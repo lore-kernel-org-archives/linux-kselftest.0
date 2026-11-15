@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794782086;
-	b=wziC6m3NiKFHtwUisS9j208AFhk7xbSI5CrmgSbZ7AxkhPm169AhfSyYz39nD0zU/v90
-	 EUWnAAiXjK5uIRkE12a3ITfc4FbLgjyoP0Og2XiSohf6QNedK3p8SB+BXSQeWwIm6HGEV
-	 lZH8HEiRhxJytUSc627OueLhRzc0Yckvb0fw+lRlb31Qnc19TkihXHqY3OipiCmEAx3mO
-	 yAU9zqWegCgjLn7GGzEFMVuTkYFjqmu4zYlBpbfA90Mw33giLIOwCl7K9eXRO01eXdq/s
-	 8dw/D3mocGmNrOeipA+uKihzdjUk5hbkO3bOVfr5yPjrEiabJsVgi9y6jVG+g7JwWKg==
+	t=1794782087;
+	b=gKDkIJU+t8iAAbFxAHG4JlIZW02Bie5ebEhksI7nnhEvkz2Fup8FaADFPn0oI1flZPtw
+	 NOmIQNd3t5xDUUL9F7V2/ff5az1b9Y/NnqySeR7X6hFmA5XA/3WbmeMFop9W2J1vELRLX
+	 i45cF4fuHehqnJ9vSqXzOcS4yyRRglm0TATOqXWC5qsaPVIffiZW6aB4Ta2T6HoP5mV2K
+	 6HkGMv+sfGf/LPO7LLwUKZw97OWuyJc4p/krl1BWqL0VolS1oAjgyyTvbpzX1rCnzP3Dy
+	 WsuJBpFQ/pe5Ty8CAVXv1Jas4tXT/eIgkgSIT1HoYLOmRlHDUVAMEoSoF05rlXPIUmA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794782086;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794782087;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=pqczHe4Cm0qmJ6912SxcOWo52myBz3hiM5iIE2Sijfk=;
-	b=HHXDGwkrxmd2YMAeUxcZuycE/Ek56lu73fQD+/WbYOkYZ0SFv0koAdi9RrKQEmoKls3T
-	 e3M7qA3cmxgcvbnsOEtWSukWTpCWuc+R+LcBq3eRCzO9kth+YlmgQ4hcHeMu6o5d6lFSn
-	 yFte4fYwM4PfCcYI7uLBEMiWjjmMM+Mp95P9eln8nmSijqQGFVCAb5Kz1MXO9RIMOfzs0
-	 JZSZ/kN0POCB4iysteldE0ZMAhi6kaHaNrep2yactccOuRoFH6qlOxB5V0okOa0MH6/ST
-	 +pNKudZOfG4oWKTmo2m4xLbWs5Ntdr/5DBgVUOOfRzf15EMSSL/Q4NhEfpsZnNcTHBQ==
+	bh=m5RPz7a6FwiInslaW4fTkNxp7BEIp07/Zx2pVKJeOao=;
+	b=u5lGYCGgIYkniXLJgeHfvSKa9Nj02Z5/SB2HdKknbGYHB/kzvWbQzeTfELn/SEJ5VTPV
+	 HYINuPkA9ZGj4p8sbk5gr5AA/98+pL+zZRs3ODMVAWNL7ZyPBpScpd+oRUzci1DFXKXo/
+	 ZudsNdvrsCcpaxXjIB8/Hi0BtyWzGmRkwjXKWDqOVVhyz0dKad1jCihE/PRDzfH94Ndzy
+	 +RW75QcVBsQq46npWwCcBXEvBvTgxM1IOn2SQnbxuylRsETUSIMNBubEnG5AcqZEKtVkL
+	 1YQJ3XVG9u20kdk5Kcc2I5KOaNhSSwQ5FprqS7i/S9AqsbsMcOCGQ6tMEmPZ5ZTsljw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yb90OE87;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="U/fZ8ndz";
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2BC606A881;
-	Sun, 15 Nov 2026 22:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701B3606A8A9;
+	Sun, 15 Nov 2026 22:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Yb90OE87
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U/fZ8ndz
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794782086;
-	b=rlmRvyY3q9DcTsMo5ynO5jQ7r8bfj9j5npraBuYe8KFS1SI89GSwYmeeK0uoxJWcnT3h
-	 ZlX5aOd6SOXsn3cHjwDPh46riW1g9I6ayOFR2k+yzb2yaOHrGBNyggNOoqxqO0tRfQLCg
-	 +VRCBbLxM4G7OGO5rLdAdE2DQMP5cikfZ9FJfW5Py7PwUd37Fo0rGQSmmlse/1K0vDoWn
-	 iSXbMBrGyjvrd8TlMDnw0FzaMHruX0QBf82IpQ/hOqWm+UBRKrbZHgRiK454N4I88D3vy
-	 ewpkWyamvVYal0FDO8psgEfLXdhEebnhuWJ5ohTr+VhwIX/ROYkqA0uG5Xz1rcs1znQ==
+	t=1794782087;
+	b=tKNdeqPWKmxq3C7r31p+dk23tCI7P44MJM8iUpPKzy0oXJQ4z5dbPLaYOjvhiPxjKMLy
+	 grcqcy7srEJbSuOMVW4N+n0xyW9b+ayIOXlpta7T0s1nv3dPknEN95pCGDmZTSriE6iW2
+	 GN/yLCeamA6diwNq5lUsnYOHKpqZ3xavpABs7gwP54lg+8uWvhprlrclgGHXgqkr1uZVj
+	 D75zZOVxxPy1PD2cKg4X5yQcNHOqTXamsh4bFhCJbxfJCQGjCoCxcyYOyiZmfGOXiNa0N
+	 H69Yz3L6bh3wRxbVHDeY/eif77lxVfx9MdwygBJqxeJxxB17iHOoOJk/IVq7iBwf0RA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794782086;
+	c=relaxed/relaxed; t=1794782087;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=pqczHe4Cm0qmJ6912SxcOWo52myBz3hiM5iIE2Sijfk=;
-	b=JvmV8xz4nvcVuPwWy3WNsqxEnK0Zo+CM9gxf7qGdB/AXDKVHREcIoTCrtumFV5hoEajS
-	 LOMVEj71JXro8viNvqxQFZPjVXqTl1aTZe90VWU6jwscXmVlxYqLkDHx7muPNFlcKqidK
-	 kDlUMqIcJ5IGSYtefapw7v7fco2N8dmDGkqaCVtEwYnrufyQMCVOtR8SVAfzcj9hsfVnj
-	 8/f4CEvwVJ9Hv74M8MZgSmG/J22GJtzD15LeWH2FXoSpoz33+HoxdH80rD55OZXGEBIpp
-	 VNih2OSfl9Li0LqDMm9I/5E7o/UVFAQ5wEa8dsKqDtytrcztHue2k4NEYrk7Q1H8l6w==
+	bh=m5RPz7a6FwiInslaW4fTkNxp7BEIp07/Zx2pVKJeOao=;
+	b=iXAa3B6+P8sIqlR8TpjiLpOWYyqS0wpDckxWqJOJlUpLjQBvcdTsTX4cSbDBAPHuihvw
+	 JpuSG+Ng+Hrk9sE4XUOsltVDqw4hzKO3a96SGx+YG4PXR7evQO+fL2JzkY7/nJQuadMju
+	 tIsT51jjnCn218oAaHLG5KGIJkZpcDJUmeuaqHFFiS+E8woDqqm9AjQfi8jxBUrPxTCJI
+	 Eb1EW4DYzQ1Fcc4/5CQrg53EtOQkVXy1tYd0x1jLhuFi79ksc5oZuqnMkQVQFfZHPNhZt
+	 16fTHSFxT/Q9rVCmBQFyFuQGkkeZqKzVHKW7+E3NdoxNj0lM1rX5svaTkjkXwbVX+rA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DCC571F000CC;
-	Sun, 15 Nov 2026 22:34:44 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id B65811F000D0;
+	Sun, 15 Nov 2026 22:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794782086;
-	bh=pqczHe4Cm0qmJ6912SxcOWo52myBz3hiM5iIE2Sijfk=;
+	s=k20260515; t=1794782087;
+	bh=m5RPz7a6FwiInslaW4fTkNxp7BEIp07/Zx2pVKJeOao=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=Yb90OE87XholEcT+l3AVhBB22W/ClnAHxlqgXPDHlycurVzyYM1R/8t4fC3qd6sdG
-	 KzH507+WCFHcW4YlCSTRyhz6IrSWKDzhKo9LV8xs+6l0gZQKZINkGsIS19X8tq7fbU
-	 Vv0L3AODRPnnd8bBiNYSTCGAb81BtnLLrDWylJKw4Vz/5IfKXQDTuojvQc0XYmBjiC
-	 yKZ5Eo8S/V0JUJeGr3TBJvw4c31WnUbRE303hU+RTovwdydUD3Y5fE2Rw1/ga6aQDy
-	 /ZMclWzzT7JBrzl3bbXSjdE03meAqhYP7TXwfKOwKzpesSEygPI5mnTaC7lvqigLxQ
-	 NgOX+hMJ4CsiA==
+	b=U/fZ8ndzsJyKr8voAQdNeWnUi86ocWMcYtostnRIPP7KeFELFekkluJl+qmRdJfDm
+	 ytBc0+9wLuBHzDkxOGb9aq2C/FQlChLLPOdsWrei45/cJ6yto8kwxOAoHp0a3IjUAS
+	 kJ1iPP7su72dVbuoeShmjVKZwvO/+Izje89JBXrV8S9O1E3IRDyuHA5ZUxfPI2B3TP
+	 EGI8fEv1juc0vnHoyx/Jv2mAOTvWu042QIKaFBNUE1IKHi9WMT+tHWPbUbWXFXpmjF
+	 kK08YHCZAoiFbSm6k5aGa+jrMJfiVxFCD1Hh8zvyAdagMmosNC9lCcCySrQtran6oK
+	 VXiBq+X/9r52w==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id BFC504A255;
+	by lkml.kernel.org (Postfix) with ESMTP id F073E4A25D;
 	Sun, 15 Nov 2026 22:34:43 +0000 (UTC)
 From: Alireza Asgari via B4 Relay <devnull+alireza.asgari.net@kernel.org>
-Date: Sun, 15 Nov 2026 22:34:46 +0000
-Subject: [PATCH RFC nf-next 6/9] netfilter: nfqueue: account saved skb
- bytes per queue
+Date: Sun, 15 Nov 2026 22:34:48 +0000
+Subject: [PATCH RFC nf-next 8/9] netfilter: nfqueue: add KUnit memory
+ accounting coverage
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261115-b4-nfqueue-memory-accounting-v1-6-b9cc30819997@asgari.net>
+Message-Id: <20261115-b4-nfqueue-memory-accounting-v1-8-b9cc30819997@asgari.net>
 References: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
 In-Reply-To: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
 To: netfilter-devel@vger.kernel.org, linux-mm@kvack.org
@@ -101,11 +101,11 @@ Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
  cgroups@vger.kernel.org, netdev@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Alireza Asgari <alireza@asgari.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794782082; l=8527;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794782082; l=14296;
  i=alireza@asgari.net; s=alireza-kernel; h=from:subject:message-id;
- bh=5VLqD9hrhT1MpNUocVL10oVpUb4KAqRndB+1hfVAv+c=;
- b=LhT3DhnLw1RGO11l0Nui1rJW18n0Ql3De38AdIwBgIQsb+M6+rLSlaBQ5uHvKK9PmMp8gO5JA
- uAK5NmbIcgLA/SoI70QJbwmrFEYfDJutbpjnQ0pVJIc8qTsu1wVbv/+
+ bh=yVuu+o+DPEI25W4yS93kGUP6LvZX/GhqtDFPsoYHgAs=;
+ b=YPoI4Nk50+1ctKI89mKDWt40MD/LMYTFi1OpHNVEFXgtIhaESx1oP+VTbjzERsu9UrHxzjP3n
+ pM5pQVERUNICNXnwtadyFf0HBGt85Za8BEkwyQkbkSSOdos9yyhA/qu
 X-Developer-Key: i=alireza@asgari.net; a=ed25519;
  pk=wuQ0/M69FqoVnrCMUJ13EQCwrCwVjCrtz75k15vW8tw=
 X-Endpoint-Received: by B4 Relay for alireza@asgari.net/alireza-kernel with
@@ -116,230 +116,421 @@ Content-Transfer-Encoding: 7bit
 
 From: Alireza Asgari <alireza@asgari.net>
 
-The packet-count limit does not bound how much skb memory a queue can
-retain: packets with different truesize values consume the same one
-entry. Add a local byte allowance alongside the existing packet limit.
+Test local byte boundaries, a small nominal-head skb, a page-backed head,
+saved accounting across detachment, and live limit changes.
 
-Derive the allowance from queue_maxlen times an aligned skb shell plus
-a nominal 2048-byte complete head. This is a proposed policy, not a
-promise that every packet fitting a nominal payload size is admitted.
-Page-backed receive heads can exceed the allowance of a small queue.
+Also test active, inactive, and failed instance creation against a private
+queue table. A KUnit static stub checks that a new instance remains absent
+from lookup until configuration succeeds. These tests exercise publication
+ordering directly; they do not claim a concurrent queue-bypass reproducer.
 
-Record admission-time skb truesize only after insertion succeeds. Keep
-that saved cost while verdict handlers detach entries, and subtract it
-before reinjection, including early consume paths. Undo it if the
-userspace notification fails. Later payload replacement does not change
-the saved cost. Segmented packets account each inserted segment.
-
-Use subtraction-based admission checks that remain safe after a live
-limit reduction. Retain existing entries when shrinking and refuse new
-ones until both limits permit admission. Byte refusal follows the
-existing drop or FAIL_OPEN policy.
-
-This implements the local accounting part of Florian Westphal's
-suggestion; shared owner accounting follows in the next patch.
-
-Link: https://lists.openwall.net/netdev/2026/11/06/366
 Signed-off-by: Alireza Asgari <alireza@asgari.net>
 ---
- include/net/netfilter/nf_queue.h |  1 +
- net/netfilter/nfnetlink_queue.c  | 59 +++++++++++++++++++++++++++++++++++-----
- 2 files changed, 53 insertions(+), 7 deletions(-)
+ net/netfilter/Kconfig                |  10 ++
+ net/netfilter/nfnetlink_queue.c      |  13 ++
+ net/netfilter/nfnetlink_queue_test.c | 338 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 361 insertions(+)
 
-diff --git a/include/net/netfilter/nf_queue.h b/include/net/netfilter/nf_queue.h
-index 4a8cefd8398d..5644a1ad32d5 100644
---- a/include/net/netfilter/nf_queue.h
-+++ b/include/net/netfilter/nf_queue.h
-@@ -16,6 +16,7 @@ struct nf_queue_entry {
- 	struct sk_buff		*skb;
- 	struct net_device	*skb_dev;
- 	unsigned int		id;
-+	unsigned int truesize; /* saved NFQUEUE charge, zero if uncharged */
- 	unsigned int		hook_index;	/* index in hook_entries->hook[] */
- #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
- 	struct net_device	*bridge_dev;
+diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
+index 09874c26fd13..02818552ac8b 100644
+--- a/net/netfilter/Kconfig
++++ b/net/netfilter/Kconfig
+@@ -71,6 +71,16 @@ config NETFILTER_NETLINK_LOG
+ 	  and is also scheduled to replace the old syslog-based ipt_LOG
+ 	  and ip6t_LOG modules.
+ 
++config NETFILTER_NETLINK_QUEUE_KUNIT_TEST
++	bool "NFQUEUE memory accounting tests" if !KUNIT_ALL_TESTS
++	depends on NETFILTER_NETLINK_QUEUE=y && KUNIT=y
++	default KUNIT_ALL_TESTS
++	help
++	  Test NFQUEUE byte admission, saved charges across detachment, and
++	  live queue limit updates without sending network traffic.
++	  The tests run with KUnit and do not need a userspace queue listener.
++	  Say N unless you are testing changes to NFQUEUE accounting.
++
+ config NETFILTER_NETLINK_OSF
+ 	tristate "Netfilter OSF over NFNETLINK interface"
+ 	depends on NETFILTER_ADVANCED
 diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
-index 862d2a762106..d1e6e02e144b 100644
+index b37fb6f21482..ad14c74f35a8 100644
 --- a/net/netfilter/nfnetlink_queue.c
 +++ b/net/netfilter/nfnetlink_queue.c
-@@ -92,6 +92,8 @@ struct nfqnl_instance {
- 	unsigned int	queue_total;
- 	unsigned int	id_sequence;		/* 'sequence' of pkt ids */
- 	struct list_head queue_list;		/* packets in queue */
-+	u64 mem_limit;
-+	u64 mem_used;
- };
+@@ -51,6 +51,10 @@
  
- typedef int (*nfqnl_cmpfn)(struct nf_queue_entry *, unsigned long);
-@@ -138,6 +140,28 @@ instance_lookup(struct nfnl_queue_net *q, u_int16_t queue_num)
- 	return NULL;
- }
+ #include <linux/atomic.h>
  
-+static u64 nfqnl_mem_limit(unsigned int maxlen)
++#if IS_ENABLED(CONFIG_NETFILTER_NETLINK_QUEUE_KUNIT_TEST)
++#include <kunit/static_stub.h>
++#endif
++
+ #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+ #include "../bridge/br_private.h"
+ #endif
+@@ -210,6 +214,11 @@ static int nfqnl_set_config(struct nfqnl_instance *queue, unsigned int maxlen,
+ 	bool activated;
+ 	int err = 0;
+ 
++#if IS_ENABLED(CONFIG_NETFILTER_NETLINK_QUEUE_KUNIT_TEST)
++	KUNIT_STATIC_STUB_REDIRECT(nfqnl_set_config, queue, maxlen, params,
++				   flags, mask);
++#endif
++
+ 	if (params && params->copy_mode == NFQNL_COPY_PACKET) {
+ 		range = ntohl(params->copy_range);
+ 		if (!range || range > NFQNL_MAX_COPY_RANGE)
+@@ -2390,3 +2399,7 @@ MODULE_ALIAS_NFNL_SUBSYS(NFNL_SUBSYS_QUEUE);
+ 
+ module_init(nfnetlink_queue_init);
+ module_exit(nfnetlink_queue_fini);
++
++#if IS_ENABLED(CONFIG_NETFILTER_NETLINK_QUEUE_KUNIT_TEST)
++#include "nfnetlink_queue_test.c"
++#endif
+diff --git a/net/netfilter/nfnetlink_queue_test.c b/net/netfilter/nfnetlink_queue_test.c
+new file mode 100644
+index 000000000000..e8b89ca83dff
+--- /dev/null
++++ b/net/netfilter/nfnetlink_queue_test.c
+@@ -0,0 +1,338 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <kunit/test.h>
++#include <linux/mm.h>
++
++static void nfqnl_test_destroy_map(void *data)
 +{
-+	/* Match the skb shell alignment included in skb->truesize. */
-+	return (u64)maxlen * (SKB_DATA_ALIGN(sizeof(struct sk_buff)) + 2048);
++	struct nfqnl_instance *queue = data;
++
++	rhashtable_destroy(&queue->nfqnl_packet_map);
 +}
 +
-+static bool nfqnl_mem_full(const struct nfqnl_instance *queue,
-+			   unsigned int truesize)
++static void nfqnl_test_free_skb(void *data)
 +{
-+	return queue->mem_used > queue->mem_limit ||
-+	       truesize > queue->mem_limit - queue->mem_used;
++	kfree_skb(data);
 +}
 +
-+/* All release paths use the saved admission cost, including notification undo. */
-+static void nfqnl_mem_uncharge(struct nfqnl_instance *queue,
-+			       struct nf_queue_entry *entry)
++static int nfqnl_test_init(struct kunit *test)
 +{
-+	lockdep_assert_held(&queue->lock);
-+	queue->mem_used -= entry->truesize;
-+	entry->truesize = 0;
++	struct nfqnl_instance *queue;
++	int err;
++
++	queue = kunit_kzalloc(test, sizeof(*queue), GFP_KERNEL);
++	if (!queue)
++		return -ENOMEM;
++	spin_lock_init(&queue->lock);
++	mutex_init(&queue->mem_mutex);
++	INIT_WORK(&queue->mem_work, nfqnl_mem_work);
++	INIT_LIST_HEAD(&queue->queue_list);
++	err = rhashtable_init(&queue->nfqnl_packet_map,
++			      &nfqnl_rhashtable_params);
++	if (err)
++		return err;
++	test->priv = queue;
++	return kunit_add_action_or_reset(test, nfqnl_test_destroy_map, queue);
 +}
 +
- static struct nfqnl_instance *
- instance_create(struct nfnl_queue_net *q, u_int16_t queue_num, u32 portid)
- {
-@@ -152,6 +176,7 @@ instance_create(struct nfnl_queue_net *q, u_int16_t queue_num, u32 portid)
- 	inst->queue_num = queue_num;
- 	inst->peer_portid = portid;
- 	inst->queue_maxlen = NFQNL_QMAX_DEFAULT;
-+	inst->mem_limit = nfqnl_mem_limit(NFQNL_QMAX_DEFAULT);
- 	inst->copy_range = NFQNL_MAX_COPY_RANGE;
- 	inst->copy_mode = NFQNL_COPY_NONE;
- 	spin_lock_init(&inst->lock);
-@@ -199,6 +224,7 @@ static void instance_destroy_work(struct work_struct *work)
- 	rcu_read_lock();
- 	nfqnl_flush(inst, NULL, 0);
- 	rcu_read_unlock();
-+	WARN_ON_ONCE(inst->mem_used);
- 
- 	rhashtable_destroy(&inst->nfqnl_packet_map);
- 
-@@ -235,6 +261,8 @@ __enqueue_entry(struct nfqnl_instance *queue, struct nf_queue_entry *entry)
- 
- 	list_add_tail(&entry->list, &queue->queue_list);
- 	queue->queue_total++;
-+	entry->truesize = entry->skb->truesize;
-+	queue->mem_used += entry->truesize;
- 
- 	return 0;
- }
-@@ -493,7 +521,7 @@ static bool nf_bridge_ports_valid(const struct nf_queue_entry *entry)
- 	return true;
- }
- 
--static void nfqnl_reinject(struct nf_queue_entry *entry, unsigned int verdict)
-+static void __nfqnl_reinject(struct nf_queue_entry *entry, unsigned int verdict)
- {
- 	const struct nf_ct_hook *ct_hook;
- 
-@@ -544,6 +572,15 @@ static void nfqnl_reinject(struct nf_queue_entry *entry, unsigned int verdict)
- 	nf_reinject(entry, verdict);
- }
- 
-+static void nfqnl_reinject(struct nfqnl_instance *queue,
-+			   struct nf_queue_entry *entry, unsigned int verdict)
++static void nfqnl_test_boundaries(struct kunit *test)
 +{
++	struct nfqnl_instance *queue = test->priv;
++
++	queue->mem_limit = 8192;
++	queue->mem_used = 4096;
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, 4096));
++	KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, 4097));
++	queue->mem_used = 8193;
++	KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, 1));
++	queue->mem_used = 0;
++	queue->mem_limit = 0;
++	KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, 1));
++	queue->mem_limit = U64_MAX;
++	queue->mem_used = U64_MAX - 10;
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, 10));
++	KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, 11));
++
++	KUNIT_EXPECT_GT(test, nfqnl_mem_limit(U32_MAX), (u64)U32_MAX);
++	KUNIT_EXPECT_EQ(test, nfqnl_mem_pages(0), 0ULL);
++	KUNIT_EXPECT_EQ(test, nfqnl_mem_pages(PAGE_SIZE), 1ULL);
++	KUNIT_EXPECT_EQ(test, nfqnl_mem_pages(PAGE_SIZE + 1), 2ULL);
++	KUNIT_EXPECT_EQ(test, nfqnl_mem_pages(U64_MAX),
++			(U64_MAX >> PAGE_SHIFT) + 1);
++}
++
++static void nfqnl_test_small_queue(struct kunit *test)
++{
++	struct nfqnl_instance *queue = test->priv;
++	struct sk_buff *skb;
++
++	skb = alloc_skb(SKB_WITH_OVERHEAD(2048), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, skb);
++	KUNIT_ASSERT_EQ(
++		test, kunit_add_action_or_reset(test, nfqnl_test_free_skb, skb),
++		0);
++	KUNIT_ASSERT_EQ(test, nfqnl_set_config(queue, 1, NULL, 0, 0), 0);
++	/* A standard 2 KiB head must fit in an empty length-one queue. */
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, skb->truesize));
++}
++
++static void nfqnl_test_page_head(struct kunit *test)
++{
++	struct nfqnl_instance *queue = test->priv;
++	struct sk_buff *skb;
++	struct page *page;
++
++	page = alloc_page(GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, page);
++	skb = build_skb(page_address(page), PAGE_SIZE);
++	if (!skb)
++		__free_page(page);
++	KUNIT_ASSERT_NOT_NULL(test, skb);
++	KUNIT_ASSERT_EQ(
++		test, kunit_add_action_or_reset(test, nfqnl_test_free_skb, skb),
++		0);
++	skb_put_zero(skb, 64);
++
++	/* A small payload still accounts for the complete receive allocation. */
++	KUNIT_ASSERT_EQ(test, nfqnl_set_config(queue, 1, NULL, 0, 0), 0);
++	if (PAGE_SIZE > 2048)
++		KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, skb->truesize));
++	else
++		KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, skb->truesize));
++	KUNIT_ASSERT_EQ(test,
++			nfqnl_set_config(queue, DIV_ROUND_UP(PAGE_SIZE, 2048),
++					 NULL, 0, 0),
++			0);
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, skb->truesize));
++
++	queue->mem_limit = skb->truesize - 1;
++	KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, skb->truesize));
++	queue->mem_limit = skb->truesize;
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, skb->truesize));
++}
++
++static void nfqnl_test_detached_charge(struct kunit *test)
++{
++	struct nfqnl_instance *queue = test->priv;
++	struct nf_queue_entry entry = {};
++	u64 detached, released;
++	unsigned int saved;
++	int err;
++
++	entry.skb = alloc_skb(512, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, entry.skb);
++	KUNIT_ASSERT_EQ(test,
++			kunit_add_action_or_reset(test, nfqnl_test_free_skb,
++						  entry.skb),
++			0);
++	saved = entry.skb->truesize;
++	queue->mem_limit = saved;
++
 +	spin_lock_bh(&queue->lock);
-+	nfqnl_mem_uncharge(queue, entry);
++	err = __enqueue_entry(queue, &entry);
++	if (!err) {
++		__dequeue_entry(queue, &entry);
++		detached = queue->mem_used;
++		/* Verdict payload replacement must not change the saved refund. */
++		entry.skb->truesize += 128;
++		nfqnl_mem_uncharge(queue, &entry);
++		released = queue->mem_used;
++		entry.skb->truesize = saved;
++	}
 +	spin_unlock_bh(&queue->lock);
-+	__nfqnl_reinject(entry, verdict);
++	KUNIT_ASSERT_EQ(test, err, 0);
++	KUNIT_EXPECT_EQ(test, detached, (u64)saved);
++	KUNIT_EXPECT_EQ(test, released, 0ULL);
++	KUNIT_EXPECT_EQ(test, entry.truesize, 0U);
++	KUNIT_EXPECT_EQ(test, queue->queue_total, 0U);
++	KUNIT_EXPECT_TRUE(test, list_empty(&queue->queue_list));
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, saved));
++
++	/* FAIL_OPEN and notification rollback can reach reinjection uncharged. */
++	spin_lock_bh(&queue->lock);
++	nfqnl_mem_uncharge(queue, &entry);
++	spin_unlock_bh(&queue->lock);
++	KUNIT_EXPECT_EQ(test, queue->mem_used, 0ULL);
 +}
 +
- static void
- nfqnl_flush(struct nfqnl_instance *queue, nfqnl_cmpfn cmpfn, unsigned long data)
- {
-@@ -553,7 +590,8 @@ nfqnl_flush(struct nfqnl_instance *queue, nfqnl_cmpfn cmpfn, unsigned long data)
- 	list_for_each_entry_safe(entry, next, &queue->queue_list, list) {
- 		if (!cmpfn || cmpfn(entry, data)) {
- 			__dequeue_entry(queue, entry);
--			nfqnl_reinject(entry, NF_DROP);
-+			nfqnl_mem_uncharge(queue, entry);
-+			__nfqnl_reinject(entry, NF_DROP);
- 		}
- 	}
- 	spin_unlock_bh(&queue->lock);
-@@ -1004,6 +1042,7 @@ __nfqnl_enqueue_packet(struct net *net, struct nfqnl_instance *queue,
- 	__be32 *packet_id_ptr;
- 	int failopen = 0;
- 
-+	entry->truesize = 0;
- 	nskb = nfqnl_build_packet_message(net, queue, entry, &packet_id_ptr);
- 	if (nskb == NULL) {
- 		err = -ENOMEM;
-@@ -1011,7 +1050,8 @@ __nfqnl_enqueue_packet(struct net *net, struct nfqnl_instance *queue,
- 	}
- 	spin_lock_bh(&queue->lock);
- 
--	if (queue->queue_total >= queue->queue_maxlen)
-+	if (queue->queue_total >= queue->queue_maxlen ||
-+	    nfqnl_mem_full(queue, entry->skb->truesize))
- 		goto err_out_queue_drop;
- 
- 	entry->id = ++queue->id_sequence;
-@@ -1027,6 +1067,7 @@ __nfqnl_enqueue_packet(struct net *net, struct nfqnl_instance *queue,
- 	if (err < 0) {
- 		/* Unicast failed - remove entry we just inserted */
- 		__dequeue_entry(queue, entry);
-+		nfqnl_mem_uncharge(queue, entry);
- 
- 		if (queue->flags & NFQA_CFG_F_FAIL_OPEN) {
- 			failopen = 1;
-@@ -1050,6 +1091,9 @@ __nfqnl_enqueue_packet(struct net *net, struct nfqnl_instance *queue,
- 		if (queue->queue_total >= queue->queue_maxlen)
- 			net_warn_ratelimited("nf_queue: full at %d entries, dropping packets(s)\n",
- 					     queue->queue_total);
-+		else if (nfqnl_mem_full(queue, entry->skb->truesize))
-+			net_warn_ratelimited(
-+				"nf_queue: byte limit reached, dropping packet\n");
- 		else
- 			net_warn_ratelimited("nf_queue: hash insert failed: %d\n", err);
- 	}
-@@ -1057,7 +1101,7 @@ __nfqnl_enqueue_packet(struct net *net, struct nfqnl_instance *queue,
- err_out_unlock:
- 	spin_unlock_bh(&queue->lock);
- 	if (failopen)
--		nfqnl_reinject(entry, NF_ACCEPT);
-+		nfqnl_reinject(queue, entry, NF_ACCEPT);
- err_out:
- 	return err;
- }
-@@ -1773,7 +1817,7 @@ static int nfqnl_recv_verdict_batch(struct sk_buff *skb,
- 		if (nfqa[NFQA_PRIORITY])
- 			entry->skb->priority = ntohl(nla_get_be32(nfqa[NFQA_PRIORITY]));
- 
--		nfqnl_reinject(entry, verdict);
-+		nfqnl_reinject(queue, entry, verdict);
- 	}
- 	return 0;
- }
-@@ -1885,7 +1929,7 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
- 	if (entry->state.pf == PF_BRIDGE) {
- 		err = nfqa_parse_bridge(entry, nfqa);
- 		if (err < 0) {
--			nfqnl_reinject(entry, NF_DROP);
-+			nfqnl_reinject(queue, entry, NF_DROP);
- 			return err;
- 		}
- 	}
-@@ -1907,7 +1951,7 @@ static int nfqnl_recv_verdict(struct sk_buff *skb, const struct nfnl_info *info,
- 	if (nfqa[NFQA_PRIORITY])
- 		entry->skb->priority = ntohl(nla_get_be32(nfqa[NFQA_PRIORITY]));
- 
--	nfqnl_reinject(entry, verdict);
-+	nfqnl_reinject(queue, entry, verdict);
- 	return 0;
- }
- 
-@@ -2037,6 +2081,7 @@ static int nfqnl_recv_config(struct sk_buff *skb, const struct nfnl_info *info,
- 
- 		spin_lock_bh(&queue->lock);
- 		queue->queue_maxlen = ntohl(*queue_maxlen);
-+		queue->mem_limit = nfqnl_mem_limit(queue->queue_maxlen);
- 		spin_unlock_bh(&queue->lock);
- 	}
- 
++static void nfqnl_test_limit_update(struct kunit *test)
++{
++	struct nfqnl_instance *queue = test->priv;
++	u64 used = nfqnl_mem_limit(8);
++
++	queue->mem_used = used;
++	queue->queue_total = 2;
++	KUNIT_ASSERT_EQ(test, nfqnl_set_config(queue, 1, NULL, 0, 0), 0);
++	KUNIT_EXPECT_EQ(test, queue->queue_maxlen, 1U);
++	KUNIT_EXPECT_EQ(test, queue->mem_limit, nfqnl_mem_limit(1));
++	KUNIT_EXPECT_EQ(test, queue->mem_used, used);
++	KUNIT_EXPECT_EQ(test, queue->queue_total, 2U);
++	KUNIT_EXPECT_TRUE(test, nfqnl_mem_full(queue, 1));
++	KUNIT_ASSERT_EQ(test, nfqnl_set_config(queue, 16, NULL, 0, 0), 0);
++	KUNIT_EXPECT_FALSE(test, nfqnl_mem_full(queue, 1));
++	KUNIT_EXPECT_EQ(test, queue->mem_used, used);
++	KUNIT_EXPECT_EQ(test, queue->mem_reserved, 0ULL);
++}
++
++struct nfqnl_test_creation {
++	struct nfnl_queue_net queues;
++	struct nfqnl_instance *instance;
++	unsigned int config_calls;
++	int config_error;
++};
++
++static struct nfqnl_instance *nfqnl_test_lookup(struct nfqnl_test_creation *ctx,
++						u16 queue_num)
++{
++	struct nfqnl_instance *queue;
++
++	rcu_read_lock();
++	queue = instance_lookup(&ctx->queues, queue_num);
++	rcu_read_unlock();
++	return queue;
++}
++
++static int
++nfqnl_test_config_private(struct nfqnl_instance *queue, unsigned int maxlen,
++			  const struct nfqnl_msg_config_params *params,
++			  u32 flags, u32 mask)
++{
++	struct kunit *test = kunit_get_current_test();
++	struct nfqnl_test_creation *ctx = test->priv;
++	int err;
++
++	ctx->config_calls++;
++	KUNIT_EXPECT_PTR_EQ(test, nfqnl_test_lookup(ctx, queue->queue_num),
++			    NULL);
++	if (ctx->config_error)
++		return ctx->config_error;
++
++	/* Exercise the real configuration while checking its visibility. */
++	kunit_deactivate_static_stub(test, nfqnl_set_config);
++	err = nfqnl_set_config(queue, maxlen, params, flags, mask);
++	KUNIT_EXPECT_PTR_EQ(test, nfqnl_test_lookup(ctx, queue->queue_num),
++			    NULL);
++	return err;
++}
++
++static void nfqnl_test_destroy_instance(void *data)
++{
++	struct nfqnl_test_creation *ctx = data;
++
++	if (!IS_ERR_OR_NULL(ctx->instance)) {
++		instance_destroy(&ctx->queues, ctx->instance);
++		rcu_barrier();
++		flush_workqueue(nfq_cleanup_wq);
++	}
++}
++
++static struct nfqnl_test_creation *nfqnl_test_creation_init(struct kunit *test)
++{
++	struct nfqnl_test_creation *ctx;
++	unsigned int i;
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return NULL;
++	spin_lock_init(&ctx->queues.instances_lock);
++	for (i = 0; i < INSTANCE_BUCKETS; i++)
++		INIT_HLIST_HEAD(&ctx->queues.instance_table[i]);
++	if (kunit_add_action_or_reset(test, nfqnl_test_destroy_instance, ctx))
++		return NULL;
++	test->priv = ctx;
++	kunit_activate_static_stub(test, nfqnl_set_config,
++				   nfqnl_test_config_private);
++	return ctx;
++}
++
++static void nfqnl_test_create_active(struct kunit *test)
++{
++	const struct nfqnl_msg_config_params params = {
++		.copy_range = htonl(512),
++		.copy_mode = NFQNL_COPY_PACKET,
++	};
++	struct nfqnl_test_creation *ctx = nfqnl_test_creation_init(test);
++	struct nfqnl_instance *queue, *duplicate;
++
++	KUNIT_ASSERT_NOT_NULL(test, ctx);
++	queue = instance_create(&init_net, &ctx->queues, 7, 1, 32, &params,
++				NFQA_CFG_F_FAIL_OPEN, NFQA_CFG_F_FAIL_OPEN);
++	ctx->instance = queue;
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, queue);
++	KUNIT_EXPECT_EQ(test, ctx->config_calls, 1U);
++	KUNIT_EXPECT_PTR_EQ(test, nfqnl_test_lookup(ctx, 7), queue);
++	KUNIT_EXPECT_TRUE(test, queue->mem_activated);
++	KUNIT_EXPECT_EQ(test, queue->queue_maxlen, 32U);
++	KUNIT_EXPECT_EQ(test, queue->mem_limit, nfqnl_mem_limit(32));
++	KUNIT_EXPECT_EQ(test, queue->copy_mode, (u8)NFQNL_COPY_PACKET);
++	KUNIT_EXPECT_EQ(test, queue->copy_range, 512U);
++	KUNIT_EXPECT_EQ(test, queue->flags, (u32)NFQA_CFG_F_FAIL_OPEN);
++
++	duplicate =
++		instance_create(&init_net, &ctx->queues, 7, 1, 1, NULL, 0, 0);
++	KUNIT_EXPECT_TRUE(test, IS_ERR(duplicate));
++	if (IS_ERR(duplicate)) {
++		KUNIT_EXPECT_EQ(test, PTR_ERR(duplicate), (long)-EEXIST);
++	} else {
++		instance_destroy(&ctx->queues, duplicate);
++		rcu_barrier();
++		flush_workqueue(nfq_cleanup_wq);
++	}
++	KUNIT_EXPECT_PTR_EQ(test, nfqnl_test_lookup(ctx, 7), queue);
++	KUNIT_EXPECT_EQ(test, queue->queue_maxlen, 32U);
++}
++
++static void nfqnl_test_create_inactive(struct kunit *test)
++{
++	struct nfqnl_test_creation *ctx = nfqnl_test_creation_init(test);
++	struct nfqnl_instance *queue;
++
++	KUNIT_ASSERT_NOT_NULL(test, ctx);
++	queue = instance_create(&init_net, &ctx->queues, 7, 1,
++				NFQNL_QMAX_DEFAULT, NULL, 0, 0);
++	ctx->instance = queue;
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, queue);
++	KUNIT_EXPECT_EQ(test, ctx->config_calls, 1U);
++	KUNIT_EXPECT_PTR_EQ(test, nfqnl_test_lookup(ctx, 7), queue);
++	KUNIT_EXPECT_FALSE(test, queue->mem_activated);
++	KUNIT_EXPECT_EQ(test, queue->copy_mode, (u8)NFQNL_COPY_NONE);
++	KUNIT_EXPECT_EQ(test, queue->queue_maxlen, NFQNL_QMAX_DEFAULT);
++	KUNIT_EXPECT_EQ(test, queue->memcg.pages, 0ULL);
++}
++
++static void nfqnl_test_create_failure(struct kunit *test)
++{
++	const struct nfqnl_msg_config_params params = {
++		.copy_mode = NFQNL_COPY_PACKET,
++	};
++	struct nfqnl_test_creation *ctx = nfqnl_test_creation_init(test);
++
++	KUNIT_ASSERT_NOT_NULL(test, ctx);
++	ctx->config_error = -ENOMEM;
++	ctx->instance = instance_create(&init_net, &ctx->queues, 7, 1, 32,
++					&params, 0, 0);
++	KUNIT_ASSERT_TRUE(test, IS_ERR(ctx->instance));
++	KUNIT_EXPECT_EQ(test, PTR_ERR(ctx->instance), (long)-ENOMEM);
++	KUNIT_EXPECT_EQ(test, ctx->config_calls, 1U);
++	KUNIT_EXPECT_PTR_EQ(test, nfqnl_test_lookup(ctx, 7), NULL);
++}
++
++static struct kunit_case nfqnl_mem_test_cases[] = {
++	KUNIT_CASE(nfqnl_test_boundaries),
++	KUNIT_CASE(nfqnl_test_small_queue),
++	KUNIT_CASE(nfqnl_test_page_head),
++	KUNIT_CASE(nfqnl_test_detached_charge),
++	KUNIT_CASE(nfqnl_test_limit_update),
++	KUNIT_CASE(nfqnl_test_create_active),
++	KUNIT_CASE(nfqnl_test_create_inactive),
++	KUNIT_CASE(nfqnl_test_create_failure),
++	{}
++};
++
++static struct kunit_suite nfqnl_mem_test_suite = {
++	.name = "nfnetlink_queue_memory",
++	.init = nfqnl_test_init,
++	.test_cases = nfqnl_mem_test_cases,
++};
++
++kunit_test_suite(nfqnl_mem_test_suite);
 
 -- 
 2.34.1
