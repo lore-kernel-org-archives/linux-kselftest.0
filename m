@@ -1,52 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794735467;
-	b=ZCf8bFv0UYgoS/teNUreHSA4WKv/cnLpiGo5S7ho9OZnprXPuQRpw/giTcAY5PM299Hi
-	 Z/UYUowi3vmzsutpUBMUlF0AOJV+DymNiSLMarrUlLFb1CZwe9d2/3lU/Hjkd7o+pIIji
-	 JyP6JHePRSFl23Mb2krv9pwuhNgZ+WjjMnAn/oALISknNJ4RpNlpJowHrn2JsBTuWrXvw
-	 odEef7SpiBjZ8QwKZOUsB1Q7dDGmwS5h4Od7UfHcxiMwTRyuS0Wak7pCArH3LFIS5+APZ
-	 atiulscz/aTwYgI/VCkWRd23k2ylX0sC0MYP3Tu6RvAzslGOzN+2diZeflrnGprbV2A==
+	t=1794738422;
+	b=oUTe9DM5NDpuGv5xt/BWbFx3fNYyNIi+oD2JEGi6W9UnTS7vLxtXEZKN8Dni4IKYaI/U
+	 moVFVjU3ihhrvZQxl1TnRMpNjYpGcSwKlyAqJPEMYSgAPJogID43yxTUiY7Gpr/sFAoEK
+	 5MdF80A4ox0On3pqJTllNllOQW04yNyr1njZkw2r/n/ES5qgUaDK8m0m8ph4En11FGOrb
+	 u3xzY9f/ddjG0gZ52EefjpFCVCsJm/7lBwfGs6p7rpYv4Sq0CEzVJjcUOAnyV6HXACUH2
+	 4FyuOuA5pXpKBEYV5YTBMcox+V9qV+i52sEFkERkPmVy6ysCWIYhxX+jwZWqV2fiMZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794735467;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=I2b7PP+El7I26h/5mkAj6vNbRpq7BbwaQUvnfhFQyqs=;
-	b=fg1pcg05g1X5FE/b87dOGhV2lYOwaytmQLn3Vx5x3fT2h7S9bjKqLcYvE01wXMN8w17x
-	 jz45IoxuK0cHN9+fU9KMVwmV3AxHtGUWX+hjOXKWfMmmzJZlJ5wp927prYunBtQ1TTI5t
-	 O54+ZSMSixlYXM4+4mFFYB8YqRBFGb5OXlkFKOTuNU+k1lVWeF7ED36dBAjyrKCqSCbop
-	 5MJZ9JYH84k0gdkMdCO3d3kQNph81ZIvuHIUu7uytzuV9JwGHUCVji26IOTy7hZ5jmt6w
-	 pUcIh3og3IQPcIJYRNOQQCcd85oiP87+lSDus1A74CU0XJ3WaCmuqyGPHFbVzNWtIng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794738422;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:Sender:X-CM-SenderInfo;
+	bh=1azWyhbD9K52O9zP67BPxVg08oy4qhI69qmDlV855Hg=;
+	b=ntFx1EUq34rQzz0U2SyoyCqV8YEHWLXy4EQ1Mca7UyZr0NhdfkE2Q39gVHMJN5jZkzra
+	 kIdlQftxB2mDpFobHtz1zPKB2/9fSNM5dbWs3fI7pJE7ywstjcMbYuT99mwFyJh+0YtMj
+	 HSCDUIYFrwNstOlDnk+tIg0//OsfhN+APHsIfYMs0KQCflN7b4+h6PNtFNDkroBouNeqT
+	 /zpQEVNQ+wKYRhf8Qx2da1A+uXoTtwTRHHz3/ocEXDn9bacq2GDOAYIA1jKo5QeqZKlbh
+	 d0H/eVquk9n/F3vUSVrq8ke5LllAnkpYjt9YpejjmZjpelLSoJiMkIHbVzlwQPv3OGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=corp.free.fr;
-	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=HejNnmMY;
-	arc=none smtp.remote-ip=212.27.60.169
-Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=azqiNrDc;
+	arc=none smtp.remote-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A45606A31A;
-	Sun, 15 Nov 2026 09:37:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3A45606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67885606A31E;
+	Sun, 15 Nov 2026 10:26:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67885606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=HejNnmMY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1794735465; bh=l9YAYkprJ5X1/VsW+JPN2Olt0TJob6Ww2LOpepA/seA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HejNnmMY3O4kM8ejz8rccgQvRjPlPkA3uSaCoC07hp34tIoiXYO3tGs0MrVE3560q
-	 /0RtMGniBOUwy5inKkqObH0bOxRkE8A18zZR7zVZKrcF8YQ3muHAom1f0Oav5SaYsD
-	 /Zxqt964Q9YJQzz89CmhoFPVZkVJ5nHKpY7OyM1IRsUvtRO9EkK2ADFiMJNvR37gcg
-	 clnsEGz/qCFis1IN9O9rTUTC3zzW4UuQcJ+9PSTy5+0rPj0BocFfv5q7wqDWD3sCo7
-	 Y5ZS31sWmXqpe+RDhUv/gOjsKG9ptZLMkHN7m/HzaSksJULgVebk/GSfjLvIbdBqFR
-	 seubAGutxNn9A==
-Received: from [0.0.0.0] (unknown [213.228.1.188])
-	by rcs.proxad.net (Postfix) with ESMTPSA id 67DD544C0736;
-	Sun, 15 Nov 2026 10:37:43 +0100 (CET)
-Message-ID: <0c42ad09-0aef-4e98-80b2-43cac04adfb7@corp.free.fr>
-Date: Sun, 15 Nov 2026 10:37:42 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=azqiNrDc
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=1a
+	zWyhbD9K52O9zP67BPxVg08oy4qhI69qmDlV855Hg=; b=azqiNrDchmfxqCncY8
+	zL+iBeSsl2dUTJmpG5X1P1kurzY8yzH2rb3OxBmNwhN6BE6s1kWE8oL2ts9ZmAzS
+	YCoPleTDznK81DD/2+gbfZNwlYZX18QNiRGdH4icHNLsRskTN0EaX+ck/7qRO9Pn
+	srel+EJHyBtqLt6UVwuZzYyO8=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgD3X7S+iPlqHVcuGA--.3517S2;
+	Sun, 15 Nov 2026 18:26:08 +0800 (CST)
+From: Yuan Chen <chenyuan@kylinos.cn>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf-next 0/2] bpf: Fix the array map gen_lookup index bounds check
+Date: Sun, 15 Nov 2026 18:25:57 +0800
+Message-ID: <20261115102559.465375-1-chenyuan@kylinos.cn>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,91 +66,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 10/10] docs: networking: describe tunnel key
- partitioning in TC queue filtering
-To: netdev-bot+sashiko@kernel.org
-Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- jhs@mojatatu.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, bharat@chelsio.com, donald.hunter@gmail.com,
- corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
- dsahern@kernel.org, idosch@nvidia.com, shuah@kernel.org,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- oss-drivers@corigine.com
-References: <20261109131039.959438-11-acassen@corp.free.fr>
- <179442433615.2199510.11200298531505956799@kernel.org>
-Content-Language: en-US
-From: Alexandre Cassen <acassen@corp.free.fr>
-In-Reply-To: <179442433615.2199510.11200298531505956799@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgD3X7S+iPlqHVcuGA--.3517S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw48KF13Gw18tFykJw1kXwb_yoWDAFXE93
+	yqkr97Xr4Yka4jqFWI9r1Yy3s3Ca1UCFykAFykXr17Wr4rXF45Cr4kCFykX3s7GrW3Xr93
+	Zrn0qa4Ivr1j9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8wa93UUUUU==
+Sender: chenyuan_fl@163.com
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5QFrKWr5iMGXSQAA3i
 
+The inlined bpf_map_lookup_elem() of the array map flavors bounds the
+index with a 64-bit JGE against map->max_entries.  The index is a
+zero-extended u32, but the immediate of a 64-bit JGE is sign-extended,
+so for max_entries >= 0x80000000 the compare is never true.
 
+With bypass_spec_v1 the inlined code then addresses the array out of
+bounds; without it the index_mask AND keeps the access in bounds, but an
+out-of-range key returns a masked element instead of NULL.
 
-On 11/11/26 20:12, netdev-bot+sashiko@kernel.org wrote:
-> [Severity: Low]
-> 
-> The commit message says this documents "what enc_key_id means on a physical
-> port of mlx5". Should this paragraph also list the limits the driver
-> enforces? As written, the driver can refuse the GTP-U example above, and
-> small variations of it, for reasons the document does not mention.
+Patch 1 switches the three compares to BPF_JMP32_IMM().  Patch 2 adds a
+selftest that checks the emitted compare in the translated program.
 
-v2 names the tunnel ports that select the key. The driver refuses the 
-other cases with an extack message that says why. The document doesn't 
-repeat each driver limit.
+Yuan Chen (2):
+  bpf: Use a 32-bit compare in the array map gen_lookups
+  selftests/bpf: Test the emitted bounds check of the array gen_lookup
 
+ kernel/bpf/arraymap.c                         |  12 +-
+ .../bpf/prog_tests/array_gen_lookup_jmp32.c   | 204 ++++++++++++++++++
+ 2 files changed, 210 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/array_gen_lookup_jmp32.c
 
-> [Severity: Low]
-> 
-> Is "Without it the filter stays in software" accurate for the queue_mapping
-> filters this document describes? Leaving out skip_sw does not seem to
-> install a software only filter.
-> 
-> If skip_sw is removed only from the filter, tcf_action_init() rejects the
-> skip_sw action:
-> 
-> net/sched/act_api.c:tcf_action_init() {
->      ...
-> 				if ((tc_act_skip_sw(act->tcfa_flags) && !skip_sw) ||
-> 				    (tc_act_skip_hw(act->tcfa_flags) && !skip_hw)) {
-> 					NL_SET_ERR_MSG(extack,
-> 						       "Mismatch between action and filter offload flags");
-> 					err = -EINVAL;
-> 					goto err;
-> 				}
->      ...
-> }
-> 
-> If skip_sw is removed from the action, tcf_skbedit_init() refuses ingress
-> queue_mapping:
-> 
-> net/sched/act_skbedit.c:tcf_skbedit_init() {
->      ...
-> 		if (is_tcf_skbedit_ingress(act_flags) &&
-> 		    !(act_flags & TCA_ACT_FLAGS_SKIP_SW)) {
-> 			NL_SET_ERR_MSG_MOD(extack, "\"queue_mapping\" option on receive side is hardware only, use skip_sw");
-> 			return -EOPNOTSUPP;
-> 		}
->      ...
-> }
-> 
-> The filter level skip_sw is not merged into the flags that the action init
-> sees, so this happens whatever the filter flags are. Both failures happen
-> before mlx5e_tc_tun_parse_outer_key() runs.
-> 
-> The "stays in software, reads key zero" behavior only seems to apply to
-> actions that can run in software, such as drop, mirred or mark. The text
-> looks like it was carried over from the commit message of "net/mlx5e: TC,
-> match the tunnel key without a tunnel device", which describes generic
-> actions.
-> 
-> Could this sentence say that the queue_mapping request is refused instead?
-
-It isn't accurate. v2 drops the sentence and says that only the hardware 
-can match the key.
-
-
+-- 
+2.54.0
 
