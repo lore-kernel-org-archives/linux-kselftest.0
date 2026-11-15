@@ -1,62 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794758571;
-	b=wYrUFtwigsGho4WoWxUe9ov5F2qZl/VbmQrvJeYHtJdVkRQuzRTM1s3lvBSCzgRv7Z+e
-	 AzenZvIwwvpMOWwTOJCDjF2r1b7aFhIF9PeusDZcp9N0KaPSfn9JFGn39i88+Bz4kKnQT
-	 G7my4TI6Vxf9CsDKLLa9NJYbbjXv1eZ7b2TIMjS3bJEc11IwhkdVGBmLnsp+Ekxev5DvD
-	 /Nr9D4+k9qVmiDqlMCJ8hn8hteCOxXLgk/G9lzHydcafUM6t+r+yWZgjFAc5AsE1j3zau
-	 OKihfEKATkqxPn5hodWGZxmgq7fMJusHCuEnQb7M5dCghw+M0D4z/UDvG3qowjc6xFg==
+	t=1794759437;
+	b=VSDn27dglCUb8TbbnKgORpm2RU+jpAtl8MwKrnQKAyL8Okd4d+ly1svBTrYfp2JjLUhE
+	 lRx8bmerHQ2OBwM8YhEo0XCRldfBfOE1uEu25NqOw7aaGdzPJeqBwHiUWMpLAqIfDY00+
+	 IXQAPgJM84RRGYY5yxB8CDEW03qfXKSXwRH4NY/v/+mw4jxaNtqSwuwbOT3aCuX764GU9
+	 tzwCUDAA/lEUVbs+yzX59orAg2Jl5L7JCk4FylqUj7LbKzCEJJBf+onRhq+nN1W3e+csX
+	 AfvnQoso3n5wrrG/64EZrxxlaBjoGEooMSDcQbs4JjZ9ak7XZJIKI5C/4xjsr8k6nWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794758571;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=6o20K47FTSJ3fNc9dXoLvvdyjdlNctQb9/oL/0Ev1js=;
-	b=AZTB/P+PYzUwHAmKYDsyF8QeeACe63SZxmpQNcrU6GfELrbPEBRWb4/LULMxu9lxrY3Z
-	 xCavrNUy5wr+OMzp5pOKTVqWw/v3ms3ts8yQeG1jk5YoYQ8trBYALsSNmlRgiDgL761pl
-	 MHwHj/LSQ8Qs0ljiaTRpMHNdqD9sduUih1zLQ6nx3s7Ip59TsszPhNrIUa7Ixz8xRuagx
-	 YuhEcTIasgJrmD3EydfLkd7ufW3GXVHAt7uCp8zfDRmbUrVm64YElfciX9ER/KkVSKOms
-	 uQ4bwtXuwrbxohuxQoTn1ZuCVOaQHVL6WtNdbotL+hUecL61CuwHM+q10RjHvUr/r4A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794759437;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:CC:Subject:In-Reply-To:
+	 References:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=NCICt+g4ba+h6Y1JYbGSqPwtwINdBha1BMylpnmqlkw=;
+	b=wfMtwx7alGUuNwNiAwp2dTLrJEttjpEnDRFYV2iaSERgU7Ni7AAPydEHv1oqUgs6QDoG
+	 9ZuAVrbjdajk1YXp8ElidbIk0GeUXdJ2UFi0vj7tU8BwGsaigDbdNxgwB1DZ0tawczFk6
+	 rjr/uMc0jb3pG7lc6soBTjc1mGQV4FvBe8+ypXkWfurVX0f3z5Mw3Dc72K9chaaiaq29H
+	 Sy1IdFEZqyeas5w7lfFewJSxHoYatf/qGVG3diuSeJxbMJwkycXQvy+DeUp/PIU7K64a/
+	 Zghi1AOEk+f3O8KSxPleWKwbcdbVQ+qx5MolUNQ/5iY5hEpuBkc9qQYJWbiPRCsT6/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VmFDLa7Q;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jTGU0qPZ;
+	arc=none smtp.remote-ip=91.218.175.139
+Received: from mta0.migadu.com (out-139.mta0.migadu.com [91.218.175.139])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A892C606A338;
-	Sun, 15 Nov 2026 16:02:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881F8606A329
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 16:17:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 881F8606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VmFDLa7Q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C961F000C7;
-	Sun, 15 Nov 2026 16:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794758571;
-	bh=6o20K47FTSJ3fNc9dXoLvvdyjdlNctQb9/oL/0Ev1js=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VmFDLa7QcLRWoMu+ysh3hNyWjCSJ9ZR8GTmWzU/4FQS3A1ZxjjELnasXlBcjvFxmM
-	 VOU3H0ZJkraZVkXzQ0QZnvSb7UGMQWJ3C/+SryCvv5JPvQ3qM+t8sJ28hNOADmgqCw
-	 cl7EIs9qPpbk8peyNtx/UMgwBwP7yPZxScg89pzZcOeJWrgdtT47UKtJ5aXtPIre+O
-	 3sGFBO25KB46ZfWdSs6Y8BDSMZ+D1qmDEE3qAuIV7eDsSsg9f8qDDEJF3ToBTuSg7I
-	 yZZNE2bmWFJn7gZirm1y9aLxERy2IDkIKWQ268mtuL+hFrj4vY2vnHXCykg/v7WwMk
-	 vt8yQrmWcLAlA==
-Subject: Re: [PATCH net-next] ipv6: always apply all.force_forwarding to every
- interface
-From: netdev-bot+sashiko@kernel.org
-To: g.goller@proxmox.com
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, rdunlap@infradead.org, dsahern@kernel.org,
- idosch@nvidia.com, nicolas.dichtel@6wind.com, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jTGU0qPZ
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=g57S+tnYE1I+WM8B/j2X3/lHuNfkcd/fJZIJlo5BpOI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794759434; v=1; x=1795364234;
+ b=jTGU0qPZCdwrI1i/wZMz58bJOOopSnXcy2Ep+1AQXZPEmXUnbL1WX7MKLyJcDW9D67Sz3koD
+ ockiAJ9/swiyVABwzraZ99v2DEt2JrQeE8Cuv0m/xBV9BjzJUqhdpe1tef+brwftpEBOouOuVfG
+ KtxDx7idEGBPqti7itEL2fDs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 434b23527c560fa3;
+	Sun, 15 Nov 2026 16:17:14 +0000
+X-Mizu-Trace-ID: 434b23527c560fa3
+X-Migadu-Flow: FLOW_OUT
+Date: Sun, 15 Nov 2026 16:17:06 +0000
+From: Bradley Morgan <bradley.morgan@linux.dev>
+To: Renzo Davoli <renzo@cs.unibo.it>, linux-kernel@vger.kernel.org
+CC: Oleg Nesterov <oleg@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
+ "Dmitry V . Levin" <ldv@strace.io>, Alexey Gladkov <legion@kernel.org>,
+ Eugene Syromyatnikov <evgsyr@gmail.com>,
+ Charlie Jenkins <thecharlesjenkins@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ strace-devel@lists.strace.io, linux-api@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Sun, 15 Nov 2026 16:02:50 +0000
-Message-ID: <179475857004.2199510.11986005836315752622@kernel.org>
-In-Reply-To: <20261112-ipv6_always_apply-v1-1-8df846631005@proxmox.com>
-References: <20261112-ipv6_always_apply-v1-1-8df846631005@proxmox.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_2/2=5D_selftests/ptrace=3A_check_that_PT?=
+ =?US-ASCII?Q?RACE=5FSET=5FSYSCALL=5FINFO_rejects_invalid_error_values?=
+In-Reply-To: <20261115152703.416254-3-renzo@cs.unibo.it>
+References: <20261115152703.416254-1-renzo@cs.unibo.it> <20261115152703.416254-3-renzo@cs.unibo.it>
+Message-ID: <DEC23DE6-5D6B-42FA-8A31-2914B730C777@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,98 +70,109 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On 15 November 2026 15:27:00 GMT, Renzo Davoli <renzo@cs.unibo.it> wrote:
+>At every exit stop of the set_syscall_info test, try to set with
+>is_error set a few values outside [-MAX_ERRNO, -1], check that
+>PTRACE_SET_SYSCALL_INFO fails with ERANGE and that the return value
+>of the system call is left untouched.
+>
+>Signed-off-by: Renzo Davoli <renzo@cs.unibo.it>
+>---
+> .../selftests/ptrace/set_syscall_info.c       | 51 +++++++++++++++++++
+> 1 file changed, 51 insertions(+)
+>
+>diff --git a/tools/testing/selftests/ptrace/set_syscall_info.c b/tools/testing/selftests/ptrace/set_syscall_info.c
+>index 1cc411a41cd6..366ef0ec228f 100644
+>--- a/tools/testing/selftests/ptrace/set_syscall_info.c
+>+++ b/tools/testing/selftests/ptrace/set_syscall_info.c
+>@@ -126,6 +126,54 @@ check_psi_exit(struct __test_metadata *_metadata,
+> 	}
+> }
+> 
+>+/* Error values that PTRACE_SET_SYSCALL_INFO must reject with ERANGE. */
+>+static const long long bad_error_rval[] = {
+>+	0,
+>+	1,
+>+	ESRCH,
+>+	-4095 - 1,	/* -MAX_ERRNO - 1 */
+>+	-2147483647LL - 1,
+>+#if __SIZEOF_LONG__ > 4
+>+	0x100000000LL,
+>+	-0x100000000LL - ESRCH,
+>+#endif
+>+};
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+yeah sure. Bit of a odd way to show error codes but okie dokie.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+>+
+>+static void
+>+check_psi_exit_bad_rval(struct __test_metadata *_metadata,
+>+			const struct ptrace_syscall_info *orig,
+>+			const struct si_exit *exp_exit)
+>+{
+>+	struct ptrace_syscall_info info;
+>+	unsigned int i;
+>+
+>+	for (i = 0; i < ARRAY_SIZE(bad_error_rval); ++i) {
+>+		info = *orig;
+>+		info.exit.is_error = 1;
+>+		info.exit.rval = bad_error_rval[i];
+>+		ASSERT_EQ(-1, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
+>+					 tracee_pid, sizeof(info),
+>+					 (uintptr_t) &info)) {
+>+			LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: error rval %lld accepted",
+>+					bad_error_rval[i]);
+>+		}
+>+		ASSERT_EQ(ERANGE, errno) {
+>+			LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: error rval %lld: %m",
+>+					bad_error_rval[i]);
+>+		}
+>+
+>+		/* the return value must be left untouched */
+>+		memset(&info, 0, sizeof(info));
+>+		info.op = 0xff;
+>+		ASSERT_LT(0, sys_ptrace(PTRACE_GET_SYSCALL_INFO, tracee_pid,
+>+					sizeof(info), (uintptr_t) &info)) {
+>+			LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
+>+		}
+>+		check_psi_exit(_metadata, &info, exp_exit,
+>+			       "PTRACE_SET_SYSCALL_INFO with bad error rval");
+>+	}
+>+}
+>+
+> TEST(set_syscall_info)
+> {
+> 	const pid_t tracer_pid = getpid();
+>@@ -476,6 +524,9 @@ TEST(set_syscall_info)
+> 				check_psi_exit(_metadata, &info, exp_exit,
+> 						"PTRACE_GET_SYSCALL_INFO #1");
+> 
+>+				/* invalid error values must be rejected */
+>+				check_psi_exit_bad_rval(_metadata, &info, exp_exit);
+>+
 
-- [Medium] The new selftest test_all_force_forwarding() in
-  tools/testing/selftests/net/ipv6_force_forwarding.sh fails every time…
+Reviewed-by: Bradley Morgan <bradley.morgan@linux.dev>
 
---
 
-ipv6: always apply all.force_forwarding to every interface
+A feature suggestion on the table here is that you can modify the
+bad_error_rval[] parameter thru sysfs so you'd provide custom addresses or
+custom whatever.
 
-This commit changes addrconf_sysctl_force_forwarding() so that every write
-to all.force_forwarding is applied to all interfaces, even when the stored
-value does not change. It now takes RTNL for every write and sends netconf
-notifications only for actual value changes. It also extends the
-ipv6_force_forwarding.sh selftest to cover the new behaviour.
+E.g:
 
-> diff --git a/tools/testing/selftests/net/ipv6_force_forwarding.sh b/tools/testing/selftests/net/ipv6_force_forwarding.sh
-> index bf0243366caa7..383d1ec64f1c1 100755
-> --- a/tools/testing/selftests/net/ipv6_force_forwarding.sh
-> +++ b/tools/testing/selftests/net/ipv6_force_forwarding.sh
+Echoing 0 to the sysfs directory. Then checking dmesg to see if it passed
+or if a hole happened.
 
-[ ... ]
 
-> +test_all_force_forwarding() {
-> +    local ret=0
-> +
-> +    echo "TEST: all.force_forwarding"
-> +
-> +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth21.force_forwarding=0 || return 1
-> +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.force_forwarding=1 || return 1
-> +    check_force_forwarding veth21 1 "all.force_forwarding applied to interfaces" || ret=1
 
-[ ... ]
+> 				/* apply the changes */
+> 				info.exit.is_error = set_exit->is_error;
+> 				info.exit.rval = set_exit->rval;
+>
 
-> +    # Disabling all.forwarding resets force_forwarding, including on all
-> +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.forwarding=1 || return 1
-> +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.forwarding=0 || return 1
-> +    check_force_forwarding all 0 "all.forwarding=0 resets all.force_forwarding" || ret=1
 
-[Severity: Medium]
-Can this check ever pass? Earlier in test_all_force_forwarding() the
-script writes all.force_forwarding=1, which stores 1 in
-net->ipv6.devconf_all->force_forwarding.
-
-The later all.forwarding=0 write goes through
-addrconf_sysctl_forward()->addrconf_fixup_forwarding(). The devconf_all
-branch there only updates devconf_dflt->forwarding and then calls
-addrconf_forward_change(net, 0).
-
-addrconf_forward_change() clears force_forwarding only in the
-per-device configs:
-
-net/ipv6/addrconf.c:addrconf_forward_change() {
-    ...
-	for_each_netdev(net, dev) {
-		idev = __in6_dev_get_rtnl_net(dev);
-		if (idev) {
-			...
-			if (newf == 0 && idev->cnf.force_forwarding) {
-				WRITE_ONCE(idev->cnf.force_forwarding, 0);
-    ...
-}
-
-Nothing resets devconf_all->force_forwarding (or
-devconf_dflt->force_forwarding) when forwarding is disabled. So
-sysctl -n net.ipv6.conf.all.force_forwarding should still return 1 at
-this point. The check would then print "FAIL: all.forwarding=0 resets
-all.force_forwarding (got 1, expected 0)", and the script would exit 1
-on every run.
-
-ip-sysctl.rst says the flag "will be reset on all interfaces". That
-matches the code, not this assertion.
-
-Should this assertion be dropped, or changed to expect 1? Or is the
-intent for all.forwarding=0 to also reset conf/all/force_forwarding in
-addrconf_fixup_forwarding()?
-
-> +    check_force_forwarding veth21 0 "all.forwarding=0 resets interface force_forwarding" || ret=1
-> +
-> +    return $ret
-> +}
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112-ipv6_always_apply-v1-1-8df846631005%40proxmox.com
+--- Thanks!
