@@ -1,64 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794727277;
-	b=FVgB9SyWXFtultqspuCED0s+VSIk27HP+ivEgHM1XpUXkBKk0eq7Tx+UsBanq29cP5wm
-	 kyppAe2K2pn34dYAFkJ3rOBhszGxkIacHRYEosExdZzRFYjOCd9Tnlr86adnOnjKbUo84
-	 zbLoERQprrw/gc11RKrL8SKpJW2RYalF4jkgDoEGBnqvAO6tKFKjEi6cBp9vqEXxHaqOK
-	 YLIUqMaVKo1zRS40+gMQhrcGFRkKOQYf6Qt0Dj8fVvB1tXS9lI2hB9uUFZyzprN2EbzWT
-	 BqLbp71Z7PCZm3kQe/06V7PKSs8jKPoKgD0mcMg+4OyIcceOXjiQKmi4G4WhqH+rn6w==
+	t=1794728577;
+	b=AG7ELtfXGb/4mduRseYk78Lj60dzEW5u+QhR7Ga+rrnoJmitHd4OFk3jvTtK2K97DEgJ
+	 BfTuaHTsYIsslsu7ZqvcR596UwFKlz7c5XNLLaz+8q0ksjskqFOoZIyLYeCzksv68pNJu
+	 DVDbsjN55v74i6ECCQkcApcE8nRCnnUthR20ce+JfsMmIr3A6Gae0kzCS6tVARuFdhRK1
+	 0hzarw6lmoLNR6tXy/AuySdt2/0tAKNnwFEmbmGZicIpVkh06jFeG4T0ad8uQrjToZiQD
+	 us7eMQyNgG6M9LIYFyKLxSgZT51LA8d1asQzcTXPj4+d4taSWwqPDuUoTEzHvf3hudQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794727277;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794728577;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=1wIaAoqveAUksE+imNE0AFXmAQw+PL+pfe8nYBhWq84=;
-	b=sON8D346ChDCHa9cV0JJAj2UELdGU+8SxweVVY1XnNAGhs2eMXcSpo1iDzHmKQPoRwt4
-	 t0UwGFYOQs4OFIOtf2c1/Uwmg0xaabix/nUst1aGV4mf6YDSBrvORmuWZ5jsnFSDPf5FD
-	 RCaPFb01N3aFA0uc8eOgrNfXx6YpCZkQGYRr/YkjjAh4YMiM5b7sy0isZQfckTLlB5k/f
-	 KNgt9ei8BIYkTofSzN3VoR/ZhxhZCaKHLARaAMpgtn7QdWccwjQ/v/AZnW5yjpOQpz5KY
-	 1ZiH6G6B4b0T5MiSvxOaPHA2ZpuhS+17s11W594/c7ah3gWV0B2sea0RlPmvIUdX8tw==
+	bh=GPVorwWextWqTeqhLKlgJWaB2HerQm/MmIfhM1PDl2w=;
+	b=fWLRDBTizf14awtzL/Eop6M0KMkMFmjENe8oYbTD016RqdrWrSYKoa68z1KZkx+kuMlp
+	 4gEPmUpROyrRrA4X1Cf5wyqRNAlG4X9rsib2kT0fshB78kZ73qoVuMgasVixdkTQNHU96
+	 2qQIJYUa2eiB7TiqIos/7Q17wJECWgAgLGKI2Lq88MXwPUK0jB3GtZKgefaYEQWuMQdsm
+	 Fts1bO7Tx/DKIfkyhEonrHhVkVxPD24TY7dO/F7Tvv7ccmD8UKoMShN4VS+TBtsN1njka
+	 QlVyzld5k3J8gFlopjODrdf9YGa2CKcsBsyb9elV90LbItB1uyfgGnOI6O5JMW3Ogfg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lWSx1ymw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KA9hFhdc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CE8606A884;
-	Sun, 15 Nov 2026 07:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B5E606A31A;
+	Sun, 15 Nov 2026 07:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lWSx1ymw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CADDD1F000C4;
-	Sun, 15 Nov 2026 07:21:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KA9hFhdc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5371A1F000C4;
+	Sun, 15 Nov 2026 07:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794727277;
-	bh=1wIaAoqveAUksE+imNE0AFXmAQw+PL+pfe8nYBhWq84=;
+	s=k20260515; t=1794728577;
+	bh=GPVorwWextWqTeqhLKlgJWaB2HerQm/MmIfhM1PDl2w=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lWSx1ymwqRfPvPk1GLXLzUv7x3SCPAxEYESanV567uUw+AKA7q8979FM4nIo5zA3N
-	 Tf/4Jy8c7fwHIVvYdzppVxuol+fjZKIUz7vBXFR+h/eKPM/Yx+V1Mo0wYZ6Rq4OQI9
-	 cQ96d1Xk3cjOaZbjoY/T7bkCBDlgGRloIoCCKvWXpupUsfUXm8BVrFWMOR9/ABbiu/
-	 onHdby1te+yFR3QzWs7DEDzmcpQbbRzEFAUzDOQaGYXqm4CpP5bavHYQC/1IJglldP
-	 yQYrDwOmcIDAdh8TZy6I8TnYgGbKVgWHIJB+9T1NX9/fWb669T9P0lOT2b0F/jRZR9
-	 EB2x/JjGGZb3g==
-Subject: Re: [PATCH net v5 6/8] selftests: drv-net: psp: test ipv6 tcp socket
- with extension headers
+	b=KA9hFhdck9Pu0lR2PrmhwtsDEAvpYWSx2ULFs9xe8v42JnsLvlTL9VTH1YD/0KQzI
+	 ejzUQnKFBhTpv5vIhRvfiNJ9gw9oB1RbSmj0/PiJNo96TBXhWcyd1S9v+VjtdEoROI
+	 tV9z87/AmMV0mu4Oh1b1WfE9BNi7icrFg3Lik9P2pgTigu09OWkEUb1cWrt4qP0TN1
+	 fBAm2VusjA6VVhBK1yKmGJ/ugo58sBzS7eTruLD6k8kqWoC617h0FxWiPmrbAJ08Ry
+	 7/EkBoBNjj6wqNa5V6u8WYH9UGKp0dnNoDnZbRHY9whoItb6Vq/B4VjtKFkXQDK3Ho
+	 GX/F/bWX8u1zg==
+Subject: Re: [PATCH net v5 1/2] tun: bound the NAPI receive queue
 From: netdev-bot+sashiko@kernel.org
-To: toddfreed@meta.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
- bjorn@kernel.org, borisp@nvidia.com, cratiu@nvidia.com,
- daniel.zahka@gmail.com, dsahern@kernel.org, dtatulea@nvidia.com,
- edumazet@kernel.org, idosch@nvidia.com, kuba@kernel.org,
- john.fastabend@gmail.com, leon@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
- mbloch@nvidia.com, pabeni@redhat.com, raeds@nvidia.com,
- rrameshbabu@nvidia.com, sd@queasysnail.net, saeedm@nvidia.com,
- shuah@kernel.org, horms@kernel.org, tariqt@nvidia.com, weiwan@google.com,
- willemdebruijn.kernel@gmail.com
-Date: Sun, 15 Nov 2026 07:21:15 +0000
-Message-ID: <179472727541.2199510.15003590884466629301@kernel.org>
-In-Reply-To: <20261111001831.3710881-7-toddfreed@meta.com>
-References: <20261111001831.3710881-7-toddfreed@meta.com>
-X-sashiko-severity: Low
+To: antonio@mandelbit.com
+Cc: willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
+ eperezma@redhat.com, shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ maheshb@google.com, peterpenkov96@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+Date: Sun, 15 Nov 2026 07:42:55 +0000
+Message-ID: <179472857592.2199510.16416804582528441222@kernel.org>
+In-Reply-To: <20261111014208.1795777-2-antonio@mandelbit.com>
+References: <20261111014208.1795777-2-antonio@mandelbit.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -71,93 +68,183 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 1 · Medium: 0 · Low: 2
 
-- [Low] In data_send_ipv6_exthdr()
-  (tools/testing/selftests/drivers/net/psp.py), the finally block runs…
-- [Low] Concern: the commit message overstates coverage ('a variant for
-  each extension header a socket can set') because there is no…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] The new bound is a packet count on each tun_file's
+  sk_write_queue, compared against net_hotdata.max_backlog (default…
+- [Low] The new full-queue check runs before every XDP hook, in both
+  paths the patch changes.
+- [Low] The new comment in tun_napi_receive() says it takes "at most
+  budget skbs, so that the queue never looks emptier to writers than it…
 
 --
 
-selftests: drv-net: psp: test ipv6 tcp socket with extension headers
+tun: bound the NAPI receive queue
 
-This adds a PSP selftest that sends data on an IPv6 PSP TCP socket in
-three phases: with no extension header, with one set (IPV6_DSTOPTS,
-IPV6_HOPOPTS or IPV6_RTHDR), and after the option is removed. After each
-phase it checks the device's tx-packets and a tc flower UDP counter on
-the remote. It also adds a helper that waits for stats to quiesce, and
-adds CONFIG_NET_ACT_GACT to the config.
+In IFF_NAPI mode, this patch drops new packets in tun_get_user() and
+tun_xdp_one() once the tfile's sk_write_queue holds more than
+netdev_max_backlog packets, and counts them as rx_dropped. It also changes
+tun_napi_receive() to take at most budget skbs from the queue instead of
+splicing out the whole queue and putting the rest back.
 
-> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-> index 473500901879b..7e251439a2fd9 100755
-> --- a/tools/testing/selftests/drivers/net/psp.py
-> +++ b/tools/testing/selftests/drivers/net/psp.py
-
-[ ... ]
-
-> @@ -658,6 +710,95 @@ def removal_device_bi(cfg):
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 3b292bce4438c..e2fda570b90f6 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
 
 [ ... ]
 
-> +@ksft_variants(_ipv6_exthdr_variants())
-> +def data_send_ipv6_exthdr(cfg, opt, val):
-> +    """ Test that PSP drops IPv6 packets with an extension header """
+> @@ -227,6 +228,16 @@ struct veth {
+>  static void tun_flow_init(struct tun_struct *tun);
+>  static void tun_flow_uninit(struct tun_struct *tun);
+>  
+> +/* In IFF_NAPI mode written packets wait in the tfile's sk_write_queue for the
+> + * NAPI poll, which may run later in a kthread or ksoftirqd. Bound that queue
+> + * like the per-CPU backlog of netif_rx().
+> + */
+> +static bool tun_napi_queue_full(const struct sk_buff_head *queue)
+> +{
+> +	return skb_queue_len_lockless(queue) >
+> +	       READ_ONCE(net_hotdata.max_backlog);
+> +}
 
-[ ... ]
+[Severity: High]
+Does a per-queue packet count bound the uncharged memory that an
+unprivileged user can pin?
 
-> +        # 2. With the option: dropped, not counted, and nothing reaches the
-> +        # peer. The data stays queued.
-> +        s.setsockopt(socket.IPPROTO_IPV6, opt, val(peer))
+This limit is about 1000 packets on one tfile's sk_write_queue. It has no
+byte accounting and no limit across tfiles. The same user who can run the
+reproducer can also open IFF_MULTI_QUEUE devices. tun_set_iff() only checks
+CAP_NET_ADMIN in the user's own user namespace:
 
-[ ... ]
+    int queues = ifr->ifr_flags & IFF_MULTI_QUEUE ?
+                 MAX_TAP_QUEUES : 1;
 
-> +    finally:
-> +        # With the option, the queued data, the FIN and the ACKs would be
-> +        # dropped, leaving an orphan holding the association
-> +        s.setsockopt(socket.IPPROTO_IPV6, opt, b'')
-> +        _close_psp_conn(cfg, s)
+    if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
+        return -EPERM;
+
+That gives up to 256 queues per device, and as many devices as
+RLIMIT_NOFILE allows. Each tfile still has sk_sndbuf = INT_MAX from
+tun_chr_open(), and its queued skbs are not charged to the writer's memcg.
+The only admission check on the write path is this one in tun_get_user()
+and tun_xdp_one().
+
+The commit message says:
+
+    Still open: the limit counts packets rather than bytes and applies per
+    queue, so with large packets and many queues (IFF_MULTI_QUEUE works in a
+    user namespace too) the queued skbs, which are not charged to the
+    writer's memcg, can still add up to an OOM. This is hard to reach in
+    practice: with large packets the writer's copy is slower than the NAPI
+    poll, so the queue does not fill.
+
+That argument covers large packets only. The reproducer itself shows
+1400-byte writes outrunning threaded NAPI. All queues drain on the same
+CPUs, so if the writer cycles small packets through every queue fd, can
+each queue reach max_backlog?
+
+With roughly 2.3 KB of truesize per 1400-byte skb, about 1000 tfiles (the
+default soft RLIMIT_NOFILE) would pin around 2.3 GB, and a higher fd limit
+pins more. Does that still allow the global OOM from a memcg-limited user
+that this patch is meant to fix?
+
+A bound that does not scale with the number of tfiles would close this.
+Two options would be charging queued skb truesize to the socket or memcg on
+every enqueue path, or a per-device or per-netns aggregate limit. Either
+would replace the per-queue packet count.
+
+> +
+>  static int tun_napi_receive(struct napi_struct *napi, int budget)
+>  {
+>  	struct tun_file *tfile = container_of(napi, struct tun_file, napi);
+> @@ -237,21 +248,24 @@ static int tun_napi_receive(struct napi_struct *napi, int budget)
+>  
+>  	__skb_queue_head_init(&process_queue);
+>  
+> +	/* Take at most budget skbs, so that the queue never looks emptier to
+> +	 * writers than it is.
+> +	 */
+>  	spin_lock(&queue->lock);
+> -	skb_queue_splice_tail_init(queue, &process_queue);
+> +	if (skb_queue_len(queue) <= budget) {
+> +		skb_queue_splice_tail_init(queue, &process_queue);
+> +	} else {
+> +		while (skb_queue_len(&process_queue) < budget &&
+> +		       (skb = __skb_dequeue(queue)))
+> +			__skb_queue_tail(&process_queue, skb);
+> +	}
+>  	spin_unlock(&queue->lock);
+>  
+> -	while (received < budget && (skb = __skb_dequeue(&process_queue))) {
+> +	while ((skb = __skb_dequeue(&process_queue))) {
+>  		napi_gro_receive(napi, skb);
+>  		++received;
+>  	}
 
 [Severity: Low]
-What happens to this cleanup in data_send_ipv6_exthdr() when the test
-runs without CAP_NET_RAW, for the dstopts and hopopts variants?
+Is the "never looks emptier to writers than it is" part of this comment
+accurate?
 
-ipv6_set_opt_hdr() checks the capability before it reaches the
-zero-length removal path. That means clearing the option with b'' can
-also fail with EPERM:
+When skb_queue_len(queue) <= budget, skb_queue_splice_tail_init() resets
+the queue's qlen to 0. Otherwise each __skb_dequeue() lowers qlen by one,
+for up to budget skbs.
 
-net/ipv6/ipv6_sockglue.c:ipv6_set_opt_hdr() {
-    ...
-	/* hop-by-hop / destination options are privileged option */
-	if (optname != IPV6_RTHDR && !sockopt_ns_capable(net->user_ns, CAP_NET_RAW))
-		return -EPERM;
+In both cases, while napi_gro_receive() works through process_queue,
+possibly on another CPU with threaded NAPI, tun_napi_queue_full() sees up to
+budget fewer pending skbs than are really pending. The real bound comes out
+to about max_backlog + budget, plus one per concurrent lockless writer.
 
-	/* remove any sticky options header with a zero option
-	 * length, per RFC3542.
-	 */
-	if (optlen > 0) {
-    ...
-}
+This is much better than hiding the whole backlog as before. Could the
+comment say the queue looks emptier by at most budget, so later code does
+not rely on a strict invariant?
 
-In that case the phase 2 setsockopt raises PermissionError first. Then
-the setsockopt in the finally block raises a second PermissionError, so
-_close_psp_conn() never runs.
+[ ... ]
 
-When that happens, psp_responder never gets the "data close" command and
-keeps its data socket open. The local PSP socket isn't closed explicitly
-either, and the original exception ends up chained under the second one.
-The following test cases share cfg.comm_sock and the responder state, so
-they could be affected.
+> @@ -2561,6 +2593,17 @@ static int tun_xdp_one(struct tun_struct *tun,
+>  		return -EIO;
+>  	}
+>  
+> +	/* NAPI queue full: drop, and schedule NAPI so that it drains even if
+> +	 * nothing in this batch gets queued
+> +	 */
+> +	if (tfile->napi_enabled &&
+> +	    unlikely(tun_napi_queue_full(&tfile->sk.sk_write_queue))) {
+> +		napi_schedule(&tfile->napi);
+> +		put_page(virt_to_head_page(xdp->data));
+> +		dev_core_stats_rx_dropped_inc(tun->dev);
+> +		return 0;
+> +	}
+> +
+>  	xdp_prog = rcu_dereference(tun->xdp_prog);
 
-The rthdr variant isn't affected because IPV6_RTHDR skips the capability
-check.
+[Severity: Low]
+Should this check come after the XDP program runs?
 
-Could the option removal be guarded separately, for example with a
-nested try/finally, so that _close_psp_conn() always runs?
+Here it sits before rcu_dereference(tun->xdp_prog) and bpf_prog_run_xdp().
+In tun_get_user() the new check also comes before tun_build_skb(), which
+runs native XDP and returns NULL when the program consumes the packet, and
+before do_xdp_generic().
+
+Packets the program would REDIRECT, TX or DROP never reach sk_write_queue.
+They add nothing to the queue being bounded.
+
+Once XDP_PASS traffic fills the queue past netdev_max_backlog, those packets
+are dropped without the program seeing them. They are also counted in
+rx_dropped. Would redirected or XDP_TX flows on that tfile stall whenever
+the stack path is congested?
+
+The commit message only says packets are dropped "before allocating and
+copying them". If this trade-off is intended, could the commit message
+mention the effect on XDP?
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111001831.3710881-1-toddfreed%40meta.com
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111014208.1795777-1-antonio%40mandelbit.com
