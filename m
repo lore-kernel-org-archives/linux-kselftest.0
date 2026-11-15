@@ -1,88 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.10
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794778264;
-	b=jVvmAEIaig7IZIjQjkTK9B8h3kO7xZWICL54FF7zQH7uTsL0AUDvy2hn4ZATtmWIr58y
-	 +v9Nw1jX2Hv7TwTsIJgEFENmC8cd4Djm6vkBpLdmiZIflG9S9UgU/t8l5ioN0HXKeLqvU
-	 dz+tRNNlaaxmd7FjbT6rU7UynJRZ8eMPI//aojI4dgdzR/gWCo6GELlOScQ6m+XuVL7l1
-	 PabUEOPLsNeVPZlFMW1l+jzUIxHkLHpJSnV09GQ6+Ww3BtRkFOi/PO8r/XW2ot7lintWU
-	 ua6dOI68vUCqsoaAazuxTg9pj7LqnH49j+A5jvy9othxbUc7EgcZirBX/LaPnyzkivA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794778264;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=gI3pT+vyemFy2bR8tG+tuc3UaQlX4B8AkgTSVPpKmCY=;
-	b=sckvIKkkv59YBBCrtLZlJOoB5Z+IC9978c7iO7h4o8fVbB7MCKY0tahnsoTyMOMJHL2N
-	 HOeM/Z+wnE8tLUoFkgVO72fLYa5QjVRR6JVl9KPrnFlHcfq0iWLczR+rX83NB644Gor/6
-	 eALxvZ4m3ixdjE3v1C5Ch55KzFGzkih0wyttWHuAlueU9kCJnrSj3SMUXdipaU1MM+jY4
-	 yVSbIiEFGXhVmlNgXEpvzvcmpJIa+r4W5WJON+0Ie9PJ93LimNL9l14KTsNgV7OpFWBxd
-	 YdZaZgs4Ka84hiU4C6di3jOzplG691a+MCL1Dgt4ssorXDCh3cWrLiWcbD+tlvVC3vQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TD+YLUMO;
-	arc=none smtp.remote-ip=192.198.163.10
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794778482;
+	b=yM2jyb1YxpIDLIdnDImEHlXtxP0AnLhtjQb0dM6AP3sarimxwC+fJp69LkPfmJJJsLgh
+	 lGE18MA82/RiuF7/EUF7ehDQQa1QNySvrfk3YybybP8C3FvGFG+wBcCqwCUvWIk3PZU9R
+	 KNOOgQJQNK3DpRm5VX4acWDy9SQ4A5uf8Y2F2VagwIg11Kduwo9hjEq4eCQQOLr4e4CM9
+	 aPaZnh8SyHGxS75UHqZAKVJ1xcY1ihE3IDiyxaRfX8bYlBXV17WuTJst3YKtMFRnM8ymY
+	 PBrxjtxzOSgDU5QfByrXjv31TowQuFRvxURldIJNU3xHOXMCXz559q0MbXcUcad/2ow==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794778482;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=cs9JHELr5d8wuCO3bjOm1h46Bh/lIS6/9xmpt7kk/0s=;
+	b=KmgcMQZ+FdRhBfCfeaObzQisPChmmDKk76v5kJ4VlhFXXJQOfCcNXXq27Sk2po/r7t5+
+	 Zy55ZOkjj4YGv74e1McJcBPGs2nJFauXg2CNXAAJzRzX63sb0N1tFwbCj4/qbGjUvIYKs
+	 QKWxCCM/Gcle7CmhzUKdhTF3npNmn4D53oWo7ByjD37nri/EkadcLb41WwHBDt+ClVvM4
+	 6V8uOfjUyQk7q1J2wS6gXEDkwo5RfLEJo1LDn9b16cdMXAw0ER8U1nFHYTSZjRSZ7k5JE
+	 0zYRiiWmpv43O0IA8IPkoipB7N3L+rnBtl0F2vPpUYIpDI0qAkuuc2W7O+5+Ub/7xoA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=LQb7bpGA;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.51
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01380606A323;
-	Sun, 15 Nov 2026 21:31:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01380606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F195606A333
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 21:34:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F195606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TD+YLUMO
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794778264; x=1826314264;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=jCKBvtDwsyaFaVJiupvEpl5700EKZdPVw5dmNxMVuSs=;
-  b=TD+YLUMOnp++488g7wSsWJ0ThD7ZUhZZrt2FwQ+vCNbhKFmazb6zjQwj
-   giAAeJfrUpPTe8uJ8T6nGUYqT1lQxhNSDBUAxI5fPK4346GSjFx4WCfZH
-   dozPqUdWuonnecNfEevhuPj+GOx+wIKkBxcFHnO0egL19PbZreeW8+Cr3
-   IPI4RUERSSiqA8zExqSvJMYeSE3Wor45n0C2hJhrjX/vuY3b+Ry+R/JDl
-   5XCb6By/JKONm/unI4zzmiONb6Y4gGl+5/4gM0/f0FrymXOnggUv+Efb6
-   tnfYhJkVYTpFkvJ+dpK7i+csrkc823lI95zhlpRWg2+vMAtmBAMSA9wup
-   g==;
-X-CSE-ConnectionGUID: B3Rr7MApSwSgoLcdBj0/8w==
-X-CSE-MsgGUID: oV7OuvJ1S8KBPOai3//Uug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3403312"
-X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
-   d="scan'208";a="3403312"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2026 13:31:03 -0800
-X-CSE-ConnectionGUID: bfSLt/uHSn+iE3PZ81FKKw==
-X-CSE-MsgGUID: EdM1X6NaTzWv3nFMBfQyZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,215,1787036400"; 
-   d="scan'208";a="9722593"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 15 Nov 2026 13:31:00 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xShoP-000000017LS-0Ahq;
-	Sun, 15 Nov 2026 21:30:57 +0000
-Date: Mon, 16 Nov 2026 05:30:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>, Arnd Bergmann <arnd@arndb.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Waiman Long <longman@redhat.com>,
-	Ryan Houdek <Sonicadvance1@gmail.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	kernel-dev@igalia.com,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Subject: Re: [PATCH v8 06/10] futex: Wire up set_robust_list2 syscall
-Message-ID: <202611160554.MGBENVam-lkp@intel.com>
-References: <20261115-tonyk-robust_futex-v8-6-a4fe47333a28@igalia.com>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=LQb7bpGA
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6b19e291cc6so3671870eaf.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 13:34:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794778481; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Q6bvrlNqYEDrb2kQEKNQjbAXqQxFadFP+mZfncpHgVJttFA85ml5x4FImrvv0LFc+N
+         cnY753+tVwzHNYf1jn/8+26RoHKXl6CkR4dcFDap90Vh8PQxG8nAhL2y+bwbUGF6C+ub
+         6VGjq7EanVSRzYSeDRu/PX7Dvu1PBO5TwouDscG+w7gbi/FFhYbA2f0+axR1cKYD5iAG
+         ORXpRR7JHSMEQVc2MZmzr0D6p7+KlgsLIhTsUTHusb0liUXl2EPTbyEJvtj8HO3Gvgvw
+         Obwp0s8spJfdh8jITTs+cy0ZxUWsV+ivRRQbFJBKeqz2tS5/1K1vbJRhgK4MPk3dAeEF
+         Hmig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=cs9JHELr5d8wuCO3bjOm1h46Bh/lIS6/9xmpt7kk/0s=;
+        fh=hZrNL7LmK/AfNX1uL5xSVIMvEK3Zr0z5i5PCZHByLk0=;
+        b=kE8qYIoOEhPXjFcIFqrZmCO3N6H/kMz2tsP4MKuTgCfOlw3bFEpnsNwyzebsAjYtXI
+         7hTI6fdEiQOaTPr0W9UFwxL4tipqFDjelPXtAV5Eh8veJAJO1KJT/AFcFaL2DJUg1WLM
+         orV5cMYJ3zwk7EDCcDtII3pbXmtpSQvheBoty9vpUSaT/pAOG40J2fK79CdK5WHJy9ky
+         DmkXxHTaSdrdYUmZ+lyFNQyWvrDvHW1fIIcrjO3GHKGd8GVapMKQCeNQ6Gc6gi5aRObi
+         tBnnhZDc+2SLnwT2nOLGfoOZZgeaM9vPHCQLQ/9wRSuacRPitv4fxPwRS5sCxJvj0Rb5
+         Qa1g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794778481; x=1795383281; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cs9JHELr5d8wuCO3bjOm1h46Bh/lIS6/9xmpt7kk/0s=;
+        b=LQb7bpGA03szUtIQx3bHdBEh40GP6gIqmFccn3+VEv955kr1PLbIVOR0uUlP87lFx7
+         4/Dra29lac4PuGRuM3R/yXVFBmgDTi6WO6vI85vAlw0n1V34Jf/hJpYsAkBnMRiQ6mqh
+         V3GMoen874LPOwBhk897GpaUo6XfRFJm+vBswGdzMb2I2uQPn0fQN6MCPQCsjuKV7gfF
+         2GSizdod0eYE/AaE3zaC/iLIkeED6WCx5HrEXxJh4s8Cvi4lLu6aOzwNQot2VdIdJN3y
+         8Bx0WHoW4EgCtFvY1FZetZuaNHmmrlxLT56LB0/prybZyypsd1+ABS5X/os09adxvk+0
+         glnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794778481; x=1795383281;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=cs9JHELr5d8wuCO3bjOm1h46Bh/lIS6/9xmpt7kk/0s=;
+        b=h2yVC44cA9murOm/DLMwR2JTUEJdTR3lbJC/994PBExQ6CDbrqwRKDPBh2IcSc/ncd
+         C+00s4bSDEGR6aAbwfNp1S0q2v1pTwj+dgigXY/s2qDLrYxURqW48aoDtbVJxdM2A9Zj
+         MIYODKOld2nHpyz7AX75Fw2i7/tZHrwv9O6Q4Bmj+ikOr49m+5isVipeA5XxYoF0FiaL
+         qeGSEwe3I7kEoweIQ3NfTmZ/56eluPwfiHAPGqBLIIZI+b+ml37AfGSvA41Rd8zvTNR9
+         ooD+z5uaeg9qEWtH3GjsJfNAlcoO2ZrZm95V6zJ+GOkxIu5YHLZSJEeSHaoQcotmTWlT
+         Lpdg==
+X-Forwarded-Encrypted: i=1; AL+hErFxQj9bqrhHCmtxub4p9AmJSaHDBnSZ0S2vBpbisDWz84VAi4FXTQHUEQwQTCFM0TnxKVQY7565LoJt6DDpqS0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8cbtYWiq6S1US8cakLafs8zsdVZ+O93M59BSyYvXvExZ0amcwP
+	MULUNkmpTM5N6w6NJC6zhAqWZPc3B/c/NhFrwspPFfCPoyaxsHKvPAY4vylebHrAzSIiuQLw70g
+	A3Nd02nEYGKm+Hg1QrckN7iHiDGjTEFMBPwrrG8epYg==
+X-Gm-Gg: AYBFou1HDYBLhR5CgX9ILTFE050cBH2d/tA65pdqyE+tGEp1rK4Ywt86tDgW+WGClUJ
+	WNjA5n7SfHZq0R8hrawd7X2IIFk0qvOZWUmlxdgmSK53cK9j14CQ6O8lB7NEYKVFC31/Se00+ls
+	mBKEpGNsdYOve/uScFlvvyU7roBJ3vRO2eI3LNR6p8J0UC02CwxS1SO7/k5IPBjxjiqM462vx2a
+	Cqyd+K+YvrIzaGEKeGzlPGkew4SyBIFoe3LagohZnTGkFWUmNF4HVmZhmb0rZU2HV8PYjJO6DrE
+	x1XNzph6k0iXbl3nJfi4wB8Q9LGjkiFP2oLMZyl9/bw1vXAgVlFVZYocAdj3eHNNuyMDp4TmUpQ
+	B0pO21AnRGTwsLBu+SEzdUat/coj3l7VuMPn1yOL1YGT0QjCG0lscs+HBBFyiX0SKF6UcG2hjoG
+	3Dxuqrnic2ig==
+X-Received: by 2002:a05:6820:3389:10b0:717:866:abde with SMTP id
+ 006d021491bc7-71ab50b64f8mr4048862eaf.50.1794778481265; Sun, 15 Nov 2026
+ 13:34:41 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,39 +104,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261115-tonyk-robust_futex-v8-6-a4fe47333a28@igalia.com>
+References: <20261115212117.48496-1-emmaonana18@gmail.com>
+In-Reply-To: <20261115212117.48496-1-emmaonana18@gmail.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Sun, 15 Nov 2026 21:34:29 +0000
+X-Gm-Features: AclHuK-PPhL2FyJA0xoMqtYefnBbjo3uLjHDcDBJy-SQemPSC9ZW6IQWHZkbIBg
+Message-ID: <CAG4wq-exUYFvw4i=gQZhwC8fF3tnhmOMtv+NceYTBEx_TO+F7w@mail.gmail.com>
+Subject: [PATCH] selftests: net: veth: propagate channel-check failures to
+ exit status
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: kuba@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net, 
+	edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi André,
+On Sun, 15 Nov 2026 22:21:16 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> Fixes: c017800af5c71 ("selftests: net: veth: test peer ndo-xmit after GRO toggle while down")
 
-kernel test robot noticed the following build errors:
+The Fixes tag should point to the commit that added chk_channels():
 
-[auto build test ERROR on 9f74092fda91ef93c2b07585785c1dc83cd7971f]
+Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/futex-Skip-test_futex_robust_unlock-if-not-supported/20261115-143110
-base:   9f74092fda91ef93c2b07585785c1dc83cd7971f
-patch link:    https://lore.kernel.org/r/20261115-tonyk-robust_futex-v8-6-a4fe47333a28%40igalia.com
-patch subject: [PATCH v8 06/10] futex: Wire up set_robust_list2 syscall
-config: xtensa-allnoconfig (https://download.01.org/0day-ci/archive/20261116/202611160554.MGBENVam-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 16.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261116/202611160554.MGBENVam-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611160554.MGBENVam-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ./arch/xtensa/include/generated/asm/syscall_table.h:474:16: error: 'sys_set_robust_list2' undeclared here (not in a function); did you mean 'sys_set_robust_list'?
-     474 | __SYSCALL(473, sys_set_robust_list2)
-         |                ^~~~~~~~~~~~~~~~~~~~
-   arch/xtensa/kernel/syscall.c:31:44: note: in definition of macro '__SYSCALL'
-      31 | #define __SYSCALL(nr, entry)    (syscall_t)entry,
-         |                                            ^~~~~
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+c017800af5c7 did not change this helper. The bug is present since
+v5.15.
