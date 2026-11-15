@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794771349;
-	b=TfSkt5nAVGN8QH0oLXpslLF7+N717WlaDOifgHrpHjZOZHdUVEgJYsJFADOqR7w26Lyd
-	 uf2n1Bs263w9XeoViPdkyhV9Qi4I4bQ/h42WbAKp6Z6R9bqXZ5ppu5mvG6swn2St37HGR
-	 xba4N1fpZUlze27RUa4XoBOFpInCEPKbojRBi73mbjB1ECmV2HBSVH4hiF4WOYYHo2qgU
-	 QdAOJ47sMxDx/LVcC4VRSrTBj+ZlRdreZN/Zab7OEu3Og0D6HCYjgcfse/39r6ur443qi
-	 aMxCxrhhO5DDCE2SaVYgchwf56MdiDcrQc9c56dJPLbkqUzEGkgomJ71qFU6ida5CZw==
+	t=1794771350;
+	b=RWI/z1pzVqsHshYeKM6bZjn3b1e6Wr989WILNtzqRf2U6jC2TxWWyfXxGD9298pXVhnK
+	 7LyfdfuFtkv63ABGfjODOG0jsK+MQR9hSZvRAynywYB4pYibQvMyPz0SZTlXKlYhN2Om/
+	 TSMsRB5IGPiCRWYZAxjN0rvZ8pc1mp8NPdUXDt1CkVrXgGkGdfqoRXA2TED53QMGEforL
+	 /bzkuUNwg6Ml2Ykwk9VRQUbR0Up9zy1lnXfzOURUZjgo+PXn5lLTs4GfZhbXE+bJdtpLq
+	 jG72GSd6vJ/UkSLzTfdx917cJQLiU7ozVBuHxpBT1PiNgP8C+YxLsMc0Nh977XoPvPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794771349;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794771350;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=F1yhPQtGuQiIVxyFRyGRvPMKXeA34EsZZQXwH34MUDA=;
-	b=qEnTIJK4w6hSB4t+5sb0z/wDSyhRN0Qw+ZCiHoZ3QrgjLknTCpxqbuK+mdLNK12/sKQs
-	 HBVOef1SkgCrEAn4n5neHehHviVoyQGGL0SUU8Z4XIbaTseShBp/3i44k8leo36uzY4IF
-	 R12MXi9Y/xh9600gmzbH4Frj73g+m/bFmkqIgQGYKXDUa/qHyEse+FzWo4+Mz+SCpw8h6
-	 p6Fy3uS4vFWRVS/0hl/jN6z8w1EphlXojkVHUZX10pSsd1x+gwh/O0bazA9Gkh2u8Kd8f
-	 uZbVWw3T/IhRUg6Le+4nhBt7Pyk8N1PVZ5WTxx+GTVmTcdNBjH+PGyLYUA4aeAPe9sA==
+	bh=A71Vxm6qPP+187+TkTcZc1nFho9ZnzIp6cYrVgpdGpg=;
+	b=JpIS7NFVnEsWtS+XOAcr8/p2lRpcA8j4mwaaim/NgaRqDlrBdVPKfuYxIDIsxEFCOYqm
+	 n40emlPW+b33tqgshpXFt4h0o4iYKYwoszIZ24XrcdFjcky3TkTPsg3wupTitBmGCmD3X
+	 EMgejCIpWRAH19ICucwGAnGTCzDaqgdQ1Di0hqjTQMr25ClWI8A3Su7w44xdIY0JnXvaU
+	 2rDmfmJExAl3tN0USD+eRRzkEHsmRpkH8C5ZZ7Vxlig+KaUHfvVaoAog88jCKI5ix5Hfv
+	 UGybBhs10U/tBbQHJX2yF3zND4SVFlvaG0hJBwRq6QOpTxJhB5VvIf6b2mk+08DL3Og==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Ddd1tPw9;
-	arc=none smtp.remote-ip=209.85.218.52
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=BnRr26k3;
+	arc=none smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFA2606A880
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:35:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDFA2606A880
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6653E606A887
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:35:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6653E606A887
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Ddd1tPw9
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c50a2efbe1dso429284466b.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 11:35:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=BnRr26k3
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c4d21051042so464937566b.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 11:35:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794771346; x=1795376146; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1794771345; x=1795376145; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=F1yhPQtGuQiIVxyFRyGRvPMKXeA34EsZZQXwH34MUDA=;
-        b=Ddd1tPw9RAVNYmD12nYH3+lDIsw1GToia/TS6/59V68w+pW8wA2Ki3VhpKYAmnAnO2
-         jeIup19iPB0uS7rCH8PHJknGTdquhpQx2Qjpmmka9fpGIOzuEmYt9M8ptEi6A3JxT3sW
-         8/5pEYQxQBHdAfY4aAei+Fe/QAvKlUNOfVgnhjlqSKYKTBbZho6GMt7Gb3uOropgCzPy
-         a23XRIktJ0XNMq4SRpqeM5KE18pG/hlNQY5EGHXdW2tj9yQRW76VFLzawNBjI1QEyEIW
-         OG7/xrshCkTwNomu8g7+z4o1ieIbvizWy6KJncCgY85zVeU9d1mOPszv4TDP4XwOUcee
-         L2kA==
+        bh=A71Vxm6qPP+187+TkTcZc1nFho9ZnzIp6cYrVgpdGpg=;
+        b=BnRr26k399RsdMOHX5eH/Zxcr0/ZNWhSJ0dtvkwH/YUqVso17JVwuWk1gH0B4garbK
+         CT4nnq3fpTI51stp3EpGM4ZB3aWoRlNcp61ZHTZN8jhjdzHyVYGEWmjPN6swd2ntHS1N
+         IrvOiVM/qhoMax+IaloSB49L2W7FBrL5BKiv+3opc3jBBqBi1gHuJjX2PIrLzttChG5b
+         Sbw5Mcq5pt4lIWRFGkV1T1UWIszVEz/BmZ16V8F8KDopQ86V/X1nR6fjdEoGmpCdiQGf
+         aZm8HUU/D6yE0d/cvyGR7WzYuI2PEDBopzxMP3qw5vZW2z6gc+mjZcUnn+XHfU4lfsUn
+         swyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794771346; x=1795376146;
+        d=1e100.net; s=20260707; t=1794771345; x=1795376145;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F1yhPQtGuQiIVxyFRyGRvPMKXeA34EsZZQXwH34MUDA=;
-        b=Q41MpsBBxYNQvRjGLniL7HmLo+wtiXhC6U5xIaTEtIHBxRShVA1aIlbbSOHMKfzHAa
-         4wkXELHAsIVNgOLs+LeMUJZSupfnR9wWFv3uayRQVJHwnL11rsFf92pjXF0CVshzYTJK
-         d7vmKo3/1anTzw8LQX6Pnj0HhYrGdD+YvR5DBjdQFHxMtDv+PEUFy/PGF3Nynrre6HE8
-         80DgZvPyVvayBu7j3WLdLL/4c/Fo7geVHMTUR9t2Edbt1CHPPEDYEoVhuGz1mzuHnenM
-         JcpKXWnZHMpH0tnHA0mA6x1ocFakTXSvg1INkrPfelBFWqIBtIwUiHBGZlsXDBWsv4Ay
-         Z3RA==
-X-Forwarded-Encrypted: i=1; AL+hErGymbg76C3nm9+1wBH/pvJtwKG2X4ACvL845HnRyyX8lQngbwWrs7PGxbajmznBtlHFQhgJ1M33+/X2XSRdVts=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/7T/0e/nn/6xLw+4elg7VOcAngO9+N7hBizEvC5U61yPr3HYhP
-	kIyGawigSaCfbhrVojVbAGV27viSOpsmJ40Mo8qwAdq9dnJC57o4NzUYuQS+wV7SYAA=
-X-Gm-Gg: AYBFou09s1IKOAey11E7+X4Uk9WEf6H79LPYbO6O88wrLUg2DEK7fcnZrwS+YTdZJgx
-	lfcWPZl1Gal2NShD7rTbJZh2tVJlGr5DUhEO3i+fzsLrERu297hsWeptNdmFPfwS9vHsFaPl6NA
-	Ji2IIihnOe+HEWOwy9up/xgPAEKui1bmw+r+FR6i2l8G4QA0jtCGSB+orL0UnxNqF/kZpjlgF0V
-	9HGDba8lkzvvUHhTwaSXxdhmokTn6q1CZ7I4dcBCfW34IEb7zvyR0aY6vgBhMZg2ANG2iySQPW7
-	RYXNBaUsHM9WwGQedo5rGfz5uvI6nMXgZLVZRPS91ubsaHC1g2eyKRCu6veOIrtu3pZhvx+w492
-	H4p923RpcodbPcPkxSjVe3lzO+eYV1rZ4ku59IwMQI+T+QuyGvGzeouw/Zk/D0GTY20cEAYFLwx
-	n3ySzT3LTeV8gq6ygeji3+u/dP25BDO3B1KUQsvnL1VIVuhu28dLYrKdf/i/tsVEIH4qAkwR4X6
-	MsuYIWrkj6yVjHKuF2yt7zoU43rCScPWhhKdmSY4x0WjAITgW572xN8gCGltdFvGIeHdrYpmNxY
-	XDiqfsB4QWX/iQszlQ/j01rF5P00gIx9gEHFwg92A0QFRAxXkXAngke5dkU=
-X-Received: by 2002:a17:907:94cb:b0:c2e:3a72:ffbd with SMTP id a640c23a62f3a-c5096389759mr692569266b.41.1794771346212;
-        Sun, 15 Nov 2026 11:35:46 -0800 (PST)
+        bh=A71Vxm6qPP+187+TkTcZc1nFho9ZnzIp6cYrVgpdGpg=;
+        b=FauVnh7Z4Z+un8IU1uVBCEodDww8CLfIxRlm8XHVyZnTEJ8recXEaBO5umvAtHOgQP
+         i+LxZUlWj8UsyuuMu2SEa9MI7H6EAEb9nKISKpMzLKG/LE8wdU3eotGIaB+ureJN9+ay
+         hXvuy2httAIW7c17CACinPnF+mVATMXbwAnyI5Cz1xyEmbOnNzr9GoxCK0RKd9xVobrP
+         aimQzX0jg7aEKSBsMHypeeZ5NCwctuYiiHYK+ld5aWtnu2Znl+sonZzOjaoDUfJNRdJb
+         RnY2mjBzNZrZftSBS9xJJmUb4k8ieXpKio35V3kSyv6CeWUklBUxl1t+g4/xAPNcqrTD
+         I7WQ==
+X-Forwarded-Encrypted: i=1; AL+hErEUZhdMkuI4R7e8FxHzwWlYELdkuMgzmJmmp/K6ckZgYRnTP5rVTkM+nhpWbp1jcU2JiUqWXfk2rdU+dQCPKDk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8o2NOmNfZEXB/qM4slYf5RKV69S5b94EoQ1docoLw0oj3OHDzg
+	qzwqhYYg64Wdn5HJQbMwXzKkR60yqhjBWyZmKcEuDZ9/HB7mf2Ln/9eI/+p+siL7mJY=
+X-Gm-Gg: AYBFou1slPyGLQGM4ryjiBiyXubMkq5ZFqcmlrXFfXCs2bkN19FI82h6gA6YRZhDdxO
+	POWzUytWs/AhV/Htzeqx4ADXVdzUl2lrhVkoSWO3IYjsDZpGfoRPJxzLB0cxuhoOYuOaquDWIwD
+	ZfBnF0c+Id04Kd/HZHs/MbjBsp/xDQ6k13xe0SZpIbEpmi+Uuy8Tihfm/Mgt/3NcuqXEJ5OoTO3
+	/wKMfCEuobX0NOuvrL7gpMc+xNzTo3gQlp2gI6AAi9/UyTI8lotegMnDnMsq25KTYbl7w4nc2/h
+	Lo/aaKsVl5DTV++ylutkMrr5ELXzIt6T3Zwi1bZSTYhLwbAWmH9+pRUfGdxfkX4aOnSl4vlMeZK
+	uxJk22djKXRzwj/mEqGKc3qHhQ24ph7WL/ZZ2oHSCDK1C3Y76wUsDHwzG7hTPLlq8KWhhF60rRJ
+	1e/mEBcQ6RWFh+1hldOu0s0AtAiXdUeAHZFR4R0d/dxY/qNh+pNN5Xf3Y6T3JUOJNsQQbCE42Wt
+	/fAfuUxby0/7ofxKvICXvIlUUlv/h3AeEVrChIwpLUeBw+6Xvfx+OlRvYkd+UjlbFsH6tCFJgDj
+	0s8Xyz0LXzAvz4uY9VD3htDixJeI84MVM/2N0QDdXaIrGLaaASRlzCTs0g==
+X-Received: by 2002:a17:906:9f8f:b0:c49:a539:aa45 with SMTP id a640c23a62f3a-c50963cf771mr650243166b.42.1794771344781;
+        Sun, 15 Nov 2026 11:35:44 -0800 (PST)
 Received: from L9JK9NPFH9 ([104.28.20.57])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b24b88sm340448766b.16.2026.11.15.11.35.44
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b24b88sm340448766b.16.2026.11.15.11.35.43
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 15 Nov 2026 11:35:45 -0800 (PST)
+        Sun, 15 Nov 2026 11:35:44 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -100,9 +100,9 @@ Cc: andrew+netdev@lunn.ch,
 	kernel-team@cloudflare.com,
 	tianyi.gao@linux.dev,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 5/5] selftests: net: veth: test that RX queues keep their NAPI IDs
-Date: Sun, 15 Nov 2026 19:35:31 +0000
-Message-ID: <20261115193531.57679-6-tianyi@cloudflare.com>
+Subject: [PATCH net-next v3 4/5] veth: use persistent NAPI config
+Date: Sun, 15 Nov 2026 19:35:30 +0000
+Message-ID: <20261115193531.57679-5-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261115193531.57679-1-tianyi@cloudflare.com>
 References: <20261115193531.57679-1-tianyi@cloudflare.com>
@@ -117,88 +117,39 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a check that each RX queue keeps its NAPI ID when veth deletes its
-NAPI instance and adds it again.
+veth deletes the NAPI instances on link down, when NAPI is no longer
+needed for GRO or XDP, and when ethtool -L reduces the number of RX
+queues. When veth adds them again, each queue gets a new NAPI ID and
+loses its per-NAPI settings. An AF_XDP socket bound to the queue keeps
+the old NAPI ID, so its busy polling stops.
 
-get_napi_ids() reads the NAPI ID of each RX queue with the ynl CLI. The
-test saves the IDs once GRO is on. chk_napi_ids() compares them with
-the saved IDs after ethtool -L raises the number of RX queues, after
-XDP is attached with GRO off, and after link down/up. A failed read
-fails the check.
+Use netif_napi_add_config(), as Documentation/networking/napi.rst asks
+drivers to do whenever possible. The queue then keeps its NAPI ID and
+its settings. virtio_net made the same change in commit d5d715207e29
+("virtio_net: Use persistent NAPI config").
 
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
- tools/testing/selftests/net/veth.sh | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+New in v3, as Sashiko suggested on v2 [1].
 
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 685209995485..9496b599d722 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -148,6 +148,30 @@ chk_queue_napi() {
- 	fi
- }
+[1] https://lore.kernel.org/all/179470883411.2199510.13825316417997386083@kernel.org/
+---
+ drivers/net/veth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 470c4f95e4a1..1c7ee3bf65f0 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1057,7 +1057,7 @@ static int veth_napi_enable_range(struct net_device *dev, int start, int end)
+ 	}
  
-+get_napi_ids() {
-+	local ns=$BASE$1
-+	local ifindex
-+
-+	ifindex=`ip netns exec $ns cat /sys/class/net/veth$1/ifindex`
-+	ip netns exec $ns "$YNL" --family netdev --dump queue-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" |
-+		jq -c 'sort_by(.id) | map(select(.type == "rx") | ."napi-id")'
-+}
-+
-+chk_napi_ids() {
-+	local msg="$1"
-+	local ids
-+
-+	ids=`get_napi_ids $2`
-+	printf "%-60s" "$msg"
-+	if [ -n "$ids" ] && [ "$ids" = "$NAPI_IDS" ]; then
-+		echo " ok "
-+	else
-+		echo " fail - expected $NAPI_IDS found $ids"
-+		ret=1
-+	fi
-+}
-+
- chk_channels() {
- 	local msg="$1"
- 	local target=$2
-@@ -492,11 +516,13 @@ if [ -f "$YNL" ] && [ -x "$(command -v jq)" ]; then
- 	chk_queue_napi "queue napi - default" $DST 0
- 	ip netns exec $NS_DST ethtool -K veth$DST gro on
- 	chk_queue_napi "           - with gro on" $DST $RXQ
-+	NAPI_IDS=`get_napi_ids $DST`
- 	if [ $CPUS -gt 1 ]; then
- 		ip netns exec $NS_DST ethtool -L veth$DST rx 1
- 		chk_queue_napi "           - fewer rx channels with gro" $DST 1
- 		ip netns exec $NS_DST ethtool -L veth$DST rx 2
- 		chk_queue_napi "           - more rx channels with gro" $DST 2
-+		chk_napi_ids "           - same napi ids" $DST
- 	fi
- 	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
- 	chk_queue_napi "           - with gro and xdp on" $DST $RXQ
-@@ -506,15 +532,18 @@ if [ -f "$YNL" ] && [ -x "$(command -v jq)" ]; then
- 	chk_queue_napi "           - after gro off" $DST 0
- 	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
- 	chk_queue_napi "           - with xdp on" $DST $RXQ
-+	chk_napi_ids "           - same napi ids" $DST
- 	if [ $CPUS -gt 1 ]; then
- 		ip netns exec $NS_DST ethtool -L veth$DST rx 1
- 		chk_queue_napi "           - fewer rx channels with xdp" $DST 1
- 		ip netns exec $NS_DST ethtool -L veth$DST rx 2
- 		chk_queue_napi "           - more rx channels with xdp" $DST 2
-+		chk_napi_ids "           - same napi ids" $DST
- 	fi
- 	ip -n $NS_DST link set dev veth$DST down
- 	ip -n $NS_DST link set dev veth$DST up
- 	chk_queue_napi "           - after down and up" $DST $RXQ
-+	chk_napi_ids "           - same napi ids" $DST
- 	ip -n $NS_DST link set dev veth$DST xdp off
- 	chk_queue_napi "           - after xdp off" $DST 0
- 	cleanup
+ 	for (i = start; i < end; i++)
+-		netif_napi_add(dev, &priv->rq[i].xdp_napi, veth_poll);
++		netif_napi_add_config(dev, &priv->rq[i].xdp_napi, veth_poll, i);
+ 
+ 	for (i = start; i < end; i++) {
+ 		struct veth_rq *rq = &priv->rq[i];
 -- 
 2.56.0
 
