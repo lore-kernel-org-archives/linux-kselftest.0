@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794782087;
-	b=LcbTTuSRArt5ocxvP3DaZspNyMk366N7WoiwSMFYoZ1Yv04pqJy8eXs974yWBC8fOCFt
-	 d1aS1D1nqYfbz7AnoeUV6ZGw9PYbfrIbmx8hMrAV3t521QbMzw0URViMVBcvpHaMjBL+f
-	 fhTr1hW7RFIyRZJYnXlZctXnPC81ctSb0XXrYtXTh5wD7iqrplHblAkegqwcaOxxi4eBp
-	 KChwJYOqX3DDVajpzkkyMFVQjuP7t6FBTOMzLzsI8b4Kr/dB7pQkT+oJUIKxIyu5Fq13H
-	 FUZvIuyrAFS713BbpJCjHRuYfo15mTilOEHhTLjWHG2YpOTa2EGM3YyZdk8h7fk/stA==
+	b=CTY51wUoo+YCbZ8nwIy8IlFboBgamKAT9UmTeRLxABkk/8RjGRVpUQIvbakewUvs39I/
+	 f1dsgZcj83hjQUIPQFe9s7mhkrwS5h0z529ncbkN7Tf8OCKE+1jHfaJYFGWYeJRJcLguf
+	 ki3KQ2NsA7Pje5pDD/Cb9EH3Iwb6TJvvWVXZkRSvzMbOiK+TbBK/cspBrgMw2TCiNyFYz
+	 cX9haHeqs0IBj/jsvIsfsyr9IVJgxALYshUXE2qPbVsKCn6H5mcuZ45kaFZpmvqRlsjP7
+	 Rm/vSbFA69q426Pp5vz1wLjtrLEeDajX+cf2l9fYI9wnOzYFJhNFpDDsLgUfNik1+PA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794782087;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=K78cscSK993U/eDSRsHNE0Wl/CJc5YLqGyOkhSFQ5d8=;
-	b=HryVsmGEjnNgoFVh2cXkW87FMiBuETWYltZ1nPkmcYGyzh1ZlaJ8eQQ4CR4LxScpyG2R
-	 HFibwyv+apDsO6B0pXt7NKUwc92atd1bMFrm1WoIv/5iZKEv7FFx/CHCG6J7wJZNHc16y
-	 Tdc+jYdCGSvhE5n0xkK60w9Se6wxAN/OhtV5f2hH4cirU3pTDbyK0mfLzHwWdopjSzhjI
-	 UEIqBBQVYLa0DGtoPl0kV+BE4T3oO+UEGqhqZSj1gyDaY0ox6/x0h2AcWeP8CKycVmo8k
-	 4a0zQP0pk5xw13yK3bUxSx8181TcGDCW5yVJr1qZ+3cOjqXRcZrwF7rxAhkrkxg9fNw==
+	bh=23RmUgKwkzTjxTukTOuc5pfGxIXjdwf3dD8nTQxRrOU=;
+	b=uRswk/Vi38NttptqmvN/Dh3tIIYSwakpWn5iRDblv0YBAEGCpRK0NhSvWLLqs/tmilGJ
+	 fDHQ/Ky2FZVU2lfy/enCGx7R9pHDqBHmM+cFQmdBLSYkZy+BTTE7EZe4QLwzkSfr9s3V0
+	 +DwtWNHU4T8rISDNF2fqny1uxyecEbC4fVLEhOZbArqN0E4b2Hyr8l6Sv6vgy0H6ACYkU
+	 RxpYTDUZUCfLIZI5fy2cz82NUO+g9hRHdNrFeXHUl5oX6bVpIx9DnHtXZMlNwjHD9NozB
+	 Hi9KZWER0LA3KrMnDV4i6BicVmJjRsn5cdhyMCSsRh3DpzkI6m+f8gegVQbXykWd8GA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SMw+IJUQ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2Odb1Wk;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7BC606A8B9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C330606A8A4;
 	Sun, 15 Nov 2026 22:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SMw+IJUQ
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H2Odb1Wk
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1794782087;
-	b=O1o0NXBEwZ5A45TRa26DM+pifoo5sK3aHNjTMlEQLGsjmTVOtaRS4fy90o17fSoS28oa
-	 D+mGL8xCcjC8DqIcuEK6yCny83OqgTnzHYAIMRVUcN2I9XkXJ26Oa0sL35J34DvQVXg4v
-	 ekIB5I4Z/OQlZ3JTwDHhH1AQaPRgQ3Tp+qaL/plu55RJOcnS/sN14ON407+QG4LOoBU5N
-	 1tQUrOxJv+98Xe0SJIU3//rKrKPQPIyftcdcuzZWh9WdUyFxlL7ORA53uFLUraZd4+kRQ
-	 oejpCNdd5GcujfHMeo3659BrpkiVuJyNQ1HamPMT54brOUWOqLkJdCORfhvB3d5aqag==
+	b=T8nxya5dtrJJCzoSA+tmnlG+NiNzCkec3CTboIHrsBRTj/t5Df6Z5wHH/d4G/bg5WKEd
+	 DpGlhSRpjNCaiRLMmub9itmSLxN1EL0IRAirOGfLgaCivUNB58fowyvOC8fmkp2zd7bkO
+	 LLM5TG8aYqIh+ty5t1DGLGNVzj40Qg9oay3Wz1sUsSyvJEQv+tlP4AjSg5IJrGMBTxw+0
+	 lFa6MgTIVc0Cwp/afW/rv8t3K2SeAaentLU6NnZ48PcHaRbuJ/VdV/y/i9XqCGFZ8eTcf
+	 yL7CNRXPTOsKkwLsOx7QkIQslf0scNXVjRoO2h70HBGdlmsqmOJp1fikHDRCZses3GA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1794782087;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=K78cscSK993U/eDSRsHNE0Wl/CJc5YLqGyOkhSFQ5d8=;
-	b=xGb7IQwPZfrWId9EmqW6FrT6BjCfrtOYA94/FkzR2J4t/qT8qEP7XrbLkPhQA6XnpMF4
-	 0B9Tk9SuWHQIKl80zSfnGh5HCf3V4vKdhW+mtAxsSjOZ3v3gA3ZFNSc772WkL30r+1rnu
-	 LWr6AFcE8ui3h34QYvV4xugz3+zNuwm339t7Pble1tv4AmAroF/Hj0gftmIVUl4iQQ9A+
-	 c0GnQV75J98Kw2ng/e5gPNBnBe9S/8V4EQc0WtpD2OKHMm1tT1phBnYAZ33h9N131Lqoc
-	 HdnLUBF1a07Eqy6j6sa6lPfCW7qqKXWZM9KEfXsgZLyv5S3Rc8VWN1HhpklCe8BbShA==
+	bh=23RmUgKwkzTjxTukTOuc5pfGxIXjdwf3dD8nTQxRrOU=;
+	b=VRJBiqFeDsuy8veB1dSLYXarNMlYmOytfHuG+Ah5famFAtRn4ZuclAokXy8tDXU4WCsV
+	 Z7XVJ71Ek7sOetB+yKbNI/CdTVHw0zyVzLJUlI9PhtHweX5PpYYvvej4XHMoeT51MVPED
+	 9wOeRFFYRUK5VCAipuiB6wkdA00dhtER7T5XkrZRNNoLmZSpr7njR/y6Q4Ng6sIqkK1P7
+	 WYb1VHqlzu1L8sta5ySBFEgd2FzcOcWAL5WfjoIAy6yx2vqBcH6WI34pU+uwIrO3dGufy
+	 wXswXNoy4T88hCltDnNKLP3zM7YRsO9u+Zkm9Og6Spwf7qv2qaE7O1dElZZU/+Ui5LQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B1CAE1F000CF;
-	Sun, 15 Nov 2026 22:34:45 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id DA1821F000CB;
+	Sun, 15 Nov 2026 22:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794782087;
-	bh=K78cscSK993U/eDSRsHNE0Wl/CJc5YLqGyOkhSFQ5d8=;
+	bh=23RmUgKwkzTjxTukTOuc5pfGxIXjdwf3dD8nTQxRrOU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=SMw+IJUQR1ZPa+Ie0IXyeL1wD8mvSXFwZoXyl0VmY109ybnh2XfVaTze9SgufaYz9
-	 JfzMvmKu1LfWMBsYTrENxnfpZj3Now3TBjQXQXCe/UTT0t3hzl41kzVSlJQK2oC3LT
-	 mhkqiKmt/8E4kfp9MTid2TMVcNjjc4OPN0lo55icJAUos2TRc/dErPCCLC1W1LPMXt
-	 zazeu2lAxjZ47T6nZ0U2uyJK6rxVR4wEMVrvSCIimk5SMMCW4/H0APzzQ66vMc7XBj
-	 6VEMh1YrmSdOFpIr01igz+jvlvYkIiidATDXpxf0GAWooVXzl9SEOI+DOzsSe5ui+0
-	 Aah9zwxO/h5Pw==
+	b=H2Odb1WkDoSKM1UxA1qcVX8uvxtmomGzb3zSTOtScGvVN3QWr3c9m+mgO8GnbGYFC
+	 oBO2aDBIkefxZGKKFteqk7g08FsLdvREQDNLxPPpXFAx5vonZqQWW0ujBV4cvztqVb
+	 A8nGAFruOyvIZ+4gF2a7E+v8qwy0oGA9KRMWSt8nfkRY7Xd62AX/AkN6WX67/ucwBa
+	 d7EP05LckGiDxsh2x+tMjZTukKwVtGxKKzEMYre7Lz1MCB9xcxTb87bnCaD+mTQabR
+	 62a3eV8l0FNmv/4hoJH8msvGgupdfnfB1YU7/gSTmPNNiEG/XjFFPFy5KtKJloQNFz
+	 lFo3NgemCzd5w==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id D601F4A259;
+	by lkml.kernel.org (Postfix) with ESMTP id A811C4A251;
 	Sun, 15 Nov 2026 22:34:43 +0000 (UTC)
 From: Alireza Asgari via B4 Relay <devnull+alireza.asgari.net@kernel.org>
-Date: Sun, 15 Nov 2026 22:34:47 +0000
-Subject: [PATCH RFC nf-next 7/9] netfilter: nfqueue: reserve capacity
- against the bound owner
+Date: Sun, 15 Nov 2026 22:34:45 +0000
+Subject: [PATCH RFC nf-next 5/9] memcg: test capacity reservation rollback
+ and refunds
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261115-b4-nfqueue-memory-accounting-v1-7-b9cc30819997@asgari.net>
+Message-Id: <20261115-b4-nfqueue-memory-accounting-v1-5-b9cc30819997@asgari.net>
 References: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
 In-Reply-To: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
 To: netfilter-devel@vger.kernel.org, linux-mm@kvack.org
@@ -101,11 +101,11 @@ Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
  cgroups@vger.kernel.org, netdev@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Alireza Asgari <alireza@asgari.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794782082; l=12745;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794782082; l=12013;
  i=alireza@asgari.net; s=alireza-kernel; h=from:subject:message-id;
- bh=2RMtp6Bo7PwbFVa/IduU+cdsBTZbySOUxORVFjimTHw=;
- b=Zo1EQcnHYoQyuJZjflJmekByHV00hvlWIoJWZS7R8/Phb4tO0CHqt6lCbdJjHE44PnHZwZGsj
- z2yVl5+yj2RA/s32bJUTSeE0cYF85zhCsqTj8+G1rjjr1qVeV+6kAM3
+ bh=JloqzugReTrQDTmQ8+3w3kkQBiN+qr4RbrFYTkj8puY=;
+ b=gg11vMfGHX0ZXN6TpMvg36yRN9ncGpEk8plCsVJP9PFk5Y2as5paAhWF0bnq91G+PynzVjsEA
+ Y1JGes7kSe5CdUilOWpBrOq7AGkkAT/+kmim7jw6bR3Seu7vVVS31XK
 X-Developer-Key: i=alireza@asgari.net; a=ed25519;
  pk=wuQ0/M69FqoVnrCMUJ13EQCwrCwVjCrtz75k15vW8tw=
 X-Endpoint-Received: by B4 Relay for alireza@asgari.net/alireza-kernel with
@@ -116,370 +116,330 @@ Content-Transfer-Encoding: 7bit
 
 From: Alireza Asgari <alireza@asgari.net>
 
-A local queue allowance does not by itself bound aggregate reservations
-across queues. Outside the initial network namespace, capture the binding
-task's objcg and charge activated capacity against that owner and its
-ancestors. Effective aggregate protection requires an applicable finite
-memory limit; root or otherwise unaccounted owners remain uncharged.
+Add reservation-specific KUnit coverage for partial-growth rollback,
+reparented-root growth, range and architecture checks, and root refunds.
 
-Reserve capacity on first activation, after any inactive sizing. Publish
-copy mode, size, and flags together only after required growth succeeds.
-Keep activation sticky so switching to COPY_NONE cannot release backing
-for retained entries or an admission already in progress. Configure a new
-instance privately before publishing it to packet readers.
+Transaction cases inject charge results through KUnit static stubs.
+The root-refund case uses temporary real root page-counter charges while
+other CPUs are stopped, and restores the counters even if the expected
+refund is absent. It models charges inherited after reparenting; the
+network selftest separately exercises real cgroup removal.
 
-Retain page-rounded backing for the greater of configured capacity and
-saved bytes still in use. Serialize configuration and refunds with a
-mutex. Packet releases schedule coalesced refund work; the worker rechecks
-the target before refunding. Teardown waits for the RCU readers that can
-hold detached entries, stops refund scheduling, cancels outstanding work,
-flushes retained entries, and destroys the reservation.
+Keep these tests separate from the generic memory.high suite and make
+all redirection conditional on the reservation KUnit option.
 
-The charges are ordinary memcg usage, additional to actual allocations.
-Empty activated capacity therefore consumes budget and can affect
-memory.high and protection accounting. The budget policy, nominal byte
-allowance, and reservation API are proposed for maintainer discussion.
-
-Link: https://lists.openwall.net/netdev/2026/11/06/366
 Signed-off-by: Alireza Asgari <alireza@asgari.net>
 ---
- net/netfilter/nfnetlink_queue.c | 213 +++++++++++++++++++++++++++-------------
- 1 file changed, 144 insertions(+), 69 deletions(-)
+ mm/Kconfig                       |  11 ++
+ mm/memcontrol.c                  |  16 +++
+ mm/memcontrol_reservation_test.c | 232 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 259 insertions(+)
 
-diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
-index d1e6e02e144b..b37fb6f21482 100644
---- a/net/netfilter/nfnetlink_queue.c
-+++ b/net/netfilter/nfnetlink_queue.c
-@@ -32,6 +32,8 @@
- #include <linux/icmpv6.h>
- #include <linux/ip.h>
- #include <linux/list.h>
-+#include <linux/memcontrol.h>
-+#include <linux/mutex.h>
- #include <linux/sctp.h>
- #include <linux/cgroup-defs.h>
- #include <linux/rhashtable.h>
-@@ -73,6 +75,10 @@ struct nfqnl_instance {
- 	struct hlist_node hlist;		/* global list of queues */
- 	struct rhashtable nfqnl_packet_map;
- 	struct rcu_work	rwork;
-+	struct work_struct mem_work;
-+	struct mutex mem_mutex; /* serializes capacity changes and refunds */
-+	struct mem_cgroup_reservation memcg;
-+	bool mem_activated; /* maintain backing after the first activation */
+diff --git a/mm/Kconfig b/mm/Kconfig
+index dd763d3d0e36..39db388f193f 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1541,6 +1541,17 @@ config MEMCG_HIGH_KUNIT_TEST
+ 	  fixed-point rounding and arithmetic bounds on 32-bit and 64-bit
+ 	  kernels. Say N unless developing memory cgroup high limit handling.
  
- 	u32 peer_portid;
- 	unsigned int queue_maxlen;
-@@ -94,6 +100,8 @@ struct nfqnl_instance {
- 	struct list_head queue_list;		/* packets in queue */
- 	u64 mem_limit;
- 	u64 mem_used;
-+	u64 mem_reserved; /* pages, published under lock */
-+	bool mem_stopping;
- };
++config MEMCG_RESERVATION_KUNIT_TEST
++	bool "Memory cgroup capacity reservation tests" if !KUNIT_ALL_TESTS
++	depends on MEMCG && KUNIT=y
++	default KUNIT_ALL_TESTS
++	help
++	  Test capacity reservation transactions, including partial growth
++	  failure, architecture support, and uncharged growth after reparenting
++	  to root. Transaction tests inject charge results. The root refund test
++	  checks real counters with a temporary eight-page charge while other
++	  CPUs are stopped. Say N unless developing this interface.
++
+ source "mm/damon/Kconfig"
  
- typedef int (*nfqnl_cmpfn)(struct nf_queue_entry *, unsigned long);
-@@ -146,6 +154,11 @@ static u64 nfqnl_mem_limit(unsigned int maxlen)
- 	return (u64)maxlen * (SKB_DATA_ALIGN(sizeof(struct sk_buff)) + 2048);
- }
+ endmenu
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 0227d9b411f5..d49ce5a92c1f 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -73,6 +73,10 @@
  
-+static u64 nfqnl_mem_pages(u64 bytes)
+ #include <linux/uaccess.h>
+ 
++#if IS_ENABLED(CONFIG_MEMCG_RESERVATION_KUNIT_TEST)
++#include <kunit/static_stub.h>
++#endif
++
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/memcg.h>
+ #undef CREATE_TRACE_POINTS
+@@ -3264,6 +3268,10 @@ static int mem_cgroup_reservation_charge(struct obj_cgroup *objcg,
+ 	struct mem_cgroup *memcg;
+ 	int ret = 0;
+ 
++#if IS_ENABLED(CONFIG_MEMCG_RESERVATION_KUNIT_TEST)
++	KUNIT_STATIC_STUB_REDIRECT(mem_cgroup_reservation_charge, objcg, pages,
++				   charged);
++#endif
+ 	memcg = get_mem_cgroup_from_objcg(objcg);
+ 	*charged = false;
+ 	/* Reparenting to root removes the limit, not previously held charges. */
+@@ -3291,6 +3299,10 @@ static void mem_cgroup_reservation_uncharge_batch(struct mem_cgroup *memcg,
+ 
+ static void mem_cgroup_reservation_uncharge(struct obj_cgroup *objcg, u64 pages)
+ {
++#if IS_ENABLED(CONFIG_MEMCG_RESERVATION_KUNIT_TEST)
++	KUNIT_STATIC_STUB_REDIRECT(mem_cgroup_reservation_uncharge, objcg,
++				   pages);
++#endif
+ 	while (pages) {
+ 		unsigned int batch = min_t(u64, pages, MEMCG_RESERVATION_BATCH);
+ 		struct mem_cgroup *memcg;
+@@ -6699,3 +6711,7 @@ void mem_cgroup_show_protected_memory(struct mem_cgroup *memcg)
+ #if IS_ENABLED(CONFIG_MEMCG_HIGH_KUNIT_TEST)
+ #include "memcontrol_high_test.c"
+ #endif
++
++#if IS_ENABLED(CONFIG_MEMCG_RESERVATION_KUNIT_TEST)
++#include "memcontrol_reservation_test.c"
++#endif
+diff --git a/mm/memcontrol_reservation_test.c b/mm/memcontrol_reservation_test.c
+new file mode 100644
+index 000000000000..5ce4f05431b3
+--- /dev/null
++++ b/mm/memcontrol_reservation_test.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <kunit/test.h>
++#include <linux/stop_machine.h>
++
++struct memcg_reservation_test {
++	struct obj_cgroup owner;
++	struct mem_cgroup_reservation res;
++	u64 refunds;
++	unsigned int calls;
++	unsigned int fail_call;
++	bool uncharged;
++};
++
++static int memcg_reservation_test_charge(struct obj_cgroup *objcg,
++					 unsigned int pages, bool *charged)
 +{
-+	return (bytes >> PAGE_SHIFT) + !!(bytes & (PAGE_SIZE - 1));
++	struct memcg_reservation_test *ctx = kunit_get_current_test()->priv;
++
++	*charged = !ctx->uncharged;
++	if (++ctx->calls == ctx->fail_call)
++		return -ENOMEM;
++	return 0;
 +}
 +
- static bool nfqnl_mem_full(const struct nfqnl_instance *queue,
- 			   unsigned int truesize)
- {
-@@ -153,6 +166,83 @@ static bool nfqnl_mem_full(const struct nfqnl_instance *queue,
- 	       truesize > queue->mem_limit - queue->mem_used;
- }
- 
-+/* The mutex excludes limit changes; packet admission cannot raise this target. */
-+static void nfqnl_mem_refund(struct nfqnl_instance *queue)
++static void memcg_reservation_test_uncharge(struct obj_cgroup *objcg, u64 pages)
 +{
-+	u64 pages;
++	struct memcg_reservation_test *ctx = kunit_get_current_test()->priv;
 +
-+	lockdep_assert_held(&queue->mem_mutex);
-+	spin_lock_bh(&queue->lock);
-+	pages = nfqnl_mem_pages(max(queue->mem_limit, queue->mem_used));
-+	spin_unlock_bh(&queue->lock);
++	ctx->refunds += pages;
++}
 +
-+	if (pages >= queue->memcg.pages)
++static int memcg_reservation_test_init(struct kunit *test)
++{
++	struct memcg_reservation_test *ctx;
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++	/* Transaction cases stub accounting; the root refund case calls the batch. */
++	ctx->owner.is_root = true;
++	ctx->res.objcg = &ctx->owner;
++	test->priv = ctx;
++	kunit_activate_static_stub(test, mem_cgroup_reservation_charge,
++				   memcg_reservation_test_charge);
++	kunit_activate_static_stub(test, mem_cgroup_reservation_uncharge,
++				   memcg_reservation_test_uncharge);
++	return 0;
++}
++
++static void memcg_reservation_test_rollback(struct kunit *test)
++{
++	struct memcg_reservation_test *ctx = test->priv;
++	u64 original = 7;
++
++	if (!IS_ENABLED(CONFIG_64BIT)) {
++		kunit_skip(test,
++			   "Charged reservations require 64-bit counters");
 +		return;
-+
-+	/* Shrinking cannot fail. Keep the packet-path copy conservative meanwhile. */
-+	mem_cgroup_reservation_resize(&queue->memcg, pages);
-+	spin_lock_bh(&queue->lock);
-+	queue->mem_reserved = pages;
-+	/* A final drain may have happened while the refund was in progress. */
-+	if (!queue->mem_stopping &&
-+	    pages > nfqnl_mem_pages(max(queue->mem_limit, queue->mem_used)))
-+		queue_work(nfq_cleanup_wq, &queue->mem_work);
-+	spin_unlock_bh(&queue->lock);
++	}
++	KUNIT_ASSERT_EQ(test,
++			mem_cgroup_reservation_resize(&ctx->res, original), 0);
++	ctx->calls = 0;
++	ctx->fail_call = 2;
++	KUNIT_EXPECT_EQ(test,
++			mem_cgroup_reservation_resize(
++				&ctx->res,
++				original + MEMCG_RESERVATION_BATCH + 1),
++			-ENOMEM);
++	KUNIT_EXPECT_EQ(test, ctx->res.pages, original);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, original);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, (u64)MEMCG_RESERVATION_BATCH);
++	KUNIT_EXPECT_EQ(test, ctx->calls, 2U);
++	mem_cgroup_reservation_destroy(&ctx->res);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, MEMCG_RESERVATION_BATCH + original);
++	KUNIT_EXPECT_PTR_EQ(test, ctx->res.objcg, NULL);
 +}
 +
-+static void nfqnl_mem_work(struct work_struct *work)
++static void memcg_reservation_test_root_growth(struct kunit *test)
 +{
-+	struct nfqnl_instance *queue =
-+		container_of(work, struct nfqnl_instance, mem_work);
++	struct memcg_reservation_test *ctx = test->priv;
 +
-+	mutex_lock(&queue->mem_mutex);
-+	nfqnl_mem_refund(queue);
-+	mutex_unlock(&queue->mem_mutex);
++	if (!IS_ENABLED(CONFIG_64BIT)) {
++		kunit_skip(test,
++			   "Charged reservations require 64-bit counters");
++		return;
++	}
++	KUNIT_ASSERT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 8), 0);
++	/* Simulate the charge helper observing reparenting to root. */
++	ctx->uncharged = true;
++	KUNIT_ASSERT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 16), 0);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, 8ULL);
++	KUNIT_ASSERT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 10), 0);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, 0ULL);
++	KUNIT_ASSERT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 3), 0);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, 3ULL);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, 5ULL);
++	mem_cgroup_reservation_destroy(&ctx->res);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, 8ULL);
++	KUNIT_EXPECT_EQ(test, ctx->res.pages, 0ULL);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, 0ULL);
 +}
 +
-+static int nfqnl_set_config(struct nfqnl_instance *queue, unsigned int maxlen,
-+			    const struct nfqnl_msg_config_params *params,
-+			    u32 flags, u32 mask)
++static void memcg_reservation_test_range(struct kunit *test)
 +{
-+	u64 limit = nfqnl_mem_limit(maxlen);
-+	u64 pages = nfqnl_mem_pages(limit);
-+	unsigned int range = 0;
-+	bool activated;
-+	int err = 0;
++	struct memcg_reservation_test *ctx = test->priv;
 +
-+	if (params && params->copy_mode == NFQNL_COPY_PACKET) {
-+		range = ntohl(params->copy_range);
-+		if (!range || range > NFQNL_MAX_COPY_RANGE)
-+			range = NFQNL_MAX_COPY_RANGE;
-+	}
-+
-+	mutex_lock(&queue->mem_mutex);
-+	activated = queue->mem_activated ||
-+		    (params && params->copy_mode != NFQNL_COPY_NONE);
-+	if (activated && pages > queue->memcg.pages && queue->memcg.objcg) {
-+		err = mem_cgroup_reservation_resize(&queue->memcg, pages);
-+		if (err)
-+			goto out;
-+	}
-+	/* Publish activation only after the complete configuration is backed. */
-+	spin_lock_bh(&queue->lock);
-+	queue->queue_maxlen = maxlen;
-+	queue->mem_limit = limit;
-+	queue->mem_reserved = queue->memcg.objcg ? queue->memcg.pages : 0;
-+	queue->mem_activated = activated;
-+	if (params) {
-+		queue->copy_range = range;
-+		queue->copy_mode = params->copy_mode;
-+	}
-+	queue->flags = (queue->flags & ~mask) | (flags & mask);
-+	spin_unlock_bh(&queue->lock);
-+	if (activated && queue->memcg.objcg)
-+		nfqnl_mem_refund(queue);
-+out:
-+	mutex_unlock(&queue->mem_mutex);
-+	return err;
++	KUNIT_EXPECT_EQ(test,
++			mem_cgroup_reservation_resize(
++				&ctx->res, (u64)PAGE_COUNTER_MAX + 1),
++			-E2BIG);
++	KUNIT_EXPECT_EQ(test, ctx->calls, 0U);
++	KUNIT_EXPECT_EQ(test, ctx->res.pages, 0ULL);
++	mem_cgroup_reservation_destroy(&ctx->res);
++	/* Disabled/root ownership still records the logical reservation. */
++	KUNIT_EXPECT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 9), 0);
++	KUNIT_EXPECT_EQ(test, ctx->res.pages, 9ULL);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, 0ULL);
++	mem_cgroup_reservation_destroy(&ctx->res);
 +}
 +
- /* All release paths use the saved admission cost, including notification undo. */
- static void nfqnl_mem_uncharge(struct nfqnl_instance *queue,
- 			       struct nf_queue_entry *entry)
-@@ -160,10 +250,17 @@ static void nfqnl_mem_uncharge(struct nfqnl_instance *queue,
- 	lockdep_assert_held(&queue->lock);
- 	queue->mem_used -= entry->truesize;
- 	entry->truesize = 0;
-+	if (!queue->mem_stopping &&
-+	    queue->mem_reserved >
-+		    nfqnl_mem_pages(max(queue->mem_limit, queue->mem_used)))
-+		queue_work(nfq_cleanup_wq, &queue->mem_work);
- }
- 
- static struct nfqnl_instance *
--instance_create(struct nfnl_queue_net *q, u_int16_t queue_num, u32 portid)
-+instance_create(struct net *net, struct nfnl_queue_net *q, u16 queue_num,
-+		u32 portid, unsigned int maxlen,
-+		const struct nfqnl_msg_config_params *params, u32 flags,
-+		u32 mask)
- {
- 	struct nfqnl_instance *inst;
- 	unsigned int h;
-@@ -175,16 +272,27 @@ instance_create(struct nfnl_queue_net *q, u_int16_t queue_num, u32 portid)
- 
- 	inst->queue_num = queue_num;
- 	inst->peer_portid = portid;
--	inst->queue_maxlen = NFQNL_QMAX_DEFAULT;
--	inst->mem_limit = nfqnl_mem_limit(NFQNL_QMAX_DEFAULT);
-+	inst->queue_maxlen = maxlen;
-+	inst->mem_limit = nfqnl_mem_limit(maxlen);
- 	inst->copy_range = NFQNL_MAX_COPY_RANGE;
- 	inst->copy_mode = NFQNL_COPY_NONE;
- 	spin_lock_init(&inst->lock);
-+	mutex_init(&inst->mem_mutex);
-+	INIT_WORK(&inst->mem_work, nfqnl_mem_work);
- 	INIT_LIST_HEAD(&inst->queue_list);
- 
--	err = rhashtable_init(&inst->nfqnl_packet_map, &nfqnl_rhashtable_params);
-+	if (!net_eq(net, &init_net))
-+		mem_cgroup_reservation_init(&inst->memcg);
++static void memcg_reservation_test_arch_support(struct kunit *test)
++{
++	struct memcg_reservation_test *ctx = test->priv;
++	bool supported = IS_ENABLED(CONFIG_64BIT);
 +
-+	err = rhashtable_init(&inst->nfqnl_packet_map,
-+			      &nfqnl_rhashtable_params);
- 	if (err < 0)
--		goto out_free;
-+		goto out_reservation;
++	KUNIT_ASSERT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 0), 0);
++	KUNIT_EXPECT_EQ(test, ctx->calls, 0U);
++	KUNIT_EXPECT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 9),
++			supported ? 0 : -EOPNOTSUPP);
++	KUNIT_EXPECT_EQ(test, ctx->calls, supported ? 1U : 0U);
++	KUNIT_EXPECT_EQ(test, ctx->res.pages, supported ? 9ULL : 0ULL);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, supported ? 9ULL : 0ULL);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, 0ULL);
++	mem_cgroup_reservation_destroy(&ctx->res);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, supported ? 9ULL : 0ULL);
++	KUNIT_EXPECT_PTR_EQ(test, ctx->res.objcg, NULL);
 +
-+	/* Keep packet readers from seeing a partially configured new queue. */
-+	err = nfqnl_set_config(inst, maxlen, params, flags, mask);
-+	if (err)
-+		goto out_map;
- 
- 	spin_lock(&q->instances_lock);
- 	if (instance_lookup(q, queue_num)) {
-@@ -206,8 +314,11 @@ instance_create(struct nfnl_queue_net *q, u_int16_t queue_num, u32 portid)
- 
- out_unlock:
- 	spin_unlock(&q->instances_lock);
-+out_map:
-+	/* Unpublished instances have no entries or pending refund work. */
- 	rhashtable_destroy(&inst->nfqnl_packet_map);
--out_free:
-+out_reservation:
-+	mem_cgroup_reservation_destroy(&inst->memcg);
- 	kfree(inst);
- 	return ERR_PTR(err);
- }
-@@ -219,12 +330,18 @@ static void instance_destroy_work(struct work_struct *work)
- {
- 	struct nfqnl_instance *inst;
- 
--	inst = container_of(to_rcu_work(work), struct nfqnl_instance,
--			    rwork);
-+	inst = container_of(to_rcu_work(work), struct nfqnl_instance, rwork);
-+	/* The grace period has drained verdict readers, including detached batches. */
-+	spin_lock_bh(&inst->lock);
-+	inst->mem_stopping = true;
-+	spin_unlock_bh(&inst->lock);
-+	cancel_work_sync(&inst->mem_work);
++	/* An uncharged reservation remains usable on either architecture. */
++	KUNIT_ASSERT_EQ(test, mem_cgroup_reservation_resize(&ctx->res, 9), 0);
++	KUNIT_EXPECT_EQ(test, ctx->res.pages, 9ULL);
++	KUNIT_EXPECT_EQ(test, ctx->res.charged_pages, 0ULL);
++	KUNIT_EXPECT_EQ(test, ctx->calls, supported ? 1U : 0U);
++	mem_cgroup_reservation_destroy(&ctx->res);
++	KUNIT_EXPECT_EQ(test, ctx->refunds, supported ? 9ULL : 0ULL);
++}
 +
- 	rcu_read_lock();
- 	nfqnl_flush(inst, NULL, 0);
- 	rcu_read_unlock();
- 	WARN_ON_ONCE(inst->mem_used);
-+	mem_cgroup_reservation_destroy(&inst->memcg);
- 
- 	rhashtable_destroy(&inst->nfqnl_packet_map);
- 
-@@ -1526,37 +1643,6 @@ nfqnl_mangle(void *data, unsigned int data_len, struct nf_queue_entry *e, int di
- 	return 0;
- }
- 
--static int
--nfqnl_set_mode(struct nfqnl_instance *queue,
--	       unsigned char mode, unsigned int range)
--{
--	int status = 0;
--
--	spin_lock_bh(&queue->lock);
--	switch (mode) {
--	case NFQNL_COPY_NONE:
--	case NFQNL_COPY_META:
--		queue->copy_mode = mode;
--		queue->copy_range = 0;
--		break;
--
--	case NFQNL_COPY_PACKET:
--		queue->copy_mode = mode;
--		if (range == 0 || range > NFQNL_MAX_COPY_RANGE)
--			queue->copy_range = NFQNL_MAX_COPY_RANGE;
--		else
--			queue->copy_range = range;
--		break;
--
--	default:
--		status = -EINVAL;
--
--	}
--	spin_unlock_bh(&queue->lock);
--
--	return status;
--}
--
- static int
- dev_cmp(struct nf_queue_entry *entry, unsigned long ifindex)
- {
-@@ -1975,12 +2061,14 @@ static const struct nf_queue_handler nfqh = {
- };
- 
- static int nfqnl_recv_config(struct sk_buff *skb, const struct nfnl_info *info,
--			     const struct nlattr * const nfqa[])
-+			     const struct nlattr *const nfqa[])
- {
- 	struct nfnl_queue_net *q = nfnl_queue_pernet(info->net);
- 	u_int16_t queue_num = ntohs(info->nfmsg->res_id);
- 	struct nfqnl_msg_config_cmd *cmd = NULL;
- 	struct nfqnl_instance *queue;
-+	const struct nfqnl_msg_config_params *params = NULL;
-+	unsigned int maxlen = NFQNL_QMAX_DEFAULT;
- 	__u32 flags = 0, mask = 0;
- 
- 	WARN_ON_ONCE(!lockdep_nfnl_is_held(NFNL_SUBSYS_QUEUE));
-@@ -2029,6 +2117,15 @@ static int nfqnl_recv_config(struct sk_buff *skb, const struct nfnl_info *info,
- 		}
- 	}
- 
-+	/* Validate before reserving capacity or publishing a newly bound queue. */
-+	if (nfqa[NFQA_CFG_PARAMS]) {
-+		params = nla_data(nfqa[NFQA_CFG_PARAMS]);
-+		if (params->copy_mode > NFQNL_COPY_PACKET)
-+			return -EINVAL;
++struct memcg_reservation_root_refund {
++	unsigned long memory_before, memory_shrunk, memory_after;
++	unsigned long memsw_before, memsw_shrunk, memsw_after;
++	bool memsw;
++};
++
++static void memcg_reservation_test_restore_counter(struct page_counter *counter,
++						   unsigned long before)
++{
++	unsigned long after = page_counter_read(counter);
++
++	if (after > before)
++		page_counter_uncharge(counter, after - before);
++	else if (after < before)
++		page_counter_charge(counter, before - after);
++}
++
++static int memcg_reservation_test_root_refund_stopped(void *data)
++{
++	struct memcg_reservation_root_refund *result = data;
++	struct mem_cgroup *memcg = root_mem_cgroup;
++
++	/* Model charged capacity inherited from a removed child. */
++	result->memory_before = page_counter_read(&memcg->memory);
++	result->memsw_before = page_counter_read(&memcg->memsw);
++	page_counter_charge(&memcg->memory, 8);
++	if (result->memsw)
++		page_counter_charge(&memcg->memsw, 8);
++	account_kmem_nmi_safe(memcg, 8);
++	memcg1_account_kmem(memcg, 8);
++
++	mem_cgroup_reservation_uncharge_batch(memcg, 3);
++	result->memory_shrunk = page_counter_read(&memcg->memory);
++	result->memsw_shrunk = page_counter_read(&memcg->memsw);
++	mem_cgroup_reservation_uncharge_batch(memcg, 5);
++	result->memory_after = page_counter_read(&memcg->memory);
++	result->memsw_after = page_counter_read(&memcg->memsw);
++
++	/* Leave no counter imbalance behind if the refund regression returns. */
++	memcg_reservation_test_restore_counter(&memcg->memory,
++					       result->memory_before);
++	if (result->memsw)
++		memcg_reservation_test_restore_counter(&memcg->memsw,
++						       result->memsw_before);
++	return 0;
++}
++
++static void memcg_reservation_test_root_refund(struct kunit *test)
++{
++	struct memcg_reservation_root_refund result = {
++		.memsw = do_memsw_account(),
++	};
++
++	if (mem_cgroup_disabled() || mem_cgroup_kmem_disabled()) {
++		kunit_skip(test, "Memory cgroup accounting is disabled");
++		return;
 +	}
-+	if (nfqa[NFQA_CFG_QUEUE_MAXLEN])
-+		maxlen = ntohl(nla_get_be32(nfqa[NFQA_CFG_QUEUE_MAXLEN]));
++	/* Exclude background charges while checking the actual root counters. */
++	KUNIT_ASSERT_EQ(test,
++			stop_machine(memcg_reservation_test_root_refund_stopped,
++				     &result, NULL),
++			0);
++	KUNIT_EXPECT_EQ(test, result.memory_shrunk, result.memory_before + 5);
++	KUNIT_EXPECT_EQ(test, result.memory_after, result.memory_before);
++	KUNIT_EXPECT_EQ(test, result.memsw_shrunk,
++			result.memsw_before + (result.memsw ? 5 : 0));
++	KUNIT_EXPECT_EQ(test, result.memsw_after, result.memsw_before);
++}
 +
- 	/* Lookup queue under RCU. After peer_portid check (or for new queue
- 	 * in BIND case), the queue is owned by the socket sending this message.
- 	 * nfqnl_rcv_nl_event() will block on the nfnl subsys mutex that is
-@@ -2048,10 +2145,10 @@ static int nfqnl_recv_config(struct sk_buff *skb, const struct nfnl_info *info,
- 		case NFQNL_CFG_CMD_BIND:
- 			if (queue)
- 				return -EBUSY;
--			queue = instance_create(q, queue_num, NETLINK_CB(skb).portid);
--			if (IS_ERR(queue))
--				return PTR_ERR(queue);
--			break;
-+			queue = instance_create(info->net, q, queue_num,
-+						NETLINK_CB(skb).portid, maxlen,
-+						params, flags, mask);
-+			return PTR_ERR_OR_ZERO(queue);
- 		case NFQNL_CFG_CMD_UNBIND:
- 			if (!queue)
- 				return -ENODEV;
-@@ -2068,31 +2165,9 @@ static int nfqnl_recv_config(struct sk_buff *skb, const struct nfnl_info *info,
- 	if (!queue)
- 		return -ENODEV;
- 
--	if (nfqa[NFQA_CFG_PARAMS]) {
--		struct nfqnl_msg_config_params *params =
--			nla_data(nfqa[NFQA_CFG_PARAMS]);
--
--		nfqnl_set_mode(queue, params->copy_mode,
--				ntohl(params->copy_range));
--	}
--
--	if (nfqa[NFQA_CFG_QUEUE_MAXLEN]) {
--		__be32 *queue_maxlen = nla_data(nfqa[NFQA_CFG_QUEUE_MAXLEN]);
--
--		spin_lock_bh(&queue->lock);
--		queue->queue_maxlen = ntohl(*queue_maxlen);
--		queue->mem_limit = nfqnl_mem_limit(queue->queue_maxlen);
--		spin_unlock_bh(&queue->lock);
--	}
--
--	if (nfqa[NFQA_CFG_FLAGS]) {
--		spin_lock_bh(&queue->lock);
--		queue->flags &= ~mask;
--		queue->flags |= flags & mask;
--		spin_unlock_bh(&queue->lock);
--	}
--
--	return 0;
-+	if (!nfqa[NFQA_CFG_QUEUE_MAXLEN])
-+		maxlen = queue->queue_maxlen;
-+	return nfqnl_set_config(queue, maxlen, params, flags, mask);
- }
- 
- static const struct nfnl_callback nfqnl_cb[NFQNL_MSG_MAX] = {
++static struct kunit_case memcg_reservation_test_cases[] = {
++	KUNIT_CASE(memcg_reservation_test_rollback),
++	KUNIT_CASE(memcg_reservation_test_root_growth),
++	KUNIT_CASE(memcg_reservation_test_range),
++	KUNIT_CASE(memcg_reservation_test_arch_support),
++	KUNIT_CASE(memcg_reservation_test_root_refund),
++	{}
++};
++
++static struct kunit_suite memcg_reservation_test_suite = {
++	.name = "memcg_reservation",
++	.init = memcg_reservation_test_init,
++	.test_cases = memcg_reservation_test_cases,
++};
++
++kunit_test_suite(memcg_reservation_test_suite);
 
 -- 
 2.34.1
