@@ -1,52 +1,52 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794779830;
-	b=o0jA2xWjHg8b/Nht9/0ePwFFx6uC/T6AnO9jEHikL1DypBo4Cq5a0ap6FlBivf0UfWmz
-	 d+7jmSyhY206/6UrY4IlOyKl9xpDugQS8MnU7sauhkVDWPAlX/Bjt7dk3JKqspckc8t1z
-	 7T1S4ejzQzh1PxDAZp+/79VrDZkNi2tvP1FAJFv+pEXMIvXxStJrB6gRssPT/yQswN8wM
-	 HwvaqzAhAK4rkAbhuHjK0AmzocXjoFdUMtTH/9PBog4V64L/69Gd/d1q6JOzRmNXpX2jL
-	 fxtMc9y6beF8fXXe97tz2F8VXJfl/v2+hjL6ZODdhZDvjv2m0RV0FYFTduUgYC9ge1Q==
+	t=1794779838;
+	b=w+1XW01A5TT10eN/CD6CBbp6wJmrH9eGX2drhTRgeM3C6fqQNMDhJNJpFV3TtCAvkZJl
+	 MvdpMkNeuOxDuaZvW2F5UQh1MBYuL3uZxneunnKgu1WGNM8XuFUeEPTdvCjzDFYrraKpv
+	 8VJLGNYfMlpEOP3ybRuhnxqM2silIN0vO+9356VBuzA7h1fU1w2LUJXQkUSlziqkzSwz1
+	 V6r5I69lc0M6ThYBr91pjsodve5OOFztaMR8gnIvqSF/LjLYSv/T7mclxixVhBr80lnNb
+	 gj36cDvhEdeRWUNEK05Mhbc+9Zz0Up1Pd7Bemduez0P3Dc3Ulcj64kBNJi8EbSEgMFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794779830;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794779838;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=BOTklJYt8KH7rFlZVdBoknjaS+NDwDtd3MuPB3oLLOc=;
-	b=GMNp33rwNYf7lD5JV11mTec2CMI6XiJV4NE54TXubmnN1KmOjT4a/NI91zBBjuJZ1+MS
-	 EEzsoXV2eFR3o87tPilEn3HK0PWS4vjBXGyQcco65yWdVIthlhklFV5F/kOf84UTMgop4
-	 LqtaIEozKdub0XeK2+Qoi3fxsmfuy3sVGVDrg+fEqQfqJc5Wd7+omRb9gqiMwO2eWSx/3
-	 danbz8g4fBk0DI/dUYsxvp97Yfonp/eZ1d/NcJR7S+UKcQVqQ27pMVbkkO4HKg0W4QCpU
-	 HmmXtP34qUM53X9oEwLnRkUDNFCXMSipASYJ1BgqWs5ai9YpBVVviBLZkafrNRis7oQ==
+	bh=hoFapUtlspIAPrh7Ga2yspRCKBKoddrYUp4uzoxvs4M=;
+	b=uzoRX19jKGTZEbNMUNUUafR/daBmUSvIUi2PSd0v3ZXkBBdVsVVEdZnTgyf9DdKL8Bv2
+	 NaQcZ/C9DeD0wY1XERBWsqM9V23Z8WBymwL5Ec5YzZ2ccrCUCAulTzvWTxEOiqfEYdgXa
+	 +Nq080XnB5dN+Py5qm94qZ/znHu+38dKvWsKmGBCA3UfgJEndzijDT/OyX9X4chPgkMty
+	 8jsrVMNQg9LQTaVFOYCFVbYWvcUv4LaTB0HPgdsz7Q3Tb2a4Av2Xb8DV2WArpSzwDlOmA
+	 mMh1oCk4ZYhyPCNocoGmKztZ2ncg4q1+qyOgal0lnqoWsVsITR3lrYjYRG7NpmYqFMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=grapheneos.org;
 	spf=pass smtp.mailfrom=grapheneos.org;
-	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=jQ2E8dSO;
+	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=HFzL14Og;
 	arc=none smtp.remote-ip=206.220.120.4
 Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFC6606A33B;
-	Sun, 15 Nov 2026 21:57:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEFC6606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799DB606A323;
+	Sun, 15 Nov 2026 21:57:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 799DB606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=jQ2E8dSO
-Received: by mail.grapheneos.org (Postfix) id 7E8833C08EE9B;
-	Sun, 15 Nov 2026 21:57:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=HFzL14Og
+Received: by mail.grapheneos.org (Postfix) id 257DC3C08EE9B;
+	Sun, 15 Nov 2026 21:57:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
-	s=default; t=1794779829;
+	s=default; t=1794779836;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=BOTklJYt8KH7rFlZVdBoknjaS+NDwDtd3MuPB3oLLOc=;
-	b=jQ2E8dSOyEyvR+KXoZTG4ntK4GTZQQAxYDEkpAwh7oT6p6eMp2Y4bdeWU9ijsMerd6WaDX
-	jdveaR6VY7MjGCJL0s4w8AHhHvfm6QMSHMQ276LG47Z12QfrYkvjCfkSQui/pWFGZqeJHT
-	GAV2f3HtdH3qbpWT/IYF6usUHq250tD2eaEWKuzzkQR29KJ6PQyi76f96sVzdw+ygMHEgq
-	rdOA7/GO/SklNRMnJlLxyDFfuyHjOOwkoWj2GRXRNt9dMl1kaKOasX7j3ldjdrtm+mzewS
-	R3Gefcm4EbTy6cXklkXovPp2/mE2v4muHG8AKLmZgnMSBW3oHR46NiRf3dY/Wg==
+	bh=hoFapUtlspIAPrh7Ga2yspRCKBKoddrYUp4uzoxvs4M=;
+	b=HFzL14OgGUYbdOXrQY8BExpfS48R2XcNs5bsII0Mmoh5f8HCewNbX229vkjdN+ZGStNRuK
+	zIUqGggdmhp3BPC06goen0oAaKV2rOiJHGB6IL2RF+i8Mulv2Pc0Wf1XBiVyQ7MdypHqSh
+	RaM+I8Rt9Tk/ROlU6miBzp+qIYuQvbZUyr4X5S+9rHf85r8Nan3p2Hkgp1LHaIWgdwTawj
+	/NqLwVB0FCdrBDSGfF83Wc3ceJcNQEoVh1sz2vQ37nLnn7rAKmAjSlQJszrVCjJyPmzYqZ
+	vr6UCPmS1qrVs02qvdFi3kk+Pw+sUtF6zBXEWtsV1hEKjNX9MXWEPQ2UM3hV/w==
 From: liamsmith827 <liamsmith827@grapheneos.org>
 To: netdev@vger.kernel.org
 Cc: David Ahern <dsahern@kernel.org>,
@@ -60,9 +60,9 @@ Cc: David Ahern <dsahern@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Liam Smith <liamsmith827@proton.me>
-Subject: [PATCH net-next v4 2/4] ipv4: restrict on-link fallback to lookup misses
-Date: Sun, 15 Nov 2026 21:56:38 +0000
-Message-ID: <20261115215640.18728-3-liamsmith827@grapheneos.org>
+Subject: [PATCH net-next v4 3/4] selftests: net: test restricted on-link fallback
+Date: Sun, 15 Nov 2026 21:56:39 +0000
+Message-ID: <20261115215640.18728-4-liamsmith827@grapheneos.org>
 In-Reply-To: <20261115215640.18728-1-liamsmith827@grapheneos.org>
 References: <20261115215640.18728-1-liamsmith827@grapheneos.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -78,60 +78,145 @@ Content-Transfer-Encoding: 8bit
 
 From: Liam Smith <liamsmith827@proton.me>
 
-For non-vrf unicast, the on-link fallback currently occurs regardless of
-the particular error returned by fib_lookup(). As a result, routes and
-rules that are supposed to restrict traffic (blackhole, prohibit,
-unreachable) are unable to do so comprehensively.
+Following the previous patch, the on-link fallback is no longer taken
+when the FIB lookup hits an unreachable, blackhole or prohibit route/
+rule. Adjust the IPv4 tests accordingly:
 
-A specific example of this being a problem is within Android, where the
-VPN "kill switch" is implemented with prohibit rules. Any process that
-can set flowi4_oif (SO_BINDTODEVICE, IP_UNICAST_IF, IP_PKTINFO, etc.) is
-able to utilize this fallback, meaning unprivileged Android apps can
-trivially bypass the VPN. This is particularly bad on cellular networks,
-where ARP is often not needed.
+1. ipv4_ping_novrf(): Pinging a loopback address while bound to a
+device now fails with an error instead of timing out, since the lookup
+hits the unreachable default route. Adjust the expected return code.
 
-Restrict the fallback to routing lookup misses.
+2. ipv4_ping_novrf(): Add a variant of the above without the
+unreachable default route, to make sure that the fallback is still
+taken upon a route miss.
 
-This was originally observed on an Android device, by way of packet
-capture.
+3. ipv4_ping_novrf(): Add a test that demonstrates ping fails as
+expected with an unreachable rule. This ensures FIB_LOOKUP_REPORT_MISS
+does not break this behavior.
 
-Tested fcnal-test.sh in UML with CONFIG_IP_MULTIPLE_TABLES both enabled
-and disabled.
+4. ipv4_ping_novrf(): Enable the device bind test cases that were
+commented out because of the fallback (prohibit rule, unreachable route
+and unreachable default route).
+
+5. ipv4_udp_novrf(): Connecting to a loopback address while bound to a
+device now fails with an error instead of timing out. Adjust the
+expected return code.
+
+With the exception of the route miss and unreachable ping test cases,
+which are specific to IPv4, the IPv4 test cases are now aligned with
+their IPv6 counterparts.
 
 Signed-off-by: Liam Smith <liamsmith827@proton.me>
 ---
- net/ipv4/route.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/fcnal-test.sh | 53 ++++++++++++++---------
+ 1 file changed, 32 insertions(+), 21 deletions(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 595a3b7f1783..03db105303b4 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2849,12 +2849,13 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 		goto make_route;
- 	}
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index a50609535fed..9722d7dcad08 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -619,17 +619,30 @@ ipv4_ping_novrf()
+ 	run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
+ 	log_test_addr ${a} $? 0 "ping local, device bind"
  
--	err = fib_lookup(net, fl4, res, 0);
-+	err = fib_lookup(net, fl4, res, FIB_LOOKUP_REPORT_MISS);
- 	if (err) {
- 		res->fi = NULL;
- 		res->table = NULL;
- 		if (fl4->flowi4_oif &&
--		    (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)) {
-+		    (ipv4_is_multicast(fl4->daddr) ||
-+		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
- 			/* Apparently, routing tables are wrong. Assume,
- 			 * that the destination is on link.
- 			 *
-@@ -2879,6 +2880,8 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 			res->type = RTN_UNICAST;
- 			goto make_route;
- 		}
-+		/* Reverse the mapping induced by FIB_LOOKUP_REPORT_MISS. */
-+		err = err == -ESRCH ? -ENETUNREACH : err;
- 		rth = ERR_PTR(err);
- 		goto out;
- 	}
+-	# loopback addresses not reachable from device bind
+-	# fails in a really weird way though because ipv4 special cases
+-	# route lookups with oif set.
++	# loopback addresses not reachable from device bind, unreachable
++	# default route
+ 	for a in ${NSA_LO_IP} 127.0.0.1
+ 	do
+ 		log_start
+ 		show_hint "Fails since address on loopback device is out of device scope"
+ 		run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
+-		log_test_addr ${a} $? 1 "ping local, device bind"
++		log_test_addr ${a} $? 2 "ping local, device bind, unreachable default route"
+ 	done
+ 
++	# loopback addresses not reachable from device bind, route miss
++	log_start
++	setup_cmd ip route del unreachable default metric 8192
++
++	for a in ${NSA_LO_IP} 127.0.0.1
++	do
++		log_start
++		show_hint "Fails since address on loopback device is out of device scope"
++		run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++		log_test_addr ${a} $? 1 "ping local, device bind, route miss"
++	done
++
++	setup_cmd ip route add unreachable default metric 8192
++
+ 	#
+ 	# ip rule blocks reachability to remote address
+ 	#
+@@ -643,10 +656,14 @@ ipv4_ping_novrf()
+ 	run_cmd ping -c1 -w1 ${a}
+ 	log_test_addr ${a} $? 2 "ping out, blocked by rule"
+ 
+-	# NOTE: ipv4 actually allows the lookup to fail and yet still create
+-	# a viable rtable if the oif (e.g., bind to device) is set, so this
+-	# case succeeds despite the rule
+-	# run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++	log_start
++	setup_cmd ip rule add pref 49 to ${NSB_LO_IP} unreachable
++	log_test_addr ${a} $? 2 "ping out, blocked by unreachable rule"
++	setup_cmd ip rule del pref 49 to ${NSB_LO_IP} unreachable
++
++	log_start
++	run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++	log_test_addr ${a} $? 2 "ping out, device bind, blocked by rule"
+ 
+ 	a=${NSA_LO_IP}
+ 	log_start
+@@ -671,10 +688,9 @@ ipv4_ping_novrf()
+ 	run_cmd ping -c1 -w1 ${a}
+ 	log_test_addr ${a} $? 2 "ping out, blocked by route"
+ 
+-	# NOTE: ipv4 actually allows the lookup to fail and yet still create
+-	# a viable rtable if the oif (e.g., bind to device) is set, so this
+-	# case succeeds despite not having a route for the address
+-	# run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++	log_start
++	run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++	log_test_addr ${a} $? 2 "ping out, device bind, blocked by route"
+ 
+ 	a=${NSA_LO_IP}
+ 	log_start
+@@ -692,10 +708,9 @@ ipv4_ping_novrf()
+ 	run_cmd ping -c1 -w1 ${a}
+ 	log_test_addr ${a} $? 2 "ping out, unreachable default route"
+ 
+-	# NOTE: ipv4 actually allows the lookup to fail and yet still create
+-	# a viable rtable if the oif (e.g., bind to device) is set, so this
+-	# case succeeds despite not having a route for the address
+-	# run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++	log_start
++	run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++	log_test_addr ${a} $? 2 "ping out, device bind, unreachable default route"
+ }
+ 
+ ipv4_ping_vrf()
+@@ -1602,10 +1617,6 @@ ipv4_udp_novrf()
+ 	run_cmd nettest -D -d ${NSA_DEV} -S -r ${a} -U
+ 	log_test_addr ${a} $? 0 "Global server, device client via IP_UNICAST_IF, local connection, with connect()"
+ 
+-
+-	# IPv4 with device bind has really weird behavior - it overrides the
+-	# fib lookup, generates an rtable and tries to send the packet. This
+-	# causes failures for local traffic at different places
+ 	for a in ${NSA_LO_IP} 127.0.0.1
+ 	do
+ 		log_start
+@@ -1613,7 +1624,7 @@ ipv4_udp_novrf()
+ 		run_cmd nettest -D -s &
+ 		wait_local_port_listen ${NSA} 12345 udp
+ 		run_cmd nettest -D -r ${a} -d ${NSA_DEV}
+-		log_test_addr ${a} $? 2 "Global server, device client, local connection"
++		log_test_addr ${a} $? 1 "Global server, device client, local connection"
+ 
+ 		log_start
+ 		show_hint "Should fail since addresses on loopback are out of device scope"
 -- 
 2.47.3
 
