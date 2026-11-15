@@ -1,81 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794781898;
-	b=ywMWznv/fmyqqPnEgN6r8Axtmx3u1k2eMPxB6yYcWxWNvEhoabyheABSlE9zkHbgYx/M
-	 lCXHbISjCxsfJ4Bt2ewltsJrbA/NJnOhK2B2Hw1Lfrjb58E/px5gFDsoqt8wNXO/IREIO
-	 RW3gTdP5iip5iQ4MYvwF/KqvpmS57U1HhGHV3aX7a2H4uCbz9q61qgvZ5PTRdRZLBh7oJ
-	 nc1Mh+UCOIQ8nZONiFemGh6DGx1Ps1TAMZa1VVy1q7UfCW41o+EVrdhv5yHpRUKnCin78
-	 SkMnTf48iiZ0WU+Rv3GjtyFIRiBGh6iLmxc+KWiIXYNBSAX7CvvCEle9UAy9+FjIo2A==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794781898;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
-	 X-Originating-IP:X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
-	 X-Proofpoint-Virus-Version;
-	bh=ykt8FTUNX1/fdxCk4A4DHYN7Y2tblUILl4FGUFZzAXY=;
-	b=03a5KAE2CN0t5oTwV80OaJ9MaMDUZ1/taIWbJgGW0HLIELIjyMX/bvNjwLFaFfYf/GFj
-	 6i3YG1uyIvw1BTCYNr4oXg5Pnlcajo++j4J2bVEh8GIXi1EVy8vcptJQKkxpjRbphRgAZ
-	 XxdBEcu/eHInIxE9GwrRk7n78hj8s+Q8shvL3VB1mCnnQnU78PJtOE4jeDXFFYGXTHwsr
-	 47bmRibCCi5sEacfYV3SL3EGeCD5aTMMssFr6HmkorQxRqDtg9+d4m2SkSQzFAHoitDIG
-	 oR6chvl6P3B78gtmOaIWVHBOttplJ6MVrR+bX+UorBBYpT59gXU9CPjgUgSOQYPTpsg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=SJ1mxSb+;
-	arc=none smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794782084;
+	b=uVHWLzGWJ0KBmacQ93DtJmRrCWaaIf86kfEdlDATdANx6QYJ9kQr2c4C0uCRt4ANMeB3
+	 iQkrMnu6yUu71EYWmC3EDtWJhdKkWUkgQrCjiTXWwqhxBIL4Xu33qDFrmgoNGcpJrVpgG
+	 2aWy6cf2I1gZR3xrSI3xPfLSrYgBJ/b72brMOgH6FXGynWUY7K0frKxfst/dOD11vzZxC
+	 +Ha9lxt9kStABleja7XBYuX9NwOEBcUlXaZXOgEpY/OzoGlhZ8isZXbH2jt32E9Wzag8c
+	 YogPM64kBhPlPnNJ/V6TDlatfQmFOmCQwFmz/SFz6//LnpLKfmb44sKUnz5cm02ajdw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794782084;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=vKFwJFQVkE1SOt4l66iLRKSuv0tZWR+rY8jCMRsdO8w=;
+	b=NZ3L10stW1MyfqwzxhGvC1l+V2E92LwE4/Suqbo+mvnjYl5cZRfGySaChFbdn6MCNygA
+	 9c1L3DNHIGWRrJji/e2pH4/32QcI7T4EOhgZ1BIJVGtliXh5GZEnKR1UZ9uQM0NGqiVLm
+	 amB990Cusalx03b/RgTcfl1AGdn4XD63a2T+UkYkec9BHi4qiFgXdFFWs4rySwBFPdPXS
+	 itDPo6C9zlXYUTtUaZhWWmXPMhmYfmHJvn9p5pCuKYicOmIRwL2R+JXcQibrrRSu2ttLf
+	 lCvCgNXV+z1PXAnUSdmbakkfKCNqvIovwG17RmElBCkxRBw0aSgjrAN0RR/20AFKhXQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X7naLAEK;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70233606A329;
+	Sun, 15 Nov 2026 22:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X7naLAEK
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794782084;
+	b=FenyRT3yhU6b1N2AfqKt5Vr6MpoL0rHA5R1RVo1Xu3ggW+QVtiCjdHjkAvaFPt3WdgNZ
+	 n78mgfIRbH7vjg7oBeyN8QmSJGxA0tCGpNgTwvGcFDVpqG2eqCMtn0Pzj4tKZ/u+9+weS
+	 1tKuhc9L2JED/eCG7m5O+iSMI8b7KzmXZ4hu1k7XnA6oas/7U467/Rbh49tza08DDwEb8
+	 r4/n2wAQNGwVVanuQ/6ynmJRSLFmRv+p30pRvP+BR750vmx0eOyPPoTwRzP6WzXeI15Do
+	 XX48JbRlSEdUMnKOCNS0HQotNtDu/LTqX0dwWEq+yrVSySAWLU0B3yMijhBYve1Z10Q==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794782084;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=vKFwJFQVkE1SOt4l66iLRKSuv0tZWR+rY8jCMRsdO8w=;
+	b=l3pw+h0Uyi+bZVAPv8toyZcnHUeRKgmFVcL8xrI65/IHWEpp1eqTUaXnHcCdQWGFPtMs
+	 tnU8fB9l3XuPE7BJ+x2G/ZP9+0fZzc1CogN4Y36XdaZi5ggcbJuD7f+Bi1R1wehOdMkKM
+	 wP2ptfXcMhBqGBzQhyOuv//XVdAycX5R1cbkeYeuwZucCG/CfN5G9MnHm6nAIUsZYUDAn
+	 O9Nd9ZkopxscM2mwm2cfoaHjehvFVW79g268o+mGU72v6VcvjjAtOEBgpThOTuGNPLhPS
+	 43T6wdgnGj7z5KxkQ9w3gIvwLPdoChrDP0PnsJ3WyaGLOhOBk4CQaP/7Fl1kD6XOgFA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0DF606A323;
-	Sun, 15 Nov 2026 22:31:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E0DF606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=SJ1mxSb+
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AFLmgRp538015;
-	Sun, 15 Nov 2026 14:31:16 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=ykt8FTUNX1/fdxCk4A4DHYN7Y2tblUILl4FGU
-	FZzAXY=; b=SJ1mxSb+jBspwpZ+RoOy/Lr5CS/7QRNeo6OhUzjml3l34B3DOQryV
-	YTrD7iaqc9bgjeOvKGchb/xXrv6VyJK/Gnz553rSSAdGLesUpyD5Iz2tjzkhAy3E
-	AiQphbyhg194wLcmkgxeLVgI8XyXEp9YyBcP0aAXzVQgJQUXnKZErZIoGmaclPQE
-	xGshwi14J+WZvgkcMRCwpNXSsDFUyFSi8i6x4g5eKeCkVNk/jhnHQntZSJqtPYaC
-	tvixv1d5+1mVFqDxanbVp8+94a3/32sOffAJJp0HYLsn4xOrSypZSbsV/oTIJabd
-	VFAOlvk4X4FxeeglzrPDyjhY9FIx+7AUA==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hxmj45x9v-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Sun, 15 Nov 2026 14:31:15 -0800 (PST)
-Received: from localhost (2620:10d:c0a8:fe::f072) by mail.thefacebook.com
- (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Sun, 15 Nov
- 2026 22:31:14 +0000
-Date: Sun, 15 Nov 2026 14:31:13 -0800
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <sgarzare@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <horms@kernel.org>, <corbet@lwn.net>,
-        <skhan@linuxfoundation.org>, <stefanha@redhat.com>, <mst@redhat.com>,
-        <jasowangio@gmail.com>, <xuanzhuo@linux.alibaba.com>,
-        <eperezma@redhat.com>, <shuah@kernel.org>, <rdunlap@infradead.org>,
-        <donald.hunter@gmail.com>, <edumazet@kernel.org>,
-        <georgezhang@vmware.com>, <acking@vmware.com>, <dtor@vmware.com>,
-        <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <sargun@sargun.me>, <jlinbox@meta.com>
-Subject: Re: [PATCH net-next v6 5/8] vsock: add a netlink command to assign
- the g2h device to a netns
-Message-ID: <avoysWTR++rTKfKL@devvm29614.prn0.facebook.com>
-References: <20261113-vsock-guest-ns-v6-5-3737ce4673c0@meta.com>
- <179471528940.2199510.18137700517588437955@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id BAEAF1F000C5;
+	Sun, 15 Nov 2026 22:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794782084;
+	bh=vKFwJFQVkE1SOt4l66iLRKSuv0tZWR+rY8jCMRsdO8w=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=X7naLAEK6oirit7XszsuEpnhnwzUL+HlZXDoZ69WpabPeKtC+ge0LzI/oLPhciV7d
+	 sjrCgAip+/R3jOWmfA8Tvp7WL35tswKNMSF82yH8FU2pRZQFGHzcl0ISwZ91bLzs45
+	 a9KUFhpP2iIkyVY0HBKVEEppPmbXl+XytgE43KtboGz39SCw+nlprFAuL2N2Vu+LI5
+	 ckb/mAB/T4w+XFzqbsM2cCJ5DlHJg1S+LFPVoUWqTCKoyBLJ19hK5/ebPBLzuQlLs2
+	 U7NsE5x/Y10qD7OfY/hcGzZlRx2dALTroiE8S/Ik8R8rkJ6T03nX+EY/jiaB8XnXsd
+	 9xZCpMUX1ZAOA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 4B4D54A244;
+	Sun, 15 Nov 2026 22:34:43 +0000 (UTC)
+From: Alireza Asgari via B4 Relay <devnull+alireza.asgari.net@kernel.org>
+Date: Sun, 15 Nov 2026 22:34:41 +0000
+Subject: [PATCH RFC nf-next 1/9] memcg: saturate deferred memory.high page
+ debt
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,130 +83,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179471528940.2199510.18137700517588437955@kernel.org>
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE1MDA4OSBTYWx0ZWRfX+ZQB0ppP8ScL
- 5zEoQ8ohV0T1CuBY5u/tqmj8DzX5Ljagf1soUB7AVYidkRKRsqhQDkRRZp+pVhEMtjBS5jfK7P+
- ZeO7st34x107s/XRqb/3LcQol9zeezk=
-X-Proofpoint-ORIG-GUID: DnfmZE2Va31yL9pMIgnnC5detjkL3Jk6
-X-Proofpoint-GUID: DnfmZE2Va31yL9pMIgnnC5detjkL3Jk6
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE1MDA4OSBTYWx0ZWRfX0OsD6yWxMwIx
- 0eZPLstlNAs7lKlPNceGqzSKTDjDVlTQ8eyUjLvERfU+AVrymQITadzDMNe6//+ObxP4VVoDsDi
- PtfEjV5VvmmKEO4UOE1nDpJKK7pde2D2jZcbeeQKi7FhIJbhCt1Zn96tR09NcwGm0DrG79aUI2w
- 7waXvI2nBWmzsmdvP5m6fUzi7e3AEmTbPRlkkM71iU3BQgwiFM7HvNnj/FbQxMrsWfSzRWxnyYl
- RmIoL8BgU+5gLMYoTLNjeqpjs4r9t4zqlQEtiuRu48++m8CutKsrxmTLLDA412TrOZTRGeO/9qu
- tWqdZPESNn+B8cvuFQMHhjqGoRus/Z9jPR7eMtzSatOkjYmg/TBUTQ1pwPhlVuVRqoVWo1a5Ykt
- ZpDhImJHp4PlMvxMImAYZlfqBSypP+uKOi3oo55f5oAk3IstOyhBmlaRPMHE8us4htBgO9vLvxr
- DalggzfOW7SMsENxYvA==
-X-Authority-Analysis: v=2.4 cv=Vp+2kO2n c=1 sm=1 tr=0 ts=6afa32b3 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=8nJEP1OIZ-IA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=tpM8CJlwf7uhpglF1g9U:22 a=VwQbUJbxAAAA:8
- a=9R54UkLUAAAA:8 a=VabnemYjAAAA:8 a=RAyg9Hr4hlSmefgnMj4A:9 a=3ZKOabzyN94A:10
- a=wPNLvfGTeEIA:10 a=YTcpBFlVQWkNscrzJ_Dz:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-15_07,2026-11-11_03,2025-10-01_01
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261115-b4-nfqueue-memory-accounting-v1-1-b9cc30819997@asgari.net>
+References: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
+In-Reply-To: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
+To: netfilter-devel@vger.kernel.org, linux-mm@kvack.org
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+ Roman Gushchin <roman.gushchin@linux.dev>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, 
+ Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+ Phil Sutter <phil@nwl.cc>, Shuah Khan <shuah@kernel.org>, 
+ Tejun Heo <tj@kernel.org>, Vladimir Davydov <vdavydov.dev@gmail.com>, 
+ Chris Down <chris@chrisdown.name>, 
+ Zhang Jiao <zhangjiao2@cmss.chinamobile.com>, Song Hu <husong@kylinos.cn>, 
+ cgroups@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Alireza Asgari <alireza@asgari.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794782082; l=2138;
+ i=alireza@asgari.net; s=alireza-kernel; h=from:subject:message-id;
+ bh=MFLqtuTtN7u8/DPQa2KEvRoRy7eP6Qdkj4IqlD51WpM=;
+ b=m98I55EK5DDGlH5OD7HSN8CrjP52A8a7eITltlcAQqwelzQ/Ji/0VnlVZwsHX3oQHyR75mAWM
+ RPrXccDRgy0DuW481S+kjEPQp4IqBc8At79t2aeJgNQhfDBRfENeSrn
+X-Developer-Key: i=alireza@asgari.net; a=ed25519;
+ pk=wuQ0/M69FqoVnrCMUJ13EQCwrCwVjCrtz75k15vW8tw=
+X-Endpoint-Received: by B4 Relay for alireza@asgari.net/alireza-kernel with
+ auth_id=1055
+X-Original-From: Alireza Asgari <alireza@asgari.net>
+Reply-To: alireza@asgari.net
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 15, 2026 at 04:01:29AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found more severe
-> issue(s) in other patches of this series. This mail is only an FYI, in case
-> you want to address the nit picks below when you respin.
-> 
-> Low priority / nit picks for your consideration:
-> 
-> - [Low] The new `vsock` generic netlink family defines `dev-netns-set`
->   (VSOCK_CMD_DEV_NETNS_SET) as a do-request with no reply.
-> 
-> --
-> 
-> vsock: add a netlink command to assign the g2h device to a netns
-> 
-> This patch adds a vsock generic netlink family. VSOCK_CMD_DEV_NETNS_SET
-> moves the guest's G2H vsock device into a given network namespace, and
-> VSOCK_CMD_DEV_NETNS_GET reports the assignment as an nsid relative to
-> the caller. Connected sockets that can no longer reach the device are
-> closed with ECONNRESET, and an assignment that would cause a CID
-> collision is refused.
-> 
-> Link: https://lore.kernel.org/all/20200427142518.uwssa6dtasrp3bfc@steredhat/
-> 
-> > diff --git a/Documentation/netlink/specs/vsock.yaml b/Documentation/netlink/specs/vsock.yaml
-> > new file mode 100644
-> > index 0000000000000..f260ee88b1402
-> > --- /dev/null
-> > +++ b/Documentation/netlink/specs/vsock.yaml
-> 
-> [ ... ]
-> 
-> > +operations:
-> > +  list:
-> > +    -
-> > +      name: dev-netns-set
-> > +      doc: |
-> > +        Set the network namespace of the guest's vsock device.
-> 
-> [ ... ]
-> 
-> > +        The assignment holds a reference on the namespace.
-> > +      attribute-set: vsock
-> > +      flags: [admin-perm]
-> > +      do:
-> > +        request:
-> > +          attributes:
-> > +            - netns-fd
-> > +            - netns-pid
-> 
-> [Severity: Low]
-> This isn't a bug, but should dev-netns-set have a reply block here?
-> 
-> The spec gives dev-netns-set a request and no reply. As a result,
-> vsock_nl_dev_netns_set_doit() only returns an errno and the caller gets a
-> bare ACK.
-> 
-> The netlink guidance for new families says every operation should reply
-> with a full message that identifies the resulting object. It also says
-> that once a command only ACKs, the ACK-only behaviour becomes uAPI and
-> cannot be changed later.
-> 
-> The v3 revision replied with netns-id. The v5 changelog says the reply
-> was dropped at Stefano's request, so this looks deliberate. Since this
-> family has not been released yet, could that decision be checked once
-> more?
-> 
-> A netns-id reply would tell the caller where the device ended up,
-> relative to its own namespace, without a second dev-netns-get request.
+From: Alireza Asgari <alireza@asgari.net>
 
-Actually, now that we're taking a netns-fd/netns-pid, the reply makes
-sense because it can be something besides the current netns.
+Repeated nonblocking charges can accumulate deferred memory.high work
+before the charging task returns to userspace. The unsigned-int page
+counter can wrap, including to zero, and erase that pending work. Large
+virtual capacity reservations can reach this range without allocating
+corresponding physical memory, including on 64-bit kernels.
 
-pw-bot: cr
+Saturate the addition at UINT_MAX. Ordinary additions retain their value;
+very large debt retains the pressure signal instead of wrapping. This does
+not change memory.max checks or promise exact debt beyond the saturation
+point.
 
--Bobby
+Found during AI-assisted source review of virtual capacity accounting.
+The accompanying KUnit patch calls the real GFP_NOWAIT charging path with
+an isolated counter fixture and a 65-page charge. It seeds debt near
+UINT_MAX to cover exact-boundary, crossing, and already-saturated cases;
+it does not allocate the corresponding large amount of physical memory.
 
-> 
-> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-> > index 37abde1ca26cd..d4d88c8cf142f 100644
-> > --- a/net/vmw_vsock/af_vsock.c
-> > +++ b/net/vmw_vsock/af_vsock.c
-> 
-> [ ... ]
-> 
-> > +int vsock_nl_dev_netns_set_doit(struct sk_buff *skb, struct genl_info *info)
-> > +{
-> 
-> [ ... ]
-> 
-> > +	err = vsock_g2h_net_assign(net, info->extack);
-> > +	put_net(net);
-> > +
-> > +	return err;
-> > +}
-> 
-> This is where a reply would be built, for example by reusing
-> vsock_nl_dev_netns_fill() as vsock_nl_dev_netns_get_doit() does.
-> 
-> -- 
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261113-vsock-guest-ns-v6-0-3737ce4673c0%40meta.com
+The debt case passed on both 64-bit and 32-bit x86 KUnit kernels built
+from this series. The test exercises the production charging and debt
+update path; it does not reproduce end-to-end throttling.
+
+Fixes: b23afb93d317 ("memcg: punt high overage reclaim to return-to-userland path")
+Signed-off-by: Alireza Asgari <alireza@asgari.net>
+---
+ mm/memcontrol.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 84f4a8fd4d16..1980fb7431a8 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2894,8 +2894,12 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 			 * Target some best-effort fairness between the tasks,
+ 			 * and distribute reclaim work and delay penalties
+ 			 * based on how much each task is actually allocating.
++			 * Saturate so repeated nonblocking charges cannot erase
++			 * pending work by wrapping the counter back to zero.
+ 			 */
+-			current->memcg_nr_pages_over_high += batch;
++			current->memcg_nr_pages_over_high += min(
++				batch,
++				UINT_MAX - current->memcg_nr_pages_over_high);
+ 			set_notify_resume(current);
+ 			break;
+ 		}
+
+-- 
+2.34.1
+
+
