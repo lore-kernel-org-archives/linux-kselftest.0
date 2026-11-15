@@ -1,70 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794779845;
-	b=laNAPd8BFmgPeJpj1ZPkYYmhg0shsM+/g5oSaZ6YDeMABw6oVOFgRRE6HGQ91ASldmAW
-	 Lwr07Cn9pbCCbdWGGaO8wI1vkUpLi2eiYphZt7l2xoXBiO+TwGnVTM9AigIAKorwtC8F2
-	 /k8cclWviA+8ziqlZN5MN7kjYaeeyyjScxZbbUNdJX2v592A74bnb3+xqpbQV5GhhzPEe
-	 SQAv/ZsYdHbb8lzwbVDn8Q+KrOZxY+BPjXzBWvECZVOhnsUQ5EVTN7m+WlRN1UAK334wH
-	 SL+AYNOQHzKtEuwwU2ual9hk1hU8TXjEIz9haP47XWod9S90FccGBwxz03eplCByx0g==
+	t=1794780173;
+	b=yFaIvAsxHUYZIPWYnvLsuvVWU3u6gfZhLtY6BaLRhAw7RlhZ2eB/N3siP5Xuh2jQw2Aj
+	 XmGTLxRWg3PBvv78KRrD9LEnlj+qXWeQgMao7Xh6Lpai81P1mXfbo9+U9pLLC4CVVkOe3
+	 aGKvqUNBagSco8JXssa63wBPttJ2lVvQFXJxgR1AGOYolewEQrhyGF/E6Z4KCfbaZx8k6
+	 9w7DmBnEl8ByzCJW4c9+92do4n4P2FMsF/R1qJhluPPP3q0qflHasY+irr81I8wIUzr+3
+	 43154CPt1qEjQz9hUXUrCrlhOn0z4AZlmjEYcUbGiHGvFAiE5oMB5yX6SWUihFuwB6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794779845;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=2V63xxIdgKQBi65AnPtnz8ppdYY7iry1RAv9yEE7Ysg=;
-	b=sGbr8mSCQ44jN+rOjH1l9bjYFzR5wrlaMoH7VF+3NEEjYc1nYrdazLQSeYXlB/C7EgFa
-	 bdJtSXNLaCCypnNM7t/FBHDTb3YSa8O3FasHpkvqQagefS2AD5yQQEBZ2pwskh2wtqM6O
-	 dGz+ORkedQgZGXdAtz9dzk+Xv/E2YYL8kqJcz8GcxzWDgw+4k3ev6L0TBeGUoJ/9vO8W/
-	 gZyJKpLknYLhWSJT/hTSQR0zzTbQvmyVkEeuhxx93GJMGiRnvsa4oYARGVtOmztlIuqXj
-	 auEp0wdpIEAViCQWbCBWfuQvFvyTV80r1RLlMckYw1bC2HfKN+at3CscSAMMZPozWmA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794780173;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=44GH0xmAnqDy7eYWEVRDMZZHirfXjJwNhusMFmtNtQ4=;
+	b=5pBNNkqILu3/wvV1q4TPafaCMvPnigr2n1n5Lj9pzfB84IXx8cQMZLpBiZLzSws6Ur/h
+	 EJufyGQzvXan/ZyWUOgBXL761GwZmk9V9VDD/DoHg7eaeXDg3N98mfGeqJfkPmi/yQxLq
+	 ajHRgH/vUX1jDk71nW1LUGYu7NKdG6sis04po3WE45DHpi+65aIE50IQOOlxQJw0Tt0Qy
+	 cnBzcloXM2hHza2caRt32/Z5nnmJYxqf50mdHJtPfRnjrXGW9ppjXZD7Pb1jhiHKFe365
+	 udwmIRv/ka7Fb5Sc91+ECMKXI/zNxH7mIIo3n1z+QwhhBgJZoSfHrJcu+jODflZEsYA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=grapheneos.org;
-	spf=pass smtp.mailfrom=grapheneos.org;
-	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=Tly4ZNCx;
-	arc=none smtp.remote-ip=206.220.120.4
-Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hMa6qxkq;
+	arc=none smtp.remote-ip=209.85.221.51
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BFD606A333;
-	Sun, 15 Nov 2026 21:57:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20BFD606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4060B606A332
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 22:02:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4060B606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=Tly4ZNCx
-Received: by mail.grapheneos.org (Postfix) id C40F63C08EEAB;
-	Sun, 15 Nov 2026 21:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
-	s=default; t=1794779844;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2V63xxIdgKQBi65AnPtnz8ppdYY7iry1RAv9yEE7Ysg=;
-	b=Tly4ZNCxDpM8U4qEEKXazjyxuZHNhwZsn0zeTQ/ZOAdfBBEXTSLLo6gsFkUN7KB2DTrPs6
-	xB//7Y5VXDIYCIR2ykXLE316hQpNUsxw31QBRL8Pf/4VY/eSpJjJh3lu0NiRHI5+GFIM1s
-	6Rr/B8lRoIjA0K6ynOg/nW1iR48kCZo5VxLbJrkKnAQNhLLwkpPU4FZzVDBGypNKQ18NGG
-	cspZMW2qn/L6x18DVIcHtDOPYc4ujJ/gXO3+Cf5ybuczANpVd7F4tpOyDZ6ol4GnwobDqA
-	dIoh7gYJ8llNwQdt14uwePoZi5TAEXSSrBInhp7B7YnPiqLhDTJW7uymbgtrHg==
-From: liamsmith827 <liamsmith827@grapheneos.org>
-To: netdev@vger.kernel.org
-Cc: David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hMa6qxkq
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-49a357e48a2so342897f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 14:02:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794780172; x=1795384972; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=44GH0xmAnqDy7eYWEVRDMZZHirfXjJwNhusMFmtNtQ4=;
+        b=hMa6qxkquxLiBeveT81zF68GYb6CJxnvwU7kp66SYWYPigJcJHz6TmqT8tw5C24616
+         bubH74AOXFvkcsGJXAFfX+ArBiWMUTVrjwhG77MzAp//sMX8SaJWiVMX8xbugTLpX139
+         ZD3e/ooXqnWaj4k3pqkQZ7Ft7ethobWskQqXiWlTzPS6FzQTbXTCs9YNkLUKd2FIgb6A
+         i9BZFyb0uuNX+i/i8CL3owRjg6mEGQGAjW5xHEdX0acwezoshJsS98dWmUMYOXQwW5HQ
+         H24EeRiAZMJWVXcOJLOP3bGlk34c+aIjKvF4zN+3LAEJCNcrZVfT3bqNH8kene/rRrWM
+         7VaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794780172; x=1795384972;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=44GH0xmAnqDy7eYWEVRDMZZHirfXjJwNhusMFmtNtQ4=;
+        b=PB1vwVHk4KRhM6weKDvfUepsXJR1aAlP02L6uO6lMbeHtRXc+Q0kb/1Q9vY6iIG1wA
+         Olb1nD6WZvcZFBr8x0fr3+Zq4uJ0b8xE1TtRixlQiaac9vY6Vq8LC8+9TqICbb4G4Ndt
+         5tt6EZ/aw6HZewT8uI0fLiEYZLknXTfy915DgE7CmZEnCEblj5cEz9aPEuxmMnnj+l/1
+         m5ktbnzJ7OZydTjQ6Q4aKvDSaDPiizkWf/S7KOHuCoIP2i5dOtIPMR3EbZBKKSgADhZx
+         yFUhcl+aQexLL4bNW2Rk3WBHdBWIpXQKhBUlvuw6sLYGShbaLrX5BXyjWEdmeZw5U7NJ
+         6FtQ==
+X-Forwarded-Encrypted: i=1; AL+hErFhgUyF2RftZE2pTyI/3EdwEe0P9Ee4IB85Ffr8CyDq9BzTE9KrbuQ8hlOJ8NayMuymRygYi2Hv+yj9SV+Fjcw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9JBrFyK6kZ8+O21LuFmmpiCdZ5vFxbwBDcjSlNFRAAOqDTCDrd
+	i/AuZM9eC6gAdR0Nj0Mh+sI9tiAw3ekVr6RJt6fudAJzVcu68pRHXBbk
+X-Gm-Gg: AYBFou1CSOij1vz5gtC6GzUsc8P/nih5tc0TsIeav0dATt6ugGV0rp+dV6X4rZ6MPMO
+	/HQGXNQNSHa3DKfAEds7f3In+0lIn4tkWbPzl2sX3Ln8PtXecNGIrumvj/2TBJ8anG3VrajMkQv
+	cv0y7GZIQvQ7iTX5CQZdsCW+i3kOeIKK642qBDT89C1/KptALw32XTM2W2nNbohNa+RJHCA6XxO
+	dgPy4hTuM3A4W4dNiREyHbv16ieU5XoU7X+aNtBzZRNkvGBkam999iqs9HUkObJ63g2hQe90KHp
+	thfwcxrUQNuu39NKmWOq59GDDM6FMzXBdpjdbdYFbrQOAEnzbpFSiJSYW4N+gt4lHoHX/28sxPJ
+	3vY2WRXp4J/ERpEHoFwmDFY2eNxcmR9DiR0kE0SO4Rfa29oCh3kEug5lU3PN+vE4QeSbkz8+VC8
+	sHgpu/xoGpOcOcrYWzGOMH/AY2njTxge/IxR2/p9OgAyf94N9o5OQHzaLF/YEhDJMFkf6p8ggbi
+	nrpil0/AqXxIwIvIbalKJQtXnnpC9XwIFfk69iQPAf21SFIlsvW1TQ4CcxwuBBjQr3JP0AWMUXw
+	5UuQehqIpfP8CEdCdtqrx7udTQaV7PT5OuP3vdOASiUwe0hkF2k2rRwflKIiMn+gFogVuUDP4kC
+	0cMAQ8dfUghZhevYX4JA=
+X-Received: by 2002:a05:600c:8b74:b0:4bb:6a02:d42e with SMTP id 5b1f17b1804b1-4bb6a02d56cmr58017955e9.1.1794780171572;
+        Sun, 15 Nov 2026 14:02:51 -0800 (PST)
+Received: from Nuel20.localdomain ([105.112.221.201])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb734b9f44sm9320665e9.1.2026.11.15.14.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Nov 2026 14:02:51 -0800 (PST)
+From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+To: tianyi@cloudflare.com,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Liam Smith <liamsmith827@proton.me>
-Subject: [PATCH net-next v4 4/4] ipv4: replace obsolete routing comment
-Date: Sun, 15 Nov 2026 21:56:40 +0000
-Message-ID: <20261115215640.18728-5-liamsmith827@grapheneos.org>
-In-Reply-To: <20261115215640.18728-1-liamsmith827@grapheneos.org>
-References: <20261115215640.18728-1-liamsmith827@grapheneos.org>
+	bpf@vger.kernel.org,
+	kuba@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	skhan@linuxfoundation.org,
+	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Subject: Re: [PATCH] selftests: net: veth: propagate channel-check failures to exit status
+Date: Sun, 15 Nov 2026 23:02:40 +0100
+Message-ID: <20261115220240.51713-1-emmaonana18@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAG4wq-exUYFvw4i=gQZhwC8fF3tnhmOMtv+NceYTBEx_TO+F7w@mail.gmail.com>
+References: <CAG4wq-exUYFvw4i=gQZhwC8fF3tnhmOMtv+NceYTBEx_TO+F7w@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,55 +115,14 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Liam Smith <liamsmith827@proton.me>
+On Sun, 15 Nov 2026 21:34:29 +0000 Tianyi Gao wrote:
+> The Fixes tag should point to the commit that added chk_channels():
+>
+> Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
+>
+> c017800af5c7 did not change this helper. The bug is present since
+> v5.15.
 
-Replace an existing comment which describes obsolete fib_lookup(),
-MSG_DONTROUTE and IPv6 behavior.
+Thank you for confirming. v2 already carries the corrected tag:
 
-Signed-off-by: Liam Smith <liamsmith827@proton.me>
----
- net/ipv4/route.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
-
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 03db105303b4..fcdcb63ba09e 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2856,24 +2856,18 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 		if (fl4->flowi4_oif &&
- 		    (ipv4_is_multicast(fl4->daddr) ||
- 		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
--			/* Apparently, routing tables are wrong. Assume,
--			 * that the destination is on link.
-+			/* When oif is specified, fib_lookup() is called
-+			 * primarily to determine if the destination is
-+			 * accessible directly or through a gateway. It also
-+			 * checks whether there are any traffic restrictions
-+			 * (blackhole, prohibit, unreachable), or if there's a
-+			 * routing lookup miss.
- 			 *
--			 * WHY? DW.
--			 * Because we are allowed to send to iface
--			 * even if it has NO routes and NO assigned
--			 * addresses. When oif is specified, routing
--			 * tables are looked up with only one purpose:
--			 * to catch if destination is gatewayed, rather than
--			 * direct. Moreover, if MSG_DONTROUTE is set,
--			 * we send packet, ignoring both routing tables
--			 * and ifaddr state. --ANK
--			 *
--			 *
--			 * We could make it even if oif is unknown,
--			 * likely IPv6, but we do not.
-+			 * Multicast is sent regardless of restriction or miss.
-+			 * Non-vrf unicast honors restrictions but allows
-+			 * oif-bound sends even when oif has no routes. In both
-+			 * cases the destination is assumed on-link.
- 			 */
--
- 			if (fl4->saddr == 0)
- 				fl4->saddr = inet_select_addr(dev_out, 0,
- 							      RT_SCOPE_LINK);
--- 
-2.47.3
-
+https://lore.kernel.org/all/20261115214702.50817-1-emmaonana18@gmail.com/
