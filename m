@@ -1,100 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794698411;
-	b=Zx49vvXuJfQJEp7+pZzm6HCHQRY6A3ngPIx6MXjbUI4Fonrzulv9QDuD0lX/k1yqopeU
-	 5KGb6WWohUk7HLC9LHG5TH1bQFw2+jtbcduIM8AKSEFaz8Trl3FhTd7CIPI6LEeWdmk0S
-	 RLy+vP7lW+k7cPDgOhtJe5AMotcKmyddUylplg6Y7b/fyfaChV8SAlxTDVMjLbHlhN2vU
-	 THBjbk689I49KssTxAUBGFS8mxhXbtJo3E3tGIgqL7YD6+BpwD0GgpasMzkzewB6yVupv
-	 CeSNCCuklBVZJM/tMHPwgAA4zqlIJDGoggP5CqsyM5m++JSLF4zaJmffCrH4ktElGdw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794698411;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.42
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794704166;
+	b=K4/BOa0LlnXBJUb3csXKmKOce2YKT0zle76Y3ctTboEoSas7rrOdTnbzOHVPp6cJDId+
+	 l0l51pvj19B+w7vrIdwDYvyJ8wKjl3UNaXeo3nGMJRpB8UyC4qaSQiJ269amFjYnTrigY
+	 wUgFWpjObZaYoQFTTPQZJm9Tfi/d4j0EkfHb40IZphP0DSw/u630RNsHVoZM8rT7Nx2do
+	 I0tHtN59768AMMg+TOWURa/GnV1HSJLBL7j9fgQF4Czi++FtBR6ce98HrTWwbnXhrC1Hr
+	 3gL3FU+dA82AT2Su5wZrJNv/673T8jWkYWvERhCfrYkJLmCxkhdwJNKE91I4RTdHleg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794704166;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-	b=JU3ne6lem6fUVH7lF8IcGK6SvJ4a6evsiP7N8F1xVQGaXtPBZ7bOv/dy8J89nMdbT31z
-	 r5lhjT0pMrpJ2L4ZK2UtePXD1kSKf1KdIxRXTHs8lYNT1bxdqwaMMmIGBCyPQXhMEwSLi
-	 66Y65cvyaCNmBqYybtYhn5wfTP23IyEMMGPnVbJP4JJ8wSY997jt8xm4kI6l5eZxNy6/3
-	 xg8L4JCxYV6mBnq6zYL5ReaADnJMK0GJlX6kXX8Xa+OjXqQyTAxj4D8G0w9Pe1nO0mrEb
-	 sleIJgHNFcowuFN46QwhK+t1Yi7g/ep6Cc+8SSXr7ZAu9r0h4jUNVz3peNttrQWgnNA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bZ4A5V+6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=TEe8D5P09T7tDxCiTRWgdiV435JqX7aUW5WkZ/vkqBo=;
+	b=wWld/i+Sk8YnMITP740ix0OLCGokOhlVwSKWdMDJUAYKahXr9ddvHfkyXMOhZYvGAgs3
+	 5Odn3Ko5ry4Atl1D/8SOfbXUMfxvWka5PrwKJ/oFPJpayVO/Ww+IJ6XqwpMhDVf0v8IMY
+	 qxONZo0h/0n/Pzr+g9ELFv9kFxRdu3cDxxcTNN55ajMMsAiQrVmPBNEug3zbmERkyvE7A
+	 OkeZQK+M7u0AfG+3M+e/kc9CIE0JhRUTw6UOgtZOYywl6xXIoptH/0h3LQnDjaPrYaPxM
+	 vBSsisC5GBla5Tg68hzBMAsuYSQaFygff1EfNy9y7oJcl1uOGwTmxW6zCi+TVdt0F4g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=bairaktaris.de;
+	spf=pass smtp.mailfrom=bairaktaris.de;
+	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=i+nkYYZ5;
+	arc=none smtp.remote-ip=209.85.208.42
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7815606A331
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 23:20:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7815606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2373A606A32C
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 00:56:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2373A606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bZ4A5V+6
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b70192ebceso4502088a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 15:20:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794698409; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VT4fHtH4VH9LcM3lp0NV7VERMd9VNq+n3IrCLVDD6Uq1HGsQ3AxtUuU9UP5hk83Xme
-         An7AvBZ6PL5DZD6ZTPr50S6F33WBT61FmjRw2OAocZTK6PfU0aA6uTA8R5k0SJ4E251e
-         NwIbCIKA6SdTi6v6yAtyInYxSaUYR3UrZ0MehJBVVLE6H/4VbtGMsGYhkaZEKaeOSNjo
-         DiYwKeBWoW+RCcTsSvZLcs0M0SaDDilDvz/yt57wZjc4U0drjzjKARYzjT5EIaNUFzqU
-         g8QM18FJISzYtXjOvwf/Kux3M/mlqHAP8gH/HyClXtnodCp0VgkLZzNVy5K7fUwa1lO4
-         TpaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-        fh=mSgYNKGeYUgXB4HLJ7yndzU1Iu9BrPtCcfqKw2KXFek=;
-        b=PhTP/BvT6dC6t4KSiwWDqkTnpTcQ/SJyEqtjZkOXMjG1/nt/ejDH3lcKv4XOsyOG+S
-         SvewB0Wp69L202sDfV1Lu9eHneJqTcbKf7uPZtuZX3CwxdwBeoK85Q+ZLC2z/ey75q+j
-         wyKvQiAGEWeiiipWIPAatTPZ8yWkYsbSyTJvMoVZR3NWBSqgnBv5ZOPYTXVBF1MScBsy
-         a3RrcGDEQtLrwmWHl8M6Xoq4vvsqC1svtG73veLS9+ipX7f53vY2eIP+yeGzLDK36Scl
-         YQO7vmEAmckBItG/g18gWwXY6hokVXBd+mHC6CsOhrLgPyMCm5tDTIw9L6nAgpdCTz6C
-         d5Dw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=i+nkYYZ5
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6b587591414so2939109a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 16:56:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794698409; x=1795303209; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-        b=bZ4A5V+6Vs4HKIPLNbCXlaoHg6GUiZAgPE1CoHup/u8F9XnmCFMSb6naMqQFAl++mw
-         +LZR0jt78s/FhrwMU+95xN0Ho10rZ/g9p6M/dfGpr9SfvlaOXM2WfiTCtO0CejnyefhK
-         5gg17lDjyCI6S+pTTK/DIWzHtcTY1JHkLI4t/I/Teu6/Lgz9A0oKfkx231Ay53Fdu4Kp
-         zCo0ecwmPzO3ZOIddRCFMjOjLH94BU3oXsC8cOhJgJSeLFwZkZlFyxo1cq6JVw7hHb6A
-         21NW8PziNlBat7d4DfM9UgO0YIScpglsDnmQoGQNIOQhlOx3hw76q6t8+8jTPfBn24eS
-         FVGg==
+        d=bairaktaris.de; s=google; t=1794704163; x=1795308963; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TEe8D5P09T7tDxCiTRWgdiV435JqX7aUW5WkZ/vkqBo=;
+        b=i+nkYYZ5WZXVA6Sd0W0lzQbXlYxqA3vHmcbCdRKjpn6GwmxOBt05KqSQ42DKqy2cB1
+         2d/22IZLsvA89rAo79MhNCwBgNaGQ9I2YD2u+KeqgnU1FJcVAyt6LwMsEw3yEYiLLTDw
+         AzN90wQSgNRtob67YBfLzt8kjyvPMrcoCJnssaYlsV/3uC33vxMnZDVO/UEW+yL5a69n
+         tBXiIJUPWoT0C/QF7yksztaJOXgNm77b6NxI9KseoF4vphdyh3W4qoFbUZvl7njsKRlC
+         UcaseQlog7w9NR6qwYDsadwyGTzbkca2RPxxAUK0Z5nWg01wE+icO99+cwTLCjzDaXXG
+         jenw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794698409; x=1795303209;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
-        b=FD4WCdsF3ohX4fzsPMD1QzLtbnsS9RnCUK8WdPMKyyHq3kLUuIg4/0OXDL5K4FZEUr
-         P225NHqndl/Rormj/naOD4HJMq5as0SvV7l0Y2cNWCqNpQt6QI7pPUeGZFbPxvtZEuQk
-         Ha+tle3hKdQne9tE0hsF9HL6fmbjqYW4AoS8EfyFxQtlZk5uV0U/PJ9/u+MwwAHoyBg3
-         Oax7tTrfniTxcZ8sA/ZUmAtg9ROC6Ohm99SZNmyHCaTU+H2Rkb++v1VsQ5bQLC4RijKI
-         mp8SYKEPk5q12prguERQ4bheq5yJ14SeoSqoo7vKyn0o+i22Dw+bCweonYAMn+5hLdET
-         CXBg==
-X-Forwarded-Encrypted: i=1; AL+hErEYEpxsA6mXNGbNR81HbGTPrPBSSax4XwngUa8sXRa5DY6MDe4NX/5L1lRilDsE93xTyg/qJSm31wB0tTAfVPs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+yv5kHqcPgz2kRffxrs6seGjZyMywoorBZUylmWelEM/67w5g4
-	0BPxXz0u59GixRUuGlpYj2mIr/i6QGiWcKXUhV0HoOuaCZiWvbPmMYL7QYmcjAM90gm0XUWyNjk
-	VDnZJFA5S5F2Deoe7AIfgRxm/gQljcd8=
-X-Gm-Gg: AYBFou1JSggdIaHk9H5pEmxF+iSWbz7tJZ23OzD3c56yfQEl1UOA4fL0hqph2VoV8JK
-	k8JQBKlLpZ5pCvklw73viAJUo+efKpQsl1OrbmnA+a3KyXpw5PbgWCMkHWKf1JK4zPs/Mkf5+nG
-	ImFDwwCt1KMtoAEL6erlrA4JQRPvcOiwr4ydTvbhuDb0lLpplJfjeNdBHdcfem2kCKt5aKjF/15
-	UfJlFL2te1dO+TbUyG5Yrx1H4omSOd75nczZu4aI5Vstx5hesCb76Fsr3VXlR376w+3ahYHmf69
-	bPQAt+udgYWXbJvWdV+S8vqQKBYM5diMNf5+oKwTNYlGCxXTMels43VOukOnia/+Ic98k48s/cC
-	vx+wj1QjS0wYOQmKUukabJIccjftxbV5+0Dbwpfr3pEpd56OmThOap2egw9HVXTjpBimV8w==
-X-Received: by 2002:a05:6402:e10:b0:6b7:f00e:5e56 with SMTP id
- 4fb4d7f45d1cf-6b7f00e5f37mr1542816a12.1.1794698409123; Sat, 14 Nov 2026
- 15:20:09 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794704163; x=1795308963;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TEe8D5P09T7tDxCiTRWgdiV435JqX7aUW5WkZ/vkqBo=;
+        b=PtjRLlGys+aRuL5A3mmnZcJE3w9Z5Devqu7ySKKeNirLNQPoioDJoU6fvTjC+a7G0H
+         3xAcN4R//P1Zez4raqtVbgPacpkCRyJMtz0fLUNLKKY8DUiuI060biuSAHRIs2jM+FO6
+         EE8wuQVlxC2YWN1W52kPxt6A5bZTUd5kMTY22Zg6dv1ohJOxs1rRVzPUbjlHSX2BNedV
+         W0ESwugJKXayKeofGFmSckc3H0LyF3XaIOJ5zli1pQBVTDvMl0El7HW4xPgb/j0+RKXS
+         3MqAlmCi01+ZVJNIiN0OOtXKB9V48Y22SWAG8IQlD1bfoxmTC2+yWjPPwu8nFQRcNLqB
+         ecyA==
+X-Forwarded-Encrypted: i=1; AL+hErFt1G0QnMWEVTQtaxin1gEE9Tu7GOkO2IEWIb/QBK0/RK6/el43btBs6kZ7C1lWjARQn6KzAiU+aZivu8+WpuY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9uzTUxPbZGLPfj5erb3cn1bM6QLv0DsZR60zhP+oIh4TX12qY1
+	pbTQjk3I19jpi9C67CdG6EXijAKQO6a+Z6SKq7Zoyqjjyn9jpFRZfmNzewB0RemV/w==
+X-Gm-Gg: AYBFou2HS2cGtSFWHgA8ziiJRRoNRPZk8DHoaOxaQSC12JNypqzrgXhlZRrBu5hXOgp
+	7csSGScXU7iOy4Lqu730z+rqsebol59d3Kq1LD+C4wsPkcDFG2ShaUxWZpbGR9u281xAoTkwryc
+	7/CtBT81jpAdvSOjxI5fG72gJLxKFgBR73e9LvKjjuhm6X7SXe0lIWQRzyqrdGOZa7eAO2cTMvY
+	Lj0HWaJLRMqwsGFAxB7NUId9Ku3aM8C6exqi9Lkt6wJRjeeXCvwE474zxv79wPzejwph82GWlTL
+	AMhEXCkr8fgiYl34wJwSrpMpdsBgkyC+Azh9CTZ5bh5eBLO6hK7XThfkh/vsWonvAJC/RnyHoIM
+	19/OHfDvaRGOT5KlRTE+NvB5VuEZQ2p5de8DijSLl4+x34a1Id53Sin0Of0Ug8QsAjL4qZxz3CT
+	P+n2lXjr0vRmPcJo3/VIgHPNjbVCwp6ZfoV93lK9QykblK3nju4iz+ZwSWUXYUnz9sZN44raak+
+	wLf99ZOya8lge3yesEzzMJoWSwP95qckktpuhsQ8kVXXwcc1mKF1qBB6Hdyk5sEOW0nEe4wCL6G
+	3b9CoO37agyXK58g6QVOaeQIhZ9cRkZcpM0XH3/VKBkYvCJU+SKSA7EZ22vyfA9bLpVdtaxM1HU
+	qpf7PLAcv0TKXEVy0b2GoRFIdCbeF1HxWWvcX08EGRp+/JOvgE3IiQcFCZoNobX9q8JnCS6CR0Y
+	8lUH/0714G+WdgQXW8x9ykgXTsii0E3tgINrICwF20J2560WwUIR+9P7f4kRu24DnqJRO+bPVjZ
+	S8CokfkymE950ES4lApRcKOTEgAOrbLfzQIya2bhoAyoBDDj70nOjE7f7NbRmy2Wh98wKa9U3oi
+	sVkhuFi5BTtKjmtOTXtD3pUgLpiq6wZxbDxI2yIqWflv2QtkQ9+tdQpbnNrq7ff4H0jjA6rp
+X-Received: by 2002:a17:907:3d44:b0:c40:4965:72c3 with SMTP id a640c23a62f3a-c509637c12emr491035466b.19.1794704162921;
+        Sat, 14 Nov 2026 16:56:02 -0800 (PST)
+Received: from Desktop (p200300f2470a670069e45948b1a17361.dip0.t-ipconnect.de. [2003:f2:470a:6700:69e4:5948:b1a1:7361])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b921d4sm266313166b.83.2026.11.14.16.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2026 16:56:01 -0800 (PST)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: netfilter-devel@vger.kernel.org
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Eric Woudstra <ericwouds@gmail.com>,
+	netdev@vger.kernel.org,
+	bridge@lists.linux.dev,
+	coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH nf-next v10 0/3] netfilter: flowtable: tear down bridged flows on layer 2 roaming
+Date: Sun, 15 Nov 2026 01:55:52 +0100
+Message-ID: <20261115005555.645727-1-julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,86 +112,127 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
- <20261114-work-loop-pseudo-v2-33-98639a2286fb@kernel.org> <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
-In-Reply-To: <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Sun, 15 Nov 2026 00:19:57 +0100
-X-Gm-Features: AclHuK_YVxhIpv6JLzeNAX5mX5IHGfu05WS6uQ-TCKewxE3JKeci2PyA-UDMCbo
-Message-ID: <CAOQ4uxhGxpBtMZ5kfuzR1tQAewiecoX7UjXQRo91QjJHH9T_Yw@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 33/42] fs: add file_check_backing()
-To: Chris Down <chris@chrisdown.name>
-Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
-	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
-	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-usb@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 14, 2026 at 9:06=E2=80=AFPM Chris Down <chris@chrisdown.name> w=
-rote:
->
-> Hi Christian,
->
-> Christian Brauner writes:
-> >+      /* Look through stacking filesystems at the inode with the data. =
-*/
-> >+      if (d_real_inode(file->f_path.dentry)->i_sb->s_iflags & SB_I_PSEU=
-DO)
-> >+              return -EINVAL;
->
-> This looks good in general, but what the bots said about O_PATH files
-> here is real. With FMODE_PATH this is reached for a file that was never
-> opened, so on overlayfs nothing has been through ovl_open() to look up
-> the lowerdata of a metacopy file yet. ovl_d_real() then does the lookup
-> itself, and when that fails it hits the WARN(1) at its end and returns
-> the overlayfs dentry, so the check passes as well.
->
-> Only fuse passes FMODE_PATH, so it takes CAP_SYS_ADMIN to get there, but
-> it's easy to trigger with that. From a quick test with a metacopy file
-> whose redirect into a data-only layer points at nothing, registering an
-> O_PATH fd of it with FUSE_DEV_IOC_BACKING_OPEN gives
->
->      ovl_d_real(/f, 0): real dentry not found
->      WARNING: fs/overlayfs/super.c:79 at ovl_d_real+0xc9/0x210
->      [...]
->       file_check_backing+0x308/0x5e0
->       fuse_backing_new+0x219/0x4a0
->       fuse_backing_open+0xe8/0x390
->       fuse_dev_ioctl+0x53a/0x7d0
->
-> and the ioctl still succeeds. A normal open of that file fails with
-> ENOENT, so nothing could have used it as a backing file anyway, but with
-> panic_on_warn this is now a panic.
->
-> Maybe ovl_d_real() should just stop warning when the lookup fails, now
-> that it has a caller that isn't trace_uprobe?
+A flowtable flow that transmits straight to a bridge port keeps sending
+to the old port when the host moves to another port, for example a Wi-Fi
+station roaming between access points.
 
-Yeh I guess that this needs to be a Fixes for lazy data lookup.
+Patch 1 is a bridge fix the series needs: br_fill_forward_path() fills a
+path to a port that does not forward (STP blocking or disabled, an MST
+vlan not forwarding), so the flowtable transmits where the bridge would
+not. Patch 2 makes the gc tear a flow down when the fdb entry moves or
+the port no longer forwards in its vid. It is Pablo's patch with my
+changes on top: it keeps his authorship, his Signed-off-by from his
+posting and a note of what I changed. Patch 3 adds selftest cases.
 
-The correct fix would be to teach all the callers to deal with an error.
+The gc finds the bridge port from out.ifidx through the vlan devices of
+the path and the bridge from the port, and looks the entry up in the vid
+the forward path used, which the tuple now keeps in out.bridge_vid. With
+two bridges on the path it also checks the outer one. struct
+flow_offload grows from 296 to 312 bytes on x86_64; its slab cache is
+SLAB_HWCACHE_ALIGN, so an object takes 320 bytes either way. A gc pass
+over 2000 flows, 1021 of them offloaded to a bridge port, took 277 to
+278 us with the series and 171 to 281 us without it (median of each of
+three runs), and no flow was torn down.
 
-> The check would still pass
-> for an O_PATH file whose lowerdata couldn't be looked up at that point,
-> though.
+Tested on nf-next 734bef548a96 in an x86_64 guest with PROVE_LOCKING:
+nft_flowtable.sh passes three runs out of three, including the eighteen
+roaming cases in both of its passes, with no lockdep splat; the "block"
+case took its final form after those runs and passes three runs of its
+own. On v9 the cases for the fixes of this version fail (stacked
+bridges, the untagged vlan that is not the pvid, the disabled port, the
+vlan leaving the port); without the series every roaming case but "del"
+and "age" fails. net/netfilter and net/bridge build without warnings
+with W=1 (x86_64 allmodconfig), each patch on its own, and with
+BRIDGE_VLAN_FILTERING off.
 
-One observation relevant to this patch set is that a datadir layer has no
-business being a pseudo fs and that can and should be blocked explicitly
-at overlayfs mount time.
+I used Claude (Anthropic) to help write these patches.
 
-The other observation is that fuse_passthrough_open() should probably
-check the backing_file that was opened for io in addition to checking
-in fuse_backing_open(), which could have different FMODE and specifically
-could be FMODE_PATH.
+Changes in v10:
+- the tuple keeps the vid of the fdb lookup (out.bridge_vid) instead of
+  the bridge_vlan bit and the port pvid: a bridge vlan that leaves the
+  port untagged is popped from the encap stack (DEV_PATH_BR_VLAN_UNTAG)
+  or never pushed (DEV_PATH_BR_VLAN_KEEP), so v9 looked in the pvid of
+  the port, which is another vlan when the untagged one is not the pvid,
+  and kept the stale flow (Sashiko). This answers Pablo's v7 question on
+  bridge_vid: no bit can recover that vid
+- the gc also tears the flow down when the port stops forwarding in its
+  vid (STP blocking or a disabled port, a vlan removed from the port,
+  vlan_filtering toggled); v9 kept sending to a disabled port and in a
+  vlan removed from the port. The new patch 1 keeps the forward path
+  from recreating such a flow
+- with two stacked bridges the gc checks the outer one too; v9 checked
+  only the bridge of the transmit port and missed a move on the outer
+- selftest: vid 10 untagged on ports of pvid 1 through a vlan device on
+  the bridge and through the bridge pvid; a move from behind the inner
+  to a port of the outer bridge; the host's port disabled; the vlan
+  leaving the port; vlan_filtering turned off before a roam
+- selftest: the IPv4 roaming cases turn IPv6 off on the host, whose
+  router solicitations crossed the bridge and refreshed the entry the
+  "age" case waits to expire (2 of 8 runs failed)
+- selftest: lines wrapped to 80 columns, namespace names initialised
+  (NIPA checkpatch and shellcheck on v9)
+- Cc coreteam and linux-kselftest (NIPA cc_maintainers on v9)
 
-Thanks,
-Amir.
+Changes in v9:
+- reset port_vlans at each bridge in the forward path, so the gc checks
+  the bridge the flow transmits on: with a vlan device of one bridge
+  enslaved to another, v8 counted the vlans below both bridges, looked
+  up the bridge port from the wrong device and read past encap[]
+  (Sashiko)
+- selftest: a bridge port that is a vlan device of another bridge
+- selftest: the roaming cases give socat five times SOCAT_TIMEOUT, as
+  roam_stop() ends it; on a loaded host a case took 109 s and the 60 s
+  timeout ended the transfer before the check
+- authorship: Pablo's patch is credited as such, with his sign-off from
+  his posting and a note of my changes, instead of Co-developed-by; his
+  paragraph on the switchdev notifier alternative is back in the commit
+  message
+- rebased onto current nf-next
+
+Changes in v8:
+- drop bridge_ifidx and bridge_vid (Pablo): the bridge port is found
+  from out.ifidx through the vlan devices below the port, the vid comes
+  from the encap stack (bridge_vlan bit) or is the pvid of an untagged
+  port of a vlan_filtering bridge
+- the fdb check sits in nf_flow_dst_valid() next to nf_flow_dst_check(),
+  the hook is fdb_valid_dst() again, and the comments Pablo pointed out
+  are gone
+
+v9: https://lore.kernel.org/netfilter-devel/20261108155344.35845-1-julius@bairaktaris.de/
+v8: https://lore.kernel.org/netfilter-devel/20261017235849.1066624-1-julius@bairaktaris.de/
+v7: https://lore.kernel.org/netfilter-devel/20261014235628.197976-1-julius@bairaktaris.de/
+v6: https://lore.kernel.org/netfilter-devel/20261004171605.3544792-1-julius@bairaktaris.de/
+v5: https://lore.kernel.org/netfilter-devel/20260914072541.897040-1-julius@bairaktaris.de/
+Pablo's patch: https://lore.kernel.org/netfilter-devel/20261014210256.1573072-1-pablo@netfilter.org/
+
+Julius Bairaktaris (2):
+  net: bridge: fill a forward path only to a port that forwards
+  selftests: netfilter: nft_flowtable.sh: roam a host between two bridge
+    ports
+
+Pablo Neira Ayuso (1):
+  netfilter: flowtable: tear down direct xmit flows when the fdb entry
+    moves
+
+ include/linux/netfilter.h                     |   7 +
+ include/net/netfilter/nf_flow_table.h         |  22 +-
+ net/bridge/Makefile                           |   2 +
+ net/bridge/br.c                               |   2 +
+ net/bridge/br_device.c                        |   2 +-
+ net/bridge/br_forward.c                       |  19 +
+ net/bridge/br_nf_utils.c                      |  35 ++
+ net/bridge/br_private.h                       |  14 +
+ net/netfilter/core.c                          |   3 +
+ net/netfilter/nf_flow_table_core.c            |  68 +++-
+ net/netfilter/nf_flow_table_path.c            |  29 +-
+ .../selftests/net/netfilter/nft_flowtable.sh  | 364 ++++++++++++++++++
+ 12 files changed, 561 insertions(+), 6 deletions(-)
+ create mode 100644 net/bridge/br_nf_utils.c
+
+
+base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
+-- 
+2.53.0
+
