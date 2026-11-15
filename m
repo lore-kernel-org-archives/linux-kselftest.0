@@ -1,101 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794725127;
-	b=aRmcdylnysDTNqQVRYeTay/YxtIkA1sEOc/bWWAAFb3ve0dr1T5q+42r8q2b3k0wArjo
-	 JLWjL7dvaQl+g9VJ2XJINfQQtB9PKEDKTB839dMQEx2otTVwsBQKxg2Xn8kKGGp85I31M
-	 ZlFhmDryHLMBqYBfpOED/uw69zjhf/Zyxa2z6SFD2X0FoOaCBHGMqBCN3sNRfNd8XMdx6
-	 YZWNXhL8pCBbb/jhjIYxskWCwiANkmN+YEQ6aEFEOTFGDCvd/IkTRR9euvTYXAQe4fe4m
-	 AiwsfRGxnAgpAG/wYq7298NiMmiDJB74vfyfgisyvv5HDPeSN3QQrmbsbBG+tOd0aUg==
+	t=1794727273;
+	b=jbbFXDxC9XtLctDRxfIVOpjWsxAT5/MCqNZkXQagia+F5mRAQCk9dbsD05RJNdebO6Av
+	 GevcoCyQI09WPEB/c5WaL2mYTdBlKIeQ/oXczrpmf/9utOjfJh9U1nXaB8RcslXVLM0ay
+	 lyiCVHXKnaiS41pVlxv0hB0GzD37fb3dBrMTcOwHydlxOJ8CG5Kx0eww8SOWaQcVzkgif
+	 Ua+3DTcZoYl1gCp+bEqOKfdhIUHSAX7FQasbaF0jwO0SwEybmuS1vuNrx4Ndh1bXXUTUI
+	 EjkpQFb9OATOR624kIWIcdLVasM50cKE5uv1Fz/LYkkUFKfVHhB63CdFFEgNaCaugog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794725127;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=jbBpt+FJ8a8qGQezAUJGyx793S/s/ZwSaKkH+VjjeYU=;
-	b=BuSdHYgm54fA1lJLzZHCzK+AMuoUE9b44XIR7Jnd9us+g0dMOXmSmLqatgUf+ZYc+1BW
-	 qvpHmeL17o+HcB4kai6p3gus8l7iv/XzmBovc67dpEO/GZS6Kg64pj67BKaMam0SsvfTS
-	 GYHF134a0yKTPH52Ajo/n+ES9V3yybplqGIYnb0KMybFC4oMBVM/RD04UfVV0XziDcpVv
-	 MSpbcvzJIytOnQWOhRfWfZwcI4sFoWi5hrFazZq3/J79sNMQOnumB9RsL7t7NjzYbuLKP
-	 95VBf8xoToxDIP2NST9R8pt8s0+3JddcNkc5XyH5oa8yzeb8w6GvBtiW8vXKD1RDTzA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794727273;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=rQkXsM7aTK1ejfcEgqQ8A28+qA/EL1BgfPpRxPrkcmM=;
+	b=srEtkfBKrYmn6xG4n/O1XAGu8gQBNdjJdUdlNgq0OapqPixAp/TB+ZU+2Q50VCTxys0U
+	 a6T7W9EuBKQPLLKZ1fbcnSAJKpzS+02Y60bCRCReIQiyhr4S29sQqz4eMw79i8zxh5SCP
+	 VSiULkgZMDn9ucg3zJNpYPpuWfO0iO9dKBelgXYPPo8EH8+/dYT68N75OjPLWFdk+Lx9M
+	 z84ax29T3RjFDMQaWDbo8kTohSIdX8F7DqHMdrx5pLyetGxHX7UX2A9NU4VBj8t0muMzt
+	 4kJ5KPfxkd1VheXd6TxoFj85ypr8QB9Ip7sJXyGtZw36HmH8836+7JFjuLIFyXivqig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qkOIAS2J;
-	arc=none smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="WBSPv3/5";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCC1606A323
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 06:45:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FCC1606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FECE606A31A;
+	Sun, 15 Nov 2026 07:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qkOIAS2J
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48b001cd92bso1603613f8f.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 22:45:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794725126; x=1795329926; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jbBpt+FJ8a8qGQezAUJGyx793S/s/ZwSaKkH+VjjeYU=;
-        b=qkOIAS2J5dfRhEsOfY7uH9G91K9RXCbZa+s9wLCAP4VoHegeS862E7+8XAq9ER3GOG
-         GXWzW5j2rGwrMY7ORSOAlNB19zj8Yt6g1GntL/2dPkZ8/U9TOVE8qJ4MP4KwDyz40Tjg
-         daP4r1zQWxAN+w5XRvFj+wuz30nw0m/q0BaLIpqWlFzrRN68+M6Ibrf2j3Q8Uwnow+uw
-         4ctrPSM3yp7pUoM6Uzu7jSeUqnw7eBzp0PHjlHQDLcc8dI9XgznELQw8n2wwqKQlHnz5
-         XPJY9VqHgHiashmKvbyj4Hztn/pNUe+YsnnrzbZw8RqllSTLm3FoNNAPppHZ+R3OCX1I
-         xsUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794725126; x=1795329926;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jbBpt+FJ8a8qGQezAUJGyx793S/s/ZwSaKkH+VjjeYU=;
-        b=Jy8oFMY5dwUXytHpdFTA0gHZ2UxxpfDhpDplXRDv+qdTP+2oj21dvsck48VTMrDdkv
-         5pCZrt/5OqodEH4Y73l+Z6BrZFpi4S0WUFbraYx2hghDlGXUNGoJ212DWtaNjOlYdcu9
-         fYshXkSM7ABLtu/fZ14Aml7didMvz7CuPk3KwEjTO+fXOmz60gHRVkBC88SaK1gm5kE4
-         53vD6M0BFxvgrjuBCj4H4N+5MgTBGLAtwVPxp9W1Cua669uj6X7DYtk+Vp5jxPqvNw5U
-         49KBZXnEG3c7f4n+Q8oa7yLwdBv7ZLh62zBPteZgb2nkKDCuUsvwyu803wSZ5VTgEc0H
-         WYGw==
-X-Forwarded-Encrypted: i=1; AL+hErHnPkFrppOcxeYn+7jMlX9w2jhFzbo3AfqxImu870sIziirC09Gybw5NCFv9QILoxigDpnk3tVSlfJsjQ8tRTM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z82eEYxSuQWk6yLtvh5NY7ifnRwf3yJsl6r+DAK/AqQw5sEHgb0
-	J0ok9QXXyXzPn5RNHs4v4hTij9tujGiC2NDa0zkFc8drT8B4RCNafMn7
-X-Gm-Gg: AYBFou1aeKrdMkBQ/2Wqe+hybrU/pKFvxzmJrLRaD9X9j5TcxsmimhlASIDwASozuEH
-	CMVWhndepKG173NS2KxVWXR2A2+IR6MLGK3jhQLDr06quVd8LUtsepYWQ2/4ANTp/OjKPNtAr7T
-	u6ciZN3GQRCoyZUlYyafqruqo2qHppBjfuQW2K51ylgn9bOUO/JkgLixFKz7gibZT1ULQuAwvDp
-	hsRUtJHGKonDRQwk4YXb31mLKq3Hbun5CNf5VToMZNwF8oksvu3vBYsTghY0lIdLaW1sj4+iQd7
-	UJ5wHgFUTxhwGX7MwLReNQmsdhADQ5EVcP6XPLxpXAss7JxnJrzveDYx16RgtCejIavWg8BtMhz
-	0eLrl1J5gxnIilv+AEdfXMLP8wOhKKRPU6IRbJueGv2esTMhSGiwMRMT5J6My0TUkYA3sws+n88
-	cslbnKWeOjowZqyuqeZe+U41AqFzLmfcsZ/if94al/QnHEYhfbuNf+xFUP0ivs0U2PN0HiVa7q5
-	ulrg2zSdKM03FzardC5/ep7id6LBQpKp5CO6ZzvtaRSUCJW6vcVC6gquZM5HRKcsYo8peszhBq+
-	4r3eCF4l8FnilX/CyjW95EdOXi7E4/wDvvI3
-X-Received: by 2002:a5d:588f:0:b0:48b:a4b:5a2c with SMTP id ffacd0b85a97d-49c6d4538fbmr17328911f8f.3.1794725125683;
-        Sat, 14 Nov 2026 22:45:25 -0800 (PST)
-Received: from LAPTOP-AVI.lan ([2a06:c701:474b:1700:dc0a:bc51:e26f:5cf8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c6020bb0fsm14073284f8f.34.2026.11.14.22.45.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 22:45:24 -0800 (PST)
-From: Avi Weiss <thnkslprpt@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	shuah@kernel.org,
-	emil@etsalapatis.com,
-	houtao1@huawei.com,
-	linux-kselftest@vger.kernel.org,
-	Avi Weiss <thnkslprpt@gmail.com>
-Subject: [PATCH bpf 2/2] selftests/bpf: Check cpumask weight after population
-Date: Sun, 15 Nov 2026 08:45:12 +0200
-Message-ID: <33f2b92b2bf65dd349beb6aaef444c8053adeec1.1794724099.git.thnkslprpt@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1794724099.git.thnkslprpt@gmail.com>
-References: <cover.1794724099.git.thnkslprpt@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WBSPv3/5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EECE1F000C4;
+	Sun, 15 Nov 2026 07:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794727273;
+	bh=rQkXsM7aTK1ejfcEgqQ8A28+qA/EL1BgfPpRxPrkcmM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=WBSPv3/5mQQn/Yr4p7hQKzQf7t7BgsLBY8A33mwoBMkC0Ii9VhGPbcAf09pKp370X
+	 rnM1l/BKKXKK+ou24cATlwOfI/ng7SWcSRH2/z46EVqAJyxZeZMaC6cu4gg1uZ0jJW
+	 XSmgn+5s21FPyV8UXQ92yW7tY2zY7kTI1dtOved2V6o+ylxLhii5Z7n6ev9abEFD7c
+	 Dj30pR/mdGkkiA4Lx6UjxbzZtiQoEJvkz4QUtyFngEjS+wJ7oC41K/2KjfArbAT/8d
+	 RlrYkvA96cF1fhuuIV3B3xnyMrbkdKEe1yRtFJuv/0rTFsLfT0tWELgocdbCLnFwVt
+	 s3uZPPf1+khVQ==
+Subject: Re: [PATCH net v5 4/8] ipv4: icmp: don't quote decrypted payload in
+ icmp errors
+From: netdev-bot+sashiko@kernel.org
+To: toddfreed@meta.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
+ bjorn@kernel.org, borisp@nvidia.com, cratiu@nvidia.com,
+ daniel.zahka@gmail.com, dsahern@kernel.org, dtatulea@nvidia.com,
+ edumazet@kernel.org, idosch@nvidia.com, kuba@kernel.org,
+ john.fastabend@gmail.com, leon@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+ mbloch@nvidia.com, pabeni@redhat.com, raeds@nvidia.com,
+ rrameshbabu@nvidia.com, sd@queasysnail.net, saeedm@nvidia.com,
+ shuah@kernel.org, horms@kernel.org, tariqt@nvidia.com, weiwan@google.com,
+ willemdebruijn.kernel@gmail.com
+Date: Sun, 15 Nov 2026 07:21:10 +0000
+Message-ID: <179472727079.2199510.11728930190494845454@kernel.org>
+In-Reply-To: <20261111001831.3710881-5-toddfreed@meta.com>
+References: <20261111001831.3710881-5-toddfreed@meta.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,34 +70,108 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The populate selftest checks individual valid CPU bits, but it does
-not check whether bits beyond nr_cpu_ids affect cpumask operations
-that scan the entire final word.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Verify the weight after populating an alternating-bit source to
-catch leftover invalid bits.
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
-Signed-off-by: Avi Weiss <thnkslprpt@gmail.com>
----
- tools/testing/selftests/bpf/progs/cpumask_success.c | 3 +++
- 1 file changed, 3 insertions(+)
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/testing/selftests/bpf/progs/cpumask_success.c
-index ddaba4318c57..09c0ee35d636 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_success.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
-@@ -887,6 +887,9 @@ int BPF_PROG(test_populate, struct task_struct *task, u64 clone_flags)
- 		break;
- 	}
- 
-+	if (!err && bpf_cpumask_weight((const struct cpumask *)mask) != nr_cpus / 2)
-+		err = 5;
-+
- out:
- 	bpf_cpumask_release(mask);
- 
+- [High] Incomplete fix, and the commit message is wrong about which
+  reject paths it covers.
+
+--
+
+ipv4: icmp: don't quote decrypted payload in icmp errors
+
+This patch makes __icmp_send() skip the ICMP error when the invoking
+skb has skb->decrypted set. The one exception is a locally originated
+skb whose error is routed to a local address. The goal is to stop
+device-decrypted kTLS or PSP data from being quoted back onto the
+network in cleartext.
+
+Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023234640.1459291-1-toddfreed%40meta.com
+
+> diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+> index 90c0e22c29bea..e11008aa4cecd 100644
+> --- a/net/ipv4/icmp.c
+> +++ b/net/ipv4/icmp.c
+> @@ -979,6 +979,18 @@ void __icmp_send(struct sk_buff *skb_in, int type, int code, __be32 info,
+>  	if (rt->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
+>  		goto ende;
+>  
+> +	/* Don't send parts of a decrypted skb onto the network. A received skb
+> +	 * was decrypted by the device, and the transport header may have been
+> +	 * encrypted. The different offloads can't be distinguished in all cases
+> +	 * so simply don't send the error.
+> +	 *
+> +	 * A locally originated skb to be encrypted may be quoted if its source
+> +	 * address (target of the error) is local.
+> +	 */
+> +	if (unlikely(skb_is_decrypted(skb_in)) &&
+> +	    (skb_in->skb_iif || !(rt->rt_flags & RTCF_LOCAL)))
+> +		goto ende;
+
+[Severity: High]
+Does this check cover every reject path the commit message names? The
+commit message says:
+
+    a reject rule (iptables REJECT, nft reject) sends its icmp error with
+    icmp_send(), through nf_send_unreach(). so now, a received packet which
+    the device decrypted, and which hits a reject rule in the INPUT or
+    FORWARD chain, is now dropped without a reply, like a drop rule.
+
+That is true for iptables REJECT and for the nft ip and inet families.
+The nft netdev and bridge families are different. They build their own
+ICMP error and never reach __icmp_send():
+
+nft_reject_netdev_eval()
+  nft_reject_netdev_send_v4_unreach()
+    nf_reject_skb_v4_unreach()
+    nft_reject_queue_xmit()
+      dev_queue_xmit()
+
+nft_reject_br_send_v4_unreach()
+  nf_reject_skb_v4_unreach()
+  br_forward()
+
+nf_reject_skb_v4_unreach() copies the original packet into the error
+and has no skb_is_decrypted() check:
+
+net/ipv4/netfilter/nf_reject_ipv4.c:nf_reject_skb_v4_unreach() {
+    ...
+	/* RFC says return as much as we can without exceeding 576 bytes. */
+	len = min_t(unsigned int, 536, oldskb->len);
+    ...
+	skb_put_data(nskb, skb_network_header(oldskb), len);
+    ...
+}
+
+Take an nft netdev reject rule on the ingress hook of a NIC that does
+kTLS or PSP RX offload. The ingress hook in __netif_receive_skb_core()
+sees the skb after the driver has decrypted it.
+
+Wouldn't the ICMP error then send the decrypted TCP payload (kTLS), or
+the TCP header plus payload (PSP), out in cleartext?
+
+The new nskb has decrypted == 0, so nothing later on the tx path stops
+it. The bridge family uses the same helper. A decrypted skb on a bridge
+port is less likely, but the code doesn't rule it out.
+
+The rest of the series doesn't seem to close this gap either. The ipv6
+follow-up, "ipv6: icmpv6: don't quote decrypted payload in icmpv6
+errors", seems to leave the same gap in nf_reject_skb_v6_unreach() for
+the netdev and bridge families.
+
+Should the check also go into nf_reject_skb_v4_unreach() and
+nf_reject_skb_v6_unreach(), or into their callers? If not, could the
+commit message be narrowed to the reject paths that are actually
+covered?
+
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111001831.3710881-1-toddfreed%40meta.com
