@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794709572;
-	b=2CiSwIBKcy6cXqZS1zAX8fScdqXSkC5NC6R/H2kyPnpfgai3GhrkUZuN6SWZyiyUE8GL
-	 jK133iZmomSheA1rIn3VtWdfL7MALWbJbaVTstF3szIdbiHKKtHpwOV+pMwD//2rZ38ak
-	 aTVDHtEg64d9KXlp1/Es2e7jqSHQPE1kuj7U4LwLyTPRCZsu+f9mFOejDyjb3aORNVBTE
-	 X/UDKPs4SufExlXZA58BX2xUNiM5NbgtU6Ro/BRh1wcjxxtRt9c0FDRpictV2usYKlu0w
-	 iAxRS04Ok7dAWPOo+QXnnewDVn+hcr/3gQiPhiV/eIQEFQfZeNz1DOP6cLOsr/cQIiw==
+	t=1794709573;
+	b=XRJP2HyPKupt9S1bYlSRZRCU8fVFQ9UODHU++DmyL49vLY+rrot/Mxenfbx0292hbiH2
+	 uBkxHJmhLsAq90aHEKXiER9cpUc6IAmPKE7BWljc7NRTecJchTnB0fYtCsgG8oExY+/Au
+	 H+XHlQjCRqwO56pWNNUkmWySMKKEQHM+Ji2Iuggik/UMxMY2Kes0UQ3gLlt75GV4p+ZxH
+	 m9OmLwx52dGBdNUMNr/5YDgDc3bXmJrmDTFX8831laNymrBaXpBZZTCSWPqziVoloJz2M
+	 5kURZ/4njGzTWG+ghMAksLP0GOE4YVlER8Kl3BR/P8t81yazoNGshBYD4f2qjN2hbyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794709572;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794709573;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=M3P7ujHQBJpighPNvjdFs5yAEbsTyYNTue7OiVYVJQQ=;
-	b=GA9mjwFsiEF5yfAeJjV+LrGNMm1t3OzpJXP0TvM6pj2fvjNIYaKPopeiiHvdxDA57S4S
-	 m34T9Wqu/UWeiLul88NNnbTGV+ygiuJEt8VVUhtcjnpyI2XLZsJY281q7qrVPbDcP8mTe
-	 IEAX+0zL8DEKApGfX6jzX5nWZdA9JYq2xU9xiixju3RrI+dnRfEDuv/Yz/gFQs5S9u7/S
-	 x6WGSTmvyh+XBert2UYEvIf5DFuwQ7bxCEgeRkcBLXm1/vB4mjJka8aDDjRTpS38hlwUj
-	 +Of+Jlv25g06prg+HZGr4Yt7l8Ziv6FDGaWreq6fISnWHErYAngS3KrVj7E2l9tpgiA==
+	bh=/64PQaoNM3+39zp/zVHlbk0maSvI3ctoo44uF1kR+GQ=;
+	b=mLX9o9rgDCGBUFdiKsXHmFRoG7h4OMPok/c6TXkqvVV+K7sGM0H/auGj94rfNYOTthHm
+	 os1mnMIdFqrtNhrXyzw81reD3lTYxy+JaQhloE9DNdnGrYPG5NAZsLf+dalk91LHdPXB4
+	 T1R1y9PP4nBTQN/Zi9zo7H8VMUfFGJTWUrtI83FXs6m9ppAJkep4RPaeCY1wwQs9XbqY2
+	 zs9c5ZwoTQcB3czQK6Yvx+pV2hATXMF3eqzKDGP8HSJRuMiD9+diUJnfgP6Rpfo1OF30W
+	 qtbB3PT+2yKjPV1xfKlJu+uzwziweC6srEQIw2hCREWeryrC3svd9cjl6+5nMMqwU2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EgEKYz0B;
-	arc=none smtp.remote-ip=74.125.82.70
-Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SMZIl3fL;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3090C606A89F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E3A606A32C
 	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 02:26:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3090C606A89F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8E3A606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EgEKYz0B
-Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-1aa0fb7f157so2732142c88.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SMZIl3fL
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-36d1353fdcdso9886275eec.0
         for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:26:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794709571; x=1795314371; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794709572; x=1795314372; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=M3P7ujHQBJpighPNvjdFs5yAEbsTyYNTue7OiVYVJQQ=;
-        b=EgEKYz0Bm+WCTC8JE7UBzWUGxO6HtTnCPy94pBDbjRzdfq5KFbSr4BcjfUDjDnmOXc
-         tgYmATM3y6ACDdsvOijbF8imopDA1fxUBlAsBNf5xipjIjRx0xSsxtTWiLiGhDKcguhT
-         kDtlF0JzClm/6AxgxRs2XhNH7vQLcKSf2tzx1SNlCfJCvjdfOollGNaiAmDc8XFFasp3
-         5ItI9wZ7Z0Xmbgfy8miBzYXeAAF4CgQkrT1oXZ1RPTXrD7eVNk6LG0MDMM68Tdv6pLv4
-         ShF4KYshTkY34y9FcXbwmbC0AoaKc2XjJHre+RUPDnP4eLgG5/9oNOjz4F/ytHz/PV9Z
-         5XPw==
+        bh=/64PQaoNM3+39zp/zVHlbk0maSvI3ctoo44uF1kR+GQ=;
+        b=SMZIl3fLu8MmGnbLhAuUfStW4QFstOOYbbFSqbWvz8gvTj5ls47cdW/zKDJOSHBl4a
+         FTcTNJBjqGtnU7NkkFIjRUVCyHF/H5niqm9hcR0VE4g3LzxXkofnCP6WaUapmGLW4vD4
+         j5pDyZcpiiRZK5moDWTpFGp6/+juRpJ/IQE7Pj0uGdfe3SVsu6BAeTtNVbxhSauChfgm
+         RV1Pfd8s3Cvh6pU0ik4IJSOUs3LBjC/Q7dEN3PbUCrUM8wg46uVdXiA4Ay27dlGfl57g
+         gGKSbku8+vBum8oxz4TUhcPYnTYiMgGvFYR/HjdEJkhxWcAtGc71JUFC6IQ8zVKu67vK
+         9AwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794709571; x=1795314371;
+        d=1e100.net; s=20260707; t=1794709572; x=1795314372;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=M3P7ujHQBJpighPNvjdFs5yAEbsTyYNTue7OiVYVJQQ=;
-        b=ZrO8md5RLQSMmDKYSj+qXGRN2UlHAmm7HiNkMcBGBCQZWwhacdXTYYmxbn76p1wg35
-         Cu3RjEis7kE/hDk6SlGFZH4VetGwHtDHQ9pbMHuhoua1I96PDYD3bNLzb5PSwIP6n1wB
-         jkLcT4MmixL6amQqo3Owuiuel6E47ww7CYRXuBgPO9UWBqZ56sE5ER5/CUPUbAivRxib
-         p3Fy+C3c7Wsb2XEZkn+08JH0wz7FqHc2QC7+f+gkhaGLEN8DLqiR0pK2se7ClXWhvSGN
-         XYT2WTHHUtwGLk5ljof0ULBEK+EwPxxYzWQeK2GGnbOwzhc99YAVOd6GozW2egj2/Ilz
-         Ka0A==
-X-Forwarded-Encrypted: i=1; AL+hErG0GKrw80V8+UzeBOrHDfPRL4rl/vUeD9kJV5B1CQdYpfHNtOPEEMeT7ftv72fHIULC647Kt0HcBdxAFcXboWY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8UK7JSkZwf5axCIoN9jvxlf//aJir5pWf88jkzOu63B0XZk3Rn
-	ADxckac31IiN066/So7YCgdQy8SJG78sGf2rQ+3R0dNB8JytvymLxCxlJpLVNM7bqTAZB39MvRa
-	sipx8HL9T1PH1iZk7CHMezb8pVg==
-X-Received: from dlbpt1.prod.google.com ([2002:a05:7022:e801:b0:1b0:ab15:db1d])
+        bh=/64PQaoNM3+39zp/zVHlbk0maSvI3ctoo44uF1kR+GQ=;
+        b=HjMFw6FTxFcVL7zLz25l50fPwFHEzynG/VkSbrhZAwBbY+sJzFJaa6Z9emXnJJaM4s
+         sRC5DYe3EcF01BUe5HUMP9Iamz7SiidHOHTSijeRLN+guQme3gJqCh74DS09sBNjRxtR
+         epxt0XyRcfUqVu9YW6ORheqO3N6gvjMkktF9A4NWvteyLec+6C7W1YOZWJUt32ziTfcC
+         6WIy05kWcQ0mnI8AsiyXg6f3R++kOYGPf0Oi1eiDYO4NglvD/4RUOU6hLA4zg7vn0+5C
+         f7NKJjcDeoduu0VKrPXUZtDEkUex2tLJELFrOL3o1/U4eXYS1q64aSEmoBO08PZpGhoi
+         L5rA==
+X-Forwarded-Encrypted: i=1; AL+hErG1xFpe3TRiwVPfS1zKOefx7fGUmGLGbA3m1t3KKvk16nSBraO+SrZonB50f+Hhve7KjpGfYrBO1CqrVAx95WI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8i2ICaBMtjbToEW1VR8gEgsJRB3f+zXdPKtTfage+wtDRI52om
+	qWllzoxRieiiuQruxiPMbSMhQB6QQXj9aL3ZL8nWI3IUsXHSRqt0Xdsuf5IPuWw3QfyqKMaiCQC
+	J6XqTjLNA39eSdeT5CGuN8vGD8g==
+X-Received: from dldyq17-n2.prod.google.com ([2002:a05:701b:4551:20b0:1b2:41fa:646b])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:701b:4354:b0:14c:1f57:3e86 with SMTP id a92af1059eb24-1b50312160emr6123231c88.47.1794709570523;
- Sat, 14 Nov 2026 18:26:10 -0800 (PST)
-Date: Sun, 15 Nov 2026 02:26:03 +0000
+ 2002:a05:7022:b054:20b0:166:862b:9bcc with SMTP id a92af1059eb24-1b5030fb7e7mr7630640c88.18.1794709571904;
+ Sat, 14 Nov 2026 18:26:11 -0800 (PST)
+Date: Sun, 15 Nov 2026 02:26:04 +0000
 In-Reply-To: <20261115022607.348112-1-almasrymina@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261115022607.348112-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
-Message-ID: <20261115022607.348112-3-almasrymina@google.com>
-Subject: [PATCH net-next v3 2/6] net: devmem: rename binding dev and vdev to
- map_dev and bind_dev
+Message-ID: <20261115022607.348112-4-almasrymina@google.com>
+Subject: [PATCH net-next v3 3/6] net: guard memory provider RX queue open and
+ close on unregister
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org
 Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
@@ -92,281 +92,142 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	linux-kernel@vger.kernel.org, Weiming Shi <bestswngs@gmail.com>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
 	Stanislav Fomichev <sdf.kernel@gmail.com>, Bobby Eshleman <bobbyeshleman@meta.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>
+	Dragos Tatulea <dtatulea@nvidia.com>, Stanislav Fomichev <sdf@fomichev.me>
 Content-Type: text/plain; charset="UTF-8"
 
-struct net_devmem_dmabuf_binding currently tracks two device pointers
-under the names 'dev' and 'vdev':
+When an RX queue is leased from a physical backing net_device to a
+virtual net_device (e.g., netkit), memory provider operations reach the
+physical net_device through rxq->lease and lock it directly via
+netdev_lock(dev) rather than looking it up via
+netdev_get_by_index_lock().
 
-- 'dev' is the physical net_device whose dma_dev holds the DMA mapping.
-- 'vdev' is the virtual net_device the user bound to when using leased
-  queues.
+Introduce a netif_lease_valid() helper checking netif_is_alive(dev)
+under netdev_lock(dev) and use it in the lease-aware callers while
+keeping __netif_mp_open_rxq() and __netif_mp_close_rxq() unaware of
+queue leasing:
 
-Rename 'dev' to 'map_dev' and 'vdev' to 'bind_dev' (typed as struct
-net_device *), and rename the matching local variable in
-netdev_nl_bind_tx_doit() from 'bind_dev' to 'map_dev' to match. No
-functional change.
+1. In netif_mp_open_rxq(), if the leased physical device is already
+   unregistering (!netif_lease_valid(dev)), netdev_get_by_index_lock()
+   on the virtual netdev succeeds before cascaded unregistration runs,
+   allowing a new memory provider to be installed on the physical device
+   while it is unregistering. Reject the open with -ENODEV.
 
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+2. In netif_mp_close_rxq() and netif_rxq_cleanup_unlease(),
+   __netif_mp_close_rxq() reconfigures the physical RX queue so that it
+   can continue operating with a regular page_pool when the physical
+   netdev outlives the virtual queue or memory provider. When the
+   physical backing netdev is itself unregistering
+   (!netif_lease_valid(dev)), its queue will not outlive the lease and,
+   matching the non-leased unregistration path (where
+   dev_memory_provider_uninstall() detaches the provider without calling
+   netdev_rx_queue_reconfig()), the physical queue should not be
+   reconfigured. However, unlike non-leased queues,
+   mp_dmabuf_devmem_uninstall() on the physical netdev does not match
+   bound_rxqs (which stores the virtual rxq), leaving
+   phys_rxq->mp_params populated until socket teardown or the virtual
+   leasee's netif_rxq_cleanup_unlease() runs. When
+   !netif_lease_valid(dev), skip __netif_mp_close_rxq() and clear
+   mp_params on the physical queue directly so that a subsequent
+   netif_rxq_cleanup_unlease() or dev_memory_provider_uninstall() sees
+   !mp_ops and does not uninstall a second time.
+
+Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- net/core/dev.c         |  2 +-
- net/core/devmem.c      | 38 ++++++++++++++++++++------------------
- net/core/devmem.h      | 17 +++++++++--------
- net/core/netdev-genl.c | 31 +++++++++++++++----------------
- 4 files changed, 45 insertions(+), 43 deletions(-)
+ net/core/dev.h             |  7 +++++++
+ net/core/netdev_rx_queue.c | 31 ++++++++++++++++++++++++++-----
+ 2 files changed, 33 insertions(+), 5 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a230ecce9327d..405811b99589b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4192,7 +4192,7 @@ static struct sk_buff *validate_xmit_unreadable_skb(struct sk_buff *skb,
- 		niov = netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
- 		if (net_is_devmem_iov(niov) &&
- 		    (net_devmem_iov_binding(niov)->direction != DMA_TO_DEVICE ||
--		     READ_ONCE(net_devmem_iov_binding(niov)->dev) != dev))
-+		     READ_ONCE(net_devmem_iov_binding(niov)->map_dev) != dev))
- 			goto out_free;
+diff --git a/net/core/dev.h b/net/core/dev.h
+index 4e9e8cd156977..50cfede051db1 100644
+--- a/net/core/dev.h
++++ b/net/core/dev.h
+@@ -119,6 +119,13 @@ bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
+ bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
+ bool netif_is_queue_leasee(const struct net_device *dev);
+ 
++static inline bool netif_lease_valid(const struct net_device *dev)
++{
++	netdev_assert_locked(dev);
++
++	return netif_is_alive(dev);
++}
++
+ void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
+ 			      const struct pp_memory_provider_params *p);
+ 
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+index a7261fedd5e76..98b51b2ac8ee1 100644
+--- a/net/core/netdev_rx_queue.c
++++ b/net/core/netdev_rx_queue.c
+@@ -270,7 +270,12 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
  	}
  
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 6fa7b909b86e8..db60d1b5ea229 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -157,7 +157,7 @@ void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
- 		     binding->area.num_niovs, binding->free_count);
- 
- 	kvfree(binding->area.niovs);
--	dev = net_devmem_lock_dev(&binding->dev, &dev_tracker);
-+	dev = net_devmem_lock_dev(&binding->map_dev, &dev_tracker);
- 	net_devmem_dmabuf_binding_unmap(binding);
- 	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
- 	net_devmem_unlock_dev(dev, &dev_tracker);
-@@ -227,13 +227,14 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
- 
- 		rxq_idx = get_netdev_rx_queue_index(rxq);
- 
--		if (netif_mp_close_rxq(binding->dev, rxq_idx, &mp_params))
-+		if (netif_mp_close_rxq(binding->map_dev, rxq_idx, &mp_params))
- 			busy = true;
- 	}
- 
--	if (binding->direction == DMA_FROM_DEVICE && binding->dev && !busy) {
-+	if (binding->direction == DMA_FROM_DEVICE && binding->map_dev &&
-+	    !busy) {
- 		net_devmem_dmabuf_binding_unmap(binding);
--		WRITE_ONCE(binding->dev, NULL);
-+		WRITE_ONCE(binding->map_dev, NULL);
- 	}
- 
- 	percpu_ref_kill(&binding->ref);
-@@ -252,16 +253,16 @@ void net_devmem_dev_unregister(struct net_device *dev)
- 	xa_lock(&net_devmem_dmabuf_bindings);
- 	xa_for_each(&net_devmem_dmabuf_bindings, xa_idx, binding) {
- 		if (binding->direction == DMA_FROM_DEVICE) {
--			if (READ_ONCE(binding->dev) != dev ||
-+			if (READ_ONCE(binding->map_dev) != dev ||
- 			    xa_get_mark(&net_devmem_dmabuf_bindings, xa_idx,
- 					NET_DEVMEM_BINDING_LIVE))
- 				continue;
- 		} else {
--			if (READ_ONCE(binding->vdev) == dev)
--				WRITE_ONCE(binding->vdev, NULL);
--			if (READ_ONCE(binding->dev) != dev)
-+			if (READ_ONCE(binding->bind_dev) == dev)
-+				WRITE_ONCE(binding->bind_dev, NULL);
-+			if (READ_ONCE(binding->map_dev) != dev)
- 				continue;
--			WRITE_ONCE(binding->vdev, NULL);
-+			WRITE_ONCE(binding->bind_dev, NULL);
- 			__xa_clear_mark(&net_devmem_dmabuf_bindings, xa_idx,
- 					NET_DEVMEM_BINDING_LIVE);
- 		}
-@@ -270,7 +271,7 @@ void net_devmem_dev_unregister(struct net_device *dev)
- 		if (!netif_is_queue_leasee(dev))
- 			net_devmem_dmabuf_binding_unmap(binding);
- 		xa_lock(&net_devmem_dmabuf_bindings);
--		WRITE_ONCE(binding->dev, NULL);
-+		WRITE_ONCE(binding->map_dev, NULL);
- 	}
- 	xa_unlock(&net_devmem_dmabuf_bindings);
+ 	netdev_lock(dev);
+-	ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
++	if (netif_lease_valid(dev)) {
++		ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
++	} else {
++		NL_SET_ERR_MSG(extack, "Device is being unregistered");
++		ret = -ENODEV;
++	}
+ 	netdev_unlock(dev);
+ 	return ret;
  }
-@@ -304,7 +305,8 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
- }
- 
- struct net_devmem_dmabuf_binding *
--net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-+net_devmem_bind_dmabuf(struct net_device *map_dev,
-+		       struct net_device *bind_dev,
- 		       struct device *dma_dev,
- 		       enum dma_data_direction direction,
- 		       unsigned int dmabuf_fd, unsigned int niov_shift,
-@@ -332,14 +334,14 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
- 		return ERR_CAST(dmabuf);
- 
- 	binding = kzalloc_node(sizeof(*binding), GFP_KERNEL,
--			       dev_to_node(&dev->dev));
-+			       dev_to_node(&map_dev->dev));
- 	if (!binding) {
- 		err = -ENOMEM;
- 		goto err_put_dmabuf;
- 	}
- 
--	binding->dev = dev;
--	binding->vdev = vdev;
-+	binding->map_dev = map_dev;
-+	binding->bind_dev = bind_dev;
- 	write_pnet(&binding->net, sock_net(nl_sk));
- 	binding->uid = sk_uid(nl_sk);
- 	binding->niov_shift = niov_shift;
-@@ -558,8 +560,8 @@ struct net_devmem_dmabuf_binding *net_devmem_get_binding(struct sock *sk,
- 	 */
- 	dst_dev = dst_dev_rcu(dst);
- 	if (unlikely(!dst_dev) ||
--	    unlikely(dst_dev != READ_ONCE(binding->dev) &&
--		     dst_dev != READ_ONCE(binding->vdev))) {
-+	    unlikely(dst_dev != READ_ONCE(binding->map_dev) &&
-+		     dst_dev != READ_ONCE(binding->bind_dev))) {
- 		err = -ENODEV;
- 		goto out_unlock;
- 	}
-@@ -683,8 +685,8 @@ static void mp_dmabuf_devmem_uninstall(void *mp_priv,
- 		if (xa_empty(&binding->bound_rxqs)) {
- 			if (!rxq->lease)
- 				net_devmem_dmabuf_binding_unmap(binding);
--			ASSERT_EXCLUSIVE_WRITER(binding->dev);
--			WRITE_ONCE(binding->dev, NULL);
-+			ASSERT_EXCLUSIVE_WRITER(binding->map_dev);
-+			WRITE_ONCE(binding->map_dev, NULL);
- 		}
- 		break;
- 	}
-diff --git a/net/core/devmem.h b/net/core/devmem.h
-index c0aaba0041ff6..9dcb629e10bfd 100644
---- a/net/core/devmem.h
-+++ b/net/core/devmem.h
-@@ -22,14 +22,13 @@ struct net_devmem_dmabuf_binding {
- 	struct dma_buf_attachment *attachment;
- 	struct sg_table *sgt;
- 	/* Physical NIC that does the actual DMA for this binding. Set at bind
--	 * time and cleared to NULL under netdev_lock(dev).
-+	 * time and cleared to NULL under netdev_lock(map_dev).
- 	 */
--	struct net_device *dev;
--	/* Opaque cookie identifying the virtual device (e.g. netkit) the user
--	 * called bind-tx on. Used only for pointer comparison via READ_ONCE()
--	 * and cleared with WRITE_ONCE() on unregistration. Never dereferenced.
-+	struct net_device *map_dev;
-+	/* Device the user called bind-rx or bind-tx on. Set at bind time and
-+	 * cleared to NULL on unregistration.
- 	 */
--	void *vdev;
-+	struct net_device *bind_dev;
- 	possible_net_t net;
- 	kuid_t uid;
- 	/* Serialize net_devmem_dmabuf_binding_unmap() on attachment and sgt */
-@@ -91,7 +90,8 @@ struct net_devmem_dmabuf_binding {
- #if defined(CONFIG_NET_DEVMEM)
- void __net_devmem_dmabuf_binding_free(struct work_struct *wq);
- struct net_devmem_dmabuf_binding *
--net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-+net_devmem_bind_dmabuf(struct net_device *map_dev,
-+		       struct net_device *bind_dev,
- 		       struct device *dma_dev,
- 		       enum dma_data_direction direction,
- 		       unsigned int dmabuf_fd, unsigned int niov_shift,
-@@ -171,7 +171,8 @@ static inline void net_devmem_net_iov_dec_ref(struct net_iov *niov)
- }
- 
- static inline struct net_devmem_dmabuf_binding *
--net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-+net_devmem_bind_dmabuf(struct net_device *map_dev,
-+		       struct net_device *bind_dev,
- 		       struct device *dma_dev,
- 		       enum dma_data_direction direction,
- 		       unsigned int dmabuf_fd,
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 2826f7e328340..962d7a8c75e9a 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -1195,9 +1195,8 @@ netdev_find_netmem_tx_dev(struct net_device *dev)
- int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+@@ -309,19 +314,29 @@ static int __netif_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
+ int netif_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
+ 		       const struct pp_memory_provider_params *old_p)
  {
- 	struct net_devmem_dmabuf_binding *binding;
--	struct net_device *bind_dev;
-+	struct net_device *netdev, *map_dev;
- 	struct netdev_nl_sock *priv;
--	struct net_device *netdev;
- 	struct device *dma_dev;
- 	u32 ifindex, dmabuf_fd;
- 	struct sk_buff *rsp;
-@@ -1245,27 +1244,27 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
- 		goto err_unlock_netdev;
+-	int ret;
++	struct netdev_rx_queue *rxq;
++	int ret = 0;
+ 
+ 	if (WARN_ON_ONCE(rxq_idx >= dev->real_num_rx_queues))
+ 		return -EINVAL;
+ 	if (!netif_rxq_is_leased(dev, rxq_idx))
+ 		return __netif_mp_close_rxq(dev, rxq_idx, old_p);
+ 
+-	if (!__netif_get_rx_queue_lease(&dev, &rxq_idx, NETIF_VIRT_TO_PHYS)) {
++	rxq = __netif_get_rx_queue_lease(&dev, &rxq_idx, NETIF_VIRT_TO_PHYS);
++	if (!rxq) {
+ 		WARN_ON_ONCE(1);
+ 		return -EINVAL;
  	}
+ 	netdev_lock(dev);
+-	ret = __netif_mp_close_rxq(dev, rxq_idx, old_p);
++	/* If the physical netdev is already unregistering, the queue will not
++	 * outlive the lease; only clear mp_params so subsequent
++	 * netif_rxq_cleanup_unlease() or dev_memory_provider_uninstall() is a
++	 * no-op.
++	 */
++	if (netif_lease_valid(dev))
++		ret = __netif_mp_close_rxq(dev, rxq_idx, old_p);
++	else
++		memset(&rxq->mp_params, 0, sizeof(rxq->mp_params));
+ 	netdev_unlock(dev);
+ 	return ret;
+ }
+@@ -340,6 +355,9 @@ void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
+  * the lease redirection. The extra __netif_mp_close_rxq is needed
+  * since the physical queue can outlive the virtual queue in the lease
+  * case, so it needs to be reconfigured to clear the memory provider.
++ * If the physical netdev is also unregistering, its queue will not
++ * outlive the lease, so only clear mp_params without reconfiguring the
++ * queue.
+  */
+ void netif_rxq_cleanup_unlease(struct netdev_rx_queue *phys_rxq,
+ 			       struct netdev_rx_queue *virt_rxq)
+@@ -350,6 +368,9 @@ void netif_rxq_cleanup_unlease(struct netdev_rx_queue *phys_rxq,
+ 	if (!p.mp_ops)
+ 		return;
  
--	bind_dev = netdev_find_netmem_tx_dev(netdev);
--	if (!bind_dev) {
-+	map_dev = netdev_find_netmem_tx_dev(netdev);
-+	if (!map_dev) {
- 		err = -EOPNOTSUPP;
- 		NL_SET_ERR_MSG(info->extack,
- 			       "No DMA-capable device found for netmem TX");
- 		goto err_unlock_netdev;
- 	}
- 
--	if (bind_dev != netdev)
--		netdev_lock(bind_dev);
-+	if (map_dev != netdev)
-+		netdev_lock(map_dev);
- 
--	dma_dev = netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
-+	dma_dev = netdev_queue_get_dma_dev(map_dev, 0, NETDEV_QUEUE_TYPE_TX);
- 
--	binding = net_devmem_bind_dmabuf(bind_dev,
--					 bind_dev != netdev ? netdev : NULL,
-+	binding = net_devmem_bind_dmabuf(map_dev,
-+					 map_dev != netdev ? netdev : NULL,
- 					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
- 					 PAGE_SHIFT, priv, NETLINK_CB(skb).sk,
- 					 info->extack);
- 	if (IS_ERR(binding)) {
- 		err = PTR_ERR(binding);
--		goto err_unlock_bind_dev;
-+		goto err_unlock_map_dev;
- 	}
- 
- 	/* rsp was allocated large enough */
-@@ -1273,16 +1272,16 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
- 
- 	genlmsg_end(rsp, hdr);
- 
--	if (bind_dev != netdev)
--		netdev_unlock(bind_dev);
-+	if (map_dev != netdev)
-+		netdev_unlock(map_dev);
- 	netdev_unlock(netdev);
- 	mutex_unlock(&priv->lock);
- 
- 	return genlmsg_reply(rsp, info);
- 
--err_unlock_bind_dev:
--	if (bind_dev != netdev)
--		netdev_unlock(bind_dev);
-+err_unlock_map_dev:
-+	if (map_dev != netdev)
-+		netdev_unlock(map_dev);
- err_unlock_netdev:
- 	netdev_unlock(netdev);
- err_unlock_sock:
-@@ -1476,7 +1475,7 @@ void netdev_nl_sock_priv_destroy(struct netdev_nl_sock *priv)
- 
- 	mutex_lock(&priv->lock);
- 	list_for_each_entry_safe(binding, temp, &priv->bindings, list) {
--		dev = net_devmem_lock_dev(&binding->dev, &dev_tracker);
-+		dev = net_devmem_lock_dev(&binding->map_dev, &dev_tracker);
- 		net_devmem_unbind_dmabuf(binding);
- 		net_devmem_unlock_dev(dev, &dev_tracker);
- 	}
+-	__netif_mp_close_rxq(phys_rxq->dev, rxq_idx, &p);
++	if (netif_lease_valid(phys_rxq->dev))
++		__netif_mp_close_rxq(phys_rxq->dev, rxq_idx, &p);
++	else
++		memset(&phys_rxq->mp_params, 0, sizeof(phys_rxq->mp_params));
+ 	__netif_mp_uninstall_rxq(virt_rxq, &p);
+ }
 -- 
 2.56.0.611.g1030f0b940-goog
 
