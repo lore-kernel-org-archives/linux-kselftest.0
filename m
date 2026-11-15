@@ -1,103 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.30.148.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794732910;
-	b=zwDh96s60i4vmy/XuHzAn1ngqHQgZPqAbxVrnHLIBEw4qsQy72xRqNhYM4/n+YjVhsV3
-	 2KsDMmgYgbOrS070YtLzS/AJbBXiNJ43jwBkGC1JOeCrKfseclFS0KbpQ5Q2ZGvGj1NSs
-	 0MjXP7AH01J/hg6Pqx2ytJYhZRoGXbZ67YGoCJKOUquV/r0hwPd/2enc6/6hYSaQabYZv
-	 +/ydx6EuKHn7K3APTOxXnmHiFG/z8VCDm4uiMBRiG0dIXczmNCQyJXWYpV4EdNHHOJDuf
-	 LXrcTudrcNpunmt/k+E6FfXB4Qcg4hGu4MgQuim/laq6qoW0mgHflU0YiNj7DB/JkrA==
+	t=1794733305;
+	b=3bI02/pP/MjYzKpaJ9TXLQuxikJ6nIFoko79uQCjwLZMCbsNBH1moMI9plbz6sc0g3+n
+	 ydfaxS2IYPp67uaAHjofAjsHQYNL0vZoVGfAcRX+JizkU1LedVNone7fzmB7JQJ8LIEAH
+	 f2prVTOt+UETBIMyKPGMdbSK9JGEKVaouAXSfphbJ9S7qNDBnLojS3ByeTbmwERBbLDgW
+	 hxO85YXcaIHSQzCtvAeyZB/2Dbqz2JnpZOAHQVV6MheHP5bJRU+Duq9VU7TVepcTxWp+x
+	 a5w+SgduAz4sTJXdEmlSf/i6XxSOjoC7cUNB4bEU1lCNS6BUKsSqLAvgpC/6/GohXmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794732910;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=2W9g589hYI/qXRjeFg9GTGFNeMUzzFOuJrEl7Zvx7OU=;
-	b=fbb9tcVi6I4G5ryC9kpnVIdjQt7j96+Pj7rnE6U6TWF1giIYayd0J8aR+xQZDeWO7KEP
-	 riVy4Q+3NgKDzXuhE32oKhabiwaG0bK4MEYV6PdOSqs1enIF1ooSDv9W9WWwAX5+7N9Zd
-	 llZ0y0kLqig+/GvdMOFcFDM28Ew537xTOtPHvQVGFXFOu3/zl4X7djjcAiL7XJGuVBWvX
-	 0gO68Duv4kj+L+Cy4AOkx6taEHgH9TY99KdwxzKHArC/oYNqKZL7xSAWyl3I4ZxWSIhNS
-	 m4ENJWzr1BlpFPvgIa0B1El5nY16kGTcft278Yfg96Vs8Z6YimdRwTzdzoUZ8V9tYQg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794733305;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Zmail-TransId:X-Mailer:Message-ID:In-Reply-To:References:Date:
+	 Mime-Version:From:To:Cc:Subject:Content-Type:X-MAIL:X-TLS:
+	 X-ENVELOPE-SENDER:X-SOURCE-IP:X-CLEAN:X-Fangmail-Anti-Spam-Filtered:
+	 X-Fangmail-MID-QID;
+	bh=6PDKL1rAzaImATTAORc/yJkECZgOXtmpf6KdI2W0Yzg=;
+	b=ePz7rHpEgTzzmK6TvTjQ1SsJcGz3EXiKztP2kgAQhXxOU0k6J0bZJlhls2utKWcVWUVn
+	 8VnLC+VEh8R397ateYWpGAnMJ2p1k6WJMvnEzmRBobGodUERwFdLX8P2fjgvYaDCwOSt6
+	 tydu5MaGfb5hd33pvw6N3vLAsBvEgOKzRsde02CbtNKDzI9VXGTXyaQAULcg6LUOWLdu5
+	 X5/P+xWMU5WcF4kPwJaAl/6UWnB50FKFTl0qgWmgF3Q1Jncadp84CMBkhC7zjrhwbgEmG
+	 QOHJOmXbFBq/cAvEzctTFrU5RdF9+HfeY4ZX29Hb5P+5yh2dA+pLf1eMbjQ5OMDGCpw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="SGeRgf/z";
-	arc=none smtp.remote-ip=74.125.227.132
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=zte.com.cn;
+	spf=pass smtp.mailfrom=zte.com.cn;
+	dkim=pass header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b="MEDHLg/e";
+	arc=none smtp.remote-ip=160.30.148.35
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.35])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0258606A327
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 08:55:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0258606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC2D606A31A;
+	Sun, 15 Nov 2026 09:01:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCC2D606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SGeRgf/z
-Received: by mail-pj2-f4.google.com with SMTP id d9443c01a7336-2e96b8bfb43so7617965ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 00:55:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794732909; x=1795337709; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2W9g589hYI/qXRjeFg9GTGFNeMUzzFOuJrEl7Zvx7OU=;
-        b=SGeRgf/zTmXTFO/Meao9ef7XXArdfTx4NyVqdNIY9tHGowAM1YFhGCePO7ukhUTHtc
-         KsorIap36rJYj+xZ8ecqWCUOkcNPt81shI9WXLvZ8A8hnPSOnDr34sIoOv4Lt00Wz6CZ
-         FMG2N6Kp0j6488k2DV5SMxPPgrR6qaxgyRrWLXTM3PulbdXlqFwwSxy11s6MmTnGJODE
-         hTym7EYH+wdwCreK/Id6ZuNjACN74YvvsJoMFdq82shwi0u6ZIbuWQuAznKtmdAn0PMH
-         4lK10Sxai10BsDEd5NJ6V4HuPYxYw2vg6Lgngx/5OsoMbMzzscc2kSpGvB5C94gPpa0/
-         SAMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794732909; x=1795337709;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2W9g589hYI/qXRjeFg9GTGFNeMUzzFOuJrEl7Zvx7OU=;
-        b=Ar/NIJRwhntYrjfVKZVx2oMmS/jpBRKQGz40W35ISCqb7r9HfF9SiIRiNWBDOGyHZC
-         EWcdDn1ImMzN3Au4ZsvPI87t4KBd9scQ/popuFJYFP7fDnKa2qIGNQdGU+2U9VtRRhLu
-         1U/itqiJxe1LHtwy5ErTi4QQ+rQo7nKCz+C1sbLc83qT43G9ZHNziNTZbkd5QgJg9qmQ
-         9luhUPkWUCq7bjoezK4Jkv8AWDcGhqU51NLlrJMHJeQgYhUFH/YRWpPTtOjLmTugCanj
-         SjeyeZuTMRTCNlbX8oXIDbTjdUEDja3m9qh8W4dp04GtZmrRbPsU0hyI6wpvdteVB09E
-         wz4Q==
-X-Forwarded-Encrypted: i=1; AL+hErE0g5NjElNMqFLIF8pTMFFcjZDdp0BOGPNXqOJ7fve2yAozNGsWCJnwA6LjwTUafY5WbYgfL6uTLY6buSy2fN0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9BH6FAGRV6N2AjYIyyTpJ3hDUY1ZyUEj1rsQ9mlUmm9ahPSpI5
-	KokuKRILeM4gtibbL2NMkex7uzAefGrIbk9///CM5ic35BNht4tN4g0p
-X-Gm-Gg: AYBFou1svQzuYErKzS6W9BLKvkaInFBUbBVEToC7GJKhvYIBiQodvcIJ7Yr/JzDkQ0B
-	9wwkYztDi2JHQbmMDZxNMR3sLF3d/DTlSHOlAnmwn2HGEL9Oku7JjZqjcngiYTcDGN6T9ASmbvq
-	6owUEa7ErzKvu6fP9eXshG+HSRQWlb1R/tURXUrRznJ+kZ5dnX1BWeAAytCPPpLlruIWlbszPZa
-	m9oEECms4iu7BZCfXduiB3Cr+22dPp/XgjTkUfb1AZXCCrkzxGgunpND5CEWpN0TEcJ8YmBaucp
-	VeEaZ9C8PUCdgeki/8IiLraVgSUDIQqY58lvK3OFRtfTY8D3cvxkGbJnI1vuS6rCGEQ0Ni9zSom
-	V1ew6tbfxEDY3GZP7ImxgWt6nbCgeUcizrpDjLWXIlujrQryFseHce98hCHpMEuVQHDX3r9Au47
-	uu3ufnyPybfSblSEFDCjapeudt3ysjMuMo2jnj/mAxy7eTdrofK/VFTaRWlp2LBO30/vbPPq7bc
-	ifBTdHiuQV9krISqnKkpTOJxmJrIw3UhF8DEB0mfBZ0BxWBA2Q+PHsS3yQ63oEBglZBmLQNLHHQ
-	WfAROWqUmFWWFWIGvWCom5fe9hJD0pBo1o/nDmKcweA=
-X-Received: by 2002:a17:90b:48c3:b0:3b0:b36b:66fc with SMTP id 98e67ed59e1d1-3b1b0cac932mr7318329a91.63.1794732908821;
-        Sun, 15 Nov 2026 00:55:08 -0800 (PST)
-Received: from q-Legion-Y7000-IRX9.. ([113.54.187.246])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cddc160a190sm2879089a12.2.2026.11.15.00.55.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 00:55:08 -0800 (PST)
-From: "Bingyu.Xian" <shanbeeyoo@gmail.com>
-To: anup@brainfault.org
-Cc: atish.patra@linux.dev,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	zhouquan@iscas.ac.cn,
-	shanbeeyoo@gmail.com,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	pbonzini@redhat.com,
-	seanjc@google.com
-Subject: [PATCH] KVM: selftests: riscv: Test the SBI STA shared memory lifecycle
-Date: Sun, 15 Nov 2026 16:54:57 +0800
-Message-Id: <20261115085457.889873-1-shanbeeyoo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key, unprotected) header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=MEDHLg/e
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4jS4jw6Pxjz8XrrJ;
+	Sun, 15 Nov 2026 17:01:40 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zte.com.cn;
+	s=z202610; t=1794733300;
+	bh=6PDKL1rAzaImATTAORc/yJkECZgOXtmpf6KdI2W0Yzg=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject;
+	b=MEDHLg/eaADWM7nJ42GBGAoxynM/3cxQk0ZakECcU0wXrpI6JAHlV9lDLpWzoJRed
+	 FxxYCWeOcmm7nz/kgosSJJzYWc3XZqp6+1lZcXQ0WvpGMPitIbulPjZaAFKDlvu9E5
+	 nHLCJ0Vz4UR6waGlsydsHt5njTjgnMhcA/8ZMzpfZtO2KIZj6kn9E4xSRtHcJdHxz1
+	 TtEXwee62wzxDeDAb1rgE6rAqlThcd9ndmR8l2xPZTA2Ln88lv/xgVCDr+x1RT0DQ/
+	 CFIl3d4yibQ97bmVXiwYR4/IWOg0hZa0HRAnj5NfvTpk7Mw1JUZKvPaEKfJ0TkwD4A
+	 XBmAdZUg6VyyA==
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+	by mse-fl1.zte.com.cn with SMTP id 6AF91anr094626;
+	Sun, 15 Nov 2026 17:01:36 +0800 (+08)
+	(envelope-from shao.mingyin@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Sun, 15 Nov 2026 17:01:38 +0800 (CST)
+X-Zmail-TransId: 2afa6af974f2466-6c1fc
+X-Mailer: Zmail v1.0
+Message-ID: <20261115170138759eOTny6ELzQaEpo1MVAd6r@zte.com.cn>
+In-Reply-To: <avkYMF-_bBaIfBly@fedora-laptop>
+References: 202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn,20261111225801025TKHDW7iZbMR4sFQAc8af5@zte.com.cn,avkYMF-_bBaIfBly@fedora-laptop
+Date: Sun, 15 Nov 2026 17:01:38 +0800 (CST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,233 +72,98 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+From: <shao.mingyin@zte.com.cn>
+To: <tom.leiming@gmail.com>
+Cc: <shuah@kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, <axboe@kernel.dk>
+Subject: =?UTF-8?B?UmU6IFtQQVRDSCAzLzRdIHVibGs6IGNhbmNlbCBjb21taXRzIGFycml2aW5nIGFmdGVyIHRoZSBxdWllc2NlIHNjYW4=?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl1.zte.com.cn 6AF91anr094626
+X-TLS: YES
+X-ENVELOPE-SENDER: shao.mingyin@zte.com.cn
+X-SOURCE-IP: 10.5.228.132 unknown Sun, 15 Nov 2026 17:01:40 +0800
+X-CLEAN: YES
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6AF974F4.000/4jS4jw6Pxjz8XrrJ
 
-The RISC-V steal-time test checks the UAPI alignment constraints and
-compares stolen time with the host run delay. It does not exercise
-changes to the shared page after accounting has been enabled.
+> Please add this as a new recovery selftest in v2, so the fix is
+> covered.
 
-Extend the existing test to check that disabling STA stops shared-page
-updates and that reconfiguring it leaves the old shared page unchanged.
-Place the second STA structure at the end of another page and verify
-that updates mark the appropriate page dirty.
+Thanks for the reproducer. I've prepared a driver revision and a new
+recovery selftest using fault_inject's existing delay, with no kernel
+hooks. The selftest has three cases; the first is your reproducer. It
+waits for an in-flight direct write, quiesces the device, and requires
+both the write and QUIESCED before cleanup can issue another control
+command. The base stays LIVE; the revised driver passes.
 
-Discard the second backing page with MADV_DONTNEED and check that a
-subsequent KVM_RUN resumes STA updates on the replacement page and
-marks it dirty. Read the replacement page before KVM_RUN so that a
-stale write into the old backing page cannot satisfy the assertions.
+> With zero copy or auto buffer registration the committed request
+> may still be in flight when the command is aborted here.
 
-Keep these checks in steal_time instead of adding another test binary.
-The test does not depend on a gfn-to-pfn cache implementation.
+I've made the distinction explicit rather than bypassing the guard at
+one call site. After COMMIT's buffer operations, the new command is
+marked COMMIT_READY before the old request's references are dropped.
+Both non-batch dispatch paths clear that bit before queuing task work.
+With cancellation set while dispatch is quiesced, the scan can cancel a
+waiting command even if its previous request remains started, while
+preserving the guard for a new request already queued to the command.
 
-Assisted-by: YuanSheng: deepseek-v4-pro
-Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: bingyu.xian <shanbeenyoo@gmail.com>
----
-Tested with a freshly built RISC-V kernel and KVM module from the base
-commit below, running as a QEMU TCG guest with H extension enabled:
-  - steal_time: 4 lifecycle checks and the existing 4 vCPU cases pass
-  - CONFIG_DEBUG_ATOMIC_SLEEP=y and CONFIG_PROVE_LOCKING=y
-  - no kernel diagnostics observed
-  - x86 steal_time build also passes (not run)
+This also matters if cancellation starts just after COMMIT: an early
+check alone misses that case. The third case uses a registered buffer:
+it submits COMMIT first and verifies that the write is still
+outstanding. The scan must abort all four commands, and releasing the
+buffer must then let the committed write complete successfully. My
+earlier draft passed the first two cases but failed this one; the
+current revision passes all three.
 
-This exercises baseline STA behavior and does not depend on an STA
-caching implementation. The lifecycle checks also apply cleanly to
-riscv_kvm_next at 633b3931a87438282d6454646ff40c669a6896cb.
+> If ublk_wait_for_idle_io() fails with -EBUSY or -EINTR, ->canceling
+> is left set and ublk_cancel_dev() isn't called.
 
-Test logs (verbatim excerpt from the 2026-11-15 QEMU run):
-  STA_LIFECYCLE_KERNEL=7.4.0-rc2-sta-lifecycle+
-  Random seed: 0x35d6f94c
-  TAP version 13
-  1..8
-  ok 1 STA shared page updates and is marked dirty
-  ok 2 STA disable stops shared page updates
-  ok 3 STA reconfiguration updates only the new page
-  ok 4 STA updates recover after backing page invalidation
-  # VCPU0: total-stolen-time=3269800 test-stolen-time=3269800
-  VCPU0:
-      sequence:  6
-      flags:     0
-      steal:     3269800
-      preempted: 0
-      pad:      00000000000000000000000000000000000000000000000
-  ok 5 vcpu0
-  # VCPU1: total-stolen-time=898700 test-stolen-time=898700 (BONUS: guest test-stolen-time even exactly matches test-run_delay)
-  VCPU1:
-      sequence:  4
-      flags:     0
-      steal:     898700
-      preempted: 0
-      pad:      00000000000000000000000000000000000000000000000
-  ok 6 vcpu1
-  # VCPU2: total-stolen-time=654000 test-stolen-time=654000 (BONUS: guest test-stolen-time even exactly matches test-run_delay)
-  VCPU2:
-      sequence:  4
-      flags:     0
-      steal:     654000
-      preempted: 0
-      pad:      00000000000000000000000000000000000000000000000
-  ok 7 vcpu2
-  # VCPU3: total-stolen-time=800700 test-stolen-time=800700 (BONUS: guest test-stolen-time even exactly matches test-run_delay)
-  VCPU3:
-      sequence:  4
-      flags:     0
-      steal:     800700
-      preempted: 0
-      pad:      00000000000000000000000000000000000000000000000
-  ok 8 vcpu3
-  # Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
-  STA_LIFECYCLE_STATUS=0
-  STA_LIFECYCLE_PASS
+I've documented that the idle-wait error leaves canceling set and skips
+the scan. The next late command receives ABORT even though QUIESCE_DEV
+returned an error; this change does not roll cancellation back. That
+error-path behavior was checked in source, not established by the runtime
+tests below.
 
- tools/testing/selftests/kvm/steal_time.c | 113 +++++++++++++++++++++++
- 1 file changed, 113 insertions(+)
+> The new check fires whenever ->canceling is set, not only for
+> QUIESCE_DEV, so the subject and commit log are narrower than the
+> change.
 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index 82b94a82d..059f7fa60 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -8,6 +8,7 @@
- #include <time.h>
- #include <sched.h>
- #include <pthread.h>
-+#include <sys/mman.h>
- #include <linux/kernel.h>
- #include <asm/kvm.h>
- #ifdef __riscv
-@@ -329,6 +330,111 @@ static void steal_time_dump(struct kvm_vm *vm, u32 vcpu_idx)
- 	pr_info("\n");
- }
- 
-+static gpa_t lifecycle_second_gpa;
-+
-+static void sta_lifecycle_guest(void)
-+{
-+	sta_set_shmem(ST_GPA_BASE, 0);
-+	GUEST_SYNC(0);
-+	/* The first update takes place on the next KVM_RUN. */
-+	GUEST_SYNC(1);
-+
-+	sta_set_shmem(INVALID_GPA, 0);
-+	GUEST_SYNC(2);
-+	GUEST_SYNC(3);
-+
-+	sta_set_shmem(lifecycle_second_gpa, 0);
-+	GUEST_SYNC(4);
-+	GUEST_SYNC(5);
-+
-+	/* Userspace discards the second backing page before resuming us. */
-+	GUEST_SYNC(6);
-+	sta_set_shmem(INVALID_GPA, 0);
-+	GUEST_DONE();
-+}
-+
-+static void sta_lifecycle_run(struct kvm_vcpu *vcpu, unsigned int stage)
-+{
-+	struct ucall uc;
-+
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+		TEST_ASSERT_EQ(uc.args[1], stage);
-+		break;
-+	case UCALL_DONE:
-+		TEST_ASSERT_EQ(stage, 7);
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+	default:
-+		TEST_FAIL("Unexpected STA lifecycle exit at stage %u", stage);
-+	}
-+}
-+
-+static void check_sta_page(struct sta_struct *st)
-+{
-+	TEST_ASSERT(st->sequence && !(st->sequence & 1),
-+		    "Expected a completed STA update, sequence=%u", st->sequence);
-+	TEST_ASSERT_EQ(st->flags, 0);
-+	TEST_ASSERT_EQ(st->preempted, 0);
-+}
-+
-+static void check_sta_lifecycle(void)
-+{
-+	struct sta_struct snapshot, *first, *second;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	unsigned long dirty = 0;
-+	void *second_page;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, sta_lifecycle_guest);
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE,
-+				    1, 2, KVM_MEM_LOG_DIRTY_PAGES);
-+	/* Also exercise an STA structure ending exactly at a page boundary. */
-+	WRITE_AND_SYNC_TO_GUEST(vm, lifecycle_second_gpa,
-+				ST_GPA_BASE + 2 * vm->page_size - sizeof(struct sta_struct));
-+	first = addr_gpa2hva(vm, ST_GPA_BASE);
-+	second = addr_gpa2hva(vm, lifecycle_second_gpa);
-+	second_page = addr_gpa2hva(vm, ST_GPA_BASE + vm->page_size);
-+
-+	sta_lifecycle_run(vcpu, 0);
-+	sta_lifecycle_run(vcpu, 1);
-+	check_sta_page(first);
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT(dirty & BIT(0), "STA update did not dirty the first page");
-+	ksft_test_result_pass("STA shared page updates and is marked dirty\n");
-+
-+	sta_lifecycle_run(vcpu, 2);
-+	snapshot = *first;
-+	sta_lifecycle_run(vcpu, 3);
-+	TEST_ASSERT(!memcmp(first, &snapshot, sizeof(snapshot)),
-+		    "Disabled STA shared page was modified");
-+	ksft_test_result_pass("STA disable stops shared page updates\n");
-+
-+	sta_lifecycle_run(vcpu, 4);
-+	sta_lifecycle_run(vcpu, 5);
-+	check_sta_page(second);
-+	TEST_ASSERT(!memcmp(first, &snapshot, sizeof(snapshot)),
-+		    "Old STA shared page was modified after reconfiguration");
-+	dirty = 0;
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT(dirty & BIT(1), "STA update did not dirty the new page");
-+	ksft_test_result_pass("STA reconfiguration updates only the new page\n");
-+
-+	TEST_ASSERT_EQ(madvise(second_page, vm->page_size, MADV_DONTNEED), 0);
-+	TEST_ASSERT_EQ(second->sequence, 0);
-+	sta_lifecycle_run(vcpu, 6);
-+	check_sta_page(second);
-+	dirty = 0;
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT(dirty & BIT(1), "Recovered STA update did not dirty the page");
-+	ksft_test_result_pass("STA updates recover after backing page invalidation\n");
-+
-+	sta_lifecycle_run(vcpu, 7);
-+	kvm_vm_free(vm);
-+}
-+
- static void check_steal_time_uapi(void)
- {
- 	struct kvm_vm *vm;
-@@ -535,9 +641,16 @@ int main(int ac, char **av)
- 
- 	ksft_print_header();
- 	TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
-+#ifdef __riscv
-+	ksft_set_plan(NR_VCPUS + 4);
-+#else
- 	ksft_set_plan(NR_VCPUS);
-+#endif
- 
- 	check_steal_time_uapi();
-+#ifdef __riscv
-+	check_sta_lifecycle();
-+#endif
- 
- 	/* Run test on each VCPU */
- 	for (i = 0; i < NR_VCPUS; ++i) {
+Agreed. The new subject is "ublk: cancel late commands while the queue is
+canceling", and the log includes STOP_DEV and server exit.
 
-base-commit: 23c62304dde29abe92013d85910d03a77dada35d
--- 
-2.34.1
+The helper is renamed ublk_complete_canceled_cmd().
 
+> io->cmd and UBLK_IO_FLAG_ACTIVE are stored here before ->canceling
+> is read, with no barrier in between ...
+
+I've added explicit paired smp_mb() barriers between command publication
+and the cancellation check, and before the scan's ACTIVE load, with a
+comment explaining the pairing. Queue quiescing serializes queue_rq, but
+the uring command handler can publish independently, so I would rather
+make that publication ordering explicit than rely on quiescing alone.
+
+> If ublk_get_data() fails and falls back to requeue ...
+
+The second case holds NEED_GET_DATA across a successful quiesce, then
+submits an unmappable address. This reaches the real mapping
+failure/requeue path. The base completes only three of four commands
+with ABORT; the revised driver completes all four, and the device
+reaches QUIESCED after the server's ring/file references are released.
+The common post-processing cancellation check covers this fallthrough
+path.
+
+All three cases (fault_inject delay, NEED_GET_DATA/requeue, registered
+buffer) were run against the same next-20261113 x86_64 base and fixed
+guests, using QEMU/KVM with four vCPUs and 2 GiB RAM. The existing
+stop_restart and stop_live_restart modes also passed on both kernels,
+with eight successful reads per mode. Kernel W=1 and selftest -Werror
+builds completed; the driver has the same pre-existing shmem stack-frame
+warning on both builds. I have not tested concurrent off-task
+registrations, automatic buffer registration, or a weakly ordered
+architecture.
+
+Thanks,
+Shao
