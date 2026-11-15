@@ -1,65 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794743271;
-	b=BdK9H1y+HNRqD/jOpQfiJ8CK50RxEZMCjwgIS48DNkylfGZf+h7yYt+dLR/rohWShFPk
-	 wfY+Vi1XUiR4xQoz/9dl0reIiXKOG5wLW7gkB4jYbbvKAp0onbjRpWAq3h6DDbAxHfbTR
-	 5/PaQlaVaf7TtFwba6zsHiW9KlQbLjzo0EerdKKIi48ZFuJLc3WH+ltRAnMLBo+gAqRpL
-	 ov61lFfeKEVmTbros4bY5hLqTBfdHKhysZz363XUX2UJKA7MroJWDEdJE++rHrOfqDHYG
-	 NlZSY4qxT1OqOgEdTD541oNseZI8+FDCzpXM+gOKg5I+2qmGEiQp5Da0bFa+VHsozfA==
+	t=1794744781;
+	b=DdjrOuDywrjza3WbAPsekdWzltm1ArzGIcK9XCpJaiNnBKHHtudYuiqvD3drj5ySkGbN
+	 fA5OXh10s0IJXgX+Cdcglbjto668M7rKutsuVwJLL1Y3chxmpV4/M1F5P5cHtk0jMz2RZ
+	 wqN/eRyYVAe3TV4+YdbeNlamZRgzTxEYzyAr4A10wx595kH8yuc2lBctI7Snj86HWJeVI
+	 L5YCFiuftriu/Qr0raKkfz3RqwCVuXF8jGxOR07V9K3scJq7J+/b5WJ0AR84vKIfZaFVN
+	 DvYGbHvLNlaMtTPAO4QYZcC3/xM8WJAnIGa9f3xiLDWI6LidAocc4RWgzHLGEZ5A09w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794743271;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=dUUoDFkPJkBg6tiiX+gwUNqdlWB0vRGU4J1TlhHh7ZE=;
-	b=iuKSIOwNdjXAi2+nKsqu7pIfpzXuLtuj3wXCa1g9MN5BFnFnH+efqOzfUtJXvT2zUGGl
-	 V9IfHEzKQzynFa9Fuo1ssXUF+7C+Eoevg9R/uDVp3b207QzEgfuu6a4+z5JoRhmzh2QN0
-	 9vJY2NJZgqRfrAE94UuSb7lSNUhcz8q8wGqjWRw5n7k7BXCLYZBSkg22ZgvSiHJnnwpNY
-	 2bXzqhTqJYzU82V3hEswRLXZDMXOPwMPocN2bf1yYrFAEINhs1DN1LNIND4gakdX7BwOF
-	 /NBQXI11IeC+qk96wRGrOuIRB815lx2fweUabl5k2cTyNpurMwEGTlfjb0o79097iFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794744781;
+	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 X-Cookie;
+	bh=6nAdsUOd3sfLiZ5il0Rjkey++jxOa1KVm/OVFeybvpI=;
+	b=QS98BFZbKPQn1BJXaTQxmb+vJ5xssc/6dV01Cze9oDl/kewDoBq6JPKi8QuP0s7NC8Yc
+	 yAHBzm3R0zbiIC/jvSr6yVSuWWUGnUDqlYs+ZqiK08u0hsMA2nZttfti030SANKA+6CI0
+	 oqd0c7gFS277KT7nfgWNzC3Jqr51E3d7rV5QNqUJGd11u3m2Jzlw/x7HCHLieUt6mc5PR
+	 nWTV5NlPjH/Ydrki6IYLIYD8xJwyvV3XilVtCbdbTFu+asoj8RaYMIG5iCoonqa57Ov1y
+	 bY6alaUk9ykwXVUEw43wsagVIW2ePvLjdAw7RiKKL3MzR4Egg0l06ycsyXp8j1TegxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O5UCROmp;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mo2xO+ZY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C6D606A32E;
-	Sun, 15 Nov 2026 11:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E168C606A31E
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 12:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O5UCROmp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF671F000C4;
-	Sun, 15 Nov 2026 11:47:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mo2xO+ZY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6322F1F000C4;
+	Sun, 15 Nov 2026 12:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794743270;
-	bh=dUUoDFkPJkBg6tiiX+gwUNqdlWB0vRGU4J1TlhHh7ZE=;
+	s=k20260515; t=1794744780;
+	bh=6nAdsUOd3sfLiZ5il0Rjkey++jxOa1KVm/OVFeybvpI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=O5UCROmpYOxPof//EVMXlzhE8CwpBAuLxySuhjVJTwgdWIcUjDEHfxQDjag+uTRua
-	 Z+qDIjnj4mqHBNrUw8Ko1zjkZMcqAeFq8ldvZlzCVbByFB+ptCuml13g6R68XiAcOc
-	 tTmUPUcRTu4mDvyiHtXFi/q4pZoMhhtkVDTdv1WqLRxEzoDBelkcsk5jYXJt2EAUob
-	 xjg6qsjtw4gR2WGGuYhHVN3Y9VjEoACQTHM3FtneMm5yNVilA99bE1xWageT1rHDiS
-	 UNAqlNNFNjgatsQNOofsxEUu3m18tcJw6JldfrHIojxyBAVmlXl979klg5KOmmNJfI
-	 Ivyq26TJMKVYg==
-Date: Sun, 15 Nov 2026 12:47:41 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Chris Down <chris@chrisdown.name>, linux-fsdevel@vger.kernel.org, 
-	Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, 
-	Josef Bacik <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, 
-	target-devel@vger.kernel.org, driver-core@lists.linux.dev, linux-mm@kvack.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	ocfs2-devel@lists.linux.dev, linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-usb@vger.kernel.org, linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 33/42] fs: add file_check_backing()
-Message-ID: <20261115-boxen-mundschutz-jacht-0ab871beca58@brauner>
-References: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
- <20261114-work-loop-pseudo-v2-33-98639a2286fb@kernel.org>
- <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
- <CAOQ4uxhGxpBtMZ5kfuzR1tQAewiecoX7UjXQRo91QjJHH9T_Yw@mail.gmail.com>
+	b=Mo2xO+ZYdxrOq1t6MQZL84cjQftKeJE/GIENXYn0PQU8insGkFBGT2ua4+7ydBMOn
+	 YV6tZB4gCbby9XENAeB0SHLW7dkIk8EpeD0Zsk2RRjKdCPlMoGfyeNRXsKP9xNun5E
+	 dAyU2h2+QNH5AxERDAr1eUTPneTOESDp9yh7NRlUJmWZqeGjIcrjdkYUZGHcnrYbjV
+	 rYUhu2Z+fMschPXLeay3giGQLt+9+cobo0UxJ+xqqw8Pwr4qwn1SoT2EgS820P//Lh
+	 dLhjVRmcmYe5w+j+sVPNY3zfHFZKW5G34HcXxCXrqY/4EQiJNipCMO92kkhV8fscRh
+	 cpXugzJH7QIkg==
+Received: by traversing.sirena.org.uk (Postfix, from userid 1000)
+	id E5F0E336AA00; Sun, 15 Nov 2026 12:12:57 +0000 (GMT)
+Date: Sun, 15 Nov 2026 12:12:57 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Long Wei <longwei27@huawei.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+	mark.rutland@arm.com, kevin.brodsky@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, hewenliang4@huawei.com
+Subject: Re: [PATCH] selftests/arm64: signal: fix inverted feature mask in
+ diagnostics
+Message-ID: <d7ad4591-ace3-4c56-80b5-7130b9954051@sirena.org.uk>
+References: <20261114081013.964933-1-longwei27@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,70 +62,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BTX7ICWH0mABSo9W"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxhGxpBtMZ5kfuzR1tQAewiecoX7UjXQRo91QjJHH9T_Yw@mail.gmail.com>
+In-Reply-To: <20261114081013.964933-1-longwei27@huawei.com>
+X-Cookie: A watched clock never boils.
 
-On Sun, Nov 15, 2026 at 12:19:57AM +0100, Amir Goldstein wrote:
-> On Sat, Nov 14, 2026 at 9:06 PM Chris Down <chris@chrisdown.name> wrote:
-> >
-> > Hi Christian,
-> >
-> > Christian Brauner writes:
-> > >+      /* Look through stacking filesystems at the inode with the data. */
-> > >+      if (d_real_inode(file->f_path.dentry)->i_sb->s_iflags & SB_I_PSEUDO)
-> > >+              return -EINVAL;
-> >
-> > This looks good in general, but what the bots said about O_PATH files
-> > here is real. With FMODE_PATH this is reached for a file that was never
-> > opened, so on overlayfs nothing has been through ovl_open() to look up
-> > the lowerdata of a metacopy file yet. ovl_d_real() then does the lookup
-> > itself, and when that fails it hits the WARN(1) at its end and returns
-> > the overlayfs dentry, so the check passes as well.
-> >
-> > Only fuse passes FMODE_PATH, so it takes CAP_SYS_ADMIN to get there, but
-> > it's easy to trigger with that. From a quick test with a metacopy file
-> > whose redirect into a data-only layer points at nothing, registering an
-> > O_PATH fd of it with FUSE_DEV_IOC_BACKING_OPEN gives
-> >
-> >      ovl_d_real(/f, 0): real dentry not found
-> >      WARNING: fs/overlayfs/super.c:79 at ovl_d_real+0xc9/0x210
-> >      [...]
-> >       file_check_backing+0x308/0x5e0
-> >       fuse_backing_new+0x219/0x4a0
-> >       fuse_backing_open+0xe8/0x390
-> >       fuse_dev_ioctl+0x53a/0x7d0
-> >
-> > and the ioctl still succeeds. A normal open of that file fails with
-> > ENOENT, so nothing could have used it as a backing file anyway, but with
-> > panic_on_warn this is now a panic.
-> >
-> > Maybe ovl_d_real() should just stop warning when the lookup fails, now
-> > that it has a caller that isn't trace_uprobe?
-> 
-> Yeh I guess that this needs to be a Fixes for lazy data lookup.
 
-I have a fix for that.
+--BTX7ICWH0mABSo9W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The correct fix would be to teach all the callers to deal with an error.
+On Sat, Nov 14, 2026 at 04:10:13PM +0800, Long Wei wrote:
+> When a testcase is skipped because an incompatible CPU feature is
+> present, test_init() reports the feature set with:
+>=20
+>         feats_incompatible & ~feats_supported
+>=20
+> That is the set of incompatible features which are *not* supported,
+> i.e. always empty, instead of the incompatible features which actually
+> triggered the skip.  As a result the diagnostic prints an empty list and
+> gives no hint about why the test was skipped.
 
-I've also implemented that. It wasn't that hard and it's also a bug. Not
-a bad one but still.
+Looks like a cut'n'paste error.
 
-> > The check would still pass
-> > for an O_PATH file whose lowerdata couldn't be looked up at that point,
-> > though.
-> 
-> One observation relevant to this patch set is that a datadir layer has no
-> business being a pseudo fs and that can and should be blocked explicitly
-> at overlayfs mount time.
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-I agree.
+--BTX7ICWH0mABSo9W
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> The other observation is that fuse_passthrough_open() should probably
-> check the backing_file that was opened for io in addition to checking
-> in fuse_backing_open(), which could have different FMODE and specifically
-> could be FMODE_PATH.
+-----BEGIN PGP SIGNATURE-----
 
-Sounds good.
+iHUEABYKAB0WIQReagvpf3TrrA7BoYYv73Ows9A4iQUCavmhyQAKCRAv73Ows9A4
+iUjQAP9HxqvWC55RPim1gX0a2Sr/cSbCgGYMKfepsoaZAyZlCAD/Z7ytZn0cKXRD
+vHVjI3eoYdcb4IGW2zHgB0nH+HBA7Qw=
+=Tm+H
+-----END PGP SIGNATURE-----
+
+--BTX7ICWH0mABSo9W--
