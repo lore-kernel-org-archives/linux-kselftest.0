@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.143.172.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794841313;
-	b=Y5YtapWylySNf8Mr35xsgX5z/eYseQWreUMWj3yiRbouNuRqZmuDXGqg8HjrqpaF0EMb
-	 mgfvX06RHvlN3UkXx/p22XEs9rIaNBQhymFqMiXeaRpB6Oo+ILOk7xXQeVt2xOki0fpXQ
-	 yHB1J8aKPsYny/Fa6ORjhfm45poUqSFPqTIcJrn700nyxWyhwMBQMP5S+SjM1NBDmV35E
-	 +z3OqfkIjeW0aTyljoWUZZSCPftjR9K1Ds0eXAquGj9VU2WhkM5dW7YcdmS+nrj2mwVAP
-	 Q5BVu/UF16R0hlaSQmPEyTZG+iQUBAzEJSvQWk5Z2m/3taeAmUYbraa8yCXqRV6THvA==
+	b=O1XT5+lZoHX3k1Z7c0KvDgBzTYSCXZCF7NyRWR4jGYLGzkXlH32PGOzQpW+qbwUAXMgZ
+	 IKb1fdBrpbVh2YAueWn/ySaRE7fw3zpAVIoNdXhJtXr8JZ0XhtsQ9IOogiFnddBj/l6CQ
+	 Z6I9wbVAmqkEMqnVWYfLMjwq4mkKmxEpBmLWKV+JV+8vsssPU8k5qOw2afU51nq+h8RQx
+	 z6ZomCOdElDMdJuouqCZvjLJdnOrHcIXFHhMm275hK6etK3L6u0Yp3zFT1fhFFAsth4LV
+	 OrT1B1GVKDNNGV1I0nrTA76u0xwGpDGlo17ni5b4j2Xen+nZG5vwXXVMjjFXB3d0yXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794841313;
 	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Rspamd-Bar:X-Rspamd-Report:X-Rspamd-Score:
 	 DKIM-Signature;
-	bh=nWU2LRdDXJ4j/FgpkY7ig95ec8lJA/+RUw4fK2JInKI=;
-	b=YBvYP4C1MQQMVMoBFPZM/+weERgLiFKVkiQcpJAdwEWPA6o572VONGn//5ukUEBXCXAg
-	 F0NYGJa5k5mu320RbvvX5VlAQlPTRrYI1Iwa9r2OCGQ2IwKPxJIUVihgFkmPsIID75zhs
-	 nhZBUJsTyO5+3uwgaNOY/39dG6a4iLObaoE61TG0Uuu9hbvBCRQQQiD3ckyeRiqdNR8S4
-	 WEHo/kyvMKjGoKAoFl6/Fa8EybJo98L1ID4cAajg9pip/yujrJUsnTjnlL9kfa3ABlul5
-	 7mVfgAncw/VYWj4nCLdt4cri8UDNGyvLkvTksGe31K9GkXGEODsOG30tXVdBjnnXS2g==
+	bh=wU42Xv+oriwKZx/rxk+EnNc9SsYqK4jjpZoanBLi7Wo=;
+	b=ZUd9XzGV79qr8aY64Q21ucuCp0okLPSg1QdF4SAMw0oZnaSADmy4eJ+Ng6CaJh5tTdPV
+	 JIy2naKjp5fVHMpD5PnWnS0/c5GghElro7mDu21iMEd/cDU+zNAGzlmEY/uME/IXhN5v2
+	 z+GijZGIgD4Hhtie1aSV7dyALmCsef/v3Hy1LtgszdumUQvG6a33tSWVmb2fwvDxvdcDU
+	 VAQMV6Y7lp+mdMdoJ2Q89CVVtNF8Sq8S/anKd8kd0aibvFgybiGcWRyafrcUBTPoDYLQr
+	 aGayotwwPvE1Q1lhlElTbZ/Og4Ag6CmfPoSM/RM/9bbQ5MQyRJpqVZCMiicsYNgEW2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=lausen.nl;
 	spf=pass smtp.mailfrom=lausen.nl;
-	dkim=pass header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=gJqaubhk;
+	dkim=pass header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=DyAulS2B;
 	arc=none smtp.remote-ip=95.143.172.20
 Received: from mailgate01.uberspace.is (mailgate01.uberspace.is [95.143.172.20])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F006B606A88E
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 15:01:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F006B606A88E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B49D606A89B
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 15:01:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B49D606A89B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lausen.nl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lausen.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=gJqaubhk
+	dkim=pass (4096-bit key) header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=DyAulS2B
 Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
-	by mailgate01.uberspace.is (Postfix) with ESMTPS id 8D98161133
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 16:01:43 +0100 (CET)
-Received: (qmail 22837 invoked by uid 990); 16 Nov 2026 15:01:43 -0000
+	by mailgate01.uberspace.is (Postfix) with ESMTPS id 0323461114
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 16:01:48 +0100 (CET)
+Received: (qmail 22990 invoked by uid 990); 16 Nov 2026 15:01:47 -0000
 Authentication-Results: devico.uberspace.de;
 	auth=pass (plain)
 Received: from unknown (HELO unknown) (::1)
-	by devico.uberspace.de (Haraka/3.1.1) with ESMTPSA; Mon, 16 Nov 2026 16:01:43 +0100
+	by devico.uberspace.de (Haraka/3.1.1) with ESMTPSA; Mon, 16 Nov 2026 16:01:47 +0100
 From: Leonard Lausen <leonard@lausen.nl>
 To: netdev@vger.kernel.org
 Cc: leonard@lausen.nl,
@@ -61,9 +61,9 @@ Cc: leonard@lausen.nl,
 	coreteam@netfilter.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 1/3] ipv6: Use the FIB prefix length when suppressing cached routes
-Date: Mon, 16 Nov 2026 15:01:28 +0000
-Message-ID: <20261116150132.9594-2-leonard@lausen.nl>
+Subject: [PATCH net v3 3/3] selftests: netfilter: cover IPv6 FIB prefix suppression
+Date: Mon, 16 Nov 2026 15:01:30 +0000
+Message-ID: <20261116150132.9594-4-leonard@lausen.nl>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261116150132.9594-1-leonard@lausen.nl>
 References: <20261116150132.9594-1-leonard@lausen.nl>
@@ -78,79 +78,183 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Bar: -----
-X-Rspamd-Report: REPLY(-4) BAYES_HAM(-2.999999) MID_CONTAINS_FROM(1) MIME_GOOD(-0.1) R_MISSING_CHARSET(0.5)
-X-Rspamd-Score: -5.599999
+X-Rspamd-Report: REPLY(-4) BAYES_HAM(-2.999838) MID_CONTAINS_FROM(1) MIME_GOOD(-0.1) R_MISSING_CHARSET(0.5)
+X-Rspamd-Score: -5.599838
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
 	d=lausen.nl; s=uberspace;
 	h=from:to:cc:subject:date;
-	bh=CmlnvftUOEkMRs1fyX9q9MoUVh+kXC35NtIDAenZtp8=;
-	b=gJqaubhkrs1lbdL52HG6W8XLf2BZH79RIvzubuE1pqscgpY+hX2gFtRt8hr8LfFx2IqxSgUdIo
-	rP00IO+kwdrDlvMPhcOM0vES2qkP/f2EfvPP23iTFC0oL31WrhAasjYMiWcWz1jH7LbofyYBFic5
-	emheHuksHyrtug3yrE2sFwSTvlQnueHJgx89dWOKHyXZwTb30NR0AeRAfO7ouqRC2Pw+M1OLE00q
-	4Qv1SJ74pjEt/sbRqh+fiM+cRBLf1ptjvB3DurlYijAmDn64jh7NW+5gqjtuG1ZpqetpXAfe4mDk
-	7pAGIr38hOCh/8KqZPc4lOM9/NPI8KWnQf5ncU+nK5q//5PWghhw4anRqGy9Hd14Gm/z6zCkbG+V
-	oVZG4IJ7ggtvakGr1f85OlqehU6bYWT9wgKxT/t93iiS97kgj8oTV12Hx1Qs0Al+lwMZCv9062xN
-	/xLUn3+iKhiAD6x4z0nrHMza97Uj0lO2DaO4OCnHkAALiwHijVfpR6OJ7jFlHO7myybb/BW37m2E
-	k70kb5XBT4M4lJ3JH1VB8W1fKnbLManfUutVw1f5aqPnufxmUBlKaxYbf2gyTjfAGTBRLOVb+agZ
-	35zM7GbWEYsN05/ap2FMbp9Qm1VHcWDjicRWADsXYVsDW3cRInL+HS0a4n9pq9CXcs9WT2cH3Liu
-	k=
+	bh=lOr4fHWDJmDbv/ZQHO6T7OQiyEAQ/Lb9RxYZKQiNakc=;
+	b=DyAulS2BaAkK3Ym+Nm2xUoNNuscFK5rsovTLXwQ2ExAb66CbC7I0BuE66Mi8M4TwY8Ojs+FHdm
+	Xd2Pxd5/nn9YH+iFL4sCyqD0ur1Cuqv3aGqA90Fn1QnRISDaS/zSLtm51+PPeZlbdDio8a+KiUdP
+	e8+hrHpqQTArW16OSmVS9iYiKJg7e1/jN+L0uAdzdpxYH6lyOIZrZ3A7GaOe/StpQnhP0+tclf0j
+	2nQb/Xz8ZVfuOeB914vyjLMZjK9Vr++vCoqlOLQghsdX37wez8BSkzQPSlkjWRyxztuEXurkVVhp
+	GikWSPnmvxyfBSw9amrF8Cv2SdIzukLTQdaC7mcShbKu7KrzA5Dk2cnAw5NWwSrj6eXVqzk4N8Fx
+	+siB3Xk0duRoL8SeDQ3/BPKfYem5q+783QyjOia2RFHzqcLfJi+hfiNXpxaZBNV5KdGsyEOt8OMV
+	2vVid9W1zfVK49yMJrS84IvFH/lkODK5R6/y1mtaN83/FPIK6qoPk11PdAvsHipSy4aaramV4CUS
+	Oy7YCJDD0MY6FukYocUjj8sifA47xO+2Iqpg6NfY4uaYmJiv2f8CLKoWZyMLiaX7pJT1yfpIrK5c
+	9dwYGzTOVDWjUsWFeadrV/y4tQPXL4GmQcaKXfDd6S+QLveZxA86artBs1aK94DbrchaIXNvKYeA
+	c=
 
-fib6_rule_suppress() compares suppress_prefixlen with rt6i_dst.plen.
-PMTU and redirect exceptions have a /128 destination prefix even when
-their parent FIB route is a default route. Consequently, a cached
-exception bypasses suppress_prefixlength 0 and stops the rule lookup
-instead of continuing to a later table.
+Extend nft_fib.sh using its existing namespaces and counter helper to
+check that suppress_prefixlength 0 suppresses a default route while
+retaining a more-specific route. Check that blackhole, unreachable and
+prohibit routes remain terminal despite a usable route in a later table.
+Include a blackhole nexthop object to distinguish result reject flags
+from flags on the FIB entry.
 
-Use the parent FIB entry's destination prefix length when available.
-The rule lookup already holds the RCU read lock needed to read rt->from.
-Retain the existing prefix check if the destination has lost its parent.
-Interface-group checks and destination reference handling are unchanged.
+Require a positive counter for the expected nftables FIB result. Compare
+it with the output device or rejection error from an ordinary lookup.
+Create a PMTU exception through the existing peer namespace and check
+that its parent default route is still suppressed.
 
-Reproduced with a PMTU exception created by an ICMPv6 Packet Too Big,
-without kernel instrumentation. Verified with the namespace reproducer
-and nft_fib.sh on the rebuilt v7.4-rc2-based kernel.
+Label ruleset-load failures and skip the affected checks when IPv6 prefix
+suppression or nexthop objects are unavailable.
 
-Fixes: 7764a45a8f1f ("fib_rules: add .suppress operation")
+Run these checks after the existing default-table tests so that adding
+policy rules does not remove coverage of the path without custom IPv6
+rules. The router's logging RPF rules have already been removed by then,
+allowing neighbour discovery during intentionally different reverse-route
+states.
+
 Signed-off-by: Leonard Lausen <leonard@lausen.nl>
 ---
 v3:
-- New separate fix for the cached-exception issue identified in review.
-- Reproduced with ICMPv6 Packet Too Big and verified on the rebuilt
-  kernel with the reproducer and all seven nft_fib.sh cases.
+- Add a cached-default PMTU case using the existing peer namespace.
+- Run after default-table tests; label load failures, skip unavailable
+  optional features and match ordinary rejection errors exactly.
+- Remove Assisted-by.
 
 v2: https://lore.kernel.org/netdev/20261115114434.10343-2-leonard@lausen.nl/
 
- net/ipv6/fib6_rules.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../selftests/net/netfilter/nft_fib.sh        | 109 ++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/net/ipv6/fib6_rules.c b/net/ipv6/fib6_rules.c
-index 0ffd7b47a046..5e2a79a81bf3 100644
---- a/net/ipv6/fib6_rules.c
-+++ b/net/ipv6/fib6_rules.c
-@@ -285,6 +285,8 @@ INDIRECT_CALLABLE_SCOPE bool fib6_rule_suppress(struct fib_rule *rule,
- 	struct fib6_result *res = arg->result;
- 	struct rt6_info *rt = res->rt6;
- 	struct net_device *dev = NULL;
-+	struct fib6_info *from;
-+	int plen;
+diff --git a/tools/testing/selftests/net/netfilter/nft_fib.sh b/tools/testing/selftests/net/netfilter/nft_fib.sh
+index 04544905c216..175bdfa825c9 100755
+--- a/tools/testing/selftests/net/netfilter/nft_fib.sh
++++ b/tools/testing/selftests/net/netfilter/nft_fib.sh
+@@ -202,6 +202,50 @@ check_fib_counter() {
+ 	return 0
+ }
  
- 	if (!rt)
- 		return false;
-@@ -292,10 +294,13 @@ INDIRECT_CALLABLE_SCOPE bool fib6_rule_suppress(struct fib_rule *rule,
- 	if (rt->rt6i_idev)
- 		dev = rt->rt6i_idev->dev;
- 
-+	from = rcu_dereference(rt->from);
-+	plen = from ? from->fib6_dst.plen : rt->rt6i_dst.plen;
++# Count probes matching the expected FIB result, then drop them.
++test_fib_suppress() {
++	local label="$1" expected="$2"
++	local result="${3:-oifname}" error err=0
 +
- 	/* do not accept result if the route does
- 	 * not meet the required prefix length
- 	 */
--	if (rt->rt6i_dst.plen <= rule->suppress_prefixlen)
-+	if (plen <= rule->suppress_prefixlen)
- 		goto suppress_route;
++	if ! ip netns exec "$nsrouter" nft -f /dev/stdin <<EOF
++flush table ip6 filter
++table ip6 filter {
++	chain prerouting {
++		type filter hook prerouting priority -1;
++		ip6 saddr dead:1::99 icmpv6 type echo-request \
++			fib saddr . mark $result "$expected" counter drop
++	}
++}
++EOF
++	then
++		echo "FAIL: $label (could not load ruleset)"
++		return 1
++	fi
++	ip netns exec "$ns1" ping -6 -c 1 -W 0.1 -q dead:1::1 > /dev/null 2>&1
++	if [ "$result" = type ]; then
++		case "$expected" in
++		blackhole) error="Invalid argument" ;;
++		unreachable) error="No route to host" ;;
++		prohibit) error="Permission denied" ;;
++		esac
++		LC_ALL=C ip -net "$nsrouter" -6 route get dead:1::99 \
++			from dead:1::1 2>&1 |
++			grep -Fxq "RTNETLINK answers: $error" || err=1
++	else
++		ip -net "$nsrouter" -6 route get dead:1::99 from dead:1::1 |
++			grep -q "dev $expected " || err=1
++	fi
++	if check_fib_type_counter_family ip6 1 "$nsrouter" prerouting \
++		"$result" "$label" &&
++	   [ "$err" -eq 0 ]; then
++		echo "PASS: $label"
++	else
++		echo "FAIL: $label"
++		ret=1
++		return 1
++	fi
++}
++
+ load_ruleset "$nsrouter"
+ load_ruleset "$ns1"
+ load_ruleset "$ns2"
+@@ -845,6 +889,71 @@ test_fib_type "default table"
+ ip netns exec "$nsrouter" nft delete table ip filter
+ ip netns exec "$nsrouter" nft delete table ip6 filter
  
- 	/* do not accept result if the route uses a device
++# Keep the earlier IPv6 checks on the path without custom rules.
++# The router's logging RPF rules have already been removed here.
++if ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 \
++	suppress_prefixlength 0; then
++	ip -net "$nsrouter" -6 route add table 128 default \
++		via dead:2::99 dev veth1 || exit 1
++	ip -net "$nsrouter" -6 route add table 129 dead:1::/64 \
++		dev veth0 || exit 1
++	ip -net "$nsrouter" -6 rule add pref 101 to dead:1::99 \
++		table 129 || exit 1
++	ip netns exec "$nsrouter" nft add table ip6 filter || exit 1
++
++	test_fib_suppress "suppress default route" veth0 || ret=1
++	ip -net "$nsrouter" -6 route add table 128 dead:1::/64 \
++		dev veth1 || exit 1
++	test_fib_suppress "retain non-default route" veth1 || ret=1
++	ip -net "$nsrouter" -6 route del table 128 dead:1::/64 \
++		dev veth1 || exit 1
++
++	# Seed a PMTU exception while bypassing suppression of its parent route.
++	ip -net "$ns2" -6 route add dead:1::99/128 via dead:2::1 \
++		dev eth0 mtu 1280 || exit 1
++	ip netns exec "$ns2" sysctl -qw net.ipv6.conf.all.forwarding=1
++	ip -net "$nsrouter" -6 rule add pref 99 to dead:1::99 \
++		table 128 || exit 1
++	ip netns exec "$nsrouter" ping -6 -I dead:2::1 -M do -s 1400 -c 1 -W 1 \
++		dead:1::99 > /dev/null 2>&1
++	if ! ip -net "$nsrouter" -6 route get dead:1::99 from dead:1::1 |
++		grep -q 'mtu 1280'; then
++		echo "FAIL: could not create PMTU exception"
++		exit 1
++	fi
++	ip -net "$nsrouter" -6 rule del pref 99
++	test_fib_suppress "suppress cached default route" veth0 || ret=1
++	ip -net "$ns2" -6 route del dead:1::99/128
++	ip netns exec "$ns2" sysctl -qw net.ipv6.conf.all.forwarding=0
++
++	for type in blackhole unreachable prohibit; do
++		ip -net "$nsrouter" -6 route replace "$type" default \
++			table 128 || exit 1
++		test_fib_suppress "retain $type" "$type" type || ret=1
++	done
++
++	if ip -net "$nsrouter" -6 nexthop add id 1 blackhole; then
++		ip -net "$nsrouter" -6 route replace default nhid 1 \
++			table 128 || exit 1
++		test_fib_suppress "retain blackhole nexthop" \
++			blackhole type || ret=1
++		ip -net "$nsrouter" -6 route del table 128 default
++		ip -net "$nsrouter" -6 nexthop del id 1
++	else
++		echo "SKIP: blackhole nexthop objects unavailable"
++		[ "$ret" -eq 0 ] && ret=$ksft_skip
++		ip -net "$nsrouter" -6 route del table 128 default
++	fi
++
++	ip -net "$nsrouter" -6 rule del pref 100
++	ip -net "$nsrouter" -6 rule del pref 101
++	ip -net "$nsrouter" -6 route flush table 129
++	ip netns exec "$nsrouter" nft delete table ip6 filter
++else
++	echo "SKIP: IPv6 prefix suppression unavailable"
++	[ "$ret" -eq 0 ] && ret=$ksft_skip
++fi
++
+ test_fib_vrf
+ 
+ exit $ret
 -- 
 2.55.0
-
