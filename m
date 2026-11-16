@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794798239;
-	b=TadNBN8pOKRDeH2WVXIpbYb3I3PsOnf+dzeSF4nWOCww4XWXUYlXJKsInQPRXA25KtzP
-	 KcVKltx1fL4xZVvpVltrZRSgUhwwOqB3ouGHnbvqLemQNsODailfK/UgoZB2adObTE9pm
-	 xUxvFRjc8ewcMFk998M4KR3NsBcESTRTStcjZB6LUiI0WDDBfoUaRC2ZagTEUi9h2Tc39
-	 ZAs4Wvns/a5OY1pISIWpLZiLWw7n9WGBT0x1UTSE0ciZf/Vf3aqi8tb5qs1BBKohLe3de
-	 vDCuHcMF6j0vnJ7rTf3ABP4K/LsK9sw020ySzKm3BLCuse5JJN6im+S4DR5GF6Yj07g==
+	t=1794798242;
+	b=dHGGDbTrIgwFGTpeweNSNe+te29ozXLX173XGBOvoINA+0aymOFBB5LoZrU35J71PtyS
+	 EP1HY21f3tyJVZnLyJ9ini5kxdguanwXx0xhYfYf86L3eAeShmKWR/ojg57xSkUPU4XKc
+	 oCfgiyAQUbLIoR6DKjg9qE8VrkfjtPcrNdEUXozuI0+WCWc5gBLvEXw90Pnu0k9T94dPd
+	 p1eD6bco9+q105lXbq+WujfhVwtP8pkynd6nLC4LfYE9OGQJLfQqOrWfujF4xVelDCGZA
+	 oRP4Cz+1YiLY5ycfJLVX5lJw3FQdS97DYTrM9re831slj7INRLLFp2rUKJop/wa4bIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794798239;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794798242;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=SNeaXfTa9XrrJcc3jd4rJaGJBMOoRygkUVLasRGgUSw=;
-	b=iqv1rB4zmMqo2VxPFXRK8Lx717bdToJiYDRVRIE72PM02xMYQPAE2qjzFax/7zbDPIRc
-	 hbB8jac4E+/FGVtvhxCnwTrwPlLqsGoD8B5q6rRUeuyHnAWjhAFNAxQVLpLJLwIbSVY2c
-	 y7Z4Bnvsa6typPRuDQRKiZEFd4SgReZotmU6ZdzoVfzT2wQ4WDNlpqZbiu0B6TPcsWWRj
-	 vn0TFf5kQ+h/D0ciTNtFfEMWA2DejFb0UcVSsnL6wvkFiF+57nDqFc2INV8yUa5UuqvEf
-	 eete+sT4l1S0aNDY7+zXK9Na+FuZ2I6z6Rt3hRQab4l2CRwt33KIeal/jeKja7UFIqw==
+	bh=tilAlplfK1rw0akhzzldbfcTxnq5HziwNFLGGQNriOc=;
+	b=jE9SeQOiBG19Wx/x04nrRKxluL6yqAgCLZUHZrLSQ1a6Ddck88EH5/w+MbHUfUGI7EIN
+	 HSG4JzmXmI6qd4x+M2qqu549c9OMTy2Z6PsTIERg7migfIoTAfxW6veHzvbjd/dTqYPe8
+	 LKocfNJCvZ24UmK3K3DqBgtoCu4LCMneBxxluuc//6YXV6DSBFgwMLbbS5vgQS2y8U+J/
+	 0IHxEXN3s8v/Xuj4jQG3c5/Vdz2+r+PWzodWQKz051hMgIQm8bqS2T616qJ0mT+Wznyfs
+	 V8vEVSYNQq24XKQZPnDP8lcZjBr2AGM4qWWk6cDtN6ssAPLxU2RPEAn15mfWwsCi3ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pe90he5M;
-	arc=none smtp.remote-ip=74.125.82.179
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ybKS4G7a;
+	arc=none smtp.remote-ip=74.125.82.176
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5A4606A33F
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 03:03:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E5A4606A33F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51929606A881
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 03:04:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51929606A881
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pe90he5M
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-37000e7234bso2179809eec.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:03:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ybKS4G7a
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-3282db206d3so8650101eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:04:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794798235; x=1795403035; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794798239; x=1795403039; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SNeaXfTa9XrrJcc3jd4rJaGJBMOoRygkUVLasRGgUSw=;
-        b=pe90he5M91kANyHpOtEYXLVei3WC1v6hnxARz3LPWc+ngmX9flCf8dFGhzEps3ActE
-         ufnm/3kO5npj5GS90QK74eqTir8h+5vpLwfA+cYlWN5uLa5R0Szpu38UXMVtYEaQ+WdE
-         55gAdIgoEzNr/FrMY/Z9cyO57SveUqLkRJ0/3KowgS4NM3jZmMDfn99HjuvVldswJs9X
-         /osx5NMwRPT6o87+Ng33GMT36pbHNouP450qaHTrO0L+vAyCgeMbdvOT9KEYnBEf30pc
-         yi0Q6qGdGesBF1xABj+cp52ZrvUd4Z7cLNB9eb8TCfXgRXz/pfHPvYsFO8sG6ISfRG3E
-         0tjA==
+        bh=tilAlplfK1rw0akhzzldbfcTxnq5HziwNFLGGQNriOc=;
+        b=ybKS4G7akInIdfyuopW0i7MzNAHHhFJs0VsmC1NaI3dodJUHEUeD9GYw5jDoc+Y+2z
+         bKKvyev8t+msX/NArlcSHiHRiup94Bi1hrRxuyVIkSvo+7Wonh5p74vBPp+lXf4d7LQW
+         hShCDEQfRFUF1svOwlYaosXNmsH80bj5XZq6ahsAP6h588kapU+P0aR9tY7HIVpUTCgd
+         4Ul9sfPta+4Yh7qS8ywSa9NKPMo3dNcLMvI4+qhstc9eqPUKqHcdSINel9sK/jBjIoNG
+         yWebFEGEZjHkpDb1Yr7B+HqM6uMWF8u0qzt++bWztvlpSQHLd2gLXR69BpV+MgqIyrHI
+         6M2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794798235; x=1795403035;
+        d=1e100.net; s=20260707; t=1794798239; x=1795403039;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SNeaXfTa9XrrJcc3jd4rJaGJBMOoRygkUVLasRGgUSw=;
-        b=IakZqWWT7J1AgL9EuKJnBLq40oxq9wyzwqdMBQnFxxVF5bDoRHVpOUyV1aG0n92R0T
-         4twTZ9dAMQhmGc71hui9cDpS2vo8yyvpqT6hZFQYUCY0ca+G9f1d83mj2yD7fb56oxXM
-         Ne1m8pxvXUQFvAWUxEb+WjBxpi9+1v9QGVUYBxJnahfo/k17xHmvfDjtv/LCorvDjF2C
-         b3XnhALsaXr+a5u1+U4rMbC8vRR3QW2hXEhjszn7d1V80TeyEf4yixIOOS9QS6b9L3Ql
-         t+oDsh6sKKJHUfqSqkPN0/JNWKf/ekCFjN+JyMldOl63BjEs30iAHUx7DW5id29frj5T
-         YnFw==
-X-Forwarded-Encrypted: i=1; AL+hErEEQZAa4qK737YsliJD7GKOWcdN7po+dZYKRF/b9f2syWfyBgynnntjmaZiG4LQaQRgmy/2tzjkbhN1EB4YSRA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9WxowtMoCO2CKzslUsQCuKvQQw0dWCS6zaT5MgDIZpUwNAw/Iy
-	dtHH6Vvi5HeGwgHPN5e/JFKUtkywtexklKf7DGLeXesZQC2dwT+2YBW3
-X-Gm-Gg: AYBFou1vk218PSRL75krx/6qBICRXgH1F1/1+5kqtMbZnJi2FoRiXt3ROJhLy4zr5du
-	89MG/37QAsomr7lPXqIdAKxPZqs+ePORG16Yrh98LqdodauKz2mydwW82hxwtsKKox9KS9EteBe
-	MYvbC0bRo27cnWZix5a43b5zSR5UeJ+V/DY2GEnUioIaTxqZn9uFFqJ/YkbDvyLh5qD8d1o46v9
-	ZFzKcGkyPXlxZ8m9Qi6OoCJcRhDrvururzoMxm9RK/+w/cmACSsAkY6sIiXRU216kqRup5hqYo+
-	3l8kzsgtXRweP+SDQOFXPaxJnbWeHUuwKBUMh+zSGk9nPxkXEXkZxG68MJFmdmZEkhFdHnEzq8G
-	sLas+/8VpMaEiAJdCclMmgEmKmGOK4sVz/8h0taCga94ut0W4ow10iwqQP8Z45NP1gng+pdl2SY
-	3Obh3n8AC0oOCoZu9TvgIXGDVPyfzERo5+Qr96csJzwsh41qj+v8IZ0imSeFc1Dx/fqvQGsws3v
-	j6R7fXZ+CSP62Uf0XbgqIWfcDd9gCXNS60JLYBddobgwqfia7SlHGNJKPWzXIYbiEYhnYm1boNh
-	pTh1rh9nbkr24TvHET47Hrpoz7W/qDwOp0RboNNTM6jef2sBidz4sN5h7qS29QR/wBeTeX3MSH1
-	uKLzaiZWSQIM5ReeoX3EqKawEUzKN9JxOf5qOsmtJ
-X-Received: by 2002:a05:7301:db11:b0:369:fe4c:b48f with SMTP id 5a478bee46e88-3796047be6bmr8947853eec.0.1794798235185;
-        Sun, 15 Nov 2026 19:03:55 -0800 (PST)
+        bh=tilAlplfK1rw0akhzzldbfcTxnq5HziwNFLGGQNriOc=;
+        b=lTY55LjdIQRiOvXEB3CnfmaghJKIMiraDqcDZzEG50h0AaCbEK7KzcCKqf7x9ZrHQL
+         w5lQPuMTM8FlbDlOJK0pAyxunOrjCHZW/h+XKhTQf/8fDdOLi58EOrh5g+a6SHc6f3Yc
+         iZvr3Pzidii6rXFP5s6pdtSsudyoWNhTvDH0cxD1aiNv2Q5K4x475316jxtQpY+Dpb3d
+         XusX9kgHg4yIocZHUqCzBLH9DuJA7psFGHVe03Tvb+atWuPUG3/JxhdlF7vzyF/SXwxt
+         6Tpjqisr71XvIONjptwu0yh9ht05HecYobpmPJ7edBR8RqfxgeqNC9uwxxMIYWTbPAX3
+         DcGg==
+X-Forwarded-Encrypted: i=1; AL+hErFSxWRCZKg0AlEH3cnDqJYsQqt6WOtV87RVUv3ltiL84ye9O/jNv3AhcasQfZc/ac1WBOwLeYxRGXTDGKH0gII=@vger.kernel.org
+X-Gm-Message-State: APuU4Z99UF7/BPWL0oAiGwjwqkrKAapNtWQ76hmSko8JefJE9oU+d0ck
+	I0sayhO/ybhl62LMr70Kl21CSF43HpzRqHB37hEP7ELapMy8Z/dP2I2lN8rBlbUzX00=
+X-Gm-Gg: AYBFou14agddBwS0+XYgblK7QMmLiHEElQWSOvDuZo1VnmbZJu1QFpPxJcCv0+xj5I6
+	1KbVHYTKBFiRqvY0oYUMvuZiiKgqbHUvo4LQ9m6Az1texUYVdh1HjRVMz/0LS3/18/M/LJRVPCh
+	7975NqlfG7le3r29DM4RsT/UzihZ+UTxMdZsIoOLmlhnWhUNjaBp/Luifntv84nuelMLMMoCIBl
+	dh16F5y5eySa2haumBi/clBYwtA3+ed9NSxG10NR6p6IkIIMC5ovVMs54fQXd6nffTyXKJZJ8dN
+	n7d8uNIz5pHNd7RFoVdiMw5wH90o6qH9VnWN0R3dSe99w6ybgltMuZftWidEBVUdWUI8MKu/lhP
+	yb76O0v438VVINIBDgzAGkP5xFkIZn1buFzn/fAH2jPD1e0132WrRWYb24vLucfe6EXiD57hnQY
+	E2LEsR93M9JHs6ZgqIcW0U7Lpe5FIGU8K1zthmA7KYmsDmNaP5i8Ef7DQKfAg7tq4ZOdVi+MdW9
+	1Kf4gAT3WQ5d7CBb4JZGp6KUq4wcaeiQ/i1cgqbDgWEWuLmlVgvGtvtYiyzqxqW23LAdiq7Tn6a
+	18o2O5i1QxPyn6FkecctmKutI9uyuRL8rXIx2Vy9Y4+HOz3LzOb4+lQlFQDGZkGelMVO7QJfQ0u
+	37vh/KoB+wPN88v4EJMOVX+wxj9FUB/3PVVa755ksm2A2vJ6Nrz1yaT4mvveVYg==
+X-Received: by 2002:a05:7301:1284:b0:36a:1e0c:e28d with SMTP id 5a478bee46e88-3796395410dmr13036616eec.4.1794798239386;
+        Sun, 15 Nov 2026 19:03:59 -0800 (PST)
 Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379508762a5sm29195595eec.0.2026.11.15.19.03.52
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379508762a5sm29195595eec.0.2026.11.15.19.03.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 19:03:54 -0800 (PST)
+        Sun, 15 Nov 2026 19:03:58 -0800 (PST)
 From: HyeongJun An <sammiee5311@gmail.com>
 To: Takashi Iwai <tiwai@suse.com>
 Cc: Jaroslav Kysela <perex@perex.cz>,
@@ -89,9 +89,9 @@ Cc: Jaroslav Kysela <perex@perex.cz>,
 	linux-kernel@vger.kernel.org,
 	HyeongJun An <sammiee5311@gmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH 1/4] ALSA: seq: ump: Don't turn a zero key pressure into a Note Off
-Date: Mon, 16 Nov 2026 12:03:34 +0900
-Message-ID: <20261116030338.422671-2-sammiee5311@gmail.com>
+Subject: [PATCH 2/4] ALSA: seq: ump: Convert a zero-velocity Note On to Note Off for MIDI 2.0
+Date: Mon, 16 Nov 2026 12:03:35 +0900
+Message-ID: <20261116030338.422671-3-sammiee5311@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261116030338.422671-1-sammiee5311@gmail.com>
 References: <20261116030338.422671-1-sammiee5311@gmail.com>
@@ -106,36 +106,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The conversion of legacy events to UMP MIDI 1.0 uses
-note_ev_to_ump_midi1() for KEYPRESS events as well as for note events.
-The function turns any event with zero velocity into a Note Off. So a
-Polyphonic Key Pressure of 0 reaches a UMP MIDI 1.0 client as a Note Off
-and ends the note.
+When a UMP MIDI 1.0 client sends to a MIDI 2.0 client,
+cvt_ump_midi1_to_midi2() passes a Note On with zero velocity as a MIDI
+2.0 Note On with zero velocity. The MIDI 1.0 sender meant a Note Off,
+but the MIDI 2.0 receiver gets a Note On.
 
-Only a Note On with zero velocity means Note Off. To fix this, check the
-status, too.
-The conversion to MIDI 2.0 already sends a zero key pressure as it is.
+The other MIDI 1.0 to MIDI 2.0 conversions send a Note Off here:
+note_ev_to_ump_midi2() for legacy sequencer events, and
+cvt_legacy_cmd_to_ump() in the UMP core. Do the same.
 
 Fixes: e9e02819a98a ("ALSA: seq: Automatic conversion of UMP events")
 Cc: stable@vger.kernel.org
 Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
 ---
- sound/core/seq/seq_ump_convert.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/seq/seq_ump_convert.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/sound/core/seq/seq_ump_convert.c b/sound/core/seq/seq_ump_convert.c
-index 62bdef6dca58..c248d87f7a83 100644
+index c248d87f7a83..b35e3a50ec52 100644
 --- a/sound/core/seq/seq_ump_convert.c
 +++ b/sound/core/seq/seq_ump_convert.c
-@@ -630,7 +630,7 @@ static int note_ev_to_ump_midi1(const struct snd_seq_event *event,
- 				union snd_ump_midi1_msg *data,
- 				unsigned char status)
- {
--	if (!event->data.note.velocity)
-+	if (status == UMP_MSG_STATUS_NOTE_ON && !event->data.note.velocity)
- 		status = UMP_MSG_STATUS_NOTE_OFF;
- 	data->note.status = status;
- 	data->note.channel = event->data.note.channel & 0x0f;
+@@ -380,6 +380,10 @@ static int cvt_ump_midi1_to_midi2(struct snd_seq_client *dest,
+ 	switch (midi1->note.status) {
+ 	case UMP_MSG_STATUS_NOTE_ON:
+ 	case UMP_MSG_STATUS_NOTE_OFF:
++		/* MIDI 2.0 doesn't treat a note-on with 0 velocity as note-off */
++		if (midi1->note.status == UMP_MSG_STATUS_NOTE_ON &&
++		    !midi1->note.velocity)
++			midi2->note.status = UMP_MSG_STATUS_NOTE_OFF;
+ 		midi2->note.note = midi1->note.note;
+ 		midi2->note.velocity = upscale_7_to_16bit(midi1->note.velocity);
+ 		break;
 -- 
 2.43.0
 
