@@ -1,100 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794792794;
-	b=y4BnAVHC3pM33syUWSMnbTnjNIT1igNlrwrMducPDbfF3Cv6DwvDlceljd7p0hKiGy7F
-	 pXFLHbGO3d6lSYCFLOTjTcycBGUfITxOWzZU/te5TbsSiyNC/ZrwE7iOsh0hqgDrgETm+
-	 I51cpbXSBmMxpKsc7PGgvU3SnQctQv2wFLEZ5+DOalvCEiiLd7hPN2KrkyUKKFxVoZ4iR
-	 AxMYrfKwdDJBxW7qXC7vy4pSxJ+0sT85N54BwUQUOzwkHk/OECTrR1qwgLt35WUMk8k2s
-	 ICbVslQa/vQdHZLLWgR2weQtXLFG3zXSDnK/tYyuc0Z16CJJRK3JjF+u3Hr8yYlEq9Q==
+	t=1794796157;
+	b=KTA/ivTj0Lvud6Uw/Zdl6WINDh5OKeM0G006brJdX6QN0bvLLoqEjSnbIvHk1Mnwk0eJ
+	 E70uq3Md2tzyB2wuVZL8DCITUxCtGRzOB83j8PK6eY8stZ/IW2VZb+V/QUafDML8zFQ8Q
+	 vQ3QFqkzUI/gJGEwyqKQNpzFnEtMBGKcgJfWZT0HSnc6tFJjHCgci2TvxggzI+wOvSvKC
+	 eXyfOz/T971Tq8PW/tCTOF7fL+75g9ST/8y/rxYIHtWuEVsOJ5VQONue31QQKsRIaEVLS
+	 SsZYD+osJhw3/vQgSt+vlza8Z9o7NCXT+J+M2yWCLN9LR48kFI2CxOOg74j3REInfag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794792794;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=5vGs2lBzyp0j826O0Tb4RZa8XbuiPqa++er/2YoLBTM=;
-	b=3g+0wcweDT9YcTc2OLan2FeOWeSr6cj6sF4A9SAJ275fGYbtYSSF37t2giemXGvgnx5P
-	 hj59MtrMVM9Qfhbq+XWvwYtKqGamo3QV68ZEtziObdcgvZ28zqV9ow/pU3cgJWl24V1B2
-	 T2fp8c/eDuJsVli8hoGu+eXiBlGx6AeDmzuhq1I1GtKeedMzG4DZH/2KstZBEjyKFq8Sy
-	 OMOAUj1kBkVvCh8bTA6DyWOnW4ZXG9vkyS9W2vYX/iURravIwtbMSXxksVNU5+rJ5aIr0
-	 m8+5msXclfwNhIsvpsdFKkJG60bQwWi95u446E79uLykxKA2U41jyRlSDdHhApQm6dw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794796157;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=DUcD8vl8HJh/JpVsy72nyWgwRsLf5KHqOvznMCLHkbo=;
+	b=5YSjb8YXtx1LcDU47YfZRvxjKQMW7Ljxh/oioX2R9r5/XcJyCJ4P9LZcbI3ebdCgunvk
+	 +5pqPgdwS1Om309WOLzrC37FwleDf/CuQ4SvhdrU6TOmZ1LJF87z45dUoU9CqKUZnVyJd
+	 LCrzuXvc0Tim3BYBZ+3JqBRJIDfABAFzbsWB/Kz5Q4EJmwMe09kwInntfhQxSVydExGkb
+	 ZZy44oapuTCoAxGZOv8xayjjfL0LviC4eZ/rblMmDUQLzlX7T+EIeFmwo2F6dpEGbaxCD
+	 2ZmKwTztRYiDRYyb15gNfm5vFfC6jVf0mKvCIPzaEUNvRPerey+yWXmdvh2TjDmVtdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cw0HoDUf;
-	arc=none smtp.remote-ip=74.125.82.45
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CGQE70jY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186EC606A31C
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 01:33:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 186EC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C44606A32C;
+	Mon, 16 Nov 2026 02:29:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cw0HoDUf
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1a2761c69fbso3763793c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 17:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794792793; x=1795397593; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5vGs2lBzyp0j826O0Tb4RZa8XbuiPqa++er/2YoLBTM=;
-        b=cw0HoDUfoAqu2yoQ9RI82TKU+nd16dXnFK2QISB+XAAWbrvtn/fS9OJvxJ3dRLnvf9
-         uvv5dM5vbEaNIDEidyFoeP2ckF7EwgfHfNPlz7R9PDej8aL4kNq7iKxkCAkAno+cMKUA
-         pV+zjGnEwfvpXSATX6lVxnWGvXVuFVUitpJO5wCTLujHvKnfAasKo9JCa4hVuAYyg21I
-         7P1+fAP8t6Y1wPwfafIlpj6XBC4BJcqr3T1pfjbRcJjHS1qcewZQqBNCO+KNYhnrUni5
-         JE63uHdr+tBqRem8wrXS16P1bc+EvKBZYTF09JWzDAUtNVPvZNqjwv3AFre/7A6vX/Sa
-         Ntqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794792793; x=1795397593;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5vGs2lBzyp0j826O0Tb4RZa8XbuiPqa++er/2YoLBTM=;
-        b=GcDok5xwRFfGaWHU0NuEOzGRgDwxLZZA8cXTVnUjeJHQF9UVAse8dZRg209kXra8BI
-         uqaVKOA32WhaAMdTe3DPYZ+ImvwjdJZrDOADS5Z7oVX4i355RVzifQEod8XeaK5ze1Y8
-         fJYzWqQff7FqC5B38mrtAVpz+c+V/N04V24FHilwJqCtFDoNqg0bqttpwf2A7KZpeKXi
-         3moouDk3dB2roexKqqbMCrHeLHIz9VU1zxbv7keda3Q6Skz8++mA8vUAhURbzKD2sg3h
-         f4rGVzjwJ+Iti1FNjmk+nZl2Pf11XH0XkFKLGMZSGwwvlG427e9uNcGSh0g8ruCpUXMr
-         0ICw==
-X-Forwarded-Encrypted: i=1; AL+hErH1AQYHPsoMU7kD8f4bN2IXhIWYjNlIeBiqKwpow0rEaPjeQCYRVLEqdjnk6Cfvw6746m9FMDOeNiU6LuyzXrY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Sagy2IsT+2R2t8KZsDGND9LtRXcpE5SwSDcsgVFM5vx9w07cq
-	JXawjUB/PIssPoBxiEzUN6X8ntht5gfcSOLHxXIjMGuf+Ik0gHkbg4HH
-X-Gm-Gg: AYBFou0hxfM0h2a3VDgAHerxAF5HvwdOC34X8xg8hWzhEXHMeR9EpbKeko+2oNnF68V
-	Z3P9oMncjXr18KIFmKUaNLJlqMwEki1pOM7ai4TmwOMo3wVbUFlTBoJ6LliB4HVWho5RwrRSfB6
-	9jAvQA4o7gwFmCBA1Vl4fUPvzWrdD83kMY8n18kx0CSsq5ZMmj/CnaXGMXUUvP8uO/549OsRYQA
-	AQ6yK0+gKspP83akC2CRm5t7nXndzJZm/jUZajrNWTp1FMoyJlEQkCdIP+VPGWn5arQQjaLuhZz
-	jUz2zG+z4Mr6QhctomEpGrKAoyyXlpxhd1w7tgQHQE0r5uaXLPFGF/FkFn3TNq/97ZXSO+sSV/m
-	TRCXVmEIGtuddB3j4sLwPCl1BPW1Y4BQbRX6WZXtY7FkfPQ5gkFYhkQk7JDJ2Qrslb3Gvc5dI5s
-	jI6zrAokAgruYWaaJOpefn4NsBedqFM2KOQonUSLMc0EJ+bzTcToHELTWyZjlPEr3bH7HfH7Ytw
-	ut5ljh4Elk8z4o3PyAPo9+BZ2Qeq/xuGs5F3APSpQ72rZNtGTiuqDilADxzVTiC2U2KTL5mcQD7
-	HIHexb1nxqUkFU/7E4sGHcThvw==
-X-Received: by 2002:a05:7300:f694:b0:375:fb27:2c59 with SMTP id 5a478bee46e88-37966c4a50emr14872296eec.20.1794792793084;
-        Sun, 15 Nov 2026 17:33:13 -0800 (PST)
-Received: from houminxi ([61.170.225.237])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37956bad134sm35309648eec.27.2026.11.15.17.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 17:33:12 -0800 (PST)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v4 0/2] net: openvswitch: fix a feature leak on a failed change
-Date: Sun, 15 Nov 2026 20:32:59 -0500
-Message-ID: <20261116013259.205882-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <179477355840.3291.10898450599671542519@kernel.org>
-References: <179477355840.3291.10898450599671542519@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CGQE70jY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BDB1F000C4;
+	Mon, 16 Nov 2026 02:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794796157;
+	bh=DUcD8vl8HJh/JpVsy72nyWgwRsLf5KHqOvznMCLHkbo=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=CGQE70jYz8fjdE/cFvriX5z6/uWMvyUvJGtXnkbgM20npQlubgINYdOFrJ8OSlIDs
+	 U6ei5dv9Vpr1aNM8ii3IqkavHSC2jrxCDVUi/4b92zEbkre1WNL+SME2VaN6g/yrKb
+	 R3UjoUY1vifohs/cp6qQC2FLHZiORJMBXpU5KSHoOlprWvNtelU/4qfcywVg0U+Nlp
+	 rNOdA8awv/pFV6tuqwGeNFd8hioM887NP1THMMOK9vvqKggzAUA6yCcmi8EPff/UtN
+	 bxz1rcZ956SHecirQjt7U0L5L5QdkbJ4BguVA3EQq1sqstNGT63EZOuHXKza7uZHhF
+	 DF69im/CyjMzw==
+Subject: Re: [PATCH net v3] selftests: drv-net: pause: Avoid cleanup failures
+ for unsupported link settings
+From: netdev-bot+sashiko@kernel.org
+To: mohsin.bashr@gmail.com
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ maxime.chevallier@bootlin.com, linux-kselftest@vger.kernel.org,
+ hmohsin@meta.com
+Date: Mon, 16 Nov 2026 02:29:16 +0000
+Message-ID: <179479615614.3136.17810537023382462405@kernel.org>
+In-Reply-To: <20261113022717.1914724-1-mohsin.bashr@gmail.com>
+References: <20261113022717.1914724-1-mohsin.bashr@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,16 +64,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The bug turned up while I was writing the YNL spec for this family and
-had to say what ovs_dp_change() does. The function records the new
-features before the per-cpu-pids check can fail the request. A failed
-request then leaves the features claiming a bit whose reference count
-was never taken. Nothing triggered it in the field.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-The second patch shows it happening. A set with an empty per-cpu-pids
-fails with EINVAL, and on a kernel without the fix the datapath reports
-the features the rejected request asked for. I ran the openvswitch
-selftest suite both ways, failing on 7.2.13 and passing on 7.4.0-rc2
-with the fix, in a virtual machine rather than on hardware.
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
+
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The patch removes the unconditional restore of the pre-test
+  link state from pause_setup(), and pause_test_support() does not…
+
+--
+
+selftests: drv-net: pause: Avoid cleanup failures for unsupported link settings
+
+This patch changes pause.py so that link-setting restores are queued only
+after a link-setting request has succeeded. Devices that cannot change link
+settings therefore no longer fail during cleanup. If no link configuration
+change is accepted, pause_test_support() falls back to checking forced MAC
+pause on the current link, and pause_autoneg_link_autoneg() now queues its
+own autoneg-on restores.
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
+> index ca4a55e59c30f..c3398c7452e01 100755
+> --- a/tools/testing/selftests/drivers/net/hw/pause.py
+> +++ b/tools/testing/selftests/drivers/net/hw/pause.py
+> @@ -402,16 +402,13 @@ def pause_setup(cfg):
+>      if "auto-negotiation" not in link:
+>          raise KsftSkipEx(f"{cfg.ifname} doesn't report its link modes")
+>  
+> -    if link["auto-negotiation"]:
+> -        defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+> -    elif "speed" in link and "duplex" in link:
+> -        defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
+> -                   f"duplex {link['duplex'].lower()}")
+> -
+>      # Local interface admin up, link aneg on
+>      ip(f"link set {cfg.ifname} up")
+>      if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
+>          ethtool(f"-s {cfg.ifname} autoneg on")
+> +        if "speed" in link and "duplex" in link:
+> +            defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
+> +                       f"duplex {link['duplex'].lower()}")
+
+[ ... ]
+
+> @@ -470,9 +463,12 @@ def pause_test_support(cfg, pauseparams):
+>  
+>      forced = forced_link_settings(cfg)
+>      _, supported = get_local_pause_supported(cfg)
+> +    link_config_tested = False
+>  
+>      # We check that what we can configure in the pause params matches what we
+> -    # support under various contditions : Link aneg on/off, pause aneg on/off
+> +    # support under various conditions: link aneg on/off, and pause aneg
+> +    # on/off. If no link configuration change is supported, fall back to
+> +    # checking forced MAC pause on the current link.
+>      ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg on", is_get = False)
+>      if ret != 0:
+>          ksft_pr("link autoneg on refused, not tested")
+> @@ -481,18 +477,23 @@ def pause_test_support(cfg, pauseparams):
+>                                 "link autoneg on")
+>          expect_pauseparams_set(cfg, pauseparams, True, supported,
+>                                 "link autoneg on")
+> +        link_config_tested = True
+>  
+>      if not forced:
+>          ksft_pr("link speed unknown, the forced link is not tested")
+> -        return
+> -
+> -    ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
+> -    if ret != 0:
+> -        ksft_pr(f"link autoneg off {forced} refused, not tested")
+> -        return
+> -
+> -    expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
+> -    expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
+> +    else:
+> +        ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
+> +        if ret != 0:
+> +            ksft_pr(f"link autoneg off {forced} refused, not tested")
+> +        else:
+> +            if link_config_tested:
+> +                defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+
+[Severity: Medium]
+Could this leave the local interface autonegotiating when it started with
+a forced link?
+
+pause_setup() now queues a restore only when it enables autoneg itself,
+which happens when supports-auto-negotiation is true and auto-negotiation
+is false. If the port starts forced and reports
+supports-auto-negotiation: false, pause_setup() queues nothing.
+
+pause_test_support() then sends:
+
+    ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg on", is_get = False)
+
+If that succeeds, no restore is queued for it. The ethtool netlink core
+does not check the Autoneg supported bit. In net/ethtool/linkmodes.c,
+ethnl_update_linkmodes() only does:
+
+    ethnl_update_u8(&lsettings->autoneg, tb[ETHTOOL_A_LINKMODES_AUTONEG], mod);
+
+The change is then passed to ->set_link_ksettings(), so the driver alone
+decides whether to accept it.
+
+If the driver accepts it and the later autoneg off {forced} request also
+succeeds, the only restore queued is the hardcoded autoneg on above.
+Cleanup then leaves the link in autoneg mode.
+
+Before this patch, pause_setup() queued "autoneg off speed X duplex Y"
+first. That restore ran last and put back the original forced settings.
+
+The commit message says:
+
+  Fix this by queuing link-setting restores only after a link-setting
+  request has succeeded.
+
+The first autoneg on request in pause_test_support() can succeed and
+change the link, but no restore is queued for it. This only happens with a
+driver that accepts enabling autoneg without advertising Autoneg support.
+
+Should pause_test_support() restore the link state it saw before the test
+instead of a fixed autoneg on?
+
+> +            expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
+> +            expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
+> +            link_config_tested = True
+> +
+> +    if not link_config_tested:
+> +        expect_pauseparams_set(cfg, pauseparams, False, supported, "current link")
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261113022717.1914724-1-mohsin.bashr%40gmail.com
