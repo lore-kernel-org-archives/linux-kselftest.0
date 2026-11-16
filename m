@@ -1,54 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794825300;
-	b=D5+eUvUUbyZgjOd8mnNtxFi4KMSf4znwZfgXJonjoSlh7maMF4M/jQ0YXnXXhWxpUYdx
-	 AWCN9KousJ4FRiHoRWwJhcIyD8DgLlX85qOAo5UmH9t4Oej7q6s6t/FP0UZe9MGL/zWgq
-	 +3jNMj/xWKXzQD2u9LjX64GarB7NWEZ1CgXy5aLTnVO981SASkInZ7CoB3E0RA2Id07iW
-	 6OJdPE9I5G52u8QXhynDgP8JUY5RPPKW8gLOJvIbWCH4k4oveX+Qn5e89t9Z0sISg1WSD
-	 EY8QzGK5Z4Zc6gr89i3Rzq5o2NXqIoFtDh2NMaMrnDtPvzSpm8E/+W2LlIHplfct8gA==
+	t=1794825445;
+	b=rmIlwPQvNxHwDJ8a844S6lroT4sj77Dx3Hpx2emeYK3fLsfhIG/0UkvgRCd/tcCo1/4M
+	 8LInlUH2RBWniBDSKNck3KizY/w1vQGC5oVvdanNjyR6HftbcM3VO+XjVg5NYEBrXsQdU
+	 CI83yKJgvwZvtFVjZaJeskqsxmRsHCeQpSGDJxzDkw1zmORaoNLFWFQcGFkU3o/K4n/jZ
+	 2KH6ala0XGM3IfNbqMCS280opTiygLLvZ9wpVycpHddSnACy+ipmpgLTHToEb2q+aUNAw
+	 e7n7D92PYXZRGCIhjwuWywHgBP91OGuFAeELt52sV4orahxpaVPvaGt/wZJX7am6HTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794825300;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=yikXnRJLxnLtVC9Ln+DjCqllVeUBUbcwr+u9b9IybI0=;
-	b=Cr8VREuBYMJ09opxIyliGV2smZk5XUMnUU2TeavoiZ3xwY8J9HzKhkeL08XIIeuj3FBT
-	 V3Ym7XxvS2pv47Z89NqF0521OCIUsaSXfHXgNVCpiFBjSC6xq1HsWpDH6ylv+V0Q6s/6z
-	 gU+lYajkCY0hqxLRDQArElgi9fV75WzIqws3nPIu5FB6/tIQtSbRQIwQmqQRECa/O6kiK
-	 iAlK4XzNnuvyFxh8+4dlKa8wVWZMXenmN36L4tiMm8mm3Pwt+1B1AWqqWcPM9XziuKkl7
-	 b9uchKwwskd1xILhZ20m57PCobHnhXCqcDFN9Qhv0aV6cPdz9Obgh/kz7I3FdVMtY7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794825445;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Scanned-By;
+	bh=0Gu+Ukkm9LaTMjLC6EylFPESV3dPO3uZmybp5fKqeAw=;
+	b=a6GtfPtITBkd3zo7SL4zWDEYoqUedmYqlI5CXquydBZor70b5ShmecQDCEZXLwD/O5Kp
+	 mGDYXd+9R6ZZGR3bF3k6C5fbRCUNP0vJZkF7CR/ZTraGwZMNtOsf+cbnCCOB8pfaxql5m
+	 kXlD4TSugp/57UkCpPVARjzSDKqO+pCp+sgt8GHClpk5MQUg+fkSjPV7qyGCCpElCXPuy
+	 IfpeXOnePP2hXjNEm9In4D5Bczq+Vz17hhyIPYmtp/5fZJWbOo/fcCak54q5CDf8BhRd7
+	 rnDNsc7AlfGrgjhoB1VHUsS1adDWTBCXkcR8HnUENOUZpZJp6Q01CibkX7Cbd472W5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="n/BhCQ/g";
-	arc=none smtp.remote-ip=95.215.58.175
-Received: from mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=U+nQHod4;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B1E606A332
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 10:34:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51B1E606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC0C606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 10:37:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEC0C606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=n/BhCQ/g
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DiiFUk/4tUTLvbNzUGI2/8Tf6ZVtfi2gRA7MyWTek2I=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794825297; v=1; x=1795430097;
- b=n/BhCQ/gqUAjCwWAmbZ7GXBn6RbR1/EScd9hLcXvfNFXFiFCDRX5rIALbhjs0+PqL7Fa49jo
- jsJW8TiJhVFatNkP+bx4g2i26nwZvsOxeg74gRyaP5nynntCJMKfy8TtKSclNodHBXv5T2fVsUW
- owLwFKwCIPdQAEpuE3/pwihM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 45cbc879b98febbf;
-	Mon, 16 Nov 2026 10:34:57 +0000
-X-Mizu-Trace-ID: 45cbc879b98febbf
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <e330c9bd-c454-4bdd-b786-052dd2e263d9@linux.dev>
-Date: Mon, 16 Nov 2026 18:34:53 +0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=U+nQHod4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794825444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0Gu+Ukkm9LaTMjLC6EylFPESV3dPO3uZmybp5fKqeAw=;
+	b=U+nQHod4kqUODw+4PVzhx3QejM4ClHMmoSN3y0o1GmaGRRKR/5S0hC7PkT8Hs6281Dohda
+	2lR16ZIT5LASuGk/8zVTFEP4XN/9PjYmPYGGFtNU5pYl/1R8hajICzqBU92IC2qZtdgmDz
+	j0oojfRANUOS2xrhseIhfT603FpK7Bs=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-88-xrhj7BO1MY-zWGsEGWyiSQ-1; Mon,
+ 16 Nov 2026 05:37:18 -0500
+X-MC-Unique: xrhj7BO1MY-zWGsEGWyiSQ-1
+X-Mimecast-MFC-AGG-ID: xrhj7BO1MY-zWGsEGWyiSQ_1794825437
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ADFCD180044D;
+	Mon, 16 Nov 2026 10:37:16 +0000 (UTC)
+Received: from thuth-p1g4.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 573A41956088;
+	Mon, 16 Nov 2026 10:37:12 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/powerpc: Fix set-but-not-used errors with GCC v16.2
+Date: Mon, 16 Nov 2026 11:37:10 +0100
+Message-ID: <20261116103710.674746-1-thuth@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,147 +82,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v4 6/6] cgroup/cpuset: Fix lockdep_is_cpuset_held()
-To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261116012330.2271010-1-longman@redhat.com>
- <20261116012330.2271010-7-longman@redhat.com>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <20261116012330.2271010-7-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
+When compiling the powerpc selftests with GCC v16.2, the compilation
+fails with:
 
+ ../pmu/lib.c: In function ‘eat_cpu_child’:
+ ../pmu/lib.c:86:22: error: variable ‘i’ set but not used [-Werror=unused-but-set-variable=]
+    86 |         volatile int i = 0;
+       |                      ^
 
-在 2026/11/16 09:23, Waiman Long 写道:
-> Commit a84097e625f2 ("cgroup/cpuset: Call housekeeping_update()
-> without holding cpus_read_lock") changes lockdep_is_cpuset_held()
-> to return true if either cpuset_mutex or cpuset_top_mutex is held.
-> lockdep_is_cpuset_held() is used by housekeeping_dereference_check()
-> as one of the conditions that rcu_read_lock() is not needed to
-> access HK_TYPE_DOMAIN cpumask that can be changed at run time.
-> In reality, it should return true only if cpuset_top_mutex is held as
-> housekeeping_update() is called with only cpuset_top_mutex held.
-> 
-> If only cpuset_mutex is held, it is possible that there can be a parallel
-> housekeeping_update() call leading to a potential use-after-free situation
-> when HK_TYPE_DOMAIN housekeeping cpumask is being accessed. It also
-> means that rcu_read_lock will be required if only cpuset_mutex is being
-> held like when calling from hotplug, scheduler or cgroup.
-> 
-> Fixes: a84097e625f2 ("cgroup/cpuset: Call housekeeping_update() without holding cpus_read_lock")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/cgroup/cpuset-v1.c | 16 ++++++++++------
->  kernel/cgroup/cpuset.c    |  9 +++++++--
->  2 files changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
-> index 7c7f2887dfaf..6bf6da639fec 100644
-> --- a/kernel/cgroup/cpuset-v1.c
-> +++ b/kernel/cgroup/cpuset-v1.c
-> @@ -686,6 +686,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
->  	int csn;		/* how many cpuset ptrs in csa so far */
->  	int i, j;		/* indices for partition finding loops */
->  	cpumask_var_t *doms;	/* resulting partition; i.e. sched domains */
-> +	cpumask_var_t hk_cpus;	/* HK_TYPE_DOMAIN housekeeping CPUs */
->  	struct sched_domain_attr *dattr;  /* attributes for custom domains */
->  	int ndoms = 0;		/* number of sched domains in result */
->  	int nslot;		/* next empty doms[] struct cpumask slot */
-> @@ -698,6 +699,11 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
->  	dattr = NULL;
->  	csa = NULL;
->  
-> +	alloc_cpumask_var(&hk_cpus, GFP_KERNEL);
-> +	scoped_guard(rcu) {
-> +		cpumask_copy(hk_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN));
-> +	}
-> +
+and:
 
-Can alloc_cpumask_var() fail? Should we add the following check?
+ ebb.c: In function ‘ebb_child’:
+ ebb.c:352:18: error: variable ‘val’ set but not used [-Werror=unused-but-set-variable=]
+   352 |         uint64_t val;
+       |                  ^~~
+ cc1: all warnings being treated as errors
 
-	if (!alloc_cpumask_var(&hk_cpus, GFP_KERNEL))
-		goto done;
+Add some "asm volatile" statements here to make to mark the variables
+as used and to avoid that the compiler might optimize the code away.
 
-Thanks,
-Guopeng
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ tools/testing/selftests/powerpc/pmu/ebb/ebb.c | 1 +
+ tools/testing/selftests/powerpc/pmu/lib.c     | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
->  	/* Special case for the 99% of systems with one, full, sched domain */
->  	if (is_sched_load_balance(&top_cpuset)) {
->  		ndoms = 1;
-> @@ -710,9 +716,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
->  			*dattr = SD_ATTR_INIT;
->  			update_domain_attr_tree(dattr, &top_cpuset);
->  		}
-> -		cpumask_and(doms[0], top_cpuset.effective_cpus,
-> -			    housekeeping_cpumask(HK_TYPE_DOMAIN));
-> -
-> +		cpumask_and(doms[0], top_cpuset.effective_cpus, hk_cpus);
->  		goto done;
->  	}
->  
-> @@ -736,8 +740,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
->  		 */
->  		if (!cpumask_empty(cp->cpus_allowed) &&
->  		    !(is_sched_load_balance(cp) &&
-> -		      cpumask_intersects(cp->cpus_allowed,
-> -					 housekeeping_cpumask(HK_TYPE_DOMAIN))))
-> +		      cpumask_intersects(cp->cpus_allowed, hk_cpus)))
->  			continue;
->  
->  		if (is_sched_load_balance(cp) &&
-> @@ -794,7 +797,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
->  						*(dattr + nslot) = SD_ATTR_INIT;
->  				}
->  				cpumask_or(dp, dp, csa[j]->effective_cpus);
-> -				cpumask_and(dp, dp, housekeeping_cpumask(HK_TYPE_DOMAIN));
-> +				cpumask_and(dp, dp, hk_cpus);
->  				if (dattr)
->  					update_domain_attr_tree(dattr + nslot, csa[j]);
->  			}
-> @@ -806,6 +809,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
->  
->  done:
->  	kfree(csa);
-> +	free_cpumask_var(hk_cpus);
->  
->  	/*
->  	 * Fallback to the default domain if kmalloc() failed.
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 64cbcbdbf6da..d18439e13bce 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -343,10 +343,13 @@ void cpuset_full_unlock(void)
->  }
->  
->  #ifdef CONFIG_LOCKDEP
-> +/*
-> + * Holding cpuset_top_mutex will guarantee that a parallel
-> + * housekeeping_update() call modifying housekeeping cpumasks is not possible.
-> + */
->  bool lockdep_is_cpuset_held(void)
->  {
-> -	return lockdep_is_held(&cpuset_mutex) ||
-> -	       lockdep_is_held(&cpuset_top_mutex);
-> +	return lockdep_is_held(&cpuset_top_mutex);
->  }
->  #endif
->  
-> @@ -1416,8 +1419,10 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
->  		}
->  	}
->  
-> +	rcu_read_lock();
->  	cpumask_and(full_hk_cpus, housekeeping_cpumask(HK_TYPE_KERNEL_NOISE),
->  		    housekeeping_cpumask(HK_TYPE_DOMAIN));
-> +	rcu_read_unlock();
->  	cpumask_andnot(full_hk_cpus, full_hk_cpus, isolated_cpus);
->  	cpumask_and(full_hk_cpus, full_hk_cpus, cpu_active_mask);
->  	res = !cpumask_weight_andnot(full_hk_cpus, new_cpus);
+diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
+index 21537d6eb6b7d..f4ef92bacd9ab 100644
+--- a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
++++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
+@@ -391,6 +391,7 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
+ 		val  = mfspr(SPRN_MMCRA);
+ 		val |= mfspr(SPRN_MMCR2);
+ 		val |= mfspr(SPRN_MMCR0);
++		asm volatile("" :: "r"(val) : "memory");
+ 	}
+ 
+ 	ebb_global_disable();
+diff --git a/tools/testing/selftests/powerpc/pmu/lib.c b/tools/testing/selftests/powerpc/pmu/lib.c
+index 3213579874084..32cafd40d2c56 100644
+--- a/tools/testing/selftests/powerpc/pmu/lib.c
++++ b/tools/testing/selftests/powerpc/pmu/lib.c
+@@ -95,7 +95,10 @@ static int eat_cpu_child(union pipe read_pipe, union pipe write_pipe)
+ 	wait_for_parent(read_pipe);
+ 
+ 	/* Soak up cpu forever */
+-	while (1) i++;
++	while (1) {
++		i++;
++		asm volatile("" :: "r"(i) : "memory");
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.56.0
 
