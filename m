@@ -1,75 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794848174;
-	b=PnWz1Q3eVeZeoR5OchHxYEO66Bg51PDP30gaH8W8giDU7hgEjkRVEmgUPU8XqydlCEcx
-	 g5UzKQeqkOqSS0ezFnDrj3hGc6txG/f6wvm5llYFxTndAA5/evtpn+G4ficj+26MZLibQ
-	 BqvUK3zjoJ8LwQdmRXtXzrxdC+7idv3+2VYA3DjEabPYM6NlDtself68xCdoEWjZUCco1
-	 FqY3Tbsf7v+b2fEBZmVdz+Ktpc7cXkYVcMXwAtYeXRYCT9RKb4vukE3yThkZqEWBauLWW
-	 QCmJ4L2M4WBo9dNDXzAUTOZefYEjnSFOEf3HFnxv3DCphmnVaCOi7RFxtHkFD6DWI4w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794848174;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=RDsIwsWu1KfQS3Aqtw59xAzqiLwWxmSzDSkW35hSn/U=;
-	b=Y0JilnxO2daCs+SAlGGxYE9Ee0G0Yr9ZGNM0UIQZ4aUHdKnhVlXfNMP9GknBnMlsxai1
-	 xIdLxwd08oXOVT3AJStWbKzeE+RXpIV30OXA7maXoJ6TFApWCTietokCboGE20w0O3fm7
-	 25LfDEyl+/WhlAMkXKWqu6SWO3Ts1G4QSBNPr8K7nVI6pyewTxXRguZBgFL2TEMW3Z8sA
-	 av0ScBZZAFbzvv4AwVnx0ktPikjt2pwpNRC78BJnYYRZEeVpeQRv0Jz6SpK2BlTKBICg8
-	 wl24zob4R9JXn86yxRlq8jGzgZ616KCqBAr/p6sniO9MbA+isuTeDTnsEasnyqxMlGw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=X671Sey6;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=e1DFnPa7;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794848240;
+	b=4wJeadasReCmfyYNuVHmSeh02EpsZNmisFdCD3TIjknUTjlgQllnwN48NPLhvrtKRMQy
+	 R2Rdu0AHVM9Y5vpgBiOO2AkLzv2veyH1cB7P+XOcMoeu2+LElLOzCy/QQoHEZUHAce8uX
+	 h9lXt8PnHM9v7Z3OwJl9JeYcHvG0elBo9CTVVMv3xNVtQ8TvqYSfWIvKEH15oIsTvdKdS
+	 Jg2LhurEEYQEdJioA8f57MkPO6KBQD/h7meKMFHQ4e2uuJQki9bKGxFoXHBhaB54UBMVG
+	 ONpITlm0s6jvvGST5rxxG7BijUkUctYmmcPuEdbmMF0aLc6Tn4Eak1AZUA1B3qDlk5A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794848240;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=3G9PFoMgFrJiZLyd5rGhgJGT9wBQ+IPLOJUmtbLVECg=;
+	b=xWx6husBP9zlgaEe1lNLYHDTNKlCAjLolN8IGq1WMfQRhpioObdl17eSY1sUTfGy+T+W
+	 6ysJvCc2CxjjvJK2/AkpS6+kAQQTC3CjnjEONzjfTuxyfGTiDheKlpAU68yvr+F5xwHKc
+	 pxC2vvMyXkF4OQd5moMX2zdJ3UbmyaeoaBPj4K0eL3mQ48wR5JR4hKdhW0w151s8Ilf18
+	 xPw6/xyDWkh0t5CdtiUtvPrCloiD103U25VfQZC0ceGS9RFRZVi+J3DV4ubJ+6tW7tzOZ
+	 PlQEyc0WGLwJaWSEvxpQwmTNRhK0E1U+j/weYwiTa7EAAKm9K/9153DVVIYp0PbtE/A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=b5BpkmLu;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA805606A33E;
-	Mon, 16 Nov 2026 16:56:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA805606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F0E606A336;
+	Mon, 16 Nov 2026 16:57:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70F0E606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=X671Sey6;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=e1DFnPa7
-Date: Mon, 16 Nov 2026 17:56:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1794848170;
+	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=b5BpkmLu
+Received: from ptx.office.stw.pengutronix.de (ptx.office.stw.4.pengutronix.de [10.9.0.3])
+	(Authenticated sender: relay-from-ptx.office.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 62D65201F22;
+	Mon, 16 Nov 2026 17:57:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1794848233;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RDsIwsWu1KfQS3Aqtw59xAzqiLwWxmSzDSkW35hSn/U=;
-	b=X671Sey6zOnA4g/Gc3LkOkWUY5RmzW1FV6Vp94tpgKxE81m3B7vjOcb6xeWO2gOzVuiM59
-	IRFp5B1mblt52QtidkWxOPXJUlBfnQ/rDO1d9BXcBvB1f6zaO5j0LfHGjIua7dtmOEC+fa
-	neVgQS5+otpe5uI5mrtcKlVbw5DSEbV9KXE40zLgv48IXVwcSNlCgb6KwpemsrVzi9JhrL
-	d07FX3hgqnm5CMF9OYGDGza5/6oFlOx8CE5+ZTbgdU7yID3LDaV+9YsVpxmFVB9jkOqxJY
-	IqPUQYVrZF6c63VzXOGFeKDPG67J/hyrpVZ2gj7cipxwGKjfu+9bWrVt7N6lgw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1794848170;
+	bh=3G9PFoMgFrJiZLyd5rGhgJGT9wBQ+IPLOJUmtbLVECg=;
+	b=b5BpkmLuUrEthbPej0hubZ31fkMXa+NzVpB3EAOlXPjbVZFxGEy6Ays3w47tY1fVyXLpte
+	7xPud8AzwE6o3SZM2wc1Us5GG91iEZbnLrFM3L+tI7J3fOSAuEndOTTu5ApBYMvM7m1H8f
+	dpPGfVxGudSq2Ten95dUjlcO7nuI+jR1tjluE/85cisR8pNSqpfheQncEx+YXri0jXC8Cy
+	LRvE+wee/RClNC0VTPv+1tiiOiFii3C8XB7h9zIenshPa0gAGvDKMbfDDiAewk6dv78ajE
+	gD6f/6DLN0xjMl7GL7pZaonf1+c4RzbHUZqxehijb0vGRZc7o+Hh66L0YzR8pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1794848233;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RDsIwsWu1KfQS3Aqtw59xAzqiLwWxmSzDSkW35hSn/U=;
-	b=e1DFnPa7JHJPmVtStbW0ulMaQP6TI4B9OVTYKVGf+WNc5CrKG4/2wIDCCiE0jqn3cpIQF3
-	t8hYYoMxdAHHpmDg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
-	linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
-	longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
-	dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
-	shuah@kernel.org, juri.lelli@redhat.com,
-	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] selftests/futex: Test priority inheritance on PI
- futexes
-Message-ID: <20261116165609.RMK-DX1Z@linutronix.de>
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
- <20261108141347.1525532-5-mathieu.desnoyers@efficios.com>
+	bh=3G9PFoMgFrJiZLyd5rGhgJGT9wBQ+IPLOJUmtbLVECg=;
+	b=aYOUz7YnVTbeDAj78HzZxfY6xT2g8bQKXlXhzV32ANx1di3qzSHrR4mbK1kVzutCBpsmsc
+	wxbb0pdA83TtTcXxmRwjfTK9Gok99ju2AZMdvmkwiMdDg8gsPJmbLNYd5KRVytHXBum0rg
+	/ZpxjSWZ9iYvljdKfFZWorRgup658KRX5amYpKrqWG5VFr1Wih6X1sLckobsSuAbizPc8O
+	woG7mLk4uhwZFzgxsgaUlQ4RZATIZWH+5WFlJ731r3+xgKuJs1byh1Wr5G4gLdArtLdVaq
+	pc3DrtToVaBd9el6cO8leH0oPVIFcDinLGuIgecvjthtJSqltnStwFCuL4xbag==
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1794848233; a=rsa-sha256;
+	cv=none;
+	b=dv2QVczAhUb4cHl4xHxXydSwU34+NSoZno7Drn+vsbnh6ItjTExc1T6EVXvMP3721Xdrga
+	DUwf9mvPfUCMbWW/sTtoQggJvUA0qbRp1gYvK9BhEbIJFi5DB7aNDdEvBHJE0zg4jVAjXi
+	Ubl1v54noyC7UunQGsROK4zYsW/n/+WiWIERh40PXCwTo1g4eZFgA9/bTJXxeRs+zcMOGD
+	qQKFmeYi4sltIZrJcH6AEf/g64kDLOAroz5SyZJ8r9z+EAKTwYn7vdR8vK2pnAX0Wgt5/1
+	wqA4saG9cPqh+2CbmrKy2uF5ciaB7/kD24Kt5EyU7RA7APloLVvglQNxYwgyRA==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=relay-from-ptx.office.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
+Received: by ptx.office.stw.pengutronix.de (Postfix, from userid 1058)
+	id 4FF2B1BFA16; Mon, 16 Nov 2026 17:57:13 +0100 (CET)
+Date: Mon, 16 Nov 2026 17:57:13 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: netdev-bot+sashiko@kernel.org
+Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
+	shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
+	quchaosheng000406@163.com, penguin-kernel@i-love.sakura.ne.jp,
+	kuba@kernel.org
+Subject: Re: [PATCH can-next v3 7/9] selftests: can: add J1939 TP/ETP
+ multi-frame tests against CAN_RAW
+Message-ID: <avs16RSSFsaLvU_5@pengutronix.de>
+References: <20261111-j1939-selftests-v3-7-5a80277ab363@pengutronix.de>
+ <179454972353.488853.9453703448480835098@kernel.org>
+ <avbIRi9NIgi6dcEB@pengutronix.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,98 +99,27 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20261108141347.1525532-5-mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <avbIRi9NIgi6dcEB@pengutronix.de>
 
-On 2026-11-08 09:13:46 [-0500], Mathieu Desnoyers wrote:
-> The PI futex selftests check what FUTEX_LOCK_PI returns. In these tests,
-> the owner always sleeps. No test checks the priority an owner runs at.
-> No test waits behind an owner that keeps running.
-=E2=80=A6
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+On Fri, Nov 13, 2026 at 09:20:22AM +0100, Oleksij Rempel wrote:
+> On Fri, Nov 13, 2026 at 06:02:03AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 1 potential
+> > issue(s) to consider.
+> >
+> > Critical: 0 · High: 0 · Medium: 1 · Low: 0
+> >
+> > If you believe none of the issues are legitimate, please reply to each
+> > issue of Medium severity or higher and explain why the AI is wrong.
+> > If any of them are legitimate and you plan to respin, please let patchwork
+> > know by including "pw-bot: cr" as a separate line at the end of your reply
+> > (one such reply per series is enough).
+> >
+> > - [Medium] The patch adds four TP/ETP tests (tp_rx_from_raw,
+> >   tp_tx_to_raw, etp_rx_from_raw, etp_tx_to_raw) that the author says can…
+>
+> pr-bot: cr
 
-I did play with this and looks it catches the errors you reported/ fixed
-earlier in this series.
+Typo in the tag above. Correct one:
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-
-> --- /dev/null
-> +++ b/tools/testing/selftests/futex/functional/futex_lock_pi_inherit.c
-> @@ -0,0 +1,773 @@
-=E2=80=A6
-> +static pid_t sys_gettid(void)
-> +{
-> +	return syscall(SYS_gettid);
-> +}
-
-glibc-2.42+ has pthread_gettid_np(pthread_self()) but this is fine.
-Debian Trixie has just 2.41 which is a bit sad.
-
-> +static uint64_t now_ns(void)
-> +{
-> +	struct timespec ts;
-> +
-> +	clock_gettime(CLOCK_MONOTONIC, &ts);
-> +	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
-> +}
-> +
-> +/* An absolute CLOCK_REALTIME timeout @ns from now, for FUTEX_LOCK_PI. */
-> +static struct timespec abs_timeout(uint64_t ns)
-> +{
-> +	struct timespec ts;
-> +
-> +	clock_gettime(CLOCK_REALTIME, &ts);
-> +	ts.tv_sec +=3D ns / NSEC_PER_SEC;
-> +	ts.tv_nsec +=3D ns % NSEC_PER_SEC;
-> +	if (ts.tv_nsec >=3D (long)NSEC_PER_SEC) {
-> +		ts.tv_nsec -=3D NSEC_PER_SEC;
-> +		ts.tv_sec++;
-> +	}
-
-This breaks if your timeout is something like 1.5s and ts.nsec is
-already > 0.5s. We usually do
-|         while (ts->tv_nsec >=3D NSEC_PER_SEC) {
-|                 ts->tv_nsec -=3D NSEC_PER_SEC;
-|                 ts->tv_sec++;
-|         }
-
-and in worst case gcc does a div. But other than that=E2=80=A6
-
-> +	return ts;
-> +}
-=E2=80=A6
-> +/*
-> + * Start @t and wait until it sleeps where it blocks. Return false if it
-> + * could not be created, if it failed, or if it did not block within 2s.
-> + * Unless it could not be created, the caller must still join it.
-> + */
-
-Could rename it to start_pi_thread() or pi_start_thread() rather than
-just start?
-
-> +static bool start(struct pi_thread *t)
-> +{
-> +	uint64_t end =3D now_ns() + 2 * NSEC_PER_SEC;
-> +	pthread_attr_t attr;
-> +	char state =3D 0;
-> +	int err;
-> +
-> +	pthread_attr_init(&attr);
-> +	pthread_attr_setstacksize(&attr, 64 * 1024);
-
-it makes me wonder what you did use as a template for this or who wrote
-this. I can't imagine why one would set a stack size 64KiB here.  It
-shouldn't matter.
-
-> +	err =3D pthread_create(&t->thread, &attr, pi_thread_fn, t);
-> +	pthread_attr_destroy(&attr);
-> +	if (err) {
-> +		t->thread =3D pthread_self();
-> +		t->err =3D err;
-> +		atomic_store(&t->done, 1);
-> +		ksft_print_msg("pthread_create: %s\n", strerror(err));
-> +		return false;
-> +	}
-=E2=80=A6
-
-Sebastian
+pw-bot: cr
