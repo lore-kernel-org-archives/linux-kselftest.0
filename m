@@ -1,59 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794871036;
-	b=q8tLCo5Y+hDK9P11urBy0IWUcs4wOO8dVYERj3nLOUeZt0RAqsxH5LRH2CHkZ5P8b/Br
-	 uA0W+iAud/Gz0h3Ot0iaIJnt0p9KaoArGrJj/GYtuImfIRlNzsX0kg4VvGGksZdKT7PZ5
-	 DQTc2Z5oXR16+DZT/Exg+tY6Ec4IGd3BGtBIRTOhD6yBS5FCTj5ZsvOQa+I0+J1k8BCQC
-	 /RC89nKaGFX7yTkr+ttNmTBv8J8MDf2StSQry/shtMhHteHow9679mepPKTFZ6d27o05b
-	 kPI6B44PPYmaFvsDYsTOFI/Ttw0TZF/GcQliyskFyb3+AnkoeOWTyHCzryL6SvKWxGA==
+	t=1794871208;
+	b=joEBiayUvYyqtam3dNnc3tZjxJldMEhDO2MTscWhikUghyPmLwJjmj2VlrWm1doh2yYZ
+	 bWpwsIunJzGzK1r7pLi2MdMrz2NGbF6NpKy6kY/e0X3GUvqNpr87V/q6gDg1YUjYpIqpj
+	 9X4b5/fiI3UP/iehyqFOFaG5CgB+83nf5ZyIfcZZbsVLueHZ0yOUb14xFt9zOr/LvtCQd
+	 IGwsPRl/iY/ugGbV7gqCMFzvY/qRjRFoOuPRYiTtTCJUr72rEkm6jkaov7ttTgGh03nly
+	 y8WgyP5I9NsO5i5B+HzpVvE04/tfPKdAupZE22ICkIYHPOGcGsR81YJv+LRbmy/BidA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794871036;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=lBMZHfw7i4eJx0zD4VQ6/+RNNcDSsfzhNT1NDQ8/k0U=;
-	b=XfAlAmJkpbGMqNThMMsUE3r3OWTjhQzdzdkOEV5afSvwoWSi7bqJGmpX6U7OZfKnd8K9
-	 Vowr4c9jtgGoxf+I/6dT6SAN1KuuFeScg0+W0tNUSbGNP7QFO1XE7AzLxCh/CxDRmUL24
-	 t0FeI/0vUmt/FhIx5jNuDaFtHB5TPdhyGS0uRr8NTtSjRBkN00//6kluw2Vw23YBNLx7E
-	 890FbrOxKyxjDk0wcq1A09GfEIXHpg1SKTJUxRiovUHeJRlDDUILn2C1ZC/iF5TwGwwpd
-	 +/Q9/M3e/qtBw7W7HtGdo+KYdDyxDYc9WSso3H+TEXWNLZZ8JilVH6PwTP9JtnSW17A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794871208;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=ximLAqazxBiE8DrwvOz+FL6zia8QGdRwgF0Cmhi1Ymo=;
+	b=l/i/T7iivNCSqCZCcvWIsM6IZS0eDz5h1j370oWsTs05tXzU6dkfT39fantZr+guplgQ
+	 A5L/wvfGV7xdCbEv1bc5CfmbTLO2dpwB25kFmJKGBZIjeWjNvJpdF6TsneFKP6MvA0qLw
+	 fL/eHdc78gksHa3vwXK4r1xTE7DVRZ5mOh2aUoSRrZMCUp6mMfiZm4HX0gUma3G51i6Jc
+	 cVUkGkDIvAd8ipV9fcR1kQHW6rcUBU7N5hAcQL9uGqNEtDWtyuiENl4ALFpLEDz2e4FOY
+	 +A6fHRb/UOGIk9gq1CsLLbH9gYBILuca7M5Z4Mp+lay9tGO/bn/yDPNMrbPzeT1N6ww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=strlen.de;
-	spf=pass smtp.mailfrom=strlen.de;
-	arc=none smtp.remote-ip=91.216.245.30
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cckya3fI;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B09606A31C;
-	Mon, 16 Nov 2026 23:17:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7B09606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 1421760342; Tue, 17 Nov 2026 00:17:13 +0100 (CET)
-Date: Tue, 17 Nov 2026 00:17:09 +0100
-From: Florian Westphal <fw@strlen.de>
-To: alireza@asgari.net
-Cc: netfilter-devel@vger.kernel.org, linux-mm@kvack.org,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Pablo Neira Ayuso <pablo@netfilter.org>, Phil Sutter <phil@nwl.cc>,
-	Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Vladimir Davydov <vdavydov.dev@gmail.com>,
-	Chris Down <chris@chrisdown.name>,
-	Zhang Jiao <zhangjiao2@cmss.chinamobile.com>,
-	Song Hu <husong@kylinos.cn>, cgroups@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC nf-next 7/9] netfilter: nfqueue: reserve capacity
- against the bound owner
-Message-ID: <avuO9UUriolRoRg8@strlen.de>
-References: <20261115-b4-nfqueue-memory-accounting-v1-0-b9cc30819997@asgari.net>
- <20261115-b4-nfqueue-memory-accounting-v1-7-b9cc30819997@asgari.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69747606A31C;
+	Mon, 16 Nov 2026 23:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cckya3fI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4317E1F000C4;
+	Mon, 16 Nov 2026 23:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794871208;
+	bh=ximLAqazxBiE8DrwvOz+FL6zia8QGdRwgF0Cmhi1Ymo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=cckya3fIbmZbuB0U7m8erec37dIYNVKlcRtrTMnIy2qv6MPD2G8aMiRlG9GK4+UH/
+	 uvOZhqoE99yLOGgveBob4BwRZ2iH/YqSisCbQh7P1w1onvBBjmcGwIP9vt7yQCSRnF
+	 JNjWQSIgfFQ5VeXAYuHn5tDbS5JCexHDvDguEtz4fNhLj4Atb/0wX1yDF9qD+G5ZCo
+	 cB7Ac38PV+r3dpy1TPrDjnvo5EpnKgnIygB1h8qquIB6+AkLz3xkgXQyuezRU9RwR2
+	 Fw6fdBJDj+FwtCsXOP6rfqMLD5FwxZD6ZmrNd7JMA54VXut0h/SXK3M8Cf6McZ7C2V
+	 P6iH+cuq+xByw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A38C391B059;
+	Mon, 16 Nov 2026 23:20:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,52 +53,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261115-b4-nfqueue-memory-accounting-v1-7-b9cc30819997@asgari.net>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/4] tcp: fix tcp_base_mss on passive
+ connections and test MTU probing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179487120703.232553.15818759103747706687.git-patchwork-notify@kernel.org>
+Date: Mon, 16 Nov 2026 23:20:07 +0000
+References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com>
+In-Reply-To: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com>
+To: Esko Mobius <echoowall@gmail.com>
+Cc: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, edumazet@kernel.org,
+ horms@kernel.org, kuniyu@google.com, ncardwell@google.com,
+ davem@davemloft.net, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ panweiping3@gmail.com
 
-Alireza Asgari via B4 Relay <devnull+alireza.asgari.net@kernel.org> wrote:
-> +static void nfqnl_mem_refund(struct nfqnl_instance *queue)
-> +{
-> +	u64 pages;
-> +
-> +	lockdep_assert_held(&queue->mem_mutex);
-> +	spin_lock_bh(&queue->lock);
-> +	pages = nfqnl_mem_pages(max(queue->mem_limit, queue->mem_used));
-> +	spin_unlock_bh(&queue->lock);
-> +
-> +	if (pages >= queue->memcg.pages)
-> +		return;
-> +
-> +	/* Shrinking cannot fail. Keep the packet-path copy conservative meanwhile. */
-> +	mem_cgroup_reservation_resize(&queue->memcg, pages);
-> +	spin_lock_bh(&queue->lock);
-> +	queue->mem_reserved = pages;
-> +	/* A final drain may have happened while the refund was in progress. */
-> +	if (!queue->mem_stopping &&
-> +	    pages > nfqnl_mem_pages(max(queue->mem_limit, queue->mem_used)))
-> +		queue_work(nfq_cleanup_wq, &queue->mem_work);
-> +	spin_unlock_bh(&queue->lock);
-> +}
-> +
-> +static void nfqnl_mem_work(struct work_struct *work)
-> +{
-> +	struct nfqnl_instance *queue =
-> +		container_of(work, struct nfqnl_instance, mem_work);
-> +
-> +	mutex_lock(&queue->mem_mutex);
-> +	nfqnl_mem_refund(queue);
-> +	mutex_unlock(&queue->mem_mutex);
-> +}
+Hello:
 
-This is rather complex, do we really need all of this extra machinery?
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-I had hoped we could do the memcg equivalent of
+On Wed, 11 Nov 2026 00:45:54 +0800 you wrote:
+> With tcp_mtu_probing=2, passive TCP connections can start at the full
+> MSS because they sync MSS before initializing MTU probing. Patch 1
+> moves initialization next to the existing MSS sync in the passive
+> paths and in the active SYN-ACK path. Patch 2 adds a regression test.
+> 
+> Patches 3 and 4 add coverage for black hole detection and the MTU
+> search on active connections.
+> 
+> [...]
 
-vmalloc(4 * 1024 * 1024, GFP_KERNEL_ACCOUNT);
-on queue creation / instantiation, and vfree() on instance destruction.
+Here is the summary with links:
+  - [net-next,v4,1/4] tcp: initialize MTU probing before syncing MSS at connection setup
+    https://git.kernel.org/netdev/net-next/c/6bde47e9c04a
+  - [net-next,v4,2/4] selftests/net: packetdrill: test tcp_base_mss on passive connections
+    https://git.kernel.org/netdev/net-next/c/beb698cfc334
+  - [net-next,v4,3/4] selftests/net: packetdrill: add TCP black hole detection tests
+    https://git.kernel.org/netdev/net-next/c/8a83f21ad75d
+  - [net-next,v4,4/4] selftests/net: packetdrill: add TCP MTU probing test
+    https://git.kernel.org/netdev/net-next/c/c95a797b0253
 
-The only minor inconvenience is queue limit reconfiguration.  But that
-also happens from process context, so it should be enough to just
-do the equivalent of vrealloc; or, if memcg precharge cannot easily
-support that, just vmalloc, then vfree(old).
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
