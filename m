@@ -1,100 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794797093;
-	b=UpfysxgSs5rmhtVAWy+vKO3jVXtap61WVH1fyOrO6x2a0gcF6ue1kHR8fojQAp7biXl+
-	 17YN7pOFtys9B+gQzOkaAGNYQmnPIQbdO1uHrxQhZg+Cz8ve26RPFRtG42ABFX9fEfyAg
-	 Evv74VUVLn8cYOPChPAZ4l2wRP5yhqgKNZE3QtKgzrXuaUTwpmCbd975DxpNyldCXAyfC
-	 4pjlQKu1ewOueSZk9+us6vqqMbovM0TH3Xfg3n6rbcuNFiCYHlfz1i8nIQg3aHVRodJgQ
-	 mu9NwL+jh/1sShl7WJXOZwS454BIbv1GFpQaeCEZiF+18KYEfjsOD1Xyqdl3inqLuKA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794797093;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.181
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794798228;
+	b=PBlgbKXn0VPxnN7lxOzg0uODLZu+ndO53Y6SG3zbRlTWYnowaGkEsHeBN8Y+/v9SNXwV
+	 lwhx6UC7FstwMLqkwmH2RohJZLRJVQ0bxQR2eF0JEDjrE5jybBUyTMUpIsID4wQJgy1xe
+	 8IeGvJZbhQu54MGg/PrCmxB0jZR7EhMOulEWdsoe5TnMEwpj7pVbE7nb5jcNtAo+Z/hYS
+	 uTnxrXaGhrQi7soO4r2mRLKaT2HfNg5TYBT3yQEdF3PQc6fcZbIYgF8E+6QhY5gPMJEOu
+	 GlVPRdmjCOsLJW3gayHZ5wJ51l2/evbNuUc68zWn59LGtnSB+e9qKDFVG5x1SC3kIew==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794798228;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=9Kly0eM9XbBDovJgfRouCKU4R9pr6Wk5hOGGnjCgSkY=;
-	b=MdTmhnIwkcBk9bjxmCvgTARIUeYay+WX9NuJbmUCMvcNkGWxKO6wrXvj2F5fPiD+ZQ0I
-	 a2K0DlZZguIBLbG/ktKRBKhBOlesFTtd5843OtL5qHmLR185iyv2Lxb1L8C5Hu5418VjB
-	 GFm+uSJOY69I6add2TBFLVPoLUExRwTnzKsAKsNP8432nqPyLcX39drH227hsFTZ0DC0c
-	 rKVCPVJc9wUZGO6drjggpRirquRVVwCsuKackMhf5h2zYU86pn71DRIHg/qNysCfF5DEt
-	 kG1UZrMbeqoXZc6JzvWabKNSA506P8sYvipFOhPL5SvqeGpeOO7OwvK04SYNMXTODkA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=nFGwJvQR;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=taZmjC+r+n5amxH5ylYkvKHjlAAevcJwdM3ESN5VOIU=;
+	b=MZlkT4RLtlp+2pjp0tNQhPQxl3oY9rAqRxqkN644wuddraHhsIWVAT1PzYWBfdPe4NOE
+	 yqT0iSROuQYM0qCVNVCvxB4MHI51CS9e6o+fTCsZ0ArOWtVZ2CatsjsxYKD9FNM5pJ0cv
+	 Dyfs05aG4EFZ2Mz1xffO/yUV1hKue7LkobqrDQOUEmeK1TByo+HxDcf5W/XUC6t3Zw6F1
+	 fqLkUbq2sPuBm4GsQFI3glWbyG+VVRerPr3c3KIhTQasatgeK1VVMintiT9wfeKLBv0yo
+	 ROQ1HGuzPOamQn1Jlys7+ZhPNZcrDti6XGNJCAzHgolzwIOTRF0y3667t32AVJxdIYA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cbuhLi0k;
+	arc=none smtp.remote-ip=74.125.82.181
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9E5606A321
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 02:44:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE9E5606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384BA606A88C
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 03:03:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 384BA606A88C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=nFGwJvQR
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-54492d8a988so226121cf.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 18:44:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794797092; cv=none;
-        d=google.com; s=arc-20260327;
-        b=sjqEkc1CjRxtnjkPJli4noInRpQyndNkxdMatpaku6kY5HRwMEeGIrz/NVsL1be8ak
-         SmPMl1tlrOQ7h3xo8CjD30q5dunHohZB58o72e3NvKqME8WO6s/M7IOqQHhI3Q6olVkY
-         d5Un2MQn9Oj/F15SWZb129rVzPALhZRqK3WS2rESw56t2raXXUaDDMlKr4vwu4NqAG8T
-         IKAfD1XIfX6aVHbPjtbkGSFDENQcFJ9v+jGAluW9fNbypsKK3GR5F/sYvEuG8Yxoh/JT
-         z2mA87GN2b4Rff7O1+ertaMJ293xJkM6/HNve1+cWh0Dx0p91kW6LuBgiLvEBmSRvf9J
-         77Pw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9Kly0eM9XbBDovJgfRouCKU4R9pr6Wk5hOGGnjCgSkY=;
-        fh=CkY8Av9a5lmON06ucyA+W3CNclWK/UECBTpLwPaKRq0=;
-        b=hMTb6v1GQqTDImODFJXhbOc4DdGCvmCvkofGacPCmUcYYZlKNL6M4PXvEYprR4qSL6
-         +JRbzuDx8M66vJdUemlKR2VWTygKj00zhBdeuQj7GIQOvoyGGZ/wV8WiEssWL/Umqp4h
-         Db+UJ+lHa7X8JTQm1ABlyKRteFA28XkPrO46lrhIyILRPnRxRtv1YPGlEm7bd1HZ2V2F
-         YCLVtUGWQQBTwkqUt0gGd68a5GyY7rzPVx/hk9lBR15PUAKdDovXdCgxjdkTOaMpiTKU
-         WAH+ufp/OZOsuBzTCHQF6qFomYJ8zHrU8kSsLZyzJpFH4EejdpPcw5Mm9wK7OwL72bKe
-         vZgQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cbuhLi0k
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-36e99cf7bb3so3861725eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794797092; x=1795401892; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9Kly0eM9XbBDovJgfRouCKU4R9pr6Wk5hOGGnjCgSkY=;
-        b=nFGwJvQRRsHhvwfmdSvYfqBZw+cwMsVDENRdiit92dHTa+7O+OiIcMa1sFUe5aj+gV
-         0arE70K4hM2KQEnQeyVZ3KwVQ7LSUSlFUphhAo8u/ggapG0bMwsQPeKcDnoGP0F55hDp
-         4YgoLKjJcLaqOl3iwtNpCKzM3pTB9gqovF2Tfe85YMJiKuPCSgUFSqB1VvncglChRX4Z
-         DnxE1h7MeVn/c1AgAC3Bt5zC7nov/mhM9bTKbn7r9TPAfAZ+qRZRQdTetJ3Xtj55ocS4
-         3SmNPRvTlmMZS1B1sWIAVj5WbHuhzjvrKl+4LOf1YMHMVRouDTiyQfv14TVJzdW2x7Dy
-         GRVw==
+        d=gmail.com; s=20260707; t=1794798225; x=1795403025; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=taZmjC+r+n5amxH5ylYkvKHjlAAevcJwdM3ESN5VOIU=;
+        b=cbuhLi0k4gPQunm0cCmyXkobLQ+2PbqWxQNlMMwNnijYec+2l1ABQqA7z+WCEKmsxO
+         zvKYa//6SGPJMW8Gnle952xsq2krkWRMJp+Lf94BVv09Wr2ZG3wZvzeZX5xTesLlFtO5
+         1xGajNIVDjGJ42VXgqvefUaZiDClnCWMj8Ld4jC9YVh5maMEBZ+b+9NTq9CY7l1Lr7GJ
+         6T3tDDaw1rwFNGcEI42z/f8r0Hhd/jL7/3giFsMcA3S/zb/eETdElF5AopnnxICyqLrb
+         pQtyeMQZEpgYCLeStJFwIjdUkthkrXIofhMLqbPwmxrcvO3YAl8aA4tfWhzgLByVMjEA
+         zRHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794797092; x=1795401892;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9Kly0eM9XbBDovJgfRouCKU4R9pr6Wk5hOGGnjCgSkY=;
-        b=FUo3Q/lPkE+Qz6OcK70uC50Og3sAr0Rz2IZcGk/yabxIQUMyt3RmDWwnpatx/JAB1e
-         oauUgOArXOQt8+TuIrOymUuBkhgF3Xm3iiVHregaS9dFeVAry0ZwI277HEI9rxrSg9xD
-         gA7UOKkQ7y/UBBDuDRM63GHjO9hZaxW9PDvgv5v/yAJfIHN7+d7mFOjkOcKHcOyY/tuc
-         LDbh2nqQouSqH5fMVgbUk4nMJ7n07OiKEpEXzkz7EGaGms/qgiWfkPh4qWwbcli67xq8
-         e1wpalrAgbaQbtnztcqVjTA2onY6wi+ndshEm+NAk0KuqKfpqljkn1mIQvhbRQh8vwhx
-         shJA==
-X-Forwarded-Encrypted: i=1; AL+hErHV8I1zb8cVXJea+uc+tlc1N19EjiLKxdJL+0bstye9Lai/pjjHy+ydyojTIFapIwR8NetlYGTj8LK9r8BmujQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+VBDofnnN6OwFWoplUHTUQjh7ZaN0ss1MhJX9DbMzg8GrNZRse
-	i2ma7+R+b/Ttoeslelk/YJ1Y8KW5V+4SRj7H/IyLIYbYVpPk+9y1RuoHbrnpJc6ArfphTfYc3eX
-	G2aom7Zy3i3HanBEuuROzYT4B/vtG39tbS09pqKLJ
-X-Gm-Gg: AYBFou3Ps++Zbl/4AyEMpkQIZvaOSbP25W048xuVIkmjy18N4rd5EDi1xoQNx7imh77
-	HKfAq5iO0PWqDIZZQxk4cls8VOKc1zjFrEUbKTf1ztk159nP5YlmymR2MSTN8dSLaS7aklXwlpW
-	FlF+17dgXHIgtaUiHZIBmM6jih/w8tiKk7HWDLxuTfCdj3iK87i2xZxr7mugIpcwBYHQXBLZFY9
-	MjnQw/uutW96Q/UXdCIJLqhC7sgIqaZouxPMu9vuJvWkOyRW/IEL7Hi90U1zzsNBjhVuq9V9cvN
-	csM8hyg4nfr2l0LOFRnonV3XTFOTYNXy5hT/KrXQtgSo74uS15zUr/auNCeS2RKXtPhSJQQgjEr
-	CcFHXUuzNxWU0la0BfHcw26EoBwW/gPe5njc=
-X-Received: by 2002:a05:622a:a06:b0:52f:9ed4:8d76 with SMTP id
- d75a77b69052e-55c682a8a6emr25827851cf.14.1794797091092; Sun, 15 Nov 2026
- 18:44:51 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794798225; x=1795403025;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=taZmjC+r+n5amxH5ylYkvKHjlAAevcJwdM3ESN5VOIU=;
+        b=LWZCUB0XqBCLo6sCR51spEFcyoRT8PU+rbSPoW35JB18/NNXIw+47Bt4HbJy/m2HJd
+         SZENhSLTLTRwDg3/FNL5k7MI2+3V6/8vOsiKTj2jgCbgLtkRGZNzkpjzaELKyd1rpH8q
+         4O/Uk4kptcPBxwUREFtGkqhH8buHcPvxVZs5Iu1jDLslDi6IUixa44l1qL0jGNqDxb9s
+         m6tLXdDpC9j3PZSSuKR+IXuM6EdMsbpIxjNQ6DIDG68EtDuEGDw8U/75t0pp4x+O/FeH
+         stL/LOLEP7RHNrNFBpsqwJzWMfGzJxegHTpI4dXlSvsYqA/lS6PvfLdud8NnJMB8pYAO
+         tMag==
+X-Forwarded-Encrypted: i=1; AL+hErHnUjmqb6yAPBZhU2lUUi/7bFvujNqNwVffWtPuxMGgf2UceuVREQTuV0Ix8CJPaa3wsMCPy4Ti7mwyTZdqfLA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8TQPfa52RcgYF1e/cgRKslgkF4+URdAGasUnp0NoRCGhEbl+Oi
+	eKV2RInDOBlxj/9MdckPkspfjAkG8OWHoPJO3My5CrO2JMJj4UoOhd4r
+X-Gm-Gg: AYBFou2NZ/hG/fCsa9wZpmxh8N1Sb7wHT3KSygqt6D16vbQYrp4uiX5mmd0K4tnw3uP
+	NCPBEK5e/jQVS3IE2DG2gpNBVI37IUNYNUU1CypKcpGixz8OgiWWQyTfdBd/eBYVA2dcig5Mrar
+	CZT4Zz+Mwcy01H6QDsPfuoRrMSA9mBcA/8F7OemV94QzwTH7okllOseyBKO4VNzspDM/YdjM0/b
+	MvNRizZoqdUuGrdWDWjiwBjt4VJLOZAP6EexzE+p95WjeBVRyCM+Sb3QIqO/QUqJqjj+99qG8w0
+	aMWkaZM4wDeMIWJKyuQ0wCH9aik3EYKTAaf5B/Q6yv1yKpXGXCb5pqAssGLzkzsQvhNeWmoNKwT
+	X3nHZEYr9jAwEO0vd0+JWPx4az8IF5mn0nKGxKvSh05SQ/uFLO+3FOgfHwZzUVdaJBhgiUq1Old
+	1m4SouEU6DBQcP5RTZAs7hVftYgqpa/AF6pn+NfRDT+AYjBB6vgIW9A7Y0k8UwOds0Y2kob81hy
+	GfsNcfRnup5UyOXMknP4j0QwISrqLdMZ9pkOuuJwMn2StKuanuDg6GN2zck7n/sMl6DSiiOAJS3
+	Fls/f1PoJdJC1pfGX9YvOpp72Keu/3DKAbpV85OKpVintiU5Dap35ncCGOr3iqwL/0IMDCJvDg0
+	Sk9ds1Ea+qVTH7haEvDycRoz8vI1X12j/GberMnlR
+X-Received: by 2002:a05:7300:d40d:b0:360:d4c5:7243 with SMTP id 5a478bee46e88-37966e3a7cfmr10269605eec.11.1794798225248;
+        Sun, 15 Nov 2026 19:03:45 -0800 (PST)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379508762a5sm29195595eec.0.2026.11.15.19.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Nov 2026 19:03:44 -0800 (PST)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: Takashi Iwai <tiwai@suse.com>
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH 0/4] ALSA: seq: ump: Fix Note On/Off and key pressure conversion
+Date: Mon, 16 Nov 2026 12:03:33 +0900
+Message-ID: <20261116030338.422671-1-sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,73 +100,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261115-main-v1-1-7011cd84e54a@xsightlabs.com>
-In-Reply-To: <20261115-main-v1-1-7011cd84e54a@xsightlabs.com>
-From: Wei Wang <weiwan@google.com>
-Date: Sun, 15 Nov 2026 18:44:40 -0800
-X-Gm-Features: Aa3M54o-0Vkofupcnn38JmSI-OGkOkHMmrH1O9tJZwmSDKKBsdojHT-nKCZT5IQ
-Message-ID: <CAEA6p_CXNCgmq0bz_mfuehPGaEx-GwcHxdNVBSBAAtqB0nfMrw@mail.gmail.com>
-Subject: Re: [PATCH net] selftests: drv-net: psp: skip unsupported versions in
- netkit data test
-To: alexeys@xsightlabs.com
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, guyt@xsightlabs.com, 
-	Lior Yizchak <liory@xsightlabs.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 15, 2026 at 5:03=E2=80=AFAM Alexey Skidanov via B4 Relay
-<devnull+alexeys.xsightlabs.com@kernel.org> wrote:
->
-> From: Alexey Skidanov <alexeys@xsightlabs.com>
->
-> data_basic_send_netkit_psp_assoc() runs for PSP versions 0-3. The
-> non-netkit data path already skips versions the device does not
-> advertise in psp-versions-cap. The netkit path does not, so those
-> cases fail instead of skipping.
->
-> Version 0 stays mandatory. Skip an unadvertised version before opening
-> the PSP connection.
->
-> Fixes: 43cf629700fa ("selftests/net: psp: add dev-assoc data path test")
-> Signed-off-by: Alexey Skidanov <alexeys@xsightlabs.com>
-> Signed-off-by: Lior Yizchak <liory@xsightlabs.com>
-> ---
+Hello Takashi,
 
-Reviewed-by: Wei Wang <weiwan@google.com>
+While extending seq-ump-test, I found three conversion bugs in
+seq_ump_convert.c. In each case the UMP core or the other sequencer
+path already does the right thing, and the fix follows it.
 
->  tools/testing/selftests/drivers/net/psp.py | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/s=
-elftests/drivers/net/psp.py
-> index c114d2245135..7c8fb2200b39 100755
-> --- a/tools/testing/selftests/drivers/net/psp.py
-> +++ b/tools/testing/selftests/drivers/net/psp.py
-> @@ -728,6 +728,12 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, =
-ipver):
->      """
->      _assoc_nk_guest(cfg)
->
-> +    # Version 0 is required by spec, don't let it skip
-> +    if version:
-> +        name =3D cfg.pspnl.consts["version"].entries_by_val[version].nam=
-e
-> +        if name not in cfg.psp_info['psp-versions-cap']:
-> +            raise KsftSkipEx("PSP version not supported", name)
-> +
->      # Enter guest namespace (netns) to run PSP test
->      with NetNSEnter(cfg.netns.name):
->          cfg.pspnl =3D PSPFamily()
->
-> ---
-> base-commit: aa40afa831ebfe45e40a23721711059f2ac584d4
-> change-id: 20261115-main-0b37fbe5e1d2
->
-> Best regards,
-> --
-> Alexey Skidanov <alexeys@xsightlabs.com>
->
->
+Patches 1-3 are the fixes. They also apply to for-linus. Patch 4 adds
+the tests on top of seq-ump-test.c in for-next.
+
+Without patches 1-3, the new tests midi1_key_pressure,
+ump_midi1_to_midi2_note and ump_midi2_to_midi1_note fail and the other
+25 pass. With them, all 28 pass.
+
+Prepared with Claude Code (Claude Opus 5.5). Tested on x86_64 under
+qemu, on sound/for-next.
+
+Best regards,
+HyeongJun An
+
+HyeongJun An (4):
+  ALSA: seq: ump: Don't turn a zero key pressure into a Note Off
+  ALSA: seq: ump: Convert a zero-velocity Note On to Note Off for MIDI
+    2.0
+  ALSA: seq: ump: Keep a soft MIDI 2.0 Note On from becoming a Note Off
+  selftests/alsa: Test the sequencer UMP Note On/Off conversion
+
+ sound/core/seq/seq_ump_convert.c            |  10 +-
+ tools/testing/selftests/alsa/seq-ump-test.c | 187 +++++++++++++++++++-
+ 2 files changed, 188 insertions(+), 9 deletions(-)
+
+-- 
+2.43.0
+
