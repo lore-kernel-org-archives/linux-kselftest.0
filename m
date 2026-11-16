@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794813238;
-	b=oT6yt54CD6z8bphy6j6g5uiWY/IVbAR1Tfcb1Z1DGehJ45m9lE0lA+svJQoiFUFSyuHb
-	 t+NcXXbxOjz6eSDbSJ/f4pVr/D3Rnqd07ZCmYkX0EutXN7HfJpAl1uq2ZZYVw8Xy+TAIm
-	 P1pEfUWJrZz7nQKKQbuzQcsVSIC3e/7RUtFFfofY1qMR1Y6msGTRgpqK5JQVzbQgLHVDs
-	 kpu7Styg04ypof3+Gb83EwZA1HQDmoMLT/BZgwxg5s8ffPDSO5yK6LwmZN7fCTzMzlrFq
-	 XS1FdWx6nZEJmyiy6CKI9BSVFaU1Gn275pjJdx7pHYS7J/qG7tp+njwuxObtS+YWmWQ==
+	t=1794813248;
+	b=NiKIcPHoz+J+cGvARCh9YjQzILq00JCp3tSMYrmNBjH7UGfxLXuRo1cXMIX9wFc+9moo
+	 gFuIYTLAC+i6zQFniBU3O45SNb0AuMn6NssCP/T8xT5b/2arbOZT2ypfzD6Ri5udTZNY5
+	 2f355rR055ScMDUh21S9c6YC2PGq5Rwrkd6MvrWVGPPWWjST6DoaOTLfsysLkyguPqKdr
+	 3Iv6b8unllZ4vGOznjcgBeIZ3pLrUQLTBxMvS6qAnQNaHZWuO4qE3iiDJ0YWur84/Acry
+	 dovB+AuLh1mpZcv9+8qDYfGBg0TqsExOjNv8rqmEj/DeKhGm6mVoOIHYxNZufRLvZlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794813238;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794813248;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=8CsXHXcl/CTMGZ0Vc+K3+S7p0GgqWl5r8v3bGSKHol8=;
-	b=Z68kleMVlMYCAq+z2BezfkW2Dkt0QpwxCLD1TcJTrTsbCjDCA81OIYS8bwMlWjSCaM6Z
-	 O8SlK+ixdMJx9ZwLngI4EEPY+NvQnbBa99icD+NHGDvXFT75FXMkKOa6DaRo/SFDUUxjC
-	 3SlyPAjmB/7iiF9htMgO90xsvijYSvTjvNgR9LQB6OW9tgNz54+nh8zgW0FbMGkSwOHEb
-	 wDCTqNAB0zTJ6+E27cLOwbrrZ5kf4QZym1N0HW7c/B19oui867C76PnHX892sgWuHUFQG
-	 JhEKaWD9Q3TyWEmUr6nBwdlXYZPZG65pSmk271/pvALZ92z6fZKxIQiASERibinbW+w==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=BuQq4JFvVTaug2dVoyrAXV50xaKQGTRvxFBICoP+1lY=;
+	b=pSBAekuyKnpEMuOP8e+jLAsYuoe5S+3+ljG3Hb9n6vae4BLyfNej8wDxieA5ElbGcGpQ
+	 tl30ydvWeIowEA/Nn7JqUxoauGiwITVRlxdI3KFoNmeZZBZcE2ktMtRNCsJSMqHspQCw1
+	 xTno1r54Pc0YKvpRn+sLoOS9JRzBTFw7gLQ/wzFhfaD91YvHFNdN9QS7TTIi9PjRvPgRm
+	 D7R7jBLDtJ67emEeWD/7DzVD9w0QqDs8ERZvpsGTo/L7ogEkdG0xZXgw5tfkyD3hue+1x
+	 YbanJj/BJWQa8qdalGVZkdWOp9QWhUTZk6dx/Qu4m8vLqFKW/fmiadVG51QK0/hdpeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bytedance.com;
 	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=Ead680lf;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b="H8/CqWCT";
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B3E606A337
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 07:13:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66B3E606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77D1606A323
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 07:14:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D77D1606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=Ead680lf
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-37071c0f42aso4570783eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 23:13:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=H8/CqWCT
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-37f14feca60so926369eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 23:14:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794813236; x=1795418036; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8CsXHXcl/CTMGZ0Vc+K3+S7p0GgqWl5r8v3bGSKHol8=;
-        b=Ead680lfFuLb87vQhc4/qO1zQ6coII9hAEbVRg/j0taumkbxx4IRnD6N1NawRYaVr+
-         nC5tJzji5IcIMLzS2LGZAwr7I72g0QbL7WfK561v7QTtiz7cUW+U87ECUA1pqXIc/+CY
-         mPo/JxQNfyjR9fFkArva2miN8PKY7+aj8wyvy83Ed73KEQTn9MIlxLjUnTa1BafPB7so
-         8lV9s/6mLnxRDRY+ydcPYXY9HWCUDNs+nWJM7stxx65758T9Ky/4rQ2CTgezVMpggD/U
-         RRzMvokXf/U/9fykxY6Pmumgr8bnDTPJMCx6pU5ph78EGJTm+tN+hZcwqhzFDisws+lB
-         T0hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794813236; x=1795418036;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1794813247; x=1795418047; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8CsXHXcl/CTMGZ0Vc+K3+S7p0GgqWl5r8v3bGSKHol8=;
-        b=pHirx5610/ueEmhGpgSZ+R7fIA14uP2NJP4rIg9Fmq/025TLCFDEwH+MgpFwMwetIo
-         co+sINYuuhUMnYsqXjUyqgl6FfA5jhPke0DhOmRIn9d29X9XIqJERSdILz47sckMUc6o
-         TQetB/heNiqkqj3V6LvOKhtrOjVyQJSvs0CHnZo0FfYyRU2e8kRaTFBuh8ETDFFqCm6Q
-         YufCiADC/kJ3MhiaL1BFHe7JKwgjR+5iMtU+cVMftq1w4vucY7KHqoOQ+v2Sz46971AR
-         XudRnOgj2kJCel6LHgRE8LZClW0KktOnxPz5Y/iyBnKklMwDtC9SJvYtioEPRzrrrjHu
-         7g8w==
-X-Forwarded-Encrypted: i=1; AL+hErGlD0oxmpmk+xZaVnnO21mxT909Be1A8Mpgo0F8hzv6SHlEddF5cuX2O7nYfdNfPvoeuv6ixDdrbbsNTA+C2co=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+zsl9lm8oqVSmeyLaKS8cHkeu3frgawRhbt5keV4NlQZN59LCY
-	xWVBzC2QEo9Psztw9oV5OqjB8Sn7z80aBguSBF7peiuzX2c5IjRMvWd/dbFxNM9pvLk=
-X-Gm-Gg: AYBFou0XzP6ts+JhyT6doKBmT3otDdl31lQnRGB1dohYl9bkYS1MsE8Mzd74foBIt3p
-	PFl7tmH2Zj0WBCW6h1CkfyIGNM3Zc/wFTIxgW0pxl6WtOWV5f1IxLYEairZu0NdazgmjJAhJDPv
-	QVvddu7QUYG3nCLMQ7582nExs9w2RP+Isp8nS/38hm30epvYEBB+mbAUDHm9ElLGS24sJA5Fv8n
-	DJXVb+FcAH97ExHTkuYYYrsDJKIck02WgwbJQZCM8NDZ2cJzWe5wIDDGUJlhJSBTh26RSok8Zp8
-	67cWi0OqlyBLNoNS+uNKuHqTCXUtp5Dmr/RjF/a3fWurDKs78xFUzdp12219wRNWCrE8TnugqCh
-	bNQQEZ5rdYW2ePPYg+1P160BQHPxWZJ+FekHGTLy1ufUvCajGm5+tfc13lnMDlgJDa0gtgqWhPG
-	jKyHz4rXanhzO0faYTuPB/UNrSdYhseh7rrVATllalVK/iQ9wcAKonoW5/A0hDlffztpy7cmZaJ
-	eXZoRdp7P4ahE/R/YzUp+U3u4iOXOzH8Oe3d9jEcpIb+buPOLeXaL87OB6mcS1+bd9Ybu/gCM+6
-	0L1mVVSkcCd8wk4iDquD4mvUkXlfcsZSvSKbpesT6K8CxJHsWLgCayWjgQ3fZzaPYrNUMi81z8a
-	s9Gjowg==
-X-Received: by 2002:a05:693c:8813:20b0:376:77e6:a66 with SMTP id 5a478bee46e88-37967315a29mr9334631eec.16.1794813236238;
-        Sun, 15 Nov 2026 23:13:56 -0800 (PST)
+        bh=BuQq4JFvVTaug2dVoyrAXV50xaKQGTRvxFBICoP+1lY=;
+        b=H8/CqWCTBX3T0VcGJ2jrluTGPGUVgzz1JASg41S5R1Qdg4jnN5GpKV3Afo9WM8mSfv
+         o0s3h6K93MKvcwSLfck/sep5GjJZRQBMA+CRc8CY06xzx768Bz/UNiKpgCXiar8kru0C
+         WLfuOFU8oPu1J67damPggINww+tLFZ8Bj7asCjIdjjlJ+4WHyPbnuy6GadwTQU+mL9s7
+         G9ALolM4oBkfoukg3yz71D/ukO30O1hqlkzy7QKpkBXINwuxkaUZHw2LPj/DFrrWxWFm
+         jilQt0O2BbGrGB6gViJQqJ7xIroCh0jeiAW99rxpU6OX9Pq6+FZf7mWsNE/QF8bgZEso
+         KXzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794813247; x=1795418047;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BuQq4JFvVTaug2dVoyrAXV50xaKQGTRvxFBICoP+1lY=;
+        b=PiRNNShix3qCgt5Ojp05yUShy1VoJUSAhux8nv6LF3RExRsdtVV1oeruuy62T2SpT3
+         Z1H9x0bjL/MwQWxK60zUSmrvmMTiJcJKuVQigd6jwK5eexaSu9uORXnpsj3fZHFPAz2h
+         Hk6dVkkGQyFhohYP74DBINUEsTuniHKvuV+idWxUrHGBoTBuIN0cq7g8tfa+BlKBBHec
+         BAthrKb0uQqzOC+ELrEinUmv6lWWcT61JLaKa8sbXMNcbANSOsCUtdw3KpGEEip0C4vP
+         CsrtwCpUUpZuBqmxpKQ1JNmaXhw+NwSRmmNq6hK9s1SerpCnlnK0Oyh7aTsdfStQCMUo
+         L9iQ==
+X-Forwarded-Encrypted: i=1; AL+hErEKYY/o9N1FLa9bs1HAf5QNCFjQW1XzLj2+ZTazNBz20PSDlpVL5cpn8bXDl2/OungpYC0NMc8PWenccYPBPGo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8mCuPCUfbbQ4bpeVSDADKVYJkIbgKPNCp/nOmCnASdJt20EO1/
+	A7TnGKOXb43swpUiMhBpwEJdAf9tLnMBkgt4XNnbBt8bF20Jw26UJap2ufHRpZ4w1o0=
+X-Gm-Gg: AYBFou05WmOm/B89ID73638SNTRdcLNDt8jklGE6hMl+kish6ZGLWGarrOQtZzmgDzj
+	PyvLM+0z6IEMWYHSlTXVXQrx2hDant3Y1/K4hsK1AtoM+qQu5ilnxTYjz0nLAXrNXGIf8/XWRza
+	aiUN/PEWNE4j4k9V+hS5eb2xtPKTrW2kq275WT4Rs0oftOxgoS0BrNR+santkX7Mxv5vb1H0Gj1
+	NxbHK9PgX1xg8A6iu5WD3EqZv9tKjRZi/l87NU6wBPQ7vu+lEO5MKgmHsIbQ0r+UW75l4xVzLqQ
+	fCDDd031GMYY8KyAMRe9DJyUryVPgdaZUBlW4gMaZLZOGnl6E2GpwYbvar013Q16gUW9u2W6z/s
+	hrsm5ZJbzwHraVYdLlQqmQh92flpbU10K6gKRuEVneQn8j3pt5iP5c4xGBmZNqO6H3sVL2WIt3X
+	+B6e4KkRP/pQMRQ8EopGjCXHI/wMnw2BVTttXawSvxD3Z3Se/KZg1QJsJSjj9n6YNkKWxqCaqlE
+	/odpzry+E4s4TKBVRFdc2BxqV0ZlUEpc11eTGkm2rZ6kJKZxoa2ImLNnOZVje89yuL7XZvvqNar
+	HjVu7GxeY75veVUgOuGrivcqw+nnJA2L5ylVAtlMdWhH3cargYTmzIoVrPuuFnXwgrWtDIqcgSt
+	RW/jucIY=
+X-Received: by 2002:a05:7301:c017:b0:36a:31b2:8643 with SMTP id 5a478bee46e88-37967dd4caamr9968595eec.38.1794813246758;
+        Sun, 15 Nov 2026 23:14:06 -0800 (PST)
 Received: from FJ7FR2JRQ3.bytedance.net ([63.216.146.178])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955332ae7sm47858505eec.8.2026.11.15.23.13.46
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955332ae7sm47858505eec.8.2026.11.15.23.13.56
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 15 Nov 2026 23:13:55 -0800 (PST)
+        Sun, 15 Nov 2026 23:14:06 -0800 (PST)
 From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 To: joro@8bytes.org,
 	palmer@dabbelt.com,
@@ -109,10 +110,12 @@ Cc: fustini@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [RFC PATCH v2 0/4] resctrl: Assign registered devices to resource groups
-Date: Mon, 16 Nov 2026 15:13:39 +0800
-Message-ID: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
+Subject: [RFC PATCH v2 1/4] resctrl: Add registered device assignment
+Date: Mon, 16 Nov 2026 15:13:40 +0800
+Message-ID: <20261116071338.35991-7-zhangzhanpeng.jasper@bytedance.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
+References: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -124,126 +127,443 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This RFC lets resctrl groups include devices as well as CPU tasks. It
-uses the RISC-V IOMMU QoS ID extension as the first provider and builds
-on Drew Fustini's CBQRI resctrl v12 series [1] on Linux v7.4-rc1.
+Keep requester discovery and hardware programming in providers. Common
+resctrl owns a bus/name registry and resource-group membership, with one
+sleepable set_ids callback per provider. Keep filesystem integration small
+and separate from the registry implementation.
 
-RISC-V QoS tags requests with a resource control ID (RCID) and a
-monitoring counter ID (MCID). On successful translations the IOMMU
-supplies the device context's IDs to the I/O bridge for device requests.
-Those IDs also tag IOMMU accesses to context-specific metadata, such as
-page tables. IOMMU accesses to the device directory, queues and
-IOMMU-generated MSIs use the per-IOMMU iommu_qosid register. When the
-IOMMU is in DDTP Bare mode, device requests use that register too.
-The IOMMU supplies the tags; downstream controllers apply the policy.
+Snapshot runtime availability at mount, serialize assignment with
+unregister, reject removal of assigned groups, and quarantine ID reuse
+after an uncertain hardware update. Recovery and dynamic creation of the
+first devices file are intentionally outside this RFC.
 
-In v1, the unit of assignment was an IOMMU group. In v2, the driver
-responsible for tagging explicitly registers supported devices with
-resctrl. Here that is the RISC-V IOMMU driver, so endpoint drivers such
-as NVMe do not need to change. Common resctrl code handles token
-lookup and group membership. When a device is assigned, resctrl calls
-the driver's set_ids() callback to program its device context. The
-devices file remains separate from tasks.
-
-  resctrl control group
-     schemata  ---------> CBQRI controller: resource policy
-     tasks     ---------> CPU:              task IDs
-     devices   ---------> IOMMU:            device context IDs
-
-For example, for an independently tagged PCI device:
-
-  mkdir /sys/fs/resctrl/p1
-  echo pci/0000:00:03.0 > /sys/fs/resctrl/p1/devices
-  echo pci/0000:00:03.0 > /sys/fs/resctrl/devices
-  rmdir /sys/fs/resctrl/p1
-
-The devices file appears only if at least one device is registered at
-mount time. A device being present in sysfs does not make it assignable.
-The IOMMU driver excludes shared hardware contexts and requires known QoS
-ID limits before registering a device. It probes those limits only with
-DDTP set to Off and all queues disabled and idle, and rejects out-of-range
-IDs before changing a device context.
-
-The separate qosid/{rcid,mcid} attributes under the IOMMU class device
-configure the global register independently of resctrl.
-
-The v12 dependency provides cache capacity allocation, not monitoring.
-Nonzero device MCIDs require a monitoring-capable dependency.
-
-Changes since RFC v1:
-
-  * Assign devices rather than IOMMU groups, as Jason and Qinxin
-    suggested [2]. Drop the IOMMU core group lookup and walk helpers.
-  * Build on James's driver callback suggestion [2] with explicit
-    device registration. Handle token lookup in common resctrl rather
-    than in each architecture, as Drew suggested [3].
-  * Keep devices separate from tasks so the existing ABI stays
-    unchanged [4]. Following Drew's runtime visibility suggestion [5],
-    check for registered devices at mount time.
-  * Split the global sysfs setting into separate rcid and mcid files
-    [6], and introduce qosid_lock in the patch that first uses it [7].
-    Thanks to Drew for both reviews.
-  * Rebase on CBQRI v12, check implemented QoS ID widths before device
-    assignment, and test task and device membership in the same
-    control group.
-
-Feedback would be particularly helpful on:
-
-  * The provider registration and lifetime contract, including how to
-    represent devices that share a tagging context.
-  * The bus/name token versus using an existing sysfs identity.
-  * The scope of protection after a command queue failure. If an update
-    leaves the hardware state uncertain, the current code prevents ID
-    reuse by blocking group removal and future mounts, including for
-    groups unrelated to the failed update. Would reserving only the
-    affected old and target IDs be sufficient?
-
-PASID assignment and recovery after an uncertain hardware update are
-outside this RFC.
-
-[1] https://lore.kernel.org/linux-riscv/20261114-dfustini-atl-sc-cbqri-dt-v12-0-6ef1f627072d@kernel.org/
-[2] https://lore.kernel.org/all/arKx__kOPe4B5gDW@agluck-desk3/T/
-[3] https://lore.kernel.org/all/an4CRRXt44%2BPhHgy@x1/
-[4] https://lore.kernel.org/all/7cf591e8-e182-447f-9808-d8e328d28f79@arm.com/#t
-[5] https://lore.kernel.org/all/anvYGuNF3MC%2F%2FQ94@x1/
-[6] https://lore.kernel.org/all/andiub47zsUsL4qh@x1/
-[7] https://lore.kernel.org/all/andiWrKhz5rLPVuq@x1/
-
-Zhanpeng Zhang (4):
-  resctrl: Add registered device assignment
-  iommu/riscv: Register independently tagged devices with resctrl
-  iommu/riscv: Expose global QoS IDs in sysfs
-  selftests/resctrl: Exercise device assignment and IOMMU global IDs
-
- .../ABI/testing/sysfs-class-iommu-riscv-iommu |  27 ++
- .../filesystems/resctrl-devices-prototype.rst |  43 ++
- MAINTAINERS                                   |   8 +
- drivers/iommu/riscv/iommu-bits.h              |   8 +
- drivers/iommu/riscv/iommu.c                   | 398 +++++++++++++++++-
- drivers/iommu/riscv/iommu.h                   |  16 +
- fs/resctrl/Makefile                           |   2 +-
- fs/resctrl/devices.c                          | 233 ++++++++++
- fs/resctrl/internal.h                         |   8 +
- fs/resctrl/rdtgroup.c                         |  28 ++
- include/linux/resctrl_device.h                |  53 +++
- tools/testing/selftests/resctrl/Makefile      |   2 +
- tools/testing/selftests/resctrl/devices.sh    | 205 +++++++++
- .../testing/selftests/resctrl/iommu_qosid.sh  | 119 ++++++
- 14 files changed, 1143 insertions(+), 7 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
- create mode 100644 Documentation/filesystems/resctrl-devices-prototype.rst
+Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+---
+ fs/resctrl/Makefile            |   2 +-
+ fs/resctrl/devices.c           | 233 +++++++++++++++++++++++++++++++++
+ fs/resctrl/internal.h          |   8 ++
+ fs/resctrl/rdtgroup.c          |  28 ++++
+ include/linux/resctrl_device.h |  53 ++++++++
+ 5 files changed, 323 insertions(+), 1 deletion(-)
  create mode 100644 fs/resctrl/devices.c
  create mode 100644 include/linux/resctrl_device.h
- create mode 100755 tools/testing/selftests/resctrl/devices.sh
- create mode 100755 tools/testing/selftests/resctrl/iommu_qosid.sh
 
-
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-prerequisite-patch-id: 492fe81aa4f3c885ac5bb48252def2fdc5527275
-prerequisite-patch-id: b4f0bd4bf660c92dbf4ca0c7d871c1550b66df0d
-prerequisite-patch-id: a2e36f0788f8e11c708d162dce653351dd99c4f0
-prerequisite-patch-id: d1d359c5cf89b2b5018d64ca8f320892f6dbcca2
-prerequisite-patch-id: 5b7fea6f1ad8f2137ffe45681d56b83e17f7cb2a
+diff --git a/fs/resctrl/Makefile b/fs/resctrl/Makefile
+index e67f34d2236a..1cd663c3309a 100644
+--- a/fs/resctrl/Makefile
++++ b/fs/resctrl/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_RESCTRL_FS)		+= rdtgroup.o ctrlmondata.o monitor.o
++obj-$(CONFIG_RESCTRL_FS)		+= rdtgroup.o ctrlmondata.o monitor.o devices.o
+ obj-$(CONFIG_RESCTRL_FS_PSEUDO_LOCK)	+= pseudo_lock.o
+ 
+ # To allow define_trace.h's recursive include:
+diff --git a/fs/resctrl/devices.c b/fs/resctrl/devices.c
+new file mode 100644
+index 000000000000..f98d375e6934
+--- /dev/null
++++ b/fs/resctrl/devices.c
+@@ -0,0 +1,233 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Registered, independently tagged devices assigned to resctrl groups. */
++#include <linux/capability.h>
++#include <linux/device.h>
++#include <linux/resctrl_device.h>
++#include <linux/slab.h>
++
++#include "internal.h"
++
++/* All registry, ownership and callback access is under rdtgroup_mutex. */
++struct resctrl_device {
++	struct list_head list;
++	struct device *dev;
++	const struct resctrl_device_ops *ops;
++	struct rdtgroup *group; /* NULL denotes the default group. */
++	char *token; /* Stable bus/name identity; not a sysfs pathname. */
++};
++
++static LIST_HEAD(resctrl_devices);
++/* No recovery protocol yet: never recycle IDs after an uncertain update. */
++static bool devices_quarantined;
++/* File visibility is a mount-time capability snapshot. */
++static bool devices_enabled;
++
++static struct resctrl_device *resctrl_device_find(struct device *dev)
++{
++	struct resctrl_device *entry;
++
++	lockdep_assert_held(&rdtgroup_mutex);
++	list_for_each_entry(entry, &resctrl_devices, list)
++		if (entry->dev == dev)
++			return entry;
++	return NULL;
++}
++
++int resctrl_device_register(struct device *dev,
++			    const struct resctrl_device_ops *ops)
++{
++	struct resctrl_device *entry, *other;
++	int ret = 0;
++
++	if (!dev->bus || !ops || !ops->set_ids ||
++	    strpbrk(dev->bus->name, "/ \t\n\r\v\f,") ||
++	    strpbrk(dev_name(dev), "/ \t\n\r\v\f,"))
++		return -EINVAL;
++
++	entry = kzalloc_obj(*entry);
++	if (!entry)
++		return -ENOMEM;
++	entry->token = kasprintf(GFP_KERNEL, "%s/%s", dev->bus->name,
++				 dev_name(dev));
++	if (!entry->token) {
++		kfree(entry);
++		return -ENOMEM;
++	}
++	entry->dev = get_device(dev);
++	entry->ops = ops;
++
++	mutex_lock(&rdtgroup_mutex);
++	list_for_each_entry(other, &resctrl_devices, list) {
++		if (other->dev == dev || !strcmp(other->token, entry->token)) {
++			ret = -EEXIST;
++			goto out;
++		}
++	}
++	list_add_tail(&entry->list, &resctrl_devices);
++out:
++	mutex_unlock(&rdtgroup_mutex);
++	if (ret) {
++		put_device(entry->dev);
++		kfree(entry->token);
++		kfree(entry);
++	}
++	return ret;
++}
++EXPORT_SYMBOL_GPL(resctrl_device_register);
++
++void resctrl_device_unregister(struct device *dev)
++{
++	struct resctrl_device *entry;
++
++	mutex_lock(&rdtgroup_mutex);
++	entry = resctrl_device_find(dev);
++	if (!entry)
++		goto out;
++
++	if (entry->ops->set_ids(dev, (struct resctrl_device_ids){})) {
++		devices_quarantined = true;
++		dev_err(dev, "resctrl: reset failed; ID reuse disabled\n");
++	}
++	list_del(&entry->list);
++	put_device(entry->dev);
++	kfree(entry->token);
++	kfree(entry);
++out:
++	mutex_unlock(&rdtgroup_mutex);
++}
++EXPORT_SYMBOL_GPL(resctrl_device_unregister);
++
++bool resctrl_devices_visible(void)
++{
++	lockdep_assert_held(&rdtgroup_mutex);
++	return devices_enabled;
++}
++
++int resctrl_devices_prepare_mount(void)
++{
++	lockdep_assert_held(&rdtgroup_mutex);
++	if (devices_quarantined)
++		return -EIO;
++	devices_enabled = !list_empty(&resctrl_devices);
++	return 0;
++}
++
++/* Must precede freeing any resource group or its IDs. */
++void resctrl_devices_unmount(void)
++{
++	struct resctrl_device *entry;
++
++	lockdep_assert_held(&rdtgroup_mutex);
++	list_for_each_entry(entry, &resctrl_devices, list) {
++		if (entry->group &&
++		    entry->ops->set_ids(entry->dev,
++					(struct resctrl_device_ids){})) {
++			devices_quarantined = true;
++			dev_err(entry->dev, "resctrl: unmount reset failed\n");
++		}
++		entry->group = NULL;
++	}
++	devices_enabled = false;
++}
++
++/* Includes monitor children when the caller changes/removes a CTRL group. */
++int resctrl_devices_check_group(struct rdtgroup *group)
++{
++	struct resctrl_device *entry;
++
++	lockdep_assert_held(&rdtgroup_mutex);
++	if (devices_quarantined) {
++		rdt_last_cmd_puts("Device QoS state uncertain; reboot required\n");
++		return -EIO;
++	}
++	list_for_each_entry(entry, &resctrl_devices, list) {
++		if (entry->group == group ||
++		    (entry->group && entry->group->type == RDTMON_GROUP &&
++		     entry->group->mon.parent == group)) {
++			rdt_last_cmd_puts("Move assigned devices to the default group first\n");
++			return -EBUSY;
++		}
++	}
++	return 0;
++}
++
++int resctrl_devices_show(struct kernfs_open_file *of, struct seq_file *s,
++			 void *v)
++{
++	struct rdtgroup *group = rdtgroup_kn_lock_live(of->kn);
++	struct resctrl_device *entry;
++	int ret = 0;
++
++	if (!group) {
++		ret = -ENOENT;
++		goto out;
++	}
++	if (devices_quarantined) {
++		ret = -EIO;
++		goto out;
++	}
++	if (group == &rdtgroup_default)
++		group = NULL;
++	list_for_each_entry(entry, &resctrl_devices, list)
++		if (entry->group == group)
++			seq_printf(s, "%s\n", entry->token);
++out:
++	rdtgroup_kn_unlock(of->kn);
++	return ret;
++}
++
++ssize_t resctrl_devices_write(struct kernfs_open_file *of, char *buf,
++			      size_t nbytes, loff_t off)
++{
++	struct resctrl_device_ids ids;
++	struct resctrl_device *entry;
++	struct rdtgroup *group;
++	char *token;
++	int ret = -ENODEV;
++
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
++	group = rdtgroup_kn_lock_live(of->kn);
++	if (!group) {
++		ret = -ENOENT;
++		goto out;
++	}
++	if (off || memchr(buf, '\0', nbytes)) {
++		ret = -EINVAL;
++		goto out;
++	}
++	token = strim(buf);
++	if (devices_quarantined) {
++		ret = -EIO;
++		goto out;
++	}
++	if (group->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
++	    group->mode == RDT_MODE_PSEUDO_LOCKED ||
++	    (group->type == RDTMON_GROUP &&
++	     group->mon.parent->mode != RDT_MODE_SHAREABLE)) {
++		ret = -EBUSY;
++		goto out;
++	}
++	/* One registered identity per write, with no path or list parsing. */
++	if (!*token || strpbrk(token, " \t\n\r\v\f,")) {
++		ret = -EINVAL;
++		goto out;
++	}
++	ids.closid = group->closid;
++	ids.rmid = group->mon.rmid;
++	list_for_each_entry(entry, &resctrl_devices, list) {
++		if (strcmp(entry->token, token))
++			continue;
++		ret = entry->ops->set_ids(entry->dev, ids);
++		if (!ret)
++			entry->group = group == &rdtgroup_default ? NULL : group;
++		else if (ret == -EIO || ret == -ETIMEDOUT)
++			devices_quarantined = true;
++		break;
++	}
++out:
++	if (ret)
++		rdt_last_cmd_printf("Device assignment failed: %d\n", ret);
++	rdtgroup_kn_unlock(of->kn);
++	return ret ? ret : nbytes;
++}
+diff --git a/fs/resctrl/internal.h b/fs/resctrl/internal.h
+index e62a277dee85..4bebd998bdb7 100644
+--- a/fs/resctrl/internal.h
++++ b/fs/resctrl/internal.h
+@@ -335,6 +335,14 @@ __printf(1, 2)
+ void rdt_last_cmd_printf(const char *fmt, ...);
+ 
+ struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn);
++bool resctrl_devices_visible(void);
++int resctrl_devices_prepare_mount(void);
++void resctrl_devices_unmount(void);
++int resctrl_devices_check_group(struct rdtgroup *group);
++int resctrl_devices_show(struct kernfs_open_file *of, struct seq_file *s,
++			 void *v);
++ssize_t resctrl_devices_write(struct kernfs_open_file *of, char *buf,
++			      size_t nbytes, loff_t off);
+ void rdtgroup_kn_unlock(struct kernfs_node *kn);
+ bool info_kn_lock(struct kernfs_node *kn);
+ void info_kn_unlock(struct kernfs_node *kn);
+diff --git a/fs/resctrl/rdtgroup.c b/fs/resctrl/rdtgroup.c
+index 57ab090072c2..4d3417273934 100644
+--- a/fs/resctrl/rdtgroup.c
++++ b/fs/resctrl/rdtgroup.c
+@@ -1560,6 +1560,9 @@ static ssize_t rdtgroup_mode_write(struct kernfs_open_file *of,
+ 		}
+ 		rdtgrp->mode = RDT_MODE_SHAREABLE;
+ 	} else if (!strcmp(buf, "exclusive")) {
++		ret = resctrl_devices_check_group(rdtgrp);
++		if (ret)
++			goto out;
+ 		if (!rdtgroup_mode_test_exclusive(rdtgrp)) {
+ 			ret = -EINVAL;
+ 			goto out;
+@@ -1572,6 +1575,9 @@ static ssize_t rdtgroup_mode_write(struct kernfs_open_file *of,
+ 		rdtgrp->mode = RDT_MODE_EXCLUSIVE;
+ 	} else if (IS_ENABLED(CONFIG_RESCTRL_FS_PSEUDO_LOCK) &&
+ 		   !strcmp(buf, "pseudo-locksetup")) {
++		ret = resctrl_devices_check_group(rdtgrp);
++		if (ret)
++			goto out;
+ 		ret = rdtgroup_locksetup_enter(rdtgrp);
+ 		if (ret)
+ 			goto out;
+@@ -2158,6 +2164,14 @@ static struct rftype res_common_files[] = {
+ 		.seq_show	= rdtgroup_tasks_show,
+ 		.fflags		= RFTYPE_BASE,
+ 	},
++	{
++		.name		= "devices",
++		.mode		= 0600,
++		.kf_ops		= &rdtgroup_kf_single_ops,
++		.write		= resctrl_devices_write,
++		.seq_show	= resctrl_devices_show,
++		.fflags		= RFTYPE_BASE,
++	},
+ 	{
+ 		.name		= "mon_hw_id",
+ 		.mode		= 0444,
+@@ -2225,6 +2239,8 @@ static int rdtgroup_add_files(struct kernfs_node *kn, unsigned long fflags)
+ 		fflags |= RFTYPE_DEBUG;
+ 
+ 	for (rft = rfts; rft < rfts + len; rft++) {
++		if (!strcmp(rft->name, "devices") && !resctrl_devices_visible())
++			continue;
+ 		if (rft->fflags && ((fflags & rft->fflags) == rft->fflags)) {
+ 			ret = rdtgroup_add_file(kn, rft);
+ 			if (ret)
+@@ -3132,6 +3148,7 @@ static void resctrl_fs_teardown(void)
+ 	if (!rdtgroup_default.kn)
+ 		return;
+ 
++	resctrl_devices_unmount();
+ 	rmdir_all_sub();
+ 	rdtgroup_unassign_cntrs(&rdtgroup_default);
+ 	mon_put_kn_priv();
+@@ -3192,6 +3209,9 @@ static int rdt_get_tree(struct fs_context *fc)
+ 		ret = -EBUSY;
+ 		goto out;
+ 	}
++	ret = resctrl_devices_prepare_mount();
++	if (ret)
++		goto out;
+ 
+ 	ret = setup_rmid_lru_list();
+ 	if (ret)
+@@ -4278,6 +4298,9 @@ static int rdtgroup_rmdir(struct kernfs_node *kn)
+ 		goto out;
+ 	}
+ 	parent_kn = rdt_kn_parent(kn);
++	ret = resctrl_devices_check_group(rdtgrp);
++	if (ret)
++		goto out;
+ 
+ 	/*
+ 	 * If the rdtgroup is a ctrl_mon group and parent directory
+@@ -4394,6 +4417,11 @@ static int rdtgroup_rename(struct kernfs_node *kn,
+ 		ret = -EPERM;
+ 		goto out;
+ 	}
++	if (rdtgrp->mon.parent != new_prdtgrp) {
++		ret = resctrl_devices_check_group(rdtgrp);
++		if (ret)
++			goto out;
++	}
+ 
+ 	/*
+ 	 * If the MON group is monitoring CPUs, the CPUs must be assigned to the
+diff --git a/include/linux/resctrl_device.h b/include/linux/resctrl_device.h
+new file mode 100644
+index 000000000000..a39f674739d6
+--- /dev/null
++++ b/include/linux/resctrl_device.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_RESCTRL_DEVICE_H
++#define _LINUX_RESCTRL_DEVICE_H
++
++#include <linux/errno.h>
++#include <linux/kconfig.h>
++#include <linux/types.h>
++
++struct device;
++
++/* Resource-group IDs, interpreted by the architecture's request tagger. */
++struct resctrl_device_ids {
++	u32 closid;
++	u32 rmid;
++};
++
++/**
++ * struct resctrl_device_ops - program one independently tagged requester
++ * @set_ids: Complete the update before returning zero. Validation errors must
++ *	leave the old IDs intact. Return -EIO if hardware state is uncertain;
++ *	resctrl then prevents ID reuse. Called in sleepable context, serialized
++ *	with assignment and unregister. Must not call back into resctrl.
++ */
++struct resctrl_device_ops {
++	int (*set_ids)(struct device *dev, struct resctrl_device_ids ids);
++};
++
++#ifdef CONFIG_RESCTRL_FS
++/*
++ * Register only after hardware and driver-private state are ready. The bus and
++ * device names must remain stable until unregister. Initial IDs must be zero.
++ * The driver must own the tag fields exclusively, including across reattach.
++ */
++int resctrl_device_register(struct device *dev,
++			    const struct resctrl_device_ops *ops);
++
++/*
++ * Remove the requester and drain callbacks BEFORE freeing driver state.
++ * This also resets its IDs. A failed reset quarantines resctrl until reboot,
++ * rather than recycling IDs which the device might still be using.
++ */
++void resctrl_device_unregister(struct device *dev);
++#else
++static inline int
++resctrl_device_register(struct device *dev, const struct resctrl_device_ops *ops)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline void resctrl_device_unregister(struct device *dev) { }
++#endif
++
++#endif
 -- 
 2.50.1 (Apple Git-155)
 
