@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794846822;
-	b=UtIgWK5wyvHg2yf3EPN1XhN41cX9g/5k5HRD2mM2o3Wy6jg/AKLIEvk9En3Sy0wBZy1I
-	 UtIZDEkpSkxP1755qtQRSkBKPpF4TuCsRQ3PR9mqmtIcVtCcE6q7AJGsCQtAXt7irHSP3
-	 UQzrTsaHhT6UW1M48Eo03NRbCzVh/hmbceAcO4OQiC1l5YIHS/PYomnVsH78z60ULeKSf
-	 zmr3PgL1eDnIPIgO0SOWfl/qP/uFJyMUv+aLOrfYBSmiL8o3XOCPT1FcfTxowiMYRMeih
-	 kAeNPolZNkE3H1fhbaViSGWU5u3XN3e+f//1xHFAvsD6Uw3/ybqlUoiTzeZ/fpxp19Q==
+	t=1794846821;
+	b=YMpdbkPIkzqTKxPL8TJ9AP5cEKmXuM+mqeb0fXBOwsfksGZ4J6gPuWuQIvSXqhESmbKU
+	 27QTo567oWjpjxq+DVQrc12naSvNgyPLVvM8nzVODPKW2d9qNrlhCHWwGe6moFil2EFVP
+	 Mo6kP7/1Lhdf+i9n+oy84tA4MbOgT6XkH23KbU/EcRQaVTAwZdwV7m8Lmvi62jlRRfn0R
+	 3eBB22fRnJMwGBiayQmLhu4bwUu/kheN+fCtLowDjeeqLc6E5XrrPX+jO27R6RgWstHB3
+	 3fNLsdy7QVg0B1tJPQbKknifGebrVECoPZQC+M2Q/tYyhTOR1YbIy+o86GYPqXmtkcw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794846822;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794846821;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=ptEMg+KJOwEQxzXZlbSM1Cg78ADzSAlRdEto8HI8C4s=;
-	b=ZghV99B8dDKwPWlyjJcW1dTwRVHXwA2zU9+yyu0+AK8mkWRJCa5ZUrI0MmjPYLhFmWwZ
-	 5t8I9FgdsG8uVF7Xy7bP8YWoUfaUoP+vIDyoe62+AVm1XLjwqyqTooce+p4/QuJWK05as
-	 VpwiTwFIvI90TaqQma4Hklvw95Td39l7LYFjgLmKrVNuNd0gnHRwnzbetVbTuX1yS0qDS
-	 B0EylFahzqgmiLU14Ffa7q3HJLqnIAuhuTVXIh2mtSgtNGWAzzjuWUnwBq1ANCzhLFhl6
-	 DHggReLVNnymgCq+U3/B/fWU+NOwiwyS44DmqxV9B14ePugTGQsHpoAILxrN7YOMqVA==
+	bh=H5M4PsxOirRTJY7Xf/9ZuzKVZPyqS56IjeQL35ENvRw=;
+	b=s8bGbxYWPdQXD2E+NLEtEuQGtZ2iRbNq7dQl0mA0e550xLIjDqxNhJwssx/wXru1DFEx
+	 A9u0CK+m3gVC2/asH7lY9tBbq1GFiFVocF0At6VH+8NhwC5fdaZsxxtNuBMRgAYbzcogH
+	 1QYB7ZcXguxXgTR34UUlY6laHCjJ0/wPBcxZ9UqsbI807HWk0JS78wGiVqnIZAWkEeNeo
+	 V433VE1kqAdm7LXHNLdCLm2qiragOnV1mFrpXgziBh9VTxDO6Gvg2wouwX1WOxq2l59wR
+	 Au8YzUTS2ZWVPT+S79XgkTUqjN2SLPW758huFA7lH5/GE9e8eQ3IQJbk6HJhCLFzvFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MBXNVCXH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NDcF6mZT;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0343606A32A;
-	Mon, 16 Nov 2026 16:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MBXNVCXH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2291F000CA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E00606A339;
 	Mon, 16 Nov 2026 16:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NDcF6mZT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE7B1F000CD;
+	Mon, 16 Nov 2026 16:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794846822;
-	bh=ptEMg+KJOwEQxzXZlbSM1Cg78ADzSAlRdEto8HI8C4s=;
+	s=k20260515; t=1794846821;
+	bh=H5M4PsxOirRTJY7Xf/9ZuzKVZPyqS56IjeQL35ENvRw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=MBXNVCXHIglAnQW2QvHh3jGLdu0vNUc/pjWPLfkook1pjVadTNW8dM4g4o2M8WfI6
-	 xo5LDfFdejGY0ykzXQTokGIiiLif5qgiUb/neqaNkxRx1OttIcONIXTOZtMHR5+mTR
-	 7nZ4Di3UnR/o8760pXLaAn0jALDOenvKNIIyYoyGmXcsR0FwIJoHJ9sbswT39+4iob
-	 3kW+dScoOqcJSwLV4qGLcUGDtMf1smceRxL4Hqekw5swuS9VIiLPEBJlxXbisE8xXE
-	 KXVv2sUjFyq00grGnn3Gjh05iP8Gm+/c5QpCPv8IStnDqDcHDWirdGlALfEnXfSRf4
-	 CVAoFZnT5dVEw==
-Subject: Re: [PATCH net v4 2/2] selftests/net/openvswitch: check that a failed
- set keeps the features
+	b=NDcF6mZTnw5jDeNXAtIXpmLyP+IdkVxeigEotB0VukEQsInc8hUQqnea98TzujDVj
+	 YYmFQF7AjJ51eePqKNEaSlLMRMUd1LoKR7GxB8UVwdU1YyPLf+lIyDNwxD34yvLXil
+	 N04XhqKpL/NBEwFFaLHm03vd4jsv4WcNYU3zCGHSjR7jNgAOvl1cpC+w0H0rxG6s3B
+	 MLjp4bVomOI9dr1rYwQQ4DjQA+rWMr3KTrm6ST6qKC+DtfrM5GOgF5qcvVGar5P0Rf
+	 1MGZgWiJ+9NbN6Yyi1ty4N+3DozORgCOHJY/FeZSxnhUn+Ks9+g6RsYNvngIK/abkV
+	 OYPmqVGc6iv+g==
+Subject: Re: [PATCH net v4 1/2] net: openvswitch: do not record user features
+ when the change fails
 From: netdev-bot+sashiko@kernel.org
 To: houminxi@gmail.com
 Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
  i.maximets@ovn.org, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 16 Nov 2026 16:33:41 +0000
-Message-ID: <179484682148.3136.16392010517799748029@kernel.org>
-In-Reply-To: <20261115163134.3202677-3-houminxi@gmail.com>
-References: <20261115163134.3202677-3-houminxi@gmail.com>
-X-sashiko-severity: Low
+Date: Mon, 16 Nov 2026 16:33:40 +0000
+Message-ID: <179484682026.3136.13753538826492049125@kernel.org>
+In-Reply-To: <20261115163134.3202677-2-houminxi@gmail.com>
+References: <20261115163134.3202677-2-houminxi@gmail.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -64,168 +64,140 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
-- [Low] The patch adds `exec 9>&1` and `ovs_fail()` so that a FAIL prints
-  its reason on the real stdout.
-- [Low] ovs_dp_features_check's comment says "A show that fails and a
-  datapath that reports other features are different faults, so they…
-- [Low] The patch runs `exec 9>&1` once at the top level of
-  openvswitch.sh (line 52) and never closes it.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] The patch changes __dp_destroy()
+  (net/openvswitch/datapath.c:1973) so that its first statement is…
 
 --
 
-selftests/net/openvswitch: check that a failed set keeps the features
+net: openvswitch: do not record user features when the change fails
 
-This adds a set-dp command to ovs-dpctl.py that sends OVS_DP_CMD_SET. It
-also adds two openvswitch.sh tests checking that a rejected set (dispatch
-bit with an empty per-cpu-pids) leaves the datapath features unchanged.
-The second test covers the recirc bit and skips when the kernel answers
-EOPNOTSUPP.
+This patch moves the write of dp->user_features in ovs_dp_change() so it
+happens after the per-cpu upcall portid update. It adds
+ovs_dp_set_user_features(), which keeps the tc skb extension reference in
+sync with the OVS_DP_F_TC_RECIRC_SHARING bit. The helper is then used from
+ovs_dp_reset_user_features(), the ovs_dp_cmd_new() error path and
+__dp_destroy().
 
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index 21444657a0404..559c25d510998 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-
-[ ... ]
-
-> @@ -44,6 +46,11 @@ info() {
->  	[ $VERBOSE = 0 ] || echo $*
+> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+> index b2a0b09fd4a56..8fcb9f2c8ece0 100644
+> --- a/net/openvswitch/datapath.c
+> +++ b/net/openvswitch/datapath.c
+> @@ -1704,6 +1704,20 @@ static struct datapath *lookup_datapath(struct net *net,
+>  	return dp ? dp : ERR_PTR(-ENODEV);
 >  }
 >  
-> +# ovs_sbx sends everything a command prints to debug.log, and a failing run
-> +# deletes that file. Keep a handle on the real stdout so a failure reason
-> +# still reaches the CI log.
-> +exec 9>&1
-
-[Severity: Low]
-fd 9 stays open for the whole life of the script, and bash does not mark
-it close-on-exec. That means every background daemon now inherits it.
-This includes the upcall listener started by ovs_add_if -u and the
-daemons started by ovs_netns_spawn_daemon():
-
-	$*  >> $ovs_dir/stdout  2>> $ovs_dir/stderr &
-
-These spawns redirect only fds 1 and 2.
-
-Under the kselftest runner, fd 1, and so fd 9, is the write end of the
-pipe into tap_prefix in run_one() in kselftest/runner.sh. tap_prefix
-reads until EOF:
-
-	(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
-		tap_prefix >&4) 3>&1) |
-		(read xs; exit $xs)) 4>>"$logfile"
-
-If a daemon outlives the script, could this pipeline block until that
-daemon exits?
-
-One way a daemon could outlive the script is the retry branch in
-run_test(). It removes the sandbox without running ovs_exit_sig:
-
-	elif [ $ret -eq 2 ]; then
-		rm -rf test_${tname}
-		run_test "$1" "$2"
-
-I could not find a current test that returns 2 after spawning a daemon,
-so this needs such a leak to happen. Daemons may also already inherit
-the runner's fds 3 and 4, which limits how much fd 9 adds.
-
-fd 9 is only needed for the new >&9 diagnostics. Would it be better to
-close it on the background spawns with 9>&-, or to open it only where
-it is used?
-
-[ ... ]
-
-> +ovs_dp_features_check() {
-> +	local out
+> +/* Called with ovs_mutex. */
+> +static void ovs_dp_set_user_features(struct datapath *dp, u32 features)
+> +{
+> +	bool was = dp->user_features & OVS_DP_F_TC_RECIRC_SHARING;
+> +	bool now = features & OVS_DP_F_TC_RECIRC_SHARING;
 > +
-> +	# A show that fails and a datapath that reports other features are
-> +	# different faults, so they return different statuses. ovs-dpctl prints
-> +	# the value with %X, so convert before comparing.
-> +	out=$(python3 $ovs_base/ovs-dpctl.py show "$1") || {
-> +		printf '# could not read the datapath %s\n' "$1" >&9
-> +		return 2
-> +	}
-> +	printf '%s\n' "$out" |
-> +		grep -q "features: 0x$(printf '%X' "$2")\$"
+> +	if (now && !was)
+> +		tc_skb_ext_tc_enable();
+> +	else if (!now && was)
+> +		tc_skb_ext_tc_disable();
+> +
+> +	dp->user_features = features;
 > +}
-
-[Severity: Low]
-Can the return 2 path be reached when the datapath is missing? The show
-branch of main() in ovs-dpctl.py only prints a message, and main() then
-returns 0:
-
-        if not found:
-            msg = "No DP found"
-            if args.showdp is not None:
-                msg += ":'%s'" % args.showdp
-            print(msg)
-
-When OVS_DP_ATTR_USER_FEATURES is missing, print_ovsdp_full() leaves
-out the features line and the exit status is still 0:
-
-    if user_features is not None:
-        print("  features: 0x%X" % user_features)
-
-In both cases show exits 0, grep fails and the helper returns 1.
-ovs_dp_features_expect() then prints the test-specific reason, for
-example "the outdated new request did not drop the features", and not
-"could not read the datapath". The "No DP found" text captured in $out
-is thrown away.
+> +
 
 [ ... ]
 
-> +test_dp_features_recirc() {
-> +	local t="test_dp_features_recirc"
-> +	local dp="dpfeat1"
-> +
-> +	sbx_add "$t" || return $?
-> +	ovs_add_dp "$t" "$dp" || return 1
-> +
-> +	ovs_sbx "$t" ovs_dp_features_set "$dp" --features 0 || return 1
-> +
-> +	# 4 is OVS_DP_F_TC_RECIRC_SHARING. The kernel takes the bit only when
-> +	# the tc skb extension is compiled in.
-> +	ovs_sbx "$t" ovs_dp_features_set "$dp" --features 4 &> /dev/null
-> +	rc=$?
-> +	if [ $rc -ne 0 ]; then
-> +		eopnotsupp=$(ovs_errno EOPNOTSUPP) || return 1
-> +		if [ $rc -eq "$eopnotsupp" ]; then
-> +			# info() only writes debug.log, which CI does not keep.
-> +			printf "# tc skb extension is not compiled in,"
-> +			printf " skipping recirc\n"
-> +			ovs_exit_sig
-> +			return $ksft_skip
-> +		fi
-> +		info "the recirc set failed with $rc"
-> +		return 1
+> @@ -1961,8 +1970,7 @@ static void __dp_destroy(struct datapath *dp)
+>  	struct flow_table *table = &dp->table;
+>  	int i;
+>  
+> -	if (dp->user_features & OVS_DP_F_TC_RECIRC_SHARING)
+> -		tc_skb_ext_tc_disable();
+> +	ovs_dp_set_user_features(dp, 0);
 
-[Severity: Low]
-Should this be ovs_fail and not info()? With the default VERBOSE=0,
-info() only appends to debug.log, and run_test() deletes $ovs_dir after
-a FAIL:
+[Severity: High]
+Can this early clear of dp->user_features race with upcalls that are still
+in flight?
 
-	ovs_exit_sig
-	[ "${PAUSE_ON_FAIL}" = "yes" ] || rm -rf "$ovs_dir"
+Before this patch, __dp_destroy() only dropped the tc reference. Now
+ovs_dp_set_user_features() does a plain store of 0 to the whole bitmap, so
+OVS_DP_F_UNALIGNED, OVS_DP_F_DISPATCH_UPCALL_PER_CPU and the other bits are
+cleared too, not only OVS_DP_F_TC_RECIRC_SHARING.
 
-So if the recirc set fails with anything other than EOPNOTSUPP, CI gets
-a bare [FAIL] with no reason. The comment a few lines up says the same
-thing about info().
+When this store runs, every vport is still attached, the datapath is still
+on ovs_net->dps, and call_rcu() has not run yet. Softirq readers on other
+CPUs can still be inside queue_userspace_packet() for this dp, and that
+function reads the field twice:
 
-The set-dp steps that only do "|| return 1" have the same gap. One is
-the --features 0 step above. In test_dp_features() there are the
---features 0 steps and the --features 8 set before the outdated add-dp:
+net/openvswitch/datapath.c:queue_userspace_packet() {
+    ...
+	if (dp->user_features & OVS_DP_F_UNALIGNED)
+		hlen = min(skb_zerocopy_headlen(skb), cutlen);
+    ...
+    skb_zerocopy()       /* user_skb gets page frags, now nonlinear */
+    ...
+    pad_packet(dp, user_skb);
+}
 
-	ovs_sbx "$t" ovs_dp_features_set "$dp" --features 0 || return 1
+net/openvswitch/datapath.c:pad_packet() {
+	if (!(dp->user_features & OVS_DP_F_UNALIGNED)) {
+		size_t plen = NLA_ALIGN(skb->len) - skb->len;
 
-ovs_sbx sends the "set failed: ..." or "DP ... not found." output from
-ovs-dpctl.py to debug.log, so these failures also reach CI with no
-reason.
+		if (plen > 0)
+			skb_put_zero(skb, plen);
+    ...
+}
+
+Say __dp_destroy() stores 0 between these two reads. Could pad_packet()
+then call skb_put_zero() on the nonlinear user_skb and hit
+SKB_LINEAR_ASSERT() in skb_put()?
+
+plen is nonzero whenever the packet length is not a multiple of 4.
+ovs-vswitchd always sets OVS_DP_F_UNALIGNED. So it looks like deleting a
+datapath under traffic (OVS_DP_CMD_DEL, vswitchd teardown, or
+ovs_exit_net()) is enough to open this window. That needs only
+CAP_NET_ADMIN in the owning user namespace.
+
+The same clear also changes in-flight upcalls in ovs_dp_process_packet()
+and output_userspace(). During teardown they fall back from per-CPU
+dispatch to per-vport portid selection.
+
+The new kernel-doc in datapath.h says:
+
+    so this field is written last, through
+    ovs_dp_set_user_features(), with ovs_mutex held.
+
+Here, though, __dp_destroy() writes the field first, before any vport is
+detached.
+
+The datapath is only freed after an RCU grace period. As far as I can
+tell, no fast-path code reads OVS_DP_F_TC_RECIRC_SHARING per dp; flow.c
+checks tc_skb_ext_tc_enabled(). Would it be enough for __dp_destroy() to
+keep the old conditional tc_skb_ext_tc_disable()? Or it could call
+something like:
+
+    ovs_dp_set_user_features(dp, dp->user_features &
+                             ~OVS_DP_F_TC_RECIRC_SHARING);
+
+The same bit could already be flipped racily through OVS_DP_CMD_SET and
+ovs_dp_reset_user_features() before this patch. Closing that older variant
+would also need queue_userspace_packet() to take one READ_ONCE() snapshot,
+pass it to pad_packet(), and use WRITE_ONCE() in the setter.
+
+The only later patch in the series, "selftests/net/openvswitch: check that
+a failed set keeps the features", does not touch net/. So this is still
+present at the end of the series.
+
+>  
+>  	for (i = 0; i < DP_VPORT_HASH_BUCKETS; i++) {
+>  		struct vport *vport;
 
 [ ... ]
 
