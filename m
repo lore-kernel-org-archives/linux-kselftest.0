@@ -1,67 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=128.30.2.78
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794796313;
-	b=lbsiY2IpiJbY3jAEMJK54Q0ydgRQJir9Yipq58orHpbfa1HHq/qPktih48/0xQ2/UN2M
-	 D+PmSoI6c/FP01YG/A+buGRet8Yw0pegNwwpQO4HsCniRmrK6yufXpB2vI1pJxRZz4+Ce
-	 Mo17+il2PtwT0bHDHV8BdFZyfJrEgXd+T02xbTMEJcEfG731D4k+wz1FLyOS5ZUW2qLYT
-	 XDRMhfYEOf0QF8XgIPAJjJIpnWNenDARxIfgwpOOL/uShPoafaJ6T4cgjF4O3Pz0GpK87
-	 l0XoVCxeoAGboMhir7jlZqYbdNk9aHtCnNEz8PtkS+uk0tF/O1ISzPDDPu8/AVC9CFQ==
+	t=1794796333;
+	b=gxXmW6asBo1Tfo+J2W+qL1mLbHZTlMB9H6SDaxwHuT6kzUvLHcHrNNGf1TuBDnnUfjZb
+	 rW5U86RTpWq20jP0+qAaDKI8H6HYgFzHDgvgAKTBdPEoze3bJ2zJsmOkrq9B+3ffjMBfZ
+	 +P3iNApMXMJDWFKwyi/l8rWhps/JGaDl1HWpybUnmKIieOrexoAg3fFeH1ODz+mEqCDph
+	 +Wyp++HBiOVyxKsSI6sVyKdbotuiPlhh2PZyEGT5Vyfi8G/AvMS4Wp/hqnL/d9VSNNBNG
+	 oPXYomkplt8+w1mp6gU0qOjOHOVzErNQpV/FJshLvBrRnCmsg8lH7XwpwwiX5BDhPzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794796313;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=6gHWPvZNXm1/ip60eIFXciIe68jdkeSrwUtnZT7TE2Q=;
-	b=22JgfYPKv3vLHe9M+LLJuUfdEmG5urhyinFqLIlg0CmqESe1TD22PVAdGykHCbg28r8b
-	 Loc8PDSTZMOWReBWSeNQDTXGQxq14PESJd+pm7nx1oUKhK4aL6EgK3qJBruAhX2fW8dUN
-	 mTZzTcyLyjcrf1HR8/pOP3OVFNSa5kPfLJvf9X5dJUz4x7Ptm62BKDPWgHez+tQI3xVfP
-	 fZLbld47Y+blSt6fPwiYE621PAIk71U98zwQakEPsFXi9YPr0X0z83Qs52yJcZkLBOhXw
-	 aq+tJtbZKC4N5mQ9enB9NEcdOTX9TQEaUagjJdHQnlzJndKCIUIAr7sDYOEKM/mNDyQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794796333;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=qP0oQ8pgHCHQzk/+nldvTTjF2Xe/AkvM0ngljoymRm4=;
+	b=hw0F3Lw2ZxBGuyjEG2GkqLMGN8g/AvKfEk/agcORYAE2aqYJZtNhaD876ScDIVeHzFOg
+	 0SFCl72ugOnwy+dNR9g2zK8eVvfGEvUJ/LYc5rHGaLeBlOMF1erxnBH6YrDOnn6DYWbRM
+	 iLKcB4se1ERIqP5uy4MuE12RbWlmNJG8Cd7OyPwa/jMF3Ncbm82nhHwFtI9NQanZzLyOa
+	 igjkBR8pvlGr1rC+Iy2tazfRrcJQZxmxngZgAkwKWC+uZxRGEnoYciJZU+wug3/cJ8Sfm
+	 K7Lk/OIlzb2F8aJmbz+uF9rIb27E25qUMmqF0NSwbUV9CgWHUsLMrKoFtGhL3xebAew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=csail.mit.edu;
-	spf=pass smtp.mailfrom=csail.mit.edu;
-	dkim=pass header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.a=rsa-sha256 header.s=test20231205 header.b=OrYqVjJ8;
-	arc=none smtp.remote-ip=128.30.2.78
-Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n097wLUh;
+	arc=none smtp.remote-ip=209.85.161.53
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE25606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 02:31:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEE25606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085A2606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 02:32:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 085A2606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.a=rsa-sha256 header.s=test20231205 header.b=OrYqVjJ8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=outgoing.csail.mit.edu; s=test20231205; h=Content-Transfer-Encoding:
-	Content-Type:Cc:To:Subject:Message-ID:Date:From:In-Reply-To:References:
-	MIME-Version:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=6gHWPvZNXm1/ip60eIFXciIe68jdkeSrwUtnZT7TE2Q=; t=1794796312; x=1795660312; 
-	b=OrYqVjJ8vXwCtJQhS2iY16HmsnZJNLksEnOnV00Fn8V3UWRVnBmQy8/wjv5Er+U7OglpQ3ZKyMr
-	yehbBC3vEmZashV4weiO610rS3kVvTBx4Fp8eBzwXoa/WgOLk+/goswMBwREKzzEUD7HFUOuuWifW
-	LerHwW8AvgTUFG+HruIW8k5X7/6gCankf06wCXdFlCNyxECbv3pQh3c5OOE/cgSB5ur1wvQnz0xKT
-	WU2rNZyNr/0zpuW3WaLGUzPsqP7Fxvs6+pGMCyw37EIr6+M+FOE22c8uUsWAEMzawMvW1AYTwf65w
-	15HseUnNG99ENynbL+LZINnZ0CWYUulGtUQg==;
-Received: from mail-dl1-f51.google.com ([74.125.82.51])
-	by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.95)
-	(envelope-from <nickolai@csail.mit.edu>)
-	id 1xSmVb-004DGr-Uy
-	for linux-kselftest@vger.kernel.org;
-	Sun, 15 Nov 2026 21:31:51 -0500
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1b3ada81853so2550882c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 18:31:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErGKxe6G+ORxDz6rpRADPnc1G3uqxAGGOkXCw5r27IhfXoaZ265iZpvAAXjn5xwWa5VP++Ktv4oNgq4qNTvKn5I=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/SCDb3yZdtBuFEMYGpCpuCTYiKv0JQPrwGyipjBwdf9jONa6Qt
-	rYJtEM+i7lVueDGUyLkj/YkU8jCH31ccCCUaPv7DrTKCnQjGTLTEfSX34uOqguNPXjRnZRHYCLq
-	0SUnYwLWI62hGIXUnblJs6GRNjgHesCM=
-X-Received: by 2002:a05:7022:290:b0:185:4ad4:3d15 with SMTP id
- a92af1059eb24-1b503068235mr8029692c88.1.1794796311011; Sun, 15 Nov 2026
- 18:31:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n097wLUh
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6b19e291cc6so3795608eaf.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 18:32:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794796332; x=1795401132; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=qP0oQ8pgHCHQzk/+nldvTTjF2Xe/AkvM0ngljoymRm4=;
+        b=n097wLUhxoclfA5QObXODd/JJRRKdOMko7wT9CCDpExxu+EqWIRhSBNsYYJW1UNrAo
+         oNR2SX6deWfZeNa0DslMa0sMX7UtmAo4zgIRgiABWk5pgtfUOw13ijcp3BLV3Cx6zeNf
+         1bUrTC2qZRH5pmqtCBMte/Th5bR9t19SgALJVXzq6Vf7+4xIxuM67fweKuwVegbjyKw8
+         emkTrBKSFEk8UIjCPafZo09qflxilxW1zvRkRkKTsOe9nWg8K/mFtD/SOTvEtC638G2M
+         jBcu5xCP71GlWOtRLnusPyokNC5B0dn9ZA4K8Cg9ZrEg3zxWJMvW1nrpzEpjZ7RWAlVe
+         n4Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794796332; x=1795401132;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qP0oQ8pgHCHQzk/+nldvTTjF2Xe/AkvM0ngljoymRm4=;
+        b=tJq9Mm07J7JijAuXoaYkwAABPpwRyxyZaFJVckveusKhBJY9ab4VZ7Gvw7Jviq/7iv
+         k6cSXLzWvID2VhzILPQ+IrqVUxsH9nZWq/yxMx0RI0+7CdmXX4+88hfkTxseyCGi3ZyE
+         uZqoAsG5nCR2n6UawjHgFwyYWzSGfAkRE9u0mTUMv9PQNKHN30hUYFgPfQ9jzmW+eJj4
+         fQbKt3cLDi3GvW+y4fXf6o3PA0H50UECOFtmyUa/Hw5Ir3A9FhAPY3W0Izk+AOf11uEb
+         56siB1dE3xEqSuxEZdvP6pV5wCqAHml3D9D6zSxPx3yMUBM39sNpmYvxzhUEhDXikowX
+         Kbqg==
+X-Forwarded-Encrypted: i=1; AL+hErGoEm/slM8jNZY9cqTwX2C1OlAuAkhJTstVjNfEhbbFYMnKzjJTQ+QZPlAhPjE/Mwzl9tibocR0S2FyIX+djKM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+tLHNQNi+6N65OTz9sU/U0frqAC+A4lOqSckx3tma85C/sofhE
+	G+C8POVchl1nAx6VSLt/SAHlohNCLf58P9VW6op2XFss+vYW4xuboyAA
+X-Gm-Gg: AYBFou0dumM4mk5rJ5XrVKki064dQo872q3br3qBQEqgcpyJAgxJDrykgAVSG+TCCKz
+	lfS54Rf2S61XH0suWVw2VAa+vlyM6Jtc81ONNwSJEu6dpZeQ7XM4GzikmFUN+xF5ElY9xC+Iq5J
+	iaq1mgHVb6LdAVNqO2ObXLyTLTpQhdIkae6qkMAzTvM5gtGFOdm0glt96NJvZHegEP82XygwzYO
+	HrZ8dfNt4XKDqkCzyW1rLB76WqV1HjX+PnKXoGM2oFGp/7j6V7TwmobXFKLsTKFjgKAHmJ7crtp
+	ebwfl4RdBb3e4TN5BNYNLuyjtfXMgveHEy5VtOfGTn8rvb69x3CPXHbyjwP+/GZqDT3fiEI1P+y
+	+vLVTpmVMwKn2nUZdvwHcdK+IXavVzb4VqYkFS5cgFSbV5qFRRzim2q4ee7PuqrZwKNUFlSxfxE
+	yUN/rnUYjany2KEy9FHbCtG+0dhtiThFh5RROtGt1rDLDyvENhOUx6sXZnAzmZbt344V5CHZxuZ
+	DbAYZXeRwSi0AUiwDLQqg6xzi/ugtYlfiyR46Ri360duajbbSILXWb/9gaGhwJ+VOf71qvxCUJ9
+	MsT2GxQsU1g1IpD0UYDNJAZ60Xp8HXuVDTPwXyYfFb0ZF8h9gRCJDDW1CDLdSlrLEL/2uHVqD3v
+	k5fd4fJZVNqCfxfycURAaFWykIAV+tDhyXg==
+X-Received: by 2002:a05:6820:1c83:b0:71a:ea6a:4f65 with SMTP id 006d021491bc7-71aea6a57c6mr2168123eaf.23.1794796331802;
+        Sun, 15 Nov 2026 18:32:11 -0800 (PST)
+Received: from fedora-laptop ([172.245.82.59])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-862c67db8basm1743225a34.13.2026.11.15.18.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Nov 2026 18:32:10 -0800 (PST)
+Date: Sun, 15 Nov 2026 20:32:02 -0600
+From: Ming Lei <tom.leiming@gmail.com>
+To: Qiliang Yuan <qiliang.yuan@linux.dev>
+Cc: "Martin K. Petersen" <mkp@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+	Mike Christie <michael.christie@oracle.com>,
+	Bodo Stroesser <bostroesser@gmail.com>
+Subject: Re: [PATCH RFC 00/18] scsi: target: Add target_core_uring, an
+ io_uring based user backstore
+Message-ID: <avprIhtn1TuYLX1b@fedora-laptop>
+References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,46 +105,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261031161826.858908-1-nickolai@csail.mit.edu>
- <20261031161826.858908-3-nickolai@csail.mit.edu> <auzD6JgYSnW186Bb@Tao-Chiu's-Mac>
-In-Reply-To: <auzD6JgYSnW186Bb@Tao-Chiu's-Mac>
-From: Nickolai Zeldovich <nickolai@csail.mit.edu>
-Date: Sun, 15 Nov 2026 21:31:38 -0500
-X-Gmail-Original-Message-ID: <CADGQE7HyKgMpUojhmFJBRD1xLiPaBrc4_60yj=9+4Q6AFC4G=Q@mail.gmail.com>
-X-Gm-Features: AclHuK_fTJKor30RYSxlkDn1OTApsOaQoTALBaQe3huilFGKC2-TOlZHcinNap8
-Message-ID: <CADGQE7HyKgMpUojhmFJBRD1xLiPaBrc4_60yj=9+4Q6AFC4G=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] selftests: riscv: test FP state restore when
- rt_sigreturn() faults
-To: Andy Chiu <tchiu@tenstorrent.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Andy Chiu <andybnac@gmail.com>, 
-	Guobin Zhang <guobin.zhang@intel.com>, Deepak Gupta <debug@rivosinc.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
 
-On Thu, Nov 5, 2026 at 12:59=E2=80=AFPM Andy Chiu <tchiu@tenstorrent.com> w=
-rote:
->
-> Hi Nickolai,
->
-> On Sat, Oct 31, 2026 at 12:18:26PM -0400, Nickolai Zeldovich wrote:
-> > Add a test for the previous patch: the signal frame sits on a
-> > userfaultfd page that the handler drops after dirtying the FP
-> > registers, so rt_sigreturn() sleeps in the middle of copying the FP
-> > registers from the frame. The interrupted code must get its own
-> > registers back.
-> >
-> > The test is skipped without the D extension or when userfaultfd is not
-> > available to the caller.
-> >
->
-> The test is failing on qemu, with or without the patch applied.
+On Sun, Nov 15, 2026 at 07:17:53PM -0500, Qiliang Yuan wrote:
+> TCM/USER is how a userspace process serves a LIO device, for instance
+> to export distributed storage over iSCSI or vhost-scsi. All commands of
+> a device go through one command ring under one mutex, the data of each
+> command is copied into and out of a shared data area, and the server
+> has to parse every SCSI CDB itself.
+> 
+> This series adds target_core_uring, a second user backstore next to
+> TCM/USER, built the way ublk is:
+> 
+> - The kernel emulates the SCSI commands. The server only sees reads,
+>   writes, flushes, UNMAP and WRITE SAME as an operation, an offset and a
+>   length.
+> - A device has several queues. Each queue is served through io_uring
+>   commands on its own ring, with no lock shared between queues.
+> - Data is copied once, with pread()/pwrite() on the character device, or
+>   not at all when the server registers the pages of a command as an
+>   io_uring fixed buffer.
 
-Oops, thanks for catching that, it was a bug in the test (clang
-preserved the local register variables until the inline asm ecall, but
-gcc didn't).  Sending a v3 with a fixed test that doesn't needlessly
-rely on local register variables.
+This is ublk's uapi re-implemented inside LIO: FETCH/COMMIT_AND_FETCH
+per tag, pread()/pwrite() with (qid, tag) in the offset, and buffer
+registration via io_buffer_register_bvec(). It starts without what
+ublk added afterwards (queue affinity, recovery, auto buffer
+registration, batching), and the sashiko reviews already found the
+same abort and lifetime races ublk fixed years ago.
 
-Nickolai.
+Follows two alternatives, especially with zero kernel change:
+
+1) If LIO is required (vhost-scsi, FC, SRP, iSER), serve the device
+with ublk and export it via target_core_iblock. Same per-queue
+io_uring, same user copy and zero copy path, no new uapi. Please
+benchmark that configuration, with UBLK_F_USER_COPY and with
+UBLK_F_AUTO_BUF_REG, same 32 queues and threads.
+
+2) If the goal is iSCSI for userspace storage, keep the kernel out of
+the data path entirely. A write here still goes NIC -> iscsit -> LIO
+-> uring_cmd -> pread() -> storage client, and a distributed storage
+client needs the data in its own memory anyway, so the zero copy path
+only helps file and block backends, which iblock and fileio already
+cover.
+
+A userspace iSCSI target on io_uring receives straight into the server's
+buffer, with one copy fewer and no new kernel ABI. ioutgt
+
+		https://github.com/io-target/ioutgt
+
+is that design: one ring per queue thread for socket and backend I/O, lock-free
+data path, NVMe/TCP and NVMe/RDMA today, iSCSI on the roadmap. It already beats
+the kernel target by a wide margin: about 2x nvmet on 4k NVMe/TCP random read
+and write, and 2x on 64k over both TCP and RDMA, on 100GbE. Adding iSCSI
+there is a bounded userspace project.
+  
+> Patches 1-4 create the device, its queues and the character device.
+> Patches 5-8 pass reads and writes to the server. Patches 9-11 handle a
+> server that exits or hangs, and aborts. Patches 12-14 add flush, UNMAP
+> and WRITE SAME, patch 15 adds fixed buffers. Patches 16-18 add a small
+> server, a selftest and the documentation.
+> 
+> Not covered yet: protection information, and a way for existing
+> tcmu-runner handlers to move over without changes, as they implement
+> SCSI rather than block commands.
+> 
+> Exporting a 2 GiB device through tcm_loop to fio (io_uring, direct I/O,
+> iodepth 32 for 4k and 8 for 1M, 6 seconds per job) on a 32 CPU VM, with
+> TCM/USER and a single-threaded handler, then with this series, 32 queues
+> and one server thread per queue. Both servers keep the data in memory.
+
+32 threads against one, over tcm_loop with data in memory, measures
+only the hand-off. Please run a real fabric and explain the -13%
+single job result.
+
+
+
+Thanks,
+Ming
