@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794857204;
-	b=vHFov6F8cK8bsCwFDxQGnZ6xwtPqLj7gZAvO5NU+LBA/JNPLR69n+6y3n1YPQRT/Bneu
-	 VL8HnQwfM8r5MKv4hZZ2+OtbDa0MfrhnW/ulyoZ6Eq+4ogUn/OUInnE5E7/ODHD/ZfVx7
-	 /aIEmhRY/TdlirzUFXq5Z4dgh+UFDPsKQdOLFGshH+1uw6N0gKJP4EFwNnQp+F4bXpVRG
-	 l9fjbHChdXyv5ovHMlg7RW7hr1WHZGdscKh9hB542MYdfnZXkcmI6oIXjJUg/AcVJlLzW
-	 ACYygxMycSPyXwskjGJ59nsQ3V0frtH5UfZX7dCSpltX2tK3MBiwc8csCbekh5/x+xA==
+	b=cJewfx+RT/3bpamtG5xWuRJtxq874hNTxW6nUWSbus06P+vOYFWUBoBZ7DErab6VpaiF
+	 W6aCRiT7mzNpHnqCHymJFbA4qb91LNCzalcInauT3DDE466UInF1k8EM5dLkpWSIaCOca
+	 bLFl8QVw8PKrPCLKbrxUaz2HpdsREUwOM3MyIQB3SdedOmlS+ebfrtGYNZ3TZzbi+9mwN
+	 o9qViQFLx4RF3KEIczO4rI7m5phSfwFO/8YvrsGJZD/Pjr7feMMBr/mTy36Kl9T6TPn4E
+	 e+7LIDvhFHxLnzQ4AtFV83uowR1jyq3enY/AMMTn0SOsn+uzIjXfmzsfRv1FmZD/Tdw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794857204;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=vnJoppMAP7WauRxqGK6EpYtf89QFW43KTEiv1ZnXlrs=;
-	b=Eh/EXEwrRONuxTQSYUdYwv3vVdHs8Pg4oKTmXQjNFnyScrfU13desK3xWmb0Wam+I1mV
-	 Trd19u9DaWKGrNRIbxOsjmBKvgxL6XNlvlrexPGJbQsPxKE8Wx3TfzNti0OMa3CXHMfq/
-	 IrCukjiZbajiXlHN5VX6qKuge0SQoT1Vz2lh/9rUE1FqEsC5YVY7cSOv9AjuG4wZSKwch
-	 fOkkIjTZmYulA0SG/9PqJpK0z4T4kovjekM1yx2H3eTU2W8/s9M6SO8dvYIKP008eSKuf
-	 u7UULRaSrpr8+XSQjDJzAJ09Zg2ac3thubmAsNsF1sG7Dk9caKwgOG8QJaaiaXKDdUw==
+	bh=rTAGMePT7zV6AmlwtAYGxs2h0IDd3cQ2XFpKwG/Bz54=;
+	b=yhwNGWBl1at6AVVPmLGz6HANekPgYk11rXWp1cwmLC9TOApKsZEELOOE/2lX3fqEo1IX
+	 +XFkRbIauBGtByViFoXJdrucNg4E19pA+t+70hYjkw/WeOxPm45CCCbw4yss4oeROSq6i
+	 BsvIWoARMFZhT4uPng5rPg/2i3q6u7Vmy8pn5VRyGqcUsTRrExvpKnfcoVTc2Uw9y3fkj
+	 wmxufaTtTc7Sosk6BftRBv3rR9SAaMmLaB7yVBw6hhSQ6Vz+kYcWDjG8Llu+JddYD8Ou2
+	 0day9de0ZaSEjcLmdDTCRm/Dtv0QeZSwNAWh/spoytoqqJUaD2YDXJSI0VH1qrKDAIg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=IF87Fvb8;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=SuXMG3yd;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174AE606A32A;
-	Mon, 16 Nov 2026 19:26:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 174AE606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5B5606A886;
+	Mon, 16 Nov 2026 19:26:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F5B5606A886
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=IF87Fvb8
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=SuXMG3yd
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
 	s=smtpout1; t=1794857202;
-	bh=vnJoppMAP7WauRxqGK6EpYtf89QFW43KTEiv1ZnXlrs=;
+	bh=rTAGMePT7zV6AmlwtAYGxs2h0IDd3cQ2XFpKwG/Bz54=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IF87Fvb84bGCqgEnyGxJm1m8hoHtA1/QVZqNcwrhTCWSbiLhXVnW2rn5mkwB13PUj
-	 V5J4wz0x3yAuvXbHtbrER2VNtSOKZUk5Ld2DjB4a4WzkQbAWpQO7FzTT8Uvb9gsPZc
-	 +cYn7V+zK3f1nmTDD561TMyUz/0PokmYQfUHcmrRjnJPqnH6MDWWwjHSVvUrZ6xW/m
-	 n1SxD3cf0wzwr4oME+ukqyRatqHMPXCTkXHSNrUWUwCD0nWt9igxWvBQ2QYDGCe/sW
-	 M85E2B8xqZmUpZGfl7MTBkHwD8uxGlrTg6M1/2uxq0wik1kcXNJBdPkKkj/dyOwe5t
-	 LEq159vHJMtMg==
+	b=SuXMG3ydw6IOTlw+ASQoIpUElxknJRtDDXayA0byNr963ToQWGz8LTvFPttFX4s9+
+	 EqggALf6eAmDXA7tWBHA3tHPyfFGIc5os5rOKvhfnDD6j14IASmvn3bB7bWUvo5W6B
+	 IxIeVl55/Ej9k6Lah9ubA5DRFtWXO1hRoD+pKcd6xmvQ0PdR410Vg2eOzcOuW++SSo
+	 a3dFbxdhZ+FuWQRL3Pjpe5a17LxcpoxQxckkuzyKAssOICSDuxe/F0jaj61nCg+Eds
+	 h4VCb4kcRpVc8iERnlTbdr7DUidQW6E8Q9/bWFOGos/fOx2I1fnbU1Zb2WG3cPWlHy
+	 R99bVRhQFrUuA==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSyXd70sfzPsn;
-	Mon, 16 Nov 2026 14:26:41 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSyXf5SD9zRPg;
+	Mon, 16 Nov 2026 14:26:42 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: jstultz@google.com,
 	peterz@infradead.org,
@@ -65,9 +65,9 @@ Cc: linux-kernel@vger.kernel.org,
 	akpm@linux-foundation.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v1 1/8] sched/proxy: Reschedule when a blocked task is woken under a proxy
-Date: Mon, 16 Nov 2026 14:26:31 -0500
-Message-Id: <20261116192638.233125-2-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH v1 6/8] sched/deadline: Use the root domain a proxy-migrated task runs in
+Date: Mon, 16 Nov 2026 14:26:36 -0500
+Message-Id: <20261116192638.233125-7-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
 References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
@@ -82,68 +82,112 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With proxy execution, a task blocked on a mutex stays on its runqueue.
-The scheduler can pick it as the donor and run the mutex owner in its
-place. When the donor is woken, the CPU must stop running the owner on
-the donor's context.
+With proxy execution, find_proxy_task() can queue a task blocked on a
+mutex on the runqueue of the mutex owner. It ignores the affinity of
+the task, which does not run there. The task returns to p->wake_cpu when
+it is woken.
 
-Commit 7918cf369361 ("sched/proxy: Only return migrate when needed")
-wakes a blocked task in place when it is still on its original CPU.
-ttwu_runnable() then relies on wakeup_preempt() to preempt the running
-task. But every class compares the woken task with rq->donor. When the
-woken task is the donor, it compares the task with itself, and no
-reschedule is requested. Only sched_ext handles this, with WF_TTWU_RQ.
+__sched_setscheduler() checks that the affinity of a task covers its
+root domain before it lets the task use SCHED_DEADLINE. It takes the
+root domain from the runqueue the task is on. sched_dl_overflow() admits
+the bandwidth of a task that enters the class in the root domain of
+task_cpu(). Both predate proxy execution, when a task was always queued
+on a CPU it can run on.
 
-So the old owner keeps the donor's context after the mutex hand-off or
-after a signal. With a SCHED_FIFO donor nothing bounds this: the owner
-runs at the donor's priority until it blocks. With a SCHED_DEADLINE
-donor the owner consumes the donor's runtime.
+When the mutex owner is in another root domain, both use the wrong one.
+sched_setattr() fails with EPERM for a deadline task that waits for the
+mutex, and for a task that asks for SCHED_DEADLINE while it waits. In a
+test with two cpuset partitions, both calls failed. Without proxy
+execution they work.
 
-In a test on one CPU, a SCHED_OTHER owner kept spinning in user space
-after it released the mutex. A SCHED_FIFO waiter then ran 800ms late. A
-SCHED_DEADLINE waiter ran one period late.
+Fix this by adding task_home_cpu(), which returns p->wake_cpu for such a
+task, and by using its root domain in both places. An affinity change
+or a CPU hotplug can leave p->wake_cpu stale while the task is queued
+elsewhere. task_home_cpu() then returns an active CPU of the task's
+mask.
 
-The same would happen when a task in the middle of a chain is woken.
-proxy_needs_return() resets the donor only when the woken task is the
-donor.
-
-Fix this in ttwu_runnable(). When a blocked task is woken on a runqueue
-that runs a proxy, reschedule. The next pick walks the chain again. A
-blocked task outside the donor's chain causes a harmless reschedule
-too.
-
-Fixes: 7918cf369361 ("sched/proxy: Only return migrate when needed")
+Fixes: b049b81bdff6 ("sched: Handle blocked-waiter migration (and return migration)")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/sched/core.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ kernel/sched/deadline.c |  2 +-
+ kernel/sched/sched.h    | 23 +++++++++++++++++++++++
+ kernel/sched/syscalls.c |  9 +++++++--
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index dc270a23179d..326026ba0b2b 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4057,9 +4057,20 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index d14ce3615ba6..c55967135df0 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -4625,7 +4625,7 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 	if (new_bw == p->dl.dl_bw && counted)
+ 		return 0;
  
- 	update_rq_clock(rq);
- 	if (p->is_blocked) {
-+		bool returned;
+-	cpu = counted && p->dl.dl_bw ? p->dl.dl_bw_cpu : task_cpu(p);
++	cpu = counted && p->dl.dl_bw ? p->dl.dl_bw_cpu : task_home_cpu(p);
+ 	dl_b = dl_bw_of(cpu);
+ 
+ 	/*
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index f80ea5541b3f..7f5e45a86285 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2585,6 +2585,29 @@ static inline int task_on_rq_queued(struct task_struct *p)
+ 	return READ_ONCE(p->on_rq) == TASK_ON_RQ_QUEUED;
+ }
+ 
++/*
++ * Return the CPU where @p runs, or will run. Proxy execution can queue a
++ * task blocked on a mutex on the CPU of the mutex owner. The task does
++ * not run there. It returns to p->wake_cpu when it is woken. The caller
++ * holds the rq lock of @p.
++ */
++static inline int task_home_cpu(struct task_struct *p)
++{
++	int cpu = p->wake_cpu;
 +
- 		if (p->se.sched_delayed)
- 			enqueue_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_DELAYED);
--		if (proxy_needs_return(rq, p))
-+		returned = proxy_needs_return(rq, p);
-+		/*
-+		 * @p was blocked and this CPU runs a proxy. If @p is the donor
-+		 * or a task of its chain, the donor no longer waits for the
-+		 * task that runs. wakeup_preempt() compares @p with the donor,
-+		 * so it does not see this. Pick again.
-+		 */
-+		if (rq->donor != rq->curr)
-+			resched_curr(rq);
-+		if (returned)
- 			return 0;
- 	}
- 	if (!task_on_cpu(rq, p)) {
++	if (!sched_proxy_exec() || !p->is_blocked || !task_on_rq_queued(p))
++		return task_cpu(p);
++
++	/*
++	 * An affinity change or a CPU hotplug can leave wake_cpu stale
++	 * while the task is queued elsewhere.
++	 */
++	if (cpumask_test_cpu(cpu, p->cpus_ptr) && cpu_active(cpu))
++		return cpu;
++	cpu = cpumask_any_and(p->cpus_ptr, cpu_active_mask);
++	return cpu < nr_cpu_ids ? cpu : task_cpu(p);
++}
++
+ static inline int task_on_rq_migrating(struct task_struct *p)
+ {
+ 	return READ_ONCE(p->on_rq) == TASK_ON_RQ_MIGRATING;
+diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+index 59d78ae6b9fd..a88a6ddc500e 100644
+--- a/kernel/sched/syscalls.c
++++ b/kernel/sched/syscalls.c
+@@ -647,7 +647,12 @@ int __sched_setscheduler(struct task_struct *p,
+ #endif /* CONFIG_RT_GROUP_SCHED */
+ 		if (dl_bandwidth_enabled() && dl_policy(policy) &&
+ 				!(attr->sched_flags & SCHED_FLAG_SUGOV)) {
+-			cpumask_t *span = rq->rd->span;
++			/*
++			 * Use the root domain @p runs in. Proxy execution can
++			 * have queued it in the root domain of a mutex owner.
++			 */
++			struct root_domain *rd = cpu_rq(task_home_cpu(p))->rd;
++			cpumask_t *span = rd->span;
+ 
+ 			/*
+ 			 * Don't allow tasks with an affinity mask smaller than
+@@ -655,7 +660,7 @@ int __sched_setscheduler(struct task_struct *p,
+ 			 * will also fail if there's no bandwidth available.
+ 			 */
+ 			if (!cpumask_subset(span, &p->cpus_mask) ||
+-			    rq->rd->dl_bw.bw == 0) {
++			    rd->dl_bw.bw == 0) {
+ 				retval = -EPERM;
+ 				goto unlock;
+ 			}
 -- 
 2.47.3
 
