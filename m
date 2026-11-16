@@ -1,84 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794862227;
-	b=WUIbVehIjdXxqA+Jmgq2jr40uaT8lt1s53f/V5EF1cGNXDIMWhE/8lOVZe3qNHerxqFS
-	 CmCkdvyG6OzIYlITDc6wnSHBFxa6SrMCJsFqywaXjCJpdnKeOaKMYIO5UIhOyYTsF3CEU
-	 7a38Qd7C6mDzfDg4HIpjRJPOjq57NuTrZG7oTLkMDNF+ILeqgI4bTeqH4z7FcD0nLslQ4
-	 uwSFCyHnI7ug82xkPiOOl4krKKW7d96XhjirkmQD4dR7g+4X7YwCQXzkmUchzSK2wJAIW
-	 osbia5oYeuxrJ/oKjEaBMotC9wnclHB+FeFhQ6BRJw2ZQaXtbPiIFlM0Be5A/7qxW1w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794862227;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794863573;
+	b=ySHuisy/gjcVDgjBDSE6pPXzhEd0bdokYlQJ3P/n9GjiytFxGtJjsiAQG6zL+x395o5X
+	 /HeAIHDEMIeCHxHtntiyMbF/PBEkKGACaYO1ArYBCWfE2wDj4e4LxgI2ZihXnduJNw/Z2
+	 ua9jj++AlGVcRJhdALLuaZGHN1ZYpZ/ZfHWttOZV5DpqMdWNGX06OzTJpsUBKxMsYOgs6
+	 0HTwEP8JleUiaOhvZaXFBr1KdhatSEeGQaamCGcJFTfYK/qbF2s1hgEY3zmozjfwiDeW7
+	 kE1u3xxNorN5Hwiu4AU1oCwBxqo+1IWSAV44bWcBR8ZZYvPdZyMSxHYujA74yhvJpxQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794863573;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=itpoRBF/1k6lXJt+7gBQZf0XsZd0eRgpwFhim4ck9gw=;
-	b=z9vQgsUDg5m+BMQEFHbhFzEqxDbLC+dI4I5QN5FXRAA8VBxb9tfWHMeQTwaM+x6DRrUd
-	 ppEn/Y5m60EjGfQZAWya+a9ADYoqF6PisAIF6/5ufjI7vPfp6YceZPbvWfNZRX1l7+s0i
-	 e+BSjh04tEicoHx0KXxZ1daAEQlByhC7fdxgSAtTcptFb2bHQpMc8peZ03Jq6KdbbKEha
-	 ZRdtrrSwipe9nZ7iVTpnJyBOZWKE14T29cMOKaXCjmb2YzHYiprwTjcMvKoQsFdQDIt4m
-	 SnsR1Zwoy6fhExF8jn1IqRiSQTpHMGlKMJh6T3Prn/0C7OlrvFoukCPtVd+dtRSvlsw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=vUMcYZu8lnBV4gY0KqIbv+nHEJCCLnO086QAfkL8hgo=;
+	b=hzH7LhUx0uGRvFfKOSAER8XSMTnFac/Gu8KD+eXkLl4+aVHxphudQq9/9KJlObHRpAp4
+	 3kM0ZzbV1o7F/qbVrS49wdMRZqxbCSp1PtReRoyIUYrRakfumvVSpefmXdsAUhZJlcbMn
+	 g59tlEwgMOYzgRvnxDynzolLJEebrjYTCAC3whoe6+jCeWrYzK0qQ/uvwezVisso2V01V
+	 uSMeRuJIrFmUsNH78VIk0vh6pBpMEfP4m+US9evVUddKQZRXws8Qvn4u7mYve1SIhrhwn
+	 0FRgzaG4fP3Ed4i+VAcsyvvBhhF/zLJ1qD56kKZ2oA4EnCR95hRX9ktBRbHDLcMAdFA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Dwg3aB5j;
-	arc=none smtp.remote-ip=209.85.210.182
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fMBYHCzd;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56145606A329
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:50:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56145606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1598606A887
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 21:12:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1598606A887
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Dwg3aB5j
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8b5a6f2f27fso1662167b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 12:50:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fMBYHCzd
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4bb6adaf0f1so14640765e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 13:12:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794863569; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kMdSAPo+bST1H6EnvBED00GxaoI0bfsDD3XruqMFbzCDiOlMFqYo/B7byOdp9z7ejF
+         CdyqmlS8RZNxl5bwB4XheJzIa+B+VI10gAbMq6zYmSvykjYQCgGRAYyv4inkG+ewf8MQ
+         r2Szxi6/Eh+wNNi9gHXXD9puIc9cDNh1+hA403SaeuLnE+LmrsW5uVcG6vamjBqVCXe6
+         6hGx6Al847Q/svHJ5x6zgso+P/n94xcgYueFkEg0ejO0sbsXNmBcHf3MCg8Uv7YKSwy+
+         99tKlmGnyfjeFU9kPzZ1kep8sXd6kYc0R41Cw8zfXSsSU/9pMm+QTIB8OuwIdP1Pf2b/
+         DOdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vUMcYZu8lnBV4gY0KqIbv+nHEJCCLnO086QAfkL8hgo=;
+        fh=+FyNJhE00+Hg0NH3gunziS4NFknw/4voeliwUuMxHL0=;
+        b=fvnlSoqL4RX+1LPyxLbzfOLw8/qME3yobTHoFX72fcZ4eMgjICwcbtm9gWLgXNa3Oi
+         TJlBP07oLi7pZaPaaWo+SfjUPztlhbNoy8+3a7/litMz/9cwYdpQViCsLbLvI7cMZ0e4
+         oQefrpCsyR2FfXNTUc97SWftlQGbKLHQuLnsHYsMEWmXelcw7NSI14L41OsgGFLiadvF
+         Yg1wkv9mRHKNhwjFw1GnwDzIhoU3OHEVVHNAU+3prO/G4H4eTmwck3c5SHBDbB5IJJ8Z
+         hKCJf7fyjLHRCopVT2/KsoHRB2PqZLCaPQkdfaNLkoHxAcp87DFcneEWd4KCXv3jvRsI
+         cPjw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794862226; x=1795467026; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=itpoRBF/1k6lXJt+7gBQZf0XsZd0eRgpwFhim4ck9gw=;
-        b=Dwg3aB5j/PWPJaLku3L1tUZkBCUnHRSbqBmF3A4BQGz08Tq28ncBeYQbG/So5ZsN+h
-         NojTXp3MVD/ZSvcPTtCd3tmxdm9+qM5KoPTSkI+CLdlA+txelMPpn8SZybXuEjrLBIaV
-         YowodJucWxxle8t1RD08hQ061mcCTFHAAfcigRC9haQR8iCHdz2xN+lplQeaY4S1h8P2
-         rfyRhY/H0SQx7FRPTAB/RKZgvSK1AUAlv4LwLdvUsGDJp95HEf/Kqijr56sClMPAuG4N
-         jqnkIcUVMlGE6mtQ8PhlTITjVU0VqdOlyT+0EtqE4DK5p65P3wpVCNkS6l7wiGteLlYw
-         f3aQ==
+        d=google.com; s=20260707; t=1794863569; x=1795468369; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vUMcYZu8lnBV4gY0KqIbv+nHEJCCLnO086QAfkL8hgo=;
+        b=fMBYHCzd06LovLLME8aQkedzRHJ0gmu5w/QBtnPIt1dTWaNPaVtltJl8CUKAcz9FZt
+         71/dY3X1H/P2TJaKxoUUFJ69cAEK4+oO5A9Y0b2HuFWEwDzgj6f9PERh8G5TAPVDlqoP
+         O/nWM/NmlE57cMxf2ac9/GZ1wSqwL5FueF/KlWiUOK9EIt0OtSbaPX2g1Fl27HuvUZjB
+         ld1jpajZRLGfz1oiX301P87gDF+Ik7RnkYHw4hG8PiNsgl02KAn6c4mwLLpruTR9i/N3
+         Az5680TsGBWRdoqZoBns26Z7ySbt3WxwN9KLrzMrfVW6zCpmtjU1UiR5rZ0P8Sm9M3pJ
+         kQAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794862226; x=1795467026;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794863569; x=1795468369;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=itpoRBF/1k6lXJt+7gBQZf0XsZd0eRgpwFhim4ck9gw=;
-        b=edYypiEE96GcWBmpQ4yUTXoRxc4787fi0nKQMfRyO3Q397UYyDirLJ9komAYZBZ48X
-         ED2Q0ygE2QBEHwbWk4GnFRqE1UxHPt3j8rhchDtDEwpDuvp/uIyunetgRwfHgje4m3nZ
-         NG2SOn1yZMmgUCazFjt9baeqBbt70V69ocLGNH5t4bhIcC+fAjxCw43My4rdckake4z9
-         t3bXK7EJTeY3MaQhMzn0CFWsZ2vC0F9r0wTCfSKwDfcq/K0fUnBjJf12+3G3SS4D0Sdc
-         ks+AyXj0CGC9dnZZnHXBMBU6lJP+7ysP/LbSs+J1u/TsfBVA7d3GMRkCvQPcyKTXyOWo
-         VMdA==
-X-Forwarded-Encrypted: i=1; AL+hErFteHSztn+MN0RjnKLW4RilsC8eqR0FysuQ4oPQNb1kE4DpsW1MiMNY7KDaFU+0SalrPqP0gpkONZOkp3gUjmI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Av+6qqcV1+GvLWQqDd6NqrqUhHFM/7l+n0yAtD7Yd/aY5XAub
-	J59Yh2pO4Lf2Nvxxc2i7+48qA0IClJgsYAtCGqVXtoW2weh2V9zxgrH955B2KIcaLw==
-X-Gm-Gg: AYBFou0wtZ64DSb1wghTM8dMOKO9SASsEcF3S4YWcimwT0Oigpl5C1NgxZ9Q5Abh+Fb
-	BeswOomUoblth1GgX0n7K4gY4myXfNtJsY5N/EFwMavroUpNimF6L1QnWSfsfBe7AN6E+c4SZdl
-	G62CtuQ6NIbbyUXNzwWlalPyYz13D3K+qrgMybDVJdJ4D3J4pShN3c/AGqqbJz7xfhzwHjSrQWO
-	izTzekTas8Bx+BNeEvT5FPlrv1kq8i2xGf8X0p5vyqAzy030xDMxn1AdKHSoiZaZLDfmfUDK8+D
-	/K+g2EMOQGCxfWGFaZzsykdjkrMRrzTGpHe15y+DYQ9oqg7ARFBCFX8iyZLBOIvu8VQQkKTlmhl
-	gytMadhP5BOyxYLPuYnNgPyJpQRqu+rTFYj2qKTA3FK2OI9ahyyq3kK+jFsbQ+c8z+PCV266D9v
-	55SZwGtxOT48mgSZ+3kRboHTnRMpNprZEc154vSuncNVtGc2bMIdjX444XV56K08jiIklrjCoKy
-	umCI5OJjJGNIIt0EQmcOgf94xrxOR8XSTm/VyqtsQQPVQ28mPToHLdMcxl7Z6RjcB1ijEFnSBXG
-	mEAdlex42VWE8EKv/uVaIiztN/L16QqcLwCADd42+VDxzQfBFUA2ybc/79rJWj7G
-X-Received: by 2002:a05:6a20:ef03:b0:3e2:4350:1528 with SMTP id adf61e73a8af0-3f7a51ba2ffmr9092719637.7.1794862225898;
-        Mon, 16 Nov 2026 12:50:25 -0800 (PST)
-Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cddc18c847asm4527944a12.28.2026.11.16.12.50.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 12:50:25 -0800 (PST)
+        bh=vUMcYZu8lnBV4gY0KqIbv+nHEJCCLnO086QAfkL8hgo=;
+        b=fi6rxz+xI2oOykoepL8jcLy8qSghCSkeBNN1ViPlu0ktXZwGOLTSjl8iFkoGWtrEx5
+         v5LCK0+eq7FOUISvUJm6Ir9cRk4W+64KmDjqHyzOe6M0tBezl8rOCa1LrHUIC0Urs8c/
+         fY+9jbbjhi/IqU5zYPwhRholdnCPQytGaN/UEpy2+G+NkBquux+/X5tWrVGirkVw/rds
+         r0RHfPIZ3AjGoMuTR6Y9eTfOt0mcv/11V7+Nn/wL266wCQwaKvMgKapgj8mO4eZ1YnVX
+         yM2MsX25bjHVAHsULOv4nx5WVEqDk4WZayEZlCDVe0uLt4PjhUfXaR/ZG3fBIi+MsizO
+         2kag==
+X-Forwarded-Encrypted: i=1; AL+hErHrE6YjQAyUXeNgSiepkm+25zrfwz38oKi+i1vJWrrEWb2ce0gkHEIa+VClE8XVs3pRq6UWXKUGk6DxNaIn2eA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+IqNm97tRuDA7G0GEtYjKEhrmAAkL3DRZqbLdhFiAR9ZuzBJSX
+	4WhAtAUDzirtlTdYl6F0xHvkf/1xCLA2Gzox+WAUXuPosLQbpcSopvxgEN+BWW8E+ZS5md48LMn
+	3ck02xSoartgj2rvc66Y2ATkJkP9Y3xJW41nnuEA=
+X-Gm-Gg: AYBFou3ElgbCRFZSZrXqqcNVKvzsx4EtrPYvGC9LgmwYNykKwqN+Y91PhAaL+dH5oRT
+	Pgk8ChLZBBt29TAFkmbwFQaITlAsEnC2XQYA5mVHRIrzjc3SlmIu1VQWGAK36q4cLb17Qc4uSdO
+	DB80XY7dI7v+3nLMyTCo9zotTRzEiZa/YCnqmj+W4TaXO5TDeoDf9nP0CcUQWM+X5J7yXSbavLU
+	HOIL8Fyfee8BcXSVTg5UNXVw7D1j5H6WgGKJ7V76d0ckUeyB21L5c9MqPuxqhyBgIgDP2NUVSFB
+	Jd0+b1bPdlJMFs3UB66vxMd1ZI67cxfBcQs2bbr/ZlPidGdUwbZNHLhw2mbedbsHGUDA3jcCipy
+	w4cU31ZZ0gbuRxb70S5Cf+TeN4XG4ULPbeDdLG0ol6Iz/e+duWD8++voDhCOs5I7Jl8svk7pPMU
+	vUYb493GWo8nXmk0xVvKAXBv5TuKF98bRhROQ3G3FwdHdTcwOsfqDFLxNeAeevkOxTtjeK31xZV
+	Msseb4yBH3rY4i8AHn4FeuEejNAuad3cq4rQP+ND6n8WQfJpDbBzQ==
+X-Received: by 2002:a05:600c:8b82:b0:4bb:6814:7391 with SMTP id
+ 5b1f17b1804b1-4bb681476a8mr151902015e9.25.1794863568642; Mon, 16 Nov 2026
+ 13:12:48 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,92 +105,117 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com> <20261116192638.233125-2-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20261116192638.233125-2-mathieu.desnoyers@efficios.com>
+From: John Stultz <jstultz@google.com>
+Date: Mon, 16 Nov 2026 13:12:35 -0800
+X-Gm-Features: Aa3M54pKctKGXB1zsDszLWVjgZbbqKABzvcHoB3xDMhImH51M6VYE6PyFT3QX8I
+Message-ID: <CANDhNCqmsDUC1hx6GnB_2ROQ2rYm3wKYfnbkVAuAjecducsSsQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/8] sched/proxy: Reschedule when a blocked task is
+ woken under a proxy
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com, 
+	vincent.guittot@linaro.org, linux-kernel@vger.kernel.org, 
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
+	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com, 
+	connoro@google.com, arighi@nvidia.com, akpm@linux-foundation.org, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Nov 2026 12:50:24 -0800
-Message-Id: <DMWXK2VTL3XP.MWW7ZG7Z6HUF@google.com>
-Cc: "Jason Gunthorpe" <jgg@nvidia.com>, "Alex Mastro" <amastro@fb.com>,
- <dri-devel@lists.freedesktop.org>, <iommu@lists.linux.dev>,
- <kvm@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>, "Alex
- Williamson" <alex@shazbot.org>, "Bjorn Helgaas" <bhelgaas@google.com>,
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, "Josh Hilke"
- <jrhilke@google.com>, "Kevin Tian" <kevin.tian@intel.com>, "Leon
- Romanovsky" <leon@kernel.org>, "Logan Gunthorpe" <logang@deltatee.com>,
- "Matt Evans" <mattev@meta.com>, "Matt Evans" <matt@ozlabs.org>, "Mina
- Almasry" <almasrymina@google.com>, "Shuah Khan" <shuah@kernel.org>, "Sumit
- Semwal" <sumit.semwal@linaro.org>, "Vipin Sharma" <vipinsh@google.com>
-Subject: Re: [RFC PATCH 0/7] vfio: selftests: Add peer-to-peer DMA selftest
-From: "David Matlack" <dmatlack@google.com>
-To: "Samiullah Khawaja" <skhawaja@google.com>, "David Matlack"
- <dmatlack@google.com>
-X-Mailer: aerc 0.21.0
-References: <20261111192411.4133780-1-dmatlack@google.com>
- <avYjFfqr3T/U7lvn@devgpu015.cco6.facebook.com>
- <DMTK99TDM9AM.SAM3Z4COP9WS@google.com>
- <20261115231946.GB1239159@nvidia.com>
- <CALzav=efnA_ABCZVicX0QeTmHknaEbMeWOy8cS+zHYVhm5z+iw@mail.gmail.com>
- <avtI--OIZu5E5sma@google.com>
-In-Reply-To: <avtI--OIZu5E5sma@google.com>
 
-On Mon Nov 16, 2026 at 10:24 AM PST, Samiullah Khawaja wrote:
-> On Mon, Nov 16, 2026 at 10:02:56AM -0800, David Matlack wrote:
->>Looks like GPUs and NVMe can do both as well.
+On Mon, Nov 16, 2026 at 11:26=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
-> AFAIU the memory BARs for GPUs would need initialization. The internal
-> VRAM needs to be exposed (mapped) to the BARs.
+> With proxy execution, a task blocked on a mutex stays on its runqueue.
+> The scheduler can pick it as the donor and run the mutex owner in its
+> place. When the donor is woken, the CPU must stop running the owner on
+> the donor's context.
 >
-> Do you think we should have a P2P device "setup" step that can be
-> implemented for various types of devices?
+> Commit 7918cf369361 ("sched/proxy: Only return migrate when needed")
+> wakes a blocked task in place when it is still on its original CPU.
+> ttwu_runnable() then relies on wakeup_preempt() to preempt the running
+> task. But every class compares the woken task with rq->donor. When the
+> woken task is the donor, it compares the task with itself, and no
+> reschedule is requested. Only sched_ext handles this, with WF_TTWU_RQ.
+>
+> So the old owner keeps the donor's context after the mutex hand-off or
+> after a signal. With a SCHED_FIFO donor nothing bounds this: the owner
+> runs at the donor's priority until it blocks. With a SCHED_DEADLINE
+> donor the owner consumes the donor's runtime.
+>
+> In a test on one CPU, a SCHED_OTHER owner kept spinning in user space
+> after it released the mutex. A SCHED_FIFO waiter then ran 800ms late. A
+> SCHED_DEADLINE waiter ran one period late.
+>
+> The same would happen when a task in the middle of a chain is woken.
+> proxy_needs_return() resets the donor only when the woken task is the
+> donor.
+>
+> Fix this in ttwu_runnable(). When a blocked task is woken on a runqueue
+> that runs a proxy, reschedule. The next pick walks the chain again. A
+> blocked task outside the donor's chain causes a harmless reschedule
+> too.
+>
+> Fixes: 7918cf369361 ("sched/proxy: Only return migrate when needed")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  kernel/sched/core.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index dc270a23179d..326026ba0b2b 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4057,9 +4057,20 @@ static int ttwu_runnable(struct task_struct *p, in=
+t wake_flags)
+>
+>         update_rq_clock(rq);
+>         if (p->is_blocked) {
+> +               bool returned;
+> +
+>                 if (p->se.sched_delayed)
+>                         enqueue_task(rq, p, ENQUEUE_NOCLOCK | ENQUEUE_DEL=
+AYED);
+> -               if (proxy_needs_return(rq, p))
+> +               returned =3D proxy_needs_return(rq, p);
+> +               /*
+> +                * @p was blocked and this CPU runs a proxy. If @p is the=
+ donor
+> +                * or a task of its chain, the donor no longer waits for =
+the
+> +                * task that runs. wakeup_preempt() compares @p with the =
+donor,
+> +                * so it does not see this. Pick again.
+> +                */
+> +               if (rq->donor !=3D rq->curr)
+> +                       resched_curr(rq);
+> +               if (returned)
+>                         return 0;
 
-Yes, I think we need something like that.
+I need to think on this some more, but my gut reaction is this feels a
+bit too subtle or possibly too broad. Particularly the check being
+done after proxy_needs_return, but before the exit, it feels like it's
+leaning too much on a non-obvious side-effect of proxy_needs_return().
 
-I've been prototyping a new optional op in struct vfio_pci_driver_ops:
+Both the comment and the commit message are also confusing, as if at
+the start of ttwu_runnable() if p is the donor, proxy_needs_return()
+will have called proxy_reset_donor(), setting rq->donor =3D rq->curr
+(and already calling resched_curr()).
 
-  /*
-   * Set up a range of device memory, accessible through a BAR,
-   * that other devices can target with P2P DMA and that the CPU
-   * can access through mem_bar->vaddr.
-   */
-  int (*mem_bar_setup)(struct vfio_pci_device *device, u64 min_size,
-                       struct vfio_pci_mem_bar *mem_bar);
+So it seems this patch is mainly trying to handle the case of a
+mid-chain wakeup, where p isn't the current donor, but is in the
+current chain? I agree that looks to be a problem, but the donor !=3D
+curr check just is testing that we are proxying, not that p is in the
+active chain. It could be previously blocked on a different unselected
+chain. That said, this may be a good enough approximation (especially
+as doing the donor->curr chain walk feels expensive).
 
-vfio_pci_find_mem_bar() falls back to calling it when the device does
-not match any entry in mem_bar_descs[], sanity checks the returned
-range, and then runs the existing memory verification on it.
-mem_bar_descs[] stays around for devices like pci-testdev that need no
-setup.
+Though it feels like maybe the check should be pushed into
+proxy_needs_return() instead so it can be more clearly aligned with
+the similar proxy_reset_donor() call?
 
-For NVIDIA GPUs, I had an LLM work on it and the setup was simpler than
-I expected, at least on Blackwell. BAR1 comes out of reset in physical
-mode, where BAR1 offset N maps directly to VRAM physical address N
-without going through the GPU MMU. The LLM confirmed this on by writing
-VRAM through BAR1 and reading it back through the BAR0 PRAMIN window
-(and vice versa) at offsets from 256MiB up to 178GiB.
+Or am I missing something more?
 
-The nv_falcon implementation only has to:
-
-  - Wait for FSP to finish booting, which takes a few seconds after the
-    reset VFIO does when the device is opened.
-  - Make sure BAR1 is in physical mode.
-  - Return the range of BAR1 that maps VRAM (the size comes from
-    NV_USABLE_FB_SIZE_IN_MB), staying clear of firmware reservations at
-    either end.
-
-With that the P2P test passes with a ConnectX-7 (mlx5 driver) as the
-initiator and B200 VRAM as the target.
-
-A couple of open questions:
-
- 1. The prototype allows .mem_bar_setup() to be called before .init().
-    That is enough for GPUs, but as Jason described, mlx5 device memory
-    has to be allocated from firmware, which needs the command interface
-    and therefore init(). Supporting mlx5 as a target would mean running
-    .mem_bar_setup() after .init().
-
- 2. nv_falcon does not support Falcon DMA on Blackwell yet, so a B200
-    can only be a target for now. That requires a driver to be able to
-    probe a device that cannot do memcpy. I am not sure I want to go
-    down that road.
+thanks
+-john
