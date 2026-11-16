@@ -1,91 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794855971;
-	b=t4jCU/gn5uIxyeOlolCs5RQk6f6UXr0nfS/gBnXSSHbwFlc4gZoI/CKjJC7B4IQnmSzk
-	 k7XyFs43HLX/OJrFW9KLbAW+cSzlJJR3wukqbjwYntpERnksSXHuUOlYe6qaZnf6+GW7g
-	 w5Jfi+nT6Nn7rFHHpPT/GJ7FST/MLsu6SBxS+HjKbY5YL9y1UXIxz+pj1PUJUqvPEl7RT
-	 DEt7fyVhIvs9VY4WFF8XTzsbcq6MkkgiKjm8z787TMgcJXSfveOjLYoiaWasyJnfB98I3
-	 J7OkDezCeQ4ytWihb5uWAfboeoT6nRjj8D8uGGzJyADTLvx0V7AjxY172e0NbyiD+Sw==
+	t=1794857203;
+	b=Am034c/YTNdbM3DzMzp0T0Qdoui1fojDVnht2YRW2ZxIV7d2cs0BfNeijZZ1bIuPrMjG
+	 wd8Wg93891a9IkC1VEssvzb/kozp1IP6hfSoh7nEuZBQFzZHt9Zg9Isp0L//69DiXeraB
+	 Yr6O2gkDrsJwJZRGmEMNG5x5vY223PTlYcHd8J7Twau3wkU9y1Y4cmM3Ui8rcUhOq4c67
+	 jBtCwhJbz+9Ea/CNoo4qBea6bAbwZgk41x/ofRPzax7SsEBT2zwmcDUpHvNrCriW2gjLS
+	 ojHrg/ek7NcF5G71JSbGGC2m7+ZKimPfHJejIfrjlsREzRD2HhyLBRmRu3S/8SUJ5iA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794855971;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794857203;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=iGBVYBjEfgobKOOWr8jMB9oqOSFznO4qt9KNsCj0Lyo=;
-	b=hWgYDlzyHX5r5INRcEZJNdR2K+MlHfUO/OOdEU9Df0WhAam4PyqtZ8U3sOx2lC0R6Yby
-	 hgMyR+VSHzjPwsqLPQzice2mdmbY3eIv4OifIEHzsitK8Oi9iOAl+cLNtKl2RI56nQjmV
-	 TbZKoSKBe5mUJNPwSazzmPLMa6FWW6D2C4ZfHYevbBscUT7iKQPcPr7inMLCgEwJDCwS9
-	 NpWM4ZQGCM5ieUmX8dNUI8T3kirg0W8pMwR/5ymIaTJzZ/6KESRJpiZE3bF6aQ5aLEmMV
-	 fuRO8GRL0IgCD+IYi3LZe8Kd8yj3Dgl7YVkkGj3Gtk/7c/P8bOmhLWn0ttOAe5SGykw==
+	bh=/Ht/COUbB5JDxYERD5b+OdKZt7mFWtp8lMUTNH7YKuE=;
+	b=qUrELhYF2/WWrwUkvVu4i16ocQ90RiSw7etcltU2pvkczdQTL+hCYj7wIZwSCQfhYw/O
+	 zpviO6BzZM1bgSBh2JzqEk/4OqQeIKAHIzdyRDQtUlolP6r8lQQAReEypmof4EFKU4JaW
+	 dnVbHmAKk7xGM8Dmg7E/uvTWo1Tc05hAn+TwTT2XsmXJxSqEtv3LTYNcXgniveWmhv9p5
+	 L640IIAcXtFFYLKJsYdT7gfFd2jGwKJUQGo+oRjeoOb8yrAHuA14tYFUnP7OZOik7t9Na
+	 BXZPLTlZj9ynQT0pvCP/8NkULWllqXe0bWSn4mwv0S14afh4X5buuIcFkqkvdayZc8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=R71TrQSC;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=Zu58a2Cu;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB97606F14E;
-	Mon, 16 Nov 2026 19:06:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FB97606F14E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34867606A322;
+	Mon, 16 Nov 2026 19:26:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34867606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=R71TrQSC
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=Zu58a2Cu
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794855958;
-	bh=iGBVYBjEfgobKOOWr8jMB9oqOSFznO4qt9KNsCj0Lyo=;
+	s=smtpout1; t=1794857202;
+	bh=/Ht/COUbB5JDxYERD5b+OdKZt7mFWtp8lMUTNH7YKuE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R71TrQSCNTcV+Djymc8OgLFP+eto6mh+bM+cMF6nCUPm6nqi13e9LnmHRSY+rRVhg
-	 WmY4ZmmkdVjDhCTSwg/UJEDjAClkkYh0XTItr4tbGDyeyC2LwAG8wCqCbTtuTD0WXz
-	 +25fXT0vxjbz5Ukn9OTJW+VQbeEjdsrk2D46gmSHqJ6bofZBJ5NWDSyxhvsk4mdbqG
-	 Djl9bFrOlpX+Am+MnEeI0AcAhH8/NVONNxnPFJ0PNjJTRBUZhwHxj9w1ww/egBkNv2
-	 MAEBsJMs1RAw/KwYDhmU1pBRjvW8lbphabglXXpnMialPJp4fLj6JQbUtiSNCsOJAc
-	 8V6J8xZJjB+0A==
+	b=Zu58a2CuH/L8I389RWVzADzLhNc/oizoNRW3VA62xSfQ5t9xe311E6MLI9nXnZg3S
+	 dtwcw0sJCEFwWZ171501j3C3J8ZjfYldR0qr/wEzt2YPLLTpR7urOrJn5xDQOseTDl
+	 +d/+pN2eF4VMQDbI0ogwAO+mrXft8wJefJECXWqtmFFQiXlqC0l/9jhtscQ5h1h+o3
+	 NKtsrzFcahneMFCGW5T7nn1BtIB2ZdBLratVGe+Q0VybRJzMWLlFuoggeIBe9Wv5Z+
+	 fAyONwY2x7kzQEfX+JSs7sVsHdBvEwVUU3BzuJqOc0QMQ1DJdE+IaEQ4gKi3sjYHVq
+	 UzZkGO3fE8ecQ==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSy4k0tc0zR13;
-	Mon, 16 Nov 2026 14:05:58 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSyXf250BzRPf;
+	Mon, 16 Nov 2026 14:26:42 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: juri.lelli@redhat.com,
+To: jstultz@google.com,
 	peterz@infradead.org,
 	mingo@redhat.com,
+	juri.lelli@redhat.com,
 	vincent.guittot@linaro.org
 Cc: linux-kernel@vger.kernel.org,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	tglx@kernel.org,
-	will@kernel.org,
-	boqun@kernel.org,
 	dietmar.eggemann@arm.com,
 	rostedt@goodmis.org,
 	bsegall@google.com,
 	mgorman@suse.de,
 	vschneid@redhat.com,
 	kprateek.nayak@amd.com,
-	luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org,
-	longman@redhat.com,
-	ridong.chen@linux.dev,
-	tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
+	connoro@google.com,
+	arighi@nvidia.com,
+	akpm@linux-foundation.org,
 	shuah@kernel.org,
-	bigeasy@linutronix.de,
-	clrkwllms@kernel.org,
-	parri.andrea@gmail.com,
-	m.szyprowski@samsung.com,
-	kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH v6 24/37] sched/deadline: Make a rebuild count a task in the root domain it runs in
-Date: Mon, 16 Nov 2026 14:05:36 -0500
-Message-Id: <20261116190549.230119-25-mathieu.desnoyers@efficios.com>
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH v1 3/8] sched/proxy: Stop the chain walk when the blocked_on chain is a cycle
+Date: Mon, 16 Nov 2026 14:26:33 -0500
+Message-Id: <20261116192638.233125-4-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20261116190549.230119-1-mathieu.desnoyers@efficios.com>
-References: <20261116190549.230119-1-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
+References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -97,174 +82,76 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A rebuild of the accounting counts each deadline task on the first
-active CPU of its cpuset. Commit 318e18ed22e8 ("sched/deadline: Walk up
-cpuset hierarchy to decide root domain when hot-unplug") made this
-choice. It relies on the bandwidth check to keep such a CPU active.
-This guess would go wrong in three ways:
+find_proxy_task() follows the blocked_on chain from the donor to a task
+that can run. It holds the rq lock, with interrupts off. It has no bound
+on the number of steps.
 
- - A cpuset, like the root one, can hold CPUs isolated by
-   isolcpus="domain" beside housekeeping CPUs. If an isolated CPU comes
-   first, the task would be counted in the default root domain. Its own
-   root domain would then be short of that bandwidth.
- - A task confined to isolated CPUs can see them all go offline. The
-   rebuild would then find no active CPU, and hit its BUG_ON().
- - dl_task_offline_migration() moves a throttled task, with its
-   bandwidth, off CPUs that went offline. The rebuild would count it in
-   its cpuset, not where it moved.
+The walk relies on the chain having an end. The ww_mutex die and wound
+paths clear blocked_on for that reason. Their comments say that circular
+blocked_on relationships would not resolve otherwise. But two tasks that
+take two plain mutexes in opposite orders deadlock for good. Once both
+are on one runqueue, the walk goes around the cycle forever.
 
-In the first and third cases, a root domain would admit deadline tasks
-beyond its capacity.
+Without proxy execution, such a deadlock leaves two tasks asleep, and
+the hung task detector can report them. With it, the CPU locks up with
+its rq lock held. Other CPUs would then block on that lock. In a test
+with two CPUs, the guest stopped without a message.
 
-Fix this by choosing the CPU in this order:
+Fix this by detecting the cycle. The walk remembers the task it met at
+its last step that is a power of two. When it meets that task again, it
+stops the donation and deactivates the donor. The donor then sleeps on
+its mutex, as without proxy execution.
 
- 1. The CPU the task is on, if it is active and in the task's mask. A
-    mask can hold CPUs of two root domains, for instance after
-    select_fallback_rq() widened it.
- 2. dl_bw_cpu, the CPU recorded with the bandwidth, if it is active and
-    in the mask. A task moved asleep is not on its new CPUs yet.
- 3. The first active CPU of the mask, a housekeeping one if any.
- 4. With no active CPU in the mask: dl_bw_cpu if it is active, else an
-    active CPU of the cpuset.
-
-The mask of the task comes before its cpuset. A partition change sets
-the task masks before its rebuild, and the housekeeping mask after.
-
-Leave out a task with no active CPU, instead of the BUG_ON(). dl_bw_gen
-then keeps its release from removing anything.
-dl_task_offline_migration() counts it again when it moves it.
-
-A task that select_fallback_rq() moves to another root domain still runs
-where its bandwidth is not counted. The next patch moves the bandwidth
-with it.
-
-The Sashiko AI reviews of v1 to v4 found these cases.
-
-Fixes: f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
-Fixes: 318e18ed22e8 ("sched/deadline: Walk up cpuset hierarchy to decide root domain when hot-unplug")
+Fixes: 7de9d4f94638 ("sched: Start blocked_on chain processing in find_proxy_task()")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: stable@vger.kernel.org
 ---
- kernel/sched/deadline.c | 83 +++++++++++++++++++++++++++++++++++------
- 1 file changed, 72 insertions(+), 11 deletions(-)
+ kernel/sched/core.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index b43106a59025..c765a403014a 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -923,14 +923,20 @@ static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p
- 			__dl_sub(dl_b, p->dl.dl_bw,
- 				 cpumask_weight(src_rq->rd->span));
- 			raw_spin_unlock(&dl_b->lock);
--
--			dl_b = &later_rq->rd->dl_bw;
--			raw_spin_lock(&dl_b->lock);
--			__dl_add(dl_b, p->dl.dl_bw,
--				 cpumask_weight(later_rq->rd->span));
--			raw_spin_unlock(&dl_b->lock);
- 		}
-+		/*
-+		 * Count the bandwidth in the root domain the task moves to.
-+		 * Do it also when a rebuild left the task out, for want of an
-+		 * active CPU. A rebuild that reaches the task after this finds
-+		 * its dl_bw_gen current, and leaves it alone.
-+		 */
-+		dl_b = &later_rq->rd->dl_bw;
-+		raw_spin_lock(&dl_b->lock);
-+		__dl_add(dl_b, p->dl.dl_bw,
-+			 cpumask_weight(later_rq->rd->span));
-+		raw_spin_unlock(&dl_b->lock);
- 		p->dl.dl_bw_cpu = later_rq->cpu;
-+		p->dl.dl_bw_gen = dl_bw_gen;
- 	}
- 
- 	set_task_cpu(p, later_rq->cpu);
-@@ -3795,6 +3801,55 @@ static void dl_get_task_effective_cpus(struct task_struct *p, struct cpumask *cp
- 	cpuset_cpus_allowed_locked(p, cpus);
- }
- 
-+/*
-+ * Return a CPU of the root domain where a rebuild of the accounting should
-+ * count the bandwidth of @p, or nr_cpu_ids if there is none.
-+ *
-+ * Prefer the CPU @p is on, if it is active and in the mask of @p. The
-+ * task runs, or wakes up, in the root domain of that CPU. A mask can hold
-+ * CPUs of two root domains: housekeeping CPUs and CPUs isolated by
-+ * isolcpus="domain". When every CPU of a mask goes offline,
-+ * select_fallback_rq() can widen it to both. It moves no bandwidth.
-+ *
-+ * Else prefer the CPU recorded with the bandwidth, if it is active and in
-+ * the mask. It is in the root domain that admitted the bandwidth, or that
-+ * its last move put it in. A task moved asleep is still on a CPU of the
-+ * root domain it left, out of its mask. Else take the first active CPU of
-+ * the mask, a housekeeping one if there is one. A task on isolated CPUs
-+ * that all went offline can have no active CPU at all.
-+ */
-+static unsigned int dl_task_rebuild_cpu(struct task_struct *p)
-+{
-+	struct cpumask *msk = this_cpu_cpumask_var_ptr(local_cpu_mask_dl);
-+	int recorded = p->dl.dl_bw_cpu;
-+	unsigned int cpu;
-+
-+	/*
-+	 * Look at the mask of the task first. A change of the cpusets sets
-+	 * the mask of each task before its rebuild. The housekeeping mask
-+	 * that dl_get_task_effective_cpus() reads is updated after it. If no
-+	 * CPU of the mask is active, take the CPU recorded if it is active.
-+	 * dl_task_offline_migration() moved the task there, or an earlier
-+	 * rebuild counted it there. Else ask the cpuset.
-+	 */
-+	cpumask_and(msk, &p->cpus_mask, cpu_active_mask);
-+	cpu = task_cpu(p);
-+	if (cpumask_test_cpu(cpu, msk))
-+		return cpu;
-+	if (cpumask_empty(msk)) {
-+		if (recorded >= 0 && cpu_active(recorded))
-+			return recorded;
-+		dl_get_task_effective_cpus(p, msk);
-+		cpumask_and(msk, msk, cpu_active_mask);
-+	} else if (recorded >= 0 && cpumask_test_cpu(recorded, msk)) {
-+		return recorded;
-+	}
-+	cpu = cpumask_first_and(msk, housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
-+	if (cpu < nr_cpu_ids)
-+		return cpu;
-+	return cpumask_first(msk);
-+}
-+
- /* From dl_rebuild_rd_accounting(), under the locks it asserts. */
- void dl_add_task_root_domain(struct task_struct *p)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index cededdcfd5a3..24105eeeb3c7 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -7135,7 +7135,8 @@ static struct task_struct *
+ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 	__must_hold(__rq_lockp(rq))
  {
-@@ -3802,7 +3857,6 @@ void dl_add_task_root_domain(struct task_struct *p)
- 	struct rq *rq;
- 	struct dl_bw *dl_b;
- 	unsigned int cpu;
--	struct cpumask *msk;
- 
- 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
- 	/*
-@@ -3817,10 +3871,17 @@ void dl_add_task_root_domain(struct task_struct *p)
- 		return;
- 	}
- 
--	msk = this_cpu_cpumask_var_ptr(local_cpu_mask_dl);
--	dl_get_task_effective_cpus(p, msk);
--	cpu = cpumask_first_and(cpu_active_mask, msk);
--	BUG_ON(cpu >= nr_cpu_ids);
-+	cpu = dl_task_rebuild_cpu(p);
-+	if (cpu >= nr_cpu_ids) {
+-	struct task_struct *owner = NULL;
++	struct task_struct *owner = NULL, *mark = NULL;
++	unsigned int steps = 0, mark_at = 1;
+ 	bool curr_in_chain = false;
+ 	int this_cpu = cpu_of(rq);
+ 	struct task_struct *p;
+@@ -7145,6 +7146,29 @@ find_proxy_task(struct rq *rq, struct task_struct *donor, struct rq_flags *rf)
+ 	for (p = donor; p->is_blocked; p = owner) {
+ 		/* if its PROXY_WAKING, do return migration or run if current */
+ 		struct mutex *mutex = p->blocked_on;
++
 +		/*
-+		 * No active CPU can count the bandwidth of this task. Leave it
-+		 * out of this rebuild. dl_bw_gen then keeps its release from
-+		 * removing anything. A later rebuild, or
-+		 * dl_task_offline_migration(), counts it again.
++		 * The walk came back to a task it already met: the chain is
++		 * a cycle. Either the tasks deadlock, or a ww_mutex cycle is
++		 * about to be broken. Do not walk it forever with the rq lock
++		 * held. Stop the donation: the donor then sleeps on its
++		 * mutex, as it does without proxy execution.
++		 *
++		 * @mark is the task met at the last step that is a power of
++		 * two. Once the walk is in a cycle, @mark is soon a task of
++		 * that cycle, and the walk meets it again.
 +		 */
-+		raw_spin_unlock_irqrestore(&p->pi_lock, rf.flags);
-+		return;
-+	}
- 
- 	raw_spin_lock(&dl_departed_lock);
- 	/*
++		if (p == mark) {
++			if (curr_in_chain)
++				goto resched_idle;
++			p = donor;
++			clear_task_blocked_on(p, NULL);
++			goto deactivate;
++		}
++		if (++steps == mark_at) {
++			mark = p;
++			mark_at <<= 1;
++		}
+ 		if (!mutex) {
+ 			clear_task_blocked_on(p, mutex);
+ 			if (task_current(rq, p)) {
 -- 
 2.47.3
 
