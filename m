@@ -1,93 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794848240;
-	b=4wJeadasReCmfyYNuVHmSeh02EpsZNmisFdCD3TIjknUTjlgQllnwN48NPLhvrtKRMQy
-	 R2Rdu0AHVM9Y5vpgBiOO2AkLzv2veyH1cB7P+XOcMoeu2+LElLOzCy/QQoHEZUHAce8uX
-	 h9lXt8PnHM9v7Z3OwJl9JeYcHvG0elBo9CTVVMv3xNVtQ8TvqYSfWIvKEH15oIsTvdKdS
-	 Jg2LhurEEYQEdJioA8f57MkPO6KBQD/h7meKMFHQ4e2uuJQki9bKGxFoXHBhaB54UBMVG
-	 ONpITlm0s6jvvGST5rxxG7BijUkUctYmmcPuEdbmMF0aLc6Tn4Eak1AZUA1B3qDlk5A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794848240;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=3G9PFoMgFrJiZLyd5rGhgJGT9wBQ+IPLOJUmtbLVECg=;
-	b=xWx6husBP9zlgaEe1lNLYHDTNKlCAjLolN8IGq1WMfQRhpioObdl17eSY1sUTfGy+T+W
-	 6ysJvCc2CxjjvJK2/AkpS6+kAQQTC3CjnjEONzjfTuxyfGTiDheKlpAU68yvr+F5xwHKc
-	 pxC2vvMyXkF4OQd5moMX2zdJ3UbmyaeoaBPj4K0eL3mQ48wR5JR4hKdhW0w151s8Ilf18
-	 xPw6/xyDWkh0t5CdtiUtvPrCloiD103U25VfQZC0ceGS9RFRZVi+J3DV4ubJ+6tW7tzOZ
-	 PlQEyc0WGLwJaWSEvxpQwmTNRhK0E1U+j/weYwiTa7EAAKm9K/9153DVVIYp0PbtE/A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=pengutronix.de;
-	spf=pass smtp.mailfrom=pengutronix.de;
-	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=b5BpkmLu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
-Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.198
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794849107;
+	b=H1yluEQwcDbQZAVck7VgyxnNrJb60is0u+k5luSpwlvFyySGYaYcG14QD6RKzQDamlQK
+	 4ZobOdHFbYKD9V5sebWUGeRyg5Q+aDj7VGaGEx4gYSIw909pnv5BxMso7v2MagpHL5CAs
+	 YxDCbM4RiJNh+x0dkiexfcD8OfilGlM8tDY88jWAEOmUDhUjcIhqYHK721poSHf+V68RH
+	 Qpyw6KnZH1PukRNmXXpSMmLjOfwnJ3+lIRGyE1Y+FMEX+apD+DS2ybN293h0EfeBk1EgA
+	 +YufdOX04CJbb8h+IbqfNbpmXg9U5UKkw02PQXnddydRfGT86NsH7fA9JSAs57azjYQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794849107;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=XSh28i+VhSML98fbPpvhJzYzMwMr+W1AdTaomqWNWcI=;
+	b=mOFsvwcFTFjn6zyDx550MgBVddNxKhKgqm/8BeZU7y9hEOrDWu8jcT0y69bix41ddz5q
+	 TeqyCIjCsPqaufHrLHRMNnb13nhpBZ/GFFtaQX1m6PHPbuPSlDM363Hew0lK1jAPMiNsf
+	 VyBg94GHyymXcu9gYE2qkGsyVESdK2Eiudt8Vxmwp57XjLMiKcTwtml+yAXVS9V35GQ9M
+	 07kmN6KpGitF7uZ/eiytLPm9GZrqbF60htlRRwOW4qxiUcdmg+9l1/oJHroW4UiA/SXUA
+	 /HAd8PVeOKVSdd4O8YEpky1Pdrb/3LGgHo0NLJy/AUx3y94WYxCj9z4N/QumaSsNd6A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fAdSLYMJ;
+	arc=none smtp.remote-ip=209.85.210.198
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F0E606A336;
-	Mon, 16 Nov 2026 16:57:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70F0E606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C499B606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:11:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C499B606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=b5BpkmLu
-Received: from ptx.office.stw.pengutronix.de (ptx.office.stw.4.pengutronix.de [10.9.0.3])
-	(Authenticated sender: relay-from-ptx.office.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 62D65201F22;
-	Mon, 16 Nov 2026 17:57:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1794848233;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3G9PFoMgFrJiZLyd5rGhgJGT9wBQ+IPLOJUmtbLVECg=;
-	b=b5BpkmLuUrEthbPej0hubZ31fkMXa+NzVpB3EAOlXPjbVZFxGEy6Ays3w47tY1fVyXLpte
-	7xPud8AzwE6o3SZM2wc1Us5GG91iEZbnLrFM3L+tI7J3fOSAuEndOTTu5ApBYMvM7m1H8f
-	dpPGfVxGudSq2Ten95dUjlcO7nuI+jR1tjluE/85cisR8pNSqpfheQncEx+YXri0jXC8Cy
-	LRvE+wee/RClNC0VTPv+1tiiOiFii3C8XB7h9zIenshPa0gAGvDKMbfDDiAewk6dv78ajE
-	gD6f/6DLN0xjMl7GL7pZaonf1+c4RzbHUZqxehijb0vGRZc7o+Hh66L0YzR8pQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1794848233;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3G9PFoMgFrJiZLyd5rGhgJGT9wBQ+IPLOJUmtbLVECg=;
-	b=aYOUz7YnVTbeDAj78HzZxfY6xT2g8bQKXlXhzV32ANx1di3qzSHrR4mbK1kVzutCBpsmsc
-	wxbb0pdA83TtTcXxmRwjfTK9Gok99ju2AZMdvmkwiMdDg8gsPJmbLNYd5KRVytHXBum0rg
-	/ZpxjSWZ9iYvljdKfFZWorRgup658KRX5amYpKrqWG5VFr1Wih6X1sLckobsSuAbizPc8O
-	woG7mLk4uhwZFzgxsgaUlQ4RZATIZWH+5WFlJ731r3+xgKuJs1byh1Wr5G4gLdArtLdVaq
-	pc3DrtToVaBd9el6cO8leH0oPVIFcDinLGuIgecvjthtJSqltnStwFCuL4xbag==
-ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1794848233; a=rsa-sha256;
-	cv=none;
-	b=dv2QVczAhUb4cHl4xHxXydSwU34+NSoZno7Drn+vsbnh6ItjTExc1T6EVXvMP3721Xdrga
-	DUwf9mvPfUCMbWW/sTtoQggJvUA0qbRp1gYvK9BhEbIJFi5DB7aNDdEvBHJE0zg4jVAjXi
-	Ubl1v54noyC7UunQGsROK4zYsW/n/+WiWIERh40PXCwTo1g4eZFgA9/bTJXxeRs+zcMOGD
-	qQKFmeYi4sltIZrJcH6AEf/g64kDLOAroz5SyZJ8r9z+EAKTwYn7vdR8vK2pnAX0Wgt5/1
-	wqA4saG9cPqh+2CbmrKy2uF5ciaB7/kD24Kt5EyU7RA7APloLVvglQNxYwgyRA==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=relay-from-ptx.office.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
-Received: by ptx.office.stw.pengutronix.de (Postfix, from userid 1058)
-	id 4FF2B1BFA16; Mon, 16 Nov 2026 17:57:13 +0100 (CET)
-Date: Mon, 16 Nov 2026 17:57:13 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: netdev-bot+sashiko@kernel.org
-Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
-	shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
-	quchaosheng000406@163.com, penguin-kernel@i-love.sakura.ne.jp,
-	kuba@kernel.org
-Subject: Re: [PATCH can-next v3 7/9] selftests: can: add J1939 TP/ETP
- multi-frame tests against CAN_RAW
-Message-ID: <avs16RSSFsaLvU_5@pengutronix.de>
-References: <20261111-j1939-selftests-v3-7-5a80277ab363@pengutronix.de>
- <179454972353.488853.9453703448480835098@kernel.org>
- <avbIRi9NIgi6dcEB@pengutronix.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fAdSLYMJ
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8a06750c74fso3442263b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 09:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794849106; x=1795453906; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XSh28i+VhSML98fbPpvhJzYzMwMr+W1AdTaomqWNWcI=;
+        b=fAdSLYMJ506+m+diwF6sFIbKTIywITxdgd/t8G3MxgiF5OVoSL5ZC1zK6LiBufXCX/
+         kvnhmlRoHgNzszyclZVB6Dn8Ez3iPNphBPeMp+BHzo33ndkbg9Avc/IOq5Q1jJ9uuwSZ
+         B0wAlkywavz1RYVEanbvdZAgSx3dK5HuI7VyuegEwDxwnRyAbiAiUmrmbfYTB2uMA9ci
+         eBUYBEjvL/M8WJhax76OndVS1Xd/tyXgvRlvl52mu5Pm3413we7w3lHoarUBVuwJanHB
+         x1OyrQC7Tr1h0i/4l9bN6llc6NjEQ1Rjytk3sde0vFJyRCN/W5JAu8qrn1ojO497A93i
+         wvRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794849106; x=1795453906;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=XSh28i+VhSML98fbPpvhJzYzMwMr+W1AdTaomqWNWcI=;
+        b=n3mkO16zkKKRcYuuO69yhHVTz5nDlBxAeCPYuLBRuOeK4Koj6UTkDTh0QgybcHi1bq
+         3SEZhxcEle/pRg2xhRCjXf2MwkNzuwCIaQmjrQ8U9SEdLnRbOB2Vm4SQGm3Qzj7HY1Se
+         Y0C2pFbiavSQWKsOZjUXzHO+CAuQK7jd5LYCBYMEpnbTCakLsxF7GTvaZE5FjZ4kWIGV
+         xa23Pf/pD2XZaCuWAbTfz98wC5SXE6/QWldlGjLqxL0IfL6fh6keRdxExMSqhy7Ggehw
+         fYkqAB0yRIcql1dAOnzUrlNDNJ1Hzid+WUjZQYzd7kIINfKYyikv0AjtKHLfs/qXgepN
+         ibqg==
+X-Forwarded-Encrypted: i=1; AL+hErFc/BGAj2byQH5zZEiDmkevKOp1aPyXRN34H0AC9tCE+Ee1tnpYtpL8jU30uyeeW/3I7FxEIOXISnduVI8zdP8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9zYOuzSXNDX/OBT9/tNEUicORiEVp8fN/LGGnQKNa9suoHwfDw
+	4DFruyP5Kg5mkPLWQrgc1Q5aZ7SKbbtEhtuRDyuzD/ue2MiVA5k8N72242rhxmtLQ7CIk540kxh
+	zJyMPsQ==
+X-Received: from pffi16-n2.prod.google.com ([2002:a05:6a00:c290:20b0:8a2:1bc3:8884])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1a87:b0:89f:9ea6:1ddb
+ with SMTP id d2e1a72fcca58-8beb619b3e6mr9177875b3a.23.1794849105715; Mon, 16
+ Nov 2026 09:11:45 -0800 (PST)
+Date: Mon, 16 Nov 2026 09:11:44 -0800
+In-Reply-To: <CA+EHjTyqJfGS+5UajX=RYTAG-qfhZ-vmGi=1SixXydWhwGHLUA@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -96,30 +77,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <avbIRi9NIgi6dcEB@pengutronix.de>
+Mime-Version: 1.0
+References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
+ <20261110110724.3614412-2-fuad.tabba@linux.dev> <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
+ <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com> <CA+EHjTyqJfGS+5UajX=RYTAG-qfhZ-vmGi=1SixXydWhwGHLUA@mail.gmail.com>
+Message-ID: <avs5UD79FB_DG1Vs@seanjc-mac.roam.internal>
+Subject: Re: [PATCH 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty
+ ring is full
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Nov 13, 2026 at 09:20:22AM +0100, Oleksij Rempel wrote:
-> On Fri, Nov 13, 2026 at 06:02:03AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 1 potential
-> > issue(s) to consider.
+On Mon, Nov 16, 2026, Fuad Tabba wrote:
+> Hi Sean,
+> 
+> On Tue, 10 Nov 2026 17:18:22 +0000, Fuad Tabba <fuad.tabba@linux.dev> wrote:
+> [...]
+> > > Eh, I vote to just use kvm_dirty_ring_check_request(), I don't see any harm in
+> > > clobbering vcpu->run->exit_reason.
 > >
-> > Critical: 0 · High: 0 · Medium: 1 · Low: 0
-> >
-> > If you believe none of the issues are legitimate, please reply to each
-> > issue of Medium severity or higher and explain why the AI is wrong.
-> > If any of them are legitimate and you plan to respin, please let patchwork
-> > know by including "pw-bot: cr" as a separate line at the end of your reply
-> > (one such reply per series is enough).
-> >
-> > - [Medium] The patch adds four TP/ETP tests (tp_rx_from_raw,
-> >   tp_tx_to_raw, etp_rx_from_raw, etp_tx_to_raw) that the author says can…
->
-> pr-bot: cr
+> > Will do.
+> 
+> After taking a closer look, the clobber is problematic on arm64, where
+> KVM_RUN completes a pending MMIO exit only if run->exit_reason is
+> still KVM_EXIT_MMIO. If a pre-fault stops on a full ring after an MMIO
+> exit, the helper overwrites exit_reason, so the next KVM_RUN doesn't
+> complete the exit and the guest repeats the MMIO access. The ring can
+> be full at that point if the pre-fault dirties pages, or with NV, if
+> the stage-2 walk for the MMIO access does.
 
-Typo in the tag above. Correct one:
+Wouldn't that require userspace to do KVM_PRE_FAULT_MEMORY after KVM_RUN with a
+KVM_EXIT_MMIO return?  If so, userspace gets to deal with the fallout of being
+stupid.
 
-pw-bot: cr
+> I don't think changing how arm64 completes an MMIO exit should be in a
+> fix for stable, so should I keep testing kvm_dirty_ring_soft_full()
+> directly in v2, or do you have another suggestion?
+> 
+> Cheers,
+> /fuad
+> 
