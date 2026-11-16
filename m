@@ -1,82 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794837835;
-	b=PWGRYBCHVt+PtJm0Tl7/9UJPDSDkrkCIRXv8gNItuiR3xh2JXxHjSWQr3Nd++RpE5BEi
-	 mQJ8Mmp/syJmk3/KEQii0U/JaRX/9IHj68o20/zDeEi5VWvGHOR/NNqP90zxV7OAYjZJI
-	 ZXdExfBwVE3tNrhA7bv6C3QjPr3m7yOBi4fCWGRbuXuG+2+9v4i8irz8GfT7qau200Y11
-	 Mpm33JnA9c4ez1nTbIPoivwrojcbg/l36Okh4kkbJ4RmEvub+bKv8NACSepMkccngti74
-	 mVoKck06OUt4XXrmhiPQO6Uoz2qjBljeQR2f8z7IZTBjS4Ax9Qjw0gfg/7jpoKKHTTA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794837835;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Scanned-By;
-	bh=KejH6EaczGR8Mx3WaNu+8KgTKth9EGIDXtNg5zc9zZM=;
-	b=uome/YgIRLEOLDMEZUVuokhytHzcfp69kAzTljZyIKjd5hpL8u3roLNfAeFeaAm0jM7B
-	 YmttdlXPSvWatv2g/U/jhHINJ59VVO/q7iJU+/oE9oI4rYlu1gFnoclwM170U14x+I4Gp
-	 B2MrlStEkpT4OtMM+GX3jzBeIs4iYMgK9rUMqPSq5ixBUSlmJnEmPHYhfKjAfxeZuxrFh
-	 bV4csn6IO12bvmc5Wyz4IL//N9sBi7hOO8MTWs3ffLWOeHkAyA73bxRmC7AFWIplsNeek
-	 arFrPzaibNB39Xa1zrmHAWqtQsKqkyPaRmbNtyBJK4VmYMSB+0Auyekc35zdp12K7CA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=b1yUNGjX;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794837903;
+	b=DVk10xZCg9hr060V/iNdKmATn7xqKjkccct5rXw23c7fjuK2jfQG+ZoexB1MAYoDAWdL
+	 8YDJKzVeSrG27OggznLz88MSs0i9Dv2768V+t0og70mRfmE7IjvxRie5ZvS4tb3wyWv2L
+	 20vvPILRCDSCrA+4JJ4vLG/pik1DaIygylEJesJet/yVgF91lz4V2ez4wbBdUePGobiMq
+	 OrIhh3v3N4IbXaYFd2qvPN/Lx6iqd6wP41Xc2SsHw3Thsv3a3i6HmQidtFVy7HqQo5UV2
+	 4hAZ5mR64trim4uQBts/g9aedXOjCzNyH1URe5EbhIxmD0S4UwTpX36PY2oALP/+8cQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794837903;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+	b=MuCSTf9ro/7bgxcIAhUzNDKgqIHeBSX2bze+PtsCHGGrWsNkgszc6c+Am1WJr9rBtj0t
+	 fRkU5zKIRC4lHGKxJyGxEpLCi6TVmguQHUK67ZUvO36S29tpOEK+ie3Iso2NUb56+A/9v
+	 pvDKD2vairpzqA6ZT8+ZEL2cTu1yD1c6vCnMliwwcKrUmc+ewgC+uXcwDrW0qgHWJTtnP
+	 Fb79FnsJe5UtUlNgas1pNfj1tTM1o24bte2jiP9MMpuCKkSBYxjrC1Mnwo5AF35EC++sC
+	 VL7RN1w7/LVV2bbhQ4/XJxDDaEBlIPFAwU50t8kjdxdfn0JKt+cYo8PadXXPT1fHzhQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b="RDRD/OcL";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C31E606A333
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 14:03:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C31E606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B07F606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 14:05:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B07F606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=b1yUNGjX
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794837834;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KejH6EaczGR8Mx3WaNu+8KgTKth9EGIDXtNg5zc9zZM=;
-	b=b1yUNGjXm9MM7yqVlCBQhZvuO3H1W0xtvVKCZLOKeZriiaYhg3m8gfO0LWmyNQq07N5mEr
-	sJ5pD9GSOjJ2RXkz0UvMqHkKkBIRhkRIMjW9Wauq3MgmE+ucdSH4eAlZlhg54sZe9wbIgt
-	YrjWAxGAMmnIAUlbIxEduQe4O4AnAek=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-438-fW6yAE7vOKCgn04yoT1flg-1; Mon,
- 16 Nov 2026 09:03:48 -0500
-X-MC-Unique: fW6yAE7vOKCgn04yoT1flg-1
-X-Mimecast-MFC-AGG-ID: fW6yAE7vOKCgn04yoT1flg_1794837826
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DE040195D032;
-	Mon, 16 Nov 2026 14:03:45 +0000 (UTC)
-Received: from onestero-thinkpadp1gen7.tpbc.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 73F4D1956042;
-	Mon, 16 Nov 2026 14:03:42 +0000 (UTC)
-Received: by onestero-thinkpadp1gen7.tpbc.csb (nbSMTP-1.00) for uid 13628
-	oleg@redhat.com; Mon, 16 Nov 2026 15:03:45 +0100 (CET)
-Date: Mon, 16 Nov 2026 15:03:41 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Renzo Davoli <renzo@cs.unibo.it>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	"Dmitry V . Levin" <ldv@strace.io>,
-	Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Charlie Jenkins <thecharlesjenkins@gmail.com>,
-	Bradley Morgan <bradley.morgan@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, strace-devel@lists.strace.io,
-	linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] ptrace: reject out of range error values in
- PTRACE_SET_SYSCALL_INFO
-Message-ID: <avsNPc_E3W0K_uiL@redhat.com>
-References: <20261116134050.505355-1-renzo@cs.unibo.it>
- <20261116134050.505355-2-renzo@cs.unibo.it>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RDRD/OcL
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-716c0217635so4580172eaf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 06:05:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794837902; cv=none;
+        d=google.com; s=arc-20260327;
+        b=s9rtcQPbBUvB9AdWZYxVTWvCRfNHNPrMLHMCTHPBw5JuNWxPUFIo/snxF2Y6UmycgM
+         37JyGU/CjdVycb1Hna1Eha1eifBlGaMg16IKIK0NCsVuGHm/NsbZdNIeJlA9iGzAdTHL
+         CsFsmtIqraiTMCf7h36Nc/WWcP+hjadxYql8ARjQ3YERopRCz3/3kEESRJvB1luIlryL
+         625g+wi1Czxl/2uHBN9VIfuvfiCNe0G0fWSeuw8a4duMoWJt71uNFm0XfnUccNy1xU/T
+         TLksoWy0GkyfQz+0Evuy0mDlSXDoWbdN+tgRqhhtMdNLoATKlqAHywc1BT7Sey5Bc7BP
+         FLuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+        fh=KOpSQUge4zGaBczMKLABYnifrIjLSeiwDgfO55i23rs=;
+        b=VimkMTMTINiicnhYY7fsQHvOzBmB58w8QwPqQuVb+VnNXNHaZ6e+f3wQSsYikYnkvs
+         GNaQ/bSEBGCa4EIWhYIOOfbS9ju0jAILOAnU20usLsHbPYvkKuKL71qPUDc/bgPW4o6H
+         qEQhvj94Ghwpmod/jv/O8mzgnl8Tr6jQH+Rtp08bmGAD9nuSqOmteFqzepv+6Bi+etzL
+         U8lii1kZ2It80XtPYakseKG7mAsyXUCggKq3IYgGSUf1i/iorrqwbRLVlfeVEPcQvFxK
+         SoKsxtvjh8hrbJ9hGl+bDVSdnAKf4uMHRk1O66M4kN2YliuNEeg9Psu/f7bPjcAuUUNO
+         aIIA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794837902; x=1795442702; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+        b=RDRD/OcLdIq6BBPMomGGzPawAcj++fY9/uI9T/1dA72dsAu8agY8Cu6695ALuLwM0n
+         8y09N3w3OnPRYtLA+0e+4U9RcOnky1LhgUOxXzhjjfWtcgZu2/11KvN+/ArJuO0D3/uL
+         AyPFayZijP6GzDPeUrJPAizS+wLTSC4SmUVsvfBY1Ile6aaQ9CPg/kv99IdzqKSiLgcp
+         KkL/sqlkUbnuggAYKTgRgmfPG3aEwE4AOQ8e2We0/RHTjfPWdEnjmhtf16f6MefhQPs8
+         wjXI5xul/QtA/M+DzPqpAjwMvOpyB7m+LDtVfZ6yuRFcXnnU7LE7HpmL5egmcfFarZcf
+         uaBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794837902; x=1795442702;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
+        b=0areKC+9CDja1qE6NnP1F2J+1p+KnWeSdEWKfFXqwYGnBy+cfTpieYfv8Zq5YCXnE4
+         BlmmlmJqEoWneGswd1oqmkD+4vVVXbqBngFcVn+7esJcYPsO0mtkIbmxyIN0m8AmXgKc
+         WQsvkeESR6dF+Foz3+N0ZcFT14kbhlT54MQBIYJj7RId6b7ncW8BUbI3mJQSHtmMkF4s
+         wT+W6sPuyi5Fhzf2BF9Er/mDdjvOZvGAGByoZzJ7/OPGYrXFDaoylXMigeLQLSlmOf9f
+         GIm5M5nVops6OS3iFpj6eu7JWyouz8qPfCGU2c/EZb1Vx7Iy22GTTZpWKvGjuVlChuop
+         Msjw==
+X-Forwarded-Encrypted: i=1; AL+hErEFs7ln8BePEbEAvwLzQotE60YkohZNU5e7VbdZz0EcGD703jbDa+tdcUOsq1Oy8IAt9kuQn/n5jyfjBChMdA4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/y4T9KK75Fc12IQ3XWl+vLnInu9cbxIBHRL5zwjt6VAP639jcN
+	QgpT4lZ2jNEaaLTsGjwV7vgTF/9LULlHVABnskd84z55kXh/pTkjLNYrOynwPVUAK8RiQ7h+DsX
+	xoCD0O8aTH2Eh5X/Na7k+yUJHJF6ExWnuiJQ4o26yMw==
+X-Gm-Gg: AYBFou1KKYaNFZrbmvYEhBhQ2xu7IxjVeM9r+UWDoooA9HbaqAKa+Tae1xQeSTSpF7i
+	PqTjjJzgMJXB9U1YMSn/0/zaBHBvn0aziQHTkcm3pxNJ33/+cqaM3bJ0INOs5A7iaVCI1Yl3kxN
+	4nfruHt8sAQR4O9+HLZQmijQMG0+dk8mFtm/uCZOX18MefMkqZCPuOtL+l3KG+yuNXbftyzc4N2
+	Pq16WTt0tVHONp8SHnQ4meuHTU5H8JTn2hWIm81VuSoO0t/fKE4/IDlJpWSHKiAcgTGagU7+1zZ
+	TTT9hSHffUqtlWPAROzvuO23zA8i7B70vRaLsuERakCThsZsvb7YvcJFpA3I0PD1LqbChMvMhe/
+	3PF0lHEXgxiF0BwI3sa+7GkqX0T4nk03oPe6ffkUWkJXHgL0OwhXPdRC0oBfBH1WDVEiSVy1Z/8
+	4hHK7Ki8aYp+Dxyp5H1V6mtp+zT40pkGY=
+X-Received: by 2002:a05:6820:7093:10b0:71a:ea6a:4f51 with SMTP id
+ 006d021491bc7-71aea6a5809mr1437630eaf.14.1794837902102; Mon, 16 Nov 2026
+ 06:05:02 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,25 +104,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261116134050.505355-2-renzo@cs.unibo.it>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com>
+ <20261116084107.6675-1-emmaonana18@gmail.com> <20261116084107.6675-3-emmaonana18@gmail.com>
+In-Reply-To: <20261116084107.6675-3-emmaonana18@gmail.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Mon, 16 Nov 2026 14:04:50 +0000
+X-Gm-Features: Aa3M54qRdeOnU1gJ7x3s56OW-hJCPdbvkrK8BlxFfQsIh19-OFAy7vmiVdSA8Lw
+Message-ID: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/2] selftests: net: veth: propagate bad-settings
+ check failures to exit status
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/16, Renzo Davoli wrote:
->
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -1111,6 +1111,10 @@ ptrace_set_syscall_info_exit(struct task_struct *child, struct pt_regs *regs,
->  	if (rval != info->exit.rval)
->  		return -ERANGE;
->
-> +	/* An error must be a negative errno value. */
-> +	if (info->exit.is_error && !IS_ERR_VALUE(rval))
-> +		return -ERANGE;
+On Mon, 16 Nov 2026 09:41:07 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> -             echo "fail - set operation successful ?!?" || echo " ok "
+> +             { echo "fail - set operation successful ?!?"; ret=1; } || echo " ok "
 
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Two small suggestions:
 
+1. These lines are 85 columns wide, over the 80-column limit.
+2. The style is inconsistent with the rest of the file. Other checks
+   use if/else instead of a "cmd && { ...; } || ..." chain.
 
-(I think you can even drop the comment, IS_ERR_VALUE() is self-explanatory)
-
+Cheers,
+Tianyi
