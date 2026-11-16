@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794804956;
-	b=GwZSrB+ZpZbfKC7Mo5mEHBwCbF/3xq4cCL5dabn9hR8mzaoPLmzJB2wSgO1I7bSeLpNM
-	 FCOE94HhHxMVNKCwOvurocbeSfs2LriVvhc/3U8mtFx7GxU+EL765LXhRh/ZLCYzAcjRx
-	 d38p0vkBvIu0o87Bcd9AH4Xx8mGrIOXxd4XgSaNFOfixJhBlATNMlCRenNO+MkGaO0xCg
-	 YBzD3i3hxPbgX/CI+cF/VuUmwkrubpc70hGiO959RIgv3GNHFZ2TprZbbzlhn//KdOvNc
-	 j7gaIzY0AfR75/kr5PMjebgYGdbjyd8DreMoLeRbFEXQJGe/cE+T2C5OTe+LiBZyQKw==
+	t=1794804957;
+	b=hnhiu1KPBJx5AzPBBIHEBFub4HCYXDyQhDobQEOCcCO1DUsNk1sC+x4mvvdiCUPSgHXs
+	 bytgIKzGlaM22tDzH8wCOgHh0EM9Z0oLZ607Wdrbl426ekEffVe+sajl1Ygsf9iJaCYpj
+	 iZslmYgg0FFWBYyO5RnYC0ojgzrHMTGwNN1VEHq1hSiWOtRTMuVDHxeJzUBlw6NOGyOSG
+	 ApaFA5bYhw8p5EkwiGPjwTFY2kOW/3g7IfQhmBsR6suM0CwlrfgLzuTVbMXHS6cwIkX3c
+	 x6k8OUyOh59ewtASYZwR9a/a8bB4xo2U0st/0cGCeLdGKGHXRyQO1HwJD6TUBU9JsRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794804956;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794804957;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=kbeLhk4kveCo14x8XWoRSKZ1A1Z6lHlwD7WTyW8dlbM=;
-	b=SRRj+QZhIc1uk00LmO5zpBUY4oMWd94ziQ2Ukon0MQv9Iuk5R3ggzjL2LlwDMlDJyblf
-	 TEE6SimHE+ae6+NsofMe3lUVwOgF4rRQVDSTS5Y/w66MW9QobnLyC2ZvBTehpg0aKioT7
-	 tT0BSnQ9DVC5VzE4MfJB7R2JtofuAVIoLrRPPSOxV7CBRTBifQ3Env8NhVIgYsC7N+DD/
-	 L91i38RzdfbkleieNNr9CbH8602YpZsvXtdgehf6SyiBefBarni+f6UkL2iSD++KFCh2a
-	 VNM2aKYA8lgEeS1HVcHleh9TkfyOJNjHy/sNO4lfmXqX0TmAaddGbDm6eqPVduy4QPA==
+	bh=1E04WpE/uHSxRFpGuSOUxK7Io7ppqVPoRkDHsReaGXs=;
+	b=ZTbXqaKvHtf66GDPd71JqdgmG86ju3LUfVY/mrA5laxwSc/6/0iU5FOvpzNTfRhWNgFL
+	 i7gii/Dz61a0EjO1F40q32fUNiNrlEp0rFzrdN2h+0u9d9Zg0kmOfIN1FUqm61Jukp+MC
+	 qLOCRtI6U9l6pAtcfb7lkL2lzTDAeITJUos1BZ4yOWtO5Zn/IBZE1pAGW5PN6beyvHndr
+	 JqhPqU39rrmPZ3av2WkhTZf4iBlO2dFZUvdO6Fq4d+jDJjMtDD45UNVXh3BMy1urE8QoM
+	 P/SX8tyf9QJNp5tyLkxcnLq/lpa+Imq40sdR8zxRqmQQ99RqY/bnwzXsgmEJQk6YGAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lw2ofetG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fsxVusuJ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE4B606A31C;
-	Mon, 16 Nov 2026 04:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C4C606A332;
+	Mon, 16 Nov 2026 04:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lw2ofetG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF0B1F000C4;
-	Mon, 16 Nov 2026 04:55:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fsxVusuJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF971F000C5;
+	Mon, 16 Nov 2026 04:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794804955;
-	bh=kbeLhk4kveCo14x8XWoRSKZ1A1Z6lHlwD7WTyW8dlbM=;
+	s=k20260515; t=1794804956;
+	bh=1E04WpE/uHSxRFpGuSOUxK7Io7ppqVPoRkDHsReaGXs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lw2ofetG4cDmvHWE14nN9TnT6/h5l3Pb/a8buMjxTJDfjjqQxquddfDe9sK9I4ken
-	 Bz+vuhDwuM1vgJg7jyDHEqJBJ4TiZd6L/w3p1MGNi24rKVz5S03Sv2xfL0iy81inX9
-	 FBDs+6K+4Q7lrFrOeDgAkKdTZyve8gBg6dqcG/axXXJJbvVDyOjzyFtthPXVJhT4kp
-	 tTo3XlVOUlqS6WLpbOXYvAETsXpPZ8ryCdOipBtRPwVHJCmCSHNW8BGN8BaQ0ky1br
-	 ueFinberADJh02vjGiS75YXtmPKw/bUkzrH8/aP/XmhLYACIUpO3mGS0cZqRveNUL/
-	 waoliR5KHhvzA==
-Subject: Re: [PATCH net v5 1/2] vxlan: reset the remote's dst cache when
- snooping moves a MAC
+	b=fsxVusuJAnDIRSAWmE2T4380ELuBpZ6n2i3q3e5VCRXR2xeC0nlIIG2BJQVbp55jO
+	 WEMFKAGOohdy76MrMSqKZbvWm7LDCLDJUeJM6dwXTYrGEgQSL952WOK2NBDZkfYIgN
+	 E+7Djv6erIhv733nXijvNXT1zYJFCexju/3thGEjjzSbWMRXFwNprukI84GdVoC+YK
+	 H7IgCBxOAbBl8+krom+j1dtVlHbLiqS3HhYjGvdAcZroEEoLMFw7at8OHwl2YI+38y
+	 x8DfNdH96TJIqcNDCfmP2S4kG2KmNUaIlPD6Zll9EM0fbrQevsZDvX2PkTwEDhyYoP
+	 Cuv5D4D0nfYhA==
+Subject: Re: [PATCH net v5 2/2] selftests: net: add a test for vxlan snooping
+ moving a MAC
 From: netdev-bot+sashiko@kernel.org
 To: ilskdw@gmail.com
 Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  kuniyu@google.com, mschiffer@universe-factory.net, nicolas.dichtel@6wind.com,
  shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 16 Nov 2026 04:55:54 +0000
-Message-ID: <179480495432.3136.17109064150958616332@kernel.org>
-In-Reply-To: <20261115040609.61134-2-ilskdw@gmail.com>
-References: <20261115040609.61134-2-ilskdw@gmail.com>
-X-sashiko-severity: Medium
+Date: Mon, 16 Nov 2026 04:55:55 +0000
+Message-ID: <179480495572.3136.4564700549616411928@kernel.org>
+In-Reply-To: <20261115040609.61134-3-ilskdw@gmail.com>
+References: <20261115040609.61134-3-ilskdw@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,140 +65,159 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The new dst_cache_reset() in vxlan_snoop() does not fully stop
-  a stale route from being cached for the new remote.
-- [Medium] vxlan_snoop() now writes two dependent fields, rdst->remote_ip
-  and rdst->remote_ifindex, as separate plain stores with no hash_lock.
+- [Low] ping_from_cpu0() in
+  tools/testing/selftests/net/test_vxlan_snoop_move.sh always pins to…
+- [Low] test_move_to_link_local() pins its pings to CPU 0.
+- [Low] test_move_behind_router (line 48), test_move_to_link_local (line
+  105) and test_same_remote_keeps_via (line 159) ignore the return value…
 
 --
 
-vxlan: reset the remote's dst cache when snooping moves a MAC
+selftests: net: add a test for vxlan snooping moving a MAC
 
-When a learned MAC migrates to a new remote, vxlan_snoop() now resets the
-remote's dst_cache, updates remote_ifindex and clears offloaded. This
-matches what vxlan_fdb_replace() already does. The early return also
-changes so that remote_ifindex is only compared for IPv6 link-local
-sources.
+This adds test_vxlan_snoop_move.sh, with three cases for a learning VXLAN
+device that snoops a known MAC. The first moves the MAC from an IPv4 remote
+to one behind a router. The second moves it from a global IPv6 remote to a
+link-local one. The third checks that a dynamic entry keeps its "via"
+device. The first two cases pin their pings to CPU 0 because the route
+cache is per CPU.
 
-> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-> index d11028b374721..1cfb34fa23604 100644
-> --- a/drivers/net/vxlan/vxlan_core.c
-> +++ b/drivers/net/vxlan/vxlan_core.c
-> @@ -1470,7 +1470,7 @@ static enum skb_drop_reason vxlan_snoop(struct net_device *dev,
->  			return SKB_DROP_REASON_VXLAN_ENTRY_EXISTS;
->  
->  		if (likely(vxlan_addr_equal(&rdst->remote_ip, src_ip) &&
-> -			   rdst->remote_ifindex == ifindex))
-> +			   (!ifindex || rdst->remote_ifindex == ifindex)))
->  			return SKB_NOT_DROPPED_YET;
->  
->  		/* Don't migrate static entries, drop packets */
-> @@ -1482,7 +1482,10 @@ static enum skb_drop_reason vxlan_snoop(struct net_device *dev,
->  				    "%pM migrated from %pIS to %pIS\n",
->  				    src_mac, &rdst->remote_ip.sa, &src_ip->sa);
->  
-> +		dst_cache_reset(&rdst->dst_cache);
->  		rdst->remote_ip = *src_ip;
+> diff --git a/tools/testing/selftests/net/test_vxlan_snoop_move.sh b/tools/testing/selftests/net/test_vxlan_snoop_move.sh
+> new file mode 100755
+> index 0000000000000..5b78310439d3a
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/test_vxlan_snoop_move.sh
+> @@ -0,0 +1,199 @@
 
-[Severity: Medium]
-Can a transmitter on another CPU still cache the route to the old remote
-after this reset?
+[ ... ]
 
-vxlan_snoop() holds only RCU here. vxlan_xmit_one() reads the same fields
-without a lock and then uses the cache:
+> +ping_from_cpu0()
+> +{
+> +	local ns=$1; shift
+> +
+> +	taskset -c 0 ip netns exec "$ns" ping -c 3 -W 1 -i 0.2 "$@" &> /dev/null
+> +}
 
-drivers/net/vxlan/vxlan_core.c:vxlan_xmit_one() {
+[Severity: Low]
+What happens here when CPU 0 is not in the allowed CPU set? That can
+happen under a cpuset cgroup that excludes CPU 0, or when CPU 0 is
+offline.
+
+In that case sched_setaffinity() fails with EINVAL, taskset exits non-zero
+and ping never runs. That status goes straight to check_err in
+test_move_behind_router() and test_move_to_link_local(). Both cases then
+report "ping before the move failed" on a working kernel instead of
+skipping.
+
+The require_command taskset near the end of the script only checks that
+the binary is installed. It doesn't check that CPU 0 is usable.
+
+The pinning only needs one CPU to fill the per-CPU dst_cache and then hit
+it. Could this pick any CPU from the current affinity mask, or skip when
+CPU 0 can't be used? srv6_iptunnel_cache.sh hard-codes taskset -c 0 the
+same way.
+
+[ ... ]
+
+> +test_move_behind_router()
+> +{
+> +	RET=0
+> +
+> +	setup_ns sw ex a r b
+> +	defer cleanup_ns "$sw" "$ex" "$a" "$r" "$b"
+
+[Severity: Low]
+Should the return value of setup_ns be checked here?
+
+In lib.sh, setup_ns() returns $ksft_skip when ip netns add fails. This
+test keeps going anyway, so every later ip -n and bridge -n command fails.
+The case then reports "ping before the move failed" instead of SKIP.
+
+The setup_ns calls in test_move_to_link_local() and
+test_same_remote_keeps_via() have the same problem. The second one reports
+"ping from the remote failed".
+
+Most net selftests don't check setup_ns either, though bareudp.sh,
+fou_gre_gro.sh and nsh_gso.sh do. So this matches common practice, but the
+result is still reported wrongly.
+
+[ ... ]
+
+> +test_move_to_link_local()
+> +{
+
+[ ... ]
+
+> +	ip -n "$ex" addr add 2001:db8:1::1/64 dev e0 nodad
+> +	ip -n "$ex" addr add fe80::1/64 dev e0 nodad
+> +	ip -n "$a" addr add 2001:db8:1::2/64 dev a0 nodad
+> +	ip -n "$b" addr add fe80::b/64 dev b0 nodad
+> +
+> +	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
+> +		local 2001:db8:1::1 learning
+> +	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 2001:db8:1::2
+> +	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst fe80::b via e0
+
+[ ... ]
+
+> +	ping_from_cpu0 "$ex" 192.168.0.10
+> +	check_err $? "ping before the move failed"
+> +
+> +	ip -n "$a" link set vx0 down
+> +	ip -n "$b" link set vx0 up
+> +	ip netns exec "$b" ping -c 1 -W 1 192.168.0.1 &> /dev/null
+> +
+> +	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst fe80::b via e0 "
+> +	check_err $? "fdb entry did not move to the new remote and interface"
+> +
+> +	ping_from_cpu0 "$ex" 192.168.0.10
+> +	check_err $? "ping after the move failed"
+
+[Severity: Low]
+Can this post-move ping tell a stale IPv6 dst_cache from a reset one?
+
+The commit message says:
+
+    The first two cases ping from CPU 0. The route cache is per CPU, and
+    only the CPU that filled it hits the stale entry.
+
+In this topology the old remote (2001:db8:1::2) and the new remote
+(fe80::b) are both on-link through e0 in $ex. The pre-move ping fills
+CPU 0's rdst->dst_cache with a non-gateway on-link route on e0. Nothing
+changes the routes in $ex between the two pings.
+
+udp_tunnel6_dst_lookup() returns the cached dst without checking oif or
+daddr:
+
+net/ipv6/ip6_udp_tunnel.c:udp_tunnel6_dst_lookup() {
     ...
-		ifindex = rdst->remote_ifindex;
-    ...
-			key.u.ipv4.dst = rdst->remote_ip.sin.sin_addr.s_addr;
-    ...
-		dst_cache = &rdst->dst_cache;
+		dst = dst_cache_get_ip6(dst_cache, saddr);
+		if (dst)
+			return dst;
     ...
 }
 
-dst_cache_reset() only stores jiffies in reset_ts. A cached entry is
-checked against that timestamp at jiffy granularity only:
+On an on-link route the next hop is the packet's own daddr. So the stale
+dst would deliver to fe80::b just as a fresh lookup would.
 
-net/core/dst_cache.c:dst_cache_per_cpu_get() {
-    ...
-	if (unlikely(!time_after(idst->refresh_ts,
-				 READ_ONCE(dst_cache->reset_ts)) ||
-    ...
-fail:
-	idst->refresh_ts = jiffies;
-	return NULL;
-}
+Suppose the dst_cache_reset(&rdst->dst_cache) call in vxlan_snoop() were
+removed but the remote_ifindex update were kept. Wouldn't this case still
+pass? It looks like only the "via e0" grep tests anything here, and the
+CPU 0 pinning has no effect.
 
-On a cache hit, udp_tunnel_dst_lookup() returns the dst without comparing
-it to key->u.ipv4.dst.
+The IPv4 case still covers dst_cache_reset() itself. Would giving the old
+and new IPv6 remotes different egress paths cover the IPv6 cache path? One
+option is to put one of them behind a router, as in the first case.
+Otherwise, could the commit message be reworded so it doesn't suggest the
+second case covers stale routes?
 
-Consider this interleaving:
-
-CPU1 (vxlan_xmit_one)             CPU0 (vxlan_snoop)
-reads old rdst->remote_ip
-                                  dst_cache_reset() at jiffy J
-                                  rdst->remote_ip = *src_ip
-dst_cache_get() at J+1, misses,
-  refresh_ts = J+1
-looks up route to old remote,
-  caches it
-
-After that, every transmit on CPU1 to this MAC uses the old remote's dst
-with the new remote's address. Later packets from the new remote take the
-early return, so snooping never resets the cache again.
-
-Is that the same blackhole the commit message describes, just reached
-through a race? Reordering the stores, even with smp_wmb(), doesn't seem
-to close the window. vxlan_fdb_replace() does the same reset followed by
-in-place stores, so it has the same window.
-
-> +		rdst->remote_ifindex = ifindex;
-
-[Severity: Medium]
-Can concurrent snoops of the same MAC leave remote_ip and remote_ifindex
-inconsistent?
-
-These are two plain stores with no hash_lock. RX for one VXLAN device can
-run on several CPUs at once, for example:
-
-CPU1: snoop from fe80::1 on ifindex 5
-CPU0: snoop from 2001:db8::1, ifindex 0
-
-If the stores interleave, the entry can end up as {remote_ip =
-2001:db8::1, remote_ifindex = 5}.
-
-With the new early-return check:
-
-	(!ifindex || rdst->remote_ifindex == ifindex)
-
-later packets from 2001:db8::1 return early, so the stale ifindex is never
-repaired. f->updated also keeps being refreshed, so the entry doesn't age
-out.
-
-vxlan_xmit_one() then uses ifindex 5 as the output interface for the
-global address. If that address isn't routed via device 5, the route
-lookup fails and traffic to the MAC is dropped.
-
-This looks like the state the commit message says it fixes ("the remote
-keeps the previous interface"). vxlan_fdb_replace(), which writes these
-fields under hash_lock, can mix with this lockless snoop in the same way.
-
-> +		rdst->offloaded = false;
->  		vxlan_fdb_notify(vxlan, f, rdst, RTM_NEWNEIGH, true, NULL);
->  	} else {
->  		/* learned new entry */
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261115040609.61134-1-ilskdw%40gmail.com
