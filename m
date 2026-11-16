@@ -1,102 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.50
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794860851;
-	b=ggZPCqrggDGxXigGyQQg9/hS3X6eSkVrr2K4/EOkU0LoDs6OtO7ELLBxLpBpQtz29koa
-	 GWYezeDazWfAg/gOMEXzY6pOgUSG1APuIAUdqCrLHjqf0y814/ePBhCTDUve4+y4Ms8yf
-	 0haTyHrpO94KU6yylX3g7/ord8e76q502PfVyrNHGttPd47psIBYi7kyiKAMJ3Ze+7QT7
-	 U1aJ+tcg5LMJBEgrYoKWlKuQWPLDLlxNMVNx6ljarCN8tuWs86FU/0xwqk6Mpdsx5mTKF
-	 HOsTQBd/Aavoxzu6PLyTtiDVhbfqP/m4I+YTM+Xa6/VTWvRGkx6OYuO7bhwIxir3ikA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794860851;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZkpeCXY/OBNvM74rLLOtFZSJQsZ8WTjSCiDSW/uXQt8=;
-	b=ncP4G3IAyD/wzq7fcqJX9o1lsy+PEkvCyLz9Q4G/0FWuzgnffFWT4PS00EywTu1aNOhc
-	 1RamfXsEGNqf7K8vk/zQvh8q8YF7Yu6yF8HDZxwSv9jS+JcLV/iW+96FFNxDWtRERCp4d
-	 NQ5Wf23I1OnaR62MVnQ99Rx8GJBKu8Y5vPtCOJ4x5arDYIUey6VqHitzE9rRxK2+MWwJi
-	 PyA93Tn7kBJOj/Hf9ibjU3tE/f98/u+vaTrOgVWLO5HVgRi5gP1ZjwijbKUQDL9oE4hI9
-	 7HRNE18KswCkn/I+ob6ItO6L7UBPmEYA86TvFsgTyVzOP6Zf0epTfCqmNTIXesLaMtg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XUHueja7;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794860873;
+	b=yZSIgtc2r6fkbB7v6wSwmrvkDVJfp6eGVWVZN9LwoJfBcAZUWm30yb8d60Xj5tZA0eQn
+	 l5H/Z1weO+6rLzw1pL72f95yXeAXXH76ulzGQghGi6JQfMw9r2yFA1WwiF88qDy8tbWuU
+	 2PDUVZYxQo37AN3FgBXOls5CyLrGb0TAIaHBnMALejBUz1tbCDLe5TgX1Q7gRPMFCgPwl
+	 D8/3pYPQsFs+lcNivuk+KHBn+WzQuQ2xBHRTsM74RceuTnsZ2fSpStMy8ZEwE8tD4os9X
+	 b+N4x4rNo1tiHf5Xd83X6SvIoIJYvFPlmSZBgoPaEOyiQsAt8g2jAZOxhmoSJ7UHzCQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794860873;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=4o0dTryM0917HXjO2xcyNWOlnxmskhtg7Kc/3xbY1nM=;
+	b=r25ZogXOKwyrTeSNP9t0v0uCaioc+kqLX0+NK8+6bfCHo3SnmBxA6TRO4BwgwgXkI9wZ
+	 cLO6rp6RB6y76GUaCfVuOz/o22/MYojt1eLuZ4QLiRbJahhRNYGQSNEsG0jvnK/T7DLzG
+	 SmSKEiYo/rsjjxYdjPqBxPI19hSA1dm2D4YOGXUDOiIC4ypZJOs7SyzKXTwHWyxfEw84r
+	 DXxPLraJj/rxDxmMNNeiO/iBIdvWRnIzzyOAA0ASWMcwv3rXYzfZgZPigb309ZlO4S6H3
+	 OMedYF4PetrX+9ny6+qT8PIKIDMRpOfV7mOXe7+GlWh11gQrix1U3uPvEFEZHEjoIkw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=grapheneos.org;
+	spf=pass smtp.mailfrom=grapheneos.org;
+	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=CrVBpOYT;
+	arc=none smtp.remote-ip=206.220.120.4
+Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC3D606A33E
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:27:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ABC3D606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D11606A88C;
+	Mon, 16 Nov 2026 20:27:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57D11606A88C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XUHueja7
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4bb64ef5a00so14239285e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 12:27:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794860849; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BRIo31ZSiz1d2r7Nym3rTBAo+SGgYfI9l/ITaQq3+uJEuSNjcbEtZMJ/ezxVHE2bm0
-         TrFRTKfMRZd5V8blkmxJ0Qr5WDP0w3DKFANh0Iii4DBloxyXgjdkNW0hOv+VThvMcyWR
-         8XfqImVYzI0jhZ0VMQcwtIL2SUStnTOv204RhMkhq68z4eYJj4BlBFrjJBUpPIqFyFpv
-         raAckhuywc9PN/YRroa6h30NQpqLg6IoWyT3LQXjI57bd/yNkPPxqEN/2ZowBLsWdp1U
-         x7iaS2nWBBNkUbmotKRJSaULGyXIIMOjgHL4BYQaq9temj4nfkzfVTCb+6H13l4N6w+7
-         /dfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZkpeCXY/OBNvM74rLLOtFZSJQsZ8WTjSCiDSW/uXQt8=;
-        fh=4N9kN4v6gm4q034dtHsY5uWEevBgoQPqKsPs/hU5dZA=;
-        b=FVZRnYue2ZkdfMxxtGIb2vX1oDpTxAWKu4USk3YDVhYPbhbDFuRKXedFB4N7Af64L0
-         DP1UVX0FYKm2Kwavo7dH6Y+/MEasCuM+HbWQA0xVSnH+SzDWeWMOSYbJAHVkwy/eStuH
-         d9lE8IKelpvSBAc1ip52J3/RZyWv6YGwLJU6vfcKDJlTlBgMAETa2uftAjieJNN5tOrx
-         Znzgm5s4gwIMxLQlq7ITxrMvNgO2Klz5tJUJ7jKcHvgII84/8mQCX1M494lzkUU6EaaH
-         SRn9+Ym2iMNlUa/Po4U4aXDgDduiClk+E6zEFB8BdmDZZFcJC3s/1jx0izNhdteVDJgL
-         SjmQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794860849; x=1795465649; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ZkpeCXY/OBNvM74rLLOtFZSJQsZ8WTjSCiDSW/uXQt8=;
-        b=XUHueja7fTCl518TBN0YXy5rWl6MSwG9BZzfBI9+bRtqQqE4X1OWC6+wNzqJlOdS9i
-         m20VOISd+lrIRLqiFsQL9ae7chJ+J6kWrnCbMhPX998AJQ6B/Mqf7EuywNJkRRSQiV+t
-         EOqMgik16devK+xORUpdTF+dfNtqJnpu/2ghA1CaF5g+WQaKMgDS1DzgDtRl6lNRuU7/
-         LodM89W0AYyKhpmG2TSgV4ejrIqDjIna+DVaSrIr8g/ROCeAdIzSmCZvOIyEhVKkKmWL
-         UTVpQDpa4mNYj89vMATjIwvJdR/A7NUhM2gLnkXMDGGAox3mV3WZRYRez89hITqZs8Sv
-         AsTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794860849; x=1795465649;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZkpeCXY/OBNvM74rLLOtFZSJQsZ8WTjSCiDSW/uXQt8=;
-        b=A7/A8sxmZOkiqxu+Q1Wo/sIuSKXgnyLtqGcWug3t9R7su9fSUNeSMeyQN5jaY6RkXk
-         axzxZwv2zFSEa1w5lHm3lZZzbh2Hjh/7T4SegctlQF8fZ0yYdMxz6YXkoKahyOuC9sK+
-         hz3Ajvrsju7U+xlnVGQlWM3mE+mWe70n6aqBhY4woJpwo2kIOHpLKdSVvoiNtyb9IepW
-         a8jy0kj7OKPKDY9/Q0g5YuAn0w+IKZdCJTbVredzVbbE8kK25MCiXL0qrzX4hIiexKo0
-         0qgI1Gqdl7s19Dd9f66WBi6BizpQhpNdZifhEfeVUtSORk31sZSCFSiXMDyv5SWsaxcc
-         knDA==
-X-Forwarded-Encrypted: i=1; AL+hErFxSPw2uHnpgjw8UznqSYRh0mWmizwNq9IGZBOBvJ5Rk5263fKXjgQxE23EJJWE6/n0zRVZhWCcloQMzPPwPik=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/tVJV7iPUKnG5ieh1ynxvUh78urdH5OgqUGeN/87HU7fP5UVWN
-	UJMYYAiSoMnoRscd31eFeHdVhXgohPQD4l2FVHeYVcby2N4voUcjfwrcjd5kbUTqXwNDYmZJcW9
-	OIVWluh0LiW1SRt6lJarTkOjgC91R0dAktteMVjA=
-X-Gm-Gg: AYBFou2YQYEk/niL8Z+Iw5VquhME+ypaqeifzzPogw+AeNbaEx+SNdWC+rac4OWhvVB
-	BJwnwmJ1y+z5EachF7XqOulkhxdssi1UvRk9ebqeNVAwpOo7hTVZYU1uM4vznYUZnYLgJyQN3T1
-	+5cQdil3xQwqOYgviwRmcF1MeRtYzcn69AALS8YO7rvoJsFLPUmsIdqEnh7789CDYJ6w3WgI1kh
-	J+g3S3TqUuzlHyh2zYHkX0L2lUtjneCf0tG94TsLk0IgjenvUfcEaXoH/KK0zIjFiYI4YGpIyT1
-	5vFffVJ3in1YQax+ZlyH5KAmo97l/Rhk3vl9bNXZJ7TlewMJznlNgIzYi8mVi1Z/leoNbs8IXtw
-	u5FEtO9RHWwzd3pHC/chTA4DQgfjCWQtnIM11tzYWKRt926IAR3gnTXvJgdfv/Hm3f9/+GtPSMM
-	lTtMm+VKh66z83GtmrNwWVm0JVuPiDqj7jYs0gwsXanlvGLbmKZRU4gRIFP+/fUkRXlN2qoPrXn
-	tEl6tunQNbvv7XcXk/dkR222sQz+pzKFsyPp5ZkhMcPLZt4/OAmug==
-X-Received: by 2002:a05:600c:46d5:b0:4a5:87b3:ddc1 with SMTP id
- 5b1f17b1804b1-4bb55a8329amr246833655e9.13.1794860848685; Mon, 16 Nov 2026
- 12:27:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=CrVBpOYT
+Received: by mail.grapheneos.org (Postfix) id 1FA1E3C08B8D4;
+	Mon, 16 Nov 2026 20:27:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
+	s=default; t=1794860872;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4o0dTryM0917HXjO2xcyNWOlnxmskhtg7Kc/3xbY1nM=;
+	b=CrVBpOYTz6wh2RP6Ebk7ORHTtPl/ryG237tCG77dyYYAOjNIoH+LG5+hInRMd/WHDZJJMh
+	hOWS10AVgzX+2cWOrA93LXB41byDYebBjgny8kRGCh34uaE1popF/+j0CAxU9MZXreikjF
+	EbQXaid2KEAnnpz+vCmBTvtw48ClqkBteDdPHsTUe+crmsj4z361Zx9yiJY3D2FTinK5W1
+	fgC4ILP9veB0u78A3cHVfid5ABtbf0S1vXrNwC8sRMHPfJS8mHq1jFKLBvNpu3KAtixoCe
+	5F1WG4YhqvCxhQwljIPnci25x6Jl0o5CBOxi7lHIlchQCbRTpeMctukLBfyAYg==
+From: liamsmith827 <liamsmith827@grapheneos.org>
+To: netdev@vger.kernel.org
+Cc: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Liam Smith <liamsmith827@proton.me>
+Subject: [PATCH net-next v5 0/4] ipv4: restrict on-link fallback to lookup misses
+Date: Mon, 16 Nov 2026 20:27:37 +0000
+Message-ID: <20261116202741.13106-1-liamsmith827@grapheneos.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,44 +70,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
-In-Reply-To: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
-From: John Stultz <jstultz@google.com>
-Date: Mon, 16 Nov 2026 12:27:16 -0800
-X-Gm-Features: Aa3M54pXKunFamkiknQGUyYNbbElkQwhbPGbBu1ME19Fs6k0HydAJH4S3zC-RSY
-Message-ID: <CANDhNCrsMh-7njT9HhiSf2nhPNCzyEOf6PmzfGw45m0wBTXVcg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] sched/proxy: fixes for proxy execution, with selftests
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, linux-kernel@vger.kernel.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com, 
-	connoro@google.com, arighi@nvidia.com, akpm@linux-foundation.org, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 16, 2026 at 11:26=E2=80=AFAM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> Hi John, Peter,
->
-> This series fixes six problems of proxy execution, and adds a test
-> module and a selftest for them. I found them while I looked at how
-> SCHED_DEADLINE priority inheritance could move to proxy execution.
+From: Liam Smith <liamsmith827@proton.me>
 
-Hey Mathieu!
-  Thanks so much for sending these out!  I've unfortunately been
-completely underwater since LPC, so I've unfortunately not been able
-to be very responsive on the list (and apologies also to everyone
-who's sent patches or feedback to my last revision of the patch set).
-But I have been collecting some fixes that have come up during this
-time to include in my next submission. I think there is some overlap
-in a few cases where we've both tried to fix the same problem, I'll
-try to get some quick feedback on your patches and see what I can pull
-into my pending set as well here.
+When an output interface is specified (e.g., using SO_BINDTODEVICE,
+IP_UNICAST_IF or IP_PKTINFO) and the FIB lookup fails, the IPv4 output
+path ignores the error and constructs an on-link route via the
+specified interface. According to the comment above the code, the
+intent was to allow sending packets via an interface that does not have
+any routes.
 
-I'm really excited for the additional test cases!
+However, the error code is not checked, so the fallback is also taken
+when the lookup hits an unreachable, blackhole or prohibit route/rule.
+In other words, these routes and rules are ignored when an output
+interface is specified [1].
 
-Thanks so much again!
--john
+This is a problem for Android, which implements its VPN "kill switch"
+using prohibit rules, with the expectation that packets hitting such
+rules are never transmitted. Unprivileged applications can bind a
+socket to an interface and trivially bypass the VPN. This is especially
+bad on cellular interfaces where neighbor resolution is not needed, so
+packets can reach any destination and not only on-link ones.
+
+Solve this by only taking the fallback when the lookup did not match
+any route (i.e., a miss) and returning the error to the caller
+otherwise [2].
+
+It is currently impossible to distinguish between a miss and an
+unreachable rule since they both return the same error (-ENETUNREACH).
+Therefore, patch #1 adds a lookup flag that makes the lookup return a
+different error upon a miss and patch #2 uses it to restrict the
+fallback. Patch #3 adjusts the selftests and patch #4 updates the
+comment above the fallback.
+
+After the change, a packet that was previously transmitted on-link
+despite hitting one of these routes/rules is no longer transmitted and
+an error is returned to user space instead. It is unlikely that anyone
+is relying on the current behavior:
+
+1. It is a side effect of not checking the error code and it contradicts
+ip-route(8) and ip-rule(8), which document these routes and rules as
+dropping packets or generating an error.
+
+2. These routes and rules are already honored when the output interface
+is a VRF device or enslaved to one.
+
+3. These rules are already honored by IPv6, which does not have such a
+fallback.
+
+The following is unchanged:
+
+1. Packets can still be sent via the specified interface when the
+lookup does not match any route, which is the original use case.
+
+2. The fallback is still always taken for multicast packets. The
+precedent in ip_route_output_key_hash_rcu() is to not enforce
+restriction rule/routes on oif-bound multicast, so that precedent should
+be followed here too. 
+
+[1]
+ # ip link add name dummy1 up type dummy
+ # ip address add 192.0.2.1/24 dev dummy1
+ # ip rule add to 198.51.100.1 prohibit
+ # ip route get 198.51.100.1
+ RTNETLINK answers: Permission denied
+ # ip route get 198.51.100.1 oif dummy1
+ 198.51.100.1 dev dummy1 src 192.0.2.1 uid 0
+     cache
+
+[2]
+ # ip route get 198.51.100.1 oif dummy1
+ RTNETLINK answers: Permission denied
+
+v5:
+- Fix broken test.
+v4: https://lore.kernel.org/netdev/20261115215640.18728-1-liamsmith827@grapheneos.org/
+- Add unreachable rule test.
+- Improve test commit message.
+- Minor formatting fix.
+- Reword routing comment.
+v3: https://lore.kernel.org/netdev/20261112235932.23836-1-liamsmith827@grapheneos.org/
+- Remove comment on flag.
+- Improve flag commit message.
+- Improve cover letter.
+- Target net-next instead of net, remove Fixes and stable Ccs.
+- Change author to legal name.
+v2: https://lore.kernel.org/netdev/20261110061536.10811-1-liamsmith827@grapheneos.org/
+- Restrict the fallback to routing lookup misses, instead of only
+  honoring prohibit (-EACCES).
+- Add FIB_LOOKUP_REPORT_MISS to differentiate a routing miss from an
+  unreachable rule.
+- Split the comment update out into its own patch and remove the
+  signature.
+- Enable all of the commented out device bind tests in
+  ipv4_ping_novrf(), add a route miss test and update the UDP test
+  expectations.
+- Target net instead of net-next, add Fixes and Cc stable.
+- Drop RFC.
+v1: https://lore.kernel.org/netdev/20261019032406.88874-1-liamsmith827@grapheneos.org/
+
+Liam Smith (4):
+  ipv4: add FIB_LOOKUP_REPORT_MISS
+  ipv4: restrict on-link fallback to lookup misses
+  selftests: net: test restricted on-link fallback
+  ipv4: replace obsolete routing comment
+
+ include/net/fib_rules.h                   |  1 +
+ include/net/ip_fib.h                      |  6 +--
+ net/ipv4/fib_rules.c                      |  2 +-
+ net/ipv4/route.c                          | 33 +++++++-------
+ tools/testing/selftests/net/fcnal-test.sh | 54 ++++++++++++++---------
+ 5 files changed, 53 insertions(+), 43 deletions(-)
+
+-- 
+2.47.3
+
