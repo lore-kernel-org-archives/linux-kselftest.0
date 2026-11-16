@@ -1,60 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794837039;
-	b=utm2YPXSrvqtVCnHG0nhxh54esZ7wHThRKOQxj0KhV2igif19BxcQ00pW7wXPi00M+B2
-	 mlC88WqvOTgJclGzsiMKIugpJYDmrOUZ4xMfCKXrY44H1tQphuHYUTtS71x/M1uI8kYb2
-	 JCICbv1/LiP5IHDfAqJEeucTXdKA2sBYovftmzopVINPfiQU3z+1yJv9YJ9WI/froPOio
-	 mhVolB9dMOdw+ta9P8mROQ2pg1BZkBkFu24pGJZ79R46a/axH/TiNb0MK+F22g5Cfb0Rx
-	 SSfrIEdwwu6R2+Xxc/sg7vA7+JEmkAk/9jFxNmfkL7SZ8CHFsSopGCcsZY3afHCkWHg==
+	t=1794837542;
+	b=HDRlROQhdktqTJns/GbO9jHAq40b0maQb/3dA3RGEPNFxHw0yslvKjZymvp6BIFKddGa
+	 /cqXD+rXro0p1/a30EZk34X02L4Sjyu1Vh55Pk0KRE+LDQwoxZUV/sFNdmZxWQF/nawE8
+	 uY7mIHHNsMnyb2sJTv6JjT+wWpF/0SEHZfPrKSFuKeiGue96uHpXVySFCCwEIXlD/vGQy
+	 tI9Hppaz7WwLbcp/HvKWxjYMyAFB8jW9kX2kb716wQddvnK32pcXAAlA4jfELyOz9gKDE
+	 j/3qCATnMy+LLHN0xknjCCwi6zCKBnWWs5pfdk6YT8Ysuv2K8tOir4l29nwgRERaXUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794837039;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=/3e3TImcCJs1Ha+JQOqG/r2t+apyd9H8tJkNWnphjK4=;
-	b=V76eKd4cZYTXrRIf4G11rvnG4KHZ50J7k8kNBcZc3DKCP0+Z8lTExQlvBOe2Nyhsn4M2
-	 pJzGSZXqu1Pfo1xIpm0A/nZUq5kpgm5T4mo4OLTmc4p3G05eqdWcG0xKFRTBhr8yIUTtZ
-	 As9JAKEAOcntMLzzou/p5QWDYO62iBq0KmZhqfRZOkErz276Yw9OjVoVX12Xal3BtPhnd
-	 ioHL/QWeCT+VXcCpEcTjm5FJbtlaPz7g3RLQbXh+6Rfqh4unWIyJkocWGrmh2Fkl8KnJE
-	 qRMGgvXU2S5SpDSLgGM7Yga7PMOiNl8HgUpwFtHtgeyd+HYZ1yL5Ei97LXQsn0B0a4A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794837542;
+	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=NvBQ7GFPfohCX3fcyNyGmyAGg0QVOAtg04t1p2J8sGc=;
+	b=Wy4em4znvICXZOuPXbu+0Am9rkWVDT3uB6tMVqYONjApn/yKVGcbsmjID/PY0ZR9IJ84
+	 SQg5su+LOnOD5o/rqgp0BjUlNKRhy7a2D0Ril8m+kd4o0sFM0VltQ45GNVrZgOY2ouU4p
+	 Gs6j2hW70yhaOCFXPXZRN/nnpGfKAqAGzma1ckhes43Izf+vnEvaXkExf+72txuBRKMii
+	 r5mjXIhA6IjyV1CHaLtso2No0IvUa+8EE82/ODsxJbJh3k5u84BAINO5lnDl+2Qt3f7wK
+	 8FVRIp337trWbkJ4TjJwmetr6FLNKAaxqj6GFqjmjdUI4GHl6fk4t3n75EbJLFwKNxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FnbMR3k/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pEXmeg2G;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b="u/d7VO3f";
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F85B606A8BF;
-	Mon, 16 Nov 2026 13:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA911606A329;
+	Mon, 16 Nov 2026 13:59:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA911606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FnbMR3k/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4631F000CA;
-	Mon, 16 Nov 2026 13:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794837039;
-	bh=/3e3TImcCJs1Ha+JQOqG/r2t+apyd9H8tJkNWnphjK4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=FnbMR3k/s1857WfSWh6tB9WVVi7dyXHR6AtKTHY8lgxg48vmtBjWsrOcT5gNOxYNh
-	 efyOBtSbehimVZruZ2K5iLWS9cBvHXWZOEVTPLkYu/BMgpSa9kaeh8/eEVbO67rROk
-	 OKmNONRqKaLYfByF8V0TAOsBY+NoS4JSrx4wcRBMRuBjzmb8mwVEFPZ/R+L36mVvUI
-	 lfOZjeL3v10Wd00CNtaNnR4w/XX5qbuBanlg0VwDjkYwymDn7ezV2R07mTClvdT/o6
-	 OOnYXOjg1IukP94opXGL85q6++NCt1EP6lHe5qk1/iKaHTgFQZOzh7A29ZSt+8nzjz
-	 /jpOhYmHUwrBA==
-Subject:
- Re: [PATCH net 2/2] selftests: net: check UDP tunnel GRO virtio offsets
-From: netdev-bot+sashiko@kernel.org
-To: bryon@fryer.io
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- horms@kernel.org, jasowangio@gmail.com, kuba@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pabeni@redhat.com, shuah@kernel.org
-Date: Mon, 16 Nov 2026 13:50:37 +0000
-Message-ID: <179483703798.3136.17536195102947528618@kernel.org>
-In-Reply-To: <20261112030708.1915665-3-bryon@fryer.io>
-References: <20261112030708.1915665-3-bryon@fryer.io>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pEXmeg2G;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=u/d7VO3f
+Date: Mon, 16 Nov 2026 14:58:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1794837539;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NvBQ7GFPfohCX3fcyNyGmyAGg0QVOAtg04t1p2J8sGc=;
+	b=pEXmeg2GIjcpwZUxa9ZZ30PChKgwhfwV+xoGkof7MhdMDK+rdNYfGvqHhj9Z217QkkRfUz
+	TseNWdSaMnB2WWKtqsusUQtFFGx5gqjo7CaAspVhsmWMjt+cPhQQiwdvJwlUhxkgYF8IrK
+	ZgjRk27uhlFcUMUThPchCdMt1weMUOxqpZL8b0E7kySOunzvP/zFmzlgEVZYESXCgFTtJL
+	FKM2SuoSqVTE8pR9MYenqS9XpZWhRdN9PAwvwYn9SwaLWRSPUL+occp6vLsbpcRh7AobJK
+	bIAklnozgQGcnPaPkzw3lHsMUWN5bh7z1sCZH6xm3XPcANiv5u6fjMQpN9064g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1794837539;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NvBQ7GFPfohCX3fcyNyGmyAGg0QVOAtg04t1p2J8sGc=;
+	b=u/d7VO3fZ9fNHwClcrd+LYOgPMKQ/eAMKZBFzPbxmwnOHeHtYQIcEbMz4qm/O6v6IwSmu3
+	nEHE/B7wpAdLE4Aw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
+	linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
+	longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
+	dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
+	shuah@kernel.org, juri.lelli@redhat.com,
+	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] locking/rtmutex: Initialize the ww_mutex context
+ of a waiter
+Message-ID: <20261116135857.5t9HGji5@linutronix.de>
+References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
+ <20261108141347.1525532-3-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,133 +78,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261108141347.1525532-3-mathieu.desnoyers@efficios.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On 2026-11-08 09:13:44 [-0500], Mathieu Desnoyers wrote:
+> With PREEMPT_RT and CONFIG_DEBUG_RT_MUTEXES, FUTEX_LOCK_PI reports no
+> deadlock. Two threads that each block on a PI futex the other holds
+> sleep forever. Without PREEMPT_RT, the second one gets EDEADLK. A chain
+> deeper than max_lock_depth is also admitted.
+> 
+> With PREEMPT_RT, ww_mutexes are built on rtmutexes. They can create a
+> cycle in the lock graph legitimately, and the wound/die logic resolves
+> it. So the PREEMPT_RT chain walk turns deadlock detection off when it
+> finds a waiter with a ww_mutex context, waiter->ww_ctx. It also drops
+> the -EDEADLK of a walk that started from such a waiter.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+I *think* this is unrelated because the futex caller shouldn't end up
+here. The __rt_mutex_slowlock() -> rt_mutex_handle_deadlock() should be
+different for the futex and ww_mutex case.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> But rt_mutex_init_waiter() does not set waiter->ww_ctx. Only
+> __rt_mutex_slowlock_locked() sets it. So the waiters of PI futexes and
+> rtlocks keep the 0x11 poison of CONFIG_DEBUG_RT_MUTEXES. Without that
+> option, they keep what was on the stack, unless the compiler zeroes it.
+> The chain walk then takes them for ww_mutex waiters.
 
-- [Medium] In the gro_on variant, TEST_F(tun_vnet_gro,
-  outer_transport_header) in tools/testing/selftests/net/tun.c reports…
-- [Low] In TEST_F(tun_vnet_gro, outer_transport_header)
-  (tools/testing/selftests/net/tun.c), `len` is an `int` that holds the…
+Is this really the case?
+You have a lock chain where the ww_mutex and a regular rtmutex interact?
+This doesn't sound too crazy. __waiter_less() expects it to be NULL for
+those.
 
---
+> 
+> The ww_mutex build of the chain walk can also requeue such waiters. On
+> two of them with equal priority, __waiter_less() would dereference the
+> poison.
 
-selftests: net: check UDP tunnel GRO virtio offsets
+I *think* the enqueue part is only affected if a regular rtmutex already
+exists. Because the rtmutex enqueue would ignore ww_mutex/ treat it as
+equals.
+This will affect rt_mutex_adjust_prio_chain(), the futex interface which
+is the only user of the chainwalk.
 
-This adds a tun_vnet_gro fixture to the tun selftest. It writes Geneve/TCP
-frames into a NAPI TAP, bridges them to a second virtio-header TAP, and
-compares the exported tunnel offsets and checksum fields of the GRO
-aggregate with the parsed wire headers. A gro_off variant is used as a
-packet integrity control.
+> Fix this by clearing waiter->ww_ctx in rt_mutex_init_waiter().
+> 
+> With this patch, the ABBA and the deep chain both get EDEADLK. The
+> futex_lock_pi_inherit selftest added later in this series found this.
+> Its deadlock and max_lock_depth cases cover it.
 
-> diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-> index 34de2580e32ec..192b3e0c0d172 100644
-> --- a/tools/testing/selftests/net/tun.c
-> +++ b/tools/testing/selftests/net/tun.c
 
-[ ... ]
+> Fixes: 6467822b8cc9 ("locking/rtmutex: Prevent spurious EDEADLK return caused by ww_mutexes")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-> +TEST_F(tun_vnet_gro, outer_transport_header)
-> +{
-> +	uint8_t input[GRO_BUFFER_SIZE], output[GRO_BUFFER_SIZE];
-> +	unsigned int seen = 0, aggregates = 0, records = 0;
-> +	/* Bound the wait even if forwarding fails or packets are lost. */
-> +	int64_t deadline = gro_milliseconds() + GRO_RECEIVE_TIMEOUT_MS;
-> +	struct pollfd pfd = { .fd = self->fd[1], .events = POLLIN };
-> +	int i, len, frame_len, ready;
+This is the right thing to do. Either my analysis is wrong or the
+changelog confusing. I would argue that the full-chainwalk depends now
+on a random stack value _and_ __waiter_less() might access the random
+value if ww_mutex is enqueued and a regular mutex exists in the lock
+chain.
 
-[ ... ]
-
-> +		ASSERT_NE(pfd.revents & POLLIN, 0);
-> +		ASSERT_LT(records++, 128);
-> +		len = read(self->fd[1], output, sizeof(output));
-> +		ASSERT_GE(len, TUN_VNET_TNL_SIZE + ETH_HLEN);
-> +		frame_len = len - TUN_VNET_TNL_SIZE;
-
-[Severity: Low]
-Can a failed read() get past this assert? len is an int, but
-TUN_VNET_TNL_SIZE is sizeof(struct virtio_net_hdr_v1_hash_tunnel), so the
-right-hand side is a size_t. __EXPECT() keeps the type of each operand:
-
-	__typeof__(_expected) __exp = (_expected);
-	__typeof__(_seen) __seen = (_seen);
-	if (!(__exp _t __seen)) {
-
-That means a -1 from read() is compared as SIZE_MAX, and the assert passes.
-
-read() can fail even after poll() reports POLLIN. tun_do_read() dequeues
-the skb and calls tun_put_user(), which can return -EINVAL from
-virtio_net_hdr_tnl_from_skb(). The skb is freed either way:
-
-drivers/net/tun.c:tun_do_read() {
-    ...
-	ret = tun_put_user(tun, tfile, skb, to);
-	if (unlikely(ret < 0))
-		kfree_skb(skb);
-    ...
-}
-
-When that happens, frame_len goes negative. The later ASSERT_GE(frame_len,
-...) checks against size_t or unsigned operands pass for the same reason.
-
-On the first iteration, output[] is uninitialized stack memory. The MAC
-memcmp() then most likely mismatches and the error is dropped by the
-continue. On later iterations the stale previous frame is parsed until the
-tot_len check fails with a misleading message.
-
-The test still fails in the end because seen never reaches 0xff, but the
-real errno is never reported. Would an ASSERT_GE(len, 0) before this check,
-or an (int) cast on the size, give a clearer failure?
-
-[ ... ]
-
-> +		if (!variant->gro || vh->gso_type == VIRTIO_NET_HDR_GSO_NONE) {
-> +			ASSERT_EQ(vh->gso_type, VIRTIO_NET_HDR_GSO_NONE);
-> +			ASSERT_EQ(segments, 1);
-> +			ASSERT_EQ(le16toh(vh->gso_size), 0);
-> +			ASSERT_EQ(gro_build_packet(input, first), len);
-> +			ASSERT_EQ(memcmp(frame, input + TUN_VNET_TNL_SIZE, frame_len), 0);
-> +			continue;
-> +		}
-
-[ ... ]
-
-> +	ASSERT_EQ(seen, (1U << GRO_PACKETS) - 1);
-> +	if (variant->gro && !aggregates && _metadata->exit_code != KSFT_FAIL)
-> +		SKIP(return, "No multi-segment GRO aggregate observed");
-
-[Severity: Medium]
-Does this match the commit message? The commit message says:
-
-  Require a multi-segment GRO aggregate ... No output or no merge is not
-  a pass.
-
-In kselftest_harness.h, SKIP() is documented as forcing a "pass" after
-reporting why the test is skipped. It sets _metadata->exit_code to
-KSFT_SKIP, which appears as "ok ... # SKIP" in the TAP output.
-
-In the gro_on variant, the GSO_NONE branch above accepts unmerged frames
-after only an integrity check. Those frames never reach the
-outer_th_offset and inner_nh_offset checks. virtio_net_hdr_tnl_from_skb()
-only fills those fields for SKB_GSO_UDP_TUNNEL or SKB_GSO_UDP_TUNNEL_CSUM
-skbs, which means only for aggregates.
-
-Suppose Geneve GRO stops merging, or the tunnel GSO export path stops
-producing tunnel GSO skbs. All 8 packets would then arrive as valid
-singles, seen would become 0xff, aggregates would stay 0, and the test
-would report SKIP.
-
-Wouldn't a regression in the path this test targets then look like an
-environment skip instead of a failure? Should the gro_on variant fail
-here instead?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112030708.1915665-1-bryon%40fryer.io
+Sebastian
