@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794807173;
-	b=CZ1y9GeOQd+WvlO6LyMPuo9d92SjHFcWq4MDyYJsjIQ74mjgS34DpGfpFZm/PQS2F+am
-	 OhVgTuzd9a5ByI1RtxfMvulnC17Vd+2wR40GatxvbM4clWtVo0jj8JgoZX54zEk+bGUYy
-	 d4NDCofzWcmzGkmfGWShdJpftC8ip43sjfyOAxPaP5KwRbsC9JvAvNmg/IVXOclhjjq1K
-	 cBMTzjw8lANa9oTA7WSUg5/ZyHC/H2N6q0BmZ5Elo+pXU5HwRQ78TjQqQ8IqS1eM8kVgd
-	 sIoH/FwA+faiUPBMglYFgAlyLGUDOiEGLxcjRSBGGPnrVAdFZYT1JWuWFy4ZmvP/WEA==
+	t=1794807171;
+	b=cvP5Ixls8q4LjLVpcw8xiPH3SPGa8yVbjl58s+lQGDjchRqIqtmBTU8gcnUCXjlowQdB
+	 qeHr9Hj1ekkTNslBc8qHuw55CIVfAHjfDQiqUcG9Mcmb2E+fhId3EPJsqU/nFMP8kJ3TD
+	 yF9iUOPQRSqJowa5RkHs8DE4rQ+v2nurxBWxT2vkR8dpFERjWWowZdFfNz5cGusPqA+V7
+	 W6fzSyf7Xsqng9/G4iZmMHyWHyCRgkd9tKvELUdUHYtru3pHrVToHjN40RRQmYj5j8kgE
+	 7MZEzxITKZyJRx8rSgweAYm+ejdj15NDxaCTew5VBXb8RI3XczsMqNZbX2wdPYKLxBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794807173;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794807171;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=douqLaofwr9UvuTKqzhW38JwSiM5sayiSfiJVWEbrBY=;
-	b=bmcgtFKWnu3bKpeusgNZhB4PN/3rk+ZZAuQbft8Qh9k4Rgn5HqqgEygz8WhJlzwNm25P
-	 uKR5HgP82BmGeoVYr4hH5yjtpTODGbQsDL0kXt/MDiZIOym982CU2fUBeMD4H/lX5gz73
-	 ap7SgGcW3uai5i+Vf184izWkUhl2sJxbGLoEraC0NixtPeKymxZsFUGWALInbqOeBJske
-	 6Ugpi/pXt8ymoSxynJYdZU5rbJRS8YfZmqokF9/iBFICe7DyjFdGyDq25BNSYRGR04p6l
-	 fSLS8wUywapLgYkAw9WI/yhCAkzJnvhaTvcY73c6aHU+xCKOtHe7p5MRK2VBVpbZyfQ==
+	bh=SFn2WlVxw0kCG/YWdNkma4tjLFQtGi86pLgIVwkVUIw=;
+	b=1xT8uYUN8llfnK+9+Dy1R6XPPeSPelelikC0YSJz3WtyHTFc357QqCG4z6GD0h3Hf8Jv
+	 7jAzEeyRf7hQw3z+BG1i3i3mH8Zwgw6mjCAnXgyHwCFGt4QR6mjTyCivhiMvQNtu6Hmdu
+	 fKD5LwOPmkgN9XxB8B5pLZdT+XB5PGDRRmnCiI47jMYfb7i6KGeyFY6eSVUZfXAdR4q+4
+	 MaMRR+jZ9rQno7j5qAffutcfLi4fwnbkqNTQvY19AlMG79i68XwKPQFQVu9faZi7nPR0f
+	 vpmdbTZXTKCbJqVSNuMuAMh9rx1CE7f3rgU2qQtyzweb0/xE/qDtwPhTlCvw9A5CkzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bGvOsCif;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Uq/MnQSc";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E5F606A33A;
-	Mon, 16 Nov 2026 05:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bGvOsCif
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5DC1F000C4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A664A606A31C;
 	Mon, 16 Nov 2026 05:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Uq/MnQSc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F69F1F000C4;
+	Mon, 16 Nov 2026 05:32:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794807172;
-	bh=douqLaofwr9UvuTKqzhW38JwSiM5sayiSfiJVWEbrBY=;
+	s=k20260515; t=1794807171;
+	bh=SFn2WlVxw0kCG/YWdNkma4tjLFQtGi86pLgIVwkVUIw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=bGvOsCifrc5y5Ypj5DriWtJWjDaVh/uS6DScPAEpIM0zVVeRqcvPFV4JQzqU4+kfH
-	 Pq0REHu1/h8PwGh5+Zng1KSEX6XnCmMj9daUofYWbiHAqtftw4FbKZDNvK5muuPm72
-	 CC3QRCImYoEyOnKUjV7Eh010yPLs4YNPHy+lT0PXKDS7nIoMlOJsVssT5Xlngwdi3j
-	 8QPbaikk+FkCEisiy6BXJstUEfp6/IOc/nwsO8dqm7uI4xKNrj/lmr/giSDTFNHe0n
-	 vIo9zu1Q1HXrHQpvAEUwakBJmunxvRpc9NlqYAghMRyx4/7iylVgOz7kZ534N/CWBy
-	 J2JMwcvyQxKYA==
-Subject: Re: [PATCH net-next v5 5/8] vxlan: leave FDB state and flags
- unchanged when an update fails
+	b=Uq/MnQScS4Ld0P375a5S4oMVSvaeKhTVNe7TOm8r5h+x84Y6C8OxTRvNykZiUM0EI
+	 S1eO9vlUE6COgKxb9jJH6UOyVtWY/KLTy575gTpkx6rLUfQX+fBFMG5E3LgrYzeUtN
+	 Wok+tFZeFpksCPnfS+HKldkR6FqKdNkfFc13xi80GC9vYpqvhckBbLfppZS8BphY/i
+	 jCE1I3NwJtuj7rF1JOMHRdVoDqwckPEe2+U8DQz92dbBauKSUvMzgMffkutOkvtb7U
+	 7UC/ehWuRSIaWJygC0u/TjYAj80JBoEKpBH/N0gACpYd2xkMh2+aqpEAM1s583M/yq
+	 U9tC8DsFQ4VUg==
+Subject: Re: [PATCH net-next v5 3/8] vxlan: vnifilter: bound the number of
+ VNIs one request may touch
 From: netdev-bot+sashiko@kernel.org
 To: alishmery18@gmail.com
 Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
@@ -50,11 +50,11 @@ Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
  roopa@nvidia.com, kuniyu@google.com, petrm@nvidia.com, aroulin@nvidia.com,
  shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Mon, 16 Nov 2026 05:32:51 +0000
-Message-ID: <179480717141.3136.11745110042567184221@kernel.org>
-In-Reply-To: <20261114221412.255825-6-alishmery18@gmail.com>
-References: <20261114221412.255825-6-alishmery18@gmail.com>
-X-sashiko-severity: High
+Date: Mon, 16 Nov 2026 05:32:49 +0000
+Message-ID: <179480716972.3136.12449306559082331677@kernel.org>
+In-Reply-To: <20261114221412.255825-4-alishmery18@gmail.com>
+References: <20261114221412.255825-4-alishmery18@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,10 +67,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 1 (2)
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,212 +78,178 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] On the switchdev-veto exit, vxlan_fdb_update_existing()
-  (drivers/net/vxlan/vxlan_core.c) still publishes the requested state…
-- [Low] The patch fixes a bug userspace can trigger, carries four Fixes:
-  tags (6681712d67ee, 906dc186e020, 61f46fe8c646, 1274e1cc4226), and is…
-
-Pre-existing issues:
-- [Low] When a switchdev driver vetoes the update,
-  vxlan_fdb_update_existing() restores f->state and f->flags at…
-- [Low] The comment the patch adds in vxlan_fdb_update_existing() (lines
-  1038-1042) says the ageing timer reads f->state and f->flags without…
+- [Medium] RTM_NEWTUNNEL/RTM_DELTUNNEL requests that work today now fail
+  with -EINVAL whenever the spans of their entries add up to more than…
+- [Low] The patch caps the number of VNIs one request walks.
+- [Low] The commit message calls the change net-next hardening and "not a
+  backport candidate".
+- [Low] The comment on vxlan_vni_filter_entry_range() says sharing the
+  helper means the count in vxlan_vnifilter_check_msg() "cannot drift…
 
 --
 
-vxlan: leave FDB state and flags unchanged when an update fails
+vxlan: vnifilter: bound the number of VNIs one request may touch
 
-This commit moves the state and flags write in vxlan_fdb_update_existing()
-so that it comes after the nexthop update, the non-unicast replace check
-and the NLM_F_APPEND allocation. A request refused at any of those steps
-no longer changes the entry. When a switchdev driver vetoes the
-notification, the saved state and flags are written back.
+This commit adds vxlan_vnifilter_check_msg(). It sums the VNI spans of
+every VXLAN_VNIFILTER_ENTRY in an RTM_NEWTUNNEL or RTM_DELTUNNEL message.
+If the total is over VXLAN_VNI_FILTER_MSG_MAX (4096), the whole message
+is rejected with -EINVAL before any entry is applied. Range extraction is
+now shared with vxlan_process_vni_filter() through the new
+vxlan_vni_filter_entry_range() helper.
 
-> The patch "vxlan: vnifilter: account the default FDB entry to memcg"
-> later in this series makes the NLM_F_APPEND allocation fail routinely
-> at a memory cgroup limit, on the path that changes a vnifilter VNI's
-> default entry; this is ordered before it so that failure leaves the
-> entry as it was. Like the rest of the series it targets net-next.
+> This is hardening for net-next -- a policy narrowing of what a single
+> message may ask for -- and is not a backport candidate.
 
 [Severity: Low]
-This isn't a bug, but could this patch go to net instead of net-next?
+Could the commit message say who can trigger the unbounded walk? Stable
+reviewers need that to decide on a backport.
 
-It carries four Fixes: tags. The bug it fixes is in released kernels and
-userspace can trigger it: a refused RTM_NEWNEIGH, such as an NLM_F_REPLACE
-of the all-zeros entry with NUD_REACHABLE that gets -EOPNOTSUPP, leaves the
-entry dynamic, and vxlan_cleanup() then ages it out.
+RTM_NEWTUNNEL is registered without DOIT_UNLOCKED. The only permission
+check is in rtnetlink_rcv_msg():
 
-The dependency on the memcg patch only goes one way. The earlier patches in
-the series don't touch drivers/net/vxlan/vxlan_core.c, so this one looks
-like it applies on its own. The rest of the series could still follow in
-net-next.
+	if (kind != RTNL_KIND_GET && !netlink_net_capable(skb, CAP_NET_ADMIN))
+		return -EPERM;
 
-The series notes that net-next was suggested for the related "vxlan:
-vnifilter: roll back a VNI add that fails" fix, so this may be the
-maintainers' call.
+So root in a user namespace can create a vnifilter vxlan device in its
+own netns. It can then send one entry spanning 0 to 0xffffff, which
+vni_filter_vni_range accepts.
 
-> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-> index d11028b374721..2303d652d3968 100644
-> --- a/drivers/net/vxlan/vxlan_core.c
-> +++ b/drivers/net/vxlan/vxlan_core.c
+The message says one request can cover the whole 24-bit space. The only
+timing it gives is for 1M VNIs (1.6 s). Scaled linearly, the full 16M
+range would hold the global rtnl_lock for about 25 s. It would also
+allocate a node and a per-CPU stats block per VNI, and before this series
+that memory was not memcg-accounted.
+
+Whether this belongs in stable is for the maintainers to decide. Could
+the message state the user-namespace reachability and the hold time for
+the full range?
+
+> diff --git a/drivers/net/vxlan/vxlan_vnifilter.c b/drivers/net/vxlan/vxlan_vnifilter.c
+> index 66a27198c65d2..127ed5b2a2eb7 100644
+> --- a/drivers/net/vxlan/vxlan_vnifilter.c
+> +++ b/drivers/net/vxlan/vxlan_vnifilter.c
 
 [ ... ]
 
-> @@ -1048,6 +1035,23 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
->  		notify |= rc;
->  	}
->  
-> +	/* Do not allow an externally learned entry to take over an entry added
-> +	 * by the user. The state and flags are written only after the steps
-> +	 * above that can fail, so that a request they refuse never changes
-> +	 * them, not even briefly: the ageing timer reads them without the lock.
-> +	 */
-> +	if (!(fdb_flags & NTF_EXT_LEARNED) ||
-> +	    !(f->flags & NTF_VXLAN_ADDED_BY_USER)) {
-> +		if (f->state != state) {
-> +			f->state = state;
-> +			notify = 1;
-> +		}
-> +		if (f->flags != fdb_flags) {
-> +			f->flags = fdb_flags;
-> +			notify = 1;
-> +		}
-> +	}
+> +/* Reject a request touching more than VXLAN_VNI_FILTER_MSG_MAX VNIs before any
+> + * of its entries is acted on. Both add and delete walk the span one VNI at a
+> + * time under rtnl_lock, so both are bounded. Entries are applied one at a time
+> + * and each one notifies as it goes, so a limit checked inside the dispatch loop
+> + * would leave the entries ahead of the offending one already applied.
+> + */
 
-[Severity: High]
-Can a request that a switchdev driver vetoes still get a permanent entry
-aged out? On the veto path, the new state and flags are still written into
-the live entry before vxlan_fdb_notify(). They only get their old values
-back at err_restore.
+[Severity: Low]
+Does capping the number of VNIs fully bound the rtnl hold time? For each
+new VNI the walk goes through
+vxlan_vni_add_del()->vxlan_vni_add()->vxlan_vni_in_use(). That last
+function loops over every vxlan device in the netns:
 
-vxlan_cleanup() reads them without hash_lock. Once it decides the entry has
-expired, the only thing it rechecks under the lock is hlist_unhashed():
-
-drivers/net/vxlan/vxlan_core.c:vxlan_cleanup() {
+drivers/net/vxlan/vxlan_core.c:vxlan_vni_in_use() {
     ...
-		if (f->state & (NUD_PERMANENT | NUD_NOARP))
-			continue;
-
-		if (f->flags & NTF_EXT_LEARNED)
-			continue;
-    ...
-		timeout = READ_ONCE(f->updated) + cfg->age_interval * HZ;
-		if (time_before_eq(timeout, jiffies)) {
-			spin_lock(&vxlan->hash_lock);
-			if (!hlist_unhashed(&f->fdb_node)) {
-				...
-				f->state = NUD_STALE;
-				vxlan_fdb_destroy(vxlan, f, true, true);
-			}
+	list_for_each_entry(tmp, &vn->vxlan_list, next) {
+		...
+		if (tmp_cfg->flags & VXLAN_F_VNIFILTER) {
+			if (!vxlan_vnifilter_lookup(tmp, vni))
+				continue;
     ...
 }
 
-Take a NUD_PERMANENT entry whose f->updated is older than age_interval, and
-a request that makes it dynamic and then gets vetoed:
+A request within the cap therefore still costs about 4096 * D steps
+under rtnl_lock, where D is the number of vxlan devices in the netns. The
+caller controls D.
 
-CPU1 (hash_lock held)
-vxlan_fdb_update_existing()
-  f->state = state;
-                                  CPU2
-                                  vxlan_cleanup()
-                                    sees f->state without NUD_PERMANENT
-                                    sees the old, expired f->updated
-                                    spin_lock(&vxlan->hash_lock) waits
-  WRITE_ONCE(f->updated, jiffies);
-  vxlan_fdb_notify() is vetoed
-  f->state = old_state;
-  hash_lock released
-                                    hlist_unhashed() is false
-                                    vxlan_fdb_destroy()
+This per-step cost was there before, and the patch does bound the walk
+length as it says. The commit message says "That walk is the cost being
+bounded". Could it also mention this second factor?
 
-On x86 the window is the gap between the f->state store and
-WRITE_ONCE(f->updated). On arm64 or powerpc nothing orders the plain
-f->state load against READ_ONCE(f->updated), so the window could span the
-whole notifier call.
+> +static int vxlan_vnifilter_check_msg(const struct nlmsghdr *nlh,
+> +				     struct netlink_ext_ack *extack)
+> +{
 
-Flags have the same window. A vetoed user request on an NTF_EXT_LEARNED
-entry clears NTF_EXT_LEARNED for a moment.
+[ ... ]
 
-An in-tree driver can veto. mlxsw_sp_switchdev_event() returns NOTIFY_BAD
-in two cases:
+> +		vxlan_vni_filter_entry_range(vattrs, &vni_start, &vni_end);
+> +
+> +		/* A start above the end selects no VNI and costs nothing;
+> +		 * leave it behaving as it does today.
+> +		 */
+> +		if (vni_end < vni_start)
+> +			continue;
 
-- mlxsw_sp_switchdev_vxlan_work_prepare() rejects the remote, for example
-  an NLM_F_REPLACE that changes the remote port and the state together.
-- Its GFP_ATOMIC allocation fails.
+[Severity: Low]
+Does the comment on vxlan_vni_filter_entry_range() still hold for an
+entry with neither VXLAN_VNIFILTER_ENTRY_START nor
+VXLAN_VNIFILTER_ENTRY_END? It says the count "cannot drift from the range
+vxlan_process_vni_filter() then acts on". The same question applies to
+START set to 0 with END absent or 0.
 
-The commit message says:
+The helper returns vni_start == vni_end == 0 for these entries. The check
+above only skips inverted ranges, so such an entry is counted as one VNI.
+vxlan_process_vni_filter() never walks such an entry; it rejects it:
 
-    The switchdev notification reports the new state, so it still
-    follows the write
+	if (!vni_start && !vni_end) {
+		NL_SET_ERR_MSG_ATTR(extack, nlvnifilter,
+				    "vni start nor end found in vni entry");
+		return -EINVAL;
+	}
 
-Is that accurate for the state? vxlan_fdb_switchdev_notifier_info() takes
-only this field from the entry:
+Take a message whose valid entries add up to exactly 4096 VNIs plus one
+empty entry. The extack points at the empty entry and says "Request asks
+for more than 4096 VNIs" instead of reporting the missing start/end.
 
-	fdb_info->added_by_user = fdb->flags & NTF_VXLAN_ADDED_BY_USER;
-
-It never reads fdb->state. Only the rtnl part, __vxlan_fdb_notify(), needs
-the new state, and it runs after the switchdev call.
-
-Would either of these work instead?
-
-- Make the switchdev call before the new state is written.
-- Recheck state, flags, nh and updated under hash_lock in vxlan_cleanup().
-
-The second would also close the race with a successful update that the
-commit message leaves open. Nothing later in the series touches this code
-or vxlan_cleanup().
+Both paths return -EINVAL, so only the diagnostic and the comment are
+affected. Could vxlan_vnifilter_check_msg() report this entry the same
+way vxlan_process_vni_filter() does?
 
 > +
->  	if (ndm_flags & NTF_USE)
->  		WRITE_ONCE(f->updated, jiffies);
+> +		/* vni_filter_entry_policy has already bounded both endpoints
+> +		 * below VXLAN_N_VID, so one entry adds at most VXLAN_N_VID and
+> +		 * vnis cannot wrap before the test below rejects it.
+> +		 */
+> +		vnis += vni_end - vni_start + 1;
+> +		if (vnis > VXLAN_VNI_FILTER_MSG_MAX) {
+> +			NL_SET_ERR_MSG_ATTR_FMT(extack, attr,
+> +						"Request asks for more than %u VNIs",
+> +						VXLAN_VNI_FILTER_MSG_MAX);
+> +			return -EINVAL;
+> +		}
 
-[Severity: Low]
-This isn't a bug introduced by this patch, but the new comment says the
-ageing timer reads f->state and f->flags without the lock, and the stores
-above are plain.
+[Severity: Medium]
+This rejects requests that work today. bridge(8) puts each range, or
+each comma-separated item, into one VXLAN_VNIFILTER_ENTRY of a single
+message. Each of these now fails with -EINVAL:
 
-f->updated is written with WRITE_ONCE() here, and vxlan_cleanup() reads it
-with READ_ONCE(). f->state and f->flags are read there with plain loads.
+  bridge vni add dev vxlan0 vni 10000-20000
 
-Should f->state and f->flags also use WRITE_ONCE() and READ_ONCE()? As
-written, KCSAN would report these accesses as data races, and the patch
-adds two more plain stores at err_restore.
+  a single range covering the whole 24-bit space
 
-> @@ -1066,13 +1070,17 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
->  
->  err_notify:
->  	if (nhid)
-> -		return err;
-> +		goto err_restore;
->  	if ((flags & NLM_F_REPLACE) && rc)
->  		*rd = oldrd;
->  	else if ((flags & NLM_F_APPEND) && rc) {
->  		list_del_rcu(&rd->list);
->  		call_rcu(&rd->rcu, vxlan_dst_free);
->  	}
-> +err_restore:
-> +	/* The notification was vetoed: put back the state and flags. */
-> +	f->state = old_state;
-> +	f->flags = old_flags;
+  re-adding more than 4096 existing VNIs to change their group
 
-[Severity: Low]
-This is a pre-existing issue, but f->updated isn't restored here. It is set
-to jiffies before vxlan_fdb_notify(), both in the notify block and when
-NTF_USE is set.
+There is no opt-out. Before this patch the only limit was the policy
+maximum of VXLAN_N_VID - 1.
 
-So a vetoed request still refreshes the ageing timestamp. Userspace can see
-that through NDA_CACHEINFO, and a dynamic entry gets up to one more
-age_interval.
+The series' own selftest ("selftests: net: test the vxlan vnifilter
+request limit and dump replay") expects "bridge vni add dev vxlan-ext1
+vni 20000-24096" to fail. Its comment notes that bridge(8) sends one
+entry per comma-separated item in a single message. That selftest does
+cover the 4096 accept and 4097 reject cases for add and delete.
 
-Should f->updated also be put back on a veto? The old code did the same
-thing, and the commit title only covers state and flags.
+The commit message says the space "can still be installed in more than
+one request". Even so, scripts and configs that use one large range will
+break on a kernel upgrade.
 
-Separately, the nhid branch of err_notify looks unreachable.
-first_remote_rtnl() returns NULL when f->nh is set, so vxlan_fdb_notify()
-never makes the switchdev call for nexthop entries.
+The 4096 figure also comes from the VLAN ID space, which does not apply
+to collect_md vnifilter devices used without VLAN-derived VNIs.
 
->  	return err;
->  }
+Should the commit message say that existing bridge(8) usage with ranges
+over 4096 VNIs will stop working?
+
+> +	}
+> +
+> +	return 0;
+> +}
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261114221412.255825-1-alishmery18%40gmail.com
