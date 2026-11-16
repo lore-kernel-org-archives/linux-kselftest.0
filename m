@@ -1,101 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.179
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794805718;
-	b=c1IwoxpWKinOIRnNTB5pky9AfoiSyspVjSYRoltWD08nNAIYPklgLnrW0+Znt1dBd5dD
-	 eCcyu8gw4pvU9MmoGzAXRn6fCcoXk54z7jNYDrG0X1K+N4pIEqEjLxKGS8ltDbxrDKCKI
-	 9z520obi3t3e+3cb6NgTALmzxMA2unJ24AAq8Zn96XUlbqRGykWncMzawnw6GBLBw9uyy
-	 GANi/gcNNuuplWfylTGbIchoXukEdcHK3Q12u8JgRidEaVQVGqV22+DxXdvDIiqCfR7XP
-	 9LYsmHTGRGe+Rm1WnyCXc9myQ6fMofQlTV3dw9kndToOVohipSulIbgTzUVNELvSCtw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794805718;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=6PFo0gWJ6YoLoXoUQd+pgr2q8m2qzjFGTHMpGL/07IE=;
-	b=OWueUI1R+np4jOVD59v9rFBxikZm8EOgdIQvqaglAC/8Bfw8s1uk1/W6jOQ+r4QrTM0O
-	 jE8KJ6hFbd9ez5m1HfS7QiKT5kt/l6Aca1SLwGY95d9LmGqlUZgEHS5zuMDduBk75sJbE
-	 kEgFdXFlIBH9yehO/EY6cfFaMqQSlyIYgsGyx4XALWdHk9U/7Qet2QpZVijDfURAVF1Bz
-	 ZwMDTRXeeB4Nxz87lHr9Mrk0xXOHrBQGePu5HdyKAZOw/2ifbbgRYd0cJBseeqM8ZMxHa
-	 RxFOWfOTjGyaFdDCtPG5ylDWvpRnm4DR6trps+seH6S1FVGt/gjv+Z9bf27c05KsYcA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nebusec.ai;
-	spf=pass smtp.mailfrom=nebusec.ai;
-	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b="TSy/b/JZ";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.179
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794807173;
+	b=CZ1y9GeOQd+WvlO6LyMPuo9d92SjHFcWq4MDyYJsjIQ74mjgS34DpGfpFZm/PQS2F+am
+	 OhVgTuzd9a5ByI1RtxfMvulnC17Vd+2wR40GatxvbM4clWtVo0jj8JgoZX54zEk+bGUYy
+	 d4NDCofzWcmzGkmfGWShdJpftC8ip43sjfyOAxPaP5KwRbsC9JvAvNmg/IVXOclhjjq1K
+	 cBMTzjw8lANa9oTA7WSUg5/ZyHC/H2N6q0BmZ5Elo+pXU5HwRQ78TjQqQ8IqS1eM8kVgd
+	 sIoH/FwA+faiUPBMglYFgAlyLGUDOiEGLxcjRSBGGPnrVAdFZYT1JWuWFy4ZmvP/WEA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794807173;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=douqLaofwr9UvuTKqzhW38JwSiM5sayiSfiJVWEbrBY=;
+	b=bmcgtFKWnu3bKpeusgNZhB4PN/3rk+ZZAuQbft8Qh9k4Rgn5HqqgEygz8WhJlzwNm25P
+	 uKR5HgP82BmGeoVYr4hH5yjtpTODGbQsDL0kXt/MDiZIOym982CU2fUBeMD4H/lX5gz73
+	 ap7SgGcW3uai5i+Vf184izWkUhl2sJxbGLoEraC0NixtPeKymxZsFUGWALInbqOeBJske
+	 6Ugpi/pXt8ymoSxynJYdZU5rbJRS8YfZmqokF9/iBFICe7DyjFdGyDq25BNSYRGR04p6l
+	 fSLS8wUywapLgYkAw9WI/yhCAkzJnvhaTvcY73c6aHU+xCKOtHe7p5MRK2VBVpbZyfQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bGvOsCif;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D028E606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 05:08:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D028E606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E5F606A33A;
+	Mon, 16 Nov 2026 05:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=TSy/b/JZ
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3ae25c9f857so33843481fa.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 21:08:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794805716; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZGahjwvUFUGHRqNUuFJ/0y3iRxglSRXD9WUqk/PG5sMyLUA1ZI9m8ARkEmfQeQftgR
-         cGBSob7Usn5GW09ALRfOZHeyjxUz72hRSp9Bom+ynwh7pnkAGPd7QtYbbm3dnW7pOz0q
-         IOZQFI1i5j5NEngc8farZSeERVAICLzhNmdmXneTDQDIMZgxMeNronCYpJK1PHtuxN1V
-         yBhZrQv792n4uEUtNNX+7hqXF3r3hDjcjRBfbm4RPP2A1WWaJXmE3aY3Cp0wQIFY2+Vx
-         fWXpmE5yInVW8F5RnoNWnKbyzgwMzSuHLBjnkO++EB+y4cuWnVPcxmGN5YaI82aR2KS3
-         QkMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6PFo0gWJ6YoLoXoUQd+pgr2q8m2qzjFGTHMpGL/07IE=;
-        fh=g2NOZINxon5hPaVv6GswyAU2gsNTYiSnMK71YVUKe1g=;
-        b=F424Vctu01awotngLKSSQZICnqr7bZXYBhLaNiPtBnRI8ixUEE16Kpn9noTfamwmqw
-         47oEYmLRrLmX4si6Vgw/GcKc7O1oeUlcacl9ODav46CXueqrNmJbVSUEtXRGqZ20cvFT
-         RplLyyRm3Yc1QX31Wf8pGsl5r/jKTX59mxfWLvQlBH8YdQfTKd4jDvBpZQmvqECl9M8H
-         qYmghxhFRnXdKuDYdNWZvurnC9170Qv1sorXm60zCKnCLP+NH6xR8TOrZLj+KJLwzM0Y
-         ISEsoDIJWOwjC1lUTzcL/kgjCwXRx2KSq59vcoZ66/q/JSqgPXDon0Jugg15FNXHt+Iw
-         ++qw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1794805716; x=1795410516; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6PFo0gWJ6YoLoXoUQd+pgr2q8m2qzjFGTHMpGL/07IE=;
-        b=TSy/b/JZ2wjrU2kStbBSWztm4DWLTNtNkuEVQ7pOSonZKkWP0IBhO40JXqIbv6xtsH
-         e45tsQPt0CQtbimH33l84TjBbWKqZZwVJaaoirP1b3P4tlG8NPWEhZzxnFoadNR/RSQA
-         HbZvJUoOqPIo+01MoNKSbPbdjJ+cu4o4wjkR0tdTx1DHFUws6d310scHTpOwOFlSe5P1
-         Bzi0iE3iqbbdP7ibe0LJItvBOj1voUJ8QBqUrMqT5lzFHsub1R1Vz3x1uAmSRscWngJb
-         WQs/5c9W8fruwuYsuoTcldvxDHd0rKHjibZeF2KfunYBHPjGXPLuUefltnycSX/n2JMP
-         1ruQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794805716; x=1795410516;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6PFo0gWJ6YoLoXoUQd+pgr2q8m2qzjFGTHMpGL/07IE=;
-        b=jE2GpNEerZjP2nnAL7WHv+NvZ3wG4mL2CGzsVytU0CU7Dac1Aen1VoQb+BVGSbi8uu
-         oN9nImusFJ7Zuis4ajCwfxXapL2ozpQj7ELu6gqcl5lsmCwr13xc3Z9t6uu+Fg18KZxv
-         MTQxtItMKDkP33Rd53qD7/mUfscxbt1E7/Y5T7FRcBfjmh4znT6WRg5NFHvNBKTMJePg
-         ycVL9EWcGUsgWNGZ/HKum2/PDYTRr81jr4ENd4u+AYnfqniCHJAzQbdhECeA5dfuQy00
-         HaEs3qZqV/Al/bbdkCZ5kCcKccvbmJZgYKA3OQ+TsYS9AcN7hQvL4Ba0y/QmltSv6JQz
-         ALnw==
-X-Forwarded-Encrypted: i=1; AL+hErFPiqv3k/ZJmqFWk5PA0aKfYRyypvMGeTJMXSiwfr465k0jzrMV/s97fk1d0jchT50bUkRaX4FBx3m84aDOIXk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9VvUjJBfLyKep0WF7JBshs7UYhZoWXfHr/uhodWqZaHYoM6ASC
-	hemRzv9iAAwQE4VwyX9BYVBKwltFUhLeDt/AU9kV9BBmn2QRzuBJzI/jbbkrmbRqnKni3iXSi7D
-	ZBxfjIPttBkkZwQy4L3TBG8aAE1MJnncro062Zgytaic=
-X-Gm-Gg: AYBFou2jXfvZkqWjeBiR84jjp+kf75srthqu56hjHW9Kf/aOjGD4CNJ1h8RmLlaWNrz
-	0eK4jQaY1GEYl4G8dEmis6SOB3a54t4SEOMx7XSzAKTpeS5hpqggdXCEVxPh0wJbBZixaG1MBrs
-	sKmJuZOgOHK+cl1tdgr9l3UJYGIqz+0LIazEhFsDI1uNqX4t7bgf9MiJs2lvDzE0U+Auay/KWpw
-	i0RRXjgEzRLXBJHvIyZSprIDXYp4mI9sCESmlZx9uxbbKye9ZV9pYdabQ4kbGYaWuPclzfrF7BU
-	lMkXk4oYz9X99ClWGX/mS70cEkSBKfiB6j8LHDAJl+pQxVuYCdqy9VFTOEf6uoGvdyD/efwF0Ni
-	UfVJg47iKMmNuMdkQKS8aSmWxas2RNOdIDRSTB8kc3c97hKWANvEdqF1WiTlUKUHBg2ciEArwN5
-	btbBZ8W/AU+XktpencVs6HwdOMpYo47u3GqHti46wm1BPsTZU9
-X-Received: by 2002:a05:651c:a14e:b0:3a9:c840:10fb with SMTP id
- 38308e7fff4ca-3ae2b423c94mr27234081fa.2.1794805715876; Sun, 15 Nov 2026
- 21:08:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bGvOsCif
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5DC1F000C4;
+	Mon, 16 Nov 2026 05:32:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794807172;
+	bh=douqLaofwr9UvuTKqzhW38JwSiM5sayiSfiJVWEbrBY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=bGvOsCifrc5y5Ypj5DriWtJWjDaVh/uS6DScPAEpIM0zVVeRqcvPFV4JQzqU4+kfH
+	 Pq0REHu1/h8PwGh5+Zng1KSEX6XnCmMj9daUofYWbiHAqtftw4FbKZDNvK5muuPm72
+	 CC3QRCImYoEyOnKUjV7Eh010yPLs4YNPHy+lT0PXKDS7nIoMlOJsVssT5Xlngwdi3j
+	 8QPbaikk+FkCEisiy6BXJstUEfp6/IOc/nwsO8dqm7uI4xKNrj/lmr/giSDTFNHe0n
+	 vIo9zu1Q1HXrHQpvAEUwakBJmunxvRpc9NlqYAghMRyx4/7iylVgOz7kZ534N/CWBy
+	 J2JMwcvyQxKYA==
+Subject: Re: [PATCH net-next v5 5/8] vxlan: leave FDB state and flags
+ unchanged when an update fails
+From: netdev-bot+sashiko@kernel.org
+To: alishmery18@gmail.com
+Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
+ pabeni@redhat.com, davem@davemloft.net, edumazet@kernel.org,
+ andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
+ roopa@nvidia.com, kuniyu@google.com, petrm@nvidia.com, aroulin@nvidia.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 16 Nov 2026 05:32:51 +0000
+Message-ID: <179480717141.3136.11745110042567184221@kernel.org>
+In-Reply-To: <20261114221412.255825-6-alishmery18@gmail.com>
+References: <20261114221412.255825-6-alishmery18@gmail.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,83 +66,224 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794759652.git.zihanx@nebusec.ai> <8c46325c4a433f02fdc7241c0c3884126cb502af.1794759652.git.zihanx@nebusec.ai>
- <DMWD65CI6NZ6.2V1UCWL1FUM8K@gmail.com>
-In-Reply-To: <DMWD65CI6NZ6.2V1UCWL1FUM8K@gmail.com>
-From: zihan xi <zihanx@nebusec.ai>
-Date: Mon, 16 Nov 2026 13:08:22 +0800
-X-Gm-Features: AclHuK8wwX3X6c9X0CotsDoQlCsd788_-OkGc6Jo0WLhdVjqKCwpL8hPjkp3rg8
-Message-ID: <CAANe3eSprp-ptkLStFXji38JQitsncoBBYSypRGJ2G5SMghMtg@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] udp: fix reuseport rescore fallback
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net, 
-	edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, benh@amazon.com, 
-	kuniyu@google.com, shuah@kernel.org, vega@nebusec.ai
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 16, 2026 at 12:51=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, Nov 15, 2026 at 07:55 PM Zihan Xi <zihanx@nebusec.ai> wrote:
-> > When a reuseport group contains connected sockets, UDP lookup rescored =
-the
-> > socket selected by the reuseport program. If that socket did not match =
-the
-> > packet, lookup retained the stale selection while continuing the scan. =
-This
-> > could deliver a packet to a socket connected to a different peer.
->
-> Not since 6.13, unless CONFIG_BASE_SMALL=3Dy.
->
-> > Link: https://bugtracker.nebusec.ai/f/net/ipv6/udp.c||udp6_lib_lookup2|=
-|socket-hijack||m7q
->
-> That's not a hijack.
-> udp_reuseport_add_sock() lets only sockets of one uid into a group.
-> A member of the group attaches the prog.
-> The prog picks a wrong socket of its own user.
->
-> > +             if (need_rescore) {
-> > +                     if (score > badness)
-> > +                             badness =3D score;
-> > +                     else
-> > +                             result =3D sk;
-> > +                     continue;
-> > +             }
->
-> This makes it worse.
-> The unconnected sockets of a group have the same score.
-> So the score of the picked socket is equal to badness, and the patch
-> replaces the picked socket with sk.
->
-> Sockets A, B, C are not connected. A is the first one in hslot2.
-> has_conns is set:
->
->   reuseport picks   today   with the patch
->   ---------------   -----   --------------
->   A                 A       A
->   B                 B       A
->   C                 C       A
->
-> Nack.
->
-Thanks for the review. You are right on both points.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-I missed the 4-tuple hash path added in 6.13, so this does not affect the
-normal configuration there; the lookup2 path remains relevant with
-CONFIG_BASE_SMALL=3Dy.
+Critical: 0 · High: 1 · Medium: 0 · Low: 1 (2)
 
-The proposed score > badness check also changes equal-score behavior
-and can override a valid reuseport selection, as your example shows.
-I will withdraw this patch and the security framing rather than send the
-current series.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-If I revisit the remaining CONFIG_BASE_SMALL behavior, I will first
-preserve valid equal-score selections and test both the mismatch fallback
-and equal-score reuseport cases.
+- [High] On the switchdev-veto exit, vxlan_fdb_update_existing()
+  (drivers/net/vxlan/vxlan_core.c) still publishes the requested state…
+- [Low] The patch fixes a bug userspace can trigger, carries four Fixes:
+  tags (6681712d67ee, 906dc186e020, 61f46fe8c646, 1274e1cc4226), and is…
 
-This series is dropped
+Pre-existing issues:
+- [Low] When a switchdev driver vetoes the update,
+  vxlan_fdb_update_existing() restores f->state and f->flags at…
+- [Low] The comment the patch adds in vxlan_fdb_update_existing() (lines
+  1038-1042) says the ageing timer reads f->state and f->flags without…
 
-Thanks.
+--
+
+vxlan: leave FDB state and flags unchanged when an update fails
+
+This commit moves the state and flags write in vxlan_fdb_update_existing()
+so that it comes after the nexthop update, the non-unicast replace check
+and the NLM_F_APPEND allocation. A request refused at any of those steps
+no longer changes the entry. When a switchdev driver vetoes the
+notification, the saved state and flags are written back.
+
+> The patch "vxlan: vnifilter: account the default FDB entry to memcg"
+> later in this series makes the NLM_F_APPEND allocation fail routinely
+> at a memory cgroup limit, on the path that changes a vnifilter VNI's
+> default entry; this is ordered before it so that failure leaves the
+> entry as it was. Like the rest of the series it targets net-next.
+
+[Severity: Low]
+This isn't a bug, but could this patch go to net instead of net-next?
+
+It carries four Fixes: tags. The bug it fixes is in released kernels and
+userspace can trigger it: a refused RTM_NEWNEIGH, such as an NLM_F_REPLACE
+of the all-zeros entry with NUD_REACHABLE that gets -EOPNOTSUPP, leaves the
+entry dynamic, and vxlan_cleanup() then ages it out.
+
+The dependency on the memcg patch only goes one way. The earlier patches in
+the series don't touch drivers/net/vxlan/vxlan_core.c, so this one looks
+like it applies on its own. The rest of the series could still follow in
+net-next.
+
+The series notes that net-next was suggested for the related "vxlan:
+vnifilter: roll back a VNI add that fails" fix, so this may be the
+maintainers' call.
+
+> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+> index d11028b374721..2303d652d3968 100644
+> --- a/drivers/net/vxlan/vxlan_core.c
+> +++ b/drivers/net/vxlan/vxlan_core.c
+
+[ ... ]
+
+> @@ -1048,6 +1035,23 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
+>  		notify |= rc;
+>  	}
+>  
+> +	/* Do not allow an externally learned entry to take over an entry added
+> +	 * by the user. The state and flags are written only after the steps
+> +	 * above that can fail, so that a request they refuse never changes
+> +	 * them, not even briefly: the ageing timer reads them without the lock.
+> +	 */
+> +	if (!(fdb_flags & NTF_EXT_LEARNED) ||
+> +	    !(f->flags & NTF_VXLAN_ADDED_BY_USER)) {
+> +		if (f->state != state) {
+> +			f->state = state;
+> +			notify = 1;
+> +		}
+> +		if (f->flags != fdb_flags) {
+> +			f->flags = fdb_flags;
+> +			notify = 1;
+> +		}
+> +	}
+
+[Severity: High]
+Can a request that a switchdev driver vetoes still get a permanent entry
+aged out? On the veto path, the new state and flags are still written into
+the live entry before vxlan_fdb_notify(). They only get their old values
+back at err_restore.
+
+vxlan_cleanup() reads them without hash_lock. Once it decides the entry has
+expired, the only thing it rechecks under the lock is hlist_unhashed():
+
+drivers/net/vxlan/vxlan_core.c:vxlan_cleanup() {
+    ...
+		if (f->state & (NUD_PERMANENT | NUD_NOARP))
+			continue;
+
+		if (f->flags & NTF_EXT_LEARNED)
+			continue;
+    ...
+		timeout = READ_ONCE(f->updated) + cfg->age_interval * HZ;
+		if (time_before_eq(timeout, jiffies)) {
+			spin_lock(&vxlan->hash_lock);
+			if (!hlist_unhashed(&f->fdb_node)) {
+				...
+				f->state = NUD_STALE;
+				vxlan_fdb_destroy(vxlan, f, true, true);
+			}
+    ...
+}
+
+Take a NUD_PERMANENT entry whose f->updated is older than age_interval, and
+a request that makes it dynamic and then gets vetoed:
+
+CPU1 (hash_lock held)
+vxlan_fdb_update_existing()
+  f->state = state;
+                                  CPU2
+                                  vxlan_cleanup()
+                                    sees f->state without NUD_PERMANENT
+                                    sees the old, expired f->updated
+                                    spin_lock(&vxlan->hash_lock) waits
+  WRITE_ONCE(f->updated, jiffies);
+  vxlan_fdb_notify() is vetoed
+  f->state = old_state;
+  hash_lock released
+                                    hlist_unhashed() is false
+                                    vxlan_fdb_destroy()
+
+On x86 the window is the gap between the f->state store and
+WRITE_ONCE(f->updated). On arm64 or powerpc nothing orders the plain
+f->state load against READ_ONCE(f->updated), so the window could span the
+whole notifier call.
+
+Flags have the same window. A vetoed user request on an NTF_EXT_LEARNED
+entry clears NTF_EXT_LEARNED for a moment.
+
+An in-tree driver can veto. mlxsw_sp_switchdev_event() returns NOTIFY_BAD
+in two cases:
+
+- mlxsw_sp_switchdev_vxlan_work_prepare() rejects the remote, for example
+  an NLM_F_REPLACE that changes the remote port and the state together.
+- Its GFP_ATOMIC allocation fails.
+
+The commit message says:
+
+    The switchdev notification reports the new state, so it still
+    follows the write
+
+Is that accurate for the state? vxlan_fdb_switchdev_notifier_info() takes
+only this field from the entry:
+
+	fdb_info->added_by_user = fdb->flags & NTF_VXLAN_ADDED_BY_USER;
+
+It never reads fdb->state. Only the rtnl part, __vxlan_fdb_notify(), needs
+the new state, and it runs after the switchdev call.
+
+Would either of these work instead?
+
+- Make the switchdev call before the new state is written.
+- Recheck state, flags, nh and updated under hash_lock in vxlan_cleanup().
+
+The second would also close the race with a successful update that the
+commit message leaves open. Nothing later in the series touches this code
+or vxlan_cleanup().
+
+> +
+>  	if (ndm_flags & NTF_USE)
+>  		WRITE_ONCE(f->updated, jiffies);
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but the new comment says the
+ageing timer reads f->state and f->flags without the lock, and the stores
+above are plain.
+
+f->updated is written with WRITE_ONCE() here, and vxlan_cleanup() reads it
+with READ_ONCE(). f->state and f->flags are read there with plain loads.
+
+Should f->state and f->flags also use WRITE_ONCE() and READ_ONCE()? As
+written, KCSAN would report these accesses as data races, and the patch
+adds two more plain stores at err_restore.
+
+> @@ -1066,13 +1070,17 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
+>  
+>  err_notify:
+>  	if (nhid)
+> -		return err;
+> +		goto err_restore;
+>  	if ((flags & NLM_F_REPLACE) && rc)
+>  		*rd = oldrd;
+>  	else if ((flags & NLM_F_APPEND) && rc) {
+>  		list_del_rcu(&rd->list);
+>  		call_rcu(&rd->rcu, vxlan_dst_free);
+>  	}
+> +err_restore:
+> +	/* The notification was vetoed: put back the state and flags. */
+> +	f->state = old_state;
+> +	f->flags = old_flags;
+
+[Severity: Low]
+This is a pre-existing issue, but f->updated isn't restored here. It is set
+to jiffies before vxlan_fdb_notify(), both in the notify block and when
+NTF_USE is set.
+
+So a vetoed request still refreshes the ageing timestamp. Userspace can see
+that through NDA_CACHEINFO, and a dynamic entry gets up to one more
+age_interval.
+
+Should f->updated also be put back on a veto? The old code did the same
+thing, and the commit title only covers state and flags.
+
+Separately, the nhid branch of err_notify looks unreachable.
+first_remote_rtnl() returns NULL when f->nh is set, so vxlan_fdb_notify()
+never makes the switchdev call for nexthop entries.
+
+>  	return err;
+>  }
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261114221412.255825-1-alishmery18%40gmail.com
