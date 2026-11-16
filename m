@@ -1,100 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794837903;
-	b=DVk10xZCg9hr060V/iNdKmATn7xqKjkccct5rXw23c7fjuK2jfQG+ZoexB1MAYoDAWdL
-	 8YDJKzVeSrG27OggznLz88MSs0i9Dv2768V+t0og70mRfmE7IjvxRie5ZvS4tb3wyWv2L
-	 20vvPILRCDSCrA+4JJ4vLG/pik1DaIygylEJesJet/yVgF91lz4V2ez4wbBdUePGobiMq
-	 OrIhh3v3N4IbXaYFd2qvPN/Lx6iqd6wP41Xc2SsHw3Thsv3a3i6HmQidtFVy7HqQo5UV2
-	 4hAZ5mR64trim4uQBts/g9aedXOjCzNyH1URe5EbhIxmD0S4UwTpX36PY2oALP/+8cQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794837903;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
-	b=MuCSTf9ro/7bgxcIAhUzNDKgqIHeBSX2bze+PtsCHGGrWsNkgszc6c+Am1WJr9rBtj0t
-	 fRkU5zKIRC4lHGKxJyGxEpLCi6TVmguQHUK67ZUvO36S29tpOEK+ie3Iso2NUb56+A/9v
-	 pvDKD2vairpzqA6ZT8+ZEL2cTu1yD1c6vCnMliwwcKrUmc+ewgC+uXcwDrW0qgHWJTtnP
-	 Fb79FnsJe5UtUlNgas1pNfj1tTM1o24bte2jiP9MMpuCKkSBYxjrC1Mnwo5AF35EC++sC
-	 VL7RN1w7/LVV2bbhQ4/XJxDDaEBlIPFAwU50t8kjdxdfn0JKt+cYo8PadXXPT1fHzhQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b="RDRD/OcL";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.43
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.121.94.170
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794839276;
+	b=2Vb52Q+AlMmTXTcV7PfsR/5aM3jcF3ScGLRTJsbdB3Py863CfTKYmaSFgKQ16RpwNRPS
+	 bw4yQSJZVhyc7baNd600If9Om5mYesgmSwgq8+owxoL72EG7VN64nI/t8pfFAFk4ScSgn
+	 2Bs1ek5H1EjH8AUsSxIYCp2aos9wZ5oYH8II9QnfmTixfK6wLIJjff42detlAZ8V7XNvy
+	 SGE+3II+oh6y3dnf0QlOJ2+8Vg+vsPGSd3UqduAHf8aQdz96F7NDcwAULF5ldR5Z4/G/X
+	 bQqR0PSIY1VRRZQOKkZmRbBPoP6qm9H7moyWY/ZMO7te/kXaql8/JBfutGzuAcBkhaQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794839276;
+	h=DMARC-Filter:X-KPN-MessageId:Received:DKIM-Signature:X-KPN-MID:
+	 X-KPN-VerifiedSender:X-CMASSUN:X-Originating-IP:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
+	bh=99y4CGnVbAz079lBiip3m9L+73H0dY+aTp6nLYODwTI=;
+	b=2FM3ryLkeBTYPYuFdZQFgNP7tX6SXvVc1p/fuS/xWGzFvXa0hPA2zX1xNHfACss5gGKX
+	 Fl5cFftqirKfit3Ep7z6oqpIUN3erHh6izR8VVMnOns1Z/SuIX4JUPxsaB6Kv0i2sE9bY
+	 npanIpIm/KNoYusXs9vkhwp5wY9q/fz/+iWB5p9iLBSgUhlGef6CbIEAAUOmZ9QJNU3TB
+	 0SJZH3v1itwP88c8o71zZ19FonDc4lnOX/FUGl4Xnp4nN6WLsJL9MqGctgzwjmO0E46u4
+	 r3cziuBWEL5mG9iX/mbLdpALojlLqhQjj5VXiwTDIZYPGevK47dMRPbjJsTYY5NsPQg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=xs4all.nl;
+	spf=pass smtp.mailfrom=xs4all.nl;
+	dkim=pass header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=PfPxDpgq;
+	arc=none smtp.remote-ip=195.121.94.170
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.170])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B07F606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 14:05:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B07F606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4929606A32F
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 14:27:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4929606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RDRD/OcL
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-716c0217635so4580172eaf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 06:05:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794837902; cv=none;
-        d=google.com; s=arc-20260327;
-        b=s9rtcQPbBUvB9AdWZYxVTWvCRfNHNPrMLHMCTHPBw5JuNWxPUFIo/snxF2Y6UmycgM
-         37JyGU/CjdVycb1Hna1Eha1eifBlGaMg16IKIK0NCsVuGHm/NsbZdNIeJlA9iGzAdTHL
-         CsFsmtIqraiTMCf7h36Nc/WWcP+hjadxYql8ARjQ3YERopRCz3/3kEESRJvB1luIlryL
-         625g+wi1Czxl/2uHBN9VIfuvfiCNe0G0fWSeuw8a4duMoWJt71uNFm0XfnUccNy1xU/T
-         TLksoWy0GkyfQz+0Evuy0mDlSXDoWbdN+tgRqhhtMdNLoATKlqAHywc1BT7Sey5Bc7BP
-         FLuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
-        fh=KOpSQUge4zGaBczMKLABYnifrIjLSeiwDgfO55i23rs=;
-        b=VimkMTMTINiicnhYY7fsQHvOzBmB58w8QwPqQuVb+VnNXNHaZ6e+f3wQSsYikYnkvs
-         GNaQ/bSEBGCa4EIWhYIOOfbS9ju0jAILOAnU20usLsHbPYvkKuKL71qPUDc/bgPW4o6H
-         qEQhvj94Ghwpmod/jv/O8mzgnl8Tr6jQH+Rtp08bmGAD9nuSqOmteFqzepv+6Bi+etzL
-         U8lii1kZ2It80XtPYakseKG7mAsyXUCggKq3IYgGSUf1i/iorrqwbRLVlfeVEPcQvFxK
-         SoKsxtvjh8hrbJ9hGl+bDVSdnAKf4uMHRk1O66M4kN2YliuNEeg9Psu/f7bPjcAuUUNO
-         aIIA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=PfPxDpgq
+X-KPN-MessageId: e4d14012-e1c9-11f1-9b59-005056ab378f
+Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id e4d14012-e1c9-11f1-9b59-005056ab378f;
+	Mon, 16 Nov 2026 15:27:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794837902; x=1795442702; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
-        b=RDRD/OcLdIq6BBPMomGGzPawAcj++fY9/uI9T/1dA72dsAu8agY8Cu6695ALuLwM0n
-         8y09N3w3OnPRYtLA+0e+4U9RcOnky1LhgUOxXzhjjfWtcgZu2/11KvN+/ArJuO0D3/uL
-         AyPFayZijP6GzDPeUrJPAizS+wLTSC4SmUVsvfBY1Ile6aaQ9CPg/kv99IdzqKSiLgcp
-         KkL/sqlkUbnuggAYKTgRgmfPG3aEwE4AOQ8e2We0/RHTjfPWdEnjmhtf16f6MefhQPs8
-         wjXI5xul/QtA/M+DzPqpAjwMvOpyB7m+LDtVfZ6yuRFcXnnU7LE7HpmL5egmcfFarZcf
-         uaBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794837902; x=1795442702;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=IiIU9t/pme/D3WoLNwnnikBF+jtcauKxTw3ofmYpCiU=;
-        b=0areKC+9CDja1qE6NnP1F2J+1p+KnWeSdEWKfFXqwYGnBy+cfTpieYfv8Zq5YCXnE4
-         BlmmlmJqEoWneGswd1oqmkD+4vVVXbqBngFcVn+7esJcYPsO0mtkIbmxyIN0m8AmXgKc
-         WQsvkeESR6dF+Foz3+N0ZcFT14kbhlT54MQBIYJj7RId6b7ncW8BUbI3mJQSHtmMkF4s
-         wT+W6sPuyi5Fhzf2BF9Er/mDdjvOZvGAGByoZzJ7/OPGYrXFDaoylXMigeLQLSlmOf9f
-         GIm5M5nVops6OS3iFpj6eu7JWyouz8qPfCGU2c/EZb1Vx7Iy22GTTZpWKvGjuVlChuop
-         Msjw==
-X-Forwarded-Encrypted: i=1; AL+hErEFs7ln8BePEbEAvwLzQotE60YkohZNU5e7VbdZz0EcGD703jbDa+tdcUOsq1Oy8IAt9kuQn/n5jyfjBChMdA4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/y4T9KK75Fc12IQ3XWl+vLnInu9cbxIBHRL5zwjt6VAP639jcN
-	QgpT4lZ2jNEaaLTsGjwV7vgTF/9LULlHVABnskd84z55kXh/pTkjLNYrOynwPVUAK8RiQ7h+DsX
-	xoCD0O8aTH2Eh5X/Na7k+yUJHJF6ExWnuiJQ4o26yMw==
-X-Gm-Gg: AYBFou1KKYaNFZrbmvYEhBhQ2xu7IxjVeM9r+UWDoooA9HbaqAKa+Tae1xQeSTSpF7i
-	PqTjjJzgMJXB9U1YMSn/0/zaBHBvn0aziQHTkcm3pxNJ33/+cqaM3bJ0INOs5A7iaVCI1Yl3kxN
-	4nfruHt8sAQR4O9+HLZQmijQMG0+dk8mFtm/uCZOX18MefMkqZCPuOtL+l3KG+yuNXbftyzc4N2
-	Pq16WTt0tVHONp8SHnQ4meuHTU5H8JTn2hWIm81VuSoO0t/fKE4/IDlJpWSHKiAcgTGagU7+1zZ
-	TTT9hSHffUqtlWPAROzvuO23zA8i7B70vRaLsuERakCThsZsvb7YvcJFpA3I0PD1LqbChMvMhe/
-	3PF0lHEXgxiF0BwI3sa+7GkqX0T4nk03oPe6ffkUWkJXHgL0OwhXPdRC0oBfBH1WDVEiSVy1Z/8
-	4hHK7Ki8aYp+Dxyp5H1V6mtp+zT40pkGY=
-X-Received: by 2002:a05:6820:7093:10b0:71a:ea6a:4f51 with SMTP id
- 006d021491bc7-71aea6a5809mr1437630eaf.14.1794837902102; Mon, 16 Nov 2026
- 06:05:02 -0800 (PST)
+	d=xs4all.nl; s=xs4all01;
+	h=to:message-id:content-type:mime-version:subject:date:from;
+	bh=99y4CGnVbAz079lBiip3m9L+73H0dY+aTp6nLYODwTI=;
+	b=PfPxDpgqeA4gwkNtU5plxL6ve9qd6AigPsG822iaSq0Ck/PIrwYRyCl24iBWpx+Q7mreoDK6BTxCz
+	 e4BY99kZ1qCCBu7bYYsjQji4Q5G2odIFWxpZ5YT3dkGeAw4VSDKyD6nUB5GPg+JMNQF8KH/xHg4wKS
+	 4LOmpAwyQ3bXuPrEYJFfZTHkBqqKSQAgqvidHjaUdjYQP1OoYThoyjy/TPWk+83grlNO3NQJJvoHq1
+	 +nKCES8Cmc7d8IXaWXBnszg7/iB3TRRkGt9F5xvNtf3Okv0yv36TAFxHRDD5uLxYQfpLVTNf5zAAMf
+	 nLrPV+evvw2RjJBwweAqn1IEtMjlxnw==
+X-KPN-MID: 33|/MIgWV6oX9xq3hYmBqzSRu75w+7s54mvLRer7uAyvZKkkOQJU3WlyczKamQ40Ma
+ qFvY5M4b0kMHkpQFfC4nDiSVsf6E06m+PKZ9ZJ9LebWU=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|YWDZrMs4Lyv4GRoA6A2/6qGXTAvptwrA0oltIKL5OmqQif2SdfW3tOA2U/S5xOS
+ hHmCBdftMN/TAm7tsc1xkIQ==
+Received: from [192.168.122.1] (unknown [178.226.154.85])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id e2d743ba-e1c9-11f1-91de-005056abf0db;
+	Mon, 16 Nov 2026 15:27:46 +0100 (CET)
+From: "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
+Date: Mon, 16 Nov 2026 09:27:43 -0500
+Subject: [PATCH] selftests: quote tr character classes in runner.sh
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,35 +69,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com>
- <20261116084107.6675-1-emmaonana18@gmail.com> <20261116084107.6675-3-emmaonana18@gmail.com>
-In-Reply-To: <20261116084107.6675-3-emmaonana18@gmail.com>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Mon, 16 Nov 2026 14:04:50 +0000
-X-Gm-Features: Aa3M54qRdeOnU1gJ7x3s56OW-hJCPdbvkrK8BlxFfQsIh19-OFAy7vmiVdSA8Lw
-Message-ID: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
-Subject: Re: [PATCH net v3 2/2] selftests: net: veth: propagate bad-settings
- check failures to exit status
-To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261116-kselftest-runner-quote-tr-v1-1-e6270326db66@xs4all.nl>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MywqDMBBG4VeRWTvQiE3BVxEXXv60Q0vUmSiC+
+ O4NLr/FOScZVGDUFCcpdjGZY4YrCxo/fXyDZcqm6lF555znr+EXEiyxbjFCed3mBE7KtX8NwzP
+ AT/1IuV8UQY773XbX9QcfAj07awAAAA==
+X-Change-ID: 20261116-kselftest-runner-quote-tr-467bb5fe6dac
+To: Shuah Khan <shuah@kernel.org>, 
+ Cristian Marussi <cristian.marussi@arm.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
+X-Mailer: b4 0.14.3
 
-On Mon, 16 Nov 2026 09:41:07 +0100 Omokefe Emmanuel Onanaroghene wrote:
-> -             echo "fail - set operation successful ?!?" || echo " ok "
-> +             { echo "fail - set operation successful ?!?"; ret=1; } || echo " ok "
+The unquoted [:lower:] and [:upper:] arguments are subject to
+pathname expansion, so a single-character file such as 'l' or 'r'
+in the current directory would replace them and break the
+KSELFTEST_<TEST>_ARGS name sanitization. Quote them like the other
+tr invocations.
 
-Two small suggestions:
+Fixes: e005ff01bfdb ("selftests/kselftest/runner.sh: Pass optional command parameters in environment")
 
-1. These lines are 85 columns wide, over the 80-column limit.
-2. The style is inconsistent with the rest of the file. Other checks
-   use if/else instead of a "cmd && { ...; } || ..." chain.
+Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
+---
+ tools/testing/selftests/kselftest/runner.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-Tianyi
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 311811dc55a0..e81a35e607da 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -77,7 +77,7 @@ run_one()
+ 		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
+ 					$TR_CMD -d "[:blank:][:cntrl:]" | \
+ 					$TR_CMD -c "[:alnum:]_" "_" | \
+-					$TR_CMD [:lower:] [:upper:])
++					$TR_CMD "[:lower:]" "[:upper:]")
+ 		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
+ 	fi
+ 
+
+---
+base-commit: 4d038dae9e5ba5b3fec87fad5b7bf3dc45523ca1
+change-id: 20261116-kselftest-runner-quote-tr-467bb5fe6dac
+
+Best regards,
+-- 
+Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
+
