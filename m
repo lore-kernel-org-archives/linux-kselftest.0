@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794839409;
-	b=Rb7oIW5e49+gWGaPkOLrt7bMJk2CMTDkf1scj+s+MKgLgWv/hVdJekrpsbO3/bydZemw
-	 kK8vIykENmJjM8+K4PLu8zKpOrA0yfTEQ5jFX37sshCDpJxRnfp+apa+SPGOdBgglFvIR
-	 ts1O7Fne2I6SgvPnZe3oSeESwmSEKMbVOsogTEUoWxo00Se2HHxbS+yhzPYlQBBNfxKbX
-	 iClfWaQeBdw5OBWIHdGcqPpdM4tzF44HqEMh5EgOz7Jmvtk7Hq0G2i26W4Tc1h1Aonfge
-	 qXgszR1VYv9zMnKvolq38DHPyWnUxdodlyk54/czhD6LFl2ckuimzpDa2fT0ziMwBWA==
+	t=1794839411;
+	b=JiQhe8lAN4ITe/EVKIK7iiF8SgA+RT+hVA/HlOYfVfEYXWA5IxOtzptMAszhdpPEpYn2
+	 1Q0Uvxt8X7U5rfSALk4xXyl+56+7oVhUyuZ7WJSffI6DCEYO7TL3+HJgVgB40FyJrrUvp
+	 zWFphzpPUhjUxzvYlYVKlbXkZEPeGbcVtCo1YaM8Tz1dTnsGQ7ceKRAuuMlm3BFEoWGDp
+	 c/R5vD3bWY43Ke8gFsoIuoopYJFxCQFLVg9q1yvjZrAOD5TW9VlI6xLuBvV++9DyVCM8f
+	 P9nKI70l1Cp40QrmgmWWWotm+jVqJyE5MJhseAiepf7Ks5Hr9WDd1vJPNH36LibBIsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794839409;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794839411;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=Vn0CoXfZNedHELRWMAV/2rl0hRsK/nJm0PDmhlk7kvw=;
-	b=rTVdzWZxU8EsA/AhmAfS0BzOlrvVFv6U1Zt8brA6X25XHMgy5FVfMbhLKDy/6XcKfnmN
-	 648C9ljNlO6kWyEHVquOS5WcEMRW+G7+8EyYEosC1Ac22XR4+ZSDM36k0zB7Urkn0oL7F
-	 OgcrLR5UvOzHQdo3u4nAZLrQyulbjdTGWUelNSbGFeZTPTTrjRxyIG5evYvV8rnIq50DG
-	 3V6oX5bls2SZ+b/QlMvEJr1/teddimRpJX9o27irTuPMsWYAxRbkx4Hq3MyieJ+SSld+a
-	 J8ZA2C9m5eOBjB55b5gbTiqUonW3ELRX2kPRL91rkiV0dp+EGWfBu+vRkp7lP1PCJhw==
+	bh=B2QlDCVZlqCbIM0I8bDmo9isk+irTXGv5x32YCbuEHA=;
+	b=r/21DJMQUJAWFQFNggjknTGUIlIEr+pPc3hPr9kSe8TPG6PBq/U8yf7HrbCTiLhOO5Na
+	 wdLFNOecgLExmmSIXTD9eo/PUKMQBn+3YQubEFeVO385kc8aaPLaN8DlSQVplFAgM1Z3j
+	 XBgA4sy2vXel6BmbHXBCRIROZ5EXf7krGydq7FARweZEvGJHAAPNPIc+U3OI0vSYn2vmV
+	 vyQnyDN5/BgkqVpl4ytJcrhvQpuvsd4QyI164M+rUBsEUBrL2+Hze/7w7suKaQIbNgmKN
+	 zsGyl7Y6CAxD741LyIvCaJNO94W597zDGgZUxlHpOEU9385zBNiGgmA1QiLB13mMbSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GHu+g0NP;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e4reIHyH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2080D606A335;
-	Mon, 16 Nov 2026 14:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B21606A88D;
+	Mon, 16 Nov 2026 14:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GHu+g0NP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEA81F000D2;
-	Mon, 16 Nov 2026 14:30:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e4reIHyH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C91F1F000C7;
+	Mon, 16 Nov 2026 14:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794839409;
-	bh=Vn0CoXfZNedHELRWMAV/2rl0hRsK/nJm0PDmhlk7kvw=;
+	s=k20260515; t=1794839410;
+	bh=B2QlDCVZlqCbIM0I8bDmo9isk+irTXGv5x32YCbuEHA=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=GHu+g0NP6dHf1oVF30I/5L9AKWSKlhmJxzscd7xf4sijTpM4GFUC212H7hNGV5A5l
-	 tM4gnVtVI0exXD+XYfZYfTXT61lvLQZ7+xzb2wOGO1AZNfXwKJNOyS9Yj2xvpsspPR
-	 S/F/pqhTAEYexnlX7Y/YQzz1M2J3fadt/cHl5VS0fj9E6om0FudAI3THa/dCy4Dsno
-	 i0Tr6k6MyibRrY3tk00pgHTzxMfy8/gDY6PJcRtT22CmeGnUUmJV189HWJjznUONCI
-	 1plE5maNxVf9tOcjk3uSZjXJTk+8JfIU6P4Rru/Dk7uTA7GV3eiNU2TXj824pr8L1O
-	 T+BLtirSND08Q==
+	b=e4reIHyHzU0g+9pBhBs5oDHsNburBjVj4hQO236cXBrJoS2ek15qoy1yN3u8yLl8e
+	 GN+zgENIqaxH5KP8a/2CXu8x1BIlvgh9duumZG0T03V0FOGY7vXoe3B+X20/Z3YhXS
+	 nbAkdvgjKr03I5pXKGvoPqna8/pZDS5tbFuWQd/TPtBlQrBZo0cRq98ULvY4Hckepe
+	 3jMYFB6Fkw4KPpnhbzk5Sw2FuSbD/WwQrLVwJD2O1ZhJQmrHW5e/ZgMk4RE0dVSDOu
+	 pTAQHWYV5lz6XiSJtZ90O4F4Df8Mq2ZYDBwD1GLnF3huiPZMHFxbPyCqPm/BClAVEv
+	 ofuMurU3mQk7Q==
 Subject:
- Re: [PATCH net-next v4 11/14] dpll: dpllsim: Add support to adjust phase
+ Re: [PATCH net-next v4 12/14] selftests: dpll: add pin phase adjust test
 From: netdev-bot+sashiko@kernel.org
 To: poros@redhat.com
 Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
@@ -50,10 +50,10 @@ Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
  arkadiusz.kubalewski@intel.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 16 Nov 2026 14:30:07 +0000
-Message-ID: <179483940736.3136.8014660218595686890@kernel.org>
-In-Reply-To: <20261112130359.840795-12-poros@redhat.com>
-References: <20261112130359.840795-12-poros@redhat.com>
+Date: Mon, 16 Nov 2026 14:30:09 +0000
+Message-ID: <179483940916.3136.8713607811565145711@kernel.org>
+In-Reply-To: <20261112130359.840795-13-poros@redhat.com>
+References: <20261112130359.840795-13-poros@redhat.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -73,82 +73,81 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] Documentation/driver-api/dpllsim.rst is not updated for the new
-  phase-adjust feature, and the series never updates it later.
+- [Low] The phase-adjust round-trip test test_pin_phase_adjust_set_get
+  (tools/testing/selftests/drivers/dpll/dpll_features.sh) only needs…
 
 --
 
-dpll: dpllsim: Add support to adjust phase
+selftests: dpll: add pin phase adjust test
 
-This adds phase adjust get and set callbacks to the dpllsim input and
-output pin ops. Each pin advertises a 100 ps granularity and a symmetric
-range that fits a 32-bit signed value. The stored value is reset to zero
-on every live transition.
+This adds test_pin_phase_adjust_set_get() to dpll_features.sh. The test
+reads the phase adjust range and granularity a pin reports. It sets the
+largest granularity multiple inside the range, or the smallest one if the
+largest is already the current value, reads it back and restores the
+original value.
 
-> diff --git a/drivers/dpll/dpllsim/dpll.c b/drivers/dpll/dpllsim/dpll.c
-> index 0cce8fef232cd..0260bffd15700 100644
-> --- a/drivers/dpll/dpllsim/dpll.c
-> +++ b/drivers/dpll/dpllsim/dpll.c
+> diff --git a/tools/testing/selftests/drivers/dpll/dpll_features.sh b/tools/testing/selftests/drivers/dpll/dpll_features.sh
+> index ebb52c8526201..7b7e077073db5 100755
+> --- a/tools/testing/selftests/drivers/dpll/dpll_features.sh
+> +++ b/tools/testing/selftests/drivers/dpll/dpll_features.sh
 
 [ ... ]
 
-> @@ -197,6 +231,8 @@ static const struct dpll_pin_ops dpllsim_output_pin_ops = {
->  	.frequency_set = dpllsim_pin_frequency_set,
->  	.direction_get = dpllsim_pin_direction_get,
->  	.state_on_dpll_get = dpllsim_pin_state_get,
-> +	.phase_adjust_get = dpllsim_pin_phase_adjust_get,
-> +	.phase_adjust_set = dpllsim_pin_phase_adjust_set,
->  };
->  
->  static const struct dpll_pin_ops *
-> @@ -212,6 +248,9 @@ static void dpllsim_pin_props(struct dpllsim_pin *pin,
->  {
->  	prop->type = pin->type;
->  	prop->board_label = config_item_name(&pin->item);
-> +	prop->phase_range.min = -DPLLSIM_PHASE_ADJUST_MAX;
-> +	prop->phase_range.max = DPLLSIM_PHASE_ADJUST_MAX;
-> +	prop->phase_gran = DPLLSIM_PHASE_ADJUST_GRAN;
->  
->  	switch (pin->type) {
->  	case DPLL_PIN_TYPE_GNSS:
-> @@ -275,6 +314,7 @@ static void dpllsim_pin_reset(struct dpllsim_pin *pin)
->  	pin->state = DPLL_PIN_STATE_DISCONNECTED;
->  	pin->frequency = pin->cfg_frequency;
->  	pin->prio = pin->cfg_prio;
-> +	pin->phase_adjust = 0;
->  }
+> +	[ -n "$gran" ] || gran=1
+> +	defer dpll_restore dpll_pin_set_phase_adjust "$PIN_TUNE_ID" "$before"
+> +
+> +	# Shell division truncates towards zero, so round the bounds towards
+> +	# the inside of the range explicitly, which matters for negative ones.
+> +	target=$((max / gran * gran))
+> +	[ "$target" -gt "$max" ] && target=$((target - gran))
+> +	if [ "$target" = "$before" ]; then
+> +		target=$((min / gran * gran))
+> +		[ "$target" -lt "$min" ] && target=$((target + gran))
+> +	fi
 
 [Severity: Low]
-This isn't a bug, but should Documentation/driver-api/dpllsim.rst be
-updated for phase adjust? The later patches in the series don't touch it
-either.
+Does the round trip need the end of the advertised range here? Any value
+one granularity step away from before would test the same set/get path.
 
-The doc paragraph about netlink-settable state only covers frequency and
-priority:
+On zl3073x, zl3073x_pin_props_get() reports the full s32 range for every
+pin, but sets a granularity only for output pins:
 
-    Every live transition starts from the configured values. A frequency or
-    a priority set over netlink while the instance is live is reported back
-    over netlink, it is not written to the ``frequency`` or ``prio``
-    attribute and is gone once the instance is taken down.
+drivers/dpll/zl3073x/prop.c:zl3073x_pin_props_get() {
+    ...
+	props->dpll_props.phase_range.min = S32_MIN;
+	props->dpll_props.phase_range.max = S32_MAX;
+    ...
+}
 
-Phase adjust has no configfs attribute, so it has no configured value.
-dpllsim_pin_reset() always sets it back to 0.
+So on a zl3073x input pin the test uses gran=1 and target=2147483647 ps.
+zl3073x_dpll_input_pin_phase_adjust_set() then writes about 2.1 ms of
+compensation into the reference's phase offset register. ice behaves the
+same way with its firmware maximum, through ice_dpll_phase_range_set().
 
-The doc also lists the prio range and the frequency table for each pin
-type. It doesn't mention any of these:
+PIN_TUNE_ID comes from pin_is_spare(), which also accepts a pin in the
+selectable state:
 
-  - the advertised phase adjust range of -2147483600..2147483600 ps
-  - the 100 ps granularity
-  - the reset to 0 on each live transition
-  - output pins accept phase adjust as well as input pins
+	any(.[]; .["parent-id"] == $dev and
+		 (.state == "disconnected" or
+		  .state == "selectable")) and
+	all(.[]; .state != "connected" and .operstate != "active")
 
-Would a sentence or two covering these help users of the simulator?
+In automatic mode the DPLL can switch to that reference by itself while
+the test runs, for example on failover or a revertive switch. The PTP or
+SyncE outputs would then be offset by milliseconds until the deferred
+restore runs.
 
-The input pin state setter added earlier in the series is also missing
-from that paragraph.
+The script header already warns against pointing it at a device whose
+reference must not be disturbed, and the value is restored right away.
 
->  
->  /* Build sim->pins in registration order, the order the pins were created */
+Would a small step such as before + gran or before - gran, clamped to
+[min, max], be enough here?
+
+> +	if [ "$target" = "$before" ] || [ "$target" -gt "$max" ] ||
+> +	   [ "$target" -lt "$min" ]; then
+> +		log_test_skip "DPLL pin phase-adjust set/get" "range too narrow"
+> +		return
+> +	fi
 
 [ ... ]
 
