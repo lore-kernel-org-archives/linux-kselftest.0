@@ -1,65 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794792246;
-	b=HsrTfnwI9NgQ1gf8VsgB6G5mm8eXezx82o+RmTxqZQ65FPBlkGhpT2BBoUlWJcHRrnEF
-	 7L8EvEL3z1UX3DWa2bJyhMT61AOTfLqNQMkma67JVUZErTyAsoBvydiZCTPrYrFbPKitb
-	 0TmH3G98JDLlSg1CYAkPHvztaL3opkvj83vhXR5IWR34AhNSfog5V4LKLdEinBpir5BaH
-	 WbZXyv2Oltf6g6TAP6AaFine8dmWEak5xLS40raqf05eQA0wHPMh6NAZAuP0+Ua2h9dCE
-	 m7A4jO1dCUPljhcpexxNt349ph0b09ANkYXmQXKVEVrE271omDK4vHnNpMASGShWocA==
+	t=1794792247;
+	b=SrFJGa4fPYSR9KYXk67T3Asv94kEMZKcXk0pWrLbl3s/g3xY7fFB2SimlmnWnyxpQ1XS
+	 IIZUvFqg+EVEVptaZW319Q6ExiEBUlT+x2NCJZuDtD8VgD9v3KVCUeF6AVl6DDpgO7RrW
+	 AYHTH+3azVmutPHigEj3Ksyy88N4jLe2j+4VctfeOeiLv25MEA5MTDaqJYgR6Xz7uAxMU
+	 IJexw1uYPqRe0E8SGu2hw7QYxbAQKeMVnOppp0O1E50q47JlTsY/NBpe+Q7S1zFGs3toz
+	 we86emnOnh6f3nGNzl/aKvSW9nl+jJnqOHO3GBsjg/UpsHoN+Mof8WU4yvE3n7W+PVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794792246;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794792247;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=9PtDkN8OBZIBR2ON97agOAnd1lKKVP99DWVdfNySUX4=;
-	b=gpm5aPgGPsmr3tPKK0URODyYCGJhOxGVqR/LjRXDAkzdOlp9q13AvikDPAaZ/OtxOFaN
-	 RjNuU67mYL4BMnfJMOVWlDaYOKGGZiOeeHVU+QM/P4ml2dR8I9laZAyNFu2MDNM47kVIq
-	 8W28y68Teu5pBmtEwD0UEHfzNnMwYfOlslGqz1SUmj97zT9icSHSfIOd5AY/LKUJu+a4i
-	 00xI6livTIsPniCiWxvp1ObcuZ8tyCiYXzt7DnAvfB9C2XvtN4IZIwaAEOryU4xStyRG2
-	 qhxdRkoRKjRW042K5fW8KKRiKekVwjPZursbCGB51ZARP2+cTfYQ8gX700v9AuCQffA==
+	bh=zScILb2+bdZUax4SsAIDkJqxTMzWrR5rjecRcds0N8o=;
+	b=OGi+DsEi2pEE7/bHwawIqivU5IgQ/fv4WTxG/DJ4vCLbQJVSIoLfxRXV+EVgc5n1o1ja
+	 X373iFJE6BUeWmYHBt9nohhj6+iUIP3BpwJxCZ8WZniBoLhEkqp59RhFqs2JKiF5aU5HS
+	 rMWR6YYJ5ln07QdeGhqkjtz2/6oGfWtq6il30QEtYgZebtRJueEovyTRbaa9bVynKbPVx
+	 1fizgUtZjTjsBRYQvI8S8FovWUQacYQc6T3ccLbJVus7PnckiQDw3KWlsB5LODtgO/qY7
+	 hDGVTvmbJeZwbSbTDd1hTsDzP8aem4UJibOdaHRix8YP0zbZRCI/5JsusljuMmBirAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IsHJwr3C;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AZaOUOMt;
 	arc=none smtp.remote-ip=170.10.129.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC73E606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF5F606A33D
 	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 01:24:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC73E606A329
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EF5F606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=IsHJwr3C
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AZaOUOMt
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794792244;
+	s=mimecast20190719; t=1794792245;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9PtDkN8OBZIBR2ON97agOAnd1lKKVP99DWVdfNySUX4=;
-	b=IsHJwr3CdWDbXU1QB70NLrgJoxFUuEegi0uZ9ZepcSa2F/z1Z3TEYkjRr0Aais6J+Eg/nc
-	q0ZIAsqVxVjoC/J7RqrCacvVqG3PnVNe+IsMKeG0cy40+vK2X78ci3pcjR6QPw7ywtZMk/
-	kycbKmvfTmSVEwnCMGkXf6/CCfzyVOM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=zScILb2+bdZUax4SsAIDkJqxTMzWrR5rjecRcds0N8o=;
+	b=AZaOUOMtp0zqOZEE5+olkK6C5hvAgNw036zAk3C4kQe9totrd4gIqIWvk8/42F2wECXZZr
+	ZAm4luPRqEEPe6vCzgDmTLuU90MjSALEjLj03Wq4olTqruAJlBwNVetnu5orstkWiOwOLf
+	vuyjVWjS5xvaKJFygXY4/flmCtMm9Xk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-533-coFtIg9XMF2VJJTHw8GsuA-1; Sun,
- 15 Nov 2026 20:24:03 -0500
-X-MC-Unique: coFtIg9XMF2VJJTHw8GsuA-1
-X-Mimecast-MFC-AGG-ID: coFtIg9XMF2VJJTHw8GsuA_1794792242
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-231-6HUUTPTMOUiktlFV85qaxw-1; Sun,
+ 15 Nov 2026 20:24:01 -0500
+X-MC-Unique: 6HUUTPTMOUiktlFV85qaxw-1
+X-Mimecast-MFC-AGG-ID: 6HUUTPTMOUiktlFV85qaxw_1794792240
 Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0896B1800546;
-	Mon, 16 Nov 2026 01:24:02 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E6AAD180034E;
+	Mon, 16 Nov 2026 01:23:59 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 25C0E589;
-	Mon, 16 Nov 2026 01:24:00 +0000 (UTC)
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 29CBF589;
+	Mon, 16 Nov 2026 01:23:58 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -70,10 +70,11 @@ Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v4 6/6] cgroup/cpuset: Fix lockdep_is_cpuset_held()
-Date: Sun, 15 Nov 2026 20:23:09 -0500
-Message-ID: <20261116012330.2271010-7-longman@redhat.com>
+	Waiman Long <longman@redhat.com>,
+	Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH-next v4 5/6] cgroup/cpuset: Handle remote partitions before local partitions in cpuset_handle_hotplug()
+Date: Sun, 15 Nov 2026 20:23:08 -0500
+Message-ID: <20261116012330.2271010-6-longman@redhat.com>
 In-Reply-To: <20261116012330.2271010-1-longman@redhat.com>
 References: <20261116012330.2271010-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -88,121 +89,218 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Commit a84097e625f2 ("cgroup/cpuset: Call housekeeping_update()
-without holding cpus_read_lock") changes lockdep_is_cpuset_held()
-to return true if either cpuset_mutex or cpuset_top_mutex is held.
-lockdep_is_cpuset_held() is used by housekeeping_dereference_check()
-as one of the conditions that rcu_read_lock() is not needed to
-access HK_TYPE_DOMAIN cpumask that can be changed at run time.
-In reality, it should return true only if cpuset_top_mutex is held as
-housekeeping_update() is called with only cpuset_top_mutex held.
+When there is a valid remote partition underneath an invalid local
+partition with subpartitions_cpus cleared because of missing active
+CPUs in the top_cpuset partition, the current iteration logic in
+cpuset_handle_hotplug() will handle the invalid local partition first
+and potentially make the local partition valid. The remote partition
+will be handled later with the potential that both the local and remote
+partitions will be valid with overlapping exclusive CPUs violating the
+cpu exclusivity rule.
 
-If only cpuset_mutex is held, it is possible that there can be a parallel
-housekeeping_update() call leading to a potential use-after-free situation
-when HK_TYPE_DOMAIN housekeeping cpumask is being accessed. It also
-means that rcu_read_lock will be required if only cpuset_mutex is being
-held like when calling from hotplug, scheduler or cgroup.
+Fix this problem by adding a new remote_partition_scan() helper to
+iterate the existing remote partitions first before iterating down
+the hierarchy to handle the local partitions. That also means that
+when subpartitions_cpus is cleared, remote partitions have precedence
+to acquire the exclusive CPUs first before local partitions. It also
+gives remote partition the ability to recover from the clearing of
+subpartitions_cpus as all the remote partitions will be disabled before
+this commit.
 
-Fixes: a84097e625f2 ("cgroup/cpuset: Call housekeeping_update() without holding cpus_read_lock")
+A remote partition can only be created if there is at least one active
+CPU in its effective_xcpus. So remote_partition_scan() will also
+invalidate the remote partition if there is no active CPU left in its
+effective_xcpus. This requires a minor change in a test_cpuset_prs.sh
+test case where a remote partition with no active CPU left will now
+be invalidated.
+
+With the addition of the remote_partition_scan() call in
+cpuset_handle_hotplug(), there is no longer a need to do a remote
+partition check in cpuset_hotplug_update_tasks() and the corresponding
+code can be removed.
+
+While at it, the subpartition_cpus clearing logic is enhanced to
+clear it when no domain housekeeping CPUs are left in the top_cpuset
+partition. When the remote partition is disabled, the effective_cpus
+is modified in a such a way that cpus_updated will be set true later
+in cpuset_hotplug_update_tasks() so that the CPU affinity of the
+tasks within the partition will be updated. This will also fix a
+bug reported by sashiko that CPU affinity will not be updated when
+remote_partition_disable() is called in such circumstance.
+
+When efffective_cpus is read during this interim period, the content
+will be invalid before and after this commit.
+
+Fixes: 181c8e091aae ("cgroup/cpuset: Introduce remote partition")
+Reported-by: Guopeng Zhang <guopeng.zhang@linux.dev>
+Link: https://lore.kernel.org/lkml/fe7aa630-d323-4981-9f89-0958cb6204a2@linux.dev
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Link: https://sashiko.dev/#/bug/linux-ab90f7e8-0d60-40ca-83e9-e405075b24d2
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset-v1.c | 16 ++++++++++------
- kernel/cgroup/cpuset.c    |  9 +++++++--
- 2 files changed, 17 insertions(+), 8 deletions(-)
+ kernel/cgroup/cpuset.c                        | 97 ++++++++++++++++---
+ .../selftests/cgroup/test_cpuset_prs.sh       |  2 +-
+ 2 files changed, 84 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
-index 7c7f2887dfaf..6bf6da639fec 100644
---- a/kernel/cgroup/cpuset-v1.c
-+++ b/kernel/cgroup/cpuset-v1.c
-@@ -686,6 +686,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
- 	int csn;		/* how many cpuset ptrs in csa so far */
- 	int i, j;		/* indices for partition finding loops */
- 	cpumask_var_t *doms;	/* resulting partition; i.e. sched domains */
-+	cpumask_var_t hk_cpus;	/* HK_TYPE_DOMAIN housekeeping CPUs */
- 	struct sched_domain_attr *dattr;  /* attributes for custom domains */
- 	int ndoms = 0;		/* number of sched domains in result */
- 	int nslot;		/* next empty doms[] struct cpumask slot */
-@@ -698,6 +699,11 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
- 	dattr = NULL;
- 	csa = NULL;
- 
-+	alloc_cpumask_var(&hk_cpus, GFP_KERNEL);
-+	scoped_guard(rcu) {
-+		cpumask_copy(hk_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN));
-+	}
-+
- 	/* Special case for the 99% of systems with one, full, sched domain */
- 	if (is_sched_load_balance(&top_cpuset)) {
- 		ndoms = 1;
-@@ -710,9 +716,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
- 			*dattr = SD_ATTR_INIT;
- 			update_domain_attr_tree(dattr, &top_cpuset);
- 		}
--		cpumask_and(doms[0], top_cpuset.effective_cpus,
--			    housekeeping_cpumask(HK_TYPE_DOMAIN));
--
-+		cpumask_and(doms[0], top_cpuset.effective_cpus, hk_cpus);
- 		goto done;
- 	}
- 
-@@ -736,8 +740,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
- 		 */
- 		if (!cpumask_empty(cp->cpus_allowed) &&
- 		    !(is_sched_load_balance(cp) &&
--		      cpumask_intersects(cp->cpus_allowed,
--					 housekeeping_cpumask(HK_TYPE_DOMAIN))))
-+		      cpumask_intersects(cp->cpus_allowed, hk_cpus)))
- 			continue;
- 
- 		if (is_sched_load_balance(cp) &&
-@@ -794,7 +797,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
- 						*(dattr + nslot) = SD_ATTR_INIT;
- 				}
- 				cpumask_or(dp, dp, csa[j]->effective_cpus);
--				cpumask_and(dp, dp, housekeeping_cpumask(HK_TYPE_DOMAIN));
-+				cpumask_and(dp, dp, hk_cpus);
- 				if (dattr)
- 					update_domain_attr_tree(dattr + nslot, csa[j]);
- 			}
-@@ -806,6 +809,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t **domains,
- 
- done:
- 	kfree(csa);
-+	free_cpumask_var(hk_cpus);
- 
- 	/*
- 	 * Fallback to the default domain if kmalloc() failed.
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 64cbcbdbf6da..d18439e13bce 100644
+index 0fe9f2731fee..64cbcbdbf6da 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -343,10 +343,13 @@ void cpuset_full_unlock(void)
- }
+@@ -153,6 +153,12 @@ static cpumask_var_t	isolated_cpus;		/* CSCB */
+  */
+ static struct list_head remote_children;	/* RWCS */
  
- #ifdef CONFIG_LOCKDEP
 +/*
-+ * Holding cpuset_top_mutex will guarantee that a parallel
-+ * housekeeping_update() call modifying housekeeping cpumasks is not possible.
++ * Temporary cpumask for local cpumask computation
++ * The cpumask may be changed when a cpuset helper is being called.
 + */
- bool lockdep_is_cpuset_held(void)
- {
--	return lockdep_is_held(&cpuset_mutex) ||
--	       lockdep_is_held(&cpuset_top_mutex);
-+	return lockdep_is_held(&cpuset_top_mutex);
++static cpumask_var_t	tmp_cpus;		/* RWCS */
++
+ /*
+  * Set if housekeeping cpumasks are to be updated.
+  */
+@@ -1873,6 +1879,67 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
+ 	remote_partition_disable(cs, tmp);
  }
- #endif
  
-@@ -1416,8 +1419,10 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
++/**
++ * remote_partition_scan: scan remote partitions to check exclusive CPUs
++ * @tmpmask: ptr to tmpmasks structure
++ *
++ * This function is called in cpuset_handle_hotplug() after the update on
++ * top_cpuset.effective_cpus when there is cpu online/offline operation.
++ * As subpartitions_cpus may have been cleared, we need to check if the remote
++ * partition should acquire the exclusive CPUs again without impacting
++ * effective_cpus or it needs to be disabled when one or more of the following
++ * conditions is true.
++ * 1) All the domain housekeeping CPUs in the top_cpuset will be taken away
++ * 2) A populated partition with no active CPU or no active CPU in
++ *    effective_xcpus
++ */
++static void remote_partition_scan(struct tmpmasks *tmp)
++{
++	struct cpuset *cs, *next;
++
++	rcu_read_lock();
++	list_for_each_entry_safe(cs, next, &remote_children, remote_sibling) {
++		bool noxcpus = !cpumask_subset(cs->effective_xcpus, subpartitions_cpus);
++		bool nocpus = !cpumask_intersects(cs->effective_xcpus, cpu_active_mask) ||
++			      (!cpumask_intersects(cs->effective_cpus, cpu_active_mask) &&
++			       partition_is_populated(cs, NULL));
++		int cpu;
++
++		cpumask_and(tmp_cpus, top_cpuset.effective_cpus,
++			    housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
++		if (noxcpus && !nocpus && !cpumask_subset(tmp_cpus, cs->effective_xcpus)) {
++			/*
++			 * Reacquire exclusive CPUs & update top_cpuset.effective_cpus
++			 */
++			spin_lock_irq(&callback_lock);
++			cpumask_andnot(subpartitions_cpus, subpartitions_cpus,
++				       cs->effective_xcpus);
++			cpumask_andnot(top_cpuset.effective_cpus, top_cpuset.effective_xcpus,
++				       cs->effective_xcpus);
++			spin_unlock_irq(&callback_lock);
++			continue;
++		}
++
++		if (noxcpus || nocpus || cpumask_empty(tmp_cpus)) {
++			/*
++			 * Disable remote partition & modifiy effective_cpus
++			 * so that cpus_updated will be set true in
++			 * cpuset_hotplug_update_tasks().
++			 */
++			WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
++			remote_partition_disable(cs, tmp);
++			cpu = cpumask_first(cs->effective_cpus);
++			spin_lock_irq(&callback_lock);
++			if (cpu < nr_cpu_ids)
++				cpumask_clear_cpu(cpu, cs->effective_cpus);
++			else
++				cpumask_set_cpu(0, cs->effective_cpus);
++			spin_unlock_irq(&callback_lock);
++		}
++	}
++	rcu_read_unlock();
++}
++
+ /**
+  * update_parent_effective_cpumask - update effective_cpus mask of parent cpuset
+  * @cs:      The cpuset that requests change in partition root state
+@@ -3919,6 +3986,7 @@ int __init cpuset_init(void)
+ 	BUG_ON(!zalloc_cpumask_var(&subpartitions_cpus, GFP_KERNEL));
+ 	BUG_ON(!zalloc_cpumask_var(&isolated_cpus, GFP_KERNEL));
+ 	BUG_ON(!zalloc_cpumask_var(&isolated_hk_cpus, GFP_KERNEL));
++	BUG_ON(!alloc_cpumask_var(&tmp_cpus, GFP_KERNEL));
+ 
+ 	cpumask_setall(top_cpuset.cpus_allowed);
+ 	nodes_setall(top_cpuset.mems_allowed);
+@@ -3993,14 +4061,6 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+ 	if (!tmp || !cs->partition_root_state)
+ 		goto update_tasks;
+ 
+-	if (is_remote_partition(cs) &&
+-	    (!cpumask_subset(cs->effective_xcpus, subpartitions_cpus) ||
+-	     (cpumask_empty(&new_cpus) && partition_is_populated(cs, NULL)))) {
+-		WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
+-		remote_partition_disable(cs, tmp);
+-		compute_effective_cpumask(&new_cpus, cs, parent);
+-	}
+-
+ 	/*
+ 	 * Force the partition to become invalid if either one of
+ 	 * the following conditions hold:
+@@ -4104,22 +4164,31 @@ static void cpuset_handle_hotplug(void)
+ 		if (!on_dfl)
+ 			cpumask_copy(top_cpuset.cpus_allowed, &new_cpus);
+ 		/*
+-		 * Make sure that CPUs allocated to child partitions
+-		 * do not show up in effective_cpus. If no CPU is left,
+-		 * we clear the subpartitions_cpus & let the child partitions
+-		 * fight for the CPUs again.
++		 * Make sure that CPUs allocated to child partitions do not
++		 * show up in effective_cpus. If no housekeeping CPU is left,
++		 * we clear the subpartitions_cpus, scan the remote partitions
++		 * to determine if they can remain valid & let the descendant
++		 * local partitions fight for the CPUs again.
+ 		 */
+ 		if (!cpumask_empty(subpartitions_cpus)) {
++			cpumask_andnot(&new_cpus, cpu_active_mask,
++				       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
+ 			if (cpumask_subset(&new_cpus, subpartitions_cpus)) {
+ 				cpumask_clear(subpartitions_cpus);
++				cpumask_copy(&new_cpus, cpu_active_mask);
+ 			} else {
+-				cpumask_andnot(&new_cpus, &new_cpus,
++				cpumask_andnot(&new_cpus, cpu_active_mask,
+ 					       subpartitions_cpus);
+ 			}
  		}
+ 		cpumask_copy(top_cpuset.effective_cpus, &new_cpus);
+ 		spin_unlock_irq(&callback_lock);
+-		/* we don't mess with cpumasks of tasks in top_cpuset */
++		/*
++		 * We don't mess with cpumasks of tasks in top_cpuset, but we
++		 * have to examine impact on remote partition roots if present.
++		 */
++		if (cpuset_v2() && ptmp)
++			remote_partition_scan(ptmp);
  	}
  
-+	rcu_read_lock();
- 	cpumask_and(full_hk_cpus, housekeeping_cpumask(HK_TYPE_KERNEL_NOISE),
- 		    housekeeping_cpumask(HK_TYPE_DOMAIN));
-+	rcu_read_unlock();
- 	cpumask_andnot(full_hk_cpus, full_hk_cpus, isolated_cpus);
- 	cpumask_and(full_hk_cpus, full_hk_cpus, cpu_active_mask);
- 	res = !cpumask_weight_andnot(full_hk_cpus, new_cpus);
+ 	/* synchronize mems_allowed to N_MEMORY */
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 81f0eecaca80..5c7b583cba18 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -378,7 +378,7 @@ TEST_MATRIX=(
+ 	# Remote partition offline tests
+ 	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1|A2:1|A3:3 A1:P0|A3:P2 2-3"
+ 	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 O2=1 0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
+-	"   C0-3    C1-3   C3      .    X2-3   X2-3    P2:O3=0   .   0 A1:0-2|A2:1-2|A3: A1:P0|A3:P2 3"
++	"   C0-3    C1-3   C3      .    X2-3   X2-3    P2:O3=0   .   0 A1:0-2|A2:1-2|A3:1-2 A1:P0|A3:P-2 3|"
+ 	"   C0-3    C1-3   C3      .    X2-3   X2-3   T:P2:O3=0  .   0 A1:0-2|A2:1-2|A3:1-2 A1:P0|A3:P-2 3|"
+ 
+ 	# An invalidated remote partition cannot self-recover from hotplug
 -- 
 2.56.0
 
