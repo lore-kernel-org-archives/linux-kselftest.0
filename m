@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.45
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794849333;
-	b=YF16wOtQMwb2bS/S/PHWOOXc3GkY2t6GpSdeJccUFdsX4d0QDGDf3mX1C4PVjs5XaASy
-	 w1/hUsgUkX7u/PxLvau1UmfoqZXlk16SHf+S4bJgK7gBBLQZpOH0spXseSOOIlRBC1lxZ
-	 RRMkj8QLy9SyO18nMrZqjaB/FRl+8c2KYY09MlNgkZl9ha3PX2tz5yw9+B3Qk+X8eMYVM
-	 8ab5UYbuaAcSBSdPUNS7UdKhtxs3H+uVdy1srKp7KrcRjkKHaZa1oTAeKayYYrdqa/ae0
-	 Hz4jHCatZePQmPfscbIzC2M5HY15UAJAVC104b3yIFvvMSQY1mcHVBhgA7045Y9al/w==
+	t=1794849422;
+	b=n0VX/OuZ3B3bpr7EXqFfgEwbZWLD8/NIElq5MYMw0Sd1a2aMYNjrY3SIdO13eYBOg8g8
+	 TpDXMF9BSMofYaKxjOLl8VeTopreejdWjZK4hIVWla6nFGzwyX1XbNc12XEQiRMWu8aBs
+	 i2wEvszYDWGSqYIEfy8WN6ln3b7zY+px0gk/7f1rPEpa6bvdYq/UvKP7LU5HKZzW9cClv
+	 1odJMp40Qsac9J1UyNJh0jQLk7B3IWU663crT9TRlKuAl5lOybmkXxsAEGaq8WIMEjjsM
+	 00m+XUEsABp/NraYGfy3qAWJPO8M/T63QGJIlHeqYNVhojw+L9VyP5dKdh5qU+6o4bg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794849333;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794849422;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=TeTKNjRbgGCPVD9Hh4J0uSo4q2UCRSd3rU9Pr4FPh88=;
-	b=DBm651bdciX6nCH6Zh5BCLwvWGIxntujkD+2l+irl8oq4iWOY7oqplALg8PnuZyhjByI
-	 n3WidzZWMgGsRNwQISxNSF70i9KD+uZuB3QavFaGF1oy66aVJjzhw/9ZZ95M4b0amdZEm
-	 vEYFD1orsxk+oPXcY2w3TA0wUEALguutM47y3VFz/SXbL2P3hr2JmD7PtzvzEo2yvwPbB
-	 Lb5ZlK0Q9dQ8am5O8slxv5cL6rKlLVYJmdlzRGxD2ne9dbnu9XgzFQafr7G+GXxo1+lfl
-	 BXVQqnSOddmC/oWsm+uxjdREoszlEypg0Zon9ksJdYH3UhxTKBtf4A5+HSjoVs5BhIQ==
+	bh=cvhlwTnVB5qObUR1donDWKQFcI5lhmN3ZPbArGLp5LQ=;
+	b=nexFLBlcn999ldWVpDvqdvvg3uVbF//ANqaW5NYsSSjkIxDlDEcS+CUe1+rpBtFjbEh0
+	 G251ibN31bpR8sN7SO2Q8lj8SWf++24wmqAYDsoudM5G1Lo6uZh39xp/r6RGKYIGc56sO
+	 N5z54aPOoOA8gM5UrCjlgG1SgpLvZ8N/3bvHtZSgGqV+/8zB3xd/l7gyhNZbTT9U4kNOU
+	 2CdwBG71Ir8qdT8TO/E/+onMO/K65n0F3J1Pms6zjUGcBjcdXewNfYp2/L8+++px23n4f
+	 B4fnS+Du+ZgkEr6ghiILD2Ltp8vR/xFWEJxRI1MZITHMMmALYnkAHIeKesSg8UmUIuA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amacapital.net;
-	spf=pass smtp.mailfrom=amacapital.net;
-	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=ApZjJDVm;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.51
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=muR038w6;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.45
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE25B606A332
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:15:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE25B606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFC4606A8A4
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:16:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ECFC4606A8A4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=ApZjJDVm
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5c14f7768acso3029789e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 09:15:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794849331; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=muR038w6
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6b577addee9so5914743a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 09:16:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794849418; cv=none;
         d=google.com; s=arc-20260327;
-        b=dhZzuoWXelDOPp8HrylWzucgkCvhLKMQ0VTTM4qfSFWkawe5cv4Mn0c+ItS3baiIuf
-         ZUKe2W9HAH9S2l9C+YnZnjJ8dSUTMxEXB3yxL27356OI33Db09gPWsctdBatWYG+JtYJ
-         SGyzgN1SMm72MJ0LWoj9ZHusbgHkcv1EFpBjyZmQORFsxg4ylfZXMRmAhgJaur6Hmf/o
-         r+GbtGmF+iGPwhOkm4JWZSwy4QG2xFPjgV/uYIEbDpsPv+qW3b0q5asVV0XlxJ0TyeSH
-         gqH5404YSCI/+jJmX0YTmapS1Y2HW2bgAVQq+YCb2UKPZjpILJxSxLtteuVCENWcPIuB
-         JpNw==
+        b=LIOJKZe8VURE5JkrkN80QAa3iP0Pe1kI7/4HLMvTT2iciwIIsioTouw7LKFex2ARsB
+         I3ewkpkkUnP6jywzrRnAbDy4SPWPZgkVCAJfwp5IMM1pWlwtd3j6EaONhHxOYJBEpTI2
+         3jeAdwq3tl0gPpyJts97XlMt46HJd4M4fR9vN9wXm68yqahp9v3DRx9/fkDSy/IJ9g8Y
+         9ksq4yc2KBxADxiFBNNEHP/gnxHaNDI7LpPLYXwYoMZf3A+XafXLtVC3bhAlDsePwoBd
+         W8ZwH/pwr16/vy7/X03qYUAmrnk+j4I5RXb5vmTIzVJRJWdRuZ+5fMIdMXwZLlBdcfjC
+         5xaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TeTKNjRbgGCPVD9Hh4J0uSo4q2UCRSd3rU9Pr4FPh88=;
-        fh=oIiQzvG/KIORZgHdss128SV8ZIuvRWFlkr0MOrZ3Coc=;
-        b=s3QqfZ0nvxLAsHMyrENfUG/RuMYS9imLnQiAUy+Q/ndlb0Nfzf9wLsXxNRf7ZY5mvg
-         WP7CVm28QTtxfsfL5M63sA3mZBmtLkoYqAlMw42WCmrc0hrDsbaGqT2e5LusulFEpRfM
-         0mdzSRur8OGQDrWoxhWv9lSMAY4ub0jEutpg/LVenpP4ClvazecBHQ72sF+d2nxHNO8S
-         mcjAWdr5VKsSACMXRk69qQApmBBLobEwV09+znXevq1EQJ1LNYHsA9qpGFr+UCX2Qhzk
-         VHagRp08CIYo65fWbwqzXXn+8/U+YNd/Ddxal69pHcffcVZP/zfnkTKFRfKKqMUNXEIl
-         t/tA==;
+        bh=cvhlwTnVB5qObUR1donDWKQFcI5lhmN3ZPbArGLp5LQ=;
+        fh=D5ZPv6ZpLX4CeRoh5TNKBEqKOdyQYpZjwTfSpWHnONI=;
+        b=OF38nBorScfk2lFJaKmwhSx/amZj3iM2UqHVPkPSDSBbJIcO+QrA0GZ2xRfbkZmfnE
+         78q4U5pSxrSabUoB5+ANrfiGGRr16pul8jTQPoxDTqpEPSp4JUtEsJ/jIcckkG0OZFXu
+         ftYrYttADgcTJtfonex8S5A1hZSbUEiuBaO0TBasjjd0hKoP9i3bLD0UIKQsPU1fwYwf
+         1mIMTrJOO/z/y14+YfoXkJmbWfr9Fra1PLRn616Rw6ei1QrE2OUlg9/W0OMGEzRyuk5l
+         WKkjA+u1ZZaCQ8qfa9/xJ+Q5S0IsLB7C/6y9hntTNkQqHmYB3LVSLQr1LiBo6L9tgGBg
+         GQqg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1794849331; x=1795454131; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794849418; x=1795454218; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=TeTKNjRbgGCPVD9Hh4J0uSo4q2UCRSd3rU9Pr4FPh88=;
-        b=ApZjJDVmy8Blwb7f7lK+J9zx/UG2Nq6aXE4IXdGkzgUwpToyasBcQHpBbdCoC3FESr
-         MQ2PZz5AdlVHNvlsqaPOUhVXU3AFQNLJAN81XG6pfFgAc6frBmguv1fNXCnwvlexdYFm
-         uO001TbMoAU22k912+wt4nRdhkzXhgHEC+18i3vXzqhK+v6NpV47705ecYGnZsqvk4DL
-         g6w8+qZm1pDPrQRMNLhaqZRn9oZ3QufBXisXUWcG4Bt5SKsG50DoZOpIlec+jJanR0oF
-         DlZo19AWOKlNBknkIEAGop4Dj0TKXO2QS+ZO8YRHjNeW7rbds/2qrDHQ2QwC997oDlRa
-         WV7g==
+        bh=cvhlwTnVB5qObUR1donDWKQFcI5lhmN3ZPbArGLp5LQ=;
+        b=muR038w65/upa4T3A8TQUgAZPPu00HSp8IEYxLeziP5g7EOqEdvXR4kRn7l7HqC4oM
+         V/H7jmVddckf4li4Y0IfO1NYwf6mTpnVcEibSiDpSUGa4rmH8J48GG/AdleQHZhCXsRY
+         RKMQZVymvxJl7k97IWLEoqvjx7NjiZbQg2uAM4mR3pJQKz5WqOab8nzYhREPb/6gAZ9i
+         pBA6UOQY1B36uqzP1y0SScadwu/L0Druqoe1fQdOxwb3sdGBUZ1ThrB2CqjVL4+PzHGX
+         wt9TbJGmNBshQby+yMN9+pQ2Lz5tWQc68vsAD3w5jK3lYbmvcjKJb74HqwwAi+/L+rlV
+         RvOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794849331; x=1795454131;
+        d=1e100.net; s=20260707; t=1794849418; x=1795454218;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TeTKNjRbgGCPVD9Hh4J0uSo4q2UCRSd3rU9Pr4FPh88=;
-        b=LHdeLcNWzFtKW/9UmZARh3eKv86C0zHJwF7YfJ3ctVLpmMRZYLUylJNku8u6qV0S2k
-         YqcdlqjEv4jEb3QfkUKbZSJbo4R5g3xnmnGsniAUjCUp5OjRlbMmcgZToq4ESl2+qPTY
-         dLYpN50Wgz9z1xJNgCd4h1rNiRBjIC78e0Owv2jvAMUlZjuVtHQ+25SR9Xdt1IcdC26I
-         4mGdzubmoMsYmweRgPZuyCBeD983UXEF/lePWYHtA3xm+zfkbIY1o5VzUihFNFB9wwxE
-         TGAElPWcE9CWReiaYNLpYXyBoOBfSIqegOIqjFY2NAhbaufnzCDxj2+csgeUSY9CYo5i
-         IYsw==
-X-Forwarded-Encrypted: i=1; AL+hErGUvzm4r8fBdelLWwYOQNKmxvxeD6Tnuk7kdb82rDZKoth43bwsiAoRnLqx2x4dDu7dg6cfltGpbJyaiQnngw0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qO0chBGFqfmmvf9NIlbSAaOREdOE8Xf2rapn43m+eMno3+lVV
-	UtORrCQNrc5NILsUFSdwcDn1TtQboI4ISwBcW0bDpVLvKbQDcgI3ZvgpC879YEPJ5YtMC01RcQ4
-	kDNIeydxXvHm5Lcob9OdcbK0XTYrkCUVzA3Fy3mxH
-X-Gm-Gg: AYBFou1J5t5ksoxtXn6uLmsBLlPr70/V8XNM6Rw2xApJDeojwr2U5+1VkVQDKQU9DUL
-	9OLDTl1RCPL4yZg40kdhIr9hqltYhayWdHUGQu3I4ESM3TDmMp803ZPCOszMbVAJRUc4SM5Bizd
-	vTvtBRzgPkjJr9kEaya4msNKHvfeiPUoFxANwveTuAsSTiFewpVcTaaJs4l0lf7+Z7JaQ6LU+iO
-	6uihO95kvM8Wg3Zxu3YNVcUZWGW+vfWqoEP//BS0nqcHkt2P+6Tnick1Ir1uhkp4zfiUIefeC/s
-	rnS7LDsT7/tjmzDUPVstAnhhZzqMXcFEBHFbWFZ7E1kbwRPLxOqy2MLAB8Qa8HOF4JOpG8twfYt
-	G/VrpxcE8QYAOuj7phARMPMHNocW+nZcovw==
-X-Received: by 2002:a05:6512:132a:b0:5c1:57cd:507 with SMTP id
- 2adb3069b0e04-5c1705d8c18mr4112436e87.8.1794849330616; Mon, 16 Nov 2026
- 09:15:30 -0800 (PST)
+        bh=cvhlwTnVB5qObUR1donDWKQFcI5lhmN3ZPbArGLp5LQ=;
+        b=08+Z7rAGjJb9mSmPE13smeFrfRahj5lJhQmcKuRlSr7ASuLBRxF+x1qEpzU9IIsAa8
+         DlyCam5upDH6Il5ttVDWjJ82WZP17yMKDmLujtx8TUNY6h09a4EeW4Ji4bsa1TUlYODR
+         zWloZq4BgGIAGsTW44ESvPG4pKZRDivHonMpxwh+sAhWL1tIG7jQRh+OvBZR4yD0PhgT
+         ItMuQmchXz6TzarMvCNTEPqJZSDZLSMwzfLd77rkVAzddOKLMi8vkmmjfOxLhkpPjDbg
+         sc8AT0bONs/7phIucToljkGG7FU7k7p0Awv8W27lHsiMYJFuM827bF8xv7z2TIcgGzlp
+         lRrQ==
+X-Forwarded-Encrypted: i=1; AL+hErHsp7JGQz8ikP2cIPTp/P4IRi8VsXsqdT13uaXi4UZ2HP5v1PkFCk4B+i52rmq1wV3LgaSTBlLQw+3buIOGS/E=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+3/amRwpKEyUInVuCLS5MEef7V/IamsQyixYWU89tbwK0gL6Ku
+	mbXEbOS4xqAKsQlggJHlh/OtYB9PMZ4IpwMwM7krNXXycr88D47+z2zJ4RIZXY0nTMomyTVf8yi
+	XPTPQfIxVP7PIa85R8VHUl59JqOiQfto=
+X-Gm-Gg: AYBFou1nAt5A/b1WnKu5VDnNXi+hogiSrDMSnBlJuraW3y130FIxorzaKH2MjF/+umB
+	d7Yp6Sky9IrajxHmnX7xb6V+LTw2LZ+zRqunSQhHHGD1DcOz/DHXzyWB87tq+IeCnqtmbHv7IuZ
+	c4VT13HW06NmAlDv7kkajhIIpFo5OB8YLRYtsjcP8BMx31tDEOTk846jYqdMMiQWPYkeKylhYII
+	59zasdhmJJuYGT+QyS7ZDW0c725aeErMC599U7A2aQi2BZKD7SVx9IFGwzgP7ikmMpVuPP6MMf1
+	H1RaPu1SXp8FL5qEucm+LL1HuSZ99wN+RC4sl9W8KV7fjwMViHBB4UwYz0TNhPLzLjVeFRMtyPt
+	Ah3ACVKWBeXvlAPZFb8FksbLebEBJH40SeGksncpCIit4C1ZP+YmP/Sysp+4Jdnvucd916dFGgf
+	Thswgzzp35mGsf61k=
+X-Received: by 2002:aa7:c258:0:b0:6b7:d69a:a3d3 with SMTP id
+ 4fb4d7f45d1cf-6b7d69aa8fbmr5089335a12.39.1794849418257; Mon, 16 Nov 2026
+ 09:16:58 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,134 +105,224 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
- <20261106-befreien-addieren-eislauf-e09212803534@brauner> <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
- <avM41a80aig2de-R@google.com> <20261111-behagen-faktisch-entgegen-e2e714373895@brauner>
-In-Reply-To: <20261111-behagen-faktisch-entgegen-e2e714373895@brauner>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Mon, 16 Nov 2026 09:15:18 -0800
-X-Gm-Features: Aa3M54qwWxMtxsZDh2vrMHB0wizt5RpGMmIfg1U4U0aXsb9fKiA9QIK00CYod18
-Message-ID: <CALCETrUjW=kXxyggDUvEN+Pxc-pE98eVbdW8XBU8JzfqXj_voA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
+References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org> <20261116-work-loop-pseudo-v3-34-8cbbea1cf34f@kernel.org>
+In-Reply-To: <20261116-work-loop-pseudo-v3-34-8cbbea1cf34f@kernel.org>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Mon, 16 Nov 2026 18:16:46 +0100
+X-Gm-Features: AclHuK_s2Kpb4OdbgPngYJl9gLHjfhlAmiJMqLtxRnpTDibz-Ni4SZJspSV9laM
+Message-ID: <CAOQ4uxjJVgy-skUbbScfz=eAEATf=iMpqRHNshX=eKu3oiwnrA@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 34/44] selftests/ovl: test data-only layers on
+ pseudo filesystems
 To: Christian Brauner <brauner@kernel.org>
-Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
-	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Jann Horn <jannh@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>, 
-	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
+	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-usb@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 11, 2026 at 7:20=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
+On Mon, Nov 16, 2026 at 12:10=E2=80=AFPM Christian Brauner <brauner@kernel.=
+org> wrote:
 >
-> On Tue, Nov 10, 2026 at 03:31:33PM +0000, Hallgrimur H. Gunnarsson wrote:
-> > If we drop CLONE_NEWNET_LOOPBACK / UNSHARE_NEWNET_LOOPBACK from this
-> > series and handle loopback separately, do you think the per-userns
-> > bounding set is a reasonable approach for withholding capabilities
-> > (e.g. CAP_NET_ADMIN and CAP_NET_RAW) from unprivileged userns, or
-> > would you prefer a different mechanism?
+> Add tests that overlayfs refuses data-only layers on pseudo filesystems:
 >
-> Seems ok to me.
+> - sysfs and procfs via the "::" separator in "lowerdir=3D"
+> - sysfs and procfs via "datadir+" by path
+> - sysfs and procfs via "datadir+" by file descriptor
+> - tmpfs as data-only layer
+> - sysfs as regular lower layer
 >
-> > To address the concern about the number of moving parts, I am also
-> > happy to simplify the control interfaces. If we decide a per-task
-> > securebit is the cleanest way to drive this configuration for both
-> > single-deep and nested cases, we could focus on that and drop the
-> > clone3() and sysctl from this series entirely, or only expose whatever
-> > subset you prefer.
+> The last two must keep mounting.
 >
-> Just a note on the essay I cut off. I really object to any arguments
-> that amount to "it's too much work" propped up by a few thin arguments
-> sprinkled in such as rtnetlink.
->
-> I also reject any arguments that amount to underscoping and overscoping
-> of the new capability. The scope is clear: empty netns with brought up
-> loop device.
->
-> I'm 180 patches deep into fixing procfs and 41 patches deep into
-> preventing loop devices from abuse. Either we do the work and get
-> something better or we do the same thing we've always done and hope we
-> end up happily ever after.
->
-> But again, I'm more focussed on cells so here's what I find acceptable:
->
-> I'd rather go back to what Jonathan proposed in 2024 (cf. [1]). A
-> per-task userns capability mask. Serge acked the core of it back
-> then. It's at least generic and not just the single securebit capability
-> thing. And we'd burn a new bit for every capability that turns out to be
-> a problem later.
->
-> Jonathan's version had holes though. The restriction only lived in the
-> task's creds so the owner rule and setns() blew this up. So it needs to
-> be combined with your per-namespace set. Roughly:
->
-> * every task carries a mask, cred->cap_userns, full by default
->   fork, exec, setuid and entering a namespace never change it
-> * a new user namespace records
->
->         ns->cap_bset =3D parent->cap_bset &
->                        (cred->cap_userns | cred->cap_permitted);
->
->   once at creation and never changes it again =3D> it's monotonic downwar=
-ds
-> * the creator gets ns->cap_bset instead of CAP_FULL_SET
-> * a task that setns()es in later gets
->   ns->cap_bset & (cred->cap_userns | cred->cap_permitted)
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-I'm not sure this is ideal.  If a task has cap_userns & CAP_NET_ADMIN,
-then there is no attack surface issue with allowing it to enter a
-namespace and be NET_ADMIN there even if the namespace itself has
-CAP_NET_ADMIN cleared from cap_bset.  But any exemption here would
-need to be a new API so that it isn't used by accident.
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 
-I'm mostly saying this because container managers might want to
-restrict cap_userns within their containers but still have it
-themselves for management.  But maybe there isn't any need to enter
-the userns for this purpose.
-
-> * the owner rule in cap_capable_helper() grants exactly what entering
->   would and otherwise falls through to what the owner has
+> ---
+>  .../selftests/filesystems/overlayfs/.gitignore     |   1 +
+>  .../selftests/filesystems/overlayfs/Makefile       |   1 +
+>  .../filesystems/overlayfs/pseudo_datadir.c         | 131 +++++++++++++++=
+++++++
+>  3 files changed, 133 insertions(+)
 >
-> So caps a task actually has always count as allowed
-> =3D> should check Andy's "only restrict creators that don't have
->    CAP_NET_ADMIN themselves" per capability.
+> diff --git a/tools/testing/selftests/filesystems/overlayfs/.gitignore b/t=
+ools/testing/selftests/filesystems/overlayfs/.gitignore
+> index b343cc430051d..e1410fee2269d 100644
+> --- a/tools/testing/selftests/filesystems/overlayfs/.gitignore
+> +++ b/tools/testing/selftests/filesystems/overlayfs/.gitignore
+> @@ -3,3 +3,4 @@ dev_in_maps
+>  set_layers_via_fds
+>  idmapped_mounts
+>  automount_in_layer
+> +pseudo_datadir
+> diff --git a/tools/testing/selftests/filesystems/overlayfs/Makefile b/too=
+ls/testing/selftests/filesystems/overlayfs/Makefile
+> index 382a59bda5e70..ace75f5627e0f 100644
+> --- a/tools/testing/selftests/filesystems/overlayfs/Makefile
+> +++ b/tools/testing/selftests/filesystems/overlayfs/Makefile
+> @@ -10,6 +10,7 @@ TEST_GEN_PROGS :=3D dev_in_maps
+>  TEST_GEN_PROGS +=3D set_layers_via_fds
+>  TEST_GEN_PROGS +=3D idmapped_mounts
+>  TEST_GEN_PROGS +=3D automount_in_layer
+> +TEST_GEN_PROGS +=3D pseudo_datadir
 >
->    This amounts to a host-wide default without a sysctl.
->    PID 1 drops CAP_NET_ADMIN and CAP_NET_RAW from its own mask at boot
->    and everything inherits that.
+>  include ../../lib.mk
 >
->    Root, sudo and setuid-root binaries have those capabilities so
->    nothing changes for them. A regular user doesn't and so their user
->    namespaces come without CAP_NET_ADMIN and CAP_NET_RAW.
+> diff --git a/tools/testing/selftests/filesystems/overlayfs/pseudo_datadir=
+.c b/tools/testing/selftests/filesystems/overlayfs/pseudo_datadir.c
+> new file mode 100644
+> index 0000000000000..3b59fd3e9f5c2
+> --- /dev/null
+> +++ b/tools/testing/selftests/filesystems/overlayfs/pseudo_datadir.c
+> @@ -0,0 +1,131 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <sched.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <sys/mount.h>
+> +#include <sys/stat.h>
+> +#include <unistd.h>
+> +
+> +#include "kselftest_harness.h"
+> +#include "../wrappers.h"
+> +
+> +static int setup_tmp(void)
+> +{
+> +       if (unshare(CLONE_NEWNS))
+> +               return -errno;
+> +       if (sys_mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL))
+> +               return -errno;
+> +       if (sys_mount("tmpfs", "/tmp", "tmpfs", 0, NULL))
+> +               return -errno;
+> +       if (mkdir("/tmp/lower", 0755) || mkdir("/tmp/data", 0755) ||
+> +           mkdir("/tmp/merged", 0755))
+> +               return -errno;
+> +       return 0;
+> +}
+> +
+> +/* Mount an overlayfs with the legacy "lowerdir=3D" option. */
+> +static int mount_lowerdir(const char *lowerdir)
+> +{
+> +       char opts[256];
+> +
+> +       snprintf(opts, sizeof(opts), "lowerdir=3D%s", lowerdir);
+> +       if (sys_mount("overlay", "/tmp/merged", "overlay", MS_RDONLY, opt=
+s))
+> +               return -errno;
+> +       if (umount2("/tmp/merged", 0))
+> +               return -errno;
+> +       return 0;
+> +}
+> +
+> +static int set_layer(int fd_context, const char *key, const char *path,
+> +                    bool by_fd)
+> +{
+> +       int fd, ret =3D 0;
+> +
+> +       if (!by_fd) {
+> +               if (sys_fsconfig(fd_context, FSCONFIG_SET_STRING, key, pa=
+th, 0))
+> +                       return -errno;
+> +               return 0;
+> +       }
+> +
+> +       fd =3D open(path, O_DIRECTORY | O_CLOEXEC);
+> +       if (fd < 0)
+> +               return -errno;
+> +       if (sys_fsconfig(fd_context, FSCONFIG_SET_FD, key, NULL, fd))
+> +               ret =3D -errno;
+> +       close(fd);
+> +       return ret;
+> +}
+> +
+> +/* Create an overlayfs with "lowerdir+" and "datadir+" through fsconfig.=
+ */
+> +static int fsmount_layers(const char *lower, const char *data, bool by_f=
+d)
+> +{
+> +       int fd_context, fd_mnt, ret;
+> +
+> +       fd_context =3D sys_fsopen("overlay", FSOPEN_CLOEXEC);
+> +       if (fd_context < 0)
+> +               return -errno;
+> +
+> +       ret =3D set_layer(fd_context, "lowerdir+", lower, by_fd);
+> +       if (ret)
+> +               goto out;
+> +       ret =3D set_layer(fd_context, "datadir+", data, by_fd);
+> +       if (ret)
+> +               goto out;
+> +
+> +       if (sys_fsconfig(fd_context, FSCONFIG_CMD_CREATE, NULL, NULL, 0))=
+ {
+> +               ret =3D -errno;
+> +               goto out;
+> +       }
+> +
+> +       fd_mnt =3D sys_fsmount(fd_context, FSMOUNT_CLOEXEC, 0);
+> +       if (fd_mnt < 0)
+> +               ret =3D -errno;
+> +       else
+> +               close(fd_mnt);
+> +out:
+> +       close(fd_context);
+> +       return ret;
+> +}
+> +
+> +TEST(datadir_sysfs)
+> +{
+> +       ASSERT_EQ(setup_tmp(), 0);
+> +
+> +       EXPECT_EQ(mount_lowerdir("/tmp/lower::/sys/kernel"), -EINVAL);
+> +       EXPECT_EQ(fsmount_layers("/tmp/lower", "/sys/kernel", false), -EI=
+NVAL);
+> +       EXPECT_EQ(fsmount_layers("/tmp/lower", "/sys/kernel", true), -EIN=
+VAL);
+> +}
+> +
+> +TEST(datadir_procfs)
+> +{
+> +       ASSERT_EQ(setup_tmp(), 0);
+> +
+> +       EXPECT_EQ(mount_lowerdir("/tmp/lower::/proc"), -EINVAL);
+> +       EXPECT_EQ(fsmount_layers("/tmp/lower", "/proc", false), -EINVAL);
+> +       EXPECT_EQ(fsmount_layers("/tmp/lower", "/proc", true), -EINVAL);
+> +}
+> +
+> +TEST(datadir_tmpfs)
+> +{
+> +       ASSERT_EQ(setup_tmp(), 0);
+> +
+> +       EXPECT_EQ(mount_lowerdir("/tmp/lower::/tmp/data"), 0);
+> +       EXPECT_EQ(fsmount_layers("/tmp/lower", "/tmp/data", false), 0);
+> +       EXPECT_EQ(fsmount_layers("/tmp/lower", "/tmp/data", true), 0);
+> +}
+> +
+> +TEST(lowerdir_sysfs)
+> +{
+> +       ASSERT_EQ(setup_tmp(), 0);
+> +
+> +       EXPECT_EQ(mount_lowerdir("/sys/kernel:/tmp/lower"), 0);
+> +       EXPECT_EQ(mount_lowerdir("/sys/kernel::/tmp/data"), 0);
+> +       EXPECT_EQ(fsmount_layers("/sys/kernel", "/tmp/data", false), 0);
+> +       EXPECT_EQ(fsmount_layers("/sys/kernel", "/tmp/data", true), 0);
+> +}
+> +
+> +TEST_HARNESS_MAIN
 >
->    This also covers newgrp, su and sudo -u shells which is where
->    resetting the mask on setuid exec (Which was raised by Serge in the
->    other thread.).
+> --
+> 2.53.0
 >
-> * Root in a container has caps as well so for containers the exemption
->   would be wrong.
->
->   So here we need a a lockable SECURE_NO_USERNS_CAP_RAISE bit thingy.
->   This turns off the exemption and prevents raising the mask.
->
->   Docker lowers the mask, sets and locks the bit, and
->   unshare(CLONE_NEWUSER) in the container doesn't hand out CAP_NET_ADMIN
->   anymore.
-
-Can you clarify this part a bit?  I'm not seeing why Docker should be
-special.  Shouldn't the inside of a Docker container work as much like
-a normal non-container system as possible?  What's the use case?
-
-
-In any event, the ptrace access checks also need to be updated.  If
-we're adding cap_userns, then one should not be able to
-PTRACE_MODE_ATTACH a task with higher cap_userns.
