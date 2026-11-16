@@ -1,111 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.243
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794818524;
-	b=xK5z47mtiYHwDQ9GFgI/Zsin+gswMQg2GmtcpTw2v0KbjcP23WupuLxL74TwQnMssXEL
-	 w+NCK0l0/hBFdaNZpkkaAaceG2Vwf/gh62dr9mok50imhnRsaQ+02DgsP6KuAFX5pFbLR
-	 2PrLuQYsAV5aDwriXFZeQ20ZhnlymkGhc2nbQSR5lstM3/6+2yPUmJKaP02kiPe+p02I+
-	 la90zrxXuYDzVBbLcXq55FPSMUnsnIFoYWFRxnUhFJUCmYWQKTSC0PVhoi17IkmuMoOdp
-	 4QcfXPoYu+OSwKDt21evRqqOTgsrTzsHfsZH1heoLt1oOpakNPKJ5dXz5zySOfvJFOQ==
+	t=1794819393;
+	b=CWHZvzYQxtrz//zrKPeZVJr6Tga64zi3qmzt/R3FHt/44h1Xhk5TrH4e3XqkAmpcd9x9
+	 3+n5xjZcnCcR8Pk6rgH54ffkqBQR6ikScaOtT820X9jaJ5/jZWWr1WAJ5xN2kj6oaw1Cd
+	 C+mXfKO3jOvC5WPuRdGqllEqk0mP3MX264ktvU0kScGZAVagw7BhVKmI3U+UCv/B1PS5E
+	 u1FRCbBAn3zq5ABq0NlzCZ69m9lxiMz+Mvw14rO3grYWloic7wISJ3c+vD6fq5DYX1zhH
+	 WQG97fi8f8SYovB3iB8icXjQjgIn8H+1plwYeqFpnpKhmlY306hwR4w/fJUemToVIrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794818524;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=IbDW2yfp/G8HBG/wT9ipOeQ5Z+TwPor4+SUJgaV0UTA=;
-	b=WGF1BAa7Rxn+673b1vYZRDaxurxdpsVtp9b1PN0y75R4beLC3bGA5F5/TebyZaivduaS
-	 q+LRnrm57/vWHmiHAQh6fc9m6O5TTdccMCicze99UXZawK3K8F3nZ+MJaW9+QmsaWrZXh
-	 hmvINf4vUkt6TEZUZJENT2AL8pg0mBda+jxQE8SyfDGokoHel4UaCckyzxodKFGz57tJC
-	 iqQhx2HFhk52XtAdIRgVONU3TElxO2SNU/S3ssxCtFwJKttIEx9/H0Ln1eFK24OtUPxf4
-	 xi+vrpT1Qo+sZA9kJ7IpvxPhzs5brmbX3sTd47i70HhiH+L0nXRBAroF5BvciRtouwA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794819393;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=TCOAmNe0BEFi8mKC+0PAv0vRnH09iyDNA3a8Nshj+co=;
+	b=oiudT924Ty0Sy+9O927UOVDdqC4YkRwEE1STrQJUpC42XGqkk8XZ2jAiOhFxSJ22JNbd
+	 66ay84LQUwnh2Q2A4OA3jxE5ksqd4AotH+CwvcHJhpW8jonmDmZ/Z2oBhxqANRMVfk/hQ
+	 5ej1DPYO2oGugz/GVaT+hRiziaOHR9Ta2OC61V+6+75BQZE3Xk2sa6crDeSi/D5ngomyT
+	 AthTe/O+zsLExy6wqZIWRwtfWDJvfvx+ddQGzkuH3gqmtNEmK9MzdQOMqapaUz2C5nlf+
+	 QctMR/z7YURODaRS6MqHyxuE1gCuHklNY8Nn71otqkQ2rNYroSU24NHQrE/DvRn614A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZoA9pBn2;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YKadq6xx;
+	arc=none smtp.remote-ip=91.218.175.243
+Received: from mta0.migadu.com (out-243.mta0.migadu.com [91.218.175.243])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473A3606A329
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 08:42:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 473A3606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456E5606A323
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 08:56:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 456E5606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZoA9pBn2
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a56e05568aso7457105e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 00:42:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794818522; x=1795423322; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IbDW2yfp/G8HBG/wT9ipOeQ5Z+TwPor4+SUJgaV0UTA=;
-        b=ZoA9pBn2SaQcXdbdTbDGdUqkVqrFSWt+g1wynpHCOei8Q80uX3HN3uHnYFkli9EpRG
-         32eCjf+w9PF111gI8CFo/2Fi6iAE8awhIK8ghCdj1w/Z5crBUJCEdB83o/LRmQazFxCj
-         h5RvnVii23vtsdO+89HmwI8+MkPFeZOKVW9+kNYlK7TFWubhLKPo5wYsAhYf/4RCkI1T
-         UoVlloGuVEBvVpV5t3vXpqc9paD7z+rZ0msoiFb0TefH5FcBOiGaSkEvImmecOZo97oE
-         lJpXf2p7y7H1i7zqcUPmiYhnOp7/Ab9yXqGHGSu6bD6g4r8JAACBJYaBTBaZ/1hZOsdg
-         BvRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794818522; x=1795423322;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IbDW2yfp/G8HBG/wT9ipOeQ5Z+TwPor4+SUJgaV0UTA=;
-        b=KRvGadUAv/vnkKerxRvGSgkG7OsktL152eNo6mv9zYnGwCGzA5UjNGdhglel82NR3f
-         OrJ/nrmKrAXO+6ajeBHJT9/t8zhZ1HXbWxkZH+XcxyVJTeHosyrDSoKCtIaZIIRjNV18
-         d/ahvqb0rwzODZ0MWiMbS0JgyDF3+o4A5UtDGJOVwLNRVw5FliRd4y2P7bZ4cxBMZgOJ
-         hAaZ+BcrnbcDWP5L3wyjyNoxoWvChfW1su8H4fS+JXdYEJg5jj6CKU95sKk79mKOVv7y
-         3K09CR8AlisazLmXZ/5tzzCJKJPxfZ9jKVZ5VdgaJSEda9GD+rxGePQ4wAJx9JzbdK5d
-         gYlQ==
-X-Forwarded-Encrypted: i=1; AL+hErGi+lvpPKbLJjoj81UVAXwDvEzTi2rPYbBCUKGwD/o/P0UYKXIVH4FX6oaDjywqrbE6VMnn7NcfLWXPy4uMZFY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/P66SqeHfeszElPGmRX/TUnSwmywz2BOKK8lhoMVl6Su/JCBMm
-	xObHgQLKSCgX6HZaLsKfQZf7t0TlXpaGOhJngTZ0PV1a+tqp7fnO+CF+
-X-Gm-Gg: AYBFou1097gc5JgZrHEXy07G8RHSQ8wTrDHfII65vlhbzIC1+7DL3EPHT+PBI/AEbml
-	X1YGhU80gGON3v2V98pG/9pjIadl0pvMEq/ZTs/lMRygsytZauuRSUlj7QowFZlSo12EjeiqoHE
-	xqzfRA6SLK7sKd3KOs4WECauaquuOBWKOUC0iWOPH2lpkC1KucuNYPUbe1ZF/Pp0gZJNEhi9cwA
-	kDY2pETAToSJUuipIATKQ4b7WEikt+fiFY+ueMleJv4zH54c17tSvemVBzDnO/bu43Wlovp55xz
-	mZI8z8Wue3E/Cibj0PCsVefpeq4zt78r7zWJa/S14r0sXGLHIYck4IvnkTNbeO/ya224dJMwg/s
-	pMrXM0Qk5gOqGdF+gmSH+z/9b1kpFKAPnN/RB6uwpQWnDB9Jb1gVI01/JGO6jLebvn7qpzlAJZD
-	R/0pR+bCfK5lfSdbQnzI76tvqqk9UEhAIrVfVyzCjYZ26wZFVvMz/18P4YUW2WsS8OQ77NfF6W3
-	P12zJrtr2tPP4kyy4FTAsL0SS66Zli57oyHKwse0iR9/FV+QNaI9/PMmyboCguRzNzKBox3jZki
-	+TkhC4vO4ALQ4Uhm2ANcP3gj1RyOWc4S771p4+dRjCeVrTvqxvsHS+qF4Sa9PY4+RuqgFdiVfH6
-	cSwhTsCBIxiEBiqh6UKE=
-X-Received: by 2002:a05:600c:16d5:b0:4bb:732a:2837 with SMTP id 5b1f17b1804b1-4bb732a2af5mr21460175e9.1.1794818522364;
-        Mon, 16 Nov 2026 00:42:02 -0800 (PST)
-Received: from Nuel20.localdomain ([105.112.221.201])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb62d5ec30sm284300555e9.15.2026.11.16.00.41.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 00:42:01 -0800 (PST)
-From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-To: Tianyi Gao <tianyi@cloudflare.com>,
-	Hangbin Liu <hangbin.liu@linux.dev>
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	skhan@linuxfoundation.org,
-	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Subject: [PATCH net v3 2/2] selftests: net: veth: propagate bad-settings check failures to exit status
-Date: Mon, 16 Nov 2026 09:41:07 +0100
-Message-ID: <20261116084107.6675-3-emmaonana18@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261116084107.6675-1-emmaonana18@gmail.com>
-References: <CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com>
- <20261116084107.6675-1-emmaonana18@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YKadq6xx
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7lolab2zVmmIzQhOdTNrMQkrZuGsVRndTA3iq4cS6mY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794819390; v=1; x=1795424190;
+ b=YKadq6xxRABnupfUM1Y3hNWq3Al7M1iv5OqCAbAfNTk17YILf3ZqtW36B6X1MXCCt1kkg91T
+ 6eHvksBn9PAi9rKa8wc5E1tikQsyX9npBRPn46zM/d8prnXNJ6tKrMyplef8SF2GgP+mcVSv6Oi
+ g6mYlUnstFLAeQrKREmEXLfI=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 17b6a22d7d497bc4;
+	Mon, 16 Nov 2026 08:56:30 +0000
+X-Mizu-Trace-ID: 17b6a22d7d497bc4
+X-Migadu-Flow: FLOW_OUT
+From: Hongfu Li <hongfu.li@linux.dev>
+Date: Mon, 16 Nov 2026 16:56:11 +0800
+Subject: [PATCH] selftests/mm: protection_keys: use _exit() in aarch64
+ ptrace tracee
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,53 +60,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261116-for-pkey-exit-v1-1-ca4c76b32ff7@kylinos.cn>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqAIBBA0avIrBtQF0JdJVqkjjUFFVpRRHfPa
+ vkW/1+QKDIlqMQFkXZOPE8ZqhDg+nbqCNlng5baKCVLDHPEZaQT6eAVZShN8EY7Yz3kZokU+Ph
+ +dfM7bXYgt74TuO8HcVaD73EAAAA=
+X-Change-ID: 20261109-for-pkey-exit-0f96fd62c6bd
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: hongfu.li@linux.dev, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Hongfu Li <lihongfu@kylinos.cn>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794819387; l=2106;
+ i=lihongfu@kylinos.cn; s=20260915; h=from:subject:message-id;
+ bh=I343t2uR4wEtG+HLyp6H7kkFFFvE00XGS9N9j96x0BE=;
+ b=WBYHvXmoxaPSzAUK9OsLYlPhQpq9V9t4iR/GbU7w7PSrNgs3/neeELXubmCtAzFBv88Jh67QB
+ PJu87aQrbGhB3pKMntsmZzL9gPjVeV+SRoEasVfYnMQ81Pr6WhKMFkM
+X-Developer-Key: i=lihongfu@kylinos.cn; a=ed25519;
+ pk=rUpDSpB3neoNZRlGG6dHlFb3RepiJakcev+ucyqaZzw=
 
-Three more checks in veth.sh print "fail - set operation successful
-?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
-"bad setting: reducing RX nr below peer TX with XDP set", and "bad
-setting: increasing peer TX nr above RX with XDP set". A kernel that
-wrongly accepts any of these invalid operations would be reported yet
-the script would still exit 0. Wrap each fail branch so it sets ret=1.
+From: Hongfu Li <lihongfu@kylinos.cn>
 
-Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
-Reported-by: Tianyi Gao <tianyi@cloudflare.com>
-Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Commit 25356081894d ("selftests/mm: protection_keys: use library code
+for HugeTLB setup") replaced the exit() calls in the x86 version of
+test_ptrace_modifies_pkru() with _exit(), but missed the aarch64
+version, which still calls exit() from the tracee.
+
+When the test runs as root, hugepage_save_settings() registers
+hugepage_restore_settings_atexit() with atexit(). The tracee inherits
+the atexit list across fork(), so its exit() runs
+hugepage_restore_settings_atexit() in the child. That handler calls
+hugetlb_restore_settings(), which writes nr_hugepages back to the saved
+original value while the test is still running. If the saved original
+value is 0 (or otherwise leaves fewer than the two free huge pages
+needed by the next allocation), subsequent iterations fail in
+malloc_pkey_hugetlb() when mmap(MAP_HUGETLB) returns MAP_FAILED.
+
+Use _exit() in the aarch64 tracee as well, matching x86.
+
+This was found by code inspection with AI assistance. No POE-capable
+arm64 hardware was available, so test_ptrace_modifies_pkru() was not
+runtime-tested; the change has only been compile-tested with an arm64
+cross-compiler.
+
+Fixes: 25356081894d ("selftests/mm: protection_keys: use library code for HugeTLB setup")
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 ---
- tools/testing/selftests/net/veth.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/protection_keys.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 5c1dbe1516bb4..0b173beed3442 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -474,7 +474,7 @@ if [ $CPUS -gt 1 ]; then
- 	printf "%-60s" "bad setting: XDP with RX nr less than TX"
- 	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
- 		section xdp 2>/dev/null &&\
--		echo "fail - set operation successful ?!?" || echo " ok "
-+		{ echo "fail - set operation successful ?!?"; ret=1; } || echo " ok "
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 5dece144ab95..a0f51be3fcbc 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -1530,11 +1530,11 @@ static void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
+ 		 * checking
+ 		 */
+ 		if (__read_pkey_reg() != new_pkey)
+-			exit(1);
++			_exit(1);
  
- 	# the following tests will run with multiple channels active
- 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
-@@ -483,7 +483,7 @@ if [ $CPUS -gt 1 ]; then
- 		section xdp 2>/dev/null
- 	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
- 	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
--		echo "fail - set operation successful ?!?" || echo " ok "
-+		{ echo "fail - set operation successful ?!?"; ret=1; } || echo " ok "
- 	CUR_RX=2
- 	CUR_TX=2
- fi
-@@ -491,7 +491,7 @@ fi
- if [ $CPUS -gt 2 ]; then
- 	printf "%-60s" "bad setting: increasing peer TX nr above RX with XDP set"
- 	ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null &&\
--		echo "fail - set operation successful ?!?" || echo " ok "
-+		{ echo "fail - set operation successful ?!?"; ret=1; } || echo " ok "
- 	chk_channels "setting invalid channels nr" $DST 2 2
- fi
+ 		raise(SIGSTOP);
  
--- 
-2.43.0
+-		exit(0);
++		_exit(0);
+ 	}
+ 
+ 	pkey_assert(child == waitpid(child, &status, 0));
+
+---
+base-commit: 2c5dafa7f289d760f4492260b0988029aab478b0
+change-id: 20261109-for-pkey-exit-0f96fd62c6bd
+
+Best regards,
+--  
+Hongfu Li <lihongfu@kylinos.cn>
 
