@@ -1,64 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794835257;
-	b=RNQMIb3w01lzLp2WACTSX6SQnebuI+4B7HYClxgieVBBTsg8S/kQiU+T29iB7HeA9GRw
-	 kpuN6spCF3aWtIKEnUKBSbOFB9m2+v0CfrWH3UNysJYuDtyENI+Yl0uK16Zvayek2iXgG
-	 Ws9PiS9jarGGGhgEikywgIa2749AO0YCWd0YCBkLTxMvnHZOxmUwjz1pGoDUO/Pz7gQk7
-	 HH+Mx365UryoKQMSurrw/Tw7gHo/G4fGTDzMQkWvoSnRrib79nXApKR7SFMsn/tu/gdEt
-	 UfoyIlJexR1GxRTZpmWKfSbiwk0JEl07Nt+VZaw6v2gO9zyBYYs1Jv8WjyyWQOtZgvA==
+	t=1794836425;
+	b=BIgCIxeqAfk7P9LF8qlZ2dTNnFCbROGuQWnngSqxeyoz+YdgSBF1YmE3vofI1Gn1ubSL
+	 D2U6OsN8TbXuDiOjp9ycb/V9UW4jRHNJ76ybZIcLcX8lBOjpCJ5mGHUtCfZKlLhobmPlq
+	 a5v4LHY9Rr+TTOoWmO6JKb6jNSKeXG0x/Gu9x+kogcQWyXsfFyZlYnG1jMkD1KkR3j1Ob
+	 b84AGrVDzi3kX6szWbH6iFGcAqP9E+B/81Wnp9LGb8vad5dUiYx2D/02dIFRT9SCMfmWR
+	 wYwPVPA+Cp3E2yUa/2ySsAhqvQdTdS8Uwi4ZzAQeoIgzc+ckAsbDqmJJKtQkiItRHag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794835257;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Zwp/b2OseRP/BP0MRnYEMv10Xx5652k/ysAi77DyTUk=;
-	b=NFCUE3XMe0UyCZhEGLrokSfcFWi5Iat1D+Qz+s3xnLC9zxlmzbF+1aEtCS2AUbAHMA3o
-	 FPJVfzREblqlqgzoKdLbYaFdHt4sy5r0fwk93YdutF6npCpYKm0xcSxRrO1fU5ownOqZh
-	 OZXf7aT5ouNYQWBaxprZALPMFrfBXHxnShhqF2SiCRqG6a7yccJTCFm4ZbjxteF69k7cz
-	 +39vhbv6gPJ+oBR9hBDfUxNM1f6J4znWx9UhxnCtWlD4i9dtpNhjm7Swbo9OThejo+MnH
-	 T44FTqk1YOmzJYMe7P1poalloVrewnUIB2mPjPL3JMq8OBl965HXPwL+1fDkooNXsnA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794836425;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=7ZuahbF6+z1TKgPocK6b1w/LNWgw/JvkC15VlenM0sg=;
+	b=nfDrIaDG/uXw5kYQns8zcJfUeb3t+lWGiT5VhRWGFjNKUJWuTvIVwcs3GsVWDg+1FVP6
+	 oYTA8H1Wg7ZvLrS8KmDu8Qrc+d4+QCF0jNMiTIqORD66sH7NaGkMGtUCJIk3PUvnoXr2V
+	 i81U8UyTsdmoDTGQi+LbnVGBDpBwF9Kcc2Gfmc2YVkdA4+ZaYSk9dPHwwnN8sdSj8X/Yt
+	 1ujUM+llLSC3eMDSuH9SjIv8DMaGepwJ87x/Z0GkqmRWoOU6keNkhOfjXh7WUogg8jexT
+	 aOiUZd0YAI4YNXL4pUldKJ7b/A2yM9DBOG8Zs5K9jHgooeQfWNPTegQ8DU4vxszayhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MhEMPzkS;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=daCQz1Zh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA5B606A331;
-	Mon, 16 Nov 2026 13:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6D1606A329;
+	Mon, 16 Nov 2026 13:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MhEMPzkS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287C11F000C4;
-	Mon, 16 Nov 2026 13:20:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=daCQz1Zh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8055B1F000C4;
+	Mon, 16 Nov 2026 13:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794835256;
-	bh=Zwp/b2OseRP/BP0MRnYEMv10Xx5652k/ysAi77DyTUk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MhEMPzkS8ELyUuZJvWfSoeeWuf7By4IL/aj2kb/a2OV4l4EgVqKXjiioyUz2RieNk
-	 XgpnwYQk+l7IQUQIb2TJG9rqwlNZZd2t4tSSz2FIOFgSK4qv3MUw+KnfbEysg8x4iS
-	 RMX98jFDrMhGiTX7izqJwsUslncHgd0fLN7Yyo0X4gX89YKFy614i608nuofc5428F
-	 SfK4Vb1AO45G7cvMjjgv1ixrvwKqD7DXpAnyYbrMZDnbnAmpR0a9mRVyF+s9eImB9m
-	 jgQn4Dmx1KWjFDTc0G8bS5OCGFot8PkE1fqYZHJngkkRDFtxZNJw9/svWtFGNRWRiW
-	 sc42i9H1mtjtg==
-Date: Mon, 16 Nov 2026 14:20:45 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: bot+bpf-ci@kernel.org, linux-fsdevel@vger.kernel.org
-Cc: jannh@google.com, mason@kernel.org, josef@toxicpanda.com, hch@lst.de, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	viro@zeniv.linux.org.uk, jack@suse.cz, linux-scsi@vger.kernel.org, 
-	target-devel@vger.kernel.org, driver-core@lists.linux.dev, linux-mm@kvack.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	ocfs2-devel@lists.linux.dev, linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-usb@vger.kernel.org, amir73il@gmail.com, linux-erofs@lists.ozlabs.org, 
-	linux-kselftest@vger.kernel.org, chris@chrisdown.name, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com, 
-	yonghong.song@linux.dev, ihor.solodrai@linux.dev
-Subject: Re: [PATCH RFC v3 38/44] nvmet: refuse files on pseudo filesystems
- as namespace backing files
-Message-ID: <20261116-geplagt-gemein-zufrieden-72c3817de2c6@brauner>
-References: <20261116-work-loop-pseudo-v3-38-8cbbea1cf34f@kernel.org>
- <cb28f09c85a473a23f14c9bd6ef135950197c9fbf966c1f7055d791977d29286@mail.kernel.org>
+	s=k20260515; t=1794836424;
+	bh=7ZuahbF6+z1TKgPocK6b1w/LNWgw/JvkC15VlenM0sg=;
+	h=From:To:Cc:Subject:Date;
+	b=daCQz1ZhyWXtl44VERLjzwf4McgJ7N2+wucObuWTVBGvb3rE+VtwnoUq05dSgs42q
+	 1LZSyEtpWtMTp71b7BeklLRhhuuUwIqs2mZggNQen0Ew07p5B1gk0cTr+zagFCAN9M
+	 v69VqSUP8U86/2u44DncKRe2BjOVrkPNXnGxurTVOYsVFomucT6Pyk+1Dfyaquexel
+	 kHDjwlalUXamnXa33LjHbumfNimFC4spzOSiCzA1uJn+jyoCiYr+cMboT4tQ/uFO1d
+	 JSiqfaiFJgERJPTKDh/zU25XFfS/wFn/tKEn75KV3pVoj15wye93vm/YJke3oCo+px
+	 6v6+5DB8GP/5Q==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Alexander Graf <graf@amazon.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tarun Sahu <tarunsahu@google.com>,
+	David Matlack <dmatlack@google.com>,
+	Samiullah Khawaja <skhawaja@google.com>
+Cc: kexec@lists.infradead.org,
+	linux-mm@kvack.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 0/5] KHO map
+Date: Mon, 16 Nov 2026 14:40:05 +0100
+Message-ID: <20261116134013.1636689-1-pratyush@kernel.org>
+X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,13 +69,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cb28f09c85a473a23f14c9bd6ef135950197c9fbf966c1f7055d791977d29286@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 16, 2026 at 12:00:14PM +0000, bot+bpf-ci@kernel.org wrote:
-> Is a prerequisite patch adding d_real_data_inode() missing from the series?
+From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-No. d_real_data_inode() comes from "fs: let d_real() fail" which is in
-the base-commit of this series (vfs-7.5.lookup). This was applied to
-bpf-next instead.
+Hi,
+
+This series introduces the KHO map. It is a sparse map from integer keys
+to u64 values. It is implemented as a radix tree of fixed depth.
+Currently the tree depth is 6, so it can support keys up to 54 bits
+wide.
+
+The main user of the map is memfd. Currently memfd uses a vmalloc buffer
+that has a pair of {index,pfn} to track the folios in the file. That
+uses 16 bytes per page. The KHO map uses only 8 bytes per page with some
+overhead. So for a 1 GiB memfd, it uses roughly half the memory.
+
+In addition, it is a more versatile data structure. For example, it
+allows for adding or removing pages from a memfd after preserve more
+efficiently than the vmalloc array.
+
+Post-LPC 2026, the plan is for KHO to maintain backwards compatibility
+as much as possible. So this data structure allows the serialization
+format to be more flexible to future changes. It can also be used by the
+upcoming HugeTLB and guest_memfd preservation.
+
+I have talked about this as "KHO xarray" before, but I think using
+"xarray" is just going to confuse everyone since it isn't really a
+xarray, and the API works a fair bit differently. So I renamed it to
+"KHO map".
+
+This series isn't complete yet, but it is in fairly good shape so I want
+to share it to get some early feedback.
+
+Things that are missing and planned in the future:
+
+- Multi-index entry support: currently, while the map is very efficient
+  with 4k folios, it is horribly inefficient with 2M folios. Each folio
+  in the memfd takes up a full page to track. Multi-index entry support
+  can fix this by tracking entries that cover a whole page in the
+  previous level, similar to page tables.
+
+- LUO versioning support: LUO versioning headers are still in
+  discussion. This data structure should use them for future
+  extensibility. I am mainly waiting for things to settle down there.
+
+- Dynamic depth support: Currently the depth is static, so it can only
+  support keys up to 54 bits wide. Adding support for multiple depth
+  levels based on what the caller needs can improve efficiency and
+  flexibility. I likely will only add support for this in the ABI and
+  leave the actual implementation for later when we have a real use
+  case.
+
+This series is based on a couple of memfd patches I sent earlier [0][1].
+
+[0] https://lore.kernel.org/kexec/20261103172251.2348370-1-pratyush@kernel.org/
+[1] https://lore.kernel.org/kexec/20261110175855.2437084-1-pratyush@kernel.org/
+
+Regards,
+Pratyush Yadav
+
+Pratyush Yadav (Google) (5):
+  kho: add KHOSER_CLEAR_PTR()
+  kho: build KHO objects into a single kho.o
+  kho: add KHO map
+  kho: test: add KHO map test
+  mm/memfd_luo: use KHO map for tracking folios
+
+ Documentation/core-api/kho/abi.rst     |   5 +
+ Documentation/core-api/kho/index.rst   |  12 +
+ include/linux/kho/abi/kexec_handover.h |   5 +
+ include/linux/kho/abi/map.h            |  94 ++++
+ include/linux/kho/abi/memfd.h          |  39 +-
+ include/linux/kho_map.h                |  77 ++++
+ kernel/liveupdate/Makefile             |  13 +-
+ kernel/liveupdate/kho_map.c            | 514 ++++++++++++++++++++++
+ lib/Kconfig.debug                      |   4 +
+ lib/Makefile                           |   2 +-
+ lib/test_kho_map.c                     | 575 +++++++++++++++++++++++++
+ mm/memfd_luo.c                         | 292 ++++++-------
+ tools/testing/selftests/kho/vmtest.sh  |   2 +
+ 13 files changed, 1449 insertions(+), 185 deletions(-)
+ create mode 100644 include/linux/kho/abi/map.h
+ create mode 100644 include/linux/kho_map.h
+ create mode 100644 kernel/liveupdate/kho_map.c
+ create mode 100644 lib/test_kho_map.c
+
+
+base-commit: a0dc8eddbfdb6dd9c5c2b70eb66ab49cb1978425
+prerequisite-patch-id: dc555295a2263ea9482ab393c50296636ab1e84f
+prerequisite-patch-id: b0c8f9caeb6fd99a352692083e4d2e9255f13d02
+prerequisite-patch-id: af8beaebdb1687c349732dc4a7773f7baa4a2c17
+-- 
+2.56.0.611.g1030f0b940-goog
+
