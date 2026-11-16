@@ -1,62 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794829784;
-	b=fjuasmjNNr60zigtll5AOE2Vt5LE2DziiBMUw7lgs/bZxcnD6Mjym34No6FtKwfh1MHs
-	 8tYOdT7WEAgWx8z9YM4Xt4R3omlQKv7nymVpuThgkeAl7wIlbzlztkTxYLEPsRgy8tVWp
-	 Rb+IqDDOwyPbzoYqfx/xRdHH+J5LoqbtIG33zMlvdZXO/m8flMWmNNkUMrULeLYMLOHFP
-	 /xG8QkRpDjR+zirkWi4Iik1AVRSVJJ8k5EdEq4Ke3Y73cMyyJRZqwaZFiZWvtFbVBWsU9
-	 SJqg667fNxxFYUD+IWoq3qDc7PocAx1hmwMUJltZEBQw2d7FA7o8OGvXk4JINN9MdKA==
+	t=1794830287;
+	b=HSq1TBYYcFAoqq3qFpdEIT6fJlc+G/HZ64LI/Yy2X8R4Ogy4U8jcDdzgPjs5tXiGgEwZ
+	 rzEqRP8sxauoCikieUmWK6ohPTi0cxHXze0mJkt0NliDovB6arKXn7mA4Nx5uisQ1G3rU
+	 evPjve4smMwqJoHQDvhYCVgYpKe2tKzqFmxGPMhuGmMmexAEQvfhkm9Y0lxdGUKVbMcEe
+	 1dTmbPQ9S4mRYU/GkhwfWSRLONkhG/RIOTBAlJituT8VEqyyMAZnXUGbvC6QhzUSHuRQf
+	 /S6DSpTkFU0J6O4afKouFduyU3lM1q/QAT8yHvP79y4nl/WiHshzAJDfdUbI6A/IjZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794829784;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=YF9uPbRNMFJDe58jYR2SHD4cB2dtFZ0yoAnGUomr6pU=;
-	b=F1c26F/Wzq8uhh+m5nsaKCM5VP35zIuu+UwauZjQFM22G8SoJZotOIgAXS+FQtWAItfr
-	 ZH7lDu6Sb0k8qtf9kK4L3WZfCG9A5m+5N4HVVlOrTPFL2iA1VtcbaPzUIBe1+YwrpSQjA
-	 dShxZmt9G89ySm0gVChst9qTZUmZdWWjmRGxZRr+v/+RIUzPaxNQWs6zychcTlvBomsRw
-	 RRPG9zwSEJDHdFZ4My4jICNSvb2Ye5885cTzEWRGMPl0Ti8CfTGvChtCYxDyevZYJY1NW
-	 EkNPTpSXogcvmbCMyVVUiccrrUTczL9zHqY+srek4zGmyjKEu078/5qWXyJUQOkD9og==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794830287;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=CT0k0qaGom0emmcyhnGmC3Zz4iYrJsSIXC3R0FJ/rw0=;
+	b=CjVkusx7a0GVtlqR1F8aiOLjPzpYevB8qSnqnRF9r5IMh8WwfVDIX/EkzlyqlzPD+8W7
+	 6zDEjhvS70YT9EYoa8qzSBQaFBfN0/oUBHJ12FmRq/LqUxjdHR/ZhvtRw3MNOwWN8iJbC
+	 5L+1gFoVU5RVETK2SylnLqN75rwyBWlA7GRqqNAfDy1fuzNWkDMvsaeezEFIf3JP9z5rb
+	 s//TodnwOJgMEyIpJPA2wIJeudD36HTNBE84s1gQCO6252S5mBmwyaNyhcwcWWw6jnelw
+	 wcz22Rv3OvqJGiO9Zg/71JojAPsbtSbX/SLZTZ9QuOCJd+K9Ep1WgH+U5Nz7Z4iI2jQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HEJPA1ce;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emQO84hB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89550606A88E;
-	Mon, 16 Nov 2026 11:49:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6A4606A335;
+	Mon, 16 Nov 2026 11:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HEJPA1ce
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398271F000C6;
-	Mon, 16 Nov 2026 11:49:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emQO84hB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8381F000C4;
+	Mon, 16 Nov 2026 11:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794829784;
-	bh=YF9uPbRNMFJDe58jYR2SHD4cB2dtFZ0yoAnGUomr6pU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=HEJPA1ceqr2psUJ8fdQ8CCHLPdb+IpZhzdHtScMXHknNqxlLgsQ9aMskTepGY7IgG
-	 7FJXlbNEVxc8ibStAtjrUghOvUoIukPt677vQJ0IkW6xtlcT48kwb0aPz7ye5Cmkj+
-	 7MDURK9sSlEh+ucWrS7i8TtYrdkgIVHCBepA7mK11tp00NaTZtyjeIqQdZ1IcFSb85
-	 PEm8TVvPekcwfvifcFOHr9DAC0nPqlh7xEEzvZFG+cmQ1DIC7Nkb1MjuTRjle6NuYl
-	 pqqkGk8zxNrEjkKFZkSZacoJRGxKtGCzjZX5BdYpk5lRQnTR3q7t2EPdHq5digT4aW
-	 ZR5BjNfEPEbXg==
-Subject: Re: [PATCH net v2 2/2] selftests: netfilter: cover IPv6 FIB prefix
- suppression
-From: netdev-bot+sashiko@kernel.org
-To: leonard@lausen.nl
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, pablo@netfilter.org, fw@strlen.de, phil@nwl.cc,
- shuah@kernel.org, daniel@iogearbox.net, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Mon, 16 Nov 2026 11:49:42 +0000
-Message-ID: <179482978277.3136.16783433298012482293@kernel.org>
-In-Reply-To: <20261115114434.10343-6-leonard@lausen.nl>
-References: <20261115114434.10343-6-leonard@lausen.nl>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1794830286;
+	bh=CT0k0qaGom0emmcyhnGmC3Zz4iYrJsSIXC3R0FJ/rw0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=emQO84hB0whhXw99h+HdACi9fEU/JaLprbnTNo96M21MSP86/z4OZAZtl1pJMrlST
+	 ES4gzvL+MKmjEUmoBloO+aouLZoQJrSVYOdoUcTr8EPC2Pih8Cwcsmnv2W7kOjAD6j
+	 qnClb+5djsuPVGOlxp8q21o/0hPtiK2aCvIsvYqGsbSMoI1nbIqPpKJhAR5At6J1eu
+	 aKX/GN+n0TfvmmaCoIn0aptz+vOSLLHYl5KznwlYw4omOypIa7wCrHsrj0Ndgi4xwH
+	 zf7psDDcoXjIhXlKNHT3WBtVDy3+UiGosmbLucRg6m9y7eQRzwzXn9XU50/CHuKdiE
+	 w/Z8ARFsXM5WA==
+Message-ID: <998d522f-e61d-420f-9834-6bdcbaab1361@kernel.org>
+Date: Mon, 16 Nov 2026 12:58:01 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,200 +51,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v4 0/2] net: openvswitch: fix a feature leak on a
+ failed change
+Content-Language: fr
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org, Aaron Conole <aconole@redhat.com>,
+ Eelco Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+References: <20261115163134.3202677-1-houminxi@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
+ YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
+ c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
+ WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
+ CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
+ nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
+ TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
+ nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
+ VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
+ 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
+ YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
+ AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
+ EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
+ /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
+ MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
+ cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
+ iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
+ jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
+ 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
+ VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
+ BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
+ ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
+ 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
+ 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
+ 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
+ mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
+ Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
+ Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
+ Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
+ x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
+ V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
+ Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
+ HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
+ 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
+ Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
+ voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
+ KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
+ UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
+ vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
+ mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
+ JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20261115163134.3202677-1-houminxi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Hi Minxi,
 
-Low priority / nit picks for your consideration:
+On 15/11/2026 17:31, Minxi Hou wrote:
+> The datapath records the user features before it applies the change, so
+> a request that fails leaves it claiming a bit whose reference count was
+> never taken. The first patch records the features last. The second adds a
+> selftest that drives the failing request and reads back what the datapath
+> reports.
+> 
+> v4:
+>  - Rebased onto current main.
+>  - The skip message is one printf again. Splitting it made shellcheck
+>    report SC2182 and dropped a word and the newline from the output.
+>  - The new tests say why they failed on stdout. info() writes debug.log
+>    and a failing run deletes that file, so CI showed a FAIL with no reason.
+>  - A datapath that cannot be read is reported as that instead of as a
+>    feature mismatch.
+>  - The outdated add-dp request is checked instead of discarded.
+>  - The errno numbers come from python rather than from a literal, and a
+>    lookup that cannot answer says so rather than comparing against an
+>    empty string.
 
-- [Low] The new prefix-suppression block in
-  tools/testing/selftests/net/netfilter/nft_fib.sh runs at top level…
-- [Low] In test_fib_suppress()
-  (tools/testing/selftests/net/netfilter/nft_fib.sh, line 210), the per-…
-- [Low] The new block adds IPv6 policy rules in nsrouter (`ip -6 rule add
-  pref 100 ...` and `pref 101 ...`, lines 762-763) and deletes them at…
-- [Low] For the blackhole, unreachable, prohibit and blackhole-nexthop
-  cases, test_fib_suppress() (nft_fib.sh line 222) checks the nft side…
+Thank you for the new version, but I suspect this series caused troubles
+on the CI side: it looks like openvswitch.sh hangs/times out after all
+subtests pass.
 
---
+  # TEST: psample                                                [START]
+  # TEST: psample: Sampling packets with psample                 [ OK ]
 
-selftests: netfilter: cover IPv6 FIB prefix suppression
+=> then nothing for 10 minutes, instead of:
 
-This patch extends nft_fib.sh with IPv6 policy routing checks. They
-verify that suppress_prefixlength 0 suppresses a default route but keeps
-a more-specific route. They also verify that blackhole, unreachable,
-prohibit and blackhole-nexthop routes stay terminal. Each check counts
-matching nft fib results, compares them with ip -6 route get, and the
-router's ruleset is now loaded after these checks.
+  ok 1 selftests: net/openvswitch: openvswitch.sh
 
-> diff --git a/tools/testing/selftests/net/netfilter/nft_fib.sh b/tools/testing/selftests/net/netfilter/nft_fib.sh
-> index 04544905c2164..65d4687622e20 100755
-> --- a/tools/testing/selftests/net/netfilter/nft_fib.sh
-> +++ b/tools/testing/selftests/net/netfilter/nft_fib.sh
-> @@ -202,7 +202,38 @@ check_fib_counter() {
->  	return 0
->  }
->  
-> -load_ruleset "$nsrouter"
-> +# Count probes matching the expected FIB result, then drop them.
-> +test_fib_suppress() {
-> +	local label="$1" expected="$2"
-> +	local result="${3:-oifname}" err=0
-> +
-> +	ip netns exec "$nsrouter" nft -f /dev/stdin <<EOF || return 1
+How did you validate this series? Note that the Netdev CI, for this
+specific case, combines 'config' files from net, net/af_unix
+net/openvswitch:
 
-[Severity: Low]
-If nft rejects this ruleset, test_fib_suppress() returns before it
-reaches the PASS/FAIL echo at the end. That can happen when
-nft_fib_ipv6 is unavailable or the "fib saddr . mark type" syntax is not
-supported.
+  tools/testing/selftests/net/config
+  tools/testing/selftests/net/af_unix/config
+  tools/testing/selftests/net/openvswitch/config
 
-The callers' "|| ret=1" still makes the overall result FAIL. However,
-the log never prints "FAIL: <label>", so it doesn't show which of the
-six cases failed. It also doesn't show that the cause was a ruleset
-load error and not a FIB mismatch.
-
-Could this path print a labelled FAIL or SKIP? Other helpers in this
-file do that when a ruleset fails to load, for example test_fib_type().
-
-> +flush table ip6 filter
-> +table ip6 filter {
-> +	chain prerouting {
-> +		type filter hook prerouting priority -1;
-> +		ip6 saddr dead:1::99 icmpv6 type echo-request \
-> +			fib saddr . mark $result "$expected" counter drop
-> +	}
-> +}
-> +EOF
-> +	ip netns exec "$ns1" ping -6 -c 1 -W 0.1 -q dead:1::1 > /dev/null 2>&1
-> +	if [ "$result" = type ]; then
-> +		ip -net "$nsrouter" -6 route get dead:1::99 from dead:1::1 > /dev/null 2>&1 && err=1
-
-[Severity: Low]
-In the type branch, the nft side has to match one exact result
-(fib saddr . mark type "$expected"). The route get side only checks that
-the lookup fails. Any non-zero exit counts as agreement, whether it is
--EINVAL for blackhole, -EHOSTUNREACH for unreachable, -EACCES for
-prohibit, or an unrelated error.
-
-The commit message says:
-
-    Require a positive packet counter for the expected nftables FIB result
-    and compare it with an ordinary route lookup.
-
-Does that comparison hold for the blackhole, unreachable, prohibit and
-blackhole nexthop cases? Only the oifname branch checks the actual
-result ("dev $expected ").
-
-Could the type branch check the error text instead (Invalid argument,
-No route to host, Permission denied)? Using ip -6 route get ... fibmatch
-would also work. Either way, the ordinary lookup would have to end on
-the same reject type.
-
-Table 129 gives a usable route for dead:1::99. If the dst path wrongly
-suppressed the reject route, route get would still succeed and the test
-would catch it. So the gap only covers a mismatched reject type.
-
-> +	else
-> +		ip -net "$nsrouter" -6 route get dead:1::99 from dead:1::1 |
-> +			grep -q "dev $expected " || err=1
-> +	fi
-
-[ ... ]
-
-> @@ -724,6 +755,36 @@ test_fib_vrf()
->  	check_fib_veth_vrf_type "fib expression address types match (iif in vrf)"
->  }
->  
-> +# Test prefix suppression before installing the router's logging RPF rules.
-> +# Neighbour discovery must remain usable even when reverse routes differ.
-> +ip -net "$nsrouter" -6 route add table 128 default dev veth1 || exit 1
-> +ip -net "$nsrouter" -6 route add table 129 dead:1::/64 dev veth0 || exit 1
-> +ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 suppress_prefixlength 0 || exit 1
-> +ip -net "$nsrouter" -6 rule add pref 101 to dead:1::99 table 129 || exit 1
-
-[Severity: Low]
-Adding these IPv6 rules in nsrouter latches fib6_has_custom_rules:
-
-net/ipv6/fib6_rules.c:fib6_rule_configure() {
-    ...
-	net->ipv6.fib6_has_custom_rules = true;
-    ...
-}
-
-Deleting the rules later in this block does not clear the flag. Only
-netns init resets it. fib6_lookup(), which nft_fib6_lookup() calls,
-branches on the flag:
-
-net/ipv6/fib6_rules.c:fib6_lookup() {
-    ...
-	if (net->ipv6.fib6_has_custom_rules) {
-    ...
-
-Before this patch, nsrouter had no IPv6 rules until test_fib_vrf(), and
-the PBR section only adds IPv4 rules. That means the IPv6 halves of
-several checks used to take the direct local/main table lookup in
-fib6_lookup():
-
-  - the unwanted-drop checks
-  - the loopback checks
-  - the fib counter check
-  - test_fib_type "policy routing" and "default table"
-
-Now that this block runs first, does nft_fib.sh still cover the IPv6
-lookup path without custom rules?
-
-Would that coverage survive if the suppression checks ran in a separate
-namespace, or after the tests that rely on having no custom IPv6 rules?
-
-> +ip netns exec "$nsrouter" nft add table ip6 filter || exit 1
-> +
-> +test_fib_suppress "suppress default route" veth0 || ret=1
-> +ip -net "$nsrouter" -6 route add table 128 dead:1::/64 dev veth1 || exit 1
-> +test_fib_suppress "retain non-default route" veth1 || ret=1
-> +ip -net "$nsrouter" -6 route del table 128 dead:1::/64 dev veth1 || exit 1
-> +
-> +for type in blackhole unreachable prohibit; do
-> +	ip -net "$nsrouter" -6 route replace "$type" default table 128 || exit 1
-> +	test_fib_suppress "retain $type" "$type" type || ret=1
-> +done
-> +
-> +ip -net "$nsrouter" -6 nexthop add id 1 blackhole || exit 1
-> +ip -net "$nsrouter" -6 route replace default nhid 1 table 128 || exit 1
-
-[Severity: Low]
-This block now runs at top level before load_ruleset "$nsrouter", the
-forwarding sysctls and the first test_ping. Every setup command here
-ends in "|| exit 1".
-
-If ip -6 rule add fails (a kernel without CONFIG_IPV6_MULTIPLE_TABLES),
-does the whole script exit with FAIL? The same question applies when
-ip -6 nexthop add fails (an iproute2 without nexthop object support).
-None of the existing checks would run then: unwanted-drop, loopback,
-fib counter, PBR, fib type and VRF.
-
-In other places, this script reports a missing feature as SKIP and keeps
-going, for example the veth check, test_fib_type() and
-load_pbr_ruleset(). Could these setup failures skip only the new
-suppression checks instead of exiting?
-
-The netfilter selftest config already sets
-CONFIG_IPV6_MULTIPLE_TABLES=y, so this mostly affects nonstandard
-environments.
-
-> +test_fib_suppress "retain blackhole nexthop" blackhole type || ret=1
-> +
-> +ip -net "$nsrouter" -6 rule del pref 100
-> +ip -net "$nsrouter" -6 rule del pref 101
-> +ip -net "$nsrouter" -6 route del table 128 default
-> +ip -net "$nsrouter" -6 route flush table 129
-> +ip -net "$nsrouter" -6 nexthop del id 1
-> +ip netns exec "$nsrouter" nft delete table ip6 filter
-> +load_ruleset "$nsrouter"
-> +
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261115114434.10343-2-leonard%40lausen.nl
+Cheers,
+Matt
