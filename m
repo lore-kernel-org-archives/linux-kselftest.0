@@ -1,62 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794849541;
-	b=YpilNxWYzuEZ1E4bRavgtsHj9r9FdgVo2gcd3EAfioo/ZPrxJqFhgvhDc+V/zLoNDrT9
-	 hG9koGMUkI3aPX1lt9CM9qLb8tX7f3ZwpBn81MIZwlnAK7TYrpgHyzq+Y2adpr2a7ee5Z
-	 zylwx8fMSAQTCA/mqnfGY8Qkw3TldpunQGvdc815IO/cfAmy+m7zjH2N93VebDdM2/3nQ
-	 j6IXhjktQFdRw7uspFm41I4tzPst4/jSOAWP0yjmFE0Heioyh9s2xgfifX+ehYethrqwd
-	 CKSDKH7N7yHdkLtNlQd/oI9DgYa5mJVPRRJFQmCpF/qYp6PMWurhhYd/kZEiE10dOOQ==
+	t=1794849966;
+	b=plH6T/WBEmpGJbAUQSY8wGfb3nr1xR88l0Y3GqCr4dmFvUYG8BHnxJIvmzLlzDoBsWGx
+	 Wwnoqku5xC7GBMaHjbRQ8HJ7JCrj0ysK/Akb0023EOO4C1ccEuQOz+80P8lya5Vn4YAXW
+	 GyLxhR11CFTS2WNJM+iknCt+ng5E93cYH4g4ia5cPQMnd2ITQ+z62Di/TtTIDgCLU2b2I
+	 hBExCZsdIgW0PLq5+5sqnBQtIa5VR1T9FmaZNVoVKa7i5P+WCmrSZ5Xl0vh1VQ4NTTYhO
+	 1G9mfiuvtYdU63Y1IqjUZuGDWvWZmFTHAX40SLBopVqtcp6ymfu517IFatZXIwixSIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794849541;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type;
-	bh=OzaqIXPqhSSG4ejd/hB4U1AFDk/wquty1pyzaNNEA1Y=;
-	b=Q0TQUuAKI1U00dgn0RVUNSVHbUukqkpafPl3DM8M49m155tPQumPHFUbK4y+fqmoBeVq
-	 y3dDgo1XanyUP5/w6txi2kJsj2OJY4tMU159pR6tzxKQy+xsgekYRJsIKnJcIEvDWzhTi
-	 7hB6tDJ0EQnhde6eBNusGKZc36UczXX520wHx0kp8lyqDuJtnJVXbR1WDLFMVcTo6ce7p
-	 XqAzct6grNRlwV0FEP0Dbnkg3wdc1A8M2qzFT5+ZUqu6r4J5JH10eQ5mRUih7OrUwkmJ1
-	 ifqN6F4l+VADW13OxvzcoAS3EnJyJFllU2/8NOscMx7eRPPYjX5GmIx7Qwk0gi/SSPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794849966;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=rzxgjF868Q8FAbCCoDm+JvCE/jhxHH7vVIq4SATyN8s=;
+	b=iu6cLWqZ/yCvB6HZOdmikJhBDYKUSBo/MX7uiZujsE3KNE8tm7bVmkReg9nybMEoCLAv
+	 Sc0XvpF2b7VvXjtNwFhykkB1Uk1c9zUSYanNCtflX4Dr9NkmOS/lZL5qmBFHSVE6uZ8TZ
+	 KqKf89ssx0hvjXlcfQZzEM8AljdAftBdQnx2f/uCBrc95xPrRhLJQRHxJPcdocuUSKUXH
+	 2vHq0BJ0WCBVLZhmBOVTfvQEh2NzF2Jvs7agp5zpeRzhBoZEPfQL63ALNdA5CKIqEkBOu
+	 EaOdO4WzepcTCW30qZ+UtGhBwfbes1NX3qYbQb/HkDUwSyHPk2Xkdzx+12HjLYvETmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZoSV5rIN;
-	arc=none smtp.remote-ip=91.218.175.133
-Received: from mta0.migadu.com (out-133.mta0.migadu.com [91.218.175.133])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=JxnmLjSq;
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90B9606A329
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:19:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C90B9606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADB4606A322;
+	Mon, 16 Nov 2026 17:26:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CADB4606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZoSV5rIN
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=PAxYfgYQrRbaE3T1nWWUCpJHJViNiRZaZVomuIz4tHw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794849538; v=1; x=1795454338;
- b=ZoSV5rINn65l40cWzZSH8b6WS496zQWk6wvN+E/+81fz+tLMKT/Pw64TNet3QRkay3RyOX24
- iO62DuF5ZGGsmv7AeDKc1vCnVipFfjsGA0rov0mjQYVkWQ90Cu5HkVuQE47j20ryi6+GTYAfm9G
- fW14WOUuT95o078lFeVsrc0w=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 74da7cb4ade7cba9;
-	Mon, 16 Nov 2026 17:18:58 +0000
-X-Mizu-Trace-ID: 74da7cb4ade7cba9
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5c14bc5a743so13561e87.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 09:18:54 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErG1QpWToLiXvU1c2UtyGe6VWNPMQsDGvzWZd5Vil4EiOHaQ4crz2jlIMU5BWHQSGTb3Z1erSBvo7siMjiIdz88=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Tsw91VdcJLNCv6S0H7QtWABJdgqzxx2n1fC0gkY0gNeqFijwu
-	RrFGwiZ7B6vRCKMFw4T4fGMIFhMRvT4RI7Q9OFcDmzhjiqBJGk4HQj/+qtKdPC6Te3rAXf5gE/G
-	h/qFyCXVzhEZjxKzRFCj1ycO3dImV7N7s4CKs4F8k
-X-Received: by 2002:a05:6512:110b:b0:5bf:f84f:1d74 with SMTP id
- 2adb3069b0e04-5c17e52e81emr262285e87.13.1794849533007; Mon, 16 Nov 2026
- 09:18:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=JxnmLjSq
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=rzxgjF868Q8FAbCCoDm+JvCE/jhxHH7vVIq4SATyN8s=; b=JxnmLjSqavqJ6CKwoKaJlMeyNp
+	D6BysKfZB+wzztxq+k73ocwtwInNef3O66o5U/ZZYYhzD8T5gcQs9/P0L68dpAI1+payU/WSVrLYV
+	r7RjEULHlK0XjY1WM72Yf4Z/LOI8oWH7hTXeei4gwegj/HejhK+eDCPG0h7sGm62m7KVgLN7wc/EJ
+	dNEEZ/JBANht5iXOsLeiMgRjuZbqFd4Trimf/0F8QHfT0kJQPVYQI4oVh4C8+XArRUcq5d/BVFygO
+	oNbSRjbjSFYQp3Z6CIGcOAj3VoQtz35oVFCauvlCP6FBP0yisEgsUfBT+9YCbpx8eQ4t4uHBVMGPL
+	hDLzO5uw==;
+Received: from [38.23.173.23] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xT0Sy-00000003P62-2xr9;
+	Mon, 16 Nov 2026 17:26:04 +0000
+Date: Mon, 16 Nov 2026 12:26:01 -0500
+From: "Liam R. Howlett" <liam@infradead.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Tal Zussman <tz2294@columbia.edu>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] mm/madvise: zap markers from guard regions
+Message-ID: <ofd747zeh26u3rba42fsdryoe2mwdhi6r4cjvrmjn25tps4ar4@ubcwdhamdyui>
+References: <20261113-disallow-uffd-guard-install-v2-1-9d0063c70542@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,52 +68,151 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
- <20261110110724.3614412-2-fuad.tabba@linux.dev> <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
- <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com>
- <CA+EHjTyqJfGS+5UajX=RYTAG-qfhZ-vmGi=1SixXydWhwGHLUA@mail.gmail.com> <avs5UD79FB_DG1Vs@seanjc-mac.roam.internal>
-In-Reply-To: <avs5UD79FB_DG1Vs@seanjc-mac.roam.internal>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Mon, 16 Nov 2026 17:18:16 +0000
-X-Gmail-Original-Message-ID: <CA+EHjTwXO_Ym1+ErHT9Si6FwHtDaPDmMRwY+RS8LDNK421rchA@mail.gmail.com>
-X-Gm-Features: AclHuK9xW32VPDT60mgyMDdb5wXbr3ChwJoDPUUlo1Wmi2N2JEJM_TMFlrp_0kc
-Message-ID: <CA+EHjTwXO_Ym1+ErHT9Si6FwHtDaPDmMRwY+RS8LDNK421rchA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty
- ring is full
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, 
-	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261113-disallow-uffd-guard-install-v2-1-9d0063c70542@kernel.org>
 
-On Mon, 16 Nov 2026 at 17:11, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Nov 16, 2026, Fuad Tabba wrote:
-> > Hi Sean,
-> >
-> > On Tue, 10 Nov 2026 17:18:22 +0000, Fuad Tabba <fuad.tabba@linux.dev> wrote:
-> > [...]
-> > > > Eh, I vote to just use kvm_dirty_ring_check_request(), I don't see any harm in
-> > > > clobbering vcpu->run->exit_reason.
-> > >
-> > > Will do.
-> >
-> > After taking a closer look, the clobber is problematic on arm64, where
-> > KVM_RUN completes a pending MMIO exit only if run->exit_reason is
-> > still KVM_EXIT_MMIO. If a pre-fault stops on a full ring after an MMIO
-> > exit, the helper overwrites exit_reason, so the next KVM_RUN doesn't
-> > complete the exit and the guest repeats the MMIO access. The ring can
-> > be full at that point if the pre-fault dirties pages, or with NV, if
-> > the stage-2 walk for the MMIO access does.
->
-> Wouldn't that require userspace to do KVM_PRE_FAULT_MEMORY after KVM_RUN with a
-> KVM_EXIT_MMIO return?  If so, userspace gets to deal with the fallout of being
-> stupid.
+On 26/11/13 09:04PM, Lorenzo Stoakes (ARM) wrote:
+> In order to establish guard regions, guard markers are installed in the
+> page tables of a mapped VMA.
+> 
+> However, problems arise when one tries to combine this with registering a
+> VMA for userfaultfd, as such operations may themselves need to install page
+> table markers such as uffd-wp.
+> 
+> When the installation is attempted the guard marker prevents these markers
+> being applied, which can lead to unexpected results (especially if the
+> guard regions are later removed.)
+> 
+> This is especially problematic because guard region installation causes the
+> regions to be zapped first, meaning that the removal of userfaultfd-tracked
+> ranges will not be logged in this case.
+> 
+> Additionally, the uffd-wp page table marker will be propagated regardless
+> for file-backed mappings as the zap being performed does not clear these
+> markers.
+> 
+> This is problematic, as it can cause repeated failure to install guard
+> markers resulting in an infinite loop.
+> 
+> Therefore, update guard region installation to invoke the zap with the
+> ZAP_FLAG_DROP_MARKER flag applied.
+> 
+> Both before and after this change, uffd remove events will not trigger on
+> guard region installation, nor will write protect state be propagated after
+> guard region removal.
+> 
+> This makes sense as conceptually, guard regions mark a part of a VMA as
+> effectively unmapped at the page table level, and removing the markers is
+> like mapping the VMA again, over which operation uffd markers would in any
+> case be lost.
+> 
+> A survey of open source users indicates nobody is relying on installing
+> guard regions in uffd-armed VMAs. Software including glibc, android,
+> tcmalloc and CRIU were checked.
+> 
+> This change means that any already established guard regions are removed on
+> zap. These will be overwritten with the newly installed guard markers on
+> success.
+> 
+> However, if this fails for some reason (fatal signal likely the only
+> reasonable cause), guard regions may remain removed, and concurrent faults
+> may succeed in the interim in the range.
+> 
+> Since the installation failing guarantees nothing about the range being
+> installed into, and since success overwrites with guard markers, this isn't
+> an issue.
+> 
+> Since MADV_DONTNEED does something similar, abstract the zapping to
+> zap_range() and call it from both places.
+> 
+> Fixes: f807123d578d ("mm: allow guard regions in file-backed and read-only mappings")
+> Reported-by: Tal Zussman <tz2294@columbia.edu>
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-9-00713d368976@columbia.edu/
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-10-00713d368976@columbia.edu/
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-11-00713d368976@columbia.edu/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Ack, so v2 will be as you suggested.
+Reviewed-by: Liam R. Howlett (Google) <liam@infradead.org>
 
-/fuad
+> ---
+> v2:
+> * Updated to just zap everything as per David + Tal.
+> 
+> v1:
+> https://lore.kernel.org/r/20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org
+> ---
+>  mm/madvise.c | 28 +++++++++++++++++++---------
+>  1 file changed, 19 insertions(+), 9 deletions(-)
+> 
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 0214efd2a014..4f7728583207 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -850,6 +850,19 @@ static int madvise_free_single_vma(struct madvise_behavior *madv_behavior)
+>  	return 0;
+>  }
+>  
+> +static void zap_range(struct madvise_behavior *madv_behavior,
+> +		      zap_flags_t flags)
+> +{
+> +	const struct madvise_behavior_range *range = &madv_behavior->range;
+> +	struct zap_details details = {
+> +		.reclaim_pt = true,
+> +		.zap_flags = flags,
+> +	};
+> +
+> +	zap_vma_range_batched(madv_behavior->tlb, madv_behavior->vma,
+> +			      range->start, range->end - range->start, &details);
+> +}
+> +
+>  /*
+>   * Application no longer needs these pages.  If the pages are dirty,
+>   * it's OK to just throw them away.  The app will be more careful about
+> @@ -872,13 +885,7 @@ static int madvise_free_single_vma(struct madvise_behavior *madv_behavior)
+>  static long madvise_dontneed_single_vma(struct madvise_behavior *madv_behavior)
+>  
+>  {
+> -	struct madvise_behavior_range *range = &madv_behavior->range;
+> -	struct zap_details details = {
+> -		.reclaim_pt = true,
+> -	};
+> -
+> -	zap_vma_range_batched(madv_behavior->tlb, madv_behavior->vma,
+> -			      range->start, range->end - range->start, &details);
+> +	zap_range(madv_behavior, 0);
+>  	return 0;
+>  }
+>  
+> @@ -1217,9 +1224,11 @@ static long madvise_guard_install(struct madvise_behavior *madv_behavior)
+>  
+>  		/*
+>  		 * OK some of the range have non-guard pages mapped, zap
+> -		 * them. This leaves existing guard pages in place.
+> +		 * them. This also drops any PTE markers in the range,
+> +		 * including existing guard markers, which we reinstall on
+> +		 * the next attempt.
+>  		 */
+> -		zap_vma_range(vma, range->start, range->end - range->start);
+> +		zap_range(madv_behavior, ZAP_FLAG_DROP_MARKER);
+>  	}
+>  
+>  	/*
+> @@ -1845,6 +1854,7 @@ static bool madvise_batch_tlb_flush(int behavior)
+>  	case MADV_DONTNEED:
+>  	case MADV_DONTNEED_LOCKED:
+>  	case MADV_FREE:
+> +	case MADV_GUARD_INSTALL:
+>  		return true;
+>  	default:
+>  		return false;
+> 
+> ---
+> base-commit: 4318887a3efa4c53d6f083ccfd7105b809a3ac65
+> change-id: 20261112-disallow-uffd-guard-install-a5294129ad7b
+> 
+> Cheers,
+> -- 
+> Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> 
