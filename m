@@ -1,62 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.93
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794807174;
-	b=28IkxmyqkL3LUHpySGwAAEi4w6mNpD54pIiHISI78LVjHen/kDWMMOvx3ODMSQYEDALz
-	 xiAENZUQuo3X+GCtTqALxCEofX/1ziF8z65KpaXev5TfnaYCBGyuUn/v2VWf3AaoIz74k
-	 JpdO0MSo8VFdlZhpW6F3orRUMJi4DvTtrDlDQdmOJkqC8NsskyMFgoFZnLBDGfo4z8sSv
-	 KmEpobdEXHsm/khLDY50rSqOBEe1SU32UXZFQRzUHgd0aL0b0pb7huNuNFR/cr8BKcASu
-	 1k9EXKaw9rzSTLD/A8gaGAOgUxEEAMzy6helKmMC0jxrcH3yAjANx4QW1TagUILgxvg==
+	t=1794810071;
+	b=3JQSEepa8PypGXHPTcGmhm24Iv5FmpjefYYjE4jN6yXho8IL8Cb0wbfz54d4b/HVZdTV
+	 DO9UAbl2z98HU6W1H8e3RZmcLCegmgUgUjjffXrRKjCyxI656dXOWtWCzLPrcVJQQ69al
+	 6YBBVkPwb1tpi5+wY19/mgq7mDkCJB+02VuZj5vJY8tCg9OdMFt9F8cDEN9/ZXGX5gTpB
+	 bvHHDAvHY5ZnXPl4KmBod/CX8/cxBD89TSGa4hJntksoioDJ9A4KuUojn+dIU536NCEw0
+	 AZWqelW+bRfgfffUUwWBY0+/2usK1Ca7bJAVmnMFIk9qnVdrdKMf4hGuLqY+Yl6sW9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794807174;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=235IhKMChFexMr22e8JQ4l9QP0XQgT/y/XG+KObBuiI=;
-	b=lAWGhjFOFEBzAEmj3pmfZ8kTib8dneljDDE08UZoGtJfY3kqKCPjGYAH5SmRBZHiqHmm
-	 WVaumZ/imzl/axHBEgMdcdnbaE7a0BlKutR49cp7fCyXMAgmxLwRYxP6JDpl9OPnN/l4R
-	 0H0EECn7NzD8jWI4CxLkcdbqlB1XU8aeDCNvaBJ0xHkvfopt+x4ziLuxurB5pLvFB4etR
-	 hBjfDwttszjMCXr4EeuakmE8U8GOrP7rBqBJOIyxjgn1DmzJKwPw7ef27JDAhgxxQIzH7
-	 1p1YlnwVlTJLDU8VT4e3MVIaR1NQgGameCMvYDWBxrG/KZNzYjgFipCllHRsJxfp6dA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794810071;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=LrWqePIA2dRTl7gYO+GfHcmbC6K7NaHxnw6+i+GpqQw=;
+	b=EEMjpmRJoAifwQpfXe7ZgVcbnNLG+PMjRhsiFtKI6+73ax3MNAc7AU6vJS5s3MF+WEAS
+	 iraoR9h1mEAGD8P1tYhjVXJH5xsD7oh/yFgU3KfN0QBunN9rQiP/eccM2gGly4om7BGi6
+	 oCvAHeJdNrgEJpaws2HZykneyJA+VSk++//N3CrecYNDzu23r6GvdQL1BUrpNvwlVBnz3
+	 NWy3aMvjzitqH0wpKMY9LXjlXI+phogCOJBBegjnSYhqZDg69bixbrmwM/XcCpDCk7E+J
+	 /+iGJeQyoAOrt5Bzx+qPyqTg0kGinVWyC8O4xKNkqIDJ04O1f3Mc7inWfzh8Gt762tw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="kVhYU/Q4";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UbqegxeK;
+	arc=none smtp.remote-ip=91.218.175.93
+Received: from mta0.migadu.com (out-93.mta0.migadu.com [91.218.175.93])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA64606A337;
-	Mon, 16 Nov 2026 05:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0276C606A329
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 06:21:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0276C606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kVhYU/Q4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3021F000C4;
-	Mon, 16 Nov 2026 05:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794807174;
-	bh=235IhKMChFexMr22e8JQ4l9QP0XQgT/y/XG+KObBuiI=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kVhYU/Q4IvyrjNAdXcQ8S0i5vceWWAa1QsAr6YoVk8LYWDG3Py+YM6tOt9d8FBuPQ
-	 /UzTilpaa4bDEnkbrzNeOxSk6MWSYMzwB4J5HvCSYUH6ANuvTd1FIrvkGuwGy77jo9
-	 7sUjgtMEwiCYnmoA1D4n7tX0T3bRrADdPFHrrwyj/l9+ZpDeXTdCFV8cEvKfTRc9t8
-	 jesz/BjmmfR9AOF9mKAe2gcgeeMNCEM5YKsSqVABDxAArfDIBW/xjk7CWgnZ53GnDD
-	 15n9Tcp5BwoCpKIe+mB//EXb8NpbOXS11fPLEduOyPb16ex1+kGj5eNv2cCmU/AXAp
-	 nqfDqQTs7ZbyA==
-Subject: Re: [PATCH net-next v5 8/8] selftests: net: test the vxlan vnifilter
- request limit and dump replay
-From: netdev-bot+sashiko@kernel.org
-To: alishmery18@gmail.com
-Cc: netdev@vger.kernel.org, idosch@nvidia.com, kuba@kernel.org,
- pabeni@redhat.com, davem@davemloft.net, edumazet@kernel.org,
- andrew+netdev@lunn.ch, horms@kernel.org, razor@blackwall.org,
- roopa@nvidia.com, kuniyu@google.com, petrm@nvidia.com, aroulin@nvidia.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Mon, 16 Nov 2026 05:32:53 +0000
-Message-ID: <179480717303.3136.3539186076980782462@kernel.org>
-In-Reply-To: <20261114221412.255825-9-alishmery18@gmail.com>
-References: <20261114221412.255825-9-alishmery18@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UbqegxeK
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=82DVlU1A65d2Os+X64YwR4fF5H6GyPEMAPG89PFIji8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794810068; v=1; x=1795414868;
+ b=UbqegxeK8YBLfncOs+okLzUNa3QCOA8D49D5hsiU8UMy4wE7u/Dp72h77j9+f3YaTlLZgf5d
+ EFI4XfoszHwYSeIGePhhoBFrvdFBnkom9ilbiU/lBFG6TJB6wqrd/TnpjhNPTfdrf06dLQylIXw
+ ZkOY5G5+irqxl+1K4LQ480Cc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 92b96a1db4b59b3b;
+	Mon, 16 Nov 2026 06:21:07 +0000
+X-Mizu-Trace-ID: 92b96a1db4b59b3b
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 16 Nov 2026 14:20:57 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net-next v3 3/5] selftests: seg6: move SRv6 End PSP setup
+ into its own helper
+Message-ID: <avqgyRcQkWLvpiA9@fedora>
+References: <20261112-srv6_flavors_endx-v3-0-c9177bbbd965@kylinos.cn>
+ <20261112-srv6_flavors_endx-v3-3-c9177bbbd965@kylinos.cn>
+ <20261116052659.e8843a373807242737faeef0@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,124 +73,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116052659.e8843a373807242737faeef0@uniroma2.it>
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Hi Andrea,
+On Mon, Nov 16, 2026 at 05:26:59AM +0100, Andrea Mayer wrote:
+> > [snip]
+> > diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > index 157baa8ecb0b..0ed5bfe99029 100755
+> > --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > @@ -488,8 +488,9 @@ cleanup()
+> >  
+> >  	# check whether the setup phase was completed successfully or not. In
+> >  	# case of an error during the setup phase of the testing environment,
+> > -	# the selftest is considered as "skipped".
+> > -	if [ "${SETUP_ERR}" -ne 0 ]; then
+> > +	# the selftest is considered as "skipped", unless a test has already
+> > +	# recorded a failure.
+> > +	if [ "${SETUP_ERR}" -ne 0 ] && [ "$ret" -ne "$ksft_fail" ]; then
+> >  		echo "SKIP: Setting up the testing environment failed"
+> >  		exit "${ksft_skip}"
+> >  	fi
+> 
+> When a test has already failed and the setup then fails, the script
+> exits with 1 and does not say that the setup failed. For example, with
+> hs-2 -> gw failing and then an error in setup_end_flv_psp(), the last
+> TEST lines in the log are:
+> 
+>     TEST: IPv6 Hosts connectivity: hs-1 -> gw                           [ OK ]
+>     TEST: IPv6 Hosts connectivity: hs-2 -> gw                           [FAIL]
+> 
+> The End PSP tests did not run. Before this patch, the setup ran before
+> any test, and cleanup() printed "Setting up the testing environment
+> failed" on every setup error. Could cleanup() print it also in this
+> case, keeping the exit code 1? Something like:
+> 
+> 	if [ "${SETUP_ERR}" -ne 0 ]; then
+> 		if [ "${ret}" -ne "${ksft_fail}" ]; then
+> 			echo "SKIP: Setting up the testing environment failed"
+> 			exit "${ksft_skip}"
+> 		fi
+> 
+> 		echo "FAIL: Setting up the testing environment failed"
+> 	fi
+> 
+> 	exit "${ret}"
 
-Low priority / nit picks for your consideration:
+OK, I will fix it.
 
-- [Low] vxlan_vnifilter_refused_fdb_update()
-  (tools/testing/selftests/net/test_vxlan_vnifiltering.sh:590) waits for…
-- [Low] The FDB regex probes in vxlan_vnifilter_refused_fdb_update()
-  (lines 582 and 592) are passed through run_cmd(), which runs…
+> >  # see __setup_rt_policy
+> > @@ -962,17 +980,29 @@ setup()
+> >  	setup_hs 1 1
+> >  	setup_hs 2 2
+> >  
+> > -	# set up the loopback addresses of the hosts used by the Policies (i.c)
+> > -	# and (i.d).
+> > -	setup_hs_lo_addr 1 1 "${END_CSID_PSP_FUNC}"
+> > -	setup_hs_lo_addr 2 2 "${END_CSID_PSP_FUNC}"
+> > -
+> >  	# set up default SRv6 Endpoints (i.e. SRv6 End behavior)
+> >  	setup_rt_local_sids 1 "2 3 4"
+> >  	setup_rt_local_sids 2 "1 3 4"
+> >  	setup_rt_local_sids 3 "1 2 4"
+> >  	setup_rt_local_sids 4 "1 2 3"
+> >  
+> > +	# testing environment was set up successfully
+> > +	SETUP_ERR=0
+> > +}
+> > +
+> > +setup_end_flv_psp()
+> > +{
+> > +	SETUP_ERR=1
+> > +
+> > +	# set up the loopback addresses of the hosts used by the Policies (i.c)
+> > +	# and (i.d).
+> > +	setup_hs_lo_addr 1 1 "${END_CSID_PSP_FUNC}"
+> > +	setup_hs_lo_addr 2 2 "${END_CSID_PSP_FUNC}"
+> > +
+> > +	# setup proxy on route entries for hosts
+> > +	setup_rt_host_proxy 1 2 "${END_CSID_PSP_FUNC}"
+> > +	setup_rt_host_proxy 2 1 "${END_CSID_PSP_FUNC}"
+> > +
+> >  	# set up SRv6 policies
+> >  	# create a connection between hosts hs-1 and hs-2.
+> >  	# The path between hs-1 and hs-2 traverses SRv6 aware routers.
+> 
+> Before this patch, __setup_rt_policy() added the proxy entry together
+> with the route of each Policy. With this patch, each scenario calls
+> setup_rt_host_proxy() instead.
+> 
+> In this v3, 4/5 deletes the proxies when the scenario ends, like the
+> routes of the Policies. So I think the proxy entry can stay in
+> __setup_rt_policy(), and in 4/5 its defer can go next to the defer of
+> the route. What do you think?
 
---
+OK, I will keep the proxy set up in __setup_rt_policy.
 
-selftests: net: test the vxlan vnifilter request limit and dump replay
-
-This extends test_vxlan_vnifiltering.sh with cases for the vnifilter
-request-size cap and the 24-bit VNI bounds. It also adds a dump/replay
-round trip, rollback of failed VNI adds and a refused FDB update. New
-helpers vni_listed(), vni_ranges() and fdb_listed() report a failed
-"bridge ... show" separately from "absent".
-
-> diff --git a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-> index 6fb5af013dacf..fb8401399b099 100755
-> --- a/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-> +++ b/tools/testing/selftests/net/test_vxlan_vnifiltering.sh
-
-[ ... ]
-
-> +# Succeed if "bridge fdb show" lists, on device $1, an entry whose line
-> +# matches the extended regex $2. A failed show returns 2, so a probe
-> +# expecting the entry to be absent cannot pass on it.
-> +fdb_listed()
-> +{
-> +	local out
-> +
-> +	out=$(bridge -netns $testns fdb show dev $1) || return 2
-> +	grep -qE "$2" <<< "$out"
-> +}
-
-[ ... ]
-
-> +vxlan_vnifilter_refused_fdb_update()
-> +{
-> +	local opts="external vnifilter local 172.16.0.1 dev veth-testns"
-> +	local zero="^00:00:00:00:00:00 dst 172.16.0.2 .*src_vni 100 .*self"
-> +	local mac=02:00:00:00:00:01
-> +
-> +	cleanup_vnifilter_api &>/dev/null
-> +	setup_vnifilter_api
-> +
-> +	run_cmd "ip -netns $testns link add vxlan-age type vxlan $opts \
-> +		 dstport 4789 ageing 1"
-> +	log_test $? 0 "refused update: create a device with ageing 1"
-> +	run_cmd "ip -netns $testns link set dev vxlan-age up"
-> +	run_cmd "bridge -netns $testns vni add dev vxlan-age vni 100 \
-> +		 remote 172.16.0.2"
-> +	log_test $? 0 "refused update: add a VNI with a remote"
-> +	run_cmd "fdb_listed vxlan-age '$zero permanent'"
-
-[Severity: Low]
-Will the single quotes around the regex survive run_cmd()? In this script
-run_cmd() does:
-
-	out=$(eval $cmd $stderr)
-
-$cmd is not quoted there, so it is word-split and globbed before eval
-re-parses it. At that point the single quotes are just literal characters
-inside the words, and they don't protect anything.
-
-That means words like .*src_vni and .*self get pathname expansion. Nothing
-in the script or lib.sh sets noglob, nullglob or failglob.
-
-If the working directory holds a dotfile whose name ends in "src_vni" or
-"self", bash would replace that piece of the regex with the filename.
-grep -E then gets a different pattern. In the usual case nothing matches
-and the words pass through unchanged.
-
-Could these two probes (here and the "still permanent" check below) call
-fdb_listed directly instead of going through run_cmd's unquoted eval?
-
-> +	log_test $? 0 "refused update: the VNI's default entry is permanent"
-> +	run_cmd "bridge -netns $testns fdb replace 00:00:00:00:00:00 \
-> +		 dev vxlan-age dst 172.16.0.3 src_vni 100 self dynamic"
-> +	log_test $? 255 "refused update: cannot replace the default entry"
-> +	run_cmd "bridge -netns $testns fdb add $mac dev vxlan-age \
-> +		 dst 172.16.0.4 src_vni 100 self dynamic"
-> +	log_test $? 0 "refused update: add a dynamic entry"
-> +	slowwait 25 eval "! fdb_listed vxlan-age '^$mac '"
-
-[Severity: Low]
-Can a failed "bridge fdb show" make this wait end early? fdb_listed()
-returns 2 when the show fails. Its comment says that is so an absence
-probe cannot pass on it. The ! here turns any non-zero status into 0,
-including 2, so slowwait would return success right away.
-
-If that happens, "the dynamic entry is aged out" reports PASS. The final
-"still permanent" check then runs before vxlan_cleanup() has done any
-ageing pass, since FDB_AGE_INTERVAL is 10 seconds. The "survives ageing"
-part of the case would not be exercised.
-
-This is the only absence probe that uses fdb_listed(), so it is the one
-place where the helper's guarantee doesn't hold.
-
-An unfixed kernel should still be caught. Without "vxlan: leave FDB state
-and flags unchanged when an update fails", the refused replace leaves
-fdb->state as NUD_REACHABLE. vxlan_fdb_info() reports
-ndm->ndm_state = fdb->state, so the final check fails anyway. The effect
-is a spurious PASS line and a skipped ageing check, not a missed
-regression.
-
-Would it work to test for status 1 explicitly, for example
-"fdb_listed ...; [ $? -eq 1 ]", instead of negating the result?
-
-> +	log_test $? 0 "refused update: the dynamic entry is aged out"
-> +	run_cmd "fdb_listed vxlan-age '$zero permanent'"
-> +	log_test $? 0 "refused update: the default entry is still permanent"
->  }
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261114221412.255825-1-alishmery18%40gmail.com
+Thanks
+Hangbin
