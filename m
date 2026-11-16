@@ -1,63 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.219
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794785973;
-	b=Cpg1N9XAyFNDMCfvjj4or6u4YC7/ZXe33ga5bIibC8frus3shp4tfeBgnSJdvFeX/326
-	 thSri5G0iqykfzzw6HbWJMDKVMp4BBgrk0cumjcUJmnswdFtNw4DVDPcYTaQVIHqDbok0
-	 2pXxU97jbjMWn1EHsdotMG4bGLiWiZA7ZojBOo/tR29p2S2ekFz7NqIZBNnroqHvVHKgn
-	 /ZR8VqkXS9yhvfX2Lv42fb6UPElMcLXsWYpbmE5uAQydsUSby3TUJra77359PTvdPoqsG
-	 8ZA3Gs6VFzlIt+YoxANVRLwWOg2rY4MhyOqfIxaDmQ1jqdspwHg05mhF+sqFvCD3Hxg==
+	t=1794788288;
+	b=nd/SaofyAum1nVwAjz2aHxG9Ru2UJLVSJ7Tk7cYldAQVu6+3lbI1ywd6l/DGMGO/qEZQ
+	 e8h6F8QjacVdQKcorJ555UbOiH9DRg6CODhhIZw4aAaqmjNhfO1N7enQAZXSyJd7sf/4A
+	 9v6lsTQDt/r28rDGVUn9JnhN6o+AI+92c6IbxApwhydnh+jIUVrHK/1gFQ0x/hdlGIbPQ
+	 ni+SrH0mbN5Uf0S8M4JqmWhR1VaOQC+Nup0mhGrlu5QfU9ZEbffYsW1kBL0LD4GMSwRGc
+	 eqFEZq505be5AuMAkBbIPkO7T8vyWpQnDCt7nvhVAd6iLaorQxM/52DSj0Wp2ElMVXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794785973;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=TqNu7M+dUQ3EhUq2ckET0QYutuCBtT7VxLyNAsn36cw=;
-	b=YZyMChfCK3F0O24c2JUCiBG8YVNeWNL91n5Nv6Suq0yXyvpYfMIXaiu2v06ROH2lT7Xd
-	 kCWyItnDAdY7aj3c/OktjSa7d5sdyn/2zShtoVXAHvlxaqE5pO5dYEXnMFeAhH1Sx+miw
-	 nBzvIVm4FZji4QAVuht7hatH2BzMskZqZJVrfASzypXvZI/ALuk2nGe/56C4FpJ9xfr8p
-	 1w31aQPZY2J+kkyuMPR8ACaBEqCvIEbkO8vucXcvfF0JDZP/vaP9+ZUdltmAEISTcFvk4
-	 Dd8shkwKYn+AzgPNOtmwTYVpacQRmmu3CNzqkeOMJTJSd1dyUMuhKFki1Uy7hGTji2w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794788288;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
+	 Cc:X-Mailer;
+	bh=bEVsen0Z4XKtG98sBbUiY6hiqLLLzzqtV9NIpCrXVCY=;
+	b=Z/Xa9/YfLh+PI3FtMp5Y0S6gqeiGs4DuKENjo2J+xVRTkG2CEnxaTkb+Dskm1UACfpzP
+	 dCq3EG1dU4DaP6L1U7FbBQdBP7+OjesN99Xt7ydWDq/A5OoY88oW57u7yDKCJ4IunHJw1
+	 BeMgwfamMtKamk3Z7NQ2f/rNey1qCYiMSIfvQeavrASGM+2mEn6yGLAWZgcQFBkQefK3D
+	 ++vE8eoxKfhlIRFEAie/fk3UO3E73rijRT0GafWztejM3GDr4zhGM7S4hdcNy5HT/g9+L
+	 9UuUuHA6x+fA1bzReQ3cwfbPN8j+vGbjN1ACxndeH2j0iIY1wwAfHxgcogz5OfocQBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hgRqg9bO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Outz9IDc;
+	arc=none smtp.remote-ip=91.218.175.219
+Received: from mta0.migadu.com (out-219.mta0.migadu.com [91.218.175.219])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D2F9A606A31F;
-	Sun, 15 Nov 2026 23:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBB3606A32C
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 00:18:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADBB3606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hgRqg9bO
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id E80E81F000C4;
-	Sun, 15 Nov 2026 23:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794785973;
-	bh=TqNu7M+dUQ3EhUq2ckET0QYutuCBtT7VxLyNAsn36cw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hgRqg9bOexODWBsqwil2KxvZNVENNDuC3ViUxLpBSJ7p5mXIQrPl/yPbsGHNrqkSi
-	 Ektvxq6Q3KZohZsizyWXmelPWpdDktK6RIjFKvx2fkMFLEmEfVQU9ZA4tnEEzuWeWZ
-	 GdpFalsIs/Nmo4QvoU7pkV8dYA8ZQYk/TN4+iCYtg9OQaK6vBk+VH8AQ9Nyk5DkGri
-	 K7ffbJe3VI3KhivzvE4y/1WBs6Oyr0mTE8d++hoF+3DEv8ZMZx/GU0ZZYKH7w7BtwG
-	 HwNrSnJ2fzGMNAq49kbqvN125pSQUZHshZs/OEoFFEbBN+B7WJP/co/mvp1/gA3OG9
-	 hnBl6r7sxS8kw==
-Date: Sun, 15 Nov 2026 18:39:31 -0500
-From: Joel Fernandes <jfern@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>, rcu@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH for-v7.5 12/14] rcutorture: Enable RCU_BOOST where
- supported
-Message-ID: <20261115233931.GC3906606@joelbox>
-References: <20261113005747.2977123-13-jfern@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Outz9IDc
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LUmjHTjauelHCTImcnlLJ9hln9wqDY9gHPAu5bGOtwM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794788284; v=1; x=1795393084;
+ b=Outz9IDcDuGE5hqx4zXYEqSTTzJQ34NOd8UC6hLRnWRc5baxtWGGR45Z6gFfympS42DOTh4M
+ 7vbj8p7UQyoA9K+6YMmegC0RcR/ZHyJtI+nP5bwJ6aRxi3nhouMEI9Z1314JnAugnxTSJ1ALhB+
+ VKoKTrgm93zxma0UbxchG/+E=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 413efdc466c6c190;
+	Mon, 16 Nov 2026 00:18:04 +0000
+X-Mizu-Trace-ID: 413efdc466c6c190
+X-Migadu-Flow: FLOW_OUT
+From: Qiliang Yuan <qiliang.yuan@linux.dev>
+Subject: [PATCH RFC 00/18] scsi: target: Add target_core_uring, an io_uring
+ based user backstore
+Date: Sun, 15 Nov 2026 19:17:53 -0500
+Message-Id: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,43 +61,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261113005747.2977123-13-jfern@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALJL+moC/x3MsQqDMBCH8VeRmz3wLHHoKvQBukqHYP5Jb4nlk
+ oogvntDx9/wfScVmKLQvTvJsGvRLTdI39H69jmBNTTTOIyTiDiO8JWrt4TK62bgr2lOHOTmJES
+ 4CKEWfwxRj/94oedjptd1/QCN/mLTbQAAAA==
+To: "Martin K. Petersen" <mkp@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ target-devel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, 
+ io-uring@vger.kernel.org, Mike Christie <michael.christie@oracle.com>, 
+ Bodo Stroesser <bostroesser@gmail.com>, Ming Lei <tom.leiming@gmail.com>, 
+ Qiliang Yuan <qiliang.yuan@linux.dev>
+X-Mailer: b4 0.13.0
 
-Hi Paul,
+TCM/USER is how a userspace process serves a LIO device, for instance
+to export distributed storage over iSCSI or vhost-scsi. All commands of
+a device go through one command ring under one mutex, the data of each
+command is copied into and out of a shared data area, and the server
+has to parse every SCSI CDB itself.
 
-Can I fold in the below diff?  Sashiko found this issue in [1]: with
-RCU_BOOST now enabled without RCU_EXPERT, its dependent options
-RCU_BOOST_DELAY and RCU_NOCB_CPU_CB_BOOST would prompt during "make oldconfig"
-for non-expert configurations.  The diff shows those prompts only with
-RCU_EXPERT; the defaults stay in effect.
+This series adds target_core_uring, a second user backstore next to
+TCM/USER, built the way ublk is:
 
-[1] https://lore.kernel.org/all/sashiko-outbox-213970@kernel.org/
+- The kernel emulates the SCSI commands. The server only sees reads,
+  writes, flushes, UNMAP and WRITE SAME as an operation, an offset and a
+  length.
+- A device has several queues. Each queue is served through io_uring
+  commands on its own ring, with no lock shared between queues.
+- Data is copied once, with pread()/pwrite() on the character device, or
+  not at all when the server registers the pages of a command as an
+  io_uring fixed buffer.
 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index 2d0132e0a90f..a0c10750b792 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -249,7 +249,7 @@ config RCU_BOOST
- 
- 
- config RCU_BOOST_DELAY
--	int "Milliseconds to delay boosting after RCU grace-period start"
-+	int "Milliseconds to delay boosting after RCU grace-period start" if RCU_EXPERT
- 	range 0 3000
- 	depends on RCU_BOOST
- 	default 500
-@@ -325,7 +325,7 @@ config RCU_NOCB_CPU_DEFAULT_ALL
- 	  Say N here if you are unsure.
- 
- config RCU_NOCB_CPU_CB_BOOST
--	bool "Offload RCU callback from real-time kthread"
-+	bool "Offload RCU callback from real-time kthread" if RCU_EXPERT
- 	depends on RCU_NOCB_CPU && RCU_BOOST
- 	default y if PREEMPT_RT
- 	help
+Patches 1-4 create the device, its queues and the character device.
+Patches 5-8 pass reads and writes to the server. Patches 9-11 handle a
+server that exits or hangs, and aborts. Patches 12-14 add flush, UNMAP
+and WRITE SAME, patch 15 adds fixed buffers. Patches 16-18 add a small
+server, a selftest and the documentation.
 
-Thanks,
-Joel
+Not covered yet: protection information, and a way for existing
+tcmu-runner handlers to move over without changes, as they implement
+SCSI rather than block commands.
+
+Exporting a 2 GiB device through tcm_loop to fio (io_uring, direct I/O,
+iodepth 32 for 4k and 8 for 1M, 6 seconds per job) on a 32 CPU VM, with
+TCM/USER and a single-threaded handler, then with this series, 32 queues
+and one server thread per queue. Both servers keep the data in memory.
+A single job is slower; the gain comes with concurrency and with large
+I/O. Three alternating runs (median, min-max in parentheses):
+
+  workload               TCM/USER (MB/s)   uring (MB/s)          change
+  4k randread, 1 job      426 (409-463)      369 (366-384)         -13%
+  4k randread, 4 jobs    1165 (1072-1253)   1524 (1413-1541)       +31%
+  4k randread, 16 jobs    920 (916-1162)    6193 (5845-6222)      +574%
+  4k randwrite, 16 jobs   793 (711-886)     5701 (5257-5706)      +619%
+  1M read, 4 jobs        6019 (5857-6047)  49460 (46706-57997)    +722%
+  1M write, 4 jobs       2791 (2649-2907)  26692 (25958-27560)    +856%
+
+Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
+---
+Qiliang Yuan (18):
+      scsi: target: uring: Introduce an io_uring based user backstore
+      scsi: target: uring: Allocate per-queue command descriptors
+      scsi: target: uring: Create a character device per backstore device
+      scsi: target: uring: Map the command descriptors into the server
+      scsi: target: uring: Queue commands until a server fetches them
+      scsi: target: uring: Hand commands out through TCMUR_IO_FETCH
+      scsi: target: uring: Complete commands with TCMUR_IO_COMMIT_AND_FETCH
+      scsi: target: uring: Copy command data with pread() and pwrite()
+      scsi: target: uring: Fail in-flight commands when the server exits
+      scsi: target: uring: Time out commands the server does not complete
+      scsi: target: uring: Drop aborted commands that are still queued
+      scsi: target: uring: Support SYNCHRONIZE CACHE
+      scsi: target: uring: Implement UNMAP
+      scsi: target: uring: Handle WRITE SAME
+      scsi: target: uring: Register command data as io_uring fixed buffers
+      selftests: target_core_uring: Add a minimal server
+      selftests: target_core_uring: Test a device exported through tcm_loop
+      Documentation: target: Describe the uring backstore
+
+ Documentation/target/index.rst                     |    1 +
+ Documentation/target/tcm-uring.rst                 |   84 ++
+ MAINTAINERS                                        |    2 +
+ drivers/target/Kconfig                             |   10 +
+ drivers/target/Makefile                            |    1 +
+ drivers/target/target_core_uring.c                 | 1126 ++++++++++++++++++++
+ include/uapi/linux/target_core_uring.h             |  126 +++
+ tools/testing/selftests/Makefile                   |    1 +
+ .../testing/selftests/target_core_uring/.gitignore |    1 +
+ tools/testing/selftests/target_core_uring/Makefile |    8 +
+ tools/testing/selftests/target_core_uring/config   |    5 +
+ .../selftests/target_core_uring/tcmur_server.c     |  310 ++++++
+ .../selftests/target_core_uring/tcmur_test.sh      |  137 +++
+ 13 files changed, 1812 insertions(+)
+---
+base-commit: 23c62304dde29abe92013d85910d03a77dada35d
+change-id: 20261115-feat-target-core-uring-d1351dfe5fe1
+
+Best regards,
+-- 
+Qiliang Yuan <qiliang.yuan@linux.dev>
 
