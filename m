@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794839405;
-	b=ZlLdnCfgaCIVoTKm32fQyjPgqnR6QEoWMOELx4LXfkt9btMCYRkJavurYx2UB5Rlkm58
-	 B9zvU5Mnf8dmAQtRj8C6+En9OiKey1QJSzH0IzAwKQXzYw9DO9i2Lb1R971A5pmOGc2mg
-	 2A2EgxkSmfKX5xLR8W/EYrYKarAVbNaegCj0k04860yefCTP0+V7R2XjU0egkxme+B8Gv
-	 KUeKXzJyvDJgg1uwpm6j74n1NRkn5K/df+PFcoQti0FPSW1PsC67SaWNpwf7vJlAeUMVB
-	 liQzwDBR5PNpX71uXUsBaTWGQXBmPvosNKZ7y6Y/ydtDl9hgP22xTOefgvSe2ObJXdA==
+	t=1794839409;
+	b=Rb7oIW5e49+gWGaPkOLrt7bMJk2CMTDkf1scj+s+MKgLgWv/hVdJekrpsbO3/bydZemw
+	 kK8vIykENmJjM8+K4PLu8zKpOrA0yfTEQ5jFX37sshCDpJxRnfp+apa+SPGOdBgglFvIR
+	 ts1O7Fne2I6SgvPnZe3oSeESwmSEKMbVOsogTEUoWxo00Se2HHxbS+yhzPYlQBBNfxKbX
+	 iClfWaQeBdw5OBWIHdGcqPpdM4tzF44HqEMh5EgOz7Jmvtk7Hq0G2i26W4Tc1h1Aonfge
+	 qXgszR1VYv9zMnKvolq38DHPyWnUxdodlyk54/czhD6LFl2ckuimzpDa2fT0ziMwBWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794839405;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794839409;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=Djq3RZOWfZKIt3UCC39UNmXjeYuoOEudxGZrjWZ7UEk=;
-	b=q1J6NYlijmM0a829AAQDbS8HoyhcSO9Nc/kaLeRfRYl7FrRIU5r48m+/3jz6RE9V96An
-	 o+SOAAkhf3IVpvQaWK1mUYQ/MPFU+tzIzPAvOI4q75jHSuR+srtX8t9MQBTnmbw9LNN3F
-	 uvNFVu/zoHy3UmX6xTv579YFMYLA9HtmR9TJSXouf9xfwv0jDO/vg64dlx0jay0XbLDW8
-	 JIiiRmedNoxwKrZ47HXDIhxMuYx1LrYKlaDRCQHEHYtkJni0gScyWw6kBi1vcttBfzYKb
-	 mqIH9qbyiONGNntPaGgyBbfRCppH2eQWeNKd4G1dfydrcfpW2ttdxG43pANxzkW9kUg==
+	bh=Vn0CoXfZNedHELRWMAV/2rl0hRsK/nJm0PDmhlk7kvw=;
+	b=rTVdzWZxU8EsA/AhmAfS0BzOlrvVFv6U1Zt8brA6X25XHMgy5FVfMbhLKDy/6XcKfnmN
+	 648C9ljNlO6kWyEHVquOS5WcEMRW+G7+8EyYEosC1Ac22XR4+ZSDM36k0zB7Urkn0oL7F
+	 OgcrLR5UvOzHQdo3u4nAZLrQyulbjdTGWUelNSbGFeZTPTTrjRxyIG5evYvV8rnIq50DG
+	 3V6oX5bls2SZ+b/QlMvEJr1/teddimRpJX9o27irTuPMsWYAxRbkx4Hq3MyieJ+SSld+a
+	 J8ZA2C9m5eOBjB55b5gbTiqUonW3ELRX2kPRL91rkiV0dp+EGWfBu+vRkp7lP1PCJhw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QpBlD6Ok;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GHu+g0NP;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C6E606A887;
-	Mon, 16 Nov 2026 14:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2080D606A335;
+	Mon, 16 Nov 2026 14:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QpBlD6Ok
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E5311F000C4;
-	Mon, 16 Nov 2026 14:30:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GHu+g0NP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEA81F000D2;
+	Mon, 16 Nov 2026 14:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794839405;
-	bh=Djq3RZOWfZKIt3UCC39UNmXjeYuoOEudxGZrjWZ7UEk=;
+	s=k20260515; t=1794839409;
+	bh=Vn0CoXfZNedHELRWMAV/2rl0hRsK/nJm0PDmhlk7kvw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QpBlD6Okka+nV7d1i9Wv1zODJ5InbxFC8/AR2fXDUp1DPQoxNed4pPzd+RHkKdoko
-	 H5O0v9rUBMImneLfKeUig1C8afA36Ky0FD+Up1m3DzjccZzvN8IwYtE2+D/nQL47i2
-	 rdd6V6bi030gLjU2kijhiMdMNzoBrUmQ6PjEL0nC7BvzZio4wmJPldVjpKf6vldpi+
-	 yVmc7EHWMq3ENHt+1VgFSRybPU8fVMdCfOTw9J6MGtR1JApKYthMuZGqTgk3X09DY1
-	 NstE6MsnQtnoI4L0w13enEtVIbl8izlM07FaedU1azbTfxTlRMVotTMSpBg4uZyEaP
-	 EBwfEluuWu1tQ==
-Subject: Re: [PATCH net-next v4 08/14] selftests: dpll: add pin priority test
+	b=GHu+g0NP6dHf1oVF30I/5L9AKWSKlhmJxzscd7xf4sijTpM4GFUC212H7hNGV5A5l
+	 tM4gnVtVI0exXD+XYfZYfTXT61lvLQZ7+xzb2wOGO1AZNfXwKJNOyS9Yj2xvpsspPR
+	 S/F/pqhTAEYexnlX7Y/YQzz1M2J3fadt/cHl5VS0fj9E6om0FudAI3THa/dCy4Dsno
+	 i0Tr6k6MyibRrY3tk00pgHTzxMfy8/gDY6PJcRtT22CmeGnUUmJV189HWJjznUONCI
+	 1plE5maNxVf9tOcjk3uSZjXJTk+8JfIU6P4Rru/Dk7uTA7GV3eiNU2TXj824pr8L1O
+	 T+BLtirSND08Q==
+Subject:
+ Re: [PATCH net-next v4 11/14] dpll: dpllsim: Add support to adjust phase
 From: netdev-bot+sashiko@kernel.org
 To: poros@redhat.com
 Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
@@ -49,11 +50,11 @@ Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
  arkadiusz.kubalewski@intel.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 16 Nov 2026 14:30:03 +0000
-Message-ID: <179483940380.3136.1462332477683774177@kernel.org>
-In-Reply-To: <20261112130359.840795-9-poros@redhat.com>
-References: <20261112130359.840795-9-poros@redhat.com>
-X-sashiko-severity: Medium
+Date: Mon, 16 Nov 2026 14:30:07 +0000
+Message-ID: <179483940736.3136.8014660218595686890@kernel.org>
+In-Reply-To: <20261112130359.840795-12-poros@redhat.com>
+References: <20261112130359.840795-12-poros@redhat.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -66,181 +67,90 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] In test_pin_priority_get_set
-  (tools/testing/selftests/drivers/dpll/dpll_features.sh), the candidate…
-- [Low] test_pin_priority_get_set (dpll_features.sh, line 93) ignores the
-  exit status of dpll_pin_get_prio: `before=$(dpll_pin_get_prio…
-- [Low] Part of the commit message rationale is out of date after v4.
+- [Low] Documentation/driver-api/dpllsim.rst is not updated for the new
+  phase-adjust feature, and the series never updates it later.
 
 --
 
-selftests: dpll: add pin priority test
+dpll: dpllsim: Add support to adjust phase
 
-This adds test_pin_priority_get_set() to dpll_features.sh. The test writes
-the current priority of a spare input pin back, sets a new priority from a
-list of candidates, reads it back and restores the original. The
-dpllsim_add_pin helper gains an optional priority argument, and the
-standard and stress simulator devices now set priorities on their input
-pins.
+This adds phase adjust get and set callbacks to the dpllsim input and
+output pin ops. Each pin advertises a 100 ps granularity and a symmetric
+range that fits a 32-bit signed value. The stored value is reset to zero
+on every live transition.
 
-> The range of priorities a device accepts is
-> not advertised over netlink, so the test tries one below the current
-> value and then the small values every driver accepts, since a large
-> current value may mark an unused pin outside the settable range, as the
-> ice driver does with 255. A driver may still refuse all of them for a
-
-[Severity: Low]
-Is this rationale still accurate after the v4 change? In v4,
-test_pin_priority_get_set() first writes the current value back, and
-returns if the device refuses it:
-
-    if ! dpll_pin_set_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID" "$before"; then
-        ...
-        return
-    fi
-
-So a current value outside the settable range, such as 255 on ice, ends
-the test before the candidate loop runs. The fallback to 1 and 7 now
-matters only when before is 0, or when the device accepts its current
-value back but refuses before - 1.
-
-Also, "the small values every driver accepts" is followed by "A driver may
-still refuse all of them". These two statements contradict each other.
-
-> The standard device lays its inputs out as gnss0 with priority 0 and
-> ext0 with priority 1, and the stress devices get random priorities on
-> their input pins.
-
-create_stress_device() gives ext0 a fixed priority of 1, and
-test_deploy_cycle() uses the fixed values 0 and 1. Could the message say
-that only the extra input pins of the stress device get random
-priorities?
-
-> diff --git a/tools/testing/selftests/drivers/dpll/dpll_features.sh b/tools/testing/selftests/drivers/dpll/dpll_features.sh
-> index 0a00a18bded2c..f7340bd89602f 100755
-> --- a/tools/testing/selftests/drivers/dpll/dpll_features.sh
-> +++ b/tools/testing/selftests/drivers/dpll/dpll_features.sh
+> diff --git a/drivers/dpll/dpllsim/dpll.c b/drivers/dpll/dpllsim/dpll.c
+> index 0cce8fef232cd..0260bffd15700 100644
+> --- a/drivers/dpll/dpllsim/dpll.c
+> +++ b/drivers/dpll/dpllsim/dpll.c
 
 [ ... ]
 
-> @@ -70,6 +71,79 @@ pin_tune_capable()
->  	return 1
->  }
+> @@ -197,6 +231,8 @@ static const struct dpll_pin_ops dpllsim_output_pin_ops = {
+>  	.frequency_set = dpllsim_pin_frequency_set,
+>  	.direction_get = dpllsim_pin_direction_get,
+>  	.state_on_dpll_get = dpllsim_pin_state_get,
+> +	.phase_adjust_get = dpllsim_pin_phase_adjust_get,
+> +	.phase_adjust_set = dpllsim_pin_phase_adjust_set,
+>  };
 >  
-> +test_pin_priority_get_set()
-> +{
-
-[ ... ]
-
-> +	pin_tune_capable priority-can-change "DPLL pin priority set/get" \
-> +			 "priority cannot change" || return
-> +
-> +	before=$(dpll_pin_get_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID")
-> +	if [ -z "$before" ]; then
-> +		dpll_log_test_skip_or_fail "DPLL pin priority set/get" \
-> +		    "prio not reported"
-> +		return
-> +	fi
+>  static const struct dpll_pin_ops *
+> @@ -212,6 +248,9 @@ static void dpllsim_pin_props(struct dpllsim_pin *pin,
+>  {
+>  	prop->type = pin->type;
+>  	prop->board_label = config_item_name(&pin->item);
+> +	prop->phase_range.min = -DPLLSIM_PHASE_ADJUST_MAX;
+> +	prop->phase_range.max = DPLLSIM_PHASE_ADJUST_MAX;
+> +	prop->phase_gran = DPLLSIM_PHASE_ADJUST_GRAN;
+>  
+>  	switch (pin->type) {
+>  	case DPLL_PIN_TYPE_GNSS:
+> @@ -275,6 +314,7 @@ static void dpllsim_pin_reset(struct dpllsim_pin *pin)
+>  	pin->state = DPLL_PIN_STATE_DISCONNECTED;
+>  	pin->frequency = pin->cfg_frequency;
+>  	pin->prio = pin->cfg_prio;
+> +	pin->phase_adjust = 0;
+>  }
 
 [Severity: Low]
-Should the exit status of dpll_pin_get_prio() be checked here? When the
-dpll tool fails, __dpll_pin_dev_field() returns 1 with empty output:
+This isn't a bug, but should Documentation/driver-api/dpllsim.rst be
+updated for phase adjust? The later patches in the series don't touch it
+either.
 
-    out=$(dpll pin show id "$pin_id" -j 2>/dev/null) || return 1
+The doc paragraph about netlink-settable state only covers frequency and
+priority:
 
-So a failed query and a pin with no prio in its parent-device nest both
-end up as "prio not reported". On a device provided by the user, that is
-logged as a skip, not a failure.
+    Every live transition starts from the configured values. A frequency or
+    a priority set over netlink while the instance is live is reported back
+    over netlink, it is not written to the ``frequency`` or ``prio``
+    attribute and is gone once the instance is taken down.
 
-pin_tune_capable(), just above, already tells a failed query apart from a
-missing capability. The later frequency and phase adjust tests in the
-series also make that distinction for their getters.
+Phase adjust has no configfs attribute, so it has no configured value.
+dpllsim_pin_reset() always sets it back to 0.
 
-> +	# A device may report a priority it does not accept back, one that
-> +	# marks an unused pin for instance, and the pin could not be
-> +	# restored then. Writing the current value changes nothing, so
-> +	# that is tried before the pin is touched.
+The doc also lists the prio range and the frequency table for each pin
+type. It doesn't mention any of these:
+
+  - the advertised phase adjust range of -2147483600..2147483600 ps
+  - the 100 ps granularity
+  - the reset to 0 on each live transition
+  - output pins accept phase adjust as well as input pins
+
+Would a sentence or two covering these help users of the simulator?
+
+The input pin state setter added earlier in the series is also missing
+from that paragraph.
+
+>  
+>  /* Build sim->pins in registration order, the order the pins were created */
 
 [ ... ]
-
-> +	# The accepted range is not advertised, so try one below the current
-> +	# value and then small values, a refusal of all of them is a skip on
-> +	# a device the user provided, the simulator accepts every value
-> +	# tried here.
-> +	target=""
-> +	for candidate in $((before - 1)) 1 7; do
-> +		[ "$candidate" -ge 0 ] && [ "$candidate" != "$before" ] ||
-> +			continue
-> +		if dpll_pin_set_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID" \
-> +				     "$candidate"; then
-> +			target=$candidate
-> +			break
-> +		fi
-> +		reason=${DPLL_LAST_ERR%%$'\n'*}
-> +	done
-> +	if [ -z "$target" ]; then
-> +		dpll_log_test_skip_or_fail "DPLL pin priority set/get" \
-> +		    "cannot set a new prio${reason:+, $reason}"
-> +		return
-> +	fi
-> +	after=$(dpll_pin_get_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID")
-> +	if [ "$after" != "$target" ]; then
-> +		check_err 1 "priority expected $target, got '$after'"
-> +	fi
-
-[Severity: Medium]
-Can this candidate order make the device switch its reference in
-automatic mode? pin_is_spare() accepts a pin whose state is selectable:
-
-    (.state == "disconnected" or
-     .state == "selectable")) and
-
-A lower number means a higher priority. Both before - 1 and then 1 move
-the spare pin toward or above the current reference.
-
-For example, take a reference at prio 2 and a spare pin at prio 3. Then
-before - 1 ties with the reference, and 1 puts the spare pin above it.
-
-Candidate 7 is tried whenever before is not 7. So when before < 7, it
-lowers the priority instead.
-
-After the set, only the prio is read back and the pin state is not
-checked. A reference switch on hardware (ice, or zl3073x when the ref is
-selectable) would go unnoticed.
-
-On a non-revertive device, the switch can remain after the deferred
-restore, and the restore still reports success.
-
-There is also no re-check like the one in test_pin_state_transitions():
-
-    if [ "$mode" = automatic ] && [ "$before" = connected ]; then
-        dpll_log_test_skip_or_fail "DPLL pin state transitions" \
-            "spare input pin became the reference"
-        return
-    fi
-
-test_pin_state_transitions() runs first. Through its
-automatic/selectable/connected exception, it accepts the pin being left
-connected.
-
-Could test_pin_priority_get_set() then change the priority of what is now
-the device's reference? When before < 7, it would lower that priority
-with 7.
-
-The script header warns that a spare pin with a valid signal can still be
-selected. Would it make sense to try values that lower the priority
-first, or to check the pin state before and after the set?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112130359.840795-1-poros%40redhat.com
