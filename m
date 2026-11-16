@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794857204;
-	b=cJewfx+RT/3bpamtG5xWuRJtxq874hNTxW6nUWSbus06P+vOYFWUBoBZ7DErab6VpaiF
-	 W6aCRiT7mzNpHnqCHymJFbA4qb91LNCzalcInauT3DDE466UInF1k8EM5dLkpWSIaCOca
-	 bLFl8QVw8PKrPCLKbrxUaz2HpdsREUwOM3MyIQB3SdedOmlS+ebfrtGYNZ3TZzbi+9mwN
-	 o9qViQFLx4RF3KEIczO4rI7m5phSfwFO/8YvrsGJZD/Pjr7feMMBr/mTy36Kl9T6TPn4E
-	 e+7LIDvhFHxLnzQ4AtFV83uowR1jyq3enY/AMMTn0SOsn+uzIjXfmzsfRv1FmZD/Tdw==
+	b=hA+5tvBfxyRArBdtSjvqu+jICw9cdIQHSC5rgILDwf8YLqj/TqinsrGdNz/X2Rf2b47q
+	 OEkzpoGPHutgn7IzrQumqQwOOvmP7MKpRM/kULMcbc5O5v656uuTWLZCeOtzMeOeXzP1r
+	 ZFHP5Dh4NjJkI61tqdo5LaMN8KYedZtM+bpNgx/RcqVApIcK2fgxfqmLv0gyEZs4ZpH4E
+	 PU67sBTES8PB8j7s0KJD2IpwOiJ2O6nSsGLDof0z/QKYIwEh5LwFeo32UxdA784WmLlfO
+	 EVA+RWKYLjIysCanwnnaSTyR9GIfGpza5NWa/xbTDEfIPd0sqnal+prs9LFSAbw4xtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794857204;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=rTAGMePT7zV6AmlwtAYGxs2h0IDd3cQ2XFpKwG/Bz54=;
-	b=yhwNGWBl1at6AVVPmLGz6HANekPgYk11rXWp1cwmLC9TOApKsZEELOOE/2lX3fqEo1IX
-	 +XFkRbIauBGtByViFoXJdrucNg4E19pA+t+70hYjkw/WeOxPm45CCCbw4yss4oeROSq6i
-	 BsvIWoARMFZhT4uPng5rPg/2i3q6u7Vmy8pn5VRyGqcUsTRrExvpKnfcoVTc2Uw9y3fkj
-	 wmxufaTtTc7Sosk6BftRBv3rR9SAaMmLaB7yVBw6hhSQ6Vz+kYcWDjG8Llu+JddYD8Ou2
-	 0day9de0ZaSEjcLmdDTCRm/Dtv0QeZSwNAWh/spoytoqqJUaD2YDXJSI0VH1qrKDAIg==
+	bh=SHiqyxpSRuXjBwldqdTOkC53dlqhLf2Ob/N30s9Ui8g=;
+	b=u0e4+nWi5ehlNhQNem6AfpIHKbgAyUrnbnVDwKnEEtn8eJT8X4odJrWGWkJd4D868bHA
+	 oBNAHaUieIWE7iD1ghWyEUktk1MBdMK6g+wOAfAZ6uJIgdWXGp2lLTEWpQO7puC2SBM9I
+	 HZ3MGAv6gYcQJ3Ay/OLal6rpRY/DJR2zhOgSZWZ7nlTouVCX6ge6a8rEmo6i6vX3euvWA
+	 +w4YCKkUhdVZkL+y1tc3tPUUe7v2wdZQzCBgLHB8AlmWAmUBikKVv+Fea7vD7uVCfIj8n
+	 /SWZMpwLp97LsLSb78M8rjjM1/mu8t2/r5AA6CFRNbT8jJi5yRxjcTmGO4I+wBxBJvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=SuXMG3yd;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ZprA2n86;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5B5606A886;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7653F606A889;
 	Mon, 16 Nov 2026 19:26:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F5B5606A886
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7653F606A889
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=SuXMG3yd
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ZprA2n86
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794857202;
-	bh=rTAGMePT7zV6AmlwtAYGxs2h0IDd3cQ2XFpKwG/Bz54=;
+	s=smtpout1; t=1794857203;
+	bh=SHiqyxpSRuXjBwldqdTOkC53dlqhLf2Ob/N30s9Ui8g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SuXMG3ydw6IOTlw+ASQoIpUElxknJRtDDXayA0byNr963ToQWGz8LTvFPttFX4s9+
-	 EqggALf6eAmDXA7tWBHA3tHPyfFGIc5os5rOKvhfnDD6j14IASmvn3bB7bWUvo5W6B
-	 IxIeVl55/Ej9k6Lah9ubA5DRFtWXO1hRoD+pKcd6xmvQ0PdR410Vg2eOzcOuW++SSo
-	 a3dFbxdhZ+FuWQRL3Pjpe5a17LxcpoxQxckkuzyKAssOICSDuxe/F0jaj61nCg+Eds
-	 h4VCb4kcRpVc8iERnlTbdr7DUidQW6E8Q9/bWFOGos/fOx2I1fnbU1Zb2WG3cPWlHy
-	 R99bVRhQFrUuA==
+	b=ZprA2n86z158GGBogvg35b2jJBG751QFyC4MG3s0yuP69x9OL5y37rs/vXfoNfqiP
+	 aTiivVz4nc4Mv6/7X3B2aJrvDeOu/AlIxS5h9x2MEfRJevWWN4F7zJC6TLz14/YS+0
+	 T+HGHOK38Xc0EJTuhFCobzOVOD8GBrZY/AZNq6cczgbQucs1Td+VeYQDNLEKrGC//k
+	 FynuwJtZcNj48rquqwGK4xqQ+3G/UXaQOYGgW+fi3Q6eo3K5fLwkRFnyAEGOBGNFG1
+	 oa4BQ5kAXQNUfweeiI90yIQ0AwueuAaBW/LezjcxSziR7cRRRIbULrld8r28BmC77a
+	 L4eg5k/9Dzz/A==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSyXf5SD9zRPg;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSyXf6ZfWzQjP;
 	Mon, 16 Nov 2026 14:26:42 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: jstultz@google.com,
@@ -65,9 +65,9 @@ Cc: linux-kernel@vger.kernel.org,
 	akpm@linux-foundation.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v1 6/8] sched/deadline: Use the root domain a proxy-migrated task runs in
-Date: Mon, 16 Nov 2026 14:26:36 -0500
-Message-Id: <20261116192638.233125-7-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH v1 7/8] lib: Add test_proxy_exec, kernel mutexes that user space can hold
+Date: Mon, 16 Nov 2026 14:26:37 -0500
+Message-Id: <20261116192638.233125-8-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
 References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
@@ -82,112 +82,207 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With proxy execution, find_proxy_task() can queue a task blocked on a
-mutex on the runqueue of the mutex owner. It ignores the affinity of
-the task, which does not run there. The task returns to p->wake_cpu when
-it is woken.
+Proxy execution acts on tasks blocked on a struct mutex. To test it,
+user space must block tasks on a kernel mutex in a chosen way:
+- hold the mutex for a chosen time;
+- block on it from a chosen task and CPU;
+- take two mutexes in opposite orders.
 
-__sched_setscheduler() checks that the affinity of a task covers its
-root domain before it lets the task use SCHED_DEADLINE. It takes the
-root domain from the runqueue the task is on. sched_dl_overflow() admits
-the bandwidth of a task that enters the class in the root domain of
-task_cpu(). Both predate proxy execution, when a task was always queued
-on a CPU it can run on.
+No system call gives that control. The mutexes that system calls take
+are held for a short time that user space does not choose. Their
+locking can change with the subsystem. And user space cannot make two
+tasks deadlock on two kernel mutexes.
 
-When the mutex owner is in another root domain, both use the wrong one.
-sched_setattr() fails with EPERM for a deadline task that waits for the
-mutex, and for a task that asks for SCHED_DEADLINE while it waits. In a
-test with two cpuset partitions, both calls failed. Without proxy
-execution they work.
+Add a test module with eight mutexes and a debugfs file. A write to the
+file runs one command:
+- hold a mutex while busy or asleep;
+- take a mutex, interruptibly or not;
+- take two mutexes, one inside the other. The inner lock is killable,
+  so that a test can end a deadlock it made.
+The write returns when the command is done.
 
-Fix this by adding task_home_cpu(), which returns p->wake_cpu for such a
-task, and by using its root domain in both places. An affinity change
-or a CPU hotplug can leave p->wake_cpu stale while the task is queued
-elsewhere. task_home_cpu() then returns an active CPU of the task's
-mask.
+The selftest added by the next patch uses it.
 
-Fixes: b049b81bdff6 ("sched: Handle blocked-waiter migration (and return migration)")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/sched/deadline.c |  2 +-
- kernel/sched/sched.h    | 23 +++++++++++++++++++++++
- kernel/sched/syscalls.c |  9 +++++++--
- 3 files changed, 31 insertions(+), 3 deletions(-)
+ lib/Kconfig.debug     |  11 ++++
+ lib/Makefile          |   1 +
+ lib/test_proxy_exec.c | 132 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 144 insertions(+)
+ create mode 100644 lib/test_proxy_exec.c
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index d14ce3615ba6..c55967135df0 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -4625,7 +4625,7 @@ int sched_dl_overflow(struct task_struct *p, int policy,
- 	if (new_bw == p->dl.dl_bw && counted)
- 		return 0;
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 2d22638ec13a..8d032d7fa387 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1361,6 +1361,17 @@ config TEST_CSD_LOCK
  
--	cpu = counted && p->dl.dl_bw ? p->dl.dl_bw_cpu : task_cpu(p);
-+	cpu = counted && p->dl.dl_bw ? p->dl.dl_bw_cpu : task_home_cpu(p);
- 	dl_b = dl_bw_of(cpu);
+ 	  If unsure, say N.
  
- 	/*
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f80ea5541b3f..7f5e45a86285 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2585,6 +2585,29 @@ static inline int task_on_rq_queued(struct task_struct *p)
- 	return READ_ONCE(p->on_rq) == TASK_ON_RQ_QUEUED;
- }
- 
++config TEST_PROXY_EXEC
++	tristate "Test module for proxy execution"
++	depends on DEBUG_FS
++	help
++	  This builds the "test_proxy_exec" module. It creates kernel
++	  mutexes that user space can hold, take and chain through
++	  debugfs. The selftests in tools/testing/selftests/sched/proxy_exec
++	  use it to block tasks on a mutex in a chosen way.
++
++	  If unsure, say N.
++
+ config TEST_LOCKUP
+ 	tristate "Test module to generate lockups"
+ 	depends on m
+diff --git a/lib/Makefile b/lib/Makefile
+index a2afe954805c..8add2a1473df 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -101,6 +101,7 @@ obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
+ obj-$(CONFIG_TEST_CSD_LOCK) += test_csd_lock.o
+ obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
++obj-$(CONFIG_TEST_PROXY_EXEC) += test_proxy_exec.o
+ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+ obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
+ obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
+diff --git a/lib/test_proxy_exec.c b/lib/test_proxy_exec.c
+new file mode 100644
+index 000000000000..d3f7af3222e8
+--- /dev/null
++++ b/lib/test_proxy_exec.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Return the CPU where @p runs, or will run. Proxy execution can queue a
-+ * task blocked on a mutex on the CPU of the mutex owner. The task does
-+ * not run there. It returns to p->wake_cpu when it is woken. The caller
-+ * holds the rq lock of @p.
++ * Test module for proxy execution: kernel mutexes that user space can
++ * hold, take and chain.
++ *
++ * Proxy execution acts on tasks blocked on a struct mutex. User space
++ * cannot hold a kernel mutex for a chosen time, nor make two tasks take
++ * two of them in a chosen order. This module lets it do both. See
++ * tools/testing/selftests/sched/proxy_exec.
++ *
++ * Write one command to <debugfs>/test_proxy_exec/op:
++ *   hold I MS        lock mutex I, busy-wait MS ms, unlock
++ *   hold_sleep I MS  lock mutex I, sleep MS ms, unlock
++ *   take I           lock mutex I, unlock
++ *   take_intr I      mutex_lock_interruptible(I), unlock if acquired
++ *   pair A B MS      lock A, busy-wait MS ms, lock B killable, unlock both
++ * The write returns when the command is done. It fails with EINTR if a
++ * signal interrupted take_intr or the inner lock of pair.
++ *
++ * Two tasks that run pair with the mutexes in opposite orders deadlock.
++ * A fatal signal ends the deadlock.
 + */
-+static inline int task_home_cpu(struct task_struct *p)
++#include <linux/debugfs.h>
++#include <linux/delay.h>
++#include <linux/init.h>
++#include <linux/ktime.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/uaccess.h>
++
++#define TPE_NR_MUTEX	8
++#define TPE_MAX_MS	10000
++
++static struct mutex tpe_mutex[TPE_NR_MUTEX];
++/* One lockdep class per mutex: "pair" nests them. */
++static struct lock_class_key tpe_key[TPE_NR_MUTEX];
++static struct dentry *tpe_dir;
++
++/*
++ * Busy-wait @ms milliseconds. The caller can be preempted. cond_resched()
++ * gives a kernel without preemption a place to do it.
++ */
++static void tpe_busy_wait(unsigned int ms)
 +{
-+	int cpu = p->wake_cpu;
++	ktime_t end = ktime_add_ms(ktime_get(), ms);
 +
-+	if (!sched_proxy_exec() || !p->is_blocked || !task_on_rq_queued(p))
-+		return task_cpu(p);
-+
-+	/*
-+	 * An affinity change or a CPU hotplug can leave wake_cpu stale
-+	 * while the task is queued elsewhere.
-+	 */
-+	if (cpumask_test_cpu(cpu, p->cpus_ptr) && cpu_active(cpu))
-+		return cpu;
-+	cpu = cpumask_any_and(p->cpus_ptr, cpu_active_mask);
-+	return cpu < nr_cpu_ids ? cpu : task_cpu(p);
++	while (ktime_before(ktime_get(), end)) {
++		cpu_relax();
++		cond_resched();
++	}
 +}
 +
- static inline int task_on_rq_migrating(struct task_struct *p)
- {
- 	return READ_ONCE(p->on_rq) == TASK_ON_RQ_MIGRATING;
-diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index 59d78ae6b9fd..a88a6ddc500e 100644
---- a/kernel/sched/syscalls.c
-+++ b/kernel/sched/syscalls.c
-@@ -647,7 +647,12 @@ int __sched_setscheduler(struct task_struct *p,
- #endif /* CONFIG_RT_GROUP_SCHED */
- 		if (dl_bandwidth_enabled() && dl_policy(policy) &&
- 				!(attr->sched_flags & SCHED_FLAG_SUGOV)) {
--			cpumask_t *span = rq->rd->span;
-+			/*
-+			 * Use the root domain @p runs in. Proxy execution can
-+			 * have queued it in the root domain of a mutex owner.
-+			 */
-+			struct root_domain *rd = cpu_rq(task_home_cpu(p))->rd;
-+			cpumask_t *span = rd->span;
- 
- 			/*
- 			 * Don't allow tasks with an affinity mask smaller than
-@@ -655,7 +660,7 @@ int __sched_setscheduler(struct task_struct *p,
- 			 * will also fail if there's no bandwidth available.
- 			 */
- 			if (!cpumask_subset(span, &p->cpus_mask) ||
--			    rq->rd->dl_bw.bw == 0) {
-+			    rd->dl_bw.bw == 0) {
- 				retval = -EPERM;
- 				goto unlock;
- 			}
++static ssize_t tpe_op_write(struct file *file, const char __user *ubuf,
++			    size_t len, loff_t *ppos)
++{
++	unsigned int a, b, ms = 0;
++	char buf[64];
++	int ret = 0;
++
++	if (len >= sizeof(buf))
++		return -EINVAL;
++	if (copy_from_user(buf, ubuf, len))
++		return -EFAULT;
++	buf[len] = '\0';
++
++	if (sscanf(buf, "hold_sleep %u %u", &a, &ms) == 2) {
++		if (a >= TPE_NR_MUTEX || ms > TPE_MAX_MS)
++			return -EINVAL;
++		mutex_lock(&tpe_mutex[a]);
++		msleep(ms);
++		mutex_unlock(&tpe_mutex[a]);
++	} else if (sscanf(buf, "hold %u %u", &a, &ms) == 2) {
++		if (a >= TPE_NR_MUTEX || ms > TPE_MAX_MS)
++			return -EINVAL;
++		mutex_lock(&tpe_mutex[a]);
++		tpe_busy_wait(ms);
++		mutex_unlock(&tpe_mutex[a]);
++	} else if (sscanf(buf, "take_intr %u", &a) == 1) {
++		if (a >= TPE_NR_MUTEX)
++			return -EINVAL;
++		ret = mutex_lock_interruptible(&tpe_mutex[a]);
++		if (!ret)
++			mutex_unlock(&tpe_mutex[a]);
++	} else if (sscanf(buf, "take %u", &a) == 1) {
++		if (a >= TPE_NR_MUTEX)
++			return -EINVAL;
++		mutex_lock(&tpe_mutex[a]);
++		mutex_unlock(&tpe_mutex[a]);
++	} else if (sscanf(buf, "pair %u %u %u", &a, &b, &ms) == 3) {
++		if (a >= TPE_NR_MUTEX || b >= TPE_NR_MUTEX || a == b ||
++		    ms > TPE_MAX_MS)
++			return -EINVAL;
++		mutex_lock(&tpe_mutex[a]);
++		tpe_busy_wait(ms);
++		ret = mutex_lock_killable(&tpe_mutex[b]);
++		if (!ret)
++			mutex_unlock(&tpe_mutex[b]);
++		mutex_unlock(&tpe_mutex[a]);
++	} else {
++		return -EINVAL;
++	}
++	return ret ? ret : len;
++}
++
++static const struct file_operations tpe_op_fops = {
++	.owner	= THIS_MODULE,
++	.write	= tpe_op_write,
++	.llseek	= noop_llseek,
++};
++
++static int __init tpe_init(void)
++{
++	int i;
++
++	for (i = 0; i < TPE_NR_MUTEX; i++) {
++		mutex_init(&tpe_mutex[i]);
++		lockdep_set_class(&tpe_mutex[i], &tpe_key[i]);
++	}
++	tpe_dir = debugfs_create_dir("test_proxy_exec", NULL);
++	debugfs_create_file("op", 0200, tpe_dir, NULL, &tpe_op_fops);
++	return 0;
++}
++module_init(tpe_init);
++
++static void __exit tpe_exit(void)
++{
++	debugfs_remove_recursive(tpe_dir);
++}
++module_exit(tpe_exit);
++
++MODULE_DESCRIPTION("Kernel mutexes for the proxy execution selftests");
++MODULE_LICENSE("GPL");
 -- 
 2.47.3
 
