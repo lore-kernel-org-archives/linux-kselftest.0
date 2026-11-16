@@ -1,74 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794849107;
-	b=H1yluEQwcDbQZAVck7VgyxnNrJb60is0u+k5luSpwlvFyySGYaYcG14QD6RKzQDamlQK
-	 4ZobOdHFbYKD9V5sebWUGeRyg5Q+aDj7VGaGEx4gYSIw909pnv5BxMso7v2MagpHL5CAs
-	 YxDCbM4RiJNh+x0dkiexfcD8OfilGlM8tDY88jWAEOmUDhUjcIhqYHK721poSHf+V68RH
-	 Qpyw6KnZH1PukRNmXXpSMmLjOfwnJ3+lIRGyE1Y+FMEX+apD+DS2ybN293h0EfeBk1EgA
-	 +YufdOX04CJbb8h+IbqfNbpmXg9U5UKkw02PQXnddydRfGT86NsH7fA9JSAs57azjYQ==
+	t=1794849310;
+	b=0SFa1Z9fYCW0A1CTzkIhfeGqiqkkUDygq1Q7/Piv6psfRXGI5eGL/wf0GwcIukFSFaiu
+	 3Exi1Q5+KDwux7HPFLztFoBaZmNMZFFEUfMSJfFT9i+759WsJZiO2Pyj1Blku24WlQ4Sh
+	 nC+b4PH2pN5GWV/YebFSYOykANDidDpqWtS6OKgV+q0S+cNXDeIK9IDjWsarN1H3QEkhk
+	 0A7dMAZY2pzwCRMAs1eGvYCYn++b91XlPZHS+JfmJ71vksxCk3hFIvhY5Aoz0FmF4wPT7
+	 G8xUQu24prLAqcUwWLGywKG22bvm1WGo1502YrRVCHPMhQIj37VVdIKUN75ngW6x7Ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794849107;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794849310;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=XSh28i+VhSML98fbPpvhJzYzMwMr+W1AdTaomqWNWcI=;
-	b=mOFsvwcFTFjn6zyDx550MgBVddNxKhKgqm/8BeZU7y9hEOrDWu8jcT0y69bix41ddz5q
-	 TeqyCIjCsPqaufHrLHRMNnb13nhpBZ/GFFtaQX1m6PHPbuPSlDM363Hew0lK1jAPMiNsf
-	 VyBg94GHyymXcu9gYE2qkGsyVESdK2Eiudt8Vxmwp57XjLMiKcTwtml+yAXVS9V35GQ9M
-	 07kmN6KpGitF7uZ/eiytLPm9GZrqbF60htlRRwOW4qxiUcdmg+9l1/oJHroW4UiA/SXUA
-	 /HAd8PVeOKVSdd4O8YEpky1Pdrb/3LGgHo0NLJy/AUx3y94WYxCj9z4N/QumaSsNd6A==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=SnIAL9Ld5dmry2xIKJXTc5l7jOobd9Cf0HDPQZMDLm0=;
+	b=T5OsUWiS0/pp89YdWQk/ZmBpP93w3JgZa/uQh2vmFe710fGquFQfJpwxCtjmO/BAyIX6
+	 EZQStXFq96Fz8OFpf7edn98gbpYA+QVuVTZoO9EwUS+oSm+q1sq/xwWZrS/6omupfRm8r
+	 k2kX8LIEla5B+ONhf1oOj/6hHkfcVeVMnJYUMbAS8YZ2Xbifo9cx2iZWYTet/Jy/xz+fa
+	 /BdNx+3bv2sy2srCkvdw6eSevf/aHPqtXouU1IPMYHPr+X+GNVLYlzuE7KUgRDEzM8GAg
+	 m7RS4e9P0BRyD6xoMfIXWpSrP3kcaa5cYZC1HfUBuOtPm1fi6qTNXjAWCLOtETLawvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fAdSLYMJ;
-	arc=none smtp.remote-ip=209.85.210.198
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BPeAPlk+;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C499B606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:11:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C499B606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC28C606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:15:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC28C606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fAdSLYMJ
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8a06750c74fso3442263b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 09:11:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BPeAPlk+
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdb45e96d2bso1516495a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 09:15:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794849106; x=1795453906; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XSh28i+VhSML98fbPpvhJzYzMwMr+W1AdTaomqWNWcI=;
-        b=fAdSLYMJ506+m+diwF6sFIbKTIywITxdgd/t8G3MxgiF5OVoSL5ZC1zK6LiBufXCX/
-         kvnhmlRoHgNzszyclZVB6Dn8Ez3iPNphBPeMp+BHzo33ndkbg9Avc/IOq5Q1jJ9uuwSZ
-         B0wAlkywavz1RYVEanbvdZAgSx3dK5HuI7VyuegEwDxwnRyAbiAiUmrmbfYTB2uMA9ci
-         eBUYBEjvL/M8WJhax76OndVS1Xd/tyXgvRlvl52mu5Pm3413we7w3lHoarUBVuwJanHB
-         x1OyrQC7Tr1h0i/4l9bN6llc6NjEQ1Rjytk3sde0vFJyRCN/W5JAu8qrn1ojO497A93i
-         wvRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794849106; x=1795453906;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794849309; x=1795454109; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XSh28i+VhSML98fbPpvhJzYzMwMr+W1AdTaomqWNWcI=;
-        b=n3mkO16zkKKRcYuuO69yhHVTz5nDlBxAeCPYuLBRuOeK4Koj6UTkDTh0QgybcHi1bq
-         3SEZhxcEle/pRg2xhRCjXf2MwkNzuwCIaQmjrQ8U9SEdLnRbOB2Vm4SQGm3Qzj7HY1Se
-         Y0C2pFbiavSQWKsOZjUXzHO+CAuQK7jd5LYCBYMEpnbTCakLsxF7GTvaZE5FjZ4kWIGV
-         xa23Pf/pD2XZaCuWAbTfz98wC5SXE6/QWldlGjLqxL0IfL6fh6keRdxExMSqhy7Ggehw
-         fYkqAB0yRIcql1dAOnzUrlNDNJ1Hzid+WUjZQYzd7kIINfKYyikv0AjtKHLfs/qXgepN
-         ibqg==
-X-Forwarded-Encrypted: i=1; AL+hErFc/BGAj2byQH5zZEiDmkevKOp1aPyXRN34H0AC9tCE+Ee1tnpYtpL8jU30uyeeW/3I7FxEIOXISnduVI8zdP8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9zYOuzSXNDX/OBT9/tNEUicORiEVp8fN/LGGnQKNa9suoHwfDw
-	4DFruyP5Kg5mkPLWQrgc1Q5aZ7SKbbtEhtuRDyuzD/ue2MiVA5k8N72242rhxmtLQ7CIk540kxh
-	zJyMPsQ==
-X-Received: from pffi16-n2.prod.google.com ([2002:a05:6a00:c290:20b0:8a2:1bc3:8884])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1a87:b0:89f:9ea6:1ddb
- with SMTP id d2e1a72fcca58-8beb619b3e6mr9177875b3a.23.1794849105715; Mon, 16
- Nov 2026 09:11:45 -0800 (PST)
-Date: Mon, 16 Nov 2026 09:11:44 -0800
-In-Reply-To: <CA+EHjTyqJfGS+5UajX=RYTAG-qfhZ-vmGi=1SixXydWhwGHLUA@mail.gmail.com>
+        bh=SnIAL9Ld5dmry2xIKJXTc5l7jOobd9Cf0HDPQZMDLm0=;
+        b=BPeAPlk+jRpLnePRs+QNuzBU6xDP3ZVzV0UCcs30Ph5AFci32D8BA2iuxiB7PTkkxS
+         4N9890b0AhomSOZJ5IBn6wcnTYCLz+j8rxQCXla6fkqTs631ZaoVoSoU79zbTpJdJDmn
+         X+FolQ6YP/Nzq6mOSHqifCwj7Mo4O77TQHl0WfWFwkhhWnpdYvB2AgJZWXnNzE/pcZsV
+         osFqpFU2UiQnFfCl5BDVpeBfjghoHEvw7NPiOoGTl9UK7IuwMdkaEP5Y8e0DyywHB2B2
+         hLsimx2DmWUQR1ByeBo0VJkVnI1lpzbK1Uhb5C/T80btpQcvOeJE8UJqe3EhHDH+8/Po
+         HLHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794849309; x=1795454109;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SnIAL9Ld5dmry2xIKJXTc5l7jOobd9Cf0HDPQZMDLm0=;
+        b=CXvmKBiUu9D+qsUflfsj9aYfZRVsXPDsOHPUflsB0XlWMprvUHCof2aJwsppY1uMmB
+         hrNeNH+NP6/mMRQGKW0PtW0b0jNfYrgCovDsvpjMrDPW5Qe6eo36YV5hqfMHy6WExeT1
+         xkD01XMVQzfZ/Y6GOE/5oym29lNTdahls8NLS/MuGzgp7WElQ7GZVW5k4UOCR2I1sAEq
+         F4bCTS+zxeFiZlo77FUZvS30V3zG1CzpgO63x2fSwFDOUP9b/z9XEzwJOlMdJ0JRM4Zi
+         EVLfwdxxkMushVl+XwsuaZg3oTrZkZtnN0PRSGrW96cn2WNNx8snVZN8ignNyNk/8rWs
+         Rk2Q==
+X-Forwarded-Encrypted: i=1; AL+hErHwPPpAuIZUmaKdg5Mp16d++0P3J5phYjJ4dVbs1VL2OAd0dPY/G+y3Q2+zrXWZOZn3Ninf1Q4NunZaSkx/DMY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8c4PPwvnawP+Avn5+8OYQ9PQud057ZaEgKvG47HJaAia6iHUnN
+	E4HkhaOzxZzH5JGtorFwCD8+BP3mgG6DETOJGD2FW36BKUPcw9q+fuZ2
+X-Gm-Gg: AZFdTZe8ljX8mgHryqVRPQXZKiWzvbc4h8oxMBNxAh9RirY1DXFHaZ7M4PJCQBOi0BJ
+	js5RXzpJp2iiP+xe9kBlkPgsGaC5v1lwy5LNzLREdDZBoKcoobiE/kRPx7TNkHpEqMait6OBXc8
+	EeMFAWa2qgcxmsTQ3amSpp4w5NRszXNwfT4kFm7j3JSaGwzDay8Hk4fNlWybvbueuYzVNL8IHlJ
+	g0sJ6jN7OVtXnKWPObCyC2k6mdCDeVKSdzxA9fuFJ/UdRc/pv2e0iY+/g+K4ODidyZTChhSBYBU
+	C7cLjB2DQsl1+Iyn0gL19F4KhjWWM9MqvYWJXUMmvnMLn/YdNmkyNY8Dlmh7xeEcZLOAUwFziP1
+	Yi3PXFM069GXndNQ9SBAM/utx9EGQiTNC5+H4j2J1E5Fkea7Rq1x+omDDzuOCFeXG/JkGL3Hp4Y
+	IoNbD5n3FYCKwdHEebNYtWsE5NeHdPfH+MxlHzEwazuUDJFEvaszI+zyLE2FTJQ+G+I7lRR767A
+	+kEhFjZ5g98SlVOdd7qthaGciV2q/faU2PDsShK47NQRwk1atgm7IIv+WzuxPGscJZdw3Rmnk+U
+	Rp4wMFN/tVHdLPBvaX2Nv+Jzl+fEnJHFp8CKVUZJaC1pv4fzm/vk/3GrpAKLdltTN1WUd1M=
+X-Received: by 2002:a17:90b:4e8f:b0:3b3:a982:6e0d with SMTP id 98e67ed59e1d1-3b3a9826eecmr478799a91.61.1794849308712;
+        Mon, 16 Nov 2026 09:15:08 -0800 (PST)
+Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cddc1887d7asm4464335a12.14.2026.11.16.09.15.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 09:15:08 -0800 (PST)
+From: Kurt Lin <lylin1023@gmail.com>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Hui Zhu <zhuhui@kylinos.cn>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Barry Song <baohua@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kurt Lin <lylin1023@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Skip memcg_proactive_reclaim when data lands in shmem
+Date: Tue, 17 Nov 2026 01:14:30 +0800
+Message-ID: <20261116171430.1008098-1-lylin1023@gmail.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <bbb07259-a2e8-40b5-9933-eb3d5d7a4bba@linux.dev>
+References: <bbb07259-a2e8-40b5-9933-eb3d5d7a4bba@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,50 +112,36 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
- <20261110110724.3614412-2-fuad.tabba@linux.dev> <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
- <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com> <CA+EHjTyqJfGS+5UajX=RYTAG-qfhZ-vmGi=1SixXydWhwGHLUA@mail.gmail.com>
-Message-ID: <avs5UD79FB_DG1Vs@seanjc-mac.roam.internal>
-Subject: Re: [PATCH 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty
- ring is full
-From: Sean Christopherson <seanjc@google.com>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, 
-	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 16, 2026, Fuad Tabba wrote:
-> Hi Sean,
-> 
-> On Tue, 10 Nov 2026 17:18:22 +0000, Fuad Tabba <fuad.tabba@linux.dev> wrote:
-> [...]
-> > > Eh, I vote to just use kvm_dirty_ring_check_request(), I don't see any harm in
-> > > clobbering vcpu->run->exit_reason.
-> >
-> > Will do.
-> 
-> After taking a closer look, the clobber is problematic on arm64, where
-> KVM_RUN completes a pending MMIO exit only if run->exit_reason is
-> still KVM_EXIT_MMIO. If a pre-fault stops on a full ring after an MMIO
-> exit, the helper overwrites exit_reason, so the next KVM_RUN doesn't
-> complete the exit and the guest repeats the MMIO access. The ring can
-> be full at that point if the pre-fault dirties pages, or with NV, if
-> the stage-2 walk for the MMIO access does.
+Hi Hui,
 
-Wouldn't that require userspace to do KVM_PRE_FAULT_MEMORY after KVM_RUN with a
-KVM_EXIT_MMIO return?  If so, userspace gets to deal with the fallout of being
-stupid.
+Thanks for the review.
 
-> I don't think changing how arm64 completes an MMIO exit should be in a
-> fix for stable, so should I keep testing kvm_dirty_ring_soft_full()
-> directly in v2, or do you have another suggestion?
-> 
-> Cheers,
-> /fuad
-> 
+On 2026/11/16 11:04, Hui Zhu wrote:
+> Would it make sense to turn the silent "return false" into an explicit
+> assertion, e.g.:
+>
+>      if (!ASSERT_OK(read_cgroup_file(CG_PATH, "memory.stat", buf,
+>                      sizeof(buf)), "read memory.stat"))
+>          return false;
+
+Agreed, a read or parse failure will fail the test in v2.
+
+> Small nit: a one-line comment on the threshold might help future
+> readers, something like "all-or-nothing: the data file is either fully
+> shmem (stacked tmpfs) or not shmem at all (disk-backed), so half of
+> FILE_SIZE is a safe midpoint". Also, printing the measured shmem value
+> in the SKIP message could be handy when debugging odd environments.
+
+Will do both.
+
+v2 will also address two points sashiko raised: memory.stat is not
+force-flushed, so right after the write it can still read 0 on machines
+with many CPUs, and a shmem-backed /tmp should fall back to "." instead
+of skipping. I plan to poll memory.stat until the write shows up and to
+try each candidate directory in a cgroup of its own.
+
+Thanks,
+Kurt
