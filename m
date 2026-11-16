@@ -1,54 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.83
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.194
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794814661;
-	b=ln7RaUBDeZtNiR86Y5fHE/VsGqf1V3Yym0HZVNJtKRvG9ypcoGqJrDW0xMf+ScI4zcsH
-	 tzK3mQBdISKLSoBe6rnJvxFRJva8OpkOwkfOoDGxta8wK54FPq5rrOmPv+RtK+oJac7mr
-	 ogYpWjyXaL9+++gW+zkR7K/yeZofb8K5cnVCkrpuiJ3dwrxJ//InrGm8SvHK5cEH4baLC
-	 25X0bQbrIrR72VU2plKUWxgoJWO9yoow50UqfyJbGpZ3ZBNdjJ3IO5C7HMVDBJ0Q5irDe
-	 OfSGKXFrW8Y5KpHXzFqyIrSOlam4IyO1ndgVQ8yY3er0K45AvIFb2i29VYcvx11yhjg==
+	t=1794816135;
+	b=cMiesr7zaG4iyqVEFmw2xafnNzPXXL2YDZ/RRbU1vnaSaxjGZ3I4/Km4fZzSUkm4BRyg
+	 j/hgwsStxtvlOCOIKHbkuxD5sLzSe0Ddqr9hYg9BX2yumuaKuVHDaZR9jRiU7ZVb+kwIB
+	 Iqr+rG/Xb86aZWsZYkrH2dbyrJvy29T0zTrOGpzggdgivHV9sg3XZ0buNdOhHloT3tUsj
+	 K1H+XgHC6Hws5jk8y8Hrc3mKiHz5t95FP4GJcjs0yzsasF/Y6E0L7fP3jY3KErzMS6Qa8
+	 af77WRPcXXbTxcxGYyb24VEWxfQs6bfwI4GRjLmuqBfnUpZx84fDN6uXVRvPttK4SIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794814661;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794816135;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ELGLnivSPBf/XoruTptZjLnaANO/5tU+GX+LXPFFz7o=;
-	b=GOogtQ8PmlFftGEKi8Kdo3lleQ/Y78t+5n1FNE+kamgCBg4lhH4sk0uThSQMdhNYKPwA
-	 gURjQq4Ib7RowQiz77RvY02xdrtVtf+OaEU0UC77KefisxxFJd6qP8zm2hGlZXjkuCHmb
-	 eiJ9c/4AjjJjyQd3DgANL4zpSm0vChk5WXB/o/e7aUK01GuMn9XSX1JCKwu0yG48Znx+w
-	 CwnJHbKngItxCSVSHpwVvCDII2otm0w2njJirkHp8lBUqI/VS3cYcjUEYeLlEeT2NWw7K
-	 MOlZQlRtX/AfHZF0sYxL/Ycpjq7BAHPQNR1zA06GEE1LDfZ9rbtvYzhoQZACPk0GbLQ==
+	bh=xjTLfRW1vmU3uyxwz3ZMVejkouImicH1fiPgUPprDmg=;
+	b=YdS6284eddm/bRxrA7uxzKLm8bOExOxxRKpdJoKRgez/rMAePXmWhtcDSNpzIfXTivGe
+	 o9GvCe42+aAbMKZAbIQUMTIB3drab3EMwbV28z7ciB/9SkcCRqSgbzAWY/tVc3mUJ0uMA
+	 hYhef2nOP1aR2Xa2zaEgvy/g2cqWzKSvI5aQk0ZQHeWBfw8J9TFvWYcIjJrrf/3tkjry+
+	 jiDfrxENSmUST1/M5521YUlOAOFs42vUarhaVZaYTVdTw1YVBH7v8QCcxMQzHJo9K1/VC
+	 XKR3m9U9Whs4YGPYYSj5JSSEfJQoKWmqsgCClUPK0crjPB080IXQmPPPvQJavhGkTyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=vnzW1sV3;
-	arc=none smtp.remote-ip=91.218.175.83
-Received: from mta0.migadu.com (out-83.mta0.migadu.com [91.218.175.83])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DVXbaDc8;
+	arc=none smtp.remote-ip=74.125.82.194
+Received: from mail-dy1-f194.google.com (mail-dy1-f194.google.com [74.125.82.194])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D20606A32F
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 07:37:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6D20606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EB0606A31C
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 08:02:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3EB0606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=vnzW1sV3
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=H6p33czRZZWahauFA0Jn1pndKd76EnVuASbuBmHSAtc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794814658; v=1; x=1795419458;
- b=vnzW1sV3OqhljrZMjkJs6X5X2veHGbuRzjf3BuV6u8CbjHGIuZaInqU7ipJffKLDYu8zv7/W
- dRXLuAOoNE59Imocx22u5NYAcpzOxW6oN52dBvPJBngvrkKXrYla/eJ0+5MmgSN/BW4MTYPWqaK
- yJxAV0OaV14TJNacqiNluYgY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9ab298eabfac997d;
-	Mon, 16 Nov 2026 07:37:38 +0000
-X-Mizu-Trace-ID: 9ab298eabfac997d
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <8015ad75-0e4d-4928-8e56-8a495d752468@linux.dev>
-Date: Mon, 16 Nov 2026 15:37:30 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DVXbaDc8
+Received: by mail-dy1-f194.google.com with SMTP id 5a478bee46e88-36e795af1d4so2253212eec.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 00:02:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794816133; x=1795420933; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xjTLfRW1vmU3uyxwz3ZMVejkouImicH1fiPgUPprDmg=;
+        b=DVXbaDc8XBP/JgibrQeahOuWJ8zcSrAJjHgtZ1awZIzX79BBEb56eWf6mfho34oEMl
+         qfQcTFJn6Pr7LC7Ge8I23zvvcHG7ZYHrl5cVlxv/mAbmXw+ikXIB4SE+p/u9llI+TOPr
+         b+/T9CRlHS3xYKHH/1nHYz5Exak+fijotsQWMOnKlbIGf9X2ZcAO8GWG52qf/nz5CRyQ
+         Dn2hkK1T1bmuU8BT30nXSQXDzrLs/IpnHOvjQwjKunin8sosiWeeqe7GH8bLV91Aj/Y9
+         ncCioZaIFUGRouKcgbkGwe4E58X2iQ325qb9MYyJ0EguxTC5bRorwZYrJkvqUbNgQsTu
+         VZdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794816133; x=1795420933;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xjTLfRW1vmU3uyxwz3ZMVejkouImicH1fiPgUPprDmg=;
+        b=FsbgOOCF7zm22pziFmnwIpMEShRW2GBe1SOq5YOZEAa24ClOqeNDHv/PaYxcoX/znl
+         HbZufoIGKKmjfGBD9eqk8AytthuXHLMY65QD3QQIVL7qiYVYIeR+vXcWsHDrdmbrrh82
+         DFAFwsKysS2/vqG3xuk0sAIY62JguFBAyh507cs/0V4N09zifFzcdOF9rYWJGpcMn6Ub
+         LphrYFliqoTT+ux5gr6u/98S6faMq8hESBUSuOvikfzm5uaezKc+5w9qqJk8Px7KjJeT
+         dpciwi71QhlwYNfigGmUXbXnGQ6964GV/5qrwppoURGbmt4l/8eUEfsl28LjzUbzEr1b
+         1dHg==
+X-Forwarded-Encrypted: i=1; AL+hErE8kbCCaDF1nggr7RGSZwS96UgZ0irIOQ6csMsr+3CoDXrdWB8Plt9zPypQuQWCOyfI4/E/YaPhkCVhaTz0tbg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8YPJsPYypLDu4+TaVn5yFa+C6mb/8hDMN2dd2xmWzUUfshSVQH
+	q27IMJZYuK0MZXesEtg5EN77WjrNL1ndEzBdTmsWdrcoWeHdnlvXqp5v
+X-Gm-Gg: AYBFou0cOmLzMN2pflWeXQEwLXO9RLwfGLIMWxGATxrW9cGt808lC4gPXan0JTYK3oU
+	XbsRdkH/TlHa25+jMDCqmZnQkbKhz0/pCJWxGn9jI1n3U2lfOOCcMXMCarCELTe5kYbz/HQuoL1
+	hLIDY6hOeC3uDONSTK0CcKwiDomzpa1J7vwKOB5xhQV4Encv1bozNQUaoPpkkxRYt2z/C5Cm+2Y
+	aG3wLpJqd8wPEAfAR332iJqAkA/ETnzW8JlU1g9uynwhOriXgYy/NBd+IDJPZp9gD88LH1xNaXH
+	CtJqk1W7PQp43PhZobDJ/+/IdpZftrGEpjtKw9BczDpUwde3/5A4z+QlcGCYpHmyJr/NRUJPXtv
+	RvAR6tVZL4+rK2BivszfHYxvHtPGYDJ3mDH0JFiJxMG62e1eSQecbraIpw3gXFjH+E6DsISaIwJ
+	qgvhBXSXWeMX9i7kremUNSD2IyCCknzF+HU/nV0L815zypQshPcip50fFRyePBh4j9sk/msAXFh
+	yCVqwJzPsvRBSXmhmYLd/RwIXD7trHFJj2kwvM3ufaoxT8z70E4PzMV+kyoqhCyy2dBhW2TbFl7
+	e0PrXisZK+PijS3MfJUs+sMDXsBfslcKyz51WNbcXe5KC2jxG49pShACoQSmdUh+7NjWH5wSiCB
+	7iKtba2quNQmgQFZqkwm0BNL/Jy/VcXKPyLRUpg==
+X-Received: by 2002:a05:7301:182e:b0:367:a092:3c73 with SMTP id 5a478bee46e88-377e1016111mr11133410eec.12.1794816132853;
+        Mon, 16 Nov 2026 00:02:12 -0800 (PST)
+Received: from localhost.localdomain ([98.148.34.5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37955f01d68sm31128558eec.17.2026.11.16.00.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 00:02:12 -0800 (PST)
+From: Hungyu Lin <dennylin0707@gmail.com>
+To: andrii@kernel.org,
+	bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	alan.maguire@oracle.com,
+	shuah@kernel.org,
+	alexis.lothore@bootlin.com,
+	luisflavieira@gmail.com,
+	ameryhung@gmail.com,
+	david.laight.linux@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	dennylin0707@gmail.com
+Subject: [PATCH bpf-next v3 0/2] Fix unaligned enum values in btf_dump
+Date: Mon, 16 Nov 2026 08:01:49 +0000
+Message-ID: <20261116080151.44860-1-dennylin0707@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,116 +113,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v4 2/6] cgroup/cpuset: excpus parameter of
- remote_cpus_update() must have at least 1 active CPU
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>,
- Sashiko <sashiko-bot@kernel.org>
-References: <20261116012330.2271010-1-longman@redhat.com>
- <20261116012330.2271010-3-longman@redhat.com>
- <e437ac79-7999-43da-9fe8-6cfd475a5196@linux.dev>
- <eb3fd5e1-aafe-4bbd-a9ca-afcdb1554fdb@redhat.com>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <eb3fd5e1-aafe-4bbd-a9ca-afcdb1554fdb@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+btf_dump_get_enum_value() reads unaligned enum values through
+btf_dump_get_bitfield_value() with a zero bit size, which shifts a
+__u64 by 64. Patch 1 copies unaligned enum data into an aligned buffer
+instead, as btf_dump_int_data() does. Patch 2 adds the tests Alexei
+posted in the v1 review.
+
+Changes in v3:
+- Do the alignment check before the size check (David).
+
+Changes in v2:
+- Describe the undefined shift in the commit log.
+- Drop the data_end check, which broke the dump of struct fs_context
+  without emit_zeroes.
+- Add the selftests from the v1 review.
+
+v2: https://lore.kernel.org/bpf/20261115084923.53182-1-dennylin0707@gmail.com/
+v1: https://lore.kernel.org/bpf/20261113223449.97604-1-dennylin0707@gmail.com/
+
+Hungyu Lin (2):
+  libbpf: Fix sign extension of unaligned enums in
+    btf_dump_get_enum_value()
+  selftests/bpf: Dump unaligned enums and a zeroed fs_context
+
+ tools/lib/bpf/btf_dump.c                          | 13 ++++---------
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 10 +++++++++-
+ 2 files changed, 13 insertions(+), 10 deletions(-)
 
 
-On 11/16/2026 11:34 AM, Waiman Long wrote:
-> On 11/15/26 10:07 PM, Ridong Chen wrote:
->>
->>
->> On 11/16/2026 9:23 AM, Waiman Long wrote:
->>> It is reported that remote_cpus_update() fails to invalidate a
->>> populated remote partition when an ancestor cgroup update reduces its
->>> effective_xcpus mask to only offline CPUs.
->>>
->>> When update_cpumasks_hier() updates a descendant remote partition, it
->>> passes the new effective_xcpus mask (excpus) to remote_cpus_update().
->>> Because excpus still contains offline CPUs, cpumask_empty(excpus) is false
->>> and remote_cpus_update() only checks tasks_nocpu_error() when adding CPUs.
->>>
->>> With the partition left valid, update_cpumasks_hier() computes an empty
->>> effective_cpus mask and jumps to get_css. The populated partition stays
->>> valid with no effective CPUs instead of inheriting its parent's CPUs,
->>> and its tasks remain affine to the online CPUs returned to top_cpuset.
->>>
->>> Fix it by invalidating the remote partition if there is no active CPU
->>> available in the given excpus parameter.
->>>
->>> Reported-by: Sashiko <sashiko-bot@kernel.org>
->>> Link: https://sashiko.dev/#/bug/linux-936b7155-f652-4146-a4ab-ec48fd392a1d
->>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> ---
->>>   kernel/cgroup/cpuset.c | 3 ++-
->>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index 631fb449cef8..195d4e3a283c 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -1810,7 +1810,8 @@ static void remote_cpus_update(struct cpuset *cs, 
->>> struct cpumask *xcpus,
->>>         WARN_ON_ONCE(!cpumask_subset(cs->effective_xcpus, subpartitions_cpus));
->>>   -    if (cpumask_empty(excpus)) {
->>> +    /* New effective_xcpus must have at least one active CPU */
->>> +    if (!cpumask_intersects(excpus, cpu_active_mask)) {
->>>           WRITE_ONCE(cs->prs_err, PERR_CPUSEMPTY);
->>>           goto invalidate;
->>>       }
->>
->> This also invalidates a remote partition with no task whose excpus
->> only has offline CPUs. According to cgroup-v2.rst, such a partition
->> is valid: cpuset.cpus.exclusive.effective may contain offline CPUs,
->> and cpuset.cpus.effective can be empty if there is no task in the
->> partition. The hotplug path and tasks_nocpu_error() follow the same
->> rule. How about only invalidating it when it is populated?
->>
->>       if (cpumask_empty(excpus) ||
->>           (!cpumask_intersects(excpus, cpu_active_mask) &&
->>            partition_is_populated(cs, NULL))) {
-> 
-> A partition can only be created if there are active CPUs in the effective_xcpus. 
-> However, such a partition root can distribute its exclusive CPUs down to child 
-> local partitions with the results that effective_cpus can be empty if there is 
-> no task there. IOW, effective_xcpus must have active CPUs while effective_cpus 
-> does not need to have active CPUs if there are child partitions underneath. I am 
-> going to clarify that in the doc. I will check the hotplug path and 
-> task_nocpu_error() to make sure that it follows this rule. Does that rule make 
-> sense to you?
-> 
-
-Yes, the rule makes sense to me, and it is clearer.
-
-Note that the hotplug path currently keeps a partition with no task
-valid after all its CPUs are offlined, e.g. these test cases in
-test_cpuset_prs.sh:
-
-"  C2-3:P1  C3:P1   .      .     O3=0    .      .      .     0 A1:2|A2: A1:P1|A2:P1"
-"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1|A2:2|A3: 
-A1:P1|A2:P1|A3:P1"
-
-So the hotplug path and these test cases need to be updated together
-with this patch to keep the behavior consistent?
-
-> 
->>
->> Also, it probably needs a Fixes tag, maybe:
->>
->> Fixes: f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check() & make 
->> update_cpumasks_hier() handle remote partition")
-> 
-> Yes, I miss the fix tag. Will update that in the next version.
-> 
-> Cheers,
-> Longman
-
+base-commit: 8835113107b2cf75df33a71e265cdeec5d5d13e0
 -- 
-Best regards
-Ridong
+2.43.0
 
