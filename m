@@ -1,45 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.136.161.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794836470;
-	b=VOSuRA14B75X1MB88ta2oiwN8OGYdShyqj4tDBtqYTyXZZyZndlODqU7+BYTVqCWFB/r
-	 Gq6E/2EveAbgFs6iUX0AGPxnu3yAFIxxR32O9gBDvoqkY6NyOLQFtCFeluxVTx/FNXBuT
-	 uFO8pwmY/3UaCr3QUzi5qy4+CZhkklEF8ONi9dxKbRaoj9tXS6EZEPnFsPbBbKbgamZXK
-	 XuEn6yXiF9YynMMPWnF9Udu0ejyRVg8RpQ9MWa6jv9BSpZD9F12BQ00tlwAei/L4U8FHt
-	 RU6fWJ8fGECDVzdORC1J+69OIAxlXDBj/5o8kevHs0ftOYGnKTatWp71WiDvPfSsElA==
+	b=IzTQDuglzspaGtcdEJnPCiK24ewLp3vxfm7+vG6fFPwtvN8XzbC9t3mvnepfdmp4DhPz
+	 WSh7SFvx7bnI0/6LWmzXmCq4ubB/fVDcIyDkunTOTcgmNli4MMrxumcGsbH/x0g8FeJuf
+	 Anb1qZrIjvVWcBBdixNsDAnWcQwJibA+ttFNOCHzDf/msXqDpcpgh8QDStteLMAaeA/hp
+	 bbCqy84Satmj/9RFSCteWsFv4c6AOcDwRGiE7AKsNf1kqVNgd+zl04qv294XriBOqQ/ld
+	 sdD2e3zk3xdTtTnZTCFtQaWaJNLaOTbuJ5J6paK8H7edhC2VLdEzn0US8NeoJbwN6bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794836470;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=CpapQu0w6LOFQW0WFLF2s/fjzPRepgaOvKVV4hoWYc4=;
-	b=eoeYUMSnimCYi9sPG++fkZ3ekgcqviNQj5kvOZiLmlWmevBFtpFHLEwqF0UjXL6VgXSG
-	 wFHtamReGn2IVnv3LjgqELbvAY5e6agWQHaoyNZTN24WHIW49idvMREnoVVTQUUgjfolt
-	 I6J4UECwkvEEYDornSMcy/fZ03E4CcQb0JoSyBZ6m5+Z+7iTBr7aZtbzSL0Qk8A3th/na
-	 ZHvzXRSqSgDXnze8yOH7U2ZEAW2Qe6bduNNMJwIL5vjBbPZmrx1ZshapJEx68z56T4Coe
-	 pnGu3+07Tm3fI1li3ao3AxaiKN8Mqnr2kpXKM9Wg/pXQDVytesl1Ep3fA/tBj31kv2g==
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=KoID3t/L5HYOJLaZAHtsmuIZvdirepRozKbl1aZqCio=;
+	b=lODYKiXib0GWy/5hCNJDgLNsJJVNgf44JipJxz2TBy2222y9K3Ro91QdLOJS7XE5/HB8
+	 3K5EQysqeXEMfMaefJa1DLWmHmW6k6KDf9gpC73dEUyGPwP4wltQo7Fol8g782NImIHHk
+	 k9P1oSNTzJgez2z8oxh3jgizeEWfpTADgqCojmITsFYbedN+eLcYq/zuu1N2v5p1q12ka
+	 OrSMVY+JYvwamw8CCM/NKZuEJOm8qYuo0D7hrPaqIV1FzysHTmwehkC3/1LpCie6SjeWB
+	 l8jF7sxA+LnMO/HUGkNr6rSrRRPJJ0kDHUuoMqoVXmQp87AHgZcWAH10Fkl19dHuM3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cs.unibo.it;
 	spf=pass smtp.mailfrom=cs.unibo.it;
-	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=WOw94JrS;
+	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=SlYczK8D;
 	arc=none smtp.remote-ip=130.136.161.50
 Received: from mail.virtlab.unibo.it (mail.virtlab.unibo.it [130.136.161.50])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D79C5606A323;
-	Mon, 16 Nov 2026 13:41:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D79C5606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DBE606A31C;
+	Mon, 16 Nov 2026 13:41:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4DBE606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cs.unibo.it
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unibo.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=WOw94JrS
+	dkim=pass (1024-bit key, unprotected) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=SlYczK8D
 Received: from eipi10.cs.unibo.it (renzopb-wl.cs.unibo.it [130.136.2.252])
-	by mail.virtlab.unibo.it (Postfix) with ESMTPA id 628DD1C025B;
-	Mon, 16 Nov 2026 14:41:03 +0100 (CET)
+	by mail.virtlab.unibo.it (Postfix) with ESMTPA id E3D2A1C024A;
+	Mon, 16 Nov 2026 14:41:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cs.unibo.it;
-	s=virtlab; t=1794836463;
-	bh=9//oVE/LxVOx4EUXtWOmCIoiuW4udIJ+Pl0Zu697YCA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WOw94JrSLzcIqUIohv5l1kB3kJudL14DxhHL52i/tkVImtnyTffLD3e0oKsPC824a
-	 yVya/xLWKqIXE+m/fOnQhJE5/rTuR7cW4f578mx+lf2jZOxXQbfS4kmp7n+n3csCsa
-	 jnO2EMbURikH7/Cm4CVnjNyykdDxdvm76cTdQopM=
+	s=virtlab; t=1794836461;
+	bh=9BePSzjzJXa33FPP/d2SwB8juy+0sIML+/UiQYc++ic=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SlYczK8D+ED2ZYMtdFF2bE5HUXOmKEiPvcjNy+jdJmHmVwWxhe6bYWWWo0XKbxB8y
+	 izORiwUKhHAEK/qwEgO9ZcclBOR21ViZWOy0IC9lPP2te1JuxsyAGac6d93C13hikq
+	 Zso1w9UGRImE067qXARKNSAIfGez2vDgmtKzEnAo=
 From: Renzo Davoli <renzo@cs.unibo.it>
 To: linux-kernel@vger.kernel.org
 Cc: Renzo Davoli <renzo@cs.unibo.it>,
@@ -54,12 +53,10 @@ Cc: Renzo Davoli <renzo@cs.unibo.it>,
 	strace-devel@lists.strace.io,
 	linux-api@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 2/2] selftests/ptrace: check that PTRACE_SET_SYSCALL_INFO rejects invalid error values
-Date: Mon, 16 Nov 2026 14:40:46 +0100
-Message-ID: <20261116134050.505355-3-renzo@cs.unibo.it>
+Subject: [PATCH v4 0/2] ptrace: reject out of range error values in PTRACE_SET_SYSCALL_INFO
+Date: Mon, 16 Nov 2026 14:40:44 +0100
+Message-ID: <20261116134050.505355-1-renzo@cs.unibo.it>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261116134050.505355-1-renzo@cs.unibo.it>
-References: <20261116134050.505355-1-renzo@cs.unibo.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,86 +68,50 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-At every exit stop of the set_syscall_info test, try to set with
-is_error set a few values outside [-MAX_ERRNO, -1], check that
-PTRACE_SET_SYSCALL_INFO fails with ERANGE and that the return value
-of the system call is left untouched.
+With is_error set, PTRACE_SET_SYSCALL_INFO passes info.exit.rval to
+syscall_set_return_value() as an "int" error without checking it: a
+positive value, or on 64-bit one outside the "int" range, turns the
+error into a success or is truncated.
 
-Reviewed-by: Bradley Morgan <bradley.morgan@linux.dev>
-Signed-off-by: Renzo Davoli <renzo@cs.unibo.it>
----
+Patch 1 rejects with -ERANGE any error value outside [-MAX_ERRNO, -1].
+Patch 2 adds a test case for this to the set_syscall_info selftest.
+
+This series is independent of the PTRACE_SET_SYSCALL_INFO seccomp skip
+and SET_IP series: they apply on top of each other in either order.
+
+Testing (x86_64, QEMU): tools/testing/selftests/ptrace/set_syscall_info
+passes 1/1 with this series applied.
+
+Changes in v4:
+* patch 1: use !IS_ERR_VALUE(rval) instead of open-coding the range
+  check, no functional change. Thanks to Oleg Nesterov for the
+  suggestion.
+* rebased on current mainline (23c62304dde2)
+* added Reviewed-by of Bradley Morgan to patch 2
+
+Changes in v3:
+* added Reviewed-by of Dmitry V. Levin and Bradley Morgan to patch 1
+* new patch 2: selftest, as suggested by Dmitry V. Levin
+
+Changes in v2:
+* shorter commit message and comment, dropped Assisted-by
+  (Bradley Morgan)
+
+v3: https://lore.kernel.org/lkml/20261115152703.416254-1-renzo@cs.unibo.it/
+v2: https://lore.kernel.org/lkml/20261115082540.385386-1-renzo@cs.unibo.it/
+v1: https://lore.kernel.org/lkml/20261114184842.373304-1-renzo@cs.unibo.it/
+
+Renzo Davoli (2):
+  ptrace: reject out of range error values in PTRACE_SET_SYSCALL_INFO
+  selftests/ptrace: check that PTRACE_SET_SYSCALL_INFO rejects invalid
+    error values
+
+ kernel/ptrace.c                               |  4 ++
  .../selftests/ptrace/set_syscall_info.c       | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ 2 files changed, 55 insertions(+)
 
-diff --git a/tools/testing/selftests/ptrace/set_syscall_info.c b/tools/testing/selftests/ptrace/set_syscall_info.c
-index 1cc411a41cd6..366ef0ec228f 100644
---- a/tools/testing/selftests/ptrace/set_syscall_info.c
-+++ b/tools/testing/selftests/ptrace/set_syscall_info.c
-@@ -126,6 +126,54 @@ check_psi_exit(struct __test_metadata *_metadata,
- 	}
- }
- 
-+/* Error values that PTRACE_SET_SYSCALL_INFO must reject with ERANGE. */
-+static const long long bad_error_rval[] = {
-+	0,
-+	1,
-+	ESRCH,
-+	-4095 - 1,	/* -MAX_ERRNO - 1 */
-+	-2147483647LL - 1,
-+#if __SIZEOF_LONG__ > 4
-+	0x100000000LL,
-+	-0x100000000LL - ESRCH,
-+#endif
-+};
-+
-+static void
-+check_psi_exit_bad_rval(struct __test_metadata *_metadata,
-+			const struct ptrace_syscall_info *orig,
-+			const struct si_exit *exp_exit)
-+{
-+	struct ptrace_syscall_info info;
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(bad_error_rval); ++i) {
-+		info = *orig;
-+		info.exit.is_error = 1;
-+		info.exit.rval = bad_error_rval[i];
-+		ASSERT_EQ(-1, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+					 tracee_pid, sizeof(info),
-+					 (uintptr_t) &info)) {
-+			LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: error rval %lld accepted",
-+					bad_error_rval[i]);
-+		}
-+		ASSERT_EQ(ERANGE, errno) {
-+			LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: error rval %lld: %m",
-+					bad_error_rval[i]);
-+		}
-+
-+		/* the return value must be left untouched */
-+		memset(&info, 0, sizeof(info));
-+		info.op = 0xff;
-+		ASSERT_LT(0, sys_ptrace(PTRACE_GET_SYSCALL_INFO, tracee_pid,
-+					sizeof(info), (uintptr_t) &info)) {
-+			LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+		}
-+		check_psi_exit(_metadata, &info, exp_exit,
-+			       "PTRACE_SET_SYSCALL_INFO with bad error rval");
-+	}
-+}
-+
- TEST(set_syscall_info)
- {
- 	const pid_t tracer_pid = getpid();
-@@ -476,6 +524,9 @@ TEST(set_syscall_info)
- 				check_psi_exit(_metadata, &info, exp_exit,
- 						"PTRACE_GET_SYSCALL_INFO #1");
- 
-+				/* invalid error values must be rejected */
-+				check_psi_exit_bad_rval(_metadata, &info, exp_exit);
-+
- 				/* apply the changes */
- 				info.exit.is_error = set_exit->is_error;
- 				info.exit.rval = set_exit->rval;
+
+base-commit: 23c62304dde29abe92013d85910d03a77dada35d
 -- 
 2.47.3
 
