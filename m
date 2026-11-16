@@ -1,69 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794810450;
-	b=e/BIUSAK80dYz9h/AVVzzICLmJhrMmzlaakKdHHt0aA4q9ijRmlJ15vVtRdHSzCFlVs0
-	 KkuVUhFkRBwY7noAV4s+Tjbt/Kk6NKpB5PciwWSrgpABbwLukXYHFQIWapm/ECE0zvX3V
-	 QTSbgNxpvWUaq4F2Y8atQ41QE0NV7rKZRIfxak3giUn2Z3eXpVwYASzCytn9S40hpkpQy
-	 pl2lX+IGxRGEAh7ty8u/ncksRUOpV7jfmYQ68EUU/SeK0VRjmTed2mHzePIp4RDKTYgpF
-	 O3bEaBnuOxeqh8odqBAGjVMeiGMjF4NyjqmabYpq3pM/ZUHY/0WLJxXMGgpQBRccJDA==
+	t=1794810873;
+	b=d5PXvgQFLj3JhZ4DsczuLNvoRLyG3W9QxwenHP/AQBv3+6hnTX7Fog7UwZz13aBfxXQr
+	 PCsQcntsnCIF9PP6UsHHEdaTXyKk2h2im22UMjm+IInhpL6U5at8J9H2lq+BAEQLe8Iv1
+	 xNj2/lawZYqj0sQZpJAGcgxQrLBjk8Dh8alXbrWS0KB1oHIQOLN1YAZvUIKEv5llv/vdz
+	 cZpSm7lbWwOuvDL9+nN6O0Plz2VE7/oBU+DW5Pd0909vPxKKwkm9FsIzCke6/hQu6ZTN0
+	 bc3WSxziKsaQDjExbaZOUKI10AI1AooulNp2dz1B/k7JejF/aleKpOGqM4deaiPI7tw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794810450;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=hwTmClWTxsFlbzuWxoT35i39mY0hOb4dtqELh37RY/s=;
-	b=3JzGipvLe75HguH9S4G52UMZAo3mmVhetg7zUvm8fo8kf61GbYw1RriVbiL7qJC97WMt
-	 PX4HUEgBmnOLFVvGexsGYXytDRAKVq3SIqX7kgAc2uqcu88a6v0X6+kGxBs+2OU/+Ytqo
-	 izsmolKcxUqKWvKi4c/MUmttpd1FtnuQGvn0Yy6mtf6PItNspjmPGptBpmMHJNI7oqD5u
-	 a/P9KYNcmVVC9LHUaIFiUfAf3PLudPRROT7Khu/zxNAzHhQbg6dKsBBSNE3N8L4GF1fYe
-	 eiQy34Jxa36Pno6EWyGabQNFzDrtWnmdPDMz1YZN5YeBnNKs4eveJ+OHppt2egqJ/Tw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794810873;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=fHZnFX7X6Kt57Oc4zqYHx2brQFPhehsybWGHrYd3t+o=;
+	b=eqQcglqPuinavsWY3hsV+TbHPMtjHZtlo991MaVElehSQzmIuL82rrjFc2kiRUSgz6C2
+	 IJ36/MKvqvfNRyQCW3E8faYSYoAzoHQNcXjEJxh4wNvSzHhazM8e2JH89T+dWMEaKj6ow
+	 EC/MgZdIdBwaExFeSbZ4Qvc4XWijAQGqovvsvquQjZz3mDfRZn5WAHRc1fzurDpOohyWV
+	 gCNPbfkLo4HjqTi/fqkeoKbGq8mvfXD4Uegl1+HlOm5mc7342gW8z22Nj86scZr0TuI8z
+	 9I2XFIaLWwLGIL1NZIvOYE43Pth+fx2lOh5UICHL8AasDb/K3KLBBWkWahA7yYSBCmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GlsyW5KF;
-	arc=none smtp.remote-ip=95.215.58.138
-Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
+	dmarc=none header.from=colorfullife.com;
+	spf=pass smtp.mailfrom=colorfullife.com;
+	dkim=pass header.d=colorfullife-com.20260707.gappssmtp.com header.i=@colorfullife-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=TnGap+Ur;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD1B606A31C
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 06:27:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2FD1B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BF6606A323
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 06:34:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25BF6606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=colorfullife.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=colorfullife.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GlsyW5KF
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yJA/CsPKGJNNLcyenep5M0wmN80PBv5RK3h15MF3ueM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794810447; v=1; x=1795415247;
- b=GlsyW5KF+yFkOMGTxIyDyMZhQH5rg93Cv02CHWOS7eVsq86a+xbUaAptvNiLwEzx+O4nBQqR
- hClmvslr4ve1QOs+EDaMPisa613dNVvK3oXOH3UECIA7ptV+ZPGZoSp/X48bkpRjay2R97vwbB9
- w15IW+OvcSjgcmFH776sD4E0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 911e766ce9e0ecd2;
-	Mon, 16 Nov 2026 06:27:27 +0000
-X-Mizu-Trace-ID: 911e766ce9e0ecd2
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 16 Nov 2026 14:27:17 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net-next v3 4/5] selftest: seg6: explicit cleanup for
- SRv6 End PSP test
-Message-ID: <avqiRTii9HYwXVXd@fedora>
-References: <20261112-srv6_flavors_endx-v3-0-c9177bbbd965@kylinos.cn>
- <20261112-srv6_flavors_endx-v3-4-c9177bbbd965@kylinos.cn>
- <20261116053407.53b79a5dceef802586952e96@uniroma2.it>
+	dkim=pass (2048-bit key) header.d=colorfullife-com.20260707.gappssmtp.com header.i=@colorfullife-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=TnGap+Ur
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48dee593f18so3223153f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 22:34:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20260707.gappssmtp.com; s=20260707; t=1794810870; x=1795415670; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fHZnFX7X6Kt57Oc4zqYHx2brQFPhehsybWGHrYd3t+o=;
+        b=TnGap+UrRgAob4hHgWXHOQ7PrgyxDzks6pmst6NT8BlJht8MF+f/rv0hzM2CTA8Ctz
+         3QowrZ3IYKLU4W3u/ay2DMuSiob4XhuqsEoA6Oy6zrVU7fbAkbIbsJbyZLnTRoz1Mld7
+         b8jgy3v+zgESQLGJCDw0LSTrKqnIWhdOLiv08LqyXDq+Ht6iO7ilrWUIu4waSIoBM8Sp
+         Lc7zn9CN81iSc23fU2SpFa5y/awuu/42sr/zKfem2AWd4DqpI+Vieh86spkyfszGy3xp
+         4vx62pHZPJCGnfBblw8v00L5alwrJP0jrMlRpblggCtnnp4rrXWvxZHEalOxEqBDZ1jX
+         D2Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794810870; x=1795415670;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fHZnFX7X6Kt57Oc4zqYHx2brQFPhehsybWGHrYd3t+o=;
+        b=VM/bbFRCPLiy2EZszyx2Qdd3lHF8j1MSYeZAYjRh63+otjNf4deAcsfjlauvE4NlGL
+         5pa49++hS8BBbBtM5fhvzpAj2Ez9bB6mnKzTiyErAyZ59JweSY756hNSg+g7ewgUS9fU
+         7Yd0h4wKnet40HSgDwjMV6/dq4RUizIlzB9N5As9mTT+nXqQCoMYS3oU4zMgW4RuYBiN
+         vfXOkqY5T0QJWCScoLnCnpiFMhKBnau1d/5XqlT3rViuY3dZHTSutNRg9aVev0A6f5sA
+         7ZDg+dp2PyjTBHFI9XFSaKNCFFD5n+8Ogn1Dc9q4lgHRpYIFk9bxO3MVUC/JMXYYTkps
+         0naA==
+X-Forwarded-Encrypted: i=1; AL+hErFb1i6OZp0M46avgrHyt9at43G6Dp1TY6RIdAlg6LUMzQZXt0CgceEd0PkyVNPk+FPgKpZEeLBOt3E/kO4+asU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8g+z0ORxSijYFZt8aCHF0RDUZgIXweIk7cG7qfOuQKHVlB8z4W
+	EkGaf88nhlcoiS6mp0+TIi8qk/PzfYoUgHQDjLQQvztNL5JcEayzpTefwnxno4YeVPeY85OM0Ds
+	3JElGxw==
+X-Gm-Gg: AYBFou36+sxAOX8W9RPc8EQNMucJm9ZOaURqX31hbg4KO+wfAhAK8ym4gyJtioe9EOg
+	BdWsaXRjey4W7Ea+icgY32o0fCrI19P2LxJGvSy73cSbQKVp+PpjPlcDMgSesif3lqp7cm60gY7
+	j+NzXaRbTIC/iGRzoucp2k0+x5TkxiWDfBbNfAlPjH+YHJB8LDtaxtsK5GQlql6Hp3iW34cnVlE
+	nzwDtTMz9K55Ut2j4VGwh+ThhR0Lc09vY1SB0YvoSmF49GFVaT6GxDvbM4nZGlkwdMkQVRt4NRM
+	wiIyc2kWZ0BY4wdg+09r5/2uRAUcQwbC9OaWPGF6mUwG2v4hxKERaqt6heOFX7IQwM5xHmLry0b
+	adYIgniy+2TMIpb/COGpsq9h+aSnPkx9R+KduVSCUVR1Wvv8r0bkuRW2eHyk+RBl48adPa++NEx
+	bROt542TCeK/z3oafsqT6v1Kt8gEXfh0OO3bN+u1rjcJo2iOOSi2mNBlYPiI+00ngozH7y8x7z3
+	wy9YvJ030oKfjaQ1/AVwsk9o1cZCksUeU0gghhElP8XKy0YzGmVQvUioN+is+7amUr9JCjalDX+
+	Di70+c92qZDJQtRY9q3cd24a145sf6PQYyJVUFhw3VLEPORIOKEmvXBdJVw/USZf8ay1GZMO3rF
+	jxxepUHrdBdLX4WAJItimqh/7bgzaJUMMQ+tLZdJyutB5R4+Aar8lYv96L5XNMpzB
+X-Received: by 2002:adf:e18d:0:b0:48c:67d6:a87a with SMTP id ffacd0b85a97d-49c70a0f020mr19590904f8f.32.1794810869228;
+        Sun, 15 Nov 2026 22:34:29 -0800 (PST)
+Received: from ?IPV6:2003:d9:9744:c00:e132:4153:eb23:391b? (p200300d997440c00e1324153eb23391b.dip0.t-ipconnect.de. [2003:d9:9744:c00:e132:4153:eb23:391b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49d7150529dsm14983828f8f.51.2026.11.15.22.34.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Nov 2026 22:34:28 -0800 (PST)
+Message-ID: <0747b78e-0ea7-46a1-a18a-8af18e98bf3c@colorfullife.com>
+Date: Mon, 16 Nov 2026 07:34:25 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,130 +94,238 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261116053407.53b79a5dceef802586952e96@uniroma2.it>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ipc/msg: fix msg_qbytes truncation in IPC_SET
+To: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>, Shuah Khan
+ <shuah@kernel.org>, Lu Shuaibing <shuaibinglu@126.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Shubhang Kaushik <shubhang@os.amperecomputing.com>,
+ "Christopher Lameter (Ampere)" <cl@gentwo.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, Jan Koester <jan.koester@tuxist.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261029-ipc-msg-qbytes-v3-1-fc3f4307c85b@gentwo.org>
+Content-Language: en-US
+From: Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <20261029-ipc-msg-qbytes-v3-1-fc3f4307c85b@gentwo.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Andrea,
-On Mon, Nov 16, 2026 at 05:34:07AM +0100, Andrea Mayer wrote:
-> On Thu, 12 Nov 2026 17:27:59 +0800
-> Hangbin Liu <hangbin.liu@linux.dev> wrote:
-> 
-> > The End PSP tests install policy and localsid state but rely on the
-> > global namespace teardown to remove it. That leaves flavor-specific
-> > state behind once more tests share this script.
-> >
-> > Use defer and defer_scopes_cleanup to remove the PSP specified
-> > configurations. i.e.
-> >
-> >   * cafe::1, cafe::1:e9, cafe::2, cafe::2:e9 route and proxy on rt1, rt2
-> >   * fcbb:0::x0e9 End next-csid,psp policies on rt 1,2,3,4
-> >   * fcff:x::0ef1 End psp polices on rt 1,2,4
-> 
-> Hi Hangbin,
-> 
-> A few nits on the message:
-> - The code uses defer_scope_pop, not defer_scopes_cleanup.
-> - The NEXT-C-SID End SIDs are fcbb:0:x0e9::/48, not fcbb:0::x0e9.
-> - "polices" is a typo.
-> - The subject prefix is "selftest: seg6:", while the other selftest
->   patches of the series use "selftests: seg6:".
+Hi Shubhang,
 
-Thanks for the detailed review, I will fix them.
+On 10/29/26 8:35 PM, Shubhang Kaushik (Ampere) wrote:
+> The msg_qbytes field in the struct msqid64_ds userspace ABI is an
+> unsigned long. Commit 889b331724c82 ("ipc/msg.c: consolidate all
+> xxxctl_down() functions") passes that value to msgctl_down() as an int.
+>
+> On ABIs where unsigned long is wider than unsigned int, this narrows
+> msg_qbytes before validation and assignment. For example, an
+> unprivileged queue owner can request msg_qbytes = 0x100000000. The
+> conversion to int changes this value to zero, which passes the
+> msg_ctlmnb check. IPC_SET then succeeds and sets q_qbytes to zero
+> instead of rejecting the requested value with EPERM.
+>
+> For callers with CAP_SYS_RESOURCE, values with bit 31 set are also
+> incorrectly sign-extended when assigned to q_qbytes. In particular,
+> UINT_MAX becomes ULONG_MAX rather than the requested UINT_MAX.
+>
+> Keep msg_qbytes as unsigned long through validation and assignment.
+> Also preserve its type in ipcctl_obtain_check(), which passes it to the
+> unsigned-long audit field.
+>
+> Add a regression test which drops CAP_SYS_RESOURCE and verifies that
+> IPC_SET with a value above UINT_MAX fails with EPERM where unsigned long
+> is wider than unsigned int. Skip the test when it is not, capabilities
+> are unavailable, or System V message queues are unavailable.
+>
+> Fixes: 889b331724c82 ("ipc/msg.c: consolidate all xxxctl_down() functions")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
+Reviewed-by: Manfred Spraul <manfred@colorfullife.com>
+> ---
+> Changes in v3:
+>    - Correct the analysis: msg_ctlmnb is unsigned int, so UINT_MAX is
+>      already rejected for unprivileged callers on the unfixed kernel.
+>    - Test an unprivileged 64-bit msg_qbytes value above UINT_MAX, which
+>      truncates to zero on the unfixed kernel.
 
-> 
-> >
-> > Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
-> > [snip]
-> > diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> > index 0ed5bfe99029..374b43661c28 100755
-> > --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> > +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> > @@ -759,6 +759,8 @@ setup_rt_endpoint()
-> >  		add "${sid}" table "${LOCALSID_TABLE_ID}" \
-> >  		encap seg6local action ${behavior_cfg} \
-> >  		dev "${DUMMY_DEVNAME}"
-> > +	defer ip -netns "${nsname}" -6 route \
-> > +		del "${sid}" table "${LOCALSID_TABLE_ID}"
-> >  }
-> >  
-> >  # Add an SRv6 Endpoint behavior to each router of a Policy element <nodeid:op>.
-> > @@ -801,10 +803,16 @@ setup_rt_host_proxy()
-> >  	ip -netns "$(get_rtname "${rt}")" -6 neigh add \
-> >  		proxy "${IPv6_HS_NETWORK}::${hs}" \
-> >  		dev "${RT2HS_DEVNAME}"
-> > +	defer ip -netns "$(get_rtname "${rt}")" -6 neigh del \
-> > +		proxy "${IPv6_HS_NETWORK}::${hs}" \
-> > +		dev "${RT2HS_DEVNAME}"
-> >  
-> >  	ip -netns "$(get_rtname "${rt}")" -6 neigh add \
-> >  		proxy "${IPv6_HS_NETWORK}::${hs}:${func}" \
-> >  		dev "${RT2HS_DEVNAME}"
-> > +	defer ip -netns "$(get_rtname "${rt}")" -6 neigh del \
-> > +		proxy "${IPv6_HS_NETWORK}::${hs}:${func}" \
-> > +		dev "${RT2HS_DEVNAME}"
-> >  }
-> >  
-> >  # This helper function builds and installs the SID List (i.e. SRv6 Policy)
-> > @@ -882,6 +890,8 @@ __setup_rt_policy()
-> >  		add "${IPv6_HS_NETWORK}::${dst}" \
-> >  		encap seg6 mode inline segs "${policy}" \
-> >  		dev "${DUMMY_DEVNAME}"
-> > +	defer ip -netns "${in_nsname}" -6 route \
-> > +		del "${IPv6_HS_NETWORK}::${dst}"
-> >  }
-> >  
-> >  # see __setup_rt_policy
-> 
-> If you agree to keep the proxy entry in __setup_rt_policy(), as
-> proposed on patch 3, its defer can go next to the defer of the route.
-> Something like:
-> 
-> 	ip -netns "${in_nsname}" -6 route \
-> 		add "${IPv6_HS_NETWORK}::${dst}" \
-> 		encap seg6 mode inline segs "${policy}" \
-> 		dev "${DUMMY_DEVNAME}"
-> 	defer ip -netns "${in_nsname}" -6 route \
-> 		del "${IPv6_HS_NETWORK}::${dst}"
-> 
-> 	ip -netns "${in_nsname}" -6 neigh \
-> 		add proxy "${IPv6_HS_NETWORK}::${dst}" \
-> 		dev "${RT2HS_DEVNAME}"
-> 	defer ip -netns "${in_nsname}" -6 neigh \
-> 		del proxy "${IPv6_HS_NETWORK}::${dst}" \
-> 		dev "${RT2HS_DEVNAME}"
-> 
-> > @@ -1460,11 +1470,13 @@ set +e
-> >  router_tests
-> >  host2gateway_tests
-> >  
-> > +defer_scope_push
-> >  set -e
-> >  setup_end_flv_psp
-> >  set +e
-> >  host_srv6_end_flv_psp_tests
-> >  host_srv6_end_flv_next_csid_psp_tests
-> >  host_srv6_end_flv_consumed_srh_tests
-> > +defer_scope_pop
-> >  
-> >  print_log_test_results
-> 
-> setup_hs_lo_addr() has no defer. The loopback addresses cafe::1:e9
-> and cafe::2:e9, and the routes that setup_hs_lo_addr() adds on rt-1
-> and rt-2, stay after defer_scope_pop. Only the End PSP scenario uses
-> them. Could setup_hs_lo_addr() defer their removal too, like the
-> Policies? Something like:
-> 
-> 	ip -netns "${hsname}" addr add "${addr}/128" dev lo nodad
-> 	defer ip -netns "${hsname}" addr del "${addr}/128" dev lo
-> 
-> 	ip -netns "${rtname}" -6 route \
-> 		add "${addr}" \
-> 		via "${IPv6_HS_NETWORK}::${hs}" dev "${RT2HS_DEVNAME}"
-> 	defer ip -netns "${rtname}" -6 route \
-> 		del "${addr}"
+Thus:
 
-I will update the defer with your suggestions.
+The global (per namespace) limit msg_ctlmnb is limited to UINT_MAX.
 
-Thanks
-Hangbin
+On a 64-bit system, root can increase the per-queue limit to ULONG_MAX.
+
+All per queue logic is now unsigned long based:
+
+struct msqid64_ds t::unsigned long  msg_qbytes;
+msgctl_down(,,unsigned long msg_qbytes)
+struct msg_queue::unsigned long q_qbytes;
+
+Ok from my side.
+
+
+>    - Skip the test on 32-bit, where unsigned long cannot represent the
+>      regression value.
+>    - Remove the incorrect queue-limit-bypass and memory-exhaustion claims.
+>
+> Link to v2: https://lore.kernel.org/r/20261027-ipc-msg-qbytes-v2-1-48d8f72f1359@gentwo.org
+> ---
+>   ipc/msg.c                                   |  2 +-
+>   ipc/util.c                                  |  3 +-
+>   ipc/util.h                                  |  3 +-
+>   tools/testing/selftests/ipc/Makefile        |  2 +-
+>   tools/testing/selftests/ipc/msgctl_qbytes.c | 84 +++++++++++++++++++++++++++++
+>   5 files changed, 90 insertions(+), 4 deletions(-)
+>
+> diff --git a/ipc/msg.c b/ipc/msg.c
+> index 62996b97f0ac2137dfc2fa109394d6db1fcb4a0f..116126f1235cd6ce9b819cfd317ef039071b95ca 100644
+> --- a/ipc/msg.c
+> +++ b/ipc/msg.c
+> @@ -399,7 +399,7 @@ copy_msqid_from_user(struct msqid64_ds *out, void __user *buf, int version)
+>    * NOTE: no locks must be held, the rwsem is taken inside this function.
+>    */
+>   static int msgctl_down(struct ipc_namespace *ns, int msqid, int cmd,
+> -			struct ipc64_perm *perm, int msg_qbytes)
+> +			struct ipc64_perm *perm, unsigned long msg_qbytes)
+>   {
+>   	struct kern_ipc_perm *ipcp;
+>   	struct msg_queue *msq;
+> diff --git a/ipc/util.c b/ipc/util.c
+> index 1737d776bc089e27495e810569bf302069db3712..c435b2d93a12e92e930358a8bc53a06314d065f5 100644
+> --- a/ipc/util.c
+> +++ b/ipc/util.c
+> @@ -718,7 +718,8 @@ int ipc_update_perm(struct ipc64_perm *in, struct kern_ipc_perm *out)
+>    */
+>   struct kern_ipc_perm *ipcctl_obtain_check(struct ipc_namespace *ns,
+>   					struct ipc_ids *ids, int id, int cmd,
+> -					struct ipc64_perm *perm, int extra_perm)
+> +					struct ipc64_perm *perm,
+> +					unsigned long extra_perm)
+>   {
+>   	kuid_t euid;
+>   	int err = -EPERM;
+> diff --git a/ipc/util.h b/ipc/util.h
+> index a55d6cebe6d3b0974548a497fcb889248aed0f87..55a76f94667cd4bb248fbcea26323db8d2778a44 100644
+> --- a/ipc/util.h
+> +++ b/ipc/util.h
+> @@ -180,7 +180,8 @@ void ipc64_perm_to_ipc_perm(struct ipc64_perm *in, struct ipc_perm *out);
+>   int ipc_update_perm(struct ipc64_perm *in, struct kern_ipc_perm *out);
+>   struct kern_ipc_perm *ipcctl_obtain_check(struct ipc_namespace *ns,
+>   					     struct ipc_ids *ids, int id, int cmd,
+> -					     struct ipc64_perm *perm, int extra_perm);
+> +					     struct ipc64_perm *perm,
+> +					     unsigned long extra_perm);
+>   
+>   static inline void ipc_update_pid(struct pid **pos, struct pid *pid)
+>   {
+> diff --git a/tools/testing/selftests/ipc/Makefile b/tools/testing/selftests/ipc/Makefile
+> index fad10f2bb57b0f06f0c741fa89f0489f6952eba6..930a334747a6353c86bebe1f4a521aeee3fe8228 100644
+> --- a/tools/testing/selftests/ipc/Makefile
+> +++ b/tools/testing/selftests/ipc/Makefile
+> @@ -12,7 +12,7 @@ endif
+>   
+>   CFLAGS += $(KHDR_INCLUDES)
+>   
+> -TEST_GEN_PROGS := msgque
+> +TEST_GEN_PROGS := msgctl_qbytes msgque
+>   
+>   include ../lib.mk
+>   
+> diff --git a/tools/testing/selftests/ipc/msgctl_qbytes.c b/tools/testing/selftests/ipc/msgctl_qbytes.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..5549229a25eb6852898fdb6cd8e89f9db78444dd
+> --- /dev/null
+> +++ b/tools/testing/selftests/ipc/msgctl_qbytes.c
+> @@ -0,0 +1,84 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <errno.h>
+> +#include <limits.h>
+> +#include <linux/capability.h>
+> +#include <stdio.h>
+> +#include <sys/msg.h>
+> +#include <sys/syscall.h>
+> +#include <unistd.h>
+> +
+> +#include "kselftest.h"
+> +
+> +static int drop_cap_sys_resource(void)
+> +{
+> +	struct __user_cap_header_struct hdr = {
+> +		.version = _LINUX_CAPABILITY_VERSION_3,
+> +	};
+> +	struct __user_cap_data_struct data[_LINUX_CAPABILITY_U32S_3];
+> +	unsigned int index = CAP_SYS_RESOURCE / 32;
+> +	__u32 mask = 1U << (CAP_SYS_RESOURCE % 32);
+> +
+> +	if (syscall(SYS_capget, &hdr, data))
+> +		return -1;
+> +
+> +	data[index].effective &= ~mask;
+> +	data[index].permitted &= ~mask;
+> +
+> +	return syscall(SYS_capset, &hdr, data);
+> +}
+> +
+> +int main(void)
+> +{
+> +	struct msqid_ds ds;
+> +	int msqid;
+> +	int ret;
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+> +#if ULONG_MAX <= UINT_MAX
+> +	ksft_exit_skip("requires unsigned long wider than unsigned int\n");
+> +#endif
+> +
+> +	if (drop_cap_sys_resource()) {
+> +		if (errno == ENOSYS)
+> +			ksft_exit_skip("capabilities are unavailable\n");
+> +		ksft_exit_fail_perror("drop CAP_SYS_RESOURCE");
+> +	}
+> +
+> +	msqid = msgget(IPC_PRIVATE, 0600);
+> +	if (msqid == -1) {
+> +		if (errno == ENOSYS)
+> +			ksft_exit_skip("System V message queues are unavailable\n");
+> +		ksft_exit_fail_perror("msgget");
+> +	}
+> +
+> +	ret = msgctl(msqid, IPC_STAT, &ds);
+> +	if (ret == -1) {
+> +		ksft_perror("msgctl(IPC_STAT)");
+> +		goto out_fail;
+> +	}
+> +
+> +	/*
+> +	 * Without CAP_SYS_RESOURCE, a value above UINT_MAX must be rejected
+> +	 * rather than truncated to zero.
+> +	 */
+> +	ds.msg_qbytes = (unsigned long)UINT_MAX + 1;
+> +	errno = 0;
+> +	ret = msgctl(msqid, IPC_SET, &ds);
+> +	if (ret == -1 && errno == EPERM) {
+> +		ksft_test_result_pass("IPC_SET rejects oversized msg_qbytes\n");
+> +		msgctl(msqid, IPC_RMID, NULL);
+> +		ksft_exit_pass();
+> +	}
+> +
+> +	if (ret == -1)
+> +		ksft_perror("msgctl(IPC_SET)");
+> +	else
+> +		ksft_print_msg("msgctl(IPC_SET) unexpectedly succeeded\n");
+> +
+> +out_fail:
+> +	msgctl(msqid, IPC_RMID, NULL);
+> +	ksft_test_result_fail("IPC_SET accepted oversized msg_qbytes\n");
+> +	ksft_exit_fail();
+> +}
+>
+> ---
+> base-commit: c339f4010dea8b0d754f84ace70cd1b089878ef8
+> change-id: 20261027-ipc-msg-qbytes-49b15931c5b6
+>
+> Best regards,
+
+
