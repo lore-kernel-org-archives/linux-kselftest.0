@@ -1,86 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794868033;
-	b=hplwH9RTpse1hTyCVrZWZ2cKJrDCbfM7bI+tn0t3zA7m/viyc3RfR8ptaVZ5lWLqRrH3
-	 ns13UNQ/lBGauS7NgxeOPNRQpOZJ61PNHnl8w3/kpub/H2YiOKsWduzGV3Kx2TzDVMUjV
-	 AbPZp8gD3i27sDxSyGLT5+FJ1PZrIXme5ofoV6/b6DKaqghCzCQIpqQNPMy87f1USo015
-	 XsPaUdeEtxq23f4FQb8aZCYdCCqPLXdgkYLAH+j+s7D60p5ES3v1VQ4hmxNi72WRx16Zx
-	 pEwMdolETgmH1bVf7e4+yQ/ipkBT15VHfd2y3AWYj8bhunA1Vho7uFEexfLHGWeY7jg==
+	t=1794868052;
+	b=O0ga80/4hUF+uVsVcVZptyOglQavlt3FCDre+cLx0E5f3GgRTsGiTWSH+OFNxONy/rhi
+	 0RkVRf5ra1ZPu1nSEhQbr9zHK0TLHHOpTje0DPx59dcLMSd1wtiumO/BbY4bNsXLO1O1C
+	 GPpKnxaBy6+J25ryXu5UErSZHYYCJU3ZnlhnYxtZw8jTATz2tkWvdYePX/8BoMmPHt0TC
+	 iEbomoRdnFefcYOr1RLTJ4aO+v/FwROXP23d3eceaEMA1qEVJgS1nbgsLh//APBnt0wWD
+	 dJsN+9jlUll40Mqdckzohm6zPW+qX4OHQQuZ4WoLeSJE2G0uSHrVMrxitmJLpPyf5Lw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794868033;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794868052;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
-	b=b+bKZ6Rqb2EEz3bnwpwmKMF6d5XVjEWW+toF4reYNspT0sd3OyMIGhQMizXZFdQ+fe78
-	 v8nrsipoD5lG0eqd3UWG1KgSrduYm+cV+1u+eP5A9401Woiwx9AajxCbeaDyYw7SZMDaE
-	 6qNc0V3J1YK1XNq/96OygV8UpencbJrUAiIeXhVZkZ9gxMfsFZdn0iX1M2vtdys5lfVpi
-	 8ea9sjpfIGObhvr2rOGJzvpywuT6fnZCcdnA01au0VA12A+BEgBDgzuCiybJf6orNrYZK
-	 wEoEuNCbHv+ymqL1v5Cn+FRXDR5FHRPK9SoNLzhta9sP5bs8tUNRS5PrtlnZbnA9l1Q==
+	bh=RUvXiIcVm9hOpppwwCqg1ARGN5d5bhbmrIqkvTODPmQ=;
+	b=zVkUuwrIWCRIUSkPe5q8iotlFGHjrERc5X/dTY56UCcoTKvXLfppf+dbfRWWiVsNf5Ze
+	 evtYXGet2hyERX9zuRJGZMTRtzpRrv28WOpcN2FTqzWFO8nVHrNDOU66nEuHhI4ws5nuH
+	 7snHwmGDLQ/Eep6MDWZJ07XV82BIGZeGQ7oYx88wcjn16qaGtko6opZ5KagseKB8ONO/y
+	 ytXxKmYoTBS71U7FHte+EhEv63OCD2nJJC3P0RgDUm/4e6xWJ31UqLCu6QS9QwImz4jPQ
+	 5xQoMHr6MVMAM/lR4B15BSOfhay1ZK4aomr2y1UGpZaPYLDRac9HOKfkdyB6S3QpBuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ni9kZ9z3;
+	arc=none smtp.remote-ip=209.85.216.69
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1F8606A884;
-	Mon, 16 Nov 2026 22:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CEE606A8A2
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 22:27:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85CEE606A8A2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=md2D4WPO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283BA1F000C4;
-	Mon, 16 Nov 2026 22:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794868032;
-	bh=yTKvK6Q2yCQePo9OFHjf3+LCM7gt5vNfOS7VI6PK0to=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=md2D4WPOInNakDSqWfE1IPbeod9zOxz2pjEYXRvX5XiOz3ugZVGikYj7oFVPNv5TA
-	 anRLz9W1IPaeffFSXdQM5eIkNzSl7SSBVcl2XNx1GIfniOATopc5iOYnfIW2tcJICz
-	 aVn8KUWMqGcxXYidnfS7JXA/XupIgyyf55FAXfxOjNnYtNjcQUssyVADQa/bzbhV3W
-	 UicZSxsZqypH7o7MtWctPXY/bJPQqUdH6+NnMUSsGHKKnFY1lnd0GDxpKiTXt7vuKS
-	 VxK1w0CvT9hWXVQ6g73MyFiBbMOQ63w53AYN7IuB3i9vZCAPLRr0V5/4yR2A03YPn6
-	 UCdDxRThMLAvA==
-Date: Mon, 16 Nov 2026 14:27:10 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
- <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
- Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
- Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
- Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
- <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
- <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
- <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Chris J Arges
- <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
- kernel-team@cloudflare.com, Tianyi Gao <tianyi.gao@linux.dev>
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-Message-ID: <20261116142710.347e8571@kernel.org>
-In-Reply-To: <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
-References: <cover.1794281983.git.tianyi@cloudflare.com>
-	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
-	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
-	<20261115113902.4834dda6@kernel.org>
-	<CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ni9kZ9z3
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3b18a173e48so3306972a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 14:27:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794868050; x=1795472850; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=RUvXiIcVm9hOpppwwCqg1ARGN5d5bhbmrIqkvTODPmQ=;
+        b=ni9kZ9z3ndG3fR2W1CR/nXPGUaB4ZhicnRKeINuTayT2Oky75VTmjsp/DzFK86Cd9v
+         cPuoexhvixBJyC7j96hyx+yJVVOr7VBMAk8TLQNJT8bkATeR0B7k0ge7nhaUGONn/UOb
+         gEXkCJLiugSWUvSaIeV7WGRgINROsyHnlu/Fn50HVBM+HAJlzY/ll3zTYjoV/rYfHxxj
+         Ltpok75OWasipSzWml+SR4Th8dijeW+FKWIGF6HtVq3JO2m2NZbMKiQRrwLFEpcL++E7
+         RWLup/N/BkKUgkCU/Fe2e7Q57Ua0Yn4kx63U3lSePzsGhjAmmmW8lWZKaBAuuUSETbLk
+         H8Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794868050; x=1795472850;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RUvXiIcVm9hOpppwwCqg1ARGN5d5bhbmrIqkvTODPmQ=;
+        b=JiUsAcH1w4fjr0vtwwoAG1txMwC+lWAwW+c48mgz5J3thsgIfCS9/W0tXBGIQc9yK5
+         coIUui5CB629afjvh6dDnDVvstQ5D3xm1vKmpAtc2CN4LHpcYhrSk8gx0cHHn1b8cHKa
+         M2Z7W9P0airghrl2wAITUSC0xuEhOJtIU153+OQDNf8o6H8AX/WRGDglfsIgVow06Xho
+         aQkBnmbDt++hOJplh1O9HF7XeI0PJsPhEXkx150jPBDULOrlKHxoHSzIOtarw9AERq1P
+         Q7K2foTgdcFvbPbHIrfLf32kRex0GQnCYJzua1NjzlaiUectIwMnr86ZdSQfg1eYb7Q2
+         7yyg==
+X-Forwarded-Encrypted: i=1; AL+hErGSdJ6SHMtCBiH+E1wYGmJ5bPe+1EbcGgwLGNC34zjCUSs1TSFStASClgwCBRHh4oW9kiuQ2RvefR40GnciyJo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Xu4Z443gayauJlSjEkpn9vr+5WrJvuxcNodv8ko+6I6IH6/RC
+	c5Bd6nbLjUfFrKLgHFQK2+Xa99JeKc4i1LfC7WTS1+DiuPsEXMJY1HHBzxJazPKLBc8ejKyRbdl
+	OpibQ8g==
+X-Received: from ploh2.prod.google.com ([2002:a17:902:f702:b0:2e3:1b6e:33bb])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:574b:b0:3ae:2969:903f
+ with SMTP id 98e67ed59e1d1-3b1b0b8bcb7mr10699281a91.45.1794868049419; Mon, 16
+ Nov 2026 14:27:29 -0800 (PST)
+Date: Mon, 16 Nov 2026 14:27:28 -0800
+In-Reply-To: <ca9dffb64656a392965f95d35b9d13d829f34076.camel@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,45 +79,150 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <cover.1794374897.git.zack.rusin@broadcom.com> <90467782be23b83fd3e9a6afe2f1d2149eaf9db9.1794374897.git.zack.rusin@broadcom.com>
+ <876c4f4fc442116c9bff8abd8c34f99fcfa65531.camel@infradead.org>
+ <CABQX2QNd7DehBsH-pGL=EJK4b5vC60PymL_YP27xDxGT6_6=uQ@mail.gmail.com>
+ <1bae109338ab6ff1ff14eac811f7e86ced785b22.camel@infradead.org>
+ <CABQX2QNhRZP1Td_HQ6QpMzw-_TjqhbooipWYg3VTgTOq2_U9+w@mail.gmail.com> <ca9dffb64656a392965f95d35b9d13d829f34076.camel@infradead.org>
+Message-ID: <avuDUNAU_a933zvp@seanjc-mac.roam.internal>
+Subject: Re: [PATCH v3 06/12] KVM: x86: Forward VMware hypercalls to userspace
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Zack Rusin <zack.rusin@broadcom.com>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	Doug Covelli <doug.covelli@broadcom.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
+	Shuah Khan <shuah@kernel.org>, Vitaly Kuznetsov <vkuznets@redhat.com>, Paul Durrant <paul@xen.org>, 
+	Xin Li <xin@zytor.com>, Francesco Lavra <flavra@baylibre.com>, 
+	"Radim =?utf-8?B?S3LEjW3DocWZ?=" <rkrcmar@ventanamicro.com>, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 15 Nov 2026 23:36:34 +0000 Tianyi Gao wrote:
-> On Sun, 15 Nov 2026 11:39:02 -0800 Jakub Kicinski wrote:
-> > On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:  
-> > > - On veth, an XDP program removes software GSO from the peer, limits
-> > >   its MTU, and can copy skbs from the peer.  
-> >
-> > Could you remind us why you XDP_REDIRECT xdp_frames to the veth
-> > if you end up allocating the skb on the veth, anyway?
-> >
-> > I thought that was to let veth run its own prog before skb is allocated
-> > but you're saying that you want to avoid veth having a prog, so clearly
-> > it's not that.  
-> 
-> Thank you for your comment!
-> 
-> XDP_REDIRECT into a veth without a program on it has been supported
-> since commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog
-> before xmit of XDP frame"). There is demand for it [1].
-> 
-> With or without a program on the veth, and on cpumap, this series
-> keeps the RX metadata from the NIC until the skb is built.
-> 
-> [1] https://lore.kernel.org/all/20210416175929.35c3c389@carbon/
+On Fri, Nov 13, 2026, David Woodhouse wrote:
+> On Fri, 2026-11-13 at 01:33 -0500, Zack Rusin wrote:
+> > > Userspace *already* needed to
+> > > know about those=C2=B9 because it can't migrate while those are pendi=
+ng;
+> > > it has to do at least one more run, even if it's with the immediate_e=
+xit
+> > > flag set.
+> >=20
+> > True, but, again afaict, that rule exists because those completions
+> > have to run, so I don't think it tells us they can be dropped.
+> >=20
+> > > If it's deemed clearer, I'd also be OK with an explicit
+> > > KVM_VCPUEVENT_CANCEL_HCALL which cancels *only* hypercalls. But I don=
+'t
+> > > really see the point; userspace shouldn't be getting confused when it
+> > > was actually some other kind of completion that was active anyway.
+> > >=20
+> > > =C2=B9 https://lore.kernel.org/all/20250111012450.1262638-1-seanjc@go=
+ogle.com/
+> > >=20
+> > > Looks something like this in my Hyper-V hcall series (except I alread=
+y
+> > > shouted at the agent for stupid struct layout and made it go run paho=
+le
+> > > on everything it's working on).
+> >=20
+> > FWIW, restricting cancellation to explicitly marked completions looks
+> > good to me.=C2=A0 If Sean/Paolo prefer that, I'm happy to mark our
+> > completion cancellable and drop our exception fields.
+>=20
+> I posted that as
+> https://lore.kernel.org/kvm/20261113170535.79246-3-dwmw2@infradead.org/T/=
+#u
+> and caught both Paolo and Sean here at KVM Forum and both seem OK with it
+> (although acquiescence when badgered at a conference doesn't necessarily
+> translate to applying the patch... :)
 
-Perhaps I'm slow but I don't see how this answers my question.
-I read your reply as "the config is supported and my team uses it".
+Heh, you jinxed yourself.
 
-The question is _why_ you use it. Let's leave the cpumap case aside,
-you provided no legitimate reason why having an XDP prog in that case
-is a problem. With veth - you are right that attaching XDP causes
-problems for pure skb traffic. For veth cases, however, there's no
-strong reason to delay the skb allocation. Hence my question.
-Why not let the driver allocate the skb if we know that the
-redirect target will need to allocate one, anyway.
+Adding something to KVM_SET_VCPU_EVENTS is complete overkill, and will crea=
+te a
+confusing ABI for hypercalls versus MSR exits.  For the latter, KVM lets us=
+erspace
+signal success/failure, and injects a #GP on failure.
 
-Since your patches are not a natural / clean extension of the existing
-infrastructure - we should step back and make sure the use case is
-practically justified.
+The VMware case in particular is a bit different since that case needs to i=
+nject
+a variety of faults, with a payload, but the concept is the same: give user=
+space
+a way to cancel/reject the hypercall/action.  And that's dead simple, e.g.
+
+  static int complete_vmware_hypercall_exit(struct kvm_vcpu *vcpu)
+  {
+	if (vcpu->run->vmware.ret)
+		return 1;
+
+	return kvm_skip_emulated_instruction(vcpu);
+  }
+
+For Hyper-V exits, from what I can tell, the plumbing already exists, i.e. =
+I
+suspect that this:
+
+  A VMM implementing Hyper-V hypercalls behind KVM_EXIT_HYPERV_HCALL can on=
+ly
+  complete them: write a status, advance RIP.  The TLFS specifies some hype=
+rcalls
+  to raise an exception at the hypercall instruction instead, and the exit =
+has no
+  way to say that.
+
+is partly wrong.  Presumably the TLFS provides a HV_STATUS_xxx flag or thre=
+e to
+indicate "exception", KVM just needs to honor those, e.g. if the behavior o=
+nly
+applies to userspace exits *and* userspace is responsible for injecting the=
+ fault:
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 5d2e3617c952..7933389731e6 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -2430,7 +2430,12 @@ static int kvm_hv_hypercall_complete(struct kvm_vcpu=
+ *vcpu, u64 result)
+
+ static int kvm_hv_hypercall_complete_userspace(struct kvm_vcpu *vcpu)
+ {
+-	return kvm_hv_hypercall_complete(vcpu, vcpu->run->hyperv.u.hcall.result);
++	u64 result =3D READ_ONCE(vcpu->run->hyperv.u.hcall.result);
++
++	if (hv_result_exception(result))
++		return 1;
++
++	return kvm_hv_hypercall_complete(vcpu, result);
+ }
+
+or if the type of fault is hardcoded and we want to apply the behavior to b=
+oth
+userspace exits and KVM-internal exits:
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 5d2e3617c952..c726a707a7ca 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -2420,6 +2420,9 @@ static int kvm_hv_hypercall_complete(struct kvm_vcpu =
+*vcpu, u64 result)
+ 	kvm_hv_hypercall_set_result(vcpu, result);
+ 	++vcpu->stat.hypercalls;
+
++	if (hv_result_exception(result))
++		return 1;
++
+ 	ret =3D kvm_skip_emulated_instruction(vcpu);
+
+ 	if (tlb_lock_count)
+
+If it's a mix of those two, we can obviously sort that out.
+
+If the exception is communicated through some other means, then (a) that ne=
+eds
+to be explained in detail, and (b) we should be able to use the same apprao=
+ch,
+just with new "ret" field or whatever in kvm_hyperv_exit.u.hcall.
