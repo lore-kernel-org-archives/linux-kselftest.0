@@ -1,49 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794847988;
-	b=cT1jX2bFpTfeP84I+daFQBMlUoo8zT36a9GWHsWl/z+vC90vAQgoYX3t+b1Yw0Xng4Mz
-	 QObVpuRvlrn0I5bpYAMvrd2XXAVicw4IQg+qFgHbMC3tTRn5lR32s7XzmmUi9HZTdkV5l
-	 qHWX8/h8gYjcaVVHilK0yXhiXcyQvV5CxjKhQZSrB8S2O+248pS4adMSl6Y6Quuz2a9oV
-	 PHPpfxxoz5507at18kFM/CPv0NHswmaRd7wtPa1G86AFWGcQGifBweNP6YnF4B0dcABAb
-	 WaoOQ4W3h757u23kn+6x48JX0j0U1mTGdYlHYnMtd2k82LgynYLGFNpA2hNwjIcFVSQ==
+	t=1794847989;
+	b=fLwZjQCpQVf9PJ5/cH9VtcsYrfYCsmdaYbtc6pEYXvPeDRh9gR/mDFvzmbcgQ7BJ/DTl
+	 F6KHwVluUxJeqGEl0NSDGXEm/azDkB8kXVVK4gbCeLw9AA9p5wB+UcosaCpAoB31REzRb
+	 P6e0NqKWqjubqB24Ct5+9Gq4MTmyELGCUnNGZshSfsSnaE4tHBZhvXm/o1Wi/4pdXTWRM
+	 h3RyllTwrg1uf/5ZKEffKs283JyYEMqwSVAAGgQ4tNkARrbV9fTUnGNv4Z6SrTFxs7jXn
+	 uQblfOVOt7BqAxOv49mpSyYHIqqpD2grv/B1Fm90w3ulnctL7NiUkpUafsLh0TGZ2XA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794847988;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=8P1anDkqsvPfymF1HrncUM/ITeUDu2rpnbYeaWyRZ9w=;
-	b=y5Z00jp4X+HiWQoXrX6wQ/72IFgb18JfMQN+GSrXAPkoOEGhkteSt2bmWOui5grDHU3z
-	 u+SziePGNfpaSjK4CQA9Sur9uRuYXVXi5kICEJfSm3IolD2kk1VSRUtWskspzrpo9qirn
-	 /JiQstDw5899Ajr4xGToZwDuvW+0P5YF89tpYLxQaneEEmw564EEoj/D1vzpfW6CTs1Lq
-	 ZqzRAaBuQSooWPgwe2HqKZCxkg783S38yGC9gCnisp6I4IMXUw8Vr/dbP5VvwBDPTG1tC
-	 OazgDx2yVqrKN1441kirKzmOOv4tbA99aX2lWfpK0y1/qlANXIv78mVAALCUGUTQkVg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794847989;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=VP7DDRUVGo0CSGEb63lpwJNrvx2CbLF1KeHf8Yfc8UE=;
+	b=vu+GUe8IYj/zzXyz+VqsznlEkoa8OT2EM6BvPFipuqjeus/+LYr/M9I7eXYDoss0Yhla
+	 hvNrC+LlGRsMcHGkwb7pn9C7oKQAQAXGW2o9VPJJL2/+/qOv33NmsyinN+PCU+A7x2epq
+	 tAR7PSRtBL7Rrz/NGrqmbBDe8xn6rlYGLBdYhoNJdigdoBofqGKZ6t8iCUrTP9w3taMQA
+	 6C+kE6aD/XWogAL3ady8px9pboyy6KOy3bqp4a0Z5z6ZYUOwl5uL3gvikNp32PxdhEShn
+	 +1l34Jm1pSncnZ04pKJE28EBPo92J3z2zxhHxck7Y5tQ/WgyJzRIkxrOkdjnq8WEpcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Ofm4ihUG;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD85B606A32C;
-	Mon, 16 Nov 2026 16:53:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD85B606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kO1v+Rjy;
+	arc=none smtp.remote-ip=209.85.161.46
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DE4606A336
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 16:53:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01DE4606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Ofm4ihUG
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA0A41476;
-	Mon, 16 Nov 2026 08:53:03 -0800 (PST)
-Received: from [10.2.212.8] (e134344.arm.com [10.2.212.8])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD3ED3F763;
-	Mon, 16 Nov 2026 08:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794847986; bh=kYPuyjOV9bDaWEZsOo5TqPn77JhxriiY+nM2DLDi3ao=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ofm4ihUG/kp+LAnzSw3B2xIaDxjXwF7CY2DAn2aPAR2UnIhkuVnurAbQTZzPw18oX
-	 TsCpx6MBpybrU2f2PGsNQRuwsUOJgF46BqYOtBMCneP9x7vqk8xlZiG3WGpEM3esh8
-	 Mo1UPD7ozUG/myUgbabE6ZiGQOkhiPidkQzUQ19A=
-Message-ID: <f609e8a4-00bc-471f-90b2-1b6ef3154adf@arm.com>
-Date: Mon, 16 Nov 2026 16:53:03 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kO1v+Rjy
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-702fd86d674so3116198eaf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 08:53:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794847988; x=1795452788; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VP7DDRUVGo0CSGEb63lpwJNrvx2CbLF1KeHf8Yfc8UE=;
+        b=kO1v+RjyMfd21G8uhXlXTTkqKgCjH/ix++kmmJggawFoXgugqK7ReQqC1OPmsj6Iqc
+         11GPg6D/LlalUK7pGLh2QA246PjCafW41IJadGMdiVoRY3TxSGhy4YFCQac+ly/huFrV
+         1dYRgv29eM2V68PzGAhfgkK/xUFb8w6uxGuvQWLt8VF+wDlH4ugShPdSPPOaO6bZLC/L
+         lABUmpeZ97Ef8JJ/n1arkomSCSSUvKXI61T1KCL2Z5TvXtkDXMV6+E9Ds+YQPOscOuZs
+         yJg5mZ/p8xxr3EVr43fu4z1US+Kjg8VtpakAdmyWsT1nKOJTzfmpd8AdnElIxOJN650k
+         Ze+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794847988; x=1795452788;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VP7DDRUVGo0CSGEb63lpwJNrvx2CbLF1KeHf8Yfc8UE=;
+        b=vLf1qL3aotniC8jxOE/buOmHYO0JNc/oNLcII/J6ecPqmyGTeyZIc+qDSxoxfY4Evd
+         eDm6aK4tjavzmTogdxKNijefUCkjac8PMlNwpc2rOYiwoC3jIO+baSB3sXomY4KuGNc2
+         MdChG7j+bwH2E7cXxiDfXKkEP0XdrDcNKVRG9Cpk7vIgtU/ciprWZCl9WpVRqqc44zGK
+         St3/3ZQq/ZUqd42AyT4DZqvu/g1Sh9ZBk2zjV/ZwrZ/SFnYIisyJJAteMyWUbweAUXGJ
+         GfJkvmfXk2ZOeZFZMw78VUsQuvROP3n6AXzhmKZSdExZZMqUGEehTwDozPQry36zH4I9
+         cP/g==
+X-Forwarded-Encrypted: i=1; AL+hErHY7okuoIYt1jKWOOxR1huDWwVsVxerWlm9nF/7bQZJDhChtzmENNhP+TL3zM9uuzoHX46QWKq1HEW5BPnYvrk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z82T4h0XY3jgs6s/RMBWwTTSog+T6twc5YgKj0upRx4Kxb1KZoe
+	JfM/XHAqTgxiUkZX03ZxA5TAHvjxNwujkt0cudU1fug5lHxwkHM8/dcd
+X-Gm-Gg: AYBFou3w2Vxqia1QmUmCJH1nvOjJGoMGgNC8T/+3EHn0BbuifEHkU4ipnqzuvbKgBev
+	G7JhZ/7/071t5QeRICJf0a/rxuyf/iqq6vbn8odE0Ybk1bD5yZ8YrrzRNu4+MF3aty4Bpge6qFR
+	7vNN6Fo6HizWenLn4LbhRExeeFdjnPDMtX7h5obZS5tRgmKR8HQtpN2/5MBycRQDqPEXE9lc7eP
+	M2KdEoC213dxxh9eD6imSU1mwvezmvzC8fs2zJyU9nsmUq4Kc896rhCq+B0YBW5+7+MKVbCUfRX
+	DcSkU9LEw8SEEqhjjokE9oeRk4nO9D2SutYXwN3xjr0gRdXgI8mFRB5uktP4wTg2orjMEYkEvzL
+	MpEXSTCzjs1UOPI95m/bvtsd3HTER+JMwzSqHZZ6mCQuVidff6Fr45KGSYFJqsSrfYaJeRWqF8o
+	8AnDRxE/w5vkQelRBFxv4jySgJ539y/qOCMvBVL+D7IotZuXwnsxqNXvy8jYuLDBEZPfZG0Y0Rc
+	IGf6p08K3dAfUSaXcPiZZTxowVCrGZV814sJql0BjjEXCzbXvG9k74sMkDCaNLiuUvwN7lkBp2f
+	C8K9Iv5mKUSF18NelR2mcatGtoD7eihDwXUs+QgTHBh08b1e565BFZFDUhMl4w==
+X-Received: by 2002:a05:6820:f02a:b0:715:2424:b6c7 with SMTP id 006d021491bc7-71ab4cf88a2mr7713750eaf.2.1794847987690;
+        Mon, 16 Nov 2026 08:53:07 -0800 (PST)
+Received: from ?IPV6:2620:10d:c085:21e8::1224? ([2620:10d:c090:400::5:1080])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71ab42c41e9sm9069522eaf.6.2026.11.16.08.53.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2026 08:53:07 -0800 (PST)
+Message-ID: <8239025c-66d0-4a63-89f0-acb97bc99456@gmail.com>
+Date: Mon, 16 Nov 2026 08:53:05 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,149 +93,168 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] selftests/resctrl: Implement cl_flush() and sb()
- for aarch64
-To: Richard Cheng <icheng@nvidia.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
- x86@kernel.org, shuah@kernel.org, fenghuay@nvidia.com, Dave.Martin@arm.com,
- james.morse@arm.com, babu.moger@amd.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kaihengf@nvidia.com, kobak@nvidia.com,
- newtonl@nvidia.com, kristinc@nvidia.com
-References: <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
- <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com> <aurOz7iGKInyjddW@MWDK4CY14F>
- <b94aa5e5-a4ab-4b61-a864-d10ff1ff2b63@arm.com> <auxM9hVAgp61Qbgv@MWDK4CY14F>
- <c58c397e-26e4-4866-be80-59d9bd861654@arm.com>
- <808923a4-0a6e-4d8f-8ace-d3573aa125e8@intel.com>
- <89549a38-4764-466b-b66e-98bab801fefc@arm.com>
- <0583dad3-f761-48d5-a9a2-f2ad39567a6b@intel.com>
- <7501303c-d304-47d4-8150-b1efc8554d36@arm.com> <avhZnuz2caJWIfLo@MWDK4CY14F>
+Subject: Re: [PATCH net v3] selftests: drv-net: pause: Avoid cleanup failures
+ for unsupported link settings
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ maxime.chevallier@bootlin.com, linux-kselftest@vger.kernel.org,
+ hmohsin@meta.com
+References: <20261113022717.1914724-1-mohsin.bashr@gmail.com>
+ <179479615614.3136.17810537023382462405@kernel.org>
 Content-Language: en-US
-From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <avhZnuz2caJWIfLo@MWDK4CY14F>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+In-Reply-To: <179479615614.3136.17810537023382462405@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Richard,
 
-On 14/11/2026 12:59, Richard Cheng wrote:
-> On Tue, Nov 10, 2026 at 12:35:48PM +0800, Ben Horgan wrote:
->> Hi Reinette, Richard,
->>
->> On 09/11/2026 17:01, Reinette Chatre wrote:
->>> Hi Ben,
->>>
->>> On 11/13/26 7:16 PM, Ben Horgan wrote:
->>>> On 07/11/2026 00:29, Reinette Chatre wrote:
->>>
->>> ... 
->>>>>
->>>>> If you do end up using a benchmark I'd suggest to make the checks as forgiving as
->>>>> possible. For example, instead of checking something like "LLC occupancy needs to be
->>>>> X when bitmap is Y" it should check something like "LLC occupancy when bitmap is all ones
->>>>> is larger than LLC occupancy when only half of bitmap is ones".
->>>>
->>>> Do you think it's too strong to say that a bitmap with n + 1 bits set
->>>> has higher occupancy than one with n bits set? I think it has slightly
->>>> more utility in that all bits of the bitmap are plumbed down to a
->>>> working control but I'm ok with a weaker check if a stronger check will
->>>> just be problematic and maintenance heavy.
->>>
->>> My comment was motivated by the recent change I needed to make to the CAT test
->>> that uses cache misses measured via perf instead of cache occupancy. Originally
->>> this test incremented the bitmap with one at each cycle but incrementing it with
->>> two proved to be more robust.
->>>
->>> What you are proposing sounds more like an enhancement to the CMT test that
->>> uses cache occupancy as measurement while following the same methodology as the
->>> CAT test. 
->>
-> 
-> Hi Ben, Reinette,
-> 
->> Ok, then perhaps it's best just to enhance the CMT test to also check that the cache allocation
->> bitmap has some measureable effect rather than a new test. In the spirit of making the checks as
->> weak as possible we could just check that the measured llc_occupancy is lowest for the minimum
->> number of cache allocation bits set, higher when half the bits set and highest when all the bits are
->> set.
->>
-> 
-> Agreed. I'll enhance the CMT test instead of adding a new one.
-> Please forget my "must not exceed" idea, as you said there's still an
-> absolute number with the same accuarcy problem.
-> 
->  
->> This brings us back to the initial subject of this patch. For MPAM we need a new implementation for
->> memflush() as cl_flush() doesn't have a direct equivalent on arm64. There is an smmcc based option
->> but the kernel support isn't upstream yet [1] and I don't know how widely it is supported in
->> firmware. As such, we need to use the writing of a buffer from a different control group. This
->> should be distinct from the default control group and have all cache portion bits set, as the CMT
->> test uses the inverse of the testing mask for the default group. The llc_occupancy of the testing
->> group can be used to check the group is clean enough, i.e. the memflush() had the desired effect.
->> All this does have the disadvantage of using the same features we are checking to to help with the
->> testing interface but there seems no easy way out of that while staying generic across even MPAM
->> platforms.
->>
-> 
-> I think we can avoid the flush completely if the bitmpas are measured
-> from narrow to wide while the same benchmark keeps running.
-> 
-> Two reason I can think of to backed it up.
-> 
-> - Everything the test group has in the cache after the narrow step was
->   allocate using the narrow bitmap, and the wide bitmap covers those portions
->   as well. Nothing is left in a portion the group may not use any more, so
->   there's nothing to flush before the wide step. Only going from wide to
->   narrow can leave such lines behind.
-> 
-> - The first step doesn't need a flush either. resctrl_val() moves the task
->   to the test group and writes the schemata before the buffer is allocate
->   and init, so the buffer never wasa in the cache under another bitmap.
 
-I'm not so sure. If there are cache lines in the cache portions that the benchmark will use that are
-currently in use by the default tasks then they may continue to be used by the default tasks unless
-we cause those lines to be evicted. The cache portion bitmap, at least on MPAM, only affects new
-cache allocations.
+On 11/15/26 6:29 PM, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 1 · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] The patch removes the unconditional restore of the pre-test
+>    link state from pause_setup(), and pause_test_support() does not…
+> 
+> --
+> 
+> selftests: drv-net: pause: Avoid cleanup failures for unsupported link settings
+> 
+> This patch changes pause.py so that link-setting restores are queued only
+> after a link-setting request has succeeded. Devices that cannot change link
+> settings therefore no longer fail during cleanup. If no link configuration
+> change is accepted, pause_test_support() falls back to checking forced MAC
+> pause on the current link, and pause_autoneg_link_autoneg() now queues its
+> own autoneg-on restores.
+> 
+>> diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
+>> index ca4a55e59c30f..c3398c7452e01 100755
+>> --- a/tools/testing/selftests/drivers/net/hw/pause.py
+>> +++ b/tools/testing/selftests/drivers/net/hw/pause.py
+>> @@ -402,16 +402,13 @@ def pause_setup(cfg):
+>>       if "auto-negotiation" not in link:
+>>           raise KsftSkipEx(f"{cfg.ifname} doesn't report its link modes")
+>>   
+>> -    if link["auto-negotiation"]:
+>> -        defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+>> -    elif "speed" in link and "duplex" in link:
+>> -        defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
+>> -                   f"duplex {link['duplex'].lower()}")
+>> -
+>>       # Local interface admin up, link aneg on
+>>       ip(f"link set {cfg.ifname} up")
+>>       if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
+>>           ethtool(f"-s {cfg.ifname} autoneg on")
+>> +        if "speed" in link and "duplex" in link:
+>> +            defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
+>> +                       f"duplex {link['duplex'].lower()}")
+> 
+> [ ... ]
+> 
+>> @@ -470,9 +463,12 @@ def pause_test_support(cfg, pauseparams):
+>>   
+>>       forced = forced_link_settings(cfg)
+>>       _, supported = get_local_pause_supported(cfg)
+>> +    link_config_tested = False
+>>   
+>>       # We check that what we can configure in the pause params matches what we
+>> -    # support under various contditions : Link aneg on/off, pause aneg on/off
+>> +    # support under various conditions: link aneg on/off, and pause aneg
+>> +    # on/off. If no link configuration change is supported, fall back to
+>> +    # checking forced MAC pause on the current link.
+>>       ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg on", is_get = False)
+>>       if ret != 0:
+>>           ksft_pr("link autoneg on refused, not tested")
+>> @@ -481,18 +477,23 @@ def pause_test_support(cfg, pauseparams):
+>>                                  "link autoneg on")
+>>           expect_pauseparams_set(cfg, pauseparams, True, supported,
+>>                                  "link autoneg on")
+>> +        link_config_tested = True
+>>   
+>>       if not forced:
+>>           ksft_pr("link speed unknown, the forced link is not tested")
+>> -        return
+>> -
+>> -    ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
+>> -    if ret != 0:
+>> -        ksft_pr(f"link autoneg off {forced} refused, not tested")
+>> -        return
+>> -
+>> -    expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
+>> -    expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
+>> +    else:
+>> +        ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
+>> +        if ret != 0:
+>> +            ksft_pr(f"link autoneg off {forced} refused, not tested")
+>> +        else:
+>> +            if link_config_tested:
+>> +                defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+> 
+> [Severity: Medium]
+> Could this leave the local interface autonegotiating when it started with
+> a forced link?
+> 
+> pause_setup() now queues a restore only when it enables autoneg itself,
+> which happens when supports-auto-negotiation is true and auto-negotiation
+> is false. If the port starts forced and reports
+> supports-auto-negotiation: false, pause_setup() queues nothing.
+> 
+> pause_test_support() then sends:
+> 
+>      ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg on", is_get = False)
+> 
+> If that succeeds, no restore is queued for it. The ethtool netlink core
+> does not check the Autoneg supported bit. In net/ethtool/linkmodes.c,
+> ethnl_update_linkmodes() only does:
+> 
+>      ethnl_update_u8(&lsettings->autoneg, tb[ETHTOOL_A_LINKMODES_AUTONEG], mod);
+> 
+> The change is then passed to ->set_link_ksettings(), so the driver alone
+> decides whether to accept it.
+> 
+> If the driver accepts it and the later autoneg off {forced} request also
+> succeeds, the only restore queued is the hardcoded autoneg on above.
+> Cleanup then leaves the link in autoneg mode.
+> 
+> Before this patch, pause_setup() queued "autoneg off speed X duplex Y"
+> first. That restore ran last and put back the original forced settings.
+> 
+> The commit message says:
+> 
+>    Fix this by queuing link-setting restores only after a link-setting
+>    request has succeeded.
+> 
+> The first autoneg on request in pause_test_support() can succeed and
+> change the link, but no restore is queued for it. This only happens with a
+> driver that accepts enabling autoneg without advertising Autoneg support.
+> 
+> Should pause_test_support() restore the link state it saw before the test
+> instead of a fixed autoneg on?
+> 
 
-Thanks,
+Thanks for the review. AFAIU this case is only possible if the driver's 
+behavior is inconsistent. The case would require driver to report that 
+it does not support autoneg and still accept AUTONEG_ENABLE. IMHO 
+pause_test_support() is not expected to validate ksetting 
+inconsistencies in a driver. I'd leave it up to the maintainers to 
+decide if it needs a respin.
 
-Ben
-
+>> +            expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
+>> +            expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
+>> +            link_config_tested = True
+>> +
+>> +    if not link_config_tested:
+>> +        expect_pauseparams_set(cfg, pauseparams, False, supported, "current link")
 > 
-> I'll work on v6 with patch 1 of this series, and patch 2 does not depend
-> on this so I'll send it as a standalone patch.
+> [ ... ]
 > 
-> Best regards,
-> Richard Cheng.
-> 
-> 
->> [1] https://lore.kernel.org/linux-arm-kernel/20261021224557.1827361-1-smadhavan@nvidia.com/
->>
->> At the moment the CMT test just uses a single cycle of a hardcoded
->>> (unless user provides something else) bitmap with five bits set. Even with this
->>> I needed add enhancements to make it more robust:
->>>
->>>  commit ca0ea39288c9 ("selftests/resctrl: Reduce interference from L2 occupancy during cache occupancy test")
->>>  commit 7a214b4ec1c9 ("selftests/resctrl: Improve accuracy of cache occupancy test")
->>>
->>> As one enhancement highlights the accuracy can be managed better on a system that
->>> supports L2 as well as L3 allocation. Not all systems able to run such test will have such
->>> capability. Also, looks like CMT does not require there to not be interference as the CAT
->>> test does but with MPAM systems having each cache portion as shareable this may also be
->>> a big influence on accuracy.
->>>
->>> I am not able to judge if a test that uses LLC occupancy and relies on single bit increments
->>> will be robust across all platforms of all architectures. Even so, I do see several risks
->>> for such test to be reliable while I do not see how such fine grained increment provides
->>> insight into resctrl kernel subsystem health.
->>
->> Thanks for sharing your experience on the testing robustness. I now see that being as permissive as
->> possible with our testing is the way to go.
->>
->> Ben
->>
->>>
->>> Reinette
->>>
->>>
->>
 
