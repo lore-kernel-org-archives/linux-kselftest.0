@@ -1,100 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.160.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1794873355;
-	b=C1ihGjX+By00lZ1+Vstkf9q+NBjblj4fJfpFko3Sx0Qv+tSK+WVUXCro4mdsEM+HzxRr
-	 PfMrx1fe2cXKwxuaOXGRhQXIpysvRQ78Hx845OnJW/NZe1/wdWMoWI3LgOGTQVcY94Xmg
-	 gUJ02Agbo+599DoNyL2ZABOea1WzWpXaVc0mntJNyNM9IOkHkEDp40lmpyuNt3lRDu9B0
-	 EXq/eGPLdwejO4lDXJaDiKkQFp6mw/6wdNSwWzdF53ScjlIl+ffJ7cG+fe0XDi9aBO4xT
-	 JDnZi+YfHStsQbWZnv7EH4cONCMeHQdWnKIicpmQn9lchdy+pwh04Ae2VzeY/EV2LeA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794873355;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=pBcsIqN5fGPsZcVWkz3kK83U3k9KWzXvm7Zsz1tEHJk=;
-	b=uxsQJeYlTF/gDPjC1XAsYKG256VknWsVVMJFbgl4r2ASeGIGAvEbg90DgXuavnaMewlz
-	 e+6mKnOUVicjeoXP3Z2w2CxJEZIts5XR5Zb9TemCh97TRDnR1O9ZcEB/DgbbdSxcv7pye
-	 off4hxi3Qd5Bof7VUOuEE6WCKbDKWRBGjMSeZpZqTkIANc+w6M0Lhg4EmQQSnXWxBx6fs
-	 tVGH5b6N5EeSS83Q/RbYfSjjAK+F/i6AO7Tz1n14/ufBYDBuOmR508NKvJLAES9OXSaoN
-	 aLm7koEkWp4GWLvYGzO9EK1gkmsgCzBuJEgdBJjkoLrhTN6KmC09ZNfnFtxexmLo8Tw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=JAkvmEBC;
-	arc=fail smtp.remote-ip=209.85.160.41
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794873417;
+	b=FkKtokx6Rvfh+cWCyPNCIV0hHS46TFIROvdXFLkn6AxXJT+SoXAbkGHdC3OA1iA2VLlL
+	 FNjhvZcbTZP+tGg1JwxUqKKlIkN86medVuBFOb7rYR6ZLqdkwvA5FI2bHCOBodokZmJqN
+	 GFssBwsD/IeuBTd6deYhBh1vIqB2OiFksqwu4dO+HyoLVcMcb3mWNP7ctxT2SGR6SXXya
+	 usddaqnJKQz9cUyKOFNUnLHnSJM9c63zH042dwRfvIewyy47hep4LDQcIofTLyIGR57Sh
+	 3cSvNbMvig91BchH4n9aIZhmPbhHWL2OaVHYKRQLio0os+e99TjBetKucUQOJo6Kl2A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794873417;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:CC:Subject:
+	 User-Agent:In-Reply-To:References:Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-SRS-Rewrite;
+	bh=VDQ8XKp98/IUabUksJNwRsl5hTpuGniKvWNPUNAUVJs=;
+	b=GA3NXbN1cCv17HuMTsqrAX3BaUEQYCpRX5+vlnievax54mRdISDrbqG8mVVrHseu4b17
+	 LmCe9/AUHDv8hFdzXFkfl3UPvk0V7s1i2mQZuEi8V+OZq0DX5+1NmNzrX+3CkBXCsZfdZ
+	 jdHpGcb1ruEjF/KnFjyHYW8eFeINY9aLWpgInsporYWWeEw2FUScKxno4WDf8f7HuShs/
+	 PKlEwiGHCkHd/acN5u/Wl+Fttjvm9w7QIkvLBSM5y4VUSgnkaTzBq7B/eKfrqV+Y0i4DZ
+	 OciJffgaas9UiZLOkbZG+FuCKhSJvM2VKPQNxzrjKYOYbsNtZCbUmhS8E9Vphq/IgiQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=infradead.org;
+	spf=none smtp.mailfrom=desiato.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=bAwGBnT5;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA18606A329
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 23:55:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDA18606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540A606A31C;
+	Mon, 16 Nov 2026 23:56:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5540A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=JAkvmEBC
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-48eee44b908so3017179fac.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 15:55:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794873354; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Rclj7wAMgtNXRNibsnJxU1vfHhKcrhVLDbnm+VnOqhpNf+A9LPcGzj3OcPR1mU5EYt
-         uwx+csu9Wlwga1YwQpCqTDd8z9zABzJ2p4pa/jWoNGaYNt62bCRaEOtgLYtB3ueXp2Uc
-         yvmANp2u214SLInR0hruC0rQUrijF/Wkls2+L7effkENM9RbaxLdsqdrDUG5QZb+LzxN
-         5sJ2bwIToawNkWIfTIvWyt22XnSaoqf5fIc9WBTo5RF04pw45ApZucSUOm/AvWoJCeXE
-         hf+e7xtzM0FX8lrsCgeqbUdAjfpa0SBfrLb+TtEZFNUr7Qg0//5qTuPN8gDUg91OWEUf
-         GEog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=pBcsIqN5fGPsZcVWkz3kK83U3k9KWzXvm7Zsz1tEHJk=;
-        fh=hY/B2OBC4dIcyte7dxnUs+vBrsBbEgEiumu1pPL7xZs=;
-        b=jbcW0+LyBYeeM3ZtYZudo0q5zLzIN0UPRiTa7IgxbhymJBNbOEHYBWoRiI5v8UftA/
-         hcgtAKfU9XJWT4B7f3qXD9jIRQ0etWLCqE4zq1Y+RWnZ82gOK23k6MIhE3HkG/09bdu7
-         fCGxHHP8WGqesIQsJsdwe4ul8Oh0/NUR4jfkcJGER4WP2rNcNlUK57noFKDnVBkakNdd
-         mrUGJ0TdURwIHikxT0phAf4kvFjaq14Pdkw4POQtajATHxuWs+akPcsyfjnAKgygOdU0
-         72RBB0DjMQhFA39ujrvFQ7yNDAbdji2xzTFFpdtRpPeZ9ytfWiAyVkvRI4sXtdjWdi/k
-         JKkg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794873354; x=1795478154; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pBcsIqN5fGPsZcVWkz3kK83U3k9KWzXvm7Zsz1tEHJk=;
-        b=JAkvmEBCaNDQqwC/zKowMzj6cpiI7lgA6iaz0LI7B90FIdYKT+zfc8mHOfbT+8rfmy
-         SkxZwQ9E/3nRcFpOdPfK4YkO31ptJrj017y76GEN9o+sriJn2LpPhsvGdy4+6ZVs7P7b
-         gWmNIxbWSERHhTKd2zkL1m6C4vu+dM8FCwNbEDFmf98bujAm6BesiHJVeKB6Mv37oIXE
-         DWAm2yXQzqAAVjsc+DybarNPT6YXVie4MGJHRFFkjGvmOyHEShJDDqv0maNaWckg64Z2
-         L/XJP7qjo7r7unFg1B4QzrVD6lfR0b+R5Old5lYIyjznlmAyd2cbZ0Uxx0FLIGVM4o9N
-         a3VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794873354; x=1795478154;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=pBcsIqN5fGPsZcVWkz3kK83U3k9KWzXvm7Zsz1tEHJk=;
-        b=vFnQmZbkoONwR86DReOAZwUZ/knGaM1DLhBEBT8eeNSY7SJ+0H8pEesYNH9qp7MNRl
-         QqjSn5E4Wv6woEXmLUUxDABcqYq02iCEEg52jDusA6dwvu75Au6ig0/wXAwcCHwV8dm2
-         yZbUVAfWnm/77J0WFNRIdLKC6eUkAB60lQhfmms5Sp+f+WxKe4Wxs5p+4TsucPmFcNVR
-         L6Ha405fNc9WO7mMMIwtHB0wbcFwxxWjgPXyPn5GBvlMcP8vlJS0eK1Lttu+XUvgu+ls
-         RjNrPWe1+g+MM+8JUcBai7dCYUmJiw9vgPIqLxdkCV/FjdhWqOjMWBEk6gNkQw7ataRZ
-         owlw==
-X-Forwarded-Encrypted: i=1; AL+hErHbWl2jonUqSbIIi63BSp939u56n1YuUz6mJhHfMKunYifQdJUdmM6IumjIQ/dcycTwJedTCjc1AURdsBom3Vs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+KYs1Y+1wJUMppmSPBE05+0tsT4YzRSIvfqswf0WdXc+sP7K3l
-	XvbBpiN/xNwtHhD5cjhyDg1yUyp6avryGsnMZoxkau5JGvjExttBap5L9qwVG6qvoUAQMiQiddu
-	SydJVQK0PIymxB6rW2tROI4FZvk+pbfv2RUC/HxWSJA==
-X-Gm-Gg: AYBFou1m7nNnUU5OUtzQWATHN9kE5Dk7eid5TFGqLF6/xa37zayZaAOVG/3LkvX3Tqf
-	KlLu20itDHoqZbrzWNj9tKTSR3o0mnxvlNB9tIS5uOF2ah3YEplMERqIGAJBOwqeYERHJ4V3w8D
-	kGGvLhHklvgNLbRsOZMQ1w2FvbtafpBvoPvQ5R3wndNWUARLueZjc2FhNLJTwfzD9EECDj6AD2C
-	Scln7eJVx0InpAgqheIC8nMF+3iCuvtrac2pHlczwc7oB+Yg/M7CiMJWpqr1Sgp8H3bczXKUWxU
-	xckNHD2qzQhUSLjN76VxLh/elbfcAAUJjFMvX428MiFHHFQ0pKYbSsF6cuDz9Ml6wTLHcn3E+o4
-	3Kpix6K1FV3cdxcOctO5qbI1EGA5nEcKJzNmlQsRSFt6bGTWbQRKpCbIK1PgrsTXIcLnGZxyioa
-	W1lK0bYn0cDQ==
-X-Received: by 2002:a05:6871:b2a:b0:494:b8f4:9a22 with SMTP id
- 586e51a60fabf-4afdf70bba7mr10365207fac.28.1794873353687; Mon, 16 Nov 2026
- 15:55:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=bAwGBnT5
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=VDQ8XKp98/IUabUksJNwRsl5hTpuGniKvWNPUNAUVJs=; b=bAwGBnT5GwP1cL3P3kxxd+Tt4p
+	RTDaT0Oyl71V25VcnfUc1TJsIvvkfVFF6tQ7cjAsdBRjhaNhVfROk11PZQ2Lqp9H080zmEhNxAUWS
+	2845Sqt5jD1hB3QkEXAuvA7zWzvgVWcCtoq4A+B1ou32/iKhaZsoaAgBPrjc9SGhhsNX56JBiO8I7
+	Bc4gc4TPwyVghj71V2WVE2j61jwGFsmpNg3XUV4E+wbwhSTecpnZFeqAKhqzvB6pBB6N+mR0wooU5
+	0SOKcOhLC9DuvMxgdFebRU8VgFgPZXIqt3KE3NaXJiKF6ke8hcLAeS4IC8G+z/mXzaEm9DAasDAbV
+	V5XT4lxw==;
+Received: from [2a00:23ee:2960:2262:e6b2:75b6:9515:3c16] (helo=ehlo.thunderbird.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xT6Z2-0000000EQr2-3zpq;
+	Mon, 16 Nov 2026 23:56:44 +0000
+Date: Mon, 16 Nov 2026 23:56:42 +0000
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+CC: Zack Rusin <zack.rusin@broadcom.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ kvm@vger.kernel.org, Doug Covelli <doug.covelli@broadcom.com>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
+ Shuah Khan <shuah@kernel.org>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ Paul Durrant <paul@xen.org>, Xin Li <xin@zytor.com>,
+ Francesco Lavra <flavra@baylibre.com>,
+ =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/12] KVM: x86: Forward VMware hypercalls to userspace
+User-Agent: K-9 Mail for Android
+In-Reply-To: <avuDUNAU_a933zvp@seanjc-mac.roam.internal>
+References: <cover.1794374897.git.zack.rusin@broadcom.com> <90467782be23b83fd3e9a6afe2f1d2149eaf9db9.1794374897.git.zack.rusin@broadcom.com> <876c4f4fc442116c9bff8abd8c34f99fcfa65531.camel@infradead.org> <CABQX2QNd7DehBsH-pGL=EJK4b5vC60PymL_YP27xDxGT6_6=uQ@mail.gmail.com> <1bae109338ab6ff1ff14eac811f7e86ced785b22.camel@infradead.org> <CABQX2QNhRZP1Td_HQ6QpMzw-_TjqhbooipWYg3VTgTOq2_U9+w@mail.gmail.com> <ca9dffb64656a392965f95d35b9d13d829f34076.camel@infradead.org> <avuDUNAU_a933zvp@seanjc-mac.roam.internal>
+Message-ID: <78F8FDAE-31A5-416B-9A97-DB8D5E7271FA@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,85 +76,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794281983.git.tianyi@cloudflare.com> <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
- <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
- <20261115113902.4834dda6@kernel.org> <CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
- <20261116142710.347e8571@kernel.org>
-In-Reply-To: <20261116142710.347e8571@kernel.org>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Mon, 16 Nov 2026 23:55:42 +0000
-X-Gm-Features: Aa3M54oRvcr-c3A5HCcCKnOxqAqDaGkfnfsAP0Ey0SL0I7zgF2gu0s6ZsVqnle8
-Message-ID: <CAG4wq-cDYa2GkpWSYeOLwEPv45BtucZk+r=N2b1Srd=gUUO4MQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Vladimir Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
-	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	llvm@lists.linux.dev, kernel-team@cloudflare.com, 
-	Tianyi Gao <tianyi.gao@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, 16 Nov 2026 14:27:10 -0800 Jakub Kicinski wrote:
-> The question is _why_ you use it. Let's leave the cpumap case aside,
-> you provided no legitimate reason why having an XDP prog in that case
-> is a problem. With veth - you are right that attaching XDP causes
-> problems for pure skb traffic. For veth cases, however, there's no
-> strong reason to delay the skb allocation. Hence my question.
-> Why not let the driver allocate the skb if we know that the
-> redirect target will need to allocate one, anyway.
+On 16 November 2026 22:27:28 GMT, Sean Christopherson <seanjc@google=2Ecom>=
+ wrote:
+>On Fri, Nov 13, 2026, David Woodhouse wrote:
+>> On Fri, 2026-11-13 at 01:33 -0500, Zack Rusin wrote:
+>> > > Userspace *already* needed to
+>> > > know about those=C2=B9 because it can't migrate while those are pen=
+ding;
+>> > > it has to do at least one more run, even if it's with the immediate=
+_exit
+>> > > flag set=2E
+>> >=20
+>> > True, but, again afaict, that rule exists because those completions
+>> > have to run, so I don't think it tells us they can be dropped=2E
+>> >=20
+>> > > If it's deemed clearer, I'd also be OK with an explicit
+>> > > KVM_VCPUEVENT_CANCEL_HCALL which cancels *only* hypercalls=2E But I=
+ don't
+>> > > really see the point; userspace shouldn't be getting confused when =
+it
+>> > > was actually some other kind of completion that was active anyway=
+=2E
+>> > >=20
+>> > > =C2=B9 https://lore=2Ekernel=2Eorg/all/20250111012450=2E1262638-1-s=
+eanjc@google=2Ecom/
+>> > >=20
+>> > > Looks something like this in my Hyper-V hcall series (except I alre=
+ady
+>> > > shouted at the agent for stupid struct layout and made it go run pa=
+hole
+>> > > on everything it's working on)=2E
+>> >=20
+>> > FWIW, restricting cancellation to explicitly marked completions looks
+>> > good to me=2E=C2=A0 If Sean/Paolo prefer that, I'm happy to mark our
+>> > completion cancellable and drop our exception fields=2E
+>>=20
+>> I posted that as
+>> https://lore=2Ekernel=2Eorg/kvm/20261113170535=2E79246-3-dwmw2@infradea=
+d=2Eorg/T/#u
+>> and caught both Paolo and Sean here at KVM Forum and both seem OK with =
+it
+>> (although acquiescence when badgered at a conference doesn't necessaril=
+y
+>> translate to applying the patch=2E=2E=2E :)
+>
+>Heh, you jinxed yourself=2E
 
-Sorry for not being clear enough.
 
-On the setup we want to build: an XDP program on the NIC does the
-decap for all traffic. The services run in namespaces, so the packets
-must be delivered into them. Some services attach their own XDP
-program to the veth, and some do not. The host does not control the
-service's program.
+Yeah, none of us had really had the time to consider it deeply=2E
 
-For a veth with a program, the skb path has the problems you mention,
-so the host uses XDP_REDIRECT. For a veth without a program, we want
-to use XDP_REDIRECT too, so that the host delivers to every namespace
-in the same way.
+For VMware and Huper-V I do believe we need to raise the fault *on* the in=
+struction, not after it=2E But that's achievable=2E
 
-In a minimal benchmark, pktgen sends UDP, and perf stat counts the
-cycles on the RX CPU. bpf_redirect_peer() from tc costs 3% more
-cycles per packet than XDP_REDIRECT with the checksum status kept
-(mlx5, one extra __netif_receive_skb_core()). So one XDP_REDIRECT path
-for all namespaces is both simpler and cheaper.
+I had also added a third user of the same cancellation today =E2=80=94 we =
+need to intercept certain control register writes and need to raise various=
+ exceptions for those too=2E
 
-> Since your patches are not a natural / clean extension of the existing
-> infrastructure - we should step back and make sure the use case is
-> practically justified.
+WIP of that at=20
+https://git=2Einfradead=2Eorg/users/dwmw2/linux=2Egit/shortlog/refs/heads/=
+vsm3/regwr-filter-v5
 
-Maybe I am missing something here. XDP_REDIRECT into a veth works
-without an XDP program on the veth. To me, it is natural that the RX
-metadata also reaches the skb on that path, without attaching an extra
-XDP program.
+I think I would still prefer to use KVM_SET_VCPU_EVENTS rather than shoe-h=
+orning the same facility into the return part of various different kvm_run =
+exit structs=2E But I won't fight for KVM_SET_VCPU_EVENTS to do the cancell=
+ation=2E How about we just give each of the exit types a way to indicate wh=
+ether to advance the RIP because the instruction is completing) or not (bec=
+ause the instruction is faulting)?
 
-Thank you for taking the time to look into this. I would really
-appreciate it if you could point out which part does not look natural
-to you.
 
-Thanks,
-Tianyi
+>If the exception is communicated through some other means, then (a) that =
+needs
+>to be explained in detail, and (b) we should be able to use the same appr=
+aoch,
+>just with new "ret" field or whatever in kvm_hyperv_exit=2Eu=2Ehcall=2E
+
+I do think it is a full 64-bit return value *or* an exception=2E My friend=
+ did originally abuse bit 63 of the return value and I may have thrown my t=
+oys out of the pram at it a little bit=2E=2E=2E they can type fast, but my =
+God they are stupid sometimes=2E
+
