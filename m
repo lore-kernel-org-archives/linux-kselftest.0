@@ -1,73 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794832309;
-	b=Ot0+dyrNTRW9Ly0Yf1BqeMvjjBireCD4NfIogsd0WLu+V/tc9sDccbxOl0CLSUb4rgzg
-	 KMqAJkFdj0I6+3hBr1heRlLKA0rJEdGRA8JNeAHFe/JvN9JqWIoSbCu9T9eYJ2HEtHsxT
-	 gbTVFD2fCcbisDXJUl3MtFIzpneY8ZCpwERs6iIBmSRUWmxrwsHUi+Rruj+6U3GHmbhj6
-	 zD1Gsi/c1mkXY5Rx+9Z8Mdxvgd2YobIMjx0r7GmV/GbVx0b8O4/gPSj4Wrmyi45gLVlb+
-	 e9IXZ76a8tEEfVeS6EIkQc/sJ8mFCF0Lf0UTPKhL9rnwgjcKsbtDMT88kLGIdobZ3Fw==
+	t=1794832357;
+	b=payL0UFDpE0uUCQLBWchuIAnMoCT4zSLABg8DllaC/1Pp+7492lx2LchiDfwSf/70abp
+	 /WXG80tsbPfcpnIk7ZdTOfMTq++JSpTr7i6qSRF4y7nJEw7zsyUPLlkzj+GKFnk8jfEu4
+	 PLFavUkE8ZDEAC/BLna5OAso/BkTQbg6VnAVjMtOqv6m5OelJsmgplcpxBtJD5qY1c/XG
+	 /DWhzsIxFKNQjO6IzteVKUpP1sAduC31FOeGt19dovfVDSJYonXbnXLuaDt/VsJKj48uq
+	 0S6fAtrnPTfbI7dbwEFONlQZU+641qe94eB1WK1eReIsjjhw6xY4h9ygN6pNialSLGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794832309;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Subject:To:CC:
-	 References:From:Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-	 Content-Type:Content-Language:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy;
-	bh=rwmmgtDh2eN4LpVrsK7ls3CDYxuyy9JTkH68hg98ZZw=;
-	b=VmFzvNwID1sx8VvIKqK01nnrkalEXHIgbsyci9bJ0xKjJoftghUqJY8KO4fCdYWsto3r
-	 iMN0D1JTK1CRsEELilDOADPuEUhXW6N6nRjSU0ifyEb0DjERIZ4PbiKl7aC+PeMdwZykU
-	 AnvjMT7UVL4D4O3T2Uj8JlEoWJiB8Lt2ET+MX4jHfFJ2IgSF8pOJWUaYSt2FKHgJJwncj
-	 u8HF/jPniIp8qJ+y2AmFG9BbnDPNOjWjyF0JUgyw64plba5EmYrtO7WI55u/hW4vc674j
-	 vvB9ld2IVKnaPoBOYMIqS8hVfDNo/ZBb6+9IoFOg3xeywkTlyHWEbul6rzrOh5FNIhw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794832357;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=8hW3Icu32YpX4MMMfBKofUdXAhk8zTVLp5A3VYY9984=;
+	b=XIJZ5W4jsc0TQK4E6xnkdmXQ/gxA7C0FT+sK+DebG3J69n2uUS054XIEH7uqsOkohKUC
+	 qBVX7EFaVS7e/XK2BbLH9vDE7fNNdar0DrxOzGfFK642UH68LG4DiuZsjteWY9Q9GftQs
+	 Vk1Als0IdD6SS5q1wPznr2GX7qxA56743r/QpWD6Reisy1pQwIHwiOY1jx4331b7VH+XI
+	 dL+qD6qCS91kqOF5Wdoqzz5slR0kolnszmCj66CQHy6hmgxQhx+wJrU06t4xo8qplersU
+	 hPiUsuiSa2G4qg+HIEDLoyb9VTkI46nfCn4eZLzfSSFQXW5rU4YZxmNVj1bfD6/y7nA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Af+L+Bhf;
-	arc=none smtp.remote-ip=113.46.200.219
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=M2COT8Q8;
+	arc=none smtp.remote-ip=74.125.82.48
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A06606A33A;
-	Mon, 16 Nov 2026 12:31:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27A06606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855A1606A31C
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 12:32:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 855A1606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Af+L+Bhf
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=rwmmgtDh2eN4LpVrsK7ls3CDYxuyy9JTkH68hg98ZZw=;
-	b=Af+L+Bhfhha7Ev+VvSiyLLUQRR/SYDcDaqvoxdvE8cdSSDC7VwwRRcrMiAC9ViVYw1n1S5bcE
-	I0VUnw4xacmSHo/XQxPflBar6M1/mlscmzq261hMg69gl8zU5QsVttnOB3t61r9te9VDaXcI1eK
-	OH+aBXqOQvMz9hoW8T/FLFs=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4jSnKS2hkYz1prKT;
-	Mon, 16 Nov 2026 20:31:24 +0800 (CST)
-Received: from whupemo200006.china.huawei.com (unknown [7.152.185.252])
-	by mail.maildlp.com (Postfix) with ESMTPS id 29B984057D;
-	Mon, 16 Nov 2026 20:31:36 +0800 (CST)
-Received: from [10.174.178.219] (10.174.178.219) by
- whupemo200006.china.huawei.com (7.152.185.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Mon, 16 Nov 2026 20:31:34 +0800
-Subject: Re: [PATCH v2 2/3] kselftst/arm64: Test NT_ARM_SVE FPSIMD format
- writes on non-SVE systems
-To: Mark Brown <broonie@kernel.org>
-CC: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Oleg
- Nesterov <oleg@redhat.com>, Mark Rutland <mark.rutland@arm.com>, David
- Spickett <david.spickett@arm.com>, Thiago Jung Bauermann
-	<thiago.bauermann@linaro.org>, Luis Machado <luis.machado.foss@gmail.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-References: <20251015-arm64-sme-ptrace-sme-only-v2-0-33c7b2f27cbf@kernel.org>
- <20251015-arm64-sme-ptrace-sme-only-v2-2-33c7b2f27cbf@kernel.org>
-From: Zenghui Yu <yuzenghui@huawei.com>
-Message-ID: <e5b40037-8314-9ad2-91e0-9347109bed31@huawei.com>
-Date: Mon, 16 Nov 2026 20:31:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=M2COT8Q8
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1a3c08d6928so4551558c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 04:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794832355; x=1795437155; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8hW3Icu32YpX4MMMfBKofUdXAhk8zTVLp5A3VYY9984=;
+        b=M2COT8Q8crFqanvp/JZI70a4Y0PeYmbOCf2PpQwD/jYf0MPLVIVno9HZb2H7gfdJm0
+         bGF0ixrSfXRY0bT+PEqwqE1+t9jXTrA6vKoes0p4f6gaR+W7z+BVWqMrWJDeDS/IHLhF
+         BUsI50LLTYS3BCoaQN16acZxvVPAYuUkZPj6OWNEJa11ktTm1eqMdcmMxkn4qZFN7VRt
+         +9Um+97M9NC0JP73zh33QGVLaqDfRnvCaviNlAU1xip/a6nV3ru5C+2+irKkvMaGOo3w
+         Hq1sbH88jWHXnfX8gwMNQ6EtKzEndhC9iQbfqgcJCcc0szKOvlEM1wUw+XZ9PrG/owwn
+         gryQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794832355; x=1795437155;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8hW3Icu32YpX4MMMfBKofUdXAhk8zTVLp5A3VYY9984=;
+        b=crJ9LHQfIp5bwuvsdEXDKoMMZJ75SDBWBSrm+Gx0nyD2JNVzA019uKH5kOA8CWtkJu
+         QhQET6W07ZrYAEdP7MlV/G70RHBt1X1+zX0bwni21umflXwe10FvaBEezGoROfAF2a3m
+         RV5WEgCJe0Bq5F4GUAW0LhOSdTzWoNrbUb7rJbeokgEzjyAt37Npz0P0u6TXYMwLgX+Q
+         xXSxiNmV2fiWmTpQCwjdVMtbuT8TRinAFGAWkkNCa25C+/dWVO+CrAI0GwxEEeTgKFZD
+         pEEGSjLIhWS68ylYCZu9cUTOqrBGHpgB946ZpefnLnZxFql+kQ1ju56moDAEsgHI6/k7
+         4yZg==
+X-Forwarded-Encrypted: i=1; AL+hErHVH8JQdlXhLQepv+TG6mptB6yYmq7T3xYcip183Z+VQ4qVT9ggpXZem/JlNDLFL/cBbuQF1lpH2gPHObaojb8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+PteHr+soyej6QksEcFqcnXldZuTmoncjYplJMLJ+m64hQYmxE
+	Ysmb4wW3B8sxAxavqHQmFOrcjcM1XRel2D9a5tfWX2dwXJrypZb0TWyN
+X-Gm-Gg: AYBFou1bavLPMZnihb9arbpJKNPyL2gUN06hFBlXqjL7frv2L0pCsBSY0DAY+fU6XPz
+	RnuCsbQT/4J6Vhz9JtY6iODfw3/JemhjqsB35qHzDvmRFVk2ACqI2XCuvxwucrhIwK2YzQ8/itN
+	X7KRxzXSY5waD/n9P5bV1pDdEnIiuN2fI1F0I3F/u3TcWA888XdF9YVmJSU2HExbI1XOyjEggFE
+	A7AJxf8LpuGzT8Og/di3HoDAEgoAfT8M70SaFu3epM3pNtSENY6+qKxCWCHbBeSsM6hAgn0Zv7k
+	d4ncLO5XDLDYHoV6f+W1bjkjhkr5JDdQSkKWq9elC0PEbGFP0uFTH9xPWvphQT7jeaD3pbB3NGm
+	YKNE451tDL3JQ4Xg1Cu+bGJJtuTLZdCMtMRjUBTFCFf36/ZZ7NK/yBP2RdRgvQ0LHYWQPHBee9N
+	S50wX6Y25YCv/8q4k7MPxvxg2F+xX9Nn4jYVagl4inkcX7mO8caoneQQ0q1wpLm4KvfHWM7RMFv
+	AyR/tnDcwtPbvS/wQXhAPtxphL2Tdi/eENCpP83xHkZ/zdr99n3RRUi8MmAC8JvTlmMXSjjH9LU
+	i/GnK88+aDKoyd3xI0o4AF3052lKqKdpTW7BwrhkbF7P7Q==
+X-Received: by 2002:a05:7022:5f11:b0:159:2c6d:fcc3 with SMTP id a92af1059eb24-1b5030e7803mr8770798c88.33.1794832355331;
+        Mon, 16 Nov 2026 04:32:35 -0800 (PST)
+Received: from houminxi ([61.170.225.237])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5031bc518sm30276611c88.15.2026.11.16.04.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 04:32:34 -0800 (PST)
+From: Minxi Hou <houminxi@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: netdev@vger.kernel.org,
+	Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Ilya Maximets <i.maximets@ovn.org>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v4 0/2] net: openvswitch: fix a feature leak on a failed change
+Date: Mon, 16 Nov 2026 07:32:19 -0500
+Message-ID: <20261116123219.1781480-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <998d522f-e61d-420f-9834-6bdcbaab1361@kernel.org>
+References: <998d522f-e61d-420f-9834-6bdcbaab1361@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,100 +105,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <20251015-arm64-sme-ptrace-sme-only-v2-2-33c7b2f27cbf@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- whupemo200006.china.huawei.com (7.152.185.252)
+Content-Transfer-Encoding: 8bit
 
-On 2025/10/16 1:56, Mark Brown wrote:
-> In order to allow exiting streaming mode on systems with SME but not SVE
-> we allow writes of FPSIMD format data via NT_ARM_SVE even when SVE is not
-> supported, add a test case that covers this to sve-ptrace.
-> 
-> We do not support reads.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/arm64/fp/sve-ptrace.c | 61 +++++++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> index e0fc3a001e28..f44d44618575 100644
-> --- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> +++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> @@ -394,6 +394,58 @@ static void ptrace_sve_fpsimd(pid_t child, const struct vec_type *type)
->  	free(svebuf);
->  }
->  
-> +/* Write the FPSIMD registers via the SVE regset when SVE is not supported */
-> +static void ptrace_sve_fpsimd_no_sve(pid_t child)
-> +{
-> +	void *svebuf;
-> +	struct user_sve_header *sve;
-> +	struct user_fpsimd_state *fpsimd, new_fpsimd;
-> +	unsigned int i, j;
-> +	unsigned char *p;
-> +	int ret;
-> +
-> +	svebuf = malloc(SVE_PT_SIZE(0, SVE_PT_REGS_FPSIMD));
-> +	if (!svebuf) {
-> +		ksft_test_result_fail("Failed to allocate FPSIMD buffer\n");
-> +		return;
-> +	}
-> +
-> +	/* On a system without SVE the VL should be set to 0 */
-> +	memset(svebuf, 0, SVE_PT_SIZE(0, SVE_PT_REGS_FPSIMD));
-> +	sve = svebuf;
-> +	sve->flags = SVE_PT_REGS_FPSIMD;
-> +	sve->size = SVE_PT_SIZE(0, SVE_PT_REGS_FPSIMD);
-> +	sve->vl = 0;
-> +
-> +	/* Try to set a known FPSIMD state via PT_REGS_SVE */
-> +	fpsimd = (struct user_fpsimd_state *)((char *)sve +
-> +					      SVE_PT_FPSIMD_OFFSET);
-> +	for (i = 0; i < 32; ++i) {
-> +		p = (unsigned char *)&fpsimd->vregs[i];
-> +
-> +		for (j = 0; j < sizeof(fpsimd->vregs[i]); ++j)
-> +			p[j] = j;
-> +	}
-> +
-> +	ret = set_sve(child, &vec_types[0], sve);
-> +	ksft_test_result(ret == 0, "FPSIMD write via SVE\n");
-> +	if (ret) {
-> +		ksft_test_result_skip("Verify FPSIMD write via SVE\n");
-> +		goto out;
-> +	}
-> +
-> +	/* Verify via the FPSIMD regset */
-> +	if (get_fpsimd(child, &new_fpsimd)) {
-> +		ksft_test_result_skip("Verify FPSIMD write via SVE\n");
-> +		goto out;
-> +	}
-> +	ksft_test_result(memcmp(fpsimd, &new_fpsimd, sizeof(*fpsimd)) == 0,
-> +			 "Verify FPSIMD write via SVE\n");
-> +
-> +out:
-> +	free(svebuf);
-> +}
-> +
->  /* Validate attempting to set SVE data and read SVE data */
->  static void ptrace_set_sve_get_sve_data(pid_t child,
->  					const struct vec_type *type,
-> @@ -826,6 +878,15 @@ static int do_parent(pid_t child)
->  		}
->  	}
->  
-> +	/* We support SVE writes of FPSMID format on SME only systems */
-> +	if (!(getauxval(AT_HWCAP) & HWCAP_SVE) &&
-> +	    (getauxval(AT_HWCAP2) & HWCAP2_SME)) {
-> +		ptrace_sve_fpsimd_no_sve(child);
-> +	} else {
-> +		ksft_test_result_skip("FPSIMD write via SVE\n");
-> +		ksft_test_result_skip("Verify FPSIMD write via SVE\n");
-> +	}
+Hi Matt,
 
-I haven't read the patch in detail, but it seems that we should update
-EXPECTED_TESTS accordingly.
+You are right about the hang, and it is mine. I reproduced it here.
+
+To get a failure reason into the CI log I duplicated stdout onto fd 9 in
+openvswitch.sh, because info() writes debug.log and a failing run
+deletes that file. The suite starts daemons that outlive the script: the
+per-vport upcall handlers from add-if -u, and the psample listener. They
+inherit the second handle. runner.sh reads the test output from a pipe,
+so as long as any process holds the write end, the pipe never reaches
+EOF and the run sits there after the last subtest has already passed.
+
+Redirecting the output to a file hides this completely, which is how I
+ran it, and why I did not see it.
+
+Writing those messages to stderr fixes it. stderr still reaches the
+runner from inside ovs_sbx, and the daemons send both stdout and stderr
+to files, so nothing is left holding the pipe.
+
+Checked with the output piped the way runner.sh does it:
+
+  before: "TEST: psample ... [ OK ]", then nothing until the timeout
+  after:  21 tests [ OK ], and the run ends by itself
+  with a wrong expectation injected: the reason still reaches the log and
+  the test fails, so the diagnostics still work
+
+The configs merge here as well. The only message is the CONFIG_IP_SCTP
+m->y redefine, which is already in the fragment before this series.
+
+I will send a v5 with this change.
+
+Thanks,
+Minxi
