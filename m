@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794855964;
-	b=gU/PLX0+dUlHHC7ZCVTMqUTTRkcWd0L/6IYlog7oyp2GC4dj6Hg6odEIxgN8QNVoSJ8L
-	 Ql0siUy+iYcVeOEucdOc9kD0VauOq5igkq8uZZk1WWnw7DkC3/PLi4uduJSDnOGcnOXFx
-	 BKiHz/O1FB60Kxr6T/OH9+C/PxrhZ0+56pOqKSVEONr+yR1rKOHjtXi7/oUTbfjFENbm6
-	 LZvW2HKkxn38570G09de7i4LNFPBIXtNFtFvMTF7So2ioFrpzhSKS9mXEg9E2f6knTMTv
-	 BZZRjMOzFNLNOB2JrSbHtQBs4b70A8Ji4ElP4odbRdA2Ozdy+Y8Zm5YqaZZ4mNb+0hQ==
+	b=WepFAnzu9hL0eInJ9OcsgNx8llAwV2oTv+Hnp3OpOzwiXHxdCjnHStnlEcLdqg8NxQC2
+	 VsJe7VQvG13pBX7PvXVwkMq1SBfPKQoFJsaMN39tTqvBF9x7voMDtoWvLX0A0lXi7ZgrQ
+	 pq551ay3WCgQDRjWgSZnSg9U+NKFtnaGztvjEmypj3RpITrxR/+Vlrjry6qne4kauBJWY
+	 ttUsg9tpZkKQwe6swnAIc2Pu2lLeEkAvkr8m0A3BZmzFh0x+XQZvmktGuQBO68n6EpT9S
+	 GJxtDGAo+XgMRn8Cjc6BEAYZxwLwO5VPRoWfQ8HKfiG7iEcePcxqmtIOeE9SWZUJaAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794855964;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=c7kHFQNtHHCA9GqdWu4FwicvvHwQfScFWuPDB3TXQvk=;
-	b=O48KfTmi363HssDk+YiZ/Eeug5F3bGjoc1qSPE1n+cZRMRl28tlgNEcrPa+utRtm7JFl
-	 txz9v0QK4BCoQs0XgH05x6OYvh4SXPJVjXCK9wqqqwtfBxMOMTVxUTRHhZNclQn7CotPk
-	 SPzCLb4OSrWeNKgSDE9anFrJK1dKK1DnWD/BNq0U7rCgBehVFMuJcWvMGK9O8ufRjn+oA
-	 pB7pjpqKHbkEOu/aG4d3a9OVM2tkPAGzfKEETt2W6wqOJj/dzOPZJvhPdKCh4lwHUJsLn
-	 pJdeavvoDc3fZQ9i7ShBmK+Q2G+bjq0xpkYV/MSMH6mLzWsKd02zrqh9Wn1GTkl2qWw==
+	bh=1dWSPzWSmrrDPm5GEFxYGW2hGJHMUlu9fb/gyhQjuvA=;
+	b=zuR9zcgo14UQi7DOYovBf/WLTQ41PCIO08MftQvrreFmWM+oDLgVvxCd2c4tO1WJiH8N
+	 PKOzguvTpxE/a88BnWXp2IXjLRrKB5sy/ohbMnFO/ImwJuPCSvWvn/GnV6aQeZCFnc+s6
+	 trRzkF2EhIJnZw9oXXv8Z93IUTTE3bQzOG8eJ5ELF9lJLeSbCwWTTk9+3t5ckH6mKk+1/
+	 BwCnVYm0jpX8NVlDPT8i44IdwaY+XzNuGBRz+EE8fTajSzhodMybJQQobB7URgjCExZrw
+	 AyaBKKJrLNasb5CU67zHgMDPO+xysSszmkoX03DxuPcGoipN4QFcSTNK8qK/CInIkqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=fytTXzYR;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=TJu9HT2p;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E648606A89C;
-	Mon, 16 Nov 2026 19:06:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E648606A89C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9AA606A899;
+	Mon, 16 Nov 2026 19:06:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D9AA606A899
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=fytTXzYR
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=TJu9HT2p
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794855954;
-	bh=c7kHFQNtHHCA9GqdWu4FwicvvHwQfScFWuPDB3TXQvk=;
+	s=smtpout1; t=1794855955;
+	bh=1dWSPzWSmrrDPm5GEFxYGW2hGJHMUlu9fb/gyhQjuvA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fytTXzYRWKttd0lVwY9DuIbHmhDRjp0QF75uB64/BUSFFGGhLJGNthj6HiJCm17C8
-	 +jSJ8riP6vC243y5NIXpFdLNyW/YoWafkp68ZjB7cIoRZO17+bz6zMxSe5CURa/jQT
-	 7vr3hK/1O+sWDE5HuVa3FojPQyc+PSSx8k63ZQKn0BjcVjnnx7TboJajF5aE5rUhWu
-	 U91XA+pT+10duFr8rW7xc2RlZCy/t7Mwrxgqrz4cUkyvVNpnut0RAtUJ1V0B7Glg8E
-	 pvJNqYHQpnODs2UeSHwvnrXj29vspPO7RqWSjVx0k21LJqxi/Fag957OjgOUbdzTEI
-	 dZ+Sje9b0xdrg==
+	b=TJu9HT2pCOiKIIU/tBdQ3eIgS+GH1WbXRsGc8cJv5Gl8ZpPQ2EnCqg7/xOmnbycE1
+	 CgU5lYsRZBuZV2rQZ5oZOdl7bDTUL0680y11XYlTZ25fqExeZP3rROZuggQs71hFUo
+	 oJNNw/DZJu7/UgS71WGqlKQQQb96LsCFzM2vjP4Roy5gXGvDs/NSktEOUqVO+AQ/4R
+	 FzaFeJPcJb0AID7nULFoh6nulpyqZr5j3yGKfQBbDewA/z7d6UH5HYuvrKHAaPk8FG
+	 b7XTtPnlKdesbtRk/ua1GrNbLYH2olF0u1yBQGYnhgYPkvB5/WEFLjdeO31q4ZxV50
+	 P/XdE2nVEYVrw==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSy4f3pyQzRGc;
-	Mon, 16 Nov 2026 14:05:54 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jSy4g27lLzQSt;
+	Mon, 16 Nov 2026 14:05:55 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -80,9 +80,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: [PATCH v6 05/37] sched/deadline: Refuse dl_server debugfs writes while the rq is offline
-Date: Mon, 16 Nov 2026 14:05:17 -0500
-Message-Id: <20261116190549.230119-6-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v6 09/37] sched/deadline: Reset the deadline and the runtime with the parameters
+Date: Mon, 16 Nov 2026 14:05:21 -0500
+Message-Id: <20261116190549.230119-10-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261116190549.230119-1-mathieu.desnoyers@efficios.com>
 References: <20261116190549.230119-1-mathieu.desnoyers@efficios.com>
@@ -97,59 +97,87 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 4043f5498416 ("sched/deadline: Reject debugfs dl_server writes
-for offline CPUs") refuses a write to a dl_server's runtime or period
-on an offline CPU. Its message says that such a write has no meaningful
-semantics.
+A task that leaves SCHED_DEADLINE keeps its parameters until its 0-lag
+time, so that leaving and coming back gains nothing. Commit 209a0cbda7a0
+("sched/deadline: Improve the tracking of active utilization") moved
+their reset to that time. Before it, the replenishment timer did the
+reset at the deadline. So a task back after the reset found its
+deadline passed, and started a new period. But __dl_clear_params()
+resets neither the deadline nor the runtime.
 
-It tests cpu_online(). But during hotplug the CPU is still online while
-it sits in the default root domain. This lasts from the rebuild in
-sched_cpu_deactivate() to the offline, and from the online to
-sched_cpu_activate(). That root domain does not count the server's
-bandwidth. A write in the window still goes through admission. With
-admission control off, it changes total_bw there. On v7.4-rc1, a write
-of the current value divides by zero in that window. The previous patch
-removes the division, not the write.
+Now a task back after its 0-lag time can be enqueued on its old
+deadline and runtime. With runtime left, its 0-lag time comes before
+its deadline. Back before that deadline, it would first spend the runtime
+of the reservation it gave back. Back after it, a constrained task
+would be throttled until its old period ends. "sched/deadline: Do not
+lose a throttled task switched out and back" moves the deadline of a
+throttled task on. This widens the window before the deadline to about
+a period.
 
-Fix this by testing rq->online instead. It is set under the runqueue
-lock when the CPU joins a root domain that counts it, after
-cpu_active() is set.
+A task with no parameters of its own, boosted by a deadline waiter,
+keeps the donor's deadline and runtime after its deboost. If it then
+enters SCHED_DEADLINE before that deadline, it runs on the donor's
+runtime. On v7.4-rc1, a task of 10ms per 100ms ran 40ms of its first
+period.
 
-A write now fails with EBUSY while the CPU goes offline or comes
-online, as a write on an offline CPU already does. Writes at any other
-time are unchanged.
+Fix this by resetting the deadline and the runtime in
+__dl_clear_params(), and in switched_from_dl() at the deboost of a task
+with no parameters. The next enqueue then starts a new period.
 
-Applied without the previous patch, this patch alone also stops the
-oops. The reproducer survives 20 rounds with no warning, in 3 VMs of 3.
+The Sashiko AI review found the first case in the second posting of
+this series, and the deboost in the third. The deboost_resets_period
+case of deadline_bw_test, added later in this series, tests the
+deboost.
 
-Fixes: d741f297bcea ("sched/fair: Fair server interface")
+Fixes: 209a0cbda7a0 ("sched/deadline: Improve the tracking of active utilization")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Juri Lelli <juri.lelli@redhat.com>
 Cc: stable@vger.kernel.org
 ---
- kernel/sched/debug.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ kernel/sched/deadline.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index e6a3b516c703..e0d6cd3bd607 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -410,7 +410,15 @@ static ssize_t sched_server_write_common(struct file *filp, const char __user *u
- 			return  -EINVAL;
- 		}
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index c4ea51059941..dd48f74412b8 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -3557,6 +3557,16 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 	if (task_on_rq_queued(p) && p->dl.dl_runtime)
+ 		task_non_contending(&p->dl, false);
  
--		if (!cpu_online(cpu_of(rq)))
-+		/*
-+		 * Refuse the write while the runqueue is offline. This
-+		 * includes the windows where the CPU goes offline or comes
-+		 * online. The root domain then does not count the server's
-+		 * bandwidth, and may have no active CPU. rq->online is set
-+		 * under this lock when the CPU joins a root domain that
-+		 * counts it. cpu_active() is set before that.
-+		 */
-+		if (!rq->online)
- 			return -EBUSY;
++	/*
++	 * A task with no parameters of its own was boosted into the class.
++	 * Its deadline and runtime are the donor's. Reset them, so that its
++	 * next entry into the class starts a new period.
++	 */
++	if (!p->dl.dl_runtime) {
++		p->dl.deadline = 0;
++		p->dl.runtime = 0;
++	}
++
+ 	/*
+ 	 * In case a task is setscheduled out from SCHED_DEADLINE we need to
+ 	 * keep track of that on its cpuset (for correct bandwidth tracking).
+@@ -3972,7 +3982,8 @@ bool __checkparam_dl(const struct sched_attr *attr)
+ }
  
- 		update_rq_clock(rq);
+ /*
+- * This function clears the sched_dl_entity static params.
++ * Clear the static parameters of @dl_se. Also reset its deadline and its
++ * runtime, so that its next enqueue starts a new period.
+  */
+ static void __dl_clear_params(struct sched_dl_entity *dl_se)
+ {
+@@ -3983,6 +3994,9 @@ static void __dl_clear_params(struct sched_dl_entity *dl_se)
+ 	dl_se->dl_bw			= 0;
+ 	dl_se->dl_density		= 0;
+ 
++	dl_se->deadline			= 0;
++	dl_se->runtime			= 0;
++
+ 	dl_se->dl_throttled		= 0;
+ 	dl_se->dl_yielded		= 0;
+ 	dl_se->dl_non_contending	= 0;
 -- 
 2.47.3
 
