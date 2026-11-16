@@ -1,104 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794801350;
-	b=lJpJ5hgjbEN4NLYTlCfVT1jvZFsqBdDoVioxo6Y50N2W9wGlEzAFGmXPQlqW4W1aZO2+
-	 2yramG9XTO5eyYD8mtoLc4w2aTUa76EDUgWsAgw/A9YzgUJBHZmrvMosB/eh1ZL/ExVR3
-	 gLJlql+i3/5asLnenIqKKdgKoXXLcGcG5eAHMx4aG/vhkDrBSp8T4qHJEoeWFoojgneka
-	 0sGAACtn1D3DrjTLe38XOPeLaKD4H/0AXeouGQSBhvFHzV/Wu0st/rcXs5+hGia5E4oBu
-	 M7kntGVI3LMoyz+KrEb+TLExlrcYT3MrZVx4H3HIJwCeK9UBvZ3eUIrStODxpAhtSXg==
+	t=1794802920;
+	b=hylewaCOJ4nMqqyYJqTVoiv38fdC9K1k+hzNOoaGdxkAWi4aZm48Xj0fYS5/dLSV1yyK
+	 NswLQjvwP+/7ZIkEGUAUTzzsmJ0DVkx1ATIoT61qbKGpEGC0S3eDgdF8GWp6w2hODL4J+
+	 sO60/9LnkodeH38C3HU/UAu9BD8o04moz3UxKrDSaqY4veM6N1XdJLcl3kRcBVgYdOTSJ
+	 yUYEPABT0iI3Uza1vHTLmnIxR0euKxiWC+KAijpV9zrS5SfdQiXjC86+upYsqDNKDY2VB
+	 ii2QlKPcEVywCvWQKvSrEgFhzq9ysyZKilviMt/vD7/M9NM8ayWgwdIuvSJpMGPZHWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794801350;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=vbQLcwmCCF7XaeF5c4vrB/idKigmQJEX9lEqs5PlpN4=;
-	b=zBG0OZ/v5erTPc41Vq+rWP+bd4WTvKQOzrvlDi9I2xRNkR7dPtBomwTJTjBFMkU+k8Pr
-	 Jm70orBpNLDLzX5B61GdAanayz+jT9TKJwIC/cAIHLoc2fkyBPDfgzYMCYL+QYqIXQY8Q
-	 1mk4HH5bOzi1krCcxwPiRheKlfHvZSM4e+m9O25LhF9BjF4pivE8447SkGnQr1UKtLdJU
-	 /oCjqRyx062grZwnOnTWQIRUJAC6vQ5qYtOttjTlxpUxscthM+AMGHuHwEZBDD1yg2h1U
-	 8b84R6Y/M9nbYQOVli1l7XvjnO9WyAhy2sYmsWrekF9MQNn8vCDvsSZojKCmos7XvAA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794802920;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=mAiC+0hT+OAYgDZe7uQXWa25nna0BFe7OezHBcr8Cmo=;
+	b=ShHQPm8WgJ8YUhRkb01pZrxycn4ByXU5dcEYyewlyPmrLXfZax+QN/aVCI+spME1wHIS
+	 ocqne+n/Qo1VFQlXjzdtREeBlQZpWe8iAXfmiTrk/R5TyUEyO5uPgY0UTszfqlEd38oud
+	 4kJ3j9z+s2xkHDOo3bYBqe3lxqcxicvJ0La6bPuRSs02SOaFgpBS+BQTqZMbjy61C8/Rp
+	 jm+nPXfiWUF9VIZMUQXSNOF4yBZ51lUb6HslwCQOodMkwEzY3vbyOMVb6tkZPnp7AZtkc
+	 If5FIgdvKYjzEExFBoZcTrYt6IcvEMawW2BP5sYSeGzvsGlsalorI4WeEZKkOW2g5OA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nebusec.ai;
-	spf=pass smtp.mailfrom=nebusec.ai;
-	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=hIoOL97Q;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PUtI0MnS;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAA2606A31C
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 03:55:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFAA2606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA15606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 04:21:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BA15606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=hIoOL97Q
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8b600fae14dso1305820b3a.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1794801349; x=1795406149; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vbQLcwmCCF7XaeF5c4vrB/idKigmQJEX9lEqs5PlpN4=;
-        b=hIoOL97QNyHYQkdAhQ+YC7y2JFMzE1n3pDZ/e0E/OvdAGlPrz3i6rhNFIGUdi7RczE
-         GMTOsyWqHvdjs2GcZibBEWpQKDxNyNJia5J0I0FryZsP8qNNg7RLDp5YQvjXxX2MbJNb
-         S10DYh9TLGCet858AOJBh6I6qRTYjuZGjpPZmErI+BqP3KnGcMyf2EDJ3f0Sau4uqGAR
-         WYCMl4TGUAc23vuIT1YC3YMHmOTvp5nFVb7ZMkWlX/ZPfWcaSN20fHenHL1wqT3piPdU
-         fWkQ2znHAf9K+QaR3Hn9v0MXyduvTDLyS+PJ3hu4NxHejSwMI91Cvxmzct1XzgQ7PL0Y
-         2nZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794801349; x=1795406149;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vbQLcwmCCF7XaeF5c4vrB/idKigmQJEX9lEqs5PlpN4=;
-        b=pYXuWYT6NsqZ8BWxDbfvO/tONn8afylEQpb5FbZQ7CNVIHCRXhG4dcPimdVR2j+U3p
-         fkWSDD4aDwYwonKWjuMft4WYlGjCg3ISWu59yjeXg3oDC5cAS88i98timOdD9KWkJ4mG
-         Lq741gN2vd7WV/DZPwC/0PrM3Ssf7VKtB2cwrcXy/TfTXfTiCeWyrlu83dWBOagqawtC
-         Q2k1OiZVVsU3PqcyQIAhdafBJ/5gpGzkVemHm9Lx6yz/zi0ayzm2jnTbdVGuseGpn7w4
-         ttcymEI9eewd15Ru6phXfNxWrRtXXcVJbO2d7PXJxLy3CvV0r6oPaVokG9u586UkLIWt
-         pZxw==
-X-Forwarded-Encrypted: i=1; AL+hErF4v8Jwy0QkjMAn34LK8S9AAPmt9eDPKfT+pytTooQCJws2NJsZ1oa4nNSvB8UXyXHtP7FXa6VI/mVsWVS53pw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+lKWsq8ge2uBz2O0FhG9o6xVX4yhx5MJDoJ6SXSKNtqyxTEzAD
-	FBmllA9/i8Hnmc/UpuGW/m2evYAiE1mv+qTxde6Zn3JDKEmi+/VTI56Wlp6TxM/aOfi9
-X-Gm-Gg: AYBFou39SqW/HrGt0kWOm5cQbB4OMpW1NbMYiDVVLa3m96Cf5tNHVR7q113GL7Of+PB
-	QGou9X8Cal3SmFnDJPhv2xoIY+VoraoBxcsd6Fvd1egEXUrLw+aQZ9OzFJwu8TCVtH5Fwg0vRjS
-	QBlCg9oJhTiK73GO8r8g/ZELTmLQCXoqLOrmQiqk+ZTLt1xtcWgRCiAl0ARnOS2hSsvfHh5WZlg
-	bQCxKwMjGeT7b9R7z9NIPlouLYDo3jDG3HrRtrHyaSd52hf0kDSHzzSGPhd30gUoBLR7qE7Iu6v
-	wZ91IsbLyvdeu2kFRPsGXQCenotejtzcz65XapDTwyzXh4W1ezFvo0pqVQ5fwRdEsuGDV4pxN99
-	CxGqyfxRhd5Smu3tX5qN0kAaCrLzyiZyNbPC896f05kdcXHMl4Or0ZG9bKFiQf02iQ2d8nSsu2R
-	ISvQbkSZo1bqmFBWfXQEaEEYxogivf3RQrIU7EzuA6MEXUaW3WF0QSHouqd9bgsw6M2CzhOJ619
-	0p+xn3WTN/hfmCALnDqZBtbJZZYT85TNtuLg83fwhSEp0S0m4svtZnbEwiFYADnGFSmyUE8sZSx
-	7OSUvIBc9Z+I9kx/hC1f1JHyMxo98YfOXrcbXqE5bbQ5dIXt1lJ58YsOvTQD3FNsLyJDiB+oPHe
-	28iR5LgglStUkcnqyQ3is
-X-Received: by 2002:a05:6a21:a382:b0:3f9:9114:8029 with SMTP id adf61e73a8af0-3f99114b750mr4751940637.90.1794801349237;
-        Sun, 15 Nov 2026 19:55:49 -0800 (PST)
-Received: from 24c857d0c3be.. ([122.51.212.64])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cddc1886b12sm3463176a12.11.2026.11.15.19.55.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2026 19:55:48 -0800 (PST)
-From: Zihan Xi <zihanx@nebusec.ai>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: willemdebruijn.kernel@gmail.com,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	benh@amazon.com,
-	kuniyu@google.com,
-	shuah@kernel.org,
-	vega@nebusec.ai,
-	zihanx@nebusec.ai
-Subject: [PATCH net 2/2] selftests: net: cover connected UDP reuseport rescore
-Date: Mon, 16 Nov 2026 03:55:33 +0000
-Message-ID: <4302d941304941ea6059b3d1fa167236635686c6.1794759652.git.zihanx@nebusec.ai>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1794759652.git.zihanx@nebusec.ai>
-References: <cover.1794759652.git.zihanx@nebusec.ai>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PUtI0MnS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794802919;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mAiC+0hT+OAYgDZe7uQXWa25nna0BFe7OezHBcr8Cmo=;
+	b=PUtI0MnSiXkeUUC5O9hkWBe7xD25pg1DNAOwMMbVRR1Vac7tcqk/XYrZFnLyGp7uww1Hf9
+	uMSl6/bI/TxX1yEmSY+u54PMNm5RbfU4B05EThi0kkPKcDnaPfDtZ8Yn6L1HlQFuRzUVy4
+	XVCWIVepc6r6oCarcKnSSO3mLLONfFg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-oB_zzBfpP8-TC5JepjMO-g-1; Sun,
+ 15 Nov 2026 23:21:52 -0500
+X-MC-Unique: oB_zzBfpP8-TC5JepjMO-g-1
+X-Mimecast-MFC-AGG-ID: oB_zzBfpP8-TC5JepjMO-g_1794802911
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 988661800476;
+	Mon, 16 Nov 2026 04:21:50 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9BFBA1956095;
+	Mon, 16 Nov 2026 04:21:48 +0000 (UTC)
+Message-ID: <e8ce51c8-3cf5-4d43-85e1-e8090bced4c8@redhat.com>
+Date: Sun, 15 Nov 2026 23:21:47 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,195 +71,213 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v4 3/6] cgroup/cpuset: Check remote partition
+ underneath before making an invalid partition valid
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Sashiko <sashiko-bot@kernel.org>
+References: <20261116012330.2271010-1-longman@redhat.com>
+ <20261116012330.2271010-4-longman@redhat.com>
+ <8c126892-8e4d-4bfe-9f3f-bc1e1a72338d@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <8c126892-8e4d-4bfe-9f3f-bc1e1a72338d@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Test UDP SO_REUSEPORT lookup when a classic BPF program selects a
-connected socket.  A packet from a different peer must fall back to the
-matching unconnected socket, while a packet from the connected peer must
-still select the connected socket.
+On 11/15/26 10:47 PM, Ridong Chen wrote:
+>
+>
+> On 11/16/2026 9:23 AM, Waiman Long wrote:
+>> When re-evaluating an invalid local partition via partcmd_update,
+>> update_parent_effective_cpumask() does not check whether a descendant
+>> remote partition is using its exclusive CPUs, promoting the cpuset to a
+>> valid partition root over the remote partition. This condition should 
+>> only
+>> be possible if parent is the top_cpuset and exclusive_cpus isn't empty.
+>>
+>> This leaves an active remote partition underneath a valid
+>> local partition root with overlapping exclusive CPUs, breaking
+>> scheduler domain partitioning and triggering warnings in
+>> compute_partition_effective_cpumask() and generate_sched_domains().
+>>
+>> Fix that by checking the effective_xcpus against subpartitions_cpus
+>> when an underneath remote partition is possible to make sure that all
+>> the exclusive CPUs are available before allowing the invalid partition
+>> to be switched back to valid.
+>>
+>> Also make sure that effective_xcpus is non-empty before swtiching an
+>> invalid partition back to valid.
+>>
+>> Add a test case in test_cpuset_prs.sh to verify that an invalid 
+>> partition
+>> with a remote partition underneath cannot be switched back to valid
+>> with a hotplug event.
+>>
+>> In the special case when the last active CPU in the top_cpuset partition
+>> is offlined, the hotplug code will empty subpartitions_cpus and let the
+>> existing local partition to compete for the exclusive CPUs again. If
+>> there is an invalid local partition above a remote partition and that
+>> invalid local partition is able to switch to a valid partition, the 
+>> remote
+>> partition below will now share some the of exclusive CPUs violating the
+>> CPU exclusivity rule. This special case will be handled in a later 
+>> patch.
+>>
+>> Fixes: 181c8e091aae ("cgroup/cpuset: Introduce remote partition")
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Link: 
+>> https://sashiko.dev/#/bug/linux-47715b89-d5fb-4731-b7c9-070773c6ff75
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c                        | 42 ++++++++++++-------
+>>   .../selftests/cgroup/test_cpuset_prs.sh       |  4 ++
+>>   2 files changed, 30 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 195d4e3a283c..81481fa62cfe 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -2029,11 +2029,7 @@ static int 
+>> update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>>            * tasks_nocpu_error() with this very mask, and a failing
+>>            * write is routed to partcmd_invalidate instead.
+>>            */
+>> -        if (is_partition_invalid(cs)) {
+>> -            adding = false;
+>> -            deleting = cpumask_and(tmp->delmask,
+>> -                    newmask, parent->effective_xcpus);
+>> -        } else {
+>> +        if (is_partition_valid(cs)) {
+>>               cpumask_andnot(tmp->addmask, cs->effective_xcpus, 
+>> newmask);
+>>               adding = cpumask_and(tmp->addmask, tmp->addmask,
+>>                            parent->effective_xcpus);
+>> @@ -2041,6 +2037,17 @@ static int 
+>> update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>>               cpumask_andnot(tmp->delmask, newmask, 
+>> cs->effective_xcpus);
+>>               deleting = cpumask_and(tmp->delmask, tmp->delmask,
+>>                              parent->effective_xcpus);
+>> +        } else {
+>> +            deleting = cpumask_and(tmp->delmask,
+>> +                    newmask, parent->effective_xcpus);
+>> +
+>> +            /* Check if a remote partition may be underneath */
+>> +            if ((parent == &top_cpuset) &&
+>> +                !cpumask_empty(cs->exclusive_cpus) &&
+>> +                cpumask_intersects(tmp->delmask, subpartitions_cpus)) {
+>> +                part_error = PERR_REMOTE;
+>> +                deleting = false;
+>> +            }
+>>           }
+>>             /*
+>> @@ -2107,34 +2114,37 @@ static int 
+>> update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>>           } else if (is_partition_invalid(cs)) {
+>>               struct cgroup_subsys_state *css;
+>>               struct cpuset *child;
+>> -            bool exclusive = true;
+>>                 /*
+>>                * Convert invalid partition to valid has to pass the
+>> -             * cpu exclusivity test when cpuset.cpus.exclusive is
+>> -             * empty as well as the housekeeping check.
+>> +             * following tests:
+>> +             * 1) housekeeping CPU conflict check
+>> +             * 2) cpu exclusivity test when cpuset.cpus.exclusive is
+>> +             *    empty.
+>> +             * 3) if parent is top_cpuset, none of the effective_xcpus
+>> +             *    (tmp->delmask) are in subpartitions_cpus, if not a
+>> +             *    remote partition may be underneath.
+>>                */
+>>               if 
+>> (prstate_housekeeping_conflict(cs->partition_root_state,
+>>                                 parent_prs, tmp->delmask, NULL)) {
+>>                   part_error = PERR_HKEEPING;
+>> -                goto write_error;
+>> -            }
+>> -            if (cpumask_empty(cs->exclusive_cpus)) {
+>> +            } else if (cpumask_empty(cs->exclusive_cpus)) {
+>>                   rcu_read_lock();
+>>                   cpuset_for_each_child(child, css, parent) {
+>>                       if (child == cs)
+>>                           continue;
+>>                       if (!cpusets_are_exclusive(cs, child)) {
+>> -                        exclusive = false;
+>> +                        part_error = PERR_NOTEXCL;
+>>                           break;
+>>                       }
+>>                   }
+>>                   rcu_read_unlock();
+>> +            } else if ((parent == &top_cpuset) &&
+>> +                   cpumask_intersects(tmp->delmask, 
+>> subpartitions_cpus)) {
+>> +                part_error = PERR_REMOTE;
+>>               }
+>> -            if (exclusive)
+>> +            if (!part_error)
+>>                   deleting = !cpumask_empty(tmp->delmask);
+>> -            else
+>> -                part_error = PERR_NOTEXCL;
+>>           }
+>>       }
+>>   @@ -2155,7 +2165,7 @@ static int 
+>> update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>>               break;
+>>           case PRS_INVALID_ROOT:
+>>           case PRS_INVALID_ISOLATED:
+>> -            if (!part_error)
+>> +            if (!part_error && deleting)
+>>                   new_prs = -old_prs;
+>>               break;
+>>           }
+>
+> Nit: deleting is always true when part_error is 0, so this check
+> doesn't change anything. It's fine to keep it as a safeguard, but
+> then the changelog shouldn't describe it as a fix.
 
-Exercise both IPv4 and IPv6.
+tmp->delmask can be empty and deleting will be set to false in this 
+case. Of course, we should not activate an invalid partition root with 
+empty effective_xcpus.
 
-Signed-off-by: Zihan Xi <zihanx@nebusec.ai>
----
- tools/testing/selftests/net/reuseport_bpf.c | 150 ++++++++++++++++++++
- 1 file changed, 150 insertions(+)
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-index 12e48b97b862..fbfe73dce211 100644
---- a/tools/testing/selftests/net/reuseport_bpf.c
-+++ b/tools/testing/selftests/net/reuseport_bpf.c
-@@ -303,6 +303,154 @@ static void test_reuseport_cbpf(struct test_params p)
- 		close(fd[i]);
- }
- 
-+static uint16_t get_sockaddr_port(const struct sockaddr *addr)
-+{
-+	if (addr->sa_family == AF_INET)
-+		return ntohs(((const struct sockaddr_in *)addr)->sin_port);
-+	return ntohs(((const struct sockaddr_in6 *)addr)->sin6_port);
-+}
-+
-+static void attach_cbpf_index(int fd, uint32_t index)
-+{
-+	struct sock_filter code[] = {
-+		{ BPF_RET | BPF_K, 0, 0, index },
-+	};
-+	struct sock_fprog p = {
-+		.len = ARRAY_SIZE(code),
-+		.filter = code,
-+	};
-+
-+	if (setsockopt(fd, SOL_SOCKET, SO_ATTACH_REUSEPORT_CBPF, &p, sizeof(p)))
-+		error(1, errno, "failed to set constant SO_REUSEPORT_CBPF");
-+}
-+
-+static void send_udp_packet(int fd, struct sockaddr *dst, const char *payload)
-+{
-+	if (sendto(fd, payload, strlen(payload), 0, dst, sockaddr_size()) < 0)
-+		error(1, errno, "failed to send UDP packet");
-+}
-+
-+static void expect_udp_socket(int epfd, int good_fd, int connected_fd,
-+			     int expected_fd, const char *payload)
-+{
-+	struct epoll_event ev;
-+	char buf[32];
-+	int n;
-+
-+	n = epoll_wait(epfd, &ev, 1, 1000);
-+	if (n < 0)
-+		error(1, errno, "epoll wait failed");
-+	if (!n)
-+		error(1, 0, "timed out waiting for UDP packet");
-+	if (ev.data.fd != expected_fd)
-+		error(1, 0, "UDP packet delivered to unexpected reuseport socket");
-+
-+	n = recv(ev.data.fd, buf, sizeof(buf), 0);
-+	if (n < 0)
-+		error(1, errno, "failed to receive UDP packet");
-+	if ((size_t)n != strlen(payload) || memcmp(buf, payload, n))
-+		error(1, 0, "received unexpected UDP payload");
-+
-+	/* No copy of the packet should be queued on the other socket. */
-+	ev.events = EPOLLIN;
-+	ev.data.fd = expected_fd == good_fd ? connected_fd : good_fd;
-+	if (epoll_ctl(epfd, EPOLL_CTL_MOD, ev.data.fd, &ev))
-+		error(1, errno, "failed to update epoll registration");
-+	n = epoll_wait(epfd, &ev, 1, 0);
-+	if (n < 0)
-+		error(1, errno, "epoll wait failed");
-+	if (n)
-+		error(1, 0, "UDP packet was also queued on the other socket");
-+}
-+
-+static void test_connected_reuseport_rescore(int family)
-+{
-+	static const char mismatch_payload[] = "mismatch";
-+	static const char match_payload[] = "match";
-+	struct sockaddr *good_addr, *peer_addr;
-+	struct sockaddr *match_src, *other_src, *dst;
-+	struct epoll_event ev;
-+	int good_fd, connected_fd, match_send_fd, other_send_fd, epfd, one = 1;
-+	uint16_t recv_port, peer_port;
-+
-+	fprintf(stderr, "Testing connected reuseport rescore, family %d...\n",
-+		family);
-+	good_fd = socket(family, SOCK_DGRAM, 0);
-+	connected_fd = socket(family, SOCK_DGRAM, 0);
-+	match_send_fd = socket(family, SOCK_DGRAM, 0);
-+	other_send_fd = socket(family, SOCK_DGRAM, 0);
-+	if (good_fd < 0 || connected_fd < 0 || match_send_fd < 0 ||
-+	    other_send_fd < 0)
-+		error(1, errno, "failed to create connected reuseport test sockets");
-+	if (setsockopt(good_fd, SOL_SOCKET, SO_REUSEPORT, &one, sizeof(one)) ||
-+	    setsockopt(connected_fd, SOL_SOCKET, SO_REUSEPORT, &one, sizeof(one)))
-+		error(1, errno, "failed to set SO_REUSEPORT");
-+
-+	good_addr = new_loopback_sockaddr(family, 0);
-+	if (bind(good_fd, good_addr, sockaddr_size()))
-+		error(1, errno, "failed to bind good reuseport socket");
-+	if (getsockname(good_fd, good_addr, (socklen_t []){ sockaddr_size() }))
-+		error(1, errno, "failed to get reuseport port");
-+	recv_port = get_sockaddr_port(good_addr);
-+	if (bind(connected_fd, good_addr, sockaddr_size()))
-+		error(1, errno, "failed to bind connected reuseport socket");
-+
-+	match_src = new_loopback_sockaddr(family, 0);
-+	if (bind(match_send_fd, match_src, sockaddr_size()))
-+		error(1, errno, "failed to bind matching source socket");
-+	if (getsockname(match_send_fd, match_src,
-+			(socklen_t []){ sockaddr_size() }))
-+		error(1, errno, "failed to get matching source port");
-+	peer_port = get_sockaddr_port(match_src);
-+	peer_addr = new_loopback_sockaddr(family, peer_port);
-+	if (connect(connected_fd, peer_addr, sockaddr_size()))
-+		error(1, errno, "failed to connect reuseport socket");
-+
-+	/* Bind order makes good_fd index 0 and connected_fd index 1. */
-+	attach_cbpf_index(good_fd, 1);
-+	other_src = new_loopback_sockaddr(family, 0);
-+	if (bind(other_send_fd, other_src, sockaddr_size()))
-+		error(1, errno, "failed to bind non-matching source socket");
-+	dst = new_loopback_sockaddr(family, recv_port);
-+	if (getsockname(other_send_fd, other_src,
-+			(socklen_t []){ sockaddr_size() }))
-+		error(1, errno, "failed to get non-matching source port");
-+	if (get_sockaddr_port(other_src) == peer_port)
-+		error(1, 0, "source ports unexpectedly match");
-+
-+	epfd = epoll_create1(0);
-+	if (epfd < 0)
-+		error(1, errno, "failed to create epoll");
-+	ev.events = EPOLLIN;
-+	ev.data.fd = good_fd;
-+	if (epoll_ctl(epfd, EPOLL_CTL_ADD, good_fd, &ev))
-+		error(1, errno, "failed to register good socket");
-+	ev.data.fd = connected_fd;
-+	if (epoll_ctl(epfd, EPOLL_CTL_ADD, connected_fd, &ev))
-+		error(1, errno, "failed to register connected socket");
-+
-+	/* An unmatched BPF-selected socket must not replace the valid candidate. */
-+	send_udp_packet(other_send_fd, dst, mismatch_payload);
-+	expect_udp_socket(epfd, good_fd, connected_fd, good_fd,
-+			  mismatch_payload);
-+
-+	/* A matching selected socket must still win the positive rescore path. */
-+	send_udp_packet(match_send_fd, dst, match_payload);
-+	expect_udp_socket(epfd, good_fd, connected_fd, connected_fd,
-+			  match_payload);
-+
-+	close(epfd);
-+	close(good_fd);
-+	close(connected_fd);
-+	close(match_send_fd);
-+	close(other_send_fd);
-+	free(good_addr);
-+	free(match_src);
-+	free(other_src);
-+	free(peer_addr);
-+	free(dst);
-+}
-+
- static void test_extra_filter(const struct test_params p)
- {
- 	struct sockaddr * const addr =
-@@ -469,6 +617,7 @@ int main(void)
- 	setup_netns();
- 
- 	fprintf(stderr, "---- IPv4 UDP ----\n");
-+	test_connected_reuseport_rescore(AF_INET);
- 	/* NOTE: UDP socket lookups traverse a different code path when there
- 	 * are > 10 sockets in a group.  Run the bpf test through both paths.
- 	 */
-@@ -510,6 +659,7 @@ int main(void)
- 		.recv_port = 8008});
- 
- 	fprintf(stderr, "---- IPv6 UDP ----\n");
-+	test_connected_reuseport_rescore(AF_INET6);
- 	test_reuseport_ebpf((struct test_params) {
- 		.recv_family = AF_INET6,
- 		.send_family = AF_INET6,
--- 
-2.43.0
+>
+> Typos in the changelog: "swtiching", "share some the of".
+>
+Will fix that in the next version.
+
+Thanks,
+Longman
+
+> Otherwise,
+>
+> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+>
+>
+>> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh 
+>> b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> index 1397ec428c46..81f0eecaca80 100755
+>> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> @@ -563,6 +563,10 @@ TEST_MATRIX=(
+>>       " C1-6:P1 C3-6:P2 C5-6:P2  .       .    P1      . .     0 
+>> A1:1-2|A2:3-4|A3:5-6 \
+>>                                          A1:P1|A2:P1|A3:P2 5-6"
+>>   +    # A hotplug event will not incorrectly activate an invalid 
+>> partition with
+>> +    # a remote partition underneath.
+>> +    "  CX1-4  C3-4:P1   .      .      P1   O1=0     . .     0 
+>> A1:2|A2:3-4 A1:P-1|A2:P1"
+>> +
+>>       #
+>>       #  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail 
+>> ECPUs Pstate ISOLCPUS
+>>       #  ------ ------ ------ ------ ------ ------ ------ ------ ---- 
+>> ----- ------ --------
+>
 
