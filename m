@@ -1,97 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.57.64
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794833469;
-	b=Ftz7SJBdwlttpZuizKK9bmB1qhNXwZ8LbI6HgbvY1UOCmbMrx7x+9rRqyLfKLWaP2Jsy
-	 zQsBVOfyoyIS4tPjrP7g77NRI6i5nVCO5rgxZfg9mKg17jIGD0dJRbDd4qO+Pw0QfaeJ0
-	 S4YeCAZwhDAVEWyGXvpIMDBcxxEgwDB7x+fpfMWHEZx3/pyfUcXzSHeiaL8b4zXvny/5m
-	 pDPwZNI7JEZ69N3wN14eVb29A034lGnBmraJKdLXXZ0541B9OG52EYFVvM7AOPLb60lab
-	 swiBlAdgQTwr7PrESsbW1Jzo1ywcSxwKPu/t7Zm5CK7zJN8SCrMsByVpJwsx9FJRWFw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794833469;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=aMNNkFGAX04I4nDB/kvsKnTIayvtZmcRz9qtXTbAeDQ=;
-	b=xs1nGD4D3k99szA2F6hoZ0aeCdKFG2OTZb00cY5/qN5SaqPXkRf0/X5YjMV7HoP6iwZv
-	 gN0JYsW83w4aMle3mvS/VBUQNbdkObDKMfRVpshkRkEdYkj8Zdi6KAjLSp0oUktjHLms+
-	 mtb8F962yUGftT0wqh7k+SwD2HZWlABHveevsSEq2KHcw8WsG5O2sqBNajjPtXHQxAEPm
-	 WkANSo1R0Eds9DT6u334HNMvDUSRBya81iyZbfj6HfcLcyPYAu9SUiztzdZslxur9XERd
-	 kf+bZzF1ARJcYw/ZX2e+HWCpSSPOggFGl+tVkitQ9amOPAjJdSE9LZRbzgXiiwC06Tw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=EeDxi68a;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.57.64
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011064.outbound.protection.outlook.com [52.101.57.64])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794833874;
+	b=LN0I1McEbfS8u56nyxDXuVN8sqeMYhIXrAKuTK1TNPnt8ByNYX+AbMVvvY8goe4OBX5k
+	 nwpagsbNnts6o5YPMfL2BpMIcMz+IkW8/CbQlCMlZR+01c3fQBhhKQaKagRoCDkmXYrPG
+	 RPABBqN12yiJHbNTdaVfu9ySytCsTOHY4IiutfL1ZwOgoVgoTxgU2Ngajeyc5IS/Tshjx
+	 Be2tZyQD3EYicW1HwSs87+2sGXPjPeH8xwtpXJufh/SxdF/+PiEwGVnG1BTuBkS1bmt0f
+	 X7tGeEIp6ekss10Q6v/4wpZmUsZohiNxp6pkmbIhWjVvUMmFhZAEBGX4hX8yS0Gf80A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794833874;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
+	bh=b54vzCQbDLyQCU94ux+/8U6SB77amlsLWgVzT1nnN+Q=;
+	b=DqRUpMRqEqL0NJ9rZ21YBi9fYCMTzGbrWO9d+T9HZyqCMzHxd8knQ/ziQp6iQv/8hGWp
+	 tg76S/XtbKcdRSeX2eLNEbdsdwFMgYT0BHc+AbrQjh57gFSlYbXNsGSJqoxe6Ql/YnhBy
+	 ox1nuYZz+EdlU+Fs/l2zcRs6bTAKIy297qwjf134NTziVOMQQdhzJF5X+n7Y0gdEsjfH+
+	 4XfYYyx5isSv6MGY1VANr438771cvQNupOeNUXCV5cNsj83G4n5GgHlywHmrRfrrx876p
+	 KCDnmznDuKeNdsvVU4sCs7BZGpgym7khACfjay9ceQcQF+3r5GpMpqL6T6Q1XYFYXPg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qkR61oGU;
+	arc=none smtp.remote-ip=74.125.224.49
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F29A606A329;
-	Mon, 16 Nov 2026 12:51:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F29A606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3DDD606A329
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 12:57:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3DDD606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=EeDxi68a
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s34WermatOTgBCy34RZqtv9s8/gVkc0dnRBgdjPTLQlGiQMa+G5KLAXM0mgyy/6xIG9yL2kgcC51gP5kanfzpWa6IGFAqZ3Bqy0YOIu9laMS0KfVD6TVfiWLTWLeWuQCnhU9l1StaCLTf07qzlto5FlO4ILBwT8ySOFsvBmwgjRFtu1lzPRx4HxZuKB5Ff/v1Eb6ldUDbWRt+6pHoa4oWaHzWYQn5iBEvTUzm8jlSFzTOrB8GI9igpZkr97hDRidu82nYAl3aOOS4MioPlVv+em6piP6HYEdfGRJaEz3RdSoPHVVq9PrMt/CTgsfaC726ldQSty9LpldN0uOFQuhbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aMNNkFGAX04I4nDB/kvsKnTIayvtZmcRz9qtXTbAeDQ=;
- b=lnG4RQUi8/uhbEZ5GUxD4i/C8Wt2G01ktR+/qcq7cYI9s47X6JDxXDgebnnojtKyScx+TPZ+msFf0UjT8P4iD7WnjiM0zx7SiOkLypC6qVMIwEZW83h4rZ0rIQo5Ban8Nihn9PQY1ofKSkb5hg0OrvbqiheTj6MZrNB32BdVUBcbTL9xXwy7loj4hYCNny6Fw24HfNgJsd118pYCix8rGWYtJHQAQqBx0TXfDhNC5U7cFhM/kYb9449MmGmcv3Bb/st7N7tDiVDXg/v3nmBj8GaGP15G6fu5Lvuf09WR8b2uiNJBAZSl7q8z28PxLfVS5U3wRuPoVgm1eeZetUt2qQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aMNNkFGAX04I4nDB/kvsKnTIayvtZmcRz9qtXTbAeDQ=;
- b=EeDxi68aQKVMgW64+h7M7ci8UPPnQzvbOdAmWsm3G6WsDiVfHZIdNUdK6+DN3g6gyAOlVgHuiV+ECwd2mGz48HJfSJ9ouq0vLLA+bumU/7U/+pkd2cgVPAolgaIWvDiuYqsvRT8Uue1CZPrkcMWatzt5HfT05r5rHuzv0R1HydSQ0Fx6ckNq44TMRLlr8Drb0NZmsSR1sJqHjcdvFGc+xeYrtuLdNKjYa7GQygZjx2uukyjCU1/9CNvRM/pqOkkeNaabEKoMrIyFFTpD/VisJYnBgcQyQHDcXtLevIWfkdmrV9L8oqv5fUIqXcqyJA4x6XjNQcYZ3M4D5i3Au7XK4Q==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by DS5PPF7671D5CC0.namprd12.prod.outlook.com (2603:10b6:f:fc00::653) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.13; Mon, 16 Nov
- 2026 12:51:04 +0000
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0615.009; Mon, 16 Nov 2026
- 12:51:04 +0000
-Date: Mon, 16 Nov 2026 14:50:56 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: leonard@lausen.nl, netdev@vger.kernel.org, dsahern@kernel.org,
-	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, pablo@netfilter.org,
-	fw@strlen.de, phil@nwl.cc, shuah@kernel.org, daniel@iogearbox.net,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 1/2] ipv6: honor prefix-length suppression in raw
- FIB lookups
-Message-ID: <20261116125056.GA275796@shredder>
-References: <20261115114434.10343-4-leonard@lausen.nl>
- <179482978100.3136.17418106822071501090@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <179482978100.3136.17418106822071501090@kernel.org>
-X-ClientProxiedBy: MR1P264CA0203.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:57::18) To LV8PR12MB9407.namprd12.prod.outlook.com
- (2603:10b6:408:1f9::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qkR61oGU
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-67be4f2f4d4so3959924d50.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 04:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794833873; x=1795438673; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=b54vzCQbDLyQCU94ux+/8U6SB77amlsLWgVzT1nnN+Q=;
+        b=qkR61oGUGfWXyq02W5NwpkdI7xWJvKjPbo4T6TzYJHy/q20X+owb18EINtxXGyeyiz
+         WrKGwDAePfVSPKmczk8CMIjBDXvpP7neyJi8+raNPzQY4aWlk4sR4R4bSnDg1kNeDTJg
+         gkvV0d20Pq9Hq4QzLU6ez1JIjSqR9wrT7XIckcZtEuZ/yXHnHFP9LuduXvnvLRMqLW/2
+         ZrkbNd8LTokrh1WbtXAOtCMMWxpX3EGTQlgoevge4vxCismIVePbFx2YyBRQI8pRbr7P
+         PxxEQwlclmc3AgwQO7qS9CbbyhI8KezTBFTDpgU+0vn2BvN1F/phbPcTZ/PLgsWJjyOJ
+         mtXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794833873; x=1795438673;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=b54vzCQbDLyQCU94ux+/8U6SB77amlsLWgVzT1nnN+Q=;
+        b=isTyj6IV6ZTZfCxMxtv5sOPfiqDPNuOdrhs/bmjKyG0hxquK6ars3mvrqRaaPVixlp
+         stvWWTd2czX5iRpvvX9Tm41cG5l3rUK4Y8eXbecnSMqMuQl57oQiOE20aOym/PYLSAfK
+         mM+OETTgHb16ipFr3TKtNTD8wawgkZbyPwst0nGh6kem3eHJqLr7eVKDHPFCa1V/u8Sm
+         ehFJFlOXOSfZNp2qsrabTPGS5eQ9+iPJ5TQW5vv8Ztm63lBUTo3eMugT1r9TxcjpQl6u
+         Y3saFoTD54UJx1SwAvEziiJeX5DsfeqgMPu0Wp+YLJIS/1ZP/88Pa7NA8/IAdU259AAW
+         dlkg==
+X-Forwarded-Encrypted: i=1; AL+hErGilyPnwGP/ez5x+xPWI58LOcUSKi6s74bwqRwIYVTnLGhVJOLM2tZArTv9ATETsamyAimmw/kbnu8nGoHlA60=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9z8/kGUBevBxYKLoX0zSGkwqozRmMr1NeiFQodFSIlM837IgQ6
+	ZWGcGA2dWrGjmyYGcR50OgMwJirFgT9CYrCKs5yQAt0zONKwtmfkzrcc
+X-Gm-Gg: AZFdTZcc4cF01z+fDpNQg8ZyPKqmQuJ7knUBowCADMmJ02CDUnyJh2MEdverhFjYJMl
+	ehKGcOMNRGUVhd+dI0SQIfGxhdC3Xio/441uede3gqtBDRvekDcbijU5BpkB0Ebe8+xHtze5KHe
+	ex86yoqdzcMGcBCOmQKfRp120VG7YmrJWXBgfIO7GScQAY9Fv43UNwZxZ7rNJAAKTS5MWPq7zyO
+	XUoRAw/jZUAxOTA6GWKVgBtqcwHzERxBPZu9eDbENWkcrbkWr/tvsDkbXkufi8d8dZSiF76EgFt
+	e6JNntrNQi4xvIE389A51nRQciL3cNNqeqYuzZU1aIXoCHcVcJnZeW6hwY5IraieRDOnBvl5hA4
+	hqzx2r5h5gfanb5+CNo8OFo4ATZZxlVBHkzZhMxFO0yJGvH/hp5PznHJ+1Mw3nO6JPXPhSoPIOw
+	NFV20tyx9t5EkgNVpgpsbA6GSiCijnXtJKM9O8KVHlMGyjGojPSvEb8bM397e5k/RUnLDpY7jog
+	qP9c6r+S20DVaqhrgVvOioVsWbdzXauU1xpd6q0J5NcF7y3LWFgb/Prq0CU0687EPYxcIOwMGJO
+	h2NOatAzuOdldt3t+Bf4fOe6GRvon29NZg==
+X-Received: by 2002:a05:690e:4504:10b0:67c:70cf:c90e with SMTP id 956f58d0204a3-67d8965ab34mr3362885d50.39.1794833872447;
+        Mon, 16 Nov 2026 04:57:52 -0800 (PST)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67d8a55ab71sm9886911d50.4.2026.11.16.04.57.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2026 04:57:51 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,100 +87,166 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|DS5PPF7671D5CC0:EE_
-X-MS-Office365-Filtering-Correlation-Id: e5cd978e-d88e-42f0-d59b-08df43e04634
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|23010399003|10067099003|11063799006|4143699003|56012099006|261021121427099003|261009223027099003|261102123227099003|261026121527099003|20052099010|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	z+EIwRz4oI42Yo52ZvHdZBL5+9WpHNJ862ewagWt9ab1Aw8lXtuu53r1uu4TW/a9BFsEYj4pAYMc57pZGfYTW4/werdLy6CWFG9iPM3SfYwLX7QNHVOPojLRC9Dc0nMMQ24BUDZNu7JlD+k3R4v1kVeJZSmwVsKjqOvYi2F7uj5eyzGQppVguN9AsYDpdZ4dXwWs670hWoCjbywRkJuMmya520uJwoTbKhpKrtAoUHuMDa41vBb/nofGPdwDmrw1zuFTM9xxATRld5Kxi2hyINVJOV4BkFDjXPr36K9RmDViewVsbla2ooBc8jXszkimlfcVQ0VkpJvKt3XaLgtMMkPnCrQUKM2JRLzd1uhVdgHd0VTCfZSoqLG1ILs1stmIXiQFIpqj9wbLNC1ndyr9dSJ7pbwqLPool3+VWX58qvkl9eBiFzTP1PeIdALDLr4LGiEG63ViCPQBrPCBXUhaaBCgmoAtotYnhMkqn1FaLPCXZQZpmzTIFP+ZIF1OB+uiE+1MpuVLHKX5EKshdDNmO9vavB+PsNHASj15okJWkeItbKoe22O0qcKmXMG9bOXLtBWIiFxnNIERlT9KX4LR+vMW2nyUZAckASeWzG+wmYSlblPkYohbNJmSr1Ft7cIV4Cz9MQXpU5Y3AkRdpD8q7kZIv+K/3/LRPCcX7Rz25Zc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(23010399003)(10067099003)(11063799006)(4143699003)(56012099006)(261021121427099003)(261009223027099003)(261102123227099003)(261026121527099003)(20052099010)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Ty3pQTLlQ8BBSseTmbuAoSSdD7yjPMA8wWWjD3zrikhTgeKOihsXlr1mPH+I?=
- =?us-ascii?Q?0rSU2sWq3Hkh69b8nrzWbCWi1TnzH3qxHdK1w8ysRCKCTD4HchcM7COUeI/T?=
- =?us-ascii?Q?h76GVyTrjfwaJzk5F3zyqJSwggu5Sv+wMpTkUBe77T1FGd+dWGKsKK1xYaVo?=
- =?us-ascii?Q?ub2QObrCwUqfdkdAsSJSC95hLHNeSKNB63evw50r/K5Z3binYsLIOcSG5IUY?=
- =?us-ascii?Q?kEWW/4IXudN3CwBOCJ3Env4NzeBY+nWBpt5znO9htZ02gkzQP7RqNeMujL5w?=
- =?us-ascii?Q?mWQl+/BET88bvvcYiB1FuYxOyB86hvNOO3i8OKlIv4LO6LJ+7++Glmaz06UA?=
- =?us-ascii?Q?5W7tQdA+irfz95/vmNobawg69MCqvoibdcrcug9VVVs0cGePBrxvX0si4YOd?=
- =?us-ascii?Q?PFMmT0iMNu9G0aRilhyKt0Ti3pfVcMl64H6grd/kfmGcnmpbBsGpwiJARnEr?=
- =?us-ascii?Q?QCj7LLOLl50rsLUfZKxiRhhjiZ3pSVhlzBpS1nxCF4G+AZqtLUd2nGNKOtfM?=
- =?us-ascii?Q?OBz/DGgdYbIOMX+m/rjHopQ/0lib1/SoDLcMMVthIGlAaUKvSS9kPOY6QzEc?=
- =?us-ascii?Q?Jt0QsaarslrLlTVoXbMcM1xJreMXkCp3aJy17/B040yNo0E0P/mtbasuEabk?=
- =?us-ascii?Q?32A2RbATS84pm0V86M5dOb5AHc0JKCSrunYAgN6zP8R2DMGB7JljyBZ8ZM0o?=
- =?us-ascii?Q?h3r89szHcs91pP5aIQeYCjawNUKiQPD4C7SGGCHe/ZHAyRYArHFa+Hw0kTJc?=
- =?us-ascii?Q?24MqfCOCndTnRN3e4UCsFCwqINZTNDfAnGL+Ktt0no8wxP8sTQ9webjWa2jd?=
- =?us-ascii?Q?P+Pyv8dmWt8L9/MlzVsR9Aft9vVXe5jS90wR856MjO1B0Zq+a47zoa3GRXow?=
- =?us-ascii?Q?6bnhnkEQo80mBFiKOSXhvL6Sb0TGBOJegRYMrlImPHycm8HbUYQKi67lKH3y?=
- =?us-ascii?Q?bNd+BM5JK22lnYOrZ/5Y0KBrasoIfuSaOyH3mZKk/s9Ed+cgRtg0TQoJ5LIL?=
- =?us-ascii?Q?ARutAdIIRjCwqinS2JKx8znzU4Cs8qm5Ohez/d0o+xAAE014eIu7mvuNnyvU?=
- =?us-ascii?Q?FXV+V3SbqNav5Rt2pJb+LbQJohNaYu4ctkjPG4qLAUbdNgg05qzRglyBhIgN?=
- =?us-ascii?Q?U5YHsxE8A1mRGmTHdGYEnKMy3rWynwaP6F3h8iSvwRhDPxKXlvElG21jQXNV?=
- =?us-ascii?Q?ugrlzp9TiMf1/c7oOzPyZsQHsuMYjPVjRlcVdUCovkkB/zEWtw4dLnTNld+X?=
- =?us-ascii?Q?GjoE2DIiI9+DhfyuVhKa4E0tRiZ9WkyU/A2MG+9vqNgt30rMZmmcaNaxOROB?=
- =?us-ascii?Q?6aOZGVEuEuXvG3R2qke4YtcSErwcplOC0I+xC90WCd6yL+0neT7OtPLh7mwK?=
- =?us-ascii?Q?M0RiEOpoGxLbj7bHVouj4IEmvsvOyfkDhgKpk/iOHMe4R3kOJNRyzqZqUZFK?=
- =?us-ascii?Q?L1lV2ZeQT6fDvgGtz5CdR8/69zX4r98LylhVow9Jcy4wsV+niHw0ONOTQ3W4?=
- =?us-ascii?Q?nyVMqkOLLfln5nKZ8OJAksZyJOz3D8kYPS7Lth/4W2QXoZhDfEQUXFzkHyv4?=
- =?us-ascii?Q?JhR7hDP9QDu5e9bxL3bHeFM9lkEartsxtaGtd2mAPcQRn4NAPr2evhqhTzbd?=
- =?us-ascii?Q?cBLy8o983RjsG2qNA+wa6AFZ495AUhKU3MvPLF7MIxCo7Ck2kiPr1V2Ojouj?=
- =?us-ascii?Q?SGgN87W3nCUOHi+2bRnptEZAINvClys3F/oQ0IAwFSaJrC3w?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5cd978e-d88e-42f0-d59b-08df43e04634
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2026 12:51:04.1814
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: D5i1p5U6ZBjRUFBPJxW53J15xI0FlHw8XDjdTsT8pE85t7VjBMXhA0SDBqnBdhW3hxe5pO9Yf8Yz0dpK47khwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPF7671D5CC0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Nov 2026 07:57:50 -0500
+Message-Id: <DMWNI97J4UZH.QK9260QE63ZJ@gmail.com>
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@kernel.org>, "Boris Pismenny" <borisp@nvidia.com>, "Cosmin Ratiu"
+ <cratiu@nvidia.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "David Ahern"
+ <dsahern@kernel.org>, "Dragos Tatulea" <dtatulea@nvidia.com>, "Eric
+ Dumazet" <edumazet@kernel.org>, "Ido Schimmel" <idosch@nvidia.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Leon Romanovsky" <leon@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>, "Mark
+ Bloch" <mbloch@nvidia.com>, "Paolo Abeni" <pabeni@redhat.com>, "Raed Salem"
+ <raeds@nvidia.com>, "Rahul Rameshbabu" <rrameshbabu@nvidia.com>, "Sabrina
+ Dubroca" <sd@queasysnail.net>, "Saeed Mahameed" <saeedm@nvidia.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Simon Horman" <horms@kernel.org>, "Tariq Toukan"
+ <tariqt@nvidia.com>, "Wei Wang" <weiwan@google.com>, "Willem de Bruijn"
+ <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net v5 0/8] psp, tls: don't send offloaded contents in
+ cleartext
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261111001831.3710881-1-toddfreed@meta.com>
+In-Reply-To: <20261111001831.3710881-1-toddfreed@meta.com>
 
-On Mon, Nov 16, 2026 at 11:49:41AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> > diff --git a/net/ipv6/fib6_rules.c b/net/ipv6/fib6_rules.c
-> > index 0ffd7b47a0460..ceb4180bcf2f8 100644
-> > --- a/net/ipv6/fib6_rules.c
-> > +++ b/net/ipv6/fib6_rules.c
-> > @@ -283,9 +283,16 @@ INDIRECT_CALLABLE_SCOPE bool fib6_rule_suppress(struct fib_rule *rule,
-> >  						struct fib_lookup_arg *arg)
-> >  {
-> >  	struct fib6_result *res = arg->result;
-> > -	struct rt6_info *rt = res->rt6;
-> > +	struct rt6_info *rt;
-> >  	struct net_device *dev = NULL;
-> >
-> > +	if (arg->lookup_ptr == fib6_table_lookup) {
-> > +		/* Raw lookups report reject routes without an error. */
-> > +		return !(res->fib6_flags & RTF_REJECT) &&
-> > +		       res->f6i->fib6_dst.plen <= rule->suppress_prefixlen;
-> > +	}
-> 
-> [Severity: Medium]
-> 
-> Can the raw and dst paths now disagree for a destination that has a
-> cached exception route?
+On Tue Nov 10, 2026 at 7:18 PM EST, Todd Freed wrote:
+> While working on adding support for socket-less psp associations, I
+> noticed the case of ipv6 extension headers was not being handled
+> properly for psp packets. It will be relevant with that series, because
+> it adds udp support, for which the psp nexthdr needs to look at the
+> inner packet.
+>
+> That led me to various other ways where packets on the crypto offload
+> path could be transmitted unencrypted.
+>
+> Since the psp/tls association encodes intent to send encrypted packets,
+> but these various cases circumvent that, sending these as fixes.
+>
+> The cases are,
+>
+>  1/ ipv6 extension headers (patch 2; patch 1 makes mlx5e flush its tx
+>     queue when the resulting drop happens),
+>  2/ fragments (patch 3),
+>  3/ icmp errors (patch 4),
+>  4/ icmpv6 errors (patch 5),
+>
+> Cases 2, 3 and 4 are relevant for ktls as well as psp.
+>
+> patch 8 fixes an mlx5e bug in tso checksum calculation for psp packets
+> when the l3 dest is an intermediate hop (ipv4 source routing). It's not
+> about preventing unencrypted tx, so could be considered separate.
+>
+> netfilter refragments bridged packets and builds reject replies itself,
+> outside these paths. A separate series to nf-next, which follows this
+> one, applies the same rules there.
+>
+> Testing:
+>
+> all hardware testing was done on connectx-7 (fw 28.48), between two x86
+> hosts, plus netdevsim.
+>
+>  - drivers/net psp.py: on netdevsim, all 36 tests pass. on mlx5, 30
+>    pass, 4 skip (gmac versions the device doesn't support), and 2 xfail
+>    (netdevsim only).
+>
+>  - tso checksum seed: a psp tcp socket with an ipv4 loose source route,
+>    the peer checking tcp checksums in software. hundreds of checksum
+>    errors before the fix, none after.
+>
+>  - fragments, with tls offload and psp:
+>    - ipv4 (route mtu above the device mtu, IP_PMTUDISC_OMIT): without
+>      the fix, some fragments after the first go out in cleartext. with
+>      it they're dropped.
+>    - ipv6, through an ipvs dr service with a local client: without the
+>      fix, fragments after the first go out in cleartext, and the peer
+>      reassembles them. with it they're dropped.
+>
+>  - icmp and icmpv6 errors, on netdevsim psp, with an nft reject rule
+>    (icmpx port-unreachable):
+>    - in an input chain, of received decrypted packets: without the fix,
+>      the errors go out on the wire, quoting the decrypted packets. with
+>      it, no error reaches the wire.
+>    - in an output chain, of a psp socket's packets: the error is
+>      delivered to the local socket, with and without the fix.
+>    - a PKT_TOOBIG from ip6_fragment() about a psp socket's packets is
+>      delivered to the socket, with and without the fix.
+>
+> v5:
+>  - new patch 1: mlx5e rings the tx doorbell when an accel offload drops
+>    a packet, and checks the stop room after the nop it posts (Sashiko)
+>  - ipv6 extension headers: drop them in psp_dev_encapsulate() again,
+>    instead of in mlx5e. it's the helper which can't encapsulate them,
+>    for every driver (netdevsim sent them malformed). unlike the routing
+>    header rejection in v2, this isn't a device limitation
 
-Yes, and I already mentioned this here:
+Can you elaborate on this? You're saying encapsulating with the
+extension headers present was working for mlx5, but not netdevsim?
 
-https://lore.kernel.org/netdev/20261115154639.GA4121811@shredder/
+>  - don't fragment decrypted skbs in ip6_fragment() either
+>  - icmp and icmpv6: send no error at all about a received decrypted skb,
+>    instead of quoting up to the tcp header for tls offload.
+>  - icmpv6: decide whether an error about a locally originated skb goes
+>    to a local address from the error's route (RTF_LOCAL), like icmp
+>    (RTCF_LOCAL), instead of the address list (Sashiko)
+>  - selftests: the extension header test runs on netdevsim too, and
+>    removes the socket option before closing. the fragment test uses the
+>    source address of the route, and turns off tcp_mtu_probing
+>
+> v4: https://lore.kernel.org/netdev/20261103001143.246081-1-toddfreed@meta=
+.com
+>  - back to dropping ipv6 packets with extension headers, but moved into
+>    mlx5e instead of psp_dev_encapsulate()
+>  - drop the psp core changes to rx and tx ipv6 extension headers
+>  - new patch 2 to drop decrypted skbs instead of fragmenting
+>  - new patches 3 and 4 to prevent quoting just-decrypted packet contents
+>    in icmp errors, v4 and v6 respectively (Jakub, Bjorn, Sashiko)
+>  - new selftest: ipv4 fragments of a psp tcp socket
+>
+> v3: https://lore.kernel.org/netdev/20261023234640.1459291-1-toddfreed@met=
+a.com
+>  - new patch 1 to fix tso checksum seed calculation in mlx5e (Daniel)
+>  - accept routing headers and reject ah (Daniel)
+>  - split the psp_dev_rcv() change into its own patch (Daniel)
+>  - return -EINVAL instead of -1 (Daniel)
+>  - selftest: one variant per extension header type (Daniel)
+>
+> v2: https://lore.kernel.org/netdev/20261022223014.556388-1-toddfreed@meta=
+.com
+>  - walk the extension headers instead of dropping (Daniel)
+>  - reject fragment headers (Bjorn, Daniel)
+>  - reject routing headers
+>  - psp_dev_rcv() handle the rx case as well
+>
+> v1: https://lore.kernel.org/netdev/20261021210200.788191-1-toddfreed@meta=
+.com
+>
+> Todd Freed (8):
+>   net/mlx5e: ring the tx doorbell when an accel offload drops a packet
+>   psp: don't encapsulate ipv6 packets with extension headers
+>   net: don't fragment decrypted skbs
+>   ipv4: icmp: don't quote decrypted payload in icmp errors
+>   ipv6: icmpv6: don't quote decrypted payload in icmpv6 errors
+>   selftests: drv-net: psp: test ipv6 tcp socket with extension headers
+>   selftests: drv-net: psp: test that ipv4 psp packets aren't fragmented
+>   net/mlx5e: psp: tso: replace only the length in checksum seed
+>
+>  .../mellanox/mlx5/core/en_accel/psp_rxtx.c    |  21 +-
+>  .../net/ethernet/mellanox/mlx5/core/en_tx.c   |   8 +-
+>  net/ipv4/icmp.c                               |  12 +
+>  net/ipv4/ip_output.c                          |   8 +
+>  net/ipv6/icmp.c                               |  16 ++
+>  net/ipv6/ip6_output.c                         |   9 +
+>  net/psp/psp_main.c                            |  21 +-
+>  tools/testing/selftests/drivers/net/config    |   1 +
+>  tools/testing/selftests/drivers/net/psp.py    | 249 +++++++++++++++++-
+>  9 files changed, 327 insertions(+), 18 deletions(-)
+>
+>
+> base-commit: 8012eec76b7e6c0d9fb338fe8e3db6ca1b419da4
 
-[...]
-
-> Should the dst branch use the parent FIB entry's prefix length for
-> RTF_CACHE routes (via rt->from), so that both paths agree? That would also
-> be closer to what fib4_rule_suppress() does for IPv4. If not, could the
-> commit message document this divergence?
-
-The dst branch should be fixed to derive the prefix length from the FIB
-entry and I will take care of it, but it shouldn't be done in this
-patch. The patch is doing the right thing and using the FIB entry in
-the "raw path".
-
-Not sure we need to overload the commit message with this info. Maybe
-under the '---'.
