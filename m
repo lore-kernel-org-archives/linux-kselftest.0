@@ -1,56 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.243
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794819393;
-	b=CWHZvzYQxtrz//zrKPeZVJr6Tga64zi3qmzt/R3FHt/44h1Xhk5TrH4e3XqkAmpcd9x9
-	 3+n5xjZcnCcR8Pk6rgH54ffkqBQR6ikScaOtT820X9jaJ5/jZWWr1WAJ5xN2kj6oaw1Cd
-	 C+mXfKO3jOvC5WPuRdGqllEqk0mP3MX264ktvU0kScGZAVagw7BhVKmI3U+UCv/B1PS5E
-	 u1FRCbBAn3zq5ABq0NlzCZ69m9lxiMz+Mvw14rO3grYWloic7wISJ3c+vD6fq5DYX1zhH
-	 WQG97fi8f8SYovB3iB8icXjQjgIn8H+1plwYeqFpnpKhmlY306hwR4w/fJUemToVIrA==
+	t=1794819424;
+	b=ZIqY1N7Q4HyQVp6kfQdBkgFpjS2x0zZzo2rONaJzG/qEhY4Yd+SchcBGoGyjD209zK93
+	 54GHJSghq3vivwnQ3tFsxwctxkcIbJK3S6SVdnRmNOdNdiwEyTRPDhmsGRrv2Ns5xMV8D
+	 zhiIYXSQa59neBdvX6fxpoz9xxNav7QLq6oMjWJNLxBE0tiLWnZz3JsMLnxS71iIUazKv
+	 ePV0vpox3PjcEwBs+u1VpD2FNcKEsNaclqXhwUGhLkmQCm5rHK9Ntp9Gzkyw9YicfMlqm
+	 4PlGeDzDMYp/t5Q9mv9B5ynnafpS+e8IyXj3LjY2pUPTQO9f+7V/DzKb45V/i6M9PTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794819393;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=TCOAmNe0BEFi8mKC+0PAv0vRnH09iyDNA3a8Nshj+co=;
-	b=oiudT924Ty0Sy+9O927UOVDdqC4YkRwEE1STrQJUpC42XGqkk8XZ2jAiOhFxSJ22JNbd
-	 66ay84LQUwnh2Q2A4OA3jxE5ksqd4AotH+CwvcHJhpW8jonmDmZ/Z2oBhxqANRMVfk/hQ
-	 5ej1DPYO2oGugz/GVaT+hRiziaOHR9Ta2OC61V+6+75BQZE3Xk2sa6crDeSi/D5ngomyT
-	 AthTe/O+zsLExy6wqZIWRwtfWDJvfvx+ddQGzkuH3gqmtNEmK9MzdQOMqapaUz2C5nlf+
-	 QctMR/z7YURODaRS6MqHyxuE1gCuHklNY8Nn71otqkQ2rNYroSU24NHQrE/DvRn614A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794819424;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=jqqQIn5fN3ExvqQJ702aRkMFV4vd8sFUVArqXPGGWmU=;
+	b=fDZHPJEouu1fMn4g2lTrCxljnKsSs/44FfQN13WcW57+/0U3MK3TjNRMEVcNcyHLdrvL
+	 SZRVDMdxL/BVK0ORTV0b+WxBBHwOGTBbF43lZV8PUr9iwO/ZMcNWhzCmNvZkWbYLmEDhX
+	 TOc3cxB5bIdEl2Jtrtl1yqU6aTgHK/by2X/ZwaJ/eH+S1940YIVpNEzDDclaosS8I4hUR
+	 /NnbeC5cZLLlH7XZDKt2VTWMzNABVP4op/8Ze2EQ2LPFOrMjE5EfHGaKlQsV2zhGnnbQi
+	 jWhaU8S1FSua2LXQDBXbP3WJQ2kxHN7VL3Jz0sS0sOWsnfL6YFWaXh2ZCC9iISwh6sQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YKadq6xx;
-	arc=none smtp.remote-ip=91.218.175.243
-Received: from mta0.migadu.com (out-243.mta0.migadu.com [91.218.175.243])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GpZnQFXB;
+	arc=none smtp.remote-ip=192.198.163.15
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456E5606A323
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 08:56:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 456E5606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3C5606A31C;
+	Mon, 16 Nov 2026 08:57:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A3C5606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YKadq6xx
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7lolab2zVmmIzQhOdTNrMQkrZuGsVRndTA3iq4cS6mY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794819390; v=1; x=1795424190;
- b=YKadq6xxRABnupfUM1Y3hNWq3Al7M1iv5OqCAbAfNTk17YILf3ZqtW36B6X1MXCCt1kkg91T
- 6eHvksBn9PAi9rKa8wc5E1tikQsyX9npBRPn46zM/d8prnXNJ6tKrMyplef8SF2GgP+mcVSv6Oi
- g6mYlUnstFLAeQrKREmEXLfI=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 17b6a22d7d497bc4;
-	Mon, 16 Nov 2026 08:56:30 +0000
-X-Mizu-Trace-ID: 17b6a22d7d497bc4
-X-Migadu-Flow: FLOW_OUT
-From: Hongfu Li <hongfu.li@linux.dev>
-Date: Mon, 16 Nov 2026 16:56:11 +0800
-Subject: [PATCH] selftests/mm: protection_keys: use _exit() in aarch64
- ptrace tracee
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=GpZnQFXB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794819424; x=1826355424;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j+APYi05VYl+fOsRhxa5u2olSjyXjy7TsU2aLGBHaSw=;
+  b=GpZnQFXB5YFxrIICpkK79qgC9H6v2smfS0X4Y7AIoHpeKs7bGOzSh7aX
+   Y4y62K93Uvd57/0kvBgM6jihBiIAoZZgbDOE3aqXoxNtUU1dJGwY4MDeV
+   77mDbQXXP4BQVuf3Zkd0Tb/ytHiafkU0o8ktfWDXy3mvPxUH6gLdt+SJ7
+   8z8FttEhlU3jGidPrM4iWrkJjv7lyThf5QNmrtP+PrKQ9LQhFXY7Apys1
+   2DAURllVmd5ed6jq6Wghp9QiSqENzQtk3tLF7FdeCl+EJj/7a9Q4LpF6Y
+   xin3ts3iKmIgyAty6Ykzanb4qOIvNPrIasNw9HdDvCzvYe1QJEL6qh1nV
+   w==;
+X-CSE-ConnectionGUID: tgJw/Sk8THGOaKvvXMBJhg==
+X-CSE-MsgGUID: CNWk83w8SBKot9mLmCdz7A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11967"; a="3557084"
+X-IronPort-AV: E=Sophos;i="6.27,216,1787036400"; 
+   d="scan'208";a="3557084"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2026 00:57:02 -0800
+X-CSE-ConnectionGUID: kVie1Q6rS9uiOHhXIECVrw==
+X-CSE-MsgGUID: +8zQcbTKQQ6zfgRIkv9O8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,216,1787036400"; 
+   d="scan'208";a="9384413"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 16 Nov 2026 00:56:58 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xSsWF-000000018AK-3xJI;
+	Mon, 16 Nov 2026 08:56:55 +0000
+Date: Mon, 16 Nov 2026 16:56:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	Waiman Long <longman@redhat.com>, Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH-next v4 5/6] cgroup/cpuset: Handle remote partitions
+ before local partitions in cpuset_handle_hotplug()
+Message-ID: <202611161625.POIP7bQr-lkp@intel.com>
+References: <20261116012330.2271010-6-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,84 +89,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261116-for-pkey-exit-v1-1-ca4c76b32ff7@kylinos.cn>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQqAIBBA0avIrBtQF0JdJVqkjjUFFVpRRHfPa
- vkW/1+QKDIlqMQFkXZOPE8ZqhDg+nbqCNlng5baKCVLDHPEZaQT6eAVZShN8EY7Yz3kZokU+Ph
- +dfM7bXYgt74TuO8HcVaD73EAAAA=
-X-Change-ID: 20261109-for-pkey-exit-0f96fd62c6bd
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: hongfu.li@linux.dev, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Hongfu Li <lihongfu@kylinos.cn>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794819387; l=2106;
- i=lihongfu@kylinos.cn; s=20260915; h=from:subject:message-id;
- bh=I343t2uR4wEtG+HLyp6H7kkFFFvE00XGS9N9j96x0BE=;
- b=WBYHvXmoxaPSzAUK9OsLYlPhQpq9V9t4iR/GbU7w7PSrNgs3/neeELXubmCtAzFBv88Jh67QB
- PJu87aQrbGhB3pKMntsmZzL9gPjVeV+SRoEasVfYnMQ81Pr6WhKMFkM
-X-Developer-Key: i=lihongfu@kylinos.cn; a=ed25519;
- pk=rUpDSpB3neoNZRlGG6dHlFb3RepiJakcev+ucyqaZzw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116012330.2271010-6-longman@redhat.com>
 
-From: Hongfu Li <lihongfu@kylinos.cn>
+Hi Waiman,
 
-Commit 25356081894d ("selftests/mm: protection_keys: use library code
-for HugeTLB setup") replaced the exit() calls in the x86 version of
-test_ptrace_modifies_pkru() with _exit(), but missed the aarch64
-version, which still calls exit() from the tracee.
+kernel test robot noticed the following build warnings:
 
-When the test runs as root, hugepage_save_settings() registers
-hugepage_restore_settings_atexit() with atexit(). The tracee inherits
-the atexit list across fork(), so its exit() runs
-hugepage_restore_settings_atexit() in the child. That handler calls
-hugetlb_restore_settings(), which writes nr_hugepages back to the saved
-original value while the test is still running. If the saved original
-value is 0 (or otherwise leaves fewer than the two free huge pages
-needed by the next allocation), subsequent iterations fail in
-malloc_pkey_hugetlb() when mmap(MAP_HUGETLB) returns MAP_FAILED.
+[auto build test WARNING on tj-cgroup/for-next]
+[also build test WARNING on next-20261113]
+[cannot apply to linus/master v7.4-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Use _exit() in the aarch64 tracee as well, matching x86.
+url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/cgroup-cpuset-Fix-incorrect-partition-invalidation-logic-in-cpuset_hotplug_update_tasks/20261115-202304
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
+patch link:    https://lore.kernel.org/r/20261116012330.2271010-6-longman%40redhat.com
+patch subject: [PATCH-next v4 5/6] cgroup/cpuset: Handle remote partitions before local partitions in cpuset_handle_hotplug()
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20261116/202611161625.POIP7bQr-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ca14e3d05c4e63d6e8103945c86b958ed2f55d5f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261116/202611161625.POIP7bQr-lkp@intel.com/reproduce)
 
-This was found by code inspection with AI assistance. No POE-capable
-arm64 hardware was available, so test_ptrace_modifies_pkru() was not
-runtime-tested; the change has only been compile-tested with an arm64
-cross-compiler.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611161625.POIP7bQr-lkp@intel.com/
 
-Fixes: 25356081894d ("selftests/mm: protection_keys: use library code for HugeTLB setup")
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/mm/protection_keys.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index 5dece144ab95..a0f51be3fcbc 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -1530,11 +1530,11 @@ static void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
- 		 * checking
- 		 */
- 		if (__read_pkey_reg() != new_pkey)
--			exit(1);
-+			_exit(1);
- 
- 		raise(SIGSTOP);
- 
--		exit(0);
-+		_exit(0);
- 	}
- 
- 	pkey_assert(child == waitpid(child, &status, 0));
+>> Warning: kernel/cgroup/cpuset.c:1895 function parameter 'tmp' not described in 'remote_partition_scan'
+>> Warning: kernel/cgroup/cpuset.c:1895 Excess function parameter 'tmpmask' description in 'remote_partition_scan' (did you mean one of: 'tmp')
+>> Warning: kernel/cgroup/cpuset.c:1895 function parameter 'tmp' not described in 'remote_partition_scan'
+>> Warning: kernel/cgroup/cpuset.c:1895 Excess function parameter 'tmpmask' description in 'remote_partition_scan' (did you mean one of: 'tmp')
 
----
-base-commit: 2c5dafa7f289d760f4492260b0988029aab478b0
-change-id: 20261109-for-pkey-exit-0f96fd62c6bd
-
-Best regards,
---  
-Hongfu Li <lihongfu@kylinos.cn>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
