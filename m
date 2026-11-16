@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794866917;
-	b=vFHQetlsTj2LoakMtXkUxdpL3LCVng1VVkFxuflOEFAUVbE+gVuXdBvXquLns3pCTWfW
-	 i59C0H0QkZfLbGe/DM4Dp7doxIt1mje/1cH3QbltNL6PlsZRwe3t9Myio6htk5ejf7L9T
-	 1xHPv8dddwRhgQFCB/tcqwSdhjVqbgZZim5qYbvgZWLRefeLo4q4nm0Z7RmL9Z68qFiE+
-	 7latczx2g+417Y9GwclsCJOEjY9W0QtT6rPsEHUNZVV0BDhyiES/cQiYbfeFspFG7wPhY
-	 SJvghF9hdnf5TU2nI4OzNmFUTdJteAeCtdZqX+IU961gMNpMW0cjyyZRhwyTfD2pnmw==
+	t=1794866918;
+	b=5VQlLOmNJYIoIbAh3kXzXMhp0zrDpVE5xShFtTYvILhqNwBoegkjBBdLKNO+6giXejUY
+	 XN+9sikxxQhU9QrQGa1CiNjJ6vQwzlsBJENtLCqGW3fe/Lx/885RGmrgkUvHOo8QHB30+
+	 vLzC00K0blhtoDdng3HVhLDyVvZawa/0ajn6MLJQlxfTUlHiudwPycZht8lrPyQwdbnrT
+	 B4iwB99xwd6Fa782250guKoxbTQIFc3I7zPG5ReokezDSMOT0pjAoDkvtRkW1QoNkIBdM
+	 LAQk3mfDmpfWzIPoVcFmxgOFxACoPTPX+gkt2piBV0UojF7hhTehqta7G7IrB0EMuLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794866917;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794866918;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=8O0t5d9d7FzzruzbNmZIybbrVFyyYL7UO/lvMO3VYcU=;
-	b=yjD6fyZw47DpiwPygFVx1qcMcYa3LBr9t8CKBzObuNo2FkSjh2OX7xEON9LFQlGt4KWv
-	 xhykUytXCaYVZScu6NMh1FIS1q9qLUwoWL2MWNkubP+fh/oXQlarNNnszkpgGMjmJ+/0o
-	 63Xo6cj8ZS2mcXB69emgrpVNpL6Wo1dl4MwOXfHnY1MhSc2JFC9siajeCDoishYqd+9f+
-	 pjrOs4jrrZQYyEFTha15tbEPubpuAjq4UkaiVtl7zMVNx2ZvKydeeBhnFdmTgc2f9mitk
-	 Eigb9wmXmMy3C4sS7A+euPN2Haososv159mCjmzG4VP0QDkmrhOHkJxlIP4OLl+kydQ==
+	bh=mJGxukNRI8guOCGYuzV7f+FvQEmBPeT2/NYqHIeuCJg=;
+	b=Z0LfqKUP7H5+N78oOoxBDJZIFi6pQaXAmvWDlVzfo9gcunFEnALGXRYcaWNxQ0dgbRB2
+	 pIizK0cIJnh7IAF7frkMHoipnHxhexZKnSP3e/drHzG4D6Mr4KTyXzZoHnEOhsPeNrJ4P
+	 Ee+k5ZTcW6dPEDAQNQLCfKSjiUYgJ20G62OB36JcW69b3+CmIk77pYauKGydW7ORZ5yYA
+	 FmCCpCXS9W4uZF4QF2au38tsNYpUlhHFENsJhQ2rw86eOnihrMTS4lD5PEqdK9NUlv+/I
+	 nEeRV69CFIpLhSQnnwFv9Y81v6UaeGKYVvBPi/m+sAR5MFnNXz7Ym0YSdH+TD0Y/FqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bJ6aacQJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NfXOz1bj;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168BD606A8B8;
-	Mon, 16 Nov 2026 22:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C3660A2621;
+	Mon, 16 Nov 2026 22:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bJ6aacQJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1102F1F000C6;
-	Mon, 16 Nov 2026 22:08:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NfXOz1bj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D191F000C6;
+	Mon, 16 Nov 2026 22:08:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794866916;
-	bh=8O0t5d9d7FzzruzbNmZIybbrVFyyYL7UO/lvMO3VYcU=;
+	s=k20260515; t=1794866918;
+	bh=mJGxukNRI8guOCGYuzV7f+FvQEmBPeT2/NYqHIeuCJg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=bJ6aacQJbvpieRaPhv9xZNyX0HgnmnGI0673tg/K6tHVz5Pgfcxc8keJOAZgGsiQS
-	 mLpUbZIP+xS6a+XgXudAuPg2h+ocFyX6S+dEjpO6+6Lp/hl2gzp9r2QIkFKPyDTL+v
-	 67Rw82ZPseEwiTLAqe93yNOekpfdpFZuGDrgSFVSGWfFjQR0vfd7FgIQNx307yE/IH
-	 /fcJZiJw0RjpJ/AztuJEonpw1JdMTFwi6Owl9jFdpRlPDW0PePXbBanwVatwvUfQ58
-	 kthCz9mxOYNCf/wPBmdsWRbH7h8UoH6w9ytAnbCCAgfda71BVGXuOofTtDeVfP3frT
-	 XazXueksQb3bQ==
+	b=NfXOz1bjnqQSic7caaDvifzS7e6EoeeDqYbBHCqBxf1odgHUmampewXS3miJugkWs
+	 q3WIh6032Q8hXhTeTAOczJwAwJfuoEEah1rLLjST68py2Hfu0YloCFIq31+H3kG5Bl
+	 YsMu5imNqWR0st9EuhnoXYXMSrk3BkOWw4eFtlDu7DY1J6O8VZ4JNWYI5LM3TXe5qK
+	 ybo42DBAkOnRL1HFbsgrf7ZGMd/rf3kWcWVOX5UtGKZVnojc+E7/fLCpQIACgL526h
+	 S3tdgTO6skVx0F/+bc4JUeS5362Nhm28eiwfLsoi+Bex4E3OcZ8dvTVOb+MYDSs1/t
+	 tkX61uyi8vUeQ==
 Subject:
- Re: [PATCH net-next v4 2/4] ipv4: restrict on-link fallback to lookup misses
+ Re: [PATCH net-next v4 3/4] selftests: net: test restricted on-link fallback
 From: netdev-bot+sashiko@kernel.org
 To: liamsmith827@grapheneos.org
 Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, liamsmith827@proton.me
-Date: Mon, 16 Nov 2026 22:08:35 +0000
-Message-ID: <179486691560.3136.15548474074992828914@kernel.org>
-In-Reply-To: <20261115215640.18728-3-liamsmith827@grapheneos.org>
-References: <20261115215640.18728-3-liamsmith827@grapheneos.org>
-X-sashiko-severity: Low
+Date: Mon, 16 Nov 2026 22:08:36 +0000
+Message-ID: <179486691687.3136.3928075477419379524@kernel.org>
+In-Reply-To: <20261115215640.18728-4-liamsmith827@grapheneos.org>
+References: <20261115215640.18728-4-liamsmith827@grapheneos.org>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,62 +65,119 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-- [Low] The commit "ipv4: restrict on-link fallback to lookup misses" is
-  written up as a bug fix with security impact: "unprivileged Android…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] In ipv4_ping_novrf() (tools/testing/selftests/net/fcnal-
+  test.sh, lines 659-662), the new case "ping out, blocked by…
+- [Low] Even with the missing ping added, the unreachable-rule case in
+  ipv4_ping_novrf() (fcnal-test.sh lines 659-662) has no device bind…
 
 --
 
-ipv4: restrict on-link fallback to lookup misses
+selftests: net: test restricted on-link fallback
 
-This patch changes ip_route_output_key_hash_rcu() so that, for non-vrf
-unicast with an oif set, the on-link fallback happens only when
-fib_lookup() reports a lookup miss (-ESRCH via FIB_LOOKUP_REPORT_MISS).
-Before, it happened for any lookup error. Blackhole, prohibit and
-unreachable routes and rules are now honored for oif-bound sends, and
--ESRCH is mapped back to -ENETUNREACH on the error path.
+This patch updates the IPv4 cases in fcnal-test.sh to match the new
+on-link fallback behaviour. The fallback is no longer taken when the FIB
+lookup hits an unreachable, blackhole or prohibit route or rule. It
+changes the expected return codes, adds a route miss variant and an
+unreachable rule case, and enables the device bind cases that were
+previously commented out.
 
-> A specific example of this being a problem is within Android, where the
-> VPN "kill switch" is implemented with prohibit rules. Any process that
-> can set flowi4_oif (SO_BINDTODEVICE, IP_UNICAST_IF, IP_PKTINFO, etc.) is
-> able to utilize this fallback, meaning unprivileged Android apps can
-> trivially bypass the VPN. This is particularly bad on cellular networks,
-> where ARP is often not needed.
+> diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+> index a50609535fedc..9722d7dcad085 100755
+> --- a/tools/testing/selftests/net/fcnal-test.sh
+> +++ b/tools/testing/selftests/net/fcnal-test.sh
 
 [ ... ]
 
-> Signed-off-by: Liam Smith <liamsmith827@proton.me>
+> @@ -643,10 +656,14 @@ ipv4_ping_novrf()
+>  	run_cmd ping -c1 -w1 ${a}
+>  	log_test_addr ${a} $? 2 "ping out, blocked by rule"
+>  
+> -	# NOTE: ipv4 actually allows the lookup to fail and yet still create
+> -	# a viable rtable if the oif (e.g., bind to device) is set, so this
+> -	# case succeeds despite the rule
+> -	# run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
+> +	log_start
+> +	setup_cmd ip rule add pref 49 to ${NSB_LO_IP} unreachable
+> +	log_test_addr ${a} $? 2 "ping out, blocked by unreachable rule"
+
+[Severity: Medium]
+Is a ping missing here? Nothing runs between the rule add and
+log_test_addr, so $? is the exit status of setup_cmd.
+
+setup_cmd() exits the whole script if the command fails:
+
+setup_cmd()
+{
+	...
+	run_cmd ${cmd}
+	rc=$?
+	if [ $rc -ne 0 ]; then
+		...
+		exit $rc
+	fi
+}
+
+So when it returns here, $? is always 0. log_test_addr() then compares
+0 against the expected value of 2. That means this case reports FAIL on
+every run, and no packet is ever sent while the pref 49 unreachable rule
+is installed.
+
+The commit message says this case will "demonstrate ping fails as
+expected with an unreachable rule" and that it "ensures
+FIB_LOOKUP_REPORT_MISS does not break this behavior". As written, the
+case checks neither.
+
+Would adding run_cmd ping -c1 -w1 ${a} before log_test_addr fix this?
+At this point a is still ${NSB_LO_IP}.
+
+> +	setup_cmd ip rule del pref 49 to ${NSB_LO_IP} unreachable
+> +
+> +	log_start
+> +	run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
+> +	log_test_addr ${a} $? 2 "ping out, device bind, blocked by rule"
 
 [Severity: Low]
-This isn't a code bug, but should the commit carry a Fixes: tag?
+Even with the ping added, can the unreachable rule case catch a
+FIB_LOOKUP_REPORT_MISS regression without a device bind?
 
-The message describes this as a fix for a VPN bypass. The trailer block
-only has Signed-off-by. Documentation/process/maintainer-netdev.rst says:
+In ip_route_output_key_hash_rcu(), the on-link fallback is only taken
+when oif is set and err == -ESRCH. In every other case a miss is mapped
+back:
 
-  "for fixes the Fixes: tag is required, regardless of the tree"
+	err = err == -ESRCH ? -ENETUNREACH : err;
 
-In ip_route_output_key_hash_rcu(), falling back to on-link for any
-fib_lookup() error goes back to:
+fib4_rule_action() returns -ENETUNREACH for FR_ACT_UNREACHABLE. With oif
+unset, two cases give the same ping exit code of 2:
 
-  1da177e4c3f4 ("Linux-2.6.12-rc2")
+  - the unreachable rule is correctly reported as -ENETUNREACH
+  - the rule is wrongly reported as a miss (-ESRCH), which is then
+    remapped to -ENETUNREACH
 
-The baseline form of the condition this patch changes:
+So a non-bound ping cannot tell them apart.
 
-  (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)
+The device bind case that follows runs after the pref 49 rule has been
+deleted. It hits the pref 50 prohibit rule (-EACCES), which never goes
+through the -ESRCH vs -ENETUNREACH distinction.
 
-comes from:
+Should there also be a run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a} case,
+expecting 2, while the pref 49 unreachable rule is still installed?
 
-  40867d74c374 ("net: Add l3mdev index to flow struct and avoid oif reset for port devices")
+>  
+>  	a=${NSA_LO_IP}
+>  	log_start
 
-Could one of these be named in a Fixes: tag? That would make it clear
-whether this change is meant for stable. It also changes what oif-bound
-sockets see when they hit reject routes or rules: those sends now return
-an error instead of going out on-link.
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261115215640.18728-1-liamsmith827%40grapheneos.org
