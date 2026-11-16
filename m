@@ -1,101 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.16
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794852645;
-	b=IQEZExXzT5xdVj+qaKMX4aPSWq4585itAsQjrn+jYnO6ditufylaNcLY0Mt4oqc//YX+
-	 EOKjsobbaULWMAR7d5Mc9s8xbm89zOVhyJy9LV4D7MUF4YFW2OxC8VNasPXYef700X8LQ
-	 WDJrc9p0lW1sbymaIyIBjuQ/Mzgg5N0cg9Kg/C4ENp+SIRQ1iU+CMLiohfZUTP8T16vva
-	 4Fxm105cbxjqYrw9trjHnJsLqjgj2uS8tA1C12hCzr/k0vBIJaH/APBga5RKbN852hZ0E
-	 34xBBgq6FeQq8dONH3S6JnMRl09Kal0t63jPus9lQ3p6S511ukxODeqDJWCH1vUjujg==
+	t=1794853023;
+	b=Prnh6o/1X/2ZELMjBpQgM1yHqN48+Wk6KiwwSmHQXoyG7tzVBJSLPZUcygu/Rk1Lp/05
+	 NoZHgEkBme1NgSqhfSVT2TPqG2PZcbZtUUYEpKLji3RFLUuPgzBmSy+Ju53uogwCD1cF6
+	 JuIUyI9Pb/uMVW416cUfaE29NA40sxJTDO3XerbTdHY0TRtbEwJKtWKlT2dZtPJjF1AAs
+	 dH+iib+J7SozdXgV3SxMRnZkIIQ9YeW/gAoa9agHZX/jHJMhAt/q7jjAr+IpZt0Pgn+9p
+	 u+ci+ezA8Vj+L3EbPvBus+4NG5AACqDCS+oIGXPDbarhjdeB21T0PVD1uITmLN3nybQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794852645;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=t10LdZZQL9q+bSGABLhe386ponBIV6xlTkNunDiJC5Y=;
-	b=TTOi3xDt18ljsh1aqkJkUgZ5IS3d73WxfYo8mptPtxez7Jem1v+2dKBO1lHKsQMorRZj
-	 lSFkpuQ/uomAZJYzEbnQQU2VN6jw01wjHbQDiXb0bZzw6YYpNHsv98dXdmGjCsN/+R1Yc
-	 wW2Wa6tH28qqFbMR5lK+fjFdhZFmmbmdKkdGWqbbU1j3+UFO79E9VrdkNFT6nXjc+69wl
-	 Xa84SSHw2W5tU5Remo36K45INnLsPPc6+A5NCxR4GzVsd3buHpwTrp/E4rzBrq52eH6Bs
-	 f+9joVu0rVHHI1LQ41vZLtuxmkCoYBwJdrePu8xV4/tMri9jFEtv+FtMiFpe7GQJWTA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794853023;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=oNfu7Qx9QWNdej/Iw5qZrDdqCuxWsTyvULvk1oCcjrg=;
+	b=P0GCejbU6rM/AbhXJcoq27k0ZLaNBurNAqMnYyWbD2PO8yC+hao0E7Zbc7KQyAOlkaVz
+	 wKU/SA+sir5SFKhxA5u1ycxf73MVUPvr9KBLv9ekk2/z5B0RkLFuvi77cZP6FcbBHiGOd
+	 Ozg2itlKdijYLeU57xxfwQNf9x7A3VFyIsuQ+HDYecuUdlIluiARHnrxRVb+CtHyGQcrn
+	 Cgo6dXshskRfHXjEiyqImC2z14dWsi9xRSXaXlF1v4ZhOZ0zPgWKZVkZhQjNfFDDs7Bz1
+	 bRyhFSQuIP7jP3xClDyo1H5g1vMbpAilAnaz6YP3n1jTWT0GLsBU3JLm3yNStF34ULQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x0lt4j5h;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.45
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b="S0KQW/gG";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.16
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011016.outbound.protection.outlook.com [40.93.194.16])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D89606A32C
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 18:10:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97D89606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF25606A322;
+	Mon, 16 Nov 2026 18:17:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EF25606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x0lt4j5h
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6b4bd3d98bfso5242347a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 10:10:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794852643; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VhBSVND/P1oS1NJ3BEBL/Ws1G3D4ru8Z7azejGE3oCedYySO2w3Ldzy2GLBKcgmPea
-         Uzjd9Z2Nvwu0TseZGT/uy0nXV/lnUrIn5RY8bX4ycOUK6V8ck93LeftjQdYQAcxUdtSu
-         VNYfYo9MfCucoGH/wqxAkx5NKjs/5mRZj4S3L/StTXZukVzzTcEm4dgO50qwdf3dEgEv
-         9E+cNeuGFMf5fPOAaGErThptwtvcBm8YwEu/L0+8RfJQ/ix/u4hwLox4o0c1iqlG7Dbo
-         gvS1lRjkYdsHmPCxCvS/iKkMWofX0Du/tfvQLxqODRMEAl03muP7BD8K28UStC4Uaz3Z
-         o9Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=t10LdZZQL9q+bSGABLhe386ponBIV6xlTkNunDiJC5Y=;
-        fh=UBjHl3llgSYeCYmSL1ZckNUeYPpBGdIzTZ4L/VXFzKg=;
-        b=BqLYhWFwE3wQuU5LrXuX57Rq01TMkHVL2BVbp38DdGluQa+Q+pMqkGQh7DqNcoS0aD
-         ncPmavPt8xYJnd0Fcd/2eNUKLVOfHF4SOM9a1/6ulZk141bi0rnH8dh9OFKTOACMY03N
-         pKrHzIZ6BKvWrqyZqUvkKl/Mm74GL0fNhkBXyS5ma0bxjluChZgfDOn4iRHEhTK8SRVl
-         3XBykMbfDLBVsoeS+iIA0jNpZZIE3Gj2mTvZ8tBuI/H3vuDHJagFHIKtl0d6QfG0g8tj
-         ITX4AAy9EwNkdFzxcuvM8sr6hlnGmPuWwsrS6B+IatR4rIUcUmRk5FM2XL5yzBjMju/0
-         BHFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794852643; x=1795457443; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=t10LdZZQL9q+bSGABLhe386ponBIV6xlTkNunDiJC5Y=;
-        b=x0lt4j5h7o5ZOIupC6QpocZBfmv8wFzUHnqEUjT+qXXHs4fqM/212o+JPya3Ne+Seo
-         tLIn+ce71Roeft17QbgYTLYZCJ0+SlsLtt4o2OLm95aLJ5VyGYDhMzriK8UdMTHsHNnj
-         8mTqTlr5/Ax8I+pLOcrqBMRwU57PT7keOGJO4t4tmQGJKRYz/1wZ/uaK+JY6cLy80yx1
-         pkobwBcMhURP6h4GfSR12sTX8GLQ2Qvn5juEllVfsWcYtDCP4X7X2kujH+BqvT2pv+Ny
-         N7Wj9fipbTOHczIeVSeB+l1xH0/w8nez4g0GJUB68vMGCquO73GzeOY0af50BLWOXJ1z
-         6RHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794852643; x=1795457443;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t10LdZZQL9q+bSGABLhe386ponBIV6xlTkNunDiJC5Y=;
-        b=yapqexyhAUATmbXBwu3rtbTQKnAODD44SDDuL3E3876oWTaLTk+yFUe0i5HvAp5Iur
-         PJHeGRIV8GooFNBEGiL8JIIAZlJkNvKkAIl24bH7Bn7RlT3yxnSVbUgdECjE/ZmRoSh8
-         ujLXGnLZa0zQNME4MD0fkUvFemwfzGPBDvDzk28dy//F0QcjsO6wsZswyOdFrWMINNs/
-         xcwugPf+TyXxgz5ILufXlWvyunr+D+sTwJ3NnwbmO54dS8l3j2FHLzUyaEnMH3A+1Bt2
-         r4cXV99qcxQ84DLmoJi45Pd5jBrgHxSQfMpAUvSOjn6YzOhu97mRR5DcvaltDnGHOyP3
-         4gBA==
-X-Forwarded-Encrypted: i=1; AL+hErHo0F41FdOotPB6GeQY3H4H3LgvQPeG3ndF1spDdAb+NE/GEXO+AU+eWFd2GIh44IQieeN41Sm+eMB5wwaEp2k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8TxkuMJxXOrkBgnY1xdL39TNM+Ddhjaz2cghVTwqZdkADr/b3q
-	jNieMyI3MiLkaCDCXPgskXHgpUfgnyLKTiMFATPerneWb/EzazOKN59NkqIEzSNzvN0/XD1sFzV
-	od1XnzbGhA63VoAtzE0WRcMb4GA13M9Y=
-X-Gm-Gg: AYBFou3Mg6wKpYBLlaATVhZ+RbidTtyF1D9/6By5SXSliClnlOxgGd1RY3NsojLSn6y
-	w7flLMENfd13oIUg5W+Cxhtq8oD8JmzGYrOkEMthnFrFPd0w45FdHsTsZj7ssloJl/BB2wgogwm
-	kEvAMutl13rWaIOGLhJObW9tmBRFe0PIjXwa2V+ET1GubS4XVslpA4LllTaaliuVtB1JLqrxViI
-	7TTquwhXVsupPugCOHpZUKG1PZcwiHVt5NAbfgVgdX8ieHloxSAmdeXDOrHEgbbPPOzbgw+NYzk
-	8GtaIxEPO3wuhCaY+BKZE3Lc/+8roRD7EWVTjeHUwOiLMx+6MHq/8rhAn+y0KcWTRJDHVeX2QYJ
-	Gtsf8HNBYSbYk9IRAyuMDkAASKQ9lm4H3hRf63Uwjg0giUlmoJelIPFGq89Ll5uA3XcPABW3XK0
-	lkhewDE2Xnj9ed7I6eO3PlHhSDGxyK8HhQC5+0dAvSHTdP
-X-Received: by 2002:aa7:c4cc:0:b0:6b4:1037:2bb1 with SMTP id
- 4fb4d7f45d1cf-6b7c0bc27a9mr6612692a12.22.1794852642773; Mon, 16 Nov 2026
- 10:10:42 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=S0KQW/gG
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dguWgp5nZwI7wdiH5v29QkrmOefmCM9LGK/eP3OOeo2AwHQ+3g/CRTAee/gzNvp+WHryRrjpTLsRt+vQv9aGIrBFNJieikoGdC3LIQKOZAKHf2ueEzVpaKag8OL4S505z1DZvha2RTIIUvUQIqrlRsPQ5Ifnycjb/oF0V57ZlvgO3jIj/iHbpetc9JOPDo4QAu5HmyuSIDLdgl6jS6dRmyXEBs2yv0AUzgkmDgJuva7eIctKL4ktPZ963CMrgG0zzRxKA74UtNK5xTaEBgghhAGprvCUoIMd5krFLBH1lUqE/gJCA0mlvFM6mBbRqk1yLslt3irSe20QZ9iMr700Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oNfu7Qx9QWNdej/Iw5qZrDdqCuxWsTyvULvk1oCcjrg=;
+ b=N3ktxXEJ8UxDLUnPkvxl4sn7XyUrd6UJXQKaDzqa8IIvGCnrmMba/7OacD9oq3y+9HdYqmYA1SOKfhJdg2BCjX6zxjlQUNppmE8bj+vxl3ileVEWw3d/1V53dSKexwmlOebPhnR+HKQxRyyn+1toCv0awZRgbrvtgtTbWkKuplHKPCW55DofvW1+3m0PDAKeAH4HC1fq7ZF2rUiK7gph83OAspxM/b6wj/SN6uewNV09ogqvag8L9owY4AQBJ6Kqlbq9XMdiPtQcUSU6Yu5ehMwHluXy+rYINbgQSyPZqYDK7mgqaifrgBeW4y229VoQmFeNB32tE1OFJOKXZh6isw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oNfu7Qx9QWNdej/Iw5qZrDdqCuxWsTyvULvk1oCcjrg=;
+ b=S0KQW/gGelilkQ7f8MxA51pYEScFvW771oWc3hPjP6K9DqBd/WkYR/kmT6ilmOYV7FX3C3K1scFilsNQe8siTE3dYFfu3/8caMKrADxPK0jKvn7qfRwiBznWOqVy42F3k3DS7tZE0Q052wL92vCaD1/B69m5iy9QOSRBhdJ9S8//ZqHM5IASFzp1x+qOGc3As5Q94yLQBG2aJozR+Ba1n1bMYYsZ3rH7iD1IFn96YEnFek/7mDxR4PH4eDn9153v3Pjn80UvDhZW1vTgm+VhQMweSvPr3+QuGlUyk03hSqH5jwf16oj/l+l7Qpqyy42HUWvy/8R4sBr6DJa44Zrmig==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12) by CY3PR12MB9605.namprd12.prod.outlook.com
+ (2603:10b6:930:103::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.8; Mon, 16 Nov
+ 2026 18:16:59 +0000
+Received: from CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
+ ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0615.013; Mon, 16 Nov 2026
+ 18:16:59 +0000
+Date: Mon, 16 Nov 2026 14:16:57 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Mastro <amastro@fb.com>, dri-devel@lists.freedesktop.org,
+	iommu@lists.linux.dev, kvm@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-pci@vger.kernel.org, Alex Williamson <alex@shazbot.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Logan Gunthorpe <logang@deltatee.com>, Matt Evans <mattev@meta.com>,
+	Matt Evans <matt@ozlabs.org>, Mina Almasry <almasrymina@google.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Vipin Sharma <vipinsh@google.com>
+Subject: Re: [RFC PATCH 0/7] vfio: selftests: Add peer-to-peer DMA selftest
+Message-ID: <20261116181657.GC2245175@nvidia.com>
+References: <20261111192411.4133780-1-dmatlack@google.com>
+ <avYjFfqr3T/U7lvn@devgpu015.cco6.facebook.com>
+ <DMTK99TDM9AM.SAM3Z4COP9WS@google.com>
+ <20261115231946.GB1239159@nvidia.com>
+ <CALzav=efnA_ABCZVicX0QeTmHknaEbMeWOy8cS+zHYVhm5z+iw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=efnA_ABCZVicX0QeTmHknaEbMeWOy8cS+zHYVhm5z+iw@mail.gmail.com>
+X-ClientProxiedBy: BN9PR03CA0770.namprd03.prod.outlook.com
+ (2603:10b6:408:13a::25) To CHBPR12MB731189.namprd12.prod.outlook.com
+ (2603:10b6:610:33d::12)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,196 +112,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261114184720.373178-1-renzo@cs.unibo.it> <20261114184720.373178-2-renzo@cs.unibo.it>
-In-Reply-To: <20261114184720.373178-2-renzo@cs.unibo.it>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Mon, 16 Nov 2026 19:10:30 +0100
-X-Gm-Features: AclHuK-3zf0u-_tVqqSwOuwnlXe0JuQIB0eE-s6YSpQo7rK-ZYPGihb4jDlFOAE
-Message-ID: <CA+=Fv5QPMYffznpkrEhZ3pMWtpHwNUUa3OaHxLexu8S47a7tRQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] asm/ptrace.h: add instruction_pointer_set
-To: Renzo Davoli <renzo@cs.unibo.it>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
-	Eugene Syromyatnikov <evgsyr@gmail.com>, Davide Berardi <berardi.dav@gmail.com>, 
-	"Dmitry V . Levin" <ldv@strace.io>, =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, strace-devel@lists.strace.io, 
-	linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Brian Cain <bcain@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Simon Schuster <schuster.simon@siemens-energy.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Chris Zankel <chris@zankel.net>, 
-	Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|CY3PR12MB9605:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1c7f693-4d60-4aa8-55ff-08df440dcdff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|7416014|6133799003|22082099003|10067099003|18002099003|56012099006|4143699003|261021121427099003|261102123227099003|261026121527099003|11063799006|261022075727099003;
+X-Microsoft-Antispam-Message-Info:
+	gwJMATy1A/s7NhHE/DnAwlVouUWCaz+rERA1TGEOLE0iQgPFrhxVT3gsSVsjhVoVfnTordSnParP74TatUw1Ed78QzHNxbSZUM9ty7cOCqmgwJ6aVp/uNO89rX+X6x8zbIgVkKWxH+h8N/CEOqiqdm6fdhyJ+d5EOOpuloyFbR+O1DozI1X1iWOyoz5CruiDxVRcfSfbu8kOiWuf52LB/l4BWfYAq9EmAozmY0Nwnzr0K5Srkufq+FDukwI/LNOfnMrFMAaRSeglum627kd8FLQ+rS08ZNl++WUde3kaEkGJC/vcrHNzTtOH2ytDqIDS6zP1CeTP6yVndRSlbmq5sGYvA6GSirsdCHSGveg5U8WKi7MUhfwyP1u1aXL6uYGNwFbb5EhGQEw1uIyc5I9HvZxqDN2QVaUqKoziOekNnd1n3ckB/lc1EhTK6KHLJ6QMPN0BGvoYXW8N6KFpeTVVWwXAjqUFVRrW8z4sEajaQBnO84f/bqmNevXxg9VTbBoGMRm8gJud1TwDCwYg6R288y9gjXZ5UQdyMjD2CrVoJ8499qJMpzL95KXO57X1VjiNDDmKvH/kgHNAqUig/ruE8Y1178CzxKDjNX1UQi1scmHU9eMDsFRxmSnJKf26EnESKO0/8UpEYDZ18wLKliu4RlLc7pOvMDdtH4ois8cYU5U=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(7416014)(6133799003)(22082099003)(10067099003)(18002099003)(56012099006)(4143699003)(261021121427099003)(261102123227099003)(261026121527099003)(11063799006)(261022075727099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qGEiDsiLCSQTw25Etch/rvT/THlWeutyqsN/MYcBPQMLbNwX7XJTiAj8ho1X?=
+ =?us-ascii?Q?cjb1Oy3YN3M0wydc1BHU99ezBsVWkuNwrWce2hhiRuz85GH87w7DjYkWVKrn?=
+ =?us-ascii?Q?55HfQDZUrOgzwUAk1hXF3uULRa9ZSSf5hJMgIZ9Jx1/0p5FPajhNdcmr07em?=
+ =?us-ascii?Q?C1YIgJ3Gj9U5xFBWW84IoqKGqK5ejGc6tlBb8/nCRzwkV9ZyG4oJZ4UdXrE+?=
+ =?us-ascii?Q?E60qsPxDzIdqo6tYpMfgituryY2pTmydW5RNnC0ZAlRQ9Ia57bEdFeA+Alty?=
+ =?us-ascii?Q?FnP6YnlhwSpSJdKAXwA/H1E9hH1K6+FKNayOLNpSbhTlYGDncRpQUVMXEEmL?=
+ =?us-ascii?Q?cTGZ5UXtfd3kzCVCp9vaJ0K+3zF/70QZZ2E3i7ImGigR5pYAZL1pnDDOf3KS?=
+ =?us-ascii?Q?MLgpj1T0XihIdTFEthBXC0FOx4JV6NTwJAsnrbhB8bsGQBdJjqreUK32zk2W?=
+ =?us-ascii?Q?s6R0GIQE+WYKKRsyNWLeQevL6k4wNdtUmDxRnBPDk3VH/Y+o9QyIMuhC0Vr9?=
+ =?us-ascii?Q?7UdZFXqxetJXBXp8kILcuYcFY9CsPhb1hz/YIO6DbPmgG3nJGgUMEhTS7rj8?=
+ =?us-ascii?Q?vvdHHwM67FCX6OyzWp7NvMvT5clYRs3rUbz1vvpDqCVpaYsIzurTMXCYOyLe?=
+ =?us-ascii?Q?CnoAS3e8ktykofp/VUSLvUDpd5+iYLb/w1CuzHekpifgrrUAhCuwd4cNOuDl?=
+ =?us-ascii?Q?mvAsU0tLuhQtCRYINpD+goeHnKuyJi2unaKWKh4Zp8yQN4cVcwBSyiNlsIWP?=
+ =?us-ascii?Q?XPzWCrX07Er/VqUn1Ao3fWBDwuVa4ESsbqWTJBv1Rsj4AguJKB94G7nPhv1s?=
+ =?us-ascii?Q?gI6/T5ojOuAQObHn8+9Mr1/x99qUKOQNybf4hdG3bZyLgI4FE4xupj0Qazy7?=
+ =?us-ascii?Q?sMKomSYpMQsmftpV0wN3nNvCjLQGHP1wGP5Vq9FyEOKUh0hhPtdCctP+BRa8?=
+ =?us-ascii?Q?ZSg4D+O76UXZq5iZi4ZSbrdEdXS2+hWqKGRfxOmQwj2V1gqnlGOWVZdR30dM?=
+ =?us-ascii?Q?J1V7b6n+FUpP8JjNEGEJgxBQAD2sdWkCHvxQXALNUGybJjrgn/vI+H4DDDg1?=
+ =?us-ascii?Q?GgMD9WBh35gJ88CL+GR0SDuNqsu/trNaPPa/PKGp/fXO8AOTVghfTD/P2Xat?=
+ =?us-ascii?Q?kVWsdC21Lsc1VraXpd19Yzn5TXCcRiOLZVyDPmic6g4QY3U0wDPZf8mhUnnU?=
+ =?us-ascii?Q?TPTstesPI3eXeKLKg1i1kURQYjtxQVNAzaUtJz0yGQ5aWztM3pjzjXb1+/Gk?=
+ =?us-ascii?Q?oCuHaP1fXUWLx+AFgEiMpEocI70yj0T8Mk2ua+asY0keD38YfZetUivvrmAZ?=
+ =?us-ascii?Q?JgYXBNdXddCi2wIr/Jdx3g7EeBULhIx8Ak1MZVxEcttzU1Sfdsf7xCxf9TAV?=
+ =?us-ascii?Q?C2AU8/N/2ZnRGzsMa5o5LMsMoiNjwIg8ami68JSiiO/siXUfXPI8jX/44hPV?=
+ =?us-ascii?Q?O07zy8z3G3X4ZLkQZc1lQVYvoHMrp6Uok1EuyXBbXX4WjF3dig+txoBfvMjm?=
+ =?us-ascii?Q?dDO+88vuir9iT8yv3PibbghZQkBcfNUVI67rD6j/MNDFvjhpWV6LlnMmsh3Y?=
+ =?us-ascii?Q?ydhmpRKN1V8CkeGFt64QgFrHecgVjwa7vMzPx3UKKtyYU5xlHuLHj8wL3wUk?=
+ =?us-ascii?Q?80/OnN4K5CtusOh98rDVfT0rt0aFUv9hCT8Tx5V7IMxTNs0bpNQ2HCottUH8?=
+ =?us-ascii?Q?Fs4HV7R54RMRP9Mq+iWzqCJJbxZsUInOqU2RdEAO0trP0PIw1L+yFoed1jV5?=
+ =?us-ascii?Q?Z5scw5TiWQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1c7f693-4d60-4aa8-55ff-08df440dcdff
+X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2026 18:16:59.2497
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZluOYr7nHXxiyLsI35fj3xjusr8Rqf5BVhPpTIIqAXgupTPEaV/DXlJ0+3ll8Szd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY3PR12MB9605
 
-Hi Renzo,
+On Mon, Nov 16, 2026 at 10:02:56AM -0800, David Matlack wrote:
 
-On Sat, Nov 14, 2026 at 7:47=E2=80=AFPM Renzo Davoli <renzo@cs.unibo.it> wr=
-ote:
->
-> Add an instruction_pointer_set function for architectures that do
-> not currently provide one.
->
-> Signed-off-by: Renzo Davoli <renzo@cs.unibo.it>
-> ---
->  arch/alpha/include/asm/ptrace.h      | 6 ++++++
->  arch/hexagon/include/asm/ptrace.h    | 6 ++++++
->  arch/m68k/include/asm/ptrace.h       | 6 ++++++
->  arch/microblaze/include/asm/ptrace.h | 6 ++++++
->  arch/nios2/include/asm/ptrace.h      | 6 ++++++
->  arch/um/include/asm/ptrace-generic.h | 6 ++++++
->  arch/xtensa/include/asm/ptrace.h     | 6 ++++++
->  7 files changed, 42 insertions(+)
->
-> diff --git a/arch/alpha/include/asm/ptrace.h b/arch/alpha/include/asm/ptr=
-ace.h
-> index 45d1229344b6..1a6f073e892e 100644
-> --- a/arch/alpha/include/asm/ptrace.h
-> +++ b/arch/alpha/include/asm/ptrace.h
-> @@ -33,6 +33,12 @@ static __always_inline bool regs_irqs_disabled(struct =
-pt_regs *regs)
->         return arch_irqs_disabled_flags(regs->ps);
->  }
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  /* Syscall emulation defines */
->  #define PTRACE_SYSEMU                  0x1d
->  #define PTRACE_SYSEMU_SINGLESTEP       0x1e
-> diff --git a/arch/hexagon/include/asm/ptrace.h b/arch/hexagon/include/asm=
-/ptrace.h
-> index ed35da1ee685..0a121f6e3bfc 100644
-> --- a/arch/hexagon/include/asm/ptrace.h
-> +++ b/arch/hexagon/include/asm/ptrace.h
-> @@ -18,6 +18,12 @@ extern const char *regs_query_register_name(unsigned i=
-nt offset);
->         ((struct pt_regs *) \
->          ((unsigned long)current_thread_info() + THREAD_SIZE) - 1)
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  #if CONFIG_HEXAGON_ARCH_VERSION >=3D 4
->  #define arch_has_single_step() (1)
->  #endif
-> diff --git a/arch/m68k/include/asm/ptrace.h b/arch/m68k/include/asm/ptrac=
-e.h
-> index bc86ce012025..6e8a8f0daee8 100644
-> --- a/arch/m68k/include/asm/ptrace.h
-> +++ b/arch/m68k/include/asm/ptrace.h
-> @@ -18,6 +18,12 @@
->         (struct pt_regs *)((char *)current_thread_info() + THREAD_SIZE) -=
- 1
->  #define current_user_stack_pointer() rdusp()
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  #define arch_has_single_step() (1)
->
->  #ifdef CONFIG_MMU
-> diff --git a/arch/microblaze/include/asm/ptrace.h b/arch/microblaze/inclu=
-de/asm/ptrace.h
-> index 17982292a64f..69e10658d7a9 100644
-> --- a/arch/microblaze/include/asm/ptrace.h
-> +++ b/arch/microblaze/include/asm/ptrace.h
-> @@ -20,5 +20,11 @@ static inline long regs_return_value(struct pt_regs *r=
-egs)
->         return regs->r3;
->  }
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  #endif /* __ASSEMBLER__ */
->  #endif /* _ASM_MICROBLAZE_PTRACE_H */
-> diff --git a/arch/nios2/include/asm/ptrace.h b/arch/nios2/include/asm/ptr=
-ace.h
-> index 96cbcd40c7ce..d120d8ecb187 100644
-> --- a/arch/nios2/include/asm/ptrace.h
-> +++ b/arch/nios2/include/asm/ptrace.h
-> @@ -70,6 +70,12 @@ struct switch_stack {
->  #define user_stack_pointer(regs)       ((regs)->sp)
->  extern void show_regs(struct pt_regs *);
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  #define current_pt_regs() \
->         ((struct pt_regs *)((unsigned long)current_thread_info() + THREAD=
-_SIZE)\
->                 - 1)
-> diff --git a/arch/um/include/asm/ptrace-generic.h b/arch/um/include/asm/p=
-trace-generic.h
-> index 62e9916078ec..632d4ce3334d 100644
-> --- a/arch/um/include/asm/ptrace-generic.h
-> +++ b/arch/um/include/asm/ptrace-generic.h
-> @@ -29,6 +29,12 @@ struct pt_regs {
->
->  #define PTRACE_OLDSETOPTIONS 21
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  #ifdef CONFIG_BINFMT_ELF_FDPIC
->  #define PTRACE_GETFDPIC                31
->  #define PTRACE_GETFDPIC_EXEC   0
-> diff --git a/arch/xtensa/include/asm/ptrace.h b/arch/xtensa/include/asm/p=
-trace.h
-> index d0568ff6d349..97b14418955e 100644
-> --- a/arch/xtensa/include/asm/ptrace.h
-> +++ b/arch/xtensa/include/asm/ptrace.h
-> @@ -103,6 +103,12 @@ static inline unsigned long regs_return_value(struct=
- pt_regs *regs)
->         return regs->areg[2];
->  }
->
-> +static inline void instruction_pointer_set(struct pt_regs *regs,
-> +                                          unsigned long val)
-> +{
-> +       instruction_pointer(regs) =3D val;
-> +}
-> +
->  int do_syscall_trace_enter(struct pt_regs *regs);
->  void do_syscall_trace_leave(struct pt_regs *regs);
->
-> --
-> 2.47.3
->
+> > > The way I designed the P2P selftest support requires 2 things:
+> > >
+> > >  (A) initiator: A device that has a VFIO selftests driver.
+> > >  (B) target: A device that can provide a memory BAR (vfio_pci_find_mem_bar()).
+> > >
+> > > So far I haven't found a single device that can do both. But you are
+> > > right that theoretically a single device could satisfy both
+> > > requirements.
+> >
+> > mlx5 can do both
+> 
+> Looks like GPUs and NVMe can do both as well.
+> 
+> How would we implement vfio_pci_find_mem_bar() for mlx5? BTW for the
+> target device, by "a memory BAR" I meant "a region of a memory BAR
+> that behaves like normal RAM". Sorry that was not clear.
 
-The Alpha change looks good and applies cleanly on my for-next,
-including the generic-entry fixes.
+It's a litlle complicated, you have to allocate a "Device memory" (DM)
+from the FW, then you get a chunk of BAR that is like RAM.
 
-Tested both series together on my AlphaServer ES40. The ptrace
-selftests passed on all three CPUs, including syscall skipping
-and instruction-pointer modification.
+There may also be some device boot time configuration that has to be
+done to turn it on, I forget.
 
-For the Alpha part:
-
-Acked-by: Magnus Lindholm <linmag7@gmail.com>
-Tested-by: Magnus Lindholm <linmag7@gmail.com>
-
-Thanks,
-Magnus
+Jason
