@@ -1,56 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.72
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794788426;
-	b=exnPXIZ/UFOAI/SFvcnK6V/ppziaW1tGPWXW6HxZ8hJrJN4bWV956Q4eb/fBTyhoGGab
-	 Fb6jPTneGEpFCu90bgwROjyhuuacNEi1n+xQIJ50s2b1qwkzoii0O/aDFQKo52ZQCMSAB
-	 8LeZBzSiKCm05baDBNbFQF5jGOhRB0D2gvSg0VtQyLerCYIvLj87A36eMH/QJr7/LTemh
-	 jbVIMf+DNEahC0KH29sFZylvNGg/ptox5/3G7Bj6UpFhaEpqA/QxpE6DD0BEpWvCkrtTp
-	 ukUkGNu81Mu1US8yopORu/laggRrhwXg8nyZhDxcQN6FwZ//5Q6F5KG141TXR3UZoLg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794788426;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer;
-	bh=4eG5CVxVnNeWp3KUkHiU/UFqeHQnVoeyxI1ZUaXIdH8=;
-	b=nNF0FaP4dcI5kjr0IdguwtbRGxedEW77U5PzBJBBVi/dy0OStiQMaZ+Yn8LAWdiurtfF
-	 h76Vc6sl8G4eRHB/nnNqs9VHuBPO3Qqp6cQTu5rUiEOt9audyek0k5taOvoPEa3j2HVsM
-	 bHpmnKH+gSz3aCJRF103GMFoI7g1C9Bg1HHysdHFf1WKej0Ioml8nWz7DC22wXP8u28UO
-	 FXFPuN5Nn0Gwzn6wQAzVr/U/f8A2Dj4DsWFwCdqCKTpP6f/ryx90d4tcmEOfPAsu5uR5p
-	 YNxenHo0VbGmSREQGi1XfOqg/JBb+QGXkgLoPY8gRImMLgc39+67/5VCJswCPrMISVQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sLZzD7e0;
-	arc=none smtp.remote-ip=91.218.175.72
-Received: from mta0.migadu.com (out-72.mta0.migadu.com [91.218.175.72])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.45
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794789960;
+	b=2sZdPchDO0Izc1d+80clRn6hJKYenPlv3EUVU3IGwz9IskbPDO3Zbedm0zSMpSQSkf2g
+	 rg4h5veNVg9b0mAssDwpyFChjygQJWw2tMsx2ehStW/IYtDE9z/tUdCtk2u0o4NZ6IP2f
+	 nLqkJFEdDLAeUqrigHg66NVY+IzHHAWJhWEgElPDY6MFdiD5qWlq2XNR+a0IWVQykbYF8
+	 WevyI/MFTlRj0mj817UhNwVxUsemog/Pi7S/qSo7rnb9Wx6Y1ydrZlkeqQxOIhZ98C2EI
+	 ZwVVsuVh95pxvNLWkCzQ/ixtvnrM9VW8isfLX72gJ+lNhQYsJ3Z6/rztguWSZTOeAZw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794789960;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=lO3Cr5SSAZtOZOOCaZ4gKS/kULSO6nzv/VYrrhRFV3k=;
+	b=H+CLuCqUiXIE4K2dQYAa2BjxUhIqMK0ZdIu1NsGs5VPcrs6MiS/CZ2FP0p9Pk6Ai4K23
+	 tJMjXTHapv3kMc9gCEnZty+wucYg8RpJ+WmR1DIpMLKA95b77vXSK1wJcbv76Gx6jiDDi
+	 AYBHvZ1dmDsv6fUX4uDm4ars+ffhqasfKOV2yKX/glGLlkptFo0wd55nhMux0/c03NGj1
+	 CMcqI2srmqzC9PPF8G/puIbxp7Ga54EhyLmypF9kBL+64le5B57jm+7xzxrIy03yUcKf0
+	 sopvpihjs8SLD0SmQE2FVKmplN4XdQpyakd8jTuzGEWKE3VKm7HR+G+qCeo6cazf1bA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Xt03lFTd;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.45
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF0C606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 00:20:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BF0C606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099C2606A329
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 00:45:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 099C2606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sLZzD7e0
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KWOMiOdqLTUcS7AFYWTNaPVfHdHsr6JQcL0b0AXvC5o=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794788423; v=1; x=1795393223;
- b=sLZzD7e0b3nfYGKOQD9nm191fM1dT0DEuaQk2W7QEypeGPCoZeliBLvcGr+jGQLmSUWIEnoB
- Mkh7KWT+SDkXJIiOI4AEcPSI2kOr2BKzyfeYRcyAbWCC2ElNpdpWbq3inbhtW+Nk9fK3XPz+yqE
- s6LqHEeYQx2dU1L5g1LknG2Q=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 67c85e73c015bfed;
-	Mon, 16 Nov 2026 00:20:23 +0000
-X-Mizu-Trace-ID: 67c85e73c015bfed
-X-Migadu-Flow: FLOW_OUT
-From: Qiliang Yuan <qiliang.yuan@linux.dev>
-Date: Sun, 15 Nov 2026 19:18:11 -0500
-Subject: [PATCH RFC 18/18] Documentation: target: Describe the uring
- backstore
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Xt03lFTd
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6d68de53053so1850708eaf.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 16:45:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794789959; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TN6uNfZ5Eak9gsF7IuWdDxSyU32FEhColy+wjmc9PbN5/PsO8b91jYUcE6GT6IcbB4
+         OKpNJSt9ZJ4mkNr5METyoTp0l06G4jl0YGz1NOVsWO3DPJwEggx3ej2fqwY59GRJfrwO
+         +cprtzEGt7t3ShZdDyDvtRh25C7c36/IRO3gd5/mg+66JJQHBXetsY4X+vHpoWlg/TqA
+         A/sCl7ISvYpkd+YYLz9ahRqz/S7i2GZofw98hb9iNh5PfCaDc+fTnU0twXyPdwbUCgOl
+         eeCC4iGZtKMQ0tVUt1SHl+YdG/bp+Qce+2O8wvB2j+x230358Ak7fKCK+5nqvUBx0LET
+         1pQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=lO3Cr5SSAZtOZOOCaZ4gKS/kULSO6nzv/VYrrhRFV3k=;
+        fh=HtUMEiGF3ctI6BC1ngpKOzd1B5fZo3v8fn3sqO4KIhs=;
+        b=Q2jiNamAcpEAoiV2kLokCO06X0AZdTzJZuDdr5KwaGWWkU0QptVfGkagpQ8jkRZgHC
+         5/uNgnyu8/Te7DYe2Hu7/ui65fXaN8me7k7zS3rI5bA80kUN19SaJXaL2KBCOZ7AFVp+
+         OPSRfqZzXYWHo+ZJdZ5CASuNWmrY3UiMmOawFazkeFa175H3vBlVu1YboKqJcQkJ22Fa
+         Lfg7dh6jBm67bJ8ES6TIX/D7s9swGezZLpxS59yuxiWVM7QgMqpkC8DHYovsGG6AOd1E
+         RbxPlYH6C2h0QsLjikFwwCvKptXKhW5BapUPshTebvl3K1Q6sP1GV6ll9IH3hZjShZ9c
+         CJZg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794789959; x=1795394759; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lO3Cr5SSAZtOZOOCaZ4gKS/kULSO6nzv/VYrrhRFV3k=;
+        b=Xt03lFTdg4jLInQcl04vLeXF9oJW0DFBwZLBN6a6UP614RusImFX02ZlrEXXz3F/ep
+         FI/p/57ji0nH0Q/LBj2Vr5Tn4kQ9X0yEFhbcaIipNU/5Dht727hz9wrlYC5v9Dw24gIK
+         gcndx96h0ysM2nC3pnuIqO7q2HWfC7yPwMymAp9Vdku3yEN1V2Og7zQOZ14fDuYFsTMu
+         3WKaUgWtbxJLvpq9v0jiIsG9cRZAqum8zzpd0kZsrPRCsAMjhZR7M+XVrftklhRZ3tPd
+         1OzvmXEgMo6/bzkd5tw/o0lbIPVzDasw4K4X/njk7mkw7MkFiZfaLq2snUGjJCuM2qG6
+         XfhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794789959; x=1795394759;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=lO3Cr5SSAZtOZOOCaZ4gKS/kULSO6nzv/VYrrhRFV3k=;
+        b=dAD+2Ja8/8/zZJ50oT/2HLG1s7YA7kxKeg2eJweY51WW9E/UJao4L43KINXJh1eoEo
+         mRm14lyHVbLsHYDtl1820GDEjw7SG64PqXXxr1ZekGp8HS7l5qQJOJks4RVQt2FMzGwK
+         HuwG7NZW5oByN+di1kWmTg/BiBxUug8mtmZeQaWnA2d1Teq58XcvEm6fGY7AxRAM346c
+         m5t2Xj6ejqYAX0YnxfqcsbYQ40Qe7XrrstgS/faR4OggV9dESW39KIkCBmpfisgTzUQI
+         moPEJhLZqiZ8QHeRdiOui3gltB+tDtAos3y4szjjU56T8s0oQlgleIz9B9xQhi+QGOlk
+         C9MQ==
+X-Forwarded-Encrypted: i=1; AL+hErFyrTDTk39zzAtHDx9VK8wsSdSV05otqlczMFCBTVGBNs1bpFiAqPGgOzx8HTYfWr/P1D4zK8CR5Cw7jSUurtk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/IVvAaNHmPwZQfGdfwBWO6dIcqeFqeq0svSHUuM1iePfibirWS
+	40wEg7QSu/v0T0u0ftSyyRAxVhDqQva17u1bsftpesgs6eL0xgqdpTlLhMtlkm6N3w3Qru8qVjI
+	CHdC8OV5fDb43lBxDpwIPXXu4g9Px+sfTA0B0DrTJhw==
+X-Gm-Gg: AYBFou0gtNrsqkn0ZOoF/FnYdjOURJkOy9y83cbgX6i2TWHw4h+w8GOFjCj2MEkn4uG
+	wx6cI22wKa1s+M4QA2gdsh8dblyhtrqkXMgD0MdqMTd/WhHWx8repJiDKsQzaJ5swBXEBGStSEP
+	z+Uqr+RzbbesTltNKF4V+Q2qof6X/DXek8N2OvEszj1+95cxOm/0olOavPSOpZkSRUGorn/RLjz
+	OVx8yOSOm0f40kDX2FPZtWoBcBYpMCtxfGfpbiplFG55OZqYYN1886pogdcr1KdoFavp79GbU24
+	RzbKjJ5itaapGFhmP355xhUouMEb0N+JQiirAocyFyS8cWH75QX1tommaMhuoaV0S6rqGX22bqL
+	D5hgXLm6ORXQDmZKH01x2SwO2iwhK5H6Y62LTCmb8yLKjKVbF08m7h433j20v6EhkWCbODYh0Z1
+	FW9CX5aK8ABnQ=
+X-Received: by 2002:a05:6820:4101:b0:716:bd98:252b with SMTP id
+ 006d021491bc7-71acc5342dcmr3472073eaf.26.1794789958914; Sun, 15 Nov 2026
+ 16:45:58 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,138 +104,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261115-feat-target-core-uring-v1-18-28cdc137eac6@linux.dev>
-References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
-In-Reply-To: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev>
-To: "Martin K. Petersen" <mkp@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
- target-devel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, 
- io-uring@vger.kernel.org, Mike Christie <michael.christie@oracle.com>, 
- Bodo Stroesser <bostroesser@gmail.com>, Ming Lei <tom.leiming@gmail.com>, 
- Qiliang Yuan <qiliang.yuan@linux.dev>
-X-Mailer: b4 0.13.0
+References: <20261115214702.50817-1-emmaonana18@gmail.com>
+In-Reply-To: <20261115214702.50817-1-emmaonana18@gmail.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Mon, 16 Nov 2026 00:45:48 +0000
+X-Gm-Features: Aa3M54pgGbrVncF7OWBfNtWTvVm2wgZ0k6kyExGgK-4Hkv46OrR8Lf1HTEPy_OU
+Message-ID: <CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com>
+Subject: [PATCH net v2] selftests: net: veth: propagate channel-check failures
+ to exit status
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: kuba@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net, 
+	edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 
-target_core_uring is a new LIO backstore served by a userspace process.
+On Sun, 15 Nov 2026 22:47:02 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> chk_channels() reports mismatches with a "fail" line but never sets
+> ret, so the script exits 0 even when channel counts are wrong.
 
-Its configfs parameters and the protocol between the kernel and the
-server are only described by the uAPI header and the code.
+I found three more checks in the same file with the same problem:
 
-Add tcm-uring.rst, which explains how the backstore differs from
-TCM/USER, how to create a device and what a server has to do.
+  bad setting: XDP with RX nr less than TX
+  bad setting: reducing RX nr below peer TX with XDP set
+  bad setting: increasing peer TX nr above RX with XDP set
 
-Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
----
- Documentation/target/index.rst     |  1 +
- Documentation/target/tcm-uring.rst | 84 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 85 insertions(+)
+Maybe it is worth fixing them all at once?
 
-diff --git a/Documentation/target/index.rst b/Documentation/target/index.rst
-index 51fa8ebc652ef..253b5fe422732 100644
---- a/Documentation/target/index.rst
-+++ b/Documentation/target/index.rst
-@@ -8,5 +8,6 @@ TCM Virtual Device
-     :maxdepth: 1
- 
-     tcmu-design
-+    tcm-uring
-     tcm_mod_builder
-     scripts
-diff --git a/Documentation/target/tcm-uring.rst b/Documentation/target/tcm-uring.rst
-new file mode 100644
-index 0000000000000..2911d80721f75
---- /dev/null
-+++ b/Documentation/target/tcm-uring.rst
-@@ -0,0 +1,84 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================
-+TCM io_uring backstore
-+======================
-+
-+target_core_uring is a LIO backstore whose block commands are served by a
-+userspace process, like TCM/USER (see tcmu-design.rst). It differs from
-+TCM/USER in three ways:
-+
-+- The kernel emulates the SCSI commands. The server only reads, writes,
-+  flushes and unmaps blocks and never parses a CDB.
-+- A device has several queues. Each queue is served through its own
-+  io_uring, so that queues do not contend with each other.
-+- Data is copied once, with pread() and pwrite(), or not at all when the
-+  server registers the data pages of a command as a fixed buffer.
-+
-+Creating a device
-+=================
-+
-+A device is created through configfs like any other backstore::
-+
-+    mkdir -p /sys/kernel/config/target/core/uring_0/disk0
-+    cd /sys/kernel/config/target/core/uring_0/disk0
-+    echo "dev_size=1073741824,nr_queues=4,queue_depth=128" > control
-+    echo 1 > enable
-+
-+The ``control`` file takes these parameters:
-+
-+``dev_size``
-+    Size of the device in bytes. It must be a multiple of the block size.
-+
-+``block_size``
-+    Logical block size in bytes, 512 by default.
-+
-+``nr_queues``
-+    Number of queues, 1 by default. A command goes to the queue selected by
-+    the CPU it was submitted on.
-+
-+``queue_depth``
-+    Number of commands the server can work on per queue, 128 by default.
-+
-+``cmd_time_out``
-+    Seconds after which a command the server has not completed fails. 30 by
-+    default; 0 waits forever.
-+
-+Once the device is enabled, the ``info`` file shows the character device
-+the server has to open, for instance ``/dev/tcmur0``.
-+
-+Serving a device
-+================
-+
-+The interface is defined in ``include/uapi/linux/target_core_uring.h``.
-+Only one process can open the character device at a time. The server:
-+
-+1. Reads the geometry with the ``TCMUR_GET_DEV_INFO`` ioctl.
-+2. Maps the descriptors of each queue read-only, at offset
-+   ``q_id * TCMUR_DESC_AREA_SIZE``. The area holds one
-+   ``struct tcmur_io_desc`` per tag.
-+3. Issues one ``TCMUR_IO_FETCH`` io_uring command (``IORING_OP_URING_CMD``)
-+   per tag. A fetch command completes with 0 once the descriptor of its tag
-+   holds a command.
-+4. Handles the command and issues ``TCMUR_IO_COMMIT_AND_FETCH`` with the
-+   result, which also waits for the next command of the tag.
-+
-+The server owns a tag from the completion of the fetch command until it
-+commits the result. Meanwhile it accesses the data of the command in one of
-+two ways:
-+
-+- pread() and pwrite() on the character device at the position returned by
-+  ``tcmur_buf_pos()``. Reading returns the data of a write command; writing
-+  fills the data of a read command.
-+- ``TCMUR_IO_REGISTER_BUF`` registers the data pages as a fixed buffer of
-+  the io_uring, which the server then passes to ``IORING_OP_READ_FIXED`` or
-+  ``IORING_OP_WRITE_FIXED`` on its backing store. The buffer has to be
-+  removed with ``TCMUR_IO_UNREGISTER_BUF``; the command only completes once
-+  it is gone.
-+
-+Commands that arrive while no tag is waiting stay queued in the kernel.
-+When the server exits, the commands it was working on fail and the queued
-+ones wait for the next server, until they time out.
-+
-+``tools/testing/selftests/target_core_uring/tcmur_server.c`` is a small
-+server that implements all of the above.
+Tested-by: Tianyi Gao <tianyi@cloudflare.com>
 
--- 
-2.43.0
-
+Cheers,
+Tianyi
