@@ -1,128 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.119
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794824483;
-	b=xNVAj7tQFd+lyUiMDgGeHZyAf4kb/QhbLb10t9ROcQAbThifdOvRmydZ36ehFWu1oiPD
-	 waOnY+BAP+YBQyCP9To0iP50VRNmfvV3vO+6bBFA6Z1bbiqmj/iDG/D+2W3en544TIyOr
-	 5wriNp/W9qHKxh/9b7yGR3zqWHuaRxB7ge2Sonye4/sREXr1IfKJAMoLQ9dwCrks3HklD
-	 GFJBeMZ/iJuJeRzKCmD/jKWU38GX+sSZjGFue/oYRvsqlJONQgZ2G7IyHKFevdrv5SCCA
-	 P0kqFlsyBvB9P0C2weZ4da2CgZyC8frA3b3vzp/Uq/C2TFkS9G/OytD3fzk4mOVkz+w==
+	t=1794825214;
+	b=lhU4nVrCR6M+gv2XdB/qSqGjGP+daKZubzeq1QfjC0IFLSHFfz/KGSArCtJfRoTGbVtf
+	 AMflQmJwe0qzFYo/Xy8LFUj1dfl8KHZg65rDMfFYAS9TluKHj4w1h/oqapHa9hAWvliC6
+	 byqsexUnj2OAj/gJ2hl/glQGa4LrelsUSilJF1Gh3Uz9fEr+LZaqfrvlX6hO8jVKfzNI9
+	 psMHCSVj9CBGTHgNe32NxfLB4FSqypnDrjDghmmKmNv6zmK0THa6qLvgr4GicRhz2Oq80
+	 v1eeQgyNrXc55IxfTNE7CDtVrhAqhLwA/1YZxMw8HF+2g1b9MnoNUdpAdrd5/AOpIdw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794824483;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=TtB6NVTta0tvsTqH3AzztjW+y0F8Qfmd7U44QxV+Lc4=;
-	b=Y5vzh+n4EyS8CQ04Eqgqlt1cFN54U5cfAzqL9flCuv/1cgOd78uU7N954PL2YIQVQ4B6
-	 kvhebfo0JgohIzOevZv88k9QBYc6mvvOIL3rQMSbHw5qkObRmudF1ztj8PwO5I+H4oSJF
-	 SQlJAQkNhUGRrbscDa+bExpdQAtslXLUDPWSMaBbTlQraa3hO+I5ewJNVsYXnm9TnlqOs
-	 8RzqlZcjSP9n8An3qVCvAoTPX+McuvHanojSCDpP4fnJNqXAV1vLNr25nyILIIM+C0CIx
-	 y9+kHx3My6jIfkvyNAI/iOGsRzyZXtMJUKvXMj3dHpEle9OLqpal+Iq+BOm3Alobcsg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794825214;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=4xP1wCT3CiCMUHIs8oS3HTOWW4Ga4YMLeo5r3EiUl/I=;
+	b=JM9g1VQDWAPikg/Ymn+qJbNC69x5ubs4ls02IKDLDJ6tnzrzSo+Iyk3xxLPRI1L+fOa2
+	 QEq20Y8itqGbJsNibsh/XATWNnj2+RLGsE62CWRCG5aZmIIATyjszaFOjr6i9xJM4QqYn
+	 7i/bPXdLFdip9e1Xha/8lxB9QkphcZ83pk7CRPLoOjLshV0moMETFJG1CmCm0UcQlgZCc
+	 w8FSyRBKRNyApc1AhRjwoifeRHrZ0sveWN11ss9g+PwMk7lG7YkU/e4t7CSdjw46JetZO
+	 qOHewsqcYrZFXo9PtW2jgk3W9r32KW7J+njqwWDpxM63h7AM1eEOfiPzm2Q6CearGIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZY6mCzKY;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qccX7har;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hVxrfMMr;
+	arc=none smtp.remote-ip=95.215.58.119
+Received: from mta1.migadu.com (out-119.mta1.migadu.com [95.215.58.119])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBAB606A31C
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 10:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FBAB606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BE7606A32C
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 10:33:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44BE7606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZY6mCzKY;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qccX7har
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794824481;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TtB6NVTta0tvsTqH3AzztjW+y0F8Qfmd7U44QxV+Lc4=;
-	b=ZY6mCzKYslCYVCgoiHSIHDP2myLAx44R4RcbutjRjjKpdhoxsbYjQyMas6Rc1LYlxsML6b
-	J4fH+hbHYEOS1gF7M8+S4UlrQD14Fx6Hn3cz4/LAnvHSQiiOMLX0tZKKee6iUWVwzCupAa
-	/z6xAqHMwhMO+mM0ETrE3rGz/JkyvDg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-611-oA8Xea6QMK283h5epOHc_Q-1; Mon, 16 Nov 2026 05:21:20 -0500
-X-MC-Unique: oA8Xea6QMK283h5epOHc_Q-1
-X-Mimecast-MFC-AGG-ID: oA8Xea6QMK283h5epOHc_Q_1794824479
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-49337a224a8so2089414f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 02:21:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794824479; x=1795429279; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TtB6NVTta0tvsTqH3AzztjW+y0F8Qfmd7U44QxV+Lc4=;
-        b=qccX7harUwf8eiayr+DfzPEQNO8jtBu0G+uJB5TxwXa2l30hixqgX8IQihn/zG3p8r
-         HinAWqG7/9eDvncHZIxEd9PMMgvtJgrOL4NpfP8hQO64ilyrx2Q7KErbo5E0+ixYqpoC
-         woZDv40aalCfcg9ed56J1SMUDiua7kEyFjc5w0LN7AXS1hV7JYix3yWmMRoIM219PUVK
-         g00YxpfaEWiNOFAIX1NK6TlH31PG4Y3p42EujrYRyfFgf+MId6UJP974D5XgG2AUuCtq
-         c47WKJNQ0HeL1trBXI/OavSD7hnR09k+Mel8LAeHyqxrlXOZgdfcednP7c3xzBs0RvKq
-         9A6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794824479; x=1795429279;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TtB6NVTta0tvsTqH3AzztjW+y0F8Qfmd7U44QxV+Lc4=;
-        b=VeLax++J8PnUe5ercghMwENo+YkJa8yk3Xq1fKcCnrFZHjZs1KgdbGcMRneJpKeQH5
-         hwpE6Nr2bexr8ZgHwDq1O67eobd4faH6Net9522m9bbP6gnxrImnvQJ0fPB9MJ9cBHUp
-         XuslrF6ON+zfUOTSvoS/68xfsHR1awQbjK/ApcFwx1vv7yofmV2KsCYafkKLhpxXhV2M
-         WDeoCUSwe470d1NsM7VWX6SyqDa7tDrUxp4eXhuF/ObIWrIhhZeSy3ilLOBNzXunrKUJ
-         0OSg/WQbhfbL9KAHQWmF9SqmSLBLIlsBnoFrffLiPBq0fGWHAI5MBvLxyQ34Sqek+rKj
-         SwlQ==
-X-Forwarded-Encrypted: i=1; AL+hErGXsnkFa7SLImBAsJMUQiZFrff9kiPpSoA80e/P6qXGkEvheyD6NF01hpcuHGX2NRIq+uu6ogLa5RBLfcJs/SY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8CNqdNQ3Yb6UDclr7s2wLgcaBxpOlYhemFDMcinZN9qXMqWhWB
-	Lzuk2NsanXy27eCvt5k7fKvrzHXYIMFl87usCYHJR1EZgoGsVYbFauZx2A0m/SotdKxLh2iryQa
-	k6xAPQobCDgiV9i+MUfHz3K0Fr7XXlEA34lAIYRT2L4No+s8zO6zXMYfdusRsuCYrLvmpAg==
-X-Gm-Gg: AZFdTZcDZCZyY9J7i4nO2tjlTAKRXQ3pyTB70tX1FB8FeTwWph2wooZG80WYEq4SSES
-	6u4wmbR/zx6W2tMHkUGw3R0iQ2xVNTlpIgoZL3X4aht9A8Kfu0MegIwo8rn2SI1w0MCxcOX22L0
-	hWOK65TVEVGJgHZ+hGx3wJ7/8jXYSoX4QaIq1r6s6aTCcPVV5KLMWYle/I5FnY2Q4D3dUYajpMl
-	mDWhnNXQYmFRm2zf1i7hDCNrciBuP4oGwyDrSYuPFurY1It9VaJn2G34om1MaxJGfLE4OkfTNH2
-	Iv6Yvu4rtuVd2Q4daGusi371cswT2F+HX4fTCamgEMLE8GupS5N8aqk5x2o6tKHZG4TcB4gzvs2
-	9RCPibSsHLyUaH8d/L9L9V0TKGhwzRcRXCA2qNA18pcQkuHqx6J8tmk3qdxMm1ljfhKZYgqDKRl
-	Zfdi0=
-X-Received: by 2002:a05:6000:3108:b0:48d:f9dd:e3de with SMTP id ffacd0b85a97d-49c7353c415mr20874713f8f.45.1794824478817;
-        Mon, 16 Nov 2026 02:21:18 -0800 (PST)
-X-Received: by 2002:a05:6000:3108:b0:48d:f9dd:e3de with SMTP id ffacd0b85a97d-49c7353c415mr20874640f8f.45.1794824478326;
-        Mon, 16 Nov 2026 02:21:18 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c60116323sm20991495f8f.32.2026.11.16.02.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 02:21:16 -0800 (PST)
-Date: Mon, 16 Nov 2026 11:21:12 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-	vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-	tglx@kernel.org, will@kernel.org, boqun@kernel.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
-	luca.abeni@santannapisa.it, mathieu.poirier@linaro.org,
-	longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org,
-	hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
-	bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 13/29] sched/deadline: Keep departing bandwidth across
- a root domain rebuild
-Message-ID: <avrZGPNdCwZMd3B4@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-14-mathieu.desnoyers@efficios.com>
- <avRmoK08LoIeySBL@jlelli-thinkpadt14gen4.remote.csb>
- <c3e7054a-486c-4e5a-a646-eee42e815ce4@efficios.com>
- <20261111161912.GP1779021@noisy.programming.kicks-ass.net>
- <83b2244c-f68a-4af3-9c8f-0fabb4eacbb4@efficios.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hVxrfMMr
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=6WEEXQpnySfT6ftjryWS5P4mMchJTeCrPm9lJA9qPkM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794825211; v=1; x=1795430011;
+ b=hVxrfMMrAA2fdPYjZDrbeMt/pMa4Csur7WEHK1+eZVs7amumk30TilCZ89AXrKJ9oDFRBx5h
+ qFFsezuLQJv8IEYZH0+D83ICDn+h2J+zqfWvlFVtas6uOGuDPp7BaN2AIP5CqcZgC86HVHAxKfB
+ oPuR2Bt2/M+hucRT9fxhio4g=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d3af8dde2262cb53;
+	Mon, 16 Nov 2026 10:33:30 +0000
+X-Mizu-Trace-ID: d3af8dde2262cb53
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <70eb1395-ebcf-4ece-ac03-f0796cd02c81@linux.dev>
+Date: Mon, 16 Nov 2026 18:33:25 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,77 +58,273 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83b2244c-f68a-4af3-9c8f-0fabb4eacbb4@efficios.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v4 5/6] cgroup/cpuset: Handle remote partitions
+ before local partitions in cpuset_handle_hotplug()
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
+References: <20261116012330.2271010-1-longman@redhat.com>
+ <20261116012330.2271010-6-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261116012330.2271010-6-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/11/26 14:19, Mathieu Desnoyers wrote:
-> On 2026-11-11 11:19, Peter Zijlstra wrote:
-> > On Wed, Nov 11, 2026 at 10:35:17AM -0500, Mathieu Desnoyers wrote:
-> > 
-> > > Measured in a 64-vCPU guest with sleeping deadline tasks:
-> > > 
-> > >    tasks    today: rebuild, longest irqs-off    single list, all irqs-off
-> > >    1000     0.75ms, under 0.1ms                 0.12ms (0.19ms worst)
-> > >    10000    7.4ms, under 0.1ms (0.3ms once)     0.9ms (1.2ms worst)
-> > > 
-> > > The rebuild itself is 8 times shorter. That comes from updating the
-> > > extra_bw of the CPUs once per root domain, not once per task. But the
-> > > longest section with interrupts disabled grows with the number of
-> > > deadline tasks. I do not think that is a step forward for a real-time
-> > > class.
-> > 
-> > This is domain rebuild? Do we really care about performance there?
+
+
+在 2026/11/16 09:23, Waiman Long 写道:
+> When there is a valid remote partition underneath an invalid local
+> partition with subpartitions_cpus cleared because of missing active
+> CPUs in the top_cpuset partition, the current iteration logic in
+> cpuset_handle_hotplug() will handle the invalid local partition first
+> and potentially make the local partition valid. The remote partition
+> will be handled later with the potential that both the local and remote
+> partitions will be valid with overlapping exclusive CPUs violating the
+> cpu exclusivity rule.
 > 
-> My worry is not performance, but rather the contribution of this
-> "iteration on all tasks" on the irqoff latency of the system, which
-> is relevant for RT.
-
-My take, of course let's have Peter keep me honest here. :)
-
-> What I don't know:
+> Fix this problem by adding a new remote_partition_scan() helper to
+> iterate the existing remote partitions first before iterating down
+> the hierarchy to handle the local partitions. That also means that
+> when subpartitions_cpus is cleared, remote partitions have precedence
+> to acquire the exclusive CPUs first before local partitions. It also
+> gives remote partition the ability to recover from the clearing of
+> subpartitions_cpus as all the remote partitions will be disabled before
+> this commit.
 > 
-> 1) is 10k deadline tasks something that we should consider as realistic
->    for sched deadline, or it's way beyond practical scale ?
+> A remote partition can only be created if there is at least one active
+> CPU in its effective_xcpus. So remote_partition_scan() will also
+> invalidate the remote partition if there is no active CPU left in its
+> effective_xcpus. This requires a minor change in a test_cpuset_prs.sh
+> test case where a remote partition with no active CPU left will now
+> be invalidated.
+> 
+> With the addition of the remote_partition_scan() call in
+> cpuset_handle_hotplug(), there is no longer a need to do a remote
+> partition check in cpuset_hotplug_update_tasks() and the corresponding
+> code can be removed.
+> 
+> While at it, the subpartition_cpus clearing logic is enhanced to
+> clear it when no domain housekeeping CPUs are left in the top_cpuset
+> partition. When the remote partition is disabled, the effective_cpus
+> is modified in a such a way that cpus_updated will be set true later
+> in cpuset_hotplug_update_tasks() so that the CPU affinity of the
+> tasks within the partition will be updated. This will also fix a
+> bug reported by sashiko that CPU affinity will not be updated when
+> remote_partition_disable() is called in such circumstance.
+> 
+> When efffective_cpus is read during this interim period, the content
+> will be invalid before and after this commit.
+> 
+> Fixes: 181c8e091aae ("cgroup/cpuset: Introduce remote partition")
+> Reported-by: Guopeng Zhang <guopeng.zhang@linux.dev>
+> Link: https://lore.kernel.org/lkml/fe7aa630-d323-4981-9f89-0958cb6204a2@linux.dev
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Link: https://sashiko.dev/#/bug/linux-ab90f7e8-0d60-40ca-83e9-e405075b24d2
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-It doesn't seem a very realistic scale to me. Yes, I've used this kind
-of numbers in the (far!) past when running experiments with DEADLINE,
-but I can't think of a real workload reaching these numbers.
+Hi，Longman
 
-> 2) is a irqoff latency of 1.2ms (rather than 0.3ms) something which is
->    relevant in terms of irq off latency on a preempt rt kernel, or is it
->    in the noise ?
+Tested all six patches on next-20261113 (32-CPU VM, cgroup v2, no boot
+isolation, all CPUs initially online). I can still reproduce an invalid
+local partition becoming valid while its remote descendant remains
+valid:
 
-Very relevant I'd say, but 0.3ms, unfortunately, very relevant already.
+  cd /sys/fs/cgroup
+  echo +cpuset > cgroup.subtree_control
+  echo 0 > /sys/devices/system/cpu/cpu31/online
+  mkdir A
+  echo 0-30 > A/cpuset.cpus
+  echo 0-30 > A/cpuset.cpus.exclusive
+  echo root > A/cpuset.cpus.partition          # invalid local root
+  echo +cpuset > A/cgroup.subtree_control
+  mkdir A/B
+  echo 20-25 > A/B/cpuset.cpus
+  echo 20-25 > A/B/cpuset.cpus.exclusive
+  echo root > A/B/cpuset.cpus.partition        # valid remote partition
+  echo 1 > /sys/devices/system/cpu/cpu31/online
 
-> 3) are those domain rebuild expected to happen with a live RT workload,
->    or are those operations expected to never happen on a RT system under
->    real-time constraints ?
+After CPU31 comes online, A is a valid root (exclusive.effective 0-30),
+A/B is still a valid remote (exclusive.effective 20-25), and the top
+cpuset's effective CPUs are 31. The kernel reports:
 
-In small systems, single workload with few housekeeping CPUs, I would
-expect the setup to happen only once before the workload is started. So
-no worries here. But we seem to have people interested in consolidating
-multiple workloads on big machine by, say, using containers. So, in this
-case there are several exclusive root domains each running its own RT
-workload. It would be undesirable (to say the least :) that a
-reconfiguration of one (or a subset) of such domains could potentially
-introduce latencies on all the others.
+  WARNING: cpuset.c:1654 compute_partition_effective_cpumask()
+           WARN_ON_ONCE(is_remote_partition(child))
 
-All that said, I now wonder a couple of things (which can be addressed
-separately as an RFC if also Peter agrees we don't need to tackle this
-right away):
+Two more results:
+1. Local partitions break too, no remote involved.  test_cpuset_prs.sh
+   fails at TEST_MATRIX[19] (C0-3:P1 C2-3:P1 + O2=0): with cpu2
+   offlined, both partitions become "root invalid" instead of remaining
+   valid. A1's effective_cpus then falls back to 0-1,3 instead of 0-1.
+2. Booted with isolcpus=31, the same kernel passes the whole suite.
 
-- The 8x from updating extra_bw once per root domain instead of once per
-  task does not look like it needs the big lock? Maybe it's a nice
-  improvement we could have on the current scheme as well?
-
-- The deeper issue the scenario above exposes is scope, not lock
-  granularity. I wonder if a rebuild really needs to re-count root
-  domains whose span and membership did not change. Maybe some kind of
-  re-walk of only the domains that actually moved CPUs would shrink the
-  scope making reconfiguring one partition a non-event for the others?
-  Again, we can think about/tackle this separately if it makes sense.
-
-Thanks!
-Juri
+Thanks，
+Guopeng> ---
+>  kernel/cgroup/cpuset.c                        | 97 ++++++++++++++++---
+>  .../selftests/cgroup/test_cpuset_prs.sh       |  2 +-
+>  2 files changed, 84 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 0fe9f2731fee..64cbcbdbf6da 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -153,6 +153,12 @@ static cpumask_var_t	isolated_cpus;		/* CSCB */
+>   */
+>  static struct list_head remote_children;	/* RWCS */
+>  
+> +/*
+> + * Temporary cpumask for local cpumask computation
+> + * The cpumask may be changed when a cpuset helper is being called.
+> + */
+> +static cpumask_var_t	tmp_cpus;		/* RWCS */
+> +
+>  /*
+>   * Set if housekeeping cpumasks are to be updated.
+>   */
+> @@ -1873,6 +1879,67 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
+>  	remote_partition_disable(cs, tmp);
+>  }
+>  
+> +/**
+> + * remote_partition_scan: scan remote partitions to check exclusive CPUs
+> + * @tmpmask: ptr to tmpmasks structure
+> + *
+> + * This function is called in cpuset_handle_hotplug() after the update on
+> + * top_cpuset.effective_cpus when there is cpu online/offline operation.
+> + * As subpartitions_cpus may have been cleared, we need to check if the remote
+> + * partition should acquire the exclusive CPUs again without impacting
+> + * effective_cpus or it needs to be disabled when one or more of the following
+> + * conditions is true.
+> + * 1) All the domain housekeeping CPUs in the top_cpuset will be taken away
+> + * 2) A populated partition with no active CPU or no active CPU in
+> + *    effective_xcpus
+> + */
+> +static void remote_partition_scan(struct tmpmasks *tmp)
+> +{
+> +	struct cpuset *cs, *next;
+> +
+> +	rcu_read_lock();
+> +	list_for_each_entry_safe(cs, next, &remote_children, remote_sibling) {
+> +		bool noxcpus = !cpumask_subset(cs->effective_xcpus, subpartitions_cpus);
+> +		bool nocpus = !cpumask_intersects(cs->effective_xcpus, cpu_active_mask) ||
+> +			      (!cpumask_intersects(cs->effective_cpus, cpu_active_mask) &&
+> +			       partition_is_populated(cs, NULL));
+> +		int cpu;
+> +
+> +		cpumask_and(tmp_cpus, top_cpuset.effective_cpus,
+> +			    housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
+> +		if (noxcpus && !nocpus && !cpumask_subset(tmp_cpus, cs->effective_xcpus)) {
+> +			/*
+> +			 * Reacquire exclusive CPUs & update top_cpuset.effective_cpus
+> +			 */
+> +			spin_lock_irq(&callback_lock);
+> +			cpumask_andnot(subpartitions_cpus, subpartitions_cpus,
+> +				       cs->effective_xcpus);
+> +			cpumask_andnot(top_cpuset.effective_cpus, top_cpuset.effective_xcpus,
+> +				       cs->effective_xcpus);
+> +			spin_unlock_irq(&callback_lock);
+> +			continue;
+> +		}
+> +
+> +		if (noxcpus || nocpus || cpumask_empty(tmp_cpus)) {
+> +			/*
+> +			 * Disable remote partition & modifiy effective_cpus
+> +			 * so that cpus_updated will be set true in
+> +			 * cpuset_hotplug_update_tasks().
+> +			 */
+> +			WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
+> +			remote_partition_disable(cs, tmp);
+> +			cpu = cpumask_first(cs->effective_cpus);
+> +			spin_lock_irq(&callback_lock);
+> +			if (cpu < nr_cpu_ids)
+> +				cpumask_clear_cpu(cpu, cs->effective_cpus);
+> +			else
+> +				cpumask_set_cpu(0, cs->effective_cpus);
+> +			spin_unlock_irq(&callback_lock);
+> +		}
+> +	}
+> +	rcu_read_unlock();
+> +}
+> +
+>  /**
+>   * update_parent_effective_cpumask - update effective_cpus mask of parent cpuset
+>   * @cs:      The cpuset that requests change in partition root state
+> @@ -3919,6 +3986,7 @@ int __init cpuset_init(void)
+>  	BUG_ON(!zalloc_cpumask_var(&subpartitions_cpus, GFP_KERNEL));
+>  	BUG_ON(!zalloc_cpumask_var(&isolated_cpus, GFP_KERNEL));
+>  	BUG_ON(!zalloc_cpumask_var(&isolated_hk_cpus, GFP_KERNEL));
+> +	BUG_ON(!alloc_cpumask_var(&tmp_cpus, GFP_KERNEL));
+>  
+>  	cpumask_setall(top_cpuset.cpus_allowed);
+>  	nodes_setall(top_cpuset.mems_allowed);
+> @@ -3993,14 +4061,6 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>  	if (!tmp || !cs->partition_root_state)
+>  		goto update_tasks;
+>  
+> -	if (is_remote_partition(cs) &&
+> -	    (!cpumask_subset(cs->effective_xcpus, subpartitions_cpus) ||
+> -	     (cpumask_empty(&new_cpus) && partition_is_populated(cs, NULL)))) {
+> -		WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
+> -		remote_partition_disable(cs, tmp);
+> -		compute_effective_cpumask(&new_cpus, cs, parent);
+> -	}
+> -
+>  	/*
+>  	 * Force the partition to become invalid if either one of
+>  	 * the following conditions hold:
+> @@ -4104,22 +4164,31 @@ static void cpuset_handle_hotplug(void)
+>  		if (!on_dfl)
+>  			cpumask_copy(top_cpuset.cpus_allowed, &new_cpus);
+>  		/*
+> -		 * Make sure that CPUs allocated to child partitions
+> -		 * do not show up in effective_cpus. If no CPU is left,
+> -		 * we clear the subpartitions_cpus & let the child partitions
+> -		 * fight for the CPUs again.
+> +		 * Make sure that CPUs allocated to child partitions do not
+> +		 * show up in effective_cpus. If no housekeeping CPU is left,
+> +		 * we clear the subpartitions_cpus, scan the remote partitions
+> +		 * to determine if they can remain valid & let the descendant
+> +		 * local partitions fight for the CPUs again.
+>  		 */
+>  		if (!cpumask_empty(subpartitions_cpus)) {
+> +			cpumask_andnot(&new_cpus, cpu_active_mask,
+> +				       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
+>  			if (cpumask_subset(&new_cpus, subpartitions_cpus)) {
+>  				cpumask_clear(subpartitions_cpus);
+> +				cpumask_copy(&new_cpus, cpu_active_mask);
+>  			} else {
+> -				cpumask_andnot(&new_cpus, &new_cpus,
+> +				cpumask_andnot(&new_cpus, cpu_active_mask,
+>  					       subpartitions_cpus);
+>  			}
+>  		}
+>  		cpumask_copy(top_cpuset.effective_cpus, &new_cpus);
+>  		spin_unlock_irq(&callback_lock);
+> -		/* we don't mess with cpumasks of tasks in top_cpuset */
+> +		/*
+> +		 * We don't mess with cpumasks of tasks in top_cpuset, but we
+> +		 * have to examine impact on remote partition roots if present.
+> +		 */
+> +		if (cpuset_v2() && ptmp)
+> +			remote_partition_scan(ptmp);
+>  	}
+>  
+>  	/* synchronize mems_allowed to N_MEMORY */
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 81f0eecaca80..5c7b583cba18 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -378,7 +378,7 @@ TEST_MATRIX=(
+>  	# Remote partition offline tests
+>  	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 .   0 A1:0-1|A2:1|A3:3 A1:P0|A3:P2 2-3"
+>  	"   C0-3    C1-3  C2-3     .    X2-3   X2-3 X2-3:P2:O2=0 O2=1 0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
+> -	"   C0-3    C1-3   C3      .    X2-3   X2-3    P2:O3=0   .   0 A1:0-2|A2:1-2|A3: A1:P0|A3:P2 3"
+> +	"   C0-3    C1-3   C3      .    X2-3   X2-3    P2:O3=0   .   0 A1:0-2|A2:1-2|A3:1-2 A1:P0|A3:P-2 3|"
+>  	"   C0-3    C1-3   C3      .    X2-3   X2-3   T:P2:O3=0  .   0 A1:0-2|A2:1-2|A3:1-2 A1:P0|A3:P-2 3|"
+>  
+>  	# An invalidated remote partition cannot self-recover from hotplug
 
