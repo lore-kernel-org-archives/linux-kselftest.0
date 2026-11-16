@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794836430;
-	b=GPYkiw0xV4mkXy9Z6f1ObPHxZGQSXcYwe7n7v7/appzvxfWUZhvHyUoC3Iu6E99llFTR
-	 ry64LxB0TFanI3C7F4wyjPEQ4954ReTKKJEFg08L3dlwvihr//EUiIwZTeZ/iZyCly9CK
-	 GyuFt7X2yRfpTYMqanNCV2ZMH8QL4bZk+0D2P4nqYlqYgfeCszO4728iB1MUVhBmD3O2y
-	 RkW9d0BaZLUvd51kxgR3M7IOzeEQPpQiNy4vSmU3+VhRUAtaFwCN/h4N2tVOKJJGJ2Hk0
-	 Bz29hODOtdk3sSZlkIFh6cHd34iBqwZfV0D7n48W0TclYuPnzsabnjRmy3l70YvVLKg==
+	t=1794836436;
+	b=2CyCkBHDS5zzEQtnbJYiq3J3nR+4olRdUq2apN1+nQchFh84gXtN+wQa2lN/wO5NCI1i
+	 mzcBQBRWZKK8FhiDQJwkLp/ojXga0aGOYZ3LC8BmHAe6pOAejk/PjFgaLQBoaddbUA1sK
+	 0XvMILL75Z6cV14FbauNfdmBgtvxQJ0VDWEUJORxWdN9asX2/3dbBBrBHXhTuBjn+icnM
+	 8j+J9TAg+c8D5SHzSu6ToS2Zqz2U8dRhd2ALDJ092Vh1ZQhXbUzpoK+EiQ3iNYCm5MOXF
+	 zUjsVXoC0VF1991WhFKxdnl90ETYwpfKElaSML2UyBv785L+9HjyKRVg51DAgJPT85Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794836430;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794836436;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=5x9NAjwyHTj7gs1TvGr/q/XVOTeFRW8sCriRzxuuRiQ=;
-	b=ChRrfkHxQa4cIZ6pxrjB0SZJP24PicddsqwAf56coVELHIv+ES45VlWF81B/WxYDi8S8
-	 HtReF4UaGoRlxnV6aeN18sEB0J88B87VVD/q3HXF5Ma/Wrv4dIWIB4RCslNCNJxEVtddN
-	 e4fOdPjqmIsV1JYuAs6qgO0U+T48DQkMdShoKPP/2K10oQn2dlpKNz+fyOgdwoSH3eAPv
-	 am/0HmoVEeNyo2IGgDeDcoONnuk5h/E636gocAVs7RpCf68W7IPDc2EqpoleKaADwUIr/
-	 lLyLj3j7tYKfdgBSTEfcPIsBepSUQ3COGV003S0DxRJ0vBxqcnHXlQnki7W55P43yEw==
+	bh=kjHiFFvvFNAhd6hsZhlyO8HyxfJvIN7x4O0H0nfgRlQ=;
+	b=gALU9VO018iQO21gmDscoQv0MKlimPdic/nBbsQn1yYRZcJzZsFwIOp9tA9U3Ut3S/IE
+	 0n61GXa4mvqFxqqB/RxmE4svUXYhT/nsS9EObnKk64D70e5n6+/RhQcIMssyogXsbj7Jo
+	 PwWm/232f94QhN0AC//NeVzV0enrRkpIn8MjWRr8rucsaF7CSrh/vcKx/7t3Y52BV/3+h
+	 e7fXD61o5PMVDwcZtfruXhdOoSQxmVIJF7PmwL+pJOtIx67HcTpAtzy1aHAxo9Yy1HSWz
+	 QYg5LUO1kd3FW45YHsHWNWNN+4dWetGYf1l6Tt344Pa6JIEIEeYin1Y8TUYcccXMU6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cEpmx0Dr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ewQE3Et0;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4FB606A333;
-	Mon, 16 Nov 2026 13:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F507606A8A7;
+	Mon, 16 Nov 2026 13:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cEpmx0Dr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063801F000C7;
-	Mon, 16 Nov 2026 13:40:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ewQE3Et0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41001F000CA;
+	Mon, 16 Nov 2026 13:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794836430;
-	bh=5x9NAjwyHTj7gs1TvGr/q/XVOTeFRW8sCriRzxuuRiQ=;
+	s=k20260515; t=1794836436;
+	bh=kjHiFFvvFNAhd6hsZhlyO8HyxfJvIN7x4O0H0nfgRlQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cEpmx0DrzH4kQYgsIkL897GpxshBlqigkorGhJo3MJ8+VZnRor36BETgWpSsikiZy
-	 a+x8UHIWtb8HhghpobzEAAnBRXwpM7ExMD864dFUseejt6SABl9jVOVY8hbpsYksHt
-	 OxKRMzN6vkTW17vcw/CXflhsSrldtO9M0BDqg1zI1vvNTJ5w/xJJrhEGAjXo3PAe+o
-	 asCk8iN5LZmhUgc+SRGVQ7Ae10QCHG3Toi9Lx5Win+W98o2Z8z8bDZzU8jXRbTc6EN
-	 Ro84Nmtnjda6fCuTuKS+Yt8KSnp7JkiMTeC/eySOLWugBM2N1lFSx7ak8+ldOAsIPZ
-	 ehRje7JdM3o3A==
+	b=ewQE3Et0vx1bLUUy7VVx1KCP59w9k72op8MVgz7xPbzHAeo0sjdDQRNcpj9WrD8ME
+	 j98lEm2zFMzrxz4m1cJg8Z/jsRmmCEbQ1GlK9peJWE7/QqAsYlRROdn8QiPiGhnQ2Y
+	 3OossR1myZQeOQ56biegAuBm+HN1PGdBbm4WbIoieJREPmiqd5RrMC8B/UrHIoz8ys
+	 wsiTpe44h//0ES7OyeYvzoLT7Lk0ebSv6wPZZ7mruDaHnM8sE6n8h/X+AJ5iZ7BzaV
+	 YWpC+y6y49ZAfMp3yy9z/TQDc6jhB3ftm7Dh8U60ZBLuFbXR8F2cK/YqvxX0js6W7E
+	 d4F47I3KlRLuw==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Mike Rapoport <rppt@kernel.org>,
 	Pasha Tatashin <pasha.tatashin@soleen.com>,
@@ -56,9 +56,9 @@ Cc: kexec@lists.infradead.org,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 2/5] kho: build KHO objects into a single kho.o
-Date: Mon, 16 Nov 2026 14:40:07 +0100
-Message-ID: <20261116134013.1636689-3-pratyush@kernel.org>
+Subject: [RFC PATCH 4/5] kho: test: add KHO map test
+Date: Mon, 16 Nov 2026 14:40:09 +0100
+Message-ID: <20261116134013.1636689-5-pratyush@kernel.org>
 X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
 In-Reply-To: <20261116134013.1636689-1-pratyush@kernel.org>
 References: <20261116134013.1636689-1-pratyush@kernel.org>
@@ -75,44 +75,659 @@ Content-Transfer-Encoding: 8bit
 
 From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
 
-kho_block.o is part of the KHO infrastructure, but is currently built as
-part of luo.o, which ties it to CONFIG_LIVEUPDATE.
+Add a test for the KHO map, built together with test_kho under
+CONFIG_TEST_KEXEC_HANDOVER.
 
-Group all KHO objects into a composite kho.o, built for
-CONFIG_KEXEC_HANDOVER, the same way the LUO objects are grouped into
-luo.o. This also gives a single place to add new KHO objects.
+In the first kernel, the test runs functional checks of the API, each on
+a fresh map. Every check runs twice: once on an unpreserved map and once
+on a map preserved right after kho_map_init(), so both the plain and the
+preserve-on-alloc/unpreserve-on-destroy paths are covered.
+
+The checks use different keys to test boundary conditions, and exercise
+lookups, iteration, overwriting and clearing entries, and destroying and
+re-initializing a map.
+
+The test then builds a map and hands it over. It preserves the map after
+adding half of the keys, so the handed-over map has nodes preserved both
+by kho_map_preserve() walking the existing tree and by kho_map_set()
+preserving new nodes on allocation.
+
+After kexec, the next kernel restores the map and verifies its contents,
+and makes sure modification of the tree still works.
+
+Also teach the KHO vmtest.sh to check for the KHO map test result.
 
 Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 ---
- kernel/liveupdate/Makefile | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ lib/Kconfig.debug                     |   4 +
+ lib/Makefile                          |   2 +-
+ lib/test_kho_map.c                    | 575 ++++++++++++++++++++++++++
+ tools/testing/selftests/kho/vmtest.sh |   2 +
+ 4 files changed, 582 insertions(+), 1 deletion(-)
+ create mode 100644 lib/test_kho_map.c
 
-diff --git a/kernel/liveupdate/Makefile b/kernel/liveupdate/Makefile
-index d9f4694625567..bc679905ce3f2 100644
---- a/kernel/liveupdate/Makefile
-+++ b/kernel/liveupdate/Makefile
-@@ -1,13 +1,17 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 2d22638ec13a6..39e65b8a5290a 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3442,6 +3442,10 @@ config TEST_KEXEC_HANDOVER
+ 	  the first kernel and restores and verifies the data on the boot of
+ 	  kexec'ed kernel.
  
-+kho-y :=								\
-+		kexec_handover.o				\
-+		kho_block.o
++	  It also tests the KHO map: the first kernel runs functional checks
++	  and builds and preserves a tree, and the kexec'ed kernel restores,
++	  modifies and destroys it.
 +
-+kho-$(CONFIG_KEXEC_HANDOVER_DEBUGFS) += kexec_handover_debugfs.o
-+
-+obj-$(CONFIG_KEXEC_HANDOVER)		+= kho.o
-+
- luo-y :=								\
--		kho_block.o						\
- 		luo_core.o						\
- 		luo_file.o						\
- 		luo_flb.o						\
- 		luo_session.o
+ 	  For detailed documentation about KHO, see Documentation/core-api/kho.
  
--obj-$(CONFIG_KEXEC_HANDOVER)		+= kexec_handover.o
--obj-$(CONFIG_KEXEC_HANDOVER_DEBUGFS)	+= kexec_handover_debugfs.o
--
- obj-$(CONFIG_LIVEUPDATE)		+= luo.o
+ 	  To run the test run:
+diff --git a/lib/Makefile b/lib/Makefile
+index a2afe954805cb..d3ab3f239e3ac 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -105,7 +105,7 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+ obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
+ obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
+ obj-$(CONFIG_TEST_OBJPOOL) += test_objpool.o
+-obj-$(CONFIG_TEST_KEXEC_HANDOVER) += test_kho.o
++obj-$(CONFIG_TEST_KEXEC_HANDOVER) += test_kho.o test_kho_map.o
+ 
+ obj-$(CONFIG_TEST_FPU) += test_fpu.o
+ test_fpu-y := test_fpu_glue.o test_fpu_impl.o
+diff --git a/lib/test_kho_map.c b/lib/test_kho_map.c
+new file mode 100644
+index 0000000000000..16db26e380d50
+--- /dev/null
++++ b/lib/test_kho_map.c
+@@ -0,0 +1,575 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2026, Google LLC.
++ * Pratyush Yadav <pratyush@kernel.org>
++ *
++ * Test for the KHO map. The first kernel runs basic tests on scratch trees,
++ * both unpreserved and preserved, then builds a tree and hands it over. The
++ * next kernel restores it, and checks its contents, and that it can then be
++ * modified and torn down like a locally built tree.
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/bits.h>
++#include <linux/err.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/kexec_handover.h>
++#include <linux/kho_map.h>
++#include <linux/mm.h>
++#include <linux/printk.h>
++#include <linux/sort.h>
++
++#define KHO_MAP_TEST_NAME	"kho_map_test"
++#define KHO_MAP_TEST_MAGIC	0x4b484f4d	/* KHOM */
++#define KHO_MAP_TEST_MAX_KEYS	32
++#define KHO_MAP_TEST_KEY_MAX	(BIT_ULL(KHO_MAP_KEY_WIDTH) - 1)
++
++struct kho_map_test_ser {
++	u64 magic;
++	struct kho_map_ser map_ser;
++};
++
++/* Never 0 for valid keys, so every generated key is present. */
++static u64 kho_map_test_value(u64 key)
++{
++	return ~key;
++}
++
++/*
++ * Fill @keys with sorted keys that sit on the boundaries of every level. With
++ * span being the number of keys covered by one entry at level l:
++ *
++ * - span - 1 and span are adjacent keys whose paths split at level l (last key
++ *   of entry 0, first key of entry 1). Walking from one to the other has to
++ *   cross a subtree boundary at exactly that level.
++ * - span * 3 + 5 skips the empty entry 2 at level l and lands on index 5 in the
++ *   leaf. This makes sure iteration correctly skips over empty subtrees and
++ *   leaves.
++ *
++ * Finally, also add the largest valid key to test the path that takes the last
++ * entry of each level.
++ *
++ * Return: number of keys.
++ */
++static unsigned int __init kho_map_test_gen_keys(u64 *keys)
++{
++	unsigned int l, n = 0;
++
++	for (l = 0; l < KHO_MAP_DEPTH; l++) {
++		u64 span = BIT_ULL(l * KHO_MAP_TBL_SHIFT);
++
++		keys[n++] = span - 1;
++		keys[n++] = span;
++		if (span * 3 + 5 < KHO_MAP_TEST_KEY_MAX)
++			keys[n++] = span * 3 + 5;
++	}
++	keys[n++] = KHO_MAP_TEST_KEY_MAX;
++
++	return n;
++}
++
++/*
++ * A key under entry 2 of the root and entry 7 of the leaf. None of the keys
++ * generated by kho_map_test_gen_keys() use it. So setting it needs a whole new
++ * path of nodes.
++ */
++static u64 __init kho_map_test_new_key(void)
++{
++	return BIT_ULL((KHO_MAP_DEPTH - 1) * KHO_MAP_TBL_SHIFT) * 2 + 7;
++}
++
++/* Check that @map has exactly @keys, in order, with the expected values. */
++static int __init kho_map_test_verify(struct kho_map *map, const u64 *keys,
++				      unsigned int n)
++{
++	unsigned int i = 0;
++	u64 key, value;
++
++	kho_map_for_each(map, key, value) {
++		if (i >= n) {
++			pr_err("unexpected key %#llx\n", key);
++			return -EINVAL;
++		}
++
++		if (key != keys[i] || value != kho_map_test_value(keys[i])) {
++			pr_err("entry %u: got %#llx = %#llx, expected %#llx = %#llx\n",
++			       i, key, value, keys[i], kho_map_test_value(keys[i]));
++			return -EINVAL;
++		}
++
++		/* Direct lookups must agree with iteration. */
++		if (kho_map_get(map, key) != value) {
++			pr_err("entry %u: kho_map_get(%#llx) = %#llx, expected %#llx\n",
++			       i, key, kho_map_get(map, key), value);
++			return -EINVAL;
++		}
++
++		i++;
++	}
++
++	if (i != n) {
++		pr_err("found %u keys, expected %u\n", i, n);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++#define KHO_MAP_ASSERT_EQ(a, b)						\
++	do {								\
++		u64 __a = (a), __b = (b);				\
++									\
++		if (__a != __b) {					\
++			pr_err("%s:%d: %s == %#llx, expected %s == %#llx\n", \
++			       __func__, __LINE__, #a, __a, #b, __b);	\
++			return -EINVAL;					\
++		}							\
++	} while (0)
++
++static int __init kho_map_test_populate(struct kho_map *map, const u64 *keys,
++					unsigned int n)
++{
++	unsigned int i;
++
++	for (i = 0; i < n; i++)
++		KHO_MAP_ASSERT_EQ(kho_map_set(map, keys[i],
++					      kho_map_test_value(keys[i])), 0);
++
++	return 0;
++}
++
++static unsigned long __init
++__kho_map_test_count_nodes(struct kho_map_node_ser *node, unsigned int level)
++{
++	unsigned long count = 1;
++	unsigned int i;
++
++	if (level == 0)
++		return count;
++
++	for (i = 0; i < KHO_MAP_TBL_ENTRIES; i++) {
++		struct kho_map_node_ser *next = KHOSER_LOAD_PTR(node->table[i]);
++
++		if (next)
++			count += __kho_map_test_count_nodes(next, level - 1);
++	}
++
++	return count;
++}
++
++/* Number of nodes (including leaves) currently allocated for @map. */
++static unsigned long __init kho_map_test_count_nodes(struct kho_map *map)
++{
++	struct kho_map_node_ser *root = KHOSER_LOAD_PTR(map->ser->root);
++
++	if (!root)
++		return 0;
++
++	return __kho_map_test_count_nodes(root, KHO_MAP_DEPTH - 1);
++}
++
++/* An empty tree has no entries, and clearing a key in it allocates nothing. */
++static int __init kho_map_test_empty(struct kho_map *map)
++{
++	u64 value;
++
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 0, &value), U64_MAX);
++
++	kho_map_clear(map, 5);
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), 0);
++
++	return 0;
++}
++
++/*
++ * A single key can be found again with its value, by lookup and by iteration,
++ * neighbouring keys have no entry, and it takes exactly one node per level.
++ */
++static int __init kho_map_test_set_get(struct kho_map *map)
++{
++	u64 value = 0;
++
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 42), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 42, 0xdead), 0);
++
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 42), 0xdead);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 41), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 43), 0);
++
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 0, &value), 42);
++	KHO_MAP_ASSERT_EQ(value, 0xdead);
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 43, &value), U64_MAX);
++
++	/* A single key needs exactly one node per level. */
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), KHO_MAP_DEPTH);
++
++	return 0;
++}
++
++/*
++ * The smallest and largest valid keys work, keys past the maximum are rejected
++ * by kho_map_set() and ignored by kho_map_clear(), kho_map_get() and
++ * kho_map_next().
++ */
++static int __init kho_map_test_key_range(struct kho_map *map)
++{
++	u64 value = 0;
++
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 0, 1), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, KHO_MAP_TEST_KEY_MAX, 2), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, KHO_MAP_TEST_KEY_MAX + 1, 3), -ERANGE);
++
++	/* Out of range clear is ignored. */
++	kho_map_clear(map, KHO_MAP_TEST_KEY_MAX + 1);
++
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 0), 1);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, KHO_MAP_TEST_KEY_MAX), 2);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, KHO_MAP_TEST_KEY_MAX + 1), 0);
++
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 0, &value), 0);
++	KHO_MAP_ASSERT_EQ(value, 1);
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 1, &value), KHO_MAP_TEST_KEY_MAX);
++	KHO_MAP_ASSERT_EQ(value, 2);
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, KHO_MAP_TEST_KEY_MAX + 1, &value),
++			  U64_MAX);
++
++	return 0;
++}
++
++/*
++ * kho_map_for_each() returns keys on the boundaries of every level in sorted
++ * order, regardless of insertion order.
++ */
++static int __init kho_map_test_order_all_levels(struct kho_map *map)
++{
++	u64 keys[KHO_MAP_TEST_MAX_KEYS];
++	unsigned int n, i;
++
++	n = kho_map_test_gen_keys(keys);
++
++	/* Insert in reverse, so the order can only come from the tree. */
++	for (i = n; i > 0; i--)
++		KHO_MAP_ASSERT_EQ(kho_map_set(map, keys[i - 1],
++					      kho_map_test_value(keys[i - 1])), 0);
++
++	return kho_map_test_verify(map, keys, n);
++}
++
++/*
++ * kho_map_next() finds a key when started exactly on it, and when started just
++ * after it, skips the empty range up to the next key, across subtree
++ * boundaries at every level.
++ */
++static int __init kho_map_test_next_from_middle(struct kho_map *map)
++{
++	u64 keys[KHO_MAP_TEST_MAX_KEYS];
++	unsigned int n, i;
++	u64 value;
++	int err;
++
++	n = kho_map_test_gen_keys(keys);
++	err = kho_map_test_populate(map, keys, n);
++	if (err)
++		return err;
++
++	for (i = 0; i < n; i++) {
++		u64 next = i + 1 < n ? keys[i + 1] : U64_MAX;
++
++		KHO_MAP_ASSERT_EQ(kho_map_next(map, keys[i], &value), keys[i]);
++		/* Skips over everything up to the next key. */
++		KHO_MAP_ASSERT_EQ(kho_map_next(map, keys[i] + 1, &value), next);
++	}
++
++	return 0;
++}
++
++/*
++ * Setting an existing key replaces its value, and clearing a key (even twice)
++ * removes it. Clearing frees the nodes that become empty, and only those.
++ */
++static int __init kho_map_test_overwrite_clear(struct kho_map *map)
++{
++	u64 value = 0;
++
++	/* Set the same key multiple times. */
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 10, 1), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 10, 2), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 0, &value), 10);
++	KHO_MAP_ASSERT_EQ(value, 2);
++
++	/* Add a key in the next leaf so it shares every node except the leaf. */
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 10 + KHO_MAP_TBL_ENTRIES, 3), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), KHO_MAP_DEPTH + 1);
++
++	/* Clearing it frees its leaf, but not the shared nodes. */
++	kho_map_clear(map, 10 + KHO_MAP_TBL_ENTRIES);
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), KHO_MAP_DEPTH);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 10), 2);
++
++	/* A leaf that still has entries is not freed. */
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 11, 4), 0);
++	kho_map_clear(map, 11);
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), KHO_MAP_DEPTH);
++
++	kho_map_clear(map, 10);
++	/* Clearing twice is fine. */
++	kho_map_clear(map, 10);
++
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 0, &value), U64_MAX);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 10), 0);
++
++	/* The last entry is gone, so the whole tree is freed. */
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), 0);
++
++	/* The tree can be populated again after it was emptied. */
++	KHO_MAP_ASSERT_EQ(kho_map_set(map, 10, 5), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_get(map, 10), 5);
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), KHO_MAP_DEPTH);
++
++	return 0;
++}
++
++/*
++ * kho_map_destroy() frees every node, after which the tree can be initialized
++ * again with kho_map_init(), populated and used like a new one.
++ */
++static int __init kho_map_test_destroy_reuse(struct kho_map *map)
++{
++	bool preserved = map->preserved;
++	u64 keys[KHO_MAP_TEST_MAX_KEYS];
++	unsigned int n;
++	u64 value;
++	int err;
++
++	n = kho_map_test_gen_keys(keys);
++	err = kho_map_test_populate(map, keys, n);
++	if (err)
++		return err;
++
++	kho_map_destroy(map);
++
++	/* Re-initialize, and preserve again if the harness preserved it. */
++	kho_map_init(map, map->ser);
++	if (preserved) {
++		err = kho_map_preserve(map);
++		if (err)
++			return err;
++	}
++
++	KHO_MAP_ASSERT_EQ(kho_map_test_count_nodes(map), 0);
++	KHO_MAP_ASSERT_EQ(kho_map_next(map, 0, &value), U64_MAX);
++
++	err = kho_map_test_populate(map, keys, n);
++	if (err)
++		return err;
++
++	return kho_map_test_verify(map, keys, n);
++}
++
++#define KHO_MAP_TEST(name)	{ #name, kho_map_test_##name }
++
++struct kho_map_test {
++	const char *name;
++	int (*fn)(struct kho_map *map);
++};
++
++static const struct kho_map_test kho_map_tests[] __initconst = {
++	KHO_MAP_TEST(empty),
++	KHO_MAP_TEST(set_get),
++	KHO_MAP_TEST(key_range),
++	KHO_MAP_TEST(order_all_levels),
++	KHO_MAP_TEST(next_from_middle),
++	KHO_MAP_TEST(overwrite_clear),
++	KHO_MAP_TEST(destroy_reuse),
++};
++
++/*
++ * Run the tests that only need the current kernel, each on a fresh tree. With
++ * @preserve, the tree is preserved before the test runs, so nodes get preserved
++ * on allocation and unpreserved on destruction.
++ */
++static int __init kho_map_test_basic(bool preserve)
++{
++	unsigned int i;
++	int err;
++
++	for (i = 0; i < ARRAY_SIZE(kho_map_tests); i++) {
++		struct kho_map_ser map_ser;
++		struct kho_map map;
++
++		kho_map_init(&map, &map_ser);
++		err = preserve ? kho_map_preserve(&map) : 0;
++		if (!err)
++			err = kho_map_tests[i].fn(&map);
++		kho_map_destroy(&map);
++
++		if (err) {
++			pr_err("test %s (%spreserved) failed: %d\n",
++			       kho_map_tests[i].name, preserve ? "" : "un", err);
++			return err;
++		}
++	}
++
++	return 0;
++}
++
++static int __init kho_map_test_save(void)
++{
++	u64 keys[KHO_MAP_TEST_MAX_KEYS];
++	struct kho_map_test_ser *ser;
++	struct kho_map map;
++	unsigned int n, i;
++	int err;
++
++	ser = kho_alloc_preserve(sizeof(*ser));
++	if (IS_ERR(ser))
++		return PTR_ERR(ser);
++
++	ser->magic = KHO_MAP_TEST_MAGIC;
++	kho_map_init(&map, &ser->map_ser);
++
++	/*
++	 * Add half the keys before preserving the tree and half after, so both
++	 * kho_map_preserve() walking existing nodes and nodes preserved on
++	 * allocation are exercised. The next kernel can only restore the tree
++	 * if every node got preserved.
++	 */
++	n = kho_map_test_gen_keys(keys);
++	for (i = 0; i < n; i++) {
++		if (i == n / 2) {
++			err = kho_map_preserve(&map);
++			if (err)
++				goto err_destroy;
++		}
++
++		err = kho_map_set(&map, keys[i], kho_map_test_value(keys[i]));
++		if (err)
++			goto err_destroy;
++	}
++
++	err = kho_map_test_verify(&map, keys, n);
++	if (err)
++		goto err_destroy;
++
++	err = kho_add_subtree(KHO_MAP_TEST_NAME, ser, sizeof(*ser));
++	if (err)
++		goto err_destroy;
++
++	return 0;
++
++err_destroy:
++	kho_map_destroy(&map);
++	kho_unpreserve_free(ser);
++	return err;
++}
++
++static int __init kho_map_test_cmp_key(const void *a, const void *b)
++{
++	return cmp_int(*(const u64 *)a, *(const u64 *)b);
++}
++
++static int __init kho_map_test_restore(phys_addr_t phys)
++{
++	struct kho_map_test_ser *ser = phys_to_virt(phys);
++	u64 keys[KHO_MAP_TEST_MAX_KEYS];
++	u64 new_key = kho_map_test_new_key();
++	struct kho_map map;
++	struct folio *folio;
++	unsigned int n;
++	int err;
++
++	if (ser->magic != KHO_MAP_TEST_MAGIC)
++		return -EINVAL;
++
++	n = kho_map_test_gen_keys(keys);
++
++	folio = kho_restore_folio(phys);
++	if (!folio)
++		return -EINVAL;
++
++	err = kho_map_restore(&map, &ser->map_ser);
++	if (err)
++		goto out_put;
++
++	err = kho_map_test_verify(&map, keys, n);
++	if (err)
++		goto out_destroy;
++
++	/*
++	 * Restored nodes must behave like normal: add a key on a new path and
++	 * clear an existing one. The restored tree is unpreserved, so the new
++	 * nodes are not preserved.
++	 */
++	err = kho_map_set(&map, new_key, kho_map_test_value(new_key));
++	if (err)
++		goto out_destroy;
++	kho_map_clear(&map, keys[0]);
++
++	/* keys[0] is gone and new_key took its place. */
++	keys[0] = new_key;
++	/* kho_map_test_verify() expects sorted keys. */
++	sort(keys, n, sizeof(*keys), kho_map_test_cmp_key, NULL);
++
++	err = kho_map_test_verify(&map, keys, n);
++	if (err)
++		goto out_destroy;
++
++	/*
++	 * A restored tree can be preserved again, which preserves both restored
++	 * and new nodes, and kho_map_destroy() then unpreserves them.
++	 */
++	err = kho_map_preserve(&map);
++
++out_destroy:
++	kho_map_destroy(&map);
++out_put:
++	folio_put(folio);
++	return err;
++}
++
++static int __init kho_map_test_init(void)
++{
++	phys_addr_t phys;
++	int err;
++
++	if (!kho_is_enabled())
++		return 0;
++
++	err = kho_retrieve_subtree(KHO_MAP_TEST_NAME, &phys, NULL);
++	if (!err) {
++		err = kho_map_test_restore(phys);
++		if (err)
++			pr_err("KHO map restore failed: %d\n", err);
++		else
++			pr_info("KHO map restore succeeded\n");
++
++		return err;
++	}
++
++	if (err != -ENOENT) {
++		pr_warn("failed to retrieve %s: %d\n", KHO_MAP_TEST_NAME, err);
++		return err;
++	}
++
++	/*
++	 * Run basic tests first. If they fail, no point in doing a handover
++	 * test.
++	 */
++	err = kho_map_test_basic(false);
++	if (!err)
++		err = kho_map_test_basic(true);
++	if (err) {
++		pr_err("KHO map basic tests failed: %d\n", err);
++		return err;
++	}
++
++	err = kho_map_test_save();
++	if (err)
++		pr_err("KHO map save failed: %d\n", err);
++
++	return err;
++}
++late_initcall(kho_map_test_init);
+diff --git a/tools/testing/selftests/kho/vmtest.sh b/tools/testing/selftests/kho/vmtest.sh
+index 1e86ffcc3a79e..03a1a1f55299f 100755
+--- a/tools/testing/selftests/kho/vmtest.sh
++++ b/tools/testing/selftests/kho/vmtest.sh
+@@ -119,6 +119,8 @@ function run_qemu() {
+ 		  -initrd "$initrd"
+ 
+ 	grep "KHO restore succeeded" "$serial" &> /dev/null || fail "KHO failed"
++	grep "KHO map restore succeeded" "$serial" &> /dev/null || \
++		fail "KHO map failed"
+ }
+ 
+ function target_to_arch() {
 -- 
 2.56.0.611.g1030f0b940-goog
 
