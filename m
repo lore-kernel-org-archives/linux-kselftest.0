@@ -1,21 +1,21 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=128.30.2.78
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794796540;
-	b=ihGWg6HZWRNesI9ECP0zptj80kMO6wkovZXE3/flHYWn2LEVEDSnC5PmZqg+VRyV51wY
-	 51+FJ+TURgvu6N3Sk6eD3j7rUsjFiHwy3KLj5LWC8lyneLXsPH7uQc9gabH1CsJnDqZXo
-	 NoXBFRW9giOX+AD257MR2/GnpnFz8P5On3yv3p73+C8l7CExcvBGnMd3JpW+eRS4jn3b3
-	 HJ0vNSh+Lgm8somAKf0IxFpTwdCoi5ZaPY+KAUVgU99GkbsI5tg5VnWPHE8doPpGd1HxG
-	 k2zxrNG6LUbf3LQlKef817bn+ZYqiF3W7VCbO/H51w8itzsBEytXchozYReoKQqLHYg==
+	t=1794796541;
+	b=piHM5UMD9Sy4HYLq8dnAoCRmAhpYaNw8wg5oMe76BJalH5G3CjyT3jYgRkCAB1KEOp01
+	 RSZfPJffsSFIBd6x1NqPvXdERF58jD91trrOdZOQkL+j+R9ex3dVRmQeWPOrtyS3EDQwP
+	 A8hdJUdD+eMahcaycArHFRWM0PY1Dq0w+5NsqThc+J0lO8sY45KwEYA4BB0VGvD04wvKJ
+	 h+ncGqJ0wuPskoZ8r/SCJc2J4pUBoKy/4dtDRlW12RitsaB+8WHkolSEwDllhJY9tunr6
+	 gkIet6BEIraVF3J5PvBc27zwyRvu1RAfE7vgaGSGQ3SCFJ+cCS5/8ZS9NYTVPcmMXcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794796540;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794796541;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=g9FuQ6VaggfrbuAnyDmj4snIulPGRQ19GvJEWYGcZbk=;
-	b=uhLto+ubPHOFiq14FZb+ZAU7FcwZWm+D+Z6cGH8ey/VsWTo2hWRXw/piDQiqanG9PuMz
-	 Z5cHBiwoXdbPyi/Id9qjfOIImm4uArqgSFR7ThdPpfHn48l3mFybeFBmJfg/7Y7DRjNp+
-	 WX29ZqFVSV3JiFr9EJW1v2Bnn6aHnp5b/yh5+I3X447Djxx4eZbokKqWjq2GHEYIZzJ74
-	 dEafK4hWJadAOGywjQpvjZSpvsRBmaOf7p//PAAOpXAo2xUiZYeQ12rpszFTsCsDruVFN
-	 lmK2TBjze1dRA9DbAwI13cMibFRMxxGrjEsg6boj2FpsHE3INn+xoI+jZeCFNkBDeNA==
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=/1nfez8rEGBZkiN7A3tsIGU96VfDaysyNnOZ7JlI17I=;
+	b=pzQZ+aObfcn80PY0mvb32ba0JZEfMoEenzSVMcEj/zk6jej58zPdW6HjlnHrV4sA18tS
+	 IwK5eWDD6rZZThOw1lU0Z3RQUWCB3rfeKSLgzW5pareLvbMtOR2TfusknVB7N/+c4+sab
+	 1Ue5OOqsVnE+pPAB9zzml+r8BN3fS6nz9qv0cv27GGa73Imt1dvut08TbHTgtB8hPwA4z
+	 HPW/GETqfcPjsYWGMZJNH8VOYrdEIgLGMDLKU8P87/OlqXZCJA5IHtMuC5P3HKi3+VeZu
+	 yMXxryR2q7qGkEsV+4Ap+pzL0/6Dv9NU+OJX5A22t6uomUUNQ8Y7JGvtPKdCEcv1fzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=csail.mit.edu;
 	spf=pass smtp.mailfrom=csail.mit.edu;
@@ -24,16 +24,16 @@ Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B26E606A321;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4C0606A323;
 	Mon, 16 Nov 2026 02:35:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B26E606A321
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B4C0606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
 Received: from escalante.csail.mit.edu ([128.52.128.198])
 	by outgoing2021.csail.mit.edu with esmtp (Exim 4.95)
 	(envelope-from <nickolai@csail.mit.edu>)
-	id 1xSmZC-004DmY-VK;
-	Sun, 15 Nov 2026 21:35:35 -0500
+	id 1xSmZC-004DmY-Px;
+	Sun, 15 Nov 2026 21:35:34 -0500
 From: Nickolai Zeldovich <nickolai@csail.mit.edu>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -47,12 +47,10 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Nickolai Zeldovich <nickolai@csail.mit.edu>
-Subject: [PATCH v3 2/2] selftests: riscv: test FP state restore when rt_sigreturn() faults
-Date: Sun, 15 Nov 2026 21:35:34 -0500
-Message-ID: <20261116023534.50074-3-nickolai@csail.mit.edu>
+Subject: [PATCH v3 0/2] riscv: signal: fix the FP state restore in rt_sigreturn()
+Date: Sun, 15 Nov 2026 21:35:32 -0500
+Message-ID: <20261116023534.50074-1-nickolai@csail.mit.edu>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261116023534.50074-1-nickolai@csail.mit.edu>
-References: <20261116023534.50074-1-nickolai@csail.mit.edu>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,201 +62,42 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test for the previous patch: the signal frame sits on a
-userfaultfd page that the handler drops after dirtying the FP
-registers, so rt_sigreturn() sleeps in the middle of copying the FP
-registers from the frame. The interrupted code must get its own
-registers back.
+If rt_sigreturn() is preempted or sleeps on a page fault while it copies
+the FP registers from the signal frame, the interrupted code resumes
+with the signal handler's FP registers. Patch 1 fixes this, patch 2 adds
+a selftest that reproduces it with userfaultfd.
 
-The test is skipped without the D extension or when userfaultfd is not
-available to the caller.
+Tested under QEMU with riscv64 defconfig plus CONFIG_USERFAULTFD: the
+new test, built with GCC 15 through the kselftest Makefile and with
+clang 21, fails 10 of 10 runs without patch 1 and passes 10 of 10 with
+it.
 
-Signed-off-by: Nickolai Zeldovich <nickolai@csail.mit.edu>
----
+This series was prepared with the help of an AI tool.
+
+Changes in v3:
+- selftest: load the tgkill() arguments inside the asm statement. v2
+  bound them to local register variables, which GCC does not keep
+  across the sigaltstack() call before the asm, so the signal was never
+  sent and the test failed with or without patch 1 (Andy Chiu).
+- Rebased onto v7.4-rc3.
+
+v2: https://lore.kernel.org/all/20261031161826.858908-1-nickolai@csail.mit.edu/
+v1: https://lore.kernel.org/all/20261016160708.790397-1-nickolai@csail.mit.edu/
+
+Nickolai Zeldovich (2):
+  riscv: signal: mark the FP state clean before restoring it from the
+    frame
+  selftests: riscv: test FP state restore when rt_sigreturn() faults
+
+ arch/riscv/kernel/signal.c                    |   7 +
  .../selftests/riscv/sigreturn/.gitignore      |   1 +
  .../selftests/riscv/sigreturn/Makefile        |   5 +-
  .../selftests/riscv/sigreturn/fp_restore.c    | 147 ++++++++++++++++++
- 3 files changed, 152 insertions(+), 1 deletion(-)
+ 4 files changed, 159 insertions(+), 1 deletion(-)
  create mode 100644 tools/testing/selftests/riscv/sigreturn/fp_restore.c
 
-diff --git a/tools/testing/selftests/riscv/sigreturn/.gitignore b/tools/testing/selftests/riscv/sigreturn/.gitignore
-index 35002b8ae780..8ed282ecb618 100644
---- a/tools/testing/selftests/riscv/sigreturn/.gitignore
-+++ b/tools/testing/selftests/riscv/sigreturn/.gitignore
-@@ -1 +1,2 @@
-+fp_restore
- sigreturn
-diff --git a/tools/testing/selftests/riscv/sigreturn/Makefile b/tools/testing/selftests/riscv/sigreturn/Makefile
-index 8c77508641f3..ac7ae7a7c2ae 100644
---- a/tools/testing/selftests/riscv/sigreturn/Makefile
-+++ b/tools/testing/selftests/riscv/sigreturn/Makefile
-@@ -4,9 +4,12 @@
- 
- CFLAGS += -I$(top_srcdir)/tools/include
- 
--TEST_GEN_PROGS := sigreturn
-+TEST_GEN_PROGS := sigreturn fp_restore
- 
- include ../../lib.mk
- 
- $(OUTPUT)/sigreturn: sigreturn.c
- 	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
-+
-+$(OUTPUT)/fp_restore: fp_restore.c
-+	$(CC) -static -pthread -o $@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/sigreturn/fp_restore.c b/tools/testing/selftests/riscv/sigreturn/fp_restore.c
-new file mode 100644
-index 000000000000..29875572b738
---- /dev/null
-+++ b/tools/testing/selftests/riscv/sigreturn/fp_restore.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Check that rt_sigreturn() restores the FP registers from the signal
-+ * frame when the copy of the frame sleeps on a page fault while the
-+ * handler's FP state is dirty.  The frame is placed on a userfaultfd
-+ * page that the handler drops, so the copy faults after f0-f15.
-+ */
-+#include <fcntl.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/auxv.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <ucontext.h>
-+#include <unistd.h>
-+#include <asm/hwcap.h>
-+#include <linux/userfaultfd.h>
-+#include "kselftest_harness.h"
-+
-+#define PAGE		4096UL
-+#define STACK_SIZE	65536UL
-+/* the page boundary falls this far into the FP image, after f0-f15 */
-+#define SPLIT		128
-+
-+#define F0_15	"0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15"
-+/* caller-saved only, so the handler's epilogue does not reload them */
-+#define HANDLER_REGS	"0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15"
-+
-+static uint64_t pattern[16], handler_pattern[16];
-+static void *saved;
-+static int placed;
-+
-+static void handler(int sig, siginfo_t *si, void *context)
-+{
-+	ucontext_t *uc = context;
-+	unsigned long split = (unsigned long)&uc->uc_mcontext.__fpregs + SPLIT;
-+
-+	placed = !(split & (PAGE - 1));
-+	if (placed) {
-+		/* rt_sigreturn() will fault on this page and wait for serve() */
-+		memcpy(saved, (void *)split, PAGE);
-+		if (madvise((void *)split, PAGE, MADV_DONTNEED))
-+			_exit(1);
-+	}
-+	asm volatile(".irp i, " HANDLER_REGS "\n"
-+		     "fld f\\i, \\i * 8(%[h])\n"
-+		     ".endr\n"
-+		     : : [h] "r" (handler_pattern)
-+		     : "memory", "ft0", "ft1", "ft2", "ft3", "ft4", "ft5",
-+		       "ft6", "ft7", "fa0", "fa1", "fa2", "fa3", "fa4", "fa5");
-+}
-+
-+static void *serve(void *arg)
-+{
-+	struct uffdio_copy copy = { .src = (unsigned long)saved, .len = PAGE };
-+	struct uffd_msg msg;
-+	int fd = (long)arg;
-+
-+	while (read(fd, &msg, sizeof(msg)) == sizeof(msg)) {
-+		copy.dst = msg.arg.pagefault.address & ~(PAGE - 1);
-+		copy.copy = 0;
-+		ioctl(fd, UFFDIO_COPY, &copy);
-+	}
-+	return NULL;
-+}
-+
-+TEST(fp_restore_frame_fault)
-+{
-+	struct sigaction sa = {
-+		.sa_sigaction = handler,
-+		.sa_flags = SA_SIGINFO | SA_ONSTACK,
-+	};
-+	struct uffdio_api api = { .api = UFFD_API };
-+	struct uffdio_register reg = { .mode = UFFDIO_REGISTER_MODE_MISSING };
-+	stack_t ss = { .ss_size = STACK_SIZE };
-+	long pid = getpid(), tid = syscall(__NR_gettid);
-+	uint64_t out[16];
-+	unsigned long fcsr, shift;
-+	pthread_t thread;
-+	int fd, i;
-+
-+	if (!(getauxval(AT_HWCAP) & COMPAT_HWCAP_ISA_D))
-+		SKIP(return, "no D extension");
-+
-+	fd = syscall(__NR_userfaultfd, O_CLOEXEC);
-+	if (fd < 0)
-+		SKIP(return, "userfaultfd not available");
-+	ASSERT_EQ(0, ioctl(fd, UFFDIO_API, &api));
-+
-+	for (i = 0; i < 16; i++) {
-+		pattern[i] = 0x4010000000000000ULL + i;
-+		handler_pattern[i] = 0xbff0000000000000ULL + i;
-+	}
-+
-+	saved = mmap(NULL, PAGE, PROT_READ | PROT_WRITE,
-+		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, saved);
-+	ss.ss_sp = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, ss.ss_sp);
-+	/* populate it, so only the page the handler drops faults */
-+	memset(ss.ss_sp, 0, STACK_SIZE);
-+	reg.range.start = (unsigned long)ss.ss_sp;
-+	reg.range.len = STACK_SIZE;
-+	ASSERT_EQ(0, ioctl(fd, UFFDIO_REGISTER, &reg));
-+	ASSERT_EQ(0, pthread_create(&thread, NULL, serve, (void *)(long)fd));
-+	ASSERT_EQ(0, sigaction(SIGUSR1, &sa, NULL));
-+
-+	/* lower the frame until the FP image crosses a page at SPLIT */
-+	for (shift = 0; shift < PAGE && !placed; shift += 16) {
-+		ss.ss_size = STACK_SIZE - shift;
-+		ASSERT_EQ(0, sigaltstack(&ss, NULL));
-+		fcsr = 0x1f;
-+		asm volatile(".irp i, " F0_15 "\n"
-+			     "fld f\\i, \\i * 8(%[in])\n"
-+			     ".endr\n"
-+			     "csrw fcsr, %[fcsr]\n"
-+			     "mv a0, %[pid]\n"
-+			     "mv a1, %[tid]\n"
-+			     "li a2, %[sig]\n"
-+			     "li a7, %[nr]\n"
-+			     "ecall\n"
-+			     "csrr %[fcsr], fcsr\n"
-+			     ".irp i, " F0_15 "\n"
-+			     "fsd f\\i, \\i * 8(%[out])\n"
-+			     ".endr\n"
-+			     : [fcsr] "+r" (fcsr)
-+			     : [pid] "r" (pid), [tid] "r" (tid),
-+			       [sig] "i" (SIGUSR1), [nr] "i" (__NR_tgkill),
-+			       [in] "r" (pattern), [out] "r" (out)
-+			     : "memory", "a0", "a1", "a2", "a7",
-+			       "ft0", "ft1", "ft2", "ft3", "ft4", "ft5",
-+			       "ft6", "ft7", "fs0", "fs1", "fa0", "fa1", "fa2",
-+			       "fa3", "fa4", "fa5");
-+	}
-+	ASSERT_TRUE(placed);
-+
-+	for (i = 0; i < 16; i++) {
-+		EXPECT_EQ(pattern[i], out[i]) TH_LOG("f%d", i);
-+	}
-+	EXPECT_EQ(0x1fUL, fcsr);
-+}
-+
-+TEST_HARNESS_MAIN
+
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
 -- 
 2.53.0
 
