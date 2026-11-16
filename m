@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794839403;
-	b=HhEBzG7p7DvMykdwbaVhkLKOXazp5OfgdWqbxF51Wf4aFJ/mkgVBa5O0WvSbGdqXcA2H
-	 h6dOrUGIQfxz23hxgMYBzxKx5zIffhy3WaotwjtDDKMCL+N8UViCYrFRbr9ozmQaD8VTy
-	 m5b3kY4SY+p66pC+JD6c8QO9lDRnw8yYdtgBtIFlDxrL53tLS6wTpRM+IZUxSBb0IDEe4
-	 zbaTEcdkhNOS+uKGl/RzQ8r7g+g9ZsAx6wfoqTM+0Itp6x5TSnAtBVRQ+iT4c9uKXoXvt
-	 PqLJzlYDFOrdc1qQJ0OB047OGmGbqA8nV9yjKfQoghlT3HBGSllGwk4PJFFyaQT2BRw==
+	t=1794839405;
+	b=ZlLdnCfgaCIVoTKm32fQyjPgqnR6QEoWMOELx4LXfkt9btMCYRkJavurYx2UB5Rlkm58
+	 B9zvU5Mnf8dmAQtRj8C6+En9OiKey1QJSzH0IzAwKQXzYw9DO9i2Lb1R971A5pmOGc2mg
+	 2A2EgxkSmfKX5xLR8W/EYrYKarAVbNaegCj0k04860yefCTP0+V7R2XjU0egkxme+B8Gv
+	 KUeKXzJyvDJgg1uwpm6j74n1NRkn5K/df+PFcoQti0FPSW1PsC67SaWNpwf7vJlAeUMVB
+	 liQzwDBR5PNpX71uXUsBaTWGQXBmPvosNKZ7y6Y/ydtDl9hgP22xTOefgvSe2ObJXdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794839403;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794839405;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=gJdbhvwAZ0O20SAHJUB68mOzD7wOnYuiNIqynnq4AMM=;
-	b=A11PPC+mmUJJZnPjuge69RiX1xIduU38cYDik5dijwRuVzbhsfNHO5fKjxNVVjd/ZB2E
-	 9cAmAU2qqP8ouseqRkWJ5hQiU44X57sQm6uRKe39p3TkLqAhZgMOSpV3iN2WPndOvp861
-	 vFPwdLIYNJYnU+2uaDU3rcFhcT3TwrxI5EZ8JIbz/0kftzHTUFHcTiCv7432vU6oHlGJD
-	 GHSDlBNHt2tROoFLLHQp3GgE1O1Rs3LqfWgRIL5k/txgjw3QSY380K0LfD6u0iYrRl1sw
-	 VYzhco5eHGMiFz3iPZZMGI4vpVRl9q98uDIRymmpiUJyLSx0EY/hZ7PbKR2B39cPDnw==
+	bh=Djq3RZOWfZKIt3UCC39UNmXjeYuoOEudxGZrjWZ7UEk=;
+	b=q1J6NYlijmM0a829AAQDbS8HoyhcSO9Nc/kaLeRfRYl7FrRIU5r48m+/3jz6RE9V96An
+	 o+SOAAkhf3IVpvQaWK1mUYQ/MPFU+tzIzPAvOI4q75jHSuR+srtX8t9MQBTnmbw9LNN3F
+	 uvNFVu/zoHy3UmX6xTv579YFMYLA9HtmR9TJSXouf9xfwv0jDO/vg64dlx0jay0XbLDW8
+	 JIiiRmedNoxwKrZ47HXDIhxMuYx1LrYKlaDRCQHEHYtkJni0gScyWw6kBi1vcttBfzYKb
+	 mqIH9qbyiONGNntPaGgyBbfRCppH2eQWeNKd4G1dfydrcfpW2ttdxG43pANxzkW9kUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gjxxjzdE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QpBlD6Ok;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3D7606A32F;
-	Mon, 16 Nov 2026 14:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C6E606A887;
+	Mon, 16 Nov 2026 14:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gjxxjzdE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6034E1F000C4;
-	Mon, 16 Nov 2026 14:30:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QpBlD6Ok
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E5311F000C4;
+	Mon, 16 Nov 2026 14:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794839403;
-	bh=gJdbhvwAZ0O20SAHJUB68mOzD7wOnYuiNIqynnq4AMM=;
+	s=k20260515; t=1794839405;
+	bh=Djq3RZOWfZKIt3UCC39UNmXjeYuoOEudxGZrjWZ7UEk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gjxxjzdEuNgkVzSbHZZQTiNk8ah4eHNyyktyPNwwgSgHm7kVC2bCbJVbsS3IEX8S1
-	 HEIBFFK5DE0YAz6bz1+YMpa5Sr3QFK7wo83DrGgHs2RjpIbWsVOFwFZNOMLGeR3TFe
-	 4m1sY8tOUXfWHcwoIOOBWECi7E7KiAHnPf84NW7xK3oOo8rx6+A+GNUWRWUxcw9d6P
-	 MKNHSog3g0VHGGlqwqdq0LhgVu//bo6f/8zaCitHhm0YjkG6XcahxYtuEcKu9aKr2A
-	 4Ea9HveprrGqPfe1r1MwMSE5v9mxxMjxolPsjqhblbrYMkcKd1/P4IR/pAwAxDYYo4
-	 IiskcOHGAvUTA==
-Subject: Re: [PATCH net-next v4 06/14] selftests: dpll: add pin state tests
+	b=QpBlD6Okka+nV7d1i9Wv1zODJ5InbxFC8/AR2fXDUp1DPQoxNed4pPzd+RHkKdoko
+	 H5O0v9rUBMImneLfKeUig1C8afA36Ky0FD+Up1m3DzjccZzvN8IwYtE2+D/nQL47i2
+	 rdd6V6bi030gLjU2kijhiMdMNzoBrUmQ6PjEL0nC7BvzZio4wmJPldVjpKf6vldpi+
+	 yVmc7EHWMq3ENHt+1VgFSRybPU8fVMdCfOTw9J6MGtR1JApKYthMuZGqTgk3X09DY1
+	 NstE6MsnQtnoI4L0w13enEtVIbl8izlM07FaedU1azbTfxTlRMVotTMSpBg4uZyEaP
+	 EBwfEluuWu1tQ==
+Subject: Re: [PATCH net-next v4 08/14] selftests: dpll: add pin priority test
 From: netdev-bot+sashiko@kernel.org
 To: poros@redhat.com
 Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
@@ -49,10 +49,10 @@ Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
  arkadiusz.kubalewski@intel.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 16 Nov 2026 14:30:01 +0000
-Message-ID: <179483940186.3136.8507799107612530903@kernel.org>
-In-Reply-To: <20261112130359.840795-7-poros@redhat.com>
-References: <20261112130359.840795-7-poros@redhat.com>
+Date: Mon, 16 Nov 2026 14:30:03 +0000
+Message-ID: <179483940380.3136.1462332477683774177@kernel.org>
+In-Reply-To: <20261112130359.840795-9-poros@redhat.com>
+References: <20261112130359.840795-9-poros@redhat.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,10 +66,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 9 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 4 · Low: 5
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,377 +77,170 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In test_pin_state_transitions, the guard against touching a
-  pin that automatic selection has since locked onto only checks the…
-- [Medium] In manual mode, test_pin_state_transitions finds the reference
-  to restore with find_connected_pin(), which only searches input_pins.
-- [Medium] pin_is_spare() and pick_tune_pin() never check the pin type,
-  so zl3073x's internal NCO pseudo-input can be chosen as PIN_TUNE_ID.
-- [Medium] test_pin_state_transitions assumes that 'manual' means one
-  connected reference, and that reconnecting it restores the device.
-- [Low] The commit message and the script header say the reference is
-  never touched, but in manual mode the test takes the reference over on…
-- [Low] Both state tests accept 'connected' as the readback after
-  'selectable' was set in automatic mode, even on dpllsim devices the…
-- [Low] In dpll_lib.sh, the comment on dpll_pin_set_supports says the
-  keyword 'must stand on its own between blanks or brackets'.
-- [Low] test_pin_state_transitions ignores the exit status of
-  `mode=$(dpll_device_get_mode ...)` (line 98) and of…
-- [Low] In manual mode, the deferred restore of PIN_TUNE_ID to `before`
-  (line 144) still runs after the test body has already restored…
+- [Medium] In test_pin_priority_get_set
+  (tools/testing/selftests/drivers/dpll/dpll_features.sh), the candidate…
+- [Low] test_pin_priority_get_set (dpll_features.sh, line 93) ignores the
+  exit status of dpll_pin_get_prio: `before=$(dpll_pin_get_prio…
+- [Low] Part of the commit message rationale is out of date after v4.
 
 --
 
-selftests: dpll: add pin state tests
+selftests: dpll: add pin priority test
 
-This adds dpll_features.sh. Its test moves a spare input pin through the
-states of the device mode and then restores it. It runs on a dpllsim
-device it creates, or on a device the user names. It also adds a state
-flooding test to dpll_stress.sh, plus library helpers for the pin state
-setter, the device mode getter, deferred restores and a dpll tool
-keyword check.
+This adds test_pin_priority_get_set() to dpll_features.sh. The test writes
+the current priority of a spare input pin back, sets a new priority from a
+list of candidates, reads it back and restores the original. The
+dpllsim_add_pin helper gains an optional priority argument, and the
+standard and stress simulator devices now set priorities on their input
+pins.
+
+> The range of priorities a device accepts is
+> not advertised over netlink, so the test tries one below the current
+> value and then the small values every driver accepts, since a large
+> current value may mark an unused pin outside the settable range, as the
+> ice driver does with 255. A driver may still refuse all of them for a
+
+[Severity: Low]
+Is this rationale still accurate after the v4 change? In v4,
+test_pin_priority_get_set() first writes the current value back, and
+returns if the device refuses it:
+
+    if ! dpll_pin_set_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID" "$before"; then
+        ...
+        return
+    fi
+
+So a current value outside the settable range, such as 255 on ice, ends
+the test before the candidate loop runs. The fallback to 1 and 7 now
+matters only when before is 0, or when the device accepts its current
+value back but refuses before - 1.
+
+Also, "the small values every driver accepts" is followed by "A driver may
+still refuse all of them". These two statements contradict each other.
+
+> The standard device lays its inputs out as gnss0 with priority 0 and
+> ext0 with priority 1, and the stress devices get random priorities on
+> their input pins.
+
+create_stress_device() gives ext0 a fixed priority of 1, and
+test_deploy_cycle() uses the fixed values 0 and 1. Could the message say
+that only the extra input pins of the stress device get random
+priorities?
 
 > diff --git a/tools/testing/selftests/drivers/dpll/dpll_features.sh b/tools/testing/selftests/drivers/dpll/dpll_features.sh
-> new file mode 100755
-> index 0000000000000..0a00a18bded2c
-> --- /dev/null
+> index 0a00a18bded2c..f7340bd89602f 100755
+> --- a/tools/testing/selftests/drivers/dpll/dpll_features.sh
 > +++ b/tools/testing/selftests/drivers/dpll/dpll_features.sh
-> @@ -0,0 +1,339 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
 
 [ ... ]
 
-> +# The tests reconfigure a spare input pin of the device and restore it
-> +# afterwards, see pick_tune_pin. A pin the device uses as its reference
-> +# is never picked, but on hardware a spare pin that carries a valid
-> +# signal can still be selected while a test reconfigures it, so do not
-> +# point the script at a device whose reference must not be disturbed.
-
-[Severity: Low]
-The header says a pin used as the reference is never picked. The commit
-message says the pin is picked up front:
-
-  "so that no test touches the reference the device is locked to"
-
-Does that hold in manual mode? test_pin_state_transitions() uses:
-
-	manual)
-		states="connected disconnected"
-
-Connecting PIN_TUNE_ID makes it the reference in place of the locked one.
-Disconnecting it then leaves the device with no reference until ref_pin
-is connected back. This happens on every manual mode run, whether or not
-the spare pin carries a valid signal.
-
-A later paragraph of the commit message says as much ("connecting the
-pin makes it the reference ... connects it back at the end"), which
-contradicts the earlier claim.
-
-Could the header and the commit message say that manual mode switches the
-reference away and back on purpose?
-
-[ ... ]
-
-> +find_connected_pin()
+> @@ -70,6 +71,79 @@ pin_tune_capable()
+>  	return 1
+>  }
+>  
+> +test_pin_priority_get_set()
 > +{
-> +	local pin_id
-> +
-> +	for pin_id in "${input_pins[@]}"; do
-> +		if [ "$(dpll_pin_get_state "$DPLL_DEV_ID" "$pin_id")" = \
-> +		     connected ]; then
-> +			echo "$pin_id"
-> +			return
-> +		fi
-> +	done
-> +}
-
-[Severity: Medium]
-Can this miss the manual mode reference? input_pins comes from
-dpll_pin_find_by_direction(), which drops mux-typed pins:
-
-	   '(.pin? // [.])[] | select(.type != "mux") |
-
-This loop also ignores the exit status of dpll_pin_get_state(), so a
-failed query looks like a pin that is not connected.
-
-zl3073x supports manual mode, and zl3073x_pin_props_get() can give input
-pins DPLL_PIN_TYPE_MUX from firmware properties. ice registers mux-typed
-direct inputs as well.
-
-If the reference is such a pin, or its state query fails, ref_pin stays
-empty in test_pin_state_transitions():
-
-		ref_pin=$(find_connected_pin)
-		if [ -n "$ref_pin" ]; then
-			defer dpll_restore dpll_pin_set_state "$DPLL_DEV_ID" \
-			      "$ref_pin" connected
-		fi
-
-Then neither the deferred reconnect nor the one at the end of the test
-runs. The loop still connects PIN_TUNE_ID, which displaces the real
-reference, and then disconnects it. Only PIN_TUNE_ID goes back to
-$before.
-
-Would the device be left without its reference while the test reports a
-pass?
 
 [ ... ]
 
-> +	mode=$(dpll_device_get_mode "$DPLL_DEV_ID")
-> +	case "$mode" in
-> +	automatic)
-> +		states="disconnected selectable"
-> +		;;
-> +	manual)
-> +		states="connected disconnected"
-> +		;;
-
-[Severity: Medium]
-Does a mode of manual always mean one connected reference that can simply
-be reconnected? zl3073x_dpll_mode_get() reports DPLL_MODE_MANUAL for the
-freerun, holdover, NCO and reflock refsel modes.
-
-In freerun or holdover every ref reads disconnected, so
-find_connected_pin() returns nothing and ref_pin is empty. The connected
-step then makes zl3073x_dpll_input_pin_state_on_dpll_set() select
-PIN_TUNE_ID and switch to reflock:
-
-	case ZL_DPLL_MODE_REFSEL_MODE_FREERUN:
-	case ZL_DPLL_MODE_REFSEL_MODE_HOLDOVER:
-		if (state == DPLL_PIN_STATE_CONNECTED) {
-			/* Choose the pin as new selected reference */
-			zl3073x_chan_ref_set(&chan, ref);
-			/* Switch to reflock mode */
-
-The disconnected step then picks holdover or freerun from the cached
-lock_status. A channel that started in holdover can end in freerun, or
-in a holdover that is now based on PIN_TUNE_ID.
-
-The original refsel mode is never saved or restored. Every pin reads
-disconnected again, so the test passes.
-
-In NCO mode the NCO pin is the connected input and becomes ref_pin.
-Connecting PIN_TUNE_ID leaves NCO mode, which steps the ToD and clears
-the PPS TIE. Reconnecting the NCO pin re-enters NCO mode, and
-nco_auto_read captures the current tracking offset, not the offset
-userspace had programmed.
-
-Should the test skip in manual mode when no regular input is connected,
-or save and restore the refsel mode?
-
-> +	*)
-> +		dpll_log_test_skip_or_fail "DPLL pin state transitions" \
-> +		    "device mode '$mode' not handled"
-> +		return
-> +		;;
-> +	esac
+> +	pin_tune_capable priority-can-change "DPLL pin priority set/get" \
+> +			 "priority cannot change" || return
 > +
-> +	before=$(dpll_pin_get_state "$DPLL_DEV_ID" "$PIN_TUNE_ID")
+> +	before=$(dpll_pin_get_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID")
 > +	if [ -z "$before" ]; then
-> +		dpll_log_test_skip_or_fail "DPLL pin state transitions" \
-> +		    "state not reported"
+> +		dpll_log_test_skip_or_fail "DPLL pin priority set/get" \
+> +		    "prio not reported"
 > +		return
 > +	fi
 
 [Severity: Low]
-__dpll_device_field() and __dpll_pin_dev_field() return 1 when the dpll
-tool fails. The status of the mode= and before= assignments is dropped
-here, though. On a device the user provided, a failed query is then
-logged as a skip, with "device mode '' not handled" or "state not
-reported".
+Should the exit status of dpll_pin_get_prio() be checked here? When the
+dpll tool fails, __dpll_pin_dev_field() returns 1 with empty output:
 
-The commit message says "A pin that cannot be queried is a failure, not
-a pin that is in use or lacks a capability". pin_is_spare() and
-dpll_pin_has_capability() return 2 for exactly that case.
+    out=$(dpll pin show id "$pin_id" -j 2>/dev/null) || return 1
 
-Should these two queries be reported as failures as well?
+So a failed query and a pin with no prio in its parent-device nest both
+end up as "prio not reported". On a device provided by the user, that is
+logged as a skip, not a failure.
 
-> +	# The automatic selection may have taken the pin since it was
-> +	# picked, it is the reference then and not to be touched.
-> +	if [ "$mode" = automatic ] && [ "$before" = connected ]; then
-> +		dpll_log_test_skip_or_fail "DPLL pin state transitions" \
-> +		    "spare input pin became the reference"
-> +		return
-> +	fi
+pin_tune_capable(), just above, already tells a failed query apart from a
+missing capability. The later frequency and phase adjust tests in the
+series also make that distinction for their getters.
 
-[Severity: Medium]
-Is the admin state enough to tell that the automatic selection took this
-pin? Documentation/driver-api/dpll.rst says the pin state reflects the
-administrative intent, while the operstate reflects what the hardware
-actually does with the pin.
-
-In automatic mode, zl3073x_dpll_input_pin_state_on_dpll_get() reports
-selectable for the active ref too:
-
-	case ZL_DPLL_MODE_REFSEL_MODE_AUTO:
-		if (zl3073x_chan_ref_is_selectable(chan, ref))
-			*state = DPLL_PIN_STATE_SELECTABLE;
-
-pin_is_spare() already rejects .operstate == "active", but this check
-does not. Suppose PIN_TUNE_ID becomes the active reference after
-pick_tune_pin() ran. On zl3073x this check passes, and the loop sets the
-pin to disconnected, which withdraws the reference the device is locked
-to.
-
-The loop comment ("the pin reports connected then") seems to rest on the
-same assumption.
+> +	# A device may report a priority it does not accept back, one that
+> +	# marks an unused pin for instance, and the pin could not be
+> +	# restored then. Writing the current value changes nothing, so
+> +	# that is tried before the pin is touched.
 
 [ ... ]
 
-> +	# Restore the original state even when the test aborts half way.
-> +	defer dpll_restore dpll_pin_set_state "$DPLL_DEV_ID" "$PIN_TUNE_ID" \
-> +	      "$before"
-
-[Severity: Low]
-In manual mode, does this restore run a second time after the test body
-has already put both pins back? On a successful run, the end of the test
-sets PIN_TUNE_ID to $before and reconnects ref_pin:
-
-	if [ -n "$ref_pin" ]; then
-		dpll_pin_set_state "$DPLL_DEV_ID" "$ref_pin" connected
-
-The deferred commands then run last in first out. PIN_TUNE_ID is set to
-disconnected again while the channel is locked to ref_pin, and only
-after that is ref_pin connected.
-
-In zl3073x_dpll_input_pin_state_on_dpll_set(), DPLL_PIN_STATE_DISCONNECTED
-in reflock mode switches the channel to holdover or freerun. It does not
-check whether the pin is the selected ref:
-
-		} else if (state == DPLL_PIN_STATE_DISCONNECTED) {
-			/* Choose new mode based on lock status */
-			switch (zldpll->lock_status) {
-
-So the device loses its reference a second time. If the deferred
-reconnect then fails, dpll_restore() only logs it, and the device stays
-in holdover or freerun.
-
-[ ... ]
-
-> +pin_is_spare()
-> +{
-> +	local out
-> +
-> +	out=$(dpll pin show id "$2" -j 2>/dev/null) || return 2
-> +	jq -e --argjson dev "$1" '
-> +		(.pin[0]? // .) | [.["parent-device"][]?] |
-> +		any(.[]; .["parent-id"] == $dev and
-> +			 (.state == "disconnected" or
-> +			  .state == "selectable")) and
-> +		all(.[]; .state != "connected" and .operstate != "active")' \
-> +		<<< "$out" &> /dev/null || return 1
-> +}
-
-[ ... ]
-
-> +pick_tune_pin()
-> +{
-> +	local pin_id
-> +
-> +	PIN_TUNE_ID=""
-> +	for pin_id in "${input_pins[@]}"; do
-> +		pin_is_spare "$DPLL_DEV_ID" "$pin_id"
-
-[ ... ]
-
-> +		PIN_TUNE_ID=$pin_id
-> +		[ "$pin_id" != "${input_pins[0]}" ] && return
+> +	# The accepted range is not advertised, so try one below the current
+> +	# value and then small values, a refusal of all of them is a skip on
+> +	# a device the user provided, the simulator accepts every value
+> +	# tried here.
+> +	target=""
+> +	for candidate in $((before - 1)) 1 7; do
+> +		[ "$candidate" -ge 0 ] && [ "$candidate" != "$before" ] ||
+> +			continue
+> +		if dpll_pin_set_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID" \
+> +				     "$candidate"; then
+> +			target=$candidate
+> +			break
+> +		fi
+> +		reason=${DPLL_LAST_ERR%%$'\n'*}
 > +	done
-> +}
+> +	if [ -z "$target" ]; then
+> +		dpll_log_test_skip_or_fail "DPLL pin priority set/get" \
+> +		    "cannot set a new prio${reason:+, $reason}"
+> +		return
+> +	fi
+> +	after=$(dpll_pin_get_prio "$DPLL_DEV_ID" "$PIN_TUNE_ID")
+> +	if [ "$after" != "$target" ]; then
+> +		check_err 1 "priority expected $target, got '$after'"
+> +	fi
 
 [Severity: Medium]
-Can this pick the zl3073x NCO pseudo-input as PIN_TUNE_ID?
+Can this candidate order make the device switch its reference in
+automatic mode? pin_is_spare() accepts a pin whose state is selectable:
 
-zl3073x_dpll_nco_pin_register() registers that pin with
-DPLL_PIN_DIRECTION_INPUT, DPLL_PIN_TYPE_INT_NCO and
-DPLL_PIN_CAPABILITIES_STATE_CAN_CHANGE, after all the ref pins. Outside
-NCO mode it reports disconnected and standby, so pin_is_spare() accepts
-it.
+    (.state == "disconnected" or
+     .state == "selectable")) and
 
-The NCO pin is dumped last. So when input_pins[0] is spare and no other
-ref qualifies, pick_tune_pin() takes the NCO pin over the real spare
-input.
+A lower number means a higher priority. Both before - 1 and then 1 move
+the spare pin toward or above the current reference.
 
-In manual mode the test then connects the NCO pin, which enters NCO mode
-with the nco_auto_read, tod_step_reset and tie_clear settings programmed
-at registration. Disconnecting it makes
-zl3073x_dpll_nco_pin_state_on_dpll_set() force freerun:
+For example, take a reference at prio 2 and a spare pin at prio 3. Then
+before - 1 ties with the reference, and 1 puts the spare pin above it.
 
-		/* Switch to freerun - holdover averaging was not
-		 * updated during NCO mode.
-		 */
-		zl3073x_chan_mode_set(&chan,
-				      ZL_DPLL_MODE_REFSEL_MODE_FREERUN);
+Candidate 7 is tried whenever before is not 7. So when before < 7, it
+lowers the priority instead.
 
-In automatic mode, setting selectable on the NCO pin returns -EINVAL, so
-on a user device the test skips and no real input gets exercised.
+After the set, only the prio is read back and the pin state is not
+checked. A reference switch on hardware (ice, or zl3073x when the ref is
+selectable) would go unnoticed.
 
-Should pin_is_spare() leave out pins of type int-nco? Later tests that
-reuse PIN_TUNE_ID would inherit the same choice.
+On a non-revertive device, the switch can remain after the deferred
+restore, and the restore still reports success.
 
-> diff --git a/tools/testing/selftests/drivers/dpll/dpll_lib.sh b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
-> index 2da8cbe8a883e..783db2a4dbc18 100644
-> --- a/tools/testing/selftests/drivers/dpll/dpll_lib.sh
-> +++ b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
+There is also no re-check like the one in test_pin_state_transitions():
 
-[ ... ]
+    if [ "$mode" = automatic ] && [ "$before" = connected ]; then
+        dpll_log_test_skip_or_fail "DPLL pin state transitions" \
+            "spare input pin became the reference"
+        return
+    fi
 
-> +# Return 0 when the dpll tool knows the given "pin set" keyword, such as
-> +# state or frequency. A test that sets something checks its keyword
-> +# first and skips on a tool that is too old for it. Only the "pin set"
-> +# usage is searched, a keyword that only "pin show" knows must not
-> +# count, and the keyword must stand on its own between blanks or
-> +# brackets, a hyphenated compound that contains it does not count.
-> +dpll_pin_set_supports()
-> +{
-> +	local usage
-> +
-> +	usage=$(__dpll_usage_block pin set) || return 1
-> +	grep -qE "(^|[[:space:][])$1([[:space:]]|$)" <<< "$usage"
-> +}
+test_pin_state_transitions() runs first. Through its
+automatic/selectable/connected exception, it accepts the pin being left
+connected.
 
-[Severity: Low]
-This isn't a bug, but the comment says the keyword must stand between
-blanks or brackets. The regex accepts an opening bracket before the
-keyword, but only a blank or the end of the line after it, so "state]"
-would not match.
+Could test_pin_priority_get_set() then change the priority of what is now
+the device's reference? When before < 7, it would lower that priority
+with 7.
 
-Every pin set keyword takes an argument, so this works in practice.
-Should the trailing group also accept ], or should the comment be
-adjusted?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/drivers/dpll/dpll_stress.sh b/tools/testing/selftests/drivers/dpll/dpll_stress.sh
-> index b21325d8368fb..396d44c7bbe35 100755
-> --- a/tools/testing/selftests/drivers/dpll/dpll_stress.sh
-> +++ b/tools/testing/selftests/drivers/dpll/dpll_stress.sh
-
-[ ... ]
-
-> +			# A device in automatic mode may pick the pin it
-> +			# was offered as its reference, the pin reports
-> +			# connected then.
-> +			state=$(dpll_pin_get_state "$dev_id" "$pin_id")
-> +			case "$state" in
-> +			selectable|connected)
-> +				;;
-
-[Severity: Low]
-Does accepting connected here hide a wrong readback on the simulator?
-
-test_pin_state_flooding() only runs on a fresh dpllsim device.
-dpllsim_pin_state_set() stores exactly the requested state, after
-dpllsim_pin_state_valid() has refused connected in automatic mode.
-Nothing in drivers/dpll/dpllsim/ writes DPLL_PIN_STATE_CONNECTED.
-
-So a regression that stores connected when selectable was requested
-would pass this test. test_pin_state_transitions() applies the same
-automatic/selectable/connected exemption, even when DPLL_CREATED_DEVICE
-is set.
-
-Could this exemption apply only to devices the user provided?
+The script header warns that a spare pin with a valid signal can still be
+selected. Would it make sense to try values that lower the priority
+first, or to check the pin state before and after the set?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112130359.840795-1-poros%40redhat.com
