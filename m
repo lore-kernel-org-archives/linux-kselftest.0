@@ -1,63 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.136.161.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794909109;
-	b=fua7ZVEFXwI15zwRdcZoqng3OapoN0SA0VzIhsYyNdIACUFTBDYaDiKXBYeNwHNzEnWh
-	 QbUiFZnCG8HmV3voXuJGyUpzOPuMhzC9pH8sL0A6DXo5CKyWElT4VNchKnO7GSr/xYvZa
-	 VHw+TjcdOesfyH4Td+essT7ECREGhASQNAek3wU5kxutMLnZD3j4B9L3Zzrs8TMw0kS/w
-	 k/ioSy1gTnkuVdR5Nt2XlSzqmcwU5ibXJJfFQOwTSGjgW/z3bPENXxBGbY/vDlA4YoYT2
-	 ofB68EEjMxCNad5WV9SfrkmOIy6o+G5nX0P/ryWTco9maf3TlbWQymBlnlqWUESab1Q==
+	t=1794910057;
+	b=hED4I00yKynXD4Bur9KqZW+UVrYrsRXpSSKx6kD7C+uRll2Da7wSdrk7rGB7WwvctFU/
+	 9umnp16XByBn38mP1F7D7MAG1UdF/WppoJCWp5wY37RdH2La6dvg3YxrEyBu994nN6mat
+	 k15o7pSkJS282jSVh5cB7vlL+9mORzw+WPfMHlLDHQzIFhzI87xEkj5H+DVYDyzhYkUhr
+	 Y5nMT828oGqzGOWAUBToJXwXrBbGWGYyVHzrhiFEaSM/s8X4cTCD5st2BrnZwOMHkOTiE
+	 F3ZTR9wZyHQ+HAXefJQqkDqd6IoRMfQYZfcM9xEa70+1/Hwf1Eb/1/rCTiZQQQXQqUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794909109;
-	h=DMARC-Filter:Received:DKIM-Signature:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=cKRq7f5sfRlpjrqiJnBl46k8dvzPN6Cm5PEhEPkW5k8=;
-	b=nqZsdhKa3dCIZ+nNBxXlU4guD4AZjXuw5Xd3jB40wpQRUhyJRcXe+CCQMkUgEqneeYY4
-	 JgEWi94tsfsch0AH4TJkQ925e4gvcZgpgXh4dAtnB3zpvEBobDjHG5ix46+3O0aZZPVH+
-	 ATfe/SzzdxYajorofnyJdOashJmE+sjiSncRsJPyCghXltOj9i8AgNocbT2p+lk0f6KeB
-	 L4prcQp6BfUcKLUeCe9XCu4NMwl7Xp8+5jGePfJaGY0/NjDWIDCXNLDLth0O4kQcORRhl
-	 D0fAu1u+BER6spfqpHicUNUFCAwu2ALQSgkW671fHL5moV/shX1GzcEX5RExrtv2gIQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794910057;
+	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
+	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:From:To:Cc:
+	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=P4EDsTXYCseHV5hzoZfsshveTpYVJTtMQhg6TQmq8mA=;
+	b=iFTu8RXWXzesZgZ1nl89b8vOu8WJJ3PVTbrifScIAmBNRfgOaU+L0D3qaVgCWvHNsWMe
+	 yDE4fUDbXm2Hp9zsRq8QhgHVS1aO8unKLc+g0sP1wYoJTS8/SPKzAqzYq3u/aTKW2tXjd
+	 E8IAcniWsZYaKDbWL5tHG4ZbVWmOHUoYJLME8pPvHks5JgoC3iEuy1/o7mDox+SEJ2xx3
+	 Fl/uHPEP980BwrHegUs5V1pmrGqi0NcxDmjWbdy1EnUYKEKlqlUXkR5/ko0bEBmEWTX1r
+	 jxY4hx7X7yyv0E+/O9EYdr1eu1Xk/EKy2+fh+0aYtR7VRMV8t7q0+Nfl4bjAeVXga/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cs.unibo.it;
-	spf=pass smtp.mailfrom=cs.unibo.it;
-	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=Gx9Xu9iP;
-	arc=none smtp.remote-ip=130.136.161.50
-Received: from mail.virtlab.unibo.it (mail.virtlab.unibo.it [130.136.161.50])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FED0606A323;
-	Tue, 17 Nov 2026 09:51:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3FED0606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cs.unibo.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unibo.it
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=Gx9Xu9iP
-Received: from cs.unibo.it (renzopb-wl.cs.unibo.it [130.136.2.252])
-	by mail.virtlab.unibo.it (Postfix) with ESMTPSA id D3C6C1C024A;
-	Tue, 17 Nov 2026 10:51:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cs.unibo.it;
-	s=virtlab; t=1794909105;
-	bh=cKRq7f5sfRlpjrqiJnBl46k8dvzPN6Cm5PEhEPkW5k8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gx9Xu9iPedqdjGY9OlCzB4M4OllwpC+LUcPKuPjRaC406iguJqjPJlei/m35BR0Zi
-	 kI4hahO0nhl4v+Y36ymGFZ0d85NGjmGt8zHBYUZChHs6VLZSbRvmd3CQqe3rHYe51a
-	 bpaFBHPHohObg24dEROUiMEG16WJ+QBj34x8HXcM=
-Date: Tue, 17 Nov 2026 10:51:44 +0100
-From: Renzo Davoli <renzo@cs.unibo.it>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-	"Dmitry V . Levin" <ldv@strace.io>,
-	Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Charlie Jenkins <thecharlesjenkins@gmail.com>,
-	Bradley Morgan <bradley.morgan@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, strace-devel@lists.strace.io,
-	linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] selftests/ptrace: check that
- PTRACE_SET_SYSCALL_INFO rejects invalid error values
-Message-ID: <avwjsMQay_N_pfvt@cs.unibo.it>
-References: <20261116134050.505355-1-renzo@cs.unibo.it>
- <20261116134050.505355-3-renzo@cs.unibo.it>
- <20261116153642.a8dddc43f53fed0402283dfa@linux-foundation.org>
- <avwY4RW14jtVfgZO@cs.unibo.it>
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22F7606A323;
+	Tue, 17 Nov 2026 10:07:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F22F7606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b1e1d30ee26e11f19a56ed5b684f684d-20261117
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:2a683d23-300d-49f1-bb21-3a3a885a9175,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:6fb6a018501204081278b4e12134eedf,BulkI
+	D:nil,BulkQuantity:0,SF:102|850|865|898,TC:nil,Content:0|15|50|99,EDM:-3,I
+	P:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+	,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b1e1d30ee26e11f19a56ed5b684f684d-20261117
+X-User: yijiangshan@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <yijiangshan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 12662009; Tue, 17 Nov 2026 18:07:28 +0800
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
+To: brendan.higgins@linux.dev,
+	david@davidgow.net
+Cc: raemoar63@gmail.com,
+	bartosz.golaszewski@oss.qualcomm.com,
+	dakr@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	13667453960@163.com,
+	Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] kunit: unregister software node when fwnode lookup fails
+Date: Tue, 17 Nov 2026 18:07:23 +0800
+Message-Id: <20261117100723.667634-1-yijiangshan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,31 +74,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avwY4RW14jtVfgZO@cs.unibo.it>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 17, 2026 at 10:05:37AM +0100, Renzo Davoli wrote:
-> Thanks Andrew, the fixup is correct and a good addition: the test now
-> covers both sides of the -MAX_ERRNO boundary.
+If software_node_fwnode() returns NULL right after a successful
+software_node_register(), the error path leaves the node registered
+with no cleanup. Unregister it before returning the error to match
+the behaviour of the other helpers in this file.
 
-A follow-up for when the other two PTRACE_SET_SYSCALL_INFO series come
-up:
+Fixes: 9fdbdb528488 ("kunit: provide a set of fwnode-oriented helpers")
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ lib/kunit/fwnode.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-[PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp syscall skipping
-https://lore.kernel.org/lkml/20261114181923.370930-1-renzo@cs.unibo.it/
-[PATCH v4 0/3] ptrace_set_syscall_info: add support for instruction pointer modification
-https://lore.kernel.org/lkml/20261114184720.373178-1-renzo@cs.unibo.it/
+diff --git a/lib/kunit/fwnode.c b/lib/kunit/fwnode.c
+index a58ce0984d76..5a98e5e75f22 100644
+--- a/lib/kunit/fwnode.c
++++ b/lib/kunit/fwnode.c
+@@ -74,8 +74,10 @@ kunit_software_node_register(struct kunit *test,
+ 		return ERR_PTR(ret);
+ 
+ 	fwnode = software_node_fwnode(swnode);
+-	if (WARN_ON(!fwnode))
++	if (WARN_ON(!fwnode)) {
++		software_node_unregister(swnode);
+ 		return ERR_PTR(-ENOENT);
++	}
+ 
+ 	ret = kunit_add_action_or_reset(test, software_node_unregister_wrapper,
+ 					(void *)swnode);
+-- 
+2.25.1
 
-I tested the full stack on x86_64 (QEMU): this series with your fixup,
-then the syscall-skipping v11, then SET_IP v4 (which depends on
-syscall-skipping). set_syscall_info passes.
-
-There is one trivial textual conflict: your "#define MAX_ERRNO" lands
-right where syscall-skipping v11 patch 3/3 adds new #includes, so it
-does not apply with plain "git am"; "git am -3" resolves it, and the
-result differs from the stack without your fixup only by the fixup
-itself. If you prefer, I can send syscall-skipping v12 rebased on top
-of mm-nonmm-unstable.
-
-renzo
