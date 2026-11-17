@@ -1,107 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794955620;
-	b=isRNoA8TVscWHrIoyoutnE4DrQ1RDLijCfExdXhu4L29F6goEYtXtLyVhnM9485RLlVc
-	 s9zBPawoSeiIXoGkn9AOzi36W5XSE8/Z1MHvrZCBl4Vjif78g96jsqFFqv45Jberr2VZD
-	 WovaLn65/QJubF/2K9HerD8wR2G89rfCSnCzAphtppASRxnwEG675rggUJIZN808I0mT1
-	 A1QFORNVHvMCU7qYPa5l8Bgf29SO4BrS8WwDp3pqjnwlWGjY+gtUXqBlVM6HkU51UTucf
-	 3w22WHf2IQgAMVP6uX+TWe5qlFj47bmzbJ/zIkYfX8AQVDFNi1nQNXwZmfgM+K9CAiw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794955620;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=KSC81XL1+EQpdKzjuyxfAuAaB+et2a6UKZ6CLWHqjqw=;
-	b=j+uW+Ph5ahc/jxXMIL52sk71Iw+53qbIKGJuIfGqLjbgfozXkIvl3rMhKZB6Yc0m/lZN
-	 YcgEJi/JErDZo0QvaRgA0jJyDGyWvrxstLzauSnpMLEz7blpW1VsEuCuOjZnzj7O4YC1T
-	 /nSc0iyXo0ClmP1K35AofFVN+qc/DAgElQ2bioSSykGIS3cTF6B226FFSfXR5dkC0i0k2
-	 8S3AYZxMuniCgWgdTRTyFe7m/WFagoo+nJe9B0yYx2WIVYD97YZLo1Q5ugkqrqnunXmSY
-	 B5yg7CaESTNUidQbe8RpcpejRyXUtW8dNscI6YHgZXFY14ZryxEj0BqPU9F8C7Y8vNw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=OpD+6PDM;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794956090;
+	b=Kwou2luWVF7m2ePZ7UI+LLTTvDE2LhbKCGA96/l/LokB7T6PSvSjmjbHobtj2FmEqpOD
+	 e1tUiXqvH62suoCeF1uzo9EXRZPRfQAX/NsMwiLdk2lvHuNyqdeG05QYUXHkcyCXcZ1L0
+	 G32qbHN8neRqLSNjjM7SCj26/ekUfxOhit0BOucq+ramuQy0vYnmf9qT5HA1yWH25MksQ
+	 Lo5IsTDdQJtf/82jwr6yEyDFBdtQaqrbtG4Efkw8Oupf69g5WkBS9JoWFrAOV1n5byt7J
+	 aPXH9i7+ub02I00WR6pQLQnvJjIJIoUKqQ1UwNtnhh5Sq9hQGrQVD5jEukDyUpeyQnA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794956090;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Mailer:From:To:Cc:Subject:References:In-Reply-To;
+	bh=k7/QLUvYDzH8xZxy3OOm+8SYpFBmpzd+eC/ISXSLxiA=;
+	b=Rf4YUCNLR/7cD2piitbPWbYb8UkYVboHQf9BmozdlPwSQstJ0syuPflJc0Ri0Nl41e/n
+	 FfRvQKrd0Ix4mEUkZpWIJRtwFsBTer2H0LlY9miGBOBLjf6c0owdIZ1QF4QYhrSYQetzc
+	 D74qwPozY6/W/90vaKFG3hjO447WQhtX7Z883BI3bWj4PfStUIkDDaUGznfva+6C4rRgg
+	 fkOJ0qgUrecfMGlQY0ALspqgyTSS9Qgk8c4JWR3VdelZzISxNwJL+1iSuyXxFQEiyu0d/
+	 i5CD/2W/dUMbtnBEE7hjaqkjtwLQz5V2g2yxoTLuoZwSR3P9Pd8ckQIgBzllAfHLvsg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=DIOqvTtw;
+	arc=none smtp.remote-ip=209.85.219.49
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7E8606A335
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 22:46:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE7E8606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217FC606A32F
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 22:54:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 217FC606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=OpD+6PDM
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AHMgFdo1839806
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 14:46:59 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=KSC81XL1+EQ
-	pdKzjuyxfAuAaB+et2a6UKZ6CLWHqjqw=; b=OpD+6PDMlyRVIQ4gUsxd1pQRiiY
-	2xNljoVElEeEhFUiOG5Uk44VLPG4O4uXpXj0+j4jeDetx+c0P8e+noxSYq2lCh5W
-	KHejIzt/I4UdTJmzw+Fg/nSj7cB1QTMx/l3bO+xrP+TSeATVVrDxWTZVHibCW5U+
-	hjOQG+u9uC1e2kybz2OaCsXrkrsDWl9/U/SGRqGmJY0vG7rKiLXndtlvel7lQl55
-	sdjYVggRIUMT42oLfV5wteJXfkuV+1P3ib3Fp4ylW8JJJGpvlzjjnP6mzY9S0HdJ
-	AQ9e8xf/1KwJnz4XcYTaX6HmGdSH8UZ30qmpl1eTP9PIAKGbfG22H6j3L9Q==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0yu883ae-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 14:46:58 -0800 (PST)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3ad53f538d2so150388a91.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 14:46:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794955617; cv=none;
-        d=google.com; s=arc-20260327;
-        b=krdbqWzLseP5TrsMTGJrEN3UgwNorxWi0gVe8mqcCne8RSajcSUqy5wKUfjiE83Ekc
-         +ts5TQkSNid3UNVuROTViMUvq6nI7ytr87S5r0Q/qkTl7MZNZZXfFp2fUtQQARITHT0a
-         MX5xt0k0rcdc9ZVPYp/xoWx9KBLwu+DGuo9dWWWpqPqwY8CsQB6tKO7peAZ1ZQdQyv6g
-         jr/BD8IcAqtoyCBP4Z4SlYUrLdVQJeaF0teMEX6hB50Xx5AiAKsdRhkoyQ9dUgr852L5
-         0GnGha7fV/iTqfPIi8VnygR5Bwejm+eD+cviYtJXF6bBye8zWt/iF2XoAujWk5JNbD1e
-         yj2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version;
-        bh=KSC81XL1+EQpdKzjuyxfAuAaB+et2a6UKZ6CLWHqjqw=;
-        fh=rHj7ZLFc1eXzhGC+5yRMpkJ5diqXumAiXtdiFsZhhgc=;
-        b=CkDGwRMo3slO604sy8l4BCp/x3S9EpfKkN9U2RUtoG2zyCfNkLnf1k+bmlLA37V7MU
-         c7bYh7zQdNGeer/lvlwc7/Pslt2CO/ud6r3vGE9ZgXulRbiLetrCWcjSTle0nz6CdILa
-         9giYpfGx6iJA+Txv/xQh3fS2tz55IO20v8GPJsvIHmMVG7Z1C0nZOabmMIkkjTfvt2O6
-         LV5ZrKMkwCDut/1HmpFK8WqIIdiQtfE04a3C6bbJrabAjuYzuqAZPOxG10CbOZFmzB35
-         3qDnUjHRx7TykZb//tAUEvNMtIpBdPKSm4O64CfLfE+TNFdGWqUb8kLpl/hn83lyST9R
-         w+CQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=DIOqvTtw
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-91f23ddf32fso1749086d6.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 14:54:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1794956089; x=1795560889; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=k7/QLUvYDzH8xZxy3OOm+8SYpFBmpzd+eC/ISXSLxiA=;
+        b=DIOqvTtwgZ5ItvYEoe2KZqcsY3ZGLQ+HaihmoLRuvlSTEm54jSBGFp7446G3/I8rQV
+         jdaaePJOPptbJB/iycrO1+C9CK7f1Lzi0/ZtjLgb3g74xLYezSMe33/lJcnXDXHCH2QR
+         nPspoy5WRs3Kr/RdCST5lRUxeJijzn91kv7ip8tpuZvGiqXVwaGEyqsdCZ4UzGopcOig
+         odhAaVLPfkteT28BObGagg1mfMyZi1OKOhsJXcZRCsolfwMYJPBhlTEF26Wy/fGeH2g/
+         6GB9fJ+t+azZKqhhqQ/sH3UiAz8tKQMSv7Y+PqcaopnbJ1qBu03DBRydnqkMiL70S4pM
+         2u+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794955617; x=1795560417;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KSC81XL1+EQpdKzjuyxfAuAaB+et2a6UKZ6CLWHqjqw=;
-        b=em7sl91vQoguLCtFqLUchLtN/CdO6ofnBdkql5dnVb0WLvnTM9X0iuVOyiFxdalVds
-         KLjXzOSgKV4fDYakEAYJoTdqwTdFxStY5eX09t/bmVAUEnasQRLYiOEdx3/499jjowqw
-         RXFwvYixfowCAgU3xYjSPYeZRvRFqGFHAcHRGn2ywPM0lJ31TG/vr0bC+MXWsudQV2s8
-         tCTux10W4xNaET1Zed++MA04FSyutqqWYME4DlxSTS3xg7dH3s7NvE9PWIscua63yypz
-         8sjTtzwOVOsCK2xz2AVl5pr6GpZXD1Bb7fsQ/sObZYDN4pOPuapArDavQD2ESLAMnT/R
-         9zAQ==
-X-Forwarded-Encrypted: i=1; AL+hErFpuF3RdnJfY0HgepfajqGAFMosas8dSsN73zPDWaY5pc9fwMW5u426cnuo38u0mAwXpl3xbJNXFyV1wVCYBY8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+XGBrxkQlLdb7AKgmIhdAJQ+XFuI76hEw+snYiJVWhtDkd8QNG
-	SSfhUTmgwOcwZaPpjnQOl3SWpZcEQztcZUTGGmjveCN3xJgR6ThnPQRSyShEnHG32l4L/zjlERX
-	6wRperDroVbQ8Xq0vqvrkN2fjAxBZNA/c7GmqXCeZwmAzXBJfK109F5r1jmsbMFGKZejUvqZKHI
-	WNDF5O7ySCVBHkZpGS4qz5O7ICrQT1sFKTP6J1TyGXXRM=
-X-Gm-Gg: AZFdTZcdVWfwjZvAw5gQMZfoG/8O+2n1dj14PVMnkAfi5C5189F5MxNGZa+8rUi3McT
-	0Sp/9Vm+5kOaUOdKipQI5zn/x3PgBINSOQ7IJWbCLZW+rKBt8sjCUtxRJLi86WUy3UljaN320Qa
-	vdlTKUOEI870q3/cOE9QVDsPPO+j+VddMxgY+asRpwj00HmUBcQNXn8R4dPhiKOmXE0Ns0Pdp/I
-	zaaG/15yh9kG1ZcqYtOejh0QI/exOg4PFr63N0NNX1npgNOGQM=
-X-Received: by 2002:a17:90b:2fc8:b0:3b3:c3b9:7de6 with SMTP id 98e67ed59e1d1-3b3d07a212dmr710193a91.13.1794955617309;
-        Tue, 17 Nov 2026 14:46:57 -0800 (PST)
-X-Received: by 2002:a17:90b:2fc8:b0:3b3:c3b9:7de6 with SMTP id
- 98e67ed59e1d1-3b3d07a212dmr710167a91.13.1794955616819; Tue, 17 Nov 2026
- 14:46:56 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794956089; x=1795560889;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=k7/QLUvYDzH8xZxy3OOm+8SYpFBmpzd+eC/ISXSLxiA=;
+        b=caH76t/77Je2CfAk0vTk79YLkfWlyXK+rrMzFmH/dvFzjTTWSKIKZpOeqNjfb9vB3y
+         nW/hce3BnYRD9LTITzqnTK6syiGTS+3hZlZgYTytZCU7R6fUgOJINPo/ee11NvlTcWTP
+         l4NntfltfwZeidG43iEziL1q08Qv3f/o9VZZUq6rDlxUoKfxqMu6vDs9gM0Kky6JYx8Q
+         s4bA6cELCo3PjaL+x2TG1g2VYEFnau5AA5Yrz/1US0kjoxT3frp+DXO5qIniZnpMihfu
+         3rhrWmvM6kCnIW8ZXbkcNBE/afHRrKh0G8tWzSMrez2ApnSlh2UHbXuKuuDe3Xk06XTD
+         nXbg==
+X-Forwarded-Encrypted: i=1; AL+hErEMSBBC9w4yRtPtJrFHZbS7mFYSgdJOL82ZXVa39hu8onhQ9RA0fxO4mAoVO61DSTe/NnGcSlzZ1mAy9v/MDL0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z97E2eSHEmPsJqrG0W3hKk71413OSDOvO3LPuZjsAXwm4l2y8w8
+	XQfmf5zWe8ECnJ1ys/Axphh6pQf7ToNpatYt0Rua6EZhW0NtM1Zyvht02DbE9avrow==
+X-Gm-Gg: AZFdTZdzPdo9Z+tOKJxqYsL//EAn8T/V8CnCl3QXM0eRWUFIJvWMeRK6V/Zio3hrNsW
+	+jjQbzLOzG0aFTt37c6VNcw7/qZHLNZB2xNjbkHJ/yaTIH1UylM6pMnEbPhgwPGf7yV55ovAXzs
+	A7isDSYtZbyTasUukqA7crVBjGKkFqS6Azt3Wz1ZQZcAzwZmZM46KNEmo0y3oMeCluWcNLmJ4No
+	dU2XVDbUJH/bEb2BVc/fQkTHo3P0/EdM15ZgBejNMlFDQKEpSJNA3513bVr4uD/5Dvq1tiXz0Dt
+	oMIQsr5YCA930HfvqBxpjGtP+LjuYVdZ7d/6kZ3/ix25qEx4Mh2hrwil3gxDp9Q66TaGSSVSWUr
+	CP8PjBHtarQgXtyfikPqdcknKRj7qWUrk7RDMLbO3sAJ3tuCMIbE7u1xBSJLLbBoyiWDNP/dwUW
+	wdyFvE1aJ74sdXqtAKIZsOEPTWESBSKhNZYby8cBPYmq2viGUUlEk1lWKXlF8xmxl/kn+nwHu3w
+	9ltoWGNeXjRKWrOEQMueZCXe9vFOfcu9Juc9EY3RumdWubfgzRo3A/3zYz4nk1YGtW1hEsk4VrD
+	RNuClU0HVq0i1Gj9agCzt5YRcpChO0uzvOA7d4zmee7VEezOR86wfNlQq5al6Nj73Oh8vs+Khf/
+	GQihaeXxks8U1/LnQZbmJNBSYEcCKcw==
+X-Received: by 2002:a05:6214:4981:b0:921:9ed:ee6 with SMTP id 6a1803df08f44-92114dd0d06mr10225486d6.20.1794956088668;
+        Tue, 17 Nov 2026 14:54:48 -0800 (PST)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-92114d53b7fsm5495766d6.26.2026.11.17.14.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Nov 2026 14:54:48 -0800 (PST)
+Date: Tue, 17 Nov 2026 17:54:47 -0500
+Message-ID: <4356992ac4fb7876fb5759189ba4b492@paul-moore.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,97 +90,145 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261111005533.6436-10-toddfreed@meta.com> <179471270451.2199510.14795764193886368841@kernel.org>
-In-Reply-To: <179471270451.2199510.14795764193886368841@kernel.org>
-From: Todd Bert Freed <toddfreed@meta.com>
-Date: Tue, 17 Nov 2026 14:46:45 -0800
-X-Gm-Features: AclHuK_60Rb9y_3QFrgeQGfRKqUkPpfoiUhcDbbJP8UTYE_KV9Woof2OdSMKaMY
-Message-ID: <CADh2yMwGN64zEVedBhYbMDcsyPjSJ90tyPz7evJ6x7B9pAk3TQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 09/15] net/sched: add act_psp for psp
- transport mode
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, davem@davemloft.net, andrew+netdev@lunn.ch,
-        bjorn@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        daniel.zahka@gmail.com, donald.hunter@gmail.com, edumazet@kernel.org,
-        kuba@kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
-        john.fastabend@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, martin.lau@linux.dev, pabeni@redhat.com,
-        saeedm@nvidia.com, horms@kernel.org, tariqt@nvidia.com,
-        weiwan@google.com, willemdebruijn.kernel@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA5MCBTYWx0ZWRfXynEkttPrFSFr
- IPzaSqrtR314E1p9xXNMr28+FQ93hjSR87A4E107BiAH5DgSOvPaeakbsRuegH5o2Y5OKDe8d7m
- Br1JDzz2H1Hbg4iFjXo++0MdZsVQ0XQ=
-X-Proofpoint-GUID: -l_oCapvCNQDjATyQNt3tgfSuPhys9GG
-X-Authority-Analysis: v=2.4 cv=aLRlOr9m c=1 sm=1 tr=0 ts=6afcd962 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=JnKecZnUtZousrUlYMGU:22
- a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8 a=DHOIGP5XwAi4GC-hQCcA:9 a=QEXdDO2ut3YA:10
- a=uKXjsCUrEbL0IQVhDsJ9:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: -l_oCapvCNQDjATyQNt3tgfSuPhys9GG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA5MCBTYWx0ZWRfX/9kkdQojetdE
- EW1uv5Duv2+KNL+ZFpHceJk8RcC0/C3eSuS0hecL8/99rJc5T6zNFZjBzLS8u5Se01167B6stAv
- TtPRNOqdkCYgtiFEFvLkiTtqXcTrMQpP10282P6PscmLtE+WNCS3AJViRimgMiiRnM9U4yUN7mZ
- ommV4WI8NnQZxUhFsYtV8nDXRNPKiF6dpsrRL4Rkp1FDFG0kCmK4nAZCRe+CbU+wDjg2K7UI9Wh
- 3Mba2uidA0oyR0JbuFknZngoZvuEw9ApBtLlocbJb9wiBlPEnDeqbNLJC2gjDsiXwz3szvB6t0c
- lZjvEvJwmxnm3sc8mLvfeOiH6gi8q5S9jkOUbDstKdhcLcvVFOpN6h5/zseLZq5kKvMGolge+i2
- XdG0jV75hm5vCUDbUI7iTGItsp6VuBP59n+DgJuW8tQCGkgZGRmNiOa+pB7vhT2CqEUzXCqUQFY
- f7nz+/SorZewpPKdOzw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-17_05,2026-11-16_01,2025-10-01_01
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20261117_1552/pstg-lib:20261117_1552/pstg-pwork:20261117_1552
+From: Paul Moore <paul@paul-moore.com>
+To: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
+	Christian Brauner <brauner@kernel.org>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	=?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>, 
+	Jens Wiklander <jenswi@kernel.org>, Sumit Garg <sumit.garg@kernel.org>, 
+	Philipp Stanner <phasta@kernel.org>
+Cc: airlied@gmail.com, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, op-tee@lists.trustedfirmware.org, Albert Esteve <aesteve@redhat.com>, echanude@redhat.com, mripard@kernel.org
+Subject: Re: [PATCH v5 0/8] memcg: dma-buf cgroup accounting and charge
+ transfer
+References: <20261117-v2_20230123_tjmercier_google_com-v5-0-1ce975f2a9ad@redhat.com>
+In-Reply-To: <20261117-v2_20230123_tjmercier_google_com-v5-0-1ce975f2a9ad@redhat.com>
 
-> [Severity: Medium]
-> Can the METADATA_PSP dst and skb->decrypted get separated after this
-> point?
->
-> The commit message relies on skb->decrypted as the backstop: "on egress,
-> encap sets skb->decrypted, so that sk_validate_xmit_skb() drops the packet
-> if it loses the METADATA_PSP dst on the way". The egress to ingress guards
-> in mirred and bpf also check only the decrypted bit:
->
-> One path where this happens, on a non-PSP netdev's clsact egress:
->
->   act_ct (defrag, sets tc_skb_cb(skb)->mru)
->   -> psp encap (the reassembled packet is not a fragment, so it is accepted)
->   -> mirred egress redirect to the PSP netdev
->
-> tcf_dev_queue_xmit()
->   sch_frag_xmit_hook()
->     sch_fragment()
->       ip_do_fragment(net, skb->sk, skb, sch_frag_xmit)
->
-> sch_frag_xmit() then puts the original dst back on each fragment:
->
->         __skb_dst_copy(skb, data->dst);
->
-> As a result, every fragment carries the association but has
-> decrypted == 0.
+On Nov 17, 2026 Albert Esteve <aesteve@redhat.com> wrote:
+> 
+> Shared-memory allocator services (e.g., Android's gralloc)
+> allocate dma-bufs on behalf of client processes in different
+> cgroups. Today those allocations are charged to the allocator's
+> own cgroup, leaving client cgroups with no visibility into their
+> actual memory consumption and defeating resource limits.
+> 
+> This series adds memory cgroup accounting for dma-buf allocations,
+> building on T.J. Mercier's earlier series [1] and incorporating
+> feedback from previous versions and LPC discussions [2].
+> 
+> Patch 1 introduces the MEMCG_DMABUF stat and the
+> obj_cgroup_reserve_dmabuf()/obj_cgroup_cancel_dmabuf() and
+> mem_cgroup_commit_dmabuf()/mem_cgroup_uncharge_dmabuf() helpers
+> in mm/memcontrol.c
+> 
+> Patch 2 wires up the charging policy: dma_buf_export() stores
+> exp_info.objcg and updates the stat, a new charge_fd field in
+> DMA_HEAP_IOCTL_ALLOC accepts a pidfd or cgroupfd to identify
+> the target cgroup, and __GFP_ACCOUNT is removed from system-heap
+> allocations to avoid double counting.
+> 
+> Patch 3 adds DMA_BUF_IOCTL_XFER_CHARGE, a general ioctl on any
+> dma-buf fd to transfer charges post-allocation. This covers the
+> double-hop allocator case (SurfaceFlinger -> gralloc -> kernel)
+> and works for buffers from any exporter that opts in. Charging
+> is gated by dmabuf->objcg being set at export time, ensuring that
+> transfer is only applied for buffers backed by system memory where
+> size reflects actual bytes. If the receiving cgroup lacks capacity
+> for the charge, the ioctl returns -ENOMEM and the original charge
+> is preserved.
+> 
+> Patches 4-7 add access control for cross-cgroup charging. Letting
+> userspace decide who to charge needs to be a privileged operation
+> because it has material impact on OOM decision and resource limits.
+> Charging outside the caller's own memcg subtree requires
+> CAP_SYS_RESOURCE. On top of that, LSM hooks gate the two charge_fd
+> flavours: security_memcg_charge_task() gates the pidfd path (target
+> identified by task credentials) and security_memcg_charge_cgroup()
+> gates the cgroupfd path (target identified by cgroup directory label),
+> with SELinux implementations using process2:charge_to and
+> cgroup:charge_to permissions.
 
-The fragment path is handled by "net: don't fragment decrypted skbs" in the
-net series,
+I'm probably misunderstanding the description here, but in both cases
+(the pidfd or cgroupfd case), ultimately the cgroup is charged, yes?  In
+the cgroupfd case it is more direct, but in the pidfd case it is still
+the cgroup associated with the process identified by pidfd, yes?
 
-https://lore.kernel.org/netdev/20261117203137.804424-4-toddfreed@meta.com
+If that's the case - and it very well may not be (!) - it probably makes
+more sense to combine the two SELinux access controls into one.  Yes, the
+LSM hooks and callbacks would likely need to be different due to the
+mechanics of it, but the permission check "cgroup/charge" could be the
+same.
 
-This causes the skbs to simply be dropped instead of being fragmented.
+> Patch 8 adds selftests. The tests and vmtest script were mostly
+> written by an LLM, closely following the style of the surrounding
+> tests and the virtme-ng setup. All code has been reviewed and tested.
 
-> Would it make sense to do one or more of the following?
->
-> - propagate decrypted in ip_copy_metadata() and ip6_copy_metadata()
+I think we need to have selinux-testsuite tests to go along with
+this, especially as this would be the first patchset to add cgroup
+controls.  Historically I've pushed back on piecemeal cgroup additions,
+pushing for some basic design of how to manage access controls for
+resource management first, but since evidently no one wants to do that,
+we really do need tests.
 
-Conceptually it makes sense. But because of the fix above, that would be
-dead code. Furthermore, they still couldn't be sent. skbs which are to be
-encrypted on tx (ktls, psp) need the L4 header, and non-initial fragments
-do not have it.
+https://github.com/SELinuxProject/selinux-testsuite
 
-> - also test skb_psp_md() in the mirred/bpf guards and in the cleartext
->   backstop
->
-> - have decap refuse packets that carry a METADATA_PSP dst
+> Known limitations:
+> 
+> - Single-owner model: a dma-buf carries one memcg charge regardless
+>   of how many processes share it.
 
-In both cases, these guards would be dead code.There's no way for these
-to happen once the fragment path is closed.
+Once again, I'm sure I'm misunderstanding things, but are you saying
+that multiple cgroups can end up sharing the same dma-buf despite
+only one of the cgroups taking the accounting hit?
 
--Todd
+Hopefully the charged cgroup is deterministic?
+
+> - Only memcg accounting. CMA heaps would additionally need dmem
+>   controller integration.
+
+Do you have a rough idea of how that would work?  I ask only because I'm
+interested in seeing if that would require an additional LSM hook or if
+there is some way we could leverage the same hook(s) used here.
+
+> - If a transfer of an uncharged buffer fails, the buffer remains
+>   charged to the original cgroup. The allocator (userspace) is
+>   expected to handle this (retry, free, ...).
+> - The LSM hooks are intentionally narrow. Broader cgroup access controls
+>   (e.g. for the memfd/kexec handover case [2]) could be a separate effort
+>   reusing the same pattern.
+> - Only system heap sets exp_info.objcg today. Other exporters
+>   (DRM, V4L2, etc.) can opt in by setting it, but are not
+>   covered by this series.
+> - Related to the above: lazy backing-store allocation is not supported.
+>   This can be extended later, e.g., by adding a flag on the dma-buf
+>   struct for explicitly marking when memory is committed.
+
+Similar to the CMA case, any rough ideas on what this would look like?
+
+> Note on TTM/GPU accounting [3]: that effort charges system memory
+> allocated for GPU buffers per page, with its own stats (gpu_active
+> and gpu_reclaim). This series charges at the dma-buf level, for
+> memory with no memory.stat category of its own; exporters whose
+> memory is already charged by their allocator must not opt in, so
+> the two do not overlap.
+> 
+> [1] https://lore.kernel.org/cgroups/20230109213809.418135-1-tjmercier@google.com/
+> [2] https://lpc.events/event/20/contributions/2416/
+> [3] https://lore.kernel.org/all/20260706052330.1110909-1-airlied@gmail.com/
+> 
+> Signed-off-by: Albert Esteve <aesteve@redhat.com>
+
+--
+paul-moore.com
