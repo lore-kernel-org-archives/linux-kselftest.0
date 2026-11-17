@@ -1,84 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.214
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794907780;
-	b=ef7wV5jRQf3tUxqltyibsCwpPRFo4h8w7/VFnceY1dE7te06V5DH6yD5iUzINQ4Vhu5d
-	 EmZiq+gvBOQY2tDjwX+l0t1nEqdAvRMxqh3bu5Rj/zC3Zd6y/Xvl/x5OiGmds9oS2HdHT
-	 UhTw0APm/19DdNeCrG8EWxA8suaPDd51zwRjJ4O1B0dGyq9JIaknuiWVr3EHq/fJHbdzt
-	 /XQ8C+RZ0QlaLcPfLEoTqwBKotQwV153DSM66LmJBiheNdOwHVGz/4DR70VhLoQ4wQ5Ov
-	 65TuJ1mZYZqjdL5tqhEdXl0YhbYvKcEm3+O2z6L2Kbu7bJSPcSUhemJ4JgR1xzg8rUQ==
+	t=1794908760;
+	b=vo4oheZ272+g/CBpJD48qqpwaB2js05MThhWEjAQNr4tG+aBiCirb+HxFARZNVy6mLkG
+	 m+iqUplODww78uRcbXVVq3znboQYdaVG6ECLwGNJ97XlPyxsgIOa40FMHZdngeIUwh33i
+	 m13NgxVOPZetT8KD73MZaDy0v1/bl8UEV/xtwpIZqqpPW0ur6yUex1dz16eJkol9SuUl6
+	 F1tUPU2fRrfXqHg5ZyKhwuT0hIbtYKiUM3SYnjqahjPizLbsS6DVTTOmLCxKbDcjqtn/w
+	 3ahBXlI1eO8c/xaC4Pr+XGuXJaT971h3f4sDaWXllJhzGSqao7Y+/6Q1JQR4q8BDtQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794907780;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=xqQWfWKatMYIK2o9eLxPURKMr0Gqkug9p556vmmLLro=;
-	b=3UgUqx0h3TaRMy3c5ET3QCeC+kkhSNbZlvEa620VAb2bwRtpz42DWSU6UdoGjpLIrYYO
-	 TCYYZsM7k43sKjg5fE3ozbTiQj6/3/WnfZhvTszLHYAiXlUNZCUJQW4b5YQqS2WMcqHg2
-	 lJamQ6x9qItS0QvlI/D/YbW+G7vsaUubKcGQCAKmL1LDLhsmZ/i8XKUCrSRb+11Lqlwjy
-	 25Vc+kO8oOWkoaEy8bQlClrBFsPvDsy65mz82InevTIe00iK0MbNhm6WI+bTuPltfG5A7
-	 Mib/iQQCX30VrHxat0lPwe5E4XqOJpsDmxKVyoTPFGJS6OXYZJzvYp5swP/eFf59qxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794908760;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=AQAqYl2tn6009DL8HqBJOMfPKmQERaYIFx8LZttnag8=;
+	b=wJc9d9BE8I2rPYDc20bvoeIu2tckjW9NwFW1d8uqsy819dm22dcX5lwfDL7LpzJgguex
+	 Wwk+VOcxNgg5AFyZ/DPSvae/ieMuZ+kFZQM/TECH9ki5t4YTfWSexORkhSLkdFB0xIRwX
+	 XBjXibqEpSJXv0NRDe1ZzrGB6gyjQilrl96N3HtMP4UILQl/nC5IWBFBU+W+M9Lw8iJ3J
+	 fxWTefEHSI/G9czCVmLWgDgdtKSmpZ2EjaPOL2+0ylG02j/QWae4f4DzZke8Boz9cBZD/
+	 +TwEGARsmHVYIuTt7jnpjUKz/4aauzZUNcLxa+mznTXezJXX0vPy51VPHik8VIapRqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=corp.free.fr;
-	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=Sj+fDnbN;
-	arc=none smtp.remote-ip=212.27.60.169
-Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sK++JJdW;
+	arc=none smtp.remote-ip=95.215.58.214
+Received: from mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653C460A2623;
-	Tue, 17 Nov 2026 09:29:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 653C460A2623
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9EA0606A32A
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 09:45:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9EA0606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=Sj+fDnbN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1794907764; bh=qPmG8P+hFAtTUxkbaEcSp1PyPgXZo0DXS68/FvOLOG8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Sj+fDnbNzmtSvk5xqSC3Y8E9IhXqSNQk6YlG3JZSdyb5InDNl19tyx/SqnCjWcCno
-	 PvQ0YdWlio/UH+c78gRkKf5HTpMBjiuaO1IiMofsrs5dYp/dEoeHnSAIpEEKE94Jnd
-	 y0XZdKH+uGHgXJSDboluV4yL87IuEE2uz1O5dosrnEaWAO3riQH96jpTCyi/IXtg4w
-	 xv8x90TN/ycoAFOdGNaI0NZmIT97xHWBXxJW7Fy8EPzHUgzo6LxssneAnqphEM35zw
-	 jgK67lwL7GSmQ0Fd7/4/E8iy2TAesTZyd1cX/va0PCelb36f7B3iKxL7xWgICora5S
-	 jOx1OJGdSxXLQ==
-Received: from lnxos-dev.home (82-66-150-212.subs.proxad.net [82.66.150.212])
-	by rcs.proxad.net (Postfix) with ESMTPSA id 8CADB44C0B5A;
-	Tue, 17 Nov 2026 10:29:23 +0100 (CET)
-From: Alexandre Cassen <acassen@corp.free.fr>
-To: Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Potnuri Bharat Teja <bharat@chelsio.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sK++JJdW
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=eNKitI6OumQU1ILYmuf2OVKQGpBdNX+qex8fxTVDt9Y=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794908758; v=1; x=1795513558;
+ b=sK++JJdWVLVl0CCpvK0ISou9FM6hepE/mJvPI1cJ0sZhOfrLeOEwH7mqYVDW1w4oevDhrxNe
+ E31HXe1kSDO5PtBNsO6aW1okDo/009j7UnzjMM6wT1D+u3+m0MUTtph+ZIFLDZuHLJToIbvgtzT
+ lDtVeq/ezpYzoBFYU9cmRV4I=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id dac5996b5fb42819;
+	Tue, 17 Nov 2026 09:45:57 +0000
+X-Mizu-Trace-ID: dac5996b5fb42819
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	John Fastabend <john.fastabend@gmail.com>,
+	Michal Luczaj <mhal@rbox.co>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
 	linux-kselftest@vger.kernel.org,
-	oss-drivers@corigine.com
-Subject: [PATCH net-next v2 04/10] net/mlx5e: TC, refuse a tunnel key wider than the VNI
-Date: Tue, 17 Nov 2026 10:29:07 +0100
-Message-ID: <20261117092915.255194-5-acassen@corp.free.fr>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v1] selftests/bpf: Fix CO-RE relocation of anonymous unions for bpf-gcc
+Date: Tue, 17 Nov 2026 17:45:38 +0800
+Message-ID: <20261117094544.148437-1-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261117092915.255194-1-acassen@corp.free.fr>
-References: <20261117092915.255194-1-acassen@corp.free.fr>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,78 +81,59 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-VXLAN and GENEVE flows truncate the key and the mask of enc_key_id to a 24
-bit VNI. An exact key above bit 23 already selects the wrong VNI. Flower
-is about to accept partial masks. A mask that only covers bits above 23
-would then match any VNI. Refuse a key that no VNI can match. GRE keeps
-its 32 bit key.
+bpf-gcc fails to load test_trace_iter_unix:
 
-Found by an AI code review agent while auditing the users of enc_key_id.
-Confirmed by code inspection. The wrong match was not triggered. Tested
-on ConnectX-7 with firmware 28.48.1000 in switchdev mode on VXLAN, GENEVE
-and gretap devices.
+  Error: #766/6 verifier_sockmap_mutate/test_trace_iter_unix
+  libbpf: elf: skipping section(3) .data (size 0)
+  libbpf: elf: skipping unrecognized data section(18) .comment
+  run_subtest:PASS:obj_open_mem 0 nsec
+  libbpf: prog 'test_trace_iter_unix': relo #0: insn #0 (LDX/ST/STX) accesses field incorrectly. ...
+  libbpf: prog 'test_trace_iter_unix': BPF program load failed: -EINVAL
+  libbpf: prog 'test_trace_iter_unix': failed to load: -EINVAL
+  libbpf: failed to load object 'verifier_sockmap_mutate'
+  run_subtest:PASS:unexpected_load_success 0 nsec
+  validate_msgs:FAIL:1014 expect_msg
+  VERIFIER LOG:
+  =============
+  0: R1=ctx() R10=fp0
+  ;  @ verifier_sockmap_mutate.c:124
+  0: <invalid CO-RE relocation>
+  failed to resolve CO-RE relocation <byte_off> [4] struct bpf_iter__unix (0:0 @ offset 0)
+  processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+  =============
+  EXPECTED   SUBSTR: 'cannot update sockmap in this context'
 
-Fixes: bbd00f7e2349 ("net/mlx5e: Add TC tunnel release action for SRIOV offloads")
-Fixes: 9272e3df3023 ("net/mlx5e: Geneve, Add support for encap/decap flows offload")
-Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
+GCC only applies preserve_access_index to types that carry the attribute
+themselves. The anonymous union holding the sock pointer doesn't, so the
+CO-RE access stops at the union ("0:0") instead of reaching the pointer
+("0:0:0"), and libbpf rejects the relocation. Mark the unions too.
+
+Fixes: e16c83fa764f ("selftests/bpf: Add negative test for sockmap update from non-sockmap iter")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h       | 3 +++
- .../net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c    | 8 ++++++++
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c | 8 ++++++++
- 3 files changed, 19 insertions(+)
+ tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h
-index 6873c1201803..d7c778bbb2ef 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h
-@@ -13,6 +13,9 @@
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
+index 1516fe1524bb..68b1a5323470 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
+@@ -16,13 +16,13 @@ struct sock {
+ struct bpf_iter__sockmap {
+ 	union {
+ 		struct sock *sk;
+-	};
++	} __attribute__((preserve_access_index));
+ } __attribute__((preserve_access_index));
  
- #ifdef CONFIG_MLX5_ESWITCH
+ struct bpf_iter__unix {
+ 	union {
+ 		struct sock *unix_sk;
+-	};
++	} __attribute__((preserve_access_index));
+ } __attribute__((preserve_access_index));
  
-+/* VXLAN and GENEVE match registers hold a 24 bit VNI */
-+#define MLX5E_TC_TUN_N_VNI BIT(24)
-+
- enum {
- 	MLX5E_TC_TUNNEL_TYPE_UNKNOWN,
- 	MLX5E_TC_TUNNEL_TYPE_VXLAN,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c
-index bf969212cc77..ee04fcdca6ff 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c
-@@ -141,6 +141,14 @@ static int mlx5e_tc_tun_parse_geneve_vni(struct mlx5e_priv *priv,
- 	if (!enc_keyid.mask->keyid)
- 		return 0;
- 
-+	if (be32_to_cpu(enc_keyid.key->keyid) >= MLX5E_TC_TUN_N_VNI) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Tunnel key does not fit the 24 bit VNI");
-+		netdev_warn(priv->netdev,
-+			    "Tunnel key does not fit the 24 bit VNI\n");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	if (!MLX5_CAP_ESW_FLOWTABLE_FDB(priv->mdev, ft_field_support.outer_geneve_vni)) {
- 		NL_SET_ERR_MSG_MOD(extack, "Matching on GENEVE VNI is not supported");
- 		netdev_warn(priv->netdev, "Matching on GENEVE VNI is not supported\n");
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-index 467fbe43b89e..33911e72d20d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-@@ -173,6 +173,14 @@ static int mlx5e_tc_tun_parse_vxlan(struct mlx5e_priv *priv,
- 	if (!enc_keyid.mask->keyid)
- 		return 0;
- 
-+	if (be32_to_cpu(enc_keyid.key->keyid) >= MLX5E_TC_TUN_N_VNI) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Tunnel key does not fit the 24 bit VNI");
-+		netdev_warn(priv->netdev,
-+			    "Tunnel key does not fit the 24 bit VNI\n");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_OPTS)) {
- 		int err;
- 
+ struct {
 -- 
 2.43.0
 
