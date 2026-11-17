@@ -1,72 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794891183;
-	b=UwFN59/p9rpRC+jfmMqr7uUUWmTaTLikxGvAr6Bj4lyPD91ZO/uM1gzL3dr6ordrtKYv
-	 VePCO9bkwAeBBGPO37FcdBKW4uNRv3ZdkKk83KVCUY49uXPLsVEPMDXlgnXTN+5iVAT8h
-	 IK5j0Yi6Qr238zMj6UmifTPbdOmKFPiS4MyDTaBHVB0JlU2iUIhkl5z6mJUVGjlh2+NBn
-	 C53eDpLV1oibzZ/26aE8Mr2PA/Digo5YA0oKGVNh8TuVldcvTLnVp8y40rRGBhq1Yccfw
-	 W0B5TapJpMY/AblwUPO/LVR0YMIF7CH9ONtS3QbAi36LVH6VmgUCerf13E97nOScucg==
+	t=1794891186;
+	b=QvQ4bn54zf6DMXRma+p1daVf4iaVbGyC2lmGeuTc07oPPR5QrGFaQxhfhzvMoQNsA9JF
+	 u01u2c8oFJaOemzsWOt0b69EY9iM/Kj/A4SJMfU3MEJDDRZFHUPbIpGQxNwaj8AZ7MWJv
+	 Y4i7vqWw4sHvKEzzbMrbl2LEq37KAVaSUQZQ9UDPcfitTgh2Gw+s2BjEiaVqnZJihR8XM
+	 A5Q83YNmxrReo19MEG/wt1VZJIkR2HeEr5k6s9aB84bQESEXJw+9OQORZrUViu5J/e6vE
+	 PXuAdsAf/M/Rxobv8I/GOncBz7zvf6c6cz6MsfdeB/sH1ss/AHlpdLIs7eTCwKkqyQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794891183;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794891186;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=uYOWyoTwdGB1zBQKTb94yS19n4vxEQPiG111QSznMfk=;
-	b=yryJ/h58TAcXmeKNycc7Rc0XBKe6dBcOEuKj4Zl8b+mtbsh94l4CiCJLILm0GGHQXxmF
-	 bxFHOgmuUTy3QbGAD66xqEqoyWGh8SjRaguFiAMrJfkvINo+2shYuH+Hn4TkkBfbDzVnr
-	 I/A7scYclNIvZr7Q8kQ5hB84DWDz4LTT39SCHlLwMBEeDu2pQKzlF+Dw0uAhwsgJjyiyA
-	 3mUYYOZL0A89jZ18kA0hIh0pL6SCp8vU2LyVhailjoMrXVzzkFRO5TlV/CZI7wmkFtlcP
-	 GkHZt8Hwlukrj2oDe+uC0p7PS+CC2FBQWlNOH95JN/dm+DA92QtpZpgwaxYZV6YyFSA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=fN22KBOTScvrwmw++3dnOESml/CWiaCxPlZ9R+mGDfI=;
+	b=QkPhSwF4UTdVSgPeOaVS5xVH52dtq4U3HWfIaZyl+58vU+vLw0WbrsKJazJsEjFLrhWg
+	 wFvJ2qliqaEyTuvN0Iy9O9cHFljMrvaMCoFFHoBcm0jPcwFFCHOIAssRNteHSTVt7V82h
+	 6gPtmJdEMoMycXKfzwWWJ5CAp/zNPA+h8eux47Z9EsO0RM50GcG46AqJK7gXlEoGO40Yx
+	 rUnQNRzd/2YwX9fvsrze7EnQXdRXTK5yCujemnqnJFjWCAF6dC4W4vhlh2CMK4rnO7KRA
+	 ggBGkUnm902D2VsJCE3cPI9HT8JK4HgWuKpO0Bb6tzz7uLcg7TpBPXkwJu3vVIZU7rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fLoJXj9U;
-	arc=none smtp.remote-ip=209.85.214.199
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=in6qnkgC;
+	arc=none smtp.remote-ip=209.85.215.199
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B7A606A32A
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:53:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1B7A606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBC6606A336
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:53:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FBC6606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fLoJXj9U
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2efda3bfec1so3054405ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:53:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=in6qnkgC
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cdd9fa2a558so4254241a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:53:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794891182; x=1795495982; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uYOWyoTwdGB1zBQKTb94yS19n4vxEQPiG111QSznMfk=;
-        b=fLoJXj9UEhu3Vmkbdkou3wYmEHIq6PzMgFNe/gen8xGRbE0bDpPg1AShDFe7A1rylb
-         LjYqBJ7Dvix1ae6a51qESzNgaowA123Jq7JSc8r5Af1v1UYVFrJJjoQ8OQo0VNv3RAv/
-         pWpA/En94uLZKLSXiJwu42hUqtI3UNmCo4mQOMears0B3IoRwL8L+Luzg61O7DyP5/nv
-         IVTsvt83yiF+F62fEgGEtRDKR4H7scIkJq49UimfiEC6ZH2VzGe+YhnXEylah5+tiYrN
-         XKHYVqU1WlethUqmQsJF4+X0BODRMf9dQ9ccLZ8fTg4R+hayrPkCiJMxGFj+vTucXZfb
-         PBRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794891182; x=1795495982;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1794891185; x=1795495985; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uYOWyoTwdGB1zBQKTb94yS19n4vxEQPiG111QSznMfk=;
-        b=C1fYoug0A2Fw0+2FObS37V4pPQWOUqSNtdwYcZNsWuXqz913alQNu48jF0XIKluTC8
-         TEajkfvxJflgxcKADMaP3vxRYmBbTMi3REb3o0DizfXaT/nLNwOggaML87bWyNnDYRjM
-         LKJzteAt4DsxsT2VNLqDHlmdtzdhd7RVHouc+PX7UrLQXsnc/GKd9fLe6zf3tzoApol4
-         L7r/tXOeoymczSnEiQ0n9EtC4R3xNxEQXIl8JjMD44VnFiQcsv4ZGnJX2Ru5QwRYLaaD
-         lgHzeJe6GWwelQc23X1saLiXwwX7/bzHs52jHBXFEvjbRrUcO2TanNNvBcvqrP+g2tSe
-         AxkQ==
-X-Forwarded-Encrypted: i=1; AL+hErEyoZQV2PkZf1MuqH1I9PbgVC3c8cvMFpMIHe7WnjzK0+O3LgLZe5tGLmR4ciipr8AboqimA07liddrpNw1AVU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9+3uDt3qYnRvG55u1Q8n9zRx6aIZ6qjrkgmwQxu/6ikKCf/VLp
-	kZvIYwse1UD3wbEpja7WG6UF4cBVgmZQy32YqprARWyfVtHIy8cICKudzMt7MqfavCMzfjoEDUZ
-	XE2zmhEdbi7kDEN6V7FZUP/mESw==
-X-Received: from plbjj10.prod.google.com ([2002:a17:903:48a:b0:2ea:7f9c:2ce])
+        bh=fN22KBOTScvrwmw++3dnOESml/CWiaCxPlZ9R+mGDfI=;
+        b=in6qnkgCY9elVezeHjtPo3lzsyuVBhxQMFlh+v/veDnqQqV8A7Unf5023qp94pHz0O
+         wGnBOKLLcofjnnHsMxufzS6qXrUPKXLBAO1+az4OTKoOrmgDNKEwPc0UmOSsVr+hK6Ea
+         3ub8U/TD0/jht+fuMucHa3Lah75zD0+WahGKiR5PiyESX/EzVZxL51on/ymtorBOv35i
+         rzAuNwkSRsbkocZIgk5UuwZp4m/3G8UwcHxNAmbUaD/sUkzxPfz3t7b9NvQNQ6XTQjXQ
+         BxdWemp4YkrYzYxnb2/BbGBTj+W9vgKWXNUo40IIY+XsjmUGrbvsCQKmuFE3Pq+lpPWr
+         RUhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794891185; x=1795495985;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fN22KBOTScvrwmw++3dnOESml/CWiaCxPlZ9R+mGDfI=;
+        b=0tBs8F2MDzzv284vz0KVoBX3KrEB/l57n21IhJjT3k090RW/psdLqaBsbBCiNjU8fK
+         C9siwOrZfqDkuWybg5Ebo6RVI0r0dn5A+WW03CIAdrWTbQaZ4PRBUg4pV2BQ7N6dLhOl
+         HgRDFRiAyk9f0SU7QyggZwprZcpkGZsoOVv1BHYF7iW3U4YngE5rjFQXF87q0y1wS+Xn
+         JuRLF34WcP+m/azLw9aByP33W/eBEVpzoFaDDWpWSODTnOMS4YFfgHXDzbnp3hMthVQN
+         yRNfRBhkWqWyIBsNkBdn8HbdzElGTNKjJZLsgDeuCCQW5jELG3127aZrBLfLveXwyLxU
+         hArg==
+X-Forwarded-Encrypted: i=1; AL+hErEFODre1yjhycqlkxTXdE78RpLr1MO44y+h4mI6X2He33XjLCE8+hEXIjM7SaqcVvm6wYHHeioCDgQrh5teIsI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/1IRRrXbnrL/uxXfXwUKtEEuNe5v98F/sU5QVf+UeTmIPB3SrG
+	CRwZRph4jQwWsqZTexKRtZUrKaOQeemGd6N9AIEJMjrvTFJ7phwxmmnDJ1KWw3l+sxc8bOmMdm2
+	XLv2SLCtdWoNSGeUjHEn5ye4yxw==
+X-Received: from pjrx15.prod.google.com ([2002:a17:90a:bc8f:b0:3b3:ad37:918c])
  (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:d4c9:b0:2ed:38c0:3328 with SMTP id d9443c01a7336-2ee0dac397dmr120063995ad.28.1794891181828;
- Mon, 16 Nov 2026 20:53:01 -0800 (PST)
-Date: Tue, 17 Nov 2026 04:52:52 +0000
+ 2002:a17:90b:380f:b0:3ab:e588:c29b with SMTP id 98e67ed59e1d1-3b1b0816e0dmr12919214a91.5.1794891184644;
+ Mon, 16 Nov 2026 20:53:04 -0800 (PST)
+Date: Tue, 17 Nov 2026 04:52:53 +0000
+In-Reply-To: <20261117045254.1048298-1-dylanbhatch@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,9 +79,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
+References: <20261117045254.1048298-1-dylanbhatch@google.com>
 X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261117045254.1048298-1-dylanbhatch@google.com>
-Subject: [PATCH 0/2] sched, livepatch: Fix transition stall for CPU-bound tasks
+Message-ID: <20261117045254.1048298-2-dylanbhatch@google.com>
+Subject: [PATCH 1/2] sched, livepatch: Fix transition stall for CPU-bound tasks
 From: Dylan Hatch <dylanbhatch@google.com>
 To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
 	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
@@ -94,16 +98,16 @@ Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis
 Content-Type: text/plain; charset="UTF-8"
 
 Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
-live-patching") moved klp_sched_try_switch() from _cond_resched() into
+live-patching") moved klp_sched_try_switch() from cond_resched() into
 __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
-This causes livepatch transitions to stall when CPU-bound kthreads or
-PF_USER_WORKER threads (such as vhost-<pid>) spin in a kernel loop with
-cond_resched():
+This causes livepatch transitions to stall when a CPU-bound kthread or
+PF_USER_WORKER thread (such as vhost-<pid>) spins in a kernel loop with
+cond_resched() for two reasons:
 
 1. A sole runnable task on a CPU (cfs_rq->nr_queued == 1) never has
    TIF_NEED_RESCHED set during sched_tick(), and wake_up_state(task,
    TASK_INTERRUPTIBLE) in klp_send_signals() is a no-op for a
-   TASK_RUNNING task. Because _cond_resched() is a no-op under
+   TASK_RUNNING kthread. Because _cond_resched() is a no-op under
    CONFIG_PREEMPTION=y, the task only enters __schedule(SM_PREEMPT) on
    return from interrupts via irqentry_exit_cond_resched() when
    TIF_NEED_RESCHED is set.
@@ -111,54 +115,80 @@ cond_resched():
    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
+   Livepatch safety in __schedule() is already guaranteed by
+   stack_trace_save_tsk_reliable() inside klp_check_stack().
 
-Patch 1 fixes both issues by dropping the TASK_FREEZABLE check from
-klp_sched_try_switch() (relying on stack_trace_save_tsk_reliable() in
-klp_check_stack()) and calling resched_curr(rq) in sched_tick() when
-klp_sched_need_resched() is true for the current task.
+Fix both issues by:
+- Removing the TASK_FREEZABLE check from klp_sched_try_switch() and
+  checking TIF_PATCH_PENDING inline via klp_sched_need_resched().
+- Calling resched_curr(rq) in sched_tick() when klp_sched_need_resched()
+  is true for the current task, ensuring CPU-bound tasks with a pending
+  livepatch enter __schedule() at the next timer tick.
 
-Patch 2 adds a livepatch kselftest (test-cond-resched.sh) that spawns
-kthreads spinning in a cpu_relax() + cond_resched_tasks_rcu_qs() loop
-and verifies that livepatch transitions complete without stalling.
+Note that when a CPU-bound task is the sole runnable task on its CPU,
+entering __schedule(SM_PREEMPT) from preempt_schedule_irq() leaves an
+in-kernel interrupt pt_regs frame on the stack during
+klp_sched_try_switch(). Completing the transition in that context
+requires arch_stack_walk_reliable() to support unwinding across
+in-kernel exception frames (as CONFIG_UNWINDER_ORC=y does on x86_64);
+configs and architectures whose reliable unwinder rejects in-kernel
+exception frames (x86 with CONFIG_FRAME_POINTER=y, arm64, powerpc, and
+s390) still require another runnable task to context-switch the spinning
+task out until exception-boundary reliable unwinding (e.g. via SFrame)
+is available.
 
-Note on reliable stacktraces across exception boundaries:
-Because _cond_resched() is a no-op under CONFIG_PREEMPTION=y, a sole
-runnable spinning kthread enters __schedule(SM_PREEMPT) from
-preempt_schedule_irq() with an in-kernel interrupt pt_regs frame on the
-stack. Switching the task in klp_sched_try_switch() therefore requires
-arch_stack_walk_reliable() to support unwinding across in-kernel
-exception frames. This works on x86_64 with CONFIG_UNWINDER_ORC=y, where
-test-cond-resched.sh passes with this series.
+Fixes: 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and live-patching")
+Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+---
+ include/linux/livepatch_sched.h | 13 +++++++++++--
+ kernel/sched/core.c             |  3 ++-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-On architectures or configurations where arch_stack_walk_reliable()
-currently rejects in-kernel exception frames (arm64, powerpc, s390, or
-x86 with CONFIG_FRAME_POINTER=y), test-cond-resched.sh exposes this
-limitation and will fail until exception-boundary unwinding is
-supported. On arm64, the test passes when combined with the proposed
-kernel SFrame unwinder series [1] or equivalent .eh_frame-derived
-unwind tables [2].
-
-This series is available on github: [3].
-
-Ref:
-[1]: https://lore.kernel.org/all/20261117020648.323464-1-dylanbhatch@google.com/
-[2]: https://lore.kernel.org/all/20261117043504.1021063-1-dylanbhatch@google.com/
-[3]: https://github.com/dylanbhatch/linux/tree/stall
-
-Dylan Hatch (2):
-  sched, livepatch: Fix transition stall for CPU-bound tasks
-  selftests/livepatch: Add cond_resched() kthread transition test
-
- include/linux/livepatch_sched.h               | 13 ++-
- kernel/sched/core.c                           |  3 +-
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../selftests/livepatch/test-cond-resched.sh  | 73 ++++++++++++++
- .../selftests/livepatch/test_modules/Makefile |  1 +
- .../test_modules/test_klp_cond_resched.c      | 94 +++++++++++++++++++
- 6 files changed, 183 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-cond-resched.sh
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
-
+diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
+index 065c185f27638..748b6012e2e06 100644
+--- a/include/linux/livepatch_sched.h
++++ b/include/linux/livepatch_sched.h
+@@ -11,15 +11,24 @@ void __klp_sched_try_switch(void);
+ 
+ DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
+ 
++static __always_inline bool klp_sched_need_resched(struct task_struct *curr)
++{
++	return static_branch_unlikely(&klp_sched_try_switch_key) &&
++	       unlikely(test_tsk_thread_flag(curr, TIF_PATCH_PENDING));
++}
++
+ static __always_inline void klp_sched_try_switch(struct task_struct *curr)
+ {
+-	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
+-	    READ_ONCE(curr->__state) & TASK_FREEZABLE)
++	if (klp_sched_need_resched(curr))
+ 		__klp_sched_try_switch();
+ }
+ 
+ #else /* !CONFIG_LIVEPATCH */
+ static inline void klp_sched_try_switch(struct task_struct *curr) {}
++static inline bool klp_sched_need_resched(struct task_struct *curr)
++{
++	return false;
++}
+ #endif /* CONFIG_LIVEPATCH */
+ 
+ #endif /* _LINUX_LIVEPATCH_SCHED_H_ */
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 04b62c16fa8ca..fcea9cea3edf1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5854,7 +5854,8 @@ void sched_tick(void)
+ 	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
+ 	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
+ 
+-	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
++	if ((dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY)) ||
++	    klp_sched_need_resched(curr))
+ 		resched_curr(rq);
+ 
+ 	donor->sched_class->task_tick(rq, donor, 0);
 -- 
 2.56.0.679.gc527c65306-goog
 
