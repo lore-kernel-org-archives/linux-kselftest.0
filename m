@@ -1,70 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794934160;
-	b=w23blO+/ZUdfvjrzy74VAYXj281IvrJpN3RCiDDb3PXtZbDLRh2hxmQ9vZsddbwbCHsM
-	 PH2vHqntXBfwYLxEfj3AOnIVtgK+eWLsu6dhsHdK8XA3ndj7xdmHOtGIpwIpOXZoAtvzq
-	 OaBT/ci31k6IKVkxQtTfbAJaYk9/YnxgRx3eemDRcOlIlxkp3rT4HYbCXF9VQwlU3JA8/
-	 UU63OBLQPqRjb0n+8rsSSxhaOkd8CWQCJnx4XaGzYdUEX8psQ24r8oErkvpYwyP4cQwuU
-	 BPYEOrHAkIaN7AMez4RcQDRXFUSsSkwAUYPer2Qs/eb2m9S8OskkQBTvFrQCmotNfeg==
+	t=1794934489;
+	b=aIM+qsI1MO+4avhQAGY3uwZT94RHpQ6OrDK+SYSAz5suP21US9ORBJEDf1djNZqkjvoN
+	 eYdgj4CWfgypaKVBIn5bmCs0duLB3/QBo7NOiiSFTBHLSdlun3LLi5r3rAMI1K8MGVO7Y
+	 dqY7+72PJ90z3uXe4u38v2kQa6XR0pb5tmkU1a8F2kMu8rMAmi5mQ2WGN4kcsh0O9gvaB
+	 4nV27XZZxq8H9ipvEpH6TDPlzHEzjXNzhMGfCmKNwU9akA5Sqw75cBzA3CO94wRylzykj
+	 DnyKCutalj0wVGxomd2M1eJl2Bi7Sr4yDXCGJ6k7eyBoucNjhs5ZdztnMUGxGRwq/Tg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794934160;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Scl/VifAjlxPDoAR0t/AhiRabE59EDiCI7/IkrSw3+M=;
-	b=hlvW8hUtOdCcFHxnnG/efV0iZyMTx/1kV/YPNzhjf4Q2kohU643zuDzeNXH5geZY32n1
-	 fttrzGFsxZcsYMyyUQ02pl4dTFHuu6M8NFZ0sjWpSRJ8BuRrHMKffBdpFmowxLv7IrW43
-	 ZMjg2ZLOEKep4suMhlPnDYPMIUeePuNrI2f7V9nlEaPkqQpl+7TBfZtKUqHEphQPEk3EP
-	 JiMvnfDUMPMqWblTHq9SHmR2T6bo38IcHidYjju8UF46Hg4igqngZ7xPkkZEjFsRIsXFY
-	 zrLbqQa9vcnAC5YsGavNVXdJstCc4Ghu+nUrIZnNh211wV/BMX6G8bTUxVis91h9oVw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794934489;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
+	 X-Scanned-By;
+	bh=CkKLhtnqbVqX+zHwbFhSKHBuVVeu6ZYa3DYw5fokX68=;
+	b=ysFuGT0nRp2NAP4vKel6e1jOxdUBRRVFCiHEqf/THq5F5NWwMUzHmyOn5Ryt27DKk/ua
+	 wIqYjxBh6WTicsL29XJByeqBOBzSyN+L2HzH7atcvsmSD/e02o3LzMu0q4I8NpBfLxm1+
+	 p+UmLVEBd8oaJCxo3CPKSzqVlaiU1UWqK3MM9IGcJ/O+/mTFIaZc2LBSrY1Moef5rajss
+	 GPndGx6UnFicQ/5teOHfIwrS6osmXOpf2D/Z8208CZN8SBMVEzaVb8uo/0HCAd+O/0fdv
+	 7ySG+wlgJgJHbtxSMBP57pL+S0GaBfBJYs3X0Z0IXHWFV5NxqfmnMp7I70hvFYkg3pA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aIeRJ75E;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JsMsoXM1;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A17606A31C;
-	Tue, 17 Nov 2026 16:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD52606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 16:54:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AD52606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aIeRJ75E
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F431F000CB;
-	Tue, 17 Nov 2026 16:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794934159;
-	bh=Scl/VifAjlxPDoAR0t/AhiRabE59EDiCI7/IkrSw3+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=aIeRJ75E+9ST4vOLKED9LJSC1b+MQ6CDTXIHOyZ4D9fc7EvV6clSf1nXJKIyXN3HO
-	 zk8sfd0ETNlAz+2/ewTdVDDUImFZFd2CrtllN00E5B/eFnhnRNeKJ8N6SXaiOosc2N
-	 wKZof/4+J3uj2rfto011U4mCJJCpxP8RWdfOITsuOsMLA3crXqexX1mSsQ0/w2M6Bp
-	 LyiKPPVX+uZrrbpvaWWe92vRfBL6lf39Syd7GWv8j2iCeWBZXvkOG9hKsSuq7OiI5p
-	 8MT3yswJXkDCu1RdrKuyvFEucdhYmxccv7CIOyCD9L+QizogYZbQwMcw/DCPeHAst/
-	 ocY+AxXGYimnQ==
-Date: Tue, 17 Nov 2026 17:49:11 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: "Hallgrimur H. Gunnarsson" <halg@google.com>
-Cc: Andy Lutomirski <luto@amacapital.net>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Paul Moore <paul@paul-moore.com>, 
-	Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
-	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Jann Horn <jannh@google.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
-Message-ID: <20261117-grabung-sowie-symmetrie-41925e0f1b84@brauner>
-References: <20261028221705.3915340-1-halg@google.com>
- <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
- <20261106-befreien-addieren-eislauf-e09212803534@brauner>
- <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
- <avM41a80aig2de-R@google.com>
- <20261111-behagen-faktisch-entgegen-e2e714373895@brauner>
- <avsymRBSulVZfouF@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JsMsoXM1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794934489;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CkKLhtnqbVqX+zHwbFhSKHBuVVeu6ZYa3DYw5fokX68=;
+	b=JsMsoXM1fWm35TZYmduhQobXmOO3k+8CxVfbbOz9ctG9fi+cO9vFz8aegXNi4fp0q8/V6L
+	yphy0Yd+DDNbXkEFNKYIT26Y8Ndr1GlS+JhLQcdagbHg/m1ABxEEfRTdzAhFR54lXK/5vy
+	nVqoXctunnMafqHEJeYf8lVc3wKl/Bc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-62-fB3idbrNOmKXizt0_vf9cg-1; Tue,
+ 17 Nov 2026 11:54:44 -0500
+X-MC-Unique: fB3idbrNOmKXizt0_vf9cg-1
+X-Mimecast-MFC-AGG-ID: fB3idbrNOmKXizt0_vf9cg_1794934481
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 16238195608F;
+	Tue, 17 Nov 2026 16:54:41 +0000 (UTC)
+Received: from onestero-thinkpadp1gen7.tpbc.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 4D02D3001DAD;
+	Tue, 17 Nov 2026 16:54:35 +0000 (UTC)
+Received: by onestero-thinkpadp1gen7.tpbc.csb (nbSMTP-1.00) for uid 13628
+	oleg@redhat.com; Tue, 17 Nov 2026 17:54:40 +0100 (CET)
+Date: Tue, 17 Nov 2026 17:54:34 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Renzo Davoli <renzo@cs.unibo.it>, Kees Cook <kees@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Davide Berardi <berardi.dav@gmail.com>,
+	Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>, Thomas Gleixner <tglx@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, "Dmitry V . Levin" <ldv@strace.io>,
+	Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, strace-devel@lists.strace.io
+Subject: Re: [PATCH v11 1/3] seccomp: let the tracer skip a syscall
+ independently of its number
+Message-ID: <avyGylgRmpAHan9r@redhat.com>
+References: <20261114181923.370930-1-renzo@cs.unibo.it>
+ <20261114181923.370930-2-renzo@cs.unibo.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,22 +94,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <avsymRBSulVZfouF@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261114181923.370930-2-renzo@cs.unibo.it>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Mon, Nov 16, 2026 at 04:43:05PM +0000, Hallgrimur H. Gunnarsson wrote:
-> Quick question on AUDIT_CAPSET: today it's only emitted on capset() and
-> only logs capability sets that capset() can modify (explicitly or
-> implicitly like cap_ambient). It does not include cap_bset which is
-> modified via prctl(). Since capset() never modifies cap_userns either,
-> does it make sense to treat it like cap_bset and leave it out of
-> AUDIT_CAPSET, relying on prctl auditing instead?
+On 11/14, Renzo Davoli wrote:
+>
+> Add a per-task flag which the tracer sets with
+> seccomp_ptrace_skip_syscall() while the tracee is stopped at the
+> PTRACE_EVENT_SECCOMP stop, after it has set the return value.  When the
+> tracee resumes, seccomp skips the system call like for
+> SECCOMP_RET_ERRNO, which every architecture already handles without
+> touching the return value.
+>
+> The flag is cleared by the tracee before the stop and written by the
+> tracer only while the tracee is stopped, so it needs no locking: the
+> wake-up of the tracee orders it like the registers written by the
+> tracer.
+>
+> The next patch uses this in PTRACE_SET_SYSCALL_INFO.
+>
+> Suggested-by: Michal Suchánek <msuchanek@suse.de>
+> Assisted-by: claude-opus-5-5
+> Signed-off-by: Renzo Davoli <renzo@cs.unibo.it>
 
-Fine by me as well.
+I am not comfortable to review this change ;) Kees, can you take a look?
 
-> Thanks for the feedback and the detailed proposal. It looks good to me
-> and nicely ties everything together. I'll prepare a V2 for review based
-> on this hybrid design.
+But it LGTM. So FWIW
 
-Sounds good.
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+
+
+
+(As for the new new member in struct seccomp... we can probably avoid it
+ if you don't like it, but .ptrace_skip looks like the simplest solution
+ for the start)
+
