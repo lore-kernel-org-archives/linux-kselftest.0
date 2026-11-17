@@ -1,71 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.78
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794900413;
-	b=e4laReU6yat2XuaQuiujfIVZkz3MY/bPddaXzV3aXCqfUfkBkDHo+hl78UOl3Mi4UDav
-	 3sekqCJpodYKQGfO10bJB7S85EGh7jpcGSk4XYPBO8xNzxQDaUg+m8IWhoHm6b2NoYmxt
-	 UYtFTTIBKxJZp/xAjeRh7YcPSNEudTFjY1m1/Nuo96Gga61t2traoPz+NQeGFOFOHszdZ
-	 PnSavUhgexm5qoyPuLcjwySvbWxRpwkSHT27IPQBfPcCYRvhEwUUAvY5Pilk09fKFR0p7
-	 3lm1zKADCxdvmCkthtAl3n3XkpDIWxdcYOuqNFzJHhZmuUjhp4XHIBQKIBzsSKeqcAw==
+	t=1794901124;
+	b=GA2CZW9tIQMaLugrrKgokA8vfDnMKIMq95oAFTI/XIsYWbrxIW07Dh6b0JFNTlc7GXym
+	 ZWwxbhzvoYOQvxe2rSMAggDKrrIunlg6wVHSn/Wf3m8TXom+OjE1FXKn+bT7YXO/SYkal
+	 Wkbg20PSnQAKI1YcUK3sxnSo4ja0Lkq49y5kDwLfdcqPncPdlWPiDdC0LRnf06pOcY2fN
+	 hVikKvZIzBD2vf9aZa/mLDvhTgav81hN5FsPo8xyQ6rPocDVf8yB+8+AIreRwu6jlur57
+	 FapzWyIKn9arXy0Au9seyjrtyAgOzE36oZvW7vBsVt1SQ81Z9HEuuza3eSuE/lV9R1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794900413;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=MNmh1Reg5Czo+a3LVsCK+8As4ZT63TJjE//xLVoIjok=;
-	b=c7UiDP1xVpA0jPtbFaH3uZb0/9uLXWz/csY9WdJaoeYwLKe2vxlBbaVEJcNEabdTg6hy
-	 C9wxKWQj6UAZCxrpy53sWrD6FdjMHA3bbecre2gkZLbs+LOcppeShAxj1lYJorJTKqS+j
-	 IyyI0a1gThf5HLIQWr1wQSvPPvnaDji+IziPM3tH7iNs7rFf5ndxZTUBbAR7iWI83oZwy
-	 LVuh7NzmkGIqVWwyK9H0BbCPEdakUFFfsL6Ul9CIl6CCBz38C+ZixuALCz+HCbNQRZpMO
-	 qAt1AAE9FkEId8ihRlN/iLWgyutWUcveynUV9E7pkQdSYOlkkLjJJD9kSi4xVYBvH7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794901124;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=X1EFeZBdLj15mNpUXtl+gFcocPPY28d2wx+TBKBPcMw=;
+	b=MUZQvAi4pM+Ra98Sb/EM8e378I8UdY0GG8RVzUwIux1vL1LnMJLPwSBg/fCkO5TnSxHZ
+	 qcO+WJosjUDUqW9xxa2sn9h2tVzBHkNZM5mK+IjXoQYoVtRzH3jCp8SHKwp2ljEhilKj1
+	 SnvwpmMO5P6y29bFeW8L+xK3nFex1ILdman0y4ZqqRKx01P8gUdXaM1fitxXIK74YQlwg
+	 tBhpwlW06WBHxwADMefBzEQ1yBfo1QvjnXXYWzOh3oocZODlKNteuw+2DnC2e4evJdr3O
+	 odALtybC5yAKi6BWA1+XV5vTpFTSP51Y7/Emoi8AzDMKh6o0Rl5L6F8dfRd+d4dilWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P2BFPSWq;
-	arc=none smtp.remote-ip=95.215.58.78
-Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
+	dmarc=pass header.from=sifive.com;
+	spf=pass smtp.mailfrom=sifive.com;
+	dkim=pass header.d=sifive.com header.i=@sifive.com header.a=rsa-sha256 header.s=google header.b="beuriP7/";
+	arc=none smtp.remote-ip=74.125.82.45
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09D7606A32A
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 07:26:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C09D7606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C11606A33B
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 07:38:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8C11606A33B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P2BFPSWq
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZHQ7vGXzig53gxhV15EJJjqr5AYYwWSgOJJV79sVoaQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794900410; v=1; x=1795505210;
- b=P2BFPSWq9Bsx/WL684prYR47sAoRAqgVjfLNXZoMZMvxxCgcZQ49YoewdGoXMM52aWHcTSa6
- IfGYAP4m9ieTqIWTMQ56iyp0ff1whYBeTKJ/cd12qibbIAS9pttFtym/Vpy823SFfsp5IlJUQPN
- AkmBawkdoFFzwnrgrFkLCCbE=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 5c923570b0d44339;
-	Tue, 17 Nov 2026 07:26:50 +0000
-X-Mizu-Trace-ID: 5c923570b0d44339
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 17 Nov 2026 15:26:37 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Pin-yen Lin <treapking@google.com>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Bjoern Doebel <doebel@amazon.de>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Jonathan Toppins <jon.toppins+linux@gmail.com>,
-	linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>
-Subject: Re: [PATCH net] selftests: bonding: fix failover race in
- bond_options.sh prio test
-Message-ID: <avwBrbJfp4ET9ifT@fedora>
-References: <20261112014942.2946303-1-treapking@google.com>
- <avaewOJD7tX1UYfE@fedora>
- <avanVkILHDYdpond@fedora>
- <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=sifive.com header.i=@sifive.com header.a=rsa-sha256 header.s=google header.b=beuriP7/
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1b3a05f8b5bso5474825c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 23:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1794901123; x=1795505923; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=X1EFeZBdLj15mNpUXtl+gFcocPPY28d2wx+TBKBPcMw=;
+        b=beuriP7/I8mJ5gicXCudomDAvGMJDJwTwMDx3uZWhBdM2pn1X6J7ROxeBuTe/xwYaL
+         CrBKVCe4mZdEWyKMChtESwCNSxdqbsNDLRP4ly1XPAt41MFEap2KE24LON2Gn4iHYAV+
+         4RgWb1iMmcsz9iNGpACz5DMGL1rDwkQAFWOgiHas27u+NVI8m+w/AdVyMpbfvRwPrOfh
+         t1/QMXEDOrqyJiIbPv/nI+XUuq+qYF9tI/jB9tFbTo/Tc0T4o8TZ2atN1VPOCculLvfC
+         hBtsSQcChalIAvn+BUGrlDFAqVPu0ICCp7DM/lGBVprbRYhVP/ytHK3IsbzkTc39LAa9
+         lGUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794901123; x=1795505923;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=X1EFeZBdLj15mNpUXtl+gFcocPPY28d2wx+TBKBPcMw=;
+        b=oecmoylW86liprlXZ7FNivhwSwLXZAm+EpxPH/ztt6Zsb42LbrmI5dYx4sBZGyjGow
+         QtecUra8SrSaMBZulM2DRkT8Yho/ytcS6fHfp3rJneAEdodHV6/kdXO/U+IAT+x5I+D2
+         A3HL3cOWWHFz5/kXtelxWv0IyaBAV9tPsyyN9NFSlX10UFbsax3Nh0FLhlGMECq/N7wY
+         nXD9plCC4Tryv6sd96Vb9Cwb28wWVVyh+PZ7CVMOZhnurW19j6wT/xFdrRTbYkLwQfAK
+         aHmMi3JQCAcYaTveBIV2fRqPjFHtDGTu7rRJI4OHPfAeFO6V9iDnkMYD8jPt1N27pCBr
+         lFvg==
+X-Forwarded-Encrypted: i=1; AL+hErEraeANks/XurvrKdUHXmoqoLqQJ7SqLKJHZ02BvTmsphl6E9Am3cqB5kEg93+dBgZaACVIylGiFMHfbR4k9Yo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+NibZpXVVM/3sZLM30CY3h1CSnq/5HJuv09S0niXjFjPuk5sG3
+	bD2RnJdRN5aJm5HHtzeU4RLdPJs1YnXz0eRL/Kpld0n1jDObqt9uvtifRvT0MPEIv/g=
+X-Gm-Gg: AZFdTZdTaHp71p4MwOWF/l08Xg7ZQZSJbjLEDLlRRRp013JRvL9YsZKvUFcKcqKxf+f
+	bdZ8+lIuJ/clcVwWo4i/k4wDLCYhfrkWN18c/Um78MeeqVqXKafeekcNCl+iqAaDXfoJnAbhcFO
+	MLr9TZVeaQ9X8FVqQJB4Yj1OKdjkSAgktN7lCb+1R4gytZoyq+qWAzyAEOfiH8I7J/VJeQN5uWj
+	Ihn/MVxASi6czKanGr76t+JccwLDhDBBVJMpp2SErHYUlyFWmYpa26uK6GQhJpaWSP6/NPcsr5S
+	0hSSQb0qb0JrsOhMDJCGPRUo16yaVCED/0p4QRN49qiTvcxb5lT6a4MI91yMTBlYvzzwcmNr7ui
+	bF8tnP9UBZ30lBy+rbOf6TQFdTqTYmTz3uGRrehpF4KwjmxBwsS6OMUYnN4KI1mpM6Gt3HC78rK
+	AadCrnpsOKThkjB8y0l1809fc2MLKsKqpA36FT78Sy4gJF5wIbda7iKJ1fwJecnVZ0co7Y5mkpx
+	3nDyvxEJqZmrug1hxfSsodK1eVpVEJ31vHsjR8xlWEGripANWWkaods495HPkrfeqX0IdqovKc9
+	hb59zoig9n3g/MRYKutfJksrvoVphMqFi5pSWKGDOXgdHQ==
+X-Received: by 2002:a05:693c:8084:b0:378:1191:43ca with SMTP id 5a478bee46e88-37966e3b292mr13877536eec.18.1794901122726;
+        Mon, 16 Nov 2026 23:38:42 -0800 (PST)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-38116afd7f7sm5190967eec.17.2026.11.16.23.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 23:38:42 -0800 (PST)
+From: Nylon Chen <nylon.chen@sifive.com>
+Subject: [PATCH 0/2] riscv: Add support for vector misaligned load/store
+Date: Mon, 16 Nov 2026 23:38:36 -0800
+Message-Id: <20261116-riscv-vector-misaligned-v1-0-6c4d0ca905b7@sifive.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -75,116 +92,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHwE/GoC/yXMQQ6CMBBA0auQWTtJiwjoVYiLUgYcg4XMQENCu
+ DtVl2/x/w5KwqTwyHYQiqw8hQR7ycC/XBgIuUuG3OSlteaOwuojRvLLJPhhdSMPgTq8FVV17Wv
+ jXdlCqmehnrffuXn+rWv7Tt13B8dxAvHaodh7AAAA
+X-Change-ID: 20261109-riscv-vector-misaligned-54773f80ca6b
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Nylon Chen <nylon.chen@sifive.com>, 
+ Yeting Kuo <yeting.kuo@sifive.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794901121; l=1475;
+ i=nylon.chen@sifive.com; s=20260310; h=from:subject:message-id;
+ bh=tmkoHjHMDPa3fXfBx0Bpn94ZmUkTCA76BxDrgEkQkxk=;
+ b=SiEKMftKaKj2WXk40u2hgHdrIuZP1id9WexL6FBiWpYCzwKZ7E9P508IlsiIrGB8ZZ4YTwaay
+ QYqbd9QQSghDsu1t++ht8dkkuaGOQ6a8UGxl8a31LHjf9RJ+2LrcOT+
+X-Developer-Key: i=nylon.chen@sifive.com; a=ed25519;
+ pk=+xtFLLbXfGd50d5UhR9oBzLTh+JLft7T60t3u7YMZPI=
 
-Hi Pin-yen,
-On Mon, Nov 16, 2026 at 05:30:28PM -0800, Pin-yen Lin wrote:
-> Hi Hangbin,
-> 
-> On Thu, Nov 12, 2026 at 10:00 PM Hangbin Liu <hangbin.liu@linux.dev> wrote:
-> >
-> > On Fri, Nov 13, 2026 at 01:23:40PM +0800, Hangbin Liu wrote:
-> > > Hi Pin-yen,
-> > > On Wed, Nov 11, 2026 at 05:46:18PM -0800, Pin-yen Lin wrote:
-> > > > The prio test intermittently fails in the arp_ip_target and
-> > > > ns_ip6_target variants:
-> > > >
-> > > >   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
-> > > >     Current active slave is eth0 but not eth2
-> > > >
-> > > > The ARP/NS monitor marks a slave down when it has received nothing for
-> > > > too long. With arp_interval 100 and the default arp_missed_max, that is
-> > > > about 250ms for the active slave (eth1) and 350ms for a backup slave
-> > > > (eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the reply,
-> > > > and eth0/eth2 receive a copy forwarded by the gateway bridge. Once eth1
-> > > > is down, its probes reach no one and no slave receives anything, so
-> > > > eth1 normally times out first and the new active slave is picked by
-> > > > prio:
-> > > >
-> > > >   t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
-> > > >   t=10   test sets eth1 down
-> > > >   t=300  monitor: eth1 idle 300ms -> down
-> > > >                   eth0/eth2 idle 300ms -> up, eth2 picked by prio
-> > > >
-> > > > But the test takes eth1 down right after bond_check_connection(), whose
-> > > > ping replies only arrive on eth1:
-> > > >
-> > > >   t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
-> > > >   t=70   ping reply on eth1 only
-> > > >   t=85   test sets eth1 down
-> > > >   t=300  monitor: eth1 idle 230ms -> still up
-> > > >   t=400  monitor: eth1 idle 330ms -> down
-> > > >                   eth2 idle 400ms -> down too
-> > > >
-> > > > eth2 can then no longer be picked. eth0 becomes the active slave if it
-> > > > happened to receive some other packet (e.g. an MLD report), otherwise
-> > > > whichever slave comes back first does. With primary_reselect 1 or 2,
-> > > > the bond keeps eth0 even after eth2 comes back.
-> > > >
-> > > > Before taking the active slave down, wait two monitor intervals
-> > > > (200ms), so that at least one more probe is sent after the last ping
-> > > > reply and all slaves last received that probe. The miimon variants do
-> > > > not need the wait, but the extra delay is negligible.
-> > >
-> > > I'm afraid the waiting time is too strict, especially with a debug kernel
-> > > since delays can happen.
-> > >
-> > > Bjoern is also fixing[1] this issue by pinging a non-existent neighbor to
-> > > keep traffic flowing. Would you like to test whether that works for you?
-> > >
-> > > [1] https://lore.kernel.org/netdev/20261104142018.552135-1-doebel@amazon.de/
-> >
-> > BTW, using ping may not able to triger the arp request in time. You can try
-> > arping instead.
-> 
-> Thanks for the pointer, but I believe Bjoern's patch addresses a
-> different problem.
+This series adds emulation support for misaligned RISC-V vector
+load/store instructions, which may currently fault/trap without being
+handled on hardware that does not provide misaligned vector memory
+access support.
 
-I think they are the same issue, as you comment also said
+Patch 1 implements the trap handler, with emulators for vector
+load/store covering unit-stride, strided, indexed (ordered and
+unordered), segment, whole-register, and fault-only-first forms, for
+both user and kernel mode traps.
 
-The ARP/NS monitor marks a slave down when it has received nothing for
-too long.
+Patch 2 adds a kselftest exercising these code paths across the
+various vector instruction forms and element widths.
 
-> 
-> Bjoern's patch keeps the traffic flowing so that idle slaves are kept
-> alive between the test steps. This patch fixes the case where the ping
-> replies from bond_check_connection() only arrive on the active slave
-> right before it is set down. The active slave's failure is then
-> detected one monitor interval late, when the backups have also timed
-> out.
+Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+---
+Nylon Chen (2):
+      riscv: traps: Add support for vector misalignment handler
+      selftests/riscv: Add vector misaligned load/store tests
 
-The reason is we set arp interval to 100ms, and slowwait also check every
-100ms. If the backup slave down at the same check point, e.g.
+ arch/riscv/include/asm/vector.h                    |   4 +
+ arch/riscv/kernel/Makefile                         |   1 +
+ arch/riscv/kernel/traps_misaligned.c               |  39 +-
+ arch/riscv/kernel/traps_v_misaligned.c             | 902 +++++++++++++++++++++
+ tools/testing/selftests/riscv/vector/Makefile      |   5 +-
+ .../testing/selftests/riscv/vector/v_misaligned.c  | 169 ++++
+ .../testing/selftests/riscv/vector/v_misaligned.h  | 530 ++++++++++++
+ 7 files changed, 1647 insertions(+), 3 deletions(-)
+---
+base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
+change-id: 20261109-riscv-vector-misaligned-54773f80ca6b
 
-  t=300  monitor: eth1 idle 230ms -> still up
-  t=400  monitor: eth1 idle 330ms -> down
-                  eth2 idle 400ms -> down too
+Best regards,
+--  
+Nylon Chen <nylon.chen@sifive.com>
 
-The test failed.
-
-> 
-> The ARP requests triggered by Bjoern's ping are sent only about once
-> per second, which isn't frequent enough for this failure. I tested
-> Bjoern's patch and confirmed that it didn't fix the issue in our
-> testing environment. We also can't simply use arping instead because
-> iputils arping doesn't support sub-second intervals.
-> 
-> If you're worried that the 200ms sleep is too short, would increasing
-> it to 0.5s or 1s work for you?
-
-It's not about the sleep time before setting active slave down. I'm afraid
-about the slowwait checking time. Even we sleep 1s, with arp interval 100,
-we still only have 100ms checking window. Before the window, the active slave
-is up, after the window, the backup slave also down. With a debug kernel, this
-time is a little tight.
-
-So, either we have some background arp traffic, or let's extend the arp
-interval to a larger one.
-
-What do you think?
-
-Thanks
-Hangbin
