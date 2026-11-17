@@ -1,112 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.139.74
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.216
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794897431;
-	b=QEekpT4lzVGDvOLiO4+u7nHqVOyh1i3XAEg2iZ1RjZ2rpjwtWm4TH0jyjMx+Lhmz20yo
-	 BqRmxEKKwoh8fhT1ixccxe2k+IqIG+Xi6Z2a/jC6pLErd4r0o6rf995zcGEU8Y8VtaXsH
-	 HYjAhQJQ3TxGg9wbn020pXWJDMmNIIv4rbvlzD7KbKaAXXkWK0xvXz7zOAhC4ImQN5oGK
-	 QeKOhnBimukqZKs28Lz8L6oELcpm203ZqYfT/Bqo9+2nBU5QPy9DBu0AuuX6QjE1dSZle
-	 T9b9z4yBHqU2nkAr8FYqS+x0D6WJg9Ipk1HkQZ6fI0t4fdT63+QTBjElHxQAlTIgYmw==
+	t=1794897592;
+	b=jAhakY/8oaftH093F3h62hFzilPIFRpiwSyin3Wmhw7rs1GlzMRwDOnNnoaiXExemRAL
+	 3cc+x51lTqx5+qvfvCdAhgBfddjhIU8qhc/yRit1GD438Tuck+CfXTjaj2hNtuZS4V7r6
+	 S7GxvDlb4aptjagXZEVD2Nout3QLqyKsKCSNkT4LuQzS9UYGIj9xFFCN1uIZYYYaLpAof
+	 5MReX+JIZxhmHkbrjvSDMvupLgA6g6AiHjfH0RC9NDI9Nf6t74bZpWCrVUepfuLYPAUC7
+	 RG6tx0AjEnPiJG0bOtAqbgPsEd2IJC1jx37ahnK+2o85VMvD3HWbQxcRuJBpI2p+oiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794897431;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Authority-Analysis:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=DOsBTsM8HzI17SPUr1ak/9a9bMUvOh6RzD9t7xsTYQU=;
-	b=5PJ5tIzPYlsrCQd7upkrZIntKO6bwezoiT4CBSkHymrEcNqEeQS7/gBsDcxkHeAOukHm
-	 tB8qkzcfwc+AB3gDNdig9tin3FTdNSze/mNtLMhvFop4YjzHRe0v8UNIZBxoYxc8jhRb3
-	 KRm6LCjQS6A7tpmWB34KAo/O49RWySimH8d1gbSEG7rQNM8BHX4giWWLc8CX7tz0l2JMn
-	 8I/pyUseqmGrGpodwLnF5u9SYBsSX9a69KQDKlHCQQVgOmUTeHX7VgmAmYjOrHboXtWFB
-	 qttknw/myHPDW7e1/FOlmFfPV78Yjc1QFOTzDK8hm49aFqB5h2Xg6oHqsByBB2vs/jQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794897592;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=Vyyeb7T7qeUDSVNFDSYs8COzLLUJ9wy6TmVNkRmGH10=;
+	b=jlIJI+rvw7WIezJdUnJLEtvyv3+6q2LZ49oJ3OGnPW+Nakm1lR2nDg6V8HPpQf7LbaKd
+	 9CYKsglLIZsU6w9GgUQNuYu2KBMZeeu6A237g5BL4r7DdrbkLq0o0UbXXxUgHq46SUY00
+	 TvgV3hQzLgNIkdeeeWzKdMgpszihCFsau2FpcvTW9ZOjkq+YUUfZkYr+qOV5KsegerRUr
+	 E6N+kfvABl5iXvbLEEsZuNIHGXkO7Mo8qcZDero8RFVWg0zj4UrcneYHLJ0G17+WDTiDK
+	 S2RxAv17qIJzPyjQCrNjr3dntWpOzhkXRG/OTZyZk4Kwkb7ReAhO6ma2UlbKAT4CrjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=columbia.edu;
-	spf=pass smtp.mailfrom=columbia.edu;
-	dkim=pass header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=pps01 header.b=MauZHBO0;
-	dkim=pass header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=lionmail header.b=NAacnamq;
-	arc=none smtp.remote-ip=148.163.139.74
-Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=F2haETcQ;
+	arc=none smtp.remote-ip=113.46.200.216
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5532606A323
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 06:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5532606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2BE606A31C;
+	Tue, 17 Nov 2026 06:39:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A2BE606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=pps01 header.b=MauZHBO0;
-	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=lionmail header.b=NAacnamq
-Received: from pps.filterd (m0167076.ppops.net [127.0.0.1])
-	by mx0b-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AH6GXml2130693
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 01:37:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps01; bh=DOsB
-	TsM8HzI17SPUr1ak/9a9bMUvOh6RzD9t7xsTYQU=; b=MauZHBO0QHOwDKA+XX+b
-	5NPgYZ4th7Jzs/pn2qwSByCnGvBsaSJc5coSVdGgWEdboi7jundzHOOM5HiM42WB
-	w0OyBmo17RGT7CtiNHkic9OwrbhIuAIOKMz1xyVIP0oacCdQoPCmhkkn2AmamZC7
-	mBeSrbxoXB6igxp5uzLLa4D2IFme7QvqvquEjuxdUxnBQA6/IHFDWpw05cjVR1nA
-	6pqKykASzKK8FkuSYbOtbsrqtnG1wjANodQW1tQeKxZrnFbvlYJ/Evk7urX0feCD
-	FDfewHX0Jj2Ys1Zg/kZOA96usAUZAlS01YBpxaYovi/Ep2sJWUyQKe5egD9ZDAKN
-	/g==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 4j059qwgck-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 01:37:08 -0500 (EST)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-944138ed63fso655074385a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 22:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=columbia.edu; s=lionmail; t=1794897428; x=1795502228; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DOsBTsM8HzI17SPUr1ak/9a9bMUvOh6RzD9t7xsTYQU=;
-        b=NAacnamqM/fJxKIaGIq/+aJuJkRwcvSvNe3PsFCVhJHtQPEw3GkpqTnt/Zu7OcjRdT
-         UYcULCikl0UsUFK7F/oizAEr6LQbCZxFxLsrE3/+DL+AZabmY1fPMMPxnaXOARdgk/kS
-         7FtXohksQSwnIhBJD5Q8vUjq+2XaUxgZRXz6ABlYlAtyOqPqJ+qXEiV/mxrLFh7IL+BW
-         E66PCqzKKXM39dzvJG/5vQAY4Q6GKslyig7ktMrD2pnKs4TlqnVcjZCIBAfXpjDDi9UA
-         M9ZTTlfkok64SL9B1bjUUd1NbcwDazSidl81OPTvoUZ6uQZ8PhzakvysmIFfAwRy8gLV
-         KMug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794897428; x=1795502228;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=DOsBTsM8HzI17SPUr1ak/9a9bMUvOh6RzD9t7xsTYQU=;
-        b=QnmguHnyx+mRpusk05YorCl4gs8fOBrD3bwZYO+LOqag/5JhqXFABajiC6wp0TBgJZ
-         rxX95rXnwjb2qI4m8iHYDXxzCh9O2ThNnvc0bVG9jR9fEy5ODjR5w0H3zoMkKUC0zmSw
-         QeC4MURod6CbH8sbmdkoDWZZIcHBzUGlSsxzGZhw4tfg6VEQF7hUPgL4ZQRYe788bcKf
-         HZ3PnzPUqHIOF7bsVsrMi/dWxkZ91u6tPkC+XEuotnTjGhvDVq+XiDLPSwh9K59xWeP/
-         hmqKiNj4OVXSwiNcksDo/cCllwPFLEmlSYHSKgxo4sZ/nSbMl2SLyNLINHTAE73VL5KO
-         PsIQ==
-X-Forwarded-Encrypted: i=1; AL+hErGxiw2aNOmxsGmSnfqcn7B5fiay4hA50T/hvWFY0eBFBt4murmjE1aA+ykhv6diZW2XnK4PdvpkJDw8G5YSsdI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9UIjrnxfMEn7wqK1HGjL+lvFijE22SniWURp7kgtsVAjaAjMgc
-	IvCUK0f28DRzwr6ABVun9e21VhGVJwRQd/jPS8gTIBDAU0eUwaV279uSIuxuPQ3qWmdVN0IiEc8
-	VS8ntzFR1+TqhKiY0BG3w1vFhm2mx6nYyFCDwSlNESaTYOJA0bh2bctCV3P8Pr/Hrdw==
-X-Gm-Gg: AYBFou3WIHN6LXtk4OOwAO8CgCG3j/07zeRKhUeshChkKKAoeQmQvzFv+pE2GypaxRW
-	wTtJTe53sNw79TQvjF9wHuKtjce2P7WkwvryhTg8PT/Jap0+FymDWE5vFTzX4N4NIdxBhTlb1Ce
-	kwcp8VjCVwkkAEsEEvSQqBt43gHolKvR7npuxNp4AcHMpZDz/dPUYGD1aDUk03TuU+wiZvophzM
-	oOzSZAcDeWsvyyf/txrbmkZeX7z6I+0rFzl/axVqOTRXqo1ghbK4dRijuMFiqcO8109T3D+78a3
-	0tDmg2JQqkLVgFilQXXdb7WLXIZmsPQm86HrJ/WPJeSHVZE3pi6oVsiRzA9+37YKfVD0Rlic8KV
-	vQ4XT2qZ5RWyazwH6ImjBD+E9LtuWhmtxXnbsW+Hm9gNIsGBePeNJCdqWq1i6u/b8jW6taAHDNw
-	TUYc//3g/4TFKxRzwynhw2fA==
-X-Received: by 2002:a05:620a:2b46:b0:949:6898:2e4b with SMTP id af79cd13be357-94968982e92mr1269464985a.66.1794897427876;
-        Mon, 16 Nov 2026 22:37:07 -0800 (PST)
-X-Received: by 2002:a05:620a:2b46:b0:949:6898:2e4b with SMTP id af79cd13be357-94968982e92mr1269462185a.66.1794897427441;
-        Mon, 16 Nov 2026 22:37:07 -0800 (PST)
-Received: from [192.168.1.62] (dyn-160-39-33-242.dyn.columbia.edu. [160.39.33.242])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91f23d614b4sm104980356d6.18.2026.11.16.22.37.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 22:37:06 -0800 (PST)
-Message-ID: <8092de9e-3146-4fe7-a235-01ea8efab08c@columbia.edu>
-Date: Tue, 17 Nov 2026 01:37:06 -0500
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=F2haETcQ
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Vyyeb7T7qeUDSVNFDSYs8COzLLUJ9wy6TmVNkRmGH10=;
+	b=F2haETcQ46YGD322PYEjUhEVyENsxdG1FCM9hRUWF3f+Rdn3di0ztZoNSf38nMmzHwO4z6y/N
+	CMBfyq/FYspNp/0tZEGtfMYwGbxeLt3PGhTVAuJl/N/WMxICMEB65MAWPy9+F2nYNTok0HJdF4X
+	XVxl/OfaJvbD0TayyAcyPDA=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4jTFSP3f8sz1T4Fv;
+	Tue, 17 Nov 2026 14:39:01 +0800 (CST)
+Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 92A2640561;
+	Tue, 17 Nov 2026 14:39:39 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemk200008.china.huawei.com
+ (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Tue, 17 Nov
+ 2026 14:39:37 +0800
+Message-ID: <80ff9aea-3a5c-4c92-b713-99c249564008@huawei.com>
+Date: Tue, 17 Nov 2026 14:39:36 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -117,104 +63,401 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mm/madvise: zap markers from guard regions
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        David Hildenbrand
- <david@kernel.org>,
-        Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20261113-disallow-uffd-guard-install-v2-1-9d0063c70542@kernel.org>
-Content-Language: en-US
-From: Tal Zussman <tz2294@columbia.edu>
-In-Reply-To: <20261113-disallow-uffd-guard-install-v2-1-9d0063c70542@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=L/qI0OT8 c=1 sm=1 tr=0 ts=6afbf614 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=GaPK54s0Se3oFqK5NkZy0g==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=x7bEGLp0ZPQA:10 a=A0y_DWxS2BwA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Da8U98TiO7q1upZEImrf:22 a=Qm0qsxP7aFY2tkT6R2MF:22
- a=nc3XcxN3xHuRbhElZrYA:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-GUID: h2uFJaQjiD7v13VxHLGfpUVprP7oz8kb
-X-Proofpoint-ORIG-GUID: h2uFJaQjiD7v13VxHLGfpUVprP7oz8kb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDAyNSBTYWx0ZWRfX18q0262nmwk2
- ZLV4v2uNjQUv4Odle1Df+QlMxc5hUGRNvyjb1ZnSJbLAMQUaZmOGk9JzK/GsJE7GU91b8nv1oWl
- +Uk+2WiCPORWGPySTzXd4Gb2AsBKDZBiiP51nApgV+FKlskpY8QoLp2O3nFFSayi7aixVaARYQZ
- SJpsNwHnAEhLOETFLFOJ3rnBH7MADoiwTzwasbPTRerQKTllhCB9egU+WWnlBsQvKkSHAU+Asiu
- nQ44I8UDt+82sOCJno9+qv+PR0PwUtDxIOTSy6CtyEyp6hjY+iKjaE7irs9Zwp3ziXpQ6URJPHJ
- 0Vs9d709HUaxGDu4VuFO+4XL4YVZM9+kcd0Yct2nV2LpjKPDo+Tng0vKbfZgc5QcckmeeYUVfEu
- XCjn+r8BsPjfWW0IVAfIuLyqQ4iGN/PKslNdcxWEKUb9IGrHtavI7DmOS7/hzpyt8HkhOuAfeCW
- sr3u29gWm9wlcfRtf/Q==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDAyNSBTYWx0ZWRfX7y6q4LQVRqy6
- 6wOM7h5t3yEMJbY/kktGhacbrvscfEPXH8mZc0bYJWVcOtE9P9JE0a4Qs67J14RwH07jEdsnCz2
- N2pnCVy15aGU6YHuU/C7hKwHU5NJFGWFXQ4qE25092qdSo6pieBe
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11968
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=10 lowpriorityscore=10 adultscore=0 priorityscore=1501
- malwarescore=0 bulkscore=10 suspectscore=0 phishscore=0 clxscore=1015
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611170025
+Subject: Re: [RFC PATCH v2 2/3] security: Add PR_CAPBSET_DROP_MASK for
+ process-wide bounding-set drops
+To: "Serge E. Hallyn" <serge@hallyn.com>, "Andrew G. Morgan"
+	<morgan@kernel.org>
+CC: Oleg Nesterov <oleg@redhat.com>, <kees@kernel.org>,
+	<akpm@linux-foundation.org>, <david@kernel.org>, <ljs@kernel.org>,
+	<liam@infradead.org>, <vbabka@kernel.org>, <rppt@kernel.org>,
+	<surenb@google.com>, <mhocko@suse.com>, <mingo@redhat.com>,
+	<peterz@infradead.org>, <juri.lelli@redhat.com>,
+	<vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+	<rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+	<vschneid@redhat.com>, <kprateek.nayak@amd.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <shuah@kernel.org>, <brauner@kernel.org>,
+	<alexjlzheng@tencent.com>, <jannh@google.com>, <jaime.saguillo@gmail.com>,
+	<elver@google.com>, <blbllhy@gmail.com>, <bvanassche@acm.org>,
+	<pjw@kernel.org>, <broonie@kernel.org>, <debug@rivosinc.com>,
+	<tglx@kernel.org>, <aleksey.oladko@virtuozzo.com>,
+	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-security-module@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
+ <20260929130200.1638343-3-ruanjinjie@huawei.com>
+ <atjN3JX7sWx9kpQ5@hallyn.com>
+ <CACmP8ULW+COA17s6_UUKhQrJaviWmnUCjfite43Y0FgPN30-AQ@mail.gmail.com>
+ <avHfxe++P4WLUQxf@hallyn.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <avHfxe++P4WLUQxf@hallyn.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemk200008.china.huawei.com (7.202.194.74)
 
-On 11/13/26 4:04 PM, Lorenzo Stoakes (ARM) wrote:
-> In order to establish guard regions, guard markers are installed in the
-> page tables of a mapped VMA.
+
+
+在 2026/11/9 22:59, Serge E. Hallyn 写道:
+> Hi Jinjie,
 > 
-> However, problems arise when one tries to combine this with registering a
-> VMA for userfaultfd, as such operations may themselves need to install page
-> table markers such as uffd-wp.
+> how do you feel about adding something like a thread | process flag?
+
+Hi Serge, Andrew,
+
+Sorry for replying so late.
+
+I think this sounds good for me, similar to seccomp's
+SECCOMP_FILTER_FLAG_TSYNC: by default only the calling thread's bounding
+set is trimmed (so a later fork() inherits it while the rest of the
+process is untouched), and PR_CAPBSET_DROP_PROCESS applies it to the
+whole thread group.
+
+Is it similar to the following code?
+
+
+#define PR_CAPBSET_DROP_MASK          <n>
+#define PR_CAPBSET_DROP_THREAD         0
+#define PR_CAPBSET_DROP_PROCESS        1
+
+User space use as below:
+
+	prctl(PR_CAPBSET_DROP_MASK, lo, hi, PR_CAPBSET_DROP_THREAD, 0);
+	prctl(PR_CAPBSET_DROP_MASK, lo, hi, PR_CAPBSET_DROP_PROCESS, 0);
+
+# cap_task_prctl()
+case PR_CAPBSET_DROP_MASK:
+        switch (arg4) {
+        case PR_CAPBSET_DROP_THREAD:
+                return cap_prctl_drop_mask(arg2, arg3, false);
+
+        case PR_CAPBSET_DROP_PROCESS:
+                return cap_prctl_drop_mask(arg2, arg3, true);
+
+        default:
+                return -EINVAL;
+        }
+
+static int cap_bset_drop_thread(kernel_cap_t mask)
+{
+        struct cred *new = prepare_creds();
+
+        if (!new)
+                return -ENOMEM;
+
+        new->cap_bset = cap_drop(new->cap_bset, mask);
+        return commit_creds(new);
+}
+
+Best regards,
+Jinjie
+
 > 
-> When the installation is attempted the guard marker prevents these markers
-> being applied, which can lead to unexpected results (especially if the
-> guard regions are later removed.)
-> 
-> This is especially problematic because guard region installation causes the
-> regions to be zapped first, meaning that the removal of userfaultfd-tracked
-> ranges will not be logged in this case.
-> 
-> Additionally, the uffd-wp page table marker will be propagated regardless
-> for file-backed mappings as the zap being performed does not clear these
-> markers.
-> 
-> This is problematic, as it can cause repeated failure to install guard
-> markers resulting in an infinite loop.
-> 
-> Therefore, update guard region installation to invoke the zap with the
-> ZAP_FLAG_DROP_MARKER flag applied.
-> 
-> Both before and after this change, uffd remove events will not trigger on
-> guard region installation, nor will write protect state be propagated after
-> guard region removal.
-> 
-> This makes sense as conceptually, guard regions mark a part of a VMA as
-> effectively unmapped at the page table level, and removing the markers is
-> like mapping the VMA again, over which operation uffd markers would in any
-> case be lost.
-> 
-> A survey of open source users indicates nobody is relying on installing
-> guard regions in uffd-armed VMAs. Software including glibc, android,
-> tcmalloc and CRIU were checked.
-> 
-> This change means that any already established guard regions are removed on
-> zap. These will be overwritten with the newly installed guard markers on
-> success.
-> 
-> However, if this fails for some reason (fatal signal likely the only
-> reasonable cause), guard regions may remain removed, and concurrent faults
-> may succeed in the interim in the range.
-> 
-> Since the installation failing guarantees nothing about the range being
-> installed into, and since success overwrites with guard markers, this isn't
-> an issue.
-> 
-> Since MADV_DONTNEED does something similar, abstract the zapping to
-> zap_range() and call it from both places.
-> 
-Reviewed-by: Tal Zussman <tz2294@columbia.edu>
-Tested-by: Tal Zussman <tz2294@columbia.edu>
+> On Wed, Oct 21, 2026 at 07:42:43AM -0700, Andrew G. Morgan wrote:
+>> There are a number of situations where existing code wants to
+>> (temporarily) affect the capabilities of a single thread, so a
+>> subsequent fork() starts with those without affecting the parent
+>> process as a whole. I've been wondering if this code could be
+>> structured to allow an argument of the prctl() to indicate if the call
+>> is "whole process" or "just this thread" scoped?
+>>
+>> Cheers
+>>
+>> Andrew
+>>
+>> On Wed, Oct 21, 2026 at 7:36 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+>>>
+>>> On Tue, Sep 29, 2026 at 09:01:59PM +0800, Jinjie Ruan wrote:
+>>>> PR_CAPBSET_DROP only affects the calling thread. Process-wide capability
+>>>> dropping requires user space to loop over every thread and every
+>>>> capability, which is highly expensive. For instance, long-lived
+>>>> multi-threaded processes (like gVisor's sentry) spend milliseconds
+>>>> trimming the bounding set because the runtime has to coordinate
+>>>> and signal every thread.
+>>>>
+>>>> Add PR_CAPBSET_DROP_MASK, an opt-in prctl that removes a set of
+>>>> capabilities from the entire thread group's bounding set in a single call.
+>>>> The capabilities are specified via a 64-bit mask across arg2 (low 32 bits)
+>>>> and arg3 (high 32 bits).
+>>>>
+>>>> The drop is recorded in a per-thread-group mask,
+>>>> signal_struct::cap_bset_pending, under sighand->siglock. This pending drop
+>>>> is dynamically folded into the bounding set in critical paths:
+>>>> cap_capset(), PR_CAPBSET_READ(), and cap_bprm_creds_from_file().
+>>>> Running, concurrently created, or future threads within the group will
+>>>> all immediately observe the drop. A forked child inherits this mask
+>>>> in cap_bset_drop_fork() under siglock to close the race window
+>>>> against clone().
+>>>>
+>>>> The operation is drop-only, so concurrent callers commute and a single
+>>>> atomic OR is the linearization point.  It performs no per-thread allocation
+>>>> and only the caller's replacement cred can fail, reported synchronously as
+>>>> -ENOMEM before anything changes.
+>>>>
+>>>> In an arm64 KVM guest, trimming 41 capabilities of a multi-threaded Go
+>>>> process takes ~8.5-23.6ms with the per-thread PR_CAPBSET_DROP loop and
+>>>> ~11-14us with PR_CAPBSET_DROP_MASK, independent of the thread count.
+>>>>
+>>>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>>>
+>>> Interesting idea, storing it in the sighand.
+>>>
+>>> Oleg, do you see any issues with that part of this?
+>>>
+>>> Overall, this seems ok to me.  That is, I think it addresses all the
+>>> concerns I had with the previous version.
+>>>
+>>>> ---
+>>>>  fs/proc/array.c              |  3 +-
+>>>>  include/linux/capability.h   |  5 ++
+>>>>  include/linux/sched/signal.h |  8 ++++
+>>>>  include/uapi/linux/prctl.h   |  1 +
+>>>>  kernel/fork.c                |  1 +
+>>>>  security/commoncap.c         | 91 ++++++++++++++++++++++++++++++++++--
+>>>>  6 files changed, 105 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/fs/proc/array.c b/fs/proc/array.c
+>>>> index f6f75d206762..f1cde26d079c 100644
+>>>> --- a/fs/proc/array.c
+>>>> +++ b/fs/proc/array.c
+>>>> @@ -63,6 +63,7 @@
+>>>>  #include <linux/tty.h>
+>>>>  #include <linux/string.h>
+>>>>  #include <linux/mman.h>
+>>>> +#include <linux/capability.h>
+>>>>  #include <linux/sched/mm.h>
+>>>>  #include <linux/sched/numa_balancing.h>
+>>>>  #include <linux/sched/task_stack.h>
+>>>> @@ -318,7 +319,7 @@ static inline void task_cap(struct seq_file *m, struct task_struct *p)
+>>>>       cap_inheritable = cred->cap_inheritable;
+>>>>       cap_permitted   = cred->cap_permitted;
+>>>>       cap_effective   = cred->cap_effective;
+>>>> -     cap_bset        = cred->cap_bset;
+>>>> +     cap_bset        = cap_bset_effective(p, cred);
+>>>>       cap_ambient     = cred->cap_ambient;
+>>>>       rcu_read_unlock();
+>>>>
+>>>> diff --git a/include/linux/capability.h b/include/linux/capability.h
+>>>> index 7921a0b3b04a..6413c7fedb69 100644
+>>>> --- a/include/linux/capability.h
+>>>> +++ b/include/linux/capability.h
+>>>> @@ -38,6 +38,7 @@ struct file;
+>>>>  struct inode;
+>>>>  struct dentry;
+>>>>  struct task_struct;
+>>>> +struct cred;
+>>>>  struct user_namespace;
+>>>>  struct mnt_idmap;
+>>>>
+>>>> @@ -197,6 +198,10 @@ bool capable_wrt_inode_uidgid(struct mnt_idmap *idmap,
+>>>>                             const struct inode *inode, int cap);
+>>>>  extern bool file_ns_capable(const struct file *file, struct user_namespace *ns, int cap);
+>>>>  extern bool ptracer_capable(struct task_struct *tsk, struct user_namespace *ns);
+>>>> +extern kernel_cap_t cap_bset_effective(const struct task_struct *task,
+>>>> +                                    const struct cred *cred);
+>>>> +extern void cap_bset_drop_fork(struct task_struct *p);
+>>>> +
+>>>>  static inline bool perfmon_capable(void)
+>>>>  {
+>>>>       return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
+>>>> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+>>>> index d45a5476b97d..bda6f18b65b9 100644
+>>>> --- a/include/linux/sched/signal.h
+>>>> +++ b/include/linux/sched/signal.h
+>>>> @@ -98,6 +98,14 @@ struct signal_struct {
+>>>>       int                     quick_threads;
+>>>>       struct list_head        thread_head;
+>>>>
+>>>> +     /*
+>>>> +      * Capabilities being removed from the bounding set of every thread in
+>>>> +      * this group by PR_CAPBSET_DROP_MASK.  Read on capability-transition
+>>>> +      * paths without sighand->siglock, hence atomic64 (a 64-bit value would
+>>>> +      * otherwise tear on 32-bit).
+>>>> +      */
+>>>> +     atomic64_t              cap_bset_pending;
+>>>> +
+>>>>       wait_queue_head_t       wait_chldexit;  /* for wait4() */
+>>>>
+>>>>       /* current thread group signal load-balancing target: */
+>>>> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+>>>> index b6ec6f693719..85ac71897070 100644
+>>>> --- a/include/uapi/linux/prctl.h
+>>>> +++ b/include/uapi/linux/prctl.h
+>>>> @@ -70,6 +70,7 @@
+>>>>  /* Get/set the capability bounding set (as per security/commoncap.c) */
+>>>>  #define PR_CAPBSET_READ 23
+>>>>  #define PR_CAPBSET_DROP 24
+>>>> +#define PR_CAPBSET_DROP_MASK 82
+>>>>
+>>>>  /* Get/set the process' ability to use the timestamp counter instruction */
+>>>>  #define PR_GET_TSC 25
+>>>> diff --git a/kernel/fork.c b/kernel/fork.c
+>>>> index 5ef413368912..bf671a85d39d 100644
+>>>> --- a/kernel/fork.c
+>>>> +++ b/kernel/fork.c
+>>>> @@ -2504,6 +2504,7 @@ __latent_entropy struct task_struct *copy_process(
+>>>>        * before holding sighand lock.
+>>>>        */
+>>>>       copy_seccomp(p);
+>>>> +     cap_bset_drop_fork(p);
+>>>>
+>>>>       if (clone_flags & CLONE_NNP)
+>>>>               task_set_no_new_privs(p);
+>>>> diff --git a/security/commoncap.c b/security/commoncap.c
+>>>> index 3399535808fe..3bec15d43731 100644
+>>>> --- a/security/commoncap.c
+>>>> +++ b/security/commoncap.c
+>>>> @@ -3,6 +3,7 @@
+>>>>   */
+>>>>
+>>>>  #include <linux/capability.h>
+>>>> +#include <linux/cred.h>
+>>>>  #include <linux/audit.h>
+>>>>  #include <linux/init.h>
+>>>>  #include <linux/kernel.h>
+>>>> @@ -19,6 +20,7 @@
+>>>>  #include <linux/hugetlb.h>
+>>>>  #include <linux/mount.h>
+>>>>  #include <linux/sched.h>
+>>>> +#include <linux/sched/signal.h>
+>>>>  #include <linux/prctl.h>
+>>>>  #include <linux/securebits.h>
+>>>>  #include <linux/user_namespace.h>
+>>>> @@ -30,6 +32,25 @@
+>>>>  #define CREATE_TRACE_POINTS
+>>>>  #include <trace/events/capability.h>
+>>>>
+>>>> +/**
+>>>> + * Effective bounding set of @cred in @task's thread group
+>>>> + * @task: task whose thread group's pending drop applies
+>>>> + * @cred: credentials to read the bounding set from
+>>>> + *
+>>>> + * A drop recorded by PR_CAPBSET_DROP_MASK is authoritative on the thread group
+>>>> + * and may not have been materialized into every thread's cred yet, so the
+>>>> + * effective bounding set is the cred's own set minus the group's pending drop.
+>>>> + */
+>>>> +kernel_cap_t cap_bset_effective(const struct task_struct *task,
+>>>> +                             const struct cred *cred)
+>>>> +{
+>>>> +     kernel_cap_t pending = {
+>>>> +             .val = atomic64_read(&task->signal->cap_bset_pending),
+>>>> +     };
+>>>> +
+>>>> +     return cap_drop(cred->cap_bset, pending);
+>>>> +}
+>>>> +
+>>>>  /*
+>>>>   * If a non-root user executes a setuid-root binary in
+>>>>   * !secure(SECURE_NOROOT) mode, then we raise capabilities.
+>>>> @@ -284,8 +305,8 @@ int cap_capset(struct cred *new,
+>>>>
+>>>>       if (!cap_issubset(*inheritable,
+>>>>                         cap_combine(old->cap_inheritable,
+>>>> -                                   old->cap_bset)))
+>>>>               /* no new pI capabilities outside bounding set */
+>>>> +                                   cap_bset_effective(current, old))))
+>>>>               return -EPERM;
+>>>>
+>>>>       /* verify restrictions on target's new Permitted set */
+>>>> @@ -849,7 +870,7 @@ static void handle_privileged_root(struct linux_binprm *bprm, bool has_fcap,
+>>>>        */
+>>>>       if (__is_eff(root_uid, new) || __is_real(root_uid, new)) {
+>>>>               /* pP' = (cap_bset & ~0) | (pI & ~0) */
+>>>> -             new->cap_permitted = cap_combine(old->cap_bset,
+>>>> +             new->cap_permitted = cap_combine(new->cap_bset,
+>>>>                                                old->cap_inheritable);
+>>>>       }
+>>>>       /*
+>>>> @@ -925,6 +946,8 @@ int cap_bprm_creds_from_file(struct linux_binprm *bprm, const struct file *file)
+>>>>       int ret;
+>>>>       kuid_t root_uid;
+>>>>
+>>>> +     new->cap_bset = cap_bset_effective(current, new);
+>>>> +
+>>>>       if (WARN_ON(!cap_ambient_invariant_ok(old)))
+>>>>               return -EPERM;
+>>>>
+>>>> @@ -1283,6 +1306,63 @@ static int cap_prctl_drop(unsigned long cap)
+>>>>       return commit_creds(new);
+>>>>  }
+>>>>
+>>>> +static int cap_bset_drop_process(kernel_cap_t mask)
+>>>> +{
+>>>> +     kernel_cap_t pending;
+>>>> +     struct cred *new;
+>>>> +
+>>>> +     new = prepare_creds();
+>>>> +     if (!new)
+>>>> +             return -ENOMEM;
+>>>> +
+>>>> +     /*
+>>>> +      * Record the drop before committing the caller's cred, so that a
+>>>> +      * thread created from now on is guaranteed to observe it.  Apply the
+>>>> +      * current union, not just this call's mask, to the caller's cred.
+>>>> +      */
+>>>> +     spin_lock_irq(&current->sighand->siglock);
+>>>> +     atomic64_or(mask.val, &current->signal->cap_bset_pending);
+>>>> +     pending.val = atomic64_read(&current->signal->cap_bset_pending);
+>>>> +     spin_unlock_irq(&current->sighand->siglock);
+>>>> +
+>>>> +     new->cap_bset = cap_drop(new->cap_bset, pending);
+>>>> +     commit_creds(new);
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>> +/*
+>>>> + * Propagate a pending process-wide bounding-set drop to @p, a task being
+>>>> + * created by the current thread.  Threads sharing the group read
+>>>> + * current->signal->cap_bset_pending directly; a forked child gets its own
+>>>> + * signal_struct and must carry the mask itself.  Called under
+>>>> + * current->sighand->siglock, which serializes it with cap_bset_drop_process().
+>>>> + */
+>>>> +void cap_bset_drop_fork(struct task_struct *p)
+>>>> +{
+>>>> +     kernel_cap_t mask = {
+>>>> +             .val = atomic64_read(&current->signal->cap_bset_pending),
+>>>> +     };
+>>>> +
+>>>> +     if (cap_isclear(mask) || p->signal == current->signal)
+>>>> +             return;
+>>>> +
+>>>> +     atomic64_or(mask.val, &p->signal->cap_bset_pending);
+>>>> +}
+>>>> +
+>>>> +static int cap_prctl_drop_mask(unsigned long low, unsigned long high)
+>>>> +{
+>>>> +     kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
+>>>> +
+>>>> +     if (cap_isclear(mask))
+>>>> +             return 0;
+>>>> +
+>>>> +     if (!ns_capable(current_user_ns(), CAP_SETPCAP))
+>>>> +             return -EPERM;
+>>>> +
+>>>> +     return cap_bset_drop_process(mask);
+>>>> +}
+>>>> +
+>>>>  /**
+>>>>   * cap_task_prctl - Implement process control functions for this security module
+>>>>   * @option: The process control function requested
+>>>> @@ -1308,11 +1388,16 @@ int cap_task_prctl(int option, unsigned long arg2, unsigned long arg3,
+>>>>       case PR_CAPBSET_READ:
+>>>>               if (!cap_valid(arg2))
+>>>>                       return -EINVAL;
+>>>> -             return !!cap_raised(old->cap_bset, arg2);
+>>>> +             return !!cap_raised(cap_bset_effective(current, old), arg2);
+>>>>
+>>>>       case PR_CAPBSET_DROP:
+>>>>               return cap_prctl_drop(arg2);
+>>>>
+>>>> +     case PR_CAPBSET_DROP_MASK:
+>>>> +             if (arg4 || arg5)
+>>>> +                     return -EINVAL;
+>>>> +             return cap_prctl_drop_mask(arg2, arg3);
+>>>> +
+>>>>       /*
+>>>>        * The next four prctl's remain to assist with transitioning a
+>>>>        * system from legacy UID=0 based privilege (when filesystem
+>>>> --
+>>>> 2.34.1
+
