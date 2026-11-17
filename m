@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794878622;
-	b=JANKLik8wMNkvy+nwJE22msNe666KdvvT1oI/UfF8Rl/vwzCJWUF7ANQg+oc/HsYSu0t
-	 zZqNuy67fKYifqiVHfrYMGCrORLDDO2sZgpDb7qmRrZG8vaT4FoHvObSr+p/VAe68v6vb
-	 YeoFcngYMiPcrKsKwvhQFU6VIZ7bxf/IO6XhTL+bEaWNRz06vZczPFiPvcCupbOIOSxj2
-	 SakmiyaprnlvfwfeZeyNJefN+RpXwtiwEQfL/y427lpkHIMt9yz8OpHHzWGtvYagFiG5o
-	 ADwnAMkRtDncWfVdG2U++b2K+GQm/VU8oKCUce5XR1axwUXJlzP4tUl7xURPk2XDaLg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794878622;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=6RCPXUXfIxo+y2UnkG/bhthPFYIMWnxtExJ5BNdZHk0=;
-	b=3SDSEoEG5x+LeCQmaZEQiaowtI08g3v7pTL/zchTp77Or2iTRLQKWhEbMpi2BST65tyO
-	 UCqCt8hsdJLZFH8mBVw28fzmRFb71JRlaN8XrVnI0J85LCKGg8uYdveQ+2eEnOtRx/Fci
-	 ED7HO3yx5YVleVmW4j3nj/MmB+HF/Z2xw0SuOC1qOQt+4x+giz/gDQS0cjSoyJPA1phiZ
-	 dVQ+DPdzKJxw0DXL91oHY7Ge8PUSuzKqDgXan8EanDR4fIwWXmpxcitBaHn+SD1x1JwYC
-	 OEvFQZux/hJWJGbMGh+Z1T3EjXOuYaHGnwn0c6DYnUuygGEE6Pvkomishl2+yXqui7Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=SDswVXvu;
-	arc=none smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794879042;
+	b=uXEGVBv6cLYPCvW9W+OJfN38UuYgNBIBWN0/lYRQIkWXYdJyBaxKBvKldNULls9WM+eZ
+	 4yzXEDbgNUHMi2SkRuIbNL9mo2ABWjWRKlBpCEzpRcJ66PZzgO3TaguzlSI3M+0WbDCP/
+	 H99rPL1kfczMGcCYSu3nI9QX2xXOynidAMAxOhmIaMnivEq/S1MhExRlSpheza1EIiAFJ
+	 s2esufLSnaJvEUiMmhfKYv1MzHvP7qCuE2jHJFS6ZixjFhb2HXD9AcIpXXiQZQKMuVhs8
+	 CvF7mWFriK02NJoWGPmUICkT2TdNMBXXTv3YAGbf+krFq9mMkTONHQb8pZyC+Ae8N9A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794879042;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=0foDh9lhfm067jv5RbQ/CuCGBEs3f2iWSqlNDstz5V0=;
+	b=bPON4joyF7x8m+6YQwV+CNGKCsTaGWktZO/en/BlvxSy8xm1BS/JuVjXNXwwGTusoMQa
+	 5Ti+N8eJmtnyBnXzXQSkQu9z4aQjRpAnbh3GBhp6ferBS7jOU8zy13QFfb30yItGp3FTX
+	 f6PBpF67X7G5B8kTPF7Hg6QlHS0YPBXKLPHHXtpgVkT0qzdaoJzDlxWbh5GX/HxR+/tuu
+	 RLSw6T9wawuUjE7ZvsoMKC9NCIBMxghDiz0FdhsdmaPgE8/3qr2kUpBzJwnQ/D11mSVYT
+	 HI4FidYVoRE0roDPDiR/RxJDsDCKjyhLF2pv64nHiWegJhPZtZ21ToWbRJ2XBLkKf3g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G4sYMCym;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.181
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8854D606A31C;
-	Tue, 17 Nov 2026 01:23:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8854D606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E36606A329
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 01:30:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85E36606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=SDswVXvu
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AGNOqqu1978717;
-	Mon, 16 Nov 2026 17:23:12 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=6RCPXUXfIxo
-	+y2UnkG/bhthPFYIMWnxtExJ5BNdZHk0=; b=SDswVXvuAUI8muhYNcUukufeX/8
-	D0GSKX1dQ5mDP6hG9AJk7bmtYcsUtAXz/xqd+GyP3Czju46I9wy6c81vEzz3d+nr
-	3zzWn80O8v8Z//Bt3Pq6YemXWZ0MwbwZYeU/1VhOf3fZQlUgHarY5yfEBh1btC+q
-	FAEuQzvBZTF0bygBuW5y94wMAvw4GNVIlqD8p/O8obf0jZlUjDaNT1qoH5z5NDad
-	udafcX4jcAM+RT8yaHcFlFBzwJmYcfgYnJq+YvvLZN9xNojTZL3F/iVpC9mftDU9
-	15DSOQ7bujgsnTXW9BMI8AYcDHAkQNQ/vVw+bpDl3x68XTwDzvSFxFRHscA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hxku5xbr2-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 16 Nov 2026 17:23:12 -0800 (PST)
-Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
- (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 17 Nov
- 2026 01:23:11 +0000
-Date: Mon, 16 Nov 2026 17:23:10 -0800
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-To: Michal Luczaj <mhal@rbox.co>
-CC: Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Simon Horman <horms@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Stefan Hajnoczi
-	<stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang
-	<jasowangio@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Eugenio
- =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Donald Hunter
-	<donald.hunter@gmail.com>,
-        Eric Dumazet <edumazet@kernel.org>,
-        George Zhang
-	<georgezhang@vmware.com>, Andy King <acking@vmware.com>,
-        Dmitry Torokhov
-	<dtor@vmware.com>, <virtualization@lists.linux.dev>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
-        <jlinbox@meta.com>
-Subject: Re: [PATCH net-next v6 1/8] vsock: only undo SS_CONNECTING when
- connect() fails
-Message-ID: <avusfpnZuzMV3WxB@devvm29614.prn0.facebook.com>
-References: <20261113-vsock-guest-ns-v6-0-3737ce4673c0@meta.com>
- <20261113-vsock-guest-ns-v6-1-3737ce4673c0@meta.com>
- <6bdfe6f7-aba8-4fb8-ac24-62fe020e1422@rbox.co>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G4sYMCym
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5edf97136aaso3494407e0c.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 17:30:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794879041; cv=none;
+        d=google.com; s=arc-20260327;
+        b=KUr8yfeR7bBltve/MlM0MtjzHn8JWWH4U+wzYI4+YDTchODlWbyX7jX2NgE/aHsAdm
+         qMVwVvNOtlVEv3di8x8fIAzXqTcNi3oPoBtah9uWlOExBVp2JtyB+yNtlqQGQJ2hzY9r
+         TA4/0nYFqpudfXnx4byeButPKgod2/dizMJx4YkjeRm+m0VuYvYeay1JTD7vfonFJYGA
+         IfjYZk/iy4VF73bfEuHLC9nNzLU/0omo0RkU+lnSGHllEVw3ltyDOkXUuaMd0IOMGSWu
+         wuCs2AQbg4AuiP/hFEyRHY8hhW+J78nNmi35aGss/b7nxtUhABUUuGGfOX8qf4eU3OW/
+         mopg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0foDh9lhfm067jv5RbQ/CuCGBEs3f2iWSqlNDstz5V0=;
+        fh=H093R8oJwMsAposqqTJZgeU7A2VtRUJ2FRf3kcca0dg=;
+        b=fVe+p1W5pupd8J3HZeBUBl3Q/Yv6ccBUnF48K4sAMacT7j8Q6ksCoSzSMmg5oJK/yC
+         aa0YvzFGDsGGGbiq4JVMMKSBQwjZXYGwKGKAEclX7Njd8fR1VsVj4fQgIfA4kGuQ35PR
+         hlAXVmsfLFeqVnBbCr1LDXoyM8IUnCKQydwdzwhqFNPx0ay9uE84tRS/DY4yDWeaInjj
+         4dnlBiGSd84GSmz1rjdKNlAvosyWjhgHsabtLpOoyLsSNKqGur7VvS91CYQILnryKbKs
+         wwzQFeHBYdC2reQK0KZx7ldQ+nRGSAdBMKV7FXNW4lLB9D3ZZU0FtlJeYmyyY6+oGHh1
+         JCxg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794879041; x=1795483841; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0foDh9lhfm067jv5RbQ/CuCGBEs3f2iWSqlNDstz5V0=;
+        b=G4sYMCymILpacviV7mjCOULNLDF3rKitytNMchDzU/yEFfaNdgaoTdJvm9yPP2LP0S
+         Xh4bw+3IZR6wZDfD8uagDzYrh2q3JsGJw4ULl1l7gYqQblNn+2A2hQhLxT/TnWnvWFF+
+         8lWCNnxcNTcCFWSTVsWEe7MohD2/jrgTeNizfAZyJwWNYfR1cEOYcr7zTcZaNbK3t32p
+         YA5tdoLasMWMi5DMuHyy0tTcS+i+F7zvxLjbiCRyEFeKfMHb4luMG0cunaEbKKX7h5Vc
+         k+sSZr56on6kqxWzPzvxazbeHu1jrsL6giLqWzinjnJ7F+68d4CIHK42jG19QVxAasX+
+         whFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794879041; x=1795483841;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0foDh9lhfm067jv5RbQ/CuCGBEs3f2iWSqlNDstz5V0=;
+        b=qu+oDFfMIadkeGQNZTqDr21IJbF69nIu3vKT29AlAbYkqBSmZl4gdZYDuN0Jri+s4/
+         JNgKpudrlHdhzslIOql/o/9HnFSph2dWPefIEjrzKwcXWnzjepmE4sproo8pUs6ACUsJ
+         ZcTBlycX5PRLoUr8NKT5a695P5nrDSnKKElz1HnRJQe43E5R2+UgNFJ01Kq3aK5eo/ed
+         K0vvihlNstSB62MLaiTtZkk23c/328y3O2MUZD8uFxEN/PVsJbBI11yX97flD4tZKfsE
+         qFzBrKuJoLwxWCqSBwZn4h05tnWw9xDPRaiYK9C7JI9p2a6y+4hMizM+NynidXmteFbC
+         bfNA==
+X-Forwarded-Encrypted: i=1; AL+hErGsIkrcKDt3guk95akDd8kgFkL1JLcT1hrbxduTsXX5ZCNBBs1n5hgXc+/c+o4Niom4Dl4oVrzkSBfWc2jknfM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9A8n8QDzzs90N38nOekI+9cwzuJSpMXogkz59gHfyqfsJ1c6vY
+	ujxObVRDv5ZPmSCPLR6hDvvBFy3v0jah2gBSggt3aGZdZFe1ypVdtox90n67jQfzwNu1NFh9eRr
+	c1ZXtvheMRAlFx/JSzlWVa822FmFwEmHbBLNw4NF2
+X-Gm-Gg: AYBFou3YPC9wVnC/5QebXUotnD7D3jo8xprAljSvyN43gn7U6/2RlSxb4D9q8uD8zeJ
+	Ofxsqg4w2e4RsufMpscl2fp1ahbbVUs1BCQFz74Avr+Nbv7C1jb2PNE0/toY+sGx173t4bXtZRe
+	7FJ+JOhBaDkH/1r0QciGiABdWeM5cRvPVzTKmC4J4d7QSsSAy9oKfOlc1WSsPspOjUomoXP+u26
+	SG40YSgp9shFMjdMEpSlimeh+SAPVMht3tTbBKQj1f85pg6lXtXv/b2g7rem6s2ni4d/TXs7/Gi
+	EI0TDoKwfA1GSgA1Pw64f+mL1gPSVQCHcput5J30Z4RKIV5OoUVNL9fUNIKlIWBRcbVnKDKBqbi
+	INcnc2E7mXL+BCbuRtlg21I5pS+XL+BJ3Pdk3plT8uNfHc0uOuJQRXCOmk9eTN5L3Z2m5j74=
+X-Received: by 2002:a05:6122:29c5:b0:5ea:cd69:7cda with SMTP id
+ 71dfb90a1353d-5ee34a4a22fmr4937364e0c.7.1794879040840; Mon, 16 Nov 2026
+ 17:30:40 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,75 +104,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6bdfe6f7-aba8-4fb8-ac24-62fe020e1422@rbox.co>
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDAwNCBTYWx0ZWRfXw+sA7WyR5fAw
- TXovZZcIazZICOswjUfauPnRZHKFDpY4OamNG3a9JpkvewckKGNTvzKwEdnOguhJtqIYtYFUORE
- Oaf8zJKi9lKXWEz7SKlSSR6GOGUZ/9s=
-X-Proofpoint-ORIG-GUID: KMXLMYJs4-5j-kqvUpTGAlw7R4_j3K2w
-X-Proofpoint-GUID: KMXLMYJs4-5j-kqvUpTGAlw7R4_j3K2w
-X-Authority-Analysis: v=2.4 cv=SuoFe/O0 c=1 sm=1 tr=0 ts=6afbac80 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=8elwO82fXORLTBIkMd32:22 a=VwQbUJbxAAAA:8
- a=VabnemYjAAAA:8 a=LG5T7v2SAAAA:8 a=He0p99DsmHbbqY9DTv8A:9 a=CjuIK1q_8ugA:10
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDAwNCBTYWx0ZWRfX7m85Y5zQnTEb
- cMVAlqDIp0L2XulWWy+37PM46rNDD2UY88oV3B2zR4ZtJPzZP+9UGqIVwRIIlZXTvIQx3EiZDC4
- gnkFY9xidHqSP4RoTbA661mzuoizyd7SYwiNmLi1KDMmkzkgvlQ4Kp61rXBcobVCl/zKyBVil60
- 7am3E8oOWIzMZlEajob5IKnlA3kjYWd5+OTUfZg7Wa/QtQBIWSXnfLK7a1ng8uVvNECyQ0aqPDD
- UH6C+hqMkjYARmkePb09z0KEEQ85Tg1J1V/c8BTRcJnODLrf2uy/E5mHretdmt9JQuCEKwf63G+
- 4lCbtvEVGeaZ3Bt2v1anQCC47V5lYoFsR5hPoMxkbtl86hPzsvl7VC9+9h4ir4te1TUs3X5BUNa
- tGwOB75rcksb/sblhi6g3vr6FErZTmmr8tAv5tODQC+Gg5tnvGhAZVQDMsqHhMfWVpDYLdPgNV+
- a7jxS+n385ic9UFqJEQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-16_07,2026-11-16_01,2025-10-01_01
+References: <20261112014942.2946303-1-treapking@google.com>
+ <avaewOJD7tX1UYfE@fedora> <avanVkILHDYdpond@fedora>
+In-Reply-To: <avanVkILHDYdpond@fedora>
+From: Pin-yen Lin <treapking@google.com>
+Date: Mon, 16 Nov 2026 17:30:28 -0800
+X-Gm-Features: AclHuK-byOO9ApLlxanSDYI9Lfieig8sHZUQyc_p9n6pRaoz5hWdciXbyY9EdzA
+Message-ID: <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: bonding: fix failover race in
+ bond_options.sh prio test
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Bjoern Doebel <doebel@amazon.de>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	Matthieu Baerts <matttbe@kernel.org>, linux-kernel@vger.kernel.org, 
+	Jonathan Toppins <jon.toppins+linux@gmail.com>, linux-kselftest@vger.kernel.org, 
+	Hangbin Liu <liuhangbin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 16, 2026 at 12:10:19AM +0100, Michal Luczaj wrote:
-> On 11/14/26 04:14, Bobby Eshleman wrote:
-> > vsock_connect() sleeps with the socket unlocked. Meanwhile the transport
-> > can complete the handshake, setting sock->state to SS_CONNECTED, and then
-> > reset the connection, e.g. in vhost_vsock_reset_orphans(),
-> > virtio_vsock_reset_sock() or vmci_transport_handle_detach(). When
-> > connect() gets the lock back, it finds sk_err set and moves the socket
-> > back to SS_UNCONNECTED. Userspace can then connect() the socket again,
-> > and a connect() to a CID on another transport makes
-> > vsock_assign_transport() release the transport the socket was connected
-> > on.
-> > 
-> > Only move the socket back to SS_UNCONNECTED if it is still
-> > SS_CONNECTING. A socket that got connected stays SS_CONNECTED, and
-> > another connect() fails with -EISCONN.
-> > 
-> > Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
-> > Suggested-by: Michal Luczaj <mhal@rbox.co>
-> > Link: https://lore.kernel.org/netdev/179447093204.2199510.8895677421994612994@kernel.org/
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> Reviewed-by: Michal Luczaj <mhal@rbox.co>
-> 
-> Thanks! To be precise, the Link: above is more of Sashiko's musings on
-> what's wrong with Jerome's (not merged) patch. The patch of yours makes it
-> moot.
-> 
-> I believe the first time lore mentions the issue at hand:
-> Link:
-> https://lore.kernel.org/netdev/20260909-vsock-connect-reset-closing-v1-1-50298b9ccfbf@rbox.co/
-> 
-> And there was at least one report off-list, so:
-> Reported-by: Kyle Zeng <kylebot@openai.com>
-> 
-> BTW, I've noticed Sashiko already commented on this patch. I feel I'm
-> responsible for that wall of text, so I took the liberty to reply. Hope
-> this will help.
-> 
+Hi Hangbin,
 
-Got it, will address this. And I think I will actually break this out
-into a separate fix for net instead of net-next.
+On Thu, Nov 12, 2026 at 10:00=E2=80=AFPM Hangbin Liu <hangbin.liu@linux.dev=
+> wrote:
+>
+> On Fri, Nov 13, 2026 at 01:23:40PM +0800, Hangbin Liu wrote:
+> > Hi Pin-yen,
+> > On Wed, Nov 11, 2026 at 05:46:18PM -0800, Pin-yen Lin wrote:
+> > > The prio test intermittently fails in the arp_ip_target and
+> > > ns_ip6_target variants:
+> > >
+> > >   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL=
+]
+> > >     Current active slave is eth0 but not eth2
+> > >
+> > > The ARP/NS monitor marks a slave down when it has received nothing fo=
+r
+> > > too long. With arp_interval 100 and the default arp_missed_max, that =
+is
+> > > about 250ms for the active slave (eth1) and 350ms for a backup slave
+> > > (eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the repl=
+y,
+> > > and eth0/eth2 receive a copy forwarded by the gateway bridge. Once et=
+h1
+> > > is down, its probes reach no one and no slave receives anything, so
+> > > eth1 normally times out first and the new active slave is picked by
+> > > prio:
+> > >
+> > >   t=3D0    probe: eth1 gets the reply, eth0/eth2 get a copy
+> > >   t=3D10   test sets eth1 down
+> > >   t=3D300  monitor: eth1 idle 300ms -> down
+> > >                   eth0/eth2 idle 300ms -> up, eth2 picked by prio
+> > >
+> > > But the test takes eth1 down right after bond_check_connection(), who=
+se
+> > > ping replies only arrive on eth1:
+> > >
+> > >   t=3D0    probe: eth1 gets the reply, eth0/eth2 get a copy
+> > >   t=3D70   ping reply on eth1 only
+> > >   t=3D85   test sets eth1 down
+> > >   t=3D300  monitor: eth1 idle 230ms -> still up
+> > >   t=3D400  monitor: eth1 idle 330ms -> down
+> > >                   eth2 idle 400ms -> down too
+> > >
+> > > eth2 can then no longer be picked. eth0 becomes the active slave if i=
+t
+> > > happened to receive some other packet (e.g. an MLD report), otherwise
+> > > whichever slave comes back first does. With primary_reselect 1 or 2,
+> > > the bond keeps eth0 even after eth2 comes back.
+> > >
+> > > Before taking the active slave down, wait two monitor intervals
+> > > (200ms), so that at least one more probe is sent after the last ping
+> > > reply and all slaves last received that probe. The miimon variants do
+> > > not need the wait, but the extra delay is negligible.
+> >
+> > I'm afraid the waiting time is too strict, especially with a debug kern=
+el
+> > since delays can happen.
+> >
+> > Bjoern is also fixing[1] this issue by pinging a non-existent neighbor =
+to
+> > keep traffic flowing. Would you like to test whether that works for you=
+?
+> >
+> > [1] https://lore.kernel.org/netdev/20261104142018.552135-1-doebel@amazo=
+n.de/
+>
+> BTW, using ping may not able to triger the arp request in time. You can t=
+ry
+> arping instead.
 
-Yes, I much appreciated you responding in the Sashiko thread! Thanks!
+Thanks for the pointer, but I believe Bjoern's patch addresses a
+different problem.
 
-Best,
-Bobby
+Bjoern's patch keeps the traffic flowing so that idle slaves are kept
+alive between the test steps. This patch fixes the case where the ping
+replies from bond_check_connection() only arrive on the active slave
+right before it is set down. The active slave's failure is then
+detected one monitor interval late, when the backups have also timed
+out.
+
+The ARP requests triggered by Bjoern's ping are sent only about once
+per second, which isn't frequent enough for this failure. I tested
+Bjoern's patch and confirmed that it didn't fix the issue in our
+testing environment. We also can't simply use arping instead because
+iputils arping doesn't support sub-second intervals.
+
+If you're worried that the 200ms sleep is too short, would increasing
+it to 0.5s or 1s work for you?
+>
+>
+> Thanks
+> Hangbin
+
+Regards,
+Pin-yen
