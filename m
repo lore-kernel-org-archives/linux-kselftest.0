@@ -1,101 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.19
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794931990;
-	b=358J7B7jprR5F8fXeeeyfQcqH11LW7XbvHJ4aUtor9DXS/L979dsdOTejPIbNtx7W1Nw
-	 ksNt3WF1AdFCk5gHHuF7unmUw6xEnJhv7bcd4CbTFO/8qb/quUkNd0quCHf3UM/Qz+sWZ
-	 /MI4EfLB7wP8NxLA4mVL9cwydsQ/Y0Bme3NlRWSbkYuTSYD4ndKNMzANpQw3YNj9+LNFO
-	 2iAhK98r9Uuj3OHrMJo0QqsR42ZzO0T5oJTbwGS6ytQ516C8uNTYTBZ/iNcojy2IC4NPN
-	 W0u76QT481HoJe9Au9WVsfCwD/Lr5PFDgoWeOaQFhvHkTy86fHEjl0VM89X9odh7RNg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794931990;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=Ip4kHiwEptNEn1s/Uh0GInETpDrMH/A2C/6rU3lAchk=;
-	b=MHLb/AgLRB/aIG4re5jTUX/3/AmtdzW5OMJCHbcGnfrxd5OOvapGVINLBQpWJCifCZ5E
-	 WP4dzjwC82XmFG3NjwgjD0BGFeeePSK6y5NZS+GKWHNAt/pifWioZhwum/vadzGrcfIeJ
-	 3jVFO/rtM3p3YUSdbikSlJKdsWdXlQ+wiawWgv9VeS4T9qOtlx83ontnCth2j490fwutu
-	 wK80nsWoQqLrsgdfVR+jvdMVPfKvPWKQd+8H+OCVwwGHoyTaFYN59XAkxc2Z3tisFhULG
-	 LB6Oftq+W7ckBdyr78FrweKkfq7hqPUbUPbp8elcTmQaE7YVevu0FOVlco2VmbFgp4A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=awSMrNoK;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.19
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010019.outbound.protection.outlook.com [52.101.201.19])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794932045;
+	b=sXDzh/2ln5SxH7Hfps0888tALzuqUdn5i7W3NWKXbcH/vob8k0L+KMUf27piQjPyJVog
+	 /pmcdf/qGJXpqkzi/ZCR74RG0ORd2Fs+eUUtVZP227O5iA+Wdunldi2RtNxPGj9y450TT
+	 anXcBy/fTlgAAHkUAbjc+2MvgFZSv/6Ot41VOA09B6XgDXs9MoZzZ/MvGf9P5nw7wuOSi
+	 P1D+9vQuZqE4tg21lo65jEgBJw0C0HeEIB1tgYMhhQVH9QV1wX716CerUuUVYIjkKtYcR
+	 wb7TnLfdA40/gXX9esklHzLsboQMkjatUjz3/4mNJGZf6DEqkwn8ol78BNpDGyZQ4UQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794932045;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=2GB8yrCh15PzKnWWii1+rdwb9F4gbHq8S/zUVposLqc=;
+	b=CWx/R84tvg9U5k99c+ruc3oDwzBeO1q4WJ73SdJdKNj7cpoisvXDMVinPhRZhbms1IbO
+	 doKwvQ9rKzIqEYhKsrJsY9fGoVk80Sw8iq/x0/dUoSx8S5CK8UI6ctqPJWdE1nLc1lDK3
+	 8QATwDUyGHdwzoWggCfLmH2vRYD9Gr8exwdsOFZwyHRFg9FmNYIExiH+CSjHGkWt5X36L
+	 67jSBZgwEz/JcIxsmmscMqAX6z6kdOOf48aAcYKiGp3WxdG4OB26oIRmb0UnUpKgkFQff
+	 TVthskp8Nczjp5AGiL6/UUI9lkcQByF9+rfHh8T5Z1oG7cgKyRohE4xKfDpotslTlbA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SUUaCxyE;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F7D606A31C;
-	Tue, 17 Nov 2026 16:13:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38F7D606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 781AC606A336;
+	Tue, 17 Nov 2026 16:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=awSMrNoK
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jdWCdmviTtlFvGwTheIZStGS6zeMLO8QU1lAlhvyGQgpIv+l/KqOWRXNPDI2pj1fZGmjLpFAlCSDKBd+MZ58WojUc4WaYdSjXtuPaz3UCwBZPfT8L71BIKtypl0M/dBz9VNOHl3N960vt37OjFZAB0NaI4/jYUf7mdkOGKSx0TkR/trd3L/OeCNRHJgV/FNEF0HRtz9Mk3wrjxg8sZ13UFzV7vq9JmKIop0vjcYuh90fDjEQxv6VqsrD335b8SiZdEK8q8VbR9nojS52poGBHtvJU/BsQYRKSN5PaxbSLqLovBH4NH7VW7Qpx/Lk+MgOclLsSjDL2e1Jq3gibY8IHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ip4kHiwEptNEn1s/Uh0GInETpDrMH/A2C/6rU3lAchk=;
- b=IvpaB4LkVlP+YGYUsaOWywJ8jtJk6bHMhYOjcduHyCvmGBeDtVsjEPI/JF6TiEoBopwzZ0Bt0v7Jz5Jp834WfARYNZ8g7h6JLzqc9O64Xx5DCZ4QDaRMCmnYi+W203g8m370PB2MtOnjBxTeROc8ieVSVxWe2xQThnkzWmBd5lyzxpCST9rwfR52zmYxLc+YDQL8EvJ/ini0UAO8L/VoHBTQCkxbLJpjK8a2Vqkz/tDcX5q7OVE9pF5OuAg6Gh+fks8xkpg0kkHDSVzQ4bdf3EXgdR+ELtxppPL9MKPhAIIvh9hybzVtVKO0rAKozKlUs7nBO4N2qoyEQ4j5PZilyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ip4kHiwEptNEn1s/Uh0GInETpDrMH/A2C/6rU3lAchk=;
- b=awSMrNoKzVKmF9mqlRqJJyPBnnQNeevqB93+MKHmq41k/B2RL2ybc20SzesH1tRYAO7N3G6yiAi0DmBgq04HDdIhnU0NYGskGJxS4qHBFTiC2z9yf8jGV+3tF2nzJ6G6nMMATmse+xJDvl5ejKu5k4Ameg1Kmr5oUVTd37HiaCyXqbzG0IstUiCcWvs409xVJhVr73AAdiv7G5/KFpcvouQ98SOgA+C3Hn36U3mJW0GceB7DMA8gwYw6yhQWzrrUXL/ft0pPZZ5TBa1mjoaPs+YxmoJ25oUBX4KFzDLz56WAQXg1bQnIFhzbHhxN6njzS59MzcXoYd330PVcTBG2pA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by MW6PR12MB8957.namprd12.prod.outlook.com (2603:10b6:303:23a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Tue, 17 Nov
- 2026 16:13:04 +0000
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0615.009; Tue, 17 Nov 2026
- 16:13:04 +0000
-Date: Tue, 17 Nov 2026 18:12:55 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Leonard Lausen <leonard@lausen.nl>
-Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	Shuah Khan <shuah@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v4 1/2] ipv6: Honor suppress_prefixlength in
- fib6_lookup()
-Message-ID: <20261117161255.GA878128@shredder>
-References: <20261117110813.9894-2-leonard@lausen.nl>
- <20261117110813.9894-3-leonard@lausen.nl>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261117110813.9894-3-leonard@lausen.nl>
-X-ClientProxiedBy: TL0P290CA0009.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:5::6)
- To LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SUUaCxyE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BA41F000C5;
+	Tue, 17 Nov 2026 16:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794932045;
+	bh=2GB8yrCh15PzKnWWii1+rdwb9F4gbHq8S/zUVposLqc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=SUUaCxyEJAr9sFQpR9cYGiM8ZssslZmtENDRxbVOROPtjr+4okMvRrCvlqciEcy+D
+	 oQo3Q/24waMzaeuTq+AbQIV1lG4bm1C63m6wMMV65my7rc5EEJ3OLYdIbm28pPpT4x
+	 t5UsxVIR5xbXHfogsbYLFp8sb8tvlEyUOAMeoLiQqegc2jkLN8cWE7bBHvljYg6v9y
+	 lXeNhumCFcES68xB+T0TXg7tkwYfE37dvg6x72+0IEAsv+54qTpdlPl+xEPRQavSCM
+	 yvnOYUQLVPjks/adjm/fjLzh1mIFTa5I/qpLXEGC5fUp9/FYMDR7jb9Otqrp2krEjn
+	 4v/0ZUdKhH+qQ==
+Subject: Re: [PATCH net v4 1/2] vxlan: reset the remote's dst cache when
+ snooping moves a MAC
+From: netdev-bot+sashiko@kernel.org
+To: ilskdw@gmail.com
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ kuniyu@google.com, mschiffer@universe-factory.net, nicolas.dichtel@6wind.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 17 Nov 2026 16:14:04 +0000
+Message-ID: <179493204412.3136.9530927866932224793@kernel.org>
+In-Reply-To: <20261113155133.75090-2-ilskdw@gmail.com>
+References: <20261113155133.75090-2-ilskdw@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,107 +64,213 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|MW6PR12MB8957:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4dc311ab-be3b-4545-1b94-08df44c5a8c1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|22082099003|18002099003|6133799003|261009223027099003|3023799007|4143699003|5023799004|11063799006|56012099006|261028144727099003|261102123227099003|261022105027099003|261026140227099003|261022075727099003|261026121527099003|261021121427099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	7Gzu5/7lx+OXySkjd6yM74mgeggZ0wxIf5P+HcwVmfP2i/YOzX+ZU2OWrW+RFlzAWBUusuX1dXElYE8Gx78gW1TqLYDgQGjFchNQ3n5h/qCzfgeZH48LmtwUtLx5tj1ypFDtTsjWLsLSaKsOXoU0SPr+7RFzBVKoln8MWMPhvavzz0MHSusC5yEjyyH5EDLX5NUpjf1eluzln7CWZ7CEwhkyUhXwed5es3OlBeIdKjHgxONiUraqjZ5iYJ9fSjtwV10M7+s/A5OymnEvkB3CGF7up3sQ8WUvBYcL+MwBMLttd+K46aN6K88w3sV5cPcnyKW+owIufQh74cwbZ1kIvQ/Ir+vvbjSPkMrEfq8OotdpLaKIwMujRc6JrN/bCZ5PyYpLIMaBvv3QZcc6yqVHq6DunWt1ynLQiGtCrpviidS8x8ZTk7stp9R+weqie64WqRyb5yATgK1T0nlZF6F3Fi34Q8Dx+jfhw9+bkdPIlvfSrUTT+l4PhqECYXfhMdbFPAO1WZb6NZ2bb/sNhqKMOMPxcCrPXfB5oXv5VQMHNbahDDIxAxUH+2JD/23ThcpfVHq6rlGEvtBhZWKoKCn8n/nO4rNPv1T4+5Qt0EIXkMPKn4ypeKSHDMjkfCGCbVwBm7dtAFaBjNzidcwSGsRSxBG8Id9CrNHgDyCTs0mL7EA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(22082099003)(18002099003)(6133799003)(261009223027099003)(3023799007)(4143699003)(5023799004)(11063799006)(56012099006)(261028144727099003)(261102123227099003)(261022105027099003)(261026140227099003)(261022075727099003)(261026121527099003)(261021121427099003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XL/HUDTgRJb6oWx22/nA3MWx+aSwqHAhaW9224IhsgNSWJHUYTOYm+j5k0JR?=
- =?us-ascii?Q?w8RVxOUI4IFTKk+lDdpu6DTuAVXgE3CcJqjMkj3iWN81JvZ45FPeVS6tONDQ?=
- =?us-ascii?Q?fGFiTtWYWH/XTq4CI12/kNV3Rf5LbibAwAghC2VZoH751HCAYOX068ppjRz3?=
- =?us-ascii?Q?eSpsBWpROnpKFH0YHlZwvbhiGFrDyry4GsOdStS05WWKD4GOXMvwDjsSLoTF?=
- =?us-ascii?Q?61GC1SXZUkNcNNmkeZth7inHgRKZo6KyeNFHSKcr8JdgUz+aWDQulTpQAdfe?=
- =?us-ascii?Q?vwTyeAP7xeS3swbgcyKuhIyuZSU/tw4FfrivxgWa83/ahZwsIzJ+427KqEYQ?=
- =?us-ascii?Q?nlS2/rp1jHpHZ1+zGJlkQms37BYJ847XhJ+aRAb/eDJw0xj0mEALKbP9Re3t?=
- =?us-ascii?Q?YmBTkkxSuw+cCjBxrwyN2g3IJ1tlz19rZ1/Ag3mVejbuF7mkIv4VEyWmDf2c?=
- =?us-ascii?Q?8hH68NK1JSEHNGvLj7nrFL9BHDeuZAWReuPzdO9X9Wkkcu4Qmxi0EtkPtoJa?=
- =?us-ascii?Q?WRUc+FSkeb6ZmLNbL5d41sE/swPfE04q2qZfZB9JFb0tD81/zCZc4FGctIZC?=
- =?us-ascii?Q?V6hSJt7foBgWNdGmjTFD/siQTcgykmrpoxreTH5CwETHWfiknMkfT7t3AP1z?=
- =?us-ascii?Q?xGeOPZo+p/vIYMVNjxywT3Vdd11JeuHYpCmuCQKWmiCEA8DBWikoIj/k6YmU?=
- =?us-ascii?Q?rdPUSAB6XzCtvv09hgWObF6+y7ClgXkFMJup/JdCEK3gNgacaFOmkrnull1i?=
- =?us-ascii?Q?Zuk6OC8yjOLr/2g0sLXXFCvgo5OGVVZUK5MPHF7/rJgrXZ4mADZIQub4CB1N?=
- =?us-ascii?Q?FfRgMz2BWYTjs+Kv2E3JNwWc2i3cJPegOszXzIOvXy1eXdcjrJF6aSVcWUqU?=
- =?us-ascii?Q?gCsNXWLprqql7dQmWBaNm0E16ZDYYbCBUbis6dUqhkVlP8Z+F/Ax723Ap0ha?=
- =?us-ascii?Q?H4KOGJdrIa2HSC1dOoRr0mt4bptJy/tSDeXFU7gVYFSOq3Rus8HRe1S7V0ZV?=
- =?us-ascii?Q?0SaXxvSMPm9i2LUoor+a5LYlfLPHqxuQvRGrhekADzjO5DeM4lF0pfVX4gYq?=
- =?us-ascii?Q?DDqWHuWv1Fz9/w/gyw8I+SRBjnlCtQOH+pE1d/Bbfxp0ijTAOwySRIWyfv1Q?=
- =?us-ascii?Q?wi0kvzWFhnCfTpRJu6JWfwiq7I2TT40BFxktASWyH967fxU7QxOYVANCXkAy?=
- =?us-ascii?Q?O1r61UlJ7cIFzMGk2YTy5dSI937S4VnzIqqibEG2rbkmnz8TgEOkjZvy11CP?=
- =?us-ascii?Q?BGFAFRlBdMM6boAQA0T1YN+ISd3qUKebNfAyg/uapIv5mg6xi+miHJmlp53Y?=
- =?us-ascii?Q?NtUsbQJM+ff/UgT4QyrDCoQ2lmdsuyAhYvox+Yel1uHJ+2UD+sacOO7ihqdC?=
- =?us-ascii?Q?FkrFviYzX6JCBYgbxvPpEqPQn7iq/zrWzx0uZJD9FPquX4kiBZfH45tCBaDe?=
- =?us-ascii?Q?WUjqZh6BGBJx9IVN6uiyP8ZSp9E3FM4ZrxKpK8EdMDsGdEztneq94IGIkCod?=
- =?us-ascii?Q?1GZIEeTMAdV9xyHlqVV8C956fJ+El9APPxqSTmc9/o4yjrBHBNXEs7SmV8Xz?=
- =?us-ascii?Q?EtoXFmNeu08Hbs/JppAS5T2N4g85lkT6n95tu3agOkqDXv/QsYleIAxl+HM4?=
- =?us-ascii?Q?Tf9UElzZy9EEnqJ2wgroIHulaS+ylQe2/9jxkOW6hu+6HAsRNnR7P0hdl8V2?=
- =?us-ascii?Q?i4mp5+c4IxQD8d6OFtdhCRZqGA0+UYKONM/XmlNpcWBg6RJC?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dc311ab-be3b-4545-1b94-08df44c5a8c1
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 16:13:04.3478
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oy2Od1tCWKexq1K/qLGULoVKuIO3uQTSjDseJmKbBKDexXAPovQFn4fZjwdBxDQ/AQB6F7V6fXhCm+ZydmPvkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8957
 
-On Tue, Nov 17, 2026 at 11:08:11AM +0000, Leonard Lausen wrote:
-> When custom FIB rules are configured, fib6_lookup() performs the lookup
-> via fib6_rule_action_alt() which calls fib6_table_lookup() and only
-> populates the f6i, nh, fib6_flags and fib6_type fields of the FIB
-> result. However, fib6_rule_suppress() only examines the rt6 field, which
-> is only populated when the lookup is performed via one of the callers of
-> fib6_rule_lookup() such as ip6_route_output(). As a result,
-> fib6_lookup() ignores suppress_prefixlength.
-> 
-> This was not a problem for nftables until commit 1c32b24c234b
-> ("netfilter: nft_fib_ipv6: switch to fib6_lookup") switched the FIB
-> expression from ip6_route_lookup() / nf_ip6_route() to fib6_lookup().
-> Since then, with a rule that suppresses the default route in the main
-> table before looking up a VPN table (as commonly configured for
-> WireGuard), the FIB expression returns the suppressed default route
-> instead of the VPN route. Strict reverse path filtering then drops
-> replies received over the VPN.
-> 
-> Fix by evaluating suppress_prefixlength against the prefix length of
-> the FIB entry when the lookup is performed via fib6_lookup().
-> 
-> fib_rules_lookup() only invokes the suppress callback when the rule
-> action returns 0. Unlike __fib6_rule_action(), fib6_rule_action_alt()
-> returns 0 for reject routes and instead sets RTF_REJECT in the result.
-> Do not suppress such routes so that they continue to terminate the
-> lookup, as with ip6_route_output() and IPv4. Check the flags in the
-> result rather than in the FIB entry so that blackhole nexthop objects
-> are also covered.
-> 
-> suppress_ifgroup is not handled since fib6_table_lookup() does not
-> perform multipath selection and the nexthop it returns might not be the
-> one that is eventually used.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-Simply deriving the 'ifgroup' from the first nexthop device would be
-consistent with IPv4 and it only matters if someone is not putting all
-the nexthop devices of a route in the same 'ifgroup', which would be
-weird. I suspect 'suppress_ifgroup' is hardly used.
+Critical: 0 · High: 0 · Medium: 4 · Low: 0
 
-Anyway, this can be deferred to net-next.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-> 
-> Observed during WireGuard use and reproduced on unmodified v7.4-rc2,
-> without instrumentation or error injection. Verified with namespace
-> probes and nft_fib.sh on the rebuilt v7.4-rc2-based kernel.
-> 
-> Fixes: 1c32b24c234b ("netfilter: nft_fib_ipv6: switch to fib6_lookup")
-> Link: https://github.com/firewalld/firewalld/issues/1600
-> Signed-off-by: Leonard Lausen <leonard@lausen.nl>
+- [Medium] On a switchdev-offloaded device, the snoop migration path can
+  now hit a notifier rejection that it ignores.
+- [Medium] A packet from the same remote now erases a user-configured
+  `via <dev>` on a dynamic FDB entry.
+- [Medium] The patch adds two unlocked stores, rdst->remote_ifindex and
+  rdst->offloaded, to fields that every other writer updates under…
+- [Medium] The stale dst-cache blackhole that the commit claims to fix
+  can still happen through a race with a concurrent transmitter.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+--
+
+vxlan: reset the remote's dst cache when snooping moves a MAC
+
+When a known MAC arrives from a different remote, this patch makes the
+migration branch of vxlan_snoop() reset the remote's dst_cache, update
+remote_ifindex and clear offloaded. That matches what vxlan_fdb_replace()
+already does for netlink updates. The goal is to stop routing with a stale
+cached dst after a MAC move, and to stop the repeated RTM_NEWNEIGH
+notifications when a MAC moves between link-local and other IPv6 addresses.
+
+> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+> index d11028b374721..6bc54642e7f45 100644
+> --- a/drivers/net/vxlan/vxlan_core.c
+> +++ b/drivers/net/vxlan/vxlan_core.c
+> @@ -1482,7 +1482,10 @@ static enum skb_drop_reason vxlan_snoop(struct net_device *dev,
+>  				    "%pM migrated from %pIS to %pIS\n",
+>  				    src_mac, &rdst->remote_ip.sa, &src_ip->sa);
+>  
+> +		dst_cache_reset(&rdst->dst_cache);
+>  		rdst->remote_ip = *src_ip;
+
+[Severity: Medium]
+Can a transmitter on another CPU still fill the cache with a dst for the
+old remote after this reset?
+
+dst_cache_reset() only records a timestamp:
+
+static inline void dst_cache_reset(struct dst_cache *dst_cache)
+{
+	WRITE_ONCE(dst_cache->reset_ts, jiffies);
+}
+
+vxlan_xmit_one() reads rdst->remote_ip into the flow key before it reaches
+dst_cache_get_ip4()/dst_cache_get_ip6() through udp_tunnel_dst_lookup().
+dst_cache_per_cpu_get() treats an entry as valid while
+time_after(refresh_ts, reset_ts), and sets refresh_ts = jiffies on a miss.
+
+Consider this sequence:
+
+CPU0 (vxlan_xmit_one)                 CPU1 (vxlan_snoop)
+reads rdst->remote_ip (old)
+                                      dst_cache_reset(), reset_ts = J
+<jiffies advances to J+1>
+dst_cache_get misses,
+  refresh_ts = J+1
+                                      rdst->remote_ip = *src_ip
+routes the old address,
+dst_cache_set_ip4/ip6()
+
+>From then on, CPU0 reads the new remote_ip, but dst_cache_per_cpu_get()
+returns the dst for the old remote because time_after(J+1, J) is true.
+
+Wouldn't that be the same blackhole the changelog describes, lasting until
+the route is invalidated (for example by "ip route flush cache")?
+
+Moving the address store ahead of the reset doesn't close the window.
+Nothing orders the reset_ts store against the remote_ip store for lockless
+readers on weakly ordered CPUs.
+
+The window is narrow because it needs a jiffies tick at the right moment.
+It is widest in the live migration case this patch targets, where traffic
+flows both ways during the move. On PREEMPT_RT, the xmit path can also be
+preempted between reading the IP and the cache lookup.
+vxlan_fdb_replace() has the same weakness.
+
+> +		rdst->remote_ifindex = ifindex;
+
+[Severity: Medium]
+Could a packet from the same remote now erase a user-configured "via <dev>"
+on a dynamic FDB entry?
+
+For IPv4 or global IPv6 sources, vxlan_snoop() keeps ifindex at 0. Only
+link-local IPv6 sources get src_ifindex. vxlan_fdb_parse() accepts
+NDA_IFINDEX for any address family, so a dynamic entry such as:
+
+  bridge fdb add MAC dev vxlan0 dst 10.0.0.2 via eth1 dynamic
+
+has remote_ifindex set to eth1. The first packet from 10.0.0.2 with that
+inner source MAC fails the early return:
+
+		if (likely(vxlan_addr_equal(&rdst->remote_ip, src_ip) &&
+			   rdst->remote_ifindex == ifindex))
+			return SKB_NOT_DROPPED_YET;
+
+because remote_ifindex is eth1 and ifindex is 0. The entry is not
+NUD_PERMANENT or NUD_NOARP, so it enters the migration branch and logs
+"migrated from 10.0.0.2 to 10.0.0.2".
+
+With this patch, that branch overwrites remote_ifindex with 0, resets the
+dst_cache and clears offloaded. vxlan_xmit_one() uses the field as the oif
+for the underlay route lookup:
+
+		ifindex = rdst->remote_ifindex;
+
+Later packets to the MAC are then routed without the configured egress
+interface. On multi-homed or VRF underlays, that can change the egress
+device.
+
+Before this patch, the same case sent a notification on every packet but
+kept the configured interface. The commit message only covers link-local
+moves and doesn't mention this case. Should remote_ifindex only be
+rewritten when the remote actually changes?
+
+> +		rdst->offloaded = false;
+
+[Severity: Medium]
+Can these new stores race with the other writers of these fields?
+
+vxlan_snoop() runs in RX softirq under rcu_read_lock only, without
+vxlan->hash_lock. vxlan_fdb_replace(), vxlan_fdb_offloaded_set() and
+vxlan_fdb_clear_offload() all write remote_ip, remote_ifindex and
+offloaded while holding hash_lock.
+
+One interleaving involves vxlan_fdb_offloaded_set(). Under hash_lock, it
+finds the rdst through vxlan_fdb_find_rdst() using the old (remote_ip,
+port, vni, remote_ifindex). Snoop on another CPU then writes the new
+remote and offloaded = false, and sends ADD_TO_DEVICE. After that,
+vxlan_fdb_offloaded_set() resumes:
+
+	rdst->offloaded = fdb_info->offloaded;
+
+The entry now names the new remote but is marked offloaded for the old one.
+The flag stays wrong if the driver rejects the new remote, as in the mlxsw
+link-local case below.
+
+Another interleaving involves two RX CPUs that see the same inner source
+MAC, one from remote A (IPv6 link-local, ifindex X) and one from remote B
+(global, ifindex 0). Both enter the migration branch, and the remote_ip
+copy and remote_ifindex stores can interleave. That can leave A's address
+with B's ifindex of 0, or a torn address.
+
+vxlan_xmit_one() reads remote_ifindex and remote_ip with separate plain
+loads, so it would route a link-local destination with oif 0.
+
+The unlocked in-place remote_ip update predates this patch. These new
+stores extend it to the fields the commit message says it keeps
+consistent.
+
+Would it work to take hash_lock and re-check the state here, as the
+learn-new-entry branch already does?
+
+>  		vxlan_fdb_notify(vxlan, f, rdst, RTM_NEWNEIGH, true, NULL);
+
+[Severity: Medium]
+What happens here when a switchdev driver rejects the new remote_ifindex?
+
+With swdev_notify set, vxlan_fdb_notify() returns early when the notifier
+fails:
+
+		case RTM_NEWNEIGH:
+			err = vxlan_fdb_switchdev_call_notifiers(vxlan, fdb, rd,
+								 true, extack);
+			if (err)
+				return err;
+
+vxlan_snoop() ignores that return value. With this patch, a snooped IPv6
+link-local source now passes a non-zero remote_ifindex to the notifier,
+and mlxsw_sp_switchdev_vxlan_work_prepare() in spectrum_switchdev.c
+rejects it:
+
+	if (vxlan_fdb_info->remote_ifindex) {
+		NL_SET_ERR_MSG_MOD(extack, "VxLAN: FDB: Local interface is not supported");
+		return -EOPNOTSUPP;
+	}
+
+__vxlan_fdb_notify() then never runs, so no RTM_NEWNEIGH reaches
+userspace.
+
+The snoop path also keeps the in-place change. On the same error,
+vxlan_fdb_update_existing() restores the old rdst:
+
+	if ((flags & NLM_F_REPLACE) && rc)
+		*rd = oldrd;
+
+Wouldn't the software FDB then point the MAC at (link-local IP, ifindex X)
+with offloaded = false, while the hardware FDB still forwards to the old
+global remote? Nothing in netlink would report the mismatch.
+
+Before this patch, snoop never changed remote_ifindex, so this error path
+was effectively unreachable from snoop. Whether it is reachable now
+depends on such a packet reaching the software vxlan socket instead of
+being decapsulated in hardware.
+
+>  	} else {
+>  		/* learned new entry */
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261113155133.75090-1-ilskdw%40gmail.com
