@@ -1,70 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794887543;
-	b=H3Yo2HjxDWuybA/XsPS4THO0Ai1hXwb8J7ZmaoGCtuOQzq6X529wExGxaSZNnH4bmHB0
-	 b1BRpdBhpe4Djo8XSV0WFdoqbO8UuGgaey0wO9HtZtJqPAzqXwpDKF9ygpSzvS8YMVUGd
-	 fbl2j//sQSoeWqCST/Sv60aB+YdC8sP9bd8dmKtqIkk2YUPYZ8qD3rWukhPw8ksubXxK3
-	 2PR78z3ynof0sTmGAVlDw7H6ncTFW0MBp4vR1ul3uBiJBI6hJcvMuLIsGwihtAUU1Hh7B
-	 KLSxjPWVEyb0cLE+iTAQOP2z1ZIPi8phEVVVtzP8bU5ZpxnGn6XcgaWGxfTTM4dw8ow==
+	t=1794888400;
+	b=YNt79CqIPAsGeDaBTRBK/8bbGVD9Ik7xArprHUQs/Zxjdi1UW3mhuIj+5fvxMERmFazt
+	 gIyCe1H6twq0y02v93iLfAkzX7mpkWVnFaCjljvSemrxft5isXcPAoGftn+w8VbN/HCQG
+	 W+M/QNTf71A70UR2QcGPEmL8fbmACiE9gNdKlFW/cbiVhfDuM8OAbAYyRtfTVRbE/VH/P
+	 YVDpnWIvC9Hh1gdr+fI84+3zUN4ySpEZoZMAvLgrREvkJm5bgkHL/CRSvRx7LpUsu9SM0
+	 LWQi5OcQvP4pb8ks+q8eLBo7SM/27YDTtx0Jk3ElCfR0wreLHhGE3opjl0suL/Gk3JQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794887543;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:From:To:Cc:
-	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=kPbUU2pSkdSIyR6nxJNJ4pLUOdW5sNHpnFPYPN95g1Y=;
-	b=hsy6vbFxCvSddVTFCu8ogCczqhphcSmiZ7Ccek7gYyJEsMjCvk+r0QZVzI7GwagJ9COC
-	 +U3EQEumgCE6cINf8Xn9mtwwH3BBjLQzTGIlf1fb7IuopTNLJjer4eusB54/NxlSMRKRK
-	 bx1BLr+mDBwyirum8iWDXo4KN4PAND1cA8657lUbdXq5kd27f/BFYJ84MFZMDEYi/UWlj
-	 QCn/qMex534xOhHqXVaXvSiPsFYqe19PphY5pmn7d54Fk9lduOYpWQCBh9V+W70w8hOCC
-	 uG0nTk232KrtrPx40QXuVwi11cNzpmyhM3kMFoUj+5IhoXkexaTSAuhvMFJHOcifjIw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794888400;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=va/mnMTqx710thSJTM0Z8CocDpxShRf7Hl6EIOOUmGE=;
+	b=z1rm5q7LLtPv+DqmBYwZG847zCLRgHbGRKm9nPow6wCyo1pQx1es2ZE7NWHSbhTuTZGG
+	 NCQJffrYR1IkwSwnhCSZUw70fGvjJutGAVRTdPQV0T/dSP1dtAt13QdXXzZvsGj3kGd6Y
+	 xr4M0X/qv2CRGqZP4lC1ZSbCO2l1EN6kbhHJNmoHje5CPcCO4GlTcFIirsloHb0jXKMh1
+	 Qg9vnyvAzMpXU+vAUZOvlmHzbKv634gTQiHIzjuMNonB4vCH9IP3OYu76qxsdTZzlD7TS
+	 y5XImck1Yhpj8rDPMCU1vMRIcKZH8+0Ba1eGFZ2zM5jvzUznD2vUu+fXuzlgLq7NyvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Z6ZQGHLi;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12731606A31C;
-	Tue, 17 Nov 2026 03:52:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12731606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 429694a0e23a11f19a56ed5b684f684d-20261117
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:e56faa59-909d-4110-9eb5-9206bf254019,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:7db8b62,CLOUDID:54d9638c31d6d837d37134dceeea875f,BulkI
-	D:nil,BulkQuantity:0,SF:102|850|865|898,TC:nil,Content:0|15|50|99,EDM:-3,I
-	P:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-	,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 429694a0e23a11f19a56ed5b684f684d-20261117
-X-User: yijiangshan@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yijiangshan@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 671802626; Tue, 17 Nov 2026 11:52:07 +0800
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
-To: brendan.higgins@linux.dev,
-	david@davidgow.net
-Cc: raemoar63@gmail.com,
-	skhan@linuxfoundation.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	13667453960@163.com,
-	Jiangshan Yi <yijiangshan@kylinos.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH] kunit: fix NULL dereference when glob filter matches no tests
-Date: Tue, 17 Nov 2026 11:52:02 +0800
-Message-Id: <20261117035202.251238-1-yijiangshan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD463606A331
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:06:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD463606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Z6ZQGHLi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794888398;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=va/mnMTqx710thSJTM0Z8CocDpxShRf7Hl6EIOOUmGE=;
+	b=Z6ZQGHLipnfl1/B7VcEdljB3zJADL1zlYP0S9TTHGwD7xnkJ3s1N3r0LC4qz/OTyCElmRE
+	xlmRkHlIyhfx/ZbmzbtB+v6IpSprHU4t973zjFe9yLopkyYTSP//lIvVO5KxOEbeIsoiCB
+	Z6RA+kaEeZASDNP6N0b6C3jxrih59AY=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-362-CViUN3KmOXme1qAmpHQ0cQ-1; Mon,
+ 16 Nov 2026 23:06:37 -0500
+X-MC-Unique: CViUN3KmOXme1qAmpHQ0cQ-1
+X-Mimecast-MFC-AGG-ID: CViUN3KmOXme1qAmpHQ0cQ_1794888395
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 12CA818001EF;
+	Tue, 17 Nov 2026 04:06:35 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6EFCD180055C;
+	Tue, 17 Nov 2026 04:06:33 +0000 (UTC)
+Message-ID: <ec27406c-5e30-400a-bfde-f88752ec73be@redhat.com>
+Date: Mon, 16 Nov 2026 23:06:32 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,38 +71,170 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v4 6/6] cgroup/cpuset: Fix lockdep_is_cpuset_held()
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20261116012330.2271010-1-longman@redhat.com>
+ <20261116012330.2271010-7-longman@redhat.com>
+ <f5f1ecf6-d33a-4245-a522-34b986a3d7c2@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <f5f1ecf6-d33a-4245-a522-34b986a3d7c2@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-When a suite glob matches a suite but its test glob matches none of the
-suite's tests, kunit_filter_glob_tests() returns NULL.
-kunit_filter_suites() only checks IS_ERR(), so the NULL passes into
-kunit_filter_attr_tests() and is dereferenced by kmemdup() in memcpy().
+On 11/16/26 2:24 AM, Ridong Chen wrote:
+>
+>
+> On 11/16/2026 9:23 AM, Waiman Long wrote:
+>> Commit a84097e625f2 ("cgroup/cpuset: Call housekeeping_update()
+>> without holding cpus_read_lock") changes lockdep_is_cpuset_held()
+>> to return true if either cpuset_mutex or cpuset_top_mutex is held.
+>> lockdep_is_cpuset_held() is used by housekeeping_dereference_check()
+>> as one of the conditions that rcu_read_lock() is not needed to
+>> access HK_TYPE_DOMAIN cpumask that can be changed at run time.
+>> In reality, it should return true only if cpuset_top_mutex is held as
+>> housekeeping_update() is called with only cpuset_top_mutex held.
+>>
+>> If only cpuset_mutex is held, it is possible that there can be a 
+>> parallel
+>> housekeeping_update() call leading to a potential use-after-free 
+>> situation
+>> when HK_TYPE_DOMAIN housekeeping cpumask is being accessed. It also
+>> means that rcu_read_lock will be required if only cpuset_mutex is being
+>> held like when calling from hotplug, scheduler or cgroup.
+>>
+>> Fixes: a84097e625f2 ("cgroup/cpuset: Call housekeeping_update() 
+>> without holding cpus_read_lock")
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset-v1.c | 16 ++++++++++------
+>>   kernel/cgroup/cpuset.c    |  9 +++++++--
+>>   2 files changed, 17 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
+>> index 7c7f2887dfaf..6bf6da639fec 100644
+>> --- a/kernel/cgroup/cpuset-v1.c
+>> +++ b/kernel/cgroup/cpuset-v1.c
+>> @@ -686,6 +686,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t 
+>> **domains,
+>>       int csn;        /* how many cpuset ptrs in csa so far */
+>>       int i, j;        /* indices for partition finding loops */
+>>       cpumask_var_t *doms;    /* resulting partition; i.e. sched 
+>> domains */
+>> +    cpumask_var_t hk_cpus;    /* HK_TYPE_DOMAIN housekeeping CPUs */
+>>       struct sched_domain_attr *dattr;  /* attributes for custom 
+>> domains */
+>>       int ndoms = 0;        /* number of sched domains in result */
+>>       int nslot;        /* next empty doms[] struct cpumask slot */
+>> @@ -698,6 +699,11 @@ int cpuset1_generate_sched_domains(cpumask_var_t 
+>> **domains,
+>>       dattr = NULL;
+>>       csa = NULL;
+>>   +    alloc_cpumask_var(&hk_cpus, GFP_KERNEL);
+>> +    scoped_guard(rcu) {
+>> +        cpumask_copy(hk_cpus, housekeeping_cpumask(HK_TYPE_DOMAIN));
+>> +    }
+>> +
+>
+> The return value of alloc_cpumask_var() isn't checked. With
+> CONFIG_CPUMASK_OFFSTACK=y, hk_cpus is NULL on failure. Maybe goto done
+> like the other allocation failures here?
+>
+> Also, rebuild_sched_domains() can be called from outside cpuset, e.g.
+> arch_topology and the energy model, with only cpus_read_lock and
+> cpuset_mutex held. partition_sched_domains_locked() reads
+> HK_TYPE_DOMAIN in asym_cpu_capacity_scan() and in its fallback path.
+> Will these trigger a lockdep warning after this change? If so, do they
+> need an RCU read lock as well?
+>
+>
+Yes, I realize that some additional scheduler functions will need to be 
+updated as well for this to work. I am planning to have an alternative 
+solution to work around this problem. I am going to drop this patch and 
+send out another patch soon.
 
-Skip the suite when the glob filter returns NULL. Keep the existing NULL
-check after the attribute filter, which covers suites whose tests are all
-removed by attributes.
+Cheers,
+Longman
 
-Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- lib/kunit/executor.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index c798a02470d8..3a281af3cda8 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -226,6 +226,9 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 				*err = PTR_ERR(filtered_suite);
- 				goto free_filtered_suite;
- 			}
-+			/* Skip this suite if the glob filter matched no tests. */
-+			if (!filtered_suite)
-+				continue;
- 		}
- 		if (filter_count > 0 && parsed_filters != NULL) {
- 			for (k = 0; k < filter_count; k++) {
--- 
-2.25.1
+>>       /* Special case for the 99% of systems with one, full, sched 
+>> domain */
+>>       if (is_sched_load_balance(&top_cpuset)) {
+>>           ndoms = 1;
+>> @@ -710,9 +716,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t 
+>> **domains,
+>>               *dattr = SD_ATTR_INIT;
+>>               update_domain_attr_tree(dattr, &top_cpuset);
+>>           }
+>> -        cpumask_and(doms[0], top_cpuset.effective_cpus,
+>> -                housekeeping_cpumask(HK_TYPE_DOMAIN));
+>> -
+>> +        cpumask_and(doms[0], top_cpuset.effective_cpus, hk_cpus);
+>>           goto done;
+>>       }
+>>   @@ -736,8 +740,7 @@ int 
+>> cpuset1_generate_sched_domains(cpumask_var_t **domains,
+>>            */
+>>           if (!cpumask_empty(cp->cpus_allowed) &&
+>>               !(is_sched_load_balance(cp) &&
+>> -              cpumask_intersects(cp->cpus_allowed,
+>> -                     housekeeping_cpumask(HK_TYPE_DOMAIN))))
+>> +              cpumask_intersects(cp->cpus_allowed, hk_cpus)))
+>>               continue;
+>>             if (is_sched_load_balance(cp) &&
+>> @@ -794,7 +797,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t 
+>> **domains,
+>>                           *(dattr + nslot) = SD_ATTR_INIT;
+>>                   }
+>>                   cpumask_or(dp, dp, csa[j]->effective_cpus);
+>> -                cpumask_and(dp, dp, 
+>> housekeeping_cpumask(HK_TYPE_DOMAIN));
+>> +                cpumask_and(dp, dp, hk_cpus);
+>>                   if (dattr)
+>>                       update_domain_attr_tree(dattr + nslot, csa[j]);
+>>               }
+>> @@ -806,6 +809,7 @@ int cpuset1_generate_sched_domains(cpumask_var_t 
+>> **domains,
+>>     done:
+>>       kfree(csa);
+>> +    free_cpumask_var(hk_cpus);
+>>         /*
+>>        * Fallback to the default domain if kmalloc() failed.
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 64cbcbdbf6da..d18439e13bce 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -343,10 +343,13 @@ void cpuset_full_unlock(void)
+>>   }
+>>     #ifdef CONFIG_LOCKDEP
+>> +/*
+>> + * Holding cpuset_top_mutex will guarantee that a parallel
+>> + * housekeeping_update() call modifying housekeeping cpumasks is not 
+>> possible.
+>> + */
+>>   bool lockdep_is_cpuset_held(void)
+>>   {
+>> -    return lockdep_is_held(&cpuset_mutex) ||
+>> -           lockdep_is_held(&cpuset_top_mutex);
+>> +    return lockdep_is_held(&cpuset_top_mutex);
+>>   }
+>>   #endif
+>>   @@ -1416,8 +1419,10 @@ static bool 
+>> prstate_housekeeping_conflict(int new_prs, int parent_prs,
+>>           }
+>>       }
+>>   +    rcu_read_lock();
+>>       cpumask_and(full_hk_cpus, 
+>> housekeeping_cpumask(HK_TYPE_KERNEL_NOISE),
+>>               housekeeping_cpumask(HK_TYPE_DOMAIN));
+>> +    rcu_read_unlock();
+>>       cpumask_andnot(full_hk_cpus, full_hk_cpus, isolated_cpus);
+>>       cpumask_and(full_hk_cpus, full_hk_cpus, cpu_active_mask);
+>>       res = !cpumask_weight_andnot(full_hk_cpus, new_cpus);
+>
 
