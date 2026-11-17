@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794907774;
-	b=F++MMqJN1cicfdZCYLORbAbu1XxOvjQsp96oxRHcGXTYno9jlu8vKL+edR9MDjIbsxhf
-	 rkp8XNCH/i5wIbWSfNHzDfYTXdcZH1aVaz2ad6Kb/uRYIcT4mQWYstgHxABooWw0du0/b
-	 ObpU2C6Cj6/dc37jwH2JqlnMB31X7tELt2f51c0kxq4JTpyRgBCzXlsibm/5IHmlk1SL1
-	 eZFAfB6YW08Smg10oA8vtf7PxtopbM4Nb0av0rrXlFb5gGWyDbv+Okn4HbesQkhiGrXY1
-	 D4vm7COPjTpuptVE4yK+F0D/vb3IzOfLwZJq7+RH8UnR9WFtDgTqhg6wLvav3oVDC5A==
+	t=1794907777;
+	b=W5KgHNGRV6yt8YNLlJ4qNmlyk5hy0UpHxUO8FU1qk3Y2nUq5aR7dj1HpI3pFortXisCA
+	 ahvAK6NSEtO97lzXtUIz6TdKUrS90UXxuf0hf2C7a2AFFNiDNKaxQsHUyrP58iEnGwh2i
+	 hCJNLo7epiCVJ8qVKvD9Wqk79dYiHJyankUq7u3Zm+lutdK7w+L29UbrML9pnq8erBXRV
+	 GV9kvKVoSqk+gM+WjvzJA38aGunTEXmOiD4DDjvLMRUqVvoOrWH0s6Iuv5KMaJCZ5LKb2
+	 rVgW50wAkDhbBN1J3LNkhVNVo8C0WWcCNkvR7QOfzvZ42iMqKttUR+kQtgddPZW2nsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794907774;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794907777;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=lVrc4oHsxDCDJa3Hp3qUem7EegpD7+yTpsfWRSyZgHs=;
-	b=n4x7UxBEutCIDJJqPIEnxna+lZtwrG/Q+IaMxRSLTHVSKtDVLCV3YibXQrAA/rnyCAQe
-	 qIx9AYrv6OYaHl7ZKFvtBNSVXXUobJYl0KQi4Q+G/MWSAue8VXvWdXR87yEruJMWGhx8N
-	 mzzODqw/+XGlZ3vDavoZZtV2ZOdGxzQaCLu6vWKg/BJHPFl8wfnkfCZ1SZDl1sojTmWP7
-	 PoNNEEJzJyys4eaQE8cPoQDdftEff0/3tB/5kgRSGz62+gUYa9sXpOts4Hl0jifnl7xMY
-	 7lz9e+xh6HqwWGjYynCz2ncvIT0B08SzbVBMbijWBF1R2jthUIkeKbh12eOOypwikhg==
+	bh=WwkPKboaRHO3gWj6crYxjpzj9cX9xx9wCpXmZOCeZgY=;
+	b=h1DAfE6s6BQ+phWnpe8EWXhsVCMyn/kcnCdAWP7Wnggbz58Kw+bXWiFLDKqJewkd4G5A
+	 4IQsiNUsA9hWQVE5UbxaAz4tGIPsPI5BqB4rNtA0yX9nB2v7PK7uOsceqJLc7sVv6Zi+V
+	 VHMnmPo0iCN3sSiJ5mzc7dfenEcEB7wzzjeqzZJoyVmicPDw1kK9sPwLgmeCyMTSKIb8n
+	 NzOZv2D7JULf7wnaG1Un0Y3Z6chy7edz61BX0OM5ftakaGNQBIk37hbCcChZ75lFi5i+Y
+	 ukCFxOIaKKqRRTCVQHJNCIJYpMjUKZ74c0kCQpoq+J6yodb43/mzoapJKL+NZlOiHmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=corp.free.fr;
 	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=DOWVf6Gp;
+	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=AR7mJYKU;
 	arc=none smtp.remote-ip=212.27.60.169
 Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3698B606A8AA;
-	Tue, 17 Nov 2026 09:29:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3698B606A8AA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4A760A261A;
+	Tue, 17 Nov 2026 09:29:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C4A760A261A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=DOWVf6Gp
+	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=AR7mJYKU
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1794907765; bh=K4Llhg1hmaw8g5dzoUBJThs+VMah2kSFZeuFKLz69pI=;
+	t=1794907767; bh=ETQLiklF/DMETVxTZ3pQ7sasKCndEu5GA0chMOax7tQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DOWVf6GpipRv9xFZ0LaKuSjkTaITR+HUa8BZSAhPA1+kSdPC0Bj2TbExGhzvYl7Fs
-	 IOOk6AvBwMcFTz8upmL+b3ytmT6DKaqSQjvoLeqfnBq9WBT5YQfYGNFwaFBY45rb8D
-	 14rjZsIwN9D4GnvSfTAyPngPrlgmTm6dTmybu96YUa3kaU4YOaj1N3Umuy/dWCFzge
-	 bWw+jFRNFBtcd2POSfhs4tiwQmB27HplZ6rGxQII4HatUtlgjyeoQGVzz3Fn+uY5yH
-	 ClYiqRojRnIy2R2gvAnZDm8ouKiFTjriPBrqmIgzjwTjitXqfDoNjVuvyO35Uye1J8
-	 9dJd5sO3ZEqxQ==
+	b=AR7mJYKUIRtrhZbZFUN8RbCO7nzL38du94dad2Uxd0sbL1VDMHZoxW4tsGLpAOQiK
+	 sByl3UiR7+ADY+ER3BvxcyxfuAD8VOGIh1h98WTyXTkbAkLLwRDE7ax4q+DmILoIGA
+	 PvgJ6F9pZDSzlr1ByjIwgdifTNLj3+7Kzx7v0xeKAFUJxCFQbF6URFy0d8TNIitOzn
+	 LCwMs16pF5URo/XGfr9LLt8mc7Ya37HSl31qr2uYZ6yfHXvXxMlvC5IBBjAkDKt8sp
+	 0dirJNTLY9v7cVeqKm81bVQ1WHs54Ec77eTiSZr+7Du64WmkGCPtd65Rqk1/6e0x4a
+	 cRpK9ywmg9gCQ==
 Received: from lnxos-dev.home (82-66-150-212.subs.proxad.net [82.66.150.212])
-	by rcs.proxad.net (Postfix) with ESMTPSA id 89F4B44C0B5D;
-	Tue, 17 Nov 2026 10:29:24 +0100 (CET)
+	by rcs.proxad.net (Postfix) with ESMTPSA id 958F844C0C2F;
+	Tue, 17 Nov 2026 10:29:26 +0100 (CET)
 From: Alexandre Cassen <acassen@corp.free.fr>
 To: Saeed Mahameed <saeedm@nvidia.com>,
 	Leon Romanovsky <leon@kernel.org>,
@@ -72,11 +72,10 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-rdma@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	oss-drivers@corigine.com,
-	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>
-Subject: [PATCH net-next v2 06/10] net/sched: cls_flower: add enc_key_id mask
-Date: Tue, 17 Nov 2026 10:29:09 +0100
-Message-ID: <20261117092915.255194-7-acassen@corp.free.fr>
+	oss-drivers@corigine.com
+Subject: [PATCH net-next v2 10/10] docs: networking: describe tunnel key partitioning in TC queue filtering
+Date: Tue, 17 Nov 2026 10:29:13 +0100
+Message-ID: <20261117092915.255194-11-acassen@corp.free.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261117092915.255194-1-acassen@corp.free.fr>
 References: <20261117092915.255194-1-acassen@corp.free.fr>
@@ -91,87 +90,46 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Flower only matches enc_key_id exactly. A block of tunnel keys takes one
-filter per key. Add an optional mask. Without one the match stays exact.
-
-  tc filter add dev <dev> ingress protocol ip flower \
-      enc_key_id 0x100/0xf00 action ...
-
-cxgb4, mlx5 and nfp program the mask. sfc does when its firmware supports
-it. hns3 and ice reject a partial one. The previous patches make bnxt and
-mlx5 tunnel mapping reject it too. i40e and iavf never program the value
-of enc_key_id, with or without this patch.
-
-Hardware holding a 24 bit VNI truncates the mask too. This is correct when
-the key fits the VNI. The previous patches enforce this on cxgb4, nfp and
-mlx5. On cxgb4 a mask without a VNI bit would also drop the tunnel match,
-and the cxgb4 patch refuses it.
+Tunnel key partitioning steers blocks of tunnel flows to RX queues with a
+mask on enc_key_id. Document this use and what enc_key_id means on a
+physical port of mlx5. Also document what happens to such a filter when
+its queue goes away.
 
 Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
 ---
- Documentation/netlink/specs/tc.yaml | 4 ++++
- include/uapi/linux/pkt_cls.h        | 2 ++
- net/sched/cls_flower.c              | 5 +++--
- 3 files changed, 9 insertions(+), 2 deletions(-)
+ Documentation/networking/tc-queue-filters.rst | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-index b6ccc645b0e3..a20fa42e6715 100644
---- a/Documentation/netlink/specs/tc.yaml
-+++ b/Documentation/netlink/specs/tc.yaml
-@@ -2908,6 +2908,10 @@ attribute-sets:
-         byte-order: big-endian
-         enum: flower-key-ctrl-flags
-         enum-as-flags: true
-+      -
-+        name: key-enc-key-id-mask
-+        type: u32
-+        byte-order: big-endian
-   -
-     name: flower-key-enc-opts-attrs
-     name-prefix: tca-flower-key-enc-opts-
-diff --git a/include/uapi/linux/pkt_cls.h b/include/uapi/linux/pkt_cls.h
-index 28d94b11d1aa..fcaf06c6892d 100644
---- a/include/uapi/linux/pkt_cls.h
-+++ b/include/uapi/linux/pkt_cls.h
-@@ -560,6 +560,8 @@ enum {
- 	TCA_FLOWER_KEY_ENC_FLAGS,	/* be32 */
- 	TCA_FLOWER_KEY_ENC_FLAGS_MASK,	/* be32 */
- 
-+	TCA_FLOWER_KEY_ENC_KEY_ID_MASK,	/* be32 */
+diff --git a/Documentation/networking/tc-queue-filters.rst b/Documentation/networking/tc-queue-filters.rst
+index 6b417092276f..14032375d630 100644
+--- a/Documentation/networking/tc-queue-filters.rst
++++ b/Documentation/networking/tc-queue-filters.rst
+@@ -35,3 +35,25 @@ queues and/or a single queue are supported as below:
+    devices, TC filter directing traffic to a queue have higher
+    priority over flow director filter assigning a queue. The hash
+    filter has lowest priority.
 +
- 	__TCA_FLOWER_MAX,
- };
- 
-diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
-index 23eba4a00a94..dd248a335402 100644
---- a/net/sched/cls_flower.c
-+++ b/net/sched/cls_flower.c
-@@ -661,6 +661,7 @@ static const struct nla_policy fl_policy[TCA_FLOWER_MAX + 1] = {
- 	[TCA_FLOWER_KEY_VLAN_PRIO]	= { .type = NLA_U8 },
- 	[TCA_FLOWER_KEY_VLAN_ETH_TYPE]	= { .type = NLA_U16 },
- 	[TCA_FLOWER_KEY_ENC_KEY_ID]	= { .type = NLA_U32 },
-+	[TCA_FLOWER_KEY_ENC_KEY_ID_MASK] = { .type = NLA_U32 },
- 	[TCA_FLOWER_KEY_ENC_IPV4_SRC]	= { .type = NLA_U32 },
- 	[TCA_FLOWER_KEY_ENC_IPV4_SRC_MASK] = { .type = NLA_U32 },
- 	[TCA_FLOWER_KEY_ENC_IPV4_DST]	= { .type = NLA_U32 },
-@@ -2110,7 +2111,7 @@ static int fl_set_key(struct net *net, struct nlattr *tca_opts,
- 	}
- 
- 	fl_set_key_val(tb, &key->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID,
--		       &mask->enc_key_id.keyid, TCA_FLOWER_UNSPEC,
-+		       &mask->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID_MASK,
- 		       sizeof(key->enc_key_id.keyid));
- 
- 	fl_set_key_val(tb, &key->enc_tp.src, TCA_FLOWER_KEY_ENC_UDP_SRC_PORT,
-@@ -3680,7 +3681,7 @@ static int fl_dump_key(struct sk_buff *skb, struct net *net,
- 		goto nla_put_failure;
- 
- 	if (fl_dump_key_val(skb, &key->enc_key_id, TCA_FLOWER_KEY_ENC_KEY_ID,
--			    &mask->enc_key_id, TCA_FLOWER_UNSPEC,
-+			    &mask->enc_key_id, TCA_FLOWER_KEY_ENC_KEY_ID_MASK,
- 			    sizeof(key->enc_key_id)) ||
- 	    fl_dump_key_val(skb, &key->enc_tp.src,
- 			    TCA_FLOWER_KEY_ENC_UDP_SRC_PORT,
++Tunnel key partitioning splits the key space of a tunnel into blocks. One
++filter with a mask on enc_key_id steers a block to its own queue. This
++helps with traffic that RSS cannot spread because its hashed fields barely
++vary, such as GTP-U tunnels between a few endpoints::
++
++  # GTP-U TEIDs whose two top bits are 01 go to queue 1
++  tc filter add dev eth0 ingress protocol ip flower skip_sw \
++      ip_proto udp dst_port 2152 enc_key_id 0x40000000/0xc0000000 \
++      action skbedit queue_mapping 1 skip_sw
++
++Not all drivers can program a partial mask.
++
++On mlx5 devices such a filter runs on a physical port where nothing
++decapsulates the packet. All the keys describe the packet on the wire.
++enc_key_id is the only tunnel key such a filter matches.
++ip_proto 0x2f, or udp with dst_port 2152, 4789 or 6081, tells the hardware
++which tunnel header holds the key. The software datapath has no tunnel
++metadata on such a port. Only the hardware can match the key.
++
++Reducing the number of channels below the queue of a filter drops the
++traffic of that filter on mlx5 devices until the channel returns.
 -- 
 2.43.0
 
