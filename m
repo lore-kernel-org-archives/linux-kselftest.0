@@ -1,54 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.68
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794903022;
-	b=2WTcMsffUJyzidomlBX/fDKenOrf7G9NrE7TAQDaoQd5wbx8BCWbXRFfrwbhrmDaKGvc
-	 7K+Qz1TGY+zRsta+YQJaWERwELqPE/OXWk1sO4LTJ1d1jBw+VXuOTGlZA8bYVMI2Sb+XN
-	 lYBH6JsFjc49p8oo2w8xZ3QlpjTkQPV4OJl7BSq0IXF22+FIdOGoQG+YWFWor/L9l5xir
-	 8T6Kw+HZ7ekvtM21dnqWZ1sgUR/8Sle6wHwlo2CVkJvYTy/SfLkWEfgBuXpHzkri8YWtk
-	 ZcaFnrREAQKKA6yxbr1g7jKGEqVBIRvbkFFCdFjugL2gMCrjwlWuEm2SGXUsyRO7RbA==
+	t=1794903941;
+	b=IQl8eCY1ftXwsx+yL12erxPPaNH/BrA04L+XYv8LRfB23fLyQi0klxbfSU4ODT3vNId8
+	 ggL1CcTFbjeMmXnzQpGNU9d8DzEIc4NCwgsP3TljMDEcfcxQGBqIISPuQJqtnPZWTXtLs
+	 0zl/mCSlRMZVqyQQwQ6qABq+4qCDJUtB27pdZ8Z0/LaT3SsugyFTH+sqS0rwYDRR++gzV
+	 GcjUk0V1NFDp3PhNMQLskyD3CGZV/YbotW6DbuKnBtZamjlg4wUgi/JdtGn0EWloCKEEN
+	 4PIK5oOHS6+CMj0ndNjZX9EIWCIT08XO56ZWytP+aiGVY9xXG17ZRGh4KqL9+1yVYpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794903022;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=LmGROQ8j6ssfXVbTrRZUW1rS5G1Xj+GI9rns6J0VgQk=;
-	b=0zuhCTe8s22jBgBRisbwbkhTB/bw6Q8GwKWxvB/LA+ZiW4Se2TrMpxvboOj/zauj6Hox
-	 mnTMHBgLeY648slbr3NU7mVCLZVPRWiYlKXlgCK9QmYeXdW8LWut+QKilvdlJ0qFfci7L
-	 90HqqCE0WWP6VQC3hLOhWrqmLBw9H3FeWH2dd7SiVqFjMxROfIgBA7Z4UTFSXpbrPB3J7
-	 s16LAJ3bpz8AIepcQrhYkt07mwiklB9n71Twth/1YXaA6dOFSVqqeeuvb3c2IDL7NGf3H
-	 aFPQ/npYCA/74AQHqDnMbVbenQfld+JG1GB/HvjZ+jDW5FfasI0CWMdsrHEY/ALSjcA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794903941;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=UGlayfD5Z/El6cdpm6ie0HDMH84kD107OWGXScU9uXE=;
+	b=4afzMTewahgrnmBkF1OEvSiB3vXkddnXjVMMJCSfOPKJpc8DXauL2L8G4mbWBO94d1Wf
+	 7CWLbBxYHzPeVpaJxgFqQzN+i6qxATe488B/TcAG0m35HJQiPoMI2DqKsMbxmuHjoluB1
+	 bk+XPM/Kl0bf2rakvGTBQF8eCXFGamb1E/bKKBLf+O6KuPBofOXk+pRd9knOWDD/eQfk6
+	 DGD73bHsUMMhMaNJSrH/ZcUmGCCCy31SYGQ13HvqpZPbVrDdhU3lzhwAuynLQnz7+OSq+
+	 QESlnlCT204S0gdGFPbbsV0QYELC8siG+FqA8PaMgMOTpatRVz3utv9LLBpp6590b3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Wn0ruJT9;
-	arc=none smtp.remote-ip=95.215.58.68
-Received: from mta1.migadu.com (out-68.mta1.migadu.com [95.215.58.68])
+	dmarc=none header.from=amutable.com;
+	spf=pass smtp.mailfrom=amutable.com;
+	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b="QoCmkI1/";
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18025606A332
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 08:10:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18025606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD96D606A32C
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 08:25:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD96D606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Wn0ruJT9
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=cn6tymwrhooG82BjdGKkfjlm33e7584SzGicUSgvQKM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794903020; v=1; x=1795507820;
- b=Wn0ruJT9Acsnawp/GLxSLIMzssi5hdpg13VVA4lwvI79ZrxkTOXPIU2SXue0MBqDw9LLTcKZ
- b0+jkN75auSvfz/idVWPITa8+49k933XfouRvPCZ8+V+/sJLRRiDdrQswMTzriWsIyzhPPqJrQj
- M1hTS1b+NcZcqJr45/HZ3pxw=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d49511be82a76482;
-	Tue, 17 Nov 2026 08:10:18 +0000
-X-Mizu-Trace-ID: d49511be82a76482
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <64588236-7ab4-4d63-8ab5-8a1658eb15b0@linux.dev>
-Date: Tue, 17 Nov 2026 16:10:06 +0800
+	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=QoCmkI1/
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-492690dd5daso4102907f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 00:25:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1794903939; x=1795508739; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=UGlayfD5Z/El6cdpm6ie0HDMH84kD107OWGXScU9uXE=;
+        b=QoCmkI1/XbLLMuB5pWQjj6w7lhYbbqiM96jQW+pj9RZ000aRRl9S7H2qSmbtORMNOo
+         ePt1TXAWzVIR/TrMeI58Zu3n81XgIdPHavzyhyljr/3uEJYZwsW6Sg14gd450d308jE0
+         RrvE2vSlthe4MhW9V05IsJzW8g0CM3u+nfQ1hkfntpYQW6a4z4zmXmxD0w/TiuzDbd7U
+         U8xZ2FexNWbZhSQ3d3pA0tlH/f0MOfn4O69UeuIyRM8vQ/YXTKpGPDyGoQczoxEfoynP
+         BDcwZppUf46pJGXZ+RH52kug0iZSl25eld2NGIqCa+XVs4XFwFr0CZI1pzljVyhbNHw0
+         NmQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794903939; x=1795508739;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UGlayfD5Z/El6cdpm6ie0HDMH84kD107OWGXScU9uXE=;
+        b=R+QLD5ZBZh1AKK55SKuvrkSry6RwdIDxawrU/0eeFXbfMKFVZtKLH0dpXVo7hd9fd3
+         XIK9XF9dhfRyPiEn7xzANg5qhPnt9BHmti8yjllvkyUmEMKY+vDsBfZ998T7wGt/2j9y
+         MBMlnmg7WmFEq5AXetOUKvnNRMjxGjvA1WjTpDgogHIqDOmc4/zwCWClXyQ2QinfmVij
+         RlDOL5yac3yS79yqP7yDMO7hfojm/TDzuB9YfwwtjEnaHO7iQwy76thLYdqUNxH1at+F
+         jCEu8Q3tYx38Ozlsqgy3SKGzd2rRIg2XFIQiLuOMD/hA8f/0IsP1BJYDMZIQn9+//GMT
+         wuWw==
+X-Forwarded-Encrypted: i=1; AL+hErGT3BpeYqqUJ1nr90jeZre7ztGOo2gh1GjbN9LombRqwWOS8IKRZ8spVCuklEjxLMXE9FvJqrMPALv6otw2gRA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9B/9MimZ+O1Rq2LvuJ7YDj8ulm8Ve+qV6ql26qTqdAR77n2gOx
+	ZQaMRrC29tW+gdUzdFiulXXebGvAhzDw8auDo34SRy68YcAqpTT4DOI/EBlE6AGDlw3D
+X-Gm-Gg: AZFdTZcMnDzgoebFFQTJ2OK4Q6K2wl5fuLljksbYu/t75qP3ziifiQkNQANUzKP0fJ+
+	IpoeO2qk0/Rgdinr7uiGStQ+iAfdEf7ERY13T6b2Mwo/AyHzIgmVSdxRcGFk114zcX8evtbdq11
+	+J2039wLZn+a2WKyYrHSCMgnj7dKzkHCGJQyFWKmEoC3gAYhxnaA7iq/EO2ua0447/WsGjldm7v
+	WETvMKMKanVxcqgz4HMM9SJbpujoPH9pep9D1Yh4TdGTyE9ginaIRWGfSB4E2bCWVsIq1M0muFC
+	k8wMMH95uoVAYRLRWnj0RZtCg70zYYM3moFElPa9BugEyz0wPVOmlMMza2aVMQGtiQJJojDj0eM
+	KVnnB6dc1NqofkqIeiUB4icG9tWyVtK4A+HqRUuhUxN9lWesGKyqTG9eKv2XW22fBCEqtUcFOYo
+	OHB95JjxqN2iSfYoiwfPW/f2HfQ8RRuJvBl9ijJhvYx6nW3ralt9zml2XE4HJp2qq3QmcTqxNsl
+	hbEZgvPmEHRTHWZjogvik0GDApFUxyMMVQgEero+IGCZ2S392mQKpfaXs9oVVJsMIERaa0muRPX
+	UXOSeeANSJxTL2FnElRgEt5ugYrDd+01d3B/c3PNpMxc34PyBVXGTDOc/dFP839G7YL3Db3YyKR
+	u6Z6Ly76vfPkBsaGCwXd4kofZWQ03uTmIOf319g0eIrb9BwhPP9GuyG1hyUNGIPae8a6OCXM8UM
+	9oxg==
+X-Received: by 2002:a05:6000:2084:b0:492:46e:d4ce with SMTP id ffacd0b85a97d-49c6fd932c8mr25238543f8f.13.1794903938925;
+        Tue, 17 Nov 2026 00:25:38 -0800 (PST)
+Received: from ?IPv6:2003:cf:572c:2800:de4c:6789:33ce:97c2? (p200300cf572c2800de4c678933ce97c2.dip0.t-ipconnect.de. [2003:cf:572c:2800:de4c:6789:33ce:97c2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5ff2be55sm26907832f8f.28.2026.11.17.00.25.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Nov 2026 00:25:38 -0800 (PST)
+Message-ID: <a9124bf1c858cef3e8ac06b1b2396dcb0e19e2a5.camel@amutable.com>
+Subject: Re: [PATCH RFC v3 02/44] nvmet: check that the file backend
+ supports ->{read,write}_iter
+From: Alexander Mikhalitsyn <alex@amutable.com>
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef
+ Bacik	 <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org,
+ target-devel@vger.kernel.org, 	driver-core@lists.linux.dev,
+ linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org,
+ netdev@vger.kernel.org, 	fuse-devel@lists.linux.dev,
+ linux-efi@vger.kernel.org, 	xen-devel@lists.xenproject.org,
+ ocfs2-devel@lists.linux.dev, 	linux-s390@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, 	linux-usb@vger.kernel.org, Amir Goldstein
+ <amir73il@gmail.com>, 	linux-erofs@lists.ozlabs.org,
+ linux-kselftest@vger.kernel.org, Chris Down	 <chris@chrisdown.name>
+Date: Tue, 17 Nov 2026 09:25:36 +0100
+In-Reply-To: <20261116-work-loop-pseudo-v3-2-8cbbea1cf34f@kernel.org>
+References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org>
+	 <20261116-work-loop-pseudo-v3-2-8cbbea1cf34f@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,134 +117,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- alexei.starovoitov@gmail.com, cgroups@vger.kernel.org,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, linux-kselftest@vger.kernel.org, cuitao@kylinos.cn,
- ameryhung@gmail.com
-Subject: Re: [RFC PATCH v13 1/4] blk-iocost: add BPF struct_ops cost model
- support
-To: Tejun Heo <tj@kernel.org>
-References: <20261106122356.3224638-1-cui.tao@linux.dev>
- <20261106122356.3224638-2-cui.tao@linux.dev>
- <e6062944917f1c9a87ab084bae9352a9@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <e6062944917f1c9a87ab084bae9352a9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hello, Tejun.
+On Mon, 2026-11-16 at 12:04 +0100, Christian Brauner wrote:
+> The file backend calls ->read_iter() and ->write_iter() of the
+> backing
+> file directly but never checks that they exist. Everything that isn't
+> a
+> block device ends up in the file backend. So a namespace pointing to
+> a
+> file without them calls a NULL pointer on its first I/O. Only
+> buffered_io=3D1 gets that far as the O_DIRECT open fails for such
+> files.
+>=20
+> Refuse them when the namespace is enabled the same way zloop does
+> since
+> commit 0c10f8a1a7ae ("zloop: check that the zone backing file support
+> ->{read,write}_iter").
+>=20
+> Fixes: d5eff33ee6f8 ("nvmet: add simple file backed ns support")
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Chris Down <chris@chrisdown.name>
 
-在 2026/11/17 01:27, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Fri, Nov 06, 2026 at 08:23:53PM +0800, Tao Cui wrote:
->> Attaching an iocost_model_ops struct_ops binds the model to one
->> device: the target is set in the dev member from userspace and
->> .reg creates the ioc if needed like an io.cost.model write and
->> ...
-> 
-> From here on, the description mostly walks through what the code does.
-> Can it instead explain why it works this way and what it guarantees, and
-> leave the mechanics to the code?
-> 
-Rewritten. The commit message now describes what the attachment
-guarantees: one attached model per device, pricing follows the
-model across io.cost.model writes, attaching doesn't enable the
-controller, and the model can't go away while it's pricing. The
-freeze ordering and the detach mechanics are left to the code.
+Reviewed-by: Alexander Mikhalitsyn <alex@amutable.com>
 
->> +enum {
->> +	IOCOST_COST_F_MERGE	= 1 << 0,	/* called from the merge path */
->> +};
-> 
-> Maybe name the flags after the callback they're passed to, e.g. enum
-> iocost_calc_flags, IOCOST_CALC_MERGE and a calc_flags parameter, the way
-> sched_ext pairs ops.enqueue()'s enq_flags with enum scx_enq_flags and
-> SCX_ENQ_*? An unnamed enum type can't be looked up by name through BTF,
-> so BPF programs can't test whether a flag exists.
-> 
-Renamed. The enum is now iocost_calc_flags with
-IOCOST_CALC_MERGE and the calc_cost parameter is calc_flags.
-The named enum is used for the kernel-side definition; the BPF
-callback argument remains u64, matching the existing struct_ops
-interface style.
-
-> Also, can the comment say what the flag means to the model rather than
-> where the call comes from? The bio is being merged into an IO which was
-> already charged its base cost.
-> 
-Updated accordingly.
->> +	/* holds a reference on the struct_ops map, NULL if none is attached */
->> +	const struct iocost_model_ops	*attached;
->> +	struct bpf_link			*attached_link;
->> +	/* either NULL (linear) or ->attached */
->> +	const struct iocost_model_ops __rcu *model;
-> 
-> Can the comment say why iocost holds its own reference on the map? If the
-> link is destroyed after del_gendisk() has unhashed the bdev but before
-> rq_qos_exit(), .unreg can't look up the disk and returns without
-> detaching, and the link drops its reference. iocost's reference keeps the
-> map alive until ioc_rqos_exit() detaches the model.
-> 
-The field comment now says exactly this.
-
-> Also, why are attached and attached_link updated under ioc->lock in
-> ioc_bpf_reg() and ioc_detach_model()? Everything which reads the two
-> holds rq_qos_mutex: .reg, .unreg, ioc_detach_model() and
-> ioc_cost_model_write(), which gets it from blkg_conf_open_bdev(). Only
-> model is read under ioc->lock alone, by ioc_autop_idx() from the timer
-> and the io.cost.model show path, besides the RCU readers. What is
-> ioc->lock protecting for the two? Can you document the locking on the
-> fields?
-> 
-attached and attached_link themselves are protected by
-rq_qos_mutex. The ioc->lock coverage is only needed for bpf_model,
-which is read under ioc->lock by the timer and io.cost.model show
-paths. The field comments now document the locking rules.
-
->> +static const struct iocost_model_ops *ioc_model(struct ioc *ioc)
->> +{
->> +	if (!IS_ENABLED(CONFIG_BLK_CGROUP_IOCOST_BPF))
->> +		return NULL;
->> +	return rcu_dereference_check(ioc->model, lockdep_is_held(&ioc->lock));
->> +}
-> 
-> ioc_model() returns NULL while the builtin linear model is in use, which
-> is a model too. Maybe rename the accessor and the field together, e.g.
-> ioc_bpf_model() and bpf_model, or ioc_model_bpf() and model_bpf?
-> 
-Renamed to ioc_bpf_model() and bpf_model.
-
->> +	spin_lock_irq(&ioc->lock);
->> +	rcu_assign_pointer(ioc->model, NULL);
->> ...
->> +	ioc->autop_too_fast_at = 0;
->> +	ioc->autop_too_slow_at = 0;
-> 
-> Resetting to 0 is right, but maybe ioc_bpf_reg() is a better place for
-> it? .reg is the only path which switches pricing to the BPF model without
-> a forced ioc_refresh_params(), which is what zeroes the timestamps for
-> io.cost.qos and io.cost.model writes. If ioc_bpf_reg() zeroes them, they
-> stay zero while the BPF model is in use, which covers both detach and the
-> "model=linear" switch sashiko reported on this posting.
-> 
-Moved. ioc_bpf_reg() zeroes the timestamps inside the ioc->lock
-section together with the settle, and the zero in ioc_detach_model()
-is dropped; as you say, they stay zero for the whole BPF period,
-which covers both the detach and the model=linear switch.
-
-Besides your comments, p1 also picked up two fixes from testing:
-calc_cost() now matches the builtin pricing scope, and a dead owning
-map now reports -ENODEV instead of -EBUSY.
-
-Thanks,
-Tao
-
-> Thanks.
-> 
-> --
-> tejun
-
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+> =C2=A0drivers/nvme/target/io-cmd-file.c | 5 +++++
+> =C2=A01 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/nvme/target/io-cmd-file.c
+> b/drivers/nvme/target/io-cmd-file.c
+> index 695963dd932ee..dfa8aa46188c8 100644
+> --- a/drivers/nvme/target/io-cmd-file.c
+> +++ b/drivers/nvme/target/io-cmd-file.c
+> @@ -47,6 +47,11 @@ int nvmet_file_ns_enable(struct nvmet_ns *ns)
+> =C2=A0		return ret;
+> =C2=A0	}
+> =C2=A0
+> +	if (!ns->file->f_op->read_iter || !ns->file->f_op-
+> >write_iter) {
+> +		ret =3D -EINVAL;
+> +		goto err;
+> +	}
+> +
+> =C2=A0	nvmet_file_ns_revalidate(ns);
+> =C2=A0
+> =C2=A0	/*
