@@ -1,75 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.78
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794918272;
-	b=jukLKAutq5zu0WfvcAAs339eMX15KxbKbPcN0tNffIAFtIDaYhQFgwSknpDmoW3gFAKk
-	 O+d8ksqDmkTublor5KysVLcM6p01AMFV9XQVGHQwxZ8uC0U0TjPOSbaViILR/3JJSKJzD
-	 Vk9BiWGyxIzUFNHJdKNdBXRA1hmPEE1D8cz/958nbE+KpSBlrq/vPTjP1mrQjgkAnHDsm
-	 sgNuF2XkAGjxHr6BKFGViK0XPOUerOj3xqnjk414Q4lnmu25zOw60+oCjzRoToEcW5Xll
-	 zUg27zY0jWBKaK/JYR/4Uih7rYwkxwXNmKGsew10pq2WjHkcXxfO9BcssG90BBiaXSA==
+	t=1794918417;
+	b=0lATm1Q7osGanTp73eHHWQ+FHdkq+P34dYf7EjBzL2NHODgq0h1lJEs7b32sxjyyzaIa
+	 0bbg3qa+59OLnFd6jXCTxF76FzkXXL3EBKZS6jxt5ykndsehxhE5SChQWlIqM6t8dgkUO
+	 IFSIqRElO42CCcQVYPECiCO9sNb8gohQSzsaSo8g+fTYVRnkh5e66a/5UjJb7O6EtRFOT
+	 h3YaPwFv/FGEImZ4HXUwDvVPYDtCAR0NJSQ3xuVqH8rhTGa7Wiqq+3WIIZCOXeE83hSCL
+	 yiYl1eOkVyZqMJAcpgdM/lm6AkCDZSihW760CQ1CSlOB5ONjM0RHXeFA3K8a+US0FnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794918272;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=DCpu+Hq5xQeJszgIeoHmZoIg86kcDoEMxUxHmN2abjs=;
-	b=3EfFGi8L166UGrocQvNUqSZ1Q08FJMoELrxz0lgDqaSxa1NoLq8juorcqc+1Z6Vvcjqe
-	 VwEVGT04w1xNbVBtueZDNj4rx9OZymPULgUIQzSd1Z+2AuSx89tcqiqtrR/toNakN8Pf6
-	 bWHrDoFOv9XWMypIFjYp7oTyAre1WOqZy6TL8F+1mah4AmrS4PsVYVsF/+kXjiD2RcFzF
-	 x/MMx2Oq/j+K7lrvm18OmCQ9EpZFLYqDLbADhbBiLsxcJJ5RSwsDixfdYhy0yFJiLz1bD
-	 Bx49vXncrrrOXufrqtzsF5kxgEc9V41mkYD8yvKRvNHGvVpt3TfAGBDnLkHUhjQ2qgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794918417;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=a0Hhh6EB7u7ze6tHi/AqmllD56uVT+yPDQDWEyuvBtQ=;
+	b=fSqNQlGzTRS7XysedJqhEfM2oBUoM7Mdaohabm2XGlukU95qrRiPcQk8+GprV0q0ix4E
+	 /mSLuO29EtGKSDF/ZXgOpEQg+sBKKIbbbLMRbNYIvb/WynbpLr+2MUmYuw77GaLXuBGI8
+	 dLHD+lz9HzQBIb7UcU+aGK3MWZF9yIvElGBM9KTraom7ab0XKOb00qRT4L3Isri80uF0Y
+	 tro+3+vZmZ2xBztxUenEDkO8Ntr9JMh8aN80Q9Vjm8s3VYfefe6lvqAOeCRItQawKnAFe
+	 Pgk5HXMd6jjGmDoigJcKbv2YvrZFFzvR/u0nj/0dyjfzGSVxXNUGTUXrb+5qsecjeWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ugVJQVtE;
-	arc=none smtp.remote-ip=95.215.58.78
-Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L3B8zwEX;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB20606A329
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 12:24:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ACB20606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A60606A88F;
+	Tue, 17 Nov 2026 12:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ugVJQVtE
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=3vM0O1dJswiN9N8gqBgAgWRmPD44k2JkjuKN6dhc+5s=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794918269; v=1; x=1795523069;
- b=ugVJQVtEFegxsdAPplHrLvIIMoLGDHtWyhnX6a7Ry7Hl/47jxjo4G8h/ItdzXkqbEhhLYSdZ
- hzWVSncUUtM4pm8ye0UyxQHwIO9gf8cNXyJ15GxFKsxjg98MT6DWzuN+WmmRAyA6VtvZ6gAvp6u
- hBEY7xESuScRyr/ZvKW4Aw8E=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 953c64e80f13473e;
-	Tue, 17 Nov 2026 12:24:29 +0000
-X-Mizu-Trace-ID: 953c64e80f13473e
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Michal Luczaj <mhal@rbox.co>,
-	John Fastabend <john.fastabend@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2] selftests/bpf: Fix bpf-gcc CO-RE relocation in verifier_sockmap_mutate
-Date: Tue, 17 Nov 2026 20:24:13 +0800
-Message-ID: <20261117122417.340562-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L3B8zwEX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5012B1F000C5;
+	Tue, 17 Nov 2026 12:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794918417;
+	bh=a0Hhh6EB7u7ze6tHi/AqmllD56uVT+yPDQDWEyuvBtQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=L3B8zwEX1FTal6O2Eoy7mwJOAUsJyaL07I0n5sa7jQbOMTnV8LSBRDO5mhrYj7xBL
+	 qmncfH3N68+9Ld2c0KC+cQh6tJUWmGDp1uhXgdNRYi8YXggB1uVr9+U1iIv1kvgzbW
+	 0IVV0KaOH9/vIMOAgAWPCHZIQ20rMwcSflm4Df6WkAaoyvPN2hkGeoFF9Av7FPArqt
+	 Ck+nzUb0sMblXMJymF8IVhrsfMjRGfRucr1V0Yz2luxdfACZ5ItBcsXcWnDnhOhmmr
+	 iL6Yt7QGzH43LPppRMilN3ujiwNT/FkKpnMOGp3f4T2kI0geMpS0HYN5Y+jxz75X6i
+	 suriT9i4Gl5GA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Pratyush Yadav <pratyush@kernel.org>,  Mike Rapoport <rppt@kernel.org>,
+  Alexander Graf <graf@amazon.com>,  Jonathan Corbet <corbet@lwn.net>,
+  Shuah Khan <skhan@linuxfoundation.org>,  Randy Dunlap
+ <rdunlap@infradead.org>,  Andrew Morton <akpm@linux-foundation.org>,
+  Tarun Sahu <tarunsahu@google.com>,  David Matlack <dmatlack@google.com>,
+  Samiullah Khawaja <skhawaja@google.com>,  kexec@lists.infradead.org,
+  linux-mm@kvack.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/5] KHO map
+In-Reply-To: <179486913878.127049.11178890384802388709.b4-review@b4> (Pasha
+	Tatashin's message of "Mon, 16 Nov 2026 17:45:38 -0500")
+References: <20261116134013.1636689-1-pratyush@kernel.org>
+	<179486913878.127049.11178890384802388709.b4-review@b4>
+Date: Tue, 17 Nov 2026 13:26:52 +0100
+Message-ID: <2vxzwlqbfxtf.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,69 +66,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-bpf-gcc fails to load test_trace_iter_unix:
+On Mon, Nov 16 2026, Pasha Tatashin wrote:
 
-  Error: #766/6 verifier_sockmap_mutate/test_trace_iter_unix
-  libbpf: elf: skipping section(3) .data (size 0)
-  libbpf: elf: skipping unrecognized data section(18) .comment
-  run_subtest:PASS:obj_open_mem 0 nsec
-  libbpf: prog 'test_trace_iter_unix': relo #0: insn #0 (LDX/ST/STX) accesses field incorrectly. ...
-  libbpf: prog 'test_trace_iter_unix': BPF program load failed: -EINVAL
-  libbpf: prog 'test_trace_iter_unix': failed to load: -EINVAL
-  libbpf: failed to load object 'verifier_sockmap_mutate'
-  run_subtest:PASS:unexpected_load_success 0 nsec
-  validate_msgs:FAIL:1014 expect_msg
-  VERIFIER LOG:
-  =============
-  0: R1=ctx() R10=fp0
-  ;  @ verifier_sockmap_mutate.c:124
-  0: <invalid CO-RE relocation>
-  failed to resolve CO-RE relocation <byte_off> [4] struct bpf_iter__unix (0:0 @ offset 0)
-  processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-  =============
-  EXPECTED   SUBSTR: 'cannot update sockmap in this context'
+>> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
+>> 
+>> Hi,
+>> 
+>> This series introduces the KHO map. It is a sparse map from integer keys
+>> to u64 values. It is implemented as a radix tree of fixed depth.
+>> Currently the tree depth is 6, so it can support keys up to 54 bits
+>> wide.
+>> 
+>> The main user of the map is memfd. Currently memfd uses a vmalloc buffer
+>> that has a pair of {index,pfn} to track the folios in the file. That
+>> uses 16 bytes per page. The KHO map uses only 8 bytes per page with some
+>> overhead. So for a 1 GiB memfd, it uses roughly half the memory.
+>> 
+>> In addition, it is a more versatile data structure. For example, it
+>> allows for adding or removing pages from a memfd after preserve more
+>> efficiently than the vmalloc array.
+>> 
+>> Post-LPC 2026, the plan is for KHO to maintain backwards compatibility
+>> as much as possible. So this data structure allows the serialization
+>> format to be more flexible to future changes. It can also be used by the
+>> upcoming HugeTLB and guest_memfd preservation.
+>> 
+>> I have talked about this as "KHO xarray" before, but I think using
+>> "xarray" is just going to confuse everyone since it isn't really a
+>> xarray, and the API works a fair bit differently. So I renamed it to
+>> "KHO map".
+>> 
+>> This series isn't complete yet, but it is in fairly good shape so I want
+>> to share it to get some early feedback.
+>> 
+>> Things that are missing and planned in the future:
+>> 
+>> - Multi-index entry support: currently, while the map is very efficient
+>>   with 4k folios, it is horribly inefficient with 2M folios. Each folio
+>>   in the memfd takes up a full page to track. Multi-index entry support
+>>   can fix this by tracking entries that cover a whole page in the
+>>   previous level, similar to page tables.
+>
+> Let's fix it, see below.
+>
+>> 
+>> - LUO versioning support: LUO versioning headers are still in
+>>   discussion. This data structure should use them for future
+>>   extensibility. I am mainly waiting for things to settle down there.
+>
+> I would not worry about this. If versioning lands first, this series can 
+> be updated then; if this series lands first, Tarun will update his 
+> series.
 
-GCC only applies preserve_access_index to types that carry the attribute
-themselves. The anonymous union holding the sock pointer doesn't, so the
-CO-RE access stops at the union ("0:0") instead of reaching the pointer
-("0:0:0"), and libbpf rejects the relocation.
+Sure, fair enough.
 
-Fixes: e16c83fa764f ("selftests/bpf: Add negative test for sockmap update from non-sockmap iter")
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
-v1 : https://lore.kernel.org/bpf/20261117094544.148437-1-jiayuan.chen@linux.dev/
----
- .../selftests/bpf/progs/verifier_sockmap_mutate.c     | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+>
+>> 
+>> - Dynamic depth support: Currently the depth is static, so it can only
+>>   support keys up to 54 bits wide. Adding support for multiple depth
+>
+> Let's allow keys to cover the full 64-bit space from day 1, and make 
+> values 63-bit (like XArray), using bit 0 to distinguish a child node 
+> pointer from a leaf value.
+>
+> By making it generic from the beginning, we won't need to worry about 
+> ABI churn for these features later.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
-index 1516fe1524bb..0dbbc5ad1de9 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
-@@ -10,19 +10,12 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--struct sock {
--} __attribute__((preserve_access_index));
--
- struct bpf_iter__sockmap {
--	union {
--		struct sock *sk;
--	};
-+	struct sock *sk;
- } __attribute__((preserve_access_index));
- 
- struct bpf_iter__unix {
--	union {
--		struct sock *unix_sk;
--	};
-+	struct sock *unix_sk;
- } __attribute__((preserve_access_index));
- 
- struct {
+Right, that makes sense. I didn't want to over-complicate things, but
+you have a point. Taking the ABI complexity up-front is better than the
+churn later down the line.
+
+> Instead of caller-chosen depth, the tree should grow (and shrink?)
+> dynamically bottom-up based on the widest key.
+>
+> Plus, with bit 0 tagging leaf values, 2M entries can be stored directly 
+> at L1 and 1G at L2 (on 4K pages). Even for huge memfds, the pgoff space 
+> is much smaller than 64 bits, so in practice the tree stays tiny in 
+> depth.
+
+I think it is a good idea to allow dynamic depth in the ABI, but I am
+not sure if we should deal with the automatic resizing just yet. How
+about we start with making callers specify the depth (max index/pgoff)
+up-front for now? The ABI stays the same, so we can add support for
+dynamic resizing later if needed.
+
+The reason for this is to keep things simpler to begin with. That said,
+I don't have a _strong_ opinion about this, so if you insist, I can add
+dynamic resizing from the get go.
+
 -- 
-2.43.0
-
+Regards,
+Pratyush Yadav
