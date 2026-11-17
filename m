@@ -1,60 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794921276;
-	b=QcT2Zi98wIHYyTdC/w2YoGgPSc780UWKkq9i+3gpG4RsZmeVUK93y3S261tv7w+D/7KQ
-	 uRYhxpOAa4VVMtLZuOhE7MXRYgVYU/Viz/nfMzZ1lVJcNchVf9DIoL1jUiJz5i5htnOHE
-	 CntH+26ssJyE3IhfQIzLV20KAFliYL/mOLY3RcV1Spych9Czzjo/uMa5o+5Iyf/DeCgzu
-	 /ZHT9nMIJ0ggZhEtM1MTMK5ECHYeqqqXdeEp2oBvbpm5OKN1kKv7QsR/q4dbk8eBev0/h
-	 4W9qeTpmKzr5QS/oMNbF7BcIkhQ/zuDXwBL+uy2iuFXqEyTOrPyb2qD3oO8It+yn2mg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794921276;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=7cgl7yc5iVLhr224nmSrB4Z3hvi64B3G73hI753Om8A=;
-	b=RKZtsuEPTxwN4N0HulNyUofAdJGnQP1GGyB1lCPvTFUlXBUKZXLmXj7c51vn1+UGaBzf
-	 hhe8uS0SfFijhFcusR3ULmDlijHdaiBuJFtX2ipLuqeEkHQ5D8VqGAfi25hwukMk7xwLa
-	 IqaF/lEIzwdYIvuFbl6TIUGH2haX1NS2rNd8lQacSg1sN7M/VwXvsr4qHw0o+BXf4rsuZ
-	 lpUWNVnWEqOFbkLSWGTi16Yt5nv+fDLICkZy51yZ4bboscE5YTpEEMlbNMWpp3wzmrTOI
-	 LLHkNRYTuZhjm5DhRHVNk9BUg8pmSfqkWLnvRbF+y4vmbnMvAcEwvli9Ky4Dvl3AxXA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="YXpwqc3/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.193.135
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794921372;
+	b=1ZnkMlE/zPdGKH/xV28D+WoYXmNiYrDHsYf33D1DYuXTceoMge72OVvcOz9YTLWDogbj
+	 s/urISCeb3V5fzBGQMap2Fw+nwuIoLxjRD+Se6Xm5SSEVE+84/Wy36nQx26hfd6InAQMc
+	 FhGodPSKnM8dCs+vcXXQCawPvULkpmwJ7Tn6KD7Nqp5fdgREGVdgdUd9fAPBW7X5zl4Mg
+	 VV/NyfqhMrsNA+UsRe9MIy+LnwYfosgmrkZsZMxaxU5Lo6l8noSc2faby/dGsDQwI4Irl
+	 IKawr0bjf9rcI968H+0QR8UVj++kvq0PJsopihnOieMNCih6tH+V86oGSNolHty8GFA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794921372;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=qygKaxFvEesfKDnkrDKAflVAtxbsDlFiWGqkH5wIDXY=;
+	b=DzcaDNRQLIXWhNb5wLAo1Z5aTZSGgMBr3E6tZCqHJfFqKEtN1LGle7F/TpLaJCrWXTz5
+	 Pccf7clcIRH/dzv+mDxyuHnxanlHglsHQyTESJVKGDsbZ7J+FODXqHZgAVJb4j4VFgX/Q
+	 qxMZF0wpk4PLCMldIk0xsgrcdbxLXBRScdmu8RNzKS1gb6CV2KOOMFA9nZzkHtzI5s4lw
+	 vQv9BLwS9MIrPdl6DDPUyL9LQHmQGIlYLUGhbgzWDdA/Egx/wTMFClkIgszQj0m2dCpBN
+	 qb6wGwkHLUkh9iNeZEP0yAPbfhvcwq+fDlqKDjOKO7ZnK/1lCNQMT4RJsM+i4+wljng==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=nUTMhkTy;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.193.135
+Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022135.outbound.protection.outlook.com [40.107.193.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E95B606A88A;
-	Tue, 17 Nov 2026 13:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42613606A31C;
+	Tue, 17 Nov 2026 13:16:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 42613606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YXpwqc3/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1893D1F000CA;
-	Tue, 17 Nov 2026 13:14:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794921275;
-	bh=7cgl7yc5iVLhr224nmSrB4Z3hvi64B3G73hI753Om8A=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YXpwqc3/3iT0EvXEI7bSEqa4FjMeKnipGuuaNjIDLONGkXTbuXvPUyyhDyyBWXcL7
-	 /lsWVPX2OslzTnBvOeamsFrSb7taydNZo+tRZOTkUfZ4+D60ZU5NPn7EprvZE39Cib
-	 1TGKcAcCk63CnhhJZeFHaruGXUgpa3vU+dMNENz0XOiSa8HvOzUITpkFFCBw1WQp/q
-	 CZuaW1rrR/RrMmYMeI7urkMymzzGeUcI+s5klazsjriSOTKkuYEDRF42b2ZI0uH1l3
-	 iNAatOX7/wMwvdPLYmXB7A05Prf0pO1Jh0KFOkKOSrOlqa4J7iSPw8F1tvjfq8hrk7
-	 LCc1RiPhScJbQ==
-Subject: Re: [PATCH net-next v3 3/3] selftests: net: pmtu: Add IPv6 and
- asymmetric multipath tests
-From: netdev-bot+sashiko@kernel.org
-To: deliran@verdict.gg
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Tue, 17 Nov 2026 13:14:34 +0000
-Message-ID: <179492127464.3136.16715840375114819070@kernel.org>
-In-Reply-To: <20261113122237.88990-4-deliran@verdict.gg>
-References: <20261113122237.88990-4-deliran@verdict.gg>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=nUTMhkTy
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=J3IuxhrBHH0KLzlfgXJIqXHv26IJFzx4FEyWBFF+ZP2dRUn/0Xj61k9qx7ekWMusEeFLi9qBFKGk8cvEbHLo0f8cbFe4tOxzS8hkV4XqnRmSMsNftg1TfISG3LJBco2TlYAyKgTiHJlkgkFisAin8lNGyC+2+lHvmK+CxC58HMdTAq7MFoi3zKpasX53LNfLoqOmBCxPlGimSqzcnkveIkyGpcXhvjHtnXxh7Vq4t7TjJSf3BwUD89A7AfZeHtD1oRmXQIc6K4Mi+0c88d5d3Fh3yGgcR+Vt/0k6KmBilBkreofR4Ls+HsC0zSZWcvrWgZCARV4eV51LV2VfNsNKyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qygKaxFvEesfKDnkrDKAflVAtxbsDlFiWGqkH5wIDXY=;
+ b=JwsH4xTzrO7RQ81O6brs4Dhorceql6t48CKwKI9vrFB0F3nu6ShtoMnE9YXSE1guf8yWmFDDrmNaOQdKe1oWYkJcQxafVRG/qeDNtNGRFfyypxpgJKmsj9vBZHDrjYXk2vnsB48Yi5ViwM6FyfsxEo3YxqHR47XuQgW5CNXB2nS5mVhlTB+V9+XG2Wa6YUktzc6PDZFZwxJVCpqU5VGKPI9SIycKBuJPuDKMOj+CqRcGyJo4IsMl3SihO0QkyCTBIeyVT/lvdO3RE2BN8TEKs0YDMxfKfA0J5g/1nbR/zQGQn9gQLHqO481bDu+lww6qEnjnp9j62OAhAM4VYnNDiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qygKaxFvEesfKDnkrDKAflVAtxbsDlFiWGqkH5wIDXY=;
+ b=nUTMhkTyYyaE4kIe4oIYAIpabKY53gqM9MRzdQOtdD8hTtWsspTU7B6FcsigW7QRv9NrzihZmA9Xaj3apRK4ssEhcHC8EwNR4qdz1CnJNu2+bj583qMT/p1IAHE6lJBEwd3Ia7LrDjMjLuexnTDdK6qFoFVYMu3C3Vb4Vc8m55TTdn/1f6t0HvmwPDmPn1eBqZONYTlAaZqexZUVrV2mFY/4KyEoo22VNR84MYb6rN8xNlNIkvOIgj4dCzxF7FALPORR7UirxN7nrtorWVOUmOmaTSm4/cbhGD0f7WxezHSW/a1fCx/YQO8zFLjbbHGnAbrzZBi6oOmjOelPP16LTg==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by TO1PPFB99324EBE.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b08::686) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Tue, 17 Nov
+ 2026 13:16:06 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.013; Tue, 17 Nov 2026
+ 13:16:06 +0000
+Message-ID: <fda5e270-2a76-4752-a845-94815992d14b@efficios.com>
+Date: Tue, 17 Nov 2026 08:16:05 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 0/8] sched/proxy: fixes for proxy execution, with
+ selftests
+To: John Stultz <jstultz@google.com>
+Cc: peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
+ connoro@google.com, arighi@nvidia.com, akpm@linux-foundation.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
+ <CANDhNCruzSQ3r3WKPz9J6J5-DEm+L4hC8g6PvnuYnx9SiBTKhA@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <CANDhNCruzSQ3r3WKPz9J6J5-DEm+L4hC8g6PvnuYnx9SiBTKhA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQZPR01CA0081.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:84::8) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,102 +103,137 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|TO1PPFB99324EBE:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7700701c-a2ef-4385-da52-08df44acf020
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|7416014|366016|376014|1800799024|18002099003|22082099003|3023799007|4143699003|56012099006|261022075727099003|261026121527099003|261028144727099003|10067099003|261026140227099003|261022105027099003;
+X-Microsoft-Antispam-Message-Info:
+	KqGgtD5/wnXnvc1UnK5x9vKwkcK8Q4HsjYWFcUHaYoFBOkk+qmAbMgJok5LjcTsKm9rmHpWZAi2ZYbHhIosRAe/2PXBVEiuocbf/I6T1mhCGZeRGMF0OmMLREKxMKNCakCw4xnT1GOzV2XyswRJF3Qhq3C82vZZagYCtu1Kuh4v6wuSBELpU5weGWhCtdwqYG8z+QPB1U2N9e2QrhrhFCG3HPdfCPK+qYU7b3V+5Q9aebQh4gIAVF8PEj+EJYrn8nDdpifY7tr1pa4lHebge0+jskL21y4oAyNL1qsBVlbsy6h91Tt4C5VVEdAL2EgWESmsyM8cVm3CUHLMSmqbuCc0ZJnM9JGUM7ZL0wp1BKj4ci6a7O1nOnjdpf/l8Nw8ucZJWh3vphPzMEU/uIJd++msEcF+F+4JsTOFKaB5rEBiCSs+ve4cSrc8uANzQ9ay5Cgq2Fa7cumeAHV0ndBqxQ8EE4t6zUjZmxFxB7nimO7Mt2U4/dGT8qIfC7tpOTSmSDK99vV8+5L/R5ZCyP7anP4LM1KENUgV37I03bHRenPMniNiidFbnOaIhSFyxi6XV12VcaEZktyZdmIOG0Xf1eZMrU3skzC8XF8DqQp+5S4Y=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(366016)(376014)(1800799024)(18002099003)(22082099003)(3023799007)(4143699003)(56012099006)(261022075727099003)(261026121527099003)(261028144727099003)(10067099003)(261026140227099003)(261022105027099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YldMblZwRmkveFdSaWVPQ1QwY2dLTnluOWs0V3kzeW40cDNxMnczZnI2Z0kz?=
+ =?utf-8?B?QXdWL0JEMzErSEpaS0ttN0VRUFlxTHZoQ0Y1cWVvT2swSEJEL2JRamdVeUZ5?=
+ =?utf-8?B?WllwZlllaU14UXFUbWd6WmlmRFJjYkJsYjdMZGlCMFVqOFZMRXZQUHQ1bnFS?=
+ =?utf-8?B?aUZxdlU4ZEdoR2JnVWpueHcvaWUyMjc5YmZWY2U5Q1ArQ0FUSzhlU1FoRzdP?=
+ =?utf-8?B?WUJvWkZOQ0xjN1NmZGh3NTJFSUR5cllTYXFTdUpMWVJBTFBsZ1REUVp6cS9v?=
+ =?utf-8?B?b0c1WFZIWHl4TTN3R2hOcTFOdFhYS3VxcGlQeU9sVlRoeUN6MTlnVlBQWm8x?=
+ =?utf-8?B?VFVvSWJ3ZFVvMGFkVkdNVFZjV2NnWUduUmlFKzAwcldIVTRmLzhZMUZYQ1gr?=
+ =?utf-8?B?dUtKVWhySmVweVNmZjREV3poZ2NwTjlhVG8zMTJ0R3N5bVg3cHJrVUp0dSt6?=
+ =?utf-8?B?V1psMkpuZ1pyY3JpdDc4Y1diWnlFazZyTWxnTDVGSDhNZjRRWWFzSTNoSE5I?=
+ =?utf-8?B?eXRwZmJrTGUwcUkyNklGOTZzVWtDLzdGRFFQY2g0S1FNZUNmMGs1RnZrSk91?=
+ =?utf-8?B?bnhnbjd3dlNrZ0txbE5ITlNJK0t2T0hVbEJ2MXR1c0p2N01lRnAvSWlsbno3?=
+ =?utf-8?B?Tm9VZ2JiOXlGM05zQ0QzVHNHTUNqQkJROVdtNHgxRG1mK3JJNjFmUmhWaFRv?=
+ =?utf-8?B?b1BSZU0wUEUxczJoVkJScHl5ZEJqMERQSnNXdzZMOWhZWTJMSmN3QUludkxS?=
+ =?utf-8?B?MGFEd3lkMTFWcC9OSldSQnNlZkhBK0ViUXloTzVvRVJJbUgwemNlNnp0N3dN?=
+ =?utf-8?B?NHJlRHNzZjN6akJwMlFlYlVoQjRVWWtnS1B0THdCTEFwdnRvNnlHdW13Q3lS?=
+ =?utf-8?B?OXU1Y3NYV3hOSkpYSFhQMWM1NWpSWlRXalptNlhZaHZkazZVbVVIdUQ5NDkv?=
+ =?utf-8?B?SFJ6Q29CcjlmTlErRzVPUFhuaEt4SXVDZnpiVWJ1NFNJZE05WFUyMGNIamo5?=
+ =?utf-8?B?M054MXV2cGZnYllZUjNpOXZaZm9iMkx2Yk9VR3RlK0xxWWFVZENOcFRQSGky?=
+ =?utf-8?B?cEY4bDlRcTd1OTdobkw3SHQ0bkdoL29qNE9HQXBQM0F6YndFNkFaMTlrUDYw?=
+ =?utf-8?B?RnV6c25PYXdTK2lLRzVickpNcVhHd1I3czdrOUlwenFGVlVkZ055THF4YWhs?=
+ =?utf-8?B?RmI4VVRzTkJ2VEo0SUtyUmx1cysrbTUyajdRdldrT2JkSDdrOURXSEQyYTJQ?=
+ =?utf-8?B?K0pBZm1vSjd4VE55eHRBY0lYWERIMllrdzZPN2hDTE5ncXZ3U2o5S2l1YzZL?=
+ =?utf-8?B?VS9wZi9tTDVlT0JRNU0vcVpzblVueForQ1VvdDdUaHRzeWFUM1JWVEFnZHlh?=
+ =?utf-8?B?VUg0VWp3ZHdsekUwQWF4eEx6L3phTmsrWUwzVm9kRm5EUTdub2p2ZHZFN2Vz?=
+ =?utf-8?B?cHdMbUdwOUxqazVXakl2MDZwUCs0OXVZRjlBUEJzd1ZBUVB4MDhycm9rTDM1?=
+ =?utf-8?B?UklwK3NVTU5JTWRibVhPK0NMSnIyODVRaWdzS2IyY250UW41Y0lNKzZhVXdT?=
+ =?utf-8?B?ajNVeDdoLzliSUNYbnArNkRVUXNuTnphbEFEN01YcldWUm9SdnZSNDlwQSt4?=
+ =?utf-8?B?bU5ua1dsZEpBTllUanUyQ0Q2cnpRbmtlSEZqTG1QRDdkc0lLZEFXM3VsK1ds?=
+ =?utf-8?B?clM0TGtxd1Z3M1dkRXcwOTVNMkdGWXJhUDNzN2M4UzNMZGRmWThrOGdrNmFu?=
+ =?utf-8?B?MUV6dngzUnNLWmJnc3RzRWJmRnozNDBGWGlvUTk1bExSRFpDc1U2UDM2UXFD?=
+ =?utf-8?B?SDlndEdyRE1TN0g1V2gxajNFc2hnME1nUHlZOE9haDVETmtkaFVURExhZmVU?=
+ =?utf-8?B?L05ES1QrVWJGMTZ6UUFwU1hOM250dnBXQUo4aEJXb29XdjJFRVBZUlNacURj?=
+ =?utf-8?B?dEY2V1g1QnJVT1ZEUjhEenRNRTA3clhpbW9wRzI4bnArbmRsOGdLQmUyOFRO?=
+ =?utf-8?B?aS9KdDlqZTgwdEs4WWRrSmZiRVJUd2FQbTlrWW1ZZmJGd01iTkpUQWFKNnho?=
+ =?utf-8?B?Qk5YNkJRaHl4Y2FMYmhJaVBNNktsMi9CNjBlOXRTSytURHJYU2JqK1FCMVc0?=
+ =?utf-8?B?K1lNV1hLMTU3UmRuaWdDSkZwM29MczlSeTFEc0tjNHBUcE9aS1V2VHVnbE5h?=
+ =?utf-8?B?emNPNFBjdHJPMmFtZm0vUHJOdWFzZ3V0SVp4aTM2RGdOZnVtRjBzNEk4UmdL?=
+ =?utf-8?B?RW4zM1E4ODNCbDVoRVZzK1QraG0xQWp0Lzc3WXprd0orUUNscWR4aDZsZ3pP?=
+ =?utf-8?B?SytjNnU0aU1PU0FmM25qeVE3UFJSLzJZRkphN0xjSXZsL3VJdnQzVVE0ZzZZ?=
+ =?utf-8?Q?ZS5qKZdWfm7BGbcglTxEg0DsscMfUuy+TstOY?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7700701c-a2ef-4385-da52-08df44acf020
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 13:16:06.4674
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hQs/qxIEhDOiuyfhhCmpskf7eQEWPCRQTbQtr+StJEYRMhyfb1y47VPIfz/fgdLvFP+zSVvkzx0M3VZcjseB+PIulNyys9MSzzT73Rk/yks=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TO1PPFB99324EBE
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Hi John,
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Thanks for running the tests on your tree. I answered on patches 1, 2,
+4 and 5. The rest is below.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+On 2026-11-17 01:28, John Stultz wrote:
+>>  3  Stop the chain walk when the blocked_on chain is a cycle, so that a
+>>     mutex deadlock no longer locks up the CPU.
+>
+> Already have a fix for this.
 
-- [Medium] In tools/testing/selftests/net/pmtu.sh, the new IPv6 variants
-  of setup_multipath_new() and setup_multipath_old() add host6_a_addr…
+deadlock_cycle (case 8) passes on your tree, so please drop mine.
 
---
+>>  6  Check and admit a proxy-migrated deadline task in its own root
+>>     domain, so that sched_setattr() no longer fails with EPERM.
+>
+> This one I couldn't take as it was dependent on your other series.
 
-selftests: net: pmtu: Add IPv6 and asymmetric multipath tests
+Only one line of it depends on that series. On tip, that line becomes
+task_home_cpu(p) in place of task_cpu(p) in sched_dl_overflow(). I can
+post patch 6 on tip if you want to take it.
 
-This commit makes pmtu_ipv4_mp_exceptions family agnostic and adds an
-IPv6 variant of it. It also adds IPv4 and IPv6 asymmetric multipath
-tests. These pick a flow through each router and check which paths get
-PMTU exceptions.
+> Basically after the first two patches tests 6, and 7 continue to fail.
+> Interestingly, 7 does pass with proxy-exec off, so I need to look
+> closer to understand what is happening in that case that isn't
+> dependent on your other DL patch series.
 
-> diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-> index c7cd271714ef7..2bd132991841a 100755
-> --- a/tools/testing/selftests/net/pmtu.sh
-> +++ b/tools/testing/selftests/net/pmtu.sh
+Case 7 is what patch 6 fixes. Its sched_setattr() checks the root
+domain of the CPU the waiter was proxy-migrated to. That is the root
+domain of the mutex owner, not the waiter's own.
 
-[ ... ]
+You also see case 6 fail with proxy execution off. It fails the same
+way on tip, so it is not a proxy execution bug. The waiter changes its
+parameters and then leaves SCHED_DEADLINE while it is blocked. Its
+bandwidth stays counted in its root domain:
 
-> @@ -994,49 +1014,112 @@ setup_ovs_bridge() {
->  }
->  
->  setup_multipath_new() {
-> -	# Set up host A with multipath routes to host B host4_b_addr
-> -	run_cmd ${ns_a} ip addr add ${host4_a_addr} dev lo
-> -	run_cmd ${ns_a} ip nexthop add id 401 via ${prefix4}.${a_r1}.2 dev veth_A-R1
-> -	run_cmd ${ns_a} ip nexthop add id 402 via ${prefix4}.${a_r2}.2 dev veth_A-R2
-> -	run_cmd ${ns_a} ip nexthop add id 403 group 401/402
-> -	run_cmd ${ns_a} ip route add ${host4_b_addr} src ${host4_a_addr} nhid 403
-> +	family=${1}
-> +
-> +	if [ ${family} -eq 4 ]; then
+  # total_bw A: before 52428, at 300ms 262143, after 262143
 
-[ ... ]
+My deadline series fixes this. With it, the case passes with proxy
+execution off.
 
-> +	else
-> +		host_a_addr=${host6_a_addr}
-> +		host_b_addr=${host6_b_addr}
+I also ran the selftest on your public proxy-exec-v33-7.4-pre-rc1
+branch, with the test module added. The results match yours, except
+for case 5: Yu-Ting's fix is not on that branch.
 
-[ ... ]
+>> - Patch 3 also stops the donation on a ww_mutex cycle that the wound or
+>>   die path is about to break. The donor then sleeps on its mutex.
+>
+> Is this a concern or did you verify this occurs? I thought we
+> wound/kill tasks before the cycle gets created (see
+> __mutex_lock_common(), before we call set_task_blocked_on()). Maybe
+> I'm forgetting something?
 
-> +	fi
-> +
-> +	# Set up host A with multipath routes to host B host_b_addr
-> +	run_cmd ${ns_a} ip addr add ${host_a_addr} dev lo
-> +	run_cmd ${ns_a} ip nexthop add id ${family}01 via ${nh_a_r1} dev veth_A-R1
-> +	run_cmd ${ns_a} ip nexthop add id ${family}02 via ${nh_a_r2} dev veth_A-R2
-> +	run_cmd ${ns_a} ip nexthop add id ${family}03 group ${family}01/${family}02
-> +	run_cmd ${ns_a} ip route add ${host_b_addr} src ${host_a_addr} nhid ${family}03
+You are right, and it was not verified. I wrote it from reading, and
+my was wrong. A task that wounds or kills another first clears
+the blocked_on of that task. The victim sets its blocked_on again under
+the wait_lock of its mutex. It then sees that it must back off, and
+clears blocked_on before it drops that lock. The chain walk takes the
+same lock before it follows the victim. So the walk never sees the
+cycle. Please ignore that point.
 
-[Severity: Medium]
-With family 6, can this route add race against DAD on the lo address?
+Thanks,
 
-host6_a_addr is added to lo without nodad, so ipv6_add_addr() marks it
-IFA_F_TENTATIVE. addrconf_dad_start() only queues dad_work. The flag is
-cleared later, once addrconf_dad_work() takes the rtnl lock and reaches the
-IFF_LOOPBACK shortcut in addrconf_dad_begin().
-
-The next command uses that address as the prefsrc. In
-ip6_route_info_create_nh() the address is checked like this:
-
-    if (!ipv6_chk_addr(net, &cfg->fc_prefsrc, dev, 0)) {
-        NL_SET_ERR_MSG(extack, "Invalid source address");
-        err = -EINVAL;
-
-ipv6_chk_addr() bans IFA_F_TENTATIVE. If dad_work hasn't run yet, the route
-add fails with "Invalid source address".
-
-The same check covers the legacy nexthop route in setup_multipath_old(),
-and the host B routes in both helpers.
-
-The run_cmd return values are ignored. The status of setup_multipath()
-comes from the last router route add, so setup() still succeeds even when
-host A or B has no multipath route.
-
-Would that lead to spurious failures? Examples would be "no flow through
-veth_A-R2 found" in test_pmtu_ipvX_mp_asym_exceptions(), or a missing
-exception on veth_A-R2 in pmtu_ipv6_mp_exceptions.
-
-IPv4 has no DAD, so the IPv4-only version of these helpers didn't have
-this race. Would adding nodad to the IPv6 lo addresses, as other net
-selftests do, avoid it?
-
-[ ... ]
+Mathieu
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261113122237.88990-1-deliran%40verdict.gg
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
