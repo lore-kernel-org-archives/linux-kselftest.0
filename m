@@ -1,108 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794933036;
-	b=0t8NJK5Yrf8Mwl5anZjHMgOKl5RyfqQPtOSuDnyiuubtuVsFtNWbetNXO6nCTWId1+Pd
-	 yaNIfvSb64/IFHRxjodGozs2S/7lfMPdDt0RlKikoEzeYBqoj/pSdZwA4arILyYT0Eab1
-	 mSXDzC4/nznpSn20VcvbGEhWrtpydHU0xex5Qy5/Ndcp3O9QjUYy8L04RXCgZeSjBj6sJ
-	 0HcywbnkvN9hjVfSMEqGMa9khz0K4NlkMQHUAvZh6lT/458oZhfLGSrSHMB3v+G2kJJMI
-	 vQ+UIooWbcQfv0Snl1DQwgOozOmKjrabq3g2L5DV1+2NvJM54UL9xIAZIav+Lrsv+6A==
+	t=1794934037;
+	b=ptOxKPinqeyYJ1n81UZMEAYzV1gSv9Ijw8GqfzJJiaeH0StQphf3es1GcSn9Nj6T7bvk
+	 gCnaw/CzrHLIRpVOtfoYMyu62Nt5lCV3pzpBkTzzxM1gZtA/SoqKfe+OKiWcphd/zy23d
+	 AcNJ/BsN5VannXci95mrKqdqXiIMDuNKQwSmNQtpRHxy8K+zZ4lJ/y0XEZ3Dd880RcoLp
+	 meUAVT/S+aQFp9tJ0cx+JCJEjlYZmIanQyKyNzu/mUdMcswfCC6tj1+DKYZRwcIyKc1bl
+	 pOWuhCwFSQCnIbaXDkfNBSDJ8bLghFGqy82aJkTj3MQdfB3Fd4e/6DSHoXCmBqVaolg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794933036;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=gzNj9YY/nz5fvfy6gpTsHNPiMT4iZgLl23IUytoqvOw=;
-	b=K55I77QcCbb4HqKva2J3QJ9LLcPjWGCzCrzFPsdcLTQOBrFOnpEzTMsRJhWbvYPwzhsC
-	 lPvt4dq94oLaaXlysrUGOQxHts1R104Ll5dyDcszoizW5ZlxPnuzoDFG3SRozyWWE/yCj
-	 prD+cYuRaf0k695HFLOEqRtgEScxMyJ6LU35OwHBKr3w8h/RTJEXaAcK5IO6In96pbLbi
-	 nTAIC+dB1oJRKN6kvc8cXFjFzcZH6R5Kt7SrvJ6MraLTOLkvvGYP9lSqz/VrwV6utJJF+
-	 Cnem5hWSyU1XI6/50MpliTp3El2RqnCXwi5PRkfT5YsR8udpWNr1vZPdqFaPgvxbWKw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794934037;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=Fco+UlnINs31RhLyhKfNSsZubf2jNgBWY6vfGvE0k4A=;
+	b=e7zn3sEuiXisjbm5ozvwOtReeUigBYanjxC55AbhrJA1YsmdtZESClwTdE0EAlKZSpIi
+	 f+UF7qDyH+DkQP376/zIVHZ5o6wgTWpCbKxMHj/qugEuMCllxbhkR82doJa4GO2Oq/5Zs
+	 hwXo3V9Te9DLSl++ffbbUNIGIGxFdxKCirEUw+pCwctqZ9VTrAXSptzlPX0BZygO4YydO
+	 vUfKfG4voe/tmBDINy84V8zjHV3ImCi4UVVySexKyHAZQM11fCFQ/gRcBNKP/Oq0TbMjj
+	 0uKFUpeIwDyiUzlsYw9q3x0CwrvqAEL0Cw8Yizn1UJCh52mbWQnrtLCezXOKE6buKMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=V5r4QaM3;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qf60IkSA;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iDPwpT4H;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D736606A880
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 16:30:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D736606A880
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E223606A889;
+	Tue, 17 Nov 2026 16:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=V5r4QaM3;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qf60IkSA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794933035;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gzNj9YY/nz5fvfy6gpTsHNPiMT4iZgLl23IUytoqvOw=;
-	b=V5r4QaM3YYk4Mh+SmSdU6e5HHmbhhgjPLC9NO8QfF9gYPDtaF+DCs5e3JrKQE1PIIM3J3P
-	xVzuzkPU24pwNcAbp1VtHK8NUCc2sa6MO8DCG0eVKKnKC7i5JG6e2ZEfexLHezbfhR+alF
-	EHe9nvc2aXj94EgIG1EYE+dr14GB7rw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-48-HGxbjyacN8u4gL-rCBzisw-1; Tue, 17 Nov 2026 11:30:32 -0500
-X-MC-Unique: HGxbjyacN8u4gL-rCBzisw-1
-X-Mimecast-MFC-AGG-ID: HGxbjyacN8u4gL-rCBzisw_1794933031
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-49166c8a60dso3754407f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 08:30:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794933031; x=1795537831; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gzNj9YY/nz5fvfy6gpTsHNPiMT4iZgLl23IUytoqvOw=;
-        b=qf60IkSAFxTD8xr8bOjsd/byszjQSqPLfjok2uQ+ANozpf+0gR9NTS8yPJ7RUtY0eA
-         IKfVZEz+ooTfmV3fZJ0ZPon3xFvNtD5Qvmc59ZPJCk5/1J+xOLhIq1v9zlJomaZAW2H4
-         aUpvwfLGlWZ8xdmIH1uQwJfzN33jnBbmgxGNoj6XQRm6sNK/Gyq9QSz43sCTQa6Kjnfl
-         6cDq4OXrIKMWWsaSc1ryv6UsrZeF3f4vIogqHWTxd6IFuqA7Tp+7HLuhJ+4JbxnWVjXe
-         7eXmtj7+9avNVfGIN/HUPG3A48fEIcZx46uDs3vt9/5EDAh+btcari2jaZKPIQ9zA4Mx
-         Zcig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794933031; x=1795537831;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gzNj9YY/nz5fvfy6gpTsHNPiMT4iZgLl23IUytoqvOw=;
-        b=LcdFCZkBM5FF593xUrEWYNOttneFFnOxUBoJL4TpWvu7WOi8Oe4SkVFZBzUMTFPZRb
-         9vTyO+IoguSwDOAaF2N9MNqePecRxiNKlvM+CkSy0D/fO9Llo2DoASV47fFihPEAPhd1
-         SFy0F7XSEXLrzJW0yKBM/jjR9uBK8V7qw3FqQQDTyAUAULsjmRjRQIumIi2RqyI0YbFi
-         5cb9iCerhqQCkpSeGPls0vL/DJszKsJUjr3HeNDcsPM9X+rtfPoqsgcth+Zc0VY2/i35
-         kauchckhz+4/lyVgtshuitzoAXDN2OjelGfQFssA8wpvHCOUoTm2lcaZYqkUicqb9qdw
-         JbTw==
-X-Forwarded-Encrypted: i=1; AL+hErHGArXaOaxaw2g2k6EYekFrzGBfuABgJgP2R6pL1Y8iMtD9JMSJ7IhBOZL5RJXhc2KHZJrDVO1HVeGPluXuQ4o=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/6PzF9MgPoafqsQ/fd5dxv53f3/SVgEhh6vt3fX2csgjIcHWul
-	XvpLFzsv9gwbgM8czfgvJgswqdfju9gBxSZHQyHYldxJ7qpFGe3jwTpD79O6x/Z857ryVwnnLck
-	GZ8HnazRPpUC3vLE6nsAZsgDvDTTcmK1tnZmL5XZZgCQOSbi4neRrH2ZhkfgJuTNMG9U68Q==
-X-Gm-Gg: AZFdTZfaZpSmi50dtgSCkO/YDMwvg/GQIFOMRj8uzM5ZH9/0iTNXPWYBkhK0Dq1NC47
-	qnTqvDNFCwPKJvuomZRIRta8uhN7m/Z26HrVqvpXg1y/6lgKFm4GSq1cfVxi9XQpjXrNuPSRzcf
-	3W/xmlQ0KvBb+j2Rt25m/AA4HOlx5iVUdPg90xbAXHkOsofx0v2Z2jM7P71h9kTBiP2Mntm04uY
-	kBHXzDBI2dP/WMlww1eJ4tWpBx2RQPyJ4kydt4QsnU3nBpJUluKcvDMKeepKCOfrv+ND0lpAIXR
-	SDI9KyO/LWPfnA2fPOenvVIaRQVxlhp2cbOOe7XY7tA+jiDZnXBAf5a9R4UUhjd715RmJsJkeF8
-	Ikt41CRTLA5kb+Ihi277gNZp+wZM6O2a5W7rZfE3E2QZe9/5gvBXYMQ2a3fF0mHjogisqUcsZXz
-	ASwxo0AoIHybzbbINXqoqT2Ne5vr8HJiWlsDQeaiL1I8Xs
-X-Received: by 2002:a05:6000:1a8a:b0:48b:f93:3b87 with SMTP id ffacd0b85a97d-49c726da6e1mr33405902f8f.30.1794933030638;
-        Tue, 17 Nov 2026 08:30:30 -0800 (PST)
-X-Received: by 2002:a05:6000:1a8a:b0:48b:f93:3b87 with SMTP id ffacd0b85a97d-49c726da6e1mr33405842f8f.30.1794933030089;
-        Tue, 17 Nov 2026 08:30:30 -0800 (PST)
-Received: from [192.168.88.30] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c888b90d4sm29021988f8f.9.2026.11.17.08.30.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Nov 2026 08:30:29 -0800 (PST)
-Message-ID: <09765df8-89a7-4b7e-b889-5bafd7622c20@redhat.com>
-Date: Tue, 17 Nov 2026 17:30:27 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iDPwpT4H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0541F000C5;
+	Tue, 17 Nov 2026 16:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794934036;
+	bh=Fco+UlnINs31RhLyhKfNSsZubf2jNgBWY6vfGvE0k4A=;
+	h=From:To:Cc:Subject:Date;
+	b=iDPwpT4HdexXsiGZ4nqwW9ju6XomdL9Mw3q2pwnUf3nGxM5O4Tv2DqZO4tmlmEaky
+	 gQxkzAocgG1wTOARZLMae7SolEpZ4NV2F4bf73cN07EAeIvWbwidolW6/gk4BVgmbZ
+	 66KCxVsQJYoaTz8GqfyMWu/przkFfgCIdiz99eDosesQ+Sz9DFh6IbnOLk3y+aJhxe
+	 EmZdZC9K5Ixc35fHjPlGDBqsyY4g16Foc4tw++GdO4H7aSQfQcC6gcucJqy8RwIJBF
+	 00SL4BEcgYQvBMAVfG1i4EIIQSmbaRIjvEI8H6XfpS3+bff9pHdrU7rd0zOwU0dZep
+	 1n2Dod1G6s7dA==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	kernel-team@meta.com,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Wei <dw@davidwei.uk>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	Mina Almasry <almasrymina@google.com>
+Subject: [PATCH net-next 0/7] XDP with io_uring zero-copy RX and devmem
+Date: Tue, 17 Nov 2026 17:46:51 +0100
+Message-ID: <20261117164700.2157816-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,41 +93,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4 0/2] ipv6: Honor suppress_prefixlength in
- fib6_lookup()
-To: Ido Schimmel <idosch@nvidia.com>, Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Leonard Lausen <leonard@lausen.nl>, netdev@vger.kernel.org,
- David Ahern <dsahern@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>,
- Phil Sutter <phil@nwl.cc>, Shuah Khan <shuah@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261117110813.9894-2-leonard@lausen.nl>
- <avxPFYfEirXzTup8@chamomile> <94f4ea0e-c1bf-467c-94be-b65963410d30@lausen.nl>
- <avxRfzsnke7VJq_w@chamomile> <20261117152414.GA824125@shredder>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20261117152414.GA824125@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/17/26 16:24, Ido Schimmel wrote:
-> On Tue, Nov 17, 2026 at 02:07:11PM +0100, Pablo Neira Ayuso wrote:
->> As Paolo suggests you explore fixing this from nft_fib itself,
-> 
-> Why?
-> 
-> fib6_lookup() is the IPv6 counterpart of fib_lookup() which is used by
-> nft_fib_ipv4. The fact that it's not working with
-> 'suppress_prefixlength' is an oversight, which is being fixed here.
+Hi!
 
-I must admit I read the previous version as the issue was caused by an
-API misuse by nft.
+I had a long chat on page-pool providers with Magnus and Maciej
+earlier this week, and the topic of "XDP on unreadable providers" came
+up. Magnus suggested building on the xdp.frags mode, to support this.
 
-It looks like I misread it, I'm fine with this fix.
+Here goes...
 
-/P
+Devmem and io_uring zero-copy RX place packet payload in memory that the
+kernel cannot read through the normal packet APIs. Header split keeps
+the headers in ordinary kernel memory. Today, the core rejects XDP and
+these memory providers on the same device, in either attach order.
+
+A program that checks headers should not need to copy the payload or
+turn off zero-copy receive. Keep the payload in fragments and run a
+native XDP program with frags support. Frags support means that the
+program accepts a packet whose data_end does not cover the whole
+packet. It does not give the program permission to read provider data.
+
+Kuba added XDP_FLAGS_FRAGS_UNREADABLE, which already records this kind
+of payload. xdp_buff_add_frag() sets it for net_iov fragments, and skb
+construction copies it to skb->unreadable. Drivers use this path even
+without an XDP program. The series uses the same flag to stop helpers
+from reading or writing provider fragments. Header access still works.
+
+XDP_PASS keeps the payload for the normal receive path. XDP_DROP frees
+it without reading it. Frame redirects and AF_XDP copies reject a
+buffer while the flag is set. The driver must also reject XDP_TX:
+provider payload is mapped for receive, not transmit. Tail trimming
+can remove the payload without reading it; after the last fragment is
+removed, the remaining header buffer has no unreadable fragments.
+
+Only drivers that declare xdp_unreadable support accept the combination.
+fbnic is the real driver in this series. Its XDP_TX path drops packets
+while unreadable fragments remain. netdevsim tests the attachment
+rules, but it does not test packet access to provider memory.
+
+Generic XDP remains rejected. Its receive path first copies or
+linearizes nonlinear skbs, which fails when it reaches provider data.
+Even if that step were skipped, skb-to-XDP conversion does not carry
+the unreadable flag, and generic transmit and redirect use skb paths
+outside the native driver's XDP_TX guard. Supporting generic XDP needs
+separate handling; admitting it here would not be enough.
+
+
+Björn
+
+Björn Töpel (7):
+  bpf: Keep XDP helpers within readable data
+  xdp: Reject frames with unreadable fragments
+  net: Admit native XDP on provider queues
+  eth: fbnic: Run XDP on provider queues
+  netdevsim: Run native XDP next to devmem
+  selftests: net: Test XDP with devmem bindings
+  selftests: net: Test XDP on io_uring RX
+
+ Documentation/networking/netmem.rst           |   8 +
+ MAINTAINERS                                   |   2 +
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  |   4 +-
+ drivers/net/netdevsim/netdev.c                |   2 +
+ include/linux/filter.h                        |   9 +-
+ include/net/netdev_queues.h                   |   6 +
+ include/net/xdp.h                             |  20 +-
+ kernel/bpf/helpers.c                          |   4 +-
+ net/core/dev.c                                |  28 +-
+ net/core/dev.h                                |   1 +
+ net/core/filter.c                             |  37 ++-
+ net/core/netdev_rx_queue.c                    |   2 +-
+ net/xdp/xsk.c                                 |   5 +
+ .../selftests/drivers/net/hw/.gitignore       |   1 +
+ .../testing/selftests/drivers/net/hw/Makefile |  10 +-
+ tools/testing/selftests/drivers/net/hw/config |   5 +
+ .../selftests/drivers/net/hw/iou-zcrx.c       | 242 +++++++++++++++++-
+ .../selftests/drivers/net/hw/iou-zcrx.py      | 108 +++++++-
+ .../selftests/drivers/net/hw/iou_zcrx.bpf.c   | 111 ++++++++
+ .../selftests/drivers/net/hw/iou_zcrx.h       |  34 +++
+ tools/testing/selftests/net/nl_netdev.py      |  54 +++-
+ 21 files changed, 646 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/iou_zcrx.bpf.c
+ create mode 100644 tools/testing/selftests/drivers/net/hw/iou_zcrx.h
+
+
+base-commit: f23dcd8055612eb37c666c67fe0cfe38b3c65021
+-- 
+2.56.1
 
