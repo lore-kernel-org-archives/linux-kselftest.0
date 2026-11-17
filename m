@@ -1,50 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794932243;
-	b=J0MfV8tJM8MSNyIcWoegkJ2iaoLQ1J8kjLl9U73gR9HeulqpdvQamHLx4OPY0qn7elJ4
-	 fHDzvA/sXgYpv7+9DwXFCQH8tF3FrzxdljhqiK39kgEAxQwhwEtVaerckczNYk3pyNINp
-	 TG8D9FlODPD9r2teCOlzEZZqtTDzqWuc+mSatuqprCt69Sf1Ettmrll2lvMDi8m9M3Cap
-	 xIQxZI0go8eFYsBFKyyQXWyYadYI3Efmf4vja66oLoawFxUdgFNsKLTEum1lwtvXNwZBB
-	 0rOWLXzUhG1307RFv0xf6BvnqoILuq59tL1yfzIplk2rg+GFDNIlr+gGaYPpjHVizzg==
+	t=1794932244;
+	b=iC9Vg0krt1/4ddS86rO8Ue/qWOz1sZvydYxhLScmQN6950a5HAxIUqhD98XiKtGOgNRA
+	 Q/R/mZPx05MYvStPnAv5xFaIF8SI857wAmuc2D4RXqfSo2Ygr0HJaG7vlAsmCvahwn/1y
+	 nuXOfAuH3Y0dCtiuTYbxQ3pBFinoO8HibZh2ePb5G1XgL/fzLmGAihaATTH3qDgFE9GxQ
+	 cMqNEY0DxErgNktmHW+gC0MolDHHl8hoioxv1KXj4XqaXfFkjuEeNRc/jLUEFlzSIiSgX
+	 GyEdoK3qbvg8SM2W6tNJnqGRXsckY944/6tKOOLXv1usLbF0jAIaY3GGlhSIpHvVy8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794932243;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794932244;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=Y/ijzipXaXnoXOLHV52Sh9vsSMoQjLwzHp6q5TSfpno=;
-	b=WwECCtch6gBJtxfkDT8yul/5m2jy9yPUE/cJ59KKshyJ2DTBiC/yV3ta3lVOeMub9axw
-	 IPLaOQizEBeCAOT6KwshbXfVVY/XdexqI72/0kXiR2vL4WcxGSoOZ3SXm2wsrmXPZLNcZ
-	 FC1vSTDmaAMvLacv2T3ko83ALM5sVmnPwKGseYeUAy91gmb5RndFeK1yvH6e0fr9cSUPB
-	 k68Qm9Y36a92z8u3sua0oGCv4GzxLu5+B8JVTBKm6nzX8MLeq1+EV7e3M2sjcwBQjLE28
-	 x7bmyrhLXd40bt8uCgsXajsOPkOoPgZjKLzsx2qQjl4PKeSaAWZ7jCkU7EvEG8l0E6A==
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=CfJVYl8d7qdtMu+pXKIuXS8SjsAEQjuLyjcfQyGXzHw=;
+	b=mNOXQ5LeT3Xhu9Nt1dO3sQ7BJLb1QYIKV1eEZZtM9fl++yGnXaiOrkXt+PPGs34A+Adc
+	 OeHrvxJg31jzI2dTHl2YoSZacALb/A2kkbkmlzgQI37KV/qSoE1fP///4+J0hBFLVOfjD
+	 GovfoOclwLZ+4OEQBsBCW3TqOgtFA7ZfJtj0R3CeuoBpdBwT1vQ7ekFVbNcLCiGZTSDFX
+	 6qF6mzlEFoUzZhmJ4q96kptvBt/u33XuTR5/ej/jwIvwz6/mzp+kE0MkjH2D8pvWlYm5N
+	 4pFOV3lvGdk3nkZHd04ACgcJ+9iCOAG2J3pa1zXNpk98UbbXVW3FrlP0tufk7dMDdiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b="v/loGHrK";
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=xiRImFeZ;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD1F606A32C;
-	Tue, 17 Nov 2026 16:17:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CD1F606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD8C606A8A1;
+	Tue, 17 Nov 2026 16:17:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDD8C606A8A1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=v/loGHrK
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=xiRImFeZ
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794932241;
-	bh=Y/ijzipXaXnoXOLHV52Sh9vsSMoQjLwzHp6q5TSfpno=;
-	h=From:To:Cc:Subject:Date:From;
-	b=v/loGHrKnnGsv0sMIlOTpNV9tuB/Zn+gINtQpAYdGamDd/kFJ5UAS5mWDUYeEVEF7
-	 3ag6Uty5k/BEUOV/S9xW7MaT9vJPWlZUCKdpD97gOqyaia2Tsd0GvlKL08whypTaoj
-	 VCBvfl1GHcPfNYNqNIy5dpNCdIPUAVi3DcVSLFgpHozrFVInrHnOJzRuhvn3qa/Bul
-	 SXXD2W4RFiuiP8EKXR5pqdNy3/CVrTnxua2HHPH/8mUqXPn/JX/i33OLz82zo1PXs3
-	 hWVhLACdkUiq6Ilohsu2ixlICroZX6ZoPbQSNY+qAODWMzwx3j/JH/7OFwz1DrEE1T
-	 ZBkmTkD8Nj02g==
+	s=smtpout1; t=1794932242;
+	bh=CfJVYl8d7qdtMu+pXKIuXS8SjsAEQjuLyjcfQyGXzHw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=xiRImFeZD6zn8N1cKU87FaBUXW7qWxpd/dReIsv3iWScG0aHGA4xQK5WpLP31IPoc
+	 Jt4XIGjtMQDhfLqDah6YaGrdo+wLBdGQeWHbhOEtMZ4+D+mw+nevK64ZTokqSq2l+m
+	 4ipl2N06TbQszjJIUby9epNaZGyv+mMNIH0UH1v+EQ22MfxoqDNK2wuacYmVG/iT7A
+	 me2o7vftkFnkaWNymDLcw2v5voYFr7Oc0Cg2aol6KAf61KJUKnQEE6KMKjyW+7Hkj+
+	 iS1VnK9R7SQQkrZR61d45CVN3Qa95WfzWtZJrcrB5L6hetad/33LusDTWf19xnNDbN
+	 FMExrGjIxfsPg==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jTVHj2dxpzR8M;
-	Tue, 17 Nov 2026 11:17:21 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jTVHk39MCzRHW;
+	Tue, 17 Nov 2026 11:17:22 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: tglx@kernel.org,
 	peterz@infradead.org
@@ -72,11 +73,15 @@ Cc: linux-kernel@vger.kernel.org,
 	xujiakai24@mails.ucas.ac.cn,
 	linux-mm@kvack.org,
 	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 00/17] sched/mmcid: fixes for execve, mode switches and affinity
-Date: Tue, 17 Nov 2026 11:17:00 -0500
-Message-Id: <cover.1794932121.git.mathieu.desnoyers@efficios.com>
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	co+cab19e2ebe4d535a@bugs.sh
+Subject: [PATCH 06/17] sched/mmcid: Synchronize MM teardown with affinity updates
+Date: Tue, 17 Nov 2026 11:17:06 -0500
+Message-Id: <cb90e1d7ec582b72eb5d3b15633a1fc149ec1a57.1794932121.git.mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <cover.1794932121.git.mathieu.desnoyers@efficios.com>
+References: <cover.1794932121.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,178 +93,170 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Thomas, Peter,
+From: Weiming Shi <bestswngs@gmail.com>
 
-This series fixes six problems of the rseq concurrency IDs (mm_cid),
-and adds selftests for them. I looked for cases the existing tests do
-not reach:
-- a thread count that goes up and down;
-- exit, fork and a failed execve();
-- affinity changes made by another process.
+set_cpus_allowed_common() passes a remote task's p->mm to
+mm_update_cpus_allowed() while holding p->pi_lock, but that lock did not
+stabilize the pointer against MM replacement. A same-owner
+sched_setaffinity() caller can therefore retain the old pointer while exec
+replaces and frees it. On architectures which shoot down rather than
+refcount lazy TLB MMs, exit_mm() and kthread_unuse_mm() have the same
+lifetime gap.
 
-The fixes come first, and all six are marked for stable:
+  BUG: KASAN: slab-use-after-free in set_cpus_allowed_common
+  Read of size 4 at addr ffff888123155e4c by task poc/5132
+  Call Trace:
+   set_cpus_allowed_common (kernel/sched/core.c:10835)
+   set_cpus_allowed_fair (kernel/sched/fair.c:10046)
+   __set_cpus_allowed_ptr_locked (kernel/sched/core.c:3224)
+   __set_cpus_allowed_ptr (kernel/sched/core.c:3258)
+   __sched_setaffinity (kernel/sched/syscalls.c:1161)
+   sched_setaffinity (kernel/sched/syscalls.c:1239)
+   __x64_sys_sched_setaffinity (kernel/sched/syscalls.c:1275)
+   do_syscall_64 (arch/x86/entry/syscall_64.c:84)
+   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
 
-  1  Give a CID to a task that joins its mm while running. A failed
-     execve() then no longer returns to user space with an mm_cid of
-     0x80000000.
-  2  Give no CID to io_uring and vhost workers, so that they do not
-     take IDs from the threads of the process.
-  3  Reset the stale per CPU state of an mm when its first user joins.
-     A machine with two or three CPUs no longer locks up after a failed
-     execve().
-  4  Keep a running joiner inactive until the fixups are done, so that
-     it cannot loop in mm_get_cid() while it holds mm_cid.mutex.
-  5  Add the allowed CPUs of the first user to the mm when it joins.
-     An affinity change by another task during execve() is then not
-     lost.
-  6  Fix the use after free of the old mm in set_cpus_allowed_common().
+  Freed by task 5127:
+   kmem_cache_free (mm/slub.c:6757)
+   __mmput (kernel/fork.c:1204)
+   mmput (kernel/fork.c:1215)
+   setup_new_exec (fs/exec.c:1395)
+   load_elf_binary (fs/binfmt_elf.c:1024)
+   bprm_execve (fs/exec.c:1865)
+   do_execveat_common.isra.0 (fs/exec.c:1963)
+   __x64_sys_execveat (fs/exec.c:2047)
+   do_syscall_64 (arch/x86/entry/syscall_64.c:84)
+   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
 
-The tests, all in tools/testing/selftests/rseq. Tests 7, 8, 12 and 17
-fail without the fix they check:
+  Kernel panic - not syncing: KASAN: panic_on_warn set ...
 
-  7  mm_cid_execve_test: the mm_cid after a failed execve(). For patch
-     1.
-  8  The last user fails execve() on another CPU. For patch 3, on
-     guests with 2 and 3 CPUs.
-  9  mm_cid_transition_test: threads count per mm_cid while the thread
-     count crosses the mode thresholds.
- 10  mm_cid_bound_test: the largest mm_cid stays below the possible
-     CPUs. It prints how far the IDs go above the max_cids target.
- 11  A transition case: affinity changes made by another process.
- 12  mm_cid_exec_affinity_test. For patch 5, on guests with 4 to 64
-     CPUs.
- 13  Transition cases: threads created by several threads at once, and
-     threads migrated by another process.
- 14  A bound case: the IDs after the affinity is widened. It prints
-     when they are not compact.
- 15  mm_cid_window_test: two directed cases for mode switch windows.
-     For patch 4, see the last point below.
- 16  mm_cid_teardown_test, for patch 6.
- 17  A second case for patch 3, see the first point below.
+Affinity paths hold p->pi_lock across the p->mm load and its complete use.
+After publishing a replacement or NULL p->mm, take and release that same
+lock before dropping the old MM reference. For an updater that is already
+using the old pointer, the ordering is:
 
-Points I would like your opinion on:
-- Patch 3. Thomas, this is your cleanup from the thread "[PATCH]
-  sched/mmcid: Bound the CID allocation busy wait", which you preferred
-  to my fix. I wrote its subject and changelog. Change them as you see
-  fit. Without your Signed-off-by, the patch carries my name, with an
-  Originally-by: tag for you. If you send your Signed-off-by, I will
-  make you its author. Three remarks on the code:
-  - From patch 5 on, the cleanup runs in sched_mm_cid_add_first_user(),
-    under t->pi_lock and mm_cid.lock. Its loop over the possible CPUs
-    then runs with interrupts off. It could move out of the raw locks:
-    mm_cid.mutex is held and the mm has no user.
-  - The cleanup copies the allowed CPUs of the task when the mode is
-    not 0. Patch 5 adds them at every first join. One of the two is
-    enough.
-  - The stale state is not limited to two or three possible CPUs.
-    mm_cid_calc_pcpu_thrs() also returns 1 when the mm counts one
-    allowed CPU. Test 17 gets a CID leaked that way on guests with 4, 8
-    and 64 CPUs. It needs an affinity change that the mm missed during
-    an execve(). So it fails only without both patch 3 and patch 5. I
-    reproduced the lockup itself with two and three possible CPUs only.
-  I did not show that this lockup is the splat of that thread.
-- Patch 5 has Fixes: b0c3d51b54f8. Part of its window is older and
-  dates from commit 7e019dcc470f ("sched: Improve cache locality of
-  RSEQ concurrency IDs for intermittent workloads").
-- Test 15 passes on a kernel without the two fixes it targets: its
-  windows are a few instructions wide. It fails there only when the
-  kernel makes the chosen thread sleep in the window. I did that with a
-  local debug prctl(), which is not in this series. The test marks the
-  places with "Delay injection" comments. Would you want such delay
-  points upstream, for instance as fault injection?
+  affinity updater                     MM teardown
+  ----------------                     -----------
+  raw_spin_lock(&p->pi_lock)
+  mm = p->mm            /* old_mm */
+                                       p->mm = new_mm or NULL
+                                       raw_spin_lock(&p->pi_lock)
+                                         /* waits */
+  mm_update_cpus_allowed(mm, mask)
+  raw_spin_unlock(&p->pi_lock) /* release */
+                                         /* acquire succeeds */
+                                       raw_spin_unlock(&p->pi_lock)
+                                       ...
+                                       mmput/mmdrop(old_mm)
 
-Testing
-=======
+The teardown-side acquire cannot complete until an updater ordered before
+it has released p->pi_lock, so old_mm remains alive throughout that
+updater's access. If teardown is ordered first instead, its unlock is a
+release that orders the preceding p->mm store before a later updater's lock
+acquire. The later updater therefore observes new_mm or NULL. An updater
+that acquired the lock before the store but has not loaded p->mm yet is
+still ordered before the teardown-side acquisition; it may observe either
+pointer, but teardown waits for its complete use before dropping old_mm.
 
-All tests pass in x86-64 QEMU guests with lockdep, with 2 to 64 CPUs.
-Also:
-- Without patch 4 and without delay injection, the sequence of test 15
-  hangs a guest with 2 CPUs when a SCHED_FIFO task preempts the joiner.
-- Patch 2 has no test.
-- I did not reproduce the use after free that patch 6 fixes. Its exec
-  case needs CONFIG_FUTEX=n. Test 16 passes on a KASAN guest with
-  CONFIG_FUTEX=n and the fix, with no report.
-- Tests 11, 13 and 16 are stress tests. They found no bug.
+All runtime callers of set_cpus_allowed_common() hold p->pi_lock across
+this access. The runqueue lock is not part of the p->mm lifetime ordering,
+so the grace period only needs p->pi_lock. Place it after publication and
+before the old reference drop in exec_mmap(), exit_mm(), and
+kthread_unuse_mm(). The last two paths matter on architectures which shoot
+down rather than refcount lazy TLB MMs.
 
-A Spin model of the mode switches found the problem of patch 4. It is
-not part of the series.
+This change was developed with assistance from an LLM.
 
-How this was developed
-======================
+Fixes: 7e019dcc470f ("sched: Improve cache locality of RSEQ concurrency IDs for intermittent workloads")
+Cc: stable@vger.kernel.org
+Reported-by: <co+cab19e2ebe4d535a@bugs.sh>
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Link: https://lore.kernel.org/all/20261110183809.3308868-1-bestswngs@gmail.com/
+---
+ fs/exec.c             | 1 +
+ include/linux/sched.h | 2 ++
+ kernel/exit.c         | 1 +
+ kernel/kthread.c      | 1 +
+ kernel/sched/core.c   | 9 +++++++++
+ 5 files changed, 14 insertions(+)
 
-An LLM coding assistant reviewed the mm_cid code under my direction. It
-wrote all the patches, their messages and the tests, which I reviewed.
-There are two exceptions. The code of patch 3 is Thomas's. Patch 6 is
-Weiming Shi's, carried as he posted it. Test 16 follows the shape of his
-reproducer, and takes no code from it.
-A reproducer that stops failing shows that the symptom goes away. It
-does not show that the fix is the one you would have written, so I ask
-for a careful reading.
-
-Based on tip sched/urgent, 006991aa8997.
-
-Links:
-- Weiming Shi, "[PATCH v3] sched/mmcid: Synchronize MM teardown with
-  affinity updates":
-  https://lore.kernel.org/all/20261110183809.3308868-1-bestswngs@gmail.com/
-- "[PATCH] sched/mmcid: Bound the CID allocation busy wait":
-  https://lore.kernel.org/all/87mrs8bhp4.ffs@fw13/
-- My reply in that thread, with my variant of patch 3 and the
-  reproducer:
-  https://lore.kernel.org/all/bd4c03e6-7ea6-4a21-9a3e-74ea9d36fe17@efficios.com/
-- Thomas's answer, which prefers the cleanup:
-  https://lore.kernel.org/all/87eccossye.ffs@fw13/
-
-Mathieu Desnoyers (16):
-  sched/mmcid: Give a CID to a task that joins its mm while running
-  sched/mmcid: Give no concurrency ID to user workers
-  sched/mmcid: Reset stale state when the first user joins an mm
-  sched/mmcid: Let a running joiner take its CID after the fixups
-  sched/mmcid: Take the allowed CPUs of the first user when it joins
-  selftests/rseq: Test the concurrency ID after a failed execve
-  selftests/rseq: Test the concurrency ID after the last user fails
-    execve
-  selftests/rseq: Test the concurrency IDs across ownership mode
-    switches
-  selftests/rseq: Test the upper bound of the concurrency IDs
-  selftests/rseq: Test affinity changes made by another process
-  selftests/rseq: Test an affinity change by another process during
-    execve
-  selftests/rseq: Test concurrent thread creation and forced migration
-  selftests/rseq: Test the concurrency IDs after the affinity is widened
-  selftests/rseq: Test two race windows of the concurrency ID mode
-    switches
-  selftests/rseq: Test affinity changes while a task replaces or drops
-    its mm
-  selftests/rseq: Test the last user after an affinity change during
-    execve
-
-Weiming Shi (1):
-  sched/mmcid: Synchronize MM teardown with affinity updates
-
- fs/exec.c                                     |   1 +
- include/linux/sched.h                         |   2 +
- kernel/exit.c                                 |   1 +
- kernel/kthread.c                              |   1 +
- kernel/sched/core.c                           | 151 +++-
- tools/testing/selftests/rseq/.gitignore       |   5 +
- tools/testing/selftests/rseq/Makefile         |   5 +-
- .../selftests/rseq/mm_cid_bound_test.c        | 441 +++++++++++
- .../rseq/mm_cid_exec_affinity_test.c          | 283 ++++++++
- .../selftests/rseq/mm_cid_execve_test.c       | 685 ++++++++++++++++++
- .../selftests/rseq/mm_cid_teardown_test.c     | 396 ++++++++++
- .../selftests/rseq/mm_cid_transition_test.c   | 511 +++++++++++++
- .../selftests/rseq/mm_cid_window_test.c       | 485 +++++++++++++
- 13 files changed, 2942 insertions(+), 25 deletions(-)
- create mode 100644 tools/testing/selftests/rseq/mm_cid_bound_test.c
- create mode 100644 tools/testing/selftests/rseq/mm_cid_exec_affinity_test.c
- create mode 100644 tools/testing/selftests/rseq/mm_cid_execve_test.c
- create mode 100644 tools/testing/selftests/rseq/mm_cid_teardown_test.c
- create mode 100644 tools/testing/selftests/rseq/mm_cid_transition_test.c
- create mode 100644 tools/testing/selftests/rseq/mm_cid_window_test.c
-
-
-base-commit: 006991aa89974378ee579416dba87adc22cd60fd
+diff --git a/fs/exec.c b/fs/exec.c
+index 8d2b14e1d455..3196421cb81d 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -905,6 +905,7 @@ static int exec_mmap(struct linux_binprm *bprm)
+ 		BUG_ON(active_mm != old_mm);
+ 		/* Defer teardown to setup_new_exec(), outside the exec locks. */
+ 		bprm->old_mm = old_mm;
++		sched_mm_cid_mm_barrier(tsk);
+ 	} else {
+ 		mmdrop_lazy_tlb(active_mm);
+ 	}
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index e4f6323d7855..8da4b88f434c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2360,6 +2360,7 @@ static __always_inline void alloc_tag_restore(struct alloc_tag *tag, struct allo
+ #ifdef CONFIG_SCHED_MM_CID
+ void sched_mm_cid_before_execve(struct task_struct *t);
+ void sched_mm_cid_after_execve(struct task_struct *t);
++void sched_mm_cid_mm_barrier(struct task_struct *t);
+ void sched_mm_cid_exit(struct task_struct *t);
+ static __always_inline int task_mm_cid(struct task_struct *t)
+ {
+@@ -2368,6 +2369,7 @@ static __always_inline int task_mm_cid(struct task_struct *t)
+ #else
+ static inline void sched_mm_cid_before_execve(struct task_struct *t) { }
+ static inline void sched_mm_cid_after_execve(struct task_struct *t) { }
++static inline void sched_mm_cid_mm_barrier(struct task_struct *t) { }
+ static inline void sched_mm_cid_exit(struct task_struct *t) { }
+ static __always_inline int task_mm_cid(struct task_struct *t)
+ {
+diff --git a/kernel/exit.c b/kernel/exit.c
+index d5e7bc2af804..5f9979d6216c 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -582,6 +582,7 @@ static void exit_mm(void)
+ 	local_irq_enable();
+ 	task_unlock(current);
+ 	mmap_read_unlock(mm);
++	sched_mm_cid_mm_barrier(current);
+ 	mm_update_next_owner(mm);
+ 	mmput(mm);
+ 	if (test_thread_flag(TIF_MEMDIE))
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index fdb8fb07f40b..e7b393cfdcee 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -1682,6 +1682,7 @@ void kthread_unuse_mm(struct mm_struct *mm)
+ 	enter_lazy_tlb(mm, tsk);
+ 	local_irq_enable();
+ 	task_unlock(tsk);
++	sched_mm_cid_mm_barrier(tsk);
+ 
+ 	mmdrop(mm);
+ }
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 456b76e823b3..c4475344f6f2 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11229,6 +11229,15 @@ void sched_mm_cid_after_execve(struct task_struct *t)
+ 		sched_mm_cid_fork(t);
+ }
+ 
++/*
++ * Pair with set_cpus_allowed_common()'s p->pi_lock critical section. Call
++ * after publishing p->mm and before dropping the old MM reference.
++ */
++void sched_mm_cid_mm_barrier(struct task_struct *t)
++{
++	guard(raw_spinlock_irq)(&t->pi_lock);
++}
++
+ static void mm_cid_work_fn(struct work_struct *work)
+ {
+ 	struct mm_struct *mm = container_of(work, struct mm_struct, mm_cid.work);
 -- 
 2.47.3
 
