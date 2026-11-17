@@ -1,75 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.58
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794883611;
-	b=M9ugu0tQ60Tn8+v3BqP4H2YHhLvPBlCf71iEjCopPDZO5zmpD5dutLSNQt4h9TfVh3rE
-	 inNjYXmm0h4hOOGicK5Etv88mBFwfFdKbjboy0smRer3ZairH+ZrXR2agKENr05mOpqoU
-	 SVpn0l5yZMUvp4b3EMMGQx1gNQa2VYgVSOhll1OGVrOhu5DzwilwpHDqLR77h/RhArPkJ
-	 TaVFhO6lkBISoWtZ4zFHYASVarfCacSQBmBqdKwFIL48WdNq+eFTzK7QMGEVbpfMZLZq/
-	 XRdOeM0QbQ4x3NDHIymec73Rc4XQHYPRYPyzMbOCofrQcTfgSIuntKJvJlCE1irhOqQ==
+	t=1794883877;
+	b=280WE0TvfZFVlybdvoyB0TylTmkWPDrnSRTflujq4qwSr7pwXjTMDc/hR8XvCX5f373e
+	 GeVj1Gq3AoxqYeja6IwaUKgYRPpViUayDvssNeJ+Htl8Sr3X3Ff9xMfz6rrMCblnS+ANq
+	 X4WrC1s8wADia1VXYzKLY+8vhRgJWd37tfvFPz7rRKteqP3imAHx1DsmbW4ZvHUnzlZii
+	 s1mImq/23CT6n8AP3j2jGwz4x+uXgJm6PKapP6BrigKDbIHltwctJePFIe1uiPltQUnLG
+	 yjD4RUW5YpXL/kdQGO2S0irYljTQxJlKWQX7I+ogJrAfhiwcO1phy7pCdfqYwP3hNbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794883611;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=7czWWVAT5JV9Hgu1J/we5C/Mmw86nPPn7DAH8Olg8dI=;
-	b=INTuQNcPebHckxrf9I+9cjtCiMZ1Nyd/hDe6EE9wzdrDvqz7SaK37+M6UFmqkKsXk4YB
-	 dkyxPD62BoyzcICzem7AIcwctKxdmPH7zUb6AZMOG9GscwT+rebG7fwZA02rfOl1mCLHs
-	 eU08TP8rV6PV2HVqrLOBBT0/9HWBdOGSV5nACHW1CZNN2F2Re6bT3UoOMh/YCZ/ZWjZ63
-	 9mZk27XeXFej91PB49pyl4XSjumttbYVsEvj0FQG98F/jzyMWyZBHVN7yP9eRgOSxtwBg
-	 l7pRTOG3ZlRVGqdLBTjnupSGwTUaG+VUC/1/l1bMc+ENlFg2aekNymbOkHuUnqUC32w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794883877;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:Date:
+	 From:To:Cc:Subject:Message-Id:In-Reply-To:References:X-Mailer:
+	 Mime-Version:Content-Type:Content-Transfer-Encoding:X-Virus-Scanned:
+	 X-Virus-Status;
+	bh=HlrkP1BWYUFvZgn9jiQ0vFkRqQCaW4G/qIXqF3E+axo=;
+	b=iEoeDExlc8E7VOWVy4plsMISufWnxWGS341zdgGMumrkvOD/jug1oQXThQ3m/50i/Ovd
+	 adStsCofivHv3IeZyPbF6IEPUwfBttE5NfvtRNFC8tEroT8HjWPJchcIcyh02lT/bX2mL
+	 SL9y42WRsJvezbrbqry3z35mtv33nFopaQD36arLVC+ALyNEKh6SZkSfSwFeVcZQBXN+x
+	 1HHv9NyNhcgRJpBObW2vd8VD1jxfCXrAeb3rUm8kmTFqqq2iSoXic+O3Lk6t8YRok2BtP
+	 c0FiVcBbguMEP3iB3INXJYwbcVnLNM5hCKQ0viJ5yPpoD4secYsYaQ4mftYN+oZx0Hw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Eoe2YQDc;
-	arc=none smtp.remote-ip=95.215.58.58
-Received: from mta1.migadu.com (out-58.mta1.migadu.com [95.215.58.58])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272E3606A334
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 02:46:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 272E3606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	dmarc=pass header.from=uniroma2.it;
+	spf=pass smtp.mailfrom=uniroma2.it;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b="N/wMYX1o";
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=gXEIWKr4;
+	arc=none smtp.remote-ip=160.80.4.38
+Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C354606A31C;
+	Tue, 17 Nov 2026 02:51:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C354606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Eoe2YQDc
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+lyCNsOGqBEwZGBZXNbbfgivTSkomZxjKHS28V8jHeM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794883609; v=1; x=1795488409;
- b=Eoe2YQDcrs37v0hCU297WOF3bnEyAH/TMkkjhWVpjtIfopIe2Rr5hf/Ol10oyukvWybRQB5q
- IAM4nErB/BWWJQM1DcJuIkn1eSFLL3Hug3L3ilQ6DC3bcNxW0O14Tf1pTtCeKzzpyEyE+FrtcC1
- Q66sxA48nc9HdXHl8OsKufw0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id de5ce04a605127d5;
-	Tue, 17 Nov 2026 02:46:48 +0000
-X-Mizu-Trace-ID: de5ce04a605127d5
-X-Migadu-Flow: FLOW_OUT
-From: Qiliang Yuan <qiliang.yuan@linux.dev>
-To: Ming Lei <tom.leiming@gmail.com>
-Cc: Qiliang Yuan <qiliang.yuan@linux.dev>,
-	"Martin K. Petersen" <mkp@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-kernel@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org,
-	Mike Christie <michael.christie@oracle.com>,
-	Bodo Stroesser <bostroesser@gmail.com>
-Subject: Re: [PATCH RFC 00/18] scsi: target: Add target_core_uring, an io_uring based user backstore
-Date: Mon, 16 Nov 2026 21:46:40 -0500
-Message-ID: <20261117024640.3184554-1-qiliang.yuan@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <avprIhtn1TuYLX1b@fedora-laptop>
-References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev> <avprIhtn1TuYLX1b@fedora-laptop>
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=N/wMYX1o;
+	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=gXEIWKr4
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6AH2oPVt004190;
+	Tue, 17 Nov 2026 03:50:31 +0100
+Received: from lubuntu-18.04 (unknown [160.80.103.126])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id CC2061209A0;
+	Tue, 17 Nov 2026 03:50:21 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1794883822; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HlrkP1BWYUFvZgn9jiQ0vFkRqQCaW4G/qIXqF3E+axo=;
+	b=N/wMYX1oSWo6b0W1FmE0sa86RbWhoQu7o8wkjzE0ua8VsD8b58ffahRZFygCZ+k2hPue8e
+	vRMnEG9Ucu0GtYBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1794883822; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HlrkP1BWYUFvZgn9jiQ0vFkRqQCaW4G/qIXqF3E+axo=;
+	b=gXEIWKr48PS3d/aDYMf7TJ2eo5m0xd6902CDtSXu+np3/q6jdYiad6vB96wbulXQc+b2Q1
+	pg5I/DUORn9BNgzsacNaLAdeCAcoy0HmjhyhZk0X5FA5CWI6oRQ3Kn/jE+C6EnKQMmU8sp
+	3//k5rLGoficYqFY7JGbKXNK/VzJVToQyG82OpOrKtmkPpq7/rvMqou5pxvWMZ7ckI1qVN
+	vGZe526/NPFAAww0hrASmPamTri2fLu+0naOkK2ejFjQRUvnM/Rb6rCUtQRg9lyktEE32y
+	vxypSf7Gt0WCZeSF04XWjXZnDYNuMyMVWXDcGQR5JckqJMQ9rNF78/EUBl2fQA==
+Date: Tue, 17 Nov 2026 03:50:21 +0100
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan
+ <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Hangbin Liu <liuhangbin@kylinos.cn>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Andrea Mayer
+ <andrea.mayer@uniroma2.it>,
+        Justin Iurman <justin.iurman@gmail.com>,
+        Andrea
+ Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net-next v3 5/5] selftests: seg6: add PSP flavor testing
+ for SRv6 End.X
+Message-Id: <20261117035021.e724668d726ecce54e091288@uniroma2.it>
+In-Reply-To: <20261112-srv6_flavors_endx-v3-5-c9177bbbd965@kylinos.cn>
+References: <20261112-srv6_flavors_endx-v3-0-c9177bbbd965@kylinos.cn>
+ <20261112-srv6_flavors_endx-v3-5-c9177bbbd965@kylinos.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,140 +93,324 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-On Sun, Nov 15, 2026 at 08:32:02PM -0600, Ming Lei wrote:
-> This is ublk's uapi re-implemented inside LIO: FETCH/COMMIT_AND_FETCH
-> per tag, pread()/pwrite() with (qid, tag) in the offset, and buffer
-> registration via io_buffer_register_bvec().
+On Thu, 12 Nov 2026 17:28:00 +0800
+Hangbin Liu <hangbin.liu@linux.dev> wrote:
 
-Yes, the interface is modelled on ublk on purpose.
+> Add an End.X flavor scenario to srv6_end_flavors_test.sh that applies
+> the same PSP policies as the End scenario, alone and combined with
+> NEXT-C-SID, with every node bound through its adjacency (e.g. 4>2 for
+> rt-4 towards rt-2, 2>h towards the host), and exercise it with the
+> existing host connectivity tests.
+>
+> Teach the policy and endpoint helpers about <nodeid:op:act> elements:
+> __get_srv6_rtcfg_act() extracts the action, the __get_*_func()
+> helpers pick the Function for the action, __get_act_cfg() derives the
+> End.X next hop, and build_csid()/get_rt_sid() keep the adjacency so
+> it is encoded into the C-SIDs (e.g. fcbb:0:34a9:: is End.X on rt-3
+> towards rt-4).
+>
+> There is no need to re-check the ip command capability as it already
+> supports setting PSP flavor with End.X.
 
-> 1) If LIO is required (vhost-scsi, FC, SRP, iSER), serve the device
-> with ublk and export it via target_core_iblock. Same per-queue
-> io_uring, same user copy and zero copy path, no new uapi. Please
-> benchmark that configuration, with UBLK_F_USER_COPY and with
-> UBLK_F_AUTO_BUF_REG, same 32 queues and threads.
+Hi Hangbin,
+thanks for adding the End.X scenario.
 
-Done, with kublk from selftests/ublk (loop target, -q 32 -d 128, "-u"
-and "--auto_zc") behind target_core_iblock, against this series with 32
-queues. Both serve the same 2 GiB file on tmpfs. Same VM (32 CPUs) and
-fio jobs as in the cover letter, three alternating runs, median.
+I see these main areas to work on:
+- How an element is read. The "router>adjacency" form is read in
+  different places, each with its own sed or cut. IMO, the selftest
+  would be easier to extend to other behaviors and flavor combinations
+  if the nodes were read in one place, with small helpers. What
+  depends on the behavior could also be chosen in one place.
+- A check of the elements, so that a mistake in a Policy does not go
+  unnoticed.
+- A check of the kernel support for End.X PSP.
+- The End.X tests with a consumed SRH.
+- One End.X SID per adjacency also without NEXT-C-SID, where today
+  the SIDs of a router do not depend on the adjacency.
 
-Over tcm_loop:
+The comments below are ideas on how to address each of them, plus
+some smaller points. There may also be other parts of the selftest
+to adapt.
 
-  User copy (UBLK_F_USER_COPY against pread()/pwrite()):
-  workload               ublk + iblock (MB/s) this series (MB/s)  change
-  4k randread, 1 job                      201                358    +78%
-  4k randread, 4 jobs                     614               1440   +135%
-  4k randread, 16 jobs                   4456               5899    +32%
-  4k randwrite, 16 jobs                  1206               2077    +72%
-  1M read, 4 jobs                        6444              15465   +140%
-  1M write, 4 jobs                       5638               6941    +23%
+>
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> ---
+> I didn't add `host_srv6_end_flv_consumed_srh_tests()` for End.X because
+> the extra policy insertion does not work with the End.X policy. The packet
+> resolves the destination via the next hop directly, rather than doing a
+> re-lookup in table 90.
 
-  Zero copy (UBLK_F_AUTO_BUF_REG against fixed buffers):
-  workload               ublk + iblock (MB/s) this series (MB/s)  change
-  4k randread, 1 job                      195                330    +69%
-  4k randread, 4 jobs                     621               1674   +170%
-  4k randread, 16 jobs                   4051               5773    +43%
-  4k randwrite, 16 jobs                  1140               1952    +71%
-  1M read, 4 jobs                       27568              49666    +80%
-  1M write, 4 jobs                       5326               7262    +36%
+The ingress router can insert the extra SRH instead, on the first SID
+of the Policy. As in the End tests, an End SID of the base setup can
+then consume it. This way, we can add these tests for End.X too. What
+do you think?
 
-Over iSCSI on 127.0.0.1 (iscsi_target_mod and iscsi_tcp in the same
-VM, 16 sessions, one fio job per session):
+> [snip]
+> diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> index 374b43661c28..5b1b13586df0 100755
+> --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> [snip]
+>  __get_srv6_rtcfg_id()
+>  {
+>  	local element="$1"
+>  
+> +	echo "${element}" | sed 's/:.*//; s/>[1234h]//g'
+> +}
+> [snip]
+> +__get_srv6_rtcfg_all_id()
+> +{
+> +	local element="$1"
+> +
+>  	echo "${element}" | cut -d':' -f1
+>  }
+>  
 
-  User copy (UBLK_F_USER_COPY against pread()/pwrite()):
-  workload               ublk + iblock (MB/s) this series (MB/s)  change
-  4k randread, 1 job                      136                154    +13%
-  4k randread, 4 jobs                     578                698    +21%
-  4k randread, 16 jobs                   2516               2412     -4%
-  4k randwrite, 16 jobs                  1512               1739    +15%
-  1M read, 4 jobs                         613                716    +17%
-  1M write, 4 jobs                       3747               5218    +39%
+The same node is read again in build_csid(), get_rt_sid() and
+setup_rt_endpoints(), each time in its own way. Two small helpers,
+one returning the router of a node and one its adjacency, could
+replace these sed and cut. __get_srv6_rtcfg_id() above would then not
+need the sed, and __get_srv6_rtcfg_all_id() would probably not be
+needed at all. Without NEXT-C-SID, __setup_rt_policy() could then get
+each SID of the Policy from get_rt_sid(), as setup_rt_endpoints()
+does.
 
-  Zero copy (UBLK_F_AUTO_BUF_REG against fixed buffers):
-  workload               ublk + iblock (MB/s) this series (MB/s)  change
-  4k randread, 1 job                      145                153     +6%
-  4k randread, 4 jobs                     576                679    +18%
-  4k randread, 16 jobs                   2740               2222    -19%
-  4k randwrite, 16 jobs                  1716               1508    -12%
-  1M read, 4 jobs                         778                805     +3%
-  1M write, 4 jobs                       5235               5262     +1%
+> [snip]
+> +__get_noflv_func()
+> +{
+> +	local act="$1"
+> +
+> +	case "${act}" in
+> +	"End")
+> +		echo "${END_FUNC}" ;;
+> +	"End.X")
+> +		echo "${ENDX_FUNC}" ;;
+> +	esac
+> +}
+> +
+> +__get_psp_func()
+> +{
+> +	local act="$1"
+> +
+> +	case "${act}" in
+> +	"End")
+> +		echo "${END_PSP_FUNC}" ;;
+> +	"End.X")
+> +		echo "${ENDX_PSP_FUNC}" ;;
+> +	esac
+> +}
+> +
+> +__get_csid_psp_func()
+> +{
+> +	local act="$1"
+> +
+> +	case "${act}" in
+> +	"End")
+> +		echo "${END_CSID_PSP_FUNC}" ;;
+> +	"End.X")
+> +		echo "${ENDX_CSID_PSP_FUNC}" ;;
+> +	esac
+> +}
 
-Through vhost-scsi to a nested KVM guest (16 vCPUs, 16 virtqueues,
-worker_per_virtqueue=on), fio running in the guest:
+The three __get_*_func() helpers differ only in the constants. As a
+possible simplification, they could be one function with, for example,
+a case on the behavior and the operation ("End noflv", "End psp", ...,
+"End.X next-csid,psp"). Then the Functions are chosen in one place,
+also for a new behavior.
 
-  User copy (UBLK_F_USER_COPY against pread()/pwrite()):
-  workload               ublk + iblock (MB/s) this series (MB/s)  change
-  4k randread, 1 job                      335                213    -36%
-  4k randread, 4 jobs                    1436                844    -41%
-  4k randread, 16 jobs                   2341               2651    +13%
-  4k randwrite, 16 jobs                  1467               1640    +12%
-  1M read, 4 jobs                        8077              21991   +172%
-  1M write, 4 jobs                       5006               6943    +39%
+> [snip]
+>  # Return the C-SID of a router: the Locator-Node (4 bits), i.e. the ID of the
+>  # router, followed by the parameter of the behavior (4 bits, 0) and the
+>  # Function (8 bits).
+>  # args:
+>  #  $1 - router
+>  #  $2 - Function (e.g. "e9")
+> -# e.g. input: "4" "e9"
+> -#      output: "40e9"
+> +# e.g. input: "4" "e9", output: "40e9"
+> +#      input: "4>2" "a9", output: "42a9"
+>  build_csid()
+>  {
+>  	local nodeid="$1"
+>  	local func="$2"
+>  
+> -	printf "${LCNODE_FMT}%s" "${nodeid}" "${func}"
+> +	nodeid=$(echo "${nodeid}" | sed 's/>//; s/h/0/')
+> +	[[ ${#nodeid} -eq 1 ]] && mid=0 || mid=""
+> +	printf "%s%s%s" "${nodeid}" "$mid" "${func}"
+>  }
 
-  Zero copy (UBLK_F_AUTO_BUF_REG against fixed buffers):
-  workload               ublk + iblock (MB/s) this series (MB/s)  change
-  4k randread, 1 job                      339                306    -10%
-  4k randread, 4 jobs                    1521               1030    -32%
-  4k randread, 16 jobs                   2589               1987    -23%
-  4k randwrite, 16 jobs                  1518               1669    +10%
-  1M read, 4 jobs                       37494              39978     +7%
-  1M write, 4 jobs                       4519               8240    +82%
+Here the parameter of the behavior comes from the length of the
+string after the sed, and mid is not local. The callers of
+build_csid() could set the parameter from the behavior and the
+adjacency of the node. The parameter is the adjacent router for End.X,
+and 0 for End and towards the host. For example, with the Function a9
+or e9:
 
-So this series is ahead over tcm_loop, about even over iSCSI, and
-behind ublk + iblock for 4k with few jobs through vhost-scsi. I have
-not found out yet where the time goes in the vhost-scsi case. With zero
-copy and 16 jobs ublk is ahead on both fabrics, which I attribute to
-auto buffer registration saving the two extra commands per I/O that
-this series needs.
+	End     4      e9      40e9
+	End.X   4>2    a9      42a9
+	End.X   2>h    a9      20a9
 
-> 32 threads against one, over tcm_loop with data in memory, measures
-> only the hand-off. Please run a real fabric and explain the -13%
-> single job result.
+The comment above still says that the parameter is 0 ("(4 bits, 0)").
 
-Same fabrics, data in memory, TCM/USER against this series with one
-queue (one server thread) and with 32. Over iSCSI:
+> [snip]
+> @@ -713,10 +814,10 @@ op_has_next_csid()
+>  #  $1 - router
+>  #  $2 - operation <op> of the element (e.g. "next-csid,psp")
+>  #  $3 - Function (e.g. "0ef1", or "e9" with NEXT-C-SID)
+> -# e.g. input: "4" "psp" "0ef1"
+> -#      output: "fcff:4::0ef1"
+> -#      input: "4" "next-csid,psp" "e9"
+> -#      output: "fcbb:0:40e9::/48"
+> +# e.g. input: "4" "psp" "0ef1", output: "fcff:4::0ef1"
+> +#      input: "4>2" "psp" "0af1", output: "fcff:4::0af1"
+> +#      input: "4" "next-csid,psp" "e9", output: "fcbb:0:40e9::/48"
+> +#      input: "4>2" "next-csid,psp" "a9", output: "fcbb:0:42a9::/48"
+>  get_rt_sid()
+>  {
+>  	local rt="$1"
+> @@ -730,6 +831,7 @@ get_rt_sid()
+>  		return
+>  	fi
+>  
+> +	rt=$(echo "${rt}" | sed 's/>.*//')
+>  	echo "${LOCATOR_SERVICE}:${rt}::${func}"
+>  }
 
-  workload               TCM/USER  1 queue          32 queues
-                           (MB/s)   (MB/s)  change     (MB/s)  change
-  4k randread, 1 job          138      157    +14%        155    +12%
-  4k randread, 4 jobs         538      679    +26%        685    +27%
-  4k randread, 16 jobs        720     1101    +53%       2631   +265%
-  4k randwrite, 16 jobs       859     1228    +43%       2161   +152%
-  1M read, 4 jobs             756      799     +6%        765     +1%
-  1M write, 4 jobs           2263     6075   +168%       5379   +138%
+Without NEXT-C-SID, get_rt_sid() drops the adjacency, as the Sashiko
+review also notes: "4>2:psp:End.X" and "4>3:psp:End.X" would both get
+fcff:4::0af1. I think each adjacency should have its own SID. The
+SID could carry the adjacency, as the C-SID already does. Then
+__setup_rt_policy() needs the new SID. Calling get_rt_sid() there,
+as suggested above, would do that.
 
-1M reads over iSCSI are limited by the loopback TCP connection for
-every backend here (retransmits and zero window stalls), so that row
-says nothing about the backstores.
+> [snip]
+> @@ -765,26 +867,34 @@ setup_rt_endpoint()
+>  
+>  # Add an SRv6 Endpoint behavior to each router of a Policy element <nodeid:op>.
+>  # args:
+> -#  $1 - <nodeid> of the element: one router, or a comma-separated list
+> +#  $1 - <nodeid:op:act> element
+>  #  $2 - operation <op> of the element (e.g. "next-csid,psp")
+>  #  $3 - Function (e.g. "0ef1", or "e9" with NEXT-C-SID)
+> -#  $4 - SRv6 Endpoint behavior and flavors (e.g. "End flavors psp")
+> -# e.g. input: "4,2" "next-csid,psp" "e9"
+> -#             "End flavors next-csid,psp lblen 32 nflen 16"
+> +#  $4 - flavor configuration of the behavior, without the action
+> +#       (e.g. "flavors psp")
+> +# e.g. input: "4,2:next-csid,psp" "next-csid,psp" "e9"
+> +#             "flavors next-csid,psp lblen 32 nflen 16"
+>  #      result: the behavior is added on rt-4, bound to fcbb:0:40e9::/48, and
+>  #              on rt-2, bound to fcbb:0:20e9::/48
+>  setup_rt_endpoints()
+>  {
+> -	local node="$1"
+> +	local nodeid="$1"
+>  	local op_type="$2"
+>  	local func="$3"
+>  	local behavior_cfg="$4"
+> +	local nodes node next_node
+> +	local act act_cfg
+>  	local sid
+>  	local rt
+>  
+> -	for rt in $(echo "${node}" | sed 's/,/ /g'); do
+> -		sid="$(get_rt_sid "${rt}" "${op_type}" "${func}")"
+> -		setup_rt_endpoint "${rt}" "${sid}" "${behavior_cfg}"
+> +	nodes="$(__get_srv6_rtcfg_all_id "${nodeid}")"
+> +	act="$(__get_srv6_rtcfg_act "${nodeid}")"
+> +	for node in $(echo "${nodes}" | sed 's/,/ /g'); do
+> +		rt=$(echo "${node}" | cut -d'>' -f1)
+> +		next_node=$(echo "${node}" | cut -d'>' -f2)
+> +		act_cfg="$(__get_act_cfg "${act}" "${rt}" "${next_node}")"
+> +		sid="$(get_rt_sid "${node}" "${op_type}" "${func}")"
+> +		setup_rt_endpoint "${rt}" "${sid}" "${act_cfg} ${behavior_cfg}"
+>  	done
+>  }
 
-And through vhost-scsi:
+setup_rt_endpoints() now gets the whole element, and reads it again
+with the same helpers as __setup_rt_policy(). I think
+__setup_rt_policy() can read the element once, and pass only what
+setup_rt_endpoints() needs, for example the nodes and the behavior.
 
-  workload               TCM/USER  1 queue          32 queues
-                           (MB/s)   (MB/s)  change     (MB/s)  change
-  4k randread, 1 job          201      237    +18%        238    +18%
-  4k randread, 4 jobs        1095      902    -18%        843    -23%
-  4k randread, 16 jobs        957     1119    +17%       2865   +199%
-  4k randwrite, 16 jobs       749     1098    +47%       2599   +247%
-  1M read, 4 jobs            5373    15317   +185%      56532   +952%
-  1M write, 4 jobs           2064    10948   +430%      27074  +1212%
+Nit: I would declare one local per line in the new code, as in the
+rest of the selftest.
 
-On the single job over tcm_loop: one fio job submits from one CPU, so
-only one queue and one server thread are in use and it is one thread
-against one. The TCM/USER handler finds the data area in its mmap and
-takes a whole batch per wakeup, while the server here issues one
-pwrite() per read on top of the io_uring_enter(). Counted over the
-whole system during that job, that is 1.1 system calls and 0.27 context
-switches per I/O for TCM/USER against 2.2 and 0.39 for this series.
+> [snip]
+> @@ -824,7 +934,8 @@ setup_rt_host_proxy()
+>  #       cafe::x:yy on the loopback of the host (e.g. 2:e9)
+>  #  $2 - SRv6 router configured for enforcing the SRv6 Policy
+>  #  $3 - compact way to represent a list of SRv6 routers with their operations
+> -#       (i.e. behaviors) that each of them needs to perform. Every <nodeid:op>
+> +#       (i.e. behaviors) that each of them needs to perform. Every
+> +#       <nodeid:op:act>
+>  #       element constructs a SID that is associated with the behavior <op> on
+>  #       the <nodeid> node. The list of such elements forms an SRv6 Policy.
+>  #       For "next-csid,psp", <nodeid> is a comma-separated list of node IDs.
+> @@ -841,34 +952,38 @@ __setup_rt_policy()
+>  	local container
+>  	local function
+>  	local op_type
+> +	local nodes
+>  	local node
+> +	local act
+>  	local n
+>  
+>  	in_nsname="$(get_rtname "${encap_rt}")"
+>  
+>  	for n in ${policy_rts}; do
+>  		node="$(__get_srv6_rtcfg_id "${n}")"
+> +		nodes="$(__get_srv6_rtcfg_all_id "${n}")"
+>  		op_type="$(__get_srv6_rtcfg_op "${n}")"
+> +		act="$(__get_srv6_rtcfg_act "${n}")"
 
-> 2) If the goal is iSCSI for userspace storage, keep the kernel out of
-> the data path entirely.
+I would also describe the new syntax in the comment of
+__setup_rt_policy() above: the ">" with the adjacency, "h" for the
+host, and the ":End.X" field.
 
-The goal is the fabrics LIO already has, vhost-scsi and tcm_loop as
-much as iSCSI, for setups that run TCM/USER today.
+A mistake in an element can also go unnoticed. With "1>h:psp",
+rt-1 gets End instead of End.X, and the End.X tests still pass. Could
+a check at the top of this loop make the test fail on such an element?
+The check could also refuse an End.X element without an adjacency,
+e.g. "4:psp:End.X".
+On a setup error, cleanup() reports SKIP, unless the check sets ret
+to ksft_fail first.
+
+> [snip]
+> @@ -1479,4 +1623,12 @@ host_srv6_end_flv_next_csid_psp_tests
+>  host_srv6_end_flv_consumed_srh_tests
+>  defer_scope_pop
+>  
+> +defer_scope_push
+> +set -e
+> +setup_endx_flv_psp
+> +set +e
+> +host_srv6_end_flv_psp_tests "End.X"
+> +host_srv6_end_flv_next_csid_psp_tests "End.X"
+> +defer_scope_pop
+> +
+>  print_log_test_results
+
+On a kernel with End PSP but without End.X PSP, the whole script ends
+as SKIP, after the End tests passed. This can happen without any
+backport, since the selftests from mainline can also be run on older
+stable kernels. The selftest already probes End PSP with
+test_kernel_supp_or_ksft_skip(), for kernels without it. We could
+probe End.X PSP first in the same way, with an nh6, but returning
+instead of exiting. If each scenario is moved into its own function,
+the End.X one can return early, and only that scenario is skipped.
+
+Sashiko asks whether the End.X tests would also pass if End.X worked
+as End. The "1>h:psp" case above suggests that they would. I think it
+is worth a look.
+
+If you want a hand with any of these points, I am glad to help.
 
 Thanks,
-Qiliang
+Andrea
