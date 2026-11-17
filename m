@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794892172;
-	b=tzu+ycOve+HE5IxCNAlSAaSPnKSzAhm/DvL7Xc7YvAjaH0cxT27EKaV7fz1H5IOR58vd
-	 /Eh/k/hkxzhQRlZbeqlxLq5tIamFBCCjLe/T1OmRkGQwyPukdaL1uigF8SQT98632Jb7q
-	 9jzCAw337+RbcTzRsIy9i8rkvnUtCyNy4mG4mM/gfgqp0JuKH5fwCblvV9BNad1O6xkxU
-	 vEiPMgWdX3SrqY8Myig+mNXUaARx4j/cyJqB25S9ZZNZlwtn4FhIhF5QK+uqlipU4TNgH
-	 rsI2zhhO3LOcdJWbvFsWM5KIIJllZz2VT6zJtvdL5hI2pjCcIjpfAgfzmlmPFGSHrnA==
+	t=1794892180;
+	b=Fs//nxSDMQoMoMnm/FZTPtZhJ66eSWywbeuMZ3tih9FhvBkg5JRmUV/8OOUCmtrKuM9z
+	 ecq33sl9NTjauMue9VBHXCDGqQFDSNMRztH0lqFMhD5qT4hgTeuB+MtK3+JQD8QGh0QZf
+	 /Nlv81/S5RTLg1inU/uM3KE3w8kEsgyfp8jX2xJga73mJ84zW8+yvS/tygesBLo2PCTYX
+	 SYt90OK8QhCv985FZTFylJF3noCzAU5JVPO6AX/NDucr/QJK8CwadWToMIBWGRIb2aioc
+	 rvYCGGspnQydDUiZ1fTDwLDW52DpvsLeCrheBTQdIj3h1Ll8fZjctLisitd/na9Q7rg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794892172;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794892180;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=T6eIobs5D9XmHWrYFhdj7cW0/x/RnlZNFsdojclJewE=;
-	b=YRnNlHGQjfSs34/mtLvHzKBDvb9cyqa4voshefeMcXX/gdturqGVNsFvoLjl2ORdOO1h
-	 CnllolnLiABC2JogATCtUfocVIsuhKOZSXhKUyxlexVoKJRaDhwB63+UFATmD+ExiUkdm
-	 pb//kHd1DwzblDFZFHVWzBHHFWwIbvXbEZ8vyEoJkaBzRfnV+DHQF+URM8sWtRtFUxZ0y
-	 EgZjnPSb/UG7YJH1pqgg7fYrzM2KXW+B6VeD2TMzG0li+IU5CXXucSs1FYpUdoon/KsG+
-	 3V80JNCvKJJMgt2H40i9z9bIkWuOzi53fDtSatAAu76/C+Fk3fbe53ayeMdozRGh0OQ==
+	bh=sBuq7agc2LJ6hWE7imheP/OC6f3LlJfwcnXlMy2Xfu8=;
+	b=RLj4Vfd79JsQ3wjCutqDPRqBfNCZIkncBgNpBGejaLGFhhluhMATF5EOhaWzgvh6m4HF
+	 +Emeiuyg4GMgjOA6JO7HeUpwUHTt26NL3LzWjsFUmKEsp9YfTzbMNFkvNFWahT6UmkFSU
+	 a2QJEKS0rSTSSS5Yy9c2TSRSbWVU+HIErU1iNZokF+OYT2BmUCgAxFqQF7/mHopA+2Ocf
+	 WEtNSl9GrxjXfg/5hAt9Ogk0XPQAOSgPEMrPbxytWVpRn/p9fkF07yV89KintIQd0ZC+b
+	 HNb6msPJdD1ZozZQHL5gTDnuhJbvBMJ97kt+pXMOKznqR4sO0ZYlZddBYnUiXGpMbZg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eltAhv4l;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m2Y1P68o;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 783B5606A31C;
-	Tue, 17 Nov 2026 05:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 763FC606A329;
+	Tue, 17 Nov 2026 05:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eltAhv4l
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 71EFC1F000C5;
-	Tue, 17 Nov 2026 05:09:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m2Y1P68o
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 6AEF51F000C9;
+	Tue, 17 Nov 2026 05:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794892172;
-	bh=T6eIobs5D9XmHWrYFhdj7cW0/x/RnlZNFsdojclJewE=;
+	s=k20260515; t=1794892180;
+	bh=sBuq7agc2LJ6hWE7imheP/OC6f3LlJfwcnXlMy2Xfu8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eltAhv4lO1ELFXOfm97cs3eTtAy14zpxN7frA5zDTXljNuj4XDHZRC+HKOwcHYfZq
-	 aPgKgW3mho2K57IVLnM3hZ1ogp5RNP1UdB5PuBBeaMJ70ENJxggJNl8RmRt3Qu/ZKR
-	 YxN7DbLGmOwScWCab2mUCGewxHbkAe6k2mKsdo3IblwchimDILQDwD6xmjKpdfv0hl
-	 sG2rcAPDonSz/l+efsK+nd4bG4cs1PoUswRJS0A8Ro4I8M1SOnRJGJR8tDlUOqsXr5
-	 ioNt1Z77jisG+XdgfWf+tCd0OXKdpVTIIybUTE/rk2XCuTylFWSfBteeEVyCuev3hI
-	 QRLJOxxlJRksg==
+	b=m2Y1P68oF3q8KRZXuY1dLQyCw7Xuffv8OmSRl/XRANK/TJRucEcvKZ7ML40C9WIT0
+	 2QSfuZcJpGeTlHq+kA/FndpXIuAZ4/3IXJ8L4y/OEa7LznWrwu48E9xD0mykdM9fFO
+	 tDPfqB26b7brXwbYtUkwUSptl5IZRMT3T2K5LcWWhbIiGUgWlt80bOOqg+3i4AaMHT
+	 UD9v8ntxI8rcuw6SzeqpkMe2yhb3NtfpAVtK73/KsvfyLGBqCC5hZBuk5nU7J23Ca0
+	 ZTLJ06fyDF7PqeD6U5CQnM7LbniWVBmO6Pr5VN367BVf723Hm2KNrL10kIac9yrhZA
+	 1QYYVTl3wgyRA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-fsdevel@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -80,9 +80,9 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	Valentin Schneider <vschneid@redhat.com>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Vlastimil Babka <vbabka@kernel.org>
-Subject: [RFC PATCH 11/13] docs: Document root namespace uAPI
-Date: Tue, 17 Nov 2026 07:08:39 +0200
-Message-ID: <20261117050841.3289652-12-jarkko@kernel.org>
+Subject: [RFC PATCH 13/13] MAINTAINERS: Add entry for ROOT NAMESPACE
+Date: Tue, 17 Nov 2026 07:08:41 +0200
+Message-ID: <20261117050841.3289652-14-jarkko@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261117050841.3289652-1-jarkko@kernel.org>
 References: <20261117050841.3289652-1-jarkko@kernel.org>
@@ -97,76 +97,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Userspace container managers need a clear specification of rootns state
-transitions, mount-tree construction, credential rules, and namespace
-isolation guarantees.
+Record maintainership and mailing list routing for the root namespace
+subsystem across its uAPI headers, core implementation, documentation,
+and selftests.
 
-Add Documentation/userspace-api/rootns.rst to include the kernel-doc
-sections and system call reference from kernel/rootns.c,
-include/uapi/linux/rootns.h, fs/fsopen.c, and fs/namespace.c.
-
-Co-developed-by: David Howells <dhowells@redhat.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- Documentation/userspace-api/index.rst  |  1 +
- Documentation/userspace-api/rootns.rst | 35 ++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
- create mode 100644 Documentation/userspace-api/rootns.rst
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index a68b1bea57a8..56d0ac4eb087 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -17,6 +17,7 @@ System calls
-    :maxdepth: 1
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7e7753a54125..1019266bc077 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24534,6 +24534,17 @@ F:	include/linux/mfd/rohm-bd96802.h
+ F:	include/linux/mfd/rohm-generic.h
+ F:	include/linux/mfd/rohm-shared.h
  
-    unshare
-+   rootns
-    futex2
-    ebpf/index
-    ioctl/index
-diff --git a/Documentation/userspace-api/rootns.rst b/Documentation/userspace-api/rootns.rst
-new file mode 100644
-index 000000000000..66c6dbc0e937
---- /dev/null
-+++ b/Documentation/userspace-api/rootns.rst
-@@ -0,0 +1,35 @@
-+.. SPDX-License-Identifier: GPL-2.0
++ROOT NAMESPACE
++M:	David Howells <dhowells@redhat.com>
++M:	Jarkko Sakkinen <jarkko@kernel.org>
++L:	linux-fsdevel@vger.kernel.org
++S:	Maintained
++F:	Documentation/userspace-api/rootns.rst
++F:	include/linux/rootns.h
++F:	include/uapi/linux/rootns.h
++F:	kernel/rootns.c
++F:	tools/testing/selftests/rootns/
 +
-+===================
-+Root namespace uAPI
-+===================
-+
-+Overview
-+========
-+
-+.. kernel-doc:: kernel/rootns.c
-+   :doc: Overview
-+
-+Flags
-+=====
-+
-+.. kernel-doc:: include/uapi/linux/rootns.h
-+
-+System calls
-+============
-+
-+.. kernel-doc:: kernel/rootns.c
-+   :identifiers: sys_rootns_create sys_rootns_enter sys_rootns_wait
-+                 sys_rootns_kill
-+
-+Filesystem configuration
-+========================
-+
-+.. kernel-doc:: fs/fsopen.c
-+   :doc: FSCONFIG_SET_ROOTNS
-+
-+Mount tree installation
-+=======================
-+
-+.. kernel-doc:: fs/namespace.c
-+   :doc: MOVE_MOUNT_T_ROOTNS_ROOT
+ ROTATION DRIVER FOR ALLWINNER A83T
+ M:	Jernej Skrabec <jernej.skrabec@gmail.com>
+ L:	linux-media@vger.kernel.org
 -- 
 2.47.3
 
