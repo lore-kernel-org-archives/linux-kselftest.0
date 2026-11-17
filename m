@@ -1,49 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.226
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794899215;
-	b=whYa5aCNo4FTabet0tMRtNIJwZFepO/XfAeF2SJdTlTleP+F0WXlQY/8twxmspH854Te
-	 1Q74hlAHnsVdFamqmxKtKtbADuwWq1AcWEEUJo1YW7sxQ0gQrND358KL3TGMf0BdJXQKD
-	 a+nhCkfpfvcbfcZ35RYTBTe90rwJ9348NG1wJ1gBdVDdFE02NCMNQNZozfX5awig0UDGX
-	 s6wOFgIEkF5u5vj2QsOn58qX+dnywApwt0nH2Zkv7EUdd6wmYzchTOV0SSY+48dFz6DhF
-	 J2tBQ6u0u/PUN2j78cmcuC6YPN9QG1HlYZEx9crQa6XAKAMOqX4b+b1bbBmtwNNRvzQ==
+	t=1794899305;
+	b=UJiRWMgvDmNm9Vf8Abosc5xyzikAaWiyR4WE6nKEZF5gqQELZVjuu5EwHgQOL+7v4bDG
+	 ksYp+1CK/JirIlqUATuO5lcxMpjunBJlcB+RwzkGPJGZZ7GYY1oJccJRQnG2OlPptYj9/
+	 XufjnJXHFbXVzR642/9u6LQcD3BGf2B5pwYsGSCspDWamQ+v35ehiRzD0+YmhUsSbsK7/
+	 bP9k+8uOX8qiAorelWscx/5BHZw7zDqt0WhaZ9Cly+li6qRI71edBDRc9Go2iRNajbFId
+	 dfedoaYrOc3GR6F5Cowz2+VzCbg1H7bzdoIQxywJ30jIdag1WgpclkUQoS8irAmmYDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794899215;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=5lu26Bt2eDNFvp6cstc3Xl7/hEM7htfAhlohX2GmX/g=;
-	b=HWbUgRjOZWNXzL0ItC2B2cHlchHZNxGAM6B1PQHBFTxruiMHDWngIsXy1t/nnF3y2NX1
-	 Rh6uQW6sBeVAt1/Mw4v0Cez+WHosInmWfi4fOTvCputfFKfgO/0Aww0e9E5uCgIPvN2Xf
-	 q48RnnauthO33ave2+AuXxCmkKfqUoejMhB6QPs0PyMV8EsixJSLzuRvWHdQ3J5bWlzxY
-	 0ntuZn9YHuFn6ihIaSwZ0mhezMJaFjpL1JRZPHa16hUQrCfMXSz/kfOmcesVthHmXcr5n
-	 gZ+nJ8CjdAjVyiVLM0D5acovcxKDWfAO2bl5YOUMDMaQ3OnaEBTRkzZ39aSiqAkfaDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794899305;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=rOa3RtnmIODQAIOd/ZqlGYqJucQki9cfsWeLmMaO4dU=;
+	b=I8o4h5RpekShu7K1lvGzra7ljEs7yUzkgTbpBw0sMwnEZaLS7GbKziQHXrIAj0slrwj2
+	 8gcMLEhBaAP8nkkyOVmIvJsF2bBgXPcyXS6Xj8ts61aPyrXnQxebbWxa1ZMKYJtTI1Tlt
+	 eU7j7l0z521+rNFKKuLZvvoTWQhGwrgtbHvxKoaR4N29bw9+s1deom+Ay01iq0i4fTgmS
+	 fW/y/BylbhrGDLCL1zWXGnsyIx8inhpcmcrwpCCu6Arm6ec/mIfSTNIY08+qwBPVc8zDN
+	 QwgZd1YVx621j6Qr7550J7Tga5NUspSYESX7NJ26GyUd1fAmLe/BWaZQVxmzpabxxLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="CPhiYY/V";
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98A8606A89C;
-	Tue, 17 Nov 2026 07:06:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E98A8606A89C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="L4X/7pi/";
+	arc=none smtp.remote-ip=113.46.200.226
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C832E606A329;
+	Tue, 17 Nov 2026 07:08:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C832E606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=CPhiYY/V
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43C781682;
-	Mon, 16 Nov 2026 23:06:51 -0800 (PST)
-Received: from [10.164.19.84] (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6F7E3F763;
-	Mon, 16 Nov 2026 23:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794899214; bh=37zKrLpxA2dCRmPleyeQ7VCQicsitLgl6s35S11J8D4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CPhiYY/VeBxfA5FgTuKfVU3lDlJHHcJNrwLU0csIRCJUyg027aZZ0ieaS7USQoPS/
-	 lQxkrCAi2Swy4jFEKg5BYpXH+U+hr7ZG7+7LG7yLhSfEnZ5COpEFM/pWVO8F7ycEaJ
-	 BSjicGNIQOpuxcgKSXPhmZ8Q/DiYOsbGFTXsurUY=
-Message-ID: <0fc496fa-8b5d-4067-a21e-c8dae707b95e@arm.com>
-Date: Tue, 17 Nov 2026 12:36:46 +0530
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=L4X/7pi/
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=rOa3RtnmIODQAIOd/ZqlGYqJucQki9cfsWeLmMaO4dU=;
+	b=L4X/7pi/hKgrcWH+r2Lyz2K5fDr6oemmr9Vqo/mlPjixIKI0SaWd02EkAFwLiATXCcyx1b0Xd
+	SD4a44BotoB4mvpr9tipicm36JCDbfzpc2xS5upFF+YfPk1QhGsg2JAQ+C8ME4u4aQkhKCrxCFx
+	b96PIsaaZyFGx0HZvwo6Js4=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4jTG5y5hW3zKmT8;
+	Tue, 17 Nov 2026 15:08:06 +0800 (CST)
+Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 72C8D4055B;
+	Tue, 17 Nov 2026 15:08:20 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemk200008.china.huawei.com
+ (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Tue, 17 Nov
+ 2026 15:08:18 +0800
+Message-ID: <ece02e4c-f87e-48ca-a653-cd02ca74eaba@huawei.com>
+Date: Tue, 17 Nov 2026 15:08:18 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,87 +63,70 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] selftests/mm: replace transhuge-stress with a THP
- compaction selftest
-To: Dev Jain <dev.jain@arm.com>, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>, Barry Song
- <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261112090250.334344-1-sarthak.sharma@arm.com>
- <acbbc219-0b6a-4ec5-8047-af4b4b695212@arm.com>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <acbbc219-0b6a-4ec5-8047-af4b4b695212@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [RFC PATCH v2 2/3] security: Add PR_CAPBSET_DROP_MASK for
+ process-wide bounding-set drops
+To: "Serge E. Hallyn" <serge@hallyn.com>, Oleg Nesterov <oleg@redhat.com>
+CC: <kees@kernel.org>, <akpm@linux-foundation.org>, <david@kernel.org>,
+	<ljs@kernel.org>, <liam@infradead.org>, <vbabka@kernel.org>,
+	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
+	<mingo@redhat.com>, <peterz@infradead.org>, <juri.lelli@redhat.com>,
+	<vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+	<rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+	<vschneid@redhat.com>, <kprateek.nayak@amd.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <shuah@kernel.org>, <brauner@kernel.org>,
+	<alexjlzheng@tencent.com>, <jannh@google.com>, <jaime.saguillo@gmail.com>,
+	<elver@google.com>, <blbllhy@gmail.com>, <bvanassche@acm.org>,
+	<pjw@kernel.org>, <broonie@kernel.org>, <debug@rivosinc.com>,
+	<tglx@kernel.org>, <aleksey.oladko@virtuozzo.com>,
+	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-security-module@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-kselftest@vger.kernel.org>, <morgan@kernel.org>
+References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
+ <20260929130200.1638343-3-ruanjinjie@huawei.com>
+ <atjN3JX7sWx9kpQ5@hallyn.com> <avHfm5/mVtuN/oPW@hallyn.com>
+ <avIKUzCKAkfC-wuk@redhat.com> <avIVCf1ok6Xyfii0@hallyn.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <avIVCf1ok6Xyfii0@hallyn.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemk200008.china.huawei.com (7.202.194.74)
 
-Hi Dev!
 
-On 11/14/26 6:13 PM, Dev Jain wrote:
-> 
-> 
-> On 12/11/26 2:32 pm, Sarthak Sharma wrote:
->> transhuge-stress is a stressor tool that repeatedly
->> allocates and splits THPs till a specified duration. If the
->> duration elapses, the test passes and fails only if a setup or
->> system call fails.
->>
->> This is not how a test residing in selftests/mm is supposed to
->> behave. So remove it and add a new functional test called
->> thp-compaction.c, that allocates THPs as much as it can,
->> splits those THPs keeping one page retained and discarding
->> others, and then retries allocating THPs, which will test
->> if THP compaction is working fine. If we are able to recover
->> more than half of the initial THPs, the test passes. Otherwise
->> it fails.
->>
->> This was suggested by David earlier [1].
->>
-> 
-> Isn't compaction_test.c already sort-of doing what you are trying to
-> do here?
 
-Yup, but compaction_test.c is for hugetlb pages. Maybe we can rename 
-compaction_test.c to something like hugetlb_compaction or something for 
-clarity.
+在 2026/11/10 2:46, Serge E. Hallyn 写道:
+> On Mon, Nov 09, 2026 at 07:00:51PM +0100, Oleg Nesterov wrote:
+>> On 11/09, Serge E. Hallyn wrote:
+>>>
+>>> Hi Oleg,
+>>>
+>>> please see below.  Do you have any issues with this use of sighand?
+>>
+>> Hi Serge,
+>>
+>> I already tried to look at this patch, but sorry, can't really comment.
+>>
+>> I'll try to take another look, but can't promise much, I don't understand
+>> the problem space (I could never reallly understand capabilites in details).
+> 
+> Thanks.  I'm mainly wondering about the storing of this pending capability
+> bounding mask in signal_struct, whether that might have any unexpected
 
-> 
-> 
->> Patch 1 removes the current transhuge-stress. Patch 2 adds a check to see
->> if PFNs are being masked due to no CAP_SYS_ADMIN in the initial user namespace.
->> Patch 3 factors out THP split helpers from split_huge_page_test.c to vm_util.c.
->> Patch 4 adds the
->> new test.
->>
->> [1] https://lore.kernel.org/all/94ace42d-8d60-4475-953e-74fb3dc23774@kernel.org/
->>
->> Sarthak Sharma (4):
->>    selftests/mm: remove transhuge-stress
->>    selftests/mm: detect masked PFNs in allocate_transhuge()
->>    selftests/mm: factor out THP split helpers
->>    selftests/mm: add a THP compaction selftest
->>
->>   MAINTAINERS                                   |   2 +-
->>   tools/testing/selftests/mm/Makefile           |   2 +-
->>   tools/testing/selftests/mm/ksm_tests.c        |  26 ++-
->>   tools/testing/selftests/mm/run_vmtests.sh     |   2 +-
->>   .../selftests/mm/split_huge_page_test.c       |  45 +---
->>   tools/testing/selftests/mm/thp-compaction.c   | 215 ++++++++++++++++++
->>   tools/testing/selftests/mm/transhuge-stress.c | 146 ------------
->>   tools/testing/selftests/mm/vm_util.c          |  65 ++++++
->>   tools/testing/selftests/mm/vm_util.h          |   6 +
->>   9 files changed, 313 insertions(+), 196 deletions(-)
->>   create mode 100644 tools/testing/selftests/mm/thp-compaction.c
->>   delete mode 100644 tools/testing/selftests/mm/transhuge-stress.c
->>
-> 
+Hi Serge,
+
+rlimit is also placed inside the signal struct to implement
+process-level restrictions.
+
+I think the different lifetimes of cred and signal struct might be an
+issue, but since drop only decreases and never increases, the result
+seen by the user will only be stricter.
+
+Link: https://lwn.net/Articles/103658/
+Link:
+https://github.com/torvalds/linux/commit/31180071ee5e6cc6ff4d036d655c556f582f74e4
+
+Best regards,
+Jinjie
+
+> side effects.
 
