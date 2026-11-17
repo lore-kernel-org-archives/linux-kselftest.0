@@ -1,64 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794912076;
-	b=ivhGG+3rKWsGtXB73dbhS5p7gOpQ5U88lbdoxP8iDeHksFkTpu9Wejen/FeRAtD6t/UD
-	 nPu2xUSkcmNNMiWkkeT7NDruCe7KA9cT7to+rneExdvZcOtu4yIsEtoCQzaGA4dxpPKhz
-	 0xolzDGfWGPU0ZEn3CVMTzKKgRKzmlFSCM5cTwQmI/kdUW3FMZgFsCsgGTQajj/FC37ya
-	 f/b6USzJ5xK+HteGduywErK7ULkOR3gga3v+tpBX0IYluHqAjrVmKq31BM08waxu03+tJ
-	 fgiBl3wwJZOqdK0gjLC4onf4VHFmdDl3vaApcpukBnDepO4XHcKefXI7S4yre9kv61w==
+	t=1794912671;
+	b=zXOtBea9ca08rRu417wbqjPA+rNqrZJ2sS9o+/j1/nEC9qPCt6Zr5gIatalv+V4S3qNo
+	 H6oC3JJm7+t7nz6Ahi+BKWmb4Kqs8T+MIrnHj/dy7fJAF1OLBYHeMnq1GoR2qSZsbOuvS
+	 bYuL+t65WJl6pfK9z7HDvtp7PySuH98DzwnpbhCg2llfDz6fBkvNO3hkNALWQ4Xj4yYDo
+	 KqH53iPBnkvNfgJB9KSGwm8g2ir1uJHemHpsVBk6r5BJfqjSrnh83hQJhwu1s3yDisS+A
+	 orLiH2DSgshGgkWsJQhuss6QvWW4J/Mnw4vmJxlZ5pOdOFrgia4QOzELtrazxYAurPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794912076;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=imUJWBchit9SuVHDzuMNjlSPoobNZbAUtuLMrGVWVHg=;
-	b=gejWY9vtjt3zPCZGOB6oFJuj91t0fTBwxw4FPs9LUZ6YRhkisctg47rBsm2GkChqgcrm
-	 7ZbAd9+0JA1g2H2F2VkWICvxZEkjZbALsuKP0PGbrJSMZGhP+a9ZY4a2ktcfubOFIjuy5
-	 UfKFKBqmPgGE5hexf/3Ub1MQv5ljTuybJTQWCyNuhwgzwxCdidtCMTgJZE7cUFjKyBs3k
-	 ftRklq20/+ERA5VcT43wClijgMs8hO2axfHouqYyGzxz8l7mNwcO8l+HKWfTmU2HtCSrE
-	 98vQawHlCMJQ2khBZMCrRnhCGiJ0EBaOZqPt+I4wGTz6SM6Wi3gMCM16QCFfUZaJAxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794912671;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=yGGt8NV4WYvP8D8jXjkN3E6BeLc6Z0ULYHtYvxxLSCI=;
+	b=JJri9r4jIvhodg7kttQNUIgqX/USz09AXd4wkjXMmF7mrUU8Z/K7FlBbK22jrxu2yeQU
+	 N/PnpbnQqDsne+w3M7jq9YrVdBxHrnlxfk7dNlC4oY3nOubLK6Ipyg0wrYYYR5UkroAE/
+	 sDgMovUaj1NYL9i4LO1RMi4rteZMzGu/d6rJ24YwzppsC1Qi7q83osjDvjDGo1v7j2CGw
+	 /wiedyQ/ZT0Zu1IKOfiQYmFQK75OFTpDsFyAL6fpJ3gCIJ3IRJ5Hc4XkUfRvXIaSit5iy
+	 z2eN7Pq4WlzeDDRY4N7tRm1SU4GBSzUxcJQhoTz7YbgMPC5BiI3iEJuMz4YVKbVonLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CVNFSdox;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B23606A31C;
-	Tue, 17 Nov 2026 10:41:16 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=oi+gFa2F;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02855606A33E;
+	Tue, 17 Nov 2026 10:51:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02855606A33E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CVNFSdox
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A95B1F000C4;
-	Tue, 17 Nov 2026 10:41:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794912076;
-	bh=imUJWBchit9SuVHDzuMNjlSPoobNZbAUtuLMrGVWVHg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=CVNFSdoxu4l/nj9Mm2t0iUMPrhaOa4wgFFHGazUP4pNZG3iVJogqLdJRtgEQF9czH
-	 m4snTDqFKQ3MkIbWzh75EhHd7RnhaUXlGRkmsSWK112fFsCxKPzMuuvptHfqjccnnH
-	 tnzU+NfrXZvW1AvcjOKxICz+exYDTNTQ142SIYK3sfM2NPToO2s8hPj3GUpd5AOGUF
-	 1NUYkeSmlrz4EDqLtJXzjVXoH52BxzV3TDyAvmeSzGON/Bgtc+8wbu8p94EZ8BP/l+
-	 IwkQq2f0NbmR4zpxS7teFcFqKIhRYFA5/ELcuVo73JX7yC2H+qT7BbYZYlTwqY4T54
-	 WQXZrrz9MeoBw==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: "Pasha Tatashin" <pasha.tatashin@soleen.com>
-Cc: "Pratyush Yadav" <pratyush@kernel.org>,  "Mike Rapoport"
- <rppt@kernel.org>,  "Alexander Graf" <graf@amazon.com>,  "Jonathan Corbet"
- <corbet@lwn.net>,  "Shuah Khan" <skhan@linuxfoundation.org>,  "Randy
- Dunlap" <rdunlap@infradead.org>,  "Andrew Morton"
- <akpm@linux-foundation.org>,  "Tarun Sahu" <tarunsahu@google.com>,  "David
- Matlack" <dmatlack@google.com>,  "Samiullah Khawaja"
- <skhawaja@google.com>,  <kexec@lists.infradead.org>,
-  <linux-mm@kvack.org>,  <linux-doc@vger.kernel.org>,
-  <linux-kernel@vger.kernel.org>,  <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH 2/5] kho: build KHO objects into a single kho.o
-In-Reply-To: <DMWWRQTLNYH6.1LJ2K5HT60LK8@soleen.com> (Pasha Tatashin's message
-	of "Mon, 16 Nov 2026 15:13:23 -0500")
-References: <20261116134013.1636689-1-pratyush@kernel.org>
-	<20261116134013.1636689-3-pratyush@kernel.org>
-	<DMWWRQTLNYH6.1LJ2K5HT60LK8@soleen.com>
-Date: Tue, 17 Nov 2026 11:41:11 +0100
-Message-ID: <2vxz5wxvhha0.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=oi+gFa2F
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03EE21476;
+	Tue, 17 Nov 2026 02:51:07 -0800 (PST)
+Received: from [10.0.130.226] (e127648.arm.com [10.0.130.226])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B5E03F763;
+	Tue, 17 Nov 2026 02:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1794912669; bh=E3QjzpjlG575ONB94R6gDkhYslcgcTo7SORhb5xOQys=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oi+gFa2FfTAC6l/84DGUSZsQY6RHBH0v9Ores4fAfSbDkbDg5UYRlJSmJc3LTeQ6K
+	 pbvGuib+72+pNST0Df1t6ShiyLgM4A/o6mya//XN5w1NU2OeG+L7L82f07PNs0dOl+
+	 oFbchjMGudkpeuizxFGrtldqVeiBdnQbjCTnD3yc=
+Message-ID: <c6918c4e-060a-4968-a43a-1b1cbdafd27b@arm.com>
+Date: Tue, 17 Nov 2026 10:51:04 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,62 +53,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH AUTOSEL 6.12 486/486] kernfs: Use RCU to access
+ kernfs_node::parent.
+To: Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Tejun Heo <tj@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, reinette.chatre@intel.com,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, rafael@kernel.org,
+ dakr@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ shuah@kernel.org, jolsa@kernel.org, alan.maguire@oracle.com,
+ cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250505223922.2682012-1-sashal@kernel.org>
+ <20250505223922.2682012-486-sashal@kernel.org>
+ <e274493b-0774-423e-a7e0-bd2c59333d93@arm.com>
+ <draft-0011-reloehlekernfs612@kernel.org>
+From: Christian Loehle <christian.loehle@arm.com>
+Content-Language: en-US
+In-Reply-To: <draft-0011-reloehlekernfs612@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 16 2026, Pasha Tatashin wrote:
+On 11/13/26 19:10, Sasha Levin wrote:
+> On 5/5/25 23:39, Sasha Levin wrote:
+>> Subject: [PATCH AUTOSEL 6.12 486/486] kernfs: Use RCU to access kernfs_node::parent.
+> 
+> On Fri, Nov 13, 2026, Christian Loehle wrote:
+>> I just stumbled over this issue on a 6.12 stable kernel,
+>> any reason this patch wasn't applied back then?
+>> Can we apply the backport now?
+> 
+> 633488947ef6 ("kernfs: Use RCU to access kernfs_node::parent.") is a
+> preparatory refactor with no Fixes: or Cc: stable. It is part of a series whose
+> other patches are not in 6.12 either, and it has fixups upstream, so it is not
+> a clean backport.
+> 
+> What failure are you seeing on 6.12 (oops, lockdep splat, trace)? If you can
+> send it, we can look for the fix that addresses it directly.
+> 
 
-> On Mon Nov 16, 2026 at 8:40 AM EST, Pratyush Yadav wrote:
->> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
->>
->> kho_block.o is part of the KHO infrastructure, but is currently built as
->> part of luo.o, which ties it to CONFIG_LIVEUPDATE.
->>
->> Group all KHO objects into a composite kho.o, built for
->> CONFIG_KEXEC_HANDOVER, the same way the LUO objects are grouped into
->> luo.o. This also gives a single place to add new KHO objects.
->>
->> Signed-off-by: Pratyush Yadav (Google) <pratyush@kernel.org>
->> ---
->>  kernel/liveupdate/Makefile | 12 ++++++++----
->>  1 file changed, 8 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/liveupdate/Makefile b/kernel/liveupdate/Makefile
->> index d9f4694625567..bc679905ce3f2 100644
->> --- a/kernel/liveupdate/Makefile
->> +++ b/kernel/liveupdate/Makefile
->> @@ -1,13 +1,17 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  
->> +kho-y :=								\
->> +		kexec_handover.o				\
->> +		kho_block.o
->> +
->> +kho-$(CONFIG_KEXEC_HANDOVER_DEBUGFS) += kexec_handover_debugfs.o
->> +
->> +obj-$(CONFIG_KEXEC_HANDOVER)		+= kho.o
->> +
->>  luo-y :=								\
->> -		kho_block.o						\
->>  		luo_core.o						\
->>  		luo_file.o						\
->>  		luo_flb.o						\
->>  		luo_session.o
->>  
->> -obj-$(CONFIG_KEXEC_HANDOVER)		+= kexec_handover.o
->> -obj-$(CONFIG_KEXEC_HANDOVER_DEBUGFS)	+= kexec_handover_debugfs.o
->> -
->>  obj-$(CONFIG_LIVEUPDATE)		+= luo.o
->
-> Please send it as a separate patch. I have the same change included as 
-> part of the kho-ro series, but let's fix it outside of both series 
-> instead as a standalone fix. Also, maybe rename kexec_handover_debugfs.c 
-> to kho_debugfs.c and kexec_handover.c to kho_core.c for consistency, now 
-> that they are not shared with the rest of the kexec_* files in kernel/*?
+Sorry, my bad, this should've been to ::name, later in the series.
+Here's a lockdep:
 
-Sure, makes sense. I have a few other misc cleanups in mind like
-re-organizing some of the KHO headers. I can do that all in a single
-"misc cleanups" series.
-
--- 
-Regards,
-Pratyush Yadav
+[    7.291918] [ BUG: Invalid wait context ]
+[    7.292932] 6.12.117-kernfs-intree #3 Not tainted
+[    7.293486] -----------------------------
+[    7.293808] repro/92 is trying to lock:
+[    7.294275] ffffffff81effa18 (kernfs_rename_lock){....}-{3:3}, at: kernfs_path_from_node+0x26/0x60
+[    7.297072] other info that might help us debug this:
+[    7.298307] context-{5:5}
+[    7.298739] 5 locks held by repro/92:
+[    7.299157]  #0: ff11000000d90b20 (&vma->vm_lock->lock){++++}-{4:4}, at: lock_vma_under_rcu+0x91/0x410
+[    7.300199]  #1: ffffffff81eb2900 (rcu_read_lock){....}-{1:3}, at: __pte_offset_map+0x26/0x1a0
+[    7.300931]  #2: ff1100003ea2c218 (&rq->__lock){-.-.}-{2:2}, at: __schedule+0xb4/0x8f0
+[    7.301590]  #3: ffffffff81eb2900 (rcu_read_lock){....}-{1:3}, at: bpf_trace_run2+0x7b/0x1e0
+[    7.302469]  #4: ff11000000f0b0f8 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xbd/0x300
+[    7.303319] stack backtrace:
+[    7.303979] CPU: 0 UID: 0 PID: 92 Comm: repro Not tainted 6.12.117-kernfs-intree #3
+[    7.304499] Call Trace:
+[    7.304737]  <TASK>
+[    7.304970]  ? dump_stack_lvl+0x64/0x90
+[    7.305089]  ? __lock_acquire+0xb05/0x25d0
+[    7.305130]  ? __lock_acquire+0x404/0x25d0
+[    7.305171]  ? lock_acquire+0xb3/0x290
+[    7.305194]  ? kernfs_path_from_node+0x26/0x60
+[    7.305222]  ? find_held_lock+0x2b/0x80
+[    7.305252]  ? _raw_read_lock_irqsave+0x72/0x90
+[    7.305277]  ? kernfs_path_from_node+0x26/0x60
+[    7.305297]  ? kernfs_path_from_node+0x26/0x60
+[    7.305321]  ? get_mm_memcg_path.part.0.constprop.0+0x36/0x150
+[    7.305350]  ? __mmap_lock_do_trace_acquire_returned+0x54/0xe0
+[    7.305394]  ? lock_acquire+0xb3/0x290
+[    7.305432]  ? stack_map_get_build_id_offset+0xbd/0x300
+[    7.305465]  ? lock_is_held_type+0x97/0x110
+[    7.305511]  ? down_read_trylock+0xa9/0x130
+[    7.305551]  ? stack_map_get_build_id_offset+0x2d1/0x300
+[    7.305616]  ? __bpf_get_stack+0x3a9/0x400
+[    7.305674]  ? bpf_get_stack_raw_tp+0x7a/0xa0
+[    7.305713]  ? bpf_prog_ec3b2eefa702d8d3+0x3b/0x3f
+[    7.306445]  ? bpf_trace_run2+0xc4/0x1e0
+[    7.306478]  ? set_next_entity+0x97/0x130
+[    7.306512]  ? switch_mm_irqs_off+0x4a6/0x570
+[    7.306546]  ? __schedule+0x2f3/0x8f0
+[    7.306585]  ? preempt_schedule+0x33/0x50
+[    7.306608]  ? preempt_schedule_thunk+0x16/0x30
+[    7.306646]  ? _raw_spin_unlock+0x2f/0x40
+[    7.306672]  ? wp_page_copy+0x2f9/0x8b0
+[    7.306711]  ? __handle_mm_fault+0xa3d/0x19e0
+[    7.306757]  ? handle_mm_fault+0xb0/0x360
+[    7.306784]  ? exc_page_fault+0x240/0x8c0
+[    7.306824]  ? asm_exc_page_fault+0x22/0x30
+[    7.306949]  </TASK>
