@@ -1,60 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794911673;
-	b=xyhg+WxjNGwngBV7N+WdDZPry+8zT/4Q+YqF5kzv9RV6/is3tHce7w5obCJMS7nmnRee
-	 Z10pnAmJBbxrLRs4wZxKjooeZgHZ5AyYp4YA3zY0qeZwSP6UhwQL2a3XX8HHuofEWOhPC
-	 I0F7H+mhRM27pNxflGBhZzuttb84JS7U8cZgLOw1KxLz6HV/8kCydk45F21cgZIjUJGm4
-	 X5SzrD05uQWSxbBYIbCRpJmo/PG/ynoREt+XzD3KUaSihYodO9fD70dy+0SLpFYeevA9e
-	 9ULzz7t/dpDw+52HwLXXkUKS6P1tnWlbk4sJ8CsY8eN6VsxTWtQJV3mCJlNAVl4yKJw==
+	t=1794911674;
+	b=QijlKpS3axcXewT4112Rb562gWfSeN3fwhxgTkshvxhvsmbxvtxKGqKg5Ya2pY+fbt6S
+	 wYlE4TQKjg9iuUmIf8qePF58igqEOuXH/QLfkF2yFS1ch2V0cT3efzS4P+HwaG8HRGzq5
+	 WE4SPWCCOG0eiv0K+hiXq9iUtYQJ2PLhznnj8ZH3MNdSPCaiP64mhL0wXVYrS0BYglMLU
+	 NCdPmePoIZtxO1GdD8tyMoo1aajSLAH4QKiHhfcfQw48SUTlW6VaOA6Hz/IM+vgt8cJUj
+	 mCsKU0OQTSe7MHgjVkUfyBtWepCA+w7iQ5VOqstnzv/2GhRNB+7NC+ov/DOVh7tRR1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794911673;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794911674;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
 	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=eAOQ1s+gPzNsuJpV8C1O9PE4dm/X+jR4Bq/PX7siDc8=;
-	b=3pXtLAqLnsjuXuBre1flXsaalKeg1DxQQeBT8JupEEPVHpYeWw1U28rp21QNS5JgGg1T
-	 WoYkuXwp5JW/XWg8mXlPaJUVZ6w9NtlecLlzLxAXNavDXoh086ccnlp0qL2WvpS40cdMa
-	 /uimrtkPc8GqviyYM43lO7zat1UkboMk/vPxyhY56tKFb8diKvd4mUq11TpE74oC/x00G
-	 NTEv4Ye+SFREXY56t9KJOwAYgYVE+gI/qJuSD5pCMYia+T3vDAQTlXsihr0zFL8oZ6zpJ
-	 y3PxYihZVS1MzM0MB3YNrtznp7t0MWnb6GrJ1u29InYnGPrikSQsAzbbA6ZA4gxSVug==
+	bh=HcNd76WousIs8PdoPoXsEFeHtUzPt/XcpoXtQbyY/NM=;
+	b=PelwrsY8MOjfAyuw/fMZZZaQXzUtIQwBcISVdCuuCSc5TYvj5rHcu5ZBbvn06kUbpOcD
+	 BTfItSYAenILB2LJI6qsmxP1teu6isjOrp/I3IRc0v7rKTTZGRhkn9+uDXQtbViev5aW1
+	 qGs5nJJz+DhDjOLaA1Vumaswt4/wouwdJ/dnFN3COePfg619bdhfwO5ox/35G9DkkwCnp
+	 PkO8JOO+vNroC/iFkMgkRSxoptCPbysogxkQDWXV74hYSAKNimzsupJVTCsf9O12+DEy2
+	 JWDm6JpUVeJZ/1Ues2bmbW/mXi6ksQsDV41CHVw2TxX4n93CvdXrtOWGBTYvTAI7NpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=gmail.com;
 	spf=pass smtp.mailfrom=runbox.com;
-	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=O+PEqNCr;
+	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=SsFyMJ94;
 	arc=none smtp.remote-ip=185.226.149.38
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A261606A333;
-	Tue, 17 Nov 2026 10:34:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A261606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54622606A898;
+	Tue, 17 Nov 2026 10:34:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54622606A898
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=O+PEqNCr
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=SsFyMJ94
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW7-002Lje-CF; Tue, 17 Nov 2026 11:34:23 +0100
+	id 1xTGW6-002LjO-SW; Tue, 17 Nov 2026 11:34:22 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
 	:Message-Id:Date:Subject:Cc:To:From;
-	bh=eAOQ1s+gPzNsuJpV8C1O9PE4dm/X+jR4Bq/PX7siDc8=; b=O+PEqNCrDR2SDtmy4Jmi6AOP14
-	jAYcSmT67ar8/1bXWn1nmgDVFDc7app2z4fMC02PLq0u7rIGev9UeAigBT+fKcrEQJvDkqlGrCP0Q
-	dEpsr+k2KP2hnU2I1AuTyirArVp0Zfi3AHVqzHJcrx3Tk7Pxh7bMQ8oJu1Fsy+2Nj/6LEdT2dD9aR
-	+sOQ8tRm4ApyxD6tsDn/OeftrjCz50MhiGpXCvdf084N5pWf9Y+J170Gglykc5TQnYd5vEpaL3HER
-	iS72lX1pBVav6VsRQjtliz1deQE+UK2RpvIwAkvNXIqgDHv/kEvbFK2udq2GBrjkpYuPrWf3NARcg
-	nUy3INmA==;
+	bh=HcNd76WousIs8PdoPoXsEFeHtUzPt/XcpoXtQbyY/NM=; b=SsFyMJ948MLUocpyir6zUA8ppx
+	5DCt9Q8kr97+aTDUm+I9qruBW1vDY9gOhcRhx+x18pXaTeTbEcILJt/aEFiD7BDlFyXMbMCxQ79S3
+	ez23uV7/jcdL+Rj+MiMxDeXLvgNqvxQ5NNALEx3BLilUxPyoueB6auEwTklY7Macdz1hv/cHSU5yn
+	h9LfxGG80lSmu0g2puIo5DuFW6xFJBCGpFfjbblIPzumdZfU7rwzxJtdcEY9fhTMQnrwQUxkCsVHx
+	S8qWtiwxHzedk/wZ2xx7eAuXEQC45SBQLfqSBzxWG+ShtmHnmf6e3VfMBk7IChBIU9RJwcGzuuMJi
+	iZHypU2Q==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW1-0002f5-UT; Tue, 17 Nov 2026 11:34:18 +0100
+	id 1xTGW1-0002F3-Gk; Tue, 17 Nov 2026 11:34:17 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xTGVr-005qHU-7t;
-	Tue, 17 Nov 2026 11:34:07 +0100
+	id 1xTGVq-005qHU-HE;
+	Tue, 17 Nov 2026 11:34:06 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Petr Mladek <pmladek@suse.com>,
 	Kees Cook <kees@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Samuel Wu <wusamuel@google.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 next 12/13] scripts/kallsyms: Reuse tokens that have no references
-Date: Tue, 17 Nov 2026 10:33:51 +0000
-Message-Id: <20261117103352.1244657-13-david.laight.linux@gmail.com>
+Subject: [PATCH v4 next 11/13] scripts/kallsyms: Optimise compress_symbols()
+Date: Tue, 17 Nov 2026 10:33:50 +0000
+Message-Id: <20261117103352.1244657-12-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261117103352.1244657-1-david.laight.linux@gmail.com>
 References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
@@ -87,210 +87,263 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Keep track of the number of times each compression token is used.
-If the count becomes zero (eg if the only x are in axb and y is
-substituted for xb giving ay) then x can be reused.
+When (say) axyb is replaced with azb instead of decrementing the
+token_profit[] value for every pair of token in the old string before
+the substitution and then incrementing it afterwards just decrement
+the counts for ax and yb and increment the ones for az and zb.
+Set the count for xy (the number of actual substitions) to zero
+afterwards.
 
-This means that a token can refer to a long string without needing
-tokens for all the shorter strings.
+On my system this reduces the execution time for optimize_result()
+from 98ms to 64ms
 
-Output the counts in comments in the output file.
+The gain will be far more for kernels containing very long symbol names.
 
-For my normal kernel build four tokens get reused saving 8.5k of data.
-The savings may be greater if there are symbols with long matching prefix.
+Add a function to verify the compression tables are correct.
+Call before generating the output when 'incbin' isn't being used.
+
+Output file unchanged.
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
 
-v3: Formally patch 13, rebased on 7.4-rc1
+v3: Formally patch 12, rebased on 7.4-rc1
 v4: No change.
 
- scripts/kallsyms.c | 72 ++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 57 insertions(+), 15 deletions(-)
+ scripts/kallsyms.c | 169 ++++++++++++++++++++++++++++-----------------
+ 1 file changed, 105 insertions(+), 64 deletions(-)
 
 diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 69b9e5aa7b08..da397ab4c07e 100644
+index a63e0ce833f9..69b9e5aa7b08 100644
 --- a/scripts/kallsyms.c
 +++ b/scripts/kallsyms.c
-@@ -91,6 +91,7 @@ static struct sym_arr token_syms[NR_TOKENS];
- static struct best_table {
- 	char           *str;		/* Full expansion, '\0' terminated */
- 	unsigned short len;		/* Length of str */
-+	unsigned int   refs;		/* Number of times used in a symbol */
- } best_table[256];
+@@ -639,22 +639,79 @@ static unsigned int token_second(unsigned int token)
  
- static void stamp(const char *where)
-@@ -428,7 +429,8 @@ static void write_src(void)
- 	for (i = 0; i < 256; i++) {
- 		best_idx[i] = off;
- 		off += best_table[i].len + 1;
--		printf("\t.asciz\t\"%s\"\n", best_table[i].str);
-+		printf("\t.asciz\t\"%s\"\t/* %u: refs %u */\n",
-+		       best_table[i].str, i, best_table[i].refs);
- 	}
- 	printf(".size kallsyms_token_table, . - kallsyms_token_table\n");
- 	printf("\n");
-@@ -646,12 +648,14 @@ static void check_tables(void)
- 		unsigned int refs;
- 		unsigned int idx;
- 	} tok_info[NR_TOKENS], *ti;
-+	unsigned int tok_refs[256];
- 	unsigned int sym_idx, token;
- 	unsigned char *cp, *end;
- 	struct sym_arr *sa;
- 	unsigned int i, idx;
+ /* table lookup compression functions */
  
- 	memset(&tok_info, 0, sizeof(tok_info));
-+	memset(&tok_refs, 0, sizeof(tok_refs));
- 
- 	/* Check that token_syms[]->sym_indexes is correctly sorted. */
- 	for (token = 0; token < NR_TOKENS; token++) {
-@@ -670,8 +674,10 @@ static void check_tables(void)
- 	for (sym_idx = 0; sym_idx < table_cnt; sym_idx++) {
- 		cp = table[sym_idx]->sym;
- 		end = cp + table[sym_idx]->len;
-+		tok_refs[*cp]++;
- 		/* Scan all pairs */
- 		while (++cp < end) {
-+			tok_refs[*cp]++;
- 			token = token_index(cp[-1], cp[0]);
- 			ti = tok_info + token;
- 			ti->refs++;
-@@ -695,6 +701,12 @@ static void check_tables(void)
- 	}
- 
- 	/* Check the reference counts for all tokens. */
-+	for (i = 0; i < 256; i++) {
-+		if (tok_refs[i] != best_table[i].refs)
-+			errx(EXIT_FAILURE, "token reference error for %u (%s) %u != %u",
-+			     i, best_table[i].str, best_table[i].refs, tok_refs[i]);
-+	}
-+
- 	for (idx = 0; idx < NR_TOKENS; idx++) {
- 		if (tok_info[idx].refs != token_profit[idx]) {
- 			errx(EXIT_FAILURE, "profit error for %x (%s/%s) discrepency %u != %u",
-@@ -703,6 +715,7 @@ static void check_tables(void)
- 			     tok_info[idx].refs, token_profit[idx]);
- 		}
- 	}
-+
- }
- 
- /* count all the possible tokens in a symbol */
-@@ -725,6 +738,19 @@ static void token_add_symbol(unsigned int token_idx, unsigned int sym_idx)
- 	sym_arr_add(arr, sym_idx);
- }
- 
-+static unsigned int sym_arr_free_all(unsigned int ch)
-+{
-+	unsigned int i;
-+
-+	/* Just zero the counts, the entries are about to be reused. */
-+	for (i = 0; i < 256; i++) {
-+		token_syms[token_index(i, ch)].cnt = 0;
-+		token_syms[token_index(ch, i)].cnt = 0;
-+	}
-+
-+	return ch;
-+}
-+
- static void symbol_index_all_tokens(const unsigned char *symbol, int len,
- 				    unsigned int sym_idx)
+-/* count all the possible tokens in a symbol */
+-static void learn_symbol(const unsigned char *symbol, int len)
++/* Check that the compression data is consistent. */
++static void check_tables(void)
  {
-@@ -790,11 +816,11 @@ static unsigned char *find_token(unsigned char *str, unsigned char *end,
+-	int i;
++	struct {
++		unsigned int refs;
++		unsigned int idx;
++	} tok_info[NR_TOKENS], *ti;
++	unsigned int sym_idx, token;
++	unsigned char *cp, *end;
++	struct sym_arr *sa;
++	unsigned int i, idx;
++
++	memset(&tok_info, 0, sizeof(tok_info));
++
++	/* Check that token_syms[]->sym_indexes is correctly sorted. */
++	for (token = 0; token < NR_TOKENS; token++) {
++		sa = token_syms + token;
++		for (i = 0; i + 1 < sa->cnt; i++) {
++			if (sa->sym_indexes[i] < sa->sym_indexes[i + 1])
++				continue;
++			errx(EXIT_FAILURE, "sym_indexes[%x (%s/%s)] missorted at %u %u >= %u",
++			     token, best_table[token_first(token)].str,
++			     best_table[token_second(token)].str,
++			     i, sa->sym_indexes[i], sa->sym_indexes[i + 1]);
++		}
++	}
+ 
+-	for (i = 0; i < len - 1; i++)
+-		token_profit[sym_token_index(symbol, i)]++;
++	/* Check that every token pair is in token_syms[]->sym_indexes[]. */
++	for (sym_idx = 0; sym_idx < table_cnt; sym_idx++) {
++		cp = table[sym_idx]->sym;
++		end = cp + table[sym_idx]->len;
++		/* Scan all pairs */
++		while (++cp < end) {
++			token = token_index(cp[-1], cp[0]);
++			ti = tok_info + token;
++			ti->refs++;
++
++			/* token_syms[]->sym_indexes holds symbol numbers in order. */
++			sa = token_syms + token;
++			for (idx = ti->idx; idx < sa->cnt; idx++) {
++				if (sym_idx == sa->sym_indexes[idx])
++					break;
++			}
++			if (idx >= sa->cnt) {
++				char buf[1 + KSYM_NAME_LEN];
++				expand_symbol(table[sym_idx]->sym, table[sym_idx]->len, buf);
++				errx(EXIT_FAILURE,
++				     "symbol %u (%s) not in sym_indexes[] for token %x (%s/%s)",
++				     sym_idx, buf, token, best_table[cp[-1]].str,
++				     best_table[cp[0]].str);
++			}
++			ti->idx = idx;
++		}
++	}
++
++	/* Check the reference counts for all tokens. */
++	for (idx = 0; idx < NR_TOKENS; idx++) {
++		if (tok_info[idx].refs != token_profit[idx]) {
++			errx(EXIT_FAILURE, "profit error for %x (%s/%s) discrepency %u != %u",
++			     idx, best_table[token_first(idx)].str,
++			     best_table[token_second(idx)].str,
++			     tok_info[idx].refs, token_profit[idx]);
++		}
++	}
+ }
+ 
+-/* decrease the count for all the possible tokens in a symbol */
+-static void forget_symbol(const unsigned char *symbol, int len)
++/* count all the possible tokens in a symbol */
++static void learn_symbol(const unsigned char *symbol, int len)
+ {
+ 	int i;
+ 
+ 	for (i = 0; i < len - 1; i++)
+-		token_profit[sym_token_index(symbol, i)]--;
++		token_profit[sym_token_index(symbol, i)]++;
+ }
+ 
+ static void token_add_symbol(unsigned int token_idx, unsigned int sym_idx)
+@@ -680,23 +737,14 @@ static void symbol_index_all_tokens(const unsigned char *symbol, int len,
+ 	}
+ }
+ 
+-/*
+- * The symbol just got compressed. The only parts of the symbol that changed
+- * meaningfully are those containing the newly assigned compressed char, so
+- * index those.
+- */
+-static void symbol_index_new_tokens(const unsigned char *symbol, int len,
+-				    unsigned int sym_idx, int compressed_chr)
++static void adjust_profit(unsigned int sym_idx,
++			  unsigned int old_first, unsigned int new_first,
++			  unsigned int old_second, unsigned int new_second)
+ {
+-	int i;
++	token_profit[token_index(old_first, old_second)]--;
++	token_profit[token_index(new_first, new_second)]++;
+ 
+-	for (i = 0; i < len - 1; i++) {
+-		const unsigned int token_idx = sym_token_index(symbol, i);
+-
+-		if (symbol[i] == compressed_chr ||
+-		    symbol[i + 1] == compressed_chr)
+-			token_add_symbol(token_idx, sym_idx);
+-	}
++	token_add_symbol(token_index(new_first, new_second), sym_idx);
+ }
+ 
+ static void build_initial_token_table(void)
+@@ -726,13 +774,12 @@ static void build_initial_token_table(void)
+ 		symbol_index_all_tokens(table[i]->sym, table[i]->len, i);
+ }
+ 
+-static unsigned char *find_token(unsigned char *str, int len,
++static unsigned char *find_token(unsigned char *str, unsigned char *end,
+ 				 unsigned int want)
+ {
+ 	unsigned int token = token_index(0, *str++);
+-	int i;
+ 
+-	for (i = 0; i < len - 1; i++) {
++	while (str < end) {
+ 		token = token_index(token_second(token), *str++);
+ 		if (token == want)
+ 			return str - 2;
+@@ -741,53 +788,42 @@ static unsigned char *find_token(unsigned char *str, int len,
+ }
+ 
  /* replace a given token in all the valid symbols. Use the sampled symbols
-  * to update the counts.
-  * Marked noinline to help register allocation. */
--static __attribute__((noinline)) void
-+static __attribute__((noinline)) unsigned int
- compress_symbols(unsigned int token_idx, int compressed_chr)
+- * to update the counts */
+-static void compress_symbols(unsigned int token_idx, int compressed_chr)
++ * to update the counts.
++ * Marked noinline to help register allocation. */
++static __attribute__((noinline)) void
++compress_symbols(unsigned int token_idx, int compressed_chr)
  {
  	struct sym_arr *arr = &token_syms[token_idx];
--	unsigned int sym_idx, j, len;
-+	unsigned int sym_idx, j, len, subs;
- 	unsigned char *sym, *p, *end;
- 	struct sym_entry *se;
+-	unsigned int sym_idx, j, len, size;
+-	unsigned char *p1, *p2;
++	unsigned int sym_idx, j, len;
++	unsigned char *sym, *p, *end;
++	struct sym_entry *se;
  
-@@ -822,8 +848,11 @@ compress_symbols(unsigned int token_idx, int compressed_chr)
+ 	/* Iterate through all symbols this token is found in and compress. */
+ 	for (j = 0; j < arr->cnt; j++) {
+ 		sym_idx = arr->sym_indexes[j];
+ 
+-		len = table[sym_idx]->len;
+-		p1 = table[sym_idx]->sym;
+-
+-		/* find the token on the symbol */
+-		p2 = find_token(p1, len, token_idx);
+-		if (!p2) continue;
+-
+-		/* decrease the counts for this symbol's tokens */
+-		forget_symbol(table[sym_idx]->sym, len);
+-
+-		size = len;
+-
+-		do {
+-			*p2 = compressed_chr;
+-			p2++;
+-			size -= (p2 - p1);
+-			memmove(p2, p2 + 1, size);
+-			p1 = p2;
+-			len--;
+-
+-			if (size < 2) break;
+-
+-			/* find the token on the symbol */
+-			p2 = find_token(p1, size, token_idx);
+-
+-		} while (p2);
+-
+-		table[sym_idx]->len = len;
+-
+-		/* increase the counts for this symbol's new tokens */
+-		learn_symbol(table[sym_idx]->sym, len);
+-		symbol_index_new_tokens(table[sym_idx]->sym, len, sym_idx,
+-					compressed_chr);
++		se = table[sym_idx];
++		sym = se->sym;
++		end = sym + se->len;
++
++		for (p = sym; (p = find_token(p, end, token_idx)); p++) {
++			len = end - p - 2;
++			end--;
++			*p = compressed_chr;
++			if (p != sym)
++				adjust_profit(sym_idx, p[-1], p[-1],
++					      token_first(token_idx), compressed_chr);
++			if (!len)
++				break;
++			adjust_profit(sym_idx, token_second(token_idx), compressed_chr, p[2], p[2]);
++			memmove(p + 1, p + 2, len);
++		}
++		se->len = end - sym;
  	}
  
- 	/* No symbol contains this token any more. */
-+	subs = token_profit[token_idx];
- 	token_profit[token_idx] = 0;
- 	sym_arr_free(arr);
-+
-+	return subs;
+-	sym_arr_free(arr); /* No symbol contains this token any more. */
++	/* No symbol contains this token any more. */
++	token_profit[token_idx] = 0;
++	sym_arr_free(arr);
  }
  
  /* search the token with the maximum profit */
-@@ -847,28 +876,40 @@ static int find_best_token(void)
- static void optimize_result(void)
- {
- 	struct best_table *bt, *first, *second;
--	unsigned int len;
-+	unsigned char to_process[256];
-+	unsigned int idx, len, refs;
- 	int i, best;
- 	char *str;
+@@ -875,6 +911,11 @@ static void optimize_token_table(void)
  
--	/* Use the '\0' symbol last so the output is unchanged */
--	for (i = 255; i >= 0; i--) {
--		bt = best_table + i;
--		/* Ignore tokens used for the original character codes. */
--		if (bt->len)
--			continue;
-+	/* Generate a list of the unused tokens. */
-+	for (i = 0, idx = 0; i < 256; i++) {
-+		if (!best_table[i].len)
-+			to_process[idx++] = i;
+ 	optimize_result();
+ 	stamp("optimize result");
++
++	if (!out_bin_file) {
++		check_tables();
++		stamp("check tables");
 +	}
- 
--		/* Find the token that appears most often. */
-+	while (idx) {
-+		/* find the token that appears most often */
- 		best = find_best_token();
- 		if (best < 0)
- 			break;
-+		i = to_process[--idx];
- 
- 		/* Replace this token in all the valid symbols. */
--		compress_symbols(best, i);
-+		refs = compress_symbols(best, i);
- 
--		/* Generate the full name for this token ... */
-+		bt = best_table + i;
- 		first = best_table + token_first(best);
- 		second = best_table + token_second(best);
-+
-+		/* Update the number of times each token is used. */
-+		bt->refs += refs;
-+		if (!(first->refs -= refs) && first->len > 1)
-+			/* There are no references left, reuse the token. */
-+			to_process[idx++] = sym_arr_free_all(token_first(best));
-+		if (!(second->refs -= refs) && second->len > 1)
-+			to_process[idx++] = sym_arr_free_all(token_second(best));
-+
-+		/* Generate the full name for this token ... */
- 		len = first->len + second->len;
- 		str = xmalloc(len + 1);
- 		str[len] = 0;
-@@ -890,13 +931,14 @@ static void insert_real_symbols_in_table(void)
- 	for (i = 0; i < table_cnt; i++) {
- 		for (j = 0; j < table[i]->len; j++) {
- 			c = table[i]->sym[j];
--			best_table[c].len = 1;
-+			best_table[c].refs++;
- 		}
- 	}
- 
- 	for (i = 0; i <= 255; i++) {
- 		best_table[i].str = xmalloc(2);
--		best_table[i].str[0] = best_table[i].len ? i : 0;
-+		best_table[i].len = best_table[i].refs ? 1 : 0;
-+		best_table[i].str[0] = best_table[i].refs ? i : 0;
- 		best_table[i].str[1] = 0;
- 	}
  }
+ 
+ /* guess for "linker script provide" symbol */
 -- 
 2.39.5
 
