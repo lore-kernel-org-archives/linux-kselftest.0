@@ -1,57 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=94.136.29.106
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794911380;
-	b=V2yoEl6mq2PA4Ki3a3J6UPnHcT9p7d+YtxJqvf8R2Ak39YLzhM3LBXSstfscV1xqQr3X
-	 H6aMVtv5U1AkovH4ruTGEVR6NOGvsErwmnArpX5sw9K8nXgHkTVI1SKewPLS1U/BGzx+l
-	 VjZjNgd9wQ2t69t3QMcs2RjEwqIWMuSMoDKNLvIXAc0+n71Kmw6Fil8acRVpCbPL2yJ+A
-	 dtHXreUkQKX7+vXtbYMZm9MY3bnCUK40qUOfMfRC3UG5BkN0p3RaFx6bAOU35zl2XRLGv
-	 wVHNHyWPircbfve/NJophayNO61iJj6Nyqco+TbQTTLubddi4ZamjYzZOMfg/cO/LtA==
+	t=1794911630;
+	b=w5xgkmjjTu581xivRgSNGAj8oIaHk9t00TlNpso0X2x8COZAG4jGDZm4dOYPEjOCRxlx
+	 V8R6T881D8/JZ8j6QCN78CXP8dSd1QI7tPK1hh7m1DhhUMNxmQbtZhHr920a4LQfcq+ZJ
+	 flR2JJm6FW/I1IWRsCqi7c4pj9MHg9bddLB9EzM7NtjgCtUsv6dr3LcDO44sxH+r5nsQs
+	 henCTeZ84ahxSreol4kOkEJQ8xL00n44dpq4by2s/StPkoSRcWxlAmSMwoR5mWTT/1wnc
+	 5vKZrmp0tqBqLLTJVNdS4ThbTnlERAJB1YswIOKgCXW8uEvRbP2zkcfSg1eXtAxBLSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794911380;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=5xd4kH02h2/RHBixGr9Rh7KR37RCKshv/F2OBniMhWQ=;
-	b=PUFPYTcTc7MY625eCYeC4qUM8J/wtNbAoyaOOYnq8R/jXcwqjFU7L5B5/Zwk7FimmbsK
-	 W7o+YmJXCW37l8VJc3nL+F2d8yBxKFIWNVdx8ie9/h6t9scyL5XogFEavuN5YAu2+ja7W
-	 FHj7YaYSZ1x9CGUM8sfc9U63PkI6qHcpljioiDcM0rp39MlXjJ3gevJj1FVMXbBHGgfXL
-	 EucCCMjU2awdOqTMtf3Lk1NO9Ox266PL4huaRmJBYYKn7AJv+G8/eB8CcCJZ+1tyZzEUx
-	 t/FtiNLhpzNkTZ+KQ4oolOEzfXnDEmfvtHmyVgSaxrrFXbM23PQzyDjrVCHOySvTCxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794911630;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To:User-Agent:X-Bm-Milter-Handled:
+	 X-Bm-Transport-Timestamp;
+	bh=Mwp2JsfQ9y1vNZwCYUi5p1qF6/L43HTWSe+6S+JCKms=;
+	b=U4l6AnoCs9g/R5or6MokGyeHxaK4QJYelXU1KZpVH4rJ0BgvhAPealh2hh3bNE8yT5y2
+	 EkCN4CBSIFC0vljm4vBLrvQ2z0zd5+Upi9Mk+uRMOYs2vZ8Uzk7LIXOzDfM8cmhNGPaYi
+	 8KGAiUVEUNDa1Ed+0Uyy+4eGsFiWIf6Sjb5jrvIv5rNe0EKAn1TqurwTHzeIhXAyMCnSI
+	 qzoosAQ7VQzbARPezz4J01xzvGzu38aSO2cy5c/Aw9Mi0OMWrAs2t9HjzhmEnSaPqnGXJ
+	 SkQpImBJpjD9Q/PTRsulataqDeuQTE68mxPoq8OUJc44e0UXqh1rwoDNwRE0EhVGcyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nGl0PMKr;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=proxmox.com;
+	spf=pass smtp.mailfrom=proxmox.com;
+	arc=none smtp.remote-ip=94.136.29.106
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5EB606A883;
-	Tue, 17 Nov 2026 10:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nGl0PMKr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFEB1F000C4;
-	Tue, 17 Nov 2026 10:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794911380;
-	bh=5xd4kH02h2/RHBixGr9Rh7KR37RCKshv/F2OBniMhWQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nGl0PMKrFNzmEF2BOR91pPrc/W8Z37D0KlbhQz16W2M5WXKx0P28v6EFJFsxZjHdP
-	 WzoR40aWQ7oFNbp3kQpkcI3S9JG4kxjcvWPr8vQGSifi4qQ7BLznI3WQDnvx27V7XP
-	 UuiNMSAP++eI3vrHz0Vvo7cP55LwH1GIH5xt7nGwL1qeluQSMdfGr3heGCbUaHij5l
-	 ILtcQjiosvjoqfGiSlbuEuRkENr2+1iJjcdTueyLNfE4CcEWCJ8/zuQ19dc5xP07Js
-	 Mz9nJdkqUVU+uguT/oouZnicCApxQw8uk/85KA7kTJ916TYYiv/9cKjQ+G5xXvYxyU
-	 lqIh1/NsdIG8g==
-Date: Tue, 17 Nov 2026 10:29:34 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Tal Zussman <tz2294@columbia.edu>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, David Hildenbrand <david@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm/madvise: zap markers from guard regions
-Message-ID: <avwsiDm5bM0OCNIg@gremlin>
-References: <20261113-disallow-uffd-guard-install-v2-1-9d0063c70542@kernel.org>
- <8092de9e-3146-4fe7-a235-01ea8efab08c@columbia.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD249606A31C;
+	Tue, 17 Nov 2026 10:33:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD249606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 18E03486D2;
+	Tue, 17 Nov 2026 11:33:41 +0100 (CET)
+Date: Tue, 17 Nov 2026 11:33:33 +0100
+From: Gabriel Goller <g.goller@proxmox.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, 
+	rdunlap@infradead.org, dsahern@kernel.org, idosch@nvidia.com, nicolas.dichtel@6wind.com, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] ipv6: always apply all.force_forwarding to
+ every interface
+Message-ID: <avwtH0OKZzGYQ1lW@luna.proxmox.com>
+References: <20261112-ipv6_always_apply-v1-1-8df846631005@proxmox.com>
+ <179475857004.2199510.11986005836315752622@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,70 +56,114 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8092de9e-3146-4fe7-a235-01ea8efab08c@columbia.edu>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179475857004.2199510.11986005836315752622@kernel.org>
+User-Agent: NeoMutt/20260504
+X-Bm-Milter-Handled: 55990f41-d878-4baa-be0a-ee34c49e34d2
+X-Bm-Transport-Timestamp: 1794911619870
 
-On Tue, Nov 17, 2026 at 01:37:06AM -0500, Tal Zussman wrote:
-> On 11/13/26 4:04 PM, Lorenzo Stoakes (ARM) wrote:
-> > In order to establish guard regions, guard markers are installed in the
-> > page tables of a mapped VMA.
-> >
-> > However, problems arise when one tries to combine this with registering a
-> > VMA for userfaultfd, as such operations may themselves need to install page
-> > table markers such as uffd-wp.
-> >
-> > When the installation is attempted the guard marker prevents these markers
-> > being applied, which can lead to unexpected results (especially if the
-> > guard regions are later removed.)
-> >
-> > This is especially problematic because guard region installation causes the
-> > regions to be zapped first, meaning that the removal of userfaultfd-tracked
-> > ranges will not be logged in this case.
-> >
-> > Additionally, the uffd-wp page table marker will be propagated regardless
-> > for file-backed mappings as the zap being performed does not clear these
-> > markers.
-> >
-> > This is problematic, as it can cause repeated failure to install guard
-> > markers resulting in an infinite loop.
-> >
-> > Therefore, update guard region installation to invoke the zap with the
-> > ZAP_FLAG_DROP_MARKER flag applied.
-> >
-> > Both before and after this change, uffd remove events will not trigger on
-> > guard region installation, nor will write protect state be propagated after
-> > guard region removal.
-> >
-> > This makes sense as conceptually, guard regions mark a part of a VMA as
-> > effectively unmapped at the page table level, and removing the markers is
-> > like mapping the VMA again, over which operation uffd markers would in any
-> > case be lost.
-> >
-> > A survey of open source users indicates nobody is relying on installing
-> > guard regions in uffd-armed VMAs. Software including glibc, android,
-> > tcmalloc and CRIU were checked.
-> >
-> > This change means that any already established guard regions are removed on
-> > zap. These will be overwritten with the newly installed guard markers on
-> > success.
-> >
-> > However, if this fails for some reason (fatal signal likely the only
-> > reasonable cause), guard regions may remain removed, and concurrent faults
-> > may succeed in the interim in the range.
-> >
-> > Since the installation failing guarantees nothing about the range being
-> > installed into, and since success overwrites with guard markers, this isn't
-> > an issue.
-> >
-> > Since MADV_DONTNEED does something similar, abstract the zapping to
-> > zap_range() and call it from both places.
-> >
-> Reviewed-by: Tal Zussman <tz2294@columbia.edu>
-> Tested-by: Tal Zussman <tz2294@columbia.edu>
+On 15.11.2026 16:02, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 1 · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] The new selftest test_all_force_forwarding() in
+>   tools/testing/selftests/net/ipv6_force_forwarding.sh fails every time…
+> 
+> --
+> 
+> ipv6: always apply all.force_forwarding to every interface
+> 
+> This commit changes addrconf_sysctl_force_forwarding() so that every write
+> to all.force_forwarding is applied to all interfaces, even when the stored
+> value does not change. It now takes RTNL for every write and sends netconf
+> notifications only for actual value changes. It also extends the
+> ipv6_force_forwarding.sh selftest to cover the new behaviour.
+> 
+> > diff --git a/tools/testing/selftests/net/ipv6_force_forwarding.sh b/tools/testing/selftests/net/ipv6_force_forwarding.sh
+> > index bf0243366caa7..383d1ec64f1c1 100755
+> > --- a/tools/testing/selftests/net/ipv6_force_forwarding.sh
+> > +++ b/tools/testing/selftests/net/ipv6_force_forwarding.sh
+> 
+> [ ... ]
+> 
+> > +test_all_force_forwarding() {
+> > +    local ret=0
+> > +
+> > +    echo "TEST: all.force_forwarding"
+> > +
+> > +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.veth21.force_forwarding=0 || return 1
+> > +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.force_forwarding=1 || return 1
+> > +    check_force_forwarding veth21 1 "all.force_forwarding applied to interfaces" || ret=1
+> 
+> [ ... ]
+> 
+> > +    # Disabling all.forwarding resets force_forwarding, including on all
+> > +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.forwarding=1 || return 1
+> > +    ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.forwarding=0 || return 1
+> > +    check_force_forwarding all 0 "all.forwarding=0 resets all.force_forwarding" || ret=1
+> 
+> [Severity: Medium]
+> Can this check ever pass? Earlier in test_all_force_forwarding() the
+> script writes all.force_forwarding=1, which stores 1 in
+> net->ipv6.devconf_all->force_forwarding.
+> 
+> The later all.forwarding=0 write goes through
+> addrconf_sysctl_forward()->addrconf_fixup_forwarding(). The devconf_all
+> branch there only updates devconf_dflt->forwarding and then calls
+> addrconf_forward_change(net, 0).
+> 
+> addrconf_forward_change() clears force_forwarding only in the
+> per-device configs:
+> 
+> net/ipv6/addrconf.c:addrconf_forward_change() {
+>     ...
+> 	for_each_netdev(net, dev) {
+> 		idev = __in6_dev_get_rtnl_net(dev);
+> 		if (idev) {
+> 			...
+> 			if (newf == 0 && idev->cnf.force_forwarding) {
+> 				WRITE_ONCE(idev->cnf.force_forwarding, 0);
+>     ...
+> }
+> 
+> Nothing resets devconf_all->force_forwarding (or
+> devconf_dflt->force_forwarding) when forwarding is disabled. So
+> sysctl -n net.ipv6.conf.all.force_forwarding should still return 1 at
+> this point. The check would then print "FAIL: all.forwarding=0 resets
+> all.force_forwarding (got 1, expected 0)", and the script would exit 1
+> on every run.
+> 
+> ip-sysctl.rst says the flag "will be reset on all interfaces". That
+> matches the code, not this assertion.
+> 
+> Should this assertion be dropped, or changed to expect 1? Or is the
+> intent for all.forwarding=0 to also reset conf/all/force_forwarding in
+> addrconf_fixup_forwarding()?
 
-Thanks! :)
+Already fixed with
+a76e8bf4be55 ("ipv6: reset all.force_forwarding when disabling all.forwarding")
+AFAICS.
 
+I should have added a b4 dependency on that patch, then maybe sashiko wouldn't
+flag this...
 
---
-Cheers, Lorenzo
+> > +    check_force_forwarding veth21 0 "all.forwarding=0 resets interface force_forwarding" || ret=1
+> > +
+> > +    return $ret
+> > +}
+> 
+> [ ... ]
+> 
+> -- 
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112-ipv6_always_apply-v1-1-8df846631005%40proxmox.com
+
