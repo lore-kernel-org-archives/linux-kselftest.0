@@ -1,108 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794893077;
-	b=otxk4knhyelkIEHLXog5g/vQrFgN28e9hHDBGni1IDl0lvsMABQXr2jodCJBEMR+TDqY
-	 typkQ0M93aerqt3jP1apclRqXsmr6ATBcurc8RjjeVB+f4kSGHBa2Tn6ZZ39wVJpY/Lho
-	 Am1gXD88Zh8bEc4UXjkty6Ky0Z1XarIBudsh148mdI594AukVk4Q9Q5C9tD7nwg+itt2y
-	 XFiPOCeCCe83sDQOkU5qaaNR4rZpNUVbFL1yQuQSt3dib2aBmgYByefoQfcceeV51U1d+
-	 zWdCa6iwalgw0t9QD+Kq6guDbzY8ksYDI6vNgbIizalqeoJDnt9raIXQZfOFXxHxExA==
+	t=1794893405;
+	b=Hgqp1ZSeMCgwzyiSgIq4U2IrFApdTDJyl7C/aYGNeDUfBuh5xneLCmZ3yRp0yTZtAgJg
+	 gOFXPcNnaSVRK/qFpJXIlrGJ6FAYOTVLffTRa4mrKVzBVVK27HsNFETymOuDbkmhB7B7K
+	 wcYdXG0bMjpCHJ3n8X+6eJUL1nCbAEfSijnZDj7LVLxQTWUlN82f3cAP0mhTLXwhur3fx
+	 Yy0beRSoTZzOdN0wywdQwe7C82ucY470yettlF293f8p1JcffMbRiNG3P7xk0ruVuDEDy
+	 iS4BQecvlM59w2XDD/VnHc7f4IhO11kFq1/MbnRfERy+FELWSvpwnnB61tn+gStObQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794893077;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794893405;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=92iLM9PE3+0NUQh9S/WcBgYVX45/LD+uF4QmzjutD40=;
-	b=n/Lii659ldTxPPPexNGmY7mLzPdw5i5xpnlppSb3Jis/UOkobrPdOOEYDHS/VTmWtxfu
-	 dgENniG5V8EdYpu3I8yyKFfzWDpCmRG+1keDGX3jAKx7CAFldmJk1il4iX3YdgigB6Sy3
-	 dFGcdVHBTfUlrhfPNY7kqbQeLScNCWlkWq3etmuMwlguTO3Rb7J54ncQLhfe27YHTAYls
-	 20awNLKvH2CmbPlWi/rm69X+Jc9jP8limgRpX5OsteNy/j3QAfVjgCK51Y8Sl39gnzrhq
-	 Q1RpMd6ILv/i1wzOLz6z5GaqwOH12VhNegeV1aBLxME24JdJyRIxTX2qx+XdQWWd5Kg==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=ftrMizvuhIHObTCvAdpIahRgmk2EwZxg4CfQaHM/YjU=;
+	b=0nwV0MkTCQp4SLZ6y3o4YmJncnW3ra0uSUP0kMPA5TV1a8Q1kc/73dTAAZlPpXP8eezy
+	 Ye2aiSJUtrTV7kOk4nM7Y4Xx52fGOEsVEs/y9Pzo0rn8+/RqIkjTaIjZFQeIAg4sSdLSb
+	 QzwNpzIavjE/uKIRPSeLRWS+/qmzdUYFj3YZLxidtkf4wvk5Xsd3qEbgyHN8v7yTkClvb
+	 Fu8lb4Ju07cxtwwkywDclTH19gZeYjB3xIes2Nb3hdnw1fVrUC7svIu7IRQRpstbRkeXj
+	 JVdINrxqMCCQhH64vnBKMX1G3Qnn7RWjd9eYGLgsXJzcU9WYQ0lVktMQBvcVpGKOdIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZN5eayI2;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Jx5pGRxE;
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5D1606A32F
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 05:24:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C5D1606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A28A606A330
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 05:30:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A28A606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZN5eayI2
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b37951a397so2067003a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 21:24:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=Jx5pGRxE
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-37071c0f42aso6311087eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 21:30:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794893076; x=1795497876; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+        d=linaro.org; s=google; t=1794893404; x=1795498204; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=92iLM9PE3+0NUQh9S/WcBgYVX45/LD+uF4QmzjutD40=;
-        b=ZN5eayI2Xlw1biAy43IblBYsfXrWirhPgtWguYGIMxCMTNw2ar3F3eICDg66bXGkfz
-         a5T/JO97wWmOSgRwl/L0B8y4UmeM16L6Kz38SEZ+pMzD1M9z1XxYrqHWcIolZGMVDzEc
-         CMYOnCWlxIRfoJ+ltZWf1qZ+h3JM/69OxOLPylJCnIY0Tjos7bBfhx3yPyA0+uRZKD+1
-         JZFyY2PF0ppO4QTrSN5tCV/4jHfhzi5dng7zrqShksCEwvV7lfEwqZS0x0O9nBnwQLMZ
-         q4LSIkg/9IGTJrnlclNkB7n6BE+r9jjOLizBx6xn2ouv7drX+j3feBkz+51rnKDw1/Hq
-         gOPQ==
+        bh=ftrMizvuhIHObTCvAdpIahRgmk2EwZxg4CfQaHM/YjU=;
+        b=Jx5pGRxEn/r5S4/3N0yhzLTza9aPjKIstDeFKgSij5nK+aSlmAC86wdabmnPytAen/
+         kxVwbjGlPYVnJBopzfjTvdRf0AGe/mTwz9tkopS2yB958I883j92ZadhqHMX4+Yjexf2
+         Vz0NXVbpAR1i7P8EAYmA6xDiuz+JVh2Zj1v4OF/C6tf2VYGfjVaVcAQaqwWBIv3rWwOq
+         qebu8KuRr+cQ/mJQ9ETfZXkafs/HTLzQDS1LwuJsLZsxEq8T1xRUxCWCEZ+3Y9Or1I7t
+         cPXn2Y4iVfSC6C0gTujGvgEaJr1XTp2sFgNww6DJ5dtiHVV8biEK8U9cXdxZb8dZwAJr
+         WsqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794893076; x=1795497876;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1794893404; x=1795498204;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=92iLM9PE3+0NUQh9S/WcBgYVX45/LD+uF4QmzjutD40=;
-        b=VqOPV+eWLCwyb+Cv26XRgwNzk6FPcITXPAd9cdv2mafACXELdEFgRrCgevt9aUejbT
-         4fVEGoc21R7Vlb/Iefrl39v4uvrUKgy3wysqVN5TivLuQbbjSMxIlYxF6DKYyhd4nkr7
-         s3hHq8xYFWloX/GPtMfE6+83bFS51ADy42I+GUaR63sz8IW17NyJeXzjZm91GJX7tqh+
-         L3ZJcEOTQrhdskZa0wA/OFqiH3eH5UZSfEm7F7FufHdJvWA4nYIj17z33B/6v7mD8pUh
-         5V3zIPlrhT+T/6ySyus9Cy5gsXqdkRxnwitEXjN10dGZmUAEMlnFeRvyXFo3nY3bDtcX
-         9LEw==
-X-Forwarded-Encrypted: i=1; AL+hErFIWyomfbFfvlDlygVgURZ5Oc+5e+ZQMHG3rd/3j6HFOg6aB7ZIcc9aRiqTMPLr/rpzKE59Bl7rLQLYZI+OD6w=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+AK21+ezht4FGOrFNkeoEZcHZv5nJVlYPUw9vt9HHFTuQWaRL0
-	zpnIPx/oQWDV8T0ZgZAYd3K1Zb6CDMgJ0TJDwk4UlNVo8kgtCnls8Ec2
-X-Gm-Gg: AZFdTZeSECJNSuKVIMDFR5ZN3COeUQJt8eh9xNT63a0uGbYI7/AZySFj3XWMEbGqmmg
-	SByLjCWoZhIvf42+OaxLlFgaTgTrsYhK4Aqz8nx4SxbrC+iF8esgKWhUigtVKl5beNyjhuHPNk5
-	nRlOe+MsCPwV0NiTdCm69rlHSVlE/N84UjBCisAvW6xFszc2AsTYZzXQTLoDbmxDCfbMr5jAP6F
-	3WvTlaDFvXDHp7rZgULXoIV8ZTSk19l8Ih1kf+nTd0qMAkVy2rOImvQzgz46qoDCDOGKEkeWAUH
-	jAaJvkb2P+dGqR0xBHCHwq/K7qKVNljNTT/Q60ddsTcy8R596Nnei5XQaegd5HBawWMlvMMcWaR
-	zjd2z6Ux/YbZsaydpEnrqUvdDnsz5Y70inUA4nESBWJSRQOrMC9d0eS52seZvVIIOSMC2WhVI5i
-	HDgJT/k0ZOgE2loMqfwoNl22ms0elVyBwWSukzmE6lpyI8DZMwhKcCQHnMi+rnckugg9UOSLK8L
-	i1HTsI52bd4SytY1Gyb/4X910Sb/hOszVAu9wkFXYqQXFq8y2ZlRD3ajArg+i8wYgqjLtjjO1Hy
-	3CMl7NTP4k9SpYl9ITREH24rBjbfbQu5rO7obmf/QNEVUJB7LxoGjf/+F2fIeGM12qlViN/1Uaf
-	JCqavNiqD2XiWNjsggAk2MLP3vJgo3FG/ovA=
-X-Received: by 2002:a17:90b:1dc8:b0:3a8:9d0d:ca50 with SMTP id 98e67ed59e1d1-3b1b0b5b89dmr12632432a91.10.1794893075609;
-        Mon, 16 Nov 2026 21:24:35 -0800 (PST)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac29a846sm2093493a91.9.2026.11.16.21.24.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2026 21:24:35 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 17 Nov 2026 05:24:34 +0000
-Message-Id: <DMX8HR7NDP9V.CDDWGLZ98C0K@gmail.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Steven Rostedt"
- <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Mathieu
- Desnoyers" <mathieu.desnoyers@efficios.com>, "KP Singh"
- <kpsingh@kernel.org>, "Matt Bobrowski" <matt@bobrowski.net>, "Shuah Khan"
- <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 2/9] bpf: Add log support for tracing_multi
- link_create
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-In-Reply-To: <20261114150610.84507-3-leon.hwang@linux.dev>
-References: <20261114150610.84507-1-leon.hwang@linux.dev> <20261114150610.84507-3-leon.hwang@linux.dev>
-Content-Transfer-Encoding: 8bit
+        bh=ftrMizvuhIHObTCvAdpIahRgmk2EwZxg4CfQaHM/YjU=;
+        b=Vzza0JPQnBZRGwhawbbDUWjwSUVm1wd0iWUIVf+J2fSXe07/7vtfB2BNc0TqcV3uUA
+         GroDbyE9+5WbQqOwzKP/ptMcXqjOuBTwBINVaWoHvDHlAG1BqSmhUkeKuJZRv6J7yI35
+         fFMXK+FUKEBjnFB2s2fdRu4XMAYY+MHbvkcDK0l93WvXXxyXEiDHOPEeJ3xG6trdcdtM
+         ARjCWJiOXabEl1sKeB/JmSlHLC6VHZ6ScEx/7A/LRcWxbA8c1rrjNXqVwc24Ihz8DPBo
+         2orQMZu5eYYgmXlhBWalpIaajB0kSHG9qrUhIpEG3YcoPuJ4ZeoRXkGwCUmYhn0aXxh/
+         JadA==
+X-Forwarded-Encrypted: i=1; AL+hErF70XIpYkJ3rcrjh2EEYG2yaA1p8y5VvkWKOhMtsJDIuuY3izAl4D/Hb35vOcmAePtrLALQFjQQ06fcEBthuOE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8TVSQ3VmUI9Y+vXNf+bOXQH+dT74PAP1UEW/5o1eTXCKdJ5neN
+	5nSrMlR5WfNGpGE+pYyO6fDCp2ng0lNYLiv9hJyRBaGp6EIHjA1aHkutr2r4D55MrJ+S05CfhQy
+	qWoch
+X-Gm-Gg: AYBFou2OICDm5RY52vGw1QOe8J+1HXUjrQs6OqzmcHBsORRLLvjA1W70XEfn9dus1Ix
+	cpLXiMiou9s2CAzSVLnAeGzsDh7zEjF0ZdbxRGXDkq6gDFkl3Htgux0gWK8GqVcEolhfZnpcoVH
+	8PNQpO1JdGxhHCaidbELD4rS9HIYEdZFSXBLLs6k93Ra/Ew8S+8Z0ZF2duXd5cDIRIqxB47P9YP
+	YRim1Gvng+KU0UsYEBWFLef8Yb8OMcpvb6jITY4i31kMkHfw7fax8oryzjSt/qtsZtaoQV62rA4
+	RgZgX9yq18o8OUJoNZRMQ/lF+NnU/1irD/tHJqYkjTbloDUqW54QeQzLBayxQMuPfX7VWkddfsJ
+	p2/frxMRwo4JluZfQaif255I6gLJ449S1pQ75y1zwkwbMtFkqdpKPUc2iGwDvaDyuQdIozZXJCD
+	A1uR3DRAQTy4S+YxrrggoxXczDxMUPy+7204LvMg9QbCnPDICYdHlpdb6o/mQVEdE/ggsWXdMVv
+	WsBYt25I1d/If6agPupUyuZuYDtpaYxlq05WuwzzHgycv0ybvackJLlKWdIfftIiFGBPuMoIKzW
+	sfsfXv7Sx5FHkXOXnHbg9Q1DwWn1LA==
+X-Received: by 2002:a05:7300:e9ce:10b0:368:7c2d:a612 with SMTP id 5a478bee46e88-37966c4738fmr12899653eec.10.1794893403702;
+        Mon, 16 Nov 2026 21:30:03 -0800 (PST)
+Received: from localhost ([122.172.83.36])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379563df84fsm77630203eec.20.2026.11.16.21.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2026 21:30:02 -0800 (PST)
+Date: Tue, 17 Nov 2026 11:00:00 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Gyokhan Kochmarla <gyokhan@amazon.de>
+Cc: Shuah Khan <shuah@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] selftests: cpufreq: Disable the runner timeout
+Message-ID: <avvmWA6YX2I-ovJy@vireshk-B250M-D3H>
+References: <20261113163951.1510082-1-gyokhan@amazon.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,207 +98,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261113163951.1510082-1-gyokhan@amazon.de>
 
-On Sat, Nov 14, 2026 at 07:06 AM Leon Hwang <leon.hwang@linux.dev> wrote:
-> -	if (!cnt || !uids)
-> +	if (!cnt) {
-> +		bpf_log(log, "tracing_multi.cnt cannot be zero.\n");
->  		return -EINVAL;
+On 13-11-26, 16:39, Gyokhan Kochmarla wrote:
+> cpufreq_basic_tests() reads and writes every policy file, offlines and
+> onlines every non-boot CPU five times, and then shuffles all
+> frequencies and governors of every policy. The amount of work scales
+> with the number of CPUs, but the test runs under the default 45 second
+> kselftest timeout.
+> 
+> On large systems the hotplug loop alone does not fit. On a 256 CPU x86
+> machine each offline/online pair takes about 0.5 seconds, so the
+> reboot_cpus 5 step needs more than 10 minutes. Even with the timeout
+> raised to 180 seconds it is killed in the second of the five loops,
+> and the frequency and governor tests never run:
+> 
+>   not ok 1 selftests: cpufreq: main.sh # TIMEOUT 180 seconds
+> 
+> A larger fixed value would only move the problem to the next bigger
+> machine. The basic test has a fixed number of iterations and does not
+> wait on external events, so disable the timeout with timeout=0, as
+> ftrace, timers and net/forwarding already do.
+> 
+> Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gyokhan Kochmarla <gyokhan@amazon.de>
+> ---
+>  tools/testing/selftests/cpufreq/settings | 5 +++++
+>  1 file changed, 5 insertions(+)
+>  create mode 100644 tools/testing/selftests/cpufreq/settings
+> 
+> diff --git a/tools/testing/selftests/cpufreq/settings b/tools/testing/selftests/cpufreq/settings
+> new file mode 100644
+> index 000000000000..d3e07370a7e4
+> --- /dev/null
+> +++ b/tools/testing/selftests/cpufreq/settings
+> @@ -0,0 +1,5 @@
+> +# The basic test hotplugs every non-boot CPU five times and then walks
+> +# all frequencies and governors of every policy, so its runtime grows
+> +# with the number of CPUs. No fixed timeout fits every machine, and the
+> +# test always terminates on its own, so disable the runner timeout.
+> +timeout=0
 
-The user sees cnt == 0 in his own code.
-He can't see which of up to 1 << 20 ids the kernel refuses.
-That part stays silent:
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-  bpf_tracing_multi_attach()
-    check_dup_ids()                      -EINVAL
-    bpf_trampoline_multi_attach()
-      bpf_check_attach_btf_id_multi()    -EINVAL, -ENOENT, -EOPNOTSUPP
-        btf_attach_func_proto(NULL, btf, btf_id)
-        btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel)
-
-The last two have messages. They get NULL.
-That loop runs before trampoline_lock_all(), so bpf_log() is fine there.
-can we pass the log down and name the id ?
-
-> +	if (cnt > MAX_TRACING_MULTI_CNT) {
-> +		bpf_log(log, "tracing_multi.cnt is too large.\n");
->  		return -E2BIG;
-
-that's not a helpful message. -E2BIG says the same.
-
-> +	if (attr->link_create.flags) {
-> +		bpf_log(log, "Invalid flags.\n");
->  		return -EINVAL;
-
-Each value but zero is refused. "flags must be zero." would make it clear.
-
-> -int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-> +int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
-> +			     struct bpf_verifier_log *log)
->  {
->  	return -EOPNOTSUPP;
-
-The stub has the log now and knows the reason.
-
-Consider something like:
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c3f6364..efff0fa 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1646,7 +1646,8 @@ void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
- 
- int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
--				struct bpf_tracing_multi_link *link);
-+				struct bpf_tracing_multi_link *link,
-+				struct bpf_verifier_log *log);
- void bpf_trampoline_multi_detach(struct bpf_prog *prog,
- 				 struct bpf_tracing_multi_link *link);
- void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags);
-@@ -1764,7 +1765,8 @@ static inline bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
- 	return false;
- }
- static inline int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
--					      struct bpf_tracing_multi_link *link)
-+					      struct bpf_tracing_multi_link *link,
-+					      struct bpf_verifier_log *log)
- {
- 	return -ENOTSUPP;
- }
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 716330b..bf2aef5 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -2183,7 +2183,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			 struct bpf_insn *insn_buf, int insn_idx, int *cnt);
- 
- /* Functions exported from verifier.c, used by trampoline.c */
--int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
-+int bpf_check_attach_btf_id_multi(struct bpf_verifier_log *log, struct btf *btf,
-+				  struct bpf_prog *prog, u32 btf_id,
- 				  struct bpf_attach_target_info *tgt_info);
- 
- /* Functions in fixups.c, called from bpf_check() */
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 21d4608..93fead8 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -1724,7 +1724,8 @@ static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
- 	for_each_mnode_cnt(mnode, link, link->nodes_cnt)
- 
- int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
--				struct bpf_tracing_multi_link *link)
-+				struct bpf_tracing_multi_link *link,
-+				struct bpf_verifier_log *log)
- {
- 	struct bpf_tracing_multi_data *data = &link->data;
- 	struct bpf_attach_target_info tgt_info = {};
-@@ -1737,9 +1738,11 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 	for_each_mnode(mnode, link) {
- 		rollback_cnt = i;
- 
--		err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
--		if (err)
-+		err = bpf_check_attach_btf_id_multi(log, btf, prog, ids[i], &tgt_info);
-+		if (err) {
-+			bpf_log(log, "Cannot attach to btf_id %u.\n", ids[i]);
- 			goto rollback_put;
-+		}
- 
- 		key = bpf_trampoline_compute_key(NULL, btf, ids[i]);
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ce11e78..ce7f530 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24420,7 +24422,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 	return 0;
- }
- 
--int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 btf_id,
-+int bpf_check_attach_btf_id_multi(struct bpf_verifier_log *log, struct btf *btf,
-+				  struct bpf_prog *prog, u32 btf_id,
- 				  struct bpf_attach_target_info *tgt_info)
- {
- 	const struct btf_type *t;
-@@ -24447,10 +24450,10 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
- 	tname = btf_name_by_offset(btf, t->name_off);
- 	if (!tname)
- 		return -EINVAL;
--	t = btf_attach_func_proto(NULL, btf, btf_id);
-+	t = btf_attach_func_proto(log, btf, btf_id);
- 	if (!t || !btf_type_is_func_proto(t))
- 		return -EINVAL;
--	err = btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel);
-+	err = btf_distill_func_proto(log, btf, t, tname, &tgt_info->fmodel);
- 	if (err < 0)
- 		return err;
- 	if (tgt_info->fmodel.ret_size > 8 &&
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index a3964d7..a7954e0 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3890,7 +3890,7 @@ static void ids_swap_r(void *a, void *b, int size __maybe_unused,
- 	swap(*id_a, *id_b);
- }
- 
--static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt)
-+static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt, struct bpf_verifier_log *log)
- {
- 	void *data[2] = { ids, cookies };
- 	int err = 0;
-@@ -3904,6 +3904,7 @@ static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt)
- 
- 	for (int i = 1; i < cnt; i++) {
- 		if (ids[i] == ids[i - 1]) {
-+			bpf_log(log, "btf_id %u is in tracing_multi.ids twice.\n", ids[i]);
- 			err = -EINVAL;
- 			break;
- 		}
-@@ -3935,15 +3936,16 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
- 		return -EINVAL;
- 	}
- 	if (cnt > MAX_TRACING_MULTI_CNT) {
--		bpf_log(log, "tracing_multi.cnt is too large.\n");
-+		bpf_log(log, "tracing_multi.cnt %u is above the limit %u.\n",
-+			cnt, MAX_TRACING_MULTI_CNT);
- 		return -E2BIG;
- 	}
- 	if (attr->link_create.flags) {
--		bpf_log(log, "Invalid flags.\n");
-+		bpf_log(log, "flags must be zero.\n");
- 		return -EINVAL;
- 	}
- 	if (attr->link_create.target_fd) {
--		bpf_log(log, "Invalid target_fd.\n");
-+		bpf_log(log, "target_fd must be zero.\n");
- 		return -EINVAL;
- 	}
- 
-@@ -3969,7 +3971,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
- 		}
- 	}
- 
--	err = check_dup_ids(ids, cookies, cnt);
-+	err = check_dup_ids(ids, cookies, cnt, log);
- 	if (err)
- 		goto error;
- 
-@@ -3998,7 +4000,7 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
- 	link->cookies = cookies;
- 	link->fexits = fexits;
- 
--	err = bpf_trampoline_multi_attach(prog, ids, link);
-+	err = bpf_trampoline_multi_attach(prog, ids, link, log);
- 	kvfree(ids);
- 	if (err) {
- 		bpf_link_cleanup(&link_primer);
-@@ -4019,6 +4021,7 @@ error:
- int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
- 			     struct bpf_verifier_log *log)
- {
-+	bpf_log(log, "This kernel does not support tracing_multi.\n");
- 	return -EOPNOTSUPP;
- }
- 
+-- 
+viresh
