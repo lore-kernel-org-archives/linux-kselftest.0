@@ -1,102 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794891038;
-	b=BUxFc6/mqyVKFoY5o4Sw3L60iUNDIqusjdERiO3r3zMcDAfzkH/LRnQSnS0Vnv3ctbjW
-	 XZbNhk0FM8CaGIxSp6ChIeA9zEjaQo46xx05J0SwE5wdFP7TbKM6+TWwrCom18bVunC+n
-	 G2H1RDOWysmdw7t0BsR/ilm4qYy9xHxy5n1YTlTLhNMMVzeo/Hjt+rt1ZeMwnBifWeud7
-	 yB014b2R+Ud3i3Xex/kI4Inh9RG9NIovpB5WtnS36FrzwfKO2YfyXWn9fETO2/3JSDflJ
-	 yyWeiXMneHiGSRS5mGWjTmSTZPhZJ97tww0S/wv22VPd9v9eVWJ+FAfluhkcy62AdVw==
+	t=1794891183;
+	b=UwFN59/p9rpRC+jfmMqr7uUUWmTaTLikxGvAr6Bj4lyPD91ZO/uM1gzL3dr6ordrtKYv
+	 VePCO9bkwAeBBGPO37FcdBKW4uNRv3ZdkKk83KVCUY49uXPLsVEPMDXlgnXTN+5iVAT8h
+	 IK5j0Yi6Qr238zMj6UmifTPbdOmKFPiS4MyDTaBHVB0JlU2iUIhkl5z6mJUVGjlh2+NBn
+	 C53eDpLV1oibzZ/26aE8Mr2PA/Digo5YA0oKGVNh8TuVldcvTLnVp8y40rRGBhq1Yccfw
+	 W0B5TapJpMY/AblwUPO/LVR0YMIF7CH9ONtS3QbAi36LVH6VmgUCerf13E97nOScucg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794891038;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794891183;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Message-ID:User-Agent;
-	bh=9bqqmMB4+kyoRGHHPejEHuADL6UxgHY0xArC5J1XYUg=;
-	b=pUGnhvc9sXd2Fa/kFEUqhkcJW4GpmDcy6sPDAT1ZzD3wUYrOAoj6aFK+GG/yHVh9xw3A
-	 Ie0KisjeSs5HSiOAJdQD9cLiCgxFiukJvl8DyjmkqgWcUtLd3oU6+qVsPOhNTacAHjcqG
-	 8YLTtVbFMDuDhd3L3JvLBcw3M4X9QmHGQfl5zvJyUIN8ovUqvbhzK4j/WdVBRMbVnaMe/
-	 GQBQ8fjAJe3KwLrmzwb5gkUxvg7W9kJipj3435eV87dVhwDDqyCMmbnlEj+i4xAhz/KuW
-	 feXg1IUKRTlsw66Q3OhR4oeon+HRWfxVfbfmGoylWvYGStZVpr96AI1S1t0KH4jj8zQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=uYOWyoTwdGB1zBQKTb94yS19n4vxEQPiG111QSznMfk=;
+	b=yryJ/h58TAcXmeKNycc7Rc0XBKe6dBcOEuKj4Zl8b+mtbsh94l4CiCJLILm0GGHQXxmF
+	 bxFHOgmuUTy3QbGAD66xqEqoyWGh8SjRaguFiAMrJfkvINo+2shYuH+Hn4TkkBfbDzVnr
+	 I/A7scYclNIvZr7Q8kQ5hB84DWDz4LTT39SCHlLwMBEeDu2pQKzlF+Dw0uAhwsgJjyiyA
+	 3mUYYOZL0A89jZ18kA0hIh0pL6SCp8vU2LyVhailjoMrXVzzkFRO5TlV/CZI7wmkFtlcP
+	 GkHZt8Hwlukrj2oDe+uC0p7PS+CC2FBQWlNOH95JN/dm+DA92QtpZpgwaxYZV6YyFSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=JVoEkBuR;
-	arc=none smtp.remote-ip=74.125.82.42
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fLoJXj9U;
+	arc=none smtp.remote-ip=209.85.214.199
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE9A606A33B
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:50:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FE9A606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B7A606A32A
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:53:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1B7A606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=JVoEkBuR
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-14394530ec6so5373826c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:50:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fLoJXj9U
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2efda3bfec1so3054405ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:53:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794891037; x=1795495837; darn=vger.kernel.org;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9bqqmMB4+kyoRGHHPejEHuADL6UxgHY0xArC5J1XYUg=;
-        b=JVoEkBuRB7FQiKYHvBCxvAxh9Oaxf01xN5UIrTjfVi6OU10CeKbp241d27RcBRcSsk
-         /Xi/x0gE95b4H/4imd4d7XC7TvMqKuqGtZq30FdKfitiezpDW1A26JSOriDXlFFBwZBZ
-         HwMfdVtpba397eVPFTvqZp/IbohPL8IT2620Y=
+        d=google.com; s=20260707; t=1794891182; x=1795495982; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uYOWyoTwdGB1zBQKTb94yS19n4vxEQPiG111QSznMfk=;
+        b=fLoJXj9UEhu3Vmkbdkou3wYmEHIq6PzMgFNe/gen8xGRbE0bDpPg1AShDFe7A1rylb
+         LjYqBJ7Dvix1ae6a51qESzNgaowA123Jq7JSc8r5Af1v1UYVFrJJjoQ8OQo0VNv3RAv/
+         pWpA/En94uLZKLSXiJwu42hUqtI3UNmCo4mQOMears0B3IoRwL8L+Luzg61O7DyP5/nv
+         IVTsvt83yiF+F62fEgGEtRDKR4H7scIkJq49UimfiEC6ZH2VzGe+YhnXEylah5+tiYrN
+         XKHYVqU1WlethUqmQsJF4+X0BODRMf9dQ9ccLZ8fTg4R+hayrPkCiJMxGFj+vTucXZfb
+         PBRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794891037; x=1795495837;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1794891182; x=1795495982;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9bqqmMB4+kyoRGHHPejEHuADL6UxgHY0xArC5J1XYUg=;
-        b=ndR1oO9q1e1htlYGgUvw2eFLX6EVAewqquqpC2vdtYCfUHsCdc4c4beKrBlzqKgB9m
-         mJgfUWZ/8AN1IwHdyNpRv6pvGA/JQMxa7coiU7OtFXKvzsVOz/gw9OxOhoYVpRoLnlrm
-         S9KJci/SCYDT9Ms18bVFzgtOVo+8FDYJAiXt32UKPAzjM3OKxwgmS9X8dt5j7Bq2RICi
-         PDBEzySW24qXdM4Xhu5tv9l3KOqjtU/Af2ZKOZCRk3p33OY9aEy+PKAbExGDZ74Q9ZXZ
-         jd0SzoshXuigFINUBZ7MKo2JVuaDdLHb+YPtmV4OIwy4YffLhiLFvlMbk87M3n2YUsDm
-         3v5w==
-X-Forwarded-Encrypted: i=1; AL+hErGk7EH9HlXS8KY/Lp3Avq7WKW1oYmSU8jTkNgc4rX10P3pNwXJHfVEos4ozPN1aoAAESKziY9yGcIzIYCN1sAE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z91guZXunTWNgeqYHAxUsDx7hzi0oiT0eEjHaFE2Yt4dC8klk9l
-	gkqmgKnUtMr9+5hfZURWdJvsuZ1e3BrlgBIVPnhnT+Gz6V0WbLwmV2ABCybSFMgoT24=
-X-Gm-Gg: AYBFou0UvV6BE8KokiWIJfTqpIv53Pdyw+2x6EYYgqZW3d4MblCi7eSKN8fM4hqbo+n
-	aR8Ly0U7/jl1isKKh5MqKijrTyBKI8RrunX2KqMJKOUSVZ0iDeBExDJHDpRItWxQV4Vl00L5VaB
-	HwRhS+LqXd9f3IROiWg3i2MS2mvTvHnj8/E+jMwUSPjBzAEtTFLxUD+EXGpFO2FqJAgV0C6/J4T
-	L7iJrD2tjckOOf5shSNDlfkzmJXmDISI0QysYuAPUnOuotXTTCr+8A2GR1WR8JfbC8bKSOqxe1Z
-	fyViOd0O9vx0mJJCJV3j15wdNi+TLEr1pvcx9tAcJUlrsUgzjDts1DALxuywIM8ltl6M+kXLC9T
-	2BZQnUxOfdtCUon8m/IZGPSW+PFl2RiLZROca9a8wNoN9c8kC/f8mqYNjbnMDau4sK9wz8+1wxZ
-	3BlKHIv4nD6gc13uR02ELVhn/6y7BGCPGBtOl5rGRmqxBB+6VmADpn/lm7ZvRAmo8xG3POpt9D8
-	xbD2E8o6fBPLhVDyUhmKdGFGKUS/HEsurUH4Q9bVQvi2rtYk6DdGMypVYO5rm5TEHwCnOHpScks
-	jiI6blkwa01PDkbVlSoTQHVkqIph68ukPNPB4zheMWheYLce6n9UbPgym7cj1QgbDI6ll8A4LU/
-	ojkbHxUT2Bu6qvOAzsRQivgiTjCYxL8qhp404PyWblH1zcwzvcxB2r4R+tVJghpxSVgq8p2HXT+
-	UPPOv0t8WW6LTAzB7ZFeFOLN7V1ShHDaQTc9rBLEJ/uIPuUZoNZPY8vuwS6toe6oUT
-X-Received: by 2002:a05:7022:96:b0:1a8:4997:65f6 with SMTP id a92af1059eb24-1b503105175mr11734678c88.20.1794891037361;
-        Mon, 16 Nov 2026 20:50:37 -0800 (PST)
-Received: from [172.20.0.3] ([172.56.235.113])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5031918c7sm53517692c88.9.2026.11.16.20.50.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 20:50:36 -0800 (PST)
-Date: Mon, 16 Nov 2026 20:50:33 -0800
-From: Chris Down <chris@chrisdown.name>
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: linmiaohe@huawei.com, muchun.song@linux.dev, nao.horiguchi@gmail.com,
-	william.roche@oracle.com, ljs@kernel.org, vbabka@kernel.org,
-	tony.luck@intel.com, wangkefeng.wang@huawei.com, willy@infradead.org,
-	akpm@linux-foundation.org, osalvador@suse.de, rientjes@google.com,
-	duenwen@google.com, jthoughton@google.com, jgg@nvidia.com, ankita@nvidia.com,
-	peterx@redhat.com, sidhartha.kumar@oracle.com, ziy@nvidia.com,
-	skhan@linuxfoundation.org, corbet@lwn.net, david@kernel.org,
-	dave.hansen@linux.intel.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] selftests/mm: test userspace MFR for HugeTLB
-	hugepage
-In-Reply-To: <20261115160105.2507650-3-jiaqiyan@google.com>
-References: <20261115160105.2507650-1-jiaqiyan@google.com>
-	<20261115160105.2507650-3-jiaqiyan@google.com>
+        bh=uYOWyoTwdGB1zBQKTb94yS19n4vxEQPiG111QSznMfk=;
+        b=C1fYoug0A2Fw0+2FObS37V4pPQWOUqSNtdwYcZNsWuXqz913alQNu48jF0XIKluTC8
+         TEajkfvxJflgxcKADMaP3vxRYmBbTMi3REb3o0DizfXaT/nLNwOggaML87bWyNnDYRjM
+         LKJzteAt4DsxsT2VNLqDHlmdtzdhd7RVHouc+PX7UrLQXsnc/GKd9fLe6zf3tzoApol4
+         L7r/tXOeoymczSnEiQ0n9EtC4R3xNxEQXIl8JjMD44VnFiQcsv4ZGnJX2Ru5QwRYLaaD
+         lgHzeJe6GWwelQc23X1saLiXwwX7/bzHs52jHBXFEvjbRrUcO2TanNNvBcvqrP+g2tSe
+         AxkQ==
+X-Forwarded-Encrypted: i=1; AL+hErEyoZQV2PkZf1MuqH1I9PbgVC3c8cvMFpMIHe7WnjzK0+O3LgLZe5tGLmR4ciipr8AboqimA07liddrpNw1AVU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9+3uDt3qYnRvG55u1Q8n9zRx6aIZ6qjrkgmwQxu/6ikKCf/VLp
+	kZvIYwse1UD3wbEpja7WG6UF4cBVgmZQy32YqprARWyfVtHIy8cICKudzMt7MqfavCMzfjoEDUZ
+	XE2zmhEdbi7kDEN6V7FZUP/mESw==
+X-Received: from plbjj10.prod.google.com ([2002:a17:903:48a:b0:2ea:7f9c:2ce])
+ (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:d4c9:b0:2ed:38c0:3328 with SMTP id d9443c01a7336-2ee0dac397dmr120063995ad.28.1794891181828;
+ Mon, 16 Nov 2026 20:53:01 -0800 (PST)
+Date: Tue, 17 Nov 2026 04:52:52 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,28 +75,90 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Message-ID: <avvdGec7NCt5oAFr@chrisdown.name>
-User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
+Message-ID: <20261117045254.1048298-1-dylanbhatch@google.com>
+Subject: [PATCH 0/2] sched, livepatch: Fix transition stall for CPU-bound tasks
+From: Dylan Hatch <dylanbhatch@google.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dylan Hatch <dylanbhatch@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jiaqi,
+Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
+live-patching") moved klp_sched_try_switch() from _cond_resched() into
+__schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
+This causes livepatch transitions to stall when CPU-bound kthreads or
+PF_USER_WORKER threads (such as vhost-<pid>) spin in a kernel loop with
+cond_resched():
 
-Jiaqi Yan writes:
->+	map = mmap(NULL, len, PROT_READ, MAP_PRIVATE, fd, 0);
+1. A sole runnable task on a CPU (cfs_rq->nr_queued == 1) never has
+   TIF_NEED_RESCHED set during sched_tick(), and wake_up_state(task,
+   TASK_INTERRUPTIBLE) in klp_send_signals() is a no-op for a
+   TASK_RUNNING task. Because _cond_resched() is a no-op under
+   CONFIG_PREEMPTION=y, the task only enters __schedule(SM_PREEMPT) on
+   return from interrupts via irqentry_exit_cond_resched() when
+   TIF_NEED_RESCHED is set.
+2. Even when __schedule() is entered via preemption or an unfreezable
+   sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
+   sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
+   TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
 
-This isn't right -- a private mapping reserves hugepages of its own, but the
-4 hugepages that setup_hugetlb_pages() asked for are all in the page cache
-by now, so the seal mode fails with ENOMEM when the test sets up the pool by
-itself. I think we either need MAP_NORESERVE here, or to ask for twice
-NR_HUGEPAGES in seal mode.
+Patch 1 fixes both issues by dropping the TASK_FREEZABLE check from
+klp_sched_try_switch() (relying on stack_trace_save_tsk_reliable() in
+klp_check_stack()) and calling resched_curr(rq) in sched_tick() when
+klp_sched_need_resched() is true for the current task.
 
->+CATEGORY="memory-failure" run_test ./hugetlb-mfr
+Patch 2 adds a livepatch kselftest (test-cond-resched.sh) that spawns
+kthreads spinning in a cpu_relax() + cond_resched_tasks_rcu_qs() loop
+and verifies that livepatch transitions complete without stalling.
 
-Probably worth adding a 2M line or two as well, since this only runs the 1G
-case, which is skipped when 4 free 1G hugepages can't be allocated.
+Note on reliable stacktraces across exception boundaries:
+Because _cond_resched() is a no-op under CONFIG_PREEMPTION=y, a sole
+runnable spinning kthread enters __schedule(SM_PREEMPT) from
+preempt_schedule_irq() with an in-kernel interrupt pt_regs frame on the
+stack. Switching the task in klp_sched_try_switch() therefore requires
+arch_stack_walk_reliable() to support unwinding across in-kernel
+exception frames. This works on x86_64 with CONFIG_UNWINDER_ORC=y, where
+test-cond-resched.sh passes with this series.
 
-Thanks!
+On architectures or configurations where arch_stack_walk_reliable()
+currently rejects in-kernel exception frames (arm64, powerpc, s390, or
+x86 with CONFIG_FRAME_POINTER=y), test-cond-resched.sh exposes this
+limitation and will fail until exception-boundary unwinding is
+supported. On arm64, the test passes when combined with the proposed
+kernel SFrame unwinder series [1] or equivalent .eh_frame-derived
+unwind tables [2].
 
-Chris
+This series is available on github: [3].
+
+Ref:
+[1]: https://lore.kernel.org/all/20261117020648.323464-1-dylanbhatch@google.com/
+[2]: https://lore.kernel.org/all/20261117043504.1021063-1-dylanbhatch@google.com/
+[3]: https://github.com/dylanbhatch/linux/tree/stall
+
+Dylan Hatch (2):
+  sched, livepatch: Fix transition stall for CPU-bound tasks
+  selftests/livepatch: Add cond_resched() kthread transition test
+
+ include/linux/livepatch_sched.h               | 13 ++-
+ kernel/sched/core.c                           |  3 +-
+ tools/testing/selftests/livepatch/Makefile    |  3 +-
+ .../selftests/livepatch/test-cond-resched.sh  | 73 ++++++++++++++
+ .../selftests/livepatch/test_modules/Makefile |  1 +
+ .../test_modules/test_klp_cond_resched.c      | 94 +++++++++++++++++++
+ 6 files changed, 183 insertions(+), 4 deletions(-)
+ create mode 100755 tools/testing/selftests/livepatch/test-cond-resched.sh
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
+
+-- 
+2.56.0.679.gc527c65306-goog
+
