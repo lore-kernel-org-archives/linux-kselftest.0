@@ -1,91 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794892176;
-	b=r5WvEhuQ/w/Qn7dY20QMQygi52uz/bmLx/SnZ78Shq0U2XWI0+JY8iYU2gWtYZt8NM0B
-	 hrv3O+WVmsxCxSO2lfF9kvOJE6Rxgb0UoL/TkkcEfBaT6MpHRgvFwX28H9oqjgqT5iRIu
-	 zPKZMu1DrVn4Xtp4gc8B/Ocdkjl6xgX7KA66khCUMUUc3fqIFTTB9ZSXrKSpv1QfWO4T0
-	 D/VKE+nkUSs7twSK6ivXvQwnhDD02JNzUvuUoqrCFM2peC+D/E7dCGGz4Ujd5DJ2nmo7d
-	 BC4iskBYtcEEcRN5AM3tHjzzeSDn2f9ryPKGmK0riXMKaGp4MSc7HxuPQd/+ml2QKGw==
+	t=1794892939;
+	b=zVf3eJTjBTuQuC8axNWLJ/La3u0O8wGZOg+HFowUrRRjJMQQj9mc9Ks6terQhl//ILjY
+	 Yx8DEjqrWPg1KaDO/ydif0/bsK0m18E25zf7yTD8YJwcpFhlEdqY8L5+6JLcRZ7t4rBHp
+	 3qScX68jZdSsBQKCFKTf33w9/Nu1S7ug3nm1YtlnzXC2odQ7YymE0g+Q2iIlmLWsQ0k7/
+	 ExSoNrOk1Y7Qv6bKvY7Kfr3UyPVWE4yE7GQDlnSqqi5vEn2JKxo337G5/xHlxO4GYzzzg
+	 uEY5tF9+fr+ormBweYxRc79qrETCDGbSJ1ta/ObPc/3HHxGQyJz8sKSMQTNW+2Rvuzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794892176;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=4NSuENY4sDp6CJDf1Z9ij5wGps/PbfeGnK6cIis33/U=;
-	b=YMfeADfAXEINE5cH3KVqodCVgMEsI+TniSxtY/n8coZcV/giYhkRoDCGNt4YEnkJo2qF
-	 apSmNscHCxRwqLn1mP0sMBzSrAODgJnGd2mIlzEoMVokLyFUtHkE32WCaxiJjcMBn/a+k
-	 aIHj04NHjhEkoimSgl5cqnLHtHyK8bufq+MkTLsTN6bjqx0UxaOD2nWEW30WhT+0+srJT
-	 XqkIc6F4QkuNfnvqWb+eBG/u6YmbNkUVHlf7LCrs9458S4IRrnviNPY5bB7Yhn1i5EYTA
-	 nJvtIvvRn8CKJ9pQPAB2JxTZEPXhM3Ghb3h4uOrSv5nrYFksdXPkVqEPK/dtCsIY+8A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794892939;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=KH2EdOZQFCM29AQgS9x2MTO2Oio7leMA6Gbor09I+Fo=;
+	b=VAC6UsqFr2YvGz0+yGdfDhbySRhPimLhxYsyny2FwAtgKsDP3bDEiw1/1dM4a4vC4V6Q
+	 8xRNbeHkMkOdkeE9JvRAZCmrK8PGwTGrYSMGqVNIRpNRnMkCwp9Sud3eEECuNRusEv52+
+	 pNpkklgDaePuLAsCuIr9dYsgUp8solJXM+wgyhc83BycgovMf1qgDg1x5agUv+eR0sCa+
+	 ZAOJ6n67rnnf9zTTRKpqkz+AYLdpVyMVN9jjEGml0b8Q15dvK4Oi+zA+vE7ZZF5EPdDWR
+	 ii8eE0OHphrIN920U0CdE4OnQDT48oC2Fs0qwgcOD0zHP12AKombjTKu1KziEIwHSmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T+iTmDJg;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QgpotozO;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 68BFA606A335;
-	Tue, 17 Nov 2026 05:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C055D606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 05:22:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C055D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T+iTmDJg
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 495841F000C4;
-	Tue, 17 Nov 2026 05:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794892176;
-	bh=4NSuENY4sDp6CJDf1Z9ij5wGps/PbfeGnK6cIis33/U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=T+iTmDJgncWJeOKeI+O83J5a2s4oOxrm98ydrpnkD/j48JUksG274KbyVFvretHpt
-	 +1BopnJc79la5mL75IeEOkndbf+qJ4k+2iWo77bWLPPN9fPMQciPy+eFzT0Ioks62d
-	 iQNTYaHvtzZBh0tUSZGL5d5AW7Oip9/0EaFk5uK7KaM1LAjzZbKf062y+FO7SGSNYz
-	 t2sWVRe3V8F8NQ5sx6v44FfzBnKBzeCKVfcaQu+4Chx6JVE9a4yQShSVSFQ8xw02wQ
-	 Czr3qgUr9YyB6YWMidb/ZaiXVrnQ/yGpD5BlC2uepxDXRxhm7FvpHGLwQZaB5fh9s9
-	 HYUoX9S8kIVZQ==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	linux-api@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ben Segall <bsegall@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jan Kara <jack@suse.cz>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Kees Cook <kees@kernel.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Manfred Spraul <manfred@colorfullife.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Neal Gompa <neal@gompa.dev>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Vlastimil Babka <vbabka@kernel.org>
-Subject: [RFC PATCH 12/13] selftests/rootns: Add root namespace test suite
-Date: Tue, 17 Nov 2026 07:08:40 +0200
-Message-ID: <20261117050841.3289652-13-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261117050841.3289652-1-jarkko@kernel.org>
-References: <20261117050841.3289652-1-jarkko@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QgpotozO
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e9995ce866so40330215ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 21:22:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794892938; x=1795497738; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KH2EdOZQFCM29AQgS9x2MTO2Oio7leMA6Gbor09I+Fo=;
+        b=QgpotozOIwafP7uLbeWT2TODTeVPHollYT3PV4rkXSBXMCIZTTiFHVXcgv5LmUHUAB
+         sM6H4SaB+swTJKPebfWdVgNSVhx7Ai2xMgBDufHrFUmSndxJZ4iU4RgEs8IbmCwL44H/
+         RnD5BGk7CmQL0gY1bXjT8+5gHGmgOIr7KJ6wJX5KWiZOe0s7QYwEOOaJ8MXVixzFXSCa
+         1VMiM5KSBUz6okr0kI9ILn/Bnje5qU8Ge1mOccIz4SKGjP/ftcIb34IS5Xkmuk+vov+n
+         dgREl+PhzdtQgnIdT8DpMGklQkSQIzOcNzs6VzOfLvEJvqP16HuoeznE6BuY2LKXBF4o
+         tDyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794892938; x=1795497738;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KH2EdOZQFCM29AQgS9x2MTO2Oio7leMA6Gbor09I+Fo=;
+        b=x7CwaW6Hf4pjkM85LDJyTExNgYciR84nUYlgVc8uLlTOgdomMvuGcGCkY+pEJ4YNpI
+         gnQoGlmYWPL3zgbPSX7hUQv1tU54/1bd+cVvOxELd1WzxnAcakZkVLxzX2e7a1R6FKIx
+         rAcUexMR/k+tRE7RSpg5hOvb6AsYnbPgXqcsVW73YU8X4zBTUE4sqYH7mQuuCHTpB9fz
+         2kKw+XTPfLbfeHJeGpy/MGmiIYnTrvR4MsbBD42AcIhnwXe4sLVOImVkyoGGDYLK8WSf
+         QZpc3d2GQE1MZSW/xX8FLD9Ho2IFTX9TTrZcMqxhgriaxdKM0SI/maPvbczZpzhQqfOG
+         jzpg==
+X-Forwarded-Encrypted: i=1; AL+hErGb98ZolqJvG0qOxYvfZWY1b4qF0T2zqPS85B67PySXRLWlwjR1toGfAG3zEoIkuGHBktm0LnYWZznkHjRtXII=@vger.kernel.org
+X-Gm-Message-State: APuU4Z803PyfrfhD/KHtX4z4ztfhd3LKAIQ2e6X5zNL01NIH+mrsZK4n
+	yzVtjqcAzZ01Eo+WLNkjpVgnyUaHSmR/Lg5cCyfFPS/zdFA/qtBv6l9ALACH3w==
+X-Gm-Gg: AZFdTZfEbylD70AgDJSFCIXAXWS/orCxXeiLRO+BlnyUg3GnvGkVdZbH47CkyVZtgn3
+	bWKt0d5r1l7n/0DS2PPcNMbq0gNJv9nGz/XhI1PgRiS8n9DrWQf3DMA8IYHn7lmG5NYWFYDhGCR
+	djL8l5iU484ZRa/rVajSderOtwa/DB2o1iwmRKH0K3ie7rK3sIMNYOMRwo0/dB9h/UA68quDGPI
+	fRHuFRqqztCKi0eb8jfgzDebPWJw+yT/wDmCnmxPuQRrfrGeHcigcyo6HT0eQhJQJsAKjSt1Stq
+	oZBYWqN7vkItPU72DMbSd6QpKUkjkA7Fq/HeJVzaR9335LOCCEiKciaxpRt1j2SlllRTVXgnnIl
+	y2DQzy3/CD27cj7Ym9Izm3NnaOQ5jCa72PnvDstyGawSs6Ld3Tyg/7ND4iB+jukPNaENEOdHMxq
+	XJs+uKhUixUuB53nhndiUV7Hs948G9hYnfzgRxR7FA/E1x3LvOVIrB12489DGiPYsiKrxdJhORs
+	9WAOYBjcjSIiOBnD4PDncxe5B7FqEmLpEbui6dQHtrDAIHzVN0lWnl0YQlsohnoLcPlN4+1e8vO
+	3NFVyiTU5w8sURqOVKyxnPYnqACpac4eQyqxJRhB4C1J8ZeoY1knu0Np8+J04M+Xv9TLtcdrxhn
+	4j3GUyZp66PWWMcGePBUBIJN6z+q4g0HUXw==
+X-Received: by 2002:a17:902:d4c5:b0:2ed:3ad6:141d with SMTP id d9443c01a7336-2ee0dad017bmr119363765ad.25.1794892937999;
+        Mon, 16 Nov 2026 21:22:17 -0800 (PST)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2efd7a4114csm7909205ad.38.2026.11.16.21.22.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2026 21:22:17 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 17 Nov 2026 05:22:16 +0000
+Message-Id: <DMX8G01GB597.2KEEFI12YK9V0@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Steven Rostedt"
+ <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "KP Singh"
+ <kpsingh@kernel.org>, "Matt Bobrowski" <matt@bobrowski.net>, "Shuah Khan"
+ <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/9] bpf: Add log support for tracing
+ link_create
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261114150610.84507-2-leon.hwang@linux.dev>
+References: <20261114150610.84507-1-leon.hwang@linux.dev> <20261114150610.84507-2-leon.hwang@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,1336 +112,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Verify the root namespace uAPI and security invariants across
-privileged, unprivileged, and edge-case scenarios.
+On Sat, Nov 14, 2026 at 07:06 AM Leon Hwang <leon.hwang@linux.dev> wrote:
 
-Add a kselftest harness suite under tools/testing/selftests/rootns
-exercising rootns creation, init and concurrent bootstrap lifecycle,
-poll(EPOLLHUP) and WNOHANG/rusage reporting, FSCONFIG_SET_ROOTNS and
-mount-tree installation, pivot_root() and OPEN_TREE_NAMESPACE inside a
-rootns, and entry and setns() permission enforcement.
+tldr: pls use uapi names where possible:
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- tools/testing/selftests/Makefile          |    1 +
- tools/testing/selftests/rootns/.gitignore |    2 +
- tools/testing/selftests/rootns/Makefile   |    5 +
- tools/testing/selftests/rootns/config     |    9 +
- tools/testing/selftests/rootns/smoke.c    | 1254 +++++++++++++++++++++
- 5 files changed, 1271 insertions(+)
- create mode 100644 tools/testing/selftests/rootns/.gitignore
- create mode 100644 tools/testing/selftests/rootns/Makefile
- create mode 100644 tools/testing/selftests/rootns/config
- create mode 100644 tools/testing/selftests/rootns/smoke.c
+> +		bpf_log(log, "tgt_prog_fd and btf_id must be both set or both unset.\n");
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 07c3719f8b04..7c44f93e57a4 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -117,6 +117,7 @@ TARGETS += rdma
- TARGETS += resctrl
- TARGETS += riscv
- TARGETS += rlimits
-+TARGETS += rootns
- TARGETS += rseq
- TARGETS += rtc
- TARGETS += rust
-diff --git a/tools/testing/selftests/rootns/.gitignore b/tools/testing/selftests/rootns/.gitignore
-new file mode 100644
-index 000000000000..9a018c20d310
---- /dev/null
-+++ b/tools/testing/selftests/rootns/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/smoke
-diff --git a/tools/testing/selftests/rootns/Makefile b/tools/testing/selftests/rootns/Makefile
-new file mode 100644
-index 000000000000..79162fba3c2b
---- /dev/null
-+++ b/tools/testing/selftests/rootns/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS += -Wall -Wextra -O2 -g $(KHDR_INCLUDES)
-+TEST_GEN_PROGS := smoke
-+include ../lib.mk
-diff --git a/tools/testing/selftests/rootns/config b/tools/testing/selftests/rootns/config
-new file mode 100644
-index 000000000000..715b0a1cf6a8
---- /dev/null
-+++ b/tools/testing/selftests/rootns/config
-@@ -0,0 +1,9 @@
-+CONFIG_CGROUPS=y
-+CONFIG_IPC_NS=y
-+CONFIG_NET_NS=y
-+CONFIG_PID_NS=y
-+CONFIG_PROC_FS=y
-+CONFIG_ROOTNS=y
-+CONFIG_TMPFS=y
-+CONFIG_USER_NS=y
-+CONFIG_UTS_NS=y
-diff --git a/tools/testing/selftests/rootns/smoke.c b/tools/testing/selftests/rootns/smoke.c
-new file mode 100644
-index 000000000000..fdb6a7482220
---- /dev/null
-+++ b/tools/testing/selftests/rootns/smoke.c
-@@ -0,0 +1,1254 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (C) 2026 Opinsys Oy
-+ */
-+
-+#ifndef _GNU_SOURCE
-+#define _GNU_SOURCE
-+#endif
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <sys/vfs.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <linux/magic.h>
-+#include <linux/mount.h>
-+#include <linux/rootns.h>
-+#include "kselftest_harness.h"
-+
-+#ifndef __NR_pidfd_open
-+#define __NR_pidfd_open 434
-+#endif
-+
-+#ifndef __NR_rootns_create
-+#ifdef __alpha__
-+#define __NR_rootns_create 583
-+#define __NR_rootns_wait 584
-+#define __NR_rootns_kill 585
-+#define __NR_rootns_enter 586
-+#else
-+#define __NR_rootns_create 473
-+#define __NR_rootns_wait 474
-+#define __NR_rootns_kill 475
-+#define __NR_rootns_enter 476
-+#endif
-+#endif
-+
-+static int sys_open_tree(int dfd, const char *path, unsigned int flags)
-+{
-+	return syscall(__NR_open_tree, dfd, path, flags);
-+}
-+
-+static int sys_move_mount(int from_dfd, const char *from_path, int to_dfd,
-+			  const char *to_path, unsigned int flags)
-+{
-+	return syscall(__NR_move_mount, from_dfd, from_path, to_dfd, to_path,
-+		       flags);
-+}
-+
-+static int sys_fsopen(const char *fsname, unsigned int flags)
-+{
-+	return syscall(__NR_fsopen, fsname, flags);
-+}
-+
-+static int sys_fsconfig(int fsfd, unsigned int cmd, const char *key,
-+			const void *value, int aux)
-+{
-+	return syscall(__NR_fsconfig, fsfd, cmd, key, value, aux);
-+}
-+
-+static int sys_fsmount(int fsfd, unsigned int flags, unsigned int attr_flags)
-+{
-+	return syscall(__NR_fsmount, fsfd, flags, attr_flags);
-+}
-+
-+static int sys_pidfd_open(pid_t pid, unsigned int flags)
-+{
-+	return syscall(__NR_pidfd_open, pid, flags);
-+}
-+
-+static int sys_pivot_root(const char *new_root, const char *put_old)
-+{
-+	return syscall(__NR_pivot_root, new_root, put_old);
-+}
-+
-+static int sys_rootns_create(unsigned int flags)
-+{
-+	return syscall(__NR_rootns_create, flags);
-+}
-+
-+static int sys_rootns_enter(int cfd)
-+{
-+	return syscall(__NR_rootns_enter, cfd);
-+}
-+
-+static int sys_rootns_wait(int cfd, int *status, unsigned int options,
-+			   struct rusage *ru)
-+{
-+	return syscall(__NR_rootns_wait, cfd, status, options, ru);
-+}
-+
-+static int sys_rootns_kill(int cfd, int sig)
-+{
-+	return syscall(__NR_rootns_kill, cfd, sig);
-+}
-+
-+static int wait_for_pid_exit(pid_t pid, int *status, int timeout_ms)
-+{
-+	struct pollfd pfd;
-+	int pidfd;
-+	int ret;
-+
-+	pidfd = sys_pidfd_open(pid, 0);
-+	if (pidfd >= 0) {
-+		pfd.fd = pidfd;
-+		pfd.events = POLLIN;
-+		do {
-+			ret = poll(&pfd, 1, timeout_ms);
-+		} while (ret < 0 && errno == EINTR);
-+		close(pidfd);
-+
-+		if (ret == 0) {
-+			errno = ETIMEDOUT;
-+			return -1;
-+		}
-+		if (ret < 0)
-+			return -1;
-+	} else if (errno != ESRCH) {
-+		return -1;
-+	}
-+
-+	do {
-+		ret = waitpid(pid, status, 0);
-+	} while (ret < 0 && errno == EINTR);
-+
-+	return (ret == pid) ? 0 : -1;
-+}
-+
-+static void kill_and_reap_pid(pid_t pid)
-+{
-+	int status;
-+
-+	if (pid <= 0)
-+		return;
-+	if (kill(pid, SIGKILL) < 0 && errno != ESRCH)
-+		return;
-+	(void)waitpid(pid, &status, 0);
-+}
-+
-+static int reap_child_exit_code(pid_t pid)
-+{
-+	int status = 0;
-+
-+	if (wait_for_pid_exit(pid, &status, 5000) < 0) {
-+		kill_and_reap_pid(pid);
-+		return -1;
-+	}
-+	if (!WIFEXITED(status))
-+		return -2;
-+	return WEXITSTATUS(status);
-+}
-+
-+static int clone_exit(void *arg)
-+{
-+	(void)arg;
-+	return 0;
-+}
-+
-+static int clone_with_flags(int flags)
-+{
-+	const size_t stack_size = 64 * 1024;
-+	void *stack;
-+	pid_t pid;
-+	int status;
-+	int ret;
-+
-+	stack = malloc(stack_size);
-+	if (!stack)
-+		return -ENOMEM;
-+
-+	pid = clone(clone_exit, (char *)stack + stack_size,
-+		    SIGCHLD | flags, NULL);
-+	if (pid < 0)
-+		ret = -errno;
-+	else if (waitpid(pid, &status, 0) < 0)
-+		ret = -errno;
-+	else if (!WIFEXITED(status) || WEXITSTATUS(status))
-+		ret = -EIO;
-+	else
-+		ret = 0;
-+
-+	free(stack);
-+	return ret;
-+}
-+
-+static int send_fd(int sockfd, int fd)
-+{
-+	char control[CMSG_SPACE(sizeof(fd))];
-+	char marker = 'R';
-+	struct iovec iov = {
-+		.iov_base = &marker,
-+		.iov_len = sizeof(marker),
-+	};
-+	struct msghdr msg = {
-+		.msg_iov = &iov,
-+		.msg_iovlen = 1,
-+		.msg_control = control,
-+		.msg_controllen = sizeof(control),
-+	};
-+	struct cmsghdr *cmsg;
-+
-+	memset(control, 0, sizeof(control));
-+	cmsg = CMSG_FIRSTHDR(&msg);
-+	cmsg->cmsg_level = SOL_SOCKET;
-+	cmsg->cmsg_type = SCM_RIGHTS;
-+	cmsg->cmsg_len = CMSG_LEN(sizeof(fd));
-+	memcpy(CMSG_DATA(cmsg), &fd, sizeof(fd));
-+
-+	return (sendmsg(sockfd, &msg, 0) < 0) ? -1 : 0;
-+}
-+
-+static int recv_fd(int sockfd)
-+{
-+	char control[CMSG_SPACE(sizeof(int))];
-+	char marker;
-+	int fd;
-+	struct iovec iov = {
-+		.iov_base = &marker,
-+		.iov_len = sizeof(marker),
-+	};
-+	struct msghdr msg = {
-+		.msg_iov = &iov,
-+		.msg_iovlen = 1,
-+		.msg_control = control,
-+		.msg_controllen = sizeof(control),
-+	};
-+	struct cmsghdr *cmsg;
-+
-+	memset(control, 0, sizeof(control));
-+	if (recvmsg(sockfd, &msg, 0) < 0)
-+		return -1;
-+
-+	cmsg = CMSG_FIRSTHDR(&msg);
-+	if (!cmsg ||
-+	    cmsg->cmsg_level != SOL_SOCKET ||
-+	    cmsg->cmsg_type != SCM_RIGHTS ||
-+	    cmsg->cmsg_len < CMSG_LEN(sizeof(fd))) {
-+		errno = EPROTO;
-+		return -1;
-+	}
-+
-+	memcpy(&fd, CMSG_DATA(cmsg), sizeof(fd));
-+	return fd;
-+}
-+
-+static int send_unshared_mntns_and_wait(int sockfd)
-+{
-+	ssize_t nread;
-+	char ch;
-+	int nsfd;
-+	int ret;
-+
-+	if (unshare(CLONE_NEWNS) < 0)
-+		return 1;
-+
-+	nsfd = open("/proc/self/ns/mnt", O_RDONLY | O_CLOEXEC);
-+	if (nsfd < 0)
-+		return 2;
-+
-+	ret = send_fd(sockfd, nsfd);
-+	close(nsfd);
-+	if (ret < 0)
-+		return 3;
-+
-+	nread = read(sockfd, &ch, sizeof(ch));
-+	if (nread != (ssize_t)sizeof(ch))
-+		return 4;
-+
-+	return 0;
-+}
-+
-+static int create_rootns_as_uid(uid_t uid, unsigned int flags, int *cfd)
-+{
-+	int pipefd[2];
-+	ssize_t nread;
-+	int err = 0;
-+	int status;
-+	int sv[2];
-+	pid_t pid;
-+
-+	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0, sv) < 0)
-+		return -errno;
-+
-+	if (pipe2(pipefd, O_CLOEXEC) < 0) {
-+		err = -errno;
-+		close(sv[0]);
-+		close(sv[1]);
-+		return err;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		err = -errno;
-+		close(pipefd[0]);
-+		close(pipefd[1]);
-+		close(sv[0]);
-+		close(sv[1]);
-+		return err;
-+	}
-+
-+	if (pid == 0) {
-+		int child_fd = -1;
-+
-+		close(pipefd[0]);
-+		close(sv[0]);
-+
-+		if (setresuid(uid, uid, uid) < 0) {
-+			err = errno;
-+			goto out_child;
-+		}
-+
-+		child_fd = sys_rootns_create(flags);
-+		if (child_fd < 0) {
-+			err = errno;
-+			goto out_child;
-+		}
-+
-+		if (send_fd(sv[1], child_fd) < 0)
-+			err = errno;
-+
-+out_child:
-+		if (child_fd >= 0)
-+			close(child_fd);
-+		(void)write(pipefd[1], &err, sizeof(err));
-+		close(pipefd[1]);
-+		close(sv[1]);
-+		_exit(err ? 1 : 0);
-+	}
-+
-+	close(pipefd[1]);
-+	close(sv[1]);
-+
-+	nread = read(pipefd[0], &err, sizeof(err));
-+	close(pipefd[0]);
-+	if (nread != (ssize_t)sizeof(err))
-+		err = (nread < 0) ? errno : EPROTO;
-+
-+	if (!err) {
-+		*cfd = recv_fd(sv[0]);
-+		if (*cfd < 0)
-+			err = errno;
-+	}
-+	close(sv[0]);
-+
-+	if (waitpid(pid, &status, 0) != pid && !err)
-+		err = errno;
-+	if (!err && (!WIFEXITED(status) || WEXITSTATUS(status)))
-+		err = ECHILD;
-+
-+	return err ? -err : 0;
-+}
-+
-+static int mount_root(int cfd)
-+{
-+	static const char *const dirs[] = { "proc", "mnt", "tmp" };
-+	int saved_errno;
-+	int rootfd;
-+	int fsfd;
-+	size_t i;
-+
-+	fsfd = sys_fsopen("tmpfs", 0);
-+	if (fsfd < 0)
-+		return -1;
-+
-+	if (sys_fsconfig(fsfd, FSCONFIG_SET_ROOTNS, NULL, NULL, cfd) < 0)
-+		goto err_fsfd;
-+	if (sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0) < 0)
-+		goto err_fsfd;
-+
-+	rootfd = sys_fsmount(fsfd, 0, 0);
-+	if (rootfd < 0)
-+		goto err_fsfd;
-+
-+	for (i = 0; i < ARRAY_SIZE(dirs); i++) {
-+		if (mkdirat(rootfd, dirs[i], 0755) < 0 && errno != EEXIST)
-+			goto err_rootfd;
-+	}
-+
-+	if (sys_move_mount(rootfd, "", cfd, "/",
-+			   MOVE_MOUNT_F_EMPTY_PATH |
-+			   MOVE_MOUNT_T_ROOTNS_ROOT) < 0)
-+		goto err_rootfd;
-+
-+	close(rootfd);
-+	close(fsfd);
-+	return 0;
-+
-+err_rootfd:
-+	saved_errno = errno;
-+	close(rootfd);
-+	errno = saved_errno;
-+err_fsfd:
-+	saved_errno = errno;
-+	close(fsfd);
-+	errno = saved_errno;
-+	return -1;
-+}
-+
-+static int mount_proc(int cfd, bool need_proc)
-+{
-+	const char *fstype = need_proc ? "proc" : "tmpfs";
-+	int saved_errno;
-+	int fsfd;
-+	int mfd;
-+
-+	fsfd = sys_fsopen(fstype, 0);
-+	if (fsfd < 0)
-+		return -1;
-+
-+	if (sys_fsconfig(fsfd, FSCONFIG_SET_ROOTNS, NULL, NULL, cfd) < 0)
-+		goto err_fsfd;
-+	if (sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0) < 0)
-+		goto err_fsfd;
-+
-+	mfd = sys_fsmount(fsfd, 0, 0);
-+	if (mfd < 0)
-+		goto err_fsfd;
-+
-+	if (sys_move_mount(mfd, "", cfd, "proc",
-+			   MOVE_MOUNT_F_EMPTY_PATH |
-+			   MOVE_MOUNT_T_ROOTNS_ROOT) < 0) {
-+		saved_errno = errno;
-+		close(mfd);
-+		errno = saved_errno;
-+		goto err_fsfd;
-+	}
-+
-+	close(mfd);
-+	close(fsfd);
-+	return 0;
-+
-+err_fsfd:
-+	saved_errno = errno;
-+	close(fsfd);
-+	errno = saved_errno;
-+	return -1;
-+}
-+
-+static int create_test_rootns(bool need_proc, unsigned int flags)
-+{
-+	int saved_errno;
-+	int cfd;
-+
-+	cfd = sys_rootns_create(flags);
-+	if (cfd < 0)
-+		return -1;
-+
-+	if (mount_root(cfd) < 0 || mount_proc(cfd, need_proc) < 0) {
-+		saved_errno = errno;
-+		close(cfd);
-+		errno = saved_errno;
-+		return -1;
-+	}
-+
-+	return cfd;
-+}
-+
-+FIXTURE(rootns) {
-+	int cfd;
-+};
-+
-+FIXTURE_SETUP(rootns) {
-+	self->cfd = create_test_rootns(false, ROOTNS_ALL_NAMESPACES |
-+					ROOTNS_KILL_ON_CLOSE |
-+					ROOTNS_CLOSE_ON_EXEC);
-+	ASSERT_GE(self->cfd, 0);
-+}
-+
-+FIXTURE_TEARDOWN(rootns) {
-+	if (self->cfd >= 0)
-+		close(self->cfd);
-+}
-+
-+TEST_F(rootns, create) {
-+	ASSERT_GE(self->cfd, 0);
-+}
-+
-+TEST_F(rootns, kill) {
-+	int ready_pipe[2];
-+	int hold_pipe[2];
-+	char ch;
-+	int status;
-+	pid_t pid1;
-+	pid_t pid2;
-+	int ret;
-+
-+	ASSERT_EQ(pipe2(ready_pipe, O_CLOEXEC), 0);
-+	ASSERT_EQ(pipe2(hold_pipe, O_CLOEXEC), 0);
-+
-+	pid1 = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid1, 0);
-+	if (pid1 == 0) {
-+		close(self->cfd);
-+		close(ready_pipe[0]);
-+		close(ready_pipe[1]);
-+		close(hold_pipe[0]);
-+		close(hold_pipe[1]);
-+		for (;;)
-+			pause();
-+	}
-+
-+	pid2 = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid2, 0);
-+	if (pid2 == 0) {
-+		pid_t child;
-+
-+		close(self->cfd);
-+		close(ready_pipe[0]);
-+		close(hold_pipe[0]);
-+		child = fork();
-+		if (child < 0)
-+			_exit(1);
-+		if (child == 0) {
-+			ch = 'r';
-+			(void)write(ready_pipe[1], &ch, 1);
-+			close(ready_pipe[1]);
-+			for (;;)
-+				pause();
-+		}
-+		close(ready_pipe[1]);
-+		close(hold_pipe[1]);
-+		for (;;)
-+			pause();
-+	}
-+	close(ready_pipe[1]);
-+	close(hold_pipe[1]);
-+
-+	ASSERT_EQ(read(ready_pipe[0], &ch, 1), 1);
-+	close(ready_pipe[0]);
-+
-+	ASSERT_EQ(sys_rootns_kill(self->cfd, SIGKILL), 0);
-+	ASSERT_EQ(read(hold_pipe[0], &ch, 1), 0);
-+	close(hold_pipe[0]);
-+
-+	ret = wait_for_pid_exit(pid2, &status, 5000);
-+	if (ret < 0) {
-+		kill_and_reap_pid(pid2);
-+		kill_and_reap_pid(pid1);
-+		ASSERT_EQ(ret, 0);
-+	}
-+	ASSERT_TRUE(WIFSIGNALED(status));
-+	ASSERT_EQ(WTERMSIG(status), SIGKILL);
-+
-+	ret = wait_for_pid_exit(pid1, &status, 5000);
-+	if (ret < 0) {
-+		kill_and_reap_pid(pid1);
-+		ASSERT_EQ(ret, 0);
-+	}
-+	ASSERT_TRUE(WIFSIGNALED(status));
-+	ASSERT_EQ(WTERMSIG(status), SIGKILL);
-+}
-+
-+TEST_F(rootns, wait) {
-+	int status = 0;
-+	pid_t pid;
-+
-+	pid = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0)
-+		_exit(123);
-+
-+	ASSERT_EQ(sys_rootns_wait(self->cfd, &status, 0, NULL), pid);
-+	ASSERT_TRUE(WIFEXITED(status));
-+	ASSERT_EQ(WEXITSTATUS(status), 123);
-+	ASSERT_EQ(reap_child_exit_code(pid), 123);
-+}
-+
-+TEST_F(rootns, poll) {
-+	struct pollfd pfd;
-+	struct rusage ru;
-+	int status = 0;
-+	int pipefd[2];
-+	pid_t pid;
-+
-+	ASSERT_EQ(pipe2(pipefd, O_CLOEXEC), 0);
-+
-+	pid = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		char ch;
-+
-+		close(self->cfd);
-+		close(pipefd[1]);
-+		(void)read(pipefd[0], &ch, 1);
-+		close(pipefd[0]);
-+		_exit(42);
-+	}
-+	close(pipefd[0]);
-+
-+	ASSERT_EQ(sys_rootns_wait(self->cfd, &status, WNOHANG, NULL), 0);
-+
-+	pfd.fd = self->cfd;
-+	pfd.events = POLLIN;
-+	pfd.revents = 0;
-+	ASSERT_EQ(poll(&pfd, 1, 0), 0);
-+
-+	close(pipefd[1]);
-+
-+	ASSERT_EQ(poll(&pfd, 1, 5000), 1);
-+	ASSERT_NE(pfd.revents & POLLHUP, 0);
-+
-+	memset(&ru, 0xff, sizeof(ru));
-+	ASSERT_EQ(sys_rootns_wait(self->cfd, &status, WNOHANG, &ru), pid);
-+	ASSERT_TRUE(WIFEXITED(status));
-+	ASSERT_EQ(WEXITSTATUS(status), 42);
-+	ASSERT_GE(ru.ru_utime.tv_sec, 0);
-+	ASSERT_GE(ru.ru_maxrss, 0);
-+	ASSERT_EQ(reap_child_exit_code(pid), 42);
-+}
-+
-+TEST_F(rootns, enter_dead) {
-+	int status = 0;
-+	pid_t pid;
-+
-+	pid = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0)
-+		_exit(0);
-+
-+	ASSERT_EQ(sys_rootns_wait(self->cfd, &status, 0, NULL), pid);
-+	ASSERT_TRUE(WIFEXITED(status));
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+
-+	ASSERT_EQ(sys_rootns_enter(self->cfd), -1);
-+	ASSERT_EQ(errno, ESRCH);
-+}
-+
-+TEST_F(rootns, nested_ns) {
-+	pid_t pid;
-+	int nsfd;
-+
-+	nsfd = open("/proc/self/ns/mnt", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(nsfd, 0);
-+
-+	pid = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		close(self->cfd);
-+
-+		if (unshare(CLONE_NEWNS))
-+			_exit(1);
-+		if (clone_with_flags(CLONE_NEWNS))
-+			_exit(2);
-+		if (unshare(CLONE_NEWUSER))
-+			_exit(3);
-+		if (clone_with_flags(CLONE_NEWUSER))
-+			_exit(4);
-+		if (setns(nsfd, CLONE_NEWNS) != -1 || errno != EPERM)
-+			_exit(5);
-+
-+		close(nsfd);
-+		_exit(0);
-+	}
-+
-+	close(nsfd);
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+}
-+
-+TEST_F(rootns, setns_same) {
-+	ssize_t nwritten;
-+	pid_t pid1;
-+	pid_t pid2;
-+	char ch;
-+	int nsfd;
-+	int sv[2];
-+
-+	ASSERT_EQ(socketpair(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0, sv), 0);
-+
-+	pid1 = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid1, 0);
-+	if (pid1 == 0) {
-+		int ret;
-+
-+		close(self->cfd);
-+		close(sv[0]);
-+		ret = send_unshared_mntns_and_wait(sv[1]);
-+		close(sv[1]);
-+		_exit(ret);
-+	}
-+	close(sv[1]);
-+
-+	nsfd = recv_fd(sv[0]);
-+	ASSERT_GE(nsfd, 0);
-+
-+	pid2 = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid2, 0);
-+	if (pid2 == 0) {
-+		int ret;
-+
-+		close(self->cfd);
-+		close(sv[0]);
-+		ret = setns(nsfd, CLONE_NEWNS);
-+		close(nsfd);
-+		_exit(ret ? 1 : 0);
-+	}
-+	close(nsfd);
-+
-+	ASSERT_EQ(reap_child_exit_code(pid2), 0);
-+
-+	ch = 'x';
-+	nwritten = write(sv[0], &ch, sizeof(ch));
-+	ASSERT_EQ(nwritten, (ssize_t)sizeof(ch));
-+	close(sv[0]);
-+
-+	ASSERT_EQ(reap_child_exit_code(pid1), 0);
-+}
-+
-+TEST_F(rootns, setns_foreign) {
-+	unsigned int flags = (ROOTNS_ALL_NAMESPACES & ~ROOTNS_USER) |
-+			     ROOTNS_KILL_ON_CLOSE | ROOTNS_CLOSE_ON_EXEC;
-+	ssize_t nwritten;
-+	int alpha_cfd;
-+	int beta_cfd;
-+	pid_t alpha_pid;
-+	pid_t beta_pid;
-+	char ch;
-+	int nsfd;
-+	int sv[2];
-+
-+	alpha_cfd = create_test_rootns(false, flags);
-+	ASSERT_GE(alpha_cfd, 0);
-+
-+	beta_cfd = create_test_rootns(false, flags);
-+	ASSERT_GE(beta_cfd, 0);
-+
-+	ASSERT_EQ(socketpair(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0, sv), 0);
-+
-+	beta_pid = sys_rootns_enter(beta_cfd);
-+	ASSERT_GE(beta_pid, 0);
-+	if (beta_pid == 0) {
-+		int ret;
-+
-+		close(alpha_cfd);
-+		close(beta_cfd);
-+		close(sv[0]);
-+		ret = send_unshared_mntns_and_wait(sv[1]);
-+		close(sv[1]);
-+		_exit(ret);
-+	}
-+	close(sv[1]);
-+
-+	nsfd = recv_fd(sv[0]);
-+	ASSERT_GE(nsfd, 0);
-+
-+	alpha_pid = sys_rootns_enter(alpha_cfd);
-+	ASSERT_GE(alpha_pid, 0);
-+	if (alpha_pid == 0) {
-+		int ret;
-+
-+		close(alpha_cfd);
-+		close(beta_cfd);
-+		close(sv[0]);
-+		ret = setns(nsfd, CLONE_NEWNS);
-+		close(nsfd);
-+		if (ret != -1 || errno != EPERM)
-+			_exit(1);
-+		_exit(0);
-+	}
-+	close(nsfd);
-+
-+	ASSERT_EQ(reap_child_exit_code(alpha_pid), 0);
-+
-+	ch = 'x';
-+	nwritten = write(sv[0], &ch, sizeof(ch));
-+	ASSERT_EQ(nwritten, (ssize_t)sizeof(ch));
-+	close(sv[0]);
-+
-+	ASSERT_EQ(reap_child_exit_code(beta_pid), 0);
-+
-+	close(alpha_cfd);
-+	close(beta_cfd);
-+}
-+
-+TEST_F(rootns, submount) {
-+	pid_t pid;
-+
-+	pid = sys_rootns_enter(self->cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		struct statfs st;
-+
-+		close(self->cfd);
-+		if (statfs("/proc", &st) < 0)
-+			_exit(1);
-+		if ((unsigned long)st.f_type != (unsigned long)TMPFS_MAGIC)
-+			_exit(2);
-+		_exit(0);
-+	}
-+
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+}
-+
-+TEST_F(rootns, proc) {
-+	int cfd;
-+	pid_t pid;
-+
-+	cfd = create_test_rootns(true, ROOTNS_ALL_NAMESPACES |
-+				 ROOTNS_KILL_ON_CLOSE |
-+				 ROOTNS_CLOSE_ON_EXEC);
-+	ASSERT_GE(cfd, 0);
-+
-+	pid = sys_rootns_enter(cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		struct statfs st;
-+		char target[32];
-+		ssize_t len;
-+
-+		close(cfd);
-+		if (getpid() != 1)
-+			_exit(1);
-+		if (statfs("/proc", &st) < 0)
-+			_exit(2);
-+		if ((unsigned long)st.f_type != (unsigned long)PROC_SUPER_MAGIC)
-+			_exit(3);
-+		len = readlink("/proc/self", target, sizeof(target) - 1);
-+		if (len <= 0)
-+			_exit(4);
-+		target[len] = '\0';
-+		if (strcmp(target, "1") != 0)
-+			_exit(5);
-+		_exit(0);
-+	}
-+
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+	close(cfd);
-+}
-+
-+TEST_F(rootns, pivot_root) {
-+	unsigned int flags = (ROOTNS_ALL_NAMESPACES & ~ROOTNS_USER) |
-+			     ROOTNS_KILL_ON_CLOSE | ROOTNS_CLOSE_ON_EXEC;
-+	int cfd;
-+	pid_t pid;
-+
-+	cfd = create_test_rootns(false, flags);
-+	ASSERT_GE(cfd, 0);
-+
-+	pid = sys_rootns_enter(cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		int fsfd;
-+		int mfd;
-+		int nsfd;
-+
-+		close(cfd);
-+		fsfd = sys_fsopen("tmpfs", 0);
-+		if (fsfd < 0)
-+			_exit(1);
-+		if (sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0) < 0)
-+			_exit(2);
-+		mfd = sys_fsmount(fsfd, 0, 0);
-+		close(fsfd);
-+		if (mfd < 0)
-+			_exit(3);
-+		if (mkdirat(mfd, "old", 0755) < 0)
-+			_exit(4);
-+		if (sys_move_mount(mfd, "", AT_FDCWD, "/mnt",
-+				   MOVE_MOUNT_F_EMPTY_PATH) < 0)
-+			_exit(5);
-+		close(mfd);
-+
-+		if (chdir("/mnt") < 0)
-+			_exit(6);
-+		if (sys_pivot_root(".", "old") < 0)
-+			_exit(7);
-+
-+		nsfd = sys_open_tree(AT_FDCWD, "/",
-+				     OPEN_TREE_NAMESPACE | OPEN_TREE_CLOEXEC);
-+		if (nsfd < 0)
-+			_exit(8);
-+		if (setns(nsfd, CLONE_NEWNS) < 0)
-+			_exit(9);
-+		close(nsfd);
-+		_exit(0);
-+	}
-+
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+	close(cfd);
-+}
-+
-+TEST_F(rootns, kill_on_close) {
-+	int status;
-+	pid_t pid;
-+	int cfd;
-+	int ret;
-+
-+	cfd = create_test_rootns(false, ROOTNS_ALL_NAMESPACES | ROOTNS_KILL_ON_CLOSE);
-+	ASSERT_GE(cfd, 0);
-+
-+	pid = sys_rootns_enter(cfd);
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		close(cfd);
-+		for (;;)
-+			pause();
-+	}
-+
-+	close(cfd);
-+
-+	ret = wait_for_pid_exit(pid, &status, 5000);
-+	if (ret < 0) {
-+		kill_and_reap_pid(pid);
-+		ASSERT_EQ(ret, 0);
-+	}
-+	ASSERT_TRUE(WIFSIGNALED(status));
-+	ASSERT_EQ(WTERMSIG(status), SIGKILL);
-+}
-+
-+static int enter_unpriv_user_mntns(uid_t drop_uid)
-+{
-+	char map[32];
-+	uid_t uid;
-+	gid_t gid;
-+	int fd;
-+	int len;
-+
-+	if (geteuid() == 0 &&
-+	    (setresgid(drop_uid, drop_uid, drop_uid) < 0 ||
-+	     setresuid(drop_uid, drop_uid, drop_uid) < 0))
-+		return -errno;
-+
-+	uid = geteuid();
-+	gid = getegid();
-+	if (unshare(CLONE_NEWUSER | CLONE_NEWNS) < 0)
-+		return -errno;
-+
-+	fd = open("/proc/self/setgroups", O_WRONLY | O_CLOEXEC);
-+	if (fd >= 0) {
-+		(void)write(fd, "deny\n", 5);
-+		close(fd);
-+	}
-+
-+	fd = open("/proc/self/uid_map", O_WRONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		return -errno;
-+	len = snprintf(map, sizeof(map), "0 %u 1\n", (unsigned int)uid);
-+	if (write(fd, map, (size_t)len) != len) {
-+		close(fd);
-+		return -EIO;
-+	}
-+	close(fd);
-+
-+	fd = open("/proc/self/gid_map", O_WRONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		return -errno;
-+	len = snprintf(map, sizeof(map), "0 %u 1\n", (unsigned int)gid);
-+	if (write(fd, map, (size_t)len) != len) {
-+		close(fd);
-+		return -EIO;
-+	}
-+	close(fd);
-+
-+	return 0;
-+}
-+
-+TEST_F(rootns, mount_perms) {
-+	int cfd = -1;
-+	int rootfsfd;
-+	pid_t pid;
-+	int mfd;
-+	int ret;
-+
-+	ret = create_rootns_as_uid(1000, ROOTNS_ALL_NAMESPACES | ROOTNS_USER,
-+				   &cfd);
-+	if (ret == -EPERM || ret == -EACCES || ret == -EINVAL)
-+		SKIP(return, "unprivileged ROOTNS_USER creation is unavailable");
-+	ASSERT_EQ(ret, 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		int u_fsfd;
-+		int u_mfd;
-+
-+		ret = enter_unpriv_user_mntns(2000);
-+		if (ret == -EPERM || ret == -EACCES || ret == -EINVAL ||
-+		    ret == -ENOSPC)
-+			_exit(0);
-+		if (ret < 0)
-+			_exit(1);
-+
-+		u_fsfd = sys_fsopen("tmpfs", 0);
-+		if (u_fsfd < 0)
-+			_exit(2);
-+		if (sys_fsconfig(u_fsfd, FSCONFIG_SET_ROOTNS, NULL, NULL,
-+				 cfd) != -1 || errno != EPERM)
-+			_exit(3);
-+		if (sys_fsconfig(u_fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0) < 0)
-+			_exit(4);
-+
-+		u_mfd = sys_fsmount(u_fsfd, 0, 0);
-+		if (u_mfd < 0)
-+			_exit(5);
-+		if (sys_move_mount(u_mfd, "", cfd, "/",
-+				   MOVE_MOUNT_F_EMPTY_PATH |
-+				   MOVE_MOUNT_T_ROOTNS_ROOT) != -1 ||
-+		    errno != EPERM)
-+			_exit(6);
-+
-+		close(u_mfd);
-+		close(u_fsfd);
-+		close(cfd);
-+		_exit(0);
-+	}
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+
-+	if (geteuid() == 0) {
-+		rootfsfd = sys_fsopen("tmpfs", 0);
-+		ASSERT_GE(rootfsfd, 0);
-+		ASSERT_EQ(sys_fsconfig(rootfsfd, FSCONFIG_SET_ROOTNS, NULL,
-+				       NULL, cfd), 0);
-+		ASSERT_EQ(sys_fsconfig(rootfsfd, FSCONFIG_CMD_CREATE, NULL,
-+				       NULL, 0), 0);
-+		mfd = sys_fsmount(rootfsfd, 0, 0);
-+		ASSERT_GE(mfd, 0);
-+		close(rootfsfd);
-+
-+		pid = fork();
-+		ASSERT_GE(pid, 0);
-+		if (pid == 0) {
-+			if (setresgid(1000, 1000, 1000) < 0 ||
-+			    setresuid(1000, 1000, 1000) < 0)
-+				_exit(1);
-+			if (sys_move_mount(mfd, "", cfd, "/",
-+					   MOVE_MOUNT_F_EMPTY_PATH |
-+					   MOVE_MOUNT_T_ROOTNS_ROOT) < 0)
-+				_exit(2);
-+			close(mfd);
-+			close(cfd);
-+			_exit(0);
-+		}
-+		close(mfd);
-+		ASSERT_EQ(reap_child_exit_code(pid), 0);
-+	}
-+
-+	close(cfd);
-+}
-+
-+TEST_F(rootns, mount_attached) {
-+	int cfd;
-+
-+	cfd = sys_rootns_create(ROOTNS_ALL_NAMESPACES |
-+			    ROOTNS_KILL_ON_CLOSE |
-+			    ROOTNS_CLOSE_ON_EXEC);
-+	ASSERT_GE(cfd, 0);
-+
-+	ASSERT_EQ(sys_move_mount(AT_FDCWD, "/", cfd, "/",
-+				 MOVE_MOUNT_T_ROOTNS_ROOT), -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	close(cfd);
-+}
-+
-+TEST_F(rootns, mount_empty_path) {
-+	int cfd;
-+	int mfd;
-+
-+	cfd = sys_rootns_create(ROOTNS_ALL_NAMESPACES |
-+			    ROOTNS_KILL_ON_CLOSE |
-+			    ROOTNS_CLOSE_ON_EXEC);
-+	ASSERT_GE(cfd, 0);
-+
-+	mfd = sys_open_tree(AT_FDCWD, "/", OPEN_TREE_CLONE);
-+	ASSERT_GE(mfd, 0);
-+
-+	ASSERT_EQ(sys_move_mount(mfd, "", cfd, "",
-+				 MOVE_MOUNT_F_EMPTY_PATH |
-+				 MOVE_MOUNT_T_ROOTNS_ROOT), -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	close(mfd);
-+	close(cfd);
-+}
-+
-+TEST_F(rootns, enter_perms) {
-+	pid_t pid;
-+	int cfd;
-+
-+	cfd = sys_rootns_create(ROOTNS_ALL_NAMESPACES |
-+			    ROOTNS_KILL_ON_CLOSE |
-+			    ROOTNS_CLOSE_ON_EXEC);
-+	ASSERT_GE(cfd, 0);
-+
-+	ASSERT_EQ(sys_rootns_enter(cfd), -1);
-+	ASSERT_EQ(errno, ENOENT);
-+
-+	ASSERT_EQ(mount_root(cfd), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) < 0)
-+			_exit(1);
-+		if (sys_rootns_enter(cfd) != -1 || errno != EPERM)
-+			_exit(2);
-+		close(cfd);
-+		_exit(0);
-+	}
-+
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+	close(cfd);
-+}
-+
-+TEST_F(rootns, fsconfig) {
-+	pid_t pid;
-+	int fsfd;
-+	int cfd;
-+
-+	cfd = sys_rootns_create(ROOTNS_ALL_NAMESPACES |
-+			    ROOTNS_KILL_ON_CLOSE |
-+			    ROOTNS_CLOSE_ON_EXEC);
-+	ASSERT_GE(cfd, 0);
-+
-+	fsfd = sys_fsopen("tmpfs", 0);
-+	ASSERT_GE(fsfd, 0);
-+	ASSERT_EQ(sys_fsconfig(fsfd, FSCONFIG_SET_ROOTNS, NULL, NULL, cfd), 0);
-+	ASSERT_EQ(sys_fsconfig(fsfd, FSCONFIG_SET_ROOTNS, NULL, NULL, cfd), -1);
-+	ASSERT_EQ(errno, EBUSY);
-+	close(fsfd);
-+	close(cfd);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		int ucfd;
-+		int ret;
-+		int sfd;
-+
-+		ret = enter_unpriv_user_mntns(1000);
-+		if (ret == -EPERM || ret == -EACCES || ret == -EINVAL ||
-+		    ret == -ENOSPC)
-+			_exit(0);
-+		if (ret < 0)
-+			_exit(1);
-+
-+		ucfd = sys_rootns_create(ROOTNS_USER | ROOTNS_CLOSE_ON_EXEC);
-+		if (ucfd < 0) {
-+			if (errno == EPERM || errno == EACCES ||
-+			    errno == EINVAL || errno == ENOSPC)
-+				_exit(0);
-+			_exit(2);
-+		}
-+
-+		sfd = sys_fsopen("sysfs", 0);
-+		if (sfd < 0) {
-+			if (errno == ENODEV) {
-+				close(ucfd);
-+				_exit(0);
-+			}
-+			_exit(3);
-+		}
-+
-+		if (sys_fsconfig(sfd, FSCONFIG_SET_ROOTNS, NULL, NULL, ucfd) < 0)
-+			_exit(4);
-+		if (sys_fsconfig(sfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0) != -1 ||
-+		    errno != EPERM)
-+			_exit(5);
-+
-+		close(sfd);
-+		close(ucfd);
-+		_exit(0);
-+	}
-+
-+	ASSERT_EQ(reap_child_exit_code(pid), 0);
-+}
-+
-+TEST_F(rootns, enter_concurrent) {
-+	unsigned int seen_mask = 0;
-+	int start_pipe[2];
-+	int ready_pipe[2];
-+	int hold_pipe[2];
-+	pid_t workers[4];
-+	int status = 0;
-+	int i;
-+
-+	ASSERT_EQ(pipe2(start_pipe, O_CLOEXEC), 0);
-+	ASSERT_EQ(pipe2(ready_pipe, O_CLOEXEC), 0);
-+	ASSERT_EQ(pipe2(hold_pipe, O_CLOEXEC), 0);
-+
-+	for (i = 0; i < 4; i++) {
-+		workers[i] = fork();
-+		ASSERT_GE(workers[i], 0);
-+		if (workers[i] == 0) {
-+			pid_t ent_pid;
-+			char ch;
-+
-+			close(start_pipe[1]);
-+			close(ready_pipe[0]);
-+			close(hold_pipe[1]);
-+
-+			(void)read(start_pipe[0], &ch, 1);
-+			close(start_pipe[0]);
-+
-+			ent_pid = sys_rootns_enter(self->cfd);
-+			if (ent_pid < 0)
-+				_exit(1);
-+			if (ent_pid == 0) {
-+				unsigned char my_pid = (unsigned char)getpid();
-+
-+				if (write(ready_pipe[1], &my_pid, 1) != 1)
-+					_exit(2);
-+				close(ready_pipe[1]);
-+				(void)read(hold_pipe[0], &ch, 1);
-+				close(hold_pipe[0]);
-+				_exit(0);
-+			}
-+
-+			close(ready_pipe[1]);
-+			close(hold_pipe[0]);
-+			close(self->cfd);
-+			_exit(reap_child_exit_code(ent_pid) == 0 ? 0 : 3);
-+		}
-+	}
-+
-+	close(start_pipe[0]);
-+	close(ready_pipe[1]);
-+	close(hold_pipe[0]);
-+	close(start_pipe[1]);
-+
-+	for (i = 0; i < 4; i++) {
-+		unsigned char pid_byte = 0;
-+
-+		ASSERT_EQ(read(ready_pipe[0], &pid_byte, 1), 1);
-+		ASSERT_GE(pid_byte, 1);
-+		ASSERT_LE(pid_byte, 4);
-+		seen_mask |= 1U << pid_byte;
-+	}
-+	close(ready_pipe[0]);
-+	close(hold_pipe[1]);
-+
-+	ASSERT_EQ(seen_mask, 0x1eU);
-+
-+	for (i = 0; i < 4; i++)
-+		ASSERT_EQ(reap_child_exit_code(workers[i]), 0);
-+
-+	ASSERT_GT(sys_rootns_wait(self->cfd, &status, 0, NULL), 0);
-+	ASSERT_TRUE(WIFEXITED(status));
-+	ASSERT_EQ(WEXITSTATUS(status), 0);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.47.3
+The uapi fields are target_fd and target_btf_id.
+tgt_prog_fd and btf_id are arguments of this function.
+Patches 2, 3 and 4 say target_fd for the same field.
 
+> +			bpf_log(log, "Only allow re-attach for tracing and lsm progs.\n");
+
+I think this one misleads. A freplace prog can re-attach.
+It has to pass target_fd and target_btf_id.
+The comment above the check says so.
+
+> +			bpf_log(log, "Invalid attach_btf.\n");
+
+attach_btf is a field of bpf_prog_aux. The user never set it.
+NULL means that the prog was loaded with attach_prog_fd.
+Such a prog can't re-attach at all.
+
+> +		bpf_log(log, "Invalid kprobe_write_ctx.\n");
+
+Another bit of bpf_prog_aux.
+The rule is that both progs write to pt_regs, or none.
+
+> +			bpf_log(log, "Invalid tracing attach_type.\n");
+
+LSM progs get here too.
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 35f8a71..85d97cb 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3712,7 +3712,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 	}
+ 
+ 	if (!!tgt_prog_fd != !!btf_id) {
+-		bpf_log(log, "tgt_prog_fd and btf_id must be both set or both unset.\n");
++		bpf_log(log, "target_fd and target_btf_id must be both set or both unset.\n");
+ 		err = -EINVAL;
+ 		goto out_put_prog;
+ 	}
+@@ -3725,14 +3725,14 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 		 * attach_tracing_prog flag is set.
+ 		 */
+ 		if (prog->type != BPF_PROG_TYPE_EXT) {
+-			bpf_log(log, "tgt_prog_fd is only allowed for freplace prog.\n");
++			bpf_log(log, "target_fd is only allowed for freplace prog.\n");
+ 			err = -EINVAL;
+ 			goto out_put_prog;
+ 		}
+ 
+ 		tgt_prog = bpf_prog_get(tgt_prog_fd);
+ 		if (IS_ERR(tgt_prog)) {
+-			bpf_log(log, "Invalid tgt_prog_fd.\n");
++			bpf_log(log, "Invalid target_fd.\n");
+ 			err = PTR_ERR(tgt_prog);
+ 			tgt_prog = NULL;
+ 			goto out_put_prog;
+@@ -3787,13 +3787,13 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 		 */
+ 		if (prog->type != BPF_PROG_TYPE_TRACING &&
+ 		    prog->type != BPF_PROG_TYPE_LSM) {
+-			bpf_log(log, "Only allow re-attach for tracing and lsm progs.\n");
++			bpf_log(log, "Re-attach of freplace prog needs target_fd and target_btf_id.\n");
+ 			err = -EINVAL;
+ 			goto out_unlock;
+ 		}
+ 		/* We can allow re-attach only if we have valid attach_btf. */
+ 		if (!prog->aux->attach_btf) {
+-			bpf_log(log, "Invalid attach_btf.\n");
++			bpf_log(log, "Cannot re-attach a prog that was attached to a bpf prog.\n");
+ 			err = -EINVAL;
+ 			goto out_unlock;
+ 		}
+@@ -3849,7 +3849,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 	 */
+ 	if (prog->type == BPF_PROG_TYPE_EXT &&
+ 	    prog->aux->kprobe_write_ctx != tgt_prog->aux->kprobe_write_ctx) {
+-		bpf_log(log, "Invalid kprobe_write_ctx.\n");
++		bpf_log(log, "Only one of freplace prog and its target writes to pt_regs.\n");
+ 		err = -EINVAL;
+ 		goto out_unlock;
+ 	}
+@@ -5921,7 +5921,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_a
+ 	case BPF_PROG_TYPE_LSM:
+ 	case BPF_PROG_TYPE_TRACING:
+ 		if (attr->link_create.attach_type != prog->expected_attach_type) {
+-			bpf_log(log, "Invalid tracing attach_type.\n");
++			bpf_log(log, "attach_type is not expected_attach_type of the prog.\n");
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ce11e78..ce7f530 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -23873,7 +23873,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 
+ 		if (bpf_prog_is_dev_bound(prog->aux) &&
+ 		    !bpf_prog_dev_bound_match(prog, tgt_prog)) {
+-			bpf_log(log, "Target program bound device mismatch");
++			bpf_log(log, "Target program bound device mismatch\n");
+ 			return -EINVAL;
+ 		}
+ 
+@@ -24133,8 +24133,10 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 
+ 		if ((prog->aux->saved_dst_prog_type || prog->aux->saved_dst_attach_type) &&
+ 		    (!tgt_prog || prog->aux->saved_dst_prog_type != tgt_prog->type ||
+-		     prog->aux->saved_dst_attach_type != tgt_prog->expected_attach_type))
++		     prog->aux->saved_dst_attach_type != tgt_prog->expected_attach_type)) {
++			bpf_log(log, "Target differs in type from the target at load time\n");
+ 			return -EINVAL;
++		}
+ 
+ 		if (tgt_prog && conservative) {
+ 			/*
+pw-bot: cr
