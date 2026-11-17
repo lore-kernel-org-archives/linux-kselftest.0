@@ -1,100 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.130
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794921749;
-	b=sEuaFR6Gd5MSdStRSWac+2LII0GpaQDww8h7MRa7tA0jNx8+JeIfFrpd4R1Oepeb/mtq
-	 gNbeXr01Zrh241M8MuApcZg0nAVjHo0ImU82kzWTsuIv0qfM5Kosx4OfSgMBt5IoQ0Qe5
-	 b8V1Tplic8QQNuJyZil1oNYJ/WNl4mcAZv2VybtZwlvIQISWskJnGQPBbnN97dBpZwSQU
-	 kmBYEZjtGvc3deujF7MERhu587AlQ5OWFCrAv8OfV2wHy35b6v4ImfJyjrj3aqID9qJ/8
-	 NIEvGzlFR8YDeRXzqn9IGTHkdqt6wfcDOlPk3WXZPmGp/z94llL+//kCIp6LxqWwvgw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794921749;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=33qaQ4771NTprzqfLHANMa3dcM1F/TqW0EurN//O0S4=;
-	b=QykzuLuZxozk8DvIpt8ch4XD3lsnH8PGlUI1Dg8uDcG5IQy9OW6HHhX6YpWz/SX+P3F1
-	 9JVG5ar/5X4uk2vgzBCQQ92rJHtO/a14HoiCbfw08pMHAA/mwBXmnrirmxonAw1dfVfio
-	 DX7paIBBsH4DxODmAxO1scib0+1ZSf2Ixpu45YOYg6epZNUpns1ur8h9/9kYUjvxGFIVr
-	 sRPWPMIdsjQxccXuxCE8ohYUpHCTD8eMnMLkZNA1qXxFt3hv3fAkR/N6uLOGykOLtXjoA
-	 UWox47I/sWvLB7YIIXSku0w8NjNWmNeWYIXns/ThzcOZMtcSe9UUTxtJrrqzq87zWng==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b="t3EC/v44";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.130
-Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020130.outbound.protection.outlook.com [52.101.191.130])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794922088;
+	b=lJls3ZirEkgPZu/fWq+sjMDwVzlltlz7zSZVWMpYuuV5mzGGq+ejAiwjkQFEb5xX1fDs
+	 E51uaXXw0B3vQAvXcNJQaXKld1NASPWmvEHF9vVsanAzpziojOLRF4UUrV9O3eofJFzrq
+	 s2QODikJR1K+aapHqNkAlQ2EINSduhz2Z5EpyFF+s5BuhsNJXcUoNJcDB6ZTPH1d1PEOD
+	 CGPReD0puy1LjwlaN+T3Z1Xu2NQ7UuuLGTKkoeuC9TTuXzM3N94KyTpb7pmoXVSnXqORG
+	 uLLQZCgrEU3zFlI22rOXfTb2XaI+WLmRSUF2jRh9A/tl1wsjwnSojNmxrPUfD7DDwoA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794922088;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Developer-Signature:X-Developer-Key:X-Scanned-By;
+	bh=pgk4Qd0GhYJ0WlbyQl7cozJzKhp0/3wkitfM0BBpn34=;
+	b=D9Yq6z5JhH116ZYaXSUcX+f3RANNGSB9SwRmrEO8oJ5jUUbYLIcYLz/UlF5zo99MKgby
+	 mrRzeT/NUbeYBJ9C6LAj9675mmvIoZz+QkcaVRpVePg47MDDazv8fiaHoN3UpUZDVNCMw
+	 XQAUO0hRUZTQFXwhTPmLRiykHOTXIi9SqeLxrAijy/vxxcQrkCh+zDoMwD+NTcvMe8ETF
+	 qvcimreVAWJ7AuIjJ8+UAeCOeIGLHZ5rggcnpdy7LM6tGxlyiHGHoNS4ymzQUSunTOuhJ
+	 qi6bHyJeDvEcvJH4Sboi7dyDMlt2Adqn04TTllnNvW7uOdW9UXBmtqLWmOUe12lLkCA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=e7wGEwKH;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06C6606A333;
-	Tue, 17 Nov 2026 13:22:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F06C6606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863B3606A323
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 13:28:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 863B3606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=t3EC/v44
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r2GT7TXoVtbLAyvexDuPGXzvbK3lkXWP9R+gipidtU7F2kRQyx2N+61HhvS5AfaaofcncQTcD8n+H38w/FtmAkPz/NFm6Um9heVPsrc6HUb8jqCASBvew/hQY/RA+aA6BaRB3aHI7inAyd4fnoElLOSic3ZO8Ukfzi8cQSj6I1bSZhIbwRna8SyPjCoMKzkadbKw0KzEAah8TbXMd57Xuqg3OdeHYOAc6SFneGsP8gU3xcjvCEH74+1ppM7jKyPf+iCwAxkWIoHAUUN2b8PFDGnUsXZcnyQJbQnDkW9LDUVl6rhnU6VUS1o5E1LGLrB9Lh70jr8sw/E9bOoGeFQaiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=33qaQ4771NTprzqfLHANMa3dcM1F/TqW0EurN//O0S4=;
- b=B5vFc8yMc2q1YirrHswgeea7iZYghNBl4LKXZ4zTsKuAX1n608tALoUf3BkT/kI/GW9P3TsyFpNkyEKnWlEDcgKhtAspcdhGlxKgf75smaK8ZIzO5Sn8Idr2o53Kk/8Uns0szuVY48GXYqIybKj9zw1i7jVmNTdtlWU7xQals/8QaoSQdzKRIII9q5cQpiKnwWaK/1YjimnZ/Sd3XfrviMvKB5L6Ip41wOwfT0LCQD9Cr/4AQh/QlAZRxmaaEwwZSsYUc/fQV9+DToY1h++MOW+7gXCqVT7BSSOzhNKmB6KMWF55B11F2EOHSCyWpJe7NE0OT2bQKWRwqySXpwyHYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=33qaQ4771NTprzqfLHANMa3dcM1F/TqW0EurN//O0S4=;
- b=t3EC/v4400AOaxDPP4CSENgtt4Gf+4YuLSiAxSVC4AellMQHgoJFT2wW004U2Nk/Ye072QAUfenvTndYikoonpTw8EO3ARhTSPt32w1eyCqz5R8+cxXtonm4DWpc6cD4d6cL7ONP4KmDnTXmMsId7GZRp0YrMGZrwMk5gRblIyNicu2Ok2BTLYHHsfUzpNRMaEwqHDnLzpiLzRQiKHOn8fMx2q0pc06SQkBs65+31D+NZG1ZJl8Vb2pY4rcK0dBqI/lKbcyvPMPg6aYZaC/nHCkpu8SM6RdmrD8zHlECpsWPT9wQY7fy/IvdP8G+pefXFZ0VEl+EsZAGXKCJu3SZHw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YQ1PR01MB688080.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:cf::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Tue, 17 Nov
- 2026 13:22:25 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.013; Tue, 17 Nov 2026
- 13:22:25 +0000
-Message-ID: <710de08f-09e3-4dea-a5e2-6c2c55522161@efficios.com>
-Date: Tue, 17 Nov 2026 08:22:24 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 5/8] sched/proxy: Clear blocked_donor when the
- donor stops donating
-To: John Stultz <jstultz@google.com>
-Cc: peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
- connoro@google.com, arighi@nvidia.com, akpm@linux-foundation.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20261116192638.233125-1-mathieu.desnoyers@efficios.com>
- <20261116192638.233125-6-mathieu.desnoyers@efficios.com>
- <CANDhNCoQteppE0ERWyz2LJ4PBLBKQymmzzbKwrxMwv1sAL4VPw@mail.gmail.com>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <CANDhNCoQteppE0ERWyz2LJ4PBLBKQymmzzbKwrxMwv1sAL4VPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0320.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:6c::15) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=e7wGEwKH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794922086;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pgk4Qd0GhYJ0WlbyQl7cozJzKhp0/3wkitfM0BBpn34=;
+	b=e7wGEwKHhMLoMJW6xieeoHa0jn1JwUKBiuDr/K1cBLIRd4cudAu1sy1fDRfgXlfWnF7tuI
+	oIoZPYCPECAX3e+YQAuNAt5FwK7bh+GooVV0SxEmoW/5YGCdGaTkASwJkpCQ9CZ2QsFrKa
+	G7Yn/B7CCG0x1M1ZPSHj/9gUCmNumPE=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-115-Nn1SvXetM7qk3lUdHznLWw-1; Tue,
+ 17 Nov 2026 08:28:00 -0500
+X-MC-Unique: Nn1SvXetM7qk3lUdHznLWw-1
+X-Mimecast-MFC-AGG-ID: Nn1SvXetM7qk3lUdHznLWw_1794922079
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F3C8E195608A;
+	Tue, 17 Nov 2026 13:27:57 +0000 (UTC)
+Received: from aesteve-thinkpadp1gen8.rmtes.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 887AC1956087;
+	Tue, 17 Nov 2026 13:27:54 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v7 0/3] cgroup: dmem: add selftest helper and coverage
+Date: Tue, 17 Nov 2026 14:27:45 +0100
+Message-Id: <20261117-kunit_cgroups-v7-0-5bcbfe17f323@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,99 +72,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQ1PR01MB688080:EE_
-X-MS-Office365-Filtering-Correlation-Id: b87285b0-e5cd-4155-7728-08df44add1f3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|18002099003|22082099003|261026140227099003|261026121527099003|261022075727099003|261028144727099003|261022105027099003|56012099006|4143699003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	hG5+xMppIS5PVjBxm5GcwFLalcUnOMAxs2GQpJ8YnET14NUDCeqU+5/QqjbwWpCu1qWURkVdtAGFbafrJT/L0Wj0KvCfVWi7xX1P9VCTUdMs2INmuzjA2BymtDFL5bSX7Vf0auTW/XNZi1WOiDxUisqLK43rhTFxYIkd3K2+SV+kax6aFsyQoxubYFpViG4ANj8swZ2BWB34s7Rgg9VcnFGVc/37qsoRe6EXcW9lJYssuJsLwRt537rJ8Vg4BAM8Ruwu1g0L9EC8GSeIoUgDQ3PezNUVjV3W2no+WAO/EG35PeJHyZ0psPkjIwPR9BNxRcQ0Y7EkOomT+BEgHPvQyG9ataiFilWgVKdm8w8GyIDPm4o6/FNrJyt5dHNq7F8C7wxpWOWMZ3POEgYAb/z7XEzbzXe0AdmzR0RHndPynft3bN9jVf52ItvWZaJI2B8Jb9SeAXgaONKn9FU7hyG9ZBnO5M54Tj5x4A1CypBn/63e8hTgxEgE9LSAw7vXCW4AK/uNUUkbA6z7HsA8/l4IHiSPV55xpewD3x7i1C7o6tNi819qsezmxcmyQ4iYnE3EgUckEru5T36R9Lwaz/U3242tyFLe3QWKgXnsCIa8M/I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(18002099003)(22082099003)(261026140227099003)(261026121527099003)(261022075727099003)(261028144727099003)(261022105027099003)(56012099006)(4143699003)(10067099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bXBZUFJPR3hWbDdFRnp4VERDOXJLR3pQWGZqMkFoV2VKUm4xWGpqQW1BUnlL?=
- =?utf-8?B?eURDNTBqMHNROXpzU0RCYTBuWndCd1FuVVJNVWxOQ3QyZ0ZDd0pIME9ab3VE?=
- =?utf-8?B?blk0cjNSdjMvRXUxYVIwcVdFZ2tzTFNya3RMeThlMndJWEswcDBZN3hZUEJF?=
- =?utf-8?B?MkhGRFZYSUk2bnpMNy94L05rT0FRSUJzSVRKVy81eUZ3STcrNTRuRXRJV2dO?=
- =?utf-8?B?Z2FucFU0TWZOajVXUjdYR01BQ041OGdOaVBjbHA0SGtUN3pmV2Y5bW83QkJ4?=
- =?utf-8?B?eDdEY3diK0pjV29kTVp5Q2kyK2hzTThDQmtkQWd1OTRHZ3dJVHg3VFA1RUZK?=
- =?utf-8?B?TnJaUFpxQ2NBVjJ5Q3NVMklmYjNyUElnNXpuY1lPUFJlY1k1Ty83RW03OHlm?=
- =?utf-8?B?NURRYXg0azBSdk1xWjJnZWtyQ3BSUnBJY0huY0hiT0dBMXpuLzU1aE9UZmM5?=
- =?utf-8?B?U2F5MzBEMk1LQzcvTW0xNDdod09Qa3c4Q1RnNmxReTBYMkpJeTNLZXpvZHQz?=
- =?utf-8?B?bllrdE5VNTNLakhPOWZLcVQxYlRLYktYV1hDRndxWmNTV1VXd2pFQ1lYMGtr?=
- =?utf-8?B?enFuNGhaR1JVYVV4ZERkNm1CNjMvRmdYTnN3bksyY0FUb0V6WFAyRnMxcnNO?=
- =?utf-8?B?eWJxR1BjZ01DbnkvWm9Ma0dsTG5CS0wrSG5ZQ1FvSnVwVmpNTEZ3a1k2Qkx5?=
- =?utf-8?B?R3FDbHNYSVJDVkl5N2FvYTZDU3M2QkNUOFdkazFLd0hqRjNYM3B2TjhZZ1hs?=
- =?utf-8?B?SDBkSzhXdGlxalJSRVY4TitQTEJoVzZEVDJKZHNqeFNGaEN0ckxBQ1k3azlZ?=
- =?utf-8?B?K1FQUllyM2JpQzJFNlNwUlltUFdLM2ZoT0dnTjJ5N2lieUJ4L1ByTEI4WVRV?=
- =?utf-8?B?M25NR2p4MENsajN4YndBV1RpYWhCN0g0OEZoUVljdlRObEN4UHNKVEUwQlNQ?=
- =?utf-8?B?WEsvRjhCcTZBcEFQaTJmd3NUck4wemkzUGs4ZjdoekZ2NVA3TmdvYW0wSWY3?=
- =?utf-8?B?T2dzU2JpVGJaUENHR0lhelozL0xqWXBLdm1Nc095NW9qSUphdGhWVkxZdmlI?=
- =?utf-8?B?OEJ3QkJDaVphQzg5blVrait1TGRwN08xV282dTE2MlVXM2F2MnJ1OTRaMGRS?=
- =?utf-8?B?MkFqdWJ2MXFoUUgwSU8zUFVvMXNCc1VObm9LMFNrSkJjZ0ttQWV0QVVLV2FP?=
- =?utf-8?B?emRyN3BUZTA0Q3c4UW16cXBWY1FUZ2FYSGl6aEJZdWprNXpLZHFaZGhQaHFq?=
- =?utf-8?B?cVB2QXFITm1vZU5EZ0pxa3Jia3hqV2ZGcE83MzJiZ1Nrem1yU0ZiR2VJK3dU?=
- =?utf-8?B?NDV2NEtseWpWY0Q4SG11czRWUlNFSHBlWWx0NTg3V01iUXFUMlZ4Rk9GRFVz?=
- =?utf-8?B?M2FvMHJyYzVPUjMrOGdPZGlrd1RuK2d5cVdVeWFWMmhDN2xlMXN3RHlORGpL?=
- =?utf-8?B?Q0hYSXBOYWUvSWM2TGJOUTNFQWM0REI3cE5aODZBODJuNytkZVpIS3B3b0pO?=
- =?utf-8?B?VE5UVkl2RytUUEE5YjV4WW1DU1NzNTNtdHM5VUljVzZiYlFtcTZLRWVjRUlB?=
- =?utf-8?B?SWtUMFRQRFBOZlNmclJwU2FNY2J5SWxGZ3duR2ZnQXg5NGtwY0xLTkYwR3Vq?=
- =?utf-8?B?ZDVzWE1CZk45RVhod1pxaFlFaU5jcm9JNS9kTTUvZWp0ZGlqQStaek5JUVhO?=
- =?utf-8?B?SGNzK0FFODBvM1FhVmRCUnppd1lqbXRvVE81cTROZjBJRWM4V3BDZ0NJUjFK?=
- =?utf-8?B?VG8zN0FFa0FqdTc2cUNLSjRxWjdvUmlURlk4eXdYZ0lQdDRrektiMFRaT25L?=
- =?utf-8?B?bEVLTE1GT0MzeHNnVkZHY1htT20xV2VaVkVzMUc3eERYTytWZTBLSC9vNk1X?=
- =?utf-8?B?bFBTVEROYlhMSXRqYUtQMnVyS0E4ZUhXWGxKOUpMMDRDWWx2UjAwQzF5M0Zw?=
- =?utf-8?B?akd5K2lWRDB4NnRLdGE1REZweGZzNnhrZWJ4Q3ZPMitFQUMvaTIxNUlPZkl3?=
- =?utf-8?B?N21lOTBtZVBEanc1Q3hKRW8venBOdlF0YlRrUzYzWGZKOWpRTkVRREgxVXMw?=
- =?utf-8?B?VXVickFiWmJXSkZ1YXY5clBGbVg4akhVZTRIbFVFZ2ZvUmgwUTBmUFIzRjZq?=
- =?utf-8?B?cUQ2VkI3R2t2bmFnVG1WckdWbGNLNSt5QXRxRWpNSlZrUjRCL0JwblR5VXhW?=
- =?utf-8?B?MDBYYVBlSGQxVXdCMXd2aXhnUE1adWFmTUdicmN1MFZtSDh2RG00ZEp3OEth?=
- =?utf-8?B?YUx3U0tZSUNTSUQxd3E1M2liODVnUW5ib0NPUzF2U0xMaXdjZTBWc2ViaThV?=
- =?utf-8?B?VmVSdFQxZndQMW1TV2lvcC8wMm1VcENlMXNveTY0dTZUeFNqc0xqRkcvRHMy?=
- =?utf-8?Q?B4NQidynxmI+nUT8=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b87285b0-e5cd-4155-7728-08df44add1f3
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2026 13:22:25.3089
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8Yrrygw5JhEDBZdysHI+3BrveldJSPQFKchBFzYpPrCipJ8qHCUZOZkyxJAEqtshP71sJkAZ3sYGDGE07UiKmY05uJKfaJEg95bSjoG5xuM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQ1PR01MB688080
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2XP3UrEMBCG4VtZcmwlP5OZZI+8DxFp0mQbxHZJu
+ 0VZeu+mi1BND7+B54W5synkFCZ2Pt1ZDkua0jiUQU8n5vt2uIQmdWUzySVyJUzzcRvS/O4vebx
+ dp4ai484GBC6IFXPNIaavR+/1rew+TfOYvx/5RWzX35KkqrSIhjeWhFOelG05f8mh69v52Y+fb
+ EstcucgRc1l4c4hku6MBOsPXO1cc6i5KhxC6y13hNGKA4c/XNiaQ+ERvYxgTWwDHLjeOXGsuS4
+ cPUhvSCtAc+C4c6MOv+PGlUNPaLU09I+v6/oDoy37ZuYBAAA=
+X-Change-ID: 20260318-kunit_cgroups-7fb0b9e64017
+To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Shuah Khan <shuah@kernel.org>, Maarten Lankhorst <dev@lankhorst.se>, 
+ Natalie Vock <nat@pixelcluster.dev>
+Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ Albert Esteve <aesteve@redhat.com>, echanude@redhat.com, mripard@kernel.org, 
+ R Nageswara Sastry <rnsastry@linux.ibm.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794922072; l=4451;
+ i=aesteve@redhat.com; s=20260827; h=from:subject:message-id;
+ bh=J54cefq5pNs4CXyHrRneTBJTDa9pohFCkKAQn13xwl4=;
+ b=XW1BcOhusZr1LLixs2v/qsL0BnNTojGLahXgKDyYC7ikOFNMK70fa2Nu8+6RdnCGhIvcEEM9g
+ v8FJqQd2H2yAUyMfBGQ015Jilz/c0sIUchLmr+Zh9z2b01kqtSkkURD
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=zI2RBeZgocwYm3AkJW4CtjoJnKoDZrfBl1xe5Ed6h+U=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 2026-11-16 18:16, John Stultz wrote:
-> That said, Its not immediately obvious to me why clearing on
-> move_queued_task() is needed? Mostly because: why would a proxy
-> blocked task be migrated before wakeup? If a proxy-blocked task were
-> migrated away, __schedule() would just proxy migrate it back to the
-> current lock owner's rq.
+Hi all,
 
-Another task can move it. For example, sched_setaffinity() on the
-donor: affine_move_task() calls move_queued_task() for a task that is
-queued and not running. The donor is then queued on another runqueue.
-If it is woken there, the clear at wake-up runs on that runqueue. It
-does not see the owner. The owner still runs on the old CPU, with
-blocked_donor pointing at the donor. Your proxy_needs_return()
-clear has the same limit. The proxy migration back that you describe
-only happens if the new CPU picks the donor before it is woken.
+This small series adds practical test coverage for the dmem
+cgroup controller.
 
-> as you mentioned there's no test case in your test for this logic.
+The motivation came from following the recent dmem API discussion in
+thread [1]. That discussion considered changing the dmem API and
+adding a new knob. Currently there are no dedicated tests covering
+dmem behaviour, which makes such changes riskier.
 
-Right. It was found by reading, and I did not try to reproduce it. The
-owner would have to stay in the kernel without scheduling while the
-donor exits and is freed.
+No reviews were received on the last version. The series is small
+and self-contained, and was tested by R Nageswara Sastry, so
+reviewing it should be cheap.
 
-Thanks,
+Adding selftests has an additional challenge: dmem charging paths
+are driver-driven today, so regression testing is harder unless a
+suitable driver is present in the test environment.
 
-Mathieu
+This series addresses that by adding:
+- an out-of-tree dmem_selftest helper with alloc/free module parameters,
+- KB() definition next to existing MB()/GB() helpers
+- test_dmem for dmem.max enforcement and byte-accurate dmem.current
 
+The goal is to make dmem behavior easier to validate when evolving the API
+and implementation, while keeping tests deterministic and driver-independent.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Thanks.
+
+[1] - https://lore.kernel.org/all/aZoHfloupKvF2oSu@fedora/
+
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
+---
+Changes in v7:
+- Rebased onto v7.4-rc3. No functional changes since v6.
+- Link to v6: https://lore.kernel.org/r/20260831-kunit_cgroups-v6-0-63b6c7695287@redhat.com
+
+Changes in v6:
+- Drop virtme-ng wrappers
+- Build the helper out of tree, drop CONFIG_DMEM_SELFTEST
+- Rename charge/uncharge to alloc/free
+- Add KB() in cgroup_util.h
+- Use cg_read_key_long(), ARRAY_SIZE(), and KB()/MB() size literals
+- Drop test_dmem_min/low
+- Check dmem.current for exact equality
+- stat() the helper once in main() instead of per-subtest
+- Link to v5: https://lore.kernel.org/r/20260706-kunit_cgroups-v5-0-6c42c8753468@redhat.com
+
+Changes in v5:
+- Change parse_first_region() by find_selftest_region to scan
+  dmem.capacity lines
+- Use exact equality for limit readback, not values_close()
+- Write VM tempfile to $SCRIPT_DIR
+- Fix KTAP by dropping outer framing in test_dmem
+- Use array for optional vng args to handle paths with spaces
+- Respect O=/KBUILD_OUTPUT= when building, per bpf/vmtest.sh convention
+- Link to v4: https://lore.kernel.org/r/20260519-kunit_cgroups-v4-0-f6c2f498fae4@redhat.com
+
+Changes in v4:
+- Fix charged_pool leak in dmem_selftest_init()
+- Replace ssh-based VM approach in vmtest-dmem.sh with vng --exec
+- Add main() wrapper to vmtest-dmem.sh
+- Other small fixes suggested by Sashiko
+- Link to v3: https://lore.kernel.org/r/20260504-kunit_cgroups-v3-0-4eac90b76f91@redhat.com
+
+Changes in v3:
+- Set charged flag on unexpected over-limit charge success.
+- Add CONFIG_DMEM_SELFTEST=m to selftest config.
+- Simplify -v to a boolean; single -v was a no-op.
+- Unquote kernel_opt to avoid empty-string arg to vng.
+- Document -b in usage() output.
+- Link to v2: https://lore.kernel.org/r/20260421-kunit_cgroups-v2-0-bb6675d8249c@redhat.com
+
+Changes in v2:
+- Fix debugfs_create_dir() error check
+- Fix module teardown race: call dmem_selftest_remove() before
+  uncharging so debugfs files are torn down
+- Use IS_ERR_OR_NULL() in selftest() sanity check
+- Add CONFIG_CGROUP_DMEM=y to the cgroup selftest config
+- Replace config-file parsing in check_guest_requirements() with
+  a direct check of /sys/fs/cgroup/cgroup.controllers
+- Add new patch 4 (from Eric Chanudet): vmtest-dmem.sh -b flag
+  to configure and build a local kernel tree
+- Link to v1: https://lore.kernel.org/r/20260327-kunit_cgroups-v1-0-971b3c739a00@redhat.com
+
+---
+Albert Esteve (3):
+      selftests: cgroup: Add dmem_selftest helper module
+      selftests: cgroup: Add KB() helper
+      selftests: cgroup: Add dmem selftest coverage
+
+ tools/testing/selftests/cgroup/.gitignore          |   1 +
+ tools/testing/selftests/cgroup/Makefile            |   3 +
+ tools/testing/selftests/cgroup/config              |   1 +
+ .../selftests/cgroup/lib/include/cgroup_util.h     |   1 +
+ tools/testing/selftests/cgroup/test_dmem.c         | 314 +++++++++++++++++++++
+ .../testing/selftests/cgroup/test_modules/Makefile |  17 ++
+ .../selftests/cgroup/test_modules/dmem_selftest.c  | 146 ++++++++++
+ 7 files changed, 483 insertions(+)
+---
+base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
+change-id: 20260318-kunit_cgroups-7fb0b9e64017
+
+Best regards,
+--  
+Albert Esteve <aesteve@redhat.com>
+
