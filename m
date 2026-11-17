@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794891034;
-	b=yCLWt8UGy511EQJ7ak+dAqQNBPz0rQ3jPm/z+eehEaTdAminI30oKiTgdzPyrOIU2tN6
-	 dXcZ0H86yP6tIkuqI/3m+d/YD56ezidIdF7238Mi1ZFYBiYS423q8+vJFVur1oTwxPZje
-	 z90U3jRiq5ubAK7ocERVnA+RD+TEhihdXGLYnbFBGQ2fhsCx2tskgdzGEu34cHaxx/y6l
-	 kcLEzspJ+0NERAhL7XPBlUQY27Ws0riytRJ0DyJNFhKq/xOjv7bgXJANbIP4IDCX60ddp
-	 L7Na5+R32nb20t1dSv6lAYRMg8eF4sjAkI6Lu0zmphbhBWN0AR76573Q5Lr861gpV7Q==
+	t=1794891038;
+	b=BUxFc6/mqyVKFoY5o4Sw3L60iUNDIqusjdERiO3r3zMcDAfzkH/LRnQSnS0Vnv3ctbjW
+	 XZbNhk0FM8CaGIxSp6ChIeA9zEjaQo46xx05J0SwE5wdFP7TbKM6+TWwrCom18bVunC+n
+	 G2H1RDOWysmdw7t0BsR/ilm4qYy9xHxy5n1YTlTLhNMMVzeo/Hjt+rt1ZeMwnBifWeud7
+	 yB014b2R+Ud3i3Xex/kI4Inh9RG9NIovpB5WtnS36FrzwfKO2YfyXWn9fETO2/3JSDflJ
+	 yyWeiXMneHiGSRS5mGWjTmSTZPhZJ97tww0S/wv22VPd9v9eVWJ+FAfluhkcy62AdVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794891034;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794891038;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Disposition:Message-ID:User-Agent;
-	bh=yUYUZ2LlOsiIpdrbhk1wJZRY3ayR3Noi9TQPGtDKtP8=;
-	b=wuyLLeFAwI1YhIjlbUntYNDMXQH8ZiJvw5dliRK5tTr+ELDDUFTLnJciiDqi2wWZ4ndY
-	 MMPZS7zjh0RaTI0XrLJNtRK4/WCEM0rCiWtiPojReluCyPXVxIsdK+2OrBH7943qV+i9x
-	 MKLT8cd9SmdB7o2wUBDJfPq2rF5w3IeE++vQAdJvVlp5KJhy8ornf7pwmX/0Q3bSNrETw
-	 605Ua0+rxG5MPLYvEjBzKiDfG1yWits6eRkMOYAUwgjdfzR177/tuWTdOIrcDQhGUEb7W
-	 4nz2BtYSpETO4C1AOZUulHY+ekrsyQ551Ub6wGjDJBU9fYLnnJbixms5LogIL3GKgjw==
+	bh=9bqqmMB4+kyoRGHHPejEHuADL6UxgHY0xArC5J1XYUg=;
+	b=pUGnhvc9sXd2Fa/kFEUqhkcJW4GpmDcy6sPDAT1ZzD3wUYrOAoj6aFK+GG/yHVh9xw3A
+	 Ie0KisjeSs5HSiOAJdQD9cLiCgxFiukJvl8DyjmkqgWcUtLd3oU6+qVsPOhNTacAHjcqG
+	 8YLTtVbFMDuDhd3L3JvLBcw3M4X9QmHGQfl5zvJyUIN8ovUqvbhzK4j/WdVBRMbVnaMe/
+	 GQBQ8fjAJe3KwLrmzwb5gkUxvg7W9kJipj3435eV87dVhwDDqyCMmbnlEj+i4xAhz/KuW
+	 feXg1IUKRTlsw66Q3OhR4oeon+HRWfxVfbfmGoylWvYGStZVpr96AI1S1t0KH4jj8zQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=chrisdown.name;
 	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=xGusYjGi;
-	arc=none smtp.remote-ip=74.125.82.44
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=JVoEkBuR;
+	arc=none smtp.remote-ip=74.125.82.42
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5151A606A32A
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:50:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5151A606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE9A606A33B
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 04:50:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FE9A606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=xGusYjGi
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-170135e43c7so6784090c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:50:34 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=JVoEkBuR
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-14394530ec6so5373826c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2026 20:50:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794891033; x=1795495833; darn=vger.kernel.org;
+        d=chrisdown.name; s=google; t=1794891037; x=1795495837; darn=vger.kernel.org;
         h=user-agent:message-id:content-disposition:content-type:mime-version
          :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=yUYUZ2LlOsiIpdrbhk1wJZRY3ayR3Noi9TQPGtDKtP8=;
-        b=xGusYjGiAdnGxncVaBVneIpjK1Ph9eHqEeeWt7lnJOkMFdfkTt1BtipRJ++rtd7axm
-         TNY7mXokRzpdPDScm4nkTWyZVHSDCLj45TjHq4Sbviprep7R07QzTsdMPDa4KrXp2Rvn
-         8lsnvqGG1oEchDAwidDM03GPkgBCly20w/qqQ=
+        bh=9bqqmMB4+kyoRGHHPejEHuADL6UxgHY0xArC5J1XYUg=;
+        b=JVoEkBuRB7FQiKYHvBCxvAxh9Oaxf01xN5UIrTjfVi6OU10CeKbp241d27RcBRcSsk
+         /Xi/x0gE95b4H/4imd4d7XC7TvMqKuqGtZq30FdKfitiezpDW1A26JSOriDXlFFBwZBZ
+         HwMfdVtpba397eVPFTvqZp/IbohPL8IT2620Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794891033; x=1795495833;
+        d=1e100.net; s=20260707; t=1794891037; x=1795495837;
         h=user-agent:message-id:content-disposition:content-type:mime-version
          :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yUYUZ2LlOsiIpdrbhk1wJZRY3ayR3Noi9TQPGtDKtP8=;
-        b=WNh9sMtTH8yCmuwzofa0/p6sFghtP1lwnGU8YxwoLYXF3QEH5IsJjpF11yHxjUi4IM
-         ijrPlJibpD6ZmcVdHazIQHeZXLaHdIgEKBpSYrdSc0oLs2eCKZ5EvP7DkSzKDuawMcC5
-         Jx7IMJt1xc8mt8kiou2sqYib0WBD9s45xXQOGl20PkjKVeT9S4dtQEr5SiTmbzpP6V1T
-         ncPScfF2V1t1gbBuox0jwpaeP7Y63k/yT+a/e+GsqMm8qefrkhdMnNoqsPML16l54x6A
-         qiRp7T3Jo45UG3YYNr+MDMkAD6oT2QVCnRp06LG+wKgyhWzaqQYY9LlTBHIdeyZeMNVY
-         +QuQ==
-X-Forwarded-Encrypted: i=1; AL+hErGyf67KoiWDAVSL26aLeJTgftNJEqAUeUOjU7hEYVrnCTyNYHhX58Zlnxf5ST4NnHU1uX7rz8uf5w1eih5LSVw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+huBDzZp0HL+0MBxzcb1Fv2Rr430pglwc6NfUoAPVyPDeNsqyQ
-	jrRjYKEwuKBVP84EVryMYnl4VtkSDFGoJQ0cyGWRyRb4NkzYijSwr+NVj4Omvf0LiBo=
-X-Gm-Gg: AYBFou34/QOFGokTzsFKa5YvFqpIc9AKrWImRfKtJFXzohfB5dGnuI7bRmj/x05Kaez
-	oIdO0uZejbMoGkTXQgojToVzCvBvNGGohOhOk7ZKYJXFWJHWTy4avqvm6ZVa4XtNcL5RneIMl+o
-	6s3xf5wMxFWh52Ro6c/4OgfgDK9NkPqhJSb9gfbvrkK3BS1MwZX/wez52DVjUo6ffVKFLitpUGL
-	vbfBmSDJQlnM7s2D77mTxrEDYWW3lboL7j1pLegZFgTkdcyxN7niIS699GT+WOgfytqIPc252LM
-	7cRVwh9D+bwO+Gwda4WU8VHq1cT+peZi6GrO2MYXccWg5Jb25tJnKA4Kjm3Jdy+CaoHz3C6j55T
-	/hWhHuWyFo2+GX0FypB4A18zfOBX59drcX2CPohCWgjTjk8rAN0HOiFKHBx3ctZAFyWu5MUr/Ks
-	U4Dv0djZ2Q9BqePNp2vRgZxbWfxSBW0XhBUpwZuGpjMAl/F9WVpiAKyBga80RuKVvwot9y36va2
-	c4SaPRw66y7uz2z62w+LAtutWvCn42JwTHT8Ef9VHaZA7UWznG3RhMjqZuEOPemHZaVXyb9ZUB1
-	B1/tQlYd4ZtSVpk855Sr02TvILTSnB7FNlThEiCNymCv9tnzAK4gwU6STrwnnPQn/Ij4kiqz7MO
-	VnrMXlE1O66swkr7yqrt6RxHCHlPRG9UdkJ0TM5QXIzpsisZELazz7/piQV44s9iBJGSRA5O8wE
-	QGWnivf27TBwiP0UxFC2Urb9bAenWKKQm8P/oiZfd8DP8Oe8jrH38vvNN9C0COYfWY
-X-Received: by 2002:a05:7022:1583:b0:1ac:1343:fa54 with SMTP id a92af1059eb24-1b503112a8cmr13989391c88.14.1794891033256;
-        Mon, 16 Nov 2026 20:50:33 -0800 (PST)
+        bh=9bqqmMB4+kyoRGHHPejEHuADL6UxgHY0xArC5J1XYUg=;
+        b=ndR1oO9q1e1htlYGgUvw2eFLX6EVAewqquqpC2vdtYCfUHsCdc4c4beKrBlzqKgB9m
+         mJgfUWZ/8AN1IwHdyNpRv6pvGA/JQMxa7coiU7OtFXKvzsVOz/gw9OxOhoYVpRoLnlrm
+         S9KJci/SCYDT9Ms18bVFzgtOVo+8FDYJAiXt32UKPAzjM3OKxwgmS9X8dt5j7Bq2RICi
+         PDBEzySW24qXdM4Xhu5tv9l3KOqjtU/Af2ZKOZCRk3p33OY9aEy+PKAbExGDZ74Q9ZXZ
+         jd0SzoshXuigFINUBZ7MKo2JVuaDdLHb+YPtmV4OIwy4YffLhiLFvlMbk87M3n2YUsDm
+         3v5w==
+X-Forwarded-Encrypted: i=1; AL+hErGk7EH9HlXS8KY/Lp3Avq7WKW1oYmSU8jTkNgc4rX10P3pNwXJHfVEos4ozPN1aoAAESKziY9yGcIzIYCN1sAE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z91guZXunTWNgeqYHAxUsDx7hzi0oiT0eEjHaFE2Yt4dC8klk9l
+	gkqmgKnUtMr9+5hfZURWdJvsuZ1e3BrlgBIVPnhnT+Gz6V0WbLwmV2ABCybSFMgoT24=
+X-Gm-Gg: AYBFou0UvV6BE8KokiWIJfTqpIv53Pdyw+2x6EYYgqZW3d4MblCi7eSKN8fM4hqbo+n
+	aR8Ly0U7/jl1isKKh5MqKijrTyBKI8RrunX2KqMJKOUSVZ0iDeBExDJHDpRItWxQV4Vl00L5VaB
+	HwRhS+LqXd9f3IROiWg3i2MS2mvTvHnj8/E+jMwUSPjBzAEtTFLxUD+EXGpFO2FqJAgV0C6/J4T
+	L7iJrD2tjckOOf5shSNDlfkzmJXmDISI0QysYuAPUnOuotXTTCr+8A2GR1WR8JfbC8bKSOqxe1Z
+	fyViOd0O9vx0mJJCJV3j15wdNi+TLEr1pvcx9tAcJUlrsUgzjDts1DALxuywIM8ltl6M+kXLC9T
+	2BZQnUxOfdtCUon8m/IZGPSW+PFl2RiLZROca9a8wNoN9c8kC/f8mqYNjbnMDau4sK9wz8+1wxZ
+	3BlKHIv4nD6gc13uR02ELVhn/6y7BGCPGBtOl5rGRmqxBB+6VmADpn/lm7ZvRAmo8xG3POpt9D8
+	xbD2E8o6fBPLhVDyUhmKdGFGKUS/HEsurUH4Q9bVQvi2rtYk6DdGMypVYO5rm5TEHwCnOHpScks
+	jiI6blkwa01PDkbVlSoTQHVkqIph68ukPNPB4zheMWheYLce6n9UbPgym7cj1QgbDI6ll8A4LU/
+	ojkbHxUT2Bu6qvOAzsRQivgiTjCYxL8qhp404PyWblH1zcwzvcxB2r4R+tVJghpxSVgq8p2HXT+
+	UPPOv0t8WW6LTAzB7ZFeFOLN7V1ShHDaQTc9rBLEJ/uIPuUZoNZPY8vuwS6toe6oUT
+X-Received: by 2002:a05:7022:96:b0:1a8:4997:65f6 with SMTP id a92af1059eb24-1b503105175mr11734678c88.20.1794891037361;
+        Mon, 16 Nov 2026 20:50:37 -0800 (PST)
 Received: from [172.20.0.3] ([172.56.235.113])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5031468b7sm43375533c88.5.2026.11.16.20.50.30
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5031918c7sm53517692c88.9.2026.11.16.20.50.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2026 20:50:32 -0800 (PST)
-Date: Mon, 16 Nov 2026 20:50:28 -0800
+        Mon, 16 Nov 2026 20:50:36 -0800 (PST)
+Date: Mon, 16 Nov 2026 20:50:33 -0800
 From: Chris Down <chris@chrisdown.name>
 To: Jiaqi Yan <jiaqiyan@google.com>
 Cc: linmiaohe@huawei.com, muchun.song@linux.dev, nao.horiguchi@gmail.com,
@@ -92,11 +92,11 @@ Cc: linmiaohe@huawei.com, muchun.song@linux.dev, nao.horiguchi@gmail.com,
 	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mm: memfd/hugetlb: memfd-based userspace HugeTLB
-	MFR policy
-In-Reply-To: <20261115160105.2507650-2-jiaqiyan@google.com>
+Subject: Re: [PATCH v4 2/3] selftests/mm: test userspace MFR for HugeTLB
+	hugepage
+In-Reply-To: <20261115160105.2507650-3-jiaqiyan@google.com>
 References: <20261115160105.2507650-1-jiaqiyan@google.com>
-	<20261115160105.2507650-2-jiaqiyan@google.com>
+	<20261115160105.2507650-3-jiaqiyan@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,62 +108,25 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-Message-ID: <avvdFHtnw2BlE5Vq@chrisdown.name>
+Message-ID: <avvdGec7NCt5oAFr@chrisdown.name>
 User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
 
 Hi Jiaqi,
 
-This generally looks reasonable in principle, but some comments.
-
 Jiaqi Yan writes:
->+			if (!mapping_mf_keep_ue_mapped(mapping)) {
->+				ret = VM_FAULT_HWPOISON_LARGE |
->+				      VM_FAULT_SET_HINDEX(hstate_index(h));
->+				goto backout_unlocked;
->+			}
+>+	map = mmap(NULL, len, PROT_READ, MAP_PRIVATE, fd, 0);
 
-This doesn't look right to me. For example, hugetlb_mfill_atomic_pte() also
-checks folio_test_hwpoison(), so UFFDIO_CONTINUE on such a folio still fails
-with -EIO. Also, do_migrate_range() calls unmap_poisoned_folio() on any
-mapped folio with HWPoison set, so offlining the memory block unmaps the
-hugepage after all.
+This isn't right -- a private mapping reserves hugepages of its own, but the
+4 hugepages that setup_hugetlb_pages() asked for are all in the page cache
+by now, so the seal mode fails with ENOMEM when the test sets up the pool by
+itself. I think we either need MAP_NORESERVE here, or to ask for twice
+NR_HUGEPAGES in seal mode.
 
->+	folio_put(folio);
->+
->+	/* Refcount now should be zero and ready to dissolve folio. */
->+	ret = dissolve_free_hugetlb_folio(folio);
->+	if (ret)
->+		pr_err("failed to dissolve hugetlb folio: %d\n", ret);
+>+CATEGORY="memory-failure" run_test ./hugetlb-mfr
 
-This isn't a good idea when somebody else still holds a reference, such as
-a long term pin from io_uring or iommufd (Jason was asking about the latter
-in [1]). dissolve_free_hugetlb_folio() returns -EBUSY, and when that last
-reference goes away later, free_huge_folio() puts the folio on the free list
-with HWPoison still set. Now, while this sketchy page may well never be
-handed out again, it is nevertheless counted in free_huge_pages, so a later
-mmap() can end up getting its reservation against it, and as a result, a
-SIGBUS when it faults. That seems like a real problem for a VMM with
-passthrough devices.
-
-I didn't check in detail, but since the folio has to be dissolved when its
-last reference goes, wherever that happens, perhaps one way to fix this
-would be to do it from free_huge_folio() instead, and treat a HWPoison folio
-there much like a surplus one? That would cover the pinned case, and I think
-it would also let you drop filemap_offline_hwpoison_folio() and the
-folio_batch changes in remove_inode_hugepages() entirely.
-
->+		if (hugetlb_should_keep_hwpoison_mapped(folio, mapping))
->+			/* A new raw HWPoison page in a still mapped hugepage. */
->+			ret = MF_HUGETLB_IN_USED;
-
-This also looks a little wrong, because a 2nd error now gets past here and
-reaches the hwpoison_filter() check in try_memory_failure_hugetlb(), which
-calls folio_clear_hugetlb_hwpoison() when the page is filtered. That clears
-HWPoison for the whole folio, earlier errors included. I'd suggest instead
-that it only undoes what this call added.
+Probably worth adding a 2M line or two as well, since this only runs the 1G
+case, which is skipped when 4 free 1G hugepages can't be allocated.
 
 Thanks!
 
 Chris
-
-[1] https://lore.kernel.org/r/20250120172626.GO5556@nvidia.com
