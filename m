@@ -1,62 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794944272;
-	b=fLbfv5oHdqu0b7M1sT2v9WEDXS6FiewuvHfZhV0l0RpSHtTFD7KSv6sVOLHx/Ym3nij3
-	 Og0M9vDumHPWh0+iRZU3mQYhNE2JjryrYYSeE9hTPOtxx6+ikj1EQvcrGMhHYQFsDUxad
-	 SUg4GO9ZWH02+hunsNJOTHQqM9smiyLPoZqrIC4Cw2FVOE8fBkfeFYI/7aRaJ3QRXg+2v
-	 aQTYB3UblSNIKoV77az89xsUbCbyzCywcgSrFtQMgE0vkgTD37lZG6Szok5Q9zcvYPSCy
-	 5+Grkzk2uJb8pWJxFeEF4EJ8kBDg9xNjUW8b7wKXAe1MbmdCejYA3UBhd5/wD4hdQcw==
+	t=1794944517;
+	b=oP8UbQXNLid6r2RrQ6GeJACsRJ6Soqs0XUH/Myk4PPRxvfmi2+vq8KDxIbTENL5v+1bh
+	 AcrRA0LAhxrZOx/sBccGBrwuSbbtlg6DWVJz06A/aKpFYVqdKJjbi49NPSTsOMs3etAhL
+	 lEatKfsFWkYzySW7QF0WcKTWvDKhdroR+M9hkvkz1F3WjRry1aHQ/fXW08ORP5uNHNsi3
+	 x1YbVksfwmZrni6cRoOUdpcSoY+UQPDB2ad2JH6B5O1U5XqPlvZTv7QqEDKWMktmOiaqc
+	 YKhTb3vyhzoDGm2gA4IKeQYx9R5LJ9mZ9eqGL6dRoVANpeT19IN55sWa4FC1bnw9Sfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794944272;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
-	b=A3mxCvjd5pvvAJwcXU70YpNRPRv797FzYEXVB7l7x/Ckpl4wKpRP559XL/etHdmRem1h
-	 aVtshfGvoTf4FHwxgHHyULdMGaGVNjpy6wVR7uRRedftiVcWIhvfE1tKhdy2YmBP70uoe
-	 y15oIVTCsfIstWL1a3ZbO2pFS51bKXtbvji5YmHkAIzrIuCw6+cmH8SJdWzaImTN3tqJ6
-	 sjXPIIBtjL4Ei25tHn6F3o1797eXtIFFjgyoqZJ1hvIPFroXuRTrCVYalfGHPeEhSDUPl
-	 +iqvgnT5QJFgdu/THUH5AR+QgUUqchx39RhfhYQlQR131UNZZ6qzz4sisgcrezV0ybw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794944517;
+	h=Received:DKIM-Signature:Received:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:X-SA-Exim-Mail-From:
+	 X-SA-Exim-Scanned;
+	bh=+M/Rtxh3yGMbVllbJRU+JtKA13rBSYOFw41bb75VE4U=;
+	b=WPFMNSher3jJfm/0IRT/5Z9ZCTIsSd8zR5e9AAlbqMa+K6U4fXexmOJIUhEvpFUbw3dV
+	 7WjULp1MsmAgk6a409G64wsgHUsvd7ckmzY9f7yufrq54mKslpj3NjVBrUloZGcUs3PbN
+	 9lTeClDbi0sLJSMYyNWX6VH8P6nIgdlmD6Bk2BkZ7oAc8KjziqAWSdR+tN/MkveT74rky
+	 pm2N+fZi6nxPJ4aWKYXs0/kEVuaKBmciesVLPYx0KWc+TNCsA0kVVQEd5CevRKiA6o1VN
+	 GaDpGnWDNE9xoVi9LxN+8WmJdyulz8gNu1kzwZUxi5NMGcBU3C7uR/GbZ2JDpSbFn4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="hS9/k7ub";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E96h9sv4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8CF606A32F;
-	Tue, 17 Nov 2026 19:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017A4606A31C;
+	Tue, 17 Nov 2026 19:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hS9/k7ub
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130C91F000C4;
-	Tue, 17 Nov 2026 19:37:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E96h9sv4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9A81F000C5;
+	Tue, 17 Nov 2026 19:41:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794944272;
-	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hS9/k7ubWlfsx6SughAzMgnLGcWl6kQDnzIehOBrbhJaRjbW2PR5pPYCCnmLXS/RP
-	 3BECAhQEPFhgZpe5r405fP5Bbyf2teysidVY1Zpe928uwzSoDjShoEo7lExAB0Iu91
-	 vap2ce0sJW9pGG9NjRU6jOX4E8J/GZjyxKkc7WFdiCQGcu4wfg/nNpHvVQJExw85o3
-	 srbMjpxklrLleu8P7mvMDDVb9U72LLNRML697us4a3xyConpFPuNWCrzYwQrGyti1O
-	 ZwCHXtzEokaU9BttyIBJ2HKBVZlaG32bi7nCUzYP8Fa9tOqxj3/bxQAvdY0E3bDAFz
-	 rQ7z7j8GPHuEA==
-From: netdev-bot+sinfo@kernel.org
-To: Vladimir Vdovin <deliran@verdict.gg>
-Cc: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 0/3] ipv4/ipv6: Cache pmtu on all paths of a
- multipath route
-Date: Tue, 17 Nov 2026 19:37:51 +0000
-Message-ID: <179494427164.3291.6413261457824057937@kernel.org>
-In-Reply-To: <20261117193141.27004-1-deliran@verdict.gg>
-References: <20261117193141.27004-1-deliran@verdict.gg>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=k20260515; t=1794944516;
+	bh=+M/Rtxh3yGMbVllbJRU+JtKA13rBSYOFw41bb75VE4U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=E96h9sv4SckZZn0xBQJFDt4SE5F4NR5pDOuHOdrlzwystp4RmrvzVT8agTD6itkot
+	 ks6naELZWw6Yk3V0FlemoqnJDyW1/qroAm9MY/tndKlHNqAvZ28n4xtjU6nhMDzh80
+	 +iGpCfj31kUN/LzD7Vu9j3ny5m+TWL54Dco8XO2t3CuaMcEaUuGjIClY+1xzJDNl2Y
+	 uvxznDi+8xqAyhKnIJY9bl3keFC0xypVzollgnMgYNgGZc84WTPkJQGQ6iRq3szo5K
+	 eNGz3SUGSLSSYV8bFSc7fPQZx6FJfYAQhXqE/edmhJI+Zey25KSrCG01PD7nDqiIZT
+	 yql77Q9cxOw8Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1xTP3y-0000000HCc3-2ZQd;
+	Tue, 17 Nov 2026 19:41:54 +0000
+Date: Tue, 17 Nov 2026 19:41:54 +0000
+Message-ID: <86bj7n1bzx.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Fuad Tabba <tabba@google.com>,
+	kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/19] KVM: arm64: Hide generic ptrauth from protected VMs without ptrauth
+In-Reply-To: <20261109084854.840576-2-fuad.tabba@linux.dev>
+References: <20261109084854.840576-1-fuad.tabba@linux.dev>
+	<20261109084854.840576-2-fuad.tabba@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,23 +85,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: fuad.tabba@linux.dev, oupton@kernel.org, will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, vdonnefort@google.com, qperret@google.com, tabba@google.com, kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi!
+On Mon, 09 Nov 2026 08:48:36 +0000,
+Fuad Tabba <fuad.tabba@linux.dev> wrote:
+> 
+> A protected VM without the ptrauth vCPU features shouldn't have pointer
+> authentication in its ID registers. Commit 3d7ff00700d1 ("KVM: arm64:
+> Rework specifying restricted features for protected VMs") gated APA,
+> API, APA3 and GPA3 on vm_has_ptrauth(), but left GPA and GPI capped
+> at IMP. So generic authentication is advertised to a protected guest
+> without ptrauth, and PACGA UNDEFs.
+> 
+> Gate GPA and GPI on vm_has_ptrauth() too.
+> 
+> Fixes: 3d7ff00700d1 ("KVM: arm64: Rework specifying restricted features for protected VMs")
+> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+> ---
+>  arch/arm64/kvm/hyp/nvhe/sys_regs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/nvhe/sys_regs.c b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+> index 32e82653ebf7e..e5502d5651b05 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+> @@ -157,8 +157,8 @@ static const struct pvm_ftr_bits pvmid_aa64isar1[] = {
+>  	MAX_FEAT(ID_AA64ISAR1_EL1, JSCVT, IMP),
+>  	MAX_FEAT(ID_AA64ISAR1_EL1, FCMA, IMP),
+>  	MAX_FEAT(ID_AA64ISAR1_EL1, LRCPC, LRCPC3),
+> -	MAX_FEAT(ID_AA64ISAR1_EL1, GPA, IMP),
+> -	MAX_FEAT(ID_AA64ISAR1_EL1, GPI, IMP),
+> +	MAX_FEAT_FUNC(ID_AA64ISAR1_EL1, GPA, IMP, vm_has_ptrauth),
+> +	MAX_FEAT_FUNC(ID_AA64ISAR1_EL1, GPI, IMP, vm_has_ptrauth),
+>  	MAX_FEAT(ID_AA64ISAR1_EL1, FRINTTS, IMP),
+>  	MAX_FEAT(ID_AA64ISAR1_EL1, SB, IMP),
+>  	MAX_FEAT(ID_AA64ISAR1_EL1, SPECRES, COSP_RCTX),
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+Burying a fix in a selftest series is a recipe to make sure it is
+ignored for a full cycle... Why isn't that with the "massive feature
+set" series?
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+	M.
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account.
-
-*IMPORTANT*: If you do repost (for other reasons) - please include
-the relevant info in the cover letter or commit messages.
 -- 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+Without deviation from the norm, progress is not possible.
