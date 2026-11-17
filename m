@@ -1,77 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.68
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794901482;
-	b=QIRVHjTXn+fmb4f3Xc/IO8MMiFG8UCCtA2hqQOIk7N0gv4DV5NIrJpk8Af/28nO4e6/U
-	 FS4IANDI+PoaMCe/4Y4Bd/NwtYTcTsI9zwes9RNy1OOHKqOW2SCPwkEmofjp9HDotp8Bf
-	 QfHkBi8qN63Qjz8H+aT8AJd3ZQtw6MHKYN5hoZQsmxV4uez1lPOgaVC21quqj7tdW2Grj
-	 nllTmbaU6wLwokiHHKy3V9NdEI37fvB4a1B2Yc45fPa2oVBpa4zw0ND8VBpvVUvi4r9iV
-	 swKWRZcIx0Heoxs03oAVjHowXjvuXLB1iZ3Xuh4LELxEA0mvIKI055PWcN/+yKOnV6Q==
+	t=1794903022;
+	b=2WTcMsffUJyzidomlBX/fDKenOrf7G9NrE7TAQDaoQd5wbx8BCWbXRFfrwbhrmDaKGvc
+	 7K+Qz1TGY+zRsta+YQJaWERwELqPE/OXWk1sO4LTJ1d1jBw+VXuOTGlZA8bYVMI2Sb+XN
+	 lYBH6JsFjc49p8oo2w8xZ3QlpjTkQPV4OJl7BSq0IXF22+FIdOGoQG+YWFWor/L9l5xir
+	 8T6Kw+HZ7ekvtM21dnqWZ1sgUR/8Sle6wHwlo2CVkJvYTy/SfLkWEfgBuXpHzkri8YWtk
+	 ZcaFnrREAQKKA6yxbr1g7jKGEqVBIRvbkFFCdFjugL2gMCrjwlWuEm2SGXUsyRO7RbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794901482;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794903022;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=tXiO5EarY27CkofXoR84oUPiSJOHxCIl3llp7XgcGS4=;
-	b=ZOQsCB/Gw4PLojw0dCNXrgk/agduR+Q7gubOkxCAXHfjR6QMiHgW8ddKYiqXRXN6GgHc
-	 NP+cXuGkt2MAL5gG7N4psacBPXaoLzY2h6gSYotgy9QG9sWaKAz3H6IHe9pYEnQmlJdHp
-	 /MNF1fe+75OOIHTMLe48AgGqCVyhDhCH6EsPMtN4ZCmyHcX96JwxXODaAiBfigWf9ptV8
-	 l+YCUbLuah3PChbLXy6YnI9sQiE1nK6/yyxUM88vIr5YMHzu3hQyi7b7idGK3KuDJBsrg
-	 KBph+TYB5a/TqEuU5gWsZBihHCBq5FbBCv0UGvOgAGa/4WL1ZOkNi8GbtFXYfqiRnqQ==
+	bh=LmGROQ8j6ssfXVbTrRZUW1rS5G1Xj+GI9rns6J0VgQk=;
+	b=0zuhCTe8s22jBgBRisbwbkhTB/bw6Q8GwKWxvB/LA+ZiW4Se2TrMpxvboOj/zauj6Hox
+	 mnTMHBgLeY648slbr3NU7mVCLZVPRWiYlKXlgCK9QmYeXdW8LWut+QKilvdlJ0qFfci7L
+	 90HqqCE0WWP6VQC3hLOhWrqmLBw9H3FeWH2dd7SiVqFjMxROfIgBA7Z4UTFSXpbrPB3J7
+	 s16LAJ3bpz8AIepcQrhYkt07mwiklB9n71Twth/1YXaA6dOFSVqqeeuvb3c2IDL7NGf3H
+	 aFPQ/npYCA/74AQHqDnMbVbenQfld+JG1GB/HvjZ+jDW5FfasI0CWMdsrHEY/ALSjcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EyRArXIN;
-	arc=none smtp.remote-ip=95.215.58.175
-Received: from mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Wn0ruJT9;
+	arc=none smtp.remote-ip=95.215.58.68
+Received: from mta1.migadu.com (out-68.mta1.migadu.com [95.215.58.68])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367C5606A330
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 07:44:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 367C5606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18025606A332
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 08:10:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18025606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EyRArXIN
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Wn0ruJT9
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=IW5ynYIfi6Xr6T0cE9YbEpif7QMM3ckaJbRURkeLx6M=;
+DKIM-Signature: a=rsa-sha256; bh=cn6tymwrhooG82BjdGKkfjlm33e7584SzGicUSgvQKM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794901479; v=1; x=1795506279;
- b=EyRArXINeSswu1l1XnoTJArpiAVzjsKXhAXbde9QyZ1UVAR+AttMBN8hPWF1Gn6277d8MUz7
- VvTR4NmlN29of7IY4od3MQjS2+WvPwbVTXxVIuNryuCEKPdHwLDZlnnPylMFmhL4+m4h7u7Xu9G
- hNPLilohDyarlu96UqDqzOkE=
+ t=1794903020; v=1; x=1795507820;
+ b=Wn0ruJT9Acsnawp/GLxSLIMzssi5hdpg13VVA4lwvI79ZrxkTOXPIU2SXue0MBqDw9LLTcKZ
+ b0+jkN75auSvfz/idVWPITa8+49k933XfouRvPCZ8+V+/sJLRRiDdrQswMTzriWsIyzhPPqJrQj
+ M1hTS1b+NcZcqJr45/HZ3pxw=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9a9bc6f3d3d80109;
-	Tue, 17 Nov 2026 07:44:39 +0000
-X-Mizu-Trace-ID: 9a9bc6f3d3d80109
+Received: by smtp.migadu.com with ESMTPS id d49511be82a76482;
+	Tue, 17 Nov 2026 08:10:18 +0000
+X-Mizu-Trace-ID: d49511be82a76482
 X-Migadu-Flow: FLOW_OUT
-From: Fuad Tabba <fuad.tabba@linux.dev>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Isaku Yamahata <isaku.yamahata@intel.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	kvmarm@lists.linux.dev,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Fuad Tabba <tabba@google.com>
-Subject: [PATCH v2 2/2] KVM: selftests: Test KVM_PRE_FAULT_MEMORY against a full dirty ring
-Date: Tue, 17 Nov 2026 07:44:28 +0000
-Message-ID: <20261117074428.7544-3-fuad.tabba@linux.dev>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261117074428.7544-1-fuad.tabba@linux.dev>
-References: <20261117074428.7544-1-fuad.tabba@linux.dev>
+Message-ID: <64588236-7ab4-4d63-8ab5-8a1658eb15b0@linux.dev>
+Date: Tue, 17 Nov 2026 16:10:06 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,152 +58,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ alexei.starovoitov@gmail.com, cgroups@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, linux-kselftest@vger.kernel.org, cuitao@kylinos.cn,
+ ameryhung@gmail.com
+Subject: Re: [RFC PATCH v13 1/4] blk-iocost: add BPF struct_ops cost model
+ support
+To: Tejun Heo <tj@kernel.org>
+References: <20261106122356.3224638-1-cui.tao@linux.dev>
+ <20261106122356.3224638-2-cui.tao@linux.dev>
+ <e6062944917f1c9a87ab084bae9352a9@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <e6062944917f1c9a87ab084bae9352a9@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Pre-fault more populated, dirty-logged pages than the vCPU's dirty ring
-holds, and check that each call stops before the ring overflows, that a
-retry returns ENOSPC without progress, and that each page is reported
-exactly once. A read pre-fault can map a page read-only, or
-access-tracked on x86 without EPT A/D bits, so skip the case if
-pre-faulting doesn't dirty any page.
+Hello, Tejun.
 
-Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
----
- .../selftests/kvm/pre_fault_memory_test.c     | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
+在 2026/11/17 01:27, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Fri, Nov 06, 2026 at 08:23:53PM +0800, Tao Cui wrote:
+>> Attaching an iocost_model_ops struct_ops binds the model to one
+>> device: the target is set in the dev member from userspace and
+>> .reg creates the ioc if needed like an io.cost.model write and
+>> ...
+> 
+> From here on, the description mostly walks through what the code does.
+> Can it instead explain why it works this way and what it guarantees, and
+> leave the mechanics to the code?
+> 
+Rewritten. The commit message now describes what the attachment
+guarantees: one attached model per device, pricing follows the
+model across io.cost.model writes, attaching doesn't enable the
+controller, and the model can't go away while it's pricing. The
+freeze ordering and the detach mechanics are left to the code.
 
-diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-index 3082fe09b95fa..72c501afc873b 100644
---- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
-+++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-@@ -5,6 +5,9 @@
-  * Author:
-  * Isaku Yamahata <isaku.yamahata at gmail.com>
-  */
-+#include <asm/barrier.h>
-+#include <linux/bitmap.h>
-+#include <linux/bitops.h>
- #include <linux/sizes.h>
- 
- #include <test_util.h>
-@@ -17,6 +20,8 @@
- /* Arbitrarily chosen values */
- #define TEST_BASE_SIZE		SZ_2M
- #define TEST_SLOT		10
-+/* Large enough for the entries every architecture reserves. */
-+#define TEST_RING_SIZE		SZ_64K
- 
- /* Storage of test info to share with guest code */
- struct test_config {
-@@ -281,6 +286,101 @@ static void test_pre_fault_memory(unsigned long vm_type, enum vm_mem_backing_src
- 	for_each_guest_mode(__test_pre_fault_memory, &p);
- }
- 
-+/*
-+ * Pre-fault more dirty-logged pages than the ring holds: each call has to stop
-+ * before the ring overflows, and no entry may be lost.
-+ */
-+static void test_pre_fault_dirty_ring(void)
-+{
-+	const u64 entries = TEST_RING_SIZE / sizeof(struct kvm_dirty_gfn);
-+	const u64 npages = entries + entries / 4;
-+	struct kvm_pre_fault_memory range, left;
-+	struct kvm_dirty_gfn *gfns, *cur;
-+	u64 harvested = 0, size;
-+	struct kvm_vcpu *vcpu;
-+	unsigned long *seen;
-+	int ret, stops = 0;
-+	struct kvm_vm *vm;
-+	u32 fetch = 0;
-+	gpa_t gpa;
-+
-+	if (!kvm_has_cap(KVM_CAP_DIRTY_LOG_RING) && !kvm_has_cap(KVM_CAP_DIRTY_LOG_RING_ACQ_REL)) {
-+		pr_info("Skipping the dirty ring test: no dirty ring\n");
-+		return;
-+	}
-+
-+	vm = vm_create(1);
-+	vm_enable_dirty_ring(vm, TEST_RING_SIZE);
-+	vcpu = vm_vcpu_add(vm, 0, NULL);
-+	gfns = vcpu_map_dirty_ring(vcpu);
-+
-+	/* A ring entry is a host page. */
-+	size = npages * getpagesize();
-+	gpa = align_down(vm->max_gfn * vm->page_size - size, SZ_2M);
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, gpa, TEST_SLOT,
-+				    vm_num_guest_pages(vm->mode, npages), KVM_MEM_LOG_DIRTY_PAGES);
-+
-+	/* Populate the pages, so that pre-faulting can map them writable. */
-+	memset(addr_gpa2hva(vm, gpa), 1, size);
-+
-+	seen = bitmap_zalloc(npages);
-+	TEST_ASSERT(seen, "Failed to allocate the bitmap of reported pages");
-+
-+	range = (struct kvm_pre_fault_memory) { .gpa = gpa, .size = size };
-+	while (range.size) {
-+		u64 n;
-+
-+		vcpu_ioctl(vcpu, KVM_PRE_FAULT_MEMORY, &range);
-+
-+		if (range.size) {
-+			left = range;
-+			ret = __vcpu_ioctl(vcpu, KVM_PRE_FAULT_MEMORY, &range);
-+			TEST_ASSERT_VM_VCPU_IOCTL(ret == -1 && errno == ENOSPC,
-+						  KVM_PRE_FAULT_MEMORY, ret, vm);
-+			TEST_ASSERT(range.gpa == left.gpa && range.size == left.size,
-+				    "KVM_PRE_FAULT_MEMORY made progress on a full ring");
-+			stops++;
-+		}
-+
-+		for (n = 0; ; n++) {
-+			cur = &gfns[fetch % entries];
-+			/* Pairs with the smp_wmb() in kvm_dirty_ring_push(). */
-+			if (smp_load_acquire(&cur->flags) != KVM_DIRTY_GFN_F_DIRTY)
-+				break;
-+
-+			TEST_ASSERT(cur->slot == TEST_SLOT && cur->offset < npages,
-+				    "Ring entry %u: slot %u offset 0x%llx, expected slot %u offset < 0x%lx",
-+				    fetch, cur->slot, cur->offset, TEST_SLOT, npages);
-+			TEST_ASSERT(!__test_and_set_bit(cur->offset, seen),
-+				    "Ring entry %u: offset 0x%llx reported twice",
-+				    fetch, cur->offset);
-+			/* Pairs with kvm_dirty_gfn_harvested()'s smp_load_acquire(). */
-+			smp_store_release(&cur->flags, KVM_DIRTY_GFN_F_RESET);
-+			fetch++;
-+		}
-+
-+		/* A read pre-fault can map a page read-only, or access-tracked on x86. */
-+		if (!n && !harvested && !range.size) {
-+			pr_info("Skipping the dirty ring test: pre-faulting dirtied no pages\n");
-+			bitmap_free(seen);
-+			kvm_vm_free(vm);
-+			return;
-+		}
-+		TEST_ASSERT(n, "KVM_PRE_FAULT_MEMORY pushed nothing to the ring");
-+		TEST_ASSERT(kvm_vm_reset_dirty_ring(vm) == n,
-+			    "KVM_RESET_DIRTY_RINGS didn't reset %lu entries", n);
-+		harvested += n;
-+	}
-+
-+	TEST_ASSERT(harvested == npages, "%lu ring entries for %lu pages", harvested, npages);
-+	TEST_ASSERT(stops, "KVM_PRE_FAULT_MEMORY never stopped for a %lu-entry ring", entries);
-+	pr_info("Pre-faulted %lu pages through a %lu-entry ring, stopping %d times\n",
-+		npages, entries, stops);
-+
-+	bitmap_free(seen);
-+	kvm_vm_free(vm);
-+}
-+
- static void help(char *name)
- {
- 	puts("");
-@@ -320,5 +420,6 @@ int main(int argc, char *argv[])
- 	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, false);
- 	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, true);
- #endif
-+	test_pre_fault_dirty_ring();
- 	return 0;
- }
--- 
-2.47.3
+>> +enum {
+>> +	IOCOST_COST_F_MERGE	= 1 << 0,	/* called from the merge path */
+>> +};
+> 
+> Maybe name the flags after the callback they're passed to, e.g. enum
+> iocost_calc_flags, IOCOST_CALC_MERGE and a calc_flags parameter, the way
+> sched_ext pairs ops.enqueue()'s enq_flags with enum scx_enq_flags and
+> SCX_ENQ_*? An unnamed enum type can't be looked up by name through BTF,
+> so BPF programs can't test whether a flag exists.
+> 
+Renamed. The enum is now iocost_calc_flags with
+IOCOST_CALC_MERGE and the calc_cost parameter is calc_flags.
+The named enum is used for the kernel-side definition; the BPF
+callback argument remains u64, matching the existing struct_ops
+interface style.
+
+> Also, can the comment say what the flag means to the model rather than
+> where the call comes from? The bio is being merged into an IO which was
+> already charged its base cost.
+> 
+Updated accordingly.
+>> +	/* holds a reference on the struct_ops map, NULL if none is attached */
+>> +	const struct iocost_model_ops	*attached;
+>> +	struct bpf_link			*attached_link;
+>> +	/* either NULL (linear) or ->attached */
+>> +	const struct iocost_model_ops __rcu *model;
+> 
+> Can the comment say why iocost holds its own reference on the map? If the
+> link is destroyed after del_gendisk() has unhashed the bdev but before
+> rq_qos_exit(), .unreg can't look up the disk and returns without
+> detaching, and the link drops its reference. iocost's reference keeps the
+> map alive until ioc_rqos_exit() detaches the model.
+> 
+The field comment now says exactly this.
+
+> Also, why are attached and attached_link updated under ioc->lock in
+> ioc_bpf_reg() and ioc_detach_model()? Everything which reads the two
+> holds rq_qos_mutex: .reg, .unreg, ioc_detach_model() and
+> ioc_cost_model_write(), which gets it from blkg_conf_open_bdev(). Only
+> model is read under ioc->lock alone, by ioc_autop_idx() from the timer
+> and the io.cost.model show path, besides the RCU readers. What is
+> ioc->lock protecting for the two? Can you document the locking on the
+> fields?
+> 
+attached and attached_link themselves are protected by
+rq_qos_mutex. The ioc->lock coverage is only needed for bpf_model,
+which is read under ioc->lock by the timer and io.cost.model show
+paths. The field comments now document the locking rules.
+
+>> +static const struct iocost_model_ops *ioc_model(struct ioc *ioc)
+>> +{
+>> +	if (!IS_ENABLED(CONFIG_BLK_CGROUP_IOCOST_BPF))
+>> +		return NULL;
+>> +	return rcu_dereference_check(ioc->model, lockdep_is_held(&ioc->lock));
+>> +}
+> 
+> ioc_model() returns NULL while the builtin linear model is in use, which
+> is a model too. Maybe rename the accessor and the field together, e.g.
+> ioc_bpf_model() and bpf_model, or ioc_model_bpf() and model_bpf?
+> 
+Renamed to ioc_bpf_model() and bpf_model.
+
+>> +	spin_lock_irq(&ioc->lock);
+>> +	rcu_assign_pointer(ioc->model, NULL);
+>> ...
+>> +	ioc->autop_too_fast_at = 0;
+>> +	ioc->autop_too_slow_at = 0;
+> 
+> Resetting to 0 is right, but maybe ioc_bpf_reg() is a better place for
+> it? .reg is the only path which switches pricing to the BPF model without
+> a forced ioc_refresh_params(), which is what zeroes the timestamps for
+> io.cost.qos and io.cost.model writes. If ioc_bpf_reg() zeroes them, they
+> stay zero while the BPF model is in use, which covers both detach and the
+> "model=linear" switch sashiko reported on this posting.
+> 
+Moved. ioc_bpf_reg() zeroes the timestamps inside the ioc->lock
+section together with the settle, and the zero in ioc_detach_model()
+is dropped; as you say, they stay zero for the whole BPF period,
+which covers both the detach and the model=linear switch.
+
+Besides your comments, p1 also picked up two fixes from testing:
+calc_cost() now matches the builtin pricing scope, and a dead owning
+map now reports -ENODEV instead of -EBUSY.
+
+Thanks,
+Tao
+
+> Thanks.
+> 
+> --
+> tejun
 
