@@ -1,112 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794905083;
-	b=zvqz1i7vYeNDRsr+1ts5Yo5O25ix9ffTLQinP+F/WtpoQv+DMH/myiw13fm7f+R1DAYb
-	 WFrH0jr8z7ch3ZVwNeq2g/+KSTVBrtsAYff1K/EcRV6ZrzllqTxMkhXGe1dfm1EmIJrat
-	 oLmkLZ4ib1DqwmgfpZ5oqtVd/MOCVTNFzOZ5elmdsCVR5/iDtHc0MydwY7jwAQVaDJ/Lm
-	 IJbmWoLfHaGL+pCN/hvNIBFBjjxzileWqjfx+YCYOseJGGxE6pDWtlpy8jCEDcPePA/LY
-	 cvktagjGPRN7DEQtDUc6qVPDowmvGxYYr1viLfaP7BIHn/yUlalep9eaV+bs1tIp+iw==
+	t=1794905317;
+	b=1UIH8W83JVuJ2mBn0422OEY44/wUx4t0reC6ifPyOVYCoNcgg3xSBLAEO5vfoJtaY0RK
+	 zVUFin5UO/TydEyInTCEp7CsavWZZAuNXxDSYYjFoMtciTUndw6C9rHTeSFDpMKYZPjmb
+	 qWph2IoEhuvJ8Q/uocfozC8rMkCI/ah3nHMwy2969WZ2n6tBaLHWpK20X2o8F0pReGR13
+	 qFlvbZa3vdho2VVY7Sf+yeEywUff8Sh9NPPjDv22C9cVVusEvV1hdAPIfJO1/JBcg6D46
+	 SZqNYd6jKS85tcwXRXYUzaUYrhtli7NwQ2ConOMtM4PpEzM9X6mCge9KnpAOB0IU9kQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794905083;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
-	b=kRGlLdjiIWZUs5Jtq5Wwk+nmy8yPp6PTvsj3ocPxJVZDmrZuCEzTljuCDhHTJen0SoC7
-	 haDKsK1OJ7s6NTq7F3DPJ29+SM/6vn68zRrOsddR2GlbI7Zvbw4AcZL7Jg/6CNKAnRB7u
-	 QuvQBP6ypNbKzJLk0FcxH2yPykZgDSuW+1SYjyrVT/YQPDkYsitET4n7svHCErtSdEXpR
-	 BaHeiLS3yGVdTnBHdKvU9/VGgjVEWvJxECzWiv68194CGn0Kx6Bie8WGn9MzuH9dA1nQQ
-	 sqojypEj+sj6HC27ILgsgC096KYQcaeydW1/P6Zw6B2TT5SGdD1xk7O5Z0pAIMc5mkg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794905317;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=OF6Cp5FG0HrDU4fEnYEdsDYyzWBxBPMclGmCe3hKMhY=;
+	b=Kyo7HQS7FqH71flf7e6G8+uGTpSdyTx9tUGZM+ZzYOgC+sR0bDntiQPQfX7zNf4jE0Z6
+	 /6IqlTZJVpUKBsHaBoZ2ZNCJLMahPgGOCRKxuQ4xahAQLX+0ifOgkDkbOim5MzdWUk6+d
+	 wMaK8ZBbBLMy6uSlv+e4EsU512GVW8MVbk5dFahSKYYrY50p/OQxNwAdmzKvj0RmSyqpd
+	 0VRipvkKZ4BS84L//WlOr9TKaz7srS7Q/KTxZgw1pAUYlcxIBIrrRkAIB7J4Ak8epxPoK
+	 IspTFgh/ZamjDtIxivsqK8NiKuuz4lLmhXEMdnH8Msg8bMcAsjoJ0FSYf7BOk7DPRwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amutable.com;
-	spf=pass smtp.mailfrom=amutable.com;
-	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qPWJSshs;
-	arc=none smtp.remote-ip=209.85.221.51
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="cgQgs/dO";
+	arc=none smtp.remote-ip=91.218.175.12
+Received: from mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C61606A88C
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 08:44:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6C61606A88C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2A3606A889
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 08:48:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC2A3606A889
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=qPWJSshs
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48e20ed3b9dso4618887f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 00:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1794905081; x=1795509881; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
-        b=qPWJSshsn8vVlxONBkwnt0Rrdn9d5F3Qc4ul63isG/q9SzfN/YeX6Opt0gSo3Jew6G
-         TPoHc3exB3o1TVJHb31ucJURrMLm+X5ZLvKQdkLiUwsGhwj3/4jXaF9QxR3XbUAvZwOE
-         a/cd4y1UcgXoBr9kVgdvuhJuBveUAauSYuunqpBOO8ny5BuS4lSdHT4xtCJFDNjS8url
-         r/ZKVJBRzaToW1BBIq0cKvkP0/i/p+OipahpXpiSl0PGBR9WYmSpn39e8LKnYXYjrWjD
-         bzQp5gYJPTRPzgdIgnmtc42HrrCv5BgaqLA/tsUHs3tWdIoSQrhFLq1gvYrghbRPmmpF
-         EcZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794905081; x=1795509881;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YtgOPMlBsDbDRTTami0iaeC2PfdAlPMUJ3BhZBWqnDY=;
-        b=TNoC30ituO0QkdEkQk9XtboyAEsyn0VFurU0/qb62mBuRjyNyixv2FBXKBcXrtczEx
-         b+e3EqskAeBSBbpkwg5wewHANk4Kwzyn2KVV13UdH9y3k4AvUdB/81KnB/C/Wt6IaB15
-         +5ZY3KE8Qn1bYaqeZrMzd+BSJGuBLho62T1BwdUGvdZ2qfJ3BnYCAbNLLb8wDoFdTm74
-         OSXzAUDEnTOiE2kdSzY5LFxsJvJM6kVcY7wN/SrDtrKU3zfoxUv6ZGJESCU1i/SwppoG
-         G3l13WqOvlXooaWweF+DzRJnhxN1sfzNLDekUaxVuTM+alX7wN2wtgPj/jhzR3k9Usn0
-         gQmQ==
-X-Forwarded-Encrypted: i=1; AL+hErG8Cm5JzeZWfIdk5NARGCDp2x9D0bUpzIvwrlGGvjzLY5rxoHq/8j46vPbS4aDdMva32hpXWT3LKza7/imFu3U=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/W+yqOjfdgdLX+FtwqBwjvjnTWnuV44atWJTCm+/OcjY/EQBnF
-	uggf3fn0QPNtht+VPErraO4ZaJGLvK5UNuoxA6oaQlffPMKvYm8Jhy7xx1R2uyEV+96U
-X-Gm-Gg: AZFdTZfXOiU4Z/SmUknN52e/GSYow0EWSYXYLj3vqvBC5mKmHwOZ/VMKdK9jpMDBe0G
-	XS4gfpSzaivrL/QfShXTQ7sN24agUTww7qwW2a7pNaj14n7FuhtCfVvEMrTZ1lONuK4mcVmXkKq
-	1tqoi+1ViwTth215WcBpdb0An6FqFZjRbU99gPVl2CEgNUi30O9FprOrxhgrDMq6fdBNs3X+4Ty
-	lx37Z4B8a4rPbXnphfs6cRWgTiKWbSYQOHgzbxr/49ylWY01cZGaHUnO70hpVncmNIIV8QYwzFV
-	Ms9vgNS23Dmgwxph7NwbmLUC+CzlIWsHOeRYstqQRgDPnXZ+vFZFo7tYJvvIGqtGmxA0flv4vUD
-	Rzw6ul37AaP5xuN3/7NY32iW+PWRgaVYjz4N7lbewr+pvapSHccwFHtMzjfxFdgaBkSBXCRf2il
-	6i8ljYoMeViv/CUKfk/YJeqp1aBYQzEZouWg7Lrm+MoF3LdJHgfwUjvbxxUVueO26qQOH7tsP1I
-	B/Aq+ZWfflwhDRAaO7LHGiA/BFYZU5gqJIb9d9oDbsdy5fHYtMzSwCCB9pT4RusOqCJMRSuGfu0
-	VSMYHXz+YkkDGnSff7y2Wnygj4oT57UP3+ZMkMYBo9HJHv1rCml+lMljesw+B+d0ontLk9dNGSM
-	UCDm+y9VizlsVphsJ+qLa9x/1+eK39/HQdPEgMPW9JET2rs5tlr/AYbK76PBoBk8A9l9I3qK88G
-	5sWw==
-X-Received: by 2002:a05:6000:2411:b0:48f:f26d:c5c with SMTP id ffacd0b85a97d-49c70b051d1mr27471178f8f.9.1794905081269;
-        Tue, 17 Nov 2026 00:44:41 -0800 (PST)
-Received: from ?IPv6:2003:cf:572c:2800:de4c:6789:33ce:97c2? (p200300cf572c2800de4c678933ce97c2.dip0.t-ipconnect.de. [2003:cf:572c:2800:de4c:6789:33ce:97c2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49d673ce75fsm19982260f8f.55.2026.11.17.00.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 00:44:40 -0800 (PST)
-Message-ID: <d18a972cfc6a7d6da39ab9674903d7ae6e4c1826.camel@amutable.com>
-Subject: Re: [PATCH RFC v3 35/44] fs: add file_check_backing()
-From: Alexander Mikhalitsyn <alex@amutable.com>
-To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef
- Bacik	 <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, 	driver-core@lists.linux.dev,
- linux-mm@kvack.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org,
- netdev@vger.kernel.org, 	fuse-devel@lists.linux.dev,
- linux-efi@vger.kernel.org, 	xen-devel@lists.xenproject.org,
- ocfs2-devel@lists.linux.dev, 	linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, 	linux-usb@vger.kernel.org, Amir Goldstein
- <amir73il@gmail.com>, 	linux-erofs@lists.ozlabs.org,
- linux-kselftest@vger.kernel.org
-Date: Tue, 17 Nov 2026 09:44:39 +0100
-In-Reply-To: <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
-References: <20261116-work-loop-pseudo-v3-0-8cbbea1cf34f@kernel.org>
-	 <20261116-work-loop-pseudo-v3-35-8cbbea1cf34f@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cgQgs/dO
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LQmkq3cSMRegdHM94Dm1Vc2r2vLITOvaUszwP4C6EyQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794905307; v=1; x=1795510107;
+ b=cgQgs/dOoWlnzob1ObJRhaMmHYy+dgmR44aPy7coGph3V3l1WJ6er1iD1aI27clxqTg5LsQC
+ ZEjLkhoR4h0F5OMr2oxuUbQX2KaCi12msTw0Xzdp1Z6lQK99CTz54WAvd6njqbAZ9cKJ85B4zTO
+ mI8RKviDtSSSXfTuL+JMq3DE=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 8a9d863a83631418;
+	Tue, 17 Nov 2026 08:48:26 +0000
+X-Mizu-Trace-ID: 8a9d863a83631418
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 17 Nov 2026 16:48:12 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net-next v3 5/5] selftests: seg6: add PSP flavor testing
+ for SRv6 End.X
+Message-ID: <avwUzLyWxZl9cBIX@fedora>
+References: <20261112-srv6_flavors_endx-v3-0-c9177bbbd965@kylinos.cn>
+ <20261112-srv6_flavors_endx-v3-5-c9177bbbd965@kylinos.cn>
+ <20261117035021.e724668d726ecce54e091288@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,172 +74,325 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261117035021.e724668d726ecce54e091288@uniroma2.it>
 
-On Mon, 2026-11-16 at 12:05 +0100, Christian Brauner wrote:
-> Loop, zloop, the nvme target, the scsi target, fuse passthrough, the
-> usb
-> mass storage gadget, erofs and acct all take a file from userspace
-> and
-> use it as storage. Currently, each of them has its own idea of what
-> to
-> check before using a file like that:
->=20
-> - loop and the gadget check for a regular file or a block device, the
-> =C2=A0 nvme target, the scsi target and zloop take any file type
-> - loop checks the open mode, the gadget checks FMODE_CAN_READ, the
-> nvme
-> =C2=A0 target, the scsi target and zloop only check for ->read_iter() and
-> =C2=A0 ->write_iter()
-> - apart from acct which refuses procfs and sysfs files none of them
-> =C2=A0 cares whether the file is a kernel interface
->=20
-> Add a helper that does all of it in one place. It only accepts
-> regular
-> files and, if the caller passes S_IFBLK, block devices. It refuses
-> files
-> on pseudo filesystems. And it checks that the file is open for what
-> the
-> caller is going to do with it and implements ->read_iter() for
-> reading
-> and ->write_iter() for writing.
->=20
-> O_PATH files are refused unless the caller passes FMODE_PATH. That is
-> for callers that only need the path of the file. fuse passthrough is
-> one of them and has accepted O_PATH file descriptors since commit
-> efad7153bf93 ("fuse: allow O_PATH fd for FUSE_DEV_IOC_BACKING_OPEN").
->=20
-> Block devices are fine even though bdevfs is a pseudo filesystem. A
-> block device that userspace hands in is a device node on devtmpfs or
-> some other filesystem. Files on bdevfs only come from
-> bdev_file_open_by_*() and never end up here.
->=20
-> The pseudo filesystem check looks at the inode that actually provides
-> the data via d_real_data_inode(). overlayfs accepts sysfs, cgroup2,
-> debugfs, tracefs, configfs and securityfs as lower layers and reads
-> of
-> such an overlayfs file are served by the file on the pseudo
-> filesystem.
-> Checking the overlayfs inode would miss that.
->=20
-> For an O_PATH file nothing might have looked up the data yet.
-> overlayfs
-> only looks up the data of a metacopy file in a data-only layer when
-> the
-> file is opened. d_real_data_inode() does the lookup then and if that
-> fails we return the error.
->=20
-> Note that the file type is taken from the inode of the file and not
-> from
-> the host of ->f_mapping like loop and the gadget do it. A driver can
-> point ->f_mapping somewhere else in ->open(). It makes no difference
-> for
-> block devices as both inodes are block devices.
->=20
-> No functional changes. Nothing calls the helper yet.
->=20
+Hi Andrea,
+On Tue, Nov 17, 2026 at 03:50:21AM +0100, Andrea Mayer wrote:
+> On Thu, 12 Nov 2026 17:28:00 +0800
+> Hangbin Liu <hangbin.liu@linux.dev> wrote:
+> 
+> > Add an End.X flavor scenario to srv6_end_flavors_test.sh that applies
+> > the same PSP policies as the End scenario, alone and combined with
+> > NEXT-C-SID, with every node bound through its adjacency (e.g. 4>2 for
+> > rt-4 towards rt-2, 2>h towards the host), and exercise it with the
+> > existing host connectivity tests.
+> >
+> > Teach the policy and endpoint helpers about <nodeid:op:act> elements:
+> > __get_srv6_rtcfg_act() extracts the action, the __get_*_func()
+> > helpers pick the Function for the action, __get_act_cfg() derives the
+> > End.X next hop, and build_csid()/get_rt_sid() keep the adjacency so
+> > it is encoded into the C-SIDs (e.g. fcbb:0:34a9:: is End.X on rt-3
+> > towards rt-4).
+> >
+> > There is no need to re-check the ip command capability as it already
+> > supports setting PSP flavor with End.X.
+> 
+> Hi Hangbin,
+> thanks for adding the End.X scenario.
+> 
+> I see these main areas to work on:
+> - How an element is read. The "router>adjacency" form is read in
+>   different places, each with its own sed or cut. IMO, the selftest
+>   would be easier to extend to other behaviors and flavor combinations
+>   if the nodes were read in one place, with small helpers. What
+>   depends on the behavior could also be chosen in one place.
+> - A check of the elements, so that a mistake in a Policy does not go
+>   unnoticed.
+> - A check of the kernel support for End.X PSP.
+> - The End.X tests with a consumed SRH.
+> - One End.X SID per adjacency also without NEXT-C-SID, where today
+>   the SIDs of a router do not depend on the adjacency.
+> 
+> The comments below are ideas on how to address each of them, plus
+> some smaller points. There may also be other parts of the selftest
+> to adapt.
 
-Reviewed-by: Alexander Mikhalitsyn <alex@amutable.com>
+Thanks for your kind review.
 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
-> =C2=A0fs/read_write.c=C2=A0=C2=A0=C2=A0 | 53
-> +++++++++++++++++++++++++++++++++++++++++++++++++++++
-> =C2=A0include/linux/fs.h |=C2=A0 2 ++
-> =C2=A02 files changed, 55 insertions(+)
->=20
-> diff --git a/fs/read_write.c b/fs/read_write.c
-> index 6767283108991..9f1e7bfcbd4f1 100644
-> --- a/fs/read_write.c
-> +++ b/fs/read_write.c
-> @@ -866,6 +866,59 @@ static ssize_t do_loop_readv_writev(struct file
-> *filp, struct iov_iter *iter,
-> =C2=A0	return ret;
-> =C2=A0}
-> =C2=A0
-> +/**
-> + * file_check_backing - check that the kernel can use a file as
-> storage
-> + * @file: file that userspace handed in
-> + * @mode: FMODE_READ and/or FMODE_WRITE the kernel will do I/O with,
-> or
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FMODE_PATH if only the path=
- of @file is used
-> + * @type: S_IFBLK if a block device is fine as well, 0 otherwise
-> + *
-> + * Call this where a file from userspace is taken as a backing file.
-> Only
-> + * regular files and, if @type is S_IFBLK, block devices are
-> storage. Files
-> + * on pseudo filesystems are kernel interfaces and are refused. The
-> file
-> + * must be open for @mode and implement ->read_iter() for reading
-> and
-> + * ->write_iter() for writing. O_PATH files are only fine with
-> FMODE_PATH.
-> + *
-> + * Return: 0 on success, -EBADF if @file isn't open for @mode, -
-> EINVAL if it
-> + * can't be used as storage, or the error from looking up the data
-> of @file
-> + * on a stacking filesystem.
-> + */
-> +int file_check_backing(const struct file *file, fmode_t mode,
-> umode_t type)
-> +{
-> +	fmode_t io =3D mode & (FMODE_READ | FMODE_WRITE);
-> +	/* Drivers may point ->f_mapping at something else. */
-> +	umode_t fmt =3D file_inode(file)->i_mode & S_IFMT;
-> +	struct inode *real_inode;
-> +
-> +	/* O_PATH files are only fine for callers that just use the
-> path. */
-> +	if ((file->f_mode & FMODE_PATH) && !(mode & FMODE_PATH))
-> +		return -EBADF;
-> +
-> +	if ((file->f_mode & io) !=3D io)
-> +		return -EBADF;
-> +
-> +	if (fmt !=3D S_IFREG && !(type =3D=3D S_IFBLK && fmt =3D=3D S_IFBLK))
-> +		return -EINVAL;
-> +
-> +	/* Look through stacking filesystems at the inode with the
-> data. */
-> +	real_inode =3D d_real_data_inode(file->f_path.dentry);
-> +	if (IS_ERR(real_inode))
-> +		return PTR_ERR(real_inode);
-> +	if (real_inode->i_sb->s_iflags & SB_I_PSEUDO)
-> +		return -EINVAL;
-> +
-> +	if ((mode & FMODE_READ) &&
-> +	=C2=A0=C2=A0=C2=A0 (!(file->f_mode & FMODE_CAN_READ) || !file->f_op-
-> >read_iter))
-> +		return -EINVAL;
-> +
-> +	if ((mode & FMODE_WRITE) &&
-> +	=C2=A0=C2=A0=C2=A0 (!(file->f_mode & FMODE_CAN_WRITE) || !file->f_op-
-> >write_iter))
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(file_check_backing);
-> +
-> =C2=A0ssize_t vfs_iocb_iter_read(struct file *file, struct kiocb *iocb,
-> =C2=A0			=C2=A0=C2=A0 struct iov_iter *iter)
-> =C2=A0{
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 99caef43ff3c4..b1c7ebafbadbe 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -2553,6 +2553,8 @@ static inline const struct inode
-> *file_user_inode(const struct file *f)
-> =C2=A0	return file_inode(f);
-> =C2=A0}
-> =C2=A0
-> +int file_check_backing(const struct file *file, fmode_t mode,
-> umode_t type);
-> +
-> =C2=A0static inline struct file *file_clone_open(struct file *file)
-> =C2=A0{
-> =C2=A0	return dentry_open(&file->f_path, file->f_flags, file-
-> >f_cred);
+> > Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> > ---
+> > I didn't add `host_srv6_end_flv_consumed_srh_tests()` for End.X because
+> > the extra policy insertion does not work with the End.X policy. The packet
+> > resolves the destination via the next hop directly, rather than doing a
+> > re-lookup in table 90.
+> 
+> The ingress router can insert the extra SRH instead, on the first SID
+> of the Policy. As in the End tests, an End SID of the base setup can
+> then consume it. This way, we can add these tests for End.X too. What
+> do you think?
+
+For the End.X Policy (i.a) testing, we have SID List=fcff:3::a,fcff:4::af1,fcff:2::af1,cafe::2.
+And we configured the next hop policy for the SID on each rt. e.g
+
+On rt3: fcff:3::000a table 90 encap seg6local action End.X nh6 fcf0:0:3:4::4
+On rt4: fcff:4::0af1 table 90 encap seg6local action End.X nh6 fcf0:0:2:4::2 flavors psp
+on rt2: fcff:2::0af1 table 90 encap seg6local action End.X nh6 cafe::2 flavors psp
+
+When the packet arrive on rt4, it's dst is set to fcff:2::af1. And the new
+insert policy (fcff:2::0af1 table 90 encap seg6 mode inline segs fcff:3::000e dev dum0)
+doesn't works as the End.X policy will goto next hop fcf0:0:2:4::2 directly
+instead of looking at fcff:2::af1 on table 90.
+
+Would you add more info about the ingress route?
+
+> 
+> > [snip]
+> > diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > index 374b43661c28..5b1b13586df0 100755
+> > --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
+> > [snip]
+> >  __get_srv6_rtcfg_id()
+> >  {
+> >  	local element="$1"
+> >  
+> > +	echo "${element}" | sed 's/:.*//; s/>[1234h]//g'
+> > +}
+> > [snip]
+> > +__get_srv6_rtcfg_all_id()
+> > +{
+> > +	local element="$1"
+> > +
+> >  	echo "${element}" | cut -d':' -f1
+> >  }
+> >  
+> 
+> The same node is read again in build_csid(), get_rt_sid() and
+> setup_rt_endpoints(), each time in its own way. Two small helpers,
+> one returning the router of a node and one its adjacency, could
+> replace these sed and cut. __get_srv6_rtcfg_id() above would then not
+> need the sed, and __get_srv6_rtcfg_all_id() would probably not be
+> needed at all. Without NEXT-C-SID, __setup_rt_policy() could then get
+> each SID of the Policy from get_rt_sid(), as setup_rt_endpoints()
+> does.
+
+For a single End.X node, e.g. "4>2", we can return the router (4) and adjacent
+router (2). But how to get multi nodes. e.g. "4>2,2>3", with theses 2 small
+helpers?
+
+> 
+> > [snip]
+> > +__get_noflv_func()
+> > +{
+> > +	local act="$1"
+> > +
+> > +	case "${act}" in
+> > +	"End")
+> > +		echo "${END_FUNC}" ;;
+> > +	"End.X")
+> > +		echo "${ENDX_FUNC}" ;;
+> > +	esac
+> > +}
+> > +
+> > +__get_psp_func()
+> > +{
+> > +	local act="$1"
+> > +
+> > +	case "${act}" in
+> > +	"End")
+> > +		echo "${END_PSP_FUNC}" ;;
+> > +	"End.X")
+> > +		echo "${ENDX_PSP_FUNC}" ;;
+> > +	esac
+> > +}
+> > +
+> > +__get_csid_psp_func()
+> > +{
+> > +	local act="$1"
+> > +
+> > +	case "${act}" in
+> > +	"End")
+> > +		echo "${END_CSID_PSP_FUNC}" ;;
+> > +	"End.X")
+> > +		echo "${ENDX_CSID_PSP_FUNC}" ;;
+> > +	esac
+> > +}
+> 
+> The three __get_*_func() helpers differ only in the constants. As a
+> possible simplification, they could be one function with, for example,
+> a case on the behavior and the operation ("End noflv", "End psp", ...,
+> "End.X next-csid,psp"). Then the Functions are chosen in one place,
+> also for a new behavior.
+
+Thanks, I will merge them together.
+
+> 
+> > [snip]
+> > @@ -713,10 +814,10 @@ op_has_next_csid()
+> >  #  $1 - router
+> >  #  $2 - operation <op> of the element (e.g. "next-csid,psp")
+> >  #  $3 - Function (e.g. "0ef1", or "e9" with NEXT-C-SID)
+> > -# e.g. input: "4" "psp" "0ef1"
+> > -#      output: "fcff:4::0ef1"
+> > -#      input: "4" "next-csid,psp" "e9"
+> > -#      output: "fcbb:0:40e9::/48"
+> > +# e.g. input: "4" "psp" "0ef1", output: "fcff:4::0ef1"
+> > +#      input: "4>2" "psp" "0af1", output: "fcff:4::0af1"
+> > +#      input: "4" "next-csid,psp" "e9", output: "fcbb:0:40e9::/48"
+> > +#      input: "4>2" "next-csid,psp" "a9", output: "fcbb:0:42a9::/48"
+> >  get_rt_sid()
+> >  {
+> >  	local rt="$1"
+> > @@ -730,6 +831,7 @@ get_rt_sid()
+> >  		return
+> >  	fi
+> >  
+> > +	rt=$(echo "${rt}" | sed 's/>.*//')
+> >  	echo "${LOCATOR_SERVICE}:${rt}::${func}"
+> >  }
+> 
+> Without NEXT-C-SID, get_rt_sid() drops the adjacency, as the Sashiko
+> review also notes: "4>2:psp:End.X" and "4>3:psp:End.X" would both get
+> fcff:4::0af1. I think each adjacency should have its own SID. The
+> SID could carry the adjacency, as the C-SID already does. Then
+> __setup_rt_policy() needs the new SID. Calling get_rt_sid() there,
+> as suggested above, would do that.
+
+Hmm, do you want to set the adjacency like xaf1 or xxa1?
+e.g. ffcf:4::2af1 for 4>2:psp:End.X, ffcf:4::3af1 for 4>3:psp:End.X
+or
+ffcf:4::42a1 for 4>2:psp:End.X, ffcf:4::43a1 for 4>3:psp:End.X?
+
+The second one may also need to adjust the End address. e.g.
+fcff:x::ef1 -> fcff:x::e1
+
+> 
+> > [snip]
+> > @@ -765,26 +867,34 @@ setup_rt_endpoint()
+> >  
+> >  # Add an SRv6 Endpoint behavior to each router of a Policy element <nodeid:op>.
+> >  # args:
+> > -#  $1 - <nodeid> of the element: one router, or a comma-separated list
+> > +#  $1 - <nodeid:op:act> element
+> >  #  $2 - operation <op> of the element (e.g. "next-csid,psp")
+> >  #  $3 - Function (e.g. "0ef1", or "e9" with NEXT-C-SID)
+> > -#  $4 - SRv6 Endpoint behavior and flavors (e.g. "End flavors psp")
+> > -# e.g. input: "4,2" "next-csid,psp" "e9"
+> > -#             "End flavors next-csid,psp lblen 32 nflen 16"
+> > +#  $4 - flavor configuration of the behavior, without the action
+> > +#       (e.g. "flavors psp")
+> > +# e.g. input: "4,2:next-csid,psp" "next-csid,psp" "e9"
+> > +#             "flavors next-csid,psp lblen 32 nflen 16"
+> >  #      result: the behavior is added on rt-4, bound to fcbb:0:40e9::/48, and
+> >  #              on rt-2, bound to fcbb:0:20e9::/48
+> >  setup_rt_endpoints()
+> >  {
+> > -	local node="$1"
+> > +	local nodeid="$1"
+> >  	local op_type="$2"
+> >  	local func="$3"
+> >  	local behavior_cfg="$4"
+> > +	local nodes node next_node
+> > +	local act act_cfg
+> >  	local sid
+> >  	local rt
+> >  
+> > -	for rt in $(echo "${node}" | sed 's/,/ /g'); do
+> > -		sid="$(get_rt_sid "${rt}" "${op_type}" "${func}")"
+> > -		setup_rt_endpoint "${rt}" "${sid}" "${behavior_cfg}"
+> > +	nodes="$(__get_srv6_rtcfg_all_id "${nodeid}")"
+> > +	act="$(__get_srv6_rtcfg_act "${nodeid}")"
+> > +	for node in $(echo "${nodes}" | sed 's/,/ /g'); do
+> > +		rt=$(echo "${node}" | cut -d'>' -f1)
+> > +		next_node=$(echo "${node}" | cut -d'>' -f2)
+> > +		act_cfg="$(__get_act_cfg "${act}" "${rt}" "${next_node}")"
+> > +		sid="$(get_rt_sid "${node}" "${op_type}" "${func}")"
+> > +		setup_rt_endpoint "${rt}" "${sid}" "${act_cfg} ${behavior_cfg}"
+> >  	done
+> >  }
+> 
+> setup_rt_endpoints() now gets the whole element, and reads it again
+> with the same helpers as __setup_rt_policy(). I think
+> __setup_rt_policy() can read the element once, and pass only what
+> setup_rt_endpoints() needs, for example the nodes and the behavior.
+> 
+> Nit: I would declare one local per line in the new code, as in the
+> rest of the selftest.
+> 
+> > [snip]
+> > @@ -824,7 +934,8 @@ setup_rt_host_proxy()
+> >  #       cafe::x:yy on the loopback of the host (e.g. 2:e9)
+> >  #  $2 - SRv6 router configured for enforcing the SRv6 Policy
+> >  #  $3 - compact way to represent a list of SRv6 routers with their operations
+> > -#       (i.e. behaviors) that each of them needs to perform. Every <nodeid:op>
+> > +#       (i.e. behaviors) that each of them needs to perform. Every
+> > +#       <nodeid:op:act>
+> >  #       element constructs a SID that is associated with the behavior <op> on
+> >  #       the <nodeid> node. The list of such elements forms an SRv6 Policy.
+> >  #       For "next-csid,psp", <nodeid> is a comma-separated list of node IDs.
+> > @@ -841,34 +952,38 @@ __setup_rt_policy()
+> >  	local container
+> >  	local function
+> >  	local op_type
+> > +	local nodes
+> >  	local node
+> > +	local act
+> >  	local n
+> >  
+> >  	in_nsname="$(get_rtname "${encap_rt}")"
+> >  
+> >  	for n in ${policy_rts}; do
+> >  		node="$(__get_srv6_rtcfg_id "${n}")"
+> > +		nodes="$(__get_srv6_rtcfg_all_id "${n}")"
+> >  		op_type="$(__get_srv6_rtcfg_op "${n}")"
+> > +		act="$(__get_srv6_rtcfg_act "${n}")"
+> 
+> I would also describe the new syntax in the comment of
+> __setup_rt_policy() above: the ">" with the adjacency, "h" for the
+> host, and the ":End.X" field.
+> 
+> A mistake in an element can also go unnoticed. With "1>h:psp",
+> rt-1 gets End instead of End.X, and the End.X tests still pass. Could
+> a check at the top of this loop make the test fail on such an element?
+> The check could also refuse an End.X element without an adjacency,
+> e.g. "4:psp:End.X".
+> On a setup error, cleanup() reports SKIP, unless the check sets ret
+> to ksft_fail first.
+
+Thanks, I will add a check for this.
+
+> 
+> > [snip]
+> > @@ -1479,4 +1623,12 @@ host_srv6_end_flv_next_csid_psp_tests
+> >  host_srv6_end_flv_consumed_srh_tests
+> >  defer_scope_pop
+> >  
+> > +defer_scope_push
+> > +set -e
+> > +setup_endx_flv_psp
+> > +set +e
+> > +host_srv6_end_flv_psp_tests "End.X"
+> > +host_srv6_end_flv_next_csid_psp_tests "End.X"
+> > +defer_scope_pop
+> > +
+> >  print_log_test_results
+> 
+> On a kernel with End PSP but without End.X PSP, the whole script ends
+> as SKIP, after the End tests passed. This can happen without any
+> backport, since the selftests from mainline can also be run on older
+> stable kernels. The selftest already probes End PSP with
+> test_kernel_supp_or_ksft_skip(), for kernels without it. We could
+> probe End.X PSP first in the same way, with an nh6, but returning
+> instead of exiting. If each scenario is moved into its own function,
+> the End.X one can return early, and only that scenario is skipped.
+> 
+> Sashiko asks whether the End.X tests would also pass if End.X worked
+> as End. The "1>h:psp" case above suggests that they would. I think it
+> is worth a look.
+
+Also a check for this.
+
+Thanks
+Hangbin
