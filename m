@@ -1,72 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794873417;
-	b=FkKtokx6Rvfh+cWCyPNCIV0hHS46TFIROvdXFLkn6AxXJT+SoXAbkGHdC3OA1iA2VLlL
-	 FNjhvZcbTZP+tGg1JwxUqKKlIkN86medVuBFOb7rYR6ZLqdkwvA5FI2bHCOBodokZmJqN
-	 GFssBwsD/IeuBTd6deYhBh1vIqB2OiFksqwu4dO+HyoLVcMcb3mWNP7ctxT2SGR6SXXya
-	 usddaqnJKQz9cUyKOFNUnLHnSJM9c63zH042dwRfvIewyy47hep4LDQcIofTLyIGR57Sh
-	 3cSvNbMvig91BchH4n9aIZhmPbhHWL2OaVHYKRQLio0os+e99TjBetKucUQOJo6Kl2A==
+	t=1794878622;
+	b=JANKLik8wMNkvy+nwJE22msNe666KdvvT1oI/UfF8Rl/vwzCJWUF7ANQg+oc/HsYSu0t
+	 zZqNuy67fKYifqiVHfrYMGCrORLDDO2sZgpDb7qmRrZG8vaT4FoHvObSr+p/VAe68v6vb
+	 YeoFcngYMiPcrKsKwvhQFU6VIZ7bxf/IO6XhTL+bEaWNRz06vZczPFiPvcCupbOIOSxj2
+	 SakmiyaprnlvfwfeZeyNJefN+RpXwtiwEQfL/y427lpkHIMt9yz8OpHHzWGtvYagFiG5o
+	 ADwnAMkRtDncWfVdG2U++b2K+GQm/VU8oKCUce5XR1axwUXJlzP4tUl7xURPk2XDaLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794873417;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:CC:Subject:
-	 User-Agent:In-Reply-To:References:Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-SRS-Rewrite;
-	bh=VDQ8XKp98/IUabUksJNwRsl5hTpuGniKvWNPUNAUVJs=;
-	b=GA3NXbN1cCv17HuMTsqrAX3BaUEQYCpRX5+vlnievax54mRdISDrbqG8mVVrHseu4b17
-	 LmCe9/AUHDv8hFdzXFkfl3UPvk0V7s1i2mQZuEi8V+OZq0DX5+1NmNzrX+3CkBXCsZfdZ
-	 jdHpGcb1ruEjF/KnFjyHYW8eFeINY9aLWpgInsporYWWeEw2FUScKxno4WDf8f7HuShs/
-	 PKlEwiGHCkHd/acN5u/Wl+Fttjvm9w7QIkvLBSM5y4VUSgnkaTzBq7B/eKfrqV+Y0i4DZ
-	 OciJffgaas9UiZLOkbZG+FuCKhSJvM2VKPQNxzrjKYOYbsNtZCbUmhS8E9Vphq/IgiQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794878622;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
+	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version;
+	bh=6RCPXUXfIxo+y2UnkG/bhthPFYIMWnxtExJ5BNdZHk0=;
+	b=3SDSEoEG5x+LeCQmaZEQiaowtI08g3v7pTL/zchTp77Or2iTRLQKWhEbMpi2BST65tyO
+	 UCqCt8hsdJLZFH8mBVw28fzmRFb71JRlaN8XrVnI0J85LCKGg8uYdveQ+2eEnOtRx/Fci
+	 ED7HO3yx5YVleVmW4j3nj/MmB+HF/Z2xw0SuOC1qOQt+4x+giz/gDQS0cjSoyJPA1phiZ
+	 dVQ+DPdzKJxw0DXL91oHY7Ge8PUSuzKqDgXan8EanDR4fIwWXmpxcitBaHn+SD1x1JwYC
+	 OEvFQZux/hJWJGbMGh+Z1T3EjXOuYaHGnwn0c6DYnUuygGEE6Pvkomishl2+yXqui7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=bAwGBnT5;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=SDswVXvu;
+	arc=none smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540A606A31C;
-	Mon, 16 Nov 2026 23:56:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5540A606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8854D606A31C;
+	Tue, 17 Nov 2026 01:23:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8854D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=bAwGBnT5
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=VDQ8XKp98/IUabUksJNwRsl5hTpuGniKvWNPUNAUVJs=; b=bAwGBnT5GwP1cL3P3kxxd+Tt4p
-	RTDaT0Oyl71V25VcnfUc1TJsIvvkfVFF6tQ7cjAsdBRjhaNhVfROk11PZQ2Lqp9H080zmEhNxAUWS
-	2845Sqt5jD1hB3QkEXAuvA7zWzvgVWcCtoq4A+B1ou32/iKhaZsoaAgBPrjc9SGhhsNX56JBiO8I7
-	Bc4gc4TPwyVghj71V2WVE2j61jwGFsmpNg3XUV4E+wbwhSTecpnZFeqAKhqzvB6pBB6N+mR0wooU5
-	0SOKcOhLC9DuvMxgdFebRU8VgFgPZXIqt3KE3NaXJiKF6ke8hcLAeS4IC8G+z/mXzaEm9DAasDAbV
-	V5XT4lxw==;
-Received: from [2a00:23ee:2960:2262:e6b2:75b6:9515:3c16] (helo=ehlo.thunderbird.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xT6Z2-0000000EQr2-3zpq;
-	Mon, 16 Nov 2026 23:56:44 +0000
-Date: Mon, 16 Nov 2026 23:56:42 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: Sean Christopherson <seanjc@google.com>
-CC: Zack Rusin <zack.rusin@broadcom.com>, Paolo Bonzini <pbonzini@redhat.com>,
- kvm@vger.kernel.org, Doug Covelli <doug.covelli@broadcom.com>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
- Shuah Khan <shuah@kernel.org>, Vitaly Kuznetsov <vkuznets@redhat.com>,
- Paul Durrant <paul@xen.org>, Xin Li <xin@zytor.com>,
- Francesco Lavra <flavra@baylibre.com>,
- =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/12] KVM: x86: Forward VMware hypercalls to userspace
-User-Agent: K-9 Mail for Android
-In-Reply-To: <avuDUNAU_a933zvp@seanjc-mac.roam.internal>
-References: <cover.1794374897.git.zack.rusin@broadcom.com> <90467782be23b83fd3e9a6afe2f1d2149eaf9db9.1794374897.git.zack.rusin@broadcom.com> <876c4f4fc442116c9bff8abd8c34f99fcfa65531.camel@infradead.org> <CABQX2QNd7DehBsH-pGL=EJK4b5vC60PymL_YP27xDxGT6_6=uQ@mail.gmail.com> <1bae109338ab6ff1ff14eac811f7e86ced785b22.camel@infradead.org> <CABQX2QNhRZP1Td_HQ6QpMzw-_TjqhbooipWYg3VTgTOq2_U9+w@mail.gmail.com> <ca9dffb64656a392965f95d35b9d13d829f34076.camel@infradead.org> <avuDUNAU_a933zvp@seanjc-mac.roam.internal>
-Message-ID: <78F8FDAE-31A5-416B-9A97-DB8D5E7271FA@infradead.org>
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=SDswVXvu
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AGNOqqu1978717;
+	Mon, 16 Nov 2026 17:23:12 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=6RCPXUXfIxo
+	+y2UnkG/bhthPFYIMWnxtExJ5BNdZHk0=; b=SDswVXvuAUI8muhYNcUukufeX/8
+	D0GSKX1dQ5mDP6hG9AJk7bmtYcsUtAXz/xqd+GyP3Czju46I9wy6c81vEzz3d+nr
+	3zzWn80O8v8Z//Bt3Pq6YemXWZ0MwbwZYeU/1VhOf3fZQlUgHarY5yfEBh1btC+q
+	FAEuQzvBZTF0bygBuW5y94wMAvw4GNVIlqD8p/O8obf0jZlUjDaNT1qoH5z5NDad
+	udafcX4jcAM+RT8yaHcFlFBzwJmYcfgYnJq+YvvLZN9xNojTZL3F/iVpC9mftDU9
+	15DSOQ7bujgsnTXW9BMI8AYcDHAkQNQ/vVw+bpDl3x68XTwDzvSFxFRHscA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hxku5xbr2-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 16 Nov 2026 17:23:12 -0800 (PST)
+Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
+ (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 17 Nov
+ 2026 01:23:11 +0000
+Date: Mon, 16 Nov 2026 17:23:10 -0800
+From: Bobby Eshleman <bobbyeshleman@meta.com>
+To: Michal Luczaj <mhal@rbox.co>
+CC: Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Stefan Hajnoczi
+	<stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang
+	<jasowangio@gmail.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Eugenio
+ =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Shuah Khan
+	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Donald Hunter
+	<donald.hunter@gmail.com>,
+        Eric Dumazet <edumazet@kernel.org>,
+        George Zhang
+	<georgezhang@vmware.com>, Andy King <acking@vmware.com>,
+        Dmitry Torokhov
+	<dtor@vmware.com>, <virtualization@lists.linux.dev>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
+        <jlinbox@meta.com>
+Subject: Re: [PATCH net-next v6 1/8] vsock: only undo SS_CONNECTING when
+ connect() fails
+Message-ID: <avusfpnZuzMV3WxB@devvm29614.prn0.facebook.com>
+References: <20261113-vsock-guest-ns-v6-0-3737ce4673c0@meta.com>
+ <20261113-vsock-guest-ns-v6-1-3737ce4673c0@meta.com>
+ <6bdfe6f7-aba8-4fb8-ac24-62fe020e1422@rbox.co>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,87 +103,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6bdfe6f7-aba8-4fb8-ac24-62fe020e1422@rbox.co>
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDAwNCBTYWx0ZWRfXw+sA7WyR5fAw
+ TXovZZcIazZICOswjUfauPnRZHKFDpY4OamNG3a9JpkvewckKGNTvzKwEdnOguhJtqIYtYFUORE
+ Oaf8zJKi9lKXWEz7SKlSSR6GOGUZ/9s=
+X-Proofpoint-ORIG-GUID: KMXLMYJs4-5j-kqvUpTGAlw7R4_j3K2w
+X-Proofpoint-GUID: KMXLMYJs4-5j-kqvUpTGAlw7R4_j3K2w
+X-Authority-Analysis: v=2.4 cv=SuoFe/O0 c=1 sm=1 tr=0 ts=6afbac80 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=8elwO82fXORLTBIkMd32:22 a=VwQbUJbxAAAA:8
+ a=VabnemYjAAAA:8 a=LG5T7v2SAAAA:8 a=He0p99DsmHbbqY9DTv8A:9 a=CjuIK1q_8ugA:10
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDAwNCBTYWx0ZWRfX7m85Y5zQnTEb
+ cMVAlqDIp0L2XulWWy+37PM46rNDD2UY88oV3B2zR4ZtJPzZP+9UGqIVwRIIlZXTvIQx3EiZDC4
+ gnkFY9xidHqSP4RoTbA661mzuoizyd7SYwiNmLi1KDMmkzkgvlQ4Kp61rXBcobVCl/zKyBVil60
+ 7am3E8oOWIzMZlEajob5IKnlA3kjYWd5+OTUfZg7Wa/QtQBIWSXnfLK7a1ng8uVvNECyQ0aqPDD
+ UH6C+hqMkjYARmkePb09z0KEEQ85Tg1J1V/c8BTRcJnODLrf2uy/E5mHretdmt9JQuCEKwf63G+
+ 4lCbtvEVGeaZ3Bt2v1anQCC47V5lYoFsR5hPoMxkbtl86hPzsvl7VC9+9h4ir4te1TUs3X5BUNa
+ tGwOB75rcksb/sblhi6g3vr6FErZTmmr8tAv5tODQC+Gg5tnvGhAZVQDMsqHhMfWVpDYLdPgNV+
+ a7jxS+n385ic9UFqJEQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-16_07,2026-11-16_01,2025-10-01_01
 
-On 16 November 2026 22:27:28 GMT, Sean Christopherson <seanjc@google=2Ecom>=
- wrote:
->On Fri, Nov 13, 2026, David Woodhouse wrote:
->> On Fri, 2026-11-13 at 01:33 -0500, Zack Rusin wrote:
->> > > Userspace *already* needed to
->> > > know about those=C2=B9 because it can't migrate while those are pen=
-ding;
->> > > it has to do at least one more run, even if it's with the immediate=
-_exit
->> > > flag set=2E
->> >=20
->> > True, but, again afaict, that rule exists because those completions
->> > have to run, so I don't think it tells us they can be dropped=2E
->> >=20
->> > > If it's deemed clearer, I'd also be OK with an explicit
->> > > KVM_VCPUEVENT_CANCEL_HCALL which cancels *only* hypercalls=2E But I=
- don't
->> > > really see the point; userspace shouldn't be getting confused when =
-it
->> > > was actually some other kind of completion that was active anyway=
-=2E
->> > >=20
->> > > =C2=B9 https://lore=2Ekernel=2Eorg/all/20250111012450=2E1262638-1-s=
-eanjc@google=2Ecom/
->> > >=20
->> > > Looks something like this in my Hyper-V hcall series (except I alre=
-ady
->> > > shouted at the agent for stupid struct layout and made it go run pa=
-hole
->> > > on everything it's working on)=2E
->> >=20
->> > FWIW, restricting cancellation to explicitly marked completions looks
->> > good to me=2E=C2=A0 If Sean/Paolo prefer that, I'm happy to mark our
->> > completion cancellable and drop our exception fields=2E
->>=20
->> I posted that as
->> https://lore=2Ekernel=2Eorg/kvm/20261113170535=2E79246-3-dwmw2@infradea=
-d=2Eorg/T/#u
->> and caught both Paolo and Sean here at KVM Forum and both seem OK with =
-it
->> (although acquiescence when badgered at a conference doesn't necessaril=
-y
->> translate to applying the patch=2E=2E=2E :)
->
->Heh, you jinxed yourself=2E
+On Mon, Nov 16, 2026 at 12:10:19AM +0100, Michal Luczaj wrote:
+> On 11/14/26 04:14, Bobby Eshleman wrote:
+> > vsock_connect() sleeps with the socket unlocked. Meanwhile the transport
+> > can complete the handshake, setting sock->state to SS_CONNECTED, and then
+> > reset the connection, e.g. in vhost_vsock_reset_orphans(),
+> > virtio_vsock_reset_sock() or vmci_transport_handle_detach(). When
+> > connect() gets the lock back, it finds sk_err set and moves the socket
+> > back to SS_UNCONNECTED. Userspace can then connect() the socket again,
+> > and a connect() to a CID on another transport makes
+> > vsock_assign_transport() release the transport the socket was connected
+> > on.
+> > 
+> > Only move the socket back to SS_UNCONNECTED if it is still
+> > SS_CONNECTING. A socket that got connected stays SS_CONNECTED, and
+> > another connect() fails with -EISCONN.
+> > 
+> > Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+> > Suggested-by: Michal Luczaj <mhal@rbox.co>
+> > Link: https://lore.kernel.org/netdev/179447093204.2199510.8895677421994612994@kernel.org/
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> Reviewed-by: Michal Luczaj <mhal@rbox.co>
+> 
+> Thanks! To be precise, the Link: above is more of Sashiko's musings on
+> what's wrong with Jerome's (not merged) patch. The patch of yours makes it
+> moot.
+> 
+> I believe the first time lore mentions the issue at hand:
+> Link:
+> https://lore.kernel.org/netdev/20260909-vsock-connect-reset-closing-v1-1-50298b9ccfbf@rbox.co/
+> 
+> And there was at least one report off-list, so:
+> Reported-by: Kyle Zeng <kylebot@openai.com>
+> 
+> BTW, I've noticed Sashiko already commented on this patch. I feel I'm
+> responsible for that wall of text, so I took the liberty to reply. Hope
+> this will help.
+> 
 
+Got it, will address this. And I think I will actually break this out
+into a separate fix for net instead of net-next.
 
-Yeah, none of us had really had the time to consider it deeply=2E
+Yes, I much appreciated you responding in the Sashiko thread! Thanks!
 
-For VMware and Huper-V I do believe we need to raise the fault *on* the in=
-struction, not after it=2E But that's achievable=2E
-
-I had also added a third user of the same cancellation today =E2=80=94 we =
-need to intercept certain control register writes and need to raise various=
- exceptions for those too=2E
-
-WIP of that at=20
-https://git=2Einfradead=2Eorg/users/dwmw2/linux=2Egit/shortlog/refs/heads/=
-vsm3/regwr-filter-v5
-
-I think I would still prefer to use KVM_SET_VCPU_EVENTS rather than shoe-h=
-orning the same facility into the return part of various different kvm_run =
-exit structs=2E But I won't fight for KVM_SET_VCPU_EVENTS to do the cancell=
-ation=2E How about we just give each of the exit types a way to indicate wh=
-ether to advance the RIP because the instruction is completing) or not (bec=
-ause the instruction is faulting)?
-
-
->If the exception is communicated through some other means, then (a) that =
-needs
->to be explained in detail, and (b) we should be able to use the same appr=
-aoch,
->just with new "ret" field or whatever in kvm_hyperv_exit=2Eu=2Ehcall=2E
-
-I do think it is a full 64-bit return value *or* an exception=2E My friend=
- did originally abuse bit 63 of the return value and I may have thrown my t=
-oys out of the pram at it a little bit=2E=2E=2E they can type fast, but my =
-God they are stupid sometimes=2E
-
+Best,
+Bobby
