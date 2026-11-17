@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794952464;
-	b=0HdoeMtOFZ5KXDBR8zuHrn4AIBLCGVscY/LBwk5bqE4KZ3Ewn8KihQK2QLQF/ACcEG0D
-	 zz+JM6M7xG7Y4+yfAhlgiUvtjyZIq9P7NulGSp06S2bzVFPwJeJT7FXY9Ey/GZtrJI0vp
-	 BRh6qmOeCPYMEPwc0BW4G1xWYwXUpgaInF+SY1ceZMJjl4+jw9dZ7OtKTw63wVftRdauW
-	 7BcX6URioLK2PptCxPXmYMvHUOhqr+vU0eYapFDGrTanfMUTRf65hJXOIS6WzOMT27ngH
-	 la8L0RjrSQqCMgZrbKOG2P/YwTEEjp/su0cLXQsn3t2vJtKCnuxQ2FS3CUoLII6lGJA==
+	t=1794952466;
+	b=2AlhCn0KdbOhdKdiCFUj5BwgM4vswvgyRPq6N6kipLc69FPPdRxCve6iPoN3wLkpC/7A
+	 oFmw7mvwKEvXIIBY56lHsY+qJTGysztOHcrxtJHoGR5Zvg+hOTuuv9CmAfq+BPxaDZ/We
+	 uxTlqR+9Pazk9zZYCXMi0yD4UdEMqywukvrXihrjoq7/UVVxIYu9NN3Lw2ElBAo8FzW5L
+	 55GmfI0xDiYQpkSK+rwmeLZBg7U/SwXKPruGYiQPpYdfuXOIcxClSauXa/br/V7PzCNZ7
+	 +2tthVL2Tc3dHc0FrYeF9BfJooDbhU1JjCYiw9Ux/Mq8tSGLLGKuq/dnjfVnYsrAJQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794952464;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794952466;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=EQxaNsOwz4D2HUUy1GPmObRm9Acepun3MfHPQ7DCyEA=;
-	b=UnD1knLV5xDk37GXPT4aRkpTK6lA1QjAq1e6k8b0mJWL0MwR8oliiXs7qb7nzHJk0sHb
-	 VIBL0D/pAJuggCpKFIoS9qIi9sL0vUo8UjOKpQmndmirUeoKY5ZOVe9pRSgjIbX5BISkR
-	 Blhl8xYfsFOqYGgznA5wX9n1+zer6BLjcCc7+8aqwd78F7IsWlp6qZe+TQXya9hLXRV5R
-	 9pZYNmLxq4PB1qpX0v9oWyGhXgivmMGVy9hO6QFipHPQ4tCXBpXmXndaN4+V9/Hcg5xpx
-	 KJyvLEf7UJM560n6MXwG5RZ6idXDvlrOWPtEVUNEIqtJZVhE0nDRstsSlYk80RMKmVw==
+	bh=DRUpC1ia/SGGyXZ7wtl3dvuAfgYqDQrahDr+fyr7qzo=;
+	b=LAa12DZlItt6kk2wd+tn7ny+z2+pOSXrpA8AZnAdq1o2v0Bt6i/ltAEq3fNWlIHzXPwo
+	 ITjJ4jRbB0rg4si4/9xhFzPSubW7Yb1g9zs4wJV1TvieVirgLRaUYWhAaXa5VRA2qR7Mj
+	 FmLqscz+7cRWWKXiKqm2oloSsTsahMR0r0b1JD8NX1phMqsfAzu0fxGI28pTNa6cPDkCG
+	 X7A1ebfeBA6B5YHGLGBkGncH4qTMnzj5iRgHhzmqOAQ3a0Vl3RGPFCV0vBQDKSax+R4uS
+	 JMtlQ4Jm7hKrpI83HynkFlHRU0gnSsgiSXXlS1hdtcQblsDKAynAfNDok3tgmxKBATg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VhX7Jcov;
-	arc=none smtp.remote-ip=209.85.215.180
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oyTUrrZa;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94F9606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 21:54:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C94F9606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5524606A33A
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 21:54:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5524606A33A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VhX7Jcov
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso268563a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 13:54:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oyTUrrZa
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cddc597d062so210401a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 13:54:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794952463; x=1795557263; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794952465; x=1795557265; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=EQxaNsOwz4D2HUUy1GPmObRm9Acepun3MfHPQ7DCyEA=;
-        b=VhX7JcovyKmxrvgpIB50VgtnRKLOxpSCZaUD5vEX1j+ZH0rclqvrXKsgxWfxAQ0LYO
-         jk9amyl+pksRr8fdhxOy8ejm8VaYDnwCogkH7TiAedxD1aVxwD0hmzEJQsD8E95LjcJW
-         xb+eDL9hMkYYxlNZj4tCv7bjEEO/XFWV6iaQT4TxY9l2e6edpzujiXq3MBjkTHh7gmqY
-         V6dNwKUYuPbarpG+jSEgod5QpdciWNgttrw4dfa6qS6mYhft6pBs2rPw5GgEnMQuTco2
-         Vgita1KfYEyDGdqpkbjf4GMnvaC2h6e/81WNYUz0rXXORVFl1MaPSy3iRflFkwR/FCIZ
-         BscA==
+        bh=DRUpC1ia/SGGyXZ7wtl3dvuAfgYqDQrahDr+fyr7qzo=;
+        b=oyTUrrZaD3U6y9iF+/WP+iFGaDphOp0jPL1Lj4o8T/ibG0uWJRDRZ+strisDHToiZ4
+         5zksiJEWUTZfJijxq1Kl+swar4Ig0xS//XLtmin+XCR5PLYB1Bvysk/EqOvCi8q5SpcY
+         mVQ87q3ifB6buhCe40BNFXKi4rvxr7yXLQEAUJfV08U06CXGOMNVhQQ6m5a2co6+nQFi
+         lB72YB92mVtvx3gLewTANqO7aC6Xftjwt9Dnbdbyjyzyp3bb0yz56psmuXGEBpnocZmE
+         qooxP0bNqNKao9SK7S7WH5IiXkdBmKNwARMVFjKG/c2pRu1JoKaUpgsA/1DJV1gcd2Af
+         3euA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794952463; x=1795557263;
+        d=1e100.net; s=20260707; t=1794952465; x=1795557265;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=EQxaNsOwz4D2HUUy1GPmObRm9Acepun3MfHPQ7DCyEA=;
-        b=p8lJAtBYvSPXzVBAjgsqKjp3IIHVnVHpVeXi02EZiC4Z24zaRLfti6ln+4z7XorEDl
-         J3iC6SLKNo7JdqP0V3PTILEkXU20SBrkZRDBgpd+V7QkU3+isvuUcFe1BY57dd7GhZSi
-         kd/3W9fO9AWGrWy1plvaK8iqTd25AMBVc/JalYY2BjxcqVyQefCZVq8BWG4OBJJ6L+LX
-         CCiLvOUghJNx9IVmT/8fcmXw4BTCcS7ZWGq9O0LUn4MJjUVzvwFwUIHkn6Eg54PnCBXX
-         /Atb5kgWBLdoOWN58AqASmavAYc3fMgw+F5WCT3B4MKJ6saKioiYH+Y4KcloXbt1nDQD
-         8/QQ==
-X-Forwarded-Encrypted: i=1; AL+hErFa3c955xoEEON6HSveM4WFZhED6QlQBGwFdOK3lutYY3t0HaaCt6gLiHSfJzYJo3gudsbrDnBPBilRev+bp24=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+kfBnR0z8HL2avqY7MPgZpOif4ECaY1yrleJgszEBsuMXr4h26
-	02rVtFpDf8OGBMcYWjY+s3C6hHTPYxJWB7Hu3B1yixX/MTBgj8gNbqLQ
-X-Gm-Gg: AZFdTZehP6eN2OhI/Fuo2WxmDUJMEXdaC3RRMeIU2R2ENaH5ce/nv81g0I0fdfAej/v
-	cV2EOZ/eCLOP722V1LV4lS+fKOMXJ1Q/SoIGSDmtyyqtMhO+bXUDy6QKC1YwJOG0i9zajV2Km+j
-	q8+brVcut6mSb2lxmN1R72rnMBd7+l46f3/VvGqZ1rquH3gN3Ilh7m++IWAhLSKBUheEOXED1IQ
-	CmBzE51nBX4JtQTCggQFoqjm0mtYChBRqZlDrlaGXGbT0n01L9jI6tPJFYRbQKle6BLSySSjfsb
-	47PgXvIKmrI9KMYU/ncm7Vk/5a1c5I18q1YXvbqMGQy/2mJE6NbpLBABS4zr3dTtdvXxvLUUaG4
-	XDuyvYWqIIDUzqXYWNn6cgLIXK+9RkuQ3MA9rCoAZl4D61z/2aymsd0sTB0656YWxLrJT7bqvAj
-	1mM2ZBblL7+Y/uIrP1QX94VVwNFn2NkE022jTCMKjqbXDeNUdwjzxauTWvCTBD+JV4AL7IsO7PJ
-	ns/Go0yZMu+cJZ1zsNIPQCiMQ1QgPIFIF04RtM7wLADsnkrxSqsALulpAQ17Tf0RrZMoUHEJkaR
-	DOblWx06ESqy7nS5mSgaelVkhw0u3zsvA8c=
-X-Received: by 2002:a17:90b:4acb:b0:3b0:9317:5842 with SMTP id 98e67ed59e1d1-3b3d07b08a8mr748364a91.48.1794952463115;
-        Tue, 17 Nov 2026 13:54:23 -0800 (PST)
-Received: from localhost ([2a03:2880:7ff:3::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde3c4bea17sm91996a12.28.2026.11.17.13.54.20
+        bh=DRUpC1ia/SGGyXZ7wtl3dvuAfgYqDQrahDr+fyr7qzo=;
+        b=fSfdYhNiFwYfaHEwrxPJTDS5rfT13vz1OYzOHNkbS+hCO6dRzhO0FmiMDosJ9bhz8U
+         Jdhn7/fqEncEHkij3BcljLfZf0cxk22zd52UKDHOt9H33BhK9ZIDZMxJNc3US7mVyEKv
+         T19DL/KK2Hv4kuOlwcwJGnhxxanS8WMJrsAcZUHbX9CB0zOkMzxbwv0XO+j/xZ5m/Rja
+         5WOLGSR3wxLJXDRJHB9o+Jv1D61lEpa2H3LWIkMeDIRAKuO7eYXZGmYypPsRRxE0pHz4
+         g1A5dIh6ZAkRgdMliI41/9nrHA239j0TQT618QBqBSSLC1oRpJ7/jxNasJ8B2Z2Yve4B
+         xrVA==
+X-Forwarded-Encrypted: i=1; AL+hErGRtJH53tf7/DPjd7tPq/Q2STI6LU5xPCBnoBxikQDBIslNp0GHo2ogzyU9So46VB1Rz5xjbiP6HipwTxeiWVY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z87rC1zh/GzUEyxPtTYK1yIoGTyXYq07D1AHeHIdfsW/b35WBgF
+	yDhoGqziE5uzHh9CksQn42qL5IswGc7QjzfP6rgLIogBZIwjyBM0cDTw
+X-Gm-Gg: AZFdTZcEUJWaX9796epTSyyYQ6KOLNFkzCb+5Er+rRKT49VHxtEZqyo8IwV5T470OVS
+	RIskvfoFudzC7Ck4Ej/lnYo2KCPhLmCnhiwfeN74tGLUxCe9gK2Rb/AD9/iTG1mj6T0EejzVZ1a
+	qVqVS6mOT4X/dlubVyoAlMAhqJVaUIOekZmqrXxXLr3HuRtPn4Av/0P6zIIxRP17UKfNhs4mhu2
+	5GNJQT2A3q/J3MUK9VszIaWCnps4vqCA/ULx8yqaJfKjKJxGusAs//VgAfkUDAmR2SPooJuv3sW
+	XDGqz6jP9SIPrmyGGLMZ5dmG5XN0p7n7xHIoMmPPiBbd8iB6nH0vX8N6rZRgvS2KAJXmlxIpcgC
+	HJcsZQ0BopxNB0WZqCkTZC3g+5r2eAKiHUM76epINquOikBlO8pLGrdmFwUMotG1eNTqB8xpVbe
+	v0WsNp/p3XhOK3PRezG8s9vaMdzOQx8J4OiL+8dam5xCskBZUK57RugYz68wn2xuMmHzwzTBtD7
+	pg5Osf4hSRBV3eAsHU6ACgw5JVlJvNKMQMAIdp6Iygh3zDwWx18LzNc6xFelpDke/yulzumtWk3
+	xV3fpNsMmRw1dOB0nJJgDUr/7nmA4hP2We4=
+X-Received: by 2002:a17:90b:37cb:b0:3b3:b0e5:57fb with SMTP id 98e67ed59e1d1-3b3d07e372emr802152a91.60.1794952464869;
+        Tue, 17 Nov 2026 13:54:24 -0800 (PST)
+Received: from localhost ([2a03:2880:7ff:44::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac2b5ec6sm5872992a91.10.2026.11.17.13.54.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 13:54:21 -0800 (PST)
+        Tue, 17 Nov 2026 13:54:24 -0800 (PST)
 From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>
 Cc: Alexander Duyck <alexanderduyck@fb.com>,
@@ -100,9 +100,9 @@ Cc: Alexander Duyck <alexanderduyck@fb.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Subject: [PATCH net v2 2/5] eth: fbnic: skip disabled Tx rings when setting the queue NAPI
-Date: Tue, 17 Nov 2026 13:54:13 -0800
-Message-ID: <20261117215416.1901246-3-dimitri.daskalakis1@gmail.com>
+Subject: [PATCH net v2 3/5] eth: fbnic: skip freed Tx rings in fbnic_get_ts_stats()
+Date: Tue, 17 Nov 2026 13:54:14 -0800
+Message-ID: <20261117215416.1901246-4-dimitri.daskalakis1@gmail.com>
 X-Mailer: git-send-email 2.52.1
 In-Reply-To: <20261117215416.1901246-1-dimitri.daskalakis1@gmail.com>
 References: <20261117215416.1901246-1-dimitri.daskalakis1@gmail.com>
@@ -119,51 +119,42 @@ Content-Transfer-Encoding: 8bit
 
 From: Dimitri Daskalakis <daskald@meta.com>
 
-When Rx and Tx channels are not combined, each Rx vector gets a Tx
-triad whose sub0 is disabled with a q_idx of 0. fbnic_set_netif_napi()
-and fbnic_reset_netif_napi() don't skip it, so every Rx vector
-associates Tx queue 0 with its own NAPI, and the netlink queue info
-reports the wrong NAPI for Tx queue 0.
+fbnic_stop() frees the NAPI vectors, which clears fbn->tx[] while
+num_tx_queues is left unchanged. fbnic_get_ts_stats() walks fbn->tx[]
+without checking for NULL, so asking for timestamping statistics while
+the interface is down dereferences a NULL ring.
 
-This bug was found by AI and verified on HW.
+This was found by AI and reproduced on HW.
 
-Reproduced with "ethtool -L eth0 combined 0 rx 34 tx 34", and reading
-the NAPI IDs with "ynl --family netdev --dump queue-get":
+  # ip link set dev eth0 down; ethtool -I -T eth0
+  BUG: kernel NULL pointer dereference, address: 0000000000000050
+  RIP: 0010:fbnic_get_ts_stats+0x38/0x60
+  Call Trace:
+   tsinfo_prepare_data+0x82/0xb0
+   ethnl_default_doit+0x213/0x470
+   genl_family_rcv_msg_doit+0xdd/0x110
+   ...
 
-  before: tx 0 napi-id 580, tx 1 napi-id 514, rx 33 napi-id 580
-                       ^^^ rx 33's NAPI, not vector 0's
-  after:  tx 0 napi-id 513, tx 1 napi-id 514, rx 33 napi-id 580
-
-Fixes: cf4facfb132a ("eth: fbnic: Add support for XDP queues")
+Fixes: 96f358f75d1a ("eth: fbnic: add ethtool timestamping statistics")
 Signed-off-by: Dimitri Daskalakis <daskald@meta.com>
 ---
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-index 5efed21e5932..89e7b806363b 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-@@ -2184,6 +2184,9 @@ static void fbnic_set_netif_napi(struct fbnic_napi_vector *nv)
- 	for (i = 0; i < nv->txt_count; i++) {
- 		struct fbnic_q_triad *qt = &nv->qt[i];
- 
-+		if (qt->sub0.flags & FBNIC_RING_F_DISABLED)
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
+index e774740fcb5d..0cd03cbf2713 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
+@@ -1740,6 +1740,9 @@ static void fbnic_get_ts_stats(struct net_device *netdev,
+ 	ts_stats->lost = fbn->tx_stats.twq.ts_lost;
+ 	for (i = 0; i < fbn->num_tx_queues; i++) {
+ 		ring = fbn->tx[i];
++		if (!ring)
 +			continue;
 +
- 		netif_queue_set_napi(nv->napi.dev, qt->sub0.q_idx,
- 				     NETDEV_QUEUE_TYPE_TX, &nv->napi);
- 	}
-@@ -2205,6 +2208,9 @@ static void fbnic_reset_netif_napi(struct fbnic_napi_vector *nv)
- 	for (i = 0; i < nv->txt_count; i++) {
- 		struct fbnic_q_triad *qt = &nv->qt[i];
- 
-+		if (qt->sub0.flags & FBNIC_RING_F_DISABLED)
-+			continue;
-+
- 		netif_queue_set_napi(nv->napi.dev, qt->sub0.q_idx,
- 				     NETDEV_QUEUE_TYPE_TX, NULL);
- 	}
+ 		do {
+ 			start = u64_stats_fetch_begin(&ring->stats.syncp);
+ 			ts_packets = ring->stats.twq.ts_packets;
 -- 
 2.52.1
 
