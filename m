@@ -1,59 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794926420;
-	b=W0rtMBRVFeWyHfwc0kJgs6ClF06rLbCrVcb+tr2nD2W7FK2YpyJYGc3Dq/47XKzJDWvk
-	 o7yiYNqi3CcbeKuus66f2cKhlHuSiBnK7ZfGzQeXCgAn6DSL9U3bobqEPfpplDuUljQVE
-	 1kD8fh3YIVYwK7vgKB9CTlpa88921jCuB9+m6xhEGDsbr6E/JalnC9fA7OD9gJDqR6BfP
-	 gDSsVzYREMQN/Xe/VpjPaoDBe9CY7xeqNkYsNceLkGF1LEuTzz9gWqJERdlHdOlq6z2s9
-	 p1922HM9cqbFfOiseINDAKy9KHH0s+Zw13ut3X7jKUy5Tgo1JWvrvDUlxNVE8iigYgw==
+	t=1794928207;
+	b=jf6ozNohAS4GcIR0ERL7i4aPeK57cq69c9NiViSZ+AfpQPo7uEZy6NuwqUCmjrlBHXU/
+	 TknByX8ER0ZpaZlFePAyagc1x6SWnw5i16jbJauF6y0iWFiXTIpGisJUFpNoe9rj62Klz
+	 govXlXz0l8un4OBXLWRlTjTCt51YrMCqxiFPf/ec3WS2Sb1dgxvs6t9rMEb9q79U00UNw
+	 rMs7mqNksG8DOTei9udw8KxLEiM/HaRT6ldJNJabZFlYaezGDwzcCWwHxqCD+6zUl2ygg
+	 1oWpEwjuobFaDxY/VsaE5mKUPh8Jnp4FtKWhN6ZxWWkfyfTiM1ZBY+vNG/deCpG0JZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794926420;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=Is3YZDsuf4kkEHdqcvbool8F9PgEbG1uxT0GybnHP8U=;
-	b=lXXA9TX9yHDx9Z2woOHRE+2rMsOflxAwQLxcKn2e3hbJGUq2uywoWgJ5EEJLYkeFtD0q
-	 Y3WiaunOfoAOhGoQa43kf9/0LVL7gxXO+86NCycsDCIFd9JrcjCNZEowA9FeIlTuSqjk6
-	 KpX2vnYU6GLfZ/xPa8EFlgOvT9sWDGRTVt6p3vMT1mSJg+0/R6ox9pty2938e+FA1As95
-	 aNuOfkpWRdOzfjvLh1GYlFlFAtYQYs5xWjv7qx0ZKsduX54v13zSuLUOAWZ9b5NLRVyIH
-	 pYFUBINCfyZIYNiYu6cttQ5E+1DAYJFzGEIVN0VjpwlVT5BzSTtDQ68nDbNpaIXjYPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794928207;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=lEbpltDNjkJszBEnTUmCRNYXNuTkbTXqfjEIb3lwv5w=;
+	b=CGzZlQnXQWsJYZuSh2TThObXarjfXLM1pdJNmmtSI/emHQQDPmIIDBWEyhWGxdoqa31b
+	 Y/SFBD695lHITR82A1QJdEPaFScpLa4r0LKZODIKpn96FJ66r7y+WsTqp/bmtSnt6/2KP
+	 prOdYjaMarqEI2b7cIxrkm7lGFEXpasa2TnSk74DTveuSnRepcPSaHSkQixGIyfxa2TLP
+	 3q8XSBGrUiqk8m/Mk9F3TwxcVGfecajZRye3/P4anJhff+dEahEuwosUgTOHtvxxyWtjo
+	 8gIfubPl/TF6QfozNtG5rFWjvq3zi2a5zD7brcKeLokdR+C8xPXUVARkqDtA7EAGCrw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iGIIRE7y;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hsRQf0mL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD13606A33D;
-	Tue, 17 Nov 2026 14:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361F5606A31C;
+	Tue, 17 Nov 2026 15:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iGIIRE7y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18BE61F000D0;
-	Tue, 17 Nov 2026 14:40:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hsRQf0mL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C7D1F000C7;
+	Tue, 17 Nov 2026 15:10:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794926420;
-	bh=Is3YZDsuf4kkEHdqcvbool8F9PgEbG1uxT0GybnHP8U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iGIIRE7yfPORHZlp7Lj3Bag4dvQuRrC62XSY1s6WDTNwavLC1O5g6mPe7yWCoHU3e
-	 3lEfcY99mbdwW+mnBqYQSsmlvkVMxihpUSe0nnnqdhHjz5PunFqtuPY9ErjUAg2xVH
-	 7w8V7WwU1lHBrFBefjZxu++osEVkRbISir5i0SwSQFxhRTwJV5fMFvRnORd1/ajyV+
-	 iWzJH+wRMnP+rbZ3UF8ffi6FtwgL2yPFkfAq0sWebH+jMNJ3vevr0bFvTdnzk3TG8J
-	 yuOEfVjkgJXF9EpoKL0KQ3HYTYwuj8/WKuB586Z9/OGkOmk0kaKm2m+mpRU3L4owa8
-	 uAiL/0CdbhMrA==
-From: SJ Park <sj@kernel.org>
-To: Aveline Noir <jm5905938@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/damon/damos_quota: skip the last sample when counting exceeds
-Date: Tue, 17 Nov 2026 06:40:12 -0800
-Message-ID: <20261117144013.121872-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261117-fix-damon-quota-selftest-20261117-v1-1-c65d687d3def@gmail.com>
-References: 
+	s=k20260515; t=1794928207;
+	bh=lEbpltDNjkJszBEnTUmCRNYXNuTkbTXqfjEIb3lwv5w=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=hsRQf0mLTIxiiq7hK/eySWKy8ndGqH5/fMIrhIRDwea/Gw9OAISYBklPf9kmJD36/
+	 yjTUsyb+/p1JrWk+rmlONVaCLZus4zvMufcH8EJJb5+UjJctW0lZ236AWiEPWH2b8D
+	 TzF5hVoEatJt+vbmVQscGH9wPF9J+gxQvHPsJl1mBVwSOx+T0O80saDmyrkDcX1Hhw
+	 WBI7oMXlCnv/AT8uY7iFfC3igVtG/me0ry8051lLUTFdvvsYDhsqwLwCaz2T/PWrIG
+	 ey6XY0zENEn1sTXXza3stfd2CupL9TSNzBe9Lyozc/C44tMM5jZ1bc8XHwUnFSGwQq
+	 9qZozkB/E1mFw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F1612392705B;
+	Tue, 17 Nov 2026 15:10:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,34 +54,48 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] ipv6: always apply all.force_forwarding to every
+ interface
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179492820578.647296.24088219612999201.git-patchwork-notify@kernel.org>
+Date: Tue, 17 Nov 2026 15:10:05 +0000
+References: <20261112-ipv6_always_apply-v1-1-8df846631005@proxmox.com>
+In-Reply-To: <20261112-ipv6_always_apply-v1-1-8df846631005@proxmox.com>
+To: Gabriel Goller <g.goller@proxmox.com>
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, dsahern@kernel.org,
+ idosch@nvidia.com, nicolas.dichtel@6wind.com, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-Hello Aveline,
+Hello:
 
-On Tue, 17 Nov 2026 17:25:36 +1100 Aveline Noir <jm5905938@gmail.com> wrote:
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-> damos_quota.py expects qt_exceeds to be increased for every sample whose
-> tried_bytes equals the quota.  The kernel increases it only when the next
-> quota window starts, so the last full window may still be pending when
-> the workload exits.  The test then fails with an expected count one
-> higher than the actual one, e.g., 15 < 16.
+On Thu, 12 Nov 2026 14:41:00 +0100 you wrote:
+> Currently, writing to all.force_forwarding updates the interfaces
+> only if the value stored in all.force_forwarding changes. Setting an
+> interface to a different value and then writing the same value to all
+> leaves that interface unchanged:
 > 
-> Do not count the last sample.  Also drop the sorting of the samples, so
-> that the last one is the latest.
-
-Looks good to me, thank you for this patch.
-
+>   # sysctl -wq net.ipv6.conf.all.force_forwarding=1
+>   # sysctl -wq net.ipv6.conf.dummy1.force_forwarding=0
+>   # sysctl -wq net.ipv6.conf.all.force_forwarding=1
+>   # sysctl net.ipv6.conf.dummy1.force_forwarding
+>   net.ipv6.conf.dummy1.force_forwarding = 0
 > 
-> Signed-off-by: Aveline Noir <jm5905938@gmail.com>
+> [...]
 
-Reviewed-by: SJ Park <sj@kernel.org>
+Here is the summary with links:
+  - [net-next] ipv6: always apply all.force_forwarding to every interface
+    https://git.kernel.org/netdev/net-next/c/6bc9aed3994c
 
-This patch is applied to damon/next [1] tree.  I will repost it soon (~1 week)
-as an mm.git merge request.  So, no action from your side is needed for now.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
 
-
-Thanks,
-SJ
-
-[...]
