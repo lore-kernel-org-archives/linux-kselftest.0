@@ -1,50 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=57.103.86.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=57.103.86.145
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794943918;
-	b=kyTDbF/ApxLHZFCnIW3111Q2SqZg3Hf8LkM5IpC3xDrynELF49tgd5cDk+DErIvcz/y9
-	 mqhZYi9tze4BQe/Ig6osrhewFzUDPZu5ifVUJ2ny7gOeYkxJ8vG/sPGJu03ZKtsDaUsrh
-	 jVorkMDfxHmEGfxpi5riq7oqXHF9cv3yrZIzNMBJ8YS/DmCZjl3SE9iN/W3u3eZGn1r0J
-	 UlClT6Ep8cItHEc8Lh3GzLkXWGmdh7AXifII/A9HHfkZCBlvtgtLI958P0aL7GbJ6bYH/
-	 Mz2q6jSlKNwdRLjRrrSlO1QDBF2CEp3NdYYJHYqwVz/0fcvOJM4pR4GV3MokOZ18z6Q==
+	t=1794943919;
+	b=XVE6ZlFGUKBs1L0s5yItf5vkW5RzMo9tk7uc9HGiqt8IfS4eJ+ZRdSnEQvivVVxsYd3g
+	 AGQ2xZOWfjJxz4PL9ePwg/HImM6OqIxDb9g+v6ukKNWVuQLes9NV8+ukTGW3SuycEy9Il
+	 UsCyg/sPh+IsZybZR9TeOxm6tAXnP79UUQyf8uJW9U8ZuTi/wkVs81dAH2np4+dpZ7kJ6
+	 3Iahf07B6JODjJsIrEaLAkg9qYn59lb6y18zNYSKvcKrdyDnzpL3oMqV4mTu3UDehfg3v
+	 1EpU/3Z7YA471Q02IG5FpJrLZkAF0liX0zkiJPTeCYtaQBXO45rB6aWtcDNEdw0qL2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794943918;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794943919;
 	h=DMARC-Filter:Received:X-ICL-RepId:Dkim-Signature:
 	 mail-alias-created-date:Received:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Proofpoint-Spam-Info:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
-	 X-Authority-Info-Out:X-JNJ;
-	bh=rN1wAzsDyTyHsKYikFRi8F7g30XHEisXiAU6gXl3u08=;
-	b=fHP+Bqj+KMFX8h5lcJsj6H3ut+wlexzDFLC0D5xUXGp2kfoXE4xIBuUFZkK0nEOeYFUE
-	 Gth2rQZM7c9WjIU3fMpgoKAodU78SiAaAw24SZNd+Flu/p+PRdYH2p+NN4DGLzcpOYBG1
-	 wPqXUxgGYy3Q5NYKfGWbTOio/8wMFhOFKGN7EBZFE13oXSUQbzMtqwJ4mv30Yku1wXxMg
-	 5VFGcpJGTEcJcIVt+ZZpvzEM66LFgvrIjUAAfJAfa08g1usCADy8g6DRcOC8JuUauWEY7
-	 R4S2evHT+xcLEr+jsDplju+viCTYTAEd3quTvnRLtUfOPSSQJSYOxsJzojkM1l4G4/A==
+	 Content-Transfer-Encoding:X-Authority-Info-Out:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-JNJ;
+	bh=S568VBiZawAF43lVx5UIOI9lVrbFH9i2Y+l6M8aUoaY=;
+	b=Ca6ILo0psjOG69phsQfQBODhqI9kz8o5oywaCjKgjS9snzMeQnqvjYJGGTg6iNy4IX95
+	 eMJkojQ1aGyQFCee+pz0Y7JcsC92kPuVUIuFF8/JLaVRLWXge2V0p7ehMAdopO98W9wRt
+	 hG/331dEqnDszmCcv0hSWVAW0HcO9/Wj2d00KRarXR3B/uomVTvmRtpO4uu/pW2Q1j1G4
+	 AhA5iqjMZs63sYnV/UnGtorLzdWkwcRI0cRX/JnP0d0/CfZuw5GLW2ezr5GMb9S7Woww7
+	 f6UBSUtghSCKbx2zBoV9Vge2mE+E/BxRy5QqPsC/EqqBLTiAnDAKFXweXcEOc69BrCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=verdict.gg;
 	spf=pass smtp.mailfrom=verdict.gg;
-	dkim=pass header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b="H/aCc+E5";
-	arc=none smtp.remote-ip=57.103.86.181
-Received: from outbound.qs.icloud.com (qs-2005e-snip4-11.eps.apple.com [57.103.86.181])
+	dkim=pass header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=UbajGJBd;
+	arc=none smtp.remote-ip=57.103.86.145
+Received: from outbound.qs.icloud.com (qs-2005b-snip4-4.eps.apple.com [57.103.86.145])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B2B606A33B
-	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 19:31:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38B2B606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02C3606A33E
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 19:31:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F02C3606A33E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=H/aCc+E5
+	dkim=pass (2048-bit key, unprotected) header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=UbajGJBd
 Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-2d-10-percent-2 (Postfix) with ESMTPS id 2BF283000171;
-	Tue, 17 Nov 2026 19:31:53 +0000 (UTC)
-X-ICL-RepId: 01a1eafe-8c80-7955-8955-4795a3a64edd
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1794943916; x=1826479916; bh=rN1wAzsDyTyHsKYikFRi8F7g30XHEisXiAU6gXl3u08=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=H/aCc+E5impAEyXCBfDtV0/tlNHnmC/HkRwSqOYfmscXsbstE0292HQlNePX49M3ztnLBPFJ2kh37xmADrdREUsrHWXiASdOTVjrSa0k8oWWMnqASlZXadUdonxeqAubKbtcfotcSUbMtYcAR75B678c7wqVmty+JxyfBoPtmysPJsxQO29eYuu0ucJL0PzC0AMtgr+OTv5yLTeah8fquqQFXXAbXC5xzBdfs+bKkZpWOO+Pa1eCY3H3lamd5jtMPf+NryRhjzwTNPqcYlpFAj553Gk00G9iVhENRrf6gczziBOZt0fei+gzVMBQ72nVsSUTX0hfh2czytZuIusrZA==
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-2 (Postfix) with ESMTPS id 2879F30006CE;
+	Tue, 17 Nov 2026 19:31:54 +0000 (UTC)
+X-ICL-RepId: 01a1eafe-9449-7edd-b63a-b9f3b4a926bd
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1794943918; x=1826479918; bh=S568VBiZawAF43lVx5UIOI9lVrbFH9i2Y+l6M8aUoaY=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=UbajGJBdAMQkX0RebuPU3iXZVtLOctW3j+VsV5kq0iHMVv9QDkeEpcKaxpYXbwIXYrSuJbCi5d7hg4wSH5wgo4vAzYNrQhZWzPowg6fIPugp3FuEZWb3xENUWw1Ii6z72eVMVy1MYLeRod8X7+GTrR76iVaSzde0zH/8s724KnhBIOgSHo3svI3XD7emjJlned8leUzkBR2b8dLQuPIazuiKwd1OZC3kg7oIW6AOrkW4vASVnShIEMQskMIMqj9MqNJI5v7cPAA2U+xRIwvBQR2kDZjXwYOpoR+njD0Gbx6wa1bNI6vOe/l5wEGwkw33wkLiDZLlGfZLvrUCLUNcTQ==
 mail-alias-created-date: 1621344842221
 Received: from DelNac.mail.msk (unknown [17.57.155.37])
-	by p00-icloudmta-asmtp-us-east-2d-10-percent-2 (Postfix) with ESMTPSA id 5E32730006C7;
-	Tue, 17 Nov 2026 19:31:50 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-2d-10-percent-2 (Postfix) with ESMTPSA id 8FDB33000176;
+	Tue, 17 Nov 2026 19:31:52 +0000 (UTC)
 From: Vladimir Vdovin <deliran@verdict.gg>
 To: David Ahern <dsahern@kernel.org>,
 	Ido Schimmel <idosch@nvidia.com>,
@@ -58,9 +58,9 @@ Cc: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vladimir Vdovin <deliran@verdict.gg>
-Subject: [PATCH net-next v4 1/3] ipv4: Check a Fragmentation Needed against each path of a multipath route
-Date: Tue, 17 Nov 2026 22:31:39 +0300
-Message-ID: <20261117193141.27004-2-deliran@verdict.gg>
+Subject: [PATCH net-next v4 2/3] ipv6: Cache pmtu for all paths of a multipath route
+Date: Tue, 17 Nov 2026 22:31:40 +0300
+Message-ID: <20261117193141.27004-3-deliran@verdict.gg>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261117193141.27004-1-deliran@verdict.gg>
 References: <20261117193141.27004-1-deliran@verdict.gg>
@@ -74,222 +74,257 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE3MDA3NyBTYWx0ZWRfXxHkkGdvFWXOQ
- AAcKtJ7uNYB+a2aAtPF4Br8M6/5H6T+7UKY4TEB5Gz88D9F22lzpFG9QOepATAMkJp9UYr5laNx
- iyKmaLlRYmKINch+f1doRMVLOM/6id8=
-X-Proofpoint-GUID: Tdyp_REldT85hbKg71cBBtghor5BqhrM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA3NyBTYWx0ZWRfXxJfSMHPLOoFQ
- fx7wrbf+QfIcuPgb7i9OXqpFW2AX8S1YNMi+89luBg+9rF2FxMIolyMJDh5L8ZyMmP1MQqsxhSO
- 1FGgmO1+fUy5UqPDPMpmlzaHvgXCmk1WKVIRAqaBcoOe/Oj7VeDWeZZL8yrAg4s4n11V47CDlC1
- yQavSjBGDvTCtJeQl7MIkvDWfJpwNb5r+8kps8QARbt9tQ2gUh1D8kgaP4rh/++ImaRBBMdJN1D
- dgefsc12I8UabC2xvkKo2MY3tNh9SmOUekYwQM0M1gfuKZybnDAIcgNzjvokhmU1peOMy/WrI+x
- 87gBlj7GKqDVwaH28vgm/IIcOhlzByhtM+wojdAyRZikdWWOo8VaVKlBmWdESw=
-X-Proofpoint-ORIG-GUID: Tdyp_REldT85hbKg71cBBtghor5BqhrM
-X-Authority-Info-Out: v=2.4 cv=EJOTQFZC c=1 sm=1 tr=0 ts=6afcabaa
+X-Authority-Info-Out: v=2.4 cv=eZUwvrEH c=1 sm=1 tr=0 ts=6afcabac
  cx=c_apl:c_pps:t_out a=bsP7O+dXZ5uKcj+dsLqiMw==:117
  a=bsP7O+dXZ5uKcj+dsLqiMw==:17 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=HxOO8S7qDNDRVQTpMkN7:22 a=0OSefl1wAvM1iDVUJ7Ah:22 a=HdksMtlPh3Tn2dY-6eIA:9
-X-JNJ: AAAAAAAB8rPvDcUX3ZLgcgHjcRpMweUBNVctQMVy1436jeJP9wuxUj8ZAuh1W0UfQ6YMYX
- 9ftrn9uwmhqZzzmWRxUFrRXk1estSRfFOevvDjruUfA3pAqEOEv0KUv4i+0X4Y7hxMe403
- 2rDB0HfzlPcyAtBaOhUnl0NJ0JFr+cada7vYj67ocuD8zsqZy9R3s+owGLM+/cghwKYJLj
- b45Mwup/7VWDcovUxVkC3ceQODYdazdI/keo50Dtb1OYBe9H5Fl+OKnINl9upkymGW5Qc5
- 8x7/6L28NfmTg3+jitOAPijz8M3UAFHUBByCpdTXrBNn2k7ggetClU014BdFSNeHdLIi8J
- fnhJJdPI6lKeDk7VEfdqJwWseJOAP4hDxfmCu/a4h1yXcUNyECicA6VFQ+kbSkuLxlT+rv
- vpv3Q3wHqM6a6zQTdkMs4mkaqsfmJ7ENpSDSIWWTPNQDiojqHbTALxS4VFcYe/pe6nAPL7
- +axvXn3eCNGcJOEESKKjdNn26fbhel2ZK/ZnfUhF2/0qxTj3t08MkVQnnOnpekpclj4jKh
- DvwZNLb33Yp0Em2gGBWSK4/ywGPJ2QPV0JTCAZyIYz2qGGjl38GY7n7wiSUTLHm3o7z1VH
- PH+B9sOy/boOoc2QDr61irP16PqyGFmN2PZ+O6y7bej9Eg5cLZN650cjozm/LBf9Y23V9I
- cOjSMgDEuuxrR9rOZ1a+cUTB8vyfEn/Ed/YbuVeAdsNHtnvc2WQkltWmyJwH9F6MKTB9gT
- XiYUaqpFsNM+bYCT0MKKFJdfPENl72a9zqC8k4ESXJyYHEpEOTHn7BMjKNQcd5ELzLq0dm
- xznyW5WLO6rvftmaoH7EPQmWdAEpZ5OcOuqv5lG9Cta3ou4=
+ a=VwQbUJbxAAAA:8 a=WYnk3XYbMWVZ0JM96JUA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE3MDA3NyBTYWx0ZWRfXwTBuelg4BqKT
+ BBGRkebnwTH3bsgIXWdzbWnsaM1MWVH4GMI8eglKUur6wa0TrnWm4YS6LDvtX02DElr8bOldKPG
+ +HAMgxWDZPIk8l/9QRBw2dCVTCNZ8yW01nUNGcc5JEpV+Uy2ZEXPBb1WmgKQW6JMMemNusHHkPU
+ 330r3506Q2yAV8J2JKgpxFQKZ814NqcUz3La/xMYadHmULgs3cTMpE5qwbdEx8eMiI7vqrnge8t
+ j8uO/NXUZKN291tlixvV0Nb4+3+3srUEO5wZ29dFhIJaYZWwUMMalKLqAtDjS7AzEap61qSWhRM
+ X2bn7LMqxHEjR2inwfExHNR6k156dP//0hbtBB9DPELkdJb6mpPk6MRk6y3jFI=
+X-Proofpoint-GUID: Pw4CkM6oSJ-qbY0tltBjUKersR4fxsWk
+X-Proofpoint-ORIG-GUID: Pw4CkM6oSJ-qbY0tltBjUKersR4fxsWk
+X-JNJ: AAAAAAAB/v2JPUaDiWdlGmVDBbn4Wqnw/PyJ31oU5og2aLEUE4PpMysBeEpmMTAxpWZ/bH
+ KNLJnqjBRY5uAZ69gmfevE6zoLaNIUYv8ITXU68Ej9rYqkwypjmxDgqhofQZX28O5pmleL
+ maGWJLRevl9ZZITgMoMPO9nCkR5Lnpml/VkesbHYsu/+RY+RrGMi/2gqPkn3cBLeDw1dZi
+ ZP0tMtwH+O2qTUWERWAkZ2GsgjuWx2RLa4vw4kS6NOZXkiMlQfIVTOB6MIkCqYzI/PcQa6
+ RocLiAuZ+J4AQJitmu0UYS7cy25FKCs8CLs9DgF6OqtIXXsdtax/B3ZIQgvMAsnMy9re0+
+ oK/LeaGT2Nv2gNfmbpfsfJEjjgsD/5vDz0/H5Y25XgePKpv/XjswiKM3oDLDTlezA2i6ZG
+ 954FlIkWDynoiwu9xXa7L6DbYhHQ/LJZ6HUt1ob0yVM/jIsyCMPSdgcvasJSENjVDqRK0B
+ FHbFShUbJqcDOQhPwlJcQJQ0rXKG8I0+yT34BHTVA4ZA9G+Rbh9LxVlH39MwTwV1Cr3q0v
+ /PmrQT2FkrXEIRHk/OWYv6mYTvQKNYJXIdd4zIuwdlSMwKKP+rXPoVluNmiXvV4/2RLbzh
+ +BmLY05J3jAN8BUbxkMH1ojd9b8VOOCEROrX7c3c5Jrbw+c9rynDLvLqxIWifjN9uL2zW9
+ Ws5Ev6BxqtwQMuYAOobL0QYDe5hADvV+oYntCvoPZDgw/i81dEoH+F/eoUtuGyPXok19Ky
+ kwwnNUVG6il4GuycnIo58DuRPSdy0VaxBFLDO+HckAxBN8+l7HzQXLMsAjHi5jc+NKoZ2y
+ KLoLcbJNroETUb02RIMdg/x+4BtOPJHdV7Eowjg=
 
-Since commit 7d3f3b4367f3 ("net: ipv4: Cache pmtu for all packet paths
-if multipath enabled") the mtu of a Fragmentation Needed is cached on
-every path of a multipath route, as the lookup for it may land on
-another path than the one the flow is on. But the mtu is still checked
-against that one path only, by the early returns on the looked-up dst:
+Same problem and same fix as for IPv4 in commit 7d3f3b4367f3 ("net:
+ipv4: Cache pmtu for all packet paths if multipath enabled"): the
+exception for a Packet Too Big may land on another path of a multipath
+route than the one the flow is on, and the flow keeps blackholing. Cache
+the pmtu on every path of the route instead.
 
-- a path whose mtu or pmtu is lower gets a pmtu above what it can
-  carry, its flows blackhole until the exception expires
-- a mtu locked for being below ip_rt_min_pmtu is written as is, over a
-  lower device mtu or locked pmtu
-- a looked-up path narrower than the mtu, or already at it, ends the
-  update before the path of the flow has learned anything
+For IPv6 that means:
 
-Check the mtu against each path instead, what it uses now as ipv4_mtu()
-reports it: cache the mtu only where it is lower, cap a locked mtu to
-it, leave a locked pmtu alone. The checks on the dst stay for the other
-callers, sockets and tunnels, whose dst is the path of their flow. A
-Fragmentation Needed that changes nothing costs the ICMP callers a fib
-lookup and a look at the exception of each path.
+- ip6_update_pmtu() looks the destination up by the interface the
+  Packet Too Big came in on, or by a hash without the protocol and
+  ports for an unbound socket, neither has to be the path of the flow.
 
-Fixes: 7d3f3b4367f3 ("net: ipv4: Cache pmtu for all packet paths if multipath enabled")
+- the paths are the fib6_nh of a nexthop object, or the siblings of the
+  fib6_info the dst came from. Only ip6_update_pmtu() walks them, the
+  dst of sockets and tunnels is the path of their flow.
+
+- a path only lowers what it uses, the pmtu of its exception, updated
+  in place to keep a gateway from a redirect, else the mtu of the route
+  and the device. The looked-up dst isn't checked anymore, it may be
+  narrower than the Packet Too Big while the path of the flow isn't.
+
+- siblings not in the tree and a nexthop replaced by a blackhole are
+  skipped.
+
+A Packet Too Big now costs up to one exception per path, as a
+Fragmentation Needed does for IPv4 since the commit above.
+
+Link: https://lore.kernel.org/netdev/ad29493c-9e48-4a94-b327-e47af3a9d137@kernel.org/
 Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 ---
- net/ipv4/route.c | 90 +++++++++++++++++++++++++++++++++---------------
- 1 file changed, 63 insertions(+), 27 deletions(-)
+ net/ipv6/route.c | 138 +++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 103 insertions(+), 35 deletions(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index d0a5f6d77094..b90eed715fb5 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -150,6 +150,8 @@ static struct neighbour *ipv4_dst_neigh_lookup(const struct dst_entry *dst,
- 					       struct sk_buff *skb,
- 					       const void *daddr);
- static void ipv4_confirm_neigh(const struct dst_entry *dst, const void *daddr);
-+static struct fib_nh_exception *find_exception(struct fib_nh_common *nhc,
-+					       __be32 daddr);
- 
- static struct dst_ops ipv4_dst_ops = {
- 	.family =		AF_INET,
-@@ -1046,54 +1048,87 @@ out:	kfree_skb_reason(skb, reason);
- 	return 0;
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 04098cf32eab..a835abc698d2 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -2911,12 +2911,55 @@ static bool rt6_cache_allowed_for_pmtu(const struct rt6_info *rt)
+ 		(rt->rt6i_flags & RTF_PCPU || rcu_access_pointer(rt->from));
  }
  
--static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu)
-+/* The pmtu to cache on a path for the mtu of a Fragmentation Needed, 0 to
-+ * leave the path alone: what it uses now, as ipv4_mtu() reports it, is not
-+ * above the mtu, or its pmtu is locked. An exception about to expire is
-+ * refreshed, a locked mtu is capped at what the path uses.
++struct rt6_pmtu_arg {
++	struct fib6_result	res;
++	const struct in6_addr	*daddr;
++	const struct in6_addr	*saddr;
++	u32			mtu;
++};
++
++/* Cache a pmtu on one path of a route, never raising what the path
++ * uses for daddr. An existing exception is updated in place, a new
++ * one would lose a gateway learned from a redirect.
 + */
-+static u32 fib_nhc_pmtu(struct fib_nh_common *nhc, const struct fib_info *fi,
-+			__be32 daddr, u32 mtu, bool lock)
++static int rt6_nh_update_pmtu(struct fib6_nh *nh, void *_arg)
 +{
-+	struct fib_nh_exception *fnhe = find_exception(nhc, daddr);
-+	struct net *net = dev_net(nhc->nhc_dev);
-+	u32 path_mtu = 0;
++	struct rt6_pmtu_arg *arg = _arg;
++	struct fib6_result *res = &arg->res;
++	struct rt6_info *rt;
 +
-+	if (fnhe && fnhe->fnhe_genid == fnhe_genid(net) &&
-+	    time_before(jiffies, fnhe->fnhe_expires)) {
-+		if (fnhe->fnhe_mtu_locked)
-+			return 0;
-+		if (!lock && fnhe->fnhe_pmtu == mtu &&
-+		    time_before(jiffies, fnhe->fnhe_expires -
-+					 net->ipv4.ip_rt_mtu_expires / 2))
-+			return 0;
-+		path_mtu = fnhe->fnhe_pmtu;
++	res->nh = nh;
++	rt = rt6_find_cached_rt(res, arg->daddr, arg->saddr);
++	if (rt) {
++		if (arg->mtu < dst6_mtu(&rt->dst)) {
++			rt6_do_update_pmtu(rt, arg->mtu);
++			fib6_nh_update_exception(nh, res->f6i->fib6_src.plen,
++						 rt);
++		}
++		return 0;
 +	}
-+	if (!path_mtu)
-+		path_mtu = fi->fib_mtu;
-+	if (!path_mtu)
-+		path_mtu = READ_ONCE(nhc->nhc_dev->mtu);
-+	path_mtu = min(path_mtu, IP_MAX_MTU);
 +
-+	if (lock)
-+		return min(mtu, path_mtu);
-+	return mtu > path_mtu ? 0 : mtu;
++	if (arg->mtu >= fib6_mtu(res))
++		return 0;
++
++	rt = ip6_rt_cache_alloc(res, arg->daddr, arg->saddr);
++	if (rt) {
++		rt6_do_update_pmtu(rt, arg->mtu);
++		if (rt6_insert_exception(rt, res))
++			dst_release_immediate(&rt->dst);
++	}
++
++	return 0;
 +}
 +
-+static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu,
-+				bool from_lookup)
+ static void __ip6_rt_update_pmtu(struct dst_entry *dst, const struct sock *sk,
+ 				 const struct ipv6hdr *iph, u32 mtu,
+-				 bool confirm_neigh)
++				 bool confirm_neigh, bool from_lookup)
  {
- 	struct dst_entry *dst = &rt->dst;
- 	struct fib_result res;
- 	bool lock = false;
- 	struct net *net;
--	u32 old_mtu;
+-	const struct in6_addr *daddr, *saddr;
++	struct rt6_pmtu_arg arg = { .mtu = mtu };
+ 	struct rt6_info *rt6 = dst_rt6_info(dst);
++	const struct in6_addr *daddr, *saddr;
++	struct fib6_info *f6i, *sibling;
  
--	if (ip_mtu_locked(dst))
-+	if (dst_metric_locked(dst, RTAX_MTU))
+ 	/* Note: do *NOT* check dst_metric_locked(dst, RTAX_MTU)
+ 	 * IPv6 pmtu discovery isn't optional, so 'mtu lock' cannot disable it.
+@@ -2939,55 +2982,80 @@ static void __ip6_rt_update_pmtu(struct dst_entry *dst, const struct sock *sk,
+ 
+ 	if (mtu < IPV6_MIN_MTU)
  		return;
+-	if (mtu >= dst6_mtu(dst))
+-		return;
  
--	old_mtu = ipv4_mtu(dst);
--	if (old_mtu < mtu)
-+	/* A dst looked up for the Fragmentation Needed, without the ports
-+	 * the packet was hashed on, may be another path of a multipath
-+	 * route than the flow is on: don't judge the mtu by it, each path
-+	 * does that below.
-+	 */
-+	if (!from_lookup && (rt->rt_mtu_locked || ipv4_mtu(dst) < mtu))
- 		return;
+-	if (!rt6_cache_allowed_for_pmtu(rt6)) {
++	if (mtu >= dst6_mtu(dst)) {
++		/* A dst ip6_update_pmtu() looked up for the Packet Too Big
++		 * may be another path of a multipath route than the flow is
++		 * on: don't judge the mtu by it, each path does that below.
++		 */
++		if (!from_lookup)
++			return;
++	} else if (!rt6_cache_allowed_for_pmtu(rt6)) {
+ 		rt6_do_update_pmtu(rt6, mtu);
+ 		/* update rt6_ex->stamp for cache */
+ 		if (rt6->rt6i_flags & RTF_CACHE)
+ 			rt6_update_exception_stamp_rt(rt6);
+-	} else if (daddr) {
+-		struct fib6_result res = {};
+-		struct rt6_info *nrt6;
++		if (!from_lookup)
++			return;
++	}
++	if (!daddr)
++		return;
  
- 	rcu_read_lock();
- 	net = dst_dev_net_rcu(dst);
- 	if (mtu < net->ipv4.ip_rt_min_pmtu) {
- 		lock = true;
--		mtu = min(old_mtu, net->ipv4.ip_rt_min_pmtu);
-+		mtu = net->ipv4.ip_rt_min_pmtu;
- 	}
+-		rcu_read_lock();
+-		res.f6i = rcu_dereference(rt6->from);
+-		if (!res.f6i)
+-			goto out_unlock;
++	rcu_read_lock();
++	f6i = rcu_dereference(rt6->from);
++	/* A route on its way out of the tree takes no exceptions */
++	if (!f6i || !rcu_access_pointer(f6i->fib6_node))
++		goto out;
  
--	if (rt->rt_pmtu == mtu && !lock &&
-+	if (!from_lookup && rt->rt_pmtu == mtu && !lock &&
- 	    time_before(jiffies, READ_ONCE(dst->expires) -
- 				 net->ipv4.ip_rt_mtu_expires / 2))
- 		goto out;
+-		res.fib6_flags = res.f6i->fib6_flags;
+-		res.fib6_type = res.f6i->fib6_type;
++	arg.daddr = daddr;
++	arg.saddr = saddr;
++	arg.res.f6i = f6i;
++	arg.res.fib6_flags = f6i->fib6_flags;
++	arg.res.fib6_type = f6i->fib6_type;
  
- 	if (fib_lookup(net, fl4, &res, 0) == 0) {
- 		struct fib_nh_common *nhc;
-+		unsigned long expires;
-+		u32 pmtu;
-+		int nhsel;
+-		if (res.f6i->nh) {
+-			struct fib6_nh_match_arg arg = {
++	if (f6i->nh) {
++		if (!from_lookup) {
++			struct fib6_nh_match_arg match = {
+ 				.dev = dst_dev_rcu(dst),
+ 				.gw = &rt6->rt6i_gateway,
+ 			};
  
- 		fib_select_path(net, &res, fl4, NULL);
--#ifdef CONFIG_IP_ROUTE_MULTIPATH
--		if (fib_info_num_path(res.fi) > 1) {
--			int nhsel;
+-			nexthop_for_each_fib6_nh(res.f6i->nh,
+-						 fib6_nh_find_match, &arg);
 -
--			for (nhsel = 0; nhsel < fib_info_num_path(res.fi); nhsel++) {
--				nhc = fib_info_nhc(res.fi, nhsel);
--				if (!nhc)
--					break;
--				update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
--						      jiffies + net->ipv4.ip_rt_mtu_expires);
--			}
--			goto out;
-+		expires = jiffies + net->ipv4.ip_rt_mtu_expires;
-+		for (nhsel = 0; nhsel < fib_info_num_path(res.fi); nhsel++) {
-+			nhc = fib_info_nhc(res.fi, nhsel);
-+			if (!nhc)
-+				break;
-+			pmtu = fib_nhc_pmtu(nhc, res.fi, fl4->daddr, mtu, lock);
-+			if (pmtu)
-+				update_or_create_fnhe(nhc, fl4->daddr, 0, pmtu,
-+						      lock, expires);
++			nexthop_for_each_fib6_nh(f6i->nh, fib6_nh_find_match,
++						 &match);
+ 			/* fib6_info uses a nexthop that does not have fib6_nh
+ 			 * using the dst->dev + gw. Should be impossible.
+ 			 */
+-			if (!arg.match)
+-				goto out_unlock;
+-
+-			res.nh = arg.match;
+-		} else {
+-			res.nh = res.f6i->fib6_nh;
++			if (match.match)
++				rt6_nh_update_pmtu(match.match, &arg);
++		} else if (!nexthop_is_blackhole(f6i->nh)) {
++			/* A blackhole nexthop, swapped in by a replace since
++			 * the lookup, must not get a usable exception.
++			 */
++			nexthop_for_each_fib6_nh(f6i->nh, rt6_nh_update_pmtu,
++						 &arg);
  		}
--#endif /* CONFIG_IP_ROUTE_MULTIPATH */
--		nhc = FIB_RES_NHC(res);
--		update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
--				      jiffies + net->ipv4.ip_rt_mtu_expires);
- 	}
- out:
- 	rcu_read_unlock();
-@@ -1112,7 +1147,7 @@ static void ip_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
- 	if (skb && netif_is_any_bridge_port(skb->dev))
- 		fl4.flowi4_oif = 0;
++		goto out;
++	}
  
--	__ip_rt_update_pmtu(rt, &fl4, mtu);
-+	__ip_rt_update_pmtu(rt, &fl4, mtu, false);
+-		nrt6 = ip6_rt_cache_alloc(&res, daddr, saddr);
+-		if (nrt6) {
+-			rt6_do_update_pmtu(nrt6, mtu);
+-			if (rt6_insert_exception(nrt6, &res))
+-				dst_release_immediate(&nrt6->dst);
+-		}
+-out_unlock:
+-		rcu_read_unlock();
++	rt6_nh_update_pmtu(f6i->fib6_nh, &arg);
++	if (!from_lookup)
++		goto out;
++
++	/* Stop when f6i leaves the sibling list, the walk would never end.
++	 * Skip a sibling not in the tree, being added or removed.
++	 */
++	list_for_each_entry_rcu(sibling, &f6i->fib6_siblings, fib6_siblings) {
++		if (!READ_ONCE(f6i->fib6_nsiblings))
++			break;
++		if (!rcu_access_pointer(sibling->fib6_node))
++			continue;
++		arg.res.f6i = sibling;
++		arg.res.fib6_flags = sibling->fib6_flags;
++		arg.res.fib6_type = sibling->fib6_type;
++		rt6_nh_update_pmtu(sibling->fib6_nh, &arg);
+ 	}
++out:
++	rcu_read_unlock();
  }
  
- void ipv4_update_pmtu(struct sk_buff *skb, struct net *net, u32 mtu,
-@@ -1127,7 +1162,7 @@ void ipv4_update_pmtu(struct sk_buff *skb, struct net *net, u32 mtu,
- 			 0);
- 	rt = __ip_route_output_key(net, &fl4);
- 	if (!IS_ERR(rt)) {
--		__ip_rt_update_pmtu(rt, &fl4, mtu);
-+		__ip_rt_update_pmtu(rt, &fl4, mtu, true);
- 		ip_rt_put(rt);
- 	}
+ static void ip6_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
+@@ -2995,7 +3063,7 @@ static void ip6_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
+ 			       bool confirm_neigh)
+ {
+ 	__ip6_rt_update_pmtu(dst, sk, skb ? ipv6_hdr(skb) : NULL, mtu,
+-			     confirm_neigh);
++			     confirm_neigh, false);
  }
-@@ -1146,7 +1181,7 @@ static void __ipv4_sk_update_pmtu(struct sk_buff *skb, struct sock *sk, u32 mtu)
  
- 	rt = __ip_route_output_key(sock_net(sk), &fl4);
- 	if (!IS_ERR(rt)) {
--		__ip_rt_update_pmtu(rt, &fl4, mtu);
-+		__ip_rt_update_pmtu(rt, &fl4, mtu, true);
- 		ip_rt_put(rt);
- 	}
+ void ip6_update_pmtu(struct sk_buff *skb, struct net *net, __be32 mtu,
+@@ -3014,7 +3082,7 @@ void ip6_update_pmtu(struct sk_buff *skb, struct net *net, __be32 mtu,
+ 
+ 	dst = ip6_route_output(net, NULL, &fl6);
+ 	if (!dst->error)
+-		__ip6_rt_update_pmtu(dst, NULL, iph, ntohl(mtu), true);
++		__ip6_rt_update_pmtu(dst, NULL, iph, ntohl(mtu), true, true);
+ 	dst_release(dst);
  }
-@@ -1183,7 +1218,8 @@ void ipv4_sk_update_pmtu(struct sk_buff *skb, struct sock *sk, u32 mtu)
- 		new = true;
- 	}
- 
--	__ip_rt_update_pmtu(dst_rtable(xfrm_dst_path(&rt->dst)), &fl4, mtu);
-+	__ip_rt_update_pmtu(dst_rtable(xfrm_dst_path(&rt->dst)), &fl4, mtu,
-+			    new);
- 
- 	if (!dst_check(&rt->dst, 0)) {
- 		if (new)
+ EXPORT_SYMBOL_GPL(ip6_update_pmtu);
 -- 
 2.56.0
 
