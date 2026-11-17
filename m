@@ -1,49 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794907771;
-	b=yZJxxbg5mP1TefB7gUMZNydDTjzgFSarZmEl2ft8KULJd+Rzoqxk/YHtvRVvwfMH0vE9
-	 94Z+9WIfITTtFq+I0ZGDYZixIklay5avHzPNKqZ3SSV2KTZAgLtUDKkbB/Wvu3Kf6oNkJ
-	 YJkhKV4gpCCB84VdGRkCtbikCyHZ/KLtLeCRtfh4w0EEn4FPt8WVpJGlGhQY9sZQ5/fD8
-	 FUWkmhu6ws+k+gAAmN4J4wLvB16FzRGAulUb+TXuYM+DkbTkRsR9gOJ26L2gX1e1I1N+M
-	 tYjC6+pJbcNxsSgZ19nmegWcC98zCsWcClkqgmO42g7vMlSwMfeHF3sOrUuZxwNtvBQ==
+	b=waVlJU39afxBirl4qQ7xWlhvSU6MhzTYs6pwF6E8m2mZaYvUa3b6Rnniyes5FLnBD8RI
+	 eZCuHLsZAH0GhqATTww6cO7xLkGR9PDZ347bShGO18VE8RMBtSqqF1LZis65xqX+N8EQ1
+	 R+RfNtEUa03e/kKfiFywG+6FnIH/vpNa022/0QGbmpR2pcaDrf3Yw5d6GQRvw4mx75YwH
+	 txBWK2KS/cocqKO0bwG/aXiRrFkHDfIv3nL2L+qs7UOsz/XojQdW/cBKNnDbHP2R5dN12
+	 iXrfOaYK560CvYbEpSfJAyOtG8HIDqKq9d1ryodZ/1pK9HzAnH/Pu7h+rxBaDtKJVJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794907771;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=YE7hb6EJ8MnZjqeIFG8zu2TxBYRPi6yG8xDT6an+A0I=;
-	b=m04iYqtivEvt4bjk5GSGIh50HjXCOJklpIaK6v+JduyO5R9WRlMX0jIrOv4mgz27xeUF
-	 psI7AeSonAl/SgsQnPoFoHMwnhRnqHBOdslpxD/MkosltB4Q3IRpwSexPrNgsiWLOvqyC
-	 qrL/jBnzLyk40Wz54ipqJJDDJ6CoDcEhhmbs03iaawj/BuB34K9Q1d+6L5h35zowCCAe9
-	 NfzqChdkILiZCiBNwT5Qe7EtXUeIKcHrHzEPjQUIcADoCtmsJH9Wy5Xfuqjo6Q6ikc0vp
-	 wg7Owjm/D0wsgnXFsri/bh2w8vb3ecHITb+u8cvxcxkik7TS58eBCje6ZJt7aWzr2ag==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=PApOUXK1WkiduHeBDkmMB8mnWq/IyNG+wx88YRljsTI=;
+	b=WScBSefsY8JI5k/5NT2iQezxmdrqCuvO24z7qmCB1qTI5IZ7/pv+gzx2AQ2FVq32x/dt
+	 jpeNVlVNxpJ+cZ/3ajUQ7vLHWrIcAgErLUtOXD8k7cMKDedEaUMB5NcvONlemv4yfqLOY
+	 5tk8zITcXDT0OWc2p+Qc+12Cs1oikbWeydlWP6w079KINZ6pC4MmW5UbLBj4q4yubyk1b
+	 CQy9Qt4kDhVwfsJWBRXVDcK+rZqTKoU0QchlkNIGwuw+k8VLoHvmtaXsmOcjIvB52IviU
+	 EgK8ZOlITpAoSWUDQ5BVL5lOsJCJkTREuKmOyNdzPhnXb0j0ajVjNm+Zj4OGQA4cyzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=corp.free.fr;
 	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=SiOqTfVw;
+	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=bwMrHAB6;
 	arc=none smtp.remote-ip=212.27.60.169
 Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE7E606A33A;
-	Tue, 17 Nov 2026 09:29:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFE7E606A33A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21075606A33D;
+	Tue, 17 Nov 2026 09:29:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21075606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=SiOqTfVw
+	dkim=pass (2048-bit key, unprotected) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=bwMrHAB6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1794907762; bh=iLmIdYcI+NQQ9aOw3zP2Rr0bm+RPSvskVZvNhW00Cv0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SiOqTfVw9EXhZWKeAAvzAA4gEMDrVvlB/HNB51gC/QrMG7qsxvGiZtgDAgKJ/CuLz
-	 RIRb2v66dM7eMQOMYPaiVon6juCybF0iW57uCoo9hXlzZK84ba5GqEaUNxG+PN8zX4
-	 kspe5IeN/sI2jKWvQxLAB7btKabncL6n6dZ30rFAEkYS4TrsmYAp+aXN8qq1vUh9bF
-	 EI5zTdR7VSnQKFzJTnCpilzZg+ThurdH8dsz8Jqov9hxIw1kfnAV3+dTV3aiAT+xmI
-	 8b6xfTl64KvXO4S085MfX5k8UvW7xtllA3VPMpHm1mbxFpaEGQJD66WpQuhxyqaa3e
-	 408qJGRBtfgGw==
+	t=1794907763; bh=RoGIP+lb4T/ncLxF3QQFj5FahL2EbJ0Uys3hYC006P0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bwMrHAB6/NvVZ5WaK2izNARtr9AzamdMlfhevMBnykCJHfSZJi85i2Z4/qIjH5/lX
+	 Hr83voeaY9ayK6Jyfy6CFlDfwxuUU8zqIOnLmA11UYatb8PF85k/phSl+6mMqJ9Q4V
+	 wP1vL4NPhBIfqJ0vRa5oA/mZz25Nax9BnR7aLcSUQCXXDJDaKkVv1JbadYfH+GgGqz
+	 icQ/YobSx1yVJCnNjhQ7TWHfGx/ENZxjVRWF0Us325zzDD24qbhwRE83Am+uAk98WG
+	 pBVhac0N440nlGCvgKMk+pLjG4ujC6tv9iAxHySDVEmnGiN71cEaZN4MPBMZyTCnGt
+	 7AQR88hQvDfUA==
 Received: from lnxos-dev.home (82-66-150-212.subs.proxad.net [82.66.150.212])
-	by rcs.proxad.net (Postfix) with ESMTPSA id 7606444C017F;
-	Tue, 17 Nov 2026 10:29:21 +0100 (CET)
+	by rcs.proxad.net (Postfix) with ESMTPSA id 8908244C0B4E;
+	Tue, 17 Nov 2026 10:29:22 +0100 (CET)
 From: Alexandre Cassen <acassen@corp.free.fr>
 To: Saeed Mahameed <saeedm@nvidia.com>,
 	Leon Romanovsky <leon@kernel.org>,
@@ -71,12 +72,13 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-rdma@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	oss-drivers@corigine.com,
-	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>
-Subject: [PATCH net-next v2 00/10] tc flower: tunnel key partitioning for RX queue steering
-Date: Tue, 17 Nov 2026 10:29:03 +0100
-Message-ID: <20261117092915.255194-1-acassen@corp.free.fr>
+	oss-drivers@corigine.com
+Subject: [PATCH net-next v2 02/10] cxgb4: flower: refuse a tunnel key wider than the VNI
+Date: Tue, 17 Nov 2026 10:29:05 +0100
+Message-ID: <20261117092915.255194-3-acassen@corp.free.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261117092915.255194-1-acassen@corp.free.fr>
+References: <20261117092915.255194-1-acassen@corp.free.fr>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,101 +90,49 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RSS cant spread GTP-U traffic between a few endpoints. The outer headers
-barely vary and mlx5 does not hash the TEID. One flower rule per TEID does
-not scale.
+cxgb4 holds a 24 bit VNI and truncates the key and the mask of enc_key_id.
+An exact key above bit 23 already selects the wrong VNI. Flower is about
+to accept partial masks. A mask that only covers bits above 23 would then
+clear the VNI mask and encap_vld. The rule would match any traffic its
+other keys allow. Refuse a key that no VNI can match and a mask that
+leaves no VNI bit.
 
-Add a mask to the flower enc_key_id key and offload it on mlx5e NIC flows
-with skbedit queue_mapping. One rule then steers a block of tunnel keys to
-an RX queue. This "tunnel key partitioning" supports fine-grained session
-placement. In a 5G mobile network, the UPF can place a session on a CPU by
-allocating its TEID from the right block [1]. Any scheduling algorithm can
-then pick that block.
+Found by an AI code review agent while auditing the users of enc_key_id.
+Confirmed by code inspection. The wrong match was not triggered. Build
+tested only.
 
-  tc filter add dev eth0 ingress protocol ip flower skip_sw \
-      ip_proto udp dst_port 2152 enc_key_id 0x40000000/0xc0000000 \
-      action skbedit queue_mapping 1 skip_sw
+Fixes: 98f3697f8d41 ("cxgb4: add tc flower match support for tunnel VNI")
+Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
+---
+ .../net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c  | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-This series generalize an earlier GTP-U work [2] to other tunnels that the
-ConnectX family can steer: GRE, VXLAN and GENEVE.
-
-Patches 1 to 5 refuse a partial mask or a key wider than the VNI where a
-driver cant honor them. Patches 6 and 7 add the flower mask and its test.
-Patch 8 adds queue mapping to mlx5e NIC flows. Patch 9 adds the tunnel key
-match to mlx5e NIC and eswitch flows without a tunnel device. Patch 10
-documents the result.
-
-Without a tunnel device nothing decapsulates. enc_key_id reads the tunnel
-header on the wire like on cxgb4 and hns3. On mlx5 the plain ip_proto and
-dst_port keys select the match register. A rule without a tunnel device
-used to ignore enc_key_id and now matches it or gets refused. I can rework
-patch 9 on a dedicated key if that looks cleaner.
-
-Tested on ConnectX-7 with firmware 28.48.1000 in NIC mode. Also tested on
-the uplink and VF representors in dmfs, smfs and hmfs. This includes
-redirect to a VF. GTP-U needs flex parser profile 3 and GENEVE profile 0.
-The bnxt, cxgb4 and nfp patches are build tested only. So is the min
-inline check of patch 9, because ConnectX-7 needs no inlining. The selftest
-passes under User-Mode Linux and fails on a kernel without the mask.
-
-Multiple AI tools were used to test this feature. They found the problems
-fixed by patches 1 to 5.
-
-The iproute2 support is posted separately.
-
-v2:
-- cxgb4: also refuse a mask that leaves no VNI bit.
-- cxgb4, nfp and mlx5: add Fixes tags.
-- selftest: run the enc_key_id mask test in software only.
-- mlx5 queue mapping: refuse it after any terminating action.
-- mlx5 outer key: refuse other tunnel keys and representors that need
-  inlining.
-- docs: drop a wrong sentence about skip_sw and name the tunnel ports.
-- nfp and selftest: wrap two lines over 80 columns.
-The first six follow the Sashiko review of v1 [3].
-
-v1: https://lore.kernel.org/netdev/20261109131039.959438-1-acassen@corp.free.fr/
-[1] https://gtp-guard.org/articles/5g-upf-pump-up-the-volume/#benefits-of-range-partitioning
-[2] https://github.com/acassen/research/tree/main/UPF-flow-steering
-[3] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109131039.959438-1-acassen%40corp.free.fr
-
-Alexandre Cassen (10):
-  bnxt_en: require an exact tunnel id in TC flows
-  cxgb4: flower: refuse a tunnel key wider than the VNI
-  nfp: flower: refuse a tunnel key wider than the VNI
-  net/mlx5e: TC, refuse a tunnel key wider than the VNI
-  net/mlx5e: TC, reject a partial tunnel key with tunnel mapping
-  net/sched: cls_flower: add enc_key_id mask
-  selftests: forwarding: tc_flower: test the enc_key_id mask
-  net/mlx5e: TC, offload RX queue mapping in NIC flows
-  net/mlx5e: TC, match the tunnel key without a tunnel device
-  docs: networking: describe tunnel key partitioning in TC queue
-    filtering
-
- Documentation/netlink/specs/tc.yaml           |   4 +
- Documentation/networking/tc-queue-filters.rst |  22 ++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_tc.c  |   7 ++
- .../ethernet/chelsio/cxgb4/cxgb4_tc_flower.c  |  15 +++
- .../net/ethernet/mellanox/mlx5/core/Makefile  |   6 +-
- .../mellanox/mlx5/core/en/tc/act/act.c        |   1 +
- .../mellanox/mlx5/core/en/tc/act/act.h        |   1 +
- .../mellanox/mlx5/core/en/tc/act/rx_queue.c   |  67 +++++++++++
- .../ethernet/mellanox/mlx5/core/en/tc_tun.c   | 110 ++++++++++++++++++
- .../ethernet/mellanox/mlx5/core/en/tc_tun.h   |  14 +++
- .../mellanox/mlx5/core/en/tc_tun_geneve.c     |  46 ++++++++
- .../mellanox/mlx5/core/en/tc_tun_gre.c        |  31 +++++
- .../mellanox/mlx5/core/en/tc_tun_gtp.c        |  36 ++++++
- .../mellanox/mlx5/core/en/tc_tun_vxlan.c      |  45 +++++++
- .../net/ethernet/mellanox/mlx5/core/en_tc.c   |  19 +++
- .../net/ethernet/mellanox/mlx5/core/en_tc.h   |   1 +
- .../ethernet/netronome/nfp/flower/offload.c   |  22 ++++
- include/uapi/linux/pkt_cls.h                  |   2 +
- net/sched/cls_flower.c                        |   5 +-
- .../selftests/net/forwarding/tc_flower.sh     |  54 +++++++++
- 20 files changed, 504 insertions(+), 4 deletions(-)
- create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c
- create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_gtp.c
-
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+index 3307e5042681..467f055e318c 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+@@ -316,6 +316,21 @@ static int cxgb4_validate_flow_match(struct netlink_ext_ack *extack,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
++	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID)) {
++		struct flow_match_enc_keyid match;
++		u32 key, mask;
++
++		flow_rule_match_enc_keyid(rule, &match);
++		key = be32_to_cpu(match.key->keyid);
++		mask = be32_to_cpu(match.mask->keyid);
++		if (key >> ENCAP_VNI_BITWIDTH ||
++		    !(mask & GENMASK(ENCAP_VNI_BITWIDTH - 1, 0))) {
++			NL_SET_ERR_MSG_MOD(extack,
++					   "Tunnel key does not fit the 24 bit VNI");
++			return -EOPNOTSUPP;
++		}
++	}
++
+ 	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_BASIC)) {
+ 		struct flow_match_basic match;
+ 
 -- 
 2.43.0
 
