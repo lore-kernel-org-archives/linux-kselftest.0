@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794957282;
-	b=ABIlvwVllU8Jhv2Z4bSt0uOxiE0xTMz+yc7TBLFAXeyV8z8roF4aIvJk3RREtywAT45Q
-	 8HHy9ljZP8UKz9TijlwMUXv+QQbG76ms7w5q94CL56Xnlzc4mErBz5oFdM4ZUPwYynzji
-	 MFWiIJubQ+q03WqY670xRrF4YwH1IAhGscAwsk3VVnQQtiQpff6xie/NDaiaC2X94qtml
-	 tWI9e5zUgBn8n1B1u8u6ovY/RSAYftGWERZJE+fxSXvXuye4yhtVzftkccGIXuQ/dxJzH
-	 iiF3fXS32NkartY/EPdQDBgBDgQzRquHmFxQevUSPFSdgIIFokGzPbqRAEguVYOFbGQ==
+	t=1794957289;
+	b=a07i3F1ePIdEYprhOUSb4XNgLbp5lDGxt1lJvS7/RSAMCoYCOj07QHDASjK+Aj4TOjc8
+	 yUE9GvbVIZsGJD3+KDi8BSkOe+JTY3WH0ii4sNZjWAa+EZWdGFr1cwt4FoPIfctSEa0qp
+	 NOdEN1eiuP43lVVwYt8+BfVDvi1zIgTQSNX06H14yo30EN64zUF59PSFzArj4i4D/1Pz7
+	 JqyWDNPTy+XfCYbHmoxCnUkvCT3mSWvPld9G4BUMxNBbl6QqQ62gKTp7CVIDWZ0wpkD9I
+	 C4zJHp7z0eIHlgARS/zujRyOwXDWqibyd7cX/6qKGhvazMu4LXUQTEAg+z2uERALFsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794957282;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794957289;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=YM03tj0qhFqGxTChBGNPgoRuD3foZkehP4IPWon9Cak=;
-	b=jvysgB8q1hxov+oYgo/d+Mf60KyRfATRt/eCPYd+dtXf93jHPWXf+aDeKG1i3cTcGlNl
-	 yh7OSAcKdL1W8REbdteSS7RyTw4D28hI5f/ISupcWfrrIpYBt1xMgYzT5dPDW/YD/1vVf
-	 F9j0RBZHcMrxjAjCTn9k/IgUee+DbN7VinS1QreH7vTvDzXLcT88tpmQyPJX9l8y5YgYQ
-	 EYdpIqFCDs060hOEQs/2nXtXG1ICFfsr/W1qAFNM5Wm6AW5IgAgkW/6Kq2qq+T8t+uYv4
-	 HPb35BRklx8yKBL4dbEEOucStyMoU28jufUEvBmXvumDDIz7jj1gDG+QBB03BnlDHYQ==
+	bh=rnhD6tF7xb3gXg3a7yMK93SFhcbPvgN7PjvYAJdpiHc=;
+	b=HNXATS0Gm7xgEtqHf0wGVZxdFGC/lD7hfM/688fDctuswtLy4KVZqBkRbhLWv+3zr+0U
+	 pBu5FK8+sXm30j9DkGnqGmgGdDQY1WpgQmiwMwomImaRcBtnckNyF2mGPlu1GRjSv+605
+	 f0b8+iLtjkKCQuKVuhATPBfQXQudI3lo38+/AMIeE3IUXmkhGnYkkKUNERidriZbUNk6q
+	 t5EZvfJ22zfbO75FOPuwaVe5v/plmI8iJTFMASGhNojmynQp5se+1HvPp8BMTSMie2x1o
+	 /o4kIge8eOzDTrztRHjHD6xydudu+1C37cARgRlL+TiYYoX4+nGleNRfAGzs66QGwgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlbF1Z8k;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HfTmLOUV;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 342DE606A333;
-	Tue, 17 Nov 2026 23:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 925A9606A88C;
+	Tue, 17 Nov 2026 23:14:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlbF1Z8k
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 13F081F000C7;
-	Tue, 17 Nov 2026 23:14:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HfTmLOUV
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id BBD881F000C8;
+	Tue, 17 Nov 2026 23:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794957281;
-	bh=YM03tj0qhFqGxTChBGNPgoRuD3foZkehP4IPWon9Cak=;
+	s=k20260515; t=1794957289;
+	bh=rnhD6tF7xb3gXg3a7yMK93SFhcbPvgN7PjvYAJdpiHc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=LlbF1Z8kYcrI81oTdyGlWvMBJelrKdR1O0TNUGnwdcSbm1rm5rYP2lq8EA8WLEmHu
-	 Ae2hPOt8GGUUFMavRV3OHSY2o5KUQXiJIoLwa/y8zyDkzVkamtybC8Bqh+hqdS4LLk
-	 +n/Wtcnkw0q4/KieF+4OlYnFr2sSuK2UrrDWe1RUoFeCTJcJqMJOfTlMICwwtRLx+7
-	 QDVKs5lSJNCG4sKcWPGwgJEx/vl9Mrquhfwun8eDx61f8Yb+k1+64IhUd777R/9iqR
-	 AIIeEgZ522tGsQYlh1hrVh79oByO1TQKw7qE4XHN1QAvasmPI2yRO+T4hqt/2sfk3p
-	 hpX3JBhXZeTDA==
+	b=HfTmLOUVS6gLgxvFdZvNX8G2CAu5/WmQ0zzV9SMNDABd5r92r2e74OYGuADjFyQSX
+	 c3c0txaes/2fL/dYmbzFCEYqxsz54RB71iVUkA4iVkOWgaGIG/d+QmPdMq6acb91Qg
+	 BJzeUEKu1KgvKN7QH9LrE8RktByfg+XkDXpdBWzBf+semaIkzVcH/ecVszvu/KqiUe
+	 uHmLfa7tOwCwWSn1XjCfsDweCekGO9WnaambZntx6taoia/sGx5in2Vtc0oOO5wBSt
+	 lFTagVBrZwwdBfC5R34DQkSNaGNtoNcNA150K7sPGnYOcIUUbg17eUblGB6iTwBuI9
+	 D2ADlX6CEMsvw==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-fsdevel@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -83,9 +83,9 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Vlastimil Babka <vbabka@kernel.org>,
 	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: [RFC PATCH v2 08/13] fs: Support FSCONFIG_SET_ROOTNS in fsconfig()
-Date: Wed, 18 Nov 2026 01:13:47 +0200
-Message-ID: <20261117231352.3816603-9-jarkko@kernel.org>
+Subject: [RFC PATCH v2 10/13] arch: Wire up rootns system calls
+Date: Wed, 18 Nov 2026 01:13:49 +0200
+Message-ID: <20261117231352.3816603-11-jarkko@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261117231352.3816603-1-jarkko@kernel.org>
 References: <20261117231352.3816603-1-jarkko@kernel.org>
@@ -100,284 +100,247 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-fsopen() initializes a filesystem context from current's user, network,
-PID, and IPC namespaces, preventing an external manager from creating
-proc, mqueue, or userns-owned superblocks bound to an unentered root
-namespace.
-
-Add FSCONFIG_SET_ROOTNS so callers holding CAP_SYS_ADMIN in the target
-rootns user namespace can bind a newly opened fs_context to that rootns
-once before offering parameters. Update fc->net_ns, switch fc->user_ns
-for non-global FS_USERNS_MOUNT or FS_USERNS_DELEGATABLE filesystems
-whose mounter fsuid/fsgid map into the rootns user namespace, and pass
-the rootns to ->set_rootns() for proc and mqueue.
+Now that the core root namespace lifecycle and VFS mount-tree
+installation are in place, expose rootns_create() (473), rootns_wait()
+(474), and rootns_kill() (475) across all architecture system call
+tables and asm-generic unistd.h.
 
 Co-developed-by: David Howells <dhowells@redhat.com>
 Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- fs/fsopen.c                | 76 ++++++++++++++++++++++++++++++++++++--
- fs/proc/root.c             | 13 +++++++
- include/linux/fs_context.h |  3 ++
- include/uapi/linux/mount.h |  1 +
- ipc/mqueue.c               | 12 ++++++
- 5 files changed, 101 insertions(+), 4 deletions(-)
+ arch/alpha/kernel/syscalls/syscall.tbl      |  3 +++
+ arch/arm/tools/syscall.tbl                  |  3 +++
+ arch/arm64/tools/syscall_32.tbl             |  3 +++
+ arch/m68k/kernel/syscalls/syscall.tbl       |  3 +++
+ arch/microblaze/kernel/syscalls/syscall.tbl |  3 +++
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |  3 +++
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |  3 +++
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |  3 +++
+ arch/parisc/kernel/syscalls/syscall.tbl     |  3 +++
+ arch/powerpc/kernel/syscalls/syscall.tbl    |  3 +++
+ arch/s390/kernel/syscalls/syscall.tbl       |  3 +++
+ arch/sh/kernel/syscalls/syscall.tbl         |  3 +++
+ arch/sparc/kernel/syscalls/syscall.tbl      |  3 +++
+ arch/x86/entry/syscalls/syscall_32.tbl      |  3 +++
+ arch/x86/entry/syscalls/syscall_64.tbl      |  3 +++
+ arch/xtensa/kernel/syscalls/syscall.tbl     |  3 +++
+ include/uapi/asm-generic/unistd.h           | 10 +++++++++-
+ scripts/syscall.tbl                         |  3 +++
+ 18 files changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/fs/fsopen.c b/fs/fsopen.c
-index 70024870fefa..ca3234c8c4e4 100644
---- a/fs/fsopen.c
-+++ b/fs/fsopen.c
-@@ -13,9 +13,14 @@
- #include <linux/security.h>
- #include <linux/anon_inodes.h>
- #include <linux/namei.h>
-+#include <linux/capability.h>
-+#include <linux/nsproxy.h>
-+#include <linux/rootns.h>
-+#include <linux/user_namespace.h>
- #include <linux/file.h>
- #include <uapi/linux/mount.h>
- #include <linux/audit.h>
-+#include <net/net_namespace.h>
- #include "internal.h"
- #include "mount.h"
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 52e3538cc7df..c7bec286deff 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -512,3 +512,6 @@
+ 580	common	listns				sys_listns
+ 581	common	rseq_slice_yield		sys_rseq_slice_yield
+ 582	common	fchroot				sys_fchroot
++583	common	rootns_create			sys_rootns_create
++584	common	rootns_wait			sys_rootns_wait
++585	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index 55717ed32c27..59f78bf991c9 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -487,3 +487,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/arm64/tools/syscall_32.tbl b/arch/arm64/tools/syscall_32.tbl
+index df2d1d82fb3c..8ef57696c6a8 100644
+--- a/arch/arm64/tools/syscall_32.tbl
++++ b/arch/arm64/tools/syscall_32.tbl
+@@ -484,3 +484,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait		compat_sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index ba7a4d8903d0..36eb16ae659f 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -472,3 +472,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 76d7cbe2a133..54739d61a9ee 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -478,3 +478,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 9ae88e4eac61..f0a58c6b4516 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -411,3 +411,6 @@
+ 470	n32	listns				sys_listns
+ 471	n32	rseq_slice_yield		sys_rseq_slice_yield
+ 472	n32	fchroot				sys_fchroot
++473	n32	rootns_create			sys_rootns_create
++474	n32	rootns_wait			compat_sys_rootns_wait
++475	n32	rootns_kill			sys_rootns_kill
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 83dc93a0712f..c1d2774c6283 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -387,3 +387,6 @@
+ 470	n64	listns				sys_listns
+ 471	n64	rseq_slice_yield		sys_rseq_slice_yield
+ 472	n64	fchroot				sys_fchroot
++473	n64	rootns_create			sys_rootns_create
++474	n64	rootns_wait			sys_rootns_wait
++475	n64	rootns_kill			sys_rootns_kill
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 9c62429c9b7b..99a753234dbf 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -460,3 +460,6 @@
+ 470	o32	listns				sys_listns
+ 471	o32	rseq_slice_yield		sys_rseq_slice_yield
+ 472	o32	fchroot				sys_fchroot
++473	o32	rootns_create			sys_rootns_create
++474	o32	rootns_wait			sys_rootns_wait			compat_sys_rootns_wait
++475	o32	rootns_kill			sys_rootns_kill
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 88adc4016cce..f3bac8085491 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -471,3 +471,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait			compat_sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index cfbb70039ff0..4cac51e4d370 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -563,3 +563,6 @@
+ 470	common	listns				sys_listns
+ 471	nospu	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait			compat_sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 1b45e68a217b..7f8cd4147860 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -399,3 +399,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index ace068dff0de..9bfcb96dcdeb 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -476,3 +476,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 5b9fe0e8140f..a847f4cbea3a 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -518,3 +518,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait			compat_sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 2c172ef48dfd..e49c96692038 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -478,3 +478,6 @@
+ 470	i386	listns			sys_listns
+ 471	i386	rseq_slice_yield	sys_rseq_slice_yield
+ 472	i386	fchroot			sys_fchroot
++473	i386	rootns_create		sys_rootns_create
++474	i386	rootns_wait		sys_rootns_wait		compat_sys_rootns_wait
++475	i386	rootns_kill		sys_rootns_kill
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index d5b6045b0090..d6f7fb7be172 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -397,6 +397,9 @@
+ 470	common	listns			sys_listns
+ 471	common	rseq_slice_yield	sys_rseq_slice_yield
+ 472	common	fchroot			sys_fchroot
++473	common	rootns_create		sys_rootns_create
++474	common	rootns_wait		sys_rootns_wait
++475	common	rootns_kill		sys_rootns_kill
  
-@@ -41,6 +46,50 @@ static inline const char *fetch_message_locked(struct fc_log *log, size_t len,
- 	return p;
- }
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index d354bb231796..268c0d577788 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -443,3 +443,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 5b7e77a7c736..571db09eb571 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -867,8 +867,16 @@ __SYSCALL(__NR_rseq_slice_yield, sys_rseq_slice_yield)
+ #define __NR_fchroot 472
+ __SYSCALL(__NR_fchroot, sys_fchroot)
  
-+/**
-+ * DOC: FSCONFIG_SET_ROOTNS
-+ *
-+ * ``fsconfig(fsfd, FSCONFIG_SET_ROOTNS, NULL, NULL, rootnsfd)`` binds a newly
-+ * opened filesystem context to ``rootnsfd`` once before any parameters are
-+ * supplied (subsequent calls fail with ``-EBUSY``).
-+ *
-+ * The caller must hold ``CAP_SYS_ADMIN`` in the target ``rootns`` user
-+ * namespace.
-+ *
-+ * ``fc->net_ns`` is switched to the ``rootns`` network namespace,
-+ * ``fc->user_ns`` is delegated for non-global ``FS_USERNS_MOUNT`` or
-+ * ``FS_USERNS_DELEGATABLE`` filesystems when the mounter ``fsuid``/``fsgid``
-+ * map into the target user namespace, and ``proc`` and ``mqueue`` contexts
-+ * bind to the target ``rootns`` PID and IPC namespaces.
-+ */
-+static int fsconfig_set_rootns(struct fs_context *fc, struct fs_parameter *param)
-+{
-+	struct user_namespace *user_ns;
-+	struct rootns *c;
++/* kernel/rootns.c */
++#define __NR_rootns_create 473
++__SYSCALL(__NR_rootns_create, sys_rootns_create)
++#define __NR_rootns_wait 474
++__SC_COMP(__NR_rootns_wait, sys_rootns_wait, compat_sys_rootns_wait)
++#define __NR_rootns_kill 475
++__SYSCALL(__NR_rootns_kill, sys_rootns_kill)
 +
-+	if (!is_rootns_file(param->file))
-+		return -EINVAL;
-+
-+	c = param->file->private_data;
-+	user_ns = c->cred->user_ns;
-+	if (!ns_capable(user_ns, CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	put_net(fc->net_ns);
-+	fc->net_ns = get_net(c->ns->net_ns);
-+	if (!fc->global &&
-+	    (fc->fs_type->fs_flags & (FS_USERNS_MOUNT | FS_USERNS_DELEGATABLE)) &&
-+	    kuid_has_mapping(user_ns, fc->cred->fsuid) &&
-+	    kgid_has_mapping(user_ns, fc->cred->fsgid)) {
-+		put_user_ns(fc->user_ns);
-+		fc->user_ns = get_user_ns(user_ns);
-+	}
-+	if (fc->ops->set_rootns)
-+		fc->ops->set_rootns(fc, c);
-+	fc->phase = FS_CONTEXT_CREATE_PARAMS;
-+	return 0;
-+}
-+
- /*
-  * Allow the user to read back any error, warning or informational messages.
-  * Only one message is returned for each read(2) call.
-@@ -147,7 +196,7 @@ SYSCALL_DEFINE2(fsopen, const char __user *, _fs_name, unsigned int, flags)
- 	if (IS_ERR(fc))
- 		return PTR_ERR(fc);
- 
--	fc->phase = FS_CONTEXT_CREATE_PARAMS;
-+	fc->phase = FS_CONTEXT_CREATE_NS;
- 
- 	ret = fscontext_alloc_log(fc);
- 	if (ret < 0)
-@@ -222,7 +271,8 @@ static int vfs_cmd_create(struct fs_context *fc, bool exclusive)
- 	struct super_block *sb;
- 	int ret;
- 
--	if (fc->phase != FS_CONTEXT_CREATE_PARAMS)
-+	if (fc->phase != FS_CONTEXT_CREATE_NS &&
-+	    fc->phase != FS_CONTEXT_CREATE_PARAMS)
- 		return -EBUSY;
- 
- 	if (!mount_capable(fc))
-@@ -298,9 +348,16 @@ static int vfs_fsconfig_locked(struct fs_context *fc, int cmd,
- 		return vfs_cmd_create(fc, true);
- 	case FSCONFIG_CMD_RECONFIGURE:
- 		return vfs_cmd_reconfigure(fc);
-+	case FSCONFIG_SET_ROOTNS:
-+		if (fc->phase != FS_CONTEXT_CREATE_NS)
-+			return -EBUSY;
-+		return fsconfig_set_rootns(fc, param);
-+
- 	default:
--		if (fc->phase != FS_CONTEXT_CREATE_PARAMS &&
--		    fc->phase != FS_CONTEXT_RECONF_PARAMS)
-+		if (fc->phase == FS_CONTEXT_CREATE_NS)
-+			fc->phase = FS_CONTEXT_CREATE_PARAMS;
-+		else if (fc->phase != FS_CONTEXT_CREATE_PARAMS &&
-+			 fc->phase != FS_CONTEXT_RECONF_PARAMS)
- 			return -EBUSY;
- 
- 		return vfs_parse_fs_param(fc, param);
-@@ -390,6 +447,10 @@ SYSCALL_DEFINE5(fsconfig,
- 		if (!_key || _value || aux < 0)
- 			return -EINVAL;
- 		break;
-+	case FSCONFIG_SET_ROOTNS:
-+		if (_key || _value || aux < 0)
-+			return -EINVAL;
-+		break;
- 	case FSCONFIG_CMD_CREATE:
- 	case FSCONFIG_CMD_CREATE_EXCL:
- 	case FSCONFIG_CMD_RECONFIGURE:
-@@ -457,6 +518,12 @@ SYSCALL_DEFINE5(fsconfig,
- 			goto out_key;
- 		param.dirfd = aux;
- 		break;
-+	case FSCONFIG_SET_ROOTNS:
-+		ret = -EBADF;
-+		param.file = fget(aux);
-+		if (!param.file)
-+			goto out_key;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -482,6 +549,7 @@ SYSCALL_DEFINE5(fsconfig,
- 			putname(param.name);
- 		break;
- 	case FSCONFIG_SET_FD:
-+	case FSCONFIG_SET_ROOTNS:
- 		if (param.file)
- 			fput(param.file);
- 		break;
-diff --git a/fs/proc/root.c b/fs/proc/root.c
-index 7fbbe92bf73a..5976029ad3f8 100644
---- a/fs/proc/root.c
-+++ b/fs/proc/root.c
-@@ -15,6 +15,8 @@
- #include <linux/sched/stat.h>
- #include <linux/module.h>
- #include <linux/bitops.h>
-+#include <linux/nsproxy.h>
-+#include <linux/rootns.h>
- #include <linux/user_namespace.h>
- #include <linux/fs_context.h>
- #include <linux/mount.h>
-@@ -323,6 +325,16 @@ static int proc_get_tree(struct fs_context *fc)
- 	return get_tree_nodev(fc, proc_fill_super);
- }
- 
-+static void proc_set_rootns(struct fs_context *fc, struct rootns *rootns)
-+{
-+	struct proc_fs_context *ctx = fc->fs_private;
-+
-+	put_pid_ns(ctx->pid_ns);
-+	ctx->pid_ns = get_pid_ns(rootns->ns->pid_ns_for_children);
-+	put_user_ns(fc->user_ns);
-+	fc->user_ns = get_user_ns(ctx->pid_ns->user_ns);
-+}
-+
- static void proc_fs_context_free(struct fs_context *fc)
- {
- 	struct proc_fs_context *ctx = fc->fs_private;
-@@ -334,6 +346,7 @@ static void proc_fs_context_free(struct fs_context *fc)
- static const struct fs_context_operations proc_fs_context_ops = {
- 	.free		= proc_fs_context_free,
- 	.parse_param	= proc_parse_param,
-+	.set_rootns	= proc_set_rootns,
- 	.get_tree	= proc_get_tree,
- 	.reconfigure	= proc_reconfigure,
- };
-diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
-index d1727dffecc5..cb978273c8bc 100644
---- a/include/linux/fs_context.h
-+++ b/include/linux/fs_context.h
-@@ -21,6 +21,7 @@ struct file_system_type;
- struct mnt_namespace;
- struct net;
- struct pid_namespace;
-+struct rootns;
- struct super_block;
- struct user_namespace;
- struct vfsmount;
-@@ -36,6 +37,7 @@ enum fs_context_purpose {
-  * Userspace usage phase for fsopen/fspick.
-  */
- enum fs_context_phase {
-+	FS_CONTEXT_CREATE_NS,		/* Set namespaces for sb creation */
- 	FS_CONTEXT_CREATE_PARAMS,	/* Loading params for sb creation */
- 	FS_CONTEXT_CREATING,		/* A superblock is being created */
- 	FS_CONTEXT_AWAITING_MOUNT,	/* Superblock created, awaiting fsmount() */
-@@ -117,6 +119,7 @@ struct fs_context_operations {
- 	int (*dup)(struct fs_context *fc, struct fs_context *src_fc);
- 	int (*parse_param)(struct fs_context *fc, struct fs_parameter *param);
- 	int (*parse_monolithic)(struct fs_context *fc, void *data);
-+	void (*set_rootns)(struct fs_context *fc, struct rootns *rootns);
- 	int (*get_tree)(struct fs_context *fc);
- 	int (*reconfigure)(struct fs_context *fc);
- };
-diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
-index ac865edac517..cb55cfcfc92e 100644
---- a/include/uapi/linux/mount.h
-+++ b/include/uapi/linux/mount.h
-@@ -105,6 +105,7 @@ enum fsconfig_command {
- 	FSCONFIG_CMD_CREATE	= 6,	/* Create new or reuse existing superblock */
- 	FSCONFIG_CMD_RECONFIGURE = 7,	/* Invoke superblock reconfiguration */
- 	FSCONFIG_CMD_CREATE_EXCL = 8,	/* Create new superblock, fail if reusing existing superblock */
-+	FSCONFIG_SET_ROOTNS	= 9,	/* Set a rootns, supplied by fd */
- };
+ #undef __NR_syscalls
+-#define __NR_syscalls 473
++#define __NR_syscalls 476
  
  /*
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 322c3dd98c44..a85ca188d370 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -32,6 +32,7 @@
- #include <linux/mutex.h>
- #include <linux/nsproxy.h>
- #include <linux/pid.h>
-+#include <linux/rootns.h>
- #include <linux/ipc_namespace.h>
- #include <linux/user_namespace.h>
- #include <linux/slab.h>
-@@ -400,6 +401,16 @@ static struct inode *mqueue_get_inode(struct super_block *sb,
- 	return ERR_PTR(ret);
- }
- 
-+static void mqueue_set_rootns(struct fs_context *fc, struct rootns *rootns)
-+{
-+	struct mqueue_fs_context *ctx = fc->fs_private;
-+
-+	put_ipc_ns(ctx->ipc_ns);
-+	ctx->ipc_ns = get_ipc_ns(rootns->ns->ipc_ns);
-+	put_user_ns(fc->user_ns);
-+	fc->user_ns = get_user_ns(ctx->ipc_ns->user_ns);
-+}
-+
- static int mqueue_fill_super(struct super_block *sb, struct fs_context *fc)
- {
- 	struct inode *inode;
-@@ -1613,6 +1624,7 @@ static const struct super_operations mqueue_super_ops = {
- 
- static const struct fs_context_operations mqueue_fs_context_ops = {
- 	.free		= mqueue_fs_context_free,
-+	.set_rootns	= mqueue_set_rootns,
- 	.get_tree	= mqueue_get_tree,
- };
- 
+  * 32 bit systems traditionally used different
+diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
+index 0ab531605120..e9ff99c03b2b 100644
+--- a/scripts/syscall.tbl
++++ b/scripts/syscall.tbl
+@@ -413,3 +413,6 @@
+ 470	common	listns				sys_listns
+ 471	common	rseq_slice_yield		sys_rseq_slice_yield
+ 472	common	fchroot				sys_fchroot
++473	common	rootns_create			sys_rootns_create
++474	common	rootns_wait			sys_rootns_wait			compat_sys_rootns_wait
++475	common	rootns_kill			sys_rootns_kill
 -- 
 2.47.3
 
