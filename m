@@ -1,60 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794911674;
-	b=5pjYE3fFAlSyz8cpa9VEqgjXPTUDXxBlTc/YyKG0z0TZaUewzh55H+fy4ihoGucswCBm
-	 i/zBsXqJcYJ7uzV+JEiu4QVXehKMGe6JZrE7ijnkwWxuJPnBs/CqUQqNpqKnzBfRqx7/p
-	 f+AcvzhVwx4CvtSMahUT/c0pZWFrzLIwi3IqeorerCO+wEXjf/o9RVd9jXu+HPfdpV40p
-	 eE97kFQ72lrANSvDOo5cE9myo+u87cJvGOVuYH70uu2S91621O04Y7PLHku8DLTnX4FLQ
-	 kU89vHwgYMIz30p5Yw281v6/T4XOTGAJqeXCMN+B5WmjVEc5rwm5TRIUOSt1tj6dXvA==
+	b=vpqKHOArsvqFTYf6zWjhZuX0Zz6hAiAcxZND6qNqD+qEiUpvolzTKINVkAQYunZc4GGW
+	 5GzgAvTzvQxaUzXHDrlujg2XC7BluZqCrIW/NBlYuWe0b3Ur1UJYub6sQ6WftMi1LQQh2
+	 +j6RfVLgYNd13P+UTRinNGZSxGl3+VSSRrhRQBcnN0ut1IAhA/M6AYOmP7zRXtLpOWspb
+	 b3xM9aJc/fNplj3b2iTZthRhpPQO//7CnisG6O16r34wz64+oLQ1jI3WszCjGkMgcXzSG
+	 6Mpq1U4D69a6RdvnN080xoO8HXXnddYZcKR1ssfodhQMyA4AM9KFd2XTFjWzKIQbUfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794911674;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:Cc:
 	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=5og5gbIFuLrK4odCnF2cFU+0oOHDzasvRkpi1DDbr2I=;
-	b=2oQvUp6ZnEsojPIsJC/17CkP8KFXePugK9HiYQnTA2pGq8et5z2sKH9QSr8pGxJRSBzW
-	 yoKu1OxbQ3Rumj0E0dAIpBeJTuPy9BOfLWVX0gXAwdxyPrz9y96ql9xmRqEIjlw09Cnjq
-	 QkRA1cBe2vY0UvKcxVNtEsxKlstS368NCKfpZMW7/djR1+vsGM079wHb1o1OrABj+9x8X
-	 pcXid8u1T3Ub/ooaBiUkz0aOhhdlwv7FpCYI8yk6Offn66GE6RF2k5Nc3+Hp93Lfuya7h
-	 0BNWvsGaSIYzQ+Z30/mhn13kt2qOJjUPKP1Ve7LVjc+KMlmp40W5AWgwaj1BqwgPImA==
+	bh=0jaKc4f8rKfsWdTY9CvwawCD8sMoYbS/IYHBnjDqo9k=;
+	b=fzgi8GOB5pD0zB7PT3l9zDQqUDmj6R+X0q23S9Z9kTzY9MQyBDkMcIju9MPTh1nCoWXF
+	 wrejr1IN86s1hd64KHjSwQF35TlJyRvTG2GLK5k8lpm4EHK5eroTljTWlCm1uJlj7T2zO
+	 VOtGV6Ekt9lIQWMW3F6JKY0BmtEf9uYtzJpiyA6ig/mftgLpXnkRnp3n2ShXOHLiqDyCd
+	 wxw/7kKMawheD9q2xabXaZf3owiJ8r5JHJx4U7c7/dRnVQLG53L8FjP+r7qdh9wMA9054
+	 vJZUH3rwUId7nthBZXLWXjJheKV7+hroqPp8ia9i/beosgG6Ks5ajc5hn9QmoHw/nmw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=gmail.com;
 	spf=pass smtp.mailfrom=runbox.com;
-	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=nHjFWE76;
+	dkim=pass header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=cKu9ER1W;
 	arc=none smtp.remote-ip=185.226.149.37
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BD460A2604;
-	Tue, 17 Nov 2026 10:34:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57BD460A2604
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8175260A260B
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 10:34:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8175260A260B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=nHjFWE76
+	dkim=pass (2048-bit key, unprotected) header.d=runbox.com header.i=@runbox.com header.a=rsa-sha256 header.s=selector1 header.b=cKu9ER1W
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW8-001QXp-Fe; Tue, 17 Nov 2026 11:34:24 +0100
+	id 1xTGW9-001QXu-18; Tue, 17 Nov 2026 11:34:25 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
 	:Message-Id:Date:Subject:Cc:To:From;
-	bh=5og5gbIFuLrK4odCnF2cFU+0oOHDzasvRkpi1DDbr2I=; b=nHjFWE76JFPXgbBj/GeNNNvAxS
-	rCElX7eBJuvMRBI2r0YgBwqdDHlcd9GW9k6/LLuvu1OwgHhlKoU+l9rRWm7yCBshvzmWvvIBlKlM0
-	K8xGP8ToMETKCwq2SXPoUKChDlUHLJee29V7kuvfrFa+7/Hs+PER1gEfjMElwidyVTVbIicZuU3+f
-	JiEMt+qiIQG53/dQMi4dPdRmxdGgEGjKnnahjPpF5M2d4qbMnV4yIeJoSso0Licvv25SFUtQL1flb
-	FYSnK7T/LwGjdizJeVxdFJUPpYsqIudunBFDBEgC8OMl+iRCIieKjYXAzipEgqUo7mGsXW8u8WLeP
-	ddpPFdMA==;
+	bh=0jaKc4f8rKfsWdTY9CvwawCD8sMoYbS/IYHBnjDqo9k=; b=cKu9ER1WzeKRhwJK7eulD7MJeV
+	d8gghixBOLJfFgCoB/Je5DgfcbG5JRXTz8zM5GucTB/SUf5xyFX8BFuR/b3yvS3QPMz7QfVYV7iCs
+	Brpa6QfyBMNrDFa33MWlCrQc1tXAxsXI7bdI7E9JhpBgvuSY3zzVgYv9OM7yhmr3tT9YNE5E1v88L
+	vb+WnDjMN/E286HvFpE5gNt7x9VOQhZ2T4qFjQb48x90kz+KCzS7w0s8qDcmjMmeEpNSFoofZmFV6
+	BCO34QHziHEh7KpZ5SeaCqaFrF6soaifG4oCKToo15nTdTHOLiV1P950Cb09iFMb53AQ0XNk/jcT5
+	kOXY3Dfw==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xTGW3-0002FD-2J; Tue, 17 Nov 2026 11:34:19 +0100
+	id 1xTGW3-0002FH-H7; Tue, 17 Nov 2026 11:34:19 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xTGVk-005qHU-1t;
-	Tue, 17 Nov 2026 11:34:00 +0100
+	id 1xTGVm-005qHU-MW;
+	Tue, 17 Nov 2026 11:34:02 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Petr Mladek <pmladek@suse.com>,
 	Kees Cook <kees@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Samuel Wu <wusamuel@google.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 next 01/13] scripts/kallsyms: Avoid overrunning on-stack buffer
-Date: Tue, 17 Nov 2026 10:33:40 +0000
-Message-Id: <20261117103352.1244657-2-david.laight.linux@gmail.com>
+Subject: [PATCH v4 next 05/13] kallsyms: Fix selftest startup delay
+Date: Tue, 17 Nov 2026 10:33:44 +0000
+Message-Id: <20261117103352.1244657-6-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261117103352.1244657-1-david.laight.linux@gmail.com>
 References: <20261117103352.1244657-1-david.laight.linux@gmail.com>
@@ -87,41 +87,42 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A maximum length symbol can be KSYM_NAME_LEN long (including the '\0').
-But the name being compressed contains a leading symbol type (e.g. T).
-So when the compressed name is expanded (after the hex is written out)
-the buffer needs to be KSYM_NAME_LEN+1 bytes long to allow to both the
-symbol type and the '\0'.
-But it is declared 'char buf[KSYM_NAME_LEN] so a maximal length name
-overwrites something on stack.
+The kallsym_selftest code clearly intends to sleep until initialisation
+is complete in order to get more reproducable timings.
 
-Found by code inspection, seems to have been broken before the code
-was imported into git.
+Replace the schedule_timeout() calls with schedule_timeout_idle()
+so that the thread actually sleeps.
+Poll every second (not every 5) for SYSTEM_RUNNING and then wait
+another 10 seconds before starting the tests, otherwise the tests
+start as soon an init is executed.
 
-I expect there aren't any maximal length symbols and/or the byte that
-is overwritten is something that is either zero or 'don't care'.
+This code is in the initial 2022 import of the tests.
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
 
-Unchanged from v2.
+Unchanged, was patch 2 in v2.
 
- scripts/kallsyms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/kallsyms_selftest.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index ecb444078c1c..140e888bf713 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -398,7 +398,7 @@ static void write_src(FILE *out_bin_file, const char *out_bin_name)
- 	unsigned int best_idx[256];
- 	unsigned int *markers, markers_cnt;
- 	long bin_start;
--	char buf[KSYM_NAME_LEN];
-+	char buf[1 + KSYM_NAME_LEN];
+diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+index 8f6c4e9b3a1c..0db79237fe54 100644
+--- a/kernel/kallsyms_selftest.c
++++ b/kernel/kallsyms_selftest.c
+@@ -411,9 +411,11 @@ static int test_entry(void *p)
+ {
+ 	int ret;
  
- 	printf("\t.section .rodata, \"a\"\n");
++	pr_info("waiting\n");
+ 	do {
+-		schedule_timeout(5 * HZ);
++		schedule_timeout_idle(HZ);
+ 	} while (system_state != SYSTEM_RUNNING);
++	schedule_timeout_idle(10 * HZ);
  
+ 	pr_info("start\n");
+ 	ret = test_kallsyms_basic_function();
 -- 
 2.39.5
 
