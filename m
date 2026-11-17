@@ -1,58 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.78
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794899305;
-	b=UJiRWMgvDmNm9Vf8Abosc5xyzikAaWiyR4WE6nKEZF5gqQELZVjuu5EwHgQOL+7v4bDG
-	 ksYp+1CK/JirIlqUATuO5lcxMpjunBJlcB+RwzkGPJGZZ7GYY1oJccJRQnG2OlPptYj9/
-	 XufjnJXHFbXVzR642/9u6LQcD3BGf2B5pwYsGSCspDWamQ+v35ehiRzD0+YmhUsSbsK7/
-	 bP9k+8uOX8qiAorelWscx/5BHZw7zDqt0WhaZ9Cly+li6qRI71edBDRc9Go2iRNajbFId
-	 dfedoaYrOc3GR6F5Cowz2+VzCbg1H7bzdoIQxywJ30jIdag1WgpclkUQoS8irAmmYDw==
+	t=1794900413;
+	b=e4laReU6yat2XuaQuiujfIVZkz3MY/bPddaXzV3aXCqfUfkBkDHo+hl78UOl3Mi4UDav
+	 3sekqCJpodYKQGfO10bJB7S85EGh7jpcGSk4XYPBO8xNzxQDaUg+m8IWhoHm6b2NoYmxt
+	 UYtFTTIBKxJZp/xAjeRh7YcPSNEudTFjY1m1/Nuo96Gga61t2traoPz+NQeGFOFOHszdZ
+	 PnSavUhgexm5qoyPuLcjwySvbWxRpwkSHT27IPQBfPcCYRvhEwUUAvY5Pilk09fKFR0p7
+	 3lm1zKADCxdvmCkthtAl3n3XkpDIWxdcYOuqNFzJHhZmuUjhp4XHIBQKIBzsSKeqcAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794899305;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=rOa3RtnmIODQAIOd/ZqlGYqJucQki9cfsWeLmMaO4dU=;
-	b=I8o4h5RpekShu7K1lvGzra7ljEs7yUzkgTbpBw0sMwnEZaLS7GbKziQHXrIAj0slrwj2
-	 8gcMLEhBaAP8nkkyOVmIvJsF2bBgXPcyXS6Xj8ts61aPyrXnQxebbWxa1ZMKYJtTI1Tlt
-	 eU7j7l0z521+rNFKKuLZvvoTWQhGwrgtbHvxKoaR4N29bw9+s1deom+Ay01iq0i4fTgmS
-	 fW/y/BylbhrGDLCL1zWXGnsyIx8inhpcmcrwpCCu6Arm6ec/mIfSTNIY08+qwBPVc8zDN
-	 QwgZd1YVx621j6Qr7550J7Tga5NUspSYESX7NJ26GyUd1fAmLe/BWaZQVxmzpabxxLg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794900413;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=MNmh1Reg5Czo+a3LVsCK+8As4ZT63TJjE//xLVoIjok=;
+	b=c7UiDP1xVpA0jPtbFaH3uZb0/9uLXWz/csY9WdJaoeYwLKe2vxlBbaVEJcNEabdTg6hy
+	 C9wxKWQj6UAZCxrpy53sWrD6FdjMHA3bbecre2gkZLbs+LOcppeShAxj1lYJorJTKqS+j
+	 IyyI0a1gThf5HLIQWr1wQSvPPvnaDji+IziPM3tH7iNs7rFf5ndxZTUBbAR7iWI83oZwy
+	 LVuh7NzmkGIqVWwyK9H0BbCPEdakUFFfsL6Ul9CIl6CCBz38C+ZixuALCz+HCbNQRZpMO
+	 qAt1AAE9FkEId8ihRlN/iLWgyutWUcveynUV9E7pkQdSYOlkkLjJJD9kSi4xVYBvH7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="L4X/7pi/";
-	arc=none smtp.remote-ip=113.46.200.226
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P2BFPSWq;
+	arc=none smtp.remote-ip=95.215.58.78
+Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C832E606A329;
-	Tue, 17 Nov 2026 07:08:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C832E606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09D7606A32A
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 07:26:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C09D7606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=L4X/7pi/
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=rOa3RtnmIODQAIOd/ZqlGYqJucQki9cfsWeLmMaO4dU=;
-	b=L4X/7pi/hKgrcWH+r2Lyz2K5fDr6oemmr9Vqo/mlPjixIKI0SaWd02EkAFwLiATXCcyx1b0Xd
-	SD4a44BotoB4mvpr9tipicm36JCDbfzpc2xS5upFF+YfPk1QhGsg2JAQ+C8ME4u4aQkhKCrxCFx
-	b96PIsaaZyFGx0HZvwo6Js4=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4jTG5y5hW3zKmT8;
-	Tue, 17 Nov 2026 15:08:06 +0800 (CST)
-Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 72C8D4055B;
-	Tue, 17 Nov 2026 15:08:20 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemk200008.china.huawei.com
- (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Tue, 17 Nov
- 2026 15:08:18 +0800
-Message-ID: <ece02e4c-f87e-48ca-a653-cd02ca74eaba@huawei.com>
-Date: Tue, 17 Nov 2026 15:08:18 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P2BFPSWq
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ZHQ7vGXzig53gxhV15EJJjqr5AYYwWSgOJJV79sVoaQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794900410; v=1; x=1795505210;
+ b=P2BFPSWq9Bsx/WL684prYR47sAoRAqgVjfLNXZoMZMvxxCgcZQ49YoewdGoXMM52aWHcTSa6
+ IfGYAP4m9ieTqIWTMQ56iyp0ff1whYBeTKJ/cd12qibbIAS9pttFtym/Vpy823SFfsp5IlJUQPN
+ AkmBawkdoFFzwnrgrFkLCCbE=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 5c923570b0d44339;
+	Tue, 17 Nov 2026 07:26:50 +0000
+X-Mizu-Trace-ID: 5c923570b0d44339
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 17 Nov 2026 15:26:37 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Pin-yen Lin <treapking@google.com>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Bjoern Doebel <doebel@amazon.de>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Jonathan Toppins <jon.toppins+linux@gmail.com>,
+	linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>
+Subject: Re: [PATCH net] selftests: bonding: fix failover race in
+ bond_options.sh prio test
+Message-ID: <avwBrbJfp4ET9ifT@fedora>
+References: <20261112014942.2946303-1-treapking@google.com>
+ <avaewOJD7tX1UYfE@fedora>
+ <avanVkILHDYdpond@fedora>
+ <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,71 +75,116 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 2/3] security: Add PR_CAPBSET_DROP_MASK for
- process-wide bounding-set drops
-To: "Serge E. Hallyn" <serge@hallyn.com>, Oleg Nesterov <oleg@redhat.com>
-CC: <kees@kernel.org>, <akpm@linux-foundation.org>, <david@kernel.org>,
-	<ljs@kernel.org>, <liam@infradead.org>, <vbabka@kernel.org>,
-	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
-	<mingo@redhat.com>, <peterz@infradead.org>, <juri.lelli@redhat.com>,
-	<vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
-	<rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-	<vschneid@redhat.com>, <kprateek.nayak@amd.com>, <paul@paul-moore.com>,
-	<jmorris@namei.org>, <shuah@kernel.org>, <brauner@kernel.org>,
-	<alexjlzheng@tencent.com>, <jannh@google.com>, <jaime.saguillo@gmail.com>,
-	<elver@google.com>, <blbllhy@gmail.com>, <bvanassche@acm.org>,
-	<pjw@kernel.org>, <broonie@kernel.org>, <debug@rivosinc.com>,
-	<tglx@kernel.org>, <aleksey.oladko@virtuozzo.com>,
-	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<linux-security-module@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-kselftest@vger.kernel.org>, <morgan@kernel.org>
-References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
- <20260929130200.1638343-3-ruanjinjie@huawei.com>
- <atjN3JX7sWx9kpQ5@hallyn.com> <avHfm5/mVtuN/oPW@hallyn.com>
- <avIKUzCKAkfC-wuk@redhat.com> <avIVCf1ok6Xyfii0@hallyn.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <avIVCf1ok6Xyfii0@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemk200008.china.huawei.com (7.202.194.74)
+In-Reply-To: <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
 
-
-
-在 2026/11/10 2:46, Serge E. Hallyn 写道:
-> On Mon, Nov 09, 2026 at 07:00:51PM +0100, Oleg Nesterov wrote:
->> On 11/09, Serge E. Hallyn wrote:
->>>
->>> Hi Oleg,
->>>
->>> please see below.  Do you have any issues with this use of sighand?
->>
->> Hi Serge,
->>
->> I already tried to look at this patch, but sorry, can't really comment.
->>
->> I'll try to take another look, but can't promise much, I don't understand
->> the problem space (I could never reallly understand capabilites in details).
+Hi Pin-yen,
+On Mon, Nov 16, 2026 at 05:30:28PM -0800, Pin-yen Lin wrote:
+> Hi Hangbin,
 > 
-> Thanks.  I'm mainly wondering about the storing of this pending capability
-> bounding mask in signal_struct, whether that might have any unexpected
+> On Thu, Nov 12, 2026 at 10:00 PM Hangbin Liu <hangbin.liu@linux.dev> wrote:
+> >
+> > On Fri, Nov 13, 2026 at 01:23:40PM +0800, Hangbin Liu wrote:
+> > > Hi Pin-yen,
+> > > On Wed, Nov 11, 2026 at 05:46:18PM -0800, Pin-yen Lin wrote:
+> > > > The prio test intermittently fails in the arp_ip_target and
+> > > > ns_ip6_target variants:
+> > > >
+> > > >   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
+> > > >     Current active slave is eth0 but not eth2
+> > > >
+> > > > The ARP/NS monitor marks a slave down when it has received nothing for
+> > > > too long. With arp_interval 100 and the default arp_missed_max, that is
+> > > > about 250ms for the active slave (eth1) and 350ms for a backup slave
+> > > > (eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the reply,
+> > > > and eth0/eth2 receive a copy forwarded by the gateway bridge. Once eth1
+> > > > is down, its probes reach no one and no slave receives anything, so
+> > > > eth1 normally times out first and the new active slave is picked by
+> > > > prio:
+> > > >
+> > > >   t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
+> > > >   t=10   test sets eth1 down
+> > > >   t=300  monitor: eth1 idle 300ms -> down
+> > > >                   eth0/eth2 idle 300ms -> up, eth2 picked by prio
+> > > >
+> > > > But the test takes eth1 down right after bond_check_connection(), whose
+> > > > ping replies only arrive on eth1:
+> > > >
+> > > >   t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
+> > > >   t=70   ping reply on eth1 only
+> > > >   t=85   test sets eth1 down
+> > > >   t=300  monitor: eth1 idle 230ms -> still up
+> > > >   t=400  monitor: eth1 idle 330ms -> down
+> > > >                   eth2 idle 400ms -> down too
+> > > >
+> > > > eth2 can then no longer be picked. eth0 becomes the active slave if it
+> > > > happened to receive some other packet (e.g. an MLD report), otherwise
+> > > > whichever slave comes back first does. With primary_reselect 1 or 2,
+> > > > the bond keeps eth0 even after eth2 comes back.
+> > > >
+> > > > Before taking the active slave down, wait two monitor intervals
+> > > > (200ms), so that at least one more probe is sent after the last ping
+> > > > reply and all slaves last received that probe. The miimon variants do
+> > > > not need the wait, but the extra delay is negligible.
+> > >
+> > > I'm afraid the waiting time is too strict, especially with a debug kernel
+> > > since delays can happen.
+> > >
+> > > Bjoern is also fixing[1] this issue by pinging a non-existent neighbor to
+> > > keep traffic flowing. Would you like to test whether that works for you?
+> > >
+> > > [1] https://lore.kernel.org/netdev/20261104142018.552135-1-doebel@amazon.de/
+> >
+> > BTW, using ping may not able to triger the arp request in time. You can try
+> > arping instead.
+> 
+> Thanks for the pointer, but I believe Bjoern's patch addresses a
+> different problem.
 
-Hi Serge,
+I think they are the same issue, as you comment also said
 
-rlimit is also placed inside the signal struct to implement
-process-level restrictions.
+The ARP/NS monitor marks a slave down when it has received nothing for
+too long.
 
-I think the different lifetimes of cred and signal struct might be an
-issue, but since drop only decreases and never increases, the result
-seen by the user will only be stricter.
+> 
+> Bjoern's patch keeps the traffic flowing so that idle slaves are kept
+> alive between the test steps. This patch fixes the case where the ping
+> replies from bond_check_connection() only arrive on the active slave
+> right before it is set down. The active slave's failure is then
+> detected one monitor interval late, when the backups have also timed
+> out.
 
-Link: https://lwn.net/Articles/103658/
-Link:
-https://github.com/torvalds/linux/commit/31180071ee5e6cc6ff4d036d655c556f582f74e4
+The reason is we set arp interval to 100ms, and slowwait also check every
+100ms. If the backup slave down at the same check point, e.g.
 
-Best regards,
-Jinjie
+  t=300  monitor: eth1 idle 230ms -> still up
+  t=400  monitor: eth1 idle 330ms -> down
+                  eth2 idle 400ms -> down too
 
-> side effects.
+The test failed.
 
+> 
+> The ARP requests triggered by Bjoern's ping are sent only about once
+> per second, which isn't frequent enough for this failure. I tested
+> Bjoern's patch and confirmed that it didn't fix the issue in our
+> testing environment. We also can't simply use arping instead because
+> iputils arping doesn't support sub-second intervals.
+> 
+> If you're worried that the 200ms sleep is too short, would increasing
+> it to 0.5s or 1s work for you?
+
+It's not about the sleep time before setting active slave down. I'm afraid
+about the slowwait checking time. Even we sleep 1s, with arp interval 100,
+we still only have 100ms checking window. Before the window, the active slave
+is up, after the window, the backup slave also down. With a debug kernel, this
+time is a little tight.
+
+So, either we have some background arp traffic, or let's extend the arp
+interval to a larger one.
+
+What do you think?
+
+Thanks
+Hangbin
