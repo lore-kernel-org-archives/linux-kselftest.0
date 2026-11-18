@@ -1,70 +1,122 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795016832;
-	b=hR1ckGNCd+DR52NEQ/Q/V2zxfl+oX12BZWdNMkLKfwfQ/enT0zL6BYRVkOc4Ku0M9nzQ
-	 kZxpYip7CB/k+KXM72s1k94r0qBcbT6efL0LYlcjM17CLLl7wB0QcerM28WERlMMcKRCr
-	 YEvnCB1orxThqmj/b/SS7dBvBtmGM4+L/dZ4ue7QRglrrzwotX/t+h3Qqg76lVPNSPv03
-	 RqxKra2/IftW1Bf56Ji17V3L+3WdbZ2vUFIeDYQ0GZ6hPu7UkNWWa0h8n51oTnG62OF6P
-	 EKIQ5Wfp86aKlJJqsz1nQ2VqD4BCJ0ObQ5h3s9nHBmIg+Y+21eQLvIDJVl2fiYQuOCA==
+	t=1795017191;
+	b=0M8hEYKUsJl8erxfQg+LQJbFlGSHORW2nf+PNcqk7ZYGUegezNMVjvkhGQizg5dEYPoE
+	 bko0tSOW0LcvYi/9EXTcg1+UYqJ8P8BZBuPvDN0PFiKBf7u54sWKq5iA9ZBbTzU7xydNQ
+	 FBufEs0Q7Gkko5oSRtP273N9bpDtmtg5EuK8rMlExQhWodoQz31kdWWMrDZRn6p+bJ3PF
+	 ZdVn31DpX9YBgPSBVT9vmRJIUcussdy2Koo4S7LfB/XUV4kHrX1+QJKMk9z/XFSQ32drp
+	 fbZ24mgDNOIcRSn2CQxu+aGb3u3KegajZUfuwyECYyLBnAlRZUAa9Qy6NKAHn1by1ow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795016832;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To:X-Rspamd-Pre-Result:
-	 X-Rspamd-Server:X-Spamd-Result:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Rspamd-Queue-Id:X-Rspamd-Pre-Result:X-Rspamd-Action;
-	bh=flMGPLDMTpq68z1lJ74ODL+EiAGhlUNC3nFdUWIDwBE=;
-	b=n/+lCBkNWBFu0jLHajKOPrG/TN+giYEFpzhI6B2xNxZBE32mrnXE6Ly++sTxnsiRg6ma
-	 z4vb3Ur1+3WDEmUXYpCpZm3eha1BPQ7alsylOq3JwDNNsloYjTKk1x1pu+Kf1FEgTX2jI
-	 Nm0ZLBpy7AyvavOYOgIhumpdT53ofxEx/kQ9ZXfjmwRiTEhAtFcju/dGX4FZYNXY6SSJr
-	 yzufikrVtrX7AgZUty0qrhJbmafW6z6dHTT8pwuNph5XGENezJqUXVFVlxQy3KTHudzvB
-	 ESooXWG2zyKI+M/l5aaOagwtGdINma9EqxOoO6+XcdQV5xheWQaDOxde0Ov90qTChxw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795017191;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=a85wi9zMKa3ITk5iiE5QycHbAdVE4Knzk7eFGcpu7xQ=;
+	b=XSJuuHU1UMbhlhl+2L0fXE786M851xcnu9d4DMrvweXNZODsyI6K6ZpSfTNfvLIC9HLi
+	 eBBkGmkQ7A5Ym/t7qbupozFjHZUIreGp/KeVkSYIKgTcIKFo0nqbZXmQM4Gh/f7Pr8sqq
+	 29XebVFKRvILzYFgxQqD5jJfgGGfKMxInVpE2IU+yf8Sp6Z+YT8SI8SQpwNqsWM+xxsj3
+	 W7ln6Ig0nj38Y9HEMaXRd6iGo13D9ce4ju5Vhtg3sXEBj6AY6bO1WfpRXsVl15fWS55af
+	 5VmWBEBM2fHSxIoFskUckrpm1IGLa5OC48ts0wykNedzKd5yh7C1JpGRSXE3jxE9mCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=GntU17sT;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=TGw4wEhA;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468B9606A320;
-	Wed, 18 Nov 2026 15:47:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 468B9606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kunlun.suse.cz (unknown [IPv6:2a07:de40:b306:2000::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 5A73A1F798;
-	Wed, 18 Nov 2026 15:47:10 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Date: Wed, 18 Nov 2026 16:47:09 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Renzo Davoli <renzo@cs.unibo.it>
-Cc: linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>, Thomas Gleixner <tglx@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, "Dmitry V . Levin" <ldv@strace.io>,
-	Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, strace-devel@lists.strace.io
-Subject: Re: [PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp
- syscall skipping
-Message-ID: <av3Ifd4saO2_6Slq@kunlun.suse.cz>
-References: <20261114181923.370930-1-renzo@cs.unibo.it>
- <av2PKIf8YsEPro8O@kunlun.suse.cz>
- <av2i9kbZyMRJE9D6@cs.unibo.it>
- <av2pRG1JT9te8IiM@kunlun.suse.cz>
- <av2yDgdBWfTxvZca@cs.unibo.it>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B5B606A330
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 15:53:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21B5B606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=GntU17sT;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=TGw4wEhA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795017190;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=a85wi9zMKa3ITk5iiE5QycHbAdVE4Knzk7eFGcpu7xQ=;
+	b=GntU17sTwCEPiLDxsAqaaHOhZPXKJ7NLXyZMmlw3JzRCYtB0alzbzQZycSXIpOriK7VLHv
+	t8hAaNRiK99MmrAtT7qhu3446lEtrafcw8570cbYm37YyB5TDVQWZnHfOAuKh2yrlzPW41
+	PT4IZ5RMTOA4Sr8sl9fSZETH13RTWSk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-552-a7k1hOAsNqK1QWmnBbFrdg-1; Wed, 18 Nov 2026 10:53:08 -0500
+X-MC-Unique: a7k1hOAsNqK1QWmnBbFrdg-1
+X-Mimecast-MFC-AGG-ID: a7k1hOAsNqK1QWmnBbFrdg_1795017188
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-4915ba023d4so835186f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 07:53:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1795017187; x=1795621987; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=a85wi9zMKa3ITk5iiE5QycHbAdVE4Knzk7eFGcpu7xQ=;
+        b=TGw4wEhAEYz6dqxQddcwF2q5nSNk0fQ5KZjLd4qAAC0huj85vW++9H7xg052kqQirP
+         4/7ZflEl59RJrPbO/EwbDUqXwmzPJxlBDlLJ6s7npb3cYtAN2ekn4ofpZVQwed46KD2c
+         Eqs5qRBbPDEBSz2TL+ZkYV7lvc4UvrGUUE9R9vhHD+DOnNoRQUchIlmhv7hs+g8wY2nL
+         J0JBUz2GRuOtN6+q4vogAaMvpb3HTZlwBUp2c/VYqaiYtc09cziupcrDNI/jGLDgWAfZ
+         cGBjqv0W6tTxOfu4dSrjQALmErhn9ZYqntp25FkEf9b/XdZoC5XKRUbvE5UBGfnETMIh
+         vWNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795017187; x=1795621987;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=a85wi9zMKa3ITk5iiE5QycHbAdVE4Knzk7eFGcpu7xQ=;
+        b=ceMXCyaKxDMP6nnW4x1H7g0eiY9wC24fmLSMs50Q9M0kZvSWFbnv9eKr3jsGd9dyNf
+         AwRcnV91ZxPXziy5WnLvmsb1prDHax+55aLR+zbLUgaTbh45ZbnXr3Jwf1Chexqy0nCj
+         FXNkfS6T8quyHfEqHE6ytXT0D/BTbdP+kgBjJ18cyoJuNojDtAtiZ97DLuLgKRs4+42I
+         8awpheyxZzOORRSPcVoCAfU9cVTq1BpIjVk2wkNhcIAeVGJuJywgU5dLrlxEtOje0ph9
+         uLM1fF8GlE2m7c0y9DiSDVhIPlb4JfhDaXOoGE5m7dVXBjI9/2QtVNDqGFk8VR6XlIaC
+         WbIQ==
+X-Forwarded-Encrypted: i=1; AL+hErHJ9ZnJQ+m18ltluPzInSPEy7ZHdbpUkDk9FtEO+czcJs9jxK+91gaYAM4bmUKcikkAsC9ruq8WeeqkVPTABp4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8IDQWaczbYsILni4vfrXKVqzoGgVezD/mCJaMa/voCjnrlqOAb
+	UrefDuXu1cbl87oqU+WugncWTCnbF0hTdGToajnoGQY9dM2kxCqtQOBdnNtVQu/ktUIpzXcasD+
+	gdxGIQevjmJ91NwIYp8k8MdFZT+OCOsEuYTC52T2wHmLx5NdbopOTbnF70GaltQ3WgWxYxg==
+X-Gm-Gg: AZFdTZf/2PGQE7aW5KP9X0Y/Jr8sAkjLO57a6V60X8BK7bdsm2gLY85vu2/HlRgImV0
+	m5yU+/FOlB/ksczQgvjW31hvAyyggS+LUI1Dgs02zb8ibil3azw/PEbiMVeSZ2IM5MRFbJcRak4
+	KThzg+BoVgidPJ+uiteUlhHnmqOKM/tEwNMkJxcOhveI5bYOpf9QUv/OTZEEiZ9ktizkJMdkmg1
+	IvuYdJQSWGxarhEllK+pcMgDxXhrE9889C7+NBJmluw0l2gP6Pu7mtUvZfFGfby6GkxZ3uClCFE
+	pqlg2M5R2e5dZB8fYfnDlnwZS7AQ1lozprNBpqRGSpHJ6p41cNkDIQt//ik7FQc58MkNBVUkm5I
+	0PDpCY+t465Dk+3W4D/LV4ABcojaGG+XzHfM3ayZv0dQoAjBjQxJYFy2JCuQ+G30mbUDuzFvE85
+	GzinE=
+X-Received: by 2002:a05:6000:310e:b0:4a8:7115:fa0f with SMTP id ffacd0b85a97d-4a87115fd47mr1608213f8f.32.1795017187551;
+        Wed, 18 Nov 2026 07:53:07 -0800 (PST)
+X-Received: by 2002:a05:6000:310e:b0:4a8:7115:fa0f with SMTP id ffacd0b85a97d-4a87115fd47mr1608144f8f.32.1795017187160;
+        Wed, 18 Nov 2026 07:53:07 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4a65683d5a2sm5699651f8f.43.2026.11.18.07.53.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 07:53:06 -0800 (PST)
+Date: Wed, 18 Nov 2026 16:53:03 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v7 00/40] sched/deadline: bandwidth accounting fixes and
+ selftests
+Message-ID: <av3J3zMfkRplg-N4@jlelli-thinkpadt14gen4.remote.csb>
+References: <cover.1794922146.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,63 +126,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <av2yDgdBWfTxvZca@cs.unibo.it>
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 5A73A1F798
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
+In-Reply-To: <cover.1794922146.git.mathieu.desnoyers@efficios.com>
 
-On Wed, Nov 18, 2026 at 03:11:26PM +0100, Renzo Davoli wrote:
-> On Wed, Nov 18, 2026 at 02:33:56PM +0100, Michal Suchánek wrote:
-> > As I understand it the new s390 code resolves the problem by storing the
-> > syscall number outside of the registers. Then the return value can be
-> > set directly. It does not depend on using the generic entry but on the
-> > architecture adding storage for the syscall number in struct pt_regs,
-> > and implementing the code to determine where to get/set the syscall
-> > value depending on the syscall stage.
-> 
-> Right, thanks for the correction: what matters is a separate storage
-> for the syscall number on the architectures where it shares a register
-> with the return value, not the generic entry code.
-> 
-> > However, it seems that extending struct pt_regs breaks userspace ABI
-> > (probably because kernel refuses to transfer partial pt_regs to/fom
-> > userspace) which makes it unclear how the int_code that is used by this
-> > new code could be added to the s390 struct pt_regs in the first place.
-> 
-> On s390 int_code is not new: it has been in the kernel-only part of
-> struct pt_regs, after user_pt_regs, since aa33c8cbbae2 ("[S390] cleanup
-> trap handling"), and the user ABI (s390_regs, user_regs_struct) does
-> not include it. Heiko's patch only redirects the ptrace accesses to
-> gpr2.
-> 
-> On architectures where struct pt_regs is itself the user ABI (e.g.
-> alpha), the storage does not need to be in pt_regs: MIPS already keeps
-> the syscall number in thread_info.
-> 
-> This is also why this series uses a per-task flag at the seccomp stop:
-> it does not depend on where the architecture stores the syscall
-> number.
+Hello,
 
-It does not have to know where the architecture stores the syscall
-number when using syscall_get_nr and syscall_set_nr. However, the
-storage for the syscall number has to be somewhere, and for powerpc
-there is AFAIK no such storage.
+On 17/11/26 09:10, Mathieu Desnoyers wrote:
+> Hi Ingo, Juri,
+> 
+> This series fixes 36 bugs of SCHED_DEADLINE. Most of them are in its
 
-Thanks
+...
 
-Michal
+Thanks again for all the work on this!
+
+So, I feel we are making progress, but the set keeps growing/changing.
+
+While we spend more time on the "upper half" of it, would it maybe make
+sense to split the lowest part so that foundation fixes can start to be
+merged. I'm thinking 1-8, 10, 13, 14, 16, 20, 37 (37 is not a fix but
+harmless). Not all associated test will pass of course, which is not
+super nice, but we know they pass with the complete set and can maybe
+come later.
+
+Just a thought, happy to continue iterating over the complete set.
+
+Thanks,
+Juri
+
