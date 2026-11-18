@@ -1,66 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.121.94.186
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795009231;
-	b=gTiWTlpDle+2ILxyTGBbN9BVLDqw+6bdGJsotxma4l/ojkuN3xmPgHT/YDl7pY4pJK07
-	 gQjJvgnOkNvQhx5rahHATzbZa0t6oDOflBHj99/kZSqKRRXF+cJUrdbuJAEfqKBwM4C56
-	 6HJNjll32MwOLQ/3OCBsmycP6a2W3i8lqrVTD+p6Dr1Krsn4odMzQPkZo6zyUtC051cFl
-	 WOWj1SJYbfGZWOOri4vPvYXWGD3pYNxZ+OfGrZaHEjwnPp5TdvI91RpRo0tM++dZPJA0J
-	 0VB1vCb5T5xJEC3F5gyeL5kBl5mliX73HOvLB6QSgNMriAEwLJIOFLG2aqpsTiYt+Ig==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795009231;
-	h=DMARC-Filter:X-KPN-MessageId:Received:DKIM-Signature:X-KPN-MID:
-	 X-KPN-VerifiedSender:X-CMASSUN:X-Originating-IP:Received:From:Subject:
-	 Date:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=eE3Q5w+pSqd4UtdSA0jQ/qK39TFdapJT41KR34oRoMo=;
-	b=diTau9mc5x15CQVHcn9DAuw93RU3X8mJBcyOqcZxwd5x1RqyC4SnUfuwfqh4Fb9LFp3h
-	 2Gi/l3DFaJ1KgKZwJf/WSvbG6+csoxErxZ1o8RT4lxSG3LV9VKBHyG16/b1HmRO+5qlDz
-	 eKvH7BLPw0gctjz6FC3SRQFO5pLMnamaID8bqfBCbzy3jBBjmYAu0+o5XPPzvb2d5eRKY
-	 55gv9lxgxIsZX3RHexy5QIWOyJtbN3IOyu7PRIjdjA3Iiueeoo/6vXZJ6XfjqRzSanr/x
-	 7gHiy22j5jwyi/lpTtDTtANOSArPaRwAfm2qcQJJ/3cilqMaRUsu3ykfD1R/kSyJ6uQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=xs4all.nl;
-	spf=pass smtp.mailfrom=xs4all.nl;
-	dkim=pass header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=FAap7tBc;
-	arc=none smtp.remote-ip=195.121.94.186
-Received: from ewsoutbound.kpnmail.nl (unknown [195.121.94.186])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.100
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795009492;
+	b=ijD8TDBniJOa3JAG6ejo7I9aCgh2HzB1lGdaE6lLZSwS6FUCeqbcit+gMrXPEiM5jQYS
+	 0YcTspPS4sVYA5b74ncbf0ooCxrWF+RiovIARoKKp3eFxJVvmrA3C4Zx1f+rKVF0zQWen
+	 rAEuGsxCUOyjlShThzLCZzfAznSauj/T219rwhf1dn7aA1nFZFJH7G2YfrrVq6klsusoC
+	 nadII2OmsGyx0b5Owgfqp0AEZrfjgckOh3bndV4gEhpKy831uO+xWMJQmViwiAhkzw6Dr
+	 3+iSDwsIRtIlraSTYmf2Ot8L3obSbxkuBuSBZk4/3CX1y4oo6yBioFSQKds4T29cWSA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795009492;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=x/D5GLCdkWoucjtSiDwdb0e+0Tl2CDlfFJNe6ZUHRxA=;
+	b=cFDez2hzwcOi3aRwX4aLfPhZt8Qmt80q01qe2nXjH4zhOGPLYmkt8KCxvFjEIXxEkqDm
+	 83I6WGelc8XTLVqP86nPO6wXvTdT2Jtd+UEJemAvsd5NzU1tIZ4PsBqfW1IEmDOdoHW1J
+	 CMjL0wyfudPRtcasBDZMVSdL6W4bSUKtaJLFMbW5cdu0Ek1RpHQL+wPhVn6ASb2XQ4yW/
+	 OMxEZlMt5OfA4enCabzBnuspRNhHMKPKAdRajRrAc2+juFSICFB3fMTLqZRoQZyGhb8SH
+	 CspAAIxP36Pqld6fhBtVq9PKx0iynsmtpqqZL9ulq2P8n6prZ7Wl/cuuMMk2r1KYRhA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=Aus4pigh;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.100
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020100.outbound.protection.outlook.com [52.101.189.100])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B8E606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 13:40:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07B8E606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA523606A31C;
+	Wed, 18 Nov 2026 13:44:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA523606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=FAap7tBc
-X-KPN-MessageId: 9a0dd8ae-e355-11f1-a112-00505699b430
-Received: from smtp.kpnmail.nl (unknown [10.31.155.6])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 9a0dd8ae-e355-11f1-a112-00505699b430;
-	Wed, 18 Nov 2026 14:40:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=to:content-type:mime-version:message-id:date:subject:from;
-	bh=eE3Q5w+pSqd4UtdSA0jQ/qK39TFdapJT41KR34oRoMo=;
-	b=FAap7tBcbSM8HaPG9LNxi9+VY2LksQAR0bHB5dkuOKS3nwDl1cssuAsevMlsyqCXz/TA1VdeULi6U
-	 e42Er1vgvZxzcrrqB8eWVpBUuWt4d/nd0KJS/H5IAeRshKusRqPlXgCBZNiOcNp+1ksFzxSrN793l5
-	 Yyr7JFKrR1pOBtWBxa2iaE6TwBis+rRFKMbgcmmpg2vH8tzjy4gbtxWLarGDnITu5t7+ELt8roCcpS
-	 NsQxkx7vFMB3hBqErBfWpGtayfMNuJ6pllU6bs/O3AyRMQ5/BYndX4XuNrbhPZjFl+iuvGdxoT62Ji
-	 za/jTeIoYUNqxpBAJY29EYP1thtlhLw==
-X-KPN-MID: 33|Q7DQQlTAFKhNuJ3H31f6EzyskdVihSBVT8cCfCIhR5jOgqerhH15XgPOF7YCAvp
- wDy/Ib6nmI9bKtfn4vf9Ch2rspNV1bsGBUK/+WpXA0Ds=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|HSGfxGRT1XqkLuYSsNifFiWzZ65ewkDRbRvrs6Gxog97Hfp7v/bkBVDIsmnsbW1
- IXseDGflLnx1TWQyiCEHxBA==
-Received: from [192.168.122.1] (unknown [178.226.154.85])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 97245f71-e355-11f1-a6ee-00505699772e;
-	Wed, 18 Nov 2026 14:40:22 +0100 (CET)
-From: "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
-Subject: [PATCH 0/3] selftests: add option to print the time spent per test
-Date: Wed, 18 Nov 2026 08:40:08 -0500
-Message-Id: <20261118-kselftest-run-timer-v1-0-53a838b2d62b@xs4all.nl>
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=Aus4pigh
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=N8ckg9LtPxEyRYRHJ9l5dXd5w8y5l8qf7tyFqJ1WiNhNly253PRvYt0q313OpClDQaykiMbIKyW2OfRZA/eTfeESaZ8SuF1YefGlbDu3CbjyHa+7jRhufR68iKHox6b3KV+fIIL3D99BYt8WCMTz942SzZZMoWi7vL/yUKi0WXKMCMcgfsIPRZDJVRqTMb4SJtgYg11E3AsoXg94T+DP+ve91rcEZZoXweGOMhJhZEUt0QNO81E7yrEpN3KSP2nZn4YmAZr1w2GG4K5KLSq4jnosI8maBeVRuq83NZU3FCtLhrmOJ2z3V4lEQultvxzp8W6pyoH98Qe81QUFfpwdpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x/D5GLCdkWoucjtSiDwdb0e+0Tl2CDlfFJNe6ZUHRxA=;
+ b=jTuhigXcs2zEdWB6eT7C6g7dAp1o9A0p3I6duZPE46SBw7NNnLLShSMV/+BSnUouZH4OTNCjLZowtrNisqshu+ZddrDtJr+4cw8KhbqCBgVqUaX7+h1H4ub7emxmlE/kUXVtSAxr/Wf0rUvmNBZN86WTyezJn9Kj+hnlJ88x0uRy8QoK64PHPukdORHlzEQ9VXnEPsa7q/byQI6Rqgx3iXy488KSj7DburN/OiEeooZJStj5k6iaIWiQS4dTwShs1u7FF/rL7vy8MCiL6TBTGdk6nyXADcq8Qrahnv28t/iPkOZ69A6NECg8jIkPeojQFwHtq2MhiQS1ILb0afaWkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x/D5GLCdkWoucjtSiDwdb0e+0Tl2CDlfFJNe6ZUHRxA=;
+ b=Aus4pighJ//eoLQLi6dp0ZQsEj/os/xTYTbAbSb64x9er4E5mrdzxeQ/oy4XI7t9qM0PR0sQYFzd+WnFjsQKMoluGEI6O5Yh78VviD9/EB4MxjEtWdnCSz79jGOeuz12KhzYXSYUlAd8uNjWeYZGdny25mhnJHRuaitnoP0NIQ9k2u9S3187h1QSNuwU7RrKFxGVDSFnzUVzhy6a+PDkjB6vxb8+tKPTPHytB1rLNODFsTEDeEV+9iOMKYFR0P16dpUt3N3N9LZ+uOZBloiGvicA9y3DMv06+3YL65uDSN+hAqeVyXNCeyX6PhW/+ak3HDNpMoWwuQCnpLcqd5wmTw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YT5PR01MB619307.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1b0::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
+ 2026 13:44:50 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.013; Wed, 18 Nov 2026
+ 13:44:50 +0000
+Message-ID: <ddd215ff-d6de-4dea-b12a-80948a9b5ea6@efficios.com>
+Date: Wed, 18 Nov 2026 08:44:48 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 08/40] sched/deadline: Do not replenish a boost from
+ cleared parameters
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+ linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+ boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+ mathieu.poirier@linaro.org, longman@redhat.com, ridong.chen@linux.dev,
+ tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
+ m.szyprowski@samsung.com, kayracizmeci@gmail.com, weihengqiuu@gmail.com,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, stable@vger.kernel.org
+References: <cover.1794922146.git.mathieu.desnoyers@efficios.com>
+ <cefacab5f1c0e7617f17e050af4ef5f6db01700a.1794922146.git.mathieu.desnoyers@efficios.com>
+ <av2k8JlLvUcBBOhn@jlelli-thinkpadt14gen4.remote.csb>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <av2k8JlLvUcBBOhn@jlelli-thinkpadt14gen4.remote.csb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQZPR01CA0007.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:85::25) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,54 +109,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzNDQ0Nz3ezi1Jy0ktTiEt2i0jzdkszc1CLdlDTjxGRTY0MzU6NUJaDOgqL
- UtMwKsKnRsbW1AFMrWMplAAAA
-X-Change-ID: 20261117-kselftest-run-timer-df3ac531652e
-To: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Hangbin Liu <hangbin.liu@linux.dev>, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <ricardo@marliere.net>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
-X-Mailer: b4 0.14.3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT5PR01MB619307:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7904f9c4-5833-4481-a9cf-08df457a1e03
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|366016|1800799024|4143699003|56012099006|10067099003|261026121527099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	MzC/1X6Ac77QKlJcRFbNrBN7eL4nAhI4TkPLwy4wh7T239HMI9zKsz3hxPIkaMJj8dFVSvKRuPVtX9XhaDlW4PuO5uXhwArsO8rJUGbC82bAq5NldgC/dJaF6gIcfrgUkmLays5wQdyofJvyTzESSF5769n6KUhk4QpIfLO48K4/h847qR83CXtKexB17cpUOfQOcHYK72M5Zd0t6n0iWlfihP++0ZEgwzG8GZKmShw1jxtkagBmCz2kgfC470+bwadMfvkLjJeeI0nYQSCdqonoj5zSMQW2p1JL2C0IAu66m5wWoV/sm8Ro3g6wGcnOf900cnf2IY3n5/WoMuwkqEh1Lih+oIvcSjwoA4xi/Ku4geoK6jHKrkPt7QvvcAPOyJjxyisJNxBi5tM6VdHCDjt1jiGPuya/3irbzH/GY1x+oq+Bpx2gzkWbhlEiezrZOPavfCEaalcbF7ZstkwovqfNzE7k9R2CJckg4KXd28ey2FICXuCaLEd0uKAgRTvDY9pPaQqCquBWHktmPR2wi+rA+qrljnZgWNuwGrq4sGfdNNPJxsEc0xT2xIuZ8SD/3uqvTHM2rS8oRsBj9QQvq69VYS+h6SUteji0p+/Itao=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(366016)(1800799024)(4143699003)(56012099006)(10067099003)(261026121527099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NVpwNFZjL3kyWmZCT3htcjl0U0JJdHZwdHBsbExzRGJRWG44WE1YcTJpeDd3?=
+ =?utf-8?B?WEN6N3NGMWo2c3JNM2hTTlpjMGRSSElsMVBVZjFPbWg2RUE1ZXV0WEM2UG9N?=
+ =?utf-8?B?dFRoQnpXQjBkNndEL3B6N0Q1SnNicHNpNXJSdUc5cFRmQ2dHODhnT3hQS1NU?=
+ =?utf-8?B?YlNNWlRIbVFuQ245aXR2amNadXl2VmFaS09FbjlMOUp0bVpWblVZd1RPRnJ6?=
+ =?utf-8?B?ODRzUEVjN29PR3B0bENPcnlad3hZaVFaYU1lZEEyMVZvUmhxMTI5c3FmZTBh?=
+ =?utf-8?B?d1plK09rVnBjc2Nnb0xiL3JiaGJzU0xMdkRMVXVyc0VhbHVRMFFQUlZtRVV1?=
+ =?utf-8?B?RElmRzFRbVhKUEJWeVdORXpQNkNESmQ1bzRCSWJxSDVrdTBWT3Z5OWVmMmln?=
+ =?utf-8?B?Z2Q3KzI3VVVHNW5kWlpnRk02b0xycjBSeGdRYlFJdEEwLy9EQmdvbWNOU2gy?=
+ =?utf-8?B?NVlVT0F1ZS9WT1lRZVdueEU4RHY1a0Y2TjlSZ2pkVG1aYzlVaVdJUS85eWFN?=
+ =?utf-8?B?QllPMjNnTTNGMDd1V1ArTllYVDE2Yi9VS3YvZXZyazNGWEw2TlFWYUY5T2Nk?=
+ =?utf-8?B?NVZqNWwrRUpadktxZzBaMkVISzFBQTZ2QmJDeVE5Uk5VRVk3NjBRWVBxOTFi?=
+ =?utf-8?B?ZjRpUHpQZHlOWndLMXhETHVPRm5uTVVab3MvaHZRTmF0T3pOWVo2cEl6cStn?=
+ =?utf-8?B?a2xaemZoU2ZPR2dCUXZLSndYeVNvc2t0ZXVSRDI0VWs0WVA5YllORkdabnRv?=
+ =?utf-8?B?UE5FOFhTSUJTQWlndllCUlU5RE1PdVZmSmh0cFJMSnpjZ1M3ZGV1UGN6YVlO?=
+ =?utf-8?B?UzJVaHUvTk1Na01RcVUwYVBPZHQrTGdXcDRNcmZ5R3ZPQ0xMSTJTSTMyRG9Q?=
+ =?utf-8?B?QU9UbVVYcGRRM3dKclo2MHlWZVpZT3lHSnF1dEZDb01qRHp1dkVzQVZtVWJ6?=
+ =?utf-8?B?QmxVZHcraVcvVDF2WHlQTG9rekhibjdzbkpRMnVNVVp0b0VWUExYWGx6RXpI?=
+ =?utf-8?B?WDYxdEI1cmZzQ2w5dGVXSjcvM2tMYXlTb1NOck1hL2h5UWllSVVjM3hSQmdO?=
+ =?utf-8?B?elBUSkVmeGluQWR2NjFOMW1DZ2hBaERSL3FuZXNtM2lQb21mZW05TVIrZHUz?=
+ =?utf-8?B?UlR1Q2NJcXE4N3VZbDlGSDdjTW8rSVY2ZzNxaHFBTXZjYVc2eElNb3pIUnoy?=
+ =?utf-8?B?dTRJdWR0Rk9yeW50YkpSYmpGaDVreWNiRTEwQUNVZE0xVUlRTFRCUXgweStV?=
+ =?utf-8?B?ZkRWaTJtRE1ZaVlHZFJyRDBlUGJIZFFtRkFRbDhFYzR5R3I3WFBNaUUzQXNo?=
+ =?utf-8?B?VUFyYlFTbUN5VmdLSVA0TjVrRk1GYU41akFVYTl6emhIMVZmTkJEREppWHFq?=
+ =?utf-8?B?YjJwdU9nVDFGR1lTY0NUUS8waElNNnFKelFLczQ5ZHNxSzUxTXZyMlkxY2x2?=
+ =?utf-8?B?M2RSOVh1ZDNHNTBhSDRRS0pFZnNZU21Ua2lQOStaa2grWlZNdlljRnVQRWp0?=
+ =?utf-8?B?aTJheEpZcndiZUsralVWdTVqVW5RYVVRaEVkUXh2b1JQbGVxQ2U5NzBOK2FL?=
+ =?utf-8?B?SWRqeStXZmxJaFM3SzltSnFRMzl1NVVvZ1JhTklLcnRYRUZFV25uZ1BQeUNO?=
+ =?utf-8?B?eTF1RHplcmdad1J3aHNib2hrWWk2WVVXOWlVa0twVnM5dDJickVtSWVPTG92?=
+ =?utf-8?B?b2R4Y2NSQUFTMVVXcVRqQXFyeFk2VTN4c3FPVTlHcU1RWSs0VEFoSmk0Wm9I?=
+ =?utf-8?B?U3JFSDlYQUdHZC9qaGNWQm1hYllaOEJ4L2xxazZBK1liYUNyR3N4TTFnYlFY?=
+ =?utf-8?B?KzBENDFLNytjZUNLVXpST2JpUFBjaTBBaklYOFhJb1I0TzExRDc1TUlEaXRy?=
+ =?utf-8?B?VFpnOFNhQmllOUVPamZjbXBhN3Z4REtxNjJDM1VRVlZoVFNSdVdXbVVtWFVV?=
+ =?utf-8?B?a1JMaStTdDQ2WDZDT0hPQmtVb3VWVEpBSGR1cm1ITU1yd0VjNURzWjVMUVpu?=
+ =?utf-8?B?TStaWFEydWZ0Q0dnVlFYMmhkRlpYZUc5VFQvb09wSTc4djVkc1k0b1FVeitH?=
+ =?utf-8?B?L1ZvVU5CM0FQVWR0V0hFSC9BaTA3aW9QV0hMeERUZTZUQzg2TEhBbERGV1kv?=
+ =?utf-8?B?TmRqVlFKblo4M0VEcUw4YUNpRzBESENWcGJWcjlIYVRab202ZkZhUDBmN0p1?=
+ =?utf-8?B?VHV2QUdaZGdoVE85dVp4YUQwSmlpN3VobTNiOUZRUk5McnExTHdwNmxaYm9W?=
+ =?utf-8?B?ajA1N1k4bk51OHFPVEs4dEJwTEVIT1o4d1FjbVUybFBMNnpYSWczTml4ZHlW?=
+ =?utf-8?B?aUxHbld3VHE0QlIvdDRURk0yY1JaVmo1SzZiRXVlQmViTlpzdnNkR09ZQmNQ?=
+ =?utf-8?Q?Yrg/YXNgEKh+IPSMRDAeR01mamQpFF5oAclT2?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7904f9c4-5833-4481-a9cf-08df457a1e03
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 13:44:50.2542
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rSBlirgqyzReNu1ELI/qqdbK04lJyM0eC+/uZ9ZlslDW3sb6qvImtfRL0KRt1AdU7pc3ZkbJwht+6FNrFc3NAtx/BJVB9TmW5wc5kAvKuoU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT5PR01MB619307
 
-For CI/CD purposes it is useful to know how much time each selftest
-took to complete, for instance, to know which suites to run for a
-quick-fail diagnostic, or what percentage of tests you can expect to
-complete on a paricular --override-timeout value.
+On 18/11/26 14:15, Juri Lelli wrote:
+> The above paragraph is a bit hard to decipher. :)
+>
+> Maybe something like the below?
 
-Add a -T/--timed option to run_kselftest.sh. When it is set, run_one()
-prints a KTAP diagnostic line with the elapsed wall-clock time just
-before the result line of each test that is actually run, e.g.:
+Yes, thanks. The next version takes your text as is.
 
-      # selftests: timers: nanosleep
-      # time: 12.34s
-      ok 3 selftests: timers: nanosleep
+> Also for other changelogs, I am not sure this kind of info adds much, as
+> I fear it will be hard to track down in history anyway.
 
-The other two patches clean up the use of 'local' in runner.sh and fix a
-bug when using --netns in run_kselftest.sh. Strictly these could be sent
-as separate patches, but "selftests: add option to print the time spent
-per test" builds on these, and it would otherwise require needless
-rebasing for two small fixes.
+Agreed. The next version drops the sentences that name the review that
+found a bug, in all the changelogs. The credits to people stay.
 
-Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
----
-Jori Koolstra (CIQ) (3):
-      selftests: use local variables consistently in runner.sh
-      selftests: pass the timeout override to tests run in a netns
-      selftests: add option to print the time spent per test
+> For the implementation,
+>
+> Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
 
- tools/testing/selftests/kselftest/runner.sh | 50 ++++++++++++++++++++++-------
- tools/testing/selftests/run_kselftest.sh    |  8 +++++
- 2 files changed, 47 insertions(+), 11 deletions(-)
----
-base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
-change-id: 20261117-kselftest-run-timer-df3ac531652e
+Thanks!
 
-Best regards,
+Mathieu
+
+
 -- 
-Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
