@@ -1,20 +1,20 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.45
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794991094;
-	b=X2+aqrOIS5r+0g1C1g2OIwAWEyku5GqkQybkO1t9ixz6dHDSKImkXmTw6XjeBouJhtuP
-	 mAnn8znJ/Pp9ElF7qHGvjL6D/oLoNlM9ZZ0a/nrNMpqdQitSCeK9+zZkdBhjzRl43aFhe
-	 /+4rSKt3lD8I4lPZDtL3YVyDUpYjahJdfYJFXglgTojWTlfEUU9PlPfearVtWfX5Eir2+
-	 sgsWF9EGLoHhJpVaVwR8csLzjtPbtQHCSoiB1O4FukMqQDYWulrAT/JxXzVYJ1EhntNBe
-	 R9Se5bvGWUVHHCusiExnyLXoIhMWkW3JkSq20bI1gPQ1A7jEsrR0dqfQ18Us0UtT6Bw==
+	b=pDjsm9XrBrVfTrMrv/hPg1FIHP8SmCEoNJLGdjcPiNKvsgvahlZ/6l/+blOfOIi+v874
+	 uJTs8fUfTfTYfmY6njMbvQNV5Wpaye20v19U4GyG1uOqwnhOeIvnD0SeAa+FMngWl6PPZ
+	 zRkIveDpfXnYiL70/1QDZW1kfByY7XS1FaGgiq2fk3RKH7M0E1XcfB0DwQtJUeLmU3xEp
+	 S1RAIt5M+XQ3ressGFk51hwG7m2YiV6LzRW/whYzgUV2bQDpSvvi0s5ShNcQ8XtLY7w30
+	 elsWQkBX/h8XwJBN5C4LYxdYJQGJdxTR5NmNTzI/GYLyZOYyFG+AR6TEKz3PXwRoJNA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794991094;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
 	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
 	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
 	 X-MS-Exchange-CrossTenant-Network-Message-Id:
@@ -24,54 +24,54 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
 	 X-MS-Exchange-CrossTenant-UserPrincipalName:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=tUpwCW+TDts2qvRGUqUxbyHk2/1A6qZqIvYVdcoijUk=;
-	b=ThTgSLFVqSLAfLdMKBe4RQkgRYETaeS9KjCfv8ZA5q05L2aDNQtdBWU5ggbwFv2cOc3n
-	 e/ga6GfYieDzQcoURN5RMMU5v6+ipxlC4oTdxmxO6cecY5yPjPKsGm/o8OA6YrLiL5Q/h
-	 1yalhZCu0GFd0vCKDkiyhQvH2neYahhjSWNzEP2DTxksuUiiNbKjijYbqhrw9Ocpce5m4
-	 VMVmq802FMk4ij0/DsZyHu8+osvLTZLUYa7KR774K+t3mMMiRSiLU1Kv8BrRUYgApMfPg
-	 hscsaHAh+tCVHxU/Wu/Rl5z+di7tZ0GIBD4aw5JHxXeEtnaJwn3Kcje/QfXIuvr/Pow==
+	bh=MdhPTYskaXErlluukZSJhn6+kPj5oAVom/0TywmgYgA=;
+	b=rgWaUovp0yVg8cQwOQ+B4DJxXqo8gMvC3t8VGGmCmAJHgVA5lj81mh+wAStahXunhhOd
+	 Obat+E420WyTSwBKPYvGdF5KNS/nso5Ay3TAxKaP71Pq8QxuvuyIg8IEAr0+bnf2DtC8p
+	 u4axFbr/b2K8Zx0Jm92pSUaXSTQbnSBZg8ZGbSKL+CbO7Pkv3eEydh7GxABhm2g+fDbFr
+	 vclcLiqpTyl05MHWekA+IBqjEP5B9cqbTayOc8DRebfTve0pGtXvGZOMk54JsM9fgmHrb
+	 e0y3ZqBn7yJMtE8tokU8lMHNc5a2f+Geow0mLQdyXPbBCDg+hdrVaQgkzb+9rGJRVJw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=R41XLxg7;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=rHXDbgEp;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.45
 Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013045.outbound.protection.outlook.com [40.107.201.45])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F52606A31C;
-	Wed, 18 Nov 2026 08:38:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80F52606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EB7606A32C;
+	Wed, 18 Nov 2026 08:38:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40EB7606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=R41XLxg7
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=rHXDbgEp
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HP/zov4aoa3hi/MyNtxXBkKWZMm3Bpb8RMBW6GxOevgY2EhAYHUVVgARotEPnHS5ukXkR14Bnwuu8N/oCc5fukEzsTUBlyNp/KCtZy+nXGSk4miJ/32QF+3tq7ZtWCi2jHRVHC3+JKIJdw5FohsN4WJYECmZL4Mu7xpgNT3fQKo9f34xHiGfVmrcirHqJVx+iLeEaShyJqZg5OG5qgBb4pTA13eRbmE86wO6s58qFD+RAegzLFl2GuGG4i+lr7L6X+hD7wig69b669wnihGBfiNJV/ZQTmNbfsB6CW/MbnH0/u8voiPjwbYrB6DkrxGRWi5SXHdNOUBEI+RAOsTFnA==
+ b=XHOlJI4F8XDpgF988qXuP3OmImyPRpJWxuFD6NqNkRa8Ll2c3YxeP7MkgJCgNUN177enpavxJ/EfANc8rVn8qlTFWdr3133lY72FhJQKBzJ2XDFglUUkxLTMh4Be+J02z/EnsN//WZEz2Ig2FRZiqfsce6HhBbSL38fybdBYc9eR25+/Dlj7s7Ln5kuQE8AxkU96z5Wyh5iYt1joFIGoPE7YeyAbP+FVzBFfayyD37TwG1iP0VJDZtRBkPttAaQsbePZDb5J+i1/FgYrsgmG340PIjPAsVOko7VDi0/7j/Xj5MqK+InA+v8KAeigjgZzvcpR3uRHzemamK85nPcAJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tUpwCW+TDts2qvRGUqUxbyHk2/1A6qZqIvYVdcoijUk=;
- b=FAhM18NSKXRBvLC3mg9YDIJ8LT8ej7TJFup2rv4wuHdYS1UZM/iLmNhywJu5gGvfxpxiFlX9FW8zh8kiml1Ra4UJsVLv8qJJiA7d9dntxDZjbOJDEIG3fEasdaHqDBAnPCxEg/0fW8Wzr93EKipE2BJgGTp5Ft7jO1rwcfj2B/3KyFj+9YoGEyEHUM+U8CblBklUiwbjxJxTPlU67G7YRDawPIPVvgDfC4IKi7SfGG69EZ9y/RTGQnooTKjd8xnWtEvjgpPX6aEHuxrHnQwC95E8v7dwoh6jj3dvtFo1AeiNRLkzpyoE/QNvoTmNqZTooLps/hoXZzLOp0wqcjpRYw==
+ bh=MdhPTYskaXErlluukZSJhn6+kPj5oAVom/0TywmgYgA=;
+ b=qUlxE/xOG6j0xyGSRJT4E9uhjylb4YozxJ8AUJURBKb2noudvJNa3e4zvIKk8wIC0EjIU63rMX0G6Hn406wtDkj75sz1Xctk8TjY0qgVOKBEjP3DJSy9zYTDZSb7G20p/bqEmTToBWnORcsR5Ex/ukUC+n8ClxYXFuTfROpXuMcpnv/W6w6f/NfQJb8zRgFReuv/FDlRFJefZBA0SEWg5WhCVAjCH6jlvVrFd9z9v+s9v3FOQrx+Y22pQ7ax2OTg6rzj5MubVYZVIjjDa4wB07JSsDsJQ6lQasNp0yYh5gv3OPIwimdFA/HflQTZuU6zz+MY370iVPcQcsPslv4KbA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tUpwCW+TDts2qvRGUqUxbyHk2/1A6qZqIvYVdcoijUk=;
- b=R41XLxg70lG5oYr/WwDMcWSkdA5li40wwTgQA3EA/vtPMD1IjzjqEWLFPHBIQdVsRVA8jRmRJs7vVwmltLTUUrTo+2XvpjjWWxImhSlJ6zA9KLm7QmM6HHP4k5rb/5R+0zVrLSjdU6oarfRwDeafPSphD2LhD5TVeVJT3WRKiCFwF1YMqBiN07fdtAX+hD2rjKucOe6yb+xURYvGTb43ECYqqBozn5ezbR1xPYxGIzeKxJHuEmsUIBWWNJg0dO1ToFdJ0GlPGdPkjZRiWV5YBMwxuxzGkdAn9mK5tbDo0DaajCt8spsob6GkdWFQ15hOirmmMOSvEzimm5f4s66qCA==
+ bh=MdhPTYskaXErlluukZSJhn6+kPj5oAVom/0TywmgYgA=;
+ b=rHXDbgEpwwf1CQM87+HaunoqfCs7WBbGziavWVDWs8pXHd2EgpHHGnB3Wd8zp+x7fDWftHBCjgdTGAfy1mdiIdCVKE13pxaNc8fco585YrmYK7NPxu6bniwy/UHHfaNiZtDkks1beFd61HBnk3mdyESemG81xW/761Am73J2p3jWxKtSxvGEPGo03FdJgZsCerKMNsCryjlLft8UYcAcqKrR8UHUEY47wMUgcBzjBIrOnzPVBACMInixohvwY+tDr/rspznqjRsUG9EmywxEGqt4Ww30LSwRF9KxFWTuk51GKhV2mquJ7Q2NVLlYlusQ+44iE/8IA7fLqYBX628uKg==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
  by PH8PR12MB999319.namprd12.prod.outlook.com (2603:10b6:510:40f::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 08:37:03 +0000
+ 2026 08:36:09 +0000
 Received: from LV8PR12MB9407.namprd12.prod.outlook.com
  ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
  ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0615.009; Wed, 18 Nov 2026
- 08:37:02 +0000
+ 08:36:09 +0000
 From: Ido Schimmel <idosch@nvidia.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -88,16 +88,14 @@ Cc: davem@davemloft.net,
 	linux-kselftest@vger.kernel.org,
 	razor@blackwall.org,
 	Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH net-next 6/6] selftests: bonding: Test that Collecting is advertised after notification
-Date: Wed, 18 Nov 2026 10:34:42 +0200
-Message-ID: <20261118083442.1061289-7-idosch@nvidia.com>
+Subject: [PATCH net-next 0/6] bonding: 3ad: Support independent control with LAG offload
+Date: Wed, 18 Nov 2026 10:34:36 +0200
+Message-ID: <20261118083442.1061289-1-idosch@nvidia.com>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261118083442.1061289-1-idosch@nvidia.com>
-References: <20261118083442.1061289-1-idosch@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TL0P290CA0001.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:5::15) To LV8PR12MB9407.namprd12.prod.outlook.com
+X-ClientProxiedBy: TL2P290CA0018.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:3::17) To LV8PR12MB9407.namprd12.prod.outlook.com
  (2603:10b6:408:1f9::13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,191 +108,115 @@ Precedence: list
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|PH8PR12MB999319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ca07a61-a8c6-4d59-132c-08df454f1e56
+X-MS-Office365-Filtering-Correlation-Id: da8f0135-2191-4659-422d-08df454efe8d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|7416014|376014|6133799003|22082099003|18002099003|3023799007|261009223027099003|56012099006|261026140227099003|11063799006|261102123227099003|261028144727099003|261022075727099003|261021123027099003|261026121527099003|261021121427099003|261022105027099003|261022113327099003|10067099003;
+	BCL:0;ARA:13230040|23010399003|1800799024|366016|7416014|376014|18002099003|261009223027099003|56012099006|261026140227099003|11063799006|261102123227099003|261028144727099003|261022075727099003|261021123027099003|261026121527099003|261021121427099003|261022105027099003|10067099003;
 X-Microsoft-Antispam-Message-Info:
-	cQY8arUqzdY7j1nx1KDrZrPFQv01AJFSJdo4Z7H/YxC0H3ejAv2coxAagCgaNs/U2Uxd8EWlr0p/QPp1clc58NCY10kylryFjx+q9Fpj5+vDCsKz5rYb7w8WvWtRObep1WNTfIThhAllQAFey1yyRYfakN+Le7/lCBwb89rMjMrxVlJ1L9kFDClQKiRKwpYpSkIukJ7LBh5uy5ZrRmFRHodSqIc3WmY8i6v1Fj3NQHEkU3DTBRmU6sDnuf3BXG4TT8qn6l2YGOsAlZx/KtoUjnof83ZIKFGj+4/aQfeKmf/+Qp/tUnp6PAUF7nKvB1r3ULWfin28v9L88AeP6uYQtXq5q8cIcvbOOroIYaKSX5/DfYm1vuNyHbsUp2cc08SDjzzCfiwqpzg+AMeTWorYDPt1ef6MWK2Vu0ItKhDAB/OYQepZygdxQdTcjwZ1OFsnS3DWb8PUXHNkuoirVdkmiHE9WptnXBdhHARfe8+Cot/zFkG31O6cG970mwAHccD1MSMgoB6TBk+NRlQQFFLe26jqyVq8Jfv0aNudhpiUxukor/FNErnJ1liezGDH1W4rqp48i0gfth1p0YNdxe9O+9bXusmefrkNCT7u8SKRmYE/gcMVv0VjJWm9+anA2deRnCzkcS7Vk3/1bIH/o4Kq5pplJOUCUhfdvsnBEfFf0gk=
+	nlxWtQjffzkcuitK2oYC1jpbv6OU8mYvL3mT5XgVOXUcJjV+TOWWUo8IoV2T/pX9AWewKVC5LNgpe4wZnP8c1WuT1Y/WQlViLcexwTWcZtkC6M7ar0PmQVUOZixLmU1AI7axPZEDjO4KlBtRpp2tBJhvxAkfd3WWMrdwlAKJiLEMLmSdOw9nehDi+RrnDy+1Cn5JvYojQtW37eV/R5dw9hhhqWJYNRadjVz+H31q5Won9JezmBcvYIkDKImPgKcSC2n5iQ9659JNQfJawsuiQ9Cs/VASDpqszbTJFBuUwFGRcabIiNVCuxCpnDMSDoOprXFNy0hJtWlvi5B0A+4T5UaY9HFIOXK+FOF/AxsnO8dT9B1riyS+sgg4cUCErzKHwjHP6CG8H/2vFB8TZpOzKYuxz9FctPHZjkSZ85gIaaeZfNDbOEe6pHmpRtO49pZcxXJx0IZhzaBE84Mvb/9+IihTy0+hNvyKzgksZkhkeWdJ8UjsYoaIgWGln2M69b5a0tHAOU14abhjyISBiIXVUzWRBSQpRojpILriwMcIkKFklxVgLaoglqU1W7YYXKhy2QspptNh4snlvEft8Uz9s8MIqYjCaNjgSu2n6qv98NBLkb9ZHpFp4eP6amcrfzkIrDMwcL5n3eyMmDwl1buBKD6AXgcWEDHy2AzD76K8kak=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(7416014)(376014)(6133799003)(22082099003)(18002099003)(3023799007)(261009223027099003)(56012099006)(261026140227099003)(11063799006)(261102123227099003)(261028144727099003)(261022075727099003)(261021123027099003)(261026121527099003)(261021121427099003)(261022105027099003)(261022113327099003)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(7416014)(376014)(18002099003)(261009223027099003)(56012099006)(261026140227099003)(11063799006)(261102123227099003)(261028144727099003)(261022075727099003)(261021123027099003)(261026121527099003)(261021121427099003)(261022105027099003)(10067099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?SOooZIvwxuY/PdGGNt2yeofBUSGiUh6zaKHPqP4EauNmyGznqXYRNw92/VwT?=
- =?us-ascii?Q?zFFyUy8mHP9Vq/nmrpNeGJwqHvmhELx6hMdkfGUoB25I1tRv/MFNg8xBHBjB?=
- =?us-ascii?Q?p9uckKLeDyRacCtDLbgH6ASLr+yS6nP5VxrEwLxERWdndxVw260DlJZSlSqw?=
- =?us-ascii?Q?6m2OOAWfGQAuf279oyv+IzCzhDHP6nmDRsAJx6eWc+Lg4O2v08FqeB/ShYX+?=
- =?us-ascii?Q?ZLQj/KEE3NlzpgXaQ9xM3hGCMMGbC+b5Wog5gjEioB2SHjJ1UqYTw67Gvatx?=
- =?us-ascii?Q?burHDSCOAem0Rx+UeSXyRr06cfg3IQJkfUp9877lLAbhRX/+RbQZ5qWDk61f?=
- =?us-ascii?Q?DAI6/XC5Xr8YI/2i3GG9BPVG9ksP6rTGJIwPbv8xBlQbn3HX/re5wfps91LN?=
- =?us-ascii?Q?sfkbg9oN/bJi/lB94k+cChG2GwJzPjgVKzYUGHB4UenF+1saE7ex84D73oXW?=
- =?us-ascii?Q?hWb0KtsnbE8B/Q+T5uyLof2w4wzk60bTic7Sc7gtkgfD+ysNQFUDKpdO5DWi?=
- =?us-ascii?Q?Y8s3NEkpbU90ly17utLPcC+QV3zwsOCJvEQxRcO+r9+Erdi43Jh4x7mUQorK?=
- =?us-ascii?Q?GcUrDwQYuEx+8D9pbboQMTPNaKFDSOkG2oRnYBpwTujs1Hmn0X9iKEaWgcqz?=
- =?us-ascii?Q?OxpV2ehWN9t5sTa+znVxotgJTatUqawrCoEhKuIUyorXo5mFfx1LddHmMGKI?=
- =?us-ascii?Q?o3dlrVgsMQ0KC03X1/ZUJiTERgXa6AsxtQyjfzgLsYAN2uwkZSHFS6UJGTR/?=
- =?us-ascii?Q?h9+5ceI2PRre2yO1pGAVZ6IEvHNY/g1ZgPn7xwSI41TKN33/9sRSw/PJNKQs?=
- =?us-ascii?Q?E3As0BahUQgr48xl/TNRsYdubloJ+jxXEVzJ9QQQrbqcvYPNqth9h/lJmcTo?=
- =?us-ascii?Q?O1tN95gcbUGg/yBuKTX67i2pOpSzY88dsYsH2YoSlcOGUA4Xe2/fLbFjLDD3?=
- =?us-ascii?Q?8oDKrYm3h3RuuODuqyfoqYFw8MAoNjt+HrKakt6UQquFEr/CRoqnC4OpBDV9?=
- =?us-ascii?Q?U8wWbNcAnvK22eZyUFRNYpnWFLK1N4RagWhQrzY8iMUiJd+zDhMeZy53FOaT?=
- =?us-ascii?Q?6MsG2grnPGb1NYjadFrC19TozyZn98MF6qrO3IAqxjWl/fxIspuoPL7Iqjg6?=
- =?us-ascii?Q?ZpJ2IV7UtzHH0SU6KiT3Q8rhlJ+bkfA5y91olkIVn96D8yXIK7a9vCsSKMa/?=
- =?us-ascii?Q?l3hES+lB+QrIAzk+B8Kqv30W3qqcebsiz8FKXNCl1g1qRc1ZIH0d7KSpYlLe?=
- =?us-ascii?Q?BMDHEsccsqsimLqtzOKMWnGRx90EgOugNE2g6qST3pobBgseTyft+pHsz8hM?=
- =?us-ascii?Q?DBOTo3sLeGrDZlFGZE5cd+XzIR+8suuwamkOKxCXAY9tCvP8jqrt5i8a3v9Z?=
- =?us-ascii?Q?ZsJwV+g7veGzSrx+CKCilPk2v+QYWuEs0NsODPfBgzUS3k/zfIGIx5NHBq83?=
- =?us-ascii?Q?tPqlrR7lOreMoIGEsAD6Fqm5nqg+LFw1JjNmkcYGcvXVy4o/ixq7zbfEFxbL?=
- =?us-ascii?Q?J/T5SdB2XPw0OFuxSdXBqwuQsW3/Huxt1gBv+fxxd7yzHnmktb9fRZX+ooQU?=
- =?us-ascii?Q?wV4BKlfsOa18b36eojbM28tv2+HA3kVjvRGyhgWz7I6jG7Lpe+O2ersflWwY?=
- =?us-ascii?Q?o5nzW3eoFcvycajEiT+0Up69O1B6Y//33OCfhr4FMlT4dg5UeEMPf45gKd19?=
- =?us-ascii?Q?3CNSFYfZ44StykmF8e1ToEOqncbQZB0oodj/PWVJulfI8ln/?=
+	=?us-ascii?Q?49z1eavDRzWHY4SxOM1sw077FuQn0/Ryr2Zj1rHCbCR4STD7tDA5dNUpmUFR?=
+ =?us-ascii?Q?kAGNmpoBcQzxN4eNbJldWPIomPRULOYWQeklrernpDgz/cmN3MXyhpcSwccP?=
+ =?us-ascii?Q?HmQfkWkXOGoqX3Ksxr6/FPOrUXnekiX0EmQBhIJrHWJeLiZtZ5GXdfWVj2fN?=
+ =?us-ascii?Q?/7Y4wALi0c2N18oFh//4dwSruN2X4zbV/3Q+WNrvcsDT5OdoDprCcQFj9WGE?=
+ =?us-ascii?Q?2r4qf/9fs6hE+5YzrHWE5gk5XUstoeYegcuinF64P/MvAnm64/4Y77vsWtHd?=
+ =?us-ascii?Q?Fahx73iX9DL5R445oToPGwVYbE8S0u2iQ3psbO7rvr6iCWMnX1dW/iL0Uyi0?=
+ =?us-ascii?Q?EIOLO1dAyKgBu4J8A9CIU2NPGpIj1ihzFS+gnZb1vNJ3OJrRzqS64bLf4O3Z?=
+ =?us-ascii?Q?WQ6mog3KHtTSvK48QFdwYfZAqsXbDviTSFDlRXVh3kKADOKYj0jc1yPmpD3u?=
+ =?us-ascii?Q?oh9vs/RdfqY0u11C5nqsTYeiyxZgJk1t/3mpjaEvgDe5BHEODHxb0+ktKpqt?=
+ =?us-ascii?Q?C+yyDp6ahbJntDYFroCLy71sYc1Qcb22YIjhMKdpTUJeJp94uGIpYhTkM+/G?=
+ =?us-ascii?Q?luIbr9pFr6vAeqwXHhsCEkxzy8hM3tjJXOhlFyINKtCrUXsSkIJYIhh07FtN?=
+ =?us-ascii?Q?oTefgKg9ZnsoWeBlIvSmEjLx1ORj13MPMU0R0sW9oojs44hJrxwRy38Vg3WC?=
+ =?us-ascii?Q?Iaw2ltjSqYPJQTxwKGghy6aOv2K8Wcd50byquYOqWwc8uF2W7GvuSpIUm7x8?=
+ =?us-ascii?Q?/EFWtn+UoiFMTzstbUkLEMofoYCG2s2SJgpTwHSSWeJ+6CmYS29RLSfIBBQw?=
+ =?us-ascii?Q?aLm2EVB4FyernuNO1Yo83IQILyYJfKiNE+reCL9NXc+lsHxJgZvaC7OgiRz5?=
+ =?us-ascii?Q?SLOHXnXh94LeuovR6laQQzOyB8704b6Heuf/GGWepsS9E2/CSMuHQzisH3yw?=
+ =?us-ascii?Q?VkctMpsVPB94o2+i9MHYkD5nS+GmX1GC4p39ehlEqTPT6eZFr8YIYvlwnXjl?=
+ =?us-ascii?Q?WrZIDNLSR9TUNZXrmBxMAhCyFAauXBNp/6o/H/2Q9bRmlnkCtk7XQrbxc65S?=
+ =?us-ascii?Q?mO72ogXOacZ5DnURUgMcFurrMRgFZLgAEpJbfcyCP6zSdKv1pVB6xDSWQ052?=
+ =?us-ascii?Q?BIxJNt5OHw1y7qWGGZR0vpHhGTvqRBjrUsRbxJOu1r3cjpJkrwVZDOlZJ32w?=
+ =?us-ascii?Q?LzOmM0DqHa+zKXdm/mf+SulgQZW9iPJGO0aKVxxX+byyKt/PsEQWQfCj2X/w?=
+ =?us-ascii?Q?o4Dtb8xvkR6vyOUVvRnKmelmmdfuuiGoETmZQ3wXFb4Dw9uISJdZMc/ooUQJ?=
+ =?us-ascii?Q?WhWcBGb2wyFsA+h+qNQnIkmmOcwaXwQtSm3xjg2TOmoMig5BMDIPTJDWlspD?=
+ =?us-ascii?Q?uOOalH7lqST1LHSt3cYy/OifigilQxgQFZ1LkCq1B1OiVRRf1R300qQInkRe?=
+ =?us-ascii?Q?n57CvA4gmfVwI7jQo2y5lhkmjBNhN7eHstasyQUAvGzg1t6E/Aut9/hJxZ6q?=
+ =?us-ascii?Q?5An0QykH+R2681FCv8KNiXUxC7uW7wb4fRyGjngj0s+axWSkj7dhPq4GcURY?=
+ =?us-ascii?Q?efpxiwFY3b2d+fGHQe3XAiZPkUNK/KgLieZQwW5jFVwfJN35/BLqDJigJQyO?=
+ =?us-ascii?Q?Cz9Lk3gmfNYK8I3qlASMCHkDfNsxdLMLLxCs/6X0JKd6sbAp8w7iUlUvYpbT?=
+ =?us-ascii?Q?ALdZkIl848SJxA5CsPa+N1orhKP2PH5azF4Zx5kDnfUhnmIl?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ca07a61-a8c6-4d59-132c-08df454f1e56
+X-MS-Exchange-CrossTenant-Network-Message-Id: da8f0135-2191-4659-422d-08df454efe8d
 X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 08:37:02.5246
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 08:36:09.2120
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ys1RsgckSRDjDgGF3346Fw9t8vlztbEgNVrD/dzQ/m1UCKhWMh0w+19Q3kViiyENgKZwn1EhCJrN+BQgG8aNMQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1Qs3hKTlk6SFo8vTOaggbvUXuRH8K/3gTa61Mvqml7A1b6xS3QnxiQiWSeafltiaMPGhsibjts1OvZqAnQIVxg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB999319
 
-Test that with coupled control disabled, a port only advertises the
-Collecting bit after a notification about its Rx state change was
-emitted.
+When coupled control is disabled (i.e., independent control is enabled),
+an 802.3ad port can be in COLLECTING state where it is enabled for
+collection, but not for distribution. This is useful in deployments that
+want to avoid packet loss caused by a port starting to distribute before
+its partner starts collecting.
 
-Use a slow LACP rate on the partner so that the port only transmits
-periodic LACPDUs every 30 seconds and is therefore not rate limited when
-entering COLLECTING state.
+Drivers that offload LAG are not aware of this Rx-only state since the
+LAG lower state information only indicates whether the port is enabled
+for transmission and the bond does not notify about Rx state changes.
+Instead, these drivers enable or disable both collection and
+distribution on the port according to its Tx state. As a result, packets
+received by a port in COLLECTING state are dropped by the hardware.
 
-Output without "bonding: 3ad: Advertise Collecting only after collection
-is enabled":
+In addition, a port that enters COLLECTING state advertises the
+Collecting bit in its LACPDUs before offloading drivers are notified
+about the Rx state change. The partner can therefore start distributing
+packets to the port before collection is enabled, which defeats the
+purpose of independent control.
 
- # ./bond_lacp_independent_control.sh
- TEST: Receive in COLLECTING state                                   [ OK ]
- TEST: Notifications in COLLECTING state                             [ OK ]
- TEST: Collecting advertised after notification                      [FAIL]
-         Collecting bit advertised before notification
- TEST: Ping in DISTRIBUTING state                                    [ OK ]
+Patch #1 adds an Rx enabled state to the LAG lower state information and
+sets it according to the existing Tx enabled state.
 
-Output with the fix:
+Patch #2 sets this state in the bond driver according to the port's Rx
+state and notifies about Rx state changes. The team driver keeps setting
+it according to the Tx state.
 
- # ./bond_lacp_independent_control.sh
- TEST: Receive in COLLECTING state                                   [ OK ]
- TEST: Notifications in COLLECTING state                             [ OK ]
- TEST: Collecting advertised after notification                      [ OK ]
- TEST: Ping in DISTRIBUTING state                                    [ OK ]
+Patch #3 changes mlxsw to enable collection independently of
+distribution. Other drivers keep using the Tx enabled state, so their
+behavior does not change.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
----
+Patch #4 adds a selftest for the Rx notifications (i.e., entering /
+leaving COLLECTING state).
 
-Notes:
-    The test compares a user space timestamp (ip monitor) with a kernel
-    timestamp (tcpdump). This cannot hide a bug since a delay in ip can only
-    make the notification appear later. A false failure requires ip to stall
-    for longer than the gap between the notification and the LACPDU, which
-    is at least one state machine tick (100 ms). Did not observe such a
-    failure with normal or debug kernels.
+Patch #5 masks the Collecting bit in transmitted LACPDUs until the
+notification about the Rx state change has been delivered.
 
- .../bonding/bond_lacp_independent_control.sh  | 53 ++++++++++++++++++-
- 1 file changed, 51 insertions(+), 2 deletions(-)
+Patch #6 adds a selftest for the previous patch.
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh b/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh
-index a2b83b581e40..b86f39f31d0c 100755
---- a/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh
-@@ -4,7 +4,7 @@
- # +-------------------------+ +-------------------------+
- # | H1 (vrf)                | | H2 (vrf)                |
- # |  + bond1 (802.3ad)      | |  + bond2 (802.3ad)      |
--# |  | coupled_control off  | |  |                      |
-+# |  | coupled_control off  | |  | lacp_rate slow       |
- # |  | 192.0.2.1/28         | |  | 192.0.2.2/28         |
- # |  |                      | |  |                      |
- # |  + $h1                  | |  + $h2                  |
-@@ -16,6 +16,7 @@
- ALL_TESTS="
- 	collecting
- 	collecting_notify
-+	collecting_advertise
- 	distributing
- "
- NUM_NETIFS=2
-@@ -24,6 +25,8 @@ lib_dir=$(dirname "$0")
- # shellcheck disable=SC1091
- source "$lib_dir"/../../../net/forwarding/lib.sh
- 
-+require_command tcpdump
-+
- lacp_state_get()
- {
- 	local dev=$1; shift
-@@ -75,7 +78,9 @@ h1_create()
- 
- h2_create()
- {
--	adf_ip_link_add bond2 type bond mode 802.3ad lacp_rate fast
-+	# Slow rate makes $h1 transmit periodic LACPDUs every 30 seconds, so
-+	# that it is not rate limited when entering COLLECTING state.
-+	adf_ip_link_add bond2 type bond mode 802.3ad lacp_rate slow
- 	adf_ip_link_set_master "$h2" bond2
- 	adf_simple_if_init bond2 192.0.2.2/28
- }
-@@ -162,6 +167,50 @@ collecting_notify()
- 	log_test "Notifications in COLLECTING state"
- }
- 
-+collecting_advertise()
-+{
-+	local lacpdu_ts notify_ts tmp_dir
-+
-+	RET=0
-+
-+	partner_state_clear 0x18
-+	defer tc filter del dev "$h1" ingress pref 1 handle 101 flower
-+	lacp_state_wait "$h1" 0x0f
-+	check_err $? "Port did not reach ATTACHED state"
-+
-+	tmp_dir=$(mktemp -d)
-+	defer rm -rf "$tmp_dir"
-+	ip -ts -o -d monitor link dev "$h1" > "$tmp_dir"/notify &
-+	defer kill_process $!
-+	# Capture transmitted LACPDUs with the Collecting (0x10) bit set in
-+	# the actor state.
-+	tcpdump -tt -n -l -p -Q out -i "$h1" \
-+		"ether proto 0x8809 and ether[32] & 0x10 != 0" \
-+		> "$tmp_dir"/lacpdu 2> /dev/null &
-+	defer kill_process $!
-+	sleep 1
-+
-+	partner_state_clear 0x10
-+	lacp_state_wait "$h1" 0x1f
-+	check_err $? "Port did not reach COLLECTING state"
-+
-+	slowwait "$WAIT_TIMEOUT" grep -qw \
-+		"ad_actor_oper_port_state $((0x1f))" "$tmp_dir"/notify
-+	check_err $? "No notification upon entering COLLECTING state"
-+
-+	slowwait "$WAIT_TIMEOUT" grep -q . "$tmp_dir"/lacpdu
-+	check_err $? "Collecting bit not advertised"
-+
-+	notify_ts=$(grep -m1 -w "ad_actor_oper_port_state $((0x1f))" \
-+		    "$tmp_dir"/notify | sed 's/^\[\([^]]*\)\].*/\1/')
-+	notify_ts=$(date -d "$notify_ts" +%s%6N)
-+	lacpdu_ts=$(head -n1 "$tmp_dir"/lacpdu | cut -d' ' -f1 | tr -d .)
-+	((lacpdu_ts > notify_ts))
-+	check_err $? "Collecting bit advertised before notification"
-+
-+	log_test "Collecting advertised after notification"
-+}
-+
- distributing()
- {
- 	RET=0
+Ido Schimmel (6):
+  net: Add Rx enabled state to LAG lower state information
+  bonding: 3ad: Notify Rx state changes
+  mlxsw: Enable LAG collector independently of distributor
+  selftests: bonding: Test notifications in COLLECTING state
+  bonding: 3ad: Advertise Collecting only after collection is enabled
+  selftests: bonding: Test that Collecting is advertised after
+    notification
+
+ drivers/net/bonding/bond_3ad.c                | 24 ++++-
+ drivers/net/bonding/bond_main.c               |  4 +
+ .../net/ethernet/mellanox/mlxsw/spectrum.c    | 15 +++
+ drivers/net/net_failover.c                    |  1 +
+ drivers/net/team/team_core.c                  |  1 +
+ include/linux/netdevice.h                     |  3 +-
+ include/net/bonding.h                         | 25 ++++-
+ .../bonding/bond_lacp_independent_control.sh  | 94 ++++++++++++++++++-
+ 8 files changed, 159 insertions(+), 8 deletions(-)
+
 -- 
 2.56.0
 
