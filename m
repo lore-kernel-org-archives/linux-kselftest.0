@@ -1,58 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.112
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794993223;
-	b=ouYoLaIkyQk96IUstm+X2QO4RdLuUajOMYKIcdoOqKGtvLApMr7ODAq7Ai8w2TGJ15Au
-	 y3a5kicmhV55e5jvggxZCuKSZUox9WChYp3K/ZVd64UjSbpP/nrJ5ruxuXxy+8zAobcjj
-	 B87pudA7SJUkkeQMEooGhbKX0fKQd582rNWwFoE/9Vy09rJ8WjUesAf6QvRNn1wf1Ba9s
-	 q6DdW4kt1uc98L+x6pQVdhHEW3KM6LX6nOLj+ix6Oj7OcA9RjgV0Eeqqpu4J7urpVgmc3
-	 uJDoTkCZN+oBHRyh0Q17OlTf0a3Omo6RnOtfY/uRt/J8FWDP84gBQoAhub+PvX+nlDw==
+	t=1794993377;
+	b=dhC8LiOQzMeuLduN3PAQvqkKZEhg9Klpy0zf5VAlZeGE/lcymBD3rqPwBclYYGw8id3z
+	 G7w+01SNUQf7qanijjDIEO1UhAFawVz+oL8GsezWI8sLE+gtDhP9j+QbAbivVoUX8JsE4
+	 KQEqDoLAM+/3eEMH0wRlSPea0cvryDaajrmisbmx6tT3brUBpzp7/zWcnElBzmXm4xvWj
+	 bUnNnvkOp40UBj2FRDY6FreM9upxlc+nS/mlBEAo3Y8BPGwYuExoRjaLwBjvifKNTXUfc
+	 zL5GVhX9tV4lc7nBvXGorLI/NgMyP42xJRtNXyYx1uKGvvNedZocWD5fEF8kRWXaVrw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794993223;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=gqPBU5vSzctPXUMsg32k86Yb/Qp3EYKKyTavFdf5sH8=;
-	b=cq8NLcIpxDrs6FZXJ9TmlxhEruIKvkgPI1uREp7kORsNKvIzr7w6MNgcrrT96NxzcYuO
-	 UdxiG0DqjmtyfxWX9acvL98DQxDQfV6MfYrunjlHx+rLiZ5Oq8tAV0Pxr9PyVzaD9fiuz
-	 7+iwMIHDotrBwpcQox45wAdZI+9yUyUjf8+kHf0tOJmfSb1I6llmNroVY8DoLLmGhL8w5
-	 XKXixs+alpq1dCuozqBfVN//awQAAf/IOCuWeMZQRDzwPuP5dMncRxpelRBZJIpr0KTZt
-	 yXZbkJYVUHkOyQHQMho/01zCDgA6hQZ7fcTeroPzT0xxZepZ8CSKhWAonW57cJLwLkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794993377;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=hGfK5Hi5QOdXQbsME0+GiG+Fz4TcL5XOwxtDG4CKWPw=;
+	b=4V+VJ/tZXEVWBHOCN2POUWtozV2Ks6ere7SdoML/fChe71e4PNWRerf8a0+jzBzLvAho
+	 vvdHEzyiD47pNxyuRqKPof0cDHrkULjpv+IwZt/LFGcgIazmS51Pb1eyIZK6wWu2wO0lx
+	 628XjiMd9zd9SgDXv7TliBnvTveU/HQhW6FyiyetOU9KukyP8L9MV3SpSwLtgY1Rz1iaL
+	 4brgzv9ogP5rcEmOetGxZbgu/gA30fI9F7hrK+4nfOkDV5RTutnm2PVBMkLVsBB1CeutA
+	 5ffNB/aXr+Kq2LEHBJTH/Q5U4frAUVoXTbzVCtxuxnzHiQL+RL3NmX4uDjMee8bzj0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=u7vlY2Tx;
-	arc=none smtp.remote-ip=113.46.200.224
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b="IMxHp5/4";
+	arc=none smtp.remote-ip=115.124.30.112
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615CE606A336;
-	Wed, 18 Nov 2026 09:13:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 615CE606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04956606A31C;
+	Wed, 18 Nov 2026 09:16:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04956606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=u7vlY2Tx
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=gqPBU5vSzctPXUMsg32k86Yb/Qp3EYKKyTavFdf5sH8=;
-	b=u7vlY2TxckHQP+tYQthSmXBs8/AgddjDNh8bkjwDxaHhPAcGONyr849lvDagg0uq2tPODQr+O
-	RNkZ/GSkSnHrw23pVJBgD4eBpcXClBJwejVje/VjYL1bZHv0QSts4KMpbezyGFZ04qUx8679+NR
-	1cZfatNyiz6HsIFs9LF+vZQ=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jTwr04b2Pz1cyPH;
-	Wed, 18 Nov 2026 17:13:20 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6D73B40561;
-	Wed, 18 Nov 2026 17:13:40 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 18 Nov 2026 17:13:33 +0800
-Message-ID: <32b8d9c9-27d2-4da9-8618-ccfc44dee7a3@huawei.com>
-Date: Wed, 18 Nov 2026 17:13:31 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=IMxHp5/4
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1794993372; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=hGfK5Hi5QOdXQbsME0+GiG+Fz4TcL5XOwxtDG4CKWPw=;
+	b=IMxHp5/4Hya92K4PGWI0zD1I4+NYVqFVtap/Dq6H2pYShk/UHQcpaVr4FfgFMP5daHdxAzZrw1R3brTHQSrpj6oAHdHQvujQ9L4T+6+gLG9zvjzLTYJRQxTIXpXrFwRJ9AYI0pag0ir6gJ7CwWDMrHNeSpc9IJufFPrdS6+JOOo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0XF0HHZg_1794993365;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XF0HHZg_1794993365 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 18 Nov 2026 17:16:11 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	alex@ghiti.fr,
+	rppt@kernel.org,
+	pasha.tatashin@soleen.com,
+	pratyush@kernel.org,
+	graf@amazon.com,
+	shuah@kernel.org
+Cc: guoren@kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	kexec@lists.infradead.org
+Subject: [PATCH v4 0/4] riscv: Enable kexec handover and live update
+Date: Wed, 18 Nov 2026 17:15:59 +0800
+Message-ID: <20261118091603.979-1-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,81 +70,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next -v4 01/17] fs: pass struct path to notify_change()
-To: Al Viro <viro@zeniv.linux.org.uk>
-CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
-	<brauner@kernel.org>, <jack@suse.cz>, <amir73il@gmail.com>,
-	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
-	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
-	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
-	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
-	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
-	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
-	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
-	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
-	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
-	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
-	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
-	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
-	<johan@kernel.org>, <john.fastabend@gmail.com>,
-	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
-	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
-	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
-	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
-	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
-	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
-	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
-	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
-	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
-	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
-	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
-	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
-	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
-References: <20261117150542.1169451-1-caixinchen1@huawei.com>
- <20261117150542.1169451-2-caixinchen1@huawei.com>
- <20261117183059.GP989762@ZenIV>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <20261117183059.GP989762@ZenIV>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- whupemk100010.china.huawei.com (7.152.184.41)
 
-On whether we want the mount references at all: they are not for NTFS.
-The path-based LSM hooks need them - Landlock's check walks the hierarchy
-up from the object with path->mnt->mnt_root and follow_up(), for every
-layer, and the idmap we pass has to be the one of the mount the path was
-checked in.  NTFS is only the reason for ia_path/notify_change_target():
-->setattr() has no path argument, so a change forwarded to the base inode
-would otherwise lose the mount.
+Host kernel updates in the cloud should not require draining the
+machine: next to live migration to another host, replacing the kernel in
+place while preserving selected workload state ("live update") is what
+KHO/LUO were built for, and LUO's documentation names hypervisor hosts as
+its primary use case. This series closes the gap for riscv64 and
+validates it with both upstream test runners.
 
-On 11/18/2026 2:30 AM, Al Viro wrote:
-> That needs a bit along the lines of "path MUST be consistent - don't combine
-> a dentry from one filesystem with mount of another".  All in-kernel callers
-> might have appropriate struct mount references on hand, but for out-of-tree
-> code that might be not true and we'd better be upfront about the headache
-> we are inflicting.
->
-> I'm not sure we really want to provide those mount references, TBH - it does
-> add a constraint not just on out-of-tree callers, but upon the future uses
-> in the kernel.  If NTFS is the only reason... ugh.
+KHO has been architecture independent since it was merged: the outgoing
+kernel publishes the handover FDT and the bootmem descriptor array in
+the /chosen node of the DTB it builds for the incoming kernel, and the
+incoming kernel collects both while scanning that node -- which is why
+the arm64 integration (commit 274cdcb1c004) needed only three lines of
+arch code.
 
-ok, I will change in v5
+RISC-V already walks those generic paths. The blocker is ordering:
+setup_arch() runs early_ioremap_setup() after parse_dtb(), so the early
+mapping kho_populate() needs for the handover FDT is not set up yet and
+the handover is dropped. Patch 1 fixes that ordering and stands on its
+own regardless of KHO. Patch 2 enables ARCH_SUPPORTS_KEXEC_HANDOVER as
+"def_bool 64BIT && MMU" rather than arm64's "def_bool y":
+ARCH_SUPPORTS_KEXEC_FILE is already 64BIT only, and KEXEC_HANDOVER
+selects CMA, which depends on MMU. LIVEUPDATE depends only on
+KEXEC_HANDOVER, so patch 2 makes it selectable on riscv as well.
+Patches 3 and 4 teach the two upstream vmtest runners about riscv64.
 
-> BTW, why not something like
->
-> 		notify_change(&nop_mnt_idmap,
-> 			      &(struct path){.mnt = path.mnt, .dentry = dentry},
-> 			      &newattrs, NULL);
-> instead of that named local?  Same question for other places like that...
+This base already contains Greg Thelen's is_kho_boot() fix [1] and Mike
+Rapoport's bootmem sizing rework [2], so the series carries no generic
+KHO changes and neither patch is needed on top.
 
+No DT schema changes are needed: linux,kho-fdt / linux,kho-bootmem are
+the properties arm64 introduced (commit 274cdcb1c004), and their binding
+lives in the external dt-schema repository [3] rather than in
+Documentation.
+
+[1] https://lore.kernel.org/all/20261023054518.3258350-1-gthelen@google.com/
+[2] https://lore.kernel.org/kexec/20261112-kho-bootmem-sizing-v3-0-f0c8d00295d5@kernel.org/
+[3] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/chosen.yaml
+
+Changes since v3:
+ - Dropped the arm64/x86 comparison from patch 1 and this cover letter.
+ - Renamed patch 2 to "riscv: Add support for KHO" and spelled out the
+   acronym on first use in its body.
+ - Dropped the dependency note; both generic fixes are in this base.
+ - Collected Reviewed-by and Acked-by tags.
+ - Rebased onto linux-next-20261117 (7cfbf79c66c6).
+
+Changes since v2:
+ - Dropped "kho: Do not translate the handover FDT address in
+   is_kho_boot()", which Greg Thelen's fix does as well.
+ - Commit messages cut back to the reason for the change.
+ - Rebased onto linux-next-20261105 (ddfe51b0a0f5).
+
+Changes since v1:
+ - New patch 1: kho: Do not translate the handover FDT address in
+   is_kho_boot(), a generic fix the riscv enablement needs.
+ - Rebased onto linux-next-20261102 (2637bdec0535).
+
+Test
+----
+Testing on linux-next-20261117 (7cfbf79c66c6) with qemu-system-riscv64
+(virt, -cpu max, TCG); method and logs under the --- of patches 3 and 4:
+  - kho vmtest: "ok 1 KHO succeeded", Totals pass:1 fail:0
+  - liveupdate vmtest, all four suites passed one by one (simple,
+    multi-session, 500 files, 2000 sessions)
+  - riscv defconfig with and without CONFIG_KEXEC_HANDOVER both boot to
+    userspace with no oops on the console; builds: riscv defconfig
+    (+KHO), rv32_defconfig, arm64 defconfig (+KHO), x86_64 defconfig
+    (+KHO)
+  - UEFI handover boot (edk2 on pflash over OpenSBI fw_dynamic,
+    DEBUG_VIRTUAL=y): 28 consecutive handovers and no BUG
+
+Additionally, a workload-continuity test was run outside the selftests:
+a counter process was snapshot with criu 4.3, the dump was carried
+across the kexec in an LUO-preserved memfd, and criu restored it in the
+new kernel. The process resumed with the same PID and open log file and
+kept counting from where it was dumped (500006 -> 500007, no lost or
+duplicated ticks).
+
+
+Chen Pei (4):
+  riscv: Call early_ioremap_setup() before parsing the DTB
+  riscv: Add support for KHO
+  selftests: kho: Add riscv support
+  selftests: liveupdate: Add riscv support
+
+ arch/riscv/Kconfig                                | 3 +++
+ arch/riscv/kernel/setup.c                         | 2 +-
+ tools/testing/selftests/kho/riscv.conf            | 9 +++++++++
+ tools/testing/selftests/kho/vmtest.sh             | 3 ++-
+ tools/testing/selftests/liveupdate/config.riscv64 | 3 +++
+ tools/testing/selftests/liveupdate/run-vmtests.sh | 2 +-
+ tools/testing/selftests/liveupdate/vmtest.sh      | 8 +++++++-
+ 7 files changed, 26 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/kho/riscv.conf
+ create mode 100644 tools/testing/selftests/liveupdate/config.riscv64
+
+
+base-commit: 7cfbf79c66c63e807ea452abf0546e6f6d6833a6
+-- 
+2.50.1
 
