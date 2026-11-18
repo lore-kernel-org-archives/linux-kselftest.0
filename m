@@ -1,86 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.99
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794989768;
-	b=PA/aXmCG1KWMN2+O/NjyocZk8KwZ2g96NYQdR326kOiyhayPJ55JQoJQqa9prK9/ihk5
-	 BoOgZvCGJEw+xkZbHOQzs9EakJUWnXHyZBlgPo0Eh9UxqFY1Mm/b1jI25dsNn7sei2erA
-	 Lesx8/k/1lQ/vnrDIPbdtQnPNPoROd8w8KcQFFqTXHJC8eUz4DgW8JjsQ3FSsEKBBcRcb
-	 cbEYpEPOo6dJv6Fj5cO4sYmY0U+vvf56ePMJbTW1Md/TQVMxATHWCP92Xq92KOfcvnFi1
-	 5vwuL3SZrfBpgZi1vBDT3PTjbmvyi9k1z6abY7cp8g7ev3wTOr25rPyIB0qIV5DTu4A==
+	t=1794990439;
+	b=4sRJwW2G7w4fM1taV7e3xLW5OsQsbfjGumeCHr0i6IBEz5t93LxQnMcNG41ymxzJ2lal
+	 tkfCpgvm2qsrWDQoHGcZ1myk4CjgZfGbuDBvxPMx5fJh6WWUmd6DqKF2XytRYZuoem6Iw
+	 K8v7o9fghEa31HgVa8evaL//gC3xMbWCzSnTnOop32K7YC93VwRwdxSZIRIsRx6fzB1PH
+	 YkGDLxGn1nczLLFTbdjWHJeAz0qiuli2r1xh4M/Vx0DWzKl+3EccyqzhckLrbOIgVAaG6
+	 d3MEmhUnt+Xn10Xvf2ZO9rzmao/b+ZYM4l7uXI+7fSrPsyzmh7BkHaqT7hNS4cLGbtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794989768;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=NYSvF3w4fJZaH+dCoDovCFBy1OSTg48d7tJNsIEBVo8=;
-	b=f9QlNGwmBzhK/bbVkt2r14120PK0ulx4HtkkKGDOVpXHXrgcGsJ1nOaXe6mJSowxMip0
-	 TyARo9up1OKik/beHoFlGn9XoJR+GgYbLLWypBzfa4KdtXILx4VadaWWtkL3QwXos4poy
-	 bSOx+RLIV/n17Z3hI7zTXeTEeYGk8CHu9cgN+ZPk1YPpUG84a2lQU7PgS5Ob53PH/6vjh
-	 GOZ0/pBI2ADykOX+nhh5d5nFAU2MmbWwk7P+GN0bJ4kLZ4vcCzVwCrROiNwm8jUbJvNDY
-	 l0iAfuoMFuYOctRNiYmKXK4bknN3ZtAVUenKOPxqHACF1qQcPvyWpF/dhIzuqV7wezA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794990439;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=gadXbyq6kkimUUJ2iNNLdaAaP/G19gIHifpqbx4fy98=;
+	b=49s1ldOK6x0nepwP2gU37bnNvnRWsAQuJykZR8hi3SBbwxWakSVnnP2O4kUVt7bxwvem
+	 kdHU0ZjE7uRPjs/RX1u8oaHHEPjlv1LR39wHrfy45iN0/iEOc/i6p9zVShl91E7EqaTsT
+	 QWFcKSAvLEapos9FVTEXh9PJTxLQnd0H3DR4zdjtO+kYr82S5M6KvJym39OYF0t5MfMju
+	 4ekixCqF2bBDTMxQW6b1sqnacZs0t+deUW7M+FfLclBUb5dRH2pLhI4geKmnFqPYZlBWU
+	 Gx0ByeDO9/VcUuonulofPmBqRmLI9YR1Yr0WXF9k+TB4QioJr+QcbkHFJ6NI+QAxzeQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c06OloGD;
-	arc=none smtp.remote-ip=192.198.163.18
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=m42car4W;
+	arc=none smtp.remote-ip=91.218.175.99
+Received: from mta0.migadu.com (out-99.mta0.migadu.com [91.218.175.99])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62460606A331;
-	Wed, 18 Nov 2026 08:16:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62460606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39151606A32A
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 08:27:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39151606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=c06OloGD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794989768; x=1826525768;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZFy8lElfDcfVXCFI7XDvMs7NAlQEj6nfUntxpIvbV20=;
-  b=c06OloGDvHnhr0jao3bMeskewyMGxsvACBb4iOPqiFdjQiCXYiDKC5/h
-   pT+outmUo/dKMo3X5RtCsc/jzjWxDkgJ+O4FK1pbaVst2IRRI9r1i1Sgo
-   HxKn/4pzHiWec52ts2lj38OUg0Dwnv65fI9/qiirpCyP4shHIm4jrFPs6
-   tMves9GaaxAtFfY4ecoPMYr9qDmxa62G5ZxpwR9x2sc608CI+AkYq34WX
-   RFgVn4VdocrdVIix02nCBkda9R4hYa3Hq5Z7FBpGPOiKo1Px9JAqIa1yq
-   qisP39SdEip0kMhFRw2gAUJJ7NPb7IKAar7O+Rv/sDUmtUQKhqBQh5Cm/
-   w==;
-X-CSE-ConnectionGUID: MliC4XESSuiLDBfgEkteuw==
-X-CSE-MsgGUID: kNy5jwxxTeGnnbDZAsCsTA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11969"; a="3813907"
-X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="3813907"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 00:16:08 -0800
-X-CSE-ConnectionGUID: XZPja6g9QN2b6kHbI7v8+A==
-X-CSE-MsgGUID: 6Fn4JIDyRpCOlLmivOUtoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
-   d="scan'208";a="10340996"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 18 Nov 2026 00:16:04 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xTapm-00000001DEU-1BVi;
-	Wed, 18 Nov 2026 08:16:02 +0000
-Date: Wed, 18 Nov 2026 16:15:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
-	kuba@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/2] netdevsim: add TLS device offload
- emulation
-Message-ID: <202611181558.YOFWJh8M-lkp@intel.com>
-References: <20261117140642.4008-2-jiayuan.chen@linux.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=m42car4W
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=aoOLVpBoWNs84O56OwBWfuEn1iIlTR6T4qFPvvTlP/0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794990436; v=1; x=1795595236;
+ b=m42car4Wimit/SuZmWvk0s7e+6V2UvcS0iy/1++b7+ZHPR3+5YjHsSdcLvDbZxabEc/GyIta
+ bcDW9vq2GX8DqlhLUrPJqKp0HaOMVKWk253W5gqnUrp3VawRZTC+7czkT5z37NDdkpY/9mMb7d2
+ rysiXhxfI0eW3U1bEabY27rw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id dd52a83b7784220a;
+	Wed, 18 Nov 2026 08:27:15 +0000
+X-Mizu-Trace-ID: dd52a83b7784220a
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 18 Nov 2026 16:27:07 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Pin-yen Lin <treapking@google.com>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Bjoern Doebel <doebel@amazon.de>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Jonathan Toppins <jon.toppins+linux@gmail.com>,
+	linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>
+Subject: Re: [PATCH net] selftests: bonding: fix failover race in
+ bond_options.sh prio test
+Message-ID: <av1hWxGIlZUJDUpl@fedora>
+References: <20261112014942.2946303-1-treapking@google.com>
+ <avaewOJD7tX1UYfE@fedora>
+ <avanVkILHDYdpond@fedora>
+ <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
+ <avwBrbJfp4ET9ifT@fedora>
+ <CAHwYsiqwCVPJqtQRoP+9Uw66RpdGL4zuiCPO8+mqShxnvFgDPw@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,107 +77,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261117140642.4008-2-jiayuan.chen@linux.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHwYsiqwCVPJqtQRoP+9Uw66RpdGL4zuiCPO8+mqShxnvFgDPw@mail.gmail.com>
 
-Hi Jiayuan,
+Hi Pin-yen,
+On Tue, Nov 17, 2026 at 06:32:52PM -0800, Pin-yen Lin wrote:
+> Hi Hangbin,
+> 
+> On Mon, Nov 16, 2026 at 11:26 PM Hangbin Liu <hangbin.liu@linux.dev> wrote:
+> >
+> > Hi Pin-yen,
+> > On Mon, Nov 16, 2026 at 05:30:28PM -0800, Pin-yen Lin wrote:
+> > > Thanks for the pointer, but I believe Bjoern's patch addresses a
+> > > different problem.
+> >
+> > I think they are the same issue, as you comment also said
+> >
+> > The ARP/NS monitor marks a slave down when it has received nothing for
+> > too long.
+> 
+> This is the existing behavior of the bonding driver, and the prio test
+> uses it to check which backup slave takes over. Slaves being marked
+> down is not the root cause of the test failure. Instead, the root
+> cause is the ping replies described below.
 
-kernel test robot noticed the following build errors:
+If the backup slaves are not mark down, we can active the correct slave
+based on the priority, right? I think that's the root cause. The ping testing
+is just for checking connectivity.
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/netdevsim-add-TLS-device-offload-emulation/20261117-220630
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20261117140642.4008-2-jiayuan.chen%40linux.dev
-patch subject: [PATCH net-next v2 1/2] netdevsim: add TLS device offload emulation
-config: x86_64-randconfig-1004-20261118 (https://download.01.org/0day-ci/archive/20261118/202611181558.YOFWJh8M-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261118/202611181558.YOFWJh8M-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611181558.YOFWJh8M-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/netdevsim/tls.c:298:21: error: no member named 'skc_v6_rcv_saddr' in 'struct sock_common'
-     298 |                 conn->laddr = sk->sk_v6_rcv_saddr;
-         |                               ~~~~^~~~~~~~~~~~~~~
-   include/net/sock.h:404:37: note: expanded from macro 'sk_v6_rcv_saddr'
-     404 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
-         |                                     ^
->> drivers/net/netdevsim/tls.c:299:21: error: no member named 'skc_v6_daddr' in 'struct sock_common'
-     299 |                 conn->raddr = sk->sk_v6_daddr;
-         |                               ~~~~^~~~~~~~~~~
-   include/net/sock.h:403:34: note: expanded from macro 'sk_v6_daddr'
-     403 | #define sk_v6_daddr             __sk_common.skc_v6_daddr
-         |                                             ^
-   2 errors generated.
+> 
+> >
+> > >
+> > > Bjoern's patch keeps the traffic flowing so that idle slaves are kept
+> > > alive between the test steps. This patch fixes the case where the ping
+> > > replies from bond_check_connection() only arrive on the active slave
+> > > right before it is set down. The active slave's failure is then
+> > > detected one monitor interval late, when the backups have also timed
+> > > out.
+> >
+> > The reason is we set arp interval to 100ms, and slowwait also check every
+> > 100ms. If the backup slave down at the same check point, e.g.
+> >
+> >   t=300  monitor: eth1 idle 230ms -> still up
+> >   t=400  monitor: eth1 idle 330ms -> down
+> >                   eth2 idle 400ms -> down too
+> >
+> > The test failed.
+> 
+> I don't think the slowwait interval makes a difference here.
+> 
+> The ARP monitor decides which slave becomes active, and slowwait only
+> reads the result afterwards. The test expects the active slave and the
+> backups to time out in different monitor runs, so that a backup can
+> take over. In the example above, eth2 is already down when the bond
+> picks the new active slave, no matter when slowwait polls.
 
 
-vim +298 drivers/net/netdevsim/tls.c
+My idea is, by extending the arp interval, there is a larger gap. e.g.
 
-   274	
-   275	static int nsim_tls_dev_add(struct net_device *netdev, struct sock *sk,
-   276				    enum tls_offload_ctx_dir direction,
-   277				    struct tls_crypto_info *crypto_info,
-   278				    u32 start_offload_tcp_sn)
-   279	{
-   280		struct netdevsim *ns = netdev_priv(netdev);
-   281		struct nsim_tls_conn *conn;
-   282		int ret = 0;
-   283	
-   284		/* Mirror the cipher support of a typical offload capable NIC. */
-   285		switch (crypto_info->cipher_type) {
-   286		case TLS_CIPHER_AES_GCM_128:
-   287		case TLS_CIPHER_AES_GCM_256:
-   288			break;
-   289		default:
-   290			return -EOPNOTSUPP;
-   291		}
-   292	
-   293		conn = kzalloc_obj(*conn);
-   294		if (!conn)
-   295			return -ENOMEM;
-   296	
-   297		if (sk->sk_family == AF_INET6) {
- > 298			conn->laddr = sk->sk_v6_rcv_saddr;
- > 299			conn->raddr = sk->sk_v6_daddr;
-   300		} else {
-   301			ipv6_addr_set_v4mapped(sk->sk_rcv_saddr, &conn->laddr);
-   302			ipv6_addr_set_v4mapped(sk->sk_daddr, &conn->raddr);
-   303		}
-   304		conn->family = sk->sk_family;
-   305		conn->lport = htons(inet_sk(sk)->inet_num);
-   306		conn->rport = sk->sk_dport;
-   307		conn->dir = direction;
-   308		conn->start_sn = start_offload_tcp_sn;
-   309		conn->cipher_type = crypto_info->cipher_type;
-   310		conn->tls_ctx = tls_get_ctx(sk);
-   311	
-   312		spin_lock_bh(&ns->tls.lock);
-   313		if (ns->tls.count >= NSIM_TLS_MAX_CONN) {
-   314			ret = -ENOSPC;
-   315			goto out_unlock;
-   316		}
-   317		list_add_tail_rcu(&conn->list, &ns->tls.conns);
-   318		WRITE_ONCE(ns->tls.count, ns->tls.count + 1);
-   319		if (direction == TLS_OFFLOAD_CTX_DIR_TX)
-   320			ns->tls.tx_conn++;
-   321		else
-   322			ns->tls.rx_conn++;
-   323	out_unlock:
-   324		spin_unlock_bh(&ns->tls.lock);
-   325	
-   326		if (ret)
-   327			kfree(conn);
-   328	
-   329		return ret;
-   330	}
-   331	
+   t=300  monitor: eth1 still up
+		   ^^ slowwait check, incorrect active slave
+   t=400  monitor: eth1 down
+                   eth2 still up, should become active slave
+   t=500  monitor: eth1 down
+                   eth2 still up, active slave
+		   ^^ slowwait check, correct active
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >
+> > >
+> > > The ARP requests triggered by Bjoern's ping are sent only about once
+> > > per second, which isn't frequent enough for this failure. I tested
+> > > Bjoern's patch and confirmed that it didn't fix the issue in our
+> > > testing environment. We also can't simply use arping instead because
+> > > iputils arping doesn't support sub-second intervals.
+> > >
+> > > If you're worried that the 200ms sleep is too short, would increasing
+> > > it to 0.5s or 1s work for you?
+> >
+> > It's not about the sleep time before setting active slave down. I'm afraid
+> > about the slowwait checking time. Even we sleep 1s, with arp interval 100,
+> > we still only have 100ms checking window. Before the window, the active slave
+> > is up, after the window, the backup slave also down. With a debug kernel, this
+> > time is a little tight.
+> >
+> > So, either we have some background arp traffic, or let's extend the arp
+> > interval to a larger one.
+> >
+> > What do you think?
+> 
+> I agree that a 100ms ARP interval could be too short in environments
+> like a debug kernel.
+> 
+> Background ARP traffic doesn't widen that window, though: it is sent
+> through the active slave, so once the active slave is set down,
+> nothing reaches the backups. It could only help with the ping reply
+> race if it were very frequent; Bjoern's patch triggers about one ARP
+> request per second and didn't fix the failures in our testing.
+
+For background traffic, I mean let the client send the arp requests,
+not from active slave of server. With arp_validate 0, the backup slaves
+will update last_rx and won't be down with idle.
+
+> 
+> Increasing the ARP interval alone won't address the ping reply race,
+> but it should help in environments like a debug kernel. I'd prefer to
+> keep this patch focused on the ping reply race and send the ARP
+> interval change as a follow-up, but I can fold it into v2 if you
+> prefer.
+
+Doesn't extending the arp_interval (e.g. to 500) resolve your issue?
+Are you still able to reproduce the problem?
+
+Thanks
+Hangbin
