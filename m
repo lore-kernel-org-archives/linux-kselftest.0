@@ -1,47 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795044341;
-	b=W9D3vDiPgSYLbJFZhpAN02Npp8UrGzeaLiXocr2aPA60rhRFGEBRVLFxPgV22OJFV6Yb
-	 f661M5Xq1+6MpIxN29KmPIxzNjofi+kZfg4jk4rdCKQBSvjTCrg7l27yvdIh36M1vXY4j
-	 DprsprLkWcRjb4NG08pLK7Wdh5FXv/lc9Cjlhk1Rr3LzM8jSgNaFaSlThMr47gyJJz0Fo
-	 hODod15HZvxv8/i1R/5U8cw2QCfo0sbAe4Sq/xGk/72V+HVCuQsp4ZtoLZmncsjGTXSy+
-	 JFZSHd1zkm7xKBDpWuKfku78tCw9zgyJMz5K/df7HgAAUeRRM1PHOgjJqQ2FPm1Xrwg==
+	t=1795044509;
+	b=p98jLY70tOhwq5ssyLYMuNqlOfMrJM0WigaBhDhwwae55uU8gKbxRca160uUG8JW0XLp
+	 ybN+Ri8oBiAdTXAUx75dgqn3kdnlwi78dzB/XgST89KFKWBgkP7DBJK4FotKTzom1XUiD
+	 cKFgiA/4gG3C43hjIY3dMQDMR8sKKkIoSg2PJF5Q/Av03hbECzdw8oXLNofB807YcuvM4
+	 vSybIJK5qdxXoLxLF46RcSZb1qnkE+71b3QJ4GzaXSXbo+WRzbRX6cB215wIrHTR+G+3u
+	 0zn2yrWdsXekIXNntx0cQyaAKxdzpnxqEsGgdScrKXvrMEN/Ze2UsPSruY5bFnpgUPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795044341;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=WOYda5e3A5KKvpqZuIuLhWTICxZNXazCCYpYFCxSe84=;
-	b=x6guCawJxYup4JW0DOdFXH9ZQNcQMb5n9zUTGYEi6cH2EjTJNCn89ea7d8e276gCh9aZ
-	 Kn5QXQj+wEXzosl4h2Xz13L6Kf7dCUVGtZ5PUaOCIMzHNDeSFMraONZPJen8aPS+t0Zbp
-	 4tvJjYlpusXYnZpC8hUFqH+/rnXykAhTwskMxNA+ic8wEccoOcUMaaM0iO5+RNik6KGZQ
-	 BuoLhvh5pclnnN2u8vbBHF6C/+heTDNJgB6/axXXKlC72kYrKU5gSh8hXmjnwBA8r0KrV
-	 jcNYDGtTLL/r0zhRWe7C3bO1h0xltY+nPVQ9jbFEQWC4t3/0GkmOuDZc62Uq3G2X5jA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795044509;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=wZosD5+/Nj2eIGY2Fv4ggxK50RAWtAyE3IvgDSS2SiQ=;
+	b=PIJW4UIqlhLoSUjHuFf/mx+IFxZSVaVDiIOM4ze7F6qRKaBfhXskoUk+JRqIm7bgMT1L
+	 We1S3M6BYFq6OBLutY4sQc0hmuQ1lHLTCpKE2jfJvHBAAfA+psvkj4Br8BWCCbx/rmog1
+	 ShuXzpo77eDq902y25B8ReY8kr5fH+onNYkBGRpt9LMI3xmGrRXV7fHjg8RV0qX0Hool3
+	 vLsIHnokrduG+5VTFRxcw3CPoXqmLXZ+2PzelFPM1qWWXzY811qEKmNhCdK8rrZ9fPKaV
+	 H/HGWaZtISdX8JuOhd5pJeoZ08MUfdE1IDxJzQwX/L5r8lwtQiaTg3WAb74e3YJQuog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XSiYbTJC;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b2xc3CNk;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58AB606A31C;
-	Wed, 18 Nov 2026 23:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DBD606A32F;
+	Wed, 18 Nov 2026 23:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XSiYbTJC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8531F000C5;
-	Wed, 18 Nov 2026 23:25:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b2xc3CNk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9B21F000C4;
+	Wed, 18 Nov 2026 23:28:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795044341;
-	bh=WOYda5e3A5KKvpqZuIuLhWTICxZNXazCCYpYFCxSe84=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XSiYbTJCEe0e0ylf9UWuraISb3AzIJ/LS5jmctUicP9oaWDAPyxWCDQpGH4Q56k36
-	 LUt2l4uzZW4xTSJazzR4gkHzmM/mRn9+jBpqa6NpGYlOiXjtuwLuEdAtz3hRywGIRB
-	 dmlm6xW7btWMGgHuASEZ1ysowr9I4l/fq7K4zqMHbfyxhDFr7RmNVZwLtPRJ0IlcDf
-	 wFzjz03CiHoQWgXj92mjkmmCOt2RJOVy1AvDPcJPAFs7pJNiL9v5fqPOCdBU5nW09Q
-	 9BtW4/+FXhjaLNy2ISv3IaEF5FRVT1549fsrDebR9exH9XWhND7vbuoQ4vBaJq2gGw
-	 so5R22LhA3YSA==
-Message-ID: <e32482de-295a-4e26-b6ae-5b8b58f8b98c@kernel.org>
-Date: Thu, 19 Nov 2026 00:25:31 +0100
+	s=k20260515; t=1795044509;
+	bh=wZosD5+/Nj2eIGY2Fv4ggxK50RAWtAyE3IvgDSS2SiQ=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=b2xc3CNkofjUuaNiWY+44q1putpRhXHx/AV8RXZg+BA/7bJR0Lo0ks54YS2OayOTT
+	 sNDHo7QdvE7gDcWsFywJ8u293UOyfQuJ/8XxL8ktOomjMx/jvkQVdmDKFJb9FfxhGr
+	 0oBy3fSOCqRaRmIrpr9pr414OJbz3KgThA3TgITErWki7PTEDgpm+9c8m6AlePI3ub
+	 sWLekn/m+ZCggtuzRbBgcJQrnOUrDQ8M20dKGy4vw6Om32e2GTv0BFi2EwyvKBnXBn
+	 F6RZA9LEl5z+IYmMCFHFVN8aPG1cTJ+vJy1AQy3PJfYeml9dG9yH82g2Lpt6lcPYNJ
+	 e9eK+AJXGF1tA==
+Subject:
+ Re: [PATCH net-next v5 2/4] ipv4: restrict on-link fallback to lookup misses
+From: netdev-bot+sashiko@kernel.org
+To: liamsmith827@grapheneos.org
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, liamsmith827@proton.me
+Date: Wed, 18 Nov 2026 23:28:28 +0000
+Message-ID: <179504450812.3136.16231358596487999009@kernel.org>
+In-Reply-To: <20261116202741.13106-3-liamsmith827@grapheneos.org>
+References: <20261116202741.13106-3-liamsmith827@grapheneos.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -51,161 +64,141 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm/gup: make mlock() and MAP_POPULATE handle
- VM_FAULT_RETRY properly
-To: harrison@crosse.dev, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Jan Kara <jack@suse.cz>,
- stable@vger.kernel.org
-References: <20261118-mmpop-populate-v1-0-9c561d178d11@crosse.dev>
- <20261118-mmpop-populate-v1-1-9c561d178d11@crosse.dev>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20261118-mmpop-populate-v1-1-9c561d178d11@crosse.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 11/18/26 22:56, Harrison Crosse via B4 Relay wrote:
-> From: Harrison Crosse <harrison@crosse.dev>
-> 
-> If every read of a page of a file mapping fails, mmap(MAP_POPULATE)
-> and mlock() of that mapping do not return: the task spins in
-> __mm_populate(), submitting a new read of the page on each iteration,
-> until it gets a fatal signal. Touching the same page gets SIGBUS, and
-> madvise(MADV_POPULATE_READ) fails with -EFAULT.
-> 
-> The first fault on the page reaches filemap_fault() with
-> FAULT_FLAG_ALLOW_RETRY and without FAULT_FLAG_TRIED. filemap_fault()
-> releases the mmap_lock to read the page and, because it released the
-> lock, returns VM_FAULT_RETRY before it looks at the result of the read.
-> It cannot report the error then: a fault that has released the lock
-> returns VM_FAULT_RETRY or VM_FAULT_COMPLETED, and neither carries an
-> error. faultin_page() turns VM_FAULT_RETRY into -EBUSY, so
-> __get_user_pages() stops at that page without an error, and
-> __mm_populate() calls populate_vma_page_range() again at that address,
-> again without FOLL_TRIED. The page fault handlers and
-> __get_user_pages_locked() retry with FAULT_FLAG_TRIED instead, and on
-> that attempt filemap_fault() reads the page with the lock held and
-> returns VM_FAULT_SIGBUS if the read fails.
-> 
-> Commit 631426ba1d45 ("mm/madvise: make MADV_POPULATE_(READ|WRITE) handle
-> VM_FAULT_RETRY properly") fixed the same loop for MADV_POPULATE_* by
-> calling __get_user_pages_locked(). That does not fit here:
-> __get_user_pages_locked() retakes the mmap_lock itself and carries on
-> with the GUP flags it was given, while populate_vma_page_range()
-> derives those flags from the VMA that __mm_populate() looks up again,
-> and may skip, after each unlock. Retrying with a NULL locked instead
-> would drop FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_KILLABLE, so a
-> userfaultfd range would fail rather than wait, and folio lock waits
-> would not be killable.
-> 
-> Instead, have __mm_populate() remember the address of the page whose
-> fault released the mmap_lock. When the next iteration starts at that
-> address, fault in that page alone with FOLL_TRIED, as
-> __get_user_pages_locked() does, then continue with the rest of the
-> range as before. The retry reads the page with the mmap_lock held, as
-> filemap_fault() did for a page that was not uptodate before v5.1, and
-> as the other GUP retries do. With a persistent read error the retry
-> fails with -EFAULT: mlock() returns -ENOMEM
-> (__mlock_posix_error_return() maps -EFAULT to it), and MAP_POPULATE,
-> which ignores populate errors, returns the mapping. A fatal signal
-> still ends the loop, with -EINTR from __get_user_pages() or, if it
-> interrupts the FOLL_TRIED read, with -EFAULT. The other callers of
-> populate_vma_page_range() pass a NULL locked, so they cannot get
-> VM_FAULT_RETRY and are unchanged.
-> 
-> Reproduced with ext4 on dm-linear over a loop device, with the eight
-> sectors of one page of a file mapped to the dm "error" target, on arm64
-> (Debian's 6.12.116 and v7.4-rc3) and x86_64 (v7.4-rc3): mmap(MAP_POPULATE)
-> and mlock() of the file were still running in the kernel after 5 seconds
-> and ended when sent SIGKILL. On 6.12.116, the block layer tracepoints
-> showed about 280,000 bios a second being submitted and failed.
-> 
-> The analysis, the patch and this changelog were prepared with the help
-> of an AI coding assistant (Claude).
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Yes, that's rather obvious from looking at it, thanks for documenting that :)
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
-Thanks for the report!
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-[...]
+- [High] Route-based restrictions can still be bypassed by an
+  unprivileged process after this fix.
+- [Low] The commit message describes a security-relevant bug that users
+  can see: unprivileged Android apps can get around a VPN kill switch…
 
-> +		 *
-> +		 * filemap_fault() reports a read error only when
-> +		 * FAULT_FLAG_TRIED is set: on a first attempt it releases the
-> +		 * mmap_lock for the read and returns VM_FAULT_RETRY whatever
-> +		 * the result. So when the last call released the lock at
-> +		 * nstart, retry that page with FOLL_TRIED, and only that page,
-> +		 * so that later pages still get a first attempt that releases
-> +		 * the lock for the read. Compare the address because nstart
-> +		 * moves past that page if it is no longer mapped, or its VMA
-> +		 * is skipped, when the lock is retaken.
->  		 */
-> -		ret = populate_vma_page_range(vma, nstart, nend, &locked);
-> +		tried = retry && nstart == retry_addr;
-> +		ret = __populate_vma_page_range(vma, nstart,
-> +						tried ? nstart + PAGE_SIZE : nend,
-> +						&locked, tried);
+--
 
-Yeah, that's quite the ugly code. Let me take care of this (or find someone more
-familiar with that code that can help).
+ipv4: restrict on-link fallback to lookup misses
 
-@Yeoreum, do you have some spare cycles?
+With this patch, ip_route_output_key_hash_rcu() takes the oif-bound
+on-link fallback for non-vrf unicast only when fib_lookup() reports a
+real lookup miss (-ESRCH, via FIB_LOOKUP_REPORT_MISS). Errors from
+blackhole, prohibit and unreachable routes or rules now go back to the
+caller, and -ESRCH is mapped back to -ENETUNREACH.
 
+> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> index b9f5397336d34..b71443e4b522c 100644
+> --- a/net/ipv4/route.c
+> +++ b/net/ipv4/route.c
+> @@ -2859,12 +2859,13 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
+>  		goto make_route;
+>  	}
+>  
+> -	err = fib_lookup(net, fl4, res, 0);
+> +	err = fib_lookup(net, fl4, res, FIB_LOOKUP_REPORT_MISS);
+
+[Severity: Low]
+The commit message describes a security-relevant problem that users can
+see: unprivileged apps can bypass the Android VPN kill switch. There is
+no Fixes: tag and no Cc: stable, though.
+
+The unconditional on-link fallback in ip_route_output_key_hash_rcu()
+dates back to the initial git import. Should this carry something like
+the following?
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+
+A Fixes: tag would also make it clearer whether this is meant for net
+or net-next.
+
+This change also depends on the earlier patch "ipv4: add
+FIB_LOOKUP_REPORT_MISS". A backport of this patch alone would fail to
+build, because FIB_LOOKUP_REPORT_MISS would be undefined, so it would
+not misbehave silently. If this is meant for stable, could the
+dependency be stated?
+
+>  	if (err) {
+>  		res->fi = NULL;
+>  		res->table = NULL;
+>  		if (fl4->flowi4_oif &&
+> -		    (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)) {
+> +		    (ipv4_is_multicast(fl4->daddr) ||
+> +		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
+
+[Severity: High]
+Can route-based restrictions still be bypassed here when the flow asks
+for link scope?
+
+The commit message says this fixes "routes and rules that are supposed
+to restrict traffic (blackhole, prohibit, unreachable)".
+
+An unprivileged process can bind to a device (SO_BINDTODEVICE,
+IP_UNICAST_IF, IP_PKTINFO) and also set SO_DONTROUTE or MSG_DONTROUTE.
+Neither needs a capability. In that case ip_sendmsg_scope() returns
+RT_SCOPE_LINK, and so does ip_sock_rt_scope() for connect and TCP:
+
+include/net/ip.h:ip_sendmsg_scope() {
+	if (sock_flag(&inet->sk, SOCK_LOCALROUTE) ||
+	    msg->msg_flags & MSG_DONTROUTE ||
+	    (ipc->opt && ipc->opt->opt.is_strictroute))
+		return RT_SCOPE_LINK;
+    ...
+}
+
+In fib_table_lookup(), the scope check runs before the reject error is
+read:
+
+net/ipv4/fib_trie.c:fib_table_lookup() {
+    ...
+		if (fa->fa_info->fib_scope < flp->flowi4_scope)
+			continue;
+		fib_alias_accessed(fa);
+		err = fib_props[fa->fa_type].error;
+    ...
+}
+
+Blackhole, prohibit and unreachable routes have universe scope by
+default. fib_create_info() keeps cfg->fc_scope for reject types, and
+iproute2 creates them with universe scope. A link-scope flow therefore
+skips the reject route as if it were not there.
+
+The table then returns -EAGAIN. Because of FIB_LOOKUP_REPORT_MISS,
+fib_lookup() turns that into -ESRCH, and so does __fib_lookup() ->
+fib_rules_lookup() when custom rules exist.
+
+The condition above then holds, and the code jumps to make_route with an
+RTN_UNICAST route on the chosen device. For example:
+
+  ping -r -I eth1 <blocked dst>
+
+That packet would still seem to go out eth1, even with a prohibit route
+for that destination. Before this patch every error fell back. After it,
+the same bypass needs just one more unprivileged socket option.
+
+Rule actions (FR_ACT_PROHIBIT, FR_ACT_UNREACHABLE and FR_ACT_BLACKHOLE
+in fib4_rule_action()) are not filtered by scope. So the kill switch
+built on prohibit rules does look fixed, and only the route case
+remains open.
+
+Could the fallback tell a real miss apart from a reject route that was
+skipped only because of scope? Another option would be to not apply the
+scope filter to reject-type aliases when deciding whether to fall back.
+
+A later patch in the series, "ipv4: replace obsolete routing comment",
+adds the comment "Non-vrf unicast honors restrictions", which does not
+hold in this case either. Nothing later in the series changes
+fib_trie.c or this condition.
+
+>  			/* Apparently, routing tables are wrong. Assume,
+>  			 * that the destination is on link.
+>  			 *
+
+[ ... ]
 
 -- 
-Cheers,
-
-David
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261116202741.13106-1-liamsmith827%40grapheneos.org
