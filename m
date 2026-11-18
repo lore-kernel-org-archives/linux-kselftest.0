@@ -1,78 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794961382;
-	b=uFP58sTFC7istJ6Fhtg5msNfwaoZ9PiqT7K2b2CP5a4InCcA7JOIqLr/QnyeKGA1Cugf
-	 quVlxXrgp7575pc4VvLnEVFYWHAVV/1o0FmtccBYA2NF9m4IhcTyoFDmgDC9Mc3Aj90LM
-	 fgHWdXZR8AQsx3p2rOLuqlTP+XtTENKaA6XrsnkDBogOrvWq6IWuXB98xYwZF+i+iiLFx
-	 a9q2iTxOszr6twMqmnQlbeu0XHznY7Jt2CFrX6Wq5Dkj2kCvfuFRS4R62UDEPZaY+eYnz
-	 QdWJqtghdQOyFpPxY3134fQvuBLy2B/6u5O4IXD1HLLwzssPCIYHdPPYBMEnigmHjLg==
+	t=1794961533;
+	b=i6QyaJFMaqsBDisL3ku3ueLPrv6TGZLhNztDhdS6dhTzgtI9tpA9k4DkkeW7U0jaD8sQ
+	 /QW+whSOcNbmymuzguTZ1TCBn6NU2R2F+XiQX3Zb0nT7Ns65ilannggmTwE/33557U2KT
+	 Biaa3oB0koeT+Yvs7t9d/lgTmlrSntnpMWl/n7O2uNA1g4+2moTRQcfwSBuL8FYowYIeB
+	 VlKnmqOYJ7j5Y/MkVkyNmTDBAyMvm6Pz3U7wxMT5xBODqhdMcADz89YaJXk6rUU13I3gI
+	 4adpot7xar0I5NMpVS0OR0eIFzTlcAckYHW8IesDYuOA0UrosjjpThCcVKHhrlz8qPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794961382;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=oy0tZArTQ8iY4s0PSPsEHwXzkcjVeEK/EWogk8QKuFE=;
-	b=AH1CfGUP2InEZXhcto9rP14myKryyFJVMDrFQ29l/jD3dJRbVZDhY+dmBJ/HkBI1//bf
-	 ryb9PUe3UIX4YfxCia95+z2uaNKoQmEW259d4rKg+qb+57c/bjXEZNEwcO3ZSjekgg1kG
-	 E+j9N9Ogkd3BSLpJHkPyO4t/V1qZMAX2hrntmeSI5KMnEQ00UVQ7HdFMj3X34PtQ+FWTJ
-	 LJ8ZI2HHb6INqlStluwL/McelrD0WagDcnWpWlF9J/PHbMZcY++mwkGLsfpn71KpdOr7a
-	 0iiRoMcPgtUsjd2GxjGjONgrv8tLUt1W4iN0eYYkCUsXjIFAZj9PKJyX64jfUhJZB9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794961533;
+	h=Received:DKIM-Signature:Date:From:To:cc:Subject:In-Reply-To:
+	 Message-ID:References:MIME-Version:Content-Type;
+	bh=0FtVx+bdZ2ArSXP0mcBKd/WQHCmPoQ5KtqvMi55F/xs=;
+	b=YNNbTumYPJAqev+Y8ylxIeucHR5PosGXSqWdhRtv1rNvbDERIMozkMIpf1aZWdheIqSU
+	 6ejEgpsnJs79tkxH/Oz2QlvOvKeNNUfnXnwqVQ/iggcG1Wa66oY7PsVI4+0xMXjKQjedJ
+	 O78U2G8czUUmboZ9H44ePVUr7qo0icyh84he86QhnYZTgH6KtlE0I59Lw8VHyofq+I4hC
+	 +ocpSZglOfNRQkaeQk7CN9BA60FraAWIq1UBBDpnx7Hkkhxm0eX3JQBf656xypuX5b2lO
+	 0VV+8eI8qrNHrvMj3AnU2Wj5bHmXrbc9ulp0T02C8IsmOQTnOA4QWk8XR8nD6coNCqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N6Kadfqw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RcbYZgYK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AC8606A31C;
-	Wed, 18 Nov 2026 00:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2F0606A31C;
+	Wed, 18 Nov 2026 00:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N6Kadfqw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA821F000C7;
-	Wed, 18 Nov 2026 00:22:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RcbYZgYK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112E31F000C4;
+	Wed, 18 Nov 2026 00:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794961382;
-	bh=oy0tZArTQ8iY4s0PSPsEHwXzkcjVeEK/EWogk8QKuFE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=N6Kadfqwpfv/pGQ0wbQSrHki8QAA64Obzd0jDazYYcjyw3uObaNDeGJZ8ROsf/nsP
-	 Hpciy6rJer6vdiu4lHcMEIuI80nSElpixOVVuWs5ZnCXASv50e1esRo8TqIv6ASzzX
-	 J0NS/reN/W1//y0rkWMm39Cxzf2zNhx6IUa82lH8oOU3XxW41Y8+F6Zr6+PCljEdpD
-	 fJIWZGXa4WUnim/G2nyYrqjKfd/4faIsmEm+aAIL3uwFGzKI8nz77SFJPs2e3UcUbX
-	 rCXUuUDGZmshyVMIlwLyE6mxXPL4uhj7BL4sGzwF1r8MSIipjQpTsxn0s4aSKysA5Q
-	 s1YYIGy501r0g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Tejun Heo <tj@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	reinette.chatre@intel.com,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	jolsa@kernel.org,
-	alan.maguire@oracle.com,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH AUTOSEL 6.12 486/486] kernfs: Use RCU to access kernfs_node::parent.
-Date: Tue, 17 Nov 2026 19:22:57 -0500
-Message-ID: <2026-11-17-1-daily-reply-0006@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <c6918c4e-060a-4968-a43a-1b1cbdafd27b@arm.com>
-References: <c6918c4e-060a-4968-a43a-1b1cbdafd27b@arm.com>
+	s=k20260515; t=1794961532;
+	bh=0FtVx+bdZ2ArSXP0mcBKd/WQHCmPoQ5KtqvMi55F/xs=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=RcbYZgYKuT8rtNBavT9z0RMeM4rv0wQkI8zvWHGBOBvEBOgztWdMgNcwrojSs3pWx
+	 HRRaFKWgBtsPJfe0t/DO4Bbcp04o4fMI9CXSTEo+D7alzjW73Kmofjb+seANrtRMXg
+	 PbXFyPiP+fZj/bQNK3A3AMBPlvGQE2r2QDwBeOp0kkL2YEgx+WSPQZyx+ZCwm1Fctn
+	 xkVDBtaBfAt5+4g9ucbO/tXTR3RX0McYZgbPwcNcNfrQ58eFBavf1XIYebevnXW4/K
+	 A7jlS6YsGDl3fqMDvPR+spnQ2RThSzCEcsf2Oa0e/rpWh4VVy7jnhNwQN27f2d3G/9
+	 4l3d+Yv1MXXkg==
+Date: Tue, 17 Nov 2026 17:25:27 -0700 (MST)
+From: Paul Walmsley <pjw@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+    Chen Pei <cp0613@linux.alibaba.com>, pjw@kernel.org, palmer@dabbelt.com, 
+    alex@ghiti.fr, pratyush@kernel.org, graf@amazon.com, shuah@kernel.org, 
+    guoren@kernel.org, linux-riscv@lists.infradead.org, 
+    linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+    linux-kselftest@vger.kernel.org, kexec@lists.infradead.org
+Subject: Re: [PATCH v3 2/4] riscv: Add support for kexec handover (KHO)
+In-Reply-To: <avLi0_mYXatBWmpL@kernel.org>
+Message-ID: <6c377596-479e-439a-f68c-5d61fe40824c@kernel.org>
+References: <20261106071459.2003-1-cp0613@linux.alibaba.com> <20261106071459.2003-3-cp0613@linux.alibaba.com> <179415145358.358073.165272378597657083.b4-review@b4> <avLi0_mYXatBWmpL@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,22 +61,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Message-ID: <20261118002257.8J0Hx6m5tGzALTBeIGOqKbPOrAmprGTL6yIh9GottK4@z>
+Content-Type: text/plain; charset=US-ASCII
 
-> Sorry, my bad, this should've been to ::name, later in the series.
-> Here's a lockdep:
+Hi Mike,
 
-Thanks for the splat. The fix for it is not one patch but the whole kernfs RCU
-series, from 400188ae361a ("kernfs: Acquire kernfs_rwsem in
-kernfs_notify_workfn().") through 741c10b096bc ("kernfs: Use RCU to access
-kernfs_node::name."), plus its follow-ups. None of it is tagged for stable, and
-one follow-up, 6034974e3aec ("kernfs: take kernfs_rename_lock for same-parent
-renames too"), is not in 7.3 or 6.18 yet.
+On Tue, 10 Nov 2026, Mike Rapoport wrote:
 
-That is too invasive for 6.12 for a lockdep report, so I'm not queueing it. A
-tested backport of the series would be considered.
+> On Sun, Nov 08, 2026 at 10:24:13AM -0500, Pasha Tatashin wrote:
 
--- 
-Thanks,
-Sasha
+> > Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com> 
+> > 
+> > But pre-reqs. should be applied prior taking this series:
+> > 
+> > 1. https://lore.kernel.org/all/20261023054518.3258350-1-gthelen@google.com
+> 
+> I'm planning to send it to Linus this week.
+> 
+> > 2. https://lore.kernel.org/all/20261104-kho-bootmem-sizing-v2-0-b0d1a834780f@kernel.org
+> 
+> This is easy if we take it via liveupdate tree :) 
+> 
+> @ricsv folks, how do you prefer to play it?
+
+Sure, if you want to take it, that's fine.  I'll send acks for the two 
+arch/riscv patches.
+
+
+- Paul
