@@ -1,78 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=84.16.66.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795012811;
-	b=ErJ6fwKLnF5+LvqvGo+bn1RYtnGtEcHrl7CFGEJgBIosPcOZBHvZaA/kBVZgAblXPO70
-	 RDRSwUgwkwJqCOdV/LOCf1XqfaGkW7grb2oblm6q8EPe59giNuoaiC9rMw2y9V8YgNWZX
-	 iE7ApLDzv3dZzqvrVL3cm+30nYsJoiQBFzhUw2AxLHp34GeJFRyItfaZ3rdzDhcWXug53
-	 SdYRASxeatczc1d4m1YMmn5Jf/8wO4KVwpuZhtTmaHFIl9F7esjWhRlhuwhuW7VdswPOM
-	 f8vnqsG8v/PthqbV+eKCiSbp+C3QX5fiG9XF1CLCwXo8a0cVHalgdScPMHuXPnDB+6Q==
+	t=1795013001;
+	b=akYnl0gr3bhJx9+yuOuhu4bGCuMVLdfs67dmyGX6yeXUJzoE/7O+TLKUf1dpun8aOakV
+	 DGHJpFYmUZA8OCL1MoLOqrOwTe9C5bjOyKzWSpw9DZvNjQ7h0fS/tK+MbA0DHGuMfD+tw
+	 uN3puen77E95Z903N+vaxt+sN2KoXmW9nPy+NMMSX9iEHbdPhMs+JKNecdB4frFSCcT2V
+	 +cY/NDdjtzWrElfbdN5Ug9aQyKMpDM3qmw/AoTeUuRFmZoTqXHWA9F5nserEz+DsCeAck
+	 34lP3aK+JHOKtPmR+YFuR5fimsP5sBjwb2EsgEA7caFGv0tt5DpuMOlrZJcNan0lM+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795012811;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=o9zNTrCs5ck/1o3RCSKW2VT8r4JHp1JK8lZkVLfXYGM=;
-	b=FxGpITM7f95gI1IZpRGteJ1bPTlopq/JmKF1O3aN9Z32ft6wE6EQ2Qpf7OEf5+ss8TKU
-	 tclY+Xpiyds+lvCZzKF2eO5TlXPMIhZM1riJWtfPba551g+N+dOujI0wXerYY/P0FZJcD
-	 6TcQ3S+NuJi3gIVu+yMKIkFVluZm8YWHdeSyvt3XCGwRMd78gAJXp30rzjDBhfUQsAA4g
-	 QSa3wKkKi8tkYTxuQo6/Ax1WZO7g40uhtDdjmQYp+/yhZTeVPLgx+WD7UHqpFOEYLNk/n
-	 rWLPABYybvQDqoipGkFbd88bAGkY9rV9ldobPF1MhUxzMUuFGU42HGG7a/7AEYXfsIQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795013001;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
+	 X-Infomaniak-Routing;
+	bh=M6QIKb9uK+rYlKgFv0M8IDY5COdkGlTIaO9ytGUAZX0=;
+	b=guvNTHjlgKU45+hi9Ii0HlQC6y8F6DZMSXviRFXKElVsLH0LpmR6V+CiMlJO3Ev4aGIO
+	 UWAYUJVEWizd1xXMSlB5ksCWXAGdyJNVBRTSf64KTlcj4Xw1xsLR/kqNoUe179b95byY6
+	 mM3GNttI8h23hPeIiMQGW19OVvlEXVlTYuc5z36cLWwzKnpR3dG3ohYYMrRYRadkysxZL
+	 nfNyyxbiF5HP7NfxqeqmyQMSks+Wy0miq/WznQzTlDf6zZDpDcIhV0Y96JxwdawWY2L6L
+	 NlhGT1w1UAOEoHlDlG/P30xqWwuj67a2Gg8CErq14l+Ar3ogKKgV9JpOwjXr+goz84A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=Hxw+3jK2;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b="z9dCV9/L";
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	dmarc=none header.from=digikod.net;
+	spf=pass smtp.mailfrom=digikod.net;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=FgUMxLDk;
+	arc=none smtp.remote-ip=84.16.66.174
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F037606A32A;
-	Wed, 18 Nov 2026 14:40:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F037606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEDB606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 14:43:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCEDB606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=Hxw+3jK2;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=z9dCV9/L
-Date: Wed, 18 Nov 2026 15:40:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1795012808;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=o9zNTrCs5ck/1o3RCSKW2VT8r4JHp1JK8lZkVLfXYGM=;
-	b=Hxw+3jK2/k2u2O3CKhECYZkMY5C1OWMxtlf2QBhY6TDkaiBTw/BnRslwUxpFzhIB1rghqZ
-	WdaV6Uf9hkBrTfUT6WGqE/dBgr6kYlg4JiQP/B1PwvwdMba0KkcIEoHm5rrzqbp0upS/eJ
-	wxNqxqAtwuzD+FH1xcFk95zTAayGVcrWLldXfqqCGz07hyzl5zHbb71alV63C603+tIDux
-	t27jM1+cUPvsucTEGHEm547VFvbiztOoR5XieLR8tztrq0JROaNCEKxU3mg+K86jSgLfSi
-	Mt/4YpWDMf9kA1gtBLw/JIxE5vhCS+QFkEWYwcSpDshD1JdfsrhcI5UwN0IxsA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1795012808;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=o9zNTrCs5ck/1o3RCSKW2VT8r4JHp1JK8lZkVLfXYGM=;
-	b=z9dCV9/LLwfZ/WJUCNkWRDcS94wXIj2YymCvzLINZIqZYOT8lnxmLGaPjBAiDrErtDdc5i
-	TDvDcearZiD+nhDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
-	linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
-	longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
-	dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
-	shuah@kernel.org, juri.lelli@redhat.com,
-	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] locking/rtmutex: Initialize the ww_mutex context
- of a waiter
-Message-ID: <20261118144006.ms1fvDv1@linutronix.de>
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
- <20261108141347.1525532-3-mathieu.desnoyers@efficios.com>
- <20261116135857.5t9HGji5@linutronix.de>
- <de727dc6-cd11-4a7e-a853-aecd895685a9@efficios.com>
+	dkim=pass (1024-bit key, unprotected) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=FgUMxLDk
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jV48b1ZLlz5Sh;
+	Wed, 18 Nov 2026 15:43:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1795012990;
+	bh=M6QIKb9uK+rYlKgFv0M8IDY5COdkGlTIaO9ytGUAZX0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FgUMxLDkPqSmwZ6EcBTblOHEUd3cgQPaQjH7r9+HN4HyCZJeS3aKGBU7y63C5PQm4
+	 oahgWtSJtuYQnKjYsDzintXkET56emKP/Mku2uupkeQGot2oHw2ebluUA1miq883PB
+	 QdiuiYDN13+67tWQ3e8v1w4PYHRkbyYyag7nc3PM=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4jV48V68V3zPlr;
+	Wed, 18 Nov 2026 15:43:06 +0100 (CET)
+Date: Wed, 18 Nov 2026 15:43:03 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: "Hallgrimur H. Gunnarsson" <halg@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Paul Moore <paul@paul-moore.com>, 
+	Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Jann Horn <jannh@google.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+Message-ID: <20261118.faiBee9Taigh@digikod.net>
+References: <20261028221705.3915340-1-halg@google.com>
+ <20261107.aighieG4Ami1@digikod.net>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,126 +78,210 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <de727dc6-cd11-4a7e-a853-aecd895685a9@efficios.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261107.aighieG4Ami1@digikod.net>
+X-Infomaniak-Routing: alpha
 
-On 2026-11-16 13:37:09 [-0500], Mathieu Desnoyers wrote:
-> Hi Sebastian,
-Hi Mathieu,
+Hallgrimur, could you please explain why your use case would not work
+with Landlock?  The capability split or new clone flags would be
+complementary of course.
 
-> > I *think* this is unrelated because the futex caller shouldn't end up
-> > here. The __rt_mutex_slowlock() -> rt_mutex_handle_deadlock() should be
-> > different for the futex and ww_mutex case.
->=20
-> The futex caller does not go through __rt_mutex_slowlock(). It gets to
-> the chain walk through the proxy lock:
->=20
->   futex_lock_pi()
->     rt_mutex_init_waiter(&rt_waiter)
->     __rt_mutex_start_proxy_lock()
->       task_blocks_on_rt_mutex(..., RT_MUTEX_FULL_CHAINWALK)
->         rt_mutex_adjust_prio_chain()
->=20
-> rt_mutex_adjust_prio_chain() reads waiter->ww_ctx in two places:
->=20
-> 	if (IS_ENABLED(CONFIG_PREEMPT_RT) && waiter->ww_ctx && detect_deadlock)
-> 		detect_deadlock =3D false;
-> 	[...]
-> 		if (IS_ENABLED(CONFIG_PREEMPT_RT) && orig_waiter && orig_waiter->ww_ctx)
-> 			ret =3D 0;
->=20
-> Both tests are under IS_ENABLED(CONFIG_PREEMPT_RT), not under
-> build_ww_mutex(). So the futex build of the chain walk has them too.
-
-Yes, this part. I realised this later=E2=80=A6
-
-> > Is this really the case?
-> > You have a lock chain where the ww_mutex and a regular rtmutex interact?
->=20
-> No ww_mutex is needed. Two PI futexes are enough. Both waiters come from
-> rt_mutex_init_waiter() in futex_lock_pi(), so both hold the 0x11 poison
-> in ww_ctx with CONFIG_DEBUG_RT_MUTEXES. The chain walk takes them for
-> ww_mutex waiters.
->=20
-> The deadlock case of futex_lock_pi_inherit (patch 4) is that ABBA. With
-> PREEMPT_RT and CONFIG_DEBUG_RT_MUTEXES, it fails without this patch: the
-> second FUTEX_LOCK_PI blocks. It passes with it.
-
-right. That is an issue.
-
-> > I would argue that the full-chainwalk depends now
-> > on a random stack value _and_ __waiter_less() might access the random
-> > value if ww_mutex is enqueued and a regular mutex exists in the lock
-> > chain.
->=20
-> Yes, those are the two effects. I reproduced the first one only. The
-> second one is from reading the code, which is why the changelog says
-> "would dereference".
-
-The deference _shouldn't_ happen because those two a different. However,
-we could have a mix of those two and which point it becomes relevant.
-
-> You are right that the changelog is confusing. It starts with the futex
-> symptom, and only then says where the value is read. In the planned next
-> version, I would put the mechanism first, with the call path above. Does
-> this read better?
->=20
->     rt_mutex_init_waiter() does not set waiter->ww_ctx. Only
- rt_mutex_waiter::ww_ctx please
-
->     __rt_mutex_slowlock_locked() sets it. So the waiters of PI futexes
->     and rtlocks keep the 0x11 poison of CONFIG_DEBUG_RT_MUTEXES. Without
-
-or random garbage which.
-
->     that option, they keep what was on the stack, unless the compiler
->     zeroes it.
->=20
->     With PREEMPT_RT, ww_mutexes are built on rtmutexes. They can create
->     a cycle in the lock graph legitimately, and the wound/die logic
->     resolves it. So rt_mutex_adjust_prio_chain() turns deadlock
->     detection off when it finds a waiter with a ww_ctx. It also drops
->     the -EDEADLK of a walk that started from such a waiter. Both tests
->     are under IS_ENABLED(CONFIG_PREEMPT_RT), so every build of the chain
->     walk has them.
-
-I would strip that paragraph because *I* think it is more important to
-mention the FUTEX case which no longer does proper chainwalk regardless
-of PREEMPT_RT. Yes, ww_mutex has=20
-
->     FUTEX_LOCK_PI gets there with no ww_mutex in the chain:
->=20
->       futex_lock_pi()
->         rt_mutex_init_waiter()
->         __rt_mutex_start_proxy_lock()
->           task_blocks_on_rt_mutex()
->             rt_mutex_adjust_prio_chain()
->=20
->     The chain walk takes its waiters for ww_mutex waiters. With
->     PREEMPT_RT and CONFIG_DEBUG_RT_MUTEXES, FUTEX_LOCK_PI then reports
->     no deadlock. Two threads that each block on a PI futex the other
->     holds sleep forever. Without PREEMPT_RT, the second one gets
->     EDEADLK. FUTEX_LOCK_PI also blocks on a chain deeper than
->     max_lock_depth, instead of returning EDEADLK.
->=20
->     The ww_mutex build of the chain walk can also requeue such waiters.
->     On two of them with equal priority, __waiter_less() would
->     dereference the poison.
-
-The futex code for PI_LOCK performs a RT_MUTEX_FULL_CHAINWALK during
-locking. rt_mutex_adjust_prio_chain() then wrongly assumes that it is a
-ww_mutex (due to random garbage in rt_mutex_waiter::ww_ctx) and does not
-report a deadlock but expects the caller to handle it.
-
->     Fix this by clearing waiter->ww_ctx in rt_mutex_init_waiter().
-rt_mutex_waiter::ww_ctx
-
-This, Fixes: and=20
-
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-
-> Thanks,
->=20
-> Mathieu
-
-Sebastian
+On Sat, Nov 07, 2026 at 01:43:53PM +0100, Mickaël Salaün wrote:
+> Hi,
+> 
+> I think this is mostly solved with Landlock (kernel v7.4), see
+> https://docs.kernel.org/userspace-api/landlock.html#capability-and-namespace-restrictions
+> and
+> https://lore.kernel.org/all/20261014082718.1435842-1-mic@digikod.net/
+> 
+> This approach is agnostic to UID, cgroups, or other ways to identify
+> processes, so it should fit any use case.
+> 
+> What is missing is a split of capabilities (e.g. CAP_NET_ADMIN) that
+> makes sense from a security and (user) namespace point of view.
+> 
+> Regards,
+>  Mickaël
+> 
+> On Wed, Oct 28, 2026 at 10:16:57PM +0000, Hallgrimur H. Gunnarsson wrote:
+> > When an unprivileged process creates a new user namespace, it is granted
+> > a full set of capabilities (CAP_FULL_SET) scoped to that namespace.
+> > While these capabilities are isolated to the namespace, they allow
+> > unprivileged local users to reach deep kernel subsystems (most notably
+> > networking configuration and raw sockets via CAP_NET_ADMIN and
+> > CAP_NET_RAW) that historically assumed a trusted caller and have
+> > accounted for a large share of local privilege escalation
+> > vulnerabilities.
+> > 
+> > Many workloads and sandboxes use unprivileged user namespaces strictly
+> > for basic UID/GID, mount, PID, or network isolation and never need
+> > high-risk capabilities like CAP_NET_ADMIN or CAP_NET_RAW. Likewise,
+> > system administrators often want a host-wide policy ceiling restricting
+> > which capabilities unprivileged user namespaces may acquire, without
+> > disabling unprivileged user namespaces altogether.
+> > 
+> > Prior work by Jonathan Calmels [1] proposed addressing this via a sixth
+> > per-thread capability set (cap_userns) alongside a global sysctl mask.
+> > During that discussion [1, 2], feedback (e.g. from Casey Schaufler)
+> > suggested that rather than adding another per-thread capability set and
+> > prctl() interface, capability restrictions could be integrated directly
+> > into struct user_namespace and configured via clone3(). At the same
+> > time, as noted in [1], a clone3() flag alone is not sufficient for
+> > administrators who need to enforce a host-wide ceiling on unprivileged
+> > user namespaces without modifying every userspace callsite.
+> > 
+> > This series combines both pieces of feedback: it embeds a capability
+> > bounding set (cap_bset) directly into struct user_namespace, reusing
+> > the existing task cap_bset, cap_permitted, and cap_effective sets on
+> > namespace entry, and provides both a system-wide sysctl ceiling for
+> > unprivileged user namespaces and a CLONE_NEWUSER_BSET flag for
+> > voluntary per-namespace restriction via clone3().
+> > 
+> > In addition, because restricting CAP_NET_ADMIN at user namespace
+> > creation time prevents userspace from bringing up the loopback
+> > interface in new network namespaces, the series first introduces
+> > an opt-in flag to automatically enable loopback on network namespace
+> > creation:
+> > 
+> > 1. Opt-in loopback activation on netns creation (Patch 1)
+> > 
+> >   New network namespaces start with the loopback interface (lo) DOWN by
+> >   default, requiring CAP_NET_ADMIN over the owning user namespace to
+> >   bring it up. To block external network access while preserving
+> >   localhost networking, sandboxes commonly create an isolated network
+> >   namespace with only the loopback interface enabled.
+> > 
+> >   However, requiring a sandbox to hold CAP_NET_ADMIN in a new user
+> >   namespace solely to bring loopback up conflicts with reducing the
+> >   CAP_NET_ADMIN attack surface. Today, an unprivileged sandbox must
+> >   start with CAP_NET_ADMIN to bring loopback up, drop it, and then
+> >   block CAP_NET_ADMIN from being regained in nested user namespaces
+> >   (e.g. via seccomp or max_user_namespaces limits). Conversely, when
+> >   CAP_NET_ADMIN is restricted at user namespace creation time (via the
+> >   sysctl ceiling or CLONE_NEWUSER_BSET introduced in Patches 2-3, or
+> >   via LSMs such as Landlock), tasks inside the new namespace never
+> >   acquire CAP_NET_ADMIN and cannot bring loopback up from userspace,
+> >   breaking localhost networking for unprivileged sandboxes.
+> > 
+> >   Introduce the CLONE_NEWNET_LOOPBACK flag for clone3() and the
+> >   corresponding UNSHARE_NEWNET_LOOPBACK flag for unshare(), which imply
+> >   CLONE_NEWNET and automatically bring the loopback device up in
+> >   copy_net_ns() before returning the new network namespace. Making this
+> >   an explicit opt-in preserves default network namespace semantics
+> >   while allowing unprivileged sandboxes to create an isolated network
+> >   namespace with functional localhost networking without ever holding
+> >   CAP_NET_ADMIN.
+> > 
+> > 2. Per-user-namespace capability bounding set & sysctl ceiling (Patch 2)
+> > 
+> >   Add cap_bset to struct user_namespace (initialized to CAP_FULL_SET in
+> >   init_user_ns) and introduce a system-wide sysctl ceiling for
+> >   unprivileged users at:
+> >     /proc/sys/kernel/unprivileged_userns_caps_allowed
+> >   (defaulting to CAP_FULL_SET).
+> > 
+> >   When a new user namespace is created:
+> >   - Privileged creators (holding CAP_SYS_ADMIN in the parent user
+> >     namespace) inherit cap_bset from the parent user namespace.
+> >   - Unprivileged creators (lacking CAP_SYS_ADMIN in the parent user
+> >     namespace) have the child namespace's bounding set constrained by
+> >     the sysctl ceiling combined with any effective capabilities the
+> >     creator already holds in the parent namespace:
+> >         child_bset = parent_bset & (sysctl_ceiling | creator_effective)
+> >     Allowing the creator to retain capabilities it already holds in the
+> >     parent namespace ensures that a process granted a specific
+> >     capability (e.g. CAP_NET_ADMIN) does not lose it when creating a
+> >     nested user namespace.
+> > 
+> >   When a task enters a user namespace via clone()/unshare() or
+> >   setns(), its cap_bset, cap_permitted, and cap_effective sets are
+> >   clamped to user_ns->cap_bset. In addition, cap_capable_helper() is
+> >   updated so that implicit capabilities granted to the parent-namespace
+> >   owner of a user namespace are likewise bounded by the owned
+> >   namespace's cap_bset.
+> > 
+> > 3. Per-namespace restriction via clone3() (Patch 3)
+> > 
+> >   Introduce CLONE_NEWUSER_BSET and add cap_bset to struct clone_args.
+> >   When specified alongside CLONE_NEWUSER, the new user namespace's
+> >   bounding set is further intersected with the requested cap_bset mask,
+> >   allowing container runtimes and sandboxes to drop unneeded capabilities
+> >   from a user namespace at creation time even when permitted by the
+> >   global sysctl.
+> > 
+> > 4. Introspection via NS_USER_GET_INFO (Patch 4)
+> > 
+> >   While tasks inside a user namespace see their initial ceiling in
+> >   /proc/<pid>/status (CapBnd), threads may subsequently drop
+> >   individual capabilities from their per-thread bounding set. Add
+> >   an extensible NS_USER_GET_INFO ioctl on userns file descriptors
+> >   to allow userspace to directly query a user namespace's cap_bset.
+> > 
+> > 5. Selftests (Patches 5-8)
+> > 
+> >   Add kselftest suites covering CLONE_NEWNET_LOOPBACK, the sysctl
+> >   ceiling, creator capability retention, nested monotonicity,
+> >   parent-owner bounding, CLONE_NEWUSER_BSET and NS_USER_GET_INFO.
+> > 
+> > [1] https://lore.kernel.org/all/20240609104355.442002-1-jcalmels@3xx0.net/
+> > [2] https://lwn.net/Articles/978846/
+> > 
+> > Note on tree routing:
+> > 
+> > While Patch 1 (CLONE_NEWNET_LOOPBACK) touches net/core/net_namespace.c,
+> > most of its changes add clone3()/unshare() flag plumbing in
+> > include/uapi/linux/sched.h, kernel/fork.c, and kernel/nsproxy.c, which
+> > Patch 3 (CLONE_NEWUSER_BSET) builds directly on top of. To avoid
+> > merge conflicts in kernel/fork.c and include/uapi/linux/sched.h, it
+> > may be simplest to route the entire series through a single tree, e.g.
+> > a namespace branch in vfs.git with Acked-by from the netdev and
+> > capabilities/credentials maintainers, or whichever tree the maintainers
+> > prefer.
+> > 
+> > Hallgrimur H. Gunnarsson (8):
+> >   net: introduce CLONE_NEWNET_LOOPBACK to auto-enable loopback
+> >   userns: introduce capability bounding set for user namespaces
+> >   userns: allow restricting capability bounding set via clone3()
+> >   nsfs: add NS_USER_GET_INFO ioctl to inspect user namespace
+> >     capabilities
+> >   selftests/net: add test suite for CLONE_NEWNET_LOOPBACK
+> >   selftests/capabilities: tests for user namespace capability bounding
+> >     set
+> >   selftests/capabilities: add clone3() tests for CLONE_NEWUSER_BSET
+> >   selftests/nsfs: add tests for NS_USER_GET_INFO ioctl
+> > 
+> >  Documentation/admin-guide/sysctl/kernel.rst   |  37 ++
+> >  fs/nsfs.c                                     |  29 +
+> >  include/linux/cred.h                          |   3 +-
+> >  include/linux/sched/task.h                    |   1 +
+> >  include/linux/user_namespace.h                |  20 +-
+> >  include/uapi/linux/nsfs.h                     |  17 +
+> >  include/uapi/linux/sched.h                    |   9 +
+> >  kernel/cred.c                                 |  10 +-
+> >  kernel/fork.c                                 |  38 +-
+> >  kernel/nsproxy.c                              |   9 +
+> >  kernel/user.c                                 |   1 +
+> >  kernel/user_namespace.c                       | 100 +++-
+> >  net/core/net_namespace.c                      |  11 +
+> >  security/commoncap.c                          |   8 +-
+> >  .../testing/selftests/capabilities/.gitignore |   1 +
+> >  tools/testing/selftests/capabilities/Makefile |   2 +-
+> >  .../capabilities/userns_bounding_set_test.c   | 566 ++++++++++++++++++
+> >  .../selftests/clone3/clone3_selftests.h       |   1 +
+> >  .../selftests/filesystems/nsfs/.gitignore     |   1 +
+> >  .../selftests/filesystems/nsfs/Makefile       |   4 +-
+> >  .../selftests/filesystems/nsfs/userns.c       | 120 ++++
+> >  tools/testing/selftests/net/.gitignore        |   1 +
+> >  tools/testing/selftests/net/Makefile          |   1 +
+> >  tools/testing/selftests/net/loopback_netns.c  | 103 ++++
+> >  24 files changed, 1069 insertions(+), 24 deletions(-)
+> >  create mode 100644 tools/testing/selftests/capabilities/userns_bounding_set_test.c
+> >  create mode 100644 tools/testing/selftests/filesystems/nsfs/userns.c
+> >  create mode 100644 tools/testing/selftests/net/loopback_netns.c
+> > 
+> > 
+> > base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+> > -- 
+> > 2.56.0.313.g2479322e68-goog
+> > 
+> > 
