@@ -1,102 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.45
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794991094;
-	b=pDjsm9XrBrVfTrMrv/hPg1FIHP8SmCEoNJLGdjcPiNKvsgvahlZ/6l/+blOfOIi+v874
-	 uJTs8fUfTfTYfmY6njMbvQNV5Wpaye20v19U4GyG1uOqwnhOeIvnD0SeAa+FMngWl6PPZ
-	 zRkIveDpfXnYiL70/1QDZW1kfByY7XS1FaGgiq2fk3RKH7M0E1XcfB0DwQtJUeLmU3xEp
-	 S1RAIt5M+XQ3ressGFk51hwG7m2YiV6LzRW/whYzgUV2bQDpSvvi0s5ShNcQ8XtLY7w30
-	 elsWQkBX/h8XwJBN5C4LYxdYJQGJdxTR5NmNTzI/GYLyZOYyFG+AR6TEKz3PXwRoJNA==
+	t=1794991357;
+	b=HQqofRliBEoUkO6H8jNQw2wqdgijDyUsEtnTWKaojMPpfUcOHNjjZZ2QJZTvbngcehoC
+	 fABRanfYl7QYpFeT152bRMO0DEgCYigXvCk4Ib27LgwZeKepVdmF+r8ZEdEhiSSDxT9SX
+	 Z22iIoTTWi2XqtbNfUMDotBEcIwTHhQRpxCcHS8ieE4XIOwD8InC14DXMgSPwBmyKUVNw
+	 Mkd9x5SaLr99w0q5SI3aeJSKAOGAeLTFzaEQaf1H5OFt0P0wx1Y+S+smv0hS4b+bzqigF
+	 08U+A8p/mAyWbur2a9bAKVOn4May2RSRp6Xhj+g5bAnz9cbw/3+ICbHHpmacl5dIjqA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794991094;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=MdhPTYskaXErlluukZSJhn6+kPj5oAVom/0TywmgYgA=;
-	b=rgWaUovp0yVg8cQwOQ+B4DJxXqo8gMvC3t8VGGmCmAJHgVA5lj81mh+wAStahXunhhOd
-	 Obat+E420WyTSwBKPYvGdF5KNS/nso5Ay3TAxKaP71Pq8QxuvuyIg8IEAr0+bnf2DtC8p
-	 u4axFbr/b2K8Zx0Jm92pSUaXSTQbnSBZg8ZGbSKL+CbO7Pkv3eEydh7GxABhm2g+fDbFr
-	 vclcLiqpTyl05MHWekA+IBqjEP5B9cqbTayOc8DRebfTve0pGtXvGZOMk54JsM9fgmHrb
-	 e0y3ZqBn7yJMtE8tokU8lMHNc5a2f+Geow0mLQdyXPbBCDg+hdrVaQgkzb+9rGJRVJw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794991357;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Mailer;
+	bh=dqmah0e6poIDVkEH4ZFxTlHLm0QkuRGxVKsCE1p3Hyc=;
+	b=aslsuDfzzkjFNERNscpGP+UlqvnCF8z86YW1qgU38hD3vbma2Pyg7AuewlUkTmU1GOPQ
+	 LMfL+N8zIWCWs/AggNC/HNGNLxi7/+ZhsFSLMmZw5ToamMA1c2x0VPkfSJDWpKYxSecct
+	 oB9pv85zG7pbrBgeVC0LRdzxz9Pxuu1piqanB1eC1R2Ev5hzDWNGfP6VnRN5zx9qe/I93
+	 yETIVgH6zyk6UFKWgh3cBhHqKacVqStkDZdCNr2YiP+abM/yVnU9md/zijZfljt57WUPg
+	 vfy4AM+8Lpniy56LfQ5lytRN4uy+jPb+rQdUN772iCpzoDCv/2rFZTRAvgy5lBqDfYA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=rHXDbgEp;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.45
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013045.outbound.protection.outlook.com [40.107.201.45])
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b="U/+PhQbz";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EB7606A32C;
-	Wed, 18 Nov 2026 08:38:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40EB7606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9EE606A886;
+	Wed, 18 Nov 2026 08:42:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E9EE606A886
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=rHXDbgEp
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XHOlJI4F8XDpgF988qXuP3OmImyPRpJWxuFD6NqNkRa8Ll2c3YxeP7MkgJCgNUN177enpavxJ/EfANc8rVn8qlTFWdr3133lY72FhJQKBzJ2XDFglUUkxLTMh4Be+J02z/EnsN//WZEz2Ig2FRZiqfsce6HhBbSL38fybdBYc9eR25+/Dlj7s7Ln5kuQE8AxkU96z5Wyh5iYt1joFIGoPE7YeyAbP+FVzBFfayyD37TwG1iP0VJDZtRBkPttAaQsbePZDb5J+i1/FgYrsgmG340PIjPAsVOko7VDi0/7j/Xj5MqK+InA+v8KAeigjgZzvcpR3uRHzemamK85nPcAJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MdhPTYskaXErlluukZSJhn6+kPj5oAVom/0TywmgYgA=;
- b=qUlxE/xOG6j0xyGSRJT4E9uhjylb4YozxJ8AUJURBKb2noudvJNa3e4zvIKk8wIC0EjIU63rMX0G6Hn406wtDkj75sz1Xctk8TjY0qgVOKBEjP3DJSy9zYTDZSb7G20p/bqEmTToBWnORcsR5Ex/ukUC+n8ClxYXFuTfROpXuMcpnv/W6w6f/NfQJb8zRgFReuv/FDlRFJefZBA0SEWg5WhCVAjCH6jlvVrFd9z9v+s9v3FOQrx+Y22pQ7ax2OTg6rzj5MubVYZVIjjDa4wB07JSsDsJQ6lQasNp0yYh5gv3OPIwimdFA/HflQTZuU6zz+MY370iVPcQcsPslv4KbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MdhPTYskaXErlluukZSJhn6+kPj5oAVom/0TywmgYgA=;
- b=rHXDbgEpwwf1CQM87+HaunoqfCs7WBbGziavWVDWs8pXHd2EgpHHGnB3Wd8zp+x7fDWftHBCjgdTGAfy1mdiIdCVKE13pxaNc8fco585YrmYK7NPxu6bniwy/UHHfaNiZtDkks1beFd61HBnk3mdyESemG81xW/761Am73J2p3jWxKtSxvGEPGo03FdJgZsCerKMNsCryjlLft8UYcAcqKrR8UHUEY47wMUgcBzjBIrOnzPVBACMInixohvwY+tDr/rspznqjRsUG9EmywxEGqt4Ww30LSwRF9KxFWTuk51GKhV2mquJ7Q2NVLlYlusQ+44iE/8IA7fLqYBX628uKg==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by PH8PR12MB999319.namprd12.prod.outlook.com (2603:10b6:510:40f::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 08:36:09 +0000
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0615.009; Wed, 18 Nov 2026
- 08:36:09 +0000
-From: Ido Schimmel <idosch@nvidia.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@kernel.org,
-	jv@jvosburgh.net,
-	andrew+netdev@lunn.ch,
-	petrm@nvidia.com,
-	sridhar.samudrala@intel.com,
-	jiri@resnulli.us,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	razor@blackwall.org,
-	Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH net-next 0/6] bonding: 3ad: Support independent control with LAG offload
-Date: Wed, 18 Nov 2026 10:34:36 +0200
-Message-ID: <20261118083442.1061289-1-idosch@nvidia.com>
-X-Mailer: git-send-email 2.56.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TL2P290CA0018.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:3::17) To LV8PR12MB9407.namprd12.prod.outlook.com
- (2603:10b6:408:1f9::13)
+	dkim=pass (2048-bit key, unprotected) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=U/+PhQbz
+Received: from dude04.red.stw.pengutronix.de (dude04.red.stw.4.pengutronix.de [10.17.1.12])
+	(Authenticated sender: relay-from-dude04.red.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id D19A9205A77;
+	Wed, 18 Nov 2026 09:42:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1794991347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqmah0e6poIDVkEH4ZFxTlHLm0QkuRGxVKsCE1p3Hyc=;
+	b=U/+PhQbzrNZ8Sr6VI83fc1DY5G+e7g2TJNMVVZ2DNZ+qU2UwANXHCOFGMDhQd15VYyJKQO
+	960WMHn4OF47iiJf7QdXnBQI8p5z8qnOa0yWpq/k4nyKv4dijwKA0Uom2GGnN5bw2ukwAk
+	0xG2uEJEgir+Uuew+IJIBAmJiJKNfLbyEs0XeLT8Dt8iuvniUenbF7nm2S26ghuUswFkVm
+	wFGs0dAZKIjgZuuS4qBcAkbjcg9XvBTXdr4QRAlcq3vk1621BxX3FTAgUqagQRBWZ3Gpzm
+	TruyLWQIStXbK0YxTJep7z/NDT/LnNs8j4DltydyWxW2VV+F60BO5Q1AYjjUqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1794991347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqmah0e6poIDVkEH4ZFxTlHLm0QkuRGxVKsCE1p3Hyc=;
+	b=Ly0c2M4M5aR+HFkry+Ki/ErAX6yt1ZOP2lEjcOjqaSFQts9ppNj6TdlLEWXdPrQtrz9Sq+
+	eqBY5weOeg0kY8I9PVTLkpZBAyeWmCWqfz4b84swhK3aX00+EwFIbOMmkA7AJq8qpMZl8i
+	CfJAAYwxYNptJyoE7Iyh+zjamnckeeDmFTnQ49PyYhGuHhDsGlA+CjWP+ikF57H9mDTzuQ
+	0fFvqvyOqigSyMP4XfeTynDh+6cEYTS/GweoBgGlig9MHEGHztwKtEvlgQk2PXfNUBhEAw
+	IIsNVKMLydo6raiiz9RzlPKerLEU4g+jAu+lbjU3YPUUXCTv0y3CNKzrlZcg5w==
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1794991347; a=rsa-sha256;
+	cv=none;
+	b=VuuBv1ADGfpZmOfG/YVWtEWTHaMLAT4NkSv0ly/Rk4tlBbAtqHaNF3FhLfWUuB8J4MuQTF
+	HSWmEMexEYtX+QbzHyecGiZba+8PWd9XRzbVjXs3FW9byQQeANRIvx9LOKXLgBFiZBP2Te
+	PQjaG7OmzKcPUw2+dI3tjlTIBTmvUhXskIj9qntqIX2rqHaY0+eeuzicoN3oziBd3iqxqJ
+	2kTr1uCbw6cu6izlVSPIQeQgOd8vyOUsG1R4P37nwnQ8WKU5RfJgyO2ClOZ3/DhR7AOiqC
+	/PYY3l7n5U9PLc3vEdSzYl0tigSTvKkgA9lIYo8Nfj4qqk8XGH2u4T2h598T+A==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=relay-from-dude04.red.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
+Received: by dude04.red.stw.pengutronix.de (Postfix, from userid 1058)
+	id B32F33815D2; Wed, 18 Nov 2026 09:42:27 +0100 (CET)
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+Date: Wed, 18 Nov 2026 09:42:18 +0100
+Subject: [PATCH can-next v4 3/9] selftests: can: add J1939 base functional
+ tests
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,117 +86,430 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|PH8PR12MB999319:EE_
-X-MS-Office365-Filtering-Correlation-Id: da8f0135-2191-4659-422d-08df454efe8d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|7416014|376014|18002099003|261009223027099003|56012099006|261026140227099003|11063799006|261102123227099003|261028144727099003|261022075727099003|261021123027099003|261026121527099003|261021121427099003|261022105027099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	nlxWtQjffzkcuitK2oYC1jpbv6OU8mYvL3mT5XgVOXUcJjV+TOWWUo8IoV2T/pX9AWewKVC5LNgpe4wZnP8c1WuT1Y/WQlViLcexwTWcZtkC6M7ar0PmQVUOZixLmU1AI7axPZEDjO4KlBtRpp2tBJhvxAkfd3WWMrdwlAKJiLEMLmSdOw9nehDi+RrnDy+1Cn5JvYojQtW37eV/R5dw9hhhqWJYNRadjVz+H31q5Won9JezmBcvYIkDKImPgKcSC2n5iQ9659JNQfJawsuiQ9Cs/VASDpqszbTJFBuUwFGRcabIiNVCuxCpnDMSDoOprXFNy0hJtWlvi5B0A+4T5UaY9HFIOXK+FOF/AxsnO8dT9B1riyS+sgg4cUCErzKHwjHP6CG8H/2vFB8TZpOzKYuxz9FctPHZjkSZ85gIaaeZfNDbOEe6pHmpRtO49pZcxXJx0IZhzaBE84Mvb/9+IihTy0+hNvyKzgksZkhkeWdJ8UjsYoaIgWGln2M69b5a0tHAOU14abhjyISBiIXVUzWRBSQpRojpILriwMcIkKFklxVgLaoglqU1W7YYXKhy2QspptNh4snlvEft8Uz9s8MIqYjCaNjgSu2n6qv98NBLkb9ZHpFp4eP6amcrfzkIrDMwcL5n3eyMmDwl1buBKD6AXgcWEDHy2AzD76K8kak=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(7416014)(376014)(18002099003)(261009223027099003)(56012099006)(261026140227099003)(11063799006)(261102123227099003)(261028144727099003)(261022075727099003)(261021123027099003)(261026121527099003)(261021121427099003)(261022105027099003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?49z1eavDRzWHY4SxOM1sw077FuQn0/Ryr2Zj1rHCbCR4STD7tDA5dNUpmUFR?=
- =?us-ascii?Q?kAGNmpoBcQzxN4eNbJldWPIomPRULOYWQeklrernpDgz/cmN3MXyhpcSwccP?=
- =?us-ascii?Q?HmQfkWkXOGoqX3Ksxr6/FPOrUXnekiX0EmQBhIJrHWJeLiZtZ5GXdfWVj2fN?=
- =?us-ascii?Q?/7Y4wALi0c2N18oFh//4dwSruN2X4zbV/3Q+WNrvcsDT5OdoDprCcQFj9WGE?=
- =?us-ascii?Q?2r4qf/9fs6hE+5YzrHWE5gk5XUstoeYegcuinF64P/MvAnm64/4Y77vsWtHd?=
- =?us-ascii?Q?Fahx73iX9DL5R445oToPGwVYbE8S0u2iQ3psbO7rvr6iCWMnX1dW/iL0Uyi0?=
- =?us-ascii?Q?EIOLO1dAyKgBu4J8A9CIU2NPGpIj1ihzFS+gnZb1vNJ3OJrRzqS64bLf4O3Z?=
- =?us-ascii?Q?WQ6mog3KHtTSvK48QFdwYfZAqsXbDviTSFDlRXVh3kKADOKYj0jc1yPmpD3u?=
- =?us-ascii?Q?oh9vs/RdfqY0u11C5nqsTYeiyxZgJk1t/3mpjaEvgDe5BHEODHxb0+ktKpqt?=
- =?us-ascii?Q?C+yyDp6ahbJntDYFroCLy71sYc1Qcb22YIjhMKdpTUJeJp94uGIpYhTkM+/G?=
- =?us-ascii?Q?luIbr9pFr6vAeqwXHhsCEkxzy8hM3tjJXOhlFyINKtCrUXsSkIJYIhh07FtN?=
- =?us-ascii?Q?oTefgKg9ZnsoWeBlIvSmEjLx1ORj13MPMU0R0sW9oojs44hJrxwRy38Vg3WC?=
- =?us-ascii?Q?Iaw2ltjSqYPJQTxwKGghy6aOv2K8Wcd50byquYOqWwc8uF2W7GvuSpIUm7x8?=
- =?us-ascii?Q?/EFWtn+UoiFMTzstbUkLEMofoYCG2s2SJgpTwHSSWeJ+6CmYS29RLSfIBBQw?=
- =?us-ascii?Q?aLm2EVB4FyernuNO1Yo83IQILyYJfKiNE+reCL9NXc+lsHxJgZvaC7OgiRz5?=
- =?us-ascii?Q?SLOHXnXh94LeuovR6laQQzOyB8704b6Heuf/GGWepsS9E2/CSMuHQzisH3yw?=
- =?us-ascii?Q?VkctMpsVPB94o2+i9MHYkD5nS+GmX1GC4p39ehlEqTPT6eZFr8YIYvlwnXjl?=
- =?us-ascii?Q?WrZIDNLSR9TUNZXrmBxMAhCyFAauXBNp/6o/H/2Q9bRmlnkCtk7XQrbxc65S?=
- =?us-ascii?Q?mO72ogXOacZ5DnURUgMcFurrMRgFZLgAEpJbfcyCP6zSdKv1pVB6xDSWQ052?=
- =?us-ascii?Q?BIxJNt5OHw1y7qWGGZR0vpHhGTvqRBjrUsRbxJOu1r3cjpJkrwVZDOlZJ32w?=
- =?us-ascii?Q?LzOmM0DqHa+zKXdm/mf+SulgQZW9iPJGO0aKVxxX+byyKt/PsEQWQfCj2X/w?=
- =?us-ascii?Q?o4Dtb8xvkR6vyOUVvRnKmelmmdfuuiGoETmZQ3wXFb4Dw9uISJdZMc/ooUQJ?=
- =?us-ascii?Q?WhWcBGb2wyFsA+h+qNQnIkmmOcwaXwQtSm3xjg2TOmoMig5BMDIPTJDWlspD?=
- =?us-ascii?Q?uOOalH7lqST1LHSt3cYy/OifigilQxgQFZ1LkCq1B1OiVRRf1R300qQInkRe?=
- =?us-ascii?Q?n57CvA4gmfVwI7jQo2y5lhkmjBNhN7eHstasyQUAvGzg1t6E/Aut9/hJxZ6q?=
- =?us-ascii?Q?5An0QykH+R2681FCv8KNiXUxC7uW7wb4fRyGjngj0s+axWSkj7dhPq4GcURY?=
- =?us-ascii?Q?efpxiwFY3b2d+fGHQe3XAiZPkUNK/KgLieZQwW5jFVwfJN35/BLqDJigJQyO?=
- =?us-ascii?Q?Cz9Lk3gmfNYK8I3qlASMCHkDfNsxdLMLLxCs/6X0JKd6sbAp8w7iUlUvYpbT?=
- =?us-ascii?Q?ALdZkIl848SJxA5CsPa+N1orhKP2PH5azF4Zx5kDnfUhnmIl?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da8f0135-2191-4659-422d-08df454efe8d
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 08:36:09.2120
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1Qs3hKTlk6SFo8vTOaggbvUXuRH8K/3gTa61Mvqml7A1b6xS3QnxiQiWSeafltiaMPGhsibjts1OvZqAnQIVxg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB999319
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261118-j1939-selftests-v4-3-756768d32ff2@pengutronix.de>
+References: <20261118-j1939-selftests-v4-0-756768d32ff2@pengutronix.de>
+In-Reply-To: <20261118-j1939-selftests-v4-0-756768d32ff2@pengutronix.de>
+To: Robin van der Gracht <robin@protonic.nl>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Felix Maurer <fmaurer@redhat.com>, Vincent Mailhol <mailhol@kernel.org>, 
+ =?utf-8?q?Alexander_H=C3=B6lzl?= <alexander.hoelzl@gmx.net>, 
+ Chaosheng Qu <quchaosheng000406@163.com>, 
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, 
+ Oleksij Rempel <o.rempel@pengutronix.de>
+X-Mailer: b4 0.14.2
 
-When coupled control is disabled (i.e., independent control is enabled),
-an 802.3ad port can be in COLLECTING state where it is enabled for
-collection, but not for distribution. This is useful in deployments that
-want to avoid packet loss caused by a port starting to distribute before
-its partner starts collecting.
+Add a functional selftest for the SAE J1939 socket interface. It sends
+between CAN_J1939 sockets over a vcan interface and checks payload
+integrity for single frame, TP and ETP sizes, the boundaries between
+them, and single-frame and BAM broadcast. A single-frame broadcast
+reaches a receiver only with SO_BROADCAST.
 
-Drivers that offload LAG are not aware of this Rx-only state since the
-LAG lower state information only indicates whether the port is enabled
-for transmission and the bond does not notify about Rx state changes.
-Instead, these drivers enable or disable both collection and
-distribution on the port according to its Tx state. As a result, packets
-received by a port in COLLECTING state are dropped by the hardware.
+Enable CONFIG_CAN_J1939, CONFIG_CAN_RAW and CONFIG_CAN_GW in the test
+config: CAN_RAW for the CAN_RAW peer of the later tests, CAN_GW for the
+gateway that j1939_lib.sh sets up. This test opens no CAN_RAW socket and
+skips only without CAN_J1939.
 
-In addition, a port that enters COLLECTING state advertises the
-Collecting bit in its LACPDUs before offloading drivers are notified
-about the Rx state change. The partner can therefore start distributing
-packets to the port before collection is enabled, which defeats the
-purpose of independent control.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+Changes in v4:
+- add CONFIG_CAN_GW to config, for the gateway of j1939_lib.sh
+- set J1939_NO_PEER=1 in the wrapper, this test needs no CAN_RAW peer
+- do not skip without CAN_RAW, this test opens no CAN_RAW socket; the v2
+  note that every test needs CAN_RAW was wrong (sashiko, Chaosheng Qu)
+- add recv_none_ok(), which also fails on a socket error, and use it for
+  the negative receive check
+- give the broadcast sent after SO_BROADCAST is set its own payload, so a
+  late first frame cannot pass as the second one
 
-Patch #1 adds an Rx enabled state to the LAG lower state information and
-sets it according to the existing Tx enabled state.
+Changes in v3:
+- use the 200 ms maximum packet gap of the spec, per packet, in the
+  receive timeout of a BAM message (sashiko)
+- add a test that a single-frame broadcast reaches a receiver only
+  with SO_BROADCAST
+- assert that PGN_PDU1 has PS 0, that both PGNs are valid, and that
+  SA_TX and SA_RX are two different unicast addresses
+- rebuild the tests when clock-helpers.h changes
+- link j1939_helpers.c into the J1939 test binaries
 
-Patch #2 sets this state in the bond driver according to the port's Rx
-state and notifies about Rx state changes. The team driver keeps setting
-it according to the Tx state.
+Changes in v2:
+- drop the Assisted-by trailer; the cover letter says how an LLM was used
+- wrap at 80 columns and fix the checkpatch warnings (Marc)
+- name the message sizes and add static asserts for them
+- return bool from helpers named *_ok()
+- sort the Makefile lists, config and .gitignore; derive TEST_GEN_FILES
+  from TEST_PROGS
+- add CONFIG_CAN_RAW to config here, not in the opts patch: every test
+  needs it
+- the wrapper no longer sets J1939_TEST_PROG
+- say why a round trip failed instead of printing a stale errno
+  (sashiko)
+- say that size_boundaries checks only the payload, not the transport
+  (sashiko)
+---
+ tools/testing/selftests/net/can/.gitignore         |   1 +
+ tools/testing/selftests/net/can/Makefile           |  13 +-
+ tools/testing/selftests/net/can/config             |   3 +
+ tools/testing/selftests/net/can/j1939_helpers.c    |  11 +
+ tools/testing/selftests/net/can/j1939_helpers.h    |   8 +
+ tools/testing/selftests/net/can/test_j1939_base.c  | 239 +++++++++++++++++++++
+ tools/testing/selftests/net/can/test_j1939_base.sh |   7 +
+ 7 files changed, 280 insertions(+), 2 deletions(-)
 
-Patch #3 changes mlxsw to enable collection independently of
-distribution. Other drivers keep using the Tx enabled state, so their
-behavior does not change.
-
-Patch #4 adds a selftest for the Rx notifications (i.e., entering /
-leaving COLLECTING state).
-
-Patch #5 masks the Collecting bit in transmitted LACPDUs until the
-notification about the Rx state change has been delivered.
-
-Patch #6 adds a selftest for the previous patch.
-
-Ido Schimmel (6):
-  net: Add Rx enabled state to LAG lower state information
-  bonding: 3ad: Notify Rx state changes
-  mlxsw: Enable LAG collector independently of distributor
-  selftests: bonding: Test notifications in COLLECTING state
-  bonding: 3ad: Advertise Collecting only after collection is enabled
-  selftests: bonding: Test that Collecting is advertised after
-    notification
-
- drivers/net/bonding/bond_3ad.c                | 24 ++++-
- drivers/net/bonding/bond_main.c               |  4 +
- .../net/ethernet/mellanox/mlxsw/spectrum.c    | 15 +++
- drivers/net/net_failover.c                    |  1 +
- drivers/net/team/team_core.c                  |  1 +
- include/linux/netdevice.h                     |  3 +-
- include/net/bonding.h                         | 25 ++++-
- .../bonding/bond_lacp_independent_control.sh  | 94 ++++++++++++++++++-
- 8 files changed, 159 insertions(+), 8 deletions(-)
+diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/selftests/net/can/.gitignore
+index 30cd8b40d0f885fdf8c3855d231c9d3ec7c7c112..e566019425c84f362d9cb0dffc5e733dc90a4ce1 100644
+--- a/tools/testing/selftests/net/can/.gitignore
++++ b/tools/testing/selftests/net/can/.gitignore
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ j1939_gw
++test_j1939_base
+ test_raw_filter
+diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
+index 7f16586006104652c9872008d3eec860416486ed..ee677904c74537037e7e64ae73a177fe3b2f3a38 100644
+--- a/tools/testing/selftests/net/can/Makefile
++++ b/tools/testing/selftests/net/can/Makefile
+@@ -4,14 +4,23 @@ top_srcdir = ../../../../..
+ 
+ CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
+ 
+-TEST_PROGS := test_raw_filter.sh
++LOCAL_HDRS := j1939_helpers.h j1939_tests.h ../../clock-helpers.h
++
++TEST_PROGS := \
++	test_j1939_base.sh \
++	test_raw_filter.sh \
++# end of TEST_PROGS
+ 
+ TEST_FILES := j1939_lib.sh
+ 
+ TEST_INCLUDES := ../lib.sh $(wildcard ../lib/sh/*.sh)
+ 
+-TEST_GEN_FILES := test_raw_filter
++# each .sh in TEST_PROGS runs the binary of the same name
++TEST_GEN_FILES := $(TEST_PROGS:.sh=)
+ # sets up the CAN gateway for j1939_lib.sh
+ TEST_GEN_FILES += j1939_gw
+ 
+ include ../../lib.mk
++
++# the J1939 tests link the shared helper code
++$(filter $(OUTPUT)/test_j1939_%,$(TEST_GEN_FILES)): j1939_helpers.c
+diff --git a/tools/testing/selftests/net/can/config b/tools/testing/selftests/net/can/config
+index 188f7979667097071401f84cc8e81d17f838af85..e124727f63b6464742ef0723cd748c10f3b96ff1 100644
+--- a/tools/testing/selftests/net/can/config
++++ b/tools/testing/selftests/net/can/config
+@@ -1,3 +1,6 @@
+ CONFIG_CAN=m
+ CONFIG_CAN_DEV=m
++CONFIG_CAN_GW=m
++CONFIG_CAN_J1939=m
++CONFIG_CAN_RAW=m
+ CONFIG_CAN_VCAN=m
+diff --git a/tools/testing/selftests/net/can/j1939_helpers.c b/tools/testing/selftests/net/can/j1939_helpers.c
+index c33080708a6bd540469a80a064632708fdf34865..57a2e2219055a45754bc4bb2911c6ec485da06d0 100644
+--- a/tools/testing/selftests/net/can/j1939_helpers.c
++++ b/tools/testing/selftests/net/can/j1939_helpers.c
+@@ -221,6 +221,17 @@ ssize_t recv_timeout(int s, void *buf, size_t len,
+ 	return recv(s, buf, len, 0);
+ }
+ 
++bool recv_none_ok(int s)
++{
++	struct pollfd pfd = { .fd = s, .events = POLLIN };
++	uint8_t drop;
++
++	if (poll(&pfd, 1, J1939_NEG_RECV_TIMEOUT_MS) == 0)
++		return true;
++	recv(s, &drop, sizeof(drop), MSG_DONTWAIT);
++	return false;
++}
++
+ bool recvfrom_verify_ok(int s, const void *want, size_t len,
+ 			int timeout_ms, struct sockaddr_can *src)
+ {
+diff --git a/tools/testing/selftests/net/can/j1939_helpers.h b/tools/testing/selftests/net/can/j1939_helpers.h
+index 62b7502a688ce5a48d98cb50c084b065962f1b34..941e6573f815f08cbf95d8b3f6e6fd5a90211423 100644
+--- a/tools/testing/selftests/net/can/j1939_helpers.h
++++ b/tools/testing/selftests/net/can/j1939_helpers.h
+@@ -216,6 +216,14 @@ int open_raw(void);
+ ssize_t recv_timeout(int s, void *buf, size_t len,
+ 		     int timeout_ms);
+ 
++/*
++ * Return true if poll() on s times out after J1939_NEG_RECV_TIMEOUT_MS.
++ * Otherwise (a message, a socket error or a poll() failure) do one recv()
++ * with MSG_DONTWAIT and return false. That recv() drops a waiting message
++ * or clears a pending socket error.
++ */
++bool recv_none_ok(int s);
++
+ /*
+  * recvfrom() one message on s within timeout_ms, check that it is the len
+  * bytes in want, and return the sender in *src unless src is NULL. The buffer
+diff --git a/tools/testing/selftests/net/can/test_j1939_base.c b/tools/testing/selftests/net/can/test_j1939_base.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..73f15dbb53e52b824130e7629fe416a000b983a8
+--- /dev/null
++++ b/tools/testing/selftests/net/can/test_j1939_base.c
+@@ -0,0 +1,239 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/*
++ * J1939 base functional selftests.
++ *
++ * Send between SOCK_DGRAM/CAN_J1939 sockets over a vcan interface and verify
++ * payload integrity across the transport-size transitions:
++ * a single frame (PDU1), Transport Protocol, Extended Transport Protocol, the
++ * exact boundaries between them, and single-frame and BAM broadcast (PDU2).
++ *
++ * Run by test_j1939_base.sh, see j1939_tests.h.
++ */
++#include <errno.h>
++
++#include "kselftest_harness.h"
++#include "j1939_tests.h"
++
++/* arbitrary addresses and PGNs, within the asserts below */
++#define SA_TX			0x80
++#define SA_RX			0x90
++#define PGN_PDU1		0x0ab00	/* destination specific */
++#define PGN_PDU2		0x0feee	/* broadcast */
++_Static_assert(J1939_IS_PDU1(PGN_PDU1) && !J1939_IS_PDU1(PGN_PDU2),
++	       "PGN_PDU1 must be PDU1 and PGN_PDU2 must be PDU2");
++_Static_assert((PGN_PDU1 & UINT8_MAX) == 0,
++	       "the kernel rejects a PDU1 PGN whose PS byte is not 0");
++_Static_assert(PGN_PDU1 <= J1939_PGN_MAX && PGN_PDU2 <= J1939_PGN_MAX,
++	       "PGN_PDU1 and PGN_PDU2 must be valid PGNs");
++_Static_assert(SA_TX != SA_RX && SA_TX <= J1939_MAX_UNICAST_ADDR &&
++	       SA_RX <= J1939_MAX_UNICAST_ADDR,
++	       "SA_TX and SA_RX must be two different unicast addresses");
++
++/* An arbitrary TP size inside the TP range, and one that needs ETP. */
++#define TP_SIZE			128
++#define ETP_SIZE		2000
++_Static_assert(TP_SIZE > J1939_SF_MAX_SIZE, "TP_SIZE must need TP");
++_Static_assert(TP_SIZE < J1939_TP_MAX_SIZE, "TP_SIZE must fit TP");
++_Static_assert(ETP_SIZE > J1939_TP_MAX_SIZE, "ETP_SIZE must need ETP");
++
++/*
++ * Longest gap the spec allows before a BAM data packet (SAE J1939-21:2001
++ * section 5.12.3). The kernel waits 50 ms, see j1939_session_tx_rts() and
++ * j1939_session_tx_dat().
++ */
++#define BAM_PKT_GAP_MAX_MS	200
++
++FIXTURE(j1939_base)
++{
++	int ifindex;
++	int tx;
++	int rx;
++	int rx_no_bcast;	/* a receiver without SO_BROADCAST */
++	bool bcast;
++};
++
++FIXTURE_SETUP(j1939_base)
++{
++	self->tx = -1;
++	self->rx = -1;
++	self->rx_no_bcast = -1;
++	J1939_SETUP_IFINDEX(self);
++}
++
++FIXTURE_TEARDOWN(j1939_base)
++{
++	if (self->tx >= 0)
++		close(self->tx);
++	if (self->rx >= 0)
++		close(self->rx);
++	if (self->rx_no_bcast >= 0)
++		close(self->rx_no_bcast);
++}
++
++/*
++ * Set up a receiver bound to (rx_addr, pgn) and a sender bound to SA_TX and
++ * connected to (tx_dst, pgn). Any pair opened by a previous call is closed
++ * first. bcast opens both sockets with J1939_OPEN_BCAST, for the PDU2 and BAM
++ * tests.
++ */
++static bool pair_up_ok(FIXTURE_DATA(j1939_base) *self, uint8_t rx_addr,
++		       uint8_t tx_dst, pgn_t pgn, bool bcast)
++{
++	int flags = bcast ? J1939_OPEN_BCAST : J1939_OPEN_NONE;
++
++	self->bcast = bcast;
++	if (self->tx >= 0) {
++		close(self->tx);
++		self->tx = -1;
++	}
++	if (self->rx >= 0) {
++		close(self->rx);
++		self->rx = -1;
++	}
++
++	self->rx = j1939_open_flags(self->ifindex, J1939_NO_NAME, rx_addr, pgn,
++				    flags);
++	if (self->rx < 0) {
++		fprintf(stderr, "# open rx failed: %d\n", errno);
++		return false;
++	}
++
++	self->tx = j1939_open_flags(self->ifindex, J1939_NO_NAME, SA_TX,
++				    J1939_NO_PGN, flags);
++	if (self->tx < 0) {
++		fprintf(stderr, "# open tx failed: %d\n", errno);
++		return false;
++	}
++
++	if (!j1939_connect_ok(self->tx, self->ifindex, tx_dst, pgn)) {
++		fprintf(stderr, "# connect tx failed: %d\n", errno);
++		return false;
++	}
++
++	return true;
++}
++
++/*
++ * Send a deterministic payload of the given size on tx and verify it is
++ * received byte for byte on rx.
++ */
++static bool roundtrip_ok(FIXTURE_DATA(j1939_base) *self, size_t size)
++{
++	int timeout_ms = J1939_RECV_TIMEOUT_MS;
++	uint8_t *tx_buf;
++	bool ok;
++
++	/* a BAM message arrives only after all its packet gaps */
++	if (self->bcast && size > J1939_SF_MAX_SIZE)
++		timeout_ms += J1939_NUM_PKTS(size) * BAM_PKT_GAP_MAX_MS;
++
++	tx_buf = malloc(size);
++	if (!tx_buf) {
++		fprintf(stderr, "# alloc failed\n");
++		return false;
++	}
++	fill_pattern(tx_buf, size);
++
++	errno = 0;
++	ok = send_recv_verify_ok(self->tx, self->rx, tx_buf, size, timeout_ms);
++	if (!ok)
++		fprintf(stderr, "# round-trip failed at size %zu: %s\n", size,
++			errno ? strerror(errno) : "no or wrong data");
++
++	free(tx_buf);
++	return ok;
++}
++
++/* Largest single frame, unicast PDU1. */
++TEST_F(j1939_base, single_frame_pdu1)
++{
++	ASSERT_TRUE(pair_up_ok(self, SA_RX, SA_RX, PGN_PDU1, false));
++	EXPECT_TRUE(roundtrip_ok(self, J1939_SF_MAX_SIZE));
++}
++
++/* Transport Protocol, unicast. */
++TEST_F(j1939_base, tp_roundtrip)
++{
++	ASSERT_TRUE(pair_up_ok(self, SA_RX, SA_RX, PGN_PDU1, false));
++	EXPECT_TRUE(roundtrip_ok(self, TP_SIZE));
++}
++
++/* Extended Transport Protocol, unicast. */
++TEST_F(j1939_base, etp_roundtrip)
++{
++	ASSERT_TRUE(pair_up_ok(self, SA_RX, SA_RX, PGN_PDU1, false));
++	EXPECT_TRUE(roundtrip_ok(self, ETP_SIZE));
++}
++
++/*
++ * Sizes on both sides of the single frame / TP and TP / ETP limits. Only the
++ * payload is checked here, not which transport carried it.
++ */
++TEST_F(j1939_base, size_boundaries)
++{
++	static const size_t sizes[] = {
++		J1939_SF_MAX_SIZE, J1939_SF_MAX_SIZE + 1,
++		J1939_TP_MAX_SIZE, J1939_TP_MAX_SIZE + 1,
++	};
++	size_t k;
++
++	for (k = 0; k < ARRAY_SIZE(sizes); k++) {
++		ASSERT_TRUE(pair_up_ok(self, SA_RX, SA_RX, PGN_PDU1, false));
++		EXPECT_TRUE(roundtrip_ok(self, sizes[k]))
++			TH_LOG("failed at boundary size %zu", sizes[k]);
++	}
++}
++
++/* Single-frame broadcast, PDU2. */
++TEST_F(j1939_base, single_frame_broadcast_pdu2)
++{
++	ASSERT_TRUE(pair_up_ok(self, SA_RX, J1939_NO_ADDR, PGN_PDU2, true));
++	EXPECT_TRUE(roundtrip_ok(self, J1939_SF_MAX_SIZE));
++}
++
++/* BAM (broadcast transport). */
++TEST_F(j1939_base, bam_broadcast)
++{
++	ASSERT_TRUE(pair_up_ok(self, SA_RX, J1939_NO_ADDR, PGN_PDU2, true));
++	EXPECT_TRUE(roundtrip_ok(self, TP_SIZE));
++}
++
++/* A single-frame broadcast reaches only a receiver with SO_BROADCAST. */
++TEST_F(j1939_base, bcast_needs_so_broadcast)
++{
++	uint8_t second_buf[J1939_SF_MAX_SIZE];
++	uint8_t tx_buf[J1939_SF_MAX_SIZE];
++	int enable = 1;
++
++	fill_pattern(tx_buf, sizeof(tx_buf));
++	memcpy(second_buf, tx_buf, sizeof(second_buf));
++	second_buf[0] ^= UINT8_MAX;
++	ASSERT_TRUE(pair_up_ok(self, SA_RX, J1939_NO_ADDR, PGN_PDU2, true));
++	self->rx_no_bcast = j1939_open(self->ifindex, SA_RX, PGN_PDU2);
++	ASSERT_GE(self->rx_no_bcast, 0)
++		TH_LOG("open rx_no_bcast failed: %d", errno);
++
++	/* the receiver with SO_BROADCAST shows that the frame went out */
++	ASSERT_TRUE(send_recv_verify_ok(self->tx, self->rx, tx_buf,
++					sizeof(tx_buf), J1939_RECV_TIMEOUT_MS));
++	EXPECT_TRUE(recv_none_ok(self->rx_no_bcast))
++		TH_LOG("a receiver without SO_BROADCAST got a frame or error");
++
++	/*
++	 * Set SO_BROADCAST and send a second frame. It must arrive now.
++	 * That shows the first frame was dropped for the missing flag,
++	 * not for another reason. The second frame has its own payload,
++	 * so a late first frame cannot be mistaken for it.
++	 */
++	ASSERT_EQ(setsockopt(self->rx_no_bcast, SOL_SOCKET, SO_BROADCAST,
++			     &enable, sizeof(enable)), 0);
++	EXPECT_TRUE(send_recv_verify_ok(self->tx, self->rx_no_bcast,
++					second_buf, sizeof(second_buf),
++					J1939_RECV_TIMEOUT_MS))
++		TH_LOG("second broadcast missing or not the expected payload");
++}
++
++int main(int argc, char **argv)
++{
++	return j1939_test_main(argc, argv, 0);
++}
+diff --git a/tools/testing/selftests/net/can/test_j1939_base.sh b/tools/testing/selftests/net/can/test_j1939_base.sh
+new file mode 100755
+index 0000000000000000000000000000000000000000..dd19cd469651a7b48a799f1d1337041972f2be14
+--- /dev/null
++++ b/tools/testing/selftests/net/can/test_j1939_base.sh
+@@ -0,0 +1,7 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# test_j1939_base opens no CAN_RAW socket
++# shellcheck disable=SC2034 # read by j1939_lib.sh
++J1939_NO_PEER=1
++source "$(dirname "$0")/j1939_lib.sh"
 
 -- 
-2.56.0
+2.47.3
 
