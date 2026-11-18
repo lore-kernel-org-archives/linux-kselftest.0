@@ -1,45 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795009747;
-	b=lji9x8VrleceZF2xv97ZaR3voEW+6drIV5muDEOTsfs8uF/URmTiQsyzJ8xnMKreyhF3
-	 rG1/i2q7UBP8T6o7QVlwpq4JwvFyxEOCqN2m81n61KvwBojTHvE02KESrevDbO0WuE134
-	 m90ItUtatd0el+rdkIj2/sfLBof9wESPmBZGwP3dneDoq5IpKe8Xql4rDmIPAbI0GuTXz
-	 AvFgUs71c86tB/oI/8Yms7kJuLWQ7u8WtZlG+6M2UWUCCHt+WKFgbneqH5By9qiTBMQCD
-	 B/mD7ytGv6OWIhtCTXG1L2EebrcBG3BHaVXnDI+MhY7VKU3a4fsBRudjIVSdBfUzmhQ==
+	t=1795009864;
+	b=sDt35tPd0Yz46LpcQ7bfA0zX39puQZRNAt7j1m8zTrAkE/h/dZPA4K3+8VYGmb0hEkY8
+	 vltxbLbA489yXAvcDbw4udN4WxZcai2DdoTlbr6PYbnFGFKni3MblQnJ+7Pn3+XCa302A
+	 nUW4G7fqH2a6Fuf5gy5SKIN4fczFwbO64mIJOE/JlseZne2ZXuW8Rg6DxXC9fMwgApmaX
+	 MjxUGB1FMd4A5wFQ1y1SVBnWK7PC/iYOjy3jzyJp2RwfzpE1r4FqK4EThjjndsd/nu8oU
+	 DbKjnZLzodthIdwhDee1s5ozsq2NzBxjZYby+XyNCbhdnUQrotOVY5GdoI1bvjb0HKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795009747;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Lf9IjcA2+oZMwxII2T5OD9H6hKAKYAUPWKlQiPhHjMg=;
-	b=hxVrvi6/zNsM8VAVay0H2KGYA8HMMfJVfTpyjtpSSk9ksOjaYp0vTCGNk4wmxReFFuz1
-	 uYWplrOGgF+3CoPBHvjc3cgXx+TSi2P8GQ451RF6GnxxsLSkxFdAd5XQHlbVi/UH0s7ei
-	 rtSFTAA6eTPMWHAwfa6sizSCpziaEn/pCvVz8TRKO4JxnDZZuEMH4UHsGZ9ppzC/fIU4m
-	 P4I7IlHf5D/MjM3uzG35VO0Ijxmu1o8szlncR4wTt6sCS4AYwzIl7IQyIOng5fHItTF8s
-	 GJrYbyWVAj9TAlcFhxkOm0twVqzHtPa6poAHKT3SRz7voDWIW5QS7JEpILrBK37OKRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795009864;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=Xv6ZLSbP6n9Fqjz3yHGKwGABvgK8NbihdmkMj0RD7OU=;
+	b=VeGf3tRFo9IlCdN5zprXb5leZueZZ6E7MgWMxUQ2N5CVAiduumWWag8+pxqsT32kkPFf
+	 0BuanA0vZR0GlDyUhQ0DaS7U7RKUaJQHvpdqOzmRtjKGdb9pngjRWNdrcn3nriCTpu2If
+	 xmMXpo2U3G1/I81HHLtJdrhDeKSCFjRxwZ4v1kuD8c8FZMO5kmyKOu1TKLntyXCU4nWqZ
+	 SJXDb7Ueqo1ReeZxvftCdB48+sReNq7QcfygvibTK2lqoIUn8U/bd1BFJKGQGwDHMd7zO
+	 3q8EcMRRIHOcFvtYJtdWNd6N4+Dr8AHflnju0XgTcXEjNe4XVkZCa/AZc8WTtdEm46w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CoLY0off;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=lSWxA4eB;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35010606A33F;
-	Wed, 18 Nov 2026 13:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11DAE606A31C;
+	Wed, 18 Nov 2026 13:51:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11DAE606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CoLY0off
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8CFD1F000CB;
-	Wed, 18 Nov 2026 13:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795009747;
-	bh=Lf9IjcA2+oZMwxII2T5OD9H6hKAKYAUPWKlQiPhHjMg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CoLY0offtUoehSU0pfUjtBAVA181JYa2POkTHHcFfM5OZa2QqBkjiINTqBnP6IYT1
-	 S0oTZF5X6GGrn6PlyKl/OiPoMp9jhlTgKOn7Rz1E1z6DrW3ce99hAkhlFcK46x5X7z
-	 5Eq+er2X6Py1mHOGaqfj09HG41fVTCgcvrt3Mvla1rT+4uAI8xgY6DLqXiJmIVQZRN
-	 vg+kUVRDr8bTW1j9tSSB4Uxo4uTMY3OKDEvdvvAGV5QhL8wbqcRDB8hM2u10PKcsAF
-	 uqLB6nEsbV4jDkyjUqiGmXXo4TI9YPai25yTPp74HfrkGDQ0aKfm7EIkDLugboK5mZ
-	 cL5Ei7yRfijgg==
-Content-Type: multipart/mixed; boundary="===============4220229775293101488=="
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=lSWxA4eB
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Xv6ZLSbP6n9Fqjz3yHGKwGABvgK8NbihdmkMj0RD7OU=; b=lSWxA4eB5bPX/y/32M3w5C7/M0
+	2eVPLLtSf/Y8ZLm7VJAFzm97q/ieD+h5+g62xiaSU5XTHv5YxiDJaS/qpHSdUdYCA8mQnWx/KbSPI
+	VGqdhMuGDvs8b8oK2ziJB7l/qN8JlloMbIvpbaIJAbYI3fsdfCGai3JJw4MMJQRtNAyO9oCapLN/x
+	rMZLyVJNBjcvihA2UDune6ANtdrgjlyArvxX1pBsOOnzxeEgI6alJYNr2RX6hMA5oU5OOsG/q5QOm
+	lC9ficajCKBuQE/kLerGwfqIIkA8Bh+qubJsFRtn9gwOZr+Rsj5z/odxFkLTwDmfusdzR4Yf8L2jW
+	9kzAjV5g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xTg3q-0000000G61F-0eLq;
+	Wed, 18 Nov 2026 13:50:55 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 736E630057F; Wed, 18 Nov 2026 14:50:52 +0100 (CET)
+Date: Wed, 18 Nov 2026 14:50:52 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Fernand Sieber <sieberf@amazon.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Daniel Bristot de Oliveira <bristot@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, nh-open-source@amazon.com,
+	Fahad Mubeen <fmubeen@amazon.de>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Misha Karataiev <karataev@amazon.com>,
+	Hendrik Borghorst <hborghor@amazon.de>,
+	Ibrahim Elshahed <lshahed@amazon.de>
+Subject: Re: [PATCH 2/5] sched/core: Keep a sibling's DL server link in the
+ core-wide pick
+Message-ID: <20261118135052.GX1779021@noisy.programming.kicks-ass.net>
+References: <20261112161548.78189-1-sieberf@amazon.com>
+ <20261112161548.78189-3-sieberf@amazon.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,113 +83,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <59496aca38bf7cf3d4d3e11d5ac32e144ae92bf9fa8b3d2420ae65464fea51df@mail.kernel.org>
-In-Reply-To: <20261118131029.797007-4-cui.tao@linux.dev>
-References: <20261118131029.797007-4-cui.tao@linux.dev>
-Subject: Re: [RFC PATCH v14 3/4] selftests/bpf: add iocost cost model test
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk,ast@kernel.org,alexei.starovoitov@gmail.com
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 18 Nov 2026 13:49:04 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261112161548.78189-3-sieberf@amazon.com>
 
---===============4220229775293101488==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Nov 12, 2026 at 06:15:45PM +0200, Fernand Sieber wrote:
+> The core-wide selection records in rq_i->core_dl_server the DL server
+> each sibling's pick came through, then clears it for every sibling in
+> the cookie matching loop, including when the pick is kept. The sibling
+> takes the fast path, which sets rq->dl_server from rq->core_dl_server,
+> and runs the task its server picked with p->dl_server NULL. Only the
+> selecting CPU keeps the link, as its pick goes through rq->dl_server.
+> 
+> A running task is ranked for core scheduling by p->dl_server. While
+> such a task runs on a sibling, each following core-wide selection
+> ranks it as a plain fair or ext task rather than by its server's
+> deadline, so a higher class task on another sibling takes the core
+> back before the server's runtime is used. The RV nomiss monitor, which
+> follows the server through next->dl_server at sched_switch, does not
+> see the server run either.
+> 
+> Keep the server that pick_task() left in rq_i->dl_server. With the
+> previous patch it is NULL when the class pick was replaced. Drop the
+> assignment in the first loop, which the matching loop always
+> overwrites.
+> 
+> Fixes: bd9bbc96e835 ("sched: Rework dl_server")
+> Signed-off-by: Fernand Sieber <sieberf@amazon.com>
+> ---
+>  kernel/sched/core.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f7ac13186ee59..61d4e6e990bba 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -6431,7 +6431,6 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
+>  		}
+>  
+>  		rq_i->core_pick = p;
+> -		rq_i->core_dl_server = rq_i->dl_server;
+>  
+>  		if (!max || prio_less(max, p, fi_before))
+>  			max = p;
+> @@ -6462,7 +6461,7 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
+>  		}
+>  
+>  		rq_i->core_pick = p;
+> -		rq_i->core_dl_server = NULL;
+> +		rq_i->core_dl_server = rq_i->dl_server;
+>  
+>  		if (p == rq_i->idle) {
+>  			if (rq_i->nr_running) {
 
-> selftests/bpf: add iocost cost model test
+Isn't this broken in the face of a rq->lock drop through pick_task() ?
 
-TL;DR: In the iocost selftest, the setns() unwind on the skip path may reset
-test_progs' cwd to "/" (and possibly leave a chroot), so later unrelated tests
-could fail with -ENOENT when null_blk is unavailable.
+Consider this does:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+  SMT0: pick_task()
+  SMT1: pick_task()
+          drop rq->lock
+	    newidle
 
-[ ... ]
+  SMT0: rq_0->core_dl_server = rq_0->dl_server;
 
-> +static bool iocost_test_env(void)
-> +{
 
-[ ... ]
+I am reworking all of that somewhere, but delaying saving rq->dl_server
+like this feels fragile.
 
-> +	/*
-> +	 * Isolate the configfs and cgroup mounts from the host. A
-> +	 * failed setup unwinds the namespace so that a later retry does
-> +	 * not stack private namespaces.
-> +	 */
-> +	orig_ns = open("/proc/self/ns/mnt", O_RDONLY);
-> +	if (unshare(CLONE_NEWNS) ||
-> +	    mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL)) {
-> +		printf("%s:SKIP:cannot make mounts private: %s\n",
-> +		       __func__, strerror(errno));
-> +		test__skip();
-> +		goto out;
-> +	}
-> +	mkdir("/sys/kernel/config", 0755);
-> +	(void)mount("none", "/sys/kernel/config", "configfs", 0, NULL);
-> +	SYS_NOFAIL("modprobe null_blk nr_devices=0");
-> +	if (access("/sys/kernel/config/nullb", W_OK)) {
-> +		printf("%s:SKIP:needs null_blk with configfs support\n",
-> +		       __func__);
-> +		test__skip();
-> +		goto out;
-> +	}
-> +
-> +	ready = true;
-> +	ok = true;
-> +
-> +out:
-> +	if (orig_ns >= 0) {
-> +		if (!ok)
-> +			setns(orig_ns, CLONE_NEWNS);
-> +		close(orig_ns);
-> +	}
-> +	return ok;
-> +}
-
-When a prerequisite check fails after unshare(CLONE_NEWNS), for example
-when access("/sys/kernel/config/nullb", W_OK) fails because null_blk is
-not built, not installed, or modprobe is missing, this goes back with
-setns(orig_ns, CLONE_NEWNS).
-
-Can this change the cwd of the test_progs process?  mntns_install() in
-fs/namespace.c ends with:
-
-	/* Update the pwd and root */
-	set_fs_pwd(fs, &root);
-	set_fs_root(fs, &root);
-
-unshare() keeps the cwd, so only this skip path moves the process to "/".
-
-The serial tests run in the test_progs main process, so the new cwd
-persists for every test that runs afterwards.  Many of those open objects
-by cwd-relative path, for example serial_test_kfree_skb() loading
-"./test_pkt_access.bpf.o", select_reuseport.c opening
-"test_select_reuseport_kern.bpf.o", and l4lb_all.c using "test_l4lb.bpf.o".
-The flavored runners also lose the chdir() done by cd_flavor_subdir().
-
-So on a kernel with the iocost BPF support but no usable null_blk, would
-the iocost tests report SKIP and then unrelated tests fail with -ENOENT?
-If test_progs runs inside a chroot, does the root reset also leave the
-chroot?
-
-The comment says the unwind exists "so that a later retry does not stack
-private namespaces", but serial_test_iocost_model() and
-serial_test_iocost_model_streams() call cgroup_setup_and_join(), and
-setup_cgroup_environment() calls unshare(CLONE_NEWNS) every time, so
-namespaces stack regardless.
-
-Would it work to drop the setns() unwind and cache the failure in a
-static, or to save the cwd with open(".", O_RDONLY | O_DIRECTORY) before
-unshare() and fchdir() back to it after setns()?
-
+Can't we fold the first two patches into something like so?
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44312765238
---===============4220229775293101488==--
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 175b52a7ea79..68b980ddf88f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6453,10 +6453,16 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
+ 				p = sched_core_find(rq_i, cookie);
+ 			if (!p)
+ 				p = idle_sched_class.pick_task(rq_i, rf);
++
++			/*
++			 * Neither a core tree pick nor idle comes through a
++			 * DL server; drop the one the replaced pick left.
++			 */
++			rq_i->dl_server = NULL;
+ 		}
+ 
+ 		rq_i->core_pick = p;
+-		rq_i->core_dl_server = NULL;
++		rq_i->core_dl_server = rq_i->dl_server;
+ 
+ 		if (p == rq_i->idle) {
+ 			if (rq_i->nr_running) {
