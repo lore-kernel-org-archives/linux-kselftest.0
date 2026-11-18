@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.158
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.127
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794966941;
-	b=2j0OXC7mjiuUIUYndngZOAh4lAgiJYLvloeNHGUFQMTnhjxiwtU6BfJKWrFAdDOBFhDB
-	 pWJg23x28RqgEbN5Q9jLXMPmsU2HfaO6qKsa1oBi76PukDd0di8AC5AWrMoEoLJL8bTU7
-	 a5fEg9U7wSldV9sCHddn668+dVxH7rfyCX9krrPfwA2tZyBM6drRd5xclEGLS+DyQcE7y
-	 ZcqgqbebI3PYSG3fKb0kAVBJFa/7mkjignX3NuVLoxGUveMPleU/eCPz6XBir8Dr0kt5L
-	 ndrBym0t7vQOVAhvV/xvFr0Qfv3K04gZgeJdE206EbPr5hlELgzkY9XYNSbF3zSWvWg==
+	t=1794966983;
+	b=DBW/xZq4Ph8dtHew9TYXRQBMTJPdNHhwOQIYf8PowbZaZmoqM5+VJiyMuFJlH2KJ/mlA
+	 aCNDE5NdkEuuz8OaMIWEEraTWz8llhhWY2LF/VWpmgZM5/a7FMYjP/dxnX6ztacUuSIDX
+	 LE4hP9bZitM7nScY6gQi8eOfL/Yn5hgZg6r0x1E1GzuiYSpUOA2pyH4+46my4H5PvRkbf
+	 0wWO1gs3VxDRzFXkPVo9zE5QI2yl16K0TU1df1hHZpjhVtiJ2FC02CmHowxXo9o6uhSW/
+	 A3HMlwdIcgf8ILjH3Fk2Aw8GkgVQDA7ltlROk7anx7W/spc8H5S5vZTQYkZta0pYMAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794966941;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794966983;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=n6+eDFFvL/Wsk0eeysYpdGNLwTPv8Y7kp0pCYvn78f0=;
-	b=QTEwoBelJD/4kEYlbUqJ86YQ0KtVTP2T2bpn7CaxwxfJctdoc/sPo/Fn2k4bk8s5jdMQ
-	 vOScZKIyuMDIaXcC3FhzZfppM7AwLG4Q7taBtdRXTsdqFDiRJQwITA+Z0gb5nXJCiVq4h
-	 xiNHorXBj6faRXbsH32lKjuRFr4MAZkP5Gw4cThwJQ/mn3EmgxhUkbvjeZSS4kox/E015
-	 2R20uJuXMj7Eq7rqjE30gWz9x891CEb+nK/iYZnSo0wgbJ9GdtY3L7N5vfgh45TrKWfBl
-	 O7lz/JX34n3x0+Jq94nTbcbUSm3A/ukWCFmYFwFcYKOFDPQP58tvTnj573bCzUhxqhA==
+	bh=PEzaiXe/BwYn0wyikcZkU7jHpGSWF5KdLHubwn3Rz8c=;
+	b=YD5wO+THw6LDfEBt/B1sPoTnKELM3GDmtuo2tXl17Tz2CiYsvHWhjOb05PvFFHdvfIXu
+	 Sg1MgQlORCZUEFlNEChZzk50BwyFKoIkDFWdFsnWoE0vfrQLAN0OlpmuU4WqA6DFg0Cdu
+	 W4m4n+wqfeSTBrzwL8c6EYznrgQZ9LFvXa89oZ7qKFSByJaecCSCQuepzyJTZtozLJiTp
+	 ubMJZfTQVoyve1tVbxhIXS9Mu/T3q/j2JexEADekjz7WZDLpOIDlTc1a4Zm5X7VuZiYUh
+	 UKyyVIbbglHs0VycWnVx0ZJQeAQeZWQZN91PU7KEASUySqhFZuPYu8aJpdisyf7NAcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GgIYDdkN;
-	arc=none smtp.remote-ip=91.218.175.158
-Received: from mta0.migadu.com (out-158.mta0.migadu.com [91.218.175.158])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=c+Yl5ksu;
+	arc=none smtp.remote-ip=95.215.58.127
+Received: from mta1.migadu.com (out-127.mta1.migadu.com [95.215.58.127])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B2E60A2627
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 01:55:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7B2E60A2627
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACC4606A33D
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 01:56:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CACC4606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GgIYDdkN
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=c+Yl5ksu
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=inCj9hgFOM+3wUeyAcIWcO42wDOsOp5Vk/7hHTYE1G8=;
+DKIM-Signature: a=rsa-sha256; bh=y6rqbLvaakw1Vs5JNP6HAQoycmzxKnGquwpiedhS5iA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794966938; v=1; x=1795571738;
- b=GgIYDdkN89LjuVdl5y8CJdY0zGpkAa8UTyK6HGJFRvf99H8IWLM7mkVZsmfh+Eg3cgfUDG9x
- WdZR1txON9onqNfbhIEmx6STjl2UXJUGQfWkoNvDfNWDs13QGX6I+IVmeLLTTvKndio+lzR+4Yo
- pAYRcctm4kqK/9yL9LXBJqMs=
+ t=1794966981; v=1; x=1795571781;
+ b=c+Yl5ksuFks4bXzGXIRBhDrdwPDqKw8yjrT6MBVuUpOSj58OYSRyKfNNxoUUVjBtfaWI5GG3
+ 8yWN0EgwnjmEp2K/IjgfpfKA0EfhxE6qphLKWEtaVIv4rF9sf5GYXQY+qJ+GCIUvJJcixkfhY+q
+ aYPV2rid9dWX5dNT4RTzSUtI=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0ae421e0b46adfb2;
-	Wed, 18 Nov 2026 01:55:23 +0000
-X-Mizu-Trace-ID: 0ae421e0b46adfb2
+Received: by smtp.migadu.com with ESMTPS id e19851a3f875c143;
+	Wed, 18 Nov 2026 01:56:20 +0000
+X-Mizu-Trace-ID: e19851a3f875c143
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <8922213b-d734-4f43-9648-97b3fce1cfc6@linux.dev>
-Date: Wed, 18 Nov 2026 09:55:17 +0800
+Message-ID: <ff9a041f-27fa-425c-b2fa-4cb6a79670d3@linux.dev>
+Date: Wed, 18 Nov 2026 09:56:14 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,7 +59,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/9] bpf: Add log support for tracing
+Subject: Re: [PATCH bpf-next v2 2/9] bpf: Add log support for tracing_multi
  link_create
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
 Cc: Daniel Borkmann <daniel@iogearbox.net>,
@@ -77,47 +77,59 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
  linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  netdev@vger.kernel.org
 References: <20261114150610.84507-1-leon.hwang@linux.dev>
- <20261114150610.84507-2-leon.hwang@linux.dev>
- <DMX8G01GB597.2KEEFI12YK9V0@gmail.com>
+ <20261114150610.84507-3-leon.hwang@linux.dev>
+ <DMX8HR7NDP9V.CDDWGLZ98C0K@gmail.com>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <DMX8G01GB597.2KEEFI12YK9V0@gmail.com>
+In-Reply-To: <DMX8HR7NDP9V.CDDWGLZ98C0K@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/11/26 13:22, Alexei Starovoitov wrote:
+On 17/11/26 13:24, Alexei Starovoitov wrote:
 > On Sat, Nov 14, 2026 at 07:06 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>> -	if (!cnt || !uids)
+>> +	if (!cnt) {
+>> +		bpf_log(log, "tracing_multi.cnt cannot be zero.\n");
+>>  		return -EINVAL;
 > 
-> tldr: pls use uapi names where possible:
+> The user sees cnt == 0 in his own code.
+> He can't see which of up to 1 << 20 ids the kernel refuses.
+> That part stays silent:
 > 
->> +		bpf_log(log, "tgt_prog_fd and btf_id must be both set or both unset.\n");
+>   bpf_tracing_multi_attach()
+>     check_dup_ids()                      -EINVAL
+>     bpf_trampoline_multi_attach()
+>       bpf_check_attach_btf_id_multi()    -EINVAL, -ENOENT, -EOPNOTSUPP
+>         btf_attach_func_proto(NULL, btf, btf_id)
+>         btf_distill_func_proto(NULL, btf, t, tname, &tgt_info->fmodel)
 > 
-> The uapi fields are target_fd and target_btf_id.
-> tgt_prog_fd and btf_id are arguments of this function.
-> Patches 2, 3 and 4 say target_fd for the same field.
+> The last two have messages. They get NULL.
+> That loop runs before trampoline_lock_all(), so bpf_log() is fine there.
+> can we pass the log down and name the id ?
 > 
->> +			bpf_log(log, "Only allow re-attach for tracing and lsm progs.\n");
+>> +	if (cnt > MAX_TRACING_MULTI_CNT) {
+>> +		bpf_log(log, "tracing_multi.cnt is too large.\n");
+>>  		return -E2BIG;
 > 
-> I think this one misleads. A freplace prog can re-attach.
-> It has to pass target_fd and target_btf_id.
-> The comment above the check says so.
+> that's not a helpful message. -E2BIG says the same.
 > 
->> +			bpf_log(log, "Invalid attach_btf.\n");
+>> +	if (attr->link_create.flags) {
+>> +		bpf_log(log, "Invalid flags.\n");
+>>  		return -EINVAL;
 > 
-> attach_btf is a field of bpf_prog_aux. The user never set it.
-> NULL means that the prog was loaded with attach_prog_fd.
-> Such a prog can't re-attach at all.
+> Each value but zero is refused. "flags must be zero." would make it clear.
 > 
->> +		bpf_log(log, "Invalid kprobe_write_ctx.\n");
+>> -int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+>> +int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr,
+>> +			     struct bpf_verifier_log *log)
+>>  {
+>>  	return -EOPNOTSUPP;
 > 
-> Another bit of bpf_prog_aux.
-> The rule is that both progs write to pt_regs, or none.
+> The stub has the log now and knows the reason.
 > 
->> +			bpf_log(log, "Invalid tracing attach_type.\n");
-> 
-> LSM progs get here too.
+> Consider something like:
 
-Ack. Will update the log messages.
+Ack. Will do.
 
 Thanks,
 Leon
