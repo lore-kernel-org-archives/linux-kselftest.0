@@ -1,73 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.214
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794993582;
-	b=GC58+RLs0pCTyGiwWyWdLwAx61C1vF55T08eCENPJAV7RVbm4ff9RV7/kmbpiEjMMCNh
-	 N9ZiBRQtEPEcI4z5XT+de11uWo3qlVRj0N6++H5xWaDpwCDf7OXlsYGcGL02VEgVeEA/Z
-	 UuWC3bFer/SnBCC1mtyVMw8Wz6NdtDYnm/jq9YX1A8W1Xt2YvjcAq39ZscWgo1z8hUv7L
-	 PGu3xOyDWkmpb8Y7ax5+GgXnPMtnHrdxu2mHSaNoBjLPEludJCeXk6ITK/wlMY72VgXjz
-	 9i0UbOKn5F08UJy3Qp5Xi7M8uGsOXRRnUCAB76xQjK48WyXmRVswlNyh7RD3/FI67Mg==
+	t=1794994563;
+	b=uige0oKgeJWHNoG03Q1AnC9RbaARJdL19qZ9Cg6wcaiovz6lJg0OI4jSfLdshI6pv/KA
+	 jNTbX25cpcj4qJwBTfPw+8JDoufK3Fvp/jbnvx0D+tUohfBDDtOjT6dOISs3ecs2GGbYo
+	 G5AThHr8o3ab/U7fSBbVlYmKRXC77kzPLvdQgTB7LxWQH9yN/WhNIVZugbODndFujLfNz
+	 mBMbC3/TqZPWxIx7G3SPse7KNk8zpjbUjizLLu+bDk9ihboeT//pRIrBRvxjDfgQgjgpS
+	 zYvse4vQKSHZ1TPSXiDV5BeuXCMzxHxJKoPJumVuTsxW5B82CRCALk/SKsDf13HgYPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794993582;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794994563;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ri397ivyt6aPfQFFNso09dyLrQMfhGhibx0HBwogbaM=;
-	b=POaGIYCE/2+MbhAZoTOTGqXtazViTEVjTMasMftVw9eybcWWVLBwJ9J3NnzwCCfrukp8
-	 2OSi5FrjMnTXzTXQrZamjc1PmNjeZX98PX2CGStyKHFMVebAJg3pOXdY2Eo0hA14iY1pD
-	 u0in65YLhhImQDiWQU1pyYtKbYHvlKFYm1Mw0cUJzPb0TdVdWtYjwJ7QY8H2Z3JNUy9hv
-	 WWCim1TP5smGhB++U3/b8HMerxZi3YcS1PRUp+v2dTNvSdTMr7QOy5C4UKRNTXfNnkmKw
-	 GAHywFbr3UUOzb9cDM8J+JAuQJ3qoUTzaphnmvSo/8oD9eNQorsHuAyAnf6iYQB1zJQ==
+	bh=oEtrs9YN++TIvppEtfu/diqt2HKppGf1oq8L8HaJ3VE=;
+	b=JHHT6GeaZBO6zG1NBYKWec1cXinR97AX7khOViQRUydYGKs8oRGE8KnVjaK8LhOUL+ZW
+	 rYalF4yIvB1/GcW3Gh6XFeHnIQQU1RrVXzJKOiPSF/tmESHYxAltdbu8PyNrFbZKEOwoW
+	 ieHmCdmJqFi16QijcxgD4pZ7esxPiMB3xrxcFcFAMWg8QhqrDXE/hVlLi7NE9PhfQa48N
+	 m0UHIkDkylbLWRYiv7HzD98MIKFWkl4feBVjd+nwcBXkE1hu2exRzTREtQqK1NE7gs8si
+	 zlGbHK7KLZ6EWISue9p52Vro7wvl3vAtremgw33zWnDqWGo+aPs65LeSnimlleR9NSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PRn2oYbE;
-	arc=none smtp.remote-ip=91.218.175.214
-Received: from mta0.migadu.com (out-214.mta0.migadu.com [91.218.175.214])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nahPYjtB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3645C606A31C
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 09:19:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3645C606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8235B606A31C;
+	Wed, 18 Nov 2026 09:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PRn2oYbE
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Yz7Wt5y85at5AxmKuuWhCUSqjxdfBYCurbD5eS1YmfU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794993580; v=1; x=1795598380;
- b=PRn2oYbENfLPgMH7rdWqUIVdpLCQsd7QQYZNfW2Odh37z6+IsbFCYyKG1TC9IJFmzS4CyXkr
- yqIC4y3qBKfl4cg3vnyAy/K+RED+RV8EQCYu3hvUofM4jgl5lK0GORNEYp0f81/vIdJ69KPteEv
- R52est+iZkMBiRaCpWSXfKIs=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id a2db3085dd474efd;
-	Wed, 18 Nov 2026 09:19:40 +0000
-X-Mizu-Trace-ID: a2db3085dd474efd
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 18 Nov 2026 17:19:24 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Justin Iurman <justin.iurman@gmail.com>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net-next v3 5/5] selftests: seg6: add PSP flavor testing
- for SRv6 End.X
-Message-ID: <av1tnEmaTM2pAtBc@fedora>
-References: <20261112-srv6_flavors_endx-v3-0-c9177bbbd965@kylinos.cn>
- <20261112-srv6_flavors_endx-v3-5-c9177bbbd965@kylinos.cn>
- <20261117035021.e724668d726ecce54e091288@uniroma2.it>
- <avwUzLyWxZl9cBIX@fedora>
- <20261118035010.e028076fbd99fbcddd937156@uniroma2.it>
- <av1OftpFCWPLimPx@fedora>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nahPYjtB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F321F000C4;
+	Wed, 18 Nov 2026 09:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794994563;
+	bh=oEtrs9YN++TIvppEtfu/diqt2HKppGf1oq8L8HaJ3VE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nahPYjtBD1Iaas2FHy09zfnsVzzPWV2xfnaZM4o2uDixquvqwuHvQ+/o6Lx3RmcT7
+	 A5MLlaaWHi5zeDFe6Pr6Zu/1tZf365UdM7zLPXtacuahcYasmLgD5icYRCqSxPoOAQ
+	 apSPaDPnXbhT/Rjv6/c4yyGGAb3a6EIjZs+gpHbG4KtSnFEboWn87xat6LJyla++Jd
+	 yjbLXh2HQKcIglQe/QgOIjdxO0MlY4PzADbD2mLPuxiLGazQOP1N6OqiCY11zDd0cS
+	 +PtK7soRS49YQWtEbo0XhLlRb2q60FYLSeh5q1DNqhKbRWl7YpSpO779dHK9eKPFp5
+	 s/bgKJ6Xw8nfA==
+Date: Wed, 18 Nov 2026 10:35:40 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, mic@digikod.net, gnoack@google.com, 
+	paul@paul-moore.com, jack@suse.cz, amir73il@gmail.com, andrii@kernel.org, 
+	apparmor@lists.ubuntu.com, ast@kernel.org, axboe@kernel.dk, bpf@vger.kernel.org, 
+	casey@schaufler-ca.com, cel@kernel.org, cem@kernel.org, chenxiaosong@chenxiaosong.com, 
+	code@tyhicks.com, corbet@lwn.net, Dai.Ngo@oracle.com, dakr@kernel.org, 
+	daniel@iogearbox.net, dhowells@redhat.com, dlemoal@kernel.org, 
+	dmitry.kasatkin@gmail.com, driver-core@lists.linux.dev, dsterba@suse.com, 
+	ecryptfs@vger.kernel.org, eddyz87@gmail.com, emil@etsalapatis.com, 
+	eric.snowberg@oracle.com, exfat@lists.linux.dev, georgia.garcia@canonical.com, 
+	gregkh@linuxfoundation.org, hch@lst.de, hirofumi@mail.parknet.co.jp, hyc.lee@gmail.com, 
+	ihor.solodrai@linux.dev, jlayton@kernel.org, jmorris@namei.org, johan@kernel.org, 
+	john.fastabend@gmail.com, john.johansen@canonical.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linkinjeon@kernel.org, linux-api@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org, liubaolin12138@163.com, 
+	martin.lau@linux.dev, mason@kernel.org, mathieu.desnoyers@efficios.com, 
+	matt@bobrowski.net, memxor@gmail.com, mhiramat@kernel.org, miklos@szeredi.hu, 
+	neil@brown.name, netfs@lists.linux.dev, ntfs@lists.linux.dev, okorniev@redhat.com, 
+	omosnacek@gmail.com, penguin-kernel@i-love.sakura.ne.jp, rafael@kernel.org, 
+	rdunlap@infradead.org, roberto.sassu@huawei.com, rostedt@goodmis.org, 
+	selinux@vger.kernel.org, senozhatsky@chromium.org, serge@hallyn.com, 
+	sj1557.seo@samsung.com, skhan@linuxfoundation.org, song@kernel.org, 
+	stephen.smalley.work@gmail.com, takedakn@nttdata.co.jp, tom@talpey.com, yonghong.song@linux.dev, 
+	yuezhang.mo@sony.com, zohar@linux.ibm.com, utilityemal77@gmail.com, 
+	lujialin4@huawei.com
+Subject: Re: [PATCH -next -v4 02/17] LSM: pass struct path to the
+ inode_setsecctx hook
+Message-ID: <20261118-nordlicht-badeort-daumen-813a1e9fd0b3@brauner>
+References: <20261117150542.1169451-1-caixinchen1@huawei.com>
+ <20261117150542.1169451-3-caixinchen1@huawei.com>
+ <20261117184342.GR989762@ZenIV>
+ <20261118001641.GA1669148@ZenIV>
+ <bdc22808-9f22-46f7-b42d-e6bd8e1eeaca@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,40 +87,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <av1OftpFCWPLimPx@fedora>
+In-Reply-To: <bdc22808-9f22-46f7-b42d-e6bd8e1eeaca@huawei.com>
 
-On Wed, Nov 18, 2026 at 03:06:38PM +0800, Hangbin Liu wrote:
-> Hi Andrea,
-> On Wed, Nov 18, 2026 at 03:50:10AM +0100, Andrea Mayer wrote:
-> > > > 
-> > > > Without NEXT-C-SID, get_rt_sid() drops the adjacency, as the Sashiko
-> > > > review also notes: "4>2:psp:End.X" and "4>3:psp:End.X" would both get
-> > > > fcff:4::0af1. I think each adjacency should have its own SID. The
-> > > > SID could carry the adjacency, as the C-SID already does. Then
-> > > > __setup_rt_policy() needs the new SID. Calling get_rt_sid() there,
-> > > > as suggested above, would do that.
-> > >
-> > > Hmm, do you want to set the adjacency like xaf1 or xxa1?
-> > > e.g. ffcf:4::2af1 for 4>2:psp:End.X, ffcf:4::3af1 for 4>3:psp:End.X
-> > > or
-> > > ffcf:4::42a1 for 4>2:psp:End.X, ffcf:4::43a1 for 4>3:psp:End.X?
-> > >
-> > > The second one may also need to adjust the End address. e.g.
-> > > fcff:x::ef1 -> fcff:x::e1
-> > 
-> > The first one you propose, fcff:4::2af1, seems reasonable. The adjacency
-> > takes the place of the leading 0 of the Function (0af1 -> 2af1). Towards
-> > the host the 0 stays, as in the C-SID, and the End SIDs do not change.
-> 
-> What about noflv? e.g. 3>4:noflv:End.X, should we use addr like
-> fcff:3::4a?
+On Wed, Nov 18, 2026 at 04:59:29PM +0800, Cai Xinchen wrote:
+> There are two places that violate (1), both introduced by this series of
+> patches in ksmbd:
+>
+> smb2_parent_compressed() and smb_inherit_dacl() pair the directory entry
+> returned by dget_parent()
+>
+> with path->mnt, and problems arise once that directory entry becomes the
+> root of its mount point.
 
-Oh, I saw your example in the earlier reply. We should use the format like
-fcff:3::400a.
+No, (1) holds there. dget_parent() never leaves the superblock so the
+parent has the same ->d_sb as path->dentry.
 
-No need to reply.
-
-Thanks
-Hangbin
+What happens at the root of a mount is that the parent isn't below
+path->mnt->mnt_root anymore. That's a different property and struct path
+doesn't guarantee that (open_by_handle_at(), nfsd with
+no_subtree_check). So there's nothing to fix for (1) in those two.
