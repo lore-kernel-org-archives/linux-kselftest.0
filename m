@@ -1,104 +1,104 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795000850;
-	b=M49F5/UHqncj1uWlKlbrmgI0rLbpY0BQ0PKHEjdrugKA+D5v74aXqkG7O/zrWnd0kOfE
-	 l9UFPshYdict+e7dLir2NWPCUESfdHw+Jd6m94l0Y4q3zCNhB/6tfpL5rxPxGMomPl7Uc
-	 Nku23lOi9W8J+6PYT4KywnSQ3eE3gctfFLmGIXh+lpCmdcNjlzf8GtfFR68zBxivoH1Ow
-	 sQX/4ppDWxEH3kt4q7MKVcKn1i/t5K7Wi2OzghhG+Qc0HC5yr40dNjBrYWWHmMnJFJhWV
-	 MOVIxy9TRed7EW2c5R01hxQIfoL/P8kJrGSwZC1j7gGkO0UeYkoZAf1J6jIQZsKlijw==
+	t=1795001209;
+	b=Io2MbJBR5zckdej6Mh4rFbtmHkE5qCawaux8u1mvr23fNQaMBMBLeLjd/IsumJSYGo9I
+	 ehZzeNLpk9ZBbUHJa0wJZtJXAB9tV5uaeU6cgXTACpDwUj9lXG7g7s1lR3TULj6UmmW7q
+	 P3tUJjOPtDTYnnSbW/cI+EuWqJy8V2+P9UvWhVBfPztWS1gySP5zAY1xQxjwnHIfkZQqF
+	 9RXtilx39c2pFyC3+jBPTbxQQR/QSQNek+UCLZJECArodjR3H74iT5rQro8HYl44frdpN
+	 KrbSv+ONzuCwPo5Rz656T0ehplPLwHbJ4DKjGH96FXNF677jMp6d6ud7BrWNj3eeY6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795000850;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795001209;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
 	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=UYZeLko8ARh+TMZJ/jcaVMaBZpqH4WAJB7a5zPUzakg=;
-	b=msVZwxUBoAZ0BNq8P/ikHcP8Bwx2wV49rTD8Jb2fQW0O+mOi+K6Ffv4nExsqiwipp3Ug
-	 8UGQ5R0kQKIyDVQuImrgH/QTJcmqlKtXqDul1hOuvNukpkdUG516t2Fc6mhK6uDyGqRi6
-	 oFCi5LAcE5tx8zu50HUPxY6zLR5pyEBDurRq47MHH2PXiuF6aViNlulF2ZbDd/ziruh2a
-	 1Jn1TqgQlEGmDjzZEdAMepJX+NoBIyb4qMtxQYzhbRvUSyOnzvZrXv6wou4bkcQYg+93M
-	 dYzKGiachnWJNWAYRTBcLzJlDh0x9AAFIZM5OyhZ/yXEDT1Rj0u+11vwJJ9WOpQw4EQ==
+	bh=brXugAcDbaCylrm2Wl7ARVAM15xweZmcyeF8T+2xKUM=;
+	b=lOpgr2i6BAK3Un7FHyBhiF/2YNCYzN+cRT4EoX/fEQyUsi7Ej6RJE/DVccHfqa5Ncpon
+	 v7UHORHqXUwnUbvuD3aG6QKiuvMxXiFs8/fbC6+wV3WVexlEe1Nrrn6vuvoh87oYTvlOg
+	 fTu7Zlr+iVke/fRXUGtxHWRjBBuvfYzLCkhdaEXa+o3/iJzSg1UHHDEmD5+xIkGEbHWdz
+	 8WOkgitn30W4knCY/3fb224EeS5Srk8VG2kGLu3uQnXCwToiarWsJbRy9yidG3BBgdMEe
+	 Ecsjz91iDBkOpqfHEJdYYxIsGAv7lg+NEFzF45ISLqndMYiBe75YhC3C5yFXtZSwRoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iORFFgFd;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=GpL06LLH;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=MTSCO9KN;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ldl0hQ71;
 	arc=none smtp.remote-ip=170.10.129.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58673606A32F
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 11:20:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 58673606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A0560A2616
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 11:26:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3A0560A2616
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iORFFgFd;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=GpL06LLH
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=MTSCO9KN;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ldl0hQ71
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795000848;
+	s=mimecast20190719; t=1795001208;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UYZeLko8ARh+TMZJ/jcaVMaBZpqH4WAJB7a5zPUzakg=;
-	b=iORFFgFd322gO9ZgYGy1IvDR74Gf36yEqNGJxd4+VfnSq0mZFQdnH9+yCpx8U86A6I9LPH
-	JpHIUxeOoDT7gA1XSbyb7LQOPjXqz0u8A7H94AuXpi5sYcdLE1YWMFt8IGbXONS1johxXg
-	eE2ofvemC7h+RRHZ5H5HchRrYgU04No=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=brXugAcDbaCylrm2Wl7ARVAM15xweZmcyeF8T+2xKUM=;
+	b=MTSCO9KNWcHiY7wfpX0H9Di7lOMSsi28OWm3cotM7G3xoIOeF98RiUjWzm6TIRrqiP/7r3
+	KUWQ6ihgyUBMfoqpXByi6EeqJeBgYQoNpWqDCzYxUQTKOAiFe9JVW61myXg4TBo5T7mO2D
+	4f1o5u9Fl+gnh5e9syrfoBZy4vu+7hk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-97-cWL5Qzg-NF6ZkrwMtrADhg-1; Wed, 18 Nov 2026 06:20:47 -0500
-X-MC-Unique: cWL5Qzg-NF6ZkrwMtrADhg-1
-X-Mimecast-MFC-AGG-ID: cWL5Qzg-NF6ZkrwMtrADhg_1795000846
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4ad3d35e899so6975015e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 03:20:47 -0800 (PST)
+ us-mta-155-ZYb7kaJpOrKBs3XjNC6w1Q-1; Wed, 18 Nov 2026 06:26:46 -0500
+X-MC-Unique: ZYb7kaJpOrKBs3XjNC6w1Q-1
+X-Mimecast-MFC-AGG-ID: ZYb7kaJpOrKBs3XjNC6w1Q_1795001206
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48df02b91f9so1116265f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 03:26:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1795000846; x=1795605646; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1795001206; x=1795606006; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=UYZeLko8ARh+TMZJ/jcaVMaBZpqH4WAJB7a5zPUzakg=;
-        b=GpL06LLH6he6KY83Kswtjf5NHWlqseEgBMeWpf2WQ9het2uamRVdPeeUrDLQVbR8Ox
-         Ihmv8Dm7c5v5zBi5IjZccJR6pEt6C5XIvcsNl13QVzxOELXQqg4jacsBtZYJBI82gSnF
-         umpvBG6Js4CqPHi0EOoMyzjVGBEfZ6XkWovAbifhSzhGHTl+17Wv8+v/tHqY/zsZJ2kx
-         VZsk2YPsYg+VEb1uqA+vP6I1CbgFYe+ZLa4GUU/o/FO+WGBBllgGRvxjlbmuq2UnWK6f
-         klwuHSjRZY9jP/SIH2Q7ejD96q1Kv/pVsiZoDEhIrEVyaPJKv5jXtojriGafP4FU/TSI
-         BMmw==
+        bh=brXugAcDbaCylrm2Wl7ARVAM15xweZmcyeF8T+2xKUM=;
+        b=ldl0hQ71DHIdVq7HpWWFHFpHRtzn6igtDD/F2HIuoqcYe/H/DB7u8RQmjziUY0WyLL
+         S9I1Cd8iLHjIJKfEPPGf/HoGVpuSqkelIVhCR6n92+lXpFUKil9nuyyl7Pf/GXvFOK82
+         xjgbhGopkcyxS7WdE4ZOuV/p3XeBdkX5or/H9xjbbhrgMsNwlrT+KE/YzwZZYNvmcqRN
+         ThslAYBt9tUXbgZqUkp1Tvp8MAYdvteJHFm27dS5VtPO+f2JAr0KywG0O0d9SUJx7iz6
+         iLjsjefDNZ+hMi7wuOkL7B7CSpdIqNdADK/j/GrfRqmCUzDNcsCHV45qRRZFb1/aPekS
+         rGmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795000846; x=1795605646;
+        d=1e100.net; s=20260707; t=1795001206; x=1795606006;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UYZeLko8ARh+TMZJ/jcaVMaBZpqH4WAJB7a5zPUzakg=;
-        b=F9UsS8tky5UBdTgItqocJNW6xTuWQZy1QTfDfp8OpHCA502qrSpbmZ0S7cc/SksFWM
-         0qAmQcRQaEEaTQYVkl7TVmRMI2h4NBJJZi1Tc0AbDWNWdk5l7M4HDsIRyfcaWapaGYKN
-         Yt1aMLmrayYtqpY8cMZyW45Dxa50yMxqbhbUUqlQ2uWhSh0XRk0Li5nI/LsCfTq+EZr9
-         Ggq0GLeVnr/3V8byc8G6cKJBMdTs1p9Jf/yL6NErq1djjg7p9xWfBEKgqHqqt95+4Jra
-         LKpYRTnsgAqz9Y9Ucj10nAfYVGawcH6T58im5VSCDJKkwdnZN2s4m+EhBOP3S9ZUTxzB
-         abtA==
-X-Forwarded-Encrypted: i=1; AL+hErH5VmiJt0X1yjzuYw6gOjnJ0meEa/mQdRFfz52lG/4+rvXfYb4MfksBkdptmAoRoJEizdvrEHWvqv/dHooGp9c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/jKewo4adM5a5gj80mw3ReuybJTWSxeqZjVClL2BfoAWdluuuh
-	7gSmwMZy7og14Tpmur6RmgRtI76LdS9Jw6XJipZwvHIRhDSa7Z3Y5d1p+cQzBG9j/D14ACBB/0G
-	shsSLGRz5ohdAINzY0sJX5grFryEwjbnonkJiUYhIHPH2UsRQEzfuHwYPpLpMQm3AFAKgVA==
-X-Gm-Gg: AYBFou3BZAjnxqAmL1oQ8iUsmUXw8zc6dHTstRMt8mwB0MvQb+MmvRKrj+xfrs+tMby
-	7VhRJZgmsbLOZHD3vvqj8qcLr9IWi0IddBAFkCBbW7CM9MHRDbr2s2Kl4kPVt6BY9KOVATfqSlf
-	73MVTKMfXHNYaO4O5HYKW6K4yfC9Kof01Sl0qCxVUiitN/njQscoYXBrw3v1zOItZnHeFRgX/EH
-	agQvxSqvy2+VSXd6WZqNo0no2GxNugniXQNMDj91OynhZxxZIbvVsDq9cFEMAdPJl/HMjGWuL34
-	q+FznLbm4k441XZIQ5AXoB1puz8V/ZC3DDLbYV4tpFw9KDnAWlmIsvuJbo5MSiAlYKCYxKCcJvw
-	DftbYa8AwnZqSXcTAdYeBiMjbI3/XLkcd45T6lLMjyw576vZ4lgPxTq9p30JAUN008QX0kJvWzq
-	Mk+7I=
-X-Received: by 2002:a05:600c:8b02:b0:4bb:6752:8400 with SMTP id 5b1f17b1804b1-4bb7da1b48dmr39551995e9.17.1795000845961;
-        Wed, 18 Nov 2026 03:20:45 -0800 (PST)
-X-Received: by 2002:a05:600c:8b02:b0:4bb:6752:8400 with SMTP id 5b1f17b1804b1-4bb7da1b48dmr39551335e9.17.1795000845561;
-        Wed, 18 Nov 2026 03:20:45 -0800 (PST)
+        bh=brXugAcDbaCylrm2Wl7ARVAM15xweZmcyeF8T+2xKUM=;
+        b=QoNLgdfMC0BWc1zc6hfAFc5k+t1iePhc0tv/tI8JKoBiKrYGIlJmEN8H4Urs+Oe1f0
+         XDoANS54GBRVMfhk2RwrsRlsefuYnnZs9ot+qmsWSW7+f9SaNo5g26ogC00LSeKK9AWo
+         POfzwJAcJsWu2I5SHPZ8C6I26F4rAV0kkPCNbJDtmtPEQXaZ8v9RMC+7reSy0B5/9LOB
+         pYMwFq8bXPouOMBqlwKSEDaQYZA2W4FgDB6gJaympa+HEkgE8zEqpUOvAKyVnovT2504
+         eIxx+50QiF/7cjE6bnqZiS/ZJsfEDEDd85qJ0iVKHQsDlX5gVosRr2tV5LvXdjMDaJ/L
+         X2hg==
+X-Forwarded-Encrypted: i=1; AL+hErH/ZzCytbN3l2orces2+RANWIEBnAKZk9KsrSjwmetHOE6syf2Cq4xpayDZxfA/y7Iy56d6MC5GaWVrdgjsQBQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/EB48RTVSgXx2W1bypCcoUaQ5m0oF1k6NcNkve2D5Tf/ha7kS2
+	PMJcD1t+d8f+j/gKuc/4domv3fP4D7I5BIs/R5Q9g0NULqqB90en4dNPzjRTmYPQpQ2fTbfewMr
+	VMhjVLHiELSFY9LDaEdRzpI7BfxQ9onQsdVdLnfW7Pk7Vi6lfIGDRYKDvZyh+zOPfK8oQ/g==
+X-Gm-Gg: AYBFou3BOHVmPKatVM5Uq5FvBfepkRd9RGx3vB4w1ASgofN9H2AQyJI+24R4sD8+4Y2
+	z8Duu7LfGE8jUOxpq39q7VwGxYrV2cf9mEsQnJL9tF4TTsOh+JSCWlxTfRJ5kk/32cFjhD4EvkM
+	noRZaz66FWryxto1Cic0bxuqTUjy/jgqi/QyXXgFsVSn9p95lPnfgtMh2gJg0gq3tlMcmVliidL
+	0qBYdXXHlZFtEesS86CQRNQ1ySKVvSBhWo9/dpmLkjWqISZFsa26xLPfk2qcP4+3VDQTX6E+Y7O
+	PI0/sXaO8Lu1CXk5w4k4Jz0bT7TkkTLocchZZuBbR0scxXn2i6jdilqDtasWnl5paHQ7C+lzu9J
+	RF1uEWzcdYiUkutlabc5tzL23UAu7Izny5dZv2qinIR3wzLOYvAb8SDtua7BNHlom3AnVy30/TB
+	Mffm8=
+X-Received: by 2002:a05:600c:1d8e:b0:4b9:f90b:1c4d with SMTP id 5b1f17b1804b1-4bb783aec42mr139593245e9.5.1795001205696;
+        Wed, 18 Nov 2026 03:26:45 -0800 (PST)
+X-Received: by 2002:a05:600c:1d8e:b0:4b9:f90b:1c4d with SMTP id 5b1f17b1804b1-4bb783aec42mr139592495e9.5.1795001205361;
+        Wed, 18 Nov 2026 03:26:45 -0800 (PST)
 Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb78418853sm195748985e9.8.2026.11.18.03.20.43
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4a65560b2a1sm4049093f8f.32.2026.11.18.03.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 03:20:44 -0800 (PST)
-Date: Wed, 18 Nov 2026 12:20:41 +0100
+        Wed, 18 Nov 2026 03:26:44 -0800 (PST)
+Date: Wed, 18 Nov 2026 12:26:41 +0100
 From: Juri Lelli <juri.lelli@redhat.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
@@ -114,11 +114,11 @@ Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
 	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: Re: [PATCH v7 04/40] sched/deadline: Do not divide by zero active
- CPUs of a root domain
-Message-ID: <av2KCeKAnXAi6saN@jlelli-thinkpadt14gen4.remote.csb>
+Subject: Re: [PATCH v7 05/40] sched/deadline: Refuse dl_server debugfs writes
+ while the rq is offline
+Message-ID: <av2LcczdGk37WJLm@jlelli-thinkpadt14gen4.remote.csb>
 References: <cover.1794922146.git.mathieu.desnoyers@efficios.com>
- <31f723a7dab4d58045cc60fac0fea09ea1841c7b.1794922146.git.mathieu.desnoyers@efficios.com>
+ <2bee6a143319301f082855a15274f0563e99b8a5.1794922146.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -130,47 +130,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <31f723a7dab4d58045cc60fac0fea09ea1841c7b.1794922146.git.mathieu.desnoyers@efficios.com>
+In-Reply-To: <2bee6a143319301f082855a15274f0563e99b8a5.1794922146.git.mathieu.desnoyers@efficios.com>
 
 Hello,
 
 On 17/11/26 09:10, Mathieu Desnoyers wrote:
-> __dl_sub() and __dl_add() divide by their cpus argument. Most callers
-> pass dl_bw_cpus(), the number of active CPUs of a root domain. That
-> number can be 0, and the division then traps.
+> Commit 4043f5498416 ("sched/deadline: Reject debugfs dl_server writes
+> for offline CPUs") refuses a write to a dl_server's runtime or period
+> on an offline CPU. Its message says that such a write has no meaningful
+> semantics.
 > 
-> Commit daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl
-> tasks") added extra_bw, the bandwidth that deadline tasks can reclaim
-> on a runqueue. A change of a root domain's total_bw is spread over the
-> extra_bw of its active CPUs.
-> 
-> During hotplug, a CPU sits in the default root domain, which can then
-> have no active CPU. This lasts from the rebuild in
+> It tests cpu_online(). But during hotplug the CPU is still online while
+> it sits in the default root domain. This lasts from the rebuild in
 > sched_cpu_deactivate() to the offline, and from the online to
-> sched_cpu_activate(). A debugfs write to the runtime or period of its
-> fair or ext server divides there. A write of the current value passes
-> admission in the window. In 8-CPU VMs of v7.4-rc2, a loop of such writes
-> oopses at the first offline and online:
+> sched_cpu_activate(). That root domain does not count the server's
+> bandwidth. A write in the window still goes through admission. With
+> admission control off, it changes total_bw there. On v7.4-rc2, a write
+> of the current value divides by zero in that window. The previous patch
+> removes the division, not the write.
 > 
->   Oops: divide error: 0000 [#1] SMP NOPTI
->   RIP: 0010:dl_server_apply_params+0x335/0x380
->   Call Trace:
->    sched_server_write_common.isra.0+0x1c0/0x260
->    full_proxy_write+0x58/0x90
->    vfs_write+0xcb/0x550
+> Fix this by testing rq->online instead. It is set under the runqueue
+> lock when the CPU joins a root domain that counts it, after
+> cpu_active() is set.
 > 
-> By reading, two other paths would divide by zero:
-> - inactive_task_timer(), for a task that left SCHED_DEADLINE or died,
->   if its CPU went offline.
-> - sched_setattr(SCHED_DEADLINE) on a task asleep on an offline CPU,
->   with admission control off.
+> A write now fails with EBUSY while the CPU goes offline or comes
+> online, as a write on an offline CPU already does. Writes at any other
+> time are unchanged.
 > 
-> Fix this by changing total_bw alone when the root domain has no active
-> CPU.
+> Applied without the previous patch, this patch alone also stops the
+> oops. The reproducer survives 20 rounds with no warning, in 3 VMs of 3.
 > 
-> With this patch, the reproducer survives 20 rounds with no warning.
-> 
-> Fixes: daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl tasks")
+> Fixes: d741f297bcea ("sched/fair: Fair server interface")
 > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > Cc: stable@vger.kernel.org
 > ---
