@@ -1,84 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795001325;
-	b=b84xCMC2cY1HJeVyExku418ZkQr3gyQ7CBY0k3GNtlbM2scWEItvx3r3K3wyCZIGgUPP
-	 0Pwe6Q0z4UDX4dCaB+t/tK11w51wzoFYzC/jNp8cz4OXyOHrApFi2yoIRQTKZNJqn1Lj3
-	 j6y9mNAgStjKJHU2jdvigPjutK6Kl/zRUBytTsP3/iem2PZk12okEJFFA0AlWVR6cyLKz
-	 13gVkvfE/hMAnC1R7IU5RYSV2YM7KOLyDPYn5XhLka+/dAtHuFywMsOkQ9hr9kIWcHiGT
-	 c/ZYvLkoV3P5mXyK4nS/YWYTC29qBQyDFJ7naLy4mt147Ab/dj7uA5pmTzNGl3GxSkw==
+	t=1795002157;
+	b=f3MnM4AhhM+qSedYMaKRhCB4UnmPeYatIBliP2IyuV90SNoVEKEOPhFAvE9X15Ea6iDw
+	 yvEPcvoMel4JXCM7UahgT/w+T4F/4m/d0jNSphliDPYwZY03f2/7O6XnOyx+3W0x39IE8
+	 5WpI/EZefu/gm3U1quy5AfQJSQJuocEnXr8Xd3rZgkF62KPGEcc120zC1aGNUiYU1T8RX
+	 yi/cPj9O3GlOROKbfAzdHBImtazrJx86SZCUhapd1g05dpFQzk9/phCy5VJ5TpigUoxr3
+	 d9kIFxicBWL8moMdJ9151mDqOewG2H5JTd4f5UUFi5b7F3GNil/YhqvgIlU9tzQV+6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795001325;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
-	bh=PTE76i3nixm+phqU46XvEqvVLXQTlr+vsdjYP97MKXk=;
-	b=qwZ67rGH55Y1CfKc4dK4RzB9LfW9V+PErdiE/W+tKgesZ8B6kk0+0fEf9phvWRoY+y6j
-	 vnedumHI8Its3CY1I1XHsUb7wKlP9QJIiB1ILgoPxDOayBQayzrZc7kc1dz2crvK/p0Ns
-	 FX7pBpTDU3XoMGTJfN/S8xa2LljQWSeEI7bm9JHPdCVNZ6p8MXx7Df9OcrduZtEG1Oqwa
-	 pt+QV5vYrxQDhpljZxltrz+NBxb66p+Hd1soDLMueX8orahff6xsT/qiPZNDSCq95Hx5o
-	 Z/h3JLDKnPgDv4SbgGP/LJ7Ha6VsMVHbCtoCY7aJ4eb2LplcTWGxr8hnrgybQ6OKrRQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795002157;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To:X-Rspamd-Queue-Id:X-Spam-Level:
+	 X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:X-Spamd-Result:
+	 X-Spam-Score;
+	bh=ts1zyYo+0tF/wBGQw87MWas4/lAsPLXenr9aSms+T5s=;
+	b=m7wvpfJl0e9wHnMBfiRKpZW9gp/u3T6Q2eV33Qps2hunPPTVMoccwB4UwswmXBT5BF0z
+	 6FYvV6umZbdXY5Aq0/plXTv5vlJn16acSiZ3VQwmWnHahgns3BDW8iYAwF4oGNSt9r3Ho
+	 9VnxQ6R+uf5pO7Js4DlURahwx80YSf6cKHUeUWKnD2YSk014US6fznb0WwxSdMrj+M9Xj
+	 FUy2DZUY1ckCC7RfN3oA4KXIdoqLpk+kcYTAe2Ynj8iqhw24AypqlwsXyxKl58xqgAQCD
+	 9MElA1J/gXSa62roszv8a+QerM+JstPkYiQyZ5gQX4JK0JUKu2MEPaVIsjK1lYtLA0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J9D5OyQQ;
-	arc=none smtp.remote-ip=209.85.219.45
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=MJYbixBP;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=9F6yuFzm;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=tjvt0P+o;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=CHdKwqiP;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B55606A31C
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 11:28:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67B55606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA9A606A31C;
+	Wed, 18 Nov 2026 11:42:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FA9A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J9D5OyQQ
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-91ccfb88e4dso8556976d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 03:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795001324; x=1795606124; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=PTE76i3nixm+phqU46XvEqvVLXQTlr+vsdjYP97MKXk=;
-        b=J9D5OyQQ7CtDJfGNBTDrS8xXQb1oxOlFHB2CwmcqpmdeGfNTXI0akJ0lAfAC8TqwEE
-         W50Zc7KjwtcLjWa64N2bJICEox+7cN8GZp6uc5A+aZVDr1EgOu+t+DzvVISOmYq2iAnP
-         PN/umpdWd49EvKjLiMbMTTDtc2chbXkrfAjgKwizy/4ebN+GLj6a8QG9/g9QGRq3LP2F
-         5aqm27u+smmz8Up+MD8FsgOPaxTto6ProUjm1Ki35/BNDk9qaIae2f3/ow6m/6yAcjKq
-         cLv7TJBXbB76xCs5dvWqFwpFu2U8Z1Q49AEo32dVZKR7hFJLipWw1HLWdgp89P5IDKk2
-         3zvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795001324; x=1795606124;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PTE76i3nixm+phqU46XvEqvVLXQTlr+vsdjYP97MKXk=;
-        b=boHAQKdVl1EM3/Gli3uJqkr0z7JSaHZG4LpDmY7UrtLXz97zqtaCj6oNFFi5tlkrK6
-         fF96YoRnzMEhoEpyPnJ6YLdy7ceii1LifS4L9/Gi4cDAj2f1D4Rb/PTOdIcHLRQNJTOK
-         7D8MtrhNA7DfMzKbmvY1jNqOr4OTpNM33Q+M7NEfywGXDwSb1ta6sKrk/hzRj2XlE9vI
-         Yjzh4nQ4Ob+dFow95K+RobKTBEXducdg4cN40aRQOs+QkIzh++3CjG3JrbRYOj9nZxU4
-         EPBQ25nfDxQQ0fmg9WucSbPVh6i0MPpKk5u2tEyXEh0AlnWQ3NXPfvtq8wAGaG+R9ZOq
-         NtIQ==
-X-Forwarded-Encrypted: i=1; AL+hErHjjwSiaXTqhss9bkkfeKqtlSdnQMQooQYho4g5nyjCHlAaMgMnIMtbiiS2sZADfIMAR3HjHSLsDYs7Pm4sWAQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9G4TQsTuRYtY+UysgO1toIa2m10MpimCPKP3XI8ZkT/Q3RoDxa
-	90k4EJZ/AjxGHZJO5NTiT6uywOU3YOQ4ifc3883zniBD1zZN2yb2fchg
-X-Gm-Gg: AZFdTZfdC5xoswHXKqIa2b0MXwdA0eS3WeA6qYqMWs0xYVMS2fKxaRNt7OPgHoyhyu8
-	KYz3oGQRaejIXuG8ss4LkW03gA9wtAXxfTTckhBbGF9srTAP320LMjI6MuuSbwRhHHkF0tx5Zi5
-	vx6Y1hIWuZmoNmspw8fVCPmSOmPr5y6engYiW1Vl8cHt/qLfNEW/goo2Ebx1JHuLJ5w+Ey5ma9i
-	sg22HzvJL/MAD967DS49meHXEeWjX5s3LNoJd8OqLvhGsKXv5MsBuEUAHV9hBryNXzFmDfz3pSu
-	cj+9zbV04a6fgwahXINAvJ1aoN7AXkJZTE6xcBA27uwlTF23McyvnIx+K4YPIGb1XQxXOR+rcWv
-	S9v4nWzRLloVASYgU3gu0L+E2p8yssqV/jHKe4ReCvESZNpYGhlfdck4T0KMVtkt+pVjUvtvR1f
-	HnmbnkiY/1+aXnWfChluzG0wPyqxS/kck8wjoGnPUoQAdEpSUlyfAkHL/FC/JdDchEWE61tGPL4
-	tJiikBs+Fntub2EjzQjH9zfgH+XVaopMxNm+CI4afcvGKufRQilFCgq9k9hoed/bJ9VnzHJo4nf
-	MSGwHJMJkMWtdHzlNyhHayCC7a8dG09xEQ==
-X-Received: by 2002:ad4:5aaf:0:b0:91f:329a:904 with SMTP id 6a1803df08f44-92114ee2ddcmr32476686d6.32.1795001324220;
-        Wed, 18 Nov 2026 03:28:44 -0800 (PST)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-92114d35dabsm19207126d6.17.2026.11.18.03.28.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Nov 2026 03:28:43 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=MJYbixBP;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=9F6yuFzm;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=tjvt0P+o;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=CHdKwqiP
+Received: from kunlun.suse.cz (unknown [IPv6:2a07:de40:b306:2000::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 75CE21FB54;
+	Wed, 18 Nov 2026 11:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1795002154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ts1zyYo+0tF/wBGQw87MWas4/lAsPLXenr9aSms+T5s=;
+	b=MJYbixBPXebGghxcy9GLxNdpTxi5J1APSIVerzfUfFMu5GHAp6ZDY18IQ0C01KLofCsaQa
+	iLxUfq3jL4ShHx2lhkaOkCZ85BgpCJXJU1fTSsvLK8p91QsPi3SvK+FreT3GMDVJegEjKy
+	SFt6abukRfiGzU6B6i9o8L9x6ep+pq0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1795002154;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ts1zyYo+0tF/wBGQw87MWas4/lAsPLXenr9aSms+T5s=;
+	b=9F6yuFzm2ea4WmMd6IJ9jyZSa5ej8Hb4wjPtUkxTeJon96jrG1bwsrXBETFDtvJqKOWof/
+	VJosWdeZhIavdbCQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=tjvt0P+o;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=CHdKwqiP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1795002153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ts1zyYo+0tF/wBGQw87MWas4/lAsPLXenr9aSms+T5s=;
+	b=tjvt0P+oze6M+//BuxhCpozTK9biCEkeBlPm74JbxWXo1S7DXiXTvPmGRjRgwSTA/mlw0J
+	xPoaJv0wpZN62UdqYZgwQkFlOwbOR23cp+NdBusnoTHVMHFaLu31XdrIPu7L/gExFC/tfN
+	sGjATTjETAAp59VtWDPj3fvmh/NDidY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1795002153;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ts1zyYo+0tF/wBGQw87MWas4/lAsPLXenr9aSms+T5s=;
+	b=CHdKwqiP9NqvC2rAs0raL9qkbYbZVNUZCscjq8BLFBo/z0i5yUzELG09kfz8HDsY45agAe
+	5aIhSUfATZZXGVDQ==
+Date: Wed, 18 Nov 2026 12:42:32 +0100
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Renzo Davoli <renzo@cs.unibo.it>
+Cc: linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>, Thomas Gleixner <tglx@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, "Dmitry V . Levin" <ldv@strace.io>,
+	Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, strace-devel@lists.strace.io
+Subject: Re: [PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp
+ syscall skipping
+Message-ID: <av2PKIf8YsEPro8O@kunlun.suse.cz>
+References: <20261114181923.370930-1-renzo@cs.unibo.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,161 +116,206 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 18 Nov 2026 06:28:42 -0500
-Message-Id: <DMYAV3MCA9T5.180N4MSVXNWT@gmail.com>
-Subject: Re: [PATCH net-next v4 3/5] psp: defer tx key deletions for SADB
- drivers
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
-Cc: <kuba@kernel.org>, <willemdebruijn.kernel@gmail.com>,
- <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <rdunlap@infradead.org>, <donald.hunter@gmail.com>,
- <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <willemb@google.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261116-psp-v4-3-1a599df2aefa@gmail.com>
- <179498190614.3136.5698785790307751985@kernel.org>
-In-Reply-To: <179498190614.3136.5698785790307751985@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261114181923.370930-1-renzo@cs.unibo.it>
+X-Rspamd-Queue-Id: 75CE21FB54
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-6.01 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ONCE_RECEIVED(1.20)[];
+	RDNS_NONE(1.00)[];
+	HFILTER_HELO_IP_A(1.00)[kunlun.suse.cz];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HFILTER_HELO_NORES_A_OR_MX(0.30)[kunlun.suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.975];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	URIBL_BLOCKED(0.00)[sashiko.dev:url,suse.de:dkim,kunlun.suse.cz:helo];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b306:2000::2:from];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,redhat.com,kernel.org,amacapital.net,chromium.org,linux-foundation.org,strace.io,gmail.com,alpha.franken.de,linux.ibm.com,lists.ozlabs.org,lists.strace.io];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MISSING_XM_UA(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[kunlun.suse.cz:helo,suse.de:dkim,sashiko.dev:url]
+X-Spam-Score: -6.01
 
-On Wed Nov 18, 2026 at 1:05 AM EST, netdev-bot+sashiko wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 2 =C2=B7 Low: 2
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [Medium] The new PSP_ASSOC_DEFER_TX_KEY_DEL path in `psp_assoc_free()`
->   (net/psp/psp_sock.c:118-121) gives up its only psd reference before=E2=
-=80=A6
-> - [Medium] Removing the SADB check in `psp_sock_tx_rekey()` lets any non-
->   admin user who can reach the PSP device rekey one established TCP=E2=80=
-=A6
-> - [Low] The commit message never says that this patch turns on Tx rekey
->   for SADB devices.
-> - [Low] The patch adds a lock-context rule for SADB drivers that only the
->   commit message states: they must not call `psp_dev_unregister()` with=
-=E2=80=A6
->
-> --
->
-> psp: defer tx key deletions for SADB drivers
->
-> This commit adds a deferred deletion queue for Tx keys on SADB devices.
-> A key detached by a Tx rekey is removed from the device only after a
-> BQL-based descriptor grace period, which a delayed work item checks by
-> snapshotting per-queue num_queued and polling num_completed. It also
-> makes INET_PSP depend on BQL, requires ops-locked netdevs for SADB
-> drivers, and drops the check that rejected Tx rekey on SADB devices.
->
->> diff --git a/Documentation/networking/psp.rst b/Documentation/networking=
-/psp.rst
->> index 43f222b38d3d4..ceb1e232317fc 100644
->> --- a/Documentation/networking/psp.rst
->> +++ b/Documentation/networking/psp.rst
->> @@ -202,6 +202,48 @@ Drivers must use ``psp_skb_get_assoc_rcu()`` to che=
-ck if PSP Tx offload
->
-> [ ... ]
->
->> +* Before calling ``psp_dev_unregister()``, the driver must ensure that =
-all
->> +  outstanding Tx descriptors containing key references have been comple=
-ted
->> +  or discarded. PSP core deletes all remaining Tx keys during
->> +  unregistration without waiting for a grace period.
->
-> [Severity: Low]
-> Should this list also say that psp_dev_unregister() must not be called
-> with the netdev instance lock held? The commit message states that rule.
-> It is not in this list or in the psp_dev_unregister() kernel-doc, and
-> nothing asserts it.
->
-> psp_dev_unregister() now starts with:
->
-> psp_dev_unregister()
->   psp_deferred_del_stop()
->     disable_delayed_work_sync(&psd->tx_del.work)
->
-> and psp_deferred_del_work() takes the locks in this order:
->
-> 	mutex_lock(&psd->lock);
-> 	netdev_lock(psd->main_netdev);
->
-> Suppose a driver calls psp_dev_unregister() while holding
-> main_netdev->lock, and the work is blocked in netdev_lock(). Wouldn't
-> disable_delayed_work_sync() then wait forever?
->
-> Even with the work idle, the later mutex_lock(&psd->lock) in
-> psp_dev_unregister() would run under the netdev lock. That inverts the
-> lock order the work uses.
->
-> mlx5 complies today, because mlx5e_nic_disable() drops the netdev lock
-> before mlx5e_psp_unregister().
->
-> Could the rule go in this list with the other requirements? Something
-> like lockdep_assert_not_held(&psd->main_netdev->lock) in
-> psp_dev_unregister() would also match the ops-lock WARN_ON check in
-> psp_dev_create().
->
-> [ ... ]
->
->> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
->> index d497f41c483e1..48bffe088c79b 100644
->> --- a/net/psp/psp_sock.c
->> +++ b/net/psp/psp_sock.c
->> @@ -114,8 +114,14 @@ static void psp_assoc_free(struct work_struct *work=
-)
->> =20
->>  	mutex_lock(&psd->lock);
->>  	if (psp_dev_is_registered(psd)) {
->> -		if (psp_assoc_needs_tx_key_del(pas))
->> +		if (psp_assoc_needs_tx_key_del(pas)) {
->> +			if (pas->flags & PSP_ASSOC_DEFER_TX_KEY_DEL) {
->> +				psp_deferred_del_queue(psd, pas);
->> +				mutex_unlock(&psd->lock);
->> +				return;
->> +			}
->
-> [Severity: Medium]
-> Once pas is on psd->tx_del.next, its psd reference belongs to the
-> deferred queue. This path keeps no reference of its own across
-> mutex_unlock(&psd->lock). Can psd be torn down while this thread is
-> still inside mutex_unlock()?
->
-> Documentation/locking/mutex-design.rst says mutex_unlock() may access the
-> mutex after releasing ownership, so the caller has to keep the mutex
-> alive until it returns. When there is a waiter, __mutex_unlock_slowpath()
-> releases ownership and then still takes lock->wait_lock and calls
-> debug_mutex_unlock(lock).
->
-> A possible sequence:
->
-> CPU1 (psp_assoc_free work)         CPU2 (psp_dev_unregister)
-> psp_deferred_del_queue(psd, pas)
-> mutex_unlock(&psd->lock)           mutex_lock(&psd->lock) succeeds
->   still in slowpath                psp_deferred_del_uninit()
->                                      psp_dev_put(psd)
->                                    mutex_unlock(&psd->lock)
->                                    psp_dev_put(psd)
->                                      psp_dev_free()
->                                        mutex_destroy(&psd->lock)
->                                        kfree_rcu(psd, rcu)
->   debug_mutex_unlock(lock)
->
+On Sat, Nov 14, 2026 at 07:19:19PM +0100, Renzo Davoli wrote:
+> PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
+> PTRACE_GET_SYSCALL_INFO by allowing a tracer to modify details of a
+> system call in which the tracee is currently blocked.
+> 
+> This patch set extends PTRACE_SET_SYSCALL_INFO with support for
+> skipping a system call at a PTRACE_EVENT_SECCOMP stop and setting its
+> return value.  To do this, the tracer changes 'op' from
+> PTRACE_SYSCALL_INFO_SECCOMP to PTRACE_SYSCALL_INFO_EXIT and fills in the
+> exit union fields (rval and is_error).
 
-Ah TIL. I was a bit naive that mutex_unlock() can still be running while
-the next waiter enters the critical section.
+Hello,
 
-pw-bot: cr
+from a user point of view it is not clear to me why this would be done
+at the seccomp event when seccomp is not used.
+
+> 
+> Michal pointed out in the review of v7 [1] that the register state alone
+> cannot tell whether a syscall has to be executed or skipped with a
+> preset return value, since on some architectures the return value
+> shares a register with the syscall number or the arguments, and that
+> the "already dispatched" information should be architecture
+> independent rather than an architecture-specific thread flag.
+
+On s390 the removal of such architecture-specific flag is proposed here:
+
+https://lore.kernel.org/linux-s390/890e50e0-77f7-43f3-b1b9-f8e7302aa3db-agordeev@linux.ibm.com/T/#m04254224bb28b747314346153629207c5acca6f9
+
+While that shows a way to address this problem not all affected
+architectures implement it.
+
+Thanks
+
+Michal
+
+> 
+> v8 does exactly that: the tracer no longer sets the syscall number to -1
+> and relies on syscall_get_nr() reading it back as negative.  Instead,
+> patch 1 adds a per-task flag owned by seccomp, which the tracer sets
+> while the tracee is stopped.  When the tracee resumes, seccomp skips the
+> system call just like for SECCOMP_RET_ERRNO, a path every architecture
+> already handles without touching the return value.  This also fixes
+> skipping on s390, where -1 is read back as syscall 65535.
+> 
+> On powerpc, a separate fix has been posted [2]:
+> syscall_set_return_value() currently sets TIF_SYSCALL_RET on the
+> *caller*, i.e. on the tracer when called from PTRACE_SET_SYSCALL_INFO,
+> and skipped system calls lose non-error return values.  These problems
+> are already present in the source tree and break the existing
+> set_syscall_info selftest and seccomp_bpf user_notification_basic on
+> ppc64le independently of this series, which therefore no longer
+> depends on [2].
+> 
+> [1] https://lore.kernel.org/lkml/apWFHkZnCMfxQCEk@kunlun.suse.cz/
+> [2] https://lore.kernel.org/lkml/20261030084926.1068384-1-renzo@cs.unibo.it/
+> [3] https://sashiko.dev/#/patchset/20261113165509.229869-1-renzo@cs.unibo.it?part=2
+> 
+> Testing (tools/testing/selftests/ptrace/set_syscall_info and
+> tools/testing/selftests/seccomp/seccomp_bpf):
+> 
+> v11, QEMU, v7.4-rc2:
+> 
+>                                x86_64 (KVM)
+>   ptrace/set_syscall_info      2/2
+>   seccomp/seccomp_bpf          142/142
+> 
+> v9, QEMU, v7.3-rc6 (the v11 change is architecture independent):
+> 
+>                                x86_64 (KVM)   ppc64le (TCG)   s390x (TCG)
+>   ptrace/set_syscall_info      2/2            2/2             2/2
+>   seccomp/seccomp_bpf          111/111        111/111         110/111 (*)
+> 
+>   Build-tested also with CONFIG_SECCOMP=n and CONFIG_SECCOMP_FILTER=n.
+> 
+>   Skipping getpid() at a PTRACE_EVENT_SECCOMP stop, with a filter that
+>   kills the process on unknown syscall numbers:
+> 
+>   op=SECCOMP, nr=-1 (before)   error          r3 left as is   SIGSYS kill
+>   op=SECCOMP->EXIT (this)      -ESRCH         -ESRCH          -ESRCH
+> 
+>   (*) user_notification_wait_killable_after_reply timed out under TCG
+>       while another VM was running; it passes 5/5 both with and without
+>       this series on an idle x86_64 KVM guest.
+> 
+>   ppc64le results were obtained with an earlier version of the powerpc
+>   fix [2] applied.
+> 
+>   Not tested: MIPS, arm64, riscv, loongarch, real hardware.
+> 
+> Changes in v11:
+> * once the system call is skipped, PTRACE_GET_SYSCALL_INFO reports the
+>   stop as a PTRACE_SYSCALL_INFO_EXIT one, as the syscall number and
+>   arguments may have been overwritten by the return value (reported by
+>   Sashiko [3]); a later PTRACE_SYSCALL_INFO_SECCOMP update is still
+>   rejected, now by the generic check on the stop type
+> * selftests/ptrace/set_syscall_info.c: check PTRACE_GET_SYSCALL_INFO
+>   after the system call is skipped
+> 
+> Changes in v10:
+> * rebased to Linux 7.4-rc2
+> * no longer depends on the powerpc fix [2], which addresses a bug
+>   already present in the source tree
+> 
+> Changes in v9:
+> * selftests/ptrace/set_syscall_info.c: check for seccomp filter support,
+>   fix failure report
+> * rebased to Linux 7.3
+> 
+> Changes in v8:
+> * skip the system call via a seccomp per-task flag instead of
+>   syscall_set_nr(-1), as suggested by Michal Suchánek
+> * new helper ptrace_set_syscall_info_seccomp_skip() instead of a bool
+>   argument to ptrace_set_syscall_info_exit() (Michal Suchánek)
+> * once the system call is skipped, reject further
+>   PTRACE_SYSCALL_INFO_SECCOMP updates during the same stop
+> * selftest: also test an error return value and the above
+> * dropped the Reviewed-by tags of Oleg and Dmitry, as patch 2 changed
+>   significantly
+> 
+> Changes in v7:
+> * rebased to Linux 7.3-rc1
+> 
+> Changes in v6:
+> * selftests/ptrace/set_syscall_info.c: improve messages in case of failure.
+> 
+> Changes in v5:
+> * reworded the explanation for not supporting PTRACE_SYSCALL_INFO_ENTRY yet.
+> * selftests/ptrace: removed a redundant check.
+> 
+> Changes in v4:
+> * Reworded the commit messages for clarity.
+> * Renamed the local variable child_op to op in ptrace_set_syscall_info()
+> * Clean up and improve the coding style of selftests/ptrace/set_syscall_info.c
+>   (suggested by Dmitry V. Levin)
+> 
+> Changes in v3:
+> * restrict the syscall skipping feature to PTRACE_SYSCALL_INFO_SECCOMP
+> 
+> Changes in v2:
+> bugfix: _NONE -> _EXIT transition was erroneously permitted
+> 
+> Davide Berardi (1):
+>   seccomp: let the tracer skip a syscall independently of its number
+> 
+> Renzo Davoli (2):
+>   ptrace: add PTRACE_SET_SYSCALL_INFO syscall skipping support
+>   selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO syscall
+>     skipping
+> 
+>  include/linux/seccomp.h                       |  33 +++
+>  include/linux/seccomp_types.h                 |   4 +
+>  kernel/ptrace.c                               |  49 +++-
+>  kernel/seccomp.c                              |  11 +-
+>  .../selftests/ptrace/set_syscall_info.c       | 249 +++++++++++++++++-
+>  5 files changed, 342 insertions(+), 4 deletions(-)
+> 
+> base-commit: 7e1392a42ea288d70a266f6553fe06f57f8647ea
+> -- 
+> 2.55.0
+> 
