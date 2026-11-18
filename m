@@ -1,11 +1,11 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.36
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794991016;
-	b=emlluA7KdRfKndPCTedlccC+BWpg6IutOrXT9PDFI0Fzg9wLoItKBZALgAheiC2M2aAd
-	 /+KqfMpXsbelAm4khdNYzTKKzoiGzh/+mzWzVlpWstc3MoMcOjMGqQUaPp81DJU2WH9W5
-	 Mclaxgi2oWyIMc/KWRNiVDLFV3F9G+8wjEHqruj1QQ1aC8hYgeoowhiW/O30UhYUjLfhq
-	 JW8R8kNEtID5FWlS4Dd6dcoF189M+5jO6YdXgQURK57mgTfA/gSf2X0SZdZA5jCkYP0s6
-	 snMQyZZI5jMniPbVHjICZZL7aM/M4Lc0sJEdO8gQk+cXvJ2BnGseCEnDZtRmY2TU0QA==
+	b=HeMKoHcZrnDr0OPYSRxKDr9wgsATDECG6x5Rmisxhv7QyYWEiHUSNhXqXLImg2SIIlqP
+	 ACkha804zi87WCeGzIw2O8UwrROgqdhoa2XjQ5lzbvL1rFxs9IA+EDezkQoCBTGQyBKbh
+	 pPACXtDVV00lF7R8dbrRK9bLVDrLnD2ZvcPj6Q9WfgVTFBI8mzsVfXAZ30SDeRehuqD+0
+	 W2+uUg1YJ2wuZx8jzV33PxXViVM+yFlPc1tHRS/xwA+FJNTZIUktpZA2hcfGq1XYMKVmT
+	 iBFaNLGWMfh/RLntG84tCP//Nzlw9WjG5TY8lnrsGFngF3R7i0fcv2y+6monfZTyR5w==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794991016;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
@@ -24,54 +24,54 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
 	 X-MS-Exchange-CrossTenant-UserPrincipalName:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=w312t54yecQaGZMYzsgFxDj8XmU0WX+HNS4h5q6q0a4=;
-	b=FwlL6r1WtrIhUn//q/a8aB8brit8H4/jHc3an7eHfAdoX4x/cG0yH5FdNXJi4TZSa9ZJ
-	 +LgCtVeCEzqWMzJwstJ5+ohrwZAHZV6FeYl3EzkYfvfSgN2h3fLOQU0gvExdrY2G5soDi
-	 WECwLuZUt0p+v/1jLplyYCkjp9R1BHdgVy6SB7UUekxSOJCqyZ20kSxRB1lS7G4TsGHga
-	 eGgK7l+3nEw+0COAyoLSqLv7AbZfQbeuC60An56ypvKO9J7NZ3I9bNFxgX9uajUtcbJnu
-	 Tup3lqBAMuBKEY59yLD34zZU+yV4C6+Y1POK7bBpEFs9GAHnZ1IDblMFh2BClDUR7mQ==
+	bh=BplrpvugKdAdFSQVGm/HpakqVQssmlNKy7ntzEaVEWM=;
+	b=ThvkQZxOZ2nMU2YQ+8qpKLP76JGn0Kgxq4p+LYYtZzWCQ6xt6aZmQFxhJc2BWQOe/174
+	 MSKDF/JGHUKy4Awl/XBINPyI6GPYda3l6cBwPYFzCbrHKiXdJMVctW4PepxDjmxyPqDBZ
+	 ayekZ4V3yYhrQPY5/6/PGY3KEEOpWGvMBO4dqeRceSg19x8iAxgh2e75RJzlwaxNSfeXn
+	 QSzVkXgvYuoJrW+yvfNFO++04SDPUQqCKVM4+RxmYnSGH6D+fndfAKaCrjozoaim8gq9s
+	 QR5IrJuUpheOpJLA1RXjzFJizpB7+52zfh8nItatXJaN8xPGJwf6VJiAeKT2FNk8rkg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=PcKF7IFF;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=c2fy5d8J;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.36
 Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010036.outbound.protection.outlook.com [52.101.56.36])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE3D606A333;
-	Wed, 18 Nov 2026 08:36:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EE3D606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CAF606A33B;
+	Wed, 18 Nov 2026 08:36:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51CAF606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=PcKF7IFF
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=c2fy5d8J
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pC/lvg0GCG9fx26UZI++u+PAsAW2jZ/yuFwf0v5evz2Knt2S3hxvHFpXmy/pWMZxCsCusSaAEp6yBwS2tICfB1ct7pUG6GPdkfPkr+e3zKwVFy8geoKyM+W3fBqvEwg8/6ZkQLFf3fN/mHtx0HBUwxizXHTh618lXwZWnn3vxv+i3ktPBaG0kffsrZ/jmCdVXlRABecJQP8lS2xKBbHmCUF5kT55gfj6bZuJHsLfD+Ghonp6GaGaphmipHsQu6kHwF1Bw/YaK9hZ1BAvHvR1Is+3xbQve3sxtsrjdBLAlG/AXuCBrX/nDHe8cAUEyxlfm8UcaTisoe3vNnFT18TMmA==
+ b=ExZ1hTJ9vEyTx6kpvH+VPuopPqySIIBe5vAWzSs3NdJNLSYxyR0eBokX8M/QMgK4WRu6YJ6zYvCKbgN1nLSg13H/24hQsxThJbI2owu0f8uetq9iv8631dr6cP9XeuXd0Wh9kdQhloAGAzfOtSMN/xU7erOI4kdBCT5tG79F0RxADqhe/HZJJh5d2/rHwl4qQG0WkK8S3ABZe2dM00r8f7LH3Jud3c34Mhl2PDabbmrg3lShczJJysDG3LpoMGAZ+4BJ9ckG9nTnmU5v65nr26EGKEkKI4PHsjyd8QZgLlJ2Z6prRmDewz3ekhCJUyrEMOE348INscPqWEScRoRpyg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w312t54yecQaGZMYzsgFxDj8XmU0WX+HNS4h5q6q0a4=;
- b=AkSvuu+2+7uaJAgUFRHh4/QiDubAGiVdE7hsIVXSfYcji2ITWEOsV7Pmh9ZoOV/IkAC+3IQ9xLoqmbqyPWNdmnfDaBAVvtwO/+8wRqBtuX1drtjaQrnvJ6P9VKQc6ySw1Udy98jY4Yzc6VhaXpERT5BOoPG1hqLStfHZ+mkmsZUL9m10zXV526m43f0NDJlz6X4yqZJm4YySSEw4wpjfnK/nXvDPEH9pvEjnB7pK7MH3WhOTndTVTSAgHZE2HdhPBuz5RHxDmMc6BaIRr8zAGeOvMDvGI8+0GWUTQlQEIjI5QpiVfLED4Yhni3DEtTdxwgwa/YWoI+/qmW8JYiCjdg==
+ bh=BplrpvugKdAdFSQVGm/HpakqVQssmlNKy7ntzEaVEWM=;
+ b=WNo/Di+ak3GUdxx+9HlBi+Soc3qFt4bqewOl4hf+T/gtmuTCQsx4x8qFD1QS0erG8AgKVGD/QzdzHaNRI1RdR+vpicBz3aEeGr78PewCYoOBq60RDBzKNGug9wMgoyXW5Zm9BNM570u1YRfWPJdiT1HeyqtCSoZtFzEb/C9559sdrHiG4BSj+2z+MVTXoxRNl9EQZAy0O6DG0m8VK+OlLihs47LEbBHb6ErUQUMjhj1qY4dGZIgaStKLJzFvi5ojHPgiualeXMpHFtFs2FufJCrXroGOCtr2ZDxh+tQcRoyrIL8huIO9RZG2gmxHhmyssHF4bmI8nMq2ea8XKp1VqQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w312t54yecQaGZMYzsgFxDj8XmU0WX+HNS4h5q6q0a4=;
- b=PcKF7IFFzodGrPML+VODzbFf5cYHYJ9AFi6yolg3Z9JKM6s4irEO+TyWEGrP7EF/XZRdg0BaUYMHKwN1GxzNWZV8pXuYYfn+V9dhDOWLpXrfM7uSpCeCzELR36qjFnbSryoKerYkUltAvVRJ9YsMQbqlRao21i4mPOSA6hreepbV/F9vXDoJhiI9K6xBFzQX6XlmXZOak6W8S7+Ka5iAdWmLUdM/b10Jljy8ht/7uWHU8e2DFk4DLmuGwpII2PR6K9MqxBuF7j9ebMWVL4Pg2r7wmHl6+f/24KjD8YCBMF6sLefTA7Jj+TOgTWykiJ/6ja3JXMt2w5XmpHNKWzKrzw==
+ bh=BplrpvugKdAdFSQVGm/HpakqVQssmlNKy7ntzEaVEWM=;
+ b=c2fy5d8JNo2mU6UlufdtfBJBSXfOsy9Y7JInpGji+tQb7SwHYqofH8TE6j6JgLog775mY9tSvCrVHcUhsCPxQZ8tihl51iOhHMnHRThbflOChm3FQAwWE3rHaxRJ4Ky45Eujv73OxMIvVTbq01/fGrYhDUKaesl0ld8rm6jkrRAIzNXwQAZqRtronpzCt6vygZDwf6W4tt8yI5k0ttz3K9vy2h8gl3za0X9HU4ydhTWQ+AlM/+eh40sU9BSoh+CqF/PUk8aX1qcZFrLDz5rmVCg9GMWeVh1CjP7LfiEREIXQHqi3jrxJuvF1P0m1+yX5fPInEezBl7JyDDF01lSOcg==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
  by PH8PR12MB999319.namprd12.prod.outlook.com (2603:10b6:510:40f::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 08:36:18 +0000
+ 2026 08:36:27 +0000
 Received: from LV8PR12MB9407.namprd12.prod.outlook.com
  ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
  ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0615.009; Wed, 18 Nov 2026
- 08:36:18 +0000
+ 08:36:27 +0000
 From: Ido Schimmel <idosch@nvidia.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -88,17 +88,16 @@ Cc: davem@davemloft.net,
 	linux-kselftest@vger.kernel.org,
 	razor@blackwall.org,
 	Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH net-next 1/6] net: Add Rx enabled state to LAG lower state information
-Date: Wed, 18 Nov 2026 10:34:37 +0200
-Message-ID: <20261118083442.1061289-2-idosch@nvidia.com>
+Subject: [PATCH net-next 2/6] bonding: 3ad: Notify Rx state changes
+Date: Wed, 18 Nov 2026 10:34:38 +0200
+Message-ID: <20261118083442.1061289-3-idosch@nvidia.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261118083442.1061289-1-idosch@nvidia.com>
 References: <20261118083442.1061289-1-idosch@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TLZP290CA0014.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:9::13) To LV8PR12MB9407.namprd12.prod.outlook.com
- (2603:10b6:408:1f9::13)
+X-ClientProxiedBy: TL2P290CA0007.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:2::9)
+ To LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,130 +109,190 @@ Precedence: list
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|PH8PR12MB999319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c37efbf-776c-4753-2a90-08df454f03fb
+X-MS-Office365-Filtering-Correlation-Id: 33bde3df-e254-4c4d-6cc4-08df454f0925
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|7416014|376014|22082099003|18002099003|261009223027099003|56012099006|261026140227099003|11063799006|261102123227099003|261028144727099003|261021123027099003|261026121527099003|261021121427099003|261022105027099003|10067099003;
+	BCL:0;ARA:13230040|23010399003|1800799024|366016|7416014|376014|22082099003|18002099003|261009223027099003|56012099006|261026140227099003|11063799006|261102123227099003|261028144727099003|261022075727099003|261021123027099003|261026121527099003|261021121427099003|261022105027099003|10067099003;
 X-Microsoft-Antispam-Message-Info:
-	vUTtBoe2e1IPydcQIJbDArW81hBtRaTZKsMTHjQIAATOP3C97Nv/HxBukwyXJDT2rwjy+ytG2ccLkGbYoNux1kw+RUdUBC7PXzXwvm4cD8wFK5sR8yQFTOaGavwIHXJBvhYQkC4lZpxCrX5bomY7p26pYYCoHjK8Gq3vKWoURePVEytvouyIBqhpBa1ig1SvRSjVRN5RSlR35HB1jz6of3JXXBGWvh6f7oP8fx0aBcxsmGDPe+9Azw5BQ4o8frmRQEutX3xMTa2DVbCe4Pm+UjorRmfrdjEG8x0l2duuXrVCnofCDyShMx4jPC4YralqKv+cpU33Xs/PHaItlLcYRuUGWvtp4XV8I3kyTLMc3izz2CXvqparAOkDVDUu9JJAjGApTaVohvNTZo+sho62EGjl5pDD1RarluLwK6dikzvyD1FekJvfITuQJma9bEkk3aUPsw86T3oOwKLIkmh+olstnCWOir+8faaIgYmzVPG/0N0IprkEIWTkFEvw0nFuyz61YWBtqYFlsnMolQmw4nd2Z9sadOOIGz8f9j32ZKRCM+N605ifAy/2Swo+9e1Dh2eiQlzeeJei+QaGx7eZrmqYNsO7YxCb65D4U4+IOhzZkRoCk9HbzICG9QoSamhS0IoLTg3vKZB33VdJK7i3S1srqW5GSK+26tjJPgQyA0Q=
+	xO/6UmOkN5R0h8CKPo70PUdnhm0RBnvR2JqCeEOLXopxE/KgK9QKN89jnn4w6F6tqBaoUAPvZ6QqamY+q7Hk1W8qvihHVIwuiR2McZ+GcUmbEvOW9CyRFMaEEt1ce1CkCbGW+e3YLUvc9P3z172EBMQN09l6CSwk5+kBojUaszCjVeUQRU1yrJkSnGOXYHCq9KBm9/oDUe8ZN1jX24jqqlOeB3FzxWWANGhQluMmz3XeBYddDPKfPgiBA4tH6Xs+5JbNTKOVMm1/JOmeUlm/FH+ejH8w2XrwEYR1mzus5eiBGphL1Tor/qEGmKp9/vZAvmWHtBC5dkeKtZtw+OkMm2ETQXAr6bWjNnfj6oqJmktC/O80W3uZGcfnMCBIpG7J1O9GFF3lJivSnSYBd9zduV60U77kGta1sWhSV9uKgHyARJ9kK5EMfQoBJx1M/89+4dxTaw5Q7Y2VExONwQIgylv89to1h9Dd75hbLgI6WTwm5R17ubSQs/W7gFFWQFxZOC1VczfcdM0mO1+mZ4F5nz9UuyDxW1GkVlTWlSGhLuPVozfluJSlGc+pRqwHwH8oAMnRFyFoDSJO+tV8i7SIqL3efFk5QMGdOfxv/bXNWK5v6K8/VMw18jhCeL16OtcO1OSPwnOvUc9yYiPV0y1/Y+2AzVCfFtIa5swpQqAPplQ=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(7416014)(376014)(22082099003)(18002099003)(261009223027099003)(56012099006)(261026140227099003)(11063799006)(261102123227099003)(261028144727099003)(261021123027099003)(261026121527099003)(261021121427099003)(261022105027099003)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(7416014)(376014)(22082099003)(18002099003)(261009223027099003)(56012099006)(261026140227099003)(11063799006)(261102123227099003)(261028144727099003)(261022075727099003)(261021123027099003)(261026121527099003)(261021121427099003)(261022105027099003)(10067099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QU6QYZVPjktnC9JMchceUmRqnJG/eFf00zBunNU3CZ78VjaUIk0wYIwi+D5c?=
- =?us-ascii?Q?x+d2CBK/VXuCNMfw5NE8gAs855dvJ7vYBd0Rwm6rInq0Kx9MaxE1W8Nh3D2M?=
- =?us-ascii?Q?U1aGDeET2727dAyt9Qnn07ZJBboWeN+5RlM6UofvajWDYF060amq6yHnQKSo?=
- =?us-ascii?Q?2eveMoXGghOezpTPrMkAV2NCSUgHd59iJ8Fmc2RVPcAOb+QPiPF9hg2Dw73b?=
- =?us-ascii?Q?4bkmIrUDNKB2YhyKbUe5nn6ih+YNPvOgY4LfrXmPhvgwdMrDFZ6cVwPNMkY2?=
- =?us-ascii?Q?ddLQT5+yxiddOkxpTWe5/dZLYNq9sFfdIZJ+U/SOrqgrT9EyZV/6gIrJpX9v?=
- =?us-ascii?Q?KdYCyI4kiWtTMa2xZ+wo1Ea0DzlJUiNknSs68Fsk+Ehs8TiiS21d23prP44w?=
- =?us-ascii?Q?WduehHZ3wPu+APOk9s0nMpwjOi6OkTq5j29mL+mkOmfJJ21yoxugRjPJm8VN?=
- =?us-ascii?Q?/B1G8xDmVhobRmChSbWHyj/OemPUdaFj67FPIwF9H1s+G8e78AIptF7iiBQm?=
- =?us-ascii?Q?0H/GDs9w/phEKJ0W9rR1poEMoCszm947FSVAcxTREBW074TmK4hWWR3lRrJ0?=
- =?us-ascii?Q?EHSbJVDSgbHEfD/8seeh16OtqKp5GKJdEDGvtXm7iI140JyQDBzoOgIsi1ll?=
- =?us-ascii?Q?+g1qlbuy4+qpSRjsC+ttSaRKgSyzwv8lmK4Hj/f5NYHcAvCKZmuGlNVyUIv1?=
- =?us-ascii?Q?0ejzxXPi2K1mj7LsrzsRB3VmkqO8TMavWNe8i/8e07xoRZfW2agvRhVkx0xO?=
- =?us-ascii?Q?PEzPcxayZXr3azxLiOCsWsVR4VvPEUDrFKPvr/2b63adIvs20/0UFmFYq61k?=
- =?us-ascii?Q?b0CRkzedrVvwObEYKcFDvCXl0eHBjgdngpl0P5cO/i6tJIT2ju0sYi0uu/GH?=
- =?us-ascii?Q?p43YDUC0BpSd85Ctt3+jAbxtQN2Ym3QxvWKbt6It3qE+m/qojt7026BqAjn9?=
- =?us-ascii?Q?iVEE99yCp/e0Zx2CvwdsYOXlvoMYOoYQNQDVuenaHeJO+taIB+N1fRvcPNpU?=
- =?us-ascii?Q?nhmp1DOB9qxDdQ2vSH1SkgcvlhWdli4LZPXl5cHEMQ6NQaR1xlISXZvmz2CM?=
- =?us-ascii?Q?W0FVNUg0NU6YrdDsFudSAGaBGkqwEsA2Scql6KPTY7HxcazyaaO3C7e4T5LW?=
- =?us-ascii?Q?fQyxvrtgHQ7HFIVyQ/Eqre2p4YHZ2Yb09jdpvBy8qsehqnYUXgD3vTioZiDQ?=
- =?us-ascii?Q?jJVcvy/3xBBvPvwWGM6ZxK+ZtLEYUp6Po2x3W5+MfKfLHVfjsnUZ+CNiRPqS?=
- =?us-ascii?Q?L0GGvmz+48iucmxVBZzZWLq0is+2uZz4zy1ADYkwku+njPrPk2I5vCP65A/8?=
- =?us-ascii?Q?8uBlTXtKB81MYUUAiU2J/Rah5gZTwLarc+WA3kMmVzqH7gEDiBvws2Cgi1O8?=
- =?us-ascii?Q?JhDCP9KYc6N/XPf9whcPS7F04VOIuzDtY/y3sJ+QGmYxOmDxOqmTcGkOV3yl?=
- =?us-ascii?Q?c9Y3j3o05VrNpjXw0d4g9DIvWJfnDq43bWMbR5ovxJZEukPnRMN/hOR2hc5I?=
- =?us-ascii?Q?iz+ihmUmizvQDZl6rWGGBdR+JCQo+4DgJDm1rzN37sK8mADwyp4hbT32euKH?=
- =?us-ascii?Q?DDcAWhTdhdWQOkU7RRzr4FG462ZHx3oyFW76fHFdzKjLHXLcXK+x1d2ICe23?=
- =?us-ascii?Q?WgPBZ4lBvkNZEIop/dBsgWn6FYkEy1/Np6Nb42NlQsn7HZJzFnwK+L4IlaYy?=
- =?us-ascii?Q?1brT2R7lnLsum/ZmrQVxo1CvmTHUWUzSy8XmV0Vl2n57Nfab?=
+	=?us-ascii?Q?LwjtVydbVGIkjJxT2lAtB42MJ0jCXRfuKx8z/jf/y9DgzaPqgJqktjiqDHLG?=
+ =?us-ascii?Q?kyn/C5fowpSYbRHBeVs5+TEr420ONHHPdlwqGqxDPwJwKz94XEmIvGQbBztN?=
+ =?us-ascii?Q?mU7R2v2RV3IPEvrF8XzlWe/2m3SO+NoFm3A6lFP6ZihqKzCFUpmst1HNO4Fs?=
+ =?us-ascii?Q?aDxPwPLriQA63lkiLutT2pNr6a/u0sHekCpiUek0rK/Pgk/zwA3ANyU+gJhN?=
+ =?us-ascii?Q?tCl1a5DGGzzqy7ijJeg/8yaKwIZAzbQtd4RZdaZTiwqWUZUVbnEcpIk3KhLI?=
+ =?us-ascii?Q?+mlP02J0TRfIk5NsA+0MiMA7cL+rtJjjoFPyj0usZJwx6kEAZVF0Gd9D+Qdb?=
+ =?us-ascii?Q?e6Q5S5co9R1V8wcpyHwCKngeXES/vR30XZA0Dz6voHWvGrxdfJsexXGnsBa1?=
+ =?us-ascii?Q?qVEoqmePq+HZXaxnudR/ILtMFq7uh4HbwIek0PHXVNKMq1RL5/DquEKx84Ea?=
+ =?us-ascii?Q?N6v3BJrfyqSZ70oZ9gQlWO2tUtJ/Zw4/C2E/V/vUh2aHI1idqG2PL07xYnSM?=
+ =?us-ascii?Q?5n44G+vwYqzkgFFKMg6jMiGmpez+/056pj1zolRw1YAq/NMzEpwEgl4bbGdl?=
+ =?us-ascii?Q?XNkgM7sP0B6tlIcN7BYMrqwfmvdpQ4/AibmdnwjeI6kYfRijifM++v8dnlKK?=
+ =?us-ascii?Q?MFG43YgGgX/rtsDWt68nIIgPKKMTWLWi0ljNdHGdqxmSJI/UAJXZ1PoXTi9w?=
+ =?us-ascii?Q?Q2AMk/Kb7Gci6uTeD98Tm6xOH4w3nJJFwj+54Keg74qyhZEVQddGvivfRBgs?=
+ =?us-ascii?Q?q+SQzT5xZd2NhPDydchpLqr6qhy797KoX+qFVudWht+FVoZf25hjK/vH5l1B?=
+ =?us-ascii?Q?7DbX/asF6owZbfhYdvBvSe10Dj6Wlk2SFuF/kQfUlOWM/XsPv2f8Fb2A6V6/?=
+ =?us-ascii?Q?2jmPyQxtGKEvN/Mfxym7fUioinxjexLlgJdhb/9zK41WyNQlWC30efl1S6X5?=
+ =?us-ascii?Q?uDy3TwSWMNMOg0SEQYKXs4EhOqJC3inMZ0EmB9XBopHAZ4VzTZmo91rYLpwq?=
+ =?us-ascii?Q?i8e+Ifbqi3od2L2T2jqqQloQGkE73jqwcsdvXaXO5xKtF9NdaXe0lvysiS9i?=
+ =?us-ascii?Q?Whnl6i2++5/uUvfLouIiTG/vzONqsKrFTD3ts0moshhzVckj/UTuuk5ceP2b?=
+ =?us-ascii?Q?Wrc/OhfBhWO0ijGQJ7DcF510sOf6c4iN/GakCvMU+ti4+cxUCiLV1hsDhFg6?=
+ =?us-ascii?Q?0jfLGBh1KJolTlTXn3XF6DMii6cXhdFbeueVxHiJoxYUe9BY4ex/zwjYyb7E?=
+ =?us-ascii?Q?5Arq8wPtPxsgreQmSNAMf8C7hpHJAvLKvMqMuQCW6dA/+7h5TdZtaHPSUOwP?=
+ =?us-ascii?Q?JKHz9Xmj2rP3xC7nhzFsu+qlJKIIN18jIIy6fn+cJpT7RSr6In385r0yopXa?=
+ =?us-ascii?Q?Kv1bcGFBiTExsONhvoPiPPskq2zC0FOiSHm/Syuqy9+I9jvlBvT8ZdfGjEqf?=
+ =?us-ascii?Q?RIklKGZEiHPhEoBTE73WhmtCstaUw7vPBD783562PZM2Kcd1hQWPrEKdJEWg?=
+ =?us-ascii?Q?L9s/k17hnTYhXXahNl87yZUbrPmxcXB3FDmQ1x702Vb9DhfDLDQZzJGd791q?=
+ =?us-ascii?Q?Q8VOuIz/tOmE7F8C5u2/Jz5qC6h61YMvMWhfUKtenBUXx8KTmc3kBRlVrl7o?=
+ =?us-ascii?Q?I2t3Ix7jRVpqGILJUu951mKn71I85MFpU042mWCQsdhU6Eb84Cs309QY44wF?=
+ =?us-ascii?Q?TKc2/zWHOtjkZYtaIALHIMB0UcTHPVWf57IH78SH8wtQGmC8?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c37efbf-776c-4753-2a90-08df454f03fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33bde3df-e254-4c4d-6cc4-08df454f0925
 X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 08:36:18.3044
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 08:36:27.1825
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NZQoixYjiBbPg7/EuLw0PM8sDebgDWuLHi3VvyKhxMjk5CXMUxYHsexXZSPSfe/pDsQpOzFuhNyBGK93f25TVw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZFpc0e+d9IHFrSJFRks3Aiy3+qPtWti3MTCqSVSV0W/q7+Jcbcy02QYRa2/OwWK4hm3Mwi06oidLKhG8+zJGZQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB999319
 
-The LAG lower state information that is passed to drivers via the
-NETDEV_CHANGELOWERSTATE notifier only indicates whether the lower device
-is enabled for transmission ('tx_enabled'). Drivers such as mlxsw use
-it to enable or disable both collection and distribution on the port.
+When coupled control is disabled, a port in COLLECTING state is enabled
+for collection, but not for distribution. However, drivers that offload
+LAG are not notified when a port enters or leaves this state since the
+bond only notifies them when the port's 'backup' flag changes.
 
-This is not enough for an 802.3ad bond with coupled control disabled,
-where a port can be enabled for collection, but not for distribution.
-
-Add an 'rx_enabled' field that indicates whether the lower device is
-enabled for reception. For now, set it to the value of 'tx_enabled' in
-all the LAG drivers. A subsequent patch will set it differently in the
-bond driver.
+Fix by setting 'rx_enabled' in the LAG lower state information according
+to the slave's 'rx_disabled' flag in 802.3ad mode and by notifying when
+this flag changes. Track pending notifications using a separate bit
+since 'should_notify' is toggled when the 'backup' flag changes.
 
 Reviewed-by: Petr Machata <petrm@nvidia.com>
 Signed-off-by: Ido Schimmel <idosch@nvidia.com>
 ---
- drivers/net/bonding/bond_main.c | 1 +
- drivers/net/net_failover.c      | 1 +
- drivers/net/team/team_core.c    | 1 +
- include/linux/netdevice.h       | 3 ++-
- 4 files changed, 5 insertions(+), 1 deletion(-)
 
+Notes:
+    Known issues that this patch does not address:
+    
+    1. The new 'should_notify_rx' bit shares a bitfield with other slave
+       flags. The 802.3ad state machine writes them under the mode lock, while
+       a few other paths (e.g., the 'all_slaves_active' handler) write them
+       under RTNL only. This is not new.
+    
+    2. When a port is disabled with BOND_SLAVE_NOTIFY_NOW, two notifications
+       are sent: one after the Tx state change and one after the Rx state
+       change. This is harmless.
+
+ drivers/net/bonding/bond_3ad.c  |  2 +-
+ drivers/net/bonding/bond_main.c |  5 ++++-
+ include/net/bonding.h           | 25 +++++++++++++++++++++----
+ 3 files changed, 26 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index d91533b80996..d2a55f4d8979 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -2608,7 +2608,7 @@ void bond_3ad_state_machine_handler(struct work_struct *work)
+ 
+ re_arm:
+ 	bond_for_each_slave_rcu(bond, slave, iter) {
+-		if (slave->should_notify) {
++		if (slave->should_notify || slave->should_notify_rx) {
+ 			should_notify_rtnl = BOND_SLAVE_NOTIFY_NOW;
+ 			break;
+ 		}
 diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 167503d1fd15..7eb3ff82ec96 100644
+index 7eb3ff82ec96..4ba1f5c33251 100644
 --- a/drivers/net/bonding/bond_main.c
 +++ b/drivers/net/bonding/bond_main.c
-@@ -1831,6 +1831,7 @@ void bond_lower_state_changed(struct slave *slave)
+@@ -1831,7 +1831,10 @@ void bond_lower_state_changed(struct slave *slave)
  	info.link_up = slave->link == BOND_LINK_UP ||
  		       slave->link == BOND_LINK_FAIL;
  	info.tx_enabled = bond_is_active_slave(slave);
-+	info.rx_enabled = info.tx_enabled;
+-	info.rx_enabled = info.tx_enabled;
++	if (BOND_MODE(slave->bond) == BOND_MODE_8023AD)
++		info.rx_enabled = !bond_is_slave_rx_disabled(slave);
++	else
++		info.rx_enabled = info.tx_enabled;
  	netdev_lower_state_changed(slave->dev, &info);
  }
  
-diff --git a/drivers/net/net_failover.c b/drivers/net/net_failover.c
-index 1b5213e87070..c4d39f8b8802 100644
---- a/drivers/net/net_failover.c
-+++ b/drivers/net/net_failover.c
-@@ -451,6 +451,7 @@ static void net_failover_lower_state_changed(struct net_device *slave_dev,
- 		else
- 			info.tx_enabled = true;
+diff --git a/include/net/bonding.h b/include/net/bonding.h
+index cb89aff437f4..5980df71a358 100644
+--- a/include/net/bonding.h
++++ b/include/net/bonding.h
+@@ -170,6 +170,7 @@ struct slave {
+ 	       inactive:1, /* indicates inactive slave */
+ 	       rx_disabled:1, /* indicates whether slave's Rx is disabled */
+ 	       should_notify:1, /* indicates whether the state changed */
++	       should_notify_rx:1, /* indicates whether the Rx state changed */
+ 	       should_notify_link:1; /* indicates whether the link changed */
+ 	u8     duplex;
+ 	u32    original_mtu;
+@@ -399,6 +400,21 @@ static inline void bond_set_slave_state(struct slave *slave,
  	}
-+	info.rx_enabled = info.tx_enabled;
- 
- 	netdev_lower_state_changed(slave_dev, &info);
- }
-diff --git a/drivers/net/team/team_core.c b/drivers/net/team/team_core.c
-index cfb833c307c1..def94cbc8384 100644
---- a/drivers/net/team/team_core.c
-+++ b/drivers/net/team/team_core.c
-@@ -88,6 +88,7 @@ static void team_lower_state_changed(struct team_port *port)
- 
- 	info.link_up = port->linkup;
- 	info.tx_enabled = team_port_tx_enabled(port);
-+	info.rx_enabled = info.tx_enabled;
- 	netdev_lower_state_changed(port->dev, &info);
  }
  
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 0325c6f2a7d1..694b6d29f680 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3239,7 +3239,8 @@ struct netdev_lag_upper_info {
++static inline void bond_set_slave_rx_disabled(struct slave *slave,
++					      bool rx_disabled, bool notify)
++{
++	if (slave->rx_disabled == rx_disabled)
++		return;
++
++	slave->rx_disabled = rx_disabled;
++	if (notify) {
++		bond_lower_state_changed(slave);
++		slave->should_notify_rx = 0;
++	} else {
++		slave->should_notify_rx = 1;
++	}
++}
++
+ static inline void bond_slave_state_change(struct bonding *bond)
+ {
+ 	struct list_head *iter;
+@@ -418,9 +434,10 @@ static inline void bond_slave_state_notify(struct bonding *bond)
+ 	struct slave *tmp;
  
- struct netdev_lag_lower_state_info {
- 	u8 link_up : 1,
--	   tx_enabled : 1;
-+	   tx_enabled : 1,
-+	   rx_enabled : 1;
- };
+ 	bond_for_each_slave(bond, tmp, iter) {
+-		if (tmp->should_notify) {
++		if (tmp->should_notify || tmp->should_notify_rx) {
+ 			bond_lower_state_changed(tmp);
+ 			tmp->should_notify = 0;
++			tmp->should_notify_rx = 0;
+ 		}
+ 	}
+ }
+@@ -573,7 +590,7 @@ static inline void bond_set_slave_inactive_flags(struct slave *slave,
+ 	if (!slave->bond->params.all_slaves_active)
+ 		slave->inactive = 1;
+ 	if (BOND_MODE(slave->bond) == BOND_MODE_8023AD)
+-		slave->rx_disabled = 1;
++		bond_set_slave_rx_disabled(slave, true, notify);
+ }
  
- #include <linux/notifier.h>
+ static inline void bond_set_slave_tx_disabled_flags(struct slave *slave,
+@@ -588,14 +605,14 @@ static inline void bond_set_slave_active_flags(struct slave *slave,
+ 	bond_set_slave_state(slave, BOND_STATE_ACTIVE, notify);
+ 	slave->inactive = 0;
+ 	if (BOND_MODE(slave->bond) == BOND_MODE_8023AD)
+-		slave->rx_disabled = 0;
++		bond_set_slave_rx_disabled(slave, false, notify);
+ }
+ 
+ static inline void bond_set_slave_rx_enabled_flags(struct slave *slave,
+ 					       bool notify)
+ {
+ 	slave->inactive = 0;
+-	slave->rx_disabled = 0;
++	bond_set_slave_rx_disabled(slave, false, notify);
+ }
+ 
+ static inline bool bond_is_slave_inactive(struct slave *slave)
 -- 
 2.56.0
 
