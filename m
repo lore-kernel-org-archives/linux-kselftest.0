@@ -1,75 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795019893;
-	b=oq5keM2GG2nsHnoL0HtS3TSel/y1r/sPQxNBBXDn17S+vBIY+nsrGEu+Nv8SRXA+26MD
-	 DXTyHerhzYki0OD82BE+HHvVvMxozR65yJlf7jMaairNBi5oi+UyUSLIeRkhffEW7VXou
-	 +Y2VISnTATfy6wdQWyiKZFDFGYqu+M6el3pxck/8kUbM+L8jMYRxo9v2EWeKjVNZKzGWQ
-	 u5wgCNC6y1w3AjsPjTYE1v56yanac8t7GHQjXrg5xgPRXFAkpmXp5oECr2o1JeSvvuiYs
-	 49PF43/yneYL44HXMoAbRESD2cMsutyuUQB/mokVdrS56YrxOXZ5b3fgxZ03SCIJbnQ==
+	t=1795021165;
+	b=47D4GdNrCEE5pSMLic0NfbejR0YGkAymRqpbx2nm8w2DUqeb/xUWs2ospXZ8EMUe6fnz
+	 VFJjyfRLQA80vvK+cVxCg1rr+Cjxibr/njDOQaqdOoiGjE8kTFoBnKbHLm9QesPW63396
+	 NsX7Hhn4nDi5oh8IGrbw/cQFeLCg7Ai8CKQMpeZ0GwuboKr1i/IS5IXG52S23GNOXDRya
+	 yh25Dp30y9zUakhJ6bu0xdCJDntB4OHinPFyNM29Tr0029s7+vQAZ9D+vR761hFtvA5gb
+	 zwVdHBCPnzpR9khjTHzI7ibh2We48j+Qpx1UxTrSmyo4quD2ECOQPhmH7xqYZ+Mse8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795019893;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=V7mJeiSJCVTjraIciJJrP4E+euyuUY8Iim8ikHfaISQ=;
-	b=IAOl/JgdjLQf/F3LNY9z8TeMJucO5hjkhKWPRT/1K1/lK99pBsiLWghjosNGMjN9pSjp
-	 mXP/b2hZo2JriakfpsAT5hLwd+7Lz4U+OyXDtK1TMEwlccZvxde3CUQbkHe6asUx6EiXw
-	 BbVofZ3UkAMgZ0epsVnZXxK4I83v3MaO0v9jNJ8kwqQlCxH8Nsn2UIoCyIeNR75iaUC8g
-	 dlT2ZzErd5SiViLjRDOubyVN2FON1NT6ln4XPxQyTdJrfqIAG+LHrLXdWQLMY3nUlP0J9
-	 BXxc4lC5sZoTOzNf9JNMEwbgASw87/snp86Rz5+7K4hwTKKvIK5T8NGepf5Y1DxKs7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795021165;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=7T9ENv9fYoNqueNN1cl4L0LtuGcP2bPFYDoRLfK8lQQ=;
+	b=wp7oVly4krEiYjMtfHFqkfPZIBHi2iCpwe2+RxO5SMWZczknnq1mqopPHNYGzB6aZ4nW
+	 KgpdyetVBTWKESHJICbR1zF/nnlPxGCvbkIG4s37Vp4QcQjSWiOY0vCB++oPDyDY3VXuj
+	 T2pIDhFZIwoprmqB4GAPYzy7yBDiJxfMnd3QbPDtWPrl6XBOxzvW/xShA7bMq2YdcmGeJ
+	 GvAwp4Y1VEl4TRT4NMbrRCQDKNU2w90YmhRDhECCW3cHE+wAxt7nOADw2hf/z7zZ65HS1
+	 BVc9Zx9N7tCJLtppdLGvwJSluVeb6m0Fc3rgc2/7MMYqp7bth6ioyT63p3RxuneM6og==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=uK7X0Dfo;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=xPoOYmXL;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="U7ge/EMe";
+	arc=none smtp.remote-ip=192.198.163.16
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F88606A32A;
-	Wed, 18 Nov 2026 16:38:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23F88606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9C9606A31C;
+	Wed, 18 Nov 2026 16:59:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E9C9606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=uK7X0Dfo;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=xPoOYmXL
-Date: Wed, 18 Nov 2026 17:38:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1795019889;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V7mJeiSJCVTjraIciJJrP4E+euyuUY8Iim8ikHfaISQ=;
-	b=uK7X0DfoIne69g0yXQMBSJNgig84GmBBKama+JLaaIgkazJp4dm7/JhP9xlkk/EJkg6Kxk
-	uTdLoXMhELgIzbvQIvq1MqK2XRP9hqqJM+3p0KvuPyx//hnV/jjPrhVivmyKDWzKVh0EuO
-	C53YdqQSxGuFeE4eMegPyfCPckZS3M8NB7GrdOgBZbtQdzFEsTZqehRxJjiWw3MPhHxrdA
-	YyAzOR2mMVZpe3hgXacPfGVHQJn1uFTNxbAqoEMheYzL1D2Tekn1g0mUz1L/7ZFBhtNE6d
-	jYBfTdk/WzeKpJQ8usQrFm2odvYdCflhH1MYhvvDGhL1OsNDo5RYMlokrvDeew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1795019889;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V7mJeiSJCVTjraIciJJrP4E+euyuUY8Iim8ikHfaISQ=;
-	b=xPoOYmXLPL31H1HUpE17x11g4ZXHh1c+tvwXldjILuUsoFXpNOMA66/hVut9Cb8dzQKDmT
-	ZgYgAMbg/EqS0cAw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
-	linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
-	longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
-	dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
-	shuah@kernel.org, juri.lelli@redhat.com,
-	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] locking/ww_mutex/test: Time an ABBA with both
- owners running
-Message-ID: <20261118163807.75hxTxGn@linutronix.de>
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
- <20261108141347.1525532-6-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U7ge/EMe
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795021164; x=1826557164;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cghH6f8GIelkFBs05EiJ1FaW5yY1//I8u9iMgXAXf0Q=;
+  b=U7ge/EMehyqXYTSb0rvV9kk7d/LjKLfrN+Rq5i9N2uJHgNVRpWZGWCPY
+   kIaRFfah1631lKdGY7osUfUc1JfMq3jTnK7ShzkXODEr+j8Z4E3d51NHw
+   6CwD1OmmqI17Llf4AA8unDDCUds0qhBuSlNIVJWb3T0lkqtMAsJFQjJm2
+   DmlrCRQReusldDhIujdwc8T+KM5na7PlgQukR55/hebvxs6UB8mSDWpmH
+   j46rDnzwxm+Nb1JDxPvr9LqqinCYOi2U6C547CVmXx3gDY6CWuf6xCgbW
+   qdxRnU6wghG/O+bdtbTr8d2wyTWo6mJvYxHl4GAY5rWHrhllFU0H4Afbj
+   w==;
+X-CSE-ConnectionGUID: Pok4RVhtShalVFmAO6YJyQ==
+X-CSE-MsgGUID: WDdoaoJCS2GvArkKmFgaUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11970"; a="3868101"
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="3868101"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 08:54:00 -0800
+X-CSE-ConnectionGUID: uWueeSFkRAGx+hPQf4nS/g==
+X-CSE-MsgGUID: 6s/qUNgtQQq1UMg+UdEedg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="10197369"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orviesa006.jf.intel.com with ESMTP; 18 Nov 2026 08:53:56 -0800
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: kuba@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	pabeni@redhat.com,
+	edumazet@kernel.org,
+	horms@kernel.org,
+	davem@davemloft.net,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	willemb@google.com,
+	petrm@nvidia.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: net: don't warn when bpftool is missing
+Date: Wed, 18 Nov 2026 17:53:38 +0100
+Message-Id: <20261118165338.1064930-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,42 +92,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20261108141347.1525532-6-mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: 8bit
 
-On 2026-11-08 09:13:47 [-0500], Mathieu Desnoyers wrote:
-> In the ABBA cases of test-ww_mutex, an owner never keeps running while
-> the other context blocks on it. With PREEMPT_RT, a ww_mutex waiter
-> spins while its owner runs. The wound that resolves an ABBA reaches the
-> waiter through a wakeup.
->=20
-> Add a wound-wait case where both contexts keep running. Each one runs
-> on its own CPU at SCHED_FIFO. The younger context holds B and blocks on
-> A. The older context holds A, then blocks on B, which wounds the
-> younger one. The older context must get B within 10ms on average, over
-> 10 rounds.
->=20
-> On v7.4-rc1 with PREEMPT_RT, the case fails every time. The two
-> contexts spin on each other until the fair server preempts them, after
-> 950ms by default. With "locking/rtmutex: Stop spinning on the owner
-> when the waiter is woken", earlier in this series, the older context
-> gets B in microseconds. Without PREEMPT_RT, the case passes with or
-> without that fix.
+xskxceiver and xdp_hw_metadata need bpftool to generate their BPF
+skeletons, so they are skipped when it is missing or does not work.
+The kernel test robot builds selftests without bpftool and reports the
+warnings about it as new build regressions in both net-next and
+bpf-next. Skipping the two tools is expected there, so drop the
+warnings.
 
-This is the ww_mutex equivalent of the futex case on PREEMPT_RT. I got
-lightly distracted by the -35/-EDEADLK error it always returns.
-Something that we might have since v5.16-rc1=E2=80=A6
+Fixes: e8f9d8237988 ("selftests: xsk: move the AF_XDP test suite to selftests/net")
+Fixes: d01fb5c81130 ("selftests: net: move xdp_hw_metadata from selftests/bpf")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/r/202611140904.io658Rze-lkp@intel.com/
+Closes: https://lore.kernel.org/r/202611141124.V0t6dlFo-lkp@intel.com/
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+Based on the bpf-net-xsk-move tag so it can go to net-next and bpf-next
+through another shared branch, as Alexei asked:
+https://lore.kernel.org/netdev/CAADnVQK=Y1CY=m0gGegLB-jm9S1cUcEcKUuNx33PT2W-tdMCuw@mail.gmail.com/
 
-Anyway.=20
-Since both (ww-mutex and futex) use the same code I am tempted to say
-that one test case might be enough.
+ tools/testing/selftests/net/Makefile     | 2 --
+ tools/testing/selftests/net/lib/Makefile | 2 --
+ 2 files changed, 4 deletions(-)
 
-But in case we want this,
-Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 83882735229d..a7f8b2c0b763 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -231,8 +231,6 @@ BPFTOOL ?= bpftool
+ HAS_BPFTOOL := $(shell $(BPFTOOL) version >/dev/null 2>&1 && echo y)
+ ifeq ($(HAS_BPFTOOL),y)
+ COND_GEN_FILES += xdp_hw_metadata
+-else
+-$(warning excluding xdp_hw_metadata, bpftool not installed or not working)
+ endif
+ 
+ TEST_GEN_FILES += $(COND_GEN_FILES)
+diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+index 0a6cd733883d..5765625ae7f7 100644
+--- a/tools/testing/selftests/net/lib/Makefile
++++ b/tools/testing/selftests/net/lib/Makefile
+@@ -10,8 +10,6 @@ BPFTOOL ?= bpftool
+ HAS_BPFTOOL := $(shell $(BPFTOOL) version >/dev/null 2>&1 && echo y)
+ ifeq ($(HAS_BPFTOOL),y)
+ COND_GEN_FILES += xskxceiver
+-else
+-$(warning excluding xskxceiver, bpftool not installed or not working)
+ endif
+ 
+ TEST_FILES := \
 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+base-commit: d01fb5c8113055e3d1b7f573261ae6a30abf4e53
+-- 
+2.43.0
 
-
-Sebastian
