@@ -1,64 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.12.53.23
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795026432;
-	b=0N35oAWhC4pVtaUakTVdTGRV85kl9jHfZM7VMHBU1yv+BHxFz0aFQ6ZOHwMLqdqg9pLk
-	 BdrGWZ7XI/+cQzXID4qWakGGwa6ADJ/OIDcilYb0jQG2+zr6qZIc3slWfXEq3tO+oAOBP
-	 MeRm0Nbpiva0fA/PPebwikqnM+7I+mUSI7vBRAky+kPoatGjwpM2PhQ/Gi4BjY2G/IHp0
-	 7y4yWZnygaswJClU9QRJSQ89IjEfrVUil4U9QYBcjSPWr7r+iUE1zkNPpt+O9i34/Z/Qa
-	 Aj1yaZ9zyEnAUfrGLUdf/tBB6cMfXu5ufP1pCKcq61llUOn6VW5Nxfa8M18vwJhe6WA==
+	t=1795027270;
+	b=TEMIn0mbJ25SAXa31FSn1ukdYv/F+Zr5NWfz4R5+75JM/eVwuy08+dCJEv2I53X9Lslb
+	 zmBEiGncbC0zqUNg19j+zITJZW8dUXsJ3MuF/vKz48y+5nmSK6wYj9bU5YySFptfEgMkZ
+	 ILbgKp5siK12PN1OFn7Xv2b4tXQTyD+rnHR2fm6cM/j4A1i0cIlPNdWozmcq6FMkISCTr
+	 ZKMpazSc/jLHl9fYCt7Mgp334j5kwnba8alTyRWzA+40aHD/uEOXYS5V+feV9HfoacZpw
+	 bp8ciDl1rFT7LOAuUnjDTrDoJwMIvagd1+5oqDZ1LnRX86E0KGG8GePq4FPMYeqNzkg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795026432;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=kQ8DyF1/v6HIM+JWWjYVxIs1gLifqeg4BwJopfCzUy8=;
-	b=kE2GRsv8QwhxMVuWWRtyBaRtD4bpJCcdKdBAAHbhIAEHY4TABf00xZJhNM6hWW+Rml54
-	 vaPUArVeGNBYYjmrn0pptHB7xQCIqz3WygG/9BySsa6yrpFLzhvHkqszcDT+InaKxlS7/
-	 5bPiqMDiW0OervUWebzdLGsMT+vggOa+lcrk4EsKI2RRtepvK2IXXyOpo6cuBWLr1YqgP
-	 Hi80qP7n262Sxy8lsemtPEqSLDNlrSTANEoQHt73Tt7RSYTqC+wXt/MqR4NNubp0Qej0n
-	 SLjTZt4MGB6h0xYT+Sftd0sHc4vf+t/FZSktwA2Gch0xtYTNqt+8VlFq5vKKmtLAWkw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795027270;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=QeBBXOlfrLNkClrMkLRqTkyWIPY5S5c/FDhckbc/h5k=;
+	b=F+rsZ4L66HHABKaJez16GJJxDKk4YEtx2bFkuZGx6E6r2x60GvzwdY4sB+EYOhqlnJVo
+	 UdnuL8/9eyKnCM3j0xBjfiD1dssXfiapZrMfS8SesEtyFGmCnKfE30oVwKgpbfjliuI+x
+	 15DJhp1HqQ+bPQRxPP9TZGS4xslrgKODEnfxyUNoL+eGIbKLst6Ot2G8f0vD7PDc4MENR
+	 ATELvUZwRsl7J/U+TPCYFBW+DmJr+TP4wsJ+pR/R0OaC3OGind2kJ1bjAMZtw+5G3Uq8+
+	 v7BOK9vAHhJUsNv/GXuslN7qhyHsHHQ3GXz72jrSTpy23El3JFmNbrrmdTml7YonDBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=pcPNb8Ve;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=q8BXsBcr;
+	arc=none smtp.remote-ip=52.12.53.23
+Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF44606A337;
-	Wed, 18 Nov 2026 18:27:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BF44606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE99606A31C
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 18:41:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCE99606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=pcPNb8Ve
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=kQ8DyF1/v6HIM+JWWjYVxIs1gLifqeg4BwJopfCzUy8=; b=pcPNb8Ve0lfmKj5OjcQoE5P4F8
-	Wc3bdDQWed8zDgTEnKafoYEkUR8YDZrP4sVmPz62AWiOBALYxPbZshN2fpAbWqjcd0ujNh0WUg5Im
-	taBJOdHVWjUrOYSlRkuwGPtuoH3NArKN9ocuTwt1yVi59h8Gb8PvGlpgMi1dWwAvypaNQmAdPR+Dh
-	v93C+3chhfmjLoB9Zf+mN3BiSvIyIIDob8K2gwDeaD9/bPqoW9bNq5x4x176cUqh5X/NWxkdl/pYL
-	PclxpqOvNTkiTjNLR49M6XWYm/JOazfBHWZiylBcQHqXMqBT+bXm+MY+uq2oxbs9DIrOO1EtnTWJY
-	5EFpXrew==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xTkMx-0004Wo-1d;
-	Wed, 18 Nov 2026 19:26:55 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xTkMw-000Hvj-08;
-	Wed, 18 Nov 2026 19:26:54 +0100
-Message-ID: <4d271539-b2f5-4fb9-a4dd-32becd02ce5e@iogearbox.net>
-Date: Wed, 18 Nov 2026 19:26:53 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=q8BXsBcr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1795027269; x=1826563269;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QeBBXOlfrLNkClrMkLRqTkyWIPY5S5c/FDhckbc/h5k=;
+  b=q8BXsBcrf7VLcl3QSPaIm0+hQEekbal34Yu6yB0JB8Zf+30ePv72vjdC
+   glqyS7SFG0scij8m6/z2CQKtDhIK0Zc2Yz0yN0VZ+t0AGGXXka3O91PEh
+   OA+Wev9w1N5Q7srCj32vUQlWAYs+qBZzyNxvt6bLpiR0U1vI1dLA+Idke
+   XbtPPcCmRtt+HmC0pFWerwcnEUxI1BSG/LJ9CLYOQVEfIHnwJtnYO5axe
+   W1O60k0m1lBwi82szKWNPFyOvcaqi4DXzJkUN/Y/mdEsn3OLku+CuZmO6
+   eP7S4dIshHgUlLn30JX/2Csk3oc7SRSD+uh+l4/XgcJYECSk5SnqnbtYr
+   w==;
+X-CSE-ConnectionGUID: ZoBT2TxJSBK8JWyUhHdQ/g==
+X-CSE-MsgGUID: gs6TZ0Q0Sxiv9o3wGAaKlg==
+X-IronPort-AV: E=Sophos;i="6.27,219,1787011200"; 
+   d="scan'208";a="34336987"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 18:41:09 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:24888]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.50.212:2525] with esmtp (Farcaster)
+ id b365bfda-2b16-4889-bdad-109873107649; Wed, 18 Nov 2026 18:41:09 +0000 (UTC)
+X-Farcaster-Flow-ID: b365bfda-2b16-4889-bdad-109873107649
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Wed, 18 Nov 2026 18:41:08 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Wed, 18 Nov 2026 18:41:07 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Bernd Schubert <bernd@bsbernd.com>
+CC: Miklos Szeredi <miklos@szeredi.hu>, <fuse-devel@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, Jim Harris
+	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
+	<luis@igalia.com>, NeilBrown <neil@brown.name>, Joanne Koong
+	<joannelkoong@gmail.com>
+Subject: Re: [PATCH v8 1/2] fuse: add FUSE_OPEN_ATOMIC
+Date: Wed, 18 Nov 2026 18:40:57 +0000
+Message-ID: <20261118184057.630761-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <fa582b7f-23ba-449d-b311-20f6ac8e867c@bsbernd.com>
+References: <fa582b7f-23ba-449d-b311-20f6ac8e867c@bsbernd.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,80 +87,21 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 07/15] bpf: don't redirect decrypted skbs from
- egress to ingress
-To: Todd Bert Freed <toddfreed@meta.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, bpf@vger.kernel.org,
- Daniel Zahka <daniel.zahka@gmail.com>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
- Jiri Pirko <jiri@resnulli.us>, John Fastabend <john.fastabend@gmail.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
- Martin KaFai Lau <martin.lau@linux.dev>, Paolo Abeni <pabeni@redhat.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Simon Horman <horms@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Wei Wang <weiwan@google.com>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-References: <20261111005533.6436-1-toddfreed@meta.com>
- <20261111005533.6436-8-toddfreed@meta.com>
- <ea8a18e0-12cc-48e0-903e-325a8ece5a0f@iogearbox.net>
- <CADh2yMxffQ3cywT3aNg3SkVfog5CFnUSp34F1esyun-xUBVa9g@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <CADh2yMxffQ3cywT3aNg3SkVfog5CFnUSp34F1esyun-xUBVa9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28187/Wed Nov 18 07:28:39 2026)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On 11/18/26 6:46 PM, Todd Bert Freed wrote:
->>> +     /* On transmit, decrypted asks the device to encrypt the packet. Sent
->>> +      * to ingress, the packet would read as decrypted by the device.
->>> +      */
->>> +     if (unlikely((flags & BPF_F_INGRESS) && !skb_at_tc_ingress(skb) &&
->>> +                  skb_is_decrypted(skb))) {
->>> +             kfree_skb(skb);
->>> +             return -EINVAL;
->>
->> This check should rather live in the bpf_redirect (and friends) helper e.g. after
->> we check for invalid params, etc, rather than here which feels off. Also, it would
->> probably make sense to refactor this condition into a small inline helper so you
->> don't have to open code it multiple times.
-> 
-> Sounds good I will move this check into the two callers
-> (bpf_clone_redirect() and
-> skb_do_redirect()) under a helper.
+On Wed, 18 Nov 2026, Bernd Schubert wrote:
+> We happen to have an online meeting once per month and the next is tomorrow,
+> would you mind to join?
 
-But why under skb_do_redirect? I meant just here:
+Hi Bernd,
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 532405988fd9..ba112111de22 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2471,6 +2471,8 @@ BPF_CALL_3(bpf_clone_redirect, struct sk_buff *, skb, u32, ifindex, u64, flags)
-  
-         if (unlikely(flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL)))
-                 return -EINVAL;
-+       if (...cond...)
-+               return -EOPNOTSUPP;
-  
-         /* BPF test infra's convert___skb_to_skb() can create type-less
-          * GSO packets. gso_features_check() will detect this as a bad
-@@ -2563,6 +2565,8 @@ BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
-         if (unlikely(!bpf_net_ctx_get() ||
-                      (flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL))))
-                 return TC_ACT_SHOT;
-+       if (...cond...)
-+               return TC_ACT_SHOT;
-  
-         ri = bpf_net_ctx_get_ri();
-         ri->flags = flags;
+Thanks for the review! Yeah, I would be interested in joining the
+meeting. Could you send me the time and link (presumably off this
+thread)? I'd love to find a way to improve performance for this routine
+pattern in FUSE, but I understand that it is a bit challenging to model.
 
-> FYI this patch was moved to the net series "net: don't redirect
-> decrypted skbs to
-> ingress, psp time-wait validator", so you will see this applied to v3 there.
-> 
-> -Todd
-
+Thanks,
+Jimmy
