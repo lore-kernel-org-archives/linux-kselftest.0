@@ -1,90 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795036976;
-	b=oGBveMXfn70MndCAI/lHJuZCKHt1ZmUAXf9nlcWWjPnG7F/wNdK0a4w38icKZ40tGN4H
-	 jIAWSUeTFKfCH53x9pfSCUthaFrAytY3MGmNTkrdJeOHwX7QmCCAqMEB79fmooZDOGy+s
-	 bmZZzxeTEy8/uR1C9xbylhig5gDGvDroLjImackE36Twd/uaKxUxY5uoZvvrBeWStyzYh
-	 Vr28NghNyDo72EV8tVOHGoV8MTrUlGDm/eYBhqOtlGPoRLdSUNEJvPlMbl8qVaJ/Ywcqa
-	 eyFG2aeHVnwGFh6Lgi+wfYmCJvz8cUmFMy78yh54fP0Yid+OJfryjIpX0g6E9XDLKcw==
+	t=1795037117;
+	b=HID9iYKUnjsI0AieQX565KjvF0UXwUhFtiZBYEivsdd5VaswZZRxYRPuo4M5SunjIBkS
+	 aP1TELUlp4H2irl2Ix1IReONvzKzhTuj4EraX3D1nwnivPe9AQrLFj7iGTBvUyocu1/G5
+	 EnATsC/OF2gNT070qmNx234Do4eB2/spY9wyQzEahGlj7HhoE4kmzteKgEv4lhyPxIjcC
+	 uaXUxwMiZ7p8zdeomX8NFWumTJmTOpWq+40f+FRVJk0EuuNfa0824U3xe15YJ6wD1tEoG
+	 ZHASjO3rQnf3kLLZvQ5BMe6qbHfMOpJVHV9+zXseY63cG5aNr9dqAdxA+4fNoG+LxAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795036976;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=vqtZas3t5wXmBF7qeLP24ETZ+NnHhg0AAw7WUrgO5/M=;
-	b=leWOvHPL7P3/S0xaO7i4oBhePMp6+uRPAKM47EHD1CeAyIMyfvqJ5UKBdNCg6j8Uh1wg
-	 KVHH2+UjoQoXKMsVkrXPmzrd1EqktsCNU/6aE6ep24xb+E4LRvG8y/lq4edxsVyBh9M3u
-	 z+iowanOGQKq7I+hGQ6m/skkV8XICqhq5H8lq9TfJWhW/ck4NmD14kwefGIjxm+gsiKek
-	 jjFY7j1RpgQJcTONEodFb4kR+PhbV0FNJt4SfmAgj6w+IPI5dr2kSlHJ5p+827mlsN6vH
-	 NEP8MSTGQ5OIBljS15i/+UD83Ow4dHwEbPZGG3CxHCUErAH4x6KX78ZOCU5F+aA1/Xw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795037117;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=sYEvR0y/S587RGU4gKT0zwa1IWS1hIurv3wif+IluiY=;
+	b=hE7TgN2MmSo7owrGuwvjKUShIsbrbfrkbYWBe34eivkYxA9D2mmw2pYnKb9UA6zSejSk
+	 vF7BbgxzEeTslGFbSxohOPCgnTR9rfWtt2VCIMZk6uf+9D1EUzu500B+rWUrp+XAjEfed
+	 cGYrrEEbHpptg2fqj+0RyXPsE3zHTD2nlpynY/6nKCtz8SLN+Kq1VPARCu+DVQWo8vRJF
+	 7x2zX/f24aKEAaqjvGlyHJOyQwZpkjIREtp27JXtywxPIYlikpZkUdEcWkfS+g0IsZGl6
+	 bAJhZnDlOVrLaSjgeP9HtgDLUgppP3QB313UAsX6ite5GuabbgZ4gZZpvL4BI9XDHBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ml+aVGKv;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b="hZ1/OQrG";
+	arc=none smtp.remote-ip=158.69.130.18
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 5DE5B606A31C;
-	Wed, 18 Nov 2026 21:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2FE606A338;
+	Wed, 18 Nov 2026 21:25:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE2FE606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ml+aVGKv
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 733A41F000C4;
-	Wed, 18 Nov 2026 21:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795036976;
-	bh=vqtZas3t5wXmBF7qeLP24ETZ+NnHhg0AAw7WUrgO5/M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ml+aVGKvvIC5pcrzx9ZzwGHLtrNZnut1ESXjSEU2HVNx6KxFl13Zr+qffUFbbPCwW
-	 V83mH7Py3EnQBPKdeQ6gpt7TyHQQlg5bEPLKqrq2wu1xjOrLWufishv37LqIoW8BFs
-	 YQp1QvRsDrJQWGENlrzay8K370ntnq0LSRLNiftl+fd7XrzLs8QDVSKZwPJ3ElX+vi
-	 OjP/miHHrlWI0I0NTP6aPNfvZ2Uz7sgVwWjL+HOqy7hVzjmWfdLN31G6Jok2wePmbd
-	 RziLHmPCbpggAo4Y/HUC9dK4Gjc1b5IRHx6l3+MHzVFmMxy1ndqJ3CxDspiyEHOVVd
-	 1GWZ+a/AyLQMA==
-Date: Wed, 18 Nov 2026 23:22:52 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ben Segall <bsegall@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Jan Kara <jack@suse.cz>,
-	John Johansen <john.johansen@canonical.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Manfred Spraul <manfred@colorfullife.com>,
-	Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v3 00/13] Namespace for namespace roots
-Message-ID: <av4XLJcO0y8CbGT-@kernel.org>
-References: <20261118193539.240065-1-jarkko@kernel.org>
- <av4CdM-eW73oO4wB@kernel.org>
- <av4NonrcCxzMoDyz@kernel.org>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=hZ1/OQrG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1795037116;
+	bh=sYEvR0y/S587RGU4gKT0zwa1IWS1hIurv3wif+IluiY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hZ1/OQrGicJP/4tHG55iTqg5QEl3Y+YBHaq2jSoMcG/9fikeqzF+YHimJ+JNITPR3
+	 BFschatYLf+Fd0mfwqdr7vtNteq2oi6ZcG0GR17SCwzXqYITvLdPjWkiwjWm3xtTzF
+	 5CbDF5Nzm/Hvk06HJNpIIy/+u0qrHxYdmKAQqh7Vx57l3t7fiNZ4tD0gYAeZopRDvY
+	 sH4GrmE2qYMgIg/AoTxJo7JRF50148B57DJu10sDaeL5rGA9/GtNJypCtN6qqopqb2
+	 X+ZR7exYpn7Hty+PLmoRfVFcLfxhvJR0fcK/JOXZLBGKYE3j8C4Ts5GYuJby2hnZFu
+	 J98v3x7bBTYfg==
+Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jVF4X07vZzS0K;
+	Wed, 18 Nov 2026 16:25:16 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: juri.lelli@redhat.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	vincent.guittot@linaro.org
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	tglx@kernel.org,
+	will@kernel.org,
+	boqun@kernel.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org,
+	longman@redhat.com,
+	ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	parri.andrea@gmail.com,
+	m.szyprowski@samsung.com,
+	kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH v2 03/16] sched: Let a task boosted by a deadline waiter change its policy
+Date: Wed, 18 Nov 2026 16:24:59 -0500
+Message-Id: <32e83abf79c6cebb23193478bdfea27e3525b025.1795037078.git.mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <cover.1795037078.git.mathieu.desnoyers@efficios.com>
+References: <cover.1795037078.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,135 +95,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <av4NonrcCxzMoDyz@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 18, 2026 at 10:42:15PM +0200, Jarkko Sakkinen wrote:
-> On Wed, Nov 18, 2026 at 09:54:32PM +0200, Jarkko Sakkinen wrote:
-> > On Wed, Nov 18, 2026 at 09:35:26PM +0200, Jarkko Sakkinen wrote:
-> > > OVERVIEW
-> > > ========
-> > > 
-> > > A root namespace (rootns) is a kernel object backed by a file descriptor
-> > > that binds together:
-> > > 
-> > > 1. A full set of detached namespaces owned by a fresh user namespace.
-> > > 2. A dedicated PID namespace for spawning processes into, signaling
-> > >    members, and polling or waiting on PID 1 exit.
-> > > 3. An initially empty mount namespace (CLONE_EMPTY_MNTNS) populated
-> > >    directly in its target user namespace before going live, without
-> > >    inheriting host mounts or cloning staged trees, while still allowing
-> > >    new mounts to be attached at runtime.
-> > > 
-> > > Work on this feature started in 2025 from David Howells' container object
-> > > patch set [1], which I turned into a namespace for namespace roots and
-> > > rebuilt around that premise.
-> > > 
-> > > While the patch set is manually written, the original motivation came
-> > > from isolating LLM agents. Running untrusted agent workloads made it
-> > > clear that OCI runtimes need to minimize their live configuration
-> > > surface.
-> > > 
-> > > Assembling mounts, credentials, and namespaces inside helper processes
-> > > with a half-configured container is what I see as the main challenge,
-> > > and the existential debate around namespaces and container objects is an
-> > > unfocused discussion topic.
-> > > 
-> > > [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
-> > > 
-> > > IMPLEMENTATION
-> > > ==============
-> > > 
-> > > rootns_create() allocates a rootns instance backed by a pollable
-> > > anonymous inode fd, creating a fresh owning user namespace and a full set
-> > > of detached namespaces: empty mount (CLONE_EMPTY_MNTNS), PID, UTS, IPC,
-> > > network, cgroup, and time. ioctl(rootnsfd, ROOTNS_GET_NSFD, nstype)
-> > > returns nsfs file descriptors for individual member namespaces when
-> > > standalone namespace operations are needed.
-> > > 
-> > > Superblocks are configured directly in the target user namespace via
-> > > fsopen(), FSCONFIG_SET_ROOTNS, and fsmount(), allowing unprivileged
-> > > callers to assemble FS_USERNS_MOUNT filesystems without holding
-> > > CAP_SYS_ADMIN in their own user namespace or entering the target user
-> > > namespace first. move_mount(..., MOVE_MOUNT_T_MNTNS) operates on any
-> > > non-anonymous mount namespace fd: on an empty mount namespace it installs
-> > > "/" onto the nullfs root once, and it attaches relative submounts both
-> > > before entry and into live mount namespaces.
-> > > 
-> > > Once "/" is installed, processes are spawned into the rootns via clone3()
-> > > with CLONE_INTO_ROOTNS and struct clone_args.rootns, without mutating the
-> > > caller in place. Pairing CLONE_INTO_ROOTNS with CLONE_VM | CLONE_VFORK
-> > > and opening the target binary via openat2(..., RESOLVE_IN_ROOT) on the
-> > > retained "/" mount fd allows spawning with execveat() without copying
-> > > page tables.
-> > > 
-> > > The first entrant becomes PID 1; once it exits and
-> > > zap_pid_ns_processes() reaps all members, poll() reports EPOLLHUP and
-> > > rootns_wait() returns init's exit status and rusage. rootns_kill() walks
-> > > pid_ns->idr under tasklist_lock to signal member thread groups.
-> > > 
-> > > CHANGES
-> > > =======
-> > > 
-> > > v3:
-> > > - The patch set size increased predominantly because the coverage of
-> > >   kselftest had to widened to cover the introduced changes.
-> > > - Replace MOVE_MOUNT_T_ROOTNS_ROOT with MOVE_MOUNT_T_MNTNS targeting
-> > >   mnt_ns nsfs fds, and add ioctl(ROOTNS_GET_NSFD) to open member
-> > >   namespace fds (Andy Lutomirski).
-> > > - Allow unprivileged fsopen(), FSCONFIG_SET_ROOTNS, and fsmount() to
-> > >   configure and mount FS_USERNS_MOUNT filesystems directly in the target
-> > >   user namespace without entering it first (Andy Lutomirski).
-> > > - Fix locking, refcounting, credential/dumpability/timens setup,
-> > >   pivot_root() lookup, and cross-userns mount checks across copy_rootns(),
-> > >   CLONE_INTO_ROOTNS, rootns_kill(), FSCONFIG_SET_ROOTNS, and move_mount()
-> > >   (Sashiko).
-> > > - Mark PowerPC rootns syscalls nospu (Sashiko).
-> > > - Update documentation and kselftests.
-> > 
-> > I.e. before PID 1 and /proc/<pid>/ns/* existss, nsfd for namespace other
-> > than root nsfd can be acquired as follows:
-> > 
-> > 	int mnts_fd = ioctl(root_fd, ROOTNS_GET_NSFD, CLONE_NEWNS);
-> 
-> 
-> Unprivileged caller becomes the owner of rootns->user_ns. Each mount
-> syscall then just checks CAP_SYS_ADMIN against rootns->user_ns.
-> 
-> The user space wiring goes along the lines of:
-> 
->         int root_fd = rootns_create(ROOTNS_KILL_ON_CLOSE | ROOTNS_CLOSE_ON_EXEC);
->         int mntns_fd = ioctl(root_fd, ROOTNS_GET_NSFD, CLONE_NEWNS);
-> 
->         int tmpfs_fd = fsopen("tmpfs", 0);
->         fsconfig(tmpfs_fd, FSCONFIG_SET_ROOTNS, NULL, NULL, root_fd);
->         fsconfig(tmpfs_fd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
->         int rootfs_fd = fsmount(tmpfs_fd, 0, 0);
-> 
->         move_mount(rootfs_fd, "", mntns_fd, "/", MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_MNTNS);
-> 
->         struct clone_args args = {
->                 .flags  = CLONE_INTO_ROOTNS,
->                 .rootns = root_fd,
->         };
->         pid_t pid = clone3(&args, sizeof(args));
-> 
-> Note that example is uncompiled :-)
-> 
-> This example makes me feel that perhaps RootNS is not the best possible
-> name for this but this rather should be e.g., NullNS?
+A SCHED_OTHER or SCHED_FIFO task that holds an rt_mutex can be boosted
+into the deadline class by a deadline waiter. Then a sched_setattr() or
+sched_setscheduler() call on it fails with EBUSY, unless it asks for
+SCHED_DEADLINE. sysrq-n would not reset it either.
 
-Before judging this, keep in mind that I've not just suddenly invented
-this. I first encountered the topic when David posted his patches, and
-felt that they were a bit unfairly judged.
+The admission test runs "if setscheduling to SCHED_DEADLINE (or
+changing the parameters of a SCHED_DEADLINE task)", as its comment
+says. sched_dl_overflow() then handles three cases, by the task's
+policy: the task enters, leaves or stays in SCHED_DEADLINE. But the
+call site tests dl_task(p). That tests the priority, so a boosted task
+passes it. For such a task and another policy, sched_dl_overflow()
+matches no case and returns -1.
 
-Somewhere at 2025 David rebased his branch when I asked, and slow-cooked
-the result that we're seeing during a period of 1.5 years. It has not
-been a priority topic at work so this has been more like a spare time
-sudoku.
+Fix this by testing the policy, with task_has_dl_policy(). A boosted
+task has no bandwidth of its own to admit or release.
 
-So if you count the David's original patch set version, this has
-history spanning since 2017.
+Now sysrq-n can take a boosted task out of the class.
+normalize_rt_tasks() calls __sched_setscheduler() without pi, so the
+task gets its normal priority. Nothing then drops the boost. At the
+unlock, rt_mutex_setprio() sees no change of priority. The pi_se of the
+task would keep pointing to the waiter, which can exit. So also drop the
+boost in __setscheduler_dl_pi() when the task leaves the class, as
+rt_mutex_setprio() does.
 
-Br, Jarkko
+The boosted_owner_policy case of deadline_bw_test, added later in this
+series, fails with EBUSY on v7.4-rc2. It passes with this series. The
+sysrq_boosted_owner case of deadline_switch_test tests the sysrq-n path.
+
+Fixes: 332ac17ef5bf ("sched/deadline: Add bandwidth management for SCHED_DEADLINE tasks")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Cc: stable@vger.kernel.org
+---
+ kernel/sched/syscalls.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+index 6f8ce5fd94a1..cb115aa9b0b3 100644
+--- a/kernel/sched/syscalls.c
++++ b/kernel/sched/syscalls.c
+@@ -304,6 +304,13 @@ static inline void __setscheduler_dl_pi(int newprio, int policy,
+ 			scope->flags |= ENQUEUE_REPLENISH;
+ 		}
+ 	}
++
++	/*
++	 * Without pi, as from normalize_rt_tasks(), a boosted task can leave
++	 * the class. Drop its boost then, as rt_mutex_setprio() does.
++	 */
++	if (!dl_prio(newprio))
++		p->dl.pi_se = &p->dl;
+ }
+ #else /* !CONFIG_RT_MUTEXES */
+ static inline void __setscheduler_dl_pi(int newprio, int policy,
+@@ -691,6 +698,10 @@ int __sched_setscheduler(struct task_struct *p,
+ 	 * is available. Keep this check last. If a later check failed,
+ 	 * nothing would give back the bandwidth it reserves.
+ 	 *
++	 * Test the policy, not the priority. A task boosted into the class
++	 * by priority inheritance has no bandwidth of its own to admit or
++	 * release.
++	 *
+ 	 * With SCHED_FLAG_KEEP_PARAMS, the task keeps its parameters, so
+ 	 * there is nothing to admit. Such a call changes other attributes,
+ 	 * such as the utilization clamps. A deadline task does not use its
+@@ -699,7 +710,8 @@ int __sched_setscheduler(struct task_struct *p,
+ 	 * them from the task without a lock.
+ 	 */
+ 	if (!(attr->sched_flags & SCHED_FLAG_KEEP_PARAMS) &&
+-	    (dl_policy(policy) || dl_task(p)) && sched_dl_overflow(p, policy, attr)) {
++	    (dl_policy(policy) || task_has_dl_policy(p)) &&
++	    sched_dl_overflow(p, policy, attr)) {
+ 		retval = -EBUSY;
+ 		goto unlock;
+ 	}
+-- 
+2.47.3
+
