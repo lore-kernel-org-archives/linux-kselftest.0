@@ -1,76 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795012282;
-	b=HFK7to3yomVH1zpcyMSaMDbFeoYEMimBvX717KLq3JagKYrcyZOB22YZHYQgEa/UXn9c
-	 fGGKb8aL4/wgj5j0ru6G+7hMM6dEAQ+yuR0h6vRmc/hT6VtAYWHyhi4HpJ9rBCq/OsStq
-	 vyzy+oTuduiJV3fPUPkyoV+1cIz/2uIchPtxSwD8TdzXOToAekSxdklYhuoTqG5EqllwG
-	 PC3/hptF7s0lbrg8b1KGr98rPAcdg6/iZCjTFOvbChRreeu2ZMoIwRyWUYF+4aWVJps8T
-	 vpZ4PPLZDTFjMKmsQV9wMOoLyiY0LNgSepSQBscRN57xIwJc6yKgu79Sgx1BFPfvohA==
+	t=1795012340;
+	b=WMX53giwYGVuxC0g72zfTG9HNchd+ZTSOoQ5LDBB64JMtpIzyWkaPLevEb5plSv8+zpS
+	 9kniqCfJx+d77Nm6s2XdRfu0SQgnuz1sEu3hDcrYkcjwNWVZmaOnQmvHdmuMRf+TmR3N7
+	 XcVyns99HojOq0z4Gs2tHVsgblBvZFlr+o8GFX1LOMSL3qJ7dPS6Si72jd2NLPOVOdleg
+	 AErFtONWMslcPXIVLPSMG8oAmDtMQXf088su39YEK93gdZivn+X4U4/mh9iMfzhwdxtFf
+	 JkTnNsFMpppZwysIFWpqKHUbr9iLBrmCXex7aB2ihgkXsaagzIS13SbVvDplO+ZbZXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795012282;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=OXWSHKpo0S6c/jR7/8XBZxBcRvLohSQDocmHEXhtdSE=;
-	b=pdC/Y96d9NentfiSaUkI9tQ0Hk4J5d4gVoaI8vrOe+d3R8kW5LIkq9U+kuDqYLEqZHBP
-	 inut3knyAOVousnzl0uUE2Y8A7ZaLpzVRSg9dvbkGjFxnETqvvs1+pha4UcC7gzv5XhtY
-	 22BXzCR7KwwrBJlTGQmTYkY9D3jo4mVJFFoM7mv4TU/TMMZdCVAgSjniwLSnI6Ftwho3L
-	 25wPhdJLIk1Mg/nIt5bFMLDVe/p4/7UrDMFgWi9ia5NMRLwG4aaVetUkKJbAjo0fHuEEx
-	 POpxPOfYnSZTmplLFXaGkgYCpGhuvFh6dLGLelfdVLvqVBapAUFe40BSTD4nXHQF7/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795012340;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=7jQT3dfpLYqeUK4DoTAQSzaDXb+f3HOv+YBt8ur6KBI=;
+	b=h6RmMQkslm0QXPsE7bViUzBTjzn7uc8uTJKip1CzZ3Te1/NROnRx04wT29reELZcQ8SZ
+	 8a7dt+R+HeYwP/JETw9Dz+Ey+EDb2+5t4ELF7skp7hf+CWeJNMqjoDRMboigUmw3FZXbh
+	 fnN80WmHGveH172CQRBlBwgj99GX1BnwUXxt3AuNxht8RqnKdCBXv33C2ow1BpbYcQJr+
+	 9qiGkUzKGaPC4+ba5rxQneTTwggPbocYiVYc5zSrBnXM7YAorZud2rq9oxmKR/ZrPDm13
+	 ZRiMoB918xBYYa/ZC8V6vwwwM3JJtIeIctcgN5S73K5Shm2fpyVx3lL1QLqRcxa7y3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ICDVkcIX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VySfDEcB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 4A154606A31C;
-	Wed, 18 Nov 2026 14:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999DD606A31C;
+	Wed, 18 Nov 2026 14:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ICDVkcIX
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 201251F000C5;
-	Wed, 18 Nov 2026 14:31:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VySfDEcB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9A41F000C4;
+	Wed, 18 Nov 2026 14:32:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795012281;
-	bh=OXWSHKpo0S6c/jR7/8XBZxBcRvLohSQDocmHEXhtdSE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ICDVkcIXTKsGJF4JDPx+noCHqXryDLDuRsiFwCbNSqYHSWqrxcpVtFEnK2/n3K9tl
-	 hLUC5Y8djH0g94+VD2H9eKqLQKiCnIOFjqgTzkOt+8jt4BtYH5hp7WLw6E64ZuS3qp
-	 OTLMdWu03IA0hkZ4PnZxQ8wHuuQNI7/p6ngkcHjc9w3tdH7d5KC9Fb6ojOUW4nbaR/
-	 fftLSJlHIiqjAtX41LjPEqXOwBNl8M/qWkSX/Ydqn2zmLXf3XXzY4EtPGnIJqj0MfT
-	 ZEIQVKi1TgDdcexQPnuFQQhoBOnbpyqIduB6GeK4be0sVjetLyY/TwZHP46MgHPsYL
-	 Ks+TLg66b9ZQg==
-Date: Wed, 18 Nov 2026 16:31:17 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Rodolfo Giometti <giometti@enneenne.com>
-Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jens Wiklander <jenswi@kernel.org>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	op-tee@lists.trustedfirmware.org,
-	Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-	Pankaj Gupta <pankaj.gupta@nxp.com>,
-	Sahil Malhotra <sahil.malhotra@nxp.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Richard Weinberger <richard@nod.at>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Demi Marie Obenour <demiobenour@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
- never read
-Message-ID: <av22tUCclsAPJq1g@kernel.org>
-References: <20261118140421.584086-1-giometti@enneenne.com>
+	s=k20260515; t=1795012340;
+	bh=7jQT3dfpLYqeUK4DoTAQSzaDXb+f3HOv+YBt8ur6KBI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=VySfDEcBcNGbFF+rpI4yHodTmFw50soCkCJgjkGJGjLWZYcNts3AorVeo1LGcWXaw
+	 7DoYFjgtsKr55eavX5lfDSka9rk4aPY1dwYTNszLo/VXYUnczghpL/8giNhAEqmb9B
+	 DGU67WcwEaL+EGkx3k6uwOZ5Rg7URJLGSj507Z3UFg3EDt1yMYWIBzkFQF0gBxqLxQ
+	 OTQgRbV5f5ARaShw+5QWFFLBgrJaeM4MsPI/7vJGGU2p2CKUbTOMljQ0S+5q22bnRq
+	 x8KzAzL9Sgo5L+q8tKOKiCxmnEAPS2+6Jc5chh8XaZ5V12yiDyEqXM5bRvgox8dDp7
+	 EBGwJlYJLYMaQ==
+Subject:
+ Re: [PATCH net-next v2 1/2] netdevsim: add TLS device offload emulation
+From: netdev-bot+sashiko@kernel.org
+To: jiayuan.chen@linux.dev
+Cc: netdev@vger.kernel.org, kuba@kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com,
+ john.fastabend@gmail.com, sd@queasysnail.net, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Wed, 18 Nov 2026 14:32:19 +0000
+Message-ID: <179501233933.3136.12728860174259324524@kernel.org>
+In-Reply-To: <20261117140642.4008-2-jiayuan.chen@linux.dev>
+References: <20261117140642.4008-2-jiayuan.chen@linux.dev>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,318 +64,777 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261118140421.584086-1-giometti@enneenne.com>
 
-On Wed, Nov 18, 2026 at 03:04:12PM +0100, Rodolfo Giometti wrote:
-> This RFC proposes a key type, "keycrypt", whose material user space can
-> use for symmetric operations but never read: AES-256-CBC, HMAC-SHA256
-> and an authenticated AES-256-GCM stream, through a file descriptor that
-> KEYCTL_CRYPT_OPEN returns for one key and one operation. The key is held
-> by a backend: the kernel itself (sealed under a trusted key), an OP-TEE
-> trusted application, or, as a proposal only, the CAAM. I am asking
-> whether this is a direction the keyrings, crypto and TEE maintainers
-> would take, before polishing it further.
-> 
-> Patch 9, the authenticated stream, is a proposal on its own and not
-> needed by the rest of the series: it is a construction of keycrypt's
-> own, and patches 1-8 do not depend on it, so it can be discussed, or
-> left out, apart from them. No user-space consumer uses the stream or
-> HMAC-SHA256 yet: craf (below) uses CBC only. If this direction is found
-> acceptable, one of the next steps is to bring craf's keycrypt backend
-> into craf's main line, with the stream and HMAC-SHA256, as long as
-> doing so does not stand in the way of this RFC or of the series I hope
-> will follow it.
-> 
-> The problem
-> -----------
-> 
-> An embedded product that encrypts its own data (a root filesystem
-> archive, configuration backups, logs) needs a key that does not sit in
-> the root filesystem and that a compromised user space cannot copy. Today
-> user space either reads the key (a user or logon key handed to AF_ALG)
-> or cannot use it at all (a trusted key serves kernel consumers only).
-> AF_ALG, the one interface that let user space drive a key the kernel
-> held, has moved away from that use: v7.2 dropped off-CPU cryptography
-> from it (7524070f26d8, "crypto: af_alg - Drop support for off-CPU
-> cryptography"), whose message says "If using an off-CPU accelerator
-> really does turn out to be a win, a new API should be developed that is
-> actually a good fit for it", and v7.3 restricted it to allowlisted
-> generic algorithms by default (2f204fe718f5, the af_alg_restrict
-> sysctl). One exception was let back in, cbc(paes) with a CAAM blob in
-> place of the key, because "this crypto operation cannot be implemented
-> in a userspace library" (285d8204638c, v7.2), for privileged users only
-> (d9506e82ced5, v7.3): the need is acknowledged, for one driver and
-> one mode. keycrypt is meant to be the API that 7524070f26d8 asks for,
-> for keys that stay in a TEE or in hardware, whatever the backend.
-> 
-> The interface
-> -------------
-> 
-> 1. A key type, "keycrypt", created with add_key() from "new <alg>
->    <purposes> [tier=|min-tier=] [backend=]", "load <blob>
->    [accepted-min-tier=] [purpose=]" or, when allowed, "import <alg>
->    <purposes> [tier=|min-tier=] [backend=] <hex>". User space states the
->    protection a key needs, as a tier, and the kernel chooses the backend
->    that provides it, unless backend= names one. backend= is a constraint
->    added to the tier, never one in its place: a named backend that does
->    not meet tier= or min-tier= gives ENODEV, not a weaker key. It is for
->    a system with more than one backend, an i.MX8 with both the CAAM and
->    OP-TEE say, where a program must choose which mechanism holds a key
->    (the cost of each call, what the key is bound to) and not only how
->    well; the name chooses among mechanisms that meet the tier asked for,
->    it never lowers a tier asked for (without one, it takes that backend
->    at the tier it declares, so a program that needs a tier states it).
->    Its payload read back is a blob that only that backend can open; the
->    material itself never reaches user space.
-> 2. Each key is bound, when it is made, to one algorithm and to the
->    purposes it may serve, checked at every open:
->    a. encrypt and decrypt, for aes256-cbc and aes256-gcm-stream keys:
->       a key that may only encrypt lets a device write data it cannot
->       read back, a key that may only decrypt the reverse;
->    b. mac and verify, for hmac-sha256 keys: "mac" computes a tag over
->       data, "verify" only checks a tag given by the caller, so a
->       component holding a verify-only key can authenticate data (a
->       configuration, an update) but cannot produce a tag that would
->       pass. VERIFY takes the expected tag at FINAL and answers 0 or
->       EBADMSG; the tag it computed never leaves the backend. For
->       example, a server authenticates the commands it sends to a fleet
->       of devices with HMAC-SHA256, and every device holds the same key,
->       imported at the factory as verify-only. With a plain HMAC key,
->       root on one device could extract it and forge commands for the
->       whole fleet; with a verify-only keycrypt key held by a tee or hsm
->       backend, a compromised device can still check commands but can
->       neither read the key nor compute a tag that passes. It comes
->       close to what a signature gives (everyone verifies, only the
->       server signs), with a MAC, as long as no device's TEE or HSM is
->       broken: the key is the fleet's, so the device that breaks forges
->       for all of it, which a signature would not allow.
-> 3. KEYCTL_CRYPT_OPEN (keyctl 33) opens an operation context on a key and
->    returns an fd; ioctls on it: KEYCRYPT_IOC_UPDATE, KEYCRYPT_IOC_FINAL,
->    KEYCRYPT_IOC_SEGMENT (the GCM stream, patch 9) and KEYCRYPT_IOC_INFO,
->    which tells a program holding only the fd (passed by SCM_RIGHTS, say)
->    the operation, the minimum tier it was opened with, and the
->    algorithm, purposes, tier, origin and backend of the key it is using.
->    Search permission on the key is the right to open it; the caller may
->    name the lowest tier it accepts (accepted_min_tier), and a key below
->    it is refused.
-> 4. Policies: kernel.keys.keycrypt_system_tier and
->    kernel.keys.keycrypt_import (also the boot parameters
->    keycrypt.system_tier= and keycrypt.import=), one-way, so that a
->    system can refuse the use of low-tier keys or clear-key import for
->    good. The system tier is a floor on use only: keys below it can
->    still be made and loaded, but KEYCTL_CRYPT_OPEN refuses them. Its
->    starting value is chosen at build time
->    (CONFIG_KEYCRYPT_SYSTEM_TIER_*), so a signed kernel image carries a
->    floor its command line cannot lower; likewise, a kernel built
->    without CONFIG_KEYCRYPT_IMPORT refuses import whatever its command
->    line or sysctl say.
-> 5. EOPNOTSUPP from KEYCTL_CRYPT_OPEN means "not a keycrypt key", or a
->    kernel without keycrypt, so a library may fall back to another
->    interface on it; ENODEV means no backend can run the key.
-> 
-> Tiers and what a compromised kernel can do
-> ------------------------------------------
-> 
-> Each backend declares a tier, and the open path checks it against the
-> system tier and the caller's accepted minimum:
-> 
->   tier     key in clear    purpose enforced by   who may use the key
->            in the kernel
->   kernel   yes             the kernel            the kernel
->   engine   no              the kernel            the kernel
->   tee      no              the TA                the kernel
->   hsm      no              the HSM               the kernel
-> 
-> The last column is the limit of the mechanism: a compromised kernel can
-> use a tee or hsm key for the purposes it already has, but cannot extract
-> it or change its purpose. Documentation/security/keys/keycrypt.rst,
-> "Backend requirements", is the contract a tee or hsm backend must meet.
-> 
-> 1. kernel: the keys are in clear in kernel memory while loaded. It is
->    there so that the same interface works on a system with no TEE and
->    no suitable hardware, where it still keeps the key out of user space
->    and out of the root filesystem; its one backend, sw, is off by
->    default (CONFIG_KEYCRYPT_SW), and a system that has one of the
->    other tiers should use it, engine at least, and raise the system
->    tier accordingly. Raising it stops the use of kernel-tier keys, not
->    their presence: one created or loaded below it is in clear all the
->    same, as its trusted master is, so a system that must have none
->    builds without CONFIG_KEYCRYPT_SW.
-> 2. engine: a crypto engine the kernel drives keeps the key, never in
->    clear in the kernel, but its use is decided by the kernel only. It
->    comes in patch 6, on its own, so that patches 1-5 stand without a
->    tier no backend of theirs declares. The CAAM backend of this series
->    is an engine, since the CAAM does not check what a key is used for;
->    an ELE backend (below) would start as an engine too, and could move
->    to hsm once the firmware is confirmed to enforce a key's purpose. If
->    more such shades appear, a separate property may fit better than
->    more tiers, and I would welcome an opinion.
-> 3. tee: the OP-TEE backend; the TA re-checks every operation against
->    the purposes it bound when the key was sealed.
-> 4. hsm: as tee, in dedicated hardware apart from the CPU running the
->    kernel (a secure element, a security core of its own such as NXP's
->    EdgeLock Enclave, a crypto engine with its own policy), the place of
->    Android KeyMint's StrongBox; no backend in this series.
-> 
-> The backends
-> ------------
-> 
-> 1. sw, of the kernel tier (no name is both a tier's and a backend's):
->    keys sealed with AES-256-GCM under a key derived with HMAC-SHA256
->    from a trusted key (any trusted-key source); HKDF-derived stream
->    subkeys; lib/crypto AES. Where the trusted key
->    comes from a TPM, the TPM only unseals that master when a key is
->    loaded; the data itself is ciphered on the CPU, never by the TPM.
-> 2. OP-TEE: a trusted application, an early TA, REE kernel login only;
->    it derives its sealing key from OP-TEE's hardware-unique-key
->    service. The TA is written (ta/keycrypt, one patch to optee_os) and
->    is the one that ran on the hardware below, but I have not proposed
->    it to OP-TEE yet: I would first like to know whether this direction
->    can go on. I can publish it for anyone who wants to try it and is
->    willing to support the work.
-> 3. CAAM: patches 7 and 8, a proposal and not to be applied as they
->    are.
->    They are based on Richard Weinberger's "crypto: caam" series v1 (see
->    "Base and prerequisites") and never ran on a CAAM. Questions for the
->    CAAM maintainers:
->    a. is an internal cbc(paes) taking the caller's key modifier an
->       acceptable form;
->    b. can a job generate a key in the CAAM and keep it black without it
->       crossing kernel memory;
->    c. can the use of a key be checked by something a compromised kernel
->       does not drive: trusted descriptors, which would let the CAAM
->       itself enforce a key's purpose and make the backend hsm, or a job
->       ring owned by the secure world, which would make it tee;
->    d. could cbc(paes) take CCM black keys, which are authenticated where
->       ECB ones are not, once the driver handles their extra length
->       (Weinberger's series refuses them, so the backend uses ECB).
-> 4. ELE (i.MX9), not in this series: this is an RFC, and I am not an
->    expert of the enclave, so I would rather know first what NXP thinks
->    of it, and whether they would be willing to propose an ELE backend
->    themselves, as an engine or, better, as an hsm. As far as I can see,
->    the se_if driver in linux-next gives user space a misc device with a
->    generic send-and-receive ioctl for the enclave's messages, and offers
->    nothing to other kernel code. A per-operation in-kernel API exported
->    by that driver (open a key store reserved to the kernel, generate a
->    key, import a wrapped one, read a key's attributes, delete it,
->    AES-CBC and MAC in one call) would let a keycrypt backend use the
->    enclave. Questions for NXP:
->    a. does the firmware enforce a key's key_usage and permitted_algo on
->       every operation, min_mac_length when verifying, and never release
->       a generated key in clear (yes to all three would make the backend
->       hsm rather than engine);
->    b. could a key be exported wrapped under a device-unique key and
->       imported again, so that a keycrypt blob holds the key itself
->       rather than a reference to the enclave's key store;
->    c. is the key that wraps an imported key unique per device;
->    d. the user-space library has a streaming MAC (hsm_mac() with its
->       INIT, UPDATE_DATA and FINALIZE flags): would the firmware offer
->       it to the kernel for a key in its key store;
->    e. can a key_id be reused after a key is deleted (the library's
->       documentation does not say);
->    f. would a per-operation API of this kind answer the objection Arnd
->       Bergmann raised to the generic passthrough
->       (<2034fb2f-f169-46a5-85e8-fa723ddb0360@app.fastmail.com>).
-> 
-> Base and prerequisites
-> ----------------------
-> 
-> The series is based on mainline v7.4-rc2-92 (067c5c24cef2). Patches
-> 1-6, and patch 9 on top of them, apply on it alone. Patches 7 and 8, the
-> CAAM proposal, need Richard
-> Weinberger's "crypto: caam" series v1
-> (<20260726081504.2182951-1-richard@nod.at>, three patches, listed as
-> prerequisites below) applied first, for example with:
-> 
->   b4 am -o - 20260726081504.2182951-1-richard@nod.at | git am
-> 
-> Testing
-> -------
-> 
-> The series comes without its tests. There are KUnit suites for the
-> core and the sw, OP-TEE and CAAM backends, and a kselftest for the user
-> ABI, with a case for every reachable row of keycrypt.rst's error
-> tables; together they are larger than the code they test, so I am
-> keeping them for the non-RFC series, once the direction is agreed. The
-> results below that name them come from the series with the tests in it.
-> Taking them out removed only the tests and the hooks that let them
-> reach the code's internals (static functions made visible and exported
-> to KUnit modules): with CONFIG_KUNIT off, the posted patches build for
-> arm64 to the same instructions as that series.
-> 
-> On that base, with Weinberger's three patches applied: built for arm64
-> with W=1 (security/keys/keycrypt/ and drivers/crypto/caam/, no
-> warning), and, with the tests on top, the KUnit suites pass on UML
-> but for the one case that needs the system tier above kernel (by
-> Kconfig or boot parameter). Patches 1-6 and 9 alone, on the base without
-> Weinberger's patches: the same build of security/keys/keycrypt/, no
-> warning.
-> The runs below were made on that series at v7.3 on QEMU, and, without
-> the CAAM code, backported to NXP's 6.18, on QEMU and on hardware:
-> 
-> 1. QEMU (qemuarm64-secureboot, OP-TEE 4.9.0, an fTPM as the source of
->    the trusted master): the KUnit suites and the kselftest passed on
->    the sw and OP-TEE backends, a case skipped only where its backend
->    was absent (the CAAM) or where it needs a one-way policy setting;
->    the TA's unbind and bind; persistence of a blob across a restart.
->    QEMU proves function, not secrecy: its hardware unique key is a stub.
-> 2. Hardware: the series, backported to NXP's linux-imx lf-6.18.2-1.0.0
->    (six upstream prerequisites; the two CAAM patches left out), with the
->    TA built as an early TA into NXP's imx-optee-os 4.8.0, ran on an
->    i.MX93 board with secure boot closed (AHAB), where OP-TEE derives the
->    key that seals the TA's key blobs from the EdgeLock Enclave's
->    hardware unique key. The KUnit suites and the kselftest passed on
->    the OP-TEE backend, a case skipped only where its backend was absent
->    (sw, which 6.18 cannot build for lack of the library AES it needs,
->    and the CAAM, left out) or where it needs a one-way policy setting.
->    A key generated in OP-TEE and kept as its blob
->    was loaded back after a reboot and after a full power-off, and
->    decrypted a file encrypted before them. The same AES-256-CBC key and
->    IV through AF_ALG (cbc-aes-ce), through keycrypt and through openssl
->    gave identical ciphertexts.
-> 3. Cost on that board (Cortex-A55), AES-256-CBC, per call on an open
->    context: keycrypt with the OP-TEE backend 59-62us up to 256 bytes,
->    ~106us at 4KiB, 880-930us at 64KiB (67-71MiB/s); AF_ALG cbc-aes-ce
->    6-7, 12-14 and 110-138us (454-570MiB/s). Opening a context costs
->    ~500us, against ~9us for an AF_ALG accept on a keyed socket (~25us
->    for the whole AF_ALG setup). OP-TEE's own benchmark (xtest
->    --aes-perf, from user space through libteec) on the same board gives
->    ~64us per call plus ~1.5ns per byte. keycrypt's fixed cost matches
->    that round trip to the secure world; its remaining ~11ns per byte is
->    spent in this prototype's own data path (buffer allocation and
->    copies between user space, kernel, shared memory and the TA); which
->    part dominates is not yet measured, and it is to be reduced.
-> 
-> A user-space consumer exists: craf, the archive tool of crypto-afalg,
-> has a keycrypt backend on the keycrypt branch of
-> https://github.com/giometti/crypto-afalg (tag keycrypt-board-5 is the
-> version that ran on the hardware above). Its enc command, an openssl
-> enc that takes its key from the keyring, shows what a keycrypt key
-> carries. A key made once as
-> 
->   k=$(keyctl add keycrypt demo \
->         "new aes256-cbc encrypt,decrypt min-tier=tee" @u)
-> 
-> is bound there to AES-256-CBC, to encrypting and decrypting, and to a
-> backend of tier tee at least, chosen by the kernel; so
-> 
->   craf enc -enc-key $k -iv <hex> < plain > cipher
->   craf enc -d -enc-key $k -iv <hex> < cipher > plain
-> 
-> need nothing else: the open takes no algorithm and no backend, the key
-> brings them, and its tier is enforced by the kernel against
-> -enc-min-tier or the system's tier. Any other key goes to AF_ALG, and
-> the command line must name the cipher. On the board, craf enc with an
-> imported keycrypt key and openssl enc with the same key bytes and IV
-> each decrypted what the other encrypted.
-> 
-> While testing the user-space side of this series, craf's test suite hit
-> the KEYCTL_PKEY_VERIFY regression of cb481e59ea6c, which lets a short
-> RSA signature verify: it is fixed by Florian Bauckholt's patch [1], and
-> the reproducer was reported in [2].
+Thank you for your contribution! Sashiko AI review found 5 potential
+issue(s) to consider.
 
-I likely have never time to read this. Thus, NAK.
+Critical: 0 · High: 0 · Medium: 3 · Low: 2
 
-Br, Jarkko
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The RX-side 'decryption' emulation does not decide whether the
+  peer sees skb->decrypted=1 for offloaded TLS records.
+- [Medium] netdevsim: unguarded IPv6 sock fields in nsim_tls_dev_add()
+  break IPV6=n build
+- [Medium] netdevsim: non-TLS TCP segments treated as TLS records in
+  nsim_tls_tx()
+- [Low] The comment on struct nsim_tls's lock in
+  drivers/net/netdevsim/netdevsim.h:61 reads 'protects conns and the…
+- [Low] nsim_tls_tx_zero_tags() rewrites payload bytes (the auth-tag
+  placeholder at the end of each record's last frag) without checking…
+
+--
+
+netdevsim: add TLS device offload emulation
+
+This adds kTLS device offload emulation to netdevsim. It implements
+tlsdev_ops and advertises NETIF_F_HW_TLS_TX/RX. TX passes plaintext
+records through and zeroes the auth tag placeholder. RX marks skbs
+decrypted when they match the tuple installed at ->tls_dev_add().
+
+> diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
+> index 2aa7ea924396e..5c14033ab507f 100644
+> --- a/drivers/net/netdevsim/netdevsim.h
+> +++ b/drivers/net/netdevsim/netdevsim.h
+> @@ -56,6 +56,19 @@ struct nsim_ipsec {
+>  	u32 tx;
+>  };
+>  
+> +struct nsim_tls {
+> +	struct list_head conns;
+> +	spinlock_t lock;	/* protects conns and the counters below */
+> +	struct dentry *dfile;
+> +	u32 count;
+> +	u32 tx_conn;
+> +	u32 rx_conn;
+> +	atomic64_t tx_packets;
+> +	atomic64_t tx_bytes;
+> +	atomic64_t rx_packets;
+> +	atomic64_t rx_bytes;
+> +};
+
+[Severity: Low]
+This isn't a bug, but is this comment accurate?
+
+The lock doesn't cover the datapath:
+
+  - nsim_tls_tx() and nsim_tls_rx() update the atomic64 counters below it
+    without ns->tls.lock.
+  - nsim_tls_rx() reads count with READ_ONCE().
+  - nsim_tls_rx_offloaded() walks conns under RCU with
+    list_for_each_entry_rcu().
+
+The lock seems to serialize only the writers (nsim_tls_dev_add(),
+nsim_tls_dev_del() and nsim_tls_teardown()) and the debugfs snapshot.
+
+Could the comment say that instead?
+
+[ ... ]
+
+> diff --git a/drivers/net/netdevsim/tls.c b/drivers/net/netdevsim/tls.c
+> new file mode 100644
+> index 0000000000000..cad9b262da441
+> --- /dev/null
+> +++ b/drivers/net/netdevsim/tls.c
+> @@ -0,0 +1,477 @@
+
+[ ... ]
+
+> +static void nsim_tls_tx_zero_tags(struct sk_buff *skb)
+> +{
+
+[ ... ]
+
+> +	spin_lock_irqsave(&tx_ctx->lock, flags);
+> +	while (before(seq, end)) {
+> +		struct tls_record_info *record;
+> +		skb_frag_t *frag;
+> +		u64 rcd_sn;
+> +
+> +		record = tls_get_record(tx_ctx, seq, &rcd_sn);
+> +		if (!record || tls_record_is_start_marker(record))
+> +			break;
+> +
+> +		frag = &record->frags[record->num_frags - 1];
+> +		memset(skb_frag_address(frag) + skb_frag_size(frag) - tag_size,
+> +		       0, tag_size);
+
+[Severity: Low]
+Can this memset leave a bad TCP checksum when the checksum has already
+been computed in software?
+
+netdevsim puts NETIF_F_HW_CSUM in hw_features. So "ethtool -K <dev> tx
+off" can be run while TLS TX offloads are installed. That leads to:
+
+  - netdev_fix_features() drops NETIF_F_HW_TLS_TX and TSO.
+  - tls_dev_event() does not tear down existing contexts on
+    NETDEV_FEAT_CHANGE.
+  - tls_validate_xmit_skb() keeps passing the skb through, because dev
+    still matches tls_ctx->netdev.
+
+validate_xmit_skb() then computes the checksum in software, through
+skb_csum_hwoffload_help() or software GSO, over the stale placeholder
+bytes. After that, this path rewrites them:
+
+nsim_start_xmit()
+  nsim_do_tls()
+    nsim_tls_tx()
+      nsim_tls_tx_zero_tags()
+        memset(..., 0, tag_size)
+
+The skb is no longer CHECKSUM_PARTIAL, and the netdevsim RX path does not
+mark it CHECKSUM_UNNECESSARY. The peer's TCP would see a checksum mismatch
+and drop the segment that carries the tag.
+
+The retransmit would have a correct checksum, since the pages already
+hold zeros. The result is one drop and retransmit per record whenever
+the stale bytes were non-zero.
+
+Should this only touch the tag when skb->ip_summed == CHECKSUM_PARTIAL,
+or fix up the checksum after the memset?
+
+[ ... ]
+
+> +static bool nsim_tls_tx(struct netdevsim *ns, struct sk_buff *skb)
+> +{
+> +	/* Not ours: the software fallback has already encrypted it.  Clear
+> +	 * the decrypted mark the sending stack left so the peer's stack
+> +	 * decrypts it.
+> +	 */
+> +	if (!tls_is_skb_tx_device_offloaded(skb) ||
+> +	    rcu_dereference_bh(tls_get_ctx(skb->sk)->netdev) != ns->netdev) {
+> +		skb->decrypted = 0;
+> +		return false;
+> +	}
+> +
+> +	nsim_tls_tx_zero_tags(skb);
+> +	atomic64_inc(&ns->tls.tx_packets);
+> +	atomic64_add(skb->len, &ns->tls.tx_bytes);
+> +
+> +	return true;
+> +}
+> +
+> +/* Stand in for the inline decryption the peer's hardware would do, since we
+> + * are about to hand the skb to its stack.
+> + */
+> +static void nsim_tls_rx(struct netdevsim *ns, struct sk_buff *skb)
+> +{
+> +	struct nsim_tls_tuple t;
+> +
+
+[Severity: Medium]
+Does this treat every skb from the offloaded socket as a TLS record?
+
+Once tls_set_device_offload() installs tls_validate_xmit_skb,
+tls_is_skb_tx_device_offloaded() is true for anything the socket
+sends. That includes pure ACKs, bare FINs, window probes and
+keepalives with no TCP payload. It also includes retransmits of bytes
+that were queued before TLS_TX was set up.
+
+nsim_tls_tx_zero_tags() detects these cases (off >= skb->len, or
+tls_get_record() returning NULL or the start marker), but it just
+returns. nsim_tls_tx() still bumps tx_packets/tx_bytes and returns
+true:
+
+nsim_do_tls()
+  nsim_tls_tx()            <- counts it, returns true
+  nsim_tls_rx(peer_ns)
+    nsim_tls_parse()       <- no payload length check
+    nsim_tls_rx_offloaded()
+      WRITE_ONCE(conn->started, true)
+    skb->decrypted = 1
+
+On the peer, a zero length segment with seq at or after start_sn is
+enough to latch conn->started. The one-shot start_sn check can then be
+used up by an ACK that carries no record bytes at all.
+
+Pre-offload segments can also be marked decrypted and counted in
+rx_packets/rx_bytes. Their bytes are not device records, and the
+sending stack built them with skb->decrypted == 0.
+
+The debugfs counters on both ports therefore count control segments as
+offloaded TLS traffic.
+
+Real drivers skip these. For example, mlx5e_ktls_handle_tx_skb()
+returns early when there is no TCP payload. Could
+nsim_tls_tx_zero_tags() report whether it found a device record, with
+nsim_tls_tx() returning false otherwise? Or would checking the
+sender's skb->decrypted, together with a payload length check, be
+enough here?
+
+[ ... ]
+
+> +	if (!READ_ONCE(ns->tls.count))
+> +		return;
+> +
+> +	if (!nsim_tls_parse(skb, &t))
+> +		return;
+> +
+> +	if (!nsim_tls_rx_offloaded(ns, &t))
+> +		return;
+> +
+> +	skb->decrypted = 1;
+
+[Severity: Medium]
+Does the peer-side match here decide whether the peer sees
+skb->decrypted set on offloaded records?
+
+On the device-offloaded TX path, tls_push_data() adds
+MSG_SENDPAGE_DECRYPTED:
+
+net/tls/tls_device.c:tls_push_data() {
+    ...
+	flags |= MSG_SENDPAGE_DECRYPTED;
+    ...
+}
+
+tcp_sendmsg_locked() then turns that into the skb bit:
+
+net/ipv4/tcp.c:tcp_sendmsg_locked() {
+    ...
+			skb->decrypted = !!(flags & MSG_SENDPAGE_DECRYPTED);
+    ...
+}
+
+nsim_tls_tx() clears the bit only on the "not ours" path. nsim_tls_rx()
+only ever sets it and never clears it. skb_scrub_packet(), called from
+__dev_forward_skb(), doesn't touch it either.
+
+So every record skb from an offloaded sender seems to reach the peer
+stack with decrypted = 1, even when:
+
+  - the peer has ns->tls.count == 0 (no RX offload installed, or the RX
+    feature is off)
+  - the tuple does not match in nsim_tls_rx_offloaded()
+  - the seq is before conn->start_sn
+
+For example, records that reach the peer before its TLS_RX offload is
+installed would already be marked decrypted.
+
+That doesn't match the comment in nsim_do_tls():
+
+	/* Only what this port just "encrypted" may skip decryption on the
+	 * peer.  ...
+
+or the one in nsim_tls_rx_offloaded():
+
+		 * ...  The check only keeps a pre-offload stream
+		 * from being reported decrypted, ...
+
+The commit message also says:
+
+    on RX, where there is no socket yet, connections are matched on the
+    tuple from ->tls_dev_add() the way the hardware does.
+
+For record skbs, the tuple match and the start_sn/started logic seem to
+change only the debugfs rx counters. The gate still applies to "ours"
+skbs that were built with decrypted = 0, such as retransmits of bytes
+queued before TX offload was installed.
+
+Would it make sense for nsim_do_tls() to clear skb->decrypted on its own
+records, and for nsim_tls_rx() to set it only on a match?
+
+[ ... ]
+
+> @@ -0,0 +1,477 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/ipv6.h>
+> +#include <linux/list.h>
+> +#include <linux/skbuff.h>
+> +#include <linux/slab.h>
+> +#include <linux/tcp.h>
+> +#include <net/ip.h>
+> +#include <net/ipv6.h>
+> +#include <net/tcp.h>
+> +#include <net/tls.h>
+> +
+> +#include "netdevsim.h"
+> +
+> +/* Emulated kTLS offload.  No crypto is performed: TX puts the record on the
+> + * wire as plaintext and RX marks it decrypted, so the RX side has to be
+> + * offloaded on netdevsim as well, otherwise the core runs the software AEAD
+> + * over plaintext and fails the connection with -EBADMSG.  The other way
+> + * round, software TX into an offloaded RX, is real ciphertext and works.
+> + */
+> +
+> +#define NSIM_TLS_MAX_CONN	32
+> +
+> +/* netdev_fix_features() drops NETIF_F_HW_TLS_RX unless the device also does
+> + * RX checksums, which every offload capable NIC does.
+> + */
+> +#define NSIM_TLS_FEATURES	(NETIF_F_HW_TLS_TX | NETIF_F_HW_TLS_RX | \
+> +				 NETIF_F_RXCSUM)
+> +
+> +struct nsim_tls_conn {
+> +	struct list_head list;
+> +	struct rcu_head rcu;
+> +
+> +	/* Identity as seen on the wire, from the point of view of the port
+> +	 * the offload was installed on: l* is this side, r* is the peer.
+> +	 */
+> +	struct in6_addr laddr;
+> +	struct in6_addr raddr;
+> +	__be16 lport;
+> +	__be16 rport;
+> +	u16 family;
+> +
+> +	enum tls_offload_ctx_dir dir;
+> +	u32 start_sn;
+> +	bool started;
+> +	u16 cipher_type;
+> +	const struct tls_context *tls_ctx;
+> +};
+> +
+> +struct nsim_tls_tuple {
+> +	struct in6_addr saddr;
+> +	struct in6_addr daddr;
+> +	__be16 sport;
+> +	__be16 dport;
+> +	u32 seq;
+> +};
+> +
+> +/* Parse the tuple from the frame the way a NIC would.  The xmit skb is not
+> + * always a well formed local TCP skb (AF_PACKET, tc redirect); use
+> + * skb_header_pointer() so a non-linear or truncated header cannot be misread.
+> + */
+> +static bool nsim_tls_parse(const struct sk_buff *skb,
+> +			   struct nsim_tls_tuple *t)
+> +{
+> +	int off = skb_network_offset(skb);
+> +	const struct tcphdr *th;
+> +	struct tcphdr _th;
+> +
+> +	switch (skb->protocol) {
+> +	case htons(ETH_P_IP): {
+> +		const struct iphdr *iph;
+> +		struct iphdr _iph;
+> +
+> +		iph = skb_header_pointer(skb, off, sizeof(_iph), &_iph);
+> +		if (!iph || iph->version != 4 || iph->ihl < 5 ||
+> +		    iph->protocol != IPPROTO_TCP || ip_is_fragment(iph))
+> +			return false;
+> +		ipv6_addr_set_v4mapped(iph->saddr, &t->saddr);
+> +		ipv6_addr_set_v4mapped(iph->daddr, &t->daddr);
+> +		off += iph->ihl * 4;
+> +		break;
+> +	}
+> +	case htons(ETH_P_IPV6): {
+> +		const struct ipv6hdr *ip6h;
+> +		struct ipv6hdr _ip6h;
+> +		__be16 frag_off;
+> +		u8 nexthdr;
+> +		int thoff;
+> +
+> +		ip6h = skb_header_pointer(skb, off, sizeof(_ip6h), &_ip6h);
+> +		if (!ip6h)
+> +			return false;
+> +
+> +		nexthdr = ip6h->nexthdr;
+> +		thoff = ipv6_skip_exthdr(skb, off + sizeof(_ip6h), &nexthdr,
+> +					 &frag_off);
+> +		if (thoff < 0 || nexthdr != IPPROTO_TCP || frag_off)
+> +			return false;
+> +
+> +		t->saddr = ip6h->saddr;
+> +		t->daddr = ip6h->daddr;
+> +		off = thoff;
+> +		break;
+> +	}
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	th = skb_header_pointer(skb, off, sizeof(_th), &_th);
+> +	if (!th)
+> +		return false;
+> +	t->sport = th->source;
+> +	t->dport = th->dest;
+> +	t->seq = ntohl(th->seq);
+> +
+> +	return true;
+> +}
+> +
+> +/* No socket on RX yet, so match the tuple installed at ->tls_dev_add(), the
+> + * way the hardware does.
+> + */
+> +static bool nsim_tls_rx_offloaded(struct netdevsim *ns,
+> +				  const struct nsim_tls_tuple *t)
+> +{
+> +	struct nsim_tls_conn *conn;
+> +
+> +	list_for_each_entry_rcu(conn, &ns->tls.conns, list) {
+> +		if (conn->dir != TLS_OFFLOAD_CTX_DIR_RX ||
+> +		    conn->lport != t->dport || conn->rport != t->sport ||
+> +		    !ipv6_addr_equal(&conn->laddr, &t->daddr) ||
+> +		    !ipv6_addr_equal(&conn->raddr, &t->saddr))
+> +			continue;
+> +
+> +		/* start_sn is the socket's copied_seq when the offload was
+> +		 * installed, so a segment before it only carries bytes TCP
+> +		 * has already received: tcp_data_queue() drops or trims those
+> +		 * whatever we flag.  The check only keeps a pre-offload stream
+> +		 * from being reported decrypted, so asking once is enough,
+> +		 * and it also avoids the sequence space wrapping past a fixed
+> +		 * start_sn 2G later.
+> +		 */
+> +		if (!READ_ONCE(conn->started)) {
+> +			if (before(t->seq, conn->start_sn))
+> +				return false;
+> +			WRITE_ONCE(conn->started, true);
+> +		}
+> +
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/* The stack leaves an uninitialized, tag sized gap at the tail of each record
+> + * for the device to write the auth tag into.  We do not encrypt, so zero it
+> + * to avoid leaking that memory onto the wire.  Nothing tells the device where
+> + * the tag is, so walk the records with tls_get_record() and clear the end of
+> + * each one's last frag.  Every segment of a record and any retransmit of it
+> + * share these pages, which is why the record is cleared rather than the skb;
+> + * nothing consumes the placeholder, so a clone seeing the write is harmless.
+> + */
+> +static void nsim_tls_tx_zero_tags(struct sk_buff *skb)
+> +{
+> +	struct tls_context *ctx = tls_get_ctx(skb->sk);
+> +	const struct tcphdr *th = tcp_hdr(skb);
+> +	struct tls_offload_context_tx *tx_ctx;
+> +	u32 seq, end, tag_size;
+> +	unsigned long flags;
+> +	unsigned int off;
+> +
+> +	off = skb_transport_offset(skb) + __tcp_hdrlen(th);
+> +	if (off >= skb->len)
+> +		return;
+> +
+> +	tag_size = ctx->prot_info.tag_size;
+> +	seq = ntohl(th->seq);
+> +	end = seq + skb->len - off;
+> +	tx_ctx = tls_offload_ctx_tx(ctx);
+> +
+> +	spin_lock_irqsave(&tx_ctx->lock, flags);
+> +	while (before(seq, end)) {
+> +		struct tls_record_info *record;
+> +		skb_frag_t *frag;
+> +		u64 rcd_sn;
+> +
+> +		record = tls_get_record(tx_ctx, seq, &rcd_sn);
+> +		if (!record || tls_record_is_start_marker(record))
+> +			break;
+> +
+> +		frag = &record->frags[record->num_frags - 1];
+> +		memset(skb_frag_address(frag) + skb_frag_size(frag) - tag_size,
+> +		       0, tag_size);
+> +
+> +		seq = record->end_seq;
+> +	}
+> +	spin_unlock_irqrestore(&tx_ctx->lock, flags);
+> +}
+> +
+> +/* Stand in for the inline encryption the hardware would do on the way out.
+> + * The stack has already framed the record and we do not encrypt, so
+> + * skb->decrypted is not cleared for our own records and the tag is all that
+> + * is left to deal with.  The socket is right here, so identify the connection
+> + * the way the real drivers do.
+> + */
+> +static bool nsim_tls_tx(struct netdevsim *ns, struct sk_buff *skb)
+> +{
+> +	/* Not ours: the software fallback has already encrypted it.  Clear
+> +	 * the decrypted mark the sending stack left so the peer's stack
+> +	 * decrypts it.
+> +	 */
+> +	if (!tls_is_skb_tx_device_offloaded(skb) ||
+> +	    rcu_dereference_bh(tls_get_ctx(skb->sk)->netdev) != ns->netdev) {
+> +		skb->decrypted = 0;
+> +		return false;
+> +	}
+> +
+> +	nsim_tls_tx_zero_tags(skb);
+> +	atomic64_inc(&ns->tls.tx_packets);
+> +	atomic64_add(skb->len, &ns->tls.tx_bytes);
+> +
+> +	return true;
+> +}
+> +
+> +/* Stand in for the inline decryption the peer's hardware would do, since we
+> + * are about to hand the skb to its stack.
+> + */
+> +static void nsim_tls_rx(struct netdevsim *ns, struct sk_buff *skb)
+> +{
+> +	struct nsim_tls_tuple t;
+> +
+> +	/* Not every port registers the offload, and one that does not never
+> +	 * initializes the list head, so gate on the count.  It is the
+> +	 * cheaper test anyway.
+> +	 */
+> +	if (!READ_ONCE(ns->tls.count))
+> +		return;
+> +
+> +	if (!nsim_tls_parse(skb, &t))
+> +		return;
+> +
+> +	if (!nsim_tls_rx_offloaded(ns, &t))
+> +		return;
+> +
+> +	skb->decrypted = 1;
+> +	atomic64_inc(&ns->tls.rx_packets);
+> +	atomic64_add(skb->len, &ns->tls.rx_bytes);
+> +}
+> +
+> +/* netdevsim has no wire: nsim_start_xmit() hands the skb straight to the
+> + * peer's receive path, so this one call site stands in for the hardware of
+> + * both ports.  It has to run before nsim_forward_skb() moves the skb over,
+> + * which resets the headers.
+> + */
+> +void nsim_do_tls(struct sk_buff *skb, struct netdevsim *ns,
+> +		 struct netdevsim *peer_ns)
+> +{
+> +	/* nsim_do_psp() ran first and may have wrapped the record stream, so
+> +	 * this is no longer a plain TLS over TCP packet.  No NIC chains the
+> +	 * two inline offloads either, so leave it alone.
+> +	 */
+> +	if (skb->encapsulation)
+> +		return;
+> +
+> +	/* Only what this port just "encrypted" may skip decryption on the
+> +	 * peer.  Everything else - a software kTLS sender because the TX
+> +	 * feature is off, a frame injected on the tuple - really is
+> +	 * ciphertext or not TLS at all, and the core has to deal with it.
+> +	 */
+> +	if (!nsim_tls_tx(ns, skb))
+> +		return;
+> +
+> +	nsim_tls_rx(peer_ns, skb);
+> +}
+> +
+> +static int nsim_tls_dev_add(struct net_device *netdev, struct sock *sk,
+> +			    enum tls_offload_ctx_dir direction,
+> +			    struct tls_crypto_info *crypto_info,
+> +			    u32 start_offload_tcp_sn)
+> +{
+> +	struct netdevsim *ns = netdev_priv(netdev);
+> +	struct nsim_tls_conn *conn;
+> +	int ret = 0;
+> +
+> +	/* Mirror the cipher support of a typical offload capable NIC. */
+> +	switch (crypto_info->cipher_type) {
+> +	case TLS_CIPHER_AES_GCM_128:
+> +	case TLS_CIPHER_AES_GCM_256:
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	conn = kzalloc_obj(*conn);
+> +	if (!conn)
+> +		return -ENOMEM;
+> +
+> +	if (sk->sk_family == AF_INET6) {
+> +		conn->laddr = sk->sk_v6_rcv_saddr;
+> +		conn->raddr = sk->sk_v6_daddr;
+> +	} else {
+> +		ipv6_addr_set_v4mapped(sk->sk_rcv_saddr, &conn->laddr);
+> +		ipv6_addr_set_v4mapped(sk->sk_daddr, &conn->raddr);
+> +	}
+> +	conn->family = sk->sk_family;
+> +	conn->lport = htons(inet_sk(sk)->inet_num);
+> +	conn->rport = sk->sk_dport;
+> +	conn->dir = direction;
+> +	conn->start_sn = start_offload_tcp_sn;
+> +	conn->cipher_type = crypto_info->cipher_type;
+> +	conn->tls_ctx = tls_get_ctx(sk);
+> +
+> +	spin_lock_bh(&ns->tls.lock);
+> +	if (ns->tls.count >= NSIM_TLS_MAX_CONN) {
+> +		ret = -ENOSPC;
+> +		goto out_unlock;
+> +	}
+> +	list_add_tail_rcu(&conn->list, &ns->tls.conns);
+> +	WRITE_ONCE(ns->tls.count, ns->tls.count + 1);
+> +	if (direction == TLS_OFFLOAD_CTX_DIR_TX)
+> +		ns->tls.tx_conn++;
+> +	else
+> +		ns->tls.rx_conn++;
+> +out_unlock:
+> +	spin_unlock_bh(&ns->tls.lock);
+> +
+> +	if (ret)
+> +		kfree(conn);
+> +
+> +	return ret;
+> +}
+> +
+> +static void nsim_tls_dev_del(struct net_device *netdev,
+> +			     struct tls_context *tls_ctx,
+> +			     enum tls_offload_ctx_dir direction)
+> +{
+> +	struct netdevsim *ns = netdev_priv(netdev);
+> +	struct nsim_tls_conn *conn;
+> +
+> +	spin_lock_bh(&ns->tls.lock);
+> +	list_for_each_entry(conn, &ns->tls.conns, list) {
+> +		if (conn->tls_ctx != tls_ctx || conn->dir != direction)
+> +			continue;
+> +
+> +		list_del_rcu(&conn->list);
+> +		WRITE_ONCE(ns->tls.count, ns->tls.count - 1);
+> +		if (direction == TLS_OFFLOAD_CTX_DIR_TX)
+> +			ns->tls.tx_conn--;
+> +		else
+> +			ns->tls.rx_conn--;
+> +		spin_unlock_bh(&ns->tls.lock);
+> +
+> +		kfree_rcu(conn, rcu);
+> +		return;
+> +	}
+> +	spin_unlock_bh(&ns->tls.lock);
+> +
+> +	netdev_err(netdev, "TLS %s context not found on del\n",
+> +		   direction == TLS_OFFLOAD_CTX_DIR_TX ? "tx" : "rx");
+> +}
+> +
+> +/* Never reached, the emulation never asks for a resync, but the core insists
+> + * on it for NETIF_F_HW_TLS_RX.
+> + */
+> +static int nsim_tls_dev_resync(struct net_device *netdev, struct sock *sk,
+> +			       u32 seq, u8 *rcd_sn,
+> +			       enum tls_offload_ctx_dir direction)
+> +{
+> +	return 0;
+> +}
+> +
+> +static const struct tlsdev_ops nsim_tlsdev_ops = {
+> +	.tls_dev_add	= nsim_tls_dev_add,
+> +	.tls_dev_del	= nsim_tls_dev_del,
+> +	.tls_dev_resync	= nsim_tls_dev_resync,
+> +};
+> +
+> +static ssize_t nsim_tls_dbg_read(struct file *filp, char __user *buffer,
+> +				 size_t count, loff_t *ppos)
+> +{
+> +	struct netdevsim *ns = filp->private_data;
+> +	struct nsim_tls_conn *conn;
+> +	size_t bufsize;
+> +	char *buf, *p;
+> +	int len;
+> +
+> +	/* Two full IPv6 addresses and ports fit in 160 bytes a line. */
+> +	bufsize = (NSIM_TLS_MAX_CONN * 160) + 200;
+> +	buf = kzalloc(bufsize, GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	p = buf;
+> +
+> +	spin_lock_bh(&ns->tls.lock);
+> +	p += scnprintf(p, bufsize - (p - buf),
+> +		       "conn count=%u tx=%u rx=%u\n",
+> +		       ns->tls.count, ns->tls.tx_conn, ns->tls.rx_conn);
+> +	p += scnprintf(p, bufsize - (p - buf),
+> +		       "tx_packets=%llu tx_bytes=%llu rx_packets=%llu rx_bytes=%llu\n",
+> +		       atomic64_read(&ns->tls.tx_packets),
+> +		       atomic64_read(&ns->tls.tx_bytes),
+> +		       atomic64_read(&ns->tls.rx_packets),
+> +		       atomic64_read(&ns->tls.rx_bytes));
+> +
+> +	list_for_each_entry(conn, &ns->tls.conns, list) {
+> +		if (conn->family == AF_INET6)
+> +			p += scnprintf(p, bufsize - (p - buf),
+> +				       "%s [%pI6c]:%u -> [%pI6c]:%u cipher=%u sn=%u\n",
+> +				       conn->dir == TLS_OFFLOAD_CTX_DIR_TX ?
+> +				       "tx" : "rx",
+> +				       &conn->laddr, ntohs(conn->lport),
+> +				       &conn->raddr, ntohs(conn->rport),
+> +				       conn->cipher_type, conn->start_sn);
+> +		else
+> +			p += scnprintf(p, bufsize - (p - buf),
+> +				       "%s %pI4:%u -> %pI4:%u cipher=%u sn=%u\n",
+> +				       conn->dir == TLS_OFFLOAD_CTX_DIR_TX ?
+> +				       "tx" : "rx",
+> +				       &conn->laddr.s6_addr32[3],
+> +				       ntohs(conn->lport),
+> +				       &conn->raddr.s6_addr32[3],
+> +				       ntohs(conn->rport),
+> +				       conn->cipher_type, conn->start_sn);
+> +	}
+> +	spin_unlock_bh(&ns->tls.lock);
+> +
+> +	len = simple_read_from_buffer(buffer, count, ppos, buf, p - buf);
+> +
+> +	kfree(buf);
+> +
+> +	return len;
+> +}
+> +
+> +static const struct file_operations nsim_tls_dbg_fops = {
+> +	.owner = THIS_MODULE,
+> +	.open = simple_open,
+> +	.read = nsim_tls_dbg_read,
+> +	.llseek = default_llseek,
+> +};
+> +
+> +void nsim_tls_init(struct netdevsim *ns)
+> +{
+> +	INIT_LIST_HEAD(&ns->tls.conns);
+> +	spin_lock_init(&ns->tls.lock);
+> +
+> +	ns->netdev->tlsdev_ops = &nsim_tlsdev_ops;
+> +	ns->netdev->features |= NSIM_TLS_FEATURES;
+> +	ns->netdev->hw_features |= NSIM_TLS_FEATURES;
+> +
+> +	ns->tls.dfile = debugfs_create_file("tls", 0400,
+> +					    ns->nsim_dev_port->ddir, ns,
+> +					    &nsim_tls_dbg_fops);
+> +}
+> +
+> +void nsim_tls_teardown(struct netdevsim *ns)
+> +{
+> +	struct nsim_tls_conn *conn, *tmp;
+> +	u32 left;
+> +
+> +	debugfs_remove_recursive(ns->tls.dfile);
+> +
+> +	spin_lock_bh(&ns->tls.lock);
+> +	left = ns->tls.count;
+> +	list_for_each_entry_safe(conn, tmp, &ns->tls.conns, list) {
+> +		list_del_rcu(&conn->list);
+> +		kfree_rcu(conn, rcu);
+> +	}
+> +	WRITE_ONCE(ns->tls.count, 0);
+> +	ns->tls.tx_conn = 0;
+> +	ns->tls.rx_conn = 0;
+> +	spin_unlock_bh(&ns->tls.lock);
+> +
+> +	if (left)
+> +		netdev_err(ns->netdev,
+> +			   "tearing down TLS offload with %u connections left\n",
+> +			   left);
+> +}
+
+[Severity: Medium]
+Does this build with CONFIG_IPV6=n?
+
+sk_v6_rcv_saddr and sk_v6_daddr are aliases for skc_v6_rcv_saddr and
+skc_v6_daddr in struct sock_common. include/net/sock.h only defines
+those members inside #if IS_ENABLED(CONFIG_IPV6).
+
+Neither NETDEVSIM nor TLS/TLS_DEVICE depends on IPV6. They only depend
+on INET. So a config with INET=y, IPV6=n, TLS_DEVICE=y and NETDEVSIM=y
+or m adds tls.o to netdevsim, and nsim_tls_dev_add() then fails to
+compile.
+
+Other users in the tree guard these fields, for example netdevsim's
+own psp.c and nfp_net_tls_add() in the nfp kTLS code. Should the
+AF_INET6 branch here be wrapped in #if IS_ENABLED(CONFIG_IPV6) the
+same way?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117140642.4008-1-jiayuan.chen%40linux.dev
