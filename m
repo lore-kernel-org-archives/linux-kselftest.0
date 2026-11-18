@@ -1,115 +1,120 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795008840;
-	b=K1RcYLrSOfuhCnkckJd2RILNHYJmQ1ZEJoYedF3UwvXWOybjnEvPBeOlXG46ItWZE7JK
-	 aB8jANxC9Eou2wfSp4nFrJtgdM+/yvPsOSBXTDnYT7LC4srgV8PfPIPeGDU38ND/Png42
-	 tGd4lNpk7G6MfF5EbaH5IJJePIcID7wNSx0XoI5DE63Qe7N0eFCj57i3/1J+mIbq7uM6q
-	 JhoVIJfiX7fT28ASkxYYDvYtoIQxVxfN48qBCa1I0jPYcAW4PAySnIKYfC1EipibQmONB
-	 IJxU7i+lDxGrS4n1Gv4VyMKEI62oXha9Sayvqy04Cxur4TyaAvavVUK5LNeBBJPLkqA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795008840;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To:X-Spamd-Result:X-Rspamd-Server:
-	 X-Rspamd-Action:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Rspamd-Queue-Id;
-	bh=x3kW6IHZ/0RLy2LARDOC9HiEbdlANu6Ii4B8shzCZQU=;
-	b=zyvEZY3QllRneJ0JgvTvRfvRpCowMyMY1L5TNBcJGbblmkr33xtGxVA0sc9TGqQPyvgw
-	 XbL0UZX+P6tSJlpuIddEFjAQiC3WREo6ASz7av5Iu3ITzPV9DoUomRxPSg4UxhOwAET3I
-	 6rxU2LZ2JNQfNX8X/BFXUT6F1+s9KIzBxblyNNfsgEQx+dZsBj+VZO9w3jSUeplONhryA
-	 BmgG6Oob+d/N3fQj1jOzePZiU1Z6jyMc7S42wdpsirI+4XsXi7RHG5j+z5Y44leu6in68
-	 eJMdRtirDp+iUT1EuWH8FAhaOVLjUHl85abDtEiWnYmQRbdIDWWJw5/NXuIgntF9CXw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b="JDx/rGU0";
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=TEdd3r0n;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b="JDx/rGU0";
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=TEdd3r0n;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795009125;
+	b=V8z8IX7v6joWFqtg97eZXlmbPKjRgyYDM5XUVSDgwwGJIms6JhQ6CUSrUNAZ7xJCNO2F
+	 nqAXvG6mduIHDsxp7AafZ4FdZQdNqWssHwYGtDYXp1VCA7dBezkBOksMdsp2xofhE62Yf
+	 Z1ylloTultbmPi9dZbFyn1REotCPH2XgezkC1jijwbeBNdbuhcKc3rL3yXwpfDK+VlFBM
+	 2kVusGyDyRR0h0WiP9zD3o+96GjeQsSgTggKzx0BkYXAmSAMW6xNW476QuaDCsEkafTtA
+	 yCleon/yy7bIgohUHNkXfYOI4LTclqpwm7y4iiP5TSftN/nmKbFForIK+EbLNh07FbQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795009125;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=h50xYCZDbBstrT/18dKKndyJ3XtJH6sY5/J/QnXGpDQ=;
+	b=McRGWfTMOxJNJFSrq564Cz//01+nS8FwN0vwnZfOxhKm42hhqL+Ke5wxCqmf7keUnj1Q
+	 Xpy0gT7ljhGmCpMvlN7IBk40swUt/AnnRwB0dGwZKjjm5ZPOywuC2vSb8YCHkL4zyCzTK
+	 HqbCZvZJUvJ0LepBWnyZoCrU0hqB5pe79S0rqcienOZ4BWJf6PsZ95UtGDYdAaAFhtZUb
+	 E1QQWNR83cOzIr3LODCBxRVtCMn6rTB4+6HIb2f8+94SdiaCXMMsS0cGQTvyJfc5MJweU
+	 tLww7KTNn+B3Aq7xFCgW+iUdk2zSjOAn+VGqIjrw7yl3ZE9WnwZFo42ncNbJCe0VgpQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=DGPTWsj1;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="m1U/f12J";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B5E606A320;
-	Wed, 18 Nov 2026 13:33:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65B5E606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5143606A33E
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 13:38:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5143606A33E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=JDx/rGU0;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=TEdd3r0n;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=JDx/rGU0;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=TEdd3r0n
-Received: from kunlun.suse.cz (unknown [IPv6:2a07:de40:b306:2000::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2D37C1F76B;
-	Wed, 18 Nov 2026 13:33:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1795008837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=DGPTWsj1;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=m1U/f12J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795009123;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=x3kW6IHZ/0RLy2LARDOC9HiEbdlANu6Ii4B8shzCZQU=;
-	b=JDx/rGU0HCc6Ed7gNE8IdTlpVzFAkXIp6dQOuhaLkI4aMqIeZLdi9NuqD6TWvANeQ2yCKK
-	B8dN8XDfVBaOzO/CRhgJtQwBigE5LoTdDj+YGomQSUFoJ2iqej0avIAAIiMIPndkaqXi57
-	cWNqwc0h27kfVcYcK/V1MDi2E7amH4U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1795008837;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x3kW6IHZ/0RLy2LARDOC9HiEbdlANu6Ii4B8shzCZQU=;
-	b=TEdd3r0nHiekiQs2TDHnWWl2Ub5x6e0ph8fykDPRx0Bc83uNWG+VbMJmhVD/RluGPR4cOH
-	8xCFIYgDT7aEtHAg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="JDx/rGU0";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=TEdd3r0n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1795008837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x3kW6IHZ/0RLy2LARDOC9HiEbdlANu6Ii4B8shzCZQU=;
-	b=JDx/rGU0HCc6Ed7gNE8IdTlpVzFAkXIp6dQOuhaLkI4aMqIeZLdi9NuqD6TWvANeQ2yCKK
-	B8dN8XDfVBaOzO/CRhgJtQwBigE5LoTdDj+YGomQSUFoJ2iqej0avIAAIiMIPndkaqXi57
-	cWNqwc0h27kfVcYcK/V1MDi2E7amH4U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1795008837;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x3kW6IHZ/0RLy2LARDOC9HiEbdlANu6Ii4B8shzCZQU=;
-	b=TEdd3r0nHiekiQs2TDHnWWl2Ub5x6e0ph8fykDPRx0Bc83uNWG+VbMJmhVD/RluGPR4cOH
-	8xCFIYgDT7aEtHAg==
-Date: Wed, 18 Nov 2026 14:33:56 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Renzo Davoli <renzo@cs.unibo.it>
-Cc: linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>, Thomas Gleixner <tglx@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, "Dmitry V . Levin" <ldv@strace.io>,
-	Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, strace-devel@lists.strace.io
-Subject: Re: [PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp
- syscall skipping
-Message-ID: <av2pRG1JT9te8IiM@kunlun.suse.cz>
-References: <20261114181923.370930-1-renzo@cs.unibo.it>
- <av2PKIf8YsEPro8O@kunlun.suse.cz>
- <av2i9kbZyMRJE9D6@cs.unibo.it>
+	bh=h50xYCZDbBstrT/18dKKndyJ3XtJH6sY5/J/QnXGpDQ=;
+	b=DGPTWsj1tcK7BHakniQKRg5wXJb+lKnVxEXj7BGYIhDdMMYbwh2Wr4/0Q49v/m3qW/dsds
+	PXzd7CI8GoGaxh0JFgxa6zOio0f0IZ5MVYE9tBbnaiArvxV89Y8rW+ZKtFnlw/19nIqn4Z
+	OXySadyFXfPUeMnq2XHkraGwVLEvGSw=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-117-wOk4Sl_kNqW0Fek9uTwKyQ-1; Wed, 18 Nov 2026 08:38:42 -0500
+X-MC-Unique: wOk4Sl_kNqW0Fek9uTwKyQ-1
+X-Mimecast-MFC-AGG-ID: wOk4Sl_kNqW0Fek9uTwKyQ_1795009121
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-8b3ad09ad82so13425387b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 05:38:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795009121; cv=none;
+        d=google.com; s=arc-20260327;
+        b=RwqOt7ztrfPeg47EiIq+8/mCneQ7GCv8ekiMPeJpZyjEtM5RIj5CWKQEC56IZW+eyb
+         zYxVYHUKC/WbAkywcfEE062d8Pd78dkqgL/J2COPHHkWBVyTR45rXhrAT4Qq3Ev3avxN
+         jw0vE+L7RRQEDhlvfFbG/M+hnYgZ4SEefe3RiW6WTzCieqTm7XSTpCm5ROslHRJwaSzq
+         ptKOJozuydA8lgU1un6nQ+P0PvMSaBAvpf4Y6N1NRr/ZKgOMbUDJoH9dnBfmOVXnPK9f
+         z/4J1/ST0OoqyV9v+y+XCzIiQ4K5aFINSD+TK8fRIOcLu5SgrG/YiwjFhxC9Z6Ljq7o9
+         4EAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=h50xYCZDbBstrT/18dKKndyJ3XtJH6sY5/J/QnXGpDQ=;
+        fh=BUkpVf3c/dzZQtcMqtGYOy/NDtkBEaO1vLr4KkZ7BzE=;
+        b=PJ3Gx9kDCt6FX61AhpLt3e3OugdEb8vkAnNpS2a0fKoHJnYR3IwbAlKAcuWIgcfw1N
+         yTJLNDq46MOElbAid2UzVTt7pDOdaP63FPmdQXCRlaebAeAzCP7XhgDdCPVYgyLv88Pb
+         J3kaUxiqNbVLs+hhFq6E/HA5Bxc9gcyfip33AkWpr8EYbwZml/hC6iZVhb+Ch2o/nPpi
+         fcIEqexG0c/KKE7c6T6kppdf8tHWVmvKyF+qd/NySOuByq2GKxu8JGOxgL0RS8DEp4Bc
+         drV7fEsMD35UA5fYZVgNll3unI3BxyPTMLteHLHk/wY91nurjSTrKdOpS+jRn4MCciL3
+         AoGg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1795009121; x=1795613921; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=h50xYCZDbBstrT/18dKKndyJ3XtJH6sY5/J/QnXGpDQ=;
+        b=m1U/f12J+ShUTGTGggJRi8KWH5geQbIoUtFMFOrndyGwP0Lkjvyue4j595npuKQp7v
+         UynlTtWXc/N0WgxJO1Eh9B0rgmNUcUCd/fe2y2aqqhwEQc5sz7XB3d3BF8blaFQQsm6l
+         BIFKk/wJx3tUMG+ZzqdOa04aWuQnHC9c3eHjYq77Zs5R6PpyZS6fg5pUCCDzRlxbuqeL
+         6TWfG8AGCYSHLpH+pLf9WpAQ9HEa4rOwR2cAEOBu/tri1gSzxl1aXRj3xSBR9pXZKIMm
+         9sqYw0Eu6CMouTg16/H3YR/idZKQXNHpJbp9J077XuX6pp7ekW4DOfM8so6CkAaAAyiW
+         esFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795009121; x=1795613921;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=h50xYCZDbBstrT/18dKKndyJ3XtJH6sY5/J/QnXGpDQ=;
+        b=DdDt7Ry3/pLMfCyQGQjS+vKhqn3sAU2qQ5rZnb09rZ5ZPVA71llbxp0nhsJMRFgEo8
+         9IUecnYk0cx9d5HCBNbVuGuYLl19ew/PzY/PYCPZky4VLwBwLb8G6sQMFPTMYD9EvLRz
+         PNbrz3nmcw7FNLKipEq545kjzeC1XsEsXUZJbR7ZE1mxtKMPDQ0LkIvQ7nGuuEx3vWhi
+         9f+Z2p+wHfRqkaBl3/zlSEYWs5zomZefr/+YGD5ZbQW4qiaO7i0p2niZ+lzzbBRiw+qB
+         6Kbc7EreQB6IJVvUB+UFagdeHMQXSlfItlemfr/MACnpvvcQ9RGU9BXvLRsFBDnrAZvE
+         f7vQ==
+X-Forwarded-Encrypted: i=1; AL+hErH00EOyr7oWPhwKUPrH9mSSh//4OUJRfbBwyXmRN1ZYMKhf31f1eqiortiZAqE7BeIQpesSG8cTRlgL734rS/k=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+0enRHEhsd7fU4+0U23eoXyfo+KYer6nZX6z5g0SEanw9RiCSS
+	nbIcvc776sN3AcTu/b5yPHjj234jVnj11lWL/nnavuWynpaMY0huyjxKacVp0pTV7GqUkuOG5ku
+	/AVn7bfz9hg8MWDuXT8edbu9iU3TV7VonCyxJnGuB3zgjwxnpCgUnxH+Nefs8Jc5XfMMeK+E2+H
+	BJTm0nefIN/k5qpskEYUJ7wB2JzqB7Ddzilz7LPKjEYBas
+X-Gm-Gg: AZFdTZfyWhh6/mvWn6JMFq2/q4TUGlLtVlFT7UbK7+Ng/Q+WpqGEL13e4EztJsFiyn9
+	BBPWnQMz3ho3O5d/y5Wgq62YXInEb+GSqWzyut8NAJVqeA1h0abonw7O6n2JG3mnPYo2T/hxbla
+	ALVicdBZf5cVCM9jZigxz6s9i97Ve1/ovXDTUGK5KKvalKRqJdAfymPKXu
+X-Received: by 2002:a05:690c:368a:b0:873:5bb2:6bfd with SMTP id 00721157ae682-8b4fed83351mr10018177b3.39.1795009120748;
+        Wed, 18 Nov 2026 05:38:40 -0800 (PST)
+X-Received: by 2002:a05:690c:368a:b0:873:5bb2:6bfd with SMTP id
+ 00721157ae682-8b4fed83351mr10017817b3.39.1795009119849; Wed, 18 Nov 2026
+ 05:38:39 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -119,94 +124,240 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <av2i9kbZyMRJE9D6@cs.unibo.it>
-X-Spamd-Result: default: False [-6.00 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ONCE_RECEIVED(1.20)[];
-	RDNS_NONE(1.00)[];
-	HFILTER_HELO_IP_A(1.00)[kunlun.suse.cz];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HFILTER_HELO_NORES_A_OR_MX(0.30)[kunlun.suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.19)[-0.958];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,redhat.com,kernel.org,amacapital.net,chromium.org,linux-foundation.org,strace.io,gmail.com,alpha.franken.de,linux.ibm.com,lists.ozlabs.org,lists.strace.io];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MISSING_XM_UA(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -6.00
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 2D37C1F76B
+References: <20261117-v2_20230123_tjmercier_google_com-v5-0-1ce975f2a9ad@redhat.com>
+ <4356992ac4fb7876fb5759189ba4b492@paul-moore.com>
+In-Reply-To: <4356992ac4fb7876fb5759189ba4b492@paul-moore.com>
+From: Albert Esteve <aesteve@redhat.com>
+Date: Wed, 18 Nov 2026 14:38:28 +0100
+X-Gm-Features: Aa3M54php6hihR6Ihi3l34Ri9nQdKaLYB3Ss2kJeRmi5f3v9ab0vBjDa0q2nnvI
+Message-ID: <CADSE00JyTwrbNh4r8PZWLqOHWpepyHkaL+9fkc+AbVRmCc-f-g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/8] memcg: dma-buf cgroup accounting and charge transfer
+To: Paul Moore <paul@paul-moore.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
+	Christian Brauner <brauner@kernel.org>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	=?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>, 
+	Jens Wiklander <jenswi@kernel.org>, Sumit Garg <sumit.garg@kernel.org>, 
+	Philipp Stanner <phasta@kernel.org>, airlied@gmail.com, cgroups@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, op-tee@lists.trustedfirmware.org, 
+	echanude@redhat.com, mripard@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 18, 2026 at 02:07:02PM +0100, Renzo Davoli wrote:
-> On Wed, Nov 18, 2026 at 12:42:32PM +0100, Michal Suchánek wrote:
-> > from a user point of view it is not clear to me why this would be done
-> > at the seccomp event when seccomp is not used.
->  
-> Hi Michal,
->  
-> thank you for the review.
->  
-> You are right, and the cover letter does not explain it (only patch 2
-> does, briefly). The series is limited to the PTRACE_EVENT_SECCOMP stop
-> because that is the only stop where a syscall can currently be skipped
-> with a preset return value in an architecture independent way: the
-> tracer's request goes through the same path as SECCOMP_RET_ERRNO,
-> which every architecture already handles.
-> 
-> At the syscall entry stop this depends on the architecture's entry
-> code. On some architectures (e.g. MIPS) the entry path overwrites the
-> return value with -ENOSYS when the syscall is skipped, so the value set
-> by the tracer is lost. A tracer that does not otherwise use seccomp
-> has to install a SECCOMP_RET_TRACE filter to use this feature.
-> 
-> > On s390 the removal of such architecture-specific flag is proposed here:
-> > [...]
-> > While that shows a way to address this problem not all affected
-> > architectures implement it.
-> 
-> Thanks for the pointer. With 05c033db7e9a ("entry, treewide: Make
-> syscall_enter_from_user_mode[_work]() indicate syscall execution") and
-> Heiko's s390 fix, the architectures using the generic entry code
-> preset -ENOSYS and leave the return value alone when the syscall is
-> skipped, so skipping at the entry stop could be supported there. As
-> in patch 1, a per-task flag checked right after the ptrace entry
-> report could be used, so that it does not depend on the syscall
-> number.
+On Tue, Nov 17, 2026 at 11:54=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+>
+> On Nov 17, 2026 Albert Esteve <aesteve@redhat.com> wrote:
+> >
+> > Shared-memory allocator services (e.g., Android's gralloc)
+> > allocate dma-bufs on behalf of client processes in different
+> > cgroups. Today those allocations are charged to the allocator's
+> > own cgroup, leaving client cgroups with no visibility into their
+> > actual memory consumption and defeating resource limits.
+> >
+> > This series adds memory cgroup accounting for dma-buf allocations,
+> > building on T.J. Mercier's earlier series [1] and incorporating
+> > feedback from previous versions and LPC discussions [2].
+> >
+> > Patch 1 introduces the MEMCG_DMABUF stat and the
+> > obj_cgroup_reserve_dmabuf()/obj_cgroup_cancel_dmabuf() and
+> > mem_cgroup_commit_dmabuf()/mem_cgroup_uncharge_dmabuf() helpers
+> > in mm/memcontrol.c
+> >
+> > Patch 2 wires up the charging policy: dma_buf_export() stores
+> > exp_info.objcg and updates the stat, a new charge_fd field in
+> > DMA_HEAP_IOCTL_ALLOC accepts a pidfd or cgroupfd to identify
+> > the target cgroup, and __GFP_ACCOUNT is removed from system-heap
+> > allocations to avoid double counting.
+> >
+> > Patch 3 adds DMA_BUF_IOCTL_XFER_CHARGE, a general ioctl on any
+> > dma-buf fd to transfer charges post-allocation. This covers the
+> > double-hop allocator case (SurfaceFlinger -> gralloc -> kernel)
+> > and works for buffers from any exporter that opts in. Charging
+> > is gated by dmabuf->objcg being set at export time, ensuring that
+> > transfer is only applied for buffers backed by system memory where
+> > size reflects actual bytes. If the receiving cgroup lacks capacity
+> > for the charge, the ioctl returns -ENOMEM and the original charge
+> > is preserved.
+> >
+> > Patches 4-7 add access control for cross-cgroup charging. Letting
+> > userspace decide who to charge needs to be a privileged operation
+> > because it has material impact on OOM decision and resource limits.
+> > Charging outside the caller's own memcg subtree requires
+> > CAP_SYS_RESOURCE. On top of that, LSM hooks gate the two charge_fd
+> > flavours: security_memcg_charge_task() gates the pidfd path (target
+> > identified by task credentials) and security_memcg_charge_cgroup()
+> > gates the cgroupfd path (target identified by cgroup directory label),
+> > with SELinux implementations using process2:charge_to and
+> > cgroup:charge_to permissions.
+>
+> I'm probably misunderstanding the description here, but in both cases
+> (the pidfd or cgroupfd case), ultimately the cgroup is charged, yes?  In
+> the cgroupfd case it is more direct, but in the pidfd case it is still
+> the cgroup associated with the process identified by pidfd, yes?
 
-As I understand it the new s390 code resolves the problem by storing the
-syscall number outside of the registers. Then the return value can be
-set directly. It does not depend on using the generic entry but on the
-architecture adding storage for the syscall number in struct pt_regs,
-and implementing the code to determine where to get/set the syscall
-value depending on the syscall stage.
+Your understanding is correct here.
 
-However, it seems that extending struct pt_regs breaks userspace ABI
-(probably because kernel refuses to transfer partial pt_regs to/fom
-userspace) which makes it unclear how the int_code that is used by this
-new code could be added to the s390 struct pt_regs in the first place.
+>
+> If that's the case - and it very well may not be (!) - it probably makes
+> more sense to combine the two SELinux access controls into one.  Yes, the
+> LSM hooks and callbacks would likely need to be different due to the
+> mechanics of it, but the permission check "cgroup/charge" could be the
+> same.
 
-Thanks
+Combining SELinux access controls makes sense to me. I kept them split
+because I wanted to preserve granularity between the two flavours, and
+process2 seemed like a natural fit for the pidfd path, but I guess it
+can still be achieved with a single permission through the target
+types.
 
-Michal
+I'll rework for v6. So, in the pidfd case the check target would
+remain the process's domain:
+
+   allow allocator_t client_t:cgroup charge_to;
+
+where allocator_t is the domain requesting the charge (i.e., the
+central allocator), and client_t is the domain of the process the
+pidfd refers to. The groupfd path would check the cgroup directory
+label like so:
+
+  allow allocator_t cgroup_t:cgroup charge_to;
+
+Would that be ok?
+
+>
+> > Patch 8 adds selftests. The tests and vmtest script were mostly
+> > written by an LLM, closely following the style of the surrounding
+> > tests and the virtme-ng setup. All code has been reviewed and tested.
+>
+> I think we need to have selinux-testsuite tests to go along with
+> this, especially as this would be the first patchset to add cgroup
+> controls.  Historically I've pushed back on piecemeal cgroup additions,
+> pushing for some basic design of how to manage access controls for
+> resource management first, but since evidently no one wants to do that,
+> we really do need tests.
+>
+> https://github.com/SELinuxProject/selinux-testsuite
+
+Agreed! I was already playing with it between the last version and
+this one. I have some tests drafted, more or less. I was unfamiliar
+with the testsuite, so instead of offloading the work to an LLM, I
+tried to follow along and proceeded too slowly.
+
+I will link a PR when sending the next version.
+
+>
+> > Known limitations:
+> >
+> > - Single-owner model: a dma-buf carries one memcg charge regardless
+> >   of how many processes share it.
+>
+> Once again, I'm sure I'm misunderstanding things, but are you saying
+> that multiple cgroups can end up sharing the same dma-buf despite
+> only one of the cgroups taking the accounting hit?
+
+Yes, you are correct. A dma-buf (its fd) can be shared by multiple
+processes from multiple cgroups, but only one holds the charge. With
+this series it can be transferred, but never shared.
+
+Sharing could be a follow-up series. Perhaps splitting the charge
+equally? But sharing is a big problem on its own, so I preferred to
+keep it out of this series.
+
+>
+> Hopefully the charged cgroup is deterministic?
+
+Yes, the charged cgroup is deterministic: it is set at allocation, and
+only moves via an explicit ioctl.
+
+>
+> > - Only memcg accounting. CMA heaps would additionally need dmem
+> >   controller integration.
+>
+> Do you have a rough idea of how that would work?  I ask only because I'm
+> interested in seeing if that would require an additional LSM hook or if
+> there is some way we could leverage the same hook(s) used here.
+
+Rough idea, yes. Today, no dma-buf allocation charges dmem at all, and
+of course no target charging either. The first goal for CMA is simply
+getting those heaps accounted. In that regard, Eric Chanudet has a
+series making CMA allocations memcg-accountable with per-area counter
+[1], and is working on extending that approach to dmem. It's a bit on
+hold waiting for the feedback on this series.
+
+But afaik the cross-cgroup charging and central allocator problem is
+mainly a system-memory one. Whether dmem ever needs the same
+cross-cgroup attribution (e.g., DRM central allocator wanting to
+charge clients' dmem budgets) is not clear to me.
+
+Nonetheless, if it does, the internals should be mostly the same;
+everything, including the permission checks is controller-agnostic.
+Only the controller performing the charge changes. I expect no
+additional hook is required.
+
+[1] https://lore.kernel.org/all/20260821-cma-memcg-regions-v1-0-d21b165b844=
+0@redhat.com/
+
+>
+> > - If a transfer of an uncharged buffer fails, the buffer remains
+> >   charged to the original cgroup. The allocator (userspace) is
+> >   expected to handle this (retry, free, ...).
+> > - The LSM hooks are intentionally narrow. Broader cgroup access control=
+s
+> >   (e.g. for the memfd/kexec handover case [2]) could be a separate effo=
+rt
+> >   reusing the same pattern.
+> > - Only system heap sets exp_info.objcg today. Other exporters
+> >   (DRM, V4L2, etc.) can opt in by setting it, but are not
+> >   covered by this series.
+> > - Related to the above: lazy backing-store allocation is not supported.
+> >   This can be extended later, e.g., by adding a flag on the dma-buf
+> >   struct for explicitly marking when memory is committed.
+>
+> Similar to the CMA case, any rough ideas on what this would look like?
+
+Yes, again I have a rough idea. We already separate reserve and commit
+operations, so the idea is to delay when a charge is committed. For
+that we can use a flag in the dma-buf struct to mark when the memory
+is committed. The limit is still enforced up front (so a lazy exporter
+cannot overcommit), and the stat reflects the actual allocation.
+
+The permission model is also unchanged for this case. The flag only
+affects when the stat will reflect the charge.
+
+Thanks!
+Albert.
+
+>
+> > Note on TTM/GPU accounting [3]: that effort charges system memory
+> > allocated for GPU buffers per page, with its own stats (gpu_active
+> > and gpu_reclaim). This series charges at the dma-buf level, for
+> > memory with no memory.stat category of its own; exporters whose
+> > memory is already charged by their allocator must not opt in, so
+> > the two do not overlap.
+> >
+> > [1] https://lore.kernel.org/cgroups/20230109213809.418135-1-tjmercier@g=
+oogle.com/
+> > [2] https://lpc.events/event/20/contributions/2416/
+> > [3] https://lore.kernel.org/all/20260706052330.1110909-1-airlied@gmail.=
+com/
+> >
+> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
+>
+> --
+> paul-moore.com
+>
+
