@@ -1,62 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794999507;
-	b=BFfp5pj+lnT17LDy8QGZmVHutFB/10+E2SjvQDC1BY9NVcQlIse4SkOzDBGdU35Mi2EO
-	 a0+TVJSRPpiB4ez+2GDvKATbcG/ezVJ0N8iwh7m72Gi4/tjpFPKbA1NvqwlPm/W8MNYf3
-	 U8sFxEt25X5ZZZEd+LJCOr+y4o71D5Fur0T0JhTDViiiZrIO1cHJGhDcPPVDgfQxhrWG6
-	 TSbv5BJlrFEcZTLG4wsjSGiTLXEl+xb6DrWvaKbJ6vZYpVE7LWMNhIVqWOqdurgi4ILpH
-	 s6ZMftJKuup8SqNQYN7xdjQuYg7K9VqMj0Bk5Q1fxXQivs9sVTjhodZw8Fovzx/oORw==
+	t=1795000344;
+	b=SRRO/VHn5SAccUZKzwHkQFymRdKZZ/0YVQNgP9vUfas7egqvpg2rnf2veNj9rQeazaMX
+	 fhL6090zSM1qeMOqiUDTCj9rBuPAaLpqgIne7w/1Yt4SAJKqQakzgZ+GJfkiTEs5QJeuY
+	 QdoDoeF0R6rWgXENb1isRFpNNQTYk7Wp6si9PQMG0L7cjm3dutcCONp/6FFpAND9Ip8Df
+	 S8/1UTbmhQlLdJt6DVhWUVYOtXqhBAZjgQPj0XYR3+S7FxdFBU9hpOk9cAPwNIUYoar/O
+	 J327pZ8y/Py/6AKqnnnoDgkaIVdc6v4PxVdZwhzMeKvgjcOO61dq2T69EIuj1xFd87w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794999507;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type;
-	bh=ji0Sy7yk69gklaMPP5Zc2g+qgmHVYq7bGDR02Mw+y7w=;
-	b=2WclXqvbzwV/0OyyQzf6pJCCjA95WmK7kDzWY48DOTNjYIJONgN0I8sIabGuHZIBmmFS
-	 RDaXBMQldnyAckYDsqyfG5nDOoBzu5x36R/ZUF65CXejPg/L7ScFIEzpw6dwW3Ki5q+dP
-	 zstIhmMPpLKgZchriSWRz6GYyS1fc/qBq9KjAUvvU6lX3FsHy5S5ujNkuP0/qL3cntRL9
-	 yeryHaNd0b++K+iHqLewwIdwWUY9ffgsgf6hMH9F7Jfoott6uNxJvEY/ETdhs6SS4tSVK
-	 tufWTON8x7Hc2ZbvIuLgN9f+GNqg7D385y1ciakO4nOLt/IL3zdUTonNNPinZXo/gUg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795000344;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=53IUSq9d/hk1iaXQ1eoTJWrnyEolczWzJhhgu4AKlpo=;
+	b=QnojXvl6hBWDc21cHzmd+nLJ6+OHEdvH4xdGZmA7v/tiN5Wh/W/ytbxairxK+ivP0zrC
+	 mD8FlU+6/Su+beYdR2roCuMoE4rh8OP6wBeHG30BmfZiJPiotpXmAEsHZ7HXAHQghfC8f
+	 cHq6denDJEVsYYpB+H674OwvYAeD8xgasGfDQ/tUw+6vDspFxWnMReDjlTdlA21toIHYR
+	 9cHQuU/w58wFtFU7AkIiqz9K7AnaStt71mjJ3A8ygpINf7rAPUVb9OhoLY3SfH5FTh7ms
+	 JU8w9svr+I1CeI53S+OXvRarcUfxxlk2A+IG0PnL2JUsJKlMh/i5IPwvlIh0euyEaoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZGNmggXu;
-	arc=none smtp.remote-ip=95.215.58.199
-Received: from mta1.migadu.com (out-199.mta1.migadu.com [95.215.58.199])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fn4EEAIe;
+	arc=none smtp.remote-ip=74.125.82.179
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64B1606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 10:58:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C64B1606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52685606A330
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 11:12:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52685606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZGNmggXu
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ji0Sy7yk69gklaMPP5Zc2g+qgmHVYq7bGDR02Mw+y7w=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794999504; v=1; x=1795604304;
- b=ZGNmggXurR8lJiCivOFgmm9zGexE/Sc3Ef9Jh96Ssyl8lUqutCToLMG+RiH2QetOo0eOI/LO
- e4pKhpPwjqABMTV5Kl3HChUqpqSa+a1C82KpZECRDuYHye7CR1FKR7VVObanxhd2A11GZJeI2N7
- 5572+hQFtAIS7mZAFg7GirF0=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 15c8ec06d710020f;
-	Wed, 18 Nov 2026 10:58:24 +0000
-X-Mizu-Trace-ID: 15c8ec06d710020f
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5c144eb2f43so5330e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 02:58:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErEIM2DEVV/TkP8V4YlH+3aQnAtnAMJlg+FGcsjx+lF9A/sDUHuZicCfYy27wum0dE3l6asWaSxCQJ15B81vK9Y=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/2ahrK08KOOso7vK9XP1Bv/P+D25puG64t8yFmfYtpd1ToUfwe
-	kkUI2y9BgRZWGhvtksk0UgolwVGPjpeVmYlLmgZYASz+Gu+sY8Awhe5DnoahYzJNVWZtmh+dF/O
-	gz438bg+uZHaAWWSPFUKkBkR9zRoh39xrJhDeVfJ4
-X-Received: by 2002:a05:6512:2346:b0:5c1:6e17:16fc with SMTP id
- 2adb3069b0e04-5c1a985f78cmr169644e87.2.1794999499497; Wed, 18 Nov 2026
- 02:58:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fn4EEAIe
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3282db206d3so2352625eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 03:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795000343; x=1795605143; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=53IUSq9d/hk1iaXQ1eoTJWrnyEolczWzJhhgu4AKlpo=;
+        b=fn4EEAIeEpRx+AnRh0wkedAQ7ceRd9Ww8JOclttNSiiYHTkONMmyWWsQYQ0i1hSI76
+         3BIFIuXOvpYWPfmXMMPlO9ZyggeGqvwQVrTvfhR1OJuxEM+5Gua2f3eUV5kShdtoemLO
+         kRa1DB6bKUfyS+HeB7lcwSGUMg+6VxmV7TFcelRgzLe006d64bZSuLh0rvmc8A2prAJ0
+         YEGgL1SM8EL5pU6rkU7B9ky5N8F8tRZRlvbAqAvLtsPhmy11spnC8mbKcj+ExEWd9Csh
+         NRvsIJyROWyyXsYdWRC6wW7k/DF4Py1QgcRovGoHhwhlaBQoOLTTrJRySpOVpHoaUazM
+         i4Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795000343; x=1795605143;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=53IUSq9d/hk1iaXQ1eoTJWrnyEolczWzJhhgu4AKlpo=;
+        b=tSt2b9eE9G+nRuUgcEXgl0LStAZXZRX9lzBjjiV2Opcg/A8TNTrTi6iXMPwGAAsfry
+         IdF5a6P16XdAynNenwgFB0uHmNq1SL19AHj7PW3kLs07YKQ+Wse7HpLSVL0zDi3ttviw
+         GMK5Vc7Pl1sV9MP8rok8sG4OxwVqciooU0XhVn6j7sUUnXjCB4nSSpVHIc/vrxnyUSVN
+         76sV54q1CAjhmW2C+MQC1DzLXL6HZNh5fczOoma7ayTpbmln+pMU0ibKfZDd9Inbp88R
+         F23UCX/ZFogCxXeBgp3ju8eJUHeFJhoM2BafM9FFLt4+9xYWa9GGlUpJdiEEDDKK+pvs
+         v7qA==
+X-Forwarded-Encrypted: i=1; AL+hErH+juEwZxou6BZctaZVDKxPmWjmNKj7GlXZEcrUNtI1bztKfM+ok7I3YBfdoUHiBLn64YNp3AsqWWW4c/p+7B0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9P8mizzQbyEG8kYGP64bzubiRAWgkGhvFg7Q3pYbs+ru1PbVnM
+	DLF9EZEAwojqGBv8TZRVCbSwCOVt4NAyyg4CQIdWiJ2N2YXRkhLEzycH
+X-Gm-Gg: AZFdTZcTL4dU3giswAQ19BSc+0WqhoXtchMBf/ExyWT/vpOwsIhICArG8FJ8QVdOkWU
+	SOhYMoBfY03ydkludMshVeG8At5A6gGyBMrfCO9OAtsV2JhWZsMhpk3TXH4l45ZaeCb3Mm6Bk0J
+	KH0dwvTtEC8o5oocjD8TfJOyeC4lE4s34dyQu1USNuHXS5cU7QJj4CQrnyWueK22L6Ts9MVDV3d
+	OSNJ0ZQi7Mrgu1Iu0EWAwDTcrE4JKWKM9ajkbhHBw6y7IZfgjbvn/WGuBENSnN+Qsal+YX09kJ+
+	5iIs4SU9DIAyyfUJyFSO/PigTN5pa9nsDMluRNrYXeHgwwAOiDhYKQiXi30hoFpjXjSopnEF30C
+	lakcSA8N5GbAZ7Z7BlqyGfq5rERPkZJKFxP0GBbxGDI42gqCL8QcgsuWmjEYfEjCRGo8Z6YYZgk
+	CM1DB4rE4yWrNK4HRYv5aUQMjXHH/goWj8yeEzUgCLk4XzhBfjA12+6oX2SyUG67YQFcKVZX3KB
+	XkpN5eNYKGQFMSVr54v29BKg8ks9m0rgGgOJmcocbdOwDJVWMZCtAyQt6itZx+SJHMw7RmwWT4+
+	aYSG5rng/Ee+SlNpgN3UMJk3
+X-Received: by 2002:a05:7300:271e:b0:369:4c3f:8a5 with SMTP id 5a478bee46e88-3827fe755c8mr2374157eec.14.1795000343264;
+        Wed, 18 Nov 2026 03:12:23 -0800 (PST)
+Received: from houminxi ([61.170.225.237])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-382a6304efbsm12327831eec.7.2026.11.18.03.12.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2026 03:12:22 -0800 (PST)
+From: Minxi Hou <houminxi@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>,
+	netdev@vger.kernel.org
+Cc: Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Ilya Maximets <i.maximets@ovn.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net v5 2/2] selftests/net/openvswitch: check that a failed set keeps the features
+Date: Wed, 18 Nov 2026 06:12:05 -0500
+Message-ID: <20261118111205.1381184-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <119b21d2-31de-4416-aeed-d1f04ffcfd82@kernel.org>
+References: <119b21d2-31de-4416-aeed-d1f04ffcfd82@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,45 +107,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261109084854.840576-1-fuad.tabba@linux.dev> <20261109084854.840576-2-fuad.tabba@linux.dev>
- <86bj7n1bzx.wl-maz@kernel.org> <CA+EHjTwJ9XTCfrfBLgGjed3GrRtiTnk-ErvPSwU-AhvyTVcnsw@mail.gmail.com>
- <867bia1kab.wl-maz@kernel.org>
-In-Reply-To: <867bia1kab.wl-maz@kernel.org>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Wed, 18 Nov 2026 10:57:43 +0000
-X-Gmail-Original-Message-ID: <CA+EHjTxMVXR11s5_U5144hdpYStkd1-gi1P2HK6DLnn5D4RW8Q@mail.gmail.com>
-X-Gm-Features: AclHuK8nMc23WqG7bzjhLPz1LETcOHXAsv2Kso31Kz9QH-6JXZhmhiORkbvHHMI
-Message-ID: <CA+EHjTxMVXR11s5_U5144hdpYStkd1-gi1P2HK6DLnn5D4RW8Q@mail.gmail.com>
-Subject: Re: [PATCH v2 01/19] KVM: arm64: Hide generic ptrauth from protected
- VMs without ptrauth
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Vincent Donnefort <vdonnefort@google.com>, Quentin Perret <qperret@google.com>, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 18 Nov 2026 at 10:55, Marc Zyngier <maz@kernel.org> wrote:
-[...]
-> > It's in this one because pkvm_id_regs depends on it. The test checks
-> > that GPA and GPI read 0 in a protected VM without ptrauth, and it
-> > fails without the fix.
->
-> But that's a *test*. Nobody runs tests as a production workload.
-> Delaying a fix to satisfy testing makes no sense to me. If someone
-> screams that their tests are failing, let them scream, safe in the
-> knowledge that you have fixed the problem rather than the symptom.
+Hi Matt,
 
-Ack.
+Both make sense, and I will do both.
 
-> > Would you prefer that I send it on its own, or with the respin of the
-> > features series?
->
-> I'll cherry-pick it directly.
+I will put a changelog per patch in the notes under --- next time, and
+mention the CI error there as context instead of a Reported-by tag. You
+reported the hang, not the ordering bug behind it, and the trailer claimed
+otherwise.
 
-Thanks Marc,
-/fuad
+The CI link was how I found the hang at all, so thanks for that.
+
+No new version for this one, as you said.
+
+Minxi
