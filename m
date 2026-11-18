@@ -1,79 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795014471;
-	b=i7xHja6TX4k2vyKVkTIxxZGJ9X9lDgKZeyQUGHeWihz2Ayxl0RJZBmawedv75lma9zWN
-	 8i/Nk7u7ojiSdk3GT8y0gnfvysRsokmn528PV12JIq+d2SOzFlk0CZoezrMWTTfN6FRuK
-	 vsfzB9qbFbMRUBrzKJVi/dmZyWZyELWSvdLB62kRJDEue3TVxZ/JCW3qac0Q9HblL9/jO
-	 3foVhJi/A85J1O5Pcq+u4VywX2CUOwbX13s7CvOzuoRz753TDtiI0OGLXgeI63Y/6olKy
-	 PKGUmYuJ/Q59N+5GbZUsj9c7DFu70rOHiIN2gjpWhMV45L8rQRiod4SvfDAVWgN3/8g==
+	t=1795014509;
+	b=RkJeE6wp4TJDobPIe6gISy2i1bJq1+ci3bhISAWtJBXYWTSntQfO0rvMM0lfXgSMG1ec
+	 +VwymWLjeo5EW4lkta6D1p+Oq2ch/EHLnyaa/ob9Q3bmR1Vp6A+TBSFmQl0zgC1jEawSu
+	 IwVhkPep6VBHRmxIlsl3hM7J1R4Hs3ixSILXtJnoRBdbrE/XQM3dZOo0/lbBq4AncGhff
+	 Wi0BlNQGiM89c0D39yiEVVHGMA1+nRyQ/7jHL7InHxEz+yjyXxbMNSQeAe7YfsbBUCr20
+	 zOXf6zuz+OSQhiiIC5BlRof1uDrjOeq19iRAeb7LQPK/lja/+wvfCCFRfvZhhC2BzJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795014471;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=WpNvKlvQgWs4nlBDzrAzqY0K1wpz+T9bN3CMOunjYys=;
-	b=Fl/TV1qL8pXXYwQtwzaPISgKZqc9cgUbzPKdsyvhlL1vaPsX09DGzchUesLj8AqWekO6
-	 grFoSgSx3PEW1Fl6fN/1K/CPXsrj6jsXmYVQ7FDfex42qBz/4g+jxeIAR1LRyK34Po7oL
-	 fZ2sLD+g02DwI/Upn28HXV4tzv65YR46g6RHkGKIpiXoKRHjJhFXxC7FY217hpK5Dcm3D
-	 JoMIbttbo/E/0gTy+AF6FxrPQVHA5mqr8ePxveg9SGM7+R/7MSIUk4UsxVQXGmbkKV6vA
-	 wuPiyahEJTeeRXqrJM2HPCneGJbfJK0ubTpu0UZHZblMXQBLFKkSVJZzUf1T5PRfLyA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795014509;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:From:To:
+	 Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:X-Virus-Scanned:
+	 X-Virus-Status;
+	bh=hmXBOFJVisUqKsWSXSyM1C7VfnAQRO3g66qqmgXB4ZE=;
+	b=H30BwTRti6vzfS/3Wb2O0YOyRbbHbUpIktne+wyrkp9UnHPLXrdjuT/Ev5lV8UAxtKh5
+	 aNlanqF8KKiGwstLEJyHn6fOtN6XrOV0ZSh0phYrWk8eUJXwy4VEjdamSJxfRTngy3nPM
+	 2P7NoRsoykWLo8S9M6G5juUmUymz8jX5KywTzVB25BwMkDDCxu47doPOl6/RaNRLzd4g4
+	 K+dbqdodsRQUpqvpxvlXP2RfDKrYbOdWLULw3uZr9a9oD2gjgze7XSKyejstR5IQcM/zm
+	 dXXsbDOoCRPErV1rqQXu8o+p3DqPFtNUrU0yZr5WC25OcTn2hx2AEUGOYXzLqiZQ8Mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ik0wB+4P;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id CE5E0606A32A;
-	Wed, 18 Nov 2026 15:07:51 +0000 (UTC)
+	dmarc=pass header.from=uniroma2.it;
+	spf=pass smtp.mailfrom=uniroma2.it;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=U+XfrZ9p;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=BE3xfWBa;
+	arc=none smtp.remote-ip=160.80.4.37
+Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0A3606A33F;
+	Wed, 18 Nov 2026 15:08:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC0A3606A33F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ik0wB+4P
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id C01C41F000C4;
-	Wed, 18 Nov 2026 15:07:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795014471;
-	bh=WpNvKlvQgWs4nlBDzrAzqY0K1wpz+T9bN3CMOunjYys=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ik0wB+4PWOYL2hmQiNwFTeBBvupZ2nUcJiZ54iyfaa2tU77mnLlpFifyj8n1RAoxc
-	 JiFr1whbKGn9jctVHgQHsWlXlRxqGaOAejYgryvppYJ1hYUJPmJajsbl1RZNJZ2urH
-	 fAR3taWBeKxDwuMnnlsPRwbWW5GR06M9hA5dv1M1pEA51yEPNLWXKWfBsoGOA85JWU
-	 RdSwiNfRnISgDS/zRQ8IFyTjSctGJRDAEhTnp4ENDN8HwGtDmIypnNR9Lro8os8drC
-	 gH5m26+2mcTSgygYysYIO2BPjm0gAz6kctoO3OxBWgeB2Wg89nS8C+lhRUQ+5galCW
-	 RrUE6ZrvqIprA==
-Date: Wed, 18 Nov 2026 17:07:46 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Rodolfo Giometti <giometti@enneenne.com>,
-	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jens Wiklander <jenswi@kernel.org>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	op-tee@lists.trustedfirmware.org,
-	Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-	Pankaj Gupta <pankaj.gupta@nxp.com>,
-	Sahil Malhotra <sahil.malhotra@nxp.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Richard Weinberger <richard@nod.at>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Demi Marie Obenour <demiobenour@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
- never read
-Message-ID: <av2_QoJHp1gMTFMp@kernel.org>
-References: <20261118140421.584086-1-giometti@enneenne.com>
- <mvyqqjhvfka3kkumztixzozrthutkq6mfakkonxqbpm5gvzb62@eitzzleeyioe>
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=U+XfrZ9p;
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=BE3xfWBa
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6AIF7YJ8012193;
+	Wed, 18 Nov 2026 16:07:39 +0100
+Received: from localhost.localdomain (unknown [160.80.105.87])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 8973E122958;
+	Wed, 18 Nov 2026 16:07:30 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1795014450; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hmXBOFJVisUqKsWSXSyM1C7VfnAQRO3g66qqmgXB4ZE=;
+	b=U+XfrZ9pAiZV+r1dhjbdVX+7vYw7zMmeAtyQQYkCDgU/UDc6gm8r6F7R7piWXb3LTsedOx
+	oPUy/HN4qzUcQQBg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1795014450; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hmXBOFJVisUqKsWSXSyM1C7VfnAQRO3g66qqmgXB4ZE=;
+	b=BE3xfWBahuAv++SpGa6ntVuWzrWUubbdVtnM4HRnXwoRcz/dD1jxaYtC8hk0k1yzF8uvPz
+	SLLBw836WgJrnjD+Tfa+ylX2UF8CclVAFXEdlwcBH2TiV2bnwBPov7S7TuISayG3pKBu53
+	AfydvRXXP77h3QEurV1MrGiFpZvD7HMrRQ2EPh38taDOM3l0YPpVdVZWa4VuHXGnXWpwqS
+	uw0GWs7UmoIxLehZMskr8Hu9Sd/f70jkIms14e01mwq/ThhE1GPSZ2YozCH2O1PmbW7Lnv
+	tRxUd2S/cbxuYaGWP8AQpS+6J1dEs9xgqm2dhOwGsOFp4TzdNEx9asX7TnqEig==
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        David Lebrun <david.lebrun@uclouvain.be>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Mathieu Xhonneux <m.xhonneux@gmail.com>,
+        David Lebrun <dlebrun@google.com>, Hangbin Liu <hangbin.liu@linux.dev>,
+        Justin Iurman <justin.iurman@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Andrea Mayer <andrea@common-net.org>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [PATCH net v2 5/6] seg6: account for the MAC header in skb checksum on L2 encapsulation
+Date: Wed, 18 Nov 2026 16:02:50 +0100
+Message-Id: <20261118150251.65-6-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,28 +89,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mvyqqjhvfka3kkumztixzozrthutkq6mfakkonxqbpm5gvzb62@eitzzleeyioe>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-On Wed, Nov 18, 2026 at 03:57:27PM +0100, Marco Felsch wrote:
-> These are basically the trusted-key purpose.
+In L2ENCAP and L2ENCAP_RED mode, seg6_do_srh() puts the MAC header back
+in front of the frame with skb_push(), without adding it to skb->csum.
+The encapsulation then calls skb_postpush_rcsum() only for the outer
+headers. With CHECKSUM_COMPLETE the MAC header is missing from
+skb->csum, which no longer covers the whole packet as required.
 
-This is it.
+For a forwarded packet, ip6_forward() sets ip_summed to CHECKSUM_NONE with
+skb_forward_csum(), and End.DX2 does the same before sending the frame.
+When the packet is delivered on the same node, a raw socket with
+IPV6_CHECKSUM still reads skb->csum. With skb->csum computed by the device,
+the kernel can then log a "hw csum failure", as if the device had computed
+a wrong skb->csum.
 
-If I was adding something like this, I would at least:
+Use skb_push_rcsum(), which also calls skb_postpush_rcsum() for the MAC
+header.
 
-1. Discuss the solution that would extend trusted keys to the level
-   that makes it crystal clear that this is won't work out too
-   well.
-2. Then show how the new thing addresses all of this.
+Found by manual code inspection of the skb->csum updates in the SRv6 code,
+and observed in a VM without kernel changes or error injection: with
+skb->csum computed by a tc ct action, a BPF tracing program on
+ip6_forward() shows skb->csum missing the MAC header. With this patch,
+skb->csum covers it. Also tested against the srv6 selftests, and with a
+ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
 
-If there is any gist this should not require whole a lot of text
-dump.
+Fixes: 38ee7f2d4756 ("ipv6: sr: add support for encapsulation of L2 frames")
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ net/ipv6/seg6_iptunnel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-AI assistance should not be really even mentioned the cover letters in
-my opinion. It's equal to text editor; or smoke signals. It does not
-level down anything i.e., I'm equally dissatified however this was
-produced :-) 
+diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+index 3bc47c5614ff..82b3c2af03f7 100644
+--- a/net/ipv6/seg6_iptunnel.c
++++ b/net/ipv6/seg6_iptunnel.c
+@@ -472,7 +472,7 @@ static int seg6_do_srh(struct sk_buff *skb, struct dst_entry *cache_dst)
+ 			return err;
+ 
+ 		skb_mac_header_rebuild(skb);
+-		skb_push(skb, skb->mac_len);
++		skb_push_rcsum(skb, skb->mac_len);
+ 
+ 		if (tinfo->mode == SEG6_IPTUN_MODE_L2ENCAP)
+ 			err = __seg6_do_srh_encap(skb, tinfo->srh,
+-- 
+2.43.0
 
-Br, Jarkko
