@@ -1,90 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794971631;
-	b=LCrRedKzVRV+GbUA4J+L6kPLaDW8ZGI7RxxVpf1u/tCI2paydtONIsXSEzr34g+ALeT0
-	 dyQR4uK4X1rZAwwnI7BnzimMiU3P8qdXue1pBEUf2ZcMoDJop8LIkbwqabdP6RHdBOLXb
-	 tx3xSTSmv6AGeab+cRv18bdglM45bRgyo+w/nbpg84dhKC1sMBTqcXEhKek8qBb4y6F79
-	 /uTSrxjsKKX6tkAWjwaAfhfzCmYKGGgneNYUaC1J8t8sNgHybFBZnYxqp7bQib0BEGUZV
-	 io6v5UYb3wsMD3p1Mk9zNLdprXiQfTKe2/e0qAxeS6DzT7LsZA0aaa5p3mL4tSDKqsQ==
+	t=1794971632;
+	b=HMzGqoI04AzR6gFCHdt+jsFA2fyfj8LfjrMh10jx0H/erZ4kKsQABtTZhtsrKMMZ6E5h
+	 VsdVymGhIFmwlOU1ve9pHrrDAqVVW/N/2kOjphtYWLlEXnoUDmTDJ14zfHWbfx0eyPOR2
+	 IUPCRzHE5QrfAxM9T9IONDMGVO/hJ7RzMB1GQ2RfpMsYHM/n+emMA8aZ/7gh98APIC9S3
+	 gmtnrQf06nq5eCSHTw0I3GrNukyjCpfQf/gX/94kE4klk28MRozqaVsc4zBjDpmQKL8Uk
+	 jw3A5pAY6wYFPDr8YKuzLSNjgNX/7w7FxovhKsL0CKgxI5HtBm7xZ9YeqYCJ+uNYU/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794971631;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794971632;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=vGh/vPCpuM/8bsnvm8QC3JIlKI/9b3IxD6kLaQlvrSs=;
-	b=iGjWja9yOEMfcG2FAJ5xrxxY5rlPWyIvN6XHLabqxARoAqGnaOZELgbCGlkEFINU7ujB
-	 NOIxSqfdp5Smpm9ARrEFe/pjj4ymr7n+hjawHjLmI+dq9vgxgkRmVARPvrFE7JAQr5L3y
-	 UAd3oQK60LELr8IxVXFBv+0skHd8zrO+rKNdjkkcd1fy+XUlOGeV7OwcWgF+Bnuzf87Yj
-	 gr+EFa86cZe+nyFAVtKjLyDQh+TJ/5noe541TPr2IMjA1dtzM8mvV0a4UG+3/0USbj8lU
-	 PQT7qYeUka/VKdltY20S09QYaT2X/HrHhlubNrhMtCmLbrukQCNPahjij7X8qX3E1+A==
+	bh=Bq1xM5S6cCDzBWNgh8mhLU4r4aKno2jWbKQ7mURNMgw=;
+	b=FnHk1DvKMw4Jh20p7x+DitE8SJQHGa7O/fo1fsZ6wxb/i1JmuqcEwqv22IZQWljoHv5X
+	 u26aeVP7tiyv9j7mNepj80wp2CWqkjXqOBVC19zHd0Agc2dkQHcoQSeZJkbeSdd8E0/O8
+	 XNEcma8CyS1K3yxMWwbMGqs/RiFtbqZ87uNwK4NHhmGCJaZl+gbWYS8XHNdlhccNbR/uk
+	 TTs+sUEewBHWaZ9/R08yp3wLjge2pYuSTJrWlmTWucngA4VGEgDqiNvNZ2kIeRaHXHgiG
+	 xDj7vMpjRPkg98xmve+5D8fASVhO+K3pm6xZ/vmld3Zcy6RbCnAbfOAdfoIuORldcJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=sifive.com;
 	spf=pass smtp.mailfrom=sifive.com;
-	dkim=pass header.d=sifive.com header.i=@sifive.com header.a=rsa-sha256 header.s=google header.b=H38X0uyd;
-	arc=none smtp.remote-ip=74.125.82.52
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	dkim=pass header.d=sifive.com header.i=@sifive.com header.a=rsa-sha256 header.s=google header.b=Y44+nLb+;
+	arc=none smtp.remote-ip=74.125.82.47
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6810A606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19ED9606A335
 	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 03:13:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6810A606A32F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19ED9606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.a=rsa-sha256 header.s=google header.b=H38X0uyd
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1a3c08d6928so817523c88.0
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.a=rsa-sha256 header.s=google header.b=Y44+nLb+
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1aefd1bf74aso314029c88.1
         for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 19:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1794971629; x=1795576429; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1794971630; x=1795576430; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vGh/vPCpuM/8bsnvm8QC3JIlKI/9b3IxD6kLaQlvrSs=;
-        b=H38X0uydvk/LbRXGd46vP/a1OOV399sRM5kA4IjsNynvrSWwSe+3qd1V6xZDcbDGAs
-         qrsaix+Yyfr1RkgdIyBd4IxzfrWjFyHDwVse/B5pTYKysq4pTd2TmCijPtgBSuAKTKWw
-         Jgnrm7ndv+gVLn2PEgqHszRkNiaGi2jbs8cKOpXAqngUoX1mx3zV8oYGVU4dNX+1toSR
-         D/QqxwPNEXLqDYqvUGLf0gwAjoy0rySXlvseNSPtzDtp5ytJDYRJ6/D1WbxAaxzffh2B
-         Z7p3XZ7mjpMGz5UXa3IWamK9V1mj9QtiVwbniYrkzXUjZxWjChivcRL5t3ixJv/gMVPv
-         yAcg==
+        bh=Bq1xM5S6cCDzBWNgh8mhLU4r4aKno2jWbKQ7mURNMgw=;
+        b=Y44+nLb+FZOGeTj1lftXdspKS8dmDt2p+3pzIcX17kvi5ko38iN+3ey/YyTk+7tbDA
+         CJJKlZaS32nSSZZtaaO3DCZPkMgXJxVesMWgKZktmlR7TsnQ6X3hzEOuSE0EmmzepSlj
+         fStYqsSF1RNB/MA3ML8y42drWuRXHCNsEGPg8j1e+B1WGhkZEzoIqrzGgmn1/Gvgxy30
+         12AF8Oo2kxYAH4E4SrlOr9hx+KHJBskfPCSm31ttVCyxZG557Y8U58f5CwrwY0N+2LBp
+         kz6IGpG77fMcA+5MEct8c3saJb9H3Vp2zNH6zNbdWmK8B1mn2XG3bWNT6acNBTWZSTfb
+         uSmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794971629; x=1795576429;
+        d=1e100.net; s=20260707; t=1794971630; x=1795576430;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vGh/vPCpuM/8bsnvm8QC3JIlKI/9b3IxD6kLaQlvrSs=;
-        b=G9VK6s6XstI10CL0HRLUpqlCTE0p79Wq60BIYOMs7OyQRHCvLAWiko0NNU0/tFPU2T
-         Ha1r7WvEH2up1FEwh6TnBMHKN80x+O/2hXzNEMyBvH40/CplcWOj5AVVvzNMDWOus2+x
-         d8iPFKs0tzhlIuqdaOSTW1MDKmnuLvM8Bds16AkYxSaXmfLbrkq14f1LnA71bhIYimjv
-         3T6PYhMQD5LHGzjYOKOP6sjRciL74jZZUaqyjMPUOF7+9Egp7pHi+DJPhZTEaUoRQj8s
-         ZJioQmxn99mABUFiBrEL3i/cTvTUi2MULQSIbOHmwNa8lzgcska0ZjZ2jZJk4DF/mZV4
-         q6Mg==
-X-Forwarded-Encrypted: i=1; AL+hErGnRGZjEf/G4o3zPOHdveHPZQCAj2jrn8wm3yBMqwgU+NBFa/qdnluRTrQij6OrzaD6eFYsnT0gZVTS/J8FsfQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8MC2KBDYTBppgTT9sZKODACfZQIfUCe1FL75H+kJWpBwVejD6X
-	ywspO9Bz00c/jjH+4/plyoVy6mauwzjIvf9vEd7P5GJKTimyuqImktxK4YjCd5U8iZVifZzN7QV
-	pEeSIgZY=
-X-Gm-Gg: AYBFou3No7pSEzHzKPKwGHBm1h9vGuzWi9l7nbjqkWJTRUjBhr7lshvPn2f6b7kdBoN
-	5/rhjrKd2JotvRzaNpSh0pnu5+EO+UagtNJAExfi1c33pRyAGG1v8wH7QPBVfFXCHB9RbBQ4k63
-	TGYGy/AAfasMGauZkD2k/FyhrQ909PJkvh6hNNGiCt7L+rmFxHr30+V2eldwKd17iL+GEYuwLFs
-	OB7qmUwx9/qse8CtF3Ogyj1jeach9+jN9kW8QW97ORkdL5Gwl6rspEsrJqDp1uOlvyGCx9hupKA
-	LCRR1KvyBXGSRNKd8E5wk/A6vWIEl1VqHhD01KPO2p210vNmK0nOANMoQqZ2WbxlsbZVTfXbVSQ
-	wfWpHlXG6CKJakcCDiw6TqQcvbt/uP5v1DXadZ7vdXcGreOXPRI8WqU8bRUlGwu/91wlrsm0eFI
-	fzfQxRIBSdEGOg/p/6Hub1dXqk8o4xoVGTHpMCRUH7/6XUe+ZqTSwWOnURSbCb0J5gzhqUP71uR
-	z3msN2gP5rsp5TThL3/WKhgwKJWF8FqeBw66A+Z/bHxWHtnbfje9afo0USTVxorq/3ve20oRsXF
-	l82trd+GuTolmzZOBfbgH5wq8ynLhBluwKzuvVR7d41jaw==
-X-Received: by 2002:a05:7023:d0d:b0:1b2:60b2:96ff with SMTP id a92af1059eb24-1b543d0ce1fmr1469082c88.38.1794971629134;
-        Tue, 17 Nov 2026 19:13:49 -0800 (PST)
+        bh=Bq1xM5S6cCDzBWNgh8mhLU4r4aKno2jWbKQ7mURNMgw=;
+        b=Zb1LdQe8E7KhmXXp2kacm4149DkIEsrXtS6psPFIpI6s9YyRqtuKpKLcJZA3DhP4Zr
+         POCdiGcj+NOSqA/Vds3e8iDnX+SS2Eszr26Yv6AR+X19I7IgPjuWE3eERqE10gn+IXKB
+         tfVKyFzQQUyAyA6a2+UCOUxfr21Q3fIyPIKMbzFxicHeD62Ca1OkG7uaXGA7EYbxHYu8
+         DvWz1Jz6kuhIDVFG+2Pqj2CsCt+9ZK+igz6efaBNN+x7yw6aS2c3XXiPIEtKO1oVVWjJ
+         W/KElUMCnqgcBmUJp1CN/w5lfKvfB7CZx9Z2weCnn+FZdQ0ZcMeGyrM/TozYMA5lrkgV
+         11cg==
+X-Forwarded-Encrypted: i=1; AL+hErEVvmIKl3iIqQtyKaxPDcZbhvXSGAvUzv71mEkY6CdBSeoliopkOgGVeLJFQjDU//fmJ8pZ83mHBAGJauUzb0o=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8KZAPRBEjnrOuwcqlrGh6rlNhsxyE4X1E/6k6X3X1vLDjdRi7n
+	bR7VUaElm4MveFHdhf8bCLYueNMVLtzhaHuAR0EWqA0/+n/+aG9Sa0MsUokXmQaw5Ds=
+X-Gm-Gg: AYBFou3t9Pp8w/MmftmbQfFyqtdvB0T1mEQeBWhQa6W474Zb/NNqS8zMGc9hV7rPBmR
+	dIVrCYwEFmLadzQrOeFc7RkObm+GfAsoeaTJklqSnO8NSpVvYTOj2iiBTZ6kZpWrwwjF3nLbzwQ
+	4CmGW5vxlUhSc0VoGUd1VN98QVq/Z48i62LgQF3BpU++p/XRKLMf4ndgmrjwu0Sy9EbHy1+IONk
+	qWHwk1M+MKTP3HHH/SkbPqOe8y/lP9PoqMeCQdYQ1g3rXuYKXIYrCVppXWUKyo7nTfL8upiUkYk
+	k5RzFgnajOetGbk4MYKvn9lPDLVGwM5XhQB8WPQ8fvRKksimfvpNW27RZHbzic+jn394gjCRqVU
+	4jRWzokUdG+qZWPCqabmzS8xF/+MxZU5rafhjD8lO/Bf5yDOr2STZuo/AxKumitZbUWjs1/vFNB
+	54ZfnjZs5jHgEPFgZPy4rV2D4qy5BId1a416drzRInidPWNf25nPNU9cAhFgB5iorWex8QNUM5G
+	LrbDoU0GXarnl5crUWTUnikZajZAt4xtnWR0gpxf/biiPo+zTqrOhbe00JlZ9a/JidnKt20BbUY
+	M29FBbvdg0JamghSr7Aq0PiEg/bSjhZyYw406Y1mC1W/IA==
+X-Received: by 2002:a05:701b:42cb:10b0:1b2:de00:9bc2 with SMTP id a92af1059eb24-1b53a44bcc4mr3841253c88.12.1794971630010;
+        Tue, 17 Nov 2026 19:13:50 -0800 (PST)
 Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b544784017sm2512908c88.4.2026.11.17.19.13.48
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b544784017sm2512908c88.4.2026.11.17.19.13.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 19:13:48 -0800 (PST)
+        Tue, 17 Nov 2026 19:13:49 -0800 (PST)
 From: Nylon Chen <nylon.chen@sifive.com>
-Date: Tue, 17 Nov 2026 19:13:44 -0800
-Subject: [PATCH v2 1/2] riscv: traps: Add support for vector misalignment
- handler
+Date: Tue, 17 Nov 2026 19:13:45 -0800
+Subject: [PATCH v2 2/2] selftests/riscv: Add vector misaligned load/store
+ tests
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -96,163 +95,252 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261117-riscv-vector-misaligned-v2-1-0163d9430ca1@sifive.com>
+Message-Id: <20261117-riscv-vector-misaligned-v2-2-0163d9430ca1@sifive.com>
 References: <20261117-riscv-vector-misaligned-v2-0-0163d9430ca1@sifive.com>
 In-Reply-To: <20261117-riscv-vector-misaligned-v2-0-0163d9430ca1@sifive.com>
 To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
  Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Nylon Chen <nylon.chen@sifive.com>
+ linux-kselftest@vger.kernel.org, Nylon Chen <nylon.chen@sifive.com>, 
+ Yeting Kuo <yeting.kuo@sifive.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794971627; l=38886;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794971627; l=30486;
  i=nylon.chen@sifive.com; s=20260310; h=from:subject:message-id;
- bh=JorrJtfyVJEWp/Rlvcet6Uv7hhcKqeBgfb9oUhUpVk0=;
- b=L5TJ1ry4PlgFGOnCZtjCG6ZbKKOt9rN4X1RZBkHtt5opmAPLVMln19XepV9R+PIqp8CIPhQie
- CH4/9YSOAvcB6/kr55RgIkdGWFafV/1nRMlvjNBFruJQEMc+k/DGQ2c
+ bh=cucAsBHXdr13plVMqPvS//NcNRD5TsQvaW5PNj6lvzw=;
+ b=JmkqiINCYjj7EXtdGLQjn1E20klTHqqDWgVBJELB366BMgKcSpaMljWOgR3Ca0oHUj3O7h2/D
+ 6Yv7siWgecBARLmSPom5T0yS9cmL1paLlQRqRPk//twOrfxZ3XlM2Hz
 X-Developer-Key: i=nylon.chen@sifive.com; a=ed25519;
  pk=+xtFLLbXfGd50d5UhR9oBzLTh+JLft7T60t3u7YMZPI=
 
-Implement misaligned load/store emulation for RISC-V vector instructions.
-This adds support for handling misaligned memory accesses in vector
-operations, which may occur when the effective address is not naturally
-aligned for the element size.
+Add a new kselftest for RISC-V vector misaligned load/store operations.
+This test covers various vector instruction types including:
+- Unit-stride and strided load/store
+- Indexed ordered and unordered load/store
+- Fault-only-first loads
+- Whole register load/store
+- Segment load/store (unit-stride, strided, indexed)
 
-The implementation includes:
-- Vector load emulator (misaligned_v_ld_emulator)
-- Vector store emulator (misaligned_v_st_emulator)
-- Support for various vector instruction formats:
-  - Unit-stride and strided load/store
-  - Indexed load/store
-  - Segment load/store
-  - Whole register load/store
-  - Fault-only-first loads
+The test uses macros to generate test functions for different element
+widths (16/32/64-bit) and segment configurations (nf=2,4,8), reducing
+code duplication significantly.
 
-Both user mode and kernel mode traps are emulated. In user mode, the
-vector register file has already been saved to current->thread.vstate
-by kernel_vector_begin(), so register contents are accessed there. In
-kernel mode the registers are still live in hardware for the duration
-of the trap (IRQs stay disabled, nothing else can touch them), so
-get_vreg()/set_vreg() instead use vstart together with a
-tail-undisturbed vsetvli to read or modify only the target element in
-place, the same technique OpenSBI's M-mode handler uses. This avoids
-depending on CONFIG_RISCV_ISA_V_PREEMPTIVE or any per-task kernel
-vector state allocation.
+The test properly uses kselftest APIs:
+- ksft_print_header() and ksft_set_plan() for initialization
+- ksft_test_result_pass/fail() for reporting test results
+- ksft_finished() for proper exit handling
 
 Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+Signed-off-by: Yeting Kuo <yeting.kuo@sifive.com>
 ---
- arch/riscv/include/asm/vector.h        |   4 +
- arch/riscv/kernel/Makefile             |   1 +
- arch/riscv/kernel/traps_misaligned.c   |  39 +-
- arch/riscv/kernel/traps_v_misaligned.c | 902 +++++++++++++++++++++++++++++++++
- 4 files changed, 944 insertions(+), 2 deletions(-)
+ tools/testing/selftests/riscv/vector/Makefile      |   5 +-
+ .../testing/selftests/riscv/vector/v_misaligned.c  | 169 +++++++
+ .../testing/selftests/riscv/vector/v_misaligned.h  | 530 +++++++++++++++++++++
+ 3 files changed, 703 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vector.h
-index cd09f32e1ea3..712c38383998 100644
---- a/arch/riscv/include/asm/vector.h
-+++ b/arch/riscv/include/asm/vector.h
-@@ -51,6 +51,8 @@ void put_cpu_vector_context(void);
- void riscv_v_thread_free(struct task_struct *tsk);
- void __init riscv_v_setup_ctx_cache(void);
- void riscv_v_thread_alloc(struct task_struct *tsk);
-+int misaligned_v_ld_emulator(struct pt_regs *regs, unsigned long insn);
-+int misaligned_v_st_emulator(struct pt_regs *regs, unsigned long insn);
- void __init update_regset_vector_info(unsigned long size);
+diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
+index 0ed09b69dd8a..79f475251797 100644
+--- a/tools/testing/selftests/riscv/vector/Makefile
++++ b/tools/testing/selftests/riscv/vector/Makefile
+@@ -3,7 +3,7 @@
+ # Originally tools/testing/arm64/abi/Makefile
  
- static inline u32 riscv_v_flags(void)
-@@ -411,6 +413,8 @@ bool riscv_v_vstate_ctrl_user_allowed(void);
+ TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace \
+-		  v_uaccess_stress
++		  v_uaccess_stress v_misaligned
+ TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc v_exec_initval_nolibc
+ TEST_GEN_LIBS := v_helpers.c sys_hwprobe.c
  
- struct pt_regs;
+@@ -40,4 +40,7 @@ $(OUTPUT)/validate_v_ptrace: validate_v_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPU
+ $(OUTPUT)/v_uaccess_stress: v_uaccess_stress.c
+ 	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
  
-+int misaligned_v_ld_emulator(struct pt_regs *regs, unsigned long insn);
-+int misaligned_v_st_emulator(struct pt_regs *regs, unsigned long insn);
- static inline int riscv_v_setup_vsize(void) { return -EOPNOTSUPP; }
- static __always_inline bool has_vector(void) { return false; }
- static __always_inline bool insn_is_vector(u32 insn_buf) { return false; }
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index f54c336bf547..001b2eb12a9f 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -76,6 +76,7 @@ obj-$(CONFIG_MMU) += vdso.o vdso/
- obj-$(CONFIG_RISCV_USER_CFI) += vdso_cfi/
- 
- obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
-+obj-$(CONFIG_RISCV_VECTOR_MISALIGNED)	+= traps_v_misaligned.o
- obj-$(CONFIG_RISCV_MISALIGNED)	+= unaligned_access_speed.o
- obj-$(CONFIG_RISCV_PROBE_UNALIGNED_ACCESS)		+= copy-unaligned.o
- obj-$(CONFIG_RISCV_PROBE_VECTOR_UNALIGNED_ACCESS)	+= vec-copy-unaligned.o
-diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
-index 6e8ae6c66322..3a16ec91e150 100644
---- a/arch/riscv/kernel/traps_misaligned.c
-+++ b/arch/riscv/kernel/traps_misaligned.c
-@@ -206,15 +206,39 @@ static int handle_vector_misaligned_load(struct pt_regs *regs)
- 		return 0;
- 	}
- 
--	/* If vector instruction we don't emulate it yet */
- 	regs->epc = epc;
--	return -1;
-+	return misaligned_v_ld_emulator(regs, insn);
-+}
++$(OUTPUT)/v_misaligned: v_misaligned.c
++	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) -march=rv64imafdcvh -mabi=lp64d $^
 +
-+static int handle_vector_misaligned_store(struct pt_regs *regs)
-+{
-+	unsigned long epc = regs->epc;
-+	unsigned long insn;
-+
-+	if (get_insn(regs, epc, &insn))
-+		return -1;
-+
-+	/* Only return 0 when in check_vector_unaligned_access_emulated */
-+	if (*this_cpu_ptr(&vector_misaligned_access) == RISCV_HWPROBE_MISALIGNED_VECTOR_UNKNOWN) {
-+		*this_cpu_ptr(&vector_misaligned_access) =
-+			RISCV_HWPROBE_MISALIGNED_VECTOR_UNSUPPORTED;
-+		regs->epc = epc + INSN_LEN(insn);
-+		return 0;
-+	}
-+
-+	regs->epc = epc;
-+	return misaligned_v_st_emulator(regs, insn);
- }
- #else
- static int handle_vector_misaligned_load(struct pt_regs *regs)
- {
- 	return -1;
- }
-+
-+static int handle_vector_misaligned_store(struct pt_regs *regs)
-+{
-+	return -1;
-+}
- #endif
- 
- static int handle_scalar_misaligned_load(struct pt_regs *regs)
-@@ -445,6 +469,17 @@ int handle_misaligned_load(struct pt_regs *regs)
- 
- int handle_misaligned_store(struct pt_regs *regs)
- {
-+	unsigned long epc = regs->epc;
-+	unsigned long insn;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_VECTOR_MISALIGNED)) {
-+		if (get_insn(regs, epc, &insn))
-+			return -1;
-+
-+		if (insn_is_vector(insn))
-+			return handle_vector_misaligned_store(regs);
-+	}
-+
- 	if (IS_ENABLED(CONFIG_RISCV_SCALAR_MISALIGNED))
- 		return handle_scalar_misaligned_store(regs);
- 
-diff --git a/arch/riscv/kernel/traps_v_misaligned.c b/arch/riscv/kernel/traps_v_misaligned.c
+ EXTRA_CLEAN += $(TEST_GEN_OBJ)
+diff --git a/tools/testing/selftests/riscv/vector/v_misaligned.c b/tools/testing/selftests/riscv/vector/v_misaligned.c
 new file mode 100644
-index 000000000000..29557a51a347
+index 000000000000..c0439a633280
 --- /dev/null
-+++ b/arch/riscv/kernel/traps_v_misaligned.c
-@@ -0,0 +1,902 @@
++++ b/tools/testing/selftests/riscv/vector/v_misaligned.c
+@@ -0,0 +1,169 @@
 +// SPDX-License-Identifier: BSD-2-Clause
 +/*
++ * Copyright (c) 2025 SiFive Inc.
++ *
++ * Authors:
++ *   Nylon Chen <nylon.chen@sifive.com>
++ *   Zong Li <zong.li@sifive.com>
++ */
++
++#include "v_misaligned.h"
++
++/* Strided load/store tests (16/32/64-bit) */
++DEFINE_STRIDED_TEST(16, uint16_t, 0x1234, 0x1111, 2)
++DEFINE_STRIDED_TEST(32, uint32_t, 0x12345678, 0x11111111, 4)
++DEFINE_STRIDED_TEST(64, uint64_t, 0x1234567890abcdefULL, 0x1111111111111111ULL, 8)
++
++/* Unit-stride load/store tests (16/32/64-bit) */
++DEFINE_UNIT_STRIDE_TEST(16, uint16_t, 0x1234, 0x1111)
++DEFINE_UNIT_STRIDE_TEST(32, uint32_t, 0x12345678, 0x11111111)
++DEFINE_UNIT_STRIDE_TEST(64, uint64_t, 0x1234567890abcdefULL, 0x1111111111111111ULL)
++
++/* Indexed ordered load/store tests (16/32/64-bit) */
++DEFINE_INDEXED_ORDERED_TEST(16, uint16_t, 0x1234, 0x1111, 2)
++DEFINE_INDEXED_ORDERED_TEST(32, uint32_t, 0x12345678, 0x11111111, 4)
++DEFINE_INDEXED_ORDERED_TEST(64, uint64_t, 0x1234567890abcdefULL, 0x1111111111111111ULL, 8)
++
++/* Indexed unordered load/store tests (16/32/64-bit) */
++DEFINE_INDEXED_UNORDERED_TEST(16, uint16_t, 0x1234, 0x1111, 2)
++DEFINE_INDEXED_UNORDERED_TEST(32, uint32_t, 0x12345678, 0x11111111, 4)
++DEFINE_INDEXED_UNORDERED_TEST(64, uint64_t, 0x1234567890abcdefULL, 0x1111111111111111ULL, 8)
++
++/* Fault-only-first load tests (16/32/64-bit) */
++DEFINE_FAULT_ONLY_FIRST_TEST(16, uint16_t, 0x1234, 0x1111)
++DEFINE_FAULT_ONLY_FIRST_TEST(32, uint32_t, 0x12345678, 0x11111111)
++DEFINE_FAULT_ONLY_FIRST_TEST(64, uint64_t, 0x1234567890abcdefULL, 0x1111111111111111ULL)
++
++/* Whole register load/store tests (16/32/64-bit) */
++DEFINE_WHOLE_REG_TEST(16, uint16_t)
++DEFINE_WHOLE_REG_TEST(32, uint32_t)
++DEFINE_WHOLE_REG_TEST(64, uint64_t)
++
++/* Strided segment load/store tests (eew x nf combinations) */
++DEFINE_STRIDED_SEGMENT_TEST(16, 2)
++DEFINE_STRIDED_SEGMENT_TEST(16, 4)
++DEFINE_STRIDED_SEGMENT_TEST(16, 8)
++DEFINE_STRIDED_SEGMENT_TEST(32, 2)
++DEFINE_STRIDED_SEGMENT_TEST(32, 4)
++DEFINE_STRIDED_SEGMENT_TEST(32, 8)
++DEFINE_STRIDED_SEGMENT_TEST(64, 2)
++DEFINE_STRIDED_SEGMENT_TEST(64, 4)
++DEFINE_STRIDED_SEGMENT_TEST(64, 8)
++
++/* Unit-stride segment load/store tests (eew x nf combinations) */
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(16, 2)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(16, 4)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(16, 8)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(32, 2)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(32, 4)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(32, 8)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(64, 2)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(64, 4)
++DEFINE_UNIT_STRIDE_SEGMENT_TEST(64, 8)
++
++/* Indexed unordered segment load/store tests (eew x nf combinations) */
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(16, 2, uint16_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(16, 4, uint16_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(16, 8, uint16_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(32, 2, uint32_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(32, 4, uint32_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(32, 8, uint32_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(64, 2, uint64_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(64, 4, uint64_t)
++DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(64, 8, uint64_t)
++
++/* Indexed ordered segment load/store tests (eew x nf combinations) */
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(16, 2, uint16_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(16, 4, uint16_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(16, 8, uint16_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(32, 2, uint32_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(32, 4, uint32_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(32, 8, uint32_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(64, 2, uint64_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(64, 4, uint64_t)
++DEFINE_INDEXED_ORDERED_SEGMENT_TEST(64, 8, uint64_t)
++
++int main(void)
++{
++	ksft_print_header();
++	ksft_set_plan(54);
++
++	int VLEN = csr_read(CSR_VLENB);
++	int VEC_LEN = VLEN / 8;
++
++	/* stride */
++	test_misaligned_strided_load_store_16(VEC_LEN);
++	test_misaligned_strided_load_store_32(VEC_LEN);
++	test_misaligned_strided_load_store_64(VEC_LEN);
++
++	/* unit-stride  */
++	test_misaligned_unit_stride_load_store_16(VEC_LEN);
++	test_misaligned_unit_stride_load_store_32(VEC_LEN);
++	test_misaligned_unit_stride_load_store_64(VEC_LEN);
++
++	/* indexed_ordered  */
++	test_indexed_ordered_load_store_16(VEC_LEN);
++	test_indexed_ordered_load_store_32(VEC_LEN);
++	test_indexed_ordered_load_store_64(VEC_LEN);
++
++	/* indexed_unordered  */
++	test_indexed_unordered_load_store_16(VEC_LEN);
++	test_indexed_unordered_load_store_32(VEC_LEN);
++	test_indexed_unordered_load_store_64(VEC_LEN);
++
++	/* fault_only_first */
++	test_fault_only_first_load_16_misaligned(VEC_LEN);
++	test_fault_only_first_load_32_misaligned(VEC_LEN);
++	test_fault_only_first_load_64_misaligned(VEC_LEN);
++
++	/* whole_reg  */
++	whole_reg_16(VLEN);
++	whole_reg_32(VLEN);
++	whole_reg_64(VLEN);
++
++	/* unit-stride segment */
++	test_misaligned_unit_stride_segment_load_store_16_2(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_16_4(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_16_8(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_32_2(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_32_4(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_32_8(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_64_2(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_64_4(VEC_LEN);
++	test_misaligned_unit_stride_segment_load_store_64_8(VEC_LEN);
++
++	/* strided segment */
++	test_misaligned_strided_segment_load_store_16_2(VEC_LEN);
++	test_misaligned_strided_segment_load_store_16_4(VEC_LEN);
++	test_misaligned_strided_segment_load_store_16_8(VEC_LEN);
++	test_misaligned_strided_segment_load_store_32_2(VEC_LEN);
++	test_misaligned_strided_segment_load_store_32_4(VEC_LEN);
++	test_misaligned_strided_segment_load_store_32_8(VEC_LEN);
++	test_misaligned_strided_segment_load_store_64_2(VEC_LEN);
++	test_misaligned_strided_segment_load_store_64_4(VEC_LEN);
++	test_misaligned_strided_segment_load_store_64_8(VEC_LEN);
++
++	/* indexed unordered segment */
++	test_misaligned_indexed_unordered_segment_load_store_16_2(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_16_4(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_16_8(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_32_2(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_32_4(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_32_8(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_64_2(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_64_4(VEC_LEN);
++	test_misaligned_indexed_unordered_segment_load_store_64_8(VEC_LEN);
++
++	/* indexed ordered segment */
++	test_misaligned_indexed_ordered_segment_load_store_16_2(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_16_4(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_16_8(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_32_2(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_32_4(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_32_8(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_64_2(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_64_4(VEC_LEN);
++	test_misaligned_indexed_ordered_segment_load_store_64_8(VEC_LEN);
++
++	ksft_finished();
++}
+diff --git a/tools/testing/selftests/riscv/vector/v_misaligned.h b/tools/testing/selftests/riscv/vector/v_misaligned.h
+new file mode 100644
+index 000000000000..fe9d53cfe9fc
+--- /dev/null
++++ b/tools/testing/selftests/riscv/vector/v_misaligned.h
+@@ -0,0 +1,530 @@
++/* SPDX-License-Identifier: BSD-2-Clause
 + *
 + * Copyright (c) 2025 SiFive Inc.
 + *
@@ -261,898 +349,527 @@ index 000000000000..29557a51a347
 + *   Zong Li <zong.li@sifive.com>
 + */
 +
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/perf_event.h>
-+#include <linux/irq.h>
-+#include <linux/stringify.h>
-+#include <linux/sched/signal.h>
++#ifndef _V_MISALIGNED_H
++#define _V_MISALIGNED_H
 +
-+#include <linux/processor.h>
-+#include <asm/ptrace.h>
-+#include <asm/csr.h>
-+#include <linux/entry-common.h>
-+#include <asm/hwprobe.h>
-+#include <linux/cpufeature.h>
-+#include <asm/vector.h>
-+#include <asm/simd.h>
-+#include <linux/slab.h>
-+#include <asm/asm-prototypes.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stdint.h>
++#include "../../kselftest_harness.h"
 +
-+#define INSN_MASK_VECTOR_UNIT_STRIDE			0xfdf0707f
-+#define INSN_MASK_VECTOR_FAULT_ONLY_FIRST		0xfdf0707f
-+#define INSN_MASK_VECTOR_STRIDE				0xfc00707f
-+#define INSN_MASK_VECTOR_INDEXED			0xfc00707f
-+#define INSN_MASK_VECTOR_WHOLE_REG			0xfff0707f
++#define __ASM_STR(x)	#x
 +
-+#define VSEW3(bits) ({							\
-+	unsigned long __b = (unsigned long)(bits);			\
-+	(__b == 16UL ? 5UL : (__b == 32UL ? 6UL : 7UL));		\
-+})
++#define CSR_VSTART	0x8
++#define CSR_VLENB	0xc22
 +
-+#define INSN_MATCH_VLUXSEG(n, bits) \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x04000007UL | (VSEW3(bits) << 12))
++#define OFFSET		1
 +
-+#define INSN_MATCH_VSUXSEG(n, bits) \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x04000027UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VLOXSEG(n, bits) \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x0c000007UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VSOXSEG(n, bits) \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x0c000027UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VLSSEG(n, bits)  \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x08000007UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VSSSEG(n, bits)  \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x08000027UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VSSEG(n, bits)   \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x00004027UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VLSEG(n, bits)   \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x00004007UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VLSEGFF(n, bits) \
-+	((((unsigned long)(n) - 1UL) << 29) | 0x01000007UL | (VSEW3(bits) << 12))
-+
-+#define INSN_MATCH_VLE16V		0x00005007
-+#define INSN_MATCH_VLE32V		0x00006007
-+#define INSN_MATCH_VLE64V		0x00007007
-+#define INSN_MATCH_VSE16V		0x00005027
-+#define INSN_MATCH_VSE32V		0x00006027
-+#define INSN_MATCH_VSE64V		0x00007027
-+#define INSN_MATCH_VLSE16V		0x08005007
-+#define INSN_MATCH_VLSE32V		0x08006007
-+#define INSN_MATCH_VLSE64V		0x08007007
-+#define INSN_MATCH_VSSE16V		0x08005027
-+#define INSN_MATCH_VSSE32V		0x08006027
-+#define INSN_MATCH_VSSE64V		0x08007027
-+#define INSN_MATCH_VLOXEI16V		0x0c005007
-+#define INSN_MATCH_VLOXEI32V		0x0c006007
-+#define INSN_MATCH_VLOXEI64V		0x0c007007
-+#define INSN_MATCH_VSOXEI16V		0x0c005027
-+#define INSN_MATCH_VSOXEI32V		0x0c006027
-+#define INSN_MATCH_VSOXEI64V		0x0c007027
-+#define INSN_MATCH_VLUXEI16V		0x04005007
-+#define INSN_MATCH_VLUXEI32V		0x04006007
-+#define INSN_MATCH_VLUXEI64V		0x04007007
-+#define INSN_MATCH_VSUXEI16V		0x04005027
-+#define INSN_MATCH_VSUXEI32V		0x04006027
-+#define INSN_MATCH_VSUXEI64V		0x04007027
-+#define INSN_MATCH_VLE16FFV		0x01005007
-+#define INSN_MATCH_VLE32FFV		0x01006007
-+#define INSN_MATCH_VLE64FFV		0x01007007
-+#define INSN_MATCH_VL1RE8V		0x02800007
-+#define INSN_MATCH_VL1RE16V		0x02805007
-+#define INSN_MATCH_VL1RE32V		0x02806007
-+#define INSN_MATCH_VL1RE64V		0x02807007
-+#define INSN_MATCH_VL2RE8V		0x22800007
-+#define INSN_MATCH_VL2RE16V		0x22805007
-+#define INSN_MATCH_VL2RE32V		0x22806007
-+#define INSN_MATCH_VL2RE64V		0x22807007
-+#define INSN_MATCH_VL4RE8V		0x62800007
-+#define INSN_MATCH_VL4RE16V		0x62805007
-+#define INSN_MATCH_VL4RE32V		0x62806007
-+#define INSN_MATCH_VL4RE64V		0x62807007
-+#define INSN_MATCH_VL8RE8V		0xe2800007
-+#define INSN_MATCH_VL8RE16V		0xe2805007
-+#define INSN_MATCH_VL8RE32V		0xe2806007
-+#define INSN_MATCH_VL8RE64V		0xe2807007
-+#define INSN_MATCH_VS1RV		0x02800027
-+#define INSN_MATCH_VS2RV		0x22800027
-+#define INSN_MATCH_VS4RV		0x62800027
-+#define INSN_MATCH_VS8RV		0xe2800027
-+
-+#define IS_VECTOR_INSN_MATCH(insn, match, mask)					\
-+({										\
-+	u32 _i = (u32)(insn);							\
-+	u32 _m = (u32)(match);							\
-+	u32 _k = (u32)(mask);							\
-+	(((_i & _k) == (_m & _k)));						\
-+})
-+
-+#define IS_UNIT_STRIDE_MATCH(insn, match) \
-+	IS_VECTOR_INSN_MATCH(insn, match, INSN_MASK_VECTOR_UNIT_STRIDE)
-+
-+#define IS_STRIDE_MATCH(insn, match) \
-+	IS_VECTOR_INSN_MATCH(insn, match, INSN_MASK_VECTOR_STRIDE)
-+
-+#define IS_INDEXED_MATCH(insn, match) \
-+	IS_VECTOR_INSN_MATCH(insn, match, INSN_MASK_VECTOR_INDEXED)
-+
-+#define IS_FAULT_ONLY_FIRST_MATCH(insn, match) \
-+	IS_VECTOR_INSN_MATCH(insn, match, INSN_MASK_VECTOR_FAULT_ONLY_FIRST)
-+
-+#define IS_WHOLE_REG_MATCH(insn, match) \
-+	IS_VECTOR_INSN_MATCH(insn, match, INSN_MASK_VECTOR_WHOLE_REG)
-+
-+#define IS_UNIT_STRIDE_LOAD(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLE16V) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLE32V) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLE64V) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(2, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(3, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(4, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(5, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(6, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(7, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(8, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(2, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(3, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(4, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(5, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(6, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(7, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(8, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(2, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(3, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(4, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(5, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(6, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(7, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VLSEG(8, 64)); \
-+})
-+
-+#define IS_UNIT_STRIDE_STORE(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSE16V) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSE32V) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSE64V) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(2, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(3, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(4, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(5, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(6, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(7, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(8, 16)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(2, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(3, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(4, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(5, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(6, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(7, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(8, 32)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(2, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(3, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(4, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(5, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(6, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(7, 64)) || \
-+	IS_UNIT_STRIDE_MATCH(__insn, INSN_MATCH_VSSEG(8, 64)); \
-+})
-+
-+#define IS_STRIDE_LOAD(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSE16V) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSE32V) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSE64V) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(2, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(3, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(4, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(5, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(6, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(7, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(8, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(2, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(3, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(4, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(5, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(6, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(7, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(8, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(2, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(3, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(4, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(5, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(6, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(7, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VLSSEG(8, 64)); \
-+})
-+
-+#define IS_STRIDE_STORE(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSE16V) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSE32V) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSE64V) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(2, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(3, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(4, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(5, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(6, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(7, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(8, 16)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(2, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(3, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(4, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(5, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(6, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(7, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(8, 32)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(2, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(3, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(4, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(5, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(6, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(7, 64)) || \
-+	IS_STRIDE_MATCH(__insn, INSN_MATCH_VSSSEG(8, 64)); \
-+})
-+
-+#define IS_INDEXED_LOAD(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXEI16V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXEI32V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXEI64V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXEI16V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXEI32V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXEI64V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(2, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(3, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(4, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(5, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(6, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(7, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(8, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(2, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(3, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(4, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(5, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(6, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(7, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(8, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(2, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(3, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(4, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(5, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(6, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(7, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLUXSEG(8, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(2, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(3, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(4, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(5, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(6, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(7, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(8, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(2, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(3, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(4, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(5, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(6, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(7, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(8, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(2, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(3, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(4, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(5, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(6, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(7, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VLOXSEG(8, 64)); \
-+})
-+
-+#define IS_INDEXED_STORE(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXEI16V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXEI32V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXEI64V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXEI16V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXEI32V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXEI64V) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(2, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(3, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(4, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(5, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(6, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(7, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(8, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(2, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(3, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(4, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(5, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(6, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(7, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(8, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(2, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(3, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(4, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(5, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(6, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(7, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSUXSEG(8, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(2, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(3, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(4, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(5, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(6, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(7, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(8, 16)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(2, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(3, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(4, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(5, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(6, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(7, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(8, 32)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(2, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(3, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(4, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(5, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(6, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(7, 64)) || \
-+	IS_INDEXED_MATCH(__insn, INSN_MATCH_VSOXSEG(8, 64)); \
-+})
-+
-+#define IS_FAULT_ONLY_FIRST_LOAD(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLE16FFV) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLE32FFV) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLE64FFV) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(2, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(3, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(4, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(5, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(6, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(7, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(8, 16)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(2, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(3, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(4, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(5, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(6, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(7, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(8, 32)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(2, 64)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(3, 64)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(4, 64)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(5, 64)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(6, 64)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(7, 64)) || \
-+	IS_FAULT_ONLY_FIRST_MATCH(__insn, INSN_MATCH_VLSEGFF(8, 64)); \
-+})
-+
-+#define IS_WHOLE_REG_LOAD(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL1RE8V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL1RE16V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL1RE32V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL1RE64V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL2RE8V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL2RE16V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL2RE32V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL2RE64V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL4RE8V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL4RE16V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL4RE32V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL4RE64V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL8RE8V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL8RE16V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL8RE32V) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VL8RE64V); \
-+})
-+
-+#define IS_WHOLE_REG_STORE(insn) ({ \
-+	typeof(insn) __insn = (insn); \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VS1RV) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VS2RV) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VS4RV) || \
-+	IS_WHOLE_REG_MATCH(__insn, INSN_MATCH_VS8RV); \
-+})
-+
-+#define VM_MASK				0x1
-+#define VIEW_MASK			0x3
-+#define VSEW_MASK			0x3
-+#define VLMUL_MASK			0x7
-+#define VD_MASK				0x1f
-+#define VS2_MASK			0x1f
-+
-+#define SH_VSEW				3
-+#define SH_VIEW				12
-+#define SH_VD				7
-+#define SH_VS2				20
-+#define SH_VM				25
-+#define SH_MEW				28
-+
-+#define GET_VD(insn)			(((insn) >> SH_VD) & VD_MASK)
-+#define GET_VS2(insn)			(((insn) >> SH_VS2) & VS2_MASK)
-+#define GET_VIEW(insn)			(((insn) >> SH_VIEW) & VIEW_MASK)
-+#define IS_MASKED(insn)			((((insn) >> SH_VM) & VM_MASK) == 0)
-+#define GET_MEW(insn)			(((insn) >> SH_MEW) & 1)
-+#define GET_VSEW(vtype)			(((vtype) >> SH_VSEW) & VSEW_MASK)
-+#define GET_VLMUL(vtype)		((vtype) & VLMUL_MASK)
-+#define GET_LEN(view)			(1UL << (view))
-+#define GET_NF(insn)			(1 + (((insn) >> 29) & 7))
-+#define GET_VEMUL(vlmul, view, vsew)	(((vlmul) + (view) - (vsew)) & 7)
-+#define GET_EMUL(vemul)						\
++#define csr_read(csr)						\
 +({								\
-+	unsigned long _v = (unsigned long)(vemul);		\
-+	(1UL << (_v >= 4 ? 0 : _v));				\
++	register unsigned long __v;				\
++	__asm__ __volatile__("csrr %0, " __ASM_STR(csr)		\
++		: "=r" (__v)					\
++		:						\
++		: "memory");					\
++	__v;							\
 +})
 +
-+#if defined(CONFIG_64BIT)
-+#define LOG_REGBYTES		3
-+#else
-+#define LOG_REGBYTES		2
-+#endif
-+
-+#define SH_RS1			15
-+#define SH_RS2			20
-+
-+#define SHIFT_RIGHT(x, y)					\
++#define csr_write(csr, val)					\
 +({								\
-+	long _y = (long)(y);					\
-+	__typeof__(x) _x = (x);					\
-+	(_y < 0) ? (_x << (unsigned long)(-_y))			\
-+	: (_x >> (unsigned long)_y);				\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__("csrw " __ASM_STR(csr) ", %0"	\
++		:						\
++		: "rK" (__v)					\
++		: "memory");					\
 +})
 +
-+#define REG_MASK                        \
-+	((1 << (5 + LOG_REGBYTES)) - (1 << LOG_REGBYTES))
-+
-+#define REG_OFFSET(insn, pos)           \
-+	(SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-+
-+#define REG_PTR(insn, pos, regs)                                               \
-+	((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-+
-+#define GET_RS1(insn, regs)		(*REG_PTR(insn, SH_RS1, regs))
-+#define GET_RS2(insn, regs)		(*REG_PTR(insn, SH_RS2, regs))
-+
-+/*
-+ * VLEN_MAX defines the maximum vector length supported by the emulator.
-+ * The mask array size must be at least VLEN_MAX / 8 bytes to hold v0 mask.
-+ * Current hardware implementations typically have VLEN of 128-1024 bits.
-+ * We use 4096 bits (512 bytes) as a reasonable upper bound that covers
-+ * known implementations while keeping stack usage manageable.
-+ */
-+#define VLEN_MAX 4096
-+
-+/*
-+ * set_vreg - Write bytes into a vector register at a specific position.
-+ *
-+ * In user mode, kernel_vector_begin() has already saved the hardware
-+ * vector register file into current->thread.vstate.datap, so the target
-+ * bytes are modified there and restored to hardware by kernel_vector_end().
-+ *
-+ * In kernel mode, the vector registers are "live" in hardware for the
-+ * duration of the trap (IRQs are disabled, nothing else can touch them).
-+ * vstart skips elements before @pos, and the tail-undisturbed (tu) policy
-+ * on vsetvli preserves elements after @pos+@size, so only [pos, pos+size)
-+ * is modified without corrupting the rest of the register. This is the
-+ * same technique OpenSBI's M-mode vector misaligned handler uses.
-+ */
-+static inline void set_vreg(ulong vlenb, ulong which, ulong pos, ulong size,
-+			    const u8 *bytes, bool is_usermode)
++static inline int check_result(const void *expected, const void *actual,
++			       size_t element_size, size_t vec_len)
 +{
-+	if (is_usermode) {
-+		struct __riscv_v_ext_state *vstate = &current->thread.vstate;
-+		unsigned char *vdata = vstate->datap;
++	const uint8_t *expected_bytes = (const uint8_t *)expected;
++	const uint8_t *actual_bytes = (const uint8_t *)actual;
 +
-+		if (!vdata)
-+			return;
-+		memcpy(vdata + which * vlenb + pos, bytes, size);
-+		return;
-+	}
-+
-+	/* Kernel mode: directly access the live hardware vector registers. */
-+	pos += (which % 8) * vlenb;
-+	bytes -= pos;
-+
-+	__asm__ __volatile__(
-+		".option push\n\t"
-+		".option arch, +v\n\t"
-+		"vsetvli x0, %0, e8, m8, tu, ma\n\t"
-+		".option pop\n\t"
-+		: : "r"(pos + size));
-+
-+	csr_write(CSR_VSTART, pos);
-+
-+	switch (which / 8) {
-+	case 0:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vle8.v v0, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	case 1:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vle8.v v8, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	case 2:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vle8.v v16, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	case 3:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vle8.v v24, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	}
-+}
-+
-+/*
-+ * get_vreg - Read bytes from a vector register at a specific position.
-+ *
-+ * Same technique as set_vreg but in reverse: uses vse8.v to store register
-+ * contents to memory.
-+ */
-+static inline void get_vreg(ulong vlenb, ulong which, ulong pos, ulong size,
-+			    u8 *bytes, bool is_usermode)
-+{
-+	if (is_usermode) {
-+		struct __riscv_v_ext_state *vstate = &current->thread.vstate;
-+		const unsigned char *vdata = vstate->datap;
-+
-+		if (!vdata) {
-+			memset(bytes, 0, size);
-+			return;
-+		}
-+		memcpy(bytes, vdata + which * vlenb + pos, size);
-+		return;
-+	}
-+
-+	/* Kernel mode: directly access the live hardware vector registers. */
-+	pos += (which % 8) * vlenb;
-+	bytes -= pos;
-+
-+	__asm__ __volatile__(
-+		".option push\n\t"
-+		".option arch, +v\n\t"
-+		"vsetvli x0, %0, e8, m8, tu, ma\n\t"
-+		".option pop\n\t"
-+		: : "r"(pos + size));
-+
-+	csr_write(CSR_VSTART, pos);
-+
-+	switch (which / 8) {
-+	case 0:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vse8.v v0, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	case 1:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vse8.v v8, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	case 2:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vse8.v v16, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	case 3:
-+		__asm__ __volatile__(
-+			".option push\n\t"
-+			".option arch, +v\n\t"
-+			"vse8.v v24, (%0)\n\t"
-+			".option pop\n\t"
-+			: : "r"(bytes) : "memory");
-+		break;
-+	}
-+}
-+
-+/*
-+ * vsetvl - Restore vl and vtype CSRs after get_vreg/set_vreg clobber them.
-+ *
-+ * get_vreg/set_vreg use vsetvli internally, which modifies vl and vtype.
-+ * This must be called after kernel-mode emulation completes to restore the
-+ * original values. vsetvl also implicitly resets vstart to 0, which is the
-+ * correct post-instruction state per the V spec.
-+ */
-+static inline void vsetvl(ulong vl, ulong vtype)
-+{
-+	__asm__ __volatile__(
-+		".option push\n\t"
-+		".option arch, +v\n\t"
-+		"vsetvl x0, %0, %1\n\t"
-+		".option pop\n\t"
-+		: : "r"(vl), "r"(vtype));
-+}
-+
-+int misaligned_v_ld_emulator(struct pt_regs *regs, unsigned long insn)
-+{
-+	int ret = 0;
-+	unsigned long vl, vtype, vlenb, vstart, base, stride;
-+	unsigned long vd, vs2, view, vsew, vlmul, emul, vemul;
-+	unsigned long len, nf;
-+	bool illegal, masked;
-+	bool is_usermode = user_mode(regs);
-+	u8 mask[VLEN_MAX / 8];
-+	u8 bytes[8 * sizeof(u64)];
-+
-+	/*
-+	 * User mode: IRQs are enabled by do_trap_misaligned(), so we can use
-+	 * kernel_vector_begin() which saves the user's vector state to datap.
-+	 * We then read CSRs from the saved vstate (not hardware) because
-+	 * kernel_vector_begin() -> riscv_v_vstate_save() modifies the hw CSRs.
-+	 *
-+	 * Kernel mode: IRQs are disabled (NMI-like context), may_use_simd()
-+	 * returns false, so kernel_vector_begin() cannot be used. Instead we
-+	 * enable vector directly and read CSRs from hardware; get_vreg/
-+	 * set_vreg access individual register elements in place via vstart +
-+	 * vsetvli(tu), without disturbing the rest of the register file.
-+	 */
-+	if (is_usermode) {
-+		struct __riscv_v_ext_state *vstate = &current->thread.vstate;
-+
-+		kernel_vector_begin();
-+		vl = vstate->vl;
-+		vtype = vstate->vtype;
-+		vstart = vstate->vstart;
-+		vlenb = vstate->vlenb;
-+	} else {
-+		riscv_v_enable();
-+		vl = csr_read(CSR_VL);
-+		vtype = csr_read(CSR_VTYPE);
-+		vstart = csr_read(CSR_VSTART);
-+		vlenb = csr_read(CSR_VLENB);
-+	}
-+
-+	base = GET_RS1(insn, regs);
-+	stride = GET_RS2(insn, regs);
-+	vd = GET_VD(insn);
-+	vs2 = GET_VS2(insn);
-+	view = GET_VIEW(insn);
-+	vsew = GET_VSEW(vtype);
-+	vlmul = GET_VLMUL(vtype);
-+	illegal = GET_MEW(insn);
-+	masked = IS_MASKED(insn);
-+	len = GET_LEN(view);
-+	nf = GET_NF(insn);
-+	vemul = GET_VEMUL(vlmul, view, vsew);
-+	emul = GET_EMUL(vemul);
-+
-+	if (IS_UNIT_STRIDE_LOAD(insn) || IS_FAULT_ONLY_FIRST_LOAD(insn)) {
-+		stride = nf * len;
-+	} else if (IS_WHOLE_REG_LOAD(insn)) {
-+		vl = (nf * vlenb) >> view;
-+		nf = 1;
-+		vemul = 0;
-+		emul = 1;
-+		stride = nf * len;
-+	} else if (IS_INDEXED_LOAD(insn)) {
-+		len = 1 << vsew;
-+		vemul = (vlmul + vsew - vsew) & 7;
-+		emul = 1 << ((vemul & 4) ? 0 : vemul);
-+		stride = nf * len;
-+	}
-+
-+	if (illegal || vlenb > VLEN_MAX / 8) {
-+		if (is_usermode)
-+			force_sig_fault(SIGILL, ILL_ILLOPC, (void __user *)regs->epc);
-+		ret = -EFAULT;
-+		goto out;
-+	}
-+
-+	if (masked)
-+		get_vreg(vlenb, 0, 0, vlenb, mask, is_usermode);
-+
-+	do {
-+		if (!masked || ((mask[vstart / 8] >> (vstart % 8)) & 1)) {
-+			unsigned long addr = base + vstart * stride;
-+
-+			if (IS_INDEXED_LOAD(insn)) {
-+				unsigned long offset = 0;
-+
-+				get_vreg(vlenb, vs2, vstart << view, 1 << view,
-+					 (u8 *)&offset, is_usermode);
-+				addr = base + offset;
-+			}
-+
-+			csr_write(CSR_VSTART, vstart);
-+
-+			for (unsigned long seg = 0; seg < nf; seg++) {
-+				for (unsigned long i = 0; i < len; i++) {
-+					u8 *src = (u8 *)(addr + seg * len + i);
-+
-+					if (is_usermode) {
-+						if (get_user(bytes[seg * len + i],
-+							     (u8 __user *)src)) {
-+							if (IS_FAULT_ONLY_FIRST_LOAD(insn) &&
-+							    vstart != 0) {
-+								vl = vstart;
-+								break;
-+							}
-+							ret = -EFAULT;
-+							goto out;
-+						}
-+					} else {
-+						bytes[seg * len + i] = *src;
-+					}
-+				}
-+			}
-+
-+			for (unsigned long seg = 0; seg < nf; seg++)
-+				set_vreg(vlenb, vd + seg * emul, vstart * len, len,
-+					 &bytes[seg * len], is_usermode);
-+		}
-+	} while (++vstart < vl);
-+
-+out:
-+	if (ret == 0)
-+		regs->epc += 4;
-+
-+	if (is_usermode) {
-+		kernel_vector_end();
-+	} else {
-+		/*
-+		 * Restore vl/vtype clobbered by get_vreg/set_vreg's vsetvli.
-+		 * vsetvl also resets vstart to 0 (the correct post-insn state).
-+		 */
-+		vsetvl(vl, vtype);
-+		riscv_v_disable();
-+	}
-+
-+	return ret;
-+}
-+
-+int misaligned_v_st_emulator(struct pt_regs *regs, unsigned long insn)
-+{
-+	int ret = 0;
-+	unsigned long vl, vtype, vlenb, vstart, base, stride;
-+	unsigned long vd, vs2, view, vsew, vlmul, emul, vemul;
-+	unsigned long len, nf;
-+	bool illegal, masked;
-+	bool is_usermode = user_mode(regs);
-+	u8 mask[VLEN_MAX / 8];
-+	u8 bytes[8 * sizeof(u64)];
-+
-+	/*
-+	 * User mode: IRQs are enabled by do_trap_misaligned(), so we can use
-+	 * kernel_vector_begin() which saves the user's vector state to datap.
-+	 *
-+	 * Kernel mode: IRQs are disabled, may_use_simd() returns false. Enable
-+	 * vector directly and access registers via vstart + vsetvli(tu).
-+	 */
-+	if (is_usermode) {
-+		struct __riscv_v_ext_state *vstate = &current->thread.vstate;
-+
-+		kernel_vector_begin();
-+		vl = vstate->vl;
-+		vtype = vstate->vtype;
-+		vstart = vstate->vstart;
-+		vlenb = vstate->vlenb;
-+	} else {
-+		riscv_v_enable();
-+		vl = csr_read(CSR_VL);
-+		vtype = csr_read(CSR_VTYPE);
-+		vstart = csr_read(CSR_VSTART);
-+		vlenb = csr_read(CSR_VLENB);
-+	}
-+
-+	base = GET_RS1(insn, regs);
-+	stride = GET_RS2(insn, regs);
-+	vd = GET_VD(insn);
-+	vs2 = GET_VS2(insn);
-+	view = GET_VIEW(insn);
-+	vsew = GET_VSEW(vtype);
-+	vlmul = GET_VLMUL(vtype);
-+	illegal = GET_MEW(insn);
-+	masked = IS_MASKED(insn);
-+	len = GET_LEN(view);
-+	nf = GET_NF(insn);
-+	vemul = GET_VEMUL(vlmul, view, vsew);
-+	emul = GET_EMUL(vemul);
-+
-+	if (IS_UNIT_STRIDE_STORE(insn)) {
-+		stride = nf * len;
-+	} else if (IS_WHOLE_REG_STORE(insn)) {
-+		vl = (nf * vlenb) >> view;
-+		nf = 1;
-+		vemul = 0;
-+		emul = 1;
-+		stride = nf * len;
-+	} else if (IS_INDEXED_STORE(insn)) {
-+		len = 1 << vsew;
-+		vemul = (vlmul + vsew - vsew) & 7;
-+		emul = 1 << ((vemul & 4) ? 0 : vemul);
-+		stride = nf * len;
-+	}
-+
-+	if (illegal || vlenb > VLEN_MAX / 8) {
-+		if (is_usermode)
-+			force_sig_fault(SIGILL, ILL_ILLOPC, (void __user *)regs->epc);
-+		ret = -EFAULT;
-+		goto out;
-+	}
-+
-+	if (masked)
-+		get_vreg(vlenb, 0, 0, vlenb, mask, is_usermode);
-+
-+	do {
-+		if (!masked || ((mask[vstart / 8] >> (vstart % 8)) & 1)) {
-+			unsigned long addr = base + vstart * stride;
-+
-+			if (IS_INDEXED_STORE(insn)) {
-+				unsigned long offset = 0;
-+
-+				get_vreg(vlenb, vs2, vstart << view, 1 << view,
-+					 (u8 *)&offset, is_usermode);
-+				addr = base + offset;
-+			}
-+
-+			for (unsigned long seg = 0; seg < nf; seg++)
-+				get_vreg(vlenb, vd + seg * emul, vstart * len, len,
-+					 &bytes[seg * len], is_usermode);
-+
-+			csr_write(CSR_VSTART, vstart);
-+			for (unsigned long seg = 0; seg < nf; seg++) {
-+				for (unsigned long i = 0; i < len; i++) {
-+					u8 *dst = (u8 *)(addr + seg * len + i);
-+
-+					if (is_usermode) {
-+						if (put_user(bytes[seg * len + i],
-+							     (u8 __user *)dst)) {
-+							ret = -EFAULT;
-+							goto out;
-+						}
-+					} else {
-+						*dst = bytes[seg * len + i];
-+					}
-+				}
++	for (size_t i = 0; i < vec_len; i++) {
++		for (size_t j = 0; j < element_size; j++) {
++			if (expected_bytes[i * element_size + j] !=
++			    actual_bytes[i * element_size + j]) {
++				fprintf(stderr,
++					"Error: Expected 0x%02x, got 0x%02x at byte %zu of element %zu\n",
++					expected_bytes[i * element_size + j],
++					actual_bytes[i * element_size + j], j, i);
++				return 0;
 +			}
 +		}
-+	} while (++vstart < vl);
-+
-+out:
-+	if (ret == 0)
-+		regs->epc += 4;
-+
-+	if (is_usermode) {
-+		kernel_vector_end();
-+	} else {
-+		/* Restore vl/vtype clobbered by get_vreg's vsetvli. */
-+		vsetvl(vl, vtype);
-+		riscv_v_disable();
 +	}
-+
-+	return ret;
++	return 1;
 +}
++
++/*
++ * Macro to define strided load/store test functions
++ */
++#define DEFINE_STRIDED_TEST(bits, type, init_val, fill_val, stride_val)		\
++void test_misaligned_strided_load_store_##bits(int VEC_LEN)			\
++{										\
++	ksft_print_msg("start\n");						\
++	type *src_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *dst_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	if (!src_vec || !dst_vec) {						\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++) {					\
++		src_vec[i] = (init_val) + (i * (fill_val));			\
++		dst_vec[i] = (type)-1;						\
++	}									\
++	type *misaligned_load_addr = (type *)((uint8_t *)src_vec + OFFSET);	\
++	type *misaligned_store_addr = (type *)((uint8_t *)dst_vec + OFFSET);	\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vlse" #bits ".v v1, (%1), %3\n\t"				\
++		     "vsse" #bits ".v v1, (%2), %3\n\t"				\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr), "r"(stride_val)		\
++		     : "memory", "v1");						\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VEC_LEN)) {				\
++		ksft_test_result_fail("strided " #bits " fail\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	ksft_test_result_pass("strided " #bits " pass\n");			\
++	free(src_vec);								\
++	free(dst_vec);								\
++}
++
++/*
++ * Macro to define unit-stride load/store test functions
++ */
++#define DEFINE_UNIT_STRIDE_TEST(bits, type, init_val, fill_val)			\
++void test_misaligned_unit_stride_load_store_##bits(int VEC_LEN)			\
++{										\
++	ksft_print_msg("start\n");						\
++	type *src_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *dst_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	if (!src_vec || !dst_vec) {						\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++) {					\
++		src_vec[i + OFFSET] = (init_val) + (i * (fill_val));		\
++		dst_vec[i + OFFSET] = (type)-1;					\
++	}									\
++	type *misaligned_load_addr = (type *)((uint8_t *)src_vec + OFFSET);	\
++	type *misaligned_store_addr = (type *)((uint8_t *)dst_vec + OFFSET);	\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vle" #bits ".v v1, (%1)\n\t"				\
++		     "vse" #bits ".v v1, (%2)\n\t"				\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr)				\
++		     : "memory", "v1");						\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VEC_LEN)) {				\
++		ksft_test_result_fail("unit_stride " #bits " fail\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	ksft_test_result_pass("unit_stride " #bits " pass\n");			\
++	free(src_vec);								\
++	free(dst_vec);								\
++}
++
++/*
++ * Macro to define indexed ordered load/store test functions
++ */
++#define DEFINE_INDEXED_ORDERED_TEST(bits, type, init_val, fill_val, idx_mul)	\
++void test_indexed_ordered_load_store_##bits(int VEC_LEN)			\
++{										\
++	ksft_print_msg("start\n");						\
++	type *src_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *dst_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *index_vec = (type *)calloc(VEC_LEN, sizeof(type));		\
++	if (!src_vec || !dst_vec || !index_vec) {				\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++) {					\
++		src_vec[i] = (init_val) + (i * (fill_val));			\
++		dst_vec[i] = (type)-1;						\
++		index_vec[i] = i * (idx_mul);					\
++	}									\
++	type *misaligned_load_addr = (type *)((uint8_t *)src_vec + OFFSET);	\
++	type *misaligned_store_addr = (type *)((uint8_t *)dst_vec + OFFSET);	\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vle" #bits ".v v2, (%3)\n\t"				\
++		     "vloxei" #bits ".v v1, (%1), v2\n\t"			\
++		     "vsoxei" #bits ".v v1, (%2), v2\n\t"			\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr), "r"(index_vec)		\
++		     : "memory", "v1", "v2");					\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VEC_LEN)) {				\
++		ksft_test_result_fail("indexed_ordered " #bits " fail\n");	\
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	ksft_test_result_pass("indexed_ordered " #bits " pass\n");		\
++	free(src_vec);								\
++	free(dst_vec);								\
++	free(index_vec);							\
++}
++
++
++/*
++ * Macro to define indexed unordered load/store test functions
++ */
++#define DEFINE_INDEXED_UNORDERED_TEST(bits, type, init_val, fill_val, idx_mul)	\
++void test_indexed_unordered_load_store_##bits(int VEC_LEN)			\
++{										\
++	ksft_print_msg("start\n");						\
++	type *src_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *dst_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *index_vec = (type *)calloc(VEC_LEN, sizeof(type));		\
++	if (!src_vec || !dst_vec || !index_vec) {				\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++) {					\
++		src_vec[i] = (init_val) + (i * (fill_val));			\
++		dst_vec[i] = (type)-1;						\
++		index_vec[i] = i * (idx_mul);					\
++	}									\
++	type *misaligned_load_addr = (type *)((uint8_t *)src_vec + OFFSET);	\
++	type *misaligned_store_addr = (type *)((uint8_t *)dst_vec + OFFSET);	\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vle" #bits ".v v2, (%3)\n\t"				\
++		     "vluxei" #bits ".v v1, (%1), v2\n\t"			\
++		     "vsuxei" #bits ".v v1, (%2), v2\n\t"			\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr), "r"(index_vec)		\
++		     : "memory", "v1", "v2");					\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VEC_LEN)) {				\
++		ksft_test_result_fail("indexed_unordered " #bits " fail\n");	\
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	ksft_test_result_pass("indexed_unordered " #bits " pass\n");		\
++	free(src_vec);								\
++	free(dst_vec);								\
++	free(index_vec);							\
++}
++
++/*
++ * Macro to define fault-only-first load test functions
++ */
++#define DEFINE_FAULT_ONLY_FIRST_TEST(bits, type, init_val, fill_val)		\
++void test_fault_only_first_load_##bits##_misaligned(int VEC_LEN)		\
++{										\
++	ksft_print_msg("start\n");						\
++	type *src_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	type *dst_vec = (type *)calloc(VEC_LEN + OFFSET, sizeof(type));		\
++	if (!src_vec || !dst_vec) {						\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++) {					\
++		src_vec[i + OFFSET] = (init_val) + (i * (fill_val));		\
++		dst_vec[i + OFFSET] = (type)-1;					\
++	}									\
++	type *misaligned_load_addr = (type *)((uint8_t *)src_vec + OFFSET);	\
++	type *misaligned_store_addr = (type *)((uint8_t *)dst_vec + OFFSET);	\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vle" #bits "ff.v v1, (%1)\n\t"				\
++		     "vse" #bits ".v v1, (%2)\n\t"				\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr)				\
++		     : "memory", "v1");						\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VEC_LEN)) {				\
++		ksft_test_result_fail("fault_only_first " #bits " fail\n");	\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	ksft_test_result_pass("fault_only_first " #bits " pass\n");		\
++	free(src_vec);								\
++	free(dst_vec);								\
++}
++
++/*
++ * Macro to define unit-stride segment load/store test functions
++ */
++#define DEFINE_UNIT_STRIDE_SEGMENT_TEST(bits, nf_val)				\
++void test_misaligned_unit_stride_segment_load_store_##bits##_##nf_val(int VEC_LEN) \
++{										\
++	ksft_print_msg("start\n");						\
++	size_t eew = bits;							\
++	size_t nf = nf_val;							\
++	size_t element_size = eew / 8;						\
++	size_t total_size = VEC_LEN * nf * element_size;			\
++	uint8_t *src_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	uint8_t *dst_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	if (!src_vec || !dst_vec) {						\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	for (size_t i = 0; i < total_size; i++) {				\
++		src_vec[i + OFFSET] = (uint8_t)(i + 1);				\
++		dst_vec[i + OFFSET] = 0xff;					\
++	}									\
++	uint8_t *misaligned_load_addr = src_vec + OFFSET;			\
++	uint8_t *misaligned_store_addr = dst_vec + OFFSET;			\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vlseg" #nf_val "e" #bits ".v v8, (%1)\n\t"			\
++		     "vsseg" #nf_val "e" #bits ".v v8, (%2)\n\t"			\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr)				\
++		     : "memory", "v8");						\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  element_size, VEC_LEN * nf)) {			\
++		ksft_test_result_fail("unit_stride_segment " #bits "_" #nf_val " fail\n"); \
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	ksft_test_result_pass("unit_stride_segment " #bits "_" #nf_val " pass\n"); \
++	free(src_vec);								\
++	free(dst_vec);								\
++}
++
++/*
++ * Macro to define strided segment load/store test functions
++ */
++#define DEFINE_STRIDED_SEGMENT_TEST(bits, nf_val)				\
++void test_misaligned_strided_segment_load_store_##bits##_##nf_val(int VEC_LEN)	\
++{										\
++	ksft_print_msg("start\n");						\
++	size_t eew = bits;							\
++	size_t nf = nf_val;							\
++	size_t element_size = eew / 8;						\
++	size_t total_size = VEC_LEN * nf * element_size;			\
++	uint8_t *src_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	uint8_t *dst_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	if (!src_vec || !dst_vec) {						\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	for (size_t i = 0; i < total_size; i++) {				\
++		src_vec[i + OFFSET] = (uint8_t)(i + 1);				\
++		dst_vec[i + OFFSET] = 0xff;					\
++	}									\
++	uint8_t *misaligned_load_addr = src_vec + OFFSET;			\
++	uint8_t *misaligned_store_addr = dst_vec + OFFSET;			\
++	size_t stride = nf * element_size;					\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vlsseg" #nf_val "e" #bits ".v v8, (%1), %2\n\t"		\
++		     "vssseg" #nf_val "e" #bits ".v v8, (%3), %2\n\t"		\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(stride), "r"(misaligned_store_addr)			\
++		     : "memory", "v8");						\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  element_size, VEC_LEN * nf)) {			\
++		ksft_test_result_fail("strided_segment " #bits "_" #nf_val " fail\n"); \
++		free(src_vec);							\
++		free(dst_vec);							\
++		return;								\
++	}									\
++	ksft_test_result_pass("strided_segment " #bits "_" #nf_val " pass\n"); \
++	free(src_vec);								\
++	free(dst_vec);								\
++}
++
++
++/*
++ * Macro to define indexed unordered segment load/store test functions
++ */
++#define DEFINE_INDEXED_UNORDERED_SEGMENT_TEST(bits, nf_val, idx_type)		\
++void test_misaligned_indexed_unordered_segment_load_store_##bits##_##nf_val(int VEC_LEN) \
++{										\
++	ksft_print_msg("start\n");						\
++	size_t eew = bits;							\
++	size_t nf = nf_val;							\
++	size_t element_size = eew / 8;						\
++	size_t total_size = VEC_LEN * nf * element_size;			\
++	uint8_t *src_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	uint8_t *dst_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	idx_type *index_vec = (idx_type *)calloc(VEC_LEN, sizeof(idx_type));	\
++	if (!src_vec || !dst_vec || !index_vec) {				\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	for (size_t i = 0; i < total_size; i++) {				\
++		src_vec[i + OFFSET] = (uint8_t)(i + 1);				\
++		dst_vec[i + OFFSET] = 0xff;					\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++)					\
++		index_vec[i] = i * nf * element_size;				\
++	uint8_t *misaligned_load_addr = src_vec + OFFSET;			\
++	uint8_t *misaligned_store_addr = dst_vec + OFFSET;			\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vle" #bits ".v v16, (%3)\n\t"				\
++		     "vluxseg" #nf_val "ei" #bits ".v v8, (%1), v16\n\t"		\
++		     "vsuxseg" #nf_val "ei" #bits ".v v8, (%2), v16\n\t"		\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr), "r"(index_vec)		\
++		     : "memory", "v8", "v16");					\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  element_size, VEC_LEN * nf)) {			\
++		ksft_test_result_fail("indexed_unordered_segment " #bits "_" #nf_val " fail\n"); \
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	ksft_test_result_pass("indexed_unordered_segment " #bits "_" #nf_val " pass\n"); \
++	free(src_vec);								\
++	free(dst_vec);								\
++	free(index_vec);							\
++}
++
++/*
++ * Macro to define indexed ordered segment load/store test functions
++ */
++#define DEFINE_INDEXED_ORDERED_SEGMENT_TEST(bits, nf_val, idx_type)		\
++void test_misaligned_indexed_ordered_segment_load_store_##bits##_##nf_val(int VEC_LEN) \
++{										\
++	ksft_print_msg("start\n");						\
++	size_t eew = bits;							\
++	size_t nf = nf_val;							\
++	size_t element_size = eew / 8;						\
++	size_t total_size = VEC_LEN * nf * element_size;			\
++	uint8_t *src_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	uint8_t *dst_vec = (uint8_t *)calloc(total_size + OFFSET, 1);		\
++	idx_type *index_vec = (idx_type *)calloc(VEC_LEN, sizeof(idx_type));	\
++	if (!src_vec || !dst_vec || !index_vec) {				\
++		fprintf(stderr, "Error: Memory allocation failed\n");		\
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	for (size_t i = 0; i < total_size; i++) {				\
++		src_vec[i + OFFSET] = (uint8_t)(i + 1);				\
++		dst_vec[i + OFFSET] = 0xff;					\
++	}									\
++	for (size_t i = 0; i < VEC_LEN; i++)					\
++		index_vec[i] = i * nf * element_size;				\
++	uint8_t *misaligned_load_addr = src_vec + OFFSET;			\
++	uint8_t *misaligned_store_addr = dst_vec + OFFSET;			\
++	asm volatile("vsetvli zero, %0, e" #bits ", m1\n\t"			\
++		     "vle" #bits ".v v16, (%3)\n\t"				\
++		     "vloxseg" #nf_val "ei" #bits ".v v8, (%1), v16\n\t"		\
++		     "vsoxseg" #nf_val "ei" #bits ".v v8, (%2), v16\n\t"		\
++		     :								\
++		     : "r"(VEC_LEN), "r"(misaligned_load_addr),			\
++		       "r"(misaligned_store_addr), "r"(index_vec)		\
++		     : "memory", "v8", "v16");					\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  element_size, VEC_LEN * nf)) {			\
++		ksft_test_result_fail("indexed_ordered_segment " #bits "_" #nf_val " fail\n"); \
++		free(src_vec);							\
++		free(dst_vec);							\
++		free(index_vec);						\
++		return;								\
++	}									\
++	ksft_test_result_pass("indexed_ordered_segment " #bits "_" #nf_val " pass\n"); \
++	free(src_vec);								\
++	free(dst_vec);								\
++	free(index_vec);							\
++}
++
++/*
++ * Macro to define whole register load/store test functions
++ */
++#define DEFINE_WHOLE_REG_TEST(bits, type)					\
++void whole_reg_##bits(int VLEN)							\
++{										\
++	type *src = (type *)calloc(8 * VLEN + OFFSET, sizeof(type));		\
++	type *dst = (type *)calloc(8 * VLEN + OFFSET, sizeof(type));		\
++	if (!src || !dst) {							\
++		ksft_test_result_fail("whole_reg " #bits " memory alloc fail\n"); \
++		free(src);							\
++		free(dst);							\
++		return;								\
++	}									\
++	for (int i = 0; i < VLEN; i++)						\
++		src[i] = i;							\
++	type *misaligned_load_addr = (type *)((uint8_t *)src + OFFSET);		\
++	type *misaligned_store_addr = (type *)((uint8_t *)dst + OFFSET);	\
++	asm volatile("vl1re" #bits ".v v1, (%0)" :: "r"(misaligned_load_addr));	\
++	asm volatile("vs1r.v v1, (%0)" :: "r"(misaligned_store_addr));		\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VLEN / 8 / 2)) {			\
++		ksft_test_result_fail("whole_reg " #bits " vl1re fail\n");	\
++		free(src);							\
++		free(dst);							\
++		return;								\
++	}									\
++	asm volatile("vl2re" #bits ".v v2, (%0)" :: "r"(misaligned_load_addr));	\
++	asm volatile("vs2r.v v2, (%0)" :: "r"(misaligned_store_addr));		\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VLEN / 8)) {				\
++		ksft_test_result_fail("whole_reg " #bits " vl2re fail\n");	\
++		free(src);							\
++		free(dst);							\
++		return;								\
++	}									\
++	asm volatile("vl4re" #bits ".v v4, (%0)" :: "r"(misaligned_load_addr));	\
++	asm volatile("vs4r.v v4, (%0)" :: "r"(misaligned_store_addr));		\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VLEN / 4)) {				\
++		ksft_test_result_fail("whole_reg " #bits " vl4re fail\n");	\
++		free(src);							\
++		free(dst);							\
++		return;								\
++	}									\
++	asm volatile("vl8re" #bits ".v v8, (%0)" :: "r"(misaligned_load_addr));	\
++	asm volatile("vs8r.v v8, (%0)" :: "r"(misaligned_store_addr));		\
++	if (!check_result(misaligned_load_addr, misaligned_store_addr,		\
++			  sizeof(type), VLEN / 2)) {				\
++		ksft_test_result_fail("whole_reg " #bits " vl8re fail\n");	\
++		free(src);							\
++		free(dst);							\
++		return;								\
++	}									\
++	ksft_test_result_pass("whole_reg " #bits " pass\n");			\
++	free(src);								\
++	free(dst);								\
++}
++
++#endif /* _V_MISALIGNED_H */
 
 -- 
 2.56.0
