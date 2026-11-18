@@ -1,74 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.149
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795035969;
-	b=JW76Ee5/pBFfD2W//0zI7FEMSRzf7fSjBgc8UnsRdUZuIWmrgXqktOyFNxWNzfWoQNKf
-	 8yHLBIAmnY6+xF6jf4GeA2cBbL1wjDSe/K8oMXdCu3s3GQuu9Z5mb0VjguvWKvAvbd7cb
-	 cZE5CmhVO/eTi16zQTbdWRfRR3Q+8PWQqdLuSQoD4xSoJD2Wq8e3WdarzXJopN6+zxnqW
-	 YW0ly3WRV+3DttUbEFW6qEtLudW521HMJejfrNfkDoyu3Isul3pOthiAynV2KtHF546xc
-	 3xh427z8fyCxSlH6kfS05GO0BUSAWmi7pFx0QWAPF0ZT9shHAm5sxm4DuYbsgQE1WkA==
+	t=1795036096;
+	b=CrMA/GPyW0dsEi7xRmvC6HON78SxNBMCEyNx6UX3MPd0/ZEPCa/kpE/RyNVsIx7HO8Hv
+	 PbNw+3ghhPti5rEb3oM1Zjhyhf+G24RjJtiH6enxEXA1Aaw8Ly3k5ge9SXNP/mxyUBrnE
+	 3J5XeWww8+tHRpZ6C3a6V1kGTvZArlH7dQGs7nrg1f7znu9nwcK72BD3CRmyg2kLaMaR2
+	 NkMKEmxDpLX7S61S9yRlE6kuAqQV6irHu7B6pf9bNkHOmhEQgT/LQ8XKKKnQtKU+7R7X5
+	 Q/K0lNtaRprpE+SEW6+TXiKYsSWBB18pNGQjFOczY8fop9gYV6PuTpLUSP9L94UTnOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795035969;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=OFOAizb0lscpHZmsQNMwCZciIP7qYn5PXudpLFxhVjo=;
-	b=o1YWrk9tb6GpZ8RUejOJGf25s22UG2nCs+Nx6iyFaGR3STdCfZGwyvakC3L1R7P+hrLz
-	 uBh9BEUgQGd4EOM8wOFOHu8h0IaT28CC/lr+E+3LGSawTwwzV/OTLtNm/PW8Pkw5bl+EQ
-	 CEi+frbL5ixQjXcbQjUdDJdEtprFuSDnZhvHUAw261JasHYQnA8N9CXUzd54gAZHtECRU
-	 DIaLsXQAfDiEV2saAK3LelFtYNgBOytAJKDVdWUH1cM+1uWbXkCVG1zgbtdNHK5EZCg1A
-	 kFwLujQPTrLlqzsea1WWvwXw7oyA7ZOZPu1SK3O35wg6uB2ju3Nh2dsHgLtlZdz5+TQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795036096;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:From:To:Cc:
+	 References:Content-Language:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=gYvo29vFQaQUxp92paawfy/fpGkwT1TbpVKZ2bg51Lk=;
+	b=A0CHiigLZXIgDvgdEFMelZYFtASbHO3Z44Up+ZZq917+gajDZ5vtEUY3wv0RQIqSASEf
+	 Q9QNrYyQCPDTYwWVoMNOMm/r3hqXf+mhpsoP7a+7ACobhA9kVG/4X9W5HwXa5EPV6E2WJ
+	 LZTvhbQytjUH1kFvMuJ8XkTsB0NyViuJor9EZx6VHHxiYAh98o0kFwc4aDGSObISePnhc
+	 XWfDCsPv4IrmI8du8SgTLP6QxTFVldScVzaLar4F6oeXfV4o9/JXFVW93RMJZYGlTd0e4
+	 0nEUeZp6l/KukJ+kXfC93pBmmalGgx9uyH32xoZbnG9v3czfCeq+0alLospL8NuksbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Oxumkmff;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bsbernd.com;
+	spf=pass smtp.mailfrom=bsbernd.com;
+	dkim=pass header.d=bsbernd.com header.i=@bsbernd.com header.a=rsa-sha256 header.s=fm2 header.b="W/btgby9";
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=FCvv1W3b;
+	arc=none smtp.remote-ip=103.168.172.149
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46CC606A320;
-	Wed, 18 Nov 2026 21:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7298606A31C
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 21:08:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7298606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bsbernd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bsbernd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Oxumkmff
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49971F000C5;
-	Wed, 18 Nov 2026 21:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795035969;
-	bh=OFOAizb0lscpHZmsQNMwCZciIP7qYn5PXudpLFxhVjo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Oxumkmffd22oHF7wJW38hIMU17Z8IDsp3bMe2LRsEkvKCXjg3EAdR8hPO1RQygJxX
-	 maa5Wr2sBhJ4g2+11YmKbgX1CxHGiDyr6SpBJi8FP9+RJV4Z4B6qbftOvJFBgmLysR
-	 owiAp9FuVPl7j8bbomdobonegaudOenFoENCgYs+PObtVvqEdOYsO094XPzCkyx0Aa
-	 0NhDxKrCswLGZUL3UN8PjPwyHamn6Dsyzd1ccHi86BpQAR79X/74tFKQAKUlD+2YMV
-	 7GSXq6skor2xtMKDlym1bnHUCqYvIF0PbepUdlyQUc/0OpB+U7doxUnbUix1DanUfk
-	 BdoMvC6ASRZrg==
-Date: Wed, 18 Nov 2026 22:06:01 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Paul Moore <paul@paul-moore.com>, 
-	Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
-	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Jann Horn <jannh@google.com>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
-Message-ID: <20261118-zufahrt-baubeginn-gutsbetrieb-c09004227e8f@brauner>
-References: <20261028221705.3915340-1-halg@google.com>
- <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
- <20261106-befreien-addieren-eislauf-e09212803534@brauner>
- <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
- <avM41a80aig2de-R@google.com>
- <20261111-behagen-faktisch-entgegen-e2e714373895@brauner>
- <CALCETrUjW=kXxyggDUvEN+Pxc-pE98eVbdW8XBU8JzfqXj_voA@mail.gmail.com>
- <20261117-rational-ohnehin-unbeugsam-e5c04759a156@brauner>
- <CALCETrWhuOnBy0N0KznmczD4S2XEK0fbr0C=1KFQqTnoTJbQbg@mail.gmail.com>
- <20261118-stapeln-eckpunkte-lesbar-ee73537f474d@brauner>
+	dkim=pass (2048-bit key, unprotected) header.d=bsbernd.com header.i=@bsbernd.com header.a=rsa-sha256 header.s=fm2 header.b=W/btgby9;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=FCvv1W3b
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id B5FA4EC0635
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:08:13 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 18 Nov 2026 16:08:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bsbernd.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1795036093;
+	 x=1795122493; bh=gYvo29vFQaQUxp92paawfy/fpGkwT1TbpVKZ2bg51Lk=; b=
+	W/btgby98L6UpAt1uJqNDl+HyMovhExfel4TOstOpxPNdYPfqVFpFC/K5HuSoIGZ
+	MaPyqDFWUgFt6t7bd4apdF2Wxs5I6c3fjb9DpK5I8eCVLIkB7BuVzHo6popu7MIp
+	iaI6J3HC8FabDw/+6cQO+wJVptLS90edq8mqntv0/dP4wXWpAz/HKDzZHgStnTXW
+	3O5isZ19fQnNgoVg6amaVFd+Zku75Z1lr2ErMnKgZU75elEqBlSrGJDUCJPxbPbI
+	uvm3BUEiKx62dPe040eenXwdAuLX8PZqOcY2u2sSuyXpEqHjSe7A0aUxXpnWdotQ
+	8diICcUcGS9x2UuUtUYklA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795036093; x=
+	1795122493; bh=gYvo29vFQaQUxp92paawfy/fpGkwT1TbpVKZ2bg51Lk=; b=F
+	Cvv1W3bPN7QyuybD7ANjkhGsAXGIz7LbUxHoENANFKr/Khj75zA+ctxo8zYmtoEv
+	FO/8ZpmJ6YRhVDG6p4NbtJe8IcGe1ktajSF6tZX2lo3iejhZ/8OI3SOvAENr08nJ
+	x//EZhf0hQ0wOxCdPHnn/ypWPjYc8OApo/gpB2IA9R9RsgJ2WGENRWNqiybgZ4gK
+	XNcMGb681iL86o2f6Y3Pz4EfAzNsaG7pKUndU/Pl/cVGzDbfUm8WXp3sSwbdvxoB
+	HYhkHT8yk25X9DxZi5ud/jVDLGPIAur2wgmu5+OTEmFY/s3g59eNLMjYOqZ1DuUP
+	flFHcKxg8Y9rf/8mj7rAw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=bsbernd.com a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1795036093; d=bsbernd.com;
+	mf=PGJlcm5kQGJzYmVybmQuY29tPg==;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:Ire9LTYS4bmV2NbiOyEgTOnZPeIdJahm3hsLgw6M6YLJZK7
+	VMu2PFOhaoB9PbDzllLctk0+NWT8P0ooj1eA8P1MeUqeBOwek75EE8+bBZ7b101e
+	cFFmwNDMrwiih4wdiEhaQCy8yt/r8AOyLhbp902LyeCvpiYIhcu9TUawsfVTmBoF
+	OJdssXdY3lkNXRjJcs0M09CkoGgfpBbxWjXX2bKD176hIkvxIGw6drmBE5jgouwZ
+	6klLmseaxD2Q1kEpfhzVWe0Ljvo8eTdQ6PtZ6uPkmUvrBTLNKXlf3f+RINcpZo8k
+	dhwfY51fwz19vQhJ8Iv6y+cZHVd1veXCKsdjDYg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=14;
+	hn=cc,content-language,content-transfer-encoding,content-type,
+	date,feedback-id,from,in-reply-to,message-id,mime-version,
+	references,subject,to,user-agent;
+Message-Instance: m=1; h=sha256:DBw6MwT0A/9yfAR3E59js9Rlcfp5upJWmiAE6B98S8g=:Dd53dfMD02esYoTzu4UOAQnkg85CTIqhzdDNX6taZIo=;
+X-ME-Sender: <xms:vBP-anTb6S_9rRWqLxkV_AXujnoeiFZ8GGRy-GhL8epqmQlP3ojprw>
+    <xme:vBP-ar2pIZlyN-kHsb8k677x60J3SWhNZMKr-YksWo5Nx0GM-R03S3ebQydpP4ZXM
+    fQ7sTo1MGZ5xarQFx28MN-1PZPeAH82PDxiQGE3DB-N9R9k1nlOY3k>
+X-ME-Received: <xmr:vBP-anfrLi5rhP2at09t3dEP57l5mXILEp_kC9QSNeRqd2Kx0XIbXbHrs-s5bopCBsDjgBmIVKIb2tEDyjpQFqXQf8ujor7AuAFd7cXtu9gFd688rg>
+X-ME-Proxy-Cause: dmFkZTEUNMEfQCdr7W+iZjs3Q2JR36Y9OZvZt6oxLs3R11vwS5ii52bbSgXHONW9FEwScO
+    zLdV+Xhv12tZaUmwOfkDn0eYn8dRASgrThhO9Q8mfzbtVOONxD1cSqzt/qp2WXd6FkQAGE
+    WA4TJmvRJkXzr4TfxMYp1sGxRDVCk3ilBqnmZLEyqAyi5bv4G6hoUtd7/a6BpY/sMrsUim
+    M6/Zfb2Nzdy00G766lZmTVIifG+Sek+nbvTv+ABxJ6KrplqmNpTmS/LkcBQAQa9GQ0r7Zs
+    Vu0UuNRgP9c1S4Mgm4BBmw/XRwKvvJFlvjH/4jiBrVoLIU8RWBL5+8bxHJ7fqDsfQWmABJ
+    vqshS+J5zU4mvu+d5vK2rx4JKUd7O8iK6a3IgLx/sjIKNTBAlvRfSMeTWF5/Gdli779fgF
+    cv9p1cTsW0WvI2QHXGCiL6aBR4cvR54zGLqiTyyJnEEMaxMohXlY35AIouwsLiPB3fvPS8
+    hoT8ih3IaGfRGQw4GJMxYrILZ0TWSgVXZr+xUxTJooX7KBboE189M7FpMJ25UHEx1geUR/
+    OkqaLC2DqB3zSsNrf5+mBrEECIbHs8ZpBJuQSM0Rus/GBHi1UfY3UOLhwZVZCPxXu44Qcq
+    86UNiXMQArrlM1O6P4fzCEI64TN9VPgylS8aJWm8ci+8OriPVIXGNYJXg4DQ
+X-ME-Proxy: <xmx:vBP-ajOjPe7yXmFRvbJeGDfGm_rvvCIeHipulBdO70EhwMChih-BFQ>
+    <xmx:vBP-arW3ohEgpmzl9wwlWs35zAZiuEkXkUcfzaFK93enPzPnqUmrCQ>
+    <xmx:vBP-arzmosYM3OgqvtFABsIZ8wBtzdssngfsc6UpDvIKiGc7D1WtMA>
+    <xmx:vBP-ai_oczUAFwVZBcjNTJ_8bPGVBjpXlfCEVQ6wsRctmTsCHEEovg>
+    <xmx:vRP-asA8yw3pUZnckYKGOTYgcB2I25ISIPV1J6faNqMyv7Hq1PPLdk_->
+Feedback-ID: i5c2e48a5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 18 Nov 2026 16:08:11 -0500 (EST)
+Message-ID: <9bac7320-5e1a-4647-914e-d29d0db1dc3d@bsbernd.com>
+Date: Wed, 18 Nov 2026 22:08:09 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,212 +119,246 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261118-stapeln-eckpunkte-lesbar-ee73537f474d@brauner>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 1/2] fuse: add FUSE_OPEN_ATOMIC
+From: Bernd Schubert <bernd@bsbernd.com>
+To: Jimmy Zuber <jamz@amazon.com>, Miklos Szeredi <miklos@szeredi.hu>
+Cc: fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Jim Harris <jiharris@nvidia.com>,
+ Horst Birthelmer <horst@birthelmer.de>, Luis Henriques <luis@igalia.com>,
+ NeilBrown <neil@brown.name>, Joanne Koong <joannelkoong@gmail.com>
+References: <20261110204421.1251726-1-jamz@amazon.com>
+ <20261110204421.1251726-2-jamz@amazon.com>
+ <fa582b7f-23ba-449d-b311-20f6ac8e867c@bsbernd.com>
+Content-Language: fr, en-US, de-DE, ru-RU
+In-Reply-To: <fa582b7f-23ba-449d-b311-20f6ac8e867c@bsbernd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 18, 2026 at 11:21:57AM +0100, Christian Brauner wrote:
-> On Tue, Nov 17, 2026 at 09:37:19AM -0800, Andy Lutomirski wrote:
-> > On Tue, Nov 17, 2026 at 9:10 AM Christian Brauner <brauner@kernel.org> wrote:
-> > >
-> > > On Mon, Nov 16, 2026 at 09:15:18AM -0800, Andy Lutomirski wrote:
-> > > > On Wed, Nov 11, 2026 at 7:20 AM Christian Brauner <brauner@kernel.org> wrote:
-> > > > > * a task that setns()es in later gets
-> > > > >   ns->cap_bset & (cred->cap_userns | cred->cap_permitted)
-> > > >
-> > > > I'm not sure this is ideal.  If a task has cap_userns & CAP_NET_ADMIN,
-> > > > then there is no attack surface issue with allowing it to enter a
-> > > > namespace and be NET_ADMIN there even if the namespace itself has
-> > > > CAP_NET_ADMIN cleared from cap_bset.  But any exemption here would
-> > > > need to be a new API so that it isn't used by accident.
-> > > >
-> > > > I'm mostly saying this because container managers might want to
-> > > > restrict cap_userns within their containers but still have it
-> > > > themselves for management.  But maybe there isn't any need to enter
-> > > > the userns for this purpose.
-> > >
-> > > I don't think there is. A manager that holds the capabilities itself can
-> > > just do most things from the outside. I think it's nice that once you're
-> > > inside a namespace you're bound by its capabiltiy set. Otherwise the set
-> > > isn't a property of the namespace anymore. If someone comes up with a
-> > > real need to enter we can add an explicit opt-in later?
-> > 
-> > Fair enough.  Also you've written infinitely more nontrivial container
-> > managers than I have (I've written container managers, too, but
-> > they're all special-purpose things that don't do much in the way of
-> > actual managing).
-> 
-> So I think this is another instance where we're bitten by the complexity
-> of the whole namespace api. In a perfect world our answer would be "Yes,
-> the owner of the userns is definitely capable of performing all relevant
-> actions from outside the userns.". But we're actually not able to say
-> that because there's so many different ways how some <object> is set up
-> or configured for a container and nobody ever sat down and defined the
-> model how a container and it's various resoures are set up.
-> 
-> So once again, here we are guessing our way to a decent decision...
-> Thanks for helping with thinking this through.
-> 
-> > > > > * Root in a container has caps as well so for containers the exemption
-> > > > >   would be wrong.
-> > > > >
-> > > > >   So here we need a a lockable SECURE_NO_USERNS_CAP_RAISE bit thingy.
-> > > > >   This turns off the exemption and prevents raising the mask.
-> > > > >
-> > > > >   Docker lowers the mask, sets and locks the bit, and
-> > > > >   unshare(CLONE_NEWUSER) in the container doesn't hand out CAP_NET_ADMIN
-> > > > >   anymore.
-> > > >
-> > > > Can you clarify this part a bit?  I'm not seeing why Docker should be
-> > > > special.  Shouldn't the inside of a Docker container work as much like
-> > > > a normal non-container system as possible?  What's the use case?
-> > >
-> > > I picked Docker because you brought it up, and your goal of allowing
-> > > user namespaces even in Docker is kinda the use case. Docker can only
-> > > drop the CLONE_NEWUSER block from its seccomp profile if nested user
-> > > namespaces can't get more caps than root/Docker wants to give them.
-> > >
-> > > But the bit isn't at all Docker specific. Any privileged task that wants the
-> > > mask to apply to itself would benefit. With just the exemption this wouldn't be
-> > > possible:
-> > >
-> > > (1) A runtime that holds full capabilities gives a
-> > >     user namespace it creates all bits.
-> > >     It can just set the bit before creating it.
-> > >
-> > > (2) In a container without a user namespace container root has host-level
-> > >     capabilities. Any user namespace it creates gets them through this
-> > >     exemption thing. So it can also add them back to its mask. And the mask is
-> > >     inherited. So every process it starts can then create user namespaces with
-> > >     them.
-> > >
-> > >     by raising the bit we stop both. The locked bit keeps container root which
-> > >     also has CAP_SETPCAP from clearing it.
-> > >
-> > 
-> > I'm still not 100% sure I'm following this.  By "exemption" are you
-> > talking about the cred->cap_premitted term here?
-> 
-> Yes.
-> 
-> > ns->cap_bset = parent->cap_bset &
-> >                        (cred->cap_userns | cred->cap_permitted);
-> > 
-> > (As as aside, as formulated, the parent->cap_bset term should be
-> > irrelevant, no?  cred always refers to a task in parent, and this
-> 
-> (
-> I don't think it i.s
-> cap_userns is full by default. Entering a namespace doesn't change it.
-> A task inside a namespace with a reduced cap_bset still has the full
-> mask. Without the term a child namespace gets more caps than its parent
-> had.
-> 
-> cap_permitted can grow through a setuid-root exec in the parent
-> namespace. And that exec is bounded by the tasks bounding set and not
-> by the namespace bounding set.
-> 
-> So that term ensures that the namespace bounding set shrinks
-> monotonically by construction.
-> 
-> I think it would only be redundant if exec would be clamped by cap_bset.
-> I'm not sure if the patchset does this.
-> 
-> /me looks...
-> 
-> Ah, ok... this patch series already clamps exec to the namespace
-> bounding set. So yes, you're right.
-> )
-> 
-> > whole thing is defined so that cap_userns and cap_permitted are always
-> > subsets of parent's cap_bset, right?)
-> > 
-> > I think I agree that there needs to be a way to turn the cap_permitted
-> > thing on and off (and I'm also not sure whether cap_permitted is
-> > better than cap_effective), but I'm not convinced that an inheritable
-> 
-> The effective set can be raised from the permitted set at will. So I
-> think permitted is just more correct.
-> 
-> > and lockable bit is necessary or wise.
-> > 
-> > How about changing the rule to:
-> > 
-> > child->cap_bset = parent->cap_bset & soft_cap_userns &
-> > (cred->cap_userns | cred->cap_permitted)
-> > 
-> > a) (ugly but easier) A non-inheritable prctl-controlled mask
-> > soft_cap_userns, changing the rule to parent->cap_bset &
-> > soft_cap_userns & (cred->cap_userns | cred->cap_permitted).
-> > soft_cap_userns would be reset to all ones on on fork and exec to
-> > avoid creating new inheritable security-relevant state.
-> 
-> So both let the creator pick. But the bit is for the creator when it
-> wants to self-restrict: container-root without a user namespace.
-> 
-> It's the same reason that securebits and no_new_privs are inheritable
-> and lockable. Afaict, a) is reset on exec so it doesn't control the next
-> exec. b) covers namespace creation but not unsharing a user namespace.
-> 
-> > b) A whole new create-a-namespace API where the caller chooses
-> > soft_cap_userns at the time they create the namespace.
-> > 
-> > > On the host none of that matters as the mask is root's own policy there.
-> > 
-> > I'm still not seeing how there's a difference between host vs
-> > init-userns-container vs separate-userns-container.  After all, in
-> 
-> I think the difference is simply whether the restricting task holds the
-> capabilities itself. Unprivileged users on the host don't and so they're
-> not subject to the exemption. The bit is for that case where the task
-> holds the caps.
-> 
-> But ok, if we really don't want to bother with container without user
-> namespaces the bit vs a) thing can also go into a follow-up series.
-> 
-> > Unfortunately we don't live in this world, and I'm not convinced that
-> > can credibly even approximate it, because people really like their
-> > setuid programs working inside a userns.  It still bugs me that we're
-> > designing permission systems designed to work in the POSIX model that
-> > I think we all kind of agree is fundamentally rather messed up.
-> 
-> I don't think all hope is lost. We have slowly been pushing in this
-> direction. systemd allows to set NoNewPrivileges= in it's global config
-> so it's possible to enable it for the whole system easily.
-> 
-> There's been a ton of work to get rid of classic setuid-exec stuff:
-> 
-> * run0 instead of sudo (with sudo compat), and systemd-ptybrokerd for
->   interactive shells
-> * nsresourced for user namespaces with delegated ranges, mountfsd for
->   unprivileged image mounts
-> * outside of systemd: pwaccessd/pwupdd/newidmapd replacing unix_chkpwd,
->   passwd and newuidmap/newgidmap, polkit without a setuid helper, and
->   su/sudo/pkexec wrappers on top of ptybrokerd
-> 
-> But yes, containers are the sore spot. no_new_privs inherited from PID
-> 1 breaks setuid inside of containers.
-> 
-> My idea has been to make this dynamic:
-> 
-> * deny privilege gain on exec in the initial user namespace and allow it
->   in nested ones. I mused about this in
->   https://github.com/uapi-group/kernel-features/pull/38
-> 
-> Also, since v7.1 there's CLONE_NNP to spawn a child without no_new_privs
-> set.
 
-Forgot:
 
-https://www.thkukuk.de/blog/no_new_privs/
+On 11/18/26 18:40, Bernd Schubert wrote:
+> 
+> 
+> On 11/10/26 21:44, Jimmy Zuber wrote:
+>> Add FUSE_OPEN_ATOMIC. FUSE_OPEN_ATOMIC is FUSE_LOOKUP plus FUSE_OPEN or
+>> FUSE_CREATE in one request. With FUSE_OPEN_ATOMIC, the kernel opens a
+>> name that is not in the dcache with one request to the server. This
+>> greatly improves performance for file systems where the bottleneck is
+>> calls between the kernel and the server. Servers that don't support
+>> FUSE_OPEN_ATOMIC are handled gracefully.
+>>
+>> After a -ENOSYS reply to FUSE_OPEN_ATOMIC, every open() on the
+>> connection uses FUSE_LOOKUP, FUSE_OPEN and FUSE_CREATE, including the
+>> open() that received -ENOSYS.
+>>
+>> The kernel sends FUSE_OPEN_ATOMIC from ->atomic_open(). The VFS calls
+>> ->atomic_open() for a name that is not in the dcache, and for open()
+>> with O_CREAT on a negative dentry. For a name with a valid positive
+>> dentry, the kernel sends FUSE_OPEN. FUSE_OPEN_ATOMIC for a name with a
+>> valid positive dentry would need a VFS change.
+>>
+>> If the server opens an existing file, the VFS checks permissions after
+>> the reply, as on other filesystems with ->atomic_open(). If open() fails
+>> after a valid reply with fuse_open_out, the kernel sends FUSE_RELEASE.
+>> With default_permissions, the server can receive FUSE_OPEN_ATOMIC and
+>> FUSE_RELEASE for a file that the caller may not open.
+>>
+>> The kernel clears O_TRUNC in fuse_create_in.flags, so that the server
+>> truncates a file only after the VFS checks permissions. After the VFS
+>> checks permissions, the kernel sends FUSE_SETATTR to truncate an
+>> existing file. A server with FUSE_ATOMIC_O_TRUNC truncates the file in
+>> FUSE_OPEN. For open() with O_TRUNC on a server with FUSE_ATOMIC_O_TRUNC,
+>> the kernel sends FUSE_OPEN or FUSE_CREATE after the VFS checks
+>> permissions, with FUSE_LOOKUP first for a name that is not in the
+>> dcache.
+>>
+>> The request contains fuse_create_in and the name. The reply contains
+>> fuse_entry_out, and fuse_open_out if the server opened the file. The
+>> server replies as follows:
+>>
+>> - O_CREAT | O_EXCL on an existing name: the server returns -EEXIST.
+>> - An existing regular file, with or without O_CREAT: the server can
+>>   open the file and return fuse_open_out. The server can also return
+>>   only fuse_entry_out, and the kernel sends FUSE_OPEN after the VFS
+>>   checks permissions.
+>> - An existing directory, symlink or special file: the server must
+>>   return only fuse_entry_out. The kernel returns -EIO for fuse_open_out
+>>   on any file except a regular file.
+>> - A missing name with O_CREAT: the server creates a regular file, opens
+>>   it, and sets FOPEN_CREATED.
+>> - A missing name without O_CREAT: the server returns a zero nodeid. The
+>>   kernel caches a negative dentry, as it does for FUSE_LOOKUP.
+>>
+>> The server sets FOPEN_CREATED exactly when it created the file. For
+>> FOPEN_CREATED, the kernel sets FMODE_CREATED, and do_open() passes an
+>> acc_mode of 0 to may_open(), as for any file that open() creates.
+>>
+>> For O_CREAT | O_EXCL, when the caller may not create the file, for
+>> example on a read-only mount, the VFS clears O_CREAT and leaves O_EXCL.
+>> For O_EXCL without O_CREAT, the kernel sends FUSE_LOOKUP. For an
+>> existing name, do_open() returns -EEXIST, and the server receives only
+>> FUSE_LOOKUP.
+>>
+>> Signed-off-by: Jimmy Zuber <jamz@amazon.com>
+>> ---
+>>  fs/fuse/dir.c             | 194 ++++++++++++++++++++++++++++++++++++++
+>>  fs/fuse/fuse_i.h          |   6 ++
+>>  fs/fuse/fuse_trace.h      |   1 +
+>>  include/uapi/linux/fuse.h |  20 +++-
+>>  4 files changed, 220 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+>> index 8a8177a178a20..0331d4df6248e 100644
+>> --- a/fs/fuse/dir.c
+>> +++ b/fs/fuse/dir.c
+>> @@ -938,6 +938,185 @@ static int fuse_create_open(const struct mnt_idmap *idmap, struct inode *dir,
+>>  	return err;
+>>  }
+>>  
+>> +/* Release the file the server opened for a reply the kernel rejects */
+>> +static void fuse_open_atomic_release(struct fuse_file *ff, u64 nodeid,
+>> +				     unsigned int open_size,
+>> +				     unsigned int flags)
+>> +{
+>> +	if (open_size >= FUSE_COMPAT_OPEN_OUT_SIZE && !invalid_nodeid(nodeid)) {
+>> +		ff->fh = ff->args->open_outarg.fh;
+>> +		ff->nodeid = nodeid;
+>> +		fuse_sync_release(NULL, ff, flags & ~(O_CREAT | O_EXCL));
+>> +	} else {
+>> +		fuse_file_free(ff);
+>> +	}
+>> +}
+>> +
+>> +/*
+>> + * Send FUSE_LOOKUP plus FUSE_OPEN or FUSE_CREATE as one FUSE_OPEN_ATOMIC
+>> + * request.  The server can open an existing regular file, or return only
+>> + * fuse_entry_out.  Without O_CREAT, a missing name gets a zero nodeid.
+>> + * The VFS checks permissions after the reply.  Returns 1 on -ENOSYS.
+>> + */
+>> +static int fuse_open_atomic(const struct mnt_idmap *idmap, struct inode *dir,
+>> +			    struct dentry *entry, struct file *file,
+>> +			    unsigned int flags, umode_t mode)
+>> +{
+>> +	struct fuse_mount *fm = get_fuse_mount(dir);
+>> +	struct fuse_conn *fc = fm->fc;
+>> +	FUSE_ARGS(args);
+>> +	struct fuse_forget_link *forget;
+>> +	struct fuse_create_in inarg;
+> 
+> Personally I'm not so happy about struct fuse_create_in. 
+> 
+> https://lore.kernel.org/all/20240813212149.1909627-1-joannelkoong@gmail.com/
+> https://lore.kernel.org/all/20240820211735.2098951-1-bschubert@ddn.com/
+> 
+> 
+> Summarized outcome from Miklos was that Miklos doesn't want to have another
+> op code for this combined operation and that Miklos would prefer a NFS like
+> compound way. Then Horst worked on compounds, with Miklos not wanting to
+> have that in fuse, but only in fusex. Well, the underlying problem doesn't
+> get solved - like there is a libfuse report with sshfs, where people set
+> a high attr timeout and then get corruption, because the file size is plain
+> wrong after open.
+> 
+> 
+> My suggestion would be to have a new atomic_open struct, similar to
+> fuse_create_in, but with flags. Given that atomic open is in the end
+> just an open+getattr, we could also use that for the issue above, with the
+> same new op code. However, we need Miklos' agreement here. 
+> 
+> We happen to have an online meeting once per month and the next is tomorrow,
+> would you mind to join?
+> 
+> 
+>> +	struct fuse_open_out *outopen;
+>> +	struct fuse_entry_out outentry;
+>> +	struct inode *inode = NULL;
+>> +	unsigned int open_size;
+>> +	u64 attr_version, evict_ctr;
+>> +	struct fuse_file *ff;
+>> +	struct dentry *res;
+>> +	bool locked = false;
+>> +	int epoch, err;
+>> +
+>> +	if (entry->d_name.len > fc->name_max)
+>> +		return -ENAMETOOLONG;
+>> +	forget = fuse_alloc_forget();
+>> +	ff = fuse_file_alloc(fm, true);
+>> +	if (!forget || !ff) {
+>> +		kfree(forget);
+>> +		if (ff)
+>> +			fuse_file_free(ff);
+>> +		return -ENOMEM;
+>> +	}
+>> +	outopen = &ff->args->open_outarg;
+>> +	if (!fc->dont_mask)
+>> +		mode &= ~current_umask();
+>> +
+>> +	/* The VFS truncates after may_open() */
+>> +	memset(&inarg, 0, sizeof(inarg));
+>> +	memset(&outentry, 0, sizeof(outentry));
+>> +	inarg.flags = flags & ~(O_NOCTTY | O_TRUNC);
+>> +	inarg.mode = mode;
+>> +	inarg.umask = current_umask();
+>> +	args.opcode = FUSE_OPEN_ATOMIC;
+>> +	args.nodeid = get_node_id(dir);
+>> +	args.in_numargs = 2;
+>> +	args.in_args[0].size = sizeof(inarg);
+>> +	args.in_args[0].value = &inarg;
+>> +	args.in_args[1].size = entry->d_name.len + 1;
+>> +	args.in_args[1].value = entry->d_name.name;
+>> +	args.out_numargs = 2;
+>> +	args.out_args[0].size = sizeof(outentry);
+>> +	args.out_args[0].value = &outentry;
+>> +	args.out_argvar = true;
+>> +	args.out_args[1].size = sizeof(*outopen);
+>> +	args.out_args[1].value = outopen;
+>> +
+>> +	if (flags & O_CREAT) {
+>> +		err = get_create_ext(idmap, &args, dir, entry, mode);
+>> +		if (err)
+>> +			goto out_free;
+>> +	} else {
+>> +		/* Locked as for FUSE_LOOKUP */
+>> +		idmap = &invalid_mnt_idmap;
+>> +		locked = fuse_lock_inode(dir);
+>> +	}
+>> +	epoch = atomic_read(&fc->epoch);
+>> +	attr_version = fuse_get_attr_version(fc);
+>> +	evict_ctr = fuse_get_evict_ctr(fc);
+>> +	err = fuse_simple_idmap_request(idmap, fm, &args);
+>> +	fuse_unlock_inode(dir, locked);
+>> +	free_ext_value(&args);
+>> +	if (err < 0) {
+>> +		if (err == -ENOSYS) {
+>> +			fc->no_open_atomic = 1;
+>> +			err = 1;
+>> +		} else if (err == -EEXIST) {
+>> +			fuse_invalidate_entry(entry);
+>> +		}
+>> +		goto out_free;
+>> +	}
+>> +
+>> +	open_size = args.out_args[1].size;
+>> +	if (open_size && (outopen->open_flags & FOPEN_CREATED))
+>> +		fuse_dir_changed(dir);
+>> +	err = -EIO;
+>> +	if (outentry.nodeid && (invalid_nodeid(outentry.nodeid) ||
+>> +				fuse_invalid_attr(&outentry.attr)))
+>> +		goto out_reject;
+>> +	/* A zero nodeid: the name does not exist and nothing was opened */
+>> +	if (!outentry.nodeid && (open_size || (flags & O_CREAT)))
+>> +		goto out_reject;
+>> +	/* Only a regular file is opened */
+>> +	if (open_size && (open_size < FUSE_COMPAT_OPEN_OUT_SIZE ||
+>> +			  !S_ISREG(outentry.attr.mode)))
 
-has an overview of where we're currently at.
+Why not just (open_size < sizeof(*outopen))? Why would we need to handle
+a compat size for atomic open?
 
-Some tools are in:
+>> +		goto out_reject;
+>> +	if (outentry.nodeid) {
+>> +		inode = fuse_iget(dir->i_sb, outentry.nodeid,
 
-https://github.com/thkukuk/account-utils
-
-and Thorsten also gave a talk at All Systems Go in September:
-
-https://www.youtube.com/watch?v=MKG_WMAypDY
+Thanks,
+Bernd
