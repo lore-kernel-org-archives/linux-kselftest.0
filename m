@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795007608;
-	b=r5xTErfSGzq3FiMq3RkVMmOQkZXffKKgirUOs+N/mp47Kzhju9Hg+PRm/Y2mKlXki2UC
-	 akDQd4tdU0cMRUtnMH09CFzuSdA/jbAi2JqyHGtJgXRxBlX8Do1zr6tlJJ1jKJk9j5b1b
-	 0OR73xM5RPt/HJGkpc6izPrly0Bi9ZzArOtH5uT6icoSoKjr19FPL2m5fNsV67QKkecvM
-	 A+vRzFg9mAUGTz+oKasSPw7Y0zYuk50OF7ljT4rcyRbX6mv3AzKwfF64XsYIisL8oKAP6
-	 RZ30Fwj71Qng85o8Rm3DE0dDQrYekJVoIhQbvSYoB/cd6MayDLJmSvoxq9tPb1iQoUw==
+	t=1795007704;
+	b=FofREn2FNLV/dHB+pwBcjFDZhSCecS3B6x/6yaHjSAQv63S210teo0pvoQHFls7osIC5
+	 NJ77tqIRJuBYKfOSFZeiBij9opPLP97UZ8jeeoEP+qIUN8Ca2xfWnnX7fVAbdmPYugFIK
+	 M6mJF39IrSlXcwIyErkmpfFJLnv/rvvaJ8L9QKnjiSq4EU0dOQRg4D0XApyYOv7US30A5
+	 qZwvHxETkDNy3ekC3eHQifhYXcjm4pTjq6tzbNlX8HN3o9j58yb3hBvZf5YlVPb6Wtl4L
+	 L3+a6yccraWI9UCLwetFIH4OV0vs1ZBOwYqSMiQ+Venj3BdFuwyUcY6qpO2PUAO9D+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795007608;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795007704;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=v7CzwBI9qtFWKPM2/kfPZOOMtSQs3ZKi6kkd05xq81E=;
-	b=QqFwnaNS8Pky4q9mHj/x9ltCVmtdevGFVyaoJsNQzYhPakWEDwLgMD3JTDCaEv8znb6I
-	 6bTeKoZZnwPnqPzghvIvbxXUiDd4aP3Vo80Zs8MwEPqR2B7imUhtoJgi/lt3FSHPIkP7x
-	 i4LLODNHPXcEe8hTb0UxgptKw2OK5lVWU4UJPQwhPh/0Uc+4WrlHWyLIsQg4KiAZZOgU6
-	 5m76w/vzRay469VstxBovXvFudHT7Dj+TbFyGBTaT4gBJHsPFA0Si0eqmd53mUnzlF9yB
-	 4cTkvHHNVXOETtkuYlH0Mp778ioe2jgaIeASyTT0zIhir4WiR67hgst1buuZYAsl+2w==
+	bh=1rdoibtMJEgmFhGA3O158ZSka1CROmoLMcft8dX5w58=;
+	b=dh4v9VGWe1pmFIStyN1f4MjXFRBd46uc+uYkar/lHRujJwpNP/YUiGiAI/vLyiA3rgmP
+	 ROyjlkcLbayApF9esZeQW65a4s1PMcU4uJ49fsUo1l9LXPCMPgdib9RVFZugDE45yCpoW
+	 xQG7pbmdqGCh1/2nygc6hXjC67f+RRBBZryR7uENJ6TMKEj2LNHfq+3dKQf3VldmILeLG
+	 SGyB1XN3wIUyxhxz/iVfxvAcgIqG+yG69B8zHr8ESIfZHBXHYw7ZSpzxK7x/CBhDwie5/
+	 KxODRmna1wDl46x6hBrqx6lshl0Za6eUX8QLSXCPApYxrIl31eFkMKP6i18pDsYUWtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qg5hzfLR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XQxzCYqo;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79DD606A31C;
-	Wed, 18 Nov 2026 13:13:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9132A606A320;
+	Wed, 18 Nov 2026 13:15:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qg5hzfLR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3AC1F000C4;
-	Wed, 18 Nov 2026 13:13:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XQxzCYqo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34231F000C4;
+	Wed, 18 Nov 2026 13:15:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795007608;
-	bh=v7CzwBI9qtFWKPM2/kfPZOOMtSQs3ZKi6kkd05xq81E=;
+	s=k20260515; t=1795007704;
+	bh=1rdoibtMJEgmFhGA3O158ZSka1CROmoLMcft8dX5w58=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Qg5hzfLRc5Iuuqvgn1lTY3BR2wPtlPnG2nCx5N3SQEGVkhIKXm4Fo1NNwfC/iGbFT
-	 oyS8cw4ljFBnUQOuv8PBkE1+kDx1aayOIC3iRl1KN411rExAZqGlDnuVa6ekPEzzFh
-	 TF8IXkF88E+0UaPFXGg7ABTLhotCD6hb6WMAVTZiYbrPs1btdO+kCwRt7gekRZuQNH
-	 VNsx0G8wTGF8mMsSfzdGR9ai3kU8eJ0mkVRuETNY5sVJbDo0KE2g9hZjutYdiGq3Mm
-	 lXAOpO/f9mqoUm0gYCJnsvKsxdLz5w+Wgsgm4sxNqeciD+Xtlpd2lmjgfb991V++Hc
-	 tKHXRBHZ4ZIpQ==
+	b=XQxzCYqoLZmz7UXi74ewPHfV2bgb5VPRf/nhLGpC0Ijunmk4UVROORsI6jgNmCp4a
+	 /JR9d9ZnmsH0ELzUFo32fujVnlFZpTHYO2qcgbRn+LUwoGjRSoQ5GPN8G0R3WeYkJJ
+	 a0bQ3AMTlD/f+Mf4fhVaYj4O0npNUPj4RvcsI/LT2+xoOr2fCgaWFOr93KO/Locd1o
+	 CUnfiSeZsWCB9KSw+G0dmwFBZ60T2qEvkNFrnVkaa+fwOEQjd0bh0CmFyJFE8nGw9k
+	 IM1nYkAf0vzz/2qYGU08yyidhi/FG8m4C0ChRWPDI6Xk2ALLDVSR/+EY2RrCN7NV2X
+	 23gEqTNmZhqZQ==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, "David S. Miller"
  <davem@davemloft.net>
@@ -54,13 +54,13 @@ Cc: Alexander Duyck <alexanderduyck@fb.com>, Jakub Kicinski
  <daskald@meta.com>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Dimitri Daskalakis
  <dimitri.daskalakis1@gmail.com>
-Subject: Re: [PATCH net v2 1/5] eth: fbnic: wait on the correct queues in
- fbnic_queue_stop()
-In-Reply-To: <20261117215416.1901246-2-dimitri.daskalakis1@gmail.com>
+Subject: Re: [PATCH net v2 2/5] eth: fbnic: skip disabled Tx rings when
+ setting the queue NAPI
+In-Reply-To: <20261117215416.1901246-3-dimitri.daskalakis1@gmail.com>
 References: <20261117215416.1901246-1-dimitri.daskalakis1@gmail.com>
- <20261117215416.1901246-2-dimitri.daskalakis1@gmail.com>
-Date: Wed, 18 Nov 2026 14:13:24 +0100
-Message-ID: <874ide8eq3.fsf@all.your.base.are.belong.to.us>
+ <20261117215416.1901246-3-dimitri.daskalakis1@gmail.com>
+Date: Wed, 18 Nov 2026 14:15:01 +0100
+Message-ID: <87zev6702y.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,21 +77,22 @@ Dimitri Daskalakis <dimitri.daskalakis1@gmail.com> writes:
 
 > From: Dimitri Daskalakis <daskald@meta.com>
 >
-> fbnic_queue_stop() waits for every queue of the NAPI vector to go idle
-> before tearing it down, using sub0.q_idx as the queue index. We set
-> q_idx on submission queues for Tx, and completion queues on Rx, so
-> this waits on queue 0 for every Rx queue.
->
-> For non-combined channels, stopping an Rx queue always stops/wakes
-> Tx queue 0.
->
-> Set the queue id on Tx completion rings so we don't have to distinguish
-> between ring types to get the correct queue id, and don't stop/wake
-> disabled rings.
+> When Rx and Tx channels are not combined, each Rx vector gets a Tx
+> triad whose sub0 is disabled with a q_idx of 0. fbnic_set_netif_napi()
+> and fbnic_reset_netif_napi() don't skip it, so every Rx vector
+> associates Tx queue 0 with its own NAPI, and the netlink queue info
+> reports the wrong NAPI for Tx queue 0.
 >
 > This bug was found by AI and verified on HW.
-
-The LLMs I run complained about this as well -- nice to see it verified
-on HW. Also, this fix is much cleaner than what my clanker suggested!
+>
+> Reproduced with "ethtool -L eth0 combined 0 rx 34 tx 34", and reading
+> the NAPI IDs with "ynl --family netdev --dump queue-get":
+>
+>   before: tx 0 napi-id 580, tx 1 napi-id 514, rx 33 napi-id 580
+>                        ^^^ rx 33's NAPI, not vector 0's
+>   after:  tx 0 napi-id 513, tx 1 napi-id 514, rx 33 napi-id 580
+>
+> Fixes: cf4facfb132a ("eth: fbnic: Add support for XDP queues")
+> Signed-off-by: Dimitri Daskalakis <daskald@meta.com>
 
 Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
