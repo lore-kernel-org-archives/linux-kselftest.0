@@ -1,79 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795039166;
-	b=jLbV+pwp7owjXrS3bxVwtYat8x0UlxpSnhUNUP9mwEPlbjNmdApMWa19ycIaNMA5x/92
-	 tiKbUzWWcdpHKiWClsF+W34GtCu5yDcD7wLdRaV3G7pE8rLeHFXEZ8pR5guZGGVAt3ueT
-	 NKetn2hHN6onrBen84OCa04Cql4V/kIwvVmdlS/yLJS6CJMF8Nqrc2zFwmZMYxgSzdzVz
-	 NwlcOA+1ry8ZIOMrReBKIxArf4koboXDV+xwgJIBaP3YrAT10Y6CElkZPPVGZu3A3bCdR
-	 fkP/+Dtrx++kszp/WNQzFPUxg4bnMtExtbUH9gNwnJZxr8l8kWi1acmLvgE31p6a5Tw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795039166;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7Yl39mKeZgRaNqBdeDMDhKOdQAAgeoxYk2dFdGGo/q8=;
-	b=e/tyJG6SnCVbFJHQp/zk+xV1lxg92lfI05Xp+FOWNgBPtqjRm7rbXNRNu8DOIT7CuPSj
-	 NRIZrQfFOay/djtlya0K1HFgv08tpWzSQNf9yDJWbEJ6h5G/x5oTaZBAqc4BWwd2+bfCa
-	 Mte7lBoWfHqgv0k8PN1jNeJMfnfbW3u6GAQjM4ElUnppRskpolwb2oxVrRxXO2IoECM8M
-	 nvQt/2CQpIyHhkF4BLbw0UXbMgUvpSBMOo0w7KcORblfwszVKXRuecztkh9pyszlsgYqB
-	 WLk4FGyV/u6R5L8g/6tjh9XNYR7m4CtsCuPp58MSVJlgI3GdgOfpjgG/V+1BhfhS6og==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mlvMvSZT;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795040136;
+	b=XmXoE/YoXUBMkM1R7sJWxcSVlRNQ4cmmvm7zfNOcvEPgyO0oBHi82Z10LwPXq8SCqBNn
+	 7vsux2dHdzCJMZA8rLfW2x+1jubheZJ0Sji6S5Llo6lvJW5EHgw491MGDcUKXUyA5YzKW
+	 /Ze+e16yupfnBAugdnIGGPDN2UspKNvKm8Q4uYDkDoGGf6Gj8CT9yFGXd4B03dwf2/fLe
+	 P14/mrQ6r9knm8hr6SEVLBKQNWysCFEWYk6fD3KYe5amXcb5BWsD2AjHMs0c8TC7pnqpG
+	 kqifK65T1gZXJJwyp5bwKWBIspEFyL/Lg1ysXtWOqF2sF71I3RoWiWZnGagLqoz4s1A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795040136;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=e0puxu11uw6EkDOS3QsOBhNMDjZor1AmTioNsCPSIoU=;
+	b=TnYoE3hq8kldi2d9Vd7AycVbNJTvvaqRr++Va9KLwPbrG+CoQZZj8eQtv022KhfcakaZ
+	 rmGj8CkPys/LA+Ro43zAOEVDO/crzZ66QnH8URgqtvqMSh9z6BBRcCIEJ4Eev3aOqveRx
+	 xwEJGa/HnPMSZjDs+NAluThOjCPNDnL2nTrsIh35jeSLNK6z4Z08RgEBuIKvCok9Ll6fW
+	 1SbtHLrZeUmOL9wmeCO6Ip9Sj4LT1PcGpDxsqrSnCWaJfytsT8tAGvVoL4ue1P+vmcaOF
+	 qeizVEaJ2e0qIVblpjbbmnD15tGkU+k5l7NxX4GwuzfI97p/mUNoeQzBPHEFFbPTcjg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Vmip2v4f;
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921AE606A331;
-	Wed, 18 Nov 2026 21:59:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E955606A31C;
+	Wed, 18 Nov 2026 22:15:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E955606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mlvMvSZT
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795039166;
-	b=d0KTLZSTibspKr15bCws7VgREFRHEi7tEOr70v7Gxl/rKVlTH6HsWhDRpndwVJmtAtp0
-	 yD4rPIQfhgaJp0exuFs3aiTw252ze9udvThiBgOanTXipi7EEZbzd/UYYMjVQVgvIajba
-	 tUR0MwLRohV6tvF/mX030wM1+e4tHyDx4+XZCPGoF2Jp5JA4Q5TsZZ5nHcNmhxX0LKpc/
-	 VMn9p8hzm1BEbib9Htuv17vyMp4y8tRH+zkThApQDUplCV3skhkpfu3s7QjciYTad/jp1
-	 1J7k2nTrnlFcy01MeIh6XmNvrQtNxBAwqHeDubmmjb/sO+jgh/hRffSYJG42ZIC+Blg==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795039166;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7Yl39mKeZgRaNqBdeDMDhKOdQAAgeoxYk2dFdGGo/q8=;
-	b=GI8popkSjjaeutV2buLEYWDK4og162o6zAMI856nnK64lqOJIWm5+R4oznhcBG1g2pn1
-	 NYwt+WwX8bKZ4qX80+XqnPm6ZA02WwANO8zPEV2h7G9Z1EMJpswHtXJ2F7ZOW6oZhxkZd
-	 LWSxJvG9STGxFXxNz6ila6ULNFrneNr4EY3aLRyqI4qLYXsgw2TyC3DDsvVe02x4pTQFo
-	 1ltq+L/X6ttvPLUdksSRMVN6yH6nLmGVYJOEOW3ryPBSaG2JICWGzUYmGw4U9HTfb6/mM
-	 OLozQW50QjY0uDo9Hj5qmaw3aeN1LBiqmlWmnI+wOO+G8H46cweFVvN7WWS3TuA4ISQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B4B401F000C5;
-	Wed, 18 Nov 2026 21:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795039166;
-	bh=7Yl39mKeZgRaNqBdeDMDhKOdQAAgeoxYk2dFdGGo/q8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=mlvMvSZT24cCJl2E6beMO4A7kLIPyog5q/WP4XFBzI3A92eSYMYaIVpY3dHiwVuT4
-	 jMXqtPfOtSmJoED8A2bpJszsgvsHaAAdsTt7DPAL7TMOGLLI02/38eVjD2/VRdOzur
-	 Au49Fx5ZhMtsiI81DXJeAekvgfFbxSTomRB5LvceCjUgHIjO/hpF1sC1quTLCft0eo
-	 3i0x2e4Ut1sjZGYZkC1TrZNF7oJLuNRvQPjLlkHijHuanpORwpzuul/SkOBAeWjh3A
-	 cycp7I4GXoeUP3Iu+tyhbjsqXk74rE3YLuXgc6ziipLHNsYpDUh65dkg1ZY/xx7DJ1
-	 0FqX31mQhlQeg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 3C8324AFE7;
-	Wed, 18 Nov 2026 21:59:24 +0000 (UTC)
-From: Harrison Crosse via B4 Relay <devnull+harrison.crosse.dev@kernel.org>
-Date: Wed, 18 Nov 2026 16:56:42 -0500
-Subject: [PATCH 2/2] selftests/mm: add a test for populating a page that
- cannot be read
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Vmip2v4f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795040135; x=1826576135;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kMuBiIFxltAIjikpl7vK3di7IS3jrzFLHdvUlAWFAtM=;
+  b=Vmip2v4fPQX9tNZgylnvpJTnUAauRD6HYma/5elA2noIrSCnv4y9pVek
+   nm6pSTPeTaCl55c+J56Sd0bkeOaSr4051P7ToZ02S0ObgDBoAmgsa5CyG
+   +EV4Z08iPfPxHz+peUh4q/F2n4EYqKLNfewU5FM/3Pa/RbzC65cJF8jip
+   5RIQpUhkxWfKJl6Pio7jQmB83IwEfLhzDSwQXK0RzGSXm90lUAxKKmSKg
+   EsyqohmYdfNPvvvrDwmHgBos/2rwX2j/RM89dUMhEu4DbQq7u5LO1h65n
+   Pi3jsGwj0fBaTOgAuV5yJ2pJwpzEMVZufzmmiT3m85yC5+teJNyuESL0s
+   w==;
+X-CSE-ConnectionGUID: AUf4m39jRtqEjbUFI6oqJg==
+X-CSE-MsgGUID: Xq6IgimUTvSc4zoGeitcDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11970"; a="3919412"
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="3919412"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 14:15:33 -0800
+X-CSE-ConnectionGUID: oVdWhmTXTcGBnFFPqzvCiQ==
+X-CSE-MsgGUID: PORxCRw+TimmA918XZfGcg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,219,1787036400"; 
+   d="scan'208";a="10651745"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 18 Nov 2026 14:15:30 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xTnw6-00000001ETm-2tJG;
+	Wed, 18 Nov 2026 22:15:26 +0000
+Date: Thu, 19 Nov 2026 06:15:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+	kuba@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/2] netdevsim: add TLS device offload
+ emulation
+Message-ID: <202611190536.FTvmv1cW-lkp@intel.com>
+References: <20261117140642.4008-2-jiayuan.chen@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,537 +89,110 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261118-mmpop-populate-v1-2-9c561d178d11@crosse.dev>
-References: <20261118-mmpop-populate-v1-0-9c561d178d11@crosse.dev>
-In-Reply-To: <20261118-mmpop-populate-v1-0-9c561d178d11@crosse.dev>
-To: David Hildenbrand <david@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
- Johannes Weiner <hannes@cmpxchg.org>, Jan Kara <jack@suse.cz>, 
- Harrison Crosse <harrison@crosse.dev>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795039163; l=15821;
- i=harrison@crosse.dev; s=20261117; h=from:subject:message-id;
- bh=ozpf4+RjmEWsr6XVU7gtEDTBOVvOljQv4enrF13umZI=;
- b=z5iQcgQhQloMXQM8vhSIzkjjnfSBQGFpYstK5hSaIVrlJgBaxIGDWxo3ahHhSUpqOrxRqVh5U
- 4yRWa2VPjxxBSVwyb7lGNG2FVp2pNtGxF4IlfTAi4S2F2PjSSefjwpD
-X-Developer-Key: i=harrison@crosse.dev; a=ed25519;
- pk=fwi/XME2YaW/BDBQ76FmKgF9xHZwRb+dxlVCbxuyojo=
-X-Endpoint-Received: by B4 Relay for harrison@crosse.dev/20261117 with
- auth_id=1552
-X-Original-From: Harrison Crosse <harrison@crosse.dev>
-Reply-To: harrison@crosse.dev
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261117140642.4008-2-jiayuan.chen@linux.dev>
 
-From: Harrison Crosse <harrison@crosse.dev>
+Hi Jiayuan,
 
-Add populate_eio, which serves a FUSE file system from the test itself
-on /dev/fuse, without libfuse. Its one file has a page whose reads
-always fail with -EIO. FUSE handles faults on mapped files with
-filemap_fault(), so a fault on that page releases the mmap_lock for the
-read and, on a first attempt, returns VM_FAULT_RETRY whatever the
-result.
+kernel test robot noticed the following build errors:
 
-The test checks that MADV_POPULATE_READ fails with EFAULT, that
-mmap(MAP_POPULATE) returns the mapping and that mlock() fails with
-ENOMEM. Each call runs in a child with a timeout, so a kernel that
-retries the read endlessly fails the test instead of hanging it.
-Without the previous patch, the mmap(MAP_POPULATE) and mlock() checks
-fail this way.
+[auto build test ERROR on net-next/main]
 
-The mlock() check is skipped if the test cannot lock an anonymous
-mapping of the same size, and the whole test is skipped if /dev/fuse
-cannot be opened or the file system cannot be created, for example
-without CAP_SYS_ADMIN. The file system is created with fsmount() and
-never attached to a mount point, so it goes away with the test's
-processes. If a child does not exit after SIGKILL because the server
-read its request and stopped, the test kills the server, which aborts
-the connection. CONFIG_FUSE_FS is added to the mm selftest config.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/netdevsim-add-TLS-device-offload-emulation/20261117-220630
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20261117140642.4008-2-jiayuan.chen%40linux.dev
+patch subject: [PATCH net-next v2 1/2] netdevsim: add TLS device offload emulation
+config: i386-buildonly-randconfig-1004-20261119 (https://download.01.org/0day-ci/archive/20261119/202611190536.FTvmv1cW-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261119/202611190536.FTvmv1cW-lkp@intel.com/reproduce)
 
-This test and its changelog were prepared with the help of an AI coding
-assistant (Claude).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611190536.FTvmv1cW-lkp@intel.com/
 
-Signed-off-by: Harrison Crosse <harrison@crosse.dev>
----
-Tested on x86_64 under QEMU (TCG), with 4K pages. On v7.4-rc3 without
-the previous patch, and on 6.12.117 with the test built with the
-v7.4-rc3 FUSE header, MADV_POPULATE_READ passes and the
-mmap(MAP_POPULATE) and mlock() checks fail with no return within 5 s;
-with the previous patch on v7.4-rc3, all three pass. Two faults were
-tried on v7.4-rc3 without the previous patch, and neither left a
-process or FUSE connection. With the server stopped by SIGSTOP after it
-read the bad page's read request, the test killed the server and ended
-in about 7 s. The other fault killed the test process with SIGKILL.
-Without CAP_IPC_LOCK and with RLIMIT_MEMLOCK at 0, the mlock() check is
-skipped. On arm64 v7.4-rc3 under QEMU (TCG), also with 4K pages, the
-three checks give the same results without and with the previous patch.
+All errors (new ones prefixed by >>):
 
-Not tested: architectures other than x86_64 and arm64, other page
-sizes, unprivileged user namespaces, and kernels older than 6.12.
----
- tools/testing/selftests/mm/Makefile       |   1 +
- tools/testing/selftests/mm/config         |   1 +
- tools/testing/selftests/mm/populate_eio.c | 410 ++++++++++++++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh |   1 +
- 4 files changed, 413 insertions(+)
+   In file included from include/linux/tcp.h:19,
+                    from include/linux/ipv6.h:103,
+                    from drivers/net/netdevsim/tls.c:3:
+   drivers/net/netdevsim/tls.c: In function 'nsim_tls_dev_add':
+>> include/net/sock.h:404:37: error: 'struct sock_common' has no member named 'skc_v6_rcv_saddr'; did you mean 'skc_rcv_saddr'?
+     404 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
+         |                                     ^~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/tls.c:298:35: note: in expansion of macro 'sk_v6_rcv_saddr'
+     298 |                 conn->laddr = sk->sk_v6_rcv_saddr;
+         |                                   ^~~~~~~~~~~~~~~
+>> include/net/sock.h:403:45: error: 'struct sock_common' has no member named 'skc_v6_daddr'; did you mean 'skc_daddr'?
+     403 | #define sk_v6_daddr             __sk_common.skc_v6_daddr
+         |                                             ^~~~~~~~~~~~
+   drivers/net/netdevsim/tls.c:299:35: note: in expansion of macro 'sk_v6_daddr'
+     299 |                 conn->raddr = sk->sk_v6_daddr;
+         |                                   ^~~~~~~~~~~
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 0ea72e997..2efb61d51 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -71,6 +71,7 @@ TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += madv_populate
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_populate
-+TEST_GEN_FILES += populate_eio
- ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64))
- TEST_GEN_FILES += memfd_secret
- endif
-diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
-index 06f78bd23..08a5ba29b 100644
---- a/tools/testing/selftests/mm/config
-+++ b/tools/testing/selftests/mm/config
-@@ -14,3 +14,4 @@ CONFIG_UPROBES=y
- CONFIG_MEMORY_FAILURE=y
- CONFIG_HWPOISON_INJECT=m
- CONFIG_PROC_MEM_ALWAYS_FORCE=y
-+CONFIG_FUSE_FS=y
-diff --git a/tools/testing/selftests/mm/populate_eio.c b/tools/testing/selftests/mm/populate_eio.c
-new file mode 100644
-index 000000000..1099bd7ed
---- /dev/null
-+++ b/tools/testing/selftests/mm/populate_eio.c
-@@ -0,0 +1,410 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Populate a file mapping with a page whose reads always fail.
-+ *
-+ * A minimal FUSE server on /dev/fuse serves one file and fails every
-+ * read of one of its pages with -EIO. MADV_POPULATE_READ must fail with
-+ * EFAULT, mmap(MAP_POPULATE) must return the mapping and mlock() must
-+ * fail with ENOMEM, rather than retry the read until the task is killed.
-+ *
-+ * The file system is created with fsopen() and fsmount() and never
-+ * attached to a mount point, so it goes away with the test's processes.
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/fuse.h>
-+#include <linux/mman.h>
-+#include <linux/mount.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include "kselftest.h"
-+
-+#define NR_PAGES	8
-+#define BAD_PAGE	3
-+#define FILE_INO	2
-+#define TIMEOUT_S	5
-+#define GRACE_S		2
-+
-+/*
-+ * Kernels before FUSE 7.47 accept only this size of open reply; 7.47
-+ * appended backing_id_64 and accepts the shorter reply as well.
-+ */
-+#define OPEN_OUT_SIZE	16
-+
-+/* child exit status: 0 if the call succeeded, its errno, or this */
-+#define EXIT_SETUP	200
-+
-+/* run_call() results other than an exit status */
-+#define RUN_TIMEOUT	-1
-+#define RUN_SIGNALED	-2
-+
-+enum call { CALL_MADV_POPULATE_READ, CALL_MAP_POPULATE, CALL_MLOCK };
-+
-+static size_t page_size;
-+static pid_t parent, server;
-+
-+static int sys_fsopen(const char *fsname, unsigned int flags)
-+{
-+	return syscall(__NR_fsopen, fsname, flags);
-+}
-+
-+static int sys_fsconfig(int fd, unsigned int cmd, const char *key,
-+			const char *value)
-+{
-+	return syscall(__NR_fsconfig, fd, cmd, key, value, 0);
-+}
-+
-+static int sys_fsmount(int fd, unsigned int flags, unsigned int attr_flags)
-+{
-+	return syscall(__NR_fsmount, fd, flags, attr_flags);
-+}
-+
-+/* Recheck getppid() in case parent exited before PR_SET_PDEATHSIG. */
-+static void die_with_parent(void)
-+{
-+	if (prctl(PR_SET_PDEATHSIG, SIGKILL) || getppid() != parent)
-+		_exit(EXIT_SETUP);
-+}
-+
-+static void fuse_reply(int fd, uint64_t unique, int error,
-+		       const void *arg, size_t len)
-+{
-+	struct fuse_out_header out = {
-+		.len = sizeof(out) + len,
-+		.error = error,
-+		.unique = unique,
-+	};
-+	struct iovec iov[] = {
-+		{ .iov_base = &out, .iov_len = sizeof(out) },
-+		{ .iov_base = (void *)arg, .iov_len = len },
-+	};
-+
-+	/* ENOENT: the request was interrupted or aborted */
-+	if (writev(fd, iov, len ? 2 : 1) < 0 && errno != ENOENT)
-+		ksft_print_msg("FUSE reply of %zu bytes rejected: %s\n",
-+			       len, strerror(errno));
-+}
-+
-+static void fill_attr(struct fuse_attr *attr, uint64_t ino)
-+{
-+	memset(attr, 0, sizeof(*attr));
-+	attr->ino = ino;
-+	attr->blksize = page_size;
-+	if (ino == FUSE_ROOT_ID) {
-+		attr->mode = S_IFDIR | 0755;
-+		attr->nlink = 2;
-+	} else {
-+		attr->mode = S_IFREG | 0444;
-+		attr->nlink = 1;
-+		attr->size = NR_PAGES * page_size;
-+		attr->blocks = attr->size / 512;
-+	}
-+}
-+
-+static void fuse_read(int fd, uint64_t unique, const struct fuse_read_in *read_in,
-+		      const char *data)
-+{
-+	uint64_t size = NR_PAGES * page_size;
-+	uint64_t bad = BAD_PAGE * page_size;
-+	uint64_t start = read_in->offset;
-+	uint64_t end = start + read_in->size;
-+
-+	if (start < bad + page_size && end > bad) {
-+		fuse_reply(fd, unique, -EIO, NULL, 0);
-+		return;
-+	}
-+	if (end > size)
-+		end = size;
-+	fuse_reply(fd, unique, 0, data, start < end ? end - start : 0);
-+}
-+
-+static __noreturn void fuse_serve(int fd)
-+{
-+	size_t bufsize = FUSE_MIN_READ_BUFFER + page_size;
-+	struct fuse_in_header *in;
-+	char *data;
-+	void *arg;
-+
-+	die_with_parent();
-+	in = malloc(bufsize);
-+	data = calloc(NR_PAGES, page_size);
-+	if (!in || !data)
-+		_exit(1);
-+	arg = in + 1;
-+
-+	for (;;) {
-+		ssize_t n = read(fd, in, bufsize);
-+
-+		if (n < 0 && (errno == EINTR || errno == ENOENT))
-+			continue;
-+		/* read() fails with ENODEV once the connection is gone */
-+		if (n < (ssize_t)sizeof(*in))
-+			_exit(0);
-+
-+		switch (in->opcode) {
-+		case FUSE_INIT: {
-+			const struct fuse_init_in *init_in = arg;
-+			struct fuse_init_out init_out = {
-+				.major = FUSE_KERNEL_VERSION,
-+				.minor = FUSE_KERNEL_MINOR_VERSION,
-+				.max_readahead = init_in->max_readahead,
-+				.max_write = page_size,
-+				.time_gran = 1,
-+			};
-+
-+			if (init_in->minor < init_out.minor)
-+				init_out.minor = init_in->minor;
-+			fuse_reply(fd, in->unique, 0, &init_out, sizeof(init_out));
-+			break;
-+		}
-+		case FUSE_LOOKUP: {
-+			struct fuse_entry_out entry = {
-+				.nodeid = FILE_INO,
-+				.generation = 1,
-+				.entry_valid = 3600,
-+				.attr_valid = 3600,
-+			};
-+
-+			if (in->nodeid != FUSE_ROOT_ID || strcmp(arg, "file")) {
-+				fuse_reply(fd, in->unique, -ENOENT, NULL, 0);
-+				break;
-+			}
-+			fill_attr(&entry.attr, FILE_INO);
-+			fuse_reply(fd, in->unique, 0, &entry, sizeof(entry));
-+			break;
-+		}
-+		case FUSE_GETATTR: {
-+			struct fuse_attr_out attr_out = { .attr_valid = 3600 };
-+
-+			fill_attr(&attr_out.attr, in->nodeid);
-+			fuse_reply(fd, in->unique, 0, &attr_out, sizeof(attr_out));
-+			break;
-+		}
-+		case FUSE_OPEN: {
-+			struct fuse_open_out open_out = { .fh = 1 };
-+
-+			fuse_reply(fd, in->unique, 0, &open_out, OPEN_OUT_SIZE);
-+			break;
-+		}
-+		case FUSE_READ:
-+			fuse_read(fd, in->unique, arg, data);
-+			break;
-+		case FUSE_FORGET:
-+		case FUSE_BATCH_FORGET:
-+			break;
-+		default:
-+			fuse_reply(fd, in->unique, -ENOSYS, NULL, 0);
-+		}
-+	}
-+}
-+
-+/*
-+ * do_mlock() can fail with ENOMEM from RLIMIT_MEMLOCK before reaching
-+ * __mm_populate(), which would falsely pass CALL_MLOCK without CAP_IPC_LOCK.
-+ */
-+static bool can_mlock(size_t size)
-+{
-+	struct rlimit rlim;
-+	bool locked;
-+	void *p;
-+
-+	if (!getrlimit(RLIMIT_MEMLOCK, &rlim) && rlim.rlim_cur < size) {
-+		rlim.rlim_cur = rlim.rlim_max;
-+		setrlimit(RLIMIT_MEMLOCK, &rlim);
-+	}
-+	p = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (p == MAP_FAILED)
-+		return false;
-+	locked = !mlock(p, size);
-+	munmap(p, size);
-+	return locked;
-+}
-+
-+static __noreturn void do_call(enum call call, int mnt_fd)
-+{
-+	size_t size = NR_PAGES * page_size;
-+	int flags = MAP_SHARED;
-+	char *p;
-+	int fd;
-+
-+	die_with_parent();
-+	fd = openat(mnt_fd, "file", O_RDONLY);
-+	if (fd < 0)
-+		_exit(EXIT_SETUP);
-+	if (call == CALL_MAP_POPULATE)
-+		flags |= MAP_POPULATE;
-+	p = mmap(NULL, size, PROT_READ, flags, fd, 0);
-+	if (p == MAP_FAILED)
-+		_exit(call == CALL_MAP_POPULATE ? errno : EXIT_SETUP);
-+	if (call == CALL_MADV_POPULATE_READ && madvise(p, size, MADV_POPULATE_READ))
-+		_exit(errno);
-+	if (call == CALL_MLOCK && mlock(p, size))
-+		_exit(errno);
-+	_exit(0);
-+}
-+
-+static bool reap(pid_t pid, int *status, int timeout_ms)
-+{
-+	int i;
-+
-+	for (i = 0; i < timeout_ms / 10; i++) {
-+		pid_t ret = waitpid(pid, status, WNOHANG);
-+
-+		if (ret == pid)
-+			return true;
-+		if (ret < 0 && errno != EINTR)
-+			ksft_exit_fail_perror("waitpid");
-+		usleep(10000);
-+	}
-+	return false;
-+}
-+
-+/*
-+ * A caller whose request the server read but did not answer waits for
-+ * the answer even after SIGKILL. Killing the server closes the last
-+ * /dev/fuse file descriptor, which aborts the connection and ends such
-+ * requests.
-+ */
-+static void stop_server(void)
-+{
-+	if (!server)
-+		return;
-+	kill(server, SIGKILL);
-+	while (waitpid(server, NULL, 0) < 0 && errno == EINTR)
-+		;
-+	server = 0;
-+}
-+
-+static int run_call(enum call call, int mnt_fd, int *sig)
-+{
-+	int status;
-+	pid_t pid;
-+
-+	pid = fork();
-+	if (pid < 0)
-+		ksft_exit_fail_perror("fork");
-+	if (!pid)
-+		do_call(call, mnt_fd);
-+
-+	if (!reap(pid, &status, TIMEOUT_S * 1000)) {
-+		kill(pid, SIGKILL);
-+		if (!reap(pid, &status, GRACE_S * 1000)) {
-+			ksft_print_msg("child alive %d s after SIGKILL, killing the server\n",
-+				       GRACE_S);
-+			stop_server();
-+			while (waitpid(pid, &status, 0) < 0 && errno == EINTR)
-+				;
-+		}
-+		return RUN_TIMEOUT;
-+	}
-+	if (WIFSIGNALED(status)) {
-+		*sig = WTERMSIG(status);
-+		return RUN_SIGNALED;
-+	}
-+	return WEXITSTATUS(status);
-+}
-+
-+static void check(const char *name, enum call call, int mnt_fd, int expected)
-+{
-+	int sig = 0, ret;
-+
-+	if (!server) {
-+		ksft_test_result_fail("%s: not run, the FUSE server was killed\n", name);
-+		return;
-+	}
-+	ret = run_call(call, mnt_fd, &sig);
-+	if (ret == RUN_TIMEOUT)
-+		ksft_print_msg("%s: no return within %d s\n", name, TIMEOUT_S);
-+	else if (ret == RUN_SIGNALED)
-+		ksft_print_msg("%s: killed by %s\n", name, strsignal(sig));
-+	else if (ret == EXIT_SETUP)
-+		ksft_print_msg("%s: openat() or mmap() failed\n", name);
-+	else if (ret >= 0 && ret != expected)
-+		ksft_print_msg("%s: %s\n", name, ret ? strerror(ret) : "the call succeeded");
-+	ksft_test_result(ret == expected, "%s\n", name);
-+}
-+
-+static bool unavailable(int err)
-+{
-+	return err == ENOENT || err == ENODEV || err == ENXIO ||
-+	       err == EPERM || err == EACCES || err == ENOSYS;
-+}
-+
-+int main(void)
-+{
-+	char fd_str[16], uid_str[16], gid_str[16];
-+	int fd, fs_fd, mnt_fd;
-+
-+	ksft_print_header();
-+	page_size = getpagesize();
-+	parent = getpid();
-+
-+	fd = open("/dev/fuse", O_RDWR | O_CLOEXEC);
-+	if (fd < 0 && unavailable(errno))
-+		ksft_exit_skip("cannot open /dev/fuse: %s\n", strerror(errno));
-+	if (fd < 0)
-+		ksft_exit_fail_perror("open /dev/fuse");
-+	fs_fd = sys_fsopen("fuse", FSOPEN_CLOEXEC);
-+	if (fs_fd < 0 && unavailable(errno))
-+		ksft_exit_skip("cannot create a FUSE file system: %s\n", strerror(errno));
-+	if (fs_fd < 0)
-+		ksft_exit_fail_perror("fsopen");
-+
-+	snprintf(fd_str, sizeof(fd_str), "%d", fd);
-+	snprintf(uid_str, sizeof(uid_str), "%u", getuid());
-+	snprintf(gid_str, sizeof(gid_str), "%u", getgid());
-+	if (sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, "fd", fd_str) ||
-+	    sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, "rootmode", "40000") ||
-+	    sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, "user_id", uid_str) ||
-+	    sys_fsconfig(fs_fd, FSCONFIG_SET_STRING, "group_id", gid_str))
-+		ksft_exit_fail_perror("fsconfig");
-+	if (sys_fsconfig(fs_fd, FSCONFIG_CMD_CREATE, NULL, NULL)) {
-+		if (unavailable(errno))
-+			ksft_exit_skip("cannot mount FUSE: %s\n", strerror(errno));
-+		ksft_exit_fail_perror("fsconfig create");
-+	}
-+	mnt_fd = sys_fsmount(fs_fd, FSMOUNT_CLOEXEC,
-+			     MOUNT_ATTR_NOSUID | MOUNT_ATTR_NODEV);
-+	if (mnt_fd < 0 && unavailable(errno))
-+		ksft_exit_skip("cannot mount FUSE: %s\n", strerror(errno));
-+	if (mnt_fd < 0)
-+		ksft_exit_fail_perror("fsmount");
-+	close(fs_fd);
-+
-+	server = fork();
-+	if (server < 0)
-+		ksft_exit_fail_perror("fork");
-+	if (!server) {
-+		close(mnt_fd);
-+		fuse_serve(fd);
-+	}
-+	close(fd);
-+
-+	ksft_set_plan(3);
-+	check("MADV_POPULATE_READ fails with EFAULT", CALL_MADV_POPULATE_READ,
-+	      mnt_fd, EFAULT);
-+	check("mmap(MAP_POPULATE) returns the mapping", CALL_MAP_POPULATE,
-+	      mnt_fd, 0);
-+	if (can_mlock(NR_PAGES * page_size))
-+		check("mlock() fails with ENOMEM", CALL_MLOCK, mnt_fd, ENOMEM);
-+	else
-+		ksft_test_result_skip("mlock() fails with ENOMEM: cannot mlock() %zu bytes\n",
-+				      NR_PAGES * page_size);
-+
-+	close(mnt_fd);
-+	stop_server();
-+	ksft_finished();
-+}
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index a1b45a3de..3ac9f9336 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -291,6 +291,7 @@ else
- fi
- 
- CATEGORY="mmap" run_test ./map_populate
-+CATEGORY="mmap" run_test ./populate_eio
- CATEGORY="mmap" run_test ./droppable
- 
- CATEGORY="mlock" run_test ./mlock-random-test
+
+vim +404 include/net/sock.h
+
+4dc6dc7162c08b9 Eric Dumazet             2009-07-15  382  
+68835aba4d9b74e Eric Dumazet             2010-11-30  383  #define sk_dontcopy_begin	__sk_common.skc_dontcopy_begin
+68835aba4d9b74e Eric Dumazet             2010-11-30  384  #define sk_dontcopy_end		__sk_common.skc_dontcopy_end
+4dc6dc7162c08b9 Eric Dumazet             2009-07-15  385  #define sk_hash			__sk_common.skc_hash
+5080546682bae3d Eric Dumazet             2013-10-02  386  #define sk_portpair		__sk_common.skc_portpair
+05dbc7b59481ca8 Eric Dumazet             2013-10-03  387  #define sk_num			__sk_common.skc_num
+05dbc7b59481ca8 Eric Dumazet             2013-10-03  388  #define sk_dport		__sk_common.skc_dport
+5080546682bae3d Eric Dumazet             2013-10-02  389  #define sk_addrpair		__sk_common.skc_addrpair
+5080546682bae3d Eric Dumazet             2013-10-02  390  #define sk_daddr		__sk_common.skc_daddr
+5080546682bae3d Eric Dumazet             2013-10-02  391  #define sk_rcv_saddr		__sk_common.skc_rcv_saddr
+^1da177e4c3f415 Linus Torvalds           2005-04-16  392  #define sk_family		__sk_common.skc_family
+^1da177e4c3f415 Linus Torvalds           2005-04-16  393  #define sk_state		__sk_common.skc_state
+^1da177e4c3f415 Linus Torvalds           2005-04-16  394  #define sk_reuse		__sk_common.skc_reuse
+055dc21a1d1d219 Tom Herbert              2013-01-22  395  #define sk_reuseport		__sk_common.skc_reuseport
+9fe516ba3fb29b6 Eric Dumazet             2014-06-27  396  #define sk_ipv6only		__sk_common.skc_ipv6only
+26abe14379f8e2f Eric W. Biederman        2015-05-08  397  #define sk_net_refcnt		__sk_common.skc_net_refcnt
+7c268eaeec6388b Kuniyuki Iwashima        2025-10-14  398  #define sk_bypass_prot_mem	__sk_common.skc_bypass_prot_mem
+^1da177e4c3f415 Linus Torvalds           2005-04-16  399  #define sk_bound_dev_if		__sk_common.skc_bound_dev_if
+^1da177e4c3f415 Linus Torvalds           2005-04-16  400  #define sk_bind_node		__sk_common.skc_bind_node
+8feaf0c0a5488b3 Arnaldo Carvalho de Melo 2005-08-09  401  #define sk_prot			__sk_common.skc_prot
+07feaebfcc10cd3 Eric W. Biederman        2007-09-12  402  #define sk_net			__sk_common.skc_net
+efe4208f47f907b Eric Dumazet             2013-10-03 @403  #define sk_v6_daddr		__sk_common.skc_v6_daddr
+efe4208f47f907b Eric Dumazet             2013-10-03 @404  #define sk_v6_rcv_saddr	__sk_common.skc_v6_rcv_saddr
+33cf7c90fe2f97a Eric Dumazet             2015-03-11  405  #define sk_cookie		__sk_common.skc_cookie
+70da268b569d32a Eric Dumazet             2015-10-08  406  #define sk_incoming_cpu		__sk_common.skc_incoming_cpu
+8e5eb54d303b7cb Eric Dumazet             2015-10-08  407  #define sk_flags		__sk_common.skc_flags
+ed53d0ab761f5c7 Eric Dumazet             2015-10-08  408  #define sk_rxhash		__sk_common.skc_rxhash
+efe4208f47f907b Eric Dumazet             2013-10-03  409  
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  410  	__cacheline_group_begin(sock_write_rx);
+43f51df41729559 Eric Dumazet             2021-11-15  411  
+9115e8cd2a0c6ea Eric Dumazet             2016-12-03  412  	atomic_t		sk_drops;
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  413  	__s32			sk_peek_off;
+7d452516b67add4 Eric Dumazet             2025-09-29  414  	struct sk_buff_head	sk_error_queue;
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  415  	struct sk_buff_head	sk_receive_queue;
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  416  	/*
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  417  	 * The backlog queue is special, it is always used with
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  418  	 * the per-socket spinlock held and requires low latency
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  419  	 * access. Therefore we special case it's implementation.
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  420  	 * Note : rmem_alloc is in this structure to fill a hole
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  421  	 * on 64bit arches, not because its logically part of
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  422  	 * backlog.
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  423  	 */
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  424  	struct {
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  425  		atomic_t	rmem_alloc;
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  426  		int		len;
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  427  		struct sk_buff	*head;
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  428  		struct sk_buff	*tail;
+fa438ccfdfd3f6d Eric Dumazet             2007-03-04  429  	} sk_backlog;
+b178bb3dfc30d95 Eric Dumazet             2010-11-16  430  #define sk_rmem_alloc sk_backlog.rmem_alloc
+2c8c56e15df3d4c Eric Dumazet             2014-11-11  431  
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  432  	__cacheline_group_end(sock_write_rx);
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  433  
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  434  	__cacheline_group_begin(sock_read_rx);
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  435  	/* early demux fields */
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  436  	struct dst_entry __rcu	*sk_rx_dst;
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  437  	int			sk_rx_dst_ifindex;
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  438  	u32			sk_rx_dst_cookie;
+5d4cc87414c5d11 Eric Dumazet             2024-02-16  439  
 
 -- 
-2.56.1
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
