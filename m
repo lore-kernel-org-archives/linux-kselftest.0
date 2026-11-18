@@ -1,72 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794985615;
-	b=1LLkmXyOUvprU9c1qskO54IMlaGMxo7KHK3/Mcv1A5efbX7iK1JpYsleRV9+PqyICjcO
-	 UiBJBn7yYszLIvzkG6tJluAIdCW86tzZmkUKMRtHk5z9vV4mGZtT7KHrkZREjoClh13FH
-	 rhdiNjpKyyFs0xt5ddX3jnYfKjetpF2MxYnCR75YnMq2VuLn7IFcrXJfG/gD1qEWX1kM4
-	 9MUelndJu6x1GauQLZoVAGKNfLh8xHk/MkE3soriKc18sF1QJ7AcJ+3rdeZaeHNWnIgwe
-	 7ojlonHvgdlRgfU42QOX22JOfYqnB8QXUkseD0OSGHvcL+LTTzKdQAETAYa1n7GZyZQ==
+	t=1794987259;
+	b=Fz2/vCW2822VYQzGgubq1Zist3M6WyzQu/ah22JyblNkZFgN3xXsgi/1QibJIBVY0/0h
+	 ccbtFYm/q+USJlNCXtmVL86HT2lg/PcK2o93GSRiX1NJi+BG6NSO8adYkl60/Wra3UCjQ
+	 IO/WlbXVrInZ2gtHea6ymyHnwrgu3WHTXiLzKZPG73A+uHIRia8eqipHOZnzupYXPt+4X
+	 mqoxU4VF3qcA3GZUVTGc+jd7cUU1JsoyYhZyfV+/BOlYNrd55E/iL1Nm6JwJ10uYVNfSt
+	 UV2JNwWRQ3NQGXDtOg2BndQWMDm3RlaPyieFUVChdy7LQ1Br72VuH+4okMx55jjPe9w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794985615;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=lavIvmK0urfTHmvVury1Glpuztzy8qTc3/egbY5arcE=;
-	b=PnHSlEe31xNgh9SQO3TJsndJhTjeUnO9/WUd8cV/h88CAl3u3tsz9eSbdnE0DzKivS0V
-	 0Uc84EY9xu3oAaFGcmyokvvgmkX9KauZATRkSpW3mJdt1GY5G78FLuLpIboifCN7LCGFQ
-	 oQVPfYpql+7RJanorvhcyA5M511swHIGxJxWHiYw7IqDJx0BFvsAMcLBp4Ss0/ZLWy9zc
-	 Fei38/3DxZ/JwXgcYSjrvBPELqMktML5E/Q32lY0e0W+GO+sGgzlaRtwcJIdpTgpMAxgv
-	 liMbCc19WqTqUqYJehdjuLHaQkPyMBGeEgy9NJYFDEXhULjaxtStGS3CLnc8X7gnFuQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794987259;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=ZlM43h4YcZYPb2lh6vOLR1Gxai+gJzcwC6njybeWZ7w=;
+	b=w5Mq/fvc7HguQD8xIAmzx3CopeDyKgOu64A3wP5ZUNi/OphvuIeuFdMHpjuG8h8udfk6
+	 n4cYplojtHbCLScEkFxSaJTS+9uik6MM/ResEWUhnJUW6eSEzI/rZjtJJeGNs2DJyKsUm
+	 NJSzfJuDEhy/EeKzg1KfDBGmnGmVOVGANoiD0zt1+xCBsBF8INXfNRGdexwGcyzlU8w2R
+	 e9M9VnUtwh6gJbfStzg4T4AwLZkWA7zYUPczfhxARYkxQSU00ABA0ZRZNg90fimlhq3Wx
+	 J/JAJnMxbPX8fVf7m16FFMLnSyRxAdrUWeJW9D6zACA1uejjONDxtGuDd05ZTJaEgXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dJJzPrgL;
-	arc=none smtp.remote-ip=95.215.58.34
-Received: from mta1.migadu.com (out-34.mta1.migadu.com [95.215.58.34])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ScVdSO0q;
+	arc=none smtp.remote-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E500A606A325
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 07:06:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E500A606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F81F606A32A;
+	Wed, 18 Nov 2026 07:34:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F81F606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dJJzPrgL
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=6DGn/R9oKAsdK87b39nDdkeh8fsr4sCIVdI0Xj/b8fk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794985613; v=1; x=1795590413;
- b=dJJzPrgLrI63mNW7x06jI8qibtBICPfeWiToWIxtxRy0RXH+poXP0quG8BLWZiDWgR18k+2O
- XC3fz1ShL6+kmL5JgsWpxTEl9jc9H8oPXaiR14g/7pWlfnZgxcz5mFpt/eaUlCMJjryxAabtjow
- dhL4zQy/g7qXhm4vIvLRAhzk=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 52a0c46646173832;
-	Wed, 18 Nov 2026 07:06:52 +0000
-X-Mizu-Trace-ID: 52a0c46646173832
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 18 Nov 2026 15:06:38 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Justin Iurman <justin.iurman@gmail.com>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net-next v3 5/5] selftests: seg6: add PSP flavor testing
- for SRv6 End.X
-Message-ID: <av1OftpFCWPLimPx@fedora>
-References: <20261112-srv6_flavors_endx-v3-0-c9177bbbd965@kylinos.cn>
- <20261112-srv6_flavors_endx-v3-5-c9177bbbd965@kylinos.cn>
- <20261117035021.e724668d726ecce54e091288@uniroma2.it>
- <avwUzLyWxZl9cBIX@fedora>
- <20261118035010.e028076fbd99fbcddd937156@uniroma2.it>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ScVdSO0q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Zl
+	M43h4YcZYPb2lh6vOLR1Gxai+gJzcwC6njybeWZ7w=; b=ScVdSO0qXDDdpswZ/M
+	Bssbn1RMH47NixMv4jOh/NJ10vaFWywuaNx4+puS+MKavlgEbA7L9aC0Si7/69Z1
+	klBuKZYoPCwlQBX7M8lGSA50pqou1yrVI9I+no+st9+3CP5+PiJ7N2hl9aUoQOh9
+	aLSzqToQQRuYE2mQ/K5uXg7SI=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wDX39q9VP1q6+71Hw--.26225S2;
+	Wed, 18 Nov 2026 15:33:19 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Run all summarization freplace cases
+Date: Wed, 18 Nov 2026 15:33:09 +0800
+Message-ID: <20261118073309.125424-1-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,34 +70,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261118035010.e028076fbd99fbcddd937156@uniroma2.it>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDX39q9VP1q6+71Hw--.26225S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Wry7Ar47JF1ktF13XryxKrg_yoW8Wr48pa
+	s3WrWktFyfGF17tw1Ikw47XFWfuFWkXrW5Gr40qr1DZws5J392gryxKw43JFykuFWfXw1F
+	v3ZIkr1Y9wsFvrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UD739UUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6x9eLWr9VL8OvwAA3K
 
-Hi Andrea,
-On Wed, Nov 18, 2026 at 03:50:10AM +0100, Andrea Mayer wrote:
-> > > 
-> > > Without NEXT-C-SID, get_rt_sid() drops the adjacency, as the Sashiko
-> > > review also notes: "4>2:psp:End.X" and "4>3:psp:End.X" would both get
-> > > fcff:4::0af1. I think each adjacency should have its own SID. The
-> > > SID could carry the adjacency, as the C-SID already does. Then
-> > > __setup_rt_policy() needs the new SID. Calling get_rt_sid() there,
-> > > as suggested above, would do that.
-> >
-> > Hmm, do you want to set the adjacency like xaf1 or xxa1?
-> > e.g. ffcf:4::2af1 for 4>2:psp:End.X, ffcf:4::3af1 for 4>3:psp:End.X
-> > or
-> > ffcf:4::42a1 for 4>2:psp:End.X, ffcf:4::43a1 for 4>3:psp:End.X?
-> >
-> > The second one may also need to adjust the End address. e.g.
-> > fcff:x::ef1 -> fcff:x::e1
-> 
-> The first one you propose, fcff:4::2af1, seems reasonable. The adjacency
-> takes the place of the leading 0 of the Function (0af1 -> 2af1). Towards
-> the host the 0 stays, as in the C-SID, and the End SIDs do not change.
+From: Yun Lu <luyun@kylinos.cn>
 
-What about noflv? e.g. 3>4:noflv:End.X, should we use addr like
-fcff:3::4a?
+The test matrix groups targets by the side effect under test.
+ARRAY_SIZE(mains) gives the number of groups, so using it as the
+target loop bound skips the two standalone entry-point targets in
+each group.
 
-Thanks
-Hangbin
+Use the target and replacement counts from the current group and
+derive the group count from mains. This restores four packet-data
+cases and enables four sleepable-program cases.
+
+Fixes: 72ed076abf54 ("selftests/bpf: Add tests for extending sleepable global subprogs")
+Reported-by: Jackie Liu <liuyun01@kylinos.cn>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+ tools/testing/selftests/bpf/prog_tests/summarization.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
+index 3e4bcf071735..f51b203eca8a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/summarization.c
++++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
+@@ -116,9 +116,9 @@ void test_summarization_freplace(void)
+ 	};
+ 	char buf[64];
+ 
+-	for (int t = 0; t < 2; t++) {
+-		for (int i = 0; i < ARRAY_SIZE(mains); ++i) {
+-			for (int j = 0; j < ARRAY_SIZE(replacements); ++j) {
++	for (int t = 0; t < ARRAY_SIZE(mains); t++) {
++		for (int i = 0; i < ARRAY_SIZE(mains[t]); ++i) {
++			for (int j = 0; j < ARRAY_SIZE(replacements[t]); ++j) {
+ 				snprintf(buf, sizeof(buf), "%s_with_%s",
+ 					 mains[t][i].to_be_replaced, replacements[t][j].func);
+ 				if (!test__start_subtest(buf))
+-- 
+2.43.0
+
