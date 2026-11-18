@@ -1,83 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.12.53.23
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795027270;
-	b=TEMIn0mbJ25SAXa31FSn1ukdYv/F+Zr5NWfz4R5+75JM/eVwuy08+dCJEv2I53X9Lslb
-	 zmBEiGncbC0zqUNg19j+zITJZW8dUXsJ3MuF/vKz48y+5nmSK6wYj9bU5YySFptfEgMkZ
-	 ILbgKp5siK12PN1OFn7Xv2b4tXQTyD+rnHR2fm6cM/j4A1i0cIlPNdWozmcq6FMkISCTr
-	 ZKMpazSc/jLHl9fYCt7Mgp334j5kwnba8alTyRWzA+40aHD/uEOXYS5V+feV9HfoacZpw
-	 bp8ciDl1rFT7LOAuUnjDTrDoJwMIvagd1+5oqDZ1LnRX86E0KGG8GePq4FPMYeqNzkg==
+	t=1795027536;
+	b=iO86OYLDAGi+Gn2Wx0C1eC/RfA3aCYS1ARw1TlBcmkWZrC+tBo4GwYl/Ijly6NKxMJRb
+	 iFE3135EpT26oL5WbswmyVTSaBa/I8ggFEC0lWzbgXgXhwHGwCiJfLmraowaRO5LV9Ws0
+	 egU5mQkVMcqnx34EFs+rMPeiPEYLv1G+fG1XkdcIQ2MYrSVwGpJgAmWh9k7w+Lq6aV0AJ
+	 mKQ2KSCm84Idoq+B4aKFolfszzN/cPzOOzwFxC+Du3DLQZN/ONeDh7ZCTEF92rCQs+7Cw
+	 YM3+1utz0mDRwxpsat9fyZr4qWGq2YBJv3wHQePDP7c38IC5R/jyUh4KRI+o4w06ArA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795027270;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=QeBBXOlfrLNkClrMkLRqTkyWIPY5S5c/FDhckbc/h5k=;
-	b=F+rsZ4L66HHABKaJez16GJJxDKk4YEtx2bFkuZGx6E6r2x60GvzwdY4sB+EYOhqlnJVo
-	 UdnuL8/9eyKnCM3j0xBjfiD1dssXfiapZrMfS8SesEtyFGmCnKfE30oVwKgpbfjliuI+x
-	 15DJhp1HqQ+bPQRxPP9TZGS4xslrgKODEnfxyUNoL+eGIbKLst6Ot2G8f0vD7PDc4MENR
-	 ATELvUZwRsl7J/U+TPCYFBW+DmJr+TP4wsJ+pR/R0OaC3OGind2kJ1bjAMZtw+5G3Uq8+
-	 v7BOK9vAHhJUsNv/GXuslN7qhyHsHHQ3GXz72jrSTpy23El3JFmNbrrmdTml7YonDBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795027536;
+	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=vGWUgyGfw7j22BMb4pU06ctXkLaCqXf8bR6lTYcnToQ=;
+	b=VbiJOP8+eJBYSAIUghaZQIfoU5ZxUpMyAk73E8e4l6h7zTekQu0h7cfxrXV2FlaGwmXj
+	 gSAw4dLGD1Euw7ZaBBHZUhnBjqYPg6ZurgWRHSl3pqXMnuqiCtlmDlgVHQAhTQ4P6Eprp
+	 3osS2c2HyI/qiiCvMexzCqVozmi5wvVXVckpLFX1Ox0FiZpvyZbmH+U/Voc920qrRxmW1
+	 nRq4UCPkAn8Nvu8dr3p0wfdd7e7OoJaQQYg2dD2MhQpIZe4DKj0BxXnC66wC/BCxarsPf
+	 0HdNYZYv0lUuGoiEVKOqYpfEvIIBv9KkoYStaGFX+gWWl5wctKw4cx+gL+FXPYufF4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=q8BXsBcr;
-	arc=none smtp.remote-ip=52.12.53.23
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=IQCQA2zd;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=IB0tl0dO;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE99606A31C
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 18:41:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCE99606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FA860A260E;
+	Wed, 18 Nov 2026 18:45:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06FA860A260E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=q8BXsBcr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1795027269; x=1826563269;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QeBBXOlfrLNkClrMkLRqTkyWIPY5S5c/FDhckbc/h5k=;
-  b=q8BXsBcrf7VLcl3QSPaIm0+hQEekbal34Yu6yB0JB8Zf+30ePv72vjdC
-   glqyS7SFG0scij8m6/z2CQKtDhIK0Zc2Yz0yN0VZ+t0AGGXXka3O91PEh
-   OA+Wev9w1N5Q7srCj32vUQlWAYs+qBZzyNxvt6bLpiR0U1vI1dLA+Idke
-   XbtPPcCmRtt+HmC0pFWerwcnEUxI1BSG/LJ9CLYOQVEfIHnwJtnYO5axe
-   W1O60k0m1lBwi82szKWNPFyOvcaqi4DXzJkUN/Y/mdEsn3OLku+CuZmO6
-   eP7S4dIshHgUlLn30JX/2Csk3oc7SRSD+uh+l4/XgcJYECSk5SnqnbtYr
-   w==;
-X-CSE-ConnectionGUID: ZoBT2TxJSBK8JWyUhHdQ/g==
-X-CSE-MsgGUID: gs6TZ0Q0Sxiv9o3wGAaKlg==
-X-IronPort-AV: E=Sophos;i="6.27,219,1787011200"; 
-   d="scan'208";a="34336987"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2026 18:41:09 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:24888]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.50.212:2525] with esmtp (Farcaster)
- id b365bfda-2b16-4889-bdad-109873107649; Wed, 18 Nov 2026 18:41:09 +0000 (UTC)
-X-Farcaster-Flow-ID: b365bfda-2b16-4889-bdad-109873107649
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 18 Nov 2026 18:41:08 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 18 Nov 2026 18:41:07 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: Bernd Schubert <bernd@bsbernd.com>
-CC: Miklos Szeredi <miklos@szeredi.hu>, <fuse-devel@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, Jim Harris
-	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
-	<luis@igalia.com>, NeilBrown <neil@brown.name>, Joanne Koong
-	<joannelkoong@gmail.com>
-Subject: Re: [PATCH v8 1/2] fuse: add FUSE_OPEN_ATOMIC
-Date: Wed, 18 Nov 2026 18:40:57 +0000
-Message-ID: <20261118184057.630761-1-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <fa582b7f-23ba-449d-b311-20f6ac8e867c@bsbernd.com>
-References: <fa582b7f-23ba-449d-b311-20f6ac8e867c@bsbernd.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=IQCQA2zd;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=IB0tl0dO
+Date: Wed, 18 Nov 2026 19:45:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1795027526;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vGWUgyGfw7j22BMb4pU06ctXkLaCqXf8bR6lTYcnToQ=;
+	b=IQCQA2zdkTcf9E6mhzzRMaLYIbiNdjO5KRf7VnD1VGfQrT6qv3DniWkbigfsq+bhE6Tujk
+	RrogTYi0aSVRHhW+5nEICKshtgXZ20WtT7qg76ppTdO/A9i69qiyJmz6EOdcL/CDrqbKl6
+	RO5pEABTAuySwUj8DFCvw0Uju+upOqm4vWES9HTXn0F67xMBEkb/G5w6AVBGg/2hLlwcgK
+	w8Q0kxcrt8oqGQUJOyp2nN68x+Uy/nby68mlXbMYoltILfitXFV2/387HEW6HseduaC4Gw
+	auMtX0afIROcw0m2kbOpTHB0HEJe4ZzBscTzHUsrwHpQIdRKrhzK6sznwFM7nw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1795027526;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vGWUgyGfw7j22BMb4pU06ctXkLaCqXf8bR6lTYcnToQ=;
+	b=IB0tl0dO0GEA+iI8A5RmjHEUCuLm9UMaL/bBsKz0K1j3Ghz/dISF3vGZHh1wz6CpgDAsRt
+	C1fdWc9vPTxswjCw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
+	linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
+	longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
+	dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
+	shuah@kernel.org, juri.lelli@redhat.com,
+	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] locking/ww_mutex/test: Time an ABBA with both
+ owners running
+Message-ID: <20261118184524.Vxz_-nKr@linutronix.de>
+References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
+ <20261108141347.1525532-6-mathieu.desnoyers@efficios.com>
+ <20261118163807.75hxTxGn@linutronix.de>
+ <e57bdae9-4f87-4cc1-9fdc-22c2d766e252@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,21 +81,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <e57bdae9-4f87-4cc1-9fdc-22c2d766e252@efficios.com>
 
-On Wed, 18 Nov 2026, Bernd Schubert wrote:
-> We happen to have an online meeting once per month and the next is tomorrow,
-> would you mind to join?
+On 2026-11-18 12:29:55 [-0500], Mathieu Desnoyers wrote:
+> Hi Sebastian,
+Hi Mathieu,
 
-Hi Bernd,
+> > This is the ww_mutex equivalent of the futex case on PREEMPT_RT. I got
+> > lightly distracted by the -35/-EDEADLK error it always returns.
+> > Something that we might have since v5.16-rc1=E2=80=A6
+>=20
+> Where do you see it? In this case, the younger context gets -EDEADLK
+> from ww_mutex_lock(A). That is the wound: it backs off and retries, and
+> the case returns 0. In our PREEMPT_RT VMs, test-ww_mutex loads with 0.
+> If a case of the module returns -35 on your setup, I can look into it.
+> Which case prints it?
 
-Thanks for the review! Yeah, I would be interested in joining the
-meeting. Could you send me the time and link (presumably off this
-thread)? I'd love to find a way to improve performance for this routine
-pattern in FUSE, but I understand that it is a bit challenging to model.
+The timeout that was introduced in commit cfa92b6d52071
+("locking/ww_mutex/test: Make sure we bail out instead of livelock")
+triggers. That is not related to your patch. Increasing the timeout
+makes it go away. It takes ~7sec to complete. It is not related to your
+changes.
+According to the history it hangs on real hardware and passes in kvm.
 
-Thanks,
-Jimmy
+> > Since both (ww-mutex and futex) use the same code I am tempted to say
+> > that one test case might be enough.
+>=20
+> The two take different wakeups through the same spin. A timeout or a
+> signal wakes the futex waiter, and its cases fail with and without
+> PREEMPT_RT. The wound wakes this one, and it fails only with
+> PREEMPT_RT. I would keep it, but I can drop it if you prefer.
+
+The testsuite changes, without the fixes I get
+| [    0.810516][    T1] Beginning ww (wound) mutex selftests
+| [    7.388445][  T143] stress (stress_inorder_work) failed with -35
+| [    7.410548][    T1] Beginning ww (die) mutex selftests
+| [   13.994648][    T1] All ww mutex selftests passed
+
+The ww_mutex testsuite complains only on PREEMPT_RT. The route cause is
+the same. I don't see a difference on !PREEMPT_RT here nor do the
+patches touch anything.
+
+I don't call the shots here, I just explained why I don't see this
+needed. We might want to cover this code path if the paths divert in
+future.  I don't know.
+
+> > But in case we want this,
+> > Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>=20
+> Thanks!
+>=20
+> Mathieu
+
+Sebastian
