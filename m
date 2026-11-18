@@ -1,126 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795012351;
-	b=hV4RGqLLtdHmqrkzPdHT5y998u84IFg0UyONs3zTNoj1blW6EKLJghvGBBSMxOJsqw7x
-	 xBEg8R4iM5JXnkjq0IhjBewSZnKr+uWOkwmJyHtk2yjmYeGy4OP0/12NM7AY6GlU2R6j+
-	 VRcSipYdZnwDTBpideaH2wzhfpeX3FvmE/HKTYF+0O12h8mKRt0WA0kQSLwERKA6sQCuJ
-	 mjJbdy08etsw2/9QgrH5I/RXgYzlCzptsscVl6CPdZmJgPapiz1wb8dIBDWbKE5i/C0s+
-	 nQ0L+ynwkdC3vY6Erdja5sj3Ns2UQkFq4sjxn0uqzTzW1jqKtZ+EaLGolm8j3ce7R0A==
+	t=1795012769;
+	b=CKCEquYL/SDJx5RBEBbRHdr9PAIt/uwPYksmpbjyvSAXJrcJ8kbbL0v0BIPLE8C/r8nq
+	 0inVIIDyp+ot+3vC+RaDPJ2EbuM/sAg80a6C/YrqN/So6K/FTNv9pRQGS3fikI2ckhkx2
+	 oIfJiBC0bY0jC20G6r2CjcFrfGzFnOSuCaOEiCEuBptl9vcyH0LZ6BRClYmx8Efj1dfjC
+	 LXsmT2S2m9LO2JpoiJp3PqztjAvDZvIlRczUkyJvDWgffCSSr9wP7eDvYyfXmOc0uiar3
+	 rBYDZDZjT7HR9mL7TNScVehsDpxK9byPIBHLen1gdvjbLXG2a4dL+nzgq7dS5l+/qkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795012351;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=IYa7d2S4FNA7B3qml35ZrjkyJZWT7YLdzwOJhQFTPJw=;
-	b=JPM25KLkDuJf02BDTTPVo99gUh0j3I8qMrSyLJpTweZlsX9r8WV4f2lcL0J4GRt40PCw
-	 qHcQcRyViL+vwPfDS8nwv22Fu/dOpEEYfJiSxEYhjFjDsDEUQGMBOG2pkNZR3p57eihKD
-	 WdHEoV1Zzs1PYKQ0u8DTtPdG2VlquOAkhN6h6j3Vuw//28Ymlz0AKG2p8PYdQpyaYOShq
-	 /0kcdIYGzzL1BZf3ZBcoZ1J0EmvQd3A9B3UNWVBbqqJgnbze+rGmCKkFDEY9BJ1TAiqSc
-	 lG2CH1PiB/My4UT/oxruLtqt590VM9dd+idK5t2KvjbCOXXGeHynoE1tYBR/eQeNScw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795012769;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=EkTIfpCkKGsr/+EUWsgItcZz9N+NCRH4ACc35xW4RU0=;
+	b=fXG4d5ehNSm20lh2TOTaI6mj5GTGjyYWM/pgiYIWG6YWy+7X42gW3jRbDFrPM6tU6cI1
+	 nPZTocMK2IURRKKery4Om3/Vdh3LNR2xoN+NJKCjwlelma0aQ697IyFBqitmFs/zvpjCG
+	 8muKftJLsmcG0vBou2v4pTxqL62zXWI4vL5cecHSO4zxaKNKmWgGIHSUe9fCxX58TcOEs
+	 VrW3EfkwLMojm6cjhDNT+LqDE/DoYJ1Uykz58no+mubQVY9cpjHJzAzqCFZH/u8PrbNWq
+	 XFfk/qbpyQbCaWyw2toPNI2mUeuWKz11hWBEm59addE1JmQqGX1OcPZ6g1tMTYpe+Og==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Xh8aO3IH;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=jhchfRR+;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D4ftvp5U;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6EC606A31C
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 14:32:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E6EC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D76B2606A325;
+	Wed, 18 Nov 2026 14:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Xh8aO3IH;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=jhchfRR+
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795012349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IYa7d2S4FNA7B3qml35ZrjkyJZWT7YLdzwOJhQFTPJw=;
-	b=Xh8aO3IHmGovAn1+3wH/UUw4Ugd/Vt9DaHg7cYgsvqScUGGNgXYHYOihAuruY482zMtI1z
-	URTDlDg986sHukFd+o4B3jO6YCN8Sw1AIJOrDK08cG/XDcaHvkK1eC8D+IBIoRrhVCDhav
-	krbRccIGhKttFjbA6xv5JIxEmNoezis=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-683-QHiLSNpDOHq3pqh636s4tg-1; Wed, 18 Nov 2026 09:32:28 -0500
-X-MC-Unique: QHiLSNpDOHq3pqh636s4tg-1
-X-Mimecast-MFC-AGG-ID: QHiLSNpDOHq3pqh636s4tg_1795012347
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a70b42bab0so8405095e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 06:32:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1795012347; x=1795617147; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IYa7d2S4FNA7B3qml35ZrjkyJZWT7YLdzwOJhQFTPJw=;
-        b=jhchfRR+9STjT4RdQylP7KrJi5iKHkLKKg+LqCVbi+6LvYc/vlbXKwv+BbYq9IyMB5
-         5IuuHmdsLkM2rw2y6UhKtLVj1wJeVgZIliUYnnFwyBooZl3lPlPjle9k6c9PjiB350TR
-         ZdRR0OcSgvgiZaML0rzx4h8rU2XLsXvGAbf5Cm8NLa5+SdGfDzvkgg3NiYc/r8MBs1bt
-         Y3knU0pXRvWk37uIGmeS3wbA/XMgLSH1UBvdcZsRGN5EhvpLsA4ZZEQcoZXnNl4n2zQQ
-         /rWcyjyE018M2KmjNVvvymzL+Nls+cOtEIEDk09i8PkO6LBq6ANB/M00NGOAjbvSleoI
-         iXJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795012347; x=1795617147;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IYa7d2S4FNA7B3qml35ZrjkyJZWT7YLdzwOJhQFTPJw=;
-        b=HISldPuVsEs9rYhOeXG+pFF7K0i6erkH791xOQA0f3yaK1iMFV9XSvdA3pLpmg3oEE
-         1OBEIhY5097yD+zwgiq/vsLtMXn86o488B3S67yLvPyLWG9YBLV/+eWZre6ecKFuTXoh
-         e1t0kT1Ybtc9H8Ty3/pwGjdGKnGbv6Ss3mUDgqEBn3MUCnu+EkPBY7yMPizNjPxLmGS9
-         OE8WFLg/BCwtEogpLqTwHU5xoV5FrAxAgRUWgtuUdS8/K8s/ny7uzJzIh+tl51KOu/RG
-         AIRRrnAoaPEUC9Om7ESTCm7GTmlRG65bjuZjuwb0CP2m+US8hMKWRf/hRb3Kz2aJ/14w
-         21Bw==
-X-Forwarded-Encrypted: i=1; AL+hErGO1AJev2pqTVogpqRm1tLunJrC9zG6qkHJrlg565+g/t57fL3LP5AC19+KcgbjIDP5LJUBUMf177jA6Cfh+GI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9gQfiNGhxnUEZ7pIV7W26E+rCu8uh1hKetN0nk1ByoKH6jc6nI
-	zVtf3iKYZRbe8hzBgM7YaNg5z474+JQQWniRk4eTJLWTlkizgRXI8WiiZQZxx+XdgDglYuzOPBn
-	f4S2A9srtX3XA6kSyuZcOHQ9ybeU8nFgDI2Y9SOV4Indg/j4vN5z8LxvB995i2QqfZ87pkQ==
-X-Gm-Gg: AYBFou2gLyrp0pn8+B3uGkvdDCVHRbunooUObhK5E1jc1fQqigZ/4/Z1581glFHPlBn
-	Xi6uLOyalpo39+9FpWeHTXbnRXN4eFSnzVUBDVktpUCS10qsa+Ax7X5kBG+2PmhHqF+4cWE+HMc
-	RFpBv905r9ALa5Uhcq6JKtevLNsxtYZEPWtrzsFF5nAwVUb47lTrfPpOohyh4/IezcRBFnQDL4h
-	o7pjGhuM69bbd9/EQEAQ9VnTWIXiTNt1D4TM2J4NRp0lOSz1+/NSe/p71YQkh/xjwFxbkCxyt3r
-	g33BBHFL1l+XjTMLOPCjdVkrtrspGwV+T5AK9aXE+wFXwrU7HsIikCdzyG3Xn4b0/IIE7PsjrSd
-	fihYsSx58xAXb1bsjOn3JAGXZvnO48PMRyJO3StYGt5X7JhrOQAbDrrTa0erBUujnmgKhUV9yrF
-	CX8qg=
-X-Received: by 2002:a05:600c:6290:b0:4bb:6a78:7c42 with SMTP id 5b1f17b1804b1-4bb7d6cd48cmr55544835e9.1.1795012346831;
-        Wed, 18 Nov 2026 06:32:26 -0800 (PST)
-X-Received: by 2002:a05:600c:6290:b0:4bb:6a78:7c42 with SMTP id 5b1f17b1804b1-4bb7d6cd48cmr55544025e9.1.1795012346150;
-        Wed, 18 Nov 2026 06:32:26 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb7d2aad96sm58360485e9.6.2026.11.18.06.32.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 06:32:25 -0800 (PST)
-Date: Wed, 18 Nov 2026 15:32:23 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
-	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org, longman@redhat.com,
-	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
-	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v7 08/40] sched/deadline: Do not replenish a boost from
- cleared parameters
-Message-ID: <av2295tJMdwRp3wK@jlelli-thinkpadt14gen4.remote.csb>
-References: <cover.1794922146.git.mathieu.desnoyers@efficios.com>
- <cefacab5f1c0e7617f17e050af4ef5f6db01700a.1794922146.git.mathieu.desnoyers@efficios.com>
- <av2k8JlLvUcBBOhn@jlelli-thinkpadt14gen4.remote.csb>
- <ddd215ff-d6de-4dea-b12a-80948a9b5ea6@efficios.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D4ftvp5U
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id DD2571F000C4;
+	Wed, 18 Nov 2026 14:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795012769;
+	bh=EkTIfpCkKGsr/+EUWsgItcZz9N+NCRH4ACc35xW4RU0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=D4ftvp5UnRHjBoaocLaME4nyOfPMFjThfwMZhQe5L15XZrIXgfm1mUpDBjT7pCCl+
+	 9QPgzjYOYQ/zcXytm375W++rt+wWgM2daUsOOwMJgD2AXKK2ombWPTHDdM/Wg9u30S
+	 938J8rLDYOyysFggccBRsB65VyG6YWC6xmSIGZtK8YMT2dUOfdIaC9sSgDwRDLDXhJ
+	 r+qUZ8vfCqmMIH01TvQ/t8/DyJBUcTov6rXG0ezUtF5YB1L/2a72OtJeEG70Ye8vfS
+	 6YBlDKQYr+Ceham9eQHjVxX9uFnXXUJqezQO5jCJrESouIJX2NmE+LeG06PuD9Q8Ch
+	 zyikQSnO5LmbA==
+Date: Wed, 18 Nov 2026 16:39:25 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Rodolfo Giometti <giometti@enneenne.com>
+Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jens Wiklander <jenswi@kernel.org>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	op-tee@lists.trustedfirmware.org,
+	Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+	Pankaj Gupta <pankaj.gupta@nxp.com>,
+	Sahil Malhotra <sahil.malhotra@nxp.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Richard Weinberger <richard@nod.at>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Demi Marie Obenour <demiobenour@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
+ never read
+Message-ID: <av24nYfBMbOcoW4Y@kernel.org>
+References: <20261118140421.584086-1-giometti@enneenne.com>
+ <av22tUCclsAPJq1g@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,22 +83,323 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ddd215ff-d6de-4dea-b12a-80948a9b5ea6@efficios.com>
+In-Reply-To: <av22tUCclsAPJq1g@kernel.org>
 
-On 18/11/26 08:44, Mathieu Desnoyers wrote:
-> On 18/11/26 14:15, Juri Lelli wrote:
-> > The above paragraph is a bit hard to decipher. :)
-> >
-> > Maybe something like the below?
+On Wed, Nov 18, 2026 at 04:31:22PM +0200, Jarkko Sakkinen wrote:
+> On Wed, Nov 18, 2026 at 03:04:12PM +0100, Rodolfo Giometti wrote:
+> > This RFC proposes a key type, "keycrypt", whose material user space can
+> > use for symmetric operations but never read: AES-256-CBC, HMAC-SHA256
+> > and an authenticated AES-256-GCM stream, through a file descriptor that
+> > KEYCTL_CRYPT_OPEN returns for one key and one operation. The key is held
+> > by a backend: the kernel itself (sealed under a trusted key), an OP-TEE
+> > trusted application, or, as a proposal only, the CAAM. I am asking
+> > whether this is a direction the keyrings, crypto and TEE maintainers
+> > would take, before polishing it further.
+> > 
+> > Patch 9, the authenticated stream, is a proposal on its own and not
+> > needed by the rest of the series: it is a construction of keycrypt's
+> > own, and patches 1-8 do not depend on it, so it can be discussed, or
+> > left out, apart from them. No user-space consumer uses the stream or
+> > HMAC-SHA256 yet: craf (below) uses CBC only. If this direction is found
+> > acceptable, one of the next steps is to bring craf's keycrypt backend
+> > into craf's main line, with the stream and HMAC-SHA256, as long as
+> > doing so does not stand in the way of this RFC or of the series I hope
+> > will follow it.
+> > 
+> > The problem
+> > -----------
+> > 
+> > An embedded product that encrypts its own data (a root filesystem
+> > archive, configuration backups, logs) needs a key that does not sit in
+> > the root filesystem and that a compromised user space cannot copy. Today
+> > user space either reads the key (a user or logon key handed to AF_ALG)
+> > or cannot use it at all (a trusted key serves kernel consumers only).
+> > AF_ALG, the one interface that let user space drive a key the kernel
+> > held, has moved away from that use: v7.2 dropped off-CPU cryptography
+> > from it (7524070f26d8, "crypto: af_alg - Drop support for off-CPU
+> > cryptography"), whose message says "If using an off-CPU accelerator
+> > really does turn out to be a win, a new API should be developed that is
+> > actually a good fit for it", and v7.3 restricted it to allowlisted
+> > generic algorithms by default (2f204fe718f5, the af_alg_restrict
+> > sysctl). One exception was let back in, cbc(paes) with a CAAM blob in
+> > place of the key, because "this crypto operation cannot be implemented
+> > in a userspace library" (285d8204638c, v7.2), for privileged users only
+> > (d9506e82ced5, v7.3): the need is acknowledged, for one driver and
+> > one mode. keycrypt is meant to be the API that 7524070f26d8 asks for,
+> > for keys that stay in a TEE or in hardware, whatever the backend.
+> > 
+> > The interface
+> > -------------
+> > 
+> > 1. A key type, "keycrypt", created with add_key() from "new <alg>
+> >    <purposes> [tier=|min-tier=] [backend=]", "load <blob>
+> >    [accepted-min-tier=] [purpose=]" or, when allowed, "import <alg>
+> >    <purposes> [tier=|min-tier=] [backend=] <hex>". User space states the
+> >    protection a key needs, as a tier, and the kernel chooses the backend
+> >    that provides it, unless backend= names one. backend= is a constraint
+> >    added to the tier, never one in its place: a named backend that does
+> >    not meet tier= or min-tier= gives ENODEV, not a weaker key. It is for
+> >    a system with more than one backend, an i.MX8 with both the CAAM and
+> >    OP-TEE say, where a program must choose which mechanism holds a key
+> >    (the cost of each call, what the key is bound to) and not only how
+> >    well; the name chooses among mechanisms that meet the tier asked for,
+> >    it never lowers a tier asked for (without one, it takes that backend
+> >    at the tier it declares, so a program that needs a tier states it).
+> >    Its payload read back is a blob that only that backend can open; the
+> >    material itself never reaches user space.
+> > 2. Each key is bound, when it is made, to one algorithm and to the
+> >    purposes it may serve, checked at every open:
+> >    a. encrypt and decrypt, for aes256-cbc and aes256-gcm-stream keys:
+> >       a key that may only encrypt lets a device write data it cannot
+> >       read back, a key that may only decrypt the reverse;
+> >    b. mac and verify, for hmac-sha256 keys: "mac" computes a tag over
+> >       data, "verify" only checks a tag given by the caller, so a
+> >       component holding a verify-only key can authenticate data (a
+> >       configuration, an update) but cannot produce a tag that would
+> >       pass. VERIFY takes the expected tag at FINAL and answers 0 or
+> >       EBADMSG; the tag it computed never leaves the backend. For
+> >       example, a server authenticates the commands it sends to a fleet
+> >       of devices with HMAC-SHA256, and every device holds the same key,
+> >       imported at the factory as verify-only. With a plain HMAC key,
+> >       root on one device could extract it and forge commands for the
+> >       whole fleet; with a verify-only keycrypt key held by a tee or hsm
+> >       backend, a compromised device can still check commands but can
+> >       neither read the key nor compute a tag that passes. It comes
+> >       close to what a signature gives (everyone verifies, only the
+> >       server signs), with a MAC, as long as no device's TEE or HSM is
+> >       broken: the key is the fleet's, so the device that breaks forges
+> >       for all of it, which a signature would not allow.
+> > 3. KEYCTL_CRYPT_OPEN (keyctl 33) opens an operation context on a key and
+> >    returns an fd; ioctls on it: KEYCRYPT_IOC_UPDATE, KEYCRYPT_IOC_FINAL,
+> >    KEYCRYPT_IOC_SEGMENT (the GCM stream, patch 9) and KEYCRYPT_IOC_INFO,
+> >    which tells a program holding only the fd (passed by SCM_RIGHTS, say)
+> >    the operation, the minimum tier it was opened with, and the
+> >    algorithm, purposes, tier, origin and backend of the key it is using.
+> >    Search permission on the key is the right to open it; the caller may
+> >    name the lowest tier it accepts (accepted_min_tier), and a key below
+> >    it is refused.
+> > 4. Policies: kernel.keys.keycrypt_system_tier and
+> >    kernel.keys.keycrypt_import (also the boot parameters
+> >    keycrypt.system_tier= and keycrypt.import=), one-way, so that a
+> >    system can refuse the use of low-tier keys or clear-key import for
+> >    good. The system tier is a floor on use only: keys below it can
+> >    still be made and loaded, but KEYCTL_CRYPT_OPEN refuses them. Its
+> >    starting value is chosen at build time
+> >    (CONFIG_KEYCRYPT_SYSTEM_TIER_*), so a signed kernel image carries a
+> >    floor its command line cannot lower; likewise, a kernel built
+> >    without CONFIG_KEYCRYPT_IMPORT refuses import whatever its command
+> >    line or sysctl say.
+> > 5. EOPNOTSUPP from KEYCTL_CRYPT_OPEN means "not a keycrypt key", or a
+> >    kernel without keycrypt, so a library may fall back to another
+> >    interface on it; ENODEV means no backend can run the key.
+> > 
+> > Tiers and what a compromised kernel can do
+> > ------------------------------------------
+> > 
+> > Each backend declares a tier, and the open path checks it against the
+> > system tier and the caller's accepted minimum:
+> > 
+> >   tier     key in clear    purpose enforced by   who may use the key
+> >            in the kernel
+> >   kernel   yes             the kernel            the kernel
+> >   engine   no              the kernel            the kernel
+> >   tee      no              the TA                the kernel
+> >   hsm      no              the HSM               the kernel
+> > 
+> > The last column is the limit of the mechanism: a compromised kernel can
+> > use a tee or hsm key for the purposes it already has, but cannot extract
+> > it or change its purpose. Documentation/security/keys/keycrypt.rst,
+> > "Backend requirements", is the contract a tee or hsm backend must meet.
+> > 
+> > 1. kernel: the keys are in clear in kernel memory while loaded. It is
+> >    there so that the same interface works on a system with no TEE and
+> >    no suitable hardware, where it still keeps the key out of user space
+> >    and out of the root filesystem; its one backend, sw, is off by
+> >    default (CONFIG_KEYCRYPT_SW), and a system that has one of the
+> >    other tiers should use it, engine at least, and raise the system
+> >    tier accordingly. Raising it stops the use of kernel-tier keys, not
+> >    their presence: one created or loaded below it is in clear all the
+> >    same, as its trusted master is, so a system that must have none
+> >    builds without CONFIG_KEYCRYPT_SW.
+> > 2. engine: a crypto engine the kernel drives keeps the key, never in
+> >    clear in the kernel, but its use is decided by the kernel only. It
+> >    comes in patch 6, on its own, so that patches 1-5 stand without a
+> >    tier no backend of theirs declares. The CAAM backend of this series
+> >    is an engine, since the CAAM does not check what a key is used for;
+> >    an ELE backend (below) would start as an engine too, and could move
+> >    to hsm once the firmware is confirmed to enforce a key's purpose. If
+> >    more such shades appear, a separate property may fit better than
+> >    more tiers, and I would welcome an opinion.
+> > 3. tee: the OP-TEE backend; the TA re-checks every operation against
+> >    the purposes it bound when the key was sealed.
+> > 4. hsm: as tee, in dedicated hardware apart from the CPU running the
+> >    kernel (a secure element, a security core of its own such as NXP's
+> >    EdgeLock Enclave, a crypto engine with its own policy), the place of
+> >    Android KeyMint's StrongBox; no backend in this series.
+> > 
+> > The backends
+> > ------------
+> > 
+> > 1. sw, of the kernel tier (no name is both a tier's and a backend's):
+> >    keys sealed with AES-256-GCM under a key derived with HMAC-SHA256
+> >    from a trusted key (any trusted-key source); HKDF-derived stream
+> >    subkeys; lib/crypto AES. Where the trusted key
+> >    comes from a TPM, the TPM only unseals that master when a key is
+> >    loaded; the data itself is ciphered on the CPU, never by the TPM.
+> > 2. OP-TEE: a trusted application, an early TA, REE kernel login only;
+> >    it derives its sealing key from OP-TEE's hardware-unique-key
+> >    service. The TA is written (ta/keycrypt, one patch to optee_os) and
+> >    is the one that ran on the hardware below, but I have not proposed
+> >    it to OP-TEE yet: I would first like to know whether this direction
+> >    can go on. I can publish it for anyone who wants to try it and is
+> >    willing to support the work.
+> > 3. CAAM: patches 7 and 8, a proposal and not to be applied as they
+> >    are.
+> >    They are based on Richard Weinberger's "crypto: caam" series v1 (see
+> >    "Base and prerequisites") and never ran on a CAAM. Questions for the
+> >    CAAM maintainers:
+> >    a. is an internal cbc(paes) taking the caller's key modifier an
+> >       acceptable form;
+> >    b. can a job generate a key in the CAAM and keep it black without it
+> >       crossing kernel memory;
+> >    c. can the use of a key be checked by something a compromised kernel
+> >       does not drive: trusted descriptors, which would let the CAAM
+> >       itself enforce a key's purpose and make the backend hsm, or a job
+> >       ring owned by the secure world, which would make it tee;
+> >    d. could cbc(paes) take CCM black keys, which are authenticated where
+> >       ECB ones are not, once the driver handles their extra length
+> >       (Weinberger's series refuses them, so the backend uses ECB).
+> > 4. ELE (i.MX9), not in this series: this is an RFC, and I am not an
+> >    expert of the enclave, so I would rather know first what NXP thinks
+> >    of it, and whether they would be willing to propose an ELE backend
+> >    themselves, as an engine or, better, as an hsm. As far as I can see,
+> >    the se_if driver in linux-next gives user space a misc device with a
+> >    generic send-and-receive ioctl for the enclave's messages, and offers
+> >    nothing to other kernel code. A per-operation in-kernel API exported
+> >    by that driver (open a key store reserved to the kernel, generate a
+> >    key, import a wrapped one, read a key's attributes, delete it,
+> >    AES-CBC and MAC in one call) would let a keycrypt backend use the
+> >    enclave. Questions for NXP:
+> >    a. does the firmware enforce a key's key_usage and permitted_algo on
+> >       every operation, min_mac_length when verifying, and never release
+> >       a generated key in clear (yes to all three would make the backend
+> >       hsm rather than engine);
+> >    b. could a key be exported wrapped under a device-unique key and
+> >       imported again, so that a keycrypt blob holds the key itself
+> >       rather than a reference to the enclave's key store;
+> >    c. is the key that wraps an imported key unique per device;
+> >    d. the user-space library has a streaming MAC (hsm_mac() with its
+> >       INIT, UPDATE_DATA and FINALIZE flags): would the firmware offer
+> >       it to the kernel for a key in its key store;
+> >    e. can a key_id be reused after a key is deleted (the library's
+> >       documentation does not say);
+> >    f. would a per-operation API of this kind answer the objection Arnd
+> >       Bergmann raised to the generic passthrough
+> >       (<2034fb2f-f169-46a5-85e8-fa723ddb0360@app.fastmail.com>).
+> > 
+> > Base and prerequisites
+> > ----------------------
+> > 
+> > The series is based on mainline v7.4-rc2-92 (067c5c24cef2). Patches
+> > 1-6, and patch 9 on top of them, apply on it alone. Patches 7 and 8, the
+> > CAAM proposal, need Richard
+> > Weinberger's "crypto: caam" series v1
+> > (<20260726081504.2182951-1-richard@nod.at>, three patches, listed as
+> > prerequisites below) applied first, for example with:
+> > 
+> >   b4 am -o - 20260726081504.2182951-1-richard@nod.at | git am
+> > 
+> > Testing
+> > -------
+> > 
+> > The series comes without its tests. There are KUnit suites for the
+> > core and the sw, OP-TEE and CAAM backends, and a kselftest for the user
+> > ABI, with a case for every reachable row of keycrypt.rst's error
+> > tables; together they are larger than the code they test, so I am
+> > keeping them for the non-RFC series, once the direction is agreed. The
+> > results below that name them come from the series with the tests in it.
+> > Taking them out removed only the tests and the hooks that let them
+> > reach the code's internals (static functions made visible and exported
+> > to KUnit modules): with CONFIG_KUNIT off, the posted patches build for
+> > arm64 to the same instructions as that series.
+> > 
+> > On that base, with Weinberger's three patches applied: built for arm64
+> > with W=1 (security/keys/keycrypt/ and drivers/crypto/caam/, no
+> > warning), and, with the tests on top, the KUnit suites pass on UML
+> > but for the one case that needs the system tier above kernel (by
+> > Kconfig or boot parameter). Patches 1-6 and 9 alone, on the base without
+> > Weinberger's patches: the same build of security/keys/keycrypt/, no
+> > warning.
+> > The runs below were made on that series at v7.3 on QEMU, and, without
+> > the CAAM code, backported to NXP's 6.18, on QEMU and on hardware:
+> > 
+> > 1. QEMU (qemuarm64-secureboot, OP-TEE 4.9.0, an fTPM as the source of
+> >    the trusted master): the KUnit suites and the kselftest passed on
+> >    the sw and OP-TEE backends, a case skipped only where its backend
+> >    was absent (the CAAM) or where it needs a one-way policy setting;
+> >    the TA's unbind and bind; persistence of a blob across a restart.
+> >    QEMU proves function, not secrecy: its hardware unique key is a stub.
+> > 2. Hardware: the series, backported to NXP's linux-imx lf-6.18.2-1.0.0
+> >    (six upstream prerequisites; the two CAAM patches left out), with the
+> >    TA built as an early TA into NXP's imx-optee-os 4.8.0, ran on an
+> >    i.MX93 board with secure boot closed (AHAB), where OP-TEE derives the
+> >    key that seals the TA's key blobs from the EdgeLock Enclave's
+> >    hardware unique key. The KUnit suites and the kselftest passed on
+> >    the OP-TEE backend, a case skipped only where its backend was absent
+> >    (sw, which 6.18 cannot build for lack of the library AES it needs,
+> >    and the CAAM, left out) or where it needs a one-way policy setting.
+> >    A key generated in OP-TEE and kept as its blob
+> >    was loaded back after a reboot and after a full power-off, and
+> >    decrypted a file encrypted before them. The same AES-256-CBC key and
+> >    IV through AF_ALG (cbc-aes-ce), through keycrypt and through openssl
+> >    gave identical ciphertexts.
+> > 3. Cost on that board (Cortex-A55), AES-256-CBC, per call on an open
+> >    context: keycrypt with the OP-TEE backend 59-62us up to 256 bytes,
+> >    ~106us at 4KiB, 880-930us at 64KiB (67-71MiB/s); AF_ALG cbc-aes-ce
+> >    6-7, 12-14 and 110-138us (454-570MiB/s). Opening a context costs
+> >    ~500us, against ~9us for an AF_ALG accept on a keyed socket (~25us
+> >    for the whole AF_ALG setup). OP-TEE's own benchmark (xtest
+> >    --aes-perf, from user space through libteec) on the same board gives
+> >    ~64us per call plus ~1.5ns per byte. keycrypt's fixed cost matches
+> >    that round trip to the secure world; its remaining ~11ns per byte is
+> >    spent in this prototype's own data path (buffer allocation and
+> >    copies between user space, kernel, shared memory and the TA); which
+> >    part dominates is not yet measured, and it is to be reduced.
+> > 
+> > A user-space consumer exists: craf, the archive tool of crypto-afalg,
+> > has a keycrypt backend on the keycrypt branch of
+> > https://github.com/giometti/crypto-afalg (tag keycrypt-board-5 is the
+> > version that ran on the hardware above). Its enc command, an openssl
+> > enc that takes its key from the keyring, shows what a keycrypt key
+> > carries. A key made once as
+> > 
+> >   k=$(keyctl add keycrypt demo \
+> >         "new aes256-cbc encrypt,decrypt min-tier=tee" @u)
+> > 
+> > is bound there to AES-256-CBC, to encrypting and decrypting, and to a
+> > backend of tier tee at least, chosen by the kernel; so
+> > 
+> >   craf enc -enc-key $k -iv <hex> < plain > cipher
+> >   craf enc -d -enc-key $k -iv <hex> < cipher > plain
+> > 
+> > need nothing else: the open takes no algorithm and no backend, the key
+> > brings them, and its tier is enforced by the kernel against
+> > -enc-min-tier or the system's tier. Any other key goes to AF_ALG, and
+> > the command line must name the cipher. On the board, craf enc with an
+> > imported keycrypt key and openssl enc with the same key bytes and IV
+> > each decrypted what the other encrypted.
+> > 
+> > While testing the user-space side of this series, craf's test suite hit
+> > the KEYCTL_PKEY_VERIFY regression of cb481e59ea6c, which lets a short
+> > RSA signature verify: it is fixed by Florian Bauckholt's patch [1], and
+> > the reproducer was reported in [2].
 > 
-> Yes, thanks. The next version takes your text as is.
-> 
-> > Also for other changelogs, I am not sure this kind of info adds much, as
-> > I fear it will be hard to track down in history anyway.
-> 
-> Agreed. The next version drops the sentences that name the review that
-> found a bug, in all the changelogs. The credits to people stay.
+> I likely have never time to read this. Thus, NAK.
 
-Hummm, now that you say it, crediting Sashiko for findings might be
-worthwhile (for usefulness statistics etc), though.
+Would you yourself enjoy reading the above? Have you read it word by word?
+
+It fails on projecting "extraordinary to ordinary". That makes this
+random code with no context.
+
+Br, Jarkko
 
