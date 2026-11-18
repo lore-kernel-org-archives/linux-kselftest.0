@@ -1,88 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.149.156.91
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795010988;
-	b=B11tsPxB4xVx6pQXytwJFxxORtwllPLC27z7X+nd0NhaULWCbXuPgaCi7ppgN5sCeVdo
-	 1Q1CUcDmr/JGTQpFkhELyCCyEzc6wSBdBvXD5/aFNgoJuhLjC6g9A0Rdqy+m4u3nxtqWI
-	 u6kC+lWakAZH2CqKVe/jlNvU2I0do/bDqx0TRaiNKGUVzJYSD7L8ylrupk/OAfQySdBaP
-	 tx4/bAZS5aJqn9qtUw40xb6IOxin/OtgZtRIEP3jqUzwJjIEwarZCmeGeAoyjCeeMs4+1
-	 u/vYSEu5gR4TNJw1dun82TfI8HuvHCiuEw39G7HfUPY2ODPvqyLlumJwMUH6muIpWWQ==
+	t=1795010990;
+	b=BQOrKSFTGKQvE4HZ1Ea2MLBC3o9FMuxs/STjk9AU+uSr3Ixi2vSZJIu2ckBR9PnELK09
+	 PE0Pp1ZDM6boDfi2zvmMEIpKhCH4o1d1dG/pyGtEgoxEIR0L0XHNQOTjvPoe1RIKN1b3p
+	 UqojB6mgQSs7KayM3DQq0Q8y/mKBM8gxIgtPTRPazN31akBJqDiNSeG05aeoHJb+kpw5u
+	 V1rI+XpAcEBbybTziqiq/XqsCXx4cYZQhy2K8TEJc2YxqM/+FNb3h4i3DYqpyauphPdkB
+	 UF8St7NQ12nxUhcTJQhP6MY37SIZMpQ7EW1UxrrhuzFXp0ZfqpBxOPKAWeHKHPOaQ9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795010988;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=tcgPJyrG/tkBCFtIrUZsvk3sWZQyrMsvPzB+MTHh/GA=;
-	b=wIXD/TzZQH0CArRNiGwbtcM6ZC7NfUEPq0pUhmaIERIJ4URAAgh/deqj9+HWdatPaTcp
-	 SHhZZ26nKdWpKQfE+6CTme+0utH9QKFfgRq1pWmOEsXk3tzqJw24mLiiwIqmHRgEP/yBZ
-	 GfNSnNRQnKvpcdUvpuxYTJ8vlGc0RHCcXzJpRHlkXqR5qYaOeoYjYe1vq67MG4fqJlx9s
-	 gwAXqIN5our6vH5tnWG3iXP1gQeVQVIaUzWVqu58DZ8f4Ie7VYy2kJtICpSmSkvGWz3oU
-	 Zv87+0P0urC4PgqWiCkHSs1fSDPXRLGfgu2iELC5UAjgNhmjZXRnKm/7Fh9LT1SUGHg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795010990;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CMAE-Envelope;
+	bh=T1qvRLtkirmgKXEavAQCYElsIkpIGZmynR3Whc+7Ebc=;
+	b=5KH15H6eopwr35IXOhrqRSXDrUQ8oOYnXi7gnVqgZCXY1pji+NExf7KPL5lBVkChbwD8
+	 wDTjSrRqlvvyhIwwo8v1LHVAx5FxfF73mVpV+kcw5Epq5BNfBfS0W6XgnhHnFsfpjYP9K
+	 kOA0jabSlR3Fs67QfRf6z0kT2O4OfXIqiKxTXDjg/spWkOfGznIOslp9CqM5RHd8gY+Iy
+	 cbDBnaj0YNSr5xhzexH/l714nJtZIdyC44k0RFTQwLVHN3d01PO41Ru72Qgb9MpwdwnvY
+	 sKl6RPXqsWH0T9gxdWFlXpobOpcNGg9u5TDzFUeZBdpvoWv0xljIV7P1y4UF6UwmdkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LAnecXSD;
-	arc=none smtp.remote-ip=209.85.161.42
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=enneenne.com;
+	spf=pass smtp.mailfrom=enneenne.com;
+	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=MFTygGwd;
+	arc=none smtp.remote-ip=62.149.156.91
+Received: from smtpcmd0991.aruba.it (smtpcmd0991.aruba.it [62.149.156.91])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BE060A3808
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 14:09:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1BE060A3808
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C9C60A3828
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 14:09:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11C9C60A3828
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enneenne.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LAnecXSD
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-71aed54d4c5so643780eaf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 06:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795010985; x=1795615785; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=tcgPJyrG/tkBCFtIrUZsvk3sWZQyrMsvPzB+MTHh/GA=;
-        b=LAnecXSDfxZKBC7lRKXezKA7kvBi80WIMW4p7syBsLb2sx99DS24F+9izV7rEHKh4S
-         uUDaCJTRi/Blg/8pyTYCFCnPvM6viGAohCKP/iLaIN4+hvlWWxJIFKrcrHJ0DGj1VCEJ
-         97hSq8VH09GnRuruyRZAKJHcn6hzf4r2gnfxEZIvU++MHl4EHk0pbdVQ6VpHv+wNV7B9
-         cgZijaS4+K2FrnG3Z93Pw7fQnwMKQFsmo8yqd4h0zgW6sAk9kN0WWH1C9ERMbjlbvjAy
-         u+adpm7CzPFKDzBomD4Jr8f8lGd+A5d3qtKpO29CPK+x+R6AL7R6f4HEaidVejdM7Kpi
-         GzYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795010985; x=1795615785;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=tcgPJyrG/tkBCFtIrUZsvk3sWZQyrMsvPzB+MTHh/GA=;
-        b=biOkQxeixs7hOk7uSCB7P3dYSAda4SPNKrljS+YqGbGI1urP/KbDe8tMzkaQ3Q6fHf
-         1yL7AknrxqNEzxDyAcmmuzn/7y5utPSz8PM9D9BIxyQLW5njkSUNakwvCFnI7ggStX1+
-         jDAoZW3f7Ay/WlH9NZCCkZxFOvri2I16t2dB7NdQzPy/sL4DRjflto8Egcscaq1tvPLU
-         lZt/1OcmV0JxnxuT8Yu7xmnX9Jk2MfD4VWQmS8c0iTP5V6FgBjiCUXQ5sc09gNCxAQnz
-         LCzHOwLiCI4z4qeenPFSrJSVPI7oDKNrGdClkiXCttmaFU02HJnXCGP18/haYu5j51Cx
-         yAMg==
-X-Forwarded-Encrypted: i=1; AL+hErEJYUUcyNYRRUy0hBogReKogQ6AMgspZHosgCtLZ8ReeEDeZ1U68Of2MJKYA2hQpUVwT/rzODS723z//KWxDGw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+1GeyUdma/oa0TKkA2P+Qe6kPN0+k0wXJzKhHKZfRZZgPVip3K
-	d4reMqkJ8z4ZMJwi2lbSwtv7YMeJl0X4K1oXXy1aNs6TLFGg5W3s7vZ9
-X-Gm-Gg: AYBFou1C/1bYwmdHEhiw5pi8xf3Ts/rUrWsv/QzKVM+pDBdWbKsDuWHiYkd3nUVct2f
-	xITBoYfBeiC9nqye3zlDHDL9ZD5H5LIXDG4emwOZT/tZV7itFVE4RDRWJE1WY4liW15vZqO0jts
-	Q195BVglGM0z1SW0J/lLoauhzaPJJuqCItOt5+BULCOH/5F8klNmSMl09hDiK8Z6DuD+y68ceCu
-	rn57fiJsrnWIPIolfDsAcNg9gXEbs69IOfoGFWKgWceTdTL/LS/DDue7iLwVwYtLsQRI9NzhtVC
-	kadbRJc3wocP2uxW+Gvf9VUUeBATKWpMEkIfiYiL3+Q93nY9svZt/dGFh8bSe2A6sLdM4NJEkNg
-	PCMpuPE1UbZ1gCHy3Z0I575gU66r9xbvM9AHACRZXKunLP8RsKdegmePosPufNbZusUgo6JQ8WU
-	8SiJgtzsFK7KcGZsLdj17q4srrWeavZocD5E6ZcZ46yZn1x5nTqNdVD4eVXltGowbNmYWt6sb05
-	ir2j+InGkL3yFqP/4GunVd3A5RqE/XBv2cnJIm8yORhxRJOfQGYkggSEKCX8Fzg3bWk1DHpFB67
-	MncFYrRE9BPVxt4TPty9aIBFwCE=
-X-Received: by 2002:a05:6820:1355:b0:71a:ee31:7b87 with SMTP id 006d021491bc7-71b18460540mr1709015eaf.32.1795010984713;
-        Wed, 18 Nov 2026 06:09:44 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:42::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b19516ea1sm1983557eaf.11.2026.11.18.06.09.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 06:09:44 -0800 (PST)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Wed, 18 Nov 2026 06:08:05 -0800
-Subject: [PATCH net-next v5 3/6] psp: document lock ordering with the
- netdev instance lock
+	dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=MFTygGwd
+Received: from polimar.tail4f75e6.ts.net ([101.57.122.26])
+	by Aruba SMTP with ESMTPSA
+	id TgM6xLP476q8sTgM6xc97L; Wed, 18 Nov 2026 15:09:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+	t=1795010987; bh=XZv05H9A0y4JWx4C2kfVEJYBBhLV1Q9ClegJUUM5OIE=;
+	h=From:To:Subject:Date:MIME-Version;
+	b=MFTygGwdCJZ8dpJvyJST8MwHh46EfjwD8kJhmEijTWLZPxxhase+OwFsh7lq4cxfB
+	 LvCzgmBzy5Sj0C+N8g+2EU6Pcu6B9geb94MQEOAaldHnVjX4NbEFpnu9yCVc7RVqVI
+	 +/AlMwU46kB64xB6rlOg11YsetCkK56NQCCud9ukyLEjGxv8FI2EFtwtCzI88HVCUM
+	 B6NkgyZorcsWSf/nTrtd3tpjpBJsBiLJVblcOmVSQ+xtE2OkhSr6Xp9ZjC4W2kKWsf
+	 BdIKUCSta0s0GrqoJrElz2rqMIPfoGeQMGuaO7S4Jm0PYmBD6xJ5cqhofu31zEpuIG
+	 sgCvnIdr8afqw==
+From: Rodolfo Giometti <giometti@enneenne.com>
+To: David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	keyrings@vger.kernel.org
+Cc: Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jens Wiklander <jenswi@kernel.org>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	op-tee@lists.trustedfirmware.org,
+	=?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+	Pankaj Gupta <pankaj.gupta@nxp.com>,
+	Sahil Malhotra <sahil.malhotra@nxp.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Richard Weinberger <richard@nod.at>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Demi Marie Obenour <demiobenour@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-crypto@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	Rodolfo Giometti <giometti@enneenne.com>
+Subject: [RFC PATCH 6/9] KEYS: keycrypt: Add the engine tier
+Date: Wed, 18 Nov 2026 15:09:42 +0100
+Message-ID: <20261118140942.611715-1-giometti@enneenne.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261118140421.584086-1-giometti@enneenne.com>
+References: <20261118140421.584086-1-giometti@enneenne.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,91 +94,235 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261118-psp-v5-3-b9ec840e0296@gmail.com>
-References: <20261118-psp-v5-0-b9ec840e0296@gmail.com>
-In-Reply-To: <20261118-psp-v5-0-b9ec840e0296@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Donald Hunter <donald.hunter@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: Daniel Zahka <daniel.zahka@gmail.com>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfFtUaTfzPhMStwlKWj88S+iQKFn5wIBaG0bPK9UENjParNezD2h+kZm7q4GYiByZEdzsQH74S0KbPsFg8L7xfVpZZUnjhY3pvc+kJ0BI7LAXIm58qdb9
+ bmkkzJji62ZNTiCaxMVfpuHS4eJ/IXnFce4WrfNK4ImC4JclA+7r7fNiS6xXF3F9kUC91n5svOz1wzWSghT5q6XEf53LyZNPrrc/noqYJn3OAMFe3Pcb7d+Z
+ lRjzZ3rJpEVlyaE6ZI2Wxa4zh+XsUDK06eYDCydSJelXQvFXJ/WcWw5zkZJmJbm+vSiBAWnHsm2ItB4NZD5IeudmMrhZuKOXH7fJAO1LJTX3f0+sCHzRh9Xa
+ n6jRK7VYKmcuD36NmPcE5a5qQ/DRV4vSOdUvPRrj/YvrPiea5MQ272QjO9qYLF/tix30iyVpguDSK2HRDa5zWr9oHu/AmEqOnLHKbVlXBpjLAdAazGEbIdth
+ HLdXtums/t6kZMih5f2171UZiUULMzQNNsA94fCJdyDrVNFgPi8QHEXi6Y6xttQhUmXYmmZ4AuvnmL3kqMJn7s1upMk6hz9BbrqmMr4MMqaJVK30Jdysnt3f
+ aRE8ya2QcCJtLQZr2RKmA4za1+IDt3smFwyvwU0c0r7cklwl8k5m34d/3+v0wnQc3OYnJcu1eSKZC7iiFg5RCwiMaeE4GI9gOFJDyvCaAFdyRFcCpRjXKm/u
+ GnIMoCQUZ5cJbIXmH42HgeB9Mom/HM5zjf0AlDmQtFWyjsKOawX6s1W3KoFBLp0q0/5py+RkiRvnGJj0OMMIa9p3PYucVRq6lNq9gjio7BegbgMgdi8r8j/d
+ xoJQ/GXQOWY68hvg/ZjD3OLU7hzNveMPkTCK96+gF/kzvrwVR+Ov6eIIfrB54gLPMnycFVr8wlY9Ouj04WoukiONU0ZPwhpz+SloxyLiXmGFuthIFr8FhsfS
+ 0eWaDGWHGPkp/suwdEXROQaeuYznS1LzoE24Vp3dBHi6YHa/fK4JF7yMGmMjjJSkbdNO9q5+x8865SHF0fA8CjK0jlLmZcGf6DM0Kiite82qeySAORG2OHJj
+ tsqmLYj7eCkPBqaXElyOd10BiBW5+l71PrgU6PmJ01lz1dfGGYbyi0hh2O084BQyoFb51+EX8oC0fOneRnlTf5YqiiOyj8W3ITzlZC4yuRDvls9YeeraZcew
+ 16RkCXAhbo/9u1wjwqAT+RTjXNHh+RgruILUwr6hGEZ6T7PcMQzrNneKZec16tMsxqCQ1dH6MW6E9jAeCvsC9SIXyrfSWdpa1/TFF9zOmXIA7d6cP1Vrkwvq
+ /dvjANn24zLCUQGaJId5m7U3wjKNz3IJB5tye/7AjlK9e0p9aQ0=
 
-PSP core calls driver ops with psp_dev::lock held, and drivers may take
-the netdev instance lock inside them. mlx5e_psp_set_config() has done so
-since commit 1e6e0cec0dab ("net/mlx5e: psp: Make PSP steering config
-dynamic"). That commit established a lock ordering that was not
-documented anywhere.
+Some crypto engines hold a key so that the kernel never reads it once
+sealed, yet run whatever operation the kernel asks of it: the CAAM's
+black keys are of this kind. A key there is better kept than in
+kernel memory, but its use is no more checked than the kernel
+tier's.
 
-Document it. psp_dev_create() and psp_dev_unregister() take
-psp_devs_lock and psp_dev::lock, so assert that they are not called
-with the netdev instance lock held. The next patch adds a work item to
-PSP core which relies on this ordering.
+Add the engine tier, 15, between kernel and tee, for such backends:
+tier=engine and min-tier=engine choose them, accepted-min-tier=engine
+and KEYCTL_CRYPT_OPEN's accepted_min_tier take them, and
+CONFIG_KEYCRYPT_SYSTEM_TIER_ENGINE makes it the system tier at boot.
+The core warns in the kernel log when a backend registers at it, since
+the protection its name may suggest stops short of the use of the key.
 
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+No backend in the kernel declares this tier yet; the keycrypt CAAM
+backend proposed with it does.
+
+Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
 ---
-v5:
-- new patch
----
- net/psp/psp_main.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../admin-guide/kernel-parameters.txt         |  2 +-
+ Documentation/security/keys/keycrypt.rst      | 42 ++++++++++++-------
+ include/uapi/linux/keycrypt.h                 |  2 +
+ security/keys/keycrypt/Kconfig                | 11 ++++-
+ security/keys/keycrypt/core.c                 |  4 ++
+ security/keys/keycrypt/keycrypt.h             |  2 +
+ 6 files changed, 46 insertions(+), 17 deletions(-)
 
-diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-index 273b010d2355..ba44154cf8dc 100644
---- a/net/psp/psp_main.c
-+++ b/net/psp/psp_main.c
-@@ -19,6 +19,8 @@ struct mutex psp_devs_lock;
-  *
-  * psp_devs_lock protects the psp_devs xarray.
-  * Ordering is take the psp_devs_lock and then the instance lock.
-+ * The PSP instance lock must be taken before its main netdev's instance
-+ * lock.
-  * Each instance is protected by RCU, and has a refcount.
-  * When driver unregisters the instance gets flushed, but struct sticks around.
-  */
-@@ -53,6 +55,7 @@ int psp_dev_check_access(struct psp_dev *psd, struct net *net, bool admin)
-  * @psd_caps:	device capabilities
-  * @priv_ptr:	back-pointer to driver private data
-  *
-+ * Context: Must not be called with the netdev instance lock held.
-  * Return: pointer to allocated PSP device, or ERR_PTR.
-  */
- struct psp_dev *
-@@ -64,6 +67,8 @@ psp_dev_create(struct net_device *netdev,
- 	static u32 last_id;
- 	int err;
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 62d44a5225e4..0cacb7d1ca1d 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2947,7 +2947,7 @@ Kernel parameters
+ 	keycrypt.system_tier=	[KEYS] Lowest protection tier a keycrypt key
+ 			may be used at; keys of a lower tier can still
+ 			be created and loaded.
+-			Format: { kernel | tee | hsm }
++			Format: { kernel | engine | tee | hsm }
+ 			Default: the CONFIG_KEYCRYPT_SYSTEM_TIER_*
+ 			choice, kernel unless set. Can only be raised,
+ 			here or later through the
+diff --git a/Documentation/security/keys/keycrypt.rst b/Documentation/security/keys/keycrypt.rst
+index 17af3b041000..ac393a0bc97d 100644
+--- a/Documentation/security/keys/keycrypt.rst
++++ b/Documentation/security/keys/keycrypt.rst
+@@ -26,6 +26,10 @@ The tiers, lowest first:
+ ========== =========================================================
+ ``kernel`` the key is in clear in kernel memory while loaded; the
+            kernel enforces its use
++``engine`` a crypto engine the kernel drives keeps the key, never in
++           clear in the kernel once sealed; the kernel decides its use
++           (a secure element that does not check a key's use is an
++           engine too)
+ ``tee``    a trusted execution environment keeps the key and checks
+            every use against the purpose it bound (an OP-TEE TA)
+ ``hsm``    as ``tee``, in dedicated hardware apart from the CPU running
+@@ -34,7 +38,9 @@ The tiers, lowest first:
+            policy)
+ ========== =========================================================
  
-+	lockdep_assert_not_held(&netdev->lock);
+-Each tier holds the guarantees of those before it.
++Each tier holds the guarantees of those before it. Keys of the ``engine``
++tier, such as the CAAM's protected keys, are used by the kernel, which
++cannot read them once sealed.
+ 
+ The backends of this document: ``sw``, of tier ``kernel``, where the
+ kernel's own software uses the key (`The sw backend`_); and ``optee``,
+@@ -55,7 +61,9 @@ sw backend the secret is the trusted master each key names with
+ master (`The sw backend`_).
+ 
+ A backend of tier ``tee`` or ``hsm`` also declares that it meets
+-`Backend requirements`_.
++`Backend requirements`_; one that keeps a sealed key out of the kernel's
++reading but leaves its use to the kernel is ``engine``. The core says
++so in the kernel log when an ``engine`` backend registers.
+ 
+ A backend registers with ``keycrypt_register_backend()``
+ (``include/keys/keycrypt.h``) under a name that is stored in every blob it
+@@ -96,10 +104,13 @@ itself does what the core has no way to check:
+ A backend declares its own tier at ``keycrypt_register_backend()``; the
+ core stores and compares it wherever a tier is checked, but never
+ confirms that the backend is actually a TEE or hardware rather than
+-ordinary kernel code claiming to be one. The ``kernel`` tier meets
+-none of the above: its key material is in clear in kernel memory (`The
+-sw backend`_), so there every property above is only as strong as the
+-kernel itself.
++ordinary kernel code claiming to be one. The ``engine`` and ``kernel``
++tiers meet none of the above: an ``engine`` backend leaves the key's
++use to the kernel, and the kernel tier's key material is in clear in
++kernel memory (`The sw backend`_), so there every property above is
++only as strong as the kernel itself. What an ``engine`` backend keeps
++against a compromised kernel is only that a sealed key is not in clear
++in kernel memory, as far as its hardware's own properties hold.
+ 
+ Metadata
+ ========
+@@ -187,7 +198,7 @@ Any other ``<option>=<value>`` is passed to the backend; the core refuses
+ an option the backend does not declare and an option given twice. The
+ one option a backend of this document takes from user space is
+ ``master=``, the sw backend's: it needs a master to seal its keys, while from
+-``tee`` up a backend's own mechanisms protect the key. A command for
++``engine`` up a backend's own mechanisms protect the key. A command for
+ the kernel tier therefore reads ``tier=kernel master=<name>``; the kernel
+ tier chosen without ``master=``, or ``master=`` given to a backend of
+ another tier, is refused with ``EINVAL``.
+@@ -451,10 +462,11 @@ so that a kernel compromised enough to lie about the operation or the
+ key's metadata still cannot open, say, an encryption context on a
+ decrypt-only key; the sw backend has no such check of its own, since
+ a compromised kernel already has that backend's key material in clear
+-(`The sw backend`_), and relies on the core's check alone. Across
+-every tier it is the kernel, not any backend, that decides who may open
+-a context on a key, since Search permission is the core's own check; a
+-compromised kernel can
++(`The sw backend`_), and relies on the core's check alone; neither
++does an ``engine`` backend, whose key's use the kernel decides
++(`Tiers and backends`_). Across every tier it is the kernel, not any
++backend, that decides who may open a context on a key, since Search
++permission is the core's own check; a compromised kernel can
+ therefore still open a context on a key of any tier and use it for a
+ purpose the key already has, but, for a backend of tier ``tee`` or
+ ``hsm`` meeting `Backend requirements`_, it can neither read that key
+@@ -603,8 +615,8 @@ the capability); neither touches a context already open at the time
+ they change.
+ 
+ ``kernel.keys.keycrypt_system_tier`` is the system tier, the lowest tier
+-a key may be used at: one of ``10`` (``kernel``), ``20`` (``tee``)
+-or ``30`` (``hsm``), the same values as
++a key may be used at: one of ``10`` (``kernel``), ``15`` (``engine``),
++``20`` (``tee``) or ``30`` (``hsm``), the same values as
+ ``KEYCRYPT_TIER_*`` (`Tiers and backends`_). It can only be raised,
+ never lowered (``EPERM`` on a lower value, ``EINVAL`` on anything
+ else). It applies to use only: ``KEYCTL_CRYPT_OPEN`` refuses a key
+@@ -630,8 +642,8 @@ already loaded is affected, imported or not. With
+ rather than this one.
+ 
+ Each has a boot parameter setting its starting value before either sysctl
+-is ever written: ``keycrypt.system_tier=`` (``kernel``, ``tee`` or
+-``hsm``) and ``keycrypt.import=`` (a boolean). An invalid
++is ever written: ``keycrypt.system_tier=`` (``kernel``, ``engine``,
++``tee`` or ``hsm``) and ``keycrypt.import=`` (a boolean). An invalid
+ value, or one that would lower what is already set, is ignored, with a
+ kernel warning, rather than failing the boot. An administrator who
+ wants either policy fixed from the very start, before any user-space
+diff --git a/include/uapi/linux/keycrypt.h b/include/uapi/linux/keycrypt.h
+index c03348579f62..71209a08c924 100644
+--- a/include/uapi/linux/keycrypt.h
++++ b/include/uapi/linux/keycrypt.h
+@@ -13,6 +13,8 @@
+ 
+ /* Protection tiers, lowest first; the gaps leave room for more */
+ #define KEYCRYPT_TIER_KERNEL	10	/* the kernel itself */
++/* a crypto engine the kernel drives; the kernel decides its use */
++#define KEYCRYPT_TIER_ENGINE	15
+ #define KEYCRYPT_TIER_TEE	20	/* a trusted execution environment */
+ /* as TEE, in dedicated hardware apart from the CPU running the kernel */
+ #define KEYCRYPT_TIER_HSM	30
+diff --git a/security/keys/keycrypt/Kconfig b/security/keys/keycrypt/Kconfig
+index e61922933bd7..a6d8a0fa6d29 100644
+--- a/security/keys/keycrypt/Kconfig
++++ b/security/keys/keycrypt/Kconfig
+@@ -56,11 +56,20 @@ config KEYCRYPT_SYSTEM_TIER_KERNEL
+ 	  A system with no backend of the kernel tier built has no key of
+ 	  that tier to use.
+ 
++config KEYCRYPT_SYSTEM_TIER_ENGINE
++	bool "Engine"
++	help
++	  Only keys whose backend declares them never in clear in the
++	  kernel once sealed can be used: a key of the kernel tier is
++	  refused at every KEYCTL_CRYPT_OPEN; the engine, tee and hsm tiers
++	  can be used. For a system that must never use a key held in clear
++	  by the kernel.
 +
- 	if (WARN_ON(!psd_caps->versions ||
- 		    !psd_ops->set_config ||
- 		    !psd_ops->key_rotate ||
-@@ -127,12 +132,16 @@ void psp_dev_free(struct psp_dev *psd)
- /**
-  * psp_dev_unregister() - unregister PSP device
-  * @psd:	PSP device structure
-+ *
-+ * Context: Must not be called with the netdev instance lock held.
-  */
- void psp_dev_unregister(struct psp_dev *psd)
- {
- 	struct psp_assoc_dev *entry, *entry_tmp;
- 	struct psp_assoc *pas, *next;
+ config KEYCRYPT_SYSTEM_TIER_TEE
+ 	bool "TEE"
+ 	help
+ 	  Keys whose use a trusted execution environment or the hardware
+-	  checks: keys of the kernel tier are refused at every
++	  checks: keys of the kernel and engine tiers are refused at every
+ 	  KEYCTL_CRYPT_OPEN; the tee and hsm tiers can be used. For a
+ 	  system where OP-TEE or an hsm backend holds the keys.
  
-+	lockdep_assert_not_held(&psd->main_netdev->lock);
-+
- 	mutex_lock(&psp_devs_lock);
- 	mutex_lock(&psd->lock);
+diff --git a/security/keys/keycrypt/core.c b/security/keys/keycrypt/core.c
+index debd0845621e..4a2609c6830f 100644
+--- a/security/keys/keycrypt/core.c
++++ b/security/keys/keycrypt/core.c
+@@ -40,6 +40,7 @@ static const struct keycrypt_name keycrypt_algs[] = {
  
-
+ static const struct keycrypt_name keycrypt_tiers[] = {
+ 	{ KEYCRYPT_TIER_KERNEL,		"kernel" },
++	{ KEYCRYPT_TIER_ENGINE,		"engine" },
+ 	{ KEYCRYPT_TIER_TEE,		"tee" },
+ 	{ KEYCRYPT_TIER_HSM,		"hsm" },
+ };
+@@ -441,6 +442,9 @@ int keycrypt_register_backend(struct keycrypt_backend *b)
+ 		b->handle = h;
+ 	}
+ 	mutex_unlock(&keycrypt_lock);
++	if (!ret && b->tier == KEYCRYPT_TIER_ENGINE)
++		pr_warn("backend %s registered at tier engine: the use of its keys is checked by the kernel only\n",
++			b->name);
+ 	if (ret)
+ 		kfree(h);
+ 	return ret;
+diff --git a/security/keys/keycrypt/keycrypt.h b/security/keys/keycrypt/keycrypt.h
+index 5a41a68c48fa..40487eb3e139 100644
+--- a/security/keys/keycrypt/keycrypt.h
++++ b/security/keys/keycrypt/keycrypt.h
+@@ -143,6 +143,8 @@ bool keycrypt_tier_valid(u32 tier);
+ #define KEYCRYPT_BOOT_SYSTEM_TIER	KEYCRYPT_TIER_HSM
+ #elif IS_ENABLED(CONFIG_KEYCRYPT_SYSTEM_TIER_TEE)
+ #define KEYCRYPT_BOOT_SYSTEM_TIER	KEYCRYPT_TIER_TEE
++#elif IS_ENABLED(CONFIG_KEYCRYPT_SYSTEM_TIER_ENGINE)
++#define KEYCRYPT_BOOT_SYSTEM_TIER	KEYCRYPT_TIER_ENGINE
+ #else
+ #define KEYCRYPT_BOOT_SYSTEM_TIER	KEYCRYPT_TIER_KERNEL
+ #endif
 -- 
-2.52.1
+2.43.0
 
