@@ -1,58 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794961031;
-	b=SLJbQiVIYKEtUaj8tJaIYsx9f3WQd1HrTNskqyvXHpJEKW7ll8JZzFJM4pip6StSSnYE
-	 A6jjBEhkm9H+AfbNHzM+eFqmw8CATemg0bGairNuie3VvQzx7qLs0zjTb2il5U+cD2/Ao
-	 n5aLXTLFyOgultjuEurmOVRKOZoRHILZKzxVFpNAV29CPIRI7Om6gPMNxqEZqcp1uGsAt
-	 NCPX5mNY2/3DGOjB8YhE03cTLy55elxA67nggCMJJs7lzcE7621bTZeTMWO5l9C+zvOBX
-	 1iOwwLbgA75M1Bo+01b07q0Gio8hia/g7k04oECWxpykkDZdlZB6ZBvPDlYNa4gnNkg==
+	t=1794961139;
+	b=ycetRm9mOKvVWIkbNAKlQcPJalOhohwBanQt/vT96KaGbaQbPggryirZjI7KRybcTR72
+	 nZOeJeW0uw8c+iZnyqhMW6gsHRmgkgyFSs/wcCVnX80uG7HUOfVASBU0vEj9rh+PEm5WW
+	 LiWHjuAjY61KOm5EWMtPmxPYdjvKGFK3He8FmxXDuKu69XyO2UpboGllBoKK33luwV6t9
+	 QfMfq1cPhW0SE8vxW1RreeAXtLTcjNwpx4fnzNOxSl8I1cd9PbnnwjhDESEnBKlNSnKio
+	 daWuVC/+xacEJVpdbv2FarTtA3w8lJ2ddMp4LPWdlYN4lqAY3GqFz5lXIEoWpjHktgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794961031;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Stat-Signature:X-Spam-Status:
-	 X-Rspamd-Server:X-Rspamd-Queue-Id:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=nB+gjuRUBau1r4/44QHA44Pj17gefsRJ2uGOE8AuGuI=;
-	b=TAS7y7OSC9IRra0KjeJrfUo5kv29u0OLEevZiv0FWeagn83l0OPFxpwV/creynTOUmNz
-	 Vx65aIJzJS5VdHoJB3sg822V95H9ZrENHQ3jCKBOPidWbWGG1tTM6jprOrOtWb7HvsI5U
-	 TAFgIFsBBLpOdaE3Ig6ean6UB1fRtU3vusPqpAHvUC7z6zYop++KwHNsxnuIt2BLAmfiT
-	 Os4SIFevL9Y5VFdHToTN+G8jmoOetLfQ/U9PvjKq0tkZDJbQVaY7ymsKhvLWiRYzkvlGl
-	 d8pVuVfxpe2iYf23RVeS6kZ+ND2mB9ukhz5W1KyVBJ8BNWR2s0LlBYMH82d2eyS4Atg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794961139;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=CiaEOlN3DliPTegWH/OxBrR4pZjxHdFZsot9BUcRetk=;
+	b=XKENBPHq0z4ErIxwmA29C4NrvQSsaNd6NOT6B9z1WPgmAw8DEkPrYft1JuCAxZ9yE+7U
+	 NadVtN5EErxZ0fwg8NXPKnsiso0jX6S429tdjFMvfEe+cjLTyKcr3IeRL74UMd+7ii4w7
+	 BCCxhoWlQhwqXoIUJ6oZyxkpH6Oj0MA4hjPYz97+7+UskHuEiblkbI9uaOkFNF2kEJqra
+	 1AtT/ey2mBj6u446TSrnhStUa/bdmrbGecbpvMHAMyqXiGSIQH9b6/NqtWcB/hcZf8VPI
+	 VpBZ8jx4sHxjVRmdwIxcUBZTHbGdgsqdVCTH8qq+3/lkPG01jB6LygAidfIKZ4UDXng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Dky5B1EU;
-	arc=none smtp.remote-ip=216.40.44.13
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H8Z8uMXb;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331D6606A31C;
-	Wed, 18 Nov 2026 00:17:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 331D6606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D79606A31C;
+	Wed, 18 Nov 2026 00:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Dky5B1EU
-Received: from omf04.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id 3237340528;
-	Wed, 18 Nov 2026 00:17:04 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id 1C86F20024;
-	Wed, 18 Nov 2026 00:17:02 +0000 (UTC)
-Date: Tue, 17 Nov 2026 19:17:00 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 08/15] tracing/filters: Reject unsupported field
- sizes in parse_pred()
-Message-ID: <20261117191700.7e5f1a10@gandalf.local.home>
-In-Reply-To: <179323791927.740114.2174706496595446472.stgit@devnote2>
-References: <179323784538.740114.15323117974242744566.stgit@devnote2>
-	<179323791927.740114.2174706496595446472.stgit@devnote2>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H8Z8uMXb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117E81F000C4;
+	Wed, 18 Nov 2026 00:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794961138;
+	bh=CiaEOlN3DliPTegWH/OxBrR4pZjxHdFZsot9BUcRetk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=H8Z8uMXbbN46/Dz3D2RrmXrHgVu5ybahMNNXc49qnRx6z5esm+e9cQXQNXAkFRcrN
+	 XjmuwGX7gj9Rh1y79PoI4NaK0mLI3lCX73yjdRDoB+D1y1WklzIy2e8f9mS3q4u+l/
+	 dLFiO9fYL3E7KTmVPPiOfWsjTNhS0YMv7GMyaIDCQ+pKEm8Lgacu/lrndDp8B7MNLx
+	 YwMbpf7AFMyuj1PqggDvwly759kt51eULOFCZw2i7JDZG6WT+TRtdZa0B7IB2fTULb
+	 hB4c/bZDmJWQPPjQJHU2uC878bQxQs4xyl6w8kaik3Dq8UI1RItPx7q2mDRwt/utdd
+	 +sV71LPdCs9XQ==
+Date: Tue, 17 Nov 2026 16:18:56 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
+ Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
+ Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Chris J Arges
+ <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
+ kernel-team@cloudflare.com, Tianyi Gao <tianyi.gao@linux.dev>
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <20261117161856.6f6c2ce9@kernel.org>
+In-Reply-To: <CAG4wq-cDYa2GkpWSYeOLwEPv45BtucZk+r=N2b1Srd=gUUO4MQ@mail.gmail.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+	<20261115113902.4834dda6@kernel.org>
+	<CAG4wq-dhd5a5zxQcSShaKifYd2z+pMpHaCYtZJRX1QCxEH4dfg@mail.gmail.com>
+	<20261116142710.347e8571@kernel.org>
+	<CAG4wq-cDYa2GkpWSYeOLwEPv45BtucZk+r=N2b1Srd=gUUO4MQ@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,76 +94,60 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: uqa1e8c6p63frqkppqydag99yf7ibiao
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 1C86F20024
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18mMmaCzgOxIbDsahODxHWL9zZ2WjjclQw=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=nB+gjuRUBau1r4/44QHA44Pj17gefsRJ2uGOE8AuGuI=; b=Dky5B1EUjw4FszzLtcU9Mm3VxmdkTvcn22M8S7jQCPY6wlxtVCsQofwoXAW3Cr0bpuapptSTfCF4g0uYjrw1gD4hS9HO+USMyLTRpu4P9zO0QOjA1WyJ/Vg5/4TGTD03DSbqk8xNJFJp84SRo5gUAYkyKjCGgHhhlgMKiKpveV0=
-X-HE-Tag: 1794961022-560662
-X-HE-Meta: U2FsdGVkX1/9geDdSvzb+sa0A5xCFrldOeszpsg1TpnmT4Lyv/SwsZZr1h4obMyARgIS3ASGWN7r4OI8HY6FvsAsXxx7g8WFLZStAxXIW3reeT/9JsrcdqlWqC5RCK6KChgwh6R35YuLwh4nlWa+KrD060HcCzBkuy9h73+qW6E2xm+RosAHLuq2fMT6aeHQQDGCr3ZYjrCLiPytBbDXgjefce+JQ5Y80E5kr4y/in/4CWog2/8JhQvVCYuF3P1gbQHN2lzQYNt1/aLASOk4PJCbECSPr0dore1MgaRjG0CwYJZjexMUSSCOHSgpJmq8zCWCmzruMdNxtZEsTse5aI0sLNGZf6rB
 
-On Thu, 29 Oct 2026 10:38:39 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, 16 Nov 2026 23:55:42 +0000 Tianyi Gao wrote:
+> On Mon, 16 Nov 2026 14:27:10 -0800 Jakub Kicinski wrote:
+> > The question is _why_ you use it. Let's leave the cpumap case aside,
+> > you provided no legitimate reason why having an XDP prog in that case
+> > is a problem. With veth - you are right that attaching XDP causes
+> > problems for pure skb traffic. For veth cases, however, there's no
+> > strong reason to delay the skb allocation. Hence my question.
+> > Why not let the driver allocate the skb if we know that the
+> > redirect target will need to allocate one, anyway.  
 > 
-> Prior to commit 80765597bc58 ("tracing: Rewrite filter logic to be simpler
-> and faster"), parse_pred() checked whether select_comparison_fn() returned
-> NULL and failed with FILT_ERR_INVALID_OP and -EINVAL. That check was lost
-> during the rewrite, and commit 3cbec9d7b93d ("tracing/filters: Enable
-> filtering a scalar field by a cpumask") similarly omitted a default error
-> case when matching field->size for CPUS{} comparisons.
+> Sorry for not being clear enough.
 > 
-> If a non-string field (FILTER_OTHER) has a size other than 1, 2, 4, or 8
-> (such as a fixed-size integer array field), pred->fn_num remains
-> FILTER_PRED_FN_NOP (0) and parse_pred() returns success. Subsequently,
-> update_preds() rejects FILTER_PRED_FN_NOP via WARN_ON_ONCE() and returns
-> -EINVAL without setting a parse_error() message, triggering a kernel
-> warning from user-supplied filter input.
+> On the setup we want to build: an XDP program on the NIC does the
+> decap for all traffic. The services run in namespaces, so the packets
+> must be delivered into them. Some services attach their own XDP
+> program to the veth, and some do not. The host does not control the
+> service's program.
+
+The host doesn't have to control the program, just know whether the
+program will be attached, and therefore whether to use TC or XDP.
+
+> For a veth with a program, the skb path has the problems you mention,
+> so the host uses XDP_REDIRECT. For a veth without a program, we want
+> to use XDP_REDIRECT too, so that the host delivers to every namespace
+> in the same way.
 > 
-> Restore the check for FILTER_PRED_FN_NOP in both the numeric scalar and
-> CPUS{} branches of parse_pred() and report FILT_ERR_INVALID_OP.
+> In a minimal benchmark, pktgen sends UDP, and perf stat counts the
+> cycles on the RX CPU. bpf_redirect_peer() from tc costs 3% more
+> cycles per packet than XDP_REDIRECT with the checksum status kept
+> (mlx5, one extra __netif_receive_skb_core()). So one XDP_REDIRECT path
+> for all namespaces is both simpler and cheaper.
 
-Again, please show real examples of what fails, so I can test it.
+That's noise.
 
-Thanks,
-
--- Steve
-
+> > Since your patches are not a natural / clean extension of the existing
+> > infrastructure - we should step back and make sure the use case is
+> > practically justified.  
 > 
-> Fixes: 80765597bc58 ("tracing: Rewrite filter logic to be simpler and faster")
-> Fixes: 3cbec9d7b93d ("tracing/filters: Enable filtering a scalar field by a cpumask")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  kernel/trace/trace_events_filter.c |    8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index a645af9eb1f8..40efcef94e02 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -2013,6 +2013,10 @@ static int parse_pred(const char *str, void *data,
->  				break;
->  			}
->  		}
-> +		if (pred->fn_num == FILTER_PRED_FN_NOP) {
-> +			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-> +			goto err_free;
-> +		}
->  
->  	/* This is either a string, or an integer */
->  	} else if (str[i] == '\'' || str[i] == '"') {
-> @@ -2166,6 +2170,10 @@ static int parse_pred(const char *str, void *data,
->  		else {
->  			pred->fn_num = select_comparison_fn(pred->op, field->size,
->  							    field->is_signed);
-> +			if (pred->fn_num == FILTER_PRED_FN_NOP) {
-> +				parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-> +				goto err_free;
-> +			}
->  			if (pred->op == OP_NE)
->  				pred->not = 1;
->  		}
+> Maybe I am missing something here. XDP_REDIRECT into a veth works
+> without an XDP program on the veth. To me, it is natural that the RX
+> metadata also reaches the skb on that path, without attaching an extra
+> XDP program.
 
+Sure, nobody is arguing whether in an ideal world the metadata would 
+be magically available everywhere.
+
+Inventing a new way of storing metadata (either in this set or Alexei's
+simpler proposal) doesn't integrate naturally with HW drivers.
+And duplicates the information. Fast packet processing at HW drivers is
+the primary use case for XDP, we should keep that front of mind when
+designing.
+
+You want to cross from XDP realm to skb realm, after frame left the
+scope of the original driver, and with no BPF involvement.
+These constraints are unreasonable, and leave only clumsy and
+inflexible solution on the table.
