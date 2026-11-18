@@ -1,68 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794993385;
-	b=peAMguprVZhbcg+wSRE+Wk2wYoUTViErbFVfHCLhUsDQZW5FA3h35g22abPpeNhrHBI9
-	 W6skgOYDglD8KcBmjQc9GU+lb/ykAAMhs+T4kZtn44BU+5lw1GccnK2E/Env8s6g3WHMD
-	 21eLavPQCS7yKv7OYxR74Smrb9fuz2eX0oo+sOXomU5EtVicuqU/16WgwGXrGQ05hnGIJ
-	 jo1Ge8xntEJnI9iCjf7zFkTkG42OhsaKR7lHAGsQiTw4emUPEXl82+TDLCocH6+hH8/Qi
-	 dVaV9yWDE0heTaf6SUfHNhs/L9sp1GJT21LfzJ4r2arUZMSes8ls6cSzK04l/hSv8uQ==
+	t=1794993434;
+	b=SZjtEk4+03rUjxb6jpY8KjvCwW8Iu9cWIZJGAu0BCSaRC33vxYDYr385MdAePDR3Zerv
+	 Y1b5/3TBUCenZ9ipuVeHPvFdMSyiHXu54geZHeojvBy305gS2w/NQWV2HVOldhBko47S9
+	 p+T09XKMxkpGq0ghzD7NxwMKDtjYRh8HNs5Ng8SCYFiqVwRq/uyShKvZDhdnzKCmOSV1z
+	 4LEiWkgnP6h1o7XO19bvcGiG8Tj0/SV7kms6nk5801SGtxCefPloGDCDnocHqmzzrL92m
+	 GzpKa7aA2hCXsm5dMSAn8yucmFz19jEtHcY7vZUyouEoZdRbPIy7KJfr5G/LEkvMR7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794993385;
-	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=rYTNFSuTJlFrpWYa18HHlkT3uGcwjQ9KRzLVSjey8BA=;
-	b=MfMTLFIeC7I/EcJ5qZRbgFDvNrD4713JLQBA5whC5F3E+ugphtJEiY45sk6CEfbBsoGD
-	 f7qvz7DfOG9j81en/Eni4KVqEDP547dlh74g3aCkmivJO3SMuAb4WmzzQZxqW9ngUIpfo
-	 9rKk0Ao/+gSP9VRIj7Tfpkl4I06b6hRZcg9amn6GJsk0DlgDxYXWY3a3IZUAKWHpb2T0Z
-	 nA3FT0pLPicJFhQDS5Ms9eRiCYl046MBLorjl45rI/6B1mBKfAYiHn6mxT259lRb4qXo9
-	 kblImtqw/uGJ4zI8cKvZMdB9p3hcVX11yAwUKVBkHU3RVnpTSy1kVOMdL3tuKmgxPGA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794993434;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=xsIsDZiCZyB7+lKhnSB47LX6hbKq7VMg+O30s3v8xU0=;
+	b=5gGwX4qeeuNA0xE4XiLnTNe6+OuoMxrBar7wo0rKhrIQrXUKaBJopV7ClykQyawWgYIN
+	 QTpUaGXNPCc3yb7/JoDRa1MsRVwohSgje4p8jcGXiTjR4zcK7NKTa57UzhYs2PXVaBMFC
+	 ICDAAG50uvl95Mr1Mu/pcFX/Dg+Nop555aSZx7VK0TbOnx9uJpJrgRTUI5cQqt3k1xt+M
+	 jgE+p96MvtX8QNUXtaR3INblbJEAyrWl8sfJDkI7ZzIBzp/cAZG/1ciAuLzD5XR9it8nw
+	 wXMiFbKPZ0jWoBX+xYXyGGj1CosrE1v2c58A/yJEmldtupyd90BNDO+hmqBsXPBBPyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.alibaba.com;
-	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=vOxrTR1S;
-	arc=none smtp.remote-ip=115.124.30.118
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=PV3E+oEf;
+	arc=none smtp.remote-ip=113.46.200.224
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B65606A885;
-	Wed, 18 Nov 2026 09:16:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9B65606A885
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0925606A31C;
+	Wed, 18 Nov 2026 09:17:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0925606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=vOxrTR1S
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1794993375; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=rYTNFSuTJlFrpWYa18HHlkT3uGcwjQ9KRzLVSjey8BA=;
-	b=vOxrTR1S3POtL6aMibVZzV5rG6tZX4qAtZ4KDeEcdaP6qsSCNtluxDv4R5q9LgeRVVvi4oIwVPWGqoIBafbw2ka9Kljk9Ty1iVyhLmCwaa/DbsA/3Nw5o6tLTtInPhSVH28hzjbkK1PvpTol+nFCLdxiVFLtPTtWFUzc9IMpZUs=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0XF0HHcG_1794993374;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XF0HHcG_1794993374 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 18 Nov 2026 17:16:14 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	alex@ghiti.fr,
-	rppt@kernel.org,
-	pasha.tatashin@soleen.com,
-	pratyush@kernel.org,
-	graf@amazon.com,
-	shuah@kernel.org
-Cc: guoren@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	kexec@lists.infradead.org
-Subject: [PATCH v4 4/4] selftests: liveupdate: Add riscv support
-Date: Wed, 18 Nov 2026 17:16:03 +0800
-Message-ID: <20261118091603.979-5-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261118091603.979-1-cp0613@linux.alibaba.com>
-References: <20261118091603.979-1-cp0613@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=PV3E+oEf
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=xsIsDZiCZyB7+lKhnSB47LX6hbKq7VMg+O30s3v8xU0=;
+	b=PV3E+oEfe6GWTlN7IzcOZNtMuGokpGaMaE5HT+w5Vk98jOWnb53YzhdAAkTed93AvGp6D+ngZ
+	ftGk2P047j6/rbz8Ke0Kewk86yZLKYBKuM/FH/uksdfAvh6qdTvxfoyU41EsmNujsw5oLc+20hb
+	oGEWnwe8RZuneZEt42a2+8c=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jTww23GW7z1cySm;
+	Wed, 18 Nov 2026 17:16:50 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id 41D7540586;
+	Wed, 18 Nov 2026 17:17:10 +0800 (CST)
+Received: from [10.67.110.140] (10.67.110.140) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Wed, 18 Nov 2026 17:17:02 +0800
+Message-ID: <61823b38-032d-4e4c-bcbb-82fe83c34ade@huawei.com>
+Date: Wed, 18 Nov 2026 17:17:01 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,104 +62,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next -v4 01/17] fs: pass struct path to notify_change()
+To: Al Viro <viro@zeniv.linux.org.uk>
+CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<brauner@kernel.org>, <jack@suse.cz>, <amir73il@gmail.com>,
+	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
+	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
+	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
+	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
+	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
+	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
+	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
+	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
+	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
+	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
+	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
+	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
+	<johan@kernel.org>, <john.fastabend@gmail.com>,
+	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
+	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
+	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
+	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
+	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
+	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
+	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
+	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
+	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
+	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
+	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
+	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
+	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
+References: <20261117150542.1169451-1-caixinchen1@huawei.com>
+ <20261117150542.1169451-2-caixinchen1@huawei.com>
+ <20261117183059.GP989762@ZenIV> <20261117183440.GQ989762@ZenIV>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <20261117183440.GQ989762@ZenIV>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-Teach the live update vmtest runners about riscv64, so the LUO tests can
-be run on this architecture.
+Yes.  ovl_do_notify_change() passes
+ovl_upper_mnt(ofs) together with the real upperdentry, so the sb matches,
+and the idmap handed down is ovl_upper_mnt_idmap(ofs), i.e. taken from
+that very mount.  It runs under with_ovl_creds(), like the other ovl_do_*
+forwards, so an LSM sees a genuine upper-layer path instead of a merged
+dentry whose mount we cannot name - which is the point of converting the
+metadata helpers.
 
-LIVEUPDATE depends only on KEXEC_HANDOVER, enabled for riscv64 by the
-previous commit, so nothing in the tests stood in the way.
-
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
-
-Test: qemu-system-riscv64 (virt, -cpu max, -m 1G, -smp 2, TCG), in-tree
-runner "tools/testing/selftests/liveupdate/vmtest.sh -t riscv64 -T <suite>",
-all four suites:
-
-  ok 1 luo_kexec_simple succeeded
-  ok 1 luo_multi_session succeeded
-  ok 1 luo_stress_files succeeded
-  ok 1 luo_stress_sessions succeeded
-
-each with "# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0". The
-simple suite's serial log shows the handover round trip:
-
-  KHO: found kexec handover data.
-  luo: Retrieved live update data, liveupdate number: 1
-  # [STAGE 2] Test data verified successfully.
-  --- SIMPLE KEXEC TEST PASSED ---
-
- tools/testing/selftests/liveupdate/config.riscv64 | 3 +++
- tools/testing/selftests/liveupdate/run-vmtests.sh | 2 +-
- tools/testing/selftests/liveupdate/vmtest.sh      | 8 +++++++-
- 3 files changed, 11 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/liveupdate/config.riscv64
-
-diff --git a/tools/testing/selftests/liveupdate/config.riscv64 b/tools/testing/selftests/liveupdate/config.riscv64
-new file mode 100644
-index 000000000000..edbc551199b0
---- /dev/null
-+++ b/tools/testing/selftests/liveupdate/config.riscv64
-@@ -0,0 +1,3 @@
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-diff --git a/tools/testing/selftests/liveupdate/run-vmtests.sh b/tools/testing/selftests/liveupdate/run-vmtests.sh
-index 6f592aec0f85..c3d828cfd63b 100755
---- a/tools/testing/selftests/liveupdate/run-vmtests.sh
-+++ b/tools/testing/selftests/liveupdate/run-vmtests.sh
-@@ -4,7 +4,7 @@
- SCRIPT_DIR=$(dirname "$(realpath "$0")")
- TEST_RUNNER="$SCRIPT_DIR/vmtest.sh"
- 
--TARGETS=("x86_64" "aarch64")
-+TARGETS=("x86_64" "aarch64" "riscv64")
- 
- GREEN='\033[0;32m'
- RED='\033[0;31m'
-diff --git a/tools/testing/selftests/liveupdate/vmtest.sh b/tools/testing/selftests/liveupdate/vmtest.sh
-index dea5a6fb2abc..70a8d978077a 100755
---- a/tools/testing/selftests/liveupdate/vmtest.sh
-+++ b/tools/testing/selftests/liveupdate/vmtest.sh
-@@ -25,6 +25,10 @@ function get_arch_conf() {
- 		QEMU_CMD="qemu-system-x86_64"
- 		KERNEL_IMAGE="bzImage"
- 		KERNEL_CMDLINE="console=ttyS0"
-+	elif [[ "$arch" == "riscv" ]]; then
-+		QEMU_CMD="qemu-system-riscv64 -M virt -cpu max"
-+		KERNEL_IMAGE="Image"
-+		KERNEL_CMDLINE="console=ttyS0"
- 	else
- 		echo "Unsupported architecture: $arch"
- 		exit 1
-@@ -37,7 +41,7 @@ $0 [-d build_dir] [-j jobs] [-t target_arch] [-T test_name] [-w workspace_dir] [
- Options:
- 	-d)	path to the kernel build directory (default: .luo_test_build.<arch>)
- 	-j)	number of jobs for compilation
--	-t)	run test for target_arch (aarch64, x86_64)
-+	-t)	run test for target_arch (aarch64, x86_64, riscv64)
- 	-T)	test name to run (default: luo_kexec_simple)
- 	-w)	custom workspace directory (default: creates temp dir)
- 	-k)	keep workspace directory
-@@ -87,6 +91,7 @@ function detect_cross_compile() {
- 	case "$target" in
- 		aarch64) candidate="aarch64-linux-gnu-" ;;
- 		x86_64)  candidate="x86_64-linux-gnu-" ;;
-+		riscv64) candidate="riscv64-linux-gnu-" ;;
- 		*)       skip "Auto-detection for target '$target' not supported. Please set CROSS_COMPILE manually." ;;
- 	esac
- 
-@@ -194,6 +199,7 @@ function target_to_arch() {
- 	case $target in
- 	     aarch64) echo "arm64" ;;
- 	     x86_64) echo "x86" ;;
-+	     riscv64) echo "riscv" ;;
- 	     *) skip "architecture $target is not supported"
- 	esac
- }
--- 
-2.50.1
-
+On 11/18/2026 2:34 AM, Al Viro wrote:
+> Incidentally, will the mount reference you are supplying in case of overlayfs
+> upper layer be any good for LSM users?
