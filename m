@@ -1,47 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.112
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.99
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794993377;
-	b=dhC8LiOQzMeuLduN3PAQvqkKZEhg9Klpy0zf5VAlZeGE/lcymBD3rqPwBclYYGw8id3z
-	 G7w+01SNUQf7qanijjDIEO1UhAFawVz+oL8GsezWI8sLE+gtDhP9j+QbAbivVoUX8JsE4
-	 KQEqDoLAM+/3eEMH0wRlSPea0cvryDaajrmisbmx6tT3brUBpzp7/zWcnElBzmXm4xvWj
-	 bUnNnvkOp40UBj2FRDY6FreM9upxlc+nS/mlBEAo3Y8BPGwYuExoRjaLwBjvifKNTXUfc
-	 zL5GVhX9tV4lc7nBvXGorLI/NgMyP42xJRtNXyYx1uKGvvNedZocWD5fEF8kRWXaVrw==
+	b=Nzm+p2IG2VOqfzk4Q3ogS13drIxM8H2+SDnz5UcphsS6XMCuZ/0vCE+hf4smofwtsmH9
+	 I0dASfs2ffXzJ96AVlGTjIZ53F8M4QNvoIJfEFFXTi4C3G62f105IneumCYRjDlqHjy7p
+	 25FYfVccjhiX3/GaWf6j06hEVwrUJxqf01KN0HLM4U2LkaWk8vADX4alLE8oMbwTOMuta
+	 F/Fwz63g9kBC3g3eM7gPxyvC61S++/QXJnRpchLciaxwI2UK8gqe5cYBm2NrnKmacdzW4
+	 xbvFDc56OuMmjaaQy3Zvel4rqOYQ/HW++SQOEBP66CkvpDELE6ZAOyrcZuOUECkrRLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794993377;
 	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=hGfK5Hi5QOdXQbsME0+GiG+Fz4TcL5XOwxtDG4CKWPw=;
-	b=4V+VJ/tZXEVWBHOCN2POUWtozV2Ks6ere7SdoML/fChe71e4PNWRerf8a0+jzBzLvAho
-	 vvdHEzyiD47pNxyuRqKPof0cDHrkULjpv+IwZt/LFGcgIazmS51Pb1eyIZK6wWu2wO0lx
-	 628XjiMd9zd9SgDXv7TliBnvTveU/HQhW6FyiyetOU9KukyP8L9MV3SpSwLtgY1Rz1iaL
-	 4brgzv9ogP5rcEmOetGxZbgu/gA30fI9F7hrK+4nfOkDV5RTutnm2PVBMkLVsBB1CeutA
-	 5ffNB/aXr+Kq2LEHBJTH/Q5U4frAUVoXTbzVCtxuxnzHiQL+RL3NmX4uDjMee8bzj0A==
+	bh=cXMHSSOYVw74OronUDzpBoUxN/GzmRZG6et2woHsVBw=;
+	b=YoSkHBMxdIoPLdRTd0Jh8uSV9aIoyQd0lnFhQmXTMotNMVO0HFNKgz3/JQO/nVM1+w6g
+	 wQiK7Fww8V7eBrCMZ2K4YXRRg6Y7cDlCxvlMjCavBFWQScqjwXeYvvGbk5arkYLEcGbur
+	 Ob0zOaCbEh+dC5TEZiFKs6z40U27HMS6+y2IkXSJoC4xaFtUu86nNPI2gq4/mItjXqnJi
+	 SZ0moYq0uvkScMYNyZ0RsCtsy/VMjpOPX3CcYIv/v40H+lv3mQDt475Htjdoxz4L9vm04
+	 DECwg7X5Baa837TdPQ4RhnxgjMMNYoiYhpT2YOgaU+xCpRURmPXXnxborgJHSjqAmKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.alibaba.com;
 	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b="IMxHp5/4";
-	arc=none smtp.remote-ip=115.124.30.112
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=UBPmCmDl;
+	arc=none smtp.remote-ip=115.124.30.99
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04956606A31C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4336A606A320;
 	Wed, 18 Nov 2026 09:16:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04956606A31C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4336A606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=IMxHp5/4
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=UBPmCmDl
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1794993372; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=hGfK5Hi5QOdXQbsME0+GiG+Fz4TcL5XOwxtDG4CKWPw=;
-	b=IMxHp5/4Hya92K4PGWI0zD1I4+NYVqFVtap/Dq6H2pYShk/UHQcpaVr4FfgFMP5daHdxAzZrw1R3brTHQSrpj6oAHdHQvujQ9L4T+6+gLG9zvjzLTYJRQxTIXpXrFwRJ9AYI0pag0ir6gJ7CwWDMrHNeSpc9IJufFPrdS6+JOOo=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0XF0HHZg_1794993365;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XF0HHZg_1794993365 cluster:ay36)
+	t=1794993373; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=cXMHSSOYVw74OronUDzpBoUxN/GzmRZG6et2woHsVBw=;
+	b=UBPmCmDlpRWqX0q+d51An6UjS87dthjR9yR+W0l62BauO4K0RWvQe2tVitk3GcQswS2hBLM2lYkSKf+M2hExQhZlLR/YiU4lS4klW26maIwQZrTAtK0tIpz/IeY/YXa1RZ6uMznOm4kwDtJmlvwVfWn0PZ9pCDWFzKFYGoBEwZM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0XF0HHbl_1794993372;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XF0HHbl_1794993372 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Wed, 18 Nov 2026 17:16:11 +0800
+          Wed, 18 Nov 2026 17:16:13 +0800
 From: Chen Pei <cp0613@linux.alibaba.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -57,10 +57,12 @@ Cc: guoren@kernel.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	kexec@lists.infradead.org
-Subject: [PATCH v4 0/4] riscv: Enable kexec handover and live update
-Date: Wed, 18 Nov 2026 17:15:59 +0800
-Message-ID: <20261118091603.979-1-cp0613@linux.alibaba.com>
+Subject: [PATCH v4 2/4] riscv: Add support for KHO
+Date: Wed, 18 Nov 2026 17:16:01 +0800
+Message-ID: <20261118091603.979-3-cp0613@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261118091603.979-1-cp0613@linux.alibaba.com>
+References: <20261118091603.979-1-cp0613@linux.alibaba.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,104 +74,36 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Host kernel updates in the cloud should not require draining the
-machine: next to live migration to another host, replacing the kernel in
-place while preserving selected workload state ("live update") is what
-KHO/LUO were built for, and LUO's documentation names hypervisor hosts as
-its primary use case. This series closes the gap for riscv64 and
-validates it with both upstream test runners.
+The generic kexec handover (KHO) paths are already in place on RISC-V:
+the outgoing kernel publishes the handover FDT and the bootmem list in
+/chosen of the DTB built by of_kexec_alloc_and_setup_fdt(), and the
+incoming kernel picks both up while scanning that node. Only the
+architecture symbol is missing.
 
-KHO has been architecture independent since it was merged: the outgoing
-kernel publishes the handover FDT and the bootmem descriptor array in
-the /chosen node of the DTB it builds for the incoming kernel, and the
-incoming kernel collects both while scanning that node -- which is why
-the arm64 integration (commit 274cdcb1c004) needed only three lines of
-arch code.
+Set it to 64BIT && MMU: ARCH_SUPPORTS_KEXEC_FILE is already 64BIT only,
+and KEXEC_HANDOVER selects CMA, which depends on MMU.
 
-RISC-V already walks those generic paths. The blocker is ordering:
-setup_arch() runs early_ioremap_setup() after parse_dtb(), so the early
-mapping kho_populate() needs for the handover FDT is not set up yet and
-the handover is dropped. Patch 1 fixes that ordering and stands on its
-own regardless of KHO. Patch 2 enables ARCH_SUPPORTS_KEXEC_HANDOVER as
-"def_bool 64BIT && MMU" rather than arm64's "def_bool y":
-ARCH_SUPPORTS_KEXEC_FILE is already 64BIT only, and KEXEC_HANDOVER
-selects CMA, which depends on MMU. LIVEUPDATE depends only on
-KEXEC_HANDOVER, so patch 2 makes it selectable on riscv as well.
-Patches 3 and 4 teach the two upstream vmtest runners about riscv64.
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Acked-by: Paul Walmsley <pjw@kernel.org> # arch/riscv
+---
+ arch/riscv/Kconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-This base already contains Greg Thelen's is_kho_boot() fix [1] and Mike
-Rapoport's bootmem sizing rework [2], so the series carries no generic
-KHO changes and neither patch is needed on top.
-
-No DT schema changes are needed: linux,kho-fdt / linux,kho-bootmem are
-the properties arm64 introduced (commit 274cdcb1c004), and their binding
-lives in the external dt-schema repository [3] rather than in
-Documentation.
-
-[1] https://lore.kernel.org/all/20261023054518.3258350-1-gthelen@google.com/
-[2] https://lore.kernel.org/kexec/20261112-kho-bootmem-sizing-v3-0-f0c8d00295d5@kernel.org/
-[3] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/chosen.yaml
-
-Changes since v3:
- - Dropped the arm64/x86 comparison from patch 1 and this cover letter.
- - Renamed patch 2 to "riscv: Add support for KHO" and spelled out the
-   acronym on first use in its body.
- - Dropped the dependency note; both generic fixes are in this base.
- - Collected Reviewed-by and Acked-by tags.
- - Rebased onto linux-next-20261117 (7cfbf79c66c6).
-
-Changes since v2:
- - Dropped "kho: Do not translate the handover FDT address in
-   is_kho_boot()", which Greg Thelen's fix does as well.
- - Commit messages cut back to the reason for the change.
- - Rebased onto linux-next-20261105 (ddfe51b0a0f5).
-
-Changes since v1:
- - New patch 1: kho: Do not translate the handover FDT address in
-   is_kho_boot(), a generic fix the riscv enablement needs.
- - Rebased onto linux-next-20261102 (2637bdec0535).
-
-Test
-----
-Testing on linux-next-20261117 (7cfbf79c66c6) with qemu-system-riscv64
-(virt, -cpu max, TCG); method and logs under the --- of patches 3 and 4:
-  - kho vmtest: "ok 1 KHO succeeded", Totals pass:1 fail:0
-  - liveupdate vmtest, all four suites passed one by one (simple,
-    multi-session, 500 files, 2000 sessions)
-  - riscv defconfig with and without CONFIG_KEXEC_HANDOVER both boot to
-    userspace with no oops on the console; builds: riscv defconfig
-    (+KHO), rv32_defconfig, arm64 defconfig (+KHO), x86_64 defconfig
-    (+KHO)
-  - UEFI handover boot (edk2 on pflash over OpenSBI fw_dynamic,
-    DEBUG_VIRTUAL=y): 28 consecutive handovers and no BUG
-
-Additionally, a workload-continuity test was run outside the selftests:
-a counter process was snapshot with criu 4.3, the dump was carried
-across the kexec in an LUO-preserved memfd, and criu restored it in the
-new kernel. The process resumed with the same PID and open log file and
-kept counting from where it was dumped (500006 -> 500007, no lost or
-duplicated ticks).
-
-
-Chen Pei (4):
-  riscv: Call early_ioremap_setup() before parsing the DTB
-  riscv: Add support for KHO
-  selftests: kho: Add riscv support
-  selftests: liveupdate: Add riscv support
-
- arch/riscv/Kconfig                                | 3 +++
- arch/riscv/kernel/setup.c                         | 2 +-
- tools/testing/selftests/kho/riscv.conf            | 9 +++++++++
- tools/testing/selftests/kho/vmtest.sh             | 3 ++-
- tools/testing/selftests/liveupdate/config.riscv64 | 3 +++
- tools/testing/selftests/liveupdate/run-vmtests.sh | 2 +-
- tools/testing/selftests/liveupdate/vmtest.sh      | 8 +++++++-
- 7 files changed, 26 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/kho/riscv.conf
- create mode 100644 tools/testing/selftests/liveupdate/config.riscv64
-
-
-base-commit: 7cfbf79c66c63e807ea452abf0546e6f6d6833a6
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index bde1f1885038..bffef6b903e1 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -1125,6 +1125,9 @@ config ARCH_SELECTS_KEXEC_FILE
+ config ARCH_SUPPORTS_KEXEC_PURGATORY
+ 	def_bool ARCH_SUPPORTS_KEXEC_FILE
+ 
++config ARCH_SUPPORTS_KEXEC_HANDOVER
++	def_bool 64BIT && MMU
++
+ config ARCH_SUPPORTS_CRASH_DUMP
+ 	def_bool y
+ 
 -- 
 2.50.1
 
