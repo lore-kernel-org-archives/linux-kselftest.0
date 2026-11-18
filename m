@@ -1,98 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795017613;
-	b=WrsfaIE0k/S+cKjcVRqGxUA9uhMQJhyTTfc6GlHKwVdWdVntsldkJFBpVUuAixp0KFxf
-	 PsXMLHrViJ4lsviJhAAyDdPgeGyZcoH/FAtd/Yjn6Gb6xYO3OVFNr9nBy0LhTk4A8Yw1T
-	 65zE9qACBTmuGQ2ZrePSWTbeFdgaGqwsvhCWrxMtv7ojoaGB3JdklNVsNXSCqwpIngLDq
-	 mj0FRvDsNFoxk5Us5osHwyM24MYRYOFjUsklvOCViY5W+B3efbYdMVjxHwVYNoU+SAu1v
-	 uYO+Ns8MryYOP53IVviogfR+ZBfdzBlDcYX3r6q5dk8OrqgHHa+3n8Y5y7t9plP2T6Q==
+	t=1795018061;
+	b=abgUMa5Rr07vdWMyV0QH57jWMPiPquIei1tx/yz98bR7AeXXlzK5ndMdMSxZEkoK26n7
+	 SCPDUZvr18qq6FIK8Vy1zFqrhBD4MNqoU0EdO+dFkI/+89gnpcDLCXsH2azrSDRyYeQLM
+	 BHYG6KyKWUz2E/U8wnN/Rwq2gQowIiWz+9ihemSN2w0/SpjjFnJJyrv7AFW+a9n5dHPMb
+	 w/OOjtc/xifSzhTxo3h/BEWrkXUMtQg024i4BFkRyaBZt5/7uw/Iol2hJJir05UEuwUaZ
+	 EdeOaK+2GUfPZbdB9QJ6mlxBnle6a6o1TtbJz9N7kqQA5ypJntdUVgwAzTsfH5MgpTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795017613;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795018061;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key;
-	bh=gN7nvCApkpNJjBBl+gdS00SQSe9taX0A7DICocon5Uk=;
-	b=T3NakQ+Llz7zkEvIiUmDukoSFotsAK4WEXq92WXKelhx0hpdsUsv9SCD3DesPRU8hoyQ
-	 k1xZ0/FoF0vggx3ZQHZu3Uprzp0wuel/zg7omP+jHRi0vsrp0xRu9wttHWs4qcZwZjfro
-	 7EaCWtcU1C+l7OuqTg8BTcxJ4CQFsgZrdgJK6V1/Zjb/G+hCKJHLe6dbcsXvVZzswpgiz
-	 dB8SVn6rSvEfNn2AFqZwHBJnaGXTVUwYtcrHwBwc0hhKjpFSv5bDtRk2QLzk/b9TO/cFP
-	 ha2dtuv/Is3GJkGGA0YWqiWeeJXUMWC3RzLquTxVYUdBSWzb9GnYAbsWbp+dCim6Qkw==
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=ujkN+eC6Zu+/+obGmDVtyoxxt+WJSJZ0U/kWRfaBMgw=;
+	b=wxwA6D7z1w9ASUTBfi2IP3ALEpVCOGcD+tt98BARdgo7loOC52AoS2I8cYMjG4pIr+OH
+	 iZKNOUKOLt68mkphhR7CfceH6QvWnOeCsE/8IU3AWf30aUzDwvRx6QqA1aP4ZTZXjPvs0
+	 Xy6+OsDMsg34o95YM9D6PsxIR3MzlUvk3Waw+DZyxTeIQjXSuM29wQT5a1sq8eFw6oJ6R
+	 jzyHm84mjN6LS570HM8vl8DoevKJ8DYXyQUiYVbqPJvaxm/an60HzEfTZsZ4m1NiZJ4NC
+	 DGFf+zFQbTgpfMJBspuWa5/XvectMBkoS6lxOePEjMjdi67kfo1sD+isLLcuFSHBwhg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=NsaoKX6E;
-	arc=none smtp.remote-ip=209.85.221.172
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=WW6ACKA7;
+	arc=none smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFB7606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:00:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFFB7606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80594606A337
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:07:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80594606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=NsaoKX6E
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5eac319a6c2so810812e0c.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 08:00:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=WW6ACKA7
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-71aea92f666so741710eaf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 08:07:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1795017611; x=1795622411; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1795018060; x=1795622860; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gN7nvCApkpNJjBBl+gdS00SQSe9taX0A7DICocon5Uk=;
-        b=NsaoKX6EAyelKGC7l/g5UCQwSZxT96lYF7VFxnW5gSG2311qNRFlOqNKdjyxXJKTqR
-         35qBeVSVK9m+dZiXVDJiEshyPwANzNbvsSbLVHjyQRJpEr99F+JM6h7XhzWzI4D1wHe6
-         /Iss+aCOeivtGBs6O2ef/O4ssse4QU60KE+KBhlHL66dvHloRnS8CDdDDyzR0ZNrGVSe
-         OzrOqDkYGUAgn+f0n1btObMOFOB5Ep7+bjDAiVsVnkDNAU4xi/Fn5HLCpXxmSmSbS4Mq
-         2ypX/3wo7vOIxcHZPc16/J1ASVucuZPlGKn7YuIREhosIdqy/jmzbv9DdnHLiWCmIKeY
-         J7Qw==
+        bh=ujkN+eC6Zu+/+obGmDVtyoxxt+WJSJZ0U/kWRfaBMgw=;
+        b=WW6ACKA7UVZiX0KfAzzg+edxiER4uOGUTJowPB7yetEcRNF0o4/Kgsp9BxcVCXTdif
+         Tgv4mmpcq1Wmrf7KxcoFOWJZbPQfmjFqlCYt+veaAJCLfJJpjJJ0+pe+WJbg9pSpDyX4
+         hEB4mBStC6AtALo5N6bjSJ5/23Si3ahmHjbu+4GyrjanqO9Z9FQL7hr4Y+i5Dj6ojLaN
+         f8kgHBRGEQ82u2/SnxNtKDHtkRKPlhx5anbGuZ15xZocj+BHbgcKoOetIUpg1RZEvvJo
+         MQ27KN1ViJofCC9c5ILfBA0ZvkCbNS1QGKsj6P7llq7rDd/KfASgsSuCATFnW+exUF01
+         J99A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795017611; x=1795622411;
+        d=1e100.net; s=20260707; t=1795018060; x=1795622860;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gN7nvCApkpNJjBBl+gdS00SQSe9taX0A7DICocon5Uk=;
-        b=kgA2ZIORFlRyU6HtiwgXKAeromGbwKa/CN1E1pnyJNJXzEpuz1rCABgdjKqcGi3351
-         YfbuWXFmDL+U1MJPxZLaa1q+5v1xKvr1p7R8X3NctcbsuKTjgZOkXgz+pGrubArXZw5q
-         1nw59w9L4goblFhrloLMO7SNqa8lX02mjLyyRRHl8HkjaUgUe26GdeHs/a0fPe4Mh845
-         TRT5Vj48iaTX/BioEsCPkd+XEp8DBLY8crHNWZoggwD7D/ZdcAk+jZH2uxad3QQwcsXK
-         Z64sTGyfIUZDplxzcYMB8P3f2VH2EbaaTDjXmGBgS6Dp1+fNrnxd4zQaHoQZ6TMryAA9
-         6kxA==
-X-Forwarded-Encrypted: i=1; AL+hErHV3g/nINuKsyxjx7pJ6ak1aN6LVGC+DlBREeSxrCCZPkcCkdEjWIRnryorHFJFHz0fqME9rfhqPM0TLWM6lE4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+pysZR4dIbQTGrPCfKap1jEfRo2KvUadCyavsbEniJioqAFZHZ
-	x9EqFYOLlNP7+3+Ex3AzQd6LUNB5uvyT2AiERK2r7f+ruQ7Guondax3KCw5vnIqOORI=
-X-Gm-Gg: AYBFou1Tax82IEINar7/DxTxwWwV21kRUUuFXAiSBrSvy3Zba05l0J6qmbY5jZpfxVV
-	nVXNMt4crAZNx91SZK3AcuoG3VD4udT//4JlkGkn9gdUoTTnEwpwIPxMJ2hNk3KBr7tQ7wBBo4+
-	JBYsnhIbYEAPGLQBMIKWJJtJDwEPM2eB9pKz+0WuhUb4+SgRFwmSurCNS7yQTKGUI3Pv9PjSdMt
-	O/M9wnLFU/4bX18y+IFx31KDrp/7hCf46gm0VYf4JsUjMNVEq7/RHBQOqNrSJvsmZuZ0KtCPoIF
-	Hdrly4GHEZnQX43XH5KbUlCSbWmZTce/xh92c7ZXwT5G6QcJ4Wt9Sac5bW3U59tNSyTgxMLXnLW
-	v5KgGZVlsKKgd+9b3+qQ+0pF/yXIprH2o8zd5cal0QmJxFz/tLt2IeR+4AnREaWZ1/eGMGCzHL5
-	gszcXmXEIpG0tHZB/1EhH5D3D3qlKcunzo1vS2TvnbparTtrmqbwqXelhsRoXSlAnFkcKY4lam1
-	CbN3gOSmCjv0aBlcEWxmBsEQI1ENNIa+wd6IivxKPJG3hZbl36qIhCzzZIT1oZ0jT2LaTUE2nx1
-	iJrT0K5Q4cqhdrnGsagm+W9ldJ5yYgTSGjJgCl2ePmHfqIG9Uou2vibJuUmbSmfm2SF2x4zhfbr
-	mNUkTONVSH1L2CkQU2eO2DiH2lUcxe9NzyJ2C0LOD5CxFY1A+p/d0QEaQZPrm+UWu+U5w
-X-Received: by 2002:a05:6122:3a15:b0:5ea:389c:51e4 with SMTP id 71dfb90a1353d-5ee645faa03mr1663031e0c.2.1795017611348;
-        Wed, 18 Nov 2026 08:00:11 -0800 (PST)
-Received: from soleen.c.googlers.com (57.233.150.34.bc.googleusercontent.com. [34.150.233.57])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ee64ec2730sm2002506e0c.14.2026.11.18.08.00.10
+        bh=ujkN+eC6Zu+/+obGmDVtyoxxt+WJSJZ0U/kWRfaBMgw=;
+        b=QqYazp6QRLhndeu0u+Q9ZWxdXH4EE9O1xwRLSBUOsnHV3clZIQMlDUT3g1eSRxsOHg
+         MjD2L0fR+jvBxZ5AZp7GnbBq/NMxsI5QUCJX0aEOlz1FqXvMxywoaRj3c6v1XFB6In76
+         LlzsSpyt8kTSQq5lSdYn892ONZKfKNpKqY5xH9JGcVoJdiF0lu27S9dlOHX8+tPzTfqK
+         dJIsEO57Tdul5yc2CeEIOAOn+QSyI48ZzYqOxeA8RN2jBDqANfEgI3BdlKm00NJCjTQx
+         efwHBHdH/kbm8NTLnNbhnBDX7fYirmZxN3Cdi6oyvWALGeJnWLmMZ1K0rymyvU/EgFUi
+         YNxA==
+X-Forwarded-Encrypted: i=1; AL+hErENI7iZXhe48gtsxFW5Vh07CPaQNsczQ2oyedDU2MyiDkQWzPOitFqERxYNPI00hOWdaE6KIx70pmFWxCOmliM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/plR0Amsob5Ht68jbDrmxNYY/vWqVcbdXkk2xQewcU76MHe/RD
+	vbatUwScwxwl5zVvsvhGWOUMrI0ooZI2nySO69a7Sw7RSUdTNu1arNylRw4/r0cRbRs=
+X-Gm-Gg: AYBFou2I78P3mEQYpJZO/aRk9ej7BEwvyneJgiZSIxB9koJaX/sF5U797nL5+eWojpT
+	S5IwRSs00aDlB0jajKlioKJ7qAF5yh3swEECV5B5QUSrEufKLTsmG4eO3DsHu1wTh8DQXOASSek
+	cfn/AGexC0NZjF+h9h3P9SFseEdsAbSgEO8a8XdyrUGARLyxPLFg9u3Xv/yQunaLzcGMvPQkMRI
+	1R8i5qanBFPMmaC+eM8vSnlM0mfxQeiWAe5jxG8NB2ob9NqbKXmprSbp8Pg7I/2Tag7BuCdFigq
+	7Cdv5E3LDsZ6WQRKuHwCviW9X18LHtPr97A1egQfDAp9KMP9Oz+kfaWcFnH+bJltDf/r468xNN7
+	C/HfxmqaokKuGmp8vCVufLuW5DnLkCisxDFCf3nuPMfRrzGIWW6FfnQfYTLiEM04Rpdt0uI2gWX
+	cex3PLJGA1eXJlXRZi2Yb2b2x3J6mkIUzI8NmvPlB9N/BCcUKb0v20CPTJUHljVyoYTz5YGD37o
+	tBV0IK0whFK2egomUOSRhI2HiNQdWBSRk19ct4lXv5KNV+/rHHA8nZkm5Nk+TTBWYTorGhfBKRd
+	qBtizg9b+epnALHbndRceWyurTS6fb7gAl/ExvIvnQijbvGDEBcO+5goZv7CLuCuDJmQGOeYID7
+	FRYT0JnTdPheYSmZpBa7tS+VsCw0ULHbH/R24mdfRYsdOAFhAExZ8V/C9Mb065mRrjo+1owgB
+X-Received: by 2002:a05:6820:807:b0:71a:fa06:4dd7 with SMTP id 006d021491bc7-71b18454b50mr2463359eaf.28.1795018060423;
+        Wed, 18 Nov 2026 08:07:40 -0800 (PST)
+Received: from [192.168.11.112] ([96.43.243.130])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4b743721fe9sm2624231fac.6.2026.11.18.08.07.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 08:00:10 -0800 (PST)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr, rppt@kernel.org, 
- pratyush@kernel.org, graf@amazon.com, shuah@kernel.org, 
- Chen Pei <cp0613@linux.alibaba.com>
-Cc: guoren@kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, kexec@lists.infradead.org
-In-Reply-To: <20261118091603.979-1-cp0613@linux.alibaba.com>
-References: <20261118091603.979-1-cp0613@linux.alibaba.com>
-Subject: Re: [PATCH v4 0/4] riscv: Enable kexec handover and live update
-Message-Id: <179501759947.250261.1712117569683645423.b4-ty@b4>
-Date: Wed, 18 Nov 2026 10:59:59 -0500
+        Wed, 18 Nov 2026 08:07:39 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: tom.leiming@gmail.com, shuah@kernel.org, linux-block@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, shao.mingyin@zte.com.cn
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org
+In-Reply-To: <202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn>
+References: <202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn>
+Subject: Re: [PATCH 0/4] ublk: report recovery test failures and fix the
+ exposed defects
+Message-Id: <179501805884.17649.3891543607346842206.b4-ty@b4>
+Date: Wed, 18 Nov 2026 09:07:38 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,52 +101,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1086;
- i=pasha.tatashin@soleen.com; h=from:subject:message-id;
- bh=yx/6YU4ftdolIH+TM3tFCIqxwpFna+tV5pnuszpTgAM=;
- b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq/cuKW1Ven/TsYWcH9R9JVtNZvIr/Wrzbj9eUF
- VZnu673CJ2JAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCav3LigAKCRC7dyhM23N6
- 3l0zD/9GkT2xiw3xOPo4dtrl50v/Zo+28SEOr65ml35aBi52o28TK4homX8OAljUtDYygGhutpM
- WxnvBmRGuzLI5PV5A7/SV+WgkIZ52fXibj+mPS9LI2vYsbaTB7qWpXD/tPjUXOLL3sp8s0nWgA/
- xzgDZjJbri0YhMen/qMzef3v9u09p3Wn4uVIdtlK0LLcBqgYpEtW1xCFKqg8Plgdmm8VzBkMBqm
- 201gts8eO1QmJ87giSN1+mgcvDTecZXC7TLBmWsfh6zueYb2h7iy18luOHRy2FcgK/fG6x6oK+/
- q5kb3mOX9vuWeOn4JfkYG9JvRemmTyttU4mvzXS7wc56lZd8ObMBpcWCRJaliTNo4Fwky6rrbSU
- ubyyFqvQGzUjfL2/Rp3rc+Cie1RnXgh0XXw4RSGXf6YrqAi8dVFfXKbWikrk5D9dqJ+2t6zEbFK
- +GHKpssJeeElG+UOr2KEGjpeWljj+Alhh73XBEVezYA9oWQYDth78nJKELwFtPq8Xcfc4Br9O1V
- Iu1DpxwaZOV4fUHtQpY9XdoUQSLklPkalqeaaIppy2vDIKY2IMWWeLNhVX7XrCsNIO3L/BO4EIS
- BjJYaBZ3qqGAfTeisqH8//T8U/uQq7h8rHx7J2zXA1bXqN+ErinqAopKFwtALn0trP8D1sYJivX
- Ntme4+UlYo8oAIg==
-X-Developer-Key: i=pasha.tatashin@soleen.com; a=openpgp;
- fpr=CAAAB722DD22A081F0D49F35633A6A993D43B569
+X-Mailer: b4 0.15.2
 
-On Wed, 18 Nov 2026 17:15:59 +0800, Chen Pei wrote:
-> riscv: Enable kexec handover and live update
+
+On Wed, 11 Nov 2026 22:57:52 +0800, shao.mingyin@zte.com.cn wrote:
+> The four patches make the ublk recovery tests report failures from their
+> workers, and then fix the two defects that the stricter tests exposed.
+> They are one series because the later work came out of the earlier
+> patches: patch 2 applies on top of patch 1, and patches 3 and 4 are the
+> two independent fixes that patch 2's testing uncovered.
 > 
-> Host kernel updates in the cloud should not require draining the
-> machine: next to live migration to another host, replacing the kernel in
-> place while preserving selected workload state ("live update") is what
-> KHO/LUO were built for, and LUO's documentation names hypervisor hosts as
-> its primary use case. This series closes the gap for riscv64 and
-> validates it with both upstream test runners.
+> Patch 1 waits for the recorded recovery worker PIDs and reports their
+> status from the parent, so a failed worker no longer ends in PASS.  It is
+> a v2 of the patch posted separately on 11-09; the only change is the
+> simplified wait loop Ming Lei asked for, and his Reviewed-by is kept.
 > 
 > [...]
 
 Applied, thanks!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git/log/?h=liveupdate-7.5
-
-[1/4] riscv: Call early_ioremap_setup() before parsing the DTB
-      commit: dc821c9badf7b2558e206804c2adaae28d25477d
-[2/4] riscv: Add support for KHO
-      commit: 48ea610913a6d6fc513d082afad04ff342120931
-[3/4] selftests: kho: Add riscv support
-      commit: 30c6fc85b4fb89fc867bdea413403bf169e7e194
-[4/4] selftests: liveupdate: Add riscv support
-      commit: 9615c5074cdccb651684e61cd8872ca8b0b30e52
+[1/4] selftests: ublk: propagate recovery worker failures
+      commit: 6f3393515ee6526cf66175a85f3327899db765e3
+[2/4] selftests: ublk: propagate stress worker failures
+      commit: 01fe9c1894fc4cce7b04cdae5522c86519ba835e
+[3/4] ublk: cancel commits arriving after the quiesce scan
+      commit: b79225a8965f80b448dcdd236da2e1ca0690238e
+[4/4] selftests: ublk: clear reused batch SQE command flags
+      commit: 73f6a1d93040ac8cbdb03b3702a66e6a14773d02
 
 Best regards,
 -- 
-Pasha
+Jens Axboe
+
 
 
