@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795037331;
-	b=fpy5oF6xIFzcVI5zXxE3Tfgk4miKqEYomWitKf94Fz4ctYtVcwuxWgQUIJOGoDVKwyHN
-	 jD8ILT69ndwTH5FcMfiTz0F5mro0HYOAzQ7bOTBcC70R9/R8BLeVbeQywTucFdVmCeBaO
-	 5GswLY7hO1+N35GiGj6l2JrC849GRDMIiYr99boe7BT8C0qdD51O0aKV2krYaJV+wIgGg
-	 d7KEXGRT9r0FcI6LoAz+O1vu3eavKKbTAwRzXw1cNW/b8RZ10UjEPQpvdt1kOG4QJ8FMQ
-	 ++NMHGLWFsmB/FgopgqGpZaiDmD2mUOoDuTSFTrAPrveYQKItTWR/r6A39LgNHpQTfg==
+	t=1795037332;
+	b=3QvVK1XcFcifZWqr+Mn1UtrWr3NEvyBJ7/jlRj42JdlYZfZyxoeWy2irM+D01rG0J0Xw
+	 9MzZetMXGxXaGGOyoXpSwip8pNbMQ5tmYhn/9Wpr6ySgZySJulOGrHmAEF6v/inw8tUAR
+	 1Cf9zhKpqBeiAil/wSnMuOSi2ixOOx1+fiCiQxo+Mwj8910JRAf8ZtCzC1ZmRVmFHD1iF
+	 MBSPB8lAgTCIkzY9Y4inFArWby4kDyzOvaA1J2FuKMtqq/+tzWQRxYx8ArSYXbTbVCEwR
+	 PIZMh4ijeL3kJ4CkSWjh+yjw3EzvUQtIO1XgDfC0Tb7Djw6jYB8RESD/VLlSbpRwNnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795037331;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795037332;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=hq4FetZ9TbMuXfM2xTa4nRWlSTgcNRWAkocFboOGKak=;
-	b=fxDdhlG4eAML+jlNvh1PFLo/19awOpWObROCD21BSONWoCQwvpIULk/LOEA9RQ2jXejv
-	 07+KVsC+ojyJqDaO1Fa/lE2AUW3qI0FV3ftNDvqsQji7cOglSot1uRctlSm5M/QFat4o4
-	 oWjjVTNcb/FC+HpBglD8Rhs/7tL7vz5VXPO2/ntLbUqvTcBvL/DOj/po5MgPXw0MY+Tcl
-	 MjWVswsEIn48huNAuFCC3UrooGSILta6stLjxxYWGxjuZguFSdXYGOlLgU5R83935xMrD
-	 ugINi/rMESTocH4ZHduJ1719EpGXvYod1X0He1QZXHRhPtLiPnufR0+W2uluNzJW20Q==
+	bh=ePURxFbZRmuaZzBcCX+c1ARIFExZY6rS7Q59wKvUVmQ=;
+	b=J7tEHUtgh1Pw3hqQmvB4xBCd9pLO9xnx9cqM9m/dyhZa/be0aWq2HjzZ27oHZl7mJ18h
+	 IC31gUHegAehR5AmWKK3QfUPiscUzJagZuzXFfd9MIhTcCBJbjHj0naS6z8PPGf90OyKa
+	 GKdG64HYXPj+ReCdgcnzu2zjW5V4bFDCY9g2bXxaHv2yWPxUnd1Q1Twde8IPeaHvrZPUa
+	 46ZDipD1zRfv5YOucmVLEYMThwSMfLiNI+QuEBA+gKLUA8wEJ4fDE5XalPKH3NUg7PUns
+	 e2yjpOeNKt4Jry/f1wI/7wdgiAwhMyo7XMIy0OfZnLSxzcJACze835amFoDJhg1z0wg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=soleen.com;
 	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PU6hBncs;
-	arc=none smtp.remote-ip=209.85.217.42
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=iooawujv;
+	arc=none smtp.remote-ip=209.85.217.46
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8DB606A335
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 21:28:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C8DB606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB2760A2620
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 21:28:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FB2760A2620
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PU6hBncs
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-7d2e1abf3eeso236506137.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 13:28:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=iooawujv
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-7d65662077cso1013598137.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 13:28:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1795037330; x=1795642130; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1795037331; x=1795642131; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=hq4FetZ9TbMuXfM2xTa4nRWlSTgcNRWAkocFboOGKak=;
-        b=PU6hBncsvDrJaRz44/8QtEy0YBcK8b/Doh2iSeX+EDnmZuLUgTHlmFmrppRNBbBt/+
-         3Lm6engsCRZRg1wMX+q2hy4OkG04YLPglB1wTDgHqs1fNy5Q7NlpSpBebzsn6G9+BBhi
-         WYonvBgDqUR+FbxzMv0HWjLd/1DUuInhPrKLJTxku9za8x+UneTXek5xRcor5MEKcZXs
-         W8u0MylrMu6KRxtI4ebke+bbt54UKw67ew7ILCkQDKRdrRhlMgYsI6+SCVdkN1+5GUiz
-         qXPvCTk6RrsaVWLXWojHqCmDsccIssZiuH9XQh9xmqzeftbELRJIVGM+FBWzoKO+Y1v4
-         mAFA==
+        bh=ePURxFbZRmuaZzBcCX+c1ARIFExZY6rS7Q59wKvUVmQ=;
+        b=iooawujvjzstKoxIo3QMQSY9W2lmr3chcPXIxTqwQ4UzlVojE08xCsqGnt6sl5g1Sc
+         xxz0MPeQnsOsxQfcNuJ1J9GeM6zm05LcsBKsu1Z6CZtlSVvvIZIlIM8UOcQvkGRLDDBd
+         sjq8dwRs3izuHH0bVA9yN+8byYR1N1WpzDQ96sXdG9fWc3qYxYH1JROMH/w0d9u99hEw
+         k1UShZ78J0sQoBBGoSbrnUPBk1SsLobLotR5KKngGDUcX0Ee8yZtU2Svq1vpsiCaZ9XM
+         J0mmMo3BKFTxUtiMdU7kdZ462vJofiZErqW5Rzm7ncmZpjQwoWVuwCJd6vLdxpn/mfeB
+         sQqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795037330; x=1795642130;
+        d=1e100.net; s=20260707; t=1795037331; x=1795642131;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=hq4FetZ9TbMuXfM2xTa4nRWlSTgcNRWAkocFboOGKak=;
-        b=Ba0dx5ZOxnZkOHua8+pxu/6hgzjrnnUXsu6mhHksLUecAu5wjnmKxfroH0f9ajfQQV
-         uk+nQ2sXpBIBS6KetQ6gu6DlWaRxrfZ6DaqQfEvLIm8IwxkjCFcZvb9h7U25wwPl0AVL
-         UgKzppEJa+mOQhJw7NzDwNIyhh2NpaXiJrRDIOeA3ijCfi4SDIy/0v2iDdXMv9InDt2M
-         sznl4Dm4iHTBRp0hr1Rj2L4BGY+LyDo6fTOA+BWeIBhyjLgZssEaglwyblCdgreGywl7
-         HPxaY3So2N6rF1ZK6ZZXiAtRXDjvz0XQ0sRC6kRVDJKIlruYHZWznsf4C+o69anpNlBp
-         QsJQ==
-X-Gm-Message-State: APuU4Z+qhq+O3bTkFUMoKr0skappl65hqEo4tj4yGw1qpk+FIjSEwl5l
-	hcl2sCjXZQYUDYFFB0fpeA5WE0bpj1IRCAUgcx66FQ/JchvlAMMKKSuv1Lc7ATypfylbkAEhlHD
-	cceB4
-X-Gm-Gg: AYBFou39tvP/jsnXsVW0CP2HBGaJ6Hf7U1Ma56ObRo48Qzr8ZCgw9WNqMKjR1zeEY/a
-	ssxfHla1ff05IpOexjvac8IEhYLVE67dSkWROsL7lnecCS0Fx77YjSOLICj0kcUS8fVAOcvZHPM
-	77LYn7r8Lu0+IIrMoXcTS0jtrenniEoqnxzl3fwTf87PmHHa85dd65iXWvuuurejdSLZt+XzJOG
-	VM0+Gu2lMLox/N6wF4g1B2gpzfyi2kO4lhw0GdEcHGqNz23yBOJdxFax1LYLIgujM8osRfBY2xn
-	LjzNThak4BrAYTJ+dIVQZLXtLp68nEaXdKkJUEf5YfH6EgjTWcSlpORl79/ZjfyAoKiV7qmJPor
-	CIEduF6cIvuUshkRM9aBHWNh/j7ZxqCf4RvRorplPgtHivWRxCieq+tl3+5UzqNcvPahjpw98d0
-	akmzbodPgNyOHIi9oUMZbjvK5XrXqHWXg5DbrVyiB91nRo4kw6gwJZ7t6xPoqe83bF91Rd2Butr
-	jZOkqrkcSUa51DTv6G1Grd9Y0taHFq5Wccoinzw9aJ3BTXROCW8Ba2LHDovX7HZrrgd5C4rL2lK
-	yjqZ+GTWtDyNCHxqnx2tiIOJCZVcjgc2EFVmXtDlZiRMwGT/Xm7cTStwP6IP1k3ufDcDdVuvVVV
-	yyBXE2wAYOAvnARMc3p/Sd17pbrcbTYsP3mJf+sTCHKz8aObdc/61
-X-Received: by 2002:a05:6102:548e:b0:7ba:b5ea:c4b8 with SMTP id ada2fe7eead31-7d6cb42f39emr262542137.1.1795037330488;
-        Wed, 18 Nov 2026 13:28:50 -0800 (PST)
+        bh=ePURxFbZRmuaZzBcCX+c1ARIFExZY6rS7Q59wKvUVmQ=;
+        b=gVtlpaKWxdQfuv3rWzRuIpVP/lju/VECwUgn9zUNquVE3tCSToDdOny8MSj4sX7vYU
+         /RSeHozoLghBuHhETwZcT1wlBZ/1YEbUEkEZcWSiFxL2w3ZGJha4sGPqL9Zx5mnoQDiG
+         ee6r9Tp3DGZRXY8hNU2BzhRp+nu/Me3oKBKw9IsDilRuI/3U9ija/Ff7KDOFHJ0TQIzg
+         DZrmlozNF1TOphQKbwlqQMS3sg2eV7YbbxXqosZk2nQR/9C9/BewZhQjSx6eNZoY8ZSv
+         QR6N2GASsaoX229jcJY3wLxq8yq+I5ldfuj2GxqELSGQysQuOkEx2+ymqjJEL/DgUMEP
+         I6EQ==
+X-Gm-Message-State: APuU4Z/kKaIA8mrmZuwHBxJ/VjpoGozbhscb3JnW9rtNDVZ6sayuiWpI
+	74jSbn7nBC6PuC+MdWxGCjZ8EhhnNGn6V2MCfx0Fkh+aU95M6WxB+JUAjIdEkkx4mraGiveFM8q
+	e6iVF
+X-Gm-Gg: AYBFou1Skyi98oHHp4T+MDuHh25su+mNS3wQa7QqCqbiWk/UlXPouRM2X75iVlYnmSQ
+	tFauAiGaZXyaqcj8hctweMZdR4/nmZ92bw9ClZ1dOtU18muY0ksukj0xe/47u8D3a3NSSt2MTp4
+	D3/guV2F7sCdnC57/jqs6uJuAqjOmG8mRSZorx6Lb16B2UwS+TLatBSEslrKfTQY+fv+PfYUopo
+	lnIMztA42HEtanH87JMuCtAsxRcPKuVuY6O5hqujiZsXSh2STgdrsD48hZxW5/O4lfeKmwUBVwW
+	UkNMbSLQcb4PVFPbHFngGsFbXuiI50SdJ9Bs3QnQLOXsrhpx2fhS+GsFdec+kTjWrXjWSE4vKoG
+	TgfgaM549VpXfsXxm47C3FrCy09qez5gu6iW+CTvUzaeRnGJfff+w1IA1PYxAExKnsO4KXuOiiR
+	Ft19vDVhz5R8uwl93tiFXE/zWHJvCe61xHYuHu3EJ0zwRE9BtqQ2Wlc2GP6mM5wFC+gPZxlBlgl
+	LmXG5JkFFDzSKRGgIkN9xScARMJmx2txZu6aZfOY1RoEjKzEWgl2hWvDD2Xd0w+ScmaobCygDxR
+	/VHj+W/3sgW5omD+En7MOdSQosqr+V/Evxm9TMMnf7pzWQDvmS+36JBNppCpxn+/CVfSxZSAp3q
+	QjFWphOHsKm0lEbUOJ0qWrJ1rgA9Fopz7H2XIa+B5xpg7He14NWVMnHH83W9bY51BhN7gBDeO0A
+	==
+X-Received: by 2002:a05:6102:688d:b0:7cc:2fd1:7122 with SMTP id ada2fe7eead31-7d6ba3ddfe6mr1764777137.18.1795037331333;
+        Wed, 18 Nov 2026 13:28:51 -0800 (PST)
 Received: from soleen.c.googlers.com.com (57.233.150.34.bc.googleusercontent.com. [34.150.233.57])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d6b9185bc3sm2724635137.5.2026.11.18.13.28.49
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d6b9185bc3sm2724635137.5.2026.11.18.13.28.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 18 Nov 2026 13:28:50 -0800 (PST)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
@@ -95,9 +96,9 @@ To: linux-kselftest@vger.kernel.org,
 	pratyush@kernel.org,
 	rdunlap@infradead.org,
 	graf@amazon.com
-Subject: [PATCH v6 2/7] kho: link outgoing blocks lazily in kho_block
-Date: Wed, 18 Nov 2026 16:28:37 -0500
-Message-ID: <20261118212845.2855249-3-pasha.tatashin@soleen.com>
+Subject: [PATCH v6 3/7] liveupdate: luo_session: support incremental session serialization
+Date: Wed, 18 Nov 2026 16:28:38 -0500
+Message-ID: <20261118212845.2855249-4-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
 In-Reply-To: <20261118212845.2855249-1-pasha.tatashin@soleen.com>
 References: <20261118212845.2855249-1-pasha.tatashin@soleen.com>
@@ -112,145 +113,158 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, kho_block_add() links each preallocated block onto the
-serialized chain immediately, even while it is still empty. This
-assumes all preallocated blocks are populated together before the
-chain is referenced by KHO.
-
-When sessions are serialized incrementally ahead of reboot, extra
-blocks may be preallocated for sessions that have not been serialized
-yet. Keeping those blocks linked leaves empty trailing blocks on the
-KHO chain.
-
-Keep preallocated outgoing blocks unlinked in kho_block_add() and link
-each block lazily in kho_block_set_it_reserve_entry() when advancing
-into it. Also unlink blocks in kho_block_set_clear() and stop at
-unlinked blocks in kho_block_set_it_read_entry().
+In preparation for committing frozen sessions ahead of reboot, allow
+sessions to be serialized into sh->block_set individually. Introduce
+luo_session_serialize_one() to append a single session to sh->block_set
+and mark it serialized. Update luo_session_serialize() to freeze all
+remaining unserialized sessions first, rolling back on failure, and
+then serialize each one via luo_session_serialize_one().
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- kernel/liveupdate/kho_block.c | 38 +++++++++++++++++++++++------------
- 1 file changed, 25 insertions(+), 13 deletions(-)
+ kernel/liveupdate/luo_internal.h |  3 ++
+ kernel/liveupdate/luo_session.c  | 71 ++++++++++++++++++++------------
+ 2 files changed, 47 insertions(+), 27 deletions(-)
 
-diff --git a/kernel/liveupdate/kho_block.c b/kernel/liveupdate/kho_block.c
-index 0d2a342ef422..21cee45fa1cc 100644
---- a/kernel/liveupdate/kho_block.c
-+++ b/kernel/liveupdate/kho_block.c
-@@ -16,6 +16,11 @@
-  * array of serialized entries. Multiple blocks are linked together via a
-  * physical pointer in the header, forming a linked list that can be easily
-  * traversed in both the current and the next kernel.
-+ *
-+ * Outgoing blocks preallocated via kho_block_set_grow() remain unlinked until
-+ * entries are reserved via kho_block_set_it_reserve_entry(). This allows
-+ * entries to be serialized incrementally without exposing empty trailing blocks
-+ * on the physical chain.
+diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+index 01a172cd9d7a..77dac2742877 100644
+--- a/kernel/liveupdate/luo_internal.h
++++ b/kernel/liveupdate/luo_internal.h
+@@ -64,6 +64,8 @@ struct luo_file_set {
+  *              previous kernel) sessions.
+  * @retrieved:  A boolean flag indicating whether this session has been
+  *              retrieved by a consumer in the new kernel.
++ * @serialized: A boolean flag indicating whether this outgoing session has
++ *              been serialized into KHO.
+  * @file_set:   A set of files that belong to this session.
+  * @mutex:      protects fields in the luo_session.
   */
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-@@ -79,7 +84,7 @@ static struct kho_block_header_ser *kho_block_alloc_ser(struct kho_block_set *bs
- static int kho_block_add(struct kho_block_set *bs,
- 			 struct kho_block_header_ser *ser)
- {
--	struct kho_block *block, *last;
-+	struct kho_block *block;
- 
- 	if (bs->nblocks >= KHO_MAX_BLOCKS)
- 		return -ENOSPC;
-@@ -89,15 +94,11 @@ static int kho_block_add(struct kho_block_set *bs,
- 		return -ENOMEM;
- 
- 	block->ser = ser;
--	last = list_last_entry_or_null(&bs->blocks, struct kho_block, list);
-+	if (list_empty(&bs->blocks))
-+		bs->head_pa = virt_to_phys(ser);
- 	list_add_tail(&block->list, &bs->blocks);
- 	bs->nblocks++;
- 
--	if (last)
--		last->ser->next = virt_to_phys(ser);
--	else
--		bs->head_pa = virt_to_phys(ser);
--
+@@ -71,6 +73,7 @@ struct luo_session {
+ 	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+ 	struct list_head list;
+ 	bool retrieved;
++	bool serialized;
+ 	struct luo_file_set file_set;
+ 	struct mutex mutex;
+ };
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index 6dea35911181..56d7f76c0282 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -108,6 +108,8 @@ static DECLARE_RWSEM(luo_session_serialize_rwsem);
+  * @rwsem:       A read-write semaphore providing synchronized access to the
+  *               session list and other fields in this structure.
+  * @block_set:   The set of serialization blocks.
++ * @it:          Iterator tracking the next slot in @block_set for outgoing
++ *               session serialization.
+  * @sessions_pa: Points to the location of sessions_pa within struct luo_ser.
+  * @active:      Set to true when first initialized. If previous kernel did not
+  *               send session data, active stays false for incoming.
+@@ -117,6 +119,7 @@ struct luo_session_header {
+ 	struct list_head list;
+ 	struct rw_semaphore rwsem;
+ 	struct kho_block_set block_set;
++	struct kho_block_set_it it;
+ 	u64 *sessions_pa;
+ 	bool active;
+ };
+@@ -203,6 +206,33 @@ static int luo_session_insert(struct luo_session_header *sh,
  	return 0;
  }
  
-@@ -144,9 +145,9 @@ static void kho_block_set_shrink_one(struct kho_block_set *bs)
-  * @bs:    The block set.
-  * @count: The target number of valid entries to accommodate.
-  *
-- * Dynamically preallocates and links preserved memory blocks if the target
-- * entry count exceeds the current total capacity of the set, ensuring they
-- * are available during serialization/deserialization.
-+ * Dynamically preallocates preserved memory blocks if the target entry count
-+ * exceeds the current total capacity of the set, ensuring they are available
-+ * during serialization/deserialization.
-  *
-  * Context: Caller must hold a lock protecting the block set.
-  * Return: 0 on success, or a negative errno on failure.
-@@ -312,12 +313,15 @@ void kho_block_set_destroy(struct kho_block_set *bs)
- /**
-  * kho_block_set_clear - Clear all serialized data in a block set.
-  * @bs: The block set to clear.
-+ *
-+ * Resets entry counts, unlinks blocks, and zeroes all entry payloads.
-  */
- void kho_block_set_clear(struct kho_block_set *bs)
- {
- 	struct kho_block *block;
- 
- 	list_for_each_entry(block, &bs->blocks, list) {
-+		block->ser->next = 0;
- 		block->ser->count = 0;
- 		memset(block->ser + 1, 0, KHO_BLOCK_SIZE - sizeof(*block->ser));
- 	}
-@@ -340,14 +344,16 @@ void kho_block_set_it_init(struct kho_block_set_it *it, struct kho_block_set *bs
-  * @it: The block iterator.
-  *
-  * Reserves a slot in the current block during state serialization to add a new
-- * entry, advancing the internal index. If the current block is full, it
-- * automatically moves to the next block in the set.
-+ * entry, advancing the internal index. If the current block is full, it moves
-+ * to the next preallocated block and links it onto the serialized chain via
-+ * the previous block's header.
-  *
-  * Return: A pointer to the reserved entry slot, or NULL if the block set's
-  * capacity is fully exhausted.
-  */
- void *kho_block_set_it_reserve_entry(struct kho_block_set_it *it)
- {
-+	struct kho_block *prev = NULL;
- 	void *entry;
- 
- 	if (!it->block)
-@@ -356,12 +362,16 @@ void *kho_block_set_it_reserve_entry(struct kho_block_set_it *it)
- 	if (it->i == it->bs->count_per_block) {
- 		if (list_is_last(&it->block->list, &it->bs->blocks))
- 			return NULL;
-+		prev = it->block;
- 		it->block = list_next_entry(it->block, list);
- 		it->i = 0;
- 	}
- 
- 	entry = kho_block_entry(it, it->i++);
- 	it->block->ser->count = it->i;
-+	if (prev)
-+		prev->ser->next = virt_to_phys(it->block->ser);
++static void luo_session_serialize_one(struct luo_session *session)
++{
++	struct luo_session_header *sh = &luo_session_global.outgoing;
++	struct luo_session_ser *ser;
 +
- 	return entry;
- }
++	lockdep_assert_held_write(&sh->rwsem);
++	lockdep_assert_held(&session->mutex);
++
++	if (!*sh->sessions_pa)
++		kho_block_set_it_init(&sh->it, &sh->block_set);
++
++	/* This should not fail normally as blocks were pre-allocated */
++	ser = kho_block_set_it_reserve_entry(&sh->it);
++	if (WARN_ON_ONCE(!ser))
++		return;
++
++	strscpy(ser->name, session->name, sizeof(ser->name));
++	ser->file_set_ser.count = session->file_set.count;
++	ser->file_set_ser.files =
++		kho_block_set_head_pa(&session->file_set.block_set);
++
++	if (!*sh->sessions_pa)
++		*sh->sessions_pa = kho_block_set_head_pa(&sh->block_set);
++
++	session->serialized = true;
++}
++
+ static void luo_session_remove(struct luo_session_header *sh,
+ 			       struct luo_session *session)
+ {
+@@ -637,48 +667,35 @@ int luo_session_serialize(void)
+ {
+ 	struct luo_session_header *sh = &luo_session_global.outgoing;
+ 	struct luo_session *session;
+-	struct kho_block_set_it it;
+ 	int err;
  
-@@ -381,7 +391,9 @@ void *kho_block_set_it_read_entry(struct kho_block_set_it *it)
- 		return NULL;
+ 	down_write(&luo_session_serialize_rwsem);
+ 	down_write(&sh->rwsem);
+-	*sh->sessions_pa = 0;
+-
+-	kho_block_set_it_init(&it, &sh->block_set);
  
- 	if (it->i == it->block->ser->count) {
--		if (list_is_last(&it->block->list, &it->bs->blocks))
-+		if (!it->block->ser->next)
-+			return NULL;
-+		if (WARN_ON_ONCE(list_is_last(&it->block->list, &it->bs->blocks)))
- 			return NULL;
- 		it->block = list_next_entry(it->block, list);
- 		it->i = 0;
+ 	list_for_each_entry(session, &sh->list, list) {
+-		struct luo_session_ser *ser = kho_block_set_it_reserve_entry(&it);
+-
+-		/* This should not fail normally as blocks were pre-allocated */
+-		if (WARN_ON_ONCE(!ser)) {
+-			err = -ENOSPC;
+-			goto err_undo;
+-		}
+-
++		if (session->serialized)
++			continue;
+ 		err = luo_session_freeze_one(session);
+-		if (err) {
+-			kho_block_set_it_prev(&it);
+-			goto err_undo;
+-		}
++		if (err)
++			goto err_unfreeze;
++	}
+ 
+-		strscpy(ser->name, session->name, sizeof(ser->name));
+-		ser->file_set_ser.count = session->file_set.count;
+-		ser->file_set_ser.files =
+-			kho_block_set_head_pa(&session->file_set.block_set);
++	list_for_each_entry(session, &sh->list, list) {
++		if (session->serialized)
++			continue;
++		mutex_lock(&session->mutex);
++		luo_session_serialize_one(session);
++		mutex_unlock(&session->mutex);
+ 	}
+ 
+-	if (sh->count > 0)
+-		*sh->sessions_pa = kho_block_set_head_pa(&sh->block_set);
+ 	up_write(&sh->rwsem);
+ 
+ 	return 0;
+ 
+-err_undo:
++err_unfreeze:
+ 	list_for_each_entry_continue_reverse(session, &sh->list, list) {
+-		struct luo_session_ser *ser = kho_block_set_it_prev(&it);
+-
+-		luo_session_unfreeze_one(session);
+-		memset(ser, 0, sizeof(*ser));
++		if (!session->serialized)
++			luo_session_unfreeze_one(session);
+ 	}
+ 	up_write(&sh->rwsem);
+ 	up_write(&luo_session_serialize_rwsem);
 -- 
 2.56.1.708.g77570a6a1d-goog
 
