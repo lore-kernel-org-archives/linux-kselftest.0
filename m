@@ -1,104 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794968913;
-	b=UJWIeDUbWwyE6cEhVzxy+oOm+Ugwy4Mp8BsUNqstxdfrBSioQ+ClLrx6dyb8KB4stTa6
-	 Ad7M8qWj3OMy1HghSqPVF2Jg6R9JNAbGqS+UJ5GivGq7FuVTUD0bue8jFrt/dKEKSTFXR
-	 ayGojarm6frHs+0b9CGBHAnohXs0y7tOIEfv3lFh2Lyv2XM82XQfk/yyHmb3GtI+MOIXv
-	 1E+tbDJJ364wzwWhPbriIhcgmsqeS0CBhC3H1b30BEwYxw5F7uu7TZ0U7KdU1aqsCymle
-	 lIJEDX4ZeB2RfaC8yskGqp+NUPBIdhWuSe5MEOrWKtbUI/wXuiMTtTqu79yWmay8mVA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794968913;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.178
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794969186;
+	b=V12rPxwVbYOAFycxD8r76P9UAtDn91K8W8ZFH78sUxmD0a0wguofmlCsOhiAL0kHu15f
+	 /baOwla5v9AeNboZtK9p1ND4znVOzjLxIdnZ00PKeEj+B2skjf9rxhzi/j/xFY/V1XEyq
+	 pnnG9eB73BvKEcgJBcf/qsM3lHQX1UhK7ME8yInl1CzYJAyKaIEzqILMvbNb53SjQ9ar4
+	 rbqVmnFDkvIB+czGzSRiZvkqRDG7JBYxEBrFR6k828aRHg3N52enN+97VL4twz8rVo+Pk
+	 JOAi9zKkZES8Ix5987x9thpedl4flEpd2+7ugbm1Ql/YYU36JcWY/dnMIyoumKjcNiA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794969186;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Ho54TYF6nZjSAVceuh96jk4faWMez+7R+0ZdE7pbCeo=;
-	b=FaYMGx1hzN5hpK/zydFsSMEW+okIQ5jpG1ScIqd8qI9NpLzblSd1sujJXFNr+qgUh0TD
-	 rYHnwo1hBt8hwq/c5J/Or3ZU/qwpZwueeN3675FPHLdbx6Vr61FIavh0m7IpYDVVCjlZM
-	 E2oljncqT7s/n89K2wnhGb7bFY2bRIEGIjKoD8LSUzLmiw9T3Gqae9truwhaLsmgQfAeo
-	 zssbcZioNT8dm7YUYrZUGNFZTpIrwdkR0B/yfMoBmLxlkX5+6zkfwEgBDPJKHVCWeZdUn
-	 xUudF260f+lnun9I/TzpMrGYZCHZUMLeijy3Lp6G1iLeFJoIVuVC/+RZzR8qpSMIhdA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=noSpeQOW;
-	arc=none smtp.remote-ip=209.85.215.179
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=kmSkdaUR1gPHZOSDkyeeXRZGjYfCAQ+xcWE+EobXcu0=;
+	b=Kw+Zpf/HULjnB4sz9utHKmx9ZkgNAdAxhlAVMMUtI7Nrtuac6390G1PnFkprdVVMkyPR
+	 t7RU/duCQ1P59Y5yLVd26IdjREscfe/lRsFrYYnA9HiZyXUO9c2b8H69u7hW5k4Ra7EsG
+	 zno90NNrLH9I/g5d8kqmVdJznEej6NP8sMGRyfxO5eW2ZWlkmZEXKVYJ/oEWoXxTBI8oU
+	 jQVLj0nSr0o4E8UvTDqYx6fjJTabwg8smZJYGv+CiYKkiXPZSYhlvYRd44zgEIhm84QLk
+	 eMAxQSOQ5anFFJPVd0tCNlOPyHFj2B+Opb/IakpP/aHaobm1A0fjsJj+QNd7qw6eDzg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=brQVox1F;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.178
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FD3606A31C
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 02:28:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92FD3606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11F1606A32C
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 02:33:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E11F1606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=noSpeQOW
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cdddc79a4afso234053a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 18:28:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=brQVox1F
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5ee1e4e3abcso135154e0c.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 18:33:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794969185; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PHa5YnjPiIuj+noP8SzRY456/cmnFrH+A1KUXOmB5jA/cmR30OalEBUbil7PYovrKn
+         3Byo1AlUNYm0myVmy8E14Kc1CqwKT3+D650rJLqIghOGSQcg1ULJ4+Usa6A0Rl3sdQBE
+         sH0ZVuczUjieHCwBDE54XqDNyXKMtEcYootymrstvR1y0XCtER4TTb9T4tOUFi0F8h3c
+         PHUYQBBhnBHN+CXog+1GIA2ogJ0YzirBGuTEz54QIeqBQgDsI09hox2QNJIXgpcD/jFD
+         d9lUfgxeKSn4pMDFHmtgQDSEIHRU4nytcO5l/Bd/PAds64MJRO1BmTAu/poj9BuZobVv
+         Oh3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kmSkdaUR1gPHZOSDkyeeXRZGjYfCAQ+xcWE+EobXcu0=;
+        fh=qNLKUKXxrsFN1hHGAVeEoOfJHAgdOC1iZmXudYFdL2M=;
+        b=EBqUPWIp7ybonky2Xcyr3d7Lo/yQqanIWtLNos/1paTbr1xATsNWZM1AP9a/cf+Gl+
+         wzK8ifj5K7nMFbhJZqn5oaEp6xRc2kds41BuEHZE4kkINQgcR4Jh/OoWK4EWUBYWULmH
+         vQXaLEEneqmBIjWP4+QGeF85p1b+p80KiliTRFmxQ7HbEs6ceX3l9LKwTltALjf5+mCK
+         Z+vIequSdcaSl3CXJTDiPgeidkprKK2RDVFQhoR236OPAsqPDdfuQa0RPv/cEnMEyTfb
+         XXlLTZ+LSgGRvceZQBBg45ciKIhmmTkvpT2jOqIYvoq1r5ONhfefoQQ2IIc0MT4lwaJa
+         V6ZA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794968912; x=1795573712; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ho54TYF6nZjSAVceuh96jk4faWMez+7R+0ZdE7pbCeo=;
-        b=noSpeQOWMnvjMUB6qRG1XQ4bNW0CovOzR4Vock8d8sRNJybt3HCHGEScStRD4rHXQw
-         qz60TaqJL5yaoG7l01VvNRfzP3YN1ZG4Ockxhic+KD7NCdgifN0nu/W7rTvARuUm+j9C
-         UugLhefh86fBh9EFvt56DLVHm0/6KtbPyKrdZnZU/3dCWq9T3EsNpZrQ6Clhh2VZlC5k
-         KmVIaN5kugqEK8xGHodYrAaBq1/LBqURUOvPksHiVpUHVG2HvrVOnxzo90Jl0G6pqXxG
-         n4fKFxn90Ayht0MnfjGbVYXAbHSCi0CKmZx0uhpL91VZy6+0RCBtcqznu8iF5PWcVAf3
-         eSZA==
+        d=google.com; s=20260707; t=1794969185; x=1795573985; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kmSkdaUR1gPHZOSDkyeeXRZGjYfCAQ+xcWE+EobXcu0=;
+        b=brQVox1F6VXFbGdLs1+5DMYomOu4P/zJmzDC9Ti5885w/zs4TQQIbpk+NF3r9zyy1Y
+         qzRElcNXYoo8DvxnoVvb4Lbf2dAREqfcmjd+iBdL2wbVRCy4kMnQzyJFpR8fHmKM9fG+
+         uQ6XWKes8zbeiQgz5eIIM+Te8KNZBYgvc4IlvpXFqiLwJwab8cpVZCulDFC1NjLhrbRp
+         6wPQfnwT8XLwP0RKpR98M7DveMFpl7k7gkT0M5oawiW5vG12E08SQ+FH3gyn2OzHJ6Df
+         GlPjHxzCjAc+xAHLmrN6KMr/POrH1l/qjoCfhQjmNAz7Z3gFO1JokkIfILvegihdbN1f
+         arWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794968912; x=1795573712;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ho54TYF6nZjSAVceuh96jk4faWMez+7R+0ZdE7pbCeo=;
-        b=tzpUAGWUfb745589xfnTZ7gZMHiw4/WUuS/VI2DjLNEi2QHzQQGiGX3HHJy1Tv/oqD
-         PDv29M7Ufueyz9/acTYNidb9J0VH4ujiGodaJBrK9jh01mQMF5IQYBaYXXA687Bz0uaM
-         nJ53HM7MusuLYM6vCYmNA6oJXRNu7zbeC7kE6H+oUmL5TPD0muj1915v1f3jqzG5fjN0
-         jhkECjn1QwPDwdliWgLdTykGui0joKAaMrvY+nuItXzXIYLeXqWNbk0VJno6dD5BR8GK
-         I1BZaZIimJMjqpc8MwpOmh4XkXLlW+rmU5xzf4LEdUeDi75L5ChaF2GtlSBz3rToTcfC
-         fDEg==
-X-Forwarded-Encrypted: i=1; AL+hErGQZAjxblZIpDtu9LVi170d9Ox5xVss4EAQjhFwwnNpUpty6caF7QVdLwzUwoBI9l2T/y2WPhNM6xaoYKtsVgQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z93uB1Uh8SJ/Ja6F61K+MUcMMK9OpCV0fWmHBxeXZ0qfzdSQYTY
-	4XtkR7zu7DRNxORKHX7vLmeMq5x/erP4ZKzO4mCT61m5c/mUvJ+gslSl
-X-Gm-Gg: AZFdTZdF4D4gLzWvK34WzMGjPxYx9TFjkggtIN28r3Jq14ZEAwziIAa9V5EdquJGpst
-	rDBEAnlPYyYZ1K9M9s2E9IXonyoYAhAUSKyyVChtEYkABWhIbn4HuoKV88IkOLwD42cuPh9CveK
-	t2nxGvPDSKYjgH1eqX/QQJRSWkxboHMl4trz7rl+p7W7neq7BsUGLxTpjmLEWdJ1dMZ5jrs26Ts
-	VHzx95uwHDmTA7M3hdybQOiD/7Q5DsTQL3kJ/RyZC+OAcur0N6LZ0MQH0tjlmW02uw0j3aX/cor
-	gds+OjOlKF25qv8JNVZkknwvTcGbGG/pd4FQ/ReRSf1pXDlDhkJcHTWWB6xp5frp5vMwEE/+OOI
-	6G1YcjUxtmgqZKpqFEVCYJGylwdT28hlGt6ovtsTNYjmKdXvgiU09SYJx/mwHWLOZsnX8qlv9lx
-	deUuCIUoEBrq2T672qNm0MjJTpcADeqH+wv7UDao7T8OTofRzK2G401RxiAH71HyDT3FS08Sv8f
-	9LcCN3L990U/4esgA5PkWSSE8JFuJQIT3G/GzL34aipIXkKJjRIX4e7XX8+lSCrx2QWInEGndyq
-	visS/SSR2ekGoVAtIyImClZUUL2J85+QxnEN3BY7wDRVvWQOtjjCWRNWN7bD7hvFQEP7f3h6XNt
-	VRT82h4TRcF45XqxOPvWZ32E=
-X-Received: by 2002:a17:90a:dfc8:b0:3b0:9cc6:62ba with SMTP id 98e67ed59e1d1-3b3d07d410cmr1041938a91.38.1794968911769;
-        Tue, 17 Nov 2026 18:28:31 -0800 (PST)
-Received: from message.eml ([2a09:bac1:76e0:450::21f:e8])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3ac2b5ec6sm6700682a91.10.2026.11.17.18.28.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 17 Nov 2026 18:28:31 -0800 (PST)
-From: Zhiqi Zhang <zhiqizhangg@gmail.com>
-To: Eric Dumazet <edumazet@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Tim Fuechsel <t.fuechsel@gmx.de>,
-	Lukas Prause <lukas.prause@ikt.uni-hannover.de>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] selftests: net: packetdrill: add ROCCET RTO test
-Date: Wed, 18 Nov 2026 10:28:13 +0800
-Message-ID: <20261118022813.9778-3-zhiqizhangg@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261118022813.9778-1-zhiqizhangg@gmail.com>
-References: <20261118022813.9778-1-zhiqizhangg@gmail.com>
+        d=1e100.net; s=20260707; t=1794969185; x=1795573985;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kmSkdaUR1gPHZOSDkyeeXRZGjYfCAQ+xcWE+EobXcu0=;
+        b=ml1IK/RRHB0iFdmegH4++4OklsWUcfr2+5EdUU1ecWgqOvihRdKMg171i0v+u1cVjb
+         0n7U2ULOcT3PG38uF2xCB7uyPIlYKRvlwQAJovseMeLoU2jRHQXGhxRlamI71aGyKBAp
+         op9TVgfO2zB8/zBmRlb8VUIBAbYq/e6h58qzmEf+yAE1l83HXR1jTYFCW5mdYCBrEz1S
+         k7AVJcKY3q3IaWPnkT6KZX2bQxlC8QEzmx/oRe6HINxhgDL/fF0o3tCV/4b3nx92Ct6K
+         2zy7cidfl2ZtysQBHPxhs4C5cU1Fve6xp6nOVdTe4gAqVBBLJLznR/85QTRNIaM98R4q
+         Kinw==
+X-Forwarded-Encrypted: i=1; AL+hErGUFsmt7QemecEdEQIafpzA60GSpNBpjaaaENPUB2TE0yHwLWhpK7w/dEmeXoJA4wM3ns2A6brU1D1Ss1FUJoA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9snqOCMEP3tUJsHKyasGSYwSg0H/Uqqep+4AAdv/Fq2os5Mi1X
+	NMvuYmchxGXswMvsvjsYCOIqYZ+fcj24U4CgkDqQ+MioORQxgAmTausm65mjCfnGIqydd75Q+FQ
+	6EUkzYGedNoFvuO0aC2qCAxQbzRHPYgBbYbMAC9Gq
+X-Gm-Gg: AYBFou1vrmMSCbsuZF8ugnCCmkxzMoLrSEHQbAIB3IHYXo2vSt8h3CLaG+mqIEmt6as
+	NolNuKiOKc9+isCUZJb5RQ0SalelS1Ibkkpkakz9nwamV7FPjZZRla3q2I5/pVKJTlJtxsqx8Da
+	1Bo447ODEywaTiyBRDAfQCWY7YI9jdQ74aGPj5QsGfZ/vuQjpOtHhYx9J10rpZ1gVKYwN3SYJyX
+	Us6cYx7/DmaTlizHSDdf3SjuHUSFrEtFkZmZlepmsM0cKvLx3o98mZrDrJLTqqetIqtPWsTeH6i
+	lmWdf18xqAptJozJqIiuKf9pW7tC49by3072DTQ2o40WrAih6GzprADRY/DSqxLH8RzbgTSbhrB
+	VnQWRnR4/CDgptpHHRrc6dMjdeEhEPg6VeUxl
+X-Received: by 2002:a05:6122:2090:b0:5ec:e6b8:eb94 with SMTP id
+ 71dfb90a1353d-5ee64707670mr743046e0c.12.1794969184030; Tue, 17 Nov 2026
+ 18:33:04 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,114 +104,193 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261112014942.2946303-1-treapking@google.com>
+ <avaewOJD7tX1UYfE@fedora> <avanVkILHDYdpond@fedora> <CAHwYsio=qtCY10EPnh+qvWpdgtQUG5mw1b3WKMt9_Kytcc7h9A@mail.gmail.com>
+ <avwBrbJfp4ET9ifT@fedora>
+In-Reply-To: <avwBrbJfp4ET9ifT@fedora>
+From: Pin-yen Lin <treapking@google.com>
+Date: Tue, 17 Nov 2026 18:32:52 -0800
+X-Gm-Features: AclHuK8PlSleIouGSsimoM04t8dnEBmceA6kyDcl75PCQlr4VIa_x83DUMY1klA
+Message-ID: <CAHwYsiqwCVPJqtQRoP+9Uw66RpdGL4zuiCPO8+mqShxnvFgDPw@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: bonding: fix failover race in
+ bond_options.sh prio test
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Bjoern Doebel <doebel@amazon.de>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	Matthieu Baerts <matttbe@kernel.org>, linux-kernel@vger.kernel.org, 
+	Jonathan Toppins <jon.toppins+linux@gmail.com>, linux-kselftest@vger.kernel.org, 
+	Hangbin Liu <liuhangbin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a packetdrill test for the ROCCET idle restart on RTO.  TLP is
-enabled, so the first RTO is affected; the test asserts that
-tp->snd_ssthresh stays at the prior cwnd (20) across the first and
-second RTOs.
+Hi Hangbin,
 
-The test fails at the first RTO without the preceding fix
-(snd_ssthresh == 10) and passes with it.  A variant with
-tcp_early_retrans=0 (no TLP) fails at the second RTO only.
+On Mon, Nov 16, 2026 at 11:26=E2=80=AFPM Hangbin Liu <hangbin.liu@linux.dev=
+> wrote:
+>
+> Hi Pin-yen,
+> On Mon, Nov 16, 2026 at 05:30:28PM -0800, Pin-yen Lin wrote:
+> > Hi Hangbin,
+> >
+> > On Thu, Nov 12, 2026 at 10:00=E2=80=AFPM Hangbin Liu <hangbin.liu@linux=
+.dev> wrote:
+> > >
+> > > On Fri, Nov 13, 2026 at 01:23:40PM +0800, Hangbin Liu wrote:
+> > > > Hi Pin-yen,
+> > > > On Wed, Nov 11, 2026 at 05:46:18PM -0800, Pin-yen Lin wrote:
+> > > > > The prio test intermittently fails in the arp_ip_target and
+> > > > > ns_ip6_target variants:
+> > > > >
+> > > > >   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [=
+FAIL]
+> > > > >     Current active slave is eth0 but not eth2
+> > > > >
+> > > > > The ARP/NS monitor marks a slave down when it has received nothin=
+g for
+> > > > > too long. With arp_interval 100 and the default arp_missed_max, t=
+hat is
+> > > > > about 250ms for the active slave (eth1) and 350ms for a backup sl=
+ave
+> > > > > (eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the =
+reply,
+> > > > > and eth0/eth2 receive a copy forwarded by the gateway bridge. Onc=
+e eth1
+> > > > > is down, its probes reach no one and no slave receives anything, =
+so
+> > > > > eth1 normally times out first and the new active slave is picked =
+by
+> > > > > prio:
+> > > > >
+> > > > >   t=3D0    probe: eth1 gets the reply, eth0/eth2 get a copy
+> > > > >   t=3D10   test sets eth1 down
+> > > > >   t=3D300  monitor: eth1 idle 300ms -> down
+> > > > >                   eth0/eth2 idle 300ms -> up, eth2 picked by prio
+> > > > >
+> > > > > But the test takes eth1 down right after bond_check_connection(),=
+ whose
+> > > > > ping replies only arrive on eth1:
+> > > > >
+> > > > >   t=3D0    probe: eth1 gets the reply, eth0/eth2 get a copy
+> > > > >   t=3D70   ping reply on eth1 only
+> > > > >   t=3D85   test sets eth1 down
+> > > > >   t=3D300  monitor: eth1 idle 230ms -> still up
+> > > > >   t=3D400  monitor: eth1 idle 330ms -> down
+> > > > >                   eth2 idle 400ms -> down too
+> > > > >
+> > > > > eth2 can then no longer be picked. eth0 becomes the active slave =
+if it
+> > > > > happened to receive some other packet (e.g. an MLD report), other=
+wise
+> > > > > whichever slave comes back first does. With primary_reselect 1 or=
+ 2,
+> > > > > the bond keeps eth0 even after eth2 comes back.
+> > > > >
+> > > > > Before taking the active slave down, wait two monitor intervals
+> > > > > (200ms), so that at least one more probe is sent after the last p=
+ing
+> > > > > reply and all slaves last received that probe. The miimon variant=
+s do
+> > > > > not need the wait, but the extra delay is negligible.
+> > > >
+> > > > I'm afraid the waiting time is too strict, especially with a debug =
+kernel
+> > > > since delays can happen.
+> > > >
+> > > > Bjoern is also fixing[1] this issue by pinging a non-existent neigh=
+bor to
+> > > > keep traffic flowing. Would you like to test whether that works for=
+ you?
+> > > >
+> > > > [1] https://lore.kernel.org/netdev/20261104142018.552135-1-doebel@a=
+mazon.de/
+> > >
+> > > BTW, using ping may not able to triger the arp request in time. You c=
+an try
+> > > arping instead.
+> >
+> > Thanks for the pointer, but I believe Bjoern's patch addresses a
+> > different problem.
+>
+> I think they are the same issue, as you comment also said
+>
+> The ARP/NS monitor marks a slave down when it has received nothing for
+> too long.
 
-CONFIG_TCP_CONG_ADVANCED and CONFIG_TCP_CONG_ROCCET are added to the
-packetdrill config; ROCCET is only visible when advanced congestion
-control is enabled.
+This is the existing behavior of the bonding driver, and the prio test
+uses it to check which backup slave takes over. Slaves being marked
+down is not the root cause of the test failure. Instead, the root
+cause is the ping replies described below.
 
-Test written by Eric Dumazet.
+>
+> >
+> > Bjoern's patch keeps the traffic flowing so that idle slaves are kept
+> > alive between the test steps. This patch fixes the case where the ping
+> > replies from bond_check_connection() only arrive on the active slave
+> > right before it is set down. The active slave's failure is then
+> > detected one monitor interval late, when the backups have also timed
+> > out.
+>
+> The reason is we set arp interval to 100ms, and slowwait also check every
+> 100ms. If the backup slave down at the same check point, e.g.
+>
+>   t=3D300  monitor: eth1 idle 230ms -> still up
+>   t=3D400  monitor: eth1 idle 330ms -> down
+>                   eth2 idle 400ms -> down too
+>
+> The test failed.
 
-Suggested-by: Eric Dumazet <edumazet@kernel.org>
-Signed-off-by: Zhiqi Zhang <zhiqizhangg@gmail.com>
----
- .../testing/selftests/net/packetdrill/config  |  2 +
- .../net/packetdrill/tcp_roccet_rto.pkt        | 63 +++++++++++++++++++
- 2 files changed, 65 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_roccet_rto.pkt
+I don't think the slowwait interval makes a difference here.
 
-diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
-index b7df8bf309..6e012141d5 100644
---- a/tools/testing/selftests/net/packetdrill/config
-+++ b/tools/testing/selftests/net/packetdrill/config
-@@ -6,6 +6,8 @@ CONFIG_NET_SCH_FIFO=y
- CONFIG_NET_SCH_FQ=y
- CONFIG_SYN_COOKIES=y
- CONFIG_SYSCTL=y
-+CONFIG_TCP_CONG_ADVANCED=y
- CONFIG_TCP_CONG_CUBIC=y
-+CONFIG_TCP_CONG_ROCCET=y
- CONFIG_TCP_MD5SIG=y
- CONFIG_TUN=y
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_roccet_rto.pkt b/tools/testing/selftests/net/packetdrill/tcp_roccet_rto.pkt
-new file mode 100644
-index 0000000000..dabaf07f32
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_roccet_rto.pkt
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test that ROCCET does not take its "restart after idle" path on RTO.
-+//
-+// An RTO retransmit raises CA_EVENT_TX_START, because all outstanding
-+// packets were just marked lost (tcp_packets_in_flight() == 0) while
-+// tp->packets_out is not zero. If (now - tp->lsndtime) >= icsk_rto,
-+// roccet_cwnd_event_tx_start() used to overwrite the snd_ssthresh
-+// that tcp_enter_loss() had just set with TCP_INIT_CWND.
-+//
-+// TLP is enabled here. The RTO timer is rearmed for a full icsk_rto when
-+// the loss probe is sent, and the probe is the last transmit, so the
-+// very first RTO is affected.
-+
-+`./defaults.sh
-+./set_sysctls.py /proc/sys/net/ipv4/tcp_slow_start_after_idle=1`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_TCP, TCP_CONGESTION, "roccet", 6) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 511
-+   +0 accept(3, ..., ...) = 4
-+
-+// ROCCET paces its packets: do not expect precise outgoing packets,
-+// rely on TCP_INFO instead.
-+   +0 write(4, ..., 10000) = 10000
-+  +.1 < . 1:1(0) ack 10001 win 511
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-+
-+// RTT is 100ms, RTO is ~300ms. Nothing is acked from now on.
-+   +0 write(4, ..., 20000) = 20000
-+
-+// TLP fires ~250ms after the write.
-+  +.4 %{
-+assert tcpi_ca_state == TCP_CA_Open, tcpi_ca_state
-+assert tcpi_total_retrans == 1, tcpi_total_retrans
-+}%
-+
-+// First RTO, ~300ms after the TLP probe.
-+// ROCCET is still in LAUNCH state: ssthresh is set to the prior cwnd.
-+  +.3 %{
-+assert tcpi_ca_state == TCP_CA_Loss, tcpi_ca_state
-+assert tcpi_backoff == 1, tcpi_backoff
-+assert tcpi_total_retrans == 2, tcpi_total_retrans
-+assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd
-+assert tcpi_snd_ssthresh == 20, tcpi_snd_ssthresh
-+}%
-+
-+// Second RTO, ~600ms after the first one.
-+  +.6 %{
-+assert tcpi_ca_state == TCP_CA_Loss, tcpi_ca_state
-+assert tcpi_backoff == 2, tcpi_backoff
-+assert tcpi_total_retrans == 3, tcpi_total_retrans
-+assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd
-+assert tcpi_snd_ssthresh == 20, tcpi_snd_ssthresh
-+}%
-+
-+// Reset sysctls
-+`/tmp/sysctl_restore_${PPID}.sh`
--- 
-2.54.0 (Apple Git-157)
+The ARP monitor decides which slave becomes active, and slowwait only
+reads the result afterwards. The test expects the active slave and the
+backups to time out in different monitor runs, so that a backup can
+take over. In the example above, eth2 is already down when the bond
+picks the new active slave, no matter when slowwait polls.
+>
+> >
+> > The ARP requests triggered by Bjoern's ping are sent only about once
+> > per second, which isn't frequent enough for this failure. I tested
+> > Bjoern's patch and confirmed that it didn't fix the issue in our
+> > testing environment. We also can't simply use arping instead because
+> > iputils arping doesn't support sub-second intervals.
+> >
+> > If you're worried that the 200ms sleep is too short, would increasing
+> > it to 0.5s or 1s work for you?
+>
+> It's not about the sleep time before setting active slave down. I'm afrai=
+d
+> about the slowwait checking time. Even we sleep 1s, with arp interval 100=
+,
+> we still only have 100ms checking window. Before the window, the active s=
+lave
+> is up, after the window, the backup slave also down. With a debug kernel,=
+ this
+> time is a little tight.
+>
+> So, either we have some background arp traffic, or let's extend the arp
+> interval to a larger one.
+>
+> What do you think?
 
+I agree that a 100ms ARP interval could be too short in environments
+like a debug kernel.
 
+Background ARP traffic doesn't widen that window, though: it is sent
+through the active slave, so once the active slave is set down,
+nothing reaches the backups. It could only help with the ping reply
+race if it were very frequent; Bjoern's patch triggers about one ARP
+request per second and didn't fix the failures in our testing.
+
+Increasing the ARP interval alone won't address the ping reply race,
+but it should help in environments like a debug kernel. I'd prefer to
+keep this patch focused on the ping reply race and send the ARP
+interval change as a follow-up, but I can fold it into v2 if you
+prefer.
+>
+> Thanks
+> Hangbin
+
+Regards,
+Pin-yen
