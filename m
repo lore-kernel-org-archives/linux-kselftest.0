@@ -1,100 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.193.129
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795022998;
-	b=YHdZXObOLCI6y4/VBkjB/HzLVrstM8QLTUriEKnQ6boDdy2UAdgc1bv9JXb5IbHxnhAO
-	 ukhh7tRtIUd2DC3MBr1dlDd4NMrbqN6Ih3EhTV+Uit0RAw0c/nCcXNhDDfGqBNfSe/oVz
-	 0yZ2ymEW1D412DQq9LY9Xgqd86EaK2ESrFcr8tdgr3ZsdMEQ6u0lFF9mPuRhMFh0S+G43
-	 HJn2kY3kJtM4/fXoRTl5jiaJiIVAG0DGvICBzqmHt5kKVY3Xd4h6XBzcRnlTD0VDKGO49
-	 +sYCjiSr0XCLT5Zm8YRXO16sPtL5rbiiwAY/Jr8KUDP9MZh8UgnDo8Qv292sonSsgpg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795022998;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=JnXUzxCQC1yDqwu2E0NYc6l4pXoj+t9j6grsx26mUlI=;
-	b=qb3B5QZrBEISTUuFHgDehrFVdCPpRychah6H1G7NWoFiRodL6FwE7MEFLgyZBrCXY2Gy
-	 AOD9LJg65N86tS7ZANhju4GLBmnWQeJR8Y4pRl0pUCbLkPNyeVYuALyav29P0CECP2xGO
-	 a+6VNzULfJBZienU7jJdoqkAazYhqh4RecZ/gZbcxPSK0K0uOqSrDhjCpIEwfdKEkmaeg
-	 DTwQ/+oPNuKjuxrcOF8MTiAV4NPDgZfRAAHcbuyKQXF0U3TmSHI4sUAkG+pDM2keTO1c+
-	 7X0H4r8VNLRnV3IXoHHDTTN+4pLulKdvgu7t0QJBBQv9W9V/ATJCWVr/GooKeCz1Ajw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=MS8rnmc4;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.193.129
-Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022129.outbound.protection.outlook.com [40.107.193.129])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795023025;
+	b=QhZ7jnzkJeU3CGZhg5+/lKzubMfFL/gcm/HJIA7iwwIeElCO8CWaQH4ZIcvbaPIkjkmG
+	 rtyGnvZN+HEVJ15AbeyaA2roU5SOq1sBzHVdjxknfK84Ba7K5+iM3c2LttOZ3nSbwGOOK
+	 fkv9HquYSSqqbAm92a7BToImadTtTMM/g7y9oL8xV1vQKY/NN35dQdgugeK3uh57Oa7mp
+	 /Z6LUpmP6fC77Aa/3SVoYJ4hphbhVyUVuGcBOyPvy8vtTxjflPxW5gdSzHq+77eyowPy6
+	 CBEPkZBhEZ1Ein3xG+qIbVoTi7eTiO1/HD7qptR9WSSpLQp2G5NjZKLjsSbbP3vDsSg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795023025;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=AXyr34eZLB1bS8MATPL8FPR/LLqo+MrnU3tB91TSYQo=;
+	b=MgzHzLb4qmVeSH6oIYDt+VXlXlh5+E+0/VHmmfCdLrFu7G8sVSP26FuPYTU2199hvONs
+	 df7O9zPw7nhc8sE9BlF6/c3X2CCwvlVnd1zj6oa6poCoZqjgX4Sihvlc6u/DQsoRfTgk/
+	 6rbyFq7lgAM3jZDl3NvJJTEryCQO7oW52Rk4495/RX/fo0hOHdKGgXDkDbEdv6XoYqHSK
+	 iflxKtzdLCnvTKY0cpBSzf1s93WdWsctjFJrK+wdXydwhP/1iDG4qfzm7SAUpQZoFGgow
+	 ddmve1CY6Jz4uCbKxaSeM8W2S35jxnXkdYQnirQ3vAtNi7CUGVP3Jt1rdizkthdWAfQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=djw2K2od;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51CF606A33D;
-	Wed, 18 Nov 2026 17:29:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D51CF606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id E8548606A320;
+	Wed, 18 Nov 2026 17:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=MS8rnmc4
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wLn+xJ4qCfEIQlNLjD+QnfABeWRmVh8ILt7czFGuk9NQg6PUA8VxrFColKaEgafAu4bFojYq/QUoKLPog1R5G2esBQmXiFd7ur3gdM6hOpFSfIMEOGEquWqKLstyNn2CifneKMN4RNLJ5CQURbqMuH6/x7KYHyKqR3vARHo1ygCUzTsCF2oMTAClBIqhw8VuS90rHp4LovCmXyQ9l9A5q6YgXGkEEH4HZip04QaBLbxp9ad3K8WThno5JI2hIGwMDy82vy9CcuKFKmudJdp8eGSZqQj61LYoDh9NMEElWtyRl4whcC9JNqkqgXHQ4p/07Wj5v+usJpudeUr7QjGCSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JnXUzxCQC1yDqwu2E0NYc6l4pXoj+t9j6grsx26mUlI=;
- b=p5Rl0gUxkubo52iYuTKACjKreYGq3k2eRKkDWGE4z6ajsf4mLZtlJILPm2bRphNy4tkmcP/Ot/9njdO1j0m4CQhwI+FS0CvNw+qPu70Ed5Uhrq/oCd27lSjsFeiwqzIQWaz5ieXIyJCmYx+EFaTyIDNviUinJ2hrsMuFOmRIZVtlpAebr6pgzdHDu9xQP4xe8e3dzFDqppl2FdP/TC5Q+076Y3Ve/o07fydFCBQMqL5qR4PTGHXDb/EgJsCI7V+oYOhRrV5MdpiKYeJ9Ws9QDHd6kQqMezldYWkoKSw85dumI5NdQl0MY1+PE63IntI6FQvsU6dzS/bE9kUJtrzBaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JnXUzxCQC1yDqwu2E0NYc6l4pXoj+t9j6grsx26mUlI=;
- b=MS8rnmc4FAFKwBRE6ixZaYeT6amhCvaA+H986Q8O8v72SMJYZcEvdWLZmQVo9DzaNWpt6uB1xgFvfwmek3/ZUk6bqf8h4IrR5fopwMvgprh96TMR04WJoVBTQ9fyZv+XDU7lqxYTnODZFatJ6isnOGeRxmWb3XIp/FzxPI3esHzuTjtlhFCy6pv9FNQyOrwPe1/xHRiGKPxhuKVVtGZ4u7ZLw69LpaBNf2Q1zxB5b13Iv5xOy6+L8rNewv1C9AStbFgy3Dm7Hhm7sG/+/1+BT8n0qVtSe0sWSznY16Vlt08tUYq+I5ps0gv9c/syAhPv4ytflcEUBY8TQ8OR0Z1LNw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YT2PR01MB11553.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:154::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 17:29:56 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.013; Wed, 18 Nov 2026
- 17:29:56 +0000
-Message-ID: <e57bdae9-4f87-4cc1-9fdc-22c2d766e252@efficios.com>
-Date: Wed, 18 Nov 2026 12:29:55 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] locking/ww_mutex/test: Time an ABBA with both
- owners running
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
- linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
- longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
- dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
- shuah@kernel.org, juri.lelli@redhat.com, linux-rt-devel@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
- <20261108141347.1525532-6-mathieu.desnoyers@efficios.com>
- <20261118163807.75hxTxGn@linutronix.de>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20261118163807.75hxTxGn@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR01CA0159.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:7e::19) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=djw2K2od
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 142AF1F000C4;
+	Wed, 18 Nov 2026 17:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795023024;
+	bh=AXyr34eZLB1bS8MATPL8FPR/LLqo+MrnU3tB91TSYQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=djw2K2odyCnHPUAoZZ3QMzDgwKhcnKfCVolEDh7zqTyPwLHrWwWgrXoaKOMifxeQB
+	 PgA8i2s3h5GY9GH6UgyJRCnufAKqxM+DK7OrqT6iwZZayXJSuMLirY6EZLYMetmPZP
+	 xHwqm2IO9NHoInWN3XwvKTAuj4wPHcJw+Rz48D7XjH7KB1TAck71C0Awt/Oofy0Tqy
+	 +TMVLuo0zS5w2qngKq6+nTM7SmxR+FenCGhNkse+bueiZMaT+cpR4UM8EMprS6IO/s
+	 V9Cw1fpesTrfw+QK3tQlIs2+d5U6WxpY/Iaqw0nIvP08ZxP0ZlS9mSoa5MHbLW2qSI
+	 1k7w52jwbTcvA==
+Date: Wed, 18 Nov 2026 19:30:20 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
+	linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ben Segall <bsegall@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Jan Kara <jack@suse.cz>,
+	Jonathan Corbet <corbet@lwn.net>,
+	John Johansen <john.johansen@canonical.com>,
+	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Manfred Spraul <manfred@colorfullife.com>,
+	Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v2 00/13] Namespace for namespace roots
+Message-ID: <av3grNWlMRsZrqaq@kernel.org>
+References: <20261117231352.3816603-1-jarkko@kernel.org>
+ <CALCETrVUkbpoFjwSAejyA4b_9qEauAP_36i=O8Op1ifp8aUkqA@mail.gmail.com>
+ <av3akYFOYaeQZauZ@kernel.org>
+ <av3bkDnwmjunTleX@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,100 +92,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT2PR01MB11553:EE_
-X-MS-Office365-Filtering-Correlation-Id: 138bdd44-3f05-44f8-7644-08df4599903f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10067099003|261026140227099003|4143699003|56012099006|261026121527099003|261022075727099003|261022105027099003|261028144727099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	HrzOh5BUU1pL1W9CRkpiKbA0Yq3tmxL4uOa1Psp0BouBh5kMaWvfkvabai0WXej1Zl979ZOERg7PFBedvj1L304xhnpyxQ6n5DBzOc8MUO6aFZSWwgcM7ET/HkoQKWJ3pOynCri48NBmIcTLGooK+kkdE/XECHU9r7SU9IquyiZnvC/kMpfckb3v9vfKlxhLn7LdojOeCYWmIPZFG8tUmVx8xHOZzfpn8NZzHg5DTnMy9NskeuBhqpzC9A7f5AEFEzcjq7uTGZrfLgWsjbmkcXokmW35n43r4y0eXVAwhoCW986EhtcyJc/4yoDFSmGw3kyCAHfpftcMDs6VTsO2J2kDaCucEd3bgfcdKl0vFXMn0cFJyChDeQrhNMl7fwUvdzMtK1TTo9N4MjjCxcTER4hZC1xD3KzCcA83nsNQ5Gmt/b6n++LEtKSTx8AfGfadvFzkNflWIQiA9n3RLI7qdaNdfBR5RdzHuNpsxdzJVeE91hkSUIhG+w/yj8Ag4RBwfTMJ+eYAjOnqQPcEZpEHbVdMqN2Kr6Z6exdz+igqbIWh1S89+7MeWwVfeC15stPDFaEbfNslo5z9sQKbLQVJ9msQLZpUdaWdzGegwqfLT2U=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10067099003)(261026140227099003)(4143699003)(56012099006)(261026121527099003)(261022075727099003)(261022105027099003)(261028144727099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?N3R5UTlPeUlHVHNGTDcxNHVySERQV3lJWmpvWGliakJmRnBraWZOT1V6R1Jh?=
- =?utf-8?B?TlhBRnlveFhOeS9PdHpUTVl1NUxjVU1kTjYrR05lVlpJTFNjY2daTzhnWlhu?=
- =?utf-8?B?OUxWdnRYVUJmdWJZK2MyMkxTU1dObmZWQjI5UFRqZXBZekdabnJJdXkvbmJO?=
- =?utf-8?B?SG5SR2RzRlpwMGN3QUJYKzBMdFJkejJ5K0I5SW1RWnpqZ24vRGlEMnNhVmpt?=
- =?utf-8?B?aDlRemVXRlRxUFBiT2NnNlNlKzYvQlZLcCttb0hkR1Vxc2ZWakp1b0RJWFA4?=
- =?utf-8?B?U3BTb1p1QURCazduMHJwbUFKZTJjZHd6azlXZFFiMzBMMzVWV2xsOFpkRlFM?=
- =?utf-8?B?WlJtdVF3RkQyTUxjVExlbS9JaTZTRWozQlBkZ0l6bFRXVmx0V2FwK3JmclZN?=
- =?utf-8?B?UjZUVFltYzNNQnJJWTV0ck53WnlBeVFVQmVCanVnRHJQeTRaanFRaFIyYS9S?=
- =?utf-8?B?NXNZQkwxNXU5aFNkQStFYm1vc2hrM084UVBEMVdsdUsyODBkTEh1L0Q0MFRO?=
- =?utf-8?B?aUlFOU1HZU80bUhWQWVGbEsyVisxZm9NVWgyYzVGZ094R0RnS1ZST1FCY0Rn?=
- =?utf-8?B?UlduR0dHdUgrMnhQM2hycDBBaGNPaUN5TSswOGI1aGU0d3JHZmJTMlQ3ejJr?=
- =?utf-8?B?K0VjeU9IRDA0QUV4aE10VEMrbTB5SjRNd0t0NGpKNUpLVlZ4enkrRzd6cGlm?=
- =?utf-8?B?MzFSYmEyS1VrbVFtRTNiT2xac2c2MU5PdDFTc1pWYmJYR2VlZWgxMzRWT1Vq?=
- =?utf-8?B?ZlhhT1d6T1oyOFBJSlVxYWFtb1pMTnZzcXVQcXkwWDVMa3ZjOC9qNzhoYkE2?=
- =?utf-8?B?SURtVCtleWN0M3Iveit5dG5BMTdPVzVRRkhzNEdBdzd5Mk9LVDY4MlJBSEQ1?=
- =?utf-8?B?QVRXc21tS3VPQURnVzVyNjlhcUR5d2pyZjBzbUErNFBRN2NnYm5Da2NNNjlC?=
- =?utf-8?B?OUR2THJLdnFYNUNIUUo5RElGNm5ZM0RqbXVvZkFNZjh3QkpCS1F0Q1BpeHNn?=
- =?utf-8?B?MkVsa0EzOUdCNTFyTmY3U1R3Y0t3bnpJN3F5YytybG5OQnRZZm9QZnJKT1ZF?=
- =?utf-8?B?SlB5bWhuNVlBYTk3dW44YzFDdHNlek9Wdll1RzFRbjZrNk53Uy8rMXRRU1JS?=
- =?utf-8?B?Rk5sdlg0dGtwRW04d1FCNGxJTGpCbUtMb2ZSeUEybDZjc01qZVNDck9iWGxh?=
- =?utf-8?B?WUI4c0pWdWUyQ2RVbjhkT3VPOHJJdkZNY2lIbnpKdFNxNnBzZ1VCamUxK1Nl?=
- =?utf-8?B?SHp1bm02MXdlODY3aGNMakJQTHY3d1pUZ2dDRzh6Mkk0UTJJaWtXUE10cGxp?=
- =?utf-8?B?eEcxNzAvcitlNzI4VUVWL0xDblZnNDN5S3ZwUkswdXE5VmoxclFoODIrZDQ0?=
- =?utf-8?B?WnEybERGenhsRVZSTlZFN3NEaU1PWHdCNjd0VXkxZVhzRG5Ua3VRcFlHT2Y4?=
- =?utf-8?B?dmhuSXh4dzhtaTVOR0wwTE9pNVBIKzhlOUF2YkhBY3ljS3YxUTFTK3FLNCtB?=
- =?utf-8?B?aGlGcFJRcGpkYUU3cERZc1dLR1N0elJEMm05MXREcnh4aWlaV3UwTTVGQzQr?=
- =?utf-8?B?YkNMOUZzVFQ4SXp1eHVYc3lUbURIVkpya0hJcVFDVElrb29LWEJFeEpJQ2pI?=
- =?utf-8?B?T1F0M0xEMGd2VDU4WllKY3c5RENMdW02VU5wdndHWitHbUp2bG91QXlOUVlE?=
- =?utf-8?B?OU5uaGxTWkRvdkZUb3MydTQzc0xJdnBTTVRjY0VsTUQvWDFhUVF6TXlnYm14?=
- =?utf-8?B?SnhCWlAxeFNib2wvYnVWeUduN0pFZklYU3VyZGdwaFJyWDNjdzBLZzdnSzMw?=
- =?utf-8?B?c3JyZmFnN0UrZHErai82NDJoYXcvSC9XdG9ZMy9rZnZGVmJDUkhEbTBlT2Va?=
- =?utf-8?B?ZVJhTjc1U25LRnBhV1JDdU1COGQ2Y0Nvem9QK2tHaGRmK2h6VjNsbTA1RnRw?=
- =?utf-8?B?ZnBTb2J0c0dDR3BFUVVHZmtlUXRab1A3cjd6S0JiUS9aOEFuNDBVWk5NcDlh?=
- =?utf-8?B?NkdTYXJEeXFyY2ZTTlNZNGd1UGd2VktYVFN4K1llN1BnTjBNZWFLaUh2Snk4?=
- =?utf-8?B?UmVMdWJOUnJYRU5NUEJPWTdpTExGenVaUCsydUtlQ3ZhZEROMFltYzJUSnk3?=
- =?utf-8?B?c0dVTTFJclFXZk1nNnMra2hyOWpFRHdFa2RjbHVDY01ta1lmeHg3OVE5U01E?=
- =?utf-8?B?Ylhjc3l3WUdWdjFvd2RIZHJBQlRiaENTcGhmMjdoeHp6MjZEb3haTC9DYmNs?=
- =?utf-8?B?NG5ReDdTSGwrWjUzcTR5djU3VFBHbExMeUJsbWpvZ3BwYjhhcVNlbVMzQ1Ni?=
- =?utf-8?B?Y3l6K2V1cytKL2tnN21hSU55cnFyZDBNUVRyQVJGeUE4NWlsNUVyTk9WdXll?=
- =?utf-8?Q?ijSDf/Yi0Q7erZywccCww8WxJBAB5Q0I3iMSw?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 138bdd44-3f05-44f8-7644-08df4599903f
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 17:29:56.3247
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +8zSuqqyuK6gZ1diOmEc9AVOCuZ57P8vJFX7WkuXpqR72/dlZ/V4nJyR29XpSeMkroY9TeZN/3LGad1G7rh4QdNPC6/AKwyLe8wu+L3Z24c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB11553
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <av3bkDnwmjunTleX@kernel.org>
 
-Hi Sebastian,
+On Wed, Nov 18, 2026 at 07:08:36PM +0200, Jarkko Sakkinen wrote:
+> On Wed, Nov 18, 2026 at 07:04:21PM +0200, Jarkko Sakkinen wrote:
+> > On Wed, Nov 18, 2026 at 08:59:39AM -0800, Andy Lutomirski wrote:
+> > > On Tue, Nov 17, 2026 at 3:14 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > Would it make sense to come up with a patchset that does *just* the
+> > > configure-a-namespace-by-fd part?  It seems to me that this should be
+> > > an easier thing to agree on, and it's a big part of the complexity of
+> > > all of this, and it solves a real problem even without
+> > > cells/rootnses/jails/whatever.
+> > 
+> > Is it  more accurately scope the part that is "just the fd-part" and
+> > what you consider as "extra cruft"?
+> > 
+> > I.e., where do you draw the border?
+> 
+> I'm asking this because I had similar thoughts when I started this back
+> in 2025. David had some good ideas but it did more than having a fd
+> that does not go live before everything is set up properly.
+> 
+> Then I thought that, I guess people who proactively on the topic do
+> something more lean and compact, and never sent roonts patches.
+> I'm not seeing anything more lean and compact.
 
-> This is the ww_mutex equivalent of the futex case on PREEMPT_RT. I got
-> lightly distracted by the -35/-EDEADLK error it always returns.
-> Something that we might have since v5.16-rc1…
+What if "A full or partial set of detached namespaces" would be changed
+into "full set of detached namespaces"?
 
-Where do you see it? In this case, the younger context gets -EDEADLK
-from ww_mutex_lock(A). That is the wound: it backs off and retries, and
-the case returns 0. In our PREEMPT_RT VMs, test-ww_mutex loads with 0.
-If a case of the module returns -35 on your setup, I can look into it.
-Which case prints it?
+That would simplify the patch set a lot.
 
-> Since both (ww-mutex and futex) use the same code I am tempted to say
-> that one test case might be enough.
+By pratical means we would take this:
 
-The two take different wakeups through the same spin. A timeout or a
-signal wakes the futex waiter, and its cases fail with and without
-PREEMPT_RT. The wound wakes this one, and it fails only with
-PREEMPT_RT. I would keep it, but I can drop it if you prefer.
+enum rootns_flags {
+	ROOTNS_CGROUP		= 0x00000001,
+	ROOTNS_UTS		= 0x00000002,
+	ROOTNS_IPC		= 0x00000004,
+	ROOTNS_USER		= 0x00000008,
+	ROOTNS_NET		= 0x00000010,
+	ROOTNS_KILL_ON_CLOSE	= 0x00000100,
+	ROOTNS_CLOSE_ON_EXEC	= 0x00000200,
+	ROOTNS_ALL_NAMESPACES	= 0x0000001f,
+	ROOTNS_ALL_FLAGS	= 0x0000031f,
+};
 
-> But in case we want this,
-> Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+And outcome would be:
 
-Thanks!
+enum rootns_flags {
+	ROOTNS_KILL_ON_CLOSE	= 0x00000001,
+	ROOTNS_CLOSE_ON_EXEC	= 0x00000002,
+	ROOTNS_ALL_FLAGS	= 0x00000003,
+};
 
-Mathieu
+If I was using this I would at any time just take em all. "Partial" is
+just something that I've been just carrying since probably David's
+original patches i.e., it simply has not been considered that much.
 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Br, Jarkko
