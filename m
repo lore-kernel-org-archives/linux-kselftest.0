@@ -1,106 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794988293;
-	b=eH/EsdLZuhR2giZ/zBSUU2JoAXoSv584xLeDb0b80wpeprK7gMw3eFlKVGB5XVEzm2t8
-	 ywarEYMYya+usG0kQKy+utX0YDd8pZLa1y4rEz9Gi1Sp7Ad+/XrLYpWeWBoUQfgGwzohl
-	 DUYBX1kMxpZAB1hx8Z0VkTNBuW9UQY0y5T8Pfv+GlUl95xcyzGiu8gvkGSR4HHdTjCL7Q
-	 sO/b2ea7ZTF+o/yul9S3sXy5iImiyyrvvky7Lw666d+ippd7eo2n4Q8TetyvMnLl6nu3n
-	 9SDRm3TylDlkjpPxYRMs8djYSywMFGHgKUl06X1Q5HABrV+xpeHtVjzUCUZw2JdPcYw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794988293;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=r1RbWjqFm7axK1WA6d2qj68hL+HcVofiqBMMK2TnnVw=;
-	b=ccivrtxKdrV5HTwgUiRH9kgnYWE6OLxXkszkovJ4wZ2ktgogLs/Lm9JbP5isJOLSSzKX
-	 ehk8div8f3vj9+QfkFZhNtKe4eAuuunJbA5Uu3cGPK2eIW2h52W4g0dLCdNhLOiuQP08z
-	 YgRu44ksDgkA0p9eyqid+ILQoU1xFFt+Acx/6fi2SS72hxj7ldu9uNZcQG6c9Mghyahvj
-	 h1rFzEo44hX9aN/xoNPsiYRHrhkwySgjcFGXX72iylRjM897QhLOQ1FPUYPXRd+y3L5Ol
-	 HNdOuGGe2H8bpZe/wTghJJYNMB4M2OY6S87sdZoft4N8E8vB59yU0UFg/D+OFy0tyuw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LUoPGOVC;
-	arc=none smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794989456;
+	b=4O6FHcmh55SS2/xIKM+vMSJBDfZwSlWX/MNEUxHnLzJMNudswJw0QIqv2gc/ahxyxAkf
+	 YlzJ5EwmQt+c/elZIZucTgfnh2T91ij8Je6W9rj/sx2vN9DQOmBHXCeukP0D/kXzbK4Fx
+	 7Nj27VBRY/qVFq1XQZ6OdwBNz2iQzT66Hgd2wiHLU0JqvsTfzzqzS1cAnieMnHEAsAihM
+	 2TDW0JsECr40c+RxscPY7lbxIBcM3N+Yw+PRf4KASN8MLVj8qa7BzVw9kYZd89sey2h0P
+	 cP2nqJwHMhMfWuKV5PltTBl1ieuXVpc+qW3f4EE3xCHTtqU3iIr1PJZXswbiQoHusdA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794989456;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=/NpcbjWSUChqv+cvOMiA6HbBw2XREIxDhCy3LbF2ABk=;
+	b=ZPZTrknFtWdTOY1/pBf5pAJ7I23214rEIthXoLS3LIzwo7+SS6GLoeLwicnX25CrwjYJ
+	 7NvnM5JYTntanch5WK4fXd4iXzsTrUYujgDVc3vvSpQx3ben4tJdC58bGA7yzaPlyMUNG
+	 WSH7dmZQxJacPQeqFQlRYIXkWCvcrKR9PuMkbrKPp51CdIqbfnEsN62PojVVnegcZoRUR
+	 Vph1gQmUYD3Vmwmb0qTY2vBNbBgxmA6NpHIHZjaWG6npr+VEpR6RsMsY7LBuqpHU3DRxy
+	 aHXQiLf5GtccYOuJfBguLmSUOh7B1wIZfhXPhfQwLqW2cvl8j0woaOWPohkSdz5mobw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RKH0mxUO;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA61606A31C;
+	Wed, 18 Nov 2026 08:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RKH0mxUO
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794989455;
+	b=Zhms7/di3DRoi22sOUN6/8lVbuh3Nndf1+OkN7PtapQcfc4U4ifWYcei02AApX3g/A3/
+	 WEPEPVu7qf4wwOqlzCD0uLTGivCK6eaCyq7c3D6agMHtp1rFtARUAAnwU2IOP8U6AQYTG
+	 taRQtaU5Gr12uJ8UoRfTlJAV/TswHoz5zgWTMFfP/82HieAEUxlFuryrMp19hza+ENh3d
+	 +OURY9cDtLLxWQkHEdlnijjArI4Zh+tjaT+i0wyAfyGi+cFeXav1HAGE4CXuchWjV+ytT
+	 aU+YQ+tznx4TjzCfZYKaaI3gikfA5B2/mxXqJPus6mI3T/gIeyc3BPjyy83TNeqDSjA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794989455;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=/NpcbjWSUChqv+cvOMiA6HbBw2XREIxDhCy3LbF2ABk=;
+	b=s7/u7goyCnHIpchxMk5LN3AEbz5ovhSL2s5ZLqacBOWmL8AYubNMJziof8XT86SMGDpn
+	 tguOwSQqnc1z1/zSlvqjGBzhkxa4S+HGo4EqUF1S01rEAzHcQrzgKTGUwGfs5cCT0zRDM
+	 R36v31WXb21w7fAMsoIdSS6w6YT7bdpL2iKUSppsmVYTsYGGf67AcXPKaJdINGMBy6612
+	 DUM8tmwj9CMRY4LqJ3HDCH2dwMVmpE1zw4H/pUZknSG8BpywLl7adq1/aLVX2pafDc7Db
+	 DRqX/RPV71IG47EuNzbH90PH7zqgUGvhy3sl1FOY8UEPdGtwZvhO5+0vQhpyRpWTkjA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC33D606A336
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 07:51:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC33D606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LUoPGOVC
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ee254f6eefso50735ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2026 23:51:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794988292; x=1795593092; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=r1RbWjqFm7axK1WA6d2qj68hL+HcVofiqBMMK2TnnVw=;
-        b=LUoPGOVCxwIAV8eWwoj8F3n1uK5UqmtzFRao+C0cCZUHq9IsJxO9vTwDbY2zSYPI8p
-         1qfumvCJfVUCN5vKDO1spF1y7T91lMRReIpLQbHWsxPfGc/nbjXdqXvs2CQUZLMzNBj1
-         aBFV1zfO2nYpMyw6C7gOvO9658HCrQbGItVnradArYhcMNZoTKTZ7QcGuKxMwyE4Bb+7
-         V4gS2B6y5+UoHy28L9hMkvKhoYBVR1FS3LZ1S/Ut9d5YoLGHmEwTuoPwPJ4bqAArFBGs
-         vHIkUJrjVYAoPkaNmVt9+FCPEOvYIHehWIWX3F+AosUqz6qs8XVD1oxRPHrsGj44E7gx
-         Y5NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794988292; x=1795593092;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=r1RbWjqFm7axK1WA6d2qj68hL+HcVofiqBMMK2TnnVw=;
-        b=KAiasAvlv6exDH0jC57K096wcMR0IIiSyzAHWF2E0qlHcjh7930QbAgp6fnDypFKSL
-         U7chOLx6GOlsbxlUp+Tpt/LX+oRmt43Wg1amQ++qsFHQAbM8Pbnc1v1O+eK0skkGBqWc
-         VrgmMuIqIKbsM7rmK2bjYVXQdOYq5lHKzmmJ2/ZLelm4bbGghzyGDiTqKlIMX46Ev7J0
-         d4oU+r332CPtNMx0P7RWv1CznSnfEXd87GcJlQekAai2AcT/SmZqhwxoGx07Ab3R2AW6
-         GVWcOBF/rZ3nWxwtcY+4PHzpyjZR4Qm0BX+IXqEjRpBdwMGI3qoEWTY9ZWkWhsoBPoUV
-         LnRA==
-X-Forwarded-Encrypted: i=1; AL+hErEdDExyEvL2u0TU/S94zYwofKzmqy4DnUvgri6k+FdefwrZW8SaVxOOlOVJoWrDX7RGJhyf/9m2S2ObgpYnluI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8HjC3pudZRdqIg5u3Nk74roLv+3JqlMb/c5r6Pd9LlrnvYcaOl
-	hvIUFYWAqzlT3bQfolH+yUwh8wCpMXK0VDbOlopMLajaNHUMtm/3JEfu/5N1p9aIdg==
-X-Gm-Gg: AZFdTZc6nDNEM91GlKUJ6kqzFPX+3CKAQ1tLCzuiJUCQROXFZCoSTtt7cm+0edGYS2S
-	jKlieRKWyOSOKnRSkPL1lw+8ByGspVkDQlI0u/3o6RilikHsIRpLqvlyM2Zuw7/OE/KZAA2REGT
-	BYeUcWOfTPV/6GAO8N4ejEr+YNaf0o73ETUmjoN8w3wmLZ+AzZP78LI/BfWblK9/bGZTSHYQNqe
-	kmRv0AEOfhFg8RtRkXBTc9B3BXhjIYnk7R7zn8VGbFuPXROcYIRJcDPCeYJHzIIlTYB8cjfYVLt
-	UMgGSjERf59XUksIwNqWanVlUeTVbMEV7J481SkGiOq+E79khNX55E24S3570+I6jcmtDfqPdks
-	udx0/BjDLu/r5NW3hEpcLuBZdOCl+v2erDW5tDZB9oq33pWnd2xjLT1vOAbZa1ojBZUKJ4OYjj3
-	ICo1PORJ0pvFAMie++xvu8ft6CXYBcdSFvkf21jv3YKLh8+jvONykm192i/PCfvIOUmr9WCL8B4
-	Aq09SoMidgFWav3482h2vSPaMTjUOfvGDNkD5mpplFgkihY5dKLgMeWtprS7bKzobda/iYkEQsa
-	qxDhwMu34d2ccfhLvIV5dfXBaetfL75YbrP3iHTIP03blUl/6skdUYJG35Cnzdp0+A==
-X-Received: by 2002:a17:902:d544:b0:2e6:d25:d874 with SMTP id d9443c01a7336-2eff98d30f9mr2984215ad.10.1794988291451;
-        Tue, 17 Nov 2026 23:51:31 -0800 (PST)
-Received: from google.com (60.89.247.35.bc.googleusercontent.com. [35.247.89.60])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b3d56ab352sm1000229a91.2.2026.11.17.23.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2026 23:51:30 -0800 (PST)
-Date: Tue, 17 Nov 2026 23:51:26 -0800
-From: Vipin Sharma <vipinsh@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, ajayachandra@nvidia.com, 
-	alex@shazbot.org, amastro@fb.com, ankita@nvidia.com, apopple@nvidia.com, 
-	bhelgaas@google.com, chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net, 
-	graf@amazon.com, jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, 
-	jrhilke@google.com, julianr@linux.ibm.com, kees@kernel.org, kevin.tian@intel.com, 
-	leon@kernel.org, leonro@nvidia.com, lukas@wunner.de, mattev@meta.com, 
-	michal.winiarski@intel.com, parav@nvidia.com, pasha.tatashin@soleen.com, praan@google.com, 
-	pratyush@kernel.org, rananta@google.com, rdunlap@infradead.org, rientjes@google.com, 
-	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, schnelle@linux.ibm.com, 
-	skhan@linuxfoundation.org, skhawaja@google.com, vivek.kasireddy@intel.com, witu@nvidia.com, 
-	yanjun.zhu@linux.dev, yi.l.liu@intel.com
-Subject: Re: [PATCH v6 11/27] vfio/pci: Retrieve preserved device files after
- Live Update
-Message-ID: <20261118065653.GE2250529.vipinsh@google.com>
-References: <20261102153656.1431701-1-vipinsh@google.com>
- <20261102153656.1431701-12-vipinsh@google.com>
- <DMOAT4VV939P.2DI8CEOMMSKMY@google.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4FD161F000C5;
+	Wed, 18 Nov 2026 08:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794989455;
+	bh=/NpcbjWSUChqv+cvOMiA6HbBw2XREIxDhCy3LbF2ABk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=RKH0mxUOqBSs7+f5Xppogi8HvUfVGBO26MYqpW3CXbQ3XR4/NBtNpwVjbN5aUk3ep
+	 zyVD4jBmksm7cNl1jRlfm/zFv20Tt2Vz/62h5g2vkCgNhwg3dUdSIVcYkTU2Lo9fLS
+	 4LkmTwuXN2A6ncbK+Tpu6Jcra3yN5YrbFekTvtSGYaklF0eIJYyqGtNfvCdsL2d9qz
+	 Fk87aek0Lv0qAK2jxcmvbnf0cXE7gwDoG7KtJbiXmywEHVKXtyd+YDmjL6+J8PT0wf
+	 VJuUClHRsVI2RkUYZbJiuE28BbFMdT6nOZuidwjGPj/DvErn8HJdK+JkTMu8hsTFj/
+	 PFjcQYMxkp6Yg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id CDE744AC91;
+	Wed, 18 Nov 2026 08:10:54 +0000 (UTC)
+From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
+Date: Wed, 18 Nov 2026 16:10:52 +0800
+Subject: [PATCH net-next v2 1/2] tcp: document black hole detection for
+ tcp_mtu_probing
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,104 +83,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DMOAT4VV939P.2DI8CEOMMSKMY@google.com>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261118-tcp-mtu-probing-doc-v1-v2-1-e795f20b8cfe@gmail.com>
+References: <20261118-tcp-mtu-probing-doc-v1-v2-0-e795f20b8cfe@gmail.com>
+In-Reply-To: <20261118-tcp-mtu-probing-doc-v1-v2-0-e795f20b8cfe@gmail.com>
+To: corbet@lwn.net, edumazet@kernel.org, davem@davemloft.net, 
+ kuba@kernel.org, shuah@kernel.org, pabeni@redhat.com
+Cc: Yongjian Wang <echoowall@gmail.com>, rdunlap@infradead.org, 
+ linux-doc@vger.kernel.org, horms@kernel.org, ncardwell@google.com, 
+ kuniyu@google.com, skhan@linuxfoundation.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794989453; l=2444;
+ i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
+ bh=ta6f43Q9WCijtV9U1XrIJWYCHAQ4FrHJdfRc+ckR0n8=;
+ b=S4lH+mwLEmJOlG3gNxDU33WKSApX7xGkxPBbsThKzrn0lyRgQxF6BY/IaRIex1VXZzX6Fqylt
+ pTvvDpGU65vABIK5GKvo5VMuNv+z+nFeD26bUy85582xk+RWcS4iIyj
+X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
+ pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
+X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
+ auth_id=1323
+X-Original-From: Yongjian Wang <echoowall@gmail.com>
+Reply-To: echoowall@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 06, 2026 at 05:19:28PM +0000, David Matlack wrote:
-> On Mon Nov 2, 2026 at 3:36 PM UTC, Vipin Sharma wrote:
-> > During retrieve():
-> >  * Validate the handed-over struct vfio_pci_core_device_ser header,
-> >    sizes, and flags.
-> >  * Locate the registered vfio-pci device matching the serialized domain
-> >    and BDF (requiring device->ops == &vfio_pci_ops) under the device
-> >    lock. vfio-pci registers the vfio device before its probe completes,
-> >    and the probe holds that lock, so a device that is still being probed
-> >    is not returned.
-> [...]
-> >  * Open and return an anonymous VFIO cdev file via
-> >    vfio_device_liveupdate_cdev_open().
-> 
-> Here's an idea for how the device file could be created on retrieve,
-> which I'd like to hear your thoughts on.
-> 
-> The patches from Pasha at [1] lets userspace pass a
-> file-handler-specific argument to LIVEUPDATE_SESSION_RETRIEVE_FD. In the
-> next version of the tmpfs series, I'm planning to use that to have
-> userspace create the file and pass it in the argument, and the kernel
-> then restores the preserved file into it.
-> 
-> I wonder if VFIO should work the same way, e.g.:
-> 
->   struct liveupdate_vfio_retrieve_arg {
->           __u32 size;
->           __s32 fd;
->   };
-> 
-> Userspace would open /dev/vfio/devices/noiommu-vfioX itself and pass
-> the fd. retrieve() would check that it's an unbound vfio-pci cdev file
-> for the preserved device (domain/BDF, noiommu, incoming, cfg_size),
-> attach the incoming state to that file, and LUO would track that file
-> as the retrieved file. VFIO_DEVICE_BIND_IOMMUFD would then take over the
-> device as it does now. Since VFIO preservation is new, the argument
-> could simply be required.
-> 
-> I think this could get rid of some of the special handling:
-> 
->  - There'd be no need to fake a cdev open with an anonymous inode, so
->    PATCH 09 and PATCH 10 could probably be dropped.
-> 
->  - retrieve() wouldn't need to look up the device by BDF, or reason
->    about racing with probe under the device lock. If userspace was able
->    to open the cdev, the device is registered and probed.
-> 
->  - The device file would be opened through the normal cdev path, so the
->    usual permission and LSM checks on the device node would apply.
-> 
->  - It would be the same model across file types.
-> 
-> A few things I think would need care if you go this way. The file check
-> and the attach would need to happen under dev_set->lock so they can't
-> race with a concurrent VFIO_DEVICE_BIND_IOMMUFD on the same fd. And the
-> incoming state should probably be tied to that specific
-> vfio_device_file rather than just the vdev, so only the file passed to
-> RETRIEVE_FD can take over the device.
-> 
-> It would also change PATCH 12. Opening the cdev of an incoming device
-> would have to succeed, so the check would move to the first open of the
-> device instead: fail with -EBUSY if the device is incoming and the file
-> being bound doesn't have the incoming state attached. That one check in
-> vfio-pci would also cover VFIO_GROUP_GET_DEVICE_FD, which opens the
-> device right away, so vfio_liveupdate_incoming_is_preserved() and its
-> dev_is_pci() special case could be dropped from the VFIO core.
-> 
-> The next tmpfs version will also add a way for a file handler to say a
-> failed retrieve can be retried, and a helper to claim an existing file
-> before restoring into it (so a file LUO already manages, e.g. one that
-> is preserved in an outgoing session, is rejected). Both seem useful
-> here too, e.g. so that a mistake in the argument (wrong fd, an fd for
-> another device, an already bound fd) doesn't make the device
-> unretrievable. I'll Cc you when I send it, and I'm happy to share the
-> branch before then.
-> 
-> What do you think?
+From: Yongjian Wang <echoowall@gmail.com>
 
-Overall, I agree with the strategy. I think VFIO cdev retrieval should
-happen as the flow you mentioned above. I want to hightlight two things:
+ip-sysctl.rst says that tcp_mtu_probing=1 enables MTU probing once an
+ICMP black hole is detected, but not when that happens or what TCP
+does then.
 
-1. This will lead to lot of code changes happening in vfio core. This
-   means VFIO PCI live update code change will spill in vfio core.
-   Should I create a config VFIO_LIVEUPDATE for VFIO core code. It will
-   not be visible menuconfig option but selected when
-   VFIO_PCI_LIVEUPDATE is enabled.
-2. List of other inflight series that this series will depend on is
-   increasing. It will be 3 (reset function, pci saved state, and
-   restore into fd).
+Describe both, as implemented in tcp_write_timeout() and
+tcp_mtu_probing(). Also add the missing defaults of tcp_mtu_probing
+and tcp_base_mss.
 
-For '2', should I send v7 without changes you are recommending in this
-patch and future version of this series can transition to the approach
-you are suggesting after LUO changes are landed. VFIO liveupdate series
-will go through more iterations, so we will have opportunity to make the
-change. WDYT?
-> 
-> [1] https://lore.kernel.org/kexec/20261103010216.3447716-1-dmatlack@google.com/
+Signed-off-by: Yongjian Wang <echoowall@gmail.com>
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+---
+ Documentation/networking/ip-sysctl.rst | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 0b7bfbd98a92..6ac8b3fb9aae 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -412,6 +412,8 @@ tcp_base_mss - INTEGER
+ 	Path MTU discovery (MTU probing).  If MTU probing is enabled,
+ 	this is the initial MSS used by the connection.
+ 
++	Default: 1024
++
+ tcp_mtu_probe_floor - INTEGER
+ 	If MTU probing is enabled this caps the minimum MSS used for search_low
+ 	for the connection.
+@@ -711,6 +713,25 @@ tcp_mtu_probing - INTEGER
+ 	- 1 - Disabled by default, enabled when an ICMP black hole detected
+ 	- 2 - Always enabled, use initial MSS of tcp_base_mss.
+ 
++	A black hole is detected when the retransmission timer fires after
++	the handshake and retransmissions have stayed unacknowledged for as
++	long as tcp_retries1 retransmissions would take with an RTO starting
++	at 200 ms and doubling each time, which is 3 seconds with the
++	default tcp_retries1. This time is counted from the first
++	retransmission and only checked when the timer fires, so a flow
++	with a 200 ms RTO detects the black hole at the fifth timeout,
++	about 6 seconds after the original transmission.
++
++	With value 1, the first detection enables MTU probing and lowers
++	the MSS to tcp_base_mss if it is larger. From then on, and from the
++	first detection with value 2, each further retransmission timeout
++	lowers search_low to half its MSS, keeping it at most tcp_base_mss
++	and at least tcp_mtu_probe_floor and tcp_min_snd_mss, and lowers the
++	MSS to match if it is larger. Once MTU probing is enabled, the
++	connection also probes for a larger MSS, as with value 2.
++
++	Default: 0
++
+ tcp_probe_interval - UNSIGNED INTEGER
+ 	Controls how often to start TCP Packetization-Layer Path MTU
+ 	Discovery reprobe. The default is reprobing every 10 minutes as
+
+-- 
+Git-157)
+
+
