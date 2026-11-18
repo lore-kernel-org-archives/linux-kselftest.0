@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794981905;
-	b=gsIuMOY6gBI9fZVYfgQNfTVBU7aPuxHQGoqWNKsV0Y4yg6mggQ4DS7AUY7P4PDJNepg9
-	 B76lbpoDfIttmm2xbuvaiTSIBZ2cv5H/PgUkhmFUzADyx3jG1bgOVyTHRN88VkSggCJ+q
-	 ZoTiLi6QkCbJ5/Vpzru5ThwCYXLC0SXpeH3IbV6UtJU6xpw5a7qxKauVMTV47F4Aw/ysr
-	 NUrgE+kXEmNyQpDzPeZrJZlMoBfPLpxtQzMbuO2Lxnp8mi0eiKqZO12r2IqTt4dmvoc+Z
-	 Hzqcko8gJn52pNfJ9CTMh8blsQ1n2S/iwVxmzQrCUcFwMdb4rPpM1OkWpANBzZ39uTw==
+	t=1794981906;
+	b=OxeDLGxxwnDfZCg2WL8SurpxD4HA4XbRJDUZvWVb/e3JFbQtGAs0T9on+IdZK12ys2ZX
+	 uJDDGsqGXPImRSoz+M9k7nYvcNH1JkESQZOtLbiaQeVRtKvoeqliD84gr1Z8rPoTTRC7a
+	 lsH9X1jK+QnU/+Gu/XrexLGLPiEntPsYKfrpBkruugLH/QPqL1qby75eYMjmOcdZfUOOC
+	 rcMMTsILti0DOEiyJ5TGfxVO/9J7JtCJnXYqCNkENHzzzBeZeQmltw8lhuvIDnRzQ5oym
+	 ihrqC1sPapt+bMh1RT3SwB0AR4w9/kAF8N79dBppDqZqFgY19U4+jIGA38eYsLQj5vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794981905;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794981906;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=pZzl5p/hTAG4Ht/7wLb4wKQYy+e/CeEZTrM3kv/McxQ=;
-	b=vgIJVigmkfAsZjlOWjEyfPu9JV3cIJ03DCJ2OEaDE1S38X08h6jLMbT+aLhJvHhemOD2
-	 xRiXSmoAZ0pSXUjMZgT1GhOjIjewnsVs24gEA8+DXKCtl46oIU4OsrELfCVnDbZKKmvPU
-	 mWCJF3JltWdwDpGC+nlfQTRaUI/mSzAFh9TXU0QnGO2ranun350z/XMHIwx3RZA0rK2hb
-	 MbStwIUsC3OVupI3vALN0jnZRnVGUp+kG3sURmjlot/4d8yv0aKOkLwApYWK3JvJdy+Xk
-	 W+o/1Wt03bNpuV10J+1pJ0Vl4p+JxxDdd9QLoGoyEr8BZfRdEJRyNE9CML3f6aSmuxg==
+	bh=8UxOlUwurvltrL8LywXYchF60RvSL244Iq18WBoKZQU=;
+	b=xGjSCqdfjGr1aOt4cHzChJq/LPGnUvYzxVsA/n07pS/ipBMdLB/mFEj9w7WPFETS0wXr
+	 ezeuvLKSKcbmY8Jb0nUxWRbgkL1xQbHzJkc1oi+oh98FiEWuIIBtx/3n/oxJjBC6CdRQ7
+	 l7LY7s4VkkHn8lrUtKOalGeDzN3dHBL2mhTyPT3MPkENsM//RtgqL1i4hNzbEIBhDQq9E
+	 jArVuqF4xBfEKdPyFg2A9M+rBi9iAClwx2kidHoAu6SI9XdYha5v14xexW2bXveOUH79f
+	 ullCMMGATynXwFNUjhXeGLGD8xk3h8kq2gyx2h5stzGMUiOIpgl2RZ5ZKgFrrgSGePQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RkV1PYiv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="dg/Om8Tj";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F99606A32C;
-	Wed, 18 Nov 2026 06:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2E9606A332;
+	Wed, 18 Nov 2026 06:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RkV1PYiv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A05921F000C5;
-	Wed, 18 Nov 2026 06:05:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dg/Om8Tj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF061F000C6;
+	Wed, 18 Nov 2026 06:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794981904;
-	bh=pZzl5p/hTAG4Ht/7wLb4wKQYy+e/CeEZTrM3kv/McxQ=;
+	s=k20260515; t=1794981906;
+	bh=8UxOlUwurvltrL8LywXYchF60RvSL244Iq18WBoKZQU=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=RkV1PYivYA3eGorJO/HZ12M7pw27SKD7L808WC4wcZIFV2ycMe2LPmRlSx7B+8qb9
-	 /MDBC2Duj8l13ipWztq/cG+V55RB3pWd3B0tZFJOzahMnthrXXHrnqAEdM392fYHMv
-	 1kVkOpH2x3kKdy7RcIO6BJgcZHzeS7hOd8HTUGS7JIF5xRicRKIkYbgT0Pv3T6CoA4
-	 69TQhUDhSc9s6jO6UCI1ldsH09t+3ghrqmc5uayXV8dy0c1PQQbNYKlRl1RMkLg0vZ
-	 3HwsG2mXztYxPWJVMXCbflbuHGXIBIIfEm+lHCgdBE1y1JadM5h0nFCe5lTHzXvGiT
-	 EkNun6FjjfEsw==
-Subject: Re: [PATCH net-next v4 1/5] psp: support rx rekey operation
+	b=dg/Om8TjN11NRsuZFFRkEdgzh6GRD86UQQJstuppFBw1A0AtU/WC0jQhsDE/7H3tk
+	 UBVR3Haq5Hu89t7qSg6hniWwfO/o93o2Ih0Z/0CR+EjftOnlCC2/7TF/dOfEnK4ETC
+	 960QN7yGod/Qg+YAEdlf5U/HefDcoeYnh4EmwKf6hQ4kWnine5SoiRSNm9HHpETUHD
+	 pZ01eB1HnCe3Is8HY08WdWdMapbFu5WA1fEw7RxGDd97RSmMR6M1WdDOdnNrRlUyev
+	 P3yHic00Gh039y6+ISl1Yy5p0dlhMwxjcMLLES7WhEOUn1yTcQArFFluaybigEWTW6
+	 umqXmsmYEYFGg==
+Subject: Re: [PATCH net-next v4 2/5] psp: support tx rekey operation
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
@@ -49,10 +49,10 @@ Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
  andrew+netdev@lunn.ch, shuah@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, willemb@google.com
-Date: Wed, 18 Nov 2026 06:05:03 +0000
-Message-ID: <179498190320.3136.17281959209989358635@kernel.org>
-In-Reply-To: <20261116-psp-v4-1-1a599df2aefa@gmail.com>
-References: <20261116-psp-v4-1-1a599df2aefa@gmail.com>
+Date: Wed, 18 Nov 2026 06:05:04 +0000
+Message-ID: <179498190470.3136.17804985440456720671@kernel.org>
+In-Reply-To: <20261116-psp-v4-2-1a599df2aefa@gmail.com>
+References: <20261116-psp-v4-2-1a599df2aefa@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,118 +72,114 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] At this commit, Documentation/networking/psp.rst says a PSP Full
-  connection can be rekeyed in place 'using the same netlink calls as in…
-- [Low] The new field pas->prev_generation is written with a plain read-
-  modify-write (`pas->prev_generation |= ~PSP_GEN_VALID_MASK`) in…
+- [Low] In the commit "psp: support tx rekey operation", the
+  documentation and the code disagree.
+
+Pre-existing issues:
+- [Low] Retired PSP key material is freed without being zeroized.
 
 --
 
-psp: support rx rekey operation
+psp: support tx rekey operation
 
-This commit lets rx-assoc run on a socket that already has PSP state.
-It creates a new psp_assoc that keeps the existing Tx state and gets new
-Rx state. The previous Rx SPI and generation are kept as a fallback, so
-packets the peer sends with the old key are still accepted until the
-next Rx rekey or device key rotation.
-
-> diff --git a/Documentation/networking/psp.rst b/Documentation/networking/psp.rst
-> index 0f9b6b73f2447..fab797506b0a9 100644
-> --- a/Documentation/networking/psp.rst
-> +++ b/Documentation/networking/psp.rst
-> @@ -140,14 +140,33 @@ The PSP assoc state of a socket is not reset when the connection is
->  torn down. ``connect()`` on a socket that has PSP assoc state will
->  return ``-EINVAL``.
->  
-> +Rekeying
-> +--------
-> +
-> +A connection which has completed the exchange described above and is
-> +in the "PSP Full" state can be rekeyed in place without being torn
-> +down, using the same netlink calls as in connection setup.
-
-[Severity: Low]
-Is this accurate at this point in the series?
-
-To finish the rekey, the peer has to install the new SPI and key with
-tx-assoc. At this commit, psp_sock_assoc_set_tx() in net/psp/psp_sock.c
-still rejects tx-assoc on a socket that already has a Tx key:
-
-	if (pas->tx.spi) {
-		NL_SET_ERR_MSG(extack, "Tx key already set");
-		err = -EBUSY;
-		goto exit_unlock;
-	}
-
-An application on a kernel at exactly this commit that follows this
-text, or the updated "Applications are expected to rekey their
-connections" wording in the Rotation notifications section, would get
--EBUSY from tx-assoc on the peer.
-
-Later patches in the series close this gap:
-
-- "psp: support tx rekey operation" replaces this branch with a call to
-  psp_sock_tx_rekey().
-- "psp: defer tx key deletions for SADB drivers" removes the temporary
-  -EOPNOTSUPP for SADB drivers.
-- "selftests: drv-net: psp: add rekey tests" adds test coverage.
-
-The final psp.rst also documents the tx-assoc rekey path.
-
-Could the documentation changes move to the tx rekey patch, so that the
-docs match the code at each commit?
-
-[ ... ]
+This commit lets tx-assoc be called on a socket that already has a Tx
+key. A new psp_assoc is allocated with the same Rx state and the new Tx
+key, then published to the socket with rcu_assign_pointer(). For now,
+devices that store Tx keys on the device (SADB) get -EOPNOTSUPP.
 
 > diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-> index f2cba3fa3a235..c1e38845f08c3 100644
+> index c1e38845f08c3..d497f41c483e1 100644
 > --- a/net/psp/psp_sock.c
 > +++ b/net/psp/psp_sock.c
-
-[ ... ]
-
-> @@ -302,8 +333,21 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
->  	 */
->  	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
->  		pas->generation |= ~PSP_GEN_VALID_MASK;
-> +		pas->prev_generation |= ~PSP_GEN_VALID_MASK;
->  		psd->stats.stales++;
->  	}
+> @@ -280,6 +280,53 @@ psp_sock_set_tx_key(struct sock *sk, struct psp_dev *psd, struct psp_assoc *pas,
+>  	return err;
+>  }
+>  
+> +static int
+> +psp_sock_tx_rekey(struct sock *sk, struct psp_dev *psd, struct psp_assoc *pas,
+> +		  struct psp_key_parsed *key, struct netlink_ext_ack *extack)
+> +{
+> +	struct psp_assoc *new;
+> +	int err;
 > +
-> +	/* Don't allow SPI from two generations ago to alias one from the
-> +	 * current generation. Rx rekeying under the same device key generation
-> +	 * is currently permitted, so skip if the previous SPI is from just one
-> +	 * generation ago.
-> +	 */
-> +	list_for_each_entry(pas, &psd->active_assocs, assocs_list) {
-> +		if ((pas->rx.spi ^ pas->prev_spi) &
-> +		    cpu_to_be32(PSP_SPI_KEY_PHASE))
-> +			pas->prev_generation |= ~PSP_GEN_VALID_MASK;
+> +	if (psp_dev_has_sadb(psd)) {
+> +		NL_SET_ERR_MSG(extack, "Tx rekey not supported on this device");
+> +		return -EOPNOTSUPP;
 > +	}
 
 [Severity: Low]
-Should these updates to pas->prev_generation use WRITE_ONCE(), with a
-matching READ_ONCE() on the reader side?
+Should the documentation updated in this patch mention this restriction?
 
-psp_assocs_key_rotated() holds only psd->lock here. The field is read
-without that lock in psp_pse_matches_pas():
+The tx-assoc doc in psp.yaml now says, with no condition:
 
-	(pas->prev_spi && pas->prev_spi == pse->spi &&
-	 pas->prev_generation == pse->generation));
+    If the socket already has a Tx association, rekey its Tx direction.
 
-There are two paths to that reader, and neither takes psd->lock:
+psp.rst says tx-assoc "installs a new Tx key, which takes effect
+immediately". The only rekey errors it lists are -EINVAL and -EBUSY.
 
-- __psp_sk_rx_policy_check() from tcp_v4_do_rcv()/tcp_v6_do_rcv(),
-  under the socket lock.
-- psp_twsk_rx_policy_check() from tcp_v4_rcv()/tcp_v6_rcv() and
-  tcp_timewait_state_process(), under RCU only.
+psp_dev_has_sadb() is true for mlx5, which sets
+.tx_key_del = mlx5e_psp_assoc_del. So at this commit, a Tx rekey on the
+only in-tree hardware driver always fails with -EOPNOTSUPP, and the docs
+never mention that errno.
 
-These are compound read-modify-write stores, so KCSAN can report them
-even with CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC.
+The next patch in the series, "psp: defer tx key deletions for SADB
+drivers", removes this check and adds deferred Tx key deletion. After it,
+the code and the docs agree. The mismatch only exists between these two
+patches, and the commit message calls it out ("return -EOPNOTSUPP for
+now").
 
-pas->generation already uses the same unannotated pattern. This patch
-adds a new field and a new writer loop over assocs that are attached to
-live sockets.
+> +	if (!pas->peer_tx) {
+> +		NL_SET_ERR_MSG(extack, "Socket PSP state is not fully established");
+> +		return -EBUSY;
+> +	}
+
+[ ... ]
+
+> +	memcpy(&new->rx, &pas->rx, sizeof(new->rx));
+> +
+> +	err = psp_assoc_set_tx(psd, new, key, extack);
+> +	if (err) {
+> +		kfree(new);
+> +		return err;
+> +	}
+> +
+> +	psp_dev_get(new->psd);
+> +	list_add(&new->assocs_list, &pas->assocs_list);
+> +	list_move(&pas->assocs_list, &psd->stale_assocs);
+> +
+> +	rcu_assign_pointer(sk->psp_assoc, new);
+> +	psp_assoc_put(pas);
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but should the retired key
+material be wiped before it is freed?
+
+The replaced association still holds the old Tx key in pas->tx and the Rx
+key in pas->rx. It is released through:
+
+psp_assoc_put()
+  call_rcu(&pas->rcu, psp_assoc_free_queue)
+    psp_assoc_free()
+      kfree(pas);
+
+The kfree(new) on the psp_assoc_set_tx() error path also frees an object
+that already holds a copy of the live Rx key.
+
+Neither path uses kfree_sensitive() or memzero_explicit(), so the keys
+stay in freed slab memory until that memory is reused. Since a rekey can
+now happen while the connection stays up, this can repeat many times on
+one socket.
+
+The same pattern already existed before this patch, in psp_assoc_free()
+and in the kfree(dummy) in psp_dev_tx_key_add(). Nothing in net/psp
+zeroizes key material today. Reading these keys would also need a
+separate kernel memory disclosure bug.
+
+>  int psp_sock_assoc_set_tx(struct sock *sk, struct psp_dev *psd,
+>  			  u32 version, struct psp_key_parsed *key,
+>  			  struct netlink_ext_ack *extack)
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261116-psp-v4-0-1a599df2aefa%40gmail.com
