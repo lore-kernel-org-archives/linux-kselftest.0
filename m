@@ -1,102 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.102
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795034177;
-	b=0xEHqeMYmv9dO4ZHGZ/J8SPI2FUdIdxMkqvUicqQ0bSB3WdqA1bamgXdEyt4WKR9Nj/a
-	 H5bJx001AI8X5pLl56Idrs8PAzCKTcYvQvplxr/xQnowFJ+8Yz3KTibS4kH8t56P0mCwl
-	 pemQxftmRAjwAo/mVyjBaHwaI37SMb2ryK9UcHd+9SzN3IT92NBwwdrN3p4fV6BICPnG4
-	 yxt9BGAkf6M8u/4hbca2MXGVEw5sah87XQMOp2v6a7WjQLdF7ml/0u/wrSHGrcPDv3FTx
-	 7TBTLF8NEXTqRUrejBFeE0T0Ebc5M5z4kWIJhdVXGVZr+U176jHPunz/pYJWevhTjTQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795034177;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=t9R14NaI/JeikKnHJ+yahYnsuQHAHuBELGNZM0uMuvo=;
-	b=UvhWM/LqMWCEwuwh3Mv2rBQlUiUzAjeSpTA5sA4hRPWYEaKZsgEE3QrsOcmYn0wpwRwT
-	 LPcuBfXFXMh4fnvHqUty76fxCd6TphgJc4TTzx3ZfEdgQ8V8wWPmAzBBqysS5mjZ/18Ld
-	 wl9A1M+KA3tw1hyatv2D321YcJSYgJUG5K+H9+R/9i3gN9BrdbSdHs1g0kluTHlbsOwlF
-	 XVeGz4Ncmf4NNIVqnuiJKeaK6f9DrEUM9wphbALIffzKC6UiINl+UDWpMmjOnwH1zcvpD
-	 oi/BYtptLoklrRlIgZyIZSLMWboy4fb9Zo9Kg1I8X7cc2J+k5CIecmlYc20KDAB4jTQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=estdNcX6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.102
-Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020102.outbound.protection.outlook.com [52.101.189.102])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795034535;
+	b=x3oWyPi4dKun21ql5tRl9e+d6mrRDuU7itxLCcazVLTzIGKpVQ2KNA48dhQ+9Wte/mdj
+	 jU3TCB1zIv9y3H1g00dEnDQ2YgBeRa4ncwrFBa+Bk5/1Y7w8xro7FDu39tRzhgx1SCScY
+	 dM+uKY2YYxqGzwr6tefPuw5UNzx9voJ4PD8XeClDjQMxQI5dfkWCAip7AMWwOI9LPQ945
+	 twmAdo6wmyXOE5zhMr9yRsyu4JG2H95PWB9AfEULvVWcaaIDYoI3HQqRP61DXBUZi/MLu
+	 TnBnCmi7Xn5YexYYNg1G7L5YL8WbBYjDIDcL8hzCYwZNuiRF4zKyoLw0zJIAL/gRUyQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795034535;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=yGYFAZyPSCRNjDclcP1I3y+zEfg7NXEfs5NTufJGWEA=;
+	b=PwuLNJgYgfeDam+z4T14vCQJcUSIQ5fRaycpLzoWWCtrf5icsBZff/ah6UkUMCN6VO2O
+	 0kjVY2CfBscBx0vwezcNmxUfvTNcO/ve7Pj3wAUEUtoRn1rloLYgPmvxDlM4t2ymcqEe7
+	 2th4abS+Pi6RIt0tJa9Cn7PRvqkCwaLskGg+MsFK3mcunQISiYyaDc7SuwPzedgYmhI8s
+	 sJbSYp2mOk9sXWnqbXsemiKpgNE/Mlap/rUf/f0g5A68EgNZ7N3i0s8k9kFIr9AZjWMSO
+	 iGFJvzDNrvWZaYyNvT9s0V4M9LiKixYzGjZvhtSHaKdSYYoRirvOZKPV/+xODOPJi6g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HOD98SOo;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF07F606A320;
-	Wed, 18 Nov 2026 20:36:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF07F606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 0869F606A32C;
+	Wed, 18 Nov 2026 20:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=estdNcX6
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c8ULfWrd2BVb3Dyze8FWHivQUHQq3qDx803rgJ7/sATwUTCDEMbbULLFks9M3T89oURVaKddvfu5YKMlzyKvANCCJmx+ak9Ipul6Pt3isgmlp8KWY6wri7x6sqtJAtX2S3zQEL0/Iu4cvDJg0w8j3jCOy8ruZtxfz7B4yoWAeQzEc70HJlWqXpW5FJwReZWDxBYQt/oxhedzl4G/xRnhmGjtVRZO/GLhPmqbblTuhKAfabrKe8N4R+pX+EgJUgTiMgzamHC+uISfbzjH+vPd5Iggi/m0ZxMyl/1OvlSKpabCM6bcCV9zofRcOcWHdTYrmQ7uT9zgkPPAoIotAmvvuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t9R14NaI/JeikKnHJ+yahYnsuQHAHuBELGNZM0uMuvo=;
- b=iUyo4VuMYoeQDbQBop67Xcym+JjYL2KnrAni6P5K1KwrO2QE6btapCB1MSj7TKe8IbvJedrd9nXccVFcZCtCWMs7H3ui1Ojumx379YfAgaz+IXkmcC8QCxsuBZ2E/eVdOs4kMlMgJTjB5m2uQJnnrJFTJolqbgy21Xk0qWi/KvR+LhAApJ7Ix+SG2QKoJfNBn9Di78PNLzRTg5Tnf9/lkkQUtwDmrimdTcQzMvcn4TWrNNGQrkcVtmwjYOzMBravVLSKV9RM3XW3dPYMcUruM9WkuTQm9XRBcHYkLbmwau+ETOoTFNy8ZTc9o2ntO78y31L8Yuy5N0lufoC+mkBO2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t9R14NaI/JeikKnHJ+yahYnsuQHAHuBELGNZM0uMuvo=;
- b=estdNcX6ZWle4oLQWsI3DceVoq4P9PtQFZuEaPjLIUCLj8/z69YbVgUBGLNZYophyM0iZVHIlWX8gEQe3lBVWX8VyQJ4HCoAatZKZ3B7zveZ2+mgA905STALLRqXxld6kENJXR/O5Lvgw7rHY1IGJNDjneUMU9sHLxNEBONjblUHYgXa4tXUBZeSGsNJoRUFjQYqmr+7DKXnCCqi2YAVFAJ2ePARbCJX0hjjbUN9oPlmxdRiXqAQgI/1pmwS1pYadDhZ8pljjf/ZJhvrjzMFN5FO1U4VXHlNa/gGNvsabEvRKTitdFf2B8c75E4+cFcpz8iN2DKVMtDrl/x2LjGSsQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by QB1PPF9E6EACE85.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c08::270) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 18 Nov
- 2026 20:36:12 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.013; Wed, 18 Nov 2026
- 20:36:12 +0000
-Message-ID: <042cdb9d-58c8-4a18-ba4e-a3dc8ab028c7@efficios.com>
-Date: Wed, 18 Nov 2026 15:36:11 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] locking/ww_mutex/test: Time an ABBA with both
- owners running
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
- linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
- longman@redhat.com, rostedt@goodmis.org, clrkwllms@kernel.org,
- dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
- shuah@kernel.org, juri.lelli@redhat.com, linux-rt-devel@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
- <20261108141347.1525532-6-mathieu.desnoyers@efficios.com>
- <20261118163807.75hxTxGn@linutronix.de>
- <e57bdae9-4f87-4cc1-9fdc-22c2d766e252@efficios.com>
- <20261118184524.Vxz_-nKr@linutronix.de>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20261118184524.Vxz_-nKr@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQ1P288CA0002.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:9e::23) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HOD98SOo
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 04AA41F000C5;
+	Wed, 18 Nov 2026 20:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795034534;
+	bh=yGYFAZyPSCRNjDclcP1I3y+zEfg7NXEfs5NTufJGWEA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HOD98SOo2y7LisIyear+vmT71uL7GcKw4TOcb4yz+HJhLShq9FVnXgPGBj0IeH7nB
+	 NkHXUPLZ6DRpt4YwIsK/2RvI8yv0k+FRz+5enF8Ej27HdLMrk4C6B2ytR0+pLqQK/z
+	 oMprkQ42FVzf6Xihen6u2RRCEMBBDP6MuBmjUaMjT1cdjCXVhnN+aewx89/JyIs4Gi
+	 z3B+N334YoohR8XLQNcnWbDUIliIcKGMIxLBPHjkMAQHHjbscX63CQ3tBhM7+cFll9
+	 GoLv7GUXN2rPT8+o/rRkgW8EvF037oveTAIM4TQRC1KdjuJH1V1Z49qgse9IJGO+tp
+	 XSe3e2bfxSr/A==
+Date: Wed, 18 Nov 2026 22:42:10 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Ben Segall <bsegall@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Jan Kara <jack@suse.cz>,
+	John Johansen <john.johansen@canonical.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Manfred Spraul <manfred@colorfullife.com>,
+	Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v3 00/13] Namespace for namespace roots
+Message-ID: <av4NonrcCxzMoDyz@kernel.org>
+References: <20261118193539.240065-1-jarkko@kernel.org>
+ <av4CdM-eW73oO4wB@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,96 +93,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|QB1PPF9E6EACE85:EE_
-X-MS-Office365-Filtering-Correlation-Id: adb59fd7-15f9-4b55-9ca4-08df45b395bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|18002099003|22082099003|6133799003|4143699003|56012099006|261026121527099003|261026140227099003|261102123227099003|261028144727099003|261021121427099003|261022075727099003|261022105027099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	mxHUzuY6isQ87MJRAzCSjut/CBgy15h4Ftl22AdNXVcCMEUE3gaeHOg+EBKTo4NujU/0T9tVG1x2Mn5V2pjoLkgfp50Jnej4XMgY/aUCIgBsyHSGpSIEM/FrYlMxDTk2kGy4F2GgLsaqBJ0G8Y0gv1kpAUHbXbqSzfO0zvERXPCMwBj/EgYIiOkcYbBFjI88ksG1oNFpXFO39V9K+tMhTBQ0s2ejwhb76RxhAJX6FmDbJdf0WWQll3/I8EI0x8tjfTemIXcWwv/Rz8QX4tAwu329bngqF2jkynbjJWkUWUoBwS3gQ3FpGpx+YCwB9ZTnP4zLfy7sQIilYUV9wKb5IAGYUyQeoijLzTK+aDRmK0x6oRROCwA7sfYHqLtRIxMw59XjcPcHwrzHQIYDWREGvNa2Hti6VLJZ8K5M4NQQWa6TvKvHo6OskWBSlenbwWs6W/xYfWO+tB7iAb618MebZBlMMB3s66odrZ/tFXZaT4oyQA+WcKum3wsWhu4/6Qp3pO2t0ZDlnArILfLGv5qXZZpTLuGDhaM5g8DSdyszhi9vUcZcKuus+pu/PPhFj7fDV7mdxNKbI42w/wQPcrVEqR7De5AXY7mMPcaJ01l3BV8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(18002099003)(22082099003)(6133799003)(4143699003)(56012099006)(261026121527099003)(261026140227099003)(261102123227099003)(261028144727099003)(261021121427099003)(261022075727099003)(261022105027099003)(10067099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S1Y3a1F3SVJEVE9GNk9pOWlkS2NCTFdYL0VLeW4vMzVuemVGTTl3QjBDV2JO?=
- =?utf-8?B?djRNZDBiSTBPN0syNk1SL01oMHh1anlESUJEbDFqVkFEcUNNVVB4RjdNOU9C?=
- =?utf-8?B?SHk1WU1nN0ZCbzFpZkw4NE5kQ0N0SFQybms1NEpxZ2V2aHpsSVhMQmV6cVFX?=
- =?utf-8?B?eTI2aVdBNHd0MTFlMG1zVmovN1IrQUZoaGtpQ25iUkpOdk1sTk5TdThoM0Vh?=
- =?utf-8?B?b3hENG5FbnArN0RSVnlDdTNEKzM4M0RCMFRycGQ1ZDlhLy9OOUlEVmZsQTVx?=
- =?utf-8?B?eW42amkxc1p5VjF4aWQ3QW1ZZjh1SmowUmE5VEgwMXFsdDZzcXdaR1FiYmo4?=
- =?utf-8?B?N3ZpY2dqSk03UUFDWnZNY25NVHo1MGZzeVBUMTh6d0F0RkxJUmpOR2JuejFJ?=
- =?utf-8?B?TjFrTWRKUVZiTktVTDNUQ3U5UzV0eERiS0tMQXpja3I4ZjF1WG1ETFdUNU9o?=
- =?utf-8?B?NEEwMTZSQm44YzlJdHgraE1WbHBuR3l3bG04OHpuTWpZRHZkdHd2TGFWOTBH?=
- =?utf-8?B?UUgyeGxFNjVpVytEdU5uNkRxTy9kVG9iMkk0bkt1cFdHSjhiZk96WE9xbk9u?=
- =?utf-8?B?R25IOW10Z2NkQThIaXd5WkU0TW1MbXB0aWlZbUxYZlJyd3JDOG5tdjgvb1ZB?=
- =?utf-8?B?N2pVZGtFcEd1cTJSRiszRW1qR21YMFJkeXVDbXkzSE5wNWxlQ1E2S1JadURh?=
- =?utf-8?B?QmtiSnU1c09lRHZ5YytKRWdBTnBRbkpQbHdiTDU0a0VtWXVwaEVubXdEdVVh?=
- =?utf-8?B?Y2xhZGlvd0V4czV3Sk9jSGpXY2ZwN1pTNjdaUVlXazFzVUw5VG1aZU5jejY0?=
- =?utf-8?B?YXMwQVNIRVJwNVN0WTZMVjAvS1NtVEF1aHR3a0Q1K1FhMklFT2pTdDg1SERn?=
- =?utf-8?B?K1JKM1VrQTdyaXJScFNHTjJkVWZnWFZNWE5TSWw3bG52cFpGajczZG9TcFIw?=
- =?utf-8?B?U056SUY4OTN5NXQ2OFJHUkRnbis5KzRNZ3JpcHZDU1JueHZJTEJkMGh2c2dm?=
- =?utf-8?B?SHVsd2dwTkxVdXJlMWdyMDV4bTVHdGpXcmZ2cmoyRzJlVTVid2ZITkI0QWcv?=
- =?utf-8?B?MHNnM0thS29HM0hsQ2E1eTBSRW5VZDVKTHFwY1Z4eTFKMnFoMmJqa2x4angw?=
- =?utf-8?B?TlRnQmRaWFdlTUZ6WkxjVzE1LzFCbUw0ek50azlSOEJ5VHJMS3JwVlBSYjVU?=
- =?utf-8?B?VGwxU1FKZ0pWK1JZLzJGVndmV1ZsbWxVL3dIWXF5YytaUGdDNitPNzlmcWkz?=
- =?utf-8?B?UTE1Wmk1bzQzOFQ0M2YzanM1NTl2Ykd4OUF2azFxaVNKV3RnV0ZNNkdheURw?=
- =?utf-8?B?NncyNzVuUE5waUowUDc1ZjkyZkpNV2s2ZzB0TTRqSzVEYlVZbEZRMUlsN2Rv?=
- =?utf-8?B?aS9HRDROVXFCWTMvQlBMSzZhby90MWVocUNCZGw3Z1B6T3BscTErVkFVVUth?=
- =?utf-8?B?VGYweFA2VVVOMzdDQ0VISDlDZnhZMUhFQWdGbkhBM2FCRTRvSHpkdG1WUHRs?=
- =?utf-8?B?R1RPaTRMbDNMNnByWXpxaWJzWitmZHFpQm1uenFCbmpQTDFIc1gvMEhVSFFR?=
- =?utf-8?B?VGVzMzIzUFRDbnFQRjJ1T2NqRXkyMjJ4cCtuWkwwamR0UU9UeHExclNlRmFF?=
- =?utf-8?B?ZnQvUHlyaXNGeS9uYzcwV3ZBSHJraWx6MFlZOHZSS3BqaUU5aFUyRk83ZTky?=
- =?utf-8?B?Vk0vOGZSemRxWEppd2JQY3cvbERpR2RYQWdiNUlpTTRCc2ptM2xtbWRvSU1E?=
- =?utf-8?B?ejJkNnJBd1FEanhySzgreXp5WWM4VUNrUSsvV2JOUFBCQ2dHRk1MQkVYN0ZN?=
- =?utf-8?B?ejBub2FzZUd4V0dISWM1UXk5OW9Pb054RTJZTG8wUkJBUm1HR1YvbjFMZm14?=
- =?utf-8?B?UUY4dHljREd3N3NiV1ljUDFVeTFlazI3VXhPQllmU0ZjS2RpUnZaYkRQTHFP?=
- =?utf-8?B?R0VqOTZpK3NMVVFqWTczYUYrWU1BdkFMS2c4RVE0QnlhRHBnYkQ3N3BLbWJ4?=
- =?utf-8?B?N0Y5N3RtbDNGZCt1WkppTm5zZWVNcGxjcklCV2w4R2tpOEtoblpPNU0vMlY2?=
- =?utf-8?B?bnJEbnY1WElLdXhIZFZJeW1vTktLdTI2VC9uSHRMV0hBNkZERVJQSkVITmUw?=
- =?utf-8?B?RXZDbDRyWVRZU2o5czE0UzduamRKWDNLbkF0NnlRSW1WK0oxdmpCQW9GL2U2?=
- =?utf-8?B?M2RCbWg0dExjNXRZRWxlNGhDc3dNT3ZnVTlYb2l5dElEN2EvRS9LMjRMM2s0?=
- =?utf-8?B?ZmlNbG1TalYzUW85cWZFQzdFWElMRzZQNW9NYkpwMVNUMDlEdmw5aVlESXFX?=
- =?utf-8?B?NjhLRDcrYzFLYzJ0MGFyMG9CTHpoaWtzZVdDdEoyZ3hpUm1pazhNc0FwcXFX?=
- =?utf-8?Q?DHLeB90/jyXOkAyp/bs8Ova3YMU0JymzT5D/e?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: adb59fd7-15f9-4b55-9ca4-08df45b395bd
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2026 20:36:12.4538
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BsHL1zUegEDrVymB0BycJMGerwOOot0WwEyP+AGZc8Xt5wfTYlyi6ME/nPb/nI+IVp28pXlWsM7ac7Zk8/BrH+RImKv7IWbiSTo4C93VvZ0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: QB1PPF9E6EACE85
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <av4CdM-eW73oO4wB@kernel.org>
 
-Hi Sebastian,
+On Wed, Nov 18, 2026 at 09:54:32PM +0200, Jarkko Sakkinen wrote:
+> On Wed, Nov 18, 2026 at 09:35:26PM +0200, Jarkko Sakkinen wrote:
+> > OVERVIEW
+> > ========
+> > 
+> > A root namespace (rootns) is a kernel object backed by a file descriptor
+> > that binds together:
+> > 
+> > 1. A full set of detached namespaces owned by a fresh user namespace.
+> > 2. A dedicated PID namespace for spawning processes into, signaling
+> >    members, and polling or waiting on PID 1 exit.
+> > 3. An initially empty mount namespace (CLONE_EMPTY_MNTNS) populated
+> >    directly in its target user namespace before going live, without
+> >    inheriting host mounts or cloning staged trees, while still allowing
+> >    new mounts to be attached at runtime.
+> > 
+> > Work on this feature started in 2025 from David Howells' container object
+> > patch set [1], which I turned into a namespace for namespace roots and
+> > rebuilt around that premise.
+> > 
+> > While the patch set is manually written, the original motivation came
+> > from isolating LLM agents. Running untrusted agent workloads made it
+> > clear that OCI runtimes need to minimize their live configuration
+> > surface.
+> > 
+> > Assembling mounts, credentials, and namespaces inside helper processes
+> > with a half-configured container is what I see as the main challenge,
+> > and the existential debate around namespaces and container objects is an
+> > unfocused discussion topic.
+> > 
+> > [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
+> > 
+> > IMPLEMENTATION
+> > ==============
+> > 
+> > rootns_create() allocates a rootns instance backed by a pollable
+> > anonymous inode fd, creating a fresh owning user namespace and a full set
+> > of detached namespaces: empty mount (CLONE_EMPTY_MNTNS), PID, UTS, IPC,
+> > network, cgroup, and time. ioctl(rootnsfd, ROOTNS_GET_NSFD, nstype)
+> > returns nsfs file descriptors for individual member namespaces when
+> > standalone namespace operations are needed.
+> > 
+> > Superblocks are configured directly in the target user namespace via
+> > fsopen(), FSCONFIG_SET_ROOTNS, and fsmount(), allowing unprivileged
+> > callers to assemble FS_USERNS_MOUNT filesystems without holding
+> > CAP_SYS_ADMIN in their own user namespace or entering the target user
+> > namespace first. move_mount(..., MOVE_MOUNT_T_MNTNS) operates on any
+> > non-anonymous mount namespace fd: on an empty mount namespace it installs
+> > "/" onto the nullfs root once, and it attaches relative submounts both
+> > before entry and into live mount namespaces.
+> > 
+> > Once "/" is installed, processes are spawned into the rootns via clone3()
+> > with CLONE_INTO_ROOTNS and struct clone_args.rootns, without mutating the
+> > caller in place. Pairing CLONE_INTO_ROOTNS with CLONE_VM | CLONE_VFORK
+> > and opening the target binary via openat2(..., RESOLVE_IN_ROOT) on the
+> > retained "/" mount fd allows spawning with execveat() without copying
+> > page tables.
+> > 
+> > The first entrant becomes PID 1; once it exits and
+> > zap_pid_ns_processes() reaps all members, poll() reports EPOLLHUP and
+> > rootns_wait() returns init's exit status and rusage. rootns_kill() walks
+> > pid_ns->idr under tasklist_lock to signal member thread groups.
+> > 
+> > CHANGES
+> > =======
+> > 
+> > v3:
+> > - The patch set size increased predominantly because the coverage of
+> >   kselftest had to widened to cover the introduced changes.
+> > - Replace MOVE_MOUNT_T_ROOTNS_ROOT with MOVE_MOUNT_T_MNTNS targeting
+> >   mnt_ns nsfs fds, and add ioctl(ROOTNS_GET_NSFD) to open member
+> >   namespace fds (Andy Lutomirski).
+> > - Allow unprivileged fsopen(), FSCONFIG_SET_ROOTNS, and fsmount() to
+> >   configure and mount FS_USERNS_MOUNT filesystems directly in the target
+> >   user namespace without entering it first (Andy Lutomirski).
+> > - Fix locking, refcounting, credential/dumpability/timens setup,
+> >   pivot_root() lookup, and cross-userns mount checks across copy_rootns(),
+> >   CLONE_INTO_ROOTNS, rootns_kill(), FSCONFIG_SET_ROOTNS, and move_mount()
+> >   (Sashiko).
+> > - Mark PowerPC rootns syscalls nospu (Sashiko).
+> > - Update documentation and kselftests.
+> 
+> I.e. before PID 1 and /proc/<pid>/ns/* existss, nsfd for namespace other
+> than root nsfd can be acquired as follows:
+> 
+> 	int mnts_fd = ioctl(root_fd, ROOTNS_GET_NSFD, CLONE_NEWNS);
 
-> The timeout that was introduced in commit cfa92b6d52071
-> ("locking/ww_mutex/test: Make sure we bail out instead of livelock")
-> triggers. That is not related to your patch.
 
-Thanks for tracking it down.
+Unprivileged caller becomes the owner of rootns->user_ns. Each mount
+syscall then just checks CAP_SYS_ADMIN against rootns->user_ns.
 
-> I don't call the shots here, I just explained why I don't see this
-> needed. We might want to cover this code path if the paths divert in
-> future.  I don't know.
+The user space wiring goes along the lines of:
 
-I would keep it. stress_inorder_work shows the bug only through its
-timeout, and its margin depends on the machine. This case times the
-ABBA itself: 950ms without the fix, microseconds with it. It would also
-catch a change in the ww_mutex path that the futex cases cannot see.
+        int root_fd = rootns_create(ROOTNS_KILL_ON_CLOSE | ROOTNS_CLOSE_ON_EXEC);
+        int mntns_fd = ioctl(root_fd, ROOTNS_GET_NSFD, CLONE_NEWNS);
 
-The next version keeps it, with your Tested-by.
+        int tmpfs_fd = fsopen("tmpfs", 0);
+        fsconfig(tmpfs_fd, FSCONFIG_SET_ROOTNS, NULL, NULL, root_fd);
+        fsconfig(tmpfs_fd, FSCONFIG_CMD_CREATE, NULL, NULL, 0);
+        int rootfs_fd = fsmount(tmpfs_fd, 0, 0);
 
-Thanks,
+        move_mount(rootfs_fd, "", mntns_fd, "/", MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_MNTNS);
 
-Mathieu
+        struct clone_args args = {
+                .flags  = CLONE_INTO_ROOTNS,
+                .rootns = root_fd,
+        };
+        pid_t pid = clone3(&args, sizeof(args));
 
+Note that example is uncompiled :-)
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+This example makes me feel that perhaps RootNS is not the best possible
+name for this but this rather should be e.g., NullNS?
+
+Br, Jarkko
