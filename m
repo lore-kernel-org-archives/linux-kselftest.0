@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.149.156.87
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795010681;
-	b=QADb/BI6UTnrpjEqj9WRJQKk2r5BJDsGXP7WxeBq9VEBRMSwzlP/8DgboCwSeIRv5S6e
-	 /+2LYFvgPf9xxAKj1sPuznLCF++2Xrq8VniT/DNHRsMZbAta4EeMgb/FRHe+Qc4J35GgO
-	 dmJIJE5KOy1I3/KJtsxftl+LAstXc6xBUH/z//ccDVaHCNkqpnWERxMXDQ4jUjjyUfMZm
-	 yY9Hcd7gdePp4qyV6b7bxuok0cno2FPCDuzpjOccUrnyugnvpQ3Zl98DCna58UNDGR7ke
-	 0QeBfsROqp4qB5duLeON0TNexz7XmRiXrDlt/ooaGyd1e6hGj6l4uTjDssoF7EuE3DA==
+	b=RrDQl1eeFm675KheDfP3LC04zUN9Yp3KBxthDB/AnNSbmZs8r6H0FwHo/D/cdXPNErxN
+	 UxJl5MQUnfgBnK8GbcZZlBzHpsY6vZEDcXPvesxXtTx4LXN13d8GpN2s1pKeooUJ8zOm8
+	 G7c6Sl5GI/+iKqX0Q+1n964hxUz6PvAhewrn1rEG0N0cmMgNll8m3UPY//TnMcE3vTIuF
+	 GJP35dVCZebOsq8YYPVdaABkXBco+I4iDV7xOZ3iyHST1MbJp7ReMW98I+KJvuHOrONT+
+	 ErmEAS+qin9YWEktg2RgEU91BLcgZqXcnOA3VKzH0D8/cbJAQrVe60Jvmcxz75YfUUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795010681;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CMAE-Envelope;
-	bh=iDOcFC7CeY90loQ/nRDj1EIyRbypk3twa3ZAJXJGX60=;
-	b=VvOIALhyzxjL3deUrzpfe/S9YmvuIzT4s2UszynpFOLOkC2ZW1SWGy8SN4c6Y5RBuYG3
-	 xSOzzUCZD4BHUIPjKP/6MzdDLg5G1zJnWh/GCdD+LGrLh9SLLWESh9+pOk1uMSuXScl75
-	 JN4lI5wudbgs6sov0kDq7XaV5b/jgFcivdvNiHgKi4S/4Gq+1tFBGwGaliDico8dkX6AT
-	 nk8y2h+NauCtKl5AaQVSRAFWFTT7TAxJBA+bgflsoqwvjDZT1pqslr79KJlIH8NkDZtDy
-	 E7yr0fW7TFDaS6N6f2AULNJ8dQDcbx0Ebh5nNSYlq9wwOV32KlZOgHB8NgmFDJw+i2g==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CMAE-Envelope;
+	bh=z/HJIcpabCxs0VbBc5qQ1+MCFiToabINpitp6JkLwho=;
+	b=KuNkk9LFyzMsBiRCAuTJiB1vuoUEU/XJtmdlnlYRmH1J98PW1VgNclodI/YBS0vLTeUA
+	 mnc7oSBP46s8xxfgV49w2RI2uWLEU4ICJwdatwH5sS6GegyyNEotXGh+A6/Q8uOnz0wmR
+	 QD8hNto4jRronUi9FgvzBNDj/E3gvOaB6eZDWH4QXD6Y6/rp9NjfVpukpd7nmR4JsfqHW
+	 wGHszCdr5ggkBVwXm5IoNLvWVg/nv8lhqrxGFeOCJ8QC9GuWWxZLvW+SFWxFsd38oM3qe
+	 sZUiayceuu+BJ+DGRDY3apWe/QxbF3egiM58V/dX0nZHQB4nrzdDNkKP2fypLJB1t7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=enneenne.com;
 	spf=pass smtp.mailfrom=enneenne.com;
-	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=diFyiX2c;
+	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=lUEUd6nx;
 	arc=none smtp.remote-ip=62.149.156.87
 Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80CE606A333
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 14:04:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B80CE606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555D8606A31C
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 14:04:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 555D8606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enneenne.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=diFyiX2c
+	dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=lUEUd6nx
 Received: from polimar.tail4f75e6.ts.net ([101.57.122.26])
 	by Aruba SMTP with ESMTPSA
-	id TgGvxLK1X6q8sTgGwxc6Jo; Wed, 18 Nov 2026 15:04:29 +0100
+	id TgGvxLK1X6q8sTgH0xc6NE; Wed, 18 Nov 2026 15:04:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1795010669; bh=XVtKzIZ7zXmVfJwIqA5oh/HryFQY/4SP1YexPdyddNc=;
+	t=1795010670; bh=ri1z1nmKrZJAIeer2FvVgJMXr755InTgnrOMRLpwRDE=;
 	h=From:To:Subject:Date:MIME-Version;
-	b=diFyiX2cnjnxLhaHDvNPCPMNk8KxyX3wb07gQwIG4fWNh4ErWmYv0Ps9mAbPPXaJE
-	 ouv+7BcQZ0w4Kqwx2M7IEkPW83dUavihf39OZHkF8XXWHrGomCpOoi9rMIGDKaP8sT
-	 bYnQ7dH0M53FB6rAV2kKB8Xn/xKI4GHde5WZ9cvlkKfqAvPg017zt/a5CVDqq1vc79
-	 DEQEjLT6/4jZmxTALrpiuuyl//Uj53XfKF/0kmWCs+J+xHHYSsRoBszrZcURa7+Na0
-	 vRyUBbJcOqch/2n6O/ZLjKpt+qARd65hWoUuwMgtpjkx+dslnKNen2aVYbjzGRKcfE
-	 l+qipIxcD4+RA==
+	b=lUEUd6nx9bfWcWkMOFl70pUcMUi9A8djTq+aXLhAYQ3fSB1ZmCqTyQW9G4u9+t4bO
+	 t2bfVLxS9FTArdx4n3MgQRkLNGetjJ/h5OLu/E60SiCMXCsn2QEOeWCuIBYJN8DoXD
+	 g9dMhzS3eC2/GJFssiGuq2eQu63qIO32uTOqb03uW45W9JFjuhP3cPs4bWAm9c6h/p
+	 gOqIDZjSAZWkLUnO8gp1hD+GNQBE8cnVZWowhnhn1/s23x4ro8vqmiYWJpQCdZMATj
+	 A/lZaliSVI7/owxP/V/hbo9QGS+/j9CtJfWFnsnKyWW0FPMxwh5HDiwe4zmfpkZWdU
+	 KdclpE8NEzqVg==
 From: Rodolfo Giometti <giometti@enneenne.com>
 To: David Howells <dhowells@redhat.com>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
@@ -79,10 +79,12 @@ Cc: Herbert Xu <herbert@gondor.apana.org.au>,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org,
 	Rodolfo Giometti <giometti@enneenne.com>
-Subject: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but never read
-Date: Wed, 18 Nov 2026 15:04:12 +0100
-Message-ID: <20261118140421.584086-1-giometti@enneenne.com>
+Subject: [RFC PATCH 2/9] KEYS: keycrypt: Add the sw backend
+Date: Wed, 18 Nov 2026 15:04:14 +0100
+Message-ID: <20261118140421.584086-3-giometti@enneenne.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261118140421.584086-1-giometti@enneenne.com>
+References: <20261118140421.584086-1-giometti@enneenne.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,494 +95,560 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfP7o90yEpl0YAPhWgdrop4x1SEzn49dD8UbtxyoG5ZNOclHSgj7B+UE9FzjGuOFqO5IipdjayenrCp1rF7MdKGv/1/1oqsFkyvaOChoFhQ+32DXtHPfW
- 0qw8qTyqBnCOjcZthUhJgU3qVLsreZxAdoFHChLGKPIuBosw2oOuOl9v6/MCo87h8xYr3wukO7H3mOQuyBAHuohjIaUqY/BJbofm+VEnPQCQ7TpGt+h5O9Ei
- LsMsAV9/obeBA99k1sdb5WPNOaryHONp013fpeVVZmr+zef85cF4V3aZzOTOFpUlpFFZ1EfgxueUnm9+X50UJjFn5iDH6keukp4JovPelHmsi+pvzFSZZ8Uz
- ScF3yxA2e5zp2GvyOxaRZmp5/GyGU+2eNZQ8q9MYYfFbnNTD5lBe0rElkm5GPwjMQXdQ86iub/Ol3Rnn9AK3MycilWhL4bMrC2nckCbvkOq4igXb4gx/JgSY
- x1dvfAHIiWKx+992XnenwcV1xf5Ob1auv+ahAArGZkVI37vQxGVfUvVF4U8KA4VDBZLUxVNyht+UCv/UWM4iibgisitx/l2paU+7QKD2kv9KHqAt9ZnWhKpF
- Y4yN9hCJ4Uz0AWZxGnnvN/36E35u/N10GAbSDxdy1EUVLQK+LRW+uijjr4k8SdptJmoP44xVot//CyatY0lj6Zjmm/gpwmAlMBzVXArFJHHBqi5kJ5z/5Tfc
- vIrk6s+9VcnayEEDdJbPKkc3I8LMQgrhLaDbohc1LKddmdh/8IGaHWi1rYvcIxZx65/QO7E5XRaof/SwQKZylt5rfwvHanIYoxEWbej+Df9irNh3xy7TnDGV
- DdkVqCQpLrg0qafBlIz2+po2SWPEFFlR/s4LErfKpw1vewuA4tfkfXZ6ybWa2/Tn8FvmO7Mq9Xt7jQD4w/zoTkvFC7WLFDHJ1hmdt4oBHXdjU6aCVNU83as2
- oDD7froq0UNmhaxYunFADFcXS8kcTvrVFr5jEiNK5OZnrYLAHip5JWJ4/93YnMRHyAV/jEIb6Oa/6cCr5FLI7is+BKn4ZrmzJtsf2tDQkN9VTGqn6UbYLZtI
- yNfLQItxqlcVkK2apzXk1+FxISjLxXcDiX6rw9BN8afd3Io1kgDdwxMdbmgxGvaAgnz/Ij7sPog22JXApi+1nlmAQWvL0fR9g1Rogu+sPB630qC1JKJTt+ZN
- fI7cArZ0tGDnUzNn0IWZjSsqTG4+Gt4DpVh1Riuj4r0NckIC8h0IeGqZUr3X8ZBzmqXv+SaYw1TgjSPmuorC8XzcALcFbWSBVpW9CejeVwpJttWmQ2Tb+muH
- TJ+jzyJKJ5ZxuOKN6I1ALXWfQuHA6HloazfePw0mjHksaU+mYvI=
+X-CMAE-Envelope: MS4xfP3GH+/uUH2UT8xMvG9D4FaNvSpSliR0tTjVUWsuRp2/IOriQDotlmu0kb3Bvcv48aoM5XNmWbhv5eiS7QNJbgeBC1jsSjfOF972Rnh0emTdPjKGem6H
+ R8FQM5ApEvDUk+7C5B64URlE/DqsWbFPmIqF5Fdxjbuw5qXpIO8d3te0cEC82Z1yxBQsfy5fV3Q6vZ1LuvDllWjcXQWhDr7/HbtU7r6PNWGUC6idVx8Dr8+B
+ ek4wY1yZBCSekXremPsy96JR7VaG9YbC7dlZs/oF6FLaX56+khmMFDlKpg5Dga4RtCmlhP/PTf3/Dh/xG0Z35IxWGkvCS6mi3AQfMrTerV4gSjhBfTQ8TQhO
+ 2WtVsUgvTKAdiS2UhdVIk71THz3tgRxdeiBji8ZF+HADmbWgIlux4FlE4A0p3VP28f3gPJjwZKDH6AglEq+tcr1rjRLY8s7zrvU3ThHx7VMVVqpygaf93J27
+ DHVEmdvKZFfR2UpWKSpSpKe8bJ0gn5UBlCLF0U9qDWYm+OsTcJC1+LnMhIjs4V4ikBIZNYQ72dmcSA3wyxBIE0HTPEzGG5/FK79bEa+OjwBYPRNnZMFu4/jE
+ 8fLscBn43xcxUZDE5f739I9U6VsNnUIH18fH8PjS9D9PsDJMhGMIuXaIiTxfCA1eB5mKHBc0ZnDALP0lYEcdczQp4+tzuYYNQ5Dm+6QH5rRsXS2mo/04EzVe
+ gOWbCEMppMR8Ix+CM/H9ZCn3Merx9nyppgAhPDvrxQg21bU2Slt3lq4OPuwCaUo4PM1BGE3mSkSH/K1Lh7n2baw0oAovFNLJASml8hcwqvwIut+vbNsDev+/
+ jL4TwCncokB9Gi9URV3sZeunfcG9elxQWWwLF70sRfu/Lj5CRo/LRnLLovR6bdbfJLbQL9PSC4rTIB9ezDgA8pCsliQo+8sfWszS7g+kZLsqcJe/pCzk3G2a
+ K+aXWYYMBQ0+ZNodOykTnAu3U4Hpwf+A2Zhq0OsFvpNa5DfzMmhakS1mds1nPPfv5ZvQqawz4umbE/HXrLCnbCHipO7LH80m7k96Pvpd8GYdU5c+qkfL6OQj
+ fBCugevbR4dYV71GmnWwMQf65uCPFfgEkHD8W5tyK0vJk30l/gaBt/FPPDGig/O2ukfHCRY0tThWdOkh7mGihZ6qm0bRs1fluXnNy3LNQBVXy/6c/Tec1ozG
+ NUtfvoTF17PzVAAZusBifuJoXObZh4EK1MP30GWBGgaUpFqcU8vImlEjsHJ2AZ7eVxR1conCt1qT4W3JkVapXZnACuU4vDw/6BLTMqZ/9OLmP+rDNjRBJRSv
+ hk8hlS8qrmlHW4pWqVe6at3+Hlu3MLpacBiP3W/Elb7Irg4wAAw=
 
-This RFC proposes a key type, "keycrypt", whose material user space can
-use for symmetric operations but never read: AES-256-CBC, HMAC-SHA256
-and an authenticated AES-256-GCM stream, through a file descriptor that
-KEYCTL_CRYPT_OPEN returns for one key and one operation. The key is held
-by a backend: the kernel itself (sealed under a trusted key), an OP-TEE
-trusted application, or, as a proposal only, the CAAM. I am asking
-whether this is a direction the keyrings, crypto and TEE maintainers
-would take, before polishing it further.
+Systems with neither a TEE nor a crypto engine able to keep keys still
+want keys that user space cannot read and that are bound to one
+algorithm and purpose, and the same interface on every device.
 
-Patch 9, the authenticated stream, is a proposal on its own and not
-needed by the rest of the series: it is a construction of keycrypt's
-own, and patches 1-8 do not depend on it, so it can be discussed, or
-left out, apart from them. No user-space consumer uses the stream or
-HMAC-SHA256 yet: craf (below) uses CBC only. If this direction is found
-acceptable, one of the next steps is to bring craf's keycrypt backend
-into craf's main line, with the stream and HMAC-SHA256, as long as
-doing so does not stand in the way of this RFC or of the series I hope
-will follow it.
+Add the "sw" backend, of the kernel tier: it seals each key with
+AES-256-GCM under a key derived with HMAC-SHA256 from a "trusted" key
+named by master=, authenticating the keycrypt header with it, and runs
+the operations with the kernel's crypto library. A loaded key is in
+clear in kernel memory until revoked or destroyed, which the kernel
+log says when the backend registers and when the first key is loaded;
+the backend is chosen only by tier=kernel, by backend=sw, or when no
+backend of a higher tier is registered, and a system that must not use
+it raises the system tier above it (CONFIG_KEYCRYPT_SYSTEM_TIER_*), or
+leaves this option off.
 
-The problem
------------
+In that derivation the trusted key's material is what the HMAC
+processes, under a label and a random salt as its key, and not the
+other way round: AF_ALG lets user space name a trusted key by its
+serial number as the key of an HMAC socket, so with the material as the
+key anyone allowed to search the master could recompute the sealing
+key of every blob.
 
-An embedded product that encrypts its own data (a root filesystem
-archive, configuration backups, logs) needs a key that does not sit in
-the root filesystem and that a compromised user space cannot copy. Today
-user space either reads the key (a user or logon key handed to AF_ALG)
-or cannot use it at all (a trusted key serves kernel consumers only).
-AF_ALG, the one interface that let user space drive a key the kernel
-held, has moved away from that use: v7.2 dropped off-CPU cryptography
-from it (7524070f26d8, "crypto: af_alg - Drop support for off-CPU
-cryptography"), whose message says "If using an off-CPU accelerator
-really does turn out to be a win, a new API should be developed that is
-actually a good fit for it", and v7.3 restricted it to allowlisted
-generic algorithms by default (2f204fe718f5, the af_alg_restrict
-sysctl). One exception was let back in, cbc(paes) with a CAAM blob in
-place of the key, because "this crypto operation cannot be implemented
-in a userspace library" (285d8204638c, v7.2), for privileged users only
-(d9506e82ced5, v7.3): the need is acknowledged, for one driver and
-one mode. keycrypt is meant to be the API that 7524070f26d8 asks for,
-for keys that stay in a TEE or in hardware, whatever the backend.
+It depends on TRUSTED_KEYS and is a module when trusted keys are one.
 
-The interface
--------------
-
-1. A key type, "keycrypt", created with add_key() from "new <alg>
-   <purposes> [tier=|min-tier=] [backend=]", "load <blob>
-   [accepted-min-tier=] [purpose=]" or, when allowed, "import <alg>
-   <purposes> [tier=|min-tier=] [backend=] <hex>". User space states the
-   protection a key needs, as a tier, and the kernel chooses the backend
-   that provides it, unless backend= names one. backend= is a constraint
-   added to the tier, never one in its place: a named backend that does
-   not meet tier= or min-tier= gives ENODEV, not a weaker key. It is for
-   a system with more than one backend, an i.MX8 with both the CAAM and
-   OP-TEE say, where a program must choose which mechanism holds a key
-   (the cost of each call, what the key is bound to) and not only how
-   well; the name chooses among mechanisms that meet the tier asked for,
-   it never lowers a tier asked for (without one, it takes that backend
-   at the tier it declares, so a program that needs a tier states it).
-   Its payload read back is a blob that only that backend can open; the
-   material itself never reaches user space.
-2. Each key is bound, when it is made, to one algorithm and to the
-   purposes it may serve, checked at every open:
-   a. encrypt and decrypt, for aes256-cbc and aes256-gcm-stream keys:
-      a key that may only encrypt lets a device write data it cannot
-      read back, a key that may only decrypt the reverse;
-   b. mac and verify, for hmac-sha256 keys: "mac" computes a tag over
-      data, "verify" only checks a tag given by the caller, so a
-      component holding a verify-only key can authenticate data (a
-      configuration, an update) but cannot produce a tag that would
-      pass. VERIFY takes the expected tag at FINAL and answers 0 or
-      EBADMSG; the tag it computed never leaves the backend. For
-      example, a server authenticates the commands it sends to a fleet
-      of devices with HMAC-SHA256, and every device holds the same key,
-      imported at the factory as verify-only. With a plain HMAC key,
-      root on one device could extract it and forge commands for the
-      whole fleet; with a verify-only keycrypt key held by a tee or hsm
-      backend, a compromised device can still check commands but can
-      neither read the key nor compute a tag that passes. It comes
-      close to what a signature gives (everyone verifies, only the
-      server signs), with a MAC, as long as no device's TEE or HSM is
-      broken: the key is the fleet's, so the device that breaks forges
-      for all of it, which a signature would not allow.
-3. KEYCTL_CRYPT_OPEN (keyctl 33) opens an operation context on a key and
-   returns an fd; ioctls on it: KEYCRYPT_IOC_UPDATE, KEYCRYPT_IOC_FINAL,
-   KEYCRYPT_IOC_SEGMENT (the GCM stream, patch 9) and KEYCRYPT_IOC_INFO,
-   which tells a program holding only the fd (passed by SCM_RIGHTS, say)
-   the operation, the minimum tier it was opened with, and the
-   algorithm, purposes, tier, origin and backend of the key it is using.
-   Search permission on the key is the right to open it; the caller may
-   name the lowest tier it accepts (accepted_min_tier), and a key below
-   it is refused.
-4. Policies: kernel.keys.keycrypt_system_tier and
-   kernel.keys.keycrypt_import (also the boot parameters
-   keycrypt.system_tier= and keycrypt.import=), one-way, so that a
-   system can refuse the use of low-tier keys or clear-key import for
-   good. The system tier is a floor on use only: keys below it can
-   still be made and loaded, but KEYCTL_CRYPT_OPEN refuses them. Its
-   starting value is chosen at build time
-   (CONFIG_KEYCRYPT_SYSTEM_TIER_*), so a signed kernel image carries a
-   floor its command line cannot lower; likewise, a kernel built
-   without CONFIG_KEYCRYPT_IMPORT refuses import whatever its command
-   line or sysctl say.
-5. EOPNOTSUPP from KEYCTL_CRYPT_OPEN means "not a keycrypt key", or a
-   kernel without keycrypt, so a library may fall back to another
-   interface on it; ENODEV means no backend can run the key.
-
-Tiers and what a compromised kernel can do
-------------------------------------------
-
-Each backend declares a tier, and the open path checks it against the
-system tier and the caller's accepted minimum:
-
-  tier     key in clear    purpose enforced by   who may use the key
-           in the kernel
-  kernel   yes             the kernel            the kernel
-  engine   no              the kernel            the kernel
-  tee      no              the TA                the kernel
-  hsm      no              the HSM               the kernel
-
-The last column is the limit of the mechanism: a compromised kernel can
-use a tee or hsm key for the purposes it already has, but cannot extract
-it or change its purpose. Documentation/security/keys/keycrypt.rst,
-"Backend requirements", is the contract a tee or hsm backend must meet.
-
-1. kernel: the keys are in clear in kernel memory while loaded. It is
-   there so that the same interface works on a system with no TEE and
-   no suitable hardware, where it still keeps the key out of user space
-   and out of the root filesystem; its one backend, sw, is off by
-   default (CONFIG_KEYCRYPT_SW), and a system that has one of the
-   other tiers should use it, engine at least, and raise the system
-   tier accordingly. Raising it stops the use of kernel-tier keys, not
-   their presence: one created or loaded below it is in clear all the
-   same, as its trusted master is, so a system that must have none
-   builds without CONFIG_KEYCRYPT_SW.
-2. engine: a crypto engine the kernel drives keeps the key, never in
-   clear in the kernel, but its use is decided by the kernel only. It
-   comes in patch 6, on its own, so that patches 1-5 stand without a
-   tier no backend of theirs declares. The CAAM backend of this series
-   is an engine, since the CAAM does not check what a key is used for;
-   an ELE backend (below) would start as an engine too, and could move
-   to hsm once the firmware is confirmed to enforce a key's purpose. If
-   more such shades appear, a separate property may fit better than
-   more tiers, and I would welcome an opinion.
-3. tee: the OP-TEE backend; the TA re-checks every operation against
-   the purposes it bound when the key was sealed.
-4. hsm: as tee, in dedicated hardware apart from the CPU running the
-   kernel (a secure element, a security core of its own such as NXP's
-   EdgeLock Enclave, a crypto engine with its own policy), the place of
-   Android KeyMint's StrongBox; no backend in this series.
-
-The backends
-------------
-
-1. sw, of the kernel tier (no name is both a tier's and a backend's):
-   keys sealed with AES-256-GCM under a key derived with HMAC-SHA256
-   from a trusted key (any trusted-key source); HKDF-derived stream
-   subkeys; lib/crypto AES. Where the trusted key
-   comes from a TPM, the TPM only unseals that master when a key is
-   loaded; the data itself is ciphered on the CPU, never by the TPM.
-2. OP-TEE: a trusted application, an early TA, REE kernel login only;
-   it derives its sealing key from OP-TEE's hardware-unique-key
-   service. The TA is written (ta/keycrypt, one patch to optee_os) and
-   is the one that ran on the hardware below, but I have not proposed
-   it to OP-TEE yet: I would first like to know whether this direction
-   can go on. I can publish it for anyone who wants to try it and is
-   willing to support the work.
-3. CAAM: patches 7 and 8, a proposal and not to be applied as they
-   are.
-   They are based on Richard Weinberger's "crypto: caam" series v1 (see
-   "Base and prerequisites") and never ran on a CAAM. Questions for the
-   CAAM maintainers:
-   a. is an internal cbc(paes) taking the caller's key modifier an
-      acceptable form;
-   b. can a job generate a key in the CAAM and keep it black without it
-      crossing kernel memory;
-   c. can the use of a key be checked by something a compromised kernel
-      does not drive: trusted descriptors, which would let the CAAM
-      itself enforce a key's purpose and make the backend hsm, or a job
-      ring owned by the secure world, which would make it tee;
-   d. could cbc(paes) take CCM black keys, which are authenticated where
-      ECB ones are not, once the driver handles their extra length
-      (Weinberger's series refuses them, so the backend uses ECB).
-4. ELE (i.MX9), not in this series: this is an RFC, and I am not an
-   expert of the enclave, so I would rather know first what NXP thinks
-   of it, and whether they would be willing to propose an ELE backend
-   themselves, as an engine or, better, as an hsm. As far as I can see,
-   the se_if driver in linux-next gives user space a misc device with a
-   generic send-and-receive ioctl for the enclave's messages, and offers
-   nothing to other kernel code. A per-operation in-kernel API exported
-   by that driver (open a key store reserved to the kernel, generate a
-   key, import a wrapped one, read a key's attributes, delete it,
-   AES-CBC and MAC in one call) would let a keycrypt backend use the
-   enclave. Questions for NXP:
-   a. does the firmware enforce a key's key_usage and permitted_algo on
-      every operation, min_mac_length when verifying, and never release
-      a generated key in clear (yes to all three would make the backend
-      hsm rather than engine);
-   b. could a key be exported wrapped under a device-unique key and
-      imported again, so that a keycrypt blob holds the key itself
-      rather than a reference to the enclave's key store;
-   c. is the key that wraps an imported key unique per device;
-   d. the user-space library has a streaming MAC (hsm_mac() with its
-      INIT, UPDATE_DATA and FINALIZE flags): would the firmware offer
-      it to the kernel for a key in its key store;
-   e. can a key_id be reused after a key is deleted (the library's
-      documentation does not say);
-   f. would a per-operation API of this kind answer the objection Arnd
-      Bergmann raised to the generic passthrough
-      (<2034fb2f-f169-46a5-85e8-fa723ddb0360@app.fastmail.com>).
-
-Base and prerequisites
-----------------------
-
-The series is based on mainline v7.4-rc2-92 (067c5c24cef2). Patches
-1-6, and patch 9 on top of them, apply on it alone. Patches 7 and 8, the
-CAAM proposal, need Richard
-Weinberger's "crypto: caam" series v1
-(<20260726081504.2182951-1-richard@nod.at>, three patches, listed as
-prerequisites below) applied first, for example with:
-
-  b4 am -o - 20260726081504.2182951-1-richard@nod.at | git am
-
-Testing
--------
-
-The series comes without its tests. There are KUnit suites for the
-core and the sw, OP-TEE and CAAM backends, and a kselftest for the user
-ABI, with a case for every reachable row of keycrypt.rst's error
-tables; together they are larger than the code they test, so I am
-keeping them for the non-RFC series, once the direction is agreed. The
-results below that name them come from the series with the tests in it.
-Taking them out removed only the tests and the hooks that let them
-reach the code's internals (static functions made visible and exported
-to KUnit modules): with CONFIG_KUNIT off, the posted patches build for
-arm64 to the same instructions as that series.
-
-On that base, with Weinberger's three patches applied: built for arm64
-with W=1 (security/keys/keycrypt/ and drivers/crypto/caam/, no
-warning), and, with the tests on top, the KUnit suites pass on UML
-but for the one case that needs the system tier above kernel (by
-Kconfig or boot parameter). Patches 1-6 and 9 alone, on the base without
-Weinberger's patches: the same build of security/keys/keycrypt/, no
-warning.
-The runs below were made on that series at v7.3 on QEMU, and, without
-the CAAM code, backported to NXP's 6.18, on QEMU and on hardware:
-
-1. QEMU (qemuarm64-secureboot, OP-TEE 4.9.0, an fTPM as the source of
-   the trusted master): the KUnit suites and the kselftest passed on
-   the sw and OP-TEE backends, a case skipped only where its backend
-   was absent (the CAAM) or where it needs a one-way policy setting;
-   the TA's unbind and bind; persistence of a blob across a restart.
-   QEMU proves function, not secrecy: its hardware unique key is a stub.
-2. Hardware: the series, backported to NXP's linux-imx lf-6.18.2-1.0.0
-   (six upstream prerequisites; the two CAAM patches left out), with the
-   TA built as an early TA into NXP's imx-optee-os 4.8.0, ran on an
-   i.MX93 board with secure boot closed (AHAB), where OP-TEE derives the
-   key that seals the TA's key blobs from the EdgeLock Enclave's
-   hardware unique key. The KUnit suites and the kselftest passed on
-   the OP-TEE backend, a case skipped only where its backend was absent
-   (sw, which 6.18 cannot build for lack of the library AES it needs,
-   and the CAAM, left out) or where it needs a one-way policy setting.
-   A key generated in OP-TEE and kept as its blob
-   was loaded back after a reboot and after a full power-off, and
-   decrypted a file encrypted before them. The same AES-256-CBC key and
-   IV through AF_ALG (cbc-aes-ce), through keycrypt and through openssl
-   gave identical ciphertexts.
-3. Cost on that board (Cortex-A55), AES-256-CBC, per call on an open
-   context: keycrypt with the OP-TEE backend 59-62us up to 256 bytes,
-   ~106us at 4KiB, 880-930us at 64KiB (67-71MiB/s); AF_ALG cbc-aes-ce
-   6-7, 12-14 and 110-138us (454-570MiB/s). Opening a context costs
-   ~500us, against ~9us for an AF_ALG accept on a keyed socket (~25us
-   for the whole AF_ALG setup). OP-TEE's own benchmark (xtest
-   --aes-perf, from user space through libteec) on the same board gives
-   ~64us per call plus ~1.5ns per byte. keycrypt's fixed cost matches
-   that round trip to the secure world; its remaining ~11ns per byte is
-   spent in this prototype's own data path (buffer allocation and
-   copies between user space, kernel, shared memory and the TA); which
-   part dominates is not yet measured, and it is to be reduced.
-
-A user-space consumer exists: craf, the archive tool of crypto-afalg,
-has a keycrypt backend on the keycrypt branch of
-https://github.com/giometti/crypto-afalg (tag keycrypt-board-5 is the
-version that ran on the hardware above). Its enc command, an openssl
-enc that takes its key from the keyring, shows what a keycrypt key
-carries. A key made once as
-
-  k=$(keyctl add keycrypt demo \
-        "new aes256-cbc encrypt,decrypt min-tier=tee" @u)
-
-is bound there to AES-256-CBC, to encrypting and decrypting, and to a
-backend of tier tee at least, chosen by the kernel; so
-
-  craf enc -enc-key $k -iv <hex> < plain > cipher
-  craf enc -d -enc-key $k -iv <hex> < cipher > plain
-
-need nothing else: the open takes no algorithm and no backend, the key
-brings them, and its tier is enforced by the kernel against
--enc-min-tier or the system's tier. Any other key goes to AF_ALG, and
-the command line must name the cipher. On the board, craf enc with an
-imported keycrypt key and openssl enc with the same key bytes and IV
-each decrypted what the other encrypted.
-
-While testing the user-space side of this series, craf's test suite hit
-the KEYCTL_PKEY_VERIFY regression of cb481e59ea6c, which lets a short
-RSA signature verify: it is fixed by Florian Bauckholt's patch [1], and
-the reproducer was reported in [2].
-
-[1] https://lore.kernel.org/keyrings/20261111-keyctl-pkey-fixes-v1-1-934ebaa267a7@cispa.de/
-[2] https://lore.kernel.org/all/0e20f799-e389-40d2-aaee-2f174748faae@enneenne.com/
-
-Why not AF_ALG or KEYCTL_PKEY_*
--------------------------------
-
-They are the two existing interfaces through which user space uses a
-key it does not read, so they are the first alternatives a reviewer
-will name; keycrypt.rst has a section on them.
-
-1. AF_ALG takes a trusted key by serial (ALG_SET_KEY_BY_KEY_SERIAL),
-   but copies its payload into the socket, ties it to no algorithm and
-   no purpose, and runs it on whatever implementation the socket is
-   bound to, since v7.2 only on the CPU but for cbc(paes); extending it
-   would mean adding purposes, tiers and off-CPU backends to what it
-   has just removed.
-2. KEYCTL_PKEY_* already lets user space use a key without reading it,
-   but for asymmetric keys, one operation per call; a symmetric mode
-   needs state across calls (the CBC chain, the stream's segments),
-   which an fd holds naturally.
-
-Whether one of them should be extended instead is the first question I
-would like answered.
-
-Known limits
-------------
-
-Some are limits of the design, kept on purpose:
-
-1. Only the sw backend is self-contained in the tree; every guarantee
-   against a compromised kernel is a requirement on the other backends,
-   which "Backend requirements" in keycrypt.rst sets out.
-2. Kernel-tier keys are in clear in kernel memory while loaded: that
-   tier is there for systems with nothing better, and a system that has
-   more can refuse it (above).
-3. The tier is declared by the backend, not proven: the kernel cannot
-   check what a TEE or a piece of hardware does, so it records and
-   enforces what the backend declares.
-4. A blob is a bearer credential, and a process that possesses a key
-   can read its blob: what binds the key is the backend's secret,
-   unique to the device, and the purposes sealed with it, not the blob.
-5. CBC is unauthenticated and is a raw AES oracle for its holder: it is
-   there for the formats that need it, and the GCM stream is the
-   authenticated choice. The stream is not key-committing, which a
-   format trying several keys must handle (keycrypt.rst says how), and
-   is bounded at 2^32-1 segments, 256TiB at 64KiB each.
-
-The others I plan to address if this direction is taken:
-
-6. Checks happen at open only, so an open context survives a raised
-   policy or removed Search (revocation closes it): raising a policy
-   would close the contexts it no longer allows, as revocation does.
-   Whether Search should be the use permission is among the points
-   below.
-7. import moves a clear key through kernel memory: an encrypted import,
-   wrapped for the backend, would avoid it. Policies are global: they
-   could follow namespaces, if that is wanted, and stay one-way.
-8. The GCM stream has no seek: decryption could start at a given
-   segment (keycrypt.rst leaves room for it in the open parameters);
-   encryption never will, so that no counter is used twice.
-9. OP-TEE backend: its control session is not reopened after a TA
-   panic, the TA's session limit is a build constant, and every context
-   has shared buffers of its own: the session would be reopened, the
-   limit made configurable, and the buffers taken from a pool, as part
-   of the work on the per-byte cost above.
-10. No keyutils or man-page support yet: to be added.
-
-Other points I would like opinions on:
-
-1. two KDFs and a stream construction living in security/keys rather
-   than reusable primitives;
-2. Search as the use permission;
-3. an rwsem held across sleeping backend calls;
-4. whether a KEYCTL_CAPS1_* bit telling a process once that keycrypt
-   is there would help (not in this series).
-
-Not in this RFC: signatures, ECDH, encrypted import, io_uring, other
-modes; ELE code; external secure elements as backends.
-
-How this series was made
-------------------------
-
-This work comes from a project to strengthen the secure-boot chain of
-embedded Linux systems.
-
-I used an AI coding assistant, Anthropic's Claude (claude-opus-5-5 in
-Claude Code), in the sense of
-Documentation/process/coding-assistants.rst. However, the way the
-problem is solved is mine: a new key type, so that user space can go on
-using keys it never reads while AF_ALG drops off-CPU cryptography and
-restricts what it allows, built on backends that hold the key and on
-tiers that say what a backend protects against, the engine one
-included. I directed the design and took its decisions, choosing among
-the options the assistant set out or bringing my own. The assistant
-surveyed the prior art, set out the design options with a
-recommendation at each step, and wrote the code, the KUnit tests, the
-selftests (not posted, see Testing) and the documentation under my
-direction, in plans I approved, partly through lower-tier Claude models
-it dispatched for individual tasks; each plan was followed by an AI
-review that I read.
-Claude also built and ran the QEMU bench and analysed the hardware run,
-which another Claude session carried out with me at the board.
-
-I have reviewed every patch and I am responsible for all of it.
-
-Rodolfo Giometti
-
-Rodolfo Giometti (9):
-  KEYS: keycrypt: Add a key type for keys user space never reads
-  KEYS: keycrypt: Add the sw backend
-  KEYS: keycrypt: Add the OP-TEE backend
-  docs: keycrypt: document keycrypt keys
-  MAINTAINERS: add KEYS-KEYCRYPT
-  KEYS: keycrypt: Add the engine tier
-  crypto: caam - add an internal cbc(paes) taking the blob's key
-    modifier
-  KEYS: keycrypt: Add the CAAM backend
-  KEYS: keycrypt: Add the aes256-gcm-stream algorithm
-
- .../admin-guide/kernel-parameters.txt         |   20 +
- Documentation/security/keys/index.rst         |    1 +
- Documentation/security/keys/keycrypt.rst      | 1105 +++++++++++++++++
- .../userspace-api/ioctl/ioctl-number.rst      |    2 +
- MAINTAINERS                                   |   18 +
- drivers/crypto/caam/caamalg.c                 |   89 +-
- drivers/crypto/caam/caamalg_desc.c            |    3 +-
- drivers/crypto/caam/caamalg_desc.h            |    1 +
- include/keys/keycrypt.h                       |  161 +++
- include/soc/fsl/caam-blob.h                   |    8 +
- include/uapi/linux/keycrypt.h                 |  182 +++
- include/uapi/linux/keyctl.h                   |    1 +
- security/keys/Kconfig                         |    2 +
- security/keys/Makefile                        |    1 +
- security/keys/compat.c                        |    3 +
- security/keys/internal.h                      |   12 +
- security/keys/keycrypt/Kconfig                |  153 +++
- security/keys/keycrypt/Makefile               |    9 +
- security/keys/keycrypt/caam.c                 |  346 ++++++
- security/keys/keycrypt/caam.h                 |   30 +
- security/keys/keycrypt/core.c                 | 1077 ++++++++++++++++
- security/keys/keycrypt/ctx.c                  |  667 ++++++++++
- security/keys/keycrypt/keycrypt.h             |  180 +++
- security/keys/keycrypt/optee.c                |  489 ++++++++
- security/keys/keycrypt/optee.h                |   39 +
- security/keys/keycrypt/sw.c                   |  468 +++++++
- security/keys/keycrypt/sw.h                   |   30 +
- security/keys/keyctl.c                        |    5 +
- 28 files changed, 5090 insertions(+), 12 deletions(-)
- create mode 100644 Documentation/security/keys/keycrypt.rst
- create mode 100644 include/keys/keycrypt.h
- create mode 100644 include/uapi/linux/keycrypt.h
- create mode 100644 security/keys/keycrypt/Kconfig
- create mode 100644 security/keys/keycrypt/Makefile
- create mode 100644 security/keys/keycrypt/caam.c
- create mode 100644 security/keys/keycrypt/caam.h
- create mode 100644 security/keys/keycrypt/core.c
- create mode 100644 security/keys/keycrypt/ctx.c
- create mode 100644 security/keys/keycrypt/keycrypt.h
- create mode 100644 security/keys/keycrypt/optee.c
- create mode 100644 security/keys/keycrypt/optee.h
+Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
+---
+ security/keys/keycrypt/Kconfig  |  36 ++-
+ security/keys/keycrypt/Makefile |   2 +
+ security/keys/keycrypt/sw.c     | 404 ++++++++++++++++++++++++++++++++
+ security/keys/keycrypt/sw.h     |  30 +++
+ 4 files changed, 468 insertions(+), 4 deletions(-)
  create mode 100644 security/keys/keycrypt/sw.c
  create mode 100644 security/keys/keycrypt/sw.h
 
-
-base-commit: 067c5c24cef23d913b67eaaf71ae67e7169a6620
-prerequisite-patch-id: 6f1c5a861378c58d6adea4e1745794466a9d73d6
-prerequisite-patch-id: e1565dff5540351c42ee04e0308649a6d97e9e09
-prerequisite-patch-id: 37ed62269bd4b1fcaeeab38f5feb5b0f63608459
+diff --git a/security/keys/keycrypt/Kconfig b/security/keys/keycrypt/Kconfig
+index e1d1b8e2a58b..50fd4cb3b1d2 100644
+--- a/security/keys/keycrypt/Kconfig
++++ b/security/keys/keycrypt/Kconfig
+@@ -34,10 +34,13 @@ choice
+ 	help
+ 	  The lowest tier a keycrypt key may be used at when the kernel
+ 	  starts: KEYCTL_CRYPT_OPEN refuses a key of a lower tier, which
+-	  can still be created and loaded. The keycrypt.system_tier= boot
+-	  parameter and the kernel.keys.keycrypt_system_tier sysctl can
+-	  only raise it, so a signed kernel image sets a floor its command
+-	  line cannot lower.
++	  can still be created and loaded. A key of the kernel tier so
++	  created or loaded is in clear in kernel memory all the same, as
++	  its trusted master is: to have none, build without
++	  KEYCRYPT_SW, the in-tree backend of that tier. The
++	  keycrypt.system_tier= boot parameter and the
++	  kernel.keys.keycrypt_system_tier sysctl can only raise it, so a
++	  signed kernel image sets a floor its command line cannot lower.
+ 
+ 	  The default sets no floor: which backends a kernel builds says
+ 	  nothing about which will be present when it runs (a
+@@ -70,3 +73,28 @@ config KEYCRYPT_SYSTEM_TIER_HSM
+ 	  keycrypt key can be used at all.
+ 
+ endchoice
++
++config KEYCRYPT_SW
++	tristate "The sw keycrypt backend, of the kernel tier"
++	depends on KEYCRYPT && TRUSTED_KEYS
++	select CRYPTO_LIB_AES_GCM
++	select CRYPTO_LIB_AES_CBC
++	select CRYPTO_LIB_SHA256
++	help
++	  This option provides the "sw" keycrypt backend: keys sealed
++	  with AES-256-GCM under a key derived from a "trusted" key, and
++	  used by the kernel itself. While such a key is loaded, it is in
++	  clear in kernel memory: this lowers the security of the system,
++	  and the kernel says so in its log when the backend registers and
++	  when the first such key is loaded. This backend is chosen by
++	  tier=kernel or backend=sw, and for a key created with
++	  neither a tier option nor backend= whenever no backend of a
++	  higher tier is registered.
++
++	  It needs trusted keys (TRUSTED_KEYS) to seal and load keys, and
++	  is built as a module when trusted keys are one.
++
++	  Use trusted keys created with blob authorization or a policy as
++	  masters (see the documentation).
++
++	  If you are unsure as to whether this is required, answer N.
+diff --git a/security/keys/keycrypt/Makefile b/security/keys/keycrypt/Makefile
+index 8910fb0156e7..5a2e222a6908 100644
+--- a/security/keys/keycrypt/Makefile
++++ b/security/keys/keycrypt/Makefile
+@@ -1,3 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ obj-y += core.o ctx.o
++obj-$(CONFIG_KEYCRYPT_SW) += keycrypt_sw.o
++keycrypt_sw-y := sw.o
+diff --git a/security/keys/keycrypt/sw.c b/security/keys/keycrypt/sw.c
+new file mode 100644
+index 000000000000..f1ff4de4afc6
+--- /dev/null
++++ b/security/keys/keycrypt/sw.c
+@@ -0,0 +1,404 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * keycrypt - the sw backend, of the kernel tier: keys sealed under a
++ * trusted key, used by the kernel itself
++ *
++ * The blob's layout and its GCM key are in keycrypt.rst, "The sw
++ * backend".
++ *
++ * Copyright (C) 2026 Rodolfo Giometti <giometti@enneenne.com>
++ */
++
++#include <crypto/aes-cbc.h>
++#include <crypto/aes-gcm.h>
++#include <crypto/sha2.h>
++#include <keys/trusted-type.h>
++#include <linux/err.h>
++#include <linux/init.h>
++#include <linux/key.h>
++#include <linux/module.h>
++#include <linux/random.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include "keycrypt.h"
++#include "sw.h"
++
++/* <keys/trusted-type.h> redefines pr_fmt; reassert ours after it */
++#undef pr_fmt
++#define pr_fmt(fmt) "keycrypt: " fmt
++
++#define SW_LABEL	"keycrypt kernel-tier v1"
++#define SW_AAD_MAX	(KEYCRYPT_HEADER_MAX + 2 + KEYCRYPT_SW_DESC_MAX + \
++			 KEYCRYPT_SW_SALT_LEN)
++
++static int sw_prepare(struct aes_gcm_key *gk, const u8 *master, size_t mlen,
++		      const u8 *salt)
++{
++	u8 label[sizeof(SW_LABEL) - 1 + KEYCRYPT_SW_SALT_LEN];
++	u8 dk[SHA256_DIGEST_SIZE];
++	int ret;
++
++	memcpy(label, SW_LABEL, sizeof(SW_LABEL) - 1);
++	memcpy(label + sizeof(SW_LABEL) - 1, salt, KEYCRYPT_SW_SALT_LEN);
++	/*
++	 * The master is the data, never the key: AF_ALG keys an HMAC with
++	 * a trusted key given by serial, so whoever may search the master
++	 * could otherwise compute this key.
++	 */
++	hmac_sha256_usingrawkey(label, sizeof(label), master, mlen, dk);
++	ret = aes_gcm_preparekey(gk, dk, sizeof(dk), KEYCRYPT_SW_TAG_LEN);
++	memzero_explicit(dk, sizeof(dk));
++	return ret;
++}
++
++static size_t sw_aad(u8 *aad, const u8 *hdr, u32 hdr_len, const u8 *prefix,
++		     size_t prefix_len)
++{
++	memcpy(aad, hdr, hdr_len);
++	memcpy(aad + hdr_len, prefix, prefix_len);
++	return hdr_len + prefix_len;
++}
++
++static int keycrypt_sw_seal(const u8 *master, size_t mlen,
++			    const u8 *hdr, u32 hdr_len,
++			    const char *desc, const u8 *key,
++			    size_t klen, struct keycrypt_blob *out)
++{
++	size_t dlen = strlen(desc), prefix_len, alen, len;
++	struct aes_gcm_key gk;
++	u8 aad[SW_AAD_MAX];
++	u8 *p, *salt, *nonce, *ct;
++	int ret;
++
++	if (!dlen || dlen > KEYCRYPT_SW_DESC_MAX ||
++	    hdr_len > KEYCRYPT_HEADER_MAX || !klen ||
++	    klen > KEYCRYPT_SW_KEY_MAX)
++		return -EINVAL;
++	len = 2 + dlen + KEYCRYPT_SW_SALT_LEN + KEYCRYPT_SW_NONCE_LEN + klen +
++	      KEYCRYPT_SW_TAG_LEN;
++	p = kmalloc(len, GFP_KERNEL);
++	if (!p)
++		return -ENOMEM;
++	p[0] = KEYCRYPT_SW_VERSION;
++	p[1] = dlen;
++	memcpy(p + 2, desc, dlen);
++	salt = p + 2 + dlen;
++	nonce = salt + KEYCRYPT_SW_SALT_LEN;
++	ct = nonce + KEYCRYPT_SW_NONCE_LEN;
++	ret = get_random_bytes_wait(salt, KEYCRYPT_SW_SALT_LEN);
++	if (ret) {
++		kfree(p);
++		return ret;
++	}
++	ret = sw_prepare(&gk, master, mlen, salt);
++	if (ret) {
++		kfree(p);
++		return ret;
++	}
++	ret = get_random_bytes_wait(nonce, KEYCRYPT_SW_NONCE_LEN);
++	if (ret) {
++		memzero_explicit(&gk, sizeof(gk));
++		kfree(p);
++		return ret;
++	}
++	prefix_len = 2 + dlen + KEYCRYPT_SW_SALT_LEN;
++	alen = sw_aad(aad, hdr, hdr_len, p, prefix_len);
++	aes_gcm_encrypt(ct, key, klen, ct + klen, aad, alen, nonce, &gk);
++	memzero_explicit(&gk, sizeof(gk));
++	out->data = p;
++	out->len = len;
++	return 0;
++}
++
++static int keycrypt_sw_unseal(const u8 *master, size_t mlen,
++			      const u8 *hdr, u32 hdr_len,
++			      const u8 *data, u32 len, u8 *key,
++			      size_t *klen)
++{
++	const u8 *salt, *nonce, *ct;
++	struct aes_gcm_key gk;
++	size_t dlen, clen, alen, prefix_len;
++	u8 aad[SW_AAD_MAX];
++	int ret;
++
++	if (len < 2 || data[0] != KEYCRYPT_SW_VERSION ||
++	    hdr_len > KEYCRYPT_HEADER_MAX)
++		return -EBADMSG;
++	dlen = data[1];
++	if (!dlen ||
++	    len < 2 + dlen + KEYCRYPT_SW_SALT_LEN + KEYCRYPT_SW_NONCE_LEN + 1 +
++		  KEYCRYPT_SW_TAG_LEN)
++		return -EBADMSG;
++	clen = len - 2 - dlen - KEYCRYPT_SW_SALT_LEN - KEYCRYPT_SW_NONCE_LEN -
++	       KEYCRYPT_SW_TAG_LEN;
++	if (clen > KEYCRYPT_SW_KEY_MAX)
++		return -EBADMSG;
++	salt = data + 2 + dlen;
++	nonce = salt + KEYCRYPT_SW_SALT_LEN;
++	ct = nonce + KEYCRYPT_SW_NONCE_LEN;
++	prefix_len = 2 + dlen + KEYCRYPT_SW_SALT_LEN;
++	alen = sw_aad(aad, hdr, hdr_len, data, prefix_len);
++	ret = sw_prepare(&gk, master, mlen, salt);
++	if (ret)
++		return ret;
++	ret = aes_gcm_decrypt(key, ct, clen, ct + clen, aad, alen, nonce, &gk);
++	memzero_explicit(&gk, sizeof(gk));
++	if (ret) {
++		memzero_explicit(key, clen);
++		return -EBADMSG;
++	}
++	*klen = clen;
++	return 0;
++}
++
++/*
++ * Copy the key material of the trusted key @desc that the caller can
++ * search for into @buf (MAX_KEY_SIZE bytes). No callout information, so no
++ * upcall: the key must exist, though it may still be under construction,
++ * and then this waits for it with the backend's handle held: the one wait
++ * without bound in this backend's callbacks. Not request_key_rcu(): it
++ * misses keys that the RCU walk cannot reach, such as those of the user
++ * keyring of a process without a session keyring.
++ */
++static int sw_master(const char *desc, u8 *buf, size_t *len)
++{
++	const struct trusted_key_payload *tp;
++	struct key *mk;
++	int ret;
++
++	mk = request_key(&key_type_trusted, desc, NULL);
++	if (IS_ERR(mk))
++		return PTR_ERR(mk) == -EACCES ? -EACCES : -ENOKEY;
++	down_read(&mk->sem);
++	tp = dereference_key_locked(mk);
++	if (key_validate(mk) || !tp || tp->key_len < MIN_KEY_SIZE ||
++	    tp->key_len > MAX_KEY_SIZE) {
++		ret = -ENOKEY;
++	} else {
++		memcpy(buf, tp->key, tp->key_len);
++		*len = tp->key_len;
++		ret = 0;
++	}
++	up_read(&mk->sem);
++	key_put(mk);
++	return ret;
++}
++
++/* The one option of the sw backend: "master=<description>" */
++static int sw_master_opt(const char *opts, const char **desc)
++{
++	if (!opts || strncmp(opts, "master=", 7) || !opts[7])
++		return -EINVAL;
++	*desc = opts + 7;
++	return 0;
++}
++
++static int sw_seal_key(const u8 *hdr, u32 hdr_len, const char *opts,
++		       const u8 *key, size_t klen, struct keycrypt_blob *out)
++{
++	u8 master[MAX_KEY_SIZE];
++	const char *desc;
++	size_t mlen;
++	int ret;
++
++	ret = sw_master_opt(opts, &desc);
++	if (ret)
++		return ret;
++	if (strlen(desc) > KEYCRYPT_SW_DESC_MAX)
++		return -EINVAL;
++	ret = sw_master(desc, master, &mlen);
++	if (!ret)
++		ret = keycrypt_sw_seal(master, mlen, hdr, hdr_len, desc, key,
++				       klen, out);
++	memzero_explicit(master, sizeof(master));
++	return ret;
++}
++
++static int sw_generate(struct keycrypt_backend *b,
++		       const struct keycrypt_meta *m, const u8 *hdr,
++		       u32 hdr_len, const char *opts,
++		       struct keycrypt_blob *out)
++{
++	u8 key[32];
++	int ret;
++
++	ret = get_random_bytes_wait(key, sizeof(key));
++	if (!ret)
++		ret = sw_seal_key(hdr, hdr_len, opts, key, sizeof(key), out);
++	memzero_explicit(key, sizeof(key));
++	return ret;
++}
++
++static int sw_import(struct keycrypt_backend *b,
++		     const struct keycrypt_meta *m, const u8 *hdr,
++		     u32 hdr_len, const char *opts, const u8 *key,
++		     size_t keylen, struct keycrypt_blob *out)
++{
++	return sw_seal_key(hdr, hdr_len, opts, key, keylen, out);
++}
++
++static int sw_load(struct keycrypt_backend *b, struct keycrypt_key *k,
++		   const char *opts)
++{
++	char desc[KEYCRYPT_SW_DESC_MAX + 1];
++	u8 master[MAX_KEY_SIZE];
++	struct keycrypt_sw_key *priv;
++	size_t mlen, dlen;
++	int ret;
++
++	if (opts)
++		return -EINVAL;
++	if (k->data_len < 2 || !k->data[1])
++		return -EBADMSG;
++	dlen = k->data[1];
++	if (k->data_len < 2 + dlen)
++		return -EBADMSG;
++	memcpy(desc, k->data + 2, dlen);
++	desc[dlen] = '\0';
++	if (strlen(desc) != dlen)
++		return -EBADMSG;
++
++	priv = kzalloc_obj(*priv);
++	if (!priv)
++		return -ENOMEM;
++	ret = sw_master(desc, master, &mlen);
++	if (!ret)
++		ret = keycrypt_sw_unseal(master, mlen, k->hdr, k->hdr_len,
++					 k->data, k->data_len, priv->key,
++					 &priv->len);
++	memzero_explicit(master, sizeof(master));
++	if (!ret && !keycrypt_key_len_valid(k->meta.alg, priv->len))
++		ret = -EBADMSG;
++	if (ret) {
++		kfree_sensitive(priv);
++		return ret;
++	}
++	k->priv = priv;
++	pr_warn_once("a key of the kernel tier is loaded: it is in clear in kernel memory\n");
++	return 0;
++}
++
++static void sw_destroy(struct keycrypt_backend *b, struct keycrypt_key *k)
++{
++	kfree_sensitive(k->priv);
++	k->priv = NULL;
++}
++
++struct sw_ctx {
++	u32 op;
++	union {
++		struct {
++			union {
++				struct aes_key    key;	    /* decrypt */
++				struct aes_enckey enc_key; /* encrypt-only */
++			};
++			u8 iv[AES_BLOCK_SIZE];
++		} cbc;
++		struct hmac_sha256_ctx mac;
++	};
++};
++
++static int sw_ctx_open(struct keycrypt_backend *b, struct keycrypt_key *k,
++		       u32 op, u8 *iv, void **ctx)
++{
++	struct keycrypt_sw_key *kk = k->priv;
++	struct sw_ctx *c;
++	int ret;
++
++	if (!kk)
++		return -EIO;
++	c = kzalloc_obj(*c, GFP_KERNEL_ACCOUNT);
++	if (!c)
++		return -ENOMEM;
++	c->op = op;
++	if (op == KEYCRYPT_OP_MAC || op == KEYCRYPT_OP_VERIFY) {
++		hmac_sha256_init_usingrawkey(&c->mac, kk->key, kk->len);
++	} else {
++		ret = op == KEYCRYPT_OP_ENCRYPT ?
++		      aes_prepareenckey(&c->cbc.enc_key, kk->key, kk->len) :
++		      aes_preparekey(&c->cbc.key, kk->key, kk->len);
++		if (ret) {
++			kfree_sensitive(c);
++			return -EIO;
++		}
++		memcpy(c->cbc.iv, iv, AES_BLOCK_SIZE);
++	}
++	*ctx = c;
++	return 0;
++}
++
++static int sw_update(struct keycrypt_backend *b, void *ctx, const u8 *in,
++		     u8 *out, size_t len)
++{
++	struct sw_ctx *c = ctx;
++
++	switch (c->op) {
++	case KEYCRYPT_OP_ENCRYPT:
++		aes_cbc_encrypt(out, in, len, c->cbc.iv, &c->cbc.enc_key);
++		break;
++	case KEYCRYPT_OP_DECRYPT:
++		aes_cbc_decrypt(out, in, len, c->cbc.iv, &c->cbc.key);
++		break;
++	default:
++		hmac_sha256_update(&c->mac, in, len);
++	}
++	return 0;
++}
++
++static int sw_final(struct keycrypt_backend *b, void *ctx, u8 *out,
++		    size_t out_size, size_t *len)
++{
++	struct sw_ctx *c = ctx;
++
++	if (c->op == KEYCRYPT_OP_MAC || c->op == KEYCRYPT_OP_VERIFY) {
++		if (out_size < SHA256_DIGEST_SIZE)
++			return -EIO;
++		hmac_sha256_final(&c->mac, out);
++		*len = SHA256_DIGEST_SIZE;
++	} else {
++		*len = 0;
++	}
++	return 0;
++}
++
++static void sw_ctx_free(struct keycrypt_backend *b, void *ctx)
++{
++	kfree_sensitive(ctx);
++}
++
++static const char * const sw_opts[] = { "master", NULL };
++
++static struct keycrypt_backend keycrypt_sw = {
++	.name		= "sw",
++	.tier		= KEYCRYPT_TIER_KERNEL,
++	.algs		= KEYCRYPT_ALGS_ALL,
++	.owner		= THIS_MODULE,
++	.opts		= sw_opts,
++	.generate	= sw_generate,
++	.import		= sw_import,
++	.load		= sw_load,
++	.destroy	= sw_destroy,
++	.ctx_open	= sw_ctx_open,
++	.update		= sw_update,
++	.final		= sw_final,
++	.ctx_free	= sw_ctx_free,
++};
++
++static int __init keycrypt_sw_init(void)
++{
++	int ret = keycrypt_register_backend(&keycrypt_sw);
++
++	if (!ret)
++		pr_warn("kernel tier enabled: its keys are in clear in kernel memory while loaded\n");
++	return ret;
++}
++module_init(keycrypt_sw_init);
++
++static void __exit keycrypt_sw_exit(void)
++{
++	keycrypt_unregister_backend(&keycrypt_sw);
++}
++module_exit(keycrypt_sw_exit);
++
++MODULE_DESCRIPTION("keycrypt sw backend, of the kernel tier");
++MODULE_LICENSE("GPL");
+diff --git a/security/keys/keycrypt/sw.h b/security/keys/keycrypt/sw.h
+new file mode 100644
+index 000000000000..30e24fb56ce3
+--- /dev/null
++++ b/security/keys/keycrypt/sw.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * keycrypt - the sw backend's blob fields and loaded-key state
++ *
++ * Copyright (C) 2026 Rodolfo Giometti <giometti@enneenne.com>
++ */
++
++#ifndef _SECURITY_KEYS_KEYCRYPT_SW_H
++#define _SECURITY_KEYS_KEYCRYPT_SW_H
++
++#include <linux/types.h>
++
++#define KEYCRYPT_SW_VERSION	1
++#define KEYCRYPT_SW_SALT_LEN	32
++#define KEYCRYPT_SW_NONCE_LEN	12
++#define KEYCRYPT_SW_TAG_LEN	16
++#define KEYCRYPT_SW_DESC_MAX	255
++#define KEYCRYPT_SW_KEY_MAX	64
++
++/**
++ * struct keycrypt_sw_key - the sw backend's state for a loaded key
++ * @len: bytes in @key
++ * @key: the key, in clear
++ */
++struct keycrypt_sw_key {
++	size_t	len;
++	u8	key[KEYCRYPT_SW_KEY_MAX];
++};
++
++#endif /* _SECURITY_KEYS_KEYCRYPT_SW_H */
 -- 
 2.43.0
 
