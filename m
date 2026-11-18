@@ -1,89 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795016812;
-	b=Z/vYluohUtTsU8xGhXqOK+zQotJmtNVqgU2JEsu55Jq3BnPae5vUb3UEfc6l6eVeLIbf
-	 U/auHycZlra4ifpQGYVj2XZAnCcy6emXQ7s3vBATyVppTIeaFb99mepuWnJUgv9FuNPz5
-	 r7ddIE0vHT9Qcjioj98HkHuqKkwgqGsji98C1Dch3cR6yrARN2EYBJWXiK6jqFbL3BShc
-	 f7ZgFbaZ7Mfwo67xHt3NHtA1Yyg8rGFflp+p/14tSN9253FpnT2bGAtWfn3tJ2TQCdUEq
-	 8lRB+mQHCjW0s3/gFakgNR4e6Nri/M2uVGrNZQXOGwndgk9UXFrR7exp2ZGaLKHzPig==
+	t=1795016832;
+	b=hR1ckGNCd+DR52NEQ/Q/V2zxfl+oX12BZWdNMkLKfwfQ/enT0zL6BYRVkOc4Ku0M9nzQ
+	 kZxpYip7CB/k+KXM72s1k94r0qBcbT6efL0LYlcjM17CLLl7wB0QcerM28WERlMMcKRCr
+	 YEvnCB1orxThqmj/b/SS7dBvBtmGM4+L/dZ4ue7QRglrrzwotX/t+h3Qqg76lVPNSPv03
+	 RqxKra2/IftW1Bf56Ji17V3L+3WdbZ2vUFIeDYQ0GZ6hPu7UkNWWa0h8n51oTnG62OF6P
+	 EKIQ5Wfp86aKlJJqsz1nQ2VqD4BCJ0ObQ5h3s9nHBmIg+Y+21eQLvIDJVl2fiYQuOCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795016812;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Yq7h0/bdeIgVdHwxIZvW/WAXXX6JzsrZsXwYUvWhQj0=;
-	b=fxhYMp9UiYaIGa8vFU5irIrWJ0qhU/a8BQnfVVeHHFXj4TttxtbaHobjQjo1LIvHsRHb
-	 HElqFz1Ea6UY0aqiwhAFaSdx5KHaUHX936/eXHqxRDsgaujWlhMcorfNiQRsipoatucan
-	 1Q65QGKuriMj3ebt9gpmfLYufeQaw85yKd3kilT8SI4lmdvPEGUOa6Wk00tpOuTv+Hsuk
-	 CPups4KleZpSW194dFDbiss/BWoLSTCQCF/Iw2ueypFm4ED2scQDNxnbsDRrhETmOyWZT
-	 +Opgc1tFupda60jzz3Efzsnook5IncivoDrvKLnTPINrGNvHusn3DE9F8WNDd7c2obg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795016832;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To:X-Rspamd-Pre-Result:
+	 X-Rspamd-Server:X-Spamd-Result:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Rspamd-Queue-Id:X-Rspamd-Pre-Result:X-Rspamd-Action;
+	bh=flMGPLDMTpq68z1lJ74ODL+EiAGhlUNC3nFdUWIDwBE=;
+	b=n/+lCBkNWBFu0jLHajKOPrG/TN+giYEFpzhI6B2xNxZBE32mrnXE6Ly++sTxnsiRg6ma
+	 z4vb3Ur1+3WDEmUXYpCpZm3eha1BPQ7alsylOq3JwDNNsloYjTKk1x1pu+Kf1FEgTX2jI
+	 Nm0ZLBpy7AyvavOYOgIhumpdT53ofxEx/kQ9ZXfjmwRiTEhAtFcju/dGX4FZYNXY6SSJr
+	 yzufikrVtrX7AgZUty0qrhJbmafW6z6dHTT8pwuNph5XGENezJqUXVFVlxQy3KTHudzvB
+	 ESooXWG2zyKI+M/l5aaOagwtGdINma9EqxOoO6+XcdQV5xheWQaDOxde0Ov90qTChxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EXUa+MkZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id EF371606A325;
-	Wed, 18 Nov 2026 15:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EXUa+MkZ
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id AD8611F000C4;
-	Wed, 18 Nov 2026 15:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795016811;
-	bh=Yq7h0/bdeIgVdHwxIZvW/WAXXX6JzsrZsXwYUvWhQj0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EXUa+MkZ8fF06bmTmwLNd20zxEY9MBiiXX3/inLnec+f3eiqv7AFpfp0RH1t8WMYg
-	 07CRxJbvqQzFs79L2fxYmiB+GR4+a2juvf3E/xr2joNJED6DqFsGIRBDrb6+B2ex4E
-	 sg6324IqU/NJun40bRWU9DIoQ3Mo45I4I9aqgNnl26gSlTAwOU2rfIBT3J7mwlm413
-	 UJVrWzSWKUooQDs+lkwH4rZclpp4/PrgxpZq4RUvzVBa9Zs21JNDTqT58QxIZiaVTm
-	 FXz1sMD+7Og8a/cFS0ljKI59wReWg936/UQp9l6X3OLAdeUDi4zCHOdxxm9cSZA5GW
-	 Ra3dfEdI9ZjQg==
-Date: Wed, 18 Nov 2026 17:46:47 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468B9606A320;
+	Wed, 18 Nov 2026 15:47:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 468B9606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from kunlun.suse.cz (unknown [IPv6:2a07:de40:b306:2000::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5A73A1F798;
+	Wed, 18 Nov 2026 15:47:10 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
+	none
+Date: Wed, 18 Nov 2026 16:47:09 +0100
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Renzo Davoli <renzo@cs.unibo.it>
+Cc: linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>, Thomas Gleixner <tglx@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Ben Segall <bsegall@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Jan Kara <jack@suse.cz>,
-	Jonathan Corbet <corbet@lwn.net>,
-	John Johansen <john.johansen@canonical.com>,
-	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Manfred Spraul <manfred@colorfullife.com>,
-	Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>,
-	alex@amutable.com
-Subject: Re: [RFC PATCH v2 00/13] Namespace for namespace roots
-Message-ID: <av3IZ_ZXKJWHdAl0@kernel.org>
-References: <20261117231352.3816603-1-jarkko@kernel.org>
- <wdwc3b5edgtgvrgqfhlzhrachr5hrqb7ahipcuqdz5pffxlc5b@662cpwhxwjer>
- <av3EBpSuzn_TcrDk@kernel.org>
- <av3Gv3MwP40bqvnG@kernel.org>
+	Shuah Khan <shuah@kernel.org>, "Dmitry V . Levin" <ldv@strace.io>,
+	Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, strace-devel@lists.strace.io
+Subject: Re: [PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp
+ syscall skipping
+Message-ID: <av3Ifd4saO2_6Slq@kunlun.suse.cz>
+References: <20261114181923.370930-1-renzo@cs.unibo.it>
+ <av2PKIf8YsEPro8O@kunlun.suse.cz>
+ <av2i9kbZyMRJE9D6@cs.unibo.it>
+ <av2pRG1JT9te8IiM@kunlun.suse.cz>
+ <av2yDgdBWfTxvZca@cs.unibo.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,68 +74,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <av3Gv3MwP40bqvnG@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <av2yDgdBWfTxvZca@cs.unibo.it>
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[];
+	TAGGED_RCPT(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 5A73A1F798
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
 
-On Wed, Nov 18, 2026 at 05:39:47PM +0200, Jarkko Sakkinen wrote:
-> On Wed, Nov 18, 2026 at 05:28:10PM +0200, Jarkko Sakkinen wrote:
-> > On Wed, Nov 18, 2026 at 02:47:34PM +0000, Josef Bacik wrote:
-> > > On Wed, Nov 18, 2026 at 01:13:39AM +0200, Jarkko Sakkinen wrote:
-> > > > OVERVIEW
-> > > > ========
-> > > > 
-> > > > A root namespace (rootns) is a kernel object backed by a file descriptor
-> > > > that binds together:
-> > > > 
-> > > > 1. A full or partial set of detached namespaces.
-> > > > 2. A dedicated PID namespace for spawning processes into, signaling
-> > > >    members, and polling or waiting on PID 1 exit.
-> > > > 3. An initially empty mount namespace (CLONE_EMPTY_MNTNS) that must be
-> > > >    populated before going live, without inheriting host mount-tree
-> > > >    ancestors.
-> > > 
-> > > This is what cells is doing https://lwn.net/Articles/1102593/, you may
-> > > want to take a look at that work. Christian, Lennart, Alex, myself
-> > > and others are working towards this in a more wholistic way. There's a
-> > > lot more that goes into this outside of just the object itself. I've got
-> > > my version deployed inside Anthropic for securing containers and I've
-> > > tripped over a lot of pre-work that needs to come because we can tackle
-> > > this. Alex has my rough outline for kuid64 for example, which is
-> > > necessary for making sure we don't overlap UID's on the system and
-> > > create holes this way. The cells work/anything that wants to have clear
-> > > security boundaries is going to require that as a pre-requisite. If
-> > > you'd like I can include you in our planning so we can get something
-> > > that will solve all of our problems. Thanks,
-> > > 
-> > > Josef
-> > 
-> > No it's not doing the same, and this why I sent the patch set.
-> > 
-> > I don't see cells fighting with rootns and given that rootns has a small
-> > surface and it leverages already battle-tested code, instead of
-> > reinventing the wheel, it also has benefits. It neither doubles the
-> > number of container frameworks in kernel.
-> > 
-> > What I'm not claiming is that this is better. I just wanted to fact
-> > correct "this is what cells is doing". It is not true. It could be
-> > better solution but still that statement is untrue.
+On Wed, Nov 18, 2026 at 03:11:26PM +0100, Renzo Davoli wrote:
+> On Wed, Nov 18, 2026 at 02:33:56PM +0100, Michal Suchánek wrote:
+> > As I understand it the new s390 code resolves the problem by storing the
+> > syscall number outside of the registers. Then the return value can be
+> > set directly. It does not depend on using the generic entry but on the
+> > architecture adding storage for the syscall number in struct pt_regs,
+> > and implementing the code to determine where to get/set the syscall
+> > value depending on the syscall stage.
 > 
-> For better or worse, cells does a lot more; just looking at the patch set
-> size.
+> Right, thanks for the correction: what matters is a separate storage
+> for the syscall number on the architectures where it shares a register
+> with the return value, not the generic entry code.
 > 
-> For rootns one can point out with a finger its possible problems BUT here's
-> the thing: it does not haven unknown unknowns. Even if cells had less
-> of known problems; we have zero idea what will come up if that ever
-> lands. The possible consequence have less predictability.
+> > However, it seems that extending struct pt_regs breaks userspace ABI
+> > (probably because kernel refuses to transfer partial pt_regs to/fom
+> > userspace) which makes it unclear how the int_code that is used by this
+> > new code could be added to the s390 struct pt_regs in the first place.
 > 
-> Also, as per integration, they actually are not fighting features, as
-> they are in different layers. There's no same thing at all.
+> On s390 int_code is not new: it has been in the kernel-only part of
+> struct pt_regs, after user_pt_regs, since aa33c8cbbae2 ("[S390] cleanup
+> trap handling"), and the user ABI (s390_regs, user_regs_struct) does
+> not include it. Heiko's patch only redirects the ptrace accesses to
+> gpr2.
 > 
+> On architectures where struct pt_regs is itself the user ABI (e.g.
+> alpha), the storage does not need to be in pt_regs: MIPS already keeps
+> the syscall number in thread_info.
+> 
+> This is also why this series uses a per-task flag at the seccomp stop:
+> it does not depend on where the architecture stores the syscall
+> number.
 
-Yeah, and there is no obvious causality either that would result a
-zero sum game. Rootns is something OCI runtime, any of them, can
-quickly adapt to the existing framework. Cells takes longer, but
-could be very worth of price. It's called "defense in depth".
+It does not have to know where the architecture stores the syscall
+number when using syscall_get_nr and syscall_set_nr. However, the
+storage for the syscall number has to be somewhere, and for powerpc
+there is AFAIK no such storage.
 
-Br, Jarkko
+Thanks
+
+Michal
