@@ -1,109 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795119044;
-	b=AWoeKTpTAYofgsIW7pEB4cOV/uOS+Kyya++B+NZ4OTyMveLLNcyXr+xyLlomThGr4vWv
-	 Bozhfhb/M2oaiPhlio2N6M6WYycfQTZ1jPk4WfN/28J1lZaFqSekMg9tmha6k2gvqXSiw
-	 jMUCq0TtE+QGCEwty9DkjNCa7EjYkAlOMMULJ9YQ4QqEV/TQpJhxQhNdusN5/hwo63RXB
-	 4phpS5zrajipMMW0dcVD+q3DDHtaLq78kjmR7Q1yfx4v+crOxtZVD980UwaIyQ/43MYU3
-	 1UGCdYqU2dPsLj3dnClPQcPczJKsr5YThPNmIz1MrL7d7psBnow86wr+kHieW/dS1KQ==
+	t=1795119260;
+	b=gGdr8ENWI0q8Z6e4Fq7fdHurMPtR5uz2N4r52+JklqU//ZSchlSQiKTBGbPLUdwgMDNG
+	 0bYs5yWvouIRQorbu9e8EOgcvqcxq7PXhLdg+Uv6cv+gMotu3iweSetTjJDtpls8Ts2zi
+	 CTwOIxsWumJrcp72h5goWuoQFMXfraOZgkHd3XjiqSYF4Pg/60+7nbLDGWr0q6DzrCMRn
+	 qnOYVe7bDdErcU43r7CCX7brE63IGnjVCiUSZWfkkXrHty/DaTQ264PVY23WfOktFL+gQ
+	 sKKCT7OTo41M/UmwB6NJP4JzMIxF6DkBHdNyxICT/s0vsUrGCeCnsfIB8TAzlPcxQdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795119044;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=4STxJw8apfsXksn2vhnIZYq3Je/j7gzJU23OLBgCVCw=;
-	b=TxjuDQL5lOBnWVJLPP7LNL97RMqqjNMBygi6kDptOH1fOH26M6j6ahFkpPfrsFzq9q60
-	 FPiGZlYslB6tLxSrQJBf90RTEF7rvFr0INInKJPUQ/FaHha0uhtnc8QL4QaIAs3gyy+T7
-	 yp08Hi86zXu0B3xeXHQ+Yj36VkTh9FMALe9l5KPihJOqoOQzl7JmnWpC/jWYybnFrHFpa
-	 ln/fLDv/TbFKa1dRdiu1Wm5wo16eSRp0MWSKDeo9t2liVk9vTY06/wXTZxiwy1hBUISpy
-	 41vo01FtspHS06nROFZDY+a0FdnJ2Edt75PGLhWxBj0LMSwdrcvHTNJ2H1Bl1Zo2f4Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795119260;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=ztZOYDDj4YBSqYLNwQGp2fMnE23YsKtU2LeiU8/UQwE=;
+	b=06irUZf2HB4Ectvcdb7wvcVagxxHKrs5DvB8x7t7J+g0umphTzd8llX3kj2BSe3nYVkh
+	 iXSjIl0g0X140S3DehYnfuv/kr91xb2JGp1bu59V9iPBZ/YQ1cE+jSnajnLEpGxuuGJL8
+	 qNwlAJjBIKLP2sICv/kNBNFw+G5ZzCL6qpi8WyiCviU4WqdmvXLHj8z6eLC6vX8HazSfX
+	 GD70vJwZUcr/CQM7smvFTFXr47LoUSBY2e/cywfSs/4r6wwMvbAy/fBjwbHt3SdjtXffK
+	 YApbK24sE+iOS/nQQ2U3WGDFA1eBgnidm5w9mtv1tJ9Uv4uJMcsNmknIcwhq9T80ouA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jbOGqzl4;
-	arc=none smtp.remote-ip=209.85.128.180
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mNSYDVjJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB3C606A325
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 20:10:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EAB3C606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 479D0606A320;
+	Thu, 19 Nov 2026 20:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jbOGqzl4
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8b10d24345dso1536237b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 12:10:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795119043; x=1795723843; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=4STxJw8apfsXksn2vhnIZYq3Je/j7gzJU23OLBgCVCw=;
-        b=jbOGqzl4pjTZnlX9CRqhGTwl7IvLx/HCGiF2R1smwd3C1xS/q5+8W6IuVixt3ofp/H
-         UcDRPhnfi9vbdbCkAwL2L6B2GgmVewmfYsZXHz4rNAtL3nftLQnKP3S9AEk0k7oLIwED
-         WkJLrVbc9mqKig8z//TLZvj4mk9v4eST7U+mBQKCykkKMy2zUfGyWk8m5DQlvPm8o6v2
-         YaWg39KQF8X77inqQxHzMloUyf52HDB2HfTAnPXdu+rrErMGNxVat7iZ/qXNL5hj7sax
-         DOLdkN/yHC/Ygm2ZtiQstlDpDGfBI2Wou+P5h5w/7Tv+ma5YWs70v4mbBxdENHUpD3xg
-         MJ2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795119043; x=1795723843;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4STxJw8apfsXksn2vhnIZYq3Je/j7gzJU23OLBgCVCw=;
-        b=ZxjrBMdNAjI0vngrTg+hl4kBpB4ohUFdRnz1yiCJV4Pb2fHsm6Hn8EksReASSNecr5
-         m681URHmMDbJ1vE5h10C3urwRsUuwyNu5nMia0AizT04Qjf9ZATDj5Wlr3uPtOLCHjDr
-         TRbeLVmMb111cbm6biNAIrFkUnw8vs74EdLclSZcCeFij41Z31xH/lQUfiWBY8B7MDNr
-         ySK45xJ39z5AVPHvTEaqnqd44DEjmvW6MDQTESomqTRb6h+FvENZHX1jTf/wiFACizD+
-         01rTgwbJEU4kJtbkGOZ91gG9Ug4lwXP8WoDvBS/9KNUD8XazU/BZLXNH9tpIUEy58h1z
-         clbQ==
-X-Forwarded-Encrypted: i=1; AL+hErHpOqqlhTG0KDjoN0b7K3nzJBKW0QZccch+ilw85ucY78IAwASDlECuGQ8U571H4o1yQqVG5KiXsxaXmpwx5w4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+ukFCrpE1JS68ChMkYI2yGygfLzNTiMLSiIln4jUSA7zzEAxOk
-	CAuttOHE6m+JubbnPP7bifq14uEcEA9k3dRojK+NlXuZR5iQ4I9GWS41
-X-Gm-Gg: AZFdTZfZRNQw2ZMMCve8Egz2gcLJU9amIxa+yMb9zlIMzfaEYLZ1x8xBtlYmoaFLRGE
-	0GKX5dJ+FPu5uuPw3dnrv/NnlXzZgTVHDmqXqL+jDUsY6pstl0XEsfrnhA7DUYGng9EtHoFOSHe
-	WYAsbAFuGiujYcH4l1twWD3WHo84yMcZ7BJiYXutZgRArF4xS4NmCzn9FZBEQdzH6s4H/eQQHC6
-	h7sO9D9t3UfOH5Ov5PnJplwAGLAyHDV9q48T/VfcNQbDUkiTYzDcWPhUThvOiRqKs3R1qQ5NhZK
-	hm2okQhSeTdm9VXUz8c6vImsQa4EenSUZjhVVjwAGn4CrsGKHF+ObMou8gmMxE7fLouoRk9M0Hn
-	iMk+uPPwsq9FbtSGVlikccwyxDAM/NQ4+i34NxZ3vs3j7MiSy6S1QLtoxVeT7fB5iOzU729Tdxt
-	CV5X/t2ENVuNup38RJsoxMsL0QTEzbK7TydgrZykRumYOWzzDD1JfnvyD++2CXQnMX/9NDbUNEp
-	jtZ1+5LIZEz42OgglM9me9yPWpU4Fzo/JQyS2aFLTy6nAqE/emylSRrpaWePqOMwzg10D9aBAmw
-	5onSryf2ocOTaHsLogt48wnZfUB+mW/SNLRWEpCEsnqc/082EScIc0UgLJ45C8BVyUrwLImpZHp
-	nOzw1KFmncyHPTQ2WSG2rM7WOnzzx9MDqvMk+dIpHc7iEm7HUZI+CR2Qwsru4iHx3YZ8njxSZdi
-	UY0plktkz5xg==
-X-Received: by 2002:a05:690c:c86:b0:8b3:4deb:7ce1 with SMTP id 00721157ae682-8b5204403c4mr5285257b3.14.1795119042818;
-        Thu, 19 Nov 2026 12:10:42 -0800 (PST)
-Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b5201ba5c1sm4973157b3.3.2026.11.19.12.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 12:10:41 -0800 (PST)
-Date: Thu, 19 Nov 2026 15:10:41 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Junyoung Jang <graypanda.inzag@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowangio@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>
-Cc: Junyoung Jang <graypanda.inzag@gmail.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Gwanhyun Lee <gwanhyunlee@gmail.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.2124e819195d3@gmail.com>
-In-Reply-To: <20261119144241.360238-2-graypanda.inzag@gmail.com>
-References: <20261119144241.360238-1-graypanda.inzag@gmail.com>
- <20261119144241.360238-2-graypanda.inzag@gmail.com>
-Subject: Re: [PATCH net v3 1/4] net: tun_vnet: validate hdr_len after skipping
- header padding
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mNSYDVjJ
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 9941C1F000C0;
+	Thu, 19 Nov 2026 20:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795119260;
+	bh=ztZOYDDj4YBSqYLNwQGp2fMnE23YsKtU2LeiU8/UQwE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mNSYDVjJ/BEzpaUbevR2cNTUAwuX81DGs1T+9sVKjtaxqcTSGfvEPldgdpP7Jchji
+	 jqpAwSVXHOuhZ5aY45s9O9/0dgEPRPZniI/JiMbsnRUlbivecIuPENcjQqdjVBDKMp
+	 ekjPDsS5ooFm3VuggwXme6iPKovVVyVVkrEajuUi3jLY+wMwI1h/m47qU+VP6NkvTy
+	 OJdcoCeBw7o0G6JmK1KtFdtqiC+TMVFiC8s6nHvMHqMFbv5kUCCyPJ3qOPEzuA1gPs
+	 3pgHdelX/ywey3HjBAONozyA2zIkL89dLrU7ld9cbhT8mPqGmYi5dUa7nyPLlXjqpk
+	 YjQ8Z6Y9pHgwA==
+Date: Thu, 19 Nov 2026 22:14:16 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Hallgrimur H. Gunnarsson" <halg@google.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Serge Hallyn <sergeh@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	David Howells <dhowells@redhat.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	containers@lists.linux.dev, keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for
+ user namespaces
+Message-ID: <av9YmPJexMJoCGWO@kernel.org>
+References: <20261119104208.782900-1-halg@google.com>
+ <20261119104208.782900-2-halg@google.com>
+ <av8QNiFcnGWocORy@kernel.org>
+ <av9L2ez51erKkQNo@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,64 +75,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <av9L2ez51erKkQNo@google.com>
 
-Junyoung Jang wrote:
-> __tun_vnet_hdr_get() checks hdr_len against iov_iter_count(from) before
-> advancing past the configured virtio header padding. With a 512-byte
-> header and a 14-byte Ethernet frame, hdr_len=256 passes because the
-> iterator still includes header padding. After the advance, only
-> 14 bytes remain. tun_get_user() and tap_get_user() can then reserve a
-> linear skb area larger than the frame and transmit uncopied bytes.
+On Thu, Nov 19, 2026 at 07:19:53PM +0000, Hallgrimur H. Gunnarsson wrote:
+> On Thu, Nov 19, 2026 at 05:05:26PM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Nov 19, 2026 at 10:42:05AM +0000, Hallgrimur H. Gunnarsson wrote:
+> > >  static void set_cred_user_ns(struct cred *cred, struct user_namespace *user_ns)
+> > 
+> > I read the diff through but this led me to dead end. Cannot find this
+> > function from anywhere. I look the changes again once this is sorted
+> > out becaus this is interesting.
+> > 
+> > I wanted to look at the call site to understand how cap_bset gets set,
+> > which is not now possible but I do get the gist and agree with it.
 > 
-> Advance past the padding before comparing hdr_len with the remaining
-> payload. Both callers return immediately on error and discard their
-> iterator, so the cursor position on -EINVAL is not observable by them.
+> Thanks for taking a look. The series is based on v7.4-rc1 and
+> set_cred_user_ns() lives in kernel/user_namespace.c, where it is called
+> from create_user_ns() and userns_install(). ns->cap_bset itself is
+> initialized in create_user_ns() right before calling set_cred_user_ns().
 > 
-> The problem was identified during review of the tap zero-copy fix and
-> reproduced with vhost-net in an x86-64 QEMU guest: a 14-byte input
-> produced a 256-byte frame on both tun and tap. After the change, both
-> drivers reject that input with -EINVAL. The new tun and tap selftests
-> pass on the patched kernel.
+> > I'd figure getting this relates to my rootns patches (perhas). One key
+> > mechanism for me resolving the unprivileged in my use case is
+> > MOVE_MOUNT_T_MNTNS [1], which is orthogonal but just pointing out
+> > the problem space.
 > 
-
-If respinning, please state explicitly that this restores existing
-pre 6.15 behavior.
-
-> Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> Fixes: 2506251e81d1 ("tun: Decouple vnet handling")
-> Fixes: 6a53fc5a8770 ("tap: Use tun's vnet-related code")
-> Co-developed-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
-> Signed-off-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
-> Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
-
-Reviewed-by: Willem de Bruijn <willemb@google.com> 
-
-> ---
->  drivers/net/tun_vnet.h | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> From a quick look, they appear complementary. Being able to do more
+> setup operations from the outside generally aligns with bounding
+> capabilities inside the user namespace.
 > 
-> diff --git a/drivers/net/tun_vnet.h b/drivers/net/tun_vnet.h
-> index f4c652b1fa44..0b9622891681 100644
-> --- a/drivers/net/tun_vnet.h
-> +++ b/drivers/net/tun_vnet.h
-> @@ -138,11 +138,10 @@ static inline int __tun_vnet_hdr_get(int sz, unsigned int flags,
->  		hdr->hdr_len = cpu_to_tun_vnet16(flags, hdr_len);
->  	}
->  
-> +	iov_iter_advance(from, sz - parsed_size);
->  	if (hdr_len > iov_iter_count(from))
->  		return -EINVAL;
->  
-> -	iov_iter_advance(from, sz - parsed_size);
-> -
->  	return hdr_len;
->  }
->  
-> -- 
-> 2.43.0
+> > I read through https://lwn.net/Articles/978846/ to understand the topic
+> > overall. Just mentionining as a possible addition to the cover letter
+> > (not a priority/necessity).
 > 
+> That LWN article is actually linked in the cover letter as [2].
+> 
+> > Hope these help and can be kept in the loop :-)
+> 
+> Will do, I'll keep you CC'd on future revisions.
 
+Thank you.
 
+Br, Jarkko
