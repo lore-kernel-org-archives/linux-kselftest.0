@@ -1,72 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795108001;
-	b=csBes8dq6e5OSRtCmA5uYg8qrADCmGFaiIGw1GU6Z23xE6JITEDXEJkIuzHEnCnvu9+G
-	 9BLmAnEIXh8JNCvi/AxwcH4rakf7kKZIiGSRYFaN3qRM7ghnqxv/QCEpSL1mnR1xz0u1b
-	 5fDPV6VIJWrqo2Sqf8LxAYlfkeSYjEer4BiDpuNGQOt7C9EZ8bVvPatsyX1SOONR1gK4Q
-	 hLmWlihwGNbSrdIiNbD6FsV12L0DmdJc6ZQVurecd68eqakdfPQS8a/Z3kIIVLuW6pLxx
-	 CDJuS/XUCRNdS6n+DyPPlyzRjgY19+66ind7Sj49LaV6xaWq9IcygXUeFFnYz3Uruiw==
+	t=1795109251;
+	b=5n9OiFeH2q6gEpeHsxb8GVJHMh8DR6p6nDlwif3r1RCIHzxBMdA92WvCqeJCzneb3MmZ
+	 WbJ6iIvEbGfhRyvfW/2hUOwEt/ow6LOz1CrezdGZx1jZvM8ICxbJGkJuf2sWCf+2HX+P8
+	 guYmAIUZb056ctdVuFqjKNlJZ66B+UBBF2nbP4LNO9Q57jfgb0kOAaEyyBtNRvWM7/PIs
+	 zjYxHER+vWGPJ2uuI76tyVrLaS6X2RQYrIosorWvMwHAOW9Oc1oAPOno4g0zRvg8w8uuN
+	 NNWV4UH0ui2RXiVt/z5cPQMJSOCNwsfd8Y5siBCM5aNGMb85A5oxSzaIdlsUwPKvcYw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795108001;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=F9rpw5yC+CwnnMf+RRz/bADcuyoWhuGDUJSy47EIYmg=;
-	b=OQMIJeODLUrg9WocJhXHcxbA4Yw8okcPDYRi2H0nqrres3aoOss+mOEszgCBmyn5qsfk
-	 bZPPeCngBtGDzpozAZY1fk6hRzaaaIRUFkjhiywONPa3eN+ZbMp0Bcbb63EucHjr7gNRM
-	 1nBdXM3yY2RV/pQniGqebNMCMQ6KOwRlAvj+HC8lZupw2HNGFgaBTNSkbJaNrteYRW1fh
-	 zPw/LBLo2FO51izVUBw4hVsLhoVDmXSYklGarKZaKkFS6zHDylTpX0kV+OGPNRuTilvQp
-	 ByFGNVxC6TRSkeJEo4s/hTLl6xgxR8vEoP6iPOLgQgpXgfHrmJPxsgDC1SfrP0pIFuw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795109251;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
+	bh=X4SOofTg3P4HcDJklRTSxQB79GV9lxE4EdfhoGf5GQY=;
+	b=g7HOS61qFOGfHb1SfNLnQDuf10w5QNrP49u1u90AiaZj8rzI5iO8cOrhFhVnD5HOgP0l
+	 FtHAjyxWGuhuWvHw09CrliKyl1LPpyUDH+qTWnZXM6pg4TeeNGQ8ZZeRPiskI2IQsbPqs
+	 KeY9lb18zjdqzGF7FScJFqtqguTxmUHyOiqUmJXRF6/RmTuvcqOXVSIoUWkent0ZB4jlD
+	 qadcQIjzPg0/Se4qYAlybhAztdh8d2vkg9B/+Vz68eUaTojZ6tab8g4jTtnJ95PIa5OOJ
+	 jhjya3Otw7I/GWOgd9An2gxFeJHBrwiImUCHOz8TS8+JuzQTQwAOKqK1EMJDMXfgljQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JjcDLcip;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8909E606A32C
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 17:06:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8909E606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kFWwkfGA;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F56606A320;
+	Thu, 19 Nov 2026 17:27:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48F56606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JjcDLcip
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1b29df78132so2588472c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 09:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795108001; x=1795712801; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F9rpw5yC+CwnnMf+RRz/bADcuyoWhuGDUJSy47EIYmg=;
-        b=JjcDLcipm/D4g0GDnifVcL7v6roG4oy3Eh1UtVPDG6BcGAnkeUk5wnWuIJWo9IvaK9
-         8h5Gp4fsDne+vVf5FTSOKHC6dwDBXIHEbcI8rx1kpMBsUcvU6wXuG/ClshFUxpKCqSGc
-         HC3pO8p8RmhQJklohvt4NIfMt0SPXMQIvaxvTYuKQhMQ4q/bWl01pvXAUjtmgcMj87L2
-         OZ8nE1wJWZbKJr0pAAvtpH+KbdSXNS9tgQ2lnwDajU8ogZSAK+4ChOGHpPSmLRLctu7x
-         2oVWFKCEkg2qLYcI2AQRe7v15lgPjntxqJjBtcd0TI9ccfHXCln1X84m7C48Z8Enbvjn
-         BtAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795108001; x=1795712801;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=F9rpw5yC+CwnnMf+RRz/bADcuyoWhuGDUJSy47EIYmg=;
-        b=DrKa/z6AtFNHyXqGwBiEIzNJs87iJfzAyV+Kq74cV5qTJAdl/M6FcBQ4tSIaDG8IsZ
-         BYw/kzgJz92OiWcq3anuAG6nGPgi4nO+dfrRj4fgon1nz2KiZyFv5N0nbfRn8Plm43kP
-         PnjIpQgeUams7VD8fxoxcxHfed/hAh5+cRqEosDBFdyldxG3iYoWmL2i9Ltsqiexu7wS
-         HOo7V5JsWR0wiWeV9LoJsp0ImGDn8r4txmXu6fNmVDMg+jF6yL70xmjQdDyWQ7L3Yby3
-         I2o5/NLCnUK57ihNvnj0nVtUWT+ngl2PIqfc+YmYXPP1oNRFPKgUDAl3LIRR3qaF5+k8
-         81tg==
-X-Forwarded-Encrypted: i=1; AL+hErEUZeByGd9ldgjFZOcgltLwFg8WhicqiySOLRx/err7LUW0/chpunHs4qBnRKBGSDI060lgty1Z5NrSM7VRFWA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/2l40nGamv7+2SYSo5rzf/7jHBP7oUhJKNt5/uxYolHpCawG9J
-	FlUjCkhinNTsxnc2rAuhRQh4Kj8S+PGsG7SXWRvGD1HGRMQYhzHyqmCHw8oHK94B4lSHWjUn41E
-	p/7/jju5zLg==
-X-Received: from dlbrx8.prod.google.com ([2002:a05:7022:1708:b0:1a7:44f:3bc7])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:230b:b0:147:a685:9125
- with SMTP id a92af1059eb24-1b5567c0421mr210863c88.2.1795108000056; Thu, 19
- Nov 2026 09:06:40 -0800 (PST)
-Date: Thu, 19 Nov 2026 09:06:36 -0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kFWwkfGA
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97BE41575;
+	Thu, 19 Nov 2026 09:27:26 -0800 (PST)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F067F3F673;
+	Thu, 19 Nov 2026 09:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795109249; bh=CdtwkWATegHb2n3avpl2PIBYTzMIZ4bsivwu55aszPw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kFWwkfGAVALkjXiZ22vYEsGpOYDbKAuqy+j98LGY/CRXZyLKQjo5idlx3UsOglAdR
+	 9Iic99UDpCmtD23qKvRVI+M5b5N2ZDDXBFuyd52Cxy7BXkVQZOIRahG7w8oFifVtKw
+	 s/IPattHzOPqwEERG59dBvf3c9gmzg25xwKVUSPA=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Tian Zheng <zhengtian10@huawei.com>
+Cc: Leonardo Bras <leo.bras@arm.com>,
+	maz@kernel.org,
+	oupton@kernel.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	corbet@lwn.net,
+	pbonzini@redhat.com,
+	yuzenghui@huawei.com,
+	wangzhou1@hisilicon.com,
+	yangjinqian1@huawei.com,
+	caijian11@h-partners.com,
+	liuyonglong@huawei.com,
+	tangchengchang@huawei.com,
+	yezhenyu2@huawei.com,
+	yubihong@huawei.com,
+	linuxarm@huawei.com,
+	joey.gouly@arm.com,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	seiden@linux.ibm.com,
+	suzuki.poulose@arm.com,
+	fuad.tabba@linux.dev,
+	mark.rutland@arm.com,
+	seanjc@google.com,
+	rdunlap@infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH v5 06/15] KVM: arm64: Add support for FEAT_HDBSS
+Date: Thu, 19 Nov 2026 17:27:10 +0000
+Message-ID: <av8xblyy3GzgbNwf@LeoBrasDK>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <ceb91298-3d05-486e-a900-1291963dde24@huawei.com>
+References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-7-zhengtian10@huawei.com> <at-X_hFbsBU_Dsgr@LeoBrasDK> <a301e884-f6d1-4082-8551-8d8a17276dc3@huawei.com> <auSml6yTVYIQe7NZ@LeoBrasDK> <ceb91298-3d05-486e-a900-1291963dde24@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -75,93 +88,117 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
-Message-ID: <20261119170636.1520696-1-irogers@google.com>
-Subject: [PATCH] kunit: fix uninitialized err and static suite kfree() when disabled
-From: Ian Rogers <irogers@google.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>
-Cc: Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Commit e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
-removed the zero-initialization of 'err' in kunit_run_all_tests(),
-overlooking two live consumers of 'err':
+On Thu, Nov 19, 2026 at 03:52:37PM +0800, Tian Zheng wrote:
+> 
+> 
+> On 10/30/2026 10:15 PM, Leonardo Bras wrote:
+> > On Fri, Oct 30, 2026 at 10:53:57AM +0800, Tian Zheng wrote:
+> > > 
+> > > 
+> > > On 10/27/2026 2:12 AM, Leonardo Bras wrote:
+> > > > On Tue, Sep 29, 2026 at 06:36:46PM +0800, Tian Zheng wrote:
+> > > > > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> > > > > index 32102c3912fa..12fa37328dd2 100644
+> > > > > --- a/arch/arm64/kernel/cpufeature.c
+> > > > > +++ b/arch/arm64/kernel/cpufeature.c
+> > > > > @@ -2158,6 +2158,11 @@ static bool hvhe_possible(const struct arm64_cpu_capabilities *entry,
+> > > > >    	return arm64_test_sw_feature_override(ARM64_SW_FEATURE_OVERRIDE_HVHE);
+> > > > >    }
+> > > > > 
+> > > > > +static bool has_vhe_hdbss(const struct arm64_cpu_capabilities *entry, int scope)
+> > > > > +{
+> > > > > +	return is_kernel_in_hyp_mode() && has_cpuid_feature(entry, scope);
+> > > > > +}
+> > > > > +
+> > > > 
+> > > 
+> > > Hi leo,
+> > > 
+> > > > IIUC you run this on every cpu in the system, to make sure it's matching
+> > > > the feature. Is there any chance the kernel is in EL2 only on some of the
+> > > > cpus here?
+> > > > 
+> > > 
+> > > It's impossible for the system to have only some CPUs in EL2 and others
+> > >   not.
+> > > 
+> > > > If not, maybe we can run it on system_supports_hdbss() instead, which would
+> > > > be easier for the user to understand it only runs in EL2, on top of not
+> > > > needing the above.
+> > > > 
+> > > 
+> > > However, The question is whether a cap should mean "this system can use
+> > > the feature" or "this hardware supports the feature". If the cap only
+> > > tracks hardware support, users may be confused when the hardware
+> > > supports HDBSS but the system runs in nVHE mode — they would mistakenly
+> > > believe they can use the feature.
+> > > 
+> > > So I think we should keep is_kernel_in_hyp_mode() in has_vhe_hdbss(),
+> > > and add a comment in system_supports_hdbss() explaining this.
+> > > 
+> > > Does that work for you? Looking forward to your reply.
+> > 
+> > Well,
+> > That's just my personal view of this:
+> > 
+> > If we have a function called "has_hdbss" it should only report if the
+> > system has the feature available.
+> > 
+> > On the "system_supports_*" we have to figure out if the system itself
+> > supports the feature, which checks the feature bits itself and could mean
+> > checking for other features being there, such as hyp_mode.
+> > 
+> > What do you think?
+> > 
+> > Thx,
+> > Leo
+> 
+> Hi Leo,
 
-1. When KUnit is disabled at runtime (kunit.enable=0) while any suite or
-   attribute filter is configured (via kunit.filter_glob, kunit.filter, or
-   CONFIG_KUNIT_DEFAULT_FILTER*), kunit_run_all_tests() sets suite_set to
-   normal_suite_set (pointing directly into the static .kunit_test_suites
-   linker section when init_num_suites == 0) and jumps to free_out before
-   kunit_filter_suites() runs. At free_out, 'if (err)' reads uninitialized
-   stack memory and either calls kunit_free_suite_set() on static linker
-   symbols (panicking at boot) or stores them in kunit_boot_suites.
-2. When kunit.filter is set without kunit.filter_glob,
-   kunit_filter_suites() never initializes *err on the success path (or
-   on !copy OOM), so 'if (*err)' reads uninitialized stack memory and
-   aborts KUnit execution.
-
-Check kunit_enabled() before merging or filtering suites and jump directly
-to 'out', initialize 'err' to 0 in both kunit_run_all_tests() and
-kunit_filter_suites(), and report -ENOMEM when suite pointer copy
-allocation fails.
-
-Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
--Wconditional-uninitialized enabled; fix and changelog drafted with an AI
-coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
--Wconditional-uninitialized; not boot-tested with KUnit kernel parameters.
-
-Fixes: fb6988b83b4c ("kunit: fix use-after-free in debugfs when using kunit.filter")
-Fixes: e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- lib/kunit/executor.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index c798a02470d8..5525f4da0bc9 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -189,8 +189,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+Hi Tian,
  
- 	const size_t max = suite_set->end - suite_set->start;
+> Sorry for the slow reply. I've been looking into how other cpufeatures
+> are configured on arm64, on and off, and that's why it took a while.
+
+I took some time to study it as well, and to be clear, my previous 
+understanding of this was incorrect, and it looks like the has_vhe_hdbss 
+(.matches callback) is only called once during boot, and once per hot-added 
+cpu.
  
-+	*err = 0;
-+
- 	copy = kzalloc_objs(*copy, max);
- 	if (!copy) { /* won't be able to run anything, return an empty set */
-+		*err = -ENOMEM;
- 		return filtered;
- 	}
- 	copy_start = copy;
-@@ -382,7 +385,12 @@ void kunit_run_all_tests(void)
- 		__kunit_suites_start, __kunit_suites_end,
- 	};
- 	size_t init_num_suites = init_suite_set.end - init_suite_set.start;
--	int err;
-+	int err = 0;
-+
-+	if (!kunit_enabled()) {
-+		pr_info("kunit: disabled\n");
-+		goto out;
-+	}
+> My reading is that detected: HDBSS should mean "this system can use
+> HDBSS", not just "the silicon has it".
+> 
+> Several caps already add conditions beyond the ID bits. CNP returns
+> false for kdump and under ARM64_WORKAROUND_DISABLE_CNP, NV and pKVM
+> match on kvm_get_mode(), and can_trap_icv_dir_el1() starts with
+> is_hyp_mode_available(). So in practice a SYSTEM_FEATURE cap answers
+> "can this kernel use it on this system".
+
+Humm, or maybe "can this kernel, booted as it is, use it on this system"...
  
- 	if (init_num_suites > 0) {
- 		suite_set = kunit_merge_suite_sets(init_suite_set, normal_suite_set);
-@@ -391,11 +399,6 @@ void kunit_run_all_tests(void)
- 	} else
- 		suite_set = normal_suite_set;
- 
--	if (!kunit_enabled()) {
--		pr_info("kunit: disabled\n");
--		goto free_out;
--	}
--
- 	if (filter_glob_param || filter_param) {
- 		filtered_suite_set = kunit_filter_suites(&suite_set, filter_glob_param,
- 				filter_param, filter_action_param, &err);
--- 
-2.56.1.708.g77570a6a1d-goog
+> HDBSS is EL2-only (HDBSSBR_EL2/HDBSSPROD_EL2, VTCR_EL2.HDBSS),
+> implemented only under hyp/vhe, and used only by KVM, so "the hardware
+> is there" is not the same as "this kernel can use it". That is why I'd
+> keep the gate in has_vhe_hdbss() rather than moving it to the consumer.
+> 
+> I'd be interested to hear how you see it.
+
+I agree, that looks better this way.
+
+I don't think I understand enough of what 'system' means in 
+system_supports_*(), but I think your version explains it enough based on 
+other similar functions.
+
+Thanks!
+Leo
+
+
+
+
+
 
