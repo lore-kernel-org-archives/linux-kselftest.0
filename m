@@ -1,49 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795084713;
-	b=vWm0o2hb8Eb78JO4I85VcvSauHJteZakaAdlgXV0ofB0KjMnVnpSwiXk4yJxtKtPFbMa
-	 8iil219hir4vFAkxnrO86KZB9gLp5U9u5AjUMUmEA1dY7+tZ4Px5Bjq+HYq7PtO6UmY3+
-	 fZctFjD8AHouhEn041RIjaANiK9NOtjpbixeby3zUM13l1e8sDOtg81yE590dj+Srwi9m
-	 5sPH/33f/QaDZ1+35DijC9L/ZSuHak5zorppxexaO6LiJjPAwVeeiKGZZQat130GuDaHU
-	 dxtocjCAJF04HnduGvqmCBzEXF0ywl/yj6YA/x0vqRmMtMx0gaZVO2ZKfRmzb5ARuBg==
+	t=1795084972;
+	b=VzcQlg/khVLa8VYsN7Fd8bY4v39t3iNQrHmLNHgWA3aQDgf1oYAV4TZs3Qtz4YwFEbRI
+	 4j2Z0cjJ9k5oa7mHLXCzV78WaiCbY6908kFC54e2GSBNRo6O7vFedvvjZnd6mlQn13GCM
+	 QjLiil5kYmJQEWi95hNbCz5XEGCrOi4EHYwt00zaz0lRUo1nuL+7hfOqfsjP2KSTdH7Wu
+	 9WRrEDLX/+LcsVP7cEbssgKsVqG/Uan6msYwLUM7N6bq2FPxBxtrPEZlsXGBA9MY9V5xI
+	 JjBUy8QD0MBAgzuCaQ77ci9pMPsc8kcqw3W/yMnNknfUNmHH22crRS3b1OGgwZW4WrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795084713;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=1E9aeKD0ViG7J+qDgtkquYRiN07MXNXZrVg0YWEXHdA=;
-	b=it2i5hUWMHWCX2Y5Oqt67BXSdFi07QcTeCxrbvn5Lxa/47l8TJjTzIYWBrCCy9tYhpgR
-	 TaEI/WTnNzjGQpmhC3VmfyQfpYeOYlyJ9q6wHjK1B+IakrtWdZqme0hZSdfTV9U+HCx9f
-	 MAvfs4JiaKTfFbu+fKmC383H9ThEvYwzNbEPnrAAHHVnV2cIp6fD+pkEmQL0XbSpMGRow
-	 blOKI/YNzs+2APqAX1Gt+aZKKx77UghVMq6Npf0iP4sNQrm2d5PHW4hbc60SF76uponvI
-	 O+C5x6BkdQ20S49sVnt3Tx3gbbzcmkFn7sfnkIPYVuP/MWyaEjIDSIlF+XR8fdWpf6w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795084972;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=vMWbbWSOkcM/Z7Vh8kox11muEBd1XkiAo3xwlvt0N24=;
+	b=CIfiYOjlaXMyry1dp16CzeSTvz7fytV3JV1vp36hiuv5jJ6zJtSXztW8Bgj6TPOoIEI3
+	 Dl37DX+Xgm4awjO0KOl8gvwmGng634jrOcHyJP0+A+IwpnM3mrz+UGziJZjVCHJHkIgU7
+	 4MHQhHkrm8cO7yeODMa+xY1vVlMJ4v6cYrpx8xIU3xDZjKj3lWnmzeahm2y3ah2byChyl
+	 e12D9ZW3Fr+nVP7GzU25tQxtnwtyW3RKdzVPqSUO1egVX2cS/kySHU3fhDDmGrhZOSWFd
+	 Pg4laCAt1N8HOmYreH9Cqmnm+J70AsejN+9v4z18nevT/htYqpwB9KEGwpByhPM+k2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=bDpd4c76;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268D8606A320;
-	Thu, 19 Nov 2026 10:38:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 268D8606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oW11fiAh;
+	arc=none smtp.remote-ip=209.85.218.70
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4329960A2600
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 10:42:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4329960A2600
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=bDpd4c76
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2CC61575;
-	Thu, 19 Nov 2026 02:38:29 -0800 (PST)
-Received: from [10.43.16.22] (unknown [10.43.16.22])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 048213F632;
-	Thu, 19 Nov 2026 02:38:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795084712; bh=x1fzo650tskHuvw39pi4izoFCVukJDZuJ4305LusYok=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bDpd4c76baiHnPktB9iWk7TmT3YJu9ALX+K4/DuzM0re9Yr3YRDWuxopWtg2m5zET
-	 HLVBz8WXXiC2a+J7ABKE16mDFkiEBXfpr9XI7WnIqIX/IpIM7MVn4cPEKXWKwspzrv
-	 vR9QP5Xroxlu9V4bdWCKE9UuhZ4ZGN2v9WtiBBAY=
-Message-ID: <243812f7-3883-4225-8f46-aa2a5face413@arm.com>
-Date: Thu, 19 Nov 2026 11:38:27 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oW11fiAh
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c50b0de2139so158914266b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 02:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795084970; x=1795689770; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vMWbbWSOkcM/Z7Vh8kox11muEBd1XkiAo3xwlvt0N24=;
+        b=oW11fiAh1fVsy6xgq5IQLkJN98zWoYddIagqZkzDkpueCJDM5RIhtOWVt2Ibp+QeE4
+         vLVz/VN3IfukbMIEgIcSxtqVOJdjFTy1kTkm+xYeScSIN0agEKjQzNIglCtubHhdZahM
+         gW2PO3wR6vduTj/PsGUzsQ16G6wt3LnAgQJ0PlyesozFr9xxEvViV95OZVtK6h8LF1uW
+         qlrnxlMEFynQwmpWIygxK29xxqFPiAzMQbI3oAVcqzzu7lhaDtqAqhBqv4kQ6GXBoYCy
+         WseF3F/odDo7mOODaKXMCIpmLHus2gdb4ou41qfyP4iiaDg+6kgjD2md05OsgrD+rxPp
+         LRBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795084970; x=1795689770;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vMWbbWSOkcM/Z7Vh8kox11muEBd1XkiAo3xwlvt0N24=;
+        b=p+xIoBueX5bIwuen/ldpClott9cckyplvKFHO3/WwqcuWlbiMsYeP6/WvbxHLPnvys
+         ts6s0LvXRXIF6r71nStAO4c1Be4foYPnzHJYhFnTPEYSCrW3r5+mCzQKJ6dW+oBAe/0Y
+         NKJGn2uSAdQthfvj3E6jM4osC1QRGQdO+wPmBWVgz7lrq586NUNsLIEl9ypKQPlnw/8m
+         x1xHOYCj6+IzxgTTkipfFTcR//wK4q6z0YW0M+8fpf92MPyZra63VHD9GJyhVfute9tG
+         hXJi0XlNShCeNbPbmkkQDz+xls8rey9Hw5WtZMth7v5NhLBLTh2i2CDqs0P/j0QJm7Wl
+         1V4Q==
+X-Forwarded-Encrypted: i=1; AL+hErHfgoTfJDqCzmztL+kuje3xV6rtnqTFD7MGayoDFo/pf+HwWpIiDW2+QXXAoJqVJSLtP0jJ/tp3OQRCLovKdNM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+pHXyzzUXO7tZy1rXWlJ/E5eqNgmmOpb75tekYWewbQ6xAj8rm
+	H6h8bVs5LUiyEWnSEJ6FzrP44tpuf8w5yn+ZrtKn4tIb7/EIICviVOrVdDsOrX2/kB1R+udHcA=
+	=
+X-Received: from ejak1.prod.google.com ([2002:a17:906:541:b0:c3f:7129:4c10])
+ (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:906:9f8a:b0:c41:61b9:6ef6
+ with SMTP id a640c23a62f3a-c510e376c7dmr532576166b.27.1795084969312; Thu, 19
+ Nov 2026 02:42:49 -0800 (PST)
+Date: Thu, 19 Nov 2026 10:42:04 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,87 +75,140 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] Add test for atomic uaccess with permission
- overlay
-To: linux-arm-kernel@lists.infradead.org
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Joey Gouly
- <joey.gouly@arm.com>, Linu Cherian <linu.cherian@arm.com>,
- Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Will Deacon <will@kernel.org>, Yeoreum Yun <yeoreum.yun@arm.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261119-poe_futex-v2-0-244c7a01f788@arm.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20261119-poe_futex-v2-0-244c7a01f788@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.708.g77570a6a1d-goog
+Message-ID: <20261119104208.782900-1-halg@google.com>
+Subject: [PATCH v2 0/4] userns: per-namespace capability bounding set
+From: "Hallgrimur H. Gunnarsson" <halg@google.com>
+To: Christian Brauner <brauner@kernel.org>, Serge Hallyn <sergeh@kernel.org>, 
+	Andy Lutomirski <luto@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, 
+	"=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>, 
+	"=?UTF-8?q?G=C3=BCnther=20Noack?=" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	containers@lists.linux.dev, keyrings@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, "Hallgrimur H. Gunnarsson" <halg@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 19/11/2026 10:54, Kevin Brodsky wrote:
-> POE is not currently enabled at EL1, but my series [1] protecting
-> page tables does exactly that, and it has revealed an interesting
-> issue.
->
-> Regular uaccess uses unprivileged loads/stores, which have overlays
-> applied and are checked against the user's POR_EL0 as intended (same
-> restrictions as when accessing memory from userspace). In some
-> cases, such as atomic operations when FEAT_LSUI isn't available, we
-> need to use privileged L/S with PAN disabled instead; overlays are
-> not applied in that case.
->
-> Once POE is enabled at EL1, we have to ensure that overlays are
-> still not applied to these accesses. Otherwise, they will be checked
-> against POR_EL1, which is completely invalid as kernel
-> pkeys/POIndices are unrelated to user pkeys.
->
-> If PIE is used, then we have to ensure that user memory types do not
-> have overlays applied in POR_EL1, as Sashiko reported [2] on an
-> earlier version of my series protecting page tables. Patch 1 tries
-> to preempt such errors by adding a comment. If PIE isn't available,
-> then... we're out of luck, as Sashiko reported later on [3]: we
-> cannot prevent overlays from being applied to user memory. We'll
-> most likely have to require PIE at least when POE is enabled at
-> EL1.
->
-> To avoid accidents in the future, patch 2 adds a kselftest to ensure
-> that atomic futex uaccess (which uses privileged loads/stores unless
-> FEAT_LSUI is available) does work on memory mapped with a
-> non-default pkey. 
->
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
->
-> [1] https://lore.kernel.org/r/20261109-kpkeys-v10-0-aa6c4d9603bc@arm.com
-> [2] https://sashiko.dev/#/patchset/20260505-kpkeys-v7-0-20c0bdd97197%40arm.com?part=3
-> [3] https://lore.kernel.org/r/sashiko-outbox-207324@kernel.org
->
-> ---
-> v1..v2:
->
-> * Reworded the cover letter and the commit message of patch 2 in
->   light of Sashiko's new findings (when PIE isn't available).
-> * Rebased on v7.4-rc3
->
-> v1: https://lore.kernel.org/all/20260521-poe_futex-v1-0-1da286b8f9b2@arm.com/
->
-> ---
-> To: linux-arm-kernel@lists.infradead.org
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Joey Gouly <joey.gouly@arm.com>
-> Cc: Linu Cherian <linu.cherian@arm.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Yeoreum Yun <yeoreum.yun@arm.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
->
-> ---
-> Kevin Brodsky (2):
->       arm64: mm: Add note about overlays in PIE_EL1
->       kselftest/arm64: Add test for atomic futex uaccess with POE
+When an unprivileged process creates a new user namespace, it is granted
+a full set of capabilities (CAP_FULL_SET) scoped to that namespace.
+While isolated to the namespace, these capabilities allow unprivileged
+local users to reach deep kernel subsystems (most notably networking
+configuration and raw sockets via CAP_NET_ADMIN and CAP_NET_RAW) that
+historically assumed a trusted caller and have accounted for a large
+share of local privilege escalation vulnerabilities.
 
-I completely forgot to address Mark's comment from v1... Please ignore
-this for now, sending a v3 soon.
+Many sandboxes and workloads use unprivileged user namespaces strictly
+for UID/GID, mount, PID, or network isolation and never need high-risk
+capabilities like CAP_NET_ADMIN. Likewise, system administrators,
+service managers, and container runtimes often want to enforce a
+capability ceiling across descendant user namespaces while still
+permitting exceptions for authorized workloads.
 
-- Kevin
+Prior work by Jonathan Calmels [1, 2] proposed a per-thread userns
+capability set (cap_userns), while v1 of this series [3] proposed a
+capability bounding set (cap_bset) in struct user_namespace configured
+via a global sysctl and clone3().
+
+During v1 review, both Christian Brauner and Andy Lutomirski had
+reservations about the sysctl and clone3() approach, and Andy pointed
+out the need to cover the single-deep container case. Christian then
+proposed combining per-cred cap_userns with the per-namespace cap_bset
+ceiling [4].
+
+This series implements that combined approach:
+
+1. Per-namespace cap_bset and per-cred cap_userns (Patch 1)
+   Introduce user_namespace->cap_bset and cred->cap_userns, controlled
+   via prctl(PR_CAP_USERNS) and SECBIT_CAP_USERNS_STRICT (named _STRICT
+   rather than SECURE_NO_USERNS_CAP_RAISE as it also disables the
+   default cap_permitted exemption). Clamp namespace creation,
+   set_cred_user_ns(), and parent-owner checks in cap_capable_helper()
+   against these ceilings.
+
+   One refinement over the v1 review sketch: set_cred_user_ns() also
+   intersects cred->cap_userns with user_ns->cap_bset on namespace
+   entry. Since userns transitions only move downward in the hierarchy,
+   excluded bits are permanently inert anyway. Clearing them keeps
+   CapUns and PR_CAP_USERNS_IS_SET accurate after setns() and gives all
+   six task capability masks a uniform user_ns->cap_bset subset
+   invariant.
+
+2. Ptrace and dumpability bounding (Patch 2)
+   Require the tracee's cred_userns_bset() to be a subset of the
+   tracer's in the same-namespace ptrace check (complementing the
+   cross-userns owner check in cap_capable_helper()), and update
+   cred_cap_issubset() so widening the effective userns ceiling resets
+   mm->dumpable and pdeath_signal.
+
+3. Introspection via /proc/<pid>/status (Patch 3)
+   Expose cred->cap_userns as CapUns in /proc/<pid>/status. Leave
+   AUDIT_CAPSET unchanged, as capset() never modifies cap_userns
+   (matching cap_bset, where prctl() changes are covered by syscall
+   auditing).
+
+4. Selftests (Patch 4)
+   Add kselftests covering PR_CAP_USERNS, CapUns, nested monotonicity,
+   creator capability retention, SECBIT_CAP_USERNS_STRICT, setns()
+   clamping, parent-owner bounding, ptrace restrictions, and dumpability
+   resets.
+
+Changes in v2:
+- Replace the global sysctl, CLONE_NEWUSER_BSET / struct clone_args
+  extension, and NS_USER_GET_INFO ioctl with per-cred cap_userns,
+  prctl(PR_CAP_USERNS), SECBIT_CAP_USERNS_STRICT, and CapUns in
+  /proc/<pid>/status.
+- Drop CLONE_NEWNET_LOOPBACK and UNSHARE_NEWNET_LOOPBACK to handle in a
+  separate series.
+- Clamp set_cred_user_ns() (including cred->cap_userns) against
+  user_ns->cap_bset and cred_userns_bset(cred).
+- In cap_capable_helper(), bound implicit parent-owner capabilities
+  by the owned namespace's cap_bset, and grant them only when that
+  cap_bset is a subset of cred_userns_bset(cred).
+- Bound same-namespace ptrace checks in cap_ptrace_access_check() and
+  cap_ptrace_traceme() and credential subset checks in
+  cred_cap_issubset() by userns capability ceilings.
+- Rebase onto v7.4-rc1, preserving SECURE_ALL_UNPRIVILEGED handling in
+  set_cred_user_ns().
+- Link to v1: https://lore.kernel.org/r/20261028221705.3915340-1-halg@google.com
+
+[1] https://lore.kernel.org/all/20240609104355.442002-1-jcalmels@3xx0.net/
+[2] https://lwn.net/Articles/978846/
+[3] https://lore.kernel.org/all/20261028221705.3915340-1-halg@google.com/
+[4] https://lore.kernel.org/all/20261111-behagen-faktisch-entgegen-e2e714373895@brauner/
+
+Hallgrimur H. Gunnarsson (4):
+  userns: introduce capability bounding set for user namespaces
+  capability: bound ptrace and cred subset checks by userns ceilings
+  proc: expose userns capability mask as CapUns in /proc/<pid>/status
+  selftests/capabilities: add userns capability bounding set tests
+
+ Documentation/filesystems/proc.rst            |    2 +
+ Documentation/security/credentials.rst        |   12 +-
+ fs/proc/array.c                               |    4 +-
+ include/linux/cred.h                          |   22 +
+ include/linux/user_namespace.h                |   12 +
+ include/uapi/linux/prctl.h                    |    7 +
+ include/uapi/linux/securebits.h               |   16 +-
+ init/init_task.c                              |    1 +
+ kernel/cred.c                                 |   13 +-
+ kernel/user.c                                 |    1 +
+ kernel/user_namespace.c                       |   33 +-
+ security/commoncap.c                          |   80 +-
+ security/keys/process_keys.c                  |    1 +
+ .../testing/selftests/capabilities/.gitignore |    1 +
+ tools/testing/selftests/capabilities/Makefile |    2 +-
+ .../capabilities/userns_bounding_set_test.c   | 1064 +++++++++++++++++
+ 16 files changed, 1246 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/capabilities/userns_bounding_set_test.c
+
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.56.1.708.g77570a6a1d-goog
+
