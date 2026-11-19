@@ -1,79 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.241
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795091800;
-	b=MEDuUHysK4fODHZwuKMNtuN/dr1zn4ER2fe1DQ9Jw5UP40STSGuJh5Z/NvxjpW17ncT9
-	 ATYNhy1pel8mzO0rVuWiUqptIGU4r0gLDWvLLsUu9xqTOnezi8Bhjp5Mclv9I4e3J2oqI
-	 gGbNEYgj58U0LIyQVC9TBQlmEeejB4AwaZiPg0og50K9PDtK1Y+enITppWTlSm3EOQEe+
-	 D2DR6wq7aif+hOdWZ2C3JNzLFqMDYKzC5t5PKQLVzVvlM3YDlYWjJRq0l6CnVEO6PSvcn
-	 gQnDMP8V7OzGh27WJheXDiZtZD4mcQaIvNet3gY0NYQj0RG0YRCCMSaQ2JYPM9zZrbw==
+	t=1795092225;
+	b=w9oDZTLyWZ5VBopeQ9y6fAWjwt5uoma1VmtvTPOcC/7V/YYBi7Hlze25q6QUXn0FQo39
+	 0YoOx31nB3nnC0DQu3t2prY+dDmoOHcIMeJvIyZYrFe4H5xudIoYc6Ar7fjcQYU+pwhYE
+	 LzYKU3nFIm9/eXCXl9o0lQLM/f+GYJ5WGRpD2ntPBpmPeypm5teiJTMHmjg4QvKAfHbZO
+	 DexgS5vG5Dfc3NvG2dSaBa/hJ/sMY5OWMXPIa9R71Sh9swI7EYmSwyaKOLjmDW153Q12D
+	 xIZoxJpUS+OEehrCLT/4tIYJNwwvWRujnhBPutjyB/4OwvySajuy9Te4UFz2M2gOqVg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795091800;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Z3UaETqrvFfA005xDH3cLACWIQAJP32vQKwKRzUivqI=;
-	b=myzrPYb68l2QfnLk4E0yDKzNQaGKD1nGEf1WWfW8Tdi2EZ2DtB3YRzEF5NUtfIvj0Ab+
-	 6XCPz7+tkl7eGTfMbe5Y6UlS7BGp52JjEio3A8JmCzbmXjSRiLwjGEzgYYTqt2L9H/cW1
-	 DCG10pUrr3ko+n5PJHcwxT9V8zqwIevWkO4tFV98abNLbK8rDqxiUsrMoc1eKaNhINXpR
-	 PIPBTj6F+wS570ZDvk/4M+ACly13q5088KRWeTsx6U8cdNmgYZcJZVAqdtpme1KKw3FII
-	 tUJ0wL1E0+L2bDaGOO2fDCam+dVh+7a2Pw4PFfYh4bkN1HDQHGPq6lLd3QsinHmdRGA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795092225;
+	h=Received:DKIM-Signature:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:
+	 X-SA-Exim-Mail-From:X-SA-Exim-Scanned;
+	bh=zRjcGPEqo9GIymUz7E2xF35WQXytvmcIckbBFZO8Xxw=;
+	b=QA+G4mmFMCRRh1UkfqP0QblceTgEMnFHA11tBkSxkq0n/q3ELdwNp2AXgE0RSDN/J51z
+	 tfyo1TANKy1f0llBkI47KDhgiRSwBK3seLyt0+GzKVl/BKWyIfdOkpSrsjqOYXQBio1gn
+	 G9uOuf3aZ7L0Ww2j64qtWtYuNRqtVDRpol6aCHGN7JCb9DpO2zMIXr++CYEe4ykYHfX46
+	 sNHCxB+T7lqr9tUMA4/KNzIG9C0NmWwM3kNq5q5T/rmGrz+F09aFkNmaT0LrmeusVigZS
+	 kJtjZKoByGL8nX5ksBGKSqhU0kS9HwysKq38TiwNKJCCw+4+55/Hh5XjHRWMB6UpD0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lC6uMZzr;
-	arc=none smtp.remote-ip=91.218.175.241
-Received: from mta0.migadu.com (out-241.mta0.migadu.com [91.218.175.241])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YEvLMjAR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4239606A325
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 12:36:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4239606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237F5606A338;
+	Thu, 19 Nov 2026 12:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lC6uMZzr
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Z3UaETqrvFfA005xDH3cLACWIQAJP32vQKwKRzUivqI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795091797; v=1; x=1795696597;
- b=lC6uMZzr3ePKQeAmTHxIhjRO54prPfHzsGIGlwdxiRYK/x13orsA38lW/OKGvJ2UJwbnLaGu
- IJaqHUFanrC7+JPI1DpsvL2OT+FfjO6qijHirmQdj3INbUcFwvjLFj1Rdau0Gt/Mp99dF9OE8i1
- 8w25qsNQUOiPVzeU3R/Bc0xs=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 22a63bec1e9ad1bd;
-	Thu, 19 Nov 2026 12:36:37 +0000
-X-Mizu-Trace-ID: 22a63bec1e9ad1bd
-X-Migadu-Flow: FLOW_OUT
-From: George Guo <dongtai.guo@linux.dev>
-To: pratyush@kernel.org,
-	ardb@kernel.org
-Cc: chenhuacai@kernel.org,
-	rppt@kernel.org,
-	pasha.tatashin@soleen.com,
-	shuah@kernel.org,
-	ilias.apalodimas@linaro.org,
-	akpm@linux-foundation.org,
-	baoquan.he@linux.dev,
-	ruirui.yang@linux.dev,
-	guodongtai@kylinos.cn,
-	kernel@xen0n.name,
-	graf@amazon.com,
-	liukexin@kylinos.cn,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YEvLMjAR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1161F000C5;
+	Thu, 19 Nov 2026 12:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795092225;
+	bh=zRjcGPEqo9GIymUz7E2xF35WQXytvmcIckbBFZO8Xxw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=YEvLMjARz7pZgG6OJf6NMedt4DnGUuMuuDMIrc/M7hLWYwW5rJtdw2LxdNcjLx3eg
+	 hE97c56nSSt5csVIfTta3IIuDPTIO7PTdvFHccfs3Mf+Jf4/SVWo5toqn5gjG0yk2u
+	 j5Ku3RVpNmLkGZNpoS1R/AIuyfC7iDtyxlZn2Zlqwy+fm0S8cLd+1Iq2gimc3pWbm+
+	 6y42EfefS9ZlG3ctNAl17WOmgySjaX6awji9dz97/TmZl4NUcSjkxBoln7lAsbx+vB
+	 N6wTrMOQU93cQMhHCS9jMFdCZeArzCQA1s4vOlTuGQEQY/hg2hHK3uQG+x5UiqjOCm
+	 cAwzJuOdWN8vA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1xU1UN-00000000RvW-1Iur;
+	Thu, 19 Nov 2026 12:43:43 +0000
+From: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	Quentin Perret <qperret@google.com>,
+	kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH v6 1/8] efi: Pass KHO state to the next kernel in a configuration table
-Date: Thu, 19 Nov 2026 21:36:31 +0900
-Message-ID: <20261119123631.11165-1-dongtai.guo@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <2vxzecch3x6k.fsf@kernel.org>
-References: <2vxzecch3x6k.fsf@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 01/19] KVM: arm64: Hide generic ptrauth from protected VMs without ptrauth
+Date: Thu, 19 Nov 2026 12:43:34 +0000
+Message-ID: <179509215925.3938200.7140871147964039894.b4-ty@b4>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261109084854.840576-2-fuad.tabba@linux.dev>
+References: <20261109084854.840576-2-fuad.tabba@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,33 +82,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oupton@kernel.org, fuad.tabba@linux.dev, will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, vdonnefort@google.com, qperret@google.com, kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi Pratyush,
+On Mon, 09 Nov 2026 08:48:36 +0000, Fuad Tabba wrote:
+> A protected VM without the ptrauth vCPU features shouldn't have pointer
+> authentication in its ID registers. Commit 3d7ff00700d1 ("KVM: arm64:
+> Rework specifying restricted features for protected VMs") gated APA,
+> API, APA3 and GPA3 on vm_has_ptrauth(), but left GPA and GPI capped
+> at IMP. So generic authentication is advertised to a protected guest
+> without ptrauth, and PACGA UNDEFs.
+> 
+> [...]
 
-On Thu, Nov 19 2026, Pratyush Yadav wrote:
-> Do we even care about non-EFI boot? I'd say ignore that for now until
-> someone comes with a real use case for KHO on such systems.
+Applied to fixes, thanks!
 
-OK. The fallback is only the existing setup_data path, kept when the
-table is missing. I won't spend more effort on non-EFI boot, and
-whether to remove setup_data can be decided in the x86 series.
+[01/19] KVM: arm64: Hide generic ptrauth from protected VMs without ptrauth
+        commit: 50e9e6b6eb3d9b2c318babce60abdf3b300cfb35
 
-> This should be a follow up series. Don't get your series get caught up
-> in x86 changes.
+Cheers,
 
-Will do. v7 will keep the table common with LoongArch as the only
-user, and the x86 patches will follow as a separate series.
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
 
-> Sounds good to me. You will still need to chase Ard for an ACK on the
-> generic EFI table though.
 
-Ard, you asked whether this could be an arch table handled in the
-LoongArch code. Pratyush would like a common table that x86 can move to
-later, and the x86 prototype above used the same table without changing
-its layout. Would you be OK with keeping it in drivers/firmware/efi/
-for v7? If you would still rather have it in arch/loongarch/ until the
-x86 series lands, I will move it there for v7.
-
-Thanks,
-George
