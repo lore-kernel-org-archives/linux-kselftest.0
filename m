@@ -1,141 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795128268;
-	b=nr0nAfAiPXaogSXXIphxxZXVEG0seg0k/TkYKzYEi+kqRUU0yd1b+yZKFNr6FN3+RAP8
-	 4e5Ea4ByKKY0kNlqxKRFBXIXE3rNTbwNEJo+h281jy4/PYs3FlHZwSirPvQP1EUuQCFe4
-	 szVjVlovFx2zO1jKfYq+xzabZtI62S9p8x72F7tYcTIU0qPRNwjJuIZWpsJF6uT90q8Gv
-	 8KaVIz/UvZR/z2sWRqden7xZqFMmN0JPYB0pp8zRxPFA9ROoixOz81SP6ba1lHz6vYIie
-	 CTz9yCKDsYCa4yo1WqCxHi5o39xFR39iILPY3oc/xxg0PUdfA8k8knYoIX2iMq2Ahhg==
+	t=1795128756;
+	b=okWiKxfrZSbm2z/z9wqdkiFsEWWZvREDdB/+DRbE+yY9B43pAG6OKqw352wx2aQVn4X4
+	 PF0LOfraVk1nZ3whpmQhiMNphwgb2JgTG17qJt/X3bWe+PsO0aRvpCploA7YpnmRym9up
+	 7tL9qN3VW0vHXdM3dqZI4qeSSZwx7DpPOPyGTdv/NZDHe+6SC19IQUylUeyypRJ4VeMYO
+	 vSuQdPDp6LeqOxa+BT6fGYgjfBjz9flHuqbYhF/l+7JLEbFsn+xjh6Q0nMe5+Ap/c4dGn
+	 No7YZoQ2KfCo2G+GR3yA+GWwVfaaekpJZsA10QBsl/l34rmgU2acPfzA9p7pESqIAaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795128268;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=nefIhKw4pk3hNRgKls2omID/HmfGP96iHh55NTs5Fc8=;
-	b=aBiA10+PgjoD1G7Qsk0lYx0lAnBPygR/bs7w+rTv7x+B86Vqh25Ow3ZSW9P9IaYnTKWJ
-	 bskEpcDVo2M25YpqKY02x5tM6d3b9rVE/qzpGIH75exPD4GeWZxCmvv/SEZNgxkL4Iv9M
-	 k9B8jYZTjj2sf8sxxob5Y2165qR8qHT9RYydpXcXJm6PcMwAol1CpX3M4nGchmMGb8Tjb
-	 gEuOgHR6t+7npH03X5njLRv6JaiYwPz/GdVvVm1YO76j4wkUXTcd+EhCKht4AiQ5IXPrE
-	 J9/0mpI0J4fA70+1r7nbuf/qZtkAlotq03g8AmV6U3xfUOqc09ju7UAt3duBPmfLVmg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795128756;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=4p/PmKLFKiTziuAYSkvBfkppOdPY2FKbz8KbdTu8xMs=;
+	b=TyourbNbyiwAVYhFgAwhC+pWqoiH43R/vkwqOdJUZf0sHEkuS7DZ+DZu8AfGICtMar77
+	 Xz5UDUqx2Jn+cYZn8nB3rkSemlWUAl9hME/Y8jPzdT53pi8YB9NP59z2DKpep3Ab8r3ul
+	 dWLcT9N3CWIs6E6mxPQ7sOBCQWmijs/mAPrQnNXvZWDyma4ZB+K+0/xhNOF2QMaxTH6Hv
+	 u5rPLhcM0J2eIfvG9s/lVyKT3HYHo9qmOIWOyvRdDGSYoPLH9d48VSaFoxoFXqzopUQvj
+	 vscp9VXpp7nqRVgDiDjL4ggv7wNDZd0ryE+1TABbhpwmNWRqriBpkttNwOBlxzdjZ7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=esdAudvZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLzMGv6Q;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 775C2606A330;
-	Thu, 19 Nov 2026 22:44:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C6C606A325
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 22:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=esdAudvZ
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 61A181F000CA;
-	Thu, 19 Nov 2026 22:44:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLzMGv6Q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BC01F000D8
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 22:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795128268;
-	bh=nefIhKw4pk3hNRgKls2omID/HmfGP96iHh55NTs5Fc8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=esdAudvZa+WKWyffO/lrY+z7QYAZ6No+WEP53swromiY2438FAZcSNn0CJB3YH16X
-	 zpRv0W0Tagm2qyMa2IRE9JZ4dwaENI5Jr512dORRagsTsAAYEpnIzuVY6BsxEGSq3L
-	 7voWpSqv/CsOKdk3E+luW8/3/upHnv1ZDR4/emJbhTr6hEq3QwyLvWqXQBzQWgvbpG
-	 P3Bg0DTBahtB++fEg+4uiF5/UXIvkLDlQSJtQZfxxel1aD44hGtow8FBnBGFCtjloO
-	 2BLScF956dTTJuVxtqyw0Wy7W4qkjXm/aFVwwjtFqf90JnNA4O0IIR2Ur1CPNMAQyw
-	 Jvw9xUkHK33Ng==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Ben Segall <bsegall@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Christian Brauner <brauner@kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Chris Zankel <chris@zankel.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	"Hallgrimur H. Gunnarsson" <halg@google.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Jan Kara <jack@suse.cz>,
-	John Johansen <john.johansen@canonical.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Kees Cook <kees@kernel.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Magnus Lindholm <linmag7@gmail.com>,
-	Manfred Spraul <manfred@colorfullife.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Hocko <mhocko@suse.com>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Neal Gompa <neal@gompa.dev>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Paul Walmsley <pjw@kernel.org>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Rich Felker <dalias@libc.org>,
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: [RFC PATCH v4 14/14] MAINTAINERS: Add entry for ROOT NAMESPACE
-Date: Fri, 20 Nov 2026 00:43:12 +0200
-Message-ID: <20261119224312.1037966-15-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261119224312.1037966-1-jarkko@kernel.org>
-References: <20261119224312.1037966-1-jarkko@kernel.org>
+	s=k20260515; t=1795128756;
+	bh=4p/PmKLFKiTziuAYSkvBfkppOdPY2FKbz8KbdTu8xMs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=jLzMGv6QSLDRuuYdmlrWyDrqR4/7yaIA4DiuD/TJo+ltbFdpYlnKD1ow6MoFtHmzU
+	 31MDSG+ayW6stLEOadA9RWrGOQ+I96C1UpjULxEKqoVL1cX+R0z59PG73lkV9i8StL
+	 Oj+EfazBd2TGtXjM/kKlP30H6OZPATnmtIKke0/nehMlxkfCb5hvWdym9Ib28gCuGg
+	 TLVjdP22MXAAXGH0tbumy9ZhFMz9X9aaDvzt9CwuPfKq53We+MIFBmpvv83JqhaHMM
+	 Sov1cwLZaff5BXyOowvKrTyvcB6KLO+KfEaB3nEisSyt6sFCl9WQJSwSIJtkvp74WO
+	 NzyPYYqMHk4WA==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3ae25c846edso1554951fa.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:52:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErEJOpz3UcAGTW9zvb/GELMhy2DsBU0qGbGpWuOW1b0gSy538jkQzARGs+NiNtEzGKzlQHX4dcWqhqqAy7yLlAo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+5fvKabu9JYAdey7yV9YS6E2hF0lhGAD4OyM6ITT2LgHhXn4Hs
+	2GvgWS08nScCsLry3ECah9pm2SkFkIOZkZ7CpSKMBHhW8keiTRH7o29MnPhfOVbV9Pd7ubw92fg
+	rrYTJyAREhNylgz6yb6LHseGHwqWBCkttBWYNrhzZ
+X-Received: by 2002:a05:6512:6d2:b0:5c1:ae5e:fec8 with SMTP id
+ 2adb3069b0e04-5c1bc8f41bfmr282170e87.61.1795128754567; Thu, 19 Nov 2026
+ 14:52:34 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -145,39 +59,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261119104208.782900-1-halg@google.com> <20261119104208.782900-2-halg@google.com>
+In-Reply-To: <20261119104208.782900-2-halg@google.com>
+From: Andy Lutomirski <luto@kernel.org>
+Date: Thu, 19 Nov 2026 14:52:22 -0800
+X-Gmail-Original-Message-ID: <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+X-Gm-Features: Aa3M54orIgtW7gpar1jND6wqZDNNJFniZeT3SuBwbGzX9xy6w35wjatFfSpXNgQ
+Message-ID: <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for user namespaces
+To: "Hallgrimur H. Gunnarsson" <halg@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <sergeh@kernel.org>, 
+	Andy Lutomirski <luto@kernel.org>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Casey Schaufler <casey@schaufler-ca.com>, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-api@vger.kernel.org, containers@lists.linux.dev, 
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Record maintainership and mailing list routing for the root namespace
-subsystem across its uAPI headers, core implementation, documentation,
-and selftests.
+On Thu, Nov 19, 2026 at 2:43=E2=80=AFAM Hallgrimur H. Gunnarsson
+<halg@google.com> wrote:
+>
+> When a process creates a new user namespace, it receives a full set of
+> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
+> in scope, several of these capabilities (such as CAP_NET_ADMIN and
+> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
+> containers never need. However, there is currently no configurable way
+> to withhold such capabilities from user namespaces while still granting
+> them to workloads that require them.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7cbce21ba45a..072be5ec7fd8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24533,6 +24533,17 @@ F:	include/linux/mfd/rohm-bd96802.h
- F:	include/linux/mfd/rohm-generic.h
- F:	include/linux/mfd/rohm-shared.h
- 
-+ROOT NAMESPACE
-+M:	David Howells <dhowells@redhat.com>
-+M:	Jarkko Sakkinen <jarkko@kernel.org>
-+L:	linux-fsdevel@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/userspace-api/rootns.rst
-+F:	include/linux/rootns.h
-+F:	include/uapi/linux/rootns.h
-+F:	kernel/rootns.c
-+F:	tools/testing/selftests/rootns/
-+
- ROTATION DRIVER FOR ALLWINNER A83T
- M:	Jernej Skrabec <jernej.skrabec@gmail.com>
- L:	linux-media@vger.kernel.org
--- 
-2.47.3
+One thought (from the rootns thread): the other decent sized attack
+surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
+bit.
 
+A sort of horrible solution (but maybe not so awful) would be to
+declare that the bits in cap_userns aren't actually capability bits,
+and that you need the bit in cap_userns *and* the bit in cap_effective
+to do sensitive things, and that mounting needs cap_userns to have
+NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
+
+I want to sleep on this.  It might actually solve several problems,
+e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
+or whatever.
+
+--Andy
