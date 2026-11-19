@@ -1,52 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795085791;
-	b=x9u2rZrV8WfqPsMBWm+wdkb79KWKt5T54pHYjZ48ps/UxqNRdtmuTrzVgCAHq25DkU6T
-	 DyPF7p0hLJYnshgqMGV4kLgOBRfTUJMPZaEG+SIEyN9svDJTKO6NOO0JaPSogNhN3OLbZ
-	 5kpx6tafqS/AyK1fJVelyes0lRm+f1uJy8yh052ThPQKHO1CSyopdEr8uK0/oGIfO9bDN
-	 SMw7XgmbIqjUoljKyzv8f9PHnffIdcs/GHqZjSI91L7kIQ0n9aUxzEc3AkMqy2BzVCjv/
-	 3wd+pp0Mg1nSaQkbJh2UPXxXF33u0HBZW4eUxU0oaDZZFhcs4G9F7UHiuvk+2rnTeew==
+	t=1795085897;
+	b=ZDp1JjGtBzueTNwrKc9B3Ma+Kb71/yTlsjXdkHrw2+UbjupEV/Jr4pyVDg4Q6a/QEjSf
+	 FaLFWNraJ2hF8mIgknb1VIHN7gO0rkIIw5zNbBRjCbQ5kQJGB/p2ecXEQWpH+rPhsUTNQ
+	 yN8lroyXUI1fZU5LRUlJVloZvRZsZlz9Ws8adAftX5BOcgQCH0vdVTN7UagnqQ6L6fkFu
+	 kr3tWBpJatIQVVc030y87gLfNhPB+SEyTM+mFtR2JFsJoDC/y+Oh0ImSCrSVpyJ9QRf0C
+	 wqKGSxt/Irbb0mh6eGtXr59RxgVdpZrNvQSCWZbVWFPBB9M6gDike39wqU3+jYOvr6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795085791;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:Date:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	 References:In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:
-	 X-Developer-Key;
-	bh=+QqOX6qRKz2jl5Fwuo4iZMVb3P/jIaq+xtjqBa/w/Os=;
-	b=x1Dhwia7jA4zDJk5QEqUl50z7PTybTisYJuSS1unPCRWGL2H1Rc0bb0a9cI3uONTbqGB
-	 cgfmBl45hNQfbvya83yfHn6MkqbD2y4/EdRTHCCD11me2+44gD04RIizzAIaxoQsLkmxP
-	 fzaroHGfgaYELbhQw0RFqao2phV0Rq52FGhpXqWEUAJYiJGwtn9yXsGMTOyM1lwQUGp0/
-	 Ox3BF7jqJnhoUf5RDNBCivKg47GvYX+JiRNWJzjB3DIUwscnhp3YftdIKY+GYqpr127Ye
-	 L8jqYv6XX1XM7PrYNNv8I9fh+hio4loj4mqN/bz2GsxmiVUw6lG5Fwmrxx8fbeNqwDg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795085897;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=+o0bQUd8q0A+WRUXZxAmN8P7csYU6Eu6m9jj0vuUv3w=;
+	b=nG7GbMg5/iu6PhCKeQ6D6zePghhxP/fBp8NVXzMBzaaJVqotauIbdlHIVhgaeRyKnRlw
+	 quhFm8/8f7zCX7fMPCxafgVyrb25jo+23Ryuhh3k0G00DSpcLfHWMCmpiXkWIO/pWsAOx
+	 P3dWSMckHfDwPpRuDXQIQaavG7WuLq0R4oy238Ngq1+SldS7ylwwodxojLg/1liG2UWgc
+	 q0RB30HHoRXfn/w8AwfhFL+vpGBXSDQMvpUUwLRnXpgfQj/UC4ocCpoSyHo1X7h+KI3//
+	 sPZ0iTB099UjoqNdHThM5LT91IkPzZR4UezVV6hSmGD2ekfRLH+vE0NIkVzeK+VxkAg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kL5bGxVv;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD355606A338;
-	Thu, 19 Nov 2026 10:56:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD355606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MIHzLV8A;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240C8606A324;
+	Thu, 19 Nov 2026 10:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kL5bGxVv
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8377E1C01;
-	Thu, 19 Nov 2026 02:56:27 -0800 (PST)
-Received: from localhost.localdomain (e123572-lin.cambridge.arm.com [10.2.208.46])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E40313F673;
-	Thu, 19 Nov 2026 02:56:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795085790; bh=xNlTLs9cWFXvnfMSaMiLNCkTmQLfRvsHS+nhbY131uw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kL5bGxVvzQlOYxSuoqV607E849pAUgvIQrzEqNIfgseJjJkwYEDT7n7ElR92Jo3r2
-	 BSy+sXR4EHKRNkuh/kF4fi5SbKBIjQYWKijcztCsFu54VO13dZF7tmETWAvK5kiEe8
-	 MEeRYmIccssfQ8DUOud1b3VG/KymjQ4TxuxgKydo=
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Date: Thu, 19 Nov 2026 10:56:19 +0000
-Subject: [PATCH v3 2/2] kselftest/arm64: Add test for atomic futex uaccess
- with POE
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MIHzLV8A
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA28D1F000C4;
+	Thu, 19 Nov 2026 10:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795085896;
+	bh=+o0bQUd8q0A+WRUXZxAmN8P7csYU6Eu6m9jj0vuUv3w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=MIHzLV8As6nXxtqY6me3mqzdXMBaRaBOWQfGJwhvK3jossC2GDG2Ra6MFKWW4G+PA
+	 FSE2j3Y2nrgYKsoZRqeaQlmmR8HldEkKQX/ibJlGfPtyxwuDyYtL+xn/5wmzzz9v7l
+	 5FGWgzmXPkWsCVt8Us7AHZKoM27j4CijTLiDv3A5kZZVUgHGXiPdfaNJLoY6UIIyb3
+	 5zUQWEG9CGNQ5rsRZ+yKBwxyMv1MVd/HvFPW6rmUc8+i1/G3rENaOYczrKWZpdGWCp
+	 PdEYWVcB7FsPeI2kwfT60Qzmw+M8L3OMHvVFc0+jgQvHEL/6alUpmO0kf3kFqCnvDg
+	 nyLPMZIojBYvw==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: chenhuacai@kernel.org,  ardb@kernel.org,  pratyush@kernel.org,
+  rppt@kernel.org,  pasha.tatashin@soleen.com,  shuah@kernel.org,
+  ilias.apalodimas@linaro.org,  akpm@linux-foundation.org,
+  baoquan.he@linux.dev,  ruirui.yang@linux.dev,  guodongtai@kylinos.cn,
+  kernel@xen0n.name,  graf@amazon.com,  liukexin@kylinos.cn,
+  loongarch@lists.linux.dev,  linux-kernel@vger.kernel.org,
+  kexec@lists.infradead.org,  linux-mm@kvack.org,
+  linux-kselftest@vger.kernel.org,  linux-efi@vger.kernel.org
+Subject: Re: [PATCH v6 1/8] efi: Pass KHO state to the next kernel in a
+ configuration table
+In-Reply-To: <20261119082252.9120-1-dongtai.guo@linux.dev> (George Guo's
+	message of "Thu, 19 Nov 2026 17:22:52 +0900")
+References: <CAAhV-H5Vse=pKC3Beqhqxa7fqadiGVNqkSy_06HZ3Luw2Pmj5Q@mail.gmail.com>
+	<20261119082252.9120-1-dongtai.guo@linux.dev>
+Date: Thu, 19 Nov 2026 10:58:11 +0000
+Message-ID: <2vxzecch3x6k.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,160 +67,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261119-poe_futex-v3-2-0baeb0aee0d9@arm.com>
-References: <20261119-poe_futex-v3-0-0baeb0aee0d9@arm.com>
-In-Reply-To: <20261119-poe_futex-v3-0-0baeb0aee0d9@arm.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Joey Gouly <joey.gouly@arm.com>, 
- Linu Cherian <linu.cherian@arm.com>, Mark Brown <broonie@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>, 
- Yeoreum Yun <yeoreum.yun@arm.com>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795085784; l=4303;
- i=kevin.brodsky@arm.com; s=20260427; h=from:subject:message-id;
- bh=xNlTLs9cWFXvnfMSaMiLNCkTmQLfRvsHS+nhbY131uw=;
- b=XQ8aUEdxlmqgGKIDrBG4kTQAb6t014FYWiKzGv18UpCYblROeuzoE1BsWT0fLYIFTUgchpMDt
- xiYrdm2I1C2BnM3n36tpfRdYG/eEQUksbzBPzr3+X3zU1swX+vmZQd+
-X-Developer-Key: i=kevin.brodsky@arm.com; a=ed25519;
- pk=N2QG+eJKrvkNovwhhwJhnJ4+ScVfsGCHldmqLfcMTFs=
+Content-Type: text/plain
 
-Add a new test to ensure that atomic futex uaccess succeeds on
-memory mapped with a non-default POIndex/pkey.
+On Thu, Nov 19 2026, George Guo wrote:
 
-In the absence of FEAT_LSUI, atomic futex uaccess operations such as
-those triggered by FUTEX_WAKE_OP use privileged atomic load/store
-instructions and thus cannot have user permission overlays (POR_EL0)
-applied. In case the kernel enabled POE at EL1, it is worth
-checking that kernel overlays (POR_EL1) are not applied to these
-accesses, as that would fail for non-zero pkeys.
+> Hi Huacai, Ard, Pratyush,
+>
+> On Wed, Nov 04 2026, Huacai Chen wrote:
+>> I prefer to keep it in LoongArch until a second architecture, and I
+>> think Ard is the same. But this is not a strong objection to Pratyush.
+>
+> Kexin Liu and I have tried x86 as the second user, to see whether the
+> common table holds up. It needed only small changes:
+>
+> - The x86 EFI stub installs the table, as the LoongArch stub does.
+>   install_kho_table() moves from efi-stub.c to efi-stub-helper.c so
+>   that the x86 stub can call it.
+>
+> - kexec_file_load() skips the SETUP_KEXEC_KHO record when the table
+>   exists and the next kernel will get efi_info. Otherwise, for example
+>   on a legacy BIOS boot or with noefi, it falls back to setup_data.
 
-Note that if such misconfiguration occurs, futex_wake_op() may get
-stuck in an infinite loop because futex_atomic_op_inuser() will fail
-but fault_in_user_writeable() will still report success.
+Do we even care about non-EFI boot? I'd say ignore that for now until
+someone comes with a real use case for KHO on such systems.
 
-Reviewed-by: Yeoreum Yun <yeoreum.yun@arm.com>
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- tools/testing/selftests/arm64/Makefile        |  2 +-
- tools/testing/selftests/arm64/poe/.gitignore  |  2 +
- tools/testing/selftests/arm64/poe/Makefile    |  6 +++
- tools/testing/selftests/arm64/poe/poe_futex.c | 70 +++++++++++++++++++++++++++
- 4 files changed, 79 insertions(+), 1 deletion(-)
+>
+> - When there is no SETUP_KEXEC_KHO record, the decompressor's KASLR
+>   code looks up the KHO bootmem areas in the table, so the kernel is
+>   not decompressed onto preserved memory.
+>
+> The table layout did not change. The only change to the common code is
+> that efi_kho_table_found() is no longer __init, since x86 calls it at
+> kexec load time.
+>
+> Tested in QEMU on x86_64. With OVMF, the KHO vmtest and
+> luo_kexec_simple pass, and the second kernel finds the KHO state
+> through the table. With SeaBIOS, the KHO vmtest passes through
+> setup_data.
+>
+> So I would like to keep the table common in v7. Would you prefer the
+> x86 patches in the same series, so that the generic code comes with a
+> second user, or as a separate series on top?
 
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-index e456f3b62fa1..bad5c3b33dce 100644
---- a/tools/testing/selftests/arm64/Makefile
-+++ b/tools/testing/selftests/arm64/Makefile
-@@ -4,7 +4,7 @@
- ARCH ?= $(shell uname -m 2>/dev/null || echo not)
- 
- ifneq (,$(filter $(ARCH),aarch64 arm64))
--ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi gcs
-+ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi gcs poe
- else
- ARM64_SUBTARGETS :=
- endif
-diff --git a/tools/testing/selftests/arm64/poe/.gitignore b/tools/testing/selftests/arm64/poe/.gitignore
-new file mode 100644
-index 000000000000..0dce4a3aa38b
---- /dev/null
-+++ b/tools/testing/selftests/arm64/poe/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+poe_futex
-diff --git a/tools/testing/selftests/arm64/poe/Makefile b/tools/testing/selftests/arm64/poe/Makefile
-new file mode 100644
-index 000000000000..2af2bbf3f6d3
---- /dev/null
-+++ b/tools/testing/selftests/arm64/poe/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+TEST_GEN_PROGS := poe_futex
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/poe/poe_futex.c b/tools/testing/selftests/arm64/poe/poe_futex.c
-new file mode 100644
-index 000000000000..65c5be8fb9ec
---- /dev/null
-+++ b/tools/testing/selftests/arm64/poe/poe_futex.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/futex.h>
-+#include <sys/syscall.h>
-+
-+#include "kselftest_harness.h"
-+
-+static int sys_pkey_alloc(unsigned long flags, unsigned long init_val)
-+{
-+	return syscall(__NR_pkey_alloc, flags, init_val);
-+}
-+
-+static int sys_pkey_mprotect(void *ptr, size_t size, int prot, int pkey)
-+{
-+	return syscall(__NR_pkey_mprotect, ptr, size, prot, pkey);
-+}
-+
-+static int sys_pkey_free(int pkey)
-+{
-+	return syscall(__NR_pkey_free, pkey);
-+}
-+
-+static int futex_wake_op(uint32_t *uaddr, uint32_t val, uint32_t val2,
-+			 uint32_t *uaddr2, uint32_t val3)
-+{
-+	return syscall(SYS_futex, uaddr, FUTEX_WAKE_OP, val, val2,
-+		       uaddr2, val3);
-+}
-+
-+/*
-+ * Trigger some atomic uaccess on a page mapped with a non-default pkey.
-+ *
-+ * This ensures that such access is not mistakenly checked against the
-+ * kernel's POR_EL1 register.
-+ */
-+TEST(poe_futex)
-+{
-+	int ret, pkey;
-+	void *ptr;
-+	size_t size = getpagesize();
-+
-+	pkey = sys_pkey_alloc(0, 0);
-+
-+	if (pkey == -1 && errno == ENOSPC)
-+		SKIP(return, "pkeys are not supported");
-+
-+	ASSERT_GT(pkey, 0);
-+
-+	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	ret = sys_pkey_mprotect(ptr, size, PROT_READ | PROT_WRITE, pkey);
-+	ASSERT_EQ(ret, 0);
-+
-+	/*
-+	 * There is no one to wake up so this syscall boils down to *(ptr+4) = 0
-+	 * (arch_futex_atomic_op_inuser() called with FUTEX_OP_SET and op_arg=0).
-+	 */
-+	ret = futex_wake_op(ptr, 1, 1, ptr + sizeof(uint32_t), 0);
-+	ASSERT_EQ(ret, 0);
-+
-+	sys_pkey_free(pkey);
-+	munmap(ptr, size);
-+}
-+
-+TEST_HARNESS_MAIN
+This should be a follow up series. Don't get your series get caught up
+in x86 changes.
+
+>
+> Pratyush, does this match what you had in mind for x86?
+
+Sounds good to me. You will still need to chase Ard for an ACK on the
+generic EFI table though.
 
 -- 
-2.56.0
-
+Regards,
+Pratyush Yadav
