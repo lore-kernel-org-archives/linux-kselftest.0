@@ -1,52 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.122
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795077760;
-	b=uaT4ENjbHnHiGIR/9YOsRzmiTaIwx8tLyh5k/SS/P9nkO+AqOMxOUqBZOQ06MRLCl2c2
-	 7VtDs5PwzNhAcd01zntkGrUKk9Ye9BPvJrV3o9HmoLOOl/lEIeqRSPTp1HLAYVaMgD4iF
-	 Nzr2R/TvrWwXW25/A63x82dutjmibqZ6YhhnkB79d0+s9VGl+UWRe4SneI95Wzgvi7+Ib
-	 a//nfKJz08uvirW+h6jkL6q4xQcl87nNs7w4HzSkCqjCkPJJVM+BniQtXTMe7YiF3fl1B
-	 xHmxtJT85x/8mLpNjDxzlP2c+l8ghO2fGCZZacY7LznSRfVZOXuOXrnBaagHSykcxgw==
+	t=1795078086;
+	b=FZHJfcQ0Pbm75H8rOuM5bK1tfE8BVvWIN8igoBmEsiDbv3SdUcc76WwRmdeSDOEDUBSW
+	 QAzL3x6ntDwcrwZ/MKQLscvosQPZhc1gVlMeNTjfj4I46HKtBycplCCj4Nc8E+9fvksjC
+	 BsGxdFFIFmCO2hnFH5GQvjsZOJZP4YNa5xi3rxncPMkLxW7zhCvn0UA5Byoz2r1m5GrAM
+	 TufMWy/375TFgwHXfrig2tOCsBV7YTON543cuob69ThQp1ckq5fkLMt1Eo6Dhh9cE54vD
+	 xCfFoMVg9wAIf+ls1pYhhTyqSXQA6BTvhc/utkHlJqzt9wFCO7Q2Hzog+kn1fcQ4t8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795077760;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795078086;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=iWiJbFtVqVddp2vrnL7/ZGl130GuxHSvBxEu5wOIpWo=;
-	b=bklhq1ivG/+6p1O8upMtiTd7ZUgFnGc79LiQZ9A7zQp+AO2aIr0VjkVAeh2geDOkC7l6
-	 5ZUuNBqFxnPhnFdtndiKjCiYTxCcKI5rgeYQgfxUDBmJHK1QLjRnvzvNRdXhIqAI9Fqhe
-	 /XUnIZe8dOcPO/vsoW6xwGBtl546zFxI1X323SshUMAESmihTnWL/OhQZNWDHhk2JUCu9
-	 esVckn52SMaHJY71TTBYAl2LYcVNA9X+Ew86P14dakA5HzvXcD/9yGzNrt2n6kMVyMarb
-	 zctDFOtPGBTyw5Erm3lj0RQ/fb4t2eiq6wESKFPZaUqObonwZTMB1wzXVnQDreOO/aw==
+	bh=H1bhQLtIfRhu5KAqAjgC9nCVZmy6r3NXMjolwdRpzaA=;
+	b=eg8X6kzcCW2OW4iEsNRsLZRWbEoB/qWWCrYTt0wDbYJOW4Uf1OkDGsSeBqbnPKsQPwha
+	 YUgSLcUuhM1QeNQxJJl2PQEd/ntuKb4qzmFGtJCsDMaC/l5J9PkwxIhdm5vXoObR6IwD/
+	 WGxQ2O5gi3RgCBLMXTzVEnXvhTAGCdBue4/0ebhmOoqKIe+PTXw4L28MNCMuJ2Q9GE2Gw
+	 HYau0afnjM4MoYUzl1lixzSLZ52IHO4zv0eFlYLXISsjpkJDzZWhVld2KxOCWF0zc+J3e
+	 nsHhYL75FscWf39nSgq4Ufv3+lckvRBYAZxLMxxC533lB67wBkQduk7jVxyj+x1Usog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q8pJCaj3;
-	arc=none smtp.remote-ip=91.218.175.43
-Received: from mta0.migadu.com (out-43.mta0.migadu.com [91.218.175.43])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X5uQIsei;
+	arc=none smtp.remote-ip=95.215.58.122
+Received: from mta1.migadu.com (out-122.mta1.migadu.com [95.215.58.122])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349BA606A324
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 08:42:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 349BA606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AC2606A324
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 08:48:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46AC2606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q8pJCaj3
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X5uQIsei
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vL/J4zG6bd1pCk4S7uhM04WqGErVOFa1v5NdfiiZhWs=;
+DKIM-Signature: a=rsa-sha256; bh=Y9EVLqGCLJb6bEWtsztP5YW7dfjn2JrAKJzkvnEfwzE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795077756; v=1; x=1795682556;
- b=q8pJCaj3gX6e+McaWww+F+gOZ7PqhkSpMuCMBqUbaupfpH6mxRZl69UsuvBvL4zwofdGOrSs
- Jvi4C12rOZ7EEWtUlmgSlR7LZt2qIQRl2RCQ34rqnibEtfTixwbrPmHOtwTfIw/O8Y8HfcDYFCU
- 1tN7udbbGN9yIKHWl1y1wRTo=
+ t=1795078083; v=1; x=1795682883;
+ b=X5uQIseiNdtIy5kUc5kkUN0fHVDdotCpin2O6LAb54zpbTe7M5FhgnjCAX5I6iMf5sVh8Akh
+ SN1nOFFeCGfrpDamjcrNbFOWa71kQECZG5eiq0BoXvc0IpGMQ3/4BVf1T7Zz0ZtCh2OxMeKeOCH
+ t63HNmA4ww8XIGjUpfRPpY0E=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 42f76bb1e926322b;
-	Thu, 19 Nov 2026 08:42:35 +0000
-X-Mizu-Trace-ID: 42f76bb1e926322b
+Received: by mta10.migadu.com with ESMTPS id d0654b647b7ec1a7;
+	Thu, 19 Nov 2026 08:48:03 +0000
+X-Mizu-Trace-ID: d0654b647b7ec1a7
 X-Migadu-Flow: FLOW_OUT
-Date: Thu, 19 Nov 2026 16:42:20 +0800
+Date: Thu, 19 Nov 2026 16:47:50 +0800
 From: Hangbin Liu <hangbin.liu@linux.dev>
 To: Andrea Mayer <andrea.mayer@uniroma2.it>
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -63,11 +63,11 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Justin Iurman <justin.iurman@gmail.com>,
 	Stefano Salsano <stefano.salsano@uniroma2.it>,
 	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net v2 4/6] seg6: discard CHECKSUM_COMPLETE after the
- End.BPF program
-Message-ID: <av62bJ3xNkvqD-gD@fedora>
+Subject: Re: [PATCH net v2 5/6] seg6: account for the MAC header in skb
+ checksum on L2 encapsulation
+Message-ID: <av63tgNtC6__wjWS@fedora>
 References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
- <20261118150251.65-5-andrea.mayer@uniroma2.it>
+ <20261118150251.65-6-andrea.mayer@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,55 +79,51 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261118150251.65-5-andrea.mayer@uniroma2.it>
+In-Reply-To: <20261118150251.65-6-andrea.mayer@uniroma2.it>
 
-On Wed, Nov 18, 2026 at 04:02:49PM +0100, Andrea Mayer wrote:
-> The End.BPF program can change the packet through the seg6 BPF helpers,
-> for instance the SRH Tag with bpf_lwt_seg6_store_bytes(). After the
-> program, seg6_bpf_has_valid_srh() can also rewrite the SRH Hdr Ext Len.
+On Wed, Nov 18, 2026 at 04:02:50PM +0100, Andrea Mayer wrote:
+> In L2ENCAP and L2ENCAP_RED mode, seg6_do_srh() puts the MAC header back
+> in front of the frame with skb_push(), without adding it to skb->csum.
+> The encapsulation then calls skb_postpush_rcsum() only for the outer
+> headers. With CHECKSUM_COMPLETE the MAC header is missing from
+> skb->csum, which no longer covers the whole packet as required.
 > 
-> With CHECKSUM_COMPLETE, the program does not always update skb->csum for
-> the bytes it writes, and seg6_bpf_has_valid_srh() does not either. If the
-> packet is then delivered on the same node and skb->csum was computed in
-> software, for instance by conntrack, UDP can drop the packet as a checksum
-> error. With skb->csum computed by the device, TCP can instead log a
-> "hw csum failure", as if the device had computed a wrong skb->csum.
+> For a forwarded packet, ip6_forward() sets ip_summed to CHECKSUM_NONE with
+> skb_forward_csum(), and End.DX2 does the same before sending the frame.
+> When the packet is delivered on the same node, a raw socket with
+> IPV6_CHECKSUM still reads skb->csum. With skb->csum computed by the device,
+> the kernel can then log a "hw csum failure", as if the device had computed
+> a wrong skb->csum.
 > 
-> Discard CHECKSUM_COMPLETE with skb_checksum_complete_unset() after the
-> program, since input_action_end_bpf() does not know which bytes the program
-> changed. The checksum is then verified in software.
+> Use skb_push_rcsum(), which also calls skb_postpush_rcsum() for the MAC
+> header.
 > 
-> Found by manual code inspection and reproduced in a VM without kernel
-> changes or error injection: with skb->csum computed by a tc ct action, an
-> End.BPF program that writes the SRH Tag, followed by End.B6.Encaps and a
-> local End.DT6 SID, makes UDP drop the packet. With this patch, the packet
-> is delivered. Also tested against the srv6 selftests, the lwt_seg6local
-> BPF selftest, and with a ConnectX-6 Lx NIC (mlx5) that provides
-> CHECKSUM_COMPLETE.
+> Found by manual code inspection of the skb->csum updates in the SRv6 code,
+> and observed in a VM without kernel changes or error injection: with
+> skb->csum computed by a tc ct action, a BPF tracing program on
+> ip6_forward() shows skb->csum missing the MAC header. With this patch,
+> skb->csum covers it. Also tested against the srv6 selftests, and with a
+> ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
 > 
-> Fixes: 004d4b274e2a ("ipv6: sr: Add seg6local action End.BPF")
+> Fixes: 38ee7f2d4756 ("ipv6: sr: add support for encapsulation of L2 frames")
 > Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 > ---
->  net/ipv6/seg6_local.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  net/ipv6/seg6_iptunnel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 56c6be841e53..f7e1bbc6e9f9 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -1661,6 +1661,12 @@ static int input_action_end_bpf(struct sk_buff *skb,
->  		goto drop;
->  	local_unlock_nested_bh(&seg6_bpf_srh_states.bh_lock);
+> diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+> index 3bc47c5614ff..82b3c2af03f7 100644
+> --- a/net/ipv6/seg6_iptunnel.c
+> +++ b/net/ipv6/seg6_iptunnel.c
+> @@ -472,7 +472,7 @@ static int seg6_do_srh(struct sk_buff *skb, struct dst_entry *cache_dst)
+>  			return err;
 >  
-> +	/* The program may have changed the packet and seg6_bpf_has_valid_srh()
-> +	 * may have rewritten the SRH Hdr Ext Len.
-> +	 * skb->csum may then no longer be the checksum of the full packet.
-> +	 */
-> +	skb_checksum_complete_unset(skb);
-> +
->  	if (ret != BPF_REDIRECT)
->  		seg6_lookup_nexthop(skb, NULL, 0);
+>  		skb_mac_header_rebuild(skb);
+> -		skb_push(skb, skb->mac_len);
+> +		skb_push_rcsum(skb, skb->mac_len);
 >  
+>  		if (tinfo->mode == SEG6_IPTUN_MODE_L2ENCAP)
+>  			err = __seg6_do_srh_encap(skb, tinfo->srh,
 > -- 
 > 2.43.0
 > 
