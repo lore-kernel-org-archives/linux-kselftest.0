@@ -1,84 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795048233;
-	b=BhphWq63jwLuhgys9rU9D+aP9wT3ZLy8MYzBIG9O25JyOMGQlCaZPgzZ+P5HgMKV52Zg
-	 bApdFSPuV/7CPOE7dFfq6ZkucbNV++t4N0AKyRxKXQTJ0b+HA2ZR2ylv9rtZwd1kRJDMP
-	 sZIl79cTb1/ZGmJTMFuKN9iqBRinnwgrCzetXO+q0z+Cx8VGg2LWnC0uS8Xs4WoOHvjoS
-	 TnDBhd7m7g9zYsWil0VVzCX/DazChHX2PjgH3eaLqsZVluTMTgfFlfIp8TwaI6HbLZofm
-	 qYcLdfuUpTLQxIuUNxYM0iuW4Ussg1HZYNHnXGvw047jwNfaolE+KEtP6EGSWjM+bvw==
+	t=1795048243;
+	b=DFMH9UEpFluRf66Xw/VVPXEk5UdzpirEjVQhu6ZtGTJqAs53COrJ1KDgYBoqgJ1AP6pH
+	 QHzAJ5EmQN0OtWLtVbmol1XZV/JVBv9mrs+Q3BsR1X6S8h/E1+Kn3pGjdTrgQQUKziZ4W
+	 46S3Z5RwE82YTjpq8PduUtBruX/nVsSniuRif9K6A5cmW6T/w6ZTdkkSxFBVngNS3CUXq
+	 1Kdhkskkbp7TLpqDJtEDdT95Khy830RDUzjUATkebOp7ni7OSDHijRRrkmtmkdVLq3nyl
+	 5LljwVCryUJpKDTUljSkLlmOkhHpjbTELfDuYhGZAf0YYu9B3CWYcp8twWcicsLlb6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795048233;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795048243;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=tY6fRiRHZ4qZ5vYbTo0aHqI1fHONsrHB61AnWgkQo9U=;
-	b=u4vK33A52DHYZnlkVD8O6eTgAksrS4RCYhq4s2/ylpY1fPk966MU0oA0Vk+uAuF1Hq0S
-	 B+rhDYnK7gvK1xMg3uOTkZv78rsaQO0UFMPv3aNovBDfeiUeEFEIAqyG7mePXm4dsx5i8
-	 LTt3iPXYwgRqE3ID7H5jkc0z3AgOg0tDXFlIVCR6kPXkqYQ2AjP9agf15/P9tQDPLfQA3
-	 JMfBMUJf3E4PNCqtNHfLeYLoroshWyr9Net1vSEGzmBnKT/+V4gmKeyjjyqLapnzyBYUU
-	 0CmHM3HnIGV1XwoQv2dewpw4+Oo4aLcJuw7MW/UDuWqOI9KQNIgkqeV8IT0OYm93p/w==
+	bh=ZiPMStJELJVEfo481tju4B7weEAXXX4fx2HGMzLvMQ8=;
+	b=jcuK/es4F5v3/gfN6NUYY5pY9IPL3fnooBZOwUvC8tZA8gRrQrQUwTtaO76jIYKv4KTg
+	 sg1sw0HouK4YNRVtxlGMx5/F4wpwjZwmPVN2vVPs/ht6QwGpwHVcJ8g3PEsHnZDF9/dLN
+	 xScXFAqowz5bHtg8mAvvfavCnhMvL+PrUFVdjDde4MhQJjs9a4U6TTAjd8mVZZpB3fVbn
+	 zpZ07VyoSEheqkhOOPLBi0alpPCUnklwxs0tIQmDjNgl5Ij9vPLgQT9liKWxBltQ9d6Kx
+	 Ys2IIvwn5emj5tNGa7xiUKO6EuhrH1TuwAhgDM3uGe3FMpAZbGcR9vJXaP1O9ogalsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PRNwZbbp;
-	arc=none smtp.remote-ip=209.85.218.41
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DA7ly8Qk;
+	arc=none smtp.remote-ip=209.85.208.43
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C36660A2621
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 00:30:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C36660A2621
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1ADF606A32F
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 00:30:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1ADF606A32F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PRNwZbbp
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c504707acfeso36736266b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:30:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DA7ly8Qk
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b89399d92cso232231a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:30:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795048232; x=1795653032; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795048241; x=1795653041; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tY6fRiRHZ4qZ5vYbTo0aHqI1fHONsrHB61AnWgkQo9U=;
-        b=PRNwZbbpu1cxDps4lx1UK660t5mxgKF3mzzZubJ0SgZGhmNYtnHeBDIQK0hVqt6qs0
-         1qzPOjOtvYhmWNnW1MrRjPaBgOicIxQW7ZaCLSAxktNNeZGws5e9jDQ3iQkqI/qxXto9
-         JGct10nK5IE1P0lsAHlZ+iX24wYAY8s+K+d0jEBa9K0/R4A9MOJQFqH9ZIbj4GRy+rDJ
-         rXohZgzARca5GUzOWkjtOE6N+z7JrIQjHoAbO2xd0JxxNhvMRK/LPYAZ7GfXvfkvJEt4
-         +fhXNAS7vdhZlHrDvrbpkb2ndMD7fSl5EQx75kNhbXfrTx1SkXDKtXAii9K7l2iWP1C3
-         E3Og==
+        bh=ZiPMStJELJVEfo481tju4B7weEAXXX4fx2HGMzLvMQ8=;
+        b=DA7ly8QklzTVI7vPByhXLORbOFKqcXC58tufHLEdaxrOBAgryP/bxMy8mJSB2CBH/8
+         ado34FlA3guZ02gcBVrHlUq0WnZCAr9MTeyv9c//VuYh0Rjht8q2cqzQseKZ2UakxqDC
+         py2sLEVftQnh7sMRtlOe+3Q33a+VTzYGzFL73vTTAt2BkjaS9KZeU2O2EHm8+I3a4SK2
+         AuulkU7iy32PXxQbvH8aJfbM8R+Yy6Twtcd6eoXg8JYDXAqZE5K6CUPSbF8vkX5rZu5Y
+         af9FdJpKLabOZkxQrTEds7KXKdFETs6vAz7Y/OoDQUHbEtMi7TF9djIVNa8O+k0K4x1a
+         V2+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795048232; x=1795653032;
+        d=1e100.net; s=20260707; t=1795048241; x=1795653041;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tY6fRiRHZ4qZ5vYbTo0aHqI1fHONsrHB61AnWgkQo9U=;
-        b=rwG/AwjmSwiB/bORUTsyWMdqHLbuWAipnLa7qVykEgDlxc9V1+5DoOp1ycvqR9gGZL
-         VbWZ0ZQAxNzywxg/+xjT8nceGZB0puoqjXaaPN9GbcsOiWax+xHZw41HbheMRd5TSvu+
-         jjixVwnhHl5sG+l73LOQnoYCIrIlR6zmOWjy3CV0FR4DHGQuI+w/NUKIXnZPvY2r2/pH
-         cQOUq8lkjmIsy7LxcMmjk03YhXvtypHYzqG7F1y75dEmlKnzD3JNlVxBaPtDsjKZb5sI
-         yhMKTD1rWSpZ5oKJ8/K6BMAG6GW+UqJ3vl3z0dMOgTZ4Zt2a16jHmjGnZFA5TtdGrWEA
-         4XMQ==
-X-Forwarded-Encrypted: i=1; AL+hErETiGlfEx4HTz7McowwnDnuI12uXO6uHcnfjY2Vf4ZvGqxudllk5AKjklT/6ULxyQmWq2cTUfxpPtBeHJdhvn0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8gGs44X53r9Tg5B3V8bn7ERXyml3GGMD1R8rnJiS7wcV4D7O7k
-	n77t33T4xqE+TwDu4cb8oiS6+Tu/ZpBDYyLGbF/Y9OM5zBuq1JyI4adS
-X-Gm-Gg: AYBFou0a41u6P3Q+yh6r1LhRPOBzyaVw/aaAoAW2uRvnunbLdXdGB2rxrEjRa9xGRdG
-	0C0gloW+mO/ei7DCaTATg8HDztt6KZQluOlwx2ovPRQSad9GSo5x1flI+LcCrQcXe13yKsHmwwQ
-	w5mRZD2XNQVdYcxUA7yvp69ljSq8HiCHzAFNwEnEjiokTCrYiOKSSuEbvKJ6ByzuEhP8mxtKU5i
-	oQWRH35J16i/vjGPjOC3Kj0bcgA7kOsLnSUjxvk0f98UinMk1gJ2H3PgCa6sMqHM/TQs2r4zIQB
-	QE9Z4AykTlocAJuLTm8yJS18KWCSvkgRZ6EuhRcbTkn5euWo7ADc3H01H17zHgZ6wK1ZNz/HlKd
-	EJz9OOCG7ujeYXGne61J63HRZrXLrhlymCiA0s0nRktAeVTdr1Wk2IrfvrfcRg6jGr5TOkhnie3
-	ddbF4Tl3X1H76ilQYyef4j+XKXm4j0qnyqi5SN/C3iTu0RITTJw/0wtNo+cnQmOSdSgD9EAEh0i
-	YofZs11HtRIwmG80XNmhnSEyhH9gimYKov8NiSQ/sfTf7r9I0CZ7kTErMW4VGoOOyqvNnxOAGXm
-	eZpdDbybrcWo0Mq0QPOcwA13hQeLFHIbflxWfqDNz0uz4/VrRwPTWEiKv6bHMaFYQ0MVPEINSQ=
-	=
-X-Received: by 2002:a05:6402:ca02:b0:6b8:8146:a10f with SMTP id 4fb4d7f45d1cf-6b887e52710mr3301122a12.2.1795048231599;
-        Wed, 18 Nov 2026 16:30:31 -0800 (PST)
+        bh=ZiPMStJELJVEfo481tju4B7weEAXXX4fx2HGMzLvMQ8=;
+        b=oxTSuK4jHtBNL7xNmkb6PYR2wNeZ+Gjap+CmmsdFu3T7Eq1iimZQON1VETS8OnPk+E
+         yCwyYalVL0KeCxA9ek1Kh5zfmN9frLpSbIy4Su9cxaJeBk6CQ/jeTgv/2HtJYLgo4Vkc
+         zNoix4EKdTyp5h5srub41o3Y16U4wE9sNT+KLJBBGGYfbwxFACMV8xGeWqiO6KRzjO8E
+         Kk4xtq39wKDH2wACFyJiY8GCkJxFBCNquot5ZuXXPKRlBKV9ciQam2r8kkzh5ufoHV0F
+         oaesrqOhGb8yJOfjo81l/lvzIGCItjeXHvXS4j9dmcrG4roZdRq35xuWr0FK3tRKT0Mt
+         ryjg==
+X-Forwarded-Encrypted: i=1; AL+hErHe8w9gz/jzwMO1dN5TTFhs9iup/o76RXXSf1k2GqPc+cJNVWwVQopJOw2XkBGfSrVWyGNvFdjgyinq2SmxVWg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/t2HdTTLXue2AJQH3ZebOIP9ll1FCPasFU9pV1ewCXx4zC78GW
+	sSXOTF9tKuZTMN8Th55Do+h7IcVap3c2C2lTN7KI8tZmf58YkUhaF514
+X-Gm-Gg: AYBFou25qcJxzmgtL5KwAqioA+vfzmX0H0qvWWPsnpWoy08PxWAZtJpR8u3XEYKTHor
+	V5PaBHQdqCPJcS0aE28MVxKeT+4mAHMoLt37CLWjbE8dDN/SKqI0Ctlz7pC9YGNXrmGosPgAFPU
+	NYdSO+NZ2duWkUYYQny//5zDAcGA/DJQrfiD4JaDh9hVRisHGzotFjHqsYMvABapAAFvGJCo7ij
+	dJnBRzkZLiVP6qJfQfWzeAO1xxDYOMY6WGedZqJ3fqGHGFRBEkAyoZAsp1OhNs2ybx4i6ZJ7QHy
+	RHmmit0ocA2oG+QYj/uyKMX1GjaYP6JK7u52QzPu5Y01R9uEfqSMpFHeBakliwy9wbor8ZOv1uM
+	/L5MmC7BCcQlcEf8PACgoWcyZL2EusdJMOsbdWB66ToppPHQtGQnzWW3FQqgu1yFRgcFh+cipcD
+	mSYJ+F2yu171BRXUGgq50/swBymNap/pY+qB4EvVb3O17aA2wKRBAqBdiKbvAm0cHaPAhRQDOsQ
+	dkiV0fUfyaDJAPVERiED4W4121Dul8DZcCp21L57MR8ggEcDZgElFH0HLSp6uxH4hiYvkDrFMTn
+	+hEjPKHL8yG6bYMOCiSePm2k5xc52YTGv28F5jsyRk9KMEW/MiWi
+X-Received: by 2002:a05:6402:3137:b0:6b7:aca7:4cee with SMTP id 4fb4d7f45d1cf-6b887eac9d2mr3678935a12.3.1795048241161;
+        Wed, 18 Nov 2026 16:30:41 -0800 (PST)
 Received: from Nuel20.localdomain ([105.112.208.161])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b88a001123sm1729744a12.21.2026.11.18.16.30.27
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b88a001123sm1729744a12.21.2026.11.18.16.30.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2026 16:30:31 -0800 (PST)
+        Wed, 18 Nov 2026 16:30:40 -0800 (PST)
 From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
 To: tianyi@cloudflare.com,
 	hangbin.liu@linux.dev
@@ -99,9 +98,9 @@ Cc: kuba@kernel.org,
 	sdf@fomichev.me,
 	skhan@linuxfoundation.org,
 	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Subject: [PATCH net v4 2/3] selftests: net: veth: propagate bad-settings check failures to exit status
-Date: Thu, 19 Nov 2026 01:30:01 +0100
-Message-ID: <20261119003003.40482-3-emmaonana18@gmail.com>
+Subject: [PATCH] selftests: net: veth: derive invalid-tx test value from kernel max
+Date: Thu, 19 Nov 2026 01:30:02 +0100
+Message-ID: <20261119003003.40482-4-emmaonana18@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261119003003.40482-1-emmaonana18@gmail.com>
 References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
@@ -117,71 +116,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Three more checks in veth.sh print "fail - set operation successful
-?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
-"bad setting: reducing RX nr below peer TX with XDP set", and "bad
-setting: increasing peer TX nr above RX with XDP set". A kernel that
-wrongly accepts any of these invalid operations would be reported yet
-the script would still exit 0. Wrap each fail branch so it sets ret=1.
+The "setting invalid channels nr" check treats CPUS+1 (CPUS=`nproc`)
+as an invalid tx count, but the kernel allows up to max_tx, for veth
+that is num_possible_cpus(). On hosts where nproc < num_possible_cpus
+(taskset/cpuset confinement, QEMU maxcpus slots, hotplug firmware),
+the ethtool -L call succeeds and chk_channels() reports a false
+failure. With failure propagation fixed, this fails the whole script.
+
+Query the kernel-reported maximum with ethtool -l (the same parsing
+idiom chk_channels() uses, first match) and attempt max+1, which is
+invalid on every host.
 
 Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
-Reported-by: Tianyi Gao <tianyi@cloudflare.com>
-Link: https://lore.kernel.org/all/CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com/
 Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
 ---
- tools/testing/selftests/net/veth.sh | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+ tools/testing/selftests/net/veth.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 5c1dbe1516bb4..2a37d21f97da5 100755
+index 2a37d21f97da5..6eeb123aaf885 100755
 --- a/tools/testing/selftests/net/veth.sh
 +++ b/tools/testing/selftests/net/veth.sh
-@@ -472,9 +472,13 @@ if [ $CPUS -gt 1 ]; then
- 	ip netns exec $NS_DST ethtool -L veth$DST rx 1 tx 2 2>/dev/null
- 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
- 	printf "%-60s" "bad setting: XDP with RX nr less than TX"
--	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
--		section xdp 2>/dev/null &&\
--		echo "fail - set operation successful ?!?" || echo " ok "
-+	if ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
-+		section xdp 2>/dev/null; then
-+		echo "fail - set operation successful ?!?"
-+		ret=1
-+	else
-+		echo " ok "
-+	fi
+@@ -464,7 +464,9 @@ fi
+ ip netns exec $NS_DST ethtool -L veth$DST combined 2 2>/dev/null
+ chk_channels "bad setting: combined channels" $DST $CUR_RX $CUR_TX
  
- 	# the following tests will run with multiple channels active
- 	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
-@@ -482,16 +486,24 @@ if [ $CPUS -gt 1 ]; then
- 	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
- 		section xdp 2>/dev/null
- 	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
--	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
--		echo "fail - set operation successful ?!?" || echo " ok "
-+	if ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null; then
-+		echo "fail - set operation successful ?!?"
-+		ret=1
-+	else
-+		echo " ok "
-+	fi
- 	CUR_RX=2
- 	CUR_TX=2
- fi
+-ip netns exec $NS_DST ethtool -L veth$DST tx $((CPUS + 1)) 2>/dev/null
++MAX_TX=`ip netns exec $NS_DST ethtool -l veth$DST |\
++	grep TX: | head -n 1 | awk '{print $2}'`
++ip netns exec $NS_DST ethtool -L veth$DST tx $((MAX_TX + 1)) 2>/dev/null
+ chk_channels "setting invalid channels nr" $DST $CUR_RX $CUR_TX
  
- if [ $CPUS -gt 2 ]; then
- 	printf "%-60s" "bad setting: increasing peer TX nr above RX with XDP set"
--	ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null &&\
--		echo "fail - set operation successful ?!?" || echo " ok "
-+	if ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null; then
-+		echo "fail - set operation successful ?!?"
-+		ret=1
-+	else
-+		echo " ok "
-+	fi
- 	chk_channels "setting invalid channels nr" $DST 2 2
- fi
- 
+ if [ $CPUS -gt 1 ]; then
 -- 
 2.43.0
 
