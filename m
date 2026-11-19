@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795097486;
-	b=tTRaRlxiQImsy95yIPr+zhDQtYXEv+Baf6knimNs5/goNhc3IPqNeusBI0B4+3WRf8sK
-	 AW6Z0VjQ3u0kMX9AHDiAJ0cUlH1Oxvx/WLQMYouoJOfCdiIbT+64qwGK6/7AEEEIWRyQN
-	 6F904f1UZvs/ZnMfvAykSVS1XjE0mlBCLKcIbqmsCHXZyzfmxGDdIzpafyaQ+QUWJrsMG
-	 Zrg+mOSFBv8rKqaX8sKJByRNM17Di1H1sBJPfUq9NJxkWNHKD+gGoRcfvBlNqxGUzhVbL
-	 cZ8zR3uJLTH2Yvs+FPJgTY2vlenS/qvJIE1mCakBK30uBd5nhat6iEI/Qbnd/xyl05w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795097486;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=bf3s9RgIY82SmvQaR+hK80LHud4bx2Ddycs3hcBL9WE=;
-	b=0d0jJWvCN79UOh0Oi4/qUmyAb2lNVdnI/N89sapk1ZzsZ+4Mx8BN2s9MDoy8SVt5Dyz7
-	 RrMl/ifCFVC2HBPnVr1KPykLozt9wzFYWbHK/TU1NFrBfracaHp2YI/ApGSz9bJd1uBiu
-	 hoO+XQyCJnTgK58Tlr+TB9ZDj4011Hj8qkRWMz4JLAa435q1Yo4DPNRIbphtRqB34+edj
-	 zeQyJ8hbaul2yoCGx2tDfm1w+88I3eIuYHYfGTIs22/lSSgGKztp6950rD8Dr8bBrlRp0
-	 8GrbfXh/J9pJwHXrZE7I/auYP6d5kNcmqXBSffQ+ZNvDQgfeHkaMRODh7UHv40j1Kog==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=omL137Mu;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795098265;
+	b=zW3TPXg9xMzd0K+4D1beik188aQrGqC+1D1kWZX36hoRWvjx6CBgZ3fRs2FJC/FkHzsL
+	 bW/T5M70PogOPA3MPNsjeDqtKawc9dAmxEWc18ltLwMRMdZJvS6EFHV5Tp4Iw+2Su+WH7
+	 lQaiFgt/SpKxmgMZUPs0VNuDqzrmcnz2fvG6zERYsbg/XT108UW4PTERU7tVjqWg7UdZB
+	 loNCeEUfeiJg9NwmcH5Kq86baw0ucYNEcmr5Inv1tK7md5DDxsMx7UNKRW8WLZJb45Gr6
+	 ns3YdeZc19wzb2ItdPzUa9wSzYOdIkNc+jzr+0XhVzpoIP5U7xfAfV0A1m4gS42x+Rw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795098265;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
+	b=AQftuMPR5FysbIp8+NZR5EC85qH4YgyPkh6cd66y2Wkij+XGNVEctho9WxndCQjTF+7O
+	 jf/yzTd/7qzk6+aDlNV5GLY+y4SDSsbGCJ/FOPOuqSc7BopuCBX0BWARIcv6eglzvSgoC
+	 DSVzfeVD15YhVFawSkE+a3OHzsF3mHIKosVan6rfK2R5s32wTWAiPGxW3OOiDS8MtC/Ai
+	 zTACnbUyKc+ah1ub1x59bpYamdN20j+Ke3xnxonAAUoVVBWDtEMPDDu8Aa4fm61RemcQn
+	 W+yQRcH3841RMxlmikBGRECGy8IZv/Zy+33UkksijG3L+Oj34bO1Mi8UsGtWBr1isSw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Jky2d6gY;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.49
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F71760A260D;
-	Thu, 19 Nov 2026 14:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDB7606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:24:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BDB7606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=omL137Mu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7C51F000C4;
-	Thu, 19 Nov 2026 14:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795097485;
-	bh=bf3s9RgIY82SmvQaR+hK80LHud4bx2Ddycs3hcBL9WE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=omL137MuvhpSe/wi/xx9MkwCYV21C8J9Cb4ElascXr7mkFMGFmXiY8OnZVKOOR3mL
-	 3bL0SAe1KMfdMgTA9wEg7Fs5s/Tn4PKAqn4xrzYQ4zr7BgRwLQWSOtxP6ezTe2LNaD
-	 a/V/epuUf6QZhSWcmV41KLbjXam4m9+1m6qQn3dBzC5e9r96Jgp36R51qTo1OMUFHm
-	 J0G2fxgmvx5w18IQ5tlJEeSib9VGzFw23oMyJeUiUXTDJRri43ILTYRovHvHjO9l7s
-	 lHtxfXqi1Qpur9WnmJjwlyCbIJ8fHxSduGm/+N82MzRTkKDzJq/oBO1/gx+i1mrKwa
-	 uHuZPEBYhTjaw==
-Content-Type: multipart/mixed; boundary="===============5181703165338020747=="
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Jky2d6gY
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6ddef424972so1914323eaf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 06:24:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795098264; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ElPPoLK9QDWY9OuMuhGbMhuHMAZZL1f8ph9uJLmIZjKB+6u2+RtU3p0+x3Z4I8eeZF
+         B4B7rN1dYuM7iJD61Ym9Fnr4vXism//Vb0XqRAOSDWVJeEaWM7XLl8wWjh07+/MSDt0W
+         fljEtOd+s0Cwr3TbN023jGOJ2BfL1+1b0KHycLjAensENTcEJwqCexq9WxA2DwmuMH+S
+         PenuWIk0ZIuDTVOm7wHCsT0d8v5NLO88PORW4N6F5kOr3WOd9peJSTkVGNmGHDiABtDP
+         gP7S/Hg0lfkSMlBFaqWB9H7p9iDI9NXReQNCvX1fX2/5x9Rbjw8F0zaw2S9LF8CH+a3N
+         +zGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
+        fh=HJ2ePke1co8UlGtTekeKiZ+9Gu9ecAktbcOoajB9vqg=;
+        b=j9aP1eHNrxyJDtVkSTmM+/1B4bwyvlCwqc8v2NF2kjABUs+vCZUBFOIbvILbzn4aBy
+         vhPSmk6KcfzrmI1VVF0CnmLHd8wh0jrV3+UGdoEr0RnC4x7UZPjsD3MFOEBK/vK8Xplv
+         mMi4OIz5ZiyDS473tZYJK6dYqVzN/v4mnRlU+7Wh8/NUdtjGjuzk6chYoLyL+ndmXwIW
+         zH09JUpCRktXfnydQkgCVVCqJFgtgp5xzAyjiSAw+WczcoJzIWOFiXotpxXmW7j8Mvxh
+         uQFBw+Js7fV0SWItKCPotZQaIHJi7qXanBB4ZnYeQhRFn1/+VIicLLM2pzEExUNRR788
+         ahZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1795098264; x=1795703064; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
+        b=Jky2d6gYO2im7zgXjsRHuw8jDBLvJEUKKauPO49apSmZAHtopHWUGW9waTKeDU6oKi
+         OG4FE0LJagiop3Ipbm8Y/2r8NDw0FCzRIeDflqWcnhIfSDPNNGxg8CNqtWMA5cpHFUjm
+         wh1tshorNt5nlQE1S5K/GOFnCXDu4SvTkIVT8x0YWtEpMzdrJy517oWZCwAVxfd37wXb
+         HLe9cPgjg5pLGDXWbiFckzf4pRFHqsBmzAhvZLitWyefhCShnu7ojrM9P8qaZG89nV/1
+         4HEEKYxlco/Ghvuv3qIXR4sM8vTlwA1gzjO8a+MX5Miw2zqc0x66C7gYW8AX5CSU1QpW
+         E7qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795098264; x=1795703064;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
+        b=qSUjkEXV6BFRSTtra97ireizGfKqeHkqDoqUqCwqtud15Wi4FLPIBf45lIBeYPEWwF
+         il4oSiptScUaKuBF9LmwMsUyEAEX9Ilh5QZBuawbAoZpYh/Q73HNPPRoSeINXX+4nqSl
+         tBSQ3ZnpL4pURptD+Lch6B06vqJtu0JD3fINjBMAFM6Xnt+SSp+6FZBRDP1kbxEuNTMW
+         6S7xTBhYzoxIZeJPtozUla1ViuRLAQ3/YVuIrAPF0aWWbG/S2m4VwuUFEk4tzD9qxTBB
+         AOqy4lzGv13nDVuqTyzapXO+YMW01jvqYajNccG+E4sZswt/05LVEjPFxlFSlLbOceTs
+         R4kw==
+X-Forwarded-Encrypted: i=1; AL+hErEp8mfMauM+hJolcNqQjzLVFNb7raMybFqMn6b5cCgh42Dxx6a98r4mIjAUlKodR2yiFyhDbXg9PAW21MOGdp0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/9651k/80iCR4u8jb7+iEzu6V3TsoDn85Vu92C9D7zEGfiNhh9
+	apIXAnklgqSwY/+Heol6oPFF7UZh89tl5xcAbTsAkR95nbbwQ+K8yeT/7D4XnRrTtDj34QWydxu
+	dwSckEsZrzp5YdjLOcrSrK9KE53t/rtozGVsbspK3+A==
+X-Gm-Gg: AYBFou2Gy3AeXsXxHJciD/OGnOTikKajZJHHW+mBJX3dCBlOR+keelzEXXxXwhNCavh
+	2cclxy0yFR/SWAl4BWMnqVW4B9SyM+8X1ix1aXaSllC6wS/6VaswGzqhvH45yOpLYFWwE+gzeRd
+	YUwTx2koyLi+EOTRomc6CiYgEaf+uOzStHmEDI4upQlipYndT2ypfegEbkZUnHq7+KpcAJcpQAn
+	Avm6hC41R3oNAKv9NTN7twzDWiV0PIW+sWRiaL7AjGPK2PUKh7hHD1Vm9i9vUU+U2/ckvOE90/l
+	hR9yj2IE5Vc7nIbFtZFeWSJwr8AWoeMajL7yk4O8DvnJbF08HfyW8aE8KxRyS+FIvXdy3A/kt4H
+	AQbkgsm4m4Z1EyCK9VWJgEMpV8Kmx2sK7rps9PE+SsRNRdrLiZtidpL/sfsU/CXYYlBQAxrafzy
+	MziFMV/9x88w==
+X-Received: by 2002:a05:6820:1355:b0:71b:193f:2eb1 with SMTP id
+ 006d021491bc7-71b193f3492mr4490832eaf.1.1795098263194; Thu, 19 Nov 2026
+ 06:24:23 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,92 +104,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <fd9b43958f6297b0031158bd33bdc6cc54f3c9338a4ee2e30bd6e50acf775a60@mail.kernel.org>
-In-Reply-To: <20261119133032.2015656-3-sst@poczta.fm>
-References: <20261119133032.2015656-3-sst@poczta.fm>
-Subject: Re: [PATCH v7 bpf 2/5] xdp: introduce xdp_convert_skb_to_buff()
-From: bot+bpf-ci@kernel.org
-To: sst@poczta.fm,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me
-Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,maciej.fijalkowski@intel.com,tianyi@cloudflare.com,tavip@google.com,toke@redhat.com,aleksander.lobakin@intel.com,ilias.apalodimas@linaro.org,lorenzo@kernel.org,magnus.karlsson@intel.com,ihor.solodrai@linux.dev,edumazet@kernel.org,pabeni@redhat.com,andrew+netdev@lunn.ch,horms@kernel.org,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,memxor@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,stable@vger.kernel.org,sst@poczta.fm,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 19 Nov 2026 14:11:22 +0000 (UTC)
+References: <20261119133032.2015656-4-sst@poczta.fm> <9a5a1487a4676381f4c3d98cb5a22f50e2f54d9d4ec7947891c889b64ac12693@mail.kernel.org>
+In-Reply-To: <9a5a1487a4676381f4c3d98cb5a22f50e2f54d9d4ec7947891c889b64ac12693@mail.kernel.org>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Thu, 19 Nov 2026 14:24:12 +0000
+X-Gm-Features: Aa3M54pU7ZbLxGTK6OUaJJJ5wSY671yMAwh7XMSPppG-d1bHhduINP_cjWCI05s
+Message-ID: <CAG4wq-favnH37jS2=a-aJwBgQOuW=KTsM-vJWp73PNDfFq4=ZA@mail.gmail.com>
+Subject: Re: [PATCH v7 bpf 3/5] veth: use the frame mem type when running XDP
+ on an xdp_frame
+To: bot+bpf-ci@kernel.org
+Cc: sst@poczta.fm, ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
+	kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, maciej.fijalkowski@intel.com, 
+	tavip@google.com, toke@redhat.com, aleksander.lobakin@intel.com, 
+	ilias.apalodimas@linaro.org, lorenzo@kernel.org, magnus.karlsson@intel.com, 
+	ihor.solodrai@linux.dev, edumazet@kernel.org, pabeni@redhat.com, 
+	andrew+netdev@lunn.ch, horms@kernel.org, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org, 
+	martin.lau@kernel.org, mason@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============5181703165338020747==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, 19 Nov 2026 13:54:58 +0000, bot+bpf-ci@kernel.org wrote:
+> Is this Fixes: tag pointing at the right commit?
+>
+> 718a18a0c8a6 only reworks the skb path (veth_xdp_rcv_skb() and
+> veth_convert_skb_to_xdp_buff()), and does not touch veth_xdp_rcv_one(),
+> which is the only function this patch changes.
 
-> xdp: introduce xdp_convert_skb_to_buff()
+I think the AI is wrong here. Before 718a18a0c8a6, veth copied a
+non-linear skb into one linear page, so no frame with frags could reach
+veth_xdp_rcv_one(). Either way, 718a18a0c8a6 and bf25146a5595 are both
+in v5.18-rc1, so the choice makes no difference for stable.
 
-TL;DR:
-- Commit message calls the bug a page leak; it may be a use-after-free of
-  page_pool pages
-- Stable Cc 6.4.x predates the Fixes: tag (v6.9)
-- kdoc may overstate mem type usage (nit)
-
-> Then when bpf_xdp_adjust_tail() calls
-> __xdp_return(), it acts incorrectly due to mem type not being set to
-> MEM_TYPE_PAGE_POOL and causes a page leak.
-
-Is "causes a page leak" the full impact?
-
-The mechanism is bpf_xdp_adjust_tail() -> bpf_xdp_frags_shrink_tail() ->
-bpf_xdp_shrink_data() -> __xdp_return(netmem, MEM_TYPE_PAGE_SHARED) ->
-page_frag_free().  That ends in put_page_testzero() on a page_pool page.
-
-With page checks enabled this is reported as "page_pool leak" and the page
-is not freed.  Without them, page_pool keeps _refcount at 1 and counts
-fragment users in pp_ref_count, and skb_pp_cow_data() allocates
-fragment-sized chunks.  A single page_frag_free() can therefore hand back
-to the buddy allocator a page that other skbs or pool->frag_page still
-use, which looks like a use-after-free rather than only a leak.
-
-Could the commit message describe that?
-
-> Cc: <stable@vger.kernel.org> # 6.4.x
-
-The Fixes: tag points at e6d5dbdd20aa, which first landed in v6.9.  Before
-that, generic XDP linearized every skb and never set the frags flag, so
-this bug cannot occur on 6.4 through 6.8.
-
-The later veth patch in this series (1d3541dbf827) appears to be why 6.4.x
-is listed, since it uses this helper and needs it as a backport
-prerequisite.  Could the commit message either say that, or align the
-stable range with the Fixes: tag?
-
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-
-[ ... ]
-
-> +/**
-> + * xdp_convert_skb_to_buff - build an xdp_buff on top of an skb
-> + * @skb: skb to describe, packet data is taken from its MAC header onwards
-> + * @xdp: xdp_buff to initialize
-> + * @xdp_rxq: Rx queue info to attach to @xdp
-> + *
-> + * The memory type set on @xdp_rxq is only used to release fragments that
-> + * the XDP program consumes; the head can not be freed from under the skb.
-> + * A non-linear @skb is expected to have gone through skb_pp_cow_data(), so
-> + * all of its fragments are page_pool backed.
-> + */
-
-This isn't a bug, but is the "only used to release fragments" statement a
-property of this helper, or of its current caller?
-
-It holds for generic XDP.  However, the veth patch later in this series
-(1d3541dbf827) converts the xdp_buff to an xdp_frame on XDP_TX and
-XDP_REDIRECT, where the head is released through the same mem type, and it
-has to overwrite rq->xdp_rxq.mem after calling this helper.
-
-The kdoc also does not mention that the mem type stays set on the caller's
-possibly shared @xdp_rxq after the call.  Should the kdoc say that these
-properties depend on the caller?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44535627869
---===============5181703165338020747==--
+Cheers,
+Tianyi
