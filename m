@@ -1,52 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.149.156.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.241
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795090655;
-	b=Xd9Lo6U0zIvo11l0w4LEvD2V1i8IRSdq1+xiffL6JGd50RaMDPLRyYkaRXkdfzdKm3QH
-	 mh3Oim20NeOvU3/XPgSv6EfmZFONonwpP4AVeOW/bayWAnzASGyOPHI0AFfG/JYchg9BT
-	 nglfgjFBgfAN76OEQugoaLjUtG3P+QLbmfAg5he5LxuHTgjqDXh3KIifIABiL3wWJ447h
-	 Ev2TJ8mXszglCiR647VmWb02HUPJ4TnCDdetmEV2Q31I0FE0E517wJ/EuIL9Y63QAlYFP
-	 ylWM4aXvGHD2/mfHovJeLfSLEQyL9vSodfCM+s7TuGur8hDAcNZ1k5gI0jG/TKV+6Qg==
+	t=1795091800;
+	b=MEDuUHysK4fODHZwuKMNtuN/dr1zn4ER2fe1DQ9Jw5UP40STSGuJh5Z/NvxjpW17ncT9
+	 ATYNhy1pel8mzO0rVuWiUqptIGU4r0gLDWvLLsUu9xqTOnezi8Bhjp5Mclv9I4e3J2oqI
+	 gGbNEYgj58U0LIyQVC9TBQlmEeejB4AwaZiPg0og50K9PDtK1Y+enITppWTlSm3EOQEe+
+	 D2DR6wq7aif+hOdWZ2C3JNzLFqMDYKzC5t5PKQLVzVvlM3YDlYWjJRq0l6CnVEO6PSvcn
+	 gQnDMP8V7OzGh27WJheXDiZtZD4mcQaIvNet3gY0NYQj0RG0YRCCMSaQ2JYPM9zZrbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795090655;
-	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CMAE-Envelope;
-	bh=4+hewYS5Xc85XMsrC6qSZHgaMk+5vxcwYlnKkuazLe8=;
-	b=4aiY6P3msn53/rqWIfDw6IOa8ME/5Ii7/ellHOTzD3lWLFcjnnMRFqKyYom2aifhHuDp
-	 CWhXZmmYD8Ng+fIDSwsbEC3Y63OTquT8fNvCpwzM0M7EOnH1hLPWLw+wOuVZg/vIBKpOU
-	 PG7foXuvz7yEG7wZ8xfY2xTmR8sozQtKfQvZ4ajcIXBzFfx9IMdXNn7bMZQa4zb2qgzCx
-	 6AWyJG88ttD7UsnsnBEGzkZ9375iZChD7ZW3adj+GCoqJcM8nd3Kxq+GNnp5+jXxOHz5F
-	 hUkwwnMIvY5c5q8Pc8cc70lWbojFvoVGEk/yLIeqXdR8bFURzhJvyNSF5ELlEdb012g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795091800;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Z3UaETqrvFfA005xDH3cLACWIQAJP32vQKwKRzUivqI=;
+	b=myzrPYb68l2QfnLk4E0yDKzNQaGKD1nGEf1WWfW8Tdi2EZ2DtB3YRzEF5NUtfIvj0Ab+
+	 6XCPz7+tkl7eGTfMbe5Y6UlS7BGp52JjEio3A8JmCzbmXjSRiLwjGEzgYYTqt2L9H/cW1
+	 DCG10pUrr3ko+n5PJHcwxT9V8zqwIevWkO4tFV98abNLbK8rDqxiUsrMoc1eKaNhINXpR
+	 PIPBTj6F+wS570ZDvk/4M+ACly13q5088KRWeTsx6U8cdNmgYZcJZVAqdtpme1KKw3FII
+	 tUJ0wL1E0+L2bDaGOO2fDCam+dVh+7a2Pw4PFfYh4bkN1HDQHGPq6lLd3QsinHmdRGA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=enneenne.com;
-	spf=pass smtp.mailfrom=enneenne.com;
-	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=CycFhd9A;
-	arc=none smtp.remote-ip=62.149.156.116
-Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lC6uMZzr;
+	arc=none smtp.remote-ip=91.218.175.241
+Received: from mta0.migadu.com (out-241.mta0.migadu.com [91.218.175.241])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FE6606A32A
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 12:17:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9FE6606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enneenne.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4239606A325
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 12:36:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4239606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=CycFhd9A
-Received: from [192.168.0.186] ([101.57.122.26])
-	by Aruba SMTP with ESMTPSA
-	id U14zxDwan6VShU14zxRiua; Thu, 19 Nov 2026 13:17:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1795090651; bh=V3OZh4icVrzbMI2k6cXTPEjlLw6DW6zRycuz+4CAfec=;
-	h=Date:MIME-Version:Subject:To:From:Content-Type;
-	b=CycFhd9A1catDJK8mSVVnIjyH5ROQd1v+wC5+drY99wllUzOcvv0JnbleYae1QyWl
-	 BfXvel5+GlGK/smjYdZVOsE8ifTJ+aNn92e3/PHwymqXJ9vopCmtPNtiJdDDxgFhXQ
-	 gH0O5LL0GqGBMM5zzAqHd0YcDoUE/TebWvQKcOdv9bAt/QbHhwHYpgUqx3x1h4Ldgp
-	 75NfGZPT+sNKTTrA02giDUkiO0gk016/Jf4H4Ha37Gpw+3d0e3MxEHOw+7cjazCAy7
-	 12PcNhVzIViATgQFKluA/RK3kpXudgDDYCPNifgplaPxzA8PVajw1Iru4DOG02ulfO
-	 Vnl/JByjL9DVw==
-Message-ID: <10d27c34-72d7-4380-abc9-6f8eddc6c08c@enneenne.com>
-Date: Thu, 19 Nov 2026 13:17:29 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lC6uMZzr
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Z3UaETqrvFfA005xDH3cLACWIQAJP32vQKwKRzUivqI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795091797; v=1; x=1795696597;
+ b=lC6uMZzr3ePKQeAmTHxIhjRO54prPfHzsGIGlwdxiRYK/x13orsA38lW/OKGvJ2UJwbnLaGu
+ IJaqHUFanrC7+JPI1DpsvL2OT+FfjO6qijHirmQdj3INbUcFwvjLFj1Rdau0Gt/Mp99dF9OE8i1
+ 8w25qsNQUOiPVzeU3R/Bc0xs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 22a63bec1e9ad1bd;
+	Thu, 19 Nov 2026 12:36:37 +0000
+X-Mizu-Trace-ID: 22a63bec1e9ad1bd
+X-Migadu-Flow: FLOW_OUT
+From: George Guo <dongtai.guo@linux.dev>
+To: pratyush@kernel.org,
+	ardb@kernel.org
+Cc: chenhuacai@kernel.org,
+	rppt@kernel.org,
+	pasha.tatashin@soleen.com,
+	shuah@kernel.org,
+	ilias.apalodimas@linaro.org,
+	akpm@linux-foundation.org,
+	baoquan.he@linux.dev,
+	ruirui.yang@linux.dev,
+	guodongtai@kylinos.cn,
+	kernel@xen0n.name,
+	graf@amazon.com,
+	liukexin@kylinos.cn,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kexec@lists.infradead.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-efi@vger.kernel.org
+Subject: Re: [PATCH v6 1/8] efi: Pass KHO state to the next kernel in a configuration table
+Date: Thu, 19 Nov 2026 21:36:31 +0900
+Message-ID: <20261119123631.11165-1-dongtai.guo@linux.dev>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <2vxzecch3x6k.fsf@kernel.org>
+References: <2vxzecch3x6k.fsf@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,106 +83,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
- never read
-Content-Language: en-US
-To: Demi Marie Obenour <demiobenour@gmail.com>,
- Jarkko Sakkinen <jarkko@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
- Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, Jens Wiklander <jenswi@kernel.org>,
- Sumit Garg <sumit.garg@kernel.org>, op-tee@lists.trustedfirmware.org,
- =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
- Pankaj Gupta <pankaj.gupta@nxp.com>, Sahil Malhotra
- <sahil.malhotra@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
- Richard Weinberger <richard@nod.at>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20261118140421.584086-1-giometti@enneenne.com>
- <650f89ef-9745-4f75-b254-80fa5ac4773d@gmail.com>
- <av5EyVHnNzT27dyK@kernel.org>
- <61ca7c37-7b42-48a3-be2e-95deb4d999a2@gmail.com>
- <01692969-8e92-4a08-bde9-aad86674504f@gmail.com>
-From: Rodolfo Giometti <giometti@enneenne.com>
-In-Reply-To: <01692969-8e92-4a08-bde9-aad86674504f@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfKBPrYJ2CDN4f71Kap/ixDsQG8LCW21ix5G/r+qduPuGoKFzPku3ui/3D6NrDy/I4fLjS/AZ5x4bSLPCyVIF0to5TjSclhUTdSU4uon2/XK98GioKEpu
- t0DAXGgZowfR8EBdb4xlQI1aOmtiyouqFm6ozJqENawyIYsyVwWUPVtIrxKIMh6tgg2DcE0bNvKSfTxI4E/KX6og6HQ36T9SsUF5L6ywvP0CPLLtoj3XfOJK
- KK6OL4sQiUzIGXyKYC/g5t6eDL7TGBKZYqtynb/EnlVDCDMoH+BMpug/FQzubq89PMXLKw1FzF7r79429pnKXBHAlDBdAGSZfIFNS5uHsw8Ky4Ryb//LMK9V
- xLfwyhC5KBHWow0xsn0MR7mF6xbrK8rHOP6EY/6N+7N/mkYzZW0dxG31VP79/qgd0FE+u/f6bwMdsGglkPiv7Y+X/kQhNQovCMTLqK/xd4/A1//iDD4ibkuq
- 1/kQFk3iW8okXGDrlVnZ6UkHWDYJU0H4V33JM+dA1KrG1s5yxelszfrfDGYXDXRvM9MRXG2C0JJFVnXDW1DBfX7oruz0XIMBt6ZuUqYpwYoCJYgDT8/Y94gB
- RtndS527vikEPvkczW3D2qQoIsrt4+TG4WSJC3lfoPhIyloLUzoc3clohznlcZ5d41rbBCRbfQ1vSp4l+bVmTsLWseSQTZKxyCBx5FWky+xTaEm69CxDc2nW
- HxMYdlYxr4DwnIfL+x2fqCJ5RbC7gBciMQd6ihsH1iadIXHfBcS4KhXDviVzexL7jL7TLPHnlpjTAhT/rODrCAAiT5G8Le0zqKlXI3LhP81Ke0+765dQ0e9y
- vgu5MhNb82zl8mX48OJ9rhfGTJKQP6C/S1uHuzQOV8VuqFJx7jL006rc7ZGJIcc4/bSi4OzRvFhFOgNVnMJP+jAWIUvBJtJS4o9aDPfIoaC0wUPeec7ltUUx
- 3YAptj8Js+/LJy8wIk8KSIHNu1+DIrXnbtSxZ48rdWX3ylBXpUU2OdzVbAPjylucDm+hVHDEnZGmwM4stN3z19Ce9cCXkLIDcyAWyz9J1zqQ0O2bu0XmE7hv
- 9+HAxJgOrvm6fyiIZnDN/P7bOyh6SKydeOvoEul+E155hehVkqO41wFNa7awsiPXufzyRwo7sKbPtMCbyJ4P/mnlwQSbOC29VJQeoCboPfyks3hw+p1gJkwG
- UStDxD9YrJOkVXUS048vbJ5rbuI5vxFjkO5bxo7Dsgk2WyJjnWav55v2ahPGzLX0t+XZEaY1n4iDLxnooNN/H35sYauqbDVs3RMMPG938OJL4wUKNVf/6fDh
- Y3+0UYag
+Content-Transfer-Encoding: 8bit
 
-On 19/11/2026 05:35, Demi Marie Obenour wrote:
-> On 11/18/26 7:43 PM, Demi Marie Obenour wrote:
->> On 11/18/26 7:37 PM, Jarkko Sakkinen wrote:
->>> On Wed, Nov 18, 2026 at 06:42:15PM -0500, Demi Marie Obenour wrote:
->>>> AES-256-CBC isn't a suitable mode on its own, unless it's combined
->>>> with a MAC in encrypt-then-MAC.  Even then, it has a 2^64 birthday
->>>> bound, so it should only be used 2^48 times with a single key unless
->>>> the key is ephemeral.
+Hi Pratyush,
 
-CBC is there for existing formats (craf writes files that openssl enc
-can read) and because the CAAM path is CBC only. I take your points
-on it.
+On Thu, Nov 19 2026, Pratyush Yadav wrote:
+> Do we even care about non-EFI boot? I'd say ignore that for now until
+> someone comes with a real use case for KHO on such systems.
 
->>>> AES-GCM is not a suitable algorithm either.  If you allow encrypting
->>>> with a key loaded from persistent storage, there is no way for the API
->>>> to ensure it is only used with a unique nonce.  Nonce reuse leaks the
->>>> authentication key and allows forgeries.  Using random nonces isn't
->>>> good enough either: NIST only allows 2^32 encryptions in this case,
->>>> and the API can't enforce that limit.
+OK. The fallback is only the existing setup_data path, kept when the
+table is missing. I won't spend more effort on non-EFI boot, and
+whether to remove setup_data can be decided in the x86 series.
 
-You are right that a construction of our own is the wrong choice:
-patch 9, the only GCM in the series, has no user yet and can go.
+> This should be a follow up series. Don't get your series get caught up
+> in x86 changes.
 
-[snip]
+Will do. v7 will keep the table common with LoongArch as the only
+user, and the x86 patches will follow as a separate series.
 
->> The usual solution to something like this is a userspace service
->> like ssh-agent.  Then you can do whatever key management you want.
->> That doesn't protect against root, but if someone can get root you
->> have bigger problems.
+> Sounds good to me. You will still need to chase Ard for an ACK on the
+> generic EFI table though.
 
-The threat here is root, on devices where root eventually falls: a
-key root can copy decrypts that device's data offline and forever. A
-service that holds the key in its memory gives that away. keycrypt
-with the OP-TEE backend does not: the TA keeps the key and checks the
-purpose sealed with it at every use, so even a compromised kernel can
-only use it on that device, and only for that purpose.
+Ard, you asked whether this could be an arch table handled in the
+LoongArch code. Pratyush would like a common table that x86 can move to
+later, and the x86 prototype above used the same table without changing
+its layout. Would you be OK with keeping it in drivers/firmware/efi/
+for v7? If you would still rather have it in arch/loongarch/ until the
+x86 series lands, I will move it there for v7.
 
-> Also, if you need keys stored in hardware for some reason (compliance,
-> time-limited exfiltration), you can use a userspace library or
-> daemon that abstracts over whatever the hardware-specific API is.
-
-Yes, that is the case I mean, and a daemon over a TEE would not give
-the key away either. What it costs here is, for OP-TEE's PKCS#11 TA,
-secure storage before the root filesystem exists; for the CAAM, the
-only user-space path is AF_ALG cbc(paes), the one off-CPU exception
-left in an interface the kernel documents as deprecated, privileged by
-default, with a key format per driver and no purpose.
-
-Ciao,
-
-Rodolfo
-
--- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming
+Thanks,
+George
