@@ -1,58 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795130456;
-	b=lF7Z7RW7Q+WnKE/jJNXJIZ/gRBVo+fMdvt1b+3BnRtD6cDAWAISzPoDzXj/TA7pfqHO0
-	 w4g0M0fsRhBKfQHY6MjJ+8BK4XscNI7WChWFVhWA3IjVueq6+I53JNstQOSkCXNhOPLYU
-	 uUcMTr1EPYjCHdDqApYW5h0LBDCIGRF49myxJzLsRTI+SNUeBeZImYt6lL7gbYqUi9E4A
-	 aQnD0YHe9Qc2r05JDl2SK8vY8mGQAnpMSnhNokt9IreWd8XpapklC3eyBjuJX/v16NEWg
-	 e5UJoHe9X7+OOg5nBQpmdnSxp3cGhledk319N0lgyNqOTNL0nY2qd2xVnU+hWSuo7kA==
+	t=1795132478;
+	b=UN44YPXNTgarfxogASNDealoFq3bi4wDBBvdMsFMkYuKCkFovg3UYxoDHNLkPk9ppk+s
+	 swNWyk1DFfC7LZo9iV5ylc1SZuprAn1x2Nbz42ubHCDFghdWyawnHZlHhYOf4iOhh94+8
+	 8+DVY6xgstrob/SPCRuW0MnnIXGGTBo+UHjUSDqGpb/O/AtJGVxLm3AwY0/6lvVMOVlHs
+	 gownw1YWGIwEww6uw9gHh4X9uaEYy6N3xiE3S0+CB0yXKg4TfLWlcObCqgEpxMoojbpFV
+	 uh+01Kze0tYUcc5JPgcWv5sqbMJ4fmtNHYuxVyYzsx5cD3Np2NaEUH+awHVDzJKYncw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795130456;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=xr5y2HrJ4TdM8R0sbSoyLZirPhsEM1UUu96wLJAFCyk=;
-	b=Amt6pXGPPrdOh9FQoNLh9XK6Z24NZSzXhThk/ix7khrrIozJ1b+s28T6i1MT5BqujinC
-	 PkbwrVxXjTyBsd2Ve0dRUGFtowZpXJAMb+J6E2HCwc+2/HrdAjI/blwUF+xJLadOERi+4
-	 q399offAevr8pNE84KHOWKm1sX28MijN4tw5nyJppbdDhpYl1ZvgQe0srUG5Gnt/h0A4w
-	 vKV6YaNYlaxv+FgZ7GN3YjpeZG1va0V2POCBuDwSiPMi7ciyHa5qPqLM8wbUkvnh4tOle
-	 qbTk0Y5srsCJAlgDNo+Ax+cRUaQSsQaEFxt+/0Ods+0bdHt6JdTVKXVwb96gcheMHMw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795132478;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=12ZSxNtzN2/RK0wVV1a0rB4b6IXbcwkOy/ggx5peZS8=;
+	b=WJhS6ZSmylw/B60tp7pDmeIuCIaEPhz30BAgHiREtwAaF7Oaw6RUEHV9qc9euxv/MVnU
+	 lRP9oLbTaK53pxR0oCaDryJfbBQ+H/W/MZ40o2ogEnGy4NCg2YFxAoSGQZiTM5BEQIPwz
+	 XzZ1cJhF6ELdWL/Ewj/LBbAvdcxZYmwXYFckYqMCrcYj9WjE+2p6/FzGCE2zO7IxsqQtB
+	 mpChqF4vT6GH+E3j2TpW6icmc9QugTrtlVGB7A8IkO0LvrEID6vy7j0hzF1DZGdjf+sRE
+	 I2n1c/7YJ1R1o5pvGf8r9sl6b4pUgpESj4iIYMC4KAVgNtKidO6441/1J4saqSZCOdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FQdS/ZB/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9ZlWS1P;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABF3606A325;
-	Thu, 19 Nov 2026 23:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F37606A325;
+	Thu, 19 Nov 2026 23:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FQdS/ZB/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8FBB1F000CF;
-	Thu, 19 Nov 2026 23:20:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9ZlWS1P
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451291F000C4;
+	Thu, 19 Nov 2026 23:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795130456;
-	bh=xr5y2HrJ4TdM8R0sbSoyLZirPhsEM1UUu96wLJAFCyk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=FQdS/ZB/n3kVaRc6Uoq4w46I7PdeouA3kgT2u5+IFKhtr4bDGVNcmysKTZBhTspiv
-	 z9Il2siQEAgIWIbXC5nh72w//2LH6/OUXhCZW3BHCUaBzdiBzi34pG3K1k7Ym8zVK8
-	 cfdz066DcVMMSe5ge5J0Ua5pyNvo+OocbabTfBwGQa72KL+qFJ92ngYVuMu6ecH0uG
-	 Mo6npIvXn1W/nuWhpcxywfqIO4SKtCwxy75n0GZU7x5MvWang3Sc98kl6ax6jsay/1
-	 cetTpRZjU+9fVZg2Uvife+M3JxFMWiEP+pSqTxbGLfHKBNnhEDjwuo/98+CWCuct6w
-	 LgN1Kf0YTp7Qg==
-Date: Thu, 19 Nov 2026 15:20:55 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bryon Fryer <bryon@fryer.io>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- horms@kernel.org, jasowangio@gmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org,
- stable@vger.kernel.org, Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net 1/2] udp: restore outer transport header after
- tunnel GRO
-Message-ID: <20261119152055.415dc942@kernel.org>
-In-Reply-To: <20261112030708.1915665-2-bryon@fryer.io>
-References: <20261112030708.1915665-1-bryon@fryer.io>
-	<20261112030708.1915665-2-bryon@fryer.io>
+	s=k20260515; t=1795132478;
+	bh=12ZSxNtzN2/RK0wVV1a0rB4b6IXbcwkOy/ggx5peZS8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=a9ZlWS1P7Ku8B8lKMPE3IOzC8ySlc3z+93UsUAgIeUMg5IsveXaIw3Qy9wFcZU4HS
+	 zm92zwiLiBdJObY0wz5othEcP3qEQeevULXHTgJhfQUnotB9gHWdfNDDFpG1IbPuou
+	 ERJpUHeIoECUwcQLJHLlQnEpcy3APbLvTX/vnKGitsrylJXTE1HmJMpKu6tVytojRT
+	 QIVtesCv0MXZz4f2ZMJF5gpiZiBlRsAUfb2lHmCmrNybR9Lhjq/VLShpws94IJUMt6
+	 +1zfesNub7oc+G92az7RWCpN6NeFc2OqNnoVb2v4AtXmEgrAK5GoE3ulFnrCrhL30H
+	 WzuK1nYrCdHGw==
+Subject: Re: [PATCH can-next v4 2/9] selftests: can: add J1939 test helper
+ header and library
+From: netdev-bot+sashiko@kernel.org
+To: o.rempel@pengutronix.de
+Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
+ shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
+ quchaosheng000406@163.com, penguin-kernel@I-love.SAKURA.ne.jp,
+ kuba@kernel.org
+Date: Thu, 19 Nov 2026 23:54:36 +0000
+Message-ID: <179513247684.3132.16965169120419676697@kernel.org>
+In-Reply-To: <20261118-j1939-selftests-v4-2-756768d32ff2@pengutronix.de>
+References: <20261118-j1939-selftests-v4-2-756768d32ff2@pengutronix.de>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,20 +66,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Wed, 11 Nov 2026 22:07:07 -0500 Bryon Fryer wrote:
-> @@ -948,6 +948,8 @@ int udp_gro_complete(struct sk_buff *skb, int nhoff,
->  		skb->encapsulation = 1;
->  		err = udp_sk(sk)->gro_complete(sk, skb,
->  				nhoff + sizeof(struct udphdr));
-> +		if (!err)
-> +			skb_set_transport_header(skb, nhoff);
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-IIUC only UDP bothers us because that's what virtio/tun supports but
-isn't the header stale for every tunnel (eg GRE?) Should we not reset
-this back in inet_gro_complete()/ipv6_gro_complete() ?
+Low priority / nit picks for your consideration:
 
-Maybe GRO experts prefer it here, dunno. An ACK from someone who
-understands this code better than me would be good.
+- [Low] Baseline decision: false positive.
+
+--
+
+selftests: can: add J1939 test helper header and library
+
+This commit adds the shared code for the upcoming J1939 selftests: the C
+helpers in j1939_helpers.c/.h, the harness glue in j1939_tests.h, and the
+j1939_lib.sh vcan setup and runner. It also adds j1939_gw, which sets up
+CAN gateway rules so that the CAN_RAW peer can sit on its own vcan,
+separate from the J1939 sockets.
+
+> diff --git a/tools/testing/selftests/net/can/j1939_lib.sh b/tools/testing/selftests/net/can/j1939_lib.sh
+> new file mode 100644
+> index 0000000000000..796022760e487
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/can/j1939_lib.sh
+
+[ ... ]
+
+> +setup()
+> +{
+> +	vcan_setup "$CANIF"
+> +
+> +	# shared or none: no second vcan
+> +	[ "$j1939_peer" = gateway ] || return 0
+> +
+> +	if [ "$CANIF_RAW" = "$CANIF" ]; then
+> +		echo "SKIP: CANIF_RAW is CANIF ($CANIF); set another CANIF_RAW or J1939_SHARED_IF=1"
+> +		exit "$ksft_skip"
+> +	fi
+> +
+> +	vcan_setup "$CANIF_RAW"
+> +
+> +	# rtnetlink does not load can-gw on demand
+> +	modprobe -q can-gw 2>/dev/null
+> +
+> +	if ! "$(dirname "$0")/j1939_gw" "$CANIF" "$CANIF_RAW"; then
+
+[Severity: Low]
+This isn't a bug, but at this patch tools/testing/selftests/net/can/config
+still contains only:
+
+CONFIG_CAN=m
+CONFIG_CAN_DEV=m
+CONFIG_CAN_VCAN=m
+
+In the default gateway mode, setup() needs CAN_GW. The checks in
+j1939_test_main() need CAN_J1939, and CAN_RAW too when a test passes
+J1939_NEEDS_RAW:
+
+	if (can_proto_missing(SOCK_DGRAM, CAN_J1939)) {
+		fprintf(stderr, "# kernel lacks CAN_J1939\n");
+		return KSFT_SKIP;
+	}
+
+A kernel built only from this fragment would skip every J1939 test.
+
+At this patch nothing goes wrong. TEST_PROGS is still only
+test_raw_filter.sh, so no test reaches j1939_lib.sh or j1939_test_main()
+yet.
+
+The next patch in the series, "selftests: can: add J1939 base functional
+tests", adds the first J1939 test. In the same patch it adds
+CONFIG_CAN_GW=m, CONFIG_CAN_J1939=m and CONFIG_CAN_RAW=m to the fragment,
+so this is resolved later in the series.
+
+Would it be clearer to add those options here, next to the library and
+j1939_gw that depend on them, or is the current split intended?
+
+> +		echo "SKIP: cannot route $CANIF <-> $CANIF_RAW (can-gw?); try J1939_SHARED_IF=1"
+> +		exit "$ksft_skip"
+> +	fi
+> +}
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118-j1939-selftests-v4-0-756768d32ff2%40pengutronix.de
