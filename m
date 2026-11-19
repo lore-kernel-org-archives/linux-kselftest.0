@@ -1,98 +1,155 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795051900;
-	b=DFHbw8GOIBenzMqXbgNy4pS8Jd4YQgCdS7eJxyy21K8vW5ThDpLG7YhmK4XhJnAc+Cui
-	 izm0X4R2VNHztNgd015pD4dPHeEJ4vsXT6ivbWse6BHYZ5w8Q6eukM39vn5xtkOr+52Cm
-	 zQwIgkoCtmV04U+N7p8FwMGpqNFBzdGCV88qkZTPZkJ8romOyDaIGyzk8sVIYCX1skgna
-	 iBC8a+6q6sLo/UxPqYJ6ODBzCI/SK4ggAqu3ISoRcziZf1PV/jT9Y7Z75qovFa0qq//Xr
-	 aqiaj5no+tWuHCTcx80UmkQZZk5QlvR6PJoTN2ftnMdaN6nJocOJRqkKj2i3Z6JGcBQ==
+	t=1795052318;
+	b=k5P35a4VTMeXiViv+CC2WjvHH7ihoct1sIwPTjD+9S7KaB/O0k/LD+OYvSq6qXNyjCQ8
+	 fncn+DgYj/a46anGTfychCJHBVBi9Ar7A51hk8JKmDqPZTdrYXrkfWB2IclVQsMdWqau5
+	 xa9Xnlw0Kg6tdDIwo1vt9rd+ksqncFPGEJchj7RrAXj5bYhEjzTGQnFn8mFqql8WIG3KW
+	 WFUJB3X4QqOzEiJ9YZ1RAgjdQKhWrKDy0M1Zi6+jAVaWxFqxdHBR2hEbA3h9heFz1rGt0
+	 /oxAmIOhPuCL2z6KhBGdPtPXERFGnmmAXs3PnUI/FFdfd6XJHfAirGSSBBnjrD4ppgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795051900;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=pNrcFkQV1C/8zLJHTThB2eiTETmGNutp7bQGWFNStJQ=;
-	b=OokWj30DRHKCLn42xdbLXaspzPcu7QARoaFRmWOQysQ4Slz3uQuspxnDMn5hbKkraKhL
-	 g3GDJKk0F+qTtTuNE2fn4Pkf8ljYA4uUAcSUm3VK3KZpaVxU0GtR7uJ4P3sBZIPC2tqeu
-	 1sKW91iolJ45kTWoq8jeF4mIbZk4XqlDNO3E23QqfhKZmICkoDH7XSmeYCQpWt6jWjhBn
-	 pNJA/b5g3xIuThaqYYh9AcZVkOuPm8E1mqyGyQWzzNI6VHGwnmrlcs7BmjLhELNJRCl3h
-	 kotDcWyGFFpR4+EfneLbglJ3x6ad/59LLntaI60q93z4Md9rYDJjzp0u/W6xpSm/72g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795052318;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=xWmFAMLfaz7aon/MP5W7LeR089ODY2jYCmY0YF/QEHk=;
+	b=3rIBEW1Y6uT4FRjsOU+Y2wKTdU+ud9JXQ11tll9/vWUxqfrrpdOz7AeoLxoJ5gjDdcM2
+	 fMzIdRhZ5J0sMXH1OKG3qemlOOMUlVe1TuEoX+HQ/EaiQlIzkiOg9r1Hzu/KHbG8Vc+tE
+	 Vr/MB9lttsTZxb06yhi7bIuZdEEVDu0Eqr+YWR08dzVQwmlqZDehPXh2ImrsNMJTwMP9t
+	 ScPKperQfMRDNAbWebpenMigCo/vgaNuqt7FC0Ebr1n2E1JwuxAkqejERFRNuSZSV6vwR
+	 5gB1LeUbWCliaCVOpqLGckbTqNyzCvUR/j54l/QFv0BuQCe/NOy2ZuZKO/041igpS7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Q7CG8iVe;
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=ftmtS202;
+	arc=none smtp.remote-ip=209.85.218.44
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634A5606A33D;
-	Thu, 19 Nov 2026 01:31:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 634A5606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21458606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:38:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21458606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Q7CG8iVe
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJ192L01041963;
-	Wed, 18 Nov 2026 17:31:29 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=pNrcFkQV1C/8zLJHTThB2eiTETmGNutp7bQGW
-	FNStJQ=; b=Q7CG8iVezvuNmYxpWeK1kHwSxzVupBwHD4p9/7Ub/NOJmsOU5nc2/
-	rlx6XnrQ3RnmS28CYwuCAT/nZQS2eSzfLaLLJ9VGQS8/ZMI8rdRghVTQYPHVP31R
-	ccyG0DCTr/tmCj7vt4XMA8QMZ+5RfzqciMj6OSdVnwlyBnEnq1g8ixTdEwsl6A07
-	7uwlMMvTZrcmJUQu/OuEEBcbZH7wtIwWjrufutPfWWk+lTgvNkjVldFxM58sZ98p
-	xPmt3IdWTyoL1zCSUdEop6efc3rpmLUvOPs0VKf/9UfYF1Y5b8F/KoFOp5hjfTeC
-	NnzgNxIY2FpptupQEe+KNczyie8QrK5ow==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0yu8k791-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 18 Nov 2026 17:31:29 -0800 (PST)
-Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 19 Nov
- 2026 01:31:28 +0000
-From: Todd Freed <toddfreed@meta.com>
-To: <netdev@vger.kernel.org>
-CC: "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn
-	<andrew+netdev@lunn.ch>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=
-	<bjorn@kernel.org>,
-        Boris Pismenny <borisp@nvidia.com>, Cosmin Ratiu
-	<cratiu@nvidia.com>,
-        Daniel Zahka <daniel.zahka@gmail.com>,
-        Donald Hunter
-	<donald.hunter@gmail.com>,
-        Dragos Tatulea <dtatulea@nvidia.com>,
-        Eric Dumazet
-	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim
-	<jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
-        Leon Romanovsky
-	<leon@kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, Mark Bloch <mbloch@nvidia.com>,
-        Paolo Abeni
-	<pabeni@redhat.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Saeed Mahameed
-	<saeedm@nvidia.com>, Simon Horman <horms@kernel.org>,
-        Tariq Toukan
-	<tariqt@nvidia.com>, Wei Wang <weiwan@google.com>,
-        Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>
-Subject: [PATCH net-next v2 10/12] selftests: tc-testing: run dependsOn probes outside the test namespace
-Date: Wed, 18 Nov 2026 17:31:01 -0800
-Message-ID: <20261119013103.1092559-11-toddfreed@meta.com>
-X-Mailer: git-send-email 2.53.1
-In-Reply-To: <20261119013103.1092559-1-toddfreed@meta.com>
-References: <20261119013103.1092559-1-toddfreed@meta.com>
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=ftmtS202
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c4d21051042so280708466b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 17:38:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1795052316; x=1795657116; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xWmFAMLfaz7aon/MP5W7LeR089ODY2jYCmY0YF/QEHk=;
+        b=ftmtS2029GKX5UtZAgJGitX70lJkwUErFdKHtYPToccHq6NEAzp/y2zynrEO8TBbYA
+         HLNNeLQ7RH/J1RJ3wOSBfM1z2xsLBF8nma8WNzcBwdAzsMjgYKxTmnhFbNqAJqNAJejM
+         UJxr5YbLIpUBkEC5iaUXVTCwzJi0RPLnlF+7SiFZQ7WUb1zMU+CpjqzK0sXV2iIqUBHw
+         Zp9CuL1FXGbtUP+rNfv4hyyA0qKkTiQso5wcOzKYtF1ggznDmlLfJDCWg04WiAE4BFJt
+         A1PFd3A4WXgFfDeTHp6X4WOZdAQXr4ue9pnV1Q+bU/snB9pgoOWjvfDFR5lEWkVzq5pf
+         HwJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795052316; x=1795657116;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xWmFAMLfaz7aon/MP5W7LeR089ODY2jYCmY0YF/QEHk=;
+        b=xNc76r8Q+mmTAwsghVn4fZ0agkqaqHjMKinBJ/qaLcq5Q2uOtLzGiS27IuLl/1JM17
+         WwGAFGxorH9gisTHin/oqCCIlfz89Ijqexjn7VnbSHqpDHdfqfR3yuXxzaSLnSJXuX9c
+         7AYw6wgGgz2H24fJEqeIy0dxtP5DCNkdiYkQwd72sR4aQBG/fu9dzC9JmJrmPYZOlZa7
+         J+kZN2aTr7CVFrpVTVMwnOC2KvEftoNnXlC/caSCwhIUeCZTXuIXPsmplbFdRDHaa2kF
+         F4+D7hnigKB0WeibVOsDTza+Cg9Ytj1Fvq9j8wEXfk1SShhr2Z5ma59xiiD6xu72QKUu
+         4dSg==
+X-Forwarded-Encrypted: i=1; AL+hErFEqDA+FJbS7Bacfo6HJxvVphUT62aaYVc9Xd/NFGGFLVKds10QLx80DqI3Bd04PXBdtEt6m7XCuYiCiK3lzqc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9xCyB1E/TvlH1DS0YugSMjvXoMwbSNPifBIarzSQmnY5ISCgbI
+	VOO6Et3IApzSGRHYvIDN1Kzj2PBxG3o1GHxdK6jYIkXOQf+DNp/jDW9yzPgCTs+uRv0=
+X-Gm-Gg: AYBFou1PvsEtUUb2M2LFig3ZUi4m8R9FSUTS1dC42AMv2Olg6v1d1SpCLDahps4T4WQ
+	qhJOWeN9rWFwihlaR4ot2w5xgVMCCdFSyOQ911GZxiwveV1a5TMQd8sIj0A4COl5XR3Rhl6Y3Tm
+	4jEe0AuH4trDMnAmMnDW+0kDurlhO5XYojA4Iy+2kBIN/mO2JGu9t5dM50gb3y0pVXQZKD8wFjL
+	7VUKsYB/59m+ZNUw2cWv89ylGKZJb7slYUg7H2fFEx8oXLtUBz8miVAxeJosKNWCEsw7HjjnTPn
+	KEXNtbr37jIF/mnIEydPXk3gHnMND5jVGlUk9u8AOFeBMX0B48dycsTAy5sPZUXxzquxOt1PUXz
+	4oegindy7JhYdO0FTg6vULKALRR5O+hlUNGFBtra8zVUXmK2vs0lnmDXCxKbZVckU5rajXtLbLs
+	DaNZ+SwrCj/dcwEACEJsguGfeo08Q7k1TAr1o61GGF+UzHOv8wrYfPhQNG0hwhvEvyPtEIf4aQU
+	t67PcKIs3swBeM8JoJM9dvjusdCETIG38FgUCD6E6ARKZEhonxtZeFi+AEmK1f0UCVKJ2PKgtAn
+	kr7JzlvnJdnN3xtUP52h04oP2ORycD3b+9eho01FYsMvy91Jkwbk6OBkAA==
+X-Received: by 2002:a17:907:934e:b0:c46:7ec3:fdfe with SMTP id a640c23a62f3a-c510e1b723bmr406658966b.19.1795052316475;
+        Wed, 18 Nov 2026 17:38:36 -0800 (PST)
+Received: from L9JK9NPFH9 ([104.28.20.56])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c51233c4080sm59785966b.16.2026.11.18.17.38.33
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 18 Nov 2026 17:38:36 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>,
+	David Keogh <dkeogh@amazon.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	Nimrod Oren <noren@nvidia.com>,
+	Alasdair McWilliam <alasdair@mcwilliam.dev>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Breno Leitao <leitao@debian.org>,
+	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
+	Danielle Ratson <danieller@nvidia.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	bpf@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-team@cloudflare.com,
+	nh-open-source@amazon.com,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	"Remy D. Farley" <one-d-wide@protonmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>,
+	Anil Kaushik <anilkaushikwireless@gmail.com>,
+	Demos Ra <demosthenes.ra@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Hangbin Liu <hangbin.liu@linux.dev>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Joe Damato <joe@dama.to>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Li RongQing <lirongqing@baidu.com>,
+	Louis Scalbert <louis.scalbert@6wind.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Michael Bommarito <michael.bommarito@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Runyu Xiao <runyu.xiao@seu.edu.cn>,
+	Song Liu <song@kernel.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Wang Zhan <wang.zhan@smartx.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Zhou Qiuyue <n0ps1edzz@gmail.com>,
+	Tianyi Gao <tianyi.gao@linux.dev>,
+	Tianyi Gao <tianyi@cloudflare.com>
+Subject: [PATCH net-next v2 00/11] net: extra TX headroom for local egress
+Date: Thu, 19 Nov 2026 01:38:19 +0000
+Message-ID: <20261119013830.36935-1-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,88 +160,174 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDAwNSBTYWx0ZWRfX9P0Rz4Cxf053
- Awq9xL7Ge239l5w9dozWVmSTx/o+0PTSa6n8bltXUo+sFiMQFWe9FvWDxFOonfMTY5Znq0arkEX
- 3n7NdmR6bwJQIlgCBaHjYynTY+wq/aI=
-X-Proofpoint-GUID: cHGZ10vn5774juy0JmjaG8VwY7VcIh1l
-X-Authority-Analysis: v=2.4 cv=aLRlOr9m c=1 sm=1 tr=0 ts=6afe5171 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=JnKecZnUtZousrUlYMGU:22 a=VabnemYjAAAA:8 a=bVv6ZBUfH5OyOozUiAoA:9
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: cHGZ10vn5774juy0JmjaG8VwY7VcIh1l
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDAwNSBTYWx0ZWRfXxl960wczq5Cr
- xXag8IhBQpTS+n19e5ERCPqq/WEgjK4ldA1BLQemBHKNu/13NHZ5bwrI9BNn9NM2yLNdOzuBCbi
- 37gZmU3yyaUnCp1urQJ4nWPvvV/maWsaDEGfWH/rJydER37N3KPYYX6hf+c8X6gLdcFsftFgZp1
- NPa9YqjscM+Y9XqTj9yg5tm02+XTKI+3r17Aq2pL+WASNXlWEo/kCAvYepJqhYgOcYIX3/4f0D8
- u9dJaeFaXz9Ucd9NoyHeHpAdzJc2RHeoFHp7Xr5MU4l//XUoobFiRbLBEdveX99wq7olj3uuZTo
- Wl+INHMYX2JOCKuXxNjKIJd+LIQMvWHfiiwPI5nUNj94pZ6g0UWQNcxei+7plVzthbwvucgQ10u
- jlz0HH0JjS1iSqox5rA/b0CNO3a2wbEVyucy3P1Sb53WazxcBwpeL0W0ksKl11elHTOcvUUWDKT
- RVaGl32Gn16pRZ61HVQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-19_01,2026-11-16_01,2025-10-01_01
 
-A test's dependsOn probe runs as an execute stage command, but before
-the test's namespace is created. nsPlugin prefixes the command with
-"ip netns exec tcut", which makes it fail. Every test with a probe
-that requires nsPlugin is therefore skipped currently, for example the
-mirred blockid tests and the tunnel_key nofrag test.
+This is v2 of the series that David Keogh posted as an RFC [1].
+v1 is [2].
 
-Probes are meant to check what tc and the kernel support, not anything
-in the test's namespace. Run them as their own stage ("probe"), which
-makes them run in the base namespace. Add the stage to the README, and
-say in AddingTestCases.txt that dependsOn runs in the base namespace.
+Locally generated UDP, raw and AF_PACKET packets, and AF_XDP packets in
+copy mode, get only the headroom that needed_headroom asks for. If an
+XDP or TC program needs more, the skb is reallocated or copied for every
+packet. This happens in three cases:
 
-Fixes: 98cfbe4234a4 ("selftests/tc-testing: localize test resources")
-Signed-off-by: Todd Freed <toddfreed@meta.com>
+- An XDP program on a veth peer needs XDP_PACKET_HEADROOM (256 bytes).
+  The peer copies the packet.
+- A program at TC egress adds headers. The skb is reallocated.
+- A namespace sends through a veth pair, and a program at TC egress of
+  another device, such as the host uplink, adds headers. The skb is
+  reallocated on that device.
+
+(patches 1-2, from David Keogh) This series adds tx_extra_headroom to
+struct net_device. It is added only where a locally generated skb is
+allocated.
+
+Each case sets tx_extra_headroom in its own way, to keep the new UAPI
+minimal:
+
+- (patches 3-5) The kernel sets it when XDP is attached to the peer of
+  a veth or netkit device. New skbs on the device then reserve enough
+  headroom for XDP_PACKET_HEADROOM.
+- (patches 6-8) Add a BTF decl tag "tx_extra_headroom:<bytes>" as
+  UAPI. A tcx egress program declares it, and the verifier reads it at
+  load.
+- (patches 9-11) Add a VETH_INFO_TX_EXTRA_HEADROOM UAPI for headers that
+  another device pushes, such as the host uplink. It is like
+  IFLA_NETKIT_HEADROOM for netkit [3]. The CNI plugin sets it at veth
+  creation, as Cilium does with netkit [4].
+
+tx_extra_headroom is the sum of the extra headroom that each case
+requires, limited to 512 bytes. For example, a program at TC egress
+pushes a header, and XDP on the peer then still needs
+XDP_PACKET_HEADROOM in front of it. The kernel recalculates
+tx_extra_headroom when XDP or a tcx program is attached or detached.
+
+For all three cases, one option is to raise needed_headroom instead.
+This causes a regression for TCP and forwarding, because
+needed_headroom is also the minimum that ip_finish_output2() and
+ip_forward() require.
+
+Patch 3 depends on commit f564749b3b26 ("net: record XDP programs
+propagated to lower devices"), which is only in net-next, so the series
+targets net-next. Patches 6-8 change tcx and the verifier. An Ack from
+the BPF maintainers on them would be appreciated.
+
+Performance:
+
+All tests run on a Xeon E5-2640 v4 with a ConnectX-4 Lx NIC, on
+net-next at d6816d9a93b6. Details of the artifacts are in [5].
+
+The first table shows the regression when needed_headroom is raised
+to 256 on both ends of a veth pair. XDP runs on the namespace side:
+
+test                                 net-next       needed_headroom 256
+netns sends TCP to host              32.1 Gbit/s    30.8 Gbit/s
+host forwards 1400B UDP into netns   0.583 Mpps     0.366 Mpps
+
+The second table shows the gain from tx_extra_headroom in all three
+cases, with 1400-byte UDP payloads. All numbers come from one kernel
+with this series applied, with tx_extra_headroom off and on. Between
+two kernels, the code layout alone changed the rate by up to 13%.
+Off uses a benchmark-only patch for the XDP case [5], the push program
+without its decl tag, and a veth pair without
+VETH_INFO_TX_EXTRA_HEADROOM:
+
+test                                          off          on
+host to netns, generic XDP_PASS in netns      0.237 Mpps   0.283 Mpps
+host to netns, generic XDP_DROP in netns      0.386 Mpps   0.465 Mpps
+host to netns, 20-byte push at TC egress      0.385 Mpps   0.468 Mpps
+netns to uplink, 20-byte push on the uplink   0.190 Mpps   0.219 Mpps
+
+Out of scope:
+
+- Auto-tuning for the second and third cases [6].
+- Backlinking the originating netdev to set tx_extra_headroom for the
+  third case [7].
+- Native XDP on veth. veth_convert_skb_to_xdp_buff() still copies
+  these packets. A follow-up veth patch changes this for XDP_PASS and
+  XDP_DROP.
+
+Changes:
+
+v2:
+- Drop "configurable" from the series title and rework the cover
+  letter.
+- Drop IFLA_TX_EXTRA_HEADROOM (Willem, Stephen).
+- Set tx_extra_headroom on veth XDP attach (Stephen), from the BPF decl
+  tag "tx_extra_headroom:<bytes>" on tcx attach (Dragos, Willem), and
+  with VETH_INFO_TX_EXTRA_HEADROOM at veth creation.
+- Turn the LL_ALLOC_SPACE() and LL_ALLOC_SPACE_EX() macros into static
+  inline functions (Willem).
+- Test the veth attribute with YNL only (Jakub).
+
+v1 [2]:
+- Add the veth XDP case and the needed_headroom regression data to the
+  cover letter.
+- Remove LL_RESERVED_SPACE_EXTRA(), which has no user.
+- Replace the RFC data-path selftests with a test of a push at TC
+  egress.
+- Add tests of generic XDP on a veth peer and of setting both ends of
+  a veth pair.
+
+RFC: [1]
+
+[1] https://lore.kernel.org/all/20261015235335.4162993-1-dkeogh@amazon.com/
+[2] https://lore.kernel.org/all/cover.1794020868.git.tianyi@cloudflare.com/
+[3] https://git.kernel.org/torvalds/c/b9ed315d3c4c
+[4] https://github.com/cilium/cilium/blob/4a5cd2a20e31/pkg/datapath/connector/netkit.go#L63-L67
+[5] https://github.com/tgao-cf/tx-extra-headroom-bench/tree/main
+[6] https://lore.kernel.org/all/20261108214356.95406-1-tianyi@cloudflare.com/
+[7] https://lore.kernel.org/all/20261110201250.95225-1-tianyi@cloudflare.com/
 ---
- tools/testing/selftests/tc-testing/README                     | 1 +
- .../tc-testing/creating-testcases/AddingTestCases.txt         | 4 +++-
- tools/testing/selftests/tc-testing/tdc.py                     | 2 +-
- 3 files changed, 5 insertions(+), 2 deletions(-)
+David Keogh will post a TCP test as a reply to this series.
 
-diff --git a/tools/testing/selftests/tc-testing/README b/tools/testing/selftests/tc-testing/README
-index fc8e858ff119..430ac0bf68ab 100644
---- a/tools/testing/selftests/tc-testing/README
-+++ b/tools/testing/selftests/tc-testing/README
-@@ -168,6 +168,7 @@ of the command.
- The stages are identified by the following strings:
- 
-   - pre  (pre-suite)
-+  - probe (dependsOn, before setup)
-   - setup
-   - command
-   - verify
-diff --git a/tools/testing/selftests/tc-testing/creating-testcases/AddingTestCases.txt b/tools/testing/selftests/tc-testing/creating-testcases/AddingTestCases.txt
-index ff956d8c99c5..c61f2e2020e0 100644
---- a/tools/testing/selftests/tc-testing/creating-testcases/AddingTestCases.txt
-+++ b/tools/testing/selftests/tc-testing/creating-testcases/AddingTestCases.txt
-@@ -39,7 +39,9 @@ skip:         A completely optional key, if the corresponding value is "yes"
-               marked as skipped. This key can be placed anywhere inside the
-               test case at the top level.
- dependsOn:    Same as 'skip', but the value is executed as a command. The test
--              is skipped when the command returns non-zero.
-+              is skipped when the command returns non-zero. The command runs
-+              in the base namespace, before setup, so it can't use the test's
-+              devices.
- category:     A list of single-word descriptions covering what the command
-               under test is testing. Example: filter, actions, u32, gact, etc.
- setup:        The list of commands required to ensure the command under test
-diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
-index 511d66c36a2a..541caf984519 100755
---- a/tools/testing/selftests/tc-testing/tdc.py
-+++ b/tools/testing/selftests/tc-testing/tdc.py
-@@ -399,7 +399,7 @@ def run_one_test(pm, args, index, tidx):
-     if 'dependsOn' in tidx:
-         if (args.verbose > 0):
-             print('probe command for test skip')
--        (p, procout) = exec_cmd(tidx, args, pm, 'execute', tidx['dependsOn'])
-+        (p, procout) = exec_cmd(tidx, args, pm, 'probe', tidx['dependsOn'])
-         if p:
-             if (p.returncode != 0):
-                 res = TestResult(tidx['id'], tidx['name'])
+The iproute2 patch for VETH_INFO_TX_EXTRA_HEADROOM will be posted after
+this series is accepted.
+
+David Keogh (2):
+  net: add tx_extra_headroom and netdev_get_alloc_headroom()
+  net: reserve extra TX headroom for local egress
+
+Tianyi Gao (9):
+  net: set tx_extra_headroom of the peer on XDP attach
+  selftests: net: add flag to send a frame in xdp_helper
+  selftests: net: add tx_extra_headroom test
+  bpf, tcx: Set tx_extra_headroom from a decl tag on egress programs
+  selftests: net: tx_extra_headroom: test a push at TC egress
+  selftests/bpf: Test the tx_extra_headroom decl tag
+  veth: add VETH_INFO_TX_EXTRA_HEADROOM
+  netlink: specs: rt-link: add veth attributes
+  selftests: net: tx_extra_headroom: test the veth attribute
+
+ Documentation/netlink/specs/rt-link.yaml      |  14 +
+ .../networking/net_cachelines/net_device.rst  |   1 +
+ Documentation/networking/netdevices.rst       |  44 ++
+ drivers/net/veth.c                            |  44 ++
+ include/linux/bpf.h                           |   1 +
+ include/linux/netdevice.h                     |  40 +-
+ include/net/tcx.h                             |   6 +
+ include/uapi/linux/veth.h                     |   5 +-
+ kernel/bpf/tcx.c                              |  24 +
+ kernel/bpf/verifier.c                         |  31 ++
+ net/core/dev.c                                |  44 ++
+ net/ipv4/ip_output.c                          |   2 +-
+ net/ipv4/raw.c                                |   2 +-
+ net/ipv6/ip6_output.c                         |   2 +-
+ net/ipv6/raw.c                                |   2 +-
+ net/packet/af_packet.c                        |   7 +-
+ net/xdp/xsk.c                                 |   6 +-
+ tools/net/ynl/Makefile.deps                   |   3 +-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_tx_extra_headroom.c    |  40 ++
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/lib/xdp_helper.c  |  82 +++-
+ .../selftests/net/tx_extra_headroom.bpf.c     | 138 ++++++
+ .../selftests/net/tx_extra_headroom.py        | 426 ++++++++++++++++++
+ 24 files changed, 944 insertions(+), 23 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_tx_extra_headroom.c
+ create mode 100644 tools/testing/selftests/net/tx_extra_headroom.bpf.c
+ create mode 100755 tools/testing/selftests/net/tx_extra_headroom.py
+
+
+base-commit: d6816d9a93b66a12bf01e10037e377f3333ad6cc
 -- 
-2.53.1-Meta
+2.56.0
 
