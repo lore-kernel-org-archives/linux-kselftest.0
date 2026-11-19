@@ -1,109 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.83.142
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795083536;
-	b=lCCKwRQKqOs1vzjHhJnZsOPbplOhj3pEXkR+M8y1wCyLsml8pTt69gY+gxGeI/4xWfJo
-	 uhrrCa0u0fJ+ThrWwoLh0sDQVp3XFwrZI5VXgirG/cAnqCj6E/AGxX8+HGV6sEd6skt5H
-	 1pl4+Bt0zlxHmJ3dXNfMUme/I8ZiMjTx5nx7uivmPAeswgpYsDhkjW6Uh7buj+U+jzujS
-	 HUMh19Xt07CZLd+iQi3VEHXfdOh7rN+jpNkF2vGS5LAySsZex8+bYyb7qJ8J13+Aot7sF
-	 A26vpNULLXf2zek04F9asiMwRjljHmvUaxPwrg3m1GMwbi0MMZL7yfxwZnfL8yOW6zg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795083536;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=tfxTFHEyluesyaBIpsmmWm8rq7qtETtH8efUGbR+L4g=;
-	b=PviamHIDFkrujCAZqPIcpP92haJ8KiWGCZYxLedSEvcsleLzQ8uJe8Oav9JwOv1+MaM1
-	 XnplqxQQJQ8BidpmFdoZjp1GUtygnJCX1GDvpgRNNpPVxByF1dOjiQJITPdkV4Frna59p
-	 trqZIDVQl0dba2rn8wD3fB6QN76sxTad+E7+Yj0kvCTcTKjWrZa5AVkLSZleJmiNuGOMU
-	 FWEyY5VOTVtRSNttxi171X+rgUbFCjpf0jmg+iW6cNCzRk3jmb78evltRBnQHfaQ+unJ1
-	 8CPOLDYNkJGZsMV0hI0pq+lReH0ufOfbb4I0351T+4MYQqQB6bcR0yEGZoDUDBHEQkw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=virtuozzo.com;
-	spf=pass smtp.mailfrom=virtuozzo.com;
-	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=C85qvXLQ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.83.142
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11023142.outbound.protection.outlook.com [52.101.83.142])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.149.156.116
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795083572;
+	b=GxgorJBlChkRxKU7341maMj4MI3j1b0V44avDxt3nlfhBtvgGZEcBslwNG7UgDDjGfHH
+	 kHpUIYSfw6IGA6tOsbVQ6upVzNp6hlkr0JOgCFpMGN8VkRhiAwObXthQ3i8sx2Q/4fCLe
+	 atkysyPDJKFgCHRxTbyFinUEIL20acBy6t1oOX9tU848QuIs0Mo++Snkc2gO29jem5Zkh
+	 nhvpWBC2I+G1Z5rSI2vWLtPCHFJa/Gd7esXQt9DRmSvbWjAO+5l+OonRd3T6cpXw3FFjI
+	 EAXF9W1/VJyx4roIwuODnjz6+Ka9gRM5HHXbDOQGiUPPb/KIy5pK4HRRUyMqI8IZUVA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795083572;
+	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CMAE-Envelope;
+	bh=qoTfovvGGzpx6qWwGgUcp8ZrLCtEAOaZqm/XAVRtgu8=;
+	b=oxByNamvvy2k5RP2LvAQhAWkceonHCQOsbKJ82vcEoK+QjPEi3+xdXK6hf7p+VY35NKR
+	 j71L6SQa89/3JxvKpXmdzwSnLQe6Bc4gTjWqnV60si0HNXq77msWt7VqB4UYmX9mQupRA
+	 CddPYuT8o3ChR7l80yNHxyLMu1eUyB83KOqw74HgXbgYlm5syFlLUskeRQy2Z/rSwIPzj
+	 l3zkqZ8FyGLAUW27RWXkHen+N5bC7UhVhklgOzFPgdEtd69N6B25mg89HeZCeBCnxTX4J
+	 ou72aXuKT4otf7vYeSU/qjws+GqqywMrIXcXCn4XCSXaiNsORHb9L4OdklJYaVmWyrQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=enneenne.com;
+	spf=pass smtp.mailfrom=enneenne.com;
+	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b="YbUT/4nB";
+	arc=none smtp.remote-ip=62.149.156.116
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DA0606A324;
-	Thu, 19 Nov 2026 10:18:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64DA0606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A705660A2608
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 10:19:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A705660A2608
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enneenne.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=C85qvXLQ
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dX7HbMqJBq5/eWQbtiPAHNdfIe9kK758ilDW7ZgFvZnFwakhaQMqoHfinxaCDwc/wvNdP+Gb+NGmHddmbm8fTzEpWkz+E2Tm0+PbLaxP0Eh/Fbeb3n6MRWkJ+ldtZhhLlfBz5drk7OB4mM+6o1AJPJ+inUOqFLBORggXySo8Rbx/zfO4Ic3JB2Te4hR5MtBp/EhSAEqIhvU0xrYf7Ltdm2Kus4mKaU3LFCwFZwBEzlkV5kyA3/xliqhqBq9HpdTnTGH1+U0rbEPtimGggvNhUuSu321j3Jy9PVuE1MPClxGVOFBCn/kqiRp3+bKJHJK3ZHiz5x0jDG1rKgbLD6dH/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tfxTFHEyluesyaBIpsmmWm8rq7qtETtH8efUGbR+L4g=;
- b=xU5CFrAgne68LHzWGgO01/KvGc81+Tj9b1h1cbqgbm7qBEJObJTjlc+OhR65Upav+y8YtUAa07TMhJS2dKsSivaV02GBA5blt6b7G2qcKgUDronmmyqva3rn6jeaWNse210mqXzFfhEGbMlgIn9HzKzHJuQeXhiLLtCdF9fxfSK5J77Cbdhkyxl9anb0kHGqn57pq96iPh6LmUjV/R812QSZ88v7IhFZBE5RKv4VLfkChlenJ3Ih/pWTjvfIjuMNjkk4ONYRQDlda5cwnjzRcPZD9LLisK8HXOKFg6PSWegAkcOlrgE6cAnH59t13MDEvi2WHkTFpSPbDiQ9AaZMDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tfxTFHEyluesyaBIpsmmWm8rq7qtETtH8efUGbR+L4g=;
- b=C85qvXLQ+jSSrCoq1mXdrvp5iBbAUo+DCV3qWMbQfzdoYOXySmLkyWrw1gPSYZznLV3K09MviE1MoQdVuLGDsPab79BKyn/w8nI5CGKsjIVjkeL+vFwffto7JAaBz2ZSXXhFrwgqKdwy4VCeP0pOcz7kxUXM5Q9+boOeB2woHrSU0rg53hpKpZnAyzWDMv2uZFi0UyNTbRA0QN/JmEEisjuZa5V9THvBMO7Bc19M1iFc2qlbRYkVNRYtDU5CzrAPzELvd0GEyEW+JllakE/mCVeKgP+V8ZCfBlGOi0q6HbF8B537uWnIigzFj5YOzf5bCjG22qkSVsF6iJkO4922sw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from AS2PR08MB9075.eurprd08.prod.outlook.com (2603:10a6:20b:5ff::9)
- by GVXPR08MB10452.eurprd08.prod.outlook.com (2603:10a6:150:149::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Thu, 19 Nov
- 2026 10:18:48 +0000
-Received: from AS2PR08MB9075.eurprd08.prod.outlook.com
- ([fe80::3f57:9ced:7a37:1bd8]) by AS2PR08MB9075.eurprd08.prod.outlook.com
- ([fe80::3f57:9ced:7a37:1bd8%4]) with mapi id 15.21.0615.015; Thu, 19 Nov 2026
- 10:18:42 +0000
-Message-ID: <d9104dfd-4a07-4fe9-b1ca-5ff6541422f8@virtuozzo.com>
-Date: Thu, 19 Nov 2026 11:18:39 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/4] mm/huge_memory: copy PMDs at fork like the PTE
- path does
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Peter Xu <peterx@redhat.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
- =?UTF-8?Q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>,
- Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
- linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
- stable@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
-References: <20261104-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v5-0-c56d0d26f970@virtuozzo.com>
- <9514b491-ce2b-41e1-b1c7-066855ed6fd7@kernel.org>
-Content-Language: en-US, ru, sr
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
-In-Reply-To: <9514b491-ce2b-41e1-b1c7-066855ed6fd7@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P192CA0033.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:658::27) To AS2PR08MB9075.eurprd08.prod.outlook.com
- (2603:10a6:20b:5ff::9)
+	dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=YbUT/4nB
+Received: from [192.168.0.186] ([101.57.122.26])
+	by Aruba SMTP with ESMTPSA
+	id TzEoxCjbX6VShTzEoxQo8b; Thu, 19 Nov 2026 11:19:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+	t=1795083571; bh=xVDB/U48+KhBs5UAsVUdiYW+qscID3emDO8ims3vEAk=;
+	h=Date:MIME-Version:Subject:To:From:Content-Type;
+	b=YbUT/4nBgfoaIXJwrMhQeMlvt9sIO8ewa18oowgWvXyRXmLc2FHqa2uE+1ff4WSTf
+	 +SlwXjDXm5+E/qUhmEoIB20CoCnXl3yFBCAfguB9RFKweMi7UXcT5bvO6X6JzcKsVY
+	 YdpDu59seHkq9sF+x9RNqBAoaQVUMas1goxW3myB1EgiT3nhghCefk4/uA0S5tFFps
+	 TKVA8foIHclyKVCWFHy5lEMDBTPNoWtxVHid8dwSdINvi25UgNeSV0dcPqLyfphhGR
+	 kGKvJwZviyVJAXY+tsejDtlxxsZooEEM2WPMcXCcmF3vDQZeiDtSbhOPjEWtT1DFPA
+	 jFwJQ9Lcm3lfg==
+Message-ID: <6fc1eaee-3a60-49d9-a5a0-74b662f2232f@enneenne.com>
+Date: Thu, 19 Nov 2026 11:19:30 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,97 +56,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS2PR08MB9075:EE_|GVXPR08MB10452:EE_
-X-MS-Office365-Filtering-Correlation-Id: 733ac57d-b07f-4613-c20d-08df46267cc7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|7416014|366016|23010399003|921020|261022105027099003|261026121527099003|261026140227099003|261028144727099003|4143699003|56012099006|10067099003|261009223027099003|261022075727099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	9mJKa8ifQpqcIiiD1qWI3uolMutHJQysRYfQ0A3NtyAYH97/Qv5BdRF6RxD3ZL1jdQHSHDUu7Lb85SAVxl8b0epM3OI5pKCwWrwHfZ0ttWe7SjkyOAL561zvHnuHMj8ZOZ4WHm6C57+DR/V/QoHPk/bpHL6iD4aoKzAZ57IUgED92RHC9ZxR1TbKZ4S6M9HmpqO103/eHscUrV5mla/L/KmVjiDQd70RsTX1nMOIA9CEVWoT6jDJK/CFuADGm0u3iOMRTz+wYuSNTVDbC7jHsbGQa/FKG7ZqNXkGGCDhSNB3lm/MDrLd/Li+SkZ18DMgE7fY+2z+i9cxLwcHNd8x1bDX8Uvdi/fxtc3Nr7a7muIUDUe0IsxLHAoc/DBHtrnnkEQxckBs+yb+6ysm0WxiEBN4a70K9OWRB/1zwXkxNew24svNtpMhAWCiXP5OCfJv0SRRcYWxMgpQoVWNyxnFMoZ5JBpbavgCrjj/oN1lmItLN8BwfBn3l7EoD5X9mkPphsvrQTGBIxZXfzBHBN8Ee+jdd8uYAXhXPF8BRNp2z2EUYxF1B1jEk3rjr6w5bTMq3LAO63n0/6mg6RftQ62F6NBwmJdjRlpNF0oCh3El7srkQSsunQZl7Ko4VY3LhpMSfCsHbmLBhSHOxMxLvMpgAFB29J6FUk0ZBF4bhlbv5tNXbNb1bkwP6INys2RT6acnipybzbZYL54dwylQf/0cCg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9075.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016)(23010399003)(921020)(261022105027099003)(261026121527099003)(261026140227099003)(261028144727099003)(4143699003)(56012099006)(10067099003)(261009223027099003)(261022075727099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VC9WRG0rQWZDcSsxSk9TMlcrSkJmUUszNkw0ZnN1bmt2ei9ETngrVUdwTXpX?=
- =?utf-8?B?NlpwTmR6TmNucjVMcGFGZlU4eUkrL0pyUE5rTUxXY2RIenhSaGNDR0lBVHl2?=
- =?utf-8?B?YkM1RTg3SjFLLzVNVkx6bWc3N0ZGWk1pT1NMVHhjQkdSVVM3eGdJeExGSW8v?=
- =?utf-8?B?RE1IU3NSeDFsUVprazAyZEh0b29MNVpTeHowQ2h3TlZENWNXcnJNOFJVZ3BJ?=
- =?utf-8?B?R1NzTitFbFFoSWtZcWR6YXlxSm9tZGhMZlpPOHlyb1FaSWxSSlJSbFArMWlN?=
- =?utf-8?B?VmhVN3J6Z0FNV0R4T2Z4UWFzR2JDRlFHdkdPaVd0NVRhNmtEbnV6UnhOT3dE?=
- =?utf-8?B?d1d1M0lZMnlLY1ozQVFJVDdoRFVERmxiQ09mdVNpYUVpUlZyd3duQWo5Qmkv?=
- =?utf-8?B?MG9rektaSnkzMEliK1pVb3BieldHOFlhZ1FsZE9ockJqNHlnZWhkQmQxQ2p5?=
- =?utf-8?B?UEtSSENVeEJCZC9oZ3o1YmZoTmUwREdJRjZHbXkwMlFkQXNNUW5mRlAwNlVx?=
- =?utf-8?B?WGM5UW1Wck4zcGtaQlorS2QxR2E4ZDB4VjAvNHJ3SkE0S0JRM1U4ckRMdFlT?=
- =?utf-8?B?M3lyZThUVFJTSlNGOHVNZmhjL2J0eFFkMEJxZWg5VE4yWHM2ZFRER0ZJOFN3?=
- =?utf-8?B?MVVlWWlVbGszWlRaQ3NDeGtPMlVzcFdOY29SNzlVUWNsdklETTArMGhzOGNq?=
- =?utf-8?B?Ti9JNWNENHMvQ1U5b2M5QkVaejhzYi82Q0lyYkJRenhWWDQrWTYzT3F0SnQr?=
- =?utf-8?B?Z2thaGtvN1VWOTBrMUhDZ1B4TU5EODhVTnEwc2IvRTY2ZTFuc1BBdzh2QUpv?=
- =?utf-8?B?a0c4ZE8yZEQreExmamtGdFduaE9sNm9rQ041cklZSDBKR21UOUZZUUFVY21X?=
- =?utf-8?B?V1N1SXFZNUdCY0JPQnUxUHV2K0ZtUE0wbW1JY055SWJmVTNoTUNIYmlhckVP?=
- =?utf-8?B?R0hNQmtzMUx2cmQrZmtrcTh0aFF3WmJIamwraE9EVVY5L25DV093bC9wb2xt?=
- =?utf-8?B?ay9tbHF2dW40aGNvUElZMW9GZTd6cjNaMmZJdHFtczdXdlovclJqK0EyZjho?=
- =?utf-8?B?ckJoaVFUdmxXOXJHQkpBK0l6UVBrd3ZKc0pvZ3NJK0hheE03eGVPclBST1lF?=
- =?utf-8?B?UHVKc0dmd2RnL3J6QVRPNDZhd1VMbXhJcHB0cExLS2MvMzBnVytuRmk0L1Jq?=
- =?utf-8?B?dlpNR25GeGFRZ3Fwd3RMdlBOazlMbzYrREJIaXh5QlN4R2tsU3psVkpMbE53?=
- =?utf-8?B?S211cFcyUDBuaEsvUjlOT0VRTXpoWVdYK0U0Q0dqbThPcW9lbW1YekVKYms2?=
- =?utf-8?B?VEc3OU5DNGRMYUh4WlJpUjZJbXpLbGNHbzZDTmhUbE4yUHdBemM5M2pqWk5w?=
- =?utf-8?B?c0lkWFBFcGZETWdkK2VOazluWnJTaHYwVW5mUmRwNUZIK1hhQ0VBSVU4V0pO?=
- =?utf-8?B?dEYyNU55cVpBcGNuM1RWNVBpSThjUlkzUTVhVkVGaFpGMnhnNGtmenNnWGJI?=
- =?utf-8?B?OU92Zk9oUnNsaVF2N1hLeGN6VGFoWkdaOEN2azdZSnZnTUFJM0xrdDljUlg5?=
- =?utf-8?B?R2hETDYwVmZ6NG8wdUpBNE40UWRtby9YNm5WcGVpTTkxa0ViNEw4T0txdGtx?=
- =?utf-8?B?UVNUNUJZMmF2MTQyVVVlcU1sb1c2ZGtZbWYzZDZ2RENvYkJDMlowcTdzWkRh?=
- =?utf-8?B?Sm01dS8yaGpZVTlyaTZDcncwL2NvU2dIa2dTV2RQWDdoazF2NEhCdVpaSWox?=
- =?utf-8?B?RUV1dld2M2swdDA0RDZvUHkxYWRHYWlqbTE3RHpBQVpwbjRjdEFxZ3gxVU1M?=
- =?utf-8?B?dHlkTHFaNW8wQzlVYmpDMW9uV1AvRXk0amxtWjBLOXlXTkYrNXlpVFNHQjg0?=
- =?utf-8?B?VVlXM24vWEtGd1JEY1BQZ2dQdEJONWs1ZVhyMzhtZXgvNlNPcTl4Z1R6UmNZ?=
- =?utf-8?B?RlluU0RBQnBCUXpvS2FaMVZ2OEZtc05pbXNXNjVTdFR6Sm1PQzl2b0NmMnhC?=
- =?utf-8?B?ampkQXFBRjM5UnZkQ2ZzY3p1S2ZQVkhqbWgwMFJxQmh1L3cwTWNRV0tyeVJR?=
- =?utf-8?B?TjlOd2g4S0F5cThJVXhWMGc1M1ZwSzU4ckRyOEx3OVV0VVhtQ3BuNTlHanBa?=
- =?utf-8?B?RzA5dnViWFdJV0hhelNxK2twM1phWHBHTXBwZEVJbDhWTjhPWVdsbW9BNmFm?=
- =?utf-8?B?bHY0aldmTVF6endWZGZZek9xZnVwQXIreElJVlB0UzgzMURrSjlUcHJvTGND?=
- =?utf-8?B?NXRjeU53TG9VaVBYa3pPU2FwV0duNGYzTTNkaDVRd1lVVVdKVjdKMnRCM2tD?=
- =?utf-8?B?M0s3UXU4eWF3MW9hdGVNVzd0STAvMXhPSTBNNTRENEJaRHhTQVBlZz09?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 733ac57d-b07f-4613-c20d-08df46267cc7
-X-MS-Exchange-CrossTenant-AuthSource: AS2PR08MB9075.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 10:18:42.7673
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nGfyknBtY9SuhJtraBJgGSoLj8NOfuSNJc+ciFnV6l6h7Rr/Rd+yiWbsJkaeLzjonGSEQdMZm/NN18zkTB+odA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB10452
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
+ never read
+Content-Language: en-US
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+ Demi Marie Obenour <demiobenour@gmail.com>
+Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>, Jens Wiklander <jenswi@kernel.org>,
+ Sumit Garg <sumit.garg@kernel.org>, op-tee@lists.trustedfirmware.org,
+ =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+ Pankaj Gupta <pankaj.gupta@nxp.com>, Sahil Malhotra
+ <sahil.malhotra@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
+ Richard Weinberger <richard@nod.at>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20261118140421.584086-1-giometti@enneenne.com>
+ <650f89ef-9745-4f75-b254-80fa5ac4773d@gmail.com>
+ <av5EyVHnNzT27dyK@kernel.org>
+From: Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <av5EyVHnNzT27dyK@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfNmI1DIntSdZQogEw4CF+ExsMW52Dv4KVdQXYoEI2SlV11eEe+IxA80+xUydMG7wJYG2UEM6OiD9fNlRWY7iZyyfEynPQDNyEEdFhZWKfwj8abUd2CVm
+ Lq49bpZ8Z2hgx71DU6sYhhPLl43jb2ht+KlVBI2Wws/GNH5B314G6kSkVXdUI0zRZd2gi9GuTGtx9GWmWncQRI4c/1+DT6GPQBX8WtlSvd+6+m3S0U28wDVb
+ 9Hs0soZ49fsX6dkU30YublBd1jh16ccPykwFzi0QXARm/rgb+5uK/CGYB48nylkVg/Iou536TAACMpiIFEXZHeWUt50k8OfWaF0zaM+UpvSSdAus9yIAxvfo
+ TN94jAoBEVnYhfDi4/82Wy353ZJ1o5Gj7OLddeLFkBJpl5Wzw5rMleizI45QkQxnhWD9ETOrQetS561qT7M5CxMYKxPdP2CZdtSrbjcXhI6YyhaQFk/VhuOD
+ xGbNMNlUIo4efMC8Jcl4US1dtNwkfWg/BpgPT1zm36hQYfAnbrypJsoCkLgDERPLHDlxy3WHcdLrwjTHDhF152PUwUN3+0cXJP+rpQt4cnKrbJOd8mbnMBA5
+ EMXx6ob9CMe6mj+soYJG99NcZl4tQ0l+s5hpHAPsuc526bT/lm5wQJkL1AqL3CRNSBp8R47j5nwfQayZ+tYMift/3GXo8dIjA1+x5Yvr6vMNcofIH7i/59ur
+ Cr0sge9wRuaNCXPdPiwh8reCg0jcdmIDUSmDeezWJ/vVEu0ZRJk6A0sox8LZ4P6BOT1DZRkpwpiVSc8FzhApAGo7gQFx9BodEBr1xaKmgy0lQPUfofalbEII
+ C6SljIGeSVkINsuuIJIc4xdBFC7WWD/A2Sc+c78UHrVkV0MV4yXYbaTvr9wNBVTgrAwp3+Y2tyceUQ++SVMYBYF0Ep10RMiXXsCHHx8Ag3zq5QoaPh3C5Ewb
+ Xi3Ngl0pycbj6Q70Q43aVHp4xi3eUQlhWi1FOWVON921NfgQcZmZwXdeGWDCESlVLmbWInKcpIgUO2tNtllaYf9/CQP+sPgnyHv17dhDWbS3pxvLllfyiCb3
+ ok3jS7JCxO6vaFDZQLPPhhR/83ZbJ2KLWnwLSR3vhTJoHsFu1MSbYvLxA49eoVbSM//x+PpbPS6efabzTOuqyXJypu2VSbiPywrJvlCcYgz8HkYiOp/KN/7w
+ 5+vVhbHV+6327zrFt84ZC5MvsP6W7QnSoCxLdbTLlHwV7lXCyMgyzPaAh/4+68Unc1/0NALeZ2REnwOiT7xXoxkV85CK2tGeb5X9z7vGZH0Jh1i15QTOZRXm
+ iZpFWF2L
 
-On 11/17/26 22:49, David Hildenbrand (Arm) wrote:
-> On 11/4/26 21:40, Konstantin Khorenko wrote:
->> copy_huge_pmd() decides what to copy at fork by its own rules, apart
->> from copy_present_ptes(): a lockless check for special PMDs, and a skip
->> of every file THP. Following David's review of v3, this series makes it
->> decide the way the PTE path does, under the page table lock, with
->> vm_normal_page_pmd(). That fixes the two bugs v1-v3 were about. The
->> patches:
->>
->> 1. folio_dup_file_rmap_pmd() duplicated a PMD mapping as HPAGE_PMD_NR
->>    PTE mappings. It had no caller until patch 2.
->> 2. File THPs are copied at fork instead of being refaulted by the
->>    child, as their PTEs would be.
->> 3. The special-PMD read moves under the lock. That closes the race with
->>    a driver zap (vfio-pci, panthor) and the missing page table deposit
->>    on ppc64 hash that Sashiko found in v1.
->> 4. A selftest for 1 and 2.
->>
-> 
-> Okay, the refcount overflow patches are now upstream.
-> 
-> Can you rebase against
-> 
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/mm/core.git for-next
-> 
-> and resend?
-Sure, will do right now!
+On 19/11/2026 01:37, Jarkko Sakkinen wrote:
 
+[snip]
 
-Cheers, Konstantin
+> The exitential problem here is that KEYCTL_CRYPT_OPEN creates a circular
+> relationship between the keyrings API and a specific key type.
+
+Agreed: it should be a key_type operation, dispatched the way
+KEYCTL_PKEY_* dispatches to asym_eds_op, so that keyctl knows no key
+type.
+
+> At hardware level I did not see any support for TPM, which narrows down
+> the potential user base.
+
+On a TPM system the sw backend can take its master from a TPM-sealed
+trusted key, but there keycrypt adds little over a trusted key. The
+users are SoCs with a TEE and often no TPM, OP-TEE on i.MX for one.
+
+> The remaining potential user base is further reduced by those that use
+> trusted keys; leaving out those who need to solve the assumed problem
+> that only this patch set can presumebly sort out.
+> 
+> And we don't really know at this point that cut. This is pretty much
+> the break down of what is wrong here.
+> 
+> If there is/was a problem to sort out, it should be so constrained that
+> it should be as quick to describe as stepping over a nail really.
+
+The nail: a device must encrypt and decrypt its own files, also from
+a minimal initramfs, with a key that root or a kernel exploit can use
+on the device but never copy off it. Trusted keys hand their users the
+key's bytes (dm-crypt, encrypted keys and AF_ALG read them). CAAM's
+"pk" option is the one exception, but even there a new key is drawn
+in kernel memory before the CAAM wraps it, and user space reaches it
+only through AF_ALG, which the kernel calls insecure and deprecated
+(Documentation/crypto/userspace-if.rst, and "Userspace interface
+(deprecated)" in crypto/Kconfig), privileged by default, with no
+purpose bound to the key. The i.MX93 has no CAAM at all: there the key
+can live in OP-TEE, and keycrypt lets the keyring use it without it
+ever leaving the TA.
+
+The stream of patch 9 has no user yet and can go.
+
+Ciao,
+
+Rodolfo
+
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming
