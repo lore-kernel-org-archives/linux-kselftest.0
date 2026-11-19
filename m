@@ -1,95 +1,139 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.14.61
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795128173;
-	b=RgHZjb1oRb7IAfe6m7IXs/yEKHnewkTyZLdFLD+bp3/MIVLy8KoFkXE0paxlUiyQBKT5
-	 a3HCZZ53/sCS1UjS8wm3LI+DuV5F0qfP2qcEt+ctdFnr/3dvjkq70wG3ZUP6Xx1S65IY8
-	 TiyeRLQVnhPKXTGDJxJo9QVlR0D9iywKTXlYyH71i4nS2OHqFZQBZEbvBPhAUIejSvkpr
-	 Bs3Ysb2K4ksdQYnErvwUvG8ew/itqTy2RkqBglIuQQ/5AI6Fn6ssE5IwL5OZMugVsVaFv
-	 dTKOMOafM97lLs1RIJSdIo5yz0FWR7BQMuE1oDWBk0bxWWpsaQoOxVabvX87hMjkejA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795128173;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
-	 X-ClientProxiedBy:X-Microsoft-Original-Message-ID:MIME-Version:
-	 X-MS-Exchange-MessageSentRepresentingType:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SLBlob-MailProps:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=4bNbrJCVKYDZquo/UYoJn35nfcHdgnsIAcTG+OQuWII=;
-	b=UFJBgCsUR1BakMHRssam9+phKzh08KVRsTo0a7Qdf8q4/SZSLpVXFvvCBYlDZULlb/fo
-	 y4uLgfcJrb4Vqfjmcri7QgmqPVhMIRgrzOQIz4n6viHDWrKnP+PETqEWAdoviTh8by1LF
-	 xYMFIdwz1hFXyexvmpkBg0x1Nc6ayP+rx9yCv6vxRlUQ1zcbWpcx+jzzgsXUa5dApFcCf
-	 l5/oWJtHp703QiWY0pilRO6BFHiC0RPo/tM3kB+wn7ltBqiz8tHpisZfOISHWI3ztSB9R
-	 O4mEpbpsK1h+oE5FiEDT8AikwCE+wReLmPYTihw/MwQCz2bZ+PSsAx/tp8MhCsQ363g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=outlook.com;
-	spf=pass smtp.mailfrom=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=fKQN1TJF;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.14.61
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazolkn19011061.outbound.protection.outlook.com [52.103.14.61])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795128212;
+	b=ofmc6HM/YX02JZzEqAethZq54ybu3VLv0wPcFyBhT4Bgh0bE/TzDyOPWEuwVrrkGQvjt
+	 qmOJpwQ+rJovcSDawKn9wh+PehRDFQRa1o6gHAb6R+WkiLA8iIgxIcLTkYaaAqs4L0Lvb
+	 yhsKqWtpHZ8mJPY9DSpggPww8VrPJhCKixlrblTwf5t7xo2bqnqQYsmaz/JeJE3ryFA8Z
+	 jawgXI27gHXF6V1TH5zMxv8G8zejnmeY0l8fjh86jOeqrYdQ3etGHhJbVH8ziR82bqk9+
+	 9DxYijBHjVF+PX6v4+8Q00fhAQHDUQxwIq7YEhL/VA7pHTPa5KjC4O5as8myWxAw+ng==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795128212;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=ZNyRLMfKGk2VGtAqB2z2tqb9Lbalo8bd1K9pdQC4VVk=;
+	b=fewJKLQNtoxV4nJHJlhYcjkYBLQAYbrkL6rOCmvS0a3oqeyOnlqqPzT0nEsE34oi7g77
+	 f1g79nxcPyCpBlToi97zGLlchG7XXOOtgEcTUhOW26GWJEm3WAPV4Iy9swuh2uwcG64lr
+	 ogI/cGAuOl/xnLX2twEcUkvkoKpfwQYURPLL0XheX5s4KNAYNogqgsr8GM0t/1Mp1G7WT
+	 rbJbRbSpen2y7wR63q0GbObIpMC0YY3nIAK45UKnLkvDb2Wf9GHTzosn//+HtRLzcdOzk
+	 mxSRaTL37tFptXC5afgAPF3VvOwyQkucbpUG2YMelxKxQhpcQ/eFk+UtZq9GF+SbqFg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P3H24aJ0;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA56606A320;
-	Thu, 19 Nov 2026 22:42:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEA56606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 38116606A320;
+	Thu, 19 Nov 2026 22:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=fKQN1TJF
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qMK4eS+Lfr3liAyN8zMpRWMWt9nUH86aYZbivjI3yEsz3lUWrUzEgMnVTFoVjStpJrw96aS2eStog8d9o3OLyphrDWIBF1iUXsD1eJHiyWAhOwU2cAYEVuGCZzaFvNyNvgcBZh1ivo3C+iU9vJYwyTf/zXF+bWUbDBGRDE+p4EhTgkFwDtSan42E2u+WPUJM8A26Ow8kX42IMTWH6k8uIg+qC3Gsk8tJc2hmtOeehJRM61GN3fpBx49nS0sxoLlMjjHn5mLS99N78PYTewx9nbx4Yz8QV50Lgn11hMkkAf/0ce3D7Em/x7kRRYBCUqj/t2HutqWzCcdytMjdAArPCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4bNbrJCVKYDZquo/UYoJn35nfcHdgnsIAcTG+OQuWII=;
- b=Ak2Ok8aqUPwIReIlL99fgJQY5uAXBTEPfoJtC21YpOmlnFvoGEKrEwackB5jry921jM+C1WfypBCrVr/4QGOPlyRJxkcY7QP7W1fIrtqOw2qW5P1qvXLZC0K5bci/7M6vT7Tipf5IBcxwYTn4bG6Aq40A2tcbC3Ylg8O0aN1pbxuIDSfCvE8QdSP0pEUampFwzdJ7jwpXLW89oWSZ7dQGIEHoGH0rxCYznzNSUQFakwJ38Trze+0xGjC0D19ecH04AJS855ibaNk85rh3F0NmkHRIrpou09eW5qgOCXeI+BDWHn98EbYQpzKq9nGD62pmNegfwdYNWlI9LGkkR5kHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4bNbrJCVKYDZquo/UYoJn35nfcHdgnsIAcTG+OQuWII=;
- b=fKQN1TJFMsJuGerIhJG5AbMweB0qcUnBz4AaK8ibXRONm1EiZQ8lKlvLNASA2MdFhI5+iJe5j/pQhylpRvJFWOGwx4ijwbHJrY3xWu0VJ1+oColY/gRswAklODB/iT4ALaPtnNXnFNRbCLO/728qYnSkmzWJTh5AtjiX+TJOnQO/grOkY29MAHR3j+Z3p7O7J1YY7U1uPJZsotn/OXq4zPH8KqhgB1zakIxDFPRn8oTdT1EJadBiSk/6tFdJNiF1iUi0WMnrlF914RfI1Pd+ADVeMT/cma/IszbO98+mjAGoLVsg3I2mb9U0zCNPSS7GONd+QXRVSQHvAf69frN97A==
-Received: from PH7PR19MB6658.namprd19.prod.outlook.com (2603:10b6:510:1ac::6)
- by IA4PR19MB342183.namprd19.prod.outlook.com (2603:10b6:207:101::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Thu, 19 Nov
- 2026 22:42:50 +0000
-Received: from PH7PR19MB6658.namprd19.prod.outlook.com
- ([fe80::3d9d:46c2:d611:dc32]) by PH7PR19MB6658.namprd19.prod.outlook.com
- ([fe80::3d9d:46c2:d611:dc32%4]) with mapi id 15.21.0639.011; Thu, 19 Nov 2026
- 22:42:49 +0000
-From: Ilyas N <desobei@outlook.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Tamir Duberstein <tamird@kernel.org>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	David Gow <david@davidgow.net>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P3H24aJ0
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 61CC01F000C0;
+	Thu, 19 Nov 2026 22:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795128212;
+	bh=ZNyRLMfKGk2VGtAqB2z2tqb9Lbalo8bd1K9pdQC4VVk=;
+	h=From:To:Cc:Subject:Date;
+	b=P3H24aJ05ftjCxEWSMFYlBYV1XTWMdVsfXZQFZ3YrSWBVd5H9bKoldecv9sSK8HUW
+	 zma+fPqxkX/aa8JLotsUMjF0hHjyH7CZsXsbi24WkApJyq9xHwPe6986tQHIQB99EZ
+	 PdwIqBqHIJ1xjPKWEyRrFYiMTTHfzqi7A1tOuE7Los2xNqxe5ISYM1+j7aKaynuB/z
+	 Fsv1Y+fWT1WzsZHIAkDnvVvbDV+e8Dq6jfXR8QPPSMKFPlkTYc6QBkUNlnXBL/2MFz
+	 8xYPGBIMn5NfJMT9vpIQC6xRvxDi/6a80g3MIPCvN6dnxEumwqO/aOPsEn/nqse8pv
+	 rQgxc/5VBoh4Q==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Ilyas N <desobei@outlook.com>
-Subject: [PATCH] lib/prime_numbers: don't sleep under rcu_read_lock() in with_primes()
-Date: Thu, 19 Nov 2026 17:42:36 -0500
-Message-ID:
- <PH7PR19MB66581508E6F6733E0C36EF92AF792@PH7PR19MB6658.namprd19.prod.outlook.com>
-X-Mailer: git-send-email 2.53.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YQZPR01CA0163.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:8c::19) To PH7PR19MB6658.namprd19.prod.outlook.com
- (2603:10b6:510:1ac::6)
-X-Microsoft-Original-Message-ID: <20261119224236.12058-1-desobei@outlook.com>
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Ben Segall <bsegall@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christian Brauner <brauner@kernel.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Chris Zankel <chris@zankel.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	"Hallgrimur H. Gunnarsson" <halg@google.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Jan Kara <jack@suse.cz>,
+	John Johansen <john.johansen@canonical.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Kees Cook <kees@kernel.org>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Manfred Spraul <manfred@colorfullife.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Hocko <mhocko@suse.com>,
+	Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Neal Gompa <neal@gompa.dev>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Rich Felker <dalias@libc.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: [RFC PATCH v4 00/14] Namespace for namespace roots
+Date: Fri, 20 Nov 2026 00:42:58 +0200
+Message-ID: <20261119224312.1037966-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -99,143 +143,321 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR19MB6658:EE_|IA4PR19MB342183:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1dc05be8-dd01-43e3-e0f6-08df468e705a
-X-MS-Exchange-SLBlob-MailProps:
-	znQPCv1HvwUXBahuwteIkQeW30lJPuxO86HM2Wk1jOWTAru4RkxpyYf+y4vsd/OQq7Pxv7QLqWWq84U+nxWjz/x7tdiJ/asTUJiB9f10GsUzeVAFhR0Yde3S4WaSm7P1Zmt/5ZQ3TvO5iJq47SinwKqGH9sQCPzQBLKu4hACYbWjKFal+1oHqM+yDVa7UvGmenxMx3UagweZUQfGalQgha2dr9Ylj50loKJRLidqLC2gt1Bnp6nJCIwdSgFub6ZpZflzbCqYeZOeDx0hhVIwID7ERaoEsN65qjjSPwzsIoy1HoNDsNtLKW1AKWOjWS8eCtuVGpX91CNoVUSoyG+2yZyIYYcv2qGR1fZQE6T05CQcX5Kb6krrY43sx9trOHluOGix22pnZmmyZU+vKtF/pyvW57FFrtJNuOL4DSqiP3X2hbPzlVRwFvnoAiok2IyezTz6Zhu1fkjCVOQhqrdfXsdZlECAem1rUCY1gQlmB+nHaJFsS1v7F6/nHq1LOnYJ5qFTf59C2pUixwkzl41ZsHre6cwLzIggZDn0iueV4di8omdmjzZsvDgqs7XdxuFdGDFN4XULNDbCEJFs1ujlIfnENsh4FgZY84TKjwPa5LXdNjO1zKRZw2bR1D4J3E3X4kpL9lNm0pTXtEPjUKVMS1/PCcOF2eG39kv/TeC1FhXTMWWay5qsVa5lO5yd2s8aDrD/JgpX5ltvaAN1KuFipR/cwKTB8QOIupm2lVfoAowlu277x1C4SzikPC62PofxABripAlMpI4=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|24021099003|15080799012|23021999003|24121999003|5062599005|260925184616899003|22121099003|8060799015|19110799012|22091999003|39105399006|4140399003|5072599009|6140399003|440099028|3412199025|3430499035|40105399003|26121999007|1710799026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?HIRmgAGQbfpqHtD28C1oohp0Ua7M2G71Z5nWwUrABf1Phfzy1gIGHHwdDGet?=
- =?us-ascii?Q?Bav4ZomKbGqXxwOi4Ab+wxomQ2X3fFYEnSnszoPC1akfJ7PRUP9mxN58X8IL?=
- =?us-ascii?Q?mjWqyB4eGNWVUYRMEmf+usPQ1oDNn10fslVnKEdlARBMxCT9P6Zu2N1vyCgt?=
- =?us-ascii?Q?nhnbi2bl3zRY4dBBZarSYb0Jq6+5byuErRNpOW7igtzAohtIMzyszoAfcGt3?=
- =?us-ascii?Q?CFnflrGwT5BYookb7+CXfC3ZfaUHGPp2lXJ0GHfyPWeysSwxHcabijZCHC+q?=
- =?us-ascii?Q?ChNFgvf9mdYHnbBPFT6cjNCc0s6uPcgw+R2nEFO8ZP9sycPLFxEquQRwtF9V?=
- =?us-ascii?Q?nRM3GwyD+UZIiLeBSaN+MK8P+8xNgwi/WTXCrx+l82+ciRJl4eNmqP8vlB6N?=
- =?us-ascii?Q?COu3r/i+DpIMaXlpUQ6974G57Ou7tq2RMx7yNmUVBah4N/aRRufBh9E6O3iN?=
- =?us-ascii?Q?MrUtmtZEzLsBA+r8MtApg9FwvKp/CuoSNNL2K1ejKSbwTxeVhHFX/lHrn3cQ?=
- =?us-ascii?Q?CNW/LJiqUt6q8o3MR1h1l3UwOaU7SNS5RvIe6CmFSTAdja7odeCH9XGl5KUp?=
- =?us-ascii?Q?tH6G12T40674CLdEGnibU4Yn2yDsohJlHK1n1FaV/lWDp/hkgYIWoEoxH3sJ?=
- =?us-ascii?Q?21tTE09idB2ClVk7x6myYhstv0lUPrIeIm7xHkO2bUDc+TnAKkD7ypc/Y9SR?=
- =?us-ascii?Q?fcfy0I3f2zP1ebmh+5hn0tJkG8V1e6aJrju7OwWGEjM1evgjvgludzRWWhBV?=
- =?us-ascii?Q?EPO3pp/ta2klt+JlcaHVOSHq9bkHp0eDZI2eP+5/sxCTMMk6CbO+IA0UOfX+?=
- =?us-ascii?Q?OtNfd22luVgTqLvo37bAsjGTIERitdSwXu6bvlOb3IvvRBsCYTy4uR4LBkUp?=
- =?us-ascii?Q?mtnjV5c3nOF4ZG16xz2lA66/5GPIQV0+3LnvFhRtXqTi0p6fCT2groSswWNf?=
- =?us-ascii?Q?QDHiz2VKshkOqCskx6UNtDQUY6ew7evd+jYo3DNrJvwUDIYWHUPsYmuDBtVs?=
- =?us-ascii?Q?u5pNGR99CaSiWItI21XRNEx/NkMzKMJW1igzziMvX0Xoo2+TSsBT6PhnMHGv?=
- =?us-ascii?Q?eYWV76yK3Drz6r4lKSUtOI6eybWaYkgQA9N0oFoSZr39XE8Wp468GIrfl0BD?=
- =?us-ascii?Q?6WwudwFKspeT?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4/BliI0CMDBIDA+WI8wATua6jnO7llE7x5yqFPKgZdBHflJGzLQU7/pL33He?=
- =?us-ascii?Q?GinCoELrzxrvcmtlq1luB+/kVkXIv7SH47i11gx0G8EZRhCD7eESMN0xE/lA?=
- =?us-ascii?Q?m7m2V5GVCFKuLHcta1hoiLOOWjuyVwKNhSZQVhAiFOq6y2LWxv5JsATkHkV+?=
- =?us-ascii?Q?njFivoCjbgXJHIgzT6WrPXAviUmZog+7vN/xb1YZMWVRI5dm5iiLtkg1RDwj?=
- =?us-ascii?Q?RvV9zCkdXV5EqVgrc/7gyI67GrhN3BJtkX/zqz1Pc4UmlJ9eSb7SSkhe1lbD?=
- =?us-ascii?Q?wtZFipq+1NmXHT2KGuGb+57pI5kMjIVbePCh/uMJvaTsWw3MLPfTFM4y38rG?=
- =?us-ascii?Q?xUXSevpteywlcqvbHDg4BM9BcMpJliO0JqSim3Ca+BiwXhYxmbadjvstXnAl?=
- =?us-ascii?Q?h1DXLeR0skvMnuQsLMcrzD7ITYuSelElSo7e67pNoTsHa/MiKl5XI60OI+61?=
- =?us-ascii?Q?2ZCSlzudZuvv+EHJQF68/UA+R+tLvI1hOE77y0gXw4BvKX4kg7YYllNtwvO1?=
- =?us-ascii?Q?NWOj1AG60PqhQfjbMKYhEEOQTIkeWbqYtXXCUdaqr6sIVBDUKMaKcPxX0NQB?=
- =?us-ascii?Q?D6HhsiyOR1dZU5WpYJlIKVnCF5LOR2mHbPNeQb0XQLXgGdjbXfe6ydaA3bC/?=
- =?us-ascii?Q?zA25vKfqmIAuJank2cQi4yxRerMfiYxaD+XTgp9dvVCgal5dhA7QFzVr7QDD?=
- =?us-ascii?Q?kY2x/vMTA/YY7SWIu2M7zG4pe8YCwtq3F0pXTaVGkvYobO9Q8pteaKECyKKL?=
- =?us-ascii?Q?Bs5h8JJBXFA00WOZWLfiUOD/CmEPuvsgNbe0PVbzziSOzrjQyuYM0589DOkw?=
- =?us-ascii?Q?0Ws3ATovQs0Y/7eOAcxewa7BEZ4SQGuE/tHMFUHd4o5IzdQmpUeN3WKdyb4z?=
- =?us-ascii?Q?PLYn+Zo9X2cMJlDOmRlg+ktjgyZER9iabGNXMVlw1nkBktWSDezyv5c36xRp?=
- =?us-ascii?Q?/pgZNXtp/ga5y0+eFJ6rCdfaqGIhjCqa9RUE82+NGUK4WFwwLpRIfxwE7x4Y?=
- =?us-ascii?Q?xB6WhjnGPg8s4KPA5oNRIxxvPYBaxtm/IiZR9LQmecpKZPqBumbM1TIBbuz9?=
- =?us-ascii?Q?zrK/0AZpyXLTkqkNcCl/OitJYozqYh4+uo83G33dxteuv3ZnCIO80IaUKZeT?=
- =?us-ascii?Q?bXzcSh2z/YNiRZsnYQPFH9AlXxHua71/wmA3jAVl/I/boAfgRePH3z/GcnzX?=
- =?us-ascii?Q?IAevry8of3d2mq2Dgy9BLLpMF/z8pKe3M2uJ2fMcLIG0iCNxLDvB9wm3HUv2?=
- =?us-ascii?Q?FyGgu7Bb5mXXHLsF6dN0yg/44z0Ym/240vn0aWQs05wEgGzOWTTGkfCrxrce?=
- =?us-ascii?Q?ENPZzF3sjIeQba5TfpXHgOigNtvPpmW3IOHqpJGnHTa/h/AkfcjcmiZT7Rci?=
- =?us-ascii?Q?GadwJ6KZIRM1tvLkChIIQUmKhXYp?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1dc05be8-dd01-43e3-e0f6-08df468e705a
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR19MB6658.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 22:42:49.7720
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR19MB342183
+Content-Transfer-Encoding: 8bit
 
-The KUnit suite exit hook dumps the primes cache through with_primes(),
-which calls its callback inside an RCU read-side critical section. The
-callback, dump_primes(), logs with kunit_info(). With
-CONFIG_KUNIT_DEBUGFS=y that also appends to the suite log, which
-allocates with GFP_KERNEL and may sleep. With CONFIG_PREEMPT_RCU=y and
-CONFIG_DEBUG_ATOMIC_SLEEP=y, every run of the suite reports:
+OVERVIEW
+========
 
-  BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:322
-  in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
-  preempt_count: 0, expected: 0
-  RCU nest depth: 1, expected: 0
-  Call Trace:
-  __might_resched
-  __kmalloc_cache_noprof
-  string_stream_vadd
-  kunit_log_append
-  dump_primes
-  with_primes
-  kunit_run_tests
+A root namespace (rootns) is a kernel object backed by a file descriptor
+that binds together:
 
-All updates of the primes pointer are serialized by the mutex in
-prime_numbers.c. Hold that mutex in with_primes() instead of the RCU
-read lock. The pointer stays valid for the callback, and the callback
-is allowed to sleep. with_primes() is only built for the KUnit test,
-and the suite exit hook is its only caller.
+1. A full set of detached namespaces owned by a fresh user namespace.
+2. A dedicated PID namespace for spawning processes into, signaling
+   members, and polling or waiting on PID 1 exit.
+3. An initially empty mount namespace (CLONE_EMPTY_MNTNS) populated
+   directly in its target user namespace before going live, without
+   inheriting host mounts or cloning staged trees, while still allowing
+   new mounts to be attached at runtime.
 
-Allocating with GFP_KERNEL under the mutex adds no new constraint on
-the callers of the library. The only other place that takes the mutex
-outside of module exit is expand_to_next_prime(), which does a
-GFP_KERNEL allocation right before taking it.
+Work on this feature started in 2025 from David Howells' container object
+patch set [1], which I turned into a namespace for namespace roots and
+rebuilt around that premise.
 
-Found by running the KUnit suites on next-20261117 with KASAN, lockdep
-and CONFIG_DEBUG_ATOMIC_SLEEP enabled. The problem was found and the
-patch was written with the help of an AI coding assistant (Claude Opus
-5.5 and Claude Fable 5.2). Tested in x86_64 QEMU/KVM guests with 1 and
-8 vCPUs, running only this suite. The splat shows up on every boot
-before the patch and is gone with it, lockdep stays quiet, and the dump
-is still printed and still lands in the debugfs log of the suite.
+While the patch set is manually written, the original motivation came
+from isolating LLM agents. Running untrusted agent workloads made it
+clear that OCI runtimes need to minimize their live configuration
+surface.
 
-Fixes: 313b38a6ecb4 ("lib/prime_numbers: convert self-test to KUnit")
-Signed-off-by: Ilyas N <desobei@outlook.com>
----
- lib/math/prime_numbers.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Assembling mounts, credentials, and namespaces inside helper processes
+with a half-configured container is what I see as the main challenge,
+and the existential debate around namespaces and container objects is an
+unfocused discussion topic.
 
-diff --git a/lib/math/prime_numbers.c b/lib/math/prime_numbers.c
-index 95a6f7960db9..2b28bbec8384 100644
---- a/lib/math/prime_numbers.c
-+++ b/lib/math/prime_numbers.c
-@@ -59,14 +59,15 @@ static const struct primes __rcu *primes = RCU_INITIALIZER(&small_primes);
- 
- #if IS_ENABLED(CONFIG_PRIME_NUMBERS_KUNIT_TEST)
- /*
-- * Calls the callback under RCU lock. The callback must not retain
-- * the primes pointer.
-+ * Calls the callback with the lock held, so that the primes cannot be
-+ * replaced under it and the callback is allowed to sleep. The callback
-+ * must not retain the primes pointer.
-  */
- void with_primes(void *ctx, primes_fn fn)
- {
--	rcu_read_lock();
--	fn(ctx, rcu_dereference(primes));
--	rcu_read_unlock();
-+	mutex_lock(&lock);
-+	fn(ctx, rcu_dereference_protected(primes, lockdep_is_held(&lock)));
-+	mutex_unlock(&lock);
- }
- EXPORT_SYMBOL(with_primes);
- 
--- 
-2.53.0
+[1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
+
+IMPLEMENTATION
+==============
+
+rootns() allocates a rootns instance backed by a pollable anonymous
+inode fd, creating a fresh owning user namespace and a full set of
+detached namespaces: empty mount (CLONE_EMPTY_MNTNS), PID, UTS, IPC,
+network, cgroup, and time. ioctl(rootnsfd, ROOTNS_GET_NSFD, nstype)
+returns nsfs file descriptors for individual member namespaces when
+standalone namespace operations are needed.
+
+Superblocks are configured directly in the target user namespace via
+fsopen(), FSCONFIG_SET_ROOTNS, and fsmount(), allowing unprivileged
+callers to assemble FS_USERNS_MOUNT filesystems without holding
+CAP_SYS_ADMIN in their own user namespace or entering the target user
+namespace first. move_mount(..., MOVE_MOUNT_T_MNTNS) operates on any
+non-anonymous mount namespace fd: on an empty mount namespace it installs
+"/" onto the nullfs root once, and it attaches relative submounts both
+before entry and into live mount namespaces.
+
+Once "/" is installed, processes are spawned into the rootns via clone3()
+with CLONE_INTO_ROOTNS and struct clone_args.rootns, without mutating the
+caller in place. Pairing CLONE_INTO_ROOTNS with CLONE_VFORK and opening
+the target binary via openat2(..., RESOLVE_IN_ROOT) on the retained "/"
+mount fd allows spawning with execveat() directly into the target root.
+
+The first entrant becomes PID 1; once it exits and
+zap_pid_ns_processes() reaps all members, poll() reports EPOLLHUP and
+ioctl(rootnsfd, ROOTNS_WAIT, &args) returns init's exit status.
+ioctl(rootnsfd, ROOTNS_KILL, sig) walks pid_ns->idr under tasklist_lock
+to signal member thread groups, and dedicated LSM hooks mediate rootns
+allocation, teardown, process entry, and signal delivery.
+
+CHANGES
+=======
+
+v4:
+- A single syscall API (and shenanigans e.g., in fsconfig).
+- I use a similar API model as I used in SGX driver, as like enclaves,
+  containers are "closures". Instead of /dev/sgx_enclave like device
+  file, anon inode is used.
+- Consolidate rootns_create(), rootns_wait(), and rootns_kill() into a
+  single rootns() system call plus ROOTNS_WAIT and ROOTNS_KILL ioctls,
+  dropping rusage from ROOTNS_WAIT.
+- LSM: lbs_rootns security blob management and security_rootns_alloc(),
+  security_rootns_free(), security_rootns_clone(), and
+  security_rootns_kill() LSM hooks wired into bpf_lsm.
+- Disallow CLONE_VM with CLONE_INTO_ROOTNS across time namespaces, require
+  CAP_SYS_CHROOT, preserve caller umask, reset dumpability on user
+  namespace transitions, and fix ROOTNS_WAIT, FSCONFIG_SET_ROOTNS,
+  fsmount(), and MOVE_MOUNT_T_MNTNS locking and permission checks
+  (Sashiko).
+- Rewrite selftests/rootns in Python. I used similar structure as I've
+  used in selftests/tpm2. This "along the lines" mimics Cells style
+  container manager. Rootns is a quite typical no policy solution and
+  Cells is a managed solution, and they are at the far ends, which can
+  also be witnessed from the patch set sizes.
+
+  The question really is where we want to draw the borderline. I'm
+  neither favoring nor supporting any possible solution because I don't
+  know. I'm just saying where they live as a software stack.
+- Update documentation and architecture syscall tables for rootns().
+
+v3:
+- The patch set size increased predominantly because the coverage of
+  kselftest had to widened to cover the introduced changes.
+- Replace MOVE_MOUNT_T_ROOTNS_ROOT with MOVE_MOUNT_T_MNTNS targeting
+  mnt_ns nsfs fds, and add ioctl(ROOTNS_GET_NSFD) to open member
+  namespace fds (Andy Lutomirski).
+- Allow unprivileged fsopen(), FSCONFIG_SET_ROOTNS, and fsmount() to
+  configure and mount FS_USERNS_MOUNT filesystems directly in the target
+  user namespace without entering it first (Andy Lutomirski).
+- Fix locking, refcounting, credential/dumpability/timens setup,
+  pivot_root() lookup, and cross-userns mount checks across copy_rootns(),
+  CLONE_INTO_ROOTNS, rootns_kill(), FSCONFIG_SET_ROOTNS, and move_mount()
+  (Sashiko).
+- Mark PowerPC rootns syscalls nospu (Sashiko).
+- Update documentation and kselftests.
+
+v2:
+- Drop rootns provenance tracking (rootns_id and rootns_may_setns()) and
+  rely on user_namespace ownership for setns() isolation (Andy
+  Lutomirski).
+- Replace the rootns_enter() system call with clone3(CLONE_INTO_ROOTNS)
+  and struct clone_args.rootns (CLONE_ARGS_SIZE_VER3), allowing
+  CLONE_VM | CLONE_VFORK and compatible per-child clone3() flags (Andy
+  Lutomirski).
+- Drop the spurious task_no_new_privs() check in may_enter_rootns_creds()
+  (Andy Lutomirski).
+- Update documentation, Kconfig, syscall tables, and kselftests for
+  CLONE_INTO_ROOTNS.
+
+VERSIONS
+========
+
+v3: https://lore.kernel.org/linux-fsdevel/20261118193539.240065-1-jarkko@kernel.org/
+v2: https://lore.kernel.org/linux-fsdevel/20261117231352.3816603-1-jarkko@kernel.org/
+v1: https://lore.kernel.org/linux-fsdevel/20261117050841.3289652-1-jarkko@kernel.org/
+
+
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-security-module@vger.kernel.org
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: David Hildenbrand <david@kernel.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Hallgrimur H. Gunnarsson <halg@google.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: John Johansen <john.johansen@canonical.com>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Kees Cook <kees@kernel.org>
+Cc: K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: "Liam R. Howlett" <liam@infradead.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: Magnus Lindholm <linmag7@gmail.com>
+Cc: Manfred Spraul <manfred@colorfullife.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Neal Gompa <neal@gompa.dev>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Paul Walmsley <pjw@kernel.org>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Rich Felker <dalias@libc.org>
+Cc: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Serge Hallyn <sergeh@kernel.org>
+Cc: Shrikanth Hegde <sshegde@linux.ibm.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@kernel.org>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: Vlastimil Babka <vbabka@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+
+Jarkko Sakkinen (14):
+  nsproxy: Pass nsproxy to create_new_namespaces()
+  rootns: Add core infrastructure for root namespaces
+  rootns: Track init lifecycle via copy_process() and pid_namespace
+  rootns: Add rootns() system call
+  rootns: Add ROOTNS_WAIT ioctl
+  rootns: Add ROOTNS_KILL ioctl
+  fork: Support CLONE_INTO_ROOTNS in clone3()
+  fs: Support FSCONFIG_SET_ROOTNS in fsconfig()
+  fs: Support MOVE_MOUNT_T_MNTNS in move_mount()
+  security: Add rootns LSM hooks
+  arch: Wire up rootns() system call
+  docs: Document root namespace uAPI
+  selftests/rootns: Add root namespace test suite
+  MAINTAINERS: Add entry for ROOT NAMESPACE
+
+ Documentation/userspace-api/index.rst         |    1 +
+ .../userspace-api/ioctl/ioctl-number.rst      |    1 +
+ Documentation/userspace-api/rootns.rst        |   56 +
+ MAINTAINERS                                   |   11 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    1 +
+ arch/arm/tools/syscall.tbl                    |    1 +
+ arch/arm64/tools/syscall_32.tbl               |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    1 +
+ fs/devpts/inode.c                             |    2 +
+ fs/filesystems.c                              |   15 +
+ fs/fs_context.c                               |   21 +-
+ fs/fsopen.c                                   |  139 +-
+ fs/internal.h                                 |    6 +
+ fs/namespace.c                                |  272 +++-
+ fs/nsfs.c                                     |   64 +
+ fs/proc/root.c                                |   18 +
+ include/linux/cred.h                          |    4 +-
+ include/linux/fs_context.h                    |    6 +
+ include/linux/lsm_hook_defs.h                 |    7 +
+ include/linux/lsm_hooks.h                     |    3 +
+ include/linux/mnt_namespace.h                 |    2 +
+ include/linux/nsfs.h                          |    2 +
+ include/linux/nsproxy.h                       |    9 +-
+ include/linux/pid_namespace.h                 |    4 +
+ include/linux/rootns.h                        |   92 ++
+ include/linux/sched/task.h                    |    8 +
+ include/linux/security.h                      |   30 +
+ include/linux/syscalls.h                      |    1 +
+ include/linux/time_namespace.h                |   13 +
+ include/linux/user_namespace.h                |    7 +
+ include/uapi/asm-generic/unistd.h             |    6 +-
+ include/uapi/linux/mount.h                    |    4 +-
+ include/uapi/linux/rootns.h                   |   83 ++
+ include/uapi/linux/sched.h                    |    5 +
+ init/Kconfig                                  |    9 +
+ ipc/mqueue.c                                  |   13 +
+ kernel/Makefile                               |    2 +
+ kernel/bpf/bpf_lsm.c                          |   10 +
+ kernel/cred.c                                 |   32 +-
+ kernel/fork.c                                 |   95 +-
+ kernel/nsproxy.c                              |   41 +-
+ kernel/pid_namespace.c                        |    2 +
+ kernel/rootns.c                               |  581 +++++++++
+ kernel/sys_ni.c                               |    3 +
+ kernel/user_namespace.c                       |   12 +-
+ scripts/syscall.tbl                           |    1 +
+ security/lsm_init.c                           |    6 +
+ security/security.c                           |   86 ++
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/rootns/Makefile       |    5 +
+ tools/testing/selftests/rootns/config         |   10 +
+ .../testing/selftests/rootns/rootns_cells.py  | 1076 +++++++++++++++
+ tools/testing/selftests/rootns/rootns_test.py | 1161 +++++++++++++++++
+ tools/testing/selftests/rootns/test_smoke.sh  |   11 +
+ 66 files changed, 3977 insertions(+), 88 deletions(-)
+ create mode 100644 Documentation/userspace-api/rootns.rst
+ create mode 100644 include/linux/rootns.h
+ create mode 100644 include/uapi/linux/rootns.h
+ create mode 100644 kernel/rootns.c
+ create mode 100644 tools/testing/selftests/rootns/Makefile
+ create mode 100644 tools/testing/selftests/rootns/config
+ create mode 100755 tools/testing/selftests/rootns/rootns_cells.py
+ create mode 100755 tools/testing/selftests/rootns/rootns_test.py
+ create mode 100755 tools/testing/selftests/rootns/test_smoke.sh
+
+--
+2.47.3
 
