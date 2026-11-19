@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795082063;
-	b=ZYbl2S5Gpn8Z0qWImSofHTPXQOJtnhJ4QpePgw4sb5cP1TUynqaLeSDsVHJvfMcouk6n
-	 Q3gWUy8wp5cK5plTVXk3pV83i6ccJx4SoXFRZuAN1bMkJtMd1zva6SIiUM8ZdfGDPN6iA
-	 3nRF2S6KjSOQys2WdiZcYnVlnkQhFKyOZ2gcf76whXLG93bF3sJ23h8za5uU5SJioxCkn
-	 n1s+iZQB5/7M0Vyee4BHlDY0kOui4vEov2sfb8m8Ie+lmwBXwecJx75oTuuYRHHio5j7k
-	 cSDgLTuydCPdx23+Sn5xR78cUCaWmfH3OFWaP4G4QQwaR/PdRdo1pa2N6LMy9lEi7AA==
+	t=1795082065;
+	b=jc8owevNnu8a6WZUczLt1J3ytmDotdkbTXeeRD4IVMTxotnpXtfP1JdaxEq7n+JkY7Pj
+	 yE6vh+Zqhox87pyNAG3fz0cHqESY/VkI72kDoxsJLrPFO+UBPbkkmsNgucmQeLD4/T6xU
+	 hCLqcuVbyvhsVWjUI7dHQVV8Zpm9KZmORICly8ttZRUk8DGC+1IWyxkXtFhEaKUTBsy95
+	 24TsjLhwxzfBXQwMhbR/qSY7jwDwhdCygG2LPwgPyDlNix1gY/8vqx0I0foxutS4VQaV3
+	 oW5QttCs1vS8AT/XV/R1lSw4orvLGp+gMIIb0Fw8dyhTg+pgR0R1i3bArcrsBwQWMeQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795082063;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795082065;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=h9SsKa89pdv6CdZOat+96TxZ6dXD8Iqx3PWwB13ANYM=;
-	b=Xufmtej93dV1hOPGEcGofYD2lo/QefsdAwkwxig5YBLL2HZ6gWVP+H/zCEQgHHEhIiEd
-	 ySuHZZfzmnDNvjApf/RsnWTB8VGdzT54gelh6x2sQzRkzE0Ft0+rGPF9Aqhg4C9fg3MpI
-	 +WwhCEJj5314nReYLTHUqKcbL9vDQ0gleLzCkBsW5LWgJx5N9W0Xv7mTkVhwS/Nw8fOge
-	 sTyqvozgiMPuF6zOFRbw/0RDbxb/g7S8LUFO2XTyL2IUO/ewGQDcfLHPlNFpxB2NtHGHT
-	 l+aUG6g0RL9rz/NsUIKpVuUe7X6Xjqj1kO2+oMwfEPznrVj8Sd5wlcwmpYRoFuR1FRA==
+	bh=iaaigDaoiSglzrhEIeaHh66YbhLhyJ2puYJ5HUmv1e0=;
+	b=aIgMPhw8M+lVEFXGDsaxycjvsiPDaOR9U9NMlfx55dKv08ROSb6mKtr/RjXEwJkm4/eO
+	 jA4vuwdD8AZn1T2sX7KQoHs9KLGDzXhKBQcLcSKsu3jEMUi1zNsEm+4yl2VSCUcRcBrZs
+	 rr8S3S6gy9f3xLsDyblOy2na4NGlrP/BOL4OnknlrP2LgQo/JzjGJvOtLv0rVfaDUvOjD
+	 c0RQjfSy4gCLkVeBKO2kvgR+1kigt5w+1vMoZ0XlPYLpeEchFO3GJS7t4vQSgWGBakt5G
+	 /tnX3ExWTEEELccXKbiBD0/pyU2hw2W5ZCzuLquN0L6jfCGkxwfD4CnHt7h0piIf39g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aSsOv2Ba;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oEOnirph;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2092606A320;
-	Thu, 19 Nov 2026 09:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1500C606A334;
+	Thu, 19 Nov 2026 09:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aSsOv2Ba
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDB41F000C5;
-	Thu, 19 Nov 2026 09:54:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oEOnirph
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C33711F000C4;
+	Thu, 19 Nov 2026 09:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795082063;
-	bh=h9SsKa89pdv6CdZOat+96TxZ6dXD8Iqx3PWwB13ANYM=;
+	s=k20260515; t=1795082064;
+	bh=iaaigDaoiSglzrhEIeaHh66YbhLhyJ2puYJ5HUmv1e0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=aSsOv2BaxlpvGGuDpyN71M7yc+4TZItkDwPgE/mVRRxpKY/5Is1ICLm1OgQDx1CQU
-	 BA0gi+RgMuVvWHZeDOzxTCb2FZXMyL9Z9/FVms1/Van+NgiraVVl5+ChPi5CB+in0C
-	 XH/kpzSmFGtfsk/A4mqAhJZgHTf4iaen7PonvaAAK3ZiUi/F2/a66EezcOG7ADXlae
-	 p3GO/y46uHeMN7OeP4VWcAvW6EW3ubHu9BOEwkegZPuNYkm4wQHv1Lxdpv1zX4Bt21
-	 f6EAHh607LaZEcwkMIHTnB2AJFaHdpmMldXw3eVwcCptWwhlNP8BT03LuCdW7ddVpI
-	 wswesMqFXK85Q==
-Subject: Re: [PATCH net v2 1/5] eth: fbnic: wait on the correct queues in
- fbnic_queue_stop()
+	b=oEOnirphtLD2ym8ndUD5y9NGkptBl4tKNArxdXKspI1a9DtmYp58Mra290JLMoIKn
+	 7DNXNG9lsiZXTGUbc8OJpmErXaF8hKn04pQ9qT238U9NovGVPWmuETVwd+fI3TSdyP
+	 9yk/3S1iSb5LdvG0DldDusuKJOtWE/nF8YYJ5YbiPKj3NojngtjNVHOmkK2gh3xE6h
+	 cxisi27LS8Z7cFPkV8Gs7brSdQQkNeGDFNeLFj4rG74tO2MSTdk6MyLJgDv6p0ULX/
+	 gshqrTF6JW9oh0E+Wd6fyWBzU9nB+QWtExxCoUXoJGP4VOvXZDLytb9p2oqH+a89+u
+	 KII5WurvwVwhg==
+Subject: Re: [PATCH net v2 5/5] selftests: drv-net: stats: query timestamping
+ stats while down
 From: netdev-bot+sashiko@kernel.org
 To: dimitri.daskalakis1@gmail.com
 Cc: davem@davemloft.net, alexanderduyck@fb.com, kuba@kernel.org,
@@ -51,11 +51,11 @@ Cc: davem@davemloft.net, alexanderduyck@fb.com, kuba@kernel.org,
  bjorn@kernel.org, leitao@debian.org, horms@kernel.org, almasrymina@google.com,
  vadim.fedorenko@linux.dev, daskald@meta.com, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Thu, 19 Nov 2026 09:54:21 +0000
-Message-ID: <179508206173.3136.15402623456535892800@kernel.org>
-In-Reply-To: <20261117215416.1901246-2-dimitri.daskalakis1@gmail.com>
-References: <20261117215416.1901246-2-dimitri.daskalakis1@gmail.com>
-X-sashiko-severity: Medium
+Date: Thu, 19 Nov 2026 09:54:23 +0000
+Message-ID: <179508206338.3136.8445234401487583362@kernel.org>
+In-Reply-To: <20261117215416.1901246-6-dimitri.daskalakis1@gmail.com>
+References: <20261117215416.1901246-6-dimitri.daskalakis1@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -68,142 +68,89 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 (1) · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] After this patch, fbnic_queue_stop() passes
-  nv->qt[t].cmpl.q_idx to fbnic_wait_queue_idle().
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but
-  fbnic_queue_stop() stops the vector's netdev Tx queues with a bare…
+- [Low] In check_down_ts_stats()
+  (tools/testing/selftests/drivers/net/stats.py), if a counter present…
 
 --
 
-eth: fbnic: wait on the correct queues in fbnic_queue_stop()
+selftests: drv-net: stats: query timestamping stats while down
 
-This patch sets q_idx on Tx completion rings. fbnic_queue_stop() now
-passes cmpl.q_idx to fbnic_wait_queue_idle(), so Rx queues no longer
-wait on queue 0. It also skips stop and wake of Tx rings that are
-marked FBNIC_RING_F_DISABLED.
+This patch adds check_down_ts_stats() to the drv-net stats selftest. The
+test reads timestamping stats over ethtool netlink before and after taking
+the link down. It then checks that no counter went backwards.
 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> index 07d4b2e923627..5efed21e59329 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> diff --git a/tools/testing/selftests/drivers/net/stats.py b/tools/testing/selftests/drivers/net/stats.py
+> index b08e4d48b15ce..e61db30b51817 100755
+> --- a/tools/testing/selftests/drivers/net/stats.py
+> +++ b/tools/testing/selftests/drivers/net/stats.py
+> @@ -220,6 +220,28 @@ def check_down(cfg) -> None:
 
 [ ... ]
 
-> @@ -3089,13 +3092,16 @@ static int fbnic_queue_stop(struct net_device *dev, void *qmem, int idx)
->  	napi_disable_locked(&nv->napi);
->  	fbnic_nv_irq_disable(nv);
->  
-> -	for (i = 0; i < nv->txt_count; i++)
-> +	for (i = 0; i < nv->txt_count; i++) {
-> +		if (nv->qt[i].sub0.flags & FBNIC_RING_F_DISABLED)
-> +			continue;
->  		netif_stop_subqueue(dev, nv->qt[i].sub0.q_idx);
-> +	}
->  	fbnic_nv_disable(fbn, nv);
+> +    ip(f"link set dev {cfg.dev['ifname']} down")
+> +    defer(ip, f"link set dev {cfg.dev['ifname']} up")
+> +
+> +    stats2 = ethnl.tsinfo_get(req).get("stats", {})
+> +    for k in stats:
+> +        ksft_ge(stats2[k], stats[k], comment=f"{k} went backwards on device down")
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does anything here wait
-for an fbnic_xmit_frame() call that is already running on another CPU?
+[Severity: Low]
+What happens here if a counter that was reported while the link was up is
+missing from the reply after ifdown?
 
-netif_stop_subqueue() only sets __QUEUE_STATE_DRV_XOFF. Nothing calls
-__netif_tx_lock() or synchronize_net() before fbnic_nv_disable(),
-fbnic_wait_queue_idle() and fbnic_nv_flush() run. Only the full-down
-path in fbnic_pci.c uses netif_tx_disable().
+The kernel only puts counters in the reply when the driver filled them in.
+tsinfo_prepare_data() resets every counter on each query:
 
-A sender may pass the netif_xmit_frozen_or_stopped() check before the
-bit is set. It can then still be inside fbnic_tx_map(), writing
-tx_buf[], ring->tail and the BQL state, and ringing the doorbell.
-
-Suppose it sets ring->tail after fbnic_nv_flush() has run:
-
-fbnic_nv_flush()
-    fbnic_clean_twq0(nv, 0, &qt->sub0, true, qt->sub0.tail);
+net/ethtool/tsinfo.c:tsinfo_prepare_data() {
     ...
-    netdev_tx_reset_queue(tx_queue);
-
-Is the skb and its DMA mapping then leaked once __fbnic_nv_restart()
-re-enables the ring and fbnic_enable_twq0() resets head/tail to 0? BQL
-would also keep in-flight bytes that never complete, and that can
-stall the Tx queue.
-
-Now suppose the sender is delayed until after fbnic_enable_twq0() has
-done this:
-
-	twq->tail = 0;
-	twq->head = 0;
-
-It would then write a stale ring->tail and ring the doorbell, and the
-hardware would fetch old descriptors whose buffers are already
-unmapped. Could those completions make fbnic_clean_twq0() read a NULL
-ring->tx_buf[] entry and dereference FBNIC_XMIT_CB(skb)->desc_count on
-it?
-
-To hit this, a queue restart (netdev bind-rx devmem, io_uring zcrx) has
-to run on an Rx queue whose NAPI vector also serves a combined Tx queue,
-while another CPU is sending on that Tx queue.
-
->  
->  	for (t = 0; t < nv->txt_count + nv->rxt_count; t++) {
->  		err = fbnic_wait_queue_idle(fbn, t >= nv->txt_count,
-> -					    nv->qt[t].sub0.q_idx);
-> +					    nv->qt[t].cmpl.q_idx);
-
-[Severity: Medium]
-On an Rx-only vector the Tx triad has sub0 disabled and carries only the
-XDP TWQ1 ring, so this call becomes fbnic_wait_queue_idle(fbn, false,
-txq_idx). Does fbnic_wait_queue_idle() actually cover TWQ1 of that
-queue?
-
-It builds a single bit from the queue index and tests that bit in all
-four Tx idle arrays:
-
-fbnic_wait_queue_idle() {
-    ...
-	off = idx / 32;
-	mask = BIT(idx % 32);
+	ethtool_stats_init((u64 *)&data->stats,
+				   sizeof(data->stats) / sizeof(u64));
     ...
 }
 
-The TWQ, TQS and TDE idle arrays are twice as wide as the TCQ one:
+Then tsinfo_put_stat() skips any counter that is still unset:
 
-#define FBNIC_QM_TWQ_IDLE_CNT			8
-#define FBNIC_QM_TCQ_IDLE_CNT			4
-#define FBNIC_QM_TQS_IDLE_CNT			8
-#define FBNIC_QM_TDE_IDLE_CNT			8
+net/ethtool/tsinfo.c:tsinfo_put_stat() {
+	if (val == ETHTOOL_STAT_NOT_SET)
+		return 0;
+    ...
+}
 
-There are 128 queues with two work queues each (TWQ0 and TWQ1), so this
-looks like one bit per TWQ. fbnic_wait_all_queues_idle() reads all 8
-registers, but fbnic_wait_queue_idle() only reads registers 0 to 3.
+So the second reply can contain fewer keys than the first. When that
+happens, stats2[k] raises KeyError before ksft_ge() runs.
 
-If bit idx maps to TWQ0, it is always idle here, because TWQ0 is
-FBNIC_RING_F_DISABLED on this triad. The TWQ1 ring that carries XDP_TX
-traffic would then never be polled.
+This already happens with wangxun ngbe/txgbe. On ifdown, ngbe_close() and
+txgbe_close() call wx_ptp_stop(), which does:
 
-Next, fbnic_queue_stop() calls fbnic_nv_flush(), which runs
-fbnic_clean_twq1() and unmaps the XDP buffers. Could the hardware still
-be fetching TWQ1 descriptors at that point?
+	if (wx->ptp_clock) {
+		ptp_clock_unregister(wx->ptp_clock);
+		wx->ptp_clock = NULL;
+		...
+	}
 
-The bit layout isn't documented in-tree, so the answer depends on the
-hardware. The commit message gives "fbnic_wait_queue_idle(tx, 39)" as
-the wait on the vector's XDP Tx queue. Is that wait enough to cover
-TWQ1?
+After that, wx_get_ptp_stats() fills nothing while the link is down:
 
->  		if (err)
->  			goto err_restart;
->  	}
+	if (wx->ptp_clock) {
+		ts_stats->pkts = wx->tx_hwtstamp_pkts;
+		...
+	}
+
+ksft_run() catches the KeyError and still marks the test as failed. The
+output is a Python traceback, though, and not the "went backwards on device
+down" message.
+
+Would it be better to check that the key is present first, for example
+with ksft_in(k, stats2, ...), before calling ksft_ge()?
+
+Also, when ETHTOOL_FLAG_STATS is set, tsinfo_fill_reply()->tsinfo_put_stats()
+always adds the stats nest to the reply. The {} default in
+.get("stats", {}) therefore never takes effect, and it can be dropped.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117215416.1901246-1-dimitri.daskalakis1%40gmail.com
