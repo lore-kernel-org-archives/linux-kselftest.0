@@ -1,108 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795122693;
-	b=GxOvW1ri/YPrJmFyRtXpZc4kWMv4acf0rFEyPpB//H6mLZ9qb2TI+Za6EOTy+UBnnxDZ
-	 JzUkVJQZRfpw+vik5dTXBz3Co337n5xvRvmwgZTC65JedbWL0F9g/DNWICL3yuC+feMq6
-	 e7se2NAOaxweGfzw3hapbsCBXeEJ9O4rpsyM5o+XyJiskW0M4+UxtPQQ1RnqvILjoLWW6
-	 txArRWnFCrBVbx9inJLyY69AuuOR87brk+RLfr6cAUTNcM5qNgyspeExIbFBumHf8En2g
-	 qb0gU1gWRFAODhyToP2E2f9+c53ULt8Y4jiMMQjhDX5ZXfotJjcR/lykyUWBQkHtvrw==
+	t=1795122736;
+	b=TgzpZdgpE6X1mATWG+3rtzyQDCzwn/PC8LaSVuMTCTofT+s+c7iVndiixxncSYVNnUAc
+	 ykrXWkVi4u+dTp+PPch21MeU38MKn0OPNO1Ha785UovVEf2RtDxCPWAjqlzzZ6BQLCnKe
+	 AxfOAvNm/o79KYElbar+pW37la67VoWcGnVwvy8i7gfmkwFuZqzfM383zzr/HnRhdHisd
+	 N2SEnCR6ddgQJaET9cqR3q40OMIVrG6bj9fG1OIKTkYWUMkBmplb2OdclOuy0umvIH/P1
+	 ZIVkYmMY3B1ACziUQjs/G6zXMd0zY2kdlbxqfIVZJxdlZELSa8oLWCOWF6uVSRPdQcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795122693;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=c/FxpSNP1KOyGBvVMF7iGpNqA3mgfV1zD60Qg+NCmX4=;
-	b=oWcb7JQ1KiBlwL/IFWDFJ9AoVo3o4fg9mdfbJLEeAlk6DESHmpA2kyrcezCri8vmIQQp
-	 VigvMQcvMhSCyne/biGlsszu55+x+R7/n0hrAoJLthhu0UtayWMBET2pshrC8zvkGAB+h
-	 KsLLmHjNXOPch2COkBzSc0Py/0Yuh7Ef2+S+9i1LHaqbfgg3Wtw3eD5uIv+vtR9njOY/b
-	 cpmrLquvGCWdF424sWGmtzKXRuwNWH9rnVW7P/1NOg4Q5brJWIsvkWQn7ZNB+eV3HLRdW
-	 CfBGD8vYgDBaS2gz15DxF3UG7iEEUVedN5msDf0pBMusFDr+bWdJ0dRZwxpNZtl+zag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795122736;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=PPsz8EPWKcdeEfKVGYp9pwNeSXYhC2IpPyvOQ8qfLNU=;
+	b=JbmqiDiZTcltR87ei8+enNQsk8SXXWrQIe5+lzeljI5q4TUTPBGFUax0HJm9wiB1Jtgg
+	 F2xRaaZKlzSSoXuJPDmYmb8ffNtgB6Z8NV0YAA+MIDyswznc6NBHrJ958idXn66+KejbY
+	 eaZLCau1lH0u4jj/wRvWUqdC+Ouwtkrukp75NxJSutCh1nVZMxIlI741HhTnMdjQe8db1
+	 9uL+nM5w4TiQgX5RO3qbp1Ek2Yo8xfAWtUuclseMWI/EDZOqzyjlPfCewkOTysH+/DN1v
+	 2zoLRkrgjUrWC2TbVS3Kg3xC9JRpijGdFTWer1Z2qBu0wXf9yWLGZiTZLfCIrHwwrCg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="nQj/AXSB";
-	arc=none smtp.remote-ip=209.85.219.54
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=elTwXLSY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61606606A331
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 21:11:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61606606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F07606A320;
+	Thu, 19 Nov 2026 21:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nQj/AXSB
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-91eb46044c4so3406526d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 13:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795122691; x=1795727491; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=c/FxpSNP1KOyGBvVMF7iGpNqA3mgfV1zD60Qg+NCmX4=;
-        b=nQj/AXSBMlx3clfcBQYldrA8gxX7muuq67ouf7ZjWPp6biVchiONrwmhAPyu788R5+
-         3983SrhAoAPloXSo0/meDJambBmtNzapvYoJzcGEMahLu7e8SlBSxoqxTQASYl+QCMdY
-         EIaeQmMefl5CHGg7wRPaUKFnUdL1J6BuKySvlGRwdt3zQQl9nWrJFm/bl5UEZRXeWkq5
-         AjsZ3stbPf7pNmaPsT57km434hskkTs5ni9q5nsQ+LQJDPFcKRcC5Rw+nBQNudu3Wtmh
-         /fdzwUEaGLLspP8oUeGqCey8uGyYLNDvW3wYlrI9YLxNC/dbkPgKyOWrlnvALjKm/Qcg
-         m7nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795122691; x=1795727491;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=c/FxpSNP1KOyGBvVMF7iGpNqA3mgfV1zD60Qg+NCmX4=;
-        b=qH3SfahPB2Wxk2aJTWqca3YR9OVUQkV0uFJkxZqKCkiDQeuoesvQyTc8iSqtjpACQh
-         B42TQH6JW9laz50S3xWxWYCFZkOfuq3j0alNvmlZqxy8vHvbF63BS0jQuPAA96NgfcKd
-         yQhec2LqLQPS/HcTrBsTb3P7XWYtdtMVgwDm9ZVPVjktZN5IT0FB/w5MELAlYBPJq82q
-         cXgVuMsObYqtZfZFGsHQjuspPRgM/qMn3ZsYBzqs7SFv/EloTQsm3mfdwSNb+MQkXNsD
-         y7XYWuuY5i/MB6fXGEu4VuN3hqW68ktAZOv0bewGUwGz3xnQoh57VX1dHP1e4EMsYjjw
-         hJZw==
-X-Forwarded-Encrypted: i=1; AL+hErH5PPob6FoLrO8V0nH0ltuz5zJrktd0u58pISl6/l7/zXmB8ipdQB3EXbHfrIzHx83pmG3JYNbKwu0PPiR+1GU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8fiwdaZdTRdlLnJiY0Hn87x5LFuLTy4jQhxgdckkFIfigZYrXG
-	bC+MOmE4j9BY9MOQ1AchqxNhwBc30a+KcnEGPmq9VSAaIE7iLzBjNXInnJ4maA==
-X-Gm-Gg: AZFdTZf9rdbliXbWcDYukBms+GLzSYWhJaoUZ7/GW75s5w4cfjbZpN7IrAyv2HjAsyJ
-	fqMT3qxkKe/QLoxGbG+HCnVZxbKjZF3kp768oiAs6C6EViHI/MSxwsZo73MDNOVlQ52+NbtP54U
-	qfaz3jfQHLB9WXgKHPWzpFdZ5OAC6ZYoWv9SNyWXZwx2HZ64PB5JaYAsPDG3FXzXL8x84umo+pc
-	uXDVEv0VbAXHI/xyw6KbI769N5UelmotLgy+aswp6Gt/WhhEIJSGBmYDnIA9cPA6QFcVjwjzYbR
-	BWCIYFAGkbZp3yltYiLPp9yCySzNm/BMIkqU7QtjM2RUls6Uka1WNdNOyw06AVUSR26hW35iXGk
-	pakvX0hVdOPmb+2pNBLXhC0WU0A6PQVKeModSAYjtCb7cWSr6MLIkJ45aeft7eKdvd9WT9VqPOt
-	TrvAFAlf17Xv4dCAGp9x58pfHlsitxjodnh+fXj/JR5NFB8HdS8jnhmyafbZcxgUTd0hrb2avVI
-	58Ja+hMTOE86Y5Nt06t5oUir4jSCCBQusfqexsBPvO48yKnQ3Ei+UGz1kyim+hx+xm2D67kKbRe
-	TJ3DXevoJSWyaj83gR4jMqr3WTg15G/SQY/o0jd0NhMEzSG63hO2KyzV7RVvlq8YtCcTvB7LjAJ
-	K6B5aXSx2DI7CECCtin3cD8LzOTZrOyAel5v/fv364mQzTfvGW0paytLhg8MwrIo=
-X-Received: by 2002:a05:6214:5294:b0:921:b6f:e3ca with SMTP id 6a1803df08f44-9213498a6f9mr17532256d6.3.1795122691261;
-        Thu, 19 Nov 2026 13:11:31 -0800 (PST)
-Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-92134bf848dsm7227906d6.44.2026.11.19.13.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 13:11:30 -0800 (PST)
-Date: Thu, 19 Nov 2026 16:11:29 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Junyoung Jang <graypanda.inzag@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowangio@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>
-Cc: Junyoung Jang <graypanda.inzag@gmail.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Gwanhyun Lee <gwanhyunlee@gmail.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.373ae703fcfde@gmail.com>
-In-Reply-To: <20261119144241.360238-3-graypanda.inzag@gmail.com>
-References: <20261119144241.360238-1-graypanda.inzag@gmail.com>
- <20261119144241.360238-3-graypanda.inzag@gmail.com>
-Subject: Re: [PATCH net v3 2/4] tap: clamp zero-copy copylen to remaining
- payload length
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=elTwXLSY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E37F1F000C0;
+	Thu, 19 Nov 2026 21:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795122736;
+	bh=PPsz8EPWKcdeEfKVGYp9pwNeSXYhC2IpPyvOQ8qfLNU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=elTwXLSY2aQ/A+on2z7+cdJtgueL4VgRLQN+A9ICWwwxPjwPJt5sImilvUU0BuatH
+	 rICfaY7p6i5P5KRW6mdIoaDnnW7oWNd4gFZwrm7vdEPIqvj1sEmabAqPTdYFFHqRMb
+	 W/mMV3GUtefPaqviMy9Jh5qJ8hC/vES7L+FsfjU9OcmczAUVRvCu5dP+UveU4NPV3m
+	 4DlKgRV3Q1pLF/1aGwIh5G7HncJ+2oK3qSBghlTd68IJVccimHqpDBhrkxavVcJJ1f
+	 8IEY6O9MDETdER51fkzGoHiPdwxRG+bfa9mYJOTDcpJW4SyHKg+VVoyEY/+KOq+9hA
+	 CcNfekYXW2rDA==
+Date: Thu, 19 Nov 2026 13:12:14 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: Tianyi Gao <tianyi@cloudflare.com>, Hangbin Liu <hangbin.liu@linux.dev>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org,
+ kernel-team@cloudflare.com, tianyi.gao@linux.dev
+Subject: Re: [PATCH net v4 0/3] selftests: net: veth: propagate check
+ failures to exit status
+Message-ID: <20261119131214.0b38c1ae@kernel.org>
+In-Reply-To: <20261119012940.32838-1-tianyi@cloudflare.com>
+References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com>
+	<20261119003003.40482-1-emmaonana18@gmail.com>
+	<20261119012940.32838-1-tianyi@cloudflare.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,42 +66,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Junyoung Jang wrote:
-> tap_get_user() chooses GOODCOPY_LEN when the virtio hdr_len is zero,
-> without limiting it to the payload remaining after the virtio header.
-> A 246-byte padded header and a 14-byte Ethernet frame give vhost-net a
-> 260-byte TX descriptor, above its 256-byte zero-copy threshold. The
-> 128-byte skb head then contains only 14 copied bytes; the rest can be
-> transmitted as stale kernel heap contents.
+On Thu, 19 Nov 2026 01:29:40 +0000 Tianyi Gao wrote:
+> On Thu, 19 Nov 2026 01:29:59 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> > Changes v3 -> v4:
+> > - Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
+> >   lines within 80 columns (thanks Tianyi for the review).
+> > - Add patch 3 deriving the invalid tx value from the kernel maximum.  
 > 
-> The original macvtap zero-copy support introduced the copylen choice.
-> Commit bab632d69ee4 ("vhost: vhost TX zero-copy support") connected
-> the in-tree vhost-net caller, so this case predates the v6.15 header
-> validation regression.
+> Sorry for being annoying, but I see three problems with how v4 was
+> sent:
 > 
-> Clamp copylen to the remaining payload before allocating the skb. This
-> also covers cases where the entire frame fits in the skb's linear area.
+> 1. Patch 3 lost its subject prefix. It went out as "[PATCH] selftests:
+>    net: veth: derive invalid-tx test value from kernel max", so
+>    patchwork put it in a series of its own [1].
 > 
-> An AI-assisted code review found this issue. An x86-64 QEMU/vhost-net
-> reproducer observed a 128-byte frame from 14 input bytes, including a
-> 114-byte uncopied tail. The patched kernel delivered 14 bytes in the
-> same test and in 400 repeated short-frame sends.
+> 2. Patch 3 should come first. Patch 1 makes a chk_channels() failure
+>    fail the script, and from then on the nproc + 1 check can fail on
+>    a correct kernel. With the fix first, no commit in the series
+>    reports a false failure.
+> 
+> 3. v4 was posted as a reply to my review of v3. A new version should
+>    start a new thread, and its change log should link the previous
+>    postings [2].
 
-If respinning:
+On top of the points Tianyi Gao already made:
 
-tun/tap's vnet_hdr_sz must be at least ~129. That is far larger than any
-header vhost would negotiate, so it only happens when the VMM sets
-vnet_hdr_sz inconsistently with the vhost features. The guest controls the
-packet contents but not vnet_hdr_sz, so a guest can't trigger this on its
-own against a sane VMM.
- 
-> Fixes: 97bc3633bec7 ("macvtap: macvtapTX zero-copy support")
-> Co-developed-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
-> Signed-off-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
-> Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
+ 4. Please target all your "fixes" for selftests at net-next rather
+    than net and remove the Fixes: tags. None of this is worth applying
+    to the current release.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+I'm tossing all your submissions from patchwork.
+Please don't forget to wait at least 24h before you repost anything.
