@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.1
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.52.69
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795120122;
-	b=kzM+kOIMhuC3tq4mZy8biGR4jmj5jhGUW0BBLjFDX0dXsLr26vRH6EwHYQiMdEZv/sZW
-	 KTkFUfPAumt12KQwgjxyDOgmfO1yQpowYRiu0lf0fG+Y9L1ppGlR7AlkSHYjLXTvnf4oz
-	 ws+rbKUZb61tGS1FGM/rCvYX269wQjw/Q1YgzZDmLr+Vs4YeT7u3T+DBhDyJr5XiwKmJY
-	 kGFrvwZGS3dVn8IKrQnqzqNeYZ7xMSJmIIoDQ87DvDHUHrme6jrvqggY6WxFdE8o1CwCY
-	 UDHzsb1Uw/0hfzilIUcEUoPWvBeb+Po9cHIVVUslSpZsxyNJBG3yK+YubXiaQPr8Pcw==
+	t=1795120140;
+	b=olY/FdxKlKGcL1d4X6GqhGMOSlx8BVBERWIcyM5Ewh/CGNrCRQTnz/+MvKbnuWL5eYfu
+	 428IF9vxBdaBN9VUjGsXBgcYo3cYeV8dpYSOhKHGwLdrdwwOECH1zr3u68DpdKlEpBmwW
+	 GrmNoxwx7v4a3W2edW3IwbE5yjwDgu8z0Fnx/RfTLtaC2mg2WaLnFHpD7W5DqtuOQPQre
+	 Ne8VdvBZakK57BG0K4Nw7V92jd25+NyrUGKErKKcqDrK9qgIg6uyWlGBF6J/xvoxL/1+I
+	 gFMMBvjfeSUbqk9ger1dG7/gmAg+mGOrKlc724DJKQHHBlFlsPkiuTPLipXwbBW1agQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795120122;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795120140;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:
 	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
 	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
@@ -26,53 +26,53 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=clcKmXPROLSkcD51/rwf4d3hToWhRa4PwGvLY9MbA4c=;
-	b=rGtkXTWWpUlA8wLvLvBDXHN6JHQvlvBQJrndIePh4pmJ2879M0ANkys+rkvDroG35kE9
-	 ODXW6aDZEx1DKTOSxPrLYRz3tMUJFP2sU5ow/qhsYZDBU1RA9wgjjzitX47E4eb/yT3c9
-	 dXCF13MEblMFc6UFmNNUJA3+R9WSP4YCAnzoNCqzXn2DZTykTBygxjygDRF81nH2IR5xi
-	 Rr0X6VBvgfN/SS3FhLetKfP1Kx6N+Oh6k9lApmoEiZz/BWL35gcCJyChlNGWmasWcxJzu
-	 vV6mO3nlv6iboKsTEWXsS+WGOgPa+WwiKKSzb1PvQy8KMY57jPnHtlcW7dh6O5AILgQ==
+	bh=HuLxAoy3AJ/vjAhQ76vUAXBYQCMdMow3lb1IKuLXrok=;
+	b=mVqWOX1BgR1a+y1wvBmppysZNJBcnpWtKNDT5tTpJ14FGakBmQssVss4KV2RSDkUMtVK
+	 2jzRdJK+GH67UT95lYyyxpjUeLYHTDFJUdPgt3SV9hgErah5riRgqzgze3/0tc1m0t3BS
+	 aouaMipp4k5BkbXhZlCIZRpSgxPe4uprv64Isz61a7xUKzshd0nzelI/G9jsI3k49hdqI
+	 qYpE11oj/6x1ehsdzr94Fhwt/LwD+ol2s9nSixaQVE2XLiWkYyua0PQMA88zz+XSyxI9l
+	 JRf2XkKKAVCBGU6qzaV8YjRQnw5N1EeYG8WPUmiHmdKdwMx/h8CdJw0beKNM7zoSHXg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amd.com;
 	spf=fail smtp.mailfrom=amd.com;
-	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=0fbwYJ6p;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.1
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010001.outbound.protection.outlook.com [52.101.85.1])
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=DK5oRoSt;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.52.69
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011069.outbound.protection.outlook.com [52.101.52.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6D3606A324;
-	Thu, 19 Nov 2026 20:28:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F6D3606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A6E606A32A;
+	Thu, 19 Nov 2026 20:28:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85A6E606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=0fbwYJ6p
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=DK5oRoSt
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uvezHYXWWae1n3elcTZr2sT4Og0kjrh4Ep/YL/5tHN6mj+cODkPB+hLVtN+lS1Kn2Y2uDLmYOZ6BbWIzQ7vwa3SJRciYr1NfCfzl7SlKEeVHdc/hdyihyUjvluETxxypIQD2vWuiIcPg2/CkJV6vBDfveBi9VEGhQ00HAF+y4hwUmKtiwNvg2kiDHbwlZsOYIU/Y2G4jC82nPLj+dmYuJYtT5I/XX4t2GbuA8aeVPvh4zgtsp4H8MzdfzhvJLpRUf2QUuzxEnC2sotv+X+zi+LmtCXu8eqhnZak34YGKpN6aB/SUMHVjX7fC5xa5YtcMalv7uoWdnwfyIyHU22r5+Q==
+ b=pUAZoZ9TRLccUcyxZYpkcznetLGC7dMX0jSURMn5Nvf1hJVOFksHnhcs0OxMC7xKSTqwP8j5sClDWWJCvbUcDmWSptydHs6YnQ+bDX82eZM0PWlGwnMPYYBvGO4A+B2HVI5M2kUAr8wkYjuUVs1dbWAcYt4J9fS0AyvgSAkfwjGn1FKExYtCBpsoTlNA2LixyzMzZMvd9nO61IQmbCzjdIBiTS6oF4YNKPGLySoI5YJE2JpKTA32yH6zojWoOAMVX4GETXYaizrftf6ngQXAzjwjmJh/ulaS1M5XNczTf4Om1Z6v0nQFPVzZNcAfy6Iwp38kgrFNH7F42TYJxKbFFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=clcKmXPROLSkcD51/rwf4d3hToWhRa4PwGvLY9MbA4c=;
- b=W9zWAr1DKg3ZQC06hwl0gta9+bEN2U5rWgQYoj1FSVCF/w6RLdXrNNaYlU/EqKLgIZOjJi/PiBuGA4KSIO/OJcqmSN+LtqOMHD3Kakh/to4sncVe0zqHIwHMqSbN9UXlFQU1Lkxbo6gmAKNsnvU/v3H6duEscNXwKueMxmxl5Id0L1QwtTqIxmQCrCw9wVVehj3/LjE80oPO0Lz35iCU6UMNX3OQ21MrXiRxur3YljThGqWWvogpZOIPE3nfkoV+aJGBf1jqwgUE3VIs7KzjaxkshtfqTroNiP7BxQcftyaZg0LO5rlVpkBVsodenYf6ipSknVK8T4Ar7VdBTrQdWQ==
+ bh=HuLxAoy3AJ/vjAhQ76vUAXBYQCMdMow3lb1IKuLXrok=;
+ b=T+0aHIOpGGNYepDFoCNCX45KngHwGiS0cR15ndIPpLJ+xkyxwtKFnuJ6UK/xXT6sZE1XSz4N52K5AM+4TpWGhXkFO2KYBhOPZQTCJBLgnlE76LxPG1nGCEWOo7oKbOcrn09CXECbaEXqX5AIVnNnpPsKt2F/sBPf38eH/6bw7P+r2nb7PB5uL0cHYYLiTbDKvLiTV/a5AS1yFBuFjXSWTgKOgrkh+PL6R0+DxNpQg+wm5DD73jOKd++y7TX4askOnuhLx6ZOEW+76RdERDjAn3hWxUfXHrffaxrBjUmZ2CsbJVZUB1jYAJ2XTRjFg9Py6A8IZo/jKsXWCvJZvZ4Hrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=clcKmXPROLSkcD51/rwf4d3hToWhRa4PwGvLY9MbA4c=;
- b=0fbwYJ6pNwuyIcBsiDNboYt+AFxIH4B+WMjARXF93ATGSqVjj1AEG3ckuotReZE0C8oOEoo15+mukAJqH2fs79JA4ZIv33+ecf3bDzvo0ZF+/RahVaDlMyoX0dyz9rnRuTnm3hh9D8bXp15pgj7zPROEzP91XJ0JKeofMn0EmCs=
-Received: from CY8PR12CA0036.namprd12.prod.outlook.com (2603:10b6:930:49::29)
- by FT1PR12MB222952.namprd12.prod.outlook.com (2603:10b6:170:d::15) with
+ bh=HuLxAoy3AJ/vjAhQ76vUAXBYQCMdMow3lb1IKuLXrok=;
+ b=DK5oRoSt4XOnWeS1+vD0b/CQQ9Fu09WMqx5p9jZZU2UypHudLHtK1eL1c9H4QRyHyELKcNaIRcErp1/8yVrO/aiQOWG6+yNXKTrx5piBzfZbN7znjPk2Hk5/mOkyfTJwcrvgi284p7xPbV9x5r/SYylFZ0xHm6L13fYcCW5+tjM=
+Received: from CY5PR22CA0038.namprd22.prod.outlook.com (2603:10b6:930:1d::6)
+ by IA1PR12MB8189.namprd12.prod.outlook.com (2603:10b6:208:3f0::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Thu, 19 Nov
- 2026 20:28:37 +0000
-Received: from CY5PEPF00000E81.namprd05.prod.outlook.com
- (2603:10b6:930:49:cafe::a0) by CY8PR12CA0036.outlook.office365.com
- (2603:10b6:930:49::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.14 via Frontend Transport; Thu,
- 19 Nov 2026 20:28:37 +0000
+ 2026 20:28:48 +0000
+Received: from CY5PEPF00000E85.namprd05.prod.outlook.com
+ (2603:10b6:930:1d:cafe::3e) by CY5PR22CA0038.outlook.office365.com
+ (2603:10b6:930:1d::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.10 via Frontend Transport; Thu,
+ 19 Nov 2026 20:28:48 +0000
 X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
  is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -80,13 +80,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
 Received: from satlexmb07.amd.com (165.204.84.17) by
- CY5PEPF00000E81.mail.protection.outlook.com (10.167.247.180) with Microsoft
+ CY5PEPF00000E85.mail.protection.outlook.com (10.167.247.185) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.639.5 via Frontend Transport; Thu, 19 Nov 2026 20:28:36 +0000
+ 15.21.639.5 via Frontend Transport; Thu, 19 Nov 2026 20:28:48 +0000
 Received: from weiserver.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Thu, 19 Nov
- 2026 14:28:35 -0600
+ 2026 14:28:47 -0600
 From: Wei Huang <wei.huang2@amd.com>
 To: <dmaengine@vger.kernel.org>
 CC: <vkoul@kernel.org>, <Frank.Li@kernel.org>, <shuah@kernel.org>,
@@ -96,9 +96,9 @@ CC: <vkoul@kernel.org>, <Frank.Li@kernel.org>, <shuah@kernel.org>,
 	<weixugc@google.com>, <bhelgaas@google.com>, <Shyam.Iyer@dell.com>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<linux-pci@vger.kernel.org>
-Subject: [PATCH v1 24/44] dmaengine: sdxi: expose character device attributes
-Date: Thu, 19 Nov 2026 14:23:00 -0600
-Message-ID: <20261119202321.1734355-25-wei.huang2@amd.com>
+Subject: [PATCH v1 25/44] dmaengine: sdxi: add PF and VF device naming
+Date: Thu, 19 Nov 2026 14:23:01 -0600
+Message-ID: <20261119202321.1734355-26-wei.huang2@amd.com>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261119202321.1734355-1-wei.huang2@amd.com>
 References: <20261119202321.1734355-1-wei.huang2@amd.com>
@@ -117,249 +117,236 @@ X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PEPF00000E81:EE_|FT1PR12MB222952:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f5dd2ca-7027-4f1d-bdf3-08df467bb0a6
+X-MS-TrafficTypeDiagnostic: CY5PEPF00000E85:EE_|IA1PR12MB8189:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3bee13f1-f377-47a6-0da1-08df467bb774
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700016|23010399003|7416014|376014|6133799003|22082099003|261009223027099003|18002099003|11063799006|56012099006|261102123227099003|261026121527099003|261028144727099003|261022105027099003|261021121427099003|261026140227099003|261021123027099003|10067099003;
+	BCL:0;ARA:13230040|36860700016|82310400026|7416014|376014|1800799024|23010399003|6133799003|22082099003|18002099003|261009223027099003|11063799006|56012099006|261102123227099003|261026121527099003|261021121427099003|261022113327099003|10067099003|261021123027099003|261022075727099003;
 X-Microsoft-Antispam-Message-Info:
-	73CcOu1fdUJ5qZH5GXAb3XPA8bpSNx56MWjsPcRUvOGEVyB75vkdnS+xWZWPjU2cd9UFLT9d4ksR/GE2WWfIz0eb5XXenKP6bU16sbj1Q0R/FuBUjq7Aq1CyaTA2MBQhbOsXL3GgTkxrnb6EZY027z26w23GcSDwrANBYPOvb06gKYrm3mft0Xz+B7CUa8dI0ZP/WDr3Bnog6uEGgdxM+Z5Xxx+rMTH3kRdAo5efgSV8lCy0mHeIiHv6r1nF/yqZq2/cNKJU95Bzir3vQWShSRKdxD9eX8tbPLEa5G7NiwRW8j/8UsLw3X2xdVsBDL++qBcUOPiAIDu7cNMafuYU7YsDMNSdMpNoKku1kHxlGSw/h3iA/52FbAj0kGYixmyqzbBdixUZCv+wBYRC2PoOZWIsW/hPx5Yoq2lpBUNu58Z0WBhxAw9YjghzUBDJfe6I/f+2A7tLpGYb37qjmLY80740+T3edCYnx10PDKaAnl/92TU5KVfAjA3xioZGUVNX6itC2d/r2HKmUENTHqEGgt72HxIAdSlSM15Abiyrd8EuVrD+mSlXkqHbZLdTz5m+E3pB+qBvQ3LzZsYXetNKhYzBwXYM6WEy1sqVAbG0lPPkqNlRaVG5kVBr+buD/C8WwcMAPB7i4EsFtOROUxfCbd3Ga+7nPeIq10jYbPeB1PHe24Qt7amz7xdHQv0P7nzdOedxygcHDESevu/dXmQWdg==
+	+g9+l1aoRf7Bemq2b+tCmVgLcTpGN0YDjPPXqDqD8r8gTC6fDinSHuHWRnlinLsL765X4c01qrpsY+0theFGK6tDZA/rHUaICsP8ynheaYlXzcxWUcx1bEoxG0NtYMt0ta9FJ43q5SrGVSfQeWsl0DAIJNcr/t0pdqAIPbSa23j9fr17BJkgzHz+30fv1KA3TcQhqAq/ernuoc/Eov25icbFkasXPzKocwv2FS4T7w607D2pg+jIpFfSk5Ni2i6Bb9XYCfCLyakttBsSJFp6LNNSkuNq+IwKQ7++Q3dsZxYuBMAlJXf8QKwjrNTM1tonT1oWLzHvlddlvHT0UJjoqUuDTKzu/bGmDayrueUwpVMMtpjirPCnfFdp9e4pmDhaOHNSvBN3AY9wDST9gcQMl9LT1f02ZB+hn7rCtAukngqT+l0cz7t1IR6peKUI+YAbgBZaEsw4BRdSHRYTf+EIiLIueTR1e9KoMlc3x+jiZpsNshtLINR3NUe983/uu12GntL5SjF7U1VUbhGFkrUN6I6y9udwMu+ikF7p9cwZm/io5hAKx+/NmJ+5cqzyQqZd98JHEliweEAN1ZO8i1DnOFYu7ZKt/vcKW7dnQbNtOszt1l6kFd7SUjZaGBGEceUhVc6DpZR/Fyw5MLBvCRJTW8qpYAmMAb1lH5z9uG/zHzQk2T68pot7U3TO2HEcoC0IhH5vlGYpbEvOw0swx29JZQ==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700016)(23010399003)(7416014)(376014)(6133799003)(22082099003)(261009223027099003)(18002099003)(11063799006)(56012099006)(261102123227099003)(261026121527099003)(261028144727099003)(261022105027099003)(261021121427099003)(261026140227099003)(261021123027099003)(10067099003);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(7416014)(376014)(1800799024)(23010399003)(6133799003)(22082099003)(18002099003)(261009223027099003)(11063799006)(56012099006)(261102123227099003)(261026121527099003)(261021121427099003)(261022113327099003)(10067099003)(261021123027099003)(261022075727099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	ElJZeZbzYg3/gLnGYVYAImVb6wd0X4HhBTwkElWMdif10Ns776QEaF6gnFMtP+BQy6V1xj6d3FLQOKdy1JCZ4sM+n736o9+rH2MiXU7VuBFhCBxBPbbHUZK94Z0FkvYxSmATwrPwRmJB2yzur+iQvvHd9xVwMccG6LyQd9ANOORxCq0U1ShzjxEUDigWcCanHSzyzguP+iUwxey0/gwzDZADCLtFhkSJEI650Tdj4GUl1W1mUWHCdGD9smy7Akcy9HXSmKJf9Y5bxfQHZQ2nvHPlxoUuuW0VcBdbMP/1eoezEh8C4YKgL27Zh+orCvOiw5Y/B6/yAGogvywsdRHhlQm3vLKeYWjT7VOrj6AoA1tZf2doHpk5K4snKIeB3P56bEi1zmrB78nKAK88CCxJJFUzp7p2CMBbHskQWk4ENHZ/RLi1EVk8KIHzYVJQF/vl
+	dSs4P1emAd0SzyozfUWmzntBF4awJhLM9AO3FAb7MkZmFq20ItIqBNRziLrre0SlDvXGL7RNmS23D1ubI+RQSaJ8eTJjqHDD9mdV1rCDEBT6eeqcz1setdPk3/GdQzEkeqj1dmhEobKfXcTbK64ULazijHKwYOSqfjWcrIefa+MUq68fJoLS78hZ+CKfRXZNQBt9vaVXgzwGUjeVhhnpdfzIMYZr6e6oTZsVoaoplIU2KDYh9C6bB12b73zT8TYfpMccXI94v+wJkw4i+cWLS2aQPAoOP7/LFVh46CxZTaze2wKPJ/jTk0t62e3/FaQPuY2fjM/FgCzn2jYiKHuTVBTW2q4iF08qI9Y2J77cpznVYql41jSR8oHRIcUQLVDKD/SZ/j+EPoseoEz6zs6OTdn+omrItR/nebFqtyVZoMD10I6rHw1OGi6qqMZHTvbS
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 20:28:36.7655
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 20:28:48.1791
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f5dd2ca-7027-4f1d-bdf3-08df467bb0a6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3bee13f1-f377-47a6-0da1-08df467bb774
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY5PEPF00000E81.namprd05.prod.outlook.com
+	CY5PEPF00000E85.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FT1PR12MB222952
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8189
 
-Add read-only version, context count, function identity, and NUMA
-attributes as sysfs to each SDXI character device. Derive context
-accounting from live sessions so users can retrieve accurate
-information.
+Let the PCI transport format character device names after the core
+allocates a minor. Physical functions use sdxiN, while SR-IOV virtual
+functions inherit the PF minor and use sdxiNvM as device names. Also
+defer VF probe until the PF is registered.
 
 Signed-off-by: Wei Huang <wei.huang2@amd.com>
 ---
- drivers/dma/sdxi/Makefile  |  1 +
- drivers/dma/sdxi/context.c |  9 ++++-
- drivers/dma/sdxi/context.h |  1 +
- drivers/dma/sdxi/device.c  |  1 +
- drivers/dma/sdxi/ioctl.c   |  2 ++
- drivers/dma/sdxi/sdxi.h    |  2 ++
- drivers/dma/sdxi/sysfs.c   | 70 ++++++++++++++++++++++++++++++++++++++
- drivers/dma/sdxi/sysfs.h   | 13 +++++++
- 8 files changed, 98 insertions(+), 1 deletion(-)
- create mode 100644 drivers/dma/sdxi/sysfs.c
- create mode 100644 drivers/dma/sdxi/sysfs.h
+ drivers/dma/sdxi/device.c |  1 +
+ drivers/dma/sdxi/ioctl.c  | 19 +++++++++++--------
+ drivers/dma/sdxi/pci.c    | 29 ++++++++++++++++++++++++++++-
+ drivers/dma/sdxi/sdxi.h   | 15 +++++++++++++++
+ 4 files changed, 55 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/dma/sdxi/Makefile b/drivers/dma/sdxi/Makefile
-index 253398a45c74..019038cc91bc 100644
---- a/drivers/dma/sdxi/Makefile
-+++ b/drivers/dma/sdxi/Makefile
-@@ -13,6 +13,7 @@ sdxi-core-y := \
- 	keys.o        \
- 	process.o     \
- 	ring.o        \
-+	sysfs.o       \
- 	vendor.o
- 
- obj-$(CONFIG_SDXI_PCI) += sdxi-pci.o
-diff --git a/drivers/dma/sdxi/context.c b/drivers/dma/sdxi/context.c
-index cdaa0f654429..43ffe132cf2e 100644
---- a/drivers/dma/sdxi/context.c
-+++ b/drivers/dma/sdxi/context.c
-@@ -424,8 +424,11 @@ static int sdxi_publish_cxt(struct sdxi_cxt *cxt,
- 	};
- 
- 	err = configure_L1_entry(ent, &L1_cfg);
--	if (!err)
-+	if (!err) {
- 		cxt->sdxi->L1_users[l2_idx]++;
-+		cxt->sdxi->cxt_count++;
-+		cxt->counted = true;
-+	}
- 
- out_unlock:
- 	mutex_unlock(&cxt->sdxi->cxt_lock);
-@@ -459,6 +462,10 @@ static void sdxi_rescind_cxt(struct sdxi_cxt *cxt)
- 		goto out_unlock;
- 
- 	sdxi->L1_users[l2_idx]--;
-+	if (cxt->counted) {
-+		sdxi->cxt_count--;
-+		cxt->counted = false;
-+	}
- 
- out_unlock:
- 	mutex_unlock(&sdxi->cxt_lock);
-diff --git a/drivers/dma/sdxi/context.h b/drivers/dma/sdxi/context.h
-index c245c7ee7841..22a33291020f 100644
---- a/drivers/dma/sdxi/context.h
-+++ b/drivers/dma/sdxi/context.h
-@@ -65,6 +65,7 @@ struct sdxi_cxt {
- 	bool registered;
- 	bool published;
- 	bool update_pending;
-+	bool counted;
- 	bool started;
- 
- 	struct sdxi_cxt_ctl *cxt_ctl;
 diff --git a/drivers/dma/sdxi/device.c b/drivers/dma/sdxi/device.c
-index 7ebecae3c541..c6b690c39b05 100644
+index c6b690c39b05..cb7056916c3d 100644
 --- a/drivers/dma/sdxi/device.c
 +++ b/drivers/dma/sdxi/device.c
-@@ -387,6 +387,7 @@ static int sdxi_fn_activate(struct sdxi_dev *sdxi)
- 
+@@ -388,6 +388,7 @@ static int sdxi_fn_activate(struct sdxi_dev *sdxi)
  	/* Read capabilities and features. */
  	cap0 = sdxi_read64(sdxi, SDXI_MMIO_CAP0);
-+	sdxi->sfunc = FIELD_GET(SDXI_MMIO_CAP0_SFUNC, cap0);
+ 	sdxi->sfunc = FIELD_GET(SDXI_MMIO_CAP0_SFUNC, cap0);
++	sdxi->is_vf = FIELD_GET(SDXI_MMIO_CAP0_VF, cap0);
  	sdxi->db_stride = SZ_4K;
  	sdxi->db_stride *= 1U << FIELD_GET(SDXI_MMIO_CAP0_DB_STRIDE, cap0);
  	if (sdxi->db_stride > sdxi->db_size)
 diff --git a/drivers/dma/sdxi/ioctl.c b/drivers/dma/sdxi/ioctl.c
-index feef322a005e..dbd6a916392d 100644
+index dbd6a916392d..98bba3a91ca7 100644
 --- a/drivers/dma/sdxi/ioctl.c
 +++ b/drivers/dma/sdxi/ioctl.c
-@@ -36,6 +36,7 @@
- #include "mmio.h"
- #include "process.h"
- #include "sdxi.h"
-+#include "sysfs.h"
- #include "vendor.h"
+@@ -8,7 +8,6 @@
+ #include <linux/cdev.h>
+ #include <linux/bitfield.h>
+ #include <linux/capability.h>
+-#include <linux/cleanup.h>
+ #include <linux/compat.h>
+ #include <linux/anon_inodes.h>
+ #include <linux/device.h>
+@@ -17,6 +16,7 @@
+ #include <linux/fs.h>
+ #include <linux/idr.h>
+ #include <linux/limits.h>
++#include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/minmax.h>
+ #include <linux/module.h>
+@@ -1067,7 +1067,6 @@ static int sdxi_mmap_live(struct file *file, struct vm_area_struct *vma)
+ {
+ 	struct sdxi_file *sf = file->private_data;
+ 	struct sdxi_cxt *cxt;
+-	struct sdxi_dev *sdxi;
+ 	u64 allowed_mask;
+ 	u64 token;
+ 	u64 type;
+@@ -1081,11 +1080,6 @@ static int sdxi_mmap_live(struct file *file, struct vm_area_struct *vma)
+ 	if (ret)
+ 		return ret;
  
- #define SDXI_MAX_MINORS	256
-@@ -1295,6 +1296,7 @@ int sdxi_chardev_register(struct sdxi_dev *sdxi)
+-	sdxi = sf->process->sdxi;
+-	guard(rwsem_read)(&sdxi->state_lock);
+-	if (!sdxi->online)
+-		return -ENODEV;
+-
+ 	cxt = sf->cxt;
+ 	if (!cxt || !cxt->id)
+ 		return -EINVAL;
+@@ -1282,6 +1276,7 @@ void sdxi_chardev_exit(void)
+ 
+ int sdxi_chardev_register(struct sdxi_dev *sdxi)
+ {
++	char name[32];
+ 	dev_t devt;
+ 	int minor;
+ 	int ret;
+@@ -1292,13 +1287,21 @@ int sdxi_chardev_register(struct sdxi_dev *sdxi)
+ 		return minor;
+ 
+ 	sdxi->minor = minor;
++	if (sdxi->bus_ops->chardev_name) {
++		ret = sdxi->bus_ops->chardev_name(sdxi, name, sizeof(name));
++		if (ret < 0)
++			goto free_minor;
++	} else {
++		scnprintf(name, sizeof(name), "sdxi%d", minor);
++	}
++
+ 	devt = MKDEV(MAJOR(sdxi_devt), minor);
  	sdxi->chardev.devt = devt;
  	sdxi->chardev.class = sdxi_class;
  	sdxi->chardev.parent = sdxi->dev;
-+	sdxi->chardev.groups = sdxi_dev_groups;
+ 	sdxi->chardev.groups = sdxi_dev_groups;
  	dev_set_drvdata(&sdxi->chardev, sdxi);
- 	ret = dev_set_name(&sdxi->chardev, "sdxi%d", minor);
+-	ret = dev_set_name(&sdxi->chardev, "sdxi%d", minor);
++	ret = dev_set_name(&sdxi->chardev, "%s", name);
  	if (ret)
+ 		goto free_minor;
+ 
+diff --git a/drivers/dma/sdxi/pci.c b/drivers/dma/sdxi/pci.c
+index 52bdaeda08ff..abef318cfd7c 100644
+--- a/drivers/dma/sdxi/pci.c
++++ b/drivers/dma/sdxi/pci.c
+@@ -11,6 +11,7 @@
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/iomap.h>
++#include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/overflow.h>
+@@ -26,6 +27,8 @@ enum sdxi_mmio_bars {
+ 	SDXI_PCI_BAR_DOORBELL = 2,
+ };
+ 
++static struct pci_driver sdxi_driver;
++
+ static struct pci_dev *sdxi_to_pci_dev(const struct sdxi_dev *sdxi)
+ {
+ 	return to_pci_dev(sdxi->dev);
+@@ -167,6 +170,29 @@ static int sdxi_pci_mmap_doorbell(struct sdxi_dev *sdxi,
+ 				  sdxi->db_stride, vma->vm_page_prot);
+ }
+ 
++static int sdxi_pci_chardev_name(struct sdxi_dev *sdxi, char *name,
++				 size_t size)
++{
++	struct pci_dev *pdev = sdxi_to_pci_dev(sdxi);
++	struct sdxi_dev *pf_sdxi;
++	int vf_id;
++
++	if (!pdev->is_virtfn)
++		return scnprintf(name, size, "sdxi%d", sdxi->minor);
++	if (!sdxi->is_vf)
++		return -EINVAL;
++
++	pf_sdxi = pci_iov_get_pf_drvdata(pdev, &sdxi_driver);
++	if (IS_ERR_OR_NULL(pf_sdxi) || pf_sdxi->minor < 0)
++		return -EPROBE_DEFER;
++
++	vf_id = pci_iov_vf_id(pdev);
++	if (vf_id < 0)
++		return vf_id;
++
++	return scnprintf(name, size, "sdxi%dv%d", pf_sdxi->minor, vf_id);
++}
++
+ static const struct sdxi_bus_ops sdxi_pci_ops = {
+ 	.owner = THIS_MODULE,
+ 	.init = sdxi_pci_init,
+@@ -174,6 +200,7 @@ static const struct sdxi_bus_ops sdxi_pci_ops = {
+ 	.get_irq = sdxi_pci_get_irq,
+ 	.force_quiesce = sdxi_pci_force_quiesce,
+ 	.mmap_doorbell = sdxi_pci_mmap_doorbell,
++	.chardev_name = sdxi_pci_chardev_name,
+ };
+ 
+ static int sdxi_pci_probe(struct pci_dev *pdev,
+@@ -184,8 +211,8 @@ static int sdxi_pci_probe(struct pci_dev *pdev,
+ 
+ static void sdxi_pci_remove(struct pci_dev *pdev)
+ {
+-	sdxi_unregister(&pdev->dev);
+ 	pci_disable_sriov(pdev);
++	sdxi_unregister(&pdev->dev);
+ }
+ 
+ static const struct pci_device_id sdxi_id_table[] = {
 diff --git a/drivers/dma/sdxi/sdxi.h b/drivers/dma/sdxi/sdxi.h
-index 55ca853d6d1c..062ba4be90ad 100644
+index 062ba4be90ad..93b4eb80358c 100644
 --- a/drivers/dma/sdxi/sdxi.h
 +++ b/drivers/dma/sdxi/sdxi.h
-@@ -92,6 +92,7 @@ struct sdxi_dev {
- 	struct sdxi_version sdxi_version;
+@@ -81,6 +81,10 @@ struct sdxi_bus_ops {
+ 	 */
+ 	int (*mmap_doorbell)(struct sdxi_dev *sdxi, struct sdxi_cxt *cxt,
+ 			     struct vm_area_struct *vma);
++	/**
++	 * @chardev_name: Format a bus-specific character device name.
++	 */
++	int (*chardev_name)(struct sdxi_dev *sdxi, char *name, size_t size);
+ };
  
- 	/* hardware capabilities (from cap0 & cap1) */
-+	u16 sfunc;
- 	u32 db_stride;			/* doorbell stride in bytes */
- 	u64 max_ring_entries;
- 	u16 max_cxtid;			/* Maximum context ID allowed. */
-@@ -129,6 +130,7 @@ struct sdxi_dev {
- 	bool admin_dead;
- 	struct xarray client_cxts; /* context id -> (struct sdxi_cxt *) */
- 	u32 mmap_gen;
-+	unsigned int cxt_count;
+ struct sdxi_dev {
+@@ -137,6 +141,7 @@ struct sdxi_dev {
+ 	struct cdev cdev;
+ 	struct device chardev;
+ 	int minor;
++	bool is_vf;
+ 	bool atomic_ops_enabled;
+ 	bool online;
+ 	struct rw_semaphore state_lock;	/* online state and user operations */
+@@ -144,6 +149,16 @@ struct sdxi_dev {
+ 	const struct sdxi_bus_ops *bus_ops;
+ };
  
- 	bool has_mailbox;
- 
-diff --git a/drivers/dma/sdxi/sysfs.c b/drivers/dma/sdxi/sysfs.c
-new file mode 100644
-index 000000000000..808712952f37
---- /dev/null
-+++ b/drivers/dma/sdxi/sysfs.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * SDXI character device attributes.
-+ *
-+ * Copyright Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/sysfs.h>
-+
-+#include "sdxi.h"
-+
-+static ssize_t version_show(struct device *dev,
-+			    struct device_attribute *attr, char *buf)
++static inline struct device *sdxi_to_dev(const struct sdxi_dev *sdxi)
 +{
-+	struct sdxi_dev *sdxi = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u.%u\n", sdxi->sdxi_version.major,
-+			  sdxi->sdxi_version.minor);
++	return sdxi->dev;
 +}
-+static DEVICE_ATTR_RO(version);
 +
-+static ssize_t cxt_count_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
++static inline bool sdxi_fn_reports_vf(const struct sdxi_dev *sdxi)
 +{
-+	struct sdxi_dev *sdxi = dev_get_drvdata(dev);
-+	unsigned int count;
-+
-+	mutex_lock(&sdxi->cxt_lock);
-+	count = sdxi->cxt_count;
-+	mutex_unlock(&sdxi->cxt_lock);
-+
-+	return sysfs_emit(buf, "%u\n", count);
++	return sdxi->is_vf;
 +}
-+static DEVICE_ATTR_RO(cxt_count);
 +
-+static ssize_t sfunc_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
-+{
-+	struct sdxi_dev *sdxi = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", sdxi->sfunc);
-+}
-+static DEVICE_ATTR_RO(sfunc);
-+
-+static ssize_t numa_node_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	struct sdxi_dev *sdxi = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", dev_to_node(sdxi->dev));
-+}
-+static DEVICE_ATTR_RO(numa_node);
-+
-+static struct attribute *sdxi_dev_attrs[] = {
-+	&dev_attr_version.attr,
-+	&dev_attr_cxt_count.attr,
-+	&dev_attr_sfunc.attr,
-+	&dev_attr_numa_node.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group sdxi_dev_group = {
-+	.attrs = sdxi_dev_attrs,
-+};
-+
-+const struct attribute_group *sdxi_dev_groups[] = {
-+	&sdxi_dev_group,
-+	NULL,
-+};
-diff --git a/drivers/dma/sdxi/sysfs.h b/drivers/dma/sdxi/sysfs.h
-new file mode 100644
-index 000000000000..91e672bb7adc
---- /dev/null
-+++ b/drivers/dma/sdxi/sysfs.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * SDXI sysfs declarations.
-+ *
-+ * Copyright Advanced Micro Devices, Inc.
-+ */
-+
-+#ifndef DMA_SDXI_SYSFS_H
-+#define DMA_SDXI_SYSFS_H
-+
-+extern const struct attribute_group *sdxi_dev_groups[];
-+
-+#endif /* DMA_SDXI_SYSFS_H */
+ static inline bool sdxi_dev_compatible(const struct sdxi_dev *sdxi,
+ 				       struct sdxi_version version)
+ {
 -- 
 2.56.1
 
