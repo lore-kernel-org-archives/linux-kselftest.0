@@ -1,68 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795055328;
-	b=34aDvSciu+VuXD/et3jyybROxuAfCrviCUTTrPI9Ma0bgr465Eguo5eqmO8APXFcfqDF
-	 a49wBhyGO4RZR82CpwtMrUl46/NIDZ5eygYnosoCrkoBzxQv66UYyZNx7D6ohzV84QK8E
-	 EUSYVztHth5IpAAF09nDp3apBDJUxLuvTqm5hUTFwQekJnxLpsrKDJ/va/qXR+DCiUMW0
-	 Vx+pXH+PCLJpiB/u5ugM3O+eh9alElTF+Vh7X8lwEVAAhGKjFQrHyPrgxMlL3i8NvtX4g
-	 jDbvCGFyn606IQIZ/yrlKP3p0FMWSbmRdhkpYX6T8JO9UHgGymo80+Xs7p2xad9G6EQ==
+	t=1795057040;
+	b=OrmvEDPSBHBNgk70pRwV9FRf8RELCNqXaQjgDJA+DzlmMwjgtfwx0tqMaFfnAjzN3+w4
+	 hEa3rAQWymOqKE0XmzTWSzkSoCVkt5B/01vCFuwcFXuzirE60xQzXPEyAmqfeUomm3vLL
+	 +SDoj6abepiy4cA4CMxnDuMCO/F2Ay89rjyKPI9gs3vbSAYX+of81t/QMGppEFa9coARg
+	 PasRnpPODtA9N+bTKACIRe9mMykg8PrpoDltLU19scuB3XjuoyiRItCyFhT0YYDM+eGs9
+	 GO3QbkF7PTxNQ6Xto1OGXT4meJ6vkAwVuwixqoEFN9xIuBNWAuxdjYh6U9/t/5jHc4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795055328;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=VSmr5vXbmsuCRGN7b7MuI6UN6XrNtVVzPed/LUHALvg=;
-	b=PtcKdM5/s7H0yo6P1thEp61epdoV9IkHTrT3EDmJXMAOKslq8dOFK4PgGTPdx9MjG52G
-	 YQ4Y9PXU9CYyBN3K/NBumzPOWbKVfpsDdZRiXzEWm8FFX7JzrnrMnMccbqoPwjTaZL8Q0
-	 z4ARHI/ql7NPwTb5hSDZ8Kx9TMnAnbFBEtk7TXryLDYqVoH+pxppFSe3aw7GXpLtzkXZc
-	 4z2WQjrcWJNVLZ91DHgD6Oy5KS2CwjugKv8AIo+1LzZbQEFFHSl9dxTf3Cy2IXpPUto/d
-	 iZnT/lNt6BGjkDyGthw+kGQE1Z07z3F0AzKvR5z9BAefFgjrzHfADq0iU5Mj4QrFnNg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795057040;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=n45qhIWgljouYKMGyLEtTBZkMLiNMOhwqdxxq1twSXI=;
+	b=MpzMDwUFA2xgGXKhudmL4ihfr4DEEevSEeCsYFIJ+qGLGts2ft6eS/Hrp3K+fR9CvjhZ
+	 mr8qsw4l1A4gN1HRRI8nl5VutFWpcJWZtg+DVV2XkJA3kgWDdyJOhVtToRxqyeSmtQXmP
+	 rU8rtH139JHN3ATlWYz4QZ5ZoZCjd1iawX9W6dkFoNKLucBfuNrfrQyDrUyXZbrivRJLQ
+	 XsABKZIDWZTRVcKKlQenYNuvBJoe1HM8pF/7MN+4DyKsfVFfOb8n2FE0C4sf0/klCVsJZ
+	 ekM0nRvyoLvCYvWIaC6qqnWzt5mBa47KWNtu7nHaY5ZQRBOPhjASyuuJYWbtfb2jjwQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QCf8TzyK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=JwN2Kjro;
+	arc=none smtp.remote-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26248606A330;
-	Thu, 19 Nov 2026 02:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F5F606A31C;
+	Thu, 19 Nov 2026 02:57:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2F5F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QCf8TzyK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85101F000C4;
-	Thu, 19 Nov 2026 02:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795055327;
-	bh=VSmr5vXbmsuCRGN7b7MuI6UN6XrNtVVzPed/LUHALvg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=QCf8TzyKY+FlztwuipmblRq0WGMCQ00jFnkGWbjo5MJ4EngICXY+S6N0DfoO5YAjp
-	 c9M4WFmnKvN75qwy32jrIRSBJfG/hJz3sNpIHm9n6K6c1EevqY118uf9Gosph6nz7y
-	 NsFPPqZ1wZyUp18XZXx2uTZ5+0AP4zoX2WQwj8xViiLt73GxQ/OfUcBPYOk9rM2cIX
-	 /i4yXRU59k7XNjxjy/8F8PM/vIOJTFbfuXWKi5ruEs65omlMkreIHesaYmkx2GItNH
-	 jHJkHQ5axVnvJY1hsnPLFvy4a0/Y5iejnpry8NLSsu23kEHhqq7axp5ZxWA7/WeaQf
-	 3oYcL2bSn71YQ==
-Date: Wed, 18 Nov 2026 18:28:46 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>, "David S. Miller"
- <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, Stefan Hajnoczi <stefanha@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio =?UTF-8?B?UMOpcmV6?=
- <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
- <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, Eric
- Dumazet <edumazet@kernel.org>, George Zhang <georgezhang@vmware.com>, Andy
- King <acking@vmware.com>, Dmitry Torokhov <dtor@vmware.com>,
- <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <sargun@sargun.me>, <jlinbox@meta.com>, Bobby Eshleman
- <bobbyeshleman@gmail.com>
-Subject: Re: [PATCH net-next v7 0/7] vsock: assign the guest vsock device to
- a network namespace
-Message-ID: <20261118182846.4ab756d1@kernel.org>
-In-Reply-To: <20261117-vsock-guest-ns-v7-0-7e522ea9dd9b@meta.com>
-References: <20261117-vsock-guest-ns-v7-0-7e522ea9dd9b@meta.com>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=JwN2Kjro
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=n4
+	5qhIWgljouYKMGyLEtTBZkMLiNMOhwqdxxq1twSXI=; b=JwN2KjroRV1Jn5JsTH
+	nA+6tSf/0JjkLNNsf8iHugUqSeB0ALRsPgoQiOLwXZjcKMZ4bIQW3e5Z7UEFC6ft
+	gm8OVUj4H61uGthjNT/TSxXLQTir2SLxBsX5+IcySwsEsaw7HpoOcDzVcK7ltFBM
+	OxDT5PMLQ3if/L48KXFKM/yOk=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDXl39hZf5q5uiiIg--.59922S2;
+	Thu, 19 Nov 2026 10:56:34 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2] selftests/bpf: Run all summarization freplace cases
+Date: Thu, 19 Nov 2026 10:56:23 +0800
+Message-ID: <20261119025623.192740-1-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,12 +70,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDXl39hZf5q5uiiIg--.59922S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFWrCr4xKrW8tw4kuFWrAFb_yoW5Wr4rpa
+	4xX398KFyxKF17Jw10kwsrWFWa9FWvqrW5Ar40g34UZr1kJ34vgryxKF4UJF9a9FWfZr1S
+	vasrKr15ZwsrArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UD739UUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wPLmmr+ZWP8PgAA3p
 
-On Tue, 17 Nov 2026 17:54:43 -0800 Bobby Eshleman wrote:
-> vsock network namespaces let a host put each VM in a namespace of its
-> own. A guest has no equivalent yet. It has a single G2H device that
-> cannot be assigned to a network namespace.
+From: Yun Lu <luyun@kylinos.cn>
 
-PW says this did not apply at the time of posting, pls respin
+ARRAY_SIZE(mains) gives the number of groups in the test matrix.
+Using it as the target loop bound skips the two standalone
+entry-point targets in each group.
+
+Derive the group count from mains and use the target and replacement
+counts from the current group. This restores four packet-data cases
+and enables four sleepable-program cases.
+
+Tag the context arguments of the standalone sleepable entry points
+with __arg_ctx. On arm64 and s390x, the verifier marks the
+unrecognized entry-point BTF as unreliable and rejects freplace before
+the RCU read-lock check that the test expects.
+
+Fixes: 72ed076abf54 ("selftests/bpf: Add tests for extending sleepable global subprogs")
+Reported-by: Jackie Liu <liuyun01@kylinos.cn>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+v2:
+- Add __arg_ctx to both standalone sleepable entry points.
+- Run summarization_freplace on x86_64 and arm64 QEMU.
+
+v1: https://lore.kernel.org/bpf/20261118073309.125424-1-luyun_611@163.com/
+
+ tools/testing/selftests/bpf/prog_tests/summarization.c | 6 +++---
+ tools/testing/selftests/bpf/progs/summarization.c      | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
+index 3e4bcf071735..f51b203eca8a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/summarization.c
++++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
+@@ -116,9 +116,9 @@ void test_summarization_freplace(void)
+ 	};
+ 	char buf[64];
+ 
+-	for (int t = 0; t < 2; t++) {
+-		for (int i = 0; i < ARRAY_SIZE(mains); ++i) {
+-			for (int j = 0; j < ARRAY_SIZE(replacements); ++j) {
++	for (int t = 0; t < ARRAY_SIZE(mains); t++) {
++		for (int i = 0; i < ARRAY_SIZE(mains[t]); ++i) {
++			for (int j = 0; j < ARRAY_SIZE(replacements[t]); ++j) {
+ 				snprintf(buf, sizeof(buf), "%s_with_%s",
+ 					 mains[t][i].to_be_replaced, replacements[t][j].func);
+ 				if (!test__start_subtest(buf))
+diff --git a/tools/testing/selftests/bpf/progs/summarization.c b/tools/testing/selftests/bpf/progs/summarization.c
+index f89effe82c9e..f08c7a73ad8e 100644
+--- a/tools/testing/selftests/bpf/progs/summarization.c
++++ b/tools/testing/selftests/bpf/progs/summarization.c
+@@ -61,7 +61,7 @@ int main_might_sleep_with_subprogs(struct pt_regs *ctx)
+ }
+ 
+ SEC("?uprobe.s")
+-int main_might_sleep(struct pt_regs *ctx)
++int main_might_sleep(struct pt_regs *ctx __arg_ctx)
+ {
+ 	int i;
+ 
+@@ -70,7 +70,7 @@ int main_might_sleep(struct pt_regs *ctx)
+ }
+ 
+ SEC("?uprobe.s")
+-int main_does_not_sleep(struct pt_regs *ctx)
++int main_does_not_sleep(struct pt_regs *ctx __arg_ctx)
+ {
+ 	return 0;
+ }
+-- 
+2.43.0
+
