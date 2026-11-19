@@ -1,54 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795057455;
-	b=oOUYDN0qnTex3hm03udnrm1WPxKxfHGnZJ7c2mLgFif+CnkW2ybwqhbYa/rIrquREciZ
-	 Q82NmL8+S028JteAHozo5drLOs5P5xvMyg3cLEqUkd3j0zvHq6o4i5EH846a2lHF8QHD9
-	 S7BUx9f+h4JkpxF0CEPOXN8fgZG5+E3DdqXvQRCCMEPZu1rHmYj0Dcs2uN5Rh/pTHd135
-	 Uwu3h3/0StgldNPRJzU/ez/ykcBnyEP2TZJvk1rFD2auXnJyI4sqZIlElU0OfvWiSj/B8
-	 6Cnf0wh0aSnrpyyfFe09tHdlesfLzal5+5YxIR3qTKuYy9CkBWpgIoifqq6T/KDW5xw==
+	t=1795058066;
+	b=j/dqSVqdBHMJqrFRAwtGzH3KEdxG1di1q0NrO9NlyW5LsrVeZxVVY9Vbr8w8MCbWgydl
+	 X0WttXLhZwZrguwaENSlKl5/ykZSu+SO/xXin5aPdK+Us4VOQme5g1BLuVKGkOm2/UFWZ
+	 slOdxvMrASK4u9V6sLAPcQxIdWFIeYCTBIwxLf3xPW0DpRT3OifSEtJ2kmJtBV/R095Kq
+	 kPV+0xpWcYY+doX47YzWdPSxv1vzbVl9KDDdGLoSOnMcIIDljKAT3dcmpyRlRsaAxRF2I
+	 HTCab2cgFOmCnpg0O9Uz12z4OBIAoztX95jV3m11QadS4j0mgk+Ke4xRV9ZzHQIcd0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795057455;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=0SbJDsJK4PSjk5SKz/IpSKiXp0UG0peF0ib+V6K/eBE=;
-	b=S1gtp50hApte2Qw2Inljzt8r0nWKgC+w5Hc2rHq/zHcy1ch24IyVRMfxp2ybFEqjc0P/
-	 DuHf0vjN9YkRrdC8XTAAA4uNIYyI88iWqzuqg2fmv5TiF6ASDUjxhrNBTA+SVA6bkvw9S
-	 7QMr8JSnB/k2fZk9D0DMMwT07N2aR1htwW3w0VP3N1DELdhEBjATJFyc5SftWlmt5nD9i
-	 f2o9lufX/XJxK3clk+mf3POhyQSGjQ2Z3M0+BMpxNCpY4a9f2MTk7BAcsuFWwE6phAXTQ
-	 QUE/R2BQr7L+d/Ph3Rdz/Fny6nh4m9WF/2UmYZnlRx47Alg89FmgJBYhaucpiuhEfFA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795058066;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=rTVCMUckF4OImfL/pZOEtpsAr6XvQh0ItXntMQmf5hQ=;
+	b=lEfcdJaVnTh5hs2iyH4sIuc1GWaK62y+3ZUWhDaoO2b8wmmaRWSh/dzxCZE717vDbR0q
+	 lleERlna0l7sD9cw0H2yufiI07IPssqZjEZ5um3n0FTu++PZptq0ItJ3m85jDScJL3gj5
+	 xCtEs2sfKuQMBGQs9cLlRyfKC9YtNzFg6wYT3DmSCtQn3QS4O1w7NM1o/LwYlBvINI/F2
+	 uj6MTu+3O9SoewgSzpNZraq21YMry86agdkVj4c6qfHeBWnETMvRJG4x3cRbW6a9cq993
+	 MZwV+UXZJAXFQhpl3Qee6A9UeWEP3z0vztSC/RCcmUQZHvkgeetSVFzGwk9SBEFjyzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DWK3GpEt;
-	arc=none smtp.remote-ip=95.215.58.55
-Received: from mta1.migadu.com (out-55.mta1.migadu.com [95.215.58.55])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=K0mLP1Yl;
+	arc=none smtp.remote-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D81606A332
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 03:04:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11D81606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09CB606A31C;
+	Thu, 19 Nov 2026 03:14:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B09CB606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DWK3GpEt
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KazbasjxrRYbBydSTs2O2Ixd8P66DwsGYWpJXQkSjv4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795057450; v=1; x=1795662250;
- b=DWK3GpEtx6OslLzkWCdUk612hJfK1YdzajCAowfM8hDrqAFe2bKFYuds5eoDrvpUlrsaZ2N+
- oHrUc2j0j2jxSiTk8FBWrOM3BjM3laE7T2Ge+x1PKYn+99dnkBn/K9WzoI+X70uVs8pvPT+b1h3
- cfV/KvH/aizE0w6QBEPiN/4Q=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 57bbc1b48389dcb3;
-	Thu, 19 Nov 2026 03:04:10 +0000
-X-Mizu-Trace-ID: 57bbc1b48389dcb3
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <79797479-029f-4e9b-8076-6a92a2a70cdd@linux.dev>
-Date: Thu, 19 Nov 2026 11:04:02 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=K0mLP1Yl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=rT
+	VCMUckF4OImfL/pZOEtpsAr6XvQh0ItXntMQmf5hQ=; b=K0mLP1YlyItMdc1LF6
+	rJwUqY22/1oVGlC9RZ62Qh5B95yITrgy83bVSAPvsisBYnRvW6eoVM44U7NgEWHz
+	JPORw40zXoAy90mV5pW2LtNb5lcT4FoB+BQnQPisa31n/dCH7ft4k6HYIKsiHluG
+	DkifVjlJCjpqJ6/2Bfn9HyFms=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDnL4Bsaf5qld76Ig--.45716S2;
+	Thu, 19 Nov 2026 11:13:59 +0800 (CST)
+From: WEI Qinggang <stitchqgwei@163.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-can@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH can-next] selftests: can: cover CAN XL VCID getsockopt
+Date: Thu, 19 Nov 2026 11:13:28 +0800
+Message-ID: <20261119031328.625-1-stitchqgwei@163.com>
+X-Mailer: git-send-email 2.47.1.windows.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,171 +62,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Betterbird (macOS/Intel)
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fall back when
- memcg_proactive_reclaim data lands in shmem
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Kurt Lin <lylin1023@gmail.com>, Hui Zhu <zhuhui@kylinos.cn>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>, Barry Song <baohua@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261117170704.1146730-1-lylin1023@gmail.com>
- <DMY136RTAL9Q.2WQSZ57W1YLV2@gmail.com>
-Content-Language: en-US
-From: Hui Zhu <hui.zhu@linux.dev>
-In-Reply-To: <DMY136RTAL9Q.2WQSZ57W1YLV2@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnL4Bsaf5qld76Ig--.45716S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3WF4fAF18tFyfZrW5Zr17GFg_yoW7Xw15p3
+	WFyFyYyw4kJF13Xwn3Gr48uFWfXF4DJrW8Kr1xWryUZ3y7AF97XrsIkFWayry7ZrZYg39I
+	va4SgF15urWDJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZzVnUUUUU=
+X-CM-SenderInfo: xvwl3u5ktj4vrl6rljoofrz/xtbC0hfR0Wr+aXcs4gAA3B
 
+CAN_RAW_XL_VCID_OPTS returns the configured VCID options through
+getsockopt(). When the supplied buffer is too small, it returns ERANGE
+and updates optlen with the required size. Neither behavior is covered
+by the CAN selftests.
 
-2026/11/18 11:49, Alexei Starovoitov:
-> On Tue, Nov 17, 2026 at 09:07 AM Kurt Lin <lylin1023@gmail.com> wrote:
->> After writing the file, check memory.stat and move on to the next
->> candidate directory if most of the data was charged as shmem; skip only
->> when none is left. Give each candidate its own cgroup so that stale
->> stats from a previous attempt cannot interfere, and poll memory.stat
->> until the write shows up, as reading it does not force a stats flush.
->> Fail the test if memory.stat cannot be read or never shows the write.
-> This is overkill.
->
->>      To exercise the polling, FILE_SIZE was temporarily cut to 2 MiB in a
->>      128-vCPU guest, which keeps the write below the flush threshold.
-> So the test with 32 MiB didn't hit it.
-> Pls don't add code just because a bot said so.
->
-> Here is what I mean. I didn't compile it:
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-> index c76a7eb..334bfa6 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-> @@ -53,8 +53,12 @@ static int alloc_pagecache(size_t size)
->   	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
->   	if (fd < 0)
->   		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
-> -	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
-> -	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
-> +	/*
-> +	 * tmpfs hands out shmem pages, which are not reclaimable without swap.
-> +	 * overlayfs hides the type of its upper layer, which can be tmpfs.
-> +	 */
-> +	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC ||
-> +	    stfs.f_type == OVERLAYFS_SUPER_MAGIC) {
->   		close(fd);
->   		return -EOPNOTSUPP;
->   	}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-> index c22dcfa..2ba0791 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_proactive_reclaim.c
-> @@ -30,7 +30,8 @@ struct reclaim_args {
->    * being available, and a read-only mount cannot host the file at all (EROFS
->    * applies to root too). /tmp is tmpfs on many systems, and test_progs is
->    * routinely run from a tmpfs working directory, so both candidates need the
-> - * check.
-> + * check. overlayfs hides the type of its upper layer, which is tmpfs for /tmp
-> + * in virtme-ng guests.
->    */
->   static const char *workload_dir(void)
->   {
-> @@ -40,7 +41,8 @@ static const char *workload_dir(void)
->
->   	for (i = 0; i < ARRAY_SIZE(dirs); i++)
->   		if (!statfs(dirs[i], &st) && st.f_type != TMPFS_MAGIC &&
-> -		    st.f_type != RAMFS_MAGIC && !access(dirs[i], W_OK))
-> +		    st.f_type != RAMFS_MAGIC &&
-> +		    st.f_type != OVERLAYFS_SUPER_MAGIC && !access(dirs[i], W_OK))
->   			return dirs[i];
->
->   	return NULL;
->
-> pw-bot: cr
+Add two tests to a separate test_raw_sockopt executable. Set nonzero,
+distinct VCID values and compare each returned field and the option
+length. Pass a buffer length one byte below the structure size and
+check the error and required length.
 
-Hi Alexei,
+Use an unbound CAN_RAW socket so the tests need neither a CAN interface
+nor vcan setup. Skip when CAN_RAW or the VCID option is unavailable.
+Register the executable with kselftest and request CONFIG_CAN_RAW.
 
-What about two things: only check when the test fails, and check
-KPF_SWAPBACKED instead of f_type?
+OpenAI Codex assisted with the implementation and commit message.
 
-1. Check only when the test fails.
-What the test needs is "these pages are reclaimable", not "these pages
-are not shmem": with swap available shmem reclaims fine, and then
-reclaimed == 0 is a real regression that must not be skipped. So probe on
-the failure path only -- nothing is paid when the test passes, there is
-no polling, and a regression cannot be masked.
+Signed-off-by: WEI Qinggang <stitchqgwei@163.com>
+---
+Tested with GCC 13.3.0 (-Werror). On Ubuntu 7.0.0-43-generic in QEMU,
+both tests pass as root and as uid 65534 with only the loopback interface.
+Both tests skip with CAN modules absent and on WSL 6.6 without the VCID
+option. No vcan interface is created.
 
-2. Probe with KPF_SWAPBACKED.
-f_type is a blacklist, so the next stacking filesystem repeats this.
-shmem-ness is a property of the pages rather than of the mount, so ask
-the pages: /proc/self/pagemap for VA -> PFN, /proc/kpageflags for
-PFN -> flags, then test bit 14.
+OpenAI Codex generated the implementation and commit message from a
+request for these two cases and ran the build and runtime checks.
 
-     #define PAGEMAP_PRESENT(e)  (((e) & (1ull << 63)) != 0)
-     #define PAGEMAP_PFN(e)      ((e) & ((1ull << 55) - 1))
-     #define KPF_SWAPBACKED      (1ull << 14)
+ tools/testing/selftests/net/can/.gitignore    |  1 +
+ tools/testing/selftests/net/can/Makefile      |  2 +
+ tools/testing/selftests/net/can/config        |  1 +
+ .../selftests/net/can/test_raw_sockopt.c      | 80 +++++++++++++++++++
+ 4 files changed, 84 insertions(+)
+ create mode 100644 tools/testing/selftests/net/can/test_raw_sockopt.c
 
-     /* 1 if fd is backed by shmem, 0 if not, -1 if it could not tell */
-     static int file_is_shmem(int fd)
-     {
-             unsigned long ps = getpagesize();
-             uint64_t ent = 0, flags = 0;
-             int pfd = -1, kfd = -1, ret = -1;
-             char *addr;
+diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/selftests/net/can/.gitignore
+index 764a53fc8..f578c0821 100644
+--- a/tools/testing/selftests/net/can/.gitignore
++++ b/tools/testing/selftests/net/can/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ test_raw_filter
++test_raw_sockopt
+diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
+index 5b82e60a0..43ea4efac 100644
+--- a/tools/testing/selftests/net/can/Makefile
++++ b/tools/testing/selftests/net/can/Makefile
+@@ -6,6 +6,8 @@ CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INC
+ 
+ TEST_PROGS := test_raw_filter.sh
+ 
++TEST_GEN_PROGS := test_raw_sockopt
++
+ TEST_GEN_FILES := test_raw_filter
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/can/config b/tools/testing/selftests/net/can/config
+index 188f79796..2fb0a7a18 100644
+--- a/tools/testing/selftests/net/can/config
++++ b/tools/testing/selftests/net/can/config
+@@ -1,3 +1,4 @@
+ CONFIG_CAN=m
++CONFIG_CAN_RAW=m
+ CONFIG_CAN_DEV=m
+ CONFIG_CAN_VCAN=m
+diff --git a/tools/testing/selftests/net/can/test_raw_sockopt.c b/tools/testing/selftests/net/can/test_raw_sockopt.c
+new file mode 100644
+index 000000000..e4175b8f6
+--- /dev/null
++++ b/tools/testing/selftests/net/can/test_raw_sockopt.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* CAN_RAW socket option tests that do not require a CAN interface. */
++
++#include <errno.h>
++#include <sys/socket.h>
++#include <unistd.h>
++
++#include <linux/can.h>
++#include <linux/can/raw.h>
++
++#include "kselftest_harness.h"
++
++static const struct can_raw_vcid_options vcid_opts = {
++	.flags = CAN_RAW_XL_VCID_TX_SET | CAN_RAW_XL_VCID_TX_PASS |
++		 CAN_RAW_XL_VCID_RX_FILTER,
++	.tx_vcid = 0x5a,
++	.rx_vcid = 0xa5,
++	.rx_vcid_mask = 0xf0,
++};
++
++FIXTURE(can_raw_vcid)
++{
++	int sock;
++};
++
++FIXTURE_SETUP(can_raw_vcid)
++{
++	int ret;
++
++	self->sock = socket(PF_CAN, SOCK_RAW, CAN_RAW);
++	if (self->sock < 0 &&
++	    (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT))
++		SKIP(return, "CAN_RAW sockets are not supported");
++	ASSERT_GE(self->sock, 0);
++
++	ret = setsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_XL_VCID_OPTS,
++			 &vcid_opts, sizeof(vcid_opts));
++	if (ret < 0 && errno == ENOPROTOOPT) {
++		close(self->sock);
++		SKIP(return, "CAN_RAW_XL_VCID_OPTS is not supported");
++	}
++	ASSERT_EQ(0, ret);
++}
++
++FIXTURE_TEARDOWN(can_raw_vcid)
++{
++	close(self->sock);
++}
++
++TEST_F(can_raw_vcid, getsockopt_roundtrip)
++{
++	struct can_raw_vcid_options opts = { };
++	socklen_t len = sizeof(opts);
++	int ret;
++
++	ret = getsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_XL_VCID_OPTS,
++			 &opts, &len);
++	ASSERT_EQ(0, ret);
++	EXPECT_EQ(sizeof(opts), len);
++	EXPECT_EQ(vcid_opts.flags, opts.flags);
++	EXPECT_EQ(vcid_opts.tx_vcid, opts.tx_vcid);
++	EXPECT_EQ(vcid_opts.rx_vcid, opts.rx_vcid);
++	EXPECT_EQ(vcid_opts.rx_vcid_mask, opts.rx_vcid_mask);
++}
++
++TEST_F(can_raw_vcid, getsockopt_short_buffer)
++{
++	struct can_raw_vcid_options opts = { };
++	socklen_t len = sizeof(opts) - 1;
++	int ret, saved_errno;
++
++	ret = getsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_XL_VCID_OPTS,
++			 &opts, &len);
++	saved_errno = errno;
++	ASSERT_EQ(-1, ret);
++	EXPECT_EQ(ERANGE, saved_errno);
++	EXPECT_EQ(sizeof(opts), len);
++}
++
++TEST_HARNESS_MAIN
 
-             addr = mmap(NULL, ps, PROT_READ, MAP_SHARED, fd, 0);
-             if (addr == MAP_FAILED)
-                     return -1;
-             *(volatile char *)addr;
-
-             pfd = open("/proc/self/pagemap", O_RDONLY);
-             kfd = open("/proc/kpageflags", O_RDONLY);
-             if (pfd < 0 || kfd < 0)
-                     goto out;
-             if (pread(pfd, &ent, sizeof(ent),
-                       ((uintptr_t)addr / ps) * sizeof(ent)) != sizeof(ent))
-                     goto out;
-             /* unprivileged readers see PM_PRESENT with the PFN zeroed */
-             if (!PAGEMAP_PRESENT(ent) || !PAGEMAP_PFN(ent))
-                     goto out;
-             if (pread(kfd, &flags, sizeof(flags),
-                       PAGEMAP_PFN(ent) * sizeof(flags)) != sizeof(flags))
-                     goto out;
-
-             ret = !!(flags & KPF_SWAPBACKED);
-     out:
-             if (pfd >= 0)
-                     close(pfd);
-             if (kfd >= 0)
-                     close(kfd);
-             munmap(addr, ps);
-             return ret;
-     }
-
-     if (!skel->bss->reclaimed) {
-             struct sysinfo si;
-
-             sysinfo(&si);
-             if (!si.totalswap && file_is_shmem(data_fd) == 1) {
-                     test__skip();
-                     goto out;
-             }
-     }
-     ASSERT_GT(skel->bss->reclaimed, 0, "reclaimed");
-
-What it buys: it sees through any stacking filesystem instead of only the
-listed ones, it is per-page rather than inferred from a magic number, it
-needs no polling and no extra cgroup, and it costs nothing on the success
-path. Returning -1 when it cannot tell keeps the caller conservative --
-a failure beats a silent pass. Both files are root-only, which these tests
-already are, and selftests/mm/vm_util.c already pairs pagemap with
-kpageflags.
-
-Best,
-Hui
-
+base-commit: 573af801552999954caa8347e4490b04cf4763f0
+-- 
+2.47.1.windows.1
 
