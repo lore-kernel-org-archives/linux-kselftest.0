@@ -1,78 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.240
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795050069;
-	b=W/g3lm9jTRdYo2hCcXaV1+V6W8Ap29zHjtRwZj2aOIByTQp0GusBPSvWVdnFz0TmQUSY
-	 vHjq7Lwpl1/v051Bl69ECVbOyVQrOeD5EnbsrhYQcVCj3X4GFqJZPBvKaTHJbfQekADpp
-	 nMoqhSOTtV9hcpdSMyLasbBrJQS5yQMAPJCCrg3yG9XTTbrUtereyoRQPopNH3G3qzHkM
-	 uSrtAHvzkMOovGYlJm0fe3vyHbfquBQGNbDY+chxn8fdgNYzNja4YClINyZ+CXF+PlGFs
-	 a/yNuncSbUak987zudP6Gv1VHIUWDUY8/uSqBg9tx3voB8AhqgtUKcUS2JoHa6cwcJg==
+	t=1795050165;
+	b=QLhXufD+AXYwmY1XlfbBV99cohFvzruOorax6CAlrdogwQjDMYhJZ/EZPPoTiU1vpr4O
+	 PJh6UW8++mmGZILPO3aTsh0EBICJnyTbSq4yGd77U1jUnlJesHX5GZ6xBVp3XP1NsSqnb
+	 3dOTTxLLe5LoVjNGlC1MbUiUDgiog94j4ZVDLod8TaOJBkOM5ZsHMGwb9ulg/2YioEHJv
+	 pQkYF3RKGwqh3O/iq6+EFnuul6JCK7d1sykE0Kngrr8QnZtYkE10DLveipbeO8RGtdmqU
+	 7nrfRkrdwjn8VDB9hocxudbt6K00xhFOegBMJZOcAYrZbPzFFnsLhJvfKXVbPk9Lm/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795050069;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=49NXjUTbzL4+xbJpcXKoJd4omTTJA3SheYrgPCgGq84=;
-	b=vS5J49mB1ax80RDM8gC/lh5KXPnw5Alz1PGjohGWgeG0NQG3AaUICpe4JTLs6ZOtYMQY
-	 JwtWoEYj/pwWcIn2uBz01NeCUjDcMubbirjJnvAjhsAhAbW2GODBwJjw4Z6KfKxdoAjy1
-	 nD8hfBhY2fKfQjzmYH9MwB8tZjgHV6J5FQiGcdj+R3ScAXWnM9kc7yx1itInHgvYmmwc+
-	 QcvVjpalSuJSeZeBDcuJQQ9LZsRYZZka4cPXuAYEw/yb+1NDx1nYzspWxIEzv6wgC6ZX1
-	 nOLrurltHwy2yptCh5rDP/xlhaAGdbyL/ws+CDN84RfjlZdQHlp5Ja3PUwbhEIj7bKQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795050165;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=BlL4W75h1MApHqdiv3CTVmX4B2zbrj1hbYs9giA+q5g=;
+	b=1zhR0It30AsclsbPXvYNEWnyjPSjIvwTfVOtUSs4A3bJVmuxCPcbHLqR3uryO3yj090K
+	 oIclUhP8ZYluSv8Z/KWDO1H2h1L2jawtouTl9mNz04J4trvLFXV4qUTUTeZTjzzvRw1yc
+	 2/gk8f7uGcfd8tUnkGyk7p0A9yTlOwIzmubnKKX1vrp3RdBVPHwQbNMK8y/aKSq97l+Q4
+	 DwdyZAgQAFzSAFiiHcbdmgxeymM0eKAR7lvSfwkuJ/aEbH1Nn4pP9zokvMBytg092zDdF
+	 nHBkadDc3HGesNqkXPGySoGKsbgaZkN48RmfT8x92W4BpXaUmvBoALmR2TVCQzToRHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IQv06nro;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fpFl4L4R;
+	arc=none smtp.remote-ip=91.218.175.240
+Received: from mta0.migadu.com (out-240.mta0.migadu.com [91.218.175.240])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 0E428606A332;
-	Thu, 19 Nov 2026 01:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5330606A320
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:02:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5330606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IQv06nro
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 3E62E1F000C4;
-	Thu, 19 Nov 2026 01:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795050068;
-	bh=49NXjUTbzL4+xbJpcXKoJd4omTTJA3SheYrgPCgGq84=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=IQv06nrofbIqNARVVWh9JrAgHaEyRWKOud9QvOcchO4KY4ScIzXSqs80rNJ/ht3b1
-	 Tsu7VMYrIh/2Fi+hRTl7qSSsKz4S7jM8ebpPVfo17lwtEFZMdAvwfZsxatV/ZsWAUp
-	 PJgwsXqU+KqK3LvIcvOGucx9P9jANzCFHIamLnf4sC5rVp+bvnrP0sCUChwGa++Hwx
-	 a7awEoAOqry4Xom2vSVycaB2NRS9vG06yCTtwmMYjMTvqtDoBc6hHSkU5Dk5pOb1Ih
-	 GIaqltmVlM6m491tKp84gsZmgrtTNr8xvyupIzrYmeeJ//m5Bn5hJKwuAsDqwP+LxE
-	 +hNKrozwFIXmA==
-Date: Thu, 19 Nov 2026 03:01:05 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Demi Marie Obenour <demiobenour@gmail.com>
-Cc: Rodolfo Giometti <giometti@enneenne.com>,
-	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jens Wiklander <jenswi@kernel.org>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	op-tee@lists.trustedfirmware.org,
-	Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-	Pankaj Gupta <pankaj.gupta@nxp.com>,
-	Sahil Malhotra <sahil.malhotra@nxp.com>,
-	Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	Richard Weinberger <richard@nod.at>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fpFl4L4R
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ux0kfY5j7nM7oh8a7BfUtbSzQISJcSgoiHsY5y3C7fo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795050162; v=1; x=1795654962;
+ b=fpFl4L4RdOYRvsiHM+GOdTXfY0EaUgQcWvxjZu5E3Iv9+BQZa/n8b9XA4f9Z5qDlBLG+tUXI
+ lzbf8E45R6pbwSlF/bLPvWn8nZdmKdusdtPneU0j6QT68TFJKw7pUq/iGap/n11nC8WuHFZhFq1
+ iOkoa/h2KlJBvxgUm+WIY/0U=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5966f3fd4a58c3d7;
+	Thu, 19 Nov 2026 01:02:42 +0000
+X-Mizu-Trace-ID: 5966f3fd4a58c3d7
+X-Migadu-Flow: FLOW_OUT
+From: Qiliang Yuan <qiliang.yuan@linux.dev>
+To: Ming Lei <tom.leiming@gmail.com>
+Cc: Qiliang Yuan <qiliang.yuan@linux.dev>,
+	"Martin K. Petersen" <mkp@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
- never read
-Message-ID: <av5KUakRYdiaondn@kernel.org>
-References: <20261118140421.584086-1-giometti@enneenne.com>
- <650f89ef-9745-4f75-b254-80fa5ac4773d@gmail.com>
- <av5EyVHnNzT27dyK@kernel.org>
- <61ca7c37-7b42-48a3-be2e-95deb4d999a2@gmail.com>
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org,
+	Mike Christie <michael.christie@oracle.com>,
+	Bodo Stroesser <bostroesser@gmail.com>
+Subject: Re: [PATCH RFC 00/18] scsi: target: Add target_core_uring, an io_uring based user backstore
+Date: Wed, 18 Nov 2026 20:02:33 -0500
+Message-ID: <20261119010233.2917434-1-qiliang.yuan@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <av0CAptnbIZP-53U@fedora-laptop>
+References: <20261115-feat-target-core-uring-v1-0-28cdc137eac6@linux.dev> <avprIhtn1TuYLX1b@fedora-laptop> <20261117024640.3184554-1-qiliang.yuan@linux.dev> <av0CAptnbIZP-53U@fedora-laptop>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,82 +79,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61ca7c37-7b42-48a3-be2e-95deb4d999a2@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 18, 2026 at 07:43:37PM -0500, Demi Marie Obenour wrote:
-> On 11/18/26 7:37 PM, Jarkko Sakkinen wrote:
-> > On Wed, Nov 18, 2026 at 06:42:15PM -0500, Demi Marie Obenour wrote:
-> >> On 11/18/26 9:04 AM, Rodolfo Giometti wrote:
-> >>> This RFC proposes a key type, "keycrypt", whose material user space can
-> >>> use for symmetric operations but never read: AES-256-CBC, HMAC-SHA256
-> >>> and an authenticated AES-256-GCM stream, through a file descriptor that
-> >>> KEYCTL_CRYPT_OPEN returns for one key and one operation.
-> >>
-> >> I haven't looked at the API, but from a cryptographic perspective,
-> >> this encourages very poor practices.  AES-GCM even allows userspace
-> >> to extract the secret authentication key.
-> >>
-> >> AES-256-CBC isn't a suitable mode on its own, unless it's combined
-> >> with a MAC in encrypt-then-MAC.  Even then, it has a 2^64 birthday
-> >> bound, so it should only be used 2^48 times with a single key unless
-> >> the key is ephemeral.
-> >>
-> >> AES-GCM is not a suitable algorithm either.  If you allow encrypting
-> >> with a key loaded from persistent storage, there is no way for the API
-> >> to ensure it is only used with a unique nonce.  Nonce reuse leaks the
-> >> authentication key and allows forgeries.  Using random nonces isn't
-> >> good enough either: NIST only allows 2^32 encryptions in this case,
-> >> and the API can't enforce that limit.
-> >>
-> >> For long-term keys, all of the following are much safer choices.
-> >> They have 192-bit nonces, which means that one can generate them
-> >> at random for each encryption without any problems.
-> >>
-> >> - XAES-256-GCM
-> >> - XChaCha20-Poly1305
-> >> - AEGIS-256
-> >>
-> >> AES-GCM-SIV is also okay, provided that you are fine with occasionally
-> >> leaking if two plaintexts are equal.  This happens whenever there is
-> >> a nonce collision, so with probability 2^-32 after 2^32 encryptions.
-> > 
-> > The exitential problem here is that KEYCTL_CRYPT_OPEN creates a circular
-> > relationship between the keyrings API and a specific key type.
-> > 
-> > At hardware level I did not see any support for TPM, which narrows down
-> > the potential user base.
-> > 
-> > The remaining potential user base is further reduced by those that use
-> > trusted keys; leaving out those who need to solve the assumed problem
-> > that only this patch set can presumebly sort out.
-> > 
-> > And we don't really know at this point that cut. This is pretty much
-> > the break down of what is wrong here.
-> > 
-> > If there is/was a problem to sort out, it should be so constrained that
-> > it should be as quick to describe as stepping over a nail really.
-> > 
-> > These are the main topics what I would focus on.
-> 
-> This whole patchset looks like a solution looking for a problem.
-> 
-> The usual solution to something like this is a userspace service
-> like ssh-agent.  Then you can do whatever key management you want.
-> That doesn't protect against root, but if someone can get root you
-> have bigger problems.
+On Tue, Nov 17, 2026 at 07:40:18PM -0600, Ming Lei wrote:
+> Can you share your setup? It is supposed that you run fio from VM,
+> otherwise you can just compare ublk with scsi backed with tcmu.
+>
+> But if you run fio from VM, I believe you can setup virtio-scsi backed by
+> ublk block device directly, which should cover your requirement, or maybe
+> I miss something?
 
-This is true. Even if the code was like it is BUT it had a clear
-motivation, I would likely suggest to the author how to resolve the
-problem more properly.
+Everything runs in one 32 CPU guest. For tcm_loop and iSCSI (16
+sessions over 127.0.0.1), fio runs in that guest on the initiator
+disks. For vhost-scsi, fio runs in a nested 16 vCPU KVM guest on the
+vhost-scsi disk, with the target and the backstore server in the outer
+guest. In the ublk runs, kublk serves the file as /dev/ublkbN and
+target_core_iblock exports that through the same fabric.
 
-I.e. bar is not too high in initial code quality but it is steep
-from the get go in the "utility value".
+You are not missing anything. This backstore has block semantics: the
+kernel emulates the SCSI commands, PR and ALUA included, exactly as for
+iblock, so ublk behind target_core_iblock offers the same function on
+every fabric, and for a VM a virtio-scsi or vhost-scsi disk on top of
+the ublk device covers it as well. What the series adds over that is
+only performance, and outside tcm_loop the numbers I sent do not show a
+consistent gain.
 
-> -- 
-> Sincerely,
-> Demi Marie Obenour (she/her/hers)
+[...]
 
+> My question is actually why there is regression wrt. 4k randread:
+>
+>  workload               TCM/USER (MB/s)   uring (MB/s)          change
+>   4k randread, 1 job      426 (409-463)      369 (366-384)         -13%
+>
+> Maybe you can focus on single job perf only, which is easy to compare and
+> investigate.
 
-Br, Jarkko
+It comes from the scheduler moving fio between CPUs. The pwrite() I
+pointed to in my last mail is not it: doing that copy inside
+io_uring_enter() instead makes no difference.
+
+tcm_loop queues the LIO submission and completion work on the CPU that
+submitted the command, so with one job, fio's CPU always has bound
+kworkers and ksoftirqd runnable next to fio. The load balancer cannot
+move those and moves fio instead. This backstore gives it more chances:
+the completion work on fio's CPU handles 14 commands per run here
+against 24 with TCM/USER, so per 1000 I/Os the completion kworker and
+ksoftirqd run about 57 times against 35, fio is preempted as often, and
+it is moved two to three times as often. With balancing on, fio's own
+CPU time per I/O doubles here, from 3.1 to 6.3 us, against 3.4 to 4.9 us
+with TCM/USER, spread over the whole submission path rather than in one
+function.
+
+Turning load balancing off for fio's CPUs and nothing else reverses the
+result. Single job, 4k randread at iodepth 32 over tcm_loop, 6 s per run,
+five alternating runs, median (min-max). fio runs in a cpuset of CPUs
+4-31 and the server threads are pinned to CPUs 0-3; the cpuset is either
+a normal member (balanced) or an isolated partition (not balanced):
+
+  fio CPUs 4-31, backstore      bandwidth (MB/s)   change
+  balanced, TCM/USER               439 (398-462)
+  balanced, uring                  379 (371-388)   -13.7%
+  not balanced, TCM/USER           662 (544-710)
+  not balanced, uring              760 (575-798)   +14.8%
+
+Booting the guest with idle=poll removes the gap as well: with fio free
+to move, five runs give a median of 612 MB/s with TCM/USER and 627 MB/s
+here.
+
+That points at what each switch costs in a guest. An idle vCPU executes
+HLT, which exits to the host and puts the vCPU thread to sleep; waking
+it for a kworker, ksoftirqd or a migrated fio takes an IPI, a host
+wakeup and a VM entry, and the host may run the thread on another
+physical CPU, so the guest code then runs with cold caches. With
+idle=poll the vCPUs spin instead, stay on their physical CPUs and take
+the IPI without an exit. This backstore makes more of those switches
+per I/O, so it pays more of that cost, and fio's slowdown spread over
+the whole submission path looks like cold caches.
+
+What is measured is that idle=poll removes the gap and that the gap
+follows the switches and migrations. Which part of the cost is the exit
+and wakeup latency and which part is the vCPU thread landing on another
+physical CPU is inferred: I cannot trace the host side here. Waking an
+idle CPU is much cheaper on bare metal, so I expect the gap to be
+smaller there, but I have not measured it. idle=poll is only a
+diagnostic, it burns a host CPU per idle vCPU.
+
+[...]
+
+> When userspace target becomes more efficient, I'd suggest you to think
+> about why these applications can't be improved or refactored for the
+> potential (bigger)perf requirement.
+
+Agreed. Since this backstore only takes block commands, an application
+that can move to it can just as well move to ublk, and one that needs
+SCSI semantics in userspace is not served by it either.
+
+Thanks,
+Qiliang
