@@ -1,58 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.239
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795074770;
-	b=CaakKwbX3GuVHLE8xr3ESRf4OjzKeZrg+/of27OhSQ9gQYdikfgrPLdV/8zlI3pmpNth
-	 5/+8wmEQxciyuylfXvXiG8lPaPQu3x8xyfjX79AF+fZTW+St82lnqhV4atxZ0sr3xIE4W
-	 vLRZzbS2NN94eCzoiRTWR6iS6gnExEBShOr+fKPYqEej6tI5RUjFbb+UW/3T9pcKswB73
-	 s2QGCGHYHGbdfu7594EAke77OqpWDelxcu1Nf/VQjlNbI7s35IQqtfq9JGG5d4le3LEME
-	 rp6oKVEs5Zjek9IGHdxT4z1PdxHsEKQs5WFbnbA6RJ0JpwI35sJ3m0981UiKrnBw3zA==
+	t=1795074889;
+	b=ZlePRBZPSwtjaeo75ZM2Qn5ijzVp1S1P8Sw2dV3Q0btpCrEbKQyorfOLsfpAGUIrrEzZ
+	 VUP6TtapwUyrzuwQbAxn1PeY1Xj59+CloGM0rWEqiG2mQXgjx5Wg3K4u11AoT6PIVwdjC
+	 D3nctyTTVEqa9KgL1UHZLtxI1T1zZj7YVkfdJ27G9Ai2nwYSwMOr1uy2M8K21JT3NWNPG
+	 kqzoGd9WquNSzHHVMC11ezP83HaWDTnrt/u5LjEaZSg5jmVNT3vjxNjuN/+3ADBMoDb9v
+	 jkjm45qut7KA+2A0wYkdIUvDInw8+617febeS8qVVbjnY2o2sF89GsH6RXI4+44s5XQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795074770;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=XDGSq+NYY9XzLBrI14hyUS/fB+/Exw2w2j7dzo+fazs=;
-	b=FTslMrBt3oRvocUtMc3GH966ewmBTv1I6vU+nKQiGkcz7x1P0DJPLWcqJ85m5XPQL+8b
-	 LqRCuEPcqRDUGT03ccSWrlhcTXpRyVybrc+8FwtrTpFde2BOSA3dp7I32GUqkBsHCwkrq
-	 9YbbqZX3W7Q46NraEqxxkXhCigpQiGOtWbBjSGVfaGjR79FgpqQIOmPY4jWwuwGSrZv1k
-	 2kEXK+G6VGauuXWiZ50kXFcfxbz/djwfogOkYr9lvTrsCscunV+MRcq59K1GyqBIhc9Fw
-	 b0k3l22KeqtiMtpmvNXI776gbkmYBKvznix7OCdpM7XJJh62A54SoWboPPzailqS3UQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795074889;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type;
+	bh=+H4AVHAkxU3vkubZcic9ja82r8a7H7wKS0//pc/pxSA=;
+	b=TCkQQw1Vjc/VP6yX2o+soH+f4gFiXty9+v9H1SkFm/MPO+WTPv8Lcv/Ek/ORGorVMM6b
+	 ZUCZRVs3zK5X3c9ZAZ5M4szwpf7CmGYUX8kwh6eteIsefWbh45kQ9RVkUe2kvA9X4GPN0
+	 Zye0UPxusiAmtL4lTWJKh85FDnuDsPQ+gLWnqKISr7aNr9uIiGDCCI+ZhIVIAg6W4Tbrl
+	 TJq4DIDb9CrmZ3f/2kgJshWhFBMKlCzdpNM1CacCR2y/XdpLxhZfmeozZYCDZaYPCHx7X
+	 3nmyrWdAMkNxSKz+6cS60SiLa1QQCbK5+F2J+g7xSry7UN11KTXHhVOi8ccDn40Zv4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=LCSdGyGP;
-	arc=none smtp.remote-ip=113.46.200.216
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="PLyB/oPQ";
+	arc=none smtp.remote-ip=95.215.58.239
+Received: from mta1.migadu.com (out-239.mta1.migadu.com [95.215.58.239])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169F4606A324;
-	Thu, 19 Nov 2026 07:52:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 169F4606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2877606A320
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 07:54:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2877606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=LCSdGyGP
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=XDGSq+NYY9XzLBrI14hyUS/fB+/Exw2w2j7dzo+fazs=;
-	b=LCSdGyGPdamq0ZtVH+kQdHhms9IgZI22Kjo79DM7xUImrxVEK+DP8tfMlYQ5/G9pKXP//eJpt
-	hiHyy9nA5IKmAKkHxPR9kSEkq3RilXY3DPsQUifasfgYSS15KqerDXrYYPbjxP+UQ9aehn1f8Gu
-	fSS+3VMnGKoM25dNCsLD0so=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4jVVzd5Ky2z1T4Fr;
-	Thu, 19 Nov 2026 15:51:57 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id C976C203AB;
-	Thu, 19 Nov 2026 15:52:38 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 19 Nov 2026 15:52:37 +0800
-Message-ID: <ceb91298-3d05-486e-a900-1291963dde24@huawei.com>
-Date: Thu, 19 Nov 2026 15:52:37 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PLyB/oPQ
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=IUkhtioo34/vN9L4UPndwkkOKppLGI8BNNMRdeeG/sE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795074886; v=1; x=1795679686;
+ b=PLyB/oPQ9b6eLgD2g4wfOAop/YJ3tndisoVwN/4RLy8pXxweh/I0WEEbonehvrFoMu8DNRC1
+ QmzFf0xpR0hzCiex8dhBkp/VFSV+Jds55mQqkMdhHHQucBTMc5+wOqlrJQIFsKNUu0WqTR2BBGM
+ WJhHlzGz+Uo8vnrW+vhg+lsg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b22ea52e78a566f4;
+	Thu, 19 Nov 2026 07:54:46 +0000
+X-Mizu-Trace-ID: b22ea52e78a566f4
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5c14bc5a743so5876e87.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 23:54:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErHRhpUBZpplXYrjzhkZ4ItnwXWWkQyBdd3iXjOU86h2FqcQrdwvtMUlBCyCne7S8dtAXWCVlSuUd/4JWRZB6U0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z++cjTaO4lUTEZLUkZ4a5rRDvzDbnt16tyoBZe1Z2jfTO9dL5Hj
+	HKIsNEJBt4Ip6a1a9on9ACQWiqVFuM1QCcysRyy/ICIaTX1L8Lr/6z1L6THAkzHSC00HQimIAHd
+	q35yMXaMTqOGM9qFLQqth56JF/N0Ljbre+FTdsbTB
+X-Received: by 2002:a05:6512:3d20:b0:5c1:ac33:5a4a with SMTP id
+ 2adb3069b0e04-5c1b67303bcmr26361e87.14.1795074884909; Wed, 18 Nov 2026
+ 23:54:44 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,115 +66,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/15] KVM: arm64: Add support for FEAT_HDBSS
-To: Leonardo Bras <leo.bras@arm.com>
-CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-7-zhengtian10@huawei.com> <at-X_hFbsBU_Dsgr@LeoBrasDK>
- <a301e884-f6d1-4082-8551-8d8a17276dc3@huawei.com>
- <auSml6yTVYIQe7NZ@LeoBrasDK>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <auSml6yTVYIQe7NZ@LeoBrasDK>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr100010.china.huawei.com (7.202.195.125)
+References: <20261117074428.7544-1-fuad.tabba@linux.dev> <20261117074428.7544-2-fuad.tabba@linux.dev>
+ <avxfgWNePsGPK9mm@gremlin> <CA+EHjTzUrDxLSMEo6X66XhKtQ-=ew3zZhMdFWR6U9Ga17WLWkw@mail.gmail.com>
+ <av5CBjbeidUUWiLq@seanjc-mac.roam.internal>
+In-Reply-To: <av5CBjbeidUUWiLq@seanjc-mac.roam.internal>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Thu, 19 Nov 2026 07:54:08 +0000
+X-Gmail-Original-Message-ID: <CA+EHjTwdkbx=1yQNP5=-BhE=S0uaoQnO3F-83d2WbYC=j9fd6A@mail.gmail.com>
+X-Gm-Features: AclHuK9mtkqv6V--RBoHl1Fg-Xb2-fd2-ZgaHzAt1DD9Kl83ENlFhqESP2uZHtY
+Message-ID: <CA+EHjTwdkbx=1yQNP5=-BhE=S0uaoQnO3F-83d2WbYC=j9fd6A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's
+ dirty ring is full
+To: Sean Christopherson <seanjc@google.com>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Sean,
 
+On Thu, 19 Nov 2026 at 00:25, Sean Christopherson <seanjc@google.com> wrote:
+[...]
+> > > Maybe worth mentioning the exit_reason thing if we keep this arch-generic?
+> >
+> > Sure, I'll document that userspace should complete a pending exit with
+> > KVM_RUN before it pre-faults on that vCPU.
+>
+> If we're going to do a documentation update, I vote to keep it vague and scary,
+> otherwise readers might think the exception proves the rule.  I.e. if we say
+> that KVM_PRE_FAULT_MEMORY isn't supported, then userspace might think all other
+> ioctls are safe, which is most definitely not the case.  E.g. something like
 
-On 10/30/2026 10:15 PM, Leonardo Bras wrote:
-> On Fri, Oct 30, 2026 at 10:53:57AM +0800, Tian Zheng wrote:
->>
->>
->> On 10/27/2026 2:12 AM, Leonardo Bras wrote:
->>> On Tue, Sep 29, 2026 at 06:36:46PM +0800, Tian Zheng wrote:
->>>> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
->>>> index 32102c3912fa..12fa37328dd2 100644
->>>> --- a/arch/arm64/kernel/cpufeature.c
->>>> +++ b/arch/arm64/kernel/cpufeature.c
->>>> @@ -2158,6 +2158,11 @@ static bool hvhe_possible(const struct arm64_cpu_capabilities *entry,
->>>>    	return arm64_test_sw_feature_override(ARM64_SW_FEATURE_OVERRIDE_HVHE);
->>>>    }
->>>>
->>>> +static bool has_vhe_hdbss(const struct arm64_cpu_capabilities *entry, int scope)
->>>> +{
->>>> +	return is_kernel_in_hyp_mode() && has_cpuid_feature(entry, scope);
->>>> +}
->>>> +
->>>
->>
->> Hi leo,
->>
->>> IIUC you run this on every cpu in the system, to make sure it's matching
->>> the feature. Is there any chance the kernel is in EL2 only on some of the
->>> cpus here?
->>>
->>
->> It's impossible for the system to have only some CPUs in EL2 and others
->>   not.
->>
->>> If not, maybe we can run it on system_supports_hdbss() instead, which would
->>> be easier for the user to understand it only runs in EL2, on top of not
->>> needing the above.
->>>
->>
->> However, The question is whether a cap should mean "this system can use
->> the feature" or "this hardware supports the feature". If the cap only
->> tracks hardware support, users may be confused when the hardware
->> supports HDBSS but the system runs in nVHE mode — they would mistakenly
->> believe they can use the feature.
->>
->> So I think we should keep is_kernel_in_hyp_mode() in has_vhe_hdbss(),
->> and add a comment in system_supports_hdbss() explaining this.
->>
->> Does that work for you? Looking forward to your reply.
-> 
-> Well,
-> That's just my personal view of this:
-> 
-> If we have a function called "has_hdbss" it should only report if the
-> system has the feature available.
-> 
-> On the "system_supports_*" we have to figure out if the system itself
-> supports the feature, which checks the feature bits itself and could mean
-> checking for other features being there, such as hyp_mode.
-> 
-> What do you think?
-> 
-> Thx,
-> Leo
-
-Hi Leo,
-
-Sorry for the slow reply. I've been looking into how other cpufeatures
-are configured on arm64, on and off, and that's why it took a while.
-
-My reading is that detected: HDBSS should mean "this system can use
-HDBSS", not just "the silicon has it".
-
-Several caps already add conditions beyond the ID bits. CNP returns
-false for kdump and under ARM64_WORKAROUND_DISABLE_CNP, NV and pKVM
-match on kvm_get_mode(), and can_trap_icv_dir_el1() starts with
-is_hyp_mode_available(). So in practice a SYSTEM_FEATURE cap answers
-"can this kernel use it on this system".
-
-HDBSS is EL2-only (HDBSSBR_EL2/HDBSSPROD_EL2, VTCR_EL2.HDBSS),
-implemented only under hyp/vhe, and used only by KVM, so "the hardware
-is there" is not the same as "this kernel can use it". That is why I'd
-keep the gate in has_vhe_hdbss() rather than moving it to the consumer.
-
-I'd be interested to hear how you see it.
+I'll go with that in v3.
 
 Thanks,
-Tian
+/fuad
