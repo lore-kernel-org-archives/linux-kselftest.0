@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795052328;
-	b=Dz+WET8wA6X0/betlUGCVq9wh9cglu7wCSaNu047TJ0KvaOud7VRz9yGOpSNXb4uAi47
-	 qxXd9s9nuSyKZ+nYl3ld4qzP+vcbhp3IdVVwg6cxZHcbKDHbLv7DRK5jMfmWlTIbYIOlT
-	 W2Z6eUphB73bgfCFCvYlXQlU0z5QkvUCuOL3arpEs7c2Vu+kQIyf+jkAakXE6aiA96oRW
-	 n3egd+WQJvlje4q2v1CPiRdahxPM2T1KZQxs1GxjRLpBdUj6Kz3qDFp4Q101KQ5ib0UW9
-	 A2lWFglZeZwHbuHwe9K3GUzRAk2fRi0QH6WlRgnm/j6L4G3AqJ/d6lBSj1Bdqb2sL0Q==
+	t=1795052332;
+	b=3XzoNFvMbLzAX3npdlxKv2T7LUCjJzHFUqtcW4HKim4d8LA3fZqbIHDjcEk+JBRuyU27
+	 g/93DPItOkAE5f4cbILcQrrFI/Rq81IL6peZ05f8qsnDOMOc+hRZ4Wc3wMU8vqIheANCR
+	 Ma6ZTHzXkfdaCo8BpVA9UhbW5iSNx9glg3ormBUP1R5WrIdbmV0Uoestp6hRkpa4q9ErV
+	 Rl5bWqB7brxZXygUXkwqbciRfSKQB8NNiLIxwvsGTF0WyBPZw4uxoX+ebeCOX7BIlHXG6
+	 zbdQm1ffsGuG9yQQJd0GoxL5ciNLmO/9Azv5TC3tESNyzzZrgp3KY26GxgLYpvNbrBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795052328;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795052332;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=SPQlmHY4zyewM/5GeaUABznsUsxTpbSiCVxtUkYNvlo=;
-	b=BVH46Jb20DasRAYjD0pNYQ0CLegj9HdH495RAyspfKDlIyuYTV+IhDfp3L61zW9WfPpm
-	 HgyUv1Ys9ZqO0n/exFBwq4M/mbvK1cSo0GZxsu+ZMgAfWhh+Km2NOUhPht1GTgXFxz0l+
-	 OF+xYY6u6nLwTuA1f3cFf/xGOmmQJGn3bWLsiDrj5fo6Q4BqsphwX679mQH8j4djHiLkg
-	 ZHTcRhELYCYEq5fDqIKmguaeTruzEUS2cICiuIm9RmDKX90g/lZbClHrngbiJXVHSvwrf
-	 CnD/mdHudipWeg340YIkm9gRdCPWutcAgNe4ZD01NEB2VZ9+XZlPci/QSil6F5qHxPw==
+	bh=yVcHqzXkcmRmeetpAor6laiPG64o4Do4e1KDubpvDQA=;
+	b=ecF0q2FKaux+F5UXi+byPdkrhU9behNKbHLm5rALSH89J7tM4hN8YxDwuVzjrOuuS1L8
+	 5eq4rJGSQcUZZ3UFsrgU9uP4lXTBjOVHB1gMGX9Xe2m1AVkRYORSexahkz7RcSQ1TDKhz
+	 cqg6ZA/Kpt6F1C/9q6el5/S5Xr4FdxSYTqoXNzUnFDlYHLNHikNINS1O153t0JdvzmUJd
+	 YHhez/5zHpqK2bPvfRfClThxF/34bgNzG4n54DAU1lx09CR8UFvLiz8hq6SEYaOov5ME4
+	 dwfVGw14ofYDfA8JrjVyq6P1ntQ5Bp4jLX4yWXWamsQQyzyVpm+RogRelA8xOWFjfxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=UqdiWGAu;
-	arc=none smtp.remote-ip=209.85.218.42
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b="Eh7C/lX8";
+	arc=none smtp.remote-ip=209.85.218.53
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12804606A333
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:38:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12804606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6666560A262C
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:38:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6666560A262C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=UqdiWGAu
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c4d581da0aaso206753866b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 17:38:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Eh7C/lX8
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c4cb6834eaaso276236366b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 17:38:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795052326; x=1795657126; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1795052330; x=1795657130; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SPQlmHY4zyewM/5GeaUABznsUsxTpbSiCVxtUkYNvlo=;
-        b=UqdiWGAuCoul1iCw7nr8t/payAfm5BvLnhLBgehnlDT3A9dt48vI4BUPgW13AkFnOx
-         7u/575cu0jVfin+WKiF84P8XjSrr6Ni7nrIJEBGUx3wpl/tn/a0DlWH0BsWz0SCR++tD
-         ThuhyJ3qMDRJQz6flh/nQ9goelfWrW2w/em7fbUf1rw6ZTfPdNDlePKdxsvNT8Y/iv41
-         MgB3PNaa2xHjJl4PtuPeKWZRu/uc5IsG4zwaVrdAEdN+7oWMrTZwOheiQtCUQwCYI88M
-         UZVvcyRBV5qHF51WgEMT9RT9amdi8rCBTd0qa3w3gWYutXtuDa2GlODvLI61agArrlFl
-         5R3g==
+        bh=yVcHqzXkcmRmeetpAor6laiPG64o4Do4e1KDubpvDQA=;
+        b=Eh7C/lX85Oa77jtB8/DFYZO+O9JzEG3DMq5syaMAz6SYmftKF83P6kGE2jMl3ya1ho
+         dcDrWR0Yjk571vjfMXLmb1qYoyp6zVnHBIJyjiAwmoaBlYEVOlje4cMf96MC7SujRAyK
+         CSJlfAg8RbfEIpBnKIbF9YUAaFdpd5eJbQCfxwFUgS90pld+VB9oqcZwRGA68tjglwkH
+         DGSOQKbLQKUB+ZxilP1l0UZRPQqWLP+udcn2MvhffPDURz8xz1SujAOV6xIYRvvD8ji2
+         pyc3/EX2bV8GqF4v/uGZE+Z17G+PNd+0NP19RB87s3AEKOhKUrYjCG+OhSzA3sKVvJFQ
+         Cr9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795052326; x=1795657126;
+        d=1e100.net; s=20260707; t=1795052330; x=1795657130;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SPQlmHY4zyewM/5GeaUABznsUsxTpbSiCVxtUkYNvlo=;
-        b=NMT2/m58ZbGUJqberSe1VWM3FiS4TWlmMCoesp08pWuIL5yToKnythhINYEw4oJ2+B
-         WvcDDKU1DnKoneGO/p3MX2bZtBhrF4KLT0noG3r1LODdrcJb6gC8J1Sje6LoqZZniHdi
-         cvggyVgBfv9AU/2PLWPyiHKZLeJfX2oDXvlrvUDtEouXM6dMA+tKevsRzbsiQVZZi8GF
-         dSM+yFpUjnMGK5QiqBqv4ENXSvPeayXKPtC6qpnsNcO7RiX8+L3x4DKUVzGPyu8XUl56
-         zo0oJIHrALs0YgJxDJcrFIv2JNsTY9UeYTZWuPIRItkeXuzCV8Uq/tdcI5FgFgr9sCa+
-         L5bQ==
-X-Forwarded-Encrypted: i=1; AL+hErF8/gGHzCP6nvSDsYnavAB21bMJSetmkmCfYmfOw8UFEdFrFUUJQr7Wqig3Ui15DjcviJ5KAyOI9IcDI6XNppA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8/4Z0BwjDMyUybhOsbmZB6ZwKqnakv0BZk+g51yWk1p7ihZzSZ
-	dQOnp8hAsNOWJgjUZ/TNZI/DvKkECb/Y5KcnWHaINyRWc+ig0Q6goyacmGYMZhkQbNs=
-X-Gm-Gg: AYBFou15Xl8WZ12cDy1LfgshHb0IArhy4A04ocg6hwulAONXQAndpPb9A9Z/UkUM0lF
-	vtjDrTWk9EgskMX5hrpHc3dBBiH0q6FAWesxYCVJ2X7NSkeqQmvwMjbA9ITiO6sj7nxFl1Ar0yt
-	sNHDaVEaDB43pkT1sHPoSJHiziIPOvDzN8opvaOXxMOfyyP5yqAUUFNJlaHyizfo0pn9bPi4WrR
-	MWFLU5Z6f6H2VeZ29vSOCkRxx7I2rxeo/vK+TK1BafMEUqr58HPXGqF1qhJShCCbhJaMOUrnox6
-	Oq7qvCaccTu8K+B8nOezQxpGDEVzsgHJIuIbKfV7n8UNmYT3Ng9Q5WhCuVQmZxmDnhJ3iAd/vLR
-	WexCi0GqNsnZfJfjkXfa/fjuy+u/gRxmK2/GKlUo2nhfZVA116jHScaotO+8vJhxoWG56fX4sU9
-	1YUSH+QKh3R5/S+lg7zDpEPeNBIV9rnH1WsCLnPbImls+lz06HyQ1IT1ik5368jTSP3Z4W/yyoA
-	kpcmm4Cc2WLQtd+h7cBBzw4AyWIVcR2mTs87T9m/0RzwYj+5PHazXmjI9jwYlrD1lUq1WmavRPG
-	HFP/AuNghrivQy21sMs+2l2vezt97OugLW/6+kHNny5o/Dpyz4OZgPOOEg==
-X-Received: by 2002:a17:907:c13:b0:c50:8d2b:4391 with SMTP id a640c23a62f3a-c510e3919e5mr367615466b.37.1795052326486;
-        Wed, 18 Nov 2026 17:38:46 -0800 (PST)
+        bh=yVcHqzXkcmRmeetpAor6laiPG64o4Do4e1KDubpvDQA=;
+        b=cFJ26Ni5LriCBJg+SJrZIkQcNlkZOqZ6QU44ujb+FIYwHuM5SZJYmuVPnNZ1FTGZEZ
+         mEiYLSbfHyr8eOV/US/NwX3S/c8Q4yalRIpMVDXkBYy7Rg4RR/5s8YdnmK14ETmWIDev
+         edDaUQOuaXHSpnIfDFO64ekqQeSBAD2o0VReITuMN1B7kpyC9SEG/06ibF1CaxfvokpZ
+         WK04DlM8wPTZ+MuxTphK/m8kvRFCv18FiVP/ayR2xKfZEPw6cCdlOQyeFfYv35gITNBc
+         lD0yCsUxHBpumhITFNiLS0A892TSxXLTyKLCLKllEENdmlT5IYohbfqEFP/y/i9yuA58
+         0nug==
+X-Forwarded-Encrypted: i=1; AL+hErGfmNKpi6dPI1FCOH9OcD9Jn7fhePa4vVnbLryxEGTZ7WJpJ8PLTeUVKqahLIdww23I1i9d3yBie2y53u4DZtk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+OIYcskEXN19OlcKRL1S5k6MKR9F2feA6WaPLvrY2vLIZkSiA/
+	JNHeEH2WBkVBhIa07TL+IqyUjZDLsuRMcEDKwpLjDO2uwbl57hydTNpywq3DZlh4gY4=
+X-Gm-Gg: AYBFou3o89cIGXWT0uhGd/GKq1Q5CDtdEZv/jV+qC1Bv1JKE9WmOmNtbWC7mSGTnvNW
+	67CHHbzrpyuzqbsPNSSRpNivAqyrsm2+6PUqcRObHq3TqU0NtU/92XciZOwmWYaaJ9mXew5Y2yo
+	l4hTanmDXy0lh6YMoctmWrh67lfbVWPMRKp0VFfFGBl8QLBlNYd2tadsy7IKdpbRzpi9T3RzbtU
+	N3RVrAWyjABpilCEMmLY6+F9ThltGFKsAJMczKV2Y35DuewaTR2IDEus74E25JF8qFgVb1jQFYj
+	lNIUgn4nmBhYt+TktUH3hQE0EekPTI6l+Ac7rPsGsPhUfECGl+VlIWx5ar7wz1n1b9Est1zFGXB
+	WGjcLid58qYpc1msvI3A9P2o8Y1E/hO1+v+KhD17/Kp8oqh+Heg/jygpnL77X0bBYbsmg6/6NnU
+	RmGkfy9Lj+gYedZ9E7fxn3/5y+8s8HD0syrtrSDpGmf8PlEV2ETBidb+7DLQcw0ZBIMB14dKR6t
+	zNOGtryDrFnKJTtqhBRt+AeJo+S6V4NS53LCHrHigmwCu/J3+wMWEjWqsDHQaQS6VXpJ3kD9BeG
+	gTDr9lsmYI5f+miLxqJlNhMb0nROtayVAzRpvZ+Fci0jK4N+9i3UoCUvpQ==
+X-Received: by 2002:a17:907:9613:b0:c40:9b75:84af with SMTP id a640c23a62f3a-c510e15bbd9mr437677766b.8.1795052329834;
+        Wed, 18 Nov 2026 17:38:49 -0800 (PST)
 Received: from L9JK9NPFH9 ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c51233c4080sm59785966b.16.2026.11.18.17.38.42
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c51233c4080sm59785966b.16.2026.11.18.17.38.46
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 18 Nov 2026 17:38:45 -0800 (PST)
+        Wed, 18 Nov 2026 17:38:48 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -147,9 +147,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Zhou Qiuyue <n0ps1edzz@gmail.com>,
 	Tianyi Gao <tianyi.gao@linux.dev>,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v2 03/11] net: set tx_extra_headroom of the peer on XDP attach
-Date: Thu, 19 Nov 2026 01:38:22 +0000
-Message-ID: <20261119013830.36935-4-tianyi@cloudflare.com>
+Subject: [PATCH net-next v2 04/11] selftests: net: add flag to send a frame in xdp_helper
+Date: Thu, 19 Nov 2026 01:38:23 +0000
+Message-ID: <20261119013830.36935-5-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261119013830.36935-1-tianyi@cloudflare.com>
 References: <20261119013830.36935-1-tianyi@cloudflare.com>
@@ -164,160 +164,161 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-XDP needs XDP_PACKET_HEADROOM (256 bytes), but locally generated packets
-only get needed_headroom. XDP on the peer of a veth or netkit device
-then copies every packet. Generic XDP copies it in
-netif_skb_check_for_xdp(), and native XDP on veth in
-veth_convert_skb_to_xdp_buff().
+xdp_helper only binds an XDP socket and waits. Tests in selftests/net
+have no way to send a frame through the AF_XDP TX path.
 
-While the peer has an XDP program, set tx_extra_headroom of the device
-to XDP_PACKET_HEADROOM minus needed_headroom.
-netdev_update_tx_extra_headroom() recalculates it when an XDP program
-is attached or detached, also when an upper device such as a bond
-propagates its program to the peer with netif_xdp_propagate(). It does
-not recalculate it:
+Add a -t option that takes one Ethernet frame in hex. With -t, the
+helper also creates a TX ring, sends the frame and exits. It returns 1
+if sendto() fails. Without -t, nothing changes.
 
-- for IFLA_NETKIT_HEADROOM, which cannot change after the netkit
-  device is created,
-- in dev_xdp_uninstall(), because veth and netkit unregister both ends
-  together,
-- when bridge or openvswitch change needed_headroom later.
+The test passes the whole frame in hex, so xdp_helper does not need to
+know about IP or UDP. veth has no AF_XDP zerocopy support, so the
+socket runs in copy mode. In copy mode the kernel allocates an skb for
+the frame in xsk_build_skb(), which uses the extra headroom. As a test
+helper, -t takes one well-formed frame and does not wait for TX
+completion, because copy mode sends the frame within sendto(). A
+driver with zerocopy support may send it later, so -t is meant for copy
+mode.
 
-openvswitch changes needed_headroom under ovs_mutex, without RTNL.
-There are three ways to handle a later change of needed_headroom:
-
-- Recalculate tx_extra_headroom in netdev_set_rx_headroom(). This
-  races with an XDP attach or detach under RTNL. The last write can
-  leave tx_extra_headroom at 0 while XDP is attached.
-- Do not subtract needed_headroom. This always reserves needed_headroom
-  bytes more than XDP needs.
-- Subtract needed_headroom only when tx_extra_headroom is recalculated.
-
-This patch uses the last one, because it does not race and reserves
-only what XDP needs. If needed_headroom shrinks later, XDP on the peer
-copies packets again until the next recalculation.
-
-tx_extra_headroom is used rather than needed_headroom, because raising
-needed_headroom can regress the performance of other paths.
+send_frame() follows tools/testing/selftests/net/lib/xsk/xsk.c and
+tools/testing/selftests/bpf/prog_tests/xdp_metadata.c. XDP_PGOFF_TX_RING
+(0x80000000) does not fit in a 32-bit off_t. xsk.c also passes it to
+mmap() without _FILE_OFFSET_BITS, so xdp_helper does not define it
+either.
 
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
-For native XDP on veth, this patch removes one of two copy
-conditions, the missing headroom. The other condition is a head that is
-not a page fragment. A follow-up veth series will fix that.
-
 v2:
-- New patch, replaces IFLA_TX_EXTRA_HEADROOM for XDP on the peer
-  (Stephen).
+- Exit after sendto() and do not wait for the TX completion, as
+  xdp_metadata.c does.
+- Drop the _FILE_OFFSET_BITS define, as xsk.c does.
 ---
- Documentation/networking/netdevices.rst | 11 +++++++
- include/linux/netdevice.h               |  1 +
- net/core/dev.c                          | 38 +++++++++++++++++++++++++
- 3 files changed, 50 insertions(+)
+ tools/testing/selftests/net/lib/xdp_helper.c | 80 ++++++++++++++++++--
+ 1 file changed, 73 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/networking/netdevices.rst b/Documentation/networking/netdevices.rst
-index f593b242da9c..53ca8439f73b 100644
---- a/Documentation/networking/netdevices.rst
-+++ b/Documentation/networking/netdevices.rst
-@@ -454,6 +454,17 @@ devices do not inherit it. It is not part of ``LL_RESERVED_SPACE()``, so a
- packet that reaches the device with less headroom, such as a forwarded
- packet, is not reallocated because of it.
+diff --git a/tools/testing/selftests/net/lib/xdp_helper.c b/tools/testing/selftests/net/lib/xdp_helper.c
+index eb025a9f35b1..1111631efd73 100644
+--- a/tools/testing/selftests/net/lib/xdp_helper.c
++++ b/tools/testing/selftests/net/lib/xdp_helper.c
+@@ -19,15 +19,65 @@
  
-+The kernel sets ``tx_extra_headroom`` of a device to the sum of these
-+values:
-+
-+* ``XDP_PACKET_HEADROOM`` (256 bytes) minus ``needed_headroom``, when the
-+  peer of a veth or netkit device has an XDP program
-+
-+When the peer has an XDP program, locally generated UDP, raw and
-+AF_PACKET packets and AF_XDP packets in copy mode have enough headroom
-+for it. ``tx_extra_headroom`` is not recalculated when a bridge or
-+openvswitch changes ``needed_headroom`` later.
-+
- NETDEV_INTERNAL symbol namespace
- ================================
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 392e6fc81e34..786b63f21d4f 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -4484,6 +4484,7 @@ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
- int dev_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
- u8 dev_xdp_sb_prog_count(struct net_device *dev);
- u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode);
-+void netdev_update_tx_extra_headroom(struct net_device *dev);
- 
- u32 dev_get_min_mp_channel_count(const struct net_device *dev);
- 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 85b7c61015c7..6e053f612d72 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10666,6 +10666,7 @@ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
- 	if (old_prog)
- 		bpf_prog_put(old_prog);
- 
-+	netdev_update_tx_extra_headroom(dev);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(netif_xdp_propagate);
-@@ -10677,6 +10678,41 @@ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode)
- 	return prog ? prog->aux->id : 0;
- }
- 
-+static void __netdev_update_tx_extra_headroom(struct net_device *dev,
-+					      struct net_device *peer)
-+{
-+	unsigned int needed_headroom = READ_ONCE(dev->needed_headroom);
-+	unsigned int tx_extra_headroom = 0;
-+
-+	if (peer && dev_xdp_prog_count(peer) &&
-+	    needed_headroom < XDP_PACKET_HEADROOM)
-+		tx_extra_headroom = XDP_PACKET_HEADROOM - needed_headroom;
-+
-+	WRITE_ONCE(dev->tx_extra_headroom, tx_extra_headroom);
+ static void print_usage(const char *bin)
+ {
+-	fprintf(stderr, "Usage: %s ifindex queue_id [-z]\n\n"
+-		"where:\n\t-z: force zerocopy mode", bin);
++	fprintf(stderr, "Usage: %s ifindex queue_id [-z] [-t frame_hex]\n\n"
++		"where:\n\t-z: force zerocopy mode\n"
++		"\t-t: send one frame, given in hex, and exit\n", bin);
 +}
 +
-+/**
-+ *	netdev_update_tx_extra_headroom - recalculate tx_extra_headroom
-+ *	@dev: the device to check
-+ *
-+ *	Recalculate tx_extra_headroom of @dev and its peer. Should be called
-+ *	after conditions that influence tx_extra_headroom might have changed.
-+ *	The caller must hold the RTNL lock.
-+ */
-+void netdev_update_tx_extra_headroom(struct net_device *dev)
++static int parse_frame(unsigned char *buf, const char *hex)
 +{
-+	struct net_device *peer = NULL;
++	size_t len = strlen(hex) / 2;
++	size_t i;
 +
-+	rcu_read_lock();
-+	if (dev->netdev_ops->ndo_get_peer_dev)
-+		peer = dev->netdev_ops->ndo_get_peer_dev(dev);
-+	__netdev_update_tx_extra_headroom(dev, peer);
-+	if (peer)
-+		__netdev_update_tx_extra_headroom(peer, dev);
-+	rcu_read_unlock();
++	if (!len || len > 2048 || strlen(hex) % 2)
++		return -1;
++	for (i = 0; i < len; i++)
++		if (sscanf(hex + 2 * i, "%2hhx", &buf[i]) != 1)
++			return -1;
++	return len;
 +}
-+EXPORT_SYMBOL_GPL(netdev_update_tx_extra_headroom);
 +
- static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
- 			   bpf_op_t bpf_op, struct netlink_ext_ack *extack,
- 			   u32 flags, struct bpf_prog *prog)
-@@ -10887,6 +10923,7 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 	if (cur_prog)
- 		bpf_prog_put(cur_prog);
- 
-+	netdev_update_tx_extra_headroom(dev);
- 	return 0;
++static int send_frame(int sock_fd, __u32 len)
++{
++	struct xdp_mmap_offsets off;
++	socklen_t optlen = sizeof(off);
++	struct xdp_desc *desc;
++	size_t tx_sz;
++	int ret = 0;
++	char *tx;
++
++	if (getsockopt(sock_fd, SOL_XDP, XDP_MMAP_OFFSETS, &off, &optlen)) {
++		perror("getsockopt failed");
++		return 1;
++	}
++
++	tx_sz = off.tx.desc + NUM_DESC * sizeof(*desc);
++	tx = mmap(NULL, tx_sz, PROT_READ | PROT_WRITE, MAP_SHARED, sock_fd,
++		  XDP_PGOFF_TX_RING);
++	if (tx == MAP_FAILED) {
++		perror("TX ring mmap failed");
++		return 1;
++	}
++
++	desc = (struct xdp_desc *)(tx + off.tx.desc);
++	desc->addr = 0;
++	desc->len = len;
++	__atomic_store_n((__u32 *)(tx + off.tx.producer), 1, __ATOMIC_RELEASE);
++
++	if (sendto(sock_fd, NULL, 0, MSG_DONTWAIT, NULL, 0) < 0) {
++		perror("sendto failed");
++		ret = 1;
++	}
++
++	munmap(tx, tx_sz);
++	return ret;
  }
  
-@@ -10913,6 +10950,7 @@ static int dev_xdp_detach_link(struct net_device *dev,
- 	bpf_op = dev_xdp_bpf_op(dev, mode);
- 	WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
- 	dev_xdp_set_link(dev, mode, NULL);
-+	netdev_update_tx_extra_headroom(dev);
- 	return 0;
- }
+ /* this is a simple helper program that creates an XDP socket and does the
+  * minimum necessary to get bind() to succeed.
+  *
+- * this test program is not intended to actually process packets, but could be
+- * extended in the future if that is actually needed.
++ * without -t it does not process packets. with -t it sends one frame
++ * through the TX ring and exits.
+  *
+  * it is used by queues.py to ensure the xsk netlinux attribute is set
+  * correctly.
+@@ -37,13 +87,15 @@ int main(int argc, char **argv)
+ 	struct xdp_umem_reg umem_reg = { 0 };
+ 	struct sockaddr_xdp sxdp = { 0 };
+ 	int num_desc = NUM_DESC;
++	int frame_len = 0;
+ 	void *umem_area;
+ 	int retry = 0;
+ 	int ifindex;
+ 	int sock_fd;
+ 	int queue;
++	int i;
+ 
+-	if (argc != 3 && argc != 4) {
++	if (argc < 3) {
+ 		print_usage(argv[0]);
+ 		return 1;
+ 	}
+@@ -94,9 +146,20 @@ int main(int argc, char **argv)
+ 	sxdp.sxdp_queue_id = queue;
+ 	sxdp.sxdp_flags = 0;
+ 
+-	if (argc > 3) {
+-		if (!strcmp(argv[3], "-z")) {
++	for (i = 3; i < argc; i++) {
++		if (!strcmp(argv[i], "-z")) {
+ 			sxdp.sxdp_flags = XDP_ZEROCOPY;
++		} else if (!strcmp(argv[i], "-t") && i + 1 < argc) {
++			frame_len = parse_frame(umem_area, argv[++i]);
++			if (frame_len < 0) {
++				print_usage(argv[0]);
++				return 1;
++			}
++			if (setsockopt(sock_fd, SOL_XDP, XDP_TX_RING, &num_desc,
++				       sizeof(num_desc))) {
++				perror("setsockopt XDP_TX_RING failed");
++				return 1;
++			}
+ 		} else {
+ 			print_usage(argv[0]);
+ 			return 1;
+@@ -119,6 +182,9 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
++	if (frame_len)
++		return send_frame(sock_fd, frame_len);
++
+ 	ksft_ready();
+ 	ksft_wait();
  
 -- 
 2.56.0
