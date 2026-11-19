@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795114343;
-	b=dUCXT3hjosG7xtU7rNu+mSLUCg8q2XugB86ZJC+e7apShxg/uJ0fTByDmbiruMAkWFr4
-	 xGHou4ltunFSa11HEJSaPWy/KuP+mkCdSghyOPG0Zzw6mCA1WLkPB1v7J14Dv7h4s7677
-	 O6IEwgSx2u0IwaG6C8Enp6xM5eh7W5OrBhkg1gcjkqHORFK9zlDLqJmjc9kJkQxIyliZ2
-	 FKNiYYz+D7jVtgP+zsNoBfHy7LIEoDK1ySJvKSrjcKTcIYIE7kTQ40ZmQShUPEgFGdwUB
-	 M0+ELCfGfE/GKwxQpsSnA7rTN9ViLOfIPepLBxUlzVfPUYk8Sgl03qOmmwTrQmzchwA==
+	t=1795114344;
+	b=zejysOwHF701oDrvPmCkvaLf/UEsJII0AhxIq1ttBtEjrEZgFdD/XNXa1oQlJokHrlgT
+	 WFSu2hc+kpuiBTMIA3Yd+Kr/uHYm/HPxH2pedyItiUD0fVyihGhq9VRica5nlngv3ltbA
+	 +zSUpyOu9da++gDkGtA/AV9LZ2C80W0nWDS+hAfCrzr6MTUyJdxH4rCiQ/oIYY7JncruE
+	 QkAFc7FRnHoNva/4WZg8pFgDQZq+5+Sjx4HUY0Vfobei11XO4i53+H02hpIu2xY4IXGMR
+	 rcnRA9mGmCVetcSqqRWLDbt6o4tArb7vK4GGu9JNMofPOdsolLgdpyJGMnzwA4lG02g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795114343;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795114344;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=B71Ljk+UIM1gXp9I8DKkVnuHdcZAuyllvZTiO1ZgbS8=;
-	b=2d0zxKzFsMI2xoRHnIqt0EhTHnZKDdKBTI1LcPvLb4casTS9yTX2YQZUfvACGpOF3gf8
-	 r4xQmO5gNR1lNN+3pKE+yZXaQ0egJOjN8mpVIp1cZHckWUkAUOBi2ehbfdQkJWiGTRBlB
-	 01SZAmML+LmwnphBiaQ8V4mlQHAW2O8FopBc7Nw1YoRUZUfNTsmlco/1bfe7dZLYNN0wD
-	 8byqSlgebJmesEzAz0wYZSFLQruXoqAztPJstPiqGgV1nHrGPg7N19W4kEBQPN9lIF89L
-	 EBj/3anmzKc6wLOVh8xS2k4fBK2RWPzykszgiMF4N4wutMSvPn+xKHYsI1p7K4LVcxw==
+	bh=SaW1KGsH36nTnT+j010zVHsDHg18D3SnYS8dyPmcydo=;
+	b=uHWU9Ln+902zujnF1FvKjHHg7uXqcs/rlIdR4MaUcadZVaKDwD3iR77m52xiYwuaXN4r
+	 7pd9eb2BFdUbzNeakkU2ZCY+g1ah8UccSjNCfEYTn6LCiRFIF3E47RNCMI/IkHxq8aOJi
+	 vElSG2zGKtSIYwJyfHvVkxGYzjrrjWswjfXuA+sie5mhegkOYolqkouG7+bR3MiJI5Lmw
+	 2SjkDZ3+0elpzKRAXNodl/RNgTy5qwg0MtVZv4WgQUwVGTsg/WXW9EG8JSkJYpW3ITEeJ
+	 RHSjWeCmaIXzybibFqIuAAftoZPmnO0H/G14LRtV1bXr57VoLhks08cQVf6EMf6UEuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JDc5VL2p;
-	arc=none smtp.remote-ip=209.85.210.69
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LkLXyRE6;
+	arc=none smtp.remote-ip=209.85.167.197
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA40360A5BC1
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 18:52:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA40360A5BC1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CF060A3803
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 18:52:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6CF060A3803
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JDc5VL2p
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-847e2926d94so279581a34.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 10:52:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LkLXyRE6
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-54dbbf252cdso199374b6e.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 10:52:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795114342; x=1795719142; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795114343; x=1795719143; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=B71Ljk+UIM1gXp9I8DKkVnuHdcZAuyllvZTiO1ZgbS8=;
-        b=JDc5VL2p9dsiAaKT2+JRAfSnNDFqtxp7x+w85hCdhzC6Hj8ZGvpn2caPMkdVbuSRZe
-         l9siPmf2jIiOVZee2G2K27qslsLC9fR92GXZ3Hbr+Z1s2yVH6JineUhaGOaf21kvbFeQ
-         dCp31mY4/VG4eCWITkOV5Savzdw7dwucfGYxnB8Y2zv0EuqpzZNtR90Pt77nn1YTZBY0
-         6JEjBKMIMOrSY9dGJHCx5zKDaWPOKEMZNDJZk8fKfVsL7PXHT5uOyYaQGAi9B5hwjTEx
-         53sVe4Nlw8dV9RSs+R6AuEKvcLU4rA6vi+FgU0Riu1YUutTLnI9FALYnYx9p1rm/3j8p
-         xM5w==
+        bh=SaW1KGsH36nTnT+j010zVHsDHg18D3SnYS8dyPmcydo=;
+        b=LkLXyRE6/S/94yHQSJScxxD8CqYjvtOxDJHdga05lbR4Vl2KtD16X65wd7i7VA4OXK
+         rfpS0TT37QHUUtE5C/tu6qeK2yFBIydBUftNGD/V2JfXJPH6DJ3zvKzLRKJNlouTnvvP
+         Zr8VDnxYalpwHvxcVm40kDXfHOxi7vaeLm0fXUxTrn2ClO6beL3dvZEz2m6jC7cWF2Hj
+         ogVAkhTE1/XmESM+6WW7ePmccHAPThzXZdgtlg5wfky3owxKvJKH8yyVnim3ecV3cvsX
+         lM3Y+xOrsvxDCCc4Xc86eRTWS5GI6WoFuav+sT+cdkhOdP6sBN8Ot/TCLYo4ZZQ0DSaF
+         YtQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795114342; x=1795719142;
+        d=1e100.net; s=20260707; t=1795114343; x=1795719143;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=B71Ljk+UIM1gXp9I8DKkVnuHdcZAuyllvZTiO1ZgbS8=;
-        b=zI4gR00LsP/aKMuGad9RixthWoRVGkCiOmDaFuT/OyWIm65/QVf0CyKfLruunLks6g
-         ItAnnaGzcJra/FVk2/SX3t8/PpwQgBfGqPjZfV645MPxPA+tConw3asRTbc9uKzMMxeW
-         RzAla7B1ZlwVi3zFWjKCNE8ft2V+ujELUPeSWw1AIzkDBrlC6sevh2/XqlR3cdsxAFe4
-         3NxzxAtuY2Kv9+fbaNQZKPkw29xQIFomsMA7r2OCkdzl4gZb5BZ0fAm3PAo2fPI4JRTC
-         wyQJVodXSGWblIMNo3C+5IucTjDH+gUgGP2F5Na60Etk+yUwYaTKhH3TTz0a+kJZaoLJ
-         m+sQ==
-X-Forwarded-Encrypted: i=1; AL+hErED7BxNBTuq5n6M/B6Fx7dzg2d16TtfTYfEWpGYBYqljARugYfqKY+xcUG8PSSG/g9XoaQBJ+MHlPm4hZOp06k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/STPHZGlmVIIxfqO9DGOckgqL9bDHORSHYsZf6JGnI/aOFIzL6
-	4JP2y9mTuB3bvfM4OGmcjowZrPi1FDjKhMqGZKTVkFGr4DHnyMdbcG3rD3XvVFOfnfJ+r+MFdAD
-	XnAhwyHl8eSSsAnmqVhJusgDy0w==
-X-Received: from ilpp13.prod.google.com ([2002:a92:d28d:0:b0:53b:ef4a:649b])
+        bh=SaW1KGsH36nTnT+j010zVHsDHg18D3SnYS8dyPmcydo=;
+        b=mKl2bKDdf1tPVMz2DYKXxP7HOYgBoI1SMxGlflEUkmfQe0bKf/7FmfOSHBhJytfnZB
+         Pcj7ZjRL/aUc/4f6MHpoWnx3faZB9LsRer1lavblTugTBrCU7773npuSUsxFqBj8m177
+         wBAgxv514UHCM2WmFj5B8koAPRt6WfuGkAWx4KqGI8gINlvXDRrqSHJ4qpj+Ckp1RDgr
+         gm5VJ33oGar7S7BIUT1+1nD/z/IjSv4UgY17xi2ENH4AYvJYY2qAOL37gjICFLIrn2Xo
+         rh4rZ+ZUuUB6Ax1i3gKM8Y1LG02ltPpyJBUsJUTqXH3dC9vrOSXKPa4puYD92Dk+6tYR
+         bFWw==
+X-Forwarded-Encrypted: i=1; AL+hErHuJGKZeH46wToDVh7AVzvC/IIsgEI/l/r5qtLSdMeaa6kfScizEbGBoyI+LocNLdviQMWp6gYAi9ezqcHZ45o=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/GxsbJFV7CNmNDak/MCnNdkYpnc4ilOOkIRp7MqG8Zgr5uoasu
+	qSACQ9i9Cz2jSpTabpft6Em5KsZh9flO6e7GfeQgxRMb3At6yYu3446zmV1dYSSdtB+Ef4qZn1D
+	u4rT5T+ibuu735jxYxvkhW21cKQ==
+X-Received: from iobp24-n1.prod.google.com ([2002:a05:6602:8698:10b0:9c7:6b53:4f8e])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1b87:b0:576:217a:6740 with SMTP id 5614622812f47-57a0a60d756mr914272b6e.22.1795114341585;
- Thu, 19 Nov 2026 10:52:21 -0800 (PST)
-Date: Thu, 19 Nov 2026 18:51:48 +0000
+ 2002:a05:6808:3088:b0:567:c44d:c1fa with SMTP id 5614622812f47-57a0a60d7f3mr1028055b6e.16.1795114342513;
+ Thu, 19 Nov 2026 10:52:22 -0800 (PST)
+Date: Thu, 19 Nov 2026 18:51:49 +0000
 In-Reply-To: <20261119185215.632334-1-coltonlewis@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261119185215.632334-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.56.1.809.ga0b61035b5-goog
-Message-ID: <20261119185215.632334-7-coltonlewis@google.com>
-Subject: [PATCH v10 06/33] perf: arm_pmuv3: Generalize counter bitmasks
+Message-ID: <20261119185215.632334-8-coltonlewis@google.com>
+Subject: [PATCH v10 07/33] perf: arm_pmuv3: Move counter allocation mask to
+ per-CPU struct pmu_hw_events
 From: Colton Lewis <coltonlewis@google.com>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
@@ -99,90 +100,176 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The OVSR bitmasks are valid for enable and interrupt registers as well as
-overflow registers. Generalize the names.
+In preparation for dynamic per-CPU PMU counter reservations when running
+KVM guests with a partitioned PMU, move the counter allocation mask from
+the global struct arm_pmu to per-CPU struct pmu_hw_events.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Initialize cpuc->cntr_mask from the static cpu_pmu->cntr_mask during PMU
+probe and CPU hotplug startup, and update event counter allocation
+helpers (armv8pmu_get_single_idx(), armv8pmu_get_chain_idx(), and
+armv8pmu_get_event_idx()) to query the per-CPU mask.
+
 Tested-by: James Clark <james.clark@linaro.org>
 Signed-off-by: Colton Lewis <coltonlewis@google.com>
 ---
- drivers/perf/arm_pmuv3.c       |  4 ++--
- include/linux/perf/arm_pmuv3.h | 14 +++++++-------
- tools/include/perf/arm_pmuv3.h | 12 +++++++-----
- 3 files changed, 16 insertions(+), 14 deletions(-)
+ drivers/perf/arm_pmu.c       |  9 +++++++--
+ drivers/perf/arm_pmuv3.c     | 28 +++++++++++++++++-----------
+ include/linux/perf/arm_pmu.h |  1 +
+ 3 files changed, 25 insertions(+), 13 deletions(-)
 
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 1150695653892..b1851d1c594b1 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -408,9 +408,11 @@ validate_group(struct perf_event *event)
+ 
+ 	/*
+ 	 * Initialise the fake PMU. We only need to populate the
+-	 * used_mask for the purposes of validation.
++	 * used_mask and cntr_mask for the purposes of validation.
+ 	 */
+ 	memset(&fake_pmu.used_mask, 0, sizeof(fake_pmu.used_mask));
++	bitmap_copy(fake_pmu.cntr_mask, to_arm_pmu(event->pmu)->cntr_mask,
++		    ARMPMU_MAX_HWEVENTS);
+ 
+ 	if (!validate_event(event->pmu, &fake_pmu, leader))
+ 		return -EINVAL;
+@@ -717,6 +719,7 @@ bool arm_pmu_irq_is_nmi(void)
+ static int arm_perf_starting_cpu(unsigned int cpu, struct hlist_node *node)
+ {
+ 	struct arm_pmu *pmu = hlist_entry_safe(node, struct arm_pmu, node);
++	struct pmu_hw_events *cpuc = per_cpu_ptr(pmu->hw_events, cpu);
+ 	int irq;
+ 
+ 	if (!cpumask_test_cpu(cpu, &pmu->supported_cpus))
+@@ -724,6 +727,8 @@ static int arm_perf_starting_cpu(unsigned int cpu, struct hlist_node *node)
+ 	if (pmu->reset)
+ 		pmu->reset(pmu);
+ 
++	bitmap_copy(cpuc->cntr_mask, pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
++
+ 	irq = armpmu_get_cpu_irq(pmu, cpu);
+ 	if (irq)
+ 		per_cpu(cpu_irq_ops, cpu)->enable_pmuirq(irq);
+@@ -753,7 +758,7 @@ static void cpu_pm_pmu_setup(struct arm_pmu *armpmu, unsigned long cmd)
+ 	struct perf_event *event;
+ 	int idx;
+ 
+-	for_each_set_bit(idx, armpmu->cntr_mask, ARMPMU_MAX_HWEVENTS) {
++	for_each_set_bit(idx, hw_events->cntr_mask, ARMPMU_MAX_HWEVENTS) {
+ 		event = hw_events->events[idx];
+ 		if (!event)
+ 			continue;
 diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index fbd631ec71a65..4a6c1f3bcea1f 100644
+index 4a6c1f3bcea1f..973d4abcb3a6e 100644
 --- a/drivers/perf/arm_pmuv3.c
 +++ b/drivers/perf/arm_pmuv3.c
-@@ -535,7 +535,7 @@ static void armv8pmu_pmcr_write(u64 val)
+@@ -813,7 +813,7 @@ static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
+ 		write_pmuacr(mask);
+ 	} else {
+ 		/* Clear any unused counters to avoid leaking their contents */
+-		for_each_andnot_bit(i, cpu_pmu->cntr_mask, cpuc->used_mask,
++		for_each_andnot_bit(i, cpuc->cntr_mask, cpuc->used_mask,
+ 				    ARMPMU_MAX_HWEVENTS) {
+ 			if (i == ARMV8_PMU_CYCLE_IDX)
+ 				write_pmccntr(0);
+@@ -917,7 +917,7 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
+ 	 * to prevent skews in group events.
+ 	 */
+ 	armv8pmu_stop(cpu_pmu);
+-	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS) {
++	for_each_set_bit(idx, cpuc->cntr_mask, ARMPMU_MAX_HWEVENTS) {
+ 		struct perf_event *event = cpuc->events[idx];
+ 		struct hw_perf_event *hwc;
  
- static int armv8pmu_has_overflowed(u64 pmovsr)
- {
--	return !!(pmovsr & ARMV8_PMU_OVERFLOWED_MASK);
-+	return !!(pmovsr & ARMV8_PMU_CNT_MASK_ALL);
+@@ -953,20 +953,18 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
+ 	return IRQ_HANDLED;
  }
  
- static int armv8pmu_counter_has_overflowed(u64 pmnc, int idx)
-@@ -771,7 +771,7 @@ static u64 armv8pmu_getreset_flags(void)
- 	value = read_pmovsclr();
+-static int armv8pmu_get_single_idx(struct pmu_hw_events *cpuc,
+-				    struct arm_pmu *cpu_pmu)
++static int armv8pmu_get_single_idx(struct pmu_hw_events *cpuc)
+ {
+ 	int idx;
  
- 	/* Write to clear flags */
--	value &= ARMV8_PMU_OVERFLOWED_MASK;
-+	value &= ARMV8_PMU_CNT_MASK_ALL;
- 	write_pmovsclr(value);
+-	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
++	for_each_set_bit(idx, cpuc->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
+ 		if (!test_and_set_bit(idx, cpuc->used_mask))
+ 			return idx;
+ 	}
+ 	return -EAGAIN;
+ }
  
- 	return value;
-diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-index d698efba28a27..fd2a34b4a64d1 100644
---- a/include/linux/perf/arm_pmuv3.h
-+++ b/include/linux/perf/arm_pmuv3.h
-@@ -224,14 +224,14 @@
- 				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
+-static int armv8pmu_get_chain_idx(struct pmu_hw_events *cpuc,
+-				   struct arm_pmu *cpu_pmu)
++static int armv8pmu_get_chain_idx(struct pmu_hw_events *cpuc)
+ {
+ 	int idx;
  
- /*
-- * PMOVSR: counters overflow flag status reg
-+ * Counter bitmask layouts for overflow, enable, and interrupts
-  */
--#define ARMV8_PMU_OVSR_P		GENMASK(30, 0)
--#define ARMV8_PMU_OVSR_C		BIT(31)
--#define ARMV8_PMU_OVSR_F		BIT_ULL(32) /* arm64 only */
--/* Mask for writable bits is both P and C fields */
--#define ARMV8_PMU_OVERFLOWED_MASK	(ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_C | \
--					ARMV8_PMU_OVSR_F)
-+#define ARMV8_PMU_CNT_MASK_P		GENMASK(30, 0)
-+#define ARMV8_PMU_CNT_MASK_C		BIT(31)
-+#define ARMV8_PMU_CNT_MASK_F		BIT_ULL(32) /* arm64 only */
-+#define ARMV8_PMU_CNT_MASK_ALL		(ARMV8_PMU_CNT_MASK_P | \
-+					 ARMV8_PMU_CNT_MASK_C | \
-+					 ARMV8_PMU_CNT_MASK_F)
+@@ -974,7 +972,7 @@ static int armv8pmu_get_chain_idx(struct pmu_hw_events *cpuc,
+ 	 * Chaining requires two consecutive event counters, where
+ 	 * the lower idx must be even.
+ 	 */
+-	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
++	for_each_set_bit(idx, cpuc->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
+ 		if (!(idx & 0x1))
+ 			continue;
+ 		if (!test_and_set_bit(idx, cpuc->used_mask)) {
+@@ -1042,7 +1040,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
+ 	 */
+ 	if ((evtype == ARMV8_PMUV3_PERFCTR_INST_RETIRED) &&
+ 	    !armv8pmu_event_get_threshold(&event->attr) &&
+-	    test_bit(ARMV8_PMU_INSTR_IDX, cpu_pmu->cntr_mask) &&
++	    test_bit(ARMV8_PMU_INSTR_IDX, cpuc->cntr_mask) &&
+ 	    !armv8pmu_event_want_user_access(event)) {
+ 		if (!test_and_set_bit(ARMV8_PMU_INSTR_IDX, cpuc->used_mask))
+ 			return ARMV8_PMU_INSTR_IDX;
+@@ -1052,9 +1050,9 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
+ 	 * Otherwise use events counters
+ 	 */
+ 	if (armv8pmu_event_is_chained(event))
+-		return	armv8pmu_get_chain_idx(cpuc, cpu_pmu);
++		return armv8pmu_get_chain_idx(cpuc);
+ 	else
+-		return armv8pmu_get_single_idx(cpuc, cpu_pmu);
++		return armv8pmu_get_single_idx(cpuc);
+ }
  
- /*
-  * PMXEVTYPER: Event selection reg
-diff --git a/tools/include/perf/arm_pmuv3.h b/tools/include/perf/arm_pmuv3.h
-index 1e397d55384ed..d045b0f3b93fe 100644
---- a/tools/include/perf/arm_pmuv3.h
-+++ b/tools/include/perf/arm_pmuv3.h
-@@ -226,12 +226,14 @@
- 				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
+ static void armv8pmu_clear_event_idx(struct pmu_hw_events *cpuc,
+@@ -1426,6 +1424,7 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+ 		.present = false,
+ 	};
+ 	int ret;
++	int cpu;
  
- /*
-- * PMOVSR: counters overflow flag status reg
-+ * Counter bitmask layouts for overflow, enable, and interrupts
-  */
--#define ARMV8_PMU_OVSR_P		GENMASK(30, 0)
--#define ARMV8_PMU_OVSR_C		BIT(31)
--/* Mask for writable bits is both P and C fields */
--#define ARMV8_PMU_OVERFLOWED_MASK	(ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_C)
-+#define ARMV8_PMU_CNT_MASK_P		GENMASK(30, 0)
-+#define ARMV8_PMU_CNT_MASK_C		BIT(31)
-+#define ARMV8_PMU_CNT_MASK_F		BIT_ULL(32) /* arm64 only */
-+#define ARMV8_PMU_CNT_MASK_ALL		(ARMV8_PMU_CNT_MASK_P | \
-+					 ARMV8_PMU_CNT_MASK_C | \
-+					 ARMV8_PMU_CNT_MASK_F)
+ 	ret = smp_call_function_any(&cpu_pmu->supported_cpus,
+ 				    __armv8pmu_probe_pmu,
+@@ -1441,6 +1440,13 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+ 		if (ret)
+ 			return ret;
+ 	}
++
++	for_each_possible_cpu(cpu) {
++		struct pmu_hw_events *cpuc = per_cpu_ptr(cpu_pmu->hw_events, cpu);
++
++		bitmap_copy(cpuc->cntr_mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
++	}
++
+ 	return 0;
+ }
  
- /*
-  * PMXEVTYPER: Event selection reg
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index 02d2c7f45b527..be1e345e99a77 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -62,6 +62,7 @@ struct pmu_hw_events {
+ 	 * an event. A 0 means that the counter can be used.
+ 	 */
+ 	DECLARE_BITMAP(used_mask, ARMPMU_MAX_HWEVENTS);
++	DECLARE_BITMAP(cntr_mask, ARMPMU_MAX_HWEVENTS);
+ 
+ 	/*
+ 	 * When using percpu IRQs, we need a percpu dev_id. Place it here as we
 -- 
 2.56.1.708.g77570a6a1d-goog
 
