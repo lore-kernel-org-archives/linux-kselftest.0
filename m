@@ -1,45 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795086241;
-	b=oJRaqW2H0K1I68gfxCIu98qOYQah8GQXjHOjtBi1JT9iR+EJy0Wc9fCBPHeXum5JzkoA
-	 HsdpiNIeOYGKCYM5Mh1M0d0KPD7iLnSC7WEDTG5atHE4yz31HCO5HMCJ8I+yZe5Dv0/oC
-	 falLSnG3B6ty6qQJKnbDihk3sfLIjxtEyVabFnKiikkH7mwWDRsb5NSNSF/Hmmaj65CeO
-	 T8efPMuTHaZx7OO+JbWEhOPmbmDmRtmbvnV9tRmchsOyTmi9tGhlPp6Tf1C5vjcLjwElq
-	 ICkvA3PtaZ/fxrC+P4eWme8ULifPnEAtrQiudnILv90Mp3F6sXvFB0hel8Jilh5p3jA==
+	t=1795087136;
+	b=fEqmBy8RAD5mDqaYJokXHoBPyuJYAwkZt7UZUg/2V4DFLK5y2D3/l8psKGk8KDjm+9uU
+	 IQ8sa7/Co305U+oiDttO6n6WKbqEI69aNIEJGfDMjWyLYdxhvmVM3gLuxBpwzUaIYO0gc
+	 g+DLb8X4aTxT5aK2cqVU1T/Jc5ENQieZwWHNaN2XgmBolnkx+TEAMEMl/wxofmAwI2cW4
+	 yDT2BwupJIXxlGihm2DzKq3UKDMto42X5nuIws24U+tj2KGwN0Odw4HDTzYVdowwgiEPz
+	 C11P5/A6NlQb3BOvrH72SeZe7aeL33VZawpGOwbUqjQmyX3ZRPdBgZDOvIf4auYIHDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795086241;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer;
-	bh=PdrhZ0ZFsQa7I1snTBf6hYpjeqJIpvbS8rtJD3JX0KU=;
-	b=j2cvfzOUBh5VtcN7nX5n0ELWFoqdGXco6e6SsMY0GW7t7kR8NANlWbtHiE0jCjfFKjnh
-	 mLevU/gmlF9cbHxInrZbLTGhGCBFCJlfdh3mcmdmriYJIW0UWAub/RSObHN6jj9sI3pGN
-	 8ZsypW6v4NCYt/AaM8qSDffof2vyZN3e1pPLkGrXeRRDyi24ifpieBwRQoFCeTOX/bnK0
-	 ZIOyS0OhPLyAb/uON33oQWEnT+tK7d80aEWMifL/OM7PKeyg4ND7+klD4GKfFWUzW4RcD
-	 TSuXvYRgx73czf22DG9YQvt6cPldJZ1ZIgqmPNvgApjNE0Q3pKpNr9/OnQzdJwS3VeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795087136;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=hdo31yiX1NgSplArPnMAKiWS3jJZJbo/7jmD/8lHOoY=;
+	b=VuqaQTikJ7+X3jPNFqSu2r4Dr/YbD0sY2Bqh/SeevOLhQ5R2RzgQGS70XWDhpoYa0lMx
+	 VhXsQXmp/aZ4unAVbQC35zDS6LgjvFicGPlR8os64q5SV2gDGELimyd8ri1Hk0czhOOFo
+	 Gp4agHAdB+o5AWmXqYXtbrVLHX0swjZ7XYVTqGqSq9cHnU3fMV/l0GvNi3xK4VmEFxgeL
+	 /06k5ZnCSy7+9s9HpHg0dK7FGJSL7Gr8vIT4S+aZx0rVE8L/q2RcmeGgmwc69jjfw43jV
+	 7ma4hDz+wKVOxrzltBjMUKheBKWigcubdY0o53XIJcMXg4DYBhp3KlkV3pS2vDAJl2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JEvEy+Zx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ddrhrIw1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B96606A324;
-	Thu, 19 Nov 2026 11:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D625606A325;
+	Thu, 19 Nov 2026 11:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JEvEy+Zx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF111F000C4;
-	Thu, 19 Nov 2026 11:03:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ddrhrIw1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29CC1F000C5;
+	Thu, 19 Nov 2026 11:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795086240;
-	bh=PdrhZ0ZFsQa7I1snTBf6hYpjeqJIpvbS8rtJD3JX0KU=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=JEvEy+ZxOHGHpptUbOqQ24Gn0XySdzQDS73WAhlCev/bRpaAyW+iZK0y8E8xcK7qr
-	 hi5DDZqqTauBScUapz8LDM3wyXLPATQKb2MvZPneCwVGtmFsLYQmASqGq0Miq49Ttc
-	 JEip4CjIuupZ8lK31OLiJeDLd4kSTzctKy3q9+BJptRRO/6vYJXROU8UaJL9nQIqIJ
-	 cWyFuC7VDOJJW0tbThUx42h0poMigC2HGiyYPOi4Mh6flax/enQAMoNAjyLkltisQk
-	 QOIXdN6Am6b+9bIwL2MIrjUmDG+XAbszHybnQ2dyDWOrKUKe9VnFMk+Zy0pXjo/gQ2
-	 pVjFxCulrk7ZA==
+	s=k20260515; t=1795087136;
+	bh=hdo31yiX1NgSplArPnMAKiWS3jJZJbo/7jmD/8lHOoY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ddrhrIw1o9OVE4VgtDLgA5LFH4se0zgUcw/IhmX6IlqCklkfPIUaTJdcseNoMuXGV
+	 M8l22jgHiVbDAEcRccHDsU6jQcY3+iHpd8WImqjSMBF+Vu0ryJYnED7Dh3GCxIXVKg
+	 FWX4eHPzDkvkk70inKrKaXzsAWc/+aqZqS+tB4z6y4clAvMdmr/vAOj2uIqYfXfkek
+	 MWER2rFzg/1eir/OJH2OricpYI5bxvk9z/EtjL2ctHgCC2sOT1KFkzZL74vsWKuTnY
+	 Kk5YfVowFmViXJSMQt9xWFHlnGXSg0h16loCM4LsZwuh7RjVTBy6/XP5wnGcoHP2yt
+	 dtfLZgk7v0jmw==
+Date: Thu, 19 Nov 2026 11:18:48 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's
+ dirty ring is full
+Message-ID: <av7S4fY7f6H_bW8t@gremlin>
+References: <20261117074428.7544-1-fuad.tabba@linux.dev>
+ <20261117074428.7544-2-fuad.tabba@linux.dev>
+ <avxfgWNePsGPK9mm@gremlin>
+ <CA+EHjTzUrDxLSMEo6X66XhKtQ-=ew3zZhMdFWR6U9Ga17WLWkw@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,138 +65,140 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v6 4/7] liveupdate: luo_flb: serialize outgoing FLBs
- incrementally
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, 
- skhan@linuxfoundation.org, linux-doc@vger.kernel.org, vipinsh@google.com, 
- linux-kernel@vger.kernel.org, corbet@lwn.net, linux-api@vger.kernel.org, 
- dmatlack@google.com, kexec@lists.infradead.org, pratyush@kernel.org, 
- rdunlap@infradead.org, graf@amazon.com
-In-Reply-To: <20261118212845.2855249-5-pasha.tatashin@soleen.com>
-References: <20261118212845.2855249-1-pasha.tatashin@soleen.com>
- <20261118212845.2855249-5-pasha.tatashin@soleen.com>
-Date: Thu, 19 Nov 2026 13:03:49 +0200
-Message-Id: <179508622989.425130.18199233960609980187.b4-review@b4>
-X-Mailer: b4 0.16.1-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTzUrDxLSMEo6X66XhKtQ-=ew3zZhMdFWR6U9Ga17WLWkw@mail.gmail.com>
 
-Hi,
-
-> Currently, outgoing FLB metadata is written in a single pass by
-> luo_flb_serialize() during liveupdate_reboot(). When sessions are
-> serialized ahead of reboot, any FLBs their files depend on must also
-> be serialized at that time so the outgoing KHO state stays consistent.
-> 
-> Serialize each file's FLB dependencies from luo_session_serialize_one(),
-> appending new FLB entries or incrementing the serialized file count in
-> place. Since every serialized session now updates its FLBs as it is
-> serialized, drop the separate luo_flb_serialize() pass from
-> liveupdate_reboot().
-> 
-> Because serialized sessions never unpreserve their files, FLB
-> serialization is one-way: once an FLB is serialized, its .unpreserve()
-> callback will not run and its root handle from .preserve() remains
-> fixed for the rest of the boot.
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  kernel/liveupdate/luo_core.c     |  10 +--
->  kernel/liveupdate/luo_file.c     |  15 +++++
->  kernel/liveupdate/luo_flb.c      | 102 ++++++++++++++++++++-----------
->  kernel/liveupdate/luo_internal.h |   3 +-
->  kernel/liveupdate/luo_session.c  |   2 +
->  5 files changed, 85 insertions(+), 47 deletions(-)
+On Tue, Nov 17, 2026 at 05:05:49PM +0000, Fuad Tabba wrote:
+> Hi Lorenzo,
 >
-> diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
-> index 1b2bda22902d2..9fef5161a1f3d 100644
-> --- a/kernel/liveupdate/luo_core.c
-> +++ b/kernel/liveupdate/luo_core.c
-> @@ -219,18 +219,10 @@ late_initcall(luo_late_startup);
->   */
->  int liveupdate_reboot(void)
->  {
-> -	int err;
-> -
->  	if (!liveupdate_enabled())
->  		return 0;
->  
-> -	err = luo_session_serialize();
-> -	if (err)
-> -		return err;
-> -
-> -	luo_flb_serialize();
-> -
-> -	return 0;
-> +	return luo_session_serialize();
->  }
->  
->  /**
-> diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
-> index 988eb313a135f..cdd3c466e5ac3 100644
-> --- a/kernel/liveupdate/luo_file.c
-> +++ b/kernel/liveupdate/luo_file.c
-> @@ -380,6 +380,21 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
->  	kho_block_set_destroy(&file_set->block_set);
->  }
->  
-> +/**
-> + * luo_file_serialize_flbs - Serialize FLBs for all preserved files in a file_set.
-> + * @file_set: The file_set being serialized.
-> + *
-> + * Iterates through all preserved files in @file_set and serializes their
-> + * associated FLB metadata into the outgoing KHO FLB array.
-> + */
-> +void luo_file_serialize_flbs(struct luo_file_set *file_set)
-> +{
-> +	struct luo_file *luo_file;
-> +
-> +	list_for_each_entry(luo_file, &file_set->files_list, list)
-> +		luo_flb_file_serialize(luo_file->fh);
-> +}
-> +
->  static int luo_file_freeze_one(struct luo_file_set *file_set,
->  			       struct luo_file *luo_file)
->  {
-> diff --git a/kernel/liveupdate/luo_flb.c b/kernel/liveupdate/luo_flb.c
-> index cd715a7c1d992..4ac534171d423 100644
-> --- a/kernel/liveupdate/luo_flb.c
-> +++ b/kernel/liveupdate/luo_flb.c
-> @@ -34,6 +34,12 @@
->   * This reference-counted approach ensures that shared state is saved exactly
->   * once and restored exactly once, regardless of how many files depend on it,
->   * and that its lifecycle is correctly managed across the kexec transition.
-> + *
-> + * Serialization: Outgoing FLB metadata is serialized into the KHO FLB array
-> + * incrementally as sessions are serialized. Once serialized, the FLB's
-> + * .unpreserve() callback is never invoked and its root KHO handle from
-> + * .preserve() remains fixed, while later sessions may still update per-FD
-> + * state in the shared live object under the FLB handler's own locking.
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> @@ -72,6 +78,13 @@ static struct luo_flb_global luo_flb_global = {
->  	.list = LIST_HEAD_INIT(luo_flb_global.list),
->  };
->  
-> +/*
-> + * Serializes updates to luo_flb_global.outgoing.header_ser and .ser[].
-> + * Lock hierarchy:
-> + *   luo_register_rwlock -> private->outgoing.lock -> luo_flb_ser_lock
-> + */
-> +static DEFINE_MUTEX(luo_flb_ser_lock);
+> On Tue, 17 Nov 2026 14:23:09 +0000, "Lorenzo Stoakes (ARM)"
+> <ljs@kernel.org> wrote:
+> [...]
+> > > The check also sets run->exit_reason, and arm64's KVM_RUN completes a
+> > > pending MMIO exit only if exit_reason is still KVM_EXIT_MMIO. If a
+> > > pre-fault stops on a full ring while an MMIO exit is pending, the next
+> > > KVM_RUN doesn't complete the exit and the guest repeats the MMIO
+> > > access. Userspace can avoid that by completing the exit with KVM_RUN
+> > > before it pre-faults.
+> >
+> > That's also true for riscv:
+> >
+> >         switch (run->exit_reason) {
+> >         case KVM_EXIT_MMIO:
+> >                 /* Process MMIO value returned from user-space */
+> >                 ret = kvm_riscv_vcpu_mmio_return(vcpu, vcpu->run);
+> >                 break;
+> >         case KVM_EXIT_RISCV_SBI:
+> >                 /* Process SBI value returned from user-space */
+> >                 ret = kvm_riscv_vcpu_sbi_return(vcpu, vcpu->run);
+> >                 break;
+> >         case KVM_EXIT_RISCV_CSR:
+> >                 /* Process CSR value returned from user-space */
+> >                 ret = kvm_riscv_vcpu_csr_return(vcpu, vcpu->run);
+> >                 break;
+> >         }
+> >
+> > (note that it skips CSR, SBI also with a changed exit_reason).
+>
+> Ack.
 
-Why is this needed? luo_flb_file_serialize() is called only from
-luo_session_serialize_one() and that runs with sh->rwsem held for write, so
-all the writers to the outgoing FLB block set are already serialized.
+Probably worth referencing in commit msg I guess?
 
-I'd drop the mutex and add lockdep_assert_held_write() for the outer lock,
-or at least mention sh->rwsem in the lock hierarchy comment above.
-Currently it lists only the inner part of the hierarchy, which is confusing.
+>
+> > But the overflow bug only applies to x86 (see below), so is this something
+> > we should worry about at all?
+>
+> The ring overflows on arm64 too (below). As for exit_reason, I asked
+> Sean about the arm64 MMIO case on v1, and his answer was that a VMM
+> that pre-faults between a KVM_EXIT_MMIO return and the next KVM_RUN
+> "gets to deal with the fallout" [1]. I think the same goes for riscv's
+> exits.
 
--- 
-Sincerely yours,
-Mike.
+I mean generally yeah, users doing silly things can expect silly results I
+guess! :)
 
+>
+> [...]
+> > > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> [...]
+> > >  The dirty ring can get full.  When it happens, the KVM_RUN of the
+> > > -vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL.
+> > > +vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL, and
+> > > +KVM_PRE_FAULT_MEMORY on the vcpu will process no more pages until the
+> > > +ring has been harvested and reset.
+> >
+> > Maybe worth mentioning the exit_reason thing if we keep this arch-generic?
+>
+> Sure, I'll document that userspace should complete a pending exit with
+> KVM_RUN before it pre-faults on that vCPU.
+
+Thanks!
+
+>
+> [...]
+> > I wonder if this shouldn't just be an x86-only fix, since no other arch is
+> > impacted AFAICT.
+> >
+> > arm64 and riscv never map a dirty-logged memslot writable, so they're never
+> > pushed to the rin, and s390 doesn't have a dirty ring at all:
+> >
+> > arm64:
+> >
+> > static int kvm_s2_fault_compute_prot(const struct kvm_s2_fault_desc *s2fd,
+> >                                      const struct kvm_s2_fault_vma_info *s2vi,
+> >                                      enum kvm_pgtable_prot *prot)
+> > {
+> >         ...
+> >         if (s2vi->map_writable && (s2vi->device ||
+> >                                    !memslot_is_logging(s2fd->memslot) ||
+> >                                    kvm_s2_fault_is_write(s2fd)))
+> >                 *prot |= KVM_PGTABLE_PROT_W;
+> >         ...
+> > }
+>
+> arm64 does map a logged slot as writable today. memslot_is_logging()
+> tests memslot->dirty_bitmap, which isn't allocated when only the dirty
+> ring is enabled, and patch 2's selftest triggers the WARN in
+> kvm_dirty_ring_push() on arm64 without patch 1. Wei-Lin's fix to
+> memslot_is_logging() [2] is in kvmarm/fixes, not in mainline yet.
+
+But Wei-Lin's fix was taken? So I don't think predicating things on the
+basis of it not being there really makes any sense.
+
+However...
+
+>
+> With it, the s2vi->device case above still maps a device page writable
+> on a read fault in a logged slot. kvm_arch_prepare_memory_region()
+> rejects logging on a VM_PFNMAP VMA, so that requires userspace to map
+> the device under the slot after creating it (I haven't tested it).
+
+...Given that this possibility exists and device pages are unconditionally
+marked writable (even if it's mildly contrived to get there), it's fair
+enough to put it in the generic code.
+
+>
+> So I think the check should be in the generic loop.
+>
+> [...]
+> > An x86-only version would be pretty simple, something like the below.
+> >
+> > This also covers off the retry (RET_PF_RETRY) loop which a generic version
+> > doesn't.
+>
+> True. To overflow there, the retries for one page would have to push
+> more entries than the ring has in reserve (at least 64), and I don't
+> see a way to get that, so I left it alone.
+
+Yep that's fair enough!
+
+>
+> Cheers,
+> /fuad
+>
+> [1] https://lore.kernel.org/all/avs5UD79FB_DG1Vs@seanjc-mac.roam.internal/
+> [2] https://lore.kernel.org/all/20261029175238.3214788-2-weilin.chang@arm.com/
+
+--
+Cheers, Lorenzo
