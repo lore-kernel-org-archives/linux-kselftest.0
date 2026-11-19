@@ -1,79 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795081686;
-	b=RN7Lm79k7eEgq2unnrZkuBF0RaGQLw85Eeo2LucVn79QdcpAh/Vcm0ZlIoujE22yKPV2
-	 oMC3Of+bl95x0P/XorQch1Ch8ZEJmvI409AfOcLG3br/9Dw/KUJ765UxYkMPad8PIW19x
-	 6RhYVAj+lx1kGwgTaqfxfv5kPaqHlCbaZZkpeICdKeiPZIWeSZtDtPkpvtjs2g+4L8HuI
-	 Pr7unCRI+F/3kwKRauWzH4DHH/jRwDr5G0kc3e0t1cSR175vmmEUb3VJB+XNNjcQaQhL8
-	 Koi2y2JD+WDdJ+zB0mtZl5pAtmUpiQJvGlCvSb0xoy3uXa3FSKSvERkCQLZ96RZjx2Q==
+	t=1795081974;
+	b=4Goq9lVS/mapBE4zIqUbT6rE4inqin/A51tGGZKU0nWVzCQxKEpUZEgwGqo1quCJHqo+
+	 VyvfPvG5PR+XDhfytrasbM4BqmLjf4Ls9FyquypYL/CP/zyP27EX/Y4c6Ob1KohzIc7AY
+	 DTY/wCECRLTzX8bY033xDLRCYLM9cscrgGnpMR48Sc+OMdPpKVf8j+qhNmnI3DGjGKoF7
+	 SDI4eeEpmv9cCXyxMNigcm1FQIpHKF/5XpSY3Wg9y+jt8tgjqvrqb03dP9ZR9XTqPszGt
+	 R4CerLQ3CT/il56F2IiK1VMv24264W8Q3WTmnaZPiOSDnkPYoHsIn0OnmDorUw6I9HA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795081686;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=KP9LMMCHlbLBMOkVCcd7UG8Nxwxf/ICjqXKfNPoI3dM=;
-	b=KtsyKGk9IDaJDrVbfcJVBa0pDLsQ77HzSsIHgaOH5KtPrHpTBql3sm8el7zj+/5FQ3Cj
-	 DYIbiGewnv3kLffEq7BXz4RyvG+WXc/YVY2WxHfNVpWlIORaaXfa8vYtrxNrEGwtiY8iJ
-	 wssVlSyuilUIj64ViEB0ZJjWoj4B0hQWBecjuw6oBGkSGiF5MbvyrXqHChTkeuwnp+ueM
-	 086wSs7XPhsz23+LNdVb4cwDDBkRScbjnEVAUNqx8q7wu/4ZH7NK3fcJ7BP20MDjvauOo
-	 1uUAT2pxsWE6S2Rk0L7isJ1mM1Gn4GWgHhmWc7b5NMGcRdTZlnqKW4N2oWfTip+Oi3Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795081974;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=rRr62zld4whCPvLg2c/dz1yTNce2KVNaPHpn280STKA=;
+	b=RUqjzw7OxAayxcZcPjis/Da2sZ7mQpb90vPjRGbWqy8ao+Dqv77SjUdjdWdWmOXSTpjF
+	 4MHdQvYLE+OCW06zLl9tloIhWc2Z91Br1dec7D4/QXvp+tOyXRljJVO/DFCm+Zgrg6RHO
+	 EtYZYWdfcChdflt86O3/HymrkZF6GO2Qr6WeJJ7p7al1TFm283Txll16HD4VIylM4hDjs
+	 JOpuUlutFVcb8zgrCCsilZae1lTQ4joEqxGc19pw1w+dfLZ1GpqB+Q+FRet/pGUFAS+Bq
+	 gVbkHGsWnEMuodYq0ASRYNOngVEbUITKU+84M6T5Bnnoelg4Hl5t3IdZo9wE9ij8GIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=Um8EXD33;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=b86u5k7w;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SxOobXst;
+	arc=none smtp.remote-ip=74.125.82.175
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DED60A262F;
-	Thu, 19 Nov 2026 09:48:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96DED60A262F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B724606A320
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 09:52:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B724606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=Um8EXD33;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=b86u5k7w
-Date: Thu, 19 Nov 2026 10:48:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1795081683;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KP9LMMCHlbLBMOkVCcd7UG8Nxwxf/ICjqXKfNPoI3dM=;
-	b=Um8EXD33M7Kvu6mhBAOuAlZJw9wI3HXyqR3HAuS1l4RbitbmO/oEw7dNSgfbmqXRSQfU4g
-	0QepaSvM3Fq54lQesg16cTyULb0afzptbMEhf46/yT6U6CzgjSY9aa93utt7gQ7sxaAhwm
-	4IG+QBxE26dVZNIT5Rm0ujA4n6ahRn7111WmQtCbQU+h/TMwJf5ZOVZJZF/z5pNsYyGf46
-	sdzjifTKxdjToqSyTtdr/BJmxyEBSnP4b1yA0xtJVRR/mFd/a/+MBY4Iiszt+fFR7kVkQE
-	NUYoNp6DC44pGA5VfpeK4nhUQKo+qO9zLio0JSHoo2DCmh2NSWqarOFprQVUZg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1795081683;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KP9LMMCHlbLBMOkVCcd7UG8Nxwxf/ICjqXKfNPoI3dM=;
-	b=b86u5k7w9ZGTzxhGEOSQ0ycoX57vkQkatQj2pcYRKRi57XdXNKtPGAgQ7ibv3FLi0ncNdh
-	v4kmn8iSq4gjjODg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Joel Fernandes <jfern@kernel.org>
-Cc: paulmck@kernel.org, rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SxOobXst
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-380b40312e2so5590372eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:52:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795081973; x=1795686773; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rRr62zld4whCPvLg2c/dz1yTNce2KVNaPHpn280STKA=;
+        b=SxOobXstPLOetOzrZfs0cbK3qgMbmcl0OnIm5FrIaxdDbGhQbGBiGGmDrTeSsgPDTX
+         XcCEPHWGikF+tGU49/Uh8EA1OgV32UX4YtDtxMFyhSlTAr87wbDIgpGdv/gPryYy5nEQ
+         zm+xgVpuLpUeFJ7TUSk5G2u+uIZSwyGTH+5GgUMls8mOkVMwoFF5zT9xvY2NkKoCyLQN
+         wKQ8ktNP4Vk/kHn3SXpi3Emq04CX5ScEOfHCHJF5js2BekOYIm9tkO9n0DWYo/8dOzCk
+         bojiTnFU/AnKJwuukPCEsn+glmB1VmX72RUlKo4Ocn9dc2kN1qxGR+j2sF4+0nDPLSmX
+         Fmjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795081973; x=1795686773;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rRr62zld4whCPvLg2c/dz1yTNce2KVNaPHpn280STKA=;
+        b=O9OeBIM7Lho70gnZhOICNF+emxh0fQHl5ljYSKp3JO2C7RpYhehqGuLf2Fe1/kySF2
+         nf3rQQ1Y0B6t04Go9xEvfE016/wp4WwdTtzcU3zH/9fstk/FDKxfg4Af9qR8SjLjwPAP
+         9roiXPAQowLEFIqKLAx0ZZ/yCNllqUSGJTo2zPxI6hGoeFVJAFEhtoCSQPqH94OubGbh
+         pxHBaRaZRF9YuRkoxdBloVi2K04rwc+VmXXSGwOzEXqZ+bBqXeEoprpDpvz+zjGtyK4F
+         9KSxD3wXsSzIZtOFtyn73ra4XU2TteOXmyIvcKMYmwsTKuLLYiCrqLhTH5FQu+0XwuQa
+         cv4Q==
+X-Forwarded-Encrypted: i=1; AL+hErGQcMbkRm8yCp63vShDCOexMfEDK4hLHfrnY3KTDjXhkjEgEEYCIxGO9+dqTxYfRyz6GOZ1MmR3KnSd2jsv6xo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9C61yV1dOmBsYfR4iKMSyxsXWWybWvouERYIh4wQmuOzWBv5TZ
+	drFeZwZt6Akl6nl3h5AgGu4uUOmTlLiYToQZR/2vMsFEVmo5iTtQIAde
+X-Gm-Gg: AZFdTZeDSP8BuvzRfnBxJzainLyob213v2TAhWgvbANDwxuNq6ZW0Y6Ms1g8P1JiAQ1
+	7n/qeZ0xNBxId1lyJojnCWs3YlDZjkaT9l/IJ7qjVqhgqDrVQCdJC9r5E1uEbm5S1SoUI4DYlcW
+	2+zbJSUW6qi4UPfRRid4L1pJgyeCuycG0wMw3ec2ywiF/HoS70f6xMAQvBUjpeQ6CLtK6mZFBmN
+	7YRkKGzq8TLd5hq7QY8UcXYHhQtJAr2Kqvd2OwpUn9f93wgQTdg0nMWXQE2MwmEui2TBKBVfuxo
+	LL1bp+H0SuZofBLO8Z3EmYbQcNAbqcTRAycF5F6DjJcCWiyysE2XlJBBTg/AaElhPWz6FIF5JgM
+	GiE9TCRAHyXnN6bWGfcMIfYBvOh5FD2F18pfEqoCpiFLr661NoikMduce0p1Ukovrf3Qlm07EG0
+	BcA2FvAI7FlxY3lBo/DXG04aOynoHvU9DfUdEVuCi0it+jWDG4Z7bEpUjXXrpJ/vFbTOv8YpmIM
+	qnlIAM85+S49AENZF1T+3LEPnVpsM91zPvwhPUx9gxEeuXoFmg9GdSvWMBlgRiPy8u9RrDsSwAO
+	h0t+k+rbLUHUNSnsIURCxEqKPKA9lQae+r+3cVgmzMAjifQRcDeveAlgf/j9dCJvmK9TGI6RB9i
+	rFU122ZOHbq+EcylCKvIPSHxc
+X-Received: by 2002:a05:7300:7487:b0:384:6575:afec with SMTP id 5a478bee46e88-3846575cd77mr1637330eec.12.1795081973354;
+        Thu, 19 Nov 2026 01:52:53 -0800 (PST)
+Received: from localhost.localdomain ([116.88.205.165])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-382a80bc19bsm16101464eec.29.2026.11.19.01.52.49
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 19 Nov 2026 01:52:52 -0800 (PST)
+From: Zhefu Peng <ilskdw@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	kuniyu@google.com,
+	mschiffer@universe-factory.net,
+	nicolas.dichtel@6wind.com,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] doc: Document rcutree.boost_disable
-Message-ID: <20261119094802.qh6UUaw8@linutronix.de>
-References: <20261116194438.306618-1-jfern@kernel.org>
- <20261116194438.306618-7-jfern@kernel.org>
+Subject: Re: [PATCH net v5 1/2] vxlan: reset the remote's dst cache when snooping moves a MAC
+Date: Thu, 19 Nov 2026 17:52:46 +0800
+Message-ID: <20261119095246.41685-1-ilskdw@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <179480495432.3136.17109064150958616332@kernel.org>
+References: <20261115040609.61134-2-ilskdw@gmail.com> <179480495432.3136.17109064150958616332@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,39 +108,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261116194438.306618-7-jfern@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On 2026-11-16 14:44:37 [-0500], Joel Fernandes wrote:
-> Add the new rcutree.boost_disable parameter to kernel-parameters.txt.
-> 
-> Signed-off-by: Joel Fernandes <jfern@kernel.org>
+> [Severity: Medium]
+> Can a transmitter on another CPU still cache the route to the old remote
+> after this reset?
 
-If you intend that both changes (adding boost_disable and its
-documentation) are merged via one tree, why do you split it in two
-patches?
+Yes, as answered for v2: dst_cache tracks freshness in jiffies, so a
+transmit that built its key before the reset can refill the cache in a
+later jiffy. vxlan_fdb_replace() has the same window. Closing it means
+replacing the remote, or its dst_cache, through RCU instead of updating
+it in place, which would also change vxlan_fdb_replace(). I would
+rather do that, if wanted, as a separate net-next change. Without this
+patch every move uses the stale route; with it only this race does.
 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index ac97cbd98b46..8f91499b3488 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5651,6 +5651,13 @@ Kernel parameters
->  			Set maximum number of finished RCU callbacks to
->  			process in one batch.
->  
-> +	rcutree.boost_disable=	[KNL]
-> +			Disable RCU priority boosting at runtime, even in
-> +			kernels built with CONFIG_RCU_BOOST=y.  This is
-> +			for testing the boost tests, for example by the
-> +			rcutorture BUSTED-BOOST scenario, and should not
-> +			be used otherwise.
+> [Severity: Medium]
+> Can concurrent snoops of the same MAC leave remote_ip and remote_ifindex
+> inconsistent?
 
-If so, why not limit it to the test-module?
+Yes. v6 updates the remote under vxlan->hash_lock and checks the entry
+again once the lock is held, so concurrent snoops are serialized with
+each other and with vxlan_fdb_replace(). v6 also addresses the three
+notes on patch 2.
 
-> +
->  	rcutree.csd_lock_suppress_rcu_stall=	[KNL]
->  			Do only a one-line RCU CPU stall warning when
->  			there is an ongoing too-long CSD-lock wait.
-
-Sebastian
+pw-bot: cr
