@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795114346;
-	b=uZ+g2pvYU6hswT0nm7hDml3bstWB5gQRRqySpEnyPFYl9lvzklJV253dQgvdOUeAKYQQ
-	 QcaJoC7VDMrnEtWu0OElpt35gfk+aTdr3RvPL83x8QcSiKYcuNAO3BVQXgeHmz6nRmRH0
-	 oezL8xEkY9pAFcjydD6W0Ay19iv2Q/BesCykGUnQvD7cVOg0F9v5z7tTxBk3cT1MYSuHH
-	 JY6cxalqBxxOyFqGKXzLE6nUScdF3i1nT82bm1dQ9T23eegZSUPX1qoqveni5nstkJMxy
-	 eTSc9PgFehK4vKGWBWJbEXCsY/0o5MMoDqCHejvsvLHRJ6ZoSMfp8+T887pRNPlfQew==
+	t=1795114347;
+	b=vcGyWbJ3rzq8whjr/eRII42t9woC8U1IvRAc3F32CyUYLKqk1RHDNk1FPD5ThiZK7KZF
+	 sgu9Ccn846yHaYkKwVdYy6TL1/+vH1Acpo2pWMVC4UtR6JCDwKI6v+HjCwbauI7uRqmvJ
+	 3KVmTXbR+1f/0ZjO6m37cz+Uo/eM3qhgiL2ts9qgx6WtYHMqa+kr38lNANNfLm2eRg47k
+	 NuEc4AOaEwL53tPadh7y5BU6SsCoaxK5v48LJLB6xP8+kks8f6SuqZxxsAcXneYa8qTar
+	 VyDFfpJqt576X0PBWZPw+GyDKhHPePswUoS7oBwwjsML6D8I2twTf8C9vzp2fqfaSyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795114346;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795114347;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=pLq92bALDfzVSwPCFwlrCOZ9rlSOsAmXjgSBQp7hHGc=;
-	b=gxKFnGCSWRvb817yqSXTeMD9tz5hu66lx76nF0ciHMrASCcRxfbWlDj0FN2OvhvIjde7
-	 WpXSRTNvFCvbhA06k+PMauuTVuEEmtR7E8+BNN8u4NayFUnotHrs5OVporunhGtPpoQrn
-	 t5wel0iv4Xt/U+rt9CjO22ATIRJ3ZsTOHySju0lfp8k1TBLFuE4RVCWaohaafz2CMxnO3
-	 rWoGwrKam6DexK0NciZ+3JtXhEL3c4X4yBiaAl0szY2EjedIYCWXzHYXdoZh/bOh+RLYg
-	 wVQGhmnoLzkJ4JcnW9AOMxl6WWrP4Yd+dJJbpDvgrslavkteWBv3ukZPqwRqh7tNNww==
+	bh=bNWLKDAO741BW0/XzcsTHBHCUfXie0HtjfUo7inFESE=;
+	b=xk7SI/lt0prW1/r7yLeji+AED/DqcA7bP/6KxA/En6uzzT+3QRENAVZL6Wg+FLGyWGWt
+	 8U7SVnwKuf67sll2WPeYKDPHtprnvavBAh56NMkMWetFaDDrxMlvQhE3Jx80kM01Q7Qu8
+	 3HwnFork5o+6cHdxDdXELQtYHXP+vm9ays5m/gK8X4TvywDLlriExju3u3psCN5HHHvOB
+	 k4jbXtR4ikJor6zbmT7LonO3LkAxiv8LsoDGCN8PKrgfkNM0V04b4WIL8DSv4iYsLNm16
+	 40+0p6yNDYOFLkWzOFnwi7tOikixCIQTeaHflVoiy3KXo+Sq3T4XYQta5Yw5VA0E2eA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Tk39+s2P;
-	arc=none smtp.remote-ip=209.85.167.198
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lZOrdfUJ;
+	arc=none smtp.remote-ip=209.85.167.200
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89B160A6F7D
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 18:52:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B89B160A6F7D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6ABA606AAA4
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 18:52:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6ABA606AAA4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Tk39+s2P
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-4e778acdbc6so171522b6e.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 10:52:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lZOrdfUJ
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-5735cd94235so171405b6e.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 10:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795114345; x=1795719145; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795114346; x=1795719146; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pLq92bALDfzVSwPCFwlrCOZ9rlSOsAmXjgSBQp7hHGc=;
-        b=Tk39+s2PF7TzJCqELszbOhUyF4TYDgFSc/xNOI6cR3l16fmcVNtuohC02GSEIBYfjJ
-         8lyf1v1YWJRA0pHtYPiFRUZk1x+qt7hbgEQ1+Sfq6aA1qdH277jleFQij8npLpsEgo+Q
-         GLOi3fjdHLmqOTbwgd0L+ATBcdhXzcuo81CDJYR0FLJNT2dcvt9PO2lAt9GxrE5Ltyic
-         OXv2BF4klsX1OW/d8/cWZR6tOyqh0uzlT/P4U1Y5YxU+DcCawNy6iinsACcrR9l9/Qu5
-         TwDBryt1RZuU+kd/qnguQFYSHmrO6oq/+3p+VY1b7Jg9CVW8fOF8UJgptO0s/ncgyQ2q
-         r4Ug==
+        bh=bNWLKDAO741BW0/XzcsTHBHCUfXie0HtjfUo7inFESE=;
+        b=lZOrdfUJxhj4PyuQ+jlK4Nh6fpZaN4LvU3djgNemxAO/MqlPGsv9XnAnP78Rqs+ocz
+         GJnevXj/F3VkP/tVFCVJv4SppHGnek68CSWLMj1hrryTZ8d4yEMlCW1FKn8o/vhxWhVC
+         +D8JJ0KDK9lR4d4j7TLEMvUZoRsTkGPt4TOJpZM0bnkTftawvIiOtNnq+0msUKrgcE1C
+         uRZHrrY3tHpjSQr1gZlFZgZ8JskJNznxheqSr0+8tA+rlLf6CNBsCqMl7dbNF/WG7CQn
+         sUM6kurEFVmiwoKsD9VF4vczrG5Cur10YF+BDkEjLtaY5NRyFHHO0xcgebRK+n9oHvhh
+         Sinw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795114345; x=1795719145;
+        d=1e100.net; s=20260707; t=1795114346; x=1795719146;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pLq92bALDfzVSwPCFwlrCOZ9rlSOsAmXjgSBQp7hHGc=;
-        b=VQZQz3ZeHBzOEDhXKXEni4zew1s9UrN8k13T3ViTAPiCJFAsUIjFDObsmVNSPh8pcH
-         v2J4/rmlaztf8ur5wx5QlWHQQYz6uXabO7kFpmV208PFh9S6ma/Yv7tYrXknC01m2viU
-         9TPIzCpt1x7OCGFqBc9R2k5CI/26RtgqtZn7YZAAT8VjY1DmbZUy2sAjZ8SldDoJfa20
-         uLmghmQxuja9Ce77EtyMu7PzcX9qjtSYCWr3dau1MYCz0wKPpdjSx7CUXoCaaR9cY1RO
-         BirrlfVwZGLQlikadEKSp5PVcipaSEtNeYvIkBZuqFbO54Wk5osIK5Q0/079LDXNw8v2
-         +jUA==
-X-Forwarded-Encrypted: i=1; AL+hErHM5ifuQ8zsQms21JBRDt4OjZMj+4c5b7myzStpFnWvl7czX739tfdkt9dwuvOtQI8gsuKfjMzk7uRYVbEBdjs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z91CUOxkKuObGkFmzgv0y2pjaa7p6KnAYq29OqpeI6QX8YaXDO8
-	tLYd0z4LYMqdzGJsoIBHDpCoRlQCsRfe6vhOhzUqF4IbSCAjqNONwPnqhMOxz+wrrYABPYfh4n2
-	rfusyQuMQP2VlzP/m/f8ek4ReXw==
-X-Received: from ioo10-n2.prod.google.com ([2002:a05:6602:864a:20b0:9c7:8645:9285])
+        bh=bNWLKDAO741BW0/XzcsTHBHCUfXie0HtjfUo7inFESE=;
+        b=d/xk4ViRm2ZpIeiyLbkrrgN7K+gKqpJtnFOHraL2cW0GvLV7UmKotAFPW9xhLrEZK0
+         1bP5dFRzUJAf6Hv1uMFAA06FC4qt8RrOAZEM2lKZ7PdZUOwpvmlFNkhcxoS0p60ZN4PT
+         PC2YUzA6E7dpHd1ywUOYkVN6s0pCiNda2Jx/8Rv1GC0qbtavmnlgPLnMZC4M5weuMWMm
+         /BNDeA5xGkOfGt3R9Pxhh+U3vFyQnOJwsUQ3MFU5vluWsVLG6lqVVzx6VLzEP+41iOo0
+         RZSrJ7yt1WwtM5ZX5I3xVQfUU+u6IHJTAWIdTcm322ZdGutn0ke3YJLQLqtaVT5VVw9K
+         tcRA==
+X-Forwarded-Encrypted: i=1; AL+hErFMlvjEtgYAfBsu9j+UMuA/SZTSqWh1trNeWdMQPYikYkcQfcyGT/QhIJnu4IGauk8ppchRiJfBdX0TdqWHFHo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z89BObl/+5F7BdsugpRBvzOEOYDBKba+kTyrWNj8Slt1ANrQipx
+	PMiQQq01dGa5EqDuHiIs2/B2FDlJC4lFI/RKZE9K0SGxHzsq12H4L2r05eGbQ95wXmUTtRQFm17
+	unaNAis975c9hTsZ3LJUI9Yd/cQ==
+X-Received: from iogs7-n1.prod.google.com ([2002:a05:6602:c447:10b0:9c8:85bd:e3c2])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:178b:b0:55c:8ed:4db8 with SMTP id 5614622812f47-57a0cbda8b5mr953892b6e.62.1795114344372;
- Thu, 19 Nov 2026 10:52:24 -0800 (PST)
-Date: Thu, 19 Nov 2026 18:51:51 +0000
+ 2002:a05:6808:1983:b0:574:4c3f:992f with SMTP id 5614622812f47-57a0bb6079dmr866880b6e.42.1795114345394;
+ Thu, 19 Nov 2026 10:52:25 -0800 (PST)
+Date: Thu, 19 Nov 2026 18:51:52 +0000
 In-Reply-To: <20261119185215.632334-1-coltonlewis@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261119185215.632334-1-coltonlewis@google.com>
 X-Mailer: git-send-email 2.56.1.809.ga0b61035b5-goog
-Message-ID: <20261119185215.632334-10-coltonlewis@google.com>
-Subject: [PATCH v10 09/33] perf: arm_pmuv3: Allocate counter indices from high
- to low
+Message-ID: <20261119185215.632334-11-coltonlewis@google.com>
+Subject: [PATCH v10 10/33] perf: arm_pmuv3: Expose number of general-purpose
+ counters in sysfs
 From: Colton Lewis <coltonlewis@google.com>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
@@ -100,71 +100,52 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-MDCR_EL2.HPMN assigns low-index general-purpose counters (0..HPMN-1) to
-the guest and high-index counters (HPMN..N-1) to the host. Allocate host
-event counters from high index to low index to minimize collisions with
-guest counter partitions and avoid rescheduling host perf events on vCPU
-load when enough upper counters are free.
+Expose the number of general-purpose event counters implemented by each
+ARMv8 PMUv3 instance at
+/sys/bus/event_source/devices/<pmu>/caps/num_counters.
 
-When allocating a 64-bit chained pair (even counter idx - 1 paired with
-odd counter idx), verify that both idx and idx - 1 are present in
-cpuc->cntr_mask so an odd HPMN boundary cannot allocate a guest-owned
-even counter as the lower half of a host chained event.
+This allows userspace (such as VMMs configuring
+KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS for a Partitioned PMU on
+heterogeneous systems) to query the maximum number of general-purpose
+counters for a specific PMU without reading PMCR_EL0.N directly from
+EL0.
 
-Tested-by: James Clark <james.clark@linaro.org>
+Suggested-by: James Clark <james.clark@linaro.org>
 Signed-off-by: Colton Lewis <coltonlewis@google.com>
 ---
- drivers/perf/arm_pmuv3.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ drivers/perf/arm_pmuv3.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index 9ce915754b0a5..667ce27d2347c 100644
+index 667ce27d2347c..1676f13cc7c38 100644
 --- a/drivers/perf/arm_pmuv3.c
 +++ b/drivers/perf/arm_pmuv3.c
-@@ -957,10 +957,12 @@ static int armv8pmu_get_single_idx(struct pmu_hw_events *cpuc)
- {
- 	int idx;
+@@ -457,12 +457,26 @@ static ssize_t branches_show(struct device *dev,
  
--	for_each_set_bit(idx, cpuc->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
--		if (!test_and_set_bit(idx, cpuc->used_mask))
-+	for (idx = ARMV8_PMU_MAX_GENERAL_COUNTERS - 1; idx >= 0; idx--) {
-+		if (test_bit(idx, cpuc->cntr_mask) &&
-+		    !test_and_set_bit(idx, cpuc->used_mask))
- 			return idx;
- 	}
-+
- 	return -EAGAIN;
- }
+ static DEVICE_ATTR_RO(branches);
  
-@@ -972,17 +974,22 @@ static int armv8pmu_get_chain_idx(struct pmu_hw_events *cpuc)
- 	 * Chaining requires two consecutive event counters, where
- 	 * the lower idx must be even.
- 	 */
--	for_each_set_bit(idx, cpuc->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
-+	for (idx = ARMV8_PMU_MAX_GENERAL_COUNTERS - 1; idx >= 0; idx--) {
- 		if (!(idx & 0x1))
- 			continue;
--		if (!test_and_set_bit(idx, cpuc->used_mask)) {
--			/* Check if the preceding even counter is available */
--			if (!test_and_set_bit(idx - 1, cpuc->used_mask))
--				return idx;
--			/* Release the Odd counter */
--			clear_bit(idx, cpuc->used_mask);
++static ssize_t num_counters_show(struct device *dev,
++				 struct device_attribute *attr, char *page)
++{
++	struct pmu *pmu = dev_get_drvdata(dev);
++	struct arm_pmu *cpu_pmu = container_of(pmu, struct arm_pmu, pmu);
++	int nr_cntrs = bitmap_weight(cpu_pmu->cntr_mask,
++				     ARMV8_PMU_MAX_GENERAL_COUNTERS);
 +
-+		if (test_bit(idx, cpuc->cntr_mask) &&
-+		    test_bit(idx - 1, cpuc->cntr_mask)) {
-+			if (!test_and_set_bit(idx, cpuc->used_mask)) {
-+				/* Check if the preceding even counter is available */
-+				if (!test_and_set_bit(idx - 1, cpuc->used_mask))
-+					return idx;
-+				/* Release the Odd counter */
-+				clear_bit(idx, cpuc->used_mask);
-+			}
- 		}
- 	}
++	return sysfs_emit(page, "%d\n", nr_cntrs);
++}
 +
- 	return -EAGAIN;
- }
++static DEVICE_ATTR_RO(num_counters);
++
+ static struct attribute *armv8_pmuv3_caps_attrs[] = {
+ 	&dev_attr_branches.attr,
+ 	&dev_attr_slots.attr,
+ 	&dev_attr_bus_slots.attr,
+ 	&dev_attr_bus_width.attr,
+ 	&dev_attr_threshold_max.attr,
++	&dev_attr_num_counters.attr,
+ 	NULL,
+ };
  
 -- 
 2.56.1.708.g77570a6a1d-goog
