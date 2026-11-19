@@ -1,74 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.118.77.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795115996;
-	b=Z1FPypApFXjONbiu2aFmMiE2kvDW33tCWSrOFYZtEgplkUCCxdqNJm2/VVUvhXq/ykY2
-	 vcgc7s46JEw1DLwi/m6XvmXnOxa2bUkd5M4q0dorCYPriL0uJfEBa2nQQfQ3QsncNbTqj
-	 Ug7zV+g5mu9O6lw2atw5/VQOh8vFrScPZq1pkoYA1IK9GaQ4x11biN+zQ21IJ8PY+YD0a
-	 BrtTyWu4EQCkNRcg2fMViCTZR7zeMhQF2DHTUEIdMXUODvW2COCTiHUenyB+cWikm7AjB
-	 jBUuWIuXHz8SgDU+lHZNpavQW6i5LEWNrGAybU1AaRQJmOT022jvfWONBLXzYkl2KEA==
+	t=1795117429;
+	b=VMkcXlE8sF7nK+bYmrvoLZN98Dm/ehzJy4dOuvPFAxEnLbHp7RTPW1SeAhdQkhVmjqc3
+	 BWpE1ORkfdLC8bNcdAi81LB+OhrNK90MhxzUwOYr8VinlEzF7n7k/kC+bKKT4J3wECceD
+	 mHgyYyj/rEyL+YeKWUHaHXC4AHho4/lZDr8NjQkrgrPOShRRsqvskTMvn9dfhO304iU/2
+	 RTfq8HJghGrzvj8jQelKcmIoiBsxCkM9P6ac8S4HXz4cXpjjw9eriVTsyLy17bHvk1J0j
+	 +/MrjDsZFKdOkFa0ER95wYp3sAmB3GaFVpqxMdGo8G4gSgiT9FQ50SWzeRVXG/wYrzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795115996;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=B3fPYwtnhJtRTzUId1FsxU5BbcK59iDRRgRTHG4g8TM=;
-	b=q6njR4G05TRYMdGeZgpybXYVnRlBcgOcy6IZQBVtZHLny+9EAC+O27CHG5tI4cFheIiR
-	 YAjN99N6PDnbg/C+j2Vd6BGWRaQgMSRHhi8ACP0MfSgrT8iN7W8y8Bu3UTma+hWGMR9YQ
-	 FHGub+3KpAEcsM+8b/QjXRtRLhHnw4R7WfqnKhy+6dODhOroW82fJ59Ig9QPshQyNUkL6
-	 2K+Tz015ZYFhP144b6AyxMbc0uLHZGBSZaNwfp2DFmA1h9IY1AU48b6dklP/mJzkdJngN
-	 6x6Ihc7AKW5V6d76uHDRF9G15+XkB45xziO4YmjLxZ5pyxrklEu9/NkE6nzJ9yduB/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795117429;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 Content-Language:From:In-Reply-To:Content-Transfer-Encoding:
+	 X-CMS-MailID:X-Msg-Generator:Content-Type:X-RootMTR:X-EPHeader:
+	 X-CMS-RootMailID:References;
+	bh=090F43O6xwbTXOOBTz6I2219/meRL0E1+FYz/xdX8XU=;
+	b=bBgyN/xEkOYohfaVn0CXra5jzBC5evN7kzsSkRJ70mrOxTYrTrvG48a5h4Q9Xj9qT7eq
+	 YYXTyrZv+w9aXGjMAa7bUA9A7R3lA6oAi5uCLBpFyuJa31RYuvQQEVf/eQdEVHZBghmXi
+	 4Azf0a3O/6G/cfucu5XEgSPSTI8Jhu/TZp3WUAsDz0edIPEc540smYt60uFAw8W6evQCP
+	 FH8bN4Ok8gvOAZ0gKeKVSCXjQeyKAlkofXSvKiUim4/+Z29Fcp4jOKfryh7sEDfr0CyMT
+	 IkOBqetAUm5ezS6RNe9PvrgktY+R1PP93CErs3BVALxjay0d0/n84rvSXARICiwQKGg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=e6cswkqt;
-	arc=none smtp.remote-ip=209.85.218.72
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=samsung.com;
+	spf=pass smtp.mailfrom=samsung.com;
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b="NRZI0/g0";
+	arc=none smtp.remote-ip=210.118.77.12
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898EB606A324
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 19:19:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 898EB606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B842606A332
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 19:43:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B842606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=e6cswkqt
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c49b95262a5so7695066b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 11:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795115995; x=1795720795; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=B3fPYwtnhJtRTzUId1FsxU5BbcK59iDRRgRTHG4g8TM=;
-        b=e6cswkqtbr5gIXT7zPqwbxbqDazMSGSQh5brqg3woxMXmbrKcsjWeeblJDpIszQpxv
-         TGd/0ALnpNpnRp60nZIXkRb+MGUi4YpzELfsgyKbr4pDwt9UXKuQxAM8wTMa71F87J3J
-         YYQ7BIp9fnmNRMjQDqTpqrghxE77fiw7x7nGb+4Wy9iKCcQm8Xc//n2/a/t+2OZIFVuz
-         vY5oy9BS16JZ7A7CoPwlDpw7vJHOvZMFy7JAayuM8duhreLgQWZdUtjMkjojacGMmAPo
-         XWy8bVfUa3GEHukBLrYA+VA8kAgfdKRZvXiR9bpIv8Lbshi6/T1qWH0+rQhWll7dwZeB
-         FMQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795115995; x=1795720795;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=B3fPYwtnhJtRTzUId1FsxU5BbcK59iDRRgRTHG4g8TM=;
-        b=ULrXEVKIm1MBMaxNNGW/WfK+dOG1Ym3aenf5u2ij/ZmHRnYwWLgIlRf5dWueUqOoNa
-         yQzfiSXmJl/0kCd/yHZNbfExI5zHtWTudMbYSLPFBHZTGGYx/pz2g4XpKaVhZqtQsIlo
-         7lBwlRjjKSY8XIp4gGWkQdi44YWSf0LGYZnthcKBOv8qFK23hTh2l71sGqGHNDGIXqfQ
-         BLxvyTRntFbaTGWvhlC+IC3yIolVCFc9WavxhctUgYPHhdofS+SSNVh1JOfrpDa+POqS
-         CPeAFI32souyy/qbpWrnEehA5ngPBbR0crBkGazruF8bTrjyajpra+v302cjmM8QHjKV
-         TTDQ==
-X-Forwarded-Encrypted: i=1; AL+hErGeggIPBTdsgrlyKAbJ1rp1fo1ubTrYQwILWhg3IhHHBW8JhyCBjNFu+shJc4WcfqwyI0MLzb8iJReVS2/nZ7A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/g0MIvQu53D/mhmXW71whD+sJ1kzmT4iuaMwWpIfGYff6+lK/s
-	dTr82MjxJ7PmNPTpf72y1XwZUETtCzCqxso9FsrjU7VMf3m1XuxoF1ApPnKTI864Ne8vJXrzvw=
-	=
-X-Received: from ejbgt15.prod.google.com ([2002:a17:906:f20f:b0:c2e:1bc5:6c6c])
- (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:906:9fd0:b0:c50:a2f1:f200
- with SMTP id a640c23a62f3a-c513a5da8e7mr99034666b.16.1795115994327; Thu, 19
- Nov 2026 11:19:54 -0800 (PST)
-Date: Thu, 19 Nov 2026 19:19:53 +0000
-In-Reply-To: <av8QNiFcnGWocORy@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=NRZI0/g0
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20261119194346euoutp026b44c36e4b0a71616179c5e856d71841~picnFp1kh0483304833euoutp02d
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 19:43:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20261119194346euoutp026b44c36e4b0a71616179c5e856d71841~picnFp1kh0483304833euoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1795117426;
+	bh=090F43O6xwbTXOOBTz6I2219/meRL0E1+FYz/xdX8XU=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=NRZI0/g0ShOOBLLsJPWC86qh3P8zV1Hh4g+2gBGi5NcIr4nz5+tTS5Rf/2EsfIxuS
+	 3LPdhpTuMT62WSRpGp7tP8ct7nFDtwFvblFIV1fUXyZhU8CfOtLn/2+tOQ8a8YMKqw
+	 dbWTXP1P+rpYp8VaTsCbEbeLXkttRKfeXqS0Ew4I=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20261119194345eucas1p19bddf3b3f2155b0f4777a822db00aec1~picm3UpHR0237702377eucas1p1Y;
+	Thu, 19 Nov 2026 19:43:45 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20261119194345eusmtip1e59aab635f10627422e5da54c5d41eaa~picmWhHfe0313403134eusmtip13;
+	Thu, 19 Nov 2026 19:43:45 +0000 (GMT)
+Message-ID: <e8235bd4-ad04-49d2-a5f6-f83463a8f8b6@samsung.com>
+Date: Thu, 19 Nov 2026 20:43:45 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,57 +63,142 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261119104208.782900-1-halg@google.com> <20261119104208.782900-2-halg@google.com>
- <av8QNiFcnGWocORy@kernel.org>
-Message-ID: <av9L2ez51erKkQNo@google.com>
-Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for user namespaces
-From: "Hallgrimur H. Gunnarsson" <halg@google.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <sergeh@kernel.org>, 
-	Andy Lutomirski <luto@kernel.org>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	David Howells <dhowells@redhat.com>, Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	"=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>, Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>, 
-	"=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	containers@lists.linux.dev, keyrings@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] lib/lz4: add KUnit tests for compression and
+ decompression
+To: "S. Biplab Raut" <Biplab.Raut@amd.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Gao Xiang <xiang@kernel.org>,
+	linux-erofs@lists.ozlabs.org, Yann Collet <yann.collet.73@gmail.com>, Nick
+	Terrell <terrelln@meta.com>, Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <20261118182343.1628236-1-Biplab.Raut@amd.com>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20261119194345eucas1p19bddf3b3f2155b0f4777a822db00aec1
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20261118182347eucas1p2f85df57ccf85e78fd2c104d4046f5295
+X-EPHeader: CA
+X-CMS-RootMailID: 20261118182347eucas1p2f85df57ccf85e78fd2c104d4046f5295
+References: <20261106-lz4-vendor-upstream-v2-0-ee04c3f0d7dc@samsung.com>
+	<CGME20261118182347eucas1p2f85df57ccf85e78fd2c104d4046f5295@eucas1p2.samsung.com>
+	<20261118182343.1628236-1-Biplab.Raut@amd.com>
 
-On Thu, Nov 19, 2026 at 05:05:26PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Nov 19, 2026 at 10:42:05AM +0000, Hallgrimur H. Gunnarsson wrote:
-> >  static void set_cred_user_ns(struct cred *cred, struct user_namespace *user_ns)
+
+
+On 11/18/26 19:23, S. Biplab Raut wrote:
+> lib/lz4 has no in-tree tests, and this series replaces both the
+> compressor and the decompressor.  Add KUnit suites for the behaviour
+> callers rely on.
 > 
-> I read the diff through but this led me to dead end. Cannot find this
-> function from anywhere. I look the changes again once this is sorted
-> out becaus this is interesting.
+> lz4_decompress:
+>  - round-trips through LZ4_decompress_safe() and
+>    LZ4_decompress_safe_partial() with exact, oversized and partial
+>    capacities;
+>  - truncated and corrupted blocks never write past the destination,
+>    through either entry point.  The input sits at the end of its
+>    allocation, so KASAN also reports over-reads;
+>  - an offset-0 match decodes the same whatever the buffer held before;
+>  - literal and match lengths longer than the output are rejected.  On
+>    32-bit, lengths whose extension bytes sum to SIZE_MAX are rejected
+>    rather than wrapped;
+>  - in-place decoding within LZ4_DECOMPRESS_INPLACE_MARGIN() leaves the
+>    output intact.  A fixed block that corrupts with the old +32 margin
+>    covers the vendored decoder's 32-byte wild copies, and a port of
+>    upstream's worst-case test covers the 64-byte copies its decoder
+>    makes since v1.11.0.
 > 
-> I wanted to look at the call site to understand how cap_bset gets set,
-> which is not now possible but I do get the gist and agree with it.
+> lz4_compress:
+>  - LZ4_compress_default() fits LZ4_COMPRESSBOUND(), and with a smaller
+>    buffer fails rather than overflowing;
+>  - LZ4_compress_fast() across documented acceleration boundaries;
+>  - LZ4_compress_destSize() output decodes to exactly the consumed
+>    prefix;
+>  - the dictionary paths of zram's lz4 and lz4hc backends;
+>  - LZ4_compress_HC() across supported levels, including the kernel's
+>    clamp boundary, with full and limited output.
+> 
+> Work memory is allocated at exactly LZ4_MEM_COMPRESS, LZ4HC_MEM_COMPRESS
+> and LZ4_MEM_DECOMPRESS bytes, so KASAN reports an implementation that
+> outgrows them.
+> 
+> Without this series, the 32-bit length case fails on i386 ("long match
+> accepted: ret=31"): the old decoder wraps the match length to 18 bytes
+> and accepts the block.
+> 
+> Signed-off-by: S. Biplab Raut <Biplab.Raut@amd.com>
+> ---
+> 
+> Michal, this goes on top of your v2: it uses LZ4_MEM_DECOMPRESS and the
+> opaque stream types, so please fold it into v3 if you find it useful.
+> 
+> The tests are deterministic regression tests.  Every randomized case
+> uses a fixed seed, so each run checks the same inputs and any failure
+> reproduces exactly.  The in-place suite has two fixed cases:
+> 
+>  - a block that corrupts with the old (compressedSize >> 8) + 32 margin
+>    under a 32-byte fast loop, the case patch 12 fixes;
+> 
+>  - a port of upstream's decompress_safe_inPlace_worstCase test [1]:
+>    fixed noise with a 65-byte match at offset 65, for every source size
+>    from 300 to 4096.
+> 
+> On patch 12 and the +65 margin: since v1.11.0, upstream's decoder makes
+> 64-byte wild copies on x86-64, aarch64 and ppc64, and upstream has raised
+> its margin to (compressedSize >> 8) + 65 to match [1].  That fix is on
+> the dev branch for v1.11.2; the released v1.11.0 and v1.11.1 headers
+> still say +32.  Your v1.10.0 import uses the 32-byte loop, so +36 is
+> right for this series.  A later re-sync to v1.11.0 or newer needs the
+> kernel's margin raised to +65 in the same patch, whatever the upstream
+> header at that tag says.
+> 
+> I checked that the worst-case test catches this, using a userspace
+> build of the same test.  Against upstream dev's decoder, all 3797 sizes
+> fail at +36 and none fail at +65.  Against your vendored v1.10.0
+> decoder, none fail at +36.
+> 
+> The HC cases are built only when LZ4HC_COMPRESS is reachable.
+> 
+> With your v2 applied on v7.3-rc4, the suite passes on UML (17 passed,
+> one 32-bit-only skip), on i386 (18 passed), and on x86_64 with KASAN and
+> KASAN_VMALLOC (17 passed, the same skip).  A UML build without
+> LZ4HC_COMPRESS passes 15 tests with the same skip.
+> 
+> [1] https://protect2.fireeye.com/v1/url?k=f02093a2-91ab868d-f02118ed-74fe485cbfe7-df7f89af9c73957c&q=1&e=79e95ae8-ccd9-4aaa-b235-c5f62451957b&u=https%3A%2F%2Fgithub.com%2Flz4%2Flz4%2Fpull%2F2104
+> 
+>  lib/Kconfig               |  15 +
+>  lib/lz4/.kunitconfig      |   5 +
+>  lib/lz4/Makefile          |   1 +
+>  lib/lz4/tests/Makefile    |   2 +
+>  lib/lz4/tests/lz4_kunit.c | 911 ++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 934 insertions(+)
+>  create mode 100644 lib/lz4/.kunitconfig
+>  create mode 100644 lib/lz4/tests/Makefile
+>  create mode 100644 lib/lz4/tests/lz4_kunit.c
+> 
 
-Thanks for taking a look. The series is based on v7.4-rc1 and
-set_cred_user_ns() lives in kernel/user_namespace.c, where it is called
-from create_user_ns() and userns_install(). ns->cap_bset itself is
-initialized in create_user_ns() right before calling set_cred_user_ns().
+Hi Biplab,
 
-> I'd figure getting this relates to my rootns patches (perhas). One key
-> mechanism for me resolving the unprivileged in my use case is
-> MOVE_MOUNT_T_MNTNS [1], which is orthogonal but just pointing out
-> the problem space.
+Thanks for the tests and for testing v2
 
-From a quick look, they appear complementary. Being able to do more
-setup operations from the outside generally aligns with bounding
-capabilities inside the user namespace.
+v3 is coming in a couple of days. It vendors v1.11.1 instead of v1.10.0,
+so it already has the 64-byte copies, and the in-place margin is
+(compressedSize >> 8) + 68.
 
-> I read through https://lwn.net/Articles/978846/ to understand the topic
-> overall. Just mentionining as a possible addition to the cover letter
-> (not a priority/necessity).
+I ran your suite on v3. Everything passes except
+lz4hc_compress_test_levels. That's because v3 no longer clamps HC levels
+to 9: levels 10-12 need a bigger state, sized with the new
+lz4hc_mem_compress(level). Allocating wrkmem per level with it fixes the
+test.
 
-That LWN article is actually linked in the cover letter as [2].
+If that's OK with you, I'll carry your patch in v3 with that small
+change keeping you as the author. Since patches 10, 11 and 13 changed
+a lot I'll drop your Tested-by - a re-test on v3 would be great.
 
-> Hope these help and can be kept in the loop :-)
-
-Will do, I'll keep you CC'd on future revisions.
+Best regards,
+-- 
+Michal Wilczynski <m.wilczynski@samsung.com>
