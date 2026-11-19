@@ -1,58 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795058066;
-	b=j/dqSVqdBHMJqrFRAwtGzH3KEdxG1di1q0NrO9NlyW5LsrVeZxVVY9Vbr8w8MCbWgydl
-	 X0WttXLhZwZrguwaENSlKl5/ykZSu+SO/xXin5aPdK+Us4VOQme5g1BLuVKGkOm2/UFWZ
-	 slOdxvMrASK4u9V6sLAPcQxIdWFIeYCTBIwxLf3xPW0DpRT3OifSEtJ2kmJtBV/R095Kq
-	 kPV+0xpWcYY+doX47YzWdPSxv1vzbVl9KDDdGLoSOnMcIIDljKAT3dcmpyRlRsaAxRF2I
-	 HTCab2cgFOmCnpg0O9Uz12z4OBIAoztX95jV3m11QadS4j0mgk+Ke4xRV9ZzHQIcd0g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795058066;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=rTVCMUckF4OImfL/pZOEtpsAr6XvQh0ItXntMQmf5hQ=;
-	b=lEfcdJaVnTh5hs2iyH4sIuc1GWaK62y+3ZUWhDaoO2b8wmmaRWSh/dzxCZE717vDbR0q
-	 lleERlna0l7sD9cw0H2yufiI07IPssqZjEZ5um3n0FTu++PZptq0ItJ3m85jDScJL3gj5
-	 xCtEs2sfKuQMBGQs9cLlRyfKC9YtNzFg6wYT3DmSCtQn3QS4O1w7NM1o/LwYlBvINI/F2
-	 uj6MTu+3O9SoewgSzpNZraq21YMry86agdkVj4c6qfHeBWnETMvRJG4x3cRbW6a9cq993
-	 MZwV+UXZJAXFQhpl3Qee6A9UeWEP3z0vztSC/RCcmUQZHvkgeetSVFzGwk9SBEFjyzw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=K0mLP1Yl;
-	arc=none smtp.remote-ip=220.197.31.4
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.177
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795059331;
+	b=hU4z3vUp8mLL2zlmUyD2ri0wCKwyjPmZAWX1vBqosftj5UHtV05/B4VTf3MfJ+PcSl7D
+	 6w8uPTg4DvN5K1YUVLkPf2VGji8ZOXc00ztNvYkgEcH4mwZ/Fr5wgdjvfaUM6bMV0FqqJ
+	 0syOiDknr6Nlm+x+i7KODb6tqArAuWsakYnM/QbAj6nWpju/2UBr1Aiv6dAxV1XCDD0w8
+	 Gay3vH9L16sKaAESKGD9ea6/8mrP3UhJdBGNblCVhZ2C15cXCBkmlHwJa3q+kvDatw940
+	 /X2ReVptJtxIkoNCabL5N+jTqscFJjDuN0cgn32ECKEvsySENrQzaS2aWdKWnpAdPXg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795059331;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 In-Reply-To:References:MIME-Version:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=dTwcKDHMNVZfmdNV5lW/CAgV1zVqOVJlSSJv03x7V3c=;
+	b=dmehnDQTk4XtIHsVdKecSw+5n+pVMSZpQBGrR6QHon+D5sRXLedZ/jUz7CTAzHDqtjOt
+	 oJAqZ8BcoZXX33H4LzdQ10+y0ttWJgoTEHJg55rfkBNwSAvyNvt2l1sTRRu1/CAqn6lkk
+	 4mA+DksaS7rYKDqj/VVXAafkiTxXVWCescsomgHk9+/I4srZUXrVN8b92l3Isv42iFrBM
+	 3qh1QZ6hTxEyjhLHHjJ0Fo2n2aDQttfSQT5oj/xgS5w/Ed7uoVfLMgnob75GvYdEvFx6n
+	 CmFifKg1QD5XKifco6Qe60f5rqwGCltVhUwKmq7Xp4dSRm6gog5sdMxWTXpLDB0bLKg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=p5q8k2MG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.177
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09CB606A31C;
-	Thu, 19 Nov 2026 03:14:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B09CB606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9AB606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 03:35:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F9AB606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=K0mLP1Yl
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=rT
-	VCMUckF4OImfL/pZOEtpsAr6XvQh0ItXntMQmf5hQ=; b=K0mLP1YlyItMdc1LF6
-	rJwUqY22/1oVGlC9RZ62Qh5B95yITrgy83bVSAPvsisBYnRvW6eoVM44U7NgEWHz
-	JPORw40zXoAy90mV5pW2LtNb5lcT4FoB+BQnQPisa31n/dCH7ft4k6HYIKsiHluG
-	DkifVjlJCjpqJ6/2Bfn9HyFms=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wDnL4Bsaf5qld76Ig--.45716S2;
-	Thu, 19 Nov 2026 11:13:59 +0800 (CST)
-From: WEI Qinggang <stitchqgwei@163.com>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-can@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH can-next] selftests: can: cover CAN XL VCID getsockopt
-Date: Thu, 19 Nov 2026 11:13:28 +0800
-Message-ID: <20261119031328.625-1-stitchqgwei@163.com>
-X-Mailer: git-send-email 2.47.1.windows.1
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=p5q8k2MG
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-8b2d14968c9so16793047b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 19:35:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795059330; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Mcj45i5KzrcvrRazpLN6Dwbl5jRNfUruNoe0T/jBxumY0SFDjzmbex0qOOiCF4txi/
+         fvG9P8EtEUi3N1Hd/NWn7N6/h0TfV3ug58D3UOfSHhSS7guYJ82mmaKfudj7Rk1AFBLz
+         L4Eq5qYqTJUmFXCVyY9a4Uwe3jd9aTWWgXacHmy6LPc/I6Fh7ObITqxz12htnYq6lVJE
+         qrPGbVWGOY1EsWoBc5/LVYSoDfb89y1sBJ9iFs+a/i4jy4aFxTVn5jOF2SS4FdFhI3GD
+         GDHuhVuvjlHzsf4iEJY3YH/NTrmlZtO/vguBImeoCpsJtJ6RIQ2AFrJuxPYC4j93iU7b
+         SOFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:references
+         :in-reply-to:dkim-signature;
+        bh=dTwcKDHMNVZfmdNV5lW/CAgV1zVqOVJlSSJv03x7V3c=;
+        fh=4GTj0WOszw0h82PcSXq39MxjEYcJpof+veneNJykKPs=;
+        b=szXIjbkg0cruCpY1joWZl/uiMWHdiOwFSgU+pmLVh8GLVyutexisDJLXJCvQ60RExy
+         z+UfYYv2qkQTLH75dUsDGtuNzeBEE4TmpUFbkovUSMNWi8MhOlqrkUqhA2x/JM4nNVeJ
+         i6NmmMSR1r9NlH5XBZjGSl2Y/tgGlrs5kxuvt52iAL5IGzGlAlWCT+K3T45OtgKt6i2K
+         bIZozBuoWBU+1uc/MdBcZJVxJO9/+7I7cYTlhxKZQ1pn5B5QSwoPGcs0n0IZtix46/eJ
+         z6lDQK+w9+RHY/xACN5Ni71Trth9jXZyKIXDfq7+yOYZ7kYWlcnaZ3j8Y6VzwKL/haqw
+         ZW5Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795059330; x=1795664130; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :references:in-reply-to:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dTwcKDHMNVZfmdNV5lW/CAgV1zVqOVJlSSJv03x7V3c=;
+        b=p5q8k2MGUuOpnGEfJtZuofAX15eghfaDILRuOeZkucAaOsg+vRtDAJ2izx3UD9/Pfs
+         D4ac6oVbUepQrfGqPpSPWFAp/vQnnE5FqLShnB4NQs3Ba2MAj7aRm53o1PKjTOgS6l5+
+         dsD3vJx4Nba2Tppke8XNi8TWF1AJLi5NiSWJjzQj3pX9shQf/Fe8khddbTCxOLNhZObN
+         Rxc28mSwtkcL65i9/ZzADsOmDtxJ1DuH3gKD5bvH+kjHeYEUNlt5I4/hoM/QwEPC3OI7
+         ViOp9VvclE2wzJI/M5cTh2P66NYDRkOQcZdh5eGNMtSuBaWHQamo9uGXZo5Nc4z9N827
+         vO3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795059330; x=1795664130;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :references:in-reply-to:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=dTwcKDHMNVZfmdNV5lW/CAgV1zVqOVJlSSJv03x7V3c=;
+        b=YDDFGuvXuyWIAJE3FN9Rsbs3LddHxDIxcpyLLhaboQA2xd+WGd0ETMxmikpvtcEdXr
+         BYht+mB+XXk6rMT+7rA9NopE/FjkQCd4ckc6ibBL9T/wxn/o9kDP71pJd1EfOBxbrJ7H
+         ebIbPK669ayV3ecqe/K6A1PdR4G6T3KZwg0p3vOLai4Ax/ecT3PGfS7yMQvdgyfvHXrU
+         dkvYelJ3yMBlIfJfptvkav+Q4LGHV9h1E+jV80ABTXOIoc3SXZr7Q/++gXWnbrxtEvHV
+         jMUGCLoAkTbd+wzlQQNUaYGA6QGTmGnAX3Eyv4aVYgCt/9e/Ts/uBuDHGDJyTSiXDDVr
+         kdQQ==
+X-Forwarded-Encrypted: i=1; AL+hErEKnUlqn1wmrEPo3ylNr5VYWATcnUFqyeF9LOMvSMzzvFHLxySLrCg8Rsl9o6zB3dWxwyuer/1eKWOaeXQCrhw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+coy1TLqn1o15wNAIzBD1nk9ZBhHWHgUtaT0++OdA4vZctQSlh
+	wDw2YCKqQcUKXVksnagkZSkWvTve1RILIzXhxufeac/rwzMgJ0X0nH3HoQeLBmZA0r7NZyNX39L
+	FQKJokhigBD3Zfaf9Quw9rqKgDcIf09tUBXgMSX/Q5ez3EnntDtpIIA==
+X-Gm-Gg: AZFdTZeYLcg1MniuJwbR2ihEY4UkhVvt71jBQEpwkKLak/AOEp6hoCB6dAsDvY+R+gY
+	P8xWf9MOO1mxys29aibb5VP/evW6euMuJC98x4PiOzksJ7BFAxbP7QFfkSk0pINf1X5I5wS9TT9
+	x1/vNr0DkxQbGlqkC+SIkNj1wT66iF9oYxGlmpzo6is39jBb4WkT2rLPACi0z2y6txZhgBNRuDb
+	HfHpyX1rtmnNgAlDMWA7f/OnqzAFDzcM004T77biTM4YJ3nTMQdXowOC2uARZmgX9H/aJUhdhm2
+	tXSXrpaTUO8aHtCpGKW4pa5QotTEYNRFvxu9011m40DPwaDyK49+X9ttEoO+Xxhp80MB2XlYpQL
+	S2kr1deLPNBPeaCDvDltLFbpKjM5Fc2lGgJdYhm0+XHl3sGAWV7icxXjjLQiGkdbK+JzYDB25al
+	Fcvxc+ReeWPqKLlMTl6XwZ/zhdR+hQR3rn45Cm/te7RZnCh+w8bMeC2YCgxiBlkqzGJq2g
+X-Received: by 2002:a05:690c:b85:b0:8b4:d554:3267 with SMTP id
+ 00721157ae682-8b4fea7b90emr18155827b3.0.1795059329731; Wed, 18 Nov 2026
+ 19:35:29 -0800 (PST)
+Received: from 913411032810 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 18 Nov 2026 19:35:27 -0800
+In-Reply-To: <20261105030843.3319056-1-wakel@google.com>
+References: <20261105030843.3319056-1-wakel@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,165 +108,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnL4Bsaf5qld76Ig--.45716S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3WF4fAF18tFyfZrW5Zr17GFg_yoW7Xw15p3
-	WFyFyYyw4kJF13Xwn3Gr48uFWfXF4DJrW8Kr1xWryUZ3y7AF97XrsIkFWayry7ZrZYg39I
-	va4SgF15urWDJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZzVnUUUUU=
-X-CM-SenderInfo: xvwl3u5ktj4vrl6rljoofrz/xtbC0hfR0Wr+aXcs4gAA3B
+From: Wake Liu <wakel@google.com>
+Date: Wed, 18 Nov 2026 19:35:27 -0800
+X-Gm-Features: Aa3M54rGVyaPN88KSs8RaBBU3XJWLg8t07Bk5yW9RZ-7pR4m_ECj9go4X8bhqeU
+Message-ID: <CAOcRiAF6kacjWRdUq=rETV3bO30yk272_PZV7sQn=t31_4ww9g@mail.gmail.com>
+Subject: Re: [PATCH] selftests/memfd: Rename local union semun to avoid bionic clash
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: Aristeu Rozanski <aris@redhat.com>, Aleksa Sarai <cyphar@cyphar.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Carlos Llamas <cmllamas@google.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-CAN_RAW_XL_VCID_OPTS returns the configured VCID options through
-getsockopt(). When the supplied buffer is too small, it returns ERANGE
-and updates optlen with the required size. Neither behavior is covered
-by the CAN selftests.
+Hi Andrew, Shuah,
 
-Add two tests to a separate test_raw_sockopt executable. Set nonzero,
-distinct VCID values and compare each returned field and the option
-length. Pass a buffer length one byte below the structure size and
-check the error and required length.
+Gentle ping on this build fix for memfd_test against bionic:
+https://lore.kernel.org/all/20261105030843.3319056-1-wakel@google.com/
 
-Use an unbound CAN_RAW socket so the tests need neither a CAN interface
-nor vcan setup. Skip when CAN_RAW or the VCID option is unavailable.
-Register the executable with kselftest and request CONFIG_CAN_RAW.
+Since b24335521de9 went through the mm tree, Andrew, would you mind
+picking this up, or should it go via Shuah's kselftest tree?
 
-OpenAI Codex assisted with the implementation and commit message.
-
-Signed-off-by: WEI Qinggang <stitchqgwei@163.com>
----
-Tested with GCC 13.3.0 (-Werror). On Ubuntu 7.0.0-43-generic in QEMU,
-both tests pass as root and as uid 65534 with only the loopback interface.
-Both tests skip with CAN modules absent and on WSL 6.6 without the VCID
-option. No vcan interface is created.
-
-OpenAI Codex generated the implementation and commit message from a
-request for these two cases and ran the build and runtime checks.
-
- tools/testing/selftests/net/can/.gitignore    |  1 +
- tools/testing/selftests/net/can/Makefile      |  2 +
- tools/testing/selftests/net/can/config        |  1 +
- .../selftests/net/can/test_raw_sockopt.c      | 80 +++++++++++++++++++
- 4 files changed, 84 insertions(+)
- create mode 100644 tools/testing/selftests/net/can/test_raw_sockopt.c
-
-diff --git a/tools/testing/selftests/net/can/.gitignore b/tools/testing/selftests/net/can/.gitignore
-index 764a53fc8..f578c0821 100644
---- a/tools/testing/selftests/net/can/.gitignore
-+++ b/tools/testing/selftests/net/can/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- test_raw_filter
-+test_raw_sockopt
-diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
-index 5b82e60a0..43ea4efac 100644
---- a/tools/testing/selftests/net/can/Makefile
-+++ b/tools/testing/selftests/net/can/Makefile
-@@ -6,6 +6,8 @@ CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INC
- 
- TEST_PROGS := test_raw_filter.sh
- 
-+TEST_GEN_PROGS := test_raw_sockopt
-+
- TEST_GEN_FILES := test_raw_filter
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/can/config b/tools/testing/selftests/net/can/config
-index 188f79796..2fb0a7a18 100644
---- a/tools/testing/selftests/net/can/config
-+++ b/tools/testing/selftests/net/can/config
-@@ -1,3 +1,4 @@
- CONFIG_CAN=m
-+CONFIG_CAN_RAW=m
- CONFIG_CAN_DEV=m
- CONFIG_CAN_VCAN=m
-diff --git a/tools/testing/selftests/net/can/test_raw_sockopt.c b/tools/testing/selftests/net/can/test_raw_sockopt.c
-new file mode 100644
-index 000000000..e4175b8f6
---- /dev/null
-+++ b/tools/testing/selftests/net/can/test_raw_sockopt.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* CAN_RAW socket option tests that do not require a CAN interface. */
-+
-+#include <errno.h>
-+#include <sys/socket.h>
-+#include <unistd.h>
-+
-+#include <linux/can.h>
-+#include <linux/can/raw.h>
-+
-+#include "kselftest_harness.h"
-+
-+static const struct can_raw_vcid_options vcid_opts = {
-+	.flags = CAN_RAW_XL_VCID_TX_SET | CAN_RAW_XL_VCID_TX_PASS |
-+		 CAN_RAW_XL_VCID_RX_FILTER,
-+	.tx_vcid = 0x5a,
-+	.rx_vcid = 0xa5,
-+	.rx_vcid_mask = 0xf0,
-+};
-+
-+FIXTURE(can_raw_vcid)
-+{
-+	int sock;
-+};
-+
-+FIXTURE_SETUP(can_raw_vcid)
-+{
-+	int ret;
-+
-+	self->sock = socket(PF_CAN, SOCK_RAW, CAN_RAW);
-+	if (self->sock < 0 &&
-+	    (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT))
-+		SKIP(return, "CAN_RAW sockets are not supported");
-+	ASSERT_GE(self->sock, 0);
-+
-+	ret = setsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_XL_VCID_OPTS,
-+			 &vcid_opts, sizeof(vcid_opts));
-+	if (ret < 0 && errno == ENOPROTOOPT) {
-+		close(self->sock);
-+		SKIP(return, "CAN_RAW_XL_VCID_OPTS is not supported");
-+	}
-+	ASSERT_EQ(0, ret);
-+}
-+
-+FIXTURE_TEARDOWN(can_raw_vcid)
-+{
-+	close(self->sock);
-+}
-+
-+TEST_F(can_raw_vcid, getsockopt_roundtrip)
-+{
-+	struct can_raw_vcid_options opts = { };
-+	socklen_t len = sizeof(opts);
-+	int ret;
-+
-+	ret = getsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_XL_VCID_OPTS,
-+			 &opts, &len);
-+	ASSERT_EQ(0, ret);
-+	EXPECT_EQ(sizeof(opts), len);
-+	EXPECT_EQ(vcid_opts.flags, opts.flags);
-+	EXPECT_EQ(vcid_opts.tx_vcid, opts.tx_vcid);
-+	EXPECT_EQ(vcid_opts.rx_vcid, opts.rx_vcid);
-+	EXPECT_EQ(vcid_opts.rx_vcid_mask, opts.rx_vcid_mask);
-+}
-+
-+TEST_F(can_raw_vcid, getsockopt_short_buffer)
-+{
-+	struct can_raw_vcid_options opts = { };
-+	socklen_t len = sizeof(opts) - 1;
-+	int ret, saved_errno;
-+
-+	ret = getsockopt(self->sock, SOL_CAN_RAW, CAN_RAW_XL_VCID_OPTS,
-+			 &opts, &len);
-+	saved_errno = errno;
-+	ASSERT_EQ(-1, ret);
-+	EXPECT_EQ(ERANGE, saved_errno);
-+	EXPECT_EQ(sizeof(opts), len);
-+}
-+
-+TEST_HARNESS_MAIN
-
-base-commit: 573af801552999954caa8347e4490b04cf4763f0
--- 
-2.47.1.windows.1
-
+Thanks,
+Wake
