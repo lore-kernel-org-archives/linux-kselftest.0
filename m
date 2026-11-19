@@ -1,54 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.246
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.117.225.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795095866;
-	b=PBgBp7Vd/GuJqYMLvb0+zfgtiD389mHREFD1YK3YKJMpDnnaZ+E+MdtDhSjfRTyER92a
-	 xX8/6z8oyDZ/VG+Ddkcu4ytzYnJEwDbYvkJ9Qm7YW17R+60r+dDxjyJgM+Gxu0lgbh2a+
-	 //RcyWwmaeadi9N4KGX645t97N0YXUqCC+z1tNAFtM770+ohDpBK6d9kI8g50OvtkYxj+
-	 zXlkilEeBOtMAYjg1lBGjozbrvW3Q18ym5jzCYJwhLR2eRa/ZwFMiso3CHNsVYTQ+dZYv
-	 LdSQ5MV+GiQLBPV72Mb5OVi86q7cSyt474hWL2fS36i9xo9DQz0kd4ru3K/RMbJSRDQ==
+	t=1795095889;
+	b=lfVXLHcosE8Ka3bTTzrhKhVoK/HwDwgHUyiyI0qVex5p6KrCaT0VtYvYWNa62I75JLC0
+	 u47DiaRCqbNqeHS8FnlM5Pw81RVndCADqExWS6p1h/VDG843a4vxX3Mb+i7s8JK0MQr9S
+	 SiYiVxkgN5pq6HiIOt467IjqctAC978i96bWiYgbChUT6hJtt9efYI2JBIhOaquQg61iA
+	 vkYkst2du4RIskzxrUWaEw/ZzigzHk+J91EFwv4PXVtJ0LVB6aySWlYgEgFbYIQ5tsUVx
+	 llcdpEEffM2gR2ZUueFXghw1PjnYu+S8CkP8i3QtvX3/ROPMxia1Fh9kkOMfB1Mt02Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795095866;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=JFOr/HaA5M4ow4p4WMe/GDqNkmn9F87y18KWeoj8kmU=;
-	b=aQ4NSo549NghTlnFGKvRVZm2n1PvaXxJXIit0zmqRHnfRYmi2C68B/hvakruvce0Mdg8
-	 cDatxfkdFsvvStbz670MpkOge4rd6zLDUqPnC1u9FhV+tlbrrP0miInUAaQ3zTHertjip
-	 JOQmxYiAVVcJUgtHFq8U06x4vQ7OfFpTQcSND9aVGD2A3hgoETS7a3BJ7H82y9qdBIokf
-	 h0ncalxKvRdDTk0jpibXaUUUvQL7bx/6nh/91Te1nc/QF/qRCRTyHUEuGKd0ATfTJhbCK
-	 fCO2HBD2W3fpwF6OJfHM/kTCY8ZNdHLG8K51hfg0fudjfLX3cvtTuOoScklg38ZK/1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795095889;
+	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=Avwvbw5yVGFVbipl1tuQaWsH+u0bWEZomnuCQzaz/wM=;
+	b=fZRmuOW0Gx2ve4KB8qqyKKYXCVJZlnjBS03v+7WTOaiABUIW2Q4NF2Gnaw1tzaPwKrQn
+	 cMyufAvmufDMwjxUq6Ed9Z9LLq/mnAy6t2Vvo/bKZANC2A17ZLd00/rieXz65awOqDnW1
+	 71WPuyCNtRFYF5wfk/40+PonU+PcdBDrSj004FD6SK3nPm4AnARg9k98rf1ns1yV2epgU
+	 EIWvoZQLZcKK2QZvOh/ud0YGrAqLwVxoaPR/EJi4dG+vSF03+qJzIqZs5N8Et8SKvOctf
+	 9jPe74RIFXShy2ih8IReW2Ko2nKx1MwPEeWLpmJFQO/Sp6ffMKc1+60Z8AzBSKm18nQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E5PJ485w;
-	arc=none smtp.remote-ip=95.215.58.246
-Received: from mta1.migadu.com (out-246.mta1.migadu.com [95.215.58.246])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=virtuozzo.com;
+	spf=pass smtp.mailfrom=virtuozzo.com;
+	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=nJUV7HiT;
+	arc=none smtp.remote-ip=130.117.225.111
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89C4606A324
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 13:44:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A89C4606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DA2606A334;
+	Thu, 19 Nov 2026 13:44:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14DA2606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E5PJ485w
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=GeacZfWtcOKsPTca8YX1CAhAl83TpLkh+Pna1MJGv8k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795095863; v=1; x=1795700663;
- b=E5PJ485wDF8oE5jTv1Rr41cNiZNzU0XeGUmmT39gnMH98TrS0u/0aV7yqDfFpLde4fRt0NCY
- H24T4j+VZEVaF2ChPgk2T6Sf32pqCmpYceCHvzudkrQnOtE/zlUg9/sZBSno3UVKPrreBqaGjUo
- 10Pj2RuMTOh+PV79Xh95P7uY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2b1b82f9378b37d8;
-	Thu, 19 Nov 2026 13:44:23 +0000
-X-Mizu-Trace-ID: 2b1b82f9378b37d8
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <0305b6b3-8292-4a4d-a473-dc26a39beca1@linux.dev>
-Date: Thu, 19 Nov 2026 14:44:18 +0100
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=nJUV7HiT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=Message-Id:Content-Type:MIME-Version:Subject:Date
+	:From; bh=Avwvbw5yVGFVbipl1tuQaWsH+u0bWEZomnuCQzaz/wM=; b=nJUV7HiTdclgnbZnBV+
+	xGN/fk00ik+jXN9tHPLxJfjZW66pMws079Bt37EGbYHTV5T+1BLAZbtosglwm6ghIog/SQaviMf8/
+	+ri0Zw71iVlBcEkSXcpU6cJdX3mWnJ16CXrIv+bsCE6DytUHWo0nNOJ5hHyCtSOVj5vi0ZvHCI1we
+	580ZgAq14CFZohYZw9Q/8BP7iXXehnCXkAipiYHtZgHEw7DXw7QM/EfKZ9mO9TE/5ZH5/OjO+b+Er
+	EWHkFhwPwdab50WF/GBK7KAU9UdLu+314KuxAnY/FzM/p6YR+jHL2vM/s0UUxXOeuh7ZYgpXzcUEi
+	wmqN1//9ZlaxGhg==;
+Received: from ch-demo-asa.virtuozzo.com ([130.117.225.8] helo=f0.sw.ru)
+	by relay.virtuozzo.com with esmtp (Exim 4.96)
+	(envelope-from <khorenko@virtuozzo.com>)
+	id 1xU2R5-00FBqZ-1q;
+	Thu, 19 Nov 2026 14:44:23 +0100
+From: Konstantin Khorenko <khorenko@virtuozzo.com>
+Date: Thu, 19 Nov 2026 14:44:02 +0100
+Subject: [PATCH v6 1/4] mm/rmap: duplicate a PMD mapping as one in
+ folio_dup_file_rmap_pmd()
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,224 +59,80 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 03/11] riscv: sse: mask events during shutdown and
- kexec
-To: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>, pjw@kernel.org,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
- himanshu.chauhan@oss.qualcomm.com, conor@kernel.org,
- anup.patel@oss.qualcomm.com
-Cc: cuiyunhui@bytedance.com, atish.patra@linux.dev, peterz@infradead.org,
- mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
- will@kernel.org, tglx@kernel.org, corbet@lwn.net, rdunlap@infradead.org,
- shuah@kernel.org, yuanzhu@bytedance.com, yang.susheng@zte.com.cn,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261119120824.13969-13-zhangzhanpeng.jasper@bytedance.com>
- <20261119120824.13969-16-zhangzhanpeng.jasper@bytedance.com>
-Content-Language: en-US
-From: Clement Leger <clement.leger@linux.dev>
-In-Reply-To: <20261119120824.13969-16-zhangzhanpeng.jasper@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-1-efa7817a2bb3@virtuozzo.com>
+References: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-0-efa7817a2bb3@virtuozzo.com>
+In-Reply-To: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-0-efa7817a2bb3@virtuozzo.com>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ "David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
+ Peter Xu <peterx@redhat.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org, 
+ =?utf-8?q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>, 
+ Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, 
+ linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, Konstantin Khorenko <khorenko@virtuozzo.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, stable@vger.kernel.org, 
+ "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1355;
+ i=khorenko@virtuozzo.com; h=from:subject:message-id;
+ bh=+iGJSVU2R69oAcxSbe2V0t1MH5H7H4D9RsN+PXcW2vM=;
+ b=owEBbQKS/ZANAwAKAVGWCkf5YVwqAcsmYgBq/v02Zu43V/DlG+vTb7VK4NcMAFw3SzTFPDVM+
+ +YbLiHc7l+JAjMEAAEKAB0WIQRWD23IPcXT0GO9CCxRlgpH+WFcKgUCav79NgAKCRBRlgpH+WFc
+ KhVUD/4pdhUvXjEatrjVm+jK1BFrSOHbw9X0CfsIn+VWgL6wUjy6J6Enx/FE0MRtjtxUuGSP+rv
+ LOu2pQQpRDBWsLf3rYPh4BaDE0/54hwlCxSOsShmzV/gd73uBUAms0Jtka4TPPqVhWjh52Z/1+2
+ E7gevPrBJBp9AryoT+Uvv6igC2cbUumpyGl2uOtwOiehl9mnYM5hfHDFbNpPUsc2oLHdak53x29
+ UlrTULEEPSZ89r1JWcyJvg4EoHRu5VpRSJLu+N4qrna6LP+7ZRuxUtE5LdvbSGvYaYwAc+iCOVN
+ ZOv8p8SnQbUh7d5Veo+KDj7BdmC4PzAdFaiGj/JoLmT+u2NvA0pSmd/4tPK3B/tVlHh+hbp7lbu
+ Dh2+uejGHvrz03qVU1Fu2XzqbbfDdkDVBSQq2XFOOwXrx1EFSPre+J+lHu6+QHO8MxxlLSAChCQ
+ 94YH9yJItBmMsKQsZM3kZIBkf3rychJwE5pqbSgu3twaI9TsYFliCL0rSdPAmpRvgwb+Tqnr9t3
+ Vy1u/gNh+uXXx3itSQhJP/3RLqQcjIiRO3r1x7uXWqXBhiVgrI5Ff/H90QJpH6DpW1qYwKCf5DL
+ r3FbC7ZmMGqI3wsw7OaKXZipJGYYBkEWj1SwNOTifZdBR2C3HwHqx/Fs4TTFGHUhP48Nj3qJfqT
+ Xzfd0OUXQe+z+dg==
+X-Developer-Key: i=khorenko@virtuozzo.com; a=openpgp;
+ fpr=560F6DC83DC5D3D063BD082C51960A47F9615C2A
 
+folio_dup_file_rmap_pmd() passes PGTABLE_LEVEL_PTE to
+__folio_dup_file_rmap() for HPAGE_PMD_NR pages, so it adds HPAGE_PMD_NR
+PTE mappings to the folio instead of one PMD mapping.
 
+The helper has no caller yet, the next patch adds the first one. Pass
+PGTABLE_LEVEL_PMD, as folio_try_dup_anon_rmap_pmd() does.
 
-On 11/19/26 13:08, Zhanpeng Zhang wrote:
-> SSE delivery is independent of normal S-mode interrupts. Firmware may also
-> retain an event registration until Linux explicitly unregisters it. A hart
-> must therefore stop accepting SSE events before Linux stops servicing the
-> registered handler.
-> 
-> Mask SSE on the local hart before panic stop, CPU stop, restart, poweroff,
-> and crash shutdown paths. This prevents firmware from entering Linux-owned
-> handler state after the corresponding CPU or kernel context is no longer
-> valid.
-> 
-> A crash kernel cannot identify or take ownership of registrations
-> inherited from the crashed kernel. Reject a later normal kexec while such
-> SSE state may still exist, rather than transferring unknown firmware state
-> to another kernel.
-> 
-> The restriction is deliberately based on firmware SSE availability, not
-> CONFIG_RISCV_SBI_SSE or registrations made by the crash kernel. Disabling
-> SSE in the crash kernel does not establish that registrations left by the
-> crashed kernel are absent. Consequently, normal kexec from a crash kernel
-> is also rejected when firmware advertises SSE but no registrations were
-> actually left behind. This conservative restriction remains until a safe
-> way to establish or clear inherited firmware state is available.
-> 
-> Link: https://lore.kernel.org/r/as7-3PbWDxygadnJ@hu-himchau-blr.qualcomm.com/
-> Reviewed-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
-> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-> ---
->   arch/riscv/kernel/machine_kexec.c | 11 +++++++++++
->   arch/riscv/kernel/reset.c         | 18 ++++++++++++++++++
->   arch/riscv/kernel/smp.c           | 17 +++++++++++++++++
->   3 files changed, 46 insertions(+)
-> 
-> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
-> index 738df176ff6f..24e7affae70b 100644
-> --- a/arch/riscv/kernel/machine_kexec.c
-> +++ b/arch/riscv/kernel/machine_kexec.c
-> @@ -14,10 +14,13 @@
->   #include <asm/set_memory.h>	/* For set_memory_x() */
->   #include <linux/compiler.h>	/* For unreachable() */
->   #include <linux/cpu.h>		/* For cpu_down() */
-> +#include <linux/crash_dump.h>
->   #include <linux/reboot.h>
->   #include <linux/interrupt.h>
->   #include <linux/irq.h>
->   
-> +#include <asm/sse.h>
-> +
->   /*
->    * machine_kexec_prepare - Initialize kexec
->    *
-> @@ -36,6 +39,13 @@ machine_kexec_prepare(struct kimage *image)
->   	unsigned int control_code_buffer_sz = 0;
->   	int i = 0;
->   
-> +	/* A crash kernel cannot tear down registrations inherited from firmware. */
-> +	if (is_kdump_kernel() && image->type != KEXEC_TYPE_CRASH &&
-> +	    riscv_sse_available()) {
-> +		pr_err("Normal kexec from a crash kernel is unsupported with SSE\n");
-> +		return -EOPNOTSUPP;
-> +	}
- > +>   	/* Find the Flattened Device Tree and save its physical address */
->   	for (i = 0; i < image->nr_segments; i++) {
->   		if (image->segment[i].memsz <= sizeof(fdt))
-> @@ -127,6 +137,7 @@ void
->   machine_crash_shutdown(struct pt_regs *regs)
->   {
->   	local_irq_disable();
-> +	riscv_sse_mask_current_hart();
->   
->   	/* shutdown non-crashing cpus */
->   	crash_smp_send_stop();
-> diff --git a/arch/riscv/kernel/reset.c b/arch/riscv/kernel/reset.c
-> index 14eb08a6db85..fdab37e7ae52 100644
-> --- a/arch/riscv/kernel/reset.c
-> +++ b/arch/riscv/kernel/reset.c
-> @@ -6,6 +6,20 @@
->   #include <linux/efi.h>
->   #include <linux/reboot.h>
->   #include <linux/pm.h>
-> +#include <linux/smp.h>
-> +
-> +#include <asm/sse.h>
-> +
-> +#ifndef CONFIG_SMP
-> +void __noreturn panic_smp_self_stop(void)
-> +{
-> +	riscv_sse_mask_current_hart();
-> +	local_irq_disable();
-> +
-> +	for (;;)
-> +		cpu_relax();
-> +}
-> +#endif
->   
->   static void __noreturn default_power_off(void)
->   {
-> @@ -18,6 +32,8 @@ EXPORT_SYMBOL(pm_power_off);
->   
->   void machine_restart(char *cmd)
->   {
-> +	riscv_sse_mask_current_hart();
-> +
->   	/*
->   	 * UpdateCapsule() depends on the system being reset via ResetSystem().
->   	 */
-> @@ -30,12 +46,14 @@ void machine_restart(char *cmd)
->   
->   void machine_halt(void)
->   {
-> +	riscv_sse_mask_current_hart();
->   	do_kernel_power_off();
->   	default_power_off();
->   }
->   
->   void machine_power_off(void)
->   {
-> +	riscv_sse_mask_current_hart();
->   	do_kernel_power_off();
->   	default_power_off();
->   }
+Fixes: d8ef5e311d7b ("mm/rmap: convert page_dup_file_rmap() to folio_dup_file_rmap_[pte|ptes|pmd]()")
+Cc: stable@vger.kernel.org
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
+Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+---
+ include/linux/rmap.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index 52fff8dc74213..9f5bfa317a5cf 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -558,7 +558,7 @@ static inline void folio_dup_file_rmap_pmd(struct folio *folio,
+ 		struct page *page, struct vm_area_struct *dst_vma)
+ {
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	__folio_dup_file_rmap(folio, page, HPAGE_PMD_NR, dst_vma, PGTABLE_LEVEL_PTE);
++	__folio_dup_file_rmap(folio, page, HPAGE_PMD_NR, dst_vma, PGTABLE_LEVEL_PMD);
+ #else
+ 	WARN_ON_ONCE(true);
+ #endif
 
-Hi Zhanpeng,
-
-Can you please factor that out in a single function ? both functions are 
-doing the exact same thing.
-
-Thanks,
-
-Clément
-
-> diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-> index 07027cfeba4b..5b05243e1deb 100644
-> --- a/arch/riscv/kernel/smp.c
-> +++ b/arch/riscv/kernel/smp.c
-> @@ -22,10 +22,13 @@
->   #include <linux/irq.h>
->   #include <linux/irq_work.h>
->   #include <linux/nmi.h>
-> +#include <linux/panic.h>
->   
->   #include <asm/tlbflush.h>
->   #include <asm/cacheflush.h>
->   #include <asm/cpu_ops.h>
-> +#include <asm/sbi.h>
-> +#include <asm/sse.h>
->   
->   static const char * const ipi_names[] = {
->   	[IPI_RESCHEDULE]	= "Rescheduling interrupts",
-> @@ -66,8 +69,18 @@ int riscv_hartid_to_cpuid(unsigned long hartid)
->   	return -ENOENT;
->   }
->   
-> +void __noreturn panic_smp_self_stop(void)
-> +{
-> +	riscv_sse_mask_current_hart();
-> +	local_irq_disable();
-> +
-> +	for (;;)
-> +		cpu_relax();
-> +}
-> +
->   static void ipi_stop(void)
->   {
-> +	riscv_sse_mask_current_hart();
->   	set_cpu_online(smp_processor_id(), false);
->   	while (1)
->   		wait_for_interrupt();
-> @@ -78,6 +91,7 @@ static atomic_t waiting_for_crash_ipi = ATOMIC_INIT(0);
->   
->   static inline void ipi_cpu_crash_stop(unsigned int cpu, struct pt_regs *regs)
->   {
-> +	riscv_sse_mask_current_hart();
->   	crash_save_cpu(regs, cpu);
->   
->   	atomic_dec(&waiting_for_crash_ipi);
-> @@ -241,6 +255,8 @@ void smp_send_stop(void)
->   {
->   	unsigned long timeout;
->   
-> +	riscv_sse_mask_current_hart();
-> +
->   	if (num_online_cpus() > 1) {
->   		cpumask_t mask;
->   
-> @@ -288,6 +304,7 @@ void crash_smp_send_stop(void)
->   		return;
->   
->   	cpus_stopped = 1;
-> +	riscv_sse_mask_current_hart();
->   
->   	/*
->   	 * If this cpu is the only one alive at this point in time, online or
+-- 
+2.43.0
 
