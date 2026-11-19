@@ -1,86 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795047919;
-	b=ayfjWjtL87vVGbn2XKjwSlTs8Bi1ee3LKC/5LHfbAtZ1nx+IVAjF9GmbH5UCCM3AAG1h
-	 wPyiR5qgVddTuXrIEMxdOyy/c0IIYJh/C61tLYq6jXDKwGhironoW5sboYiKxmS1zh88s
-	 Sy8K/dPRXb2IqNwIakor3JGP+57wl9IeaX4NOyh6PSThDBRcNgYKUvyH8REU7kwWknTq6
-	 p5QDucYMs/zSE4DCegERXGzmogF2eICnb33/9m8KnNNm2cdanQsUEgNF2M3ZWPJilU8nC
-	 R254MnSM7GVqkQhT4baJbrS+b4QP4s26VgHxoFTSdCBzC9OHEdU9GfOR//flmN6cb2A==
+	t=1795047946;
+	b=UhjtJbF/u/ER5/e204niJsBN0YnHtpcxnGYvPus7TA9s2IyXqT0Knay6ITehkSUQiKBO
+	 aDs0Feqt4bqAzfPdTK3o6cNA85YFMy3G8f8O6+CD+DRq4pFnyV1/tYCqRkbZ4pO/1lu4O
+	 MPyiKbnCYhdDbudT5B1P6IZr/ohHO9dRc+UJ9KCFwfb1C48ds6S9Y3zUHnqj0HjhpWy9z
+	 zJOAKk6pvNktOp+dKn2/f7B8SRSQi3UFgHtWsTJPfwZIcfvO1Mn6JfbQI+MxXBDWJ27Ba
+	 aMnkBeKG6H2clKhfmBjtYyQYakE2lrexutrEva6pYQu+kYgmbQJQzUNQPGjj4IWPnxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795047919;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795047946;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:Autocrypt:In-Reply-To:Content-Type;
-	bh=rSVsA9fNi7kC5K1IDfWWLOQdUEB3auXl+KZsJESSywY=;
-	b=Lmgp55ku0RMvcFFqwRWPAkSfFLbgvAysBlFxlU8BxTxBO/K/jvwhlY89LS524LSUvuV4
-	 1Ff35daJU/fOFvozJiLMDTLP/6KR1xhQupT+jCun2ifP4OkFp/DKGGEDnbNwaRMAmhbSo
-	 2EqiF87Tyq5uN2RLdkbhM8QFvj/hinUpIeDinJtmwThglozdz/w4wB6OYhFIFtCIYIqkW
-	 jbo3KGTqA2jhO+B0RvBbbDxNAjjpeXdcpmPP1G5r6IqZiRmS8TOYKKEx29zg5Vyf8DrRT
-	 w8QRmzPilJguc6Aqlzlkz7vRw7ZS5d5uwno2+qHoJbKWUoDTzKURbRnksK82nTSZSlg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=yb3RT/dSHycHHUvHrQYfX0MzmZ7Zlc0xT6PVwRVG2IA=;
+	b=5JesdBrnkuRvHDUiBqcsKHAZG8PMt8Xt8mLKUriCSl0WUnIKYBrQ9Be3FW67jlPI5Cnx
+	 HIBgiudaxUIfFBVoKZQ0wp219Yx8xnbwHW7wkTfVmSIECTgJOXC7+pIBi9lk25h3FbAVH
+	 nA3EriRJwXUTUwfdK7eehj7Zg9yX5JeM5Utis8BDQIYJ/wjv3+DG9+f/qcnQ7hF99xCU4
+	 MKk4Qv9KNsKbiUmdDz/A4357yVnVLxinDqMf+S4XTdnLrr4LeqSBmh2wdVNlQ6r1Yalym
+	 ElocfN6C1PijC4WkaCNGCvy42wHY4LD76I2ae+HD9tOeqXf073uUTyYok0An8GXV9cg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kTRSxFrz;
-	arc=none smtp.remote-ip=209.85.128.172
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VUzzRT1P;
+	arc=none smtp.remote-ip=209.85.167.200
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E757606A320
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 00:25:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E757606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249A1606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 00:25:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 249A1606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kTRSxFrz
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-8b4d5e645d1so12671757b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:25:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VUzzRT1P
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-5384e381fbbso1236897b6e.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 16:25:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795047918; x=1795652718; darn=vger.kernel.org;
-        h=content-type:in-reply-to:autocrypt:from:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=rSVsA9fNi7kC5K1IDfWWLOQdUEB3auXl+KZsJESSywY=;
-        b=kTRSxFrzbN0FDlgSnZkJwWcbWwHZ0vb2npoGAm1/BDzidEWasZv/iK2G2pd+2myyji
-         0cjtG+XeQK5e80U2/+uE/4LC2P2jb9EcDWVNmYrLBmibNzqwQ0U13+qHBZED4gQHLAQv
-         XcGDCWjz9eAgZn62G4LZszeFScSc2QlNwetVv7S2Ew3niOuzfQK0SCf7ppajtAhX9OAN
-         todKqEko+BO3PtYHKNZBklmjypBQsWIk1bN3qcgHHdzoEG/rFN4CW5WFTC0S+CayjmJg
-         KlaGLeOgXD67IKwiw4jkXWz3otsZzFaDerPDxqvyvTozr3LT53fLiNxpfFtjcMWKUgZD
-         kilg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795047918; x=1795652718;
-        h=content-type:in-reply-to:autocrypt:from:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1795047944; x=1795652744; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rSVsA9fNi7kC5K1IDfWWLOQdUEB3auXl+KZsJESSywY=;
-        b=gg0d2Obsg7Q04g7iUOgAcxhWIHHu64JfW9zDadDD9fvFgJKg7EE6KkcgmiVsT4jwmx
-         /G58pCerMv3gUnnlDd+f9zjaX4+echzdI0vUrfKHXeulR1H4+1PFHge94YSy6qVAqpsV
-         baCxzdu8ywn9SIabEWuH/daIel4T/fZ0P2jpTfUrp2fRIwYVYCZMw45j/BUjLN4CnTV9
-         jnPLRwvu9ounT+x8ka28zYJbQTiCQgUU/r89pUYtpU+ZBaEowf0fm8Tlq0ULXUy+xaD7
-         ynJKeMwd/AS+wqsG4FmRrSrmsaDvrt8xT9tW2d0L7PH0T0qPKVX4umf+wKC4v2IMsprH
-         l8rw==
-X-Forwarded-Encrypted: i=1; AL+hErEUimpkhIVREuRYXXANg9PZ87GzFUn+beVKUwK/oVNYC29gcOrwoV7OAi4SVPqT+rl3MCWZBKGpai0OdOevQf0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z81b06QbrZG1CD28N30d/8jGDuM5PrNFhPM1/ueAGSamjvn4qGa
-	K1fu5NKysq8d47AOQp7OkVIL5NBItRFFc2I/kmL/v/OlIEOyJB5vhoRT
-X-Gm-Gg: AZFdTZeoBdmaB+k+vFbspkSybuDXHrxP3LiUpv3CHZRzjD+cwhSYpQnrHkrHa/xdhna
-	jqeDl4Z06EgKSy5Uzntrfpn4oTLGjiE0VNrybjvd2D9e9mKdLOtNBCfT4dTDgmpojGTNxw46ird
-	uSYuitNKbFBjzqr38+2P2tuDSDU2bCDEdMFcX5DUbfCzFmx1veOJv9pGigWf1PcDDhHq9npEPWg
-	Tm85dLDLpY73zdh/up8YbymLHZ3GYuxu4DfcavfplSMRG21JgxMl0OmM2YxBCHL07EfMg2oxqFR
-	Ne+GA9czFEJRJYpZj8II6QtneuVY12kcpx239VG0Vb1jPzqin2hSmkbVvz3oPDF3vXSvGFGB2w9
-	0H+ytsG01CoIEPPkf1C14YDRHIfI861KY6aVJFSyWWsKkduzv+oJ3TVpUwGWycKUQ6oS+reK9WG
-	IvvnqyQsgRw0UeMRKn7ih5FvR6Sb/rJxlOSe4QVVcMAqq+MzvvZxZbc1Hb01DnqRQCaD/ai41hP
-	21sX1BBRncDcXHfgHz1zrLWIKryTiGEa17rKloi0lTHoNjZZB53AIQjezdfuJlXOevAUSWYqJrI
-	LSNX2Y8DzusXLqH+YFx+N52dpwxCYGMFQeM=
-X-Received: by 2002:a05:690c:79a:b0:8b4:f2bc:7c39 with SMTP id 00721157ae682-8b4fecfc697mr13290147b3.15.1795047918306;
-        Wed, 18 Nov 2026 16:25:18 -0800 (PST)
-Received: from [10.138.10.6] ([149.102.242.31])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4fdf1d0desm25414957b3.1.2026.11.18.16.25.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Nov 2026 16:25:17 -0800 (PST)
-Message-ID: <75946579-8335-4491-86da-fcda25ae9fd8@gmail.com>
-Date: Wed, 18 Nov 2026 19:25:09 -0500
+        bh=yb3RT/dSHycHHUvHrQYfX0MzmZ7Zlc0xT6PVwRVG2IA=;
+        b=VUzzRT1PmPN3kH/c5HD5qxg23YbKceVpVl7CPJfi+KdLeS+giLCoHmbo8TeKtLKScO
+         4M+h/q27Mc1BJm+qXrZzLChZ7Jay16UY0fuOIPg0LSSY01/l6RPxGRyiO5Cf022TUr4f
+         NqNygd6qVz76Q1ennc949Z/jfRVOM+uQc4kDStu6gb1KA1ibwjKEf5D6Xr9kxDP9hqM+
+         84jm9VV38N9kQ5om6sreRHX4BiEQfYGGyUW8pxu/mj57il7NS2aTWOHjJo9YIv4yLiLi
+         8ruKnViQKijKVdHUpz2Wp/g7k5CYbNIwKI93rKmrhMayqMFvwaNsAnxv9xRwBunbZQFZ
+         aNEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795047944; x=1795652744;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=yb3RT/dSHycHHUvHrQYfX0MzmZ7Zlc0xT6PVwRVG2IA=;
+        b=UUkBYPMd4LmLSxxJzTn5H1SoBpcE31jGlpxjfaYa58jxL7HUepfWC49CXhyXdAW2Vj
+         XhMNuITV+0LnXtUJu/IlnpT0fmqDqUpkt1qTQeGbCfy9Wagt52gYngyhh9xTQGXccbaY
+         +jxaAV1MFdoxsGsPsLTCxF1zaacIP1UJKcrnP23sYJl2WAzxkxdSD61fX0TrE4PzmdBR
+         ZAsd7Sg7ts8vIonEi0sZ7DRVY62UwM1sP4QS3cxE162X+6Cy6ZG+k2bhsUNytcjRptw3
+         7euNAqwSpczdu33roUkFZL8wIk7TQld7FwQ1OJE8c8tHP7xhlGT65oGmgNyPMKEhSX8/
+         24OQ==
+X-Forwarded-Encrypted: i=1; AL+hErG0rgARVTDM0opByPS+jIxdKUHC/FWpozK0jr2o4T3BaurxD4BuqvjruX+QX+LnTla7a8fCLe7IVvJisTqvV7U=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+91zJESE3B9Pyp4JWmmsTHorz8Sa8Pz47hBQkIWlcUQG7hBzRH
+	XTlVGP3MpAGDibFMUpWGaSCPQn4kBYGAyr95wRC9Mi33fcv2jXXD1IfPRr9Y7gtYNPx3Mv/LGyz
+	jcCDXaw==
+X-Received: from ioru16.prod.google.com ([2002:a5d:83d0:0:b0:9e2:9e82:a2e1])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:250c:b0:53a:8c5:d7de
+ with SMTP id 5614622812f47-5773db2428bmr4568078b6e.1.1795047943693; Wed, 18
+ Nov 2026 16:25:43 -0800 (PST)
+Date: Wed, 18 Nov 2026 16:25:42 -0800
+In-Reply-To: <CA+EHjTzUrDxLSMEo6X66XhKtQ-=ew3zZhMdFWR6U9Ga17WLWkw@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,221 +77,70 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 9/9] KEYS: keycrypt: Add the aes256-gcm-stream
- algorithm
-To: Rodolfo Giometti <giometti@enneenne.com>,
- David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>,
- keyrings@vger.kernel.org
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, Jens Wiklander <jenswi@kernel.org>,
- Sumit Garg <sumit.garg@kernel.org>, op-tee@lists.trustedfirmware.org,
- =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
- Pankaj Gupta <pankaj.gupta@nxp.com>, Sahil Malhotra
- <sahil.malhotra@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
- Richard Weinberger <richard@nod.at>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20261118140421.584086-1-giometti@enneenne.com>
- <20261118141257.627441-1-giometti@enneenne.com>
-Content-Language: en-US
-From: Demi Marie Obenour <demiobenour@gmail.com>
-Autocrypt: addr=demiobenour@gmail.com; keydata=
- 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
- +MYSfkEjBz0E8CLOcAw7JIwAaeBT
-In-Reply-To: <20261118141257.627441-1-giometti@enneenne.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FHGxV8cRNdUiD6U0H5BD0N5M"
+Mime-Version: 1.0
+References: <20261117074428.7544-1-fuad.tabba@linux.dev> <20261117074428.7544-2-fuad.tabba@linux.dev>
+ <avxfgWNePsGPK9mm@gremlin> <CA+EHjTzUrDxLSMEo6X66XhKtQ-=ew3zZhMdFWR6U9Ga17WLWkw@mail.gmail.com>
+Message-ID: <av5CBjbeidUUWiLq@seanjc-mac.roam.internal>
+Subject: Re: [PATCH v2 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's
+ dirty ring is full
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FHGxV8cRNdUiD6U0H5BD0N5M
-Content-Type: multipart/mixed; boundary="------------5YUoLTrRSVm1eElT0Sq1GVMR";
- protected-headers="v1"; hp="clear"
-Message-ID: <75946579-8335-4491-86da-fcda25ae9fd8@gmail.com>
-Date: Wed, 18 Nov 2026 19:25:09 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 9/9] KEYS: keycrypt: Add the aes256-gcm-stream
- algorithm
-To: Rodolfo Giometti <giometti@enneenne.com>,
- David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>,
- keyrings@vger.kernel.org
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, Jens Wiklander <jenswi@kernel.org>,
- Sumit Garg <sumit.garg@kernel.org>, op-tee@lists.trustedfirmware.org,
- =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
- Pankaj Gupta <pankaj.gupta@nxp.com>, Sahil Malhotra
- <sahil.malhotra@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
- Richard Weinberger <richard@nod.at>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20261118140421.584086-1-giometti@enneenne.com>
- <20261118141257.627441-1-giometti@enneenne.com>
-Content-Language: en-US
-From: Demi Marie Obenour <demiobenour@gmail.com>
-Autocrypt: addr=demiobenour@gmail.com; keydata=
- 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
- +MYSfkEjBz0E8CLOcAw7JIwAaeBT
-In-Reply-To: <20261118141257.627441-1-giometti@enneenne.com>
+On Tue, Nov 17, 2026, Fuad Tabba wrote:
+> > But the overflow bug only applies to x86 (see below), so is this something
+> > we should worry about at all?
+> 
+> The ring overflows on arm64 too (below). As for exit_reason, I asked
+> Sean about the arm64 MMIO case on v1, and his answer was that a VMM
+> that pre-faults between a KVM_EXIT_MMIO return and the next KVM_RUN
+> "gets to deal with the fallout" [1]. I think the same goes for riscv's
+> exits.
+> 
+> [...]
+> > > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> [...]
+> > >  The dirty ring can get full.  When it happens, the KVM_RUN of the
+> > > -vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL.
+> > > +vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL, and
+> > > +KVM_PRE_FAULT_MEMORY on the vcpu will process no more pages until the
+> > > +ring has been harvested and reset.
+> >
+> > Maybe worth mentioning the exit_reason thing if we keep this arch-generic?
+> 
+> Sure, I'll document that userspace should complete a pending exit with
+> KVM_RUN before it pre-faults on that vCPU.
 
---------------5YUoLTrRSVm1eElT0Sq1GVMR
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+If we're going to do a documentation update, I vote to keep it vague and scary,
+otherwise readers might think the exception proves the rule.  I.e. if we say
+that KVM_PRE_FAULT_MEMORY isn't supported, then userspace might think all other
+ioctls are safe, which is most definitely not the case.  E.g. something like
 
-On 11/18/26 9:12 AM, Rodolfo Giometti wrote:
-> This patch is a proposal on its own: nothing before it needs it, so it
-> can be discussed, or left out, apart from the rest.
->=20
-> aes256-cbc does not authenticate what it decrypts, and a file or a
-> transfer longer than one call cannot be sealed with a single AES-GCM
-> invocation without buffering all of it, nor decrypted without
-> releasing plaintext before its tag is checked.
->=20
-> Add aes256-gcm-stream: the STREAM construction (Hoang, Reyhanitabar,
-> Rogaway, Vizar) over AES-256-GCM. A message is split into segments
-> of up to 64 KiB, each sealed with its own tag under a subkey derived
-> with HKDF-SHA256 from the key and a 16-byte salt drawn at
-> KEYCTL_CRYPT_OPEN; the nonce carries the segment's position and a
-> last-segment flag, and the counter lives in the kernel, so segments
-> can be neither reordered nor dropped from the end unnoticed. The
-> segments go through a new ioctl, KEYCRYPT_IOC_SEGMENT, and
-> KEYCRYPT_IOC_FINAL reports a stream whose last segment never came.
-> A tee or hsm backend draws the salt and keeps the counter in its
-> secure side; the sw and optee backends implement it.
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index e95c9cda085d..45dc1e3c0b03 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6971,10 +6971,13 @@ to the byte array.
 
-Please use Cobblestone-128 or Cobblestone-256 instead.
-https://c2sp.org/chunked-encryption has the spec, and you can check
-against the implementation in pyca/cryptography or (for Cobblestone-128)
-the Go package filippo.io/cobblestone.  This assumes your CPU has AES
-and GCM instructions; if not, you should see about using one that does
-or work with a cryptographer to standardize an alternative that doesn't
-need them.
+       The pending state of the operation is not preserved in state which is
+       visible to userspace, thus userspace should ensure that the operation is
+-      completed before performing a live migration.  Userspace can re-enter the
+-      guest with an unmasked signal pending or with the immediate_exit field set
+-      to complete pending operations without allowing any further instructions
+-      to be executed.
++      completed before performing a live migration.  In general, userspace should
++      exercise extreme caution when invoking ioctls other than KVM_RUN prior to
++      completing the original operation.
++
++      Userspace can re-enter the guest with an unmasked signal pending or with
++      the immediate_exit field set to complete pending operations without
++      allowing any further instructions to be executed.
 
-Nonstandard constructions like this one are to be avoided.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-
---------------5YUoLTrRSVm1eElT0Sq1GVMR--
-
---------------FHGxV8cRNdUiD6U0H5BD0N5M
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEopQtqVJW1aeuo9/sszaHOrMp8lMFAmr+QeYACgkQszaHOrMp
-8lMKphAApmT7NKojxfNUv+4YED5wbkVa7lnarDk0nyp9M3Bt5hNIRlezPRWwnuNQ
-c3Fse2TSfDpwTAaL/pZ9bVoUW3FkLcIwnAAIe35/78qpOemxEF5XRd4CQ9OGoQkm
-MW429KUVHFxKjlSPCVrMIzW5PwLLvQVO/84lxA3BYJ503yK13kkEC2ja/5bOr2pq
-cNzlB0rvirBXLKv2LH9gyIWC3rvLI29QGgGdFocZwnV/EbsWXC+1cNqLGePQ4JW/
-X2W4CMomO+RvLWY+tfh/W+5hnUzxfaxn1oyCQbdEa+5KzWc+6oaPK9MU6x94SEhC
-qkvoS60vMTP46Q4AQT+zB918F09KoN5Gwb6kWkjYVdfoJhsq1JIToOMT4uWhxwJa
-zK5vgEPBWgvLDy5nRHf3l36sS0D8KibzPXtsQfxLrmH88Q8i8VHbMbHeuqQ3hfmi
-/7v8eSCrt2NDafwt1mKKM1s3ZhegKN+R8bDXcK9Ys9fQnVMptIcR/tlkBBf6NWes
-mdSBLNJSBR6q4Hm+kSz3+j8ah7qhuPVI9FIyKt9Lb60hrI8sHdotye0p5+Ne0iH6
-rUKkFHWYEv10C/ku2PdPBgLIc5qfhf/MPSbqH5vAcyc19JIg9xneQVTxoaFK8QD8
-aN6GKY3u02GADQHUdEuu26cEaKIBdN1yhWrjlPTIclUizw7Wppg=
-=ionq
------END PGP SIGNATURE-----
-
---------------FHGxV8cRNdUiD6U0H5BD0N5M--
+ ::
