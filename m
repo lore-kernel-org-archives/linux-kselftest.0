@@ -1,85 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795109251;
-	b=5n9OiFeH2q6gEpeHsxb8GVJHMh8DR6p6nDlwif3r1RCIHzxBMdA92WvCqeJCzneb3MmZ
-	 WbJ6iIvEbGfhRyvfW/2hUOwEt/ow6LOz1CrezdGZx1jZvM8ICxbJGkJuf2sWCf+2HX+P8
-	 guYmAIUZb056ctdVuFqjKNlJZ66B+UBBF2nbP4LNO9Q57jfgb0kOAaEyyBtNRvWM7/PIs
-	 zjYxHER+vWGPJ2uuI76tyVrLaS6X2RQYrIosorWvMwHAOW9Oc1oAPOno4g0zRvg8w8uuN
-	 NNWV4UH0ui2RXiVt/z5cPQMJSOCNwsfd8Y5siBCM5aNGMb85A5oxSzaIdlsUwPKvcYw==
+	t=1795110147;
+	b=gCJVEGuGDrmUb4pm1QnZHReprCQ63rFYoehK9bYX4Ok+mNnQCJJlxozNG3RCBw/snYE/
+	 /3+5TP3BUE/SOAyeVrI6gf8eIkwyS36xpkK1PxgQgvIrF2wa+/JB3ex/R9D9277GYZBEt
+	 wmdOPUTF3FhPEu8Qh8mK8LNTzsOGJOO2lsxjsfeESNT8am0OnGJfnsEA7TUvakFP1d0Nl
+	 XRaEszTeF6Ib6kcnoSXNlP51w6qjydEi3w30e5qsyoneppzWXCnBvPlMNAvwLn3eWoM4w
+	 EyD18JRWvy1dnH2XviCIfqQG14GfdjjqR8apCog89Sl7HQ/BUjk8pBjQq5CgxQDhcTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795109251;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=X4SOofTg3P4HcDJklRTSxQB79GV9lxE4EdfhoGf5GQY=;
-	b=g7HOS61qFOGfHb1SfNLnQDuf10w5QNrP49u1u90AiaZj8rzI5iO8cOrhFhVnD5HOgP0l
-	 FtHAjyxWGuhuWvHw09CrliKyl1LPpyUDH+qTWnZXM6pg4TeeNGQ8ZZeRPiskI2IQsbPqs
-	 KeY9lb18zjdqzGF7FScJFqtqguTxmUHyOiqUmJXRF6/RmTuvcqOXVSIoUWkent0ZB4jlD
-	 qadcQIjzPg0/Se4qYAlybhAztdh8d2vkg9B/+Vz68eUaTojZ6tab8g4jTtnJ95PIa5OOJ
-	 jhjya3Otw7I/GWOgd9An2gxFeJHBrwiImUCHOz8TS8+JuzQTQwAOKqK1EMJDMXfgljQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795110147;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
+	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version;
+	bh=G2BOqqjoP0pazrgA6aUayConw0OIxAUKTfBLvDGlW30=;
+	b=DoLF8B6FTOtwio8iaVcmXg7vltL31ABPb79WgyhpdbMTY93rmuRE2kWis2apyLusCayh
+	 ivYmVBSOzvgGo3mv0xU9LK9K3Z2aHZQvdTZpkySH5C2Iz7KqfXUeYsA7M226fENcb9FM/
+	 WYxz/ilgmjjPC3iI+3LMqcdERegQ6YNEHfs+w3xCr+sMNCJ1gg4YtMB0pLVsGxwNVb/XH
+	 7P0dLazBW+/wKzRaky9qbhlncE51/VxAO6YUYJabsUu+WaZ6l8gLioKVQm2e5icLmlpUj
+	 +o1uuUx8GFoeV0rlo8OHsnHx7s5x6Odg7lRY+EW0tDv37D6IW4n3zSIAqxeD+bmhXeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kFWwkfGA;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F56606A320;
-	Thu, 19 Nov 2026 17:27:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48F56606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=f67K80ZS;
+	arc=none smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750E4606A325;
+	Thu, 19 Nov 2026 17:42:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 750E4606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kFWwkfGA
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97BE41575;
-	Thu, 19 Nov 2026 09:27:26 -0800 (PST)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F067F3F673;
-	Thu, 19 Nov 2026 09:27:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795109249; bh=CdtwkWATegHb2n3avpl2PIBYTzMIZ4bsivwu55aszPw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kFWwkfGAVALkjXiZ22vYEsGpOYDbKAuqy+j98LGY/CRXZyLKQjo5idlx3UsOglAdR
-	 9Iic99UDpCmtD23qKvRVI+M5b5N2ZDDXBFuyd52Cxy7BXkVQZOIRahG7w8oFifVtKw
-	 s/IPattHzOPqwEERG59dBvf3c9gmzg25xwKVUSPA=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 06/15] KVM: arm64: Add support for FEAT_HDBSS
-Date: Thu, 19 Nov 2026 17:27:10 +0000
-Message-ID: <av8xblyy3GzgbNwf@LeoBrasDK>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <ceb91298-3d05-486e-a900-1291963dde24@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-7-zhengtian10@huawei.com> <at-X_hFbsBU_Dsgr@LeoBrasDK> <a301e884-f6d1-4082-8551-8d8a17276dc3@huawei.com> <auSml6yTVYIQe7NZ@LeoBrasDK> <ceb91298-3d05-486e-a900-1291963dde24@huawei.com>
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=f67K80ZS
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJF8ilo3223786;
+	Thu, 19 Nov 2026 09:42:06 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=G2BOqqjoP0p
+	azrgA6aUayConw0OIxAUKTfBLvDGlW30=; b=f67K80ZSKWqYAuowzLy9IVSzeoZ
+	Jhqpfjn7ERXrdfOGJtkZRJhqKb41AqVF0IukKEp4ZJWCAu/EMJpKJThcRR0j7p41
+	A0BYLgXK8jU8/BGuEZIzrWUQZNvT6OZckOevsR2QS0dJpb+O0CaSdMmJuNxljZwK
+	ZKiMMRV+SPUwiFWmJfRSkW3Hofcvus3oFPCZP0TAooTbYQw61pvul4wDahUio/0Q
+	+dUkR67nKYDctfo82jJfAH7fI+v7+VLhPHErPhhklqOhuLdDL/Szlu96h5uzocRD
+	DHmLsTQzZxj1CKqeU3g5W8i0t3+mbbdZH+6BnsTKoRtF7uCtY8C59wPa7Dw==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j20a530um-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 19 Nov 2026 09:42:06 -0800 (PST)
+Received: from localhost (2620:10d:c085:108::150d) by mail.thefacebook.com
+ (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 19 Nov
+ 2026 17:42:05 +0000
+Date: Thu, 19 Nov 2026 09:42:04 -0800
+From: Bobby Eshleman <bobbyeshleman@meta.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman
+	<horms@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan
+	<skhan@linuxfoundation.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael
+ S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowangio@gmail.com>,
+        Xuan Zhuo
+	<xuanzhuo@linux.alibaba.com>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?=
+	<eperezma@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Randy Dunlap
+	<rdunlap@infradead.org>,
+        Donald Hunter <donald.hunter@gmail.com>,
+        "Eric
+ Dumazet" <edumazet@kernel.org>,
+        George Zhang <georgezhang@vmware.com>,
+        "Andy
+ King" <acking@vmware.com>, Dmitry Torokhov <dtor@vmware.com>,
+        <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <sargun@sargun.me>, <jlinbox@meta.com>
+Subject: Re: [PATCH net-next v7 0/7] vsock: assign the guest vsock device to
+ a network namespace
+Message-ID: <av807G4qhzToOIMT@devvm29614.prn0.facebook.com>
+References: <20261117-vsock-guest-ns-v7-0-7e522ea9dd9b@meta.com>
+ <20261118182846.4ab756d1@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,116 +101,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261118182846.4ab756d1@kernel.org>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDA3MCBTYWx0ZWRfXyidvreKQk6wK
+ LlsF+SzTNY4ng9p5UNHi4tKeuhAuveilzAk/9KDdvz7cb/zyJffKxNKgHO+q8eFIyJZNfroiBIt
+ UlydNSUgnv+PcWKUhxFYJK8Tv4ycfpX7TqNh29IAyJ5JuoZvObkdT3mhZ79LR8dctDOmKhBrzdo
+ EiZuyCeCrOaL2GpTLBLBo2i1VID9Hw1Xu9QUxt04sc617I6tGq9oGcxYUYlR4VMVLBvnOrrHeAt
+ SkES8ZFl0wxhH96yl7klR7d6Wknofcd/ak5GkGU87mbXc1EtJ0VxEGuOLKT4gsSN1wWFfuaD86I
+ cf4HdvpcUTFzuPK/bxpG2miO6NjG3x2VEdVTKfb7a7YFcjfa3uTC4XKsW0MAPytKwVXwK6WmCFt
+ IPaGqZ0LQJv8W8b+KkSW54RiiFyxfPiVmTt/9G3uIYCpxWTUrrn4HlJTXbVtW5Z1Cv9+y8LYmGM
+ d0nXoppYzMXNES4U3XA==
+X-Authority-Analysis: v=2.4 cv=KrHYSmWN c=1 sm=1 tr=0 ts=6aff34ee cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=03ozwUkBphtHgyqjj1sw:22 a=VwQbUJbxAAAA:8
+ a=VabnemYjAAAA:8 a=dqsvmvxRPFBq9XHrJFsA:9 a=CjuIK1q_8ugA:10
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: HdmLTcJAmAU3n8_qiw1GLnU6knj5_445
+X-Proofpoint-GUID: HdmLTcJAmAU3n8_qiw1GLnU6knj5_445
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDA3MCBTYWx0ZWRfX5I3YUg6f0mmJ
+ ubh0ZySQpuSIiBufNJibvmMRLApct+aSRPOkI6tUzQfGpUUvPXeQc3o0S7aX7rrK+1rxydIxf+q
+ POEezORn5yAZnVmVQ15OF1eKcAvAaRo=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-19_04,2026-11-19_01,2025-10-01_01
 
-On Thu, Nov 19, 2026 at 03:52:37PM +0800, Tian Zheng wrote:
+On Wed, Nov 18, 2026 at 06:28:46PM -0800, Jakub Kicinski wrote:
+> On Tue, 17 Nov 2026 17:54:43 -0800 Bobby Eshleman wrote:
+> > vsock network namespaces let a host put each VM in a namespace of its
+> > own. A guest has no equivalent yet. It has a single G2H device that
+> > cannot be assigned to a network namespace.
 > 
-> 
-> On 10/30/2026 10:15 PM, Leonardo Bras wrote:
-> > On Fri, Oct 30, 2026 at 10:53:57AM +0800, Tian Zheng wrote:
-> > > 
-> > > 
-> > > On 10/27/2026 2:12 AM, Leonardo Bras wrote:
-> > > > On Tue, Sep 29, 2026 at 06:36:46PM +0800, Tian Zheng wrote:
-> > > > > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> > > > > index 32102c3912fa..12fa37328dd2 100644
-> > > > > --- a/arch/arm64/kernel/cpufeature.c
-> > > > > +++ b/arch/arm64/kernel/cpufeature.c
-> > > > > @@ -2158,6 +2158,11 @@ static bool hvhe_possible(const struct arm64_cpu_capabilities *entry,
-> > > > >    	return arm64_test_sw_feature_override(ARM64_SW_FEATURE_OVERRIDE_HVHE);
-> > > > >    }
-> > > > > 
-> > > > > +static bool has_vhe_hdbss(const struct arm64_cpu_capabilities *entry, int scope)
-> > > > > +{
-> > > > > +	return is_kernel_in_hyp_mode() && has_cpuid_feature(entry, scope);
-> > > > > +}
-> > > > > +
-> > > > 
-> > > 
-> > > Hi leo,
-> > > 
-> > > > IIUC you run this on every cpu in the system, to make sure it's matching
-> > > > the feature. Is there any chance the kernel is in EL2 only on some of the
-> > > > cpus here?
-> > > > 
-> > > 
-> > > It's impossible for the system to have only some CPUs in EL2 and others
-> > >   not.
-> > > 
-> > > > If not, maybe we can run it on system_supports_hdbss() instead, which would
-> > > > be easier for the user to understand it only runs in EL2, on top of not
-> > > > needing the above.
-> > > > 
-> > > 
-> > > However, The question is whether a cap should mean "this system can use
-> > > the feature" or "this hardware supports the feature". If the cap only
-> > > tracks hardware support, users may be confused when the hardware
-> > > supports HDBSS but the system runs in nVHE mode — they would mistakenly
-> > > believe they can use the feature.
-> > > 
-> > > So I think we should keep is_kernel_in_hyp_mode() in has_vhe_hdbss(),
-> > > and add a comment in system_supports_hdbss() explaining this.
-> > > 
-> > > Does that work for you? Looking forward to your reply.
-> > 
-> > Well,
-> > That's just my personal view of this:
-> > 
-> > If we have a function called "has_hdbss" it should only report if the
-> > system has the feature available.
-> > 
-> > On the "system_supports_*" we have to figure out if the system itself
-> > supports the feature, which checks the feature bits itself and could mean
-> > checking for other features being there, such as hyp_mode.
-> > 
-> > What do you think?
-> > 
-> > Thx,
-> > Leo
-> 
-> Hi Leo,
+> PW says this did not apply at the time of posting, pls respin
 
-Hi Tian,
- 
-> Sorry for the slow reply. I've been looking into how other cpufeatures
-> are configured on arm64, on and off, and that's why it took a while.
+Ah I forgot to call out in the cover that this now depends on this fix in
+net:
 
-I took some time to study it as well, and to be clear, my previous 
-understanding of this was incorrect, and it looks like the has_vhe_hdbss 
-(.matches callback) is only called once during boot, and once per hot-added 
-cpu.
- 
-> My reading is that detected: HDBSS should mean "this system can use
-> HDBSS", not just "the silicon has it".
-> 
-> Several caps already add conditions beyond the ID bits. CNP returns
-> false for kdump and under ARM64_WORKAROUND_DISABLE_CNP, NV and pKVM
-> match on kvm_get_mode(), and can_trap_icv_dir_el1() starts with
-> is_hyp_mode_available(). So in practice a SYSTEM_FEATURE cap answers
-> "can this kernel use it on this system".
+https://lore.kernel.org/all/20261116-vsock-tap-net-v1-1-7e24f45adad3@meta.com/
 
-Humm, or maybe "can this kernel, booted as it is, use it on this system"...
- 
-> HDBSS is EL2-only (HDBSSBR_EL2/HDBSSPROD_EL2, VTCR_EL2.HDBSS),
-> implemented only under hyp/vhe, and used only by KVM, so "the hardware
-> is there" is not the same as "this kernel can use it". That is why I'd
-> keep the gate in has_vhe_hdbss() rather than moving it to the consumer.
-> 
-> I'd be interested to hear how you see it.
+In that thread Paolo is also wondering if it is really an improvement
+rather than a fix, which is a fair take, so unless there are objections
+I'll just pull that patch into this series.
 
-I agree, that looks better this way.
-
-I don't think I understand enough of what 'system' means in 
-system_supports_*(), but I think your version explains it enough based on 
-other similar functions.
-
-Thanks!
-Leo
-
-
-
-
-
-
+Best,
+Bobby
