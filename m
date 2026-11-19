@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.195.5
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.43
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795101653;
-	b=zvcvFO2f1BPsjSU0xyEsDssptEcNVu3MP4vWVE14Oz3XV5zpdyVVvr9U9LOxoEnL2x+U
-	 oWHzy6JmQXhJzQiskjvylJuNT7Rej1PeHwQwG+rWfxUKVwWmfgHPtduCXGpozfgoip2d4
-	 WYYByPnwwNoR1OwyuYYv/UzBhHNEFJcab3np59xAck5X3OuSUX7HU9IxHbBjoXytH6jLl
-	 939SnTTIyHQ/chPi0sf60tk/ivhIirsLOYzgbNMsVs8e27xMMb7J5lxzNeTNoZI1YkWQz
-	 N/xp+yvfer+CMiJyKm3LkZbh/n0jDQpKCPloEIaIEhu8JEeUBj6tPMMg3dP7OHK1c4A==
+	t=1795101669;
+	b=TnXuJFd5a3lACxsvomIVkapdv1hZcZRm9UzVqExLMbUYomY9js3qTdoyRkRiILo7l/jS
+	 e9S6Jlxt0ongw1inhf1hFjFUB2tmWBon1BvBYTPu5YLKQwbfHE59Ys0oc6CbWY4PUN7Aj
+	 xqF2dwyC2N9xVKSdjKmbdBR+LG/pVgvLty7STlE3At4Cfv/dMno7eL3DclqDq0GXVDQmM
+	 Te4NghGVf0kqiyx9+a9liuFqKSDjRZuqUpAxatTArMkZht0XXwQq7yV/LneVFJHXea7BN
+	 riiJkcZD5I09QXmPeibLZlgRRG4N7wy73FEEZvgf6knS8050uIiRcwLH5/VQgXZToIA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795101653;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795101669;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
 	 Subject:Message-ID:References:Content-Type:Content-Disposition:
 	 Content-Transfer-Encoding:In-Reply-To:X-ClientProxiedBy:MIME-Version:
@@ -24,55 +24,55 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
 	 X-MS-Exchange-CrossTenant-UserPrincipalName:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=+gnpbqVRckoJa8Drm8ll2Y6QL50Sw6BVn8Ej5LjTHns=;
-	b=l4my80zLaaw3Jjs7eCjHSBhtkTPoLY4Wc5EUPh+/5PwiZSo6F09eQaPh6M/IXd+U//OM
-	 MuUf+zU+/hFGptxdDeRg4pdyq/KZeydy0n+aWkMWFFs9RQvTjdWyaAIfU/VirGc50FxMN
-	 5DWS56G7BtI/nfJi1a1ASGp+120xHqOb6iND18jR9ZI+VXiEKJH5VY+LWBUD6CKR0EWC+
-	 Bj/Gle6lZP441pOieYrwORnc1yo+oSzY3VF79iCQ1vRKMSSGw26l0VOcab6+HsJn5+k9L
-	 AA0iBu1ZxY6tInnUbDf+XXcE/gUBB/Fj71sicAezl38NIpUTzETB1Fq7A2h2WZFjxBw==
+	bh=N8tB/GhwDwM6d0k1uE9b4z/VL8h45xsGeWq5vZWRQUc=;
+	b=UC/Zc90FCvGpzvNZ2Nd6Iry9+mZ4w6qlLWwHs8QlM0GY8fdZgzZZ7zcV68BrR4EglC+r
+	 wEYl5LIZExclGImK8wmZY7FL1YD8+uCFM50QFJZRIgH+hzUbJypBiKeGhdfum5xoxuO0R
+	 RMvrSQh4LRxWesxdyeoyL9rhrIDP0hlbH9RVJWYwyciH46hFlToMngEPA2WPrzTaJjF2b
+	 1iOy+6pEQ+3rPkhCZfUoIsFTVTBphLtMpXQ0+PSFlql98zlIcigCbecQWFrq9NHL+sgln
+	 ilrGWQ5AC3h9jR0kkQh5vsdvYhCfyjBCcbgwK2rHbwbHCp7RLX0QP4cbCcUqhsvNPlg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=rzr6mj34;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.195.5
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012005.outbound.protection.outlook.com [40.93.195.5])
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b="JvzSOD5/";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.43
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010043.outbound.protection.outlook.com [52.101.46.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C080606A325;
-	Thu, 19 Nov 2026 15:20:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C080606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063E3606A325;
+	Thu, 19 Nov 2026 15:21:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 063E3606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=rzr6mj34
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=JvzSOD5/
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wsCfVjjCsvfvFk8nOI7iPTto+Kg42V6tfwg8cpLAf4iSeFRr9sx0Eg1rGfbm8dpIa7Vwd0exI8SYAuJKYYLqq9+WC2EbsN/J1UoLJF7EMwtUa5jcERCCbU8NKU9JhXeruMYL7CZs/AT2eI9mCqGzzU1UMGSUi0GxEqj9liNrtWV2aWTyWZqWfEVzSo7tXKlpljgxJZt23k/dQ6r3ZMl1s75fEXtLpnEbYGneHHOCzk3yrGKhB/d/bommnSmSriGjOt7JRTJI+ObcoHKW0R7Ae23iRI3bGGehDHBRgOXwTczwqzYmUiLZ6gx4u7LKJlZtbuV7IiCIN6jGjpNut0hZ/Q==
+ b=iMlMfUANyKx73emqMYKldPhDYTcQhvB8QUUACnJbBJgZUt4dRYnxggaA/+p2brdFQiuctnud00dkzRNjXy14L85Ajfe4BQluqOdmScZEsyE10IV7PnK+2HtQ1VaopdTN4zrFOXFkXz5F1UnVfX7DhuAqFcYoiXF10n/HPbbojQoodCELPNQ2J6H6oTKnQPgmFBWwB7nsiboHOND063mDVap9KlqZ99amGjfvZ6Cm1FhdVs52bWx54vCthbHXQ9fTEwnic4IhH2HtIBwoq5ByI7dAbGoWoEPZVc2ktnYmL/hQYQPx8nOVzCJT38oJC/dachDb0hwPzODu43079ozW7w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+gnpbqVRckoJa8Drm8ll2Y6QL50Sw6BVn8Ej5LjTHns=;
- b=ENfI9QmArQ9Iz2v3VEIR+pMKL9S13w7tx+NrwNKiOkQz59AiWCojG/bcoTv/SKW7sayXIsg4YoKQDU2KU2l4Ll86h7AqTtlZPAtKTA+zeRhfX56MB2f73hiNH62il7d2PeIfiQS52oFYWfkWEu5TEKmVInqmun+D20ZjRaAp/PQo5dBdshrGoBq31UDg25+G/BmauC3vGM1xUwe6ej74TisyI9fyvZrdhOYn7aCzEFSLoGqpnDJts8Y8XtPyCr3sa80fJpbjrFGn+JhJOI6aCAA1Q1p6cQvOgS21t0PjS2AmiFpAWq2KGenPpDUI1n5lumqex9+E2EL14zQa0L8wlQ==
+ bh=N8tB/GhwDwM6d0k1uE9b4z/VL8h45xsGeWq5vZWRQUc=;
+ b=HLviVy6XbeAmGGvxQgY0pEQ6JEduWdvc1Ay6X0jMr+DeF2rsM3aSlyZmEFeyJgXfrjkzE2YLNmT7ce+WKBcjc0DJdxs82rEjJnzHDyH8pVHXhA/3J5n/7FTuwVXoXjP7G/q71LlNq2TVrNrY89OC5cKKWAyDCZk1neG2Gq7h8gACaqSHxFFVAQkeZNk382V/Hi2gYSRN5fth25ekdtDmdQaHQdGxpZwMfeqJ0+Xki/Qw8Ebs/i+NRRyVS86UcU89mUKjpgxvk8/KjlzhdsnPwbRyH13361Kaxktg3I5ov6mSb2OV4m+TXi6KJW2x4L7gJLp8uYkaXfMIfA07wW7RfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+gnpbqVRckoJa8Drm8ll2Y6QL50Sw6BVn8Ej5LjTHns=;
- b=rzr6mj34ZeOZlQq612uaksNgg5xMgI7QJ/h1TasCYo+yRUamNhXtzuCMVOYvvyNpH2l1CiYNaWPlSJ7mV3JQ6umON5pprUMNZ9v5ialTBxztfzv8BMIEd2u6KD5j9bhgfHn1TlTOCuhOSLoeTYusNKm7s1NQQy3kU9lrvbw2cS8QGN+r6ytwrRRkksCXX4fEFu9xg95QGJgLa7wXye9jK2zxFuHffTckYIH9QwtYWzvWl5yVwQijgzSaKLnveeFKIYSIqZ745QgiCelMoMS5OVqTP9OzBY3IRECGZ2B4HN+RCWh2g8P2BmUc2NeS707RrajCj2FkE73obsO1dNLPQg==
+ bh=N8tB/GhwDwM6d0k1uE9b4z/VL8h45xsGeWq5vZWRQUc=;
+ b=JvzSOD5/86O4pMI9UKSktfe2mlr45L7HucK/m0YNwj/DEmQzfOHQohCNkvgfSynUedzZ2gWjqetmjgwED63IpIktCLTMC/kET+fANFXBPhe97tWB6cHviQELFN8+ivKWXWAL9yQ0RH8dfy7P0cLNyKI9euEPcSaNJXNjlDgzY9JiUx4ciGnAKoLWgmVwjTI5FzlI1H05fQqDyErZhQG0GjPp/QP+UGe93F38BHo1g2zlm6FysRTptYPOLk3JBKri0JiJL46grgfFVh5FyBr+jyLXLtH6V5hoj1Xj4XgNTdksSeLNoNweKRxdM0NGIDYTaozY1cHi6gtY7EZCDVZ+WA==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by PH7PR12MB7819.namprd12.prod.outlook.com (2603:10b6:510:27f::5) with
+ by SA3PR12MB7924.namprd12.prod.outlook.com (2603:10b6:806:313::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Thu, 19 Nov
- 2026 15:20:49 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Thu, 19 Nov
+ 2026 15:21:05 +0000
 Received: from LV8PR12MB9407.namprd12.prod.outlook.com
  ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
  ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0639.010; Thu, 19 Nov 2026
- 15:20:48 +0000
-Date: Thu, 19 Nov 2026 17:20:39 +0200
+ 15:21:05 +0000
+Date: Thu, 19 Nov 2026 17:20:57 +0200
 From: Ido Schimmel <idosch@nvidia.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: liamsmith827@grapheneos.org, netdev@vger.kernel.org, dsahern@kernel.org,
@@ -80,17 +80,16 @@ Cc: liamsmith827@grapheneos.org, netdev@vger.kernel.org, dsahern@kernel.org,
 	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	liamsmith827@proton.me
-Subject: Re: [PATCH net-next v5 2/4] ipv4: restrict on-link fallback to
- lookup misses
-Message-ID: <20261119152039.GA1980872@shredder>
-References: <20261116202741.13106-3-liamsmith827@grapheneos.org>
- <179504450812.3136.16231358596487999009@kernel.org>
+Subject: Re: [PATCH net-next v5 4/4] ipv4: replace obsolete routing comment
+Message-ID: <20261119152057.GB1980872@shredder>
+References: <20261116202741.13106-5-liamsmith827@grapheneos.org>
+ <179504451061.3136.1731007912948900423@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <179504450812.3136.16231358596487999009@kernel.org>
-X-ClientProxiedBy: TLZP290CA0012.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:9::10) To LV8PR12MB9407.namprd12.prod.outlook.com
+In-Reply-To: <179504451061.3136.1731007912948900423@kernel.org>
+X-ClientProxiedBy: TLZP290CA0003.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:9::17) To LV8PR12MB9407.namprd12.prod.outlook.com
  (2603:10b6:408:1f9::13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -102,76 +101,76 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|PH7PR12MB7819:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0e6927b-4dcc-41c5-c620-08df4650b0ab
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|SA3PR12MB7924:EE_
+X-MS-Office365-Filtering-Correlation-Id: a26a8d7c-d406-4438-54b5-08df4650bab2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|18002099003|22082099003|3023799007|4143699003|11063799006|5023799004|10067099003|56012099006|261022075727099003|261022105027099003|261026140227099003|261026121527099003|261102123227099003|261028144727099003|261021135927099003|261021121427099003|261009223027099003;
+	BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|261026140227099003|4143699003|11063799006|56012099006|5023799004|261021121427099003|261021135927099003|261102123227099003|261009223027099003|261028144727099003|261022105027099003|261026121527099003|261022075727099003|10067099003|18002099003|22082099003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	vZn5u5DWOdgelW8XBZ0kkN8JG1KZs5oDqVm9lWqgoqEh/2mnwoyPEG/LWmPc32HLsMCg+BZs4YurEjGcvgGMeGE82UXzGDRNFl+fxm8l5GRrnb0mIMs8Ea6YC++K9+ih2MbJvE78zMior4oO3LK6TliOwnfYs/85K0k0dJBAnYiwPc9Y1Pwe4MoCoP9EvxySZmdDCeRdx4kMZEolPVi+qP5ghRTfMWXmO2gKkS90Sax8jWnP7oGeyD2MlhJF94yx788hNRLOM0OKuGocdd10RDmMuLU222dX6MvHqNc6xnCfr3JnqWLcFhK/+mMlFTyTAzGaj0nibcAphs6u0YU7dnMEngGHRf3spLAeIcJ/WmOHPLtYSBXyubDKyt8OC1oabd6WWYXY/3CFx5cDt4oVsUC6v+zKOHaM8SB+UHd2/G1SJiionziEPilsmDA7JLytm0zPZNAz1RgyAMIk+hbwsooGILKqcLqA2F+NOjm2Y/XAQAMyQvovMVuI8S1/XwVEsAflMhXf+cSOdS0SX0e0XJomw4Tb54fVEeSK2KVXszOXWObtpOQ2fPKl+BkY01XVmSzQY/Le/u8Gyq9NF9OHpR8bPlaUr1zk9zj6g+DA+7FJw9uciQrU+FXbTRBy0JMa0nd2DLmDpzbHn8lTXA1j6tVPeg9KymCVi3BLZFGnkTc=
+	jiH1Om8C1wmRnSMQFqbkPx7QYzc49WLL2wYQ2S7VJDKj/RfYvnxqDjZ+zCsqzRX8Y7F48hTAgfhcDXsQ6dFnIazYEE/58IAUTsAEa9VSBD429e2m7b2m1BQZOgQPdBU2ZR/i17yzSgK3KS2NihBuf8ypAImr9xM0eM737TKhpe7kcjZOLGQmpfDptagbovC/+OuvYV3iBZ9EbVR/XwjCfe7PNHngKn187lSjdDTn/zosVR1c5VcTYTKwsTnVD/upzUTHKCLs5uMxzrZtxUMDD08W0T+QOgcwXPm0QM4/riKl44I7Fhyd7wbVJucHJncJpLPiHM6MM+poR1zI/R2/Dfv2g0Tsrke15nRtX/DRDldkQXOOrHQE1ixr+xrascBQXhHdAVw+9BKMDy0CWljC0uzVANgDXHdhE37rhmiy6v5QoF+D+XHu8axQhIE3lubbjiH/oj4r985nscE3271bvmQXhq0KtDCe+5AH79cASNTEUl0S+qaTOTbSFogXVYrmY/9ax5wHUC7dNWN0DbY/P3EoLfLMo1YbT+5MpfO0JPXuaWeod0TXJa8eIGS+htdkwOCXdZy9RAUFmjnHWPRVAfHCHq109V7AWWMVd4cOjNmwnetMnYYvqOKY+Zh5VWw4t73JYrp+N5smqB6oy9zEFcnhCmiMF+a+ED5t1AOcXAY=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(18002099003)(22082099003)(3023799007)(4143699003)(11063799006)(5023799004)(10067099003)(56012099006)(261022075727099003)(261022105027099003)(261026140227099003)(261026121527099003)(261102123227099003)(261028144727099003)(261021135927099003)(261021121427099003)(261009223027099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(261026140227099003)(4143699003)(11063799006)(56012099006)(5023799004)(261021121427099003)(261021135927099003)(261102123227099003)(261009223027099003)(261028144727099003)(261022105027099003)(261026121527099003)(261022075727099003)(10067099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NzlTdzJYczZaZUdPUG9kVVUzN0tLMEF2VEJ3azJUcnI4RFVISFVvRGIrMXpZ?=
- =?utf-8?B?MGJBcHpZNm5weTQ4MWJ3THlmdFpPVVBackVvc0dmNUx3QkdRczhBZ3hQN051?=
- =?utf-8?B?dUhCcDhGWCttVUhSODZJZ2lpcWRYSmcrenoyUFgweWdBN2ZSYmloMjdQTXR3?=
- =?utf-8?B?ZlpnWWxGTGhFelU0L0x4QzZ3TWNhdWNzMG9oQW9lQWZJVlliOVY3TXRvdmp1?=
- =?utf-8?B?cGJVclRpbjA5RW9RMFN3cS9qU3lVRDRSNzNQMjdVNE94WnBOeEt3UHcyZExa?=
- =?utf-8?B?cGtDRXozQ3BxOUxSeXh5bHNiUlBpcTE4L29wQkVBWG1ldmloOGQ3Q2RrM0VN?=
- =?utf-8?B?ejlvR3ZqZjZnbE1LTm5WdHlrdmh4cEdvMGE1M2g0OUw3bEp2R3JzQTlxR2Uw?=
- =?utf-8?B?SktVZkRNVWdwVFJpalhUb0ozWGhTU1pPc2lWSVBLREFSNW9BbGs5UmtET0pw?=
- =?utf-8?B?d2NwaFRhTlFRQkRLdmFETmtIajZESFFTUjArTGVKeHRDTVl5YjNIT2NBdCtI?=
- =?utf-8?B?TGdhamdSNXlIVnJZWHBFcHp6QWtmcVpyL0ZUSWF5R2RqN2tqTmpZcXNIaUpr?=
- =?utf-8?B?QStFclphSWN6UFU0U3YxNi9ReStnaUhMeDFGVnRFVmNWZVV4ZDlBYXU3cEVJ?=
- =?utf-8?B?c1QwMm1rbStKOUsrcVRlekVVZFl6MHVKelpqVUpBUVRTTTdQcUFQSXVTV0VC?=
- =?utf-8?B?SU43Wk0wSlUwYlkvaitkV2hnV0ozaGFzdlh3bkM5bzBwN2lENk9BYzlVM2pX?=
- =?utf-8?B?Y3YvRC9wRjYxU2RacG5MalV5OVQ3YW5PK2MzbUUzTW9INTFrejJ0ZC9Jb1Fj?=
- =?utf-8?B?bWNjbjZFZzdiQk9DZEZ4bHQ3dzNaS2EwZm9vSEVhRDVkUElVMDZjcGVDN3JD?=
- =?utf-8?B?ZURsd1NYZUNubFVOZlZxUXU0Q0ZaUndPVnZEZ0c4TlNEdHZqN2dhQjZ1OUtU?=
- =?utf-8?B?SzBFSDd1czVDNituWWFXRG84TXBaMHI5dDloWUhjcS9mUGc0OTdhN3VXTU8z?=
- =?utf-8?B?aERneHFoenVEZk5IYmFyMmswMW54dk1UcUhVUmxuQWk1UGtZSXRia1RuSlQ2?=
- =?utf-8?B?SlJkWk0wQStBTWJ5Z2E3SzZ6bGVyc2pOQkl1ZlRWbmZFaTlnV2wwQ3Y0Qnlr?=
- =?utf-8?B?TjdVQUhSWFpDL2hVS0ZJeWdVZlpKeWdhNEowYjl6aFYzQUZFSzQxUk9vS2Qz?=
- =?utf-8?B?YjBlUjdvZWhEZVJGNWQrUjdLWUdGMmpWUHYyVkE5aXhmSUpWTFcwb2Q1c2lM?=
- =?utf-8?B?bjJmL1ZmYVJGUllPakJvWmdRMmZLYnFtb0VWbWRCRTFJcDFXTUZQazQzdXNa?=
- =?utf-8?B?eDJ6U1ByN0Q5cDgwbHI1RTZSeTJ5d3laN3haM2s5UjlaMUZHV01xWm00Zzdh?=
- =?utf-8?B?YXVlYWxBNWE1dnM5c2hVb1lTOUhXYnc2SFZCN0N5Y0JMbzU1SDkyQ3dSUjQ4?=
- =?utf-8?B?K1o2Y2paellzNUpxV3lmU2dxdlRrMVZTZUNsdjA2Q0NvSGI1V0pnMlA5YUdI?=
- =?utf-8?B?dThyWnhvUTJoUlVjUGlxb1ZONG53cTh3aklrM3dmRFMxaldGdVZXaU1mZmRl?=
- =?utf-8?B?ckp4ZmhZMk5NTkVpMHFGbGg3VytOb2xVRlZvbit2MGVCLzdsWnJYcUpaQ01n?=
- =?utf-8?B?VGkvTUpXUzdKUlBjdzMxbEs4STgrZUpHaHZ6cG5HVG9vV25lZkJWbHJGVWt2?=
- =?utf-8?B?cGRqT2NhdXloWjU5amdvNU02aEZhRENIUzEwM1VXaVRNUUI3QXpNWDhydTZG?=
- =?utf-8?B?Z0FWTG5BVDAwWVBuWlBwTUt3a2RjWEFlcTdENEQ2YnBNait2S2FUS2Z0WjJF?=
- =?utf-8?B?U2U5SzBweERZNk9Oa2haeUpVRFVyMEY5djZDMHlVaUlldGF0SmJsaTlTeHB2?=
- =?utf-8?B?TmFOaXVmSVN5UmRGNk5HejFzaVo5TW1FaXlIdG9hSEJsd1pmUjNaaW8xcHJo?=
- =?utf-8?B?Ykt5RnkrZkYway9Nc2lrR2tCcUhDWDErSVlzeU56Nm9GVVAvUGFEVlBFb25T?=
- =?utf-8?B?em8vcysvS0UrT1JZb1NPNnBqcjBBWHNQSS9LREE1bGVobU5GQWZKU2J5MWVJ?=
- =?utf-8?B?cWFZeURMVlNua2RnMElNRVljdmd0R1FqdWk3VzA4aWJvNFQyOGJ5QkFlU3ph?=
- =?utf-8?B?QWIrZXBvV3g2M2hJdHA5SFdUUjllakt1ZGhBUmoxNmgyR1lZSW42S085eHR3?=
- =?utf-8?B?MFBGNGVLUzVkOHRWZitKazF3aUxieDhRWWZ5U2FhMk9hNjFudXFpUm1ZeDlC?=
- =?utf-8?B?V2JXbGVLVmlBQUh2L3gyM040dkJYRUhwZHpEOW5pUExsaGJkQlU0QU9kZHRs?=
- =?utf-8?Q?q6TyJ+UGZjcJVQ+CW3?=
+	=?utf-8?B?Wlp0elN5SVI0dFVhQlhMTkJXazZwS3JPMFRXRUFYUWlvdWxvajlMclRURkhq?=
+ =?utf-8?B?b3JFbXJEZ2hCVzd1WlZ1QXorZXRqWDI2Y012UDFzNTZXR0htUHFQRGd5dGY5?=
+ =?utf-8?B?VUQ3NlBNQWxIK0ZDSVluK0pDOGh5Yk9PSFlsQjI2M3djYWorc1kxQUt6UWsw?=
+ =?utf-8?B?SXlCUFArMnpLclBUU082SmtUS01jWWIxOFJHV09jMVdFR2R4TlVGcmpVeERP?=
+ =?utf-8?B?TXhZZlpzeVBlTXVZYUg0V3RGMGhoeDgwRXBSUUt6KzN3UVQ5eDJrOUFySFhx?=
+ =?utf-8?B?Q056Zm5xU2JZVTFaTHhnbU5pWXBzK0QybWlSNFhlcHVBOHRWNGpORE1uOUJt?=
+ =?utf-8?B?L1BjS3gvT2JSTXVSdmR3czFEdkRiaVFhb2RjYkNsQWZBZFRkdTgvVVhjSGlr?=
+ =?utf-8?B?ZWZ6dDExZHlqTTJvcEVjTllmUnNiS3pROU1zTUJWSjhVdGd2K2tJbFRWWnd1?=
+ =?utf-8?B?LzJUOG9QL1JsWHdmVGIydExuOEJJQ3RBemxzN0FtNFJQN3d2TDFSMGNZSVFz?=
+ =?utf-8?B?YitOY0thV2FQMStuQzBVYW94SmlJWnpLcFIzY2VxVk5lR0lHdXpoTnNMck5o?=
+ =?utf-8?B?bWJzSmw0cnQ1Rkxuc2diNmw2MmwvblkwSmF4VXB4UlZxaTZSNkFGUC9OSXFK?=
+ =?utf-8?B?ZlpnVjhzM3VSdHdwN2RQbk1YdWJHRk03SXJPSnB1UFU4U1htdjZPK25sNStl?=
+ =?utf-8?B?NTNpOU13b240aGplajlnRHN2R0dad3J3M1dUMWJGYkM1SkMvRTU4OVlSUzNE?=
+ =?utf-8?B?VVdSSm1MQVlDQ1B5VnZFTUtKRXNSYXBjcVZSZFFaWlB5b01XOERXd1c4SlZm?=
+ =?utf-8?B?MnNHMXhES1lJMmxSQ3NsVmRiMWZhY2xmelRGdk9zUTFDMzVVdElnc1pDV2Z1?=
+ =?utf-8?B?ZnpKVnA5ZktjL1lQeTNYSWxzcGJQUUZnU3BaMXp1dlVDU3p4T214TTZoQWxx?=
+ =?utf-8?B?R3F5MUppMjdXYzc2aDIyR1VtaGdmUytTeFBtdnJYMFZTZkFZSDA4Y2NhbldU?=
+ =?utf-8?B?NjRtZG9NQS9QT2NaaWpYQjhmaXNFMXV6c3FBU0hQMmRwMlozVFU1SlRrUGhW?=
+ =?utf-8?B?QVRSMjc5VktRUVFHdTZLME9ST2hLZXR4UHNVUllmM092ZVdna3FMRjZJZ0hL?=
+ =?utf-8?B?VkR4VGN6UkgwbXoyVHhMYmtvZm45cXVXeHVrVGVMZHV2b3h1TENwdUVCNStz?=
+ =?utf-8?B?UjBOcVVTdEVxS0gxb0FPWjlaRGJ1Vmt2S2puNmtKRzlPbTcrTlVYN3VadXVp?=
+ =?utf-8?B?dGpkY0VDRFB4ZnBJTHJvQzdiQ21vNVB5MU9YNE5TR2x5Ui9Tb1VuSmNDS1JC?=
+ =?utf-8?B?aHNCeU1jaUdSRk5XbEpQZmlVU1F3a2RsL3hRWEJ4L0FUaVZHd0g0TEFqWDlX?=
+ =?utf-8?B?KzUxUWtjUG1qNXZMZzkxcVd6em9DdytFNlp4NHVDS2lzQkY3em5adWIwRDZ0?=
+ =?utf-8?B?cG5Vb0h1NU9VTUwzTGhSU3RPdWhKNEdkczFWSHhaTzA1S1Qyc1gyVUZlSmhR?=
+ =?utf-8?B?U3dNbXRnamZtNk5PbzRKYm9uV1h6R1Z2aHYzMHh5SWRqWFNEUThYNk42TTNH?=
+ =?utf-8?B?azVvQmdrQWxDRTExUGxOd21RUkJrL3ZpYUxCbjZtRmFLbVdFYUsvdmtmZ3ZZ?=
+ =?utf-8?B?eVJIakZTSU1TRHJvTGtQdlNxZUFnalZQTXB5bi9hc0Y5VVBISnAwTlVESEZK?=
+ =?utf-8?B?OHlSd21JSGlMckNVY2NqcmhRSDU4d3hucmxwK0xPVS9zTjRSUkFCZXZRblRF?=
+ =?utf-8?B?UHVqdmhhVkYyYjAvclNrQVRIblBaR3d1RFQ3a0lCb210djExYUVwUUhlVmNY?=
+ =?utf-8?B?aEFMY0R6dDVPYlNVMmh6cmk4UGN5WW5KOG9QNjFGaFJ6WFhOQ2IrZFFMRzh6?=
+ =?utf-8?B?SW5yMGNuSjNpQ3FqTzFkcVNYVjlRL1V6U2ozckJvZVF3NnF0WXNQU2sxZU9U?=
+ =?utf-8?B?c1g1UWdNSGd6N3dpT2UxU0xlVEt1anFqY29nbUlRMjFDbTFJeXBoanJ5RGRl?=
+ =?utf-8?B?aFlvVGNRQWJlVmtZazVOc09sUnEyTC9EYk0vS25oTU1mb21BUWlBUHRlcU1V?=
+ =?utf-8?B?QW5EUG9UQXA1bG5GME1GQ1hON05SeDhCOTc2UlBPb3RXQUpoQ3VLeWFKbjRy?=
+ =?utf-8?B?NkdQMEhlckkya2J2bzc5Znc5TSttN2s4VkM0V21ZTnMwQnIxOWl1YjZsMkdw?=
+ =?utf-8?B?NmVqY3BwcDZwTFlNYmIxa3VzeHVDaDRycmlRYUlSSW8xQXZaQ2p4UXpici9N?=
+ =?utf-8?B?VVo5V3BXY3ZtU2hkMnVocGhZTEFucEMzTm1IVmdlR29LSmQzMmlpYmgvb0lE?=
+ =?utf-8?Q?7OIGMYt2VC5ABquSwL?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0e6927b-4dcc-41c5-c620-08df4650b0ab
+X-MS-Exchange-CrossTenant-Network-Message-Id: a26a8d7c-d406-4438-54b5-08df4650bab2
 X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 15:20:48.7919
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2026 15:21:05.4640
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tvMCU0qu1p+d5RLgBEpwNeb1VeO+58wuobSy/SVhpB4po8bTP3aoFgJqMbAzicOjb6H3fA7z+s8m4IJX0H6ODg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7819
+X-MS-Exchange-CrossTenant-UserPrincipalName: cE3K4eEtEEtGEy7qbWRtT+X6YTvfDhDw6xAVdD+KdwYRlvUDrX9U8WCwIQRnSjwWo/WU16aivQ6rJ9d42dzdqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7924
 
 tl;dr - I believe the patch is fine as-is.
 
-On Wed, Nov 18, 2026 at 11:28:28PM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
+On Wed, Nov 18, 2026 at 11:28:30PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
 > issue(s) to consider.
 > 
-> Critical: 0 · High: 1 · Medium: 0 · Low: 1
+> Critical: 0 · High: 0 · Medium: 1 · Low: 0
 > 
 > If you believe none of the issues are legitimate, please reply to each
 > issue of Medium severity or higher and explain why the AI is wrong.
@@ -179,74 +178,63 @@ On Wed, Nov 18, 2026 at 11:28:28PM +0000, netdev-bot+sashiko@kernel.org wrote:
 > know by including "pw-bot: cr" as a separate line at the end of your reply
 > (one such reply per series is enough).
 > 
-> - [High] Route-based restrictions can still be bypassed by an
->   unprivileged process after this fix.
-> - [Low] The commit message describes a security-relevant bug that users
->   can see: unprivileged Android apps can get around a VPN kill switch…
+> - [Medium] The comment this patch adds in ip_route_output_key_hash_rcu()
+>   (net/ipv4/route.c) says "Non-vrf unicast honors restrictions"…
 > 
 > --
 > 
-> ipv4: restrict on-link fallback to lookup misses
+> ipv4: replace obsolete routing comment
 > 
-> With this patch, ip_route_output_key_hash_rcu() takes the oif-bound
-> on-link fallback for non-vrf unicast only when fib_lookup() reports a
-> real lookup miss (-ESRCH, via FIB_LOOKUP_REPORT_MISS). Errors from
-> blackhole, prohibit and unreachable routes or rules now go back to the
-> caller, and -ESRCH is mapped back to -ENETUNREACH.
+> This commit replaces the comment above the on-link fallback in
+> ip_route_output_key_hash_rcu(). The commit message says the old comment
+> described obsolete fib_lookup(), MSG_DONTROUTE and IPv6 behavior. The new
+> comment explains how restriction routes and lookup misses are handled
+> when an oif is specified.
 > 
 > > diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-> > index b9f5397336d34..b71443e4b522c 100644
+> > index b71443e4b522c..d0930ae4c5ae6 100644
 > > --- a/net/ipv4/route.c
 > > +++ b/net/ipv4/route.c
-> > @@ -2859,12 +2859,13 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
-> >  		goto make_route;
-> >  	}
-> >  
-> > -	err = fib_lookup(net, fl4, res, 0);
-> > +	err = fib_lookup(net, fl4, res, FIB_LOOKUP_REPORT_MISS);
-> 
-> [Severity: Low]
-> The commit message describes a security-relevant problem that users can
-> see: unprivileged apps can bypass the Android VPN kill switch. There is
-> no Fixes: tag and no Cc: stable, though.
-> 
-> The unconditional on-link fallback in ip_route_output_key_hash_rcu()
-> dates back to the initial git import. Should this carry something like
-> the following?
-
-No.
-
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> 
-> A Fixes: tag would also make it clearer whether this is meant for net
-> or net-next.
-> 
-> This change also depends on the earlier patch "ipv4: add
-> FIB_LOOKUP_REPORT_MISS". A backport of this patch alone would fail to
-> build, because FIB_LOOKUP_REPORT_MISS would be undefined, so it would
-> not misbehave silently. If this is meant for stable, could the
-> dependency be stated?
-> 
-> >  	if (err) {
-> >  		res->fi = NULL;
-> >  		res->table = NULL;
+> > @@ -2866,24 +2866,18 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
 > >  		if (fl4->flowi4_oif &&
-> > -		    (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)) {
-> > +		    (ipv4_is_multicast(fl4->daddr) ||
-> > +		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
+> >  		    (ipv4_is_multicast(fl4->daddr) ||
+> >  		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
+> > -			/* Apparently, routing tables are wrong. Assume,
+> > -			 * that the destination is on link.
+> > +			/* When oif is specified, fib_lookup() is called
+> > +			 * primarily to determine if the destination is
+> > +			 * accessible directly or through a gateway. It also
+> > +			 * checks whether there are any traffic restrictions
+> > +			 * (blackhole, prohibit, unreachable), or if there's a
+> > +			 * routing lookup miss.
+> >  			 *
+> > -			 * WHY? DW.
+> > -			 * Because we are allowed to send to iface
+> > -			 * even if it has NO routes and NO assigned
+> > -			 * addresses. When oif is specified, routing
+> > -			 * tables are looked up with only one purpose:
+> > -			 * to catch if destination is gatewayed, rather than
+> > -			 * direct. Moreover, if MSG_DONTROUTE is set,
+> > -			 * we send packet, ignoring both routing tables
+> > -			 * and ifaddr state. --ANK
+> > -			 *
+> > -			 *
+> > -			 * We could make it even if oif is unknown,
+> > -			 * likely IPv6, but we do not.
+> > +			 * Multicast is sent regardless of restriction or miss.
+> > +			 * Non-vrf unicast honors restrictions but allows
+> > +			 * oif-bound sends even when oif has no routes. In both
+> > +			 * cases the destination is assumed on-link.
 > 
-> [Severity: High]
-> Can route-based restrictions still be bypassed here when the flow asks
-> for link scope?
+> [Severity: Medium]
+> Does "Non-vrf unicast honors restrictions" hold for senders that do the
+> lookup at link scope? The commit message also calls the old MSG_DONTROUTE
+> remark obsolete, but it looks like that remark still describes the
+> current behavior.
 > 
-> The commit message says this fixes "routes and rules that are supposed
-> to restrict traffic (blackhole, prohibit, unreachable)".
-> 
-> An unprivileged process can bind to a device (SO_BINDTODEVICE,
-> IP_UNICAST_IF, IP_PKTINFO) and also set SO_DONTROUTE or MSG_DONTROUTE.
-> Neither needs a capability. In that case ip_sendmsg_scope() returns
-> RT_SCOPE_LINK, and so does ip_sock_rt_scope() for connect and TCP:
+> MSG_DONTROUTE, SO_DONTROUTE and strict source routing all make
+> ip_sendmsg_scope() return RT_SCOPE_LINK, and that value ends up in
+> fl4->flowi4_scope:
 > 
 > include/net/ip.h:ip_sendmsg_scope() {
 > 	if (sock_flag(&inet->sk, SOCK_LOCALROUTE) ||
@@ -256,8 +244,8 @@ No.
 >     ...
 > }
 > 
-> In fib_table_lookup(), the scope check runs before the reject error is
-> read:
+> fib_table_lookup() applies the scope filter before it checks the route
+> type's error:
 > 
 > net/ipv4/fib_trie.c:fib_table_lookup() {
 >     ...
@@ -268,38 +256,34 @@ No.
 >     ...
 > }
 > 
-> Blackhole, prohibit and unreachable routes have universe scope by
-> default. fib_create_info() keeps cfg->fc_scope for reject types, and
-> iproute2 creates them with universe scope. A link-scope flow therefore
-> skips the reject route as if it were not there.
+> By default, fib_props[] gives blackhole, prohibit and unreachable routes
+> RT_SCOPE_UNIVERSE, so a link-scope lookup skips them. If no link-scope
+> route covers the destination, the lookup returns -EAGAIN. fib_lookup()
+> with FIB_LOOKUP_REPORT_MISS then reports that as -ESRCH.
 > 
-> The table then returns -EAGAIN. Because of FIB_LOOKUP_REPORT_MISS,
-> fib_lookup() turns that into -ESRCH, and so does __fib_lookup() ->
-> fib_rules_lookup() when custom rules exist.
+> If an oif is set through SO_BINDTODEVICE, IP_PKTINFO or IP_UNICAST_IF,
+> the condition above is true. The code then builds an on-link RTN_UNICAST
+> route even though a prohibit, blackhole or unreachable route matches the
+> destination:
 > 
-> The condition above then holds, and the code jumps to make_route with an
-> RTN_UNICAST route on the chosen device. For example:
+> udp_sendmsg() / raw_sendmsg() / ping_v4_sendmsg()
+>   ip_sendmsg_scope() -> RT_SCOPE_LINK
+>   ip_route_output_key_hash_rcu()
+>     fib_lookup(..., FIB_LOOKUP_REPORT_MISS)
+>       fib_table_lookup() skips the universe-scope prohibit route
+>       -> -EAGAIN -> -ESRCH
+>     on-link fallback
 > 
->   ping -r -I eth1 <blocked dst>
+> None of these steps need privileges. On this path, only FIB rule actions
+> such as FR_ACT_PROHIBIT still apply, because they are not filtered by
+> scope.
 > 
-> That packet would still seem to go out eth1, even with a prohibit route
-> for that destination. Before this patch every error fell back. After it,
-> the same bypass needs just one more unprivileged socket option.
-> 
-> Rule actions (FR_ACT_PROHIBIT, FR_ACT_UNREACHABLE and FR_ACT_BLACKHOLE
-> in fib4_rule_action()) are not filtered by scope. So the kill switch
-> built on prohibit rules does look fixed, and only the route case
-> remains open.
-> 
-> Could the fallback tell a real miss apart from a reject route that was
-> skipped only because of scope? Another option would be to not apply the
-> scope filter to reject-type aliases when deciding whether to fall back.
-> 
-> A later patch in the series, "ipv4: replace obsolete routing comment",
-> adds the comment "Non-vrf unicast honors restrictions", which does not
-> hold in this case either. Nothing later in the series changes
-> fib_trie.c or this condition.
+> Could the comment and the commit message say that link-scope (DONTROUTE)
+> lookups bypass restriction routes here? The series aims to make
+> restriction routes apply comprehensively ("ipv4: restrict on-link
+> fallback to lookup misses"), but nothing in the series documents this
+> case.
 
-This was already addressed in v2:
+This is the same comment from patch 2 and the same reply applies:
 
 https://lore.kernel.org/netdev/2503cfd2-5629-448f-bb9b-111ea239efb6@grapheneos.org/
