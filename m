@@ -1,103 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795081992;
-	b=kBOEXSwOwLw8E2UZZdJ1rDYp6tfph5xO9Mkqo7z3TrK3I6V0wXFmHDoY+D3neoGIjaqr
-	 Bm5DI6MCH5PNKwa7Makne/lkeqjJO25dYQc7LJHdwJoBODdoz6hZvp+v/sIml4yhZuvAf
-	 r9r7tAWTijENbwDSO2EeQdb3znxf1VbntmROpXEavpHI/MWoGkO8azLUYv2Y6Nu53ER4S
-	 YcMjn/qMCVR/7w1BlhJQ/Fqf/FrndeKIkFNu7ApcIiGQmZIM3ZHtnL1UYA0LcreWblOaP
-	 fxnbNjGLHj+Gw2Lbk5PKCyKLwElkLr//hddCAKmbSVuLrl+Zd6wfuhdAa8UcNDAI/Fg==
+	t=1795082063;
+	b=ZYbl2S5Gpn8Z0qWImSofHTPXQOJtnhJ4QpePgw4sb5cP1TUynqaLeSDsVHJvfMcouk6n
+	 Q3gWUy8wp5cK5plTVXk3pV83i6ccJx4SoXFRZuAN1bMkJtMd1zva6SIiUM8ZdfGDPN6iA
+	 3nRF2S6KjSOQys2WdiZcYnVlnkQhFKyOZ2gcf76whXLG93bF3sJ23h8za5uU5SJioxCkn
+	 n1s+iZQB5/7M0Vyee4BHlDY0kOui4vEov2sfb8m8Ie+lmwBXwecJx75oTuuYRHHio5j7k
+	 cSDgLTuydCPdx23+Sn5xR78cUCaWmfH3OFWaP4G4QQwaR/PdRdo1pa2N6LMy9lEi7AA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795081992;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=A+aU9SIn2Zhiu/uvRNR7gVgAVOlE/lo6ePmTFuyRaj0=;
-	b=0tsSBcM7iKIO6GmOgh+COp5KYPj4t7MQdBe4z6kMU8RZ4ytOXU3DCoqTQdTEWm3RtZ/g
-	 jjhZanONFMOHjHvOo/wB7RcjZYQ6l6HdTBzeTa0UK5FbgKFoWs8t6tOt42C8GWZSUhZEj
-	 RXccYjRi4obLspss5ibZpc0AJyWSOmkzgSsR4JEQqT8p8H6Qq79c+91J39hZQfQS6HY1A
-	 fxLPHKnC4f+Ncg7tooyenyDdN478PnwnAYMDEvEoaybb3Qgw0sbOHofW536V76gltNL4I
-	 H81DYeHzl3Z0OGNGrfwDxkmVwnaiRwn3l6fOmR5851gs9XF+tkbf0W0UQvCcvp2iq8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795082063;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=h9SsKa89pdv6CdZOat+96TxZ6dXD8Iqx3PWwB13ANYM=;
+	b=Xufmtej93dV1hOPGEcGofYD2lo/QefsdAwkwxig5YBLL2HZ6gWVP+H/zCEQgHHEhIiEd
+	 ySuHZZfzmnDNvjApf/RsnWTB8VGdzT54gelh6x2sQzRkzE0Ft0+rGPF9Aqhg4C9fg3MpI
+	 +WwhCEJj5314nReYLTHUqKcbL9vDQ0gleLzCkBsW5LWgJx5N9W0Xv7mTkVhwS/Nw8fOge
+	 sTyqvozgiMPuF6zOFRbw/0RDbxb/g7S8LUFO2XTyL2IUO/ewGQDcfLHPlNFpxB2NtHGHT
+	 l+aUG6g0RL9rz/NsUIKpVuUe7X6Xjqj1kO2+oMwfEPznrVj8Sd5wlcwmpYRoFuR1FRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=akvbrKpA;
-	arc=none smtp.remote-ip=74.125.82.46
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aSsOv2Ba;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32444606A325
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 09:53:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32444606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2092606A320;
+	Thu, 19 Nov 2026 09:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=akvbrKpA
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1a2af4c8d00so4139095c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795081990; x=1795686790; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=A+aU9SIn2Zhiu/uvRNR7gVgAVOlE/lo6ePmTFuyRaj0=;
-        b=akvbrKpAOrneaIgcnfJZk8zsV6GIu5bfoiQaSgz9Rcwe76DkeB0kS9fVad281LiadH
-         MoKVzuRGAoJdAbOvb+9z4AVAdPQb6mALszieK8SQEUOs2jSFGYRzGtNQeF17PrXTYVTY
-         FZvKOQ67KsdGSzdlqKAVmu+qEdc7njqp3GZSEvRetdprbQcjt1zK7vliYcB8PCWR4vK4
-         bBIk1T+GdNGGMcg6x1l8/j88+sI0w/A+2JYj3mjuhbEHetw7G3oAir8vUY67m0H6wxxi
-         PHw8dNqSV0LEWHGJjUy2xPmvghyZ7YDtJESK6hjJU7+goRBYOeqwgOGyPiHiKVfEwLuv
-         maCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795081990; x=1795686790;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A+aU9SIn2Zhiu/uvRNR7gVgAVOlE/lo6ePmTFuyRaj0=;
-        b=RsKcU+qgqZg22UTTw6kBQrp4C6QiQ1oabzKRb82W1M+sWdefgESRkOWLDi1jwlJhI3
-         k2CpVHgreHGVKO7SxjkVDEzrqu36r9pNYM8m/a1PE85lvIf4ZyzsUNYKbIylYeMcTrQM
-         s1Fclx1CnIezyGtzrXFkRWGL2YnD8aDaT9TN8V2jKX/lt8hEFIEccr5OSpM9y91/0mLz
-         Mar4Sf0Yk2ohXwDZQ7JBl5hoUQ3At4wGGMU98FgK4Iov2jQD8gYVVdSIY4Z5WW7PItCd
-         HyDvHjbEuHfdc6hrIKG9pvADqu+aIVcdozN9sSitTjos6V497h5maWoQRTRUJje7TCLj
-         DrsQ==
-X-Forwarded-Encrypted: i=1; AL+hErG0vBi2YzfPr2fBmtCJXBbvngrfV/MRwt+d2VPWGeS84FDLKamgzzDkGihhxLD4DUtMtCKZdmEu8htj2yQqFGU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8jUc3+LmWK9rZigAweG5Quj+OEoFlqaJoBNHYNTOs6qVmgFKOI
-	6UxEoQuC7CeI8Plmq+9uZl8qdCUatgWySywSFNlXG/BJVLVoXFFjQo5MzQ3dT00q
-X-Gm-Gg: AYBFou306rt4MbfmkRKScd1euOoP6hRmIkhLnvCYYUQ1tC7+bAlYnIsR8Sf7jQqIiXa
-	cos23iBJYrg1XBXPW2pbxj1nmUa02EVWh+dfyMnf5CPbmSBJ5P0LdHXGSrIumm2IWfdy2W5Tq2G
-	T8PKJ3hQG19GCcQcThXJezLv0wJy7Lh4hHzQQLJYu7DhJWowUBOyBYi5FtAPAabcadkFQ/E0rWy
-	IfQ7O9wltwKv44ulIPOIyZLzNynoJQKpZZ+W9/GsCV5jwrwcArStDAsBQ0xbyfWiowkEsmXa4zy
-	p/8UZ/R81iAaWD4vDsqAU86EHrwfljTxJQofcMB6TbOAgXI/A8Roa6+Ls9h2itmqjMqtnLecA7o
-	+/WeahjvGJbF1i6hYn2Gz6FNg2o0DQQtjtQZ/uQDpp1Xow7yYIbAOEYCvw8KdT7Nr7KGAIBtVvi
-	+1Hngi0OIGmVgHnf8HJD6FgrjsbvIMK8783uJbGDhD908nUc/ITafgfat+C5OBRpb0KqHonjssk
-	qwjfQVftsEVD4aVxsnaDPFr8W7nr4zo1xMDL16BG+uuFMG/0YaY3BQnG5Ic7ATNpYJhoW5XuPsV
-	dP2ffv2OG66yAIhb41TOpMDI5sZZYAqAirzjGKP2FxtcBOVCblcfhAjRJXl+swb3LA8UBRhA+zl
-	xgA4=
-X-Received: by 2002:a05:7023:a8b:b0:1af:d88f:fc51 with SMTP id a92af1059eb24-1b543d264e1mr5503203c88.30.1795081989999;
-        Thu, 19 Nov 2026 01:53:09 -0800 (PST)
-Received: from localhost.localdomain ([116.88.205.165])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5447c5b02sm12862850c88.6.2026.11.19.01.53.06
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 19 Nov 2026 01:53:09 -0800 (PST)
-From: Zhefu Peng <ilskdw@gmail.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	kuniyu@google.com,
-	mschiffer@universe-factory.net,
-	nicolas.dichtel@6wind.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v6 2/2] selftests: net: add a test for vxlan snooping moving a MAC
-Date: Thu, 19 Nov 2026 17:52:56 +0800
-Message-ID: <20261119095256.42005-3-ilskdw@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261119095256.42005-1-ilskdw@gmail.com>
-References: <20261119095256.42005-1-ilskdw@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aSsOv2Ba
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDB41F000C5;
+	Thu, 19 Nov 2026 09:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795082063;
+	bh=h9SsKa89pdv6CdZOat+96TxZ6dXD8Iqx3PWwB13ANYM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=aSsOv2BaxlpvGGuDpyN71M7yc+4TZItkDwPgE/mVRRxpKY/5Is1ICLm1OgQDx1CQU
+	 BA0gi+RgMuVvWHZeDOzxTCb2FZXMyL9Z9/FVms1/Van+NgiraVVl5+ChPi5CB+in0C
+	 XH/kpzSmFGtfsk/A4mqAhJZgHTf4iaen7PonvaAAK3ZiUi/F2/a66EezcOG7ADXlae
+	 p3GO/y46uHeMN7OeP4VWcAvW6EW3ubHu9BOEwkegZPuNYkm4wQHv1Lxdpv1zX4Bt21
+	 f6EAHh607LaZEcwkMIHTnB2AJFaHdpmMldXw3eVwcCptWwhlNP8BT03LuCdW7ddVpI
+	 wswesMqFXK85Q==
+Subject: Re: [PATCH net v2 1/5] eth: fbnic: wait on the correct queues in
+ fbnic_queue_stop()
+From: netdev-bot+sashiko@kernel.org
+To: dimitri.daskalakis1@gmail.com
+Cc: davem@davemloft.net, alexanderduyck@fb.com, kuba@kernel.org,
+ kernel-team@meta.com, andrew+netdev@lunn.ch, edumazet@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, hmohsin@meta.com,
+ mike.marciniszyn@gmail.com, sdf@fomichev.me, bobbyeshleman@meta.com,
+ bjorn@kernel.org, leitao@debian.org, horms@kernel.org, almasrymina@google.com,
+ vadim.fedorenko@linux.dev, daskald@meta.com, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Thu, 19 Nov 2026 09:54:21 +0000
+Message-ID: <179508206173.3136.15402623456535892800@kernel.org>
+In-Reply-To: <20261117215416.1901246-2-dimitri.daskalakis1@gmail.com>
+References: <20261117215416.1901246-2-dimitri.daskalakis1@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,273 +67,143 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add a test for a learning VXLAN device that snoops a known MAC.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-The first case moves the MAC from an on-link IPv4 remote to a remote
-behind a router, and checks that traffic to the MAC still flows. Its
-pings run on one CPU, because the route cache is per CPU and only the
-CPU that filled it hits the stale entry. This case fails while the
-device keeps the route cached for the previous remote.
+Critical: 0 · High: 0 (1) · Medium: 1 · Low: 0
 
-The second case moves the MAC from a global IPv6 remote to a link-local
-one, and checks that the FDB entry records the new output interface.
-Both remotes are on-link, so this case checks the interface, not the
-route cache.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-The third case adds a dynamic entry with a "via" device, and checks
-that traffic from the entry's remote leaves the device in place.
+- [Medium] After this patch, fbnic_queue_stop() passes
+  nv->qt[t].cmpl.q_idx to fbnic_wait_queue_idle().
 
-This test was written with the help of an AI coding assistant.
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but
+  fbnic_queue_stop() stops the vector's netdev Tx queues with a bare…
 
-Signed-off-by: Zhefu Peng <ilskdw@gmail.com>
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/test_vxlan_snoop_move.sh    | 222 ++++++++++++++++++
- 2 files changed, 223 insertions(+)
- create mode 100755 tools/testing/selftests/net/test_vxlan_snoop_move.sh
+--
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index baea3e7f0..69d440c5b 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -118,6 +118,7 @@ TEST_PROGS := \
- 	test_vxlan_mdb.sh \
- 	test_vxlan_nh.sh \
- 	test_vxlan_nolocalbypass.sh \
-+	test_vxlan_snoop_move.sh \
- 	test_vxlan_under_vrf.sh \
- 	test_vxlan_vnifilter_notify.sh \
- 	test_vxlan_vnifiltering.sh \
-diff --git a/tools/testing/selftests/net/test_vxlan_snoop_move.sh b/tools/testing/selftests/net/test_vxlan_snoop_move.sh
-new file mode 100755
-index 000000000..e1f0ebb19
---- /dev/null
-+++ b/tools/testing/selftests/net/test_vxlan_snoop_move.sh
-@@ -0,0 +1,222 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Check that a learning VXLAN device fully updates a remote when snooping
-+# moves a known MAC to another VTEP:
-+#
-+# - The route cached for the old remote is dropped. The old remote is
-+#   on-link and the new one is behind a router, so a stale cached route
-+#   blackholes traffic to the moved MAC.
-+# - The output interface follows the new remote. The MAC moves from a
-+#   global IPv6 address to a link-local one, which needs an interface.
-+# - Traffic from the remote of a dynamic entry keeps the entry's "via"
-+#   device.
-+
-+# shellcheck disable=SC2154,SC2329 # set by setup_ns, run by tests_run
-+source lib.sh
-+
-+ALL_TESTS="
-+	test_move_behind_router
-+	test_move_to_link_local
-+	test_same_remote_keeps_via
-+"
-+
-+MAC=02:00:c0:a8:00:0a
-+
-+ping_ns()
-+{
-+	local ns=$1; shift
-+
-+	ip netns exec "$ns" ping -c 3 -W 1 -i 0.2 "$@" &> /dev/null
-+}
-+
-+ping_pinned()
-+{
-+	local ns=$1; shift
-+
-+	taskset -c "$CPU" ip netns exec "$ns" ping -c 3 -W 1 -i 0.2 "$@" \
-+		&> /dev/null
-+}
-+
-+add_sw_port()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+	local port=$1; shift
-+
-+	ip link add "$dev" netns "$ns" type veth peer name "$port" netns "$sw"
-+	ip -n "$sw" link set "$port" master br0 up
-+	ip -n "$ns" link set "$dev" up
-+}
-+
-+test_move_behind_router()
-+{
-+	local name="IPv4 move to a remote behind a router"
-+
-+	RET=0
-+
-+	if ! setup_ns sw ex a r b; then
-+		log_test_skip "$name"
-+		return
-+	fi
-+	defer cleanup_ns "$sw" "$ex" "$a" "$r" "$b"
-+
-+	ip -n "$sw" link add br0 up type bridge
-+	add_sw_port "$ex" e0 s-e
-+	add_sw_port "$a" a0 s-a
-+	add_sw_port "$r" r0 s-r
-+	ip link add r1 netns "$r" type veth peer name b0 netns "$b"
-+	ip -n "$r" link set r1 up
-+	ip -n "$b" link set b0 up
-+
-+	ip -n "$ex" addr add 10.0.1.1/24 dev e0
-+	ip -n "$ex" route add default via 10.0.1.254
-+	ip -n "$a" addr add 10.0.1.2/24 dev a0
-+	ip -n "$r" addr add 10.0.1.254/24 dev r0
-+	ip -n "$r" addr add 10.0.2.254/24 dev r1
-+	ip netns exec "$r" sysctl -wq net.ipv4.ip_forward=1
-+	ip -n "$b" addr add 10.0.2.2/24 dev b0
-+	ip -n "$b" route add default via 10.0.2.254
-+
-+	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
-+		local 10.0.1.1 learning
-+	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 10.0.1.2
-+	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 10.0.2.2
-+	ip -n "$ex" addr add 192.168.0.1/24 dev vx0
-+	ip -n "$ex" link set vx0 up
-+
-+	ip -n "$a" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
-+		local 10.0.1.2 remote 10.0.1.1
-+	ip -n "$b" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
-+		local 10.0.2.2 remote 10.0.1.1
-+	ip -n "$a" addr add 192.168.0.10/24 dev vx0
-+	ip -n "$b" addr add 192.168.0.10/24 dev vx0
-+	ip -n "$a" link set vx0 up
-+
-+	ping_pinned "$ex" 192.168.0.10
-+	check_err $? "ping before the move failed"
-+
-+	ip -n "$a" link set vx0 down
-+	ip -n "$b" link set vx0 up
-+	ip netns exec "$b" ping -c 1 -W 1 192.168.0.1 &> /dev/null
-+
-+	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst 10.0.2.2 "
-+	check_err $? "fdb entry did not move to the new remote"
-+
-+	ping_pinned "$ex" 192.168.0.10
-+	check_err $? "ping after the move failed"
-+
-+	log_test "$name"
-+}
-+
-+test_move_to_link_local()
-+{
-+	local name="IPv6 move from a global to a link-local remote"
-+	local ns
-+
-+	RET=0
-+
-+	if ! setup_ns sw ex a b; then
-+		log_test_skip "$name"
-+		return
-+	fi
-+	defer cleanup_ns "$sw" "$ex" "$a" "$b"
-+
-+	for ns in "$sw" "$ex" "$a" "$b"; do
-+		ip netns exec "$ns" sysctl -wq net.ipv6.conf.all.accept_dad=0
-+		ip netns exec "$ns" sysctl -wq \
-+			net.ipv6.conf.default.accept_dad=0
-+	done
-+
-+	ip -n "$sw" link add br0 up type bridge
-+	add_sw_port "$ex" e0 s-e
-+	add_sw_port "$a" a0 s-a
-+	add_sw_port "$b" b0 s-b
-+
-+	ip -n "$ex" addr add 2001:db8:1::1/64 dev e0 nodad
-+	ip -n "$ex" addr add fe80::1/64 dev e0 nodad
-+	ip -n "$a" addr add 2001:db8:1::2/64 dev a0 nodad
-+	ip -n "$b" addr add fe80::b/64 dev b0 nodad
-+
-+	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
-+		local 2001:db8:1::1 learning
-+	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 2001:db8:1::2
-+	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst fe80::b via e0
-+	ip -n "$ex" addr add 192.168.0.1/24 dev vx0
-+	ip -n "$ex" link set vx0 up
-+
-+	ip -n "$a" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
-+		local 2001:db8:1::2 remote 2001:db8:1::1
-+	ip -n "$b" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
-+		local fe80::b remote fe80::1 dev b0 nolearning
-+	ip -n "$a" addr add 192.168.0.10/24 dev vx0
-+	ip -n "$b" addr add 192.168.0.10/24 dev vx0
-+	ip -n "$a" link set vx0 up
-+
-+	ping_ns "$ex" 192.168.0.10
-+	check_err $? "ping before the move failed"
-+
-+	ip -n "$a" link set vx0 down
-+	ip -n "$b" link set vx0 up
-+	ip netns exec "$b" ping -c 1 -W 1 192.168.0.1 &> /dev/null
-+
-+	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst fe80::b via e0 "
-+	check_err $? "fdb entry did not move to the new remote and interface"
-+
-+	ping_ns "$ex" 192.168.0.10
-+	check_err $? "ping after the move failed"
-+
-+	log_test "$name"
-+}
-+
-+test_same_remote_keeps_via()
-+{
-+	local name="Traffic from the same remote keeps the via device"
-+
-+	RET=0
-+
-+	if ! setup_ns sw ex a; then
-+		log_test_skip "$name"
-+		return
-+	fi
-+	defer cleanup_ns "$sw" "$ex" "$a"
-+
-+	ip -n "$sw" link add br0 up type bridge
-+	add_sw_port "$ex" e0 s-e
-+	add_sw_port "$a" a0 s-a
-+
-+	ip -n "$ex" addr add 10.0.1.1/24 dev e0
-+	ip -n "$a" addr add 10.0.1.2/24 dev a0
-+
-+	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
-+		local 10.0.1.1 learning
-+	bridge -n "$ex" fdb add "$MAC" dev vx0 dst 10.0.1.2 via e0 dynamic
-+	ip -n "$ex" addr add 192.168.0.1/24 dev vx0
-+	ip -n "$ex" link set vx0 up
-+
-+	ip -n "$a" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
-+		local 10.0.1.2 remote 10.0.1.1
-+	ip -n "$a" addr add 192.168.0.10/24 dev vx0
-+	ip -n "$a" link set vx0 up
-+
-+	ping_ns "$a" 192.168.0.1
-+	check_err $? "ping from the remote failed"
-+
-+	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst 10.0.1.2 via e0 "
-+	check_err $? "fdb entry lost its via device"
-+
-+	log_test "$name"
-+}
-+
-+cleanup()
-+{
-+	defer_scopes_cleanup
-+}
-+
-+require_command taskset
-+CPU=$(taskset -pc $$ | sed 's/.*: //; s/[-,].*//')
-+
-+trap cleanup EXIT
-+tests_run
-+
-+exit "$EXIT_STATUS"
+eth: fbnic: wait on the correct queues in fbnic_queue_stop()
+
+This patch sets q_idx on Tx completion rings. fbnic_queue_stop() now
+passes cmpl.q_idx to fbnic_wait_queue_idle(), so Rx queues no longer
+wait on queue 0. It also skips stop and wake of Tx rings that are
+marked FBNIC_RING_F_DISABLED.
+
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> index 07d4b2e923627..5efed21e59329 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+
+[ ... ]
+
+> @@ -3089,13 +3092,16 @@ static int fbnic_queue_stop(struct net_device *dev, void *qmem, int idx)
+>  	napi_disable_locked(&nv->napi);
+>  	fbnic_nv_irq_disable(nv);
+>  
+> -	for (i = 0; i < nv->txt_count; i++)
+> +	for (i = 0; i < nv->txt_count; i++) {
+> +		if (nv->qt[i].sub0.flags & FBNIC_RING_F_DISABLED)
+> +			continue;
+>  		netif_stop_subqueue(dev, nv->qt[i].sub0.q_idx);
+> +	}
+>  	fbnic_nv_disable(fbn, nv);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does anything here wait
+for an fbnic_xmit_frame() call that is already running on another CPU?
+
+netif_stop_subqueue() only sets __QUEUE_STATE_DRV_XOFF. Nothing calls
+__netif_tx_lock() or synchronize_net() before fbnic_nv_disable(),
+fbnic_wait_queue_idle() and fbnic_nv_flush() run. Only the full-down
+path in fbnic_pci.c uses netif_tx_disable().
+
+A sender may pass the netif_xmit_frozen_or_stopped() check before the
+bit is set. It can then still be inside fbnic_tx_map(), writing
+tx_buf[], ring->tail and the BQL state, and ringing the doorbell.
+
+Suppose it sets ring->tail after fbnic_nv_flush() has run:
+
+fbnic_nv_flush()
+    fbnic_clean_twq0(nv, 0, &qt->sub0, true, qt->sub0.tail);
+    ...
+    netdev_tx_reset_queue(tx_queue);
+
+Is the skb and its DMA mapping then leaked once __fbnic_nv_restart()
+re-enables the ring and fbnic_enable_twq0() resets head/tail to 0? BQL
+would also keep in-flight bytes that never complete, and that can
+stall the Tx queue.
+
+Now suppose the sender is delayed until after fbnic_enable_twq0() has
+done this:
+
+	twq->tail = 0;
+	twq->head = 0;
+
+It would then write a stale ring->tail and ring the doorbell, and the
+hardware would fetch old descriptors whose buffers are already
+unmapped. Could those completions make fbnic_clean_twq0() read a NULL
+ring->tx_buf[] entry and dereference FBNIC_XMIT_CB(skb)->desc_count on
+it?
+
+To hit this, a queue restart (netdev bind-rx devmem, io_uring zcrx) has
+to run on an Rx queue whose NAPI vector also serves a combined Tx queue,
+while another CPU is sending on that Tx queue.
+
+>  
+>  	for (t = 0; t < nv->txt_count + nv->rxt_count; t++) {
+>  		err = fbnic_wait_queue_idle(fbn, t >= nv->txt_count,
+> -					    nv->qt[t].sub0.q_idx);
+> +					    nv->qt[t].cmpl.q_idx);
+
+[Severity: Medium]
+On an Rx-only vector the Tx triad has sub0 disabled and carries only the
+XDP TWQ1 ring, so this call becomes fbnic_wait_queue_idle(fbn, false,
+txq_idx). Does fbnic_wait_queue_idle() actually cover TWQ1 of that
+queue?
+
+It builds a single bit from the queue index and tests that bit in all
+four Tx idle arrays:
+
+fbnic_wait_queue_idle() {
+    ...
+	off = idx / 32;
+	mask = BIT(idx % 32);
+    ...
+}
+
+The TWQ, TQS and TDE idle arrays are twice as wide as the TCQ one:
+
+#define FBNIC_QM_TWQ_IDLE_CNT			8
+#define FBNIC_QM_TCQ_IDLE_CNT			4
+#define FBNIC_QM_TQS_IDLE_CNT			8
+#define FBNIC_QM_TDE_IDLE_CNT			8
+
+There are 128 queues with two work queues each (TWQ0 and TWQ1), so this
+looks like one bit per TWQ. fbnic_wait_all_queues_idle() reads all 8
+registers, but fbnic_wait_queue_idle() only reads registers 0 to 3.
+
+If bit idx maps to TWQ0, it is always idle here, because TWQ0 is
+FBNIC_RING_F_DISABLED on this triad. The TWQ1 ring that carries XDP_TX
+traffic would then never be polled.
+
+Next, fbnic_queue_stop() calls fbnic_nv_flush(), which runs
+fbnic_clean_twq1() and unmaps the XDP buffers. Could the hardware still
+be fetching TWQ1 descriptors at that point?
+
+The bit layout isn't documented in-tree, so the answer depends on the
+hardware. The commit message gives "fbnic_wait_queue_idle(tx, 39)" as
+the wait on the vector's XDP Tx queue. Is that wait enough to cover
+TWQ1?
+
+>  		if (err)
+>  			goto err_restart;
+>  	}
+
 -- 
-2.54.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117215416.1901246-1-dimitri.daskalakis1%40gmail.com
