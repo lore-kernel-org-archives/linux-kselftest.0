@@ -1,104 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795099390;
-	b=p2QnC0v4ke3Ic6hS/RS0Wvft+xLGcpVT3jS91CXuL6PhPVQUCFu++jjtBwyG9Wa8q2vz
-	 2AF79mfKj+qQSiOHLGF2SuaQYSMZ103UvfxhLX08ciqbZ5MhxwIdRdiyNpL32LiqzVwqX
-	 Yw+kBQQHtxXXJM2+OekyboZkO5ZN+gvSnOrq+Dsc2DPj1tEDzPmxBJBnThyhIC/hl+z1L
-	 vGPzKUer1HrIW1W1A1kwcHDwe1Z96H8ULrnOuJMW3ulWqu3oLlhEx7BHvni3AKtO+nwb3
-	 pm2jh8ELz6OvQlMCJcdTVjiRjXzE3z7EUR8I5pr1Uh0jmnPSVsdKMPUtR94ZW06zLvg==
+	t=1795100070;
+	b=03yc9QsjEw+ZdGmoO6bYkfmeSNAbyk88ppS3f+tou2EDCrBtWJgsAAiYy/1gxGPokUgl
+	 9KPoEbWL75us3t6EJdkGFERMsTDn3VVCYSbbm82IMy3tIgZJljb990HrmsrdHccZMAlu9
+	 t7Nua5OTAecURtD7eoAtTsZ8jZA2EjwbDtAQh/aFMOsWiIs5uMSGh0g+QpSm1fjB6TQA1
+	 NLKsKOE0aJG5Yiko4UacE8uvYAFnOwaoo/a2PuAiFmtmrBZjPeXn1ghscd3GL8t6LL/qX
+	 tsvB/XoQJGzxIqzvTIvCO6RlQj7neTqWHnGXPc0QLd3ZnnKDSnqxua5QQCwLedY731A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795099390;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795100070;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=yiNGMOZ+T2aYXndxp6WNW2Z7eC3xgYW0cACgi8Pfxp8=;
-	b=qsX8R9CBymzx+BesFum5ahaGjooQ8fHOxvNtLRh70GGaAhnNQeR5WeEBiBwy8HqnfVnb
-	 B9InTShkEkgPFJfYSwvq1k3r4sH9kQrpWn0EKq+2AumZXmoDucRJ8TuwWTMBTjtuEtwN1
-	 aaW52j1ZGsSEo9yg9JmqWKVt7YglQrUFaqNHO5tpTNT9wY89Zsf9bLD3Vpl8ECgbiaBhE
-	 ltokr9onsqKo5UuhKJbmRaSYjudg2rwnRUlQlfK0GQ1AzGUvHWN5LEB6hpdfd57NU5ogz
-	 cO8NlruyOivOVN6EP/U/KWWRhDHAQuf19RPGwjqsQZZYDlLhfBMxLGwf8vkMIAQkGWw==
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
+	bh=mF/CN1MwkKAbj0n+aog+XXJlGwsq4jMzPf88n15fnBI=;
+	b=hC4o99WwYEvXLS79Im7I4FvnkZM0vql8+2yaLv4EOFw0SJKiFObV+XfM8S2wEfqx5Gy6
+	 N8RW2XJAD1Jl8yZFOuLnMP8/DxtOhait7rph+y7qsyLsHnAbLun2K8hUtHiClggg2WTQ0
+	 Lqb0Sl4HvE3sM4wtH5BOpmX81ctsEgD1OWkhHDKXzLzAOH2arwpTTLlJ7sF9EdBToBvpp
+	 3hyna5kh3kRUer+mm9ve79eZpKLLaiEEb/c8DCVgG/nC76zfgxHGikwKEdX65rQ9JrunA
+	 omQ8fjdL4LN7zsCOOQEjVV1u2zNiWo5cIqYrmaRFBJrRV6M8bkfHq3ah4alstheZQDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GCfnoQPq;
-	arc=none smtp.remote-ip=74.125.82.53
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=I6LPAIeX;
+	arc=none smtp.remote-ip=209.85.222.178
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC53E60A2635
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:43:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC53E60A2635
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049FF606A336
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:54:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 049FF606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GCfnoQPq
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1b3a05f8b5bso2920860c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 06:43:09 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=I6LPAIeX
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-945e6d9ceeaso204575385a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 06:54:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795099389; x=1795704189; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yiNGMOZ+T2aYXndxp6WNW2Z7eC3xgYW0cACgi8Pfxp8=;
-        b=GCfnoQPqg+rCDFqYxBpm9AKziIf+db5ejrjN3XzIAVXwywCajnXzzh4eEwiI/gLxIZ
-         p3UK5+dBJyUS386omtr4Clr/kiVXlfjqXMJ0glNBhMIymhCnApZybKHV4TvVXOh3Nv3u
-         SpL3s6Jqd2BcoXEaaK72PMwWGlRZAogU1UNYitXhG997WzgzRAjMgEuQRqOtrT1xkf5u
-         2RpdW2VwHA0Kvp9GEcqpN6VByZQ/nN5N24VOXuNR2hdxyy/eEAXMAn1gYbVTaHxUcXiy
-         piaRAyK351lHRur5sX87av2ea7Afg0SQbGMaGezLO3veV16PwqNXXK4r34aNEIyyESz6
-         U54w==
+        d=soleen.com; s=google; t=1795100069; x=1795704869; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mF/CN1MwkKAbj0n+aog+XXJlGwsq4jMzPf88n15fnBI=;
+        b=I6LPAIeX+5AEjUj2jih1ACvF7QNbKEZSSWEQHvV1cx+j9LvgW93X3qemhuduWcn0D3
+         wzjjkTCPSi8Rgf0iuqK8xc8hJddhWoVNo21OQxjCP7w+/nVX/0sSFgNp6T16VosZ8l8m
+         HAxC3NLC6MhIkDBmbKV8klY8QvYuZ/Xb43ZoIKvvEvWWV6qHPqKqKpSCN1Va6vVqIQ/u
+         honQkjaTAMAdsC3ea9n10KbyFizCpOLDvHQAp3NtIUNsuoQsfY2rOKBvBaTmm6gqubgm
+         nGFTgPM6LG7FI1IqREsQ43EHzZnUjXfjfvYzru7SjxiKuf1M/4sgL6+m4kdJklSo01+f
+         Zypg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795099389; x=1795704189;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yiNGMOZ+T2aYXndxp6WNW2Z7eC3xgYW0cACgi8Pfxp8=;
-        b=qoBqbvP5+yNUNTudQjXrUc6VFsDeukp98UDMVbUssbnlHzdIhYu5dgvB1MBR5uDzl7
-         k4e/c+HDAzRSfkidapp18r/AbHLc5WFMJLWBzEXkt3KMXHwvR0JqWJBXNQFJDpHktcbD
-         BGIEobmywsuNws/NioxVIcTrR0IeV/uU8PZWoFvTujFzkOVIMpS3POD4u+916Wlz6cjx
-         dEg4rrUEiLoRpOQM1S2fFQUyl1I3qGxfph1d5YItIKFxvF7JSI5zDLsNjPChHoYBVSKQ
-         k1p8q2czlDMr0e14R1fiDmQ9k1apeW7O9VC+oH7qlpsKHZ7infZRzws/R7Rwd57OEFns
-         OSYg==
-X-Forwarded-Encrypted: i=1; AL+hErFWFOwolD0u32ZuGrfGRGe9kXqckAA/G6hyxbmD8JmG0yCf2zO88ZVfboU214gj5FgxZbX6shzslv0x6ab3KNk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/wJ8g93B6jgjKmIZ0ASCFSRO/dRgeVYIADdJpiXoWE4H3byGFg
-	M6B6D3hLo4iEC0/ITpyt3WnXU93vXTHkcdFOXKmdy9r/0J3o0ZeJgUcX
-X-Gm-Gg: AZFdTZeA4XcBI9TYsYHY1Qng0sMcYd5ko9rxms0KNevzc+FKpb8f5yhLcw9HzQcB1K4
-	oB1OMIokOu2J0ltv6iZoEU8yvK78QCVcsV0q8tJK5TtHm8dTmeOCkkuM1VkWe4+41msLnY4kS3A
-	qxkZglZxq0zBAN6qsFDoTqxxiCWPnOrvLIY4VUPNT4fEU9ugiAYCl9hBWwsi6bKwKWW8oehna/i
-	7w4xAjq5vkwjo7MCluE0nF2fMNw2a5RhaTOw9xQkWGaacRLmD2R2zfxioFAmP+HAhdjq8a6KIzT
-	OE1xr7JTYmf99ZoV0BJVVo+01QPK+sfzkAl7ElKPk3mSBhq9mzRq9BT3zUFpdpH2USFsv4YaEF7
-	f0STjChy8pZ3OvoGY+vB3RMr9QPF2s7JNjIhtBI7md6KftEXoCneNMTWM5DUStj2SqoP12LZAXx
-	2YJQRaFMM+5hN26cDJee+6USiBCpeovHSwiIUCkp54IMEMfsorfoh5cg1ajf13E6D75dTuaCVBQ
-	3MV3OhWrlIIvbSd8DzLuGe9mWORrW6ahOVz31+mEhuFRGDoOaspCQCwLEgFGuyMIpJhm4s1FhPz
-	wKflpbwR96AoIb5cZfJ72wPOVwafSmywb0FoxfaGdM8WlOXrLw==
-X-Received: by 2002:a05:7300:cf98:b0:382:7375:1306 with SMTP id 5a478bee46e88-38280a38654mr5978419eec.14.1795099388796;
-        Thu, 19 Nov 2026 06:43:08 -0800 (PST)
-Received: from localhost.localdomain ([112.170.44.210])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-382a6fe733dsm16682848eec.16.2026.11.19.06.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 06:43:08 -0800 (PST)
-From: Junyoung Jang <graypanda.inzag@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Junyoung Jang <graypanda.inzag@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Gwanhyun Lee <gwanhyunlee@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 4/4] selftests: net: check padded vnet hdr_len in tun and tap
-Date: Thu, 19 Nov 2026 23:42:39 +0900
-Message-ID: <20261119144241.360238-5-graypanda.inzag@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261119144241.360238-1-graypanda.inzag@gmail.com>
-References: <20261119144241.360238-1-graypanda.inzag@gmail.com>
+        d=1e100.net; s=20260707; t=1795100069; x=1795704869;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mF/CN1MwkKAbj0n+aog+XXJlGwsq4jMzPf88n15fnBI=;
+        b=bNPK47OyJwOiiq2qr5ynIbdFq38K0cOnSgys/32GjvfVXol3Z/y3NG8qz7CP9d8k4V
+         RGL5W7hHS4CrW7UinUFZTCKaD7jMKeNRVVzxEwkQuJixkf5eWjlD3wS1HTNKJmlQQXAa
+         1kQG06/ngtSnIEFHzogiVwiDT1fKySiaWLTOxMSY1tO1/uoPEtrD3lcRNQLTyK1m4Iim
+         zty+SpLpAr1IWaF8Tx+waeIRlYdSycnQFhf85R78p893bVbchH9D9hn0P+UCFvpqnQ4U
+         OhegctbL88IeZ3cEV3w9qrnZz1sz0ODHGvCt1FbmfWZ/2Wc/HZHOrruGT+Cd1S6i8OIJ
+         WrJA==
+X-Forwarded-Encrypted: i=1; AL+hErGa2GHMpb+/F5uuuNt2zq6DQnoz/aWj7D8n+2bBEpjeFI8ZcGrEsXtZ71b4BaTBoPd0Yv57OFKzWgnZFenwECc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/eZPaQ7eqmeajs601u5b6KDKjNFtcD5DbbludLwW6rowjXHldh
+	x9jI3mlO4dM8AwuhNxd8CJRMfr4quz8Q3YYid8+PS8+XV2weR/b3DGx+UKjogbs5wHs=
+X-Gm-Gg: AYBFou1HB632Um9mbzXrDY0dFkM5PtGUTgqPbndO1q4/wm7ijfXE+QhNvkyYdos2jwE
+	1iqjzHNyKMlyMLmQ8mQYPqcy+2C0tMzYUNf9SFjrH8Y1GLT0E3VWgbCccSaUztm8QLdtmX8CoNP
+	xI7ZFySfWo0OfZNY3fnhaIaHd3hXLrGE8VFlVF56J5E64V6PGVDfNPgvlNLJrvRkb9s2MBaywjH
+	JCLKyQiwLSnQaX4VbnVQd8BqyXur+UDRsKAw/H3TSgQS87yyJ/sOy9lHmFOacMLNLwLmw2nqLDE
+	wjqoU0B6hfVyP2Ua+70pd2c0ZA5ZlHyNGz28KsGtix1VgJ0xTX0v7b91pE618tP3N4ksk6j1lXN
+	vieiMxnnGj0xaTfN3osiiAqfFSe1T/QmJ8tLq7MOBXz9D57SpxdWZQRam4hEhg12/FoIvisMtvu
+	TBrA+pTZSoRhds0pxw/IKgNULcDKHesTKQj2d7cf+pZ0p1kDNCuKq0pjDhbGjJKHAHtJodKZ1X5
+	owUWr4JX3QQ9swulGmA7BA54iq/u1tFfnjSsvPfUXOPMEb4N0RuDOBGATEU9eLDzu9qX0DbSSM8
+	kUjjO0dMdAP3RILwwxF6j4oPvZVE1Ik36E+SWPo4rhaiVZzqsek53ZmLpdfFtISR2nTYsgMiB5N
+	SgApGqeaHqev5MVxI9btMJA1nGdpSaH0=
+X-Received: by 2002:a05:620a:6e84:20b0:949:a7d0:e6b4 with SMTP id af79cd13be357-949a7d0e7f1mr416234385a.51.1795100068869;
+        Thu, 19 Nov 2026 06:54:28 -0800 (PST)
+Received: from localhost (57.233.150.34.bc.googleusercontent.com. [34.150.233.57])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949b9a5370dsm10296885a.23.2026.11.19.06.54.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Nov 2026 06:54:28 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,109 +88,100 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Nov 2026 09:54:27 -0500
+Message-Id: <DMZ9V6MU9XNZ.3J23SCKTSDHB@soleen.com>
+To: "Chris Down" <chris@chrisdown.name>, "Pasha Tatashin"
+ <pasha.tatashin@soleen.com>, "Mike Rapoport" <rppt@kernel.org>, "Pratyush
+ Yadav" <pratyush@kernel.org>
+Cc: "Breno Leitao" <leitao@debian.org>, "Alexander Graf" <graf@amazon.com>,
+ "Baoquan He" <baoquan.he@linux.dev>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Shuah Khan" <skhan@linuxfoundation.org>, <kexec@lists.infradead.org>,
+ <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-team@meta.com>
+Subject: Re: [PATCH 1/9] kho: Reclaim the metadata page left reserved after
+ kexec
+From: "Pasha Tatashin" <pasha.tatashin@soleen.com>
+X-Mailer: aerc 0.22.0-39-g5d7784875be2
+References: <cover.1794383544.git.chris@chrisdown.name>
+ <63ca64c004b296a998a3e531f8c0c4964916b70c.1794383544.git.chris@chrisdown.name>
+In-Reply-To: <63ca64c004b296a998a3e531f8c0c4964916b70c.1794383544.git.chris@chrisdown.name>
 
-Add tun and macvtap write tests with a 512-byte virtio header and a
-14-byte Ethernet frame. A hdr_len of 256 must fail with -EINVAL
-because it exceeds the post-padding payload. A zero hdr_len must
-continue to accept the same valid frame.
+On Wed Nov 11, 2026 at 2:52 AM EST, Chris Down wrote:
+> After a KHO kexec, the new kernel keeps the page holding the previous
+> kernel's kexec metadata reserved for as long as it runs. It only needs
+> the page once, since kho_in_kexec_metadata() copies the previous release
+> and the kexec count out of it at boot, and nothing reads it again.
+>
+> Free it with kho_restore_free() once copying is complete.
+>
+> Fixes: 76aa46b9e404 ("kho: kexec-metadata: track previous kernel chain")
+> Signed-off-by: Chris Down <chris@chrisdown.name>
+> ---
+>  Documentation/admin-guide/mm/kho.rst |  4 +++-
+>  kernel/liveupdate/kexec_handover.c   | 10 +++++++---
+>  2 files changed, 10 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/mm/kho.rst b/Documentation/admin-g=
+uide/mm/kho.rst
+> index 902d171a780a..f9d2cc5999ee 100644
+> --- a/Documentation/admin-guide/mm/kho.rst
+> +++ b/Documentation/admin-guide/mm/kho.rst
+> @@ -120,4 +120,6 @@ stabilized.
+> =20
+>  ``/sys/kernel/debug/kho/in/sub_fdts/``
+>      Similar to ``kho/out/sub_fdts/``, but contains sub blobs
+> -    of KHO producers passed from the old kernel.
+> +    of KHO producers passed from the old kernel. A blob disappears
+> +    once the kernel has read and freed it, as ``kexec-metadata`` does
+> +    during boot.
+> diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec=
+_handover.c
+> index eeec298aa9d6..3046b89e5db4 100644
+> --- a/kernel/liveupdate/kexec_handover.c
+> +++ b/kernel/liveupdate/kexec_handover.c
+> @@ -1808,6 +1808,9 @@ static void __init kho_in_kexec_metadata(void)
+> =20
+>  	pr_info("exec from: %s (count %u)\n",
+>  		kho_in.previous_release, kho_in.kexec_count);
+> +
+> +	kho_debugfs_blob_remove(&kho_in.dbg, metadata);
+> +	kho_restore_free(metadata);
+>  }
+> =20
+>  /*
+> @@ -1885,14 +1888,15 @@ static __init int kho_init(void)
+>  	if (err)
+>  		goto err_free_fdt;
+> =20
+> +	if (fdt)
+> +		kho_in_debugfs_init(&kho_in.dbg, fdt);
+> +
+>  	err =3D kho_kexec_metadata_init(fdt);
+>  	if (err)
+>  		goto err_free_fdt;
+> =20
+> -	if (fdt) {
+> -		kho_in_debugfs_init(&kho_in.dbg, fdt);
+> +	if (fdt)
+>  		return 0;
+> -	}
 
-These tests exercise the common header parser through both drivers.
-On the unpatched kernel, each oversized hdr_len test accepts the
-packet instead of rejecting it.
+This re-ordering can be removed, now that we applied:
+https://lore.kernel.org/all/179508700586.361583.12491114908870226409.b4-ty@=
+b4/
 
-In x86-64 QEMU, the patched kernel passed all 105 tun and five tap
-selftests, including the new cases.
+> =20
+>  	for (int i =3D 0; i < kho_bootmem_cnt; i++) {
+>  		unsigned long base_pfn =3D PHYS_PFN(kho_bootmem[i].addr);
 
-Co-developed-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
-Signed-off-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
-Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
----
- tools/testing/selftests/net/tap.c | 29 +++++++++++++++++++++++++++++
- tools/testing/selftests/net/tun.c | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+)
 
-diff --git a/tools/testing/selftests/net/tap.c b/tools/testing/selftests/net/tap.c
-index a0c9418132c8..bf5d36cf73c9 100644
---- a/tools/testing/selftests/net/tap.c
-+++ b/tools/testing/selftests/net/tap.c
-@@ -425,4 +425,33 @@ TEST_F(tap, test_packet_crash_tap_invalid_eth_proto)
- 	ASSERT_EQ(errno, EINVAL);
- }
- 
-+TEST_F(tap, padded_hdr_len_exceeds_payload)
-+{
-+	const int hdr_size = 512;
-+	uint8_t pkt[512 + ETH_HLEN] = { 0 };
-+	struct virtio_net_hdr *vh = (void *)pkt;
-+	ssize_t ret;
-+
-+	ASSERT_EQ(ioctl(self->fd, TUNSETVNETHDRSZ, &hdr_size), 0);
-+	vh->hdr_len = 256;
-+	build_eth(pkt + hdr_size, ETH_P_IP);
-+
-+	ret = write(self->fd, pkt, sizeof(pkt));
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+}
-+
-+TEST_F(tap, padded_hdr_len_zero)
-+{
-+	const int hdr_size = 512;
-+	uint8_t pkt[512 + ETH_HLEN] = { 0 };
-+	ssize_t ret;
-+
-+	ASSERT_EQ(ioctl(self->fd, TUNSETVNETHDRSZ, &hdr_size), 0);
-+	build_eth(pkt + hdr_size, ETH_P_IP);
-+
-+	ret = write(self->fd, pkt, sizeof(pkt));
-+	ASSERT_EQ(ret, sizeof(pkt));
-+}
-+
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-index 34de2580e32e..525fd588d916 100644
---- a/tools/testing/selftests/net/tun.c
-+++ b/tools/testing/selftests/net/tun.c
-@@ -683,6 +683,37 @@ TEST_F(tun_vnet_gso, vlan_tcpv4_gso_no_csum_64k)
- 	ASSERT_EQ(ret, len);
- }
- 
-+TEST_F(tun_vnet_gso, padded_hdr_len_exceeds_payload)
-+{
-+	const int hdr_size = 512;
-+	uint8_t pkt[512 + ETH_HLEN] = { 0 };
-+	struct virtio_net_hdr *vh = (void *)pkt;
-+	ssize_t ret;
-+
-+	ASSERT_EQ(ioctl(self->fd, TUNSETVNETHDRSZ, &hdr_size), 0);
-+	vh->hdr_len = 256;
-+	build_eth(pkt + hdr_size, ETH_P_IP, param_hwaddr_outer_src,
-+		  param_hwaddr_outer_dst);
-+
-+	ret = write(self->fd, pkt, sizeof(pkt));
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+}
-+
-+TEST_F(tun_vnet_gso, padded_hdr_len_zero)
-+{
-+	const int hdr_size = 512;
-+	uint8_t pkt[512 + ETH_HLEN] = { 0 };
-+	ssize_t ret;
-+
-+	ASSERT_EQ(ioctl(self->fd, TUNSETVNETHDRSZ, &hdr_size), 0);
-+	build_eth(pkt + hdr_size, ETH_P_IP, param_hwaddr_outer_src,
-+		  param_hwaddr_outer_dst);
-+
-+	ret = write(self->fd, pkt, sizeof(pkt));
-+	ASSERT_EQ(ret, sizeof(pkt));
-+}
-+
- FIXTURE(tun_vnet_udptnl)
- {
- 	char ifname[IFNAMSIZ];
--- 
-2.43.0
+
+
+
+--=20
+Pasha
 
