@@ -1,66 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.149.156.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795113132;
-	b=ZzHOnmNSq0YVioKp4hC19LFx/i/GNqCgw4Y1aTDVkwoPCdZTurMH/eCLf6go3Mc14EK5
-	 OAUS5vqoUVxT/l93XDJqI/oROAD6vg9NhKEx9ebm6LQTP8B1yXc/NcRaKbOvjTIws4dzD
-	 Qg7tcn4QBsVVxyGFPLL81oaa5wCYwj6StL7YKTKqkAa6OCPYIVOLtakWSEvrZuhkg1nbP
-	 abrFI5NoewJ9ZBE25OWJ0jAwiD3e0VekzN7ahlCaGcOTclTttmOmZHbUH9g2cqCI3DwJ6
-	 8NkctAA4f/cgpnhOOVHPGc+GUjPu3r2yqZEwIRLwWGJxK4cLEJro0lZmZt15xFs/5MA==
+	t=1795113213;
+	b=H5GzGfv5w/2OUYC/pS5lpUBAViX0fpwH4Q/dkX90KGdJ6bZ0mpWows46r/GLo7fGbE52
+	 w7obz5G2U/+STkAKzPbbeyZbQYBMTMqZLf47dzn6kapRHx6zEWqkwnf5FBYZvQG7dw8vM
+	 hZ4OJwqSM652/LdEQ9aodvesttmMB7SiRufTPlECpuzdW5FqNocxt+PkrOGa9XP+4S8A2
+	 Eh/TVsHjlkTvnrbvseNBmiSCtBbe6rvTIBKw96twBKfyGtV+sYsE/4xVP8+jkix/0tZt3
+	 IvV09D7zehpt2be5HGjdd+s0vVBQleuZZtlUSuOvJtEi8vmQ2p58uvWB8gpmmnOHUMw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795113132;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
-	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=rnpSKrnFQmYg+ietBlmwBi39cYR0OhHgd0OQTIatyVs=;
-	b=bZvT/ZdOtIX9lxddx5VrX9Gj2vpl0CC/HqT6h2Fd/y21j1G+HNuoAMNiT0qoT8aSnBrP
-	 4j0SCE2bP4uht0HvdWZZig2pO8u+ByZRaia7c9Q6V5OiiFU2SL4hM/6AqfSIQWEIidCe/
-	 UKULQcuqQHxm84dH/+PnfJWq39/vPhULQPNPV9yiPZHakv9qjAJLtfjErTsCdv/uvUiQM
-	 /X4eZXG0i0nnmoKKsaN/whKB1wBP8+vU5L9GrYNSGsKzWbfGq/14w1cqtRaEvjuOF7uJX
-	 MhnMnCxfBhHHPP/pYj9SEvs/XjjlzkOP6DK+Xr5G0CfdQv2h1t6ePUdgIfF39BBMSVA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795113213;
+	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CMAE-Envelope;
+	bh=2TwysOH3jFptJLl7Zh65O6ibU0W1pO9RKYiZ6XUEe4o=;
+	b=dxSY/KnY2jJrAJPMBjaNj3EElXHiOea5Ijcf/JSJQu6vzN/JOvMHBeVLnmbYpfwdSERI
+	 lkOvJ9UvQYQvtybcBo1q+PNKli/i274YidZLEtgxiah+x6tisKpvqOtDBlpclYLVUGPng
+	 DdpsvYf1n6qRsLV5XQwuc+HjL2X2yAfnbmIxsdsTO44SzYmw7ftU354GUTMvtN9mLNpoq
+	 Zfb87fXNqC08N7SLWuVV7+zlwU035pDmByEuzMh3vhtJL3fP7Wh/8UhvmG1a4NqrMUc5/
+	 65sKo0IF57yXWXdxbTqqgMldM6n2OhD2j7NYdH8YmL+sSvnzlK7//vCCmlMjnn98cfw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=I51Wzs14;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=enneenne.com;
+	spf=pass smtp.mailfrom=enneenne.com;
+	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=iMCz4c4v;
+	arc=none smtp.remote-ip=62.149.156.176
+Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FF5606A32C;
-	Thu, 19 Nov 2026 18:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0E760A260E
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 18:33:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF0E760A260E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enneenne.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=I51Wzs14
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB8F1F000C6;
-	Thu, 19 Nov 2026 18:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1795113132;
-	bh=rnpSKrnFQmYg+ietBlmwBi39cYR0OhHgd0OQTIatyVs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=I51Wzs14XbAG4qsckU/kwl6HJ858CxkZd8Rp3hB5PXisfTLMvM35ZoKvjH++juonX
-	 AL35Xk4tz1hhVpn9MtlJe0CUC+dxBvx6wMLVyxPSbVNqCySeMu/oKGY6gfD+0PY32E
-	 Ko4FR8GzYJBzLWe5QJX14zKR7S65A6HAY0c6Ypaw=
-Date: Thu, 19 Nov 2026 10:32:10 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Konstantin Khorenko <khorenko@virtuozzo.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
- <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, Ryan Roberts
- <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
- <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Usama Arif
- <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Peter Xu
- <peterx@redhat.com>, Alex Williamson <alex@shazbot.org>,
- kvm@vger.kernel.org, =?ISO-8859-1?Q?Lo=EFc?= Molinari
- <loic.molinari@collabora.com>, Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan
- <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
- linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>, Yeoreum Yun
- <yeoreum.yun@arm.com>
-Subject: Re: [PATCH v6 4/4] selftests/mm: test fork of PMD-mapped shmem THPs
-Message-Id: <20261119103210.24a7612ee26c3ffc3db49451@linux-foundation.org>
-In-Reply-To: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-4-efa7817a2bb3@virtuozzo.com>
-References: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-0-efa7817a2bb3@virtuozzo.com>
-	<20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-4-efa7817a2bb3@virtuozzo.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=iMCz4c4v
+Received: from [192.168.0.186] ([101.57.122.26])
+	by Aruba SMTP with ESMTPSA
+	id U6wix2IW175O9U6wix0Oma; Thu, 19 Nov 2026 19:33:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+	t=1795113203; bh=2t8AtcRowxFNGYE8HteZpHIn9jAWUm8DVCWA8vMMYBE=;
+	h=Date:MIME-Version:Subject:To:From:Content-Type;
+	b=iMCz4c4vXgNfjaVsNwvBuMF7tZY4Yy54lPGmuAGKY6P71MLCV/srwMTceBQ/GAt34
+	 IwJr1uqnf/dmNjlMZQB9cLgUTxbIw6iVRuT9buaKQVDbz3kaNVFEIoEpXvAkCgmyEI
+	 PSFVCiHj3v8SvBzh912x32zMoFnRUAiLuKuPzH9wjTX7qSHSKg+cusdAEfdyhakn6U
+	 MDZ+sXbJbEnEXvAx8A/4DselQVxkwI8uuu0bk6VUSPoq8UUhqONY29s9ATTEIL13dy
+	 Cw/3hrysPCKNiLyF9KsJstL/jDdfxcyJ3j39BP5mlGiBGtXHINn2jlUD38UGg+FRMw
+	 xxp9/W63RlIFw==
+Message-ID: <4ad95ed5-26b6-4871-bcb6-cfebfe73917a@enneenne.com>
+Date: Thu, 19 Nov 2026 19:33:20 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,100 +55,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
+ never read
+Content-Language: en-US
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>, Jens Wiklander <jenswi@kernel.org>,
+ Sumit Garg <sumit.garg@kernel.org>, op-tee@lists.trustedfirmware.org,
+ =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+ Pankaj Gupta <pankaj.gupta@nxp.com>, Sahil Malhotra
+ <sahil.malhotra@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
+ Richard Weinberger <richard@nod.at>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ Demi Marie Obenour <demiobenour@gmail.com>
+References: <20261118140421.584086-1-giometti@enneenne.com>
+ <650f89ef-9745-4f75-b254-80fa5ac4773d@gmail.com>
+ <av5EyVHnNzT27dyK@kernel.org> <av8In0Xyd5iI9N7K@kernel.org>
+From: Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <av8In0Xyd5iI9N7K@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfDXtWOlFTYpyTg35cFi8NKxn6M8tXvqRpaK6Te9d9LP538qpRWPqyhYCRUO7FN90zeUALjH4Pv0kc5qTXvx9JqFIICyIFmy8AMREg/ZL7rPvrVR8BOUd
+ cLloYWy2etZ8Iz2Dj35VuyDIDq5OJcXlqCU0GxFuELT2Ll0+SMmq0xT0b1NQ/mGJ1DRr6EgGHmwb1jcrz7jDiFyXggFkpjEOVUfCxm33Z+AP0WZg8zgrFJ0n
+ ffHu26kwKFVQdawAYFWmaAXnHN1p0WPTc2eQub+iUcKYdh/LB+1TMtCynW4g+PFuL/Ox/uZYSQ3twHUYmoc0NljKoPOQdr9z82B634PV+Tl5rFaczqEJswvL
+ RMT75ziH1aZFGiT3YGWODPXE3kKUfWeYw2ky9PgD86fbcUKc9YG7O6O4C555MM8R18YgP7zwMiMpC0MPLWUV4TYOFHuGzRI3nAMUWf2OAvcXsYsO9EJVC1dZ
+ /CJBXkFCk64KKzxL3y8DwpvUb58jZOH5wiXqHdVhVBx7moWR2O7fcnAGvb0ROFigOOWFyNifYgQAUKvRx0Gjo0aKANKYhIDOo9FoNc3nTrLMB+wllSvU908i
+ ZvkuwtX35joO+/L82trX60+HcodZHev58cbR0wIdppW64faoXjrD2ty6e3+iNo1wzj4r1WV6hSakPGcj+ITxJAyi+jIfJwOIVZnMMjwKHWWd276ZqiyPHgzR
+ tHcGBXPnD0+Y4FdwbDCkcDNcPihbMtNcarY0ckxuc2T0QuwtA6V5JI+qd+13NzNwBNaSBd9q0vR4Houfn0O1tVDSLHjYJhYnCW1hfd8zibQ4R4JUQeDCsiso
+ hDRhfUPbEdA73rTyHioYeBE2HST4BYaYzwzPHgFSowkALmKiOo3P6Y+sT2OdjUa1mi5YmmKKNIRc5pqRvd/Poq1X6e5PtLi+bMEeLu/tD0VuL3zYOGxE+sHW
+ BTqxG0WyQtxpY++s7NY1cpcH0qqhtrXP08lJaeDotFcKwlEQgSTkroRSzbXG9NMpu/BmvKQiIhI/dqa4MxRp7JEEFN/QNVR7WEj2UU0vqJswExy2aYWzzdw+
+ FkBYKTSapeFo97Im9jOUDeTGL1gcFhA/aHSIiD07c4PP/74NLMye+4RTaOnZlsrMaXjbB2/jn6s9k9AKtJfRSJPMFnBj3YyvI3YYi+xduehbptXY4hxkqo3D
+ c5x2hRhHNjhs0zg+GpmJGknXwvGaK4l4a6zTOKWmfv7xMtgIZ/Vn9d4GsOJdkemp7e3WX6RGITrcgwSghHENodqP2MvCkuvhyBHE4/kY7pUMNCMYz3xNrYgX
+ 6PdBjdKe
 
-On Thu, 19 Nov 2026 14:44:05 +0100 Konstantin Khorenko <khorenko@virtuozzo.com> wrote:
+On 19/11/2026 15:33, Jarkko Sakkinen wrote:
 
-> Fork a process that maps shmem THPs with PMDs, in a VMA whose page
-> tables fork copies: a private mapping with an anon_vma, and a shared
-> one with a guard region. The child must find the PMDs before it
-> touches the mapping, and its exit must leave the parent's mapping and
-> the system-wide ShmemPmdMapped counter as they were.
-> 
-> With folio_dup_file_rmap_pmd() adding PTE mappings, the child's exit
-> takes the parent's share off ShmemPmdMapped while the parent still maps
-> the folios. Unmapping them drops it once more, so every mapping stays
-> until exit, where the kernel reports "Bad page cache", or hits a
-> VM_BUG_ON with CONFIG_DEBUG_VM. A kernel that leaves file THPs to a
-> refault in the child skips the test.
-> 
-> ShmemPmdMapped is system-wide, and reclaim or NUMA balancing can take a
-> PMD from the parent while the test runs. So the test makes up to three
-> attempts, each on a fresh file, and fails only if all of them see the
-> counter drop by exactly the parent's share: the bug does that on every
-> fork, other processes only by chance. It passes on the first clean
-> attempt and skips when none is clean.
-> 
-> The test mounts a tmpfs with huge=always over /tmp in a private mount
-> namespace, so it leaves the THP settings and the host's mounts and
-> files alone.
-> 
-> ...
->
-> +static void test_fork(bool shared)
-> +{
-> +	const char *desc = shared ? "shared mapping with a guard region" :
-> +				    "private mapping with an anon_vma";
-> +	long before = 0, after = 0;
-> +	enum result res = NO_THP;
-> +	int i, drops = 0;
-> +	char *mem;
-> +
-> +	for (i = 0; i < ATTEMPTS; i++) {
-> +		mem = map_file(shared);
-> +		/* Make fork copy the page tables; the last PMD gets zapped. */
-> +		if (shared) {
-> +			if (madvise(mem + size - pagesize, pagesize,
-> +				    MADV_GUARD_INSTALL)) {
-> +				ksft_test_result_skip("%s: MADV_GUARD_INSTALL: %s\n",
-> +						      desc, strerror(errno));
-> +				return;
-> +			}
-> +		} else {
-> +			mem[size - pagesize] = 'p';
-> +		}
-> +
-> +		res = pmds_ok(mem) ? fork_once(mem, shared, &before, &after) :
-> +				     res == NO_THP ? NO_THP : LOST_PMDS;
-> +		/* Later children get only their own mapping. */
-> +		madvise(mem, size, MADV_DONTFORK);
+[snip]
 
-autobot want the return value checked:
+> And yeah, we don't have projected problems. I.e. "no users" is always
+> NAK. You have to step on the nail at first.
 
-: If this fails, the next child inherits an earlier test mapping too. 
-: Its exit can then change ShmemPmdMapped by more than the expected
-: amount, causing the test to skip a real failure.
+A customer of mine stepped on it. Their product, on i.MX6, encrypts its
+rootfs with dm-crypt and a CAAM black key, never in clear. Its backups,
+though, are encrypted in user space with a key kept as a CAAM blob; to
+use it, the blob is opened and the key handed to user space in clear.
 
-which seems ignorable - MADV_DONTFORK failures are super unlikely at present.
+The next generation is on i.MX93, and the customer now wants the
+backups and other encrypted archives protected like the rootfs: the key
+must never be in clear outside a secure world. The i.MX93 has no CAAM.
+OP-TEE can hold the key, but every way the mainline keyring offers to
+use it (a trusted key, through dm-crypt or AF_ALG) unseals its bytes
+into kernel memory, and AF_ALG no longer reaches hardware drivers.
+keycrypt's OP-TEE backend does not unseal it: a key it generates leaves
+the TA only sealed.
 
->
-> ...
->
-> +int main(void)
-> +{
-> +	ksft_print_header();
-> +	pagesize = getpagesize();
-> +	pmdsize = read_pmd_pagesize();
+Ciao,
 
-This is going to ruin Mark's day again, thanks to "kselftest: mm:
-rename read_pmd_pagesize() to pmd_psize()".
+Rodolfo
 
-I think I'll alter Yeoreum's above patch like this (presently untested):
-
---- a/tools/testing/selftests/mm/vm_util.h~kselftest-mm-rename-read_pmd_pagesize-to-pmd_psize-fix
-+++ a/tools/testing/selftests/mm/vm_util.h
-@@ -93,6 +93,8 @@ unsigned long pagemap_get_pfn(int fd, ch
- void clear_softdirty(void);
- bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
- uint64_t pmd_psize(void);
-+/* temporary cross-tree compatibility thing: */
-+#define read_pmd_pagesize() pmd_psize()
- unsigned long rss_anon(void);
- bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
- bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size);
-_
-
-and we can clean that up later.
-
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming
