@@ -1,54 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795096006;
-	b=vNbokgLWU8UeUxDLJscga4e1SjeQqHQNQwLcMlcvFCiKcKszGg91531JCgO0KQAZ8K5d
-	 QG7+GrDMHo5VKJjiCuApevpZft/7iLz+wUtFljFLQYT0JX6tRb544sYn0E/CRYZIkO/x7
-	 VnGU3AWHBjXkKVdewdJO0p3iC77aLtPrHcdvKXYsdTjW5mQzTQCx7Rj1D6AwEp3YY08xT
-	 40qWIq8HUD7eEqeNtDg3rjMwdfI7P+RgsdhJ0MOYyXT8Djov3l39oDN4kAzuy9ycGE0SU
-	 4eh00dJNEAPOBiYw5hMpfhCbeMofKXPZiJlLfH6NkgjR/YZQzdFrE77EWJO+ojNNbPw==
+	t=1795096185;
+	b=NqB3esV4TTXDfI/vZw5GIoqGza6EL+7Qpwh7dRuZddFqvnADq/KjG8KPd3BH1c3S4TW+
+	 GyzwdgeXQSxPn6jYssnpgc9H3d3uNidU3I6W1/3bcFPFjz8ggqRVL63Ef4RtUJI2r9uJB
+	 XozRkGMbIUtMpbhb0YnNJ8B0/nEVoG3AoBedkQPEQ+QvyDpBcB8P9QExbP6JAeHhojvkl
+	 9p7CTUdmHKikszQ/H1ekuZghv8A7rgMc9lzCxVhqA+txfn90d3SKHl1EfXkqu4BEGnm6k
+	 uNVzdo37ya472Ba6uPlPPz+QSmblyzcBZyfawTwHBzGmxF6Mn5mlBmr6Jj8+qlQqjlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795096006;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=aFjgMZT4ij3QgwOV3LfQIHaT7HzWZzkda031aoTFEzs=;
-	b=HDjFMeeSxsz6nyE4gFd9K9JFW3SvkYMsxJrozq/084j9n++cGsebQnazqwdpr1rJfqiT
-	 cvctFoyJH8RN/sHezf/hs+IqGhH5dTEpO+ekZUMKIpWx52kT8Arrdz6/fZzuqlAojz+I4
-	 7bGVyysXm5xUyIcMyCAuQKAzfPF5NskII1Ttuge9aHsFYNn5/riwThI/7uLjzv7PzpES6
-	 nl56sOAmPiogXH9Ly3wStX7+Y+4AUzBZkjkgCgW4jmY/bTyD5DWAxVSIOt5DCD/29bTmb
-	 kjw7mjOe1m/M2PG2Cd8LJOsO+IRQLShZd2nKonvNrCF9XoTuI06B0+xCH4Y0RH31GqQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795096185;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=VF8D/NpkOVfXwYS7vocB3YSAlBjCCPP6hp45RuIin7I=;
+	b=QL20OMXSMZQ8d94EByPFZFlUdhfAWpo1ififH3ZKBBRZyjh35lvut8QCCxka4XqwW25v
+	 +fYU20fPHxv8n2NyLDj2/OaX6/tjAoFAqQrbqvlFFrSLYkN4xDlvAF9e0V5eKgkyxHNZn
+	 nE636DZjaCdj0rTabhbCyBY1E01zyw5sPIJJPL2Yt4ZZQFBs89grfLfH47mz80kHfMerK
+	 PqbBPl6z317bUp25uLevybWKn38RNkNn5xEi4RnlN5zuzJ59R1wWAeCn0pdeJXSzbXCmx
+	 kjkIsrXZbFPr9oP6zFEVRwc85z17NJmlXlt2MsYWYI1V8pVydBai7A1EcVvG/lVaD6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BFFu1MCk;
-	arc=none smtp.remote-ip=91.218.175.37
-Received: from mta0.migadu.com (out-37.mta0.migadu.com [91.218.175.37])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=JkMS5KGC;
+	arc=none smtp.remote-ip=158.69.130.18
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435B3606A33B
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 13:46:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 435B3606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF482606A32C;
+	Thu, 19 Nov 2026 13:49:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF482606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BFFu1MCk
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=++jxRWVPeWHHNOse9hUX9VVHA8pC7zSS/WWi8a/OqNw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795096004; v=1; x=1795700804;
- b=BFFu1MCkYDNvS1QBOd5lfM7XsW1mMv06+SULHYpVMq7qtH+10lOdRlpTXISGV6TiSnMuBcFc
- skn6vs9IegdwLkYMZuuYzEpnRnLF9NLyjRQnhIp78mxyGtNgCkxdl38pbXyb4fbcbk6/wca4zUS
- e9MVHuQ3frEjO2yzdIuht1cM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 799fbb2e29e87772;
-	Thu, 19 Nov 2026 13:46:44 +0000
-X-Mizu-Trace-ID: 799fbb2e29e87772
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <69a099c3-082e-43b8-82f5-122d32df5eff@linux.dev>
-Date: Thu, 19 Nov 2026 14:46:39 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=JkMS5KGC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1795096184;
+	bh=VF8D/NpkOVfXwYS7vocB3YSAlBjCCPP6hp45RuIin7I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JkMS5KGCdrAAyJr/6GlBCW303t/UdNmymt4owZaDqKKccoJEp8Lwhz8fr7OHQDg/M
+	 2qQwu1a+gV0ciCPc2dyVrl/2Zgw5HnPsHZo+NCZWHGMlbKrBbv1UTB1wf3PKfzAQNx
+	 7j8sWcTaz1l87XRioH3TIx5ACzW76wfIpsDTHTPJqwOvY76xdl65mNYJ7WkWA6os0X
+	 +soN3u8jDIfL8fm3bPD5UqGHiJHZhh1aOj1EvE2rQH7F9qXNVAnPCDcSMag3JQ7eyl
+	 Og1nfac5EM17gIKYEVLGQXNpKyco8OSipdS8BqguFeFgen5OYG9VC6w/jpFFA8neZD
+	 116SgwAwVdyDw==
+Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jVfwR6MTFzRM6;
+	Thu, 19 Nov 2026 08:49:43 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: juri.lelli@redhat.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	vincent.guittot@linaro.org
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	tglx@kernel.org,
+	will@kernel.org,
+	boqun@kernel.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org,
+	longman@redhat.com,
+	ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	parri.andrea@gmail.com,
+	m.szyprowski@samsung.com,
+	kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH v3 02/17] sched/deadline: Do not admit bandwidth for parameters that are kept
+Date: Thu, 19 Nov 2026 08:49:25 -0500
+Message-Id: <ab5b150fe61d5db767aa98f1b1255661ad5de333.1795092090.git.mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <cover.1795092090.git.mathieu.desnoyers@efficios.com>
+References: <cover.1795092090.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,103 +95,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 06/11] riscv: enable NMI-safe lockdep irqflags
- tracking
-To: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>, pjw@kernel.org,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
- himanshu.chauhan@oss.qualcomm.com, conor@kernel.org,
- anup.patel@oss.qualcomm.com
-Cc: cuiyunhui@bytedance.com, atish.patra@linux.dev, peterz@infradead.org,
- mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org,
- will@kernel.org, tglx@kernel.org, corbet@lwn.net, rdunlap@infradead.org,
- shuah@kernel.org, yuanzhu@bytedance.com, yang.susheng@zte.com.cn,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261119120824.13969-13-zhangzhanpeng.jasper@bytedance.com>
- <20261119120824.13969-19-zhangzhanpeng.jasper@bytedance.com>
-Content-Language: en-US
-From: Clement Leger <clement.leger@linux.dev>
-In-Reply-To: <20261119120824.13969-19-zhangzhanpeng.jasper@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+__sched_setscheduler() runs the deadline admission test on a request
+with SCHED_FLAG_KEEP_PARAMS. But the task keeps its parameters: the
+call skips __setscheduler_params().
 
+Commit f4dddf90d58d ("sched: Skip priority checks with
+SCHED_FLAG_KEEP_PARAMS") made sys_sched_setattr() copy the task's own
+parameters into such a request. Then the priority checks pass.
+get_params() copies them without a lock.
 
-On 11/19/26 13:08, Zhanpeng Zhang wrote:
-> An SSE handler runs with interrupts masked, but can interrupt code whose
-> lockdep hardirq state is enabled. Bare nmi_enter()/nmi_exit() do not
-> update that state. Consequently, lockdep_assert_irqs_disabled() in the
-> perf overflow path can report a warning despite interrupts being masked.
-> 
-> Select TRACE_IRQFLAGS_NMI_SUPPORT so lockdep can update its hardirq state
-> inside an NMI. Pair this with irqentry_nmi_enter()/irqentry_nmi_exit() in
-> the SSE wrapper: these helpers save the previous tracked state, mark
-> interrupts disabled on entry and restore the tracked state on exit.
-> Selecting the configuration option alone does not perform those updates.
-> This follows the entry helpers used by the other RISC-V NMI-like traps.
-> 
-> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-> ---
->   arch/riscv/Kconfig          | 1 +
->   arch/riscv/kernel/sbi_sse.c | 7 ++++---
->   2 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index d2db8f40c616..5501c02a07eb 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -225,6 +225,7 @@ config RISCV
->   	select SYSCTL_EXCEPTION_TRACE
->   	select THREAD_INFO_IN_TASK
->   	select TRACE_IRQFLAGS_SUPPORT
-> +	select TRACE_IRQFLAGS_NMI_SUPPORT
->   	select UACCESS_MEMCPY if !MMU
->   	select VDSO_DATASTORE if MMU
->   	select VDSO_GETRANDOM if MMU && 64BIT
-> diff --git a/arch/riscv/kernel/sbi_sse.c b/arch/riscv/kernel/sbi_sse.c
-> index 032fcc07abcf..59e47a39589d 100644
-> --- a/arch/riscv/kernel/sbi_sse.c
-> +++ b/arch/riscv/kernel/sbi_sse.c
-> @@ -2,7 +2,7 @@
->   /*
->    * Copyright (C) 2025 Rivos Inc.
->    */
-> -#include <linux/nmi.h>
-> +#include <linux/entry-common.h>
->   #include <linux/sched.h>
->   #include <linux/scs.h>
->   #include <linux/bitfield.h>
-> @@ -36,9 +36,10 @@ void noinstr do_sse(struct sse_event_arch_data *arch_evt,
->   {
->   	struct riscv_sse_interrupted_context context = { regs, hstatus };
->   	struct riscv_sse_interrupted_context *previous;
-> +	irqentry_state_t state;
->   	struct sbiret sret;
->   
-> -	nmi_enter();
-> +	state = irqentry_nmi_enter(regs);
->   	instrumentation_begin();
->   
->   	/* Retrieve missing GPRs from SBI */
-> @@ -84,7 +85,7 @@ void noinstr do_sse(struct sse_event_arch_data *arch_evt,
->   
->   out:
->   	instrumentation_end();
-> -	nmi_exit();
-> +	irqentry_nmi_exit(regs, state);
->   }
->   
->   static void *alloc_to_stack_pointer(void *alloc)
+Another call can change the task's parameters before
+__sched_setscheduler() takes the runqueue lock. The request is then
+stale, and dl_param_changed() takes it for a change. sched_dl_overflow()
+would put the stale bandwidth in place of the task's own in total_bw,
+and in this_bw for a sleeping task. But the task keeps its own dl_bw.
+Its release at the 0-lag time takes that dl_bw, and the difference
+stays behind.
 
-Hi Zhanpeng,
+Fix this by skipping sched_dl_overflow() for SCHED_FLAG_KEEP_PARAMS.
+There is nothing to admit for parameters that are kept.
 
-Not sure if it was already suggested but I would fold that in the commit 
-adding SSE itself.
+Found by reading, after the Sashiko AI review of this series raised the
+boosted case of the previous patch. Not reproduced: the parameter change
+must land inside that window.
 
-Thanks,
+Fixes: a509a7cd7974 ("sched/uclamp: Extend sched_setattr() to support utilization clamping")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Cc: stable@vger.kernel.org
+---
+ kernel/sched/syscalls.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Clément
+diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+index 89b0d5787f45..6f8ce5fd94a1 100644
+--- a/kernel/sched/syscalls.c
++++ b/kernel/sched/syscalls.c
+@@ -690,8 +690,16 @@ int __sched_setscheduler(struct task_struct *p,
+ 	 * of a SCHED_DEADLINE task) we need to check if enough bandwidth
+ 	 * is available. Keep this check last. If a later check failed,
+ 	 * nothing would give back the bandwidth it reserves.
++	 *
++	 * With SCHED_FLAG_KEEP_PARAMS, the task keeps its parameters, so
++	 * there is nothing to admit. Such a call changes other attributes,
++	 * such as the utilization clamps. A deadline task does not use its
++	 * clamps, but keeps them for when it leaves the class. The
++	 * parameters in attr may also be stale: sys_sched_setattr() read
++	 * them from the task without a lock.
+ 	 */
+-	if ((dl_policy(policy) || dl_task(p)) && sched_dl_overflow(p, policy, attr)) {
++	if (!(attr->sched_flags & SCHED_FLAG_KEEP_PARAMS) &&
++	    (dl_policy(policy) || dl_task(p)) && sched_dl_overflow(p, policy, attr)) {
+ 		retval = -EBUSY;
+ 		goto unlock;
+ 	}
+-- 
+2.47.3
+
