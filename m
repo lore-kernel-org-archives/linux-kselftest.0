@@ -1,61 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795079985;
-	b=ohTPlggGfHVqNPtWfJtkt7+x2G60aMb9bs1BJfLhvo8xWyEWfgSk41ONGqlxvaGG1ftK
-	 oopdmv+eS554JwgtgkDiRNrYehTJZ/nVOKPMRKL8e2pyn7yPLIqXJgcJgEBnmXWR4zRyj
-	 Xv0ONC/MLvVdxdmnJ+YNGI/xiRXes/n/cn7enxqLPujpMZk905C9pD9jUKCEteQEg4tA2
-	 1+EVhoDPMfBJ0TZ911VrGYcBWAtre9NP7fcueku5N1o64rLsYlTdxFd1FARtSYOggvlLP
-	 PWeqUx+bosQ6Nxt41Y2NAAOl94niLUBQ73XXEg/Q/JnOLOmfboJLE/kcsbWiOoTpu/w==
+	t=1795080083;
+	b=FZa6FTKnx9i2yDoBw7OHNbEcLYfrLIpWa0b5yQ8FJMkPnJjIzAJmDCQ2vElGyQNCgf28
+	 VYqAGUeyhq9E4MBL69TqujaOlRijsHx1SspAPI4RUKqMzl27bKpptdZhbpdEhZk1YGGPl
+	 isnoP+n5+lJMOO4GE44LMt2QO3xprtZsoyhUfkrLLEr6jcPYa6mLV+Gu8G5dPWEh3G/Y4
+	 CEB6GVH1FvufpP9/VG/gpsbCZ7YWFmMq+m1e9YYopHhfznoRL75FUmPx40zc5+uJaHgcn
+	 ySiY5U3MzCX3oiS0p8b16INoW589yHrDQBtsWqLWrOdUusFsmOVmxfUB3bcOUD1uurw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795079985;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=/+nlz1kvn+hsVTexx0cBJ2RIyKU+qYJzjO2caadmD4w=;
-	b=SQb7SHmYuw7EAKWlQCnQ7XaAL2Bbmu4Ed56Xibf0wYJE9kB54KTch+ws1HcIETxP9JaA
-	 9sYPU/iR4Le5nKXBfyKJUQQDu3Bc2nMbnMDrSZb/0JrD6FcBTCzjG9wdfRfmHhYyXCGn/
-	 QVPk7SEKplb0wB9TS73hqyLKOczicURnAe2bz93QqU065O+mCrMSsv4CLmejXokx3CxmH
-	 3bD6j/gcaHJrwTFAfMkN5WQ7BPwzJq1BEGZfiaXaZFKqXGlMLi4Y4dtXt5yxV9GuwOdHe
-	 C39pq9RFV5IPJX/tMhGKxYuwFAQadmKQe1RRvGtxtOqbVrgf3Inz05nHenBXh4YYE9Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795080083;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=jwlrWkiL6/bc8bt3jFA1PNWrJYj2IlYZaoWgGCfb8oM=;
+	b=qNl1lLj/mHHyYKQPtwqNdShN1LftQEuUlVQUHDipVPNCl5vW8Gp4GzC/KcCAas5nmPMr
+	 1mgae9Ly0P8FDseT2rXXruLJ1sTAfHELGYLkBj3J2eVmz72Pzn9Z7pX6a6Q+1+uNtF7sC
+	 cH0HhVy8I1+kYIY2HpQavvdj2WrvDK9mzCz3EYhzkTSkNOm5q0leIgFWx+9kCmycQHZ39
+	 byjYDh//bX+StgGKSkujZAPHU7xMuB6CA2Zo5pG/WAnG4DiBirad6yUr0WMHkHJmPb3aA
+	 USptPNF5EHr4gmrNS54s5uXNuMGBRsDvfp9XT9jrS630zIvU40oNXYMEor07HKZszrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M44Ev5+q;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aWlX8672;
+	arc=none smtp.remote-ip=95.215.58.137
+Received: from mta1.migadu.com (out-137.mta1.migadu.com [95.215.58.137])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7C0606A33B;
-	Thu, 19 Nov 2026 09:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F88606A324
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 09:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2F88606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M44Ev5+q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E0D1F000C9;
-	Thu, 19 Nov 2026 09:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795079984;
-	bh=/+nlz1kvn+hsVTexx0cBJ2RIyKU+qYJzjO2caadmD4w=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=M44Ev5+qktf7Kppwo1JIKxNmDBQH62xpvXEyp9Pw8K1Y1i7em9yWJZtRGrMYS5S+s
-	 hfLBFUIWqgqx2WsZM4fgilmwzOc/x1OBedEpgj5+xsW7pG4x9kXy8ZhGqM1LaI7SFj
-	 oFPmpN70DKeBRuJ8BS2O9fRn4QA/gU9aO+l1mo0+Vv3KxQCqlV+KSw++PSHaMcFWYw
-	 R7cMZbzEplmmVUrF/qZ2x7Ernq4y3kQYEYjmtWmZrQROSqRcSIscsoxa/Nycg0heM7
-	 7ypwntP/B+7o3V2tO3BKGajNFhjyAf9zDLuI54l+YqU0Sr4MIrSHY5sx3MtJv+1D0I
-	 om1XgwEEDurmw==
-Subject: Re: [PATCH net-next 6/6] selftests: bonding: Test that Collecting is
- advertised after notification
-From: netdev-bot+sashiko@kernel.org
-To: idosch@nvidia.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- pabeni@redhat.com, edumazet@kernel.org, jv@jvosburgh.net,
- andrew+netdev@lunn.ch, petrm@nvidia.com, sridhar.samudrala@intel.com,
- jiri@resnulli.us, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, razor@blackwall.org
-Date: Thu, 19 Nov 2026 09:19:43 +0000
-Message-ID: <179507998375.3136.1157162879264282901@kernel.org>
-In-Reply-To: <20261118083442.1061289-7-idosch@nvidia.com>
-References: <20261118083442.1061289-7-idosch@nvidia.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aWlX8672
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=mPiSiO8g+w2DpPp3GGR8IZ3wJAak28Y/ctpnaig1pAM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795080081; v=1; x=1795684881;
+ b=aWlX8672Mj+HReGYIkiRRIhO2O6zkeJuL6VhFnecacKIcpMy2KcYJl0JkXPRJ0jF0WUoCHWX
+ UZp2CZnznB6IlqTgWp6la/ZxlGdmw4GmoBiVritBCyH+02wWoB+Yb4mtGqT+mjjfUm/Hc4tgNEi
+ T6rNUYUNQGTJDUl+RDKOLWU8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 291b443669a991fd;
+	Thu, 19 Nov 2026 09:21:20 +0000
+X-Mizu-Trace-ID: 291b443669a991fd
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 19 Nov 2026 17:20:58 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	David Lebrun <david.lebrun@uclouvain.be>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Mathieu Xhonneux <m.xhonneux@gmail.com>,
+	David Lebrun <dlebrun@google.com>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net v2 6/6] selftests: seg6: add test for skb checksum
+ with CHECKSUM_COMPLETE
+Message-ID: <av6_eqt8yH5qmLYL@fedora>
+References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+ <20261118150251.65-7-andrea.mayer@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,115 +77,151 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261118150251.65-7-andrea.mayer@uniroma2.it>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Hi Andrea,
+On Wed, Nov 18, 2026 at 04:02:51PM +0100, Andrea Mayer wrote:
+> Add a selftest for received packets with CHECKSUM_COMPLETE that the SRv6
+> code processes before they are delivered on the same node. The test checks
+> that, after the node changes the packet, UDP does not read a wrong
+> skb->csum.
+> 
+> The test uses a host and a router connected through a veth pair. Since veth
+> does not provide CHECKSUM_COMPLETE, a tc ct action on the router computes
+> skb->csum in software.
+> 
+> The host sends a UDP datagram to the router along five paths: no SRH (the
+> reference), an SRH with local segments, End.B6.Encaps with End.DT6, End
+> with the next-csid flavor, and End.BPF. Each datagram is expected to be
+> delivered, not dropped as a checksum error. Without the previous patches,
+> every path except the reference fails. With them, every path passes.
+> 
+> The host also sends a control datagram. It checks that the test detects a
+> wrong skb->csum after a change to the packet. After the ct action, a BPF
+> program on the router changes the Flow Label of the control datagram
+> without updating skb->csum, and UDP must drop it. If UDP accepts it, the
+> paths above may report a false pass, and the test fails.
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Here are some code style comments. You can decide whether to change them or not.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] collecting_advertise() in tools/testing/selftests/drivers/net/
-  bonding/bond_lacp_independent_control.sh can take the wrong…
-
---
-
-selftests: bonding: Test that Collecting is advertised after notification
-
-This patch adds a collecting_advertise test to
-bond_lacp_independent_control.sh. With coupled control disabled, the test
-checks that the Collecting bit is only advertised in a transmitted LACPDU
-after the Rx state change notification was emitted. It also switches the
-partner to a slow LACP rate so that the port is not rate limited when it
-enters COLLECTING state.
-
-> diff --git a/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh b/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh
-> index a2b83b581e403..b86f39f31d0c3 100755
-> --- a/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh
-> +++ b/tools/testing/selftests/drivers/net/bonding/bond_lacp_independent_control.sh
-
-[ ... ]
-
-> @@ -162,6 +167,50 @@ collecting_notify()
->  	log_test "Notifications in COLLECTING state"
->  }
->  
-> +collecting_advertise()
+> 
+> +print_log_test_results()
 > +{
-> +	local lacpdu_ts notify_ts tmp_dir
+> +	printf "\nTests passed: %3d\n" "${nsuccess}"
+> +	printf "Tests failed: %3d\n"   "${nfail}"
 > +
-> +	RET=0
-> +
-> +	partner_state_clear 0x18
-> +	defer tc filter del dev "$h1" ingress pref 1 handle 101 flower
-> +	lacp_state_wait "$h1" 0x0f
-> +	check_err $? "Port did not reach ATTACHED state"
-> +
-> +	tmp_dir=$(mktemp -d)
-> +	defer rm -rf "$tmp_dir"
-> +	ip -ts -o -d monitor link dev "$h1" > "$tmp_dir"/notify &
-> +	defer kill_process $!
+> +	# when a test fails, the value of 'ret' is set to 1 (error code).
+> +	# Conversely, when all tests are passed successfully, the 'ret' value
+> +	# is set to 0 (success code).
+> +	if [ "${ret}" -ne 1 ]; then
+> +		ret=0
+> +	fi
 
-[ ... ]
-
-> +	notify_ts=$(grep -m1 -w "ad_actor_oper_port_state $((0x1f))" \
-> +		    "$tmp_dir"/notify | sed 's/^\[\([^]]*\)\].*/\1/')
-> +	notify_ts=$(date -d "$notify_ts" +%s%6N)
-> +	lacpdu_ts=$(head -n1 "$tmp_dir"/lacpdu | cut -d' ' -f1 | tr -d .)
-> +	((lacpdu_ts > notify_ts))
-> +	check_err $? "Collecting bit advertised before notification"
-
-[Severity: Medium]
-
-Can notify_ts in collecting_advertise() pick up the timestamp of an
-unrelated link notification instead of the $h1 one?
-
-The monitor runs as "ip -ts -o -d monitor link dev $h1". In iproute2,
-accept_msg() in ipmonitor calls print_headers() for every RTM_NEWLINK.
-With -ts, that prints "[<time>] " with no newline.
-
-print_linkinfo() then returns early and prints nothing when
-filter.ifindex is set and ifi->ifi_index != filter.ifindex, which is the
-case for any device other than $h1. The timestamp of the filtered message
-is therefore left at the start of the next printed line.
-
-With -o, the matching line can then look like this:
-
-    [ts_other] [ts_h1] N: $h1: ... ad_actor_oper_port_state 31 ...
-
-The sed above takes the first bracket, ts_other. That timestamp is older
-than the real $h1 notification.
-
-Without "bonding: 3ad: Advertise Collecting only after collection is
-enabled", the Collecting LACPDU goes out only a short time (at most about
-one tick) before the notification. So any RTM_NEWLINK for another device
-between the monitor start and the $h1 0x1f notification would make
-notify_ts smaller than lacpdu_ts. In that case the check below passes even
-though the bug is present:
-
-    ((lacpdu_ts > notify_ts))
-
-That window covers the sleep 1 plus the wait for the partner's next
-LACPDU.
-
-The test runs in the init netns, so link events on other host interfaces
-can land in that window. Examples are NetworkManager or docker veths,
-carrier changes, and IPv6 ifinfo notifications.
-
-One option is to drop the dev filter and grep for the "$h1:" line, so
-every printed line has its own timestamp. Another is to take the last
-bracketed timestamp on the line instead of the first. Would either of
-these make the check more robust?
+Do we need to reset the "ret"? It's $ksft_skip by default. If any test failed,
+it is set to $ksft_fail. We can just exit with $ret at cleanup().
 
 > +
-> +	log_test "Collecting advertised after notification"
+> +cleanup()
+> +{
+> +	cleanup_all_ns
+> +
+> +	# check whether the setup phase was completed successfully or not. In
+> +	# case of an error during the setup phase of the testing environment,
+> +	# the selftest is considered as "skipped".
+> +	if [ "${SETUP_ERR}" -ne 0 ]; then
+> +		echo "SKIP: Setting up the testing environment failed"
+> +		exit "${ksft_skip}"
+
+if [ "${SETUP_ERR}" -ne 0 ], the ret should be ${ksft_skip}, right? Cause
+we haven't run any test.
+
+Then we can goto the following exit directly.
+
+> +	fi
+> +
+> +	exit "${ret}"
+> +}
+> +
+
+[...]
+
+> +test_end_bpf_or_ksft_skip()
+> +{
+> +	local test_netns
+> +
+> +	setup_ns test_netns
+> +
+> +	ip -netns "${test_netns}" link add "${DUMMY_DEVNAME}" type dummy
+> +	ip -netns "${test_netns}" link set "${DUMMY_DEVNAME}" up
+> +
+> +	if ! ip -netns "${test_netns}" -6 route \
+> +			add "${SID_LOCATOR}::${BPF_FUNC}/128" encap seg6local \
+> +			action End.BPF endpoint obj "${BPF_FILE}" \
+> +			sec "${BPF_END_SEC}" dev "${DUMMY_DEVNAME}" \
+> +			2>/dev/null; then
+> +		cleanup_ns "${test_netns}"
+> +		echo "SKIP: SRv6 End.BPF not supported"
+> +		exit "${ksft_skip}"
+> +	fi
+> +
+> +	cleanup_ns "${test_netns}"
 > +}
 
-[ ... ]
+Maybe move the `trap cleanup EXIT` here.
 
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118083442.1061289-1-idosch%40nvidia.com
+Then we can just `exit` instead of `exit "${ksft_skip}"` for all the
+test_* functions. The cleanup_all_ns() will just do nothing when the
+NS_LIST is NULL.
+
+If a command missing, or test_* function failed. The report shows
+
+SKIP: xxx not supported
+SKIP: Setting up the testing environment failed
+# echo $?
+4
+
+> +
+> +if [ "$(id -u)" -ne 0 ]; then
+> +	echo "SKIP: Need root privileges"
+> +	exit "${ksft_skip}"
+> +fi
+> +
+> +# required programs to carry out this selftest
+> +require_command ip
+> +require_command tc
+> +require_command ethtool
+> +require_command ping
+> +require_command sysctl
+> +require_command awk
+> +require_command grep
+> +
+> +test_dummy_dev_or_ksft_skip
+> +test_iproute2_supp_or_ksft_skip
+> +test_kernel_supp_or_ksft_skip
+> +test_veth_tx_csum_off_or_ksft_skip
+> +test_bpf_file_or_ksft_skip
+> +test_tc_or_ksft_skip
+> +test_end_bpf_or_ksft_skip
+> +
+> +set -e
+> +trap cleanup EXIT
+
+> +
+> +setup
+> +set +e
+> +
+> +connectivity_tests
+> +udp_delivery_tests
+> +
+> +print_log_test_results
+> -- 
+
+Apart from the comments, the test looks good to me.
+
+Tested-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
