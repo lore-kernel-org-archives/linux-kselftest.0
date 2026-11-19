@@ -1,99 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795067497;
-	b=PizJrPiRdacQOivJN1glKJiYPuAYyuMqqTZl3wR6SZDQCrGB0x8rOMA9QkgdTaT0uV/1
-	 bgLOd87vA/SwIr+H+68jWMEIOv5B4NGuBQ+p7yO9tZmKcyqE8vVdCqqAKSihHDS0K7yDP
-	 7O8b5P+to3XynZpyLjO5JJjiL8lXNU7SReH3SYW6tM7daU8vm4G6OJm+/TaXmJmMg1gyL
-	 Yfxr+8of5GKNaxXhphnWFrQHUHf8SnYjbFzm5o9OfJIDiolqN8uORqfvKszlLXISCHMvK
-	 2be/9YMNQdXf5MwcfuM4NkEwLIA2LOfWAAHBXC1JS/fmxCNDNh8KH2VXQLN9kHFF89Q==
+	t=1795068216;
+	b=jeQzURXx4K5pJ6y3LD7PMmflBqR4PlYO5pWiEK7hLqkxntliCveq5M9u/Oc6AWTAfxry
+	 JPyN+VpVF6xFQliFgkxXrtAchL4cjE45MEuU08ZlIQvAZ3DkpxSwo0fVFp7+razQgdmM5
+	 w4pAiZ/O6Xw2Ao2llZaNKbatbDEkAbAQj7Ssx+qbQIRKVFep+5tqhjfWDDQJNdU/0fh3g
+	 VkG5yoAvGrTjoxiZa+odQDEfzluFVpVaneR2Bqdz8jToQRahJAoyOnA96U+zo7cGDX259
+	 /KSOS14QV5Bpp8FS4hbbSiTHZxKsz6xgguLTcOgKPNXZ3t/tTlzf/foFcZVNQIAd4Cg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795067497;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:Sender;
-	bh=z8G4571aUTPFuGlDRih4WtoT+MR1zWs5KxPfHLJ0IoQ=;
-	b=K438CdbgINAZblCj2Vo8NMPTupp/jd8A3pokleOc9gKBuaVvr8hgSpT7r+t88U3xpw4R
-	 8lCEgPXLikVJak4pUOOjA4WHRs43tG8gXxCkodM9lU1qGFg3zzn8+XP2CxxHooy1Gayd0
-	 juO8N3HMQBBckyCNTsdUDRwj9NuzbHC90rRyc7Aa3H108FuG2cE5256WaeqxJlJN+wkEj
-	 takEtrZqw7IUaVDHq3aUOrY1e0ps3JpvqlCFmg12LpqYohT5bh1QbKRiHNRdaq2adobsE
-	 vYFosqm6szMv6srf4rGaa0Vd5nVeEHcEzwuULrG4gu1btRDDdAOfuAPwdULTADdmyPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795068216;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=U/cThibxsyF+VwaxQAJCQn1jL0f0MWqy045GOQuzyuM=;
+	b=myUSTxLW/5DrGakvzl7dN8iUER/9Dj0gjbwgFbDYwbYZ3OTGt1Mjncqa/nGe62NCvYu1
+	 ZEmWAW5L9tbs2wkO6IooErDL5Ghueb2lP8j8dyNK1PE+3+43HFmFIwQwr8QLKCTs+gCzr
+	 lG1VZk+iAI+r2hEDWSAbWdBuQgMvvCSeSiKxVqUHnxu224ujXx0eyv+sb5UQRedWHYonV
+	 RBn8BctMn4jOyyco8JNdb88M6sdniwMTqeZnf0xhnp9sNFM+3HC7c3zINgR5X5HmcvXn2
+	 Pkw0L2LrHxAvrWukRrLstxvu2w1DjIxafc3wuuOxm0w6MGz+kuUPlBe3bhx2Rsqqwxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zeniv.linux.org.uk;
-	spf=none smtp.mailfrom=ftp.linux.org.uk;
-	dkim=pass header.d=linux.org.uk header.i=@linux.org.uk header.a=rsa-sha256 header.s=zeniv-20220401 header.b=HUmq9V2f;
-	arc=none smtp.remote-ip=62.89.141.173
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ye9MJSlg;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD1F606A325;
-	Thu, 19 Nov 2026 05:51:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFD1F606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36BC606A320;
+	Thu, 19 Nov 2026 06:03:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.a=rsa-sha256 header.s=zeniv-20220401 header.b=HUmq9V2f
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=z8G4571aUTPFuGlDRih4WtoT+MR1zWs5KxPfHLJ0IoQ=; b=HUmq9V2fqWZniya7o9nBaVPeDZ
-	hdLnNqA0+VaoySgEJuKHB41/nmyLaGptpyplTvFZpj9ZsUfvW/Uacb0EujAyxoatj/wEjrTHUy1Y8
-	Jf/0+dvEia8oYQhTDJ2QTEjT6TZu9xP6N/is4httLR57O2jb4I7x7sybjo+/cFqRcKEnzzz9PN71w
-	Fs3s4nF5yw1DIdzaYMKdWCNazNDVu5/+7GdnX+s8wkC+dHul4l8kAJetHVgTfI7IM42m1/kFkA0V+
-	e5cVGVGh3fNAY2bVKP02Pyi9IdxpjMoQwmhSMxh71ivIpbruqUDwYbd4JXLlMVMx0hkbK2WWTq4Oa
-	k2qmfFmA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xTv3O-000000063G7-3IJX;
-	Thu, 19 Nov 2026 05:51:26 +0000
-Date: Thu, 19 Nov 2026 05:51:26 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Cai Xinchen <caixinchen1@huawei.com>, mic@digikod.net,
-	gnoack@google.com, paul@paul-moore.com, jack@suse.cz,
-	amir73il@gmail.com, andrii@kernel.org, apparmor@lists.ubuntu.com,
-	ast@kernel.org, axboe@kernel.dk, bpf@vger.kernel.org,
-	casey@schaufler-ca.com, cel@kernel.org, cem@kernel.org,
-	chenxiaosong@chenxiaosong.com, code@tyhicks.com, corbet@lwn.net,
-	Dai.Ngo@oracle.com, dakr@kernel.org, daniel@iogearbox.net,
-	dhowells@redhat.com, dlemoal@kernel.org, dmitry.kasatkin@gmail.com,
-	driver-core@lists.linux.dev, dsterba@suse.com,
-	ecryptfs@vger.kernel.org, eddyz87@gmail.com, emil@etsalapatis.com,
-	eric.snowberg@oracle.com, exfat@lists.linux.dev,
-	georgia.garcia@canonical.com, gregkh@linuxfoundation.org,
-	hch@lst.de, hirofumi@mail.parknet.co.jp, hyc.lee@gmail.com,
-	ihor.solodrai@linux.dev, jlayton@kernel.org, jmorris@namei.org,
-	johan@kernel.org, john.fastabend@gmail.com,
-	john.johansen@canonical.com, jolsa@kernel.org, kpsingh@kernel.org,
-	linkinjeon@kernel.org, linux-api@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-	linux-xfs@vger.kernel.org, liubaolin12138@163.com,
-	martin.lau@linux.dev, mason@kernel.org,
-	mathieu.desnoyers@efficios.com, matt@bobrowski.net,
-	memxor@gmail.com, mhiramat@kernel.org, miklos@szeredi.hu,
-	neil@brown.name, netfs@lists.linux.dev, ntfs@lists.linux.dev,
-	okorniev@redhat.com, omosnacek@gmail.com,
-	penguin-kernel@i-love.sakura.ne.jp, rafael@kernel.org,
-	rdunlap@infradead.org, roberto.sassu@huawei.com,
-	rostedt@goodmis.org, selinux@vger.kernel.org,
-	senozhatsky@chromium.org, serge@hallyn.com, sj1557.seo@samsung.com,
-	skhan@linuxfoundation.org, song@kernel.org,
-	stephen.smalley.work@gmail.com, takedakn@nttdata.co.jp,
-	tom@talpey.com, yonghong.song@linux.dev, yuezhang.mo@sony.com,
-	zohar@linux.ibm.com, utilityemal77@gmail.com, lujialin4@huawei.com
-Subject: Re: [PATCH -next -v4 02/17] LSM: pass struct path to the
- inode_setsecctx hook
-Message-ID: <20261119055126.GU989762@ZenIV>
-References: <20261117150542.1169451-1-caixinchen1@huawei.com>
- <20261117150542.1169451-3-caixinchen1@huawei.com>
- <20261117184342.GR989762@ZenIV>
- <20261118001641.GA1669148@ZenIV>
- <20261118-woher-duften-bejubeln-7a8a2099f89f@brauner>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ye9MJSlg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3DF1F000C5;
+	Thu, 19 Nov 2026 06:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795068215;
+	bh=U/cThibxsyF+VwaxQAJCQn1jL0f0MWqy045GOQuzyuM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Ye9MJSlgABhJiEBmlJP2nru0HDo196Dz68evEGBwiow5hO5P5+VznnJHisOB/hLW/
+	 elH83ggvtFSuDrOSvTFLCkkSlAB2uHjAcYzLrIGCn5plW4tVe9vv8ZFCo2vHPRgYTV
+	 RWarEgV/ZCUWvy1t5agEnW+vlVFIJQpGei7OYd8jIooJPDyRkS6/T+9Bd1oCJ629zb
+	 Rtd/vLlW0GKf2MqL9fAyejdG+MZYX5vKTwFA1PTncjov2HxbA3cN6sxdZi3oE7HWiw
+	 XF4RZfa1g4vYwAiEYxQBolfA5128vgRpe3YkdDu/LLaY9iA7oQqI+Wi5GOf11fJxGL
+	 TxZMi5kPKT41g==
+Subject:
+ Re: [PATCH net v3 2/3] ipv6: Honor suppress_prefixlength in fib6_lookup()
+From: netdev-bot+sashiko@kernel.org
+To: leonard@lausen.nl
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, pablo@netfilter.org, fw@strlen.de, phil@nwl.cc,
+ shuah@kernel.org, daniel@iogearbox.net, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Thu, 19 Nov 2026 06:03:34 +0000
+Message-ID: <179506821413.3136.16876288075711504414@kernel.org>
+In-Reply-To: <20261116150132.9594-3-leonard@lausen.nl>
+References: <20261116150132.9594-3-leonard@lausen.nl>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,123 +66,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261118-woher-duften-bejubeln-7a8a2099f89f@brauner>
-Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Wed, Nov 18, 2026 at 09:51:27AM +0100, Christian Brauner wrote:
-> On Wed, Nov 18, 2026 at 12:16:41AM +0000, Al Viro wrote:
-> > On Tue, Nov 17, 2026 at 06:43:42PM +0000, Al Viro wrote:
-> > > > + * Hooks that take a struct path argument: the VFS only sanctions passing
-> > > > + * the path to VFS helpers that take a struct path (e.g. notify_change());
-> > > > + * it makes no guarantees with regard to path->mnt, whose layout and
-> > > > + * implementation details are subject to change.  Implementations must
-> > > > + * not rely on its properties.
-> 
-> That comment is a garbled version of an earlier review. It meant that
-> LSMs get no guarantees about struct vfsmount internals and don't get to
-> poke at them. I'm not sure how this can be read as path->mnt being a
-> random mount.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-"no guarantees with regard to path->mnt" is easy to parse that way when one
-is stuck with a caller that needs to be converted to new API with no relevant
-mount reference in sight.
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-> > > If that kind of stuff actually does get passed to any existing hooks, we need
-> > > to fix that ASAP.
-> 
-> Of course there is one...
-> 
->   dent = lookup_one_unlocked(idmap, &QSTR_LEN(...),
->                              priv->dir_fp->filp->f_path.dentry);
->   [...].
->   rc = ksmbd_vfs_fill_dentry_attrs(priv->work, idmap, dent, &ksmbd_kstat);
-> 
-> It passes only the bare dentry, and ksmbd_vfs_fill_dentry_attrs() then
-> makes up a path from the share's root mount:
-> 
->   struct path path = {
->           .mnt = share_conf->vfs_path.mnt,   /* mount the share is exported from */
->           .dentry = dentry,                  /* entry inside the listed dir */
->   };
->   rc = vfs_getattr(&path, ...);
-> 
-> since 5614c8c487f6 ("ksmbd: replace generic_fillattr with vfs_getattr").
-> 
-> So a client that lists a directory on a submount below the share then
-> that dentry belongs to another superblock. So security_inode_getattr()
-> and ->getattr() get a mixed path.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-So e.g. apparmor hits
-        vfsuid_t vfsuid = i_uid_into_vfsuid(mnt_idmap(path->mnt),
-					    d_backing_inode(path->dentry));
-with path->mnt having nothing to do with path->dentry there?  Fun...
+- [Medium] The new RTF_REJECT exemption in fib6_rule_suppress() and the
+  commit message's reason for it ("Do not suppress such routes so that…
+- [Low] The commit message and Fixes: tag present this as a fix for the
+  nftables regression from commit 1c32b24c234b, but the code change has…
 
-> The third patch in this series fixes this. But we should make this a
-> Fixes: patch really... Something like [1].
-> 
-> > To elaborate a bit: correctness of quite a few places does depend upon the
-> > following invaraint:
-> > 	path->mnt->mnt_sb == path->dentry->d_sb		(1)
-> > for all struct path pointers they might possibly run into.
-> >
-> > _IF_ you can guarantee that (1) is not violated, we have something to
-> > talk about; otherwise, don't call your object struct path and don't
-> > pass it to anything that expects to deal with struct path.
-> 
-> Every struct path the series constructs:
-> 
->   - devtmpfs
->   - nfsd
->   - cachefiles
->   - ecryptfs
->   - overlayfs
->   - ksmbd
-> 
-> doesn't have this bug.
-> 
-> [1]:
-> 
->   --- a/fs/smb/server/smb2pdu.c
->   +++ b/fs/smb/server/smb2pdu.c
->   @@ -6375,13 +6375,14 @@ static int process_query_dir_entries(struct smb2_query_dir_private *priv)
->                           continue;
->                   }
-> 
->   +               path.mnt = priv->dir_fp->filp->f_path.mnt;
->   +               path.dentry = dent;
->   +
->                   if (test_share_config_flag(priv->work->tcon->share_conf,
->                                              KSMBD_SHARE_FLAG_HIDE_UNREADABLE)) {
->                           __le32 daccess = FILE_READ_DATA_LE | FILE_READ_EA_LE |
->                                   FILE_READ_ATTRIBUTES_LE;
-> 
->   -                       path.mnt = priv->dir_fp->filp->f_path.mnt;
->   -                       path.dentry = dent;
->                           rc = smb_check_perm_dacl(priv->work->conn, &path,
->                                                    &daccess, daccess,
->                                                    priv->work->sess->user->uid,
->   @@ -6397,7 +6398,7 @@ static int process_query_dir_entries(struct smb2_query_dir_private *priv)
->   @@ -6397,7 +6398,7 @@ static int process_query_dir_entries(struct smb2_query_dir_private *priv)
->                   if (priv->info_level != FILE_NAMES_INFORMATION) {
->                           rc = ksmbd_vfs_fill_dentry_attrs(priv->work,
->                                                            idmap,
->   -                                                        dent,
->   +                                                        &path,
->                                                            &ksmbd_kstat);
->                           if (rc) {
->                                   dput(dent);
->   --- a/fs/smb/server/smb_common.c
->   +++ b/fs/smb/server/smb_common.c
->   @@ -472,32 +472,36 @@ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
->           for (i = 0; i < 2; i++) {
->                   struct kstat kstat;
->                   struct ksmbd_kstat ksmbd_kstat;
->   -               struct dentry *dentry;
->   +               struct path path = { .mnt = dir->filp->f_path.mnt };
+--
 
-That's just asking for breakage down the road.  Just pass it
-the address of ->f_path for "." and
-	&(struct path){.mnt = dir->filp->f_path.mnt, .dentry = dentry}
-for ".." (and sod the dentry = dget(...) for "." - just have it NULL there)
+ipv6: Honor suppress_prefixlength in fib6_lookup()
+
+This patch makes fib6_rule_suppress() honour suppress_prefixlength when
+the lookup goes through fib6_lookup(). That path uses
+fib6_rule_action_alt(), which never populates res->rt6. The new code
+compares the FIB entry prefix length against suppress_prefixlen, and it
+does not suppress results that carry RTF_REJECT.
+
+Link: https://github.com/firewalld/firewalld/issues/1600
+
+> Fixes: 1c32b24c234b ("netfilter: nft_fib_ipv6: switch to fib6_lookup")
+
+[Severity: Low]
+
+This isn't a code bug, but should the changelog and Fixes: tag cover the
+other fib6_lookup() callers too?
+
+The new branch in fib6_rule_suppress() runs for every fib6_lookup() call
+while custom IPv6 rules exist, not only for nft_fib6_lookup(). At least
+two other callers change behaviour.
+
+The first is bpf_ipv6_fib_lookup() in net/core/filter.c. This is the
+bpf_fib_lookup() helper without BPF_FIB_LOOKUP_DIRECT:
+
+    err = fib6_lookup(net, oif, &fl6, &res, strict);
+
+The second is ip6_route_check_nh() in net/ipv6/route.c, which validates
+the gateway when a route is added:
+
+    err = fib6_lookup(net, cfg->fc_ifindex, &fl6, &res, flags);
+
+With a WireGuard-style "ip -6 rule add table main suppress_prefixlength 0",
+bpf_fib_lookup() now returns the VPN table route. Before this patch it
+returned the main table default route.
+
+For the BPF helper, the missing suppression is older than 1c32b24c234b.
+The custom rules path of fib6_lookup() came from 138118ec96cb (2018). It
+was converted to fib6_result in effda4dd97e878 (2019).
+fib6_rule_action_alt() has never set res->rt6, so the old suppress code
+always returned false on this path.
+
+The v3 notes say this message and Fixes tag were suggested in review.
+Even so, stable backports that follow the 1c32b24c234b tag won't reach
+older kernels where BPF users are affected.
+
+Would it make sense to mention the BPF and route-add callers in the
+changelog? Should there also be a Fixes: tag for the older commit?
+
+> diff --git a/net/ipv6/fib6_rules.c b/net/ipv6/fib6_rules.c
+> index 5e2a79a81bf35..2f43e4e48e0d0 100644
+> --- a/net/ipv6/fib6_rules.c
+> +++ b/net/ipv6/fib6_rules.c
+> @@ -288,6 +288,12 @@ INDIRECT_CALLABLE_SCOPE bool fib6_rule_suppress(struct fib_rule *rule,
+>  	struct fib6_info *from;
+>  	int plen;
+>  
+> +	if (arg->lookup_ptr == fib6_table_lookup) {
+> +		/* fib6_table_lookup() returns 0 for reject routes. */
+> +		return !(res->fib6_flags & RTF_REJECT) &&
+> +		       res->f6i->fib6_dst.plen <= rule->suppress_prefixlen;
+> +	}
+
+[Severity: Medium]
+
+Is the RTF_REJECT exemption correct for RTN_THROW routes? The commit
+message says:
+
+  Do not suppress such routes so that they continue to terminate the
+  lookup, as with ip6_route_output() and IPv4.
+
+rtm_to_fib6_config() also sets RTF_REJECT on throw routes:
+
+	if (rtm->rtm_type == RTN_UNREACHABLE ||
+	    rtm->rtm_type == RTN_BLACKHOLE ||
+	    rtm->rtm_type == RTN_PROHIBIT ||
+	    rtm->rtm_type == RTN_THROW)
+		cfg->fc_flags |= RTF_REJECT;
+
+A throw route doesn't end the lookup in ip6_route_output(). This is what
+__fib6_rule_action() does:
+
+		err = rt->dst.error;
+		if (err != -EAGAIN)
+			goto out;
+
+fib6_prop[RTN_THROW] is -EAGAIN, so fib_rules_lookup() goes on to the
+next rule. IPv4 does the same through fib_props[RTN_THROW].error.
+
+In the fib6_lookup() path, fib6_rule_action_alt() only checks for
+fib6_null_entry:
+
+	err = fib6_table_lookup(net, table, *oif, flp6, res, flags);
+	if (!err && res->f6i != net->ipv6.fib6_null_entry)
+		err = fib6_rule_saddr(net, rule, flags, flp6,
+				      res->nh->fib_nh_dev);
+	else
+		err = -EAGAIN;
+
+So a throw route gives err == 0. fib6_rule_suppress() then returns false
+because of RTF_REJECT, and the rule walk stops with the throw route as
+the result.
+
+The callers then see:
+
+  __nft_fib6_eval_type() returns RTN_THROW
+  nft_fib6_eval() returns without setting an oif
+  bpf_ipv6_fib_lookup() returns BPF_FIB_LKUP_RET_NOT_FWDED
+  ip6_route_check_nh() returns -EHOSTUNREACH
+
+In the same case, ip6_route_output() would use a later rule. An nft fib
+rpfilter rule such as firewalld's "fib saddr . mark . iif oif missing
+drop" can then drop legitimate packets.
+
+The lookup already stopped at throw routes before this patch, because the
+old suppress code always returned false here. For a throw route with
+plen <= suppress_prefixlen, though, ip6_route_output() moves on to the
+next rule. The new branch makes fib6_lookup() stop instead.
+
+Would it be better for fib6_rule_action_alt() to return -EAGAIN when
+res->fib6_type == RTN_THROW, as __fib6_rule_action() does?
+
+Also, the selftest in "selftests: netfilter: cover IPv6 FIB prefix
+suppression" covers blackhole, unreachable and prohibit, but not throw.
+
+> +
+>  	if (!rt)
+>  		return false;
+>
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261116150132.9594-1-leonard%40lausen.nl
