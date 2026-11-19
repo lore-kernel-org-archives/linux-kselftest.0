@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795099379;
-	b=IqVTyWHA+ZV5RdvtC1PwXIDBiX9ljbvuXzYFISWeQZKCG5eQm+fk6spv105h84YIqvGz
-	 40JTYJjkyW1+851Pw9kM5s3tgxVa1SfvGonZPb9FTcOGTwZvyeD9yKv7BRPjtRmFdijou
-	 PJ7mXXMGaFBWqybMfa7VdCZCqIwniattrEm90+YMrtCQ3OsxpI4Bgexwy3gwhxhu7MRV9
-	 6Q6ZwH6NCwo/0euWmyGDLcC1WPVWBXCqMyjSnQbdSSH4P5Wv3K5Qr6Y69kNRgMggjj/8k
-	 cJ/BtqSgkIailCbAXE8ft9dmvWo1uS6PX4buMHUakDwPca/vSvlhspcHLnU8YmuNDaw==
+	t=1795099384;
+	b=QrKOUGrYAZfE/YxvDhob1SDSgfIeAHFLUzgdeDEAe2RHMsJB4gjqeKpCsCkUafWut7HD
+	 YIFLeQlYIVRyLo+KNO1nrfmnrteMuNa6z+e32Nvy7zAk2Jiyl+Hl29x0KC4oSI1qIT6nE
+	 Q8qD74EIUYnp97wtKG6dKrkpd2QUkh3F+cZB010gLt+uLhdBGtuYh20jN6z54PY79brUc
+	 j4+ycT7J4QBo/fhXFPvz2uoRmkmirlh4zmaRviS05YdO59fbEQv9MEb7VUyYaD+qKQSPf
+	 cUd6JPcHK2ZAVtYMbOpDf2K/RoljTZb1UA32AFlAgDpIP3bR1gOgM4HAgomG3OExzAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795099379;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795099384;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=GpxuYon9V61W9GAwJOVwMIhDSfl3FlFyTaxEoWjwIyE=;
-	b=mpXhf2Bwve4kf7I3owUVrdEp4p6WMbQCV+jFvVA73nIDCCN8CuZG5dCkJP+hy1u/V8Tt
-	 59HGPRhH91AhR3xmT/SjOobjtsM3tziUEwel4BFwqEhPZvcqf7Rt07wpGWmijCNEkW3i0
-	 AYGe+YZkE4d7o59e0+KRmOmRmMxs4x2Esb1HvQ3uEgd8ZTKNK1b63kdE1WU/d8BnfpU5q
-	 AYUZVUelR2VnQdatDTTj+qFlSdZu1LBmpo7K7GBuZGVHJHdSR0ElyOiiTFNgIdJSwuq4l
-	 9RwzxzNGOZAlS0cpp1ZhNeLTh6FvZTBUCdiKGJG35JcN8C9j5F9Zq0x+GEdY9NvWO3A==
+	bh=yMnm3lNFGLXAd5e5gWSUcJSwva9ZjNGfsEDi2TEd7zA=;
+	b=Mnd63vdCfhXm+7gcv2OohmSOi+vUxlohGjyQJFvtcHDO3LxtBU4TsUaCXWux/1+huz1D
+	 Xn7D8wxm+M6fKQ/CUnCxq1IkLlQQchcqveXWZt7vbwSim818sCyAgACTNqzgIFQmgUqFy
+	 spdEIT8HoO6aMYPteb8XQ9/yu8/Ll3KB//ump5gvbCwTXUC4rm1PaIqUB+jnyavn3orPW
+	 EIg/18JWpGCBUof/dsmwRDDdRJjxqirHB2V+umhLk1ENeNQ5XZnnt6ophAGYrYUK00MZi
+	 ChzbUUaoeKAZwRhqwq0Eakla1i7UgGc4ZuG3blTlNiXziAqUUlvpq9kF3m6x/5dyYmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SfBrjJsg;
-	arc=none smtp.remote-ip=74.125.82.175
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cvLP2+8Y;
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C3560A2613
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:42:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88C3560A2613
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8627606A337
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:43:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8627606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SfBrjJsg
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-380b40312e2so6311469eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 06:42:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cvLP2+8Y
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-380b40319bdso3319291eec.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 06:43:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795099379; x=1795704179; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795099383; x=1795704183; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GpxuYon9V61W9GAwJOVwMIhDSfl3FlFyTaxEoWjwIyE=;
-        b=SfBrjJsgaM3SfnXmFkL//WeotaIyiccErOHnwP8Op/+jtmiZhZt6O/HPsaaXcSFv58
-         XxhWTZrcYmWyzJ/G2dJ+bGuC/UAhDwuUWst8aT1V7pLd83JCfkGHLGLgPwXRWFTZtqaq
-         yEntDwwWtY0r0BUaD5jcTHiuAO3+nfvr29+V6Ar++8T+/I8Wl/FrpMeva3Hz8rnj/c6Y
-         IfaVNb41jSu276kHot/6XCbZVDNqJPRKTm7GNItXWAtih3Hy+fz5flJhnJVSTzrWFg8H
-         oC96LLfAymtcgUYh42f5EPApHu9KXz5H1NumNZkj9BuIan//sKREg+/jXBGm+f+cr3e9
-         QkKw==
+        bh=yMnm3lNFGLXAd5e5gWSUcJSwva9ZjNGfsEDi2TEd7zA=;
+        b=cvLP2+8YSQPyvgyp72ru7K5jomnG3ckow53vlYIopcr1w8uivHenFD5EQkKokdAiOe
+         M2PCTTJaxuckK5644Q3s9KKxruSHxV/63pQmXLhv5AWtnvzJn8dWUi9xyIXL0ocRakwg
+         NCRXPscmKacvufThd9DoLwTEG8Z7+Zx7mtoMWA1Q9ftXkUCHVXTvWYuAwily2x2PNub+
+         IjgilAoZj8X+SuMWG0s4CQTFA+McmPArwRlrCC6erNxHnS7IypnzGPEhbIe85lEkNCyx
+         t+q7GMLcYHYr4WLaq8e0dmXFKGqYQPusYU5uipHES82vnlYQv3BEaRAMQ193t2S7eqCI
+         5Ihw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795099379; x=1795704179;
+        d=1e100.net; s=20260707; t=1795099383; x=1795704183;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GpxuYon9V61W9GAwJOVwMIhDSfl3FlFyTaxEoWjwIyE=;
-        b=nEVvuiGfafuto4Uh911WHJdfsDq82FY9tidDW0MScdEkKJ7NLzGd0RSU0znnegJLam
-         yuYmPd68v6oMsnGmkV0gqsadwLPsBiNdrvqH+vlJMWwEotQSYU8BZR7Oub5Xs2n8w3oY
-         phWGdkaQtKDPZkuEo6YUckIcHD8e44o76g67cBOQJ1h+xoUAJFosybJNL6rPMmbCorfI
-         SX9ZDKOrucMr1Mg3DxVVUJHDr8YUmwkJ/aO13rGzukwF2tfXzC3c2uWAegOXTknwZjjA
-         zuoVd4SoHACPNv/m45GalECZCFCg0Hd52xo9wfWbkV3P2awyjxfYwQmZFmATe7u8O3Hp
-         +mjQ==
-X-Forwarded-Encrypted: i=1; AL+hErEFqW6DglQ6FUikSimxEjuTe4BwXFSzHuBljpM8CdgCOidItkv1GeShHx8tFHbBVAmv1obs7qMEWLlNNM1M8ek=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+DJB3uIzTFWxAElzUoNI3rNva9zso9dVynkg3xod3Ds8xjbXtg
-	y6fzwPccdEcbIbT4jtsekv6wMi0GzK/a6uF9BJ8SFuD0hnb20jJN49bS
-X-Gm-Gg: AZFdTZdot+4cvr5UI7fpvAZPDS3kHtC8pnKFkBtycNvCdEWxu1XB/js58PD7ch668wP
-	eMQg6yXrQlAUJhqwRjKSLgER9HVJ9NHmIgsmnoudGF5nykKXB5GZBb51ozdsiAZCR6u43v1wYCu
-	fUEYJn3vSbUySnghXhAH+lvkIoRSh9FljUO0aKhvFnBPFkDAA/59W5DvFeWpLbQQ1IfBGLS/BUR
-	d33W699HUrgkYA5Oom32o52affGvCLwn3udwBVFgQeAFlqn0G7+ZxjaRnx9QqmGeIPE1mqUTJGj
-	YLJAC4ZKrAlqwE1XwqXI5VaiZed6P9yFBJhRWx/SNJpWgbbolDq87np0RzInQGJ/lv6ZWHcOk4C
-	vy3s9RI+y7c13UUidNwnNn6JMzSemLqisLa7TcMEU+1J6Q5wytBEMKLS3wBOxqXOpoNRknSov3q
-	VjyWIK42RrIaFXIZxpImmluNNSO6+6vb+UbZHAmmmWdAQOKnI6jCT2IbrQFxMc+tAfV0xiP4bQu
-	wm4RWxUkRQag1iO2m6Rfy3mFw8XdEjtGAOe5oq4JUV5fjEbCXMm3BENvjRwpdxwZgcMSA4xdVip
-	4m3FWhsO0zPYgJ2w2/xu6QNFaAKYs90rapyBJMWdYzpQl1CnLPUESeG2NDgMgy7a/BvYF3k=
-X-Received: by 2002:a05:7301:5f87:b0:381:9593:9984 with SMTP id 5a478bee46e88-38281626937mr5510080eec.37.1795099378702;
-        Thu, 19 Nov 2026 06:42:58 -0800 (PST)
+        bh=yMnm3lNFGLXAd5e5gWSUcJSwva9ZjNGfsEDi2TEd7zA=;
+        b=oTwmTJ2dGdJzF+/W7aCK+nhuHMVe9quhMDLSfT66O3r2X1dkw//bOOfRLsC9MiRSJZ
+         w6QRVNVVpzDBJAfc6I9j3+dkOvjO8F/Y6cG+PwGVO7H93LUHv9aTVdexnoR65GHTMacE
+         YL7vC/qPP2me0mjO5oK3esuNI0D7YNp+CacKodNwxV762syrJwtrwKCTJc7xJKuHZ2Ex
+         LeLze93p0jgW3Dv3qz+fULv1NiPzAAwbeK7NuMMswcj4+p0itKd0OHZBvF1NR9w5Rhrr
+         sBEGP0s6zTQS/Ip5REDmXuUJKjfAdtNDeNDehkXAsG1NgsKbFDkYWqunCxcfyqcef0v3
+         A9hw==
+X-Forwarded-Encrypted: i=1; AL+hErE0QF92bULaNjBJAltJnod2pKPw+/eHge1jE1u2VmmNeGhZbCaBntkrRJdR+WKKEbQ5DfRpADyn8eZ1PPUiQX8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ku1CLAATlIhWvVauhWFpD2Rshs9w2IeVx+Uiyo/SCWwnw8Qra
+	d8aWpJ8ns2WE+59k63GOKKwUXalJJb+txa0ibLV19CLux4Rs9pkaIV/r
+X-Gm-Gg: AZFdTZdNzKpkpUaAXZxesbwCmiDiWKokPRJHJU3iR2am0GNhq/gwPaUdH8eGgFR5/Z7
+	eJUyvohD4hLOlNcbwN7ShiLpJU5dp6vySG2WXKd5Hzscs87N9SO8l1lO7FnVKk4vhqTCykjPjNn
+	hm48LhEvrSDDTR6+84KW/MUuzNEWTtWm8W8Z1Ju33I+eNNqoUGvxmSRBiNiGv3GNGjMMHVXzNUg
+	rHZvExU4cte8zYy/5YbCMdIp2oUnnqlZ+mNbSl8Tdh/gBD3y7dMyH3J9XwNj58w6JAgt9z1lkD1
+	VcojJNhxzvrJUb4QpvlqrK2sFK4eePFO4u/1r9xGVp+9STSxT83h8Jyk05V3wfhZwtsd3Cgb7Mv
+	TUrLeWFnq+LlaEIT/Zr93Zefi0ujru97csqdXN/E8FDrlRf2ZywVAg9CsNIEG+DjpmQ+Q7rK+QH
+	Shddnjyy1cc6j1plpHu9MuSfTqat9oQH4fDd0pIV/Ug776Ou1EsxcNc5RZOnyPLjCV95sLmOkSZ
+	mJMbnHHZLGzXVqCGToubTZD3aHMa4FP02uuWFn+JjqUbhH/WjDzx9OUJ5ZvKLz+xaUP7S9S22Z5
+	WBg0mU24UkPs/tDH4/7m+ZxN0adGPZ7ovQKAQsZjUzI2OYOSJw==
+X-Received: by 2002:a05:7300:7314:b0:375:c5e1:931d with SMTP id 5a478bee46e88-38280c2e5fbmr7589924eec.25.1795099382820;
+        Thu, 19 Nov 2026 06:43:02 -0800 (PST)
 Received: from localhost.localdomain ([112.170.44.210])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-382a6fe733dsm16682848eec.16.2026.11.19.06.42.55
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-382a6fe733dsm16682848eec.16.2026.11.19.06.42.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2026 06:42:58 -0800 (PST)
+        Thu, 19 Nov 2026 06:43:02 -0800 (PST)
 From: Junyoung Jang <graypanda.inzag@gmail.com>
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Jason Wang <jasowangio@gmail.com>,
@@ -93,9 +93,9 @@ Cc: Junyoung Jang <graypanda.inzag@gmail.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 2/4] tap: clamp zero-copy copylen to remaining payload length
-Date: Thu, 19 Nov 2026 23:42:37 +0900
-Message-ID: <20261119144241.360238-3-graypanda.inzag@gmail.com>
+Subject: [PATCH net v3 3/4] tun: clamp zero-copy copylen to remaining payload length
+Date: Thu, 19 Nov 2026 23:42:38 +0900
+Message-ID: <20261119144241.360238-4-graypanda.inzag@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261119144241.360238-1-graypanda.inzag@gmail.com>
 References: <20261119144241.360238-1-graypanda.inzag@gmail.com>
@@ -110,47 +110,45 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tap_get_user() chooses GOODCOPY_LEN when the virtio hdr_len is zero,
-without limiting it to the payload remaining after the virtio header.
-A 246-byte padded header and a 14-byte Ethernet frame give vhost-net a
-260-byte TX descriptor, above its 256-byte zero-copy threshold. The
-128-byte skb head then contains only 14 copied bytes; the rest can be
-transmitted as stale kernel heap contents.
+tun_get_user() also derives copylen from hdr_len or GOODCOPY_LEN
+without bounding it to len after removing the virtio header. A
+padded header can make a short frame cross vhost-net's zero-copy
+threshold. tun_alloc_skb() then reserves more linear packet data than
+zerocopy_sg_from_iter() copies, and the uncopied tail can be delivered
+to the network stack.
 
-The original macvtap zero-copy support introduced the copylen choice.
-Commit bab632d69ee4 ("vhost: vhost TX zero-copy support") connected
-the in-tree vhost-net caller, so this case predates the v6.15 header
-validation regression.
+Limit copylen to len before the NAPI fragments and skb allocation
+branches. The requested copy length then cannot exceed the supplied
+payload. The normal skb-building path is unchanged.
 
-Clamp copylen to the remaining payload before allocating the skb. This
-also covers cases where the entire frame fits in the skb's linear area.
+This matching tun issue was noted during review of the tap zero-copy
+fix. An AI coding assistant helped prepare the /dev/net/tun
+reproducer. In x86-64 QEMU/vhost-net, a 14-byte input produced a
+128-byte frame with a nonzero uncopied tail. The patched kernel
+delivered 14 bytes, completed 300 repeated short sends, and still
+selected zero-copy for a later 400-byte frame.
 
-An AI-assisted code review found this issue. An x86-64 QEMU/vhost-net
-reproducer observed a 128-byte frame from 14 input bytes, including a
-114-byte uncopied tail. The patched kernel delivered 14 bytes in the
-same test and in 400 repeated short-frame sends.
-
-Fixes: 97bc3633bec7 ("macvtap: macvtapTX zero-copy support")
+Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Fixes: 0690899b4d45 ("tun: experimental zero copy tx support")
 Co-developed-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
 Signed-off-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
 Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
 ---
- drivers/net/tap.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/tun.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index 2f19fb07bb2d..f25c58d6e986 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -608,6 +608,8 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 		struct iov_iter i;
- 
- 		copylen = clamp(hdr_len ?: GOODCOPY_LEN, ETH_HLEN, good_linear);
-+		/* The remaining payload may be shorter than copylen. */
-+		copylen = min_t(unsigned long, copylen, len);
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index dcec7311e601..76486cde21e4 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1850,6 +1850,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		 * The rest of the buffer is mapped from userspace.
+ 		 */
+ 		copylen = min(hdr_len ? hdr_len : GOODCOPY_LEN, good_linear);
++		copylen = min_t(size_t, copylen, len);
  		linear = copylen;
- 		i = *from;
  		iov_iter_advance(&i, copylen);
+ 		if (iov_iter_npages(&i, INT_MAX) <= MAX_SKB_FRAGS)
 -- 
 2.43.0
 
