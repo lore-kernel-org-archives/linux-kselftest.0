@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795081987;
-	b=DcrtBrWxXzwfBZ9bHYzyVOz3QAkTlIUovavkhyYuxwG74wOrsAf8L8aVo26vM+C2h0fy
-	 AFlAaF0Wi41chDhOrp2FXZf6vsDN1VSIA9Mj/OOUv33qzNZmlorg8qDfQ+89+7b28EUsV
-	 N0zrkZUJThE3Uod30JGIgIoxxBc7s7o2dcwnm4J5yPavcZHk2M4u+XyEvlGXqu/7F5x7J
-	 heq70CTXXTPwzWSoJGfzC6K0iz0o7DNhKdvkStrrqdYF6a9RIecxZMO2wlqTVzIazfWfd
-	 igu8yNJa4Zf8WTYvX8pfKKAGH+H8fm3JmccHO1BgJarcFaasB9tPQQV6O95+7DbNq4w==
+	t=1795081992;
+	b=kBOEXSwOwLw8E2UZZdJ1rDYp6tfph5xO9Mkqo7z3TrK3I6V0wXFmHDoY+D3neoGIjaqr
+	 Bm5DI6MCH5PNKwa7Makne/lkeqjJO25dYQc7LJHdwJoBODdoz6hZvp+v/sIml4yhZuvAf
+	 r9r7tAWTijENbwDSO2EeQdb3znxf1VbntmROpXEavpHI/MWoGkO8azLUYv2Y6Nu53ER4S
+	 YcMjn/qMCVR/7w1BlhJQ/Fqf/FrndeKIkFNu7ApcIiGQmZIM3ZHtnL1UYA0LcreWblOaP
+	 fxnbNjGLHj+Gw2Lbk5PKCyKLwElkLr//hddCAKmbSVuLrl+Zd6wfuhdAa8UcNDAI/Fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795081987;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795081992;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=7TwuXd1N6O0YZu83iCTlrXxdB6FRZa6SxiwykmOOhUI=;
-	b=359/32PKGVv42ykcTSvY6bRlRYdxYG9uhATUbYFSc2OTJLRNZqzVG/IoaLgQJtUH/ZWx
-	 cLD3grTH+tVYj8PvOCX7TwUqLQ1AWvETW7WOK50KorytGT7sgd4TNu9hvPZ6RPrKO24Gz
-	 Z+k1vE19RalDRcrVAoFv0c2dj3LHiwH/FA+PAUKb3GgIz9pomTOBKD24hSKaXbbO1izBu
-	 DvfeOX56SVi2siVtQGQ4auwdrJrjwant82A1XLwKUSuMxO6OQJmBjs7dxwIDM3WLgegew
-	 mJSj38P+4WbBePw1cix7YhOzUt+7qQxwUUMh8te4quCKe/WdhpDCWl8DmYpHCh64TcA==
+	bh=A+aU9SIn2Zhiu/uvRNR7gVgAVOlE/lo6ePmTFuyRaj0=;
+	b=0tsSBcM7iKIO6GmOgh+COp5KYPj4t7MQdBe4z6kMU8RZ4ytOXU3DCoqTQdTEWm3RtZ/g
+	 jjhZanONFMOHjHvOo/wB7RcjZYQ6l6HdTBzeTa0UK5FbgKFoWs8t6tOt42C8GWZSUhZEj
+	 RXccYjRi4obLspss5ibZpc0AJyWSOmkzgSsR4JEQqT8p8H6Qq79c+91J39hZQfQS6HY1A
+	 fxLPHKnC4f+Ncg7tooyenyDdN478PnwnAYMDEvEoaybb3Qgw0sbOHofW536V76gltNL4I
+	 H81DYeHzl3Z0OGNGrfwDxkmVwnaiRwn3l6fOmR5851gs9XF+tkbf0W0UQvCcvp2iq8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QNhGTbqL;
-	arc=none smtp.remote-ip=74.125.82.51
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=akvbrKpA;
+	arc=none smtp.remote-ip=74.125.82.46
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AF9606A324
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 09:53:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46AF9606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32444606A325
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 09:53:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32444606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QNhGTbqL
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1b24f4b15c4so250399c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:53:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=akvbrKpA
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1a2af4c8d00so4139095c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:53:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795081986; x=1795686786; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795081990; x=1795686790; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7TwuXd1N6O0YZu83iCTlrXxdB6FRZa6SxiwykmOOhUI=;
-        b=QNhGTbqLw3Lg+ow9t6MkqiXyW7z1X+nWgaSRSpHoU/Tt6iurJDZ2rMAL6LMFFagOBC
-         F9CX3OuSl+7HvICJ0L2pD+kl9mNcGNS7tPHPlCwOqQjJjLj57gw9IevfKAMPRAUB+t11
-         O8cUxPD2G/4Tx9ZfOvtcEbMUhktdes0ILvhsQ+Ns/i1qVq1HnuJwenMh80Aa0SWH/aSr
-         2+t2YcwdJQDlYVY2t4mE/NmdJWG6gJk919IJw7U3UYLM9Z9pNUAoIPy8Yw6pUlRAWjLv
-         TWcN/fAp0Xe8gNduZCTf84iiqJHnvv2x/UH4hgqzAjnYsR9iDP8co7wZhg6vFvIy4rSS
-         cgmQ==
+        bh=A+aU9SIn2Zhiu/uvRNR7gVgAVOlE/lo6ePmTFuyRaj0=;
+        b=akvbrKpAOrneaIgcnfJZk8zsV6GIu5bfoiQaSgz9Rcwe76DkeB0kS9fVad281LiadH
+         MoKVzuRGAoJdAbOvb+9z4AVAdPQb6mALszieK8SQEUOs2jSFGYRzGtNQeF17PrXTYVTY
+         FZvKOQ67KsdGSzdlqKAVmu+qEdc7njqp3GZSEvRetdprbQcjt1zK7vliYcB8PCWR4vK4
+         bBIk1T+GdNGGMcg6x1l8/j88+sI0w/A+2JYj3mjuhbEHetw7G3oAir8vUY67m0H6wxxi
+         PHw8dNqSV0LEWHGJjUy2xPmvghyZ7YDtJESK6hjJU7+goRBYOeqwgOGyPiHiKVfEwLuv
+         maCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795081986; x=1795686786;
+        d=1e100.net; s=20260707; t=1795081990; x=1795686790;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7TwuXd1N6O0YZu83iCTlrXxdB6FRZa6SxiwykmOOhUI=;
-        b=NRpS0lDeQsY8Mu1Ksn2SfPGbfPc3SzOGOsVs3VXM+9a7CeP5sczt6+L8UwzZRQE96+
-         7oSLSsMTnrEN5leNp1cXBVArGqHoKGxwPb1zJc7j+iOD0JM3T4TBGwKnSLu9e8FpaMYL
-         2dhYSMfUNP7HXuCEM0s7DQbO2SAsGWWKcHXdXJ9nBU0YnrPqcyH8BYSyemmzWxqMu3aP
-         iEswKwcalSYt6q4fxxgZDaZhO22qroMmXSb9EowCXHNZniQpRWg1rZyr9bf4pyO0tidh
-         +Fij8CJgVKyDmKUSGt2dmQ1nqOAdZDgK2QJ1zqmeVolU1AxZdHRk5nHcMHeNxmMqmkJi
-         mxlQ==
-X-Forwarded-Encrypted: i=1; AL+hErHIEbiGWljfYY5kTB+jSCy3QVPHU3Xg4DmBck2GCZxQPYFXDyLh0E7Io5M+jqTPguYVd6XRFInFPwvMUb9gnBQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9TPKymmx6TDRXkdTIZlBiIuFuYExEWt52U6p5wNEpAdHZ31yQ2
-	J/Rlq76Y7jwxOzJpfYZBpKFuzyxp0I4+4v22JZAYrBtb8qmTK20NaN5E
-X-Gm-Gg: AYBFou0DmD5NLp10jIwPXPmFS8oxTFbQ3GTSnLL/C5qirMEQRJqF/mURqB+c8NqQ6LX
-	OnbgVaxrMHUsmhjr420y/+nUZG2gCdsaVSLMFlh9VEjKVMqjGghEcM8LUVDc2H/lM7EYpuxWi8Z
-	vISJ/ZH0D+J9TRjqG2upIVZMd+wIigSc9BOZel7xuDln1bofUY2AtfXA1AGmm519ohcaK7AIjyY
-	QyT3+c5EvzQWU4UHeeRVGJwYOQbw5dQzZbEkxc+DBgz1Ka0jlkbfdJ7qsY9heoa2sJ9jO3/8vMp
-	6/cqYzzrz/0WtAVjBUke5NacpchuR0CmbVCyVs7O4cSkRcav6liO3ARboL4qnvgt6WyD8PmuO0v
-	Y3pZAn8MB0ZGJg9wcZqpq5rkOVmgMFCQkXEjXqB4WbJRlR9dlPRGOjKWT57RpGiyIHFxOYSs1uD
-	VuLV2YR67DHSribPm3KqMEEdtGarPie0tQAVQV9d5s6WwVx4A+DvO6bw2XyZUVWbVRiPCf4DVPp
-	KFBvvttv0g0qzklMliDQ7QAU/kotOVuOv97E9z0DOiQXhcVUAULYCtflFoalGghp0h1hoFsSOWI
-	+nZHcboYbp8YU4pbcJqj1vHFFtaa0cIqTgsjHSj3auN1IADuvEh8biRwW1cl7Kg9FQWq+VLXt+q
-	NQUW7B1aNyqm+YT2b2EYkhVJRxQ==
-X-Received: by 2002:a05:701b:2704:b0:1ae:d447:6c84 with SMTP id a92af1059eb24-1b5525eed02mr429077c88.19.1795081986088;
-        Thu, 19 Nov 2026 01:53:06 -0800 (PST)
+        bh=A+aU9SIn2Zhiu/uvRNR7gVgAVOlE/lo6ePmTFuyRaj0=;
+        b=RsKcU+qgqZg22UTTw6kBQrp4C6QiQ1oabzKRb82W1M+sWdefgESRkOWLDi1jwlJhI3
+         k2CpVHgreHGVKO7SxjkVDEzrqu36r9pNYM8m/a1PE85lvIf4ZyzsUNYKbIylYeMcTrQM
+         s1Fclx1CnIezyGtzrXFkRWGL2YnD8aDaT9TN8V2jKX/lt8hEFIEccr5OSpM9y91/0mLz
+         Mar4Sf0Yk2ohXwDZQ7JBl5hoUQ3At4wGGMU98FgK4Iov2jQD8gYVVdSIY4Z5WW7PItCd
+         HyDvHjbEuHfdc6hrIKG9pvADqu+aIVcdozN9sSitTjos6V497h5maWoQRTRUJje7TCLj
+         DrsQ==
+X-Forwarded-Encrypted: i=1; AL+hErG0vBi2YzfPr2fBmtCJXBbvngrfV/MRwt+d2VPWGeS84FDLKamgzzDkGihhxLD4DUtMtCKZdmEu8htj2yQqFGU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8jUc3+LmWK9rZigAweG5Quj+OEoFlqaJoBNHYNTOs6qVmgFKOI
+	6UxEoQuC7CeI8Plmq+9uZl8qdCUatgWySywSFNlXG/BJVLVoXFFjQo5MzQ3dT00q
+X-Gm-Gg: AYBFou306rt4MbfmkRKScd1euOoP6hRmIkhLnvCYYUQ1tC7+bAlYnIsR8Sf7jQqIiXa
+	cos23iBJYrg1XBXPW2pbxj1nmUa02EVWh+dfyMnf5CPbmSBJ5P0LdHXGSrIumm2IWfdy2W5Tq2G
+	T8PKJ3hQG19GCcQcThXJezLv0wJy7Lh4hHzQQLJYu7DhJWowUBOyBYi5FtAPAabcadkFQ/E0rWy
+	IfQ7O9wltwKv44ulIPOIyZLzNynoJQKpZZ+W9/GsCV5jwrwcArStDAsBQ0xbyfWiowkEsmXa4zy
+	p/8UZ/R81iAaWD4vDsqAU86EHrwfljTxJQofcMB6TbOAgXI/A8Roa6+Ls9h2itmqjMqtnLecA7o
+	+/WeahjvGJbF1i6hYn2Gz6FNg2o0DQQtjtQZ/uQDpp1Xow7yYIbAOEYCvw8KdT7Nr7KGAIBtVvi
+	+1Hngi0OIGmVgHnf8HJD6FgrjsbvIMK8783uJbGDhD908nUc/ITafgfat+C5OBRpb0KqHonjssk
+	qwjfQVftsEVD4aVxsnaDPFr8W7nr4zo1xMDL16BG+uuFMG/0YaY3BQnG5Ic7ATNpYJhoW5XuPsV
+	dP2ffv2OG66yAIhb41TOpMDI5sZZYAqAirzjGKP2FxtcBOVCblcfhAjRJXl+swb3LA8UBRhA+zl
+	xgA4=
+X-Received: by 2002:a05:7023:a8b:b0:1af:d88f:fc51 with SMTP id a92af1059eb24-1b543d264e1mr5503203c88.30.1795081989999;
+        Thu, 19 Nov 2026 01:53:09 -0800 (PST)
 Received: from localhost.localdomain ([116.88.205.165])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5447c5b02sm12862850c88.6.2026.11.19.01.53.02
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5447c5b02sm12862850c88.6.2026.11.19.01.53.06
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 19 Nov 2026 01:53:05 -0800 (PST)
+        Thu, 19 Nov 2026 01:53:09 -0800 (PST)
 From: Zhefu Peng <ilskdw@gmail.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -92,9 +92,9 @@ Cc: andrew+netdev@lunn.ch,
 	nicolas.dichtel@6wind.com,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v6 1/2] vxlan: reset the remote's dst cache when snooping moves a MAC
-Date: Thu, 19 Nov 2026 17:52:55 +0800
-Message-ID: <20261119095256.42005-2-ilskdw@gmail.com>
+Subject: [PATCH net v6 2/2] selftests: net: add a test for vxlan snooping moving a MAC
+Date: Thu, 19 Nov 2026 17:52:56 +0800
+Message-ID: <20261119095256.42005-3-ilskdw@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261119095256.42005-1-ilskdw@gmail.com>
 References: <20261119095256.42005-1-ilskdw@gmail.com>
@@ -109,148 +109,271 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-vxlan_snoop() handles a known MAC that now arrives from another remote
-by rewriting the remote's IP address in place. It leaves the remote's
-dst_cache alone, so the next packet to that MAC is routed with the dst
-cached for the previous remote. When the two remotes have different
-next hops, the packet leaves the wrong way. For example, if the
-previous remote was on-link and the new one is behind a router, the
-device resolves the new remote's address on the local link, the
-neighbour stays incomplete, and traffic to the MAC is blackholed until
-the cached route is invalidated, such as by "ip route flush cache".
+Add a test for a learning VXLAN device that snoops a known MAC.
 
-The same branch also leaves remote_ifindex unchanged, although the
-early return compares it and vxlan_xmit_one() uses it as the output
-interface. When a MAC moves between an IPv6 link-local and another
-address, the remote keeps the previous interface, and every later
-packet from that remote enters the migration branch again.
+The first case moves the MAC from an on-link IPv4 remote to a remote
+behind a router, and checks that traffic to the MAC still flows. Its
+pings run on one CPU, because the route cache is per CPU and only the
+CPU that filled it hits the stale entry. This case fails while the
+device keeps the route cached for the previous remote.
 
-vxlan_fdb_replace(), which makes the same change through netlink,
-already resets the cache, updates remote_ifindex and clears offloaded.
-Do the same when snooping.
+The second case moves the MAC from a global IPv6 remote to a link-local
+one, and checks that the FDB entry records the new output interface.
+Both remotes are on-link, so this case checks the interface, not the
+route cache.
 
-vxlan_snoop() knows the interface only for IPv6 link-local sources and
-uses 0 for all others, but the early return compares remote_ifindex for
-every source. A packet from the remote of a dynamic entry that was
-added with a "via" device therefore enters the migration branch as
-well, which would now reset the device to 0. Compare remote_ifindex
-only for link-local sources.
+The third case adds a dynamic entry with a "via" device, and checks
+that traffic from the entry's remote leaves the device in place.
 
-Two CPUs can snoop the same MAC from different remotes at the same time,
-and the plain stores to remote_ip and remote_ifindex can then mix, for
-example a global address with the interface of a link-local one. With
-the early return above, such an entry is never repaired. Update the
-remote under vxlan->hash_lock, which vxlan_fdb_replace() and the other
-writers of these fields hold, and check the entry again once the lock
-is held.
+This test was written with the help of an AI coding assistant.
 
-The selftest added in the next patch moves a MAC from an on-link IPv4
-remote to one behind a router, and from a global IPv6 remote to a
-link-local one. Both cases fail without this patch and pass with it.
-A third case checks that the "via" device of a dynamic entry stays set
-when its remote sends traffic.
-
-This was found by our AI-driven automated live migration tests. The fix
-and this changelog were written with the help of an AI coding assistant.
-
-Fixes: 0c1d70af924b ("net: use dst_cache for vxlan device")
-Fixes: 87613de95041 ("vxlan: fix snooping for link-local IPv6 addresses")
 Signed-off-by: Zhefu Peng <ilskdw@gmail.com>
 ---
- drivers/net/vxlan/vxlan_core.c | 59 +++++++++++++++++++++++++++++-----
- 1 file changed, 51 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/test_vxlan_snoop_move.sh    | 222 ++++++++++++++++++
+ 2 files changed, 223 insertions(+)
+ create mode 100755 tools/testing/selftests/net/test_vxlan_snoop_move.sh
 
-diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-index d11028b37..8738be39e 100644
---- a/drivers/net/vxlan/vxlan_core.c
-+++ b/drivers/net/vxlan/vxlan_core.c
-@@ -1434,6 +1434,51 @@ static int vxlan_fdb_get(struct sk_buff *skb,
- 	return err;
- }
- 
-+static bool vxlan_snoop_same_remote(const struct vxlan_rdst *rdst,
-+				    const union vxlan_addr *src_ip,
-+				    u32 ifindex)
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index baea3e7f0..69d440c5b 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -118,6 +118,7 @@ TEST_PROGS := \
+ 	test_vxlan_mdb.sh \
+ 	test_vxlan_nh.sh \
+ 	test_vxlan_nolocalbypass.sh \
++	test_vxlan_snoop_move.sh \
+ 	test_vxlan_under_vrf.sh \
+ 	test_vxlan_vnifilter_notify.sh \
+ 	test_vxlan_vnifiltering.sh \
+diff --git a/tools/testing/selftests/net/test_vxlan_snoop_move.sh b/tools/testing/selftests/net/test_vxlan_snoop_move.sh
+new file mode 100755
+index 000000000..e1f0ebb19
+--- /dev/null
++++ b/tools/testing/selftests/net/test_vxlan_snoop_move.sh
+@@ -0,0 +1,222 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Check that a learning VXLAN device fully updates a remote when snooping
++# moves a known MAC to another VTEP:
++#
++# - The route cached for the old remote is dropped. The old remote is
++#   on-link and the new one is behind a router, so a stale cached route
++#   blackholes traffic to the moved MAC.
++# - The output interface follows the new remote. The MAC moves from a
++#   global IPv6 address to a link-local one, which needs an interface.
++# - Traffic from the remote of a dynamic entry keeps the entry's "via"
++#   device.
++
++# shellcheck disable=SC2154,SC2329 # set by setup_ns, run by tests_run
++source lib.sh
++
++ALL_TESTS="
++	test_move_behind_router
++	test_move_to_link_local
++	test_same_remote_keeps_via
++"
++
++MAC=02:00:c0:a8:00:0a
++
++ping_ns()
 +{
-+	return vxlan_addr_equal(&rdst->remote_ip, src_ip) &&
-+	       (!ifindex || rdst->remote_ifindex == ifindex);
++	local ns=$1; shift
++
++	ip netns exec "$ns" ping -c 3 -W 1 -i 0.2 "$@" &> /dev/null
 +}
 +
-+static enum skb_drop_reason vxlan_snoop_move(struct net_device *dev,
-+					     struct vxlan_fdb *f,
-+					     const u8 *src_mac,
-+					     union vxlan_addr *src_ip,
-+					     u32 ifindex)
++ping_pinned()
 +{
-+	struct vxlan_dev *vxlan = netdev_priv(dev);
-+	struct vxlan_rdst *rdst;
++	local ns=$1; shift
 +
-+	lockdep_assert_held(&vxlan->hash_lock);
-+
-+	/* The entry may have changed before the lock was taken */
-+	if (hlist_unhashed(&f->fdb_node))
-+		return SKB_NOT_DROPPED_YET;
-+
-+	if (rcu_access_pointer(f->nh) ||
-+	    (f->state & (NUD_PERMANENT | NUD_NOARP)))
-+		return SKB_DROP_REASON_VXLAN_ENTRY_EXISTS;
-+
-+	rdst = first_remote_rcu(f);
-+	if (vxlan_snoop_same_remote(rdst, src_ip, ifindex))
-+		return SKB_NOT_DROPPED_YET;
-+
-+	if (net_ratelimit())
-+		netdev_info(dev,
-+			    "%pM migrated from %pIS to %pIS\n",
-+			    src_mac, &rdst->remote_ip.sa, &src_ip->sa);
-+
-+	dst_cache_reset(&rdst->dst_cache);
-+	rdst->remote_ip = *src_ip;
-+	rdst->remote_ifindex = ifindex;
-+	rdst->offloaded = false;
-+	vxlan_fdb_notify(vxlan, f, rdst, RTM_NEWNEIGH, true, NULL);
-+
-+	return SKB_NOT_DROPPED_YET;
++	taskset -c "$CPU" ip netns exec "$ns" ping -c 3 -W 1 -i 0.2 "$@" \
++		&> /dev/null
 +}
 +
- /* Watch incoming packets to learn mapping between Ethernet address
-  * and Tunnel endpoint.
-  */
-@@ -1461,6 +1506,7 @@ static enum skb_drop_reason vxlan_snoop(struct net_device *dev,
- 	if (likely(f)) {
- 		struct vxlan_rdst *rdst = first_remote_rcu(f);
- 		unsigned long now = jiffies;
-+		enum skb_drop_reason reason;
- 
- 		if (READ_ONCE(f->updated) != now)
- 			WRITE_ONCE(f->updated, now);
-@@ -1469,21 +1515,18 @@ static enum skb_drop_reason vxlan_snoop(struct net_device *dev,
- 		if (rcu_access_pointer(f->nh))
- 			return SKB_DROP_REASON_VXLAN_ENTRY_EXISTS;
- 
--		if (likely(vxlan_addr_equal(&rdst->remote_ip, src_ip) &&
--			   rdst->remote_ifindex == ifindex))
-+		if (likely(vxlan_snoop_same_remote(rdst, src_ip, ifindex)))
- 			return SKB_NOT_DROPPED_YET;
- 
- 		/* Don't migrate static entries, drop packets */
- 		if (f->state & (NUD_PERMANENT | NUD_NOARP))
- 			return SKB_DROP_REASON_VXLAN_ENTRY_EXISTS;
- 
--		if (net_ratelimit())
--			netdev_info(dev,
--				    "%pM migrated from %pIS to %pIS\n",
--				    src_mac, &rdst->remote_ip.sa, &src_ip->sa);
-+		spin_lock(&vxlan->hash_lock);
-+		reason = vxlan_snoop_move(dev, f, src_mac, src_ip, ifindex);
-+		spin_unlock(&vxlan->hash_lock);
- 
--		rdst->remote_ip = *src_ip;
--		vxlan_fdb_notify(vxlan, f, rdst, RTM_NEWNEIGH, true, NULL);
-+		return reason;
- 	} else {
- 		/* learned new entry */
- 		spin_lock(&vxlan->hash_lock);
++add_sw_port()
++{
++	local ns=$1; shift
++	local dev=$1; shift
++	local port=$1; shift
++
++	ip link add "$dev" netns "$ns" type veth peer name "$port" netns "$sw"
++	ip -n "$sw" link set "$port" master br0 up
++	ip -n "$ns" link set "$dev" up
++}
++
++test_move_behind_router()
++{
++	local name="IPv4 move to a remote behind a router"
++
++	RET=0
++
++	if ! setup_ns sw ex a r b; then
++		log_test_skip "$name"
++		return
++	fi
++	defer cleanup_ns "$sw" "$ex" "$a" "$r" "$b"
++
++	ip -n "$sw" link add br0 up type bridge
++	add_sw_port "$ex" e0 s-e
++	add_sw_port "$a" a0 s-a
++	add_sw_port "$r" r0 s-r
++	ip link add r1 netns "$r" type veth peer name b0 netns "$b"
++	ip -n "$r" link set r1 up
++	ip -n "$b" link set b0 up
++
++	ip -n "$ex" addr add 10.0.1.1/24 dev e0
++	ip -n "$ex" route add default via 10.0.1.254
++	ip -n "$a" addr add 10.0.1.2/24 dev a0
++	ip -n "$r" addr add 10.0.1.254/24 dev r0
++	ip -n "$r" addr add 10.0.2.254/24 dev r1
++	ip netns exec "$r" sysctl -wq net.ipv4.ip_forward=1
++	ip -n "$b" addr add 10.0.2.2/24 dev b0
++	ip -n "$b" route add default via 10.0.2.254
++
++	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
++		local 10.0.1.1 learning
++	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 10.0.1.2
++	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 10.0.2.2
++	ip -n "$ex" addr add 192.168.0.1/24 dev vx0
++	ip -n "$ex" link set vx0 up
++
++	ip -n "$a" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
++		local 10.0.1.2 remote 10.0.1.1
++	ip -n "$b" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
++		local 10.0.2.2 remote 10.0.1.1
++	ip -n "$a" addr add 192.168.0.10/24 dev vx0
++	ip -n "$b" addr add 192.168.0.10/24 dev vx0
++	ip -n "$a" link set vx0 up
++
++	ping_pinned "$ex" 192.168.0.10
++	check_err $? "ping before the move failed"
++
++	ip -n "$a" link set vx0 down
++	ip -n "$b" link set vx0 up
++	ip netns exec "$b" ping -c 1 -W 1 192.168.0.1 &> /dev/null
++
++	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst 10.0.2.2 "
++	check_err $? "fdb entry did not move to the new remote"
++
++	ping_pinned "$ex" 192.168.0.10
++	check_err $? "ping after the move failed"
++
++	log_test "$name"
++}
++
++test_move_to_link_local()
++{
++	local name="IPv6 move from a global to a link-local remote"
++	local ns
++
++	RET=0
++
++	if ! setup_ns sw ex a b; then
++		log_test_skip "$name"
++		return
++	fi
++	defer cleanup_ns "$sw" "$ex" "$a" "$b"
++
++	for ns in "$sw" "$ex" "$a" "$b"; do
++		ip netns exec "$ns" sysctl -wq net.ipv6.conf.all.accept_dad=0
++		ip netns exec "$ns" sysctl -wq \
++			net.ipv6.conf.default.accept_dad=0
++	done
++
++	ip -n "$sw" link add br0 up type bridge
++	add_sw_port "$ex" e0 s-e
++	add_sw_port "$a" a0 s-a
++	add_sw_port "$b" b0 s-b
++
++	ip -n "$ex" addr add 2001:db8:1::1/64 dev e0 nodad
++	ip -n "$ex" addr add fe80::1/64 dev e0 nodad
++	ip -n "$a" addr add 2001:db8:1::2/64 dev a0 nodad
++	ip -n "$b" addr add fe80::b/64 dev b0 nodad
++
++	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
++		local 2001:db8:1::1 learning
++	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst 2001:db8:1::2
++	bridge -n "$ex" fdb append 00:00:00:00:00:00 dev vx0 dst fe80::b via e0
++	ip -n "$ex" addr add 192.168.0.1/24 dev vx0
++	ip -n "$ex" link set vx0 up
++
++	ip -n "$a" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
++		local 2001:db8:1::2 remote 2001:db8:1::1
++	ip -n "$b" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
++		local fe80::b remote fe80::1 dev b0 nolearning
++	ip -n "$a" addr add 192.168.0.10/24 dev vx0
++	ip -n "$b" addr add 192.168.0.10/24 dev vx0
++	ip -n "$a" link set vx0 up
++
++	ping_ns "$ex" 192.168.0.10
++	check_err $? "ping before the move failed"
++
++	ip -n "$a" link set vx0 down
++	ip -n "$b" link set vx0 up
++	ip netns exec "$b" ping -c 1 -W 1 192.168.0.1 &> /dev/null
++
++	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst fe80::b via e0 "
++	check_err $? "fdb entry did not move to the new remote and interface"
++
++	ping_ns "$ex" 192.168.0.10
++	check_err $? "ping after the move failed"
++
++	log_test "$name"
++}
++
++test_same_remote_keeps_via()
++{
++	local name="Traffic from the same remote keeps the via device"
++
++	RET=0
++
++	if ! setup_ns sw ex a; then
++		log_test_skip "$name"
++		return
++	fi
++	defer cleanup_ns "$sw" "$ex" "$a"
++
++	ip -n "$sw" link add br0 up type bridge
++	add_sw_port "$ex" e0 s-e
++	add_sw_port "$a" a0 s-a
++
++	ip -n "$ex" addr add 10.0.1.1/24 dev e0
++	ip -n "$a" addr add 10.0.1.2/24 dev a0
++
++	ip -n "$ex" link add vx0 type vxlan id 42 dstport 4789 \
++		local 10.0.1.1 learning
++	bridge -n "$ex" fdb add "$MAC" dev vx0 dst 10.0.1.2 via e0 dynamic
++	ip -n "$ex" addr add 192.168.0.1/24 dev vx0
++	ip -n "$ex" link set vx0 up
++
++	ip -n "$a" link add vx0 address "$MAC" type vxlan id 42 dstport 4789 \
++		local 10.0.1.2 remote 10.0.1.1
++	ip -n "$a" addr add 192.168.0.10/24 dev vx0
++	ip -n "$a" link set vx0 up
++
++	ping_ns "$a" 192.168.0.1
++	check_err $? "ping from the remote failed"
++
++	bridge -n "$ex" fdb show dev vx0 | grep -q "$MAC dst 10.0.1.2 via e0 "
++	check_err $? "fdb entry lost its via device"
++
++	log_test "$name"
++}
++
++cleanup()
++{
++	defer_scopes_cleanup
++}
++
++require_command taskset
++CPU=$(taskset -pc $$ | sed 's/.*: //; s/[-,].*//')
++
++trap cleanup EXIT
++tests_run
++
++exit "$EXIT_STATUS"
 -- 
 2.54.0
 
