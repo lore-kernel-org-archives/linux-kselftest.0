@@ -1,112 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795051789;
-	b=UK6MjhrEyBuY+QbJghANqX8zT8IqA75UB+Hg1EaIMZ0hN5iaUBkLpoB9sxBPoGKQobY7
-	 4iGhS4uJTtOXSiV9mNzAes9z34qp9ODGMQczj7ioDYzkWrdPrMjXTHzPD56DPcSlVAcIK
-	 3CHwn86BFUDGHAgywuExebFNaA5DWj5G3uRCJotmeDyUgnSPRHqeg9m+joELo5WUo6m+r
-	 pnMZfFA2vYlhFhJd6OyDDj9jfsJmwK/kyX+ck+sKDAipzrMJ0ZPslDwVH39r+Nf2zZ8+J
-	 se8S/jslajqnldrpokyqX/EptJDaUm03r/Ua56QJZG4Lk9eIo8dTPZR8DCRgJeJwRQA==
+	t=1795051887;
+	b=vosNSMyvdGVAHdSzoFPbwZ+PklWcbDoax0w+BySFxKiekCEEj5gRLzu9Uv4v2Caj6bcP
+	 DP+10tR6YlsqBRn6dPwM3elkAkSyw2kG/GhZHBr1HVEoldGx7sveUU3WZFLuqtFY0jZap
+	 zurfYHo72REWSvKXNZNZoEnWpgJ2s7ZsOjZVh3bYbXEiY99N0IHo8Y4YE91Te7LraOUmU
+	 7CD4m3A0W6hoDXtCEIMV7Kx9au+Xe5AJs+O37R0a46C44WA3LdFpmAyzwvciOQMn54d4H
+	 Q3gMb+U5KwcwbGs0EbGkG5bQq9InQv8Nrr1PVz2v0DurdKuxmXEQwh3nOMsNPfEz9vw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795051789;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=IMUfFg2iR1Z91GxSjPkov61aiB2ViYWc3Z9M9ZmX54Q=;
-	b=AfuV9xol73LAWY7Z8maLwBvjb7qw5Id66c5+sd7S/qhS0ZH1eSJV1YnxJDM9JvGc1Key
-	 YanLxF5pfDLphHwsEI6SUKePL6kssP5AJJlJ+MSUg48zzBNQ5YKWtSFr+mIuyva/L8BWX
-	 3eqmrT2NeLhDITw32snJaUq4fkCoiYcZjjcSY21rt7LuhoZw1CCSruKPl6pT9KQzLaQcY
-	 MAuyMjRne5otRai59Ff9DmFlsc0n6jM2rte4HhUjvlWiRsrQugmwadeVZp/rFv9UG/3RU
-	 EybMKkX+RF7wXOZvPOHuaB30r2w0PY+L9+ByOEJzc4oGaE+Fum6RjjbyU8VsT2RNS6w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795051887;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Virus-Version;
+	bh=4ruqJaIKIx953QIszUIJZzz8if5WmP4GcJyvcLsRn10=;
+	b=UVi7maMAmaK+Kb34MSh6PTkuDLbFOp7rOJ59ykIg4WcHLi309fBocaAIkyV45mgEUMmQ
+	 T2WbJ3Kgrk7nQobcnUBiDUVBZ1gOJTDuN4yv4HZZ+sM+oiBogizODptoNe79GmnhP7djX
+	 q0mYg6z1ORA3fHRfdQnXhw4eC8viwxoGl4fK4uOvDtcugac04Ht/TeGkyqsoK4f9wp5vH
+	 TTrIuqRwR74SpQ286oFLo124NI3vF1GdRGt9llLoNYL4MAOu1FrD/I+AJd+A7KtkqZi4e
+	 dD0RVX9bsfUfdO9IRfzvEzqyvtY3x91unZZyv7BGIn5FHUqwzGG08q5nGBErJKEAtow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=X6RUl5nX;
-	arc=none smtp.remote-ip=209.85.208.47
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Zq7TkutU;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A194A606A32F
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 01:29:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A194A606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F6F606A32C;
+	Thu, 19 Nov 2026 01:31:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4F6F606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=X6RUl5nX
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6b75712fb57so2462432a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2026 17:29:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795051787; x=1795656587; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IMUfFg2iR1Z91GxSjPkov61aiB2ViYWc3Z9M9ZmX54Q=;
-        b=X6RUl5nXPwSwt5c/kUdF+d/qAIPpu4B78KXEgoYgO1Ifwmp9Un0wXT9O03brHfdkj0
-         Iw/NgiWtHQkg9OjzyksdTG/Yk3SubNSObINPdaZ1LH3tMW9lWXcM2a5r0nkclDrg2smC
-         Zb0YGB4IT7dNKxmFRti4PmVmxBxhrgJIsbGdXjpReO5gHaAFEaHL7kPg6Eg7L+Kh2w1f
-         9UmlkTUkG7mvaMEWNHvsqbuMBWDQO8hWN6c3xb4rEMyQKIx7BNQiPLSzNI0tNGSeJsfo
-         60BiL735Nn8IsGlBj2912I24qTnwkLODMQpnOlSR6NzHZK8QstcQRJPAG1XWTsTRcE5b
-         m+WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795051787; x=1795656587;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IMUfFg2iR1Z91GxSjPkov61aiB2ViYWc3Z9M9ZmX54Q=;
-        b=S84xHQHVukB8WutAPp00kGTWXx5eH70uldFI101olkpM3VmXvo0B7D7csUOR61s+0U
-         0gafPpNiKS0XqkvlU+YSlneLEqFik1n3VQHMDU8EWh4SwodC50AyFyTmrsu1a5b9IGa0
-         KpVGOHsYPfVR5BOn5tUe7OB0EiRSK6C4DYgmBKPq0da0SBPgVikykP8uaFsVg6T9HSPq
-         xMD7gtMFtUHoUZXk/V8egOf2a6kHc251k+ffqILbE9cnQsaPd90Q0fqkk6bcjE5LEOaP
-         Wb4Dpv9P+kW614N4/2OQctWg4l+28ofdFmO3EAmMOG4wCIMju91GlWG9BebUD52PoizS
-         GhNQ==
-X-Forwarded-Encrypted: i=1; AL+hErEYMiA2UyiizmtRtnDGkafgoaighwcJ5QBYk6bXufEVveGbeUKdKlrb9VBFvMLGbQTqSuzIPdM8aKxDN/vS49o=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+MZefIXvDIHbEx7GGLPmzAlNF5eejXqFCfwXjVyqrCDdcYUT3R
-	o1a0LUrBe/I1Qe8JLwZPbzIOTfuyUC8e+dLx7ZqriLaGOz3XA6rJyFhaWdN5HKxGimBAQ3BaIx6
-	r0TajqfM=
-X-Gm-Gg: AYBFou1bAJ1VegZrurB1vKGj9qKBblcq9qxyCQAYMzAxZ3weB1LFT+YrXJ8dLrmyFrv
-	Zrh5GbLNLNZPNGvv1VBnP7Zy/S1c4TU4L4Hgah7yw0Ahk/dAArsunBeE/moQZqF04e4nJNoKH4U
-	DwhN3SoTIuFbmTWjs79nu+ufT4kG6whBfW35qKRKRIGSnhu+hlijMcw0LyvIzuLAyPV1ayZdoJ9
-	e9pdTO/04EmE9p5D9A/xFYRVKQ9E1UnWNeDf7bZrrIP/ETLOfIlKnPVmvkMmfDqRIT8AhNemJur
-	O7ih5METIGVkyMMT7K/Sdmt7dzMprDIjqiAgMK8GMctAkp8Nk28g0BJ5ZjDIQ0ZPRX9DPNgxwrL
-	+G6dRmt0AtNlWc8M0olTmpkYrsTCh4jqoZ4f+wxkLneyK9DPjLKvWDUBpT35edxN1nHMnR8BM+7
-	i1s5X3YidKeYf2McHumME8oY7r3aYk8dUXo11ctN6lyxWtOVJALl0yocoF1vF9haIosQ6MYfDLC
-	2BNSHhMGLiNHM7qlJD+787YhvjdrlqPdGZD/0mEpo3MrGTiTGb6eC0f+CIASIQHkMIGlJnyZiym
-	dEvvpu8vM1tnBRNi5RNBF4AWbIIhEL5ihXSiNqPlV3SpyOYZKsQlArejcQ==
-X-Received: by 2002:a05:6402:c4e2:10b0:6b8:afbd:64e6 with SMTP id 4fb4d7f45d1cf-6b8afbd6722mr1777470a12.42.1795051787085;
-        Wed, 18 Nov 2026 17:29:47 -0800 (PST)
-Received: from L9JK9NPFH9 ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b88a1eb813sm1711016a12.26.2026.11.18.17.29.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 18 Nov 2026 17:29:45 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>,
-	kuba@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	skhan@linuxfoundation.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH net v4 0/3] selftests: net: veth: propagate check failures to exit status
-Date: Thu, 19 Nov 2026 01:29:40 +0000
-Message-ID: <20261119012940.32838-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261119003003.40482-1-emmaonana18@gmail.com>
-References: <CAG4wq-d_30-B4wQZu48ZQXAORM4QxRqPfmYsmoHS0hiYp1EtTA@mail.gmail.com> <20261119003003.40482-1-emmaonana18@gmail.com>
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Zq7TkutU
+Received: from pps.filterd (m0528004.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AJ19S0C1375386;
+	Wed, 18 Nov 2026 17:31:15 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	pps82601-s2048-2026-q3; bh=4ruqJaIKIx953QIszUIJZzz8if5WmP4GcJyvc
+	LsRn10=; b=Zq7TkutURYKDhMRsy5afTKApI5dbEfcw0j4zHdw8tH0WBzaXPcYRl
+	13PhjMDmBZGDWVU6AZTjiCTtRUSqn6h+PHltdyETWMkRzJdhmDS+iNp00G2IoI/E
+	POH01LVuz4tbKDqZrED+CCW8cd11LFHrtnq7F1mGSpkO3RDpWlpDsDNA0U3DeAW1
+	JE2ZMdcUMyfLws6+d6t8ICodVEhYodAcXlSW1qgqx/Wl8LlJk4dUTrM+VCuYKDwq
+	Kqg+8RdCyolCX23HU020GL5DjyPzahlw52p4kY6MNoa1Ek9mK6QXsYPHuwUgyDip
+	nCZ/ykHI1ORehR1Ob7gsNDeB9h3zE4ozg==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j0yu6b8r4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 18 Nov 2026 17:31:15 -0800 (PST)
+Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
+ (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 19 Nov
+ 2026 01:31:14 +0000
+From: Todd Freed <toddfreed@meta.com>
+To: <netdev@vger.kernel.org>
+CC: "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn
+	<andrew+netdev@lunn.ch>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=
+	<bjorn@kernel.org>,
+        Boris Pismenny <borisp@nvidia.com>, Cosmin Ratiu
+	<cratiu@nvidia.com>,
+        Daniel Zahka <daniel.zahka@gmail.com>,
+        Donald Hunter
+	<donald.hunter@gmail.com>,
+        Dragos Tatulea <dtatulea@nvidia.com>,
+        Eric Dumazet
+	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim
+	<jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        Leon Romanovsky
+	<leon@kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, Mark Bloch <mbloch@nvidia.com>,
+        Paolo Abeni
+	<pabeni@redhat.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Saeed Mahameed
+	<saeedm@nvidia.com>, Simon Horman <horms@kernel.org>,
+        Tariq Toukan
+	<tariqt@nvidia.com>, Wei Wang <weiwan@google.com>,
+        Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>
+Subject: [PATCH net-next v2 02/12] psp: take the psp nexthdr from the packet on encap
+Date: Wed, 18 Nov 2026 17:30:53 -0800
+Message-ID: <20261119013103.1092559-3-toddfreed@meta.com>
+X-Mailer: git-send-email 2.53.1
+In-Reply-To: <20261119013103.1092559-1-toddfreed@meta.com>
+References: <20261119013103.1092559-1-toddfreed@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,35 +102,233 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: NLK1mtGvCZEaPZ0KVbWp03G-70toJN-B
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE5MDAwNSBTYWx0ZWRfX4RMF3ZDj/zdZ
+ iK7CpZHHNrloYBnrx6dVOYKf028T4u0xx4lpA9EAtrtn1bxiMxmPuCAhyx1SsxNi4jfutMaBTFE
+ /23OOB8PFVdcyAfo+Fb+LR7lfHWkjB8wk8wfjoQ+s1ECoVMCOb/Zcbikfmu2AEFWmAuCHhF2Pb1
+ yzwZRg6JpunU1YoqlhxFsD804EgX9PY3onfjEnU2AaWM48OGJQismmS8INJBxBMo+oaVrD1poQG
+ JgGQswVPwHM6FPDbeqOfNObmxFlMOYt733ThcuaW0vYMKkfd1LBi8ZsYJYzP8ygMQwLP+mHOAFT
+ 2DjQfJIYLaoXhA2FWRWd3eyoETuqudWSl7PbRSfWCgLbPlUHqybM4wQzuzc0/izNEjZCWIpzMIR
+ omQhTjJ9SEj/9ADBPlbmOz/N1S8Nwwo13vjhUxihbuAm+Z75s8EZ4mMXyqiuwrTxXxTn447vRR5
+ ydeAdrghhfhBa4Vyl7Q==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE5MDAwNSBTYWx0ZWRfX8IXIn1ftscBq
+ SuHNtE9ncSlMXBbJV/+BMeTyZcWKjRGYlRm2m9BJ5OWhhQS1BWVNhQZQ8f8v7GANyQ4KHCE4OqM
+ hOfhdIWbdonizZcKauupZVGQHi9WnXQ=
+X-Proofpoint-ORIG-GUID: NLK1mtGvCZEaPZ0KVbWp03G-70toJN-B
+X-Authority-Analysis: v=2.4 cv=Mfz5KJ/f c=1 sm=1 tr=0 ts=6afe5163 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=GbPsI2Ihf5RTnMjR_gZv:22 a=VabnemYjAAAA:8 a=aObd4hDyPTaLV535L6AA:9
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-19_01,2026-11-16_01,2025-10-01_01
 
-Hi Omokefe,
+PSP socket support has thus far been limited to TCP, and
+psp_dev_encapsulate() hardcodes IPPROTO_TCP as the PSP next header.
 
-On Thu, 19 Nov 2026 01:29:59 +0100 Omokefe Emmanuel Onanaroghene wrote:
-> Changes v3 -> v4:
-> - Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
->   lines within 80 columns (thanks Tianyi for the review).
-> - Add patch 3 deriving the invalid tx value from the kernel maximum.
+Socket-less PSP associations will also support UDP traffic. Populate the
+PSP next header from the IP header of the original packet instead.
 
-Sorry for being annoying, but I see three problems with how v4 was
-sent:
+With the next header taken from the fixed header, psp_dev_encapsulate()
+now refuses some cases which are unsupported:
 
-1. Patch 3 lost its subject prefix. It went out as "[PATCH] selftests:
-   net: veth: derive invalid-tx test value from kernel max", so
-   patchwork put it in a series of its own [1].
+ - IPv4 and IPv6 fragments. Non-initial fragments have no L4 header, so
+   this cannot work. Not a behavior change for PSP sockets.
+ - IPv6 extension headers. More generally, any packet whose transport
+   header isn't right after the fixed IP header. Some of these could be
+   supported in the future. Not a behavior change for PSP sockets.
+ - Already encapsulated for a tunnel (skb->encapsulation). Their inner
+   headers are already set up.
 
-2. Patch 3 should come first. Patch 1 makes a chk_channels() failure
-   fail the script, and from then on the nproc + 1 check can fail on
-   a correct kernel. With the fix first, no commit in the series
-   reports a false failure.
+Both callers of psp_dev_encapsulate(), mlx5 and netdevsim, drop the
+packet when it returns false.
 
-3. v4 was posted as a reply to my review of v3. A new version should
-   start a new thread, and its change log should link the previous
-   postings [2].
+mlx5e also fixes up the TCP checksum of GSO skbs for the device, which
+is only valid for TCP. Have the stack segment other GSO skbs, e.g. UDP
+from socket-less associations, in software. Likewise the device only
+completes a TCP or UDP checksum behind the PSP header: have the stack
+checksum the other CHECKSUM_PARTIAL skbs.
 
-[1] https://patchwork.kernel.org/series/1215530/
-[2] https://docs.kernel.org/process/maintainer-netdev.html#resending-after-review
+For the outer UDP source port, psp_write_headers() already branches to
+use TCP ehash if the skb has a socket, with fallback to
+udp_flow_src_port(). Previously, sk always meant TCP. Add an explicit
+check on nexthdr, and on the socket being a TCP one (a raw or packet
+socket can send TCP segments, and has no sk_hash), so that the fallback
+branch is taken for other packets. udp_flow_src_port() hashes the flow
+if the skb has no hash yet: compute it in psp_dev_encapsulate() before
+the headers are moved and the IP protocol rewritten, so that it covers
+the packet's own flow rather than the outer headers being written.
 
-Cheers,
-Tianyi
+Signed-off-by: Todd Freed <toddfreed@meta.com>
+---
+ .../net/ethernet/mellanox/mlx5/core/en_main.c | 33 +++++++++++
+ net/psp/psp_main.c                            | 56 +++++++++++++++----
+ 2 files changed, 79 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 2be8147fdb64..d6c32080634d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -5139,6 +5139,23 @@ static netdev_features_t mlx5e_tunnel_features_check(struct mlx5e_priv *priv,
+ 	return features & ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
+ }
+ 
++/* The L4 protocol right after the fixed IP header, which the PSP Tx path
++ * requires, is one the device can complete the checksum of
++ */
++static bool mlx5e_psp_l4_csum_ok(const struct sk_buff *skb)
++{
++	u8 proto;
++
++	if (skb->protocol == htons(ETH_P_IP))
++		proto = ip_hdr(skb)->protocol;
++	else if (skb->protocol == htons(ETH_P_IPV6))
++		proto = ipv6_hdr(skb)->nexthdr;
++	else
++		return false;
++
++	return proto == IPPROTO_TCP || proto == IPPROTO_UDP;
++}
++
+ netdev_features_t mlx5e_features_check(struct sk_buff *skb,
+ 				       struct net_device *netdev,
+ 				       netdev_features_t features)
+@@ -5147,6 +5164,22 @@ netdev_features_t mlx5e_features_check(struct sk_buff *skb,
+ 
+ 	features = vlan_features_check(skb, features);
+ 
++	/* The PSP tx path fixes up the TCP checksum of a GSO skb for the
++	 * device, which is only valid for TCP, and the device only completes
++	 * a TCP or UDP checksum behind the PSP header. Have the stack segment
++	 * and checksum other skbs.
++	 */
++	if ((skb_is_gso(skb) || skb->ip_summed == CHECKSUM_PARTIAL) &&
++	    mlx5e_psp_is_offload(skb, netdev)) {
++		if (skb_is_gso(skb) &&
++		    !(skb_shinfo(skb)->gso_type &
++		      (SKB_GSO_TCPV4 | SKB_GSO_TCPV6)))
++			features &= ~NETIF_F_GSO_MASK;
++		if (skb->ip_summed == CHECKSUM_PARTIAL &&
++		    !mlx5e_psp_l4_csum_ok(skb))
++			features &= ~NETIF_F_CSUM_MASK;
++	}
++
+ 	/* Validate if the tunneled packet is being offloaded by HW */
+ 	if (skb->encapsulation &&
+ 	    (features & NETIF_F_CSUM_MASK || features & NETIF_F_GSO_MASK))
+diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
+index e09f6fec948d..4b48070fb9e5 100644
+--- a/net/psp/psp_main.c
++++ b/net/psp/psp_main.c
+@@ -189,7 +189,8 @@ unsigned int psp_key_size(u32 version)
+ EXPORT_SYMBOL(psp_key_size);
+ 
+ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
+-			      u8 ver, unsigned int udp_len, __be16 sport)
++			      u8 ver, u8 nexthdr, unsigned int udp_len,
++			      __be16 sport)
+ {
+ 	struct udphdr *uh = udp_hdr(skb);
+ 	struct psphdr *psph = (struct psphdr *)(uh + 1);
+@@ -211,10 +212,11 @@ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
+ 	 * This field is subject to reshuffling, thanks to
+ 	 * sk_rethink_txhash() calls in various TCP functions.
+ 	 *
+-	 * Instead, use sk->sk_hash which is constant through
++	 * Instead, use sk->sk_hash for TCP which is constant through
+ 	 * the whole flow duration.
+ 	 */
+-	if (likely(sk)) {
++	if (likely(sk && nexthdr == IPPROTO_TCP &&
++		   (!sk_fullsock(sk) || sk_is_tcp(sk)))) {
+ 		u32 hash = sk->sk_hash;
+ 		int min, max;
+ 
+@@ -236,7 +238,7 @@ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
+ 	uh->check = 0;
+ 	udp_set_len(uh, udp_len);
+ 
+-	psph->nexthdr = IPPROTO_TCP;
++	psph->nexthdr = nexthdr;
+ 	psph->hdrlen = PSP_HDRLEN_NOOPT;
+ 	psph->crypt_offset = 0;
+ 	psph->verfl = FIELD_PREP(PSPHDR_VERFL_VERSION, ver) |
+@@ -245,8 +247,32 @@ static void psp_write_headers(struct net *net, struct sk_buff *skb, __be32 spi,
+ 	memset(&psph->iv, 0, sizeof(psph->iv));
+ }
+ 
+-/* Encapsulate a TCP packet with PSP by adding the UDP+PSP headers and filling
+- * them in.
++/* UDP+PSP goes in at the transport header, the protocol of the fixed IP
++ * header becomes UDP, and the PSP next header takes the protocol it had. The
++ * transport header must directly follow the fixed header.
++ */
++static bool psp_dev_encap_ok(const struct sk_buff *skb)
++{
++	u32 network_len = skb_network_header_len(skb);
++
++	/* inner headers already set up */
++	if (skb->encapsulation)
++		return false;
++	/* fragments not supported for transport mode */
++	if (skb->protocol == htons(ETH_P_IP))
++		return network_len == ip_hdrlen(skb) &&
++		       !ip_is_fragment(ip_hdr(skb));
++	if (skb->protocol == htons(ETH_P_IPV6))
++		return !ipv6_ext_hdr(ipv6_hdr(skb)->nexthdr) &&
++		       network_len == sizeof(struct ipv6hdr);
++	return false;
++}
++
++/* Encapsulate a packet with PSP by adding the UDP+PSP headers and filling
++ * them in. The PSP next header is taken from the IP header: packets with
++ * IPv6 extension headers, or whose transport header isn't right after the IP
++ * header, are refused, as are IP fragments and packets already
++ * encapsulated for a tunnel.
+  */
+ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+ 			 u8 ver, __be16 sport)
+@@ -254,11 +280,21 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+ 	u32 network_len = skb_network_header_len(skb);
+ 	u32 ethr_len = skb_mac_header_len(skb);
+ 	u32 bufflen = ethr_len + network_len;
++	u8 nexthdr;
+ 
+-	if (skb->protocol != htons(ETH_P_IP) &&
+-	    skb->protocol != htons(ETH_P_IPV6))
++	if (!psp_dev_encap_ok(skb))
+ 		return false;
+ 
++	if (skb->protocol == htons(ETH_P_IP))
++		nexthdr = ip_hdr(skb)->protocol;
++	else
++		nexthdr = ipv6_hdr(skb)->nexthdr;
++
++	/* udp_flow_src_port() may need to hash the flow: do it on the
++	 * original headers, before they are moved and rewritten
++	 */
++	skb_get_hash(skb);
++
+ 	if (skb_cow_head(skb, PSP_ENCAP_HLEN))
+ 		return false;
+ 
+@@ -279,11 +315,11 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+ 		be16_add_cpu(&ipv6_hdr(skb)->payload_len, PSP_ENCAP_HLEN);
+ 	}
+ 
+-	skb_set_inner_ipproto(skb, IPPROTO_TCP);
++	skb_set_inner_ipproto(skb, nexthdr);
+ 	skb_set_inner_transport_header(skb, skb_transport_offset(skb) +
+ 						    PSP_ENCAP_HLEN);
+ 	skb->encapsulation = 1;
+-	psp_write_headers(net, skb, spi, ver,
++	psp_write_headers(net, skb, spi, ver, nexthdr,
+ 			  skb->len - skb_transport_offset(skb), sport);
+ 
+ 	return true;
+-- 
+2.53.1-Meta
+
