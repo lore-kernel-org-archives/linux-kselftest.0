@@ -1,100 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795098265;
-	b=zW3TPXg9xMzd0K+4D1beik188aQrGqC+1D1kWZX36hoRWvjx6CBgZ3fRs2FJC/FkHzsL
-	 bW/T5M70PogOPA3MPNsjeDqtKawc9dAmxEWc18ltLwMRMdZJvS6EFHV5Tp4Iw+2Su+WH7
-	 lQaiFgt/SpKxmgMZUPs0VNuDqzrmcnz2fvG6zERYsbg/XT108UW4PTERU7tVjqWg7UdZB
-	 loNCeEUfeiJg9NwmcH5Kq86baw0ucYNEcmr5Inv1tK7md5DDxsMx7UNKRW8WLZJb45Gr6
-	 ns3YdeZc19wzb2ItdPzUa9wSzYOdIkNc+jzr+0XhVzpoIP5U7xfAfV0A1m4gS42x+Rw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795098265;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
-	b=AQftuMPR5FysbIp8+NZR5EC85qH4YgyPkh6cd66y2Wkij+XGNVEctho9WxndCQjTF+7O
-	 jf/yzTd/7qzk6+aDlNV5GLY+y4SDSsbGCJ/FOPOuqSc7BopuCBX0BWARIcv6eglzvSgoC
-	 DSVzfeVD15YhVFawSkE+a3OHzsF3mHIKosVan6rfK2R5s32wTWAiPGxW3OOiDS8MtC/Ai
-	 zTACnbUyKc+ah1ub1x59bpYamdN20j+Ke3xnxonAAUoVVBWDtEMPDDu8Aa4fm61RemcQn
-	 W+yQRcH3841RMxlmikBGRECGy8IZv/Zy+33UkksijG3L+Oj34bO1Mi8UsGtWBr1isSw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Jky2d6gY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.49
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795098787;
+	b=2LreflKMo9u/a9lTYG9UY9DO9b1HsOQYfF07CU+u+6flOrjHgfIqVpt2N6PNGWFlsZVi
+	 kqZx6siMMcuVFmDtlCsMAEy3ymWcx57CFSf2sl0QbNQBi0RPNfgms/ibbGAjWC2m/+sA7
+	 5PHdwjYAn3ephDrFaXhyE5zEffXXu8oZNPoqvD3y7TMlMcrhMf2hHkbnDUb/loWxd3HIR
+	 hXBc7HCZqoh9FwBmSGtI8l/iIe78Fg6B0/s9YVO4+JAyZs+SIs9CsQLSn9oFVlqJ3SCNO
+	 i5jSc57LUDbyeRFwC2VPKo2yGdGhbTKVAc0Ns2a9lW0vEmNRMD9UkgZ2xJawiTAoehA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795098787;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=lv3NYu11pHprgRUUKX5nzbXJ9PYh0wkr94sy1z7rgm4=;
+	b=HhUz9P0F7LL2iWHLCqEtIIjRSjYOooDMWnHt/FHS0RGOuuepJWvL4pBjWc3XWKU0SUK+
+	 w/PA6i3tfp5AoaHIlqiMnM2VWjp21PlNjCfEa52mfCdMhQCtkxBmguQNbN/3djHSM45no
+	 Ak/AAIpGE8nDC1DSJlPRGy5eedfHT1NBUuAnDBJkZQ+dCNsEm7E/dOmLadC/idPE4GxZP
+	 2GWKzOj+IvNOCIYaF0n+PKDRLikW8wszbLrIF5F5tK4sB/pnFG75X59h040SfcLtU66kV
+	 p0nRE3anKMwJ4xQQns1OS57BTB3/eJGWCI/zz8m1TbNjw/1jZSMO6wjaY/fbzbvzgAQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DkO9ZyBD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDB7606A32C
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 14:24:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BDB7606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id F34B1606A320;
+	Thu, 19 Nov 2026 14:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Jky2d6gY
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6ddef424972so1914323eaf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 06:24:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795098264; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ElPPoLK9QDWY9OuMuhGbMhuHMAZZL1f8ph9uJLmIZjKB+6u2+RtU3p0+x3Z4I8eeZF
-         B4B7rN1dYuM7iJD61Ym9Fnr4vXism//Vb0XqRAOSDWVJeEaWM7XLl8wWjh07+/MSDt0W
-         fljEtOd+s0Cwr3TbN023jGOJ2BfL1+1b0KHycLjAensENTcEJwqCexq9WxA2DwmuMH+S
-         PenuWIk0ZIuDTVOm7wHCsT0d8v5NLO88PORW4N6F5kOr3WOd9peJSTkVGNmGHDiABtDP
-         gP7S/Hg0lfkSMlBFaqWB9H7p9iDI9NXReQNCvX1fX2/5x9Rbjw8F0zaw2S9LF8CH+a3N
-         +zGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
-        fh=HJ2ePke1co8UlGtTekeKiZ+9Gu9ecAktbcOoajB9vqg=;
-        b=j9aP1eHNrxyJDtVkSTmM+/1B4bwyvlCwqc8v2NF2kjABUs+vCZUBFOIbvILbzn4aBy
-         vhPSmk6KcfzrmI1VVF0CnmLHd8wh0jrV3+UGdoEr0RnC4x7UZPjsD3MFOEBK/vK8Xplv
-         mMi4OIz5ZiyDS473tZYJK6dYqVzN/v4mnRlU+7Wh8/NUdtjGjuzk6chYoLyL+ndmXwIW
-         zH09JUpCRktXfnydQkgCVVCqJFgtgp5xzAyjiSAw+WczcoJzIWOFiXotpxXmW7j8Mvxh
-         uQFBw+Js7fV0SWItKCPotZQaIHJi7qXanBB4ZnYeQhRFn1/+VIicLLM2pzEExUNRR788
-         ahZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795098264; x=1795703064; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
-        b=Jky2d6gYO2im7zgXjsRHuw8jDBLvJEUKKauPO49apSmZAHtopHWUGW9waTKeDU6oKi
-         OG4FE0LJagiop3Ipbm8Y/2r8NDw0FCzRIeDflqWcnhIfSDPNNGxg8CNqtWMA5cpHFUjm
-         wh1tshorNt5nlQE1S5K/GOFnCXDu4SvTkIVT8x0YWtEpMzdrJy517oWZCwAVxfd37wXb
-         HLe9cPgjg5pLGDXWbiFckzf4pRFHqsBmzAhvZLitWyefhCShnu7ojrM9P8qaZG89nV/1
-         4HEEKYxlco/Ghvuv3qIXR4sM8vTlwA1gzjO8a+MX5Miw2zqc0x66C7gYW8AX5CSU1QpW
-         E7qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795098264; x=1795703064;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=o5n51x59sxtfs0bspBXfBjL3tD09TlDgiTXE1CgF8cY=;
-        b=qSUjkEXV6BFRSTtra97ireizGfKqeHkqDoqUqCwqtud15Wi4FLPIBf45lIBeYPEWwF
-         il4oSiptScUaKuBF9LmwMsUyEAEX9Ilh5QZBuawbAoZpYh/Q73HNPPRoSeINXX+4nqSl
-         tBSQ3ZnpL4pURptD+Lch6B06vqJtu0JD3fINjBMAFM6Xnt+SSp+6FZBRDP1kbxEuNTMW
-         6S7xTBhYzoxIZeJPtozUla1ViuRLAQ3/YVuIrAPF0aWWbG/S2m4VwuUFEk4tzD9qxTBB
-         AOqy4lzGv13nDVuqTyzapXO+YMW01jvqYajNccG+E4sZswt/05LVEjPFxlFSlLbOceTs
-         R4kw==
-X-Forwarded-Encrypted: i=1; AL+hErEp8mfMauM+hJolcNqQjzLVFNb7raMybFqMn6b5cCgh42Dxx6a98r4mIjAUlKodR2yiFyhDbXg9PAW21MOGdp0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/9651k/80iCR4u8jb7+iEzu6V3TsoDn85Vu92C9D7zEGfiNhh9
-	apIXAnklgqSwY/+Heol6oPFF7UZh89tl5xcAbTsAkR95nbbwQ+K8yeT/7D4XnRrTtDj34QWydxu
-	dwSckEsZrzp5YdjLOcrSrK9KE53t/rtozGVsbspK3+A==
-X-Gm-Gg: AYBFou2Gy3AeXsXxHJciD/OGnOTikKajZJHHW+mBJX3dCBlOR+keelzEXXxXwhNCavh
-	2cclxy0yFR/SWAl4BWMnqVW4B9SyM+8X1ix1aXaSllC6wS/6VaswGzqhvH45yOpLYFWwE+gzeRd
-	YUwTx2koyLi+EOTRomc6CiYgEaf+uOzStHmEDI4upQlipYndT2ypfegEbkZUnHq7+KpcAJcpQAn
-	Avm6hC41R3oNAKv9NTN7twzDWiV0PIW+sWRiaL7AjGPK2PUKh7hHD1Vm9i9vUU+U2/ckvOE90/l
-	hR9yj2IE5Vc7nIbFtZFeWSJwr8AWoeMajL7yk4O8DvnJbF08HfyW8aE8KxRyS+FIvXdy3A/kt4H
-	AQbkgsm4m4Z1EyCK9VWJgEMpV8Kmx2sK7rps9PE+SsRNRdrLiZtidpL/sfsU/CXYYlBQAxrafzy
-	MziFMV/9x88w==
-X-Received: by 2002:a05:6820:1355:b0:71b:193f:2eb1 with SMTP id
- 006d021491bc7-71b193f3492mr4490832eaf.1.1795098263194; Thu, 19 Nov 2026
- 06:24:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DkO9ZyBD
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 3738E1F000CA;
+	Thu, 19 Nov 2026 14:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795098786;
+	bh=lv3NYu11pHprgRUUKX5nzbXJ9PYh0wkr94sy1z7rgm4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=DkO9ZyBD2TgaZMRcs8EgWiOCyNyqCS5GVpH0PIaxsiAxioBTNKOP1wNtv66D5cYUo
+	 SVbW8UDU1ecj5E3RCQAhHUNANk3OefmNfhyVcaUvR0Gz4clykNB0Ug9GoG1Ptr8ZuJ
+	 ONnfC20iTyqzzJ2bUJn6Pg6qw6zmZqZ3ZatVKnDFWAqwRPzMWGYReKxU4oRi50tS1Q
+	 1qTF54aQpt4AAtXTH2qm2wUUGVJhq8ji6yCXpiUz4OvXBnHZfzrVs9GnUElmUD670e
+	 vrz7s2wx6vlq7TxR3Li0W0SBs0mp7rRKPrBjNuC5IHgS3SdNuJjawMEJSGy/3xT0BT
+	 6PR8vQwsFHWZw==
+Date: Thu, 19 Nov 2026 16:33:03 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Rodolfo Giometti <giometti@enneenne.com>
+Cc: Rodolfo Giometti <giometti@enneenne.com>,
+	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jens Wiklander <jenswi@kernel.org>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	op-tee@lists.trustedfirmware.org,
+	Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+	Pankaj Gupta <pankaj.gupta@nxp.com>,
+	Sahil Malhotra <sahil.malhotra@nxp.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Richard Weinberger <richard@nod.at>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-crypto@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	Demi Marie Obenour <demiobenour@gmail.com>
+Subject: Re: [RFC PATCH 0/9] KEYS: keycrypt: keys that user space can use but
+ never read
+Message-ID: <av8In0Xyd5iI9N7K@kernel.org>
+References: <20261118140421.584086-1-giometti@enneenne.com>
+ <650f89ef-9745-4f75-b254-80fa5ac4773d@gmail.com>
+ <av5EyVHnNzT27dyK@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,39 +82,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261119133032.2015656-4-sst@poczta.fm> <9a5a1487a4676381f4c3d98cb5a22f50e2f54d9d4ec7947891c889b64ac12693@mail.kernel.org>
-In-Reply-To: <9a5a1487a4676381f4c3d98cb5a22f50e2f54d9d4ec7947891c889b64ac12693@mail.kernel.org>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Thu, 19 Nov 2026 14:24:12 +0000
-X-Gm-Features: Aa3M54pU7ZbLxGTK6OUaJJJ5wSY671yMAwh7XMSPppG-d1bHhduINP_cjWCI05s
-Message-ID: <CAG4wq-favnH37jS2=a-aJwBgQOuW=KTsM-vJWp73PNDfFq4=ZA@mail.gmail.com>
-Subject: Re: [PATCH v7 bpf 3/5] veth: use the frame mem type when running XDP
- on an xdp_frame
-To: bot+bpf-ci@kernel.org
-Cc: sst@poczta.fm, ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
-	kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, maciej.fijalkowski@intel.com, 
-	tavip@google.com, toke@redhat.com, aleksander.lobakin@intel.com, 
-	ilias.apalodimas@linaro.org, lorenzo@kernel.org, magnus.karlsson@intel.com, 
-	ihor.solodrai@linux.dev, edumazet@kernel.org, pabeni@redhat.com, 
-	andrew+netdev@lunn.ch, horms@kernel.org, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org, 
-	martin.lau@kernel.org, mason@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <av5EyVHnNzT27dyK@kernel.org>
 
-On Thu, 19 Nov 2026 13:54:58 +0000, bot+bpf-ci@kernel.org wrote:
-> Is this Fixes: tag pointing at the right commit?
->
-> 718a18a0c8a6 only reworks the skb path (veth_xdp_rcv_skb() and
-> veth_convert_skb_to_xdp_buff()), and does not touch veth_xdp_rcv_one(),
-> which is the only function this patch changes.
+On Thu, Nov 19, 2026 at 02:37:33AM +0200, Jarkko Sakkinen wrote:
+> The exitential problem here is that KEYCTL_CRYPT_OPEN creates a circular
+> relationship between the keyrings API and a specific key type.
+> 
+> At hardware level I did not see any support for TPM, which narrows down
+> the potential user base.
+> 
+> The remaining potential user base is further reduced by those that use
+> trusted keys; leaving out those who need to solve the assumed problem
+> that only this patch set can presumebly sort out.
+> 
+> And we don't really know at this point that cut. This is pretty much
+> the break down of what is wrong here.
+> 
+> If there is/was a problem to sort out, it should be so constrained that
+> it should be as quick to describe as stepping over a nail really.
+> 
+> These are the main topics what I would focus on.
 
-I think the AI is wrong here. Before 718a18a0c8a6, veth copied a
-non-linear skb into one linear page, so no frame with frags could reach
-veth_xdp_rcv_one(). Either way, 718a18a0c8a6 and bf25146a5595 are both
-in v5.18-rc1, so the choice makes no difference for stable.
+I'm not disregarding that there might be something; and neither
+disregarding e.g., the use of Claude. Throwing a dice can apply as well
+human made code as for me code is just code. Perhaps using Claude,
+people just tend to have just a itchier trigger finger :-)
 
-Cheers,
-Tianyi
+The place where *in my personal opinion*  anyone who uses agents would
+be better to do manual work is the commit message. It enforces to use
+cognitive abilities even more so than writing code, if you with
+absolutely no self-deception, read it all through and write with your
+own words what the heck it does.
+
+Usually when hitting the wall doing that leads into better code
+because of the healthy reality check. I'm not a medical doctor but
+I believe at least that thinking more stuff like this is also great
+for long-term health and cognitive abilities.
+
+AI is for mental health as a car is for physical health; for better or
+worse.
+
+Code quality is also over-rated although best effort should be done
+but that's all. If you get it, then it is done. It's harder than it
+sounds without self-deception part.
+
+And yeah, we don't have projected problems. I.e. "no users" is always
+NAK. You have to step on the nail at first.
+
+Just need to clear my thoughts on overall the topic :-) This is I guess
+where I stand now. Hope you find these helpful.
+
+Br, Jarkko
