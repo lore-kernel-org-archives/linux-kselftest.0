@@ -1,70 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207345;
-	b=FVCwZ0CnxNjzhAY8EMVrE58Dsx073C00nzIAHfHFINeWaD68qTkz1THIQ1kWZtJ9K4+p
-	 b1tl8nIEnc53EH4GWFOuuEaKqUG9RciAJNSNjETvgH1a2UQHyMSqRktkazkrIibkh+mKV
-	 8ay+AUCTL6foqnOAP9odtCT78hjrL8h3MKncB9mxEyVSxi6VkGTQEvaqdiJxnJgUqG1f6
-	 +XTN05ZJOIAh9buxm4TUJmJDvwcGMVtbfY0ltf5q3NPqM5tl3MIQ5XAmCWG3L8v2sq4nn
-	 U7yK2eLDymANF5UgGw9yynqbASDMiR/yJrToHnWObbsdWZaShmDFKSZDHuLB7iTYAHQ==
+	t=1795207354;
+	b=dqbHJVMj1c01gs2qrD5PKaw+tY/utOn/sdw9OwyUT6zTLMdkEZ24bL/Im1YhcSEZq9Tu
+	 ietSSA8vU+q0cJvR2Bx6O682GWfSnLp2KfghnLu4IXBzg3WB2PpNAKDE8AI4eVRR2t5Uy
+	 xGCE6VUZMFiCKnUD6RyPP4koi7eOXtseiitqe8NC6cPi10BRItgPl7aaTU9z0qv4/YDmP
+	 kl+c2dLPzv8Ppo8eF48wqk/xUNoZtua75o6LuhSSjL3IXIv34qKqfs5KJ91vSmI3DSqXT
+	 msxyRbUU1iAuVUVaK/kThpLtBBDOmirDcpS8Tp+a1c8D6cJ9R+GYD5aGkoKto7bQehQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207345;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207354;
 	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=GAbvZ3pPSOrdVekXC8XU8MwNJ3POcX0QULZFkXtCXJM=;
-	b=vHrtjx+rFphY2iHQFI918wc6nit/GUMtyfg8qRSURKBj9A2xvlF+xpBuW3vUdcvMIaIz
-	 lkMBQbiWvVkQrVwm8O8mijtyN/NNR7+ZolXivl7CMXxo1i5aQ49WDTTQBJUfxjFfWmqd7
-	 3TAOfXh6F+72KhO3GOy38L3soSwg2UxhZnbYSaaPdoSpAAWbOnC4VljItCocySFK1aluw
-	 TlhkyP1YfacdKIIm4YVtAP2y1OUKvJWkyOBLV4iPbE4RO9ZO5Tl+NuN2uPrPVbFB4vzeq
-	 2aqeGP5t3wyvxL1aR2vvu1+pFpoTHESAGCohQBBM8Q/6ny9DTOUDEIQJOLXH4lvwBeA==
+	bh=zjEa/5UGkvmboDqiKH3vCqUwfyIWNYaswKb2LA9yUPc=;
+	b=N7mnMrEoo6YH4KTp+FmZGTB+hphJzSJUgPE8ra5ADSNS2CzwbJNzB2BvyFRhuCsQXAje
+	 oPlb+UsVqWQopL3ObB0k32CXV9BdkNKLDy5jny4P39v22N0jACoO/DPNed3uAq3JWHgfI
+	 ubQwikD+iWL5EcJwju0x8hNlvnjyDhw7ONdrsIUVAdrwq4Zq0yLSmEv06PcrdDAd0/Bbq
+	 ouH/7vUQlJcEnnbow6CIbvcZoJ/RoLDCj0a0GGrjiGmRhMDHZZ/VkpfZ4eiScrW90G5Mq
+	 CDQ3IIlxgvqZ6y39TtdXP8K3DjV62FO+3ChRQhGKpZl4NLhxdAI0591FYusU0AP8Cpw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=kernel.org;
 	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.160.175
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	arc=none smtp.remote-ip=209.85.160.177
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE406606A6E8
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 20:42:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE406606A6E8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADD4606A338
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 20:42:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AADD4606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5569551d19dso25324741cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 12:42:24 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5365f9a04c5so8338491cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 12:42:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207344; x=1795812144;
+        d=1e100.net; s=20260707; t=1795207339; x=1795812139;
         h=content-transfer-encoding:content-type:references:in-reply-to
          :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GAbvZ3pPSOrdVekXC8XU8MwNJ3POcX0QULZFkXtCXJM=;
-        b=i5VjjX+MBD5bnOVKJRzVf1QHcNmGj7Xy1N71qhbVJFqWWTG2EYB94BwxZTnAq7K8NK
-         Q81TTs2QpyzhKgJnWlVM9cp5UN2Yy36vcrwnyWgrAg4FotaNGOe5ov5ckpk3xcKLR4VL
-         zaDBKen7pHCKrDYkt3Mn8tVALbX3mBtp7QjaLEE+c4N/PdmZ6MXTtHgxUSwbhGnHNJee
-         Rvu7ZSZi4MWT0ELgImewPBAdHhSB/qzg6bA78TUAGVZob0IG6txIsqSOznpzGlqv/+J7
-         m7/99U006QT+ymHQlfmWEaHTZiqyhSkCbzaPGzz+MJHlWBUb6rRZkEHUCM60nwflXYfV
-         tucA==
-X-Forwarded-Encrypted: i=1; AL+hErGdv5Ei/V3gtMV5NgqMYYB+V0tGcOd72eJflB5SnfaIQcXoYMjCJftyjvYeD1IfRTBuYCqkbxmRa6PI+sl/A3A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+LaPwnlIwpWAKazy+S+klX1DM/+VhbN+g9lRJUly47FZTn8Cid
-	Fm6SCKY40UVUv5Ip5vqYIfvXgw0/YE5rupfqG6sfLJxNspXOG3q5ZMoM
-X-Gm-Gg: AYBFou2Ii0uUTrUCSmRkfYut92oq8AazmlLLE9c0BQ0EW0exKQTfnquoAngt0n9+FSI
-	idCbfx2WVjhIbxLFr91I91zLYxiJZ4eGCWvlpEaZqGAakuYCVuLRHn3vKxoHw8Ck6cszlJX4SJ1
-	+/rikqdb3h9dM5MFTS0zMr+0S8fIoO8GNVA3AO/btDFboX/dqUDq5yIdBFgofCiyiTlmIzVMstw
-	lBk8UNBxQiD0QPBykeQqAqGMH9e7Hq4m3Vdm1j46yOC1G+RkIZm+NkXCPd3R47u3WYp19j8PrSd
-	78uwZ6EWTbNNPC3zZbGWDu8k1otn25QMDiUwxxw3o8W019QMVa8fxs06eLps+Yjlxh3J90XRHcV
-	byiD897LA3qjboKaKB+lF8R3j3Doo/DWm8Cqpa7OdSrhUm4d5vPFzz8GeloTHg5QGleb1o/en+I
-	x2uGqQWdyClS7nVJPsMNr3beOnXsO+3gklS7wUwyLgvOm/o1lt5lzWiN6ogrC6tUKGrlpq1BFAS
-	cJ2Hd5Sv+X+z+3rKkXQ7oNNuSPfTku0ppG0hz4H89vDBRQvWWwjlTavZbb6qOVB77zPRFAT9bQB
-	Ovu0Op8T2ttP7IVCJVt2XeuYUvFJTFpGwamWUyxvgEiV3P0xB1ZQneSpWKi30n/ogb2Rftr2Pft
-	V2fArNMSV1MCOllIZpU1bGfPWcB+iLe0IBtmIYHYyA/iQMYtYJFL8
-X-Received: by 2002:a05:622a:259b:b0:535:6e9c:d374 with SMTP id d75a77b69052e-55d6fcabb67mr91725931cf.14.1795207343793;
-        Fri, 20 Nov 2026 12:42:23 -0800 (PST)
+        bh=zjEa/5UGkvmboDqiKH3vCqUwfyIWNYaswKb2LA9yUPc=;
+        b=l7H/RIXtklAgp7h5xobpO/K2hrwaBv127XNI4gWOnqCAuRjhZq2tiOVBRrso/KahVJ
+         3KSo3X08DHg5YGnXek7yY3TWIh8xsjk0RcihEiC24dLdxv/eQN+cKNI2txXz3nJm/Pn1
+         FkiiRCl73KPUmFWfvBvApmO8ALPawNku0nuaDrgUdCbCvp0NaILlbZ1hehg6z/PE7MVU
+         pjLnK1GMshim8vH3ULeywBzH1huAtCMiG7rOug5gdk55bqC5+yCcvmJYo3iESewx92yE
+         rIbVmUXvHKJAUySPFPWPbDdLmA7PV/IWBf3MvyKwFyqsSzPz6kB3SkK5FtUZmWX4E/2o
+         WINA==
+X-Forwarded-Encrypted: i=1; AL+hErFbnfY9Ef3crdkyvYh3ZbDcGJiFDI+rmCpNgtpBpy7YMIGMRWjLswDscGWQsp03poBMrXcfhr1+IJs8YCjdbmU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8UzhU54dZ5P2xdtwUc2ud2VEjC3QvnEmRIAIVRYIg2GFUeK5/H
+	qs84QA/PYTfBkHfwYW542qLX0+X0H1f0ohwlqt03+kMcNPvonzfFUVvX
+X-Gm-Gg: AYBFou1GXduhb88IjKtkR8vmsoTpYHZZfyFyDD0ck5Nf5/PurNZW58d08J7Oh/CpgSK
+	wzOx9ifJu56zstk5mVJyuMttRFa98irFa1mFainqluobUlD1qcnZkeA8tgprujlYVnLPCFlFi3a
+	8mWgOehhKVjNjMi5T9RtK7Brgx/sHdkC5voDnvsrB4tjIPgtMXuU6yBuu1vHr7VNemornfhx2mO
+	tywfRyEgzMstpbvuoBNqGVFByRjpbeSOqkwITEyYwAJbF3qKdSysT9ISqBQzkAQwmKoApfuzbuF
+	EBSEEeVvp/ShlO78UF1NnOaVE2PdzrsB6dTYCpjYdELetGVWxXpx7zgIxnPUmSsVNRwMeGkrI3j
+	2KpEsFlYLiRl9ccVz2psR+XMmZ0HfllvbSrOaCG+Tx/GrABO47bv1EOKHB+NgYA1sk+EEHvlxv0
+	XlG7EujAE7g2KeT55sjMhhTM1hfjEsd2jnzaPy2stxgIHAldegzMtyAFfink1QhKr2eiRi8zY34
+	n9D0WzArrJWyWzthsSFPvsc65Z9w9Xmrna6EXGC9Wbv94iM2pB/TDLub4CcVsGPQJGzbgvlzwjs
+	wVs/zn7vN5BWF3AVMvBqudebJE/6Wnipt+CFLsuFz3Z7Wd186vVoQvSJDcRziC20071G4h97ddW
+	WMhesuF77u3p7n2ey9x7dShbMQek0KFg4BeLH+Zw8tXqiG99wzO6N
+X-Received: by 2002:a05:622a:5e16:b0:55c:216f:38bb with SMTP id d75a77b69052e-55d76a5af75mr78983591cf.36.1795207339712;
+        Fri, 20 Nov 2026 12:42:19 -0800 (PST)
 Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78852bafsm32418241cf.20.2026.11.20.12.42.22
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78812968sm32377681cf.9.2026.11.20.12.42.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:42:22 -0800 (PST)
+        Fri, 20 Nov 2026 12:42:19 -0800 (PST)
 From: Tamir Duberstein <tamird@kernel.org>
 To: Emil Tsalapatis <emil@etsalapatis.com>
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -77,9 +77,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>,
  Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>
-Subject: Re: [PATCH bpf 6/6] libbpf: ringbuf: Reject overwrite callback use
+Subject: Re: [PATCH bpf 5/6] libbpf: ringbuf: Prevent missed wakeups
 Date: Fri, 20 Nov 2026 17:51:54 -0000
-Message-ID: <179519711430.18576.13986256491021949684@kernel.org>
+Message-ID: <179519711429.18576.6433271673673285138@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,11 +89,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <DJBZ6ML455FF.15NG4FYCAX9DE@etsalapatis.com>
-References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org> <20260613-bpf-ringbuf-fixes-v1-6-e623481cb724@kernel.org> <DJBZ6ML455FF.15NG4FYCAX9DE@etsalapatis.com>
+In-Reply-To: <DJBYY5JF4YBQ.2QJVU2QKJ16N2@etsalapatis.com>
+References: <20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org> <20260613-bpf-ringbuf-fixes-v1-5-e623481cb724@kernel.org> <DJBYY5JF4YBQ.2QJVU2QKJ16N2@etsalapatis.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-> Nit; unlikely(r->overwrite)?
+> let's use regular kernel style
 
-Included in v2 and now merged as f756eedb24d4.
+Fixed in v3.
+
+> [...]
+
+> The extra new variable feels overly complicated.
+
+The final iterator uses one loop without got_new_data. It retains one
+fenced BUSY retry to avoid missing a commit without spinning indefinitely.
+
+> [...]
+
+> We just add an smp_mb() here.
+
+The tools generic mb() fallback can be only a compiler barrier.
+__atomic_thread_fence() supplies the required StoreLoad ordering.
+
+> [...]
+
+> Why __ATOMIC_RELAXED here?
+
+The stop flag publishes no other state. Relaxed atomics suffice;
+volatile would leave a C data race.
+
+> [...]
+
+> Label is unnecessary
+
+Removed in v3.
