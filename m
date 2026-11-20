@@ -1,126 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.246.77.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795170805;
-	b=RV4k+4pAUhghUuNJs8ZyTe+laB+NwCp7nbQDRHl/fa6ocZ09przGRwH7J/Okw8H5uilR
-	 FT3Xp0mgAq7cdH8INoVC9uh83URiN0aohlT/onB0g9Icd9aAxnk6XMuS5miOBAxAT/EgO
-	 aqkN5ZK9rlHFlYKT3XwfveQMIsuVUGHuSiiEkKxI5ZcdZk8Mn+L6NOWZSOdYzDE5E2MDx
-	 ZPdroAe+dUTDCvkLGjraUEWIavSUWm7BpI4Ym0by0/uQNauhPvTwkBc/1+BbwYahih0/C
-	 0O+bFs2UTlT9leOP94zS/+8mQz58LjHe0S8nF8EsEGEiR7a8tSTAfWFZeuVbwSL9MSA==
+	t=1795172318;
+	b=FWkz9HR2xQCtMoEzBHvOXc21NDAclphR6ueYCgxnQAMDX1clB5qaydEAmVGQsHliJQwW
+	 V+3n/LsOGW4f3VVAMSexF9or9KIhzDqq40dZBL6sb2pz6P3BqsFNqyKKYwDq38GBTlbbH
+	 KlXRA3szl/KUfm+bcA+ZFsiIWGeHzzOaCSEmtj4gbHeIz5PlMs9aV3Yo/GqLyq+OmR1by
+	 48KQdF76ijDfbDN4Wn7rGLe+zHnF57SqRtwmKozKHdfWmNw125KDi+PrOxH45jKi0wJfV
+	 XG0Gzh6pIJKK1RGWgLz0DIWcoJSIguHNJ7agMpV/whjTukkDIEh+lmVRTZa2LagP54w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795170805;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=t9oeuZg5SOFELh61DhL9TrcyeFMUL5FVI7HyV9D7ONM=;
-	b=ENqpYgOgfzGTyAafC/KubIcjG5YSAlkIzdghGAyom+QbyTHDMBsgcmjVMxifaUYmr9bk
-	 EOqDGUnSLp7PnzqwFumczY8oBSgnqg6LWBE1XsUYRitysZhFS0CZHlYrNzUvEW13q3pdd
-	 0a5UunErkv3yn5uKwqxR4JC2pLf0OsFGSfy6UboRNlgVXJIJvnEjAIaGfpICMB9J1SdVv
-	 cQbGgHWtwEdyaTMd/eNjABL3//EWV3avl6e3mvnx7LozpiHM+HQbaxTLqB+D9tNwPKSsl
-	 0Fsi7rHvAN5hNFCwKFgslV/RLimJJ1SuViAI/EvGfW/8Iq8XpKi+y5upVWVspkkRmcg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795172318;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=AkOJ+Myj2ETQZmmGlWz7oa9vaDDW2dRxOxKFjBmdIe8=;
+	b=jCt3aEalJywQ7rEB86q0utbDZ2DWV9tqR2q1hv5KRfjK4Hb7b3nUpyNDuV1qttPbg4BX
+	 5+Q557avQIq3yWpxI/I+wPFOavY5ce18/vt6iBkckKxYg1howZtmFfUphuUdx3SGgBjRo
+	 pFDG2atpL/Te4ibGtgwKxZGJ5n19uUyD4aRYeGCDd5GJ1ab5DSE5N91jFUMFChIT/eA8e
+	 ofhEUrzVRpY8syFTX499ZC4MSFvTj5eaImepmOVQ5iqZA+MB5p1Pu3jVnu6rNVzVqdfrf
+	 ozrqbV2IXIhEyvCgFmsE16L7+5jQrQZwME0CXLhyFDtu8NuEHgMJfkLDFyiaE6kH91Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MT90aUeJ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=amazon.de;
+	spf=pass smtp.mailfrom=amazon.de;
+	dkim=pass header.d=amazon.de header.i=@amazon.de header.a=rsa-sha256 header.s=amazoncorp2 header.b=EKK66efL;
+	arc=none smtp.remote-ip=44.246.77.92
+Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 88315606A320;
-	Fri, 20 Nov 2026 10:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6726606A339;
+	Fri, 20 Nov 2026 10:58:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6726606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MT90aUeJ
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 180BE1F000C4;
-	Fri, 20 Nov 2026 10:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795170804;
-	bh=t9oeuZg5SOFELh61DhL9TrcyeFMUL5FVI7HyV9D7ONM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MT90aUeJnbBLoxSnli8tTtBlsoFe45xxYq7FCMaOJfqXCyODpNpspWc3hSd8SkzQT
-	 m9HM/m7tfYasOLIuMLno+XIBkfnsJritn1I35Hs+G85PGyOWo2aqbx01Nb546s3l7J
-	 BWGnwVJYoBUhcgV1FsrIjpajqeru0eyjz/AssVQJQzDpJuh5zNs0pxZtz1D7YPzYAN
-	 ZzYDSSj8TvhhBVhbzNJkR/DPNP3NVKgSci50dNMucuDoqkdGwZpbuLzlHRwDlI3yq2
-	 oowRyN8OH4AiBudC5DwdHeH70QNVCNAH2foLQpSDv5FnrOZ2vP8EWoxiV4qmR5D1+m
-	 a8ZBginKlEPFg==
-Date: Fri, 20 Nov 2026 12:33:21 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>, Ben Segall <bsegall@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Christian Brauner <brauner@kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Chris Zankel <chris@zankel.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	"Hallgrimur H. Gunnarsson" <halg@google.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jan Kara <jack@suse.cz>,
-	John Johansen <john.johansen@canonical.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Magnus Lindholm <linmag7@gmail.com>,
-	Manfred Spraul <manfred@colorfullife.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Moore <paul@paul-moore.com>, Paul Walmsley <pjw@kernel.org>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Rich Felker <dalias@libc.org>,
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Will Deacon <will@kernel.org>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v4 07/14] fork: Support CLONE_INTO_ROOTNS in clone3()
-Message-ID: <awAh8chFM-9WtNKP@kernel.org>
-References: <20261119224312.1037966-1-jarkko@kernel.org>
- <20261119224312.1037966-8-jarkko@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.de header.i=@amazon.de header.a=rsa-sha256 header.s=amazoncorp2 header.b=EKK66efL
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1795172317; x=1826708317;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AkOJ+Myj2ETQZmmGlWz7oa9vaDDW2dRxOxKFjBmdIe8=;
+  b=EKK66efL8ozC1PYh8JNw6Pq8XFPP4BojY+PKNYDdEv8nVzJmu1tNrXg2
+   4QOoJqyaS+Y9Qhx8U3vOlZxmuwd+iYEHXAp9/LERFv4EwMcizy+sgTKO3
+   19jWxMbnbLpjM9bgW+ybekAUKpktPeEtRfhhcz1+5vPTbz2Jc+E3bTGbd
+   9lBzQc3QN5O1FvCVUjp0yqZjY9wJ/lTfqRhgREh4dOvnh6pWaNwzQl9vy
+   XCS1VPLtu5LRdN24OXaKzA7S8DG048DkDGItQuwSiNRiO0G8qOVBxyqvB
+   KOaLp1f4OCBUk5uLVYwo4ARmMCz0Ug/wp1Cq+GRjcvy4Wo74kPgBA8aYm
+   A==;
+X-CSE-ConnectionGUID: kvlLoeuSR9SSqrEhn8+jxw==
+X-CSE-MsgGUID: K1Gae5iKR5WwHjjHB5xWMQ==
+X-IronPort-AV: E=Sophos;i="6.27,222,1787011200"; 
+   d="scan'208";a="34639974"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 10:58:35 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:31951]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.8.86:2525] with esmtp (Farcaster)
+ id a189ccf4-f869-4d5d-9ae7-80d97904740c; Fri, 20 Nov 2026 10:58:35 +0000 (UTC)
+X-Farcaster-Flow-ID: a189ccf4-f869-4d5d-9ae7-80d97904740c
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Fri, 20 Nov 2026 10:58:34 +0000
+Received: from dev-dsk-lshahed-1a-d9c3b839.eu-west-1.amazon.com
+ (172.19.123.145) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.57; Fri, 20 Nov 2026
+ 10:58:31 +0000
+From: Ibrahim Elshahed <lshahed@amazon.de>
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
+	<vincent.guittot@linaro.org>
+CC: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
+	<rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman
+	<mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak
+	<kprateek.nayak@amd.com>, Josh Don <joshdon@google.com>, Shuah Khan
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <nh-open-source@amazon.com>, Fernand Sieber
+	<sieberf@amazon.com>, Roman Kagan <rkagan@amazon.de>
+Subject: [PATCH v2 1/3] sched/core: Clear a stale rq->core_pick after dequeue
+Date: Fri, 20 Nov 2026 10:58:20 +0000
+Message-ID: <20261120105822.7770-2-lshahed@amazon.de>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261120105822.7770-1-lshahed@amazon.de>
+References: <20261120105822.7770-1-lshahed@amazon.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -130,40 +92,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119224312.1037966-8-jarkko@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWA002.ant.amazon.com (10.13.139.96) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Fri, Nov 20, 2026 at 12:43:05AM +0200, Jarkko Sakkinen wrote:
-> Multithreaded userspace daemons cannot call setns(CLONE_NEWUSER) or
-> safely mutate process-wide filesystem state in place before spawning a
-> child into a target namespace set.
-> 
-> Add CLONE_INTO_ROOTNS and struct clone_args.rootns (CLONE_ARGS_SIZE_VER3)
-> to spawn a child process directly into a rootns whose root mount has
-> been installed. Transition the rootns from ROOTNS_INIT through
-> ROOTNS_FORKING to ROOTNS_RUNNING for the first process so it becomes
-> PID 1, serialize concurrent entrants on waitq until bootstrap resolves,
-> and admit subsequent callers into the running PID namespace until
-> teardown begins.
-> 
-> Derive child credentials from current, require CAP_SYS_ADMIN and
-> CAP_SYS_CHROOT in the target user namespace and an ancestor active PID
-> namespace, preserve caller umask, reset dumpability across user namespace
-> transitions, commit time namespace vvar mappings after copy_process()
-> succeeds, and look up the live mount namespace root. Restrict companion
-> flags to CLONE_VFORK, CLONE_PIDFD, CLONE_PIDFD_AUTOKILL, CLONE_AUTOREAP,
-> CLONE_CLEAR_SIGHAND, CLONE_INTO_CGROUP, and CLONE_NNP.
-> 
-> Co-developed-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+A core-wide selection leaves the task chosen for each sibling in that
+sibling's rq->core_pick until pick_next_task() on the sibling consumes
+it. If the task is dequeued before the sibling consumes it, for example
+migrated away, the pointer stays until the sibling's next
+pick_next_task() overwrites it. Until then
+__sched_core_account_forceidle() keeps charging forced idle time to a
+task that no longer runs there and, with schedstats enabled, to its
+cgroup, even after the task has exited.
 
-Being fd-bound object the gist is that the first clone3() binds
-cgroups, which could e.g., different process than who build the
-container.
+Clear rq->core_pick and rq->core_dl_server in sched_core_dequeue() once
+the pending pick is dequeued, and don't wait for pick_next_task() to
+overwrite them.
 
-CLONE_INTO_CGROUPS is of course available as an optional flag when
-using CLONE_INTO_ROOTNS.
+Fixes: 4feee7d12603 ("sched/core: Forced idle accounting")
+Cc: stable@vger.kernel.org
+Co-developed-by: Roman Kagan <rkagan@amazon.de>
+Signed-off-by: Roman Kagan <rkagan@amazon.de>
+Signed-off-by: Ibrahim Elshahed <lshahed@amazon.de>
+---
+ kernel/sched/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Br, Jarkko
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 175b52a7ea79..b1718ba5a4d1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -328,6 +328,15 @@ void sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags)
+ 		RB_CLEAR_NODE(&p->core_node);
+ 	}
+ 
++	/*
++	 * @p left this rq, so it can no longer be the pick a sibling made.
++	 * This also avoids forced idle accounting charging it once it is gone.
++	 */
++	if (rq->core_pick == p) {
++		rq->core_pick = NULL;
++		rq->core_dl_server = NULL;
++	}
++
+ 	/*
+ 	 * Migrating the last task off the cpu, with the cpu in forced idle
+ 	 * state. Reschedule to create an accounting edge for forced idle,
+-- 
+2.47.3
+
