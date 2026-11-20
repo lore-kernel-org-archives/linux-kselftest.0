@@ -1,68 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795184966;
-	b=TrVn4+WOtblnzwnMbigtjDeqnIVPPlf6y0CUc3w1gmMkPgYGd+Z0QMjV16/OhmUF1rF7
-	 KCF8R2sklKoPgNi5H4VmMNtIuFpEcUkY7nPwwogkfHzjHMTwjBaaj+JRF76xVoueHoAJ7
-	 XZN2nHdPoSiLuz2RMXF5JeNV0PTeA9Qux2qHlgvD4lJbtRQHErFlCGTyqxGkwAozP0VIm
-	 TJHh8YsrDv9RMbJrPWfkYiGnZosC3qwBqBwu9IAc8brEwas9JPI093dWEjEykZczBF7HE
-	 xZTewn4SdpPyrJlri4Dl9Ibs2wOtK8vFd16n31TTRQx37QXFMDkRngHFsDDirbsbmTg==
+	t=1795185276;
+	b=T7LgX7F2gEYHDaXS9ShjLIs4OMK8erXFB3wECoZPVE4FZ0C4ZRLuNpeDgOwre9eqsSAe
+	 brkXST2thWEYiP3ewtRzX+uBLDZ7g9CyhT1KxXPfqaQozMQHA8iKGJ23btlxwBw4Rlmh7
+	 LkgehtkjuavFWf6nOJ6ADXJi6LMqcD22Ac5JMuYA86J8jP7WL+dlbgKVkXOi5YedoI332
+	 OAB1SHzivTnfzBhg+c7+K2TyAPwBVB2w+eLPbzg9/+a6dPhlW3/icS0Yfu5zz6mA/Yx7h
+	 mnG8dYoJLp84HjKTUaMRLIJ/gSIRFoPel9rHfJU9zNjtQyDHaqQc58eNZSaKDsG7sKA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795184966;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=rhOyoytlnDVzUE3pO2YswTduW+qVAkiRX4Xy+qDagYo=;
-	b=uOwqmWJHKGPm5vzcAPuxSYz1EsNiy1+e08xJhaXghs8LmjsU4BkVBHcwl8ysixReucxp
-	 cvfpk31WVS9pIco9Ec3Ug4l1dsiDgDgo5C4IQRNvALVpfcCwFOQvSlBbIfSJE5GAGbQbx
-	 GC8jWgRFceV5dcVygkuE/wwqYlsa+yxpWwbW0RSSP8J/GHRk9sbXNG/MT7jy71/zBKAGa
-	 M7bsFWl/KaIr4WDbTCKsdd2oLMskNMC3op5vGspGJavqT+4/XPpxjQ7v+Uv/s6Mk2Vwd9
-	 cSRcpWV2RxF8QchJYO7nV3SzWdEcq1oro9dyTGxyWIC6RBdQPvnozv1G/h2kyy/nuqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795185276;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=TexTSYlANwi+Z3VNOr7rkhMmBTNnuXd95ijh1g8jBbs=;
+	b=nN0mRA74D55DDmz/KvHzx95oJFhC8hJS220/+X59AFtLQhG7xLEclCbwXnrblwYmn+Xo
+	 brDA62HOBbYj97+d/hh3+jqhq/4pXW83VJiHw4fxxGC3FB38mqI5YDI7GtkmdeHiNJ85M
+	 ACEsSblEO1cENU1+JWRMBIG1FiwGvnThTQ8YTaJznJRbuS+1yZpWwWMe3Ad/cerRyEaKI
+	 HWyIzI1tEM9JbUhC/3QgMH1fqWDezJSuwvz4VDPXJHzCbpoUbKUdjAngeXtAr/4Gy5BZ5
+	 Jgzgz+KVUJzZd9mbe+gHAm5Jswli7h1WrbGHNuVLWiF9Bif8vNpXSn2lZ2lawxpgl9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gt+MBOJ9;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="JtAsT/rK";
+	arc=none smtp.remote-ip=209.85.215.197
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6A4606A326;
-	Fri, 20 Nov 2026 14:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB2B606A326
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 14:34:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CB2B606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gt+MBOJ9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EB61F000C0;
-	Fri, 20 Nov 2026 14:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795184965;
-	bh=rhOyoytlnDVzUE3pO2YswTduW+qVAkiRX4Xy+qDagYo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Gt+MBOJ99ecdCoik/DrDTQPtJz5L/ZTUyz/EegTnM9kepvs1tpxlCXOv1QgdhAHCu
-	 Rmea41jfXufLIE9H7uiBcy5CTMLzjfkcfLsQwgixDcr/U+q3RoZbmZZMqNU1OAuVv/
-	 aJL0k0omtXBWH1QfEfPodlrJd6YnP4ktpCjHBX2T/Fj/2sJEv9VCS9VsIA1i/Liuxu
-	 mjSFcrKqc8hvKpD9cZWD9ytUtBRRiNqbPEoe3oRte2J3A84utdWKl3hIvZBKhIlmeu
-	 KXKHkErlt1fr1FyS1G4E4e0/dmYnunLescQcyb+4VQwLXaMDFM8m3apbWo/ePA8e0j
-	 9v3XLNMi3UdSw==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
-  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
- <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
- <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
- Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
- <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
- Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
-  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
- <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
-  Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v4 14/19] selftests/liveupdate: Test which tmpfs files
- can be preserved
-In-Reply-To: <20261111002358.1842967-15-dmatlack@google.com> (David Matlack's
-	message of "Wed, 11 Nov 2026 00:23:52 +0000")
-References: <20261111002358.1842967-1-dmatlack@google.com>
-	<20261111002358.1842967-15-dmatlack@google.com>
-Date: Fri, 20 Nov 2026 14:29:19 +0000
-Message-ID: <2vxzh5hb1sqo.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JtAsT/rK
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cd65070d3feso619627a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 06:34:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795185275; x=1795790075; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TexTSYlANwi+Z3VNOr7rkhMmBTNnuXd95ijh1g8jBbs=;
+        b=JtAsT/rK6zOSNMWwW1o5I7X/fLpjy3EbAQi2mnyA1YHYQk6tJOFzrZLhQi+hHjfZn1
+         b20jxPt+RyF5UmK6dTedjTBlkJewRCsInA55bXqsiqTCf0RmTATJfFNToN40ALRUD514
+         P642W8VAkF+PieTnXEQALcR85tLmzCckqWY3w6e1JKI1o7RAjCZcY5a3XRW+Z7dWZSDn
+         3zlxY9gr0PTrDRtWkyl7sXcnGW8v7BJmSlITWMDQJMmweY2xsWnqSulPyThL8hbkmX1V
+         f3tRAlEuubZkfXKEKm5w3llWAncPzVQ5RkWS7hYznLM+gIbGyoW0m3qvye/rAxPxP68Q
+         rC4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795185275; x=1795790075;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TexTSYlANwi+Z3VNOr7rkhMmBTNnuXd95ijh1g8jBbs=;
+        b=ojgJZQhFJbW6+jAHi5FErA9uyCUIS9LjMbjoEgMi9WM8+TeXRCs/f0nLubUQyUyWQy
+         W1QFmNsDhVJPEOqHeZAbCFaHHZW7EnvcVxSRKcmB9QazDTbNK9Pm+h1cl7ugA5MpsGfb
+         oiFqaEZ9IqfYF6/+yHvRV3sNypeePizrlMIzvAqpibcqesY7LugNgaJhY0f0fSyJ9v3t
+         DUXj9Rm9dQn0f3tJB9pDQSmkUO1T0/eG2Q/Rlk7aDOquI6jrwt5rkGYy4bisC+xAr9EU
+         6Se8kxMsBwZ5WV2grHT9hlvyMVvh/zxuTwxdZvKOjiF/Qkme7hx8VOKawhjN64gl8Ivj
+         5U0A==
+X-Forwarded-Encrypted: i=1; AL+hErHlQNwqC4MN5VpI1FA/9Lgrq7z9mYTXWwHkoYQIjTIcQ7hUk744qAJFgB3+WlmUG9Jbc8maeOlyCt5LaL11aHU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/btyiV4eBU09Mpias/uW7MxD4tKkZBfrnH0hsYD4A2t49l8Hbk
+	8tzvuHoa/VBz34KtshQP3GEvu/ENAYKQ1J74w5kZI13krVEXuwxYogqBOtpWxJOtXK9Cw482j2e
+	pCvfhfQ==
+X-Received: from pgjk27-n2.prod.google.com ([2002:a05:6a02:81db:20b0:cdd:b3ae:c565])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4d87:b0:3b4:68e:1b77
+ with SMTP id 98e67ed59e1d1-3b40a5dda03mr3693597a91.20.1795185275224; Fri, 20
+ Nov 2026 06:34:35 -0800 (PST)
+Date: Fri, 20 Nov 2026 06:34:34 -0800
+In-Reply-To: <20261120-provokant-zyklisch-schutt-55d8eddf2ce4@brauner>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,88 +77,68 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
+ <20261106-gmem-alternative-providers-v3-3-8484dde66a7e@google.com> <20261120-provokant-zyklisch-schutt-55d8eddf2ce4@brauner>
+Message-ID: <awBaeiUw0i-uEQzM@seanjc-mac.roam.internal>
+Subject: Re: [PATCH RFC v3 03/88] mm: shmem: Implement guest_memfd provider
+ operations for tmpfs
+From: Sean Christopherson <seanjc@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: ackerleytng@google.com, Alexey Kardashevskiy <aik@amd.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	David Woodhouse <dwmw2@infradead.org>, Fred Griffoul <fgriffo@amazon.co.uk>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jianxiong Gao <jxgao@google.com>, 
+	John Starks <John.Starks@microsoft.com>, Michael Roth <michael.roth@amd.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tarun Sahu <tarunsahu@google.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Xu Yilun <yilun.xu@linux.intel.com>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Nov 11 2026, David Matlack wrote:
+On Fri, Nov 20, 2026, Christian Brauner wrote:
+> On Fri, Nov 06, 2026 at 04:36:37PM -0800, Ackerley Tng via B4 Relay wrote:
+> > I put guest_memfd_provider_operations as a pointer in struct
+> > file_operations. Being in file_operations generalizes well to other kinds
+> > of providers, like devices, which don't have their own super_operations.
+> 
+> > @@ -1960,6 +1961,9 @@ struct file_operations {
+> >  	int (*uring_cmd_iopoll)(struct io_uring_cmd *, struct io_comp_batch *,
+> >  				unsigned int poll_flags);
+> >  	int (*mmap_prepare)(struct vm_area_desc *);
+> > +#ifdef CONFIG_KVM_GUEST_MEMFD
+> > +	const struct guest_memfd_provider_operations *gmem_provider_ops;
+> > +#endif
+> >  } __randomize_layout;
+> 
+> Sorry, no! struct file_operations is not the place to hang KVM specific
+> callbacks off of. We didn't let KHO/LUO hang an ops table off of struct
+> file either and nobody else is getting one in file_operations.
+> 
+> LUO registers handlers that recognize their files by f_op instead,
+> memfd_luo just uses shmem_file(). And KVM already does the same for
+> VFIO: kvm_vfio_file_is_valid() -> vfio_file_is_valid(). Do the same for
+> providers and leave struct file_operations alone.
 
-> Add tests to liveupdate.c for the checks done when preserving a tmpfs
-> file: A file can be preserved through a read-only fd, but not a
-> write-only fd. Preserving it requires permission to write to it, except
-> for the owner of an immutable file or of a file on a read-only
-> superblock. Append-only files can't be preserved, and files can be
-> preserved through a read-only mount. Also check that the size of a
-> preserved file is frozen until the file is unpreserved.
->
-> These checks don't need a kexec, so they run as part of the regular
-> liveupdate selftest.
->
-> Enable CONFIG_TMPFS_XATTR for FS_IOC_SETFLAGS. The test cases that use
-> it are skipped without it.
->
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->  tools/testing/selftests/liveupdate/config     |   1 +
->  .../testing/selftests/liveupdate/liveupdate.c | 303 ++++++++++++++++++
->  2 files changed, 304 insertions(+)
->
-[...]
-> +/*
-> + * Test Case: Frozen Size of a Preserved File
-> + *
-> + * While a file is preserved, its size can't change and no holes can be punched
-> + * into it. Writes within the file still work. Closing the session unpreserves
-> + * the file, after which its size can change again.
-> + */
-> +TEST_F(preserve_tmpfs, frozen_size)
+Eww.  I really, really want to avoid having to update KVM just to recognize a
+new provider, and I shudder to think of the potential module dependency hell we
+could end up in.
 
-Nit: This test isn't really for "frozen size", it makes sure a preserved
-file behaves as we expect it to. So perhaps call it "preserved_ops" and
-update the comment?
+That said, I 100% agree that having something explicitly KVM specific in
+file_operations is a non-starter.  Would you be open to a more generic interface
+for connecting providers and consumers, e.g. something like this?
 
-> +{
-> +	long page_size = getpagesize();
-> +	struct stat st;
-> +	char c;
-> +	int fd;
-> +
-> +	fd = create_file("file", 0644);
-> +	ASSERT_GE(fd, 0);
-> +	ASSERT_EQ(ftruncate(fd, 2 * page_size), 0);
-> +	ASSERT_EQ(luo_session_preserve_fd(self->session_fd, fd, 1), 0);
-> +
-> +	EXPECT_EQ(ftruncate(fd, page_size), -1);
-> +	EXPECT_EQ(errno, EPERM);
-> +	EXPECT_EQ(ftruncate(fd, 4 * page_size), -1);
-> +	EXPECT_EQ(errno, EPERM);
-> +	EXPECT_EQ(fallocate(fd, 0, 0, 4 * page_size), -1);
-> +	EXPECT_EQ(errno, EPERM);
-> +	EXPECT_EQ(fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
-> +			    page_size), -1);
-> +	EXPECT_EQ(errno, EPERM);
-> +	EXPECT_EQ(pwrite(fd, "x", 1, 2 * page_size), -1);
-> +	EXPECT_EQ(errno, EPERM);
-
-Nit: Is there any point in matching the exact error code? Wouldn't
-checking for a failed syscall be enough?
-
-> +
-> +	/* The size didn't change, but writes within the file work. */
-> +	ASSERT_EQ(fstat(fd, &st), 0);
-> +	EXPECT_EQ(st.st_size, 2 * page_size);
-> +	EXPECT_EQ(pwrite(fd, "x", 1, page_size), 1);
-> +	EXPECT_EQ(pread(fd, &c, 1, page_size), 1);
-> +	EXPECT_EQ(c, 'x');
-> +
-> +	ASSERT_EQ(close(self->session_fd), 0);
-> +	self->session_fd = -1;
-> +	EXPECT_EQ(ftruncate(fd, page_size), 0);
-> +
-> +	close(fd);
-> +}
-> +
->  TEST_HARNESS_MAIN
-
--- 
-Regards,
-Pratyush Yadav
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 99caef43ff3c..96e4c2547d5e 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1934,6 +1934,7 @@ struct file_operations {
+ 	long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
+ 	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
+ 	int (*mmap) (struct file *, struct vm_area_struct *);
++	int (*connect) (struct file *, struct memory_consumer *);
+ 	int (*open) (struct inode *, struct file *);
+ 	int (*flush) (struct file *, fl_owner_t id);
+ 	int (*release) (struct inode *, struct file *);
