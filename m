@@ -1,97 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.1
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795194394;
-	b=HziNmm5RueEF5bylFJURDSVWuXwoVaK60pu86DTA4JgMPV+AFZurf7oecaV4rnbqZiNL
-	 6qU6F44H3ztO+hiwhyhvTJ8Bgs1iLF+eWmEwTzFSvnd3VbsrjaZ7zVAo3UtuTRCN5fOfP
-	 AOEmahCobtgILldi6vxO734Oqel77+kPKXbvmj+JbfW6RHiarj/2dHPtSBLctt5HH+yUG
-	 IQExIpZTOonAW4rPcjMR8HiZYWC9zUJkzh6OQwEpTuPkosZRU7GYYuwNeNnIjJsma8kBJ
-	 Ngh+pL+HrmlbmtTNm6JqZHNsLqp9yYVTN0MZuvO2UpR8AbVySa5Oag2oJoGl+dPgAuQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795194394;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795194602;
+	b=OVm2sVIvNK3hLzHJIf98QWcNvH03rT7/juiL2dintLhQEr3FL6BvTHcvB1nI3qpzZolo
+	 vwxkDMMjKX387RtRc18Re1KeNazJbeOf5z0QLqNdeltY+BFKMqVoFFlqsym3/kdLbVI5e
+	 80VT5EU/WbJk5rbPHfD5sSwJVcxdadfPfswcy8DziJPiRqlP86sFqwqOiV0olEoAnFTwX
+	 iNCYO+8XUszABbV1tmkCYT+XgjNzXgbpulQWNr5c0kKbelXzUdVMdQ+N6/WJB7gD3lzCa
+	 O4zOfRw9W85g+4SCFs0tgEnFVgkeKsT5B/OPPxPbBzW5qUOSjcr2jVeY51uUweeOR1Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795194602;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=HawP4HaqSSCCRWTOg50sFxNueZcWIp4gg9tOLMEyCnI=;
-	b=DzRf4O7uR+uxbngUlM8qq+thqgo9rPFfOjIte6a+GwDlPyxfpmJpHgQl0XS9xMuuHtqY
-	 Q9nujtILTDkEjAJDMLVnx+Svr6IRMQC8MLq+H5/QfxDOM6+q19DaxBMSgzPMgTV2gXlXS
-	 BsOGzwYRcNAhfUlS43g7IZisppuM1FiexeNgr1naut3CD8GqARRWt0iX31M5J+sUYbaI/
-	 4dieR3pAXtDmB6jjkSdCAFCNyzH7d6AseeMrkH3yBKIbt4lVVg2ErmKUdOQJCA22ESdJ0
-	 IO3yipAqW+qn9IUMCU0Fh+VJWoBbfZH7RhSMynk3B9N7JBaIqvgUeeFkacx+UySKgiQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OmzPOz94;
-	arc=none smtp.remote-ip=74.125.227.1
-Received: from mail-vs2-f1.google.com (mail-vs2-f1.google.com [74.125.227.1])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
+	b=OneFUEVbN8abD6/m01weQGVHnictoDT3UaEcSXTuCPtbSNBLfzOaBDH/nzYWj/rsNBGY
+	 p3Il6CMEdvlyjODw9WxAMAm4+8H8HG04k25S65umk8uPkIjyuU7/p5Wd4rvq1OqUr4ljZ
+	 LtqUEQOWnLbEgbWtSIJhNR0wZMOZ0tdOGX5xb4cFQSnZdedD9xXMlkYsbuftqGENMAoDW
+	 i4guehgYwFTGIbzGOEb4PdHbCLou2EK5pW5uMhKYtmOYepAuyMTxtYlJsuKnwMW/0l2Qk
+	 PqclWKFW9QVDTr71EmvVsBmeSlvQl2r7nxvf8xPChfai3HGY3Ab8xgsRNfjX0CIHsgg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=amacapital.net;
+	spf=pass smtp.mailfrom=amacapital.net;
+	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KzuPKz9w;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C39360A2634
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 17:06:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C39360A2634
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2907F60A2633
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 17:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2907F60A2633
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OmzPOz94
-Received: by mail-vs2-f1.google.com with SMTP id ada2fe7eead31-744b7f44933so125853137.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:06:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KzuPKz9w
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5c17ef1e18cso714103e87.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:10:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795194599; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CCwWwampuSkW3juue8vri1MiV+4uK+ddIt8TMq8ww7IWPNFYoQb4RbbkYE5a0QMx+y
+         PApDf0dAe8gTbxllLAhwzTM18COuaZWL/w4GxcmB7wbPb0fyBNdgRAlyDHRJrZD88TEn
+         D/Hr0Aj7lHKHmh1467HDhTsRRSHoqbJCVvBr08h2z9zNA2WB11C2/5wucClkzPKXyzRs
+         mokQVlKQ4B8k8z1dl/OF2f/w64NtyJ5bUHJ1TPRxhvbcPzHxMUlTV3D/5+GpFRg5tnT0
+         +/h76C+mnhohzUFrYTgtAhkiAzHKcc5Tu0+THAsq6yK2EYlTJAoNDo/UkBcLdTfQpjoS
+         wmgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
+        fh=yg+lK4t/KvlIVt3iwMlBO3C1pepQrdU66oPvwsmW8c4=;
+        b=ZT67bBQUV2jgZEfKpDUge1cLYqPeBRPOEFmJP9Nt+nwlw0d0GfvrBjhIrAONNHUhzs
+         qviC6EMBmd8LmhB62UYCHJoodzfNVZDug6HJk55S27KJrEvBFDNSU/ZtWiJiDbYI6wpO
+         9K5d0iupMzTtevedABEgRZgPZxBU0OOoi0KFVOsG0rnQ078cXzXX9LOHu/lIK7KNxcJv
+         amG9NBTg379d7s8vQwLAWf6AFaA5c+kUo0Ne0ZbBKRAgGJsQAi+vmxYF3pjewL02MxzD
+         1WHrLgNVPqu+6oC36yyetYOA/3xF2UBo46neBEONDf5JsuglVOLx2S17GN/i+Xp9QR7q
+         BH9Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795194391; x=1795799191; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1795194599; x=1795799399; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=HawP4HaqSSCCRWTOg50sFxNueZcWIp4gg9tOLMEyCnI=;
-        b=OmzPOz94RBlShM27Fq+3M13WAvPl95uJg/Z6jfSNfiGQ/2YfUXnilB6shAptLqaJ9P
-         Q8c6SFK9FjKZAJPIDtu+JPcTkDbuz4cdB3GAZiv7jYRjnKnRTSQfEouoo/pC/znPTJx0
-         10Er+1on+7/EuSkAm4mFEVsyeRSMnBy4+w86KCgmbtxuczVedutAeDaY+BPKBqieVf7d
-         ikOGQgdR1/RnFxqBpWY4K4JiyVTYjF/Iesthf/IODFdnaxnKWQ4mrhaK7f239Akgx2OK
-         2KfAc4k+kBguar6hDm4yDh+6GZEGikuofnRnhrelhphJWWPJEGB7NlcLQUP+GSCpl/eb
-         zK+g==
+        bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
+        b=KzuPKz9wlUIhaJWdwueDeEluQfGhTtFH6fz8FAZF85dKlUnHi8FkaBQALudYSWmLoT
+         azKe3eFVYRDOFx+8IjhGNb9qwSrA+uMjFasO0Y78bF+3hajdbSeasLRKTqR9rrRw93Fs
+         mgsw5HsHH8a8RLldzj7UExTUzudAO7FPQcBGxVHr544OLOOoquGgLjJUclHerWxaJdLi
+         uxmk8NZd0Ky9WVaupdZUPVmFOhf9Zb4PrRXYdyH2vDYOnjm+WhZ7uYiyPgxh2C1qaltX
+         V7aCX88km55ADvHdXfnZgPboy0v8Geo0MFUxnSN4Wp1aITRMGG9KONQZYt3Rs95J370H
+         rqIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795194391; x=1795799191;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1795194599; x=1795799399;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HawP4HaqSSCCRWTOg50sFxNueZcWIp4gg9tOLMEyCnI=;
-        b=iY65w3lhctGDRevvaRa0aWikNmPr7JD4Wn7VYqBDz5NZIB0R1T9IFYCsepBLMlM+7N
-         XqJZ23zXtdl6jw/gErLXsonfd4hJl6q/kij1OGlvYGHf29rYtri7LoFms+CZ/Un3I2up
-         ool/+FzyKFb96XercHds2sdmBFET9H5E/X0B/cCbub339yDsb2M4meUo282Gt9y7inR2
-         P3PvjHd+8fuJfq3myYqdaWsSgH2tR7sfJpL34692WPeKEsdn4ZaIiAdWGynC/wzbu3GX
-         2XNBroNm06ntrrTBa48qCYFhiZYIh1X3F9WfJdpIaCBDHjpoVeO4j+hduyXibCn/hUcT
-         STzA==
-X-Forwarded-Encrypted: i=1; AL+hErEcrM6so+Hr0sZC+HagjkNysBVkXftzhEWH2TkIo+wTFOPXV7DfdWnM0GKqGDl1dlysxXjVmg1q5f7jGvafw4g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+gAfeekeBzJTwbfjjpBwkF+jem1GK4w4QkxTnZF9KonLDZVCcj
-	MIDCBi4Zw0lZiZnDcQK5IsFhW3uHRYsR8RijdDwxnvsDxVOMZC6QxMy6
-X-Gm-Gg: AZFdTZfC1iYHiXSGxET/dxKzPDLc3+XcTc+c7nl/Bkc8GgWMLQ/TIv74aEjSVGjayQg
-	MC9yurCsD6Kak88y+2XctMsoYtMVD7wZ1eUDTNYP+sSwgmShDV9VW4Xi6alpMI2VmpHPbdTkbfh
-	Pn6NydpiU5fkMo8PKRWkDa9Yl/pIVRsJ51gnfmYEbxmJesgDborK4hvBNrwsuHqpWNatmljQLOk
-	rFm2mDFwh76jl5l3XWliheiullw5TIjuYFLjOOkVvROdQMgXxItTWwd6uV9EpAZ8vUc6cecfXgj
-	lQEOaPLM3uOq5rWUWN4iOyPbEZ7wywpFaKdipqFS8DBlavcFP9TvnkG1nTbyzsuzoy29U9LIm8G
-	ARw2j9M/E78nNM8dLRTcUSEv+36ttmGaTXn81Ew2YFf+gcX/nvwzOzRIIqPpUdlBG4QICyRs2vD
-	IIbYA7EWnizjFEkspVeovEG/it0Jh5zi5ui7gLPtGdSB0oad+JxJeMo3TA9npvMXXrc4xWbh60U
-	p7jhDxplsVfVxWquVJdubv7VM9gpCbfMc4bE2AgcSNcS2L5pW35TBIVPOACmTE65875+JugM3zQ
-	cmA7HauctnuSmbUXQe/g5b4=
-X-Received: by 2002:a05:6102:4455:b0:7c3:8150:83e7 with SMTP id ada2fe7eead31-7d7393a4a98mr1152864137.9.1795194391043;
-        Fri, 20 Nov 2026 09:06:31 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:6c::])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d6e7d784b3sm3456487137.2.2026.11.20.09.06.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 09:06:30 -0800 (PST)
-Date: Fri, 20 Nov 2026 09:04:38 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, Weiming Shi <bestswngs@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	David Wei <dw@davidwei.uk>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v4 0/7] net: devmem: support leased RX and TX
- queues on netdev unregister
-Message-ID: <awB9nOahr_lP5teq@devvm16445.scu0.facebook.com>
-References: <20261120045918.1239746-1-almasrymina@google.com>
+        bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
+        b=YbsWOUDZPkaFxdQHffwG3blUi1mJzD775auBZ+/dOHJbGalG6zutkzcXh0KfAz+W9d
+         0zOkOxjBUI0RF2aipfWEmVanWzI8Xw7nqc3hI5I/4tfQgFacWEN9oHdgL1nr5DNNdw4c
+         bhaVSY32GDAdxFr+oBybQC1ld0fy0FmRdGXhbEezcyCVrDjoHMjcgBYxSBN79CDfi+Eg
+         ev6AU25H7jZ27T3Yxjdvs7RXBVLuaVKXpMWwkeXcXtL8VXwMz98RT11Z/icgqD5WRe9w
+         XwavOnEAjxIzta5O1fVs+4n3Ay4nqDIff7b0aDlGNVWDvxj3NN5REhiNM/mbzBAihTI1
+         HidA==
+X-Forwarded-Encrypted: i=1; AL+hErGHoeUYUxFAVK10rwUuVhCqfel3qaoYUItRPfoYeSVPE0Bcb2joyrLE5v2sd/bDjLgJEHBw4bwj42yOi+Mdg74=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/b8WjmxyBfWTX4nPwvoY7QgJQqHXavQnDjvqDdWwiynfxDeJdK
+	4P3eEGKqICFHSHnHvRXDy5h9n/HpErT2fzvIvRp6oFFCr6s4UifGviCRce3d0cb7RhcDDxQwUII
+	7r7WDMAK8Rh1dhwECvRHHRmtavWszzW2XTKA211Jw
+X-Gm-Gg: AZFdTZf8ld2s5itRf3rFa5IzS6J/Zh7zub+xrTrZR0aKxuXiFq7HfOKeAZ8PsfBFuLP
+	b1XajMqs5bgmNnf1vI6FtZJpktmhrTN+oMzowQ1HiYIUOa8whaTcsALds5WaGO5QOtwaIGtRUja
+	TZg4u//FvcmTpXyBsT2EOoeW8jUfkmlnQNrFfVFCw+dSugxZ7AFjUswJsa/AXI4ETO6P++bEDB4
+	zQG0hTxDMQAMSNdicCpQnB2OYmPCpSeM/IcfjBr9b/AdosX9YDLCVFiZPWUD2a9i0P7rzMooOTC
+	BTYivouJ1ZUZEKTfCsTf4y8LvZWWoSr89jF1FGarbxCxKnRNxt7zugL5/m46JTZ2NiwkNfEeYuX
+	HimS+C5dZ0N7pnMGtnBAyIth94pwOTDoxkw==
+X-Received: by 2002:a05:6512:1042:b0:5c1:4c4a:f026 with SMTP id
+ 2adb3069b0e04-5c1bc6f633dmr1312524e87.4.1795194599155; Fri, 20 Nov 2026
+ 09:09:59 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,96 +104,236 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261120045918.1239746-1-almasrymina@google.com>
+References: <20261119104208.782900-1-halg@google.com> <20261119104208.782900-2-halg@google.com>
+ <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+In-Reply-To: <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Fri, 20 Nov 2026 09:09:47 -0800
+X-Gm-Features: Aa3M54qqiWJmEKSjiAInchWSC43ADdXnD64UgkMS8cTjGJqVilvL89j5dcH7YsU
+Message-ID: <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for user namespaces
+To: Andy Lutomirski <luto@kernel.org>
+Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>, Christian Brauner <brauner@kernel.org>, 
+	Serge Hallyn <sergeh@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, David Howells <dhowells@redhat.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Singh KP <kpsingh@kernel.org>, Casey Schaufler <casey@schaufler-ca.com>, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-api@vger.kernel.org, containers@lists.linux.dev, 
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/20, Mina Almasry wrote:
-> Support leased RX and TX devmem bindings when either the virtual device
-> (e.g. netkit) or the physical backing net_device is unregistered:
-> 
-> 1. Pass struct net_device **dev_ptr to net_devmem_lock_dev() so callers
->    can lock either binding->map_dev or binding->bind_dev.
-> 2. Rename binding->dev and binding->vdev to binding->map_dev (physical
->    DMA device) and binding->bind_dev (device passed to bind-rx/bind-tx).
-> 3. Introduce netif_lease_valid() and guard netif_mp_open_rxq(),
->    netif_mp_close_rxq(), and netif_rxq_cleanup_unlease() against an
->    unregistering physical device reached through a queue lease.
-> 4. Fold net_devmem_lookup_dmabuf() into net_devmem_get_binding() so the
->    xarray lookup, validation, device check, and reference acquisition
->    run under a single rcu_read_lock() section.
-> 5. Always populate bind_dev on RX and TX bindings and handle teardown
->    and netdev unregistration of both bind_dev and map_dev, waiting for
->    synchronize_net() after clearing NET_DEVMEM_BINDING_LIVE before
->    unmapping bindings whose map_dev is unregistering.
-> 6. Resolve the physical backing map_dev in netdev_nl_get_dma_dev() for
->    leased RX bindings, lock map_dev around net_devmem_bind_dmabuf() on
->    bind-rx when map_dev differs from netdev, assert both devices are
->    locked, and check netif_lease_valid(map_dev).
-> 7. Add kselftests in nl_netdev.py covering leased RX and TX devmem
->    bindings across both virtual-first and physical-first netdev
->    unregistration orders.
-> 
-> These issues were discovered during AI code review (Sashiko) of the
-> earlier non-leased devmem unregister series (and subsequent mailing list
-> review) and confirmed by code inspection (not observed in production or
-> reproduced on real hardware). Tested with the nl_netdev.py selftest on
-> netdevsim added in this series.
-> 
-> v4:
-> - Rebase onto latest net-next/main.
-> - Fold net_devmem_lookup_dmabuf() into net_devmem_get_binding() under a
->   single rcu_read_lock() (deferring net_devmem_dmabuf_binding_get()
->   until after all checks pass) and update net_devmem_dev_unregister() to
->   use a two-pass loop with a single synchronize_net() after clearing
->   NET_DEVMEM_BINDING_LIVE and before unmapping bindings with
->   map_dev == dev (Paolo).
-> - Document issue discovery, validation, and testing in commit messages
->   and the cover letter (netdev-bot+sinfo).
-> - v3: https://lore.kernel.org/netdev/20261115022607.348112-1-almasrymina@google.com/
-> 
-> v3:
-> - Rebase onto latest net-next/main.
-> - Add netif_lease_valid() helper and keep lease validity checks in the
->   lease-aware callers (netif_mp_open_rxq(), netif_mp_close_rxq(),
->   netif_rxq_cleanup_unlease(), and net_devmem_bind_dmabuf()) rather than
->   inside __netif_mp_open_rxq() / __netif_mp_close_rxq(), and document why
->   mp_params is cleared directly when !netif_lease_valid(dev) (Stanislav,
->   Sashiko).
-> - Guard the bound_rxqs loop in net_devmem_unbind_dmabuf() with
->   if (binding->bind_dev), keep the !netif_is_queue_leasee(dev) guard in
->   net_devmem_dev_unregister() in patch 4/6 until patch 5/6 resolves
->   binding->map_dev to the physical device so the series is bisectable at
->   every commit, and document the use-after-free in dma_unmap_sg_attrs() on
->   physical netdev teardown in patch 5/6 (Sashiko).
-> - In nl_netdev.py, verify dmabuf and lease on the physical queue after
->   binding, skip when queue_create returns EOPNOTSUPP, probe the physical
->   device on EOPNOTSUPP so a broken lease lookup is not masked as SKIP, and
->   clean up nk_ifname between loop iterations (Sashiko).
-> - v2: https://lore.kernel.org/netdev/20261108055809.2122934-1-almasrymina@google.com/
-> 
-> v2:
-> - Split patch 3/4 from v1 into 3 smaller commits (patches 3/6..5/6).
-> - Clear rxq->mp_params and return 0 in __netif_mp_close_rxq() whenever
->   dev is already unregistering, avoiding queue reconfiguration on an
->   already-shut-down map_dev during cascaded lease teardown (Sashiko).
-> - Drop unnecessary xa_erase() in net_devmem_unbind_dmabuf() and use a
->   local map_dev variable in net_devmem_get_binding() (Stanislav).
-> - Restore ASSERT_EXCLUSIVE_WRITER(binding->bind_dev) in
->   mp_dmabuf_devmem_uninstall(), drop redundant bind_dev->reg_state check
->   in net_devmem_bind_dmabuf(), and expand commit message rationale
->   (Dragos, Stanislav).
-> - v1: https://lore.kernel.org/netdev/20261103232659.1340283-1-almasrymina@google.com/
-> 
-> Mina Almasry (7):
->   net: devmem: pass net_device pointer to net_devmem_lock_dev()
->   net: devmem: rename binding dev and vdev to map_dev and bind_dev
->   net: guard memory provider RX queue open and close on unregister
->   net: devmem: fold net_devmem_lookup_dmabuf() into
->     net_devmem_get_binding()
->   net: devmem: always populate bind_dev and detach both devices on
->     unregister
->   net: devmem: resolve physical map_dev for leased RX bindings
->   selftests: net: add leased devmem RX and TX netdev unregister tests
+> On Nov 19, 2026, at 2:52=E2=80=AFPM, Andy Lutomirski <luto@kernel.org> wr=
+ote:
+> =EF=BB=BFOn Thu, Nov 19, 2026 at 2:43=E2=80=AFAM Hallgrimur H. Gunnarsson
+> <halg@google.com> wrote:
+>>
+>> When a process creates a new user namespace, it receives a full set of
+>> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
+>> in scope, several of these capabilities (such as CAP_NET_ADMIN and
+>> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
+>> containers never need. However, there is currently no configurable way
+>> to withhold such capabilities from user namespaces while still granting
+>> them to workloads that require them.
+>
+>
+> One thought (from the rootns thread): the other decent sized attack
+> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
+> bit.
+>
+> A sort of horrible solution (but maybe not so awful) would be to
+> declare that the bits in cap_userns aren't actually capability bits,
+> and that you need the bit in cap_userns *and* the bit in cap_effective
+> to do sensitive things, and that mounting needs cap_userns to have
+> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
+>
+> I want to sleep on this.  It might actually solve several problems,
+> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
+> or whatever.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+I slept on it. Here=E2=80=99s a counterproposal.  I=E2=80=99m not saying I =
+think this
+is better than this patch set, but I think it=E2=80=99s worth weighting the
+options.
+
+Define a whole new set of privilege bits.  As a
+poorly-painted-bikeshed option, I=E2=80=99ll call them eprivs (for exposure
+privileges - it=E2=80=99s a crappy name but at least it=E2=80=99s pronounce=
+able).
+
+An epriv is not permission to do something *to* an object; it=E2=80=99s
+permission to do something that exposes a meaningful attack surface
+within the kernel. So there=E2=80=99s no ns_has_epriv because there is no
+object.  These are kind of the opposite of object capabilities.
+Additionally, an epriv never grants the ability to do something that
+one couldn=E2=80=99t do in an epriv-less world.
+
+For now, all tasks have all eprivs, even not-yet-defined ones, unless
+user code or config explicitly changes this.  (Maybe some day secure
+boot might remove certain eprivs.)
+
+There should never be a check like ns_capable || has_epriv. It=E2=80=99s al=
+so
+&&, or perhaps caps are not checked at all.
+
+Example eprivs include:
+
+EPRIV_FSOPEN_VIRT: may fsconfig, fsopen, etc a virtual fs like fuse or
+tmpfs or overlayfs.
+
+EPRIV_CLONE_TREE: may clone a mount tree
+
+EPRIV_MOVE_MOUNT: may move mounts around (but only if you also have
+CAP_SYS_ADMIN on the correct namespace, of course)
+
+EPRIV_FIREWALL_TC: may configure any firewalling configuration or tc
+configuration (this includes iptables, nftables, and ebtables)
+
+EPRIV_NET_RAW: may use raw/packet sockets (like CAP_NET_RAW)
+
+EPRIV_TUNTAP: may create and attach to tun/tap interfaces
+
+EPRIV_IP_LOOPBACK: may set up IPv4 and IPv6 loopback using whatever
+new facility we add
+
+EPRIV_NETLINK: may use netlink at all
+
+EPRIV_NET_ADMIN: may use traditional CAP_NET_ADMIN abilities (all
+CAP_NET_ADMIN checks will also check EPRIV_NET_ADMIN)
+
+EPRIV_OPEN_FILE_HANDLE: May use open_by_handle_at, etc.
+
+EPRIV_UNSHARE_USERNS: may unshare userns
+
+EPRIV_UNSHARE_NONUSERNS: may unshare any other namespace
+
+EPRIV_MOUNT_CGROUPv1, EPRIV_MOUNT_CGROUPv2: may create a new mount of
+these subsystems
+
+EPRIV_PTRACE: there are lots of different variations that might make sense.
+
+EPRIV_MOUNT_PROC_PIDONLY: may mount proc-pidonly
+
+EPRIV_MOUNT_PROC_NOTPIDONLY: may mount proc not-pidonly
+
+EPRIV_MOUNT_SYSFS: may mount sysfs
+
+Example eprivs that are questionable:
+
+EPRIV_DMESG: the kernel log is a specific object, and I think it's
+better to control access using something kernel-log-specific.
+
+
+
+There is no operation that increases eprivs -- even without
+no_new_privs set, a task will never gain an epriv, nor will a child
+ever have an epriv that its creator did not have at the time the child
+was created.
+
+The evolution rules could be as simple as, on fork/clone, the child
+inheriting exactly the parent's eprivs.
+
+Or we could bind eprivs to a userns instead of a task, but that could
+be more limiting and awkward than we want.
+
+
+What do you all think?
+
+
+FWIW, I had an LLM make an inventory (surely not exhaustive) of
+recent-ish CVEs and how they relate to this list.  (The below is the
+only part of this email that is LLM-generated, although I added
+EPRIV_SYSFS because I didn't realize that nonroot userns could mount
+it until I asked an LLM, sigh.)  To me, the list and its breakdown
+suggests that there is quite a lot of room for meaningful attack
+surface reductions while still leaving large parts of userns
+available, and that my epriv proposal captures much of this but the
+cap_userns proposal may be too coarse-grained.
+
+(I also asked about eBPF, and my LLM came up with a lot of CVEs, but
+there's an existing BPF token mechanism and I therefore did not
+propose EPRIV_LOAD_EBPF.)
+
+--- begin LLM output ---
+
+**EPRIV_FSOPEN_VIRT:** CVE-2022-0185*, CVE-2023-0386*, CVE-2023-2640*,
+CVE-2023-32629*, CVE-2025-38499*
+
+**EPRIV_CLONE_TREE:** CVE-2025-38499* (only if the check also covers
+the relevant internal mount-cloning path; explicit `open_tree()`
+restrictions alone are insufficient)
+
+**EPRIV_MOVE_MOUNT:** CVE-2025-37988
+
+**EPRIV_FIREWALL_TC:** CVE-2022-25636, CVE-2022-1015, CVE-2022-1016,
+CVE-2022-32250, CVE-2022-34918, CVE-2022-48911*, CVE-2022-2588,
+CVE-2023-32233, CVE-2023-35001, CVE-2023-4004, CVE-2023-4015,
+CVE-2023-4244, CVE-2023-5197, CVE-2023-6817, CVE-2023-3609,
+CVE-2023-4623, CVE-2023-4921, CVE-2024-1086, CVE-2024-0607,
+CVE-2024-27397, CVE-2024-26925, CVE-2025-38001, CVE-2026-23111
+
+**EPRIV_NET_RAW:** None identified.
+
+**EPRIV_TUNTAP:** None identified as requiring TUN/TAP. Some
+packet-triggered exploits may optionally use it, but that does not
+establish it as a necessary blocker.
+
+**EPRIV_IP_LOOPBACK:** None identified.
+
+**EPRIV_NETLINK:** Also those blocked by `EPRIV_FIREWALL_TC`, insofar
+as the documented attack paths use netlink. No additional CVEs
+identified.
+
+**EPRIV_NET_ADMIN:** Also those blocked by `EPRIV_FIREWALL_TC`,
+insofar as the vulnerable operations require `CAP_NET_ADMIN`. No
+additional CVEs identified.
+
+**EPRIV_OPEN_FILE_HANDLE:** CVE-2025-38306*
+
+**EPRIV_UNSHARE_USERNS:** Also those blocked by `EPRIV_FSOPEN_VIRT`,
+`EPRIV_MOVE_MOUNT`, `EPRIV_FIREWALL_TC`, `EPRIV_OPEN_FILE_HANDLE`,
+`EPRIV_MOUNT_CGROUPv1`, and `EPRIV_MOUNT_SYSFS`, plus CVE-2025-38058*.
+More generally, blocks the documented unprivileged user-namespace
+setup for the entire inventory when no usable user namespace already
+exists.
+
+**EPRIV_UNSHARE_NONUSERNS:** Also the namespace-dependent attack paths
+blocked by `EPRIV_FIREWALL_TC`, `EPRIV_MOVE_MOUNT`,
+`EPRIV_MOUNT_CGROUPv1`, `EPRIV_MOUNT_SYSFS`, and many of those blocked
+by `EPRIV_FSOPEN_VIRT`. Coverage depends on whether the necessary
+non-user namespaces already exist.
+
+**EPRIV_MOUNT_CGROUPv1:** CVE-2022-0492*
+
+**EPRIV_MOUNT_CGROUPv2:** None identified.
+
+**EPRIV_PTRACE:** None identified.
+
+**EPRIV_LOAD_EBPF:** None identified.
+
+**EPRIV_MOUNT_PROC_PIDONLY:** None identified.
+
+**EPRIV_MOUNT_PROC_NOTPIDONLY:** None identified.
+
+**EPRIV_MOUNT_SYSFS:** CVE-2025-22089*
+
+CVEs not cleanly blocked by an operation-specific bit
+Excluding the two EPRIV_UNSHARE_* gates:
+
+- CVE-2025-38058: No explicit unmount privilege. The vulnerable race
+involves umount(2) and path lookup.
+
+- CVE-2022-0492: The cgroup-v1 mount bit covers the documented
+new-mount attack path, but not necessarily configuration of
+release_agent on an existing writable hierarchy.
+
+- CVE-2025-38499: The correct gate depends on which filesystem-context
+or internal cloning operation reaches clone_private_mnt(). I would not
+count EPRIV_CLONE_TREE as a definitive blocker without checking the
+exact call paths.
