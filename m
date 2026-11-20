@@ -1,100 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795203320;
-	b=ghc9cs8msm/7orFDQY68BpisQtKABKZZtzzNo/NGlBzRuYD4AEH4gqmvSoe6ciO/pP4q
-	 Z4EH5SWNKiTb8yZJiSvA6Ib3sMCZfWriN1YzeFTxvzAYHQQE9mgiujlX5yepUjg5whqu8
-	 +SYqS2aGL8Babp/A0QM1ZK+5YBp/AP07Xu0hs5oRtpA/sK+8QmB9SMruf/H/pgE1STev4
-	 6zzwW/zVnEyeNZg2ZYQoW/2xLtNuhli7P+o1BzlyMZC799ciptLX1wSKOpYSwou7lJJES
-	 T/aw1JFp+YhBpLbVQDREUcZtewTE2BDrmS6pHuJ5ujeNJ1hwPj9CIfVn9KPiOH/65xg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795203320;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795204888;
+	b=DzDZwYaHNJYlUuNFpPV9tBc/1frXifgKOYmkLHDNcV15/iL5XBRRwPlHs8dieehWOLzk
+	 tL/p6cjR9BWgCDjKT9awqvnZEerniaNoZzncWGSV6Ihel91/ElgGyqBg0pd4j6Ava5Jcz
+	 d5ks+QrHx3B2ziheHdaDF7vPGuw3IZwdDsJvAmB7MGI6VUuk1od2Ogb+a51TGreRbbLK0
+	 /u0wVfE3fzAUzLt8YoLBt1y8Cay3NcoRTMbmYI94zt+aRpSyD1CgwMbziiv6NwiX8Et1d
+	 +lo/FYfZptNG+X7l5tlx8vLy2hda8jhbegLVGQwx4eoakCF5UgFr7quHhF8voIkVWwg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795204888;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
-	b=ZmwBJ7VgsqpdhDVo3A53/HTVGv0dox6GEc4gj5husiE69IRImaOJ3QQRG9fmg1I7i+4n
-	 YkACFnlcx0JYLJPpYoDoJshBkIUEvSIqMu2eRINzSN4Dv3IyeSm5TgiElBN/81TjGLD8R
-	 cBxL+IHdcFjvquPV0h5FzS5nV8+i9KI8LmfvBfvevKMqFyJ9bMMs00yl5ocJgOvxgqZMd
-	 0rCGYcH/yUcm6MXHPNJAGfVYZXMZXECsESfD6y24/INVX+VliMrtNZv9U7lhRXHNR1iG4
-	 Ok/uxmg2L295PvGz/JfFund0R0AGcLAJ9jE7AufvCxCp5SXiGNCaIs8fYShoWZDmY/Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mEayzNdI;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=iSGO4LNksZXfBpmglfcOy2L8jlCLunM6n2azCj2uMuQ=;
+	b=Obh/rbSi2cxf/Q4/HYAUyXWTwym7PzSHEq0nl72efo8WqbtBuQ+aJuT43lx8eb78g9HK
+	 XTvHFqh5uZ11j7ZKRcOlf4Jaw+PGwaLhjN+b9wIwhvhPimHLYoXucAYpv3c7BwIifIcEZ
+	 4e6lQVgIguFHXlFjdVPgQoHbQmTUu719R+TZUlzA8cRmlk3eVtCEP0vrv23jV6ETOaB8l
+	 XWWKMa/mf/OZdLTxcHZLoFvhF0Fuo+QcwqXW+JWIsVrkDMYGtHHjojQp52FjTuNvGGXP7
+	 GaYQFrm7IADPFro41CkMoLtj0ydxauRHihaPO2AA1FxfVjDxzzr/bUJB9GfXJXlv8Ig==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linuxfoundation.org;
+	spf=pass smtp.mailfrom=linuxfoundation.org;
+	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=fDBnhl7y;
+	arc=none smtp.remote-ip=209.85.161.49
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C17260A2611
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 19:35:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C17260A2611
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC426606A6FA
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 20:01:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC426606A6FA
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mEayzNdI
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c50d3ac6b51so499012066b.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 11:35:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795203317; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JSas7IoEZ1a+V3h29Jv+Z8fYd5um2azwnB4fiRRRvuk6t2PGZT9Sq6iwmTaYpnxbZI
-         SoQeGFXIhPoqp0qYNEDh2XwJSA+zQdVIGLzncE0Y3iSDyXJ7O7SYEuZNfF7oL7Az1lyE
-         2ia9YWQYLpWfgrB2VCFMx9vzVVkekjH9Q39A2kXAp61wfjvPFkqrval+xwr20TxWYYoC
-         5QAt0DATCG1MqonMpHyvyv7FD7MJiIjMAvLKUcIVNuwmPj3ATjCVt81PfJ+vpQctQDUp
-         2KcHUXeZF3JOXkj90yBIihcNfFtd9IU+2kg0drVFdNw82aw7CBBfp3RBjInrQ8e5rwH8
-         6jnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
-        fh=DkWkHMgSoFvtZrrgmk66l0TH8f47ZQ2EBVpy7v/yk9w=;
-        b=FHdRrz6jUP6qiJlVdue1qLsA42cKlEqItIBMIsRjWxKkaf85QvWEVqaN7HUNvQnYat
-         cHqUSscbCn7A9kkSfo53p6CL7u4m9FEAH1l5ZDiSXPHCWj4uaNiLUKGNLB72W641N6Qa
-         MECO0QPZCX/4QbmGQOEATwmN027KOqbBZ45W19S/Hja01Ry0hhyv5u+jv4BoBgFg5Vw+
-         sOaJIQuMXSQMutw1iH77mwPYAM8stXqi41fgLNHZH9JcN72cIwuZ+eUec8hp0LWcD4KV
-         Tw8GBPMN5Bbi2FIQjNNLdwrLGgo/RCGwMp12qZZJDWdD2DobjHAtuwKJxR1KqNTOn31b
-         yjlw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=fDBnhl7y
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-717080a2d50so1198079eaf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 12:01:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795203317; x=1795808117; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
-        b=mEayzNdI3RbBXowLZsBRN9QL9E85SiUM+2Zma239sU2Kh5ksSQzTSY0ziLpiHV59CM
-         7SYo/SGHf9f/BuaQcw7L2iv8PrZbptbwejj5saAaosdugF+c/B6mu2N2VcFs3P0J30Xs
-         iJONriwUSnCKSsvV3YNuTBiMdGh2ko87iKPSXKaspCKEn8Eg4sIKq9PASEMF25S3rqL+
-         ikrtvub/lopTx+V9oIV7ULiuNbYeJREQZANEFrs6J/Ra/Ji6BEJHH9f6CAD3wgAgK2ZV
-         tPPXZ4d3w3MMsU/kZaH+NVG54K7lHkycb/em4YaaXq8r36ZApv2ERWimswbtCLQ2nAOA
-         NkvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795203317; x=1795808117;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=linuxfoundation.org; s=google; t=1795204886; x=1795809686; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rVJmHutVQZugQ3dWxOPlJ+2HDsz3aYGVNDsjIuC8ZbE=;
-        b=NHNXHsIAcnqEMkq116xfzQCIPZ+xJuox3Ehx3qCkOB7YvgV506SHNcUAHauPnSM+6q
-         bzoPF/hnpmrOpbNy9rgU5t2dFKR05opdupKF2ulBJDeF3Hv8X26Q+soXI30vLTYoSaFi
-         rpmvOtsnKseVs8lhPX91NEL50Z3h+wCcEw3JVQX7oajFVXDpYG6VYi/PIM+P6P5t5I4I
-         w42H9Elu1Yzvzhvt/r7lpGPd4dua7dsx3NAvrK1utv6lTVt+zkSCkw7knxfVWVarecc0
-         BOLAyZ3ZhFGL5oN+lKHrVrCx0L5/O2MhzgYsyIEOPccdSzZAQ1OlzjlbHY5U/FMJxFHq
-         JGBA==
-X-Forwarded-Encrypted: i=1; AL+hErGW6bWUDmjWYMU57XNIlNQRZF4Owqy4eCiTRLY4nspFrlKTMHxXdZ9WJ6f6W0JQRlgOHI228/l2NCUFYCECSuU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9hxIPOUPwqxKLDgp+mPA19//5zoLoCjvMaj1+CirX0/mu2mi23
-	ui3/AnqlbUOS/bElraVeh9nBc877KUvJQAYOPaGJMYwbCWHx28SI3wrQMhtTryOUHckj6C5bL2W
-	bhP8kPyCoBKaq9YqmFAFpOS78qbE/YTHA29gJJ7qQ
-X-Gm-Gg: AZFdTZfbSgJxdvBW/cRA3Gb0+tMSfkiP60IGTCdoqCp6ePBL4Po2YUKmJ3Nazh5cli5
-	/BDRkhKuOdu9I0wtCciFkzJD0q587YRTa961GfP8h7zV1FZ+L2qgfmH4+lRzEBBGc8tofaQRIWt
-	+Xi4K6AEklb+DcEzVHmi46CLUk/94ZjRHvWcdb+xIOcor+SR9qlmXwUkbYBzpLp+j0Yxm8xE8WP
-	oXPqjRNUJQrYCzBEIMN9BLpV3FhcSOcf7RUv6JIUnIJIasaKIFFZMiyuOf2hVS61RXnLXYX2NvL
-	th1nXyPksXNH/SSxv4n72AXydpPd0vN9KJYiN7RiX2aMayBbXuEEqiGpO+xfJnv1y3kiRYB47SP
-	9G4sKkngByubpG0R3Mo7ROFpvQTnzICElcnupB17bwvXDT1SaPJ4Czc78vB0d2Klk3pYB
-X-Received: by 2002:a17:907:60ce:b0:c25:5159:6a25 with SMTP id
- a640c23a62f3a-c51317e322amr590730366b.6.1795203316417; Fri, 20 Nov 2026
- 11:35:16 -0800 (PST)
+        bh=iSGO4LNksZXfBpmglfcOy2L8jlCLunM6n2azCj2uMuQ=;
+        b=fDBnhl7y/DbSsOMl/RAnyGdtT6LuKWjdhBOA8/KRPGLuAlMzxz2vJ0MyTzF9vZR1XB
+         l+yhPV5RlzKajGdl3BTOJpVuDiDfjd+dTpl1F2+7g4GllslwpYw2w6DvjLMe0IYgmSB+
+         HClgl3YAPX+e+82/dscEH2F0dngNex9YhHcrA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795204886; x=1795809686;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iSGO4LNksZXfBpmglfcOy2L8jlCLunM6n2azCj2uMuQ=;
+        b=SUT8l0+45RUXpIzqDK+2MHXldMXWkQRR17/UiFAusgH/vGkPXe2x/NMtuIf656Jeh/
+         se4j8p468bzzCEzQ5ehoh2DAS2tZNoHbRkAm/7ouGiXBrR3DmWd9jNQQEM1KxQDRYGS1
+         ITSWcRYg/0h8PjFXTaUmCu8mnjr3q5/bH4Jx21E8ewTkgiZbUDkUkb8RdpJx1UL3c7OY
+         ZCKiyAGmz69pid+GHmi7+b1oFf6EpziRcQ7S03mFwu3nAZt8MGFEE9OVZOlQB3ep5Lcm
+         kTUZxUAy1mVWW57wSJ7kyd/GWPdbGTdQugYsjZQOjPJ67f06hfdGurMI/f/FBE37b0x9
+         sdUw==
+X-Gm-Message-State: APuU4Z+Hg3Qi7s5ug+PR6ncvI1iR8lpuucKXQY7ori5oNsOA7VjPvWsI
+	T9guM+9uThUxwwgX8OThS3Zf4erH8+2FStBiwEEfPYe0aZENywLn5zC04OG5NDxyciQ8SEBgq/U
+	agfrzBhA=
+X-Gm-Gg: AYBFou2YwdsWIHUE3OtadgXBnMRJ4N8X9dp7pbLGjMbSzLRTRyYk1WsYgwDH+BHoivI
+	1nc7zhP3BY5ENFPHRmtFeHcxNUrIfj1JvsE88m4BsDQVk7JAq/jW4lskvyzc0BdZKT1ZdEnjZxW
+	CTFu15lYgRhUweXlxMlQnvSPKt1Cya6JgFSElfGVhN6NUxGuhWDLuvr8lEyqrE1ogCqDxcdfvGc
+	o8AEeIeViN2XsPSTKOAJXl2RQwamfMqIZtn+4C6rj/sUw1TBSucjwqtDZxddv88UlgE6EbKin3p
+	IY3+vDbAmklUnXiMrUbceq2v/GU8ArSgsClAtmLcc13C7CdIT0kELp8pm3D5VdGJ9i9JWr7li2e
+	6WymKy4S0peV/iS7bqdc4HgYVujnaVc+mM0GoEcDkf002pDf/Mh4cya8RboNE20giLW+DhHskzM
+	hQvSi+RrtZFKB50Wot5w5YXdDGB42g3gCwC72fm6Qbgfgbd1YsCD6f+eQWldwxwhoUoK6IVfYPR
+	/pyO+ELz/btKSmCB3uCMGkV6P43xg1wUfGoGJ9Q/gEsodOHzk19vzXuZvfKTB3tmMOPZ1gYTzEt
+	DZwnR6aAF5JZybCyl8JHMXjELMRLJjhK0tZk7nnjn4VKqDDKUKhXKCz86biX
+X-Received: by 2002:a05:6820:a511:10b0:6d7:d91d:d77d with SMTP id 006d021491bc7-71b395172a7mr2502103eaf.58.1795204885592;
+        Fri, 20 Nov 2026 12:01:25 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8631670c44dsm2751259a34.0.2026.11.20.12.01.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Nov 2026 12:01:24 -0800 (PST)
+Message-ID: <f3bdc42c-8c28-4b5c-bfa0-41ac31b37a43@linuxfoundation.org>
+Date: Fri, 20 Nov 2026 13:01:21 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,54 +88,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-12-wusamuel@google.com> <20261120-antitoxisch-flott-sense-8c2a09fc9679@brauner>
-In-Reply-To: <20261120-antitoxisch-flott-sense-8c2a09fc9679@brauner>
-From: Samuel Wu <wusamuel@google.com>
-Date: Fri, 20 Nov 2026 11:35:05 -0800
-X-Gm-Features: Aa3M54pZ23SffgU83N8qfNlS7foyPp12zk6Rc2qBKf5ucMmFiR6202xmw20UsI0
-Message-ID: <CAG2Kctri9R6b-_OiKcsabdBmLdeWGVY_zmpqqFgDHLKKCDDezA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/9] Documentation: ioctl-number: Add
- PROCFS_IOCTL_MAGIC range 0x10-0x11
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
-	David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests: use local variables consistently in
+ runner.sh
+To: Jori Koolstra <jkoolstra@xs4all.nl>, Shuah Khan <shuah@kernel.org>,
+ David Ahern <dsahern@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Hangbin Liu <hangbin.liu@linux.dev>,
+ =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <ricardo@marliere.net>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20261118-kselftest-run-timer-v1-0-53a838b2d62b@xs4all.nl>
+ <20261118-kselftest-run-timer-v1-1-53a838b2d62b@xs4all.nl>
+ <8a436334-d306-4a34-bb7b-efc713aed0f8@linuxfoundation.org>
+ <1254980601.2097872.1795173276553@kpc.webmail.kpnmail.nl>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <1254980601.2097872.1795173276553@kpc.webmail.kpnmail.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 20, 2026 at 2:23=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Fri, Nov 13, 2026 at 02:12:46PM -0800, Samuel Wu wrote:
-> > +'f'   10-11  linux/fs.h                                               =
- conflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
->
-> Those are PAGEMAP_SCAN (16) and PROCMAP_QUERY (17) which are already
-> in the tree. The two ioctls this series adds are 48 and 49, i.e.,
-> 'f' 30-31, and they aren't registered here at all. Please add them as
-> well.
+On 11/20/26 04:14, Jori Koolstra wrote:
+> 
+>> Op 18-11-2026 11:13 EST schreef Shuah Khan <skhan@linuxfoundation.org>:
+>>
+>>   
+>> On 11/18/26 06:40, Jori Koolstra (CIQ) wrote:
+>>> run_one() and run_many() assign their working variables without
+>>> declaring them local, so they leak into the global namespace of
+>>> whichever shell sources runner.sh, i.e. run_kselftest.sh or the
+>>> RUN_TESTS recipe in lib.mk.
+>>>
+>>
+>> Hmm. so if a timeout value of say 60 seconds comes from a test
+>> settings file, does it persist? Can you see that if you run a
+>> few tests using TARGETS variable?
+>>
+> 
+> No, because it is doing
+> 
+> 	export kselftest_timeout="$kselftest_default_timeout"
+> 
+> at the start of run_once(). I was just trying to get it to be a bit more
+> consistent and less bug-prone. We could also add readonly, which is in
+> POSIX. But that seemed too much.
+> 
+>>> Declare these variables local so that local is used consistently
+>>> throughout the file and the sourcing shell's namespace is not polluted.
+>>> This does not add a new requirement on the shell: local is already used
+>>> in run_many(), in_netns() and run_in_netns().
+>>
+>> Makes sense.
+>>
+>>>
+>>> Also, obey the convention to use upper case names for variables that are
+>>> constant once assigned.
+>>
+>> Can you elaborate on this convention?
+>>
+> 
+> It seems to be what was used for runner.sh, local variables set once are in
+> uppercase.
 
-Patch 1/9 here only backfills the existing PAGEMAP_SCAN (16) and
-PROCMAP_QUERY (17) entries. 'f' 30-31 for 48 and 49 are respectively
-in patches 3/9 and 4/9, where their functionalities are added.
+Drop the change. There is no need to add churn to fix something
+that doesn't need to be fixed. There is no strict convention here.
 
-Patch 1/9 is standalone, so it can be picked up independently (or I
-can resend it separately).
+> 
+>> I don't want to see these changes combined. We don't combine
+>> cleanup and convention changes with real changes.
+>>
+> 
+> I'll separate it out.
 
-Thanks!
-Sam
+Send just the real change patch.
+
+thanks,
+-- Shuah
