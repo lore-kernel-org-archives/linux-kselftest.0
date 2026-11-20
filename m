@@ -1,50 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795206817;
-	b=MjOYoYoWSHwsiqK9HxJFk6PKhkTBIOrUp4Nzo+DJkrR9CcNZuQAiuJ47fngk42iUfToJ
-	 X7D5ii2mLhneo+q20BsvfWRs6hjC9m/QN5r+dZdOIEQ/1vZEvdvHoAFpFV2Cp+CY+mUGG
-	 ZErmWU9D0/krOiwOJo+HdMCInYU66xeu2U1LP3bpMcKlw6Kj4h/m9YdQBLp0VFOVX0BsH
-	 /k8JI6DYxdQXhpPJPG4PFcoPRl2Z2JOFTOYnyq7+DpXzhlVQ2Vu9KnD/+24P4ZqQ15SIq
-	 5JProlMWTO4F+MAelyGCxhaKfGf+pzKHReJmphDec7np0aezXSUzeWepk6nNpsP2IpQ==
+	t=1795206823;
+	b=IfEN2IiFH9Y2ugELIRCOjOt0FBBxpYc85ysRqNwJxl1m92+igmj1DHdrJ+Q3xG9mtlkl
+	 XVsfD7hAfFQpdbw6KKC2RTq/4fnOZbB+QPPGO+v7/be3TjV/inCjFcsVQbY6D8zk0slFA
+	 UXaaJENOYYKS9kZ82ioCTOv+hm9dA2mvlWq5XI3dEmSDwCCisseISkIa/RLnjH5Kgccd+
+	 HH7uPuxJ62J3H8ca0J82sD1e/HvUGGwIVg3uiGkP6S6BmYeMgKEubHnF0Q/0Zg7p3zjkz
+	 Wc4BPc/CXuqvYkiaOuFP8uPxPa3vpdU6AMmA69X5taR8Jjfa6c76CMzwBuRKBjG4H+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795206817;
-	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=DcgwX7pf0/PAjyuyPUGgUqkja2QDO220o+h3fobkkQI=;
-	b=l1IC97z65pGucCXzaHngIqGuwx+j7pGdXXdrn9PkCGkqP2B4CbAxvb3Sxvqvss4ZPdNL
-	 504dpIWGEy9a4gGzDlGflIwgz/+EYE3MU07OMz8flW6L5jrOvWzKpLUdE/BjPplKsUnse
-	 HJFIdG3xdyceJaHZFuG8dwKC2lI/lrhsH9sXqAf56Pg3tzyTWHVTPttaMMwVtC5oNvORi
-	 2Ro8IHM2oA1MGU8kiI65nxtJ1wgwcKp+bqcPBVSEXa6sKCOrjZPPbxrMj4C/detR19JwO
-	 nj4nBKjHBiy/rnza26AdKKptjDvx5YzO90kSrVuuGnafpl1voBgQzhjP2lrxMG7qZkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795206823;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=nAfODRjsLIAeLMWeavhb8K8jBx8m4UlItOf7jPRMbxU=;
+	b=bjMBIrSgknZaiBnrxYMeOsRlQJe1lZpkgd/cZQY4gZFILwvVqxkt82nQkV3EYXfVRS5Y
+	 QU1I4XGaLxlPPNhLqO1vugOZk2QUli9GHkYItzW445Ab9i/+WCht5apWerGrs57GyIUUz
+	 lVKwvIe9xEAbX8NJby0yZ4Svb3b9F+kdTNw/E3KLd6fhLvF3dJwyz1atQTIpFDr7mXmzU
+	 BZOKfG79M6c0r9ulCy2m9vD/r4m+zIFurQdhflzFR6kxYjqneEyEBwqTYoJG2tSaQrBpw
+	 hSnQPc5cDW2vNCvVkV7UDh/xmhSV2XxOcGvUQfEe9Hvn3bJm/F764LBzNxZeyVI5Kow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KiFuzHzt;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TrCTFleA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19864606A6D6;
-	Fri, 20 Nov 2026 20:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3004606A6CB;
+	Fri, 20 Nov 2026 20:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KiFuzHzt
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70371F000C6;
-	Fri, 20 Nov 2026 20:33:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TrCTFleA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66241F000EB;
+	Fri, 20 Nov 2026 20:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795206817;
-	bh=DcgwX7pf0/PAjyuyPUGgUqkja2QDO220o+h3fobkkQI=;
-	h=From:Subject:Date:To:Cc;
-	b=KiFuzHztMqofIiZrMZL8fYbB6wSoXNh9lrzLqytt9ShCyoXK17NycQJvKaritlYqJ
-	 Byr6sYJXXr1aQAV2f282/CzvQJLdthXfVBi2iGJix3taoXgc22/Lo7NPZ4pmDhLXQ+
-	 90U/cnBJ+w+ETIgL0+7vxJkLvv387n4a9zLXeeFHyvbDhOGrnSREqM83SDSXDag5xZ
-	 usx7k191FHqo4J1+Q+F9y9CSFyN2mDTi3GHELGDP75y1r9q6SJBDYZ4AZzsXbVj39G
-	 8Pbs4822z73V4lU5LVSrfCCwP2mhXCK/R62yvxpDGtF2ZvKHTO9wkcsLtIkWsi/1lZ
-	 X9r2APu3NuKzw==
+	s=k20260515; t=1795206823;
+	bh=nAfODRjsLIAeLMWeavhb8K8jBx8m4UlItOf7jPRMbxU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=TrCTFleA4zQKtzI+j2l6PL/Au4hvUYDO3rYOgXsDGDekrinpm+ciHXipi8loBM/E9
+	 HpUjpPhDV11sHRaqpAQK3QYKNzC75FZOicyY7BnSiJ+2DXDuFNLVt2xP4b41G1ESgn
+	 AWrJojeuFmlNQdkZ6CZQF03OaS+qeqLjuuT1QRqK/GLIymLE/lfttJ4wqoqkatp7qM
+	 MFX18OeREqVYVcqp+uIpg++JzYxm0OcGxYUVoym9ZB4NcAch10ygQw+bAn0lsmL/VP
+	 JrXVLQJwdTxypvjkZosMsfUAxqpGFqlDrDfO2UY490O7+yflE2tQOfLiS2tc3/Rr/X
+	 DwQQ4qeYb/Vyw==
 From: Tamir Duberstein <tamird@kernel.org>
-Subject: [PATCH bpf-next v3 0/8] bpf: Fix ring buffers and add a libbpf
- iterator
-Date: Fri, 20 Nov 2026 15:33:13 -0500
-Message-Id: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org>
+Date: Fri, 20 Nov 2026 15:33:15 -0500
+Subject: [PATCH bpf-next v3 2/8] libbpf: ringbuf: Use compiler atomics
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,12 +53,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/32QzQ6CMBCEX8X0bE1/sIIn38NwoO0WqqZgWwiG8
- O4WuGhiPG5m5pvdnVAAbyGg825CHgYbbOvSwPc7pJrK1YCtTjNihAkiKMeyM9hbV8veYGNHCBi
- KKpdcCcqOEqVc52EVUuyKFruDMaJyU0Ivb6Digly8jQ2x9a+1fqBr4k/TQDHBIBjPcqrkiWWXO
- 3gHj0Pr67VgYJ+I/BeCJQTnRgPhhdaGfyHmbUkPzz59Im43lPP8BnhAaaEnAQAA
-X-Change-ID: 20260613-bpf-ringbuf-fixes-e9a8b3c6125b
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261120-bpf-ringbuf-fixes-v3-2-ff7ca15d6c37@kernel.org>
+References: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org>
+In-Reply-To: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -75,138 +71,89 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Andrew Werner <awerner32@gmail.com>, 
  Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>, 
- Tamir Duberstein <tamird@kernel.org>, Sashiko <sashiko-bot@kernel.org>
+ Tamir Duberstein <tamird@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5984; i=tamird@kernel.org;
- h=from:subject:message-id; bh=WkH6CszC1iT8xCL8zMXL0SlhHk4AwMQ8A12AjbhYu7A=;
- b=kA0DAAoW0EwOJRfXEpcByyZiAGsArpmiaMsfEVnp58Kvg2eZFWVCW/jRVeo6dbzk/JJ/ziOlV
- 4iRBAAWCgA5FiEEYRXCvWdl27wdae7H0EwOJRfXEpcFAmsArpkbFIAAAAAABAAObWFudTIsMi41
- KzEuMTIsMCwzAAoJENBMDiUX1xKXXqYA+wQxGvCMN/hZFBBPOk7h3Lqoms0mDNXheBGVDDyLfR6
- 6AP0a4FA+X/GOkMvZmVkyaky1UdDN+LxxJnFcXJX/23nXAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2695; i=tamird@kernel.org;
+ h=from:subject:message-id; bh=tiJWSCTQrAnzCESoEaoBUS9OAytDFBLTgPyN5niMMSk=;
+ b=owGbwMvMwCV2wYdPVfy60HTG02pJDNkM62Zy6f2JqkmTzX9W/mPdh+oLavVvZFuiVkXNm7Z49
+ s+zv9c/65jIwiDGxWAppsiSKHpob3rq7T2yme+Ow8xhZQIZIi3SwAAELAx8uYl5pUY6Rnqm2oZ6
+ hkY6BjrGDFycAjDVzmcZGXoTXSb+sXUN3HPI58R+MaWHv/Jd5k/+brgw/VLXNanb36QY/oq/M11
+ npPu+7NWka7W7WVxW+K3YZFd2vDF+we7VE4wKGzgB
 X-Developer-Key: i=tamird@kernel.org; a=openpgp;
  fpr=5A6714204D41EC844C50273C19D6FF6092365380
 
-The ring buffer API exposes records only through callbacks. Callers that
-need to stop at an operation-specific condition have no non-error way to
-end consumption early.
+Consumer-side ring buffer code uses architecture-specific smp_* helpers
+for shared memory accesses.
 
-Andrea Righi proposed using positive callback returns to request early
-termination. Andrii Nakryiko noted that positive values are already
-ignored and changing that behavior could break users, and suggested a
-new API:
-https://lore.kernel.org/bpf/20240310154726.734289-1-andrea.righi@canonical.com/
+Use compiler atomics for shared-memory accesses so the wakeup protocol
+can use portable compiler fences with the same atomic interface. Acquire
+and release ordering is unchanged.
 
-Discussion of overwrite-mode consumption identified an iterator as a
-better zero-copy interface than callbacks:
-https://lore.kernel.org/bpf/CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com/
-
-Add a caller-owned iterator for consuming one ring buffer map directly.
-It returns one borrowed record at a time, allowing ordinary loop
-control. Each next call ends the previous borrow and lets the caller
-choose whether to publish consumed records or defer publication for
-batching. Existing callback-based consumption uses the same internal
-iterator core while preserving callback return semantics and per-record
-consumer position updates. Callback-based consumption and public
-iteration of overwrite maps remain unsupported.
-
-This v3 targets bpf-next/for-next. The following patches from v2 are
-omitted after rebasing:
-
-- 1/8, "libbpf: ringbuf: Honor zero consume bounds", was applied as
-  40edacd47993.
-- 2/8, "libbpf: ringbuf: Prevent NULL callback crash", was applied as
-  c0628a0659b6.
-- 3/8, "libbpf: ringbuf: Reject overwrite callback use", was applied as
-  f756eedb24d4.
-- 4/8, "libbpf: ringbuf: Handle position counter wrap", is superseded by
-  Israel Téllez García's independently developed fix fdd4fad0bbbd.
-- 5/8, "bpf: ringbuf: Handle pending position wrap", is superseded by
-  Israel's independently developed fix 6ff5b56a50c5.
-
-Patches 1-3 resubmit v2 patches 6-8: "bpf: user_ringbuf: Handle position
-wrap", "libbpf: ringbuf: Use compiler atomics", and "libbpf: ringbuf:
-Prevent missed wakeups". They fix native-width wrap in the kernel's
-user-ring consumer and a missed-notification race in libbpf. The atomic
-conversion provides the portable full barrier needed by the wakeup fix.
-
-Patches 4-5 add the caller-owned iterator and simplify its traversal.
-The iterator preserves the wakeup handshake when destroyed before
-exhaustion. Patches 6-8 contain the selftest refactoring, wakeup
-regression coverage, callback-semantics checks, and iterator tests.
-Selftests follow at the end, as requested during review.
-
-Andrew Werner found the counter-wrap and missed-wakeup failures while
-implementing Aya's ring buffer reader. Aya's original implementation
-contains the equality reasoning and edge-triggered regression test:
-https://github.com/aya-rs/aya/commit/e2cf734490bc188bcedb1eac92d23d81123e42cd
-
-Aya later fixed the consumer ordering with an explicit fence:
-https://github.com/aya-rs/aya/commit/7277a57ea8cdb74918d3096a4b22b6d814481973
-
-This reroll continues the ring buffer fixes series and brings the
-callback-free API into the same submission. The original callback API
-proposal is a related submission:
-https://lore.kernel.org/bpf/20260611-bpf-ringbuf-callback-v1-1-c32b6cb6ce40@kernel.org/
-
-Review requesting that callback validation and the new API be discussed
-together:
-https://lore.kernel.org/bpf/CAADnVQLuNSE5AM6Cqzs4yDFrhTyD=j-y5dfya3dLwk3si9v26w@mail.gmail.com/
-
-Earlier versions were developed with Codex (GPT-5.5). Codex (GPT-6)
-assisted with combining the series, addressing review, and revising
-the iterator, tests, and changelogs.
-
-The libbpf build and BPF selftests have not been run.
-
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 ---
-Changes in v3:
-- Combine the remaining fixes with a new caller-owned iterator and its
-  tests, targeting bpf-next/for-next.
-- Drop v2 patches 1-3, which were applied, and v2 patches 4-5, whose
-  issues were independently fixed, as listed above.
-- Preserve -E2BIG for oversized user-ring samples when validating the
-  advertised window.
-- Move the fixes' selftests to separate commits at the end.
-- Simplify the wakeup fix's bound and error exits while retaining its
-  fenced busy retry.
-- Keep the compiler atomic stores on single lines and follow the BPF
-  multiline comment style.
-- Link to v2:
-  https://lore.kernel.org/bpf/20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org/
+ tools/lib/bpf/ringbuf.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-Changes in v2:
-- Fix additional native 32-bit wrap paths found by Sashiko review.
-- Explain modular position comparisons and leave mixed-bitness ABI work
-  separate.
-- Preserve the wakeup handshake across bounded and callback returns.
-- Follow BPF comment style and simplify wakeup test cleanup.
-- Link to v1: https://patch.msgid.link/20260613-bpf-ringbuf-fixes-v1-0-e623481cb724@kernel.org
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index 78fcb3df243f..db67eb98f3e0 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -270,13 +270,13 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ 	if (n == 0)
+ 		return 0;
+ 
+-	cons_pos = smp_load_acquire(r->consumer_pos);
++	cons_pos = __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
+ 	do {
+ 		got_new_data = false;
+-		prod_pos = smp_load_acquire(r->producer_pos);
++		prod_pos = __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
+ 		while (prod_pos - cons_pos > 0) {
+ 			len_ptr = r->data + (cons_pos & r->mask);
+-			len = smp_load_acquire(len_ptr);
++			len = __atomic_load_n(len_ptr, __ATOMIC_ACQUIRE);
+ 
+ 			/* sample not committed yet, bail out for now */
+ 			if (len & BPF_RINGBUF_BUSY_BIT)
+@@ -290,14 +290,13 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ 				err = r->sample_cb(r->ctx, sample, len);
+ 				if (err < 0) {
+ 					/* update consumer pos and bail out */
+-					smp_store_release(r->consumer_pos,
+-							  cons_pos);
++					__atomic_store_n(r->consumer_pos, cons_pos, __ATOMIC_RELEASE);
+ 					return err;
+ 				}
+ 				cnt++;
+ 			}
+ 
+-			smp_store_release(r->consumer_pos, cons_pos);
++			__atomic_store_n(r->consumer_pos, cons_pos, __ATOMIC_RELEASE);
+ 
+ 			if (cnt >= n)
+ 				goto done;
+@@ -412,8 +411,8 @@ struct ring *ring_buffer__ring(struct ring_buffer *rb, unsigned int idx)
+ 
+ unsigned long ring__consumer_pos(const struct ring *r)
+ {
+-	/* Synchronizes with smp_store_release() in ringbuf_process_ring(). */
+-	return smp_load_acquire(r->consumer_pos);
++	/* Synchronizes with the release store in ringbuf_process_ring(). */
++	return __atomic_load_n(r->consumer_pos, __ATOMIC_ACQUIRE);
+ }
+ 
+ unsigned long ring__producer_pos(const struct ring *r)
+@@ -421,7 +420,7 @@ unsigned long ring__producer_pos(const struct ring *r)
+ 	/* Synchronizes with smp_store_release() in __bpf_ringbuf_reserve() in
+ 	 * the kernel.
+ 	 */
+-	return smp_load_acquire(r->producer_pos);
++	return __atomic_load_n(r->producer_pos, __ATOMIC_ACQUIRE);
+ }
+ 
+ size_t ring__avail_data_size(const struct ring *r)
 
----
-Tamir Duberstein (8):
-      bpf: user_ringbuf: Handle position wrap
-      libbpf: ringbuf: Use compiler atomics
-      libbpf: ringbuf: Prevent missed wakeups
-      libbpf: ringbuf: Add a caller-owned iterator
-      libbpf: ringbuf: Simplify iterator implementation
-      selftests/bpf: Refactor lifetimes and test wakeups
-      selftests/bpf: Verify ringbuf callback semantics
-      selftests/bpf: Test caller-owned ring iterators
-
- kernel/bpf/ringbuf.c                               |  11 +-
- tools/lib/bpf/libbpf.h                             |  90 +++
- tools/lib/bpf/libbpf.map                           |   3 +
- tools/lib/bpf/ringbuf.c                            | 187 ++++--
- tools/testing/selftests/bpf/prog_tests/ringbuf.c   | 660 ++++++++++++++++-----
- tools/testing/selftests/bpf/progs/test_ringbuf_n.c |   9 +-
- 6 files changed, 757 insertions(+), 203 deletions(-)
----
-base-commit: 82cc2b4383e3edfa1026c8612fb4e90a9329ba11
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-change-id: 20260613-bpf-ringbuf-fixes-e9a8b3c6125b
-
-Best regards,
---  
-Tamir Duberstein <tamird@kernel.org>
+-- 
+2.56.1
 
