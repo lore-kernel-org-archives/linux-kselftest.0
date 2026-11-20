@@ -1,65 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795145446;
-	b=RTqLHNUgRC1/G8q0RNUWC3vJXELWPOXat6og3z/+P0A7KIhgXO2aIxNN8TyLwSU0wRnX
-	 4q49WeMUO3nuJKydVJkV/O+YghSQBdvJ055bk03qtbL0RplvHB0+heA4jy834SFhmq441
-	 o56oiEnYOiAGkXsGfw9RE00dpD2l0S4dH/t5O/NFUg2vhEW4kYyN0hnGz/PjWIBRRPdcA
-	 jpTj7N0WZJV18IYofT00uF2gEIBC6M7becInwN4PAXiWh1aS8ZcZ/QPBD5ZoHlukjOY4l
-	 O6Toz6SNpquxQZYHyTWdIRyze5HshAp5XgQqAEo7bsgn8OcM2AmcVwk9D9SxzqT6iag==
+	t=1795153800;
+	b=0Y4esGakxnwlCJWATzblD3wlDj2tBpbFHx1yfRREE6n38CPBw8h0XbGiqBtAsywSQybG
+	 SM1QdypHYE6ZXQLNKeMICahE3H8Hg81XPXHmgHfCv6EWLxfc5nwVlbhtPM15YvKbl14Y3
+	 A7cJ8P/bg4BpepYoU8dp75HznVJ/7G635/iPlStD4n5XDNdLB1iVo8PwlArZPoAl1LBot
+	 HKaQTdjObFOGAYb+e9mLM1uXN7qn71bzhG5gwizxbaFqS3QZ1Ka5PGi7be3hEmw72/cvI
+	 ONASeXxAsvcm84whh3uF6rV3wYbTEVRRNFRD8f51heRlv6ITG7rNzjrLba2ZbGJFlxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795145446;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=vK4QUXUiTfHup41my65EvPZk5UpSNzvc3ogu+VzFD00=;
-	b=a4II2Mh38vBhBDNny7FY0zBp/2y6eWxxj5q4OX/AFdajYFK280V5d6AN7h1jjIRc+AjH
-	 qlJZhmSV/yFSNLD+pzrVO4jmvxoC+0iDwo5w9yi6NYVJT48qr+PcpQ0s9M+LKYfwzNU8n
-	 VqtsWZ70wIgRrDsYWDznuxl09k35tBIHaZYtKYJT9ylhSczj58PNs8ht3WEfjlEfvZZW9
-	 HEykXGIA2rgDQqfr4o+rSZEtHA6J/81YG4ezPUeMjzvTDArGIhJKOXgFzL/V1cd27DB1l
-	 rNDRsIBKpaPA6hVEf3nawgLtmcZ5e/5+T3vnMiNKOOREB/VmmZvyGuyQCzoALa4vY6w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795153800;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=8UF8BKZr/PlanibZT8mYgrWg11NSrRSfUMYZM1sw1ow=;
+	b=LVqh1DWu0MSOu7y1svSJhkTWFEG04KAjaeJPXtGempkDvCqN/pVItQl1/TlphqWkF7df
+	 Q8Ic3YuyeP5HWdM1M3t5H4VUs75YLdwtypY21cFrbAjX6IzaJ/yoIl9yFKjpxh+VTfbDH
+	 kRuYOk02WQomp6w+3GD8VlwJjEXUJte9bE54FZ4OpVsr1kmLBnaM9BELV4wSkfi8QF9LV
+	 H0PZi+XhgGYg0fZHqGSJmLUX78wYsJgUAdRFilOl2pZq3zYBa/KvUbaBtKfdGhJveLBm4
+	 8XtRrIhLvBkIStiFUucg/lUZ60At0WfTgEbZAK3cFd1yBlI6YwV1EDn6gAmTe1shh9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c9lX2c1R;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cvOQrSaR;
+	arc=none smtp.remote-ip=74.125.82.71
+Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5C460A2611;
-	Fri, 20 Nov 2026 03:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240A5606A320
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 05:49:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 240A5606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c9lX2c1R
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63FE1F000C4;
-	Fri, 20 Nov 2026 03:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795145446;
-	bh=vK4QUXUiTfHup41my65EvPZk5UpSNzvc3ogu+VzFD00=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=c9lX2c1RT4YfEQqeEy899DsroMwn1127JTLXm/ZCxtukerCv0uN4Q7ILBv5AqFRhM
-	 2zRxCdlmVPH/FIM8KEm0ejsx8ujKfaPOFnOKv9Wig4WlFHJTMhNft0AWrOnrreJyBQ
-	 MqJqd/alsJSsmplI0NoiGDBuKttA+6mS/IZdKsWMHuMMPQjbNklkPlEBxkvvEhN3FA
-	 sYtQkYon8kQeA6ITmFxy+kgOTJ+SHt77ayGOFqv4lXft8Bn7ALOTgtWSsbLzkqHJI/
-	 8Xo7g+F0/JBbWZvWo0+7kejev7mXhcCFqpcW5546DVFhBFYqJuCHJB+wHWno6pOQ5U
-	 Jne4NFJqxzxCg==
-Subject: Re: [PATCH net-next v2 09/10] net/mlx5e: TC, match the tunnel key
- without a tunnel device
-From: netdev-bot+sashiko@kernel.org
-To: acassen@corp.free.fr
-Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- jhs@mojatatu.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
- bharat@chelsio.com, donald.hunter@gmail.com, corbet@lwn.net,
- skhan@linuxfoundation.org, rdunlap@infradead.org, dsahern@kernel.org,
- idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
-Date: Fri, 20 Nov 2026 03:30:44 +0000
-Message-ID: <179514544426.3136.3728064977734495529@kernel.org>
-In-Reply-To: <20261117092915.255194-10-acassen@corp.free.fr>
-References: <20261117092915.255194-10-acassen@corp.free.fr>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cvOQrSaR
+Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-1a5005fd0f8so1123238c88.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 21:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795153798; x=1795758598; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8UF8BKZr/PlanibZT8mYgrWg11NSrRSfUMYZM1sw1ow=;
+        b=cvOQrSaR2mrHRMOAsAe0QrLi0fTMNmQ8zRmvDoSy+opL4iSRI5PHwbxj5NQzo0xIM8
+         YMi54dvwySBqnghmqhwy0MTaS5q0ByfMJUAl2uDB19XH+CcpL3S0kyyugj5BkbQL+FnX
+         k0mFEngdiTfdqbLuw8dwNZxL1gIjWSkw5Ksb/n2NJJACY3dsvpMl+q+tJSbE2IPULI9l
+         6MM4lPMiN+bYTDQxGP3Kx8zXZyQu5QMZDxml0xMSkw2EaaqWGsXYo0a5WY/+xeKp92TR
+         FsWCspBIPxHgelRbeiU2udJy0xDdhpKEh4WqHeE6KJoQWGBpUlHXhOJlwGTqIvjdjvTW
+         Bjuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795153798; x=1795758598;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8UF8BKZr/PlanibZT8mYgrWg11NSrRSfUMYZM1sw1ow=;
+        b=W19aDz8pB4MvA7cUeYdU40H/SzT+D+YwckDU3WiyiV2okfsF6kcBX5vsDBGM1jYFCo
+         uPu4i5mMHaz0vi61nsNrpWLyJlrUxhbJw+/ItOAUkE4rRyQjFOE7t5UtGKpOxNPHNyj0
+         e53Y4vUcYOQtvqro8eZJWSzqerATvClhPR7GvanYdYwcaRv2uj9f+3o54/ceJ5Yi4L83
+         LoRfitQzDTwXXERCUD2rt7tbAzx3B0gjJ0nkUZx3ThXAJDuGEmJnsxwaEsShf072ZBvC
+         l5k7ND0Wg3cPAPZtgbTIF8p1FoLkilmxl4zyILVuJGXUA5BRJjihumHi1B4VbE7G99pV
+         cXWg==
+X-Forwarded-Encrypted: i=1; AL+hErHmj0P4oDMi+PnhLTdsjV26+XBj88pj9joM7QWtQhcwCjbRM4OUIQrzQxEETLYRGN9P7PuZJxGi4Qo08eVnO9o=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+JhmMYM8zDie/pehVDdsjQpzpQEHzi6PSaE7WQIOO9bvRwyGQh
+	GjmP7YFMtdu+K4/J2NKOwEeYUmLEPX3KGJZG6pTHHcSnNjl0gQKBVNyylFjrC9MkV2lIJ3105RD
+	u5xO99F+xNQZcjZH5F43DepjjCg==
+X-Received: from dlbrc10.prod.google.com ([2002:a05:7022:ea8a:b0:1ac:f9af:14c])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:701b:2616:b0:1b3:ba92:145a with SMTP id a92af1059eb24-1b5568e0a27mr1762200c88.19.1795153797762;
+ Thu, 19 Nov 2026 21:49:57 -0800 (PST)
+Date: Fri, 20 Nov 2026 04:59:11 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,172 +75,119 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
+Message-ID: <20261120045918.1239746-1-almasrymina@google.com>
+Subject: [PATCH net-next v4 0/7] net: devmem: support leased RX and TX queues
+ on netdev unregister
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Weiming Shi <bestswngs@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
+	Stanislav Fomichev <sdf.kernel@gmail.com>, Bobby Eshleman <bobbyeshleman@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Support leased RX and TX devmem bindings when either the virtual device
+(e.g. netkit) or the physical backing net_device is unregistered:
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 1
+1. Pass struct net_device **dev_ptr to net_devmem_lock_dev() so callers
+   can lock either binding->map_dev or binding->bind_dev.
+2. Rename binding->dev and binding->vdev to binding->map_dev (physical
+   DMA device) and binding->bind_dev (device passed to bind-rx/bind-tx).
+3. Introduce netif_lease_valid() and guard netif_mp_open_rxq(),
+   netif_mp_close_rxq(), and netif_rxq_cleanup_unlease() against an
+   unregistering physical device reached through a queue lease.
+4. Fold net_devmem_lookup_dmabuf() into net_devmem_get_binding() so the
+   xarray lookup, validation, device check, and reference acquisition
+   run under a single rcu_read_lock() section.
+5. Always populate bind_dev on RX and TX bindings and handle teardown
+   and netdev unregistration of both bind_dev and map_dev, waiting for
+   synchronize_net() after clearing NET_DEVMEM_BINDING_LIVE before
+   unmapping bindings whose map_dev is unregistering.
+6. Resolve the physical backing map_dev in netdev_nl_get_dma_dev() for
+   leased RX bindings, lock map_dev around net_devmem_bind_dmabuf() on
+   bind-rx when map_dev differs from netdev, assert both devices are
+   locked, and check netif_lease_valid(map_dev).
+7. Add kselftests in nl_netdev.py covering leased RX and TX devmem
+   bindings across both virtual-first and physical-first netdev
+   unregistration orders.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+These issues were discovered during AI code review (Sashiko) of the
+earlier non-leased devmem unregister series (and subsequent mailing list
+review) and confirmed by code inspection (not observed in production or
+reproduced on real hardware). Tested with the nl_netdev.py selftest on
+netdevsim added in this series.
 
-- [High] When a rule has no tunnel device, the refusal of the other
-  tunnel keys only runs if enc_key_id is also present.
-- [Medium] This one is speculative.
-- [Low] The commit message describes an existing user-visible mis-
-  offload: 'A rule without a tunnel device used to accept enc_key_id…
+v4:
+- Rebase onto latest net-next/main.
+- Fold net_devmem_lookup_dmabuf() into net_devmem_get_binding() under a
+  single rcu_read_lock() (deferring net_devmem_dmabuf_binding_get()
+  until after all checks pass) and update net_devmem_dev_unregister() to
+  use a two-pass loop with a single synchronize_net() after clearing
+  NET_DEVMEM_BINDING_LIVE and before unmapping bindings with
+  map_dev == dev (Paolo).
+- Document issue discovery, validation, and testing in commit messages
+  and the cover letter (netdev-bot+sinfo).
+- v3: https://lore.kernel.org/netdev/20261115022607.348112-1-almasrymina@google.com/
 
---
+v3:
+- Rebase onto latest net-next/main.
+- Add netif_lease_valid() helper and keep lease validity checks in the
+  lease-aware callers (netif_mp_open_rxq(), netif_mp_close_rxq(),
+  netif_rxq_cleanup_unlease(), and net_devmem_bind_dmabuf()) rather than
+  inside __netif_mp_open_rxq() / __netif_mp_close_rxq(), and document why
+  mp_params is cleared directly when !netif_lease_valid(dev) (Stanislav,
+  Sashiko).
+- Guard the bound_rxqs loop in net_devmem_unbind_dmabuf() with
+  if (binding->bind_dev), keep the !netif_is_queue_leasee(dev) guard in
+  net_devmem_dev_unregister() in patch 4/6 until patch 5/6 resolves
+  binding->map_dev to the physical device so the series is bisectable at
+  every commit, and document the use-after-free in dma_unmap_sg_attrs() on
+  physical netdev teardown in patch 5/6 (Sashiko).
+- In nl_netdev.py, verify dmabuf and lease on the physical queue after
+  binding, skip when queue_create returns EOPNOTSUPP, probe the physical
+  device on EOPNOTSUPP so a broken lease lookup is not masked as SKIP, and
+  clean up nk_ifname between loop iterations (Sashiko).
+- v2: https://lore.kernel.org/netdev/20261108055809.2122934-1-almasrymina@google.com/
 
-net/mlx5e: TC, match the tunnel key without a tunnel device
+v2:
+- Split patch 3/4 from v1 into 3 smaller commits (patches 3/6..5/6).
+- Clear rxq->mp_params and return 0 in __netif_mp_close_rxq() whenever
+  dev is already unregistering, avoiding queue reconfiguration on an
+  already-shut-down map_dev during cascaded lease teardown (Sashiko).
+- Drop unnecessary xa_erase() in net_devmem_unbind_dmabuf() and use a
+  local map_dev variable in net_devmem_get_binding() (Stanislav).
+- Restore ASSERT_EXCLUSIVE_WRITER(binding->bind_dev) in
+  mp_dmabuf_devmem_uninstall(), drop redundant bind_dev->reg_state check
+  in net_devmem_bind_dmabuf(), and expand commit message rationale
+  (Dragos, Stanislav).
+- v1: https://lore.kernel.org/netdev/20261103232659.1340283-1-almasrymina@google.com/
 
-This adds a parse_outer_key op to the mlx5e tunnel ops. On a device that
-is not a tunnel, a flower enc_key_id match now programs the GRE key,
-VXLAN VNI, GENEVE VNI or GTP-U TEID register, chosen by the outer
-ip_proto and dst_port keys. Such rules must be skip_sw, cannot decap and
-cannot carry other enc_* keys.
+Mina Almasry (7):
+  net: devmem: pass net_device pointer to net_devmem_lock_dev()
+  net: devmem: rename binding dev and vdev to map_dev and bind_dev
+  net: guard memory provider RX queue open and close on unregister
+  net: devmem: fold net_devmem_lookup_dmabuf() into
+    net_devmem_get_binding()
+  net: devmem: always populate bind_dev and detach both devices on
+    unregister
+  net: devmem: resolve physical map_dev for leased RX bindings
+  selftests: net: add leased devmem RX and TX netdev unregister tests
 
-> This covers NIC and eswitch flows. A rule without a tunnel device used to
-> accept enc_key_id without matching on it. It caught all the traffic of its
-> other keys. It now matches the key or gets refused.
+ net/core/dev.c                           |   2 +-
+ net/core/dev.h                           |   7 +
+ net/core/devmem.c                        | 178 ++++++++++++-----------
+ net/core/devmem.h                        |  31 ++--
+ net/core/netdev-genl.c                   |  59 +++++---
+ net/core/netdev_rx_queue.c               |  31 +++-
+ tools/testing/selftests/net/nl_netdev.py | 159 +++++++++++++++++++-
+ 7 files changed, 333 insertions(+), 134 deletions(-)
 
-[Severity: Low]
-This isn't a bug, but this paragraph describes an existing mis-offload.
-On a device that is not a tunnel, __parse_cls_flower() accepts
-FLOW_DISSECTOR_KEY_ENC_KEYID in its used_keys allow-list, and nothing on
-that path reads it.
 
-In this patch the fix arrives as a side effect of a new feature (a new
-tc_tun_gtp.c, a new parse_outer_key op, new capability requirements).
-There is no Fixes: tag, so the fix can't go to net or stable on its own.
-
-Other fixes in the same series do carry Fixes: tags, for example
-"net/mlx5e: TC, refuse a tunnel key wider than the VNI".
-
-Would it make sense to send a minimal fix to net that refuses enc_* keys
-when filter_dev is not a tunnel device, and then build the feature on
-top of it? That fix would also cover the __parse_cls_flower() gap
-described below.
-
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-> index 33911e72d20d0..610e2bbc21f1f 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-
-[ ... ]
-
-> @@ -261,6 +262,41 @@ static int mlx5e_tc_tun_get_remote_ifindex(struct net_device *mirred_dev)
->  	return ifindex;
->  }
->  
-> +static int
-> +mlx5e_tc_tun_parse_outer_key_vxlan(struct mlx5e_priv *priv,
-> +				   struct mlx5_flow_spec *spec,
-> +				   struct netlink_ext_ack *extack,
-> +				   u32 key, u32 mask,
-> +				   enum fs_flow_table_type fs_type)
-> +{
-> +	void *misc_c, *misc_v;
-> +
-> +	if (key >= MLX5E_TC_TUN_N_VNI) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "Tunnel key does not fit the 24 bit VNI");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (!MLX5_CAP_FLOWTABLE_TYPE(priv->mdev,
-> +				     ft_field_support.outer_vxlan_vni,
-> +				     fs_type)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "Matching on VXLAN VNI is not supported");
-> +		return -EOPNOTSUPP;
-> +	}
-
-[Severity: Medium]
-This one may be speculative. Should this path also check the driver's
-VXLAN port table?
-
-The tunnel device path goes through
-mlx5e_tc_tun_parse_udp_ports_vxlan()->mlx5e_tc_tun_check_udp_dport_vxlan(),
-which refuses the rule unless the port is known:
-
-	if (!mlx5_vxlan_lookup_port(priv->mdev->vxlan,
-				    be16_to_cpu(enc_ports.key->dst))) {
-		NL_SET_ERR_MSG_MOD(extack,
-				   "Matched UDP dst port is not registered as a VXLAN port");
-
-mlx5_vxlan_lookup_port() returns false when mlx5_vxlan_allowed() is
-false. mlx5_vxlan_create() leaves VXLAN disallowed when
-tunnel_stateless_vxlan is missing or the function is not a PF.
-
-Here mlx5e_tc_tun_outer_lookup() picks vxlan_tunnel from an exact
-dst_port 4789 alone. After that, only ft_field_support.outer_vxlan_vni is
-checked.
-
-Suppose firmware can advertise that capability while the parser does not
-handle UDP 4789. Could a skip_sw rule then be installed with a VNI match
-that the parser never fills? The rule would match nothing or, if the
-masked key includes zero, all UDP/4789 traffic.
-
-I couldn't confirm whether firmware can report outer_vxlan_vni in that
-state. mlx5_vxlan_create() notes that the hardware adds 4789 by default,
-so this may not happen in practice.
-
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-> index 2326fb21da66b..d2b961d473b89 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-> @@ -2786,6 +2786,10 @@ static int __parse_cls_flower(struct mlx5e_priv *priv,
->  		err = mlx5e_tc_verify_tunnel_ecn(priv, f, &match_inner_ecn);
->  		if (err)
->  			return err;
-> +	} else if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID)) {
-> +		err = mlx5e_tc_tun_parse_outer_key(priv, spec, f, fs_type);
-> +		if (err)
-> +			return err;
->  	}
-
-[Severity: High]
-Can a rule with other enc_* keys but no enc_key_id still be offloaded
-without those keys being matched?
-
-The refusal of the other tunnel keys only exists inside
-mlx5e_tc_tun_parse_outer_key():
-
-	/* Without a tunnel device the other tunnel keys go unmatched */
-	if (rule->match.dissector->used_keys &
-	    (BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IPV4_ADDRS) |
-	     ...
-
-That function is only called when FLOW_DISSECTOR_KEY_ENC_KEYID is
-present.
-
-The used_keys allow-list at the top of __parse_cls_flower() accepts every
-ENC_* key for any filter_dev. Nothing else on the non-tunnel path reads
-these keys. mlx5e_get_flow_tunnel_id() and mlx5e_tc_verify_tunnel_ecn()
-are only reached through the mlx5e_get_tc_tun(filter_dev) branch.
-
-Take a rule like this:
-
-  tc filter add dev <uplink|VF rep|NIC netdev> ingress flower skip_sw \
-      ip_proto udp enc_dst_port 4789 \
-      action mirred egress redirect dev <vf_rep>
-
-The same goes for a rule with enc_dst_ip X action drop. Wouldn't such a
-rule skip both branches, reach hardware with the enc_* key dropped, and
-catch all traffic that matches its other keys?
-
-The over-match itself predates this patch. However, the commit message
-says "Nothing matches the other tunnel keys on this path. Refuse them in
-such a rule.", and the new code comment states the same rule for any
-rule without a tunnel device.
-
-Should this check cover every rule where mlx5e_get_tc_tun(filter_dev)
-returns NULL, and not only rules that carry enc_key_id?
-
+base-commit: 2208ab00f4f213ade91ab775e7f8c4dacdcc856e
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117092915.255194-1-acassen%40corp.free.fr
+2.56.1.750.gf70dc682cf-goog
+
