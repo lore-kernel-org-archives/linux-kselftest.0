@@ -1,64 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795141327;
-	b=xKk21sHVEf8EYPERtqcKWMRW6TuYygh9Y3chdAEKtKH0Xtcejn/VUdx6D5Rkh+558DJ3
-	 Zy9GnX/3GtuZ4v8HziAACXU7CUUZ70uApUHQufIkzDSqcao0PasUj6EMUN7srhntySku9
-	 W4PDxgB+RC2fg+3aLq+scJMFzuDqYCrpRijGE8Q7lqbkPCBE6GWV6AF/Ph44OhzZcOi8+
-	 pGg89Qh+BD6tXVk7LUhLxCAoXnFjhNkAo3Ttrf+/ZKJ4WoxI3c7hqCx8EePFUaodFtrFi
-	 tWjz8LokUROOomHMjwdhjbxdbYQcJoQ1YwcvZGWrhAvIheYrk3RA0kBQpWa0w5qBMLA==
+	t=1795141645;
+	b=1u62gKaSA6APi3SgVPj1B/FPeHOY945SYU7Ksdl7W2/ALL3rpGqaDNHTHpIXuolBy/W6
+	 04EoYHnZQs2iFByXaITcanTj0jtnTk2pj4+cahAMVVCHD/s/LECrhXnmN5+7mdMfv9U0T
+	 vqH05yDNXyW8DOTF1CNp97iu6LrHgU7FB3kw5hb0HocaPrdzoGOgd/diY8xyqiE6QWPoh
+	 KYLXoNy15cs2mSjdJ/JA0Y+noRuJYUL/JHostThgfsH5EOOeL2HvHhU5XVkRlmj+dYCBr
+	 yA7NZmm++3xru9DI2LKC2Ncb0k4GyfTIzglU9kxpgKQI06aMdCV2LDpq3UkNawXgnWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795141327;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=5dvu3zNUsJdRmPMmPyJKE6OQ1/TPrIM97wi+LUF7hSs=;
-	b=4wN4R5Aczdt5GRNn4vI6FbnL1kNNjgyb+oOkkdrt38L3B8P0YJMJLWaD7aFmUIvel6d+
-	 xCCIYkYrnrJPBm/yJBG5JcGi6le31QpxTotLD1VaL1HiEPNyfymWjvsSfk/egK7om4x9V
-	 r5aHmgBmEEpOjUXaGLrs1l/3rSMUq3a3DlEF0q6DTpxdgjXjfmwOvtFSXLni4dPeNauLH
-	 5vUfGGC/XQx6L9xGFDYSxzoa+g3G+v3qSiRLlpc2juwt9yd6m7qYKHQp7ztXRU/yLjsqv
-	 H3rvz1n0jBdPkxTrP0MQQ+d3jd3s9ykzTkU0Pms5XHIh163rtSsgbD8tE4UKpSTLsxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795141645;
+	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
+	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:From:To:Cc:
+	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=zeP4qRxfMev4qDyWHvEpiBpmuLkuazmc6KC3D7OM+n8=;
+	b=oDUWl0I4o0YZa//Vm7NBmHvbhFFxEE9HjlSokSe1XUHVdBiQwmI+iV0a63iRyGVCOkN8
+	 nkGAM2UccCtDWA0q9UobyIzSHJAYxcrn1MCiwFc2lSwCLbNc24uIHQgzFn0I8j5MlosE9
+	 5tTWORejl6ASMSFs956AiDpiYge/x2Kiw0KlpJbQEF+NudTDwciaVjwLAxl+vRfwjXola
+	 9Ukr915CLSceioJQNjubWzQEpflhe1ZsdGzbHyR5I8fA1gs5UHi27eId9u9jB5ANzviDV
+	 VDIByXe6Y/xElHsukIaPJIKdf24s94XECsj2XcA7R+jEc410uinZF/y8HnmxqIX5Ytg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FahRO3RF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740D960A2617;
-	Fri, 20 Nov 2026 02:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FahRO3RF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7281F000C6;
-	Fri, 20 Nov 2026 02:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795141327;
-	bh=5dvu3zNUsJdRmPMmPyJKE6OQ1/TPrIM97wi+LUF7hSs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=FahRO3RFt67vKK1SWuNVpSW+qqt6m+bvoWT63PmZZgW5OBzuPHdL2u/GneW8ijRC2
-	 2JbsTCQ0bQH392x+uqWC7gh3Z8acm8P02m1UwQb16ItCDpgkcXwm7oD9qsUKY0B6WT
-	 csgUf0aBzlAZYJeI3sebK0CD9qU4loWHuDVNFC434N82OjJZgWDi3hBcq/AF6JzHEl
-	 wGP4rWMNYXk/zXBf78aY6ybtui+TiuNstmevtjCcIKXREcXHJeCxMqut0M+0Onh0L2
-	 Kz318/3uerFVjUCbDLK1XlbGrkvQxcM9FFZd5X3h2iD3IU+jijRtuMyHa/bWBsPynT
-	 BO5kdV/lheWsA==
-Subject: Re: [PATCH net v10 4/4] selftests: net: hsr: verify GRO policy and
- ordered forwarding
-From: netdev-bot+sashiko@kernel.org
-To: xiexinet@gmail.com
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
- shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
- qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
- bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
- liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com,
- lukma@denx.de, fmancera@suse.de, danishanwar@ti.com
-Date: Fri, 20 Nov 2026 02:22:05 +0000
-Message-ID: <179514132547.3136.13495496804508264681@kernel.org>
-In-Reply-To: <20261117141922.20-5-xiexinet@gmail.com>
-References: <20261117141922.20-5-xiexinet@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF193606A320;
+	Fri, 20 Nov 2026 02:27:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF193606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: e7562ec8e48911f19a56ed5b684f684d-20261120
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:ae224689-2f29-421c-af83-524793095fb6,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:d5cd3cb6a47cd4c19750056d46bd2cad,BulkI
+	D:nil,BulkQuantity:0,SF:102|850|865|898,TC:nil,Content:0|15|50|99,EDM:-3,I
+	P:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+	,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: e7562ec8e48911f19a56ed5b684f684d-20261120
+X-User: fuqingshuang@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <fuqingshuang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 724502791; Fri, 20 Nov 2026 10:27:16 +0800
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+To: Andy Whitcroft <apw@canonical.com>,
+	Joe Perches <joe@perches.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Karl Mehltretter <kmehltretter@gmail.com>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>
+Subject: [PATCH] selftests/proc: include linux/mman.h for MREMAP_DONTUNMAP
+Date: Fri, 20 Nov 2026 10:27:10 +0800
+Message-Id: <20261120022710.1585112-1-fuqingshuang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,120 +76,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+glibc versions before 2.32 do not define MREMAP_DONTUNMAP in
+<sys/mman.h>, so proc-maps-race fails to build against them (e.g.
+glibc 2.31):
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+  $ make -C tools/testing/selftests TARGETS=proc
+  ...
+  proc-maps-race.c:691:58: error: 'MREMAP_DONTUNMAP' undeclared
+    (first use in this function)
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Include <linux/mman.h> to get the flag from the kernel UAPI headers
+instead of depending on the libc version.  The proc Makefile already
+adds those headers to the include path via $(TOOLS_INCLUDES).
 
-- [Medium] The single-producer ordered cases in hsr_ordered_forwarding.sh
-  can fail even when the kernel is correct.
+Fixes: 6a45336b9b6f ("selftests/proc: extend /proc/pid/maps tearing test to include vma remapping")
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+ tools/testing/selftests/proc/proc-maps-race.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---
+diff --git a/tools/testing/selftests/proc/proc-maps-race.c b/tools/testing/selftests/proc/proc-maps-race.c
+index bf4c5073f6fc..7d2d9144fedf 100644
+--- a/tools/testing/selftests/proc/proc-maps-race.c
++++ b/tools/testing/selftests/proc/proc-maps-race.c
+@@ -33,6 +33,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <linux/fs.h>
++#include <linux/mman.h>
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <sys/stat.h>
 
-selftests: net: hsr: verify GRO policy and ordered forwarding
-
-This commit adds two HSR/PRP kselftests, and both run one shared Python
-helper. hsr_gro_superpacket.sh checks the GRO policy on HSR members, the
-refusal of unsupported port types, and TCP forwarding from the interlink
-and from a PRP SAN. hsr_ordered_forwarding.sh checks the ordering of
-local and interlink data, supervision frames, concurrent producers and a
-sequence-number wrap.
-
-> diff --git a/tools/testing/selftests/net/hsr/hsr_gro_superpacket.py b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
-> new file mode 100755
-> index 0000000000000..17055d9329b3d
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
-> @@ -0,0 +1,1468 @@
-
-[ ... ]
-
-> +def ordered_send(lab, sock, producer, first, count, port, segment=0):
-> +    """Send count datagrams, or UDP GSO aggregates of 16; return the payloads."""
-> +    expected = []
-> +    if segment:
-> +        sock.setsockopt(socket.IPPROTO_UDP, 103, segment)
-> +    blocks = 16 if segment else 1
-> +    size = segment or 64
-> +    for number in range(count):
-> +        payloads = [ordered_payload(producer, first + number * blocks + n,
-> +                                    size) for n in range(blocks)]
-> +        body = b"".join(payloads)
-> +        require(sock.sendto(body, ("239.0.0.9", port)) == len(body),
-> +                "short UDP send")
-
-[Severity: Medium]
-
-Can the single-producer ordered cases fail on a correct kernel because
-this sender is not pinned to a CPU?
-
-ordered_send() runs in the main thread, and the main thread never calls
-os.sched_setaffinity(). Only the producer threads in ordered_concurrent()
-are pinned.
-
-The frames go through the veth t0 to the interlink dil. There is no XDP,
-and GRO is forced off on HSR members. So veth hands each frame to the
-backlog of the CPU that sent it:
-
-drivers/net/veth.c:veth_forward_skb() {
-	return __dev_forward_skb(dev, skb) ?: xdp ?
-		veth_xdp_rx(rq, skb) :
-		__netif_rx(skb);
-}
-
-The netif_rx path then calls enqueue_to_backlog(skb, smp_processor_id(),
-...).
-
-Threaded backlogs are always used on CONFIG_PREEMPT_RT, and also with the
-thread_backlog_napi boot option. With them, ____napi_schedule() only wakes
-the per-CPU backlog thread:
-
-net/core/dev.c:____napi_schedule() {
-    ...
-	if (use_backlog_threads() && thread == raw_cpu_read(backlog_napi))
-		goto use_local_napi;
-
-	set_bit(NAPI_STATE_SCHED_THREADED, &napi->state);
-	wake_up_process(thread);
-    ...
-}
-
-As a result, sendto() returns before the frame is processed. The same can
-happen without threaded backlogs when NET_RX is deferred to ksoftirqd.
-
-Suppose the sender migrates from CPU X to CPU Y in the middle of the loop.
-The backlog threads of X and Y can then run hsr_handle_frame() for dil at
-the same time. They take seqnr_lock in arrival order, so a later send can
-get a lower HSR sequence number and appear earlier on dil, da and db.
-
-The test still requires the exact send order in ordered_data():
-
-    require([row["payload"] for row in incoming] == expected_inputs,
-            "actual UDP ingress input set/order differs")
-
-It also requires it through verify_udp(..., input_order=True) in
-ordered_data(), ordered_supervision() and ordered_wrap(). ordered_wrap()
-is the most exposed: it sends up to about 65k warmup datagrams plus 256
-more, and all of them are checked with input_order=True.
-
-Would pinning the sending thread to one CPU for the ordered cases, or
-pinning the whole process in ordered mode, avoid this?
-
-> +        expected.extend(payloads)
-> +        # Keep capture receive queues bounded throughout long wrap warmups.
-> +        if number % 8 == 0:
-> +            lab.observe(0)
-> +    lab.observe(0.1)
-> +    return expected
-
-[ ... ]
-
+base-commit: 20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117141922.20-1-xiexinet%40gmail.com
+2.25.1
+
