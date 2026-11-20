@@ -1,55 +1,127 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795177639;
-	b=05LG3+YAkP9dbPRbFJ1RAV/1gUieXUIR6OsKDoCmMmfgiH0Oh6C42CW1O3+Jq4O76HNR
-	 taqL4bcPLUpaQsSrRVYQLWSxJcBoAWx+Bp3FOlN/pVBpSI20hdw9Xzw0isr7jB5V5rDjz
-	 plvM7fLlxlXviTkPJNH2IBlKYEDcFU73hol3pMSJd6luTudTLpTtv9MkqyI9MrqmudFh6
-	 FnXLjZ4J3prydk5N+SOGm4cqhMNiWDjIHstzO/B6KEB7UR0iCxbtPVrhqEHxCmDgMNJKd
-	 WbTjgc8McvWD0wJyBXl01hEUnr1Z1GIiYcb/xvZe1S5SUDzyjrC6UUgzPWfIsTo7Iaw==
+	t=1795178824;
+	b=Jty6fYz9Mg4FslCKe8/nES5UnhFW1PHMt/cfJk6csa5uegc+vQlzUM+4ZXOarKJYod2/
+	 1dXxeDp/CmRlHyBCpRHqdSK6XqhILGHLjp65e9TbFo0wjdUORP++NO3enFlmmM7F3SQOr
+	 WXzdhrwik7M0/dL7tmtzaC4UkXnp1J3QTIcJ7ymcc0TxIi+3F5xZ7PMAARE8YhUHuZmCz
+	 3fk5ceR7QtQpzcr+xIi8kfrpVenCR1k60deXHHVCPA0XeXDIQvIEX8If4HrytqfmnnpWB
+	 tDdjrtfnr+Qw4V/yudFCM4RldNeopFkocWIbYITXYYxvGcyU+g25TAzLxNdWqUgbXVg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795177639;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795178824;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=R5Q/anIS5kma9/R7yRs1Zjye56minOa3GoeRtxvDz3k=;
-	b=CJUJZ3bbT7/+93Q8xQmzliNAjJJeH9ei8b8+olVl4mSaxvRpTIZIHq79kYX6HBp/kByK
-	 E+/gCQUhltZGm4xrL3qZ1NU3TzZLwukdpsiUOwQMNXvh2RfQ3dSlhT2CD3u60qQ1fTU0w
-	 qwWhYwMV2aiWGkFq8xOFNEoxxaFoWW/JgGQ2tZutDNPI8J0A9V9H6N416HdZJO3dTlT5S
-	 1f1xSa8XXihSv+VTpeVqp9NGWtBK+vP8aFRGWjRCAT7aVC2ndWrMhMgx3RND6eoMiBwS9
-	 qWo4Cii5y4GdcWWdgk4FSCDy+hxS8yBwVHlintV29gUcQVWOhLmuoCZzTWq1W8zrGqg==
+	bh=0ulF/F82puM5FYsSJ0g59/1wc8Edn/NytcDM7FiJ8jc=;
+	b=v0wNUqJK8koC0NnRS5+W3RMN7uRLuM/kwo2Rr+dkq4ySkGOhjdT1wREeBChwTRTf4Pc4
+	 gP1yCbbu0fGupTRrNZ83ndwO+EleldJL+tjJzRROSH8KAffCIjf+S+1yN0bVDwRwo0TlW
+	 is/xnRRuytpQ7ouddnQRuMrvzmY0PeFjPFIOejxBdCJ+h5wbAsCDdyU91MJQg0R70GETQ
+	 idxqWJg7jPr3lNloKrCiJniI+TASZXFzOVOxZxXG1tIW5mUb2f7BxuTUYza7vsWhNhgqy
+	 kLtxKeynidRn0rwbx19AGaZPbavOdCBbw3x5yMZqSGqdji+DJDz4zMgOeEAw4ZkY/+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lLFQM+yw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DqoZLySG;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6EC41606A326;
-	Fri, 20 Nov 2026 12:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 879F660A2607;
+	Fri, 20 Nov 2026 12:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lLFQM+yw
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 861CB1F000CA;
-	Fri, 20 Nov 2026 12:27:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DqoZLySG
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 1F3B61F01816;
+	Fri, 20 Nov 2026 12:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795177639;
-	bh=R5Q/anIS5kma9/R7yRs1Zjye56minOa3GoeRtxvDz3k=;
+	s=k20260515; t=1795178823;
+	bh=0ulF/F82puM5FYsSJ0g59/1wc8Edn/NytcDM7FiJ8jc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lLFQM+yw6/YBiNzrGx0lqhesKDPvmN+Iz8MNxC+SzdA2pSt58JcVIc32cjI9x/Kb2
-	 VBOsu76rVwrbPqrv8FfMXXSxclDvX7XSBE4PDIoUdQE3iSouKnTQ4Hrw4fnoai+6IU
-	 vw38fCdqoz7ZM4jDFBbA2lcd/JJpQb1DsPkkqeLmCOxIH9jccR5t3PnOj/SQpUONQx
-	 mCUyPHXLZ/vaggAMuYjQDodOgHqtxpew7a5ddDehdgrDW01i4YqGMQkwwo3p07QmQ2
-	 LD+hc5KE3XTJtldRV/LUGINykBVTs9NU/H0ZkQiNNB9YhnEZrX3S6WO7qA0Qe8S4u4
-	 1FhdXMQg+jA6w==
-Date: Fri, 20 Nov 2026 14:27:15 +0200
+	b=DqoZLySG6tbEny6oIUE/axFh/2wx4W5GHzOkvhTlgcaY4EZUTlRys71s81y3ij2s+
+	 Rx6evb1/Oa+v4+RmHdPnlMI8p3/9Vk2Qlijco1EtXlIo6+Uox0MEXkH/j5p22LtJG8
+	 O+pAzJgjaL1XHgOBkbBGKjTQJ9BhUBlib22F8c7LUzIeRP0B3hW1yyMckmXfB09V3/
+	 pb0B13DLnURH0RN2WYu1RtEzVFvz+D8QM0Yu59J9hZtbKvXjbGvXTuwegQcAfBSTXZ
+	 ryU1OkE2JtMJpTX6AEDJ3anQ8K5ylpOqcKArjol4ky4NYsELzEC9Sl23cE4WQ60q2T
+	 OvpwQRIevpNOw==
+Date: Fri, 20 Nov 2026 14:47:00 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Rustam Mustafin <rmustafin@cloudlinux.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Shuah Khan <shuah@kernel.org>, Jaewon Yang <yong010301@gmail.com>,
-	linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tpm: Track the response read position internally
-Message-ID: <awA8o4oIq81a7J1z@kernel.org>
-References: <20261120121614.978396-1-rmustafin@cloudlinux.com>
- <20261120121614.978396-2-rmustafin@cloudlinux.com>
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>, Ben Segall <bsegall@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christian Brauner <brauner@kernel.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Chris Zankel <chris@zankel.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	"Hallgrimur H. Gunnarsson" <halg@google.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Jan Kara <jack@suse.cz>,
+	John Johansen <john.johansen@canonical.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Manfred Spraul <manfred@colorfullife.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Moore <paul@paul-moore.com>, Paul Walmsley <pjw@kernel.org>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Rich Felker <dalias@libc.org>,
+	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Vlastimil Babka <vbabka@kernel.org>, Will Deacon <will@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v4 07/14] fork: Support CLONE_INTO_ROOTNS in clone3()
+Message-ID: <awBBRDaILtH11wgW@kernel.org>
+References: <20261119224312.1037966-1-jarkko@kernel.org>
+ <20261119224312.1037966-8-jarkko@kernel.org>
+ <awAh8chFM-9WtNKP@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,112 +133,49 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261120121614.978396-2-rmustafin@cloudlinux.com>
+In-Reply-To: <awAh8chFM-9WtNKP@kernel.org>
 
-On Fri, Nov 20, 2026 at 07:16:13PM +0700, Rustam Mustafin wrote:
-> tpm_common_read() indexes data_buffer with the caller supplied *off.
-> A read issued through io_uring reaches the driver with that offset:
-> loop_rw_iter() passes &ki_pos to ->read(). This allows out-of-bounds
-> reads and zeroing of kernel memory:
+On Fri, Nov 20, 2026 at 12:33:25PM +0200, Jarkko Sakkinen wrote:
+> On Fri, Nov 20, 2026 at 12:43:05AM +0200, Jarkko Sakkinen wrote:
+> > Multithreaded userspace daemons cannot call setns(CLONE_NEWUSER) or
+> > safely mutate process-wide filesystem state in place before spawning a
+> > child into a target namespace set.
+> > 
+> > Add CLONE_INTO_ROOTNS and struct clone_args.rootns (CLONE_ARGS_SIZE_VER3)
+> > to spawn a child process directly into a rootns whose root mount has
+> > been installed. Transition the rootns from ROOTNS_INIT through
+> > ROOTNS_FORKING to ROOTNS_RUNNING for the first process so it becomes
+> > PID 1, serialize concurrent entrants on waitq until bootstrap resolves,
+> > and admit subsequent callers into the running PID namespace until
+> > teardown begins.
+> > 
+> > Derive child credentials from current, require CAP_SYS_ADMIN and
+> > CAP_SYS_CHROOT in the target user namespace and an ancestor active PID
+> > namespace, preserve caller umask, reset dumpability across user namespace
+> > transitions, commit time namespace vvar mappings after copy_process()
+> > succeeds, and look up the live mount namespace root. Restrict companion
+> > flags to CLONE_VFORK, CLONE_PIDFD, CLONE_PIDFD_AUTOKILL, CLONE_AUTOREAP,
+> > CLONE_CLEAR_SIGHAND, CLONE_INTO_CGROUP, and CLONE_NNP.
+> > 
+> > Co-developed-by: David Howells <dhowells@redhat.com>
+> > Signed-off-by: David Howells <dhowells@redhat.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > 
->   BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x4b/0x70
->   Read of size 16 by task iou-wrk-148/149
->   Call Trace:
->    _copy_to_user+0x4b/0x70
->    tpm_common_read+0x16e/0x2c0
->    loop_rw_iter+0x235/0x5a0
->    __io_read+0xc6e/0x11a0
->    io_read+0x8a/0x180
+> Being fd-bound object the gist is that the first clone3() binds
+> cgroups, which could e.g., different process than who build the
+> container.
 > 
-> A plain read() racing a write() reaches the same access: read()
-> samples f_pos before taking buffer_mutex, so it can consume a new
-> response from the offset left by the previous one:
-> 
->   BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x4b/0x70
->   Read of size 75 by task trigger/151
->   Call Trace:
->    _copy_to_user+0x4b/0x70
->    tpm_common_read+0x16e/0x2c0
->    vfs_read+0x189/0xc00
->    ksys_read+0xf9/0x1d0
-> 
-> Replace *off with a read_pos member of struct file_priv. It is only
-> accessed under buffer_mutex, so the offset passed by the caller no
-> longer matters.
-> 
-> Fixes: 9488585b21be ("tpm: add support for partial reads")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Rustam Mustafin <rmustafin@cloudlinux.com>
-> ---
+> CLONE_INTO_CGROUPS is of course available as an optional flag when
+> using CLONE_INTO_ROOTNS.
 
-So... why does not this block uring? You are implementing a feature
-as a bug fix, or so that it appears.
+The major benefit over Cells is that there is no embryonic task state
+and nothing from the host mount table is inherited unless explicitly
+moved in. Also, unshare() cannot ascend from the rootns() created
+hierarchy.
 
->  drivers/char/tpm/tpm-dev-common.c | 11 ++++++-----
->  drivers/char/tpm/tpm-dev.h        |  1 +
->  2 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-> index ee91f456f975..553fc6aca94d 100644
-> --- a/drivers/char/tpm/tpm-dev-common.c
-> +++ b/drivers/char/tpm/tpm-dev-common.c
-> @@ -107,6 +107,7 @@ static void tpm_timeout_work(struct work_struct *work)
->  	mutex_lock(&priv->buffer_mutex);
->  	priv->response_read = true;
->  	priv->response_length = 0;
-> +	priv->read_pos = 0;
->  	memset(priv->data_buffer, 0, sizeof(priv->data_buffer));
->  	mutex_unlock(&priv->buffer_mutex);
->  	wake_up_interruptible(&priv->async_wait);
-> @@ -149,21 +150,21 @@ ssize_t tpm_common_read(struct file *file, char __user *buf,
->  			goto out;
->  		}
->  
-> -		rc = copy_to_user(buf, priv->data_buffer + *off, ret_size);
-> +		rc = copy_to_user(buf, priv->data_buffer + priv->read_pos, ret_size);
->  		if (rc) {
->  			memset(priv->data_buffer, 0, TPM_BUFSIZE);
->  			priv->response_length = 0;
->  			ret_size = -EFAULT;
->  		} else {
-> -			memset(priv->data_buffer + *off, 0, ret_size);
-> +			memset(priv->data_buffer + priv->read_pos, 0, ret_size);
->  			priv->response_length -= ret_size;
-> -			*off += ret_size;
-> +			priv->read_pos += ret_size;
->  		}
->  	}
->  
->  out:
->  	if (!priv->response_length) {
-> -		*off = 0;
-> +		priv->read_pos = 0;
->  		timer_delete_sync(&priv->user_read_timer);
->  		flush = true;
->  	}
-> @@ -214,7 +215,7 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
->  
->  	priv->response_length = 0;
->  	priv->response_read = false;
-> -	*off = 0;
-> +	priv->read_pos = 0;
->  
->  	/*
->  	 * If in nonblocking mode schedule an async job to send
-> diff --git a/drivers/char/tpm/tpm-dev.h b/drivers/char/tpm/tpm-dev.h
-> index f3742bcc73e3..34efb1ffa491 100644
-> --- a/drivers/char/tpm/tpm-dev.h
-> +++ b/drivers/char/tpm/tpm-dev.h
-> @@ -15,6 +15,7 @@ struct file_priv {
->  	struct work_struct async_work;
->  	wait_queue_head_t async_wait;
->  	ssize_t response_length;
-> +	size_t read_pos;
->  	bool response_read;
->  	bool command_enqueued;
->  
-> -- 
-> 2.52.0
-> 
+Shooting yourself in the foot is an explicit and planned action taken.
+
+And further, it has provably more defence in depth than Cells because
+LSM hooks accurately populate the data crossings.
 
 Br, Jarkko
