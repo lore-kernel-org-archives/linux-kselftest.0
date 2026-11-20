@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795182970;
-	b=oHwNYfpj9jQ4oOAou6brGYFCwrtRHMIK0qOW+JInYfDimXR2CKcP9VK7/bq6sGh4ovZT
-	 QYCvgLiyw4SfoFyke20lzK9ZDQCCFfkt++TIX5ZYjz/sG9bFgouYWrZ+z34DWe75QwUOA
-	 Iekn2pt6mdg2AN5Gr5eA+QPQjvUHSfSoPtYc6PdJDUXJzWwIhzUwE7TdBHEw4PmzhU4+O
-	 Fb5kQtScR6NjSwJ/EqlYOPIA/GpzMaft+UaSNJG7QRHKNeASadcvLpCPTDUiD+6Si9kbp
-	 mcfNJxd+sL3LPp7axwvfeSOpxNy6nXubdJe4ITS5kfaH3xcSo/9oKSGLMXjhZlY+I6Q==
+	t=1795182966;
+	b=COOpxohh6FbYeLicaJZwgol4J0mR0rKXGle5O7aRbrBSSRjyJuszx2cMx+O/n5GTM4Fu
+	 V+WcEh2uhyaDGHFj9nw+S48Gz6r7CMK+Ul+fmr38LZ2v5nSBHUv7le8c6Dc/8Z8IeXklg
+	 /okqPUkIteCsMYpAoWpRlZPW/rr4K9Js7dF5x02Lu6okIo68ZINUCqxaBnf0+lvpCrQV6
+	 HqoFad5pX3AKhlcvV7u8AbKDRKyYkmcSaOKME1tFuG4aa/04gnYHzfKuCpxpTqTezxbg9
+	 FHV9zSiD354cQevMIdhUrul5y25Pmz02aw/U7IK0NZG6EoDQWXHhezY6Uipn7kHOZhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795182970;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795182966;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=g61ociSCBdZel0zIVQLJVWSy8g8pxReuIBRbl3sP1as=;
-	b=VEaUNGgo8x32bdL3/mCvqf4Q4Gt9fLBCXhE1CxcmEH94UMPp7aF3OQgnbNx0DYzbtGU0
-	 kVdS7hmtlyRL+1QSpqZhkQ7aozBJ51j/zlE58EsnpBnqM+uig51F11WP5SRnXyVEht5JU
-	 OZrFdFrF2w+pAqHU+RJDESYlx07u2FJrLMCXcXQGl3Al0yw7usYATeVtyI9fjp/ol9JTl
-	 afvGoyzxP6z1HHXZ93uEQ3Wv10ILynp3qoORxJTFnV1j0FZ+MVtS+wu7t2qjZR3amMajk
-	 9qyQYu8ezoFC8mZmAWSl5IKG1ZIRiKPmIVLwnBkILB8s+tb8IQ46QdWC+3b5xSApw9Q==
+	bh=i29mMrYLu3GLfGpx0sxXIIxzrVFaTIEwZ5tO3XFzH9s=;
+	b=mQGaJhftdag9DRsYm2884hkJZrHs7lxc+el9RvnjaQMxhB6Z2jjpmpNAkckmyxNd3To3
+	 CzPjaC1Ti58nVBj7vVM0P35cqLff6jiw+O34fHbyS2fdVwQ5y9hmNZADQHhQ3k2uFpmpY
+	 0L8pUkz1KYG07Y535gHXSt0UpFq2x6qPgA3BXFv+gFBAvwJ0MR0PT/C5yJM4l7VUL5tvg
+	 D4Xby89261zrtW9ek6xD7bZWrQfb9bO2jy45q5ZtkOjWQo6T3cyjAVGqrGnSPZ3I7zHY9
+	 nyEps+SAYYZYuu2Evv/iMs0PFlhKeT4G39NVYsb4fAWR5soTx3YQDjhipX/vOOl9aqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=Hy7zTl7B;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=IrYyK9qm;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DBD606C50E;
-	Fri, 20 Nov 2026 13:56:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92DBD606C50E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870E5606ABC7;
+	Fri, 20 Nov 2026 13:56:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 870E5606ABC7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=Hy7zTl7B
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=IrYyK9qm
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1795182965;
-	bh=g61ociSCBdZel0zIVQLJVWSy8g8pxReuIBRbl3sP1as=;
+	s=smtpout1; t=1795182962;
+	bh=i29mMrYLu3GLfGpx0sxXIIxzrVFaTIEwZ5tO3XFzH9s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Hy7zTl7Baa1a9Z12RXjYFqQ3FZyFHd/AWou0LP1bI3symkSpBD++rYWeZIt/KdY2Q
-	 xjlrf4VMZOBIfzl3fbsza3qSazU+FvnmcSVbR38R7mG1XzYHRjBooG+4k6+kkqgZC6
-	 HugZnnzqhnDNGdpdw34/hMb4w/7kfrW7qZA03CGaPxipKw8TrwXwYNQm6tLsQGwDYn
-	 gks4AetLQnCcAFgrlf9BIn2qL2gSF+6icYunsaczKTg4M05Xwc2kMHKnY9fdLYN/wq
-	 FCPPN9v0gG8I1+prgbfSGkzGPzfqWQXn4eJoRAkjU0X2OgyYNVcBCE+mKak38HPyhl
-	 mdatD0LhHoWjw==
+	b=IrYyK9qm6Q9MJxH66ZvHC01sCoJanZK4ZWuYIVo1AGXS7egn73Z7CmgTQ7gTLPUF2
+	 DcrJx7yOjBcpLN6AGYbMcr+gFh0ZH1MUUbtU21BMqPRlhME+JxvehSNH8hfMXEyYX5
+	 NfZ0jEnvHrtKNybMeNe8LCQJ4iqMA1FOWD15CIrgwPKJ2KkwvGjPyEt7uFUkygF1XN
+	 2kaKMEJbpKukrTZcSbslJnI5jJx/Zreii0xTwP91+DH72/gxeTCaz6eYHvtRGMA+ip
+	 ms+PlygUTsj1+zpDmHfKsEp2JlBw4Is9YQd7L4DQlkt6vnZ9xOeara8qmcjRG3VYCv
+	 fpvnh0Y0RqW+w==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jWH1J6jH5zSrj;
-	Fri, 20 Nov 2026 08:56:04 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jWH1G5p6xzV21;
+	Fri, 20 Nov 2026 08:56:02 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -80,9 +80,9 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: [PATCH v9 32/33] sched/deadline: Check the runtime of a task whose parameters change
-Date: Fri, 20 Nov 2026 08:55:55 -0500
-Message-Id: <d65436da41c304678dd3d77f003f32d05583fed7.1795181240.git.mathieu.desnoyers@efficios.com>
+Subject: [PATCH v9 20/33] rtmutex: Continue the chain walk when a waiter's deadline donor changes
+Date: Fri, 20 Nov 2026 08:55:43 -0500
+Message-Id: <ffbd2d80a165b1ca191a3d1060efeb029c3be3a4.1795181240.git.mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <cover.1795181240.git.mathieu.desnoyers@efficios.com>
 References: <cover.1795181240.git.mathieu.desnoyers@efficios.com>
@@ -97,221 +97,173 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 40767b0dc768 ("sched/deadline: Fix deadline parameter
-modification handling") lets new parameters take effect at the next
-period. So sched_setattr() cannot give a task a fresh runtime.
+A task boosted by a SCHED_DEADLINE waiter runs on the parameters of a
+donor, dl.pi_se. Commit 2279f540ea7d ("sched/deadline: Fix priority
+inheritance with multiple scheduling classes") made the donor follow the
+chain. rt_mutex_setprio() copies the donor of the top waiter to the
+owner. So the owner at the end of a chain points at the deadline task at
+its head. That task waits on no lock the owner holds.
 
-But admission control counts the new bandwidth at once. When a task
-shrinks its reservation, the runtime left from the old one is not
-checked against the new one. A comment in sched_dl_overflow() names
-the gap: the old bandwidth should stay counted until the 0-lag time.
+The chain walk stops at a task whose waiter has the same sort keys as
+the task: the priority and the deadline. Then "there is no further
+priority adjustment necessary". Before 2279f540ea7d, this was enough.
+The refill read the parameters of the owner's own top waiter, which is
+blocked and so alive.
 
-So a running task can shrink its reservation, and still run on the old
-one. Other tasks can meanwhile be admitted into the bandwidth it gave
-back. On v7.4-rc2, a task of 50ms every 100ms changed to 10ms every
-100ms. It ran 39ms of the next 100ms.
+But a boost can change the donor of a blocked task and leave its keys
+as they were. The task keeps a deadline priority. It sleeps, so no
+refill moves its deadline. The walk then stops one lock too early.
 
-Fix this by applying the wakeup rule after a change of parameters, as
-the previous patch does for a task that enters the class.
-__setparam_dl() marks a change of the runtime, the deadline or the
-period. The next enqueue then calls update_dl_entity(). It starts a new
-period, or reduces the runtime of a constrained task, if the runtime
-left does not fit. The task gets no more than a wakeup would give it. A
-boosted task runs on the parameters of its donor. So it keeps the mark
-until its deboost. dl_deboost() checks it there, before
-rt_mutex_setprio() compares the task with its top waiter. A task with a
-constrained deadline can be past its deadline and before its next
-period. It keeps the mark until its enqueue, which throttles it first.
-A task blocked on an rt_mutex is not enqueued before its wakeup, but
-its waiter node holds its deadline. So prio_changed_dl() checks the
-runtime of such a task at once. rt_mutex_adjust_pi() then requeues its
-waiter. A larger reservation still takes effect at the next period.
+M and O are SCHED_OTHER tasks. W and Z are SCHED_DEADLINE tasks. Z has
+the earlier deadline. L1, L1' and L2 are rt_mutexes:
 
-The enqueue flags cannot tell a change of parameters: a cgroup move
-also uses ENQUEUE_MOVE. Without the mark, a task that waited behind
-others could fail the check, and get a later deadline for no reason.
+  O            M                       W                       Z
 
-The change_running_new_params case, added to deadline_bw_test later in
-this series, tests this. change_boosted_new_params tests a task that
-changes its parameters while boosted. Both fail on v7.4-rc2 and pass
-with this patch. deboost_new_params_reboost tests the check at the
-deboost. setattr_blocked_new_period tests a task blocked on an
-rt_mutex. Without the check in prio_changed_dl(), it took the lock
-after a waiter with a later deadline, in 6 runs of 6.
+  locks L2     locks L1 and L1'
+                                       blocks on L1'
+                                         rt_mutex_setprio(M, W)
+                                           M->dl.pi_se = &W->dl
+               blocks on L2
+                 rt_mutex_setprio(O, M)
+                   O->dl.pi_se = &W->dl
+                                                               blocks on L1
+                                                                 rt_mutex_setprio(M, Z)
+                                                                   M->dl.pi_se = &Z->dl
+                                                                 chain walk at M:
+                                                                   keys equal, stops
+                                       times out on L1'
+                                       exits
 
-Fixes: 40767b0dc768 ("sched/deadline: Fix deadline parameter modification handling")
+O runs on W's parameters, with a later deadline than Z's, while Z waits
+for it. After W exits, O's next refill would read W's freed task_struct.
+
+A deboost has the same effect. Take a deadline task that a waiter with
+an earlier deadline boosts, and that blocks on a second lock. It keeps
+its own deadline. When that waiter leaves, rt_mutex_setprio() makes the
+task its own donor again. Its keys stay equal. A policy change in
+__setscheduler_dl_pi() can also change the donor of a blocked task with
+no change of keys. rt_mutex_adjust_pi() then skips the walk.
+
+Setting up the deadline tasks needs CAP_SYS_NICE. The timeout of a
+FUTEX_LOCK_PI needs no privilege. The Sashiko AI review of this series
+found the deboost case.
+
+Fix this by recording the donor in the waiter with the sort keys, in
+waiter_update_prio(). rt_waiter_up_to_date() compares both. The walk and
+rt_mutex_adjust_pi() use it. A new donor then takes the walk on to the
+next owner, and rt_mutex_setprio() gives that owner the new donor. The
+waiter's copy is only compared, never dereferenced. A task without a
+deadline priority is always its own donor, so its walks do not change.
+
+A known limit remains. Two walks can overlap on a chain of three locks
+or more. The owners further down then keep the old donor until the
+first walk reaches them.
+
+The case pi_chain_donor_leaves of deadline_bw_test tests the missed
+boost. W leaves SCHED_DEADLINE there, in place of exiting. It passes on
+v7.4-rc2, and without this patch. The case pi_chain_top_moves, added to
+deadline_bw_test later in this series, needs this patch and the next
+one. If one of the two is missing, another deadline task gets 30ms of
+200ms in every run. With both, it passes.
+
+Fixes: 2279f540ea7d ("sched/deadline: Fix priority inheritance with multiple scheduling classes")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: stable@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.15+
 ---
- include/linux/sched.h   |  5 +++
- kernel/sched/deadline.c | 72 +++++++++++++++++++++++++++++++++++++----
- 2 files changed, 71 insertions(+), 6 deletions(-)
+ kernel/locking/rtmutex.c        | 22 ++++++++++++++++++++--
+ kernel/locking/rtmutex_api.c    |  2 +-
+ kernel/locking/rtmutex_common.h |  3 +++
+ 3 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index cbd387993607..491ddeea7d65 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -715,6 +715,10 @@ struct sched_dl_entity {
- 	 * @dl_bw_oncpu tells if the this_bw of a runqueue counts the task's
- 	 * @dl_bw: add_rq_bw() and sub_rq_bw() set and clear it, under that
- 	 * runqueue's lock. Not for servers, which keep @dl_bw_attached.
-+	 *
-+	 * @dl_new_params tells if sched_setattr() changed the runtime, the
-+	 * deadline or the period. The next enqueue that is not boosted, or
-+	 * the deboost, checks the runtime left against them, and clears it.
- 	 */
- 	unsigned int			dl_throttled      : 1;
- 	unsigned int			dl_yielded        : 1;
-@@ -729,6 +733,7 @@ struct sched_dl_entity {
- 	unsigned int			dl_defer_idle     : 1;
- 	unsigned int			dl_bw_attached    : 1;
- 	unsigned int			dl_bw_oncpu       : 1;
-+	unsigned int			dl_new_params     : 1;
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 5a9534c715b8..c78dfe9c93fc 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -369,10 +369,12 @@ static __always_inline void
+ waiter_update_prio(struct rt_mutex_waiter *waiter, struct task_struct *task)
+ {
+ 	lockdep_assert_held(&waiter->lock->wait_lock);
++	lockdep_assert_held(&task->pi_lock);
+ 	lockdep_assert(RB_EMPTY_NODE(&waiter->tree.entry));
  
- 	/*
- 	 * Bandwidth enforcement timer. Each -deadline task has its
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index b319173178f3..77f37a23b808 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -93,6 +93,19 @@ static inline void dl_start_own_period(struct sched_dl_entity *dl_se)
- 	dl_se->runtime = dl_se->dl_runtime;
+ 	waiter->tree.prio = __waiter_prio(task);
+ 	waiter->tree.deadline = task->dl.deadline;
++	waiter->pi_se = task->dl.pi_se;
+ }
+ 
+ /*
+@@ -433,6 +435,21 @@ static __always_inline int rt_waiter_node_equal(struct rt_waiter_node *left,
+ 	return 1;
  }
  
 +/*
-+ * Return true if @dl_se has a constrained deadline, and the rq clock is
-+ * past its deadline and before its next period. An enqueue then throttles
-+ * it until that period.
++ * Return true if @waiter is up to date with its task @task. Compare the
++ * sort keys and the deadline donor, which rt_mutex_setprio() copies from
++ * @task to the lock owner. A boost or a deboost of @task can change its
++ * donor and leave its keys as they were. The owner must then get the new
++ * donor: the old one can exit. The caller holds @task->pi_lock, which
++ * protects @task->dl.pi_se. @waiter->pi_se is never dereferenced.
 + */
-+static inline bool dl_in_constrained_gap(struct sched_dl_entity *dl_se)
++static __always_inline bool
++rt_waiter_up_to_date(struct rt_mutex_waiter *waiter, struct task_struct *task)
 +{
-+	u64 now = rq_clock(rq_of_dl_se(dl_se));
-+
-+	return !dl_is_implicit(dl_se) && dl_time_before(dl_se->deadline, now) &&
-+	       dl_time_before(now, dl_se->deadline - dl_se->dl_deadline + dl_se->dl_period);
++	return rt_waiter_node_equal(&waiter->tree, task_to_waiter_node(task)) &&
++	       waiter->pi_se == task->dl.pi_se;
 +}
 +
- #ifdef CONFIG_RT_MUTEXES
- static inline struct sched_dl_entity *pi_of(struct sched_dl_entity *dl_se)
+ static inline bool rt_mutex_steal(struct rt_mutex_waiter *waiter,
+ 				  struct rt_mutex_waiter *top_waiter)
  {
-@@ -114,6 +127,8 @@ static inline void dl_note_donor_refill(struct sched_dl_entity *dl_se)
- 		dl_se->dl_donor_refill = 1;
- }
+@@ -824,12 +841,13 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
  
-+static void update_dl_entity(struct sched_dl_entity *dl_se);
-+
- /*
-  * End the boost of @dl_se, whose task stays in the class. If the boost
-  * refilled its runtime from the donor's parameters, start a new period
-@@ -122,6 +137,13 @@ static inline void dl_note_donor_refill(struct sched_dl_entity *dl_se)
-  * first. Without a refill, the task keeps the runtime and the deadline
-  * of its own reservation.
-  *
-+ * If sched_setattr() changed the parameters during the boost, check the
-+ * runtime left against them now, for the same reason. rt_mutex_setprio()
-+ * then compares the result with the top waiter. Leave that check to the
-+ * next enqueue for a task with a constrained deadline, past its deadline
-+ * and before its next period. The enqueue first throttles it until that
-+ * period: see dl_check_constrained_dl().
-+ *
-  * The caller holds the rq lock and the pi_lock of the task, and has
-  * updated the rq clock.
-  */
-@@ -130,6 +152,14 @@ void dl_deboost(struct sched_dl_entity *dl_se)
- 	if (dl_se->dl_donor_refill)
- 		dl_start_own_period(dl_se);
- 	dl_drop_boost(dl_se);
-+
-+	if (dl_se->dl_new_params && !dl_se->dl_throttled && dl_in_constrained_gap(dl_se))
-+		return;
-+	if (dl_se->dl_new_params) {
-+		dl_se->dl_new_params = 0;
-+		if (!dl_se->dl_throttled)
-+			update_dl_entity(dl_se);
-+	}
- }
- 
- /* Return true if @p waits on an rt_mutex. The caller holds its pi_lock. */
-@@ -2912,7 +2942,16 @@ static void __dequeue_dl_entity(struct sched_dl_entity *dl_se)
- static void
- enqueue_dl_entity(struct sched_dl_entity *dl_se, int flags)
- {
-+	bool new_params = dl_se->dl_new_params;
-+
- 	WARN_ON_ONCE(on_dl_rq(dl_se));
-+	/*
-+	 * A boosted task is refilled from its donor. Keep the mark until the
-+	 * runtime is checked against its own parameters. dl_deboost() checks
-+	 * it at the deboost, and an enqueue that is not boosted checks it.
-+	 */
-+	if (!is_dl_boosted(dl_se))
-+		dl_se->dl_new_params = 0;
- 
- 	update_stats_enqueue_dl(dl_rq_of_se(dl_se), dl_se, flags);
- 
-@@ -2961,12 +3000,13 @@ enqueue_dl_entity(struct sched_dl_entity *dl_se, int flags)
- 		update_dl_entity(dl_se);
- 	} else if (flags & ENQUEUE_REPLENISH) {
- 		replenish_dl_entity(dl_se);
--	} else if ((flags & ENQUEUE_CLASS) && !is_dl_boosted(dl_se)) {
-+	} else if (((flags & ENQUEUE_CLASS) || new_params) &&
-+		   !is_dl_boosted(dl_se)) {
- 		/*
--		 * The task enters the class runnable. It may come back before
--		 * its deadline, with the runtime left from older parameters.
--		 * Check that runtime against the new parameters, as a wakeup
--		 * does.
-+		 * The task enters the class, or its parameters change, while
-+		 * it is runnable. It may have runtime left from older
-+		 * parameters. Check that runtime against the new parameters,
-+		 * as a wakeup does.
- 		 */
- 		update_dl_entity(dl_se);
- 	} else if ((flags & ENQUEUE_MOVE) &&
-@@ -4832,8 +4872,22 @@ static u64 get_prio_dl(struct rq *rq, struct task_struct *p)
-  */
- static void prio_changed_dl(struct rq *rq, struct task_struct *p, u64 old_deadline)
- {
--	if (!task_on_rq_queued(p))
-+	if (!task_on_rq_queued(p)) {
-+		/*
-+		 * The deadline of a task blocked on an rt_mutex is in its
-+		 * waiter node, before any wakeup. If sched_setattr() changed
-+		 * its parameters, check its runtime against them now, as
-+		 * dl_deboost() does. rt_mutex_adjust_pi() then requeues the
-+		 * waiter with the result.
-+		 */
-+		if (p->dl.dl_new_params && !is_dl_boosted(&p->dl) &&
-+		    !p->dl.dl_throttled && dl_task_pi_blocked(p) &&
-+		    !dl_in_constrained_gap(&p->dl)) {
-+			p->dl.dl_new_params = 0;
-+			update_dl_entity(&p->dl);
-+		}
- 		return;
-+	}
- 
- 	if (p->dl.deadline == old_deadline)
- 		return;
-@@ -5114,6 +5168,11 @@ void __setparam_dl(struct task_struct *p, const struct sched_attr *attr)
- 	u64 period = attr->sched_period ?: attr->sched_deadline;
- 	bool held;
- 
-+	if (attr->sched_runtime != dl_se->dl_runtime ||
-+	    attr->sched_deadline != dl_se->dl_deadline ||
-+	    period != dl_se->dl_period)
-+		dl_se->dl_new_params = 1;
-+
  	/*
- 	 * Change the bandwidth that the runqueue counts here, with the
- 	 * parameters. A task that priority inheritance boosted into the
-@@ -5247,6 +5306,7 @@ static void __dl_clear_params(struct sched_dl_entity *dl_se)
- 	dl_se->dl_defer_running		= 0;
- 	dl_se->dl_defer_armed		= 0;
- 	dl_se->dl_bw_oncpu		= 0;
-+	dl_se->dl_new_params		= 0;
+ 	 * If the waiter priority is the same as the task priority
+-	 * then there is no further priority adjustment necessary.  If
++	 * then there is no further priority adjustment necessary. The
++	 * task must also pass on the same deadline donor.  If
+ 	 * deadlock detection is off, we stop the chain walk. If its
+ 	 * enabled we continue, but stop the requeueing in the chain
+ 	 * walk.
+ 	 */
+-	if (rt_waiter_node_equal(&waiter->tree, task_to_waiter_node(task))) {
++	if (rt_waiter_up_to_date(waiter, task)) {
+ 		if (!detect_deadlock)
+ 			goto out_unlock_pi;
+ 		else
+diff --git a/kernel/locking/rtmutex_api.c b/kernel/locking/rtmutex_api.c
+index eb18b094473c..6bdbd36bac94 100644
+--- a/kernel/locking/rtmutex_api.c
++++ b/kernel/locking/rtmutex_api.c
+@@ -510,7 +510,7 @@ void __sched rt_mutex_adjust_pi(struct task_struct *task)
+ 	raw_spin_lock_irqsave(&task->pi_lock, flags);
  
- #ifdef CONFIG_RT_MUTEXES
- 	dl_se->pi_se			= dl_se;
+ 	waiter = task->pi_blocked_on;
+-	if (!waiter || rt_waiter_node_equal(&waiter->tree, task_to_waiter_node(task))) {
++	if (!waiter || rt_waiter_up_to_date(waiter, task)) {
+ 		raw_spin_unlock_irqrestore(&task->pi_lock, flags);
+ 		return;
+ 	}
+diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
+index c38b7bdea7b3..c0f391c352e3 100644
+--- a/kernel/locking/rtmutex_common.h
++++ b/kernel/locking/rtmutex_common.h
+@@ -43,6 +43,8 @@ struct rt_waiter_node {
+  * @pi_tree:		node to enqueue into the mutex owner waiters tree
+  * @task:		task reference to the blocked task
+  * @lock:		Pointer to the rt_mutex on which the waiter blocks
++ * @pi_se:		The deadline donor of @task when @tree was last updated.
++ *			Only compared, never dereferenced.
+  * @wake_state:		Wakeup state to use (TASK_NORMAL or TASK_RTLOCK_WAIT)
+  * @ww_ctx:		WW context pointer
+  *
+@@ -54,6 +56,7 @@ struct rt_mutex_waiter {
+ 	struct rt_waiter_node	pi_tree;
+ 	struct task_struct	*task;
+ 	struct rt_mutex_base	*lock;
++	struct sched_dl_entity	*pi_se;
+ 	unsigned int		wake_state;
+ 	struct ww_acquire_ctx	*ww_ctx;
+ };
 -- 
 2.47.3
 
