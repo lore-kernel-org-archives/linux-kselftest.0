@@ -1,81 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.121.94.183
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795173286;
-	b=w+s2g3y4ctv7+3dEdPk31u9AANqK5+IJ1KYrIxm2hgW3cUByk7RTvu6YdXl0NYfPMnyq
-	 rKCdJyPyO+J6+xOgnLbgXSRgAvUR9IYhdKMnE+i6pjhWuEmIj2xbXEpmnvE5TVpCSuRKw
-	 +7lE7iMMdHNqzVQahIAi/WXoFauHTj4jaOIeOwuzlVqNbQLGNA1tVipid+dFqKjc4QzQq
-	 +UA+0iJ6jIFNSAhP0zXCjAFg62Obk82uMr4Jp4I+RkiwiFXAPx0yXqpidP1xDv5LyI+19
-	 GbEwLOUq+3RGJaVi70TeCCGIbQ3x/Ux67F6nOLdG7WJRvZCc34a26p2TFJSp3KiGfkA==
+	t=1795173341;
+	b=J3Q+IJLTvwIVxZvZ3hb1uitw5AO66hvdcWsLgzXLyUSCVFbNSJyS+17uhsTeZSDv+qyX
+	 V2wMHjiiUXGEkzPan2p5QjjvPv61eDbYnA5fnaeqaNjBTNIy9x7MtOmJa8z7H38UqnPaE
+	 emz8dpVO6mE2FmRnxoFXL/eIAlOjNCABvkyHj1pQ3SnJc/wpnEN1fI9ILiua36Zx7F4z1
+	 yiHex1zozAy8cfP6iUoGTok59u0swIIWVFjMye+fth9LzKZX1p9cB3r5EErjY1pv5wQ8g
+	 mQZSL0s9zBiVajwI1inA/9zsWSbJkW/WerLftIevkKcrAQ3gONXdduzMO7rfxm6WofQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795173286;
-	h=DMARC-Filter:X-KPN-MessageId:Received:Received:DKIM-Signature:
-	 X-KPN-MID:X-CMASSUN:X-KPN-VerifiedSender:Received:Date:From:To:Cc:
-	 Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Priority:Importance:X-Originating-IP;
-	bh=PjzVgZGUm3JAnCCIs5JaL2TnGj38tBHNtriCyFT2Wzg=;
-	b=4N6BBA1m6GKW3xp/Inru0o/KtFbG/yAPjB/3RdpIxE42W56ZJWLuES6UeAg5TwhK/nGY
-	 BZJYPjCe0LFXkvEpjuWaXHxQKZmfzMKmv+60xaCpXg9uXLISndsCNO87Bq48RBL3g8YLr
-	 bbtbo0mPwre7WD5eB0uEW128i7vn7uYwNpXpH1SFQdhRKYuxqmkUvHi60aHAZskW6ZlLe
-	 gMcOdLJbnpUZfpIihqZFLSNtCzBcV740b4hiNozIKSr2sKDF+jz87hu5p/pPI6CyLYmQC
-	 latkUfsPq3e0CznkJs+ECdiOfCqWZdnzn4484Bjz1qADUC2QmsPM8M21c0UHWYVU2YQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795173341;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=4q/HAzNWIc8z/Kxp9yRP6YEkL7lf8pSJ0VxSvJc2osU=;
+	b=p2zl3k9V1fsAg51qNzAUFjXe5uONU/HMHTl0n+7aWNfW8++KGWyllQt8hfG/RRXM1B9j
+	 abdtFOkeRY2WpbCgAfYEsLvVMWicXq/J8TCLhYcrjBw/svL+MpJE7DMf39upXTVFBXV5b
+	 WF9xkJGE/1e4sJUMf3BKa47/RSocttw2fE4a3c5/Yo/UCZkLtZif1JKVRK0ndy3qzKZir
+	 N+zM53RBTwP29wS+aeifDWpYRydBOcrs58jEChT8Efl1vyjuxJxxSz5mO47mPQhCwyh4K
+	 ju37C3h3AUBt8NAEzkFWfulNj/Ae2vMlwPz3LQ+XWYrbLnb1USilm+QQ1aovQ7eadhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=xs4all.nl;
-	spf=pass smtp.mailfrom=xs4all.nl;
-	dkim=pass header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=ucC4Rj6u;
-	arc=none smtp.remote-ip=195.121.94.183
-Received: from ewsoutbound.kpnmail.nl (unknown [195.121.94.183])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiQFT9Am;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090AF606A33A
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 11:14:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 090AF606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCEB606A320;
+	Fri, 20 Nov 2026 11:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=ucC4Rj6u
-X-KPN-MessageId: 9224ddf7-e4d3-11f1-8e5d-005056992ed3
-Received: from mta.kpnmail.nl (unknown [10.31.161.188])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 9224ddf7-e4d3-11f1-8e5d-005056992ed3;
-	Fri, 20 Nov 2026 12:14:36 +0100 (CET)
-Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
-	by mta.kpnmail.nl (Halon) with ESMTP
-	id 92236a2f-e4d3-11f1-be6a-00505699693e;
-	Fri, 20 Nov 2026 12:14:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:subject:message-id:to:from:date;
-	bh=PjzVgZGUm3JAnCCIs5JaL2TnGj38tBHNtriCyFT2Wzg=;
-	b=ucC4Rj6uJwQLNweeTQfqi5QvjUTh2ZSjBprNMF8X2P5vdvD8C5d2O37pu3+MhBZQxo71p6UH341lH
-	 FC8qqlAutWOXQ6+Y+rb5d/oRVfj9l1Dxeqo7ZyWg0LmYnZARgytUII542884wDvHjXS/JttQQEs9DQ
-	 bqMVWWHsqJfkuvsPAFknqPjqBKq/uV960BenVIVLFw/0f9337/gPhQ8dAg2ygbeooRtFYl2J8977Th
-	 by/FWb6njbth6QBAIVNmLWzVNCyd44uFunmmZAWkIKoLfdFOheCBpe8nVxqu3l2p2c7PXlMetc2oJt
-	 VmwaKdVp3/7C5mr39owUglyijb6JNOA==
-X-KPN-MID: 33|/sTml7rAee1FVNVLGx5DdW+WHq1K70NfYXOiC57mU469Im1tEq7liCcW2gzjud3
- sG1/yTtbugNy6EpjhTCu4zsvvOuiNdY7N0W34d3Rb7Lk=
-X-CMASSUN: 33|NEkO+ZW4M3w9vISEGjQ3s8RjcZG5Ozjt2vMCDXfi8OkgQAwe7HT/MzSsbv+ZWt7
- MR+7TrAKikaX+MKs2lcin9Q==
-X-KPN-VerifiedSender: Yes
-Received: from cpxoxapps-mh07 (cpxoxapps-mh07.personalcloud.so.kpn.org [10.128.135.213])
-	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
-	id 92199ae0-e4d3-11f1-acfd-00505699eff2;
-	Fri, 20 Nov 2026 12:14:36 +0100 (CET)
-Date: Fri, 20 Nov 2026 12:14:36 +0100 (CET)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Hangbin Liu <hangbin.liu@linux.dev>,
-	=?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <ricardo@marliere.net>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <1254980601.2097872.1795173276553@kpc.webmail.kpnmail.nl>
-In-Reply-To: <8a436334-d306-4a34-bb7b-efc713aed0f8@linuxfoundation.org>
-References: <20261118-kselftest-run-timer-v1-0-53a838b2d62b@xs4all.nl>
- <20261118-kselftest-run-timer-v1-1-53a838b2d62b@xs4all.nl>
- <8a436334-d306-4a34-bb7b-efc713aed0f8@linuxfoundation.org>
-Subject: Re: [PATCH 1/3] selftests: use local variables consistently in
- runner.sh
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiQFT9Am
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631FE1F000E6;
+	Fri, 20 Nov 2026 11:15:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795173340;
+	bh=4q/HAzNWIc8z/Kxp9yRP6YEkL7lf8pSJ0VxSvJc2osU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=eiQFT9AmZXE80k4vQiQVbH6zGKuabiTwvqQFRzxu32eu1FITxzhp6ynTVFOKGWIYc
+	 kdt1ABR1nlY1lXBi21g6qB4xy50TYfMLG9JmYyI3xud/sDdL0BZw9ANPtDHZLwQryW
+	 CCpH0Hhfd8DgR8jKwZGeQedWSfEuCyYEqOcljny15MzC/AhsZEKPbyCj8I7Xxh0e7S
+	 zUj9rDDS3ujW4FY2JfUfbNk9Qm+e3G/+IWEJNSMyMrAiW+P3glbGmOPyJLrc9jvroF
+	 7BxRY3IzC/wbNUIiDAHAn+Kfn/hojteAjPxdyBf1vKZNdYdwr9rAyqQJN8eZxA0XXo
+	 BMVJFKbr5u18w==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
+  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
+ <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
+ <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
+ Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
+ <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
+ Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
+  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
+  Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v4 07/19] liveupdate: Add helpers to track the files
+ that LUO manages
+In-Reply-To: <20261111002358.1842967-8-dmatlack@google.com> (David Matlack's
+	message of "Wed, 11 Nov 2026 00:23:45 +0000")
+References: <20261111002358.1842967-1-dmatlack@google.com>
+	<20261111002358.1842967-8-dmatlack@google.com>
+Date: Fri, 20 Nov 2026 11:15:33 +0000
+Message-ID: <2vxzbj7j3ga2.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,147 +72,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
+Content-Type: text/plain
 
+On Wed, Nov 11 2026, David Matlack wrote:
 
-> Op 18-11-2026 11:13 EST schreef Shuah Khan <skhan@linuxfoundation.org>:
-> 
+> Add luo_track_file() and luo_untrack_file(), which add a file to and
+> remove it from luo_preserved_files, and use them instead of open-coding
+> xa_insert() and xa_erase() with luo_get_id() for preserved and retrieved
+> files.
+>
+> The next commit lets file handlers make LUO track the file they retrieve
+> into, which adds more users. The helpers keep the key and the -EBUSY
+> behavior in one place.
+>
+> No functional change intended.
+>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+[...]
+> @@ -395,8 +407,7 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
+>  		luo_file->fh->ops->unpreserve(&args);
+>  		luo_flb_file_unpreserve(luo_file->fh);
 >  
-> On 11/18/26 06:40, Jori Koolstra (CIQ) wrote:
-> > run_one() and run_many() assign their working variables without
-> > declaring them local, so they leak into the global namespace of
-> > whichever shell sources runner.sh, i.e. run_kselftest.sh or the
-> > RUN_TESTS recipe in lib.mk.
-> > 
-> 
-> Hmm. so if a timeout value of say 60 seconds comes from a test
-> settings file, does it persist? Can you see that if you run a
-> few tests using TARGETS variable?
-> 
+> -		xa_erase(&luo_preserved_files,
+> -			 luo_get_id(luo_file->fh, luo_file->file));
+> +		luo_untrack_file(luo_file->fh, luo_file->file);
+>  		module_put(luo_file->fh->ops->owner);
+>  
+>  		list_del(&luo_file->list);
+> @@ -668,9 +679,7 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+>  		return err;
+>  	}
+>  
+> -	err = xa_insert(&luo_preserved_files,
+> -			luo_get_id(luo_file->fh, args.file), args.file,
+> -			GFP_KERNEL);
+> +	err = luo_track_file(luo_file->fh, args.file);
+>  	if (err) {
+>  		/* A retrieved file is new, so it can't be tracked already. */
+>  		WARN_ON_ONCE(err == -EBUSY);
+> @@ -788,8 +797,7 @@ int luo_file_finish(struct luo_file_set *file_set)
+>  		luo_file_finish_one(file_set, luo_file);
+>  
+>  		if (luo_file->file) {
+> -			xa_erase(&luo_preserved_files,
+> -				 luo_get_id(luo_file->fh, luo_file->file));
+> +			luo_untrack_file(luo_file->fh, luo_file->file);
 
-No, because it is doing
+This looks dangerous.
 
-	export kselftest_timeout="$kselftest_default_timeout"
+Since the previous patch set luo_file->file when xa_insert() failed,
+this will trigger in a failed retrieve. Except, the file was never
+tracked to begin with.
 
-at the start of run_once(). I was just trying to get it to be a bit more
-consistent and less bug-prone. We could also add readonly, which is in
-POSIX. But that seemed too much.
+While I don't see anything that actually breaks because of this today,
+I think it is a bug in the making.
 
-> > Declare these variables local so that local is used consistently
-> > throughout the file and the sourcing shell's namespace is not polluted.
-> > This does not add a new requirement on the shell: local is already used
-> > in run_many(), in_netns() and run_in_netns().
-> 
-> Makes sense.
-> 
-> > 
-> > Also, obey the convention to use upper case names for variables that are
-> > constant once assigned.
-> 
-> Can you elaborate on this convention?
-> 
+I think the below is a bit better. Although this change probably makes
+more sense in the previous patch, since that introduced the problem.
+This patch should just replace the xa_erase() with luo_untrack_file().
 
-It seems to be what was used for runner.sh, local variables set once are in
-uppercase.
+	if (luo_file->file)
+		fput(luo_file->file);
 
-> I don't want to see these changes combined. We don't combine
-> cleanup and convention changes with real changes.
-> 
+	if (luo_file->retrieve_status > 0)
+		luo_untrack_file(luo_file->fh, luo_file->file);
 
-I'll separate it out.
+>  			fput(luo_file->file);
+>  		}
+>  		module_put(luo_file->fh->ops->owner);
 
-> > 
-> > Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
-> > ---
-> >   tools/testing/selftests/kselftest/runner.sh | 29 ++++++++++++++++++-----------
-> >   1 file changed, 18 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> > index 45fb8ec38493..9b1dad5441ea 100644
-> > --- a/tools/testing/selftests/kselftest/runner.sh
-> > +++ b/tools/testing/selftests/kselftest/runner.sh
-> > @@ -58,13 +58,18 @@ tap_timeout()
-> >   
-> >   run_one()
-> >   {
-> > +	local DIR TEST BASENAME_TEST BASENAME_SANITIZED SETTINGS TEST_HDR_MSG
-> > +	local line field value interpreter stdbuf cmd rc
-> > +
-> >   	DIR="$1"
-> >   	TEST="$2"
-> >   
-> >   	BASENAME_TEST=$(basename $TEST)
-> >   
-> >   	# Reset any "settings"-file variables.
-> > -	export kselftest_timeout="$kselftest_default_timeout"
-> > +	local kselftest_timeout="$kselftest_default_timeout"
-> > +	# Make kselftest_timeout variables available to tests
-> > +	export kselftest_timeout
-> >   
-> >   	# Safe default if tr not available
-> >   	kselftest_cmd_args_ref="KSELFTEST_ARGS"
-> > @@ -91,8 +96,8 @@ run_one()
-> >   	fi
-> >   
-> >   	# Load per-test-directory kselftest "settings" file.
-> > -	settings="$BASE_DIR/$DIR/settings"
-> > -	if [ -r "$settings" ] ; then
-> > +	SETTINGS="$BASE_DIR/$DIR/settings"
-> > +	if [ -r "$SETTINGS" ] ; then
-> >   		while read line ; do
-> >   			# Skip comments.
-> >   			if echo "$line" | grep -q '^#'; then
-> > @@ -100,8 +105,8 @@ run_one()
-> >   			fi
-> >   			field=$(echo "$line" | cut -d= -f1)
-> >   			value=$(echo "$line" | cut -d= -f2-)
-> > -			eval "kselftest_$field"="$value"
-> > -		done < "$settings"
-> > +			eval "local kselftest_$field"="$value"
-> > +		done < "$SETTINGS"
-> >   	fi
-> >   
-> >   	# Command line timeout overrides the settings file
-> > @@ -164,8 +169,8 @@ run_one()
-> >   
-> >   in_netns()
-> >   {
-> > -	local name=$1
-> > -	ip netns exec $name bash <<-EOF
-> > +	local NAME=$1
-> > +	ip netns exec $NAME bash <<-EOF
-> >   		BASE_DIR=$BASE_DIR
-> >   		source $BASE_DIR/kselftest/runner.sh
-> >   		logfile=$logfile
-> > @@ -175,9 +180,9 @@ in_netns()
-> >   
-> >   run_in_netns()
-> >   {
-> > -	local tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
-> > -	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
-> > -	local rc
-> > +	local tmplog netns rc
-> > +	tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
-> > +	netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
-> >   
-> >   	ip netns add $netns
-> >   	if [ $? -ne 0 ]; then
-> > @@ -198,8 +203,10 @@ run_in_netns()
-> >   
-> >   run_many()
-> >   {
-> > +	local DIR TEST BASENAME_TEST
-> > +	local pids pid rc
-> > +
-> >   	DIR="${PWD#${BASE_DIR}/}"
-> > -	local rc
-> >   	pids=
-> >   
-> >   	for TEST in "$@"; do
-> > 
-> 
-> thanks,
-> -- Shuah
+-- 
+Regards,
+Pratyush Yadav
