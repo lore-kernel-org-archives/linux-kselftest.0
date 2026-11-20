@@ -1,60 +1,69 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795169500;
-	b=eq4mRAJMqz/78q4DKoM4z2/4lyXkC+xn2IUv1C42NMsqEs8CbzPAltyqwQqyx3WmULZv
-	 xhZcilxkVNxrh/lodm4/DdTJ+ZUB4mH3T6jIrpcNQULGwcJLjE4umMdS/xVzIYqUz38gZ
-	 IukiWnINvjqQVd/HftpgN90DXXtrMbys9IwLC4N05T9TrT4mt6LxzoB7+TgXbdXqOSvJE
-	 EwxeSCbvDyQNVvFACtQNamh/yES2p7Yps1cXX861iC+5V3EZVJIJKckDngyI9VCLBGm5i
-	 sFcUN5cOQGFEYxBaVlbhGmhZgG6pyIdUj+4/G+5GMpvCzQWwKT5qjH9+YSRd0cKzw3w==
+	t=1795170180;
+	b=5kaeaSS62aAoLGXma+D5CuebLCn5aigEGiQ3pcZel+6WFzFc+r4MEV5rz1wzE8e2E0Rp
+	 OoWil3n/es3/ljJ0c4FDXC22YSwlJb9Tzl65xqhDVi7eLSHxTMnlXLe6AaZzYqWHTUH77
+	 G8/lSkVJ2EKI5Y/3qfjVelNPSe/flXpxx0LWL+TU/2q8Rr87MXuAt5HnLzA3HYDfz/HTW
+	 wjMzRHU9JVjBt1FS1mvVkMC/5UdZ2Fvc8802UD5BmokkJ0sYf0hwLwb05cN6V4UCUnqOa
+	 FvZ+xkrrMdxKSZ0tWWogIQfxoAKv5d2g4YL1evE52hgR6sRBtW6xaPy8TuIPYz0nYTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795169500;
-	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
-	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Mailer;
-	bh=dZiF4/CWqCQ7gcRMAMR0YOlOB4gblyvSfeSB/PEX/KA=;
-	b=h6SgTZjoTjHOv9rV8PkkW4LWiSC6YJDI2B5z5NLOhVIzedol0ybvnSRuaHoha7yhmnhT
-	 88/1uRukpZYYJca1UMBbMujbIEA/Fqd4j6w7xOpBYvk+M2/bJDi8K5KqsjhemaAwB6VrZ
-	 bdSDlm3XpfJNU7D3HNYmvAzChIraXZxsyy1qOKRPVgX/fLjlPA4m8y3HF5r7HJQGSgvZn
-	 0MLyi4R2fJVGTWhEnxpG+YQVjfOhaldA6thDM+9mayrb3WtFWBVG9aQDXZ6cphsbFTGrq
-	 YN6C7qpRl12jQNRaRNgG4oezWI2pAq5sTiLeoRyySsunyO44zyiMLWp5ZGMZ153SAoQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795170180;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=AfJVh7uFWkG93CcIU6uXtcUN7858JzhFpn/OacUyBUs=;
+	b=JCiApX7FRv5JfJEuCNfPGzgvvNaSLaaGkQzB8YIsHzCKguPOJPyMkpRPRRhth2+S/rAb
+	 yFRKIBo0zHzUPeYlDgV6HT2swDdI4+SAoY5Kf6+56uYgGtzRI96eEKDXkXFEdi73FmSxs
+	 PdAO5yn9JBtmGW7AHc7Tpgs1YeOn3Q+tpd7vCvILJiGBoW/r5AoEOeVVr43hw2DlRYbHu
+	 45H+mNimCOS86ydT0HzJUWb709Fx13n5SB+CnHNXeTx34LtcgSg86QIv83Goj5XgDqleA
+	 eFPYlguXSuf1x8vKohHQt7Mb5lfxiI+c/uS1q85Op/LXEgwlE2b0yqD4+b4rtW1GvLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="bhEWf/3U";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TOdGOWDO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3955B606A326;
-	Fri, 20 Nov 2026 10:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7206D606A320;
+	Fri, 20 Nov 2026 10:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bhEWf/3U
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886951F000CA;
-	Fri, 20 Nov 2026 10:11:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TOdGOWDO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A491F000D2;
+	Fri, 20 Nov 2026 10:22:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795169500;
-	bh=dZiF4/CWqCQ7gcRMAMR0YOlOB4gblyvSfeSB/PEX/KA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=bhEWf/3UVSV5Oj/LaVfj5iyFojab9TYNDhaX1mHwwaJAwXpdymbQOnxSokoln8AMY
-	 mX9mf4v6rXtAee5qHVWTUcejqpeGe/FkoS9Zzds8aXx3HJn35atom00NnbYxDM3e4z
-	 W4lRRn7krZTg4Xx68Ti4Pn5x4zLUufyP2G3OeRRrOJPpnrkx2mDd/w6A+blHcAFoc+
-	 8jsVCtIM79JK8gWtPvQx3NJdPTVkpIv1SLIm6unPRy/rgIv1D6q1SOLBYgH59Hx6ve
-	 eumgNRPrSC1g3HeBPTkLeny1Ub6+j+i7sZRoyfjYVbGLx+ge1hPbdrcXBaCatzCdEp
-	 DTHGPS7zjwGbg==
+	s=k20260515; t=1795170180;
+	bh=AfJVh7uFWkG93CcIU6uXtcUN7858JzhFpn/OacUyBUs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TOdGOWDOE4Q92JqZpqx1GjG7P/VGi6q7lu5iUCneklDKerF+BvgSp3V+hvXV3N6os
+	 H+cURRSLyDj5yTNEiU6aO3tuCgW6cnnCwDxCAcIXfGW2ZxAH0Op0RJ7HclI/Vgd7Np
+	 HSJMJ00npcxaTVlSmNHRpl+6DpyMMc3vK/ovrqQaf1tivc6QU0h4Gtkhke5r1nCwif
+	 jRaHkRM5T13INlz24gEfe9okl2spy+DYQ1SedfUt/ySHtyRXfGSYLd59aF93aRz1uu
+	 D2s+3h+1mi0C0WqpCIFezw0V3ZCEXg/SUOhophL3cuCueGd9MXFceCgFJnzYBFVTTI
+	 +v575icriio8Q==
+Date: Fri, 20 Nov 2026 11:22:49 +0100
 From: Christian Brauner <brauner@kernel.org>
-To: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, 
- Josef Bacik <josef@toxicpanda.com>
-Cc: James Morris <jmorris@namei.org>, David Howells <dhowells@redhat.com>, 
- Jarkko Sakkinen <jarkko@kernel.org>, "Andrew G. Morgan" <morgan@kernel.org>, 
- Serge Hallyn <sergeh@kernel.org>, linux-security-module@vger.kernel.org, 
- linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, Bradley Morgan <brads@mainlining.org>
-In-Reply-To: <20261117-b4-setfcap-userns-v11-0-2be11a2c32f4@toxicpanda.com>
-References: <20261117-b4-setfcap-userns-v11-0-2be11a2c32f4@toxicpanda.com>
-Subject: Re: [PATCH v11 0/3] capabilities: close the ways around the
- CAP_SETFCAP rule for uid 0
-Message-Id: <20261120-zutun-ausgearbeitet-erregen-ebd3834404ea@brauner>
-Date: Fri, 20 Nov 2026 11:11:34 +0100
+To: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Petr Mladek <pmladek@suse.com>, David Laight <david.laight.linux@gmail.com>, 
+	kernel-team@android.com, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 1/9] Documentation: ioctl-number: Add
+ PROCFS_IOCTL_MAGIC range 0x10-0x11
+Message-ID: <20261120-antitoxisch-flott-sense-8c2a09fc9679@brauner>
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-12-wusamuel@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,43 +73,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev-04696
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261113221248.3535369-12-wusamuel@google.com>
 
-On Tue, 17 Nov 2026 19:54:23 +0000, Josef Bacik wrote:
-> v1: https://lore.kernel.org/all/20261006-b4-setfcap-userns-v1-0-f47e7ed66072@toxicpanda.com/
-> v2: https://lore.kernel.org/all/20261014-b4-setfcap-userns-v2-0-fac4d19281d7@toxicpanda.com/
-> v3: https://lore.kernel.org/all/20261021-b4-setfcap-userns-v3-0-97c7ed4e43e1@toxicpanda.com/
-> v4: https://lore.kernel.org/all/20261022-b4-setfcap-userns-v4-0-88aa0ffaa08f@toxicpanda.com/
-> v5: https://lore.kernel.org/all/20261023-b4-setfcap-userns-v5-0-0620223be951@toxicpanda.com/
-> v6: https://lore.kernel.org/all/20261026-b4-setfcap-userns-v6-0-25f10b7ca497@toxicpanda.com/
-> v7: https://lore.kernel.org/all/20261026-b4-setfcap-userns-v7-0-bf8a576f7259@toxicpanda.com/
-> v8: https://lore.kernel.org/all/20261027-b4-setfcap-userns-v8-0-2674adc63f3c@toxicpanda.com/
-> v9: https://lore.kernel.org/all/20261109-b4-setfcap-userns-v9-0-0d3f00976ce2@toxicpanda.com/
-> v10: https://lore.kernel.org/all/20261112-b4-setfcap-userns-v10-0-84f6f7faa903@toxicpanda.com/
-> 
-> [...]
+On Fri, Nov 13, 2026 at 02:12:46PM -0800, Samuel Wu wrote:
+> +'f'   10-11  linux/fs.h                                                conflict! procfs ioctls (PROCFS_IOCTL_MAGIC)
 
-Applied to the namespace-7.5.misc branch of the vfs/vfs.git tree.
-Patches in the namespace-7.5.misc branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: namespace-7.5.misc
-
-[1/3] userns: don't let setns() lend CAP_SETFCAP
-      https://git.kernel.org/vfs/vfs/c/711bc24f1d8f
-[2/3] capabilities: don't let ptrace borrow CAP_SETFCAP
-      https://git.kernel.org/vfs/vfs/c/c1e5f4d36d2a
-[3/3] selftests/namespaces: test the CAP_SETFCAP rule for user namespaces
-      https://git.kernel.org/vfs/vfs/c/cbe977960cb3
-
+Those are PAGEMAP_SCAN (16) and PROCMAP_QUERY (17) which are already
+in the tree. The two ioctls this series adds are 48 and 49, i.e.,
+'f' 30-31, and they aren't registered here at all. Please add them as
+well.
