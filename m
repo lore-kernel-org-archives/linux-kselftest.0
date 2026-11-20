@@ -1,71 +1,67 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795182838;
-	b=Dq7wvdmgOUkAmLo8QQ+0CwcWdkvh1LCAuNGrPyOVMZpbatHVcpvOZyALco3BYWgsQFVR
-	 W2MMXL73QT7xmoFkFbhqYRQr2QRdIkcAACwTcFqZMZ6vm+qjrzbPrHOCt5Bwhb7vB4R9/
-	 kXSHQOifrK8hr3grZzTwCxnQrvJDSyY+xAqDEWZdGiuoZjVkJYe9ZiYRfWLe2P9YqYBzN
-	 onK4QKJxi53HD0KouhhjvazuDSCn3gQdYHwZWzypnKdSlLE9h0yUPj8cghKK2PMo2uLrF
-	 eKiYi4rims1fkLUO6dpj1kKF+fCAxWDOo2av6Gzl9mJQ5FiajELKxrvmWChjcm2torg==
+	t=1795182920;
+	b=FLs1zo8Iit63KIgwBdZAnL+vjlBU4bXzl5AHXxK1dK5y7+UxCpX7RuWHyM7X/r7JEw7r
+	 kerLY1pQls6k1UScpCTldSSVgTcS+CT+gypKZ9dVNWvGIcpDpPT2fj8tKhdfewq0mL04W
+	 itRbjLNofK6xQMkgcttqHp2MxcPLHe3hOUWe4uqaLcxhBoOTUa4wMKEiXQhT32mlfPeg0
+	 gRmnqDyyB25bECBEF73xbEzYt2JTSfB1opQpBgo6TXBkY6s6Agx+ui6Ng3U1aKmbzTCYN
+	 T0p0xUjF0jzx3jS51YZXJGxVwu3lye6R++FpiABNrWIM8xA1EKC9+IhXq7ZOvCcJDlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795182838;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=DpFcKmLeWcNlIWO+vriHC7zRosbcBxousCh6WYeygvs=;
-	b=i0QogKTYcr5LIURMtlxHihcFEIPGegjvrWATpS333jyp5MGWEJocVnYi4e75GHf1f3ux
-	 pFgotgMquyZuhimYkn75VBUl9ERaP4afy5z3C4mnEL41C5PEp4wMk2NxJGFhy8k0DQuxL
-	 mrMdYDNYK8ZsZt8YiDu+RUL0h9iSPJfCucsvRAKBYZl7TgHifKGpjMcbQTCnd+cvMP5z1
-	 s6IZKhnOM3QAG60O0E7elGNMWvqCHBropsb+ttOrnzDA+DOgjydtz12EhGlQJbXGFeuE+
-	 0h6jSPB3cgEZVXE+ytk8rjnxm2yJRn2N/FY+hetFDVRPD9lE5LVYdpXLfJjRj1oZcoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795182920;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=K6Ek4iGcbq3vQ07GRWmSQBnPhMgNe+rY+J8oqtO23vE=;
+	b=0uHcO/pdJhXHOswwWcfxRHyqOcjB/kDOMlJ4sVukVvq+CGDtA4F5MKc8AfIa5GqeW3rC
+	 DOtcb8jE0o2lGc6jmwfyuEza9QLSyxAxY1+pqdLLnwIP4Db6Afh2QCFODOCccw682v/8X
+	 IDgvoC4FKiEYOJJledDCUg33IHP65iQeZSAAmgbsy3dBaRBTumON/MG8DZnadnjgsVU1k
+	 wLqwXa7URxGZGqZqVI972MC2wjSGDjgSPVSRWmf4WY8wTTntur7oJNA74qgKw4wS1pfh2
+	 IRQG7rhsZ2X0edxHcLPmXRi2Sc9z5/yZuPvmHCPwjfL5mDGRcqlcpCXeUl7LNaiB3Uw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JllosG2Y;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cnhVylqs;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E58D606A320;
-	Fri, 20 Nov 2026 13:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEF2606A320;
+	Fri, 20 Nov 2026 13:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JllosG2Y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BA41F000C0;
-	Fri, 20 Nov 2026 13:53:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cnhVylqs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0C91F000CA;
+	Fri, 20 Nov 2026 13:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795182838;
-	bh=DpFcKmLeWcNlIWO+vriHC7zRosbcBxousCh6WYeygvs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JllosG2YopKKAggV+8nxkQItQJgwyK/SH23r7EujPAu9LLeAmE5OsTlP0qwfs1qzs
-	 egAqrAFrmET3vEhD6NZPH2L6aV4tacL188jjX0xkuze0uwvbqPNO7c8M2iAgoYcYeq
-	 H7ZEaOmrlD1opoFLdFwf15pg8kb+10eV8lpeF4uADYK1q19wUkmB5rJV8qiDux/Yn4
-	 hpATfff7Vkp2NHocWtfz7ojkZJZQUjOJAxL6Slx19OLLSKx4ze1EP2GCq5qfyELXpm
-	 I4Wp/Gk8JPX+/i43x3SGowq73hPjNZ8FKxqVB3mHDINzvTM6yLGWHdPtvfDCy1nhcC
-	 vqb5JvCLcxk4Q==
-Date: Fri, 20 Nov 2026 14:53:46 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>, 
-	"Andrew G. Morgan" <morgan@kernel.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>, Oleg Nesterov <oleg@redhat.com>, 
-	kees@kernel.org, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com, 
-	paul@paul-moore.com, jmorris@namei.org, shuah@kernel.org, alexjlzheng@tencent.com, 
-	jannh@google.com, jaime.saguillo@gmail.com, elver@google.com, blbllhy@gmail.com, 
-	bvanassche@acm.org, pjw@kernel.org, broonie@kernel.org, debug@rivosinc.com, 
-	tglx@kernel.org, aleksey.oladko@virtuozzo.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/3] security: Add PR_CAPBSET_DROP_MASK for
- process-wide bounding-set drops
-Message-ID: <20261120-bankverbindung-bisher-dorfleben-62a38cf1cc74@brauner>
-References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
- <20260929130200.1638343-3-ruanjinjie@huawei.com>
- <atjN3JX7sWx9kpQ5@hallyn.com>
- <CACmP8ULW+COA17s6_UUKhQrJaviWmnUCjfite43Y0FgPN30-AQ@mail.gmail.com>
- <avHfxe++P4WLUQxf@hallyn.com>
- <80ff9aea-3a5c-4c92-b713-99c249564008@huawei.com>
- <CACmP8UK=b4Hkivzf77BJ-S_CR94+AgpNs_EfQ4i=CHL3+=0Y6Q@mail.gmail.com>
- <1772fffa-b938-4fa7-bd47-ff7c03552efa@huawei.com>
+	s=k20260515; t=1795182919;
+	bh=K6Ek4iGcbq3vQ07GRWmSQBnPhMgNe+rY+J8oqtO23vE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=cnhVylqs5ES3JxvaYjPvjapckpsryCakLkf58K6cdu/yj6hEpK55l61/r5leNICKo
+	 27nkXsy8zKUdCQYesScKFBHbzuGcGSMTih+K4Glwu9mkcllzFD6NIpLxeRhwpSbtMC
+	 8Tfec7DkiYTiaSZiSkRmUJmpAOFLegUbO39jNFJfK+g4mT0xpEX0u8r1ziz2VFRy0U
+	 gdAk5alXFHUQX3rzuWjGG9rreAoYk7Is3htWwhisfUatj5QU3Jwe0ghmm8AbUKx+GH
+	 MNOwscOVMcGYsVJ/tbFp27qzAeWLDbB6s2DJ/r6JsLVSupBwX+z3TmQJqYkNS6URJ/
+	 JYvAfbSkIEcpg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
+  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
+ <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
+ <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
+ Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
+ <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
+ Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
+  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
+  Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v4 13/19] mm/shmem_luo: Allow preserving tmpfs files
+In-Reply-To: <20261111002358.1842967-14-dmatlack@google.com> (David Matlack's
+	message of "Wed, 11 Nov 2026 00:23:51 +0000")
+References: <20261111002358.1842967-1-dmatlack@google.com>
+	<20261111002358.1842967-14-dmatlack@google.com>
+Date: Fri, 20 Nov 2026 13:55:13 +0000
+Message-ID: <2vxzld6n1ubi.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -75,26 +71,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1772fffa-b938-4fa7-bd47-ff7c03552efa@huawei.com>
+Content-Type: text/plain
 
-On Wed, Nov 18, 2026 at 11:15:17AM +0800, Jinjie Ruan wrote:
-> Do I need to resubmit RFC v3 based on your suggestion and address the
-> sashiko review issues besides sighand?
-> 
-> Or wait for the results of new discussions?
+On Wed, Nov 11 2026, David Matlack wrote:
 
-The signal_struct part has to go. I think this is also what Serge's
-question was getting it. And imho it's the real problem in this series.
+> Allow preserving files on tmpfs mounts by dropping the link count check
+> from shmem_luo_can_preserve(). The check was meant to limit preservation
+> to memfds, which never have links. It isn't needed anymore, since tmpfs
+> files are now retrieved into a file on a tmpfs mount.
+>
+> Userspace can keep using a linked file by its path until the Live
+> Update. The path of the file isn't preserved. Userspace creates the file
+> to retrieve it into, and can then link that file at the path it wants.
+>
+> Preserving a linked file affects everyone who opens it by its path,
+> since its size is frozen while it is preserved. The permission check
+> added by "mm/shmem_luo: Require permission to preserve a file" covers
+> that: Callers need permission to write to the file, or must own it if
+> its size can't change anyway.
+>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-The caps a task has are described by its struct cred and the whole
-kernel relies on a cred being a complete, immutable snapshot of that.
-With a pending drop in signal_struct that isn't true anymore.
-Anything that stashes creds and uses them later, override_creds(),
-io_uring personalities, file->f_cred, LSM hooks, sees a bounding set
-the task doesn't actually have.
+Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 
-And every place that looks at the bounding set has to remember to fold
-in the signal_struct mask. Any place that forgets is a bypass. That's an
-entirely new bug class. So not going to happen, sorry.
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
