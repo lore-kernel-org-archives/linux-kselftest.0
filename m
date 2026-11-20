@@ -1,87 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207377;
-	b=RtnULzvnzkhucrdTaGzmPh0CqtMINye2QAqXo8vJM3KQ2EksATHd95Ms1Nqc8OcIpVKt
-	 Ct3oAVFGI6hOwSIkw3970/vg+D9BB2CUinIJ+jf97Ea6UDvfP+muNNR++SChbQU078vIq
-	 lW6bbh6TMZUE8sPGiphZxeoXxv/8XcvId6dCvjVt8gugKzyU1ELyq9Cb2KhFKLFQU+usk
-	 Srn/MbV/csBd6iBujzGRrg+WFzXT130fjebUmHsQAIGlN0fsQj8nCrvWf+pyMAcMp642i
-	 P5Jt8etA5WtaeB6LlAFrmNkop6FggPgBJJF6ZKXkAqEAyaq15njwXWhnobHCU5U4R9A==
+	t=1795207372;
+	b=0EN8d7OWYIyIIqaaPK6MW+JYivkhwPbxgnFJAtYtyisTOCPTJ4/vrkkGpT04ENozUcFE
+	 XJbhwnL8tJgzgiz2RvLAMk0CEnFx3Tfysh4u+6YV93uLVrll+8rwqmsfzppBw71gBXFrA
+	 gqFWZYjVItfM5eJXX7HYX7R5K5M+ROOh7yzCm3wUpyFs4+n7/DSwSzKT8cGoyIwQLs+wi
+	 cyfbkhi2M3rf3jYqakqqUxg/GCbMdnpVxpFPbf4gZ7i+BxifGeJNiGNNcFcDk2oTcPKGG
+	 ZxJnbhbGLdefPz9DVeKQSK4N8LEQlQp2z2eqcrpOsuTHkYDO9JXM4MOiVqdEqQEtNxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207377;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207372;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=4GH1ahEms1dqA45xIo5IOe2rBwRqoWw8ywFNljYwSWo=;
-	b=EIfvR4w4lVSIgT/OK9EwD01hgmPA8wpQuoC9sLOgKV8kB5FlL67dpwG1S5Yt6+dYRpEq
-	 piEFF6yKcnKzS0QtOjUdeY1HVHiTIBUSal7G2xJfYVxsV3FFfVWju7a8Q0yPy7CcXFdBd
-	 JR3YJlqJNu8nLEviDJ74ZmA1oqHIxtPgrGyT7W41pUtZd59fWMXYfiSMhC3uoG84yyYci
-	 yX5nZ0zXfKsply5tH/rf7jdRwe/y8VfiNlNdUPH+QLY6ctIa5Ug5EDzU+OtIwgby1Wjpb
-	 L1HGaegtDMLObelYZL32zkw3g6xEDo7a7ENR82XxTzvdG5/UoH2psQGzuZP/BFxuq8g==
+	bh=vE+uNjXsB2iA/fb83lE/XKLUhCwUuFaXjUJLCJJWSCI=;
+	b=I870YI4skev3rZUC2ihgBUXa1ez8wKW/E6JoVxlgdN5yqRZIW53psRqzqUISztLbXOxD
+	 mG1fGGwD9mtaJgH6pvTChDHSirjW2lvCSWEjxh0R/vGeOJH6k3ad/Oak8uHf9VaDLSZ8T
+	 ED81hbvWWLccBXmmH/4UWv8sXy55S2DiulJo61YPRdSk8f2AdHkg/TKvTtnYV5vYxqNir
+	 Z52iLSxlQDZCLEMn7mDUlSsPQyVH5il3kXu9IWbFXhg8ZaCwrU/jmSt3uopc9pRSB9QcG
+	 csgHrdTH2wmx1xKHVZ2GtVL8gnq2IcQNRjMgK4ODr8AHHAQo5xVBGSRTbzHqMsfx6Rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=kernel.org;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.222.178
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=J0Ebh9eN;
+	arc=none smtp.remote-ip=158.69.130.18
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906E8606EEED
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 20:42:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 906E8606EEED
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-9495d543b91so79524085a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 12:42:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795207375; x=1795812175;
-        h=content-transfer-encoding:content-type:references:in-reply-to
-         :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4GH1ahEms1dqA45xIo5IOe2rBwRqoWw8ywFNljYwSWo=;
-        b=YpxyCRtuO2LJcZSBCPmnunDjIQM/j9b+1XkgdTegK9mUTEFrijm6avYfSf12wHJTJm
-         3UkQpQ9Y5L5vbt5HpEZBo7j4Tgj4ajA9jfGb2Xb08gmtwDo+IKMhSNhesoxZ7yqo1gDV
-         SOdG+EDYfaxMT1/9lLLtbsx+n/IKMa475iakcPvOfZm4oggVs0eV8RRmjFXXzOna77zh
-         5tTvnR4mgsJB0rQ2DT11fSvep3JDAZACQs4B95hTvXOojXQtB+/ppzrh/1rFLD2SNydh
-         m7afMnDiKo12paE1FVjHfmYS0wowwkBidOztRMAmnlOD01gjG2SKe2aVgl2Y1c1jPdhu
-         I7fw==
-X-Forwarded-Encrypted: i=1; AL+hErFDH02u7FEqrf3fnHZLAqpjR3uCljXPibzcZZ2TlmHUpObrZqNKD8lJElRLsOleyGW3T7B+WTw8aWN8QHrsv4g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9PiU2rHkIhyr/WauyJj8oRl8zUkTnXAYKcWlpAYmslymROHxaW
-	XHYKov7+wy6EC8Xge4IQbolJ39yTSZpwfJMkvnefMJY+hDyVrqCouRFx
-X-Gm-Gg: AYBFou2zO9kc5EIe+jAE6vaP+M4KlbPi2nj/ox6KSVNHShdaHkxLdbgd1NBkUMAZNPj
-	sCi7MxFF9T2P54nRt0341tdV5tb21VEysItQShjkLOp4bx6/eWSAhMAInXT0gcPgVC4giAMc6vQ
-	ghyNz2v9trlHiiIeb1d8TEpwMtg8RdIhbGYozD5jY2fUdz/sA5J8qeskLHQUx96T0dsQs4SecS9
-	8tkhsdamytSfhbjb4dGQAQaua0SGnmP/8poqttyVj7Ip5f7ZvPYSwboYAdcSvUEU0rlxywssZcH
-	oMPDWcuZ3cEE2QA6AFFL1bSG0C++7KQhqO9aZhZ1tvlKqqvv2TOjmY+7LzUl+O+37rbt6rVCx/J
-	frnXDZ1XRz96IeqLJ3T+lLJeEesd+m+b5tYr6cwRn5lP5rSTKwsLrhfXlrtXEgAuIFfe0lsOfoA
-	BXjLdW3y9w4yHXgdG8WOcA4VTxolDj5AMC+zQvkmdNf4tWZqILOBN32gVLuqX8H0S6rWDqZ+cRo
-	faFYZU9cyQACqPayoMD2yqzJ1/eJUeMfAhXcNxZr3LbFKr8etGBJg0GcSrki6PAazw3jrVV8g5i
-	A7tdLqVadWo49eA73m/jyxWdyHTRQI6hzt2Qd5sqXbZVCgAPqOMeiHmPjLtE6navl/sorZ14kam
-	lK1D7wEV48i/NHsQcUG+kKwgT2EsqWiCJpTvB0zMC1EdVFOXUObUS
-X-Received: by 2002:a05:620a:4453:b0:949:7502:695 with SMTP id af79cd13be357-949bab651bdmr693737185a.68.1795207375597;
-        Fri, 20 Nov 2026 12:42:55 -0800 (PST)
-Received: from localhost ([199.170.132.196])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb0354a9sm288439785a.5.2026.11.20.12.42.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 12:42:55 -0800 (PST)
-From: Tamir Duberstein <tamird@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Jiri Olsa <olsajiri@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Andrea Righi <arighi@nvidia.com>, Xu Kuohai <xukuohai@huawei.com>,
- Andrea Righi <andrea.righi@canonical.com>,
- Bing-Jhong Billy Jheng <billy@starlabs.sg>, David Vernet <void@manifault.com>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Andrew Werner <awerner32@gmail.com>, Zvi Effron <zeffron@riotgames.com>,
- Andrii Nakryiko <andriin@fb.com>, Emil Tsalapatis <emil@etsalapatis.com>
-Subject: Re: [PATCH bpf v2 2/8] libbpf: ringbuf: Prevent NULL callback crash
-Date: Fri, 20 Nov 2026 17:51:54 -0000
-Message-ID: <179519711461.18576.2987868815331228057@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E8A60A6F4C;
+	Fri, 20 Nov 2026 20:42:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9E8A60A6F4C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=J0Ebh9eN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1795207360;
+	bh=vE+uNjXsB2iA/fb83lE/XKLUhCwUuFaXjUJLCJJWSCI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=J0Ebh9eNqdwgHF3sJSdkQVj4yXGzfbxfno1u1Q16gCnI6Y08MQyRzk8zpJSY4o/wY
+	 w/MY4tlTAbdVE55FzRPZ3Hw69XyvyA65MZtZxg8PQjmR7rDp+Er7r3qlR5BnM6LEb0
+	 7wPILlp+/BM7rXLblMye6TG1u1EXb7FpDYQ6L9RoG9dwNOkRrPH0KZphCaiUD+Ek4T
+	 UESTEXhSuMQPEv1saN3QyAjUaK+W6CiUTKZUQ6JkZBNV9v2Q1xBfldR7hgW3aQcKcR
+	 PM5D30EqvkaSmldtwB729MUDNSqbgQx/HHsmhXMiwvPKLXkbBO7PdDjEhem50/9grD
+	 0DCMi8+sQiSYg==
+Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jWS2S3r6qzV52;
+	Fri, 20 Nov 2026 15:42:40 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: juri.lelli@redhat.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	vincent.guittot@linaro.org
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	tglx@kernel.org,
+	will@kernel.org,
+	boqun@kernel.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org,
+	longman@redhat.com,
+	ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	parri.andrea@gmail.com,
+	m.szyprowski@samsung.com,
+	kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com,
+	linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH v10 37/40] sched/deadline: Keep the start of the period across a change of dl_deadline
+Date: Fri, 20 Nov 2026 15:42:14 -0500
+Message-Id: <3360961974ba9401f7d6d4d7d5fd513db04c9fc5.1795207233.git.mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <cover.1795207232.git.mathieu.desnoyers@efficios.com>
+References: <cover.1795207232.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,12 +95,164 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQLuNSE5AM6Cqzs4yDFrhTyD=j-y5dfya3dLwk3si9v26w@mail.gmail.com>
-References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-2-33fde039ddf3@kernel.org> <ajVKM9tJskwg9OFa@krava> <130931685c8b2064325fc65a856ecd810c8a6b5c.camel@gmail.com> <CAADnVQLuNSE5AM6Cqzs4yDFrhTyD=j-y5dfya3dLwk3si9v26w@mail.gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-> If there is a need to check
-> callback nullness it's better to discuss altogether.
+dl_next_period() works out the start of the next period of a deadline
+entity as deadline - dl_deadline + dl_period.
+Commit 5ac69d37784b ("sched/deadline: Make sure the replenishment timer
+fires in the next period") added it. The replenishment timer of a task
+with a constrained deadline then fires at its next period, not at its
+deadline. Commit df8eac8cafce ("sched/deadline: Throttle a constrained
+deadline task activated after the deadline") uses it too. It throttles a
+constrained task that wakes between its deadline and its next period.
 
-Combined in v3, including the iterator API and its NULL-callback tests.
+The formula assumes that the deadline was set with the current
+dl_deadline. But sched_setattr() can change dl_deadline during a
+period, and the deadline stays. The start of the next period then moves
+by the old dl_deadline minus the new one:
+- A shorter dl_deadline moves it later. A task that wakes after its
+  period ended is throttled until that later time. For an implicit task
+  made constrained, that is up to dl_period - dl_deadline.
+- A longer dl_deadline moves it earlier. A constrained task that wakes
+  between its deadline and its real next period is not throttled. It
+  gets a new runtime before its next period.
+
+Fix this by recording the start of each period in period_start, where
+the deadline is set. dl_next_period() and dl_in_constrained_gap() use
+it.
+
+The Sashiko AI review of this series found this. The case
+wake_after_deadline_shrunk of deadline_bw_test, added later in this
+series, tests the shorter dl_deadline. It fails without this patch.
+
+Fixes: 5ac69d37784b ("sched/deadline: Make sure the replenishment timer fires in the next period")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: stable@vger.kernel.org
+---
+ include/linux/sched.h   |  1 +
+ kernel/sched/deadline.c | 25 +++++++++++++++++++------
+ 2 files changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 491ddeea7d65..244e57fa8c21 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -661,6 +661,7 @@ struct sched_dl_entity {
+ 	 */
+ 	s64				runtime;	/* Remaining runtime for this instance	*/
+ 	u64				deadline;	/* Absolute deadline for this instance	*/
++	u64				period_start;	/* Absolute start of this instance	*/
+ 	unsigned int			flags;		/* Specifying the scheduler behaviour	*/
+ 
+ 	/*
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index b9c206a59c16..e9b3d3ec71d7 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -89,7 +89,8 @@ static inline int on_dl_rq(struct sched_dl_entity *dl_se)
+  */
+ static inline void dl_start_own_period(struct sched_dl_entity *dl_se)
+ {
+-	dl_se->deadline = rq_clock(rq_of_dl_se(dl_se)) + dl_se->dl_deadline;
++	dl_se->period_start = rq_clock(rq_of_dl_se(dl_se));
++	dl_se->deadline = dl_se->period_start + dl_se->dl_deadline;
+ 	dl_se->runtime = dl_se->dl_runtime;
+ }
+ 
+@@ -103,7 +104,7 @@ static inline bool dl_in_constrained_gap(struct sched_dl_entity *dl_se)
+ 	u64 now = rq_clock(rq_of_dl_se(dl_se));
+ 
+ 	return !dl_is_implicit(dl_se) && dl_time_before(dl_se->deadline, now) &&
+-	       dl_time_before(now, dl_se->deadline - dl_se->dl_deadline + dl_se->dl_period);
++	       dl_time_before(now, dl_se->period_start + dl_se->dl_period);
+ }
+ 
+ #ifdef CONFIG_RT_MUTEXES
+@@ -1260,7 +1261,8 @@ static inline void replenish_dl_new_period(struct sched_dl_entity *dl_se,
+ 					    struct rq *rq)
+ {
+ 	/* for non-boosted task, pi_of(dl_se) == dl_se */
+-	dl_se->deadline = rq_clock(rq) + pi_of(dl_se)->dl_deadline;
++	dl_se->period_start = rq_clock(rq);
++	dl_se->deadline = dl_se->period_start + pi_of(dl_se)->dl_deadline;
+ 	dl_se->runtime = pi_of(dl_se)->dl_runtime;
+ 	dl_note_donor_refill(dl_se);
+ 
+@@ -1384,6 +1386,7 @@ static void replenish_dl_entity(struct sched_dl_entity *dl_se)
+ 		WARN_ON_ONCE(!is_dl_boosted(dl_se));
+ 		if (!dl_se->dl_deadline) {
+ 			dl_se->deadline = rq_clock(rq);
++			dl_se->period_start = dl_se->deadline;
+ 			dl_se->runtime = 0;
+ 			dl_note_donor_refill(dl_se);
+ 		}
+@@ -1406,7 +1409,8 @@ static void replenish_dl_entity(struct sched_dl_entity *dl_se)
+ 	 */
+ 	if (dl_se->dl_deadline == 0 ||
+ 	    (dl_se->dl_defer_armed && dl_entity_overflow(dl_se, rq_clock(rq)))) {
+-		dl_se->deadline = rq_clock(rq) + deadline;
++		dl_se->period_start = rq_clock(rq);
++		dl_se->deadline = dl_se->period_start + deadline;
+ 		dl_se->runtime = runtime;
+ 		dl_note_donor_refill(dl_se);
+ 	}
+@@ -1425,6 +1429,7 @@ static void replenish_dl_entity(struct sched_dl_entity *dl_se)
+ 	 */
+ 	while (dl_se->runtime <= 0) {
+ 		dl_se->deadline += period;
++		dl_se->period_start += period;
+ 		dl_se->runtime += runtime;
+ 	}
+ 
+@@ -1658,9 +1663,14 @@ static void update_dl_entity(struct sched_dl_entity *dl_se)
+ 	}
+ }
+ 
++/*
++ * Return the start of the next period of @dl_se. Do not work it out from
++ * the deadline and dl_deadline: sched_setattr() can change dl_deadline
++ * during the period.
++ */
+ static inline u64 dl_next_period(struct sched_dl_entity *dl_se)
+ {
+-	return dl_se->deadline - dl_se->dl_deadline + dl_se->dl_period;
++	return dl_se->period_start + dl_se->dl_period;
+ }
+ 
+ #ifdef CONFIG_RT_MUTEXES
+@@ -1728,7 +1738,7 @@ static int start_dl_timer(struct sched_dl_entity *dl_se)
+ 		WARN_ON_ONCE(!dl_se->dl_throttled);
+ 		act = ns_to_ktime(dl_se->deadline - dl_se->runtime);
+ 	} else {
+-		/* act = deadline - rel-deadline + period */
++		/* act = the start of the next period */
+ 		act = ns_to_ktime(dl_next_period(dl_se));
+ 	}
+ 
+@@ -2603,6 +2613,7 @@ int dl_server_apply_params(struct sched_dl_entity *dl_se, u64 runtime, u64 perio
+ 
+ 	dl_se->runtime = 0;
+ 	dl_se->deadline = 0;
++	dl_se->period_start = 0;
+ 
+ 	dl_se->dl_bw = to_ratio(dl_se->dl_period, dl_se->dl_runtime);
+ 	dl_se->dl_density = to_ratio(dl_se->dl_deadline, dl_se->dl_runtime);
+@@ -4848,6 +4859,7 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 	 */
+ 	if (!p->dl.dl_runtime) {
+ 		p->dl.deadline = 0;
++		p->dl.period_start = 0;
+ 		p->dl.runtime = 0;
+ 	}
+ 
+@@ -5394,6 +5406,7 @@ static void __dl_clear_params(struct sched_dl_entity *dl_se)
+ 	dl_se->dl_density		= 0;
+ 
+ 	dl_se->deadline			= 0;
++	dl_se->period_start		= 0;
+ 	dl_se->runtime			= 0;
+ 
+ 	dl_se->dl_throttled		= 0;
+-- 
+2.47.3
+
