@@ -1,49 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795137607;
-	b=D8qrYfRxWiCB3UU7hIoPeKV8YbU0YPb/mNMVKM8HyneAwBJ/tkMpySq2ZmPqOljM8M3R
-	 cuA8vhBhdju12gcwXkqnSbOYV9t7r7Y+m9jcIfPg0r0ejk8Yv9WXXBX1zrkPPZVZPd/yo
-	 aNsLf9oi20dEa933jtkN5eTK6Q7H+zhvKweOsqjs1XYjh22m6s+AB6KIFGzE/6ZatWzeC
-	 ZPZyQkCyIpzDCFE9Tn4jHtIF8qadgQg4JdFzeHFAO9Gnu8DpKuNwfyvKP+c6DqrukSESB
-	 FUIm/btCb8uWjjvIWOWKZSXv4l6p8hCFPTvgIeFVUSFpBkM2qvkgrM73ag6WCEdMm+A==
+	t=1795139468;
+	b=FQ2wG523/QWz2tZUH5TD6gL9+1VT+cSFZyj3vkvhZOfsDiHDr/wbkH4onMuN3R6T0cwk
+	 mn4IlBNis0NosR60W7CtFBYLvTxrwUmlvFWRxCGEQXgXDoUCicjUw0Dg62H4ycFEljBdZ
+	 M0iHyGQvdiDHPsEwj94f5griKQDYZJyV1gairkX6qiwFu7BNCBuNKdl9CO/4nLynaoeWu
+	 7me7AzoCBcp5a+XDKhRF+xHg/j7J/Wu2yTea0eZBEVmryABDJvngz9+ld8rRpbgovvU8Y
+	 HKCuzTEp1zusQNslNDAO0yXNQcPLsyYBbsAnecFLoC0I+iZCL9DAp2sYVNLHbYU9Zgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795137607;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=9Z8wkPM3+HFDw2I3yamjNg4DZ0B3gV029Jy3Uj3/wCI=;
-	b=vbtD9pxuk8E1EqhqsfX7N4UZi2tJ8YZ8KksYI4TaiEgjNxWT153rcG1s1cF+or4LOVP/
-	 V3x0kjSk6qUNVE4RSrdKKrm2E0g07eup9tJZWp0yPoJ1H1XuAQJK/08Nal8Fsf/rpYi6Q
-	 iZhzXSeqEcxAmq3U0Lqi14Zxw9wWnnUaPk9jn+aycHmaJMq6XSiunDV6nn4rNNIJr27f3
-	 g9lIfbSsilHtx3ppGlYtjATw3fvPfS4YSZ2snTI0LLgTlvAGgFdewcx/T0U+nOUPF/LmU
-	 crZCAlUZuLL7nSSuGe6DhFLjlImavi40o0IgqFuFZRir0zFQ9sZAR73JYu5FVRGT2Nw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795139468;
+	h=DMARC-Filter:X-UUID:X-CTIC-Tags:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:
+	 X-CID-META:X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:
+	 Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=9vGUD1suLBnRt0owSt9jD5mFNgLgcQyVHLA6QUgiD1E=;
+	b=yADitn51Sm4KQXxvklspv1YSMJchdWGpnIthay0byqscSAvrJaKHpNf23Fn8IsyR+qVW
+	 8wL7Bm6+VsIyBN7yWg1MPROIrOONVIj+gZEmhc6XPK2Z3tF/VieOeWFHtJRNauxGUYrzw
+	 3gtEa7hBiSkT69GwQ2jUha2rNDmCn5erx3JVLamAKTR0ocemZ5ejpduCn2L3Dryr/1WZG
+	 E7IAFdx5otB//3RvMjzgVR1PydwnmCgLVjXtygGxQkfbqVtV1Fp7RA8GqDbF+NVjIheCf
+	 eIirOAWSJTv526QvQpBn/FicSC6mMoqzTDpK818D2oEWiRik7YOaLgBwwSOoWnSw3mg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bHrfIiry;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C330606A325;
-	Fri, 20 Nov 2026 01:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bHrfIiry
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1121F000C4;
-	Fri, 20 Nov 2026 01:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795137606;
-	bh=9Z8wkPM3+HFDw2I3yamjNg4DZ0B3gV029Jy3Uj3/wCI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=bHrfIiryZ2AZx8e2fITqETMUy9uRp1FNd/wUhYwXcbW8RZhwp+AEtfkYTXQGs8n0U
-	 mDhmXtJnSlXfWmI3kpufC/rwQl2SSf/Yz4WbNrGm+JMXULw2qg9H98XnsfOzpjl3FN
-	 Wg+e/wBmf2TBAZdBNg/U94qJsI37N+ZVcQS8Q4I2fCimjis3+Bi8seM5h0daKd1S+9
-	 9z4CEgw0HCc8N9dg9Qy5C0F43d9J61DD57en/ZdcObapOZ2zORx7lMVEHjZuyQ20zl
-	 RXke1yGj0pHTQbOovPWjK2MAiRnoFexWbJMjtXNMl4kQDvhAP5WVSMcd/lvPTMJQL0
-	 YfUUZT1xXarYg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B46FB3808209;
-	Fri, 20 Nov 2026 01:20:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1157B606A325;
+	Fri, 20 Nov 2026 01:51:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1157B606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d33fda2ee48411f19a56ed5b684f684d-20261120
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:849dcd0a-3f02-4cae-a128-8a4cd9fb2aeb,IP:15,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:15
+X-CID-INFO: VERSION:1.3.19,REQID:849dcd0a-3f02-4cae-a128-8a4cd9fb2aeb,IP:15,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:15
+X-CID-META: VersionHash:7db8b62,CLOUDID:9dadecb9686f8b308f418b8a5d787993,BulkI
+	D:261120095058ABQSO0VM,BulkQuantity:0,SF:10|38|66|78|102|127|153|850|865|8
+	98,TC:nil,Content:0|15|50|99,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,Q
+	S:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,
+	ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d33fda2ee48411f19a56ed5b684f684d-20261120
+X-User: yijiangshan@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.171)] by mailgw.kylinos.cn
+	(envelope-from <yijiangshan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 797630907; Fri, 20 Nov 2026 09:50:55 +0800
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
+To: brendan.higgins@linux.dev,
+	david@davidgow.net
+Cc: raemoar63@gmail.com,
+	brgl@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	13667453960@163.com,
+	Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] kunit: minor cleanups in attribute filtering
+Date: Fri, 20 Nov 2026 09:50:20 +0800
+Message-Id: <20261120015020.40658-1-yijiangshan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,46 +87,44 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Keep memcg test page cache off
- overlayfs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179513760554.3964806.409960549276615449.git-patchwork-notify@kernel.org>
-Date: Fri, 20 Nov 2026 01:20:05 +0000
-References: <20261119183925.1482217-1-lylin1023@gmail.com>
-In-Reply-To: <20261119183925.1482217-1-lylin1023@gmail.com>
-To: Kurt Lin <lylin1023@gmail.com>
-Cc: zhuhui@kylinos.cn, hui.zhu@linux.dev, memxor@gmail.com,
- bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, ihor.solodrai@linux.dev,
- emil@etsalapatis.com, baohua@kernel.org, shuah@kernel.org,
- jiayuan.chen@linux.dev, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+kunit_filter_attr_tests() calls get_attr() twice for each test case;
+reuse test_val for the filter() call.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+In attr_enum_filter(), stop scanning str_list once the input value is
+matched.
 
-On Fri, 20 Nov 2026 02:39:25 +0800 you wrote:
-> memcg_proactive_reclaim and arena_memcg keep their page cache off tmpfs,
-> because shmem cannot be reclaimed without swap. But statfs() only sees
-> the top of a stacking filesystem: with /tmp on overlayfs over tmpfs, as
-> in virtme-ng guests, the check passes and the data is still charged as
-> shmem. memcg_proactive_reclaim then fails in a full test_progs run with:
-> 
->   test_memcg_proactive_reclaim:FAIL:reclaimed unexpected reclaimed: actual 0 <= expected 0
-> 
-> [...]
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ lib/kunit/attributes.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next,v3] selftests/bpf: Keep memcg test page cache off overlayfs
-    https://git.kernel.org/bpf/bpf-next/c/82cc2b4383e3
-
-You are awesome, thank you!
+diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
+index 6d7a53af94a9..9ff04d2985f1 100644
+--- a/lib/kunit/attributes.c
++++ b/lib/kunit/attributes.c
+@@ -132,8 +132,10 @@ static int attr_enum_filter(void *attr, const char *input, int *err,
+ 	}
+ 
+ 	for (j = 0; j <= max; j++) {
+-		if (!strcmp(input_val, str_list[j]))
++		if (!strcmp(input_val, str_list[j])) {
+ 			input_int = j;
++			break;
++		}
+ 	}
+ 
+ 	if (input_int < 0) {
+@@ -432,8 +434,7 @@ struct kunit_suite *kunit_filter_attr_tests(const struct kunit_suite *const suit
+ 	/* For each test case, save test case if passes filtering. */
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+ 		test_val = filter.attr->get_attr((void *) test_case, true);
+-		test_result = filter.attr->filter(filter.attr->get_attr(test_case, true),
+-				filter.input, err);
++		test_result = filter.attr->filter(test_val, filter.input, err);
+ 		if (*err)
+ 			goto err;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
