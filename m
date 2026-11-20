@@ -1,74 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795183768;
-	b=Ol+7bGFffQdvLuS8eQPYnvONvVfKEvFUzgO1VJuS32x//b0YGh1KH2yw++Y5a9B9yJhY
-	 /WminFlfZbUq0SkQ8j88Cw6fIrfCtxMayMaTGAqg9/vodD2709qifc11NL5WB7wcbihtg
-	 bH/YTrXzAha6dkS3GIp+fEKL9TmOJPRhx4Y+RZ5F/wSXXXKUZyQrjunz/Bphu3R+tWaNb
-	 fhUyHQrajL1sEX0bPii39xagWhCcoYMQ7fdsCrEz+3GwU4qmYXMajE+U191+LD62777Xg
-	 jCWh4CgpPPeVbEaxn9baGSq8ro39/AGIxYFWyJT54uzjeSoNtmt4boINxj7O78FF0LA==
+	t=1795184028;
+	b=CZu01/Rf89n9DJg3vqfUEy0e6fCQaf0vUkGO3oPYyVlEmMFZWJhN+DnNgvkY9iZp05US
+	 g+bwuf0ZCR1kUAJlIhqTdDC3LD9lBkD2JKjS33G3BBnmyaWH1cY/f533tS1L9kqZAqPty
+	 i0/AUWJtB/FCevrqoO49U1Jq2PKSgfPd6Je6MkmqlDZMNHvdM5/DP0E785LYEsN0TurOQ
+	 A14Xu6l6Mj4QOT9qMndNPQCb8Twmw5Ch2eXAISat1zDeWrKRO2eEnuORIoK6ii+skZjPJ
+	 ateOMVexcrgeE63g0fzjWwgxs3LsgtkrF6pUEBrGXrDE7gkZyD83XVAsWf6xni+0zNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795183768;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=Fcs0DJBKtZLUxloKKuDwNaVEQG5Sv/NarhrhzSQukPk=;
-	b=TKVwDOOAT6SjDuNBm7tgtxoBExFxzqvFm9oVwb50qYvOM62TfJJtjp0Am15VTOxXblLe
-	 4W1x73DBeEgJXYWGoUamVP/krjR8pCFzMTaMCp7qHYlmwTmUaMdZf0xk31rqYCrVsmsAg
-	 VDEfUbO5QDPzlHxkQ1Q1zKTgNS4QVMjWwlQbMdr6X/EGZ3W/PwWzNlXy9lGWLlzvkRRN6
-	 H/oRGUfIy6fRxO1rvsKygeiyzUX2bpAbfl94gzwhxkzju/O0NT399fGs9688GZCaAY+F8
-	 TCO3d64hn3A3JO0aRXfolhw0n7PHpq5T0O8S+PdWeR0ZNTHFJOx/eIczo6zYK40Fu0A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795184028;
+	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
+	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Mailer;
+	bh=p7xxl9ib2LqWIPIDuuTmmVpFcixqIcABe6BvoXtmroY=;
+	b=Z4jkni4Gv4YwJtC7Vil+cCoM3t1E2rTwSuPQpkStJlpedkSE1c92KPT+wUQ0Gytnslqq
+	 hAbwAAMpz/McscVP5+Yt6JZtJzUDbxI4dAS2SVFuJ3RJ5LDxr+PsoyBqygFWOzZy1coQf
+	 fDP5kj3vwmu5PaUbbduzc/0SJTzj3sJf0K0nSQ2aDcSX4cBrHlyfPRaZKIij/F/8qxCSi
+	 k1g1/DZ26C0bW+p6iaUiFsX0c4TbjRBZln52EhG0qBSl65JX56ZUUkIYYY5jAZFEs6qrv
+	 BKiOTERkAwQjLTmNTCz+4tpEd+jE//deB1Jy07KcjCrMEHgHxp0o5K46s8mEhs+ubsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=phsZOd6F;
-	arc=none smtp.remote-ip=209.85.210.200
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OcpkTujT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A959606A320
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 14:09:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A959606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B2E606A325;
+	Fri, 20 Nov 2026 14:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=phsZOd6F
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8b6463f95a4so923707b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 06:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795183768; x=1795788568; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Fcs0DJBKtZLUxloKKuDwNaVEQG5Sv/NarhrhzSQukPk=;
-        b=phsZOd6FHm2fLXlBEPUk4HxHQsr2YjaF/8w8uBbsM/PVnx356OU/hMbwUbzUHLeBg3
-         qHulj4rKFN9eSri/EBSKVaLa+0AQcb3ImuX8vxCNSMnrR8V4jU54wTq6dFhHpi71fH/z
-         6XWFpi8deUl4U2lVzNSiE/+4/UY2tuES1tkJhoC5wME/1koEmYrUy2UyQ4zF3rnIdiAG
-         TJu2vG9djnhknQ0fmwqmmjfxBxl7SrmDA2hz0Sc6d/KfCkF1tkKrSF4jZZUo0Paf6fJN
-         zBUoCLo9FqJpdsnseJS2iTmbWZtGMaTAuCyL5OEHvpppSWxcOl9ntNLlkK99SXPO9/6y
-         kEig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795183768; x=1795788568;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Fcs0DJBKtZLUxloKKuDwNaVEQG5Sv/NarhrhzSQukPk=;
-        b=Zqukpk6Wo8DK9MQ5CjVGTZ2oD/oEmER8VjvGPWjrzisRoMyuij7Tu8i4fT6Ix16XPb
-         AaoRbqKOw67NlgCq7wQRk9yKRoW++EeyqOA3CYRDs97nQthWVja1C0KXJk5hyux9cpbk
-         og2ufg/vnX2sd24wCMgVt1qnWbz7cjboOI+FdAZgwC/Ut7AznHT0VHcltFG83pug5Ka2
-         f9qi8I8ePnj8EdLlyDEvtIq2My7gkFvI7zu1T3XZoStI7VrHrBhNPgh0hxlfb3YGHgo8
-         D7//XrIaWcZejLpM1nYmXb/c+HQl4uJfpjFO1eaLy2TzM5x07FftLQT/ye79AkPkflzZ
-         dNOg==
-X-Forwarded-Encrypted: i=1; AL+hErH/KJylfcMVb5tjRPn9gcHAycvaouM6R3txG8bREQ3ELo7BR6gREoZQi966/vEaBmoaJxM/MMsbJNbMooc8yeo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8XEtRDv+Tabq4SU6+hZtCj/0JBS27ZFhglxE8p6Ns8/YCUHmv9
-	wFRhzN0VMPUdNls+8CxSlqOv6DKtcm+J46n+R9M3AlQN4IP9Ch3sK1Fy3t3qPuxGAWRhtEP2mSx
-	D2rWnJQ==
-X-Received: from pgin4-n1.prod.google.com ([2002:a05:6a02:8784:10b0:cc7:cad8:adb5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:d52f:b0:3de:b95:d50f
- with SMTP id adf61e73a8af0-4014c945bf6mr2794811637.24.1795183767718; Fri, 20
- Nov 2026 06:09:27 -0800 (PST)
-Date: Fri, 20 Nov 2026 06:09:26 -0800
-In-Reply-To: <20261120-gmem-selftests-fix-v3-0-d94ffe17ead6@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OcpkTujT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D0F1F000C6;
+	Fri, 20 Nov 2026 14:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795184027;
+	bh=p7xxl9ib2LqWIPIDuuTmmVpFcixqIcABe6BvoXtmroY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=OcpkTujTra3EqsIxic2PIYwT7E3kKerIKzEEOgEyn7fGTy15YlySl/QtE57TmgqUJ
+	 RiWqM0XSpS4wcSKDiOjICof/RZke9GxGuyEMdbIckGW3AtC/lL5y8FRljGu8MpIGxp
+	 oetlVXJRiznDvhpKRl4Jy+j46LQNJHqgh/tVCuvrwmR7BZ4a+XLsxlbWQc89Epqfbr
+	 UEot67d1cGwfgwEY3TEsrcZachRsEfYiAR62abMn+tIitXpJ8B9AithSGObQ0anX4W
+	 XoFOSOhsCu2EJEwdb5bGTqk0H9tRAXFCpT5hUNW4A56SOThRw2eJbVPsdCqlOZLtd0
+	 1qDlOGBBvPv5g==
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>, 
+ Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Ding Feng <dingf3ng@gmail.com>, 
+ Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+ Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
+ linux-unionfs@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20261119183039.1505892-2-ptikhomirov@virtuozzo.com>
+References: <20261119183039.1505892-2-ptikhomirov@virtuozzo.com>
+Subject: Re: (subset) [PATCH] selftests/cachestat: add overlayfs test cases
+Message-Id: <20261120-zurief-ballon-beinfreiheit-4ff56c59f8fd@brauner>
+Date: Fri, 20 Nov 2026 15:13:42 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,37 +61,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261120-gmem-selftests-fix-v3-0-d94ffe17ead6@amd.com>
-Message-ID: <awBUlv3ItZiyZvlS@seanjc-mac.roam.internal>
-Subject: Re: [PATCH RESEND v3 0/4] KVM: guest_memfd: fix NUMA selftests
-From: Sean Christopherson <seanjc@google.com>
-To: Shivank Garg <shivankg@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Jim Mattson <jmattson@google.com>, Peter Shier <pshier@google.com>, 
-	Ricardo Koller <ricarkol@google.com>, Ackerley Tng <ackerleytng@google.com>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Steven Price <steven.price@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev-04696
 
-On Fri, Nov 20, 2026, Shivank Garg wrote:
-> NUMA selftests in guest_memfd_test assumes that node 0 and 1 exist and
-> have memory. However, nodes can be sparse or memoryless which would
-> break this selftest.  Select the nodes from MPOL_F_MEMS_ALLOWED instead.
+On Thu, 19 Nov 2026 19:30:40 +0100, Pavel Tikhomirov wrote:
+> Run cachestat() on overlayfs files in four variants. The file is written
+> either to the lower dir of an overlayfs or through its mount, so its
+> page cache is in the lower or in the upper dir. Then it is opened
+> read-only, so it is not copied up, and checked:
 > 
-> Based on kvm-x86/next.
+> - through the overlayfs mount: the page cache is one stacking level
+>   down;
+> - through a second overlayfs mount, which has the first one's merged dir
+>   as its lower dir: the page cache is two stacking levels down.
 > 
-> Tested on bare metal and in QEMU. Without this series, the test fails
-> with EINVAL when node 0 or node 1 is not an allowed memory node. With it,
-> the test passes for any set of allowed NUMA nodes.
-> 
-> RESEND:
-> - Rebase on kvm-x86/next. No code changes.
+> [...]
 
-If there are no code changes, then there's no need to rebase.  Please use
-RESEND if and only if you are sending the *exact* same patches/emails, e.g.
-because you missed a To: or Cc:, or a mail got dropped by your server, etc.
+Applied to the vfs-7.5.misc branch of the vfs/vfs.git tree.
+Patches in the vfs-7.5.misc branch should appear in linux-next soon.
 
-If you want to ping a patch/series, just ping.  v3 is sitting in my TODO folder
-and applies cleanly, i.e. there was no need to send the entire series again.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.5.misc
+
+[1/1] selftests/cachestat: add overlayfs test cases
+      https://git.kernel.org/vfs/vfs/c/ab5ec75b9f6d
+
