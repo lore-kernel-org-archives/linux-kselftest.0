@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795214561;
-	b=goN6uS9swSTQ6wo/cjZ/W8XDEti8w3XKl86ZqVzy9GuGUEAgxHsSXWOgmHbyjFIAbSPe
-	 +7SD4qu52ztjWcv3ncQNnoTmAOxwGqc1NMUZ15pkvG8kiQlBZcOvYlNQaAND+wJUvjE0D
-	 792PGhv9qqg1hZEkS0A7+He0KRD2IUsDwpP0Tr+o0zv4M4HBiYCx9KaRLdUdVDygne+5G
-	 WJI2uJi9vIpKgX8I5sUWQRRo4zUssF2oc+0H7/oU+BmkMF46x+CnpCZypv1iFf4VJ7c/n
-	 vMPkteSDi5pZlfTsqExZRDa9oq4RaIfPfqM+sh8g8TDmEUAAOHVLOllhg7YfmUtTn+g==
+	t=1795214833;
+	b=nA+2I+eEaXeqPtQDxkoCyLjAwG0MP0Ib7wSHsrWAUgb2+3z3MNuUPahmO8XTZOU1WgEf
+	 HbsEJpx89ixIm9au2UaV8DVCqy4fp9y40OyNvPDXs1s8jHWjw9Gw6w/77ayMNNmV9evZq
+	 wEUGGM3D3UpL23yr7w5f1udALh8iSVjrxK4hK1CN00QL1TFWu3hIS6Ez6dBQnkaNlIcX5
+	 itJKsMA8CDhWe4WU5aEFb8PiKqUvlij9V3MNlNDpcOyogpMuIOdi2ZrhrB+2s0gQXTUAM
+	 b8TaFmkjR/7EJJ/jDL87EWNLpLxQBzMg6KV1rD8Gn+ecrW3z1xx2W8/YB+L2cUHa7kQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795214561;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=vHqmqtUv3ldNxNv4goZfjp24sRWMWgjGzY8HbYBqnOI=;
-	b=diZLHknElQvqmagGzi2Fi5t8a7WTgeccpvR5kFT+Pj8Lduk6ewxlaNtQb0psctcol0KM
-	 ZulbbCYBrzmDGT5PK7KIsQT0aTUZ9XEdrR1uI+oDQ+nmTkUuqMIUNLJptQ2j/L7skPAjR
-	 bMR0w/sI28gxoPjJSwnLwm/21hIIn4lP5Lo/XPymjT8qXAuPZ4CVrk9rPEkIEmnyHmuan
-	 BPA21xvglyTmByM55Lr1mJ9LYLNyKkc/OSQ9BijTpK7SAiSuzMI2PSJ7fGcr2mCpzGHeX
-	 lFisK1oYotDJM0Q80myMg+x283oAgEq5skzYMD6QJC8nJhhbjoBABhG/xeey75oe8Nw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795214833;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=sQk3umOpv10DrnEpRLSYg0JUGXu/IQfMVXqwisTX700=;
+	b=gXfQLwIwNYULy0bugplaTIft1s7YHL/l24BtwpVcec7ph3Dq2oI//A94dns4ILGXpFP9
+	 OgvOqWAi2vIW+Lp89zq5mn4LV3SV8I9j46fLRsFyMZ+xKKQp1u99BTPyuQph8szNdxjp1
+	 08AvYVn+jZcMmuN/57I14hkeQxLMGNhPpHsjVFpzL3K8x9PjspzerPBgrm+Kf5sjZbomg
+	 yCXakbHHADieVZLvJ+Y8qvbaTpgaLfpes6DWhVMWSxLJfbtkN2NYsaMkFVoyCcpUhRiHM
+	 u5k5xifU8FzePyx+d40Lf3/16xei9jcgbiFpEaxvVC4DOAO4qNAJ8rjqlxUneNQWSLw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=OJwL4udw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.169
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UEiAoM5q;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBDE606A69F;
+	Fri, 20 Nov 2026 22:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UEiAoM5q
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795214833;
+	b=k2Tw0ppKHH4J9WHZzRhwT3dhq7OXORgrJfGDjmY1Huc/TqZOJPbfGEJ5CwDBmhz8Ru3H
+	 hZ2oPNm3Qxs7pj6BlOapWVlP1FSH4SAuScL8lnL7Md/ezMsayXMuffVQ9YJGFr/WxhRGJ
+	 LKIKQrVYEk4WfqE94sFvCj8wZe44azpMsTJUeuCtvTQWpo/BPu8u7X/M8XxXQWMvHp4UD
+	 bNQ6MglZ7wa4K1AXZVqdVYwqYb9TIyg9Qt8tKmzlIW5eTuFCewem0xynQzpuUzT1fkJlK
+	 lKLOVAqv/TJcgVz3hFnUL52DB+66fm+G6spq+ovD//xuIbCpgyQS+iFHdce9FwzuPGA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795214833;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=sQk3umOpv10DrnEpRLSYg0JUGXu/IQfMVXqwisTX700=;
+	b=v123Hb9VAbvYqIr4LWWBWIxfJDVswuRnYIIlrO3a6rFs8RtbbzGT0hAqmOnmnfwNUpfX
+	 7Aa5I+FC893cUY+EZFeUCR3OqYPcKGOdPINJW0I1560DcRTGIAd2l8s12eETqUSalRJcn
+	 C2rL8CM3QD70itgSkRXMdv7VaWMTTjubj8l1b77L0JmM6llwNh9T39IpH5iJl1Jf/Z/cC
+	 +B3SBp8IXPaQFEiQWJpCjEqTTdEZuRMyBoWQtY1jc7iWIrv8s0Cj07T5oD9KJjdmitZXL
+	 iIVmgShOaQS2IWfJxl2Ybhn0ad9bNUsYn1CFXkwb0+x97EIUTgxa3faGBlyufd3K5wA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F53606A6BA
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 22:42:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6F53606A6BA
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=OJwL4udw
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-ccca948203aso1550308a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 14:42:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795214557; cv=none;
-        d=google.com; s=arc-20260327;
-        b=PtqKq7s+jRj3wCnCJG/6/zIYvcaDz6LihXd/6ckX5xbH3sRL73xtCWErj+xPGKXFai
-         56puTvfSTp+cqq6V1M2We70RWlcIDfyp+fSFz4UY1WYxRZ+qk7h/4WWwtKB/wK60mi4h
-         Y+/jKEs5VbnXi5YC/uD89hfXOf52+i/ZkAWU6pnlhXQJH/96Y8uTT8XrgcMnoXQHq5F6
-         w1sQwh93eRe4RGH+rWBqP2ISnxIDMvH49rEgW1qt3oDhr4G8o+Boru4Woz2juHaqUPEu
-         xTa7BHQ7jU0WoygG8Ea788PO4Z/lNEz4GzQwazxCN5ZNt+fepfdpoYAkiYoz7FCYtypq
-         Hh+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vHqmqtUv3ldNxNv4goZfjp24sRWMWgjGzY8HbYBqnOI=;
-        fh=NL6+LI6Dmgb36etANmEH2vObBZleu++S+VISkozmLs0=;
-        b=FRrBzT8NfLH6MpEMUz6IryHKPL0d11rCvAh8cfxg4Ev3WKZlSiFDD5bs/Hl1MzHclp
-         9qLtpJTTcs3fvGow8r9ZpfxgDMMZR9FRVBr33egNd0yIThavzl+HbEz45C1YaLsaT5OL
-         Pw6iJu/klFceju7oHF0W/yOOvMczyN0a4DstaclPnuGGiaua1EhlEVYHx2bF1nD3RyCv
-         CAmfiV65l7aV6zm+zoMCoyiNnwgqTw4qy7LW4FYa3qXzPVyfAJxmtvVy5hDcbckOZFr8
-         QqzEAXyTMEL3mg3Uav5gHJm/v3YrYO4skGklHPMvzQO05cB4sT3fTcKGpJ0uIpGt/d4Y
-         y3nA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1795214557; x=1795819357; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vHqmqtUv3ldNxNv4goZfjp24sRWMWgjGzY8HbYBqnOI=;
-        b=OJwL4udwjxpmrVlLHcONzEvKUwhIev56POEovLo3PpC21XYiIbCLjZym094IUqQtp1
-         SzD3eL2YEmvY3tysOdOdNwsBvOmiPtoMmHs9W1NuU9fUrWicTXKcvYPxfOCck86JHzvT
-         qbzhYmAnu4rs7/Vg9AJjp3SqzmuPPN3i0oIPTtuiuDD9ncyts0iF5uFGUBBego5huwqI
-         UqKAd2WvunRkHPwyE5dN3n7lAhAjzJHhnmA6+dI+i7PADtHvZY9fGm65FaQVH8h/LZyC
-         qOPtpKrdHbE2MqbsGQXCYLz9M1C9jJelpoD3tNstDXxXkAUrYEM8x00PwAvGX8rJVyE0
-         16Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795214557; x=1795819357;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vHqmqtUv3ldNxNv4goZfjp24sRWMWgjGzY8HbYBqnOI=;
-        b=L93ZnTotyQUToF7NjOjGqwzzSJgukH+WRVYVxQxVe2Maj5W/Ses/QR1dQrw8tHvOT5
-         otVJH8lGLEXmiTdhBWF5tZWrtMu82Hn8bYd2yrDxIiyQVGZFxB0e4wui+Lgl7+iEs6Sz
-         muXHMLLwc5R9YnP34DAR68+oUjhZ+kcZMK0SeFIku/nMo+xKnyomZpYvWwiABz+auBkX
-         g9G715gJzkfLPd4qLv4YVfYHYXgvqF7wr4NjMWbNM1bb7ST/39OZzcuERqhwwrWmC///
-         k7b7V9ySD6YvkKhTpGfyK3ZsX0q9ayHPNzHFCjAPpAD3Nztt45fEaCF0GF+ay0OZ5h81
-         mB/Q==
-X-Forwarded-Encrypted: i=1; AL+hErF0gUo67mBpouDlMQbgWafS+nDCAFf0oF98NBbKTV/rbrmClA434DAu7Rw2s/aCXzlNZNNv5B5KsOrwYzB0TMU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/DyV4J0zxmN5BObkt/ddu5DtW36BnuDPta8XrHAEMcqwPgPmyx
-	M3LLIt50w5nEHmraccG3K9YKGr9jWAkCEtgqjvQ0GR5SRLs7KjAD/eV3p07eLnGZ5Mlveh8pybu
-	zpImN53K2zm0VH53AuiA1mkiBHH2m5fsY62rqwc18
-X-Gm-Gg: AZFdTZdbPG69WtvPlF8Rsm4nHuyB1xDZCMv/7CoEnMyOi2gRdAtExXG0+HBufa4r6HL
-	PYfa2cGGZF4CMG5etwK1gtZlJrkiyv0Indsf3b4G2BSDm8DtKAIN4vnsWegv1fqLdGDRB8zkYBx
-	VrpcVjnEMOlyIYQew0txXAqBCDKYO6XTLN66iRKfU0WtowUqhDrEoMEuTW1wAsqT8t/Q1ptaDex
-	ulhuK2RtJUwirok6ZvBFJJ41COTjuVCc8rwNawIB1h9wi3Dw9ZoMVLBLzwWiMKz5MIRUrFlW5FZ
-	Oy1yF3YUeIQRYm7LPASeFtKqcGDczKLiMyoRtwqHUrM37fJ3VvfIou0mtLeilQveCAZ8V9q2kZY
-	YM+X8s7zxpc6xRN9RrMSgmf2AMXi0fYDvfcetQnHsL4aLlcLsA5xDTJmrriOZopDKFwfZ
-X-Received: by 2002:a17:90b:2e4b:b0:3ab:884b:659e with SMTP id
- 98e67ed59e1d1-3b41c8e1705mr3678138a91.9.1795214557060; Fri, 20 Nov 2026
- 14:42:37 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 19DF91F000D3;
+	Fri, 20 Nov 2026 22:47:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795214833;
+	bh=sQk3umOpv10DrnEpRLSYg0JUGXu/IQfMVXqwisTX700=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=UEiAoM5qTvr0iSY81kibgejWRRbD5NDmt/h/zKIm4qyG6Zvs4q23/2LG+Devgk2U7
+	 gqJTTX9C0GXREopWqIxzEnuy9xmSou1XG+GgGKJ5fweBTKX8ftROEtnS9d6sTh4gk/
+	 QTigrQYB4LGd2RM6cac6dPiFdDQx2QF6GOVLZqdT8SrK2HKSxJgoBjKPwvDInLZIBE
+	 Ij4Bk2dfbctuHXtoLGPcAVubZ0kbBu8aHYGJPNqtA5nQgzfg4dgzEiFcgSwatdCpL4
+	 DSlhlKr1Jcivpa3vwr6BOhxaQQ8NvxI3agAgs9UBBbT5AlebE95d9afN168DyZNbCO
+	 VXvC0huONC/UA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 963494BA65;
+	Fri, 20 Nov 2026 22:47:06 +0000 (UTC)
+From: Kalash Nainwal via B4 Relay <devnull+kalash.nexthop.ai@kernel.org>
+Date: Fri, 20 Nov 2026 15:47:06 -0700
+Subject: [PATCH net-next 2/2] selftests: net: add tcp_l3mdev_exempt_ports
+ test
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,111 +83,288 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1791023194.git.tjdqudcks0424@naver.com> <d7e10b50556ab3b79c7132018249f6f7c608411b.1791023194.git.tjdqudcks0424@naver.com>
- <asLNxHYQ/xQ6KaWy@hallyn.com> <CAHC9VhRMCfahvx89HjSoHfyKR27swLdt2HZuM1enmoi_gxRyRg@mail.gmail.com>
- <CAJ-EccMjtVkvM5bZzUKDAPcOAKZbd1Lc59oNrW0U8m=s+4R9eg@mail.gmail.com>
-In-Reply-To: <CAJ-EccMjtVkvM5bZzUKDAPcOAKZbd1Lc59oNrW0U8m=s+4R9eg@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 20 Nov 2026 17:42:25 -0500
-X-Gm-Features: AclHuK8McY1ik9ic5I54PqjcEuVP28e3vO7azigKd93SO_GqYl3O-C3M45QZMNo
-Message-ID: <CAHC9VhSZVo-TMR7Z9xM=ECVB5xFZhdnHK-OHpE_i=1g4dhTfNw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] security: safesetid: use real GID for GID policy lookup
-To: Micah Morton <mortonm@chromium.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>, tjdqudcks0424@naver.com, 
-	linux-security-module@vger.kernel.org, James Morris <jmorris@namei.org>, 
-	Thomas Cedeno <thomascedeno@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, security@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261120-tcp-l3mdev-exempt-ports-v1-2-ccc2a3a6cd09@nexthop.ai>
+References: <20261120-tcp-l3mdev-exempt-ports-v1-0-ccc2a3a6cd09@nexthop.ai>
+In-Reply-To: <20261120-tcp-l3mdev-exempt-ports-v1-0-ccc2a3a6cd09@nexthop.ai>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, David Ahern <dsahern@kernel.org>, 
+ Ido Schimmel <idosch@nvidia.com>, Neal Cardwell <ncardwell@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Kalash Nainwal <kalash@nexthop.ai>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7022; i=kalash@nexthop.ai;
+ h=from:subject:message-id;
+ bh=R6KTlYSmq1uGZkz3MBtbOKA3zSyYsCV0/QsHaQ3Fk+0=;
+ b=owEB7QES/pANAwAKAdTKslu1X9B2AcsmYgBrAM3pAST6voGxbnPGaT8u6hs00fOprOQr0YwwL
+ +FJ6jCnKTmJAbMEAAEKAB0WIQSWKdfHnHcAucb08LDUyrJbtV/QdgUCawDN6QAKCRDUyrJbtV/Q
+ dkL5C/9mWc9H7+7qkzzUto3wpJID7vwg26Q5C2w1dQ5WEBU5Yfrbx8OGpDQioGQLTVnXwgO7EKr
+ y++eqnjrQ2Pb5VUz+fDUCt9S1FQVddtugi1ACRYnn93JNmeuOLZeLY88HOH3k55iUIrZ/PsYdfU
+ dPwgV6dTz0GYNu+iKGnxn9YpyedN6gtZ1YDrGXBR1m3Y+IYu5V116Tb6SDYN0NTKdzLDSvsm5As
+ sGtp8oCoOHy0YBmxJp3O+AvGt2+2F6xP0M6xViR+YK1WfhdFgci6NXG2LBgDPx9xRldSH6amsmI
+ 7T8E2wWPkQFrKXD+6X48u8m/HWmbGSqycArLyLktP2zOhDj34bPG8tf61DMa2QnQfkfzEORMrRK
+ dXbFy7VhJvswRDS/abArPXVioPXcLs6ELbA6Sc+huux+8kCbXPX4i27iL9w0mnzk7Ww5kwiOEiP
+ doBhWvpIVpPG/FvWgEaaq2ICVQAC3mH/nClDK0yEhkr8ewcUvet2lM/jolNWhTA/sDdNo=
+X-Developer-Key: i=kalash@nexthop.ai; a=openpgp;
+ fpr=9629D7C79C7700B9C6F4F0B0D4CAB25BB55FD076
+X-Endpoint-Received: by B4 Relay for kalash@nexthop.ai/default with
+ auth_id=1588
+X-Original-From: Kalash Nainwal <kalash@nexthop.ai>
+Reply-To: kalash@nexthop.ai
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 20, 2026 at 1:44=E2=80=AFPM Micah Morton <mortonm@chromium.org>=
- wrote:
-> On Thu, Nov 5, 2026 at 4:26=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
-rote:
-> > On Sun, Oct 4, 2026 at 6:05=E2=80=AFPM Serge E. Hallyn <serge@hallyn.co=
-m> wrote:
-> > > On Sat, Oct 03, 2026 at 07:34:15PM +0900, tjdqudcks0424@naver.com wro=
-te:
-> > > > From: Sung Byeongchan <tjdqudcks0424@naver.com>
-> > > >
-> > > > SafeSetID policies constrain the ID transitions available to a task=
- for
-> > > > each source ID.  id_permitted_for_cred() always builds that source =
-key
-> > > > from the old real UID, even when it is checking a GID transition.  =
-If the
-> > > > real UID and real GID differ, the policy attached to the real GID i=
-s
-> > > > therefore missed and the lookup can return the unconstrained defaul=
-t.
-> > > >
-> > > > On current mainline, a test task with real UID 1000, real GID 2000 =
-and
-> > > > only CAP_SETGID obtained non-allowlisted GID 2002 despite a 2000:20=
-01 GID
-> > > > policy.  The bypass reproduced for setgid(), setegid(), setregid(),
-> > > > setresgid(), setfsgid() and setgroups() across three clean QEMU boo=
-ts,
-> > > > and enabled access to a synthetic group-protected resource.  This s=
-hows
-> > > > a SafeSetID GID policy bypass and group privilege expansion; it doe=
-s not
-> > > > show direct UID 0 elevation or a universal local privilege escalati=
-on.
-> > > >
-> > > > Build the source key from the old real UID for UID policy checks an=
-d the
-> > > > old real GID for GID policy checks.  In three fixed-kernel boots, a=
-ll
-> > > > tested non-allowlisted transitions were blocked while the allowed t=
-arget,
-> > > > existing-ID, no-policy and UID-policy controls, and the existing Sa=
-feSetID
-> > > > selftest continued to pass.
-> > > >
-> > > > Fixes: 5294bac97e12 ("LSM: SafeSetID: Add GID security policy handl=
-ing")
-> > > > Cc: stable@vger.kernel.org
-> > > > Assisted-by: OpenAI Codex
-> > > > Signed-off-by: Sung Byeongchan <tjdqudcks0424@naver.com>
-> > >
-> > > Seems obviously correct.  Thanks for the find and the fix.
-> > >
-> > > Reviewed-by: Serge Hallyn <serge@hallyn.com>
-> >
-> > Looks good to me too, thanks!
-> >
-> > Reviewed-by: Paul Moore <paul@paul-moore.com>
-> >
-> > Micah, assuming this looks good to you, are you planning to pick this
-> > up?  If you would like me to take this via the LSM tree, please let me
-> > know.
->
-> Hi guys,
->
-> Sorry for the delay! Yes this patch looks good to me -- thanks for
-> catching this, Sung!
->
-> It's been a really long time since I sent any pull requests to Linus,
-> so it might be a good idea for this to come from the LSM tree if you
-> are up for it, Paul.
->
-> Let me know, if you think its better for me to dust off my old GitHub
-> repo and pull request etiquette I'm fine to do so as well :)
+From: Kalash Nainwal <kalash@nexthop.ai>
 
-I guess it's up to you Micah.  If you want an excuse to get current on
-merging patches and sending pull requests to Linus this would be a
-good one.  However, I also understand that it can be a non-trivial
-amount of work for one patch (which is why I made the offer).
+Check that with tcp_l3mdev_accept=1 and the port listed in
+tcp_l3mdev_exempt_ports, a VRF connection goes to the VRF-bound
+listener (in both listener creation orders) and is refused by an
+unbound-only listener, and that default-VRF connections still reach
+the unbound listener. Covers IPv4 and IPv6.
 
-Let me know what you would like to do; both options are fine with me.
-If you need some help on the administrative side, e.g. sending stuff
-to Linus, let me know and I'll do my best to help you out.  If you
-would prefer me to include this in the LSM tree, please reply with an
-ACK tag so I can include that in the merge.
+Signed-off-by: Kalash Nainwal <kalash@nexthop.ai>
+---
+ tools/testing/selftests/net/Makefile               |   1 +
+ .../selftests/net/tcp_l3mdev_exempt_ports.sh       | 213 +++++++++++++++++++++
+ 2 files changed, 214 insertions(+)
 
-Thanks!
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index c80dabbcc90..2a0b8453bfd 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -109,6 +109,7 @@ TEST_PROGS := \
+ 	stress_reuseport_listen.sh \
+ 	tcp_ecmp_failover.sh \
+ 	tcp_fastopen_backup_key.sh \
++	tcp_l3mdev_exempt_ports.sh \
+ 	test_bridge_backup_port.sh \
+ 	test_bridge_neigh_suppress.sh \
+ 	test_ingress_egress_chaining.sh \
+diff --git a/tools/testing/selftests/net/tcp_l3mdev_exempt_ports.sh b/tools/testing/selftests/net/tcp_l3mdev_exempt_ports.sh
+new file mode 100755
+index 00000000000..f075abb9e8f
+--- /dev/null
++++ b/tools/testing/selftests/net/tcp_l3mdev_exempt_ports.sh
+@@ -0,0 +1,213 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test net.ipv4.tcp_l3mdev_exempt_ports.
++#
++# With tcp_l3mdev_accept=1, a listener that is not bound to a device also
++# matches connections that arrive in a VRF. For a port listed in
++# tcp_l3mdev_exempt_ports it must not: only a listener bound to the VRF
++# may take such a connection. Connections in the default VRF are not
++# affected.
++#
++#  ns_c (client in VRF)       ns_s (server)             ns_d (client in default VRF)
++#      veth0 ------------- veth_vrf [vrf red]
++#                             veth_def ----------------- veth0
++
++source lib.sh
++
++PORT=12345
++OTHER_PORT=23456
++VRF=red
++VRF_TABLE=1000
++
++VRF_SRV4=172.16.1.1
++VRF_CLI4=172.16.1.2
++DEF_SRV4=172.16.2.1
++DEF_CLI4=172.16.2.2
++VRF_SRV6=2001:db8:1::1
++VRF_CLI6=2001:db8:1::2
++DEF_SRV6=2001:db8:2::1
++DEF_CLI6=2001:db8:2::2
++
++TESTS="
++	unbound_listener
++	vrf_and_unbound_listeners
++	default_vrf_unaffected
++"
++
++cleanup()
++{
++	cleanup_all_ns
++}
++
++setup()
++{
++	setup_ns ns_s ns_c ns_d || exit $ksft_skip
++
++	ip -n "$ns_s" link add "$VRF" type vrf table "$VRF_TABLE"
++	ip -n "$ns_s" link set "$VRF" up
++
++	ip -n "$ns_s" link add veth_vrf type veth peer name veth0 netns "$ns_c"
++	ip -n "$ns_s" link set veth_vrf master "$VRF"
++	ip -n "$ns_s" link set veth_vrf up
++	ip -n "$ns_s" addr add "$VRF_SRV4/24" dev veth_vrf
++	ip -n "$ns_s" addr add "$VRF_SRV6/64" dev veth_vrf nodad
++	ip -n "$ns_c" link set veth0 up
++	ip -n "$ns_c" addr add "$VRF_CLI4/24" dev veth0
++	ip -n "$ns_c" addr add "$VRF_CLI6/64" dev veth0 nodad
++
++	ip -n "$ns_s" link add veth_def type veth peer name veth0 netns "$ns_d"
++	ip -n "$ns_s" link set veth_def up
++	ip -n "$ns_s" addr add "$DEF_SRV4/24" dev veth_def
++	ip -n "$ns_s" addr add "$DEF_SRV6/64" dev veth_def nodad
++	ip -n "$ns_d" link set veth0 up
++	ip -n "$ns_d" addr add "$DEF_CLI4/24" dev veth0
++	ip -n "$ns_d" addr add "$DEF_CLI6/64" dev veth0 nodad
++
++	ip netns exec "$ns_s" sysctl -wq net.ipv4.tcp_l3mdev_accept=1
++}
++
++ipver()
++{
++	[ "$1" = "-6" ] && echo 6 || echo 4
++}
++
++set_exempt()
++{
++	ip netns exec "$ns_s" sysctl -wq net.ipv4.tcp_l3mdev_exempt_ports="$1"
++}
++
++# Start a server. nettest sets SO_REUSEPORT on its listeners, so an
++# unbound and a VRF-bound listener can share the port.
++# $1: "-6" or "", $2: "vrf" or "unbound"
++start_server()
++{
++	local dev_arg=""
++
++	[ "$2" = "vrf" ] && dev_arg="-I $VRF"
++	# shellcheck disable=SC2086
++	ip netns exec "$ns_s" ./nettest $1 -s $dev_arg -p "$PORT" -t 3 -q &
++}
++
++# $1: client netns, $2: "-6" or "", $3: server address
++connect()
++{
++	# shellcheck disable=SC2086
++	ip netns exec "$1" ./nettest $2 -r "$3" -p "$PORT" -t 2 -q
++}
++
++unbound_listener()
++{
++	local fam addr pid
++
++	for fam in "" "-6"; do
++		addr=$VRF_SRV4
++		[ "$fam" = "-6" ] && addr=$VRF_SRV6
++
++		RET=0
++		set_exempt "$OTHER_PORT"
++		start_server "$fam" unbound
++		pid=$!
++		wait_local_port_listen "$ns_s" "$PORT" tcp
++		connect "$ns_c" "$fam" "$addr"
++		check_err $? "VRF connection not accepted by unbound listener"
++		wait $pid
++		log_test "IPv$(ipver "$fam"): not exempt, VRF conn to unbound listener accepted"
++
++		RET=0
++		set_exempt "$PORT"
++		start_server "$fam" unbound
++		pid=$!
++		wait_local_port_listen "$ns_s" "$PORT" tcp
++		connect "$ns_c" "$fam" "$addr"
++		check_fail $? "VRF connection accepted by unbound listener"
++		wait $pid
++		log_test "IPv$(ipver "$fam"): exempt, VRF conn to unbound listener rejected"
++	done
++	set_exempt ""
++}
++
++# Both an unbound and a VRF-bound listener on the port. The VRF connection
++# must reach the VRF-bound one, whichever listener was created first.
++vrf_and_unbound_listeners()
++{
++	local fam addr order first second pid_first pid_second
++	local rc_first rc_second rc_vrf rc_unbound
++
++	set_exempt "$PORT"
++	for fam in "" "-6"; do
++		addr=$VRF_SRV4
++		[ "$fam" = "-6" ] && addr=$VRF_SRV6
++
++		for order in "unbound vrf" "vrf unbound"; do
++			read -r first second <<< "$order"
++			RET=0
++
++			start_server "$fam" "$first"
++			pid_first=$!
++			wait_local_port_listen "$ns_s" "$PORT" tcp
++			start_server "$fam" "$second"
++			pid_second=$!
++			sleep 0.2
++
++			connect "$ns_c" "$fam" "$addr"
++			check_err $? "VRF connection failed"
++
++			wait $pid_first
++			rc_first=$?
++			wait $pid_second
++			rc_second=$?
++			if [ "$first" = "vrf" ]; then
++				rc_vrf=$rc_first
++				rc_unbound=$rc_second
++			else
++				rc_vrf=$rc_second
++				rc_unbound=$rc_first
++			fi
++			check_err $rc_vrf "VRF-bound listener did not get the connection"
++			check_fail $rc_unbound "unbound listener got the connection"
++
++			log_test "IPv$(ipver "$fam"): exempt, $first first, VRF-bound listener wins"
++		done
++	done
++	set_exempt ""
++}
++
++default_vrf_unaffected()
++{
++	local fam addr pid
++
++	set_exempt "$PORT"
++	for fam in "" "-6"; do
++		addr=$DEF_SRV4
++		[ "$fam" = "-6" ] && addr=$DEF_SRV6
++
++		RET=0
++		start_server "$fam" unbound
++		pid=$!
++		wait_local_port_listen "$ns_s" "$PORT" tcp
++		connect "$ns_d" "$fam" "$addr"
++		check_err $? "default VRF connection not accepted"
++		wait $pid
++		check_err $? "unbound listener did not get the connection"
++		log_test "IPv$(ipver "$fam"): exempt, default VRF conn to unbound listener accepted"
++	done
++	set_exempt ""
++}
++
++trap cleanup EXIT
++
++if [ ! -x ./nettest ]; then
++	echo "SKIP: nettest not built"
++	exit "$ksft_skip"
++fi
++
++setup
++if ! ip netns exec "$ns_s" test -e /proc/sys/net/ipv4/tcp_l3mdev_exempt_ports; then
++	echo "SKIP: net.ipv4.tcp_l3mdev_exempt_ports not supported"
++	exit "$ksft_skip"
++fi
++
++tests_run
++
++exit "$EXIT_STATUS"
 
---=20
-paul-moore.com
+-- 
+2.43.0
+
+
