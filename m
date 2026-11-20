@@ -1,104 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795179724;
-	b=n6gNIH0IfkB2eqORp1YDTSDf4uBBcalbCE8XuPwMceKBiDUAybUExu+FJuWyEIMRntfo
-	 7Oj9KAz6AI6+2Jf2Strdueh27xedMIm/o3dinQC4dvOHwJ2S1jP3Zgs6gSKKWFsLcrnre
-	 vNu5xJixharhnvDGHKJ0ve9qB+bkNPAn0L2B1urctjaf9xxEZbVnVYeUg998lkE5Kkidk
-	 vN+QYUvNJZ6rvSfVZVSROiHbEIy1OeQZqKIuQ7dLjusvAIergArLTKjgU3EDIVhxHfcna
-	 h5xFWtCFGqgHbGDLCkWd0UfYSmOj5/RpZ3Yla0wryTbvYHTl0YLXGGsSaI2EOKKfMMw==
+	t=1795179925;
+	b=TCYz22IWdkBd63Chvb02GrT3aQf9nSObiXE/Pid7Z/YGA0HMyQq+Skf7vd0bzy5NjJ3Z
+	 okr0mlbZJMZiYnuR9P7g8FUUqf6JtB/N+2yxJqrZLESityk3a3MGj7pg5Q7Q00ook+0CD
+	 N2KMyLRG5XbHyEiy7hvwFMySB8owsdHiA9712apPJlP/hm3vqSAkVzQjjgnz7veV2AP8Q
+	 KfUC/zqtd5FbIhLhICXjFwOZvff8Iu5o8TFc4PCvLEBGqEGnQf4TDCeUm/YWosIG+OJbD
+	 n1iaREAkBCgyFwvRuoSaWWd887gPU93fVaMzi1oW6p6+kx17cFL8YiKAM3CejSAJekg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795179724;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795179925;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
 	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=g70Sw5KFtXeD1N+klFwavclKwEB2Fifoe4OTNieWl5U=;
-	b=jJJMLugWxT1OhAFgFTm+r+IdF1to36ie+pymDLUKzbs7InpYBNpo992suOcaMlOp+RVf
-	 eS9RMSX96C08ouNW9/INWQ31cBKA9NAGXJVLD+rUmCaUnZJkKIXTDtm3W0xPb+0UiAsNF
-	 5I2WP1U9a8Bhe1I7fab8gEeO4G64xB+6iG2MQrS4vh6+r7ssqxb2gK2Wnuiv5s1mISLo0
-	 R99fv+yCwVseXxSVJE0FcIuULGhC511srKUZ3NgZiuMOWEZG/E514OGsBobpZH2P3LQPo
-	 qwXJH/AdbcYukz09Lg8l5TKDaSCW+Ss54d3o7RMsHn61g7VE9yUbEaKu/d9qSzvamjA==
+	bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
+	b=qDVZJCrQQ73Ri92tHwduDLU8fVqQ0Bm0WFHcFH5Qw6oovF3QcEbIpN7vCrGaQ+m1wpk4
+	 Hj9dHGE/1aChNAy9XlZMhE0IfPGug8DdQwkwCrIoZy+Xch6rTBpK/KFtV2W/nS2rnSt79
+	 41Fm0FQmc3h4jVi9SFlNrLVs+Rx5mE+XyFqN5fxdnO9KDhYXNCd2rGzsdNajWFB++bzdv
+	 XEYDnR5c0VHqRWmLmWchTBr4q3cuOJRBgutUyYUeglSAyzTIq/iZliZofqE9a4S5XiUoJ
+	 QScIMto5ablhvN/821668qEw0wi3CT2KK4JwfRB0YpYwY00iu5c2NZdzE6YcCdRtBUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=QhrLdVyw;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=QGqGt7rk;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OhjTY5YT;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="a7E5Q/at";
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D857E606A33C
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 13:02:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D857E606A33C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C87606A32A
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 13:05:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89C87606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=QhrLdVyw;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=QGqGt7rk
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OhjTY5YT;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=a7E5Q/at
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795179723;
+	s=mimecast20190719; t=1795179923;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=g70Sw5KFtXeD1N+klFwavclKwEB2Fifoe4OTNieWl5U=;
-	b=QhrLdVywgpM2L3TfdQVHheY4foZyv4VJLgbgPIKKnhODk6UofGWzSqeMwsrD3O6/E2ocDf
-	fVX8Nbjwg/R27jT0aR3Xo2v3Gph4MZxXLrc4WVhJawNq9yN+Y+Z/xIIy7ia2DThRHpchMe
-	SPhlSwk/sko7AkZVHXFwwJaDdmob4/I=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
+	b=OhjTY5YTcuoDbjWOWWYh62bB2E3Uh/h0WJ2tdy2TnyM6djSce7ywoWMkdtsKgguff975BL
+	A8EUfdT6oTlpJweZR+etDaniqErkkZl7rBsBkzzMa/1iOe6hrijS6yT6m646Sq0OFF/z4Q
+	tYqp7wRsS3gmSLEEFh7vWXVZSzebCLM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-501-W6e0dYgbPWy1EZE6D9IQmw-1; Fri, 20 Nov 2026 13:02:00 +0000
-X-MC-Unique: W6e0dYgbPWy1EZE6D9IQmw-1
-X-Mimecast-MFC-AGG-ID: W6e0dYgbPWy1EZE6D9IQmw_1795179719
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4a7c864000eso492418f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 05:02:00 -0800 (PST)
+ us-mta-646-j3mm_fSbN366m9quFD-Lcg-1; Fri, 20 Nov 2026 13:05:20 +0000
+X-MC-Unique: j3mm_fSbN366m9quFD-Lcg-1
+X-Mimecast-MFC-AGG-ID: j3mm_fSbN366m9quFD-Lcg_1795179920
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4bb69d84053so6738915e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 05:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1795179719; x=1795784519; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1795179919; x=1795784719; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=g70Sw5KFtXeD1N+klFwavclKwEB2Fifoe4OTNieWl5U=;
-        b=QGqGt7rk5Ng6JlAsaTNOvWe+J8Rgzi5PgGQtc3IWAnItrDhj5780oDNb76aTbg871c
-         s7YqpOhKwWMxZGMw7sGNPNoI15yVR0kJkICC3CzE9fsodeUuRJEPcOdeDE6kekLrdSYf
-         L+u+4qQgGkO2C33ADNlPgyrDV53+xlIVTDchB/r0j3exZl2P0X95UUN+b+NGD3kTglE+
-         kFnxDo19biZd2w3WuM1CpVtiQyi0fJdpNFxQyZNBHzZ7huRP/kWVBflakONF0UpEktBR
-         mXoYJvLmISLrgP2C6Q2ifqJRGNrpxxl+rPHZh+WJkZKKrAmU+bN7dasHWR9Qd3LyTQFi
-         5Yog==
+        bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
+        b=a7E5Q/ataALL+4CgEZhd1/J5a6wtd4Qr7q0QjAm+vqgoEh1WazQWKqUvtZeABshdr5
+         BZ8w0ow4XI0vd6Aws7ckDJEyccq1QNcI6suKHQHvEEyvIjtiLTuCkowo8BpJyelOWYgy
+         /UOE2YHL2iWIVODyvLYMaEPe0ANXjRSe/Cfh8QFcyZY053+EzqA+hW36Ez418LE4lU2R
+         GzmNt8iAVXH5KSugNbLql1JDi1189UOHJ9DiE3xrrw4i5QCQEgMmNhL+m8oPavLfal/h
+         qNslfkxBK16Akwij5pxzwWlixaepoQY02h3PBfIvbW/Zcgbzk3v2zKinRBjyeev8MdbO
+         pUWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795179719; x=1795784519;
+        d=1e100.net; s=20260707; t=1795179919; x=1795784719;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=g70Sw5KFtXeD1N+klFwavclKwEB2Fifoe4OTNieWl5U=;
-        b=1KRZvfLPCCJNwt60tyklkVwnXEfGvD4sh0ZAfry29Jx3QxsekHmYjIKm3fqYpWz1Xi
-         6aeER/ZtWBdA310yNMw7sYGzbkfR4/oYmcTlpSaPQ99bg3x5Dngiaa0iDIxX4MVUTUz3
-         tugk9eCdSB7lc6LgjmqLYJQT01hcJctEc2vsVNqQAfOv7gCCezxp/Wv71D0KCEsbXjPQ
-         yVTrVN3RzVxbAwFu/zzXQfT664QcjLFSV1YcDgFiCPoDCYzfLJmKeJqgmYIJ5mH/y9cz
-         6bD4MAKpJVynurpKfRD6J3PVNjjO/13i7aOiatuKHgDN2nEyNeoRq0UPvzoSRPPFgkV9
-         Z1kg==
-X-Forwarded-Encrypted: i=1; AL+hErEmmCipTjHaURdpQQJBkH3OypHa0AT+aasnLcsPjEDPqvlmNGmWi+D4fF1XNYoLoimBjh8rQoDc6HqZcYvtWfk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9rozkDYsWAMtSYe5yBkEmElzObl8q1gQgVNJnd7rOnRbsUxm0m
-	TdlQdToxWk6vAxlzttDvID+FPr8Q+DB8AVz3u1eQEob4WENTBT00iCh9+1EDrzQUObxP33zj9/t
-	OadRo/ZBB/5kW3a/ebyCVpNCLs++jmkqQP7u/erG4o3LUmLXK9+GPT3kAiFJ7H5e+i8MSzQ==
-X-Gm-Gg: AZFdTZfHDYhRK0vsDD66YC4zNh5DvtQ2/E0Rhd4zMy6duqhIj6rEUnQbl2qKDSHRRST
-	BebVuqCCpb1EXN/p+/ySTgJWOBStf4MSpgTwGYYlrSmmUe7EaTVYPNVo1ZJfU9emeRUde+7DGmc
-	Pi80+OdcotE19zLeaN5YlzmbW5hF65DZjaBXWy17vOHg9PliaPiFaJ7PeVu3QVAnStjeDTgFWUR
-	jS1HoAvJvRYvhuc3BRMxvb0/LpWtAFuHuFoXWKK+WYExkC6IDAe1u1vksFCKC3BMikP2SFS5xkr
-	vtzX4zuaIVmyQ8otp8qFU+TjvOaVxK1zWysVZrVVw2Z73xNAEoHPjYdVeWsFpnArBObfR6sm//V
-	Quo82WRPIlongZyQCKPx1zB0G8T9jsWhBa0P4MNvz+txDTJ7RdG7wAmhIsfldpA9GMbDjZask94
-	scums=
-X-Received: by 2002:a05:6000:616:b0:4a6:e1ed:771 with SMTP id ffacd0b85a97d-4abb5db73c9mr6914899f8f.34.1795179718891;
-        Fri, 20 Nov 2026 05:01:58 -0800 (PST)
-X-Received: by 2002:a05:6000:616:b0:4a6:e1ed:771 with SMTP id ffacd0b85a97d-4abb5db73c9mr6914801f8f.34.1795179718334;
-        Fri, 20 Nov 2026 05:01:58 -0800 (PST)
+        bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
+        b=zsdXWClzTvVJlCUcUYSbulAwgMknVPCbqEGEsu1FGUYannNT1g4OTUWn24kqnLKrZx
+         OP7vFrdXFLP9XK0iMEVTCAhAej6j2VzZyawl22BFLscLS7NGUcnq/ZsjN6aG9/ldJ5AP
+         wNOq3t1FaYglj+Q3w8hhogq0lEAQsJPuoiSnlM5w8NB9fX3R3BZZsNQEiaH7qFLLcTf1
+         J166KldZL7Yk7xMIfphWTEVQxyh5rYCkMUzDWUG7bESAS8iPZyxPZSs7HhMJ2cpgzNOz
+         VMaDi2jNN+Zwxt3zVdlVI9VDQgc6M94CG+7+rgYV5lvcXouhFVsc4tmjbXomFDulm3St
+         vjmw==
+X-Forwarded-Encrypted: i=1; AL+hErF+wHwJE5qTm8x0ALBXmy8knt2rL1XyH3piFnLyLGBuqO+e81RnYb1Pk014nA+IKXep05D1VYWy+yMSVn35k6w=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9qS2HMlfJhyu2APqu23ioSVdJgoD9Vun55TBUyO9/8sx8ZYQaS
+	s5tyNudOIhvKxhflIvSqFwFpfDh24B6JGIbP75BWTGjzJDly+pQrczxOdhfVQlNn79HbMDDWa42
+	bZ0XgYNwylr0lLNUWkg/nKsI8YmWGIcOnOA8Rjj8QeD7ADDQx5ZRdIWU85w94bye1D7eSkg==
+X-Gm-Gg: AYBFou3RLyXkeqGNAtO32+mBLNtUaD3Ijak8g9o7txJy+csrPJw0XC13MKnvjGhs3mC
+	4cI4A7n3aVB4+h/J9S3DAGVD3pr0Oe/THvJgRZkbrATce9ilPDQmljXr45smnHK07rdNhGCm3jO
+	qDzXHvruQTJMfsYPzqejB/JIgDFAyDYbMySjWVeY+p72/by0ZvPCEePMoJHJctXasJM/Ra02ebw
+	ArZi44mHxVA/WlCEA+emOlLFpwC0TGUN2yzl58xt5YywaT7tPkII9AeVS8jDiWNCu8wB9hkG0Ko
+	T3EIv1aqdZPUMxJatnJDgTmUGE9XZDM1rlTB3VNlieu8x8eewG8nh8obwWuqxBBQ5Ndl03/NOjd
+	RVN7Is9MuZXuaPF5R6ufDAZ8NBbTrsqkGf9WviSYq76bLmBpcoYhqBvatT3JVOgyUoddL52tDyO
+	r2EUQ=
+X-Received: by 2002:a05:600c:820c:b0:4bb:6f6a:1976 with SMTP id 5b1f17b1804b1-4bb887c2923mr64602965e9.2.1795179919571;
+        Fri, 20 Nov 2026 05:05:19 -0800 (PST)
+X-Received: by 2002:a05:600c:820c:b0:4bb:6f6a:1976 with SMTP id 5b1f17b1804b1-4bb887c2923mr64602195e9.2.1795179919119;
+        Fri, 20 Nov 2026 05:05:19 -0800 (PST)
 Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6c4353d6sm5512771f8f.56.2026.11.20.05.01.56
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8849247asm85099165e9.7.2026.11.20.05.05.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 05:01:57 -0800 (PST)
-Date: Fri, 20 Nov 2026 14:01:55 +0100
+        Fri, 20 Nov 2026 05:05:18 -0800 (PST)
+Date: Fri, 20 Nov 2026 14:05:15 +0100
 From: Juri Lelli <juri.lelli@redhat.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
@@ -112,12 +112,11 @@ Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
 	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
 	weihengqiuu@gmail.com, linux-kernel@vger.kernel.org,
 	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v5 10/17] sched/deadline: Fix an overflow of the 0-lag
- time with long periods
-Message-ID: <awBEww33F6yn0MBO@jlelli-thinkpadt14gen4.remote.csb>
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v5 00/17] sched/deadline: first bandwidth accounting
+ fixes and selftests
+Message-ID: <awBFi0bwFt5KoEq-@jlelli-thinkpadt14gen4.remote.csb>
 References: <cover.1795115075.git.mathieu.desnoyers@efficios.com>
- <2be3813af9e997f5f7d9d3161d0b65b8d4ab917c.1795115075.git.mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -129,227 +128,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2be3813af9e997f5f7d9d3161d0b65b8d4ab917c.1795115075.git.mathieu.desnoyers@efficios.com>
+In-Reply-To: <cover.1795115075.git.mathieu.desnoyers@efficios.com>
 
 Hello,
 
-On 19/11/26 14:07, Mathieu Desnoyers wrote:
-> When a deadline task blocks, task_non_contending() computes its 0-lag
-> time:
+On 19/11/26 14:06, Mathieu Desnoyers wrote:
+> Hi Ingo, Juri,
 > 
->   zerolag_time = deadline - runtime * dl_period / dl_runtime
+> This series fixes 14 bugs of SCHED_DEADLINE. Then it shows the deadline
+> bandwidth of each runqueue in sched_debug, and adds two selftests. The
+> fixes come first, so that stable can take patches 1 to 14.
 
-...
+Thanks for the respin. v5 passes here: deadline_switch_test 5/5 and
+deadline_bw_test 46/47 (move_cancelled skips), also with scx_simple
+loaded (the server cases run on ext_server, hotplug_server skips). The
+sched_ext selftests pass 40/40, test_cpuset_prs.sh passes, and there are
+no splats with lockdep on. So you can drop "not tested with sched_ext"
+from the cover.
 
-> +	 * The 0-lag time is the deadline minus the runtime left, scaled by
-> +	 * dl_period / dl_runtime. The product of the runtime and dl_period
-> +	 * can overflow s64 with periods of a few seconds, so multiply on 128
-> +	 * bits. Compute the 0-lag time relative to now.
-> +	 *
-> +	 * After a change of parameters, the runtime and the deadline stay
-> +	 * those of the old parameters until the next period. The 0-lag time
-> +	 * uses the new dl_runtime and dl_period. The runtime left can then be
-> +	 * far above dl_runtime, and the quotient too large for 64 bits. So
-> +	 * first compare the runtime left with the runtime that the new
-> +	 * parameters give until the deadline:
-> +	 *
-> +	 *   (deadline - now) * dl_runtime / dl_period
-> +	 *
-> +	 * If it is larger, the 0-lag time has passed, and the bandwidth is
-> +	 * released now.
-> +	 *
-> +	 * The runtime is negative after an overrun. An overrun lasts at most
-> +	 * about a tick, unless the CPU stalls. After a stall of seconds, with
-> +	 * a long period and a short dl_runtime, the 0-lag time can overflow
-> +	 * s64. It would be centuries away. In that case, release the bandwidth
-> +	 * now.
->  	 */
-> -	zerolag_time -= rq_clock(rq);
-> +	left = dl_se->deadline - rq_clock(rq);
-> +	if (dl_se->runtime < 0) {
-> +		u64 room = S64_MAX - max(left, 0LL);
-> +
-> +		if (-dl_se->runtime > mul_u64_u64_div_u64(room, dl_se->dl_runtime,
-> +							  dl_se->dl_period))
-> +			zerolag_time = -1;
-> +		else
-> +			zerolag_time = left +
-> +				mul_u64_u64_div_u64(-dl_se->runtime,
-> +						    dl_se->dl_period,
-> +						    dl_se->dl_runtime);
-> +	} else if (left < 0 ||
-> +		 dl_se->runtime > mul_u64_u64_div_u64(left, dl_se->dl_runtime,
-> +						      dl_se->dl_period))
-> +		zerolag_time = -1;
-> +	else
-> +		zerolag_time = left -
-> +			mul_u64_u64_div_u64(dl_se->runtime, dl_se->dl_period,
-> +					    dl_se->dl_runtime);
+I replied to 10 separately, with a readability nit that is not a huge
+blocker.
 
-Nitpick-ish, feel free to ignore: the logic is right, but it took me a
-while to see which inequality each check stands for, and I fear the next
-person looking at it (future me included) will have the same problem.
-The multi-line branches also miss the braces the tip bracket rules ask
-for.
+Peter, Ingo, I have the impression this is starting to look good, what
+do you think?
 
-How about moving it into a helper with one early return per case, and a
-comment in front of each check saying what it compares? Something like
-the below, on top of this patch. I don't think you need to respin the
-whole series in case it makes sense, maybe just an updated version of
-this patch will do?
-
-Either way, you can add my
-
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
-
-Thanks,
+Thanks!
 Juri
----
- kernel/sched/deadline.c | 117 ++++++++++++++++++++++++----------------
- 1 file changed, 72 insertions(+), 45 deletions(-)
-
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 63890866dd0c7..eab354e15acbb 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -377,6 +377,76 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
- 
- static void __dl_clear_params(struct sched_dl_entity *dl_se);
- 
-+/*
-+ * Return the time from now to the 0-lag time of @dl_se, or a negative
-+ * value if the 0-lag time has passed.
-+ *
-+ * The 0-lag time is when a task running at its reserved bandwidth would
-+ * use up the runtime it has left:
-+ *
-+ *   0-lag = deadline - runtime * dl_period / dl_runtime
-+ *
-+ * Example: 30ms every 100ms, blocking 10ms into its period with 20ms
-+ * left. 0-lag = 100 - 20 * 100 / 30 = 33ms. From there to the deadline,
-+ * 30% of the CPU is exactly the 20ms left.
-+ *
-+ * The product can overflow 64 bits, so mul_u64_u64_div_u64() multiplies
-+ * on 128 bits. Its quotient must still fit: on x86-64 it traps
-+ * otherwise. Usually |runtime| <= dl_runtime and the quotient is at most
-+ * dl_period.
-+ *
-+ * Each check compares against the bound scaled by dl_runtime / dl_period,
-+ * That quotient cannot overflow, as dl_runtime <= dl_period.
-+ */
-+static s64 dl_time_to_zerolag(struct sched_dl_entity *dl_se, struct rq *rq)
-+{
-+	/* Time to the deadline. Negative if the deadline has passed. */
-+	s64 left = dl_se->deadline - rq_clock(rq);
-+
-+	if (dl_se->runtime < 0) {
-+		/*
-+		 * Overrun: the 0-lag time is after the deadline, by the time
-+		 * needed to pay the overrun back at the reserved bandwidth.
-+		 */
-+		u64 overrun = -dl_se->runtime;
-+		u64 room = S64_MAX - max(left, 0LL);
-+
-+		/*
-+		 * overrun * dl_period / dl_runtime > room: the result would
-+		 * overflow s64. The 0-lag time is centuries away, for a
-+		 * negligible bandwidth. Release it now.
-+		 */
-+		if (overrun > mul_u64_u64_div_u64(room, dl_se->dl_runtime,
-+						  dl_se->dl_period)) {
-+			return -1;
-+		}
-+
-+		return left + mul_u64_u64_div_u64(overrun, dl_se->dl_period,
-+						  dl_se->dl_runtime);
-+	}
-+
-+	/*
-+	 * Runtime left: the 0-lag time is before the deadline. It has
-+	 * passed if the deadline has.
-+	 */
-+	if (left < 0)
-+		return -1;
-+
-+	/*
-+	 * runtime * dl_period / dl_runtime > left: the 0-lag time has
-+	 * passed. The runtime left is more than the bandwidth gives until
-+	 * the deadline, as a wakeup would find with dl_entity_overflow().
-+	 */
-+	if (dl_se->runtime > mul_u64_u64_div_u64(left, dl_se->dl_runtime,
-+						 dl_se->dl_period)) {
-+		return -1;
-+	}
-+
-+	/* The quotient is at most @left here. */
-+	return left - mul_u64_u64_div_u64(dl_se->runtime, dl_se->dl_period,
-+					  dl_se->dl_runtime);
-+}
-+
- /*
-  * The utilization of a task cannot be immediately removed from
-  * the rq active utilization (running_bw) when the task blocks.
-@@ -436,7 +506,7 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
- 	struct hrtimer *timer = &dl_se->inactive_timer;
- 	struct rq *rq = rq_of_dl_se(dl_se);
- 	struct dl_rq *dl_rq = &rq->dl;
--	s64 zerolag_time, left;
-+	s64 zerolag_time;
- 
- 	/*
- 	 * If this is a non-deadline task that has been boosted,
-@@ -450,50 +520,7 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
- 
- 	WARN_ON(dl_se->dl_non_contending);
- 
--	/*
--	 * The 0-lag time is the deadline minus the runtime left, scaled by
--	 * dl_period / dl_runtime. The product of the runtime and dl_period
--	 * can overflow s64 with periods of a few seconds, so multiply on 128
--	 * bits. Compute the 0-lag time relative to now.
--	 *
--	 * After a change of parameters, the runtime and the deadline stay
--	 * those of the old parameters until the next period. The 0-lag time
--	 * uses the new dl_runtime and dl_period. The runtime left can then be
--	 * far above dl_runtime, and the quotient too large for 64 bits. So
--	 * first compare the runtime left with the runtime that the new
--	 * parameters give until the deadline:
--	 *
--	 *   (deadline - now) * dl_runtime / dl_period
--	 *
--	 * If it is larger, the 0-lag time has passed, and the bandwidth is
--	 * released now.
--	 *
--	 * The runtime is negative after an overrun. An overrun lasts at most
--	 * about a tick, unless the CPU stalls. After a stall of seconds, with
--	 * a long period and a short dl_runtime, the 0-lag time can overflow
--	 * s64. It would be centuries away. In that case, release the bandwidth
--	 * now.
--	 */
--	left = dl_se->deadline - rq_clock(rq);
--	if (dl_se->runtime < 0) {
--		u64 room = S64_MAX - max(left, 0LL);
--
--		if (-dl_se->runtime > mul_u64_u64_div_u64(room, dl_se->dl_runtime,
--							  dl_se->dl_period))
--			zerolag_time = -1;
--		else
--			zerolag_time = left +
--				mul_u64_u64_div_u64(-dl_se->runtime,
--						    dl_se->dl_period,
--						    dl_se->dl_runtime);
--	} else if (left < 0 ||
--		 dl_se->runtime > mul_u64_u64_div_u64(left, dl_se->dl_runtime,
--						      dl_se->dl_period))
--		zerolag_time = -1;
--	else
--		zerolag_time = left -
--			mul_u64_u64_div_u64(dl_se->runtime, dl_se->dl_period,
--					    dl_se->dl_runtime);
-+	zerolag_time = dl_time_to_zerolag(dl_se, rq);
- 
- 	/*
- 	 * If the "0-lag time" already passed, decrease the active
--- 
-2.56.0
 
