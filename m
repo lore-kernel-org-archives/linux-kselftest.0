@@ -1,68 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.121.94.186
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795173341;
-	b=J3Q+IJLTvwIVxZvZ3hb1uitw5AO66hvdcWsLgzXLyUSCVFbNSJyS+17uhsTeZSDv+qyX
-	 V2wMHjiiUXGEkzPan2p5QjjvPv61eDbYnA5fnaeqaNjBTNIy9x7MtOmJa8z7H38UqnPaE
-	 emz8dpVO6mE2FmRnxoFXL/eIAlOjNCABvkyHj1pQ3SnJc/wpnEN1fI9ILiua36Zx7F4z1
-	 yiHex1zozAy8cfP6iUoGTok59u0swIIWVFjMye+fth9LzKZX1p9cB3r5EErjY1pv5wQ8g
-	 mQZSL0s9zBiVajwI1inA/9zsWSbJkW/WerLftIevkKcrAQ3gONXdduzMO7rfxm6WofQ==
+	t=1795173949;
+	b=VDXG8ze71S0W6o+5ZdQU7/9P0uEcOpHmzGvmopcYwqhUNKQSwui64pqEA4i9fLciyrkI
+	 HWQgrGdn8b+KX7aY91RqhpgRySHIgBoquR4/akDTtvJhFg49MeVvinIUFi/HtQL5bhTpu
+	 Kqta+KzDIzV0od/C5qomP//p4iL/aaJK5cQ8Rdvsp+N88STCUOILgKlQ3u+NyDgRrissO
+	 OxQH/gEBA1rbFQN0hvlVSfmr3KI4t/GM2AhKyrS2qONrKyZFG/VQQCqpLnAA6x79RlfBs
+	 oHB8U9xLMq8FPjry3hHamudKNE8FElrptPrmbNnfbog08Cl6SOjR9SOhxGWo4EdAj1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795173341;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=4q/HAzNWIc8z/Kxp9yRP6YEkL7lf8pSJ0VxSvJc2osU=;
-	b=p2zl3k9V1fsAg51qNzAUFjXe5uONU/HMHTl0n+7aWNfW8++KGWyllQt8hfG/RRXM1B9j
-	 abdtFOkeRY2WpbCgAfYEsLvVMWicXq/J8TCLhYcrjBw/svL+MpJE7DMf39upXTVFBXV5b
-	 WF9xkJGE/1e4sJUMf3BKa47/RSocttw2fE4a3c5/Yo/UCZkLtZif1JKVRK0ndy3qzKZir
-	 N+zM53RBTwP29wS+aeifDWpYRydBOcrs58jEChT8Efl1vyjuxJxxSz5mO47mPQhCwyh4K
-	 ju37C3h3AUBt8NAEzkFWfulNj/Ae2vMlwPz3LQ+XWYrbLnb1USilm+QQ1aovQ7eadhQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795173949;
+	h=DMARC-Filter:X-KPN-MessageId:Received:DKIM-Signature:X-KPN-MID:
+	 X-KPN-VerifiedSender:X-CMASSUN:X-Originating-IP:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
+	bh=WqMA7RWH/tLIlFRV37UGqFGvravE6hhlZ1PRslslaGU=;
+	b=hF/rW3gs0ZG3hW4+AtXl6f9fOf5mELZ07l36oBQJik9MCSggJB5e0aKuMAHV2N2rhTi+
+	 KqJRlfm0LbmxrYeKeBw168wbKGIAM2kTaiPxR0areBpld5wYq61AfLI/1ldxPZ3cVXPTx
+	 RZzhj7TOJaso9TOAqmTv42WpFwKnMWmtNABFwcPAqJO7C6tOaWdgbJEoWW6zDEgjxXWMR
+	 +bvlcqYX1EgmXV8lRpIHenYtcEsi+ZSLer6rYW1uBItTJo8+qLml7q9htyY7crCZ9TUjQ
+	 TV5wuIS1NaznD4YYhvzOq2W9Aea1rlF2swLh3i7iaNWn7tN5I0K7NQpTmPMFjgVk0Ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiQFT9Am;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=xs4all.nl;
+	spf=pass smtp.mailfrom=xs4all.nl;
+	dkim=pass header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=llVSL0CD;
+	arc=none smtp.remote-ip=195.121.94.186
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCEB606A320;
-	Fri, 20 Nov 2026 11:15:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EC8606A326
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 11:25:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43EC8606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiQFT9Am
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631FE1F000E6;
-	Fri, 20 Nov 2026 11:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795173340;
-	bh=4q/HAzNWIc8z/Kxp9yRP6YEkL7lf8pSJ0VxSvJc2osU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=eiQFT9AmZXE80k4vQiQVbH6zGKuabiTwvqQFRzxu32eu1FITxzhp6ynTVFOKGWIYc
-	 kdt1ABR1nlY1lXBi21g6qB4xy50TYfMLG9JmYyI3xud/sDdL0BZw9ANPtDHZLwQryW
-	 CCpH0Hhfd8DgR8jKwZGeQedWSfEuCyYEqOcljny15MzC/AhsZEKPbyCj8I7Xxh0e7S
-	 zUj9rDDS3ujW4FY2JfUfbNk9Qm+e3G/+IWEJNSMyMrAiW+P3glbGmOPyJLrc9jvroF
-	 7BxRY3IzC/wbNUIiDAHAn+Kfn/hojteAjPxdyBf1vKZNdYdwr9rAyqQJN8eZxA0XXo
-	 BMVJFKbr5u18w==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
-  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
- <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
- <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
- Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
- <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
- Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
-  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
- <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
-  Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v4 07/19] liveupdate: Add helpers to track the files
- that LUO manages
-In-Reply-To: <20261111002358.1842967-8-dmatlack@google.com> (David Matlack's
-	message of "Wed, 11 Nov 2026 00:23:45 +0000")
-References: <20261111002358.1842967-1-dmatlack@google.com>
-	<20261111002358.1842967-8-dmatlack@google.com>
-Date: Fri, 20 Nov 2026 11:15:33 +0000
-Message-ID: <2vxzbj7j3ga2.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=llVSL0CD
+X-KPN-MessageId: 1e5a7bd5-e4d5-11f1-b88c-00505699b430
+Received: from smtp.kpnmail.nl (unknown [10.31.155.7])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 1e5a7bd5-e4d5-11f1-b88c-00505699b430;
+	Fri, 20 Nov 2026 12:25:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=to:message-id:content-type:mime-version:subject:date:from;
+	bh=WqMA7RWH/tLIlFRV37UGqFGvravE6hhlZ1PRslslaGU=;
+	b=llVSL0CDnR7GNlW9vyj/dhFxq3F0Ym+P4ppIoyWd5UuijccBxA2ufIJsPRDSNih++G5z8IU2K1Ali
+	 NTdjCnVfHVtaPexMwrdIF02gXc+LiYPMhM6m6i68soBpn46M4csW3q34UxfP1pEA3MrOsP4mikMf9K
+	 h1uuarn3BBighCPLH3G8ecEFT7r/kX/NHku9ns1iI8zfFr+6qryFbw0n8ox3afOAay3VDNN2Xcazk2
+	 XI/CGc7bUczqd0ud4zVnB40OvtNARsUAbVD5zJiKM1q3uGg9p9Q1ZeBy/tx/jRH2weyZZ9SAb3CMrn
+	 l2xKNPB6VHLPGgqrFH1+aEKGwrUNIIA==
+X-KPN-MID: 33|P7Nxi6PPULmoId54N2bDPC4PodzQBz+CESPhD3Ph/fMHF9fRpPXxmDrRfurT+Ev
+ iGQJfuy0gF0ZUWQlk8Kqb5Z6nPdHAiiPPTmUGr0mNrrM=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|9ZRuYsmyLjQ4G1beXDf1x7bP3Vx0YSsTgBoT0+s7BK+HCUeRUCt0oZ0sOTCFhDe
+ uhklr3zHVUVXnsK6yD9Iyxw==
+Received: from [192.168.1.167] (unknown [178.226.154.85])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id 1e3ea4ff-e4d5-11f1-92e0-005056998788;
+	Fri, 20 Nov 2026 12:25:41 +0100 (CET)
+From: "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
+Date: Fri, 20 Nov 2026 06:25:28 -0500
+Subject: [PATCH v2 1/2] selftests: pass the timeout override to tests run
+ in a netns
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,76 +70,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261120-kselftest-run-timer-v2-1-9802690a370b@xs4all.nl>
+References: <20261120-kselftest-run-timer-v2-0-9802690a370b@xs4all.nl>
+In-Reply-To: <20261120-kselftest-run-timer-v2-0-9802690a370b@xs4all.nl>
+To: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Hangbin Liu <hangbin.liu@linux.dev>, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <ricardo@marliere.net>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
+X-Mailer: b4 0.14.3
 
-On Wed, Nov 11 2026, David Matlack wrote:
+When run_kselftest.sh is invoked with -n, each test is run by in_netns()
+in a new bash process, which sources runner.sh again and then calls
+run_one(). Sourcing runner.sh resets its global settings, which is why
+in_netns() explicitly passes on logfile. kselftest_override_timeout is
+not passed on, so -o/--override-timeout is silently ignored for tests
+that are run in a network namespace and they use the timeout from their
+settings file or the default instead.
 
-> Add luo_track_file() and luo_untrack_file(), which add a file to and
-> remove it from luo_preserved_files, and use them instead of open-coding
-> xa_insert() and xa_erase() with luo_get_id() for preserved and retrieved
-> files.
->
-> The next commit lets file handlers make LUO track the file they retrieve
-> into, which adds more users. The helpers keep the key and the -EBUSY
-> behavior in one place.
->
-> No functional change intended.
->
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
-[...]
-> @@ -395,8 +407,7 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
->  		luo_file->fh->ops->unpreserve(&args);
->  		luo_flb_file_unpreserve(luo_file->fh);
->  
-> -		xa_erase(&luo_preserved_files,
-> -			 luo_get_id(luo_file->fh, luo_file->file));
-> +		luo_untrack_file(luo_file->fh, luo_file->file);
->  		module_put(luo_file->fh->ops->owner);
->  
->  		list_del(&luo_file->list);
-> @@ -668,9 +679,7 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
->  		return err;
->  	}
->  
-> -	err = xa_insert(&luo_preserved_files,
-> -			luo_get_id(luo_file->fh, args.file), args.file,
-> -			GFP_KERNEL);
-> +	err = luo_track_file(luo_file->fh, args.file);
->  	if (err) {
->  		/* A retrieved file is new, so it can't be tracked already. */
->  		WARN_ON_ONCE(err == -EBUSY);
-> @@ -788,8 +797,7 @@ int luo_file_finish(struct luo_file_set *file_set)
->  		luo_file_finish_one(file_set, luo_file);
->  
->  		if (luo_file->file) {
-> -			xa_erase(&luo_preserved_files,
-> -				 luo_get_id(luo_file->fh, luo_file->file));
-> +			luo_untrack_file(luo_file->fh, luo_file->file);
+Pass kselftest_override_timeout to the netns shell as well.
 
-This looks dangerous.
+Fixes: 9d0b4ad82d61 ("kselftest/runner.sh: add netns support")
+Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
+---
+ tools/testing/selftests/kselftest/runner.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-Since the previous patch set luo_file->file when xa_insert() failed,
-this will trigger in a failed retrieve. Except, the file was never
-tracked to begin with.
-
-While I don't see anything that actually breaks because of this today,
-I think it is a bug in the making.
-
-I think the below is a bit better. Although this change probably makes
-more sense in the previous patch, since that introduced the problem.
-This patch should just replace the xa_erase() with luo_untrack_file().
-
-	if (luo_file->file)
-		fput(luo_file->file);
-
-	if (luo_file->retrieve_status > 0)
-		luo_untrack_file(luo_file->fh, luo_file->file);
-
->  			fput(luo_file->file);
->  		}
->  		module_put(luo_file->fh->ops->owner);
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 45fb8ec38493..bbb2e61f323c 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -169,6 +169,7 @@ in_netns()
+ 		BASE_DIR=$BASE_DIR
+ 		source $BASE_DIR/kselftest/runner.sh
+ 		logfile=$logfile
++		kselftest_override_timeout=$kselftest_override_timeout
+ 		run_one $DIR $TEST
+ 	EOF
+ }
 
 -- 
-Regards,
-Pratyush Yadav
+2.56.1
+
