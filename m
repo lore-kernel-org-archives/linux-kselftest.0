@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795170750;
-	b=JVeCs7nHjlTON54mcN+R9O3ZVwPnq6GVG2PrkFYYH3RPhQJ7rlOSxmnNf1cbt05CoTyZ
-	 YHttXVNGLNEHmMJvcszhvjgNyh4ECVV1SL8ADmGvboRlpaRQlnTyRYYEntZ33Uyq5QsEs
-	 Fv4xlLa1lQyOK+gC2bTpGOaoQPMcrZ3BQATrs3HRqEzK18h4lLX7MHpZAc7FkaiFLOCAk
-	 /C8c2WRb/HxwbjH4fwhmxP7gi89z6EhIGnPeh0p13BLGqrGLggPFChYJmmch7o9IOuxvr
-	 71hKdcffSVpmTe6Zs0MPyXYWbBvgSpMfzoPO7M7u+VeyOw9Tx0Aj/rgUEcVUayYd5qg==
+	t=1795170752;
+	b=yR2J2mVV8pi3ifevQUu9oO92LVFFV9SIiLl9g4oEKzrhVKbaTbI1OdFwR7VHXe5GSpzl
+	 jSAhgLv3RvB6LIzKyqno799hJJ6n7jqhfD8kydJ8x8wbKEVDPkkYiakWzr9GnGHNPAQE2
+	 K0QUSBpg12/XEs6BzTdf2rANhVMp+XMEDBsJ7GNe4wdDlLwbilViFFY0ZlxzU8/9dgqdE
+	 W72H/jkhseft0bz7SCR388g4IKi+ravPjF0ZvsLimtvD65JFTA4ODbwpTWEw0v2m8NWXw
+	 p829GP4EMwdjvt5hVXSAphO4ryi++eAjdBjOGuOhGasbzbRz1uZfM6Uq8AYK8HJzWLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795170750;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795170752;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=SnAqAg381veESmVUGrbbBgkSnsyfEytJcfyGHNrIA2Q=;
-	b=5IKwMeGbP8sxviKYxjCdD7YRGY35xe0YvPvTN39c7+usWSIxA4h7w2ClYvZMyVD7gZB9
-	 YPidHfxQ438zfk3TBazUWIdeOvnuffybxC1jCfsjBR4HUbk0sxwy4Z11QiyzHGD0G8A8T
-	 tLPH+K3xzuzIZTM8H/PCjCfTYIMhq6KtuCggqaMnJqxEN6N4/xllbkotbtARzHb9qGhIh
-	 RpQjPFFxqj+au7DMRVRglfOTblOXcRvHwhE2Pl2Aa3+cWhlOBd9lEruVx0kX70p9sJ764
-	 2h+54siFtHnHv744AZzKYHz92dmkFEp6omQ/3VK1JaiSJh0f39j1LX9OinnsPqbADvQ==
+	bh=e6hDYPQhaY8CoMDDeLmCdNx7Wja3y+/nUyU+mS5UbXo=;
+	b=XNl9V3l7SdldX0QlEzFs3W1z0kgGETJQY4cnEoi0noCf2QLDo6RyIkNXpLtpSakEOOhX
+	 sS1qAkJQmAVfpTEiF+pVuDxQNjKkhlDSycEJywB6JO326YGrnr/zJBFg2Z0XBZoUznFPT
+	 BBqGFnvoDErJtDl4FiITKdlKdp/w/V5OzIdjvt+QOjcGtZPqAaA3NshLcjOTB9GEgu/w+
+	 TfHjLNeBKQd/QNpXTZnJ+ixGJpSIXvOxIgEF/HI1aY6hl7YCY6HuaCQSTP8GZ8m2j32FV
+	 32wDmcP/REchxm3qHbkdyC2GzJgh44RrJXKagQ2vbtEIY51wNiQF8mr0cRKIHSc5gow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cgQ7xvOM;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hNIyLLyh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAFC606A320;
-	Fri, 20 Nov 2026 10:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBC4606A337;
+	Fri, 20 Nov 2026 10:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cgQ7xvOM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610A31F000C4;
-	Fri, 20 Nov 2026 10:32:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hNIyLLyh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E391C1F000CF;
+	Fri, 20 Nov 2026 10:32:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795170750;
-	bh=SnAqAg381veESmVUGrbbBgkSnsyfEytJcfyGHNrIA2Q=;
+	s=k20260515; t=1795170751;
+	bh=e6hDYPQhaY8CoMDDeLmCdNx7Wja3y+/nUyU+mS5UbXo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cgQ7xvOMY1CUiX0aYkbIQvGng8ZlUuGeFzZrfjUbTaFNa9DN6kgoTbyvXMWxe6Ljl
-	 CEec0denXCUf8fkH7k6AhvvSJGL+/F5tM2hbgbIcpxQAm1+zf0ha7900xL6zC3crrb
-	 Qtp3ODAO47xlsrDeTFJ44S/aFm8cnO/yYp2P8gqndS/3Wh8lzOWrul9KpCkcfrS5ql
-	 6ndE/zg8mjWAQ9UZvHKdfnDubebQe3tYHDDVX7YlhhXyj5mOb/B2uKfhU4pJQqM/6c
-	 gCeRiU+8qgwrycImQB5N5T8syCYIndrRKwCkKqxJuPYb6lLt+gFPtYrHysuoz8IXJK
-	 BeikglWnY4ZEA==
-Subject: Re: [PATCH net-next v4 1/3] ipv4: Check a Fragmentation Needed
- against each path of a multipath route
+	b=hNIyLLyheQ75viP3v0AcpR3vFZ039HFBJ21gZ14pKuiQFvvDi9F0JB1g2OuUXx3YA
+	 B+7EFFschpESmsJTqrHjTzUTzgaq/rztImX2q88IwMLAqCzUnlKQELj4IQEOaJpXjY
+	 3q0bWr8ssPPg2pO+YyM88rQxUYbx7e8EeyfZ/+6Rf5lWxFCb2egrHFvKJ5LXQlyxbj
+	 3ejWhhtR9bakRay69ihAz3WkhEKMjt2hXEixBys7Xc7Vz2FQGlKoHEPtN1EnMjky1E
+	 uJJWzS0RzcZxG/RML5BrhmTQ/6vbUxlVW9ByhekbrykgAd2aMG12HaF2a26bjHvduH
+	 MZXhUDqKaXycw==
+Subject: Re: [PATCH net-next v4 2/3] ipv6: Cache pmtu for all paths of a
+ multipath route
 From: netdev-bot+sashiko@kernel.org
 To: deliran@verdict.gg
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Fri, 20 Nov 2026 10:32:28 +0000
-Message-ID: <179517074893.3136.1226707623351287544@kernel.org>
-In-Reply-To: <20261117193141.27004-2-deliran@verdict.gg>
-References: <20261117193141.27004-2-deliran@verdict.gg>
+Date: Fri, 20 Nov 2026 10:32:30 +0000
+Message-ID: <179517075051.3136.16687841105573859548@kernel.org>
+In-Reply-To: <20261117193141.27004-3-deliran@verdict.gg>
+References: <20261117193141.27004-3-deliran@verdict.gg>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,10 +65,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -76,177 +76,135 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In net/ipv4/route.c, fib_nhc_pmtu() does not measure a path
-  the way its comment and the commit message say.
-- [Medium] ipv4: premature mtu clamping in __ip_rt_update_pmtu() locks
-  narrower paths
-- [Low] The fib_nhc_pmtu() comment (net/ipv4/route.c:1051-1055) says the
-  function returns 0, leaving the path alone, when what the path uses…
+- [Medium] In __ip6_rt_update_pmtu() (net/ipv6/route.c), the from_lookup
+  branch is meant to skip a blackhole nexthop.
 
 --
 
-ipv4: Check a Fragmentation Needed against each path of a multipath route
+ipv6: Cache pmtu for all paths of a multipath route
 
-This patch adds fib_nhc_pmtu() and calls it from __ip_rt_update_pmtu().
-Before the mtu of a Fragmentation Needed is cached in a nexthop exception,
-it is now checked against each path of a multipath route. The early
-returns based on the looked-up dst are kept only for callers whose dst is
-the path of their flow (from_lookup == false).
+This commit makes ip6_update_pmtu() cache a Packet Too Big pmtu on every
+path of a multipath route, the same way commit 7d3f3b4367f3 does for IPv4.
+It walks the fib6_nh entries of a nexthop object or the siblings of the
+fib6_info, and it skips siblings that are not in the tree and nexthops
+replaced by a blackhole.
 
-> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-> index d0a5f6d77094c..b90eed715fb5a 100644
-> --- a/net/ipv4/route.c
-> +++ b/net/ipv4/route.c
+Link: https://lore.kernel.org/netdev/ad29493c-9e48-4a94-b327-e47af3a9d137@kernel.org/
+
+> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> index 04098cf32eabe..a835abc698d25 100644
+> --- a/net/ipv6/route.c
+> +++ b/net/ipv6/route.c
 
 [ ... ]
 
-> @@ -1046,54 +1048,87 @@ out:	kfree_skb_reason(skb, reason);
->  	return 0;
->  }
+> @@ -2939,55 +2982,80 @@ static void __ip6_rt_update_pmtu(struct dst_entry *dst, const struct sock *sk,
+
+[ ... ]
+
+> -		res.fib6_flags = res.f6i->fib6_flags;
+> -		res.fib6_type = res.f6i->fib6_type;
+> +	arg.daddr = daddr;
+> +	arg.saddr = saddr;
+> +	arg.res.f6i = f6i;
+> +	arg.res.fib6_flags = f6i->fib6_flags;
+> +	arg.res.fib6_type = f6i->fib6_type;
 >  
-> -static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu)
-> +/* The pmtu to cache on a path for the mtu of a Fragmentation Needed, 0 to
-> + * leave the path alone: what it uses now, as ipv4_mtu() reports it, is not
-> + * above the mtu, or its pmtu is locked. An exception about to expire is
-> + * refreshed, a locked mtu is capped at what the path uses.
-> + */
-> +static u32 fib_nhc_pmtu(struct fib_nh_common *nhc, const struct fib_info *fi,
-> +			__be32 daddr, u32 mtu, bool lock)
-> +{
-> +	struct fib_nh_exception *fnhe = find_exception(nhc, daddr);
-> +	struct net *net = dev_net(nhc->nhc_dev);
-> +	u32 path_mtu = 0;
-> +
-> +	if (fnhe && fnhe->fnhe_genid == fnhe_genid(net) &&
-> +	    time_before(jiffies, fnhe->fnhe_expires)) {
-> +		if (fnhe->fnhe_mtu_locked)
-> +			return 0;
-> +		if (!lock && fnhe->fnhe_pmtu == mtu &&
-> +		    time_before(jiffies, fnhe->fnhe_expires -
-> +					 net->ipv4.ip_rt_mtu_expires / 2))
-> +			return 0;
-> +		path_mtu = fnhe->fnhe_pmtu;
-> +	}
-> +	if (!path_mtu)
-> +		path_mtu = fi->fib_mtu;
-> +	if (!path_mtu)
-> +		path_mtu = READ_ONCE(nhc->nhc_dev->mtu);
-> +	path_mtu = min(path_mtu, IP_MAX_MTU);
+> -		if (res.f6i->nh) {
+> -			struct fib6_nh_match_arg arg = {
+> +	if (f6i->nh) {
+> +		if (!from_lookup) {
+
+[ ... ]
+
+> +			if (match.match)
+> +				rt6_nh_update_pmtu(match.match, &arg);
+> +		} else if (!nexthop_is_blackhole(f6i->nh)) {
+> +			/* A blackhole nexthop, swapped in by a replace since
+> +			 * the lookup, must not get a usable exception.
+> +			 */
+> +			nexthop_for_each_fib6_nh(f6i->nh, rt6_nh_update_pmtu,
+> +						 &arg);
 
 [Severity: Medium]
-Does path_mtu here match what ipv4_mtu() reports for the path? The comment
-above and the commit message both say it does.
+Can a concurrent nexthop replace put a usable exception on a blackhole
+fib6_nh here?
 
-ipv4_mtu() goes through ip_dst_mtu_maybe_forward(), which ends with:
+nexthop_is_blackhole() and nexthop_for_each_fib6_nh() each read
+f6i->nh->nh_info (or nh_grp) separately, using rcu_dereference_rtnl().
+replace_nexthop_single() in net/ipv4/nexthop.c holds only RTNL when it
+swaps the pointers:
 
-include/net/ip.h:ip_dst_mtu_maybe_forward() {
+    rcu_assign_pointer(old->nh_info, newi);
+    rcu_assign_pointer(new->nh_info, oldi);
+
+Say "ip nexthop replace id N blackhole" runs between the two reads. The
+check then sees the old non-reject nh_info. The walk then passes the
+blackhole nh_info's fib6_nh to rt6_nh_update_pmtu().
+
+That fib6_nh has fib_nh_dev set to loopback_dev, so fib6_mtu() returns the
+mtu6 of lo. Any Packet Too Big mtu from IPV6_MIN_MTU up to that value gets
+through.
+
+ip6_rt_cache_alloc() builds the dst from arg.res.fib6_flags and
+arg.res.fib6_type. Those were copied from f6i (RTN_UNICAST), not
+RTF_REJECT/RTN_BLACKHOLE. rt6_insert_exception() has no reject_nh check,
+so a usable dst on lo goes into the exception bucket of the blackhole
+fib6_nh.
+
+For a single nexthop replace, nh_rt_cache_flush() returns early:
+
+net/ipv4/nexthop.c:nh_rt_cache_flush() {
     ...
-	res = mtu - lwtunnel_headroom(dst->lwtstate, mtu);
+	if (!replaced_nh->is_group)
+		return;
     ...
 }
 
-rt_set_nexthop() sets rt->dst.lwtstate from nhc->nhc_lwtstate. The
-existing ip_mtu_from_fib_result() does the same subtraction:
+So the exception is not flushed.
 
-	return mtu - lwtunnel_headroom(nhc->nhc_lwtstate, mtu);
+Later lookups take the blackhole branch of __find_rr_leaf():
 
-fib_nhc_pmtu() takes fnhe_pmtu, fi->fib_mtu or nhc_dev->mtu and does not
-subtract the nexthop's lwtunnel headroom.
-
-For from_lookup == false, the check kept in __ip_rt_update_pmtu() still
-uses ipv4_mtu(dst):
-
-	if (!from_lookup && (rt->rt_mtu_locked || ipv4_mtu(dst) < mtu))
+	if (nexthop_is_blackhole(f6i->nh)) {
+		res->fib6_flags = RTF_REJECT;
+		res->fib6_type = RTN_BLACKHOLE;
+		res->f6i = f6i;
+		res->nh = nexthop_fib6_nh(f6i->nh);
 		return;
+	}
 
-Take a nexthop with an lwtunnel encap of headroom H (MPLS, seg6, ...) and
-an ICMP mtu M, where dev_mtu - H < M <= dev_mtu:
+res->nh is the same fib6_nh. ip6_pol_route() then finds the exception
+through rt6_find_cached_rt() and returns it instead of the discard dst.
 
-- ip_rt_update_pmtu() rejects M.
-- ipv4_update_pmtu() and __ipv4_sk_update_pmtu() accept M and create an
-  exception.
-- After that, ipv4_mtu() reports M - H for that path.
+Would this override the configured blackhole for that daddr until the
+exception expires (ip6_rt_mtu_expires)?
 
-The lock branch, min(mtu, path_mtu), also caps against the raw device or
-metric value rather than the ipv4_mtu() value.
+Locally sent packets would go out lo instead of failing with -EINVAL.
+With forwarding enabled, forwarded packets would loop through
+ip6_forward() on lo until the hop limit runs out.
 
-Should fib_nhc_pmtu() subtract lwtunnel_headroom(nhc->nhc_lwtstate, ...)
-the way ip_mtu_from_fib_result() does? If not, should the comment and
-commit message describe the raw value it actually compares against?
+Before this patch, the nexthop path only used fib6_nh_find_match() with
+the dev and gateway of the looked-up dst. That could never match the
+loopback fib6_nh of a blackhole, which has no gateway.
 
-> +
-> +	if (lock)
-> +		return min(mtu, path_mtu);
-> +	return mtu > path_mtu ? 0 : mtu;
+The commit message says:
 
-[Severity: Medium]
-When the Fragmentation Needed reports an mtu below ip_rt_min_pmtu,
-__ip_rt_update_pmtu() sets lock and replaces mtu with ip_rt_min_pmtu.
-This happens before any path has been compared against the reported
-value. fib_nhc_pmtu() only ever sees the clamped mtu, and its lock
-branch returns min(mtu, path_mtu), which is never 0.
+    - siblings not in the tree and a nexthop replaced by a blackhole are
+      skipped.
 
-Take a path where path_mtu < reported mtu < ip_rt_min_pmtu. That needs
-either a device or route mtu below 552, or a raised
-net.ipv4.route.min_pmtu.
+That only holds when the replace does not happen between the two reads.
+The later selftest patch in the series does not touch net/, so this race
+is still there at the end of the series.
 
-The commit message's rule is to cache the mtu only where it is lower,
-so this path should be left alone. Instead:
+Could reject_nh be checked for each fib6_nh during the nexthop walk? One
+way is a small wrapper callback that tests
+container_of(nh, struct nh_info, fib6_nh)->reject_nh before calling
+rt6_nh_update_pmtu(). Another is to dereference nh_info once and use that
+snapshot for both the check and the walk.
 
-- fib_nhc_pmtu() returns path_mtu.
-- update_or_create_fnhe() then creates or overwrites an exception with
-  fnhe_pmtu = path_mtu and fnhe_mtu_locked = true, on a path that was
-  already narrower than the reported bottleneck.
-
-Before this patch, the old_mtu < mtu check ran ahead of the clamp. So
-on a single path route this could not happen. Now it happens for every
-path reached from ipv4_update_pmtu() and __ipv4_sk_update_pmtu(),
-single path routes included. It also happens for the narrower legs of
-a multipath route reached from ip_rt_update_pmtu() when the flow's dst
-is a wider leg.
-
-A locked exception there is not harmless:
-
-- rt_mtu_locked makes ip_dont_fragment() return false for
-  IP_PMTUDISC_WANT sockets. DF is cleared and traffic on that path
-  gets fragmented.
-- fib_nhc_update_mtu() does not raise a locked fnhe_pmtu when the
-  device mtu grows, so the path stays at the old value.
-- fib_nhc_pmtu() itself returns 0 for a locked exception. Every later
-  Fragmentation Needed for that destination is ignored on that path
-  until the exception expires.
-
-Should fib_nhc_pmtu() also be passed the mtu as reported? It could then
-leave the path alone when path_mtu is below that value, and only apply
-the ip_rt_min_pmtu clamp and the lock to paths the report actually
-narrows. Or is locking an already narrower path intended here?
-
-[Severity: Low]
-The comment says the path is left alone when what it uses now "is not
-above the mtu". This line returns 0 only when path_mtu < mtu.
-
-Take path_mtu == mtu with no valid exception, so path_mtu came from
-fi->fib_mtu or nhc_dev->mtu. This returns mtu, and __ip_rt_update_pmtu()
-calls update_or_create_fnhe() for that path. That call:
-
-- allocates a new fnhe whose pmtu equals the mtu the path already uses
-- may evict another fnhe through fnhe_remove_oldest()
-- marks nhc_rth_input and every per-CPU nhc_pcpu_rth_output of the
-  nexthop DST_OBSOLETE_KILL
-
-This also seems to contradict two statements in the commit message:
-
-  cache the mtu only where it is lower
-
-and:
-
-  A Fragmentation Needed that changes nothing costs the ICMP callers a
-  fib lookup and a look at the exception of each path.
-
-Should this return 0 at equality when path_mtu did not come from an
-exception that needs refreshing?
-
-> +}
+>  		}
+> +		goto out;
+> +	}
 
 [ ... ]
 
