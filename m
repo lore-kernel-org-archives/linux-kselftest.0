@@ -1,82 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795184493;
-	b=HrIUMNSdNolJKNKpNv7/3w9Za5ONmvBAFSV3essAy4nWBr0XnwgHBz6Dzzdwq3NcW6Ru
-	 tqkT+YmhdU+F0qKN6XD4yvv1mucKEVyvoclLzjdqwfl2XuqHGz8U9eZpNXvJidg03ygM/
-	 5VWZjMoiDccJEY4P5nWAMMiWdXNzzPq4gT+NuuAvCjWMGpH0dnEbKJHDV3IT3VxnDJuXh
-	 7GUrzNS6jQV9WJkC8wLcfdJRTOWUjykCHVA5nv5LzIJ5pUrp7xlttxjMR9PaYdCkNitka
-	 99N7AMEOdFB3SavF+RnUZM/uQkVGmDrLUoggNxojZD0qMZTcoEHKs1jRwL8IyEPWRaA==
+	t=1795184497;
+	b=Ji7aBkdNJHzGWaiMwnjiF9TL/n+sTx0PXyi2hj2FakRGai5YkZouxkU3teA0/j8H6N6W
+	 mYPhwt4Fhk/fLiIouMIjB2NusF1ErK3GPxKCUb5LDD0lBt1Gut+KRVRb995xyCfffbtRV
+	 B4IE/ijuZ5ikb6uR0zQPEuLJfxYVahYt5TEL0RCpULjbRdaUHr1d27Ytf1a7DogHafaIg
+	 pqLuzRf3no39RQxeJ4lDQ18TtM4d4cgqyezy55JBUS+mNqT7LTvUIfFKdzkPxv4+dLloa
+	 Ug87+zuDRJrZIgK/T/vs627nso2ahL1NrCQYEIyJa04LHE7/BxOr5vaEWYWJ31x69dw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795184493;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795184497;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=8kbIPnTNVoYxnzuCSc7WD/8P36oFIhxLoZp7Il+xHts=;
-	b=P2n3AcZVEEcPHFpNfpdHNglHwsqwVLiYWJq26uMi3bAPLxQwKBSWqEKBO5TZsMrUbN7T
-	 KCcrlR4SCErfrijQdzEt+EK5LZZlYeHbda+XtB3x/k7DwM//dY1T7k06/MEjseh47dCVy
-	 5fVRrUfCpJRVgkZP3i2h0cqHo4eY1mLSb3NB1tHcqa54T30GH3rU2oete+MTZyvBaXbDG
-	 l7BKULuZmOqst0esguH+h48l93W86AN+C5WqUtiC/9GipMAk5N56L4Ssmdy7i4NFiUAJm
-	 Slhfi+FbHMRLC0Wi+v/2KyCsmlQJ3fhxVmUVy5dljxo6y06eii4N2hinKUsWbXUm6CQ==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=io64yMtWPvT2ay6lHqxeklVMER313LWgv/RG8ihTBBA=;
+	b=4BDIaXaPaEqxvJAmnM4QjAzKd88/dzCQc8HQ7yjtOQYgVzWoX2uNJ+MTAghrO0TbYVDI
+	 CHzUSn5oKMArl4j8MEKI6IbHPefj/wmZDP5VE/dZD4yVKvXcSgEKhduteYcO3r2ltLJUB
+	 yWTJKIaiO0Pu/4s8FEDoUfqnor5SvMMVFdS+LoRgHZ4Ltf4gHf+C+q1E+G/91HXLgqqlx
+	 /OMCl7EmqUQ9KNCAg33pgDLfpcUFwrO+IdYT458s/gorTSEpOj3zlBOPM63c0YPoSxF2X
+	 hRjV6eil8liDMxqj7dyecRfJIlT1if6a9zVjljSZsiPYisj3icAE0JGbdlHJ6fx+tCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudlinux.com;
 	spf=pass smtp.mailfrom=cloudlinux.com;
-	dkim=pass header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=YCXylLXu;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=h+h0Rnjx;
+	arc=none smtp.remote-ip=209.85.216.47
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2351E606A320
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 14:21:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2351E606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA66560A2601
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 14:21:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA66560A2601
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cloudlinux.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudlinux.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=YCXylLXu
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2f04e3bf46dso3953115ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 06:21:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=h+h0Rnjx
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3b43d30822fso83537a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 06:21:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudlinux.com; s=google; t=1795184491; x=1795789291; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8kbIPnTNVoYxnzuCSc7WD/8P36oFIhxLoZp7Il+xHts=;
-        b=YCXylLXuGacjr7o0Nj79F2yQRaIici/FHZRxISZWCv/UwhQz2VuGPEp1KArPhA1hzC
-         EtNjTpC9GEeLrjlReZnG+jF9Icg+UPOaqACbrkcaOZuXDGeCEhUWhKp1ohWL2ccBEHJ9
-         XmWkwouL02hOYTa3Nc3O+8e7FD1AW/JRqthUP+LSlUoDcsJJXio9MT7lg1FnQ9pCuKpx
-         dW57n7UoS7zUblmhogpl4Lb0FOOdUV9zfK4RbnsaxRiz53NlVsLaRyOyPymHNlHHWq0+
-         rPyCtQJG+9ZEXuKX0pOcrxHCs2XVKHzJBoEE42DWQlZctaIM/7Pt8uBGW+Spp/TTvK4e
-         +phg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795184491; x=1795789291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=cloudlinux.com; s=google; t=1795184496; x=1795789296; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8kbIPnTNVoYxnzuCSc7WD/8P36oFIhxLoZp7Il+xHts=;
-        b=2PxRENubwV91uiC9b7A4xPXnsZt/rl9c/zA4J6o8qe7yywOXzuzYiIfLar7xZz6vJW
-         Xmqr/XFA0Mle7IQoxfiXIItsXi8ubKtHhchvhqpNipfsBBI9cATrkrAU0TsQ0UmEfG9c
-         WgJ0oI8n59040G+DUrheDniESGroXNBG2Ms6+2AYLMEAeWs0U/6XAwOKiZW62HjJMHxJ
-         zz2hiJbEn5PAqga/k310YkBVaMhbg+xL7hfnPY5zTupQytJgF2GBehhTDI6NzOn6+Fqb
-         dk8lE5dSr0L5zj4Da5+xaFs8xT8GZuWGJnllGl/Zb+QEezJqXTXZAIGRezeROuGbWFy5
-         Xfrw==
-X-Forwarded-Encrypted: i=1; AL+hErFwHUV27si0ip+5H8J8ki7CHdUMDv4ka4RTgAMCab3p/TCArMX5V6l4GbFB6t6Ct5EzR960i43kKOcfTKVdcWQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8FVY6jSMnwo5tKn1RDH89kFjCWzIu2asB2BcWVN1ZA1FyEKywg
-	2EsrXxkQjuAyFCenVdD7OXK0tUkhkJd1Oa3xqmXi9M+cy3cKoRoEJHh3L9uPWnvRYyk=
-X-Gm-Gg: AZFdTZdl2xD02F02jwnpN/7OQ5OPu4y0SE478Wy7ZRV2hR4I4WqRKOC3f7wVsqMUELl
-	ERCVoYLt0Iz/KSVj4lfojtrzvffhxrxYMrwzCg46lrP3z0EL7IYFhXjTBf0dtQrIVCgHZ6xPP1S
-	4uA8WgzIxBuyYw1PPkf+8RceRFE8vYDfgxz0MEt4qWPBF8V8VNeRCMT/IqzAWbw3HM3VmmjWTJV
-	kD+GJgOa+ow3gLzWcAWdJCMpLoqmdMiZGKVWhySKZnyaDhMwEl4RKS8yMu6yaiLm8FO7ibVcjTl
-	2qhkH8idE1lTXrlHbfZv3TSW1qljUffsoJrEL0VswC46byU+0AAmTteV2WIJ8KSBJEXtzTmXYOt
-	g8XmJ7n3cj3wx7FI4S7myNdgG8Rk1MPwcGcDalg6GSZUdZSXUKCNhb89SnzcmzWCD3zlhablZWT
-	Y+AMAPA0DI1Ya8XRaAY2WNEa8TaDIK3+QScTBsOHG4N7tozSVMC4YC+VdNrMd61jcsRbP2auTLd
-	J+yP2ZpsUHSpxR7McsVIMkTnbvafO0dTBCaiUp1CLYz/j7GMzNbzQAcRj66H93M+aE31nWhuR4i
-	SmCpEyco3kOdMCJ1nIbGMG6QnFiuF+zrcpyZ
-X-Received: by 2002:a17:90b:442c:b0:3ac:aa8d:19de with SMTP id 98e67ed59e1d1-3b41c7d17d9mr3258685a91.3.1795184491524;
-        Fri, 20 Nov 2026 06:21:31 -0800 (PST)
+        bh=io64yMtWPvT2ay6lHqxeklVMER313LWgv/RG8ihTBBA=;
+        b=h+h0RnjxzLfsMpYwrbeUOkFpJ7rcK27QMJiQjhcfCtUCaOI2K/wjyiPw+Br3OPuWvX
+         AublXVUKuXbflspPq/EQ3XRaZGVWG2iGJl+dTFrqbLWfDpIq+6xwgzXVohcrt0DEBbZ2
+         J2klAbtWnIeqQUepnX1KliLT9Ima094zThauD63e/EqspTVAVGfHgFsWbbel4wr+Z3BO
+         belCIOc72Zzb7GGy4S1d0AjwH6MR9Qstwy+lNM6+IUsRTysOWQEzQEJ0zRqMM8STY2Z0
+         bwowX1F6VWct69OQn8unGt8gxcRfLJa9hyMNN2pCTV9QllfL0zrAuqaUYRKwy5fppiIr
+         pTYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795184496; x=1795789296;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=io64yMtWPvT2ay6lHqxeklVMER313LWgv/RG8ihTBBA=;
+        b=KTso/7CxUwEERXrpC/RfqgIMiNrQjWs7JKOLc6d2qX6KLuW/4foj5lyOu03xL/TEg/
+         W0exe3Npj0cCopaD2R+q6aHUmoZdnJsFLd1GLD0n2NB2Z/oqfvJUTdfRw3CE9tpwU6sB
+         TETonNX06XiqHnJWt6Vznz7ci4+Ry4kCRqsNxhTyHm+Z5C58TXGvZB5vcccLz8QbDICi
+         nuZ6MPJfQjiVEGbfJKndO9ZTk/fmRZcSHP3egftRw3yYLw5gNIzKpRGFJczxKvoHfSXC
+         bRoYeoV9vkbAe+bvGnfEkU49OpCgLzPsfethgCAiNF3tFaOKtWcjsfDkSnuYqjVSB8Ss
+         bx/w==
+X-Forwarded-Encrypted: i=1; AL+hErETv31t7B9Ej5tieKIdvDqylBSR1MkGfTMQ/DzqHggLUYDtiy7d0iNiSqjNQoANsYdSeTUw990GYsubfU5llME=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8fbB2m6NP7dZbT/NlccSUNMZwVUBj+Bbxn5cMr+wAjdxfv1VTl
+	glJP0CiSCjRoi3w+xbGZnUEdHuA+yUtlnHmTvW44bhZrdRaoyXApnk6/juQEozBwciMCDmmnjOD
+	3OTuR
+X-Gm-Gg: AZFdTZfDRqm3qrKPQhxcBa+1BpkXL18F6mw2yU+X658lRBfilwkMOOqQ7kcK2VcXYXa
+	GSx5lFKjRQHdjph+6p5v151Dydxu7PttkHh6TqTK2EAKWE2NXjbw/QXRNw38qNT6GOMhruUn7kC
+	cPmL2n7RwOXgTWyP5otxLoaDtLb5vse6XG+kxO9g6FVN1Q4yh7H1Pc/wJztiEOqNW7WP9oIlubD
+	4slFZvlLACIPI86cSitYOQqt1LYhBjrzpAiGs+NcmgcF7Akn6DoeKLj3ePSl0050yTex8nxRjkV
+	uut2H5Jgb7yjGyvKRe+95Q2qU8sq0ELI136AsZVACI/GfM8h/wg6MGkjdh4rP+jjW2BrQcU4Pju
+	UJXz+2hn6QB8x7TBl8fwVQqB1hwGwl9UYFio4aK7wKLWNw4tBOdanfOoor6d90/jV4fbkNDLv8k
+	1wHppxhv1/1SpK/eKUGHvCpWwLjZhh2YWoRl6csZzMfbTpkrIg9ac/CgbmKgBHVGqjSZKjN1fOU
+	3RSAwXiWoH2Fx0T4lP11659i9/F+4No69S3bV27ZW79ZlgpBfsOygE0Fqtm13OdStZAv6TB0c3P
+	9s/x/mm5rrKB7Um21vbulSyxTFMlH77E5X/Q
+X-Received: by 2002:a17:90b:4a90:b0:3ab:e588:c295 with SMTP id 98e67ed59e1d1-3b41c95b541mr3002905a91.42.1795184496011;
+        Fri, 20 Nov 2026 06:21:36 -0800 (PST)
 Received: from rmustafin-laptop ([27.79.41.63])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0a33fsm4622229a91.6.2026.11.20.06.21.28
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0a33fsm4622229a91.6.2026.11.20.06.21.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 06:21:31 -0800 (PST)
+        Fri, 20 Nov 2026 06:21:35 -0800 (PST)
 From: Rustam Mustafin <rmustafin@cloudlinux.com>
 To: Peter Huewe <peterhuewe@gmx.de>,
 	Jarkko Sakkinen <jarkko@kernel.org>
@@ -87,10 +89,12 @@ Cc: Jason Gunthorpe <jgg@ziepe.ca>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Rustam Mustafin <rmustafin@cloudlinux.com>
-Subject: [RFC PATCH 0/1] tpm: Do not allow io_uring for /dev/tpm0 and /dev/tpmrm0
-Date: Fri, 20 Nov 2026 21:21:15 +0700
-Message-ID: <20261120142116.1630010-1-rmustafin@cloudlinux.com>
+Subject: [RFC PATCH 1/1] tpm: Do not allow io_uring for /dev/tpm0 and /dev/tpmrm0
+Date: Fri, 20 Nov 2026 21:21:16 +0700
+Message-ID: <20261120142116.1630010-2-rmustafin@cloudlinux.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20261120142116.1630010-1-rmustafin@cloudlinux.com>
+References: <20261120142116.1630010-1-rmustafin@cloudlinux.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,33 +106,20 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Patch 1 blocks io_uring as suggested in the v1 review of the base
-series. AIO is rejected the same way, and readv() and writev() keep
-working.
+Add tpm_common_read_iter() and tpm_common_write_iter(), which fail
+io_uring and AIO requests with -EIO. read() and write() are not
+affected, as the VFS still calls ->read() and ->write() for them.
+readv() and writev() now reach the new callbacks instead of the VFS
+loop over ->read() and ->write(), so the callbacks keep that loop and
+call tpm_common_read() and tpm_common_write() once per iovec.
 
-The simpler alternative, read_iter/write_iter callbacks that just
-return -EIO, would also break readv() and single-iovec writev(), which
-work today as well, e.g. a readv() of the 10-byte response header and
-the body into separate buffers.
+Update the tpm_uring kselftest to expect -EIO, and check that the
+rejected request leaves the whole response for the following read().
 
-This series requires "[PATCH v2 0/2] tpm: Track the response read
-position internally":
-https://lore.kernel.org/all/20261120121614.978396-1-rmustafin@cloudlinux.com/
-
-On its own, patch 1 closes only the io_uring trace of the base series;
-the read()/write() race trace stays. It also opens a new path: the new
-->read_iter() lets vfs_iter_read() callers such as Coda reach
-tpm_common_read() with their own offset. Today these calls fail,
-because the TPM files have no ->read_iter(); without the base series
-that offset would index data_buffer again.
-
-Tested in a QEMU guest with swtpm and KASAN: the tpm2 selftests pass
-with both series applied.
-Claude Opus 5.5 was used in preparing this series.
-
-Rustam Mustafin (1):
-  tpm: Do not allow io_uring for /dev/tpm0 and /dev/tpmrm0
-
+Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Link: https://lore.kernel.org/r/av23L5HBpy2gbm3m@kernel.org
+Signed-off-by: Rustam Mustafin <rmustafin@cloudlinux.com>
+---
  drivers/char/tpm/tpm-dev-common.c        | 72 ++++++++++++++++++++++++
  drivers/char/tpm/tpm-dev.c               |  4 ++
  drivers/char/tpm/tpm-dev.h               |  4 ++
@@ -136,10 +127,181 @@ Rustam Mustafin (1):
  tools/testing/selftests/tpm2/tpm_uring.c | 14 ++---
  5 files changed, 91 insertions(+), 7 deletions(-)
 
-
-base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
-prerequisite-patch-id: 929c8a56f28a166a5961816bde23cb25204ac74a
-prerequisite-patch-id: 624623d00390085ca69fae7309aee60aa27b163e
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index 553fc6aca94d..e40a251315f3 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -13,8 +13,10 @@
+  * Device file system interface to the TPM
+  */
+ #include <linux/poll.h>
++#include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
++#include <linux/uio.h>
+ #include <linux/workqueue.h>
+ #include "tpm.h"
+ #include "tpm-dev.h"
+@@ -253,6 +255,76 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_IO_URING
++/*
++ * Reject io_uring and AIO. IORING_OP_READ_MULTISHOT requests use a
++ * synchronous kiocb, so also check for NOWAIT attempts and io-wq workers.
++ */
++static bool tpm_iter_is_async(struct kiocb *iocb)
++{
++	return !is_sync_kiocb(iocb) ||
++	       (iocb->ki_flags & IOCB_NOWAIT) ||
++	       (current->flags & PF_IO_WORKER);
++}
++
++/* Preserve the VFS fallback's per-iovec read/write semantics. */
++ssize_t tpm_common_read_iter(struct kiocb *iocb, struct iov_iter *to)
++{
++	struct file *file = iocb->ki_filp;
++	ssize_t ret = 0;
++
++	if (tpm_iter_is_async(iocb) || !user_backed_iter(to))
++		return -EIO;
++
++	while (iov_iter_count(to)) {
++		size_t len = iter_iov_len(to);
++		ssize_t nr;
++
++		nr = tpm_common_read(file, iter_iov_addr(to),
++				     len, &iocb->ki_pos);
++		if (nr < 0) {
++			if (!ret)
++				ret = nr;
++			break;
++		}
++		ret += nr;
++		iov_iter_advance(to, nr);
++		if (nr != len)
++			break;
++	}
++
++	return ret;
++}
++
++ssize_t tpm_common_write_iter(struct kiocb *iocb, struct iov_iter *from)
++{
++	struct file *file = iocb->ki_filp;
++	ssize_t ret = 0;
++
++	if (tpm_iter_is_async(iocb) || !user_backed_iter(from))
++		return -EIO;
++
++	while (iov_iter_count(from)) {
++		size_t len = iter_iov_len(from);
++		ssize_t nr;
++
++		nr = tpm_common_write(file, iter_iov_addr(from),
++				      len, &iocb->ki_pos);
++		if (nr < 0) {
++			if (!ret)
++				ret = nr;
++			break;
++		}
++		ret += nr;
++		iov_iter_advance(from, nr);
++		if (nr != len)
++			break;
++	}
++
++	return ret;
++}
++#endif /* CONFIG_IO_URING */
++
+ __poll_t tpm_common_poll(struct file *file, poll_table *wait)
+ {
+ 	struct file_priv *priv = file->private_data;
+diff --git a/drivers/char/tpm/tpm-dev.c b/drivers/char/tpm/tpm-dev.c
+index 74488f0a7b78..56751be46d90 100644
+--- a/drivers/char/tpm/tpm-dev.c
++++ b/drivers/char/tpm/tpm-dev.c
+@@ -62,6 +62,10 @@ const struct file_operations tpm_fops = {
+ 	.open = tpm_open,
+ 	.read = tpm_common_read,
+ 	.write = tpm_common_write,
++#ifdef CONFIG_IO_URING
++	.read_iter = tpm_common_read_iter,
++	.write_iter = tpm_common_write_iter,
++#endif
+ 	.poll = tpm_common_poll,
+ 	.release = tpm_release,
+ };
+diff --git a/drivers/char/tpm/tpm-dev.h b/drivers/char/tpm/tpm-dev.h
+index 34efb1ffa491..22ea88156833 100644
+--- a/drivers/char/tpm/tpm-dev.h
++++ b/drivers/char/tpm/tpm-dev.h
+@@ -28,6 +28,10 @@ ssize_t tpm_common_read(struct file *file, char __user *buf,
+ 			size_t size, loff_t *off);
+ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+ 			 size_t size, loff_t *off);
++#ifdef CONFIG_IO_URING
++ssize_t tpm_common_read_iter(struct kiocb *iocb, struct iov_iter *to);
++ssize_t tpm_common_write_iter(struct kiocb *iocb, struct iov_iter *from);
++#endif
+ __poll_t tpm_common_poll(struct file *file, poll_table *wait);
+ 
+ void tpm_common_release(struct file *file, struct file_priv *priv);
+diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
+index 19e8f2779265..95788c6bdd4c 100644
+--- a/drivers/char/tpm/tpmrm-dev.c
++++ b/drivers/char/tpm/tpmrm-dev.c
+@@ -49,6 +49,10 @@ const struct file_operations tpmrm_fops = {
+ 	.open = tpmrm_open,
+ 	.read = tpm_common_read,
+ 	.write = tpm_common_write,
++#ifdef CONFIG_IO_URING
++	.read_iter = tpm_common_read_iter,
++	.write_iter = tpm_common_write_iter,
++#endif
+ 	.poll = tpm_common_poll,
+ 	.release = tpmrm_release,
+ };
+diff --git a/tools/testing/selftests/tpm2/tpm_uring.c b/tools/testing/selftests/tpm2/tpm_uring.c
+index 9caa3cba5bf0..37b41c7d295b 100644
+--- a/tools/testing/selftests/tpm2/tpm_uring.c
++++ b/tools/testing/selftests/tpm2/tpm_uring.c
+@@ -1,7 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ /*
+- * An io_uring read chooses its own file offset. The TPM character devices
+- * must ignore it and return the response from its start.
++ * The TPM character devices must reject io_uring reads.
+  */
+ 
+ #include <endian.h>
+@@ -39,7 +38,7 @@ static void test_read(struct io_uring *ring, const char *path)
+ 	struct pollfd pfd = { .events = POLLIN };
+ 	struct io_uring_sqe *sqe;
+ 	struct io_uring_cqe *cqe;
+-	int fd, ret, res;
++	int fd, ret, res, n;
+ 
+ 	fd = open(path, O_RDWR);
+ 	if (fd < 0) {
+@@ -86,10 +85,11 @@ static void test_read(struct io_uring *ring, const char *path)
+ 	res = cqe->res;
+ 	io_uring_cqe_seen(ring);
+ 
+-	/* the offset is ignored: the whole response, from its start */
+-	ksft_test_result(res >= (int)sizeof(*hdr) &&
+-			 be32toh(hdr->size) == res && !hdr->return_code,
+-			 "%s: io_uring read %d\n", path, res);
++	/* the rejected read must leave the whole response in place */
++	n = read(fd, buf, BUF_LEN);
++	ksft_test_result(res == -EIO && n >= (int)sizeof(*hdr) &&
++			 be32toh(hdr->size) == n && !hdr->return_code,
++			 "%s: io_uring read %d, read() %d\n", path, res, n);
+ out:
+ 	close(fd);
+ }
 -- 
 2.52.0
 
