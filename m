@@ -1,73 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795145417;
-	b=xZHy1pxC1OdbYT4mx579TygD6VYb8ZWYb2k8AcxbD0LTaW3TAkCgLU0XyJfRzQRZxJ8a
-	 G32vEcE0czpM0fyiTwmfQAVXWiC21f2rkRdEvJI0HdYUevb/UvXELovAmysjqxKZ1pEKy
-	 wCk09dfofHp5NYD06SoPlElkS6jpSEeHW/402Zohn2J7KhmtSAJR9nsepyMgMHoOD5hS/
-	 jgSKye9ke1CrWvP4jDv5WxuocIjLlk+fJWp8vwp4dwdX7L6GwPQTuYhj3VUKWAgziYGD7
-	 89P6pTtHVmPBQaHdVXivDTMI49nmMofttehXMeZxETCqZHc7CbNb/k7pVAxwd7np14A==
+	t=1795145440;
+	b=itBTvYywGH7P3nNXyVdy9s1Jr3sfjwWIkqjiZSkK9Nh0OuJAMnn538siM47z439nd4yW
+	 tEEaL/ce7NK3p7Zq7Fqk7l0P6phdZ2LLENJZribcew7WqxQtilZUDJvNI2k0H1b8qYjPt
+	 ACgcwcMCx9XXAWdrnrzkwNmOgGvjM3tcgKJJ1OuxAiEvfkTBtBUrFprzVyGgF5vDV1yaH
+	 jLv00sK4hkkY/ercrj3hj5aqaqyNEU3dqzo34+Bhl6HRC+531hL5CP6DiRFyzF6rJYNYE
+	 Q2xo+67+6LtKD/zpnnEdloqmPVOWU5i6bQkjKA1UP+ygh1vY0ry44+u4No/4yAAZxEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795145417;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:From:To:Cc:
-	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=gDW1MGVDIOlb1DWUR4TOUcK83wNVzFBVTR8SHHNo9iM=;
-	b=InQNXYxAgZwaxlL1B1BMczMc1eyl5xpf3a8SYh6fL00w55va1NOaCALpH4Gbl0vr8CfA
-	 VNBzVyYkzp/mgOdvrifMJbgYBGTIOkX4Tr8jTKjcvah/kvjb2XJw+n7cHeSshOnSCtnha
-	 rhMCwmrWklfW7NqGhRt6TgjyyH+H+rEf7QH6exw3PYG8R43EO37TuQw7Ax0exuBI+T/It
-	 0gESsUklo3G1v0SnYs1Koe26tRMJnn5SH55occQKV0QRE2aO2Z3pJ7aqwGqu/l/Rsiw+w
-	 LQAs8RWwqUCBgUWJKYWmpPDV6MpOWDTuesXLC0+xRNWHFEcgSNV1lE5xn7r+gpjMQXw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795145440;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=svVu4tGtXkUqJeH2S67jLdV8xt9bisNFvl26L3qlsJI=;
+	b=d2g+Z9tt8M2CW/TMpT84cpEbH89E9TQ87/9pyRvA2VNR65VgLGQLoTCyOEK+l8s5rde9
+	 QVQa8as78o3SpcunU26OyhYqB7kXhST5e9QdxEG4yI2BTLQ33qNWTp8x54JGUar6RleYq
+	 lMFANiooOmlg5HHetxVtUXr3XQGCJzN0PxF1z0E5UdOONNeS0h1eS/sqE3BlTJuXrNsDT
+	 1H+eYpCH5FQ1nIo2GSP3kJSbN+a4mMmM57XEgS4NntTbQO9Py9ixbjCuZxcD0287EuDx5
+	 CvSXyro+vZGg+qlpFKtO4BDPZNHf/OMtdwd07yf/cw+7l+JrbgoyML/0MbTYDKglK4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aDlHmmls;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F36606A330;
-	Fri, 20 Nov 2026 03:30:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55F36606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: af7a03a4e49211f19a56ed5b684f684d-20261120
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:1c157bf3-f4d2-4ccb-ba34-7fa6219501be,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:afea6c6527a53b11ad3bb14aac0e74de,BulkI
-	D:nil,BulkQuantity:0,SF:102|850|865|898|915,TC:nil,Content:0|15|50|99,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: af7a03a4e49211f19a56ed5b684f684d-20261120
-X-User: fuqingshuang@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <fuqingshuang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 650950593; Fri, 20 Nov 2026 11:30:08 +0800
-From: Qingshuang Fu <fuqingshuang@kylinos.cn>
-To: Andy Whitcroft <apw@canonical.com>,
-	Joe Perches <joe@perches.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Amin Vakil <info@aminvakil.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>
-Cc: linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>
-Subject: [PATCH] selftests/proc: stop depending on glibc for the mount API
-Date: Fri, 20 Nov 2026 11:30:04 +0800
-Message-Id: <20261120033004.1599189-1-fuqingshuang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70685606A330;
+	Fri, 20 Nov 2026 03:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aDlHmmls
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08DE1F000C4;
+	Fri, 20 Nov 2026 03:30:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795145440;
+	bh=svVu4tGtXkUqJeH2S67jLdV8xt9bisNFvl26L3qlsJI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=aDlHmmlsjwOA5819XcEcfYMdn8JfR28OvPOsvKTx0IvSVNwF4EPrIIjThTpSF+xhV
+	 SXIPRVt5CWJJPkFXn7odk6Ivi9ct95PMwWeGhgTWFNEL+4c3dgZ8Z42kwOApD/aUun
+	 tzBSH/gg3LP56jeUxPpha5PSoe74n347ABHUEyl8Og9S5CvQFS6ZWMdYDzMgDhqe77
+	 Al1CohkjkRmIFvMoyFO1giovqfviL1u4aosq33NSQynsME8y92DXSa2xQYfOUVYbB2
+	 3ZQU1GeG+abQ4T+rdAmM3BbSBLnL4E3QyKQUq0rrb8+iCyDpISs/UlEf0ut57A1zEx
+	 qKDNUOyoYH+Xw==
+Subject: Re: [PATCH net-next v2 05/10] net/mlx5e: TC, reject a partial tunnel
+ key with tunnel mapping
+From: netdev-bot+sashiko@kernel.org
+To: acassen@corp.free.fr
+Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+ jhs@mojatatu.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
+ bharat@chelsio.com, donald.hunter@gmail.com, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, dsahern@kernel.org,
+ idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
+Date: Fri, 20 Nov 2026 03:30:38 +0000
+Message-ID: <179514543838.3136.15751272244504735479@kernel.org>
+In-Reply-To: <20261117092915.255194-6-acassen@corp.free.fr>
+References: <20261117092915.255194-6-acassen@corp.free.fr>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,129 +69,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-proc-pidns.c calls fsopen(), fsconfig() and fsmount() directly and uses
-the FSOPEN_CLOEXEC, FSCONFIG_* and FSMOUNT_CLOEXEC definitions.  glibc
-only grew declarations for these functions in 2.36 and does not provide
-the related constants at all, so older toolchains fail to build the
-test:
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-  proc-pidns.c:118:28: error: 'FSOPEN_CLOEXEC' undeclared
-    (first use in this function)
+Low priority / nit picks for your consideration:
 
-Switch to the sys_fsopen(), sys_fsconfig() and sys_fsmount() wrappers
-from filesystems/wrappers.h, the same approach already used by the
-mount_setattr test.  The wrappers issue the same syscalls directly and
-pull in <linux/mount.h>, which the proc Makefile already provides via
-$(TOOLS_INCLUDES).
+- [Low] In mlx5e_get_flow_tunnel_id()
+  (drivers/net/ethernet/mellanox/mlx5/core/en_tc.c), the new check only…
 
-Fixes: 5554d820f71c ("selftests/proc: add tests for new pidns APIs")
-Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
----
- tools/testing/selftests/proc/proc-pidns.c | 39 ++++++++++++-----------
- 1 file changed, 21 insertions(+), 18 deletions(-)
+--
 
-diff --git a/tools/testing/selftests/proc/proc-pidns.c b/tools/testing/selftests/proc/proc-pidns.c
-index 6f7c10fe97b3..00ca9ccb5a83 100644
---- a/tools/testing/selftests/proc/proc-pidns.c
-+++ b/tools/testing/selftests/proc/proc-pidns.c
-@@ -17,6 +17,7 @@
- #include <sys/stat.h>
- #include <sys/prctl.h>
- 
-+#include "../filesystems/wrappers.h"
- #include "kselftest_harness.h"
- 
- #define ASSERT_ERRNO(expected, _t, seen)				\
-@@ -115,13 +116,13 @@ TEST_F(ns, pidns_mount_string_path)
- 
- TEST_F(ns, pidns_fsconfig_string_path)
- {
--	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	int fsfd = sys_fsopen("proc", FSOPEN_CLOEXEC);
- 	ASSERT_SUCCESS(fsfd);
- 
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy/pidns", 0));
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy/pidns", 0));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
- 
--	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	int mountfd = sys_fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
- 	ASSERT_SUCCESS(mountfd);
- 
- 	ASSERT_ERRNO_EQ(-ENOENT, faccessat(mountfd, "1/", X_OK, 0));
-@@ -133,13 +134,13 @@ TEST_F(ns, pidns_fsconfig_string_path)
- 
- TEST_F(ns, pidns_fsconfig_fd)
- {
--	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	int fsfd = sys_fsopen("proc", FSOPEN_CLOEXEC);
- 	ASSERT_SUCCESS(fsfd);
- 
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
- 
--	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	int mountfd = sys_fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
- 	ASSERT_SUCCESS(mountfd);
- 
- 	ASSERT_ERRNO_EQ(-ENOENT, faccessat(mountfd, "1/", X_OK, 0));
-@@ -165,19 +166,20 @@ TEST_F(ns, pidns_reconfigure_remount)
- 
- TEST_F(ns, pidns_reconfigure_fsconfig_string_path)
- {
--	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	int fsfd = sys_fsopen("proc", FSOPEN_CLOEXEC);
- 	ASSERT_SUCCESS(fsfd);
- 
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
- 
--	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	int mountfd = sys_fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
- 	ASSERT_SUCCESS(mountfd);
- 
- 	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
- 	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
- 
--	ASSERT_ERRNO_EQ(-EBUSY, fsconfig(fsfd, FSCONFIG_SET_STRING, "pidns", "/tmp/dummy/pidns", 0));
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0)); /* noop */
-+	ASSERT_ERRNO_EQ(-EBUSY, sys_fsconfig(fsfd, FSCONFIG_SET_STRING,
-+					     "pidns", "/tmp/dummy/pidns", 0));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0)); /* noop */
- 
- 	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
- 	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
-@@ -188,19 +190,20 @@ TEST_F(ns, pidns_reconfigure_fsconfig_string_path)
- 
- TEST_F(ns, pidns_reconfigure_fsconfig_fd)
- {
--	int fsfd = fsopen("proc", FSOPEN_CLOEXEC);
-+	int fsfd = sys_fsopen("proc", FSOPEN_CLOEXEC);
- 	ASSERT_SUCCESS(fsfd);
- 
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_CMD_CREATE, NULL, NULL, 0));
- 
--	int mountfd = fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
-+	int mountfd = sys_fsmount(fsfd, FSMOUNT_CLOEXEC, 0);
- 	ASSERT_SUCCESS(mountfd);
- 
- 	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
- 	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
- 
--	ASSERT_ERRNO_EQ(-EBUSY, fsconfig(fsfd, FSCONFIG_SET_FD, "pidns", NULL, self->dummy_pidns));
--	ASSERT_SUCCESS(fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0)); /* noop */
-+	ASSERT_ERRNO_EQ(-EBUSY, sys_fsconfig(fsfd, FSCONFIG_SET_FD, "pidns",
-+					     NULL, self->dummy_pidns));
-+	ASSERT_SUCCESS(sys_fsconfig(fsfd, FSCONFIG_CMD_RECONFIGURE, NULL, NULL, 0)); /* noop */
- 
- 	ASSERT_SUCCESS(faccessat(mountfd, "1/", X_OK, 0));
- 	ASSERT_SUCCESS(faccessat(mountfd, "self/", X_OK, 0));
+I found one low-severity regression in this patch: the new check in mlx5e_get_flow_tunnel_id() refuses a VXLAN or Geneve rule that uses the full 24-bit VNI mask, even though the hardware programs it the same way as an all-ones mask. The reply below is ready to send to the list.
+
+net/mlx5e: TC, reject a partial tunnel key with tunnel mapping
+
+This patch makes mlx5e_get_flow_tunnel_id() reject flower rules whose
+enc_key_id mask is not all ones. The tunnel mapping keeps the matched key
+and uses it to restore metadata after a hardware miss. The change prepares
+for flower accepting enc_key_id masks.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+> index 1d35c97aea0bc..ba3aef3c80635 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+
+[ ... ]
+
+> @@ -2265,6 +2266,16 @@ static int mlx5e_get_flow_tunnel_id(struct mlx5e_priv *priv,
+>  	u32 value, mask;
+>  	int err;
+>  
+> +	/* The mapping restores the tunnel id of a packet missing in hardware */
+> +	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID)) {
+> +		flow_rule_match_enc_keyid(rule, &enc_keyid);
+> +		if (enc_keyid.mask->keyid != cpu_to_be32(U32_MAX)) {
+> +			NL_SET_ERR_MSG_MOD(extack,
+> +					   "Partial match of tunnel key in chains isn't supported");
+> +			return -EOPNOTSUPP;
+> +		}
+> +	}
+> +
+
+[Severity: Low]
+Should this check depend on the tunnel type? For VXLAN and Geneve the
+tunnel id is a 24-bit VNI, but this check requires all 32 mask bits.
+
+The VXLAN and Geneve parsers already refuse keys that do not fit in 24
+bits:
+
+drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c:mlx5e_tc_tun_parse_geneve_vni() {
+    ...
+	if (be32_to_cpu(enc_keyid.key->keyid) >= MLX5E_TC_TUN_N_VNI) {
+    ...
+	MLX5_SET(fte_match_set_misc, misc_c, geneve_vni, be32_to_cpu(enc_keyid.mask->keyid));
+    ...
+}
+
+mlx5e_tc_tun_parse_vxlan() has the same check. The mask is then written
+into the 24-bit vxlan_vni or geneve_vni field of fte_match_set_misc, so
+MLX5_SET() cuts it down to 0xffffff. On the VXLAN-GBP path,
+tunnel_header_1 gets mask << 8, which is 0xffffff00 for both masks.
+
+As a result, enc_key_id <vni>/0xffffff and enc_key_id <vni>/0xffffffff
+program the same hardware match. Also, key & 0x00ffffff equals key for
+every key the parser accepts. So the wrong-tunnel-id case from the commit
+message does not seem possible with this mask.
+
+After "net/sched: cls_flower: add enc_key_id mask" later in this series,
+a VXLAN or Geneve rule with the natural full-VNI mask 0xffffff would get
+-EOPNOTSUPP on every tunnel-mapping path. That covers rules in a chain
+greater than 0, and chain 0 rules with goto or sample actions.
+
+Would it work better to compare against the id width of the tunnel (24
+bits for VXLAN/Geneve, 32 for GRE)? Another option is to compare the mask
+only over the bits the device actually programs.
+
 -- 
-2.25.1
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117092915.255194-1-acassen%40corp.free.fr
