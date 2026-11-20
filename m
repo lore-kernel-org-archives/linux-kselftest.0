@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795141322;
-	b=vV6iChbj/mxnGnRV/gkeOfuVIAZvHgXVjTSKLfWbY7avoP/o81oUD/x5zDZZKqm+dc9d
-	 CW22vnQRfIxfS5acORCEkQg8VcJvN/tic6h8p5oVnCSI2qXCo/A6L/1rvfiUAeKCcHOrG
-	 V2IpY7Shqwhb7pkPDgPovb1qvlQz6Y8qhHtqJdHSPMvJXZ6RRGOS7LxbF7UjU3EVeEfNx
-	 tvbOLtJceqqiIKq4qyGbbdm9r5PWas6ad6+oOWnVqa8wjIjxaQYj/83iMFqsHkFavJAsZ
-	 sKkUWQ7kvOKtRVKQkMLDcPoJ8J5djBXxE7Djq3UiU4uZzeh1DxDK0qd23WLDBWOxOrA==
+	t=1795141325;
+	b=WPKTiIVSfaum1RvTi+H7h/MEQ2rY9j3fA/8Rd9goXNcWw6W5u+uxrUnuGtzk71L1gcAD
+	 mnamykGFEAzWo6ufJaXGzkQt78TJzco+TbwV7/e1tWUUd0nTEnsLiMGnqOlw9vjE7Wydw
+	 YfJG7byZbCjafg5m9TEaIovf0QoIvXAbHLQJuhMcvfK06/Xfn+PC2PPZT8O3u01wb02U7
+	 QU5zHR/HbYU/aweCg4AEq965iIx2V6ruFskp7k1o4wFjt0DkB8tVEAZ5NwrH1TYujAyyl
+	 /78OWp5HMckOwFyOE8wDuj7wdEDYyE/tp0Mf6m/XI3j3cXHHaMz29vMAVhEhdnTD9ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795141322;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795141325;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=gDfMbB0iLO5147W7hciH56ETASFEwnLRXOCRyFYMdqQ=;
-	b=eTOsGB64fWo7Nhdh/bMEBzRsgI56YzMO7QO1hNfuEKUdGXjQzypq5MyvDLqy1BQmNmUO
-	 ukcej3Mw7hq9Gre73VaTIwFU1XUmppU3afWZgL6jUESYSjhWwSER9YYArVFFdvr5o+kLJ
-	 kji7TNVtdx2FU4k/+poLVDdYAKgywrHRBauGsvC9xJ/tWVWn+NoNaBFNRlmJYbTEvzlST
-	 VZnSEy6z8XMeY6afq9rspsvbKFy6YRHTE2G4+HmJHnKDrIL6JvWoPe9mJYnkEPUpTx5Z3
-	 iUGTYL85deBkW6CiRGSLyD2dGrkf2sDE1oA10WmQRHWnxNv7OhLUIt5vZnSgiccf3jA==
+	bh=bFBl93slCnnNDRuvqGW5M/JPZcyWyl35W0K2HpRlQYg=;
+	b=RJCAM5XcVt2YeMY1JdD67Po4pxvSKfhj2NjQObMskI4bgIDMHuGmJVKjHhZB/nQz/iJY
+	 jRkRHar+JHGVW+lNU5eYYlRpSpfDNxZ/NAmBnc88P9dApLzV+Qck0A2IfnwZrHkrH6oxf
+	 goIPsp4XBKXcfQl57xvEVmP2NFn94k1ZQXSrLRQ/SDvPrT51IdJPzdZvgmumxlFkljZHt
+	 7jiGHJ2TnjmMZzaXOaSIoNhIYKAi8OwhfIII5pMS58fMWe5nJgj/eUC+rqJcIRAD1vvvR
+	 Plfa9vBcM4qp8xK1LWc9RRMFVCT1K1AyNupXs+FZYVWRu4gjO8aFfiW6C5f48FPiIRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T031gPTS;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gG2M71cB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ECE606A320;
-	Fri, 20 Nov 2026 02:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A97606A325;
+	Fri, 20 Nov 2026 02:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T031gPTS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72EDE1F000CA;
-	Fri, 20 Nov 2026 02:22:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gG2M71cB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EC01F000E6;
+	Fri, 20 Nov 2026 02:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795141321;
-	bh=gDfMbB0iLO5147W7hciH56ETASFEwnLRXOCRyFYMdqQ=;
+	s=k20260515; t=1795141325;
+	bh=bFBl93slCnnNDRuvqGW5M/JPZcyWyl35W0K2HpRlQYg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=T031gPTSzRGf5px/5xZoOAaCt9a/jrJuJTElhgersdptRgSVlRj30JsYC4srxx9Xc
-	 XLIw2JLsLZefBUuNyA+0lGphtfeDK0ZylsU3w/oskVDoh8W+gTxvWTauOkS9MJjMJB
-	 zWiTOyvjzeQj1IVGa/MAzyBdkwEUXYgeImNGAhG4e5WxD79Qtqq9Fh8XTolVi5+Vrj
-	 oYKR3NC+VR7uLE0fQFUtg5M85u5mfYCGQCF2tJgH/lVToFLyw+31Eu2i/O3aQK6uJ6
-	 LVf6VXN3VRVzDc632HVrsybjl81+SDk1/FfbUugS8CUyzFd3/DGoA7zMeQm+MNjxAB
-	 etliTNMtri2Hg==
-Subject: Re: [PATCH net v10 1/4] net: hsr: keep GRO disabled on HSR/PRP ports
+	b=gG2M71cBscSjViBbxE+PlolahxGfDD9MSXLIULV2JAbTs7dEHHBC+k4DB5BCABl5O
+	 O50CbRfQXbcc9ZSTJ1sFGzU5NR63Pac0YVJQjTEiS77Q+nlhVY/1NKhrSkG3ETIBzD
+	 wH45SPuBDJfbkVx+cYWcyT4On+Ap9KInZ400A2c5zcTEt6sjjDBCUYUXg7vsFtosQc
+	 y7aWkU1HYwIYbO0Ha4am7nkpfd39MWD0lROHuArjo3VRCMbvtcY4LbTzRQ+klvBjR/
+	 Um8U4qDa8OpvW6mIo4aqD195OqfqrO21B1WH5D+TNJERK7iRMFMYPr7Bss3aFUshaP
+	 2M6An+V217zFw==
+Subject:
+ Re: [PATCH net v10 3/4] net: hsr: segment GSO before per-frame forwarding
 From: netdev-bot+sashiko@kernel.org
 To: xiexinet@gmail.com
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -51,11 +52,11 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
  liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com,
  lukma@denx.de, fmancera@suse.de, danishanwar@ti.com
-Date: Fri, 20 Nov 2026 02:22:00 +0000
-Message-ID: <179514132000.3136.2415655157145361596@kernel.org>
-In-Reply-To: <20261117141922.20-2-xiexinet@gmail.com>
-References: <20261117141922.20-2-xiexinet@gmail.com>
-X-sashiko-severity: Medium
+Date: Fri, 20 Nov 2026 02:22:03 +0000
+Message-ID: <179514132368.3136.11119943958824488606@kernel.org>
+In-Reply-To: <20261117141922.20-4-xiexinet@gmail.com>
+References: <20261117141922.20-4-xiexinet@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -68,115 +69,114 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] When dev->hsr_port is set, __netdev_update_features()
-  (net/core/dev.c) clears NETIF_F_GRO, and NETIF_F_GRO_HW if it is in…
+- [Low] This patch adds a second way of counting rejected input frames in
+  net/hsr/hsr_forward.c, so the same kind of drop now lands in different…
 
 --
 
-net: hsr: keep GRO disabled on HSR/PRP ports
+net: hsr: segment GSO before per-frame forwarding
 
-This patch adds an hsr_port role bit to struct net_device and sets it on
-HSR/PRP slave and interlink devices. While the bit is set,
-__netdev_update_features() removes NETIF_F_GRO and configurable
-NETIF_F_GRO_HW from both dev->wanted_features and the computed features.
-The attach is refused if software GRO is still on after the update.
+This patch adds hsr_forward_input() as a single forwarding entry for
+master TX and for frames received on any port. GSO aggregates are
+segmented outside seqnr_lock, and each segment is then numbered and
+forwarded under the lock. Aggregates that cannot be segmented safely are
+dropped and counted in the core per-CPU drop counters. NETIF_F_GSO_MASK
+is removed from the master's hw_features.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 3c58db732761a..1f51a55ff2b08 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -11289,6 +11289,21 @@ int __netdev_update_features(struct net_device *dev)
->
->  	features = netdev_get_wanted_features(dev);
->
-> +	/* A direct HSR/PRP port needs per-frame metadata. Drop software
-> +	 * GRO and configurable GRO_HW from the request as well as from the
-> +	 * features passed to ndo_fix_features(): drivers such as veth
-> +	 * derive state from wanted_features and need the requested and the
-> +	 * active bit to agree. Fixed-on or driver-required GRO_HW is left
-> +	 * to the driver.
-> +	 */
-> +	if (dev->hsr_port) {
-> +		netdev_features_t gro = NETIF_F_GRO |
-> +					(dev->hw_features & NETIF_F_GRO_HW);
+> diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
+> index 44f6d9c83180a..5e49f2bb9e39b 100644
+> --- a/net/hsr/hsr_forward.c
+> +++ b/net/hsr/hsr_forward.c
+
+[ ... ]
+
+> @@ -794,3 +797,156 @@ void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
+>  	port->dev->stats.tx_dropped++;
+>  	kfree_skb(skb);
+>  }
 > +
-> +		dev->wanted_features &= ~gro;
-> +		features &= ~gro;
-> +	}
+> +/* Master TX and interlink RX are numbered locally: number and submit
+> + * one frame at a time under seqnr_lock, as before. LAN A/B input
+> + * keeps its received number and needs no lock.
+> + */
+> +static void hsr_forward_frame(struct sk_buff *skb, struct hsr_port *port)
+> +{
+> +	struct hsr_priv *hsr = port->hsr;
+> +	bool numbered = port->type == HSR_PT_MASTER ||
+> +			port->type == HSR_PT_INTERLINK;
+> +
+> +	if (numbered)
+> +		spin_lock_bh(&hsr->seqnr_lock);
+> +	hsr_forward_skb(skb, port);
+> +	if (numbered)
+> +		spin_unlock_bh(&hsr->seqnr_lock);
+> +}
+> +
+> +/* One count per rejected GSO input on its entry device. */
+> +static void hsr_gso_drop_stat(struct hsr_port *port)
+> +{
+> +	if (port->type == HSR_PT_MASTER)
+> +		dev_core_stats_tx_dropped_inc(port->dev);
+> +	else
+> +		dev_core_stats_rx_dropped_inc(port->dev);
+> +}
 
-[Severity: Medium]
-Does clearing dev->wanted_features here make the ethtool uAPI report a
-GRO request on an HSR member incorrectly?
+[Severity: Low]
+This isn't a functional bug, but this adds a second way of counting
+rejected input frames in hsr_forward.c. The same kind of drop can now end
+up in different counters.
 
-With the legacy ioctl, ethtool_set_features() in net/ethtool/ioctl.c
-stores the request, calls __netdev_update_features(), and then works out
-ETHTOOL_F_WISH from dev->wanted_features:
+For a GSO aggregate rejected by the hsr_forward_input() gate,
+hsr_gso_drop_stat() counts once in the core per-CPU counters. Slave and
+interlink ports get rx_dropped and the master gets tx_dropped.
 
-net/ethtool/ioctl.c:ethtool_set_features() {
+Plain frames, and each segment produced by hsr_forward_input(), still go
+through hsr_forward_frame()->hsr_forward_skb(). When fill_frame_info()
+fails there, the existing out_drop path counts the drop in legacy
+tx_dropped for every port type:
+
+net/hsr/hsr_forward.c:hsr_forward_skb() {
     ...
-	dev->wanted_features |= wanted & valid;
-	__netdev_update_features(dev);
+out_drop:
+	rcu_read_unlock();
+	port->dev->stats.tx_dropped++;
+	kfree_skb(skb);
+}
 
-	if ((dev->wanted_features ^ dev->features) & valid)
-		ret |= ETHTOOL_F_WISH;
+So on a slave port, a rejected frame goes to legacy tx_dropped if it was
+a plain frame or a segment. It goes to core rx_dropped if it was a whole
+GSO aggregate. Segments that fail fill_frame_info() are counted once per
+segment in legacy tx_dropped.
+
+The commit message says:
+
+    Drops are counted once on the entry device in the core per-CPU drop
+    counters.
+
+That covers only the gate drops, not the segment drops counted in
+hsr_forward_skb().
+
+hsr_forward_do() uses yet another convention, legacy rx_dropped on the
+receive port:
+
+net/hsr/hsr_forward.c:hsr_forward_do() {
+    ...
+		if (!skb) {
+			frame->port_rcv->dev->stats.rx_dropped++;
+			continue;
+		}
     ...
 }
 
-On a member, "ethtool -K <port> gro on" ends with GRO cleared in both
-wanted_features and features. The call therefore succeeds without
-ETHTOOL_F_WISH, even though GRO stays off.
-
-include/uapi/linux/ethtool.h documents the flag as:
-
- *   %ETHTOOL_F_WISH - some or all changes requested were recorded but the
- *      resulting state of bits masked by .valid is not equal to .requested.
-
-Is that contract broken in this case?
-
-On the netlink side, ethnl_set_features() in net/ethtool/features.c
-builds its reply from the local req_wanted bitmap:
-
-	bitmap_xor(wanted_diff_mask, req_wanted, new_active,
-		   NETDEV_FEATURE_COUNT);
-
-So the SET reply says GRO is wanted but not active. A later
-ETHTOOL_MSG_FEATURES_GET then reads dev->wanted_features in
-features_prepare_data() and shows GRO as not wanted. Can the SET reply
-and the GET that follows it disagree about the same request, and can the
-ioctl and netlink interfaces disagree with each other?
-
-The commit message describes this behaviour:
-
-    A GRO request on a member is dropped,
-    not kept pending: while GRO stays off, the legacy ETHTOOL_SFEATURES
-    ioctl returns no ETHTOOL_F_WISH for it, and the netlink reply still
-    shows the request as not applied.
-
-The other core paths seem to handle this differently.
-netdev_sync_upper_features() and ndo_fix_features() only mask the
-computed features, so a bridge port's LRO request still returns
-ETHTOOL_F_WISH. dev_disable_lro() and dev_disable_gro_hw() clear
-wanted_features only once, when they are called. This new branch erases
-the request on every recompute.
-
-Could the request stay in wanted_features, with only the computed
-features masked here? veth's use of wanted_features (veth_gro_requested()
-reads dev->wanted_features) could then be handled separately.
-
->  	if (dev->netdev_ops->ndo_fix_features)
->  		features = dev->netdev_ops->ndo_fix_features(dev, features);
->
+Would it make sense to bring these drop sites onto one convention? At
+minimum, could the commit message say that segments rejected later are
+still counted in legacy tx_dropped?
 
 [ ... ]
 
