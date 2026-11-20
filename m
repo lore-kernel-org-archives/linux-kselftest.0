@@ -1,125 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795154290;
-	b=nHcFMD+IPTPJNfXXDiRStQlCJ5xrpo77lEL5RQjJsBjzaol4Ry7Hzh+OgD7OXdVa9vrr
-	 /SJyDsigbvCOqQsmy9Qn1kHOVAmH2YyWJwkpLyp0w/Mh1Hg+biFSXUTa9JEOdT9INeDn9
-	 P3eP7uCi6LnvDDqYtG2cm9SjyXjhHSOqAY9Y6gYnwdodpzBjNmG3fT7uKf/xhVj4zufy0
-	 w7GzcD/EzXvd1WekeMPK1ImdM5RR3qPYo3ty6uRn9EW7DyqSfTsgHQ5N+NbsbCyg7PbGD
-	 0mJuw3Ep1MSZkmGpKEDR82J1JhSpr/otC4d+mOvxZS7moeBwLByGrUb822ye2Pctaxw==
+	t=1795156188;
+	b=s+ziBP79v0PL0+gLPeg5PaiGvYsHH8/43l2C4Jp40INefwwe9YV9uZBfA77Ywyvi7GDS
+	 PUzlmmw0VI7r9mpdH9MClX7AgOZ2VgBZ8e1RSroU4WivqD6yF7D+JNqFSdeN9PIc9X4On
+	 Mz7IR/6Zezq5O4D3kizgwXCYRTCcBLHODpWz3UJHdicfUiNZ24unfilamhobpyLdZZ4Hu
+	 GxpZwbO4jgr3x5gJWT9hD9ISFd9uL1/BX9d+o507N/9a13oz27qiWL2wCJ+kkhUlzzthE
+	 uptQEMqEYIp2+P2zl5idU7TB9EpMawovSFvvdbhayScKPCHDORyldpo2hlRX59/4dUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795154290;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=3J4zWN2xZSuepJxvtOxZd6Cv2PFcMo5B56sR2qMDpP8=;
-	b=ppwHdD0Qt2xDSmVyP+IatxDgLL9oipW6DLQ6PxBRrOoaPtXGYSqYYXLEm1E4GC97+pHM
-	 foUeyVZBJJAfa6sNjdAjssTFjLuNHy3VC5J7ikxZ+mUEXS71YFAtK6OeK+5vOtvgx61rE
-	 iBB5aVrRHyuhX570EQGCP5iFfpRzHfqlM1Ecdcloud7O8+LlDferLKHKqM+x00NzRM6ju
-	 9KpzzgWAUKo3VI5wzWD7S7H3gcsIvzZeOkAZAUYhz/yBJ1evYhW6vfTNLoBMVuUdJusoc
-	 brgdhAh6ZuIZtg/l3RHalrDLYNw+547Cy3v7mMlo0J2gRipYW4kkxQBrOB9rRS+9RGA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795156188;
+	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
+	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:From:To:Cc:
+	 Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=O7iWL9lO+LbrXuEpmCeRZY/N3vE58iUlbinJdsU8EUQ=;
+	b=Exsk71gNWZKd/6PGG6II/xZkN059Dk7ia5p31URbbnLryYK1314Ac2zeh2e01f3zRiV7
+	 H5s+WGOh3Ahd9JbG4Ge/3fEb/GtimTlpWqGcyunCwc80JgL/MnsOwPJGormTPrwU2b/61
+	 S71eb8FzqCQ25FthZ+CgC+qlrx4F2Z0x/5bo37/k9NRLLCqOoNZFTNDdE/DPC5hV3QjE5
+	 BLIn353oAtHkB2ywqWQk1JGKqhUrcZzhpEoBcvjrUqX4GkRv/ruPRGglot/lM6s9h3jql
+	 kaQtI20MtmIJ+fl7/tuEaqC/23ezQqj4Rod89zKg2SDlL6ZLw4ti7/zXoxIAqTJALAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SAKS3ST4;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 3FA3860A2603;
-	Fri, 20 Nov 2026 05:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SAKS3ST4
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 535581F000EB;
-	Fri, 20 Nov 2026 05:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795154290;
-	bh=3J4zWN2xZSuepJxvtOxZd6Cv2PFcMo5B56sR2qMDpP8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SAKS3ST4i7tiUXuSP7l7klGig8K851mCaNcA83yfT7HS5evQwuV9pHxHXPYNRVoBN
-	 OECH81IdbXkatDGtQDTEbZ0S0zjQEdVbnmzdw9mOYz1Xg30Zaplgj5W19nP62y6YlV
-	 Tri0TfVHScfjfdkqkwMEqDkkVdZoLgLFmUKDwq/GJAQHq+lyIRFPSxG1deSxZD/b8w
-	 aozC4d3ZTBXnBMBMor/w9ZkVSDiVqdnfcfimj2dN+sC1cm0iMw+VPyVRobRXELJYS6
-	 2S8q7BhHWzui3oDk1v9py06mOrro/JTr5AlYK88Mj3Em8Yv5p5dWVOcoaGbo7wvjA3
-	 aTGgS+xSE9t4w==
-Date: Fri, 20 Nov 2026 07:58:06 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>, Ben Segall <bsegall@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Christian Brauner <brauner@kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Chris Zankel <chris@zankel.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	"Hallgrimur H. Gunnarsson" <halg@google.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jan Kara <jack@suse.cz>,
-	John Johansen <john.johansen@canonical.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Juri Lelli <juri.lelli@redhat.com>, Kees Cook <kees@kernel.org>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Magnus Lindholm <linmag7@gmail.com>,
-	Manfred Spraul <manfred@colorfullife.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Moore <paul@paul-moore.com>, Paul Walmsley <pjw@kernel.org>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Rich Felker <dalias@libc.org>,
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Will Deacon <will@kernel.org>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v4 00/14] Namespace for namespace roots
-Message-ID: <av_hbgzwo-1FcAPZ@kernel.org>
-References: <20261119224312.1037966-1-jarkko@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AA5606A32A;
+	Fri, 20 Nov 2026 06:29:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5AA5606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c2960f8ce4ab11f19a56ed5b684f684d-20261120
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:2b8ee60e-b662-43b4-b1dc-4da4859f0e9b,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:4ff7df8b7421775660aa87df3c415b5e,BulkI
+	D:nil,BulkQuantity:0,SF:102|850|865|898,TC:nil,Content:0|15|50|99,EDM:-3,I
+	P:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+	,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: c2960f8ce4ab11f19a56ed5b684f684d-20261120
+X-User: fuqingshuang@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <fuqingshuang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1583078856; Fri, 20 Nov 2026 14:29:38 +0800
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+To: Andy Whitcroft <apw@canonical.com>,
+	Joe Perches <joe@perches.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>
+Subject: [PATCH] selftests/proc: skip fd-003-kthread if run as non-root
+Date: Fri, 20 Nov 2026 14:29:33 +0800
+Message-Id: <20261120062933.3169112-1-fuqingshuang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -129,56 +73,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119224312.1037966-1-jarkko@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 20, 2026 at 12:42:58AM +0200, Jarkko Sakkinen wrote:
->   nsproxy: Pass nsproxy to create_new_namespaces()
->   rootns: Add core infrastructure for root namespaces
->   rootns: Track init lifecycle via copy_process() and pid_namespace
->   rootns: Add rootns() system call
->   rootns: Add ROOTNS_WAIT ioctl
->   rootns: Add ROOTNS_KILL ioctl
->   fork: Support CLONE_INTO_ROOTNS in clone3()
->   fs: Support FSCONFIG_SET_ROOTNS in fsconfig()
->   fs: Support MOVE_MOUNT_T_MNTNS in move_mount()
->   security: Add rootns LSM hooks
->   arch: Wire up rootns() system call
->   docs: Document root namespace uAPI
->   selftests/rootns: Add root namespace test suite
->   MAINTAINERS: Add entry for ROOT NAMESPACE
+/proc/$KERNEL_THREAD/fd can only be opened with ptrace access, so
+openat() on the "fd" directory of a kernel thread returns EACCES
+when the test is run as non-root.  kernel_thread_fd() conflates this
+with "process is userspace process", the scan over /proc runs to
+completion without finding a usable descriptor and the test exits
+with 1 (KSFT_FAIL) instead of 4 (KSFT_SKIP):
 
-Since David's picking up patches, and starting to drill them, I've not
-paid apparently enough attention to patch division. Just noticed when
-I had hard time finding mqueue and procfs changes.
+  $ ./fd-003-kthread; echo $?
+  1
 
-I've now re-sliced these into a bit more sane pieces:
+Distinguish the two cases and skip the test like the rest of
+selftests/proc does when privileges are missing, so that unprivileged
+runs report "skip" instead of a false failure.
 
-$ git log --oneline master..
-d8e24a6bc14e (HEAD -> rootns, origin/rootns) MAINTAINERS: Add entry for ROOT NAMESPACE
-f2569e56a267 selftests/rootns: Add root namespace test suite
-bea05e758f8e docs: Document root namespace uAPI
-dd05a49aff77 arch: Wire up rootns() system call
-2dee7a5fddec bpf: Register rootns LSM hooks
-73c51e02b830 security: Add rootns LSM hooks
-3cfd6576a037 mount: Support MOVE_MOUNT_T_MNTNS in move_mount()
-9ed7387038ea ipc/mqueue: Implement ->set_rootns() fs_context operation
-624f0ed9c1c7 proc: Implement ->set_rootns() fs_context operation
-1085e6ae2eb3 fs: Support FSCONFIG_SET_ROOTNS in fsconfig()
-d2898dbdc39b fork: Support CLONE_INTO_ROOTNS in clone3()
-42dbccb5890e rootns: Add ROOTNS_KILL ioctl
-14cbda3e5bca rootns: Add ROOTNS_WAIT ioctl
-b2cc82539b75 rootns: Add rootns() system call
-d29215aa7f0f rootns: Track init lifecycle via copy_process() and pid_namespace
-0f9ce7febb49 rootns: Add core infrastructure for root namespaces
-7a0e8f969fc7 mount: Enforce mount_too_revealing() for foreign mntns
-8c61aee3afbf mount: Add mnt_ns_get_root()
-07d239d0287c userns: Factor out install_user_ns_cred()
-bf74588e706d nsfs: Add nsproxy_open_namespace()
-645d31a1c516 nsproxy: Pass nsproxy to create_new_namespaces()
+Fixes: b2f5de0334f0 ("tools/testing/selftests/proc: test /proc/*/fd a bit (+ PF_KTHREAD is ABI!)")
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+ tools/testing/selftests/proc/fd-003-kthread.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I would also divide "arch: Wire up rootns() system call" into multiple
-patches, if this was not an RFC.
+diff --git a/tools/testing/selftests/proc/fd-003-kthread.c b/tools/testing/selftests/proc/fd-003-kthread.c
+index dc591f97b63d..e939a7c5f546 100644
+--- a/tools/testing/selftests/proc/fd-003-kthread.c
++++ b/tools/testing/selftests/proc/fd-003-kthread.c
+@@ -36,6 +36,7 @@
+  *
+  * Return /proc/$PID/fd descriptor if process is kernel thread.
+  * Return -1 if a process is userspace process.
++ * Return -EACCES if run as non-root.
+  */
+ static int kernel_thread_fd(unsigned int pid)
+ {
+@@ -88,6 +89,8 @@ static int kernel_thread_fd(unsigned int pid)
+ 	fd = -1;
+ 	if (flags & PF_KHTREAD) {
+ 		fd = openat(dir_fd, "fd", O_RDONLY|O_DIRECTORY);
++		if (fd == -1 && errno == EACCES)
++			fd = -EACCES;
+ 	}
+ 	close(dir_fd);
+ 	return fd;
+@@ -168,6 +171,8 @@ int main(void)
+ 		pid++;
+ 	}
+ 	/* EACCES if run as non-root. */
++	if (fd == -EACCES)
++		return 4;
+ 	if (pid >= 1024)
+ 		return 1;
+ 
+-- 
+2.25.1
 
-Br, Jarkko
