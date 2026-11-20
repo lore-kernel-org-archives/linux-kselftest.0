@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795175751;
-	b=pEOmJR6apk0JrvmzLnxYheT4XnREM8T7PPK7VD9DGWnRsTHnjShFBSlDxmGsIsyoMIrG
-	 PqL/6VECQwNc6jlttFzvHytDvZ09AJcS9RdjlKyysxL1jo9S5itjqkSXUoT1fvrbXcMm9
-	 WVfCLtxXEZSlZRtwOquTtNk4XiNh1p+jD/NliZXMSDeB9z7nFdq59KNkK5zilcc2YfCwz
-	 rm7TM6apFWf1PSizerz1iD4ZZz0wCWeUDCP5iJoWcg38PfztGKZXkQ7IVlcapYb4tmq6w
-	 QlAJMbnzFPOf8t5VlYVdGIEkPx+kOejGhSvJsSPRBWKGjpmQAQO/yt4U9ILzOj+Y/4w==
+	t=1795176178;
+	b=HIl8fYKmduArC7mqSo8K9R18jZVThaYZ+ILVV9uM5FWJNQCLdnp1w70Lte3HGtGDh0Kk
+	 tB4lzIiOEr2wZfUd8q4kY7Z/WO/G2Z+JIscyeEPnI3b8pCQpv51Q+B0rGSxaW8NKKo5WK
+	 xUhEucn6bYy3Z+hPbwwTY6/vGEppplqcHfG43YUcUfI8qFQ0DHY+pDMPeUoQEIiH1mxh2
+	 k1AFo1Eo0ZHR3iD09g9HGzOg4JBQJBvIt9uwNoyu5Kbh60Gn+GFOzP06LWN0H0b9pVO+c
+	 /t/iQBdXYRsnE6valA4NH9gKB/Pko4ute4JD/01caVoB5IjiqePd/XWeEER/yKRKiBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795175751;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795176178;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=P3gyj12NGt5BrOAVOnJOGDgKEsVMdz42lpXGv/yZrc4=;
-	b=rz51vlDvPqLKhJODWJnoEcUxgk0H6FZ2+YaX/ac7h2mnSaNvpOd+EBHcsEayyQjn8F7y
-	 T2fY4DuUIpd7XzC4FvTQQ6rOEkbjuqhNaoS3+8seKk+llPRtQ7qB2gann+N64i5yBuOu8
-	 ycZY95oU7uWEjG4WRVKFuIBqS4rtmvjRbRyCXkMVtq2Ml8gwsXM60TAwuXIoplKl0gkgu
-	 WlMfDPHxR9W3tnXFXiXPRzCY7SmZ8jZH0CqUjM18P0U33ZzlFDsfRH3G/806psYhdV1Qe
-	 l1yAUUrL0gICFA136kVCy0XA0JvJH+bn6xpD6x9sm989bPeC+EVzFT1xEMxzlddIpjQ==
+	bh=a5J72X3HPA+7mSwk7L/JqiNlhfSlr+OpvNLs81RwtBM=;
+	b=Chj4l2DHKlrYkzRKQOBK7yvpYFph8s2upm7q4YNIcy2FvhRgBopHW/Vhw2Jqc/Qbdy2D
+	 WtvtuS+yKtzXSMGE24bzYTBpjnqax3PmqdDhWiafHs/LlvXlVmF/yv5J6vNrugqIpZtdL
+	 Y4YpbF6EhTfwADY9XqNXhXFPFw3A1okhlUNu+IN93sce7Zlxg8LvYFSXPA5DOB4kKgstV
+	 anWrsUpciMIP8weVftJeddYAs+rYk9Gw2C0qXCT8vBFHjPM07PyB6OyX89xYrIY1rAUct
+	 kxhfy/OlJd5QUrWjBc3xG7II9FRj5d+mzuiFZ+TjjRJv7o9LKoLJFOPaQRqSxPomWTg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XRmupP+O;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mWKv2sBp;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884CE606A325;
-	Fri, 20 Nov 2026 11:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C109606A325;
+	Fri, 20 Nov 2026 12:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XRmupP+O
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF9F1F000C4;
-	Fri, 20 Nov 2026 11:55:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mWKv2sBp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EEF1F000C0;
+	Fri, 20 Nov 2026 12:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795175750;
-	bh=P3gyj12NGt5BrOAVOnJOGDgKEsVMdz42lpXGv/yZrc4=;
+	s=k20260515; t=1795176177;
+	bh=a5J72X3HPA+7mSwk7L/JqiNlhfSlr+OpvNLs81RwtBM=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=XRmupP+OLijrmAtsyFzXXifwkuMS8W6gNVR4LOQJPmUXO7GcnqLiZxj7w2peSSlsu
-	 QMq1FxF6ebx+N5vGd+gPCfWv/hQdtBeT2ynxnVrf00EB2x6ercEW9SIcOTFr6/Gg+0
-	 +0VZoq0mBHSiGpSUMlOovIy33ZXnen4fS+2fARU6pJbnmbFK3EAr2ic61lpeGjOwQf
-	 iFH9PTAknNIhVdp95GGo75mLA233YHUQfa4N6a6X+dOkSuSfPvhInvrsgbZRJm5kOG
-	 X4YITabmy70LoUjGg+Mx9siucKp0Y9fW03PE1MjQGJywW/z58DOrX5l+Ovs5sBRMsQ
-	 9qqDxMCNtyI/Q==
+	b=mWKv2sBppmiUSdyRqTHoLy0JiF4sgo0VjISutNKO+L9E1A83mmNl7o4OwDh61EuPA
+	 pkCfeqgSsgrgpvW/wxbM5oLmX/qWpfSJ7NynQQUHRGPa3Q9jhYW57wuSAfo34EBEMH
+	 BFj7Y0k92tluEyBqvMQkOh67LrqF5B1Nf3Enowz7pr9aLKaU8TYe76sGIE0FQUN+YA
+	 qlAUT2yUVqmA2bJkml2+T686GxMFtvjN1hiizEyW3szH9eADb4nM1pUvd3H2vK1uNf
+	 xb5gzP2YsZBAP82sRRbl9wKGk0mrFqfR1C5SzEUC0tu7o6LCIY3d7PNaa30kWXRK5n
+	 Yd1rQsvYo08eQ==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: David Matlack <dmatlack@google.com>
 Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
@@ -54,14 +54,14 @@ Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
   Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
  <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
   Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v4 09/19] mm/shmem_luo: Leave freeing the preserved
- state to finish()
-In-Reply-To: <20261111002358.1842967-10-dmatlack@google.com> (David Matlack's
-	message of "Wed, 11 Nov 2026 00:23:47 +0000")
+Subject: Re: [PATCH v4 10/19] mm/shmem_luo: Don't make early retrieve
+ failures permanent
+In-Reply-To: <20261111002358.1842967-11-dmatlack@google.com> (David Matlack's
+	message of "Wed, 11 Nov 2026 00:23:48 +0000")
 References: <20261111002358.1842967-1-dmatlack@google.com>
-	<20261111002358.1842967-10-dmatlack@google.com>
-Date: Fri, 20 Nov 2026 11:55:44 +0000
-Message-ID: <2vxz33sv3ef3.fsf@kernel.org>
+	<20261111002358.1842967-11-dmatlack@google.com>
+Date: Fri, 20 Nov 2026 12:02:51 +0000
+Message-ID: <2vxzy0an1zis.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,35 +76,23 @@ Content-Type: text/plain
 
 On Wed, Nov 11 2026, David Matlack wrote:
 
-> Don't free the serialized state in shmem_luo_retrieve(), whether the
-> retrieve succeeds or fails, and let finish() free whatever is left of
-> the preserved state of every file. Once retrieve() has restored the
-> folios, it sets nr_folios in the serialized state to 0, so that
-> finish() only frees the rest.
+> Mark failures in shmem_luo_retrieve() before it starts restoring the
+> folios as retryable. If no retrieve succeeds, finish() frees the
+> preserved state, like it does for a file that was never retrieved.
 >
-> This fixes leaking the preserved folios when the retrieve fails before
-> it restores them, e.g. because the file has seals that this kernel
-> doesn't support, or because memfd_alloc_file() fails. The retrieve freed
-> the serialized state but not the folios, and finish() then skipped the
-> file because its retrieve had failed, so the folios were never freed.
+> Until the folios are restored, nothing has consumed the preserved state.
+> Leave it for another retrieve, which may succeed, e.g. if
+> memfd_alloc_file() failed with -ENOMEM.
 >
-> Preserved folios may also be in use until the session is finished, e.g.
-> by a device that was preserved with DMA mappings of them, so they must
-> not be freed before finish().
+> The exception is a preserved file that this kernel can't restore, e.g.
+> because it has seals that this kernel doesn't support. Retrying can't
+> help, so keep that failure permanent, so that every later retrieve
+> returns the same error.
 >
-> Fixes: f85b1c6af5bc ("liveupdate: luo_file: remember retrieve() status")
 > Signed-off-by: David Matlack <dmatlack@google.com>
+> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-I think some of this is already fixed by [0]. It holds the folios until
-finish, but only in the success case. On failure to parse seals for
-example, it leaks them. Except, as Sashiko also points out, in
-memfd_luo_retrieve_folios() the folios are freed.
-
-I don't think this is strictly related to your series so can you please
-send something on top of [0] to fix these bugs, and perhaps drop this
-patch?
-
-[0] https://lore.kernel.org/kexec/20261110175855.2437084-3-pratyush@kernel.org/
+Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 
 [...]
 
