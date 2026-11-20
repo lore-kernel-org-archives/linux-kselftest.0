@@ -1,62 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.121.94.183
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795173054;
-	b=gpC5YpdlU3oERjGMlE/rtnl4dqo7iEStwGRGJs0RrfZssSRP+ErCzhAXpH4LfMieaUlR
-	 DP5puifLHY3CddpHgmuAFLSljfTRkS1bCgBmrZOzHuBrWlh/r0KnRSYoNK4iEiLeq/T4L
-	 puiTn8wfMA1IwyRPcC9yGd6USt1bXFud/i4Sq3cUHuOUbmFosZYUx/6l4/O10Q9lU2xay
-	 glYoYfxHHT1Q5xyQNZ1mkAgerCBQKAxYd4Wg+o61Um0a+X6LpN533i4mfyVCQ63/OjLw3
-	 bg4m2Ec2UkwFzNOtS4fmgqriHj4JUxhvpb8CRG4/DTiwIsMuq4x8I8WDW9a2lolBocw==
+	t=1795173286;
+	b=w+s2g3y4ctv7+3dEdPk31u9AANqK5+IJ1KYrIxm2hgW3cUByk7RTvu6YdXl0NYfPMnyq
+	 rKCdJyPyO+J6+xOgnLbgXSRgAvUR9IYhdKMnE+i6pjhWuEmIj2xbXEpmnvE5TVpCSuRKw
+	 +7lE7iMMdHNqzVQahIAi/WXoFauHTj4jaOIeOwuzlVqNbQLGNA1tVipid+dFqKjc4QzQq
+	 +UA+0iJ6jIFNSAhP0zXCjAFg62Obk82uMr4Jp4I+RkiwiFXAPx0yXqpidP1xDv5LyI+19
+	 GbEwLOUq+3RGJaVi70TeCCGIbQ3x/Ux67F6nOLdG7WJRvZCc34a26p2TFJSp3KiGfkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795173054;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=2bj2WTnjPiLjsE3k43qjyadZlVuZzndDK7/3eTPwHqQ=;
-	b=aAihYe/vJ4lApYROn/f9u0naFnDAakSz7fNtkmpOHXI3xBvJiVGO1y41baKZFcZTGP78
-	 QU5hwUukIPzxorOpVtCP/9FN+4OsK3oB2Fvtvt6g32kXO1FzhW5XHzXoqLEjlT3zc6C1T
-	 042NPqKpR5dCCbrCK8rryJlyQmFNJ/nn8+CGXEW+bdChDcqzzV4rtGFF0vzNoiiOuf4kS
-	 KFt8iQgal0WYdEfJmfN3ppU1USnVCSPCr9Duv4HCBrJt1gwPrnXaqeClNiDHpysZHoJSD
-	 MSGeeTUVJltbGweHr/nnagsy89D57ctZ5vGlImXsOdazqfHbTQXYuO3jm/tlqAKAbvg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795173286;
+	h=DMARC-Filter:X-KPN-MessageId:Received:Received:DKIM-Signature:
+	 X-KPN-MID:X-CMASSUN:X-KPN-VerifiedSender:Received:Date:From:To:Cc:
+	 Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Priority:Importance:X-Originating-IP;
+	bh=PjzVgZGUm3JAnCCIs5JaL2TnGj38tBHNtriCyFT2Wzg=;
+	b=4N6BBA1m6GKW3xp/Inru0o/KtFbG/yAPjB/3RdpIxE42W56ZJWLuES6UeAg5TwhK/nGY
+	 BZJYPjCe0LFXkvEpjuWaXHxQKZmfzMKmv+60xaCpXg9uXLISndsCNO87Bq48RBL3g8YLr
+	 bbtbo0mPwre7WD5eB0uEW128i7vn7uYwNpXpH1SFQdhRKYuxqmkUvHi60aHAZskW6ZlLe
+	 gMcOdLJbnpUZfpIihqZFLSNtCzBcV740b4hiNozIKSr2sKDF+jz87hu5p/pPI6CyLYmQC
+	 latkUfsPq3e0CznkJs+ECdiOfCqWZdnzn4484Bjz1qADUC2QmsPM8M21c0UHWYVU2YQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z4gIouMy;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=xs4all.nl;
+	spf=pass smtp.mailfrom=xs4all.nl;
+	dkim=pass header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=ucC4Rj6u;
+	arc=none smtp.remote-ip=195.121.94.183
+Received: from ewsoutbound.kpnmail.nl (unknown [195.121.94.183])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A9E606A336;
-	Fri, 20 Nov 2026 11:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090AF606A33A
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 11:14:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 090AF606A33A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z4gIouMy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434E11F000D8;
-	Fri, 20 Nov 2026 11:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795173054;
-	bh=2bj2WTnjPiLjsE3k43qjyadZlVuZzndDK7/3eTPwHqQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Z4gIouMy2gpXBaY3WJ92xqOrONrBgfanHc39m1N5Hu9RlQQcAyvzr41n0hCNe+1z7
-	 m9cpuNaO0X4sTrpy1GWC+mYR05yX3WG8ac//p95Bz1Kz7glAHpg3rJ5k+nJgy5N/4l
-	 C5FDahJrW/v4Z4zKunw95Z9W3W73+9m7YxBITsLCmWJ8tz92cu2Ti0keTDiuF4n4bL
-	 brIgEo77x3MD++ZDTy5bWXBAb6JOuCY4JObzTt5Z5HZloAi/fDjQU37f3GOjGpUskZ
-	 iwWqPQoyMMDRPvzjXzSpzirRx/CjpQUV6HZGzHBT38rZNa7YHWjXC93Bu9T9zNkvdc
-	 PXWpWEXjV2SQg==
-Subject: Re: [PATCH net v4 2/2] selftests: netfilter: cover IPv6 FIB prefix
- suppression
-From: netdev-bot+sashiko@kernel.org
-To: leonard@lausen.nl
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, pablo@netfilter.org, fw@strlen.de, phil@nwl.cc,
- shuah@kernel.org, daniel@iogearbox.net, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Fri, 20 Nov 2026 11:10:52 +0000
-Message-ID: <179517305282.3136.16580929973360319234@kernel.org>
-In-Reply-To: <20261117110813.9894-4-leonard@lausen.nl>
-References: <20261117110813.9894-4-leonard@lausen.nl>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=xs4all.nl header.i=@xs4all.nl header.a=rsa-sha256 header.s=xs4all01 header.b=ucC4Rj6u
+X-KPN-MessageId: 9224ddf7-e4d3-11f1-8e5d-005056992ed3
+Received: from mta.kpnmail.nl (unknown [10.31.161.188])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 9224ddf7-e4d3-11f1-8e5d-005056992ed3;
+	Fri, 20 Nov 2026 12:14:36 +0100 (CET)
+Received: from mtaoutbound.kpnmail.nl (unknown [10.128.135.189])
+	by mta.kpnmail.nl (Halon) with ESMTP
+	id 92236a2f-e4d3-11f1-be6a-00505699693e;
+	Fri, 20 Nov 2026 12:14:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:subject:message-id:to:from:date;
+	bh=PjzVgZGUm3JAnCCIs5JaL2TnGj38tBHNtriCyFT2Wzg=;
+	b=ucC4Rj6uJwQLNweeTQfqi5QvjUTh2ZSjBprNMF8X2P5vdvD8C5d2O37pu3+MhBZQxo71p6UH341lH
+	 FC8qqlAutWOXQ6+Y+rb5d/oRVfj9l1Dxeqo7ZyWg0LmYnZARgytUII542884wDvHjXS/JttQQEs9DQ
+	 bqMVWWHsqJfkuvsPAFknqPjqBKq/uV960BenVIVLFw/0f9337/gPhQ8dAg2ygbeooRtFYl2J8977Th
+	 by/FWb6njbth6QBAIVNmLWzVNCyd44uFunmmZAWkIKoLfdFOheCBpe8nVxqu3l2p2c7PXlMetc2oJt
+	 VmwaKdVp3/7C5mr39owUglyijb6JNOA==
+X-KPN-MID: 33|/sTml7rAee1FVNVLGx5DdW+WHq1K70NfYXOiC57mU469Im1tEq7liCcW2gzjud3
+ sG1/yTtbugNy6EpjhTCu4zsvvOuiNdY7N0W34d3Rb7Lk=
+X-CMASSUN: 33|NEkO+ZW4M3w9vISEGjQ3s8RjcZG5Ozjt2vMCDXfi8OkgQAwe7HT/MzSsbv+ZWt7
+ MR+7TrAKikaX+MKs2lcin9Q==
+X-KPN-VerifiedSender: Yes
+Received: from cpxoxapps-mh07 (cpxoxapps-mh07.personalcloud.so.kpn.org [10.128.135.213])
+	by mtaoutbound.kpnmail.nl (Halon) with ESMTPSA
+	id 92199ae0-e4d3-11f1-acfd-00505699eff2;
+	Fri, 20 Nov 2026 12:14:36 +0100 (CET)
+Date: Fri, 20 Nov 2026 12:14:36 +0100 (CET)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Hangbin Liu <hangbin.liu@linux.dev>,
+	=?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <ricardo@marliere.net>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <1254980601.2097872.1795173276553@kpc.webmail.kpnmail.nl>
+In-Reply-To: <8a436334-d306-4a34-bb7b-efc713aed0f8@linuxfoundation.org>
+References: <20261118-kselftest-run-timer-v1-0-53a838b2d62b@xs4all.nl>
+ <20261118-kselftest-run-timer-v1-1-53a838b2d62b@xs4all.nl>
+ <8a436334-d306-4a34-bb7b-efc713aed0f8@linuxfoundation.org>
+Subject: Re: [PATCH 1/3] selftests: use local variables consistently in
+ runner.sh
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,85 +85,147 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
 
-Low priority / nit picks for your consideration:
-
-- [Low] The new in-tree comment before the IPv6 prefix-suppression block
-  in tools/testing/selftests/net/netfilter/nft_fib.sh says "The router's…
-
---
-
-selftests: netfilter: cover IPv6 FIB prefix suppression
-
-This adds IPv6 checks to nft_fib.sh for suppress_prefixlength 0. They
-verify that a default route is suppressed while a more-specific route is
-retained, and that blackhole, unreachable and prohibit routes (including
-a blackhole nexthop object) stay terminal. The checks run after the
-existing default-table tests.
-
-The commit message says:
-
-> The router's logging RPF rules have already been removed by then,
-> allowing neighbour discovery during intentionally different reverse-route
-> states.
-
-The same statement appears as a comment in the patch, covered inline
-below.
-
-> diff --git a/tools/testing/selftests/net/netfilter/nft_fib.sh b/tools/testing/selftests/net/netfilter/nft_fib.sh
-> index 04544905c2164..25e13197f0578 100755
-> --- a/tools/testing/selftests/net/netfilter/nft_fib.sh
-> +++ b/tools/testing/selftests/net/netfilter/nft_fib.sh
-
-[ ... ]
-
-> @@ -845,6 +889,52 @@ test_fib_type "default table"
->  ip netns exec "$nsrouter" nft delete table ip filter
->  ip netns exec "$nsrouter" nft delete table ip6 filter
+> Op 18-11-2026 11:13 EST schreef Shuah Khan <skhan@linuxfoundation.org>:
+> 
 >  
-> +# Keep the earlier IPv6 checks on the path without custom rules.
-> +# The router's logging RPF rules have already been removed here.
+> On 11/18/26 06:40, Jori Koolstra (CIQ) wrote:
+> > run_one() and run_many() assign their working variables without
+> > declaring them local, so they leak into the global namespace of
+> > whichever shell sources runner.sh, i.e. run_kselftest.sh or the
+> > RUN_TESTS recipe in lib.mk.
+> > 
+> 
+> Hmm. so if a timeout value of say 60 seconds comes from a test
+> settings file, does it persist? Can you see that if you run a
+> few tests using TARGETS variable?
+> 
 
-[Severity: Low]
-Is this comment accurate? Earlier, the script calls
-load_pbr_ruleset "$nsrouter", and that installs a logging RPF check in
-table inet filter:
+No, because it is doing
 
-load_pbr_ruleset() {
-    ...
-table inet filter {
-	chain forward {
-		type filter hook forward priority raw;
-		fib saddr . iif oif gt 0 accept
-		log drop
-	}
-}
-    ...
-}
+	export kselftest_timeout="$kselftest_default_timeout"
 
-Between that load and this block, the only deletions are
-"nft delete table ip filter" and "nft delete table ip6 filter", after
-each test_fib_type call. Table inet filter is not flushed until the
-"flush ruleset" in load_ruleset_vrf().
+at the start of run_once(). I was just trying to get it to be a bit more
+consistent and less bug-prone. We could also add readonly, which is in
+POSIX. But that seemed too much.
 
-The prerouting nft_rpfilter logging rules from load_ruleset() are gone
-at this point, since the earlier "nft flush ruleset" removed them. The
-forward-hook "log drop" chain is still loaded, though.
+> > Declare these variables local so that local is used consistently
+> > throughout the file and the sourcing shell's namespace is not polluted.
+> > This does not add a new requirement on the shell: local is already used
+> > in run_many(), in_netns() and run_in_netns().
+> 
+> Makes sense.
+> 
+> > 
+> > Also, obey the convention to use upper case names for variables that are
+> > constant once assigned.
+> 
+> Can you elaborate on this convention?
+> 
 
-The new probes (ping to dead:1::1) and neighbour discovery are delivered
-locally and never reach the forward hook, so the checks still pass.
-Could the comment, and the matching sentence in the commit message, say
-that it is the prerouting nft_rpfilter rules that have been removed,
-rather than all of the router's logging RPF rules?
+It seems to be what was used for runner.sh, local variables set once are in
+uppercase.
 
-> +if ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 \
-> +	suppress_prefixlength 0; then
+> I don't want to see these changes combined. We don't combine
+> cleanup and convention changes with real changes.
+> 
 
-[ ... ]
+I'll separate it out.
 
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117110813.9894-2-leonard%40lausen.nl
+> > 
+> > Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
+> > ---
+> >   tools/testing/selftests/kselftest/runner.sh | 29 ++++++++++++++++++-----------
+> >   1 file changed, 18 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> > index 45fb8ec38493..9b1dad5441ea 100644
+> > --- a/tools/testing/selftests/kselftest/runner.sh
+> > +++ b/tools/testing/selftests/kselftest/runner.sh
+> > @@ -58,13 +58,18 @@ tap_timeout()
+> >   
+> >   run_one()
+> >   {
+> > +	local DIR TEST BASENAME_TEST BASENAME_SANITIZED SETTINGS TEST_HDR_MSG
+> > +	local line field value interpreter stdbuf cmd rc
+> > +
+> >   	DIR="$1"
+> >   	TEST="$2"
+> >   
+> >   	BASENAME_TEST=$(basename $TEST)
+> >   
+> >   	# Reset any "settings"-file variables.
+> > -	export kselftest_timeout="$kselftest_default_timeout"
+> > +	local kselftest_timeout="$kselftest_default_timeout"
+> > +	# Make kselftest_timeout variables available to tests
+> > +	export kselftest_timeout
+> >   
+> >   	# Safe default if tr not available
+> >   	kselftest_cmd_args_ref="KSELFTEST_ARGS"
+> > @@ -91,8 +96,8 @@ run_one()
+> >   	fi
+> >   
+> >   	# Load per-test-directory kselftest "settings" file.
+> > -	settings="$BASE_DIR/$DIR/settings"
+> > -	if [ -r "$settings" ] ; then
+> > +	SETTINGS="$BASE_DIR/$DIR/settings"
+> > +	if [ -r "$SETTINGS" ] ; then
+> >   		while read line ; do
+> >   			# Skip comments.
+> >   			if echo "$line" | grep -q '^#'; then
+> > @@ -100,8 +105,8 @@ run_one()
+> >   			fi
+> >   			field=$(echo "$line" | cut -d= -f1)
+> >   			value=$(echo "$line" | cut -d= -f2-)
+> > -			eval "kselftest_$field"="$value"
+> > -		done < "$settings"
+> > +			eval "local kselftest_$field"="$value"
+> > +		done < "$SETTINGS"
+> >   	fi
+> >   
+> >   	# Command line timeout overrides the settings file
+> > @@ -164,8 +169,8 @@ run_one()
+> >   
+> >   in_netns()
+> >   {
+> > -	local name=$1
+> > -	ip netns exec $name bash <<-EOF
+> > +	local NAME=$1
+> > +	ip netns exec $NAME bash <<-EOF
+> >   		BASE_DIR=$BASE_DIR
+> >   		source $BASE_DIR/kselftest/runner.sh
+> >   		logfile=$logfile
+> > @@ -175,9 +180,9 @@ in_netns()
+> >   
+> >   run_in_netns()
+> >   {
+> > -	local tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
+> > -	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
+> > -	local rc
+> > +	local tmplog netns rc
+> > +	tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
+> > +	netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
+> >   
+> >   	ip netns add $netns
+> >   	if [ $? -ne 0 ]; then
+> > @@ -198,8 +203,10 @@ run_in_netns()
+> >   
+> >   run_many()
+> >   {
+> > +	local DIR TEST BASENAME_TEST
+> > +	local pids pid rc
+> > +
+> >   	DIR="${PWD#${BASE_DIR}/}"
+> > -	local rc
+> >   	pids=
+> >   
+> >   	for TEST in "$@"; do
+> > 
+> 
+> thanks,
+> -- Shuah
