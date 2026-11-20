@@ -1,60 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795157485;
-	b=y0M6JqSjH2ZSZkre2/aaAftHGkVwgGdN2HSJvLROCwEjzZAOciwexv9kDNd8SDaCkwLn
-	 SUHOkci+ve2W/wJwV+iQ3q6/bdWeVq//gZwDrsuhJUGYWb98xVyI9aDWjlNSdW7HKhErH
-	 4ghK4Ey1L0Y4JLEwqw02sEJ1D2e1ufhbG+J/meenEQe4qHRXrOHYHpa/f8TXZsBpDW1AE
-	 w1EEAhOaCb077So/36t+gckNso6Gl8eOfFTtmofdIIFrb3p1Q/6M9Q70kLoWl16lDiVl3
-	 RopmC8zD6rRkCHiDDhODxv94C6CAMt5w2ycmhlXlWQwUwSfSIPLSfVCmz7ymfvqV1qA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795157485;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=1g1qowK/Vhy/51ATJ4wve21dh0EgoCYYqHxYRokZ4Cs=;
-	b=GuBgUrY5u95keMtz6o9EDvLQGBUR42NgIIVvWnv8BSEZ5+w259fVsW6S8afM0cj0KKeW
-	 MVwpp3krF9pClXBD4YRvnqCv6q9NpGYdoTou3O7ugc5sU8PRPHheqLDnxhYJeWdffuifm
-	 BKSy7hyQ4cdEcFw7sp9nzWr++mU3ng2+A+/yP7lfJcOVypHSzMtrHSJvV6OoNTQImD++S
-	 dcfOlz8ZNe/set8iMg/UBPvUH2IzRTuA1+7UhswGCdbVrKnH4l8rmGsfiJdov27pCudS/
-	 FFH1iOHQIzssepbRvitvbIXsu1XTzg3J6n5mhCdVODVyOlJ50R2QER6PsFYuIgHuBRg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TyGyL+pv;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795157949;
+	b=00FgQ7hfEox5NSdnX3xIrVEY0OODMFNWypRfn1N1++HsHvs1nz4X5VdIA22UvxFuzCjQ
+	 T+iJvi8KEctnzZguHdqO7g2EpTbEThgCYcL+2tfHeSu8P2GLNCklUCAf8Zj5la6PVhhDF
+	 ShXTNQ0V6l0tyR9jyCqdLK4biDPjRxYYyWy2TtMP1bKOm3sdVH+jJakn741vSEvmUmHKy
+	 WreHIeCBxMC8QZKKzLUjTaMVO/dcjMDO162dXuAuoOF7fVvOPru4BLnazrnqmbB4Ad/Ah
+	 nh5GBaHLTscyYzXLcOblZrqmAT1zuZl5Qefknp3JXbAV3x1k+BXNh9jdNKhtAv1aqDQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795157949;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=PsTftBeYEFXfD9zeAqWuNXYkJ0bBYpNs1Jn91O8mPyk=;
+	b=LFfaRMQscjUE0glB0lbrMtKzYc4mJq70ZG6j/DfA6xAJkzJjkMFqddMIu4W3GeRgr+sQ
+	 cQdQ8Y8ZSyx2pML/cwWpzxKz6Gm2Quorl3IBhjKKZGivxp9NKso26kGt9JHbzb5qHfrbA
+	 Qmv9GDFQISqVRUoVZ9zXrH1H20yuP1uRg4mV2+ZBXtSa8prHHKWKqd27Y++PwaDfHe18M
+	 nLFii58TRASRx+cGSondcvX2OveI+r91mgbRlcnWdkqa1eY0wCNQTiFg6Z6BGCKkJIJV4
+	 SyQLYtArY8Q+71s6WQOnVGUbdknF5++I1+ssTv7DNwIkxUvEiaABLNIbgs1LlY52GOw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lCyew42g;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C36A606A33E;
-	Fri, 20 Nov 2026 06:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70619606A326;
+	Fri, 20 Nov 2026 06:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TyGyL+pv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F361F000C4;
-	Fri, 20 Nov 2026 06:51:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lCyew42g
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795157948;
+	b=vT2lxp5LBkET7JRoxREp0QtKM5PcBsUu13sKVElh7NBSkj/x57joI+fEKiOQLgDi+SA0
+	 JvcyqiO+WitfNlMDEpWDNc+oIxW3VzF6XJJseMpUliugryadPJixr+ElQGswq28pLMeB4
+	 ozJ6cyyidq7gw9LKLYTZCxVHPxAOSLtn3jB8XXNSQNt8glNBBfbt3mZRK18ysiwtBeAiK
+	 bv0b7D8CQP6A5grJnv23PaeryhPxil9R+5F1W0SHh7cZq2IuEgeNafWQ0EYcLIXd/YBHH
+	 AJOaTW1H9kLV1Ug8ITwOVpBSaVX+6XIZI/dIFbZ9h31aqEhd6gJsUmzNQfe3akuQ7Yw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795157948;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=PsTftBeYEFXfD9zeAqWuNXYkJ0bBYpNs1Jn91O8mPyk=;
+	b=LeXcqISEq3T7ip2g9u8n0NJrrxCyh14vSGvlNKqOWfvmp0IC+EnUgvK/fDGyTmNODPt0
+	 2EvXJXTN4ZLvujibTxkqROw0Frj5bDhSTtJ3p0myeO1JMCs8iz6NnKNmlTHC94qlKQ7MM
+	 D0NmNXUjoTiJjIqL40wcLjopX/r8tNqaooUA6c6shkao7SJIx6zChgLL6WhDf+jdvmahj
+	 ezYGKHRnitriix6O1BI5xBI6q4A8qQlOC2cFlzUDMSJGbfq90BV+dN4/QMXRp7zQtjoUO
+	 qLynDsIC8V0wtxarM4RaqUHbe+gUkPl7jyp1x+yyYQbqpttg695LVZ5lXLDCnhMs8og==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 77F2A1F000C4;
+	Fri, 20 Nov 2026 06:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795157484;
-	bh=1g1qowK/Vhy/51ATJ4wve21dh0EgoCYYqHxYRokZ4Cs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=TyGyL+pvUVyjqSzJMtV6EH6roUrKZbb9TejLfSQgNn6/Cg+1TDAJmvomZIhnT7+7E
-	 tUSgd3y/cyEkt263xOaPoa9E2ZNvcFsVI28ztYrjNHqxlrIr7HsTg8hgUQgTlrWknv
-	 F/O0aqOs1yTlQ/E+hUqX1LiRNxZNWTshEubFMqBXOZSssGfuNaJIPV6N07KuXAzlr0
-	 8vpGB1SKBdKwhokLEzPq1botFI2N4m9D05PWC+4smWR3/ympqz/kPcoyR/LOW/N6CR
-	 LEvfZR07SblM3XdBCzVjg6Kl+ueNDvtUdPPNPLVMZ5quM5slrC23usEsPVbJD9nWCn
-	 KlNYaaag13SYA==
-Subject: Re: [PATCH net-next v3 2/2] selftests: drv-net: run tls_hw_offload on
- netdevsim
-From: netdev-bot+sashiko@kernel.org
-To: jiayuan.chen@linux.dev
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- john.fastabend@gmail.com, sd@queasysnail.net, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Fri, 20 Nov 2026 06:51:23 +0000
-Message-ID: <179515748385.3136.10275675955381531740@kernel.org>
-In-Reply-To: <20261119064902.242502-3-jiayuan.chen@linux.dev>
-References: <20261119064902.242502-3-jiayuan.chen@linux.dev>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795157948;
+	bh=PsTftBeYEFXfD9zeAqWuNXYkJ0bBYpNs1Jn91O8mPyk=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=lCyew42gbvburfPID2Gmw+2swMZfRiqgc2H0IknU+oMblMaoV5lSiw+FGWbdg8tX5
+	 Wfpl7WglovqsLeNXtAeRq3mexaI89U9aVt9mPLsOf8MXYhFdb2aNBNhXVloaeQts1Y
+	 sTpcSHAfMvnqnbEn1JfE1lqEK0ZJyAB8UiIxCYC1hit47/CDLVTKzeE1QKRldwUi64
+	 osxknHtzMwL+or18O+iwy8K/3sTOc0T+eX2le8BOwh0YXZdGO0wT4ODdbyk+6/BMeR
+	 ruOwJFd40e8TFT8vHpq0wKMNiXlSvzxLaF2ci7hEvowgBCxSW4xaYF6pXQG/czAZ2w
+	 2EA/t9NYdZ3nQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 0B6C949716;
+	Fri, 20 Nov 2026 06:59:08 +0000 (UTC)
+From: Hang Zhengyang via B4 Relay <devnull+hang.zhengyang1010.gmail.com@kernel.org>
+Date: Fri, 20 Nov 2026 14:59:02 +0800
+Subject: [PATCH bpf-next] selftests/bpf: Fix
+ file_reader/on_open_non_sleepable_first on overlayfs
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,126 +83,102 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqDMBBG4avIrDuQpFaaXqV0Ec0fHZAokyIW8
+ e6GLr/FewcVqKDQqzlIsUmRJVfYW0PDFPIIllhNzrjOWmc4yQxWhAjlZYPO4ZcKm9b7Z4yhe/g
+ 71XZVJNn/3zf1a+KM/Uuf87wAwDh0gnEAAAA=
+X-Change-ID: 20261120-file-reader-overlayfs-04998dda6593
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Hang Zhengyang <hang.zhengyang1010@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795157947; l=2542;
+ i=hang.zhengyang1010@gmail.com; s=20261008; h=from:subject:message-id;
+ bh=Z42i5/leJVwaMNYSXOof1lDedpwAns1zY51D5qfLFZg=;
+ b=BVELy4sSCT416yAlXQDGZOkNtmJrAAIWI07LrHUOPdK4831RXbQ3f0/U5f91jZvgqGiuvGpmL
+ WwqN1+FqKaxBANdUCPWmvgNM9CLE67wy3NxSXRR6Y8yeTXZOETej6IR
+X-Developer-Key: i=hang.zhengyang1010@gmail.com; a=ed25519;
+ pk=5drRny3PqRPLhKVB0YIQXN5YyD8miKCpXWhnEPvafAI=
+X-Endpoint-Received: by B4 Relay for hang.zhengyang1010@gmail.com/20261008
+ with auth_id=1133
+X-Original-From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Reply-To: hang.zhengyang1010@gmail.com
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+on_open_non_sleepable_first fails every time when the test_progs binary
+is on overlayfs, as under /home and /tmp in a virtme-ng guest:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+  run_test:FAIL:err unexpected err: actual 4 != expected 0
 
-- [Medium] In read_nic_stats()
-  (tools/testing/selftests/drivers/net/hw/tls_hw_offload.py:128-131),…
-- [Low] Several comments still describe a real-hardware-only setup, but
-  after this patch the default run (no NETIF) uses a netdevsim pair that…
+bpf_task_work_schedule_signal() returns -EBUSY.  On overlayfs, the
+open() of /proc/self/exe calls security_file_open() twice: once for
+the overlay file, and once more for the backing file through
+ovl_open() -> backing_file_open() -> vfs_open().  The program runs
+twice in the same task, and the second call finds the work from the
+first one still pending, since it only runs on return to user space.
 
---
+Act only on the first call.  The other file_open programs in the file
+either don't schedule task work or don't check the result, so running
+twice doesn't affect them.
 
-selftests: drv-net: run tls_hw_offload on netdevsim
+Fixes: fc38f07781ca ("selftests/bpf: Test per-call site function specialization")
+Signed-off-by: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+---
+Tested in a virtme-ng guest on bpf-next (82cc2b4383e3): file_reader
+passes from overlayfs and from a tmpfs copy, and 20 times in a row
+from overlayfs; without the change the subtest fails from overlayfs
+and passes from tmpfs.
 
-This drops nsim_test=False from tls_hw_offload.py, so the test runs on the
-default netdevsim pair when NETIF is not set. It also makes
-read_nic_stats() skip the ethtool -S snapshot when a local netdevsim
-device was created by the environment.
+The patch, this text and the tests were written and run with Claude
+Code; I reproduced the issue and reviewed the change.
+---
+ tools/testing/selftests/bpf/progs/file_reader.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/tls_hw_offload.py b/tools/testing/selftests/drivers/net/hw/tls_hw_offload.py
-> index e720ce6547610..1197f17caa13c 100755
-> --- a/tools/testing/selftests/drivers/net/hw/tls_hw_offload.py
-> +++ b/tools/testing/selftests/drivers/net/hw/tls_hw_offload.py
-> @@ -125,6 +125,9 @@ def read_nic_stats(cfg):
->      # before/after-delta caveat as read_tls_stats(): these are device-wide,
->      # so concurrent kTLS traffic on this NIC would perturb the deltas.
->      stats = defaultdict(int)
-> +    # netdevsim has no ethtool -S, and the NIC counters below are optional
-> +    if cfg.get_local_nsim_dev():
-> +        return stats
->      output = cmd(f"ethtool -S {cfg.ifname}").stdout
+diff --git a/tools/testing/selftests/bpf/progs/file_reader.c b/tools/testing/selftests/bpf/progs/file_reader.c
+index 8b972fd26d73..1318b8e0845c 100644
+--- a/tools/testing/selftests/bpf/progs/file_reader.c
++++ b/tools/testing/selftests/bpf/progs/file_reader.c
+@@ -28,6 +28,7 @@ char tmp_buf[256000];
+ int pid = 0;
+ int err, run_success = 0;
+ __u64 beyond_eof_offset;
++bool done;
+ 
+ static int validate_file_read(struct file *file);
+ static int task_work_callback(struct bpf_map *map, void *key, void *value);
+@@ -101,8 +102,13 @@ int on_open_non_sleepable_first(void *c)
+ 	int key = 0;
+ 	int ret;
+ 
+-	if (bpf_get_current_pid_tgid() >> 32 != pid)
++	/*
++	 * On overlayfs, file_open runs again for the backing file, while the
++	 * work scheduled by the first call is still pending.
++	 */
++	if (bpf_get_current_pid_tgid() >> 32 != pid || done)
+ 		return 0;
++	done = true;
+ 
+ 	file = bpf_get_task_exe_file(task);
+ 	if (!file) {
 
-[Severity: Medium]
-Does this guard check the right thing? The comment is about the driver,
-but get_local_nsim_dev() only returns self._ns. That is set only by
-create_local() when NETIF is not in the environment:
+---
+base-commit: 82cc2b4383e3edfa1026c8612fb4e90a9329ba11
+change-id: 20261120-file-reader-overlayfs-04998dda6593
 
-tools/testing/selftests/drivers/net/lib/py/env.py:NetDrvEpEnv.__init__() {
-    ...
-        self._ns = None
-    ...
-        if "NETIF" in self.env:
-            if nsim_test is True:
-                raise KsftXfailEx("Test only works on netdevsim")
-            self._check_env()
-    ...
-}
-
-If NETIF names a netdevsim port, self._ns stays None. The test then falls
-through to cmd("ethtool -S ...") with the default fail=True. netdevsim
-has no get_sset_count, get_strings or get_ethtool_stats, so ethtool exits
-non-zero and cmd() raises CmdExitFailure. run_tls_test() does not catch
-it, so all 8 variants fail at the first snapshot. Any other TLS-offload
-netdev without ethtool stats would fail the same way.
-
-The test header already says these counters are optional:
-
-    # counters. Each counter is checked only when present.
-    ...
-    # Missing NIC crypto counters remain optional.
-
-The get_local_nsim_dev() docstring also discourages this kind of use:
-
-    Using this method is discouraged, as it makes tests nsim-specific.
-    Standard interfaces available on all HW should ideally be used.
-
-Would a driver-agnostic check be simpler? For example, run ethtool -S
-with fail=False and return the empty stats dict on a non-zero exit. That
-would cover the default nsim pair, NETIF=netdevsim and any stats-less
-driver, with about the same amount of code. The commit message mentions
-the NETIF case but doesn't say why the environment check was chosen
-over a capability check.
-
-[ ... ]
-
-> @@ -307,7 +310,7 @@ def test_tls_offload_record_type(cfg, record_type):
->  
->  def main() -> None:
->      """Set up the DUT/peer environment and run the offload test suites."""
-> -    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
-> +    with NetDrvEpEnv(__file__) as cfg:
-
-[Severity: Low]
-This isn't a bug, but with netdevsim now the default environment, a few
-comments still describe a real-hardware-only setup. Should they be
-updated?
-
-The comment in read_tls_stats() says:
-
-    # sock_net(sk)). The test runs on a real NIC in the host namespace, so
-
-The header of tls_hw_offload.c says:
-
-    * Tests kTLS hardware offload between two physical nodes using
-
-The run_tls_test() docstring says the remote:
-
-    source/sink and may run any kernel without HW offload. Both sides run
-
-On netdevsim this isn't true. drivers/net/netdevsim/tls.c says:
-
-    /* Emulated kTLS offload.  No crypto is performed: TX puts the record on the
-     * wire as plaintext, so the RX side has to be offloaded on netdevsim as
-     * well, otherwise the core runs the software AEAD over plaintext and fails
-     * the connection with -EBADMSG.
-
-So on the default nsim path, the peer has to receive with HW offload.
-If its RX offload were turned off, the test would fail, even though the
-docstring says that setup is allowed.
-
->          cfg.bin_local = cfg.test_dir / "tls_hw_offload"
->          cfg.bin_remote = None
->          cfg.tls_skip_reason = None
-
+Best regards,
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119064902.242502-1-jiayuan.chen%40linux.dev
+Hang Zhengyang <hang.zhengyang1010@gmail.com>
+
+
