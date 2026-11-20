@@ -1,74 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795185276;
-	b=T7LgX7F2gEYHDaXS9ShjLIs4OMK8erXFB3wECoZPVE4FZ0C4ZRLuNpeDgOwre9eqsSAe
-	 brkXST2thWEYiP3ewtRzX+uBLDZ7g9CyhT1KxXPfqaQozMQHA8iKGJ23btlxwBw4Rlmh7
-	 LkgehtkjuavFWf6nOJ6ADXJi6LMqcD22Ac5JMuYA86J8jP7WL+dlbgKVkXOi5YedoI332
-	 OAB1SHzivTnfzBhg+c7+K2TyAPwBVB2w+eLPbzg9/+a6dPhlW3/icS0Yfu5zz6mA/Yx7h
-	 mnG8dYoJLp84HjKTUaMRLIJ/gSIRFoPel9rHfJU9zNjtQyDHaqQc58eNZSaKDsG7sKA==
+	t=1795186249;
+	b=dnZXfv9bzdbNPHNwwrETqBF6+LTcLQgLdHichr32aJvtRomOx4IPD4BcSZHVElWpb2Ub
+	 IcDc/Orla3LyMV94ahHUvbrxrbrjnpBhw902jlqqOEpjc2D1Cn/7resM+Qn5TnJR+ixV6
+	 Fb8/9VPKLRzsI8uHH+foxcGproaW5kOr6m0bq2NiFj6Wx/8D3rafZdbzk+qw5T9cNSrE2
+	 6+l8f0ESCjtqtq7m2QTwMhLdDix8ZnO2D8pO8HnzjM46zya6vD+QfzW0UwATRuG/a56t5
+	 NHtNy9Glwx5zvCwOMH1Kr2o1pYD0//pE8cF6c03wsWSOAFfli8oQd/rXs4zg0AbVIWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795185276;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=TexTSYlANwi+Z3VNOr7rkhMmBTNnuXd95ijh1g8jBbs=;
-	b=nN0mRA74D55DDmz/KvHzx95oJFhC8hJS220/+X59AFtLQhG7xLEclCbwXnrblwYmn+Xo
-	 brDA62HOBbYj97+d/hh3+jqhq/4pXW83VJiHw4fxxGC3FB38mqI5YDI7GtkmdeHiNJ85M
-	 ACEsSblEO1cENU1+JWRMBIG1FiwGvnThTQ8YTaJznJRbuS+1yZpWwWMe3Ad/cerRyEaKI
-	 HWyIzI1tEM9JbUhC/3QgMH1fqWDezJSuwvz4VDPXJHzCbpoUbKUdjAngeXtAr/4Gy5BZ5
-	 Jgzgz+KVUJzZd9mbe+gHAm5Jswli7h1WrbGHNuVLWiF9Bif8vNpXSn2lZ2lawxpgl9Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795186249;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=/B7HjCT8zRaaT9iQcwZVpGkgJCmKDQJosUGMwRG1i8U=;
+	b=fVoVfgMkuAEciW1woDe09N87Wrc0QI63ClLGFp234yI3ZbmrQUSsaLGXuHdZHg/4Jg2B
+	 43JUHU5kYjtQcO/KRJbZOEnUdHg2P7MA1DJHngdFu/AiqKxx346qSauXtQUp2Ef0hFHTQ
+	 0sx0/8HueWrh1lL77Udke3JbmOYJyxZwcUNZFSyTzyjRb2m/QYQHSWtZT8x0Lmjby2br2
+	 ac2JeGa1wxJKHMufrxlPgzCI0Q+tghl012JtD9RnpkJ+Ch/p5RmT2AJItA/n+QPpMgAIe
+	 onhbXhok8roSeIvWehXNzC1+SDCBbigbWkg7vLlqtsRgOI6kx8vEubq6kbg+z2UmCYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="JtAsT/rK";
-	arc=none smtp.remote-ip=209.85.215.197
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="IcD4/b7o";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB2B606A326
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 14:34:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CB2B606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id E0DEF606A320;
+	Fri, 20 Nov 2026 14:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JtAsT/rK
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cd65070d3feso619627a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 06:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795185275; x=1795790075; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TexTSYlANwi+Z3VNOr7rkhMmBTNnuXd95ijh1g8jBbs=;
-        b=JtAsT/rK6zOSNMWwW1o5I7X/fLpjy3EbAQi2mnyA1YHYQk6tJOFzrZLhQi+hHjfZn1
-         b20jxPt+RyF5UmK6dTedjTBlkJewRCsInA55bXqsiqTCf0RmTATJfFNToN40ALRUD514
-         P642W8VAkF+PieTnXEQALcR85tLmzCckqWY3w6e1JKI1o7RAjCZcY5a3XRW+Z7dWZSDn
-         3zlxY9gr0PTrDRtWkyl7sXcnGW8v7BJmSlITWMDQJMmweY2xsWnqSulPyThL8hbkmX1V
-         f3tRAlEuubZkfXKEKm5w3llWAncPzVQ5RkWS7hYznLM+gIbGyoW0m3qvye/rAxPxP68Q
-         rC4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795185275; x=1795790075;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TexTSYlANwi+Z3VNOr7rkhMmBTNnuXd95ijh1g8jBbs=;
-        b=ojgJZQhFJbW6+jAHi5FErA9uyCUIS9LjMbjoEgMi9WM8+TeXRCs/f0nLubUQyUyWQy
-         W1QFmNsDhVJPEOqHeZAbCFaHHZW7EnvcVxSRKcmB9QazDTbNK9Pm+h1cl7ugA5MpsGfb
-         oiFqaEZ9IqfYF6/+yHvRV3sNypeePizrlMIzvAqpibcqesY7LugNgaJhY0f0fSyJ9v3t
-         DUXj9Rm9dQn0f3tJB9pDQSmkUO1T0/eG2Q/Rlk7aDOquI6jrwt5rkGYy4bisC+xAr9EU
-         6Se8kxMsBwZ5WV2grHT9hlvyMVvh/zxuTwxdZvKOjiF/Qkme7hx8VOKawhjN64gl8Ivj
-         5U0A==
-X-Forwarded-Encrypted: i=1; AL+hErHlQNwqC4MN5VpI1FA/9Lgrq7z9mYTXWwHkoYQIjTIcQ7hUk744qAJFgB3+WlmUG9Jbc8maeOlyCt5LaL11aHU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/btyiV4eBU09Mpias/uW7MxD4tKkZBfrnH0hsYD4A2t49l8Hbk
-	8tzvuHoa/VBz34KtshQP3GEvu/ENAYKQ1J74w5kZI13krVEXuwxYogqBOtpWxJOtXK9Cw482j2e
-	pCvfhfQ==
-X-Received: from pgjk27-n2.prod.google.com ([2002:a05:6a02:81db:20b0:cdd:b3ae:c565])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4d87:b0:3b4:68e:1b77
- with SMTP id 98e67ed59e1d1-3b40a5dda03mr3693597a91.20.1795185275224; Fri, 20
- Nov 2026 06:34:35 -0800 (PST)
-Date: Fri, 20 Nov 2026 06:34:34 -0800
-In-Reply-To: <20261120-provokant-zyklisch-schutt-55d8eddf2ce4@brauner>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcD4/b7o
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 2319C1F000C4;
+	Fri, 20 Nov 2026 14:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795186248;
+	bh=/B7HjCT8zRaaT9iQcwZVpGkgJCmKDQJosUGMwRG1i8U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IcD4/b7oZF2HqxggFNCmSMtsACUSK+J9mUi8D99Ls+ZGB51fN2s2nIiC4nHKbmVDb
+	 kHJEoiyWqLDitvdJse/hIXLaz3a3WGYuWJZ78MOBAuctHZm4slEzWI/sJw7smWqO3V
+	 vAS5A60tHujvSs3xv4Q2B9yMxxAviRaFW9Dje/2iGYykt/4vjFMoo5fimDxik5eJxv
+	 +APYb40W9VpbkJY+AgopSzNNxEpaKkx/pljj8lY2oH1034FOjK/QWJsrJfXiSAYPzj
+	 Ak1FuUznKyt4EIdUsBHt0jM2mytGAvY89ktbkCPfklWoOnGk45JBjsRU1arLdxf/Yl
+	 UUQyTOiozfaeQ==
+Date: Fri, 20 Nov 2026 16:50:44 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Rustam Mustafin <rmustafin@cloudlinux.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>, Jaewon Yang <yong010301@gmail.com>,
+	linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] tpm: Track the response read position internally
+Message-ID: <awBeRE2c7UQH8SfV@kernel.org>
+References: <20261120121614.978396-1-rmustafin@cloudlinux.com>
+ <20261120121614.978396-2-rmustafin@cloudlinux.com>
+ <awA8o4oIq81a7J1z@kernel.org>
+ <CAG6=z5tzc8DG-7gU03mKs1JxqEzUULwBinfHKtYWyPycKkG6mA@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,68 +60,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
- <20261106-gmem-alternative-providers-v3-3-8484dde66a7e@google.com> <20261120-provokant-zyklisch-schutt-55d8eddf2ce4@brauner>
-Message-ID: <awBaeiUw0i-uEQzM@seanjc-mac.roam.internal>
-Subject: Re: [PATCH RFC v3 03/88] mm: shmem: Implement guest_memfd provider
- operations for tmpfs
-From: Sean Christopherson <seanjc@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: ackerleytng@google.com, Alexey Kardashevskiy <aik@amd.com>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	David Woodhouse <dwmw2@infradead.org>, Fred Griffoul <fgriffo@amazon.co.uk>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jianxiong Gao <jxgao@google.com>, 
-	John Starks <John.Starks@microsoft.com>, Michael Roth <michael.roth@amd.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Samiullah Khawaja <skhawaja@google.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Tarun Sahu <tarunsahu@google.com>, 
-	Vishal Annapurve <vannapurve@google.com>, Xu Yilun <yilun.xu@linux.intel.com>, 
-	Fuad Tabba <fuad.tabba@linux.dev>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG6=z5tzc8DG-7gU03mKs1JxqEzUULwBinfHKtYWyPycKkG6mA@mail.gmail.com>
 
-On Fri, Nov 20, 2026, Christian Brauner wrote:
-> On Fri, Nov 06, 2026 at 04:36:37PM -0800, Ackerley Tng via B4 Relay wrote:
-> > I put guest_memfd_provider_operations as a pointer in struct
-> > file_operations. Being in file_operations generalizes well to other kinds
-> > of providers, like devices, which don't have their own super_operations.
+On Fri, Nov 20, 2026 at 09:28:53PM +0700, Rustam Mustafin wrote:
+> On Fri, Nov 20, 2026 at 7:27 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > On Fri, Nov 20, 2026 at 07:16:13PM +0700, Rustam Mustafin wrote:
+> [...]
+> > So... why does not this block uring? You are implementing a feature
+> > as a bug fix, or so that it appears.
 > 
-> > @@ -1960,6 +1961,9 @@ struct file_operations {
-> >  	int (*uring_cmd_iopoll)(struct io_uring_cmd *, struct io_comp_batch *,
-> >  				unsigned int poll_flags);
-> >  	int (*mmap_prepare)(struct vm_area_desc *);
-> > +#ifdef CONFIG_KVM_GUEST_MEMFD
-> > +	const struct guest_memfd_provider_operations *gmem_provider_ops;
-> > +#endif
-> >  } __randomize_layout;
+> Patch 1 also fixes a plain read() racing a write() (the second trace),
+> which does not involve io_uring, so blocking io_uring alone would not
+> cover it. Patch 1 is small, so it might be easier to backport.
 > 
-> Sorry, no! struct file_operations is not the place to hang KVM specific
-> callbacks off of. We didn't let KHO/LUO hang an ops table off of struct
-> file either and nobody else is getting one in file_operations.
+> The io_uring block is posted on top of this series:
+> https://lore.kernel.org/all/20261120142116.1630010-1-rmustafin@cloudlinux.com/
 > 
-> LUO registers handlers that recognize their files by f_op instead,
-> memfd_luo just uses shmem_file(). And KVM already does the same for
-> VFIO: kvm_vfio_file_is_valid() -> vfio_file_is_valid(). Do the same for
-> providers and leave struct file_operations alone.
+> It depends on this series, because the new ->read_iter() would let
+> vfs_iter_read() callers such as Coda reach tpm_common_read() with
+> their own offset.
 
-Eww.  I really, really want to avoid having to update KVM just to recognize a
-new provider, and I shudder to think of the potential module dependency hell we
-could end up in.
+My mishap.
 
-That said, I 100% agree that having something explicitly KVM specific in
-file_operations is a non-starter.  Would you be open to a more generic interface
-for connecting providers and consumers, e.g. something like this?
+Sorry. I'll look into this soon.
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 99caef43ff3c..96e4c2547d5e 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -1934,6 +1934,7 @@ struct file_operations {
- 	long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
- 	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
- 	int (*mmap) (struct file *, struct vm_area_struct *);
-+	int (*connect) (struct file *, struct memory_consumer *);
- 	int (*open) (struct inode *, struct file *);
- 	int (*flush) (struct file *, fl_owner_t id);
- 	int (*release) (struct inode *, struct file *);
+> 
+> Br,
+> Rustam
+
+Br, Jarkko
