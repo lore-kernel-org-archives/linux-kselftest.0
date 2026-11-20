@@ -1,100 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795194602;
-	b=OVm2sVIvNK3hLzHJIf98QWcNvH03rT7/juiL2dintLhQEr3FL6BvTHcvB1nI3qpzZolo
-	 vwxkDMMjKX387RtRc18Re1KeNazJbeOf5z0QLqNdeltY+BFKMqVoFFlqsym3/kdLbVI5e
-	 80VT5EU/WbJk5rbPHfD5sSwJVcxdadfPfswcy8DziJPiRqlP86sFqwqOiV0olEoAnFTwX
-	 iNCYO+8XUszABbV1tmkCYT+XgjNzXgbpulQWNr5c0kKbelXzUdVMdQ+N6/WJB7gD3lzCa
-	 O4zOfRw9W85g+4SCFs0tgEnFVgkeKsT5B/OPPxPbBzW5qUOSjcr2jVeY51uUweeOR1Q==
+	t=1795195081;
+	b=rAe8WHJzDkdTfVSqzhuaOFUaWYsBVIzeA0cps5DFLERu4fKP5uDVFFtm6LnmFanF0FsZ
+	 wrUrJnYPG3niDp7vqrfHzansnYUKP5NdS31u+exeHA61pB+JewtrgKDekAU2pZfXBYmY5
+	 olDvjnDhJRNmf4LcU/w/hz4ICjoICefxX/i3AHFTQLoA9wpB71Jb+rZtAG0Z9K7Z+S9BL
+	 zFZj84rMxPOoJNXCyi2FZMjltIEtKl8dQp10d335P9RjmAZPAAi1DDHGIkv2L7kEUh3lE
+	 Zm0s3AqkBCsRlcr+dWLQOzNHisieKezcA2YwSj05NIoKe5dBb3xJyN6K32kngFTL2Rg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795194602;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
-	b=OneFUEVbN8abD6/m01weQGVHnictoDT3UaEcSXTuCPtbSNBLfzOaBDH/nzYWj/rsNBGY
-	 p3Il6CMEdvlyjODw9WxAMAm4+8H8HG04k25S65umk8uPkIjyuU7/p5Wd4rvq1OqUr4ljZ
-	 LtqUEQOWnLbEgbWtSIJhNR0wZMOZ0tdOGX5xb4cFQSnZdedD9xXMlkYsbuftqGENMAoDW
-	 i4guehgYwFTGIbzGOEb4PdHbCLou2EK5pW5uMhKYtmOYepAuyMTxtYlJsuKnwMW/0l2Qk
-	 PqclWKFW9QVDTr71EmvVsBmeSlvQl2r7nxvf8xPChfai3HGY3Ab8xgsRNfjX0CIHsgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795195081;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version;
+	bh=wjfu+1o0XY41QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=;
+	b=1UHhVDnk7dx5hLqKJTvrywVASnvMMKduFfGyoJtqqk7ModrgzJnynEC5LGgDM1O14aab
+	 OyVSPp6quLOD55LwI/S+76d0/AqP/WyLQF7+bShBKPs9+AdZXgTyptPFohsGRu+dakLq7
+	 t2KI1eMl1lS17lzUS9tNnskdmCqgKrLkbWlz03sNu3pB4kRxFtBv2Y+BMxcd2FjtxESCY
+	 gf89lEehtpL85VHDD/vg83B2KMLrCZA46B78DJ1jA0gObyG+nAtnR1mMQx5hW+yxbDS9d
+	 UcPYqc0DRVg8DPo8e9X6MPaeNcUg0exPiBW7ftqmTdYZuf1hmmqvAK9QB2LKJ1gU7lw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amacapital.net;
-	spf=pass smtp.mailfrom=amacapital.net;
-	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KzuPKz9w;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=HvFsqWth;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2907F60A2633
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 17:10:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2907F60A2633
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A075C60A2609
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 17:18:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A075C60A2609
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KzuPKz9w
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5c17ef1e18cso714103e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:10:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795194599; cv=none;
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=HvFsqWth
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AKH3mmP2028073
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:17:59 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=wjfu+1o0XY4
+	1QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=; b=HvFsqWthOwr5IFXRc/Tsjs2JhU2
+	waqs9ZKQnjldht7nZxu9zYt3XhDvdDhpIYEfiGJJJrEARGhYqP4wrclpQ6/0EBg3
+	lRul39UgevRZgaQs0bGKuvsQi0xfHdWI42hfp2dMFO4+23ry2xekopDamDQ+QHRO
+	mXXtwTWmKRWeGnr/fcfD6YmZLWD9v7sb3z+OTz4taeyADWFoc5O08MrAVa+2lhfG
+	EBi8+Aae6qA7wuabHWw2J1neVqtl3Unw9VQ1tfsa9cHkvdngACKt/gZSf3Yp+tsQ
+	oC4H3peNvc4jyK4lcsQdMFqAsEQWukxa8zbJe+Y9Ra7kS18gy32bPs7JW4w==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j2t99r4bf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:17:59 -0800 (PST)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8b691cf0eeaso1493694b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:17:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795195079; cv=none;
         d=google.com; s=arc-20260327;
-        b=CCwWwampuSkW3juue8vri1MiV+4uK+ddIt8TMq8ww7IWPNFYoQb4RbbkYE5a0QMx+y
-         PApDf0dAe8gTbxllLAhwzTM18COuaZWL/w4GxcmB7wbPb0fyBNdgRAlyDHRJrZD88TEn
-         D/Hr0Aj7lHKHmh1467HDhTsRRSHoqbJCVvBr08h2z9zNA2WB11C2/5wucClkzPKXyzRs
-         mokQVlKQ4B8k8z1dl/OF2f/w64NtyJ5bUHJ1TPRxhvbcPzHxMUlTV3D/5+GpFRg5tnT0
-         +/h76C+mnhohzUFrYTgtAhkiAzHKcc5Tu0+THAsq6yK2EYlTJAoNDo/UkBcLdTfQpjoS
-         wmgg==
+        b=dSwfdY3gyoXXf1a4ARp9IczhuSaLBkGgWefkywjFFlrGYgvgaEYlrJsAQaEBgzQIZR
+         giUlGB2uUNH2+Qzgo6NgA9L6FvKPAMN5ePiK3BvkkGXxDf+mrmi25RhzC8EgC5hno8S4
+         24FQjyY+DOGc/PVwfzZtGJaFIxDhdIJ+kgxX9FRHDXxfGpJPMOkjrBBrGDYbbife6ZFJ
+         rrIGWtVJIYsdlrufYeVph9BjFxLLmi4tvqzueNRemIYzdCRZs+lu98gMDoOeRdjpdumf
+         6jp+RoRAfvaloromm1Uk/Q6Aj268AYSh3NSK5iS7e4VfbVsGyp9VkQsk6E68S1nLET74
+         7Nfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
-        fh=yg+lK4t/KvlIVt3iwMlBO3C1pepQrdU66oPvwsmW8c4=;
-        b=ZT67bBQUV2jgZEfKpDUge1cLYqPeBRPOEFmJP9Nt+nwlw0d0GfvrBjhIrAONNHUhzs
-         qviC6EMBmd8LmhB62UYCHJoodzfNVZDug6HJk55S27KJrEvBFDNSU/ZtWiJiDbYI6wpO
-         9K5d0iupMzTtevedABEgRZgPZxBU0OOoi0KFVOsG0rnQ078cXzXX9LOHu/lIK7KNxcJv
-         amG9NBTg379d7s8vQwLAWf6AFaA5c+kUo0Ne0ZbBKRAgGJsQAi+vmxYF3pjewL02MxzD
-         1WHrLgNVPqu+6oC36yyetYOA/3xF2UBo46neBEONDf5JsuglVOLx2S17GN/i+Xp9QR7q
-         BH9Q==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version;
+        bh=wjfu+1o0XY41QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=;
+        fh=OxPUrzDzzaRhVYm1WV3vg6fC46Ir/LzgD+q6+LSvhBU=;
+        b=YlT9KN1hBoKXsIi9XW+EIHEDA9WZ2IgX988lfx0PqpdA1nntQcX1dL8jYwa95W9yNy
+         L5BV0mjMncAQpbGo/ofS4lOrVYFOpQEcxoE/ooubJBZe1PFsT/nT6ftMJH1OUsKHyqoR
+         QSAlgG3B5TbZ+AMBjvqQfbSXJAgvFCndgajw0jP4okGnYmDYL0gwd1S5fR7PF5qwVoFI
+         pO01q/dKQM9GnNHnG7aBjDk2QWDriZaQ27O6QY2nosd0I8U/FhP1vU6Glp4/x9h3T5Nb
+         lprTbPDPiST1FlUvb9iWtIkWhnkLKNg82dos5tFx8GhYdbQ5UwLbEKX320A0lOfn5GIq
+         Vi0w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1795194599; x=1795799399; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
-        b=KzuPKz9wlUIhaJWdwueDeEluQfGhTtFH6fz8FAZF85dKlUnHi8FkaBQALudYSWmLoT
-         azKe3eFVYRDOFx+8IjhGNb9qwSrA+uMjFasO0Y78bF+3hajdbSeasLRKTqR9rrRw93Fs
-         mgsw5HsHH8a8RLldzj7UExTUzudAO7FPQcBGxVHr544OLOOoquGgLjJUclHerWxaJdLi
-         uxmk8NZd0Ky9WVaupdZUPVmFOhf9Zb4PrRXYdyH2vDYOnjm+WhZ7uYiyPgxh2C1qaltX
-         V7aCX88km55ADvHdXfnZgPboy0v8Geo0MFUxnSN4Wp1aITRMGG9KONQZYt3Rs95J370H
-         rqIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795194599; x=1795799399;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZjKXRhmMlyIf4k/Bgeh6+i9VHnnHMzl/5R3cKodeiFA=;
-        b=YbsWOUDZPkaFxdQHffwG3blUi1mJzD775auBZ+/dOHJbGalG6zutkzcXh0KfAz+W9d
-         0zOkOxjBUI0RF2aipfWEmVanWzI8Xw7nqc3hI5I/4tfQgFacWEN9oHdgL1nr5DNNdw4c
-         bhaVSY32GDAdxFr+oBybQC1ld0fy0FmRdGXhbEezcyCVrDjoHMjcgBYxSBN79CDfi+Eg
-         ev6AU25H7jZ27T3Yxjdvs7RXBVLuaVKXpMWwkeXcXtL8VXwMz98RT11Z/icgqD5WRe9w
-         XwavOnEAjxIzta5O1fVs+4n3Ay4nqDIff7b0aDlGNVWDvxj3NN5REhiNM/mbzBAihTI1
-         HidA==
-X-Forwarded-Encrypted: i=1; AL+hErGHoeUYUxFAVK10rwUuVhCqfel3qaoYUItRPfoYeSVPE0Bcb2joyrLE5v2sd/bDjLgJEHBw4bwj42yOi+Mdg74=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/b8WjmxyBfWTX4nPwvoY7QgJQqHXavQnDjvqDdWwiynfxDeJdK
-	4P3eEGKqICFHSHnHvRXDy5h9n/HpErT2fzvIvRp6oFFCr6s4UifGviCRce3d0cb7RhcDDxQwUII
-	7r7WDMAK8Rh1dhwECvRHHRmtavWszzW2XTKA211Jw
-X-Gm-Gg: AZFdTZf8ld2s5itRf3rFa5IzS6J/Zh7zub+xrTrZR0aKxuXiFq7HfOKeAZ8PsfBFuLP
-	b1XajMqs5bgmNnf1vI6FtZJpktmhrTN+oMzowQ1HiYIUOa8whaTcsALds5WaGO5QOtwaIGtRUja
-	TZg4u//FvcmTpXyBsT2EOoeW8jUfkmlnQNrFfVFCw+dSugxZ7AFjUswJsa/AXI4ETO6P++bEDB4
-	zQG0hTxDMQAMSNdicCpQnB2OYmPCpSeM/IcfjBr9b/AdosX9YDLCVFiZPWUD2a9i0P7rzMooOTC
-	BTYivouJ1ZUZEKTfCsTf4y8LvZWWoSr89jF1FGarbxCxKnRNxt7zugL5/m46JTZ2NiwkNfEeYuX
-	HimS+C5dZ0N7pnMGtnBAyIth94pwOTDoxkw==
-X-Received: by 2002:a05:6512:1042:b0:5c1:4c4a:f026 with SMTP id
- 2adb3069b0e04-5c1bc6f633dmr1312524e87.4.1795194599155; Fri, 20 Nov 2026
- 09:09:59 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795195079; x=1795799879;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=wjfu+1o0XY41QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=;
+        b=0n2LvKmQer+Ju/ThcL4tS58vhR0H8P1QuyU5CJ5ACJAPA/rCPJHHmJaNVBAiUe7C6E
+         irfJ20+dSxAH23mEefuGHwnaXXZH2zAZ0Yc0rKMepzz465Teg2AqwkZjTr3gNJxsj8mv
+         qhaCK4t+53R0jqqRz3a5+hZ1UpNs/h4yccm1Kl/Gb05+cV0HY36mLqyE1edL6r24Y2uk
+         jegJqcvpM9pwf+tsscPeGWZWqTpzayle6RmXOLDnAxQF2s6raNe5UQBHPkbqAwWnLx/F
+         cjs1+BxKLc6L8O4LC9fZnksKeCzGiC0vS26cFVV3POV9ki47U3K42L6tS0FWzmRA27Em
+         +OYw==
+X-Forwarded-Encrypted: i=1; AL+hErGOLV1zfAsQQw/Ix0FJ9nitBC3JpDQDEFEz2fEUFjEQVBRDnka0He9DRZs2g6R03wycJ9DCNIvQcYrb6VZmEIo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+bzCAh0T3kdM/2w3ey7lAPDDRdSTXQ318Ps0t550W9RnOXlgE0
+	0RFxpB+a2i7IW/NCPQl6Nuf8H26NtijHn2Nb5peak7SYpNf3sSvH/vsHSLxWJ+an3DMcWb8dJvM
+	g5sv2iWLgRwOaB+9pYUO/3STAAdusP3tl6cgBbE/jz7lSlDIo3kEUZJzD5THZTcOB0+W6yPcOUm
+	LxZXut/qKASiG81EzKSXlamgdFjQqXMGeKx6T4QM9Gsy4=
+X-Gm-Gg: AYBFou2exXV1Lhh9f0TPKpLH7xD++K3xbx9ArUFRUo4MbaulLd6wBW17oyjArRGnsmW
+	LYEJj6/Rlqdc9PVfjOWkTcbgueYE0nebyXlHQShML7hWRod4XI9E5rP/MCN/ssclIzhwssLSqWc
+	iYLAXV56bD30VujUXapMTpyEndsINk3u606ziuNQWxtiyUCAfJ9IxmCqxVzXmik4q4c0dEWkhdG
+	qJdBf28f3ikoPn544Pmpoxi8XIvWVCw
+X-Received: by 2002:a05:6a20:9f86:b0:3eb:39fd:bacc with SMTP id adf61e73a8af0-4014d360ed8mr3745390637.50.1795195078669;
+        Fri, 20 Nov 2026 09:17:58 -0800 (PST)
+X-Received: by 2002:a05:6a20:9f86:b0:3eb:39fd:bacc with SMTP id
+ adf61e73a8af0-4014d360ed8mr3745344637.50.1795195078192; Fri, 20 Nov 2026
+ 09:17:58 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,236 +111,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261119104208.782900-1-halg@google.com> <20261119104208.782900-2-halg@google.com>
- <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
-In-Reply-To: <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Fri, 20 Nov 2026 09:09:47 -0800
-X-Gm-Features: Aa3M54qqiWJmEKSjiAInchWSC43ADdXnD64UgkMS8cTjGJqVilvL89j5dcH7YsU
-Message-ID: <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for user namespaces
-To: Andy Lutomirski <luto@kernel.org>
-Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Serge Hallyn <sergeh@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Singh KP <kpsingh@kernel.org>, Casey Schaufler <casey@schaufler-ca.com>, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-api@vger.kernel.org, containers@lists.linux.dev, 
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261117203137.804424-1-toddfreed@meta.com> <20261117203137.804424-9-toddfreed@meta.com>
+ <906302b6-facd-43c4-872f-ae40bc59714a@nvidia.com>
+In-Reply-To: <906302b6-facd-43c4-872f-ae40bc59714a@nvidia.com>
+From: Todd Bert Freed <toddfreed@meta.com>
+Date: Fri, 20 Nov 2026 09:17:47 -0800
+X-Gm-Features: AclHuK-LgS6otYIsEJ3X0_WptWHRTeRKrRZOhEbdUdT3ro_BhN8Q7OlgsXmfnZs
+Message-ID: <CADh2yMzLDMEOupGJwS8=3JbN-g4LR3ZapyBNaJx3chNT4_6pDw@mail.gmail.com>
+Subject: Re: [PATCH net v6 8/8] net/mlx5e: psp: tso: replace only the length
+ in checksum seed
+To: Dragos Tatulea <dtatulea@nvidia.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Boris Pismenny <borisp@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>,
+        Daniel Zahka <daniel.zahka@gmail.com>,
+        David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Mark Bloch <mbloch@nvidia.com>, Paolo Abeni <pabeni@redhat.com>,
+        Raed Salem <raeds@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Sabrina Dubroca <sd@queasysnail.net>,
+        Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+        Wei Wang <weiwan@google.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=LvQHWXdc c=1 sm=1 tr=0 ts=6b0080c7 cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22
+ a=OFRVtpLxHUNKrmO6MooA:9 a=QEXdDO2ut3YA:10 a=QYH75iMubAgA:10
+ a=2VI0MkxyNR6bbpdq8BZq:22
+X-Proofpoint-ORIG-GUID: mK77y7takZUXR3RbcqdpgZm_fI5QzH1k
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIwMDA2NyBTYWx0ZWRfX4BAjgQ0JCUb1
+ Vsnvsc1MYw/LBTwvbjlCX2vNCfpUznK8huF7mkirsMX0xDG6/+E2WhCMnz4qhP4lKOo+WqNpMK/
+ UFBP0YR1Li+ia3HV2m+WP/3Vdpl1P7eb02/41tt0VYU/X6PoXUSKSkCRaqssh/kFFx3PicJ9W9P
+ I4g/F7MG+arGKIx4FNgi0C/1uOr1vR8njX130bwrnj16jhno7pKbr/fLqS8wZ5lGUFJ6w0IZ1V4
+ X8Fuox/Sv9oXpIO6kHJOa+EYFR1xyL859Gc2CihbFNJRmrJHRoIyz/2uQ4ejsLIbu5Tvnk42ai0
+ 5YNcnyecxn7gw5mkA/wBS20GjJDHgqA33C9Nrqfj40IorCHHi4HvHqMcK4RipCwHcg9gtdndug1
+ giLCQHFEsErRlgTY36O6/AXvOvZnNcBr0yE7qHFVzLW21sBlleHTWCSAOChUif/b9Pp78Htot0i
+ 49Hb/s496W6YHAHgwuQ==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIwMDA2NyBTYWx0ZWRfX0a0+xEF7Cjux
+ laQhuCTBllSulBtIPxWw43ch9rpzFQ63SoVlgJkPge22xC/zes9Q1UqKxCf4vkGv2oof8wM4RJp
+ Qv+j8CmY0KSYdYUdhzA0dcD+pQF17q8=
+X-Proofpoint-GUID: mK77y7takZUXR3RbcqdpgZm_fI5QzH1k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-20_05,2026-11-19_01,2025-10-01_01
 
-> On Nov 19, 2026, at 2:52=E2=80=AFPM, Andy Lutomirski <luto@kernel.org> wr=
-ote:
-> =EF=BB=BFOn Thu, Nov 19, 2026 at 2:43=E2=80=AFAM Hallgrimur H. Gunnarsson
-> <halg@google.com> wrote:
->>
->> When a process creates a new user namespace, it receives a full set of
->> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
->> in scope, several of these capabilities (such as CAP_NET_ADMIN and
->> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
->> containers never need. However, there is currently no configurable way
->> to withhold such capabilities from user namespaces while still granting
->> them to workloads that require them.
->
->
-> One thought (from the rootns thread): the other decent sized attack
-> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
-> bit.
->
-> A sort of horrible solution (but maybe not so awful) would be to
-> declare that the bits in cap_userns aren't actually capability bits,
-> and that you need the bit in cap_userns *and* the bit in cap_effective
-> to do sensitive things, and that mounting needs cap_userns to have
-> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
->
-> I want to sleep on this.  It might actually solve several problems,
-> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
-> or whatever.
+> > in these cases every segment of the tso packet to go out with a bad tcp
+> > checksum
+> What did you mean with "to go out" here? Goes out? Or is a verb missing?
 
-I slept on it. Here=E2=80=99s a counterproposal.  I=E2=80=99m not saying I =
-think this
-is better than this patch set, but I think it=E2=80=99s worth weighting the
-options.
+Sorry about that. Here is the updated phrasing.
 
-Define a whole new set of privilege bits.  As a
-poorly-painted-bikeshed option, I=E2=80=99ll call them eprivs (for exposure
-privileges - it=E2=80=99s a crappy name but at least it=E2=80=99s pronounce=
-able).
+    In these cases every segment of the TSO packet goes out with a bad TCP
+    checksum.
 
-An epriv is not permission to do something *to* an object; it=E2=80=99s
-permission to do something that exposes a meaningful attack surface
-within the kernel. So there=E2=80=99s no ns_has_epriv because there is no
-object.  These are kind of the opposite of object capabilities.
-Additionally, an epriv never grants the ability to do something that
-one couldn=E2=80=99t do in an epriv-less world.
+I'm not sure whether I should re-post if the only changes are grammar
+improvements in the commit message. But, if it does get reposted, that is
+how it will be worded.
 
-For now, all tasks have all eprivs, even not-yet-defined ones, unless
-user code or config explicitly changes this.  (Maybe some day secure
-boot might remove certain eprivs.)
-
-There should never be a check like ns_capable || has_epriv. It=E2=80=99s al=
-so
-&&, or perhaps caps are not checked at all.
-
-Example eprivs include:
-
-EPRIV_FSOPEN_VIRT: may fsconfig, fsopen, etc a virtual fs like fuse or
-tmpfs or overlayfs.
-
-EPRIV_CLONE_TREE: may clone a mount tree
-
-EPRIV_MOVE_MOUNT: may move mounts around (but only if you also have
-CAP_SYS_ADMIN on the correct namespace, of course)
-
-EPRIV_FIREWALL_TC: may configure any firewalling configuration or tc
-configuration (this includes iptables, nftables, and ebtables)
-
-EPRIV_NET_RAW: may use raw/packet sockets (like CAP_NET_RAW)
-
-EPRIV_TUNTAP: may create and attach to tun/tap interfaces
-
-EPRIV_IP_LOOPBACK: may set up IPv4 and IPv6 loopback using whatever
-new facility we add
-
-EPRIV_NETLINK: may use netlink at all
-
-EPRIV_NET_ADMIN: may use traditional CAP_NET_ADMIN abilities (all
-CAP_NET_ADMIN checks will also check EPRIV_NET_ADMIN)
-
-EPRIV_OPEN_FILE_HANDLE: May use open_by_handle_at, etc.
-
-EPRIV_UNSHARE_USERNS: may unshare userns
-
-EPRIV_UNSHARE_NONUSERNS: may unshare any other namespace
-
-EPRIV_MOUNT_CGROUPv1, EPRIV_MOUNT_CGROUPv2: may create a new mount of
-these subsystems
-
-EPRIV_PTRACE: there are lots of different variations that might make sense.
-
-EPRIV_MOUNT_PROC_PIDONLY: may mount proc-pidonly
-
-EPRIV_MOUNT_PROC_NOTPIDONLY: may mount proc not-pidonly
-
-EPRIV_MOUNT_SYSFS: may mount sysfs
-
-Example eprivs that are questionable:
-
-EPRIV_DMESG: the kernel log is a specific object, and I think it's
-better to control access using something kernel-log-specific.
-
-
-
-There is no operation that increases eprivs -- even without
-no_new_privs set, a task will never gain an epriv, nor will a child
-ever have an epriv that its creator did not have at the time the child
-was created.
-
-The evolution rules could be as simple as, on fork/clone, the child
-inheriting exactly the parent's eprivs.
-
-Or we could bind eprivs to a userns instead of a task, but that could
-be more limiting and awkward than we want.
-
-
-What do you all think?
-
-
-FWIW, I had an LLM make an inventory (surely not exhaustive) of
-recent-ish CVEs and how they relate to this list.  (The below is the
-only part of this email that is LLM-generated, although I added
-EPRIV_SYSFS because I didn't realize that nonroot userns could mount
-it until I asked an LLM, sigh.)  To me, the list and its breakdown
-suggests that there is quite a lot of room for meaningful attack
-surface reductions while still leaving large parts of userns
-available, and that my epriv proposal captures much of this but the
-cap_userns proposal may be too coarse-grained.
-
-(I also asked about eBPF, and my LLM came up with a lot of CVEs, but
-there's an existing BPF token mechanism and I therefore did not
-propose EPRIV_LOAD_EBPF.)
-
---- begin LLM output ---
-
-**EPRIV_FSOPEN_VIRT:** CVE-2022-0185*, CVE-2023-0386*, CVE-2023-2640*,
-CVE-2023-32629*, CVE-2025-38499*
-
-**EPRIV_CLONE_TREE:** CVE-2025-38499* (only if the check also covers
-the relevant internal mount-cloning path; explicit `open_tree()`
-restrictions alone are insufficient)
-
-**EPRIV_MOVE_MOUNT:** CVE-2025-37988
-
-**EPRIV_FIREWALL_TC:** CVE-2022-25636, CVE-2022-1015, CVE-2022-1016,
-CVE-2022-32250, CVE-2022-34918, CVE-2022-48911*, CVE-2022-2588,
-CVE-2023-32233, CVE-2023-35001, CVE-2023-4004, CVE-2023-4015,
-CVE-2023-4244, CVE-2023-5197, CVE-2023-6817, CVE-2023-3609,
-CVE-2023-4623, CVE-2023-4921, CVE-2024-1086, CVE-2024-0607,
-CVE-2024-27397, CVE-2024-26925, CVE-2025-38001, CVE-2026-23111
-
-**EPRIV_NET_RAW:** None identified.
-
-**EPRIV_TUNTAP:** None identified as requiring TUN/TAP. Some
-packet-triggered exploits may optionally use it, but that does not
-establish it as a necessary blocker.
-
-**EPRIV_IP_LOOPBACK:** None identified.
-
-**EPRIV_NETLINK:** Also those blocked by `EPRIV_FIREWALL_TC`, insofar
-as the documented attack paths use netlink. No additional CVEs
-identified.
-
-**EPRIV_NET_ADMIN:** Also those blocked by `EPRIV_FIREWALL_TC`,
-insofar as the vulnerable operations require `CAP_NET_ADMIN`. No
-additional CVEs identified.
-
-**EPRIV_OPEN_FILE_HANDLE:** CVE-2025-38306*
-
-**EPRIV_UNSHARE_USERNS:** Also those blocked by `EPRIV_FSOPEN_VIRT`,
-`EPRIV_MOVE_MOUNT`, `EPRIV_FIREWALL_TC`, `EPRIV_OPEN_FILE_HANDLE`,
-`EPRIV_MOUNT_CGROUPv1`, and `EPRIV_MOUNT_SYSFS`, plus CVE-2025-38058*.
-More generally, blocks the documented unprivileged user-namespace
-setup for the entire inventory when no usable user namespace already
-exists.
-
-**EPRIV_UNSHARE_NONUSERNS:** Also the namespace-dependent attack paths
-blocked by `EPRIV_FIREWALL_TC`, `EPRIV_MOVE_MOUNT`,
-`EPRIV_MOUNT_CGROUPv1`, `EPRIV_MOUNT_SYSFS`, and many of those blocked
-by `EPRIV_FSOPEN_VIRT`. Coverage depends on whether the necessary
-non-user namespaces already exist.
-
-**EPRIV_MOUNT_CGROUPv1:** CVE-2022-0492*
-
-**EPRIV_MOUNT_CGROUPv2:** None identified.
-
-**EPRIV_PTRACE:** None identified.
-
-**EPRIV_LOAD_EBPF:** None identified.
-
-**EPRIV_MOUNT_PROC_PIDONLY:** None identified.
-
-**EPRIV_MOUNT_PROC_NOTPIDONLY:** None identified.
-
-**EPRIV_MOUNT_SYSFS:** CVE-2025-22089*
-
-CVEs not cleanly blocked by an operation-specific bit
-Excluding the two EPRIV_UNSHARE_* gates:
-
-- CVE-2025-38058: No explicit unmount privilege. The vulnerable race
-involves umount(2) and path lookup.
-
-- CVE-2022-0492: The cgroup-v1 mount bit covers the documented
-new-mount attack path, but not necessarily configuration of
-release_agent on an existing writable hierarchy.
-
-- CVE-2025-38499: The correct gate depends on which filesystem-context
-or internal cloning operation reaches clone_private_mnt(). I would not
-count EPRIV_CLONE_TREE as a definitive blocker without checking the
-exact call paths.
+-Todd
