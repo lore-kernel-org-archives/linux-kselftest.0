@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207374;
-	b=FrqJMBpEUrjFyXDZXaLhdDOefKHG7Z9JquwQMCDJ1ZGcTK37R7hlBPv56DKJeGlz4ONW
-	 bNwPqXxFpx+wLWMIFEwmns4vG8/uko2fd7RmjSWpIPt5DC2nX2SLULyDpDl0QSV52Ftcv
-	 ElMqWR2E2i6rJlBJHbar65rUlsEL/QBhGeVNqTcszsqCOzO2ByHRgihOwwoEVdVimFbg2
-	 EbK6qAPvwwmQ/e8pn5k7dMiCieMmgbKU4x5Nqq05YbUhlACWGyNjoiwAJbRAubh8TU4wW
-	 pK0/qQUmWOcnCAYF45kqzXGLe4l/iLzN+D+elq2AN2NphWWlXkvXEHxs+0mcSzIPBgA==
+	t=1795207375;
+	b=4E8Pdnm9HSlv+7MgEtA7sPyMYX5UrhM3hxVC8wkUV5rvLh4xRxbAh37Y0Feojk1s4vas
+	 epnjXIh0uTgqN+s80btyktQdssJcn5f9xaaZAoa8rmTLAyGLeD4Z6qIv+Y8awzvMlAMhq
+	 hYDB7Lu9iEiKa1alvVDK3Vhr+D7plGgI5s19CyzWKvs+HfXkvNhEZXeu6hloNXEjz0bbH
+	 wX//zNRpiawo0DOtSGG6I3+xtwKnegvc6u4N/FNJPHhGrf1Ig7efz1S7Nz7uWrMsZr10z
+	 fnDV/4yVpa5rW8BmM9ZJgA3EWVH6XFDGpb3WbCqRODyXHqDoICftEuARako0Dlc+jZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207374;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207375;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=FJLs18P6JsGLJljJPAjRQFmr2b6hZS/3Fer+1PAbLOg=;
-	b=UQXL49N+lJq/YqxZ6U16jseyznDOr8GSVcDVkLBftakQb2t7tN48VrWBWwyTcTUN6QdA
-	 U47nViCZ1gcBwu4v0RrdxEPReebFcvg9BuYvA03U9oG5vMZt7D0PTC5B4Ofk87Bfax0AG
-	 SEyJah7OEOmcX+b9QlzSctaHgT7uZE0PfIWHqXYc/Eb2s0p6HgqDtf9DSobivyDzOyhD6
-	 nTeOD/S8vdIGHHOC5J3YvsauouSrgP14YlNfQY+VklmMaqjPSvfTIq+n5YC7HNRbSvlbD
-	 FbhspXHII5a7j+K5JC1An78RdKvpJ+2Xl3r627VUslen/RavEbIrWuZY3ClFgvkHK3w==
+	bh=+ZZKfPEetf6nDFJZbzURdNyw6vHKdqUkUtaOssOLQH4=;
+	b=rnXhsEGz8Tu5/aksWhtZASut62z+9f16zzGKW4dsrJW6SRGfm+RxEBMuVl5MsdGtCSyd
+	 oIsDMPYuD2hButKzANSkhQqhdgGbUqylsff9z8ZYWmMhInRsRrNK8yE3jLGuDWdbPEt7P
+	 6BCLMv+lesKSIc6J0fIOMYrd9BJdcfDUK0seZLIzX1se/3TWSRcsShGobG1bYfNmrdzCm
+	 iYheBHvvE2LwW+vbkYL/shAoRFg4Sl39zGa5KTjFHxXpWysF7y2oJmjp7r0fLppP75oy/
+	 OglB7LbtJ1m6AZYCy1uvjI/25n2hqSk1pURD9xsaFJNRKrdCKYZ8Y9l0/NxPduHvU4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b="GTov/zpg";
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=mAKmizLN;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F9F606A6D9;
-	Fri, 20 Nov 2026 20:42:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95F9F606A6D9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32119606B725;
+	Fri, 20 Nov 2026 20:42:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32119606B725
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=GTov/zpg
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=mAKmizLN
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1795207354;
-	bh=FJLs18P6JsGLJljJPAjRQFmr2b6hZS/3Fer+1PAbLOg=;
+	s=smtpout1; t=1795207361;
+	bh=+ZZKfPEetf6nDFJZbzURdNyw6vHKdqUkUtaOssOLQH4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GTov/zpgKg0UCI6KCHAyPsdsXVMJzZck0D7IyDq1xSkBrMcxTejkUsBhT22QfmnB7
-	 nYOpFgakpOoTGA63sDLHapMBVcoLnnGGN0maPrQDWgl9S6Zme8iem4M2ieQj8i+Ier
-	 o+RFzcynrrSok7I44WLq6nQxlpn9ALSrlDFBIASsEWCP226qvRgouc10JASZ88Er1w
-	 kj6U/VCwwd/f5+W2lW2Y37TlYrHLcr7boJsNF61kymyy1MCLZXNrCjSdiURrT37YIg
-	 QFt1AVB3n9yxiB1N/89YW2TUu4unnTk6YuPk/WN5zgVZVZ9kVdQEeJLV25bFuAd1kJ
-	 hdq1Im1LYHGOw==
+	b=mAKmizLN2F1SgiGTo7AiKIuSUlWWMJq2F6E3+r/KPIpk9ONZQZha4/PEQmmCJPhqD
+	 Cqb5z+rOL+5lfXzMaHOA7ipaGxGtxFm0mUdz4+FgAhaDeNa3F9DY0Nane3FOUYrRhi
+	 D65qZFCVG7tqDk3JUeVeOb7Uvzbv8aUTxFj68kJOmbigRN2jLc4cumTUiw+smXM+tU
+	 SeQTTPI60I4rDY1lLw/3N3pAp6kzCNOvjmRnCGWyQkZimtmCVAqtOJxiFT/W2QQt7i
+	 8hPcNafXVXDL+6gEJyug4w/LlfxNUZELj650yh6rN+HT9DwOkKx/BwhhIU4Ijaj2Zs
+	 /6c4M+XdpVOpQ==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jWS2L3P5BzVCm;
-	Fri, 20 Nov 2026 15:42:34 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jWS2T1fTYzSlT;
+	Fri, 20 Nov 2026 15:42:41 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -78,11 +78,10 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-kernel@vger.kernel.org,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH v10 14/40] sched/deadline: Move a task's bandwidth to the root domain it runs in
-Date: Fri, 20 Nov 2026 15:41:51 -0500
-Message-Id: <10a5bb12ba9147784cb141be56b897702cbbe489.1795207232.git.mathieu.desnoyers@efficios.com>
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH v10 40/40] selftests/sched: Share the helpers of the deadline tests
+Date: Fri, 20 Nov 2026 15:42:17 -0500
+Message-Id: <62c694b97d7fdffabae640eb6dee797eceb3701c.1795207233.git.mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <cover.1795207232.git.mathieu.desnoyers@efficios.com>
 References: <cover.1795207232.git.mathieu.desnoyers@efficios.com>
@@ -97,405 +96,442 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a CPU goes offline, select_fallback_rq() picks a new CPU for a
-deadline task asleep on it. balance_push() moves a queued task the same
-way. The new CPU can be in another root domain. With isolcpus="domain",
-the isolated CPUs are in the default root domain. A cpuset that is not
-a partition can hold CPUs of both root domains.
+deadline_bw_test, deadline_rebuild_test and deadline_switch_test each
+have a copy of the same helpers. Move these to deadline_util.h:
+- now_ns(), thread_time_ns() and sleep_ns();
+- report();
+- read_file(), write_file() and enter().
 
-Commit 59d06cea1198 ("sched/deadline: Fix bandwidth accounting at all
-levels after offline migration") fixed this for a throttled task.
-dl_task_offline_migration() moves its bandwidth with it. A task that
-select_fallback_rq() places still moves no bandwidth. So it runs in a
-root domain that does not count its bandwidth, until the next rebuild.
-That root domain can admit deadline tasks beyond its capacity.
+The Makefile rebuilds the tests when the header changes. The helpers
+that differ from one test to the other stay in each test.
 
-Fix this in migrate_task_rq_dl(). The CPU recorded with the bandwidth
-gives the root domain that counts it. If the new CPU is in another root
-domain, move the bandwidth there. Record the new CPU. As
-dl_task_offline_migration() does, add the bandwidth even without room,
-since the task runs there. Add it also if a rebuild left the task out.
-Do not move it to a CPU that is not active. A migration-disabled task
-can wake up on a CPU that goes offline. That CPU is in the default root
-domain by then. The task leaves it before it runs anywhere else.
+The Sashiko AI review of this series asked for this. No case changes.
 
-Compare the root domains, not the CPU the task leaves. That CPU can
-still be in the mask when select_fallback_rq() picks a CPU of the other
-root domain. A task can also wake up on its CPU with no migration while
-another root domain counts its bandwidth. A cpuset move or a rebuild can
-move the bandwidth while the task sleeps. A change of the mask can then
-give that CPU back. So task_woken_dl() makes the same check.
-
-Both checks read the record without dl_departed_lock, so a move inside
-a root domain takes no lock. dl_task_move_bw() checks again under
-dl_departed_lock. Its caller holds the pi_lock or the rq lock of the
-task. Together, the two locks keep the record stable.
-
-Move no bandwidth while the sched domains are rebuilt. The CPUs then
-change root domains one by one. Two CPUs can be in different root
-domains only because one of them was attached to its new root domain
-first. dl_bw_rebuild_begin() opens this window in
-partition_sched_domains_locked(). dl_clear_root_domains() closes it.
-Then the walk of the task list counts each task. Until it reaches a
-task, no move of that task is made: the walk counts it where it is.
-Once the walk counted the task, its bandwidth moves again.
-
-These cases, added to deadline_bw_test later in this series, fail
-without this patch: - hotplug_fallback, hotplug_fallback_moved and
-hotplug_fallback_in_mask: a task woken on an isolated CPU stays counted
-in the housekeeping root domain. - no_admission_affinity_moves: without
-admission control, a task given an affinity of one isolated CPU stays
-counted in the housekeeping root domain.
-
-This follows the Sashiko AI reviews of this series.
-
-Fixes: 59d06cea1198 ("sched/deadline: Fix bandwidth accounting at all levels after offline migration")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: stable@vger.kernel.org
 ---
- include/linux/sched.h          |   6 +
- include/linux/sched/deadline.h |   1 +
- kernel/sched/deadline.c        | 207 ++++++++++++++++++++++++++++++---
- kernel/sched/topology.c        |   3 +
- 4 files changed, 200 insertions(+), 17 deletions(-)
+ .../testing/selftests/sched/deadline/Makefile |   3 +
+ .../sched/deadline/deadline_bw_test.c         |  86 +-------------
+ .../sched/deadline/deadline_rebuild_test.c    |  74 +-----------
+ .../sched/deadline/deadline_switch_test.c     |  36 +-----
+ .../selftests/sched/deadline/deadline_util.h  | 106 ++++++++++++++++++
+ 5 files changed, 115 insertions(+), 190 deletions(-)
+ create mode 100644 tools/testing/selftests/sched/deadline/deadline_util.h
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 8e7aa758d863..e934e2225986 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -753,6 +753,11 @@ struct sched_dl_entity {
- 	 * @dl_bw_gen is the value of dl_bw_gen when the bandwidth was last
- 	 * counted. If a rebuild dropped it since, there is nothing to remove.
- 	 *
-+	 * @dl_bw_skip_gen is the value of dl_bw_gen when the walk of the
-+	 * task list after a rebuild left the task out: no CPU of it was
-+	 * active. A move of the task then counts the bandwidth, even before
-+	 * the walk ends.
-+	 *
- 	 * @dl_bw_resv_cpu is a CPU of the root domain where a cpuset attach
- 	 * in progress reserved room for the bandwidth, or -1.
- 	 * cpuset_can_attach() sets it, and cpuset_attach() moves the
-@@ -761,6 +766,7 @@ struct sched_dl_entity {
- 	struct list_head		dl_departed_node;
- 	int				dl_bw_cpu;
- 	unsigned int			dl_bw_gen;
-+	unsigned int			dl_bw_skip_gen;
- 	int				dl_bw_resv_cpu;
+diff --git a/tools/testing/selftests/sched/deadline/Makefile b/tools/testing/selftests/sched/deadline/Makefile
+index 15f1e96a21e6..c7a665a02d6f 100644
+--- a/tools/testing/selftests/sched/deadline/Makefile
++++ b/tools/testing/selftests/sched/deadline/Makefile
+@@ -6,3 +6,6 @@ LDLIBS += -lpthread
+ TEST_GEN_PROGS := deadline_switch_test deadline_rebuild_test deadline_bw_test
  
- 	/*
-diff --git a/include/linux/sched/deadline.h b/include/linux/sched/deadline.h
-index cbb7cd71db58..bdabd54af729 100644
---- a/include/linux/sched/deadline.h
-+++ b/include/linux/sched/deadline.h
-@@ -33,6 +33,7 @@ struct root_domain;
- extern void dl_add_task_root_domain(struct task_struct *p);
- extern void dl_clear_root_domain(struct root_domain *rd);
- extern void dl_clear_root_domains(void);
-+extern void dl_bw_rebuild_begin(void);
- extern void dl_rebuild_rd_accounting(void);
- /*
-  * Keep a rebuild of the root domains' accounting and an admission of
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 1e7168241e9c..e3b0bb456500 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -268,6 +268,73 @@ static LIST_HEAD(dl_departed_list);
- static DEFINE_RAW_SPINLOCK(dl_departed_lock);
- static unsigned int dl_bw_gen;
+ include ../../lib.mk
++
++$(OUTPUT)/%: %.c deadline_util.h
++	$(CC) $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+diff --git a/tools/testing/selftests/sched/deadline/deadline_bw_test.c b/tools/testing/selftests/sched/deadline/deadline_bw_test.c
+index ba20f7036f6c..848ac5bafd7b 100644
+--- a/tools/testing/selftests/sched/deadline/deadline_bw_test.c
++++ b/tools/testing/selftests/sched/deadline/deadline_bw_test.c
+@@ -94,6 +94,8 @@
+ #define NSEC_PER_MSEC	1000000ULL
+ #define NSEC_PER_SEC	1000000000ULL
  
-+/*
-+ * Odd while the sched domains are rebuilt: from before the first CPU
-+ * leaves its root domain until dl_clear_root_domains(). Meanwhile the
-+ * CPUs change root domains one by one. Housekeeping CPUs pass through
-+ * def_root_domain, next to the CPUs that isolcpus="domain" isolates. So
-+ * the root domain of the CPU recorded with a task says nothing about
-+ * where its bandwidth is counted. The new root domains count no task
-+ * yet.
-+ *
-+ * Changed under dl_departed_lock. dl_task_bw_elsewhere() reads it
-+ * without the lock.
-+ */
-+static unsigned int dl_bw_rebuild_seq;
++#include "deadline_util.h"
 +
-+/*
-+ * True while dl_rebuild_rd_accounting() walks the task list: from
-+ * dl_clear_root_domains() until the walk ends. The root domains are final
-+ * by then. A task the walk has not reached yet has a dl_bw_gen that is
-+ * not current. Changed under dl_departed_lock. dl_task_bw_elsewhere()
-+ * reads it without the lock.
-+ */
-+static bool dl_bw_walking;
-+
-+/* Return true while the sched domains are rebuilt. */
-+static inline bool dl_bw_rebuilding(void)
-+{
-+	return READ_ONCE(dl_bw_rebuild_seq) & 1;
-+}
-+
-+/*
-+ * Return true if the bandwidth of @p must not move now. Either the sched
-+ * domains are rebuilt, or the walk of the task list that follows has not
-+ * reached @p yet. The walk then counts @p. A move must not count it
-+ * first. A task the walk left out, with no active CPU, can move: no one
-+ * else counts it.
-+ *
-+ * The answer is exact under dl_departed_lock. Without it, the answer is a
-+ * hint: dl_task_move_bw() tests again under the lock.
-+ */
-+static inline bool dl_bw_move_blocked(struct task_struct *p)
-+{
-+	if (dl_bw_rebuilding())
-+		return true;
-+	return READ_ONCE(dl_bw_walking) &&
-+	       READ_ONCE(p->dl.dl_bw_gen) != READ_ONCE(dl_bw_gen) &&
-+	       READ_ONCE(p->dl.dl_bw_skip_gen) != READ_ONCE(dl_bw_gen);
-+}
-+
-+/*
-+ * Start a rebuild of the sched domains. Call it before the first CPU
-+ * leaves its root domain. dl_clear_root_domains() ends the rebuild.
-+ */
-+void dl_bw_rebuild_begin(void)
-+{
-+	lockdep_assert_held(&sched_domains_mutex);
-+	guard(raw_spinlock_irqsave)(&dl_departed_lock);
-+	WRITE_ONCE(dl_bw_rebuild_seq, dl_bw_rebuild_seq + 1);
-+}
-+
-+/* End the walk of the task list that dl_clear_root_domains() started. */
-+static void dl_bw_walk_end(void)
-+{
-+	guard(raw_spinlock_irqsave)(&dl_departed_lock);
-+	WARN_ON_ONCE(!dl_bw_walking);
-+	WRITE_ONCE(dl_bw_walking, false);
-+}
-+
- /*
-  * The number of tasks with a bandwidth: those whose dl_bw is not 0. A
-  * special entity and a server are not counted. __setparam_dl() and
-@@ -2947,11 +3014,87 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
- 	return cpu;
+ /* The threads of probe() and hold() do nothing: a small stack will do. */
+ #define THREAD_STACK	(64 * 1024 > PTHREAD_STACK_MIN ? 64 * 1024 : PTHREAD_STACK_MIN)
+ 
+@@ -124,34 +126,6 @@ static int top_cpu(int n)
+ 	return online[ncpus - n];
  }
  
--static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused)
-+/*
-+ * Return true if the root domain of @cpu may not count the bandwidth of
-+ * @p. Either another root domain counts it, or a rebuild left @p out.
-+ * Test without dl_departed_lock, so that a move inside a root domain
-+ * takes no lock. dl_task_move_bw() tests again under it.
-+ *
-+ * Return false if @cpu is not active. A migration-disabled task can wake
-+ * up on a CPU that goes offline, after it joined the default root domain.
-+ * Keep the bandwidth where it is counted. balance_push() moves the task
-+ * off that CPU once it enables migration, or its next wakeup does once
-+ * the CPU is offline. That migration moves the bandwidth if needed.
-+ *
-+ * Return false also if @cpu is not in the mask of @p. A task that sleeps
-+ * in a migrate_disable() section wakes up on the CPU it slept on. A
-+ * cpuset attach can have moved its mask and its bandwidth elsewhere
-+ * meanwhile. migrate_enable() then takes the task to its new mask.
-+ *
-+ * Return false while the sched domains are rebuilt. The CPUs then move
-+ * to their new root domains one by one. That alone can make the two root
-+ * domains differ. The rebuild of the accounting that follows counts @p.
-+ * Return false also while that rebuild has not reached @p. Once it has
-+ * counted @p, the root domains are final, and a move is right again.
-+ */
-+static bool dl_task_bw_elsewhere(struct task_struct *p, int cpu)
-+{
-+	int bw_cpu = READ_ONCE(p->dl.dl_bw_cpu);
-+
-+	if (bw_cpu < 0 || !p->dl.dl_bw || !cpu_active(cpu) ||
-+	    !cpumask_test_cpu(cpu, &p->cpus_mask) || dl_bw_move_blocked(p))
-+		return false;
-+	return READ_ONCE(p->dl.dl_bw_gen) != READ_ONCE(dl_bw_gen) ||
-+	       cpu_rq(bw_cpu)->rd != cpu_rq(cpu)->rd;
-+}
-+
-+/*
-+ * Move the bandwidth of @p to the root domain of @new_cpu. Count it there
-+ * also if a rebuild left @p out. Add it even without room, since @p runs
-+ * there. The caller holds the rq lock of @p, or its pi_lock for a wakeup.
-+ */
-+static void dl_task_move_bw(struct task_struct *p, int new_cpu)
-+{
-+	struct dl_bw *dl_b;
-+	int cpu;
-+
-+	if (dl_entity_is_special(&p->dl) || !p->dl.dl_bw)
-+		return;
-+
-+	guard(raw_spinlock)(&dl_departed_lock);
-+	cpu = p->dl.dl_bw_cpu;
-+	if (cpu < 0 || dl_bw_move_blocked(p))
-+		return;
-+	if (p->dl.dl_bw_gen == dl_bw_gen) {
-+		if (cpu_rq(cpu)->rd == cpu_rq(new_cpu)->rd)
-+			return;
-+		dl_b = dl_bw_of(cpu);
-+		raw_spin_lock(&dl_b->lock);
-+		__dl_sub(dl_b, p->dl.dl_bw, dl_bw_cpus(cpu));
-+		raw_spin_unlock(&dl_b->lock);
-+	}
-+	dl_b = dl_bw_of(new_cpu);
-+	raw_spin_lock(&dl_b->lock);
-+	__dl_add(dl_b, p->dl.dl_bw, dl_bw_cpus(new_cpu));
-+	raw_spin_unlock(&dl_b->lock);
-+	p->dl.dl_bw_cpu = new_cpu;
-+	p->dl.dl_bw_gen = dl_bw_gen;
-+}
-+
-+static void migrate_task_rq_dl(struct task_struct *p, int new_cpu)
+-/*
+- * clock_gettime() cannot fail in now_ns() and thread_time_ns(). Both
+- * clocks are always supported, and the pointer is valid.
+- */
+-static uint64_t now_ns(void)
+-{
+-	struct timespec ts;
+-
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
+-	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
+-}
+-
+-static uint64_t thread_time_ns(void)
+-{
+-	struct timespec ts;
+-
+-	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
+-	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
+-}
+-
+-static void sleep_ns(uint64_t ns)
+-{
+-	struct timespec ts = { .tv_sec = ns / NSEC_PER_SEC, .tv_nsec = ns % NSEC_PER_SEC };
+-
+-	while (nanosleep(&ts, &ts) && errno == EINTR)
+-		;
+-}
+-
+ static void spin_ns(uint64_t ns)
  {
- 	struct rq_flags rf;
- 	struct rq *rq;
+ 	uint64_t end = thread_time_ns() + ns;
+@@ -305,52 +279,6 @@ static int set_other(pid_t tid)
+ 	return syscall(SYS_sched_setattr, tid, &attr, 0) ? -errno : 0;
+ }
  
-+	/*
-+	 * The new CPU can be in another root domain than the one that counts
-+	 * the bandwidth. A mask can hold CPUs of two root domains, and
-+	 * select_fallback_rq() can widen it. Move the bandwidth there, as
-+	 * dl_task_offline_migration() does for a throttled task.
-+	 */
-+	if (unlikely(dl_task_bw_elsewhere(p, new_cpu)))
-+		dl_task_move_bw(p, new_cpu);
+-static int write_file(const char *dir, const char *name, const char *val)
+-{
+-	char path[PATH_MAX];
+-	int fd, err = 0;
+-	ssize_t n;
+-
+-	if (snprintf(path, sizeof(path), "%s/%s", dir, name) >= (int)sizeof(path))
+-		return -ENAMETOOLONG;
+-	fd = open(path, O_WRONLY);
+-	if (fd < 0)
+-		return -errno;
+-	n = write(fd, val, strlen(val));
+-	if (n < 0)
+-		err = -errno;
+-	else if (n != (ssize_t)strlen(val))
+-		err = -EIO;
+-	if (close(fd) && !err)
+-		err = -errno;
+-	return err;
+-}
+-
+-static int read_file(const char *path, char *buf, size_t len)
+-{
+-	int fd = open(path, O_RDONLY);
+-	ssize_t n;
+-
+-	if (fd < 0)
+-		return -1;
+-	do {
+-		n = read(fd, buf, len - 1);
+-	} while (n < 0 && errno == EINTR);
+-	close(fd);
+-	if (n < 0)
+-		return -1;
+-	buf[n] = 0;
+-	return 0;
+-}
+-
+-static int enter(const char *cg, pid_t pid)
+-{
+-	char buf[16];
+-
+-	snprintf(buf, sizeof(buf), "%d", pid);
+-	return write_file(cg, "cgroup.procs", buf);
+-}
+-
+ /* Return whether @list, words separated by blanks, holds the word @w. */
+ static int has_word(const char *list, const char *w)
+ {
+@@ -12508,16 +12436,6 @@ static int find_cgroup2(void)
+ 	return found ? 0 : -1;
+ }
+ 
+-static void report(const char *name, int ret)
+-{
+-	if (ret == KSFT_PASS)
+-		ksft_test_result_pass("%s\n", name);
+-	else if (ret == KSFT_SKIP)
+-		ksft_test_result_skip("%s\n", name);
+-	else
+-		ksft_test_result_fail("%s\n", name);
+-}
+-
+ /* sched_setaffinity() against sched_setattr(), with no P */
+ 
+ /*
+diff --git a/tools/testing/selftests/sched/deadline/deadline_rebuild_test.c b/tools/testing/selftests/sched/deadline/deadline_rebuild_test.c
+index 85b24b868da7..7b0609e8e6ed 100644
+--- a/tools/testing/selftests/sched/deadline/deadline_rebuild_test.c
++++ b/tools/testing/selftests/sched/deadline/deadline_rebuild_test.c
+@@ -52,6 +52,8 @@
+ #define NSEC_PER_MSEC	1000000ULL
+ #define NSEC_PER_SEC	1000000000ULL
+ 
++#include "deadline_util.h"
 +
- 	if (READ_ONCE(p->__state) != TASK_WAKING)
- 		return;
- 
-@@ -3614,6 +3757,15 @@ static void pull_dl_task(struct rq *this_rq)
+ struct dl_attr {
+ 	uint32_t size;
+ 	uint32_t sched_policy;
+@@ -91,22 +93,6 @@ static int set_other(pid_t pid)
+  * Return the CLOCK_MONOTONIC time in ns. clock_gettime() cannot fail: the
+  * clock is always supported, and the pointer is valid.
   */
- static void task_woken_dl(struct rq *rq, struct task_struct *p)
+-static uint64_t now_ns(void)
+-{
+-	struct timespec ts;
+-
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
+-	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
+-}
+-
+-static void sleep_ns(uint64_t ns)
+-{
+-	struct timespec ts = { .tv_sec = ns / NSEC_PER_SEC, .tv_nsec = ns % NSEC_PER_SEC };
+-
+-	while (nanosleep(&ts, &ts) && errno == EINTR)
+-		;
+-}
+-
+ static void reap(pid_t pid)
  {
-+	/*
-+	 * A task can wake up on the CPU it slept on, with no migration,
-+	 * while another root domain counts its bandwidth. The bandwidth
-+	 * moved while the task slept out of its mask, and the mask then got
-+	 * that CPU back. Move the bandwidth to this root domain.
-+	 */
-+	if (unlikely(dl_task_bw_elsewhere(p, cpu_of(rq))))
-+		dl_task_move_bw(p, cpu_of(rq));
-+
- 	if (!task_on_cpu(rq, p) &&
- 	    !test_tsk_need_resched(rq->curr) &&
- 	    p->nr_cpus_allowed > 1 &&
-@@ -3675,9 +3827,10 @@ static void set_cpus_allowed_dl(struct task_struct *p,
- 	 * (different root_domains) entails a bandwidth update. Move the
- 	 * bandwidth only if the caller made room for it in the destination,
- 	 * as SCA_DL_BW_RESERVED says. Only cpuset_attach_task() sets it.
--	 * Otherwise, the bandwidth stays where it is counted, until the next
--	 * rebuild of the accounting. Moving it without room would leave no
--	 * root domain counting it.
-+	 * Otherwise, the bandwidth stays where it is counted, until the task
-+	 * runs in another root domain (migrate_task_rq_dl(), task_woken_dl()),
-+	 * or the next rebuild of the accounting. Freeing it here without room
-+	 * would leave no root domain counting it.
- 	 *
- 	 * cpuset_can_attach() made room for @p in the root domain of
- 	 * ctx->dl_bw_cpu, and recorded that CPU with @p. Move the bandwidth
-@@ -3880,10 +4033,11 @@ static void dl_get_task_effective_cpus(struct task_struct *p, struct cpumask *cp
-  * count the bandwidth of @p, or nr_cpu_ids if there is none.
-  *
-  * Prefer the CPU @p is on, if it is active and in the mask of @p. The
-- * task runs, or wakes up, in the root domain of that CPU. A mask can hold
-- * CPUs of two root domains: housekeeping CPUs and CPUs isolated by
-- * isolcpus="domain". When every CPU of a mask goes offline,
-- * select_fallback_rq() can widen it to both. It moves no bandwidth.
-+ * task runs, or most often wakes up, in the root domain of that CPU. A
-+ * mask can hold CPUs of two root domains: housekeeping CPUs and CPUs
-+ * isolated by isolcpus="domain". When every CPU of a mask goes offline,
-+ * select_fallback_rq() can widen it to both. A task that then runs in
-+ * the other root domain takes its bandwidth along.
-  * Prefer that CPU also if @p is queued there, out of its mask, and the
-  * CPU is the one recorded. Without admission control,
-  * dl_task_offline_migration() can put a throttled task and its bandwidth
-@@ -3957,9 +4111,13 @@ void dl_add_task_root_domain(struct task_struct *p)
- 		/*
- 		 * No active CPU can count the bandwidth of this task. Leave it
- 		 * out of this rebuild. dl_bw_gen then keeps its release from
--		 * removing anything. A later rebuild, or
--		 * dl_task_offline_migration(), counts it again.
-+		 * removing anything. A later rebuild counts it again. So does
-+		 * the move of the task to an active CPU. Mark the task, so
-+		 * that the move does not wait for the end of the walk.
- 		 */
-+		raw_spin_lock(&dl_departed_lock);
-+		WRITE_ONCE(p->dl.dl_bw_skip_gen, dl_bw_gen);
-+		raw_spin_unlock(&dl_departed_lock);
- 		raw_spin_unlock_irqrestore(&p->pi_lock, rf.flags);
- 		return;
+ 	int status;
+@@ -125,52 +111,6 @@ static void reap(pid_t pid)
  	}
-@@ -4119,8 +4277,10 @@ void dl_rebuild_rd_accounting(void)
- 	 * a resume run one for each CPU. A task gets a bandwidth under the
- 	 * locks this rebuild holds, so the count cannot leave 0 meanwhile.
- 	 */
--	if (!atomic_read(&dl_nr_bw_tasks))
-+	if (!atomic_read(&dl_nr_bw_tasks)) {
-+		dl_bw_walk_end();
- 		return;
-+	}
- 
- 	read_lock(&tasklist_lock);
- 	for_each_process_thread(g, p) {
-@@ -4134,6 +4294,7 @@ void dl_rebuild_rd_accounting(void)
- 			dl_add_task_root_domain(p);
- 	}
- 	read_unlock(&tasklist_lock);
-+	dl_bw_walk_end();
  }
  
- /*
-@@ -4152,7 +4313,17 @@ void dl_clear_root_domains(void)
- 	int cpu;
+-static int write_file(const char *dir, const char *name, const char *val)
+-{
+-	char path[PATH_MAX];
+-	int fd, err = 0;
+-	ssize_t n;
+-
+-	if (snprintf(path, sizeof(path), "%s/%s", dir, name) >= (int)sizeof(path))
+-		return -ENAMETOOLONG;
+-	fd = open(path, O_WRONLY);
+-	if (fd < 0)
+-		return -errno;
+-	n = write(fd, val, strlen(val));
+-	if (n < 0)
+-		err = -errno;
+-	else if (n != (ssize_t)strlen(val))
+-		err = -EIO;
+-	if (close(fd) && !err)
+-		err = -errno;
+-	return err;
+-}
+-
+-static int read_file(const char *path, char *buf, size_t len)
+-{
+-	int fd = open(path, O_RDONLY);
+-	ssize_t n;
+-
+-	if (fd < 0)
+-		return -1;
+-	do {
+-		n = read(fd, buf, len - 1);
+-	} while (n < 0 && errno == EINTR);
+-	close(fd);
+-	if (n < 0)
+-		return -1;
+-	buf[n] = 0;
+-	return 0;
+-}
+-
+-static int enter(const char *cg, pid_t pid)
+-{
+-	char buf[16];
+-
+-	snprintf(buf, sizeof(buf), "%d", pid);
+-	return write_file(cg, "cgroup.procs", buf);
+-}
+-
+ /* Make @cg a partition root of CPU @cpu alone. Return 0, or -1 on error. */
+ static int make_partition(const char *cg, int cpu)
+ {
+@@ -525,16 +465,6 @@ static int find_cgroup2(void)
+ 	return found ? 0 : -1;
+ }
  
- 	guard(raw_spinlock_irqsave)(&dl_departed_lock);
--	dl_bw_gen++;
-+	/* dl_task_bw_elsewhere() reads it without the lock. */
-+	WRITE_ONCE(dl_bw_gen, dl_bw_gen + 1);
-+	/*
-+	 * The root domains are final. End the rebuild of the sched domains,
-+	 * and start the walk of the task list. From now on, a task that the
-+	 * walk has counted moves its bandwidth again. A task that the walk
-+	 * has not reached still waits for it: see dl_bw_move_blocked().
-+	 */
-+	WARN_ON_ONCE(!(dl_bw_rebuild_seq & 1));
-+	WRITE_ONCE(dl_bw_rebuild_seq, dl_bw_rebuild_seq + 1);
-+	WRITE_ONCE(dl_bw_walking, true);
- 	for_each_possible_cpu(cpu) {
- 		if (!dl_bw_visited(cpu, cookie))
- 			dl_clear_root_domain(cpu_rq(cpu)->rd);
-@@ -4269,11 +4440,13 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
- 	 * boosts it back into the class before its 0-lag time. (A policy change
- 	 * took it off the list in sched_dl_overflow().) The inactive timer no
- 	 * longer removes its bandwidth: the task does when it leaves the class
--	 * again. So take it off the list. The task keeps the CPU recorded. It
--	 * takes the bandwidth from the root domain of that CPU, even if it
--	 * moved to another root domain meanwhile. A rebuild while it is
--	 * boosted counts it like any deadline task, and records the CPU it
--	 * picks.
-+	 * again. So take it off the list. The task keeps the CPU recorded.
-+	 * When it leaves the class, it takes the bandwidth from the root
-+	 * domain of that CPU. If the task moved to another root domain
-+	 * meanwhile, its next wakeup or migration there first moves the
-+	 * bandwidth and the record, as for any deadline task. A rebuild while
-+	 * it is boosted counts it like any deadline task, and records the CPU
-+	 * it picks.
- 	 */
- 	dl_task_undepart(p);
+-static void report(const char *name, int ret)
+-{
+-	if (ret == KSFT_PASS)
+-		ksft_test_result_pass("%s\n", name);
+-	else if (ret == KSFT_SKIP)
+-		ksft_test_result_skip("%s\n", name);
+-	else
+-		ksft_test_result_fail("%s\n", name);
+-}
+-
+ int main(void)
+ {
+ 	char buf[256], path[PATH_MAX + 32];
+diff --git a/tools/testing/selftests/sched/deadline/deadline_switch_test.c b/tools/testing/selftests/sched/deadline/deadline_switch_test.c
+index 40c7c6bafc2b..a544bee5af5a 100644
+--- a/tools/testing/selftests/sched/deadline/deadline_switch_test.c
++++ b/tools/testing/selftests/sched/deadline/deadline_switch_test.c
+@@ -51,6 +51,8 @@
+ #define NSEC_PER_MSEC	1000000ULL
+ #define NSEC_PER_SEC	1000000000ULL
  
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 35e56a45c238..754756d2db00 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -3430,6 +3430,9 @@ static void partition_sched_domains_locked(int ndoms_new, cpumask_var_t doms_new
- 		n = ndoms_new;
- 	}
- 
-+	/* dl_clear_root_domains() ends it, in dl_rebuild_rd_accounting(). */
-+	dl_bw_rebuild_begin();
++#include "deadline_util.h"
 +
- 	/* Destroy deleted domains: */
- 	for (i = 0; i < ndoms_cur; i++) {
- 		for (j = 0; j < n && !new_topology; j++) {
+ struct dl_attr {
+ 	uint32_t size;
+ 	uint32_t sched_policy;
+@@ -70,22 +72,6 @@ struct shared {
+ 	uint64_t sleeps;	/* sleeps begun */
+ };
+ 
+-static uint64_t now_ns(void)
+-{
+-	struct timespec ts;
+-
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
+-	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
+-}
+-
+-static void sleep_ns(uint64_t ns)
+-{
+-	struct timespec ts = { .tv_sec = ns / NSEC_PER_SEC, .tv_nsec = ns % NSEC_PER_SEC };
+-
+-	while (nanosleep(&ts, &ts) && errno == EINTR)
+-		;
+-}
+-
+ static void sleep_until(uint64_t t)
+ {
+ 	struct timespec ts = { .tv_sec = t / NSEC_PER_SEC, .tv_nsec = t % NSEC_PER_SEC };
+@@ -518,14 +504,6 @@ static sem_t owner_locked, owner_go;
+ static pid_t owner_tid;
+ static int owner_ms;		/* the owner's CPU time in its first period */
+ 
+-static uint64_t thread_time_ns(void)
+-{
+-	struct timespec ts;
+-
+-	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
+-	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
+-}
+-
+ /*
+  * Wait on @s for at most @ms, retrying on signals. Return 0, or -1 on a
+  * timeout or an error.
+@@ -1081,16 +1059,6 @@ static int test_sysrq_running_owner(int normalized)
+ 	return ret;
+ }
+ 
+-static void report(const char *name, int ret)
+-{
+-	if (ret == KSFT_PASS)
+-		ksft_test_result_pass("%s\n", name);
+-	else if (ret == KSFT_SKIP)
+-		ksft_test_result_skip("%s\n", name);
+-	else
+-		ksft_test_result_fail("%s\n", name);
+-}
+-
+ int main(void)
+ {
+ 	int ret;
+diff --git a/tools/testing/selftests/sched/deadline/deadline_util.h b/tools/testing/selftests/sched/deadline/deadline_util.h
+new file mode 100644
+index 000000000000..489233a32cbd
+--- /dev/null
++++ b/tools/testing/selftests/sched/deadline/deadline_util.h
+@@ -0,0 +1,106 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Helpers that the deadline selftests share. */
++#ifndef DEADLINE_UTIL_H
++#define DEADLINE_UTIL_H
++
++#include <errno.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/types.h>
++#include <time.h>
++#include <unistd.h>
++
++#include "../../kselftest.h"
++
++#ifndef NSEC_PER_SEC
++#define NSEC_PER_SEC	1000000000ULL
++#endif
++
++/*
++ * clock_gettime() cannot fail in now_ns() and thread_time_ns(). Both
++ * clocks are always supported, and the pointer is valid.
++ */
++static inline uint64_t now_ns(void)
++{
++	struct timespec ts;
++
++	clock_gettime(CLOCK_MONOTONIC, &ts);
++	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
++}
++
++static inline uint64_t thread_time_ns(void)
++{
++	struct timespec ts;
++
++	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
++	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
++}
++
++static inline void sleep_ns(uint64_t ns)
++{
++	struct timespec ts = { .tv_sec = ns / NSEC_PER_SEC, .tv_nsec = ns % NSEC_PER_SEC };
++
++	while (nanosleep(&ts, &ts) && errno == EINTR)
++		;
++}
++
++static inline void report(const char *name, int ret)
++{
++	if (ret == KSFT_PASS)
++		ksft_test_result_pass("%s\n", name);
++	else if (ret == KSFT_SKIP)
++		ksft_test_result_skip("%s\n", name);
++	else
++		ksft_test_result_fail("%s\n", name);
++}
++
++static inline int read_file(const char *path, char *buf, size_t len)
++{
++	int fd = open(path, O_RDONLY);
++	ssize_t n;
++
++	if (fd < 0)
++		return -1;
++	do {
++		n = read(fd, buf, len - 1);
++	} while (n < 0 && errno == EINTR);
++	close(fd);
++	if (n < 0)
++		return -1;
++	buf[n] = 0;
++	return 0;
++}
++
++static inline int write_file(const char *dir, const char *name, const char *val)
++{
++	char path[PATH_MAX];
++	int fd, err = 0;
++	ssize_t n;
++
++	if (snprintf(path, sizeof(path), "%s/%s", dir, name) >= (int)sizeof(path))
++		return -ENAMETOOLONG;
++	fd = open(path, O_WRONLY);
++	if (fd < 0)
++		return -errno;
++	n = write(fd, val, strlen(val));
++	if (n < 0)
++		err = -errno;
++	else if (n != (ssize_t)strlen(val))
++		err = -EIO;
++	if (close(fd) && !err)
++		err = -errno;
++	return err;
++}
++
++static inline int enter(const char *cg, pid_t pid)
++{
++	char buf[16];
++
++	snprintf(buf, sizeof(buf), "%d", pid);
++	return write_file(cg, "cgroup.procs", buf);
++}
++
++#endif /* DEADLINE_UTIL_H */
 -- 
 2.47.3
 
