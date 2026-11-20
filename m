@@ -1,64 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.63
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795164347;
-	b=gpaQvbmEF0NDalayjayDs5kkVe++LC09XG2B/AIN7dw/270e94AP4EgX5h0t34Mwq2Nq
-	 GKdjlZicnPqrUkAToOFuB28rVZcGDD2ckJ+InA+GUn2m7DSg++fvi61xznnAFEHOLOThM
-	 2fPbqourN29F1r+y+xYI43nRmuJlE5xqr2v4vjShJx9Sv+N3RZ81zSW36WV7pf88trKB6
-	 JMzmTBue3+aHJ07iH1ctHzC+5SYc14nbhZKyGAxk3MVjtrCu4URzWMeW+hChPNDMkHZ6o
-	 xbhWnAZWz4u89+E4+tY0l6zCVZj5mA0dARFZbZNM4q65D9mwGkaPl8ozeZ/s/OpHssQ==
+	t=1795164733;
+	b=SRsS1Z5mTsqzhaYnaeCAVfPE3U/4T1RaSFINsjIcZkew8+oaLqDUsdLC3ORNKgkNthie
+	 NCyCRMJduC9E6srk+xMm+hTLgB7RPdYato85Uy8l0LTV9S5dxBZ0df2e/kX8+GTudWpBx
+	 5Ijz9RwoeeD7i+6Yn0sh4OcSvkQ0kMD/StIfHGjJWOACHL39kYxwcCtFDHTWaTWdkyoPp
+	 5tNLHlnO5E1rNC6bOFRn41YtkY71AR0e+RIXylkedkdG4L6imP2eygsxmraPu/8xvOacC
+	 CLjiujfyqgi+M+FAB3naWGP+uYoDnLzqBNjddtPK4cN1fKiRjMgVFm9GEINid8iz2Bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795164347;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 DKIM-Signature;
-	bh=4VvTXkf2XeNKXdsZD2LZXbg3e98NlnzNngOW4jq286s=;
-	b=d1mc4U4nD8nofNfOMEZEOeIqPCe6qvQ33zAjgmJ2KppAGi86PEuOB3/0rOTps6P0535r
-	 sIOd+NC+zWTOS+yE4V00jpF9Dyff+EaGgxTE3gLqoPda55DM4FS97xadtNluCv3eMl8Zi
-	 QeRgREJ85zOWaqMF/EV2Bym/O3Lyeq6Ka6Xj0jmY2/NaRrsjntuMX0YfbEjT7hfQ9oE50
-	 Ud8BPOPSiUfEpDG8uvdEv1VBXramLOPwcCVUooK1BF1rQXiV3EJRSF2SzvVCe54qQ6kpo
-	 NGZZ70OLQw3mkv3rRj/NXASyhdJVzE0J4f5MurVUyG924l3tfbyW/b1s6sv8cPStDiw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795164733;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=A9BupMtjidZ6QpobbhfwIfHs0MvSJr7PSNCGLjThNjE=;
+	b=BIC064aoXAvX+c9OnH2Ab4i36MVTBuAIee92+XkOsO/U1beAD++zXYwoWcF0nVJ1cxMf
+	 xrsi+krkXYtmNd1jx62Gw6/PV0ZFFON4IheCf3PalJ03U/kt6XYTJ+9e0vDayFLuZ3r9N
+	 1drZVuyXTDq/W4rco2GXV1ajrIhdpX1KtV2GLCeTwbIXpmmOFX854jf5nJJ3wLvuayuyZ
+	 6mVwam72+m8NHGqLJQ2ExRYuDtpkB6VUpXgHd7RbVKH1nZpABjJgdvq8m69E50hC2yoTs
+	 nuXnTVvk/6tpS0e+LqQDbdLOfCwHqXuyjyp3UC3iVcpB+/DxJT/qZhnCJwNNLtR0AoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=fQoilb7g;
-	arc=none smtp.remote-ip=217.74.67.63
-Received: from smtpo63.interia.pl (smtpo63.interia.pl [217.74.67.63])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40109606A889
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 08:45:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40109606A889
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=fQoilb7g
-Received: from nr200 (unknown [80.68.231.31])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UI7RZ7UG;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Fri, 20 Nov 2026 09:45:32 +0100 (CET)
-Date: Fri, 20 Nov 2026 09:45:30 +0100
-From: Slawomir Stepien <sst@poczta.fm>
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-	kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-	sdf@fomichev.me, bpf@vger.kernel.org, netdev@vger.kernel.org,
-	maciej.fijalkowski@intel.com, tianyi@cloudflare.com,
-	tavip@google.com, toke@redhat.com, aleksander.lobakin@intel.com,
-	ilias.apalodimas@linaro.org, lorenzo@kernel.org,
-	magnus.karlsson@intel.com, ihor.solodrai@linux.dev,
-	edumazet@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch,
-	horms@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, memxor@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com,
-	stable@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
-Subject: Re: [PATCH v7 bpf 2/5] xdp: introduce xdp_convert_skb_to_buff()
-Message-ID: <awAIqhZWK9mr_zGQ@nr200>
-References: <20261119133032.2015656-3-sst@poczta.fm>
- <fd9b43958f6297b0031158bd33bdc6cc54f3c9338a4ee2e30bd6e50acf775a60@mail.kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1477E606A337;
+	Fri, 20 Nov 2026 08:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UI7RZ7UG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC441F000CA;
+	Fri, 20 Nov 2026 08:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795164732;
+	bh=A9BupMtjidZ6QpobbhfwIfHs0MvSJr7PSNCGLjThNjE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UI7RZ7UG4ulO+8lDySyolGDohe7qVwBRm7JU4jcE1PzwxsuPIW4enjpXJ9hsRxlwA
+	 GRfeYk3l8bnxjuvd8SRFpRzbhXWUeuu4O9DMa+/XYZxEMrPWt8vHZLCFJMRuXj71Av
+	 0DnRmE153jsvcLlDVr7/T9O3PK+k5DFgFchuwKhFw7RDyTmZBvCymZcSWx9hzZxpew
+	 dO/8tAnz/RUNZPCobsNfix4h9APM0Si1UkEBYDXvKJy+BOlncANRePBbTWC596NoYV
+	 tpFuegArNVwixEy/6ldDxBRwXWh8fJpOM0sUyZGI+uB97L5vP/WhjK2YYHWvdy1RXI
+	 /8BjfbVmtIAQQ==
+Date: Fri, 20 Nov 2026 09:52:04 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: ackerleytng@google.com, Alexey Kardashevskiy <aik@amd.com>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	David Woodhouse <dwmw2@infradead.org>, Fred Griffoul <fgriffo@amazon.co.uk>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jianxiong Gao <jxgao@google.com>, 
+	John Starks <John.Starks@microsoft.com>, Michael Roth <michael.roth@amd.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Tarun Sahu <tarunsahu@google.com>, Vishal Annapurve <vannapurve@google.com>, 
+	Xu Yilun <yilun.xu@linux.intel.com>, Fuad Tabba <fuad.tabba@linux.dev>
+Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org
+Subject: Re: [PATCH RFC v3 03/88] mm: shmem: Implement guest_memfd provider
+ operations for tmpfs
+Message-ID: <20261120-provokant-zyklisch-schutt-55d8eddf2ce4@brauner>
+References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
+ <20261106-gmem-alternative-providers-v3-3-8484dde66a7e@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,92 +67,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fd9b43958f6297b0031158bd33bdc6cc54f3c9338a4ee2e30bd6e50acf775a60@mail.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795164338; bh=4VvTXkf2XeNKXdsZD2LZXbg3e98NlnzNngOW4jq286s=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	b=fQoilb7gmRMICLN2PuWLFBxuoSMwSe5N4k9EAQlWPldihRIwsNcQmoxP0X1vhfTIn
-	 FIKDCYZ6ti+5eTcSwllxXR31/grHKfZbMpYNtapDT6XvwV0e7xlV+PqdFsBOf+wKYs
-	 vUPRcJlB0/ewTFUnup6IpFXNEYCA7nXXdV+9/HRQ=
+In-Reply-To: <20261106-gmem-alternative-providers-v3-3-8484dde66a7e@google.com>
 
-On lis 19, 2026 14:11, bot+bpf-ci@kernel.org wrote:
-> > xdp: introduce xdp_convert_skb_to_buff()
-> 
-> TL;DR:
-> - Commit message calls the bug a page leak; it may be a use-after-free of
->   page_pool pages
-> - Stable Cc 6.4.x predates the Fixes: tag (v6.9)
-> - kdoc may overstate mem type usage (nit)
-> 
-> > Then when bpf_xdp_adjust_tail() calls
-> > __xdp_return(), it acts incorrectly due to mem type not being set to
-> > MEM_TYPE_PAGE_POOL and causes a page leak.
-> 
-> Is "causes a page leak" the full impact?
-> 
-> The mechanism is bpf_xdp_adjust_tail() -> bpf_xdp_frags_shrink_tail() ->
-> bpf_xdp_shrink_data() -> __xdp_return(netmem, MEM_TYPE_PAGE_SHARED) ->
-> page_frag_free().  That ends in put_page_testzero() on a page_pool page.
-> 
-> With page checks enabled this is reported as "page_pool leak" and the page
-> is not freed.  Without them, page_pool keeps _refcount at 1 and counts
-> fragment users in pp_ref_count, and skb_pp_cow_data() allocates
-> fragment-sized chunks.  A single page_frag_free() can therefore hand back
-> to the buddy allocator a page that other skbs or pool->frag_page still
-> use, which looks like a use-after-free rather than only a leak.
-> 
-> Could the commit message describe that?
+On Fri, Nov 06, 2026 at 04:36:37PM -0800, Ackerley Tng via B4 Relay wrote:
+> I put guest_memfd_provider_operations as a pointer in struct
+> file_operations. Being in file_operations generalizes well to other kinds
+> of providers, like devices, which don't have their own super_operations.
 
-Yes, I will add that do commit message in v8.
+> @@ -1960,6 +1961,9 @@ struct file_operations {
+>  	int (*uring_cmd_iopoll)(struct io_uring_cmd *, struct io_comp_batch *,
+>  				unsigned int poll_flags);
+>  	int (*mmap_prepare)(struct vm_area_desc *);
+> +#ifdef CONFIG_KVM_GUEST_MEMFD
+> +	const struct guest_memfd_provider_operations *gmem_provider_ops;
+> +#endif
+>  } __randomize_layout;
 
-> > Cc: <stable@vger.kernel.org> # 6.4.x
-> 
-> The Fixes: tag points at e6d5dbdd20aa, which first landed in v6.9.  Before
-> that, generic XDP linearized every skb and never set the frags flag, so
-> this bug cannot occur on 6.4 through 6.8.
-> 
-> The later veth patch in this series (1d3541dbf827) appears to be why 6.4.x
-> is listed, since it uses this helper and needs it as a backport
-> prerequisite.  Could the commit message either say that, or align the
-> stable range with the Fixes: tag?
+Sorry, no! struct file_operations is not the place to hang KVM specific
+callbacks off of. We didn't let KHO/LUO hang an ops table off of struct
+file either and nobody else is getting one in file_operations.
 
-Sure, v8 will describe that in v8.
+LUO registers handlers that recognize their files by f_op instead,
+memfd_luo just uses shmem_file(). And KVM already does the same for
+VFIO: kvm_vfio_file_is_valid() -> vfio_file_is_valid(). Do the same for
+providers and leave struct file_operations alone.
 
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> 
-> [ ... ]
-> 
-> > +/**
-> > + * xdp_convert_skb_to_buff - build an xdp_buff on top of an skb
-> > + * @skb: skb to describe, packet data is taken from its MAC header onwards
-> > + * @xdp: xdp_buff to initialize
-> > + * @xdp_rxq: Rx queue info to attach to @xdp
-> > + *
-> > + * The memory type set on @xdp_rxq is only used to release fragments that
-> > + * the XDP program consumes; the head can not be freed from under the skb.
-> > + * A non-linear @skb is expected to have gone through skb_pp_cow_data(), so
-> > + * all of its fragments are page_pool backed.
-> > + */
-> 
-> This isn't a bug, but is the "only used to release fragments" statement a
-> property of this helper, or of its current caller?
-> 
-> It holds for generic XDP.  However, the veth patch later in this series
-> (1d3541dbf827) converts the xdp_buff to an xdp_frame on XDP_TX and
-> XDP_REDIRECT, where the head is released through the same mem type, and it
-> has to overwrite rq->xdp_rxq.mem after calling this helper.
+> Setting it in shmem_dir_operations allows directory file descriptors
+> opened on a tmpfs mount to provide memory to guest_memfd.
 
-True, will add that info to commit message in v8.
+That is weird. A directory fd is not an allocator handle. The folios
+aren't backed by any inode in that tmpfs instance but they're charged
+against its max_blocks. Which means statfs() shows space as used that no
+file in the filesystem accounts for and that you can't get back by
+removing files.
 
-> The kdoc also does not mention that the mem type stays set on the caller's
-> possibly shared @xdp_rxq after the call.  Should the kdoc say that these
-> properties depend on the caller?
+And also with CONFIG_KVM_GUEST_MEMFD every tmpfs directory on the system
+gets its own file_operations just for this?
 
-Yes I agree. Will add in v8.
+> +#ifdef CONFIG_KVM_GUEST_MEMFD
+> +		inode->i_fop = &shmem_dir_operations;
+> +#else
+>  		inode->i_fop = &simple_offset_dir_operations;
+> +#endif
 
--- 
-Slawomir Stepien
+Afaict what you actually want from tmpfs is a mempolicyj a size limit
+and noswap? guest_memfd already has a mempolicy. Teach guest_memfd the
+rest instead of turning tmpfs mounts into a memory pool?
