@@ -1,122 +1,147 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795179925;
-	b=TCYz22IWdkBd63Chvb02GrT3aQf9nSObiXE/Pid7Z/YGA0HMyQq+Skf7vd0bzy5NjJ3Z
-	 okr0mlbZJMZiYnuR9P7g8FUUqf6JtB/N+2yxJqrZLESityk3a3MGj7pg5Q7Q00ook+0CD
-	 N2KMyLRG5XbHyEiy7hvwFMySB8owsdHiA9712apPJlP/hm3vqSAkVzQjjgnz7veV2AP8Q
-	 KfUC/zqtd5FbIhLhICXjFwOZvff8Iu5o8TFc4PCvLEBGqEGnQf4TDCeUm/YWosIG+OJbD
-	 n1iaREAkBCgyFwvRuoSaWWd887gPU93fVaMzi1oW6p6+kx17cFL8YiKAM3CejSAJekg==
+	t=1795180731;
+	b=F15vXtimO73dwt7Es696Mn2QVMIAExzoBJRxVy0/rKHIal3kvGmkQLPRn3V0HVsxu84w
+	 T17cc3IHCz+4pgcEJ47WvAcc9cwJAe6LZZzAV5ECPt4tLqYRoDAhFJXiTNbxszTSWfuap
+	 5sDJHGrBUCqgSLOSOdGxfBRYkoRM6rnwGighvyq1ICCGkAwiMw3PjX9z6rdHNnMAGWltH
+	 oliTg9uHiGXnpC7Tz7IG0guY4+XJujYiAdZNBtSxRn7VNmn/EN78wPOWX/zTlbacEa5uu
+	 XUL3FtpZ+rZSsiojNcNuI5tVqg0/awUNX6WefCn7JL8wgdQY7DJihejneOQBFMR1b9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795179925;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
-	b=qDVZJCrQQ73Ri92tHwduDLU8fVqQ0Bm0WFHcFH5Qw6oovF3QcEbIpN7vCrGaQ+m1wpk4
-	 Hj9dHGE/1aChNAy9XlZMhE0IfPGug8DdQwkwCrIoZy+Xch6rTBpK/KFtV2W/nS2rnSt79
-	 41Fm0FQmc3h4jVi9SFlNrLVs+Rx5mE+XyFqN5fxdnO9KDhYXNCd2rGzsdNajWFB++bzdv
-	 XEYDnR5c0VHqRWmLmWchTBr4q3cuOJRBgutUyYUeglSAyzTIq/iZliZofqE9a4S5XiUoJ
-	 QScIMto5ablhvN/821668qEw0wi3CT2KK4JwfRB0YpYwY00iu5c2NZdzE6YcCdRtBUg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795180731;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=YAQTVNIYZ/0Tbx2obltQhn42YTPBHmmwY733kBIibzM=;
+	b=PSXOCKAVFNK/SdWB+TDOLAdcAMVB63Q2soJ2FgRUx0LFQQGt8BClKiniaBhnpbllGrrL
+	 xIKggHYWd9Wnqc3mWgscUs62MHTXHPo+1bDm+eNs7gv1DiKLoBcLbzuvODuMBAdkg7dYJ
+	 j5/HFkOMPsITMnYgT5IioFMCthlmHMWjYirQLhuahxa19zvOGOLbWOGaIOTsJj4g2nXnh
+	 RCmThwTAsCWFK+Q0PUr61vABwXSmHgNKgtGg09RI0zyS+1/QuxwiCVQRZwFpAXvr7L5VG
+	 snzYwKhbeFmaosnvw3BabMTWx8bnTAfwtCDMJK40V8DjgefOPzwCPonV+o+4go/2J6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OhjTY5YT;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="a7E5Q/at";
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=none header.from=amutable.com;
+	spf=pass smtp.mailfrom=amutable.com;
+	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b="UI/9rv+D";
+	arc=none smtp.remote-ip=209.85.218.45
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C87606A32A
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 13:05:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89C87606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22192606A32A
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 13:18:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 22192606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OhjTY5YT;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=a7E5Q/at
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795179923;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
-	b=OhjTY5YTcuoDbjWOWWYh62bB2E3Uh/h0WJ2tdy2TnyM6djSce7ywoWMkdtsKgguff975BL
-	A8EUfdT6oTlpJweZR+etDaniqErkkZl7rBsBkzzMa/1iOe6hrijS6yT6m646Sq0OFF/z4Q
-	tYqp7wRsS3gmSLEEFh7vWXVZSzebCLM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-j3mm_fSbN366m9quFD-Lcg-1; Fri, 20 Nov 2026 13:05:20 +0000
-X-MC-Unique: j3mm_fSbN366m9quFD-Lcg-1
-X-Mimecast-MFC-AGG-ID: j3mm_fSbN366m9quFD-Lcg_1795179920
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4bb69d84053so6738915e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 05:05:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=UI/9rv+D
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c51373ae637so135959566b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 05:18:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1795179919; x=1795784719; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
-        b=a7E5Q/ataALL+4CgEZhd1/J5a6wtd4Qr7q0QjAm+vqgoEh1WazQWKqUvtZeABshdr5
-         BZ8w0ow4XI0vd6Aws7ckDJEyccq1QNcI6suKHQHvEEyvIjtiLTuCkowo8BpJyelOWYgy
-         /UOE2YHL2iWIVODyvLYMaEPe0ANXjRSe/Cfh8QFcyZY053+EzqA+hW36Ez418LE4lU2R
-         GzmNt8iAVXH5KSugNbLql1JDi1189UOHJ9DiE3xrrw4i5QCQEgMmNhL+m8oPavLfal/h
-         qNslfkxBK16Akwij5pxzwWlixaepoQY02h3PBfIvbW/Zcgbzk3v2zKinRBjyeev8MdbO
-         pUWg==
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1795180728; x=1795785528; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=YAQTVNIYZ/0Tbx2obltQhn42YTPBHmmwY733kBIibzM=;
+        b=UI/9rv+DZdDezz6z4q5V4bbLRvq2PUwTXKvmGLgkStPFRG3MFzpLEzZUOMicEVzjqv
+         h9WskxL6pQRjVp6LW7wNLul6TdE5DMEMvMtKHVto1kDWUtXl4YZysNnP5izuUm6Wyf00
+         02kOc+/ogItTG9aLvdGftl8BuwMr3ddEGZP8CscGYWnM7MnxJ1gdPDJRCMKsqAHhAduA
+         5fYf+0m8yQ6qc78NG4siN795mYwXAc6BQzyhcrtUI3sLGXErAQdCZNzpNCRSgoDhZ53Q
+         BTlXcoGhXILqja8hQmBbLSiQNTaIckFhQCA59sphyqAh5AgpCytcMtf2fggUT1oBCS51
+         FT4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795179919; x=1795784719;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1795180728; x=1795785528;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=P1l8hjvVS49GyIA6u6rGG13XCHYYHrZ9VUNaIusOyIk=;
-        b=zsdXWClzTvVJlCUcUYSbulAwgMknVPCbqEGEsu1FGUYannNT1g4OTUWn24kqnLKrZx
-         OP7vFrdXFLP9XK0iMEVTCAhAej6j2VzZyawl22BFLscLS7NGUcnq/ZsjN6aG9/ldJ5AP
-         wNOq3t1FaYglj+Q3w8hhogq0lEAQsJPuoiSnlM5w8NB9fX3R3BZZsNQEiaH7qFLLcTf1
-         J166KldZL7Yk7xMIfphWTEVQxyh5rYCkMUzDWUG7bESAS8iPZyxPZSs7HhMJ2cpgzNOz
-         VMaDi2jNN+Zwxt3zVdlVI9VDQgc6M94CG+7+rgYV5lvcXouhFVsc4tmjbXomFDulm3St
-         vjmw==
-X-Forwarded-Encrypted: i=1; AL+hErF+wHwJE5qTm8x0ALBXmy8knt2rL1XyH3piFnLyLGBuqO+e81RnYb1Pk014nA+IKXep05D1VYWy+yMSVn35k6w=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9qS2HMlfJhyu2APqu23ioSVdJgoD9Vun55TBUyO9/8sx8ZYQaS
-	s5tyNudOIhvKxhflIvSqFwFpfDh24B6JGIbP75BWTGjzJDly+pQrczxOdhfVQlNn79HbMDDWa42
-	bZ0XgYNwylr0lLNUWkg/nKsI8YmWGIcOnOA8Rjj8QeD7ADDQx5ZRdIWU85w94bye1D7eSkg==
-X-Gm-Gg: AYBFou3RLyXkeqGNAtO32+mBLNtUaD3Ijak8g9o7txJy+csrPJw0XC13MKnvjGhs3mC
-	4cI4A7n3aVB4+h/J9S3DAGVD3pr0Oe/THvJgRZkbrATce9ilPDQmljXr45smnHK07rdNhGCm3jO
-	qDzXHvruQTJMfsYPzqejB/JIgDFAyDYbMySjWVeY+p72/by0ZvPCEePMoJHJctXasJM/Ra02ebw
-	ArZi44mHxVA/WlCEA+emOlLFpwC0TGUN2yzl58xt5YywaT7tPkII9AeVS8jDiWNCu8wB9hkG0Ko
-	T3EIv1aqdZPUMxJatnJDgTmUGE9XZDM1rlTB3VNlieu8x8eewG8nh8obwWuqxBBQ5Ndl03/NOjd
-	RVN7Is9MuZXuaPF5R6ufDAZ8NBbTrsqkGf9WviSYq76bLmBpcoYhqBvatT3JVOgyUoddL52tDyO
-	r2EUQ=
-X-Received: by 2002:a05:600c:820c:b0:4bb:6f6a:1976 with SMTP id 5b1f17b1804b1-4bb887c2923mr64602965e9.2.1795179919571;
-        Fri, 20 Nov 2026 05:05:19 -0800 (PST)
-X-Received: by 2002:a05:600c:820c:b0:4bb:6f6a:1976 with SMTP id 5b1f17b1804b1-4bb887c2923mr64602195e9.2.1795179919119;
-        Fri, 20 Nov 2026 05:05:19 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8849247asm85099165e9.7.2026.11.20.05.05.17
+        bh=YAQTVNIYZ/0Tbx2obltQhn42YTPBHmmwY733kBIibzM=;
+        b=Br44Lbcqf5xIyjU7ABs4slxTVcA7FtP5XkX9uBjnV9I6DS/FC9u/Gs/fRtZeDVbwKz
+         MUDSQAVL1tri6UglpUC9zx0qTHcEgTClVkU7cz6Pv0USzOX+hbxBvoR3Rc4nGi2GbA5X
+         jby52jmzIHLt8hWIK8B7CvUctEj0hfnSuxKsAw1YEA/uki939eaVzf9yMfQ4xgQr03pB
+         RQT2tPG+BLktAGltrpYxoqOechS1LqukjpjlwAqRog84u9diUt0b++CYamPnuGT/wAba
+         FHmt85OXqHRMOBvFQiiqfdScO9ft6xqtjAtcRryjUpfGGQzgW6JEHH+eYghvL47IlL5+
+         MEVA==
+X-Forwarded-Encrypted: i=1; AL+hErF3kauB7y3IbqBdY6aZR3VTO5Hscu4rxbTsQHQmAe1au56gxHrH4uNtp/0Sd4TX4ONVy+iEHYcXDf1dSnFVh5A=@vger.kernel.org
+X-Gm-Message-State: APuU4Z90r9QkYBKg5dqN9u9+otLR7ksR4XH9IgXCPDSMxEhWGaPSKe/d
+	C7vMRAgWajemSmnHGDNsYCKvxZXSY98lGe7x5AGEePpanjZlokIEXsJCOicwZy7xBh/1
+X-Gm-Gg: AYBFou2M2KlIxxSD+XfMs7OTWI9rgXqovGuJQnbxFwmlqEvholR7gTivLjyktE3snKe
+	OLl9ePRadsu3H9OwgfCW/yuKdNvXzyfkyU+XkfbVWxmqCP64BnHuxR+q3ogAbphcXjdPozRL08o
+	axPZHq2VglnKJLlzTqwUCnGUC1ml86Q6ezHRbTqGafiFynerAHCmSZaoH4Gnrtn2+s7hcRpyUp5
+	VB7mKWThwEZbr45rd2XxEdkF6XMcWbeDvjJqM42Yzd/pdhcdWSsAF5drboH4u5KSd2A7c+K7TSY
+	OmnFXb9IL0NuJ2AIjE+RNtsOgTX4Ndmrxdpe7+XeL33vHz0ZhDc2soLc8JlHEaXgjFZegbM+EKU
+	xX1DySW8RzjtxLbKwa1Qm13HOaAvxsvMn3ncznA55C4liYYcK12stn47etS+QIpTwmA8f6CwtpB
+	dlxw8W5JDhl+4L+qhL1CGTHOPE7yjxuh+8uZqIdS0QMvNlzYrKCedfjSRBVHjaAL+HaX7sz2u6o
+	Dhy6uYijsPaNJZDH+DNqycP7Gd+pFu87o6wf8sxP96hCllUs1CZzw1tS9er+2zHul2sk4mvW2Fm
+	If5g1WbPzUSp3+PYLTb0wMCSG1bwIeM+0pYF+0Cw9w6gAl8OB3QJHJlb81wtcN8V2Q==
+X-Received: by 2002:a17:907:a890:b0:c41:55b4:d88b with SMTP id a640c23a62f3a-c513ab14402mr338807466b.43.1795180728386;
+        Fri, 20 Nov 2026 05:18:48 -0800 (PST)
+Received: from [10.0.0.233] (tmo-084-188.customers.d1-online.com. [80.187.84.188])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513acfe3b0sm93731066b.8.2026.11.20.05.18.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2026 05:05:18 -0800 (PST)
-Date: Fri, 20 Nov 2026 14:05:15 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	tglx@kernel.org, will@kernel.org, boqun@kernel.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
-	luca.abeni@santannapisa.it, mathieu.poirier@linaro.org,
-	longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org,
-	hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
-	bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v5 00/17] sched/deadline: first bandwidth accounting
- fixes and selftests
-Message-ID: <awBFi0bwFt5KoEq-@jlelli-thinkpadt14gen4.remote.csb>
-References: <cover.1795115075.git.mathieu.desnoyers@efficios.com>
+        Fri, 20 Nov 2026 05:18:47 -0800 (PST)
+Message-ID: <e376c8f0ec5c50b417375197a5589a210f151d9b.camel@amutable.com>
+Subject: Re: [RFC PATCH v4 03/14] rootns: Track init lifecycle via
+ copy_process() and pid_namespace
+From: Alexander Mikhalitsyn <alex@amutable.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Alexandre Ghiti <alex@ghiti.fr>,  Andreas
+ Larsson <andreas@gaisler.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Andy Lutomirski	 <luto@amacapital.net>, Andy Lutomirski <luto@kernel.org>,
+ Anna-Maria Behnsen	 <anna-maria@linutronix.de>, Arnd Bergmann
+ <arnd@arndb.de>, Ben Segall	 <bsegall@google.com>, Borislav Petkov
+ <bp@alien8.de>, Casey Schaufler	 <casey@schaufler-ca.com>, Catalin Marinas
+ <catalin.marinas@arm.com>,  Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Christian Brauner <brauner@kernel.org>,
+ "Christophe Leroy (CS GROUP)"	 <chleroy@kernel.org>, Chris Zankel
+ <chris@zankel.net>, Dave Hansen	 <dave.hansen@linux.intel.com>, David
+ Hildenbrand <david@kernel.org>, David Howells <dhowells@redhat.com>,
+ Davidlohr Bueso <dave@stgolabs.net>, "David S. Miller"	
+ <davem@davemloft.net>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Frederic Weisbecker <frederic@kernel.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, "Hallgrimur H. Gunnarsson"	 <halg@google.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Helge Deller	 <deller@gmx.de>, "H.
+ Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,  "James E.J.
+ Bottomley" <James.Bottomley@HansenPartnership.com>, Jan Kara
+ <jack@suse.cz>, John Johansen	 <john.johansen@canonical.com>, John Paul
+ Adrian Glaubitz	 <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
+ <corbet@lwn.net>, Josef Bacik	 <josef@toxicpanda.com>, Juri Lelli
+ <juri.lelli@redhat.com>, Kees Cook	 <kees@kernel.org>, K Prateek Nayak
+ <kprateek.nayak@amd.com>, "Liam R. Howlett"	 <liam@infradead.org>, Lorenzo
+ Stoakes <ljs@kernel.org>, Madhavan Srinivasan	 <maddy@linux.ibm.com>,
+ Magnus Lindholm <linmag7@gmail.com>, Manfred Spraul	
+ <manfred@colorfullife.com>, Mark Rutland <mark.rutland@arm.com>, Matt
+ Turner	 <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, Mel Gorman
+	 <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko	
+ <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>, Mike Rapoport	
+ <rppt@kernel.org>, Neal Gompa <neal@gompa.dev>, Nicholas Piggin	
+ <npiggin@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Moore	
+ <paul@paul-moore.com>, Paul Walmsley <pjw@kernel.org>, Pavel Tikhomirov	
+ <ptikhomirov@virtuozzo.com>, Peter Zijlstra <peterz@infradead.org>, Randy
+ Dunlap <rdunlap@infradead.org>, Richard Henderson
+ <richard.henderson@linaro.org>, Rich Felker	 <dalias@libc.org>, "Ritesh
+ Harjani (IBM)" <ritesh.list@gmail.com>, Russell King	
+ <linux@armlinux.org.uk>, Serge Hallyn <sergeh@kernel.org>, Shrikanth Hegde	
+ <sshegde@linux.ibm.com>, Shuah Khan <skhan@linuxfoundation.org>, Steven
+ Rostedt	 <rostedt@goodmis.org>, Suren Baghdasaryan <surenb@google.com>,
+ Sven Schnelle	 <svens@linux.ibm.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>,  Thomas Gleixner	 <tglx@kernel.org>, Valentin
+ Schneider <vschneid@redhat.com>, Vasily Gorbik	 <gor@linux.ibm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Vlastimil Babka <vbabka@kernel.org>, Will
+ Deacon	 <will@kernel.org>, Yoshinori Sato <ysato@users.sourceforge.jp>,
+ Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Date: Fri, 20 Nov 2026 14:18:43 +0100
+In-Reply-To: <20261119224312.1037966-4-jarkko@kernel.org>
+References: <20261119224312.1037966-1-jarkko@kernel.org>
+	 <20261119224312.1037966-4-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -126,32 +151,206 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1795115075.git.mathieu.desnoyers@efficios.com>
 
-Hello,
+On Fri, 2026-11-20 at 00:43 +0200, Jarkko Sakkinen wrote:
+> A root namespace needs to record its init thread group's PID when
+> bootstrapped and capture its exit status once all processes in the
+> root
+> namespace have terminated, without serializing normal fork() and
+> exit()
+> paths inside the container.
+>=20
+> Commit the bootstrap child reaper, bind pid_ns->rootns, and wake
+> waiters
+> in copy_rootns() after attach_pid(PIDTYPE_PID), and invoke
+> exit_rootns()
+> from zap_pid_ns_processes() after the root namespace's PID namespace
+> has
+> killed and reaped all member tasks.
+>=20
+> Co-developed-by: David Howells <dhowells@redhat.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> =C2=A0include/linux/pid_namespace.h |=C2=A0 4 ++++
+> =C2=A0include/linux/rootns.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | =
+15 ++++++++++++++
+> =C2=A0kernel/fork.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 3 +++
+> =C2=A0kernel/pid_namespace.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 2 ++
+> =C2=A0kernel/rootns.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 38
+> +++++++++++++++++++++++++++++++++++
+> =C2=A05 files changed, 62 insertions(+)
+>=20
+> diff --git a/include/linux/pid_namespace.h
+> b/include/linux/pid_namespace.h
+> index b20baaa7e62b..6fd959f4d0d4 100644
+> --- a/include/linux/pid_namespace.h
+> +++ b/include/linux/pid_namespace.h
+> @@ -15,6 +15,7 @@
+> =C2=A0#define MAX_PID_NS_LEVEL 32
+> =C2=A0
+> =C2=A0struct fs_pin;
+> +struct rootns;
+> =C2=A0
+> =C2=A0#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> =C2=A0/* modes for vm.memfd_noexec sysctl */
+> @@ -45,6 +46,9 @@ struct pid_namespace {
+> =C2=A0	struct user_namespace *user_ns;
+> =C2=A0	struct ucounts *ucounts;
+> =C2=A0	int reboot;	/* group exit code if this pidns was
+> rebooted */
+> +#ifdef CONFIG_ROOTNS
+> +	struct rootns *rootns;
+> +#endif
+> =C2=A0	struct ns_common ns;
+> =C2=A0	struct work_struct	work;
+> =C2=A0} __randomize_layout;
+> diff --git a/include/linux/rootns.h b/include/linux/rootns.h
+> index 3f59415efadb..0557ce75195d 100644
+> --- a/include/linux/rootns.h
+> +++ b/include/linux/rootns.h
+> @@ -13,6 +13,8 @@
+> =C2=A0struct file;
+> =C2=A0struct nsproxy;
+> =C2=A0struct pid;
+> +struct pid_namespace;
+> +struct task_struct;
+> =C2=A0struct user_namespace;
+> =C2=A0
+> =C2=A0enum rootns_state {
+> @@ -41,6 +43,9 @@ struct rootns {
+> =C2=A0struct rootns *get_rootns(struct rootns *c);
+> =C2=A0void put_rootns(struct rootns *c);
+> =C2=A0bool is_rootns_file(struct file *file);
+> +void copy_rootns(struct task_struct *tsk, struct pid *pid,
+> +		 struct rootns *rootns);
+> +void exit_rootns(struct pid_namespace *pid_ns, struct task_struct
+> *tsk);
+> =C2=A0#else
+> =C2=A0static inline struct rootns *get_rootns(struct rootns *c)
+> =C2=A0{
+> @@ -55,6 +60,16 @@ static inline bool is_rootns_file(struct file
+> *file)
+> =C2=A0{
+> =C2=A0	return false;
+> =C2=A0}
+> +
+> +static inline void copy_rootns(struct task_struct *tsk, struct pid
+> *pid,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct rootns *rootns)
+> +{
+> +}
+> +
+> +static inline void exit_rootns(struct pid_namespace *pid_ns,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct task_struct *tsk)
+> +{
+> +}
+> =C2=A0#endif /* CONFIG_ROOTNS */
+> =C2=A0
+> =C2=A0#endif /* _LINUX_ROOTNS_H */
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 5efceb8d58a7..08fc28ad1eed 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -83,6 +83,7 @@
+> =C2=A0#include <linux/fs_struct.h>
+> =C2=A0#include <linux/magic.h>
+> =C2=A0#include <linux/perf_event.h>
+> +#include <linux/rootns.h>
+> =C2=A0#include <linux/posix-timers.h>
+> =C2=A0#include <linux/user-return-notifier.h>
+> =C2=A0#include <linux/oom.h>
+> @@ -2576,6 +2577,8 @@ __latent_entropy struct task_struct
+> *copy_process(
+> =C2=A0					=C2=A0 &p->signal->thread_head);
+> =C2=A0		}
+> =C2=A0		attach_pid(p, PIDTYPE_PID);
+> +		if (thread_group_leader(p))
+> +			copy_rootns(p, pid, NULL);
+> =C2=A0		nr_threads++;
+> =C2=A0	}
+> =C2=A0	total_forks++;
+> diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> index 127a5fd23e70..081c27aa85bd 100644
+> --- a/kernel/pid_namespace.c
+> +++ b/kernel/pid_namespace.c
+> @@ -24,6 +24,7 @@
+> =C2=A0#include <linux/sched/signal.h>
+> =C2=A0#include <linux/idr.h>
+> =C2=A0#include <linux/nstree.h>
+> +#include <linux/rootns.h>
+> =C2=A0#include <uapi/linux/wait.h>
+> =C2=A0#include "pid_sysctl.h"
+> =C2=A0
+> @@ -280,6 +281,7 @@ void zap_pid_ns_processes(struct pid_namespace
+> *pid_ns)
+> =C2=A0		current->signal->group_exit_code =3D pid_ns->reboot;
+> =C2=A0
 
-On 19/11/26 14:06, Mathieu Desnoyers wrote:
-> Hi Ingo, Juri,
-> 
-> This series fixes 14 bugs of SCHED_DEADLINE. Then it shows the deadline
-> bandwidth of each runqueue in sched_debug, and adds two selftests. The
-> fixes come first, so that stable can take patches 1 to 14.
+Dear Jarkko,
 
-Thanks for the respin. v5 passes here: deadline_switch_test 5/5 and
-deadline_bw_test 46/47 (move_cancelled skips), also with scx_simple
-loaded (the server cases run on ext_server, hotplug_server skips). The
-sched_ext selftests pass 40/40, test_cpuset_prs.sh passes, and there are
-no splats with lockdep on. So you can drop "not tested with sched_ext"
-from the cover.
+> =C2=A0	acct_exit_ns(pid_ns);
+> +	exit_rootns(pid_ns, me);
 
-I replied to 10 separately, with a readability nit that is not a huge
-blocker.
+We have a very similar mechanism around pidfd's to track exit
+information for a task. As far as I can see we already have (struct
+rootns *)->init_pid reference, so we can get exit information for free
+(look for PIDFD_INFO_EXIT).
 
-Peter, Ingo, I have the impression this is starting to look good, what
-do you think?
+Kind regards,
+Alex
 
-Thanks!
-Juri
-
+> =C2=A0	return;
+> =C2=A0}
+> =C2=A0
+> diff --git a/kernel/rootns.c b/kernel/rootns.c
+> index 3bbf7677080e..bde7cf4baebe 100644
+> --- a/kernel/rootns.c
+> +++ b/kernel/rootns.c
+> @@ -183,3 +183,41 @@ bool is_rootns_file(struct file *file)
+> =C2=A0{
+> =C2=A0	return file->f_op =3D=3D &rootns_fops;
+> =C2=A0}
+> +
+> +void copy_rootns(struct task_struct *tsk, struct pid *pid, struct
+> rootns *c)
+> +{
+> +	if (likely(!c || !is_child_reaper(pid)))
+> +		return;
+> +
+> +	scoped_guard(spinlock, &c->lock) {
+> +		if (c->state !=3D ROOTNS_FORKING)
+> +			return;
+> +		ns_of_pid(pid)->rootns =3D get_rootns(c);
+> +		WRITE_ONCE(c->init_pid, get_pid(pid));
+> +		WRITE_ONCE(c->state, ROOTNS_RUNNING);
+> +	}
+> +	wake_up_all(&c->waitq);
+> +}
+> +
+> +void exit_rootns(struct pid_namespace *pid_ns, struct task_struct
+> *tsk)
+> +{
+> +	struct rootns *c =3D pid_ns->rootns;
+> +	struct task_struct *leader;
+> +	int status;
+> +
+> +	if (!c)
+> +		return;
+> +
+> +	leader =3D tsk->group_leader;
+> +	status =3D (tsk->signal->flags & SIGNAL_GROUP_EXIT) ?
+> +		 tsk->signal->group_exit_code : leader->exit_code;
+> +
+> +	scoped_guard(spinlock, &c->lock) {
+> +		c->exit_code =3D status;
+> +		WRITE_ONCE(c->state, ROOTNS_DEAD);
+> +	}
+> +
+> +	pid_ns->rootns =3D NULL;
+> +	wake_up_poll(&c->waitq, EPOLLHUP);
+> +	put_rootns(c);
+> +}
