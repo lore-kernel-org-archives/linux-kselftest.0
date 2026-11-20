@@ -1,68 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795176178;
-	b=HIl8fYKmduArC7mqSo8K9R18jZVThaYZ+ILVV9uM5FWJNQCLdnp1w70Lte3HGtGDh0Kk
-	 tB4lzIiOEr2wZfUd8q4kY7Z/WO/G2Z+JIscyeEPnI3b8pCQpv51Q+B0rGSxaW8NKKo5WK
-	 xUhEucn6bYy3Z+hPbwwTY6/vGEppplqcHfG43YUcUfI8qFQ0DHY+pDMPeUoQEIiH1mxh2
-	 k1AFo1Eo0ZHR3iD09g9HGzOg4JBQJBvIt9uwNoyu5Kbh60Gn+GFOzP06LWN0H0b9pVO+c
-	 /t/iQBdXYRsnE6valA4NH9gKB/Pko4ute4JD/01caVoB5IjiqePd/XWeEER/yKRKiBg==
+	t=1795176984;
+	b=l4sDTsnuVj/vlhydxah6cnuZAD35ND4h3xmgtde567qr3pIpcuMoWOVI/JqYsc5zgXMj
+	 jt7VTok7k06dMxfsaMg2QBWAvSGaNULfBGTv8i+BYE3SA+0bex0P6Fk5vFAuLD4pCY8Yq
+	 GPodwLsmYvzyWCEd1tANwT3bJWs+GVKboPsSCTZxRcZFoNZ2JdO+OIpkIaR/ZHRuA/2R+
+	 Asefbp1J1Dm/qvSl8pY5bROgfIuE0MzT9D+tYKNdB9fBRJGcDdhn8MZifOUNltTS/gg+4
+	 rebSU4UcRvjHChWmfvztspsPgyBtRS8asFMNaCRkGQBBQDhTZDA8i2uPo0f10mOpuQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795176178;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=a5J72X3HPA+7mSwk7L/JqiNlhfSlr+OpvNLs81RwtBM=;
-	b=Chj4l2DHKlrYkzRKQOBK7yvpYFph8s2upm7q4YNIcy2FvhRgBopHW/Vhw2Jqc/Qbdy2D
-	 WtvtuS+yKtzXSMGE24bzYTBpjnqax3PmqdDhWiafHs/LlvXlVmF/yv5J6vNrugqIpZtdL
-	 Y4YpbF6EhTfwADY9XqNXhXFPFw3A1okhlUNu+IN93sce7Zlxg8LvYFSXPA5DOB4kKgstV
-	 anWrsUpciMIP8weVftJeddYAs+rYk9Gw2C0qXCT8vBFHjPM07PyB6OyX89xYrIY1rAUct
-	 kxhfy/OlJd5QUrWjBc3xG7II9FRj5d+mzuiFZ+TjjRJv7o9LKoLJFOPaQRqSxPomWTg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795176984;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=IknLS1Izf6DM/sF56KVAF42vdnRgs47WGOTqobZZNJY=;
+	b=oloqR4ydlD393whF1xJ1vYeD1yIckEaQql6dYVTw1laNSAYQCqWJieEIw+N57x5IMtMg
+	 uJEpf//QXjf5c8MF3Z65IyrR/MKsngsINt3Epy428WCC3ZKydDdiE9Jcf48ug7cHpAxv/
+	 IEiyfuPzLYSi/D7I1re6t5Djea4u3fahqzg4aLaFCFZrMw6iN8yxRFyOuzJg75dmNs7Sq
+	 UP083lGGX91z+8ON2oSYutN2BqIrnnVEkkQzC+gnEa5QA5R8yYFFdkgfyy3jwKKdyG1rP
+	 n40EXqUPL+EAWjwzms9Z5TcoRMHEP3IYHqHhMNoDYiyvC5ArlnEUA9ioY0qIg1ibYmw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mWKv2sBp;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=cloudlinux.com;
+	spf=pass smtp.mailfrom=cloudlinux.com;
+	dkim=pass header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=T9vD3ibR;
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C109606A325;
-	Fri, 20 Nov 2026 12:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F76606A326
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 12:16:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57F76606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cloudlinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudlinux.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mWKv2sBp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EEF1F000C0;
-	Fri, 20 Nov 2026 12:02:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795176177;
-	bh=a5J72X3HPA+7mSwk7L/JqiNlhfSlr+OpvNLs81RwtBM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=mWKv2sBppmiUSdyRqTHoLy0JiF4sgo0VjISutNKO+L9E1A83mmNl7o4OwDh61EuPA
-	 pkCfeqgSsgrgpvW/wxbM5oLmX/qWpfSJ7NynQQUHRGPa3Q9jhYW57wuSAfo34EBEMH
-	 BFj7Y0k92tluEyBqvMQkOh67LrqF5B1Nf3Enowz7pr9aLKaU8TYe76sGIE0FQUN+YA
-	 qlAUT2yUVqmA2bJkml2+T686GxMFtvjN1hiizEyW3szH9eADb4nM1pUvd3H2vK1uNf
-	 xb5gzP2YsZBAP82sRRbl9wKGk0mrFqfR1C5SzEUC0tu7o6LCIY3d7PNaa30kWXRK5n
-	 Yd1rQsvYo08eQ==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
-  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
- <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
- <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
- Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
- <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
- Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
-  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
- <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
-  Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v4 10/19] mm/shmem_luo: Don't make early retrieve
- failures permanent
-In-Reply-To: <20261111002358.1842967-11-dmatlack@google.com> (David Matlack's
-	message of "Wed, 11 Nov 2026 00:23:48 +0000")
-References: <20261111002358.1842967-1-dmatlack@google.com>
-	<20261111002358.1842967-11-dmatlack@google.com>
-Date: Fri, 20 Nov 2026 12:02:51 +0000
-Message-ID: <2vxzy0an1zis.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=T9vD3ibR
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso603453a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 04:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudlinux.com; s=google; t=1795176983; x=1795781783; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IknLS1Izf6DM/sF56KVAF42vdnRgs47WGOTqobZZNJY=;
+        b=T9vD3ibRQLSip0fqBDuE3ADF/LJTrbPD5BVSPj9KnfEC11F7KshDIe2v6WWHxEIafs
+         c6BIPIiVuyhtlZ9SW/y9+y27NLfofz0s+/JLD8SGcLCJKIJFz8/x4k1xqLA3QVRz8wWW
+         QV++PBYMLf3HMfcXxHyc3xbLVg8v2g74m503hHYLvolnX7Z7AJjlRP3XurEEN0D5UEjT
+         zRSLYxKBEUtNratmXQRf9290R88Br2oYWf5xLZn0WM/1EWIN6uDXr8tvrS0hFyy7nA88
+         L6iiqgAGgZzH7iqKkoJnAzG5MeNZx3+O1qUfxRtOW2vE5N3qBQB3zQ0tQ6TafLQ9sIKM
+         AMhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795176983; x=1795781783;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IknLS1Izf6DM/sF56KVAF42vdnRgs47WGOTqobZZNJY=;
+        b=1FaaCSFQKRgBaNYHO+aGfLmvGlxotwWIvNA+0t+HXdatf3ZjxxXov1IBdOCZfRvbJ4
+         FE8LmsNzuYOvHKsHEuWVeTN71wKqpbheCx8I5/h9Pc9HaVBrKozGmreKMLxaHl+mw4eN
+         EXBwJDcZzn4aWlo75V9wifZEf+O8zGK5J7bdv2hicI7gFcDl1xrXs7LyQyxR3BVs5+//
+         9X28dLq+MudGVp/5vW6OGXtsFkUChvIlp71/u7X/pu8N25WhWY5hCZwmeRJqQs5GgRT2
+         vUpsBQ3ElafmBykkJ58G1pSMoXw8rQo3QJ2h+Qo1Z2m8Rq+55eo75X+cJXKmplOO6hAk
+         HWzA==
+X-Forwarded-Encrypted: i=1; AL+hErFmaqUpFsL8ZJr+ZekUBsGvV79IfCJATvpIWBBKebnqnlOJvfXjLFm2ih0vXihBHX5nM1TbMHqhok51pYLRr9o=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+ZrgEM+LYl17MxJZtLkq6L2jnEmlsp3cP6bajKoZGW3HAjfxxP
+	4z457xtD3PCHlVDNT+EzUFR/HHTGOUlgmmBsE13dRsNz5hMtQY5QqvwbQf1tYdsn/zI=
+X-Gm-Gg: AZFdTZeoqT8UfMVXETKNAXMykFhokRHfCEC3qifkpWXg0WY+JC1oMQUxjIchNaGwqJd
+	vDhOVREjEtZXv2XT9huc/MqoFAx55sSBQJmmhBeGziZUtEtam2P95YWFX4uFmodI64SGWH0aCNk
+	5m4/gL+E5kWIcm8XoS9b8OrL3ZmvbFHUZQimQ1S9wPCvKfoFWQzkRLjoXsmER1nxkF4EF4VnkPj
+	7ZocSPWZtcr3mL9Ab3xERy2nMCxnRKICilgzCIorcJW2PJErCqv4SjBgvoFEjOrLaj3SNCKawca
+	t+iIdOHzcaNH/f1iEiE85yZPp3aR/aF6LujaLSjlPnF0TdEFeh1wKGvoTqhOhR7MpFBwrSFc7O2
+	UlVjWwGj3ieWywDIHoDCXPE7nXUfANvNrAPubITnxwUjzmeBVzSknqZ+pwQEt0wlnTPZHdxWy7z
+	m66Trl4cjIn352M0hHvkHmBwkVqK/aD5bARdshyiCAD32F2SA6iNGoCoes8B/H0b2lwiL4HoUR+
+	1wqIk28N3sltkdA4SjBn7LqEgYYaf2JduLG+rVrHIc0MQfvWqrMl0zYdKctx6CW33oBMaSSey0i
+	6qdDdHNKtmmIMQbmHt9ZV4EVOsuXH6XtKQVY
+X-Received: by 2002:a17:90b:1f87:b0:3b3:ca9e:9e22 with SMTP id 98e67ed59e1d1-3b41c9b2667mr2658990a91.17.1795176982660;
+        Fri, 20 Nov 2026 04:16:22 -0800 (PST)
+Received: from rmustafin-laptop ([27.79.41.63])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41abb1b66sm4463146a91.1.2026.11.20.04.16.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2026 04:16:22 -0800 (PST)
+From: Rustam Mustafin <rmustafin@cloudlinux.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>,
+	Jaewon Yang <yong010301@gmail.com>,
+	linux-integrity@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Rustam Mustafin <rmustafin@cloudlinux.com>
+Subject: [PATCH v2 0/2] tpm: Track the response read position internally
+Date: Fri, 20 Nov 2026 19:16:12 +0700
+Message-ID: <20261120121614.978396-1-rmustafin@cloudlinux.com>
+X-Mailer: git-send-email 2.52.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,30 +100,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11 2026, David Matlack wrote:
+tpm_common_read() uses *off as an index into priv->data_buffer.
+nonseekable_open() makes pread() fail, but an IORING_OP_READ request
+still reaches tpm_common_read() through loop_rw_iter() with *off set
+to sqe->off, and a plain read() racing a write() reaches it with a
+stale f_pos. Both allow out-of-bounds reads and zeroing of kernel
+memory.
 
-> Mark failures in shmem_luo_retrieve() before it starts restoring the
-> folios as retryable. If no retrieve succeeds, finish() frees the
-> preserved state, like it does for a file that was never retrieved.
->
-> Until the folios are restored, nothing has consumed the preserved state.
-> Leave it for another retrieve, which may succeed, e.g. if
-> memfd_alloc_file() failed with -ENOMEM.
->
-> The exception is a preserved file that this kernel can't restore, e.g.
-> because it has seals that this kernel doesn't support. Retrying can't
-> help, so keep that failure permanent, so that every later retrieve
-> returns the same error.
->
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Patch 1 moves the read position into struct file_priv, under
+buffer_mutex, and ignores *off.
 
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+Patch 2 adds a kselftest: an io_uring read with sqe->off inside the
+response buffer must return the whole response from its start.
 
-[...]
+Blocking io_uring, suggested in the v1 review, is no longer needed for
+safety with patch 1; I discuss it in the v1 thread.
 
+Tested in a QEMU guest with swtpm and KASAN: the tpm2 selftests pass
+with patch 1, and the new one fails without it.
+Claude Opus 5.5 was used in preparing this series.
+
+Changes in v2:
+- commit message reworked per review, read()/write() race trace added
+- add a kselftest
+
+v1: https://lore.kernel.org/all/20261117104838.2650999-1-rmustafin@cloudlinux.com/
+
+Rustam Mustafin (2):
+  tpm: Track the response read position internally
+  selftests: tpm2: test that io_uring reads ignore the file offset
+
+ drivers/char/tpm/tpm-dev-common.c        |  11 +-
+ drivers/char/tpm/tpm-dev.h               |   1 +
+ tools/testing/selftests/tpm2/.gitignore  |   1 +
+ tools/testing/selftests/tpm2/Makefile    |   4 +
+ tools/testing/selftests/tpm2/tpm_uring.c | 131 +++++++++++++++++++++++
+ 5 files changed, 143 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/tpm2/tpm_uring.c
+
+
+base-commit: 666539eecdf4db623f5e3c3e55cf9f2dfad24aa4
 -- 
-Regards,
-Pratyush Yadav
+2.52.0
+
