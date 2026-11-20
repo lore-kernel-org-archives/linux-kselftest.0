@@ -1,58 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.218
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795167696;
-	b=KZRwXp2Bv+u4kVvTa4sRb/XXnGiGmjzB0STK1opJE2MA4LWdOnXpCsTDqm7wqpPrApSC
-	 Q6Ib+skJmuB+miJwXHZSF3L+SxzDDE+9NKCPnwXmFc8htTEFKR2zyddeRQFr+JW0s8Pn1
-	 lUMUfuXIJtJeMuXGdkyX7h648CQ5tvWdRaXc/RNxIC7AJg3aImWPpThOv4lLnh3QVB8V7
-	 8WzQMDhe+JhpJgpe14LasoznpeKbey60LjOFgeYiEMhbTH2zSVXOyv8FqUJ3K0bn2FZem
-	 DDrnYmp4kfmxUcAfDD95tFhn0fBLtJqK4D2AUR73SETA32KotGmNaZpOYBNNOa4s/uQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795167696;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=yzbdGeu2fn9Y9C1c+3jErX28oGARGq2CQCtYtowsmfA=;
-	b=y+fBwPG6V0kon1y26kMJ8BlAaHVSLSf7wk6oNNWbv5DwaouwtGJyC6r4Xno22vVVQHXu
-	 b9/ZSnCzaShFXFiQE6UfYb2lOSXO8LlhtXRhbhQ4Q6JLeoc21NS3bUZOG0Tv1M8qaaIT7
-	 7C7b9oGH7a7yVv+Mo3bmBKIg1TVkc0IfZ+FjWwuQfN1jEfd0LXRl+JshkrAmwqQDXXB3D
-	 LY3pZTvBqIUknGjf47ZhehJU/zfZZA0IFaBl3V9fVwwSZhVwrlIduQKtjqcheMCRrEHRf
-	 HaGBGKUbSkvilwVMkbQtaijhDD3wsc38EXproI/RdkGHly5KRWgj/TKWeyKoiJ/o4eQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=u8UQV2QT;
-	arc=none smtp.remote-ip=113.46.200.218
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795167970;
+	b=boSTvaBgiY9kr5VCZ/lgE8v7fsNP8rNupndmUABH6MV4rkXvBzdGtb8YPcbGQmMNVRdh
+	 k/aSDSBEslfM+6E2+eQG4Z5qHcV2S22rQn5boW1dlbkjwJ+4a+VmEKfG/n2TieuwgdCwO
+	 rKGJxPI7RWLYWwr0ny7t6oI3YhCxLwJk69iwKjWg4NXLNC6Gu5JQl8mzJOQvRlJEbX6VL
+	 usZtFlow+yIK/p/bLFVg2HLUjs/NR7APOpeH0sISJEtYi1Xn6ZSjvwqzM4Bb0hqKUDfy0
+	 V2p6gLjbD0BOU1a7RW4E6FbcB0aMvU9VNc7QKTVobHNzXk4zfPCPGvTe/waJEP69J6g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795167970;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Mailer;
+	bh=LyMGAaInYYZKD2EbDC92SHBmRPfFEzQvFWfFO59Ilto=;
+	b=pdqt+WF99b9Zl77hAtR+akWtjePgYd2qxgnmaVZE3IICgsWk5uvd6LAlO4xtS/MI68o9
+	 wsAGKb8sJD36Vmk6rnpdJIoDeugu3F+lz7VU3NKcavpqDgPRZKUaIJrRPnLKzvhoupt32
+	 PlYyzEFEW7KXv/ZlLCBGNI0P+bzdL8tQpyS6Uuts2j47nNOgt5CujCQmWiIzi1pXlTzV8
+	 PNOVmDNkSdJzQn+FwgxrfPOsQ2/2O/XCY0TvvsEgYwM6JDvNDmlI6HgchM4jRYl2BHQxt
+	 Pup3FYEDGkAD6mTyWLwyZG/B5d5E0SCpIVC4XO8JgnbKrpKRg4SO/C7yWcsPtx1lUVg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=DPbguDKv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F72C606A320;
-	Fri, 20 Nov 2026 09:41:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F72C606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5453A606A330;
+	Fri, 20 Nov 2026 09:46:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5453A606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=u8UQV2QT
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=yzbdGeu2fn9Y9C1c+3jErX28oGARGq2CQCtYtowsmfA=;
-	b=u8UQV2QTaZykzbQnjwd0wnW5WSx2hpJjxpRDfV56W/g4Lbc5kPhrrMfWdQnkl9QnpdKT1i1lS
-	2C39dUkWTA/76Q4eqIp0UHvtkafvwJITP/42FbHAZb3G/UeC6Lww4tB64npAja3ctVsuLcOpNyP
-	jdH9+vGji2P+0NsyN75IChU=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4jW9LR4mkZzpSvM;
-	Fri, 20 Nov 2026 17:40:31 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2C01240561;
-	Fri, 20 Nov 2026 17:41:25 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 20 Nov 2026 17:41:24 +0800
-Message-ID: <371fe5a8-d831-4a86-897e-3bf9541b0c26@huawei.com>
-Date: Fri, 20 Nov 2026 17:41:23 +0800
+	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=DPbguDKv
+Received: from dude04.red.stw.pengutronix.de (dude04.red.stw.pengutronix.de [IPv6:2a0a:edc0:0:1101:1d::ac])
+	(Authenticated sender: relay-from-dude04.red.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 61101202284;
+	Fri, 20 Nov 2026 10:46:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1795167962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LyMGAaInYYZKD2EbDC92SHBmRPfFEzQvFWfFO59Ilto=;
+	b=DPbguDKvunMEOfZLgYieA/RNCoNt15TZ6y9DxFv9Lxa9RaXor9ZMLHgXAKJfy+PV+Sg4XT
+	m6zsYDsa1WWYMxOqUVHOkD07fkEpr4KoqfsjAhkQPCEzR20G1YMwhNtR8/dMFtlV5Gfrr7
+	+HIDO2yTxS1OFLbi7ixCBAKdNKewaUIgHbNNbVLOigjzE7bVsDJilo4uUkb9f0ykHSYJx+
+	PHyUExqB5JwUM88HS5WV7P3cXzCtiE33JuRCfhnG/JGMWZdfvNacZmB7XlJ5o5G4Ww4IXf
+	wfXvW1mf8ezE38rGAmekBMfcqOy2p4XPQvLhPsj0aTFKN3FzaHtq25HW9Eur6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1795167962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LyMGAaInYYZKD2EbDC92SHBmRPfFEzQvFWfFO59Ilto=;
+	b=ScOOTdKlO/bWMfUaFIv6rfmPPwMuGuDoCQ3sXxyhhLjqSohAJNpbJQKxL7l6Bcc1Ai3Uax
+	YoiZo1F6gqQaw5kuQGyq/VMGBScb9HTAWwzvBbtu8JN8xUEQz7USi03lrY94c9p+A88Frp
+	FrIbgA4o1t5QCj8Df6DJOf6VZw7L9jwfBrLp52XqRPbQt97ZRkmqbTZht5/V1jk6gi1lBn
+	Q8ppfNF81nzdtNuAjN5t3UhNJXeyIU+ukQ9BO0CaUhBxGSZURqis3ueAlWbM/elYbFz8eH
+	ERh9EctbYvB4yp2MujvDgfIUU+43Ps8E3AjQcBHL2vcNibXqou1ToCNWo5Ohyg==
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1795167962; a=rsa-sha256;
+	cv=none;
+	b=U3uOlUuz3ZVQ0Ivbut6n8G2vt72m++XIGBY4D+kspf3aD0HXiENHTIWzJD6+M+XhLunlT+
+	lySMhRQSH0agOdRE1Gi5yPeKQzdFqSTNJz7rasGBRFXWRy883M7N4oO7fnXNqERADArsnv
+	DOxmLcGBJBlxJg0EdoaG9UTQm4L1fp/3Jbc89RgMuFAy/8Qu0JVw7KboEDJz4ZyvMgR88Y
+	AImpa9/dnedeuba3T5Ex62yWL1nlSfoSY48wKAXpV93nGYF5cJFYT4WI7ufeTypiSq9bLC
+	abaEm95EzibTxTQrBfQ+9ff3rp0XBxrEgaCVN5MF79iTp3/q7ZnEjwKCZSiqAg==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=relay-from-dude04.red.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
+Received: by dude04.red.stw.pengutronix.de (Postfix, from userid 1058)
+	id 4692E380A04; Fri, 20 Nov 2026 10:46:02 +0100 (CET)
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+Date: Fri, 20 Nov 2026 10:45:56 +0100
+Subject: [PATCH can-next v5 1/9] selftests: can: install net/lib.sh with
+ the CAN tests
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,143 +86,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/15] KVM: arm64: Add support for FEAT_HDBSS
-To: Leonardo Bras <leo.bras@arm.com>
-CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-7-zhengtian10@huawei.com> <at-X_hFbsBU_Dsgr@LeoBrasDK>
- <a301e884-f6d1-4082-8551-8d8a17276dc3@huawei.com>
- <auSml6yTVYIQe7NZ@LeoBrasDK>
- <ceb91298-3d05-486e-a900-1291963dde24@huawei.com>
- <av8xblyy3GzgbNwf@LeoBrasDK>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <av8xblyy3GzgbNwf@LeoBrasDK>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemr100010.china.huawei.com (7.202.195.125)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261120-j1939-selftests-v5-1-fdf4c242a37e@pengutronix.de>
+References: <20261120-j1939-selftests-v5-0-fdf4c242a37e@pengutronix.de>
+In-Reply-To: <20261120-j1939-selftests-v5-0-fdf4c242a37e@pengutronix.de>
+To: Robin van der Gracht <robin@protonic.nl>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Felix Maurer <fmaurer@redhat.com>, Vincent Mailhol <mailhol@kernel.org>, 
+ =?utf-8?q?Alexander_H=C3=B6lzl?= <alexander.hoelzl@gmx.net>, 
+ Chaosheng Qu <quchaosheng000406@163.com>, 
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, 
+ Oleksij Rempel <o.rempel@pengutronix.de>
+X-Mailer: b4 0.14.2
 
+Add ../lib.sh and ../lib/sh/*.sh to TEST_INCLUDES. net/lib.sh sources
+lib/sh/defer.sh. The install needs lib.sh and the lib/sh scripts.
 
+test_raw_filter.sh sources ../lib.sh, but the Makefile does not install
+lib.sh. A full selftest install works, because the net tests install
+lib.sh. An install of only net/can does not work. The installed
+test_raw_filter.sh cannot find lib.sh.
 
-On 11/20/2026 1:27 AM, Leonardo Bras wrote:
-> On Thu, Nov 19, 2026 at 03:52:37PM +0800, Tian Zheng wrote:
->>
->>
->> On 10/30/2026 10:15 PM, Leonardo Bras wrote:
->>> On Fri, Oct 30, 2026 at 10:53:57AM +0800, Tian Zheng wrote:
->>>>
->>>>
->>>> On 10/27/2026 2:12 AM, Leonardo Bras wrote:
->>>>> On Tue, Sep 29, 2026 at 06:36:46PM +0800, Tian Zheng wrote:
->>>>>> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
->>>>>> index 32102c3912fa..12fa37328dd2 100644
->>>>>> --- a/arch/arm64/kernel/cpufeature.c
->>>>>> +++ b/arch/arm64/kernel/cpufeature.c
->>>>>> @@ -2158,6 +2158,11 @@ static bool hvhe_possible(const struct arm64_cpu_capabilities *entry,
->>>>>>     	return arm64_test_sw_feature_override(ARM64_SW_FEATURE_OVERRIDE_HVHE);
->>>>>>     }
->>>>>>
->>>>>> +static bool has_vhe_hdbss(const struct arm64_cpu_capabilities *entry, int scope)
->>>>>> +{
->>>>>> +	return is_kernel_in_hyp_mode() && has_cpuid_feature(entry, scope);
->>>>>> +}
->>>>>> +
->>>>>
->>>>
->>>> Hi leo,
->>>>
->>>>> IIUC you run this on every cpu in the system, to make sure it's matching
->>>>> the feature. Is there any chance the kernel is in EL2 only on some of the
->>>>> cpus here?
->>>>>
->>>>
->>>> It's impossible for the system to have only some CPUs in EL2 and others
->>>>    not.
->>>>
->>>>> If not, maybe we can run it on system_supports_hdbss() instead, which would
->>>>> be easier for the user to understand it only runs in EL2, on top of not
->>>>> needing the above.
->>>>>
->>>>
->>>> However, The question is whether a cap should mean "this system can use
->>>> the feature" or "this hardware supports the feature". If the cap only
->>>> tracks hardware support, users may be confused when the hardware
->>>> supports HDBSS but the system runs in nVHE mode — they would mistakenly
->>>> believe they can use the feature.
->>>>
->>>> So I think we should keep is_kernel_in_hyp_mode() in has_vhe_hdbss(),
->>>> and add a comment in system_supports_hdbss() explaining this.
->>>>
->>>> Does that work for you? Looking forward to your reply.
->>>
->>> Well,
->>> That's just my personal view of this:
->>>
->>> If we have a function called "has_hdbss" it should only report if the
->>> system has the feature available.
->>>
->>> On the "system_supports_*" we have to figure out if the system itself
->>> supports the feature, which checks the feature bits itself and could mean
->>> checking for other features being there, such as hyp_mode.
->>>
->>> What do you think?
->>>
->>> Thx,
->>> Leo
->>
->> Hi Leo,
-> 
-> Hi Tian,
->   
->> Sorry for the slow reply. I've been looking into how other cpufeatures
->> are configured on arm64, on and off, and that's why it took a while.
-> 
-> I took some time to study it as well, and to be clear, my previous
-> understanding of this was incorrect, and it looks like the has_vhe_hdbss
-> (.matches callback) is only called once during boot, and once per hot-added
-> cpu.
->   
->> My reading is that detected: HDBSS should mean "this system can use
->> HDBSS", not just "the silicon has it".
->>
->> Several caps already add conditions beyond the ID bits. CNP returns
->> false for kdump and under ARM64_WORKAROUND_DISABLE_CNP, NV and pKVM
->> match on kvm_get_mode(), and can_trap_icv_dir_el1() starts with
->> is_hyp_mode_available(). So in practice a SYSTEM_FEATURE cap answers
->> "can this kernel use it on this system".
-> 
-> Humm, or maybe "can this kernel, booted as it is, use it on this system"...
->   
->> HDBSS is EL2-only (HDBSSBR_EL2/HDBSSPROD_EL2, VTCR_EL2.HDBSS),
->> implemented only under hyp/vhe, and used only by KVM, so "the hardware
->> is there" is not the same as "this kernel can use it". That is why I'd
->> keep the gate in has_vhe_hdbss() rather than moving it to the consumer.
->>
->> I'd be interested to hear how you see it.
-> 
-> I agree, that looks better this way.
-> 
-> I don't think I understand enough of what 'system' means in
-> system_supports_*(), but I think your version explains it enough based on
-> other similar functions.
-> 
-> Thanks!
-> Leo
+Found by installing the tests with "make TARGETS=net/can install". With
+this change the installed test_raw_filter.sh runs.
 
-Hi leo,
+Fixes: 77442ffa83e8 ("selftests: can: Import tst-filter from can-tests")
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+Changes in v5:
+- No changes.
 
-Awesome, thanks for taking the time to study it.
+Changes in v4:
+- No changes.
 
-Thanks!
-Tian
+Changes in v3:
+- No changes.
+
+Changes in v2:
+- New in v2. An install of net/can on its own left out net/lib.sh
+  (sashiko).
+---
+ tools/testing/selftests/net/can/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/net/can/Makefile b/tools/testing/selftests/net/can/Makefile
+index 5b82e60a03e75ace2cae949ceeab09a497c96074..3adaa13dcbfa303c4be2bb6a9b5dbdac76d68260 100644
+--- a/tools/testing/selftests/net/can/Makefile
++++ b/tools/testing/selftests/net/can/Makefile
+@@ -6,6 +6,8 @@ CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INC
+ 
+ TEST_PROGS := test_raw_filter.sh
+ 
++TEST_INCLUDES := ../lib.sh $(wildcard ../lib/sh/*.sh)
++
+ TEST_GEN_FILES := test_raw_filter
+ 
+ include ../../lib.mk
+
+-- 
+2.47.3
+
