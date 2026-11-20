@@ -1,62 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795132479;
-	b=peQzexFCEX+/zTwaPpu/1w6teoa4kvUFo/pzJgao5T8MplSvrC5qLDpfd2QGO8gubV/7
-	 NF2XiErjSRndqY81cLWl3cflcdeQSnfgwuzhzXrFNdaCwacXIPh3B6NJZgJaeRLqFYL/2
-	 zx2Wv+x+58uGTSzjD0CkMDSkfF8SMmP+QXDY9003Syno3BhnMDud2va16eokr9CRGvsSC
-	 /dojKpCgoV0X3nYNpw3UuNfMVZV3XrsUh5xbbkLErEpA17QsjrmSOW16OcPyzjSi0Xv0g
-	 qA3mVjiDQ+aOtDy2DRavbECwBQsoI2j33VfwH3oYnS2cN0ehXY4w+Z/qN7U0mINDifA==
+	t=1795133203;
+	b=koTyU+uAjayiRc7FQFrsSU//nFvDoduQr8+V9YNYgGEyYkBmaEJr0hBl154BEeQFI2UY
+	 lMTx78Jq85fOYVx0TkOvi9SG69EbgwEDUe8T0AEXIPQElX7+SUmJri7LX+etjPp8caBkp
+	 5Q/PE9/0G6nUdzMPuIk71e+9j7iw7oc0jl8+aA3hE6T7vqVDBCvA4qyuu3Q7Y/RMzxOCe
+	 odbUq5X1W0C9G+AWA1ozN/gU64toZpjXGgduffbR4GZ1QtoyLf3I4hlMXA64PjqDyrPZT
+	 hzxH6OUvHz/l778VX/cu3vOU2yM04qMc0chtJ21XZoiXDdkhVnZpmcjrPR3I4RRkv9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795132479;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=MFGxZ2Xkih07FRFLHqlCNyVWMKhUAhlJU97Z0YCYj0A=;
-	b=iBxnuWNf1EgCRVQ9K2Eff4hnIOOXD/9AH3p+qrqUR71K5MQecvrdja8H3lN80T6OqFIW
-	 d+Rlxj2wMxLbCOHfFLzIyWXbnhrBzejK92dXOiW8S4AxbU2Wn5AqAuquq3NPiqwXG3dzD
-	 1ReBLv6JO3SeD3Xvyx3ni9Vz27Auwcx+JL91L1Q989TpOkB6m0JN1VMf3r4ux+kxPjTWd
-	 e0unL1lRY7OWH2ncVNq3BFOcGyInOwU2eslcCCc6cTUuLnBvBx1CtnIhlppJG6c43FZ6e
-	 FrGKOe21bt+j5vfZoEROEHDOKoXwmnYon75mJL03ilUf8vzYManwFD5P84Eqo2s7IyQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795133203;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
+	bh=8PsDwtqZ7ZOXHEr9V4C4myUyqMWkC/3w4Fd9za5pDc8=;
+	b=iQc2rjZUESQOpFrZUtzLiqy4I/pNhxHQwT9cXLr0gy4a7kzj6MBJGcb8e1Sq4zbS+YTC
+	 F4XDa2nIY8dhmOBLp4FNpABiQsCn3WxRoT9atahXzbokhdIwsRju0w9D3v78WHHmajFXd
+	 z6HUPPu18nCf1KlAT+YyPcnwq1rhX7dZK5gTP0zcx2DWVU7qkSbVqGz01tElJpAIA57bu
+	 cqpRE84UuOCqLRszEHWlQVlCGqWf5Vq/H8JCRFAexffOEhfSpvCMFj+VFDAExOdbjkQXW
+	 iNBmYnGjZ0D1nwGRXRvtbyWUv0wLBbsguZLYV4DTCAkFI8AxXsVGkp7u/ybsE/jTvgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PKvLuyYH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=atGBYYwm;
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F17606A338;
-	Thu, 19 Nov 2026 23:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5514C60A2614
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 00:06:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5514C60A2614
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PKvLuyYH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE3C1F000D2;
-	Thu, 19 Nov 2026 23:54:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795132479;
-	bh=MFGxZ2Xkih07FRFLHqlCNyVWMKhUAhlJU97Z0YCYj0A=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PKvLuyYH4opg6GFFo7b+ncy0Sc94D79WFN5Vd7iI7UelP2G3pu9jYKjS87tigvH/t
-	 pFnrJrch8POG0BAyNtt3NG0HpmZLXljh2GHJpkH0+kAeMNzR2H1/opWBiZW71LDYY0
-	 UbIYH74IeE4lP1FgijKH5NMAtPQ7uz/lK161zbi/uhrgJvT7a33bm4+KcySPHj7ifS
-	 lq22C5KfLUnFNUMR8tRc0ce74INxGkg4oerVMY3S14q4pfvu/DisyMl/N2hlOpBKVC
-	 VGVMhtJIsjwcz2NxQC/gxuBMbGqScImL/LCLMst4p0AtcvBpPM6PqmNio0TiZzDyhn
-	 y7F8f3IY+EaMA==
-Subject: Re: [PATCH can-next v4 7/9] selftests: can: add J1939 TP/ETP
- multi-frame tests against CAN_RAW
-From: netdev-bot+sashiko@kernel.org
-To: o.rempel@pengutronix.de
-Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
- shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
- quchaosheng000406@163.com, penguin-kernel@I-love.SAKURA.ne.jp,
- kuba@kernel.org
-Date: Thu, 19 Nov 2026 23:54:38 +0000
-Message-ID: <179513247817.3132.9443006972128193443@kernel.org>
-In-Reply-To: <20261118-j1939-selftests-v4-7-756768d32ff2@pengutronix.de>
-References: <20261118-j1939-selftests-v4-7-756768d32ff2@pengutronix.de>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=atGBYYwm
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so183593a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Nov 2026 16:06:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795133203; x=1795738003; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=8PsDwtqZ7ZOXHEr9V4C4myUyqMWkC/3w4Fd9za5pDc8=;
+        b=atGBYYwmFdTs408RYeRx/rBd5NWMEB+wa4iq8eOwXZoi1PQZuEVmO6c9ZFxjFJILJ8
+         8tFx4uJZ6XAt9i7Ltt7bGwkv300BwOkUf8RIEN21M1ZlrnrpWf19L50BxLsElGpm2fIm
+         3KYHowzeJPcfLDaKycuVAsvRHhgVEHM3+ci6vsxlKvO9snTlzdE14WMQPwC8ZCEqPmiW
+         xFXYRWayPRx7B8OcCRY84K0LTrF7flDFnzkPkM3VBq8aNOdkGvKPFipkvcbsC+9urxYg
+         f88SGG2R+HqhnBlp9ZNosz5Ha9nuQbjEneT4pUsCJI3kqzO13XGtjCV0ZiXHcnThfxIp
+         scvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795133203; x=1795738003;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8PsDwtqZ7ZOXHEr9V4C4myUyqMWkC/3w4Fd9za5pDc8=;
+        b=GH1MTTH8k+MN223pJB9TrgT0VTBnDE4eeI7Bz5NH7+gLXl1HqjzqDrA2ChO4R72gMe
+         EaOK9RQVI+tYWfGfgjjfMyDGizCLSkJsEidPEoaXxvcLgIuH8EEYCbYnsy3laM39dEvf
+         4swaBEy94/mxTM5OWYvY6ujd9OftdsYWyudjbDNG63ATBngKDpqlYD5U7zCTs2fNQrWl
+         vxhmPz3icl4IL6pW8dHDXBPVTWrWGGDlbKTXUwHm6TyMg/Ep2Nou8am3R3mBo1l2kHzp
+         EgIOQkyInnhDDpF4xoS11qNd1EVQysVQiO/M1BG9Vgllip9zM+6Uy6xMg1HveVVz+i0I
+         qRBQ==
+X-Forwarded-Encrypted: i=1; AL+hErHypeW+axyeX9SDVVc+6ksVBMlFsbGIDacr+tgf1N5VIn+emW3bI+ZqI3Nq4ZbvMp5PXCkQp7AyInWCLvJLg54=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+pGGp+nmQVOMECrv/pW4S+cDjC4GnPaAFFeWczG9XAiW1RME2G
+	m7C4VeMqrW2Jo2MSeOK7QvcsBk0WgBsBzfjz6PHS5bsi39jb0Klibn531pvA8NGCDQ==
+X-Gm-Gg: AZFdTZc2Y645CPWmKAI8zG2uP0AdRXFYc/h+X58ekAj8nTGH8gjmLHiQpa1Zz/pehaA
+	vt0YrZWoKFTRef2BPCuL8vZKboYkp4h/RIqs2W1yX9mZsxY22dQ+bUGl8PngQc+w03johYbdaPB
+	mPWeHkk90cgkHo5De/m7vk1gXAar3e2gqDhjDhCSJfxzMAZNNVDRkokidgcDroSAWbFDpXzOIXg
+	xIt9psoA90ORony0Rg560lxteBW2Yj4zUOlCL+OKHdUSWHZp2v5zCW9DA2m8p5dDvHA/ilkIB/y
+	EKSwNxyKTI7DEfPz+8eBRp4qKnNwhkqxAp/6wXRf7fapgIGLWPlylaDncxh7XQbeq5i5H4oBlfH
+	BmvJRchilkIYsZ6teQ+aVUnbNCgEwh8KTVUL4hrdsd+VBfk9YIPuh2jMcIQ9zJS0ZSaGbltTRBn
+	uGm5I0v+UrH60rrqHnIorgk8YsmL6niHSC7dkDTlm9gxTqqOuV0+b+h6pT0w39utLhg2oeuad0v
+	aknnTkzfEKLvGp1bCdsHz/b464F8w5Wy/LXBZIIKfaOmpJrN3Uyzu4duRkjtZFQHsJwxsRSi2Gf
+	vLk/zyqybWQjYmG5Qv9YFqb8h5SuXT/IV5WfeTY/UhqllAC+jWKyvuSEhLczTN2r
+X-Received: by 2002:a17:90b:442c:b0:3b3:ab74:cc9b with SMTP id 98e67ed59e1d1-3b41c554624mr967136a91.0.1795133201767;
+        Thu, 19 Nov 2026 16:06:41 -0800 (PST)
+Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ff5d3easm328044a91.1.2026.11.19.16.06.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Nov 2026 16:06:40 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,164 +87,156 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Nov 2026 16:06:38 -0800
+Message-Id: <DMZLLYOVIGOU.1RXWYJN6UQTM@google.com>
+From: "David Matlack" <dmatlack@google.com>
+To: "Vipin Sharma" <vipinsh@google.com>, "David Matlack"
+ <dmatlack@google.com>
+Cc: <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+ <ajayachandra@nvidia.com>, <alex@shazbot.org>, <amastro@fb.com>,
+ <ankita@nvidia.com>, <apopple@nvidia.com>, <bhelgaas@google.com>,
+ <chrisl@kernel.org>, <christian.koenig@amd.com>, <corbet@lwn.net>,
+ <graf@amazon.com>, <jacob.pan@linux.microsoft.com>, <jgg@nvidia.com>,
+ <jgg@ziepe.ca>, <jrhilke@google.com>, <julianr@linux.ibm.com>,
+ <kees@kernel.org>, <kevin.tian@intel.com>, <leon@kernel.org>,
+ <leonro@nvidia.com>, <lukas@wunner.de>, <mattev@meta.com>,
+ <michal.winiarski@intel.com>, <parav@nvidia.com>,
+ <pasha.tatashin@soleen.com>, <praan@google.com>, <pratyush@kernel.org>,
+ <rananta@google.com>, <rdunlap@infradead.org>, <rientjes@google.com>,
+ <rodrigo.vivi@intel.com>, <rppt@kernel.org>, <saeedm@nvidia.com>,
+ <schnelle@linux.ibm.com>, <skhan@linuxfoundation.org>,
+ <skhawaja@google.com>, <vivek.kasireddy@intel.com>, <witu@nvidia.com>,
+ <yanjun.zhu@linux.dev>, <yi.l.liu@intel.com>
+Subject: Re: [PATCH v6 07/27] vfio/pci: Preserve vfio-pci device files
+ across Live Update
+X-Mailer: aerc 0.21.0
+References: <20261102153656.1431701-1-vipinsh@google.com>
+ <20261102153656.1431701-8-vipinsh@google.com> <auzftbPFO_6XBYVw@google.com>
+ <20261117220059.GA2250529.vipinsh@google.com>
+In-Reply-To: <20261117220059.GA2250529.vipinsh@google.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Tue Nov 17, 2026 at 10:44 PM PST, Vipin Sharma wrote:
+>> pci_config_map doesn't need to be preserved. PATCH 14 already rebuilds
+>> it with vfio_config_init() in the next kernel and only uses the
+>> preserved copy to check that the two are identical.
+>>=20
+>> I assume the intent is to detect changes to vfio-pci's config emulation
+>> between the two kernels, but the map isn't a good proxy for that. It
+>> changes for differences that don't matter (e.g. hiding a capability or
+>> learning the length of a new extended capability), which would fail
+>> take-over and lose the Live Update on exactly the kernel upgrades Live
+>> Update is meant for. And it doesn't change for differences that do
+>> matter, like which bits are virtualized or writable within a capability.
+>
+> I think it does matter because reads and writes of unitialized
+> capabilities in VFIO PCI config space goes to hardware directly. So, in
+> the new kernel if pci_config_map changes it from PCI_CAP_ID_INVALID to
+> others then those reads/writes can go to vconfig which will contain
+> stale unitialized data from the old kernel's heap.
+>
+> This also changes behavior under a running user. Writes that reached
+> hardware before Live Update can be silently dropped or redirected to
+> vconfig. See the comment above struct perm_bits unassigned_perms{}
+> in vfio_pci_config.c
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+That's true. Unassigned bytes passed through and vconfig is never
+initialized for them, so hiding or exposing a capability does matter.
+For example, 6467d0740a2b ("vfio/pci: Add DVSEC PCI Extended Config
+Capability to user visible list") changed DVSEC from hidden (all bytes
+raw) to exposed with a virtualized header. Across that boundary, v6
+would have served DVSEC from uninitialized bytes in vconfig.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> How would a userspace opt-in? New kernel can change a capability visiblit=
+y
+> or virt and write permission of the bits inside a capability. Kernel
+> cannot know if userspace used the capability or not. Creating a VFIO
+> device in the new kernel by default results in a opt-in and currently
+> there is no way for userspace to opt-out unless we add a new
+> functionality where userspace can disable/enable features something
+> similar to KVM capabilities.
+>
+> For now, I think we don't need to worry about it. As this version will
+> be a base and if any serialized data with flags set received in this
+> kernel will lead to erroring out restore.
 
-- [Medium] The commit message argues that test_j1939_multi.sh can stay in
-  the default TEST_PROGS run (not TEST_PROGS_EXTENDED or XFAIL) because…
-- [Low] In j1939_helpers.h, errqueue_empty_ok() is documented as "Is the
-  error queue of s still empty after J1939_NEG_RECV_TIMEOUT_MS?".
+We don't need an opt-in mechanism in this series. Detecting mismatches
+is enough to make Live Update safe in both directions: if the next
+kernel would emulate the device in an incompatible way, retrieve should
+fail.
 
---
+But an opt-in is needed to make rollback possible once vfio-pci starts
+changing its emulation. I imagine something like a VFIO_DEVICE_FEATURE
+that userspace can use to enable new emulation behavior right after
+opening the device, with the enabled bits recorded in a field appended
+to struct vfio_pci_core_device_ser behind a required flag. Devices that
+don't opt in keep the baseline emulation and stay compatible with older
+kernels. But that can come in a follow-on series.
 
-selftests: can: add J1939 TP/ETP multi-frame tests against CAN_RAW
+> In the next version, I will not preserve pci_config_map. Hopefully,
+> anyone changing VFIO code doesn't forget to update flags if they change
+> capability or permission bits (I will write comments at appropriate
+> places.)
+>
+> If we want to be very careful, we can do two things in this series:
+>
+> 1. Create a per bit valid mask for the vconfig and compare this between
+>    new and old kernel during restore. In the new kernel, VFIO then takes
+>    each bit from the preserved copy only where the mask says it was
+>    valid, and keeps its own freshly initialized value elsewhere.
+> 2. Create a hash or store virt and writable bits in config space.
+>    Compare it with the new kernel.
+>
+> Both of the above combined will safeguard against forgotten flag update
+> in the code.
+>
+> We don't have to do it but it safeguards against mistakes. Let me know
+> what you prefer.
 
-This adds TP and ETP round-trip selftests in both directions between a
-J1939 socket and a CAN_RAW peer. The TX tests check that the
-TX-completion ACK comes only after the peer's EOMA. By default the peer
-runs on a separate vcan behind the CAN gateway, which is meant to avoid
-a known loopback echo race in the stack.
+I think we should do both in this series, as two per-bit masks over
+config space, preserved in place of pci_config_map:
 
-> diff --git a/tools/testing/selftests/net/can/j1939_helpers.c b/tools/testing/selftests/net/can/j1939_helpers.c
-> index b7490c335d8b7..d60e49b3cc4e3 100644
-> --- a/tools/testing/selftests/net/can/j1939_helpers.c
-> +++ b/tools/testing/selftests/net/can/j1939_helpers.c
-> @@ -523,6 +523,13 @@ bool errqueue_read_ack_ok(int s)
->  	return msg_has_tstamp_ack(&msg);
->  }
->  
-> +bool errqueue_empty_ok(int s)
-> +{
-> +	struct pollfd pfd = { .fd = s, .events = POLLERR };
-> +
-> +	return poll(&pfd, 1, J1939_NEG_RECV_TIMEOUT_MS) == 0;
-> +}
-> +
+ - virt[]: the bits whose value vfio-pci keeps in vconfig and returns
+   instead of the device's value. This says which bits of the preserved
+   vconfig are valid.
 
-[ ... ]
+ - write[]: the bits whose writes take effect. For bits in virt they
+   update vconfig, and for other bits they are forwarded to the device
+   (possibly after validation). Writes to other bits are ignored.
 
-> diff --git a/tools/testing/selftests/net/can/j1939_helpers.h b/tools/testing/selftests/net/can/j1939_helpers.h
-> index 92d6af3214f2d..bc5eef14bea23 100644
-> --- a/tools/testing/selftests/net/can/j1939_helpers.h
-> +++ b/tools/testing/selftests/net/can/j1939_helpers.h
-> @@ -372,6 +372,9 @@ bool msg_has_tstamp_ack(struct msghdr *msg);
->   */
->  bool errqueue_read_ack_ok(int s);
->  
-> +/* Is the error queue of s still empty after J1939_NEG_RECV_TIMEOUT_MS? */
-> +bool errqueue_empty_ok(int s);
+The masks should describe what vfio-pci actually does rather than copy
+perm->virt and perm->write.
 
-[Severity: Low]
-Does this comment match what errqueue_empty_ok() checks? For a J1939
-socket, POLLERR covers more than the error queue:
+vfio-pci can keep changing its implementation in ways that don't break
+Live Update, e.g. start intercepting writes to a register to sanity
+check them before forwarding them to the device.
 
-net/core/datagram.c:datagram_poll_queue() {
-    ...
-	if (READ_ONCE(sk->sk_err) ||
-	    !skb_queue_empty_lockless(&sk->sk_error_queue))
-		mask |= EPOLLERR |
-    ...
-}
+Something like:
 
-So errqueue_empty_ok() also returns false when the error queue is empty
-but sk_err is set, for example ENETDOWN or ENODEV from
-j1939_sk_netdev_event(). It also returns false when poll() itself
-returns -1.
+  struct vfio_pci_core_device_ser {
+          ...
+          u8 virt[PCI_CFG_SPACE_EXP_SIZE];
+          u8 write[PCI_CFG_SPACE_EXP_SIZE];
+          u8 vconfig[PCI_CFG_SPACE_EXP_SIZE];
+  } __packed;
 
-The test fails in all of these cases. However, tp_tx_to_raw() and
-etp_tx_to_raw() would then log "error-queue entry before the EOMA",
-which names the wrong cause.
 
-Should the comment, or the TH_LOG() message in the callers, also cover
-the sk_err and poll() failure cases?
+[ Note: I'd probably store virt[], write[], and vconfig[] on their
+  own folios to avoid multi-order folio allocations, but I am embedding
+  them here for simplicity. ]
 
-[ ... ]
+The outgoing kernel computes virt[] and write[] through a helper in
+vfio_pci_config.c and saves vconfig[] during freeze().
 
-> diff --git a/tools/testing/selftests/net/can/test_j1939_multi.c b/tools/testing/selftests/net/can/test_j1939_multi.c
-> new file mode 100644
-> index 0000000000000..a97fa8b998b89
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/test_j1939_multi.c
-> @@ -0,0 +1,682 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-> +/*
-> + * J1939 multi-frame wire selftests: TP and ETP against CAN_RAW.
-> + *
-> + * A CAN_RAW socket plays the transport peer against the kernel J1939 stack,
-> + * in both directions. It takes the other side of the RTS/CTS/DT/EOMA
-> + * exchange, for TP with a short message and for ETP with a payload that
-> + * spans several CTS blocks (DPO windows).
-> + *
-> + * Known stack race: the stack updates a session from the loopback echo of
-> + * its own TP and ETP frames. A CAN_RAW peer on the same vcan can read
-> + * that echo first. If the peer replies quickly, the stack can cancel the
-> + * session. See j1939_lib.sh for where the peer runs. The fix belongs in
-> + * the stack; this file does not work around it.
+The incoming kernel computes its own virt[] and write[] masks and
+requires both to match exactly with what's in vfio_pci_core_device_ser,
+otherwise it fails the retrieve. On take-over it uses the preserved
+value for bits in virt and its own freshly initialized value for the
+rest, like your option 1.
 
-[Severity: Medium]
-The commit message says:
-
-  By default the peer runs on its own vcan behind the CAN gateway that
-  j1939_lib.sh sets up. With RPS off on that vcan, the peer then gets
-  each frame only after the stack has handled its echo.
-
-The notes below the cut line add "RPS must be off on the peer's vcan.
-It is off by default."
-
-Does anything in the series make sure RPS is off on CANIF_RAW?
-vcan_setup() in j1939_lib.sh creates the interface with:
-
-	if ! ip link add name "$dev" type vcan; then
-
-setup() then starts j1939_gw, but nothing writes or checks
-/sys/class/net/$CANIF_RAW/queues/rx-0/rps_cpus.
-
-If the host has net.core.rps_default_mask set, the new vcan1 gets a
-non-empty RPS map:
-
-net/core/net-sysfs.c:rx_queue_default_mask() {
-    ...
-	rps_default_mask = dev_net(dev)->core.rps_default_mask;
-	if (rps_default_mask && !cpumask_empty(rps_default_mask))
-		res = netdev_rx_queue_set_rps_mask(queue, rps_default_mask);
-    ...
-}
-
-The gateway's copy for the peer then goes through:
-
-can_send()->vcan_tx()->vcan_rx()->netif_rx()->netif_rx_internal()->
-get_rps_cpu()
-
-A CAN skb always has a non-zero flow hash, so get_rps_cpu() picks a CPU
-from the map. That CPU may not be the one handling the J1939 stack's
-loopback echo.
-
-In that setup, can the CAN_RAW peer reply before the stack has handled
-its echo? That would bring back the race this comment describes, and
-tp_rx_from_raw, tp_tx_to_raw, etp_rx_from_raw and etp_tx_to_raw could
-fail at random in the default TEST_PROGS run.
-
-j1939_test_main() only warns when the peer shares the vcan:
-
-	if (j1939_needs_raw && !strcmp(CANIF_RAW, CANIF))
-
-So this case would fail without any warning, and it would look like the
-protected default setup.
-
-Since the test stays in TEST_PROGS, should j1939_lib.sh clear rps_cpus
-on CANIF_RAW, or at least warn or skip when it is set?
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118-j1939-selftests-v4-0-756768d32ff2%40pengutronix.de
+I'd store the full masks rather than a hash, so that a mismatch can be
+pinpointed.
