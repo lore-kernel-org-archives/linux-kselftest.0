@@ -1,107 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795195081;
-	b=rAe8WHJzDkdTfVSqzhuaOFUaWYsBVIzeA0cps5DFLERu4fKP5uDVFFtm6LnmFanF0FsZ
-	 wrUrJnYPG3niDp7vqrfHzansnYUKP5NdS31u+exeHA61pB+JewtrgKDekAU2pZfXBYmY5
-	 olDvjnDhJRNmf4LcU/w/hz4ICjoICefxX/i3AHFTQLoA9wpB71Jb+rZtAG0Z9K7Z+S9BL
-	 zFZj84rMxPOoJNXCyi2FZMjltIEtKl8dQp10d335P9RjmAZPAAi1DDHGIkv2L7kEUh3lE
-	 Zm0s3AqkBCsRlcr+dWLQOzNHisieKezcA2YwSj05NIoKe5dBb3xJyN6K32kngFTL2Rg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795195081;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version;
-	bh=wjfu+1o0XY41QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=;
-	b=1UHhVDnk7dx5hLqKJTvrywVASnvMMKduFfGyoJtqqk7ModrgzJnynEC5LGgDM1O14aab
-	 OyVSPp6quLOD55LwI/S+76d0/AqP/WyLQF7+bShBKPs9+AdZXgTyptPFohsGRu+dakLq7
-	 t2KI1eMl1lS17lzUS9tNnskdmCqgKrLkbWlz03sNu3pB4kRxFtBv2Y+BMxcd2FjtxESCY
-	 gf89lEehtpL85VHDD/vg83B2KMLrCZA46B78DJ1jA0gObyG+nAtnR1mMQx5hW+yxbDS9d
-	 UcPYqc0DRVg8DPo8e9X6MPaeNcUg0exPiBW7ftqmTdYZuf1hmmqvAK9QB2LKJ1gU7lw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=HvFsqWth;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.63.66.53
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795195362;
+	b=FlCiBjKuSEdlbrK6+4DURAF9UBDDCIW+SteYEL5At+uwIL8C3dW1ABX4oktTqH5ZcJUg
+	 rcfETe2groLP0wLJois/C1A4zBAqUB540PbvYP1RGty6208CH0dNChOxcl2pJq6jYVt//
+	 F9x4fulzTMo50sNu3XnqZcSJ8GcqSrAKXr0x6D1Lqgj/vhn1+NirKr61tutE9Ajzm98OT
+	 7XRU4s+49+i2UEqSHxChb4Rr2hVRCW3qGtWwe2k+Eso91bN93AUgWYC48v4IdHqvDs6rI
+	 Pj/AthAR/Pm2BS6fdK1TnFdgKKUEtGMFCnKncsNpF+Z73rQR1rybqrWvLY1BOqUYVmg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795195362;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=hcGbtErC4qaWDNGFYvrl/+JTn+WF9z7rUZdodFxsCVM=;
+	b=Qm9J4FOfkbcylzPc/aBQundRY8sQaGXkY3TjCq/wdnvHF3ZJrkp0d7d3cLGP3I/HTVra
+	 uNzh5VWdLmaSS+/y4clgNRu63AG3nUJyQ7Im6D0tz2iQnjqtzpAFjw2YvGcmSGlnUxTCl
+	 Fdc2ogyPMUgr0jIGfH6QHpqO4o0Sh4SqoNA0cVCMbezDjWaQgrRYBfiRYEBcwX/suPdza
+	 +ORxr9x0Scjf9h5CdzbUd/X0FS4WtJUnk2vU/JW82eYd4YcIcz5dInaTeiPlYQAr6TnDy
+	 TapjGGmHvCLiBvDpOyy7sSd3UMFS+UxmnZyYD7GeP42x5jy1GwvprxS9pBdpERIVAQA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=hallyn.com;
+	spf=pass smtp.mailfrom=hallyn.com;
+	dkim=pass header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=LqhvxPrT;
+	arc=none smtp.remote-ip=178.63.66.53
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A075C60A2609
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 17:18:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A075C60A2609
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B93D60A2619;
+	Fri, 20 Nov 2026 17:22:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B93D60A2619
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=HvFsqWth
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AKH3mmP2028073
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:17:59 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=wjfu+1o0XY4
-	1QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=; b=HvFsqWthOwr5IFXRc/Tsjs2JhU2
-	waqs9ZKQnjldht7nZxu9zYt3XhDvdDhpIYEfiGJJJrEARGhYqP4wrclpQ6/0EBg3
-	lRul39UgevRZgaQs0bGKuvsQi0xfHdWI42hfp2dMFO4+23ry2xekopDamDQ+QHRO
-	mXXtwTWmKRWeGnr/fcfD6YmZLWD9v7sb3z+OTz4taeyADWFoc5O08MrAVa+2lhfG
-	EBi8+Aae6qA7wuabHWw2J1neVqtl3Unw9VQ1tfsa9cHkvdngACKt/gZSf3Yp+tsQ
-	oC4H3peNvc4jyK4lcsQdMFqAsEQWukxa8zbJe+Y9Ra7kS18gy32bPs7JW4w==
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j2t99r4bf-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:17:59 -0800 (PST)
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8b691cf0eeaso1493694b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 09:17:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795195079; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dSwfdY3gyoXXf1a4ARp9IczhuSaLBkGgWefkywjFFlrGYgvgaEYlrJsAQaEBgzQIZR
-         giUlGB2uUNH2+Qzgo6NgA9L6FvKPAMN5ePiK3BvkkGXxDf+mrmi25RhzC8EgC5hno8S4
-         24FQjyY+DOGc/PVwfzZtGJaFIxDhdIJ+kgxX9FRHDXxfGpJPMOkjrBBrGDYbbife6ZFJ
-         rrIGWtVJIYsdlrufYeVph9BjFxLLmi4tvqzueNRemIYzdCRZs+lu98gMDoOeRdjpdumf
-         6jp+RoRAfvaloromm1Uk/Q6Aj268AYSh3NSK5iS7e4VfbVsGyp9VkQsk6E68S1nLET74
-         7Nfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version;
-        bh=wjfu+1o0XY41QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=;
-        fh=OxPUrzDzzaRhVYm1WV3vg6fC46Ir/LzgD+q6+LSvhBU=;
-        b=YlT9KN1hBoKXsIi9XW+EIHEDA9WZ2IgX988lfx0PqpdA1nntQcX1dL8jYwa95W9yNy
-         L5BV0mjMncAQpbGo/ofS4lOrVYFOpQEcxoE/ooubJBZe1PFsT/nT6ftMJH1OUsKHyqoR
-         QSAlgG3B5TbZ+AMBjvqQfbSXJAgvFCndgajw0jP4okGnYmDYL0gwd1S5fR7PF5qwVoFI
-         pO01q/dKQM9GnNHnG7aBjDk2QWDriZaQ27O6QY2nosd0I8U/FhP1vU6Glp4/x9h3T5Nb
-         lprTbPDPiST1FlUvb9iWtIkWhnkLKNg82dos5tFx8GhYdbQ5UwLbEKX320A0lOfn5GIq
-         Vi0w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795195079; x=1795799879;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=wjfu+1o0XY41QpFEK0UkLoGoO9C3f79CMyE3qI8pCWQ=;
-        b=0n2LvKmQer+Ju/ThcL4tS58vhR0H8P1QuyU5CJ5ACJAPA/rCPJHHmJaNVBAiUe7C6E
-         irfJ20+dSxAH23mEefuGHwnaXXZH2zAZ0Yc0rKMepzz465Teg2AqwkZjTr3gNJxsj8mv
-         qhaCK4t+53R0jqqRz3a5+hZ1UpNs/h4yccm1Kl/Gb05+cV0HY36mLqyE1edL6r24Y2uk
-         jegJqcvpM9pwf+tsscPeGWZWqTpzayle6RmXOLDnAxQF2s6raNe5UQBHPkbqAwWnLx/F
-         cjs1+BxKLc6L8O4LC9fZnksKeCzGiC0vS26cFVV3POV9ki47U3K42L6tS0FWzmRA27Em
-         +OYw==
-X-Forwarded-Encrypted: i=1; AL+hErGOLV1zfAsQQw/Ix0FJ9nitBC3JpDQDEFEz2fEUFjEQVBRDnka0He9DRZs2g6R03wycJ9DCNIvQcYrb6VZmEIo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+bzCAh0T3kdM/2w3ey7lAPDDRdSTXQ318Ps0t550W9RnOXlgE0
-	0RFxpB+a2i7IW/NCPQl6Nuf8H26NtijHn2Nb5peak7SYpNf3sSvH/vsHSLxWJ+an3DMcWb8dJvM
-	g5sv2iWLgRwOaB+9pYUO/3STAAdusP3tl6cgBbE/jz7lSlDIo3kEUZJzD5THZTcOB0+W6yPcOUm
-	LxZXut/qKASiG81EzKSXlamgdFjQqXMGeKx6T4QM9Gsy4=
-X-Gm-Gg: AYBFou2exXV1Lhh9f0TPKpLH7xD++K3xbx9ArUFRUo4MbaulLd6wBW17oyjArRGnsmW
-	LYEJj6/Rlqdc9PVfjOWkTcbgueYE0nebyXlHQShML7hWRod4XI9E5rP/MCN/ssclIzhwssLSqWc
-	iYLAXV56bD30VujUXapMTpyEndsINk3u606ziuNQWxtiyUCAfJ9IxmCqxVzXmik4q4c0dEWkhdG
-	qJdBf28f3ikoPn544Pmpoxi8XIvWVCw
-X-Received: by 2002:a05:6a20:9f86:b0:3eb:39fd:bacc with SMTP id adf61e73a8af0-4014d360ed8mr3745390637.50.1795195078669;
-        Fri, 20 Nov 2026 09:17:58 -0800 (PST)
-X-Received: by 2002:a05:6a20:9f86:b0:3eb:39fd:bacc with SMTP id
- adf61e73a8af0-4014d360ed8mr3745344637.50.1795195078192; Fri, 20 Nov 2026
- 09:17:58 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=LqhvxPrT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1795195357; bh=1fh0CEGBoECp97YFqm5pPCrctH/nil1jed3l8kKD+p0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LqhvxPrTKBJRH/hn++zaICZ1golLi7TTdlWnszMGpsoqMCBEwbHxIQSexLWHm1enV
+	 8EmpIgA8gRng05B9xRm80i8BdFVuePF4zHJ4SjIhNeKGEGtJ219y6t+CKK3F4GK1f+
+	 iYbPd6g4qOKWLXeJjqMVVJJaGrajZ7P7YLsDJitDMi1EFRST0PJagyYC1+AAzRyPiq
+	 s9JF02kse2bpj+dP5rvrRYzxG4cvveZmJIEkHRYG8bVqRYI5i5/9qeFtUZChUK38Bt
+	 YTrGfQmKyu35a+kzxDXN4yZUmHnQ9vNorj1AcQCHJY9T1aUud4gy9U3Jc3n1jmz54k
+	 s6MHz3FwHKDHQ==
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id C661928C; Fri, 20 Nov 2026 11:22:37 -0600 (CST)
+Date: Fri, 20 Nov 2026 11:22:37 -0600
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Christian Brauner <brauner@kernel.org>,
+	James Morris <jmorris@namei.org>,
+	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	"Andrew G. Morgan" <morgan@kernel.org>,
+	Serge Hallyn <sergeh@kernel.org>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Bradley Morgan <brads@mainlining.org>
+Subject: Re: [PATCH v11 1/3] userns: don't let setns() lend CAP_SETFCAP
+Message-ID: <awCB3UkCPzLGRBTk@hallyn.com>
+References: <20261117-b4-setfcap-userns-v11-0-2be11a2c32f4@toxicpanda.com>
+ <20261117-b4-setfcap-userns-v11-1-2be11a2c32f4@toxicpanda.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,69 +71,178 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261117203137.804424-1-toddfreed@meta.com> <20261117203137.804424-9-toddfreed@meta.com>
- <906302b6-facd-43c4-872f-ae40bc59714a@nvidia.com>
-In-Reply-To: <906302b6-facd-43c4-872f-ae40bc59714a@nvidia.com>
-From: Todd Bert Freed <toddfreed@meta.com>
-Date: Fri, 20 Nov 2026 09:17:47 -0800
-X-Gm-Features: AclHuK-LgS6otYIsEJ3X0_WptWHRTeRKrRZOhEbdUdT3ro_BhN8Q7OlgsXmfnZs
-Message-ID: <CADh2yMzLDMEOupGJwS8=3JbN-g4LR3ZapyBNaJx3chNT4_6pDw@mail.gmail.com>
-Subject: Re: [PATCH net v6 8/8] net/mlx5e: psp: tso: replace only the length
- in checksum seed
-To: Dragos Tatulea <dtatulea@nvidia.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Boris Pismenny <borisp@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>,
-        Daniel Zahka <daniel.zahka@gmail.com>,
-        David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Mark Bloch <mbloch@nvidia.com>, Paolo Abeni <pabeni@redhat.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
-        Sabrina Dubroca <sd@queasysnail.net>,
-        Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-        Wei Wang <weiwan@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Authority-Analysis: v=2.4 cv=LvQHWXdc c=1 sm=1 tr=0 ts=6b0080c7 cx=c_pps
- a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22
- a=OFRVtpLxHUNKrmO6MooA:9 a=QEXdDO2ut3YA:10 a=QYH75iMubAgA:10
- a=2VI0MkxyNR6bbpdq8BZq:22
-X-Proofpoint-ORIG-GUID: mK77y7takZUXR3RbcqdpgZm_fI5QzH1k
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIwMDA2NyBTYWx0ZWRfX4BAjgQ0JCUb1
- Vsnvsc1MYw/LBTwvbjlCX2vNCfpUznK8huF7mkirsMX0xDG6/+E2WhCMnz4qhP4lKOo+WqNpMK/
- UFBP0YR1Li+ia3HV2m+WP/3Vdpl1P7eb02/41tt0VYU/X6PoXUSKSkCRaqssh/kFFx3PicJ9W9P
- I4g/F7MG+arGKIx4FNgi0C/1uOr1vR8njX130bwrnj16jhno7pKbr/fLqS8wZ5lGUFJ6w0IZ1V4
- X8Fuox/Sv9oXpIO6kHJOa+EYFR1xyL859Gc2CihbFNJRmrJHRoIyz/2uQ4ejsLIbu5Tvnk42ai0
- 5YNcnyecxn7gw5mkA/wBS20GjJDHgqA33C9Nrqfj40IorCHHi4HvHqMcK4RipCwHcg9gtdndug1
- giLCQHFEsErRlgTY36O6/AXvOvZnNcBr0yE7qHFVzLW21sBlleHTWCSAOChUif/b9Pp78Htot0i
- 49Hb/s496W6YHAHgwuQ==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIwMDA2NyBTYWx0ZWRfX0a0+xEF7Cjux
- laQhuCTBllSulBtIPxWw43ch9rpzFQ63SoVlgJkPge22xC/zes9Q1UqKxCf4vkGv2oof8wM4RJp
- Qv+j8CmY0KSYdYUdhzA0dcD+pQF17q8=
-X-Proofpoint-GUID: mK77y7takZUXR3RbcqdpgZm_fI5QzH1k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-20_05,2026-11-19_01,2025-10-01_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261117-b4-setfcap-userns-v11-1-2be11a2c32f4@toxicpanda.com>
 
-> > in these cases every segment of the tso packet to go out with a bad tcp
-> > checksum
-> What did you mean with "to go out" here? Goes out? Or is a verb missing?
+On Tue, Nov 17, 2026 at 07:54:24PM +0000, Josef Bacik wrote:
+> A uid 0 task that gave up CAP_SETFCAP can get it back by joining a user
+> namespace that another root task created.  Commit db2e718a4798
+> ("capabilities: require CAP_SETFCAP to map uid 0") keeps such a task
+> from mapping uid 0 into a namespace it creates itself, because tasks in
+> that namespace could then write file capabilities for its root user.
+> setns() gives a joiner a full capability set in the namespace too, so
+> it can do the same there:
+> 
+>   task A: uid 0, full caps          task B: uid 0, no CAP_SETFCAP
+>   unshare(CLONE_NEWUSER)
+>                                     setns(A's user ns)
+>                                       allowed, euid == ns->owner
+>                                     write "0 0 1" to /proc/self/uid_map
+>                                       A had CAP_SETFCAP -> allowed
+> 
+> If A's namespace already maps host uid 0, at any uid, B can set
+> security.capability on a file right away.  Either way uid 1000 can then
 
-Sorry about that. Here is the updated phrasing.
+"Either way" here means whether it already maps host uid 0, or whether
+it has no mappings yet?  I'd just drop 'Either way'.
 
-    In these cases every segment of the TSO packet goes out with a bad TCP
-    checksum.
+> run that file with CAP_SYS_ADMIN, which the selftest at the end of this
+> series shows on an unmodified kernel.
+> 
+> The check doesn't look at the joiner's uids, which it can change while
 
-I'm not sure whether I should re-post if the only changes are grammar
-improvements in the commit message. But, if it does get reposted, that is
-how it will be worded.
+From here until the 'Fix by', it is confusing whether any given statement
+refers to the pre-patch or post-patch state.
 
--Todd
+> keeping its other capabilities, and CAP_SYS_PTRACE doesn't stand in for
+
+Is this a reference to the next patch?  But that's a completely different
+commit.
+
+> CAP_SETFCAP.  What gets refused is a task without CAP_SETFCAP that has
+> CAP_SYS_ADMIN over a namespace that maps the joiner's root user, or that
+> has no uid_map yet while its parent maps that root user, so that it can
+> still be mapped.  If that is uid 0 of the parent and the creator of the
+> namespace didn't have CAP_SETFCAP, the join is let through: only a
+> writer with CAP_SETFCAP in the parent could map it then.  Containers
+> that don't map the joiner's root user, tasks with CAP_SETFCAP and
+> unprivileged users are not affected.
+> 
+> Like verify_root_map(), the check is about uid 0 of the joiner's own
+> namespace.  The root user of an ancestor that it maps at another uid,
+> and a root user stored through an idmapped mount, are left to whoever
+> set up that map or mount.
+> 
+> Fix by refusing setns() when the joiner doesn't have CAP_SETFCAP and
+> tasks in the namespace can write file capabilities for the root user of
+> the joiner's namespace.
+> 
+> Suggested-by: Serge Hallyn <serge@hallyn.com>
+> Link: https://lore.kernel.org/all/fd159e68-c613-4c7d-bfba-8af0a3f3a96e@hallyn.com/
+> Fixes: db2e718a4798 ("capabilities: require CAP_SETFCAP to map uid 0")
+> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+
+The code looks good to me,
+
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
+
+If you don't mind making the commit message and comments shorter and
+clearer, I think that would help.  In the words of the reverend
+Maclean, "Half as long".  If you feel like I"m being unreasonable or
+misguided, or would prefer I rewrite them, please let me know, but imo
+it'd be good to keep this entirely yours :)
+
+> ---
+>  include/linux/capability.h |  3 +++
+>  kernel/user_namespace.c    |  4 ++++
+>  security/commoncap.c       | 49 ++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 56 insertions(+)
+> 
+> diff --git a/include/linux/capability.h b/include/linux/capability.h
+> index 622137f66f09..9ebcdab56937 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -34,6 +34,7 @@ struct cpu_vfs_cap_data {
+>  #define _USER_CAP_HEADER_SIZE  (sizeof(struct __user_cap_header_struct))
+>  #define _KERNEL_CAP_T_SIZE     (sizeof(kernel_cap_t))
+>  
+> +struct cred;
+>  struct file;
+>  struct inode;
+>  struct dentry;
+> @@ -222,4 +223,6 @@ int get_vfs_caps_from_disk(const struct mnt_idmap *idmap,
+>  int cap_convert_nscap(const struct mnt_idmap *idmap, struct dentry *dentry,
+>  		      const void **ivalue, size_t size);
+>  
+> +bool cred_borrows_setfcap(const struct cred *cred, struct user_namespace *ns);
+> +
+>  #endif /* !_LINUX_CAPABILITY_H */
+> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> index 50c374ed4687..34becacaccd6 100644
+> --- a/kernel/user_namespace.c
+> +++ b/kernel/user_namespace.c
+> @@ -1390,6 +1390,10 @@ static int userns_install(struct nsset *nsset, struct ns_common *ns)
+>  	if (!ns_capable(user_ns, CAP_SYS_ADMIN))
+>  		return -EPERM;
+>  
+> +	/* Don't hand back CAP_SETFCAP to a root task that gave it up. */
+> +	if (cred_borrows_setfcap(current_cred(), user_ns))
+> +		return -EPERM;
+> +
+>  	cred = nsset_cred(nsset);
+>  	if (!cred)
+>  		return -EINVAL;
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index d47ab3022343..96ac039fddad 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -131,6 +131,55 @@ int cap_capable(const struct cred *cred, struct user_namespace *target_ns,
+>  	return ret;
+>  }
+>  
+> +/*
+> + * @ns has no uid_map yet.  Could @caller_root_kuid still be mapped into it,
+> + * so that tasks in @ns get CAP_SETFCAP over it?  A writer in the parent can
+> + * map any uid that the parent maps.  If that is uid 0 of the parent, a task
+> + * in @ns can only map it if the creator of @ns had CAP_SETFCAP, a writer in
+> + * the parent only if it has CAP_SETFCAP there, see verify_root_map().
+> + */
+> +static inline bool userns_may_map_root(struct user_namespace *ns,
+> +				       kuid_t caller_root_kuid)
+> +{
+> +	uid_t caller_root_in_parent = from_kuid(ns->parent, caller_root_kuid);
+> +
+> +	if (caller_root_in_parent == (uid_t)-1)
+> +		return false;
+> +	return caller_root_in_parent != 0 || ns->parent_could_setfcap;
+> +}
+> +
+> +/**
+> + * cred_borrows_setfcap - Check whether a userns gives back CAP_SETFCAP
+> + * @cred: The credentials of a task that joins @ns or traces a task in it
+> + * @ns: The user namespace
+> + *
+> + * A task without CAP_SETFCAP can't map uid 0 of its namespace into a user
+> + * namespace it creates, see verify_root_map(), as tasks there could then
+> + * write file capabilities that are honoured for that root user.  Tasks in
+> + * @ns can do that if @ns maps it, at any uid, or if it can still be mapped
+> + * into @ns, see userns_may_map_root().
+> + *
+> + * Like verify_root_map(), this only looks at uid 0 of @cred's namespace, not
+> + * at the root users of ancestors that it maps at another uid, and a root
+> + * user stored through an idmapped mount is up to whoever sets up the mount.
+> + *
+> + * Return: true if @cred doesn't have CAP_SETFCAP and tasks in @ns can write
+> + * file capabilities for the root user of @cred's namespace.
+> + */
+> +bool cred_borrows_setfcap(const struct cred *cred, struct user_namespace *ns)
+> +{
+> +	kuid_t caller_root_kuid = make_kuid(cred->user_ns, 0);
+> +
+> +	if (!uid_valid(caller_root_kuid) ||
+> +	    cap_raised(cred->cap_permitted, CAP_SETFCAP))
+> +		return false;
+> +
+> +	if (READ_ONCE(ns->uid_map.nr_extents))
+> +		return kuid_has_mapping(ns, caller_root_kuid);
+> +
+> +	return userns_may_map_root(ns, caller_root_kuid);
+> +}
+> +
+>  /**
+>   * cap_settime - Determine whether the current process may set the system clock
+>   * @ts: The time to set
+> 
+> -- 
+> 2.55.0
