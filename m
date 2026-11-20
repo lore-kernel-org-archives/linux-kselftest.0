@@ -1,91 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795207378;
-	b=zyEQAXpoT3MBeuIH5iqmUMd9Fa0oK0HtRx2T6EZaohCaxcoEFBKXxv4ub/b3ypP9iGDm
-	 tDkK/NbDmG07GUl3udVHZ8vBzozQjm5QagY5yUbNuuZyjk32uMz7CEq8uGk2MjZzVw1Bw
-	 LQ6jwSF0iPieiUhVHmyGD4EOJcKhkcs0nKhuCh/Odau/CB4q4gdxK0uaZaa13noN6ntOx
-	 9clOae3GPq4Nv2AyGajVUyLLHfvJAYo2chk0L+w6u9y/2zQ6RItxkIsZSwvd1rGRpGxLi
-	 nn/H/U159kZWmMzcRgPcJypHUKnO0mi+tnbbQLzD6pJfFq0GNYfYFMVfQswTB1EcUbg==
+	t=1795207386;
+	b=O4zg411mBWTTvlfy/GJmWKr9csYXbCRFLkbbmZfqG4GTiImnd2NT8meZ9la+2sa0nRoj
+	 ojMHhxEOuFr2hVtLQGXbVZV9NuDa1WHBJcZ/vTXBIt6mtFKMhQLc4Mb494y0GYtuFGiqk
+	 3ky918xqF09ZtrITsNOzYirDzlYen3WT7XsRjC1OaYWz5Ilr5w5E8EhQtmxSYH8yKGixc
+	 g1e6oIGbBU2gQdS8mknEO3ojiY7oKd3vA94dCacweSjVt6cNP/XEC17YTQpT3GCVpV2Az
+	 tdMh3VagHXD18vz06RZ2M4HE0m6PPg8hGu8Xuvi/OqV4P6F9uDYlZKotJz+03vCIaxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795207378;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795207386;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:MIME-Version:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=/WfV8vGSyqQt7k7lOokOJoO6ZkJTLOy+uFOX22pJNBY=;
-	b=1fo/1IB36aW+F7Z0SydHhqwaRzbrXgTXbiifw/r3cuPyz4SLVIkmIrUdsbKpOEtDfxWx
-	 Z1Zg9J2OonSRwye6Y1aLRMFvE6MjCWOs6PKQq/gf8Tbbuwz2aN/QKRLmPN+NdtdE7xBVa
-	 ExueHJabpruwEy6MzMaZrdrYct7vvHCFGqnq1ZiiFYTqzoq/nMSyD77CyOT2OpUYv8riU
-	 F0/HdKcn7EG4S3Zaioowa3ql+7XB2GjWO4psKnCG9SjdwYht5hWV1KJB32TUD4qUlt6wH
-	 K+nUuts8HGBOTDaN9i9dmYLclbGDe8m4OIBHN0ZUmpPThH4GeyXSaxNyKWCvVhnq5Dw==
+	bh=gYU6H2/wBp0m3RHfRk6KSsrkcHEKkYUH+D3d0ccp7Sc=;
+	b=Wx53zLESx4vo8i/Lqy0odp5vzN2yD7AgY2X1nGEVq6NEFVYvdCQbaRudm1cPIkIe3eCW
+	 Cp6/w5RWGCi3GZIRQglwQsBlhJuzisbYqHxCNZJ5Gw93XRurBCQyzyTRMVCIM56CJlYTH
+	 Yh4Q+zHwcvBvNz75Vv0JGNdyloWmFK5zxbC/+dbI/NNC7+Jnq0eL5NFXMzLj6EabyfHMm
+	 vjyBpW4LUS6+hNoHmj3St0+EjsM7L5WvYgmVre0Sqcatj2hadkadh7s75oVrTBhclF0LF
+	 xMwSgwpGf8sclqEfgAxuEm74+gIKSP2RXnoLh5mUDVP33bQCyslEb7yeC67hzrats/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=nQW4xbIx;
-	arc=none smtp.remote-ip=158.69.130.18
-Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=fail header.from=kernel.org;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=209.85.222.171
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5C360A2620;
-	Fri, 20 Nov 2026 20:42:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE5C360A2620
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=nQW4xbIx
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1795207357;
-	bh=/WfV8vGSyqQt7k7lOokOJoO6ZkJTLOy+uFOX22pJNBY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nQW4xbIxUPHnGpgDojDFsc+h/50MQMrO40ygmLz8bMvrfA5slRsoXyzx9zCEr23VN
-	 urGJBrp5bbs3xsfMdWSZuGiY1e732O7PvuceCgRaSRggcgEaYcfu1KbJXhshqbC/NQ
-	 fw30J5fSy3k/suROMDeAdE6gTbH7i+gVQeze9wlmZTPfkTlkj7ChrS1cfoFz0lcOzr
-	 YhHSfz6g4isHK1BIJivdws4D0WEQpRQQ55/Jqd9dGX55MvBQqLvPpNRX9vq7Ae6SQ+
-	 PZHIQADaQTB+yHomzP5huZXfLaAGk82fQbROgwMMvRvECZIApryMdrJo/zA9l3z7vu
-	 9U9P6RojCr3gQ==
-Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jWS2P0KB1zTqf;
-	Fri, 20 Nov 2026 15:42:37 -0500 (EST)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: juri.lelli@redhat.com,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	vincent.guittot@linaro.org
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	tglx@kernel.org,
-	will@kernel.org,
-	boqun@kernel.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	kprateek.nayak@amd.com,
-	luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org,
-	longman@redhat.com,
-	ridong.chen@linux.dev,
-	tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	bigeasy@linutronix.de,
-	clrkwllms@kernel.org,
-	parri.andrea@gmail.com,
-	m.szyprowski@samsung.com,
-	kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com,
-	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH v10 28/40] sched/deadline: Start a period for a task that enters the class blocked
-Date: Fri, 20 Nov 2026 15:42:05 -0500
-Message-Id: <0557a76f35a09f1caa281777e3926d3446a7c74e.1795207232.git.mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <cover.1795207232.git.mathieu.desnoyers@efficios.com>
-References: <cover.1795207232.git.mathieu.desnoyers@efficios.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538CE606A70C
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 20:43:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 538CE606A70C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-9496473b511so155202485a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 12:43:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795207385; x=1795812185;
+        h=content-transfer-encoding:content-type:references:in-reply-to
+         :mime-version:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gYU6H2/wBp0m3RHfRk6KSsrkcHEKkYUH+D3d0ccp7Sc=;
+        b=t9Zu4Qhl9l6W5C1dvqlt/e1qIAkXnIxhJaKF2Ve3IR8BlImh+vNaQHY7p7VSXu1S2v
+         5s2QXutd/m5mTTkofmcWg/wiMFQrCkTutnjvxEuRDXaxTS9dhttTiavfePOB4yU5hb+d
+         HN16VP39wm+L4fyEYRt/3NHkRfKlG9vRvcPfWaXGSW7HzOJYFNDwthM9k1+jVIctWNAS
+         k8/paXA+Ao18tUWfULwv+nVI3ohaIp94rUsYDT8KZV9agEsjTpEM0GytX8hwiIxQmwTR
+         VMOT8V7a2728cGLo53OvQy6kQKd4TlW1IIwSrSTApg8Z24bxw9y9HCvw8eAyqfSt3YaT
+         CpJQ==
+X-Forwarded-Encrypted: i=1; AL+hErGdbfRyECBDquGZQWG8pH0EUWvkcbiaIXgHqZEwpjomgW3LFyfiA1mP1ttVQB4oZUmBilA+dQBKuoaofefdvFw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9AonlBqPF+zYpzNcSIhHQF1/pTCRAIIbtuHLDfsYoWtxBOF944
+	nF7mn98nbTgrmW/h6kv1Nc5JomLkOivEOYf2c65M8agsNscR0luNW7vX
+X-Gm-Gg: AYBFou0i0a7KCokPPhUS6n01EfHxL5iZB9t0eujoL9TQ30XdwmrLPNDvirRMLW6PgY1
+	xZDDfV8P31eOq0UHJPp6+AxwQaTILio6liVj+n/P2USQY3BCb9siTvGRZFjUzfmyXv7Cb1ik+r2
+	ONqbMmhWbL6Gnk2FYAhgnXAZlz728CyEDD4kpXDH6sDtixfxI0kXlVei3merXC4Zlqoie/YPmuX
+	v8pkfAdtvsbVX+ymsR6yNZIt7l/vfBTzgXjm5C/oyYpirxbWzMsnBrTLbGEVk0CBz1gd7eIX7yJ
+	nkNBVfpahU1JNgzBQnwazr2tH2X4IFg6OqAa865JDtaWsX7SaADUjEZYhkGlwdy+SzVqOOd/X1D
+	s/bqowygwKstUVKH01HJM5gIKKm2/ngTdRitVczyDUF8+TMX7/1qQMoA+uVFpFiCNckcR82OSBQ
+	zjQr9TyH35N5vxviwRPTb6IBIzjqECyiqna8Wi1ubL6B4gY+VNqOfECU/5N91ux25ex7JDJ4mM9
+	xpsCsZuIyWImZELZuchShTrs4iIAbcoX/Sur24F3T29tj3BVe8dO5m+pEw+SW2Vang+pbpaMtO/
+	VRMKzUIST9hKsKmtbo6TBurJODte3/lboMkXXKLuMQQxgpTHv615N78oZJppjQcEF2fGZaaZzRW
+	iYAzAEHq2E3Y0d7FjJWDtTqESjlifzfBkLi4qlmbftWFqHIeACQTS
+X-Received: by 2002:a05:620a:4142:b0:945:d6e9:9a8c with SMTP id af79cd13be357-949baa0735emr674761885a.33.1795207385322;
+        Fri, 20 Nov 2026 12:43:05 -0800 (PST)
+Received: from localhost ([199.170.132.196])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb418241sm271210285a.38.2026.11.20.12.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2026 12:43:04 -0800 (PST)
+From: Tamir Duberstein <tamird@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Andrea Righi <arighi@nvidia.com>,
+ Xu Kuohai <xukuohai@huawei.com>, Andrea Righi <andrea.righi@canonical.com>,
+ Bing-Jhong Billy Jheng <billy@starlabs.sg>, David Vernet <void@manifault.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Andrew Werner <awerner32@gmail.com>,
+ Zvi Effron <zeffron@riotgames.com>, Andrii Nakryiko <andriin@fb.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH bpf v2 8/8] libbpf: ringbuf: Prevent missed wakeups
+Date: Fri, 20 Nov 2026 17:51:54 -0000
+Message-ID: <179519711471.18576.6533152874363127425@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,156 +91,21 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzYKewRUpOboOmPcxdX25731tF0w63V0Ha=_f4D_F-ie3w@mail.gmail.com>
+References: <20260618-bpf-ringbuf-fixes-v2-0-33fde039ddf3@kernel.org> <20260618-bpf-ringbuf-fixes-v2-8-33fde039ddf3@kernel.org> <CAEf4BzYKewRUpOboOmPcxdX25731tF0w63V0Ha=_f4D_F-ie3w@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 
-Commit fb00aca47440 ("rtmutex: Turn the plist into an rb-tree") sorts
-the waiters of an rt_mutex by priority. For deadline tasks, "the one
-with the earliest deadline wins". A waiter takes the deadline of its
-task.
+> so we do this one time retry
 
-A task can enter the class while it waits on an rt_mutex.
-sched_setattr() can make it SCHED_DEADLINE. A priority inheritance
-boost can also put it in the class, if it owns another rt_mutex.
-switched_to_dl() does not set up a task that is not queued. Its wakeup
-does. But the chain walk reads the deadline before that wakeup, and
-copies it into the waiter. A task new to the class has a deadline of 0.
+The retry is needed for correctness. The producer can commit after the
+first BUSY read but observe the old consumer position and skip wakeup.
+The consumer must reread the header after fencing before returning.
 
-So the waiter goes before every other deadline waiter. It takes the
-rt_mutex first, whatever their deadlines. Those waiters can then miss
-their deadlines. It also boosts a deadline owner whose own deadline is
-earlier.
+> [...]
 
-Fix this by starting a new period in switched_to_dl() for a task that
-waits on an rt_mutex, if its deadline has passed. The period uses the
-reservation the task runs on: its own, or the copy a boost made. This
-is what setup_new_dl_entity() does at an enqueue. At the wakeup,
-update_dl_entity() then checks that period as for any wakeup.
+> Wouldn't it be cleaner and easier to
+> mentally follow to have `goto done`
 
-A new donor of a task with no parameters of its own needs the same. For
-a queued task, the enqueue of the boost starts a period from the new
-donor. For a blocked task, dl_boost_blocked() starts it at the boost.
-
-The setattr_blocked_keeps_order and boost_blocked_keeps_order cases,
-added to deadline_bw_test later in this series, test this. Both fail on
-v7.4-rc2 and on the series without this patch. The triage of the Sashiko
-AI review of this series found the bug.
-
-Fixes: fb00aca47440 ("rtmutex: Turn the plist into an rb-tree")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: stable@vger.kernel.org
----
- kernel/sched/core.c     |  4 ++++
- kernel/sched/deadline.c | 46 +++++++++++++++++++++++++++++++++++++++++
- kernel/sched/sched.h    |  1 +
- 3 files changed, 51 insertions(+)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 94099ebb6246..75bfde7046fb 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7969,8 +7969,12 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
- 			if (!dl_prio(p->normal_prio) ||
- 			    (pi_task && dl_prio(pi_task->prio) &&
- 			     dl_entity_preempt(&pi_task->dl, &p->dl))) {
-+				struct sched_dl_entity *old_donor = p->dl.pi_se;
-+
- 				dl_set_donor(&p->dl, pi_task);
- 				scope->flags |= ENQUEUE_REPLENISH;
-+				if (!scope->queued && p->dl.pi_se != old_donor)
-+					dl_boost_blocked(p);
- 			} else {
- 				dl_deboost(&p->dl);
- 				/*
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index aa12908aeaea..ee3a08ff3345 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -139,6 +139,12 @@ void dl_deboost(struct sched_dl_entity *dl_se)
- 	}
- 	dl_drop_boost(dl_se);
- }
-+
-+/* Return true if @p waits on an rt_mutex. The caller holds its pi_lock. */
-+static inline bool dl_task_pi_blocked(struct task_struct *p)
-+{
-+	return p->pi_blocked_on;
-+}
- #else /* !CONFIG_RT_MUTEXES: */
- static inline struct sched_dl_entity *pi_of(struct sched_dl_entity *dl_se)
- {
-@@ -153,6 +159,11 @@ static inline bool is_dl_boosted(struct sched_dl_entity *dl_se)
- {
- 	return false;
- }
-+
-+static inline bool dl_task_pi_blocked(struct task_struct *p)
-+{
-+	return false;
-+}
- #endif /* !CONFIG_RT_MUTEXES */
- 
- static inline u8 dl_get_type(struct sched_dl_entity *dl_se, struct rq *rq)
-@@ -1184,6 +1195,30 @@ static inline void replenish_dl_new_period(struct sched_dl_entity *dl_se,
- 	trace_sched_dl_replenish_tp(dl_se, cpu_of(rq), dl_get_type(dl_se, rq));
- }
- 
-+#ifdef CONFIG_RT_MUTEXES
-+/*
-+ * Start a period from the new donor of @p, if @p has no reservation of its
-+ * own and waits on an rt_mutex. The enqueue does this for a queued task, in
-+ * replenish_dl_entity(). A blocked task is not enqueued, but the chain walk
-+ * copies its deadline into its waiter.
-+ *
-+ * The caller calls it only when the donor changes. A new period changes the
-+ * deadline, so the chain walk finds the waiter out of date and goes on. In a
-+ * ww_mutex cycle, a new period at each step would never let the walk stop.
-+ *
-+ * The caller holds the rq lock and the pi_lock of @p, and has updated the
-+ * rq clock.
-+ */
-+void dl_boost_blocked(struct task_struct *p)
-+{
-+	struct sched_dl_entity *dl_se = &p->dl;
-+
-+	if (!dl_se->dl_deadline && !dl_se->dl_throttled &&
-+	    dl_task_pi_blocked(p))
-+		replenish_dl_new_period(dl_se, task_rq(p));
-+}
-+#endif
-+
- /*
-  * We are being explicitly informed that a new instance is starting,
-  * and this means that:
-@@ -4725,6 +4760,17 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
- 	if (!task_on_rq_queued(p)) {
- 		add_rq_bw(&p->dl, &rq->dl);
- 
-+		/*
-+		 * A task that waits on an rt_mutex cannot wait for its wakeup.
-+		 * The chain walk sorts its waiter by its deadline first. A task
-+		 * new to the class has a deadline of 0, which goes before every
-+		 * real one. Start a new period now, as setup_new_dl_entity()
-+		 * does at an enqueue.
-+		 */
-+		if (dl_task_pi_blocked(p) && !p->dl.dl_throttled &&
-+		    dl_time_before(p->dl.deadline, rq_clock(rq)))
-+			replenish_dl_new_period(&p->dl, rq);
-+
- 		return;
- 	}
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 516a49370713..e512091ce5ed 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -413,6 +413,7 @@ static inline void dl_clear_donor(struct sched_dl_entity *dl_se)
- }
- 
- extern void dl_deboost(struct sched_dl_entity *dl_se);
-+extern void dl_boost_blocked(struct task_struct *p);
- 
- /* End the boost of @dl_se. The caller holds the rq lock of its task. */
- static inline void dl_drop_boost(struct sched_dl_entity *dl_se)
--- 
-2.47.3
-
+Done for the bound exit in v3. Callback errors now publish, fence, and
+return directly; cnt = err is gone.
