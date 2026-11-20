@@ -1,65 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795165010;
-	b=G12+BMYlrIvheb9u7ntooDpHeXyW3i0Aftk0EBLfx8UGdFnaTQag68aKQnpT86bqu4Ov
-	 AHm4x4y5OPCZzUn2SJTAGFVru0xJ1pCwwLP+e6HMw20/YFUphV0CKe09zfrd+SpsWG+vl
-	 ort5jPA/vTh7qCIhIqqYtknkrg0LGZqmz+wNdBKCMIeQoef4nWRdNl2QdxCCGzijjBIOh
-	 Ixu1t+JXIRHHZ9BGUqUMqy62Vgi68TawSGxeo3bPrssOg1DZUzuUnGyFXaoKCxDOHcbqu
-	 R0SffZSpbvVlKnaowusoP/wWDfIoDJfeVc47Sb9UjGIHGVp0swXC4OFso9eQJcFCpBg==
+	t=1795166617;
+	b=VjvJFJigly7QNiAHxQBV/0V2Ssd29swXod/tgeSd1gsAwHTYy8BYG8EjTwVe83S6kKpt
+	 yuTiJ9zvbLiolImK3KPBE+JNvntqcNdsS271nAij2PLcAZ1I+Zn402DtzNnE32DFR6XdG
+	 s6RlZmK4Sap0HhbE+HTH6bDM0LZVF+YcHXQ2ZNvBxE/UfRH7gK4uV67rW64/Pak/RphZF
+	 PCSpHZoTDuzrQDdbOwf+2KHyg3TOjBzj15H9316KKTRpb2s7Rxb6cQlDzXdUzKVxNAKGE
+	 RXZZo0lc74IHhrV7Pwux1JDAp9YNQLuN7YDiiaqR1/0vLbaoJybxvD7ch4d06UdAmgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795165010;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 DKIM-Signature;
-	bh=rK1R8ZHwVo1Re3JLTYlyIHvSg8L7skYpgklaW3rtQyc=;
-	b=5KmmfbNVFxhZfNtBbb5VpwOTJEkKH4BprJOZHHYd/XPaAOW5xIF7uLDb+yO7nEjDjbgr
-	 byWqJk+2D42n8/11nCO6H7Wjx+so5Vh//Qim9VmnNu9lVtuG70ocL0t+rkIH+zo6U7f6e
-	 m0I0vV4bmJqB0MQIZULxgXkgoC0bLqes41iQkXGF+MbK6Wstnj03k5z4R53d7ggbVekLM
-	 X1+o3NuZIrlraW4K/iAxseSg0H1UEFeLLMF87G8y6bdxVVqW3OrLaBXnu8aJVa41e8LOj
-	 Z39YrMoX/Eppu0UEDW9G65LbTAs/N8whSYUk3wi/DrQgbBcTSg4P7DE5UqbsGzqqZDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795166617;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=UHW4M+q/Xhm54NFX+3u4JQAN1oFui+zkbZJdU7S2zo4=;
+	b=OuRolAaS/Wm1T7OAmJBb1foqKPVx3dt/3fK7YmAw5bwChHAcC/1M/AMfZMTNtSz5CTTr
+	 /yfdGaNMSWqrARqaYqViFWdUzsgGoLfKew+NeE1N2hiPRoRA4uKojj0idbHcIGcdO+LKP
+	 pTb50N02WqgWgMw8PNIe7Uh0dFxmtR0tTAxJRjFRzJsDc1oZWuc0vtr65VXbGOrUBT9Hx
+	 3mD2hEPSyMiuVz52eV4nJ7Rb+cy8JB2rOsCVdJ/dbhKanG1sql330M3avdt1AXhXDlA/g
+	 8hcxuYXq+es2aeo8DHTwZhq777IuC8KHN5ADBA8GqTtNNlmXuRtryRa2DYDlA11iRyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=J6yO8HMf;
-	arc=none smtp.remote-ip=217.74.67.49
-Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D97606A325
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2026 08:56:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5D97606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=J6yO8HMf
-Received: from nr200 (unknown [80.68.231.31])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WpxwFu+d;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Fri, 20 Nov 2026 09:56:44 +0100 (CET)
-Date: Fri, 20 Nov 2026 09:56:42 +0100
-From: Slawomir Stepien <sst@poczta.fm>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, maciej.fijalkowski@intel.com,
-	tavip@google.com, toke@redhat.com, aleksander.lobakin@intel.com,
-	ilias.apalodimas@linaro.org, lorenzo@kernel.org,
-	magnus.karlsson@intel.com, ihor.solodrai@linux.dev,
-	edumazet@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch,
-	horms@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, memxor@gmail.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-	martin.lau@kernel.org, mason@kernel.org
-Subject: Re: [PATCH v7 bpf 3/5] veth: use the frame mem type when running XDP
- on an xdp_frame
-Message-ID: <awALSrKSY3GSVY0e@nr200>
-References: <20261119133032.2015656-4-sst@poczta.fm>
- <9a5a1487a4676381f4c3d98cb5a22f50e2f54d9d4ec7947891c889b64ac12693@mail.kernel.org>
- <CAG4wq-favnH37jS2=a-aJwBgQOuW=KTsM-vJWp73PNDfFq4=ZA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAD4606A320;
+	Fri, 20 Nov 2026 09:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WpxwFu+d
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456E71F000C6;
+	Fri, 20 Nov 2026 09:23:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795166616;
+	bh=UHW4M+q/Xhm54NFX+3u4JQAN1oFui+zkbZJdU7S2zo4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WpxwFu+dBnk7TT+TAVvOCeGZiO/i95AKNUlvowfDJHUSAgOn1AMEi1CBG2K2tfp/Y
+	 kRb4JmuT6xjrixrvoFrF3oQ1dT0X7AGsHkqw9WO6W/M14RzpjVe4aYupuKsArGkDRl
+	 PcbsYr6xFO+th1S+LgcDKGkvCqZSIpB6SvOhYiq2nHQ7gXfsN4d+TzFutAxgThIqwj
+	 CcXL9FpFXNqxgNeYqb5bWnsyL/0tp089iVZpGhFBSTPltZGX7jgip7ZzjQSuFF/UlC
+	 ixURzNPzCCy5x7y4QtCO7KfNLHpovSsxg+f7b/rGq0BoQQVR7Fym73XF20qh+v5oS/
+	 UlZ3cr8g877iw==
+Date: Fri, 20 Nov 2026 10:23:28 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: David Matlack <dmatlack@google.com>, kexec@lists.infradead.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org
+Cc: Alexander Graf <graf@amazon.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	David Hildenbrand <david@kernel.org>, Hugh Dickins <hughd@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, "Liam R. Howlett" <liam@infradead.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v4 08/19] liveupdate: Let file handlers retrieve into an
+ existing file
+Message-ID: <20261120-gedulden-rausgeflogen-spruch-cea76174d5e2@brauner>
+References: <20261111002358.1842967-1-dmatlack@google.com>
+ <20261111002358.1842967-9-dmatlack@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,30 +67,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAG4wq-favnH37jS2=a-aJwBgQOuW=KTsM-vJWp73PNDfFq4=ZA@mail.gmail.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795165007; bh=rK1R8ZHwVo1Re3JLTYlyIHvSg8L7skYpgklaW3rtQyc=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	b=J6yO8HMfdTGMVDA94Am0LW+K4wYF4g+JzZfg9naHj1EuT3mypc0dr4qGcyY+s81tw
-	 IdunbB8uJpsuRN2gGmx9lbm9vVD4z2s6w+NyAviXMnOfYQU0kqNa94d3O4GBHnF7Fc
-	 OvDmp5U9GNIdXLFn8sL0D92Yi2tkFDSWUvBM6QMY=
+In-Reply-To: <20261111002358.1842967-9-dmatlack@google.com>
 
-On lis 19, 2026 14:24, Tianyi Gao wrote:
-> On Thu, 19 Nov 2026 13:54:58 +0000, bot+bpf-ci@kernel.org wrote:
-> > Is this Fixes: tag pointing at the right commit?
-> >
-> > 718a18a0c8a6 only reworks the skb path (veth_xdp_rcv_skb() and
-> > veth_convert_skb_to_xdp_buff()), and does not touch veth_xdp_rcv_one(),
-> > which is the only function this patch changes.
-> 
-> I think the AI is wrong here. Before 718a18a0c8a6, veth copied a
-> non-linear skb into one linear page, so no frame with frags could reach
-> veth_xdp_rcv_one(). Either way, 718a18a0c8a6 and bf25146a5595 are both
-> in v5.18-rc1, so the choice makes no difference for stable.
+On Wed, Nov 11, 2026 at 12:23:46AM +0000, David Matlack wrote:
+> A file that is restored into an existing file is already open in the
+> caller, so installing a new file descriptor for it would just leave
+> userspace with two file descriptors for the same open file. Retrieving
+> the token again later still returns a new file descriptor, like for any
+> other file that was already retrieved.
 
-Thanks! I will keep 718a18a0c8a6.
+Thanks, this looks way better.
 
--- 
-Slawomir Stepien
+One thing: Please just install a new fd like for every other retrieve.
+I think it's pretty meaningless to return the fd number the userspace
+just passed to the ioctl.
+
+The fd number is also not useful as it's not tied to anything. The shmem
+handler looks the fd up once and LUO keeps a reference to the struct
+file:
+
+	CLASS(fd, target)(arg->fd);
+	[...]
+	args->file = get_file(file);
+	args->fd = arg->fd;
+
+Which means, another thread can close() that fd or dup2() something else
+over it before the ioctl returns and the fd you hand back refers to a
+different file fucking over the caller (shared fdtable etc pp).
+
+That also gets rid of @fd in struct liveupdate_file_op_args and the
+special case in luo_session_retrieve_fd(). And a retrieve into an
+existing file then behaves exactly like retrieving the token again.
