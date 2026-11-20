@@ -1,49 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795141813;
-	b=GauDn7vC2Lpkyc8zSK6rqcGvUxchdXyg2LbZTwa4w/pnSXjbuMdG5yTI5w18sKYJTEnV
-	 I/Cftj3HJ9iYl8SrhVnWcwXXBHIl55Tun7UcNts4R2l8xa7CWk0kDvt5ASMT9t5UOFgAb
-	 irI5rDECl8p8SvSHkD3zCGGsYQ7geruR77XbdizMgcnahJyWegyc22E2LP5oglpSpPayl
-	 t83jrbKhjHt8MdbBsfv5GgPQh60haV5S4oV2/HUaFWMUfWxFs5NKHwQuP8BtUdmWhblmW
-	 aQ/sC5avVJXs86iWZ5eD62yT/lpx4iPOL8sSrLd1UiAS2PKp8adendT9NO1tvR8TvRA==
+	t=1795145048;
+	b=5TxilCx+Qd1PTpLzY7UiOunvqQ3jZTQ0ZrRTonaR6x5BkCMgrH4VMJklWWUMiDuXOyjj
+	 zoUAXftGAkMSQ1Tkt/Z9a/aWqn/vH7uXPd8xuwEf0XKOx3MUxBlKV3Oq0DSzkj4KVzh1U
+	 99CZexcwbSKKj0tqC17+sQjPorDtZ/Am48dVA+ejCuJoqSxkBbNCiuwZGTFH0s5f724Xj
+	 +WPOYAW/hf9yi7HBdHcqxslMPrlS4hbqDDEre1WTzhzKp3PMnb7xc8l7dtRg+HxUTvLdE
+	 MnBocA76bBXVyu3SAXxGR7tncWhCwM1zjVMd7LuC0HQEIGOll3BW8dmPMXbWsdvDtOQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795141813;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=N3KOOkNLjVYOlOvrbb1hRyfPdTQMh0NGXyqRX6BOT0U=;
-	b=e0GFQRdu5GnfknOQn5WCEnGEj3xFLYnDnjK7+fCyhn6FnSsatN9t6X/7Xc6C8yoctXs7
-	 ls9bX7lESBJRJ91aaHeE7zGWRcP91muv7KKQuY0ob1aaK0VlKQdtFbzW4i+Gn+QNoFDJ3
-	 RnapVGDupTxGUPTF0CfLiLNA+wO0q2dAAMjB/CjHKjLFXTsEY95Zheo4GafbfQNOQB+xa
-	 39PXIVJbj0kDQsCEZ27bOAJmqRREqHq2NxaqK6o+HdyAfISj0QYEKSR+3DWKmcWVP9cjH
-	 /u0T2FU/9x2+HWwJBqv7LsDHpRFG+7jA3t4ZdDHNzGwCDXtoq34Zw/csXdDO1bCwMZA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795145048;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=3yX4FDoUFu7qkSNjWtKhvMEyfxtx14m6ybjPdJONghQ=;
+	b=RjpGjJA7avMQ+/9mAHLOXlFSg3GKMRfhAjwyHSx34qpm14PfbQlOvXYVGVD3CmUeFI1y
+	 ANEBlP9gp4RM1HX2pWEs7G2GsgSqOWFcGjakb/X6zhSDbtZsaZunBAQShOKsCwR9QCCmc
+	 7EeStO2mp6449IoivaKZAQi3QmEbPB7F88/+QqbodK0A1mTYCuUwbdz8R1Ty69dL6aNMe
+	 4dV8GKCemmJLhZ+gfi9UakdcxF3jQSGyKCDmiGXh84o5d6MeK4MTOXkpN311eVHVtthd8
+	 77Zw8KHlcQZzwBPKDyzLUiUgDTNMixC0V6IgIcCBRXhzq+UKDk3dZbQq9hcN+3aUQqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DgDyLi29;
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=W3PrHeGe;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D1E606A33C;
-	Fri, 20 Nov 2026 02:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB6B60A2617;
+	Fri, 20 Nov 2026 03:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DgDyLi29
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06AF41F000D2;
-	Fri, 20 Nov 2026 02:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795141813;
-	bh=N3KOOkNLjVYOlOvrbb1hRyfPdTQMh0NGXyqRX6BOT0U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=DgDyLi29rTOArflUCEHDngsUuw+Z7F3aHUwKDMYh7svpzCaNEkYtb+GCLY8D2uPND
-	 0tzDaM1BbQJoeeH639LeBTZjVhHgfOmWnLLGaLfT6NKGktFZYXorBnq6cy4wUo3xkq
-	 /ZvmqNAR9ymYmCrcJfz9OfRsp/Z7DxiL9vxSQx6QJLxDuZYt8nns1qIjVguNhZTaxz
-	 ZjIK9WkpSp56CgJ4NV12vFYXPxdWO8CSE3OA4Ym9wLvRPY7uBxuHAoJsMKvcr28Iua
-	 9cIkOyKDByt9GcROrOSrIAvNniRiqKOUuPXS9HBv3/ivctf+ezBe3JIYQXFs2vfbFJ
-	 OMTKF8DqGROMw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F16AE3808209;
-	Fri, 20 Nov 2026 02:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=W3PrHeGe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454F41F000C4;
+	Fri, 20 Nov 2026 03:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1795145047;
+	bh=3yX4FDoUFu7qkSNjWtKhvMEyfxtx14m6ybjPdJONghQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=W3PrHeGehRuiXr+cz0ko5CZbBrXgntivry/WM5clfbAMItcHQ34+SI5+Ffn20hTA3
+	 s6XBcVbbd70dj2/nNs4W39r5wsroGej/E7ytXCyZX80kcyXRG1+Pw7+g3FcBV4z7Hr
+	 scruvOIeXifAWOcruTEY3v5CnIQ1mqJPCuNQ+crA=
+Date: Thu, 19 Nov 2026 19:24:06 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Qingshuang Fu <fuqingshuang@kylinos.cn>
+Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, Shuah
+ Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <liam@infradead.org>, Karl Mehltretter
+ <kmehltretter@gmail.com>, Bala-Vignesh-Reddy
+ <reddybalavignesh9979@gmail.com>, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/proc: include linux/mman.h for
+ MREMAP_DONTUNMAP
+Message-Id: <20261119192406.beb3f4ccc1451f87450f858a@linux-foundation.org>
+In-Reply-To: <20261120022710.1585112-1-fuqingshuang@kylinos.cn>
+References: <20261120022710.1585112-1-fuqingshuang@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,52 +60,38 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5 0/4] ipv4: restrict on-link fallback to lookup
- misses
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179514181152.3985754.6093417150310548869.git-patchwork-notify@kernel.org>
-Date: Fri, 20 Nov 2026 02:30:11 +0000
-References: <20261116202741.13106-1-liamsmith827@grapheneos.org>
-In-Reply-To: <20261116202741.13106-1-liamsmith827@grapheneos.org>
-To: liamsmith827 <liamsmith827@grapheneos.org>
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, liamsmith827@proton.me
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Fri, 20 Nov 2026 10:27:10 +0800 Qingshuang Fu <fuqingshuang@kylinos.cn> wrote:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 16 Nov 2026 20:27:37 +0000 you wrote:
-> From: Liam Smith <liamsmith827@proton.me>
+> glibc versions before 2.32 do not define MREMAP_DONTUNMAP in
+> <sys/mman.h>, so proc-maps-race fails to build against them (e.g.
+> glibc 2.31):
 > 
-> When an output interface is specified (e.g., using SO_BINDTODEVICE,
-> IP_UNICAST_IF or IP_PKTINFO) and the FIB lookup fails, the IPv4 output
-> path ignores the error and constructs an on-link route via the
-> specified interface. According to the comment above the code, the
-> intent was to allow sending packets via an interface that does not have
-> any routes.
+>   $ make -C tools/testing/selftests TARGETS=proc
+>   ...
+>   proc-maps-race.c:691:58: error: 'MREMAP_DONTUNMAP' undeclared
+>     (first use in this function)
 > 
-> [...]
+> Include <linux/mman.h> to get the flag from the kernel UAPI headers
+> instead of depending on the libc version.  The proc Makefile already
+> adds those headers to the include path via $(TOOLS_INCLUDES).
 
-Here is the summary with links:
-  - [net-next,v5,1/4] ipv4: add FIB_LOOKUP_REPORT_MISS
-    https://git.kernel.org/netdev/net-next/c/ebcfb8e24044
-  - [net-next,v5,2/4] ipv4: restrict on-link fallback to lookup misses
-    https://git.kernel.org/netdev/net-next/c/67de0b38f68a
-  - [net-next,v5,3/4] selftests: net: test restricted on-link fallback
-    https://git.kernel.org/netdev/net-next/c/854ec14f9360
-  - [net-next,v5,4/4] ipv4: replace obsolete routing comment
-    https://git.kernel.org/netdev/net-next/c/8acc01b5b851
+Boy, anyone who is running 6 year old glibc has bigger problems than
+this.  2.31 is full of scary-looking CVEs.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> --- a/tools/testing/selftests/proc/proc-maps-race.c
+> +++ b/tools/testing/selftests/proc/proc-maps-race.c
+> @@ -33,6 +33,7 @@
+>  #include <string.h>
+>  #include <unistd.h>
+>  #include <linux/fs.h>
+> +#include <linux/mman.h>
+>  #include <sys/ioctl.h>
+>  #include <sys/mman.h>
+>  #include <sys/stat.h>
 
-
+but OK, patch looks harmless enough and lots of selftests/ are including
+linux/mman.h.
