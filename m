@@ -1,113 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795294542;
-	b=sOGcU3JhFkmIcEGhW58mlUtk4DiMncKnE3y8RAI1NgisHDYSuqoybhr/Ej8jAbigSBBG
-	 oRm1L8UJ0HBSCXc6H9rq+ZBLtD8YzxEjjF7kzKprzOXFvreSaW33+6TZ2vsQuTUQ2nFTM
-	 DW7qYuaED02MCEZK3MVARQE7H9BJW2tq048RREAHmysUEx08mryEPzK7j1ASGrQ5k+Jdd
-	 EDr1YHkAYmo/EyPjTuuWxVfDZbZaykXORhZQTggoNRhgVreCsX2eBpfOKTXc2DnkE9b3w
-	 l0iQi5oIb2mMfvgqgVxeJHr4r0FL0pmukWpZbdxFuJWhZQq0YS39X0bh5yHJf271cww==
+	t=1795294821;
+	b=BnAU0VMEYRzVdHdXthsFyNnEQ8PkRYcm+812YOZlFYH7klpff3vlckGysSRUjfwawDH8
+	 kddy3WfIdtYzrn+s8EIqDfoSrcNDyHdK3wHtQrQtS1jNFaQUFLj0twQT53XVFYyDLHbe4
+	 LLm7eNhU+wbBPyzEcU1ahEFqovrLeTe4Ul4ytmrdXTL6Yb3jDFdPCKqJlaCUf2LbmyM48
+	 iHyr432/+Nz1yRUsCq6OzPE3Aw6yudOim98ejh5T7o3mDZFdcVQdAPUX/EsntlhFO5Di0
+	 /nFEZPo20z7Ucq9pHBjutzQ+MEuQHuUm3nrfUqzCXtUCAeZsovoSVa1QElZB53UYkOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795294542;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795294821;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=iA9GCTJobddBAA9FdF1LmGHUJsNDSuUG1BPvcdAHjlw=;
-	b=WGJaJ39Yy9CVPfwCirk6yzm0X8spSEvp/aPRxsyLx9MkcTNy8CUQoGj3MRSbUcoNCLiK
-	 Z7XlRa3NnT09fT3L52z+rqOx7OVO/8M/VDLT5YrlR7gIAjte8C5NAAmk/o8e42+i8dZEG
-	 M7wv77OVtzzZCNP8I+pF3Co2nsRAIyJT2Y17KRzh3eJ7WC9HqLJRxB1qHVqbC+4ZiRe75
-	 vBfA2rsgIi5VtWesWkjx1CEo7+7WSa3NFDKEPk0BtTERJiP77J+Mi0ho4QOzZuJ+TNOg+
-	 /8c91CIt9WJFvid0rAKbiqgJuppSNrljpX9g+2mqZg1W/pOJpAmSOKI+ftTkVZNhxZA==
+	bh=zdUEUat7j9pUSbGlH4X0DruoE2B9UNxheDyAc9R5hyc=;
+	b=M7aazIfPZ/CqS3wOozvwQmkgP2+7FmAwYbwHBXI2SFiQKqO46/wkhQKXLYSYKSbXED6r
+	 Kp1wMUmKGQTpgxvjz0k3AzEvaPiz70q2V7fjmvwVIhaYj1QFzzoaG5doQZf/eEp1TsFBd
+	 G/xjTavCaEVaiGXy9PSZ8F2Xv/1SynEz1rv4hmo3H0H5rspfgSAWHJBqfw3CFIGg2hW76
+	 WoZ4kMd+MH99p+ZoiQ6jbPrsi1rA5w8fOgkc031yp6Z6rbihL67Ylk8S50UD2cb1v7BgV
+	 jfbeNBBcE90pER5zmuMNndI1+CbHkb4ReeYK9RAJDmy203Dl6IgJNPFrMISqMLYXOww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bairaktaris.de;
-	spf=pass smtp.mailfrom=bairaktaris.de;
-	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=SWrnr1jp;
-	arc=none smtp.remote-ip=209.85.218.41
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RV8Imet5;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F366606A33C
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 20:55:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F366606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7919606A32A;
+	Sat, 21 Nov 2026 21:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=SWrnr1jp
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c516a574bffso13916366b.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 12:55:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1795294540; x=1795899340; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=iA9GCTJobddBAA9FdF1LmGHUJsNDSuUG1BPvcdAHjlw=;
-        b=SWrnr1jpRqwydClUqIexX/y9BrEY1O7F3o6N14dL1hRcy7OkQM8p2oxN46gplOcu1C
-         AKoPC+J5s5CeZTlfX5GrUMi7OVC8m7V7xuIKKDcU2Ew3pI8ZQA61VtLUC/07H0lgNwyL
-         W10qZZe7anhD+yQnlsbxk4buTTfPTdxbuVHjme9wS98IcsrrEz21A4qpHqKuubOvFxJB
-         7TkwiWfheEbN6SSQ5Q9DFbx2G5jF4c7HMnV1J2ttC47sccYTLtc/KAK3DbVMyoHZUypu
-         lNgjtPmEJ6YqOCMu8V3s6zyOS/0AH9i4XUSRrdK3NTal1OZZn8P9Bz7p3+vlBl86fo3K
-         fnGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795294540; x=1795899340;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iA9GCTJobddBAA9FdF1LmGHUJsNDSuUG1BPvcdAHjlw=;
-        b=uiErpqHmtffWGtkagxQoxxoeLM1ji7kxjC2iclCAsFjFHFEBySbpElV97l4W2fKetd
-         hddDNJChtx+wH0lM30HRbO1Nthg10fy6UrXX3/QFjmoLJ4aBl0tw5ozVBA2FObN4CSYr
-         xnw7hE/beN3zr3Xgv5dfMgfC0LrOwwASywFjZwWVVsS1E1ajvMSlJw69VkzGh3kDh5GQ
-         3z2G7CMcZly+adkkKPr+5le55P7tPPQZX/vvrdibS52iDRPUOUlwmikrsYjXuOtB2UJ/
-         l2CJqHTJausHqfnSRQlu3nHBEomXwN+DgDH7MDa5m5kOCwHlEzEGcDbCzXbpXFj1y+ja
-         17PQ==
-X-Forwarded-Encrypted: i=1; AL+hErFPAEHAxiNlm+bRAciSCezoHw4XQeurSosJg6y5E5AyAznMyiavY8cztWAsK8NQVujUEBRLjYCGumjwO/CIOvU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8qxl4gI+8VHOL9i98xTYr+z2i71PnTAEKDuWCBRO9UkaVmnZNg
-	Rf7Z0/GTe1dfIX5DAAwBjs/9sqnuM8DAsCxrasRFMFKfDqOnPE1tUiwXTiRkvErXs9/7X+cJ90a
-	WKWYIu0MG
-X-Gm-Gg: AZFdTZccs4LFVrbDraqWzfpXQKWPERapZvzyCTitRfN1o5tNfM88ecrqmaP2e255boR
-	9UzcrqEDY7Q2nUymmWz6k9e3W6DC6j6uXox3m2WS59m526EAi1a02Hn7uTqTYCeB0e0Jc9hIIxR
-	dqyi/SrUmRiAswivyndY9UTP8gTWNXFz+qCjWk8UJ/ohKNe3D4nWFeQ0wusKYpxmSZOgjDJ2ycy
-	fpNF42y/QNBBhyJLVB4Oe3xMx8/jiIjEymRqNqND2Iz1xfbYv4kLuN4PfqeP4D1a5pXWcvS7W7l
-	5kvlfukGwfLmYjD+dHSPEXroScQEU4cp6pccXksMoojkq0J/nZYkFWqlcRcmkDDpWeQjkhkrDoq
-	N9ZR8PUPJLKIHTZuqNf/xY7oGDY7kJxFfELjykQRkQf35iJfKg3ICdK5cQwmN0XEvCusG6FcFUT
-	Wkn5amqKjrvOYXdUFQx+pbpslB3tqb7QuBtmjkH6RN6xja0ggZ9srHJv2bsLC+u5Q3fK1p685qO
-	wvraAd2qDcbcVelotp+Z28Mniyig9JD5TRFZ2+GfrIKBJUctZUFaGz0wYKHTl3PrCoiVExJ/OAh
-	qNnq4171xfpmZUEyJCvFHAk/aoaaJHtmK1zH/M64f+F1dSJgY/mkwdgOTpiLA9Dcsp5ycKvUC0J
-	nczpoyBTOVIeyx7YwCT5g5cF+JAbNvY/EvwrxMrQbAEE0M6vOtBauR4hd6gp1qF2RUkzUn4QtGu
-	X+IzNR11n5kdzo1qAl3ljT1iKO3jO1RR6DHuGPbYzA3ozrY/lR0iDxjxEHwvf4DfqkwBsJC26L7
-	lzaojuGSg7hMNH4detdsoncC1hdCr4u0ZhvgGy6LcGGHRXsZCMNrcQ15gwlLl/xZQ+DpQTkFc9j
-	hZstO2SCmTgXXRSMxD0S+r/fi1GYH9VWW9suoIzG2/HvDontwwn3RiJkqhL5uhF/7jMWo+7ZDM9
-	i
-X-Received: by 2002:a17:907:9693:b0:c4d:331c:2e97 with SMTP id a640c23a62f3a-c513ab47f5fmr622642366b.36.1795294539912;
-        Sat, 21 Nov 2026 12:55:39 -0800 (PST)
-Received: from Desktop.tail070c67.ts.net (p200300f2470dfa000000000000000a27.dip0.t-ipconnect.de. [2003:f2:470d:fa00::a27])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513aea28f4sm237136666b.33.2026.11.21.12.55.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2026 12:55:39 -0800 (PST)
-From: Julius Bairaktaris <julius@bairaktaris.de>
-To: netfilter-devel@vger.kernel.org
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Phil Sutter <phil@nwl.cc>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RV8Imet5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DA11F000D4;
+	Sat, 21 Nov 2026 21:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795294821;
+	bh=zdUEUat7j9pUSbGlH4X0DruoE2B9UNxheDyAc9R5hyc=;
+	h=From:To:Cc:Subject:Date;
+	b=RV8Imet55YoYm/Q24IcP+f6IYmTruUVLB/zwnit9+4KriS7a+Tfd8/738BH9piWXo
+	 6BDRXQs0/irTm2N7mgFq7RGV+N9zEK9FpB8j4jrnnsUSF28FccqaXdgu/ohKyxUbbM
+	 RRAApXmjXUnhFh8pK/dNwkh5iCIN+KGr5MlwUDJjaxHiaasEHAAkO02Q7m/x36yjD0
+	 UzXJGnZWYINaHU4yS24kou7GBC66l0Rvk+aoQL4Cg+SeweKE23x5Xxj49xRGQqHSVU
+	 BKx1Ijg8v7Um1vOFcPI4N+B4+kldV/3mXgwnbWC9r2FxMEOJ1U5GcyFFiWUb5+3vdq
+	 2JoYNLdNcEcrg==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Eric Woudstra <ericwouds@gmail.com>,
-	netdev@vger.kernel.org,
-	bridge@lists.linux.dev,
-	coreteam@netfilter.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH nf-next v11 3/3] selftests: netfilter: nft_flowtable.sh: roam a host between two bridge ports
-Date: Sat, 21 Nov 2026 21:55:35 +0100
-Message-ID: <20261121205535.1888592-4-julius@bairaktaris.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261121205535.1888592-1-julius@bairaktaris.de>
-References: <20261121205535.1888592-1-julius@bairaktaris.de>
+	Shuah Khan <skhan@linuxfoundation.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 00/27] mm/damon: let users report their data attribute findings
+Date: Sat, 21 Nov 2026 12:59:44 -0800
+Message-ID: <20261121210013.130397-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -119,437 +65,311 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move a host to another port of a bridge on the router while its flow is
-offloaded, and check that the transfer continues and is offloaded again.
-The cases are plain and vlan bridge ports, vlan ports whose real devices
-are ports of another bridge, "bridge fdb replace", a pinned and then
-deleted fdb entry, an aged out entry (the flow must stay), the plain
-case over IPv6, and a vlan_filtering bridge with untagged ports, with
-tagged plain and vlan ports, and with the router address on a vlan
-device on the bridge. Two cases give the ports vid 10 untagged while
-their pvid stays 1, with a host that tags what it sends: the router
-address on a vlan device on the bridge, and on the bridge with pvid 10.
-With "stack" the bridge port is a vlan device of another bridge, and
-with "stackout" the host moves from behind that bridge to a port of the
-outer one. Three cases check that the flow follows what the bridge
-delivers: the host's port is disabled and its vlan leaves the port
-(the flow must stop in both), and vlan_filtering is turned off before
-the host roams. In two cases the host is the remote end of an IPIP and
-an IP6IP6 tunnel on the router, whose flow transmits to the bridge port
-below the tunnel.
+TL;DR
+=====
 
-Without the gc check the transfer stalls when the host moves.
+Build a system for letting DAMON-external entities report their data
+attribute findings to DAMON.  Let users report their data attribute
+findings to DAMON using the report system.
 
-Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
----
-v11: the host roams below an IPIP and an IP6IP6 tunnel on the router,
-which Pablo's series offloads as direct xmit to the bridge port
-v10: https://lore.kernel.org/netfilter-devel/20261115005555.645727-4-julius@bairaktaris.de/
+When DAMON Extension Becomes Challenging
+========================================
 
- .../selftests/net/netfilter/nft_flowtable.sh  | 390 ++++++++++++++++++
- 1 file changed, 390 insertions(+)
+DAMON's probe based data attributes monitoring system allows flexible
+extension of it for new types of information.  Such extensions are not
+always easy, though.  That's because DAMON is collecting the information
+on its own worker threads, kdamonds.  If the new information to extend
+for is not already stored in a data structure that kdamonds can read,
+the extension becomes difficult.
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index 449c518bd947..6ae84472790f 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -851,6 +851,396 @@ test_ipip
- 
- test_bridge
- 
-+# set by setup_ns, which reuses a name it already holds
-+rns1="" rnsr="" rns2=""
-+
-+# Roam a host between two ports of a bridge on the router while its flow is
-+# offloaded, as a station moving between two access points attached to ports
-+# of one bridge. The host keeps its address and mac on a bridge of its own and
-+# roams by moving that bridge's port, so only the fdb changes. With a vid the
-+# bridge ports are vlan devices, whose ifindex differs from the device the
-+# flow transmits on. With "replace" the router's fdb entry is sticky and the
-+# move is a "bridge fdb replace". With "del" the host stays, its entry is
-+# pinned to the other port and then deleted, and a ping relearns it. With
-+# "age" the host stays and its entry ages out, which must not tear the flow
-+# down. A flow that stays on the fast path leaves no more than a few packets
-+# in the forward chain, the counter tells offloaded from slow path. The plain
-+# roam also runs over IPv6, and on a vlan_filtering bridge: with untagged
-+# ports ("vf"), whose fdb entries are keyed by the pvid of the port, with
-+# tagged ports ("tag"), and with untagged ports and the router address on a
-+# vlan device on the bridge ("upper"). "asym" and "asymkeep" give the ports
-+# vid 10 untagged while their pvid stays 1 and the host tags what it sends,
-+# with the router address on a vlan device on the bridge or on the bridge with
-+# pvid 10. With "stack" the port of br0 is a vlan device on br1, whose ports
-+# the host moves between; with "stackout" the host moves from behind br1 to a
-+# port of br0. With "block" the host's port is set to the disabled state,
-+# which must stop the flow. With "vdel" the host's vlan leaves its port, which
-+# must stop the flow, and with "toggle" vlan_filtering is turned off before
-+# the host roams. With "ipip" and "ip6tnl" the host is the remote end of a
-+# tunnel on the router, and the flow through the tunnel transmits to the
-+# bridge port below it.
-+test_bridge_roam()
-+{
-+	local vid=$1 how=$2 fam=${3:-4} vf=$4 trunk=$5 tun=$6
-+	local p0=sr0 p1=sr1 r0=rr0 r1=rr1 rbr=br0
-+	local mac=02:00:00:09:01:99
-+	local what="roaming on bridge${vf:+ with vlan_filtering}"
-+	[ "$vf" = tag ] && what="$what and tagged ports"
-+	[ "$vf" = upper ] && what="$what and a vlan device on the bridge"
-+	[ "$vf" = asym ] && what="$what, a vlan device on the bridge"
-+	[ "$vf" = asymkeep ] && what="$what and the bridge pvid"
-+	[ "${vf#asym}" != "$vf" ] && what="$what untagged on ports of pvid 1"
-+	what="$what${vid:+ with vlan ports}"
-+	case "$how" in
-+	block) what="$what, the host's port disabled" ;;
-+	vdel) what="$what, the vlan leaving the port" ;;
-+	toggle) what="$what, vlan_filtering turned off" ;;
-+	?*) what="$what by fdb $how" ;;
-+	esac
-+	[ "$trunk" = trunk ] &&
-+		what="$what whose real devices are ports of another bridge"
-+	[ "$trunk" = stack ] && what="$what on a vlan device of another bridge"
-+	[ "$trunk" = stackout ] &&
-+		what="$what from a vlan device of another bridge to a port"
-+	local ftdevs="rr0, rr1, rw0"
-+	local hn=10.9.1 wn=10.9.2 dot=. len=24 nodad="" ip6="" srv=10.9.2.99
-+	local min=10000000
-+	local dev old new slow fdb lpid cpid win=2
-+
-+	if [ "$fam" = 6 ]; then
-+		hn=dead:9:1 wn=dead:9:2 dot=:: len=64 nodad=nodad ip6=-6
-+		srv="[dead:9:2::99]"
-+		what="$what over IPv6"
-+	fi
-+	[ "$tun" = ipip ] && what="$what below an IPIP tunnel"
-+	[ "$tun" = ip6tnl ] && what="$what below an IP6IP6 tunnel"
-+
-+	setup_ns rns1 rnsr rns2
-+	# router solicitations of the host would pass the bridge and refresh
-+	# its fdb entry
-+	if [ "$fam" = 4 ]; then
-+		ip netns exec "$rns1" sysctl -q \
-+			net.ipv6.conf.all.disable_ipv6=1 \
-+			net.ipv6.conf.default.disable_ipv6=1
-+	fi
-+
-+	if ! ip -net "$rnsr" link add br0 type bridge \
-+	     ${vf:+vlan_filtering 1} 2>/dev/null; then
-+		echo "SKIP: could not add bridge for $what"
-+		[ "$ret" -eq 0 ] && ret=$ksft_skip
-+		return
-+	fi
-+
-+	ip link add sr0 netns "$rns1" type veth peer name rr0 netns "$rnsr"
-+	ip link add sr1 netns "$rns1" type veth peer name rr1 netns "$rnsr"
-+	ip link add rw0 netns "$rnsr" type veth peer name w0 netns "$rns2"
-+	if [ "$trunk" = stackout ]; then
-+		ip link add sr2 netns "$rns1" type veth peer name rr2 \
-+			netns "$rnsr"
-+		ip -net "$rns1" link set sr2 up
-+		ip -net "$rnsr" link set rr2 up
-+		ftdevs="$ftdevs, rr2"
-+	fi
-+	for dev in sr0 sr1; do
-+		ip -net "$rns1" link set "$dev" up
-+	done
-+	for dev in rr0 rr1; do
-+		ip -net "$rnsr" link set "$dev" up
-+	done
-+
-+	if [ -n "$vid" ]; then
-+		for dev in sr0 sr1; do
-+			ip -net "$rns1" link add link "$dev" name "$dev.$vid" \
-+				type vlan id "$vid"
-+			ip -net "$rns1" link set "$dev.$vid" up
-+		done
-+		p0=sr0.$vid; p1=sr1.$vid
-+	fi
-+	if [ -n "$vid" ] && [ "${trunk#stack}" = "$trunk" ]; then
-+		for dev in rr0 rr1; do
-+			ip -net "$rnsr" link add link "$dev" name "$dev.$vid" \
-+				type vlan id "$vid"
-+			ip -net "$rnsr" link set "$dev.$vid" up
-+		done
-+		r0=rr0.$vid; r1=rr1.$vid
-+	fi
-+	if [ -n "$trunk" ]; then
-+		ip -net "$rnsr" link add br1 type bridge
-+		ip -net "$rnsr" link set rr0 master br1
-+		ip -net "$rnsr" link set rr1 master br1
-+		ip -net "$rnsr" link set br1 up
-+	fi
-+	if [ "${trunk#stack}" != "$trunk" ]; then
-+		ip -net "$rnsr" link add link br1 name br1.$vid \
-+			type vlan id "$vid"
-+		ip -net "$rnsr" link set br1.$vid up
-+		r0=br1.$vid; r1=br1.$vid
-+	fi
-+	# the host moves from behind br1 to a port of br0
-+	[ "$trunk" = stackout ] && { r1=rr2; p1=sr2; }
-+
-+	ip -net "$rnsr" link set "$r0" master br0
-+	[ "$r1" != "$r0" ] && ip -net "$rnsr" link set "$r1" master br0
-+	ip -net "$rnsr" link set br0 up
-+	if [ "$vf" = tag ]; then
-+		for dev in "$r0" "$r1"; do
-+			bridge -n "$rnsr" vlan add vid 10 dev "$dev"
-+		done
-+		bridge -n "$rnsr" vlan add vid 10 dev br0 self pvid untagged
-+		for dev in "$p0" "$p1"; do
-+			ip -net "$rns1" link add link "$dev" name "$dev.10" \
-+				type vlan id 10
-+			ip -net "$rns1" link set "$dev.10" up
-+		done
-+		p0=$p0.10; p1=$p1.10
-+	elif [ "$vf" = upper ]; then
-+		for dev in "$r0" "$r1"; do
-+			bridge -n "$rnsr" vlan add vid 10 dev "$dev" \
-+				pvid untagged
-+		done
-+		bridge -n "$rnsr" vlan add vid 10 dev br0 self
-+		ip -net "$rnsr" link add link br0 name br0.10 type vlan id 10
-+		ip -net "$rnsr" link set br0.10 up
-+		rbr=br0.10
-+	elif [ "$vf" = asym ] || [ "$vf" = asymkeep ]; then
-+		# vid 10 leaves the ports untagged but is not their pvid; the
-+		# host tags what it sends, so the entry is learned in vid 10.
-+		for dev in "$r0" "$r1"; do
-+			bridge -n "$rnsr" vlan add vid 10 dev "$dev" untagged
-+		done
-+		if [ "$vf" = asym ]; then
-+			bridge -n "$rnsr" vlan add vid 10 dev br0 self
-+			ip -net "$rnsr" link add link br0 name br0.10 \
-+				type vlan id 10
-+			ip -net "$rnsr" link set br0.10 up
-+			rbr=br0.10
-+		else
-+			bridge -n "$rnsr" vlan add vid 10 dev br0 self \
-+				pvid untagged
-+		fi
-+	fi
-+	ip -net "$rnsr" addr add $hn${dot}1/$len dev $rbr $nodad
-+	ip -net "$rnsr" addr add $wn${dot}1/$len dev rw0 $nodad
-+	ip -net "$rnsr" link set rw0 up
-+	ip netns exec "$rnsr" sysctl -q net.ipv4.ip_forward=1
-+	ip netns exec "$rnsr" sysctl -q net.ipv6.conf.all.forwarding=1
-+
-+	# the host takes untagged frames into vid 10 and sends it tagged
-+	host_port() {
-+		ip -net "$rns1" link set "$1" master stbr
-+		if [ "$vf" = asym ] || [ "$vf" = asymkeep ]; then
-+			bridge -n "$rns1" vlan add vid 10 dev "$1" pvid
-+			bridge -n "$rns1" vlan del vid 1 dev "$1"
-+		fi
-+	}
-+	ip -net "$rns1" link add stbr type bridge
-+	if [ "$vf" = asym ] || [ "$vf" = asymkeep ]; then
-+		ip -net "$rns1" link set stbr type bridge vlan_filtering 1
-+		bridge -n "$rns1" vlan add vid 10 dev stbr self pvid untagged
-+		bridge -n "$rns1" vlan del vid 1 dev stbr self
-+	fi
-+	ip -net "$rns1" link set stbr address $mac
-+	host_port "$p0"
-+	ip -net "$rns1" link set stbr up
-+	ip -net "$rns1" addr add $hn${dot}99/$len dev stbr $nodad
-+	ip $ip6 -net "$rns1" route add default via $hn${dot}1
-+
-+	ip -net "$rns2" addr add $wn${dot}99/$len dev w0 $nodad
-+	ip -net "$rns2" link set w0 up
-+	ip $ip6 -net "$rns2" route add default via $wn${dot}1
-+
-+	if [ -n "$tun" ]; then
-+		local tn=10.9.3 wnet=$wn.0
-+		[ "$fam" = 6 ] && tn=dead:9:3 wnet=$wn::
-+		if ! ip -net "$rnsr" link add rtun type "$tun" \
-+		     local $hn${dot}1 remote $hn${dot}99 \
-+		     ${ip6:+encaplimit none}; then
-+			echo "SKIP: could not add tunnel for $what"
-+			[ "$ret" -eq 0 ] && ret=$ksft_skip
-+			return
-+		fi
-+		ip -net "$rns1" link add stun type "$tun" \
-+			local $hn${dot}99 remote $hn${dot}1 \
-+			${ip6:+encaplimit none}
-+		ip -net "$rnsr" link set rtun up
-+		ip -net "$rns1" link set stun up
-+		ip -net "$rnsr" addr add $tn${dot}1/$len dev rtun $nodad
-+		ip -net "$rns1" addr add $tn${dot}99/$len dev stun $nodad
-+		ip $ip6 -net "$rns1" route add $wnet/$len dev stun
-+	fi
-+
-+	# no neighbour probes, so the host only sends when it receives
-+	ip -net "$rnsr" neigh replace $hn${dot}99 lladdr $mac nud permanent \
-+		dev $rbr
-+	ip -net "$rns1" neigh replace $hn${dot}1 nud permanent dev stbr \
-+		lladdr "$(ip -net "$rnsr" -br link show br0 | awk '{print $3}')"
-+
-+	if ! ip netns exec "$rnsr" nft -f - <<EOF
-+table inet filter {
-+  counter roam_repl { }
-+  flowtable f1 { hook ingress priority 0; devices = { $ftdevs }; }
-+  chain forward {
-+    type filter hook forward priority 0; policy accept;
-+    meta oif "rw0" tcp dport 12345 flow add @f1
-+    meta iif "rw0" tcp sport 12345 counter name roam_repl flow add @f1
-+  }
-+}
-+EOF
-+	then
-+		echo "SKIP: could not load ruleset for $what"
-+		[ "$ret" -eq 0 ] && ret=$ksft_skip
-+		return
-+	fi
-+
-+	# the host discards what it receives, its socket byte counter is read
-+	rx_bytes() { ip netns exec "$rns1" ss -tin "dst $srv" 2>/dev/null |
-+		grep -o 'bytes_received:[0-9]*' | head -1 | cut -d: -f2; }
-+	rx_started() { local n; n=$(rx_bytes); [ "${n:-0}" -gt 0 ]; }
-+	# forward chain packets of the reply direction since the last call
-+	slow_pkts() { ip netns exec "$rnsr" \
-+			nft reset counter inet filter roam_repl |
-+		grep -o 'packets [0-9]*' | cut -d' ' -f2; }
-+	roam_listener_ready() {
-+		ss -N "$rns2" -lnt -o "sport = :12345" | grep -q 12345
-+	}
-+
-+	roam_stop() {
-+		kill "$cpid" "$lpid" 2>/dev/null
-+		wait "$cpid" "$lpid" 2>/dev/null
-+	}
-+
-+	timeout $((SOCAT_TIMEOUT * 5)) ip netns exec "$rns2" socat -u \
-+		OPEN:/dev/zero TCP$fam-LISTEN:12345,reuseaddr &
-+	lpid=$!
-+	if ! busywait "$BUSYWAIT_TIMEOUT" roam_listener_ready; then
-+		echo "FAIL: $what: listener did not start" 1>&2
-+		ret=1
-+		kill "$lpid" 2>/dev/null; wait "$lpid" 2>/dev/null
-+		return
-+	fi
-+	timeout $((SOCAT_TIMEOUT * 5)) ip netns exec "$rns1" socat -u \
-+		TCP$fam:$srv:12345 OPEN:/dev/null &
-+	cpid=$!
-+
-+	if ! busywait "$BUSYWAIT_TIMEOUT" rx_started; then
-+		echo "FAIL: $what: transfer did not start" 1>&2
-+		ret=1
-+		roam_stop
-+		return
-+	fi
-+	sleep 2
-+	slow_pkts > /dev/null
-+	old=$(rx_bytes)
-+	sleep 2
-+	new=$(rx_bytes)
-+	slow=$(slow_pkts)
-+	if [ -z "$slow" ] || [ $((${new:-0} - ${old:-0})) -lt $min ] ||
-+	   [ "$slow" -gt 100 ]; then
-+		echo "FAIL: $what: not offloaded before the roam:" \
-+		     "$((${new:-0} - ${old:-0})) bytes," \
-+		     "${slow:-no} forward chain packets" 1>&2
-+		ret=1
-+		roam_stop
-+		return
-+	fi
-+
-+	if [ "$how" = age ]; then
-+		# ageing_time is in centiseconds
-+		ip -net "$rnsr" link set br0 type bridge ageing_time 200
-+		win=10
-+	elif [ "$how" = del ]; then
-+		bridge -n "$rnsr" fdb replace $mac dev "$r1" \
-+			master static sticky
-+		sleep 2
-+		bridge -n "$rnsr" fdb del $mac dev "$r1" master static
-+		ip netns exec "$rns1" ping $ip6 -c 2 -W 1 -q $hn${dot}1 \
-+			>/dev/null 2>&1
-+	elif [ "$how" = block ]; then
-+		# the bridge no longer delivers there, nor may the flow; the
-+		# disabled state sticks without STP and keeps the fdb
-+		bridge -n "$rnsr" link set dev "$r0" state 0
-+	elif [ "$how" = vdel ]; then
-+		# the bridge no longer delivers to the host, nor may the flow
-+		bridge -n "$rnsr" vlan del vid 1 dev "$r0"
-+	else
-+		# roam: move the host bridge to the other port and send on it
-+		if [ "$how" = toggle ]; then
-+			ip -net "$rnsr" link set br0 type bridge \
-+				vlan_filtering 0
-+			sleep 2
-+		fi
-+		if [ "$how" = replace ]; then
-+			bridge -n "$rnsr" fdb replace $mac dev "$r0" \
-+				master static sticky
-+		fi
-+		ip -net "$rns1" link set "$p0" nomaster
-+		host_port "$p1"
-+		ip netns exec "$rns1" ping $ip6 -c 2 -W 1 -q $hn${dot}1 \
-+			>/dev/null 2>&1
-+		if [ "$how" = replace ]; then
-+			bridge -n "$rnsr" fdb replace $mac dev "$r1" \
-+				master static sticky
-+		fi
-+	fi
-+
-+	# the bytes in flight at the roam drain within the first seconds; a
-+	# stale flow delivers nothing after that, a torn down one resumes and
-+	# is offloaded again.
-+	sleep 4
-+	old=$(rx_bytes)
-+	sleep 4
-+	new=$(rx_bytes)
-+	slow_pkts > /dev/null
-+	sleep $win
-+	slow=$(slow_pkts)
-+	# before the host's FIN passes the bridge and relearns the entry
-+	fdb=$(bridge -n "$rnsr" fdb show br br0 | grep "$mac.*master")
-+	roam_stop
-+
-+	if [ "$how" = vdel ] || [ "$how" = block ]; then
-+		if [ $((${new:-0} - ${old:-0})) -gt 0 ]; then
-+			echo "FAIL: $what: $((${new:-0} - ${old:-0})) bytes" \
-+			     "delivered to a port that does not forward" 1>&2
-+			ret=1
-+		else
-+			echo "PASS: flow offload for $what"
-+		fi
-+	elif [ "$how" = age ] && [ -n "$fdb" ]; then
-+		echo "FAIL: $what: the host's fdb entry did not age out" 1>&2
-+		ret=1
-+	elif [ $((${new:-0} - ${old:-0})) -lt $min ]; then
-+		echo "FAIL: $what: transfer stalled after the roam" 1>&2
-+		ret=1
-+	elif [ "$slow" != 0 ]; then
-+		echo "FAIL: $what: $slow forward chain packets after the roam" \
-+			1>&2
-+		ret=1
-+	else
-+		echo "PASS: flow offload for $what"
-+	fi
-+}
-+
-+test_bridge_roam ""
-+test_bridge_roam 100
-+test_bridge_roam "" replace
-+test_bridge_roam "" del
-+test_bridge_roam "" age
-+test_bridge_roam "" "" 6
-+test_bridge_roam "" "" 4 vf
-+test_bridge_roam "" "" 4 tag
-+test_bridge_roam 100 "" 4 tag
-+test_bridge_roam 100 "" 4 "" trunk
-+test_bridge_roam 100 "" 4 "" stack
-+test_bridge_roam 100 "" 4 "" stackout
-+test_bridge_roam "" block
-+test_bridge_roam "" vdel 4 vf
-+test_bridge_roam "" toggle 4 vf
-+test_bridge_roam "" "" 4 upper
-+test_bridge_roam "" "" 4 asym
-+test_bridge_roam "" "" 4 asymkeep
-+test_bridge_roam "" "" 4 "" "" ipip
-+test_bridge_roam "" "" 6 "" "" ip6tnl
-+
- KEY_SHA="0x"$(ps -af | sha1sum | cut -d " " -f 1)
- KEY_AES="0x"$(ps -af | md5sum | cut -d " " -f 1)
- SPI1=$RANDOM
+For example, extending DAMON for hugepage size of the given memory was
+straightforward.  kdamonds can read that from folios.  Extending DAMON
+for accessors or writes-only accesses is challenging because there is no
+existing easy way to get that information from arbitrary threads like
+kdamonds.
+
+Extending DAMON for information that is not already available to
+kdamonds requires two works.  Finding DAMON-external kernel components
+that already have the information.  And modifying it to pass the
+information to DAMON.  Finding and modifying the components inherently
+need to be done for each of such extensions.  Building a universal way
+to report the information to DAMON could make it much easier.
+
+Modifying the component would be particularly challenging and even
+controversial depending on each case.  Some components wouldn't want to
+add a hacky change only for DAMON.  Having the universal report system
+that is well maintained will be useful at convincing the component, too.
+
+User Information
+================
+
+Users sometimes know some data attribute information more than what the
+kernel can know.  They could know frequently accessed data.  They could
+know that because they have access to the source code of the workload.
+They could know that using non-DAMON kernel features.  They could know
+that from some special tools and hardware.
+
+DAMON is not only for monitoring but also operations.  DAMON finds
+operation targets based on only its self monitoring results, though.
+Letting users report their data attribute information allows more
+flexible and effective control of the DAMON operations.  Users can make
+DAMON to find operation targets based on both its self monitoring and
+user-provided reports.
+
+DAMON is not providing such ways to let users report their information,
+though.
+
+Report System and User Report Support
+=====================================
+
+DAMON lacks efficient DAMON-external information report system and user
+report support.  Fill the gap.
+
+Introduce a system to report information from kdamond-external entities
+to DAMON.  Extend DAMON to monitor those reported information.  Build a
+user interface for letting users report their findings.
+
+Data Attribute Report System
+============================
+
+Introduce a system to report information from kdamond-external entities
+to DAMON.  The report system let any kernel components in any context
+including NMI context pass their data attribute finding to DAMON as a
+report.
+
+The system provides a data structure for such reports.  Using the report
+data structure, a flexible data attribute information for a given memory
+can be built.  The data structure also embeds a field for the type of
+the report.  The report producer can specify what data attribute type
+the report is providing, using the field.
+
+The system exposes an API function, damon_submit_report(), for
+submitting the report of the data type to DAMON.  The submit function
+can be called from any context including NMI context.
+
+DAMON Probe for Reports
+=======================
+
+Extend the DAMON probe filter to connect the report system with the
+existing monitoring part of DAMON.  Introduce a new DAMON probe filter
+type, report.  When the type is "report", it receives the report type
+argument.  Filters of the type match to a given memory if a report of
+the given type for the memory is made in the last sampling interval.
+Update DAMON sysfs ABI for probe filters setup to support the new filter
+type and the new argument for the report type.
+
+User Report Support
+===================
+
+Let users report their findings.  Introduce a report type for the users
+provided report.  Extend DAMON sysfs ABI to let users manually configure
+and submit such reports one by one.  Users can specify for what memory
+the report is made, with an arbitrary address range.
+
+Using the new support, users can control DAMON using their own
+information.  They can control DAMON using their information as only a
+source, or an additional source to existing ones.  For example, they can
+let DAMON do page table accessed-bit based access monitoring.  In
+addition to that, if they know some hot data that might not be found by
+the page table information, they can let DAMON know the hot data using
+the report system.
+
+Ongoing and Future Works
+========================
+
+This is a part of the "beyond page table accessed-bit DAMON extension"
+project [1] milestone 2.  This patch series provides the initial and
+essential part of the data attribute report system.
+
+I will implement a cpu cycle sampling based extension based on the
+report system that is implemented by this series.  It is for providing
+accessor and type-aware access monitoring.  Using it, users will be able
+to monitor access for given CPUs, tasks and types (read and/or write) of
+accesses.
+
+While doing that, the report system will also be advanced in a way that
+can be used for reports that are not manually produced by the user but
+by the kernel or hardware itself.  That will be the completion of the
+second milestone of the parent project.  After that, people will be able
+to build more extensions including AMD IBS-like hardware based
+monitoring, using the advanced report system.
+
+Patches Sequence
+================
+
+Introduce the data attribute report system with the first eleven patches
+(patches 1-11).  Define the data structure for each report and expose
+via DAMON core API, via patch 1.  Implement an internal data structure
+for saving the reports, struct damon_report, via patch 2.  Introduce
+another DAMON core API function for submitting each report,
+damon_submit_report(), via patch 3.  Implement reports/producers/
+sysfs directory next to the kdamonds/ directory, for controlling report
+producers, via patches 4-8.  Update the design, the usage and the ABI
+documents for the report system, with patches 9-11.
+
+Extend the DAMON probe filter for the reports, with the following eight
+patches (patches 12-19).  Introduce a new filter type, REPORT_MADE,
+which matches if a report for the probing memory is made in last
+sampling interval, via patch 12.  Implement and expose a DAMON core API
+function, damon_report_exist(), that returns if a report of given
+condition exist in the report queue, via patch 13.  Add support of the
+new filter type in paddr operation set, via patch 14.  Implement sysfs
+files for setting the new type of filter, via patches 15 and 16.  Update
+the design, the usage and the ABI documents for the new filter type and
+its user interface, via patches 17-19.
+
+Finally, implement user report support with the subsequent eight patches
+(patches 20-27).  Introduce a new report type DAMON core API,
+USER_REPORT, via patch 20.  Add a user keyword for the new report type
+to sysfs files, via patch 21.  Implement sysfs files for manually
+generating and submitting user reports, via patches 22 and 23.  Add a
+simple selftest for new sysfs files, via patch 24.  Update the design,
+the usage and the ABI documents for the new report type and its user
+interface, via patches 25-27.
+
+References
+==========
+
+[1] Beyond page table accessed bits DAMON extension roadmap:
+    https://lore.kernel.org/20260525225208.1179-1-sj@kernel.org/
+
+Tests
+=====
+
+Confirmed the user report is working like below.
+
+Submit report for [5 GiB, 6 GiB) address range for every 5 milliseconds.
+
+    # cd /sys/kernel/mm/damon/admin/reports/producers/
+    # echo 1 > nr_producers
+    # echo $((5*1024*1024)) > 0/addr_start
+    # echo $((6*1024*1024)) > 0/addr_end
+    # echo on > 0/producer_state
+    # while true; do echo submit > producer_state ; sleep 0.005; done
+
+On another terminal session, start DAMON in the attribute only
+monitoring mode, with user_report report_made probe filter type, using
+DAMON user-space tool, damo [1].
+
+    $ sudo ./damo start --probe \
+            --probe_filter allow report_made user_report \
+            --probe_weight 1
+
+Show the user report for the [5 GiB, 6 GiB) address range is detected:
+
+    $ sudo ./damo report attrs --sort_regions_by address
+    heatmap:
+    00000000000000000000000000000000000000000000000000069999999995111111100000000000
+    # min/max temperatures: -790,000,000, 80,001,900, column size: 99.800
+    MiB
+    probe allow report_made user_report (weight: 1)
+    intervals: sample 5 ms aggr 100 ms (max probe hits 20)
+    #   size         address       age           probe_hits
+    0   4.678 GiB    4.000 KiB     7.900 s       0
+    1   329.582 MiB  4.678 GiB     7.400 s       0
+    2   1024.000 MiB  5.000 GiB     800 ms        19
+    3   792.809 MiB  6.000 GiB     6.900 s       0
+    4   1.023 GiB    6.774 GiB     7.900 s       0
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+the region of index 2 is the region for the [5 GiB, 6 GiB) address
+range.  DAMON received the user report for nearly all sampling
+intervals, and therefore shows its probe_hits as 19.
+
+Stop user report submissions using Ctrl-C on the report submit terminal
+session. Show DAMON monitoring results showing no more reports are
+submitted.
+
+    $ sudo ./damo report attrs --sort_regions_by address
+    heatmap:
+    00000000000000000000000000000000000000000000000366666668999999822222221000000000
+    # min/max temperatures: -1,740,000,000, -740,000,000, column size:
+    99.800 MiB
+    probe allow report_made user_report (weight: 1)
+    intervals: sample 5 ms aggr 100 ms (max probe hits 20)
+    #   size         address       age           probe_hits
+    0   1.551 GiB    4.000 KiB     17.400 s      0
+    1   1.536 GiB    1.551 GiB     17.300 s      0
+    2   788.715 MiB  3.087 GiB     17.200 s      0
+    3   797.793 MiB  3.857 GiB     16.800 s      0
+    4   764.137 MiB  4.636 GiB     10.300 s      0
+    5   768.867 MiB  5.382 GiB     7.400 s       0
+    6   774.043 MiB  6.133 GiB     14.500 s      0
+    7   797.250 MiB  6.889 GiB     17 s          0
+    8   132.488 MiB  7.667 GiB     17.400 s      0
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+No more probe_hits for [5 GiB, 6 GiB) address range is shown, since the
+user report is stopped..
+
+[1] https://github.com/damonitor/damo
+
+Changes from RFC v2
+- RFC v2: https://lore.kernel.org/20261118022225.100659-1-sj@kernel.org
+- Add test results to the cover letter.
+- Rebase to the latest mm-new.
+- Drop RFC tag.
+Changes from RFC
+- RFC: https://lore.kernel.org/20261115202849.99134-1-sj@kernel.org
+- Add parent project roadmap link in the cover letter.
+- Fixup kernel-doc comments.
+- Mark damon_report_queue as static.
+- Destroy damon_region_cache for queue setup failure.
+- Fix out-of-bound writing in damon_submit_report().
+- Setup damon_filter->report_type in damon_commit_filters() path, too.
+- Fix wrong index referencing in damon_report_exist().
+- Rebase to the latest mm-new.
+Changes from RFC v0
+- RFC v0: https://lore.kernel.org/20261017195747.89961-1-sj@kernel.org
+- Implement the code.
+- Update the documentation to be less like Cover letter.
+- Rebase to the latest mm-new.
+
+SJ Park (27):
+  mm/damon/api: introduce struct damon_report
+  mm/damon/core: implement data attribute report queue
+  mm/damon/core: introduce damon_submit_report()
+  mm/damon/sysfs: add admin/reports/ directory
+  mm/damon/sysfs: add reports/producers/ directory
+  mm/damon/sysfs: add producers/nr_producers file
+  mm/damon/sysfs: implement report producer directory
+  mm/damon/sysfs: implement report producer type and state files
+  Docs/mm/damon/design: update for report system
+  Docs/admin-guide/mm/damon/usage: update for report producer sysfs
+  Docs/ABI/damon: update for report producer sysfs files
+  mm/damon/core: introduce DAMON_FILTER_TYPE_REPORT_MADE
+  mm/damon/core: introduce damon_report_exist()
+  mm/damon/paddr: support REPORT_MADE type probe filter
+  mm/damon/sysfs: add filter_report_type file under probe filter
+    directory
+  mm/damon/sysfs: support REPORT_MADE type probe filter setup
+  Docs/mm/damon/design: update for report_made probe filter type
+  Docs/admin-guide/mm/damon/usage: update for REPORT_MADE probe filter
+  Docs/ABI/damon: update for REPORT_MADE probe filter
+  mm/damon/api: introduce user_report report type
+  mm/damon/sysfs: add user_report support for report type input
+  mm/damon/sysfs: implement report producer addr_{start,end} files
+  mm/damon/sysfs: implement submit command for report producer
+  selftests/damon/sysfs.sh: add basic tests for admin/reports/
+  Docs/mm/damon/design: update for user report support
+  Docs/admin-guide/mm/damon/usage: update for user_report report support
+  Docs/ABI/damon: update for user_report report support
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  43 ++
+ Documentation/admin-guide/mm/damon/usage.rst  |  50 ++-
+ Documentation/mm/damon/design.rst             |  45 ++
+ include/linux/damon.h                         |  33 ++
+ mm/damon/core.c                               | 113 ++++-
+ mm/damon/paddr.c                              |  17 +-
+ mm/damon/sysfs.c                              | 420 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  52 +++
+ 8 files changed, 763 insertions(+), 10 deletions(-)
+
+
+base-commit: 7493b6798c5353fded63c06768dc73ab63d65fac
 -- 
-2.53.0
-
+2.47.3
