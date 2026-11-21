@@ -1,61 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.70.190.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795302186;
-	b=OEze73s2Iao3gF8Ryvel5YcLHbq6f5KGhcBvOryUlsvwxF3KQJLAQl9mdF+BJAwIEvsg
-	 zWacZQYkPoyKxnK/F8B2fenoApIIZwdF1gzmjvXIBff2ns0dN9YHl3/P2S3yAW5g8DcH2
-	 hRYP9YCdiLhcpdmW2n1fGzvXL9DOkDgzB4wxSkflHl/iF9vCZJP1j5Z3dsCkW92Gw4cYq
-	 BPcXt0moFVVG9Ygnewgj5dHaG6mpsNsgnZnT3Ydd1jLCt/k8hE0B5u7lLMJjMKYTNHkGI
-	 KJ6zPl07v3P2fx5VX5kCyTkZbj5KQLteReyNLnJMroQzx7gnN71x0+VQNXC+YKt2S8g==
+	t=1795302641;
+	b=JSaKVbOlgjZkYmuc9DugQ17OhgErYBWNbd04rE+KlvcJi97E8igCTLS9lFtS6kwmkMtL
+	 I6t+8YwXy9smVLWcJ5rv3LWeQAyYP2i3Z55qt29XzrwqlOLvcL7yXH1LdRJqI/K81klrJ
+	 T4Z9Oji2eb4HEJGuzRT7YU0Sf1n3i4MFxhLuRwZbJarPZOpXh8UKcb9uWuKyFBwC2J72r
+	 tvznPT7TvCSWqVOJNOpPmJvlPZ28x9xFD76SK7kvKTkTCqI+LT8iNfN+A0CSsbMHwWWDK
+	 ccjdpoQ0OfUIIUAmghHoevf0oW9GXz/Sib3EiUS57uavP2dz4sdB0ypoXFBRvZKzJiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795302186;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=Jl+r+6kZfTpxnCZB911RrcPgGJQ08OsuvMyIkII25KA=;
-	b=HdkQpIabw+U4SZwDsD8JB5tCpVqkgxhqWz9L3y4/cMc5eQkJw6ZZtrxK7W7VxNBAz7Mh
-	 r8DO1oIjndLjQBSt70/HPxWFKfJIjlcqcAT5g4zCh98lfCC0YAInY7K4zjqAkpD5rrLKn
-	 Kton4l6DKjbEomukhae4YzbP808tzxDG0X+g3e5Ua55DSK46wDyrKSHvX5jZRR42eRdHl
-	 DmXIFByGFRyw2sGOI3TfM1lIeTXhXylHN/JaLr2nDnDeJbZ7XIsyHy2relr8IRDqTpd96
-	 J7ZW1uh3HIrXQ/wFdc+g8zJwNs0o73ptcRavLmSIaCKkZw8z80WXbKb902bUkN92ArA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795302641;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spam-Status:X-Spam-Checker-Version;
+	bh=E9/g6o7R3K4v+CNdU1O2I9n3rAKPMOd33E4vaKpYOIc=;
+	b=IJTXoVglYtu42cz9eXlICP764G6MjUYKrKuDlbUnycjw1V6kLkGKAHUt3mqwBIKEl8Eg
+	 ShYtl+PosAubXPnmlzmQB8H1Pwu8gHNCtOrZfyY/hQDQ2l+ArBuEjrHFknwwR1dv5jx9E
+	 RnFnbEpx9mCSg7++NyaaK3cptqA+mf9ygekUTD5695EupT6XOGMIGKPEfUDwn6vVBGMv0
+	 zDEEdwr7u/v5ophg0zy/XY6PZeE9a9A4VfSzcvAb8g07z6HSbx4xaEXyME8Dv8DzQATjH
+	 Yi+NdnXQ7Xc+l4qxgBgJdbEzCSdEpG8GnQyW7fNYhe3MUO18cc/87VKXSu5N/v5LQqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DmGPnFJs;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=netfilter.org;
+	spf=pass smtp.mailfrom=netfilter.org;
+	dkim=pass header.d=netfilter.org header.i=@netfilter.org header.a=rsa-sha256 header.s=2025 header.b=hgKJt0zK;
+	arc=none smtp.remote-ip=217.70.190.124
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.190.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215EE60A2611;
-	Sat, 21 Nov 2026 23:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id F39F7606A320;
+	Sat, 21 Nov 2026 23:10:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F39F7606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DmGPnFJs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFDF1F000D8;
-	Sat, 21 Nov 2026 23:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795302185;
-	bh=Jl+r+6kZfTpxnCZB911RrcPgGJQ08OsuvMyIkII25KA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=DmGPnFJsw10BeW2uJzzVnfFW/v4MXN8PkhXj2unGjv0TuDIGOKZEEhm8ciQopEC8h
-	 gfzIIooQjV6bvME68xoN6Aqp0GEdw7Qytdtmix1wlt2u2uj7AasbFkGQdpjwcVFcjI
-	 DddNcAHKLCH2eZZPHMAtr0wxsidGMu3Raf5EalFozl0gN0MclB6mLHRpZhhInHKqT4
-	 hW+k1i6jXp7ZbNomLX2aQBctooNEKuGppvfU/Z1OGQI/9PQRFqh/uuAkiKgZfMEVrG
-	 Mkq5ROC/orSr12ZsS5018+8cwLHgsyTZBiOt8EI875V8aD3jyLXR7FobGzbf6NBLfc
-	 9XLUkE0+qgPKQ==
-Subject: Re: [PATCH net-next v5 6/6] selftests: drv-net: psp: add rekey tests
-From: netdev-bot+sashiko@kernel.org
-To: daniel.zahka@gmail.com
-Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
- edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, rdunlap@infradead.org, donald.hunter@gmail.com,
- andrew+netdev@lunn.ch, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, willemb@google.com
-Date: Sat, 21 Nov 2026 23:03:04 +0000
-Message-ID: <179530218434.3135.4343666486290603431@kernel.org>
-In-Reply-To: <20261118-psp-v5-6-b9ec840e0296@gmail.com>
-References: <20261118-psp-v5-6-b9ec840e0296@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.a=rsa-sha256 header.s=2025 header.b=hgKJt0zK
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
+	s=2025; t=1795302638;
+	bh=E9/g6o7R3K4v+CNdU1O2I9n3rAKPMOd33E4vaKpYOIc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hgKJt0zK8Ed92EIDgai/GbkljCzw05uxAoLux0phFBmi9iaYcpqV3aQll1LGlEBoC
+	 S22xC5ZE2lh8nXS47k2jgw4yLt0VVS3QkURh+GrpLV+94WMthQhhkNtR83hsgevEbD
+	 8XxowqhyeOfXtq43MPKG1AxeZ7CnSTADa6ZE5r8zQOVW/nDbj3GY/o1dn+BBJB7crZ
+	 hARAbIedqc3kqiqBlLLV2IIEey6kofjASM4H5ZbE0Dt5b1STQIkZIm4ZFZNb3POAar
+	 WodswVSvoMbwSK3wOe7CP6KU0KqUF4UASFVwBolnky70t93sbtx77H9nCF8ynefCcX
+	 neOYSt4Jlk5Rg==
+Received: from netfilter.org (mail-agni [217.70.190.124])
+	by mail.netfilter.org (Postfix) with UTF8SMTPSA id 6A32460058;
+	Sun, 22 Nov 2026 00:10:38 +0100 (CET)
+Date: Sun, 22 Nov 2026 00:10:35 +0100
+From: Pablo Neira Ayuso <pablo@netfilter.org>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: netdev@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Toshiaki Makita <toshiaki.makita1@gmail.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
+	"open list:NETFILTER" <coreteam@netfilter.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net 2/4] netfilter: flowtable: restore the GRE conntrack
+ timeout on teardown
+Message-ID: <awIk65mKn6iBATE0@chamomile>
+References: <20261118201250.2075007-1-florian.fainelli@broadcom.com>
+ <20261118201250.2075007-3-florian.fainelli@broadcom.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,69 +73,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261118201250.2075007-3-florian.fainelli@broadcom.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Hi Florian,
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+On Wed, Nov 18, 2026 at 12:12:48PM -0800, Florian Fainelli wrote:
+> flow_offload_add() sets the timeout of the conntrack entry to NF_CT_DAY
+> for every offloaded flow, and the GC keeps extending it for GRE too.
+> flow_offload_fixup_ct() only restores the conntrack timeout of TCP and
+> UDP flows when the flow is torn down, so an offloaded GRE entry which does
+> not see any other packet on the slow path stays for up to a day instead
+> of expiring after the GRE conntrack timeout.
+> 
+> Restore the GRE timeout, replied or unreplied, as for UDP. GRE has no
+> offload timeout of its own, flow_offload_get_timeout() uses the default
+> flowtable timeout for it, so use that one when the flow expired.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+I think GRE has never worked then. I have been a bit skeptical about
+this support, but tc/ct developers wanted to have this in.
 
-- [Medium] selftests: drv-net: psp: stale length n in run_session() after
-  tx assoc
+I think no crash is going, so let's better route this through
+nf-next.git.
 
---
-
-> diff --git a/tools/testing/selftests/drivers/net/psp_responder.c b/tools/testing/selftests/drivers/net/psp_responder.c
-> --- a/tools/testing/selftests/drivers/net/psp_responder.c
-> +++ b/tools/testing/selftests/drivers/net/psp_responder.c
-> @@ -247,6 +354,16 @@ run_session(struct ynl_sock *ys, struct opts *opts,
->  						fprintf(stderr, "WARN: echo but no data sock\n");
->  					send_ack(comm_sock);
->  				}
-> +				if (cmd("rx assoc"))
-> +					handle_rx_assoc(ys, data_sock,
-> +							comm_sock);
-> +				if (cmd_w_msg("tx assoc", struct assoc_msg)) {
-> +					handle_tx_assoc(ys, buf, data_sock,
-> +							comm_sock);
-> +					__consume(sizeof(struct assoc_msg));
-> +				}
-> +				if (cmd("key rotate"))
-> +					handle_key_rotate(ys, opts, comm_sock);
->  				if (cmd("data close")) {
->  					if (data_sock >= 0) {
->  						close(data_sock);
-
-[Severity: Medium]
-In run_session(), n is set from off once, before the do/while loop,
-and is never updated. cmd() still tests n >= sz and __consume() tests
-n == sz. For a single tx assoc message n is 49.
-
-cmd("tx assoc") consumes the 9 byte string and moves the struct
-assoc_msg to buf[0]. __consume(sizeof(struct assoc_msg)) then takes
-the else branch. That leaves off == 0, but the 40 byte assoc_msg is
-still in buf[0..39].
-
-The checks that follow in the same iteration (key rotate, data close,
-conn psp, conn clr, exit) still see n == 49. They memcmp() buf against
-the SPI, version and key bytes of a message that was already handled.
-Suppose those bytes match a command string. For example, an SPI of
-0x65786974 with version 0 reads as "exit\0". The matching __consume()
-then does off -= sz starting from zero, and memmove() gets a negative
-length converted to a huge size_t, which crashes the responder.
-
-The conn psp handler already has the same stale-n pattern, but it
-only leaves the two version bytes behind. tx assoc is the first
-command that leaves an arbitrary binary payload at the front of buf.
-
-Would it make sense to have cmd() and __consume() check off rather
-than n, perhaps as a small fix ahead of this patch? Then a command
-could only match bytes that have not been consumed yet.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118-psp-v5-0-b9ec840e0296%40gmail.com
+> Fixes: 4e8d9584d154 ("netfilter: flowtable: Support GRE")
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+>  net/netfilter/nf_flow_table_core.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+> index 2aa2647ed9df..051b15aecd89 100644
+> --- a/net/netfilter/nf_flow_table_core.c
+> +++ b/net/netfilter/nf_flow_table_core.c
+> @@ -237,6 +237,18 @@ static void flow_offload_fixup_ct(struct flow_offload *flow)
+>  		timeout = READ_ONCE(tn->timeouts[state]);
+>  		expired = nf_flow_has_expired(flow);
+>  		offload_timeout = READ_ONCE(tn->offload_timeout);
+> +#ifdef CONFIG_NF_CT_PROTO_GRE
+> +	} else if (l4num == IPPROTO_GRE) {
+> +		const struct nf_gre_net *tn = nf_gre_pernet(net);
+> +		enum gre_conntrack state =
+> +			test_bit(IPS_SEEN_REPLY_BIT, &ct->status) ?
+> +			GRE_CT_REPLIED : GRE_CT_UNREPLIED;
+> +
+> +		timeout = READ_ONCE(tn->timeouts[state]);
+> +		expired = nf_flow_has_expired(flow);
+> +		/* GRE has no offload timeout: see flow_offload_get_timeout(). */
+> +		offload_timeout = NF_FLOW_TIMEOUT;
+> +#endif
+>  	} else {
+>  		return;
+>  	}
+> -- 
+> 2.53.0
+> 
+> 
