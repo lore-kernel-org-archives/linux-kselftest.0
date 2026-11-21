@@ -1,65 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795230863;
-	b=yNmiFNLmnCtr3Sn+zxilajJupyzSlQDSz8nFfFTRLOvjH77Px29NlE0PTPccCODDJls1
-	 7CWqsVKEDfd/oYjdCJggJUkSP/Prl4iPe/u0/lMLMTz5lWZtIpm6x0y84vFDaq5Gmkdz9
-	 b4hH4sO78KBAe8U7NXwiJ/cX3QnxF8Q1gcs8q0oTZqniI0f0Jk85pAoBr1UO7Tvbn4JVU
-	 dI7XE/uQy33t+mnlyOiQK9kpmtIYsE82qdm2kKw7/Yz1+r7yW9bdx+YTaFmsOfyR4Ry8I
-	 A6ImEQrhi6mpZESRz2tRlNqdsrmYCi2ClMg331h4ra66MDPWAIPc23y9USyiJDUG7IA==
+	t=1795230871;
+	b=wgDGVYnv957ygegxYIp45MqqK1zaOlCpKeertaaq+9YGCXl22zah925ar8IgoDGdVOmz
+	 yQCA6Jbax+zpp2Mv21S+IpZ/Kt8MC7RKvY+6QqTCMQuRJ94aU35am4aWDK0lGdMA/am5R
+	 2Nm9968gDCj/QpFprYTYT+FeKhQfPdHvO3sURhWlryoXZFgGDspLxvc7E/Pb1Vzt3KLc1
+	 pjkGFI6mzsS3p8u/hV3C7Mis36+PGa3O5o3tiW+MuC01iiW6QGFo+orvVnwtsAZbPzKpi
+	 q71Ec2RtRgvjo2qjPtQGXJjX+f8dvGWMEz353U7+If4pV1KCxVcx3v56vZ07mx7iD3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795230863;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795230871;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=Sr6Rs7BiVm3iRcZw5WL7frN+bAW/6De8CnaYgLnn05o=;
-	b=JBCprSy112vOB7lGb3+sdXSp7al4OZ6aZ1ecHicl9KI7YUR4p9sArHHkqkvQbMj3wrw3
-	 utgS8cQt0iEzdcrRcMFOghnGnYJAxLVOhVSzqoZqVTVmDlK6x4Nxu10xZw7NU8ylJuE0L
-	 1EFoh2ssr5tqFSrHknOvOLIPuSflBqSeeLn8na+c8yERZhfdxyOWbx0S/gJmbM9xTGqKc
-	 PK3nWhTMBOoLOFxfcMfaS0Ics+dny36e3fCJMB8x9AJ3u6miJB9wNb1oXzUDuigEqgREH
-	 fz8PPZn94WV4eoJjted4spnpaz9Ceslhru7skvHoQUdOY+0hoof1I2fFrbNEgJ8Rleg==
+	bh=wTfmyiT0Ytm3pb1ocoVZSIujByKoDCAIKtW/TRjF8Lc=;
+	b=HYVIW8QZ664g/efo0rcLu+4w1kX0G9Aq6HE4e6V4dFup3LArjf05ggJYGiBVk7MvNuHg
+	 r6qbBM12LrBna1P5AXSljsXS7KTBwwbvNEkQJdUgin2eMyQQHzhGCPPuyl+4Bn4uY7AXb
+	 RX48KjvvDeFEKv5GMDuNf2AdZ7sLqGHzNFinCnPH6OMkus6NuxTT17zN66IycuHfUg/O7
+	 Bu8Y0vbxR5jETKzaIaxsZTuhiOlLjy7lxdMeaVj/UK7CvmmZn+MDjxQlD4dAe6SP1piKV
+	 yl7aHZ2OG6kKMNJooS6EAAuzd9fJmqG/0JqBIRRgb6zCCq8sxFMeGqbigfix2C8rjsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=isUHB6LN;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=deXgfRg7;
 	arc=none smtp.remote-ip=170.10.133.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE73606A69F
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 03:14:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EE73606A69F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF5F606A68D
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 03:14:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BF5F606A68D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=isUHB6LN
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=deXgfRg7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795230861;
+	s=mimecast20190719; t=1795230868;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Sr6Rs7BiVm3iRcZw5WL7frN+bAW/6De8CnaYgLnn05o=;
-	b=isUHB6LNvqecojeS5qZIDypDs8kIUrWelpxbCRfwj3CbVF5/7xYSIbNSbFjr8SN0pDpnaR
-	bZREGEoaROwfyLXbqLg38gdk1NZ7Bb3zMamoKYNhakaZhrDR26ZaOeHyHvRgg7JMv1SXET
-	+w9cT57BvMBQNgyj+1GBFLxjMgN54gk=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+	bh=wTfmyiT0Ytm3pb1ocoVZSIujByKoDCAIKtW/TRjF8Lc=;
+	b=deXgfRg7Rfw4yk5GCOKYWj2lqcXvx40HMSDTqt+tDGx91VuspG3VaywhuGH8dDC2PZXYCq
+	kfW32jyVyhiLcI1+x657K0jL84f+47GWSvdNHnyMkH3+Jd8iCvYC8apSuKwm+BebPs8ksU
+	STf/b3uYOYBVb13POUljDHIcrZeDWic=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-554-P5HoySzzOeC7tXhP7yM_gw-1; Sat,
- 21 Nov 2026 03:14:15 +0000
-X-MC-Unique: P5HoySzzOeC7tXhP7yM_gw-1
-X-Mimecast-MFC-AGG-ID: P5HoySzzOeC7tXhP7yM_gw_1795230852
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-286-OGGaf1v8OrK9pLaSgY6x0Q-1; Sat,
+ 21 Nov 2026 03:14:20 +0000
+X-MC-Unique: OGGaf1v8OrK9pLaSgY6x0Q-1
+X-Mimecast-MFC-AGG-ID: OGGaf1v8OrK9pLaSgY6x0Q_1795230857
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9373A18004F9;
-	Sat, 21 Nov 2026 03:14:11 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D317518004DA;
+	Sat, 21 Nov 2026 03:14:16 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AF82C1956087;
-	Sat, 21 Nov 2026 03:14:06 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C9E97195B3C2;
+	Sat, 21 Nov 2026 03:14:11 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -88,9 +88,9 @@ Cc: cgroups@vger.kernel.org,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next 2/3] sched/isolation: Forbid the boot CPU from being isolated
-Date: Fri, 20 Nov 2026 22:13:28 -0500
-Message-ID: <20261121031329.240177-3-longman@redhat.com>
+Subject: [PATCH-next 3/3] cgroup/cpuset: Disallow CPU 0 from being used in isolated partition
+Date: Fri, 20 Nov 2026 22:13:29 -0500
+Message-ID: <20261121031329.240177-4-longman@redhat.com>
 In-Reply-To: <20261121031329.240177-1-longman@redhat.com>
 References: <20261121031329.240177-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -105,100 +105,196 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-It is reported that with CONFIG_CPUSETS=n, a kernel booted with
-isolcpus=domain,0 hits the BUG() in select_fallback_rq() during boot
-[1]. At boot time, cpu 0 is the only CPU online and an unbound kworker
-cannot be run on a domain isolated CPU causing kernel panic.
+Domain isolating CPU 0 can be problematic and may even cause panic in
+some cases. So it is better to disable its use in an isolated partition.
 
-Sashiko also reports that domain isolating the boot CPU can break system
-suspend and trigger a BUG_ON() [2]. So it is problematic if the boot CPU
-is domain isolated.
+Add a new partition error code to indicate to the users that CPU 0
+cannot be used in an isolated partition.
 
-There may be other kernel subsystems that have problem if the boot CPU
-is domain isolated as most of them won't take into account the fact
-that boot CPU is currently allowed to be domain isolated. The current
-housekeeping code enforces the rule that if both isolcpus and nohz_full
-boot parameters are set, they should match each other. Given the fact
-that the boot CPU is likely to be disallowed from the nohz_full list,
-it makes sense that we should not allow the boot CPU from being set
-in the isolcpus boot parameter as well. This will also avoid the above
-problems due to boot CPU being domain isolated.
+Some existing test cases in test_cpuset_prs.sh are modified to remove
+the use of CPU 0 in isolated partition setup and explicit new test cases
+are added to test that. The NOHZ_FULL test cases also modified to run if
+the "nohz_full" parameters includes all the CPUs except CPU 1-7 instead
+of 0-7. Though it is not recommended to put CPU 0 in the nohz_full boot
+parameter, it is the only way we can test that the cpuset code is able to
+correctly disallow isolating the last nohz_full/domain housekeeping CPU.
 
-Do that by clearing the boot CPU from the isolcpus range when it is
-specified in the boot command line. A warning will also be printed when
-that happens.
+With CPU 0 likely not allowed in the nohz_full list and with CPU 0 also
+disallowed from being domain isolated and offline, we will likely have CPU
+0 being an always present online housekeeping CPU for most kernels. For
+those kernels, we will not be able to trigger partition invalidation due
+to using up the last nohz_full/domain housekeeping CPU in an isolated
+partition and the NOHZ_FULL test cases in test_cpuset_prs.sh will not
+be run.
 
-This is indeed a change in behavior which is customer visible. So the
-kernel-paremeters.txt is updated to mention the fact that boot CPU
-cannot be isolated.
-
-[1] https://lore.kernel.org/lkml/20261117144817.265109-1-mathieu.desnoyers@efficios.com
-[2] https://sashiko.dev/#/patchset/20261108180849.1268263-1-longman%40redhat.com
+The cgroup-v2.rst documentation file is also modified to indicate that
+CPU 0 cannot be used in an isolated partition.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  7 ++++---
- kernel/sched/isolation.c                        | 16 ++++++++++++----
- 2 files changed, 16 insertions(+), 7 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst       |  1 +
+ kernel/cgroup/cpuset-internal.h               |  1 +
+ kernel/cgroup/cpuset.c                        |  6 +++
+ .../selftests/cgroup/test_cpuset_prs.sh       | 43 ++++++++++++-------
+ 4 files changed, 36 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 930cee4de79a..1c8bf3583b0b 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2954,11 +2954,12 @@ Kernel parameters
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 9e3c67b02ae2..2f792ff29425 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2771,6 +2771,7 @@ Cpuset Interface Files
+ 	and excluded from the unbound workqueues.  Tasks placed in such
+ 	a partition with multiple CPUs should be carefully distributed
+ 	and bound to each of the individual CPUs for optimal performance.
++	The boot CPU (CPU 0) cannot be used in an isolated partition.
  
- 			  You can move a process onto or off an "isolated" CPU via
- 			  the CPU affinity syscalls or cpuset.
--			  <cpu number> begins at 0 and the maximum value is
--			  "number of CPUs in system - 1".
-+			  <cpu number> begins at 0 and the maximum value
-+			  is "number of CPUs in system - 1". However boot
-+			  CPU (cpu 0) cannot be domain isolated as it
-+			  may cause problem with some kernel subsystems.
+ 	A partition root ("root" or "isolated") can be in one of the
+ 	two possible states - valid or invalid.  An invalid partition
+diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+index 1ba94ffaff9d..505682493d81 100644
+--- a/kernel/cgroup/cpuset-internal.h
++++ b/kernel/cgroup/cpuset-internal.h
+@@ -36,6 +36,7 @@ enum prs_errcode {
+ 	PERR_ACCESS,
+ 	PERR_REMOTE,
+ 	PERR_ISOPARENT,
++	PERR_ISOLCPU0,
+ };
  
- 			managed_irq
--
- 			  Isolate from being targeted by managed interrupts
- 			  which have an interrupt mask containing isolated
- 			  CPUs. The affinity of managed interrupts is
-diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
-index 18b50c0d807a..ef4aa5126dc5 100644
---- a/kernel/sched/isolation.c
-+++ b/kernel/sched/isolation.c
-@@ -232,6 +232,7 @@ static int __init housekeeping_setup(char *str, unsigned long flags)
- {
- 	cpumask_var_t non_housekeeping_mask, housekeeping_staging;
- 	unsigned int first_cpu;
-+	int boot_cpu = smp_processor_id();
- 	int err = 0;
+ /* bits in struct cpuset flags field */
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 30af9531acdd..68d104d0bdf5 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -61,6 +61,7 @@ static const char * const perr_strings[] = {
+ 	[PERR_ACCESS]    = "Enable partition not permitted",
+ 	[PERR_REMOTE]    = "Have remote partition underneath",
+ 	[PERR_ISOPARENT] = "Root partition is not allowed with isolated parent",
++	[PERR_ISOLCPU0]  = "Boot CPU (cpu 0) cannot be isolated",
+ };
  
- 	if ((flags & HK_FLAG_KERNEL_NOISE) && !(housekeeping.flags & HK_FLAG_KERNEL_NOISE)) {
-@@ -254,14 +255,21 @@ static int __init housekeeping_setup(char *str, unsigned long flags)
+ /*
+@@ -1453,6 +1454,9 @@ static enum prs_errcode validate_partition(struct cpuset *cs,
+ 	if (tasks_nocpu_error(parent, cs, new_excpus))
+ 		return PERR_NOCPUS;
  
- 	first_cpu = cpumask_first_and(cpu_present_mask, housekeeping_staging);
- 	if (first_cpu >= nr_cpu_ids || first_cpu >= setup_max_cpus) {
--		__cpumask_set_cpu(smp_processor_id(), housekeeping_staging);
--		__cpumask_clear_cpu(smp_processor_id(), non_housekeeping_mask);
-+		__cpumask_set_cpu(boot_cpu, housekeeping_staging);
-+		__cpumask_clear_cpu(boot_cpu, non_housekeeping_mask);
- 		if (!housekeeping.flags) {
--			pr_warn("Housekeeping: must include one present CPU, "
--				"using boot CPU:%d\n", smp_processor_id());
-+			pr_warn("Housekeeping: must include one present CPU, using boot CPU:%d\n",
-+				boot_cpu);
- 		}
- 	}
- 
-+	if ((flags & HK_FLAG_DOMAIN) && cpumask_test_cpu(boot_cpu, non_housekeeping_mask)) {
-+		pr_warn("Housekeeping: Boot CPU must not be isolated, clearing %d from isolcpus range\n",
-+			 boot_cpu);
-+		__cpumask_set_cpu(boot_cpu, housekeeping_staging);
-+		__cpumask_clear_cpu(boot_cpu, non_housekeeping_mask);
-+	}
++	if ((new_prs == PRS_ISOLATED) && cpumask_test_cpu(0, new_excpus))
++		return PERR_ISOLCPU0;
 +
- 	if (cpumask_empty(non_housekeeping_mask))
- 		goto free_housekeeping_staging;
+ 	return PERR_NONE;
+ }
  
+@@ -3002,6 +3006,8 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 			err = PERR_HKEEPING;
+ 		else if (parent_prs == PRS_ISOLATED)
+ 			err = PERR_ISOPARENT;	/* old_prs should be isolated */
++		else if ((new_prs == PRS_ISOLATED) && cpumask_test_cpu(0, cs->effective_xcpus))
++			err = PERR_ISOLCPU0;
+ 
+ 		if (err) {
+ 			disable_partition = true;
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 1397ec428c46..735d515ffc10 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -110,8 +110,8 @@ echo "" > test/cpuset.cpus
+ 
+ #
+ # If nohz_full CPUs have been reserved at boot time, they should not include
+-# CPUs 0-7 as that may fail some of the test cases. On the other hand if the
+-# set of nohz_full CPUs includes all the CPUs except 0-7 in a single range
++# CPUs 1-7 as that may fail some of the test cases. On the other hand if the
++# set of nohz_full CPUs includes all the CPUs except 1-7 in a single range
+ # <first>-<last>, we can run a special set of housekeeping CPUs exhaustion
+ # tests to see if the cpuset code will reject them.
+ #
+@@ -123,14 +123,22 @@ NOHZ_FULL_CPUS=
+ 	NOHZ_FULL_CPUS=$(cat /sys/devices/system/cpu/nohz_full)
+ LAST_PRESENT_CPU=$(cat /sys/devices/system/cpu/present | sed -e "s/.*[,-]//")
+ [[ -n "$NOHZ_FULL_CPUS" ]] && {
+-	FIRST_NOHZ_FULL_CPU=$(echo $NOHZ_FULL_CPUS | sed -e "s/[,-].*//")
+-	LAST_NOHZ_FULL_CPU=$(echo $NOHZ_FULL_CPUS | sed -e "s/,.*//;s/.*[-]//")
++	if [[ $(expr $NOHZ_FULL_CPUS : "^0,") -gt 0 ]]
++	then
++		NOHZ_CPU0=1
++		NOHZ_CPUS=$(echo $NOHZ_FULL_CPUS | sed -e "s/^0,//")
++	else
++		NOHZ_CPUS=$NOHZ_FULL_CPUS
++	fi
++	FIRST_NOHZ_FULL_CPU=$(echo $NOHZ_CPUS | sed -e "s/[,-].*//")
++	LAST_NOHZ_FULL_CPU=$(echo $NOHZ_CPUS | sed -e "s/,.*//;s/.*[-]//")
+ 	echo "Boot nohz_full CPUs: $NOHZ_FULL_CPUS"
+ }
+ [[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" -le 7 ]] &&
+ 	skip_test "Boot NOHZ_FULL CPUs overlap CPUs to be tested!"
+ 
+ [[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" = 8 &&
++   -n "$NOHZ_CPU0" &&
+    "$LAST_NOHZ_FULL_CPU" = $LAST_PRESENT_CPU ]] && RUN_NOHZ_FULL_TESTS=1
+ 
+ #
+@@ -394,8 +402,8 @@ TEST_MATRIX=(
+ 	# Invalid to valid local partition direct transition tests
+ 	" C1-3:P2  X4:P2    .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
+ 	" C1-3:P2  X4:P2    .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
+-	" C0-3:P2    .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0"
+-	" C0-3:P2    .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
++	" C1-3:P2    .      .    C4-6   C1-4     .      .      .     0 A1:1-4|B1:5-6 A1:P2|B1:P0"
++	" C1-3:P2    .      .    C4-6 C1-4:C1-3  .      .      .     0 A1:1-3|B1:4-6 A1:P2|B1:P0 1-3"
+ 
+ 	# Local partition invalidation tests
+ 	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
+@@ -506,6 +514,11 @@ TEST_MATRIX=(
+ 	"  CX1-4  CX2-4:P2  .    C5-6      .     .      .   P1:C3-6  0 A1:1|A2:2-4|B1:5-6 \
+ 								       A1:P0|A2:P2:B1:P-1 2-4"
+ 
++	# CPU 0 cannot be used in an isolated partition
++	"  CX0-4     .      .      .       P2    .      .      .     0 A1:0-4 A1:P-2"
++	"  CX0-4  C0-2:P1   .      .       .     P2     .      .     0 A1:0-4:A2:0-2 A2:P-2"
++	"  CX0-4  C3-4:P2   .      .       .    C0-2    .      .     0 A1:0-4:A2:0-2 A2:P-2"
++
+ 	# When multiple partitions with conflicting cpuset.cpus are created, the
+ 	# latter created ones will only get what are left of the available exclusive
+ 	# CPUs.
+@@ -525,8 +538,8 @@ TEST_MATRIX=(
+ 
+ 	# A middle isolated parent shrunk below coverage: the released CPUs of
+ 	# an invalidated child stay isolated as a higher ancestor still covers them.
+-	" CX0-4:P2 CX2-4:P2 CX3-4:P2 .     .     X2     .      .     0 A1:0-1,3-4|A2:2|A3:2 \
+-								       A1:P2|A2:P2|A3:P-2 0-4"
++	" CX1-4:P2 CX2-4:P2 CX3-4:P2 .     .     X2     .      .     0 A1:1,3-4|A2:2|A3:2 \
++								       A1:P2|A2:P2|A3:P-2 1-4"
+ 
+ 	# When an isolated partition child with root partition parent is invalidated,
+ 	# its effective xcpus will be removed from isolated_cpus.
+@@ -618,20 +631,20 @@ ISOLCPUS_TEST_MATRIX=(
+ 	" CX1-2,I:X1,I:P1 . .      .     X1,2,I  .      .      .     0 A1:1-2,I|XA1:1-2,I A1:P-1 ."
+ )
+ 
+-# Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
++# Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 1-7
+ # This also means that CPU 8 is available and is a nohz_full CPU.
+ NOHZ_FULL_TEST_MATRIX=(
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+ 	# Using all the nohz_full HK CPUs 0-7 in isolated partition is not allowed
+-	" C0-7       .      .      .      P2     .      .      .     0 A1:0-7 A1:P-2 ."
+-	" C2-7:P2    .      .      .     C0-4    .      .      .     0 A1:0-4 A1:P2 0-4"
+-	" C1-7:P2 C5-7:P2   .      .       .     .      .    C0:P2   0 A1:1-4|A2:5-7|B1:0
+-								       A1:P2|A2:P2|B1:P-2 1-7"
++	" C1-7       .      .      .      P2     .      .      .     0 A1:1-7 A1:P-2 ."
++	" C2-7:P2    .      .      .     C1-4    .      .      .     0 A1:1-4 A1:P2 1-4"
++	" C2-7:P2 C5-7:P2   .      .       .     .      .    C1:P2   0 A1:2-4|A2:5-7|B1:1
++								       A1:P2|A2:P2|B1:P-2 2-7"
+ 	# An isolated child partition cannot grow to take over the last
+ 	# housekeeping CPU when its parent expands the exclusive CPUs.
+-	" C0-8:X1-8:P1 CX0-8:P2 .  .     X0-7    .      .      .     0 A1:0-7|A2:0-7 A1:P1|A2:P-2 ."
+-	" C0-8:X0-6:P1 CX0-8:P2 .  .     X2-8    .      .      .     0 A1:|A2:2-8 A1:P1|A2:P2 2-8"
++	" C1-8:X1-8:P1 CX1-8:P2 .  .     X1-7    .      .      .     0 A1:0-7|A2:0-7 A1:P1|A2:P-2 ."
++	" C1-8:X0-6:P1 CX1-8:P2 .  .     X2-8    .      .      .     0 A1:|A2:2-8 A1:P1|A2:P2 2-8"
+ )
+ 
+ #
 -- 
 2.56.1
 
