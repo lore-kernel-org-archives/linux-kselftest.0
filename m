@@ -1,76 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795265616;
-	b=YZoKeO7GR5x6GezRYW5JBInKvfqslr/sno3Z2SaTlL7QSdVNdGpTFhjVQR7q4beB25Is
-	 NIQ3Wd2RRa1QTShuFjrT774J9T0QsT5jx8eonVHiQGp+tTzGyeMBPuAWh2TkZm4qOLsob
-	 irKgaZ1gK9Yod13riPfue20V3QEWGqpFJ3cskx7woamzTEChdU8Xgj9Ae2GF0V90iPL78
-	 nKXFlou8QRwN2uyBxDeEqPmG9EE2WsI3EW96kzbxr9DtuOO2eRT+l96Hqpd6siZzVym5/
-	 skIV3STGJWb06WI4Epr7YbeWqdN3373vpiaLPPJSAPFe/MWV5cmIbOlh+AE7uqpAdLg==
+	t=1795271425;
+	b=pDX6ENSbUdvJJ8YtnpiRI8vb3yFLR35kWr9EV8i9oU20h0OtXPUyHzhOiPZISaAO76o/
+	 BC9xWRe3Cu6oQC7ki7iAV0okj+MP66jdgmkpaWYoX4dTKKDLFlfRhYDi7vuASZgZkbEag
+	 MPRGHlaFexplLe48SWSJjOsFfn1UBkwav2QOwUAQ93t3KMu5dMhslU7TsuvKEiMpp3suM
+	 Yoh0BU2mjQvd6uqeEOTpXal2CDMRexJWob3E2bwrpc59x8V3mqdrBO/3WTx1TcFcZxT2z
+	 iwZT+6g+AtTFoalcn4mQkWfFsA9kAE0TIdi60OlWt/uVV54ZrOM0o10DdIy69GrTXVg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795265616;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=Kv39YFS3gCTmTIBEpLn+LTr7Kna7mVqtgec2/Wwwicg=;
-	b=HV/LvRIe7CQLRz4RRKp+1hWRwmUoSYbveOtP1msP931pWKmDcZC/XBP26BifRLbW1ppJ
-	 5GBMS+ICCpuxzeQjNxNzep+Zb9KgdmFLrkTbm6OFFuUfNKVA1wr8L+vdPAyVmHdlaRF71
-	 L/zFe8v6XMlcc8NqvgF6H3nmntb+azk8q+VIJJnpDqZwC3kdczzD2+LuiRAkToOF4nQOD
-	 nqlI7uEZX/NH8dTgLLf/CDpw6aOOjiGDLqxq/AsZeugWbLjdb7Fk0uxuXIVKApgme+ieg
-	 M3OeKmgyU6jknlkW9GjMaHgsbyDnHwp2FxsRNiUwClSoDVGdPPcdIxcB0ffYila8UHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795271425;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=0YU/fDp3KZz8gM/hKbMCiYTSyjSjQFZGI4fk+N2y0LQ=;
+	b=Mk7gDbU8ARwZ9gDLG+KVixMAVFEZ9QcE0Ta4XQT1ssUOqikopyF5B21oV+uLPcDPFj0t
+	 9KitqhMb0yrTkgXqRJ1lXOWy7RmFjRD1dH5Pv3tevlhyJdb7UPsiFtIfRmeFSM6MqtFzc
+	 0+Vh0MWe5LR2zJbtdalT93H6pbgk4XQwBS6omGg1Wvd4wkF6qib8tmMdwjE03L7OYwJKx
+	 B+P/nREV0MBvIkG0bFbG4P6TVrR4R1rpOhmou51Palm20PHr1OuaTFKi+5o9HDbPWwJki
+	 YD7jKy70qVgDpfbhTsn4VZZB5kkjzFJrLca3kVh56r8OHibuFXFDxVvDj/H2fgrOHvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=D0Tve2Qu;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LesrAxbu;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799DF606A32A;
-	Sat, 21 Nov 2026 12:53:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 799DF606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 1A6E8606A32A;
+	Sat, 21 Nov 2026 14:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=D0Tve2Qu
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Kv39YFS3gCTmTIBEpLn+LTr7Kna7mVqtgec2/Wwwicg=; b=D0Tve2QuWJTHNHXcUWkFbcPJC6
-	TOiab1mhHs6+yzFNQHQnVJYMmE0HwdjNO4aoMN/HLWc3urlQ9nXzmbb34/0NKQmmZYBczP5RgddvH
-	vzPz1NHrWYJie+e/K15GD8dlMYj/CXf9w0DKH/xT+vKgtCjYmNk69C+vpkiU9O7hPkWzKKLzrAg8f
-	Nf25l5vkdz8GZzeFje0DF2iR2MHUoNElJSn8yGmhHt0W4XZ0syoVlw9TUXq0J+bzrExPGV8ZX7Oht
-	60GhviSwhWNnr2BnnEi+keEhlEd9U+CK57Qc7Ndr6c3hpqyWnxHuLJc10iKwBlrRkHh3/olbdjqs0
-	hUkL9QWg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xUkaj-003fOK-0z;
-	Sat, 21 Nov 2026 12:53:17 +0000
-Date: Sat, 21 Nov 2026 04:53:09 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 1/3] net/tcp-ao: convert the getsockopt helpers
- to sockopt_t
-Message-ID: <awGTN1cIEnnlAMPq@gmail.com>
-References: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
- <20261112-getsockopt_phase7-v1-1-1eb759dd0929@debian.org>
- <avdxDgmlDBTRgqM0@devvm16445.scu0.facebook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LesrAxbu
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 55CE71F000C0;
+	Sat, 21 Nov 2026 14:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795271424;
+	bh=0YU/fDp3KZz8gM/hKbMCiYTSyjSjQFZGI4fk+N2y0LQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=LesrAxbuFo+VSINyG5lsBjRU3Qm3DF1wRovF7M2GZjIVnxWLtSHjIfFhHxd8A/TkD
+	 RqmMokr5JvJeR0SNot1nuAQltwzSQSbG8JFAUBI0Ab2YIEIewCjGoKyIJpPONwxKM+
+	 9ymDQ/d1ZmzT8f6NK+vFbiJ/IRUKGVM3rIL52+yvWmU510DzyYl0PSMv2Sa3WOq9V9
+	 If7tUiTftN/jitxRU/10ifVruz4XBtarHF/FOmQKWkGKOLqxBFds1BPo7KI6/oB5K0
+	 V0EifwGVItWCj03K6JC7YkWzQRbBdqdNwnmWK/donEPcj5Sbh5xHDNgZ0mDxNwo3m5
+	 88zFHDkYRD7KA==
+Date: Sat, 21 Nov 2026 16:30:20 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Rustam Mustafin <rmustafin@cloudlinux.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>, Jaewon Yang <yong010301@gmail.com>,
+	linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests: tpm2: test that io_uring reads ignore
+ the file offset
+Message-ID: <awGq_L-ZjRhM0rMK@kernel.org>
+References: <20261120121614.978396-1-rmustafin@cloudlinux.com>
+ <20261120121614.978396-3-rmustafin@cloudlinux.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,60 +62,191 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <avdxDgmlDBTRgqM0@devvm16445.scu0.facebook.com>
-X-Debian-User: leitao
+In-Reply-To: <20261120121614.978396-3-rmustafin@cloudlinux.com>
 
-On Fri, Nov 13, 2026 at 12:21:27PM -0800, Stanislav Fomichev wrote:
-> On 11/12, Breno Leitao wrote:
-> > @@ -2214,6 +2213,21 @@ static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
-> >  	}
-> >  
-> >  	bytes_to_write = min_t(int, user_len, sizeof(struct tcp_ao_getsockopt));
-> > +
+On Fri, Nov 20, 2026 at 07:16:14PM +0700, Rustam Mustafin wrote:
+> Test that an IORING_OP_READ request on /dev/tpm0 and /dev/tpmrm0
+> returns the whole pending response from its start, although sqe->off
+> points past the response header. The offset stays inside
+> priv->data_buffer, so an unpatched kernel fails the test on the
+> returned header without an out-of-bounds access.
 > 
-> [..]
+> Signed-off-by: Rustam Mustafin <rmustafin@cloudlinux.com>
+> ---
+>  tools/testing/selftests/tpm2/.gitignore  |   1 +
+>  tools/testing/selftests/tpm2/Makefile    |   4 +
+>  tools/testing/selftests/tpm2/tpm_uring.c | 131 +++++++++++++++++++++++
+>  3 files changed, 136 insertions(+)
+>  create mode 100644 tools/testing/selftests/tpm2/tpm_uring.c
 > 
-> > +	/* The reply is up to nkeys entries, user_len apart, with the match
-> > +	 * count in the first entry's nkeys, so it can outgrow optlen. Size it
-> > +	 * by the keys on the socket rather than by the caller's nkeys.
-> > +	 */
-> > +	hlist_for_each_entry_rcu(key, &ao_info->head, node,
-> > +				 lockdep_sock_is_held(sk))
-> > +		nr_keys++;
-> > +	reply_len = max(array_size(min(max_keys, nr_keys), user_len),
-> > +			offsetofend(struct tcp_ao_getsockopt, nkeys));
-> > +	err = sockopt_expand_out(sopt, reply_len);
-> > +	if (err)
-> > +		return err;
-> > +	head = sopt->iter_out;
+> diff --git a/tools/testing/selftests/tpm2/.gitignore b/tools/testing/selftests/tpm2/.gitignore
+> index 6d6165c5e35d..d2324bd0eca2 100644
+> --- a/tools/testing/selftests/tpm2/.gitignore
+> +++ b/tools/testing/selftests/tpm2/.gitignore
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  AsyncTest.log
+>  SpaceTest.log
+> +tpm_uring
+> diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
+> index a9bf9459fb25..67f346f4cdef 100644
+> --- a/tools/testing/selftests/tpm2/Makefile
+> +++ b/tools/testing/selftests/tpm2/Makefile
+> @@ -1,4 +1,8 @@
+>  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+> +CFLAGS += $(KHDR_INCLUDES) -idirafter ../../../include -Wall
+> +
+> +TEST_GEN_PROGS := tpm_uring
+> +
+>  include ../lib.mk
+>  
+>  TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
+> diff --git a/tools/testing/selftests/tpm2/tpm_uring.c b/tools/testing/selftests/tpm2/tpm_uring.c
+> new file mode 100644
+> index 000000000000..9caa3cba5bf0
+> --- /dev/null
+> +++ b/tools/testing/selftests/tpm2/tpm_uring.c
+> @@ -0,0 +1,131 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+> +/*
+> + * An io_uring read chooses its own file offset. The TPM character devices
+> + * must ignore it and return the response from its start.
+> + */
+> +
+> +#include <endian.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <poll.h>
+> +#include <signal.h>
+> +#include <io_uring/mini_liburing.h>
+> +#include "../kselftest.h"
+> +
+> +#define RING_ENTRIES	4
+> +#define BUF_LEN		4096
+> +#define POLL_TIMEOUT_MS	10000
+> +#define TPM_VERSION_FILE	"/sys/class/tpm/tpm0/tpm_version_major"
+> +struct tpm_header {
+> +	uint16_t tag;
+> +	uint32_t size;
+> +	uint32_t return_code;
+> +} __attribute__((packed));
+> +
+> +/* TPM2_GetCapability(TPM_CAP_TPM_PROPERTIES, TPM_PT_FIXED, 1) */
+> +static const unsigned char cmd[] = {
+> +	0x80, 0x01,		/* TPM_ST_NO_SESSIONS */
+> +	0x00, 0x00, 0x00, 0x16,	/* command size */
+> +	0x00, 0x00, 0x01, 0x7a,	/* TPM_CC_GetCapability */
+> +	0x00, 0x00, 0x00, 0x06,	/* TPM_CAP_TPM_PROPERTIES */
+> +	0x00, 0x00, 0x01, 0x00,	/* TPM_PT_FIXED */
+> +	0x00, 0x00, 0x00, 0x01,	/* property count */
+> +};
+> +
+> +static void test_read(struct io_uring *ring, const char *path)
+> +{
+> +	static char buf[BUF_LEN];
+> +	const struct tpm_header *hdr = (const void *)buf;
+> +	struct pollfd pfd = { .events = POLLIN };
+> +	struct io_uring_sqe *sqe;
+> +	struct io_uring_cqe *cqe;
+> +	int fd, ret, res;
+> +
+> +	fd = open(path, O_RDWR);
+> +	if (fd < 0) {
+> +		if (errno == ENOENT)
+> +			ksft_test_result_skip("%s: not present\n", path);
+> +		else
+> +			ksft_test_result_fail("%s: open: %s\n", path,
+> +					      strerror(errno));
+> +		return;
+> +	}
+> +
+> +	if (write(fd, cmd, sizeof(cmd)) != sizeof(cmd)) {
+> +		ksft_test_result_fail("%s: write: %s\n", path, strerror(errno));
+> +		goto out;
+> +	}
+> +
+> +	pfd.fd = fd;
+> +	if (poll(&pfd, 1, POLL_TIMEOUT_MS) != 1) {
+> +		ksft_test_result_fail("%s: no response to the command\n", path);
+> +		goto out;
+> +	}
+> +
+> +	sqe = io_uring_get_sqe(ring);
+> +	memset(sqe, 0, sizeof(*sqe));
+> +	sqe->opcode = IORING_OP_READ;
+> +	sqe->fd = fd;
+> +	/*
+> +	 * Inside the response buffer: an unpatched kernel returns the response
+> +	 * without its header instead of reading out of bounds
+> +	 */
+> +	sqe->off = sizeof(*hdr);
+> +	sqe->addr = (unsigned long)buf;
+> +	sqe->len = BUF_LEN;
+> +	ret = io_uring_submit(ring);
+> +	if (ret != 1) {
+> +		ksft_test_result_fail("%s: io_uring_submit: %d\n", path, ret);
+> +		goto out;
+> +	}
+> +	ret = io_uring_wait_cqe(ring, &cqe);
+> +	if (ret) {
+> +		ksft_test_result_fail("%s: io_uring_wait_cqe: %d\n", path, ret);
+> +		goto out;
+> +	}
+> +	res = cqe->res;
+> +	io_uring_cqe_seen(ring);
+> +
+> +	/* the offset is ignored: the whole response, from its start */
+> +	ksft_test_result(res >= (int)sizeof(*hdr) &&
+> +			 be32toh(hdr->size) == res && !hdr->return_code,
+> +			 "%s: io_uring read %d\n", path, res);
+> +out:
+> +	close(fd);
+> +}
+> +
+> +/* the command is TPM2 only; test_smoke.sh skips the same way */
+> +static int tpm_version_major(void)
+> +{
+> +	FILE *f = fopen(TPM_VERSION_FILE, "r");
+> +	int major = 0;
+> +
+> +	if (f) {
+> +		if (fscanf(f, "%d", &major) != 1)
+> +			major = 0;
+> +		fclose(f);
+> +	}
+> +	return major;
+> +}
+> +
+> +int main(void)
+> +{
+> +	struct io_uring ring;
+> +
+> +	ksft_print_header();
+> +	if (tpm_version_major() != 2)
+> +		ksft_exit_skip("no TPM 2.0 device\n");
+> +	if (io_uring_queue_init(RING_ENTRIES, &ring, 0)) {
+> +		/* not built in, or disabled by kernel.io_uring_disabled */
+> +		if (errno == ENOSYS || errno == EPERM)
+> +			ksft_exit_skip("io_uring_setup: %s\n", strerror(errno));
+> +		ksft_exit_fail_msg("io_uring_queue_init: %s\n", strerror(errno));
+> +	}
+> +	ksft_set_plan(2);
+> +
+> +	test_read(&ring, "/dev/tpm0");
+> +	test_read(&ring, "/dev/tpmrm0");
+> +
+> +	io_uring_queue_exit(&ring);
+> +	ksft_finished();
+> +}
+> -- 
+> 2.52.0
 > 
-> Is that faster / cleaner / more preferable than calling sockopt_expand_out
-> on every iteration hlist_for_each_entry_rcu below?
 
-sockopt_expand_out() can't be called once something went through
-iter_out. It re-anchors the iterator at the head of optval, so it WARNs
-and returns -EINVAL if the iterator has already moved.
+Thanks. I applied them.
 
-That check came in v2 of the series that added the helper [1], because
-a late call would rewind the write cursor. With a call per key, the
-second key would trip it.
+Sorry for few igorant responses I was doing too many things.
 
-So the size has to be known before the first entry is written, which is
-why the keys are counted first. ip_mc_gsfget() does the same and sizes
-its source list by min(sl_count, gf_numsrc). tcp_ao_info just keeps no
-key count, hence the walk.
 
-Sizing by nkeys alone doesn't work either: a large nkeys would hit the
-MAX_RW_COUNT check and get -EINVAL, where today it copies only the keys
-that match.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-The extra walk seems very cheap. The keys come from sock_kmalloc(), so
-optmem_max caps how many a socket holds, and the socket lock keeps the
-list stable between the two walks.
-
-I'll say this in the comment and resping a v2.
-
-Thanks for the review, you are being key to this whole convertion,
---breno
-
-[1] https://lore.kernel.org/20260914-getsockopt_phase6-v2-0-e48befc9602e@debian.org
+Br, Jarkko
