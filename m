@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.233
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.243
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795257237;
-	b=CMUjH35IUdveEiOhggBQ9wMECwGut0ikNNMPl6dgALOlMWvDjrz32SwQAky7AtoOC9Uw
-	 IQk0wkUD7ZmsD7hro0u9pwWk+IwVC5WSllpXyE2c0e03m16zE1wgQ1D9uikfZgvwJwpRK
-	 /GUkkiBEy0CI3Eh+vfB1seNwMyNbTLYbmzRSu8D6+3/2w6/4uqeZhroAwDVs9fnW0Xoxo
-	 4TXPUC1HABXg90jPHC5b1dtIUvs0F56KRdEqDL4KPdY4hLxoKgVZhAZzbd6k9OOPD7ihF
-	 CzMqBW3chBKCkRxJ8X/BWKCHNub+GFnTBdQHjDFdF1EOmXp8uXeY7p16kcYZcnyEsIw==
+	t=1795257264;
+	b=aVnD9WBwT45tt7uU6hP2lZz233SWpCCBtTFfoupwqp52porbz/6lyLrdgTe8s0mnOwBI
+	 icpp7a2VzOzRW2jxEKyJN/vaGiKSbMehg3gpK++MANWjuZ8ASDd04kCYrEMhTCoJO8K9u
+	 mUDfBCDxztkT2t8aqdybVSO1QYkqduRDvKbNtX6TLwkdKfhEaxzAGZ6nipqhVcvVdhZwx
+	 1RJGI0yFmS9DHnbMwxGZEDBA4EfpD2MWuQdnYCqETO0/V00iOHlYgorfRj/IaR8hUjZ9g
+	 VJ5IVtVI4wE0V3GB50GjU9KGAa0HpoblPYnlGY37RaHkVVjIjZL3eEiMpSLejnb8XUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795257237;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795257264;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=YPWQy6tXZ2BtrJnEU05o+nAPOoRyOLYxRxI7hlvqBFU=;
-	b=MWZzqOg2Ozvc10xIVnuKnrt69ia+RxgEtY0eC7wIBl/FXhnemwpYlUyxMb4CNbOHn2OP
-	 02EF3+3L1kfumYrtOxxgp2hMQgl/YhufOPhy9qvvDqmEDU7Tumbc3wUAssplmUs5lk27Z
-	 ESvO57HMMTKTdbDgtlYih9p0T0rLKlmXIZZ2pTJUsGiM3/lDRbF+s+24IIXB6yhxb/gDl
-	 MBU3qA2bJbK2CTEZQbF6fDIKQQu9LCSJtK4b0vbX0lCGiYkZV5HPpxc1EcV7x12Ubibja
-	 iqMeiWrndDnV3s917ToWjz6kl1IK8oz4G6OMdTqE5PnNhP9VM3FNjVLIjxAVH5+zdog==
+	bh=Nc48zS1pvPQXpcOFDxpy9yc01fZs/NHTVYQQcYjGPTc=;
+	b=f48uIuMOwEFXoPvrhEZFHFPdiFrvDaBlp2/8s6eySMCVD/V+s9TwEN9h0ewXwQChniy1
+	 LojXIHFecsDE65AIIqPu7tSkWIJhdTSSc5Su1xXr7jWtCUuX3f8U9gkLQiSqaZfr08FX3
+	 s5wlAuuOIqPVQnLC4bj4qRijuh+FOwW1mNjUrHH9DHzWaE8+7+T2IzLpHeeBVka5YCDts
+	 oAgPDENoY8/K0XGsm8bliZe1XCKFoLbuPabOEOFXe8aAu15NIJOAnxfYHfown82/gJsvw
+	 PxbSgWNXAwGU9z/vyXBg5k5qKOTDit9HzcXrJJ4dgP/qrJbRH0jyTLDnpFxTx+ZGLig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=h6XR4BLx;
-	arc=none smtp.remote-ip=91.218.175.233
-Received: from mta0.migadu.com (out-233.mta0.migadu.com [91.218.175.233])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IlIE+6d0;
+	arc=none smtp.remote-ip=91.218.175.243
+Received: from mta0.migadu.com (out-243.mta0.migadu.com [91.218.175.243])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8294606A32A
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 10:33:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8294606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D42606A32C
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 10:34:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72D42606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=h6XR4BLx
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IlIE+6d0
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ecquvy0LLbyxzPk3DVJ6KSO95ySs2S2dxgtgRE1YmDE=;
+DKIM-Signature: a=rsa-sha256; bh=d0Zx0VgqM4r7n2EGcrwfr6pCsmUZw+5S5+NxgBb7BDY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795257235; v=1; x=1795862035;
- b=h6XR4BLxd3qd5d1W7d0JS9XoSZ6behdfQNPP4dwFf2OLWZlsLG8dVvmPzy3N2lmBrIz33n81
- Rxg8zJAb/I2Gu2TQZuW07DXkh0WBgQXz+MX6i6y2nqZCsCzjLM9oiBMODyoGCDU2+eOwrtBycL7
- dNhHYic725nVRoYa0HrLH6Pg=
+ t=1795257261; v=1; x=1795862061;
+ b=IlIE+6d0Fw2t21lFD3sbsZIe4TxndE7H7JkCpuaGK+XAELCyU8pjSnZRnTwutev/Ed6PtN89
+ u45KqRx5hrHlaKNxGi4TafWfSocwjdtMs49Ra1s3mj2M+ppZF+VPdiLcmN2RnQa3P4yc2ki91gq
+ paiEPltMTNLysFd8LbxBa23k=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 046055c0217f7f62;
-	Sat, 21 Nov 2026 10:33:54 +0000
-X-Mizu-Trace-ID: 046055c0217f7f62
+Received: by smtp.migadu.com with ESMTPS id ebcdaf32079d6eb0;
+	Sat, 21 Nov 2026 10:34:21 +0000
+X-Mizu-Trace-ID: ebcdaf32079d6eb0
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
@@ -73,14 +73,14 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
 	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Michal Luczaj <mhal@rbox.co>,
 	Mattia Meleleo <mattia.meleleo@coralogix.com>,
+	Michal Luczaj <mhal@rbox.co>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 03/11] bpf, sockmap: Fix strparser reinit after the parser link is removed
-Date: Sat, 21 Nov 2026 18:30:04 +0800
-Message-ID: <20261121103222.88209-4-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf 04/11] bpf, sockmap: Fix empty sk_msg queued by ingress redirect
+Date: Sat, 21 Nov 2026 18:30:05 +0800
+Message-ID: <20261121103222.88209-5-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
 References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
@@ -95,234 +95,40 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A socket can sit in several sockmaps at once, so a psock can outlive
-the link that brought the stream parser. When that link goes away,
-sock_map_del_link() can only call sk_psock_stop_strp(), which marks the
-strparser stopped. strp_done(), which cancels the message timer and the
-work and frees the partial skb, needs lock_sock() and sync cancels and
-is only run from sk_psock_destroy(). With another link holding the
-psock, destroy never comes and the strparser stays in that half state.
+An SK_MSG program can pop the whole message with bpf_msg_pop_data() and
+then redirect it with BPF_F_INGRESS. tcp_bpf_send_verdict() does not
+check for that and calls bpf_tcp_ingress() with nothing to send. Its
+do-while loop still walks the empty ring, charges zero bytes and queues
+a zero sized sk_msg on the peer's ingress_msg.
 
-Adding the socket to another map with a parser then goes through
-sk_psock_init_strp() again, because progs.stream_parser and
-saved_data_ready were both cleared. strp_init() memsets the strparser
-and reinits its work and timer while the old timer may still be on the
-timer wheel and the old work may still be queued. The partial skb is
-leaked. Once the timer fires, __run_timers() unlinks a timer_list that
-no longer matches the wheel and delayed_work_timer_fn() dereferences
-the zeroed wq:
+__sk_msg_recvmsg() hits the zero length element first, returns -EFAULT
+and never dequeues it, so every later message on that socket sits
+behind it and recvmsg() keeps failing. Only tearing down the psock gets
+rid of it.
 
-  BUG: KASAN: slab-use-after-free in __run_timers+0xa7d/0xab0
-  Write of size 8 at addr ffff888001ed40e0 by task systemd-journal/148
-  Call Trace:
-   <IRQ>
-   __run_timers+0xa7d/0xab0
-   run_timer_base+0x107/0x190
-   run_timer_softirq+0x1a/0x40
-   handle_softirqs+0x251/0xa70
-   __irq_exit_rcu+0x1a8/0x260
-   irq_exit_rcu+0xe/0x30
-   sysvec_apic_timer_interrupt+0xc2/0x110
-   </IRQ>
-  Allocated by task 756:
-   sk_psock_init+0x187/0x850
-   sock_map_link+0x7d8/0xcf0
-   sock_map_update_common+0xbd/0x6c0
-   sock_map_update_elem_sys+0x324/0x460
-  Freed by task 684:
-   sk_psock_destroy+0x847/0xb30
-   process_one_work+0x93a/0x1b60
+Return early from bpf_tcp_ingress() when the message is empty. SK_PASS
+and egress redirect already send nothing in that case.
 
-  Oops: general protection fault, probably for non-canonical address 0xdffffc0000000038
-  KASAN: null-ptr-deref in range [0x00000000000001c0-0x00000000000001c7]
-  RIP: 0010:__queue_work+0x94/0x1850
-  Call Trace:
-   <IRQ>
-   delayed_work_timer_fn+0x5d/0xa0
-   call_timer_fn+0x17d/0x510
-   __run_timers+0x4e5/0xab0
-   run_timer_base+0x107/0x190
-   run_timer_softirq+0x1a/0x40
-   </IRQ>
-
-Finish the strparser when the parser link is removed instead of waiting
-for the psock to die. sock_map_del_link() cannot sleep, so take a psock
-reference and queue sk_psock_destroy() on psock->rwork with
-SK_PSOCK_STRP_DONE_PENDING set. The work then only runs strp_done(),
-clears SK_PSOCK_RX_STRP_ENABLED and drops the reference. The work holds
-the psock, so the normal destroy cannot be queued before it finishes,
-and the final put may requeue rwork for the real destroy from inside
-the handler.
-
-sock_map_link() refuses to attach a parser while
-SK_PSOCK_RX_STRP_ENABLED is still set, under sk_callback_lock together
-with the bit updates. sock_map_update_elem_sys() flushes the pending
-work before taking the socket lock, so userspace can remove a parser and
-attach a new one back to back without seeing -EBUSY.
-
-BPF programs updating a sockmap (sockops helpers, iterator, sk_lookup
-and sk_reuseport programs) cannot wait and may get a transient -EBUSY
-if they add a socket to a parser map right after its parser link was
-removed. Before this change the same sequence reinitialized a live
-strparser, so this is the better outcome.
-
-The psock now also lives a little longer after the last link to a
-parser map is removed, until the work has run. A TLS upgrade attempted
-in that window is rejected like for any socket with a psock.
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- include/linux/skmsg.h |  6 ++++++
- net/core/skmsg.c      | 24 ++++++++++++++++++++++++
- net/core/sock_map.c   | 39 ++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 68 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_bpf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index f0e27b4b929f1..276692e060d53 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -68,6 +68,7 @@ struct sk_psock_progs {
- enum sk_psock_state_bits {
- 	SK_PSOCK_TX_ENABLED,
- 	SK_PSOCK_RX_STRP_ENABLED,
-+	SK_PSOCK_STRP_DONE_PENDING,
- };
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index e59103e77aa5f..7191b95c7b1c7 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -39,6 +39,9 @@ static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
+ 	struct sk_msg *tmp;
+ 	int i, ret = 0;
  
- struct sk_psock_link {
-@@ -459,6 +460,7 @@ void sk_psock_stop(struct sk_psock *psock);
- int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock);
- void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock);
- void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock);
-+void sk_psock_queue_strp_done(struct sk_psock *psock);
- #else
- static inline int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
- {
-@@ -472,6 +474,10 @@ static inline void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
- static inline void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
- {
- }
++	if (!msg->sg.size)
++		return 0;
 +
-+static inline void sk_psock_queue_strp_done(struct sk_psock *psock)
-+{
-+}
- #endif
- 
- void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock);
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 16f84dcb5acd9..43dc128841e98 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -879,6 +879,18 @@ static void sk_psock_destroy(struct work_struct *work)
- {
- 	struct sk_psock *psock = container_of(to_rcu_work(work),
- 					      struct sk_psock, rwork);
-+
-+	if (sk_psock_test_state(psock, SK_PSOCK_STRP_DONE_PENDING)) {
-+		/* Parser link gone, other links keep the psock alive */
-+		sk_psock_done_strp(psock);
-+		write_lock_bh(&psock->sk->sk_callback_lock);
-+		sk_psock_clear_state(psock, SK_PSOCK_RX_STRP_ENABLED);
-+		sk_psock_clear_state(psock, SK_PSOCK_STRP_DONE_PENDING);
-+		write_unlock_bh(&psock->sk->sk_callback_lock);
-+		sk_psock_put(psock->sk, psock);
-+		return;
-+	}
-+
- 	/* No sk_callback_lock since already detached. */
- 
- 	sk_psock_done_strp(psock);
-@@ -1208,6 +1220,18 @@ void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
- 	strp_stop(&psock->strp);
- }
- 
-+/* Called with sk_callback_lock held while a link still holds the psock */
-+void sk_psock_queue_strp_done(struct sk_psock *psock)
-+{
-+	if (!sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED) ||
-+	    test_and_set_bit(SK_PSOCK_STRP_DONE_PENDING, &psock->state))
-+		return;
-+
-+	refcount_inc(&psock->refcnt);
-+	INIT_WORK(&psock->rwork.work, sk_psock_destroy);
-+	schedule_work(&psock->rwork.work);
-+}
-+
- static void sk_psock_done_strp(struct sk_psock *psock)
- {
- 	/* Parser has been stopped */
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 282c6a4b2b05f..6747b3cc1cac1 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -115,6 +115,33 @@ int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype)
- 	return ret;
- }
- 
-+/*
-+ * Wait for the strparser of a removed parser link to be torn down, so that
-+ * a new parser can be attached right after the old one was removed.
-+ */
-+static void sock_map_strp_done_wait(struct bpf_map *map, struct sock *sk)
-+{
-+	struct sk_psock *psock;
-+
-+	if (!READ_ONCE(sock_map_progs(map)->stream_parser))
-+		return;
-+
-+	rcu_read_lock();
-+	read_lock_bh(&sk->sk_callback_lock);
-+	psock = sk_psock(sk);
-+	if (!psock ||
-+	    !sk_psock_test_state(psock, SK_PSOCK_STRP_DONE_PENDING) ||
-+	    !refcount_inc_not_zero(&psock->refcnt))
-+		psock = NULL;
-+	read_unlock_bh(&sk->sk_callback_lock);
-+	rcu_read_unlock();
-+	if (!psock)
-+		return;
-+
-+	flush_work(&psock->rwork.work);
-+	sk_psock_put(sk, psock);
-+}
-+
- static void sock_map_sk_acquire(struct sock *sk)
- 	__acquires(&sk->sk_lock.slock)
- {
-@@ -169,8 +196,10 @@ static void sock_map_del_link(struct sock *sk,
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 	if (psock->saved_data_ready) {
--		if (strp_stop)
-+		if (strp_stop) {
- 			sk_psock_stop_strp(sk, psock);
-+			sk_psock_queue_strp_done(psock);
-+		}
- 		if (verdict_stop)
- 			sk_psock_stop_verdict(sk, psock);
- 
-@@ -297,6 +326,13 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 	}
- 
- 	write_lock_bh(&sk->sk_callback_lock);
-+	if (stream_parser &&
-+	    sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED)) {
-+		write_unlock_bh(&sk->sk_callback_lock);
-+		sk_psock_put(sk, psock);
-+		ret = -EBUSY;
-+		goto out_progs;
-+	}
- 	if (msg_parser)
- 		psock_set_prog(&psock->progs.msg_parser, msg_parser);
- 	if (stream_parser)
-@@ -597,6 +633,7 @@ int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value,
- 		goto out;
- 	}
- 
-+	sock_map_strp_done_wait(map, sk);
- 	sock_map_sk_acquire(sk);
- 	if (!sock_map_sk_state_allowed(sk))
- 		ret = -EOPNOTSUPP;
+ 	tmp = kzalloc_obj(*tmp, __GFP_NOWARN | GFP_KERNEL);
+ 	if (unlikely(!tmp))
+ 		return -ENOMEM;
 -- 
 2.43.0
 
