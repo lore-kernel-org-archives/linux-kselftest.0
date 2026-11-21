@@ -1,95 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795288427;
-	b=xePVw4GSo6evhyuxsxnOphcbyGjxWRw0vrMBkugqMo+MWC90R6AjBjcvxOU/mnqmtcgh
-	 y8BeIHKJwo06Nf53n62Xq817pCdKAG+04zX1+6MdHXG29wBhvS8lTulp1d2EdYhcQoUpX
-	 L9X1ZspnaCzB4Z2Sk6ZOfQOIc8d/hf1FcCWBfgR20BuGMrgPfJGj4h03Lra/Q07TAGfe7
-	 mGY8AmJBkbxFDBwN2orB4NAPY/ji5zVa9XLX9Vg/QUZn0+BZK+ynd9CNssycN5Y2RgBNW
-	 AWTYzdgwFWgbQKQZcAWYrcvEuRmZ4NiV6Ilc/wjV2XN1+6gQ1cuXxiDASZq02EhRq+A==
+	t=1795289715;
+	b=qgYCVUCSyBETEdbM9ddtPkBB/BypOoKMDw9qMXxrwPFGpMwdFYEcVcsIBbDIE/vutNK9
+	 7ydfSWJ/MDHgrYXhuuG15muvJcHb9ea0fkqjrRHhxaLPBQ5z2IEpE8ZdEtzY5Z2RNvuOu
+	 dOgynMHWMLbEjbM9zuQvvyElq5yfJtftiv7MWsDSP61WEMpEULiQhH0Rb9dPLmH4pV0WM
+	 J4qXtOC8D4pggK+qHli4Kmy7/YRPnw0u/Q2s3x3HW+d//T+vqAZiPEjNGJKQgy7DfaUgR
+	 AGi1cYOK0tMUzQfDnKM++WqqNKYOcXMrSSriqeHyAn3DKIpmwvuKDIrqX7iUgN6PgEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795288427;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=0p5SdW2QUlP6oc7GBXyTSmsNARTVU7xBP/EBePnLS70=;
-	b=0b6WImdQreGyihhAoG8PZ+TXx4HGxQwBvxVpJNLRNxIr3Wbad4KHRWYd/CmwksUWAFKD
-	 26zN1S7VsbD0I8fPAAYZ0rohsQnxEGlidwLivil02YHdql5a2Ih/Kd745ww7JOUp9O1zl
-	 rEP6e202BdeIjd+Bu/NJbQGr46MDzVm508RWJ4Vtjjexilh+Q5I85xMN/96qrbqeXAMkG
-	 zAP+izdQZbvzulP0mrtRx9DYsg/IgtxhxX04Mcko6U/g7Ntc0Db2ZVEEPxDbhUb+J7gyv
-	 N1uRM0ndyqvnZty1xGhdCpUVLFlazQeT351Dbxxan5B7K1Fjgb4+RzCiGC/V6AqNMTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795289715;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=JH+iXlWaf0QYvuXeZ5FGygsDHzmcBZZQOeinMNmsuMo=;
+	b=ugnaMMzhIW6SppZk8o3QZqKpToGaRyVmR0Ri3oT7GXPoMGwKew3z7PMuORY/K0+68Xvk
+	 LSISrQo9yshJCLjDOColgu1w7oIHwfCgczFyGVWJMw6RskWBMRnpsUNRFzOYMRuFGXsM3
+	 uSyUFkDCGBBZPwTjgQ8g1tAGDStqgYOBMSXSoNn+5N9oFY2mqj9wGQzMEajSovABTaBus
+	 3WStCRkVlqF/ZVi0wW39zGm6mBBewgcZk20l6d4iQo5kLH+veDoXa0Hhmr3JN8iydL+xM
+	 6l0KEdMis/iDjLA+0uWHdGTmjiEwrAo1/PiFknVEbrOrtFGyhTPU1uGGvcdZ4t3N3Ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FmBAFmh2;
-	arc=none smtp.remote-ip=209.85.219.52
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f32ag3IC;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04664606A320
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 19:13:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04664606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FCDB606A320;
+	Sat, 21 Nov 2026 19:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FmBAFmh2
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-91f0274f88cso30049446d6.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 11:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795288426; x=1795893226; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0p5SdW2QUlP6oc7GBXyTSmsNARTVU7xBP/EBePnLS70=;
-        b=FmBAFmh2+uqLuJpfyQ35HUYP24JwjMRdBeGnnIEXuNsAIA2FIlxAD5RmRPuSCtxDUj
-         IyqC7cn9KbDxXtcuxHL1LCEqQmys6Ag0ZRDW7Qf1tMFi8g+0oCJ5HR9QH+jtu0yoM8Dw
-         AuCzMApnrfrYQ43Du7gKqDwoqc/HbYtZAppNkMIS8DL/3alQwqr8X5pydo9R8stijy+y
-         ZWQn3kjjcpGj9C6MEdJvE9+T+inKR5PBTYoUTvZjd5zaiO3bIjnDQj0FsTtN4T7cRgBr
-         16qSOzrDIo3letvoeY8SHXrqfJE/4mPzNlXsFYv1kpaxR8fNMST75owQf1vw04xjA44K
-         QW9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795288426; x=1795893226;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0p5SdW2QUlP6oc7GBXyTSmsNARTVU7xBP/EBePnLS70=;
-        b=eWwqInFyGYeQKQNkyrmrtDqy42kgCZuTsXazJFQ965NebqRY49vekzErljzE+tq+HW
-         pdXjbcyYnaC/4uBPh2D3t91fsgtFe4lUmnHQNhXZN1hwB51Vvd5uuhKxIgnZM2BOB5bB
-         m9cyW7APQHiuZrBZpx4mnfkEIHOaX2tPgKXNrQtMYtbUpjZ33CHewUSpt5TxexKjW0EI
-         NuHCzOc/JAxnIQCjNAYXAiV2liilGSvULfh8VqvL9irs3+STdILrfLYQxMVh/4+J2ktm
-         sEkQ+0Xpw4teiJ8R8Y4dIkaWuHhOa0atmKuOvU6fUSc/C4P1KpQ5OUunXaHpdhOCENoy
-         yHtw==
-X-Forwarded-Encrypted: i=1; AL+hErHGqELTBATPdSBWMyatc4Cwasxymr6pV6+vOZ48YBx8rAQPRLEbeTk91LnnmG/Jf3JAefd8up9e3jlxUcp16qY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/UZ69/r0O18XWtVnay5XNATgFFJPowqHKXXcO22ZDEmyufWrAe
-	NzwDS+0iyHDp2UDwWNw4Uh6LUaCt4IAd2fzV2OOPF8zOWaH5q7sxAj3i
-X-Gm-Gg: AZFdTZfyeFUap7eBvf7pW2vKJ4bmnvwvqGGx7hY86maZIyVmi2ixnlC7f/FCYC3P2W9
-	ndPUDNoxpwbQ126Xi7QEDS+GwcCyp/gIzm85jLjSAO4hSaVmEVErUFwQ4reOS/Dok4qv4dg4QhZ
-	OJKNNkvAA6ZGxPL2mgn5lhFFoCdxLfEafwJ82Onixn31B5QFzMQ9APYDD9APzEmJOjToCKPBuA/
-	gBOEwIpI/iD3wo8NtfuWHmqw5i8wEdgkj4ywcwJkSJ1dEchV/wwFVNkasidTuww9Py6enhMnimw
-	uo66ZfgmhKTeoDjzVAcDY7r8RPrfwvF7e/H7epWBqxMNssO9hD971IjwXZR72LGdbawPqdaKxBo
-	qjrdkLWAZNt6JhPRlVkC9Gj+ZTXo0tzTNwCjA5uwemP+akfRNfQf3MkTRQdXIk2XZfpwOscc75V
-	W+8JtC1freNc7A8gjPv4CP6wnOsmfJanM3S1i4cXLJbPZVyvEIFt6FM0glcuVyG09xTNHlqMP3+
-	ZKMWZFt9YmY0wHE39ZGNT6zSe+EA50A8ubrmPGIdWd/suouDNQD10xCV7xl87oLrlUKo3TN/t4j
-	mV7CExzJVQe+sN+jg+p+xBilRvMsVdbpPsebiB2Hkj1cFr7+VTRg2ZucfO+KmHuhRZfbPWyECes
-	riw==
-X-Received: by 2002:a05:6214:8504:20b0:921:2245:73c2 with SMTP id 6a1803df08f44-92134abe315mr91505836d6.20.1795288425845;
-        Sat, 21 Nov 2026 11:13:45 -0800 (PST)
-Received: from localhost ([143.198.29.12])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-921349ee175sm62359706d6.26.2026.11.21.11.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2026 11:13:45 -0800 (PST)
-From: Nikolai Dokutovich <ndokutovich@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/coredump: include <stddef.h> for offsetof
-Date: Sat, 21 Nov 2026 22:13:40 +0300
-Message-Id: <20261121191340.91952-2-ndokutovich@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261121191340.91952-1-ndokutovich@gmail.com>
-References: <20261121191340.91952-1-ndokutovich@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f32ag3IC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA9B71F000C0;
+	Sat, 21 Nov 2026 19:35:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795289715;
+	bh=JH+iXlWaf0QYvuXeZ5FGygsDHzmcBZZQOeinMNmsuMo=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=f32ag3IC/vl5IywST6f+vJ0yHzSYwOZFQP0PowGjHdAFvmry7mgIj3EqIOz1DJ7Ah
+	 gcS/2i2r+AcuvZW/v8aMtUXyK9G4kqk3eSrh6z/sYdhRpneE6LIOIk2yHSNWzMpk7o
+	 5e4z+mqGJRpazfiRXTz25oABoXbfbzS4n1fa2HbT1oGphZmtYKdwSM9dMwUYmcBZ6Y
+	 awzrqOGBNJmI/0Wc4Sgq0yARum1GKhplCFWzj0cwwbcy3FidY/zqf+8intUbAe6Mx5
+	 HY0b11DSRfrcEmJ/5XmmZjSYpHG3bIHt9+BU5nRoKqJR6vVqBgOnEbnnbt0ZF14mxn
+	 JAqkogyS0WOEQ==
+Subject: Re: [PATCH net-next v2 1/2] tcp: document black hole detection for
+ tcp_mtu_probing
+From: netdev-bot+sashiko@kernel.org
+To: echoowall@gmail.com
+Cc: corbet@lwn.net, edumazet@kernel.org, davem@davemloft.net, kuba@kernel.org,
+ shuah@kernel.org, pabeni@redhat.com, rdunlap@infradead.org,
+ linux-doc@vger.kernel.org, horms@kernel.org, ncardwell@google.com,
+ kuniyu@google.com, skhan@linuxfoundation.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Sat, 21 Nov 2026 19:35:14 +0000
+Message-ID: <179528971425.3135.11498750682572420334@kernel.org>
+In-Reply-To: <20261118-tcp-mtu-probing-doc-v1-v2-1-e795f20b8cfe@gmail.com>
+References: <20261118-tcp-mtu-probing-doc-v1-v2-1-e795f20b8cfe@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -99,48 +65,192 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Both files use offsetof() without including <stddef.h>.  offsetof() is a
-macro; without the header it is not expanded, so its first argument is
-parsed as a function argument and the type name fails to compile:
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider.
 
-  coredump_test_helpers.c:1309:26:
-  error: expected expression before struct
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
-Include <stddef.h> in the two files that use offsetof().
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Fixes: c71147f42bff ("selftests/coredump: split out common helpers")
-Fixes: c09ea6659e50 ("selftests/coredump: split out coredump socket tests")
-Signed-off-by: Nikolai Dokutovich <ndokutovich@gmail.com>
----
- tools/testing/selftests/coredump/coredump_socket_test.c  | 1 +
- tools/testing/selftests/coredump/coredump_test_helpers.c | 1 +
- 2 files changed, 2 insertions(+)
+- [Medium] The new tcp_mtu_probing text in Documentation/networking/ip-
+  sysctl.rst (lines 725-731) says: "From then on, and from the first…
+- [Low] The new detection-time text (ip-sysctl.rst lines 716-723) says
+  the threshold is the time tcp_retries1 retransmissions would take…
+- [Low] The new text (ip-sysctl.rst lines 728-729) says search_low is
+  kept "at most tcp_base_mss and at least tcp_mtu_probe_floor and…
+- [Low] The new text (ip-sysctl.rst lines 716-718) says "A black hole is
+  detected when the retransmission timer fires after the handshake and…
 
-diff --git a/tools/testing/selftests/coredump/coredump_socket_test.c b/tools/testing/selftests/coredump/coredump_socket_test.c
-index ec73bb690bbc..c17f3c88a00b 100644
---- a/tools/testing/selftests/coredump/coredump_socket_test.c
-+++ b/tools/testing/selftests/coredump/coredump_socket_test.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include <stddef.h>
- #include <sys/stat.h>
- #include <sys/epoll.h>
- #include <sys/socket.h>
-diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/tools/testing/selftests/coredump/coredump_test_helpers.c
-index 072ab8624808..85bf5cdf4c4a 100644
---- a/tools/testing/selftests/coredump/coredump_test_helpers.c
-+++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
-@@ -15,6 +15,7 @@
- #include <poll.h>
- #include <pthread.h>
- #include <stdbool.h>
-+#include <stddef.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
+--
+
+tcp: document black hole detection for tcp_mtu_probing
+
+This commit extends the tcp_mtu_probing entry in ip-sysctl.rst. It
+describes when an ICMP black hole is detected and how TCP adjusts the MSS
+afterwards, based on tcp_write_timeout() and tcp_mtu_probing(). It also
+adds the default values of tcp_mtu_probing and tcp_base_mss.
+
+> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> index 0b7bfbd98a923..6ac8b3fb9aae8 100644
+> --- a/Documentation/networking/ip-sysctl.rst
+> +++ b/Documentation/networking/ip-sysctl.rst
+
+[ ... ]
+
+> @@ -711,6 +713,25 @@ tcp_mtu_probing - INTEGER
+>  	- 1 - Disabled by default, enabled when an ICMP black hole detected
+>  	- 2 - Always enabled, use initial MSS of tcp_base_mss.
+>  
+> +	A black hole is detected when the retransmission timer fires after
+> +	the handshake and retransmissions have stayed unacknowledged for as
+
+[Severity: Low]
+Should this also cover the zero window case? In tcp_retransmit_timer(),
+if the peer advertises a zero window and the socket is not orphaned, the
+timer takes a separate branch and never gets to tcp_write_timeout():
+
+net/ipv4/tcp_timer.c:tcp_retransmit_timer() {
+    ...
+	if (!tp->snd_wnd && !sock_flag(sk, SOCK_DEAD) &&
+	    !((1 << sk->sk_state) & (TCPF_SYN_SENT | TCPF_SYN_RECV))) {
+		...
+		tcp_enter_loss(sk);
+		tcp_retransmit_skb(sk, skb, 1);
+		__sk_dst_reset(sk);
+		goto out_reset_timer;
+	}
+
+	__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPTIMEOUTS);
+	if (tcp_write_timeout(sk))
+		goto out;
+    ...
+}
+
+While the window stays at zero, no black hole is detected and the MSS is
+not lowered, however long the retransmissions stay unacknowledged.
+
+> +	long as tcp_retries1 retransmissions would take with an RTO starting
+> +	at 200 ms and doubling each time, which is 3 seconds with the
+
+[Severity: Low]
+Does the RTO keep doubling when tcp_rto_max is not the default?
+tcp_model_timeout() stops doubling at tcp_rto_max(sk):
+
+net/ipv4/tcp_timer.c:tcp_model_timeout() {
+	...
+	linear_backoff_thresh = ilog2(tcp_rto_max(sk) / rto_base);
+	if (boundary <= linear_backoff_thresh)
+		timeout = ((2 << boundary) - 1) * rto_base;
+	else
+		timeout = ((2 << linear_backoff_thresh) - 1) * rto_base +
+			(boundary - linear_backoff_thresh) * tcp_rto_max(sk);
+	...
+}
+
+icsk_rto_max comes from net.ipv4.tcp_rto_max_ms, which can be set as low
+as 1000, or from the TCP_RTO_MAX_MS socket option.
+
+Take tcp_rto_max_ms=1000 with the default tcp_retries1=3.
+linear_backoff_thresh is then ilog2(5) = 2, so the threshold is
+7 * 200 + 1 * 1000 = 2400 ms, not 3 seconds.
+
+The flow's own RTO is also capped at 1 s, so timeouts fire at 0.2, 0.6,
+1.4, 2.4 and 3.4 s. Detection then happens about 3.4 s after the original
+transmission, not about 6 s.
+
+With the default 120 s rto_max, a tcp_retries1 above 9 also makes the
+threshold grow linearly in 120 s steps instead of doubling.
+
+Could the text say that the doubling is capped at tcp_rto_max_ms, and
+that the 3 and 6 second figures assume the default?
+
+> +	default tcp_retries1. This time is counted from the first
+> +	retransmission and only checked when the timer fires, so a flow
+> +	with a 200 ms RTO detects the black hole at the fifth timeout,
+> +	about 6 seconds after the original transmission.
+> +
+> +	With value 1, the first detection enables MTU probing and lowers
+> +	the MSS to tcp_base_mss if it is larger. From then on, and from the
+> +	first detection with value 2, each further retransmission timeout
+
+[Severity: Medium]
+Does every further retransmission timeout really lower search_low? In
+tcp_write_timeout(), tcp_mtu_probing() is only called while the
+tcp_retries1 condition holds:
+
+net/ipv4/tcp_timer.c:tcp_write_timeout() {
+	...
+		if (retransmits_timed_out(sk, READ_ONCE(net->ipv4.sysctl_tcp_retries1), 0)) {
+			/* Black hole detection */
+			tcp_mtu_probing(icsk, sk);
+
+			__dst_negative_advice(sk);
+		}
+	...
+}
+
+retransmits_timed_out() returns false whenever icsk_retransmits is zero:
+
+net/ipv4/tcp_timer.c:retransmits_timed_out() {
+	...
+	if (!inet_csk(sk)->icsk_retransmits)
+		return false;
+	...
+}
+
+tcp_ack() resets that counter as soon as snd_una advances:
+
+net/ipv4/tcp_input.c:tcp_ack() {
+	...
+	if (after(ack, prior_snd_una)) {
+		flag |= FLAG_SND_UNA_ADVANCED;
+		WRITE_ONCE(icsk->icsk_retransmits, 0);
+	...
+}
+
+Once the connection recovers, for example after the first halving lets
+packets through, a later isolated RTO does not halve search_low again.
+Only timeouts during a new stall that lasts past the tcp_retries1
+threshold do.
+
+The commit message says the text describes the behaviour "as implemented
+in tcp_write_timeout() and tcp_mtu_probing()". Could this sentence be
+reworded, for example to "each further timeout at which the black hole
+condition still holds"?
+
+> +	lowers search_low to half its MSS, keeping it at most tcp_base_mss
+> +	and at least tcp_mtu_probe_floor and tcp_min_snd_mss, and lowers the
+
+[Severity: Low]
+Can search_low end up above tcp_base_mss? tcp_mtu_probing() applies the
+cap first and the floors after it, so the floors win:
+
+net/ipv4/tcp_timer.c:tcp_mtu_probing() {
+	...
+		mss = tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_low) >> 1;
+		mss = min(READ_ONCE(net->ipv4.sysctl_tcp_base_mss), mss);
+		mss = max(mss, READ_ONCE(net->ipv4.sysctl_tcp_mtu_probe_floor));
+		mss = max(mss, READ_ONCE(net->ipv4.sysctl_tcp_min_snd_mss));
+	...
+}
+
+tcp_base_mss uses plain proc_dointvec with no bounds, while
+tcp_mtu_probe_floor accepts 48..65535. Two settings that put search_low
+above tcp_base_mss:
+
+  tcp_mtu_probe_floor=1200 with tcp_base_mss=1024
+  tcp_base_mss set below tcp_min_snd_mss
+
+Could the text say that the floors take precedence over the tcp_base_mss
+cap?
+
+> +	MSS to match if it is larger. Once MTU probing is enabled, the
+> +	connection also probes for a larger MSS, as with value 2.
+
 -- 
-2.34.1
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118-tcp-mtu-probing-doc-v1-v2-0-e795f20b8cfe%40gmail.com
