@@ -1,88 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795221371;
-	b=PlIXzLCtceABJMGkQ0e5ecEJwWb97oCECWviMUIXj/u3QCAVuWdxOq0h9DcDZFmp+In8
-	 +6IcfRoOs1b/Jc9N2AymHV7eX8E4UnDq6ZByIofXAfoNY4ajZLLNMr0C87yKUCpIkuVUf
-	 EEyu364YsAQ7I2oaswkX4YuQuNELWYzCD+IAqw8xq2nj1yi3W4o9/cYSkIXShScMyBsCh
-	 TCHbDNX6sLgjgG9fVN/2Hq7I1Qw0DZmgZ0qtmV6nV0VHK0l2dczXBiLIvfHp3HWmqdWcz
-	 6ihq0rainugsa1NId6+t8lFGlACyPDpM1qDKuFgNAWuS0LV6FssD031SRu4k39QLQBg==
+	t=1795221615;
+	b=tOWSCHkOtrolOOT8B2rPtXiySx8aOHQIcalZHkvcVObRhhbuclIVedrqnimQQW6BV6xS
+	 rZFBkRjgClFzKxg09uWMWgoCODVBTDgiuHblKEq5mQYTWi1jZBAoBm9AgvTYNBtQM8KvH
+	 6JHLdv83TiXXlEZpBIEd/jumbbVfzvXEKWk9te73Ssi2bR5cpgN9lCjftm7dBSyim32Me
+	 q0psYohJJ/hgVvp0NPBTsgTqFF53GdjHZUAJSnukIWZgsl9HMJp3dLpmDy9NhT1wIRsnT
+	 d43mbYcQn/UO0PC0wyVahTOu2Xj5A32Ge61nGB8+1pO1JorYQ8gTimOEi5smsH1ks1w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795221371;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=U/0XuajbgDayC8b7/gOQZ/dCtUSknit6rPJA2WUmI40=;
-	b=FNAwWI1dxQr2AaVbu0wcH4w+djzV5qkDN0rJuSc8RFJYXimMhHmRB2zNV9C0fVvbhoPg
-	 Bruw+3exYUKpbgGd7x1ThdN0S+QiIfLEiPGY4Qy1IaAl0LbNrYhrEA1nNJrgdY5KOnWFl
-	 zeQHZWgtsbSc49Op5ZvVgpV/qAzbgqpcOe9EMN307ZpGnzAAZ9VMpYmJfoEuT1YqlzBil
-	 IxP6P3zS37w8XuQ4iH5VUOS3uPeN8o8/+84rGaD090hB7a7UPPxd2YOrNG/79GT4Kzmwr
-	 aHvAGIp0VvtNhNsmFS0GrHe5tOMls/SRyiIAVePtxbVXXVY3gYz/a9lj5r+mYsGN1sg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795221615;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=VuKVXev8UIxrsWCdEYjjJ6A+0TY169PgQkoqU6UjXEQ=;
+	b=Q4DH25iTfvfMPOwL5xEzE0Ef8IazJHL7Za6Ezogkyw9Ga/4pNhc4BNYX/pgLCwpPMOLC
+	 EWrDMgLmGoRXub84XbaHCSE5mhThkCPLt5IImdDOljPZLto+kBbubAFAokOHWsttkA5X9
+	 W53up7XhBqO/BRrY3s5LwHq8qIPeqDln7xCB/ekSijPcVxFJaBZlJFnNGOzLEuiVG1xux
+	 N8FeNHB15Mqv0R65OqO9/YOeepaj/OWDO/QjOyt9yJVkAVrSN/WEqDYwAnOCJHijd7WDr
+	 ux0EJBO4LcSMX9ByajM4KrWJXUAzyBokVNffDVUlqXrAmGPtTVfTAoZZik1CL5oJi/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="U58Y0/wQ";
-	arc=none smtp.remote-ip=192.198.163.18
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YXZ8laQt;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC71C606A6A3;
-	Sat, 21 Nov 2026 00:36:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC71C606A6A3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF47606A335;
+	Sat, 21 Nov 2026 00:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U58Y0/wQ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795221369; x=1826757369;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2eDu3gGP65K8nxizJGWHJCwzKAZa5mWX3NYPVgpmuE4=;
-  b=U58Y0/wQDPG/DwpA45TYON49OHcbV6ODYW0UyoQB0J4tFJ0SaURA0cZl
-   3/jllUXo7NzL+/18pKEPHXHB+wvu3ZhGiRY9Q9rbAMTCmLoTo+p/Py1WQ
-   nLngMx7hjZCsKt8FbfjMloDavRsqo7DUzZqkVh3hIHYAW0Ovsv0zy0dr3
-   qVx7iZo7j738PhGqgW+vYzTbg4BrrpQyuip30+eiZQSfc3b2pRMClPBNU
-   nEOs3BiJ8wCVMutK42FIujCbnpmYanv2DtSjyXVGT7bibpNfxZWmStYud
-   qdp+TvL3Y6cgKzXLLMb0hNqSoyapmvkIKxtskgUwz6UxgcJVb4Uu5G5LR
-   A==;
-X-CSE-ConnectionGUID: 3qxTbvQISgW9gGLFPtQl8A==
-X-CSE-MsgGUID: eMPnBQgqT+eHinyhzJqkaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4139378"
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="4139378"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2026 16:36:05 -0800
-X-CSE-ConnectionGUID: TkUg6+zjTWKgMxqa7euqfA==
-X-CSE-MsgGUID: oar82XJmQuqMkiuLvzDleg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="12646916"
-Received: from igk-lkp-server01.igk.intel.com (HELO 1073a420ae3a) ([10.211.93.152])
-  by fmviesa011.fm.intel.com with ESMTP; 20 Nov 2026 16:36:02 -0800
-Received: from kbuild by 1073a420ae3a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUZ5C-000000004C1-1t1H;
-	Sat, 21 Nov 2026 00:35:58 +0000
-Date: Sat, 21 Nov 2026 01:35:34 +0100
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>, Arnd Bergmann <arnd@arndb.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Waiman Long <longman@redhat.com>,
-	Ryan Houdek <Sonicadvance1@gmail.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	kernel-dev@igalia.com,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Subject: Re: [PATCH v8 05/10] futex: Create get_robust_list2() syscall
-Message-ID: <20261121013133.eLi73Mpq-lkp@intel.com>
-References: <20261115-tonyk-robust_futex-v8-5-a4fe47333a28@igalia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YXZ8laQt
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80EA21F000D0;
+	Sat, 21 Nov 2026 00:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795221614;
+	bh=VuKVXev8UIxrsWCdEYjjJ6A+0TY169PgQkoqU6UjXEQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=YXZ8laQtv6e7vV48kw6IopHEDcFXxaysZ8DpSztti1dOXip2twXkvtE/Zo+gDfwK4
+	 V46syXyZgqR/0HTt8QMEVQkdH/RwaaTxbAJKA6Tv3Aug2paHP4UWWXGg5bmS4sJiGh
+	 dK6ZZG44KsBm7VgMAapp7+QVgUxF2cuvQsw3K6eAxr2h5HBULVAhSGZafMRtQvcc/+
+	 7iDwGd9QV9oyUcVBcGOHHjmjABuYb59GjQMQhgJgimKs/Bh0xXJqxfN9r4Ujsfl57j
+	 /x85hJ1sA+bS+BEm+/LqCAoV4mSbQG3fttzip3fdVM/Aab/4ym4BbSvdTjiHONJ7zg
+	 +Ij7Kihhtz9WQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773CB380AA4D;
+	Sat, 21 Nov 2026 00:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,94 +53,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261115-tonyk-robust_futex-v8-5-a4fe47333a28@igalia.com>
+Subject: Re: [PATCH net v2 0/6] seg6: fix skb checksum updates with
+ CHECKSUM_COMPLETE
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179522161302.860209.8175109356029301481.git-patchwork-notify@kernel.org>
+Date: Sat, 21 Nov 2026 00:40:13 +0000
+References: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+In-Reply-To: <20261118150251.65-1-andrea.mayer@uniroma2.it>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org, idosch@nvidia.com,
+ shuah@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ david.lebrun@uclouvain.be, daniel@iogearbox.net, m.xhonneux@gmail.com,
+ dlebrun@google.com, hangbin.liu@linux.dev, justin.iurman@gmail.com,
+ stefano.salsano@uniroma2.it, andrea@common-net.org
 
-Hi André,
+Hello:
 
-kernel test robot noticed the following build warnings:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test WARNING on 9f74092fda91ef93c2b07585785c1dc83cd7971f]
+On Wed, 18 Nov 2026 16:02:45 +0100 you wrote:
+> This series fixes the skb->csum updates with CHECKSUM_COMPLETE when the
+> SRv6 code processes a received packet. In several places skb->csum is not
+> updated correctly:
+>  - ipv6_srh_rcv() updates skb->csum with the wrong sign for the new
+>    Segments Left and destination address, and not at all for the Hop Limit
+>    decrement.
+>  - advance_nextseg() and seg6_next_csid_advance_arg() in seg6_local do
+>    not update skb->csum.
+>  - The End.BPF program and seg6_bpf_has_valid_srh() can change the
+>    packet without updating skb->csum.
+>  - In L2ENCAP and L2ENCAP_RED mode, the MAC header put back in front of
+>    the frame is not added to skb->csum.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/futex-Skip-test_futex_robust_unlock-if-not-supported/20261115-143110
-base:   9f74092fda91ef93c2b07585785c1dc83cd7971f
-patch link:    https://lore.kernel.org/r/20261115-tonyk-robust_futex-v8-5-a4fe47333a28%40igalia.com
-patch subject: [PATCH v8 05/10] futex: Create get_robust_list2() syscall
-config: arm64-randconfig-r2300-20261120 (https://download.01.org/0day-ci/archive/20261121/20261121013133.eLi73Mpq-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.5.0
-sparse: v0.6.5-rc1-21-g84ec0658
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261121/20261121013133.eLi73Mpq-lkp@intel.com/reproduce)
+Here is the summary with links:
+  - [net,v2,1/6] seg6: fix skb checksum update helpers
+    https://git.kernel.org/netdev/net-next/c/47b2998b644c
+  - [net,v2,2/6] seg6: update skb checksum when ipv6_srh_rcv() decrements the Hop Limit
+    https://git.kernel.org/netdev/net-next/c/47f89dfc930b
+  - [net,v2,3/6] seg6: update skb checksum when SRv6 behaviors advance to the next SID
+    https://git.kernel.org/netdev/net-next/c/520989b4d32a
+  - [net,v2,4/6] seg6: discard CHECKSUM_COMPLETE after the End.BPF program
+    https://git.kernel.org/netdev/net-next/c/53e0a84a417d
+  - [net,v2,5/6] seg6: account for the MAC header in skb checksum on L2 encapsulation
+    https://git.kernel.org/netdev/net-next/c/e75bae5fcf5a
+  - [net,v2,6/6] selftests: seg6: add test for skb checksum with CHECKSUM_COMPLETE
+    https://git.kernel.org/netdev/net-next/c/612a37673567
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261121013133.eLi73Mpq-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/futex/syscalls.c:119:46: sparse: sparse: dereference of noderef expression
-   kernel/futex/syscalls.c:216:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct robust_list_head *head @@     got struct robust_list_head [noderef] __user * @@
-   kernel/futex/syscalls.c:216:14: sparse:     expected struct robust_list_head *head
-   kernel/futex/syscalls.c:216:14: sparse:     got struct robust_list_head [noderef] __user *
->> kernel/futex/syscalls.c:218:16: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __user *__rpu_val @@     got struct robust_list_head *head @@
-   kernel/futex/syscalls.c:218:16: sparse:     expected void [noderef] __user *__rpu_val
-   kernel/futex/syscalls.c:218:16: sparse:     got struct robust_list_head *head
-
-vim +218 kernel/futex/syscalls.c
-
-   170	
-   171	SYSCALL_DEFINE4(get_robust_list2, int, pid,
-   172			void __user * __user *, head_ptr,
-   173			unsigned int, index, unsigned int, flags)
-   174	{
-   175		struct robust_list_head *head;
-   176		void __user *entry_ptr;
-   177		uintptr_t entry;
-   178	
-   179		if (index >= FUTEX_ROBUST_LISTS_PER_USER)
-   180			return -EINVAL;
-   181	
-   182		if (flags)
-   183			return -EINVAL;
-   184	
-   185		/*
-   186		 * The first two indexes are reserved for the kernel to be used with the
-   187		 * legacy syscall, so we hide them from userspace.
-   188		 *
-   189		 * We map [0, FUTEX_ROBUST_LISTS_PER_USER) to
-   190		 *  [FUTEX_ROBUST_LIST2_IDX, FUTEX_ROBUST_LIST2_MAX_IDX)
-   191		 */
-   192		index += FUTEX_ROBUST_LIST2_IDX;
-   193	
-   194		entry_ptr = futex_get_robust_list_common(pid, false, index);
-   195		if (IS_ERR(entry_ptr))
-   196			return PTR_ERR(entry_ptr);
-   197	
-   198		entry = (uintptr_t) entry_ptr;
-   199	
-   200		if (futex_in_32bit_syscall()) {
-   201			u32 entry32;
-   202	
-   203			if (entry && !(entry & FUTEX_ROBUST_LIST_ENTRY_32BIT))
-   204				return -EOPNOTSUPP;
-   205	
-   206			entry32 = (u32)entry;
-   207			entry32 &= FUTEX_ROBUST_LIST_ENTRY_MASK;
-   208	
-   209			if (copy_to_user(head_ptr, &entry32, sizeof(entry32)))
-   210				return -EFAULT;
-   211	
-   212			return 0;
-   213		}
-   214	
-   215		entry &= FUTEX_ROBUST_LIST_ENTRY_MASK;
-   216		head = (__force struct robust_list_head __user *)entry;
-   217	
- > 218		return put_user(head, head_ptr);
-   219	}
-   220	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
