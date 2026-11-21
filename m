@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795275358;
-	b=UY5AAW7mAHRS42hzSg3nVlP29EP1kOCcc7wcmbPF/42QxlfEZI1KIKgMFXYePcSzRtKR
-	 klccgqoK5JzwzDURnCj/od2boe5B0CT20YrTojIA2YryFO4mnEg6CmzPP7YIEtKC11tVz
-	 pp/o4s+ozFk2pl7+8HRA2bkZhyaT6pT6BSU4fQn4iloaGULOEMesAsge7+mXQTG739R7U
-	 /DtsqoSx3BY7iAhONlCXel/97OYcusrpvGnlaLsqmxJiOeHJyQxDKYxBmQSH5HayWw5jd
-	 J9zge+oOyXutTm7fj/qeP7UMAZ0ZZYjJ30p0SpMN8pU1CfUJJ7MF5yX4E416/hwlwJw==
+	t=1795275360;
+	b=yWDo+SGn7B02ys+SQDcnMEVZ/kvJVvO2HGd21ta2BlkudovEvAsHdehAK49d+sYkAm57
+	 GXBUq4eR7EptOLXwMGWdd0fpDbIlpjXYTRrcBcncK6Ea2dY+sO6vkH3FfCOfrXSNDorZY
+	 DPzJnqIDmq0DRux9VZiB7vTRfpV/vF1w9Zcd1aUXs2IU4yrE6Fm9BV24/KbLsO8vm+F0f
+	 df3rymfuVvSpS6YfLd+iDGmpXFbJDi5nmNUgxCWmqHx9ZupcVI2+II7w2YhtlqrI3xm20
+	 1IvhzEipsy/AD6xZBHUjKvRQI4fZPvOqh6cyUWWd/fqIdS+u/dB3RsXVaufR8H6OtPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795275358;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795275360;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=hmn6L2WF6Lx4dTC9D8qdEMw9E1mFKrXUndeRNP2Dy5Y=;
-	b=2na+u6OqLNfCIUg0uSbo1OsFaZdnD+CZ9LHJA4hMZVsjjhFHTLSCp1IkPblLLvVpLWlq
-	 BT23BCcMN5qGjFZUHdDTGPb0XzRE/PicLzcbB9JnSICbyQ7gG8Pix8S5GUJELf0PmLJNZ
-	 AiXicUmlzQ9xmN2xEUx6SWEFYWOPf7Ehi+lsMzRvSvJ/zh4uiKlHVUfj+T4n6aNT26+zX
-	 CcqkHEmiJAU8SYIfIzAV3jqJxI9RMcaQ+ClKeP6vW4t+48yRpAgFp11TqWHJpp2eGrcao
-	 95HF9RQPFk5R03NqiTmMgqo6KfwrxIXisAnBjzb9vN0juihJlacbA4M0hkrSd/G5S8g==
+	bh=MKVZ0DHFX0TdJ61dqZcktyeB26YK/W90vSUn/sRoUrg=;
+	b=g3OJNGaIKU+7HB/6amHIzVy1U6208NbK34BXjm+hvXOYbfLo6MBjq6e7XmWmVYnUAcdo
+	 MRJHENefrlm3j5OyWxlk7u0n+u/SZFZghay/PaublZE2Aw3s1C+0Zpc9eXDCb62B0IdVx
+	 aRmx6tROr48gAnZd1BIzG11kdA64aJrMVsf1ppbQ0XDxofWanQxwQgFk90/NeOI4CYd2e
+	 GyAGpDeHsIAnnAxy7h76GQyMQ4Frk/bMXhFn12B+qOP27WmrEkq12Im621NNf2hp8R1q/
+	 +j6Q/GH1cSkotGTKkzf1eEDo/BbHAjWmObTamsh8nKSwRE25e47R6foLZfeLTGDFGeg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PqrcGrrY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHK2ASIn;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D472F606A68F;
-	Sat, 21 Nov 2026 15:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id C24F0606A338;
+	Sat, 21 Nov 2026 15:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PqrcGrrY
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 66D4D1F000D1;
-	Sat, 21 Nov 2026 15:35:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHK2ASIn
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 327341F000D2;
+	Sat, 21 Nov 2026 15:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795275358;
-	bh=hmn6L2WF6Lx4dTC9D8qdEMw9E1mFKrXUndeRNP2Dy5Y=;
+	s=k20260515; t=1795275360;
+	bh=MKVZ0DHFX0TdJ61dqZcktyeB26YK/W90vSUn/sRoUrg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PqrcGrrYSg1ePVoyF2NRMRbd7YUMPWREWn8xOBnZB1cSeH8KEfVBNK0qmfAYHKuGX
-	 HrubUVS4Ske++rGWnVo4zSoXUL2gEAizZzPwVd5vkhDy4jsYh/xxzdsHzJOiLmSJ1C
-	 rj+aKYmOppZgGO0RYpmWxudm6tfNHFLEAHMIOro7D2vv4dmQaObve8SPFyLgH61Ze0
-	 BFi4y3X1Qof9YUf4whuBe16+tLVqLGZmIzkktYpHgT6ICeIc6myrJ4vR6kz1ZkX3Wx
-	 i9WLBRz/gR9ybMEqLSiXrd3+8UsVOXUaOZij+Ns/fI8kzoOiuuf2eAYekscGiVkS7f
-	 hLDHaASM3zCUw==
+	b=kHK2ASInjG/z3kABgWjGa7jfFsQ9qkvUHVrhzp093QSSd8nfAALBWffAcWhsWJGN8
+	 PESWR3T3TDJmpET0tuSwRfKWVKcvAGtG9ASmyFTvt+ogqWBAyyvW/Ev/CGXT1+a/Sf
+	 CWhLm/auK80aZLftRC7yYMd0mlucsea59WOPRXWgerGjBH/tbPbnvweQVbtf33Jntz
+	 7fFIbGFvdBY+aNBNWG/3F/XHKXVmw5lJd5RU0aAF4eyYojtOig6ztQWNpwG1Xte3Nn
+	 oZoMdRYPiXp+oe3FULO7oYQgqanzwtTGbhe3LVjvlmXqZiekt1UIE+ix7y6XNJP6uY
+	 yCPl7z7YuqupA==
 From: Joel Fernandes <jfern@kernel.org>
 To: paulmck@kernel.org,
 	rcu@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 2/6] rcutorture: Don't try to disable to RT throttling.
-Date: Sat, 21 Nov 2026 10:35:48 -0500
-Message-ID: <20261121153552.68941-3-jfern@kernel.org>
+Subject: [PATCH v3 3/6] rcutorture: Remove unused check_boost_failed hook
+Date: Sat, 21 Nov 2026 10:35:49 -0500
+Message-ID: <20261121153552.68941-4-jfern@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261121153552.68941-1-jfern@kernel.org>
 References: <20261121153552.68941-1-jfern@kernel.org>
@@ -76,106 +76,133 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Nothing in rcutorture calls ->check_boost_failed() now that boost
+failure is decided by whether the reader finished, so drop the hook
+from struct rcu_torture_ops and its initializer.
 
-Commit 450efca7182a5 ("rcutorture: Disable RT throttling for boost
-tests") added the ability to disable RT throttling while rcutorture was
-run.
+That also leaves rcu_check_boost_fail() without any callers, so remove
+it as well, along with its prototype and its CONFIG_TINY_RCU stub.
 
-Since v6.12 the DL fair_server takes control of throttling and this
-interface no longer serves this purpose. That sysctl control still
-exists but serves a different cause.
+[ jfern: Apply feedback from Sebastian to drop stray sysctl.h include ]
+[ jfern: Apply feedback from Sebastian to remove rcu_check_boost_fail() ]
 
-There is no in-kernel interface to provide this feature, one needs to
-echo 0 to each /sys/kernel/debug/sched/fair_server/cpu*/runtime file.
-
-Since sysctl_sched_rt_runtime does not do what it once did, remove it
-from rcutorture.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-[ jfern: Rebase onto the rewritten priority-boost test ]
-[ jfern: Remove the now-unneeded sched/sysctl.h include ]
 Signed-off-by: Joel Fernandes <jfern@kernel.org>
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Tested-by: Paul E. McKenney <paulmck@kernel.org>
 ---
  kernel/rcu/rcu.h        |  2 --
- kernel/rcu/rcutorture.c | 29 -----------------------------
- 2 files changed, 31 deletions(-)
+ kernel/rcu/rcutorture.c |  2 --
+ kernel/rcu/tree_stall.h | 57 -----------------------------------------
+ 3 files changed, 61 deletions(-)
 
 diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 7cae7e64e96d..9f7e60e69275 100644
+index 9f7e60e69275..93542e30b7f4 100644
 --- a/kernel/rcu/rcu.h
 +++ b/kernel/rcu/rcu.h
-@@ -69,8 +69,6 @@
- /* A complete grace period count */
- #define RCU_SEQ_GP (RCU_SEQ_STATE_MASK + 1)
- 
--extern int sysctl_sched_rt_runtime;
--
- /*
-  * Return the counter portion of a sequence number previously returned
-  * by rcu_seq_snap() or rcu_seq_current().
+@@ -652,7 +652,6 @@ static inline bool rcu_watching_zero_in_eqs(int cpu, int *vp) { return false; }
+ static inline unsigned long rcu_get_gp_seq(void) { return 0; }
+ static inline unsigned long rcu_exp_batches_completed(void) { return 0; }
+ static inline void rcu_force_quiescent_state(void) { }
+-static inline bool rcu_check_boost_fail(unsigned long gp_state, int *cpup) { return true; }
+ static inline void show_rcu_gp_kthreads(void) { }
+ static inline int rcu_get_gp_kthreads_prio(void) { return 0; }
+ static inline void rcu_fwd_progress_check(unsigned long j) { }
+@@ -662,7 +661,6 @@ static inline void rcu_gp_slow_unregister(atomic_t *rgssp) { }
+ bool rcu_watching_zero_in_eqs(int cpu, int *vp);
+ unsigned long rcu_get_gp_seq(void);
+ unsigned long rcu_exp_batches_completed(void);
+-bool rcu_check_boost_fail(unsigned long gp_state, int *cpup);
+ void show_rcu_gp_kthreads(void);
+ int rcu_get_gp_kthreads_prio(void);
+ void rcu_fwd_progress_check(unsigned long j);
 diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index a81855efbf1f..4ec2c6e1d3ba 100644
+index 4ec2c6e1d3ba..ff674ace50a6 100644
 --- a/kernel/rcu/rcutorture.c
 +++ b/kernel/rcu/rcutorture.c
-@@ -43,7 +43,6 @@
- #include <linux/torture.h>
- #include <linux/vmalloc.h>
- #include <linux/sched/debug.h>
--#include <linux/sched/sysctl.h>
- #include <linux/oom.h>
- #include <linux/tick.h>
- #include <linux/rcupdate_trace.h>
-@@ -1349,32 +1348,6 @@ static unsigned long rcutorture_seq_diff(unsigned long new, unsigned long old)
-  * rcu_node would wait for the first one's whole CPU burn.
-  */
+@@ -425,7 +425,6 @@ struct rcu_torture_ops {
+ 	void (*fqs)(void);
+ 	void (*stats)(void);
+ 	void (*gp_kthread_dbg)(void);
+-	bool (*check_boost_failed)(unsigned long gp_state, int *cpup);
+ 	int (*stall_dur)(void);
+ 	void (*get_gp_data)(int *flags, unsigned long *gp_seq);
+ 	void (*gp_slow_register)(atomic_t *rgssp);
+@@ -637,7 +636,6 @@ static struct rcu_torture_ops rcu_ops = {
+ 	.cb_barrier		= rcu_barrier,
+ 	.fqs			= rcu_force_quiescent_state,
+ 	.gp_kthread_dbg		= show_rcu_gp_kthreads,
+-	.check_boost_failed	= rcu_check_boost_fail,
+ 	.stall_dur		= rcu_jiffies_till_stall_check,
+ 	.get_gp_data		= rcutorture_get_gp_data,
+ 	.gp_slow_register	= rcu_gp_slow_register,
+diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+index 08699652f51c..e0607f423564 100644
+--- a/kernel/rcu/tree_stall.h
++++ b/kernel/rcu/tree_stall.h
+@@ -922,63 +922,6 @@ static void check_cpu_stall(struct rcu_data *rdp)
+ // RCU forward-progress mechanisms, including for callback invocation.
  
--static int old_rt_runtime = -1;
--
--static void rcu_torture_disable_rt_throttle(void)
+ 
+-/*
+- * Check to see if a failure to end RCU priority inversion was due to
+- * a CPU not passing through a quiescent state.  When this happens, there
+- * is nothing that RCU priority boosting can do to help, so we shouldn't
+- * count this as an RCU priority boosting failure.  A return of true says
+- * RCU priority boosting is to blame, and false says otherwise.  If false
+- * is returned, the first of the CPUs to blame is stored through cpup.
+- * If there was no CPU blocking the current grace period, but also nothing
+- * in need of being boosted, *cpup is set to -1.  This can happen in case
+- * of vCPU preemption while the last CPU is reporting its quiscent state,
+- * for example.
+- *
+- * If cpup is NULL, then a lockless quick check is carried out, suitable
+- * for high-rate usage.  On the other hand, if cpup is non-NULL, each
+- * rcu_node structure's ->lock is acquired, ruling out high-rate usage.
+- */
+-bool rcu_check_boost_fail(unsigned long gp_state, int *cpup)
 -{
--	/*
--	 * Disable RT throttling so that rcutorture's boost threads don't get
--	 * throttled. Only possible if rcutorture is built-in otherwise the
--	 * user should manually do this by setting the sched_rt_period_us and
--	 * sched_rt_runtime sysctls.
--	 */
--	if (!IS_BUILTIN(CONFIG_RCU_TORTURE_TEST) || old_rt_runtime != -1)
--		return;
+-	bool atb = false;
+-	int cpu;
+-	unsigned long flags;
+-	struct rcu_node *rnp;
 -
--	old_rt_runtime = sysctl_sched_rt_runtime;
--	sysctl_sched_rt_runtime = -1;
+-	rcu_for_each_leaf_node(rnp) {
+-		if (!cpup) {
+-			if (data_race(READ_ONCE(rnp->qsmask))) {
+-				return false;
+-			} else {
+-				if (READ_ONCE(rnp->gp_tasks))
+-					atb = true;
+-				continue;
+-			}
+-		}
+-		*cpup = -1;
+-		raw_spin_lock_irqsave_rcu_node(rnp, flags);
+-		if (rnp->gp_tasks)
+-			atb = true;
+-		if (!rnp->qsmask) {
+-			// No CPUs without quiescent states for this rnp.
+-			raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+-			continue;
+-		}
+-		// Find the first holdout CPU.
+-		for_each_leaf_node_possible_cpu(rnp, cpu) {
+-			if (rnp->qsmask & (1UL << (cpu - rnp->grplo))) {
+-				raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+-				*cpup = cpu;
+-				return false;
+-			}
+-		}
+-		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+-	}
+-	// Can't blame CPUs, so must blame RCU priority boosting.
+-	return atb;
 -}
+-EXPORT_SYMBOL_GPL(rcu_check_boost_fail);
 -
--static void rcu_torture_enable_rt_throttle(void)
--{
--	if (!IS_BUILTIN(CONFIG_RCU_TORTURE_TEST) || old_rt_runtime == -1)
--		return;
--
--	sysctl_sched_rt_runtime = old_rt_runtime;
--	old_rt_runtime = -1;
--}
--
- struct rcu_torture_boost_reader {
- 	struct completion done;
- 	bool in_cs;	// Reader is inside its RCU read-side critical section.
-@@ -3422,7 +3395,6 @@ static int rcutorture_booster_cleanup(unsigned int cpu)
- 	mutex_lock(&boost_mutex);
- 	t = boost_tasks[cpu];
- 	boost_tasks[cpu] = NULL;
--	rcu_torture_enable_rt_throttle();
- 	mutex_unlock(&boost_mutex);
- 
- 	/* This must be outside of the mutex, otherwise deadlock! */
-@@ -3460,7 +3432,6 @@ static int rcutorture_booster_init(unsigned int cpu)
- 
- 	/* Don't allow time recalculation while creating a new task. */
- 	mutex_lock(&boost_mutex);
--	rcu_torture_disable_rt_throttle();
- 	VERBOSE_TOROUT_STRING("Creating rcu_torture_boost task");
- 	boost_tasks[cpu] = kthread_run_on_cpu(rcu_torture_boost, NULL,
- 					      cpu, "rcu_torture_boost_%u");
+ static noinline_for_stack void show_rcu_state(void)
+ {
+ 	unsigned long j;
 -- 
 2.54.0
 
