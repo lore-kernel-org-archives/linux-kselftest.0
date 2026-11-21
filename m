@@ -1,64 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795261660;
-	b=E2l4eaE8UvFM1GAUpbupwhxGM12p+usWpDTdiar8nD/h0RjVatZAiZSYuHjPsUckMQkv
-	 GlKPD9Lxi5g+k9Y9HMyBEiw1Krc5g3S48i9DT3ITcfnMD22Md0Nz3cqJG/Xtu2Yacns8L
-	 W2UudwBpXYBTo9/SZaax4ZRriFl7lNqsMf+DGS9OVj+7/ICCrLeSA+0p58hLHjlQm7uEX
-	 CzUKig7y9v6LDNG2shh7fiol4tjaJrkMFuab6XvGbfseAbe4me/DUSvZ9OudE3H7lUsy3
-	 ihsCPJ2FogyDbW6xwssoqgY/xRyqmdpqLiM2eTSO0bXO18lbV3gnotHZ3f4ht0aTF+A==
+	t=1795263133;
+	b=GQhKLPn8x0QnsxqP5lfHr18JLXPS4FvUG+B9eHMyLNAtRy6ltG7Vt4u78JrN0Omw43rg
+	 exQHCEeEPvVO9eJoCq0kz+5GjJUt76pGnj5rlsRnqYqqTmS7gcuHUW29qjuEwLgcwZwwn
+	 M5azUdC03JZGb+OknfVaE9ByxA44f1iwqdtIoeNP1spQquoulGZnOf0p5dCm+eP7mQeQa
+	 UpQOyodXNuTUEA6/bS27YeBZtfTePsGN0x1iExM8Uek6DuJ/xvH9zD7efB3Mq5ur9EmxA
+	 UQNADHqmAtFFoMd7BMirNR7WLI1Tfa8k/VomNDm4ESX/8WJwUfMaaxkjXbXLTgiXNjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795261660;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=4ALx0sJpj+pkFds0WlOLPKL1r0Eodz+uXw3XkI0BnJQ=;
-	b=0cyf9QfaMxbqYvf+G5jzZ6zo0rtqXO8H9w/Ba2XWF4jY3zKvl6I+iTViQmdlZXgyhSZN
-	 EgHGtQTzljqM/Wq5VNtA73C3e2WMaTIAZ/8tDGBu65J2T8CZbXFo3BqliBpmDdQ9QMMlX
-	 /LvWK2SptkkUiW/DBm+GrR/y+ODtusS4uqIN/PAS/l+U1HCQUyBN+J0RbzO34bbpJQ8Ks
-	 mznhRdD25/kLjRQgW4FiGOLOfIja38a1gQLvPu8ICGj0UzuvVciaHI2PB7RYC6uy7bLsN
-	 lPMwwwxwKx57MzXSgQWFPFWLrslIeNrbGUTgyS3HIra/gdhLbNVXUAKeuD868/1TyGw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795263133;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=lGYwpKC1fByS7GG5SknYRcbt4FjMkQjX/lb3OlO0LP4=;
+	b=Zq7hBO2xkxGtIaDCrpKHO1h7cSsIbOOBXnd3/tTE7bL1vfh13myoSMdH2WmuGvOdqO2R
+	 izCRVgRH41704Q/LnnDPIwklcsLe1klkH4Q8WQY74NrUzS/aeVoTSKeS/ZIfV+axJTmaR
+	 nXB6sTLgmX9RBAUFKJFC+s/xBrGDviNCJm0RD8C5Jqr7bwhY/t8U0Cj9b22RUF+gVB3YY
+	 8k7fXIqtoJjeJTW21ibu9CZTdVyOgC4YTfj+pGwrI7ihCQh3aKe/YUx5rA6P7C2z1Efds
+	 VqRreiuJCSoPMfHdHOZfIlIctnMV/RpnLS2sr7xkUIdfPjT6NZoWziptJ8NCoFiDoqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IkROlQ0P;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=fail header.from=kernel.org;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=209.85.160.169
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 67F4A606A320;
-	Sat, 21 Nov 2026 11:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IkROlQ0P
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 7B4521F000C0;
-	Sat, 21 Nov 2026 11:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795261660;
-	bh=4ALx0sJpj+pkFds0WlOLPKL1r0Eodz+uXw3XkI0BnJQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=IkROlQ0Pq+Rut8U64pvIUJTh/oAnChCaeNYg7hBVBuRUnEhRsa7xNq/JRarTXK2K/
-	 1SrKwVoY5oIeDiNoie/5u8U8GgnhTmyy0YX6Ld+DcqlRzwJDYG0Roi6EYh/NSo328Z
-	 gtWd1bE18xVGxRviE+EdpOnXwrmVQ8V4R2Hep+47tEdMGgvQkfsf4DeY503xo0UrGz
-	 +bmeCFDEAe5+Uy7+IO+cUFDQVBzUpeFHqWg93+bOiVNe0hghenDK7O9YRFT43oKEgj
-	 ETQw/sww4Y0GKJuijqz84K+iCyImKpbC8/fpbl33gqZ6lI9qEE90ukgklczuRo0UYy
-	 qfTMs+JqLTQJQ==
-Date: Sat, 21 Nov 2026 13:47:36 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	Neal Gompa <neal@gompa.dev>, Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v5 20/25] security: Add rootns LSM hooks
-Message-ID: <awGE2FTQ6kpWEMJh@kernel.org>
-References: <20261121000844.1863324-1-jarkko@kernel.org>
- <20261121000844.1863324-21-jarkko@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA48606A32C
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 12:12:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAA48606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-55bd96affd2so37959671cf.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 04:12:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795263132; x=1795867932;
+        h=mime-version:content-transfer-encoding:content-type:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lGYwpKC1fByS7GG5SknYRcbt4FjMkQjX/lb3OlO0LP4=;
+        b=jZ0h6T6PBb4udBHqxNPnebnjBWrHcgovE+Za4MxqT+dj5yc0bzsU5hHtRnfI5BytX0
+         Fj6dOSiLYKZHGBS3wcL+Iy9Lh8y5mv0tTqInndQvRLrVYqXuJRL0ykLNq4aoZGYNu5s+
+         xsreXAk9qRkpAhyIdxzwCFYZYMWNi4PwbQmwBGEl+OEO49BFrkTeeHvc6hZDAMpUjgpE
+         OpEw6/+a54EnRzxp/E8NXW1cWEQwp2eHylbS+xocqq3T23613wzFOXg3zoVkWR0fMh1c
+         5D6Wdi7X5tWWycY+qu7QFdKg8SUDJn/SebIvNs/moLeO+FKqp/3Slc4HHLMAWaBbyjwp
+         T3Ew==
+X-Forwarded-Encrypted: i=1; AL+hErFBCGobQ2m2V5t1+SFXK7BB8Uq3zr2XhasAwxqpotSfLe7ktlrACvAhvNWK+8iDP6xfam+6t/TbVWQDcJrEfAY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/5B4LUuiK2Sd7idVdJi3NyLY/cR02NB95K0uZ9uhVm5CxXtKXu
+	j3+M4Z655AQd27ph47COSzjoZPWqgE93+blGwHdCbS2g15ZHU2prle8hcAJuy0ry
+X-Gm-Gg: AZFdTZfgK0aVs1tgfZRv8e0t3FXvLzyy4TkZwB1Xm8ybGb1FP6xqTGKBNA0/0c5lPF5
+	/IZt6qOz/iH3Xy38fpgK58MJCaOqXcXzbqV9Vt2rFGRtYwY72nZ+znyfi5cLmFDbyOykD4xjg6o
+	+fDoCImpKsalFCmZ/euZt+nuF4mCqmTggHmuKSVdVNDeHb/xvybDoAx8zibuksbe78qHxgDoxAu
+	o5GG8+MQxB52PockH2+cOJgc5v837Aa3pJeg0+q2krSOOkgiqzHnuHy83HpOJ0Upn+NDV0Ma0oB
+	Hc6ZYSoxhw/XlZB3EBuvDFjTuTM9EQMXIw1crnSjCoNOEeP/YKDk5AjlDyXC4wK4AOFKkkStVSg
+	r4fBfNXneEgpumn73tSSiGw1Kh+yPzfgY7ccBTLetrcCLJzu5nw6GHNxbkKviIRFII+vjWruFRA
+	nE5amsCrzvBfxYjD+LPjEvwFPdV51K6Twtj00dBoCZI2rTjpApJoCH2+ysh7w2JgFp6EXXIVG8J
+	Kh2wIYYGzkQzQZoGSVLkN30z2vt2lFEd9bQshL2Ndc4B6hAbrTGaIOahxObUysTOTUIqRZkzpvU
+	sIb14BswxKuhErEGpWeb5hzKzvf6oqr6+oAXlbCXqdwVdFjh218cHei8I9oO6wZDT/cX9sP78T+
+	y9NRHe9+CbJUAPLYpegY+qiGaR/fi3T/ja9EQTobdmbzxV6MmIl2r
+X-Received: by 2002:a05:622a:2283:b0:55b:9d8d:f29e with SMTP id d75a77b69052e-55d769c6d1bmr89159451cf.9.1795263131897;
+        Sat, 21 Nov 2026 04:12:11 -0800 (PST)
+Received: from localhost ([199.170.132.196])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d78812968sm48042081cf.9.2026.11.21.04.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2026 04:12:10 -0800 (PST)
+From: Tamir Duberstein <tamird@kernel.org>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, xukuohai@huawei.com, billy@starlabs.sg, void@manifault.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, awerner32@gmail.com, andriin@fb.com
+Subject: Re: [PATCH bpf-next v3 4/8] libbpf: ringbuf: Add a caller-owned iterator
+Date: Sat, 21 Nov 2026 06:58:00 -0500
+Message-ID: <179526228002.45024.2428180539629576513@kernel.org>
+In-Reply-To: <awFr3R3DPS_so3Pp@gpd4>
+References: <20261120-bpf-ringbuf-fixes-v3-0-ff7ca15d6c37@kernel.org> <20261120-bpf-ringbuf-fixes-v3-4-ff7ca15d6c37@kernel.org> <awFr3R3DPS_so3Pp@gpd4>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,63 +84,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261121000844.1863324-21-jarkko@kernel.org>
 
-On Sat, Nov 21, 2026 at 02:08:39AM +0200, Jarkko Sakkinen wrote:
-> Security modules need visibility into root namespace creation, teardown,
-> process entry, and container-wide signal delivery so policies can attach
-> per-rootns security state and mediate operations on rootns file
-> descriptors.
-> 
-> Add lbs_rootns and rootns->security blob management alongside
-> security_rootns_alloc(), security_rootns_free(), security_rootns_clone(),
-> and security_rootns_kill().
-> 
-> Co-developed-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  include/linux/lsm_hook_defs.h |  7 +++
->  include/linux/lsm_hooks.h     |  3 ++
->  include/linux/rootns.h        |  3 ++
->  include/linux/security.h      | 30 ++++++++++++
->  kernel/rootns.c               | 44 +++++++++++++-----
->  security/lsm_init.c           |  6 +++
->  security/security.c           | 86 +++++++++++++++++++++++++++++++++++
->  7 files changed, 167 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 87d9d06710cb..2cb90ddedc14 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -480,3 +480,10 @@ LSM_HOOK(int, 0, bdev_alloc_security, struct block_device *bdev)
->  LSM_HOOK(void, LSM_RET_VOID, bdev_free_security, struct block_device *bdev)
->  LSM_HOOK(int, 0, bdev_setintegrity, struct block_device *bdev,
->  	 enum lsm_integrity_type type, const void *value, size_t size)
-> +
-> +#ifdef CONFIG_ROOTNS
-> +LSM_HOOK(int, 0, rootns_alloc, struct rootns *rootns, unsigned int flags)
-> +LSM_HOOK(void, LSM_RET_VOID, rootns_free, struct rootns *rootns)
-> +LSM_HOOK(int, 0, rootns_clone, struct rootns *rootns)
-> +LSM_HOOK(int, 0, rootns_kill, struct rootns *rootns, int sig)
+> Can we make this internal helper __always_inline?
 
-
-Rootns objects have a security model:
-
-1. No embryonic state by design. Especially staircase initialization
-   contributes to this property.
-2. Unshare logic is inverted. Right now ROOTNS_SHARE ioctl does not
-   exist right now but it is (obviously) doable.
-3. Dead obvious and transparent LSM hooks. Really hard to get them
-   wrong.
-4. We already know by experience that opaque fd-bound objects with
-   two-phase state machine (build, live) works. It's what make this
-   secure and policy-free implementatiion.
-
-The choices how to do things with closures used in SGX driver are
-translatable and they are also pretty well reviewed choices, given all
-those years... I would put some weight on this too.
-
-Br, Jarkko
+Done for v4, together with a private __always_inline destructor.
+Callback consumption uses the private destructor; the exported API
+wraps it.
