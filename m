@@ -1,61 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795289715;
-	b=qgYCVUCSyBETEdbM9ddtPkBB/BypOoKMDw9qMXxrwPFGpMwdFYEcVcsIBbDIE/vutNK9
-	 7ydfSWJ/MDHgrYXhuuG15muvJcHb9ea0fkqjrRHhxaLPBQ5z2IEpE8ZdEtzY5Z2RNvuOu
-	 dOgynMHWMLbEjbM9zuQvvyElq5yfJtftiv7MWsDSP61WEMpEULiQhH0Rb9dPLmH4pV0WM
-	 J4qXtOC8D4pggK+qHli4Kmy7/YRPnw0u/Q2s3x3HW+d//T+vqAZiPEjNGJKQgy7DfaUgR
-	 AGi1cYOK0tMUzQfDnKM++WqqNKYOcXMrSSriqeHyAn3DKIpmwvuKDIrqX7iUgN6PgEA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795289715;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=JH+iXlWaf0QYvuXeZ5FGygsDHzmcBZZQOeinMNmsuMo=;
-	b=ugnaMMzhIW6SppZk8o3QZqKpToGaRyVmR0Ri3oT7GXPoMGwKew3z7PMuORY/K0+68Xvk
-	 LSISrQo9yshJCLjDOColgu1w7oIHwfCgczFyGVWJMw6RskWBMRnpsUNRFzOYMRuFGXsM3
-	 uSyUFkDCGBBZPwTjgQ8g1tAGDStqgYOBMSXSoNn+5N9oFY2mqj9wGQzMEajSovABTaBus
-	 3WStCRkVlqF/ZVi0wW39zGm6mBBewgcZk20l6d4iQo5kLH+veDoXa0Hhmr3JN8iydL+xM
-	 6l0KEdMis/iDjLA+0uWHdGTmjiEwrAo1/PiFknVEbrOrtFGyhTPU1uGGvcdZ4t3N3Ug==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f32ag3IC;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.97
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795290430;
+	b=V6BQk0rOnjx4TzDIx56qBV6m9oo+9Et6ToXzRg2RAwDHWzL+u+Dw6J/3WCcoztzqonSU
+	 mBDCt1kP3r8he7HGIperlm+UrQ8gDkGm9zaYMELwe6Y/Rh8QEICDGE7vKTiU7I3yUf9VY
+	 wLZn/J3uJuu4e534Jp+fN7HXLsuKGJVQRSuJCv8yvXDGcplu5D426dKsOZczNsRVpY0/U
+	 oVqahNMSxHQV5wualiI+srdqB2fg1/hLDb0+gy8Ff5saTEW9eNub28bxC+R8V/QQc2J9z
+	 GKDxncGD1UeClXeIyCNr0k25oL3MsyOVp0UU7H2uiOIqSv8YMZvEjA6NSHsvzMBdj0g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795290430;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:Content-Type:Content-Disposition:In-Reply-To:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=lQ2kfgj2cqEW41SjRFJ8z3F2mWTze5/8rB7va5fc+to=;
+	b=sXKt01JLruVDqVp5bFLgqrFcftoJuIkAt4x4N57Cua7fwL4oEnUFuINyEHnqsVLdQZuK
+	 l2qIOoTag4T2l0JQ0X0Qy/DRhzxTohmjF9vcAzZg8v/Ng5Bqme7PoWyarfuLkfRTybSjD
+	 XEBufls8USLxts9NoCUGnTIXau5W3pPIZKPElWkPZuyWqs89Dy6D1itlrjtK3a2GCCbIH
+	 GawSUeKhYfPlq150QLpSmyQ5PNGfZTiaKHPpA2rpVMqhg6cVsVH1ZUwcuOJ2sM0fHoCIQ
+	 PqCdK1Ygo1Erbc5K5xweBTeThas8XBbxsLi4b/FWHRiMvH4JAVc3nuyhl39/1inZhvw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=atomlin.com;
+	spf=pass smtp.mailfrom=atomlin.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.97
+Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021097.outbound.protection.outlook.com [52.101.100.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FCDB606A320;
-	Sat, 21 Nov 2026 19:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f32ag3IC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA9B71F000C0;
-	Sat, 21 Nov 2026 19:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795289715;
-	bh=JH+iXlWaf0QYvuXeZ5FGygsDHzmcBZZQOeinMNmsuMo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=f32ag3IC/vl5IywST6f+vJ0yHzSYwOZFQP0PowGjHdAFvmry7mgIj3EqIOz1DJ7Ah
-	 gcS/2i2r+AcuvZW/v8aMtUXyK9G4kqk3eSrh6z/sYdhRpneE6LIOIk2yHSNWzMpk7o
-	 5e4z+mqGJRpazfiRXTz25oABoXbfbzS4n1fa2HbT1oGphZmtYKdwSM9dMwUYmcBZ6Y
-	 awzrqOGBNJmI/0Wc4Sgq0yARum1GKhplCFWzj0cwwbcy3FidY/zqf+8intUbAe6Mx5
-	 HY0b11DSRfrcEmJ/5XmmZjSYpHG3bIHt9+BU5nRoKqJR6vVqBgOnEbnnbt0ZF14mxn
-	 JAqkogyS0WOEQ==
-Subject: Re: [PATCH net-next v2 1/2] tcp: document black hole detection for
- tcp_mtu_probing
-From: netdev-bot+sashiko@kernel.org
-To: echoowall@gmail.com
-Cc: corbet@lwn.net, edumazet@kernel.org, davem@davemloft.net, kuba@kernel.org,
- shuah@kernel.org, pabeni@redhat.com, rdunlap@infradead.org,
- linux-doc@vger.kernel.org, horms@kernel.org, ncardwell@google.com,
- kuniyu@google.com, skhan@linuxfoundation.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Sat, 21 Nov 2026 19:35:14 +0000
-Message-ID: <179528971425.3135.11498750682572420334@kernel.org>
-In-Reply-To: <20261118-tcp-mtu-probing-doc-v1-v2-1-e795f20b8cfe@gmail.com>
-References: <20261118-tcp-mtu-probing-doc-v1-v2-1-e795f20b8cfe@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28083606A320;
+	Sat, 21 Nov 2026 19:47:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28083606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CUR82kiE51EzdwzXV1viFNrcmpuaoIxtRhRBGE9F+aAcciiLgIVCw+RWDUrq4jFI6YzqA//pfUdmUXLUyXK58EzH0rtKxS+v61beZlUA4/VSItsWmV3DoBei/60+oLRPniV0Dgbc6gjfIoz+aGrRFl/wmHTmzN+jrUwxCrALbSjGDOlPdUaJqh7CD/hwP3BFUrkQbn0xgZyMIQrzNKYlQxXIcrdwUtL+LzQwMJoHGV3QPTKhuTN2VxztSE+5/dy/bZaMPmUsvSEFNoTohDuPaq1ShMGVVvXDWeXlm1WaxixgCtE29V8odJ7V+t/5400z2M7KTR0SrUr4BfGrQMEc3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
+ bh=lQ2kfgj2cqEW41SjRFJ8z3F2mWTze5/8rB7va5fc+to=;
+ b=qP83j0FyqOfR4gMnZZcPrieItft9zGZZ1QH7vp5cglETqbiRmfrs8d0uwyeHXUppB8aSk0aeYqlEKwfk44j+zqD9fIn3nmYOBHuO5ZWpRMGpz/Kbnfj8jpu1fx1OdMKEm9r2Xo1iBCn2SUVkitjpvs7cPttgWFkmuXylzmKTU771bab9Gpkb50I+bIiplNA5FAci7kj9GbdTr2QM+Wr3DHaejEDogxQWr1IjKjkynVoXSZQtTEgiuF2C+jGZi+PTyTxg/tKeHSmUg5g7OdSVlGU03zplf4Bqo4b7aOytXFnaU/GAPt6v8p2ZMO+V8dx/JP7z9sWDF9+G9GhiV3hxCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:163::8)
+ by LO6P123MB6456.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:2a6::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Sat, 21 Nov
+ 2026 19:47:05 +0000
+Received: from LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::f71f:a9f:c4de:687a]) by LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::f71f:a9f:c4de:687a%5]) with mapi id 15.21.0639.012; Sat, 21 Nov 2026
+ 19:47:05 +0000
+Date: Sat, 21 Nov 2026 14:47:01 -0500
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: tsbogend@alpha.franken.de, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	eddyz87@gmail.com, memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, vincent.guittot@linaro.org, stephen.smalley.work@gmail.com, 
+	casey@schaufler-ca.com, longman@redhat.com, tj@kernel.org, hannes@cmpxchg.org, 
+	mkoutny@suse.com
+Cc: ihor.solodrai@linux.dev, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	chenridong@huaweicloud.com, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com, 
+	omosnace@redhat.com, kees@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
+	chris@chrisdown.name, neelx@suse.com, sean@ashe.io, chjohnst@gmail.com, steve@abita.co, 
+	mproche@gmail.com, nick.lange@gmail.com, cgroups@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/2] security: Expand task_setscheduler LSM hook
+Message-ID: <oa7e3wzdkq6vvdgast5eohbrvtcvfz4mhqexisdxztq3g3l2ys@pxii4gqdgozp>
+References: <20261119040705.684987-1-atomlin@atomlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261119040705.684987-1-atomlin@atomlin.com>
+X-ClientProxiedBy: BN9P220CA0018.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:408:13e::23) To LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:163::8)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,192 +99,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P123MB4190:EE_|LO6P123MB6456:EE_
+X-MS-Office365-Filtering-Correlation-Id: 78d79859-b496-449d-09f8-08df48083864
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|23010399003|6133799003|18002099003|22082099003|261009223027099003|261021121427099003|261022105027099003|261022075727099003|921020|261028144727099003|261022113327099003|261026140227099003|261026121527099003|56012099006|10067099003|261102125427099003|261102123227099003;
+X-Microsoft-Antispam-Message-Info:
+	McI+X4GoyEQib46nSsEWZ4HrRHq7BVf1imMA20bfdtFZt3rQybjXqTDZ5ubjNnmDvujrJBDs0L1tEUcRca1JuGHldPIQZ0u19tbyCd24rs4aAEs77Jj2MzgCTCOG3w41bBCJs79DhNnj3C+YZJ8o4/8tQrqDwsr4MiFymo98GytVDL7MbysweXdwSXJq1/U/DtPya+SN5gfk3NJut08pm4XKSNQiwtYcEqjgg17fe4jixmyOmpfNqpwH7Bbzkt9Z0wpqGO9f6WJYw3S+/8MruK/PJlUmLGjlJdWfcw+LySHXZaCvQ1jogoa2YTQOX7kZayiwlnGkEifwnSYAcvT3DU0bd79N2kIrS9M5j24wpBah3PKzIRpDICzt0QvQbYiqoFAZhYmIhW2n0+/xe3h6fH8qYqLqB7nquXVY6/BF3+Jif6JX9koNFC8Yi3zW1y+DfqyU8rO/dm3GGW7Cahl8nuJ4GovYgFaXyhUub3Ia9ELTWDf4OMspLOKXn3iscn38r/9ENULnmNKVB6flgGr+ihyGLPJfzXoTbZtXPaoZR2Xy4TPOp8eTr1XMHQEGSXBr5vHG4ZvFaPGR094XkZeZ0SyZVUHMXmLV+heYJa4R5McXXYQw23sOhDikh2/LA1gEHrdQpexP7jnaVcL7Jwkwd52fGUpMYvei+TRMGE/EuhWfptc668ATSOqGS3ClcTNXVhSlygOHQF7QrbDi4iHgZg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(23010399003)(6133799003)(18002099003)(22082099003)(261009223027099003)(261021121427099003)(261022105027099003)(261022075727099003)(921020)(261028144727099003)(261022113327099003)(261026140227099003)(261026121527099003)(56012099006)(10067099003)(261102125427099003)(261102123227099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UDU5aHptNjcyTi9TMGZabVdNL0l1VGNkeVBvWmI0MDFyN0MvNXdWdEx5NFpm?=
+ =?utf-8?B?NkVRdk1pMjUxQW9oQkxOMFpTTllGVTRjRUpvUmQzbTZzQnJQbVU3MWtmYS8x?=
+ =?utf-8?B?aXVvMnd6ekxaMlIwNkNJWDIzOXROS2tJQVlHRGlKYTFkNDJ4ZzVNVytPcDcz?=
+ =?utf-8?B?RUpHaUxnSlFpZ3BjQWxuaGg5d1U1SFlIUW1jZk5rUFRaTzEzODhPa0hYb0Nt?=
+ =?utf-8?B?eXZHODlVWUtXNzI5WTU3Yk9zamN0RndFclhxcEJtejFyZHJyYWJlYjh4RWVG?=
+ =?utf-8?B?TzE2cklJbXhCR2x1UksvSFNYazh1M0RONHpXY0QwWkk0NEtDcU1GMVpOaktQ?=
+ =?utf-8?B?SDRoenZ1enNWczhIN0FjMGZXWWFQazMxcll3U1o1TzZHM2x4d2R0Q2ZVNzF0?=
+ =?utf-8?B?MzF1VzRBUnhQNk9lZUVUYWMzQndKd2xrcmxkSnBkSXczUVYzaUtiVVNVMk8x?=
+ =?utf-8?B?b2poa24xRkNUa3l3RmZnZ0FGVTFZWktkNWxTcmdPTVNIQkU0b1dOZTFXMEVH?=
+ =?utf-8?B?aVBqUTU3dFhLQWE0enNnY3U4OFZmZ0dJTWNiNndtcEltZWlhSldIQ3JkZVRM?=
+ =?utf-8?B?ajZPa0NScTNXM3U3dExLTGJQQXh0eTY4QkZESWlSdndtQkRkeEtZbmhGcGlJ?=
+ =?utf-8?B?TFl4TGdHVU9HVVV1KzdCMEl1Um1sTkZEUjBWNmt5SE1jajN1N2lkMDBCeisv?=
+ =?utf-8?B?VzhJSzl4ZC92YmJXdE54dDQrendpS2dqRHRVY3lEa3dOcEJMMFFpazkvSjVF?=
+ =?utf-8?B?Y0wzWmpLSjZiRVVBalZvWXpGTnJncVMvUDBWcGs5eEoxazhaUndmak9GZjh3?=
+ =?utf-8?B?b2R6YnhGdnpybGpaUjBYdG5NT0I2TWlRSlQrcHVyVStGTXhvbVpvbEg0b21M?=
+ =?utf-8?B?cktiUU1wYTNRVHlpSWRCMFk5Z2trRFVlVnhGeXlpZktBODVmYktTcE1sOXhz?=
+ =?utf-8?B?YkRxUDd2OWd2cSszeG1uSmtrOU13cHMwRmZKMjBkdkp0emF2TWIybU5OU2ZU?=
+ =?utf-8?B?ek45cmVPVkdSZGlwdjBZTjRyRWF5eXhkRDVKTnZScWl0MEZuY3pmdklPakpJ?=
+ =?utf-8?B?MDJhUlIyT2RLYnlWTFNRUENVWDA2Sk5qOHlUSE4vZ3NLN3Z2SkRsSTJTcW9S?=
+ =?utf-8?B?eGlRcldSRXRmTTVwcFJCSDlRcnlWN0pFazY2QjRFVitoaVp5andXcmh2SzQz?=
+ =?utf-8?B?M2xUQWRvUkhpSGEzMkNjODlZVTRjQU9VTzlWcXlPWmQ0NzR2R3JRaklhSW5S?=
+ =?utf-8?B?WW8vMUc0eHZneC8rWjUraWRlY1Z0ZFNTaXZtUEFlVHNLL3ZCMUl4Wm53dVdi?=
+ =?utf-8?B?QWpVZllYaWx3T0xXVDd4Z0hIQnpDU3hBYjMwRjBxVWxOdllyM3dTeHl2MkRN?=
+ =?utf-8?B?Qjk3NWVmd1plaCtMM0RuRFYwUU9kM051eDNsNmpaMVl3Z05zaU83ZXQ4WUFm?=
+ =?utf-8?B?Z0h6NUlBdTVOYlJ2bUdEdkFkZUZyR3I1NXdSa1lEZ2E1LzhFM2RGcThSWUYz?=
+ =?utf-8?B?R1VZZDBhTDIxd24yUS9ic25XOVlnWnUzL0N5NkdCSmVxS2wvRDJKZWpMWXJ5?=
+ =?utf-8?B?RmtmSHBWZmdPZzh1YTZ3L0FpK0lqVHo0SHFIcllCT0lGdWRlMXdpWXRpOFh1?=
+ =?utf-8?B?OVc4VkNWQkR2UmpDem9ZYWFqMFM0U1B2UWZ2c0Fmc2dyT3p5UUdqanRkZktU?=
+ =?utf-8?B?cU9yUFBpWGwwWjZKbkE2UW13SDNiK0UzdGpUZjZueUt5ZjBwamJzbk1FYWh5?=
+ =?utf-8?B?M0dnNVE5ZUtMUmtFbmd5YU56WHl4b09ESHF6V2d3WURad3hmV3VrZmVBRHNZ?=
+ =?utf-8?B?T1hZRjVDWkNaTHNkL2RLRTRGZVk0VnN0TStKd1kzT2VZb3FpRU9kb09CUlh3?=
+ =?utf-8?B?bk5lbWpKMW5XTVNkd0JvUEo0cmhpUlpyTUhSRlhWZC9GdDVpQ01xNXNJeGhI?=
+ =?utf-8?B?ME55ekpjelhocGhjVWo5R1BWRVBBazErNTY1ZTFBQWw5UGJjRXpUQWwxVHR0?=
+ =?utf-8?B?bFBiZGU5WExhdU43VWMxWHBqUS9OS1lHRmE4OFREcGtad2s5QjBvclFUa2tK?=
+ =?utf-8?B?TTNOL28rMUxJaThzUHRraWdUNlRHZzdtU2dxZnIwZC9hRFFyODNuTFBna1VI?=
+ =?utf-8?B?ZkdsMURHNnZuRHFzWlJqLytyRjYzem5RaHVBNjJiYXM0S0oyM1JyM3psYnpS?=
+ =?utf-8?B?ZVZzeTg5alo4TDNJUkl6eFdROWZLU1ZLdVJxWmsxZTFBTTNTZ1daRTRCSlFi?=
+ =?utf-8?B?aUhGNE9Dd3kxK0xyOXBCbDIyWUxiSGwxaTBuS0FPcU1pZVV5bm42eU83WnFI?=
+ =?utf-8?B?MHl1Szl4WXpwbk4yTFczNjR5S3FlRFhOcXl5cjZrUUFINUtPQkY2UT09?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78d79859-b496-449d-09f8-08df48083864
+X-MS-Exchange-CrossTenant-AuthSource: LO2P123MB4190.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2026 19:47:05.4456
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5zYUVIqSSNZdp/htLIxtgBS9nfKMuWt1KybSl5WnjQzZphWOa7SVDEtixf0Zpt0buzu7C1YlnjlpKKj5Nd8ElA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P123MB6456
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider.
+On Wed, Nov 18, 2026 at 11:07:03PM -0500, Aaron Tomlin wrote:
+> This series expands the task_setscheduler LSM hook to accept nullable
+> pointers to the requested sched_attr and cpumask alongside the target
+> task_struct. For sched_setaffinity(), passing the raw user-supplied
+> affinity mask allows LSMs such as the BPF LSM to audit or filter the
+> mask as requested by userspace before __sched_setaffinity() intersects
+> it with the task's allowed cpuset CPUs, which seccomp filters cannot
+> inspect behind user pointers and scheduler tracepoints only observe
+> post-intersection. Similarly, __sched_setscheduler() passes a local
+> sched_attr populated with the resolved scheduling policy and effective
+> SCHED_FLAG_RESET_ON_FORK state so parameter-only updates expose the
+> effective values rather than internal sentinels or caller defaults, and
+> cpuset task migrations and CLONE_INTO_CGROUP pass the destination
+> cpuset's effective_cpus mask (note that direct writes to cpuset.cpus
+> update task affinity via cpuset_update_tasks_cpumask() without invoking
+> this hook).
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 3
+Adding KP Singh, Matt Bobrowski, and Chris Down to Cc.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+KP, Matt: I would particularly appreciate your thoughts from the BPF LSM
+side on expanding task_setscheduler (which shifts the trailing ret context
+slot from slot 1 to slot 3 for existing two-argument lsm/task_setscheduler
+programs).
 
-- [Medium] The new tcp_mtu_probing text in Documentation/networking/ip-
-  sysctl.rst (lines 725-731) says: "From then on, and from the first…
-- [Low] The new detection-time text (ip-sysctl.rst lines 716-723) says
-  the threshold is the time tcp_retries1 retransmissions would take…
-- [Low] The new text (ip-sysctl.rst lines 728-729) says search_low is
-  kept "at most tcp_base_mss and at least tcp_mtu_probe_floor and…
-- [Low] The new text (ip-sysctl.rst lines 716-718) says "A black hole is
-  detected when the retransmission timer fires after the handshake and…
-
---
-
-tcp: document black hole detection for tcp_mtu_probing
-
-This commit extends the tcp_mtu_probing entry in ip-sysctl.rst. It
-describes when an ICMP black hole is detected and how TCP adjusts the MSS
-afterwards, based on tcp_write_timeout() and tcp_mtu_probing(). It also
-adds the default values of tcp_mtu_probing and tcp_base_mss.
-
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 0b7bfbd98a923..6ac8b3fb9aae8 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-
-[ ... ]
-
-> @@ -711,6 +713,25 @@ tcp_mtu_probing - INTEGER
->  	- 1 - Disabled by default, enabled when an ICMP black hole detected
->  	- 2 - Always enabled, use initial MSS of tcp_base_mss.
->  
-> +	A black hole is detected when the retransmission timer fires after
-> +	the handshake and retransmissions have stayed unacknowledged for as
-
-[Severity: Low]
-Should this also cover the zero window case? In tcp_retransmit_timer(),
-if the peer advertises a zero window and the socket is not orphaned, the
-timer takes a separate branch and never gets to tcp_write_timeout():
-
-net/ipv4/tcp_timer.c:tcp_retransmit_timer() {
-    ...
-	if (!tp->snd_wnd && !sock_flag(sk, SOCK_DEAD) &&
-	    !((1 << sk->sk_state) & (TCPF_SYN_SENT | TCPF_SYN_RECV))) {
-		...
-		tcp_enter_loss(sk);
-		tcp_retransmit_skb(sk, skb, 1);
-		__sk_dst_reset(sk);
-		goto out_reset_timer;
-	}
-
-	__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPTIMEOUTS);
-	if (tcp_write_timeout(sk))
-		goto out;
-    ...
-}
-
-While the window stays at zero, no black hole is detected and the MSS is
-not lowered, however long the retransmissions stay unacknowledged.
-
-> +	long as tcp_retries1 retransmissions would take with an RTO starting
-> +	at 200 ms and doubling each time, which is 3 seconds with the
-
-[Severity: Low]
-Does the RTO keep doubling when tcp_rto_max is not the default?
-tcp_model_timeout() stops doubling at tcp_rto_max(sk):
-
-net/ipv4/tcp_timer.c:tcp_model_timeout() {
-	...
-	linear_backoff_thresh = ilog2(tcp_rto_max(sk) / rto_base);
-	if (boundary <= linear_backoff_thresh)
-		timeout = ((2 << boundary) - 1) * rto_base;
-	else
-		timeout = ((2 << linear_backoff_thresh) - 1) * rto_base +
-			(boundary - linear_backoff_thresh) * tcp_rto_max(sk);
-	...
-}
-
-icsk_rto_max comes from net.ipv4.tcp_rto_max_ms, which can be set as low
-as 1000, or from the TCP_RTO_MAX_MS socket option.
-
-Take tcp_rto_max_ms=1000 with the default tcp_retries1=3.
-linear_backoff_thresh is then ilog2(5) = 2, so the threshold is
-7 * 200 + 1 * 1000 = 2400 ms, not 3 seconds.
-
-The flow's own RTO is also capped at 1 s, so timeouts fire at 0.2, 0.6,
-1.4, 2.4 and 3.4 s. Detection then happens about 3.4 s after the original
-transmission, not about 6 s.
-
-With the default 120 s rto_max, a tcp_retries1 above 9 also makes the
-threshold grow linearly in 120 s steps instead of doubling.
-
-Could the text say that the doubling is capped at tcp_rto_max_ms, and
-that the 3 and 6 second figures assume the default?
-
-> +	default tcp_retries1. This time is counted from the first
-> +	retransmission and only checked when the timer fires, so a flow
-> +	with a 200 ms RTO detects the black hole at the fifth timeout,
-> +	about 6 seconds after the original transmission.
-> +
-> +	With value 1, the first detection enables MTU probing and lowers
-> +	the MSS to tcp_base_mss if it is larger. From then on, and from the
-> +	first detection with value 2, each further retransmission timeout
-
-[Severity: Medium]
-Does every further retransmission timeout really lower search_low? In
-tcp_write_timeout(), tcp_mtu_probing() is only called while the
-tcp_retries1 condition holds:
-
-net/ipv4/tcp_timer.c:tcp_write_timeout() {
-	...
-		if (retransmits_timed_out(sk, READ_ONCE(net->ipv4.sysctl_tcp_retries1), 0)) {
-			/* Black hole detection */
-			tcp_mtu_probing(icsk, sk);
-
-			__dst_negative_advice(sk);
-		}
-	...
-}
-
-retransmits_timed_out() returns false whenever icsk_retransmits is zero:
-
-net/ipv4/tcp_timer.c:retransmits_timed_out() {
-	...
-	if (!inet_csk(sk)->icsk_retransmits)
-		return false;
-	...
-}
-
-tcp_ack() resets that counter as soon as snd_una advances:
-
-net/ipv4/tcp_input.c:tcp_ack() {
-	...
-	if (after(ack, prior_snd_una)) {
-		flag |= FLAG_SND_UNA_ADVANCED;
-		WRITE_ONCE(icsk->icsk_retransmits, 0);
-	...
-}
-
-Once the connection recovers, for example after the first halving lets
-packets through, a later isolated RTO does not halve search_low again.
-Only timeouts during a new stall that lasts past the tcp_retries1
-threshold do.
-
-The commit message says the text describes the behaviour "as implemented
-in tcp_write_timeout() and tcp_mtu_probing()". Could this sentence be
-reworded, for example to "each further timeout at which the black hole
-condition still holds"?
-
-> +	lowers search_low to half its MSS, keeping it at most tcp_base_mss
-> +	and at least tcp_mtu_probe_floor and tcp_min_snd_mss, and lowers the
-
-[Severity: Low]
-Can search_low end up above tcp_base_mss? tcp_mtu_probing() applies the
-cap first and the floors after it, so the floors win:
-
-net/ipv4/tcp_timer.c:tcp_mtu_probing() {
-	...
-		mss = tcp_mtu_to_mss(sk, icsk->icsk_mtup.search_low) >> 1;
-		mss = min(READ_ONCE(net->ipv4.sysctl_tcp_base_mss), mss);
-		mss = max(mss, READ_ONCE(net->ipv4.sysctl_tcp_mtu_probe_floor));
-		mss = max(mss, READ_ONCE(net->ipv4.sysctl_tcp_min_snd_mss));
-	...
-}
-
-tcp_base_mss uses plain proc_dointvec with no bounds, while
-tcp_mtu_probe_floor accepts 48..65535. Two settings that put search_low
-above tcp_base_mss:
-
-  tcp_mtu_probe_floor=1200 with tcp_base_mss=1024
-  tcp_base_mss set below tcp_min_snd_mss
-
-Could the text say that the floors take precedence over the tcp_base_mss
-cap?
-
-> +	MSS to match if it is larger. Once MTU probing is enabled, the
-> +	connection also probes for a larger MSS, as with value 2.
-
+Kind regards,
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118-tcp-mtu-probing-doc-v1-v2-0-e795f20b8cfe%40gmail.com
+Aaron Tomlin
