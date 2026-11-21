@@ -1,86 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795294539;
-	b=X+CX21gB97uLipJ8RmTOClCr38iekirto6aILdVM4Qux11gqJI+FBQxUVvXg+UL6KNEP
-	 juk5gZPTOR4WhMd7LMpbneV6W6/pA3cph+ItFwSG2icSrL/X4PqSZejF1FFu2JGbK2JV1
-	 ceGpjIlTkmzSBojgStmW1zrKDfZvDPLOxYjJ3bA3Zm85tAsNggnN74DCzzGe2D/+W4Tej
-	 lv6PT2fXgJIRN7VEumxICqbAjDl35aOZPod0y7++nLa3Y7TKiBupgan2Fag+R615EKpBj
-	 Bydv866qvladWn9qzVf+p7kJA+uk+gW4ffLXQYIcf+8+q+ZUlRkJC2K+FDNAL5zrJeg==
+	t=1795294540;
+	b=VUu2/8ogAvi9ETkr/yWScl0lTMMeOzE6cLaJYJCC/NzZJqWDMQMFY8wzpadTB+EhDei9
+	 o2lnELGxXWswbaw3IaBoEx/vx4B9hC19w/lIxcUqXG8iRIU7ZvmOh8u5xSUfV5SZnH7My
+	 4gX2TbyUG5bDyW1GUi19DxSgfvl9Y1E9IKt0A/kHnkrad0rW5cukpZMxhs17ALidiRyeO
+	 TwQDJHjqhjn71sUDX9HcZMcolP8oJCAp8oAFolHVZBeNpMUSolsfUZGgd+FoHibLLE7NB
+	 dUGTsGoHGsSsEZCbkXh3MkjvqEtEiZusOwQQgUtyHPcNZpjuJOWrRoUOqY5zk+xHy3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795294539;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795294540;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=FH6CAC7V6zrcojqtjKmAk9ZWlQF+y6QKr70PrUGFm5M=;
-	b=BqyhYeljeG9957occsRgKAMrjpggGcfqga+l5Iw4eWaxiQCu0StTSmmsZMP5gHaBMHt/
-	 wrNeNNl+P3qM7HrWyd1nhsgPRDojxygYMJmy3ihOpfuPa6AZAWoo3KTkG7h0ivPIecSOm
-	 HZSFS8rt4Bsv4tGpzi4kyv/NUIxTnpNegx6fTb4KrUoYI2x+saAul4wN0dpb6tCmmfvU4
-	 bwLpuE7EuhaEAA0veEmY5kHG1a+rutY20/MRka1aLVhbKcV7I3i88zWyPSzexWyEWvC2Q
-	 AWBh4wI/kUEIooLXFxwcQ9AF1yL9qoSUGUVpsUE1hwTeY8qEvQ/OOoXXOg1D5s9+s+Q==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=YkoQWj+nVqdpBJbc201QDlIJGBmU9D/3Vn5cmEJp2mc=;
+	b=XaFGmdsGgNRWZUVzGP16cAa6vt+wejJktYiBcmwEElreZ4JjnnEI8UckPpJ4btClBH2a
+	 Z8ytUfgmc92abBsQcQMZtzAL0SDsr5zO1MvI/jLvMBcQK+ZY0xOrUzrIalb5GuXTJ9pWH
+	 7oy+57v5Xo3N3qHu7ms/Vy3W2q8RS+l3OfE0aJAzxkhtNqHtJxdKyI+XO8J7cv+Ub0Xds
+	 dnRI5PH1nMt9Ys/pqT9slwcS4aJS0T72hEqCA0U1GqESzR99Doib7gmoMM7xlAU5Oojgf
+	 J1qMa00gF5VfqbJ+lYger6prlnoZ3S3hhrUrCNO7ImlsA0s3lljoAjESECuZLqzXr9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bairaktaris.de;
 	spf=pass smtp.mailfrom=bairaktaris.de;
-	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=jI0DfhXh;
-	arc=none smtp.remote-ip=209.85.218.51
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=ZbVf1LK2;
+	arc=none smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CB7606A339
-	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 20:55:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3CB7606A339
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EF3606A684
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 20:55:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10EF3606A684
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=jI0DfhXh
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c50d3ac6b51so669304966b.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 12:55:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=ZbVf1LK2
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c4d21051042so352686966b.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 12:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bairaktaris.de; s=google; t=1795294536; x=1795899336; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FH6CAC7V6zrcojqtjKmAk9ZWlQF+y6QKr70PrUGFm5M=;
-        b=jI0DfhXhmytCvxyZCYk0sBeqom5DdS6FkfC3NWMuRZwIJ5//bHkwu73DeyicJ3eH8z
-         Fyf0NAa+8EcSQ9XfArgLFzfPnPyd+szkggVJrM9M2DYSLbIFi40CiFr4QXhjzqs4YGZO
-         ndhgomjI+p2FJJqBl0Dfr05g26DStFfgvyLJ2c13gNc4tRzAJtplta1rzNTZKbrw/UPl
-         9UYE1Q3Nym2M+i/WEzg6J4rku28nhIpQl6DYKY6aECq0YuB5t+GHAcoaV6wIlIpPW4c1
-         D+UqQh2BQaGA7TDZAfDj+RX4KTIDctNZ8QQAPC2dGil+GuM7LzGONQafG7VF3v/dVxtf
-         U8xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795294536; x=1795899336;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=bairaktaris.de; s=google; t=1795294538; x=1795899338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FH6CAC7V6zrcojqtjKmAk9ZWlQF+y6QKr70PrUGFm5M=;
-        b=jC846rYX5qNgQK5mszzm7/catlZtpR2GSaKg/tfenr/MzeIzu4tIwTwD/2uHwAj3m1
-         qbU2DhwjTwmpT+ygchxWHRAXTVoJcSbgNAeX6ZIXkd4besCPQXXToKqKqJz44U0Y2X4I
-         VTDYXY5799IoYXY612Acv2r2QAr+urgEyRjdvBFvvTr/Gx40ai0d2uvDU5TRQ61HVZJH
-         2LnbEvwfZgJNtPjR9R1DPnvPw468TQIJR+phaD0rBiYwST6Om2ovP5NBZ9wwRGHCInce
-         26JdGCuYWiPaFri+lJsIuZxJS8ycRVnovoC+o7Q3cp517qoAp0ZwwTFt8kRFhfhRJ3aO
-         wvCQ==
-X-Forwarded-Encrypted: i=1; AL+hErFf4pJVWJHVlh6/FcXYoyA8OCuf+nNPVB/QmwmJDB+w6rL9nIag6L1xbd+uaQ7GEMJFzBhzPFfTbz01B8CEK7w=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9lc3O/7k8FQAGtW3KQUr0nQ9hSEgPlxCOpQPFAbvk7abILqq6/
-	hz78Jednn3n9hWlDnMYWwPFA2yHZT8mbiA2kk8fO5gs+Q5aul5uABmT9edhZnBuFjQ==
-X-Gm-Gg: AZFdTZcP+Z2EYSnvk+BvcWImAGWy5nwPfR/TegEgN9onLx1ixH+nk7DtkrxQnspReEs
-	7yr0FKZxm97r9368+tYX8G/IK+Hv27YT3fXucwncwAPPekNrRpUdLdb8zI+ZNbCb/rDmi5QqtyS
-	NhjcPMFRjOJ7oYPlbWzSsnRdvsGdygKsE6DL2vg06wF+mQau6adbzfE3hn0to+i6WTYnaz1Yo02
-	MQgCXNeXDaCkoAc3a1WIOeDqtP5zsjXd6tjYeErG2qYJlTQ8KVwUIl/SHjU0DR9nm49aYc53bxX
-	c0IMOpr09ainKo+wqlGYkM+1+GcjZvLsLsqP8NsLidGihFdkWZBqt+2mCl4qi/d7fv99VByKksa
-	zEeVP5y2vaTs2RHVStSrE/lR8oT11ttCQ/lT8ZQSmn14lvWSlLMcfkx+gBZtJ9GJNPopVjQtX8e
-	tDCzmhczbf6hLxKowlqnNrcOQr8lFGczermKZc1Y48xO9Z1LpIQWQWP3RnpvR6YvN37QyUuQmI+
-	f19sdzPDCnw/kQntvkFniq0aJWV1GOcdM0ekSHRkao7hOJX2wbP3ymdZ3rMRkS8308X2wadLI0q
-	2hh035Qt6mUXarXafyx4pXbjKeErjBCpSI62Yj0h+fS+aiJK2fH7fqSZ+Bruqb+qFS+4pi7mPBe
-	G+SjJZXX1PxoRjuFA7T1Hz7yT1wV0adL30NhsGALoaVoKYhyKdSr1aPQfs+Nf8e2Uw3hljCgSQc
-	OKf1pEcL0iPGCPYWIoxKHCX61+qDK96Kqtyni2s4kStXw+JjAtizb4Wy4CKRaApfXYR20Vcq+Sd
-	ChhosDthp6bACp9QggFoVVUibjyqAtHgJ0AdAc/TLNlBW0DGXYPigKfHyA/hKAWVxbsQGvOFZUf
-	cHNgip8uL0MlevS7XggUrsjX0nC2hLMuvMuqOT80cusPNv0iK/zJ6Nw=
-X-Received: by 2002:a17:907:3e86:b0:c36:777f:824c with SMTP id a640c23a62f3a-c51315851d7mr813630666b.4.1795294535198;
-        Sat, 21 Nov 2026 12:55:35 -0800 (PST)
+        bh=YkoQWj+nVqdpBJbc201QDlIJGBmU9D/3Vn5cmEJp2mc=;
+        b=ZbVf1LK2r/PNMG43udSDOTsCRG+/ll+yAqoNERbj5ZhbEnXk7JzF4CcbsCm9O+Jd5J
+         n0YKYKywn63O1J92etT2oFQToUN3RJANfrP3u/7bqqe4VbYywFFdVjkQS2qc/Vx6807f
+         ZLu8FEXTNdFdzayzzVRpqfupYzJxWpuv3/JnDFe+9OFXgWJj90yuy8s7JrTB7HKrVEnt
+         Njv7zZpjI+5zIrYpkAHfh/JQ9lJ48z6K10HtyP1yItO4KlEfKRVWK4H/YORNTUkj2Ze2
+         3aWphpSCw5rCIsS/jcLsRlwmWbcY4VaIfkQ2GdeTzjRiOjnx/MXmsaViSKtZVebCmT1/
+         jFXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795294538; x=1795899338;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YkoQWj+nVqdpBJbc201QDlIJGBmU9D/3Vn5cmEJp2mc=;
+        b=I/MoLwO32xlKw8F1GV20P2coZrQC3s+Ltb+cYGQSr2vavaQlNxSo1JmLWzQ6dJrIOV
+         Q/b1b2rEBEHN32akTQ2406e6q7tVRqepCzG0tQ6D8sk31dspavb5+boFkcSBaD6wNTbt
+         zeQextve6h/e6zAdyGoZW0Ok0p27P3rqVv5a65KFQuTmwiQkHSM67VO0AFIDuy5eXXNj
+         DlSBJ6ndR+Rmj02XIWtjGDVuNgXx25roYmDJCDfbqSQPVWoG40RRs7AQHAsgNL4NkRCp
+         6IWhCVfVR60MuTdlaHpzX75PeUF/FA5PX0vscnaa9R4tN0Mfas8WLohfSy5mE/v4+kFc
+         IRhQ==
+X-Forwarded-Encrypted: i=1; AL+hErEiK//ZlFs2KhO3tIEioc7CinBXR4qhzznn5cfwixjxBajkAaYQiFzy4hMDFYKGIqR+3KYnKL7ILswBvFDy+ho=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Kx+XuYApCJRe/juG5MOuupmmMH//6OsKShgIERHiKstHmShgh
+	cH83CrnBoVT5m1WXxrUn8WI0qkGaOSt/Cb++Yz8WQjjZJNNUkNeSzoqvuLZQrP1Tqg==
+X-Gm-Gg: AZFdTZcMoOatAbp+VvNCxhXYkVVCak6H2Tn0fBzalMhcKT0jdF63U/KHHrp2pJfsf1E
+	in1GZNYzVv4p2//9b1+K6fesFgaea/uCipE+YHI7Z3xqRX8fWb25PGzrHqBgTwzNGMp9SDhW+id
+	O5sYtPgBXIImHAuoJOKuWcPAZcrLl8tayStM0D9Sh+w0o89bLZF9zczrZzTEkoImm9EVEAoyqwT
+	miql40sY+4uIskVylRoHuevPFVvq4Tc52YrskhWjZV0JVuhhyeQLw1sqibdtNu7NtjKIYdg49Uz
+	N9mFxYI6UznBEOL/Tt6e1Mbgxy+t4kfOw/O2ftg6MSKCmY372xd/v91DME6y2BK4U/lha9R8oph
+	yIr7cJS9LbgdKMfnteMFGB7EsmY62FcJ6M8+BOdnpgh/naOE09l9q3Qn6chZp9ejVIUakWKPKzl
+	6NrkKe6aAAu5GHQJNQ6ebnEhEOa8C/flWll/ub31u5GBFWrRQ3hzzdhYVh5BLU3VOISYqcE06j8
+	JiuilMYfNEJlYw0YukPInSRJtbMnTVVYFos7jg1UYhNnftBq8llPUlMynehVHOex2Ju7U+aMuvy
+	tNvy4DTyafsWZNZ9WEtfJsfm85Sz+mTCYou3QCxuDk45BJ+m7tc8A2L5D0n/SUXXmBOVhfY4Gcw
+	VExgQDSj+Qf4AZgSSAQ+i0GmMTJY4sVyRxMgvzYVrmCGDqosA0IAnYrdr21UwdqBLP7oJ1JqQhl
+	8Ojs7FJhV+qpS/dOrqV0fjZY/Ld8FcduS+L+EWVD0JQuCGVL2ZQWUAaGwt0N3FSuFFtzvBEdq0j
+	liiw55RWqohKH1oiIzcLoznLNKhnudAbchkjb5nTms1Hwkqpn3YepQqsV9RBtqnCYV53Ny8VKHt
+	AGu2C9EWIIrZpH0cCEMghontDXl0bdFzmdHldEe4hKQ2xTXQMA2dCnvl
+X-Received: by 2002:a17:906:b342:b0:c4d:2895:e492 with SMTP id a640c23a62f3a-c513a829d7emr435523566b.21.1795294538314;
+        Sat, 21 Nov 2026 12:55:38 -0800 (PST)
 Received: from Desktop.tail070c67.ts.net (p200300f2470dfa000000000000000a27.dip0.t-ipconnect.de. [2003:f2:470d:fa00::a27])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513aea28f4sm237136666b.33.2026.11.21.12.55.34
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513aea28f4sm237136666b.33.2026.11.21.12.55.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2026 12:55:34 -0800 (PST)
+        Sat, 21 Nov 2026 12:55:37 -0800 (PST)
 From: Julius Bairaktaris <julius@bairaktaris.de>
 To: netfilter-devel@vger.kernel.org
 Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
@@ -99,10 +100,12 @@ Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
 	bridge@lists.linux.dev,
 	coreteam@netfilter.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH nf-next v11 0/3] netfilter: flowtable: tear down bridged flows on layer 2 roaming
-Date: Sat, 21 Nov 2026 21:55:32 +0100
-Message-ID: <20261121205535.1888592-1-julius@bairaktaris.de>
+Subject: [PATCH nf-next v11 2/3] netfilter: flowtable: tear down direct xmit flows when the fdb entry moves
+Date: Sat, 21 Nov 2026 21:55:34 +0100
+Message-ID: <20261121205535.1888592-3-julius@bairaktaris.de>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261121205535.1888592-1-julius@bairaktaris.de>
+References: <20261121205535.1888592-1-julius@bairaktaris.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -114,141 +117,426 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A flowtable flow that transmits straight to a bridge port keeps sending
-to the old port when the host moves to another port, for example a Wi-Fi
-station roaming between access points.
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-The series applies on top of Pablo's "netfilter: flowtable: unify direct
-and neigh xmit path" series (nf, v6):
-https://lore.kernel.org/netfilter-devel/20261120225227.3565643-1-pablo@netfilter.org/
-His series is posted for nf; this series is for nf-next and applies once
-nf, with his series, has been merged into nf-next.
+A direct xmit flow that reaches a bridge port keeps sending to that port
+when the host moves to another port of the bridge, and packets from the
+other side keep the flow from timing out.
 
-Patch 1 is a bridge fix the series needs: br_fill_forward_path() fills a
-path to a port that does not forward (STP blocking or disabled, an MST
-vlan not forwarding), so the flowtable transmits where the bridge would
-not. Patch 2 makes the gc tear a flow down when the fdb entry moves or
-the port no longer forwards in its vid. It is Pablo's patch with my
-changes on top: it keeps his authorship, his Signed-off-by from his
-posting and a note of what I changed. Patch 3 adds selftest cases.
+The gc now checks the fdb entry after nf_flow_dst_check_gc(), through
+nf_br_utils_hook, and tears the flow down when the entry points to
+another port. An entry that aged out does not tear it down, because
+offloaded packets do not refresh it.
 
-The gc finds the bridge port from out.ifidx through the vlan devices of
-the path and the bridge from the port, and looks the entry up in the vid
-the forward path used, which the tuple now keeps in out.bridge_vid. With
-two bridges on the path it also checks the outer one. Neigh xmit flows
-need no such check: a forward path through a bridge always makes the
-flow direct xmit. struct flow_offload grows from 296 to 312 bytes on
-x86_64; its slab cache is SLAB_HWCACHE_ALIGN, so an object takes 320
-bytes either way. A gc pass over 2000 flows, 1021 of them offloaded to a
-bridge port, took 368 to 393 us with the series and 261 to 276 us
-without it (median of each of three runs), and no flow was torn down.
+One possibility to address this issue is to subscribe to
+SWITCHDEV_FDB_DEL_TO_DEVICE event notifications, however, this requires
+iterating over the whole flowtable whenever a fdb entry is removed.
 
-Tested on nf-next 994089a3fa38 with Pablo's series in an x86_64 guest:
-nft_flowtable.sh passes three runs out of three with PROVE_LOCKING and
-three out of three with KASAN and PROVE_LOCKING, including the twenty
-roaming cases in both of its passes, with no lockdep or KASAN report.
-Without this series every roaming case but "del" and "age" fails, the
-two tunnel cases included. net/netfilter and net/bridge build without
-warnings with W=1 (x86_64 allmodconfig), each patch on its own, and with
-BRIDGE_VLAN_FILTERING off.
+The bridge port is found from out.ifidx through the vlan devices that
+the forward path has below the port. The flow keeps the vid the forward
+path looked the fdb entry up in: a vlan that leaves the port untagged
+is in neither encap stack. struct flow_offload grows from 296 to 312
+bytes on x86_64; its slab cache is cacheline aligned, so an object takes
+320 bytes either way.
 
-I used Claude (Anthropic) to help write these patches.
+The flow is also torn down when the port no longer forwards in that
+vid, where the bridge would no longer deliver either: the port left the
+forwarding state, the vlan left the port, or vlan filtering was turned
+on or off. With two bridges on the path, at most two fit in a forward
+path, the gc goes up from the inner bridge through the vlan devices
+between them to the port of the outer one and checks its entry as well.
 
-Changes in v11:
-- rebased onto nf-next and Pablo's xmit series: the gc checks the fdb
-  entry after his nf_flow_dst_check_gc()
-- selftest: the host roams below an IPIP and an IP6IP6 tunnel on the
-  router; Pablo's series offloads such a flow as direct xmit to the
-  bridge port
+Neigh xmit flows need no fdb check: a forward path that crosses a bridge
+always makes the flow direct xmit, and a failed walk is not offloaded.
 
-Changes in v10:
-- the tuple keeps the vid of the fdb lookup (out.bridge_vid) instead of
-  the bridge_vlan bit and the port pvid: a bridge vlan that leaves the
-  port untagged is popped from the encap stack (DEV_PATH_BR_VLAN_UNTAG)
-  or never pushed (DEV_PATH_BR_VLAN_KEEP), so v9 looked in the pvid of
-  the port, which is another vlan when the untagged one is not the pvid,
-  and kept the stale flow (Sashiko). This answers Pablo's v7 question on
-  bridge_vid: no bit can recover that vid
-- the gc also tears the flow down when the port stops forwarding in its
-  vid (STP blocking or a disabled port, a vlan removed from the port,
-  vlan_filtering toggled); v9 kept sending to a disabled port and in a
-  vlan removed from the port. The new patch 1 keeps the forward path
-  from recreating such a flow
-- with two stacked bridges the gc checks the outer one too; v9 checked
-  only the bridge of the transmit port and missed a move on the outer
-- selftest: vid 10 untagged on ports of pvid 1 through a vlan device on
-  the bridge and through the bridge pvid; a move from behind the inner
-  to a port of the outer bridge; the host's port disabled; the vlan
-  leaving the port; vlan_filtering turned off before a roam
-- selftest: the IPv4 roaming cases turn IPv6 off on the host, whose
-  router solicitations crossed the bridge and refreshed the entry the
-  "age" case waits to expire (2 of 8 runs failed)
-- selftest: lines wrapped to 80 columns, namespace names initialised
-  (NIPA checkpatch and shellcheck on v9)
-- Cc coreteam and linux-kselftest (NIPA cc_maintainers on v9)
+Reported-by: Eric Woudstra <ericwouds@gmail.com>
+Link: https://lore.kernel.org/netfilter-devel/20250925182623.114045-1-ericwouds@gmail.com/
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+[julius@bairaktaris.de: find the bridge port below the vlan devices of the
+ path, keep the vid of the fdb lookup, keep a flow whose entry aged out,
+ check that the port forwards the vid, check both bridges of a stacked
+ path, follow struct net_bridge_dst, build br_nf_utils.o only with the
+ flowtable]
+Link: https://lore.kernel.org/netfilter-devel/20261014210256.1573072-1-pablo@netfilter.org/
+Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
+---
+v11: rebased onto Pablo's xmit series: the gc checks the fdb entry
+after his nf_flow_dst_check_gc(), which replaces nf_flow_dst_check()
+there, and his patch now sets out.h_dest for every xmit type
+v10: https://lore.kernel.org/netfilter-devel/20261115005555.645727-3-julius@bairaktaris.de/
 
-Changes in v9:
-- reset port_vlans at each bridge in the forward path, so the gc checks
-  the bridge the flow transmits on: with a vlan device of one bridge
-  enslaved to another, v8 counted the vlans below both bridges, looked
-  up the bridge port from the wrong device and read past encap[]
-  (Sashiko)
-- selftest: a bridge port that is a vlan device of another bridge
-- selftest: the roaming cases give socat five times SOCAT_TIMEOUT, as
-  roam_stop() ends it; on a loaded host a case took 109 s and the 60 s
-  timeout ended the transfer before the check
-- authorship: Pablo's patch is credited as such, with his sign-off from
-  his posting and a note of my changes, instead of Co-developed-by; his
-  paragraph on the switchdev notifier alternative is back in the commit
-  message
-- rebased onto current nf-next
-
-Changes in v8:
-- drop bridge_ifidx and bridge_vid (Pablo): the bridge port is found
-  from out.ifidx through the vlan devices below the port, the vid comes
-  from the encap stack (bridge_vlan bit) or is the pvid of an untagged
-  port of a vlan_filtering bridge
-- the fdb check sits in nf_flow_dst_valid() next to nf_flow_dst_check(),
-  the hook is fdb_valid_dst() again, and the comments Pablo pointed out
-  are gone
-
-v10: https://lore.kernel.org/netfilter-devel/20261115005555.645727-1-julius@bairaktaris.de/
-v9: https://lore.kernel.org/netfilter-devel/20261108155344.35845-1-julius@bairaktaris.de/
-v8: https://lore.kernel.org/netfilter-devel/20261017235849.1066624-1-julius@bairaktaris.de/
-v7: https://lore.kernel.org/netfilter-devel/20261014235628.197976-1-julius@bairaktaris.de/
-v6: https://lore.kernel.org/netfilter-devel/20261004171605.3544792-1-julius@bairaktaris.de/
-v5: https://lore.kernel.org/netfilter-devel/20260914072541.897040-1-julius@bairaktaris.de/
-Pablo's patch: https://lore.kernel.org/netfilter-devel/20261014210256.1573072-1-pablo@netfilter.org/
-
-Julius Bairaktaris (2):
-  net: bridge: fill a forward path only to a port that forwards
-  selftests: netfilter: nft_flowtable.sh: roam a host between two bridge
-    ports
-
-Pablo Neira Ayuso (1):
-  netfilter: flowtable: tear down direct xmit flows when the fdb entry
-    moves
-
- include/linux/netfilter.h                     |   7 +
- include/net/netfilter/nf_flow_table.h         |  22 +-
- net/bridge/Makefile                           |   2 +
- net/bridge/br.c                               |   2 +
- net/bridge/br_device.c                        |   2 +-
- net/bridge/br_forward.c                       |  19 +
- net/bridge/br_nf_utils.c                      |  35 ++
- net/bridge/br_private.h                       |  14 +
- net/netfilter/core.c                          |   3 +
- net/netfilter/nf_flow_table_core.c            |  68 ++-
- net/netfilter/nf_flow_table_path.c            |  29 +-
- .../selftests/net/netfilter/nft_flowtable.sh  | 390 ++++++++++++++++++
- 12 files changed, 587 insertions(+), 6 deletions(-)
+ include/linux/netfilter.h             |  7 +++
+ include/net/netfilter/nf_flow_table.h | 22 ++++++++-
+ net/bridge/Makefile                   |  2 +
+ net/bridge/br.c                       |  2 +
+ net/bridge/br_nf_utils.c              | 35 ++++++++++++++
+ net/bridge/br_private.h               | 13 +++++
+ net/netfilter/core.c                  |  3 ++
+ net/netfilter/nf_flow_table_core.c    | 68 ++++++++++++++++++++++++++-
+ net/netfilter/nf_flow_table_path.c    | 29 +++++++++++-
+ 9 files changed, 176 insertions(+), 5 deletions(-)
  create mode 100644 net/bridge/br_nf_utils.c
 
-
-base-commit: 994089a3fa3882f27f4bed9fc5815ee7df502e88
-prerequisite-patch-id: d7af24391d138e7c6afe5585de4a14c8bba23c67
-prerequisite-patch-id: dfb16f54f47b0c18b09eeeeccba9725bd15a6c7d
-prerequisite-patch-id: 9949846db34c9fa718ff1968445bcb618920f93b
+diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
+index e99afc1414cd..be85d8f68b45 100644
+--- a/include/linux/netfilter.h
++++ b/include/linux/netfilter.h
+@@ -67,6 +67,13 @@ static inline void nf_inet_addr_mask(const union nf_inet_addr *a1,
+ #endif
+ }
+ 
++struct nf_br_utils {
++	bool (*fdb_valid_dst)(const struct net_device *dev,
++			      const unsigned char *addr, u16 vid);
++};
++
++extern const struct nf_br_utils __rcu *nf_br_utils_hook;
++
+ int netfilter_init(void);
+ 
+ struct sk_buff;
+diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+index 143bcfce3678..206296483fe1 100644
+--- a/include/net/netfilter/nf_flow_table.h
++++ b/include/net/netfilter/nf_flow_table.h
+@@ -121,6 +121,18 @@ struct flow_offload_tunnel {
+ 	u8	encap_proto;
+ };
+ 
++/* The outer of two bridges on the path: its vid, and how to reach its port
++ * from the inner bridge.
++ */
++struct flow_offload_br_outer {
++	u16				vid;
++	u8				present:1,
++					link_vlans:2,
++					link_untag:1,
++					link_8021ad:1,
++					inner_tag:1;
++};
++
+ struct flow_offload_tuple {
+ 	union {
+ 		struct in_addr		src_v4;
+@@ -153,6 +165,8 @@ struct flow_offload_tuple {
+ 					xmit_type:3,
+ 					encap_num:2,
+ 					needs_gso_segment:1,
++					bridge_path:1,
++					port_vlans:2,
+ 					tun_num:2,
+ 					in_vlan_ingress:2;
+ 	u16				mtu;
+@@ -164,6 +178,8 @@ struct flow_offload_tuple {
+ 			u32		ifidx;
+ 			u8		h_source[ETH_ALEN];
+ 			u8		h_dest[ETH_ALEN];
++			u16		bridge_vid;
++			struct flow_offload_br_outer br_outer;
+ 		} out;
+ 		struct {
+ 			u32		iifidx;
+@@ -232,7 +248,11 @@ struct nf_flow_route {
+ 			u32			hw_ifindex;
+ 			u8			h_source[ETH_ALEN];
+ 			u8			h_dest[ETH_ALEN];
+-			u8			needs_gso_segment:1;
++			u16			bridge_vid;
++			struct flow_offload_br_outer br_outer;
++			u8			needs_gso_segment:1,
++						bridge_path:1,
++						port_vlans:2;
+ 		} out;
+ 		enum flow_offload_xmit_type	xmit_type;
+ 	} tuple[FLOW_OFFLOAD_DIR_MAX];
+diff --git a/net/bridge/Makefile b/net/bridge/Makefile
+index 1203dc19e15c..fc53c332246d 100644
+--- a/net/bridge/Makefile
++++ b/net/bridge/Makefile
+@@ -14,6 +14,8 @@ bridge-$(CONFIG_SYSFS) += br_sysfs_if.o br_sysfs_br.o
+ 
+ bridge-$(subst m,y,$(CONFIG_BRIDGE_NETFILTER)) += br_nf_core.o
+ 
++bridge-$(subst m,y,$(CONFIG_NF_FLOW_TABLE)) += br_nf_utils.o
++
+ br_netfilter-y := br_netfilter_hooks.o
+ br_netfilter-$(subst m,y,$(CONFIG_IPV6)) += br_netfilter_ipv6.o
+ obj-$(CONFIG_BRIDGE_NETFILTER) += br_netfilter.o
+diff --git a/net/bridge/br.c b/net/bridge/br.c
+index d9a39ff98868..c0618ef6dac5 100644
+--- a/net/bridge/br.c
++++ b/net/bridge/br.c
+@@ -458,6 +458,7 @@ static int __init br_init(void)
+ 		goto err_out6;
+ 
+ 	brioctl_set(br_ioctl_stub);
++	br_nf_utils_init();
+ 
+ #if IS_MODULE(CONFIG_BRIDGE_NETFILTER)
+ 	pr_info("bridge: filtering via arp/ip/ip6tables is no longer available "
+@@ -486,6 +487,7 @@ static int __init br_init(void)
+ 
+ static void __exit br_deinit(void)
+ {
++	br_nf_utils_fini();
+ 	stp_proto_unregister(&br_stp_proto);
+ 	br_netlink_fini();
+ 	unregister_switchdev_blocking_notifier(&br_switchdev_blocking_notifier);
+diff --git a/net/bridge/br_nf_utils.c b/net/bridge/br_nf_utils.c
+new file mode 100644
+index 000000000000..c9a7c94d301c
+--- /dev/null
++++ b/net/bridge/br_nf_utils.c
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/netdevice.h>
++#include <linux/netfilter.h>
++
++#include "br_private.h"
++
++static bool nf_br_fdb_valid_dst(const struct net_device *dev,
++				const unsigned char *addr, u16 vid)
++{
++	const struct net_bridge_fdb_entry *f;
++	const struct net_bridge_port *p;
++
++	p = br_port_get_check_rcu(dev);
++	if (!p || !br_port_forwards(p, vid))
++		return false;
++
++	/* Offloaded packets do not refresh the entry, it can age out. */
++	f = br_fdb_find_rcu(p->br, addr, vid);
++
++	return !f || br_fdb_dst_port(f) == p;
++}
++
++static const struct nf_br_utils nf_br_utils = {
++	.fdb_valid_dst	= nf_br_fdb_valid_dst,
++};
++
++void br_nf_utils_init(void)
++{
++	rcu_assign_pointer(nf_br_utils_hook, &nf_br_utils);
++}
++
++void br_nf_utils_fini(void)
++{
++	RCU_INIT_POINTER(nf_br_utils_hook, NULL);
++}
+diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+index 2c73d2549eae..6a6685e93b49 100644
+--- a/net/bridge/br_private.h
++++ b/net/bridge/br_private.h
+@@ -2166,6 +2166,19 @@ struct nf_br_ops {
+ };
+ extern const struct nf_br_ops __rcu *nf_br_ops;
+ 
++#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)
++void br_nf_utils_init(void);
++void br_nf_utils_fini(void);
++#else
++static inline void br_nf_utils_init(void)
++{
++}
++
++static inline void br_nf_utils_fini(void)
++{
++}
++#endif
++
+ /* br_netfilter.c */
+ #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+ int br_nf_core_init(void);
+diff --git a/net/netfilter/core.c b/net/netfilter/core.c
+index 44c856c1e621..92e9852c80c0 100644
+--- a/net/netfilter/core.c
++++ b/net/netfilter/core.c
+@@ -814,6 +814,9 @@ static struct pernet_operations netfilter_net_ops = {
+ 	.exit = netfilter_net_exit,
+ };
+ 
++const struct nf_br_utils __rcu *nf_br_utils_hook;
++EXPORT_SYMBOL_GPL(nf_br_utils_hook);
++
+ int __init netfilter_init(void)
+ {
+ 	int ret;
+diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+index 283a6fc215e5..64d0b3a916dd 100644
+--- a/net/netfilter/nf_flow_table_core.c
++++ b/net/netfilter/nf_flow_table_core.c
+@@ -6,6 +6,7 @@
+ #include <linux/rhashtable.h>
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
++#include <linux/if_vlan.h>
+ #include <net/ip.h>
+ #include <net/ip6_route.h>
+ #include <net/netfilter/nf_tables.h>
+@@ -140,6 +141,10 @@ static int flow_offload_fill_route(struct flow_offload *flow,
+ 		memcpy(flow_tuple->out.h_source, route->tuple[dir].out.h_source,
+ 		       ETH_ALEN);
+ 		flow_tuple->out.ifidx = route->tuple[dir].out.ifindex;
++		flow_tuple->bridge_path = route->tuple[dir].out.bridge_path;
++		flow_tuple->out.bridge_vid = route->tuple[dir].out.bridge_vid;
++		flow_tuple->out.br_outer = route->tuple[dir].out.br_outer;
++		flow_tuple->port_vlans = route->tuple[dir].out.port_vlans;
+ 		break;
+ 	case FLOW_OFFLOAD_XMIT_NEIGH:
+ 		memcpy(flow_tuple->out.h_dest, route->tuple[dir].out.h_dest,
+@@ -636,6 +641,65 @@ static inline bool nf_flow_dst_check_gc(struct flow_offload *flow, int dir)
+ 	return ret;
+ }
+ 
++static bool nf_flow_dst_valid(struct nf_flowtable *flow_table,
++			      struct flow_offload *flow, int dir)
++{
++	struct flow_offload_tuple *other = &flow->tuplehash[!dir].tuple;
++	struct flow_offload_tuple *tuple = &flow->tuplehash[dir].tuple;
++	struct net *net = read_pnet(&flow_table->net);
++	const struct flow_offload_br_outer *outer = &tuple->out.br_outer;
++	const struct nf_br_utils *br_utils;
++	struct net_device *dev;
++	bool valid = true;
++	__be16 proto;
++	int i, n;
++
++	if (!nf_flow_dst_check_gc(flow, dir))
++		return false;
++
++	if (!tuple->bridge_path)
++		return true;
++
++	rcu_read_lock();
++	br_utils = rcu_dereference(nf_br_utils_hook);
++	if (!br_utils)
++		goto out;
++
++	dev = dev_get_by_index_rcu(net, tuple->out.ifidx);
++	for (i = 0; dev && i < tuple->port_vlans; i++)
++		dev = __vlan_find_dev_deep_rcu(dev, other->encap[i].proto,
++					       other->encap[i].id);
++
++	valid = dev && br_utils->fdb_valid_dst(dev, tuple->out.h_dest,
++					       tuple->out.bridge_vid);
++	if (!valid || !outer->present)
++		goto out;
++
++	/* Up from the inner bridge through the vlan devices to the port of
++	 * the outer one. A link vlan the inner bridge untags is not in the
++	 * encap stack, its vid is the inner bridge vid.
++	 */
++	dev = netdev_master_upper_dev_get_rcu(dev);
++	if (dev && outer->link_untag) {
++		proto = outer->link_8021ad ? htons(ETH_P_8021AD) :
++					     htons(ETH_P_8021Q);
++		dev = __vlan_find_dev_deep_rcu(dev, proto,
++					       tuple->out.bridge_vid);
++	}
++	i += outer->inner_tag;
++	n = i + outer->link_vlans - outer->link_untag;
++	for (; dev && i < n; i++)
++		dev = __vlan_find_dev_deep_rcu(dev, other->encap[i].proto,
++					       other->encap[i].id);
++
++	valid = dev && br_utils->fdb_valid_dst(dev, tuple->out.h_dest,
++					       outer->vid);
++out:
++	rcu_read_unlock();
++
++	return valid;
++}
++
+ static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
+ 				    struct flow_offload *flow, void *data)
+ {
+@@ -648,8 +712,8 @@ static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
+ 
+ 	if (nf_flow_has_expired(flow) ||
+ 	    nf_ct_is_dying(flow->ct) ||
+-	    !nf_flow_dst_check_gc(flow, FLOW_OFFLOAD_DIR_ORIGINAL) ||
+-	    !nf_flow_dst_check_gc(flow, FLOW_OFFLOAD_DIR_REPLY) ||
++	    !nf_flow_dst_valid(flow_table, flow, FLOW_OFFLOAD_DIR_ORIGINAL) ||
++	    !nf_flow_dst_valid(flow_table, flow, FLOW_OFFLOAD_DIR_REPLY) ||
+ 	    nf_flow_custom_gc(flow_table, flow)) {
+ 		flow_offload_teardown(flow);
+ 		teardown = true;
+diff --git a/net/netfilter/nf_flow_table_path.c b/net/netfilter/nf_flow_table_path.c
+index 8db396ddbd00..a18fce90b3b2 100644
+--- a/net/netfilter/nf_flow_table_path.c
++++ b/net/netfilter/nf_flow_table_path.c
+@@ -101,7 +101,11 @@ struct nft_forward_info {
+ 	u8 ingress_vlans;
+ 	u8 h_source[ETH_ALEN];
+ 	u8 h_dest[ETH_ALEN];
+-	bool needs_gso_segment;
++	u16 bridge_vid;
++	struct flow_offload_br_outer br_outer;
++	u8 needs_gso_segment:1,
++	   bridge_path:1,
++	   port_vlans:2;
+ 	enum flow_offload_xmit_type xmit_type;
+ };
+ 
+@@ -112,8 +116,9 @@ static int nft_dev_path_info(struct net_device_path_stack *stack,
+ 			     struct nft_forward_info *info,
+ 			     unsigned char *ha, struct nft_flowtable *ft)
+ {
++	struct flow_offload_br_outer *o = &info->br_outer;
+ 	const struct net_device_path *path;
+-	int i;
++	int i, n;
+ 
+ 	memcpy(info->h_dest, ha, ETH_ALEN);
+ 
+@@ -160,6 +165,8 @@ static int nft_dev_path_info(struct net_device_path_stack *stack,
+ 				info->encap[info->num_encaps].proto =
+ 					path->encap.proto;
+ 				info->num_encaps++;
++				if (info->bridge_path)
++					info->port_vlans++;
+ 			}
+ 			if (path->type == DEV_PATH_PPPOE) {
+ 				memcpy(info->h_dest, path->encap.h_dest, ETH_ALEN);
+@@ -171,6 +178,7 @@ static int nft_dev_path_info(struct net_device_path_stack *stack,
+ 			if (is_zero_ether_addr(info->h_source))
+ 				memcpy(info->h_source, path->dev->dev_addr, ETH_ALEN);
+ 
++			n = info->num_encaps;
+ 			switch (path->bridge.vlan_mode) {
+ 			case DEV_PATH_BR_VLAN_UNTAG_HW:
+ 				if (info->num_encaps == 0)
+@@ -195,6 +203,19 @@ static int nft_dev_path_info(struct net_device_path_stack *stack,
+ 			case DEV_PATH_BR_VLAN_KEEP:
+ 				break;
+ 			}
++			if (info->bridge_path) {
++				o->present = 1;
++				o->vid = info->bridge_vid;
++				o->link_vlans = info->port_vlans;
++				o->link_untag = path->bridge.vlan_mode ==
++						DEV_PATH_BR_VLAN_UNTAG;
++				o->link_8021ad = path->bridge.vlan_proto ==
++						 htons(ETH_P_8021AD);
++				o->inner_tag = info->num_encaps > n;
++			}
++			info->bridge_path = 1;
++			info->bridge_vid = path->bridge.vlan_id;
++			info->port_vlans = 0;
+ 			info->xmit_type = FLOW_OFFLOAD_XMIT_DIRECT;
+ 			break;
+ 		default:
+@@ -274,6 +295,10 @@ static int nft_dev_forward_path(const struct nft_pktinfo *pkt,
+ 
+ 	if (info.xmit_type == FLOW_OFFLOAD_XMIT_DIRECT) {
+ 		memcpy(route->tuple[dir].out.h_source, info.h_source, ETH_ALEN);
++		route->tuple[dir].out.bridge_path = info.bridge_path;
++		route->tuple[dir].out.bridge_vid = info.bridge_vid;
++		route->tuple[dir].out.br_outer = info.br_outer;
++		route->tuple[dir].out.port_vlans = info.port_vlans;
+ 		route->tuple[dir].xmit_type = info.xmit_type;
+ 	}
+ 	route->tuple[dir].out.needs_gso_segment = info.needs_gso_segment;
 -- 
 2.53.0
 
