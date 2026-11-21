@@ -1,65 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795274372;
-	b=XuJzXNDQipAYAj+2xhlVlimEvOGhnfowB74tkCJdpXonwU5wOE8ljqV9h5x6lmD2S1WC
-	 U4ZlJXP13t8GHtmXnW2Q7/DrVBZYaiBqB4cXT7GDOLz8dASezPZi509W3mLgZH2tlhZEi
-	 Ti7Ee8LR3fp1nwWmbgMQXJoo9h9nSIGBEvaMs+EaUiipXy0YG6UJXtzQ8oBw3LTQJvH8E
-	 zWPAPOKnfClLPSzSkUS4SVjznkAqxVvohQ+53z1bn3VFzEdg9eDuOiKW739ZADcSkmeQk
-	 VT5bi3KEctR+nUibaLeoET3TLqN5G146moHfmsnrmbSR8kmoU+4cR1erdt2HZsLCzCw==
+	t=1795275247;
+	b=wkhzEGGukvGou0mEpd8CcyMEBHzSC6qHL8pzlUeuNJSkkq5HsIskYtI8XaOaLngCRGHO
+	 Q3QJ93SyMysxv+w9RKh16ECYEZPn7VRrIvk2LjEUW26hQJ+qt58fV80DTIIeJw45BZqUs
+	 y0PoMqk8qOfuDWjTWITaciOHAraRdUqAlw+mFc9fEdY5Yq8U+FBiGW/Pi2miqAX+yuhWi
+	 RsZ11dwkNw5XNIXKZ62QFaQpGGNOm/9LW/8EkIUUuV5SAfI+3Uq5+pqHa4B8IiTxCZQ8w
+	 XTAgQ60zuHKUODZWm6VGOhS3X/T2XMC42abzOiqXHivHb+x4U9SnCAyU1MCrAu5abFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795274372;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=+Hgp1B6fD9zzppPldEIpxLhJwS4sYIDRauCENQnGnnQ=;
-	b=CeSFSNQhTGvHP1M9vadlUspasElz5NrCw0R9d5z9UGfUO7u+lF6W4lysVhfXAKDuRFgK
-	 +m6d/bNeNV0H0RZOjlM6daJBwz+4BwWHoVBqyqUtKpmQYn4M/l2XzMzPyWHGK/q7OVTXT
-	 WdnvGajrm0tqxIL1XNKGnBn8lf6WZDYHSp3htxVEPLnZNH+STr/efqtIREifnj3KyD/PO
-	 I89I45FdrJUAU7nuqK/laMvzReT6QDAS3hyTuIlA0yTIYekSSl6Y55zyYWNf4oA3q1jQZ
-	 x5SJaOeaqIondXPSdEhUcE9yIi14/frXhfGo+I1EsrD0BIGzVq3cJTZZG0gQVfwBgRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795275247;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=6wI6hd3wCr92yJ1fH/9oYnu0+cWq1GtimCY3YbDctlM=;
+	b=Ler6yVFiLak07QluAmyeJszkgPGTsZgs468Cto+qg8DnLeVU0LNH3WHgRDRtVw9ZEwK0
+	 a/gB4vEE1FvFJQxlx5RqonsMGQi8y0CPxz0s/OyRiqlv3vZSAICCcmhDUw0mk+ryaXG2/
+	 rvjbJkFIa1DPC+mc3+zZ7LC46h833H8wQ3ii7HAVZ0Rm/8UchMAT7TYQ41tyP1cXPef0x
+	 kBh1AgmYG5cuZq4eGQ2uQ8koR4urfQNv1HmauylazlCdpn1xjf8XHZxZYUlFeie1xii96
+	 rKBPaT0stHTna0KzEt1ytQnOkXnXChMguT80gotanAlJ+zpfpI82f4O/qcuUuTsk1vw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mFK1muRW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="TXZ6/DgU";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 92DD0606A320;
-	Sat, 21 Nov 2026 15:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEB0606A320;
+	Sat, 21 Nov 2026 15:34:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mFK1muRW
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 0D5851F000C4;
-	Sat, 21 Nov 2026 15:19:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TXZ6/DgU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924EC1F000C4;
+	Sat, 21 Nov 2026 15:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795274372;
-	bh=+Hgp1B6fD9zzppPldEIpxLhJwS4sYIDRauCENQnGnnQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mFK1muRWhfcZzkfZJte2Um4BVK0FOduikHND1SFLRCqn0GGmdlpYLOQBVo1JUEyHV
-	 bn+aZYPqiTqgFAWWH3TiX3a2aOj1cBaqZ9bgJWMsWA8fWPDV4XlSkB2ePG/7fegl+k
-	 N2UH4ljOD5CcTDAs6m1AG2cDTVMHAFF4fbqNKZ4KWzPwnxsAzeL85dwH9Ua9+8D7IF
-	 U0VwsaLOJW7Idl3ocs4CnPQAlSWTbaCPhpSIdt9lfv+Uo+NZianm1OcMleE4Y0RAh3
-	 NQ+HUntxXZocjYoYmBiJgqdBFrucAhZWHJKnKT6mFQsYZcDxJY0xMPnsbH5mcNb6j+
-	 Jx8T4wXHZ4laA==
-Date: Sat, 21 Nov 2026 10:19:31 -0500
-From: Joel Fernandes <jfern@kernel.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: paulmck@kernel.org, rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] doc: Document rcutorture.test_boost_reader_ms
-Message-ID: <20261121151931.GF946893@joelbox>
-References: <20261116194438.306618-1-jfern@kernel.org>
- <20261116194438.306618-5-jfern@kernel.org>
- <20261119093901.Gtf9Mom6@linutronix.de>
+	s=k20260515; t=1795275246;
+	bh=6wI6hd3wCr92yJ1fH/9oYnu0+cWq1GtimCY3YbDctlM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=TXZ6/DgU0Y11jqGYzn3bje7TSdZiIGiSXkZAEoSxtBv7TZXoxUGOe2vRvQKyACC5I
+	 KHgQ4RqnELsug+V0cp+sQZJDvnL0+HSow7AmFmoa0ZsoAwPZLgVjfSHd4F/AQX+zPa
+	 KwkQDRkKRgv2nhPAN5X6brheQNQw+7GvdVdyM+cKbwxRuxwrQvuqScexYOawo4/U/t
+	 E/HbGrdBYXxA19S6fnae2ZZ7/vR+EB1tnvlRd81C+UG4lyZDOa5ek4/nMXYjWW4Iwk
+	 5vbxiUfUbqrjUhtOeZV/KNcuDCMURpiiXv+JfRgraskMR95cVd4YhSnbxiPQsuD+oc
+	 vlOAWmyuH7IAw==
+From: Sasha Levin <sashal@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Nageswara R Sastry <rnsastry@linux.ibm.com>,
+	kexec@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Wake Liu <wakel@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND 0/3] selftests: target selection fixes for cross and LLVM builds
+Date: Sat, 21 Nov 2026 10:34:04 -0500
+Message-ID: <20261121153404.2241652-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261105125701.1605281-1-sashal@kernel.org>
+References: <20261105125701.1605281-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,13 +66,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261119093901.Gtf9Mom6@linutronix.de>
+Content-Transfer-Encoding: 8bit
 
-On Thu, 19 Nov 2026, Sebastian Andrzej Siewior wrote:
+Hi Andrew, Shuah,
 
-> Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Ping on this series. All three patches still apply to current mainline and
+to next-20261120.
 
-Thanks a lot for the review. I will carry your Reviewed-by into v3.
+KernelCI still hits what 2/3 and 3/3 fix: the 32-bit arm clang builds
+fail size on the undefined _init and _fini, the loongarch builds fail it
+on _DYNAMIC, and the powerpc builds skip kexec.
 
+-- 
+Thanks,
+Sasha
