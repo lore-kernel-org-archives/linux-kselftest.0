@@ -1,65 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795288364;
-	b=AjZSn+kudy0KFlGMigzWQkJ9n55yXe1rVvPTP3MLt/QMEYO62dKrpoG/IQBh36aEeMXR
-	 7WWTY/k4KHYWV4KPUblDg8D4/fmMv6wXJ++vqIbqLaL+K+ZfRDG3YE7NPB3ImhgzdN4iv
-	 ec4o/Ai2Foe2IGRG8mdgdLN/tuwDug5XeCfIcCioxVlwpinADLBrjGA3j6IYZirsk3Imi
-	 UjZpyvNcarqqUF4Ogj0PRs72VJXivwsc7YaMAxi/qr+FWYlYiqCmyVGdK6vNqKnnUNbPA
-	 8ectZLgd7JBia+6mF2e3xRZfH7y+GHjvbXS+GiWv3SVjBC/5SPCsa+HYwZigQmPFvFw==
+	t=1795288424;
+	b=Q5KwR7L/ZlXziOTRtlh12yy/uolXrhDKX9Pp/weYA2ivPDyhoArQDHoYL5hIvvC/+2N7
+	 NUIvbtfZe4TewxXfmDavV+w1BlSj/3C5/Xn72Pm4PdJeqxDiSEq4eNvuHJnkAnJcAHK1N
+	 K+pbB/beW/+ZXH9Ss0RIIeQ2MPA8vsHLJ19AiS6YxkTHyR9/u1faX8Mm1bM7j4o57wiY8
+	 Guszex+g3uwMOG+6AE253lMpQkaW7VM6wTXzBk4eDo/CAi6vtOxQHNxSZ5GZ7zOh4qgYi
+	 HCxWB/XvLnUunCq0ykTHCbiV3ZA3bE/+5r/ceHLymih85BDWGVe8M5wb/l7qv4Mc0+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795288364;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=75J+TPV4gUTQlMal80OEqhZTuIvyo01lM/tzLCah7ac=;
-	b=CZJEOXhVMI+pCjZ1cjcsuioJ0xuFhrV1eCAyxfzdEhvLRk9zLsJuM703+OQszQ1CLXUI
-	 mK+8t4Sp6Sf7GfOnqYM9TiYRlyKxh886N22SQNz8Z5Gc/M2hMy8aAwCBgKX9ijv7ZU+OW
-	 FHqfTRithJXXFDzYBRc+25ZmkuxsadGTiMFxUqkvVKWKeUJ0cna/H4SNkWMbW+RpBkwcP
-	 4MwCah4P0bl937YqLx6+pSuKKF3ajb8kBkcH3lLUiXC9UD1DUqLDYnKRFGwCvBwpba73A
-	 8ZAimO32N2BQ5FwVnop44b9FNet5Lv9ElXgq887+jJXSmfH7IgYNDPQn5+EKq/u7m3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795288424;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=XckOn5FCGtnClD4l5C6V81UfiN1tJJnMtgHtot5cyoM=;
+	b=wcTAXcxQ8g08cTpdbZnd8b15dFwnuU479BCRqkgA/BJQhL9n9pU5RgL45jXwlfReCAHP
+	 f8wCi4rdskTHq6FQrwQ1Imhztzl7e+enK/ygieaWoZfCull5dCD9+H28+CPbEUmjgXzJE
+	 dBMrgeWsgNDiH+0LCrzTRTdblXl2+gZ0lv06SCYGaW3PCY7lVmL0LijMp2uqW2K5+Azdx
+	 hntuUzFN1wbdNJZBEbCpVMVEUgKID7htAHwvgBWvc9W25GGSLCRS86uesovfxNA7KHA7I
+	 iDq61TgpQIFzsWs93i826c03UUlO1RV5YeSutzkf0rqeDYrvgQGXY0TLs6pLt66hZKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W34Ribl0;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pkkKtbZh;
+	arc=none smtp.remote-ip=209.85.219.43
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 848EF606A32A;
-	Sat, 21 Nov 2026 19:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53917606A32A
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 19:13:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53917606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W34Ribl0
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 8E93B1F000C6;
-	Sat, 21 Nov 2026 19:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795288364;
-	bh=75J+TPV4gUTQlMal80OEqhZTuIvyo01lM/tzLCah7ac=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=W34Ribl0z+7v1iFlGB13v8z4TgYNiMd+GVWrEW8Fx8AMnkQrg6P+VOBP5vlnJfkLE
-	 kbLJA7xiGiPh0mPVcF3J1GBshtd3l1vOB1EjXO29Emfao1V88o+EPc3WQyIehYbx+/
-	 6o7/jZGDLhwU6pt5IDamQKA0wSaik0am9reT73p1DVRQ1dVLJtXuHQ3IsDiUxayJrq
-	 gcFJQiaaji47qcsJEDM4kAf4Z8UkS1t8Y1/T8eQrQhxHgYW5Vk8HRAhuDta0+xrglu
-	 yXH4pJmYQKPHvutd2n4tEWoMapfHzpSlnd7OKjYNHnSbOOPkpchfCLpZZIf0f8Rj84
-	 X6Yt3/s2KQ2Og==
-Date: Sat, 21 Nov 2026 21:12:40 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	Neal Gompa <neal@gompa.dev>, Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v5 13/25] rootns: Add rootns() system call
-Message-ID: <awHtKMkyGEPTB17G@kernel.org>
-References: <20261121000844.1863324-1-jarkko@kernel.org>
- <20261121000844.1863324-14-jarkko@kernel.org>
- <awHsvz1vdlwsink0@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pkkKtbZh
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-91f0274f88cso30049146d6.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 11:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795288423; x=1795893223; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=XckOn5FCGtnClD4l5C6V81UfiN1tJJnMtgHtot5cyoM=;
+        b=pkkKtbZhKOTUxbL/OCg0rZi/Fby1Q3GGB14+TYR3BvwX2H7baGAy1qnMQc+3Rrpwc5
+         jRupK60BOCUOIEQ5EEwQWG9ErP2r2qlvt4Tjxwk4NqHxttt4QztGPJ/5+6x+0GqY6py9
+         Eus16HMneHQz2lj0tNHosb4EPg/g2ikgKQTyPrY60HbR0cujYIn7q6pYMKBqK6VCn5Yd
+         K6VPMcxeVX4JhG3lSok+yubtPd0J/ibVBp/+CYn4vJm69WOAB1d5Za531uqqnrnGd5eR
+         5/bPYosgwO+m8duZJnJW3LYblKY2wTMXEtB58gdhy1idGokmn4qaF4GTgzqHSGPhclRM
+         Sciw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795288423; x=1795893223;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=XckOn5FCGtnClD4l5C6V81UfiN1tJJnMtgHtot5cyoM=;
+        b=Wp6QuuMpd9Exfs1F3FQfwt1f4uCfDMX4ZkdY8AuSgHX3h9rZzpiSsZLNSH8MX/p++A
+         hyRgYcWDHNu96CGbkc0zj5/lA/C6zuYtGOXfsDTyyIvhMhkREQR8no6AuxADliAxIuva
+         wDwU6i5k7vORQBYa2BOFR6oRlP5YxYZLTutBqDaac27px/BitgSH+nAKd984s8fy/8gp
+         b1//gktS21+BZ6OJAsp+unYfkEYWAZn2rEGlFUlC+AB91APcdHxcyspq6M4mYI5xoLWt
+         2BLD00vrEFjXyrbjd5wVJVgtWoLW3YwTJFVl9ncSwaFhc2CQetIVc0/uBvgJs+keuLVU
+         aKkg==
+X-Forwarded-Encrypted: i=1; AL+hErEiKHtDtTSlT3QTPz3mSOyYGvYdS6UBJCDJafXmP8DC+p7Y82Z5jAkYDPNKlv+wfJshPZbgdxUvmWm07OmYVTI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/EkJjLhcCnHhQEIVFlBIlPrsbMPbCSi/1tcAfJKMfEsuVE+utj
+	FSJBpWfuKqnBX/wHbxzs5sRXSmM3adRlP4EiijqY04W7dxikrcq1/5SH
+X-Gm-Gg: AZFdTZdwDSfakqp/PZ2z2yRUhz17kzBN3cxxh1lwI98NGG8OtYVC9Tof7RyF1DPUynX
+	7IfWZBQ8sM5gbcWbocO+OargLd73DuxFKBBkeySwe/ZNrwsP3o/8KE1c18+mw34F6mATh/LvJQV
+	U87WgW2sXY/gyiNR1hqMae+vSIXYv9kzjyoJRXJQlKRAieTHWQQMPsy0UI961JUg77mH75u6q+p
+	7jkZlsz2urJCyN+vK/jPkzM6c34Gz+CloV553rGIQYtCBeEAvXrW7+d3cz+UdAGYhifBOc2pVcD
+	7VTLXp7b9DRIAJpky2YXLnxhICULQIRsdYBFl9qzjcWAIWyDfo53FpeWwClHGfnYfBYAXs2DVAb
+	ydjjkm0g2wneyPrNDFFjyVtK0uHwyfOTXPACm57wuOPhtUJsGO0JmTqdfq6ts1Tk10ZSQ2Vzo7J
+	hHhmvfJDfqwLsXSC1ONgJuGC/LJD6mzgw2EeACX/34McZ4UOor6fe4cdf4CaW9RZr1lC3E+xmob
+	rmWxBJivzi3KYL17hM6/vq1R15Jt5yyQM5gFNoziA0sYFJIcHyWAr1QqY9GkPT3AHAbkV4DW4iZ
+	Bk5bdK5jC/g1ZRO8JI4aRlTWd26A0SpGm9MB+6aKUiZBCYOZCOxq+/9b8YWd+dhbSqvv2yT3BnL
+	lzQ==
+X-Received: by 2002:a05:6214:1c0e:b0:921:41fa:7601 with SMTP id 6a1803df08f44-92141fa7702mr67137086d6.17.1795288423188;
+        Sat, 21 Nov 2026 11:13:43 -0800 (PST)
+Received: from localhost ([143.198.29.12])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-92134a24aa8sm60285076d6.42.2026.11.21.11.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Nov 2026 11:13:42 -0800 (PST)
+From: Nikolai Dokutovich <ndokutovich@gmail.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: [PATCH 1/2] selftests/coredump: drop unused <linux/fs.h> include
+Date: Sat, 21 Nov 2026 22:13:39 +0300
+Message-Id: <20261121191340.91952-1-ndokutovich@gmail.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,30 +96,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awHsvz1vdlwsink0@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 21, 2026 at 09:10:59PM +0200, Jarkko Sakkinen wrote:
-> On Sat, Nov 21, 2026 at 02:08:32AM +0200, Jarkko Sakkinen wrote:
-> > Setting up an isolated namespace environment from a multithreaded
-> > manager process currently requires helper processes to call unshare()
-> > and pass file descriptors back over sockets.
-> > 
-> > Add the rootns() system call to allocate a detached rootns instance
-> > owning a fresh user namespace alongside dedicated empty mount
-> > (CLONE_EMPTY_MNTNS), PID, UTS, IPC, network, cgroup, and time
-> > namespaces, and return its control file descriptor. Finalize the nsproxy
-> > time namespace and pin active references for the lifetime of the rootns.
-> > 
-> > Co-developed-by: David Howells <dhowells@redhat.com>
-> > Signed-off-by: David Howells <dhowells@redhat.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> Syscall name is outdated. I'll rename it as container_create(). Does
-> not have to be final name, but is a better wip name.
+<linux/fs.h> pulls in <linux/mount.h>, which defines the MS_* flags as
+macros.  <sys/mount.h> declares the same flags as enum constants, so
+having <linux/fs.h> earlier in the file makes the macros expand inside
+the enum declaration and the build fails:
 
-Something more non-generic as it inevitably would collide to something
-(did not check). I'll figure something out.
+  /usr/include/x86_64-linux-gnu/sys/mount.h:35:3:
+  error: expected identifier before numeric constant
 
-Br, Jarkko
+The include is not used by this test.  Drop it.
+
+Seen with glibc 2.35 on Ubuntu 22.04.
+
+Fixes: 59cd658eaf40 ("selftests/coredump: add coredump server selftests")
+Signed-off-by: Nikolai Dokutovich <ndokutovich@gmail.com>
+---
+ tools/testing/selftests/coredump/stackdump_test.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/coredump/stackdump_test.c b/tools/testing/selftests/coredump/stackdump_test.c
+index 1ec88937a1c2..8a681e486c3e 100644
+--- a/tools/testing/selftests/coredump/stackdump_test.c
++++ b/tools/testing/selftests/coredump/stackdump_test.c
+@@ -6,7 +6,6 @@
+ #include <libgen.h>
+ #include <limits.h>
+ #include <linux/coredump.h>
+-#include <linux/fs.h>
+ #include <linux/limits.h>
+ #include <pthread.h>
+ #include <string.h>
+-- 
+2.34.1
+
