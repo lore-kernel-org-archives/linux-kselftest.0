@@ -1,57 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.70.190.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795294829;
-	b=W21CUaVrTtTS6Lrin5aFEvE/mOb0kpjRJJKwHWUowmU0a0SXYrfDVhpFRgGP2kCjB/YD
-	 WSUj8gqt6XcbvbtxCg2Uu4TxPn7AiR/sVqJxCT/C4zLGzdHWFkaYFZ5pWi+V3SroqT0U1
-	 V0M851swfcpFXC3+MUPw8Vew+vgY8RWb6I2HhX1dQk3FSk38EN4ztlL9MDC3kbWoqtQKa
-	 cO7GclBFnHO0ZNbiRadEMfm/n3Uykz/BMd6frzMAVd95s6M3XyOYn+v+/iQ5yWOHKK3GN
-	 ZenhQYLoIw/f+ri9PmBO63mgtoZZeYMU7xhv2hnj9gqLQ3/wXl3IyWO+CV1Fct1YgMA==
+	t=1795295423;
+	b=axzKcI5yeUSlg5c3yhDEgUvOct0a5PtEMbQknNGGZKJnAwcZBtUPM1YqrbvYlVStPr39
+	 mJmfeY+OVdDzVnU0YDG6r8gwJagKH5VyuCvyH+j6G9PFhh9qpJMdfPUDS2uJ+TlFQLPDu
+	 iopgJWYJeBmGAu/WoykybuzjHiwGr2kOyDwG4JAhhc6THoBvkThNgVGK2GKex3T2xd0xB
+	 FYTnGdnsWLb8sKnWtJ4edCL7+4t4U6Jjp0dL5Bd9yzBVBlgX9cs3vWJMn4strMvHK39jH
+	 glTGMQeEyV4fNJCs6kJC4TEcmsLQ4UVAEutrh43bWBsRUO+QV8XBgMkAWcy2O455yTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795294829;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=W6sgrGq/PIPvl2dUtr0MUNu6vsfTRiTVsaaYrgPkigI=;
-	b=aKsbQmcKxL83FFojvwZk04hLmTciSWMsredVYRnFlb3qE7dHNFIcdtGAEqRV9NYaWnno
-	 /M7yiEbkKJVwqcwbbPF6/LHGjSDjNUuO3idtJI6HR+uz8cM2XVL6mUe4upF99sdBWXfYp
-	 7m+qPqZaBC5OlYCGbKVjcgRUqre+dtYwb2cjl+q2Ig76QbvQYEQmbB5VpilNurdQCQOiy
-	 XKwX/MOPnMfWK14RKxvFM2m38gdIbQFl7k1RJK9KZXHHLOmfXONAsWyDSeGInzSZI3yXi
-	 N35G0GB8xZCCjwN8ZaL5LBcHaH2bCQOWbJDloK2RJAz6nit+nlJ7azy0Fd67dwmJfmw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795295423;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spam-Status:X-Spam-Checker-Version;
+	bh=a2NKQrpvPoSFGsmTW495uzvdLwTr591GoJMHlrOmQEQ=;
+	b=DFm1qpFWuLZbbUXyYNuopor1or8Ii9lIy0pZN/J7cFPTYt7tbFr69EL984+eHJ5wKmJT
+	 ecKsB0QKU6xVlRHIhYXQbKRVULG8bOhzYTSoPjvGZpa5bzZJsR15jYCZt0eAv478cDVEw
+	 R/6ZOzL78fJG0lPtWsvC+QhceypdW8LoxG4zdl2YUGpA8Md5HjY3KuDwzD0GT3O09uDAV
+	 AhZgqBuDo/qPZMfBfNkatUypt6Eey1whHpy5jmU2MWyPaJbEPzWsU8BpJFrWT9+gDWMfW
+	 IxKLWuPXLOTgToAq8wnbciER/EWbWrdpuf+kgr8zLNMjQR70pgnUg1pv5T2on1WzKRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hVYAiXcd;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=netfilter.org;
+	spf=pass smtp.mailfrom=netfilter.org;
+	dkim=pass header.d=netfilter.org header.i=@netfilter.org header.a=rsa-sha256 header.s=2025 header.b=DY2yRP4Y;
+	arc=none smtp.remote-ip=217.70.190.124
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.190.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5491606A334;
-	Sat, 21 Nov 2026 21:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id BBB0D606A320;
+	Sat, 21 Nov 2026 21:10:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BBB0D606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hVYAiXcd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3491C1F000CA;
-	Sat, 21 Nov 2026 21:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795294829;
-	bh=W6sgrGq/PIPvl2dUtr0MUNu6vsfTRiTVsaaYrgPkigI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hVYAiXcdRBByp1AyymUjbq0o0B20zi+R9yO+B9MX0vn27z3uGVSxnz2vwXyrEs0Ed
-	 rGCanXbvjfhQ660I7Tp6cm6JWM0VcTmi8Q2YJhYzOzJpm6Hy2RQjPH2/HMB8P1YblP
-	 SaDuxOxYmVIxRMXJGB6shWjJNoXys+d7+ZJL4zn3IzgVjv+WObcTD1Cya/qF0OzXwi
-	 9FVyUjvZ/AFw3JauRVfXF6mUeNmpN4wC9L7cCq+rw4b3skTJQaEXtRAbSD55Uvl181
-	 ltC6SguimzDwWe3z/wfVaBdyB05kdKMdVR2o6JKSh0igfnAXQ2fz36Neu6NSr0Dsc9
-	 s8Rd+vVMfi6+g==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 24/27] selftests/damon/sysfs.sh: add basic tests for admin/reports/
-Date: Sat, 21 Nov 2026 13:00:08 -0800
-Message-ID: <20261121210013.130397-25-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261121210013.130397-1-sj@kernel.org>
-References: <20261121210013.130397-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.a=rsa-sha256 header.s=2025 header.b=DY2yRP4Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
+	s=2025; t=1795295417;
+	bh=a2NKQrpvPoSFGsmTW495uzvdLwTr591GoJMHlrOmQEQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DY2yRP4YffYyDEplaRFW/pR+w5WYQMzSAnb7Fk36iVoR6lArAINIhH4yZGJHAb0dY
+	 GyqdqR/PUsnmw/U/RiLkqioEnxytnFN3p4BAJKxfG1o9m6nPczFRm7LWhFIqUg6x3B
+	 1mAksXdhS4orAdS0EL0alcm8J07vtIwGf3OWUnLlbgks4fgPAdnLHquPZdTaTPA+gX
+	 1PQ4FmfxJRMnspWQtYKL0k+XLyUx8zPlGai6pNszjHpeyAv+uhEzTEj7+jKQtmj003
+	 4MebVVYykpa5sqbya9UPizyv/31eNY600yCp/P5vtvSvPuZ2T1u2Amngi0/Wr5c4z8
+	 aITV1Y64PIJ+A==
+Received: from netfilter.org (mail-agni [217.70.190.124])
+	by mail.netfilter.org (Postfix) with UTF8SMTPSA id 7E49D6005A;
+	Sat, 21 Nov 2026 22:10:17 +0100 (CET)
+Date: Sat, 21 Nov 2026 22:10:15 +0100
+From: Pablo Neira Ayuso <pablo@netfilter.org>
+To: Julius Bairaktaris <julius@bairaktaris.de>
+Cc: netfilter-devel@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Eric Woudstra <ericwouds@gmail.com>, netdev@vger.kernel.org,
+	bridge@lists.linux.dev, coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v11 2/3] netfilter: flowtable: tear down direct
+ xmit flows when the fdb entry moves
+Message-ID: <awIItwlvNhrdOdjn@chamomile>
+References: <20261121205535.1888592-1-julius@bairaktaris.de>
+ <20261121205535.1888592-3-julius@bairaktaris.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,85 +74,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261121205535.1888592-3-julius@bairaktaris.de>
 
-Update sysfs.sh DAMON selftest to cover basic file operations for the
-sysfs files under the admin/reports/ directory.
+On Sat, Nov 21, 2026 at 09:55:34PM +0100, Julius Bairaktaris wrote:
+> From: Pablo Neira Ayuso <pablo@netfilter.org>
+> 
+> A direct xmit flow that reaches a bridge port keeps sending to that port
+> when the host moves to another port of the bridge, and packets from the
+> other side keep the flow from timing out.
+> 
+> The gc now checks the fdb entry after nf_flow_dst_check_gc(), through
+> nf_br_utils_hook, and tears the flow down when the entry points to
+> another port. An entry that aged out does not tear it down, because
+> offloaded packets do not refresh it.
+> 
+> One possibility to address this issue is to subscribe to
+> SWITCHDEV_FDB_DEL_TO_DEVICE event notifications, however, this requires
+> iterating over the whole flowtable whenever a fdb entry is removed.
+> 
+> The bridge port is found from out.ifidx through the vlan devices that
+> the forward path has below the port. The flow keeps the vid the forward
+> path looked the fdb entry up in: a vlan that leaves the port untagged
+> is in neither encap stack. struct flow_offload grows from 296 to 312
+> bytes on x86_64; its slab cache is cacheline aligned, so an object takes
+> 320 bytes either way.
+> 
+> The flow is also torn down when the port no longer forwards in that
+> vid, where the bridge would no longer deliver either: the port left the
+> forwarding state, the vlan left the port, or vlan filtering was turned
+> on or off. With two bridges on the path, at most two fit in a forward
+> path, the gc goes up from the inner bridge through the vlan devices
+> between them to the port of the outer one and checks its entry as well.
+> 
+> Neigh xmit flows need no fdb check: a forward path that crosses a bridge
+> always makes the flow direct xmit, and a failed walk is not offloaded.
+> 
+> Reported-by: Eric Woudstra <ericwouds@gmail.com>
+> Link: https://lore.kernel.org/netfilter-devel/20250925182623.114045-1-ericwouds@gmail.com/
+> Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+> [julius@bairaktaris.de: find the bridge port below the vlan devices of the
+>  path, keep the vid of the fdb lookup, keep a flow whose entry aged out,
+>  check that the port forwards the vid, check both bridges of a stacked
+>  path, follow struct net_bridge_dst, build br_nf_utils.o only with the
+>  flowtable]
+> Link: https://lore.kernel.org/netfilter-devel/20261014210256.1573072-1-pablo@netfilter.org/
+> Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
+> ---
+> v11: rebased onto Pablo's xmit series: the gc checks the fdb entry
+> after his nf_flow_dst_check_gc(), which replaces nf_flow_dst_check()
+> there, and his patch now sets out.h_dest for every xmit type
+> v10: https://lore.kernel.org/netfilter-devel/20261115005555.645727-3-julius@bairaktaris.de/
+> 
+>  include/linux/netfilter.h             |  7 +++
+>  include/net/netfilter/nf_flow_table.h | 22 ++++++++-
+>  net/bridge/Makefile                   |  2 +
+>  net/bridge/br.c                       |  2 +
+>  net/bridge/br_nf_utils.c              | 35 ++++++++++++++
+>  net/bridge/br_private.h               | 13 +++++
+>  net/netfilter/core.c                  |  3 ++
+>  net/netfilter/nf_flow_table_core.c    | 68 ++++++++++++++++++++++++++-
+>  net/netfilter/nf_flow_table_path.c    | 29 +++++++++++-
+>  9 files changed, 176 insertions(+), 5 deletions(-)
+>  create mode 100644 net/bridge/br_nf_utils.c
+> 
+> diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
+> index e99afc1414cd..be85d8f68b45 100644
+> --- a/include/linux/netfilter.h
+> +++ b/include/linux/netfilter.h
+> @@ -67,6 +67,13 @@ static inline void nf_inet_addr_mask(const union nf_inet_addr *a1,
+>  #endif
+>  }
+>  
+> +struct nf_br_utils {
+> +	bool (*fdb_valid_dst)(const struct net_device *dev,
+> +			      const unsigned char *addr, u16 vid);
+> +};
+> +
+> +extern const struct nf_br_utils __rcu *nf_br_utils_hook;
+> +
+>  int netfilter_init(void);
+>  
+>  struct sk_buff;
+> diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+> index 143bcfce3678..206296483fe1 100644
+> --- a/include/net/netfilter/nf_flow_table.h
+> +++ b/include/net/netfilter/nf_flow_table.h
+> @@ -121,6 +121,18 @@ struct flow_offload_tunnel {
+>  	u8	encap_proto;
+>  };
+>  
+> +/* The outer of two bridges on the path: its vid, and how to reach its port
+> + * from the inner bridge.
+> + */
+> +struct flow_offload_br_outer {
+> +	u16				vid;
+> +	u8				present:1,
+> +					link_vlans:2,
+> +					link_untag:1,
+> +					link_8021ad:1,
+> +					inner_tag:1;
+> +};
 
-Signed-off-by: SJ Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 52 ++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 1cc7ab2d7e22f..577953ee4e631 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -510,6 +510,57 @@ test_kdamonds()
- 	ensure_dir "$kdamonds_dir/1" "not_exist"
- }
- 
-+test_producer()
-+{
-+	producer_dir=$1
-+	ensure_file "$producer_dir/report_type" "exist" "600"
-+	ensure_write_succ "$producer_dir/report_type" "user_report" \
-+		"valid input"
-+	ensure_write_fail "$producer_dir/report_type" "foo" "invlid input"
-+
-+	ensure_file "$producer_dir/producer_state" "exist" "600"
-+	ensure_write_succ "$producer_dir/producer_state" "on" "valid input"
-+	ensure_write_succ "$producer_dir/producer_state" "submit" "valid input"
-+	ensure_write_succ "$producer_dir/producer_state" "off" "valid input"
-+	ensure_write_fail "$producer_dir/producer_state" "foo" "invalid input"
-+
-+	ensure_file "$producer_dir/addr_start" "exist" "600"
-+	ensure_write_succ "$producer_dir/addr_start" 123 "valid input"
-+	ensure_write_fail "$producer_dir/addr_start" foo "uinvalid input"
-+	ensure_write_fail "$producer_dir/addr_start" "1.23" "uinvalid input"
-+
-+	ensure_file "$producer_dir/addr_end" "exist" "600"
-+	ensure_write_succ "$producer_dir/addr_end" 123 "valid input"
-+	ensure_write_fail "$producer_dir/addr_end" foo "uinvalid input"
-+	ensure_write_fail "$producer_dir/addr_end" "1.23" "uinvalid input"
-+}
-+
-+test_producers()
-+{
-+	producers_dir=$1
-+	ensure_dir "$producers_dir" "exist"
-+
-+	ensure_file "$producers_dir/nr_producers" "exist" "600"
-+
-+	ensure_write_succ "$producers_dir/nr_producers" "1" "valid input"
-+	test_producer "$producers_dir/0"
-+
-+	ensure_write_succ "$producers_dir/nr_producers" "2" "valid input"
-+	test_producer "$producers_dir/0"
-+	test_producer "$producers_dir/1"
-+
-+	ensure_write_succ "$producers_dir/nr_producers" "0" "valid input"
-+	ensure_dir "$producers_dir/0" "not_exist"
-+	ensure_dir "$producers_dir/1" "not_exist"
-+}
-+
-+test_reports()
-+{
-+	reports_dir=$1
-+	ensure_dir "$reports_dir" "exist"
-+	test_producers "$reports_dir/producers"
-+}
-+
- test_damon_sysfs()
- {
- 	damon_sysfs=$1
-@@ -520,6 +571,7 @@ test_damon_sysfs()
- 	fi
- 
- 	test_kdamonds "$damon_sysfs/kdamonds"
-+	test_reports "$damon_sysfs/reports"
- }
- 
- check_dependencies
--- 
-2.47.3
+What scenario are you trying to support with this?
