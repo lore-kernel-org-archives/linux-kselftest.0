@@ -1,70 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795275365;
-	b=S40CLJHip91ejE3gXnZ6RPMxhvmB843TL51/tEI9xcSWcnadfhXkDXCPFg/UZyiJ9Dyb
-	 RgrwvHYENMr/V+JypP1Vk2H1u683lUYNPImrFo2pIy2fI/5O7+twZ4tvX6rK0G9omaLUm
-	 R29fgdTjOuALphzAfz+cCDWW8iC4qQ82Q/AHM9Up4SopyTRWxdhfaUAkCMZUGyBNcvewT
-	 CLuTDS6reKBOi0DNclSX0+2e5bblqtvzUPWg4HrCkI8cATYtizRMsfTG9u6CRPsb4CBXP
-	 sFGwGZPLk7YrcmDrFVF6MmyDS0IXp9HuKS6UKIRoYvuYb256DcX9aE4UZCKrZrL33ZQ==
+	t=1795276704;
+	b=frhmcBqQhzf9tTfl159M2JmUkFOnJ+qs8w0PBKKkYORMEMfOPOAw3Mi5D4v/ap7veD1a
+	 tRKaz7tNkErnIS/hn1I9UqBHdYjxszss1Xnhi7Ie3ZPwUjviz7qGqHKT9QTX2y+07KHa5
+	 N7YSz2h8Il3Beu6j8mfln+N3rpjJFmDcnURn5f3Z/Ac53Sb4190OUrDOhVUSVr8nUC1Ot
+	 YoTCKIpBs7BTlByYDXr2dpqcLJflj3GWINqUWyuwOFOyyb5AMVZE4e6RpdW209l6IBaoz
+	 onpWOJbD6hAlRTjs+DvwrYNicYC/nRWow9MuPjwxP2xG8+0DU4ghHLVSgd5hKWb3OSA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795275365;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=Z3okq6kOWMyroI150hcih+Kw/W2zOxVqBWWCYspoAnY=;
-	b=44q3lEwcVrSGvd9kwaWeM1IHwrfEKhWLOlEdgNfY+AQqGy/hlwxIWPgA/escFWUZp+Zf
-	 6jq+luZ9sReQ3EuouRbWMti7CCFUEkPmU62s2A90Jp8bKouC07zmHb6icvQOBRywBuxxz
-	 s0Yy8iTs1VV1/tl9BOxGpnAxvVrQBnNGygMBE78413PR7bMruxYAUi0PabIjk+jYytWBn
-	 mM92/ne4GZpPYdcDD752lAt0QzUS44nhd37end+3khohQ14HPU7iabTsMS5H/agUW3elv
-	 Y753PHf/A+BRP9iByoVH+nqzeNNBZZWRjHG32eE+vKB0aa34EAQ+miRVWkfkfUAC5tQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795276704;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=v59nU/2/9ru5K4MWt6NBStp2evSJmM0oxZDWWYQAtDI=;
+	b=0JL6xAV00bIeAmdy65OkntNQ6/gOve1YRLAsgo1ifLPBGfQPLTSnuz5mMRUFf2cLgM9J
+	 843QfDOMijL3/d9UWWPwjz4am5I0p1fPBhLb0NKqEVxvrJOd5JfmFDoMhJ2gsbUNOSe/B
+	 AIGxBhTkRsR4Xwav0rvvwb7rCI9t78aJFiMY77FlgLMkb1H+6EDETWzHi+BZfuDy++Nhm
+	 uKca+VTEjwluL8NnNjutu7RvpQyb0QvTiZ2A4NMjSRHHObHVPq/z3VW76lblva3b8615h
+	 J4sz7mMfnQisiF/hsE5YTlJTHMTngN8x5gDzQ7zBPcynP8boBjpaV7brbJVR3pUmn3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gF3ai+yY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U08EaliS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 8FC52606A689;
-	Sat, 21 Nov 2026 15:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 97BD2606A320;
+	Sat, 21 Nov 2026 15:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gF3ai+yY
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 2441F1F000C0;
-	Sat, 21 Nov 2026 15:36:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U08EaliS
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id CCAC31F000CA;
+	Sat, 21 Nov 2026 15:58:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795275365;
-	bh=Z3okq6kOWMyroI150hcih+Kw/W2zOxVqBWWCYspoAnY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gF3ai+yYrG2zSzf82jjWgd5Btqpu87m6Yj5U9TwaTNN0B70n/vuuJ8FB0RIWn0QDM
-	 gmQgAv1FXrR7LImpHSoAEZYKGjjS2boQ1PM/+6R55z41ub3DA8o7MWMXqIZirOcMoI
-	 VztjRK423IN5iI+Av/hITWAPKaa/+S+cUWJbSFmBK1dVU+ThgshwLvYu0zSsc/nXaH
-	 QRFCcyu7lXNgj8cNooNiEdNA531mRu9nMe5Vfo9+3tjBr4Url5JPx3IPZqmPM7Ercc
-	 p2OWrsNrTxtHq4mpZzWLgGqIMu66Z+KCJeSAW5RyPquRguxxo6WYc+chkAbsLzd8In
-	 JtJDy3wGQMbOg==
-From: Joel Fernandes <jfern@kernel.org>
-To: paulmck@kernel.org,
-	rcu@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Joel Fernandes <jfern@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Davidlohr Bueso <dave@stgolabs.net>,
+	s=k20260515; t=1795276704;
+	bh=v59nU/2/9ru5K4MWt6NBStp2evSJmM0oxZDWWYQAtDI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=U08EaliSbWubcMuaRUSpPl/xtocKTKRG5+LWCQtIwOvf1KyYvw7cQGTtMNjwQj+jx
+	 Ng4QuX/N5lAp9jx7j2hYITxmWQlgrLoVVYa7nA2uyLxoanOfvKHnmbqHjP3p/WCFrD
+	 wR2GLYIVuzGz9NvoACIKUCu691qClsGC87Em4zfKUaOoSmXlVErC63uKS9A8IKcQXV
+	 JshEx6xACR1YzyWXaG3Je89a0VlL+//Y5PN4Fs+llD0UvUh/DHsT+RER+LdFLuuIYI
+	 qeEI4tunehkM1Hw5Lm2kKHa7grtpMKogAQdxNcFXoeymOIsJD6zKuEuZzxuJLG15Uh
+	 +W0MW70agCpIw==
+Date: Sat, 21 Nov 2026 17:58:20 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 6/6] rcutorture: Make BUSTED-BOOST disable RCU priority boosting
-Date: Sat, 21 Nov 2026 10:35:52 -0500
-Message-ID: <20261121153552.68941-7-jfern@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261121153552.68941-1-jfern@kernel.org>
-References: <20261121153552.68941-1-jfern@kernel.org>
+	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
+	Neal Gompa <neal@gompa.dev>, Paul Moore <paul@paul-moore.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v5 03/25] arch: Wire up userns_set_idmap() system call
+Message-ID: <awG_nK9E-UjkVgK6@kernel.org>
+References: <20261121000844.1863324-1-jarkko@kernel.org>
+ <20261121000844.1863324-4-jarkko@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,38 +68,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261121000844.1863324-4-jarkko@kernel.org>
 
-BUSTED-BOOST is supposed to fail because priority boosting is broken,
-but boosting is now always built in for preemptible RCU, so the
-scenario passed.  Boot it with rcutorture.boost_disable=1 so that it again
-exercises rcutorture's ability to detect missing priority boosting.
+On Sat, Nov 21, 2026 at 02:08:22AM +0200, Jarkko Sakkinen wrote:
+> Expose userns_set_idmap() (473, 583 on Alpha) across all architecture
+> system call tables and asm-generic unistd.h.
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+>  arch/arm/tools/syscall.tbl                  | 1 +
+>  arch/arm64/tools/syscall_32.tbl             | 1 +
+>  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+>  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+>  arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+>  arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+>  arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+>  arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+>  include/uapi/asm-generic/unistd.h           | 6 +++++-
+>  scripts/syscall.tbl                         | 1 +
+>  18 files changed, 22 insertions(+), 1 deletion(-)
 
-Testing: kvm.sh --configs BUSTED-BOOST --duration 10 now ends FAILURE,
-with 82 of 84 boost intervals reporting:
+I'll populate remaining arch's at the time when I split this. It has
+enough coverage for the time being.
 
-	rcu_torture_boost boosting failed
-	Boost inversion: reader got only 203 of 2000 ms CPU in 4003 jiffies
-
-Without the parameter the same scenario passed with no boost failures.
-
-[ jfern: Follow the rename to rcutorture.boost_disable ]
-
-Signed-off-by: Joel Fernandes <jfern@kernel.org>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
----
- tools/testing/selftests/rcutorture/configs/rcu/BUSTED-BOOST.boot | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/BUSTED-BOOST.boot b/tools/testing/selftests/rcutorture/configs/rcu/BUSTED-BOOST.boot
-index 84f6bb98ce99..8e5b6ab533dc 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/BUSTED-BOOST.boot
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/BUSTED-BOOST.boot
-@@ -6,3 +6,4 @@ rcutree.gp_cleanup_delay=3
- rcutree.kthread_prio=2
- threadirqs
- rcutree.use_softirq=0
-+rcutorture.boost_disable=1
--- 
-2.54.0
-
+Br, Jarkko
