@@ -1,100 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795255312;
-	b=x05gtMO8ldEF2C+xFoXzD6fq+1f/yCAhcPuhzfswFi3H3dKRhZQ4+FscmoSCWXLzg8Wq
-	 5CJKcNh3lShjxke4PgxnZc8XFL21w8uA4KhbmICTihXLiFAxDLz2lO7pqeh/YHwGD3Zzw
-	 7GbGh9H9iQkdrPaQGA0abzVJwwo/wcSNrkg1UITN67xtyOW2mEbS8vhYqlzlT9qWyiXK5
-	 PH+KZUZIFCGZ6eAaE5/LcPUdW3q9rHAbVRr4VV7J50fbJxQSxsSbi/27YsaZFFK+fxXd0
-	 vI/5dOd7ugyUf7VKjf/QoCzS3UntLpHulcAitQE/pF872ElGOjZcUlpEeTtQk1SSxyQ==
+	t=1795257166;
+	b=T5jt6K4LcdnXAbbSit1ol58wynWPOzR1nS0ywfB4vFOFHBj0hz/qqFAkqByxKviCAanP
+	 yW67/at9RDy0iJJGuWGphG/VPjElYGcOdv4hAdott8bnWqybhD4aSdUo73mlTL0iwUr1E
+	 J02CGKSvWSfzCdWMhr6moernRnMGuFijl7BZ4ymq+6RAdPdOD1+697kY52cJU4YSNlpH0
+	 smPorNip9SuKYpAG7UH9/tMmRJX1YlhraJnrOdqmL7X99h0uMmWnUVQexYm1a59xeRgiw
+	 nWxG6udk2tpCuaP8Hwvy/YLngi0g1blWUuU4Fl+YwrFfJIe67M+hcYuRt/j4VgcBcYg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795255312;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=0iLrgKiBXYhJ0kV7UEcjVMICphmvwPVOu/R+vQ1ryRw=;
-	b=fGUKAmtQ0JtrCDrH+PHDQGfY8+gFhEWBnbdiBcrbznVK6zR7yrzXtaGiHqUyN9QdZ/EJ
-	 Myt/XjOp/68YpaGlhPwkFHgxGvRPzb3zgBnU0SCHzP+g+8f6dvvl2pMTfrjKn1gzjGGzL
-	 eCjH6C4knGwI9fpuuBYRVbI4DV1JmugCsqnCy5WJFQQyq4/V/6W8Z3chXBuuhDI60xMKh
-	 aV2ySEKd3nP4yy+aKqqJ1x7fLX3w+9Hd15s36sfJfO+Rq8l1hZreN4hXEzbgRxvPP/j9B
-	 ZMXG7qctMaZ9h6Axe1fmD6ZrIUUn9QmGYdBOO8yt2mUrCsmOK8Ssh8K5bNYQwk1aC2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795257166;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=OvEjtdai0kpY7vmfUkOscZqwft6Dm3Bu6Xjzn36T494=;
+	b=pEk1G99CJoiGcNDJ9mQaoy4/YSsR1MJxcS8rFiegiInQ1VsxxQMiiNaStw/DLkymo2n9
+	 1lSZrzpn6O2HylADZPLnNbkPlDJPgkcFOJ+3d4kJltjfcBO+bSw6LNNG0cmia/tGlHVvT
+	 vhaJ+njILHMk4K93S6nadJVJYomWcFNaIemgMd5lyg7rbrVcKsTB5vbiKUtbGHJYKaSm6
+	 V1tOzZTEa55krOW7na7e8r1xWrPLHaW/HdWHZGjdbezhtExfJ8mO81eLHlwL9ESXhC3Ls
+	 cbONzC2tVg7m2ZL4nbT6UhdkJ0224DRSSHMZ/oaNeoGm+ngMgbw72sknnol+2XRzB3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=k9f1iayA;
-	arc=none smtp.remote-ip=192.198.163.9
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l0RLDlVu;
+	arc=none smtp.remote-ip=95.215.58.55
+Received: from mta1.migadu.com (out-55.mta1.migadu.com [95.215.58.55])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C247606A680;
-	Sat, 21 Nov 2026 10:01:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C247606A680
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9E5606A320
+	for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2026 10:32:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB9E5606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=k9f1iayA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795255312; x=1826791312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qoUwdqVJuskEKxFdpm9I3StToR1r1PnxXAishHwsR+0=;
-  b=k9f1iayAQpPZOnH+1V4iEbUHkBCI+VXH1xkBtmPrGo2v1p8j0Rj3AhOF
-   bc5brAa6yU+H+b9/U32/Oqij71Sq5TKXMl/MBi6B9w9/LiIbuGIk9JJ8d
-   z3pHXaFM9SibDCfzSVcCyrPGlw+rXdf2stntPhkL4f0C2Zx8Y1zwRcp2L
-   m8ZqGzWZhdMf8+t7wEha8dRaUuH8bZZ6NMs5sO+fqUAOCppj0CoFr5ka/
-   /CnZ06yozczv0YxApFL5r5qKU5W53KYBFcb/xgSEVvkG6jQY7YRGuyO7i
-   c5ssuOMeQbxxwqbi3nLNB9R5LkV1+9MBetoalj/ocEudsap/B6mIEJQ3w
-   w==;
-X-CSE-ConnectionGUID: KDT8Wo5GRUyULMRG7BKxuw==
-X-CSE-MsgGUID: Io1J+KlSSFGTigrcb9SKuw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11972"; a="4011156"
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="4011156"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 02:01:51 -0800
-X-CSE-ConnectionGUID: eQ+V7i+5Tga8Bp3IPgcd0A==
-X-CSE-MsgGUID: F2pB6URmS36jLm6RP/ridw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,224,1787036400"; 
-   d="scan'208";a="11161179"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Nov 2026 02:01:44 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xUhue-00000001JsJ-2qXj;
-	Sat, 21 Nov 2026 10:01:40 +0000
-Date: Sat, 21 Nov 2026 18:01:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ridong Chen <ridong.chen@linux.dev>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH-next 1/3] tick/sched: Make tick_nohz_full_mask and
- HK_TYPE_KERNEL_NOISE cpumask consistent
-Message-ID: <202611211717.qIDq0wIX-lkp@intel.com>
-References: <20261121031329.240177-2-longman@redhat.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l0RLDlVu
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=jXBhceP3FXuZJgFiHDC3WWIwTQ/bMGes850E8yWRlIg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795257163; v=1; x=1795861963;
+ b=l0RLDlVu6ieMRKuOdaACtu9WKDxhgUNTfOkQqaxxEEfCQZFvlP8YlaKiSECwp6it0BNTBiGU
+ lRf2qT8/cqBOhNtWgQXdcsm1ZwKgN2FPndwGEHVyemHL2KucJXeMbxUnDn5VY5VwthWrlk3crWL
+ DQrVp1P6pb8gEDz4Fv9e3c+0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 0390872aa68e2c24;
+	Sat, 21 Nov 2026 10:32:42 +0000
+X-Mizu-Trace-ID: 0390872aa68e2c24
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Mattia Meleleo <mattia.meleleo@coralogix.com>,
+	Michal Luczaj <mhal@rbox.co>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 00/11] fix misc sockmap issues
+Date: Sat, 21 Nov 2026 18:30:01 +0800
+Message-ID: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,37 +90,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261121031329.240177-2-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Waiman,
+This series fixes misc issues in sockmap. Most of them are old.
 
-kernel test robot noticed the following build warnings:
+Patches 1-2 fix copied_seq when a strparser is attached and SK_PASS data
+is left unread, with a selftest. It was reported by Vega and comes from
+my earlier fix, commit 36b62df5683c ("bpf: Fix wrong copied_seq
+calculation").
 
-[auto build test WARNING on tj-cgroup/for-next]
-[also build test WARNING on tip/sched/core tip/timers/nohz linus/master v7.4-rc3 next-20261119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Patches 3, 4 and 7 are old issues I ran into while reading the code:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/tick-sched-Make-tick_nohz_full_mask-and-HK_TYPE_KERNEL_NOISE-cpumask-consistent/20261120-221327
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-patch link:    https://lore.kernel.org/r/20261121031329.240177-2-longman%40redhat.com
-patch subject: [PATCH-next 1/3] tick/sched: Make tick_nohz_full_mask and HK_TYPE_KERNEL_NOISE cpumask consistent
-config: powerpc-akebono_defconfig (https://download.01.org/0day-ci/archive/20261121/202611211717.qIDq0wIX-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 3b14d7c370558b46e5f0c6494a05c492e59bf32c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261121/202611211717.qIDq0wIX-lkp@intel.com/reproduce)
+  03  strparser is initialized again while the old one is still alive,
+      after the parser link is removed and added back
+  04  an ingress redirect queues an empty sk_msg
+  07  sk_psock_backlog() takes the refcnt of the wrong psock
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202611211717.qIDq0wIX-lkp@intel.com/
+The rest (patches 5, 6 and 8-11) are the old issues that came up in the
+review of Alexei's sockmap series [1]. They are not from that series, so
+they were left for a follow-up.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+Patch 05 returns -EBUSY to a second concurrent sender, and patch 06
+rejects disconnect with -EOPNOTSUPP like TLS does. Both change what
+user space sees, see the commit messages for why.
 
->> WARNING: modpost: vmlinux: EXPORT_SYMBOL used for init symbol 'housekeeping_set_cpu'. Remove __init or EXPORT_SYMBOL.
+[1] https://lore.kernel.org/bpf/20261102072112.4160195-1-alexei.starovoitov@gmail.com/
+
+Jiayuan Chen (11):
+  bpf, sockmap: Fix copied_seq updates with strparser
+  selftests/bpf: Add test for unread SK_PASS data with strparser
+  bpf, sockmap: Fix strparser reinit after the parser link is removed
+  bpf, sockmap: Fix empty sk_msg queued by ingress redirect
+  bpf, sockmap: Fix concurrent senders on one psock
+  bpf, sockmap: Fix reconnect with a psock by rejecting disconnect
+  bpf, sockmap: Fix psock refcnt taken in sk_psock_backlog()
+  bpf, sockmap: Fix socket lock taken on a child before accept()
+  bpf, sockmap: Fix apply_bytes when a redirect sends only a part
+  selftests/bpf: Fix errno expected by the wait send mem test of
+    test_sockmap
+  selftests/bpf: Add test for apply_bytes when a redirect sends a part
+
+ include/linux/skmsg.h                         |   8 ++
+ net/core/skmsg.c                              |  44 +++++-
+ net/core/sock_map.c                           |  67 +++++++++-
+ net/ipv4/tcp_bpf.c                            |  79 +++++++++--
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 126 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/sockmap_strp.c   |  86 ++++++++++++
+ .../bpf/progs/test_sockmap_msg_apply.c        |  46 +++++++
+ tools/testing/selftests/bpf/test_sockmap.c    |   3 +-
+ 8 files changed, 436 insertions(+), 23 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_msg_apply.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
