@@ -1,65 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.134.164.83
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795284759;
-	b=Y5fnf9Hw4gF0KHFNg3vBFtpt414VbhOBI3RRgKIMa04hF1dOUUsPs/WhH+8dM/AQtGOh
-	 LahomGVo/9Hm4mORzfawlQFn1XOhiQdA6qO6kqwmIla/djuCOJrN2U4rRX12uEnpide+e
-	 +AnFvhtiYK3k3J+uxpW8YPXyk3cbaFwL2Uq6GXJeo1c7hZxtHPfAjNgLj+67i4yusfR+G
-	 CLIBxwHlSoPZADG7Q+LNSg5Eb2RZ9eaNivZUjyfHZcVsNx2oskVO/Idvqk+whqRF5lJsZ
-	 yps56OzzhGJbCZaTLbAK+D+n6GDJshWrW/v7lsBSABA4iOaoUvPqBv8JYUcYIbZr4kg==
+	t=1795285272;
+	b=HRPw1ShpAdcnHcip+QeEFicbRy8MboRPv62AaoLa76PfpNy8iKKgYtYkvf3MWb43echl
+	 qm5PjhtvbstSgPnHXIKhF9HvQx9qTxgjURfKL1q909oozFI8CEg5otIuSjDlk3+La8SmS
+	 PELs0a+/xZEo/CbcsJ3Po6i9I/VI+W8t4TYvo24srMkDpECuZtqjLM0Tcx4xx3+e6ZLmc
+	 2J9JYmZB6N7nhlcDoyNO60WmFXkJzl2Lny1U47P9DqUXFmQ9Z3v4+gkxCZ3ofkVUg6KwA
+	 CNDDsQkY31gVlj8YqERcpMtKLDK0NpjRSusJIhrbeyjwtSZl8SifG7G67PqBG64vKRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795284759;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ykgUhZMzGN/x6qhqJXjutPzw/2bCyhgJYf32RJRH3+8=;
-	b=XDU3JOIArsnq05JusHgUDLrYo9vnIO+w0idyPp8CMGBEyisPN3Z2HQacLFqVNk5+jupm
-	 qXYjLTKQuOjaz2DgD+Jushvse6uJhLZpzh+JVZ7pxg1U+wMI8owXhg6mQWSeAUr3RWTfd
-	 Dy9ao+9iJOZxnRi4zxz4dA9b3loPQtK4NVLIx7gagxIeNx9+QBariss6qSZfwSP+eiZaZ
-	 y0hQo1+sZwojRmRv1SRmX9fdCkkKSJmKrVJLMPg5v2fsdH11uRn6VREjY15645DNFI+bM
-	 H7IgAyIHl3u4hmCmHuCmwlSrc4cEB6JJaqdGnSvzsnVHTgHP51eOP7BEVxL6tL5WRiw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795285272;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=BiTHRKW3n1NEjNfmnAFRnK5r5gKkPivxMejwt+0oWMk=;
+	b=QB2ylhCd1NIkZXpuLkzJ05wckdscjkznqaQuGF06+uSAx9QmYJlf7sZL4gqslJwTfhfH
+	 gnbT0wiW7rJL+uOnqQp1QdFU302oH+UFRsGcx6Vx7/DddDg+5EwXjUleW8rUshK/1/HBm
+	 uo8vnVpJXMH8J6TbUorVdxydRhGEcVflPsKBL6MwRG7WNB6tgyCsTnpndJeUL8mLLVQAn
+	 DG4XV3CPjawVJ4cWQZSHSLrnPdP9W/kzWIfY3vUhVFasFdqQc3SJRbCNbfXPsXMOI9aUt
+	 5bmNxKFs5RVSyvRkC2lZeudBy0Ixgw48CPFGP+a6c3JAeBO/pKGO/pWFxf3N9DwbzZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gizXyHcG;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=inria.fr;
+	spf=pass smtp.mailfrom=inria.fr;
+	dkim=pass header.d=inria.fr header.i=@inria.fr header.a=rsa-sha256 header.s=dc header.b="HSPYYjR/";
+	arc=none smtp.remote-ip=192.134.164.83
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 357DF606A320;
-	Sat, 21 Nov 2026 18:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32B0606A320;
+	Sat, 21 Nov 2026 18:21:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C32B0606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gizXyHcG
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id EC9AB1F000C0;
-	Sat, 21 Nov 2026 18:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795284758;
-	bh=ykgUhZMzGN/x6qhqJXjutPzw/2bCyhgJYf32RJRH3+8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gizXyHcGyrGFgvHEvIb9lBxy4s1YyUMohTsz1YR1Kjs4SBFw7IQhXrX2OT1wM3S5u
-	 UzRI3Gypn4jjecAF62TMtKRjzuWDeJKF3tHlEkR8dHOQO71qen2XaMaRXuZ2JwxGe3
-	 SUFeClDq3oJQk0WXNB5Ijq4r/aiPanGP+qW2kCO69BVJyeM8uDii2aPFbmtzCctv5M
-	 edz8R1joRKw3mfPuioJyw3oDqceUDETJpPLdiPZL9XazsMe4uyyTuoYRGE3drNdEvu
-	 3xDY8vdIAOR/GMOSD8oHVS7BRyXA2i/6lRMXxIclEY+fZP9bJot+0RauhBALLOEWHD
-	 xxyHgZ7Fzhbrw==
-Date: Sat, 21 Nov 2026 20:12:34 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	Neal Gompa <neal@gompa.dev>, Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v5 03/25] arch: Wire up userns_set_idmap() system call
-Message-ID: <awHfEvlmG8XEGaam@kernel.org>
-References: <20261121000844.1863324-1-jarkko@kernel.org>
- <20261121000844.1863324-4-jarkko@kernel.org>
- <awG_nK9E-UjkVgK6@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=inria.fr header.i=@inria.fr header.a=rsa-sha256 header.s=dc header.b=HSPYYjR/
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BiTHRKW3n1NEjNfmnAFRnK5r5gKkPivxMejwt+0oWMk=;
+  b=HSPYYjR/Zr29tCwa2+h9g0/n5xh3obrl7x1wprN/glMjEUC5DySZRYVX
+   h+KB43PxIMO+BHb5sjYGUpJQ9369GZmDzzEgIAJit+dek0Obn019u7U0q
+   zXFF/O1PifgfgSw0olbbkz216sXWXOa4yvhXbipvRcnWWYYWSPRicPIgB
+   c=;
+X-CSE-ConnectionGUID: COjrWgzxS2qBVH8SBH+IoA==
+X-CSE-MsgGUID: 9+G7ILc6Tze+/79Je3eaeg==
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=yifei.sun@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="6.27,225,1787004000"; 
+   d="scan'208";a="306681183"
+Received: from 193.186.140.88.rev.sfr.net (HELO macbook.tail650e82.ts.net) ([88.140.186.193])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2026 19:21:02 +0100
+From: Yifei Sun <yifei.sun@inria.fr>
+To: netdev@vger.kernel.org
+Cc: Yifei Sun <yifei.sun@inria.fr>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 1/2] ipv4: keep scanning the leaf when a nexthop object is unusable
+Date: Sat, 21 Nov 2026 19:20:16 +0100
+Message-ID: <20261121182031.36626-1-yifei.sun@inria.fr>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,41 +75,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awG_nK9E-UjkVgK6@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 21, 2026 at 05:58:24PM +0200, Jarkko Sakkinen wrote:
-> On Sat, Nov 21, 2026 at 02:08:22AM +0200, Jarkko Sakkinen wrote:
-> > Expose userns_set_idmap() (473, 583 on Alpha) across all architecture
-> > system call tables and asm-generic unistd.h.
-> > 
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> >  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
-> >  arch/arm/tools/syscall.tbl                  | 1 +
-> >  arch/arm64/tools/syscall_32.tbl             | 1 +
-> >  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
-> >  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
-> >  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
-> >  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
-> >  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
-> >  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
-> >  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
-> >  arch/s390/kernel/syscalls/syscall.tbl       | 1 +
-> >  arch/sh/kernel/syscalls/syscall.tbl         | 1 +
-> >  arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
-> >  arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
-> >  arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
-> >  arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
-> >  include/uapi/asm-generic/unistd.h           | 6 +++++-
-> >  scripts/syscall.tbl                         | 1 +
-> >  18 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> I'll populate remaining arch's at the time when I split this. It has
-> enough coverage for the time being.
+With veth1 on 172.16.1.0/24 and veth3 on 172.16.2.0/24:
 
-Ugh, I have all populated but I found some other issues to fixup while
-checking this.
+```console
+$ ip nexthop add id 12 via 172.16.1.2 dev veth1
+$ ip route add 10.0.0.0/24 nhid 12
+$ ip route add 10.0.0.0/16 via 172.16.2.2 dev veth3
+$ ip route get fibmatch 10.0.0.1 oif veth3
+RTNETLINK answers: No route to host
+```
 
-Br, Jarkko
+When the /24's nexthop object has no path on veth3, fib_table_lookup()
+backtracks past the /16 in the same leaf. A socket bound to veth3 then
+ARPs for the destination instead of the gateway. Try the next alias,
+as for inline nexthops.
+
+Encountered this while work on a unrelated IPv4 SADR patch (not sure if
+this is even needed...)
+
+In QEMU with lockdep on 5e2976e52671, the selftest and device-bound
+ping and UDP failed before the fix and passed after it.
+
+Fixes: af7888ad9edb ("ipv4: Refactor nhc evaluation in fib_table_lookup")
+Signed-off-by: Yifei Sun <yifei.sun@inria.fr>
+---
+ net/ipv4/fib_trie.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/net/ipv4/fib_trie.c b/net/ipv4/fib_trie.c
+index 394df1de1281..2a670e9b0417 100644
+--- a/net/ipv4/fib_trie.c
++++ b/net/ipv4/fib_trie.c
+@@ -1591,7 +1591,7 @@ out_reject:
+ 						     &nhsel);
+ 			if (nhc)
+ 				goto set_result;
+-			goto miss;
++			continue;
+ 		}
+ 
+ 		for (nhsel = 0; nhsel < fib_info_num_path(fi); nhsel++) {
+@@ -1622,7 +1622,6 @@ set_result:
+ 			return err;
+ 		}
+ 	}
+-miss:
+ #ifdef CONFIG_IP_FIB_TRIE_STATS
+ 	this_cpu_inc(stats->semantic_match_miss);
+ #endif
+
+base-commit: d5b89d55a322b632e2b465b392a4c1d9d338db9c
