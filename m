@@ -1,69 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795364108;
-	b=TO66DzSngxwlhZntLJHBL8azNqYiCfwDDLT+GzPsW9qDxx0SKsNXKHrHdgr7q4CsApBl
-	 KriANjJeAbX5E3uxiZDXunot+tA8LYk0AtGater+yQe1yHmzK3mvCAmXmjN9Oi9EL5ffm
-	 dJndI5snOyIGMd8O6OOeH+VAD8EK0AEkTjvu0J5g7z44FpVHcZhs4SSWYFeiU2QW+v4xw
-	 GTwhTTD++bBKADJM+GWvcyNGXGkg4zVdQ0cZuqg4uqFFP8cOLbk3B2sUjDbIBDSDZ1Fwl
-	 L16yU+VwGrMf7xFRzEd6rdr5yblv5djiVmd7iD/l90ME+pVFJnm7ZQzFkd9Q+hBwPUA==
+	t=1795364941;
+	b=OH0iL+iEb8iFkJgXPoEVTlbarjRTrc1s6LIo6d5p0wPEVyr4IKtpSs6qaWyU9wZ8CSFb
+	 EJvsrj/FHj7yu0VtlQmeHOgYeq4acH5YWWywUW3WDa5/xCwd/0Ec/OMQiFAirlBT4ozpe
+	 gJ9NGdZW8XbX58PfdzU5SoV1zN3/NjmcM5tWXY6u2WYhCed5TqULQfPfHZtQ3JIi1KUpN
+	 P+aXAFHR75E8dAXiGAitCz0tT9yjP3hH64Tz/9sOpkkh2dhM5a6WvLGV0gcUEas02IEPb
+	 aeV4b76FaN1giFk+cEErTv65D3WXiri8TbjHmmupEPiq+eZHZpZ89N2NDpgKe2TIzgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795364108;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=sidA8Eikj4NCuusYzJo7PSjkBiaXOdmJGfqzy6mhVLA=;
-	b=DJfr1Sj2bqo6lmqncaN3UoxfeGrPUKSB1l6P4RhY0KBuAujEV+iXyg8hGl7A7d2gSAcp
-	 9xUYJOiW3E+mFGSpr/breMMGTMHNicSu/0KyD2iXlOagGljaLTq9DI/+dPvv5wwSlyqRP
-	 BSKFbjaiNAgIlGpHM1Sa3FM5Xje8SSCnIwxszuoZyKWzIGVArHz33OUAiV8d4zpDQaBaE
-	 91uIaJ4dmcTPISYYYNjTcEzj3KwkJR7P5A4WdIWDSwkfE3cpzLmeDXWRjxa6q7NlVuKPm
-	 DoELAq9s2MepojZkBGwrL9LRJr/aOreNSHJRNBI8XUoyrL3bYf0igvEwhibvjdozXQg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795364941;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=u54RhPh31KUc6Mfc10ElYw3foIWIoI4CAHG9i2sGAtg=;
+	b=UvtmklTYmgL+DfUhEotcRa2Wme6pwepSyTVIdjQDbp+MUOO6Tn5OhrVPHNal5YcxJFVs
+	 PiVHNghy2asy06HTsuBLYqdPh9gA867IqPUppss59TfRWs256XiJs3QQbqWURtvyivBTx
+	 NIR13WmUPlbZYhZIqs/SAZwqba6C2ByTMj3BknPQjARY153dMJD58BwqJa70fRLKNfkgz
+	 lRD5ERWK6yxEr590tjpk4smmgoOXpbjXb7gQ3a+tY8fzObsXEjRwAeYRyBcssKljwBJkm
+	 INXzGBJVTHBE6/wnxbbMnY4M92kRvV8K5IRdzhLY/xXtgu69vn6rwU5GRLBKQ2q4xEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=hallyn.com;
-	spf=pass smtp.mailfrom=hallyn.com;
-	dkim=pass header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=bS7tYBYm;
-	arc=none smtp.remote-ip=178.63.66.53
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=quD4BYCc;
+	arc=none smtp.remote-ip=209.85.210.173
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A6E60A3820;
-	Sun, 22 Nov 2026 16:15:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98A6E60A3820
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8B9606A332
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 16:29:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA8B9606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=bS7tYBYm
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
-	t=1795364099; bh=Jg096sU21vyNh6oEq9d3agCbhZ6LbEQFdC1QhQMToUA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bS7tYBYm1lS0vPKSrdKUJYU9IiyMuYvvtKSx0tDvDXpq7HM6gtnFxFLxmIStcH3et
-	 3ppCZ5Iz36iQZInpcEZVc1mPA+YAeLLFfvzVXpt8CbPOhYma9+AY/1obg1N510ZcFT
-	 TNoAIDzvrKJKCwbU6vc/PIYu+nYulKUZlZg9pWzcqrNHITN/Dcuf2QiiR0NwZelPKL
-	 nXxLf/hXrLq8tRiJWlY4hjGeZD4uK2Mzb8/pEEfr+8h/bo6vOfpXTQGLrOf+XmgHIO
-	 YeaepmOCdyiVrEZnXDVakTd3N2UHZTW8viQjzWFI8QwLR0BJj4VkcduEUpm1I5hdgx
-	 9nQqWY3upTuHw==
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 937EFB8C; Sun, 22 Nov 2026 10:14:59 -0600 (CST)
-Date: Sun, 22 Nov 2026 10:14:59 -0600
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Christian Brauner <brauner@kernel.org>,
-	James Morris <jmorris@namei.org>,
-	David Howells <dhowells@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	"Andrew G. Morgan" <morgan@kernel.org>,
-	Serge Hallyn <sergeh@kernel.org>,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Bradley Morgan <brads@mainlining.org>
-Subject: Re: [PATCH v11 1/3] userns: don't let setns() lend CAP_SETFCAP
-Message-ID: <awMVA+9Q+7mF7naH@hallyn.com>
-References: <20261117-b4-setfcap-userns-v11-0-2be11a2c32f4@toxicpanda.com>
- <20261117-b4-setfcap-userns-v11-1-2be11a2c32f4@toxicpanda.com>
- <awCB3UkCPzLGRBTk@hallyn.com>
- <awCEjJ8syhv+f4vd@hallyn.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=quD4BYCc
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8a05b210703so1106591b3a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 08:29:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795364940; x=1795969740; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=u54RhPh31KUc6Mfc10ElYw3foIWIoI4CAHG9i2sGAtg=;
+        b=quD4BYCczIn20H71M1ek8V1tvx7D334/7+k7AnuKagUB4BMWfGzVI4e9xcWDx/egRk
+         z5YyaiFK86ipmH7iK6YAxXA7D98G6nPJtabW3lSn1n29sMuc6fqvs/4VOWLICVYP+mmm
+         F3QJz3JltyXBiH6CYg9YDbZtwt1v4sLkiAGg+XQkxFGXAKLrgifNDarBAgnUaNXxwqKY
+         Y8BqBRsa9bhaJazr/2vaRBPJTNKK7Bz6lkWatYnFyGJ0TiJlGs+I38/bDBLlBFjxO426
+         QUQ71JkEHoRj9N7DQWhzji45B9ZS4br/cjc/GkyaEA7Cb8TTKJERhK3agK/lTbZt7kLQ
+         wqOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795364940; x=1795969740;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=u54RhPh31KUc6Mfc10ElYw3foIWIoI4CAHG9i2sGAtg=;
+        b=T0Nd9HFTQQscGuO0vGzZwIPeOtvIDV10q5oNNzj+kqsQSuFGLCsZEfVQ6PZDtvbIil
+         F86nd6mu9Kx6rY/6uSHqUAEuVBN31nIG4vz9vPPQz20zLatwO4rzbK4FxrAgT9xG3VQo
+         aCveq90dwUOykB6PMhEdmmd7rS8EXwrUj2hvSrjgx6g5/5gRRn7jLzzbXauk3zyCInqS
+         MIxSs/7DFsIgzSm/TmAXwHVocZDKoqDLWows11fDkvA8F0qyMTldwNV/Mpiret2ZAzLJ
+         NxVV9IVPAbfx+bErZZ+LSTZ3tlSjkD4Ums5v/YQtzRLtbShFgrR9ssG/ekwTOAFKO+Ga
+         p/aA==
+X-Forwarded-Encrypted: i=1; AL+hErEdjUZ/Z547oveb4Hb+mJuqQkE1tjMx8jfrSA1cEsHgJYvatfAwOrxpx9eLf4oFYYWUI3J9aMg6Fcpda6T0ltI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/2giRooZuCzTDSokh20QpBD28k9ewz+JZueuXMOGC33o7mrm7X
+	ggkV5+k2BDtjGpBFRaombOjM/areH5QXL+txvygjo23Ur9XT4RTN4uSb
+X-Gm-Gg: AZFdTZdfiQgk5gwICDUWTYFd0l2z+rz+Bxhwi7CmjJytpVUNNavq8iQjqQvbXSMH6mj
+	j6q0YOdt718pt59V0pKPvpMbfuDHotXzYpcdP7QcPLq7jvEJzcdBY8AXyuLNoS0jrg/XByOxEKb
+	uPfEOd/nrCIHzOQj9hB6LGBnqpMk9sTtla+9QW2Hmpk0lrfJGdSVjdOm6QXlw49luIEFygE3C6Z
+	NaPpGthEF7occtOglQbBOQP2juFQ06vJotWVSFRh++vme9zTCW2+FLHKFUGpJZ9DcxymfyYMB5H
+	+ZjnAlSV1OL69H8+TK1Q8Vpi0ENKoMsrCcm7XGrTr0Df32eV5URiyJGix7v6iej5veuasOkl675
+	12zUPYUubwaFabJfjT0x10r45X28KU99r84crwAPygXXg3MclXVxhVjIsW0IFBhZCTcqqdlYmKu
+	yN0TzkHIfKRlnzAyhEKw8kFrEaTwI6OCi+Ntwx5u/kEbWZHUV6EG9x+Xi8rgZJUN1VmucMB2TDI
+	zOpHf5uhPuMzo/RcACMRlAPppjHPalNzNGJoRjoI+crZ099Mt2WxRK5XYl9mIMWKVCY8kpgz46+
+	CiXi8IFLSqkBgXJsVawJ1nOTcmSp8EjXedD1SRwtX31WWLtwEund+3tuNQdLwwO6978eTDo=
+X-Received: by 2002:a05:6a00:3ccf:b0:89f:feb6:5d5d with SMTP id d2e1a72fcca58-8c87c95b6b8mr8202972b3a.33.1795364940056;
+        Sun, 22 Nov 2026 08:29:00 -0800 (PST)
+Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c8706844a0sm4219437b3a.1.2026.11.22.08.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2026 08:28:59 -0800 (PST)
+From: Kurt Lin <lylin1023@gmail.com>
+To: Sasha Levin <sashal@kernel.org>,
+	Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: cgroup: fall back to an unlinked file without O_TMPFILE
+Date: Mon, 23 Nov 2026 00:28:17 +0800
+Message-ID: <20261122162817.2012387-1-lylin1023@gmail.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261105011824.1143947-1-sashal@kernel.org>
+References: <20261105011824.1143947-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,79 +107,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awCEjJ8syhv+f4vd@hallyn.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 20, 2026 at 11:34:04AM -0600, Serge E. Hallyn wrote:
-> On Fri, Nov 20, 2026 at 11:22:37AM -0600, Serge E. Hallyn wrote:
-> > On Tue, Nov 17, 2026 at 07:54:24PM +0000, Josef Bacik wrote:
-> > > A uid 0 task that gave up CAP_SETFCAP can get it back by joining a user
-> > > namespace that another root task created.  Commit db2e718a4798
-> > > ("capabilities: require CAP_SETFCAP to map uid 0") keeps such a task
-> > > from mapping uid 0 into a namespace it creates itself, because tasks in
-> > > that namespace could then write file capabilities for its root user.
-> > > setns() gives a joiner a full capability set in the namespace too, so
-> > > it can do the same there:
-> > > 
-> > >   task A: uid 0, full caps          task B: uid 0, no CAP_SETFCAP
-> > >   unshare(CLONE_NEWUSER)
-> > >                                     setns(A's user ns)
-> > >                                       allowed, euid == ns->owner
-> > >                                     write "0 0 1" to /proc/self/uid_map
-> > >                                       A had CAP_SETFCAP -> allowed
-> > > 
-> > > If A's namespace already maps host uid 0, at any uid, B can set
-> > > security.capability on a file right away.  Either way uid 1000 can then
-> > 
-> > "Either way" here means whether it already maps host uid 0, or whether
-> > it has no mappings yet?  I'd just drop 'Either way'.
-> > 
-> > > run that file with CAP_SYS_ADMIN, which the selftest at the end of this
-> > > series shows on an unmodified kernel.
-> > > 
-> > > The check doesn't look at the joiner's uids, which it can change while
-> > 
-> > >From here until the 'Fix by', it is confusing whether any given statement
-> > refers to the pre-patch or post-patch state.
-> > 
-> > > keeping its other capabilities, and CAP_SYS_PTRACE doesn't stand in for
-> > 
-> > Is this a reference to the next patch?  But that's a completely different
-> > commit.
-> > 
-> > > CAP_SETFCAP.  What gets refused is a task without CAP_SETFCAP that has
-> > > CAP_SYS_ADMIN over a namespace that maps the joiner's root user, or that
-> > > has no uid_map yet while its parent maps that root user, so that it can
-> > > still be mapped.  If that is uid 0 of the parent and the creator of the
-> > > namespace didn't have CAP_SETFCAP, the join is let through: only a
-> > > writer with CAP_SETFCAP in the parent could map it then.  Containers
-> > > that don't map the joiner's root user, tasks with CAP_SETFCAP and
-> > > unprivileged users are not affected.
-> > > 
-> > > Like verify_root_map(), the check is about uid 0 of the joiner's own
-> > > namespace.  The root user of an ancestor that it maps at another uid,
-> > > and a root user stored through an idmapped mount, are left to whoever
-> > > set up that map or mount.
-> > > 
-> > > Fix by refusing setns() when the joiner doesn't have CAP_SETFCAP and
-> > > tasks in the namespace can write file capabilities for the root user of
-> > > the joiner's namespace.
-> > > 
-> > > Suggested-by: Serge Hallyn <serge@hallyn.com>
-> > > Link: https://lore.kernel.org/all/fd159e68-c613-4c7d-bfba-8af0a3f3a96e@hallyn.com/
-> > > Fixes: db2e718a4798 ("capabilities: require CAP_SETFCAP to map uid 0")
-> > > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> > 
-> > The code looks good to me,
-> > 
-> > Reviewed-by: Serge Hallyn <serge@hallyn.com>
+On Wed, Nov 04, 2026 at 08:18:24PM -0500, Sasha Levin wrote:
+> get_temp_fd() creates its page cache file with O_TMPFILE in the current
+> directory. On filesystems without O_TMPFILE support, such as NFS, the
+> open fails with EOPNOTSUPP, and with it every test that needs page cache:
+> test_memcg_current_peak, test_memcg_min, test_memcg_low, test_memcg_high,
+> test_memcg_max and test_memcg_reclaim.
 
-I've tested that unprivileged lxc still works with these two patches, so feel
-free to add
+virtiofs is another one: run from the kernel tree shared into a
+virtme-ng guest, the O_TMPFILE open fails with EOPNOTSUPP and the same
+six tests fail.
 
-Tested-by: Serge Hallyn <serge@hallyn.com>
+With this patch on cgroup/for-7.5, test_memcontrol passes from virtiofs
+(15 pass, swap_max_peak skipped as the guest has no swap), and from an
+ext4 directory it still passes as before. No cgroup_test_* file is left
+behind in either directory.
 
-to the first two as well.
+I found and tested this with the help of an AI coding assistant.
 
--serge
+Tested-by: Kurt Lin <lylin1023@gmail.com>
