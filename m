@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795362515;
-	b=qiK3MUPGyEchIwPxKw+qVLLZCuh17XZ6D10paXUQwJ7uKONGls4ctxwle29qqJe0K0Rb
-	 WehHv5LAmGyrS6YvFJ9Zf66aindh1eQxoMScw+2kzKUmepj+qQggyzeDZgN7kEOhtClko
-	 nzYW3KxQMoaBeB/ERZeeBvoevhOibl66z68qgyD6JMsFtTv/xEDEWkR7FBWn4/V15uOTg
-	 F7n8KKXn/Xe4DCvTIyIiIu1NvDPFRoCpOibRw7j4p9iotj4alW0jRbpcKtCItdPhje41U
-	 XOo3xM1Jnkhyw68UvKtE80r4SFTW0LugbHwu3Ko1MVr+9d6LQnD+VqcdY3V15oKOAag==
+	t=1795362529;
+	b=En00QGSlCmgTv9Px4m82yXI5IlCCWygLdwYVxM2cnheXRZuHsBWv7lSR8UG0sv9DnN2j
+	 ZW26mzHLzAxfyZgnAIJtMiF4H6ZArWjI1DQr2/5oT9npkR/IMaOhOUXTOP/V9imoYNHWI
+	 F6fqH7s5f+DsogVIdfMdtrqzdqVO+V1OVmgu4/hz1VOX65x5bgZiE4JilSbzP4XEl+OXH
+	 mc+in4WY2HYRAV3PWwuYULZ641il3RuVwxzDUwOVq3T/hQHoqDVN6bu5uubYzrwkrnFBU
+	 m38fA5Zzw+vMEI0rqvrUJQzv5xd89tTU72Rv7HEvfkW/OEGYgn5k7N/gHQE/RoF+j+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795362515;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795362529;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
-	bh=tpi/k1b3USKHOwp9PPTXHQukTIfxQUIEB/5FP/mhyf0=;
-	b=Z5aQzsJC2HqLKJx42wy4tt7Qnt0kSrDScnCPvQPaK4o+mI955gHpNddge33HBV5ZfeWz
-	 Dr6x9zOaqZFUu3tQfzXnkyFnyznnNmbYUEeYFqT4KBSu83btKMvlJEPRT/mQWPdTLN9r9
-	 3++gd2cyeEGFiLkf0aKgwVg/XDfHMgcyoUhi6voYDJfczxJvAUoRoUpoKWhQIPyV9fU9C
-	 emWFKrLWqK22FTgkpovJOpzaaRntaQtMTk7/QL/dxB0qsGFjgPB2CC6GF9Al5UVbXnWL3
-	 119DuioJwg29USYiKqTMzE9LQgQVMyflWSZT0UYMDYYo4MYaynR8qnai3r5ZxiKYcTg==
+	bh=esH12vzr2t3nTD+acOaBkj79Ql9gTvcuxE2yoWswOSI=;
+	b=qWf9gR/VBBEHLUCoZKkpJIfEjYAQiajfTjixTDFVCfV0BsT8HyI/QFeH8lv41hWIYQMj
+	 pyA4S+4tD73+aMMQEKx0+JIKh6CJYAYgkIHMpqQbQyKuYNHXazm1o09VoQjYidDv49g7j
+	 5HdgRwJU+WcXCaCLIRAbz4SPwINoRPfPf5ktT6AnNVEDWpX9ql2H6o1i4UfnE19xTJPeo
+	 ZPLySWuekpYhRxZrzvQPUJUc8htdTdBhHAOzRGT8w9LJEZ55DpyxM7EKlm/ERDOoSznGj
+	 6EDtT1NDmG0dQ3+SEmMlkuZJN+FNHjVA+Uale85BZMpO9i+aC5WVXdVJbYMhWPFFd/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=h2QxIDAy;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=j4mivLUg;
 	arc=none smtp.remote-ip=111.22.67.137
 Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA854606A320;
-	Sun, 22 Nov 2026 15:48:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA854606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0300606A333;
+	Sun, 22 Nov 2026 15:48:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0300606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=h2QxIDAy
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=j4mivLUg
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=h2QxIDAyQ6AjiTtLOAHPYyqgFapkERNPrI5Xg9hH/Vg+Af/dILQpJUSE9X+bMUDjn2Uo2IR62HxYv
-	 TwJq+qf842mgYqtfyLJr8yJIoSkcXhv4b2mw+Bd7QKXG9anPVphuMvVaE+YOD67YqIWwRFFg7GcS3v
-	 e7MlIwY8bjlMzFnw=
+	b=j4mivLUgRulDXixCxmSaw/I5P6UzilBrb1gt9Jtp7Go/RmyrBaVrvxLePTy5D+bl6WyXdITend46s
+	 vfgkwceGqVpv7ZR2fh+riTAqs1povUVJH56SNkJHUxPldC8gbFWBMpPC2kn7eHXBBZ49cG9qr914cv
+	 zX8syYdQ8RXY3jbI=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86b030ec0b17-d4348;
-	Sun, 22 Nov 2026 23:48:28 +0800 (CST)
-X-RM-TRANSID:2ee86b030ec0b17-d4348
+	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46b030edda13-d4093;
+	Sun, 22 Nov 2026 23:48:45 +0800 (CST)
+X-RM-TRANSID:2ee46b030edda13-d4093
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from home-ubuntu-251 (unknown[180.106.213.53])
-	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee16b030ecb7c2-72e24;
-	Sun, 22 Nov 2026 23:48:28 +0800 (CST)
-X-RM-TRANSID:2ee16b030ecb7c2-72e24
+	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6b030edcf26-72726;
+	Sun, 22 Nov 2026 23:48:45 +0800 (CST)
+X-RM-TRANSID:2eea6b030edcf26-72726
 From: Jingjing Xu <xujingjing@cmss.chinamobile.com>
 To: netdev@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org,
@@ -57,11 +57,10 @@ Cc: linux-kselftest@vger.kernel.org,
 	pabeni@redhat.com,
 	horms@kernel.org,
 	shuah@kernel.org,
-	sdf@fomichev.me,
-	joe@dama.to
-Subject: [PATCH net-next] selftests: net: py: close the wait pipe after reaping a command
-Date: Sun, 22 Nov 2026 15:48:27 +0000
-Message-ID: <20261122154827.1272059-1-xujingjing@cmss.chinamobile.com>
+	willemb@google.com
+Subject: [PATCH net-next] selftests: net: py: preserve existing namespaces on creation failure
+Date: Sun, 22 Nov 2026 15:48:44 +0000
+Message-ID: <20261122154845.1272203-1-xujingjing@cmss.chinamobile.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,57 +72,65 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commands started with ksft_wait keep the parent write end in ksft_term_fd.
-After communicate() reaps the child, that descriptor is still open, so
-each completed command leaks a pipe in the Python process.
+NetNS records its name before running ip netns add. If creation fails
+because that name already exists, destruction of the partially built
+object deletes the pre-existing handle that it never acquired.
 
-Close the parent end after successful communication and clear its saved
-value, before decoding output or reporting a failed child exit status.
-Leave paths where communication has not completed unchanged.
+Initialize the owned name to None and record it only after creation
+succeeds. Successful creation and context cleanup keep their behavior.
 
-Run this from tools/testing/selftests/net to repeat the supported pipe
-handshake. It prints 16 on the original helper and 0 with the fix:
+Run this as root from tools/testing/selftests/net. Its mount and network
+namespaces are private; it prints False before the fix and True after:
 
-  python3 - <<'PYCODE'
-  import os
-  from lib.py import bkg
-  child = ["python3", "-c",
-           "import os; os.write(int(os.environ['KSFT_READY_FD']), b'1');"
-           "os.read(int(os.environ['KSFT_WAIT_FD']), 1)"]
-  before = len(os.listdir("/proc/self/fd"))
-  for _ in range(16):
-      with bkg(child, ksft_wait=3): pass
-  print(len(os.listdir("/proc/self/fd")) - before)
+  unshare -mn --propagation private sh -ec '
+    mount -t tmpfs tmpfs /run; mkdir /run/netns
+    exec python3 -
+  ' <<'PYCODE'
+  import gc, os
+  from lib.py import CmdExitFailure, NetNS, ip
+  ip("netns add review-existing")
+  try: NetNS("review-existing")
+  except CmdExitFailure: pass
+  gc.collect()
+  print(os.path.exists("/run/netns/review-existing"))
   PYCODE
 
-Found by AI-assisted inspection. Both this reproducer and a C helper
-using the existing ksft_ready()/ksft_wait() functions confirm the fix.
-Normal completion, initialization EOF and nonzero child exit each leak
-16 descriptors before and none after; ordinary and ready-only controls
-remain clean. No kernel instrumentation or fault injection was used.
-No hardware suite was run. Timeout cleanup and a child exiting after
-readiness but before the parent's notification remain outside this fix.
+Found by AI-assisted inspection and reproduced with real ip netns calls.
+Eight ownership/lifecycle checks go from six to eight passing, including
+preservation of the original inode and marker interface. Explicit,
+automatic and empty-name creation, body exceptions and repeated cleanup
+were checked. Current in-tree callers normally use generated names;
+this is not a claim of frequent collisions. Removing a named handle does
+not necessarily destroy all namespace references. No kernel modification
+or fault injection was used, and no hardware suite was run.
 
-Fixes: 71477137994f ("selftests: drv-net: add a way to wait for a local process")
+Fixes: 1880f272d2f9 ("selftests: drv-net: construct environment for running tests which require an endpoint")
 Signed-off-by: Jingjing Xu <xujingjing@cmss.chinamobile.com>
 ---
- tools/testing/selftests/net/lib/py/utils.py | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/net/lib/py/netns.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 1727bc418073..72c5af28cc7e 100644
---- a/tools/testing/selftests/net/lib/py/utils.py
-+++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -105,6 +105,9 @@ class cmd:
-         if terminate:
-             self.proc.terminate()
-         stdout, stderr = self.proc.communicate(timeout=timeout)
-+        if self.ksft_term_fd is not None:
-+            os.close(self.ksft_term_fd)
-+            self.ksft_term_fd = None
-         self.stdout = stdout.decode("utf-8")
-         self.stderr = stderr.decode("utf-8")
-         self.proc.stdout.close()
+diff --git a/tools/testing/selftests/net/lib/py/netns.py b/tools/testing/selftests/net/lib/py/netns.py
+index 526f6aa80077..981be5f842ff 100644
+--- a/tools/testing/selftests/net/lib/py/netns.py
++++ b/tools/testing/selftests/net/lib/py/netns.py
+@@ -15,11 +15,11 @@ libc = ctypes.cdll.LoadLibrary('libc.so.6')
+ 
+ class NetNS:
+     def __init__(self, name=None):
+-        if name:
+-            self.name = name
+-        else:
+-            self.name = ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
+-        ip('netns add ' + self.name)
++        self.name = None
++        if not name:
++            name = ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
++        ip('netns add ' + name)
++        self.name = name
+ 
+     def __del__(self):
+         if self.name:
 base-commit: 2208ab00f4f213ade91ab775e7f8c4dacdcc856e
 -- 
 2.53.0
