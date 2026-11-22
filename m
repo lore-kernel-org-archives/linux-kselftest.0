@@ -1,101 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.103
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795357830;
-	b=obT+//OAiFMaLBw/pdF4YqQOLJ0ScvZILUwVC9xBoQlvvXqh0C91RqxG6/nh5Yc5nSaD
-	 pTlqt4M84u7FfABla4TDuKGYfw1VFYy61Ds0HzF3HMgBbhFuI0rgsl3AD0tzk6SPbhApo
-	 C4N8bOLIwruD59smqYcfmX3Np1J5cnv0RoSLqNWouTsOhImvZN84wV4DzsmHamqzOlYCr
-	 buq5Cl+ScS2x85jvVdg0iHIeYo62Tb7tuvIlADJPLy5WGEiPMtrmga/cEmmogNCwLiOii
-	 8ViArR1FH9Q+QMbfpKpK5Bt8FQrINBvQ7duyz2hsb4SLpQ2MOPoG86P12AsWMUqcc/g==
+	t=1795361163;
+	b=qYSQcOtu+OJiM8e2Zu107k6NS6WXa4Yz2WkIn9fIRavD9FQPTN8nQxqCG1FvugAb640H
+	 KDJVOVW7+2/V/RUxxhjOSfoaZgOioEnQAxk3LJskYbUcClnKcsquCSEeHNCTM06S+yGng
+	 cl+8CoBE0dR3z1G6FeZiM1J6czyUWlFNbbbHt8z23kSf4KhVCNlgzmE7HYUUSYnf6hEE5
+	 SH9lbDMY+6WrNh90dI1MqYCRY07LTm+4+96qiIOwtXK+3wWG2P2VlsIcfW+I4Y/+FHJ7n
+	 cyMpefKHaOguB+zDV/vQjIaatZfv7+D/9HSWb056J8NPcms9O7vp3FT3JLcOjD02APQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795357830;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=QBjN2nkZH7Gcj/ZwiauxMt+VX48sTrjkI/4AB/9s0ZI=;
-	b=skUtjmt8oovkJsDr2M6EgELJ/wapOUsTIipbTo2PEq8YZU4N8H8XUqEKJoyeDsp2hoqf
-	 CPhVYe6p72k39sBjpfNZYCN4me15BTnEoCObj3QR//Rz+Q/SJzk4+F2+WmiNrqZpf+OfX
-	 58L6NmWRKCqv4S95GDnDicY4jmNc77SH3Yjx5rU9igIT0F7e+QnpGhX3WMKTR7nCWMmwh
-	 kBgbrAxxonrX9wUZmehVbzunz3JhH/BDn4pJHPLWleRwpqIPEVF1iMDukYrGF4Y/IZBFr
-	 SctSAoBCEuWmuO1X99xAVEaKFJFahPt7m/qltQ1CdtCi1n8hDxvcT6Oa3585Nv0JJrg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795361163;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=gMQttSAKRMtW0cW3S3mXFuyL3kR87s+2b//SCKbommw=;
+	b=z41eOQmggv6qLzG9A8M39oMwAUI7dOHi5FiSFslHy+ESNXgXPjPJVT3X2U/8Kn//2jeA
+	 UfhfWEYRI6iBLqEPpN1I7jRh+4K0M/AEuSVl+21sQDLFYXKajqD7YuCyk93tE3zWLXWGH
+	 /Vwgf4RFRJAMucbRI/8GjjJ7YUMYC30AiocpHlD+T7qw+2xjM4TmHCXRTBg8KWxxVlMqn
+	 fDu1+mz84h4J+5ccTOC3cS7Up3CAwuQs6/nrnynEmrfNeoivIlO9buVz/lcco5feVuayr
+	 fKU0WvzER2YnJNflDktmA07VdNeO8P+LLlKYa3RvnRLKMIzj7d5/6XWLrcm4ybnmYdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oEudPq9y;
-	arc=none smtp.remote-ip=74.125.82.170
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=proton.me;
+	spf=pass smtp.mailfrom=proton.me;
+	dkim=pass header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=protonmail2 header.b=LLMpfnGw;
+	arc=none smtp.remote-ip=185.70.43.103
+Received: from mail-43103.protonmail.ch (mail-43103.protonmail.ch [185.70.43.103])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A54B606A320
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 14:30:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A54B606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E667606A320
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 15:26:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E667606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oEudPq9y
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-386ab9ab619so582898eec.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 06:30:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795357829; x=1795962629; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QBjN2nkZH7Gcj/ZwiauxMt+VX48sTrjkI/4AB/9s0ZI=;
-        b=oEudPq9ya2d2ROLpUFNzQ4XiHlp7ADIN+XNA6G1p9I4nYDoV3eFVMegchsVJibGgHS
-         Ny7j2I56wtelFeOltEglS6WsBi5zW1OiOGwoG/4MeAfCj/mZVYM7ppcrNgcad87bGbf6
-         xGnoHXGOdgh/O8fA31vgDbvh+oau6MewMg25hYRS1qHURsa0Fi2yjma7MLOJvYUGvAy/
-         zZu2h+AO2PKoCh8uV+UjDGJOhg7yw1I3G8j5rHWO9DCL9afUpUDpXjkOcQN9yEJC6p7E
-         V/gn2CcvVKVol4dD/AtrwK4I3lf2HWeystQgnKw3GHzfIZilzEtqs85om9xYwx4Ra+Tm
-         BNlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795357829; x=1795962629;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QBjN2nkZH7Gcj/ZwiauxMt+VX48sTrjkI/4AB/9s0ZI=;
-        b=BJejA+TPk34dx2zRrU8kGeZjP815a24XiUeYRtGqjnExLwaIe8ajBNX+f/9/wDfBEo
-         RbreZmFmuWd4mO4R7Jvuoov5q48KLsUCemwYcePvYTCMEbTJKz/YzushD3zrY/GQy9rE
-         aqkCF2O3XdHV1VfUuxii0UCYN0Q4qHMiKQsuEyspGrHGJIq+vkB4T0KnMOfoniu7GQ+x
-         kbDhd7MY30HwYnPxdDzxJsVVm78Z66AZZrIbJ2oKnMHSGpbjerE9XN60v1XdQWgWhjB0
-         KC1F388YtO2how2FkUB+mHEZ+YKnqbEW97i3cisUsdZcTHUlNW/atulA9SSRSgFKYvuv
-         Cl7Q==
-X-Forwarded-Encrypted: i=1; AL+hErEOJOH+vYXhbIYuZJ/6CD/iAvtNigoWtGDEGc8/MFflq+6/pqCLNlY1uKVTiiER1Thwb0Lnyi00Fywzg50KtDI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9yKStwl1X0hsBPlCgFc8T6fOl8b746mFyGhng8R8JnaBRKZrVO
-	9Wn1Dgnzaq46tdbCnmdwJIIFUkVa6HGokIZiTAdoh3u7zoGdHh7ZbFq7
-X-Gm-Gg: AZFdTZc9WcGrmo0QhcEXK0Xg+AZU5NvsLkZQUcixfC5isleE0wG4OZDqpuFepfVtvzW
-	mxHxgUGHHalDoh8E59Y0KJ47iF7p0JlK9mliK0z/9ZAuPhpsVp3PsMYexDeNqJUaH6Tpiz8ET5p
-	Qc8NVmrLCkT6n7japndqCoG1nVDXEZ19D+ZjIQNvQOyWH/uiC1H1qbjZfjNG4138xNjyjUaEyOK
-	cgPwIPGClFzMgCv4RyxgWDJJd1GZ98wz7KmciHTJDQpghOjd4uVdp3HRATR0dWUEMmcJhu18B7q
-	MvVDlt3a9NfxZ8EE2hqriuCr9iYU8wPWibqaZWYrk9ezBGic5+/NnHEKKrf5FbySNthxJRSpk1+
-	W3rAcZMCOg3dUMp8U/vNb950xw3mtyXVFbv2dioDU8JKvPBy3RWo3VsWR7iKTh48FQLkIBzA0Ek
-	/118mhUNDib19Vru531qA891dp1hJVMgeXFfLAKi6mEy8gCD1Gh06gHCdEO2qrTf4VAqDcMuzCo
-	jY9FdW3NVPwsV3zqw0SHwC4l4Yor+siVUfOUDBtlo2MBlGFTMiE4Z4dvo8Ir6aLYhTeMsiSweLB
-	K2pJJojm8clSVzSJVgAtzYxPVY0lh8hC5tF2mkWuA/Xu2SKKr9SqzVQsvztrliLwsRJKtnuvDuy
-	5mL+81aX6yhXcHQ==
-X-Received: by 2002:a05:7300:e9ce:20b0:36d:5102:9974 with SMTP id 5a478bee46e88-3856c2c2123mr11231914eec.2.1795357829128;
-        Sun, 22 Nov 2026 06:30:29 -0800 (PST)
-Received: from localhost.localdomain (vmi2317719.contaboserver.net. [84.247.152.64])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385667decc2sm27877901eec.9.2026.11.22.06.30.23
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 22 Nov 2026 06:30:28 -0800 (PST)
-From: Lian Wang <lianux.mm@gmail.com>
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	damon@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 00/27] mm/damon: let users report their data attribute findings
-Date: Sun, 22 Nov 2026 22:29:52 +0800
-Message-ID: <20261122143011.85844-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261121210013.130397-1-sj@kernel.org>
-References: <20261121210013.130397-1-sj@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=protonmail2 header.b=LLMpfnGw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail2; t=1795361159; x=1795620359;
+	bh=gMQttSAKRMtW0cW3S3mXFuyL3kR87s+2b//SCKbommw=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=LLMpfnGw4CysvgJE/5RHm1CKJiC9K+HGx2O1l2d9P94YxsT0L23aFOP3cBYo2Zzaa
+	 O0c3Rp5WIEaBQHyg8wEuI3EG1+Dj9H1syVwy1swS+1SwOhOn0l/oShhln2fdyhRGAJ
+	 tXYVuAsBW55C602/p1cMMPEu/V5buySsL5GdweqAT/Iol2vzvhMa9WaLDDkMonNrcC
+	 WbxLYoXMrFXctYukFgmCBgKybBBfZMicXhh4av0Tl3B2ta14XV3ZqkfNpwgRTpbygR
+	 QXfSaCS6P1lnQkT4VKxxqb/oz0W5QURmU+VLWCMPhvrh6HfLgpVli4D0ThTZvcIfUR
+	 9WVYkddr0dkgQ==
+Date: Sun, 22 Nov 2026 15:25:56 +0000
+To: Miklos Szeredi <miklos@szeredi.hu>
+From: Yun Wang <7z0423arsenova@proton.me>
+Cc: Bernd Schubert <bernd@bsbernd.com>, Joanne Koong <joannelkoong@gmail.com>, Shuah Khan <shuah@kernel.org>, fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] fuse: don't wait for a sync-init mount where nothing should wait
+Message-ID: <20261122152514.467423-1-7z0423arsenova@proton.me>
+Feedback-ID: 227066774:user:proton
+X-Pm-Message-ID: bf74e8fcf5c6afe03560bb8645e9b95de873142a
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,21 +61,143 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 21 Nov 2026 12:59:44 -0800 SJ Park <sj@kernel.org> wrote:
+From: Yun Wang <arsenova@a7snv.com>
 
-> Build a system for letting DAMON-external entities report their data
-> attribute findings to DAMON.  Let users report their data attribute
-> findings to DAMON using the report system.
+Since commit dfb84c330794 ("fuse: allow synchronous FUSE_INIT"), a
+/dev/fuse fd with FUSE_DEV_IOC_SYNC_INIT waits in fuse_get_dev() until
+the mount installs the channel.  That suits a blocking read, but other
+callers of fuse_get_dev() must not wait, and before the mount they
+sleep until the mount or a signal:
 
-Hi SJ,
+ - The last fput of an fd that was opened with O_ASYNC, which turns
+   fasync off through ->fasync.  In a kworker, which no signal wakes,
+   it never returns, and every later delayed fput waits behind it.
+   /dev/fuse is 0666, so any user can do this.  (patch 1)
+ - read(2) and splice(2) with O_NONBLOCK.  (patch 2)
+ - IORING_OP_URING_CMD, with the ring's uring_lock held, so any other
+   thread that submits to the ring waits in D state.  (patch 3)
+ - ->poll: poll(2) even with a zero timeout and with an eventfd in the
+   set, epoll_ctl(2) with ep->mtx held, and io_uring reads and polls
+   with uring_lock held.  libfuse's sync-init worker ran into this [1].
+   (patch 4)
 
-I'm reviewing the series and setting up the tests. I'm also working on
-follow-up test patches for the report queue and its sysfs interface.
+Patch 5 adds a selftest for all of them.
 
-My schedule may be a bit tight this week, but I'll follow up here as
-soon as I find any issues.
+v1 [2] had patches 2 and 3, and announced the ->poll fix.  Patch 1 is
+new.  I put it first because it is the one that matters most for
+stable, and because it applies on its own: the same change, with
+fud->fc instead of fud->chan, also fits v6.18 to v7.1.  The others only
+apply from v7.2 on; older trees would need their own version.
 
-Thanks,
-Lian
+Patch 1: the wait goes back to dfb84c330794 and needs
+FUSE_DEV_IOC_SYNC_INIT, except in v7.1: from a8dd5f1b73bc ("fuse:
+create fuse_dev on /dev/fuse open instead of mount") until
+9f6f44aa5a58 ("fuse: don't block in fuse_get_dev() for non-sync_init
+case"), which came to 7.1.y in 7.1.4, any fd that wasn't mounted yet
+waited.  As an unprivileged user, with the last fput coming from the
+unix socket garbage collector, I got the stuck kworker on 6.18.64 and
+7.4-rc2 with sync init, and on 7.1.3 also without; 6.18.64 without
+sync init doesn't wait:
+
+  kworker/3:1+events  state S
+  fuse_get_dev <- fuse_dev_fasync <- __fput <- delayed_fput <-
+  process_one_work <- worker_thread <- kthread
+
+Nothing then drains the global delayed_fput work: an unrelated tmpfs
+umount(2) fails with EBUSY, and succeeds again with the series.
+
+Patches 2 and 3: as Bernd pointed out on v1, patch 3 means a server
+that sends REGISTER before the mount has to retry it, and -EAGAIN
+doesn't say when.  Before the patch such a REGISTER sometimes went
+through after the mount woke it up, but only by timing (12 of 20 runs
+here); and a REGISTER sent before FUSE_INIT has been answered on an
+async-init connection already gets -EAGAIN today.  libfuse sends
+REGISTER only once the connection is initialized, with sync and async
+init, so it isn't affected.  Waiting for FUSE_INIT in io-wq instead
+would hold a bounded io-wq worker per early REGISTER, which can starve
+the task's other punted work.  The details are in the v1 discussion
+[3].
+
+Patch 4: ->poll can't just stop sleeping, since a poller that registers
+before the mount has no fiq->waitq to wait on, and poll(2), epoll and
+io_uring don't register again later.  It gives struct fuse_dev a wait
+queue for that window and passes the wakeups of fiq->waitq on to it
+once the device is installed; the changelog explains why pollers that
+race with the mount don't miss a wakeup.  The other way I can see is to
+give a sync-init fd its channel when FUSE_DEV_IOC_SYNC_INIT is called,
+so that it polls the same wait queue before and after the mount.  That
+avoids the forwarding, but the channel belongs to the connection that
+fuse_get_tree() creates and a failed mount frees, so I kept the change
+local for a fix.  If you'd rather go that way, I can try it.
+
+Tested in QEMU (virtme-ng, 4 vCPUs) on 7.4-rc2 (067c5c24cef2), with
+the selftest from patch 5 (24 tests):
+
+  without the series        11 of 24 pass
+  with patches 2 and 3      15 of 24: fasync_close, poll,
+                            poll_eventfd, epoll, ring_lock_poll and
+                            the four mount tests still fail
+  with patches 1 to 4       24 of 24, also with KASAN, lockdep and
+                            DEBUG_ATOMIC_SLEEP, and nothing in dmesg
+
+With the forwarding taken out of patch 4, or done only once, the four
+mount tests fail.  With the series, the kworker from patch 1 no longer
+gets stuck, SIGIO for requests after the mount still works, my other
+/dev/fuse tests give the same results as before, with and without
+KASAN, and a test that arms pollers while the mount installs the
+device passed 200 runs, and 100 more with KASAN.
+
+The patches are against 7.4-rc2 (067c5c24cef2) and also apply to
+fuse.git for-next (7f7b822d09c5).
+
+Changes since v1:
+ - new patch 1, fasync.
+ - patch 2 (v1 1/2): renamed as Bernd suggested: the O_NONBLOCK-aware
+   lookup is now fuse_get_dev(), the waiting one _fuse_get_dev(), and
+   the callers that still wait call _fuse_get_dev(), so only read and
+   splice change behaviour.  _fuse_get_dev() sits next to
+   __fuse_get_dev(), which doesn't wait and returns NULL; if that is
+   too easy to confuse, I can use fuse_get_dev_wait() instead.  I kept
+   the rename in the fix rather than a separate patch, so that a stable
+   backport needs only the one patch.  Added Bernd's Reviewed-by.
+   Rebased onto the new patch 1, which renames the lookup in fasync too,
+   and one sentence of the changelog now says that ->poll and
+   fuse_uring_cmd() are fixed in the next patches.
+ - patch 3 (v1 2/2): the changelog said the command "returns -EAGAIN
+   anyway" until FUSE_INIT has completed, which suggested the wait
+   gained nothing; it now says that a REGISTER sent before the mount
+   could still go through after the mount woke it up, by timing, and
+   that the sleep holds the ring's uring_lock.  No code change.
+ - new patches 4, ->poll, and 5, the selftest.
+
+[1] https://github.com/libfuse/libfuse/pull/1633
+[2] https://lore.kernel.org/r/20261117075632.59959.p12-0-arsenova@a7snv.com
+[3] https://lore.kernel.org/r/7bb720d9-30ef-4d3f-8ab8-81c5fe2e0fe1@bsbernd.=
+com
+
+Yun Wang (5):
+  fuse: don't wait for a sync-init mount when turning off fasync
+  fuse: don't wait for a sync-init mount in non-blocking reads
+  fuse: don't wait for a sync-init mount in fuse_uring_cmd()
+  fuse: don't sleep in ->poll before a sync-init mount
+  selftests/fuse: test a sync-init device before the mount
+
+ fs/fuse/dev.c                                 |  95 +++-
+ fs/fuse/dev_uring.c                           |  10 +-
+ fs/fuse/fuse_dev_i.h                          |  39 +-
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   2 +
+ .../filesystems/fuse/fuse_sync_init_test.c    | 532 ++++++++++++++++++
+ 6 files changed, 665 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_sync_init=
+_test.c
+
+
+base-commit: 067c5c24cef23d913b67eaaf71ae67e7169a6620
+--=20
+2.56.1
+
+
