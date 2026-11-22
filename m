@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795383131;
-	b=qTzkQwf5jq3KEwQmZsf2xcgh4D9PJEVdLwR25OHqCPXoCXDqVVFiuRmnqIt1MfbQ5vcO
-	 WKBj4IAetQAHDYA+0EwLmQJ285VV4FFmPdHpJwDcAfMI2AbvpuJszpmbgnyODtcXuhAMN
-	 9C6foS0uiszOK/e8TD6O/JHrb0FCuIAYOdzD0W21JmI5XEW2n+G18fJ9uK5HVmwSP9pcB
-	 kUPMgaudUKlIx5W8QGIj9vnqo47+vq9MANBFIR1D8ggAPlBUZaatyms8bzoAwBMFsdS5p
-	 ysMJ1qsGxyMIo4q1Sr3vog1n8FN5pEPlbKlgGNKpPSL4u3mEasjVarXCyfm1JMpB+lQ==
+	t=1795383132;
+	b=ipoktkDm5cqLDpbxTzDfnAA8oYvEu0qRB49U3VlNyyJzBwJHUyUf5VHvcjP7YpVug+du
+	 vdv2PThMobHuKH3B4NGI6tiYeFQITaVh5QlqVr7R+0J0kE53/zy/lPf+YK7SSFp8U3dq7
+	 P2DgMu/C/n3Ya4d5yYkWzh3y9oCIMd+WtXpItbv3K4KtI7D+cX6IpxrFRp8JWzOY4UcHB
+	 MzNh2tdz6AZnKkkWNs0QVRv5lz1KsBMFQMKAUDH2Jj1bNCp4UmKIPydWEiakHbzc41uRl
+	 4zgxJIT7qKBJ5WWxfzCI2JFVjAAs1McSLs10Gh7rWda61PxTwWfgMpTB4eMNQ3LVFdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795383131;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795383132;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=xqQWfWKatMYIK2o9eLxPURKMr0Gqkug9p556vmmLLro=;
-	b=WfWcVGuPl28/Q41pKtgesBty83MuY4HfkNJEZrfbloSGBnyONCrXDABqO/aZ+OL9Alra
-	 GpchjGrH+S0Ov5bH//xpCU09uxxxszGyNjp9GL3Mo999sXPqsLXemlN1L78igOoDglZ6X
-	 9bYWBTGnq9S1ceG9CfRi2lx/1hYyO0glbCzRHzu30EAwOZwF4gBTwpo6J6pTt4jqNHF6P
-	 WjWGJO5fmMF7/KJYG9h8tr6vKvrQXDTewrlS3EBcMpHcoEdKD82aOaDhcw6qj9G8C1PYQ
-	 135YGOgPPZLxb9DmqBYtbfqw25QiUNS1WaYvaoG5TnYQnpOaAVw5V2eag2sgtgJ9FxA==
+	bh=QpXJymSL48oHV5Gty6tREKnyHspYs4HJDm5tg/o9etQ=;
+	b=U3KAdvxDhwVNEOwBCinR1k/8LtUDhW9wDeimNNU9AECSIeqkckNX5xosTiQNuUf6qxvc
+	 h2fZ+WxB0+j1DoqZpVXeXwW4b5nwVp3938bmaZwZldfhzR4bGNm+HY0HiLLU6fruq9RGU
+	 ZznK/2RStkcpR83y6gJA6U0DkcG4QI6WxvBKG1d+XhzPo4toZdKIpGVKvH5p1WmUrxm29
+	 8b40HC+EaEP9yvO2Gy/4TEBLJP3tuICFrRDnZdMLY6Y0qQLsAbGGK/wfdGRGWly7oVwNL
+	 owlDdqBfXvbiiukkaxNoso0E2iK4EMY9Kjg70vi+vwhhDeG0GLIQezqZOdPVUWxSnRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=corp.free.fr;
 	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=lWwcf02L;
+	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=TxDaeuln;
 	arc=none smtp.remote-ip=212.27.60.169
 Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4144606A33B;
-	Sun, 22 Nov 2026 21:32:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4144606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C3E606A33C;
+	Sun, 22 Nov 2026 21:32:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41C3E606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=lWwcf02L
+	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=TxDaeuln
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1795383129; bh=qPmG8P+hFAtTUxkbaEcSp1PyPgXZo0DXS68/FvOLOG8=;
+	t=1795383129; bh=9RTIFcQyd9tjIJwC9OkGdscO68l46ebZ0ckUIssCKmo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lWwcf02LVJV9TAAQ/YKkO7Hop5lLjsm3vAVzs+WyY8xF6dF+HVAO7kDxVM1TN+Lz/
-	 i7CVJudE6+9ueESKZDn6NYwz8jAfuesrOG4H6KlWQdWUQqOOcIXrN0sV40ltUZWXiM
-	 h2G02m/bbrzgP8bAqvekWl3VLEerl4+WrsDu1ECxxo2TO2no/h9LsCVQexNoszob9R
-	 HvJudc0br1+Ng192Sn4CACCP5lhe2JLren/f3u11+Ac68e/gCAnamSkGAzcBYxWsfW
-	 ZZTwvPh5P66O+q0Ic031tC4eBMZypzVaTCHwdStnNohGVA5hPfAzzMtM35xUz7p+fV
-	 0a/z2rQNtE/Ow==
+	b=TxDaeulnvByl3AbhOx1Mjm6LekRHIpx4JE8HM3iqE9aqoxBmmCeBIcwj9XjZJQ7+g
+	 7sh+GQhxxSO9IH2WvIsPw78YwGchtOEomrVtWVHjphODQoneE0kdp8iPTDAk7htgB5
+	 u7guwG1Ws0GfJJJORRYiRnaxOem942ee1ZeVzRKmxjkIquqqqX5dbdhWWtHuhm7+70
+	 MGiUx9+f3Wi+PDJnxGBDyg+fRUlTFRyVudGtGnuksNsCrd8fsl5ccYiEcTXRjuc1Kn
+	 JMabWolZOJFGWdVANTqcp6Y3vpSqjdbvjNfErIC+rVEaCgcrF0I7HZZQHUvY2duuSC
+	 uQLF3QOpis8vA==
 Received: from lnxos-dev.home (82-66-150-212.subs.proxad.net [82.66.150.212])
-	by rcs.proxad.net (Postfix) with ESMTPSA id E8E4344C0B40;
-	Sun, 22 Nov 2026 22:32:08 +0100 (CET)
+	by rcs.proxad.net (Postfix) with ESMTPSA id 6D82044C0B49;
+	Sun, 22 Nov 2026 22:32:09 +0100 (CET)
 From: Alexandre Cassen <acassen@corp.free.fr>
 To: Saeed Mahameed <saeedm@nvidia.com>,
 	Leon Romanovsky <leon@kernel.org>,
@@ -73,9 +73,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	oss-drivers@corigine.com
-Subject: [PATCH net-next v3 04/11] net/mlx5e: TC, refuse a tunnel key wider than the VNI
-Date: Sun, 22 Nov 2026 22:31:52 +0100
-Message-ID: <20261122213200.3207385-5-acassen@corp.free.fr>
+Subject: [PATCH net-next v3 05/11] net/mlx5e: TC, reject a partial tunnel key with tunnel mapping
+Date: Sun, 22 Nov 2026 22:31:53 +0100
+Message-ID: <20261122213200.3207385-6-acassen@corp.free.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261122213200.3207385-1-acassen@corp.free.fr>
 References: <20261122213200.3207385-1-acassen@corp.free.fr>
@@ -90,78 +90,51 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-VXLAN and GENEVE flows truncate the key and the mask of enc_key_id to a 24
-bit VNI. An exact key above bit 23 already selects the wrong VNI. Flower
-is about to accept partial masks. A mask that only covers bits above 23
-would then match any VNI. Refuse a key that no VNI can match. GRE keeps
-its 32 bit key.
+Tunnel mapping stores the matched tunnel key. The metadata of a packet
+missing in hardware after a goto chain or a sample is restored from it.
+A partial enc_key_id mask would restore a wrong tunnel id. Flower is about
+to accept such masks.
+
+Tunnel options with a partial class or type are already rejected here.
+Rules without tunnel mapping keep working.
 
 Found by an AI code review agent while auditing the users of enc_key_id.
-Confirmed by code inspection. The wrong match was not triggered. Tested
-on ConnectX-7 with firmware 28.48.1000 in switchdev mode on VXLAN, GENEVE
-and gretap devices.
+Tested on ConnectX-7 with firmware 28.48.1000 in switchdev mode.
 
-Fixes: bbd00f7e2349 ("net/mlx5e: Add TC tunnel release action for SRIOV offloads")
-Fixes: 9272e3df3023 ("net/mlx5e: Geneve, Add support for encap/decap flows offload")
 Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h       | 3 +++
- .../net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c    | 8 ++++++++
- drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c | 8 ++++++++
- 3 files changed, 19 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h
-index 6873c1201803..d7c778bbb2ef 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h
-@@ -13,6 +13,9 @@
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+index 1d35c97aea0b..ba3aef3c8063 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+@@ -2257,6 +2257,7 @@ static int mlx5e_get_flow_tunnel_id(struct mlx5e_priv *priv,
+ 	struct tunnel_match_enc_opts tun_enc_opts;
+ 	struct mlx5_rep_uplink_priv *uplink_priv;
+ 	struct mlx5_flow_attr *attr = flow->attr;
++	struct flow_match_enc_keyid enc_keyid;
+ 	struct mlx5e_rep_priv *uplink_rpriv;
+ 	struct tunnel_match_key tunnel_key;
+ 	bool enc_opts_is_dont_care = true;
+@@ -2265,6 +2266,16 @@ static int mlx5e_get_flow_tunnel_id(struct mlx5e_priv *priv,
+ 	u32 value, mask;
+ 	int err;
  
- #ifdef CONFIG_MLX5_ESWITCH
- 
-+/* VXLAN and GENEVE match registers hold a 24 bit VNI */
-+#define MLX5E_TC_TUN_N_VNI BIT(24)
-+
- enum {
- 	MLX5E_TC_TUNNEL_TYPE_UNKNOWN,
- 	MLX5E_TC_TUNNEL_TYPE_VXLAN,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c
-index bf969212cc77..ee04fcdca6ff 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c
-@@ -141,6 +141,14 @@ static int mlx5e_tc_tun_parse_geneve_vni(struct mlx5e_priv *priv,
- 	if (!enc_keyid.mask->keyid)
- 		return 0;
- 
-+	if (be32_to_cpu(enc_keyid.key->keyid) >= MLX5E_TC_TUN_N_VNI) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Tunnel key does not fit the 24 bit VNI");
-+		netdev_warn(priv->netdev,
-+			    "Tunnel key does not fit the 24 bit VNI\n");
-+		return -EOPNOTSUPP;
++	/* The mapping restores the tunnel id of a packet missing in hardware */
++	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID)) {
++		flow_rule_match_enc_keyid(rule, &enc_keyid);
++		if (enc_keyid.mask->keyid != cpu_to_be32(U32_MAX)) {
++			NL_SET_ERR_MSG_MOD(extack,
++					   "Partial match of tunnel key in chains isn't supported");
++			return -EOPNOTSUPP;
++		}
 +	}
 +
- 	if (!MLX5_CAP_ESW_FLOWTABLE_FDB(priv->mdev, ft_field_support.outer_geneve_vni)) {
- 		NL_SET_ERR_MSG_MOD(extack, "Matching on GENEVE VNI is not supported");
- 		netdev_warn(priv->netdev, "Matching on GENEVE VNI is not supported\n");
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-index 467fbe43b89e..33911e72d20d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_vxlan.c
-@@ -173,6 +173,14 @@ static int mlx5e_tc_tun_parse_vxlan(struct mlx5e_priv *priv,
- 	if (!enc_keyid.mask->keyid)
- 		return 0;
- 
-+	if (be32_to_cpu(enc_keyid.key->keyid) >= MLX5E_TC_TUN_N_VNI) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Tunnel key does not fit the 24 bit VNI");
-+		netdev_warn(priv->netdev,
-+			    "Tunnel key does not fit the 24 bit VNI\n");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_OPTS)) {
- 		int err;
- 
+ 	esw = priv->mdev->priv.eswitch;
+ 	uplink_rpriv = mlx5_eswitch_get_uplink_priv(esw, REP_ETH);
+ 	uplink_priv = &uplink_rpriv->uplink_priv;
 -- 
 2.43.0
 
