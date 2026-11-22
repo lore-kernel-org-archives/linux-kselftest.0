@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795335627;
-	b=EYQ7WR/8GYh2aFsgAFAcPcRLp+9xcSXgJdxLDfXy+LFApp4v/hO/2CEEou+6QQlOuGQq
-	 T0aFMiIS9RL4N9ktK4Yl83M1eSR6P8IZxdtRHWAc8THotduuTGWomGhRXYQ+UIAa74WM2
-	 /PfrZ5MqGedgvciqBaiAxv6qxgwZk1W0+wCjoIq2FOh0ajA69pngXrVf0xEmBnByPC/6T
-	 W11uIqUoyv48iC8WeBE1Cv/erAm8u455j5ZKuchZ6QTBQSfpCp7zbu2+VwT47Tngon9NM
-	 D4OZEsJCBo8rtcSCq2hwXS33X/VI9uZ6Y77sN8DYfhfSoFypQ69EYZsIPyv+Vus+oAw==
+	t=1795335629;
+	b=qXZP2LOk96Y64EzfvO+u0zlzhqvcwL/IQbpDxJBQIDigKBGyCYzNf4vHMioD0TZXHdET
+	 c4ecgN9KKz+QmOu0Gu0j55dsX5aTEYQYuCm1eIn73K0fiOnnU01vkmASKcXLoWbFerW4Z
+	 buKQqmVJQhEnMLDKiHCwS4r8YkL0QwhdKVPBYyE7zfx1tjOdJTDxURc5qYzrheCt9DvcJ
+	 HouSTmG6/04riSgBwMB9t2locUpOAYXUQyItYyUL+XhheAiU15GpqwP4ACvZwgLWFXePd
+	 d5s1lKvqV6kOlVWpdf4oG0y6basjnPYV3R32rZnlO2oiZE88esD4idVDW4KZYsD0T9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795335627;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795335629;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=+LgGMW7nTxTISYX0jXbZvoZG+Dao4TWx626ci6dSPaQ=;
-	b=vpmH62jpj8q/ALu/L1HpcQrGwYjeDPuybHZ5jNQW4NgS0LQ2/M4pLFlX66b+QGMWSBuH
-	 3JA0JzbK1Cl8D+YBocBpVHn9OP09bUAax7C7Vp1SCcyZm8vEEXz0vR/sanec8xK3P+DMl
-	 vNFLlg7hULkRIWECRw0KOweOznOs9EB8Hwwr3IN92uUVHY2yKyfR1ul2DCs4dX+UGVlAq
-	 CrLsj4fWYYCFYaCV3MFriJDrAw3sFp8J2+kUxqtnY1UnpLB7NWvI2s9XwBOLRlPk6BMEU
-	 mOEPZlwEemv9c5mbQDW96JuOWLgOxEb1lN1ZDSB9evumrJwjJNG2xr01zBttgpTekZQ==
+	bh=8Rf2VcTDmTGn3qRzDj6gU5ruc9gUgxiYv5dADr6Q67g=;
+	b=4c4l8nvB9LS4UgIghmrINsA1l2I5JcRs8tYOkmprLT9OC59nk2DEhsneyZZD/eYpNBLX
+	 M6Mq4G8pBsnSpmak3y4AKAs1g7mQnjG4diiwZRF40oM7D2zfx4/c995TB8nD/fryMmIUr
+	 fDqsX/vhCcsJXn9htwCV91NwI+PFFy/hkIAW7b2rgPHenHkvLuLoS5tYnk2Ss0SyVBiOt
+	 5GjYcJwOFV6vif5hCggPi1UbSJDEYDRLsjpTqppBMt7/jZPkhwZOp7yJFwkd5dpbG67Kj
+	 mSm31X6dIIbdi5fOkyLNuhwko1EN8Xwl3sOKaLQizh2eDHGpkVp26+Dg3fSOl+myEaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pp3oXB79;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pta+Vpza;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9EF606A330
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 08:20:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B9EF606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C94E606A334
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 08:20:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C94E606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pp3oXB79
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1b3ae17c536so2269109c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 00:20:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pta+Vpza
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-33c35f5ca6cso3270911eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 00:20:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795335626; x=1795940426; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795335628; x=1795940428; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+LgGMW7nTxTISYX0jXbZvoZG+Dao4TWx626ci6dSPaQ=;
-        b=Pp3oXB79JLI44rb+LzAxkq2F70ck7chyQolda6wVEuCrbwWSqruUYXBjG61r0N2uvy
-         wjLwWmy/wGEBMAmiuskahsZWVRzeG0NDGrAl9fM9pAGlp04jKHVlgJfRbKLYFea+e3l4
-         ATpV0XIBcG3cHB+fSv6ufnRvnMLgvS+0XNkQF+d249J9eD7zy018hv09Xo5Kxmo8h5LH
-         JaTJZB6wPJkBMhcMmHsCwEn2Q+KcnV9yDkxRWrABBX4nP7Q48ujqLqNAaNGuqttiWe9P
-         WM1xXyjO/rJXEMMLgczlETtSa+jnCoaF1fVr2PMHEnGrZvcAn6gVJsP27+ydOuH3MfPn
-         5V9g==
+        bh=8Rf2VcTDmTGn3qRzDj6gU5ruc9gUgxiYv5dADr6Q67g=;
+        b=Pta+VpzalHvscN9FNpEMJ7SQJPTNW2HKZIQ7Oq8+JPHTB2n54/14qMUfz3/SBpcEEv
+         abAtMsKOzmP0BjViMInWhRoKADhN4iKxCdu14bYvL7zIkMAzU33mI2HAQejsMzBgRd6/
+         z3i3v/yJhuV00RPjVx3x4AtEOeeW9wW38YUsyHjnvmnHaaOggO5sQtalBW8ZLphXTzIo
+         R1zEOmox9bGllcTXH462ooA+mrViUbO+OF0sVxNEEYGh/vIXO+Vhh+55aTNJj4p+cG6y
+         GML4o5RaHEr3ordQDyvtvw9m9j+mN5Qwy4UIzuGBzGO2RWLYhebFcH2k62nuqdVtrbRJ
+         HNPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795335626; x=1795940426;
+        d=1e100.net; s=20260707; t=1795335628; x=1795940428;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+LgGMW7nTxTISYX0jXbZvoZG+Dao4TWx626ci6dSPaQ=;
-        b=LKzNoVCC9RgOx3vzTMTFQxmCBxJfGLroVNDZRO4zrCQ7XYwHjcKn4oyc5tZjnwskL7
-         LJMt0ts4jU8/6DIQtE4oz5jS++zYpctZzm+Aot7aeEpPrVcikfNREdBdmPlol2rt0btF
-         qVF7rPbn+It4a56OIfyZd48sz9paXBJyz5IyfnRYXLJtie7aUQJ4Y8/0G+fuoK96Rw5Q
-         koqqzRmDaN8Ahc1QwE5P3nMirRaqZ9UpszZDGW5oS/b4MY/6KIwNc6EgsnR5zsID52Tw
-         VlEjxB1NXILIRS8um1QiSdQZtJWWv6fDnke0zwstP5LQMHfUTp6VHzrWvOnKi6WFpGcp
-         st1A==
-X-Forwarded-Encrypted: i=1; AL+hErEw66ubWRrEtA6eCGkOgQwlB/bbxuubJh2e6Q7hgn2h7IYBOT7tqDJQlKbVoli/3J05fP0T+KSdsdfy1sG879w=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+XtMFX9gl8icwSHdlbY/APFtu0/AzbKIJJuOTsIU8xLNaBwIoP
-	Sx0p5YiVnp2Wxz0QZs8ytePqbt5jWqYNefAde3296m9hb48onD4C/JMxUutZOh69mVY3EWpNFxt
-	Yueet45y/XVfoZuoU+8eI65Rutg==
-X-Received: from dlaj4.prod.google.com ([2002:a05:701b:2804:b0:1a1:3ce6:560b])
+        bh=8Rf2VcTDmTGn3qRzDj6gU5ruc9gUgxiYv5dADr6Q67g=;
+        b=vkxLd0j0Jim/p3imGX/O8oDsVyk4YnZ/xYJrpxC/1N0TQXK5mH+PQXyfbYxeEXfxYm
+         pYhKbJbz7UisYsatoekuzoAlZo2TqfdXYBBwG2vRe6Z6Y0ojhihSj17Y0l4fH8lZXM42
+         kqd2k0IrrwvhqMHdXtI+Fmywj3QXwIKQG9m4xLQOW1E60CMllEjlZiV4PbRLJ5DVXjFt
+         KwrxiA4MgKWYssqWbC42UtRc/9C5iYo/C3JaiEe37woqqiwulrItDEq2uOP7LJH9Vpgw
+         cK7o1Xgso4ITo6cfEPGZy1IMX3mz8giR+1GrgD41O1k/BsMLBqcgmrf0vZKEVxmuzVHG
+         7ilA==
+X-Forwarded-Encrypted: i=1; AL+hErG2ghaykzxnU/swRkUsiEYd8fZdKlM0zgkxlrjmAAJjlbqQSa2bdW3iuiLV3fB5jzjONJMJESADUPmvHTIW/+A=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+gNT0wXXUcygCtQ6H4CP64tW21l/SqE56rRUOws4NhyAhhabzE
+	CXQfrl2WFZFo74i8K2T+U8aYR8Oz2uxZMx5GLSTx6htNIxgvQajgBww4I0XIBtx1+Ahy7hg2nJu
+	dDKbL65zB9nCLlNhsOE0u5hjunw==
+X-Received: from dybfe25.prod.google.com ([2002:a05:7300:bf99:b0:379:1aaf:7a27])
  (user=kaleshsingh job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:3f01:b0:160:90a3:ca8c with SMTP id a92af1059eb24-1b55689f73amr8620553c88.7.1795335625670;
- Sun, 22 Nov 2026 00:20:25 -0800 (PST)
-Date: Sun, 22 Nov 2026 08:20:17 +0000
+ 2002:a05:693c:860a:10b0:35f:8c5d:5928 with SMTP id 5a478bee46e88-3857073f3c4mr8592473eec.30.1795335628168;
+ Sun, 22 Nov 2026 00:20:28 -0800 (PST)
+Date: Sun, 22 Nov 2026 08:20:18 +0000
 In-Reply-To: <20261122082020.1255434-1-kaleshsingh@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261122082020.1255434-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261122082020.1255434-2-kaleshsingh@google.com>
-Subject: [PATCH 1/2] selftests/mm: uffd-wp-mremap: skip unsupported shmem and
- hugetlb cases
+Message-ID: <20261122082020.1255434-3-kaleshsingh@google.com>
+Subject: [PATCH 2/2] selftests/mm: uffd-unit-tests: filter required features
+ per memory type
 From: kaleshsingh@google.com
 To: akpm@linux-foundation.org
 Cc: kernel-team@android.com, android-mm@google.com, 
@@ -97,56 +97,109 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Kalesh Singh <kaleshsingh@google.com>
 
-uffd-wp-mremap checks only for UFFD_FEATURE_PAGEFAULT_FLAG_WP before it
-runs. With CONFIG_PTE_MARKER_UFFD_WP=n the kernel keeps that feature
-but supports write protection on anonymous memory only, so the shmem
-and hugetlb cases fail with EINVAL from UFFDIO_REGISTER instead of
-skipping. Skip them when UFFD_FEATURE_WP_HUGETLBFS_SHMEM is missing.
+CONFIG_PTE_MARKER_UFFD_WP defaults to y but can be turned off, and
+userfaultfd write protection then works only on anonymous memory. The
+kernel still reports UFFD_FEATURE_PAGEFAULT_FLAG_WP but no longer
+UFFD_FEATURE_WP_HUGETLBFS_SHMEM.
 
-Fixes: b2466bb3b495 ("selftests/mm: introduce uffd-wp-mremap regression test")
+uffd-unit-tests checks a test's whole feature mask for every memory
+type, so the tests that run on all memory types and require
+UFFD_FEATURE_WP_HUGETLBFS_SHMEM (register-ioctls, the wp-fork tests,
+rwp-wp-exclusive, sigbus-wp and events-wp) skip their anonymous runs
+too. Check and request only the features that apply to the memory type
+under test, and make minor-wp require UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
+as it write-protects shmem and hugetlbfs.
+
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Lokesh Gidra <lokeshgidra@google.com>
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 ---
- tools/testing/selftests/mm/uffd-wp-mremap.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 42 +++++++++++++++++---
+ 1 file changed, 37 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-index c48eaab8e75c..f7b272baa6f5 100644
---- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-+++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-@@ -18,15 +18,14 @@ static int nr_thpsizes;
- static size_t thpsizes[20];
- static int nr_hugetlbsizes;
- static unsigned long hugetlbsizes[10];
-+static uint64_t uffd_features;
- 
- static void check_uffd_wp_feature_supported(void)
- {
--	uint64_t features = 0;
--
--	if (uffd_get_features(&features))
-+	if (uffd_get_features(&uffd_features))
- 		ksft_exit_skip("failed to get available features (%d)\n", errno);
- 
--	if (!(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
-+	if (!(uffd_features & UFFD_FEATURE_PAGEFAULT_FLAG_WP))
- 		ksft_exit_skip("uffd-wp feature not supported\n");
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 2a97ba1d6feb..d0dda2ec48fb 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -176,15 +176,44 @@ static void test_uffd_api(bool use_dev)
  }
  
-@@ -180,6 +179,12 @@ static void test_one_folio(uffd_global_test_opts_t *gopts, size_t size, bool pri
- 				swapout ? "true" : "false",
- 				hugetlb ? "true" : "false");
  
-+	if ((!private || hugetlb) &&
-+	    !(uffd_features & UFFD_FEATURE_WP_HUGETLBFS_SHMEM)) {
-+		ksft_test_result_skip("uffd-wp on shmem and hugetlbfs is not supported\n");
-+		return;
-+	}
+-static bool uffd_feature_supported(uffd_test_case_t *test)
++/*
++ * Filter test->uffd_feature_required down to the features needed for @mem_type.
++ * For example, UFFD_FEATURE_WP_HUGETLBFS_SHMEM (gated on
++ * CONFIG_PTE_MARKER_UFFD_WP) only applies to shmem and hugetlbfs, so anonymous
++ * subtests should still run when it is absent.
++ */
++static uint64_t uffd_test_features(const uffd_test_case_t *test,
++				   const mem_type_t *mem_type)
++{
++	const uint64_t shmem = UFFD_FEATURE_MISSING_SHMEM |
++			       UFFD_FEATURE_MINOR_SHMEM;
++	const uint64_t hugetlb = UFFD_FEATURE_MISSING_HUGETLBFS |
++				 UFFD_FEATURE_MINOR_HUGETLBFS;
++	uint64_t features = test->uffd_feature_required;
 +
- 	/* Allocate a folio of required size and type. */
- 	mem = alloc_one_folio(size, private, hugetlb);
- 	if (!mem) {
++	switch (mem_type->mem_flag) {
++	case MEM_ANON:
++		return features & ~(shmem | hugetlb |
++				    UFFD_FEATURE_WP_HUGETLBFS_SHMEM);
++	case MEM_SHMEM:
++	case MEM_SHMEM_PRIVATE:
++		return features & ~hugetlb;
++	case MEM_HUGETLB:
++	case MEM_HUGETLB_PRIVATE:
++		return features & ~shmem;
++	default:
++		return features;
++	}
++}
++
++static bool uffd_feature_supported(uint64_t required)
+ {
+ 	uint64_t features;
+ 
+ 	if (uffd_get_features(&features))
+ 		return false;
+ 
+-	return (features & test->uffd_feature_required) ==
+-	    test->uffd_feature_required;
++	return (features & required) == required;
+ }
+ 
+ static int pagemap_open(void)
+@@ -2417,6 +2446,7 @@ uffd_test_case_t uffd_tests[] = {
+ 		.uffd_feature_required =
+ 		UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM |
+ 		UFFD_FEATURE_PAGEFAULT_FLAG_WP |
++		UFFD_FEATURE_WP_HUGETLBFS_SHMEM |
+ 		/*
+ 		 * HACK: here we leveraged WP_UNPOPULATED to detect whether
+ 		 * minor mode supports wr-protect.  There's no feature flag
+@@ -2636,6 +2666,7 @@ int main(int argc, char *argv[])
+ 	mem_type_t *mem_type;
+ 	uffd_test_args_t args;
+ 	const char *errmsg;
++	uint64_t features;
+ 	int i, j, opt;
+ 
+ 	while ((opt = getopt(argc, argv, "f:hl")) != -1) {
+@@ -2711,11 +2742,12 @@ int main(int argc, char *argv[])
+ 			/* Initialize test arguments */
+ 			args.mem_type = mem_type;
+ 
+-			if (!uffd_feature_supported(test)) {
++			features = uffd_test_features(test, mem_type);
++			if (!uffd_feature_supported(features)) {
+ 				uffd_test_skip("feature missing");
+ 				continue;
+ 			}
+-			if (uffd_test_ctx_init(&gopts, test->uffd_feature_required, &errmsg)) {
++			if (uffd_test_ctx_init(&gopts, features, &errmsg)) {
+ 				uffd_test_skip(errmsg);
+ 				continue;
+ 			}
 -- 
 2.56.1.750.gf70dc682cf-goog
 
