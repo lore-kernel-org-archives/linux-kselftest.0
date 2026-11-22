@@ -1,96 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.36
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795366331;
-	b=M8+/U5nchGn+KU7zz/u7PBttY6YphpKAjJmq0ID7CrNIP90TH/FF2XvN6M8Qnihr/bED
-	 4F/7UG63cOcZehCb73Ed1kLmQs4iyUWdPsTc1Kzr/I9pJ3qkP+4zGWk2V6dbz79UhLbSu
-	 QIBazPlO3PYBnu4X3OpAi6n0aN4Vq0yqvYdo6Xohvfeun9u5K2/PblK/UwiZNKXRU0tJn
-	 QEw1pigrkGXxsgNXAOFlMn2WBpTEE1R5Wa5h9NfDiEH7QEttCH0dr9tpd4N62FgwTNSJo
-	 WUIWhLedqR8R5Z8K3JL3gAe5yDPpHjcDQfIQfJa4uaogvpUIquK/eXm78sgd9zYouqw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795366331;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=gg5CXwLELiiHT4sTbY1+2ax49goJ2iy/XRG996eDrek=;
-	b=0a+EnFBvfEjIr8uNLRM2t4jDpByM05neuuK62U9Pklo/f6+naP4rtI5oQ3OT1k7mQntd
-	 QO+pEiUNQAqFq8PG+WlfdKBx6r0OsHjX8f6WrcdFVnVS+wIvWH57pYVlF7ZvngoV+ZnZ/
-	 Z7naE9abb8N5wQT0Iq6ghw9uTZ1XquuKX5v5/Ac//77tgu4sEvn6YKQHo/r4CkL5dTYeP
-	 Q5vGgTS087w+xU6t5/zesQhW2y8koAIygadDT3KmqAXeDHM5l7ZS+VWBotY6jRixkt7jH
-	 TrBGCgKcGHUPdoD/aKPe9URUFs8wjnOAN/xsJZcMVG9umJ7mt5wxQ3ka2KjN5kS/d6Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=PkTnxDqj;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.46.36
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010036.outbound.protection.outlook.com [52.101.46.36])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795366361;
+	b=Uiv//3dqHMpsKtfVrUaDH+EaAzGiadZFJyuP9ikAhww41AFKTOX2WxpT50omon3sgz8u
+	 pZk29VTmkso/ArwWgXNoZBqV/IO3TuCBAZ8lmde2+x/f8HASqBeXwXWgvDr70SuzK19zW
+	 RbaFBDjt82g3BtVwGTrDDIdghpZw0rFXOSu+TvQIhQNPHuSsYdY52wU1jcwrpwJF/HeGE
+	 dzz0IxypPUR0BKwUIU9pp7w5N5UeYLTAvtYsoNT9raYeeS/YqvtKP2+N+1xVVgMLbh0pa
+	 d4V+J7No7j1TORgIn150wFNjmxtHifs1FqdU7noBLcJf50WGjoBoAnQIC8KI8byoPDg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795366361;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=1NKjBPa3Mm7e007sBCfL+8iXNhsADEsxbBCKLGqTb2o=;
+	b=XosIVQl+LEIGYs22JO38Xs4CJzpuHaVxsRAxo3ZKGKRqCgXP7qiExPGgfZ8vJ2gmTqWe
+	 CQ9guLZJkB1IZxHI8T4fMmPXf4Ik0phCYrXaetSAF0Lfwawgi1yh/nfR59jZs+in+oHCf
+	 wVv1wFjqATrY8iZOh6uM+eYXJbqmHpaGQTZ57bbMlCAP4jpfYhXTpd4f8ey7SF5mUuQLh
+	 1pj3htaASIJNBKddRz7WNzHZVC7AWOhxRqJzCLW2fB2TtuWxBgZFoxCvRUubvLV4W1Ckw
+	 w0cICAu2cujEFC+L9GFvpUsIAXMv8J9kgGKdHqGKw3aE1bhky3dqoV/wuW9Q240toBQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Br567cU7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81056606A698;
-	Sun, 22 Nov 2026 16:52:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81056606A698
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605A3606A682;
+	Sun, 22 Nov 2026 16:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=PkTnxDqj
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eg/IMXNRRT+NK3D3ZrssAj1TeOceWNZkNMBIKFT4yHsyTr/uMw0OkzqT6S2yLsMbDbzNDP0zTJUfTQMo6oicQI7ykuHZIJj+MyzS+qeis3IvNDnAEMphCAWZzB9Zaz9YFfMjnCAWWYGPPbGJBoRnJbbaVsmKbQcMevwX8M1oHC5HZh39dztUkBAMlJzMChDJ9JJdFsO+RtenACnyQPiq8nri+QqVbV7Bu56gKlbiYK5A7oVW6M07ipuld9UnzhhLET+pKsfjUnaTMia24t9mo39vr830Hd0q2zDumyarN/bn/lSVjD86+wpJQDR4gxQsIj6GR/etR2gd9cRKWYFnXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gg5CXwLELiiHT4sTbY1+2ax49goJ2iy/XRG996eDrek=;
- b=W2naREfEepDCyGPtIivF07926CDLaI1zN5a6FJWiUjqkfrcu5FBkLU5j6tfkaVBNYalDd4kvy5heAT2DyctkkB8ulBEPi5cuyCkVSSFK8yEKE/vsDDyTircRWji6vPF3xyWjW47rRXweHeJ9cMZb4dDJplXd34fTfd8Pd5/p+IStjaDBK40IiCb199gH8oq/NK6zTnWIXoRItDe8SjiCA3Z33KaY6u5ZP2DkOTXukSMJXLCtSV8LGD1L4Ftf7nxfFfuUnsoVKd6VxDRcQx4Ec4TR6SsnveYY/aYeT9HskqhxOfdJAifC139/60+sFxHdrqDroT/K/LjQYP9v9dIdTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gg5CXwLELiiHT4sTbY1+2ax49goJ2iy/XRG996eDrek=;
- b=PkTnxDqjg3W7hiaxMAclQxwOXUP3Wb7Vomsr1p4TUHMkSjRKaXnKEYnhaYhDVqklb1GWiHj9p7L6l/jwALKwGJUPbLVuXgEgjJcEEpeNAjA40hZS72Vb7GIvM2HJ55WGY95Xacr25qWADFWpRqOC8om6A7XK5hgjK+IH1TS0MHz+519Zy4FYcALcNhY76p2wb1KLd3sBltoHJ++KtOXD9Bz9AQU8nqJAoUlXKk6zXcbbhiBHDRh8bPl3WHh64gBjL+REBrMJC027bHh6JKqO/Y9bXRpO74maEUM2Y5/mwOyWxZbOFWj/NB01AsjHBILM1PM06JmoxVd7OkSZ0NxIPw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by SJ0PR12MB7476.namprd12.prod.outlook.com (2603:10b6:a03:48d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.14; Sun, 22 Nov
- 2026 16:52:08 +0000
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0639.012; Sun, 22 Nov 2026
- 16:52:07 +0000
-Date: Sun, 22 Nov 2026 18:51:58 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Vladimir Vdovin <deliran@verdict.gg>
-Cc: David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 0/3] ipv4/ipv6: Cache pmtu on all paths of a
- multipath route
-Message-ID: <20261122165158.GA3020566@shredder>
-References: <20261117193141.27004-1-deliran@verdict.gg>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261117193141.27004-1-deliran@verdict.gg>
-X-ClientProxiedBy: TL2P290CA0013.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:2::7)
- To LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Br567cU7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2961F000C4;
+	Sun, 22 Nov 2026 16:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795366360;
+	bh=1NKjBPa3Mm7e007sBCfL+8iXNhsADEsxbBCKLGqTb2o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Br567cU7i2EIc01fZQxF9CCJuMpkTBy7lv8Y7WoZ/xz5Kzw1Fh1Dnig7L+ZGOxarG
+	 BsleFmUduEVXp9CJsQgZhFbg00Dm4y5+2K5JpSuX8VYVuXXtQauNeRx8ZKnUwl+n+o
+	 13xquQXDfYAijo3MRpGVTssouCha+sDjPFYn6tSDEpP5u/p/Qno5mgwLW3SlfRA7J4
+	 z3bH2DtD/MRyZG8/ZmaK9xu+EBfyabZUt5eLs6DVg+Sgm2TuzcmJaQ6Emr+JC3D0Dd
+	 6rhnRwcQiNIrkdXBySVgEVNwV3/zbXJ2FlwcFJyzZY5ZQ8n+JBby2ZUoz0HtE09nfg
+	 9VTxaELeRQ0Dg==
+Message-ID: <c02a4f0a-7790-4949-9037-b346ffbe3921@kernel.org>
+Date: Sun, 22 Nov 2026 17:52:32 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,73 +51,282 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|SJ0PR12MB7476:EE_
-X-MS-Office365-Filtering-Correlation-Id: eeed7458-9aa2-41f7-dbb9-08df48b8f16c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|10067099003|56012099006|11063799006|261026140227099003|261026121527099003|261028144727099003|261022105027099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	qkxh2h/9anWk5sCFQmTI/ygkNY+sjjbIMViCGiznhCPWHEnBzLi4pY0smfjy4RtgfYg9SakSEQDNKtp+DXt1mENgiUjkAE2AxaBiAwoGvNUBhKqdoWzff50SDq6xuwltZvh4y4v3sp4jjUsrCihf/Tz6yJcsUaI681zKxK0sAtOb1/yKc2Ac55k1qZ/seH6FlwdX7S3W245jRQrFZ2BNq/9wh6Lof1iyHIj7bpc1fnNcgszXl4HaJSEc9enc5ssa9HHFgrQsyi2bk34w/K2Ttfh1KlGoz/+C8npFWX6z6Ya2+WLtusef8ZQbKfusGZ5/bVo/HMwkEjH61e/MbzyCoDyNL49jLlJPD213OcuIa6o+0CP1bvVBIAfxzPHmIpjMZe4zWQ2fH7NQmsFL18ZreYAWX25LPC/Qpk2lte0RENy4n9YNTxPug7vzDBgQk5GWRBQLpsY3MM04TfBx2KHfeJTGu3Esw1dYXHaul5rd9RAPOlUQ/itXphz9f0eLTmirc2ar5hOvXTWdifCOg2THsBBPL3yUTpHP31tvHKj/wjkVZHYoQPyQ/dPLmaI5sqB9HPNADAeh5ZkAsp2M+kuBB9hI2YIy6clWkEhb8zJwD3ZV8+D1TSuxuvkH5V0scRlbjaR1DNhywu4UhywXBXKQX7voD4uW9d58JbeQQfCUfIM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(10067099003)(56012099006)(11063799006)(261026140227099003)(261026121527099003)(261028144727099003)(261022105027099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?bY5EEXU/w2zgPu6lwFycF96d4VwUJM5Yeq7QzoGX4Vcla+pIo08RitW5vSvP?=
- =?us-ascii?Q?nmp8T8mcmC+f3YXQDO3BnE6HLGKfh3wbmmFvrVj43s1cPqLrVO3hpWeqVKZP?=
- =?us-ascii?Q?xn2WD9VnUxzYoFvY6/GFWohbgI2JG58HbOEXGy7msBnOqU1Sa1hIu1Axb6nk?=
- =?us-ascii?Q?UYbEDPGsX1me+d3nsc26RphSZBEnP47u31QxuxA0MxgKxR0vF7wrAPii2Cxk?=
- =?us-ascii?Q?yV0RQR6qLmKcrHlGsus+CqDAmdwIL8BFY0myU/wdo+alH63LKh4QeLGDXaVN?=
- =?us-ascii?Q?lQW3GFlDOXf8Sf+K2vQmMh4VSgJMGU2+OwZOb6IL9TSjIPqJrp7CoO18IVXZ?=
- =?us-ascii?Q?Z3lQ8CKMMD+dWsMO7Skc93FIMUscVPkwHjFQBLqoi0PfE+ucQ6Yxf8SjN7r+?=
- =?us-ascii?Q?s5LExkbGbUxLqczZ1X6q8FYL171KUQ4WYXe2NvR9ofk0nNfoxodbD3on74+k?=
- =?us-ascii?Q?j9YOJbqJSPgEy4RyejVMK5h6P493G7JC91jEuAMtjTxXkwLwzSo4eCKXbDDE?=
- =?us-ascii?Q?sLEGBGpp5fT/K3FX1Musy/dkCJbfFX5WtUOq+FMVvxjzjGO9CiMsd0YxzQh7?=
- =?us-ascii?Q?Rr2TETHryBX1yR5Uk0+0AObY7hPTPpXBtYjW6IzkIET0cWOSAGUN+jvs4/8x?=
- =?us-ascii?Q?oHoal5SK9E/ZJTK9aBJX17Kes2pTKxgjx9XsmwARSMU4vbFHUPj0mYSVUcMX?=
- =?us-ascii?Q?73gAeHgQpr+BoXG0ZBFgxGIdoHIpoz0x5TqYgHghKT8sL/Tr/p+ZGQSn5R/Y?=
- =?us-ascii?Q?RYUsXFtEvtVPHXfPeala9igLrkSD9rYe25ARSBVA+txHaMclZs85VI5M/0Va?=
- =?us-ascii?Q?U9qrY0Kxe0ndRAzhlboJ1FlOU8Q+UusFJzSr+a6xD2LrDH4m+CVH8ydRGgiv?=
- =?us-ascii?Q?+PyOCscmjwIE3yWR1HoM33uaizVqoQ8WaQmWZeM63vzIgfA0uP38xuZoVVVV?=
- =?us-ascii?Q?bzVKWALsz9KHBW8BphfXaN2VczLz1kg9k9gcnpPm/86q0D48wkqJvAQ/WEUV?=
- =?us-ascii?Q?g4Uo+1MzPvfpbtZCbhPViNwr06TVRVt1xyyziKLMgaXIC50eROtF7x+oeN0m?=
- =?us-ascii?Q?sBsGZylXy5G7dYHHu/Yzf/odbg+yg6Yc1iBDKKcs6woQySahNCD+C4oW4dJ2?=
- =?us-ascii?Q?dF/H/n4YHOHde7Zzq6x0cyXHn3RZLu4Y9kNdJVENOrEFM6LyFUZtyX2+E/Ww?=
- =?us-ascii?Q?s6gsI716OP1k6kx3T5SCj97UAUQTgdK8XUcyAh7ZuL78046qvV/LRG1cINZY?=
- =?us-ascii?Q?yXIYma0CXdyo0JmbK/6k2FbEEE9SXS4366NHuFil8CQHQKwXNYgViWrmbOLp?=
- =?us-ascii?Q?hhTmJOll1aeSebdnStrE+wVqi8pRgqXpfkKXqGAs92jN+wdrkE18UkLlx4CV?=
- =?us-ascii?Q?G8fROqk6OzzFJZ43CTVGx8bSlnt0cGtY6cE7cKIWr9GTYIMbShmadIs+/8QA?=
- =?us-ascii?Q?QVR2t7BmBxwxPgkwKW+WZsxixPkwJYcQFz+Wy64JuRlYWKjbPpDstBUjeidt?=
- =?us-ascii?Q?OjXGwfNYXuzDOwaQ3g3I/AZ4ttx5UbQoRqQ4SyFG9ePSRFx5ba4NdVycUHsl?=
- =?us-ascii?Q?LEuhNxDWldu+sSJgAS63O7iBBuDxBxbztPNYpc+nLfXm+9Pg466uCI6SfxuO?=
- =?us-ascii?Q?uwip7n+WzLGMWp11QmvJ3MHePCmNTU4euNyfsY/8Im8bNAVyWeppKTyPkvkW?=
- =?us-ascii?Q?L6g45rprtVFfQOx1oI+6CNWa1yHuQ0eoo00fMXv7+eUgvFXX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eeed7458-9aa2-41f7-dbb9-08df48b8f16c
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 16:52:07.2784
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /zrrhifsOeZTmkG7satUOjI0TTba0/AbMnRfqeBo/RFjomNgIOeJTR2EY1QXd+Mxadq3CI7X+P5eUomvfIkbqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7476
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/4] selftests/mm: test fork of PMD-mapped shmem THPs
+To: Konstantin Khorenko <khorenko@virtuozzo.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Peter Xu <peterx@redhat.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+ =?UTF-8?Q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-0-efa7817a2bb3@virtuozzo.com>
+ <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-4-efa7817a2bb3@virtuozzo.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261119-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v6-4-efa7817a2bb3@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 17, 2026 at 10:31:38PM +0300, Vladimir Vdovin wrote:
-> IPv6 counterpart of commit 7d3f3b4367f3 ("net: ipv4: Cache pmtu for
-> all packet paths if multipath enabled"), deferred back then [1].
+On 11/19/26 14:44, Konstantin Khorenko wrote:
+> Fork a process that maps shmem THPs with PMDs, in a VMA whose page
+> tables fork copies: a private mapping with an anon_vma, and a shared
+> one with a guard region. The child must find the PMDs before it
+> touches the mapping, and its exit must leave the parent's mapping and
+> the system-wide ShmemPmdMapped counter as they were.
 > 
-> Patch 1 checks the mtu of a Fragmentation Needed against each path of
-> the IPv4 fan-out, not against the looked-up one, patch 2 does the IPv6
-> side, patch 3 adds the tests:
-> the IPv6 variant of the pmtu.sh multipath test and, for both families,
-> a multipath test with paths of different MTU. The IPv4 asymmetric
-> test fails without patch 1, the IPv6 tests without patch 2.
+> With folio_dup_file_rmap_pmd() adding PTE mappings, the child's exit
+> takes the parent's share off ShmemPmdMapped while the parent still maps
+> the folios. Unmapping them drops it once more, so every mapping stays
+> until exit, where the kernel reports "Bad page cache", or hits a
+> VM_BUG_ON with CONFIG_DEBUG_VM. A kernel that leaves file THPs to a
+> refault in the child skips the test.
+> 
+> ShmemPmdMapped is system-wide, and reclaim or NUMA balancing can take a
+> PMD from the parent while the test runs. So the test makes up to three
+> attempts, each on a fresh file, and fails only if all of them see the
+> counter drop by exactly the parent's share: the bug does that on every
+> fork, other processes only by chance. It passes on the first clean
+> attempt and skips when none is clean.
+> 
+> The test mounts a tmpfs with huge=always over /tmp in a private mount
+> namespace, so it leaves the THP settings and the host's mounts and
+> files alone.
+> 
+> Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+> ---
+>  MAINTAINERS                                |   1 +
+>  tools/testing/selftests/mm/Makefile        |   1 +
+>  tools/testing/selftests/mm/fork_file_thp.c | 256 +++++++++++++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh  |   1 +
+>  4 files changed, 259 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d738990161bd0..7ade132e3d3ab 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17941,6 +17941,7 @@ F:	mm/huge_memory.c
+>  F:	mm/khugepaged.c
+>  F:	mm/mm_slot.h
+>  F:	tools/mm/thpmaps
+> +F:	tools/testing/selftests/mm/fork_file_thp.c
+>  F:	tools/testing/selftests/mm/khugepaged.c
+>  F:	tools/testing/selftests/mm/split_huge_page_test.c
+>  F:	tools/testing/selftests/mm/transhuge-stress.c
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 0ea72e9979347..2489027b2a36b 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -108,6 +108,7 @@ TEST_GEN_FILES += folio_split_race_test
+>  TEST_GEN_FILES += folio_order_check
+>  TEST_GEN_FILES += khugepaged_sync_check
+>  TEST_GEN_FILES += khugepaged_race
+> +TEST_GEN_FILES += fork_file_thp
+>  TEST_GEN_FILES += soft-dirty
+>  
+>  ifeq ($(ARCH),x86_64)
+> diff --git a/tools/testing/selftests/mm/fork_file_thp.c b/tools/testing/selftests/mm/fork_file_thp.c
+> new file mode 100644
+> index 0000000000000..aaecf7ba6f406
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/fork_file_thp.c
+> @@ -0,0 +1,256 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * fork() of a process that maps shmem THPs with PMDs, in a VMA whose page
+> + * tables fork copies: a private mapping with an anon_vma, and a shared
+> + * mapping with a guard region.
+> + *
+> + * The child must get the PMDs without faulting, and its exit must leave the
+> + * parent's mapping and the system-wide ShmemPmdMapped counter as they were.
+> + * Kernels that leave file THPs to a refault in the child skip the test.
+> + */
+> +#define _GNU_SOURCE
+> +#include <asm-generic/mman.h> /* Force the import of the tools version. */
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <sched.h>
+> +#include <sys/mman.h>
+> +#include <sys/mount.h>
+> +#include <sys/wait.h>
+> +
+> +#include "kselftest.h"
+> +#include "vm_util.h"
+> +
+> +#define NR_PMDS		4
+> +#define MAX_PMDSIZE	(32UL << 20)
+> +/* Other processes, reclaim and NUMA balancing can disturb an attempt. */
+> +#define ATTEMPTS	3
+> +
+> +static size_t pagesize, pmdsize, size;
+> +
+> +static long meminfo_kb(const char *key)
+> +{
+> +	char line[256];
+> +	long kb = -1;
+> +	FILE *f = fopen("/proc/meminfo", "r");
+> +
+> +	if (!f)
+> +		return -1;
+> +	while (fgets(line, sizeof(line), f))
+> +		if (!strncmp(line, key, strlen(key))) {
+> +			kb = strtol(line + strlen(key), NULL, 10);
+> +			break;
+> +		}
+> +	fclose(f);
+> +	return kb;
+> +}
+> +
+> +/* Skips the last page, which may be a guard page, and @skip. */
+> +static bool data_ok(const char *mem, size_t skip)
+> +{
+> +	size_t off;
+> +
+> +	for (off = 0; off < size - pagesize; off += pagesize)
+> +		if (off != skip && mem[off] != (char)(off / pmdsize + 1))
+> +			return false;
+> +	return true;
+> +}
+> +
+> +/* The last PMD is zapped by the setup, the others must be PMD-mapped. */
+> +static bool pmds_ok(char *mem)
+> +{
+> +	return check_huge_file(mem, size - pmdsize, NR_PMDS - 1, pmdsize);
+> +}
+> +
+> +/* Maps a fresh shmem file of NR_PMDS PMDs, PMD-aligned, until exit. */
+> +static char *map_file(bool shared)
+> +{
+> +	char *area, *buf, *mem;
+> +	size_t off;
+> +	int fd;
+> +
+> +	fd = open("/tmp/fork_file_thp", O_RDWR | O_CREAT | O_TRUNC, 0600);
+> +	if (fd < 0)
+> +		ksft_exit_fail_perror("open");
+> +	unlink("/tmp/fork_file_thp");
+> +	buf = malloc(pmdsize);
+> +	if (!buf)
+> +		ksft_exit_fail_msg("malloc failed\n");
+> +	for (off = 0; off < size; off += pmdsize) {
+> +		memset(buf, off / pmdsize + 1, pmdsize);
+> +		if (pwrite(fd, buf, pmdsize, off) != (ssize_t)pmdsize)
+> +			ksft_exit_fail_perror("pwrite");
+> +	}
+> +	free(buf);
+> +
+> +	area = mmap(NULL, size + pmdsize, PROT_NONE,
+> +		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (area == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +	mem = (char *)(((unsigned long)area + pmdsize - 1) & ~(pmdsize - 1));
+> +	mem = mmap(mem, size, PROT_READ | PROT_WRITE,
+> +		   (shared ? MAP_SHARED : MAP_PRIVATE) | MAP_FIXED, fd, 0);
+> +	if (mem == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +	close(fd);
+> +	for (off = 0; off < size; off += pmdsize)
+> +		FORCE_READ(mem[off]);
+> +	return mem;
+> +}
+> +
+> +/* Child exit codes, apart from what kselftest helpers exit with. */
+> +enum result { PASS, NO_PMDS = 10, FAIL_DATA, FAIL_COUNTER, FAIL_PARENT,
+> +	      FAIL_KILLED, COUNTER_OFF, CHANGED, LOST_PMDS, NO_THP };
+> +
+> +static enum result fork_once(char *mem, bool shared, long *before, long *after)
+> +{
+> +	/* The parent alone maps this much with PMDs. */
+> +	long own = (NR_PMDS - 1) * (pmdsize >> 10);
+> +	bool parent_pmds;
+> +	int status;
+> +	pid_t pid;
+> +
+> +	*before = *after = meminfo_kb("ShmemPmdMapped:");
 
-Please wait with v5.
+That's not how we test for PMD mappings from other code.
 
-Patch 1 and the associated selftest should be split from this series.
-Wait for the IPv4 part to be accepted, then send the IPv6 part. I will
-review both parts tomorrow.
+We have check_huge_file() etc helpers in vm_util.c for that.
+
+
+Further, some things look a bit odd, like:
+
++static void test_fork(bool shared)
++{
++	const char *desc = shared ? "shared mapping with a guard region" :
++				    "private mapping with an anon_vma";
+
+Why guard regions? Why boolean parameters?
+
+This selftest should probably be written using the kselftest harness instead.
+
+BUT I am not convinced the selftest as is is worth it. It check for too too
+detailed corner cases.
+
+I think we'd want something fairly simple, nothing the does detailed accounting
+checks.
+
+I'll queue 1-3 for now, thanks!
+
+-- 
+Cheers,
+
+David
