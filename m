@@ -1,103 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795332342;
-	b=OO9fu1JO3noNDTkunVHDqZh2k9o660VLV9Fn7T54LpxdiJCBvCa7VNtOiDC5cVlyjla4
-	 yJ23C+xXUhul5E7AgHI6rWAA8y0OG7MzpCplZkDVUHUEeA/+AMrj/V/NrxRiQOh+fvkfs
-	 y68BwmkpoaWi0hoy1CqS1GdOFDA/8Lt5ilccxMCF0gjmck8SWZLYdxNGJbOHlmWkfFNgC
-	 cp3dcXmcrzf17BSg4en0QqKolB7PXlm4kLHl8dgJn+pcsT6Dp4Olc+a8tOh6NtqTXUYQN
-	 HZNsK9ij+o0/bgpyOrjoX8u5Us6cbha7X5sZnDL0BlAeUIIEVcQ382XfwiwWNkFZ6vQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795332342;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=WCZate8X2fWlqf2Jlj+3L5Aa6pNXKCWjylCRCfTpxQ8=;
-	b=fl39vKSPc89u99tnbMe4nL1WVf3jP2rsZkYB1jF+UwyPsZrpovfkTjKpwzBLSSADJJGm
-	 jASVk5Kkt5pniGMss2nT3IMeN/VdAvuKHiT1LgIaZntUqTLHBOiEcBuDCWsXczhKvCHPn
-	 FYAOOZCeLBWLo6r9XcTgaCPlNCs42qLTJAIR5LQovnanWF0l/afXxbKgp94o3/3hv567T
-	 zqVjgwKCSGX5XO6OhkPfeX0scY2CF0GTH612q45VMqs5MRYaT/dOdIfGyP0TyNpldCSHp
-	 i5Y4G7v/VAfvXteIzoeTf/PLdPhFYj2kmIrKhb0wCpBLLQwEc7pvUnRKcw0gwcKybDQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b="hzT3sX/N";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.54
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010054.outbound.protection.outlook.com [52.101.193.54])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795332581;
+	b=VSgaTViULS3uJiv7t4XR9C4LmRYwGc3JJ+a71+EuZnXf6YfRysaNvreG0FdsiHmVpLgS
+	 LJPeyXnw0QUF6xhG+pyJQcL2ih4flB/NZiZkXI4ICSYr2we11anTTY7DfA74KyjoSrVeU
+	 GRP3bF+ndYle9uCHfh2IuvKgI22UbiNlDzWB5HMr1/JYILDbEZ5bQN6lSnSW8bxxpj9Yq
+	 ZTRitVLB7477EFrOxPpXgKG96uIfxcqFBMWnkzLGa7pM7vdwE0Z5oXxMVFc00zzxlRiUn
+	 7a1E3YKlPWlB+fHL9dRQGIEZH4e/Ig10Ia8c1DVrdyukY7WI49U5ZngczVKQ+BgOKyQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795332581;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=CcKL6w1akIoGVfJ2Pkwj4LentV4cSBE6WTjo9Oi52Hg=;
+	b=W4en4DY1AO9g3JmqsHUvvZ/SvcA/uHnb8bSYwKdtDU6xwTKXztH6FaCcOWGjzee1az4O
+	 GK+qo+vwkpkTLZaQ/7wiFRkv+DdaOJ6pi0+J0OCudmnUSSkcLLtGmClv7SyZH917UVNZu
+	 1TD7B2rRqLRnlTZYojXMlIOOe77TsRIVMrXXwfFARRfNY2a9/kR1bipPF5cqiM0NLfsvU
+	 yAXK/Mh3/elG6pu/iTrhDwODyi/3YjJUvNPWO7UYWMPdd0hP+tjO1t3u7NeJFzJwhBpXz
+	 ny2vfpInASn6jd/ubCnhFo90gKpbiqm9Tz2k+HCOeZ8Z9+/u+/375v3BIA+Sku9C1Qw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="ZUQLA/ez";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281F6606A32A;
-	Sun, 22 Nov 2026 07:25:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 281F6606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5EE606A320;
+	Sun, 22 Nov 2026 07:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=hzT3sX/N
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VSvgMcc3c+eQx8aK3fyDAtaiC9MMX1C1reuJzJkQikR75IoxjBVahUbngnb5y90RGLDzhgjXMKmqEmDvCLL6svhfoOMd8rnHCHyQKqayTd5jsSalM47x+OVmnZr6eLdrJQFNWpMHGyJojsOdPg95uuds+N0G5pnt3Wpg12CQ/68XzGLn1Gv9F03Y++Cyyzt8Yjfkjb1lN2l1jArGDn8djw9eKAy6Mbt08gVl758L21HaGztKuqdsx5N0w9GzQl57Y/phTRW0LtenEoDz+Kl9dk1CXbdR/yPRR+Gs67bh+FQUuaY4iMTDPeQ8La1AzoAtlI0nbDmV9CNeV90H3jQSUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WCZate8X2fWlqf2Jlj+3L5Aa6pNXKCWjylCRCfTpxQ8=;
- b=KTzVEvLKm/QZ5p/FqQg/FoMg7cMQdIAq+4RiL25gquF1pG1WclDwObTrLPYzIOcR1Ivb5PDfdKkEYASgUWYahgabeyYK4PLKz03hnclUKrEjZbaIAGwbnMPEKv4oecKs9eSQENlScetCQFIs01xb9ffS2QWD38FNXn/tiuTvU/eHFUuE68Hk/QopC8EqWJuuHbfIL3te6n+44emdkI2fy2BrOUlBXjes4WVWqGEFG13P88wWMi7IoMtYFpSLIzhfAUFGf+p+UEYo1j3d3tdCwI83kQmoHjKsFom2ZqyUZmkg6noS6qLM4pZo8jfoDIjJeSM9sZ3SjQVKveufbogsNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WCZate8X2fWlqf2Jlj+3L5Aa6pNXKCWjylCRCfTpxQ8=;
- b=hzT3sX/NPAy1gGwtcO9kM1n0/z1tkB2UUflZiRnxIIddOqowBfTiud4pAsroUHU4s+jv/lPDFVwaB4/xkzYtrocCRWaZZDATyuQHIxvWClUQbiB6LN0dgZ+GMaHGJYiBHiT9h7TH4yMeeIC+VozzsKrvsJrK+JQakUNAeeQ4cyTCpXqwyM0pT2VRIxtZvt8z19LixySbLpPAXZWib7jqsRxi5CqF8QIaCZHn5tMfwcmf5TaT4VEufimEBVvHnZ26Yq4YwwxJ/KGaNEBWUIEq70pJvgNYWl/ROSl7vYMFXiwIaclX4xMui/gVx4oKQdEPh9iV+B3nXFFKftyhwBXQcA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by SJ2PR12MB7963.namprd12.prod.outlook.com (2603:10b6:a03:4c1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sun, 22 Nov
- 2026 07:25:36 +0000
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0639.012; Sun, 22 Nov 2026
- 07:25:36 +0000
-From: Ido Schimmel <idosch@nvidia.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@kernel.org,
-	willemb@google.com,
-	horms@kernel.org,
-	razor@blackwall.org,
-	dsahern@kernel.org,
-	shuah@kernel.org,
-	bridge@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	kyuwoncho18@gmail.com,
-	Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH net 2/2] selftests: bridge_mdb: Test failed source list replace
-Date: Sun, 22 Nov 2026 09:25:04 +0200
-Message-ID: <20261122072504.2623702-2-idosch@nvidia.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261122072504.2623702-1-idosch@nvidia.com>
-References: <20261122072504.2623702-1-idosch@nvidia.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZUQLA/ez
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E2D1F000C0;
+	Sun, 22 Nov 2026 07:29:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795332581;
+	bh=CcKL6w1akIoGVfJ2Pkwj4LentV4cSBE6WTjo9Oi52Hg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ZUQLA/ez7P23QGL+lDEwTPkjcIe8MbbdjmDg83wk+tEZIssztZFE/YND/+ApOVZQ3
+	 d1PraFL2DiRiAxnTudqhrSNvk/4x0fvYfATiCvf+dgvRJTHh/7xrsny91TVpNMU3g0
+	 KfrGx3q6Rbz/x2O5fskjh6FJxuTlFoUla0O0gqvJv3qz054P/2jcTh6ik33VR4st4J
+	 lhVo3pqnWvOcN/rLjGdPMfO/gju7rtvB8/cU+CULUjpgZroh7/fNl5JjU9Xaj3MUBw
+	 f38QHpIvHQoEYyLw++bgwli1mCleL/XUyyE79vdRFBQ8kv+mhY+0fDWmL8hyqeI0r4
+	 Nus6ZGwFaCLyg==
+Subject: Re: [PATCH net v5 1/2] net: openvswitch: do not record user features
+ when the change fails
+From: netdev-bot+sashiko@kernel.org
+To: houminxi@gmail.com
+Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
+ i.maximets@ovn.org, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org, matttbe@kernel.org
+Date: Sun, 22 Nov 2026 07:29:40 +0000
+Message-ID: <179533258016.3135.15287628134252460635@kernel.org>
+In-Reply-To: <20261118065435.2367014-2-houminxi@gmail.com>
+References: <20261118065435.2367014-2-houminxi@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TL2P290CA0025.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:3::20) To LV8PR12MB9407.namprd12.prod.outlook.com
- (2603:10b6:408:1f9::13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,136 +64,228 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|SJ2PR12MB7963:EE_
-X-MS-Office365-Filtering-Correlation-Id: a781b6ae-04d3-4201-c0e6-08df4869cd89
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|23010399003|6133799003|18002099003|22082099003|261009223027099003|3023799007|261021121427099003|261021123027099003|261022105027099003|261026140227099003|261026121527099003|261022075727099003|261028144727099003|56012099006|10067099003|261102123227099003|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	onsob16pgyXZ/V+i/merykmMW53OAEusdqSQ3LlqrI6nva/eQSH61H3wFy3i/iO1eYTMEQgEj8IM/YgJOuhMyOK3Ax/LcInCQH25ZGgr20PXjPhooH5PkTAfsM1zcHmZZET778Dfb60g8fVa8w8k6FBgk1EN0yDc6TQ0rebAFxEPvINfa8xbu5O3VcOZM/qfJcF/rXERQ+y+7IK9Ub+5Yn4j8qz5B3GdNFNbHfB7DVUwwP0kf0Gs5NUV0M3cOdWtSoAWq2Fm8N1R8YDshwmlN2gSz6G/nnvfLpWzE2kYGNjzO263MuSxKcfD2AtLDw3nLNDnVfBlQfKTe5qNw35LSo0BOUkTC/LXKMg/fvG+CIeldwpbyU3qNcMdUyTSosRE1miVz5f3NmKfCSBA/j7KRTSp11Nb6ARKCTnGQWhAFSIg6u3NsHjaOu3+EeGkhrubK+xtbbTX45OHE5T8h8JmIz2zZSep9gJ06e12RH8SA+MFy98twwZLJtKvzWAR3onSk27a4rYTYJbhfATVy7qYWsUeRziKxVAb3o/zpE+Ckv9OpIy6o93D6nyJsh5PywxVl64KaU/kvO2YtXI8TftJab+0kRZPgpaBWle3gQP+esUlbRdPOi435WniO7SwFkSYS12RjfgfyLQm5v1y0mty8jSyy9YDE9kPqGn3Q9Cdzes=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(23010399003)(6133799003)(18002099003)(22082099003)(261009223027099003)(3023799007)(261021121427099003)(261021123027099003)(261022105027099003)(261026140227099003)(261026121527099003)(261022075727099003)(261028144727099003)(56012099006)(10067099003)(261102123227099003)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ugmnoDz266Cj2QpE7hXPgHLfiRYNMKyUoVWj5wvcWXW/1t1VufP6TqnphMhy?=
- =?us-ascii?Q?tbNHvC9kSx8eAaoXGx02MpQXlnfDFpmdxB1WYQTXyQErJt4YSgVpMjGxrDV6?=
- =?us-ascii?Q?JPqR6yK2KG8ZPWw8hXuutdzj6BzUtntG017sIFfcHAlCoN5Lsa68qmG2ac68?=
- =?us-ascii?Q?dmcobQ/hEqFhLdcql0FkhJkMe4cvfpwvqEAZY4gfuJf8+EZtDQwlDTiGGPdE?=
- =?us-ascii?Q?XLL8sAcCzdsM3VzHF1EMGiy3vVT6YIu+pDYnu+3i21E+Upy9REh4pZz1iPLQ?=
- =?us-ascii?Q?KRM8oR7McGCVwFMHYSUq9IgNAoXEmt05pP9XUNKDQsrz8XtiWgmgX/w9hUFX?=
- =?us-ascii?Q?NOtnQMuQqaWkBOgjd0c5QWbmAZKtU+v9XlBGOhqplTNa8hb7okN1ZS7u6qoU?=
- =?us-ascii?Q?qyvmEUTmttbot2PDyJeimiI5WfSOp+MhOXFPMWEkbDhOX5VkTFVVDMPOgMu7?=
- =?us-ascii?Q?M7OJ5JsLqW+Ia+ATCyk8HexyZu2tyFvtiJKF8rL/WDpgMRFU4fKEF9AdOiu+?=
- =?us-ascii?Q?KdcUcg4FuXTC4uptSvXUGmNIOcjvGwlKbog0h/PKc6OZ1kTa9+CmrrRVCw3g?=
- =?us-ascii?Q?YCWswJXlOLSdWzW2Rh1AN0c/R3HD6Y2TBKROC5sg+Aiw6XSN0X+B4epRf/Ok?=
- =?us-ascii?Q?VYMcQjQD8Dk1OxhH2AQQbd5IJFsSwOSj/es9SxzDnuod7litFYmfIZqnzIF7?=
- =?us-ascii?Q?r/1j7n1iUHsJvKERITo/c5IGk+FBCDcAhwQi1f7kYPPYZrzCFlKZUa4IrbXD?=
- =?us-ascii?Q?xE9WbAzK5q3o4d9rntMbQPxXjnhDIOFWPhfTFFLh07JLxPlh9cEMPrGk+Q7w?=
- =?us-ascii?Q?CYZdF2DGfKN7ECep9N5E0qYY3qUvQ0j5I/LYzMz+66YMBpWBCyYkNETAF7/f?=
- =?us-ascii?Q?qq/JtbFLCN2l/nmlBRwqrLWkRIhR22samLpWmfiwBy6e/C9ItD4G7CiT1zYG?=
- =?us-ascii?Q?SMXjX6w3sUC6gzVV45yj7R6W5P55p0YIKccw5wRmXpyn/OSaaOF+m1z93rHI?=
- =?us-ascii?Q?vIHa5Jex/O5FuVYLpO3RFkKvZQ1hnbcinhpEr8RBYX9UHAGGb9HIdys9G+Ar?=
- =?us-ascii?Q?OYfQL+foB72BESw5MuI075DbJ/d81o/kIuplxjoX2/EKCGTuM1rGy/3dkiSC?=
- =?us-ascii?Q?CsG9URJt0Q70b5//W+prO5akmsVhEkciAam3ygiPkPTWF/Nznqj4fJtdWinI?=
- =?us-ascii?Q?+UBcP4uaJ1hqRCFJwMC67dbPsH97XyBn46DXG/Q4cAh6ZDR/NTH01STdM1JU?=
- =?us-ascii?Q?fDxRgSY8nCwji1GRmzvmCwguvroAEmN9blo1EDyNUg7NtEEFcdjyfCCQrdGK?=
- =?us-ascii?Q?iAZg5/9lhB2sFw8/59YhuDKHt00hGwVr7kYEoO79hZ0J9D3KYz1x4DJ3m0bz?=
- =?us-ascii?Q?bx0xpVJaBq8q/J28ZlC1zfJ/aziw3o+Wo2SWToQ6IMdHWl1WrjTpzHWUyuba?=
- =?us-ascii?Q?GiG47mw/ruzGp1gQ9AkZlKcCBpTaDrMBbgj5snnK2da03UDSGzZPg0hntPmZ?=
- =?us-ascii?Q?Wis91hf5UURlCcLrqpN8RU45Mm9ghA6ej4eEXpZyvWPZaTk01lKwm/xWkQMA?=
- =?us-ascii?Q?1hocA62pnYeCQ3QcWDLTlaxgpgxm/oMCM1ajPCwWxYTctU9Nn2xDMCxAyfPA?=
- =?us-ascii?Q?NpNKGw9W1Qmz5rUoS6/OEaQGXFdCSNQCoBmlTkzmJpdu9HIpApR7PIWcrm6z?=
- =?us-ascii?Q?iEFzmAUxDbWCfsnb1NOYBGgSD2zBTYJ0l3W6GDz/QPsaoOS5?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a781b6ae-04d3-4201-c0e6-08df4869cd89
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2026 07:25:36.8454
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CL1K2dt7teQx0VAxatqjAHjcUbK0gpepItTud5dn+rz+YJ3+upMsOUTl0gnK9+GzqrRW3XZjcf2bsnWkGXttvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7963
 
-Add a test case for the issues that were fixed in "bridge: mcast: Fix
-source list rollback on failure". Check that a failed replace of a
-(*, G) entry does not change its source list, with one of the existing
-sources specified twice and a new source.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Output without the fix:
+Critical: 0 · High: 0 · Medium: 1 · Low: 2 (1)
 
- # ./bridge_mdb.sh
- [...]
- TEST: IPv4 (*, G) port group entries configuration tests            [FAIL]
-         (S, G) entry for source 192.0.2.1 deleted after failed replace
- TEST: IPv6 (*, G) port group entries configuration tests            [FAIL]
-         (S, G) entry for source 2001:db8:1::1 deleted after failed replace
- [...]
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Output with the fix:
+- [Medium] The patch also fixes a second, unrelated and older crash, and
+  the subject, Fixes tag and impact description all leave it out.
+- [Low] The `Fixes: 35d39fecbc24 (...)` and `Cc: stable@vger.kernel.org`
+  lines sit in the middle of the commit message.
+- [Low] The patch makes ovs_dp_set_user_features() the only writer and
+  has it store with `WRITE_ONCE(dp->user_features, features)`.
 
- # ./bridge_mdb.sh
- [...]
- TEST: IPv4 (*, G) port group entries configuration tests            [ OK ]
- TEST: IPv6 (*, G) port group entries configuration tests            [ OK ]
- [...]
+Pre-existing issues:
+- [Low] datapath_policy[] in net/openvswitch/datapath.c has entries for
+  NAME, UPCALL_PID, USER_FEATURES, MASKS_CACHE_SIZE and IFINDEX, but…
 
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
----
- .../selftests/net/forwarding/bridge_mdb.sh    | 23 +++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+--
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_mdb.sh b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-index e86d77946585..712b9a5a0e5f 100755
---- a/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_mdb.sh
-@@ -293,6 +293,7 @@ __cfg_test_port_ip_star_g()
- 	local grp=$1; shift
- 	local invalid_grp=$1; shift
- 	local src_prefix=$1; shift
-+	local invalid_src=$1; shift
- 	local src1=${src_prefix}1
- 	local src2=${src_prefix}2
- 	local src3=${src_prefix}3
-@@ -487,6 +488,23 @@ __cfg_test_port_ip_star_g()
- 
- 	bridge mdb del dev br0 port $swp1 grp $grp vid 10
- 
-+	# Check that a failed replace does not change the source list.
-+	bridge mdb add dev br0 port $swp1 grp $grp temp vid 10 \
-+		filter_mode exclude source_list $src1,$src2
-+
-+	bridge mdb replace dev br0 port $swp1 grp $grp temp vid 10 \
-+		filter_mode exclude source_list $src1,$src1,$src3,$invalid_src \
-+		&> /dev/null
-+	check_fail $? "Managed to replace source list with an invalid source"
-+	bridge -d mdb get dev br0 grp $grp src $src1 vid 10 &> /dev/null
-+	check_err $? "(S, G) entry for source $src1 deleted after failed replace"
-+	bridge -d mdb get dev br0 grp $grp src $src2 vid 10 &> /dev/null
-+	check_err $? "(S, G) entry for source $src2 deleted after failed replace"
-+	bridge -d mdb get dev br0 grp $grp src $src3 vid 10 &> /dev/null
-+	check_fail $? "(S, G) entry for source $src3 created after failed replace"
-+
-+	bridge mdb del dev br0 port $swp1 grp $grp vid 10
-+
- 	# Check that protocol can be modified.
- 	bridge mdb add dev br0 port $swp1 grp $grp temp vid 10 \
- 		filter_mode exclude source_list $src1 proto zebra
-@@ -568,8 +586,9 @@ cfg_test_port_ip_star_g()
- 
- 	cfg_test_port_common "IPv4 (*, G)" "grp 239.1.1.1"
- 	cfg_test_port_common "IPv6 (*, G)" "grp ff0e::1"
--	__cfg_test_port_ip_star_g "IPv4" "239.1.1.1" "224.0.0.1" "192.0.2."
--	__cfg_test_port_ip_star_g "IPv6" "ff0e::1" "ff02::1" "2001:db8:1::"
-+	__cfg_test_port_ip_star_g "IPv4" "239.1.1.1" "224.0.0.1" "192.0.2." \
-+		"0.0.0.0"
-+	__cfg_test_port_ip_star_g "IPv6" "ff0e::1" "ff02::1" "2001:db8:1::" "::"
- }
- 
- __cfg_test_port_ip_sg()
+net: openvswitch: do not record user features when the change fails
+
+The patch moves the store of dp->user_features in ovs_dp_change() to after
+the per-cpu upcall pid update. Every change now goes through a new
+ovs_dp_set_user_features() helper, which keeps OVS_DP_F_TC_RECIRC_SHARING
+and the tc skb extension reference in step. It also fixes reference leaks
+in the ovs_dp_cmd_new() error path and in ovs_dp_reset_user_features(),
+and has queue_userspace_packet() read the features once for both the
+head room and the padding.
+
+> Fixes: 35d39fecbc24 ("net/sched: Enable tc skb ext allocation on chain miss only when needed")
+> Cc: stable@vger.kernel.org
+> __dp_destroy() clears the bit before the ports are detached and before the
+> datapath leaves the list, so an upcall can still be reading the other bits
+
+[ ... ]
+
+> uses that value for both.
+>
+> Signed-off-by: Minxi Hou <houminxi@gmail.com>
+
+[Severity: Low]
+The Fixes: and Cc: stable lines sit in the middle of the commit message.
+Four more paragraphs follow them, and only then comes the Signed-off-by:
+line.
+
+git interpret-trailers, b4 and patchwork only read trailers from the last
+paragraph of the message, and here that paragraph holds only
+Signed-off-by:. Won't those tools treat the Fixes: and Cc: stable tags as
+ordinary body text?
+
+Could the paragraphs after the tags move above the trailer block? If they
+are revision notes, they could go below the --- line instead.
+
+> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+> index b2a0b09fd4a56..7c1af21f74df4 100644
+> --- a/net/openvswitch/datapath.c
+> +++ b/net/openvswitch/datapath.c
+
+[ ... ]
+
+> @@ -494,11 +495,16 @@ static int queue_userspace_packet(struct datapath *dp, struct sk_buff *skb,
+>  	    (err = skb_csum_hwoffload_help(skb, 0)))
+>  		goto out;
+>  
+> +	/* The features can be changed while this runs, so read them once and
+> +	 * use that value for both the head room and the padding.
+> +	 */
+> +	features = READ_ONCE(dp->user_features);
+> +
+
+[Severity: Medium]
+This single read also fixes a separate, older crash. The subject, the
+Fixes: tag and the impact description don't mention it.
+
+Before this patch, the hlen choice and pad_packet() each read
+dp->user_features. If OVS_DP_F_UNALIGNED is set at the first read,
+skb_zerocopy() can attach frags and leave user_skb nonlinear.
+
+An OVS_DP_CMD_SET needs only CAP_NET_ADMIN, which a user namespace can
+provide. If one cleared the bit before the second read, the path was:
+
+queue_userspace_packet()
+  pad_packet()
+    skb_put_zero()
+      skb_put()
+        SKB_LINEAR_ASSERT(skb);  /* BUG() on a nonlinear skb */
+
+The commit message only says a concurrent set "could make it pad a
+nonlinear skb". It doesn't say the result is a BUG().
+
+The double read is older than 35d39fecbc24. pad_packet() was split out in
+7f8a436eaa2c ("openvswitch: Add conntrack action") in 2015, and the double
+read dates from 2014/2015 code. Stable trees picked by the only Fixes: tag
+would miss this fix. A backporter who drops or reworks this hunk would not
+know it is a crash fix.
+
+Would this work better as its own patch, with a Fixes: tag for the commit
+that introduced the double read and a description of the BUG()?
+
+>  	/* Older versions of OVS user space enforce alignment of the last
+>  	 * Netlink attribute to NLA_ALIGNTO which would require extensive
+>  	 * padding logic. Only perform zerocopy if padding is not required.
+>  	 */
+> -	if (dp->user_features & OVS_DP_F_UNALIGNED)
+> +	if (features & OVS_DP_F_UNALIGNED)
+>  		hlen = min(skb_zerocopy_headlen(skb), cutlen);
+>  	else
+>  		hlen = skb_len;
+
+[ ... ]
+
+> @@ -1704,6 +1710,24 @@ static struct datapath *lookup_datapath(struct net *net,
+>  	return dp ? dp : ERR_PTR(-ENODEV);
+>  }
+>  
+> +/* Called with ovs_mutex. The receive path reads the field without it, so
+> + * the store is single and goes through WRITE_ONCE(). The store happens
+> + * before the reference is taken or dropped, the order ovs_dp_change() used
+> + * before this helper existed.
+> + */
+> +static void ovs_dp_set_user_features(struct datapath *dp, u32 features)
+> +{
+> +	bool was = dp->user_features & OVS_DP_F_TC_RECIRC_SHARING;
+> +	bool now = features & OVS_DP_F_TC_RECIRC_SHARING;
+> +
+> +	WRITE_ONCE(dp->user_features, features);
+
+[Severity: Low]
+The comment says the receive path reads the field without ovs_mutex, but
+only queue_userspace_packet() was switched to READ_ONCE(). Other readers
+that run without ovs_mutex still use plain loads:
+
+net/openvswitch/datapath.c:ovs_dp_process_packet() {
+    ...
+		else if (dp->user_features & OVS_DP_F_DISPATCH_UPCALL_PER_CPU)
+    ...
+}
+
+net/openvswitch/actions.c:output_userspace() {
+    ...
+			else if (dp->user_features &
+				 OVS_DP_F_DISPATCH_UPCALL_PER_CPU)
+    ...
+}
+
+net/openvswitch/vport.c:ovs_vport_get_upcall_portids() {
+    ...
+	if (vport->dp->user_features & OVS_DP_F_VPORT_PIDS)
+    ...
+}
+
+ovs_dp_process_packet() runs under rcu_read_lock() only. The kernel-doc
+for ovs_vport_get_upcall_portids() allows either ovs_mutex or
+rcu_read_lock().
+
+A plain load racing with a WRITE_ONCE() store is still a data race, and
+KCSAN will report it. Each of these readers tests the field only once, so
+there is no functional effect.
+
+Should these readers also use READ_ONCE(), or should the comment be
+limited to queue_userspace_packet()?
+
+> +
+> +	if (now && !was)
+> +		tc_skb_ext_tc_enable();
+> +	else if (!now && was)
+> +		tc_skb_ext_tc_disable();
+> +}
+
+[ ... ]
+
+> @@ -1801,9 +1825,7 @@ static int ovs_dp_change(struct datapath *dp, struct nlattr *a[])
+>  			return err;
+>  	}
+>  
+> -	dp->user_features = user_features;
+> -
+> -	if (dp->user_features & OVS_DP_F_DISPATCH_UPCALL_PER_CPU &&
+> +	if (user_features & OVS_DP_F_DISPATCH_UPCALL_PER_CPU &&
+>  	    a[OVS_DP_ATTR_PER_CPU_PIDS]) {
+>  		/* Upcall Netlink Port IDs have been updated */
+>  		err = ovs_dp_set_upcall_portids(dp,
+
+[Severity: Low]
+This is a pre-existing issue and was not introduced by this patch.
+datapath_policy[] has no entry for OVS_DP_ATTR_PER_CPU_PIDS:
+
+static const struct nla_policy datapath_policy[OVS_DP_ATTR_MAX + 1] = {
+	[OVS_DP_ATTR_NAME] = { .type = NLA_NUL_STRING, .len = IFNAMSIZ - 1 },
+	[OVS_DP_ATTR_UPCALL_PID] = { .type = NLA_U32 },
+	[OVS_DP_ATTR_USER_FEATURES] = { .type = NLA_U32 },
+	[OVS_DP_ATTR_MASKS_CACHE_SIZE] =  NLA_POLICY_RANGE(NLA_U32, 0,
+		PCPU_MIN_UNIT_SIZE / sizeof(struct mask_cache_entry)),
+	[OVS_DP_ATTR_IFINDEX] = NLA_POLICY_MIN(NLA_S32, 0),
+};
+
+Documentation/netlink/specs/ovs_datapath.yaml declares per-cpu-pids as
+binary with sub-type u32. The ops use GENL_DONT_VALIDATE_STRICT, so the
+only check that rejects an empty or misaligned attribute is the
+open-coded one in ovs_dp_set_upcall_portids():
+
+	if (!nla_len(ids) || nla_len(ids) % sizeof(u32))
+		return -EINVAL;
+
+By then, ovs_dp_change() may already have resized the masks cache.
+
+The spec has a separate gap. Its new operation lists only name,
+upcall-pid and user-features, and it defines no set operation. Both
+ovs_dp_cmd_new() and ovs_dp_cmd_set() accept per-cpu-pids,
+masks-cache-size and ifindex through ovs_dp_change().
+
+With the reordering in this patch, a malformed attribute no longer
+corrupts the features. Could a follow-up add a policy entry for the
+attribute and bring the spec in line?
+
+[ ... ]
+
 -- 
-2.56.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118065435.2367014-1-houminxi%40gmail.com
