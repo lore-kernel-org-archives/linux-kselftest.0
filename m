@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795343010;
-	b=A0tKELNAxsJjwXEnkicrYFW0mzicd2xWYId3Oz0d8qDH7j8jy3g3MPIdYgRANvrL4UQx
-	 F1uvCpPuIZxmACw0lJ64HTn16Zs7NF7QKV2T/A7w8CknDv6MifPrBA5wbzH/FaI+gbz0u
-	 5sbKRAiNQNCr3OLqnsq/+HrOm98bzpTgNBCjeD5Tye6YQ/R6USSJJe1r2m3snvionD/0q
-	 vb/TRe6YOkRksfRdHfADSWtRym58zpx3t0Kp26sFjl1L2khUhcnfVyOlOHVG+x6eBC0BY
-	 D9lOY2UZfj3pNWi02Dt8F7OrmkeDm8Ma6jZACHj+Y4KjHj4NDnSQSbJpfsN/oOdqLqA==
+	t=1795343023;
+	b=l5/rm4ZwUHW3M6UlrmYBkm4YIFk/21E0UJCRjOkpOUAuRDY3MQueXcYt/erGapQ6Io+4
+	 y+HjDdgMcZExwgOqjlfM//pOIwFof44VkSAdPRVhMj6lFVELwonvORss/js8TGJ43Qgb2
+	 mIKCisd4J2tp4MNwlfEQEcjpwLAxClMkBCqnJ9Q3HEuKHnbPXH+DXl2WhReHEsT5sPTuD
+	 8Itwl0u6A/9m8yMXKRKKJilgIFRrLfYkZwbx1zqPVB+SSbE5giKU/RUSl1JAQLbqcUdlD
+	 2VTafJ6kX+pqGMiQgOUmUTF6PN9KKEFGiOXLaDEX93iRUxQvvGJ4JUmYi/Lk2qmTf6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795343010;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795343023;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
 	 Cc:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=DS50kc0yp+XKmRK7kU59nKs7lLs5n+2L5Ptw9GISEyg=;
-	b=pAG70nTyKSbONLYwT7tZCoGSsCzeTxiNpKnEoqoNz3W/SXW4Zccb0wWhzJfOjtDQHvy2
-	 84c3wghcnXK44Z6KfHmGu+RRcTLhh1YGRzlSCJ+uFd5W2zV4gAg0yfyl2zES++xbq2Jn8
-	 H/tRjUKjau8AiLAgebAvwF+wf8YiXDQyBfwpFC9M2ybnmhiC3IJZw9prUHibZwETMj5sf
-	 zhLgEnPldu/Hmbi4WFC/smo7wbpHflh/wIg4u7mI/Mi9wrSN4lGOCJVjDg9pGocWKFJVg
-	 iC7WSpnH5+yqcVL3zj3SoP+LFEIzELhapbQri7eFjMVzpqdwN3C7wfHJ2F3peGQcfRA==
+	bh=Z5ElRnK1KcmWQzg796qjdcPFsrWyUv4vErbWyV6jKEg=;
+	b=LkbNduD6E7yEvi/z6O28ibJzlLMzQfnQt3z3XZThPhXjl01UPG7I3zYgR2E6R6OqkWHA
+	 qI3LDTjLxp4U9/p0rARON/+VPmZntvqqyYa2zmuwZmCCAT/veYDS+bgeu4gPf6X4Bcgck
+	 WYYJaeU7B+A9LFp/3bk0PsoQJmdzyNhunKm+cgAwLCI+DubUh/JjggybPG1DmsxMTyuHt
+	 lVm46W3LrxYqRLZVRTfKVZ3FnYh9Bwd296jjgz+qC4loflMwgXyJoqjxneBsdEE7k17yt
+	 PhRXwpXF2CY46OqW/9UvA/HGiwFyk9CF0gYI30xxBttmbVQGEqaItxGzWtzjhKiznYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=blackwall.org;
 	spf=none smtp.mailfrom=blackwall.org;
-	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=GqgcbTlK;
-	arc=none smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=YnhbfU8q;
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC13606A32C
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 10:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CBC13606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F09606A32C
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 10:23:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10F09606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=GqgcbTlK
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48e3b22e971so1188451f8f.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 02:23:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=YnhbfU8q
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so21985725e9.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 02:23:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1795343008; x=1795947808; darn=vger.kernel.org;
+        d=blackwall.org; s=google; t=1795343021; x=1795947821; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DS50kc0yp+XKmRK7kU59nKs7lLs5n+2L5Ptw9GISEyg=;
-        b=GqgcbTlKvhpVEdUHeAMatFpKIA/KSipQ62eUBmYCa1HlHWCsdzKAIuUzKhnNCrf8mE
-         8fQdsYR7Y4gflNAIsEkkfCTjAWfuw03vPALHREgkd/qRQ6w/rRUIUJd91kGzAhdxFbyE
-         Xw3/QtaT1HM/hVLb0j3DF3dU/o6V6EU95rRd8nd7z5snYesZ3kzyjsipCiBU3j9O9q/h
-         osjwBD6tXgWtSlYL3hqYPweMQHu6+iZ4tQL6t7YaA5tckbAFc8RTe04D7n52RUAqH667
-         WhTSE6omeCBCcK2kublsmKM1oc3EGzjtlraVXau6bMvagWU7belt6twZDqaZ5ef4gliE
-         PJLA==
+        bh=Z5ElRnK1KcmWQzg796qjdcPFsrWyUv4vErbWyV6jKEg=;
+        b=YnhbfU8qYUZS02WO6s4axbDVc9h5DJFfk9I29JCcMD+styoAIUcakV4qcy+Z8bdNdg
+         Cd0WZIClm9yvpavsH0GTft0p7+xkTq18m3kLioc9gaqX+3RhvEkZ9XHI1M42q7TcxGMJ
+         ncAHuEQQQVAzdH+EG2Mm6oTLQJWqzzpnsQ0M04e8H9OnCZJX0bbKnHi7L3PzEAPuQ2vx
+         BQxa7dTyf91S1zFPTzyLrGIERlKTpYLDNNDGht9imCbXSXvQlos0uD0uhbJiW1rEPG1/
+         6kKbEG7As9IiyUtzO49ePN6W9jrjHmz4ZKvGhC7i+Ge7oc+Xm8oSEiLdpnZa4hWohYr+
+         tC+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795343008; x=1795947808;
+        d=1e100.net; s=20260707; t=1795343021; x=1795947821;
         h=content-transfer-encoding:content-type:in-reply-to:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DS50kc0yp+XKmRK7kU59nKs7lLs5n+2L5Ptw9GISEyg=;
-        b=cDvmuFbwYVeH+r/LBOptbUYkkXQwCXfGEdzkN/0dvzuZbGQ0s5FKsguoNbT/Ybx2wo
-         4iQ/Brt1JyEy2vYoiAk7u5czpWQmGdQ4oB1TrmWJUaz4bUU/NOEm4Bk02oOnYedVM+pn
-         DPOsTKBqb23gDgGE3BvWAUIr7kATXl/Pv0EkGy0hfneQ34+e7Qo6WkGDhUGELjQ+7AjO
-         b3S9ex93fMF8bp2E7kYfZIEmcZbd605TofBfNKhDLUteETByl3MQ7nzyAUOMzxOmLT86
-         9Tn6QZ1k/NPZluZcPSWf7c00pB5ZD0GE0GeTpCaZhovD3t/xN6rIgNU4u+X0YurF61rl
-         wzmg==
-X-Forwarded-Encrypted: i=1; AL+hErHuJoyU3ocfsWSngFs0hMVza/LxR/ISEC2Se9Q+A2O4GTacx39LmBfJJ1pucrSQe2bVO/nZpo0qWJ9iXxNiZUM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9wERqpyp6p/FZM1BHpKB7IngrEnfkqNLOf1j6OS7O9QHb9t1Ch
-	JHV2gOTwar9RwV3Z3aF9pZU3ZC2bQ3ONX0+oQZL0nZN4fXNTWokLJIUyUTAkMr/TAtw=
-X-Gm-Gg: AZFdTZc48Kxb+j1m2NvIM8GrBvuF2hXWWuysz029exdoNzCnw1vt4JXtC9iCXsH666M
-	CnMAu1KdP54f8qTzrYUlFUzXQcBHQmXZjqNqPpjYndJT8rZlcpUrSet3k1ZXCKCk+sDz074SROA
-	uCAitkZwsDLFQEcLhBcPhPqUkCO8iIfSK9X/t/lei+D7g6c4rqwaD3iASeCwgAvL19ukKEX3Hfc
-	jDGp4roq47vgQlrrNEAiad5otQmamuEm+jhIGrGtJ+Zk+Z9FQhr3PfFqE9qKobSnPw9oOBP4FOT
-	hyVW01VG9fglM5ofRQjQ+CixZaRRaFaGfyx+UNtaSJxZcZSIZBFmEuwYzPBqo+P2a8vWQ9UngLU
-	wtIFN7DkoAaVcCJhoFZpGEX9aY37QQZXf3onkg9OHUNs3T+nQOxcq144Md+FXTiphLWzOnOlUjm
-	VvPLOuBM864TrDvD9F26gzz4FhFFdw/HJzq/y7Kv90zRWnlejiPHJiRA/gB+ajbqCufJ/fhLo8E
-	DvcOhIWp8NBNvbZAGntKaMzM3rSzpuLRLVvilrwW5DmcKc+EQ8PGeztNjUZPPpjwjAgK5x4rNai
-	+fHs3RaE/AUUOwlWMxrPzvDe603ShqAbqLkvEiNMj7mVz/5sXb7ffCiTIx8=
-X-Received: by 2002:a5d:5887:0:b0:4ac:84c:70df with SMTP id ffacd0b85a97d-4ac085bb48dmr15752832f8f.45.1795343007899;
-        Sun, 22 Nov 2026 02:23:27 -0800 (PST)
+        bh=Z5ElRnK1KcmWQzg796qjdcPFsrWyUv4vErbWyV6jKEg=;
+        b=WU79qtMiKc0ZlIdfph4S1j8WR572Qx2oOKEmqy7sKse4/YH3hYkPe3UjN+HaJYQwqA
+         cSAOw1ZLdzIgznuRAHjkgQ9R6nWuzSw0Po6+Ek5ATeammH3mXyEGJl0JvKyLTPSxC45a
+         cy0pyqiRbZp143DJFV5qd2O0lMuh1rAG3JihFns14oK+O8hDsEUQWrvUDhQm9FP3C7xz
+         B+xwg2hkUulNfR8TRccWIAERfn8oziuz17/u8GF+UypCgoPBCdrs9PJlA+1+I3eklUSU
+         3k8c3Iu1NrAuVcqStRxAGVMCKMKi19F/hOz2cLb737RgBQnNTN2aUS59s0PWlo0sQi1P
+         n2Mw==
+X-Forwarded-Encrypted: i=1; AL+hErFQg+rdGn7QSov9M8s5gTacIvf5Fr7Sfja2xfPCFRvBgSB1kWU8JO2ElywVGp5ydmOLbbDdJP1lENywx85vLys=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/MTqnWtKnWy88fGbTSRtsdg+1OLidfem5kErk+pQz4vQLCoNrT
+	sdxTDrVFrgFxcfGWb5H/MAIZVHYqMDa6noYAYSdU83wew8aniKuiNnnf2z1CwSHGlWA=
+X-Gm-Gg: AZFdTZcSwjr4cSMnf0IhYlWapWD3i4w304M7rqSjOBAkINoxlrQsknjp/LN4kI4Dkbx
+	Grr9tz0SBJnHW56LWIymJ3GRBeSwqwEivQldsHru9bOVmUVhjGSDRHladjQduZcfd4Iempwhfte
+	9Pute7kZXkVyrgXtY1i569sCdmibkbLUcABswy9TbFLT5XAsOLjqTdhBwTgk2VUz5M9H97dfRRL
+	cEulw+cMkGzensjIfhnkpiyBZ3t+gn0n7U/KO98MLTAVbUxipqfKsCimWgwWe5Z8SxRpitu4jc2
+	z7Efxt98uPPcyyt4ceG6XJhqZiJlBWp4uzmJ7qYr3Tb4LebHC3fu+WfdpzAJtBJFkPaF/LY4aB1
+	RgeYfxZ/AoQHPn05W3LNkIYlsnyoLO7TwMJa4oogwglUZRXsdeo/c5xQn8Doqx7BhTI5gUYwtqr
+	kPPYLGvfzs85SkWN/chnNYuk6fdiTGp8Q5dLJOkN7MiYN7ovZjVWwYuy4DRz7eM0tXE3VJrCWDz
+	X343xP0wi8bb69OPELxZaiAhtZM7bp8RztTttFTGt2jPPHGSSuY2ZUT/KQytxFqLyc3EQZ3XGfr
+	GCLfHONq/sHOciYlEemdz81PImWBKu5wS0PszbGjrLZIU6WFUoUMQOkZDzo=
+X-Received: by 2002:a05:600c:37c9:b0:4a4:4d57:8487 with SMTP id 5b1f17b1804b1-4bb887fe7f7mr158409615e9.5.1795343021420;
+        Sun, 22 Nov 2026 02:23:41 -0800 (PST)
 Received: from [192.168.0.161] (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a67f1b2sm14830205f8f.25.2026.11.22.02.23.26
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb90660cb4sm163162455e9.2.2026.11.22.02.23.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 02:23:26 -0800 (PST)
-Message-ID: <44b34f5f-742f-42eb-be7f-0cd731ff565c@blackwall.org>
-Date: Sun, 22 Nov 2026 12:23:25 +0200
+        Sun, 22 Nov 2026 02:23:40 -0800 (PST)
+Message-ID: <60766188-3c81-4d05-b684-811136c26f91@blackwall.org>
+Date: Sun, 22 Nov 2026 12:23:39 +0200
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,62 +92,49 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] bridge: mcast: Fix source list rollback on
- failure
+Subject: Re: [PATCH net 2/2] selftests: bridge_mdb: Test failed source list
+ replace
 Content-Language: en-US, bg
 To: Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org
 Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
  edumazet@kernel.org, willemb@google.com, horms@kernel.org,
  dsahern@kernel.org, shuah@kernel.org, bridge@lists.linux.dev,
- linux-kselftest@vger.kernel.org, kyuwoncho18@gmail.com,
- stable@vger.kernel.org
+ linux-kselftest@vger.kernel.org, kyuwoncho18@gmail.com
 References: <20261122072504.2623702-1-idosch@nvidia.com>
+ <20261122072504.2623702-2-idosch@nvidia.com>
 From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20261122072504.2623702-1-idosch@nvidia.com>
+In-Reply-To: <20261122072504.2623702-2-idosch@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 22/11/2026 09:25, Ido Schimmel wrote:
-> When the bridge fails to add or replace an MDB entry with a source list,
-> br_mdb_add_group_srcs() rolls back the operation by looking up and
-> deleting the source entries of all the sources that were already
-> processed. This is wrong for two reasons.
+> Add a test case for the issues that were fixed in "bridge: mcast: Fix
+> source list rollback on failure". Check that a failed replace of a
+> (*, G) entry does not change its source list, with one of the existing
+> sources specified twice and a new source.
 > 
-> First, with NLM_F_REPLACE, a source can appear more than once in the
-> source list. Its source entry is deleted when rolling back one
-> occurrence and the lookup fails for the other, triggering a
-> WARN_ON_ONCE() [1].
+> Output without the fix:
 > 
-> Second, when replacing an existing entry fails, sources from the new
-> source list that already existed before the replace are deleted together
-> with their (S, G) entries instead of being kept.
-> 
-> Fix by marking source entries that were created by the current operation
-> and only deleting them on failure.
-> 
-> [1]
-> WARNING: net/bridge/br_mdb.c:901 at br_mdb_add_group_srcs+0x310/0x440, CPU#10: repro/304
-> [...]
-> RIP: 0010:br_mdb_add_group_srcs (net/bridge/br_mdb.c:901 (discriminator 2) net/bridge/br_mdb.c:924 (discriminator 2))
-> [...]
-> Call Trace:
->   <TASK>
->   br_mdb_add_group_star_g (net/bridge/br_mdb.c:1021)
->   br_mdb_add_group (net/bridge/br_mdb.c:1082)
->   br_mdb_add (net/bridge/br_mdb.c:1097 net/bridge/br_mdb.c:1360)
->   rtnl_mdb_add (net/core/rtnetlink.c:6925)
->   rtnetlink_rcv_msg (net/core/rtnetlink.c:7178)
+>   # ./bridge_mdb.sh
+>   [...]
+>   TEST: IPv4 (*, G) port group entries configuration tests            [FAIL]
+>           (S, G) entry for source 192.0.2.1 deleted after failed replace
+>   TEST: IPv6 (*, G) port group entries configuration tests            [FAIL]
+>           (S, G) entry for source 2001:db8:1::1 deleted after failed replace
 >   [...]
 > 
-> Fixes: 61f2183512a7 ("bridge: mcast: Support replacement of MDB port group entries")
-> Cc: stable@vger.kernel.org
-> Reported-by: Kyuwon Cho <kyuwoncho18@gmail.com>
-> Closes: https://lore.kernel.org/netdev/179489219555.3099318.10297266282803881244@gmail.com/
+> Output with the fix:
+> 
+>   # ./bridge_mdb.sh
+>   [...]
+>   TEST: IPv4 (*, G) port group entries configuration tests            [ OK ]
+>   TEST: IPv6 (*, G) port group entries configuration tests            [ OK ]
+>   [...]
+> 
 > Signed-off-by: Ido Schimmel <idosch@nvidia.com>
 > ---
->   net/bridge/br_mdb.c     | 29 ++++++++++++++---------------
->   net/bridge/br_private.h |  1 +
->   2 files changed, 15 insertions(+), 15 deletions(-)
+>   .../selftests/net/forwarding/bridge_mdb.sh    | 23 +++++++++++++++++--
+>   1 file changed, 21 insertions(+), 2 deletions(-)
 > 
 
 Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
