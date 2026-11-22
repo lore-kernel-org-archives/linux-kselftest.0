@@ -1,55 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.204
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795373473;
-	b=h/rxq5dONAV6XHO7PG2IIVcrDvDGOU0Qdiv5ojQarvD0gHPt/EKP/CfET0xMGhnfNwfp
-	 ywqC9Vb6RWpqCOU5vFRF5Sxop7kMxY8JgyG3jl5Dh9EwknLns/aEuXQIiNuKGu+mmJUMi
-	 x9h6RboKerXdsRrKGmLV/KYy8W3GdAyGfCd6g5r8zzuWiZIZQBEoUPgXSZfir4zRz8epI
-	 3sc14CvOl/27od2deOoY6jehn8OciRK4Ecv7I3AsB5j5eZsypjOjjkXceFVgeXk+1loeZ
-	 /hZLNRNYOEWSH3hCKJkGQNU+cizu6d4k2Fr8bh1EljDuWOhruDY5Cf9vw5uvXOvbJCQ==
+	t=1795374133;
+	b=dqEoJkQeW9bsQkc1BiQdYrjVrqskmMstZrYdfZ29nqtungIUi72cq3WXYLTm+oKcURsv
+	 z8R2Mywv8tyXCK/yJBfZWDrw2d5kQIi88zsafHc034kOsENmcz2xmIgadNXIoMffWuJ09
+	 sWV4KTi8Cayp2IEGh8Z53NMOYV/m+a85zx4s+JJ2hZvgjlDwaJSVbBPdN2vvdAzI0zsU6
+	 nwS4Z9fTqOhjJ906Pkny+Nr2ASZVcUnJVMjt9CwvsdIsiK4rzCdy6USeOI57qSPWHnKf8
+	 BQM51E7VXj810PZw4YdXH2cJx0+CEx6NL2BD0j00MWNd0YkvSBhO9rLCdupSUp95QXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795373473;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer;
-	bh=50wCei2ezE7qqlKPwEZQKfaQvojP+aADu/REaQZidPs=;
-	b=iokrYi7o1aB1o07TCeIgKPTPqAijiwFCzZLUi9sqI247A/wwQysAAbUGSZ8t8hbrKVaA
-	 dn3nJZX3teWb2iaXWKgcZcFNhZznfhQ9UTQAS9YkGTTvqX6hU2Bnc7LQOZnNKyroUvm8F
-	 ZNjfvaN5DbDjdS6zR3tlVjwEQeHEtDUeqWcksHeAKKTwPAmGCfJpgivDz+O9WoqLiXFvh
-	 qLI1d5RjYc5Opn8KLeK8f0ote0xvCCjX1+eZou/mXvt1W3AyEknqMpCHXypu2KnJDy2Cv
-	 1LAmSJImLgDKmHmiarz5IQIRig/WSt5Q7cGhTHbmrwJPuF2Mt494rHq7bw2PWkS4ruQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795374133;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=5ImuqM4hh2EY1+d9bvgkuqa7XuiqLC0obTG9QEkhIqg=;
+	b=JoRx8kffa0y6+bEjnYAKd4BzuwbjWBHOVRB1GnMC7pyy79o8WY9h7BkcUYl2873haZmc
+	 Iy3uBZiqlwzgdPdPGUGb8klarkUOxU0vFzk/5xqyHX/7A+bka5ZlFWwDNNGnxv2ClnP8/
+	 VtbG6PrQFNQmR2yxbTgSP4oRM8zYW8bxb8ieWWD7AC9qQxz0GhU8Nk+gKX8kj3xAPfbSF
+	 E/g2AUN8VW23MBqa/kcYNK+D7+ojpFg0sC/LqwOQa1+4O9XMihdktRjYSQTlh7LfLXif7
+	 BLRB6dHQNeJGX60KKSd7XHuSj9Wt8hhZiN4Ii31K2sOirDXZeaTQd8l7OmEIKC3jQJw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DeORfqno;
-	arc=none smtp.remote-ip=95.215.58.204
-Received: from mta1.migadu.com (out-204.mta1.migadu.com [95.215.58.204])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=ncrdZuej;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F873606A320
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 18:51:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F873606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50611606A320;
+	Sun, 22 Nov 2026 19:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DeORfqno
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CGiHf1+jeEEE2NgCdnd+kn0vFA9jhJqMPHDtP1DXzTo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795373469; v=1; x=1795978269;
- b=DeORfqnoSh0rdqxELAj4spb63VFK2xQzhpJ8ltJW9dd6VmhU53G9kQKy32CnHH6odAzp6Ipj
- XHPwQ4vkCBD4UHK8nSWE5AL6+xDY+RF3rm4FrqSUFOGdthD4VkJ0STyEZrAUKniYJyBknlLCFHd
- Fw8eQ38yC5/qPFu8v0OyyoSM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 57ff06e043170ff8;
-	Sun, 22 Nov 2026 18:51:07 +0000
-X-Mizu-Trace-ID: 57ff06e043170ff8
-X-Migadu-Flow: FLOW_OUT
-From: "Nico Pache (Red Hat)" <nico.pache@linux.dev>
-Date: Sun, 22 Nov 2026 11:50:36 -0700
-Subject: [PATCH] selftests/mm: honor VM_SELFTEST_ITEMS from the environment
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=ncrdZuej
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4003B1F000D1;
+	Sun, 22 Nov 2026 19:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1795374132;
+	bh=5ImuqM4hh2EY1+d9bvgkuqa7XuiqLC0obTG9QEkhIqg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=ncrdZuejHtg4X4kIHE9XamnHb/F9dg1FnvcNpLGpxT4OXyDbYPVGYqxH+AzMOoMSF
+	 t4fgSU/fMqIRiZmzAJMU7IyzQx/NfehM+bVGPUcZb0mRxOH4Is2fs+W43blTXtPUVN
+	 1fp+bkcHtQ+aHz6nKls6VApLiBCF/ltHvHIChdgA=
+Date: Sun, 22 Nov 2026 11:02:11 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Nico Pache (Red Hat)" <nico.pache@linux.dev>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, David Hildenbrand
+ <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Tianyi Chen
+ <hi@tychen.cc>, stable@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: honor VM_SELFTEST_ITEMS from the
+ environment
+Message-Id: <20261122110211.81cf2fbbfc9048264aba50c5@linux-foundation.org>
+In-Reply-To: <20261122-vm_selftests_items_fix-v1-1-9edef5e7975d@linux.dev>
+References: <20261122-vm_selftests_items_fix-v1-1-9edef5e7975d@linux.dev>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,55 +60,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261122-vm_selftests_items_fix-v1-1-9edef5e7975d@linux.dev>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM7QqCQBCF4VuR+d2CM4RJtxKx+HG2RtJiZxNBv
- HfX+vkcOO9KhqgwuhYrRcxq+p4y+FRQ92ymB5z22SSlVMwibh694RUSLJnXhNF80MUF5rppL/V
- ZKlA+fyLy/Avf7n/btx3QpaNG27YDejFqxnoAAAA=
-X-Change-ID: 20261122-vm_selftests_items_fix-f118ab78426e
-To: linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
- Tianyi Chen <hi@tychen.cc>, stable@vger.kernel.org, 
- "Nico Pache (Red Hat)" <nico.pache@linux.dev>
-X-Mailer: b4 0.17-dev
 
-The unconditional default assignment overwrites VM_SELFTEST_ITEMS from
-the environment. This regresses environments that use the variable to
-select test groups: without -t, all default test categories run instead
-of the requested groups. The -t option continues to override it.
+On Sun, 22 Nov 2026 11:50:36 -0700 "Nico Pache (Red Hat)" <nico.pache@linux.dev> wrote:
 
-Fixes: 4844f5b84a8e ("selftests/mm: reject invalid test selections before running tests")
-Cc: stable@vger.kernel.org
-Signed-off-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
----
- tools/testing/selftests/mm/run_vmtests.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> The unconditional default assignment overwrites VM_SELFTEST_ITEMS from
+> the environment. This regresses environments that use the variable to
+> select test groups: without -t, all default test categories run instead
+> of the requested groups. The -t option continues to override it.
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index a1b45a3dedae..aa63f840cf60 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -102,7 +102,7 @@ RUN_ALL=false
- RUN_DESTRUCTIVE=false
- TAP_PREFIX="# "
- 
--VM_SELFTEST_ITEMS="default"
-+: "${VM_SELFTEST_ITEMS:=default}"
- 
- while getopts "aht:nd" OPT; do
- 	case ${OPT} in
+Oh.  Is "setenv VM_SELFTEST_ITEMS" really a thing?
 
----
-base-commit: 2dc60bd9975fc8666a13d58410499e06e6799ba9
-change-id: 20261122-vm_selftests_items_fix-f118ab78426e
-
-Best regards,
---  
-Nico Pache (Red Hat) <nico.pache@linux.dev>
-
+afaict the official way of doing this is to use -t.  Continuing to
+support "setenv VM_SELFTEST_ITEMS" is perpetuating bad behavior.  How
+about teaching "environments" to use the official selection method?
