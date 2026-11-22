@@ -1,52 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795378639;
-	b=LeTKhCcfYD5OnpQ63dHXVR/GzgFy/CMsgwv2z1HXSSBwwHytBBGAOrx1jKmb+D7TwLQr
-	 0CFWY3nk84q97p/5v1E0sy/ypFZHSNESAg9DEqvpltln9JVGlUr7l8L9i+olYfMKXcUig
-	 Hes8iacm3auYEmogkCNY78OhzMbKcQBM1gMHqDM6gbM4OgjFLeIMLwRcpKOcZHPP+QwtP
-	 relguKrq56hlw0U3GWDeUkf4vPAaZHeNNgmhiwrFfU021oTgMDIm0MbGgWqqqZZbQA3E9
-	 tMw8NFuzuR5OofYPK+YoogvRSVaam2c6CYPsbufno3J+L6GPpw0GJJGmI4UcLer71QQ==
+	t=1795379284;
+	b=lhRwsbBcE8CC3oEG9PlmejTlLgoK633nzCvnUmrowSDyUnMPBvLmiIUuA1EVMusuqxCP
+	 GmWrqo3craAJoZYcxHY/yzTF5/xh8tiPWyFpGQdUU+R7H5UTy6JQuSQRGUwkkF9kLLi+x
+	 5ypVMBkymtdS2aAcPEnf/lYSn9QC16FHONMtYDmWpt9NjD0nKBU/DjlPnT8z/fpdWxBOZ
+	 4aGntLO6OBp9QX1toPOlCKU5sPTc3gsx2GGHrcOMrDq3BRuiLo1detYMLmd73nKE057YY
+	 xvqn6BGvrQmL7x5RitS1Xj7sMvG7dZOTD4EYVjJZtJ3RNwpx+/7/Eco8dqrvutkw4vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795378639;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=eRHsra6RBQdHsm+/rz4srEJmAl36q57hdP0Dh3GlsWw=;
-	b=CH07x0RV/Fvo02a9k04qtUtcmF5U6MZsoTF2ZnBpylfZCA8nJQPXkSjAYZm8aYIaUqY1
-	 11pDqgZoTLtPG8jx3XwW5jTV0k2KUpmvXdQ3zlU5FBzLpWjejdi8oMsFNKMi1sxXOsTQR
-	 wYKe1+u630YBLkmZ9xeuxRW4eSdG7PhknzLK/l5LwO7tKir8W4i+WcLFY4lGhxDGvy5Or
-	 fe5iUMu1g7mfkKRmBzdVkA2KpezEr78cTsQx4aaRF8d1dNEtsDdLqz3Vl2JQcscjBOLfR
-	 znvDGEF6/NlpKGGuorJ+B2qgmpmiA2mJ/U49ZP3/s1+/lSeMd819ml2QUFCTVGnGqZQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795379284;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=hX4n2ELcNNj0/4nHT8RN7SbsIUQvyFqPuov+TG5Nv9g=;
+	b=0PpT/jxKVddrsw+T1qelY5W5A9EGWH4NJQaZtQadGNIVNi9Y8FoLwpaRMUhV/bmeYU0z
+	 GHca0wBngnckJ9HMvGta6cpXHZqQ27HSp6J2ikpTPkmO6ydDsQL/xtLh6KrhgxYZNXCB7
+	 CBcqHfwRKXRZqS4aAVZyCXodvcjcA7eEKmmBpRj86g57ZTQgLiiGZW9lBJe0U3//aEINd
+	 v016eNA1pinA6kIzPE67EnLq7+aIZC4zhvKCsKjkrD7w/6tPsEiwHFhnbygHY/EB7YeGp
+	 ydGrGBCstSienFbSGrrvRo4aUpFGRxW2zs/O1QSDbPgEzA0ZcV5pFQABGAulSj2hytA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=corp.free.fr;
-	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b="KV6a/Ax0";
-	arc=none smtp.remote-ip=212.27.60.169
-Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="DtQFC/+B";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A65606A31E;
-	Sun, 22 Nov 2026 20:17:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9A65606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D14606A31A;
+	Sun, 22 Nov 2026 20:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=KV6a/Ax0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1795378630; bh=reaXzdgyMMqRj1zA2Esagitp1XJA0FQvEzoZ17ZFMmI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KV6a/Ax0sBJ8OshW7PRXLVfGl41wyZ6N/c3AOKxOLU/ncq+3wpMoUzOF1cgQam+X0
-	 gSlsHOJC9VonxEVes6wxFuYhlz4oAyN/vy17UgWpyJLXYG3BVax7T3gXf+W07SCZ/R
-	 OLtU4KJcK3Vz0AjJguVkD0M8M+xGCf903Z6/vwWmb0ecxVsd/ePR9pFJaK5+Pb7aRm
-	 i2ZmCGKRc8Acw3APo5oSKUxemfDzfFF4g7FpUNsd6zrKlcE597REeOHXftyoVjlsyl
-	 uG3Rq9STohXFHqb2T8HVOuQuyErCFnFeRzQSBgWOwnwA4K/KrwCzBQneySRRSzuY84
-	 OKZ7imniFQ22A==
-Received: from [0.0.0.0] (unknown [213.228.1.188])
-	by rcs.proxad.net (Postfix) with ESMTPSA id 895A944C036C;
-	Sun, 22 Nov 2026 21:17:08 +0100 (CET)
-Message-ID: <3b3dff0d-e879-4a14-9f17-2b3015b6da39@corp.free.fr>
-Date: Sun, 22 Nov 2026 21:17:07 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DtQFC/+B
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579341F000C0;
+	Sun, 22 Nov 2026 20:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795379283;
+	bh=hX4n2ELcNNj0/4nHT8RN7SbsIUQvyFqPuov+TG5Nv9g=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DtQFC/+BjIVL35yRIkQAYiez++FX6dq1X7g9+U5wiM9l5aQa2bCiQa0lA2KTXkgKO
+	 2GT1VmmiI5zeFd1FOhAPus/+fS4ofCKzqBssX2tUSpnCu5DOjAqzn3puJ0tq8KB9t4
+	 GpNPbpdGJuuLtuJfgKRWiznvitvtiWUv388C8tOsf0YN4/CfgUZ1IiMn3x35uwU0Mn
+	 1Ao9M5lEIvKdmb/YeWSZ7g4sl3nh/deToqadEqFwGkeoAk1OyDwjyExdU9l/1PjW8N
+	 jHMgktO+4YczGQbKoF+Q9d+vLGJmsYwWWN9aZj/3h6aCyWyoR5o2gpSdRDOswa7+zR
+	 QEgyW1cP1w0QQ==
+Content-Type: multipart/mixed; boundary="===============7306649944735902366=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,71 +49,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 05/10] net/mlx5e: TC, reject a partial tunnel
- key with tunnel mapping
-To: netdev-bot+sashiko@kernel.org
-Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- jhs@mojatatu.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, bharat@chelsio.com, donald.hunter@gmail.com,
- corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
- dsahern@kernel.org, idosch@nvidia.com, shuah@kernel.org,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- oss-drivers@corigine.com
-References: <20261117092915.255194-6-acassen@corp.free.fr>
- <179514543838.3136.15751272244504735479@kernel.org>
-Content-Language: en-US
-From: Alexandre Cassen <acassen@corp.free.fr>
-In-Reply-To: <179514543838.3136.15751272244504735479@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <b6da91bd7d0e63cbf8a3d96298191544d46afbc7d0ba1a7fa55b996f7d7cd7c3@mail.kernel.org>
+In-Reply-To: <20261122193539.3334213-11-jarkko@kernel.org>
+References: <20261122193539.3334213-11-jarkko@kernel.org>
+Subject: Re: [RFC PATCH v7 10/26] userland: Add core infrastructure
+From: bot+bpf-ci@kernel.org
+To: jarkko@kernel.org,linux-fsdevel@vger.kernel.org
+Cc: jarkko@kernel.org,bpf@vger.kernel.org,containers@lists.linux.dev,linux-api@vger.kernel.org,linux-arch@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-mm@kvack.org,linux-security-module@vger.kernel.org,aleksa@amutable.com,alex@amutable.com,viro@zeniv.linux.org.uk,luto@amacapital.net,arnd@arndb.de,brauner@kernel.org,dhowells@redhat.com,ebiggers@kernel.org,giuseppe@scrivano.org,hughd@google.com,jack@suse.cz,jlayton@kernel.org,corbet@lwn.net,josef@toxicpanda.com,kees@kernel.org,kpsingh@kernel.org,lennart@poettering.net,neal@gompa.dev,oleg@redhat.com,paul@paul-moore.com,ptikhomirov@virtuozzo.com,sergeh@kernel.org,skhan@linuxfoundation.org,zygmunt.krynicki@canonical.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 22 Nov 2026 20:28:00 +0000 (UTC)
+
+--===============7306649944735902366==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> userland: Add core infrastructure
 
-On 11/20/26 04:30, netdev-bot+sashiko@kernel.org wrote:
-> [Severity: Low]
-> Should this check depend on the tunnel type? For VXLAN and Geneve the
-> tunnel id is a 24-bit VNI, but this check requires all 32 mask bits.
->
-> The VXLAN and Geneve parsers already refuse keys that do not fit in 24
-> bits:
->
-> drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_geneve.c:mlx5e_tc_tun_parse_geneve_vni() {
->      ...
-> 	if (be32_to_cpu(enc_keyid.key->keyid) >= MLX5E_TC_TUN_N_VNI) {
->      ...
-> 	MLX5_SET(fte_match_set_misc, misc_c, geneve_vni, be32_to_cpu(enc_keyid.mask->keyid));
->      ...
-> }
->
-> mlx5e_tc_tun_parse_vxlan() has the same check. The mask is then written
-> into the 24-bit vxlan_vni or geneve_vni field of fte_match_set_misc, so
-> MLX5_SET() cuts it down to 0xffffff. On the VXLAN-GBP path,
-> tunnel_header_1 gets mask << 8, which is 0xffffff00 for both masks.
->
-> As a result, enc_key_id <vni>/0xffffff and enc_key_id <vni>/0xffffffff
-> program the same hardware match. Also, key & 0x00ffffff equals key for
-> every key the parser accepts. So the wrong-tunnel-id case from the commit
-> message does not seem possible with this mask.
->
-> After "net/sched: cls_flower: add enc_key_id mask" later in this series,
-> a VXLAN or Geneve rule with the natural full-VNI mask 0xffffff would get
-> -EOPNOTSUPP on every tunnel-mapping path. That covers rules in a chain
-> greater than 0, and chain 0 rules with goto or sample actions.
->
-> Would it work better to compare against the id width of the tunnel (24
-> bits for VXLAN/Geneve, 32 for GRE)? Another option is to compare the mask
-> only over the bits the device actually programs.
+TL;DR:
+- USERLAND_ALL_FLAGS in the uapi header becomes fixed ABI; adding flags later
+  may break rebuilt programs, so consider keeping it kernel-internal
+- USERLAND_CLOSE_ON_EXEC naming nit: other flags use *_CLOEXEC
+
+> diff --git a/include/uapi/linux/userland.h b/include/uapi/linux/userland.h
+> new file mode 100644
+> --- /dev/null
+> +++ b/include/uapi/linux/userland.h
+
+[ ... ]
+
+> +enum userland_flags {
+> +	USERLAND_KILL_ON_CLOSE	= 0x00000001,
+> +	USERLAND_CLOSE_ON_EXEC	= 0x00000002,
+> +	USERLAND_ALL_FLAGS	= 0x00000003,
+> +};
+
+Should the USERLAND_ALL_FLAGS mask be exported in the uapi header?  The
+later userland_open() syscall validates with:
+
+  if (flags & ~USERLAND_ALL_FLAGS)
+          return -EINVAL;
+
+Once released, the value of this mask is fixed ABI.  If a later kernel adds
+a flag and grows the mask, a program rebuilt against the new header that
+uses USERLAND_ALL_FLAGS would get -EINVAL on older kernels.  If the mask is
+left unchanged, the in-kernel check stops covering the new flag.
+
+fanotify hit this: include/uapi/linux/fanotify.h marks FAN_ALL_CLASS_BITS,
+FAN_ALL_INIT_FLAGS and FAN_ALL_MARK_FLAGS as "Deprecated - do not use this
+in programs and do not add new flags here!", and the valid masks live in
+include/linux/fanotify.h (FANOTIFY_INIT_FLAGS).  Other fd-returning
+syscalls keep their valid-flag masks kernel-internal, for example
+CLONE_LEGACY_FLAGS in include/linux/sched/task.h and VALID_RESOLVE_FLAGS in
+include/linux/fcntl.h.  Would it make sense to move the mask to
+include/linux/userland.h?
+
+Also, this isn't a bug, but should USERLAND_CLOSE_ON_EXEC be spelled
+USERLAND_CLOEXEC?  The other close-on-exec flags under include/uapi all use
+the *_CLOEXEC form (FSOPEN_CLOEXEC, FSMOUNT_CLOEXEC, OPEN_TREE_CLOEXEC,
+MFD_CLOEXEC, EFD_CLOEXEC, ...), and the name cannot be changed after the
+ABI is released.
 
 
-No. This is the question of v1 [1]. On VXLAN and GENEVE, N/0xffffff matches
-the same packets as the exact key N and the exact key works in chains.
-A check per tunnel width would only accept a second spelling of the same 
-rule.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-[1] 
-https://lore.kernel.org/netdev/35bf2a1f-7f65-45fa-a854-dd4f4c4c0d90@corp.free.fr/
-
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45063222848
+--===============7306649944735902366==--
