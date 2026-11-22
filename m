@@ -1,60 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.247
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795332582;
-	b=CdwcChLk40Vyc4sZ3mlyuyBui+px+57BsgW3CGy3PMkH8Un6UPK5qQa45b+1RXdOF1C7
-	 Sj8x8dEjTFE99gsrUEjdU24rF6Bwbh7A1HC69ObHl9qUr1RZeaLLQ08/Ze73BcxxJ/+va
-	 xMssudE5iByen6VYyJhxRPvz0x+3XgRdZbifhYso3Un9vRLya16Q+jJtuo475P4tMtcSn
-	 mG/FZfHlg2hP5F8LieR9o0hst0tZO62TkQ9WOHLW/91W24EH7pDD1ARkf0wdj2NuHulLZ
-	 HlYVjNBHRNyr7x1BDiLS4SGRmjT+jHFrLyZCCPcVoAowCKdkpnua8DruV1MeGuZNxRw==
+	t=1795333066;
+	b=MOQOfHji+bqRjMnGAXxbyFqHVzGlgvUJ+pJe+BqbW+uQH1Z+tI2DjKNVw+I0/j8ATE/N
+	 j5PMspgXzvE0KU+KTPXBdiDRBl0Lhvb5frKbYz3VembcUhMutP5BtXBkdhQOMTc2Swb5K
+	 oHDQa0S3DBSFRk3DGP9jwAYp5wcgBkxdFufwpL/rYt2r80vca2MAE1A3eXjI5IF2F3xrY
+	 10hSjthakyKijybQQn2U3GaPT3scyKQ/yG4kv2M/tdiHAaDh8y6BI+TbxU5W2WRKCEnDA
+	 XS4m/rZ49Jpo4/pINOJ4UINu8bwK7fmyHWxSdlUZfM+ifbgRMt8VkP8KsoDxPL0h0sw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795332582;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=HiA9PYZbAt9pSqWEX/fj1U6pPBAqKzZsNmZT9z0VVZs=;
-	b=sXLy9q4/wt+N1AZxClYrk4doGvUJuLd0p8k5qKTUXLG0g6Ew4LZZaA4IRX+k20CUYDic
-	 908TnJuAAlkXQ5yWCWGJ71RKTSmtUZnwYJczB5nMBegR74OayI1cVih+HJMi1cquUqGIV
-	 LRQ9+yMdnbGi7dtqMB7f3W6GdM26cdq5plE2PlpIENO2MtF8RT+jMQJ1OxJmoyRUHMQE/
-	 aVOMDbELlfpImvi9ZSk2X03N/50v80OLFtU0nbPrrxeY4USlo0KoU64sYItt8TY18061k
-	 7m4G0w4QgM9XJHRpZPT3a4kSylIuTHVFIXO88vGEsPkVHI/dKdgA1jLywOq75/d5U3Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795333066;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
+	 Cc:X-Mailer;
+	bh=S2I91cqH+K379Jcopm9ofeEem9S17TNrqbhpkhXWgpU=;
+	b=Q4O0BlyYjAiahb0L0WbVMehzHJffKAucfIA1oXUzV9TKJTb5kwLQsEjM1IbVKoCjF13f
+	 TbgpWXbQoSPYk4kqvD9zzchBkjMrfW6M9KI+kP5PP154Fz8iy/fpWXrShWk3ProHqpFsX
+	 zEa3wMt9PU0R8D0Rm3z2ehXDnn1R7UFnEtaOVTqSrFQEPK9I4ks4sOrEWUmTmP8h4f7Wl
+	 gC7Np52keT5NeROWchnMSo48FJuvAPB89rn5fdNAfJNEsqIL98Y5xyMj/EvXUVzvHmYl/
+	 lt02VQdXIfuCoP7yYCcosKoG1jR/Lw88QQH/WVcytKHM1vMo9cwV0dLp0NDHsh28pAg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MRiyKbKO;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rrb+Cqxj;
+	arc=none smtp.remote-ip=91.218.175.247
+Received: from mta0.migadu.com (out-247.mta0.migadu.com [91.218.175.247])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4361606A339;
-	Sun, 22 Nov 2026 07:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692C0606A333
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 07:37:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 692C0606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MRiyKbKO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D8A1F000C0;
-	Sun, 22 Nov 2026 07:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795332582;
-	bh=HiA9PYZbAt9pSqWEX/fj1U6pPBAqKzZsNmZT9z0VVZs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=MRiyKbKO6PQN6irifYg0CjjvrKrfqPk+LTEePHIgOcpSd2Ntwpr69j+XfY6rWMPVG
-	 XJzvHvuJf2rChX5yusT6p1/rsGJ8u97Q803jTEVmUaEDkVboBvruXN1M9gE2PKJsxZ
-	 U8tyz8da3mH6BbVENKZqz+Bu6dGMdYZ5CMl64V9H7SK0X+JfTRWbq4iEwg0/beslre
-	 9UO7YOuOytQ0lekIbAPp7McbtsBrMG2uqoWbfF+NpC3+jHxkEIV6lGfscckHlf+zdi
-	 pEP6qlMC2NEJjvy4oqwa+dtqGRj78eH+t7srb/nWefIhDCgq3gwUyqvSVId5Eu6v2d
-	 cqTxqqvKqUfPg==
-Subject: Re: [PATCH net v5 2/2] selftests/net/openvswitch: check that a failed
- set keeps the features
-From: netdev-bot+sashiko@kernel.org
-To: houminxi@gmail.com
-Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
- i.maximets@ovn.org, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org, matttbe@kernel.org
-Date: Sun, 22 Nov 2026 07:29:41 +0000
-Message-ID: <179533258159.3135.906610390890565632@kernel.org>
-In-Reply-To: <20261118065435.2367014-3-houminxi@gmail.com>
-References: <20261118065435.2367014-3-houminxi@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rrb+Cqxj
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=h/GTrd6gvXy6aK8t1D7cqsfPdYQXwAl/ymNtfNBswfo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795333063; v=1; x=1795937863;
+ b=rrb+CqxjSEOSskj1atTey91eN/58WuuJszbA/WaZKAT+ORuH1MdXkwZHlomsdn6EMpcn6JMj
+ 8Hjem8dsnKejy56bS02PxKhIG9Sn4NJQvonh7cmnor+shVPcIZGJy0mQbSweNjrb43LWyMG3ANB
+ qmTNpXpOmlnRyP0h2478g5lw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3ac586d565c110b2;
+	Sun, 22 Nov 2026 07:37:43 +0000
+X-Mizu-Trace-ID: 3ac586d565c110b2
+X-Migadu-Flow: FLOW_OUT
+From: Qiliang Yuan <qiliang.yuan@linux.dev>
+Subject: [PATCH 0/3] udmabuf: speed up mmap() of huge page backed buffers
+Date: Sun, 22 Nov 2026 02:37:35 -0500
+Message-Id: <20261122-feat-udmabuf-huge-pfnmap-v1-0-dcba888940c2@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,122 +60,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL+bAmsC/x2MwQqFIBAAfyX2/BZyo4x+Jd7Bcq09ZKIZQfTvS
+ ceBmbkhcRROMFQ3RD4lye4LqF8F82r8wii2MFBNnVKk0LE5MNvNTNnhmosQnN9MwIbanjTZWmu
+ GkofITq5vPf6f5wW/Ik1zagAAAA==
+To: Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Philipp Stanner <phasta@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>, 
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <qiliang.yuan@linux.dev>
+X-Mailer: b4 0.13.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+QEMU and crosvm export virtio-gpu blob resources from guest memory as
+udmabufs, which the host renderer and display mmap(). The guest memory is
+often backed by 2 MiB huge pages, yet udmabuf maps it 4 KiB at a time:
+mapping and touching a 4 GiB buffer inserts a million PTEs and takes over
+200 ms.
 
-Low priority / nit picks for your consideration:
+Patch 1 has mmap() of a dma-buf align large mappings to PMD boundaries,
+which any exporter mapping contiguous memory with PMDs needs, such as the
+proposed VFIO dma-buf mmap() [1]. Patch 2 maps the huge page backed
+ranges of a udmabuf with PMDs, which cuts the time to map and touch it
+by 87-90% for hugetlb and shmem THP backed buffers and leaves 4 KiB
+backed ones as they are. Patch 3 adds selftests.
 
-- [Low] The Reported-by trailer probably does not belong on this commit.
-- [Low] A comment in the new set-dp branch of main() in ovs-dpctl.py says
-  something the kernel does not do.
+[1] https://lore.kernel.org/r/20260527102319.100128-1-mattev@meta.com
 
---
+Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
+---
+Qiliang Yuan (3):
+      dma-buf: align large mappings to PMD boundaries
+      udmabuf: map huge page backed ranges with PMDs
+      selftests/udmabuf: test mapping a huge page backed udmabuf
 
-selftests/net/openvswitch: check that a failed set keeps the features
+ drivers/dma-buf/dma-buf.c                         |  1 +
+ drivers/dma-buf/udmabuf.c                         | 69 ++++++++++++++++-
+ tools/testing/selftests/drivers/dma-buf/udmabuf.c | 90 ++++++++++++++++++++++-
+ 3 files changed, 158 insertions(+), 2 deletions(-)
+---
+base-commit: c408466a4dfaee4b12587e926c5b85e68c8b3c40
+change-id: 20261121-feat-udmabuf-huge-pfnmap-3258272d077e
 
-This adds a set-dp subcommand to ovs-dpctl.py that sends OVS_DP_CMD_SET.
-It also adds two selftests, dp_features and dp_features_recirc. They check
-that a set rejected for an empty per-cpu-pids leaves the datapath features
-unchanged. The config fragment also enables NET_SCHED, NET_CLS_ACT and
-NET_TC_SKB_EXT for the recirc test.
-
-Link: https://lore.kernel.org/netdev/998d522f-e61d-420f-9834-6bdcbaab1361@kernel.org/
-
-> Reported-by: Matthieu Baerts <matttbe@kernel.org>
-> Link: https://lore.kernel.org/netdev/998d522f-e61d-420f-9834-6bdcbaab1361@kernel.org/
-
-[Severity: Low]
-Does this Reported-by belong on this commit? The commit adds the set-dp
-subcommand, the two new tests and three config lines. It doesn't fix an
-existing defect.
-
-The kernel bug these tests cover is fixed in the parent commit "net:
-openvswitch: do not record user features when the change fails". That
-commit has no Reported-by.
-
-The commit message describes two problems:
-
-- a run that hangs when stdout is duplicated
-- a FAIL with no reason when the reason only goes to debug.log
-
-Neither can happen with the baseline openvswitch.sh, because the
-dp_features tests don't exist there yet. The report was probably about an
-earlier, unmerged revision of this patch. The linked message couldn't be
-checked from the tree.
-
-Documentation/process/submitting-patches.rst says the tag "is intended for
-bugs". Could feedback on an earlier revision be credited in the changelog
-below the --- line instead? If Matthieu reported the kernel bug, the tag
-could go on the kernel fix.
-
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index 1615843c225e4..efad71649a630 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-
-[ ... ]
-
-> @@ -2961,6 +2980,23 @@ def main(argv):
-
-[ ... ]
-
-> +    setdpcmd.add_argument(
-> +        "-p",
-> +        "--per-cpu-pids",
-> +        type=str,
-> +        default=None,
-> +        help="Comma separated upcall pids, an empty string sends none",
-> +    )
-
-[ ... ]
-
-> @@ -3057,6 +3093,35 @@ def main(argv):
->              ovspk.upcall_handler(ovsflow)
->      elif hasattr(args, "deldp"):
->          ovsdp.destroy(args.deldp)
-> +    elif hasattr(args, "setdp"):
-> +        rep = ovsdp.info(args.setdp, 0)
-> +        if rep is None:
-> +            print(f"DP '{args.setdp}' not found.")
-> +            return 1
-> +        pids = None
-> +        if args.per_cpu_pids is not None:
-> +            # Empty entries are typos in a list the user did write, so drop
-> +            # them. An empty string leaves pids as [] and not None, which
-> +            # set() sends as an attribute with no payload: the kernel refuses
-> +            # that with EINVAL, and the selftest counts on the refusal.
-
-[Severity: Low]
-Is this comment accurate? The kernel only looks at OVS_DP_ATTR_PER_CPU_PIDS
-when the requested features include OVS_DP_F_DISPATCH_UPCALL_PER_CPU:
-
-net/openvswitch/datapath.c:ovs_dp_change() {
-    ...
-	if (user_features & OVS_DP_F_DISPATCH_UPCALL_PER_CPU &&
-	    a[OVS_DP_ATTR_PER_CPU_PIDS]) {
-		/* Upcall Netlink Port IDs have been updated */
-		err = ovs_dp_set_upcall_portids(dp,
-						a[OVS_DP_ATTR_PER_CPU_PIDS]);
-    ...
-}
-
-The !nla_len(ids) check that returns -EINVAL is inside
-ovs_dp_set_upcall_portids(), so it only runs on this path.
-datapath_policy[] has no entry for OVS_DP_ATTR_PER_CPU_PIDS.
-
-That means set-dp <dp> --per-cpu-pids "" gets an ACK when --features lacks
-bit 0x8. It also gets an ACK when --features is left out and the datapath
-doesn't report 0x8. In both cases the tool prints "DP '...' updated" and
-exits 0, not 22.
-
-Both current tests pass --features 8, so they do get EINVAL. Could the
-comment say that the refusal depends on the dispatch bit?
-
-The --per-cpu-pids help text "an empty string sends none" has a similar
-problem. An empty attribute is still sent, so the text reads as if no
-attribute were sent.
-
+Best regards,
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118065435.2367014-1-houminxi%40gmail.com
+Qiliang Yuan <qiliang.yuan@linux.dev>
+
