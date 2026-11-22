@@ -1,62 +1,85 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795309438;
-	b=OVTu+RYXfeIHcGoRCKoEZs1bxgbcp+t+gv/snA4MC7AqH4mgCNcwSYxrsJp8m+CLjsIx
-	 hCVqnoQZw1Up2a0HQnnXZ7zFghH5YhG9On3OU9dCe0fdJGnS4tXaKylzV9AHrxqV14H7p
-	 c7uPfLNa45YBw9C95yHwnbTOuXV+AqwUwazwPGK7HC36PK60pMGE31HvsuFEPGWTzVhoT
-	 kpZ+oCKwYevaEHXzz0dVHanrzqvOgr77hjfWqqnDVWGIm2Ka76iJOgVXBUZK/3SIVKPc0
-	 s6oonEjHx9aeSQorXi3VW3rQ7n+qtfXFOPE/GyVQgCAHurZuIYbUdTkJ0SHFHQXjHmw==
+	t=1795310303;
+	b=uOD4aw9V+8vwcGbkv83hmrcrn49D+fz5OxxFkf73zKUA5gzqvEe6ZKoyBR5MMwmoi8aO
+	 ErKiszlu41HvFoD366+6YyR2YXh0eGZHRjtIX3Luu1+YW+61VkLzJU+NiBcJQyD2/5qD+
+	 E7RhmKiqiFkGyf0TCGtEsy1mkJqt6XLfH3OKDIx14EuBYorQa7u2fL22II0vAzef1UQmL
+	 3poCkIs8AjZxQ1TQEUXQxDODGOXJxzsT3G+JBkRLOb8xULZryheEEJrg47RyjmfFy4oHs
+	 2/7KucqGYxdzjmeJxWhGQ2BpQDyWK7Ont/5WMakKzvZfJsNR0c6PYDZRZpjnx3ZlpFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795309438;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=PILEnaDBNzPkill2qm3jj+/BKJ1Q7LUkoPvGO+IJ4aY=;
-	b=BNoLZQBRhA2FTtR+YH2gr7IJkY8kflyXGmO8VNTsK8Vyk2MZC4CTEWCUSy0dm5Q+ubHt
-	 HE5/gZb+EVm3otcNPL+7zxwidRsgQAEYQ7wFJIH7fYXMmM3Zx6wv5OnLi5G4JmPeH/0q3
-	 4XxP4qpZ/qjEkqLvlwFVIKmVnOSf7i2LQm4zUWAmmdLdXGWn93AYxSo16BcqPdIeM/drv
-	 TKg/kbkrZhPXWF+qLk/UChzY6XvZOezx6QHkNKnYjdZ7/rfK2EgGRTZYotUGX22xnYe0l
-	 0pHRjif45jhmTqvIfCxZ/DPVMVO9HtFOg4N6jNpxKLACdBtdqgUdlfVWmnT1gBt1xqQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795310303;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=HMiFFGmw0v9nxAge20cDn397wiErWOHZ9jOEttk4raU=;
+	b=xafJ4zx6oGoGCvrJT09P7toy1SehiELXx55PNc9B2RIh9QuRx6Xv06faISncLGoOJPQz
+	 Djs4DDL5SG1eZ2H0odV5bSF122yhUBJhuazhuvb9hv0bT6Ul5BTSvJogBhTFpjP6BqaX3
+	 wAM4AWCYXJ4qTXhqpbOhH2xAj7BIT/pcnmK5iE8QTeaa41RhzD/271atwoBZOyZMv4gcR
+	 GEorMheGS/brhn4pFZqbVeLAOWblmjsU81kZFiOUfuncVIrK/mwwW4EEhJZByQuqfuWji
+	 qEtl8kD6An1bkwj+IbbLVWHCGqohsQBV3B7EMve+x8CF+mhBL49Ol3WwQVKjZqC8iCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cYM5lkLf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C+j1UvVg;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BD5606A320;
-	Sun, 22 Nov 2026 01:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id C6C5E606A337;
+	Sun, 22 Nov 2026 01:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cYM5lkLf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAEB21F000C0;
-	Sun, 22 Nov 2026 01:03:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C+j1UvVg
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id C33471F000D8;
+	Sun, 22 Nov 2026 01:18:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795309438;
-	bh=PILEnaDBNzPkill2qm3jj+/BKJ1Q7LUkoPvGO+IJ4aY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cYM5lkLfxZQj+lCVglPjc4pVh+jXGBy8Yupym6eqWm7JkiWwD+JeqVrZgEcJYZUs4
-	 zhnVYL6UC9NBzYPEQ7nxTSzf7PttwEl3tlgejUDd9jKIfozed+xsmXmO8N6Bc6yuKA
-	 wdQJuWmpvkjs+69zRxKSnKUkOxvu+GeYn3A6Ui3UwNz3NmDGD2ScTzCmOy1UuzatTQ
-	 3tqKlRcQvEfvAswH9yoJWESHNqX221fBWGWYCCwlksZeZCAJAECEJYMikOOjhxfBR0
-	 e8JOlnmTp6S8nkVuIhaaR7jsVr5ytumHcDc89M8JvtZJveEM5nw22m+rl5Mc3C2SFb
-	 SeWgXuAKIlyxw==
-Subject: Re: [PATCH can-next v5 7/9] selftests: can: add J1939 TP/ETP
- multi-frame tests against CAN_RAW
-From: netdev-bot+sashiko@kernel.org
-To: o.rempel@pengutronix.de
-Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
- shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
- quchaosheng000406@163.com, penguin-kernel@I-love.SAKURA.ne.jp,
- kuba@kernel.org
-Date: Sun, 22 Nov 2026 01:03:57 +0000
-Message-ID: <179530943723.3131.3874073778043295050@kernel.org>
-In-Reply-To: <20261120-j1939-selftests-v5-7-fdf4c242a37e@pengutronix.de>
-References: <20261120-j1939-selftests-v5-7-fdf4c242a37e@pengutronix.de>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795310303;
+	bh=HMiFFGmw0v9nxAge20cDn397wiErWOHZ9jOEttk4raU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=C+j1UvVgDWtOAPt8XWSNPgtEmRheZe6p/Zxa5yvM0BnC7U/nigoPkIixtcmaJImOi
+	 3bKXBQ3MOJIzEnifXGq/e4j6MycalZFXvzccUFfqe9dI1TGndLSr5PGcnFIe8Jje/c
+	 Q45wK8DaPan0bFAhyCLTJ/VugRrIdKTx7SsBmubhLWb71wBhFL+FmC770a6SWMn0p7
+	 rb7BVXLInShRYT1vDUWHFaI4l9Zhn+nYRWiuTjtW7hVb3sLAee7jcAxJ9Dsg14rE2M
+	 cYT2ig/iuchjBheqZ2yuUXfTO8JDZcnPGiCXGoh2ZP8TLIoxv2Uv3+q/r0KUsU+iO4
+	 JD2osQs1N+zog==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	bpf@vger.kernel.org,
+	containers@lists.linux.dev,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	Hugh Dickins <hughd@google.com>,
+	Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Lennart Poettering <lennart@poettering.net>,
+	Neal Gompa <neal@gompa.dev>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: [RFC PATCH v6 01/26] userns: Factor out idmap validation and commit helpers
+Date: Sun, 22 Nov 2026 03:17:44 +0200
+Message-ID: <20261122011809.2667684-2-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261122011809.2667684-1-jarkko@kernel.org>
+References: <20261122011809.2667684-1-jarkko@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,142 +89,230 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+map_write() validates extent ranges, translates parent ID ranges, sorts
+extents, and installs the resulting map inline for procfs text writes,
+preventing non-procfs callers from reusing the same validation and
+commit path.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Extract validate_and_insert_extent(), free_new_idmap(),
+resolve_new_idmap(), and commit_new_idmap() out of map_write() with no
+functional change.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ kernel/user_namespace.c | 159 ++++++++++++++++++++--------------------
+ 1 file changed, 80 insertions(+), 79 deletions(-)
 
-- [Medium] The new RX tests in
-  tools/testing/selftests/net/can/test_j1939_multi.c assume that…
-
---
-
-selftests: can: add J1939 TP/ETP multi-frame tests against CAN_RAW
-
-This adds TP and ETP round-trip selftests in both directions. A CAN_RAW
-socket acts as the transport peer and by default sits on its own vcan
-behind the CAN gateway that j1939_lib.sh sets up. The tests check the
-control and DT frames the kernel sends and the order of the TX-completion
-ACK, and test_j1939_multi.sh is added to TEST_PROGS.
-
-> diff --git a/tools/testing/selftests/net/can/test_j1939_multi.c b/tools/testing/selftests/net/can/test_j1939_multi.c
-> new file mode 100644
-> index 0000000000000..6edce7493892b
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/test_j1939_multi.c
-> @@ -0,0 +1,682 @@
-
-[ ... ]
-
-> +static bool send_dt_burst_ok(int raw, uint8_t prio, pgn_t dt_pgn, uint8_t da,
-> +			     uint8_t sa, unsigned int next, unsigned int count,
-> +			     const uint8_t *payload, size_t size,
-> +			     unsigned int first_seq)
-> +{
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < count; i++) {
-> +		size_t abs_pkt = (next - 1) + i;
-> +		uint8_t seq = first_seq + i;
-> +
-> +		if (!send_dt_ok(raw, prio, dt_pgn, da, sa, seq, payload,
-> +				abs_pkt * J1939_DT_DATA_LEN, size))
-> +			return false;
-> +	}
-> +	return true;
-> +}
-
-[ ... ]
-
-> +static bool etp_rx_serve_cts_ok(int raw, const uint8_t *payload, size_t size)
-> +{
-
-[ ... ]
-
-> +		cm_dat_init(dat, ETP_CMD_DPO);
-> +		dat[ETP_DPO_PKTS_OFF] = cts_pkts;
-> +		put_le24(&dat[ETP_DPO_BASE_OFF], next - 1);
-> +		if (!peer_send_cm_ok(raw, ETP_CM, dat))
-> +			return false;
-> +
-> +		if (!send_dt_burst_ok(raw, PRIO, ETP_DT, SA_LOCAL, SA_PEER,
-> +				      next, cts_pkts, payload, size,
-> +				      TP_FIRST_PKT))
-> +			return false;
-
-[Severity: Medium]
-Can the DPO and the up to 255 DT frames after it reach the J1939 stack
-in a different order than they were sent?
-
-Each raw send() goes through can_send()->netif_rx()->netif_rx_internal().
-With RPS off, that queues the frame on the current CPU's backlog:
-
-net/core/dev.c:netif_rx_internal() {
-    ...
-	ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail);
-    ...
-}
-
-The gateway then queues its copy for CANIF while that CPU processes its
-backlog. Frames stay in order only inside a single CPU's backlog.
-
-On PREEMPT_RT, use_backlog_threads() always returns true. So netif_rx()
-only wakes the per-CPU backlog_napi thread, and send() returns before
-the frame has been handled. On non-RT kernels the same thing happens
-with thread_backlog_napi, or when softirq work goes to ksoftirqd.
-
-The test thread has no CPU affinity. Suppose it moves to another CPU
-between two send() calls, for example after the backlog thread it just
-woke preempts it. Then the new CPU can process a later frame before the
-earlier frames still queued on the old CPU.
-
-An ETP DT that arrives before the DPO has been handled hits the default
-case in j1939_xtp_rx_dat_one() and cancels the session:
-
-net/can/j1939/transport.c:j1939_xtp_rx_dat_one() {
-    ...
-	case J1939_TP_CMD_CTS:
-		if (skcb->addr.type != J1939_ETP)
-			break;
-		fallthrough;
-	default:
-		...
-		goto out_session_cancel;
-    ...
-}
-
-The send_tp_dt_burst_ok() call in tp_serve_cts_ok() has the same
-pattern. A TP DT that arrives early fails this check:
-
-	if (packet == session->pkt.rx)
-		session->pkt.rx++;
-
-Then pkt.rx never reaches pkt.last, no EOMA is sent, and the session
-times out.
-
-The commit message says:
-
-    j1939_lib.sh also turns RPS off on that vcan, so
-    the peer gets each frame only after the stack has handled its echo
-
-That covers the order between the stack's echo and the peer. It doesn't
-cover the order of the peer's own consecutive frames. Nothing in
-j1939_lib.sh or in this directory uses taskset or sched_setaffinity, and
-that is still true at the end of the series.
-
-Could tp_rx_from_raw and etp_rx_from_raw then fail at random in the
-default kselftest run, especially on RT kernels or loaded VMs?
-
-Would pinning the test process to one CPU fix this? That could be
-sched_setaffinity() in j1939_test_main() or taskset in j1939_lib.sh.
-The per-CPU backlog FIFO would then keep the order.
-
+diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+index cd748e1cbace..6b9673dcdc67 100644
+--- a/kernel/user_namespace.c
++++ b/kernel/user_namespace.c
+@@ -938,6 +938,80 @@ static bool verify_root_map(const struct file *file,
+ 	return true;
+ }
+ 
++static int validate_and_insert_extent(struct uid_gid_map *new_map,
++				      struct uid_gid_extent *extent)
++{
++	if ((extent->first == (u32)-1) || (extent->lower_first == (u32)-1))
++		return -EINVAL;
++
++	if ((extent->first + extent->count) <= extent->first)
++		return -EINVAL;
++	if ((extent->lower_first + extent->count) <= extent->lower_first)
++		return -EINVAL;
++
++	if (mappings_overlap(new_map, extent))
++		return -EINVAL;
++
++	if (new_map->nr_extents >= UID_GID_MAP_MAX_EXTENTS)
++		return -EINVAL;
++
++	return uid_gid_map_insert_extent(new_map, extent);
++}
++
++static void free_new_idmap(struct uid_gid_map *new_map)
++{
++	if (new_map->nr_extents > UID_GID_MAP_MAX_BASE_EXTENTS) {
++		kfree(new_map->forward);
++		kfree(new_map->reverse);
++	}
++	memset(new_map, 0, sizeof(*new_map));
++}
++
++static int resolve_new_idmap(struct uid_gid_map *new_map,
++			     struct uid_gid_map *parent_map)
++{
++	unsigned int idx;
++
++	if (new_map->nr_extents == 0)
++		return -EINVAL;
++
++	for (idx = 0; idx < new_map->nr_extents; idx++) {
++		struct uid_gid_extent *e;
++		u32 lower_first;
++
++		if (new_map->nr_extents <= UID_GID_MAP_MAX_BASE_EXTENTS)
++			e = &new_map->extent[idx];
++		else
++			e = &new_map->forward[idx];
++
++		lower_first = map_id_range_down(parent_map,
++						e->lower_first,
++						e->count);
++		if (lower_first == (u32)-1)
++			return -EPERM;
++
++		e->lower_first = lower_first;
++	}
++
++	return uid_gid_map_sort(new_map);
++}
++
++static void commit_new_idmap(struct uid_gid_map *map,
++			     struct uid_gid_map *new_map)
++{
++	if (new_map->nr_extents <= UID_GID_MAP_MAX_BASE_EXTENTS) {
++		memcpy(map->extent, new_map->extent,
++		       new_map->nr_extents * sizeof(new_map->extent[0]));
++	} else {
++		map->forward = new_map->forward;
++		map->reverse = new_map->reverse;
++	}
++	/* Pairs with smp_rmb() in map_id_range_down() / map_id_up(). */
++	smp_wmb();
++	map->nr_extents = new_map->nr_extents;
++	memset(new_map, 0, sizeof(*new_map));
++}
++
+ /*
+  * Parse the decimal u32 at *pos, up to the next whitespace or NUL, and
+  * leave *pos pointing at that character.
+@@ -966,8 +1040,7 @@ static ssize_t map_write(struct file *file, const char __user *buf,
+ {
+ 	struct seq_file *seq = file->private_data;
+ 	struct user_namespace *map_ns = seq->private;
+-	struct uid_gid_map new_map;
+-	unsigned idx;
++	struct uid_gid_map new_map = {};
+ 	struct uid_gid_extent extent;
+ 	char *kbuf, *pos, *next_line;
+ 	ssize_t ret;
+@@ -1002,8 +1075,6 @@ static ssize_t map_write(struct file *file, const char __user *buf,
+ 	 */
+ 	mutex_lock(&userns_state_mutex);
+ 
+-	memset(&new_map, 0, sizeof(struct uid_gid_map));
+-
+ 	ret = -EPERM;
+ 	/* Only allow one successful write to the map */
+ 	if (map->nr_extents != 0)
+@@ -1052,98 +1123,28 @@ static ssize_t map_write(struct file *file, const char __user *buf,
+ 		if (*pos != '\0')
+ 			goto out;
+ 
+-		/* Verify we have been given valid starting values */
+-		if ((extent.first == (u32) -1) ||
+-		    (extent.lower_first == (u32) -1))
+-			goto out;
+-
+-		/* Verify count is not zero and does not cause the
+-		 * extent to wrap
+-		 */
+-		if ((extent.first + extent.count) <= extent.first)
+-			goto out;
+-		if ((extent.lower_first + extent.count) <=
+-		     extent.lower_first)
+-			goto out;
+-
+-		/* Do the ranges in extent overlap any previous extents? */
+-		if (mappings_overlap(&new_map, &extent))
+-			goto out;
+-
+-		if ((new_map.nr_extents + 1) == UID_GID_MAP_MAX_EXTENTS &&
+-		    (next_line != NULL))
+-			goto out;
+-
+-		ret = uid_gid_map_insert_extent(&new_map, &extent);
++		ret = validate_and_insert_extent(&new_map, &extent);
+ 		if (ret < 0)
+ 			goto out;
+ 		ret = -EINVAL;
+ 	}
+-	/* Be very certain the new map actually exists */
++
+ 	if (new_map.nr_extents == 0)
+ 		goto out;
+ 
+ 	ret = -EPERM;
+-	/* Validate the user is allowed to use user id's mapped to. */
+ 	if (!new_idmap_permitted(file, map_ns, cap_setid, &new_map))
+ 		goto out;
+ 
+-	ret = -EPERM;
+-	/* Map the lower ids from the parent user namespace to the
+-	 * kernel global id space.
+-	 */
+-	for (idx = 0; idx < new_map.nr_extents; idx++) {
+-		struct uid_gid_extent *e;
+-		u32 lower_first;
+-
+-		if (new_map.nr_extents <= UID_GID_MAP_MAX_BASE_EXTENTS)
+-			e = &new_map.extent[idx];
+-		else
+-			e = &new_map.forward[idx];
+-
+-		lower_first = map_id_range_down(parent_map,
+-						e->lower_first,
+-						e->count);
+-
+-		/* Fail if we can not map the specified extent to
+-		 * the kernel global id space.
+-		 */
+-		if (lower_first == (u32) -1)
+-			goto out;
+-
+-		e->lower_first = lower_first;
+-	}
+-
+-	/*
+-	 * If we want to use binary search for lookup, this clones the extent
+-	 * array and sorts both copies.
+-	 */
+-	ret = uid_gid_map_sort(&new_map);
++	ret = resolve_new_idmap(&new_map, parent_map);
+ 	if (ret < 0)
+ 		goto out;
+ 
+-	/* Install the map */
+-	if (new_map.nr_extents <= UID_GID_MAP_MAX_BASE_EXTENTS) {
+-		memcpy(map->extent, new_map.extent,
+-		       new_map.nr_extents * sizeof(new_map.extent[0]));
+-	} else {
+-		map->forward = new_map.forward;
+-		map->reverse = new_map.reverse;
+-	}
+-	smp_wmb();
+-	map->nr_extents = new_map.nr_extents;
+-
++	commit_new_idmap(map, &new_map);
+ 	*ppos = count;
+ 	ret = count;
+ out:
+-	if (ret < 0 && new_map.nr_extents > UID_GID_MAP_MAX_BASE_EXTENTS) {
+-		kfree(new_map.forward);
+-		kfree(new_map.reverse);
+-		map->forward = NULL;
+-		map->reverse = NULL;
+-		map->nr_extents = 0;
+-	}
+-
++	free_new_idmap(&new_map);
+ 	mutex_unlock(&userns_state_mutex);
+ 	kfree(kbuf);
+ 	return ret;
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261120-j1939-selftests-v5-0-fdf4c242a37e%40pengutronix.de
+2.47.3
+
