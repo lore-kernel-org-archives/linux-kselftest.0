@@ -1,87 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.204
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795370338;
-	b=MhCln8VOcbjzcyAY4QOD6EV1ECTw31R6JtePVrL3ZPGi5pfac1Y8lNEjRjwQkbowyVQB
-	 pYcQlkoCYHnshoo2iQD5zuKPRvDokQIFgJaJUkzQUzbzzD/hohZ7zujfVEHA5+P6n7dLU
-	 Nnq9GM19AED1t4jevnfq2NkWie/g/QAFmHDBK5WQMWeulPgvRTX1Li2EJ03zt1FE8xuwT
-	 hC893wrQ418YxwhTZ9eG5e7S1zahYtTXDJM77x64cGfxAQ4nV6lpauoFDFFoN3p6itCH8
-	 p3QeSThJaUEBKmlJM2mOQOD4I6ls26hgZgvaUXStpPPuBYVh42WtNpSxb7GGHqTgOZQ==
+	t=1795373473;
+	b=h/rxq5dONAV6XHO7PG2IIVcrDvDGOU0Qdiv5ojQarvD0gHPt/EKP/CfET0xMGhnfNwfp
+	 ywqC9Vb6RWpqCOU5vFRF5Sxop7kMxY8JgyG3jl5Dh9EwknLns/aEuXQIiNuKGu+mmJUMi
+	 x9h6RboKerXdsRrKGmLV/KYy8W3GdAyGfCd6g5r8zzuWiZIZQBEoUPgXSZfir4zRz8epI
+	 3sc14CvOl/27od2deOoY6jehn8OciRK4Ecv7I3AsB5j5eZsypjOjjkXceFVgeXk+1loeZ
+	 /hZLNRNYOEWSH3hCKJkGQNU+cizu6d4k2Fr8bh1EljDuWOhruDY5Cf9vw5uvXOvbJCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795370338;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=zZK6D2/szOXdu8ofxhUwHdxgVM+nnJRbws9cN9agyJ8=;
-	b=n/mAnEQ84HcD5ftJ6f5+fd9Sh1xiGJ1CZj/lxOdFYt6Y6vT7aQ+z4VE+kFH2KnR6l8sU
-	 0XYIWPGDNwzweQ11qaaRyLFPhQYm4eTGDd9bBYSrwc9PliytsMSpdTiwX/cSRhaG4RTgA
-	 pU7SQ9/jcbpspr0dIst0TeExK6rGQ5FLdEHZ9G4hTMpsKUaWJY3RXkCkRaAUACqCZ9TCh
-	 Nsr6AlN86r16g+XDU8y5XKWyaSnUhqa6R3OxAS5Nv8zElEgBZUeAOnaLZ2owAT6At1acb
-	 zlVss8Dz1fPp7FkaNYy36ftTj9SthhySciKGdqKXoOpCqrTrdc/u41IbQAaA9Q4Le0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795373473;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer;
+	bh=50wCei2ezE7qqlKPwEZQKfaQvojP+aADu/REaQZidPs=;
+	b=iokrYi7o1aB1o07TCeIgKPTPqAijiwFCzZLUi9sqI247A/wwQysAAbUGSZ8t8hbrKVaA
+	 dn3nJZX3teWb2iaXWKgcZcFNhZznfhQ9UTQAS9YkGTTvqX6hU2Bnc7LQOZnNKyroUvm8F
+	 ZNjfvaN5DbDjdS6zR3tlVjwEQeHEtDUeqWcksHeAKKTwPAmGCfJpgivDz+O9WoqLiXFvh
+	 qLI1d5RjYc5Opn8KLeK8f0ote0xvCCjX1+eZou/mXvt1W3AyEknqMpCHXypu2KnJDy2Cv
+	 1LAmSJImLgDKmHmiarz5IQIRig/WSt5Q7cGhTHbmrwJPuF2Mt494rHq7bw2PWkS4ruQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Evrk5gN8;
-	arc=none smtp.remote-ip=209.85.215.170
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DeORfqno;
+	arc=none smtp.remote-ip=95.215.58.204
+Received: from mta1.migadu.com (out-204.mta1.migadu.com [95.215.58.204])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443FE606A320
-	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 17:58:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 443FE606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F873606A320
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 18:51:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F873606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Evrk5gN8
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdb684859cbso1446625a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 09:58:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795370337; x=1795975137; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=zZK6D2/szOXdu8ofxhUwHdxgVM+nnJRbws9cN9agyJ8=;
-        b=Evrk5gN8YawWXQCnh7BYEJBhjbQxlbQR3Iasc4IPxKuD3KXY/poUIPR4ZeqVIVv2Aa
-         gcCY6NzXbWazluS82kiS34Oxq2vyqQ3TysGFnpF1iBsYe46d84rCx2FPUgVVLgulU7/O
-         D75S7EmcxiaIGwYISTF7ZNN7GVo400f5as5LOiyWi5hho+GO07FNTqSK0mK+gWRr5zaR
-         CfNgrQSX2XbZjQtoPsIe0uBHnO4+Od3f/eqpKA8WJg7CjRU4oEhpuovZYjEKDMOeX8hT
-         w56zb3k1SNyHkd9zCA48w9uZoonCSU+YOlzLoFPvQmoHqp4UZFKO9dvvabdDNav4IVua
-         woRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795370338; x=1795975138;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=zZK6D2/szOXdu8ofxhUwHdxgVM+nnJRbws9cN9agyJ8=;
-        b=Ko9lC/w7jqXKEyDXJQX9cHIFNst4/Oh1C3G0kBatB/3iPfF6MxtrtJhUh/0PsZDJ+j
-         osYf/chNF4u9kr10l0Cr/spu4zxf/rKEpTQ44zWsmgr9IIYZgfY93PMP0VgAEfBWEe3R
-         B04Opl9cF5fXU8KvWMpV5o+HGuZo9f5cicI1UbBOlckRXlAQ8b3AlngWkK+iX6QCUXqh
-         1SA34uqzNjgibgopVRgPimfTxnllvqNli+DOq7WMeU3A14vvOYqtXRjZP0/NK5I8H8+Q
-         1ZJ/OCmmRJh0tHz2licqVq7ODIctiPZRcG1mbzc68ukXRCygcYYvIazAC73KsVUdVeOH
-         1mSw==
-X-Forwarded-Encrypted: i=1; AL+hErEAE1xn3JDCl2h99CNzUPFl7P8b1XSpZBRZwvvh68EruoPpAK2szDtK6oxgTrUqgA0TIN5k42Php3EkORJg+5A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/30XJEtn/x3t0Xpesx1yjTX3KUcd7fag+DqeN7vsEg82yXPg0J
-	O7AAJv+4L2RUCdR73h4STNooBKOM8fPaDuWHRCNUXK5zSzBkNzUlPH7B
-X-Gm-Gg: AZFdTZfupV2zocSGFSDI31kI+zT4DTJnf8+QuTxqTy1+5NOw1ke2vx2LAV9OidUYb4B
-	7D1EY5ji1R8P8nTRUavRfcyVrgX3gwYCGGaq9HyKVlVbLZ9iWEE/eQZYxmI5bXLEUwaM2lnaGmx
-	UwJJApphHzoEp8UIJCoFU+Wws4rfsX7Q+rQBRnRyFF5NBtkphqS7lcj12TTqpn7cdRXyH7Cy5CL
-	0De9UAa93APqUmUcNA/Ai5Z3QlpbMi9RhQ/y8tg9Vff4FrS9EFhEN7eDLQI/9zOIApO0CH2vdSD
-	vlBXxDKA4M7c3LgizFukrjWzZRON/aVTuk/MPdNQ24dhkQv1d4sHM+cxm8rSB8vaqe0AcIVY9xC
-	RdhWZgx8C6BPMkNt3wodSUyKqaZxoKCpGv229E9pZ40XoTpSYv3Zugayt6BhJLg7MIDidfLRt1h
-	I8sBNfW1yqofevx/SN6dvmx3WSsJ2vPHGeb7Yyafyybskp8/u32+BQvgxD3YpB1cz3+yHHv6/lI
-	/5N0XbeJeTYhu3wLe+aCKX6G74wpg/zgSvBz6mn07DWqpKRPkgtNAFn+ef4MV8RNBCRIaLBcyGO
-	SCam2tQojxEuw4eBFs8SZboPWUni8icWhr/cf5s312TwabFv1NvWz5N0cqFPkuNdHTHZEGxTENH
-	SNVM=
-X-Received: by 2002:a05:6a21:6b0d:b0:3fb:6e73:ce42 with SMTP id adf61e73a8af0-4014d56b3f9mr9114765637.74.1795370337572;
-        Sun, 22 Nov 2026 09:58:57 -0800 (PST)
-Received: from [192.168.18.15] (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87285c89dsm4160040b3a.13.2026.11.22.09.58.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 09:58:56 -0800 (PST)
-From: Kurt Lin <lylin1023@gmail.com>
-Date: Mon, 23 Nov 2026 01:58:43 +0800
-Subject: [PATCH] selftests/mm: skip hard dirty page-cache test on FUSE
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DeORfqno
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=CGiHf1+jeEEE2NgCdnd+kn0vFA9jhJqMPHDtP1DXzTo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795373469; v=1; x=1795978269;
+ b=DeORfqnoSh0rdqxELAj4spb63VFK2xQzhpJ8ltJW9dd6VmhU53G9kQKy32CnHH6odAzp6Ipj
+ XHPwQ4vkCBD4UHK8nSWE5AL6+xDY+RF3rm4FrqSUFOGdthD4VkJ0STyEZrAUKniYJyBknlLCFHd
+ Fw8eQ38yC5/qPFu8v0OyyoSM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 57ff06e043170ff8;
+	Sun, 22 Nov 2026 18:51:07 +0000
+X-Mizu-Trace-ID: 57ff06e043170ff8
+X-Migadu-Flow: FLOW_OUT
+From: "Nico Pache (Red Hat)" <nico.pache@linux.dev>
+Date: Sun, 22 Nov 2026 11:50:36 -0700
+Subject: [PATCH] selftests/mm: honor VM_SELFTEST_ITEMS from the environment
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,82 +61,52 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261123-memory-failure-fuse-skip-v1-1-19dcbda6e2e8@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAA/x3MWwrCMBAF0K0M97sDTaoVsxXpR6ITHbQPZqgop
- XsXPAs4G1xMxZFog8lbXecJiUJDuD7ydBfWGxIhtrEPIXY8yjjbl2vW12rCdXVhf+rC5Xzqy0F
- y2x0LGsJiUvXzry/Dvv8AXhvuA2oAAAA=
-X-Change-ID: 20261123-memory-failure-fuse-skip-b976b4ea035b
-To: Miaohe Lin <linmiaohe@huawei.com>, 
- Naoya Horiguchi <nao.horiguchi@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, 
+Message-Id: <20261122-vm_selftests_items_fix-v1-1-9edef5e7975d@linux.dev>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM7QqCQBCF4VuR+d2CM4RJtxKx+HG2RtJiZxNBv
+ HfX+vkcOO9KhqgwuhYrRcxq+p4y+FRQ92ymB5z22SSlVMwibh694RUSLJnXhNF80MUF5rppL/V
+ ZKlA+fyLy/Avf7n/btx3QpaNG27YDejFqxnoAAAA=
+X-Change-ID: 20261122-vm_selftests_items_fix-f118ab78426e
+To: linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- Muhammad Usama Anjum <usama.anjum@arm.com>, Kurt Lin <lylin1023@gmail.com>
-X-Mailer: b4 0.14.3
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+ Tianyi Chen <hi@tychen.cc>, stable@vger.kernel.org, 
+ "Nico Pache (Red Hat)" <nico.pache@linux.dev>
+X-Mailer: b4 0.17-dev
 
-Like NFS, FUSE reports on close() the -EIO that MADV_HWPOISON records
-in the mapping of a dirty page-cache page, as fuse_flush() calls
-filemap_check_errors(). Run from a virtiofs directory, e.g. in a
-virtme-ng guest, the hard dirty_pagecache variant fails on its final
-close():
+The unconditional default assignment overwrites VM_SELFTEST_ITEMS from
+the environment. This regresses environments that use the variable to
+select test groups: without -t, all default test categories run instead
+of the requested groups. The -t option continues to override it.
 
-  memory-failure.c:389:dirty_pagecache:Expected close(fd) (-1) == 0 (0)
-
-Skip it on FUSE, as commit e14e52a7ce02 ("selftests/mm: skip hard dirty
-page-cache test on NFS") does for NFS.
-
-An AI coding assistant (Claude) was used to find the failure, write the
-fix and draft this changelog.
-
-Fixes: d51b5076c746 ("selftests/mm: add memory failure dirty pagecache test")
-Signed-off-by: Kurt Lin <lylin1023@gmail.com>
+Fixes: 4844f5b84a8e ("selftests/mm: reject invalid test selections before running tests")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
 ---
-Tested in a virtme-ng guest, memory-failure built from mm-new with and
-without this patch, hwpoison_inject loaded:
+ tools/testing/selftests/mm/run_vmtests.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  cwd on       before                  after
-  virtiofs     9 pass, 1 fail          9 pass, 1 skip
-  ext4 (loop)  10 pass                 10 pass
-
-run_vmtests.sh -t memory-failure from the virtiofs directory passes
-with the patch. The soft dirty_pagecache variant keeps running on
-FUSE and passes.
-
-FUSE servers that open files with FOPEN_NOFLUSH do not report the error
-on close(), so the variant could run there; it is skipped with the rest.
----
- tools/testing/selftests/mm/memory-failure.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
-index 135a2e8069ba..72a29ec19692 100644
---- a/tools/testing/selftests/mm/memory-failure.c
-+++ b/tools/testing/selftests/mm/memory-failure.c
-@@ -355,11 +355,12 @@ TEST_F(memory_failure, dirty_pagecache)
- 	fs_type = get_fs_type(fd);
- 	/*
- 	 * MADV_HARD poisoning of dirty page-cache data records an expected
--	 * -EIO in the file mapping. NFS reports this error on close(), so
--	 * skip this variant.
-+	 * -EIO in the file mapping. NFS and FUSE report this error on
-+	 * close(), so skip this variant.
- 	 */
- 	if (!fs_type || fs_type == TMPFS_MAGIC ||
--	    (fs_type == NFS_SUPER_MAGIC && variant->type == MADV_HARD)) {
-+	    ((fs_type == NFS_SUPER_MAGIC || fs_type == FUSE_SUPER_MAGIC) &&
-+	     variant->type == MADV_HARD)) {
- 		close(fd);
- 		SKIP(return, "unsupported filesystem :%x\n", fs_type);
- 	}
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index a1b45a3dedae..aa63f840cf60 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -102,7 +102,7 @@ RUN_ALL=false
+ RUN_DESTRUCTIVE=false
+ TAP_PREFIX="# "
+ 
+-VM_SELFTEST_ITEMS="default"
++: "${VM_SELFTEST_ITEMS:=default}"
+ 
+ while getopts "aht:nd" OPT; do
+ 	case ${OPT} in
 
 ---
-base-commit: 7d1a16abe4cc5dccd21e3d6262e44433a5885d27
-change-id: 20261123-memory-failure-fuse-skip-b976b4ea035b
+base-commit: 2dc60bd9975fc8666a13d58410499e06e6799ba9
+change-id: 20261122-vm_selftests_items_fix-f118ab78426e
 
 Best regards,
--- 
-Kurt Lin <lylin1023@gmail.com>
+--  
+Nico Pache (Red Hat) <nico.pache@linux.dev>
 
