@@ -1,84 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795437534;
-	b=tV1y1dN+V7JF3d7FokYFvj1J3H/DVAF7yqYYnMUIcIDmjcowkHwM1CTjchbWpoqJQEma
-	 eEqnpqrDHVhwJvMpURf8iDmHBifvU0pCn1a9yaEnLjN/d4gWg1UhzpmNbbHQxtCjE/IOg
-	 9juCy4koHtFnvPh00uFoAajhVmzHHO0twnyiIraAiWYqGuuhsdrUdKRumj2e+oRG6nUEa
-	 +nNE61mdpJwi8Nf3Q4HiAl5w5rfogIl6Bpuxk+SjBBbT0Ok6LWlCQkFflV6Rc1t5n59Re
-	 68hSrMLA2sNqzB3AnB2hDkWEk3bhsdFWv5lTPpC83Osg0EtyTuov93SESjebsxwJrww==
+	t=1795439046;
+	b=G4lpFfJMNlNUMdg9L5tGv50I/JxoyWRczgccBuPGn136lpmv8ePv4gqj9F+OXh8/WbpQ
+	 4QUYxa245IJldxtE9t1QBfP5KrDw+AoM6MMDdKvzhVK29aQRonrDPEQR8pU5OxHxNVvs6
+	 8+hNDnz9syPqTpA74DnSAKeMIQD3oxtrF0RgbMklLPtgZUtDZVEh5NizVvHkyV/h3ajeZ
+	 aWdaeZItm6fJ9aCVPrcXukfJOj0RS5m9DtRg081TZOjY7z1eB2yUUoK4GJuKcTeT6oz1s
+	 mDMPtdLWN6ywJ7O0su44e/0wOsan1T82aTeHWIAaSzOAnDv+9lg15tifFefwWq4dvlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795437534;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
-	bh=59RxTHGvhltoNw2gc0/13upvGG9pwIkmUmOzptR+Lb0=;
-	b=HPvylS5rJ43i19WUJ6kvmL77z/zkWFV2BcqOEO8nJtykemuZk3rPjCgtrpsankfVH5Sm
-	 Skeo9XL/e10m9tCb1nx2oQb733zt24hqzH1Z8SG1byiyko7G7JIuiMqQ1uxnER/DpbVl6
-	 eI8RlO9bdejqgudjN9TsL7ewlUS37u+Y0MZX2mPQUvhIwYW6SkuMv6dsD486do9LlZpUe
-	 P9oSJZ3Hb6uF8pQIK14k3rBSx6pR5OHijXsGnoblvgKAM7kQw6S2Z6FS8l4eHGciDanVc
-	 9/mH7Kf4tPFYrZQqkBDKkQ5UJux35KunNL2PGC5IlpAWH531luLrv8JsYvocz5u7DUg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795439046;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
+	 X-Proofpoint-Reinject:X-Authority-Analysis:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=J0aNMZGjkaYlYlEiIOgyjzZ61GdzrSA7YGjz7yiOd3U=;
+	b=qSZuf6uvvkKV3vmsoJj9QEaw39o81C8m/z/MmAuyvttRzEsgrK5YKOrwzbT6XJfWdkeS
+	 96hrOx75r0zKudfabKKYh3RmOvfQGqO+zqg8QEI3ksh9kYockFZQR60KddivNb4nJOyMy
+	 WBjcOnnPij4wAVkA3Eavr9UubOddhf7dxClKFxctrEvIt8RifKnqBBlw4sXcl8/hQg1OX
+	 3lnbPYD5BtS67InvgOuRJrG3S0XkCR9ByZMe+opXa/qZIKF2hzYLIZ+wuNdQxzyekprO7
+	 dqqnQqSFxLg7s8/hG4QeuEy1BtvhIvqysZIZIbXVMibtaOE0j+knWPrAyZDPcrlJtXA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ieGbhYkm;
-	arc=none smtp.remote-ip=209.85.128.170
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=VjTI2dJm;
+	arc=none smtp.remote-ip=148.163.156.1
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9368E606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 12:38:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9368E606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34806606A31E;
+	Mon, 23 Nov 2026 13:04:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34806606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ieGbhYkm
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8b51389f58cso32796807b3.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 04:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795437533; x=1796042333; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=59RxTHGvhltoNw2gc0/13upvGG9pwIkmUmOzptR+Lb0=;
-        b=ieGbhYkmA1tVgB8nYy25uSifUEyfNr8bR6537VLozGv55qw9nCYaRuq9fAxvEmCRMq
-         MTqXrhD+3lp5K8wNSXipcOgFNc/jazfFRTKaErMwRbDBigni1Tb19BJY2WoKKTi0ep9s
-         UjF0IVRN+sVlNPIACAkprYnZ0OvYo5JDiWaty9hcMySXmPn+ddeePMFFVt3Hhb0bwLbb
-         XVSw+IGS2sDadCblffLCz7CnkDF7L4XIR89egfCjJefrxkrx6BgzEkyAcxdenqz4+GnO
-         S9o3fIUHacY7saE0XJ9vYdy8r/BVcuXNE9yh3x5s4FT53/9eTtvj6SiefaVycA4XGlEl
-         FmQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795437533; x=1796042333;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=59RxTHGvhltoNw2gc0/13upvGG9pwIkmUmOzptR+Lb0=;
-        b=ubz+nCYosMFv3EHh9NcfF2rXLGgZE3FZsFUABbV7uhtAOKyOcucvV49MeQqKjVRCxq
-         O2Ee4dzDMOoHxmVp+Eu7nMl3FWhEhzxjrDiHFMAVw/H52WHnAyBPNsibZ5pcNaaBKS5n
-         n0GQewbK80N4wDSKeIZQ3u4ztM5A+QjsGW2Lp5oThQYJUXE8i28QBugcVwzs964FXQg4
-         XIYN/+bTmHyMnjyqqnChI9tYlDWiL+KsxgJMZp/X8f34v8A9iYlTTi/DobaA7B8h8Xnr
-         WtwdWu7LtaryFSfRwG3rmsQkMPlwykNqU4tafG86Iafg5sUTsxffNimsPoFjion9dkMg
-         0s5g==
-X-Forwarded-Encrypted: i=1; AL+hErE3mViKtvp5BD505aAQEzL2B8x4DM++p4Rwz5/A6hWE+DlCa56G4+DX/kx97nYiIvo2372NXLnyuDo6FUaVkMQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qWi4N1tumFgJs0MEPjZzAsqnQSLF1JVYsm3ILetBVxUssoXno
-	Zb3ynvHrCCen/mzpBrsvqfnwT0XLQdLF5WNUdS9rH1NaBGP8ErF3WTdp
-X-Gm-Gg: AZFdTZepAEjt20ur6k5cKjjGwIK0PAuPuG9sOUr0/AyMCG+yM1u+syCPOTYMa9BHNhL
-	XGyxnU5o9CqFxGcYxTq3GTDtpVqb/NcQWN5Bfa1DhMuqXnOdSJ6Mnt1lsLLJ1wm3anIqhuDzYS0
-	WZNZYiMf0tszOCdaY5pPbvYiDIUD289eIZ92iKHt/fY7InDmnL43VXJafVlKgk0l7b8lOL0qEh/
-	+8Qbu2cdDStJFqB7+8lHmAykc5B7eVEd22rL9FW7g4hZed88J1MAq5f4DFQyVCaMflDqXvdunTx
-	RDFmymD/yy2lKAWX0Ymj8CkSyo2kwzsoyFBVaT5am+SeEw6o/lz2Vjo1P+Tt0m7CxjiyUcnoOTc
-	4MDALgpVcTXdDtF51/+dE4BISJq5wPWvNIQn6RgNEZuO2OarIQG83L0Fhxq2yi54+ouV4lYg9Ny
-	sx1XZ8frEALqLGg/B5CQSarlBgrpX/u6h/R3SiOcF3KytYYnwyYPYwo1+Nh4EOiBEFnlqLO/L4C
-	vPceWgPAK2YWRxf8HT+4Ex7Z/yXEaidhkLdh7NnHJHQzvzgkB1yplF2OgqAXINkO0tGiNFQdAws
-	IXVi5Tmrrjm+ELw=
-X-Received: by 2002:a05:690c:3749:b0:8a9:d5f2:f5a6 with SMTP id 00721157ae682-8b5204cd1b8mr37167077b3.67.1795437532672;
-        Mon, 23 Nov 2026 04:38:52 -0800 (PST)
-Received: from localhost ([2600:1700:4a51:2210::11])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b5201b8cdbsm43605117b3.1.2026.11.23.04.38.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 04:38:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=VjTI2dJm
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANCYj3T1981047;
+	Mon, 23 Nov 2026 13:03:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=J0aNMZ
+	GjkaYlYlEiIOgyjzZ61GdzrSA7YGjz7yiOd3U=; b=VjTI2dJm//EAKkyyho2DMj
+	EXrNf6v0Fu6HhoD091/wzB6L09utq7H8gLgPv13AbelCBhOAklDr9XH3zRPX5q3y
+	wVO5ZP8p/5fsbtfkOiRaSgKr1fOADk6DpmJEegQnp9nms4UymzaGSHnbDY++LXNl
+	MIscfkC+eyyYry7T0X98C8DugoOmM5T/nXDmyB9chP11iwEbjXmBPXJHLxj1Rrn2
+	IF4fgDbnk4HG1v0tzJ/zcZWiy9YVUyUtlLj3+WtmcfPiqPSVItG/kYyXPtfemVE5
+	ga+2j95il9jnfIjAs1Krng+ORKkcu2KZ7WhBL0S4+mTv/EFHEF65y7/WmU5T2A2g
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g338qs-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 23 Nov 2026 13:03:49 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANCJhPr1159476;
+	Mon, 23 Nov 2026 13:03:48 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3p0vf022-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Nov 2026 13:03:48 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AND3jl846006742
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Nov 2026 13:03:45 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E379B20043;
+	Mon, 23 Nov 2026 13:03:44 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A14A220040;
+	Mon, 23 Nov 2026 13:03:44 +0000 (GMT)
+Received: from [9.68.16.159] (unknown [9.68.16.159])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 23 Nov 2026 13:03:44 +0000 (GMT)
+Message-ID: <e53eaebd-c646-4d0e-841d-85ee7e7997d6@linux.ibm.com>
+Date: Mon, 23 Nov 2026 14:03:44 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,157 +85,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 07:38:51 -0500
-Message-Id: <DN2LHJ9Y8KM2.1GHH6E9738JCS@gmail.com>
-Subject: Re: [PATCH net-next v5 1/6] psp: support rx rekey operation
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
-Cc: <kuba@kernel.org>, <willemdebruijn.kernel@gmail.com>,
- <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <rdunlap@infradead.org>, <donald.hunter@gmail.com>,
- <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <willemb@google.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261118-psp-v5-1-b9ec840e0296@gmail.com>
- <179530218118.3135.6547111851222246419@kernel.org>
-In-Reply-To: <179530218118.3135.6547111851222246419@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/2] KVM: s390: vsie: Do not overwrite guest 3 state on
+ early validity icpt
+To: Gautam Gala <ggala@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Cc: frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@kernel.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, pbonzini@redhat.com, seanjc@google.com,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20261119124936.33396-1-ggala@linux.ibm.com>
+Content-Language: en-US
+From: Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20261119124936.33396-1-ggala@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=SoQFe/O0 c=1 sm=1 tr=0 ts=6b0439b6 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=3ZShRkCcaKa6pm3BFBwA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIzMDA1MCBTYWx0ZWRfX7WbJ7BilDQdB
+ E6Ug33bXH4570ZLv5OFv59XGl/Bol4cPTN6H2lM5EAWiurxixYni3uzF3+wie5nFGo5p4X2SQ7i
+ TmKMUUvFkII1xC3hu5ASNAbkSobfJfg=
+X-Proofpoint-ORIG-GUID: z6wCqkl77eR2fopJWllk5PdBkRYQiBrK
+X-Proofpoint-GUID: ORYwrD87rb85BxL1DCezvEagYpRKHL2I
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIzMDA1MCBTYWx0ZWRfX6oRkM5URu3gJ
+ dFUDU4oo1HP6I4Pi7eLYpThcQDC/SpxA1tDhnw9yMTZRY0IlM7dfFtQoGnrGNel+xT0DTYnPcgw
+ FDO1/U6h8BF9evulwdsFUSD88zX2flZfP/QkuRelyUmMrrYxMTrb6qWLBKExeKIQUX3PybDxuWX
+ +6aVrOGEtH1/AJ83x9wjP+v2mox8MS3KfS0KWNYh9Ch9DWXCa26Irgtihwksr1q/mTMYxySWCO2
+ jIlyKv085s+Mt+WZ09Wfh8caszE1yULYFs1QofPjG7C+/W2+JItgfZLelagSX6ObTzV31ralyKL
+ exGdxqKxV31U9AlWMBx0wbS1fIVz5kVXQZhCtr7lc3QTk16QA3i52TZCuk4nVwhFLJ+vZimfWVK
+ gFQI2oGgNz18F/vqlFijZN9lzJ5jrsE6qybkLMoHjuMmxylh9ED2ClLSyADHkLdvo/nvVzJoRnI
+ Uygnk7jaayLVJD6i1Lw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-23_02,2026-11-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611230050
 
-On Sat Nov 21, 2026 at 6:03 PM EST, netdev-bot+sashiko wrote:
-> Thank you for your contribution! Sashiko AI review found more severe
-> issue(s) in other patches of this series. This mail is only an FYI, in ca=
-se
-> you want to address the nit picks below when you respin.
->
-> Low priority / nit picks for your consideration:
->
-> - [Low] The uAPI doc for the rx-assoc op in
->   Documentation/netlink/specs/psp.yaml now reads "If the socket already=
-=E2=80=A6
-> - [Low] psp_assocs_key_rotated() (net/psp/psp_sock.c) now does a plain
->   read-modify-write `pas->prev_generation |=3D ~PSP_GEN_VALID_MASK` on=E2=
-=80=A6
->
-> --
->
-> psp: support rx rekey operation
->
-> This commit lets rx-assoc run on a socket that already has full PSP
-> state. It creates a new psp_assoc that keeps the existing Tx state and
-> gets new Rx state. The previous Rx SPI and generation are kept as a
-> fallback, so packets sent by the peer before it switches keys are still
-> accepted.
->
->> diff --git a/Documentation/netlink/specs/psp.yaml b/Documentation/netlin=
-k/specs/psp.yaml
->> index f3266763c3253..d5713f5d1af7e 100644
->> --- a/Documentation/netlink/specs/psp.yaml
->> +++ b/Documentation/netlink/specs/psp.yaml
->> @@ -265,7 +265,9 @@ operations:
->> =20
->>      -
->>        name: rx-assoc
->> -      doc: Allocate a new Rx key + SPI pair, associate it with a socket=
-.
->> +      doc: |
->> +        Allocate a new Rx key + SPI pair, associate it with a socket.
->> +        If the socket already has PSP state, rekey its Rx direction.
->
-> [Severity: Low]
-> Does this doc match the behaviour for every socket that has PSP state?
-> psp_sock_rx_rekey() in net/psp/psp_sock.c rejects the rekey unless both
-> directions are set up:
->
-> 	if (!prev->tx.spi || !prev->peer_tx) {
-> 		NL_SET_ERR_MSG(extack, "Socket PSP state is not fully established");
-> 		return -EBUSY;
-> 	}
->
-> So a second rx-assoc on a socket that only has Rx state still fails with
-> -EBUSY.
->
-> psp.rst describes this precondition, but the YAML spec, which ynl and
-> the generated docs use, does not. Should the op doc say something like
-> "If the socket already has fully established PSP state, rekey its Rx
-> direction."?
->
->>        attribute-set: assoc
->>        do:
->>          request:
->
-> [ ... ]
->
->> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
->> index f2cba3fa3a235..c1e38845f08c3 100644
->> --- a/net/psp/psp_sock.c
->> +++ b/net/psp/psp_sock.c
->
-> [ ... ]
->
->> @@ -302,8 +333,21 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
->>  	 */
->>  	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
->>  		pas->generation |=3D ~PSP_GEN_VALID_MASK;
->> +		pas->prev_generation |=3D ~PSP_GEN_VALID_MASK;
->>  		psd->stats.stales++;
->>  	}
->> +
->> +	/* Don't allow SPI from two generations ago to alias one from the
->> +	 * current generation. Rx rekeying under the same device key generatio=
-n
->> +	 * is currently permitted, so skip if the previous SPI is from just on=
-e
->> +	 * generation ago.
->> +	 */
->> +	list_for_each_entry(pas, &psd->active_assocs, assocs_list) {
->> +		if ((pas->rx.spi ^ pas->prev_spi) &
->> +		    cpu_to_be32(PSP_SPI_KEY_PHASE))
->> +			pas->prev_generation |=3D ~PSP_GEN_VALID_MASK;
->> +	}
->
-> [Severity: Low]
-> Can these plain writes to prev_generation race with the Rx datapath?
->
-> These assocs are still published through sk->psp_assoc. The only lock
-> held here is psd->lock, which the pre-hook of psp_nl_key_rotate_doit()
-> takes.
->
-> The reader in psp_pse_matches_pas() runs without psd->lock and without
-> READ_ONCE():
->
-> 	(pas->prev_spi && pas->prev_spi =3D=3D pse->spi &&
-> 	 pas->prev_generation =3D=3D pse->generation));
->
-> It is reached from paths that hold only the socket lock or RCU:
->
->   tcp_v4_do_rcv() / tcp_v6_do_rcv()
->     -> psp_sk_rx_policy_check()
->       -> __psp_sk_rx_policy_check()
->         -> psp_pse_matches_pas()
->
->   psp_twsk_rx_policy_check()  (RCU only)
->     -> __psp_sk_rx_policy_check()
->       -> psp_pse_matches_pas()
->
-> So a key-rotate running while PSP packets arrive on an rx-rekeyed socket
-> is an unannotated data race that KCSAN would report. The field is a u8,
-> so it can't tear, and the result is unordered against the rotation in
-> any case.
->
-> The existing pas->generation write already works this way. This patch
-> applies the same pattern to a new field that the datapath reads, and
-> adds a second write site in the active_assocs loop.
->
-> Would it make sense to use WRITE_ONCE() here and READ_ONCE() in
-> psp_pse_matches_pas()?
->
->> +
->>  	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
->>  	list_splice_init(&psd->active_assocs, &psd->prev_assocs);
 
-This review is the same as two revisions ago, so I'll just refer to:
-https://lore.kernel.org/all/DMQOJPJ4AT7P.3DUQ9O213TZBI@gmail.com/
+
+Am 19.11.26 um 13:49 schrieb Gautam Gala:
+> If prepare_cpuflags() rejects the SCB provided by guest 2 with a
+> validity interception, shadow_scb() still calls unshadow_scb(). That
+> copies the guest state from the shadow SCB back into the guest 2 SCB,
+> although the shadow SCB does not hold guest 3 state at that point. Guest
+> 2 then sees its guest 3 state overwritten with zeroes (new or recycled
+> vsie page) or with the state of the previous run (cached vsie page),
+> without guest 3 having run.
+> 
+> Patch 1 copies back only the interception data in this case and clears
+> the stale interception data (icptstatus, ipa, ipb) when a shadow SCB is
+> reused.
+> 
+> Patch 2 adds a selftest for early and late validity interceptions.
+> 
+> Gautam Gala (2):
+>    KVM: s390: vsie: Do not overwrite guest 3 state on early validity icpt
+>    KVM: s390: selftests: Add vsie validity interception tests
+> 
+>   arch/s390/kvm/s390/vsie.c                     |  24 +-
+>   tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>   .../selftests/kvm/s390/vsie_validity_test.c   | 435 ++++++++++++++++++
+>   3 files changed, 453 insertions(+), 7 deletions(-)
+>   create mode 100644 tools/testing/selftests/kvm/s390/vsie_validity_test.c
+> 
+
+thanks applied.
