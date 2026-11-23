@@ -1,110 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795424796;
-	b=gKtMLe9O9XBKyX0timOy/K3RU6SIWDxX84TOnveeL5UhqgHiWQlNdlqgCMTWmuv5w8r+
-	 hUlXBraX7u/zPVzh8W4mH2y3tQRGdbE4IVu6QRzWJWWsNzQg9Nj/wIKNgQY+/YKcqqbDX
-	 j9EL9FO8v2f16GFlLTbKUeXCJkfgG14FGdaCNsDThUDjSLzdWB+MDytnLL08zBKzUveWo
-	 WBO1lKes/xWv4v5ptenStFEOhp0VPyA1RVmUykSxLrU+oUr2eJ0cA8RP+sqJbuA+5hOi4
-	 lZ/YwnmCvZ/V+7D+3uTkiER6GFgJudARpg2186kHqCxUCJadMm2chAAs9Shy7V3lzHg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795424796;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 X-Spam-Flag:X-Spam-Level:X-Spamd-Result:X-Spam-Score;
-	bh=15Ht46g1Fi4jbVj8JCWcJmUreEdiS3C7u0Rehkt5Jo8=;
-	b=Ey1qGW7vwGIyVLNi9CF8mk1uL+k+6E2ZDjDsG8JqANB01VpLRB62xMJ/xQv+FWm4IFN1
-	 0fAsPmqNVT/AJ5RHc6PqxhPUbKM4vAkHAybiGaqG1E8m2OJy/05GfDqi8+dC0WkwdX+NI
-	 NLgDXX3QQ9uDz/qIGB6cfCvodLfb20aWIqMjVTGdoRcImz7Jm1G4W+Ka3no7PxOFLnP9M
-	 FP3ODnCjHrxJy0pXwVXdiGsrtrMIZClj/lCy/e9V6D0XxcpPEtIqBFGq0qtlx0OkWklm8
-	 7EgIn/xwQBcuSzUttXzDGvIeUBNlT9vnhqQvt7cxhcpEf/rMcLpyW+jxvtFU00r3cLg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=UYkdOdWm;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=Loj1Wq1q;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=wXQMwfa+;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=zYZ0mDRE;
-	arc=none smtp.remote-ip=195.135.223.130
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.67
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795425016;
+	b=QXCKbkJwj/pNgDNBxRvbfhaG+cgEUK8zwEVmskVjOzufWEUh7QJsoF77I+aY7HatX8gw
+	 QB581vCvSmIDodW47M6DmNq9LPlAdf6k2fIVMPVVgpmegUzjCx1Z7gLY6IhN7sIqUbTrt
+	 1GalLvi3RJfzfHIePeX9OFghnCl1IBTSUIx4rEQDs+AF1xPVWnpsOgUk0JDBh3HJq5cTz
+	 9Zm8j0uYcWKdLPs56NcUV1q+qz92CJ6iu9iSCjYpLibW1yDLOelzYxicDLdGF/ulue4oj
+	 Ani8/WYE46PJewx5z3eFOeS4tJITzGBtKraTKx6SbGvYnQ2W1aB8uOwaiPyUKjUI8vg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795425016;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=Ysah7EW+JJVPB+mXDMbQ6SSXvDH2RvPxQ9+WKhWk/ac=;
+	b=JC6LT/VGbVrUTIWoBBJ5ITOJCfGzbcl3jTJEz1+kX6Nspeg52WWikkkLvz14Tu9BXWeU
+	 UmRm3pWGzSe5x9N1rmMCNjHaV/f9OTgDUfFInoy0xa472kvjpdc8idTm1EIqJgfrVVumL
+	 sldjKkdHtd5pgQxru5P+Cdetg5FQ1i4jcYLpKLD9IPTKtUEkOG9ErScgxCB0R6HlPyMpX
+	 BQwKk9f9bs0FLL9gaXeTrJKQF7jwr9KAAOaH3iaTDS4Uxw8BLVbDbPoJWsvbju4Q4nFpV
+	 Lcf4CW8f8gE6hax64J+jTxLYphlAPqPCtp5lLbOv8+41Y8Wd+n+s0s/iJ6PvbUH3QYw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amd.com;
+	spf=fail smtp.mailfrom=amd.com;
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=L5eTlCZw;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.67
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013067.outbound.protection.outlook.com [40.107.201.67])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8041C606A327;
-	Mon, 23 Nov 2026 09:06:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8041C606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E835606A31A;
+	Mon, 23 Nov 2026 09:10:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E835606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=UYkdOdWm;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=Loj1Wq1q;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=wXQMwfa+;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=zYZ0mDRE
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id BF84D2202D;
-	Mon, 23 Nov 2026 09:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1795424793; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=15Ht46g1Fi4jbVj8JCWcJmUreEdiS3C7u0Rehkt5Jo8=;
-	b=UYkdOdWm5DVMqIBoabCMneMs/9fc0q22E7PrhHFWwYD+plWFnuYeUmsoUCaGCizRttdTgE
-	RgiHZGN2WIY36dHPde1NipXUxLqE1iiSHzDVTu/DELHtxhJL6C7PrVLDe/WsWShfMEPvSS
-	xUKhll+vAWkGK9vswCMg5ImXiB3ipBg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1795424793;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=15Ht46g1Fi4jbVj8JCWcJmUreEdiS3C7u0Rehkt5Jo8=;
-	b=Loj1Wq1q5CJ2ZMC24+O7a//o1TdpL9FERsJ0Mj+jK7yP85MHCFFevjmN4QdYfl5aq8mwya
-	XY8bU5ieXL/zIdBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1795424792; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=15Ht46g1Fi4jbVj8JCWcJmUreEdiS3C7u0Rehkt5Jo8=;
-	b=wXQMwfa+rOsy0CL49zSxGW5rYxSe5oXzJUsjnFzrkIUda/78Y5XTbZAKvUmESpflGU39R+
-	vLd6vCDkEPc3LhlySJk1unes4C/VauERrKlvULvaPpwzVZyimJcZ5ND/SENnomlnMXEQDZ
-	ofb0WtnDbVZQVcqsUIRFKAjSSwhMBEY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1795424792;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=15Ht46g1Fi4jbVj8JCWcJmUreEdiS3C7u0Rehkt5Jo8=;
-	b=zYZ0mDREy3zRaJ8AQrhDDcimAh9NGWGOC7IwcJQuspcBLfBvUiJ7OfWaWUcBlXAAtyiC4f
-	jqryDnc+SBnrAnAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 659F313532;
-	Mon, 23 Nov 2026 09:06:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id fHbIDRgCBGs5DAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 23 Nov 2026 09:06:32 +0000
-Date: Mon, 23 Nov 2026 10:06:31 +0100
-Message-ID: <87mrqzdii0.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] ALSA: seq: ump: Convert MIDI 2.0 RPN and NRPN for MIDI 1.0 clients
-In-Reply-To: <20261122103611.3264343-1-sammiee5311@gmail.com>
-References: <20261122103611.3264343-1-sammiee5311@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=L5eTlCZw
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bb2Mn+mATe1VyTn9FbXR1iLXbWs9fk6yXfE5/UtNdiT4AvSqvDHtZtcNcZvBYAAQTQmOZU3MOroWlvE4c2yYVuKx+9eZqwI1TxGhNax3cRqBIIGTv/+weW1vRYGIegGaUltcqAetZHa+n0OYvXfldUgtCjGW+xErzKdZTG+5aLCLjPpXs/O8bEH1v7I6WtqqDfhOLpVl7NQVk6ATlo9v5w9AstkD3HunJGxDXdvbKSDAZJc4Wi+05k4WrBTPsKFmmh8oSuN3SiabPaNqXKyFyRhg53cwNS+pSOYM+Dy9NxWNpECv28DAoxC6OlB5XQeio0CczTMZNZ35MN/wj8dJfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ysah7EW+JJVPB+mXDMbQ6SSXvDH2RvPxQ9+WKhWk/ac=;
+ b=VKy9mrvo3uumiVwThvQiSEIltIUkjJYChXA/ulwv/rMHIeUwSD4z6f031il+WcutwuqdeO0lozx+49kT8iLj/7EGIVgPz8fI4ElGcF3UQvQIMAoR6irsgHZTTJBcP8glnbpZKbOP5mVESU/8kvOl96miWeJAT4jvVfxKI1ibfWkMRkGXnpOHjOGgeOwbzPNGJHfJRNCIQgsrPOXgaVEHlA1Njmg5VMWD5w7SrPhQGhMRgjXp4RHaTE8C3P6SReJvOSmDEAzZ0xhXZ5uAUAx8wNRCqEuI6t/t3LGTBwk/zrEtQbp210GfCZBGlckGGRbT8cNKw5ANbdV/kHSBogMJ0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ysah7EW+JJVPB+mXDMbQ6SSXvDH2RvPxQ9+WKhWk/ac=;
+ b=L5eTlCZwffNU8rNT/yTf+RYZyCcEQxsfEUJ8sboOYEz221GMvc4sMJJUWUCCuTQHmPktBIZCb/G+huHFu3QbKpP90BtNA/qGLsedlPnS3q9WoBrpSLgZIFFOuunxovDW0smihaErZL9fHmxFK92cbPEf7y2ZeLCMTYvjNWRtgCA=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Mon, 23 Nov
+ 2026 09:10:11 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0639.012; Mon, 23 Nov 2026
+ 09:10:10 +0000
+Message-ID: <7fb27655-6a7b-474e-995c-ace5936509c1@amd.com>
+Date: Mon, 23 Nov 2026 10:10:05 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dma-buf: align large mappings to PMD boundaries
+To: Qiliang Yuan <qiliang.yuan@linux.dev>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Philipp Stanner <phasta@kernel.org>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261122-feat-udmabuf-huge-pfnmap-v1-0-dcba888940c2@linux.dev>
+ <20261122-feat-udmabuf-huge-pfnmap-v1-1-dcba888940c2@linux.dev>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20261122-feat-udmabuf-huge-pfnmap-v1-1-dcba888940c2@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0036.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c7::9) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,57 +100,107 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spamd-Result: default: False [-12.30 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -12.30
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SA1PR12MB7224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1717c4e9-a39b-4558-d3b3-08df4941936a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|10067099003|56012099006|11063799006|4143699003|261026121527099003|261021121427099003|261102130727099003|261102123227099003|261009223027099003|18002099003|22082099003|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	MUtU3wxHvaBqhNaCh4i7UB4z2vfjsm5JLGSevfcGyGz0OU6MYN+9ZeyJjDNwXf5WYKThuvhK7JFTiRqn8qjGM38Oum59Jcacp/UrWr5Nmsz7kHLiFA5fQ8w/YBSSmuCA148qEQ32FYcvsFBeba+s4KOOr/Mk9+lAQ8RM1AaTNUZpXwGiDt0a0D2km2FRXkDU2iByo+l4K1Z8w+8ziR5wRoK9BUMNagA5Wi4R9TMqJWq1Ht6VoXIAyN7/TuSOhcdzI1txz/gdtRK3inb9RVNelXOGc7Pjmn45BlS0DoKiOIXSmAuDhA6F3AadpGZhkFTt9G5RYZaRWiALyZZ5pMpjVbineiAaYZqXxtiPYUYfLWZ02BGGHMJut2hVPFxKkkleVADSOCg2wkzrhWD2ASB27ZLlu+56V+3bx5i3zpWPWtAMa9bt7ZcGgRolFG8TsgXzDgj26hRZNlLyXEwzFG8sLDaNoiiyD2q5Fpr+3Re3vl0nK276dhbf6GWntqbKVK5eUXT3d96NPgtarVdR2KMkLK9TAyN5yBennhDoBYIdX079MEf1nkWSjmXsmEu9qYVJmSjsblzhzjzEst37DZaEB4gGnzuQhvEGFbzJ8pKoV1VJD3fc4r3jktQszGu7ZFaR0pI7NHdzs6edr6+V8TD7YfC0Cy49Vy2oixC5SIuB0Cg=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(10067099003)(56012099006)(11063799006)(4143699003)(261026121527099003)(261021121427099003)(261102130727099003)(261102123227099003)(261009223027099003)(18002099003)(22082099003)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SUt1TkJjZFZHd29OZVlBY2kzMGdBMzRoTnBzS1p6TUtQSjkyaWFtbG9EanJv?=
+ =?utf-8?B?MlAxbFpSZDEyc3hIZ0pmWGtLQXFpUXVZaTBhbGpndU5KREluOFhoMFNGWTF4?=
+ =?utf-8?B?Tk1DTWc2eTl1UTFuMEcvSWZXanowbzlRNHRHYUVhWHVyVUJPcDg3MTJsMm8z?=
+ =?utf-8?B?enpDNDZQcWFQc1EwZ2Jrb2d1SVYyRzRuNEJ3WW81akNWT0lZVnhRWS9rMDZ0?=
+ =?utf-8?B?c0NhTVY0ME5MM3pVbEJNRVlxZTJBRjNlelR1eStQVHVLQlNNNjVCMHJ1Z1FI?=
+ =?utf-8?B?REtiblRVMGd0MVNqMlUzR2lhb1hwWHhndEZCTjZDYzVVSUZKNUZwOHZrN2FI?=
+ =?utf-8?B?aVVpRytLTzBiUG1rWWtFSmdPeU0vOGVRV3lPUUsyZVVIZlhxWVRBaGtNcHNB?=
+ =?utf-8?B?SVE2dnN2SFlvU2ZjdEpSbHVsUDdoeUdHU2k2Q01CTVhOVzJJMGZKTUtrVlRZ?=
+ =?utf-8?B?c0UwRmpxQnlPcVhFUUM3VjZKZlRlVWx1OTRuQ3VsUVBnSmZEL0hLY3hJamlM?=
+ =?utf-8?B?NmdON1RMcHl1VVdrOEJ4bDFWdG9nSXp3WjNYTGNvdGxIclpiZURaVm5mblBE?=
+ =?utf-8?B?ZGZyUzIvbzErZ21GY1NZL0YxeFB4SmhGVWJYQzVrVDZkUGtqMDQwekRxUHdT?=
+ =?utf-8?B?dnZKNFlsbk05QUtFQ05MRUg1TG52eWk5OVJ6TzBNRHV4ZFRzbDF0aWVJRkpx?=
+ =?utf-8?B?V1pKdW1IWFdjUkhQYUdKVWZ5RnYvaHlJQkt6SGRmZHErM3NzTGlqU2FTbFZS?=
+ =?utf-8?B?ekRNL1VoWUd6SWJiWEtQZThacW9nLzBUUVhxVzFvZEhjZElHZjl4d3h0anNJ?=
+ =?utf-8?B?Q3F3OGxkbENuV08wb0p0VDFZdFRGYUt0cGVtcHRzbUs5bkpnT0RIOGd5WU50?=
+ =?utf-8?B?TWEvb2srbHI4dXZjSU5UMEVHQU5rYjdEejhNQkhVRVk0N0k3M2Y5a2ZZbHBU?=
+ =?utf-8?B?LzhMLzhPT3lUSEhQaG1lSkV3eEJPaGMwc3Z6RVBYOENzZlQ1dXl4eFBMcDFH?=
+ =?utf-8?B?eWNGaGFlV3VXTVZPaW1ZNi91ZjM2VWlyMVRKZ2V3NnhKcjIyZXBSL1h4bFN1?=
+ =?utf-8?B?WE4yNVBMOFFjY0FhOTh5WGh3VUtBOWF5Wk1sVDE2ZEczYjVsVWI2S0oyLytt?=
+ =?utf-8?B?dGZSNHJBOUxWZUxQeldTV0sraWRtanFsay90VWR3Z08vUTNML2JiRWUrK1dC?=
+ =?utf-8?B?aVg5VXhZTkNoaDVRNkxrZGZVdW5lVDdKVGYwWHo3VlBtdzQrRE1yMzZmZk1l?=
+ =?utf-8?B?cGNCWmQ4YnBFM0RZWkF3RHY1aDVjUlk2NVUzVDQrbmFHeitqLzdYNUtjdjBX?=
+ =?utf-8?B?cU15aStUbEcvbElPN1lrbm5uTS93TzcrUW5FUlg0ZW54T0phSkJGRXRxUU1F?=
+ =?utf-8?B?MXFlZTNNVExnNGdsMmpYT2VzTXE4T3BQZFN5U3RJSE93RDNMakxVNlJsdTNW?=
+ =?utf-8?B?R2xEQmVETVE3M2hGTWVLVmxwU3l3SzFMb1hwVjhXVmsyc3V3bUlsTlpTdU5N?=
+ =?utf-8?B?aU1YZWE1MnhBSDJhNUxuSWVMVnI5SmJKQkYwN09XWnpsWWozNlNTSEpwM3Vj?=
+ =?utf-8?B?UmdpR2JaSFBPaUFFQWtJUm0xdkVZTGk2ZDZ2UVB3OHBkc0R1aEtkTlUvQU83?=
+ =?utf-8?B?Z1ZGMjJGODBCZmtPZEdicW1XWVcxU0Y1WWM3aW9UamlyQ0ZTYWdxWEVvR1kw?=
+ =?utf-8?B?a2gybjA5VVUrMnFORjZ5TVZXK1c4OFVDUzhNODEwbEU4T3FIN2o3bzVSZFBn?=
+ =?utf-8?B?eHVFQWVjcjcrdzhZUFNqVVZDVnpWbjQ3Z01yQVgwWW5ITTVGeG93b1V1cjRP?=
+ =?utf-8?B?Qk1lemZqRUhGZG5EUmxEQjF5ZDM5bjhQY1JsTkU0ajNvWVlRVHNMalZxSFNi?=
+ =?utf-8?B?TXBaeS9NNG1xRnJFdFJGZDRyU1AxVnhkdzAzVkF6Vm1yNHl1cjIwZmF0Nnhp?=
+ =?utf-8?B?OVd5UWtETUFaL1lGczFiMmhYRUczWkxUby83SXNPMStCWjZUcEU1WmsxeFFV?=
+ =?utf-8?B?dHIxakhmWFR0V1pvZmtxVm9ZU0hDTndYYlhVT1dkdTN1QnNsa3N3Y3lOZGNK?=
+ =?utf-8?B?VitDU0lXMkRkT0wwSWh0M0JWWlU2VmxYN2N1VzIwYUg3OHlTNHpYM2JoWXNv?=
+ =?utf-8?B?anNtNXR2Tm5uYlg1WkJyTlYySTVHSXJQbWZYalc4ai9PQnFHclRrdittNnlx?=
+ =?utf-8?B?eXlHY01vUnU2VnlWUTZxMndYaUt5dExBZXhkOC8vY2NrVXdKZjBVMlptVGpJ?=
+ =?utf-8?B?dTNxaTIya21jMXQ1aEVhaVpBZGhCakZTT0VpSm1HdCt5TVE1S2NPVUVlZ1NS?=
+ =?utf-8?Q?QPkE6Hr1XwZ99qQvHN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1717c4e9-a39b-4558-d3b3-08df4941936a
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2026 09:10:10.7784
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lKuia29Tfbeq7KhFjkcdL4ndfVlN+ZXx1ObxZo3uz9FXZo4QCl3Wq0Ip2iq4va6y
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
 
-On Sun, 22 Nov 2026 11:36:09 +0100,
-HyeongJun An wrote:
+On 11/22/26 08:37, Qiliang Yuan wrote:
+> A dma-buf exporter whose buffer is backed by physically contiguous memory
+> can map it with PMDs from a ->huge_fault() handler, which only works where
+> the user address and the buffer offset are aligned alike to PMD_SIZE.
 > 
-> A UMP MIDI 1.0 client gets nothing when a UMP MIDI 2.0 client sends an
-> RPN or NRPN. Patch 1 converts them to CCs the way the core converter
-> does, and patch 2 adds a test.
+> dma_buf_fops has no ->get_unmapped_area(), so mmap() places a dma-buf at
+> whatever page aligned address the default allocator returns. A 4 GiB
+> udmabuf, for one, lands 616 KiB past a 2 MiB boundary, and then none of
+> its PMD-sized ranges can be mapped with a PMD.
 > 
-> A related question. In the other direction, CC 101, 100, 6 and 38 from
-> a UMP MIDI 1.0 client reach a MIDI 2.0 client as four MIDI 2.0 CC
-> messages. The same CCs from a legacy client are combined into one RPN
-> message by cc_ev_to_ump_midi2(). Should cvt_ump_midi1_to_midi2() do
-> that too? I can send it if you want it.
+> Use thp_get_unmapped_area(), as filesystems that support huge mappings
+> do. It aligns a mapping that covers at least one whole PMD to the buffer
+> offset and leaves smaller mappings where they would be placed anyway.
 > 
-> Tested in QEMU (x86_64) on sound/for-next 1afd6b7547b2. seq-ump-test
-> passes 28 of 29 without patch 1, where the new test gets no packets,
-> and 29 of 29 with it.
-> 
-> Prepared with Claude Code (Claude Opus 5.5).
-> 
-> HyeongJun An (2):
->   ALSA: seq: ump: Don't drop MIDI 2.0 RPN and NRPN for MIDI 1.0 clients
->   selftests/alsa: Test the sequencer UMP MIDI 2.0 RPN conversion
+> Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
 
-Applied both patches to for-next branch.  Thanks.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
+> ---
+>  drivers/dma-buf/dma-buf.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 5c6957f8839a8..015a03c8d04db 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -608,6 +608,7 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
+>  static const struct file_operations dma_buf_fops = {
+>         .release        = dma_buf_file_release,
+>         .mmap           = dma_buf_mmap_internal,
+> +       .get_unmapped_area = thp_get_unmapped_area,
+>         .llseek         = dma_buf_llseek,
+>         .poll           = dma_buf_poll,
+>         .unlocked_ioctl = dma_buf_ioctl,
+> 
+> --
+> 2.43.0
+> 
 
-Takashi
