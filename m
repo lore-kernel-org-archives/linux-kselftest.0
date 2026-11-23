@@ -1,82 +1,44 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795439046;
-	b=G4lpFfJMNlNUMdg9L5tGv50I/JxoyWRczgccBuPGn136lpmv8ePv4gqj9F+OXh8/WbpQ
-	 4QUYxa245IJldxtE9t1QBfP5KrDw+AoM6MMDdKvzhVK29aQRonrDPEQR8pU5OxHxNVvs6
-	 8+hNDnz9syPqTpA74DnSAKeMIQD3oxtrF0RgbMklLPtgZUtDZVEh5NizVvHkyV/h3ajeZ
-	 aWdaeZItm6fJ9aCVPrcXukfJOj0RS5m9DtRg081TZOjY7z1eB2yUUoK4GJuKcTeT6oz1s
-	 mDMPtdLWN6ywJ7O0su44e/0wOsan1T82aTeHWIAaSzOAnDv+9lg15tifFefwWq4dvlA==
+	t=1795439487;
+	b=RHx6mwu8o37UAl/lCq8vyC/QFMrITI5HOdg892X5U/YU5ZBCN4CVq9+wJ1aWvxF+1rmT
+	 yB+70dzL7dFzYOmPMxhPBMxS+GwqBKJTUcq5qQGPDbR4ABFaRPyYKdR09lYRiqR66gZJr
+	 +0J17PknlRdM0ajOiB4PvkEWWgL2vFlXDjA01Fb7TAfq0gRicDeX1nKienR3UWkRjK+fC
+	 so7muK0wuKtKmTNPD5iNkQC9zc6/rr4wqnKT7GKMEyys9b+WrbsyA4ydwctwZQGXwNMhL
+	 E52h0CbBi4Fwfdo+N/nvqanjR7o2tXxVP4HgaurFzjYzIrffpGZ3nwyvJwnVx2PsbdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795439046;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
-	 X-Proofpoint-Reinject:X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=J0aNMZGjkaYlYlEiIOgyjzZ61GdzrSA7YGjz7yiOd3U=;
-	b=qSZuf6uvvkKV3vmsoJj9QEaw39o81C8m/z/MmAuyvttRzEsgrK5YKOrwzbT6XJfWdkeS
-	 96hrOx75r0zKudfabKKYh3RmOvfQGqO+zqg8QEI3ksh9kYockFZQR60KddivNb4nJOyMy
-	 WBjcOnnPij4wAVkA3Eavr9UubOddhf7dxClKFxctrEvIt8RifKnqBBlw4sXcl8/hQg1OX
-	 3lnbPYD5BtS67InvgOuRJrG3S0XkCR9ByZMe+opXa/qZIKF2hzYLIZ+wuNdQxzyekprO7
-	 dqqnQqSFxLg7s8/hG4QeuEy1BtvhIvqysZIZIbXVMibtaOE0j+knWPrAyZDPcrlJtXA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795439487;
+	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
+	 X-Spam-Status:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=N/hUyT208PWL628P3dp42I10YIeJiwbXLU10EQAkCuU=;
+	b=oOjRRo67m+BsVivUgDrx1nUpgkgbMH/nKFtjnm+rh3OH2DxrHmyX4O16mVih9zbvVnMa
+	 f2wxhgr72qpmzRBN8wTWuP9FgM4VUT1/tLNthXPgqAWLmF60YCFWyzzw00gdcDqWqMtnU
+	 w3wC0qUvpZBvH3V0UaydDCK9daQINjn9LRSxmJyJ1rhqU9+Q6gzs7HygGRicc/ztOjiBo
+	 RRjivdZLu5tShWpeyBAjwQYIqPZw+GRhw86xvaynu8RbvTp/e3zDGCrK+IJ2fh2LxKucq
+	 hO8YM5cFI/8W4h17vUGKvnqEOKhJxEfyoTPa/omAUPElNSeAT0MSwYMCG+sn/c5jz/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=VjTI2dJm;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	dmarc=pass header.from=davidgow.net;
+	spf=pass smtp.mailfrom=davidgow.net;
+	arc=none smtp.remote-ip=203.29.242.92
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34806606A31E;
-	Mon, 23 Nov 2026 13:04:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34806606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=VjTI2dJm
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANCYj3T1981047;
-	Mon, 23 Nov 2026 13:03:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=J0aNMZ
-	GjkaYlYlEiIOgyjzZ61GdzrSA7YGjz7yiOd3U=; b=VjTI2dJm//EAKkyyho2DMj
-	EXrNf6v0Fu6HhoD091/wzB6L09utq7H8gLgPv13AbelCBhOAklDr9XH3zRPX5q3y
-	wVO5ZP8p/5fsbtfkOiRaSgKr1fOADk6DpmJEegQnp9nms4UymzaGSHnbDY++LXNl
-	MIscfkC+eyyYry7T0X98C8DugoOmM5T/nXDmyB9chP11iwEbjXmBPXJHLxj1Rrn2
-	IF4fgDbnk4HG1v0tzJ/zcZWiy9YVUyUtlLj3+WtmcfPiqPSVItG/kYyXPtfemVE5
-	ga+2j95il9jnfIjAs1Krng+ORKkcu2KZ7WhBL0S4+mTv/EFHEF65y7/WmU5T2A2g
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g338qs-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 23 Nov 2026 13:03:49 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANCJhPr1159476;
-	Mon, 23 Nov 2026 13:03:48 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3p0vf022-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Nov 2026 13:03:48 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AND3jl846006742
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Nov 2026 13:03:45 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E379B20043;
-	Mon, 23 Nov 2026 13:03:44 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A14A220040;
-	Mon, 23 Nov 2026 13:03:44 +0000 (GMT)
-Received: from [9.68.16.159] (unknown [9.68.16.159])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Nov 2026 13:03:44 +0000 (GMT)
-Message-ID: <e53eaebd-c646-4d0e-841d-85ee7e7997d6@linux.ibm.com>
-Date: Mon, 23 Nov 2026 14:03:44 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEFC606A31A;
+	Mon, 23 Nov 2026 13:11:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6AEFC606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 0A6E4200DF4; Mon, 23 Nov 2026 21:11:24 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 1A151200DF0;
+	Mon, 23 Nov 2026 21:11:22 +0800 (AWST)
+Message-ID: <c6c991f6-f92e-4621-b5b2-7d21e4396fee@davidgow.net>
+Date: Mon, 23 Nov 2026 21:11:18 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,76 +49,201 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/2] KVM: s390: vsie: Do not overwrite guest 3 state on
- early validity icpt
-To: Gautam Gala <ggala@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Cc: frankja@linux.ibm.com, imbrenda@linux.ibm.com, david@kernel.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, seanjc@google.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20261119124936.33396-1-ggala@linux.ibm.com>
+Subject: Re: [PATCH] kunit: tool: report executor errors when listing tests
+To: simonsudarushkin@gmail.com, Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+References: <20260929-kunit-list-errors-v1-1-16bf855e2ec3@gmail.com>
 Content-Language: en-US
-From: Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20261119124936.33396-1-ggala@linux.ibm.com>
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260929-kunit-list-errors-v1-1-16bf855e2ec3@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=SoQFe/O0 c=1 sm=1 tr=0 ts=6b0439b6 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=3ZShRkCcaKa6pm3BFBwA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIzMDA1MCBTYWx0ZWRfX7WbJ7BilDQdB
- E6Ug33bXH4570ZLv5OFv59XGl/Bol4cPTN6H2lM5EAWiurxixYni3uzF3+wie5nFGo5p4X2SQ7i
- TmKMUUvFkII1xC3hu5ASNAbkSobfJfg=
-X-Proofpoint-ORIG-GUID: z6wCqkl77eR2fopJWllk5PdBkRYQiBrK
-X-Proofpoint-GUID: ORYwrD87rb85BxL1DCezvEagYpRKHL2I
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIzMDA1MCBTYWx0ZWRfX6oRkM5URu3gJ
- dFUDU4oo1HP6I4Pi7eLYpThcQDC/SpxA1tDhnw9yMTZRY0IlM7dfFtQoGnrGNel+xT0DTYnPcgw
- FDO1/U6h8BF9evulwdsFUSD88zX2flZfP/QkuRelyUmMrrYxMTrb6qWLBKExeKIQUX3PybDxuWX
- +6aVrOGEtH1/AJ83x9wjP+v2mox8MS3KfS0KWNYh9Ch9DWXCa26Irgtihwksr1q/mTMYxySWCO2
- jIlyKv085s+Mt+WZ09Wfh8caszE1yULYFs1QofPjG7C+/W2+JItgfZLelagSX6ObTzV31ralyKL
- exGdxqKxV31U9AlWMBx0wbS1fIVz5kVXQZhCtr7lc3QTk16QA3i52TZCuk4nVwhFLJ+vZimfWVK
- gFQI2oGgNz18F/vqlFijZN9lzJ5jrsE6qybkLMoHjuMmxylh9ED2ClLSyADHkLdvo/nvVzJoRnI
- Uygnk7jaayLVJD6i1Lw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-23_02,2026-11-23_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611230050
+Content-Transfer-Encoding: 8bit
 
+Le 29/09/2026 à 23:50, Simon Sudarushkin via B4 Relay a écrit :
+> From: Simon Sudarushkin <simonsudarushkin@gmail.com>
+> 
+> --list_tests, --list_suites, --list_tests_attr and --run_isolated first
+> ask the kernel for the list of tests. extract_tap_lines() keeps the
+> "kunit executor:" lines printed before the KTAP header, but the list
+> code then drops the first line as the dummy header and filters the rest
+> by name, so an executor error is silently lost:
+> 
+>    $ ./tools/testing/kunit/kunit.py run --list_tests --filter 'nosuchattr=1'
+>    ...
+>    $ echo $?
+>    0
+> 
+> The kernel log has "attribute not found: nosuchattr=1" and "error
+> filtering suites: -22", while a normal run with the same filter reports
+> the error and exits with 1. If the kernel prints no KTAP output at all,
+> the same pop() raises ValueError and kunit.py exits with a traceback.
+> 
+> Move the code shared by _list_tests() and _list_tests_attr() into
+> _run_list_action(), which raises ListError on executor errors or when
+> there is no KTAP output. exec_tests() prints the error and returns
+> TEST_FAILURE, as a normal run does.
+> 
+> Fixes: ff9e09a3762f ("kunit: tool: support running each suite/test separately")
+> Fixes: 723c8258c8fe ("kunit: tool: Add command line interface to filter and report attributes")
+> Assisted-by: LLM
+> Signed-off-by: Simon Sudarushkin <simonsudarushkin@gmail.com>
+> ---
+> Tested with kunit.py on arm64 (QEMU with KVM): a bad --filter now prints
+> both executor errors and exits with 1 for --list_tests and
+> --run_isolated, while normal listing, --list_suites, --list_tests_attr
+> and --run_isolated=suite behave as before. In run_checks.py,
+> kunit_tool_test.py and mypy pass; the UML smoke test could not be run,
+> as UML does not build on this arm64 host (it fails the same way
+> without this patch).
+> ---
 
+Thanks very much: this is a nice catch.
 
-Am 19.11.26 um 13:49 schrieb Gautam Gala:
-> If prepare_cpuflags() rejects the SCB provided by guest 2 with a
-> validity interception, shadow_scb() still calls unshadow_scb(). That
-> copies the guest state from the shadow SCB back into the guest 2 SCB,
-> although the shadow SCB does not hold guest 3 state at that point. Guest
-> 2 then sees its guest 3 state overwritten with zeroes (new or recycled
-> vsie page) or with the state of the previous run (cached vsie page),
-> without guest 3 having run.
+I'm pretty happy with it overall, though I'm starting to feel that we're 
+pushing a bit more functionality into the main kunit.py than we want, 
+and this probably should live in another module (like kunit_kernel.py or 
+kunit_parser.py, or possibly something new). That'd probably require 
+more refactoring than we want for a fix (and there are a few other 
+patches which also would benefit from some refactoring, so I think we 
+can save that for a future version).
+
+Regardless,
+Reviewed-by: David Gow <david@davidgow.net>
+
+Cheers,
+-- David
+
+>   tools/testing/kunit/kunit.py           | 57 +++++++++++++++++++++-------------
+>   tools/testing/kunit/kunit_tool_test.py | 18 +++++++++++
+>   2 files changed, 54 insertions(+), 21 deletions(-)
 > 
-> Patch 1 copies back only the interception data in this case and clears
-> the stale interception data (icptstatus, ipa, ipb) when a shadow SCB is
-> reused.
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 91d234ac3b579..6db09144d7cfc 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -109,8 +109,12 @@ def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+>   
+>   	return build_tests(linux, request)
+>   
+> -def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
+> -	args = ['kunit.action=list']
+> +class ListError(Exception):
+> +	"""Represents an error from the kernel while listing tests."""
+> +
+> +
+> +def _run_list_action(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest, action: str) -> List[str]:
+> +	args = ['kunit.action=' + action]
+>   
+>   	if request.kernel_args:
+>   		args.extend(request.kernel_args)
+> @@ -121,31 +125,34 @@ def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest)
+>   			   filter=request.filter,
+>   			   filter_action=request.filter_action,
+>   			   build_dir=request.build_dir)
+> -	lines = kunit_parser.extract_tap_lines(output)
+> +	stream = kunit_parser.extract_tap_lines(output)
+> +	lines = []  # type: List[str]
+> +	errors = []  # type: List[str]
+> +	while stream:
+> +		line = stream.pop()
+> +		match = kunit_parser.EXECUTOR_ERROR.search(line)
+> +		if match:
+> +			errors.append(match.group(0).strip())
+> +		else:
+> +			lines.append(line)
+> +
+> +	# The executor reports a bad filter or action instead of listing.
+> +	if errors:
+> +		raise ListError('\n'.join(errors))
+> +	if not lines:
+> +		raise ListError('Could not find any KTAP output. Did any KUnit tests run?')
+> +
+>   	# Hack! Drop the dummy TAP version header that the executor prints out.
+> -	lines.pop()
+> +	return lines[1:]
+> +
+> +def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
+> +	lines = _run_list_action(linux, request, 'list')
+>   
+>   	# Filter out any extraneous non-test output that might have gotten mixed in.
+>   	return [l for l in lines if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
+>   
+>   def _list_tests_attr(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> Iterable[str]:
+> -	args = ['kunit.action=list_attr']
+> -
+> -	if request.kernel_args:
+> -		args.extend(request.kernel_args)
+> -
+> -	output = linux.run_kernel(args=args,
+> -			   timeout=request.timeout,
+> -			   filter_glob=request.filter_glob,
+> -			   filter=request.filter,
+> -			   filter_action=request.filter_action,
+> -			   build_dir=request.build_dir)
+> -	lines = kunit_parser.extract_tap_lines(output)
+> -	# Hack! Drop the dummy TAP version header that the executor prints out.
+> -	lines.pop()
+> -
+> -	# Filter out any extraneous non-test output that might have gotten mixed in.
+> -	return lines
+> +	return _run_list_action(linux, request, 'list_attr')
+>   
+>   def _suites_from_test_list(tests: List[str]) -> List[str]:
+>   	"""Extracts all the suites from an ordered list of tests."""
+> @@ -160,6 +167,14 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
+>   	return suites
+>   
+>   def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> KunitResult:
+> +	try:
+> +		return _exec_tests(linux, request)
+> +	except ListError as e:
+> +		for line in str(e).splitlines():
+> +			stdout.print_with_timestamp(stdout.red('[ERROR] ') + line)
+> +		return KunitResult(status=KunitStatus.TEST_FAILURE, elapsed_time=0.0)
+> +
+> +def _exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> KunitResult:
+>   	filter_globs = [request.filter_glob]
+>   	if request.list_tests:
+>   		output = _list_tests(linux, request)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 85ae21754bdf9..d0cb3340a328d 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -991,6 +991,24 @@ class KUnitMainTest(unittest.TestCase):
+>   				     kunit.KunitExecRequest(None, None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False, False))
+>   		self.assertEqual(got, want)
+>   
+> +	def test_list_tests_executor_error(self):
+> +		self.linux_source_mock.run_kernel.return_value = [
+> +			'[    0.100000] kunit executor: attribute not found: nosuchattr=1',
+> +			'[    0.100000] kunit executor: error filtering suites: -22']
+> +
+> +		with self.assertRaises(SystemExit) as e:
+> +			kunit.main(['exec', '--list_tests'])
+> +		self.assertEqual(e.exception.code, 1)
+> +		self.print_mock.assert_any_call(StrContains('attribute not found: nosuchattr=1'))
+> +
+> +	def test_list_tests_no_output(self):
+> +		self.linux_source_mock.run_kernel.return_value = []
+> +
+> +		with self.assertRaises(SystemExit) as e:
+> +			kunit.main(['exec', '--list_suites'])
+> +		self.assertEqual(e.exception.code, 1)
+> +		self.print_mock.assert_any_call(StrContains('Could not find any KTAP output'))
+> +
+>   	@mock.patch.object(kunit, '_list_tests')
+>   	def test_run_isolated_by_suite(self, mock_tests):
+>   		mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
 > 
-> Patch 2 adds a selftest for early and late validity interceptions.
+> ---
+> base-commit: e38f53f0482468efd04397f66bda4648b70ac9fa
+> change-id: 20260929-kunit-list-errors-63c1b3066812
 > 
-> Gautam Gala (2):
->    KVM: s390: vsie: Do not overwrite guest 3 state on early validity icpt
->    KVM: s390: selftests: Add vsie validity interception tests
+> Best regards,
+> --
+> Simon Sudarushkin <simonsudarushkin@gmail.com>
 > 
->   arch/s390/kvm/s390/vsie.c                     |  24 +-
->   tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->   .../selftests/kvm/s390/vsie_validity_test.c   | 435 ++++++++++++++++++
->   3 files changed, 453 insertions(+), 7 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/s390/vsie_validity_test.c
 > 
 
-thanks applied.
