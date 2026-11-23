@@ -1,70 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.159
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795428561;
-	b=1M4WyjF9vl0yvppxurkKi7/1TWeAFYUQr4Y6xkCvSJP12K/BXh2K2UCtqEZ6wJHqdew6
-	 TDgoU/paKCKMgiq/Yf9xcoRpHWdKVcqhl819rCW3Lq6yJ/QXnOf9hHtZwj/0bCpfQ4GmT
-	 WfMAZU6PrjayGnpf+EamHsWvmH+pLgU8En1s+nQr+m1DDmA6Z9W4UWLTe6IlR5zq6H2ZD
-	 0+B5tQzxiIW+ECVVMciPXHMf3V0o4LhS3ygopUSFpDK5O15qovpagxYhALIIfEfpOjhQz
-	 /8bU+AwxkBnX5UmXHP+iVZ4nhJVxI/y22KiWfZWSvCfXfMuux7IYFFUqMI5d5mpK8lA==
+	t=1795428924;
+	b=CZtbp/1rzAZOn97IqKIJ5JDkfnRV9rxPN2m3eoeIsFZVbv+q48SXDjkPBSAnd/fX0yLh
+	 ImzbvLmU7wobeYkpNPvtPkSjIEUj/JPam7tLsSvYASDBL84Cdt9z+hb/d6rx7Us6Lq/Oh
+	 HGtHTXCd7AHKOXS7gTEvYextn0MoxHh/+mFyrxg1tsWF3l6FwAAmGRHFQOOakbcNAvFcn
+	 fjDNI4xrQ8SJXfFj+5vaHbibFHmQ9m/zRDYcDHV5RUQ9oa1uT3xD2Emy4vxdIiD1BGATl
+	 wq63Pgcp+mQOi8Us6CHyIsjgCdD+h34EFLc+5qyPTJrfryM6MZlJ70bnJNW+pIMHWNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795428561;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=UzDd0SmU9JGmt2OnzA2QPSIsnM/OhlSQ1LdpomQPeVc=;
-	b=LiR+uqbAsRscJt792CU1MY0Uko8YjcoZW1iO6A2Cra509DHWA5CIMZN9oGQpj8rEgG7I
-	 k6cl+HQkfMmPKkwuVgYHyP/QrbtsMo58He0fJJWebRuTboQdcN3yo6NErC8ZLVwnl3uTa
-	 ktdVjagVylUENsNzlEqbbnU0EWjQC/NFdq7UBSgLqnqrWiS9aJsHjiLnNeA0/ExH0BEi9
-	 60kGtlXfMMJeEXqFUdfhrtaavX+XL0TITrTSXkcGdDOOuKxv+gbaqIsMVvJACt7Jd3Xsl
-	 EpFAgYZhYzKXizTtgl4MCHbJMwifJKFvpD1j0VNYU/JcVZ5IrEUAhBiyh+S6TixAw9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795428924;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=YEmk1VDoJHLEYSmDRdBwUZmDsqu1t/NGQfUH3rocZOw=;
+	b=SO0iXnKR2d9jcs1rqu0xivOV8goCauIwnOmZT7pRyLDCWmvCLzlfe7367m6y6Mz1SHdb
+	 8lhW+HXspZdtblI9wKk1Llf31DZRsdl119HeeVorpqlG9e833cobeal03NZAWq/HtX8kZ
+	 vJ3333u6ja/3R0wYcDEZaFHsPL/xu5fDg2MFetakkYYSXJ+rrsdFmLRLulmF7plSStAmB
+	 8AyEh115BUxKW1ez9MoxJ6IChdekdkESrCpAWiTR0z0xTfVzZqfNJYin9EwimWGOdWcL8
+	 M3slQTc9QeaUaTVxdfVYuFCmRf7e4/AeNTnUqaNCefiweupGL7i+pIVKO/toLnG2PDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=euJdA8EB;
-	arc=none smtp.remote-ip=91.218.175.159
-Received: from mta0.migadu.com (out-159.mta0.migadu.com [91.218.175.159])
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Tj1tka9c;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD760606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:09:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD760606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B466B606A32C
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:15:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B466B606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=euJdA8EB
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=GRIGe4MYSmcamc/GomLgN/fYZ1+yWn5x99Cm2Hh0m+E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795428557; v=1; x=1796033357;
- b=euJdA8EBP4mOaNaki4eFa/6T3fp6J77vej0S8q4+PFeFckVlaATHyoLSCcWVaWdqTJJBh7Hw
- D/RDs7PoFiGRh0TsHq5NF40pzKOtQKy5BG3w4kLtF+FbSIYTns0Jd1P0IVcuFOPNmNEVfze7csX
- 64BRkMRElTCPc025BYOs9n5U=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 7fd23bef945703c4;
-	Mon, 23 Nov 2026 10:09:17 +0000
-X-Mizu-Trace-ID: 7fd23bef945703c4
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 23 Nov 2026 18:09:08 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Justin Iurman <justin.iurman@gmail.com>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net-next v4 5/5] selftests: seg6: add PSP flavor testing
- for SRv6 End.X
-Message-ID: <20261123100908.GA11364@Liu-laptop>
-References: <20261119-srv6_flavors_endx-v4-0-284cdb484eee@kylinos.cn>
- <20261119-srv6_flavors_endx-v4-5-284cdb484eee@kylinos.cn>
- <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Tj1tka9c
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a35a60499eso23644175e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 02:15:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795428922; x=1796033722; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YEmk1VDoJHLEYSmDRdBwUZmDsqu1t/NGQfUH3rocZOw=;
+        b=Tj1tka9cwCfSWVyOhNY4eRE05/jjgj461r/WnGC437Cg+uv520KTUAtreYXE4Uq4SQ
+         VQPr4yG2Y0WusL/sss7VMDxH1FpnVaj07Df/tNh17yAjcNGkwUdYLutIBsU9wv5Br/Fp
+         /3EHSls/7CqlnJcqVnP6DNcbP/cZtabyzOy7yIPtVQ0HUdS0h2pLtqRSxH33sUWzR4Bl
+         VeFDHbK2pSt1RXv0nj4zGr0S5c43fOYQ5w6zOWGj4gda05ZvKucxdkX5pEkLO1PMgYGZ
+         73Ko2Dj5NxRb64zkKdjz+wIrcy2vFOpvHLmQ+456M/dgvqKUIaFLpDle24Wwoad8e0pO
+         MsKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795428922; x=1796033722;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YEmk1VDoJHLEYSmDRdBwUZmDsqu1t/NGQfUH3rocZOw=;
+        b=Ll789xYtee6olTlK8cEiEC6FkQ4zQIorFDxClSSy6s9ZRJAflnrZqqWLt8pUzoLlGm
+         v2uMCnwHkpfx1Ho3JbLhutWPdUG+s2e2Au/0Uh9R99YcPKl3eyKYUjvwWvzwVXoredl2
+         0ncQza0pjTlmZ7e694cBD0de/tfpcy+cYgZ6NfNAZTT2BeRoC2qOmlx9QjQ6wxx4E0y3
+         QqWWlbDaW1nFFxVR5RhQxJyLOCf2w9RuA/Cqf3IS9jW3o02jVTXXuici6mZ6I8bUNMN7
+         uv96/Yb/OgqJy2T0LDMY1Cj6KrcrfN7pWx44dpUUSaHZ9o0jol76FHQZRe8Vtat01xoC
+         E7Hw==
+X-Forwarded-Encrypted: i=1; AL+hErHtwxjCXX0uj33bvvow8VgH+gmlzU8mtMUEjb/4xfqOeWqwWRl5b/YVKmaWSp+1p4PkUa1XbtobxmKXwcUYplU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/QOb8dyNeEx780bs0uozC8uk2TM7S+eABmtJD/4T+21I8o8oDM
+	TS+KGHE2k8lAT6cFZ6gJYbPg+mv9XhoVfgUA9sUHMPN/SLY9fNMgD8oxZkFSyQjkofg=
+X-Gm-Gg: AZFdTZcLSCY3aL2oFiAtF9cfz7rZaqJHv/k1S5CGpJiGUh4qCtD1r7ay70GAtPL7Tzk
+	bN4TDWW7ESR9G2jkEDumD/iLszojy3F5TqoKWLJ69U5Wc9eWsRMesRWrjEak5lbwPCKVUrwxsEN
+	65S77OBsr4V+2j0l6gu8+pfolvFRSK/IhfTyn7b2mVZZxufp6zM0wPeCRVbdJmshMtAVz9x2YaA
+	tooo9FASKEbz2iyCsqjS1Ihfs+3IPadfE5wNmDkj3ApoeDsof5UpA5c25ncJ8adbIsp5yf1bl+d
+	Ihk6H39G9EZjXbwn3NyK7eIl6tAiyl13MmjrQOGx03GcNp1QaxnSZUsn/2U+Ol6bc+jUUMOnsTW
+	Q/X/x3stg5iTxArQb6toKaCpB/t/YS2rXaIPkZrcGrVXnPNZnqOLDb11dJkPDz9qm5UxTwdJF9Z
+	JjB+14C2sryBDrQ0peZKAlyW2097w8GTAf6Agmy11fA9bgIvw3dsonST8+9o0QgyLw3zGKNRMSX
+	wxqntalYnBTVYqWKdwaVb2gfOXXdf3yVyoZ2gIi7tAANaKjvNmMYm8BuIalharPym6zRhpm28HS
+	RlyXcVxxNvAUM1H1xBzsrqxSF70mq+G/vsSEsr+y6J5a2VSbicJ/
+X-Received: by 2002:a05:600c:45d4:b0:4a2:84c:52f3 with SMTP id 5b1f17b1804b1-4bb8880988cmr238927785e9.6.1795428922043;
+        Mon, 23 Nov 2026 02:15:22 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853b216esm381534625e9.12.2026.11.23.02.15.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 02:15:21 -0800 (PST)
+Date: Mon, 23 Nov 2026 11:15:18 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] selftests/livepatch: skip the tests on kernels
+ without livepatch
+Message-ID: <awQSNi8Ex6eOcFOw@pathway.suse.cz>
+References: <20261110161050.2451750-1-sashal@kernel.org>
+ <20261110161050.2451750-2-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,224 +105,32 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
+In-Reply-To: <20261110161050.2451750-2-sashal@kernel.org>
 
-Hi Andrea,
-
-Thanks a lot for you detailed review. I will fix all of them in next version.
-I just have some questions about a few comments.
-
-On Mon, Nov 23, 2026 at 05:09:52AM +0100, Andrea Mayer wrote:
-> > [snip]
-> > +# Given the description of a router as an input, the function returns its
-> > +# adjacent route id, or 0 if a host adjacent.
-> > +# i.e. input: "1", output: ""
-> > +#      input: "1>2", output: "2"
-> > +#      input: "1>h", output: "0"
-> > +__get_srv6_adjacent_id()
-> > +{
-> > +	local adjacent="${1#*>}"
-> > +
-> > +	[[ "${adjacent}" == "${1}" ]] && return
-> > +	[[ "${adjacent}" == "h" ]] && adjacent=0
+On Tue 2026-11-10 11:10:47, Sasha Levin wrote:
+> The test modules can only be built against a kernel configured with
+> CONFIG_LIVEPATCH, but the selftests try to build them for any kernel.
 > 
-> Nit, a style preference: I would use if blocks here, as in the rest
-> of the selftest. With cut -s -d'>' -f2, this function could also read
-> the ">" as you already do in __get_srv6_node_id().
-
-I plan to use
-
-	echo "${element}" | cut -s -d'>' -f2 | sed 's/h/0/'
-
+> KernelCI builds the selftests for many kernel configurations, most of
+> which do not enable livepatch. On mainline from November 8, 36 of its
+> 69 kselftest builds fail to compile the test modules, for example:
 > 
-> > [snip]
-> > @@ -819,33 +964,44 @@ __setup_rt_policy()
-> >  	local function
-> >  	local op_type
-> >  	local node
-> > +	local act
-> > +	local sid
-> >  	local n
-> >  
-> >  	in_nsname="$(get_rtname "${encap_rt}")"
-> >  
-> >  	for n in ${policy_rts}; do
-> > +		# Abort if policy format is incorrect:
-> > +		# 1. "1>h:psp" that has ">" but not "End.X"
-> > +		# 2. "1:psp:End.X" that has "End.X" but no ">"
-> > +		if [[ "${n}" == *">"* && "${n}" != *"End.X"* ]] || \
-> > +			[[ "${n}" != *">"* && "${n}" == *"End.X"* ]]; then
-> > +			echo "Incorrect operation format: ${n}" && false
-> > +		fi
+>   test_klp_callbacks_demo2.c:23:16: error: invalid use of undefined type 'struct klp_object'
 > 
-> The check is there, but ret is not set. With "1>h:psp", the End tests
-> pass and then the run ends as SKIP:
+> These are arm and riscv kernels, which do not support livepatch, and
+> x86, arm64, powerpc and loongarch configurations that do not enable it.
 > 
->     Incorrect operation format: 1>h:psp
->     SKIP: Setting up the testing environment failed
+> Do not build the test modules when the kernel in KDIR was configured
+> without CONFIG_LIVEPATCH, and skip the tests when the running kernel has
+> no /sys/kernel/livepatch.
 > 
-> Could it set ret to ksft_fail? Also, the check looks at the element as
-> a whole, while the parameter and the nh6 are computed for each node.
-> For example, "4>2,2:next-csid,psp:End.X" passes it although the node
-> "2" has no adjacency, and the setup then fails in ip, on the nh6. A
-> function that checks each node, called in place of this check, would
-> cover both:
-> 
-> 	if ! __check_srv6_rtcfg "${n}"; then
-> 		ret="${ksft_fail}"
-> 		return 1
-> 	fi
-> 
-> It would take the nodes and the behavior from the parsers that
-> __setup_rt_policy() already uses, not from the text of the element.
-> Just as an idea, something like this in __check_srv6_rtcfg():
-> 
-> 	nodes="$(__get_srv6_rtcfg_id "${element}")"
-> 	op_type="$(__get_srv6_rtcfg_op "${element}")"
-> 	act="$(__get_srv6_rtcfg_act "${element}")"
-> 
-> 	if ! op_has_next_csid "${op_type}" && \
-> 	   echo "${nodes}" | grep -q ","; then
-> 		echo "${element}: only NEXT-C-SID takes more than one node"
-> 		return 1
-> 	fi
-> 
-> 	for node in $(echo "${nodes}" | sed 's/,/ /g'); do
-> 		rt="$(__get_srv6_node_id "${node}")"
-> 		param="$(__get_srv6_param "${act}" "${node}")"
-> 
-> 		case "${act}" in
-> 		"End")
-> 			if [ "${node}" != "${rt}" ]; then
-> 				echo "${element}: End takes no parameter"
-> 				return 1
-> 			fi
-> 			;;
-> 		"End.X")
-> 			if [ -z "${param}" ]; then
-> 				echo "${element}: End.X needs an adjacency"
-> 				return 1
-> 			fi
-> 			;;
+> Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-This check seems not enough with error config like "4>2h:psp:End.X".
-Should we limit the param to 0-4?
+Looks reasonable and seems to work:
 
-> 		esac
-> 	done
-> 
-> IMO a case per behavior would also make End.T easier to add, both for
-> the flavor core that your 1/5 mentions for End.X/T and for NEXT-C-SID,
-> which I am working on.
-> 
-> > [snip]
-> > @@ -1031,6 +1187,25 @@ setup_end_flv_psp()
-> >  	SETUP_ERR=0
-> >  }
-> >  
-> > +setup_endx_flv_psp()
-> > +{
-> > +	SETUP_ERR=1
-> > +
-> > +	setup_hs_lo_addr 1 1 "${ENDX_CSID_PSP_FUNC}"
-> > +	setup_hs_lo_addr 2 2 "${ENDX_CSID_PSP_FUNC}"
-> > +
-> > +	# The same SRv6 policies with setup_end_flv_psp except using End.X
-> > +	setup_rt_policy_ipv6 2 1 "3>4:noflv:End.X 4>2:psp:End.X 2>h:psp:End.X"
-> > +	setup_rt_policy_ipv6 1 2 "1>h:psp:End.X"
-> > +
-> > +	setup_rt_policy_ipv6 "2:${ENDX_CSID_PSP_FUNC}" 1 \
-> > +		"3>4:next-csid,psp:End.X 4>2,2>h:next-csid,psp:End.X"
-> > +	setup_rt_policy_ipv6 "1:${ENDX_CSID_PSP_FUNC}" 2 \
-> > +		"4>3,3>1,1>h:next-csid,psp:End.X"
-> > +
-> > +	SETUP_ERR=0
-> > +}
-> 
-> On v3, Sashiko asked whether the End.X tests would pass with End.X
-> working as End. In this topology, the nh6 of each End.X is also the
-> next hop that a lookup of the new DA gives, and the tests pass in both
-> cases. An unreachable route in table 90 for the next SID, on rt-4 for
-> (i.a) and on rt-3 for (i.c), would make End fail and leave End.X
-> working. This is close to what Sashiko suggested on v3. What do you
-> think about adding these two routes to the End.X scenario, each with
-> its defer?
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
 
-Hmm, we add the SIDs with End.X action, and the address also has parameters.
-e.g. for (1.a) we add fcff:4::2af1, which unreachable route should we add
-then? Cause we don't use fcff:2::ef1 at all.
-
-BTW, is there any reason we add the unreachable route on rt-4 for (i.a) and on
-rt-3 for (i.c)? In the consumed SRH testing, we can only add the extra on
-ingress route. e.g.
-
-#   (i.a) hs-1 -> hs-2: on the packets with DA=fcff:3::400a, rt-1 inserts the   
-#         extra SRH with SID List=fcff:4::e,fcff:3::400a, and rt-4 consumes
-#         it. 
-#         Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2        
-#   (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:34a9::, rt-1 inserts the  
-#         extra SRH with SID List=fcff:4::e,fcbb:0:34a9::, and rt-4 consumes
-#         it.
-#         Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2  
-
-Which means we need the end action on rt-4.
-
-> 
-> > [snip]
-> >  test_kernel_supp_or_ksft_skip()
-> > [snip]
-> >  	if ! ip -netns "${test_netns}" -6 route \
-> >  		add "${IPv6_TESTS_ADDR}" encap seg6local \
-> > -		action End flavors "${flavor}" dev "${DUMMY_DEVNAME}"; then
-> > -		echo "SKIP: ${flavor} flavor not supported in kernel"
-> > +		"${policy[@]}" dev "${DUMMY_DEVNAME}"; then
-> > +		echo "SKIP: ${action} flavor ${flavor} not supported in kernel"
-> 
-> A note on this probe. On older kernels this add can succeed without
-> the flavor, and the tests then fail instead of being skipped. This
-> happens with End.X on v6.5, and with End on v6.0. I was thinking of
-> sending a separate patch that reads the route back, for the End and
-> the End.X probe. There is no need to wait for it. Does it work for
-> you?
-
-OK, I will add a checking for the added route.
-
-> 
-> > [snip]
-> > +if test_kernel_supp_or_ksft_skip End.X psp; then
-> > +	test_endx_flv
-> > +fi
-> 
-> When the probe finds no End.X PSP, the End.X tests do not show up in
-> the summary. The v4 skips only that scenario, as suggested on v3,
-> which is good. On my patch that added the consumed SRH tests, you
-> suggested to return at once when the srh match is missing. I kept the
-> check in each test because log_test_skipped() then logs each test and
-> counts it in "Tests skipped". IMHO the End.X scenario could do the
-> same, to be consistent. Does it sound reasonable to you?
-
-Sorry, I didn't get what you mean here. Do you want to run
-the check before each end.x testing and report skip one by one?
-
-e.g.
-
-	if test_kernel_supp_or_ksft_skip End.X psp; then
-        	host_srv6_end_flv_psp_tests "End.X"
-	else
-		echo "SKIP..."
-	fi
-
-	if test_kernel_supp_or_ksft_skip End.X psp; then
-	        host_srv6_end_flv_next_csid_psp_tests "End.X"
-	else
-		echo "SKIP..."
-	fi
-
-	if test_kernel_supp_or_ksft_skip End.X psp; then
-	        host_srv6_endx_flv_consumed_srh_tests
-	else
-		echo "SKIP..."
-	fi
-
-Thanks
-Hangbin
+Best Regards,
+Petr
