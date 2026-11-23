@@ -1,79 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795431864;
-	b=p2ifFMQwaBs5QRXrY4c99WoEBNR8uOu1m74X8vZep6tvABi2c1Qk6w4ClYEUnZXEbgBq
-	 x3M8vWmEYFdy3LI2Cvu//KHbB62UgVAb4oQ5ymuSuZM8y5mpuuOsaeTZEl3qk8x0i7IDH
-	 4gjP5Xn5dC1+63h89JISGjYZ6QNg+PsYVJby20fOO3YJXy6mDbMtEUcYUbuviuKgAMIsJ
-	 C0KHlvehfRHubLWeqjrSMvOsOmYAD2gbW3UAikJG7Yhv23n31e7+UZ4lu25NEgaC1/IzO
-	 lksqL1gYzXPWUSWHrCPH0Rt7PDv8aAOPzJorWRVzWfjqHyVkVr/kV17saCVb0L4urLg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795431864;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Sy1hEmrM6yrrP/2YFylQYTk/EF85CVn0Vom/iqjAOJQ=;
-	b=KI6CB+9LuJnw2tkj5ket5u0osQ0gqSP908CTgoqLrvpAV1ek7zEDyxMkKSY/wtTqP77u
-	 7Z8prC3f0hhrXN9EUQcal9HvAgPOZbIIQtviUW12sqngclTXqRIG9B0tEGp3adRpRcMUf
-	 drsJbe/fdOJlUhPKMIJzBUvhNbDHalZdxc5xbkbV81TIvVUnjT/T6oWa+MO4psXEzmRJW
-	 Dt5+rMPVWDgY8TmvDi64ZhBIpz/dD8Dph/4wz16Ho+fL6GZEimlvlcnyt20mEagNG9f9t
-	 72Fi8ZIVuAgnGZJWWOSBb6qRHXSUFrFYD7XnQtlmOPnL6CUYcMF6sYWGl9gdIVmodgA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WzbVDYhF;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A1E606A6BE;
-	Mon, 23 Nov 2026 11:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WzbVDYhF
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795431863;
-	b=a7WG+aTPt+51rEexSG8w+kiqNVtJhmnv9LBFeRbvgRdIyJRmfpiGKqdwMOA+KquMp3Ou
-	 GzPzHnyZT3vuq/ucPlLezqdcCPI6PrUhSanZ7Fvkn7LbF9leQ4xvGVe4KFFTIv9TQ5SPW
-	 P2wGR4O9gmVVSgCukLoVOL7lxaV6Cmnh7aLcu4Q4C31mbkwMI6LPPQQR6tSkAsKRAIHGe
-	 XYWCALbHE6SvY/Cjq3pxyANcOWwo0ShRpJepreEwU2hyL4treRmSHeyKxNPfATz8btH0e
-	 9lBMfiT0zBaNaf86pVQTGYtl3mqNE0FDT7PF7ok0XSZYoHzl0LMgxlLcRG1f8NlzH5g==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795431863;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Sy1hEmrM6yrrP/2YFylQYTk/EF85CVn0Vom/iqjAOJQ=;
-	b=RWHKTixiit2fWNJTXUiPR68aSEdgGmZT9yVanxN544rzUwXyMwvxaTYyi7/rWEm7TYCL
-	 szkjoJo49Q46i50ZqF5gQqhabFprE8J3xz7qBzs3/ry6m4WbIHL1RMWdrvcnNAqgYVTUs
-	 IFmUEnYQUhOsWF196ld5elyd/3PzI4sUVX5TvJC/ngEqedJTMEV37C86ih6eOuQSxEmaW
-	 XnuHOoXTFuwo36rJPJ6MEaEPCsXxjkdxlsBFRYbhh+Z4tuk8nby91LIey8AZTYy8TZrAT
-	 f1S07Nhuh8KGpBgSGqLMC2M8ny5D40/6E8HhSlFP9oog54Mszjkpny2DSW0ubN96vag==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.70
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795433683;
+	b=j/JNkvw2guqreVqg+xU0jJ8L568Fq8/28pBHQGcaXzuckSaZIkk84/tC3jsQECwBgBRP
+	 gzgnguGq4l4BDBaA8yxa+M+wXSrJumYLy7pf34shG91mZG06xJwncIQymTcBMBHjNKTap
+	 gUOMuIIStWlOem0jDqtUUCvo0US4P9jvBox6Ve0j7LwXfDGUb5Enz4vMCo06H+HIWbhIj
+	 C10g3tEC0WAmekrvj1bVkCkBkEBq9Jqo7zzfSKPhWbeX60HQOzO8aG22siY+Xn4S9oXu5
+	 r1ZSTz2hW9yWwgBMKyJwkQSE1V9Hc5tSMAAjCdchh2JdPZRlrekDv7XX7necYUNjq2A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795433683;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=NPRhYDnwJRvicd4u9ac46NRRTHp7yf2uOQ6I7pysTOs=;
+	b=g2XOq3DRcSVsE8Jx9/olp1DcVy819XactGVRp9DSW6gZs1FWCWYRd3oMyoyK+BtwTdsN
+	 wJMEx/DuMJWUhRSJ0riWr81JVGEOwv4/n19p0FJQbfBO9ku1yLcIPNBlAbevbKbIOFmLp
+	 luNf8pFfsbR6h2h5/evi3TbW91TIONKhKgjQpkh8Tl6iIFxG9clA/hTTVyROlFMrp1a/l
+	 JF2nCC5W/XqVh4v2FQ2loB48sqXnK6us/Vg4J72Xg2dDCqDtyu8ZN49z6qPATdcJWac8/
+	 HLFRV/nKFysWqU5gPtC62BZ2BXnufrH94Wy6jby/6mxTcIYfAop2QuT9VXCbebTFfkw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LJyZfoTK;
+	arc=none smtp.remote-ip=91.218.175.70
+Received: from mta0.migadu.com (out-70.mta0.migadu.com [91.218.175.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A50721F000D0;
-	Mon, 23 Nov 2026 11:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795431863;
-	bh=Sy1hEmrM6yrrP/2YFylQYTk/EF85CVn0Vom/iqjAOJQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=WzbVDYhFk5c784oIDyHqHTGWV7yl+uKLxKdtnmNonYOMy0PdYlCcJyZ674i/G5+Qg
-	 sqwsa+zVGFG9vuwHhuUY23P/oSZPb1s3Ap8LA4/QhngFJkZ3UED46AKPsa/Wd6KuVE
-	 8UmFrujZ9V82bzOSuKep0ueC0p/tf1HVZgMI52Vrd9NlDqdVPqkZsX4IcftkyHxESD
-	 JAwJTpAbVXncuAewnAE5PfYmQL/ZD4bLeaucDfwBmKIjYRdA30ECI3DCO/yf+MXSvT
-	 cpUUokads0YmkZXG14AISswYbFY20hBNtuUKeUBZXm5lvspmwchlfkdvKBDeZbXU+T
-	 avGuy1mGcHhFw==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 3691F4C43A;
-	Mon, 23 Nov 2026 11:04:11 +0000 (UTC)
-From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
-Date: Mon, 23 Nov 2026 19:04:10 +0800
-Subject: [PATCH net-next v3 2/2] selftests/net: packetdrill: test
- tcp_mtu_probe_floor
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFE8606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 11:34:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EFE8606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LJyZfoTK
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=sjV6qrYMC8GhJztUOTln5L8ygixllt0tnTT6CrNeYyI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795433680; v=1; x=1796038480;
+ b=LJyZfoTK8ZtIYq9wmTcSMfhlUK4V/QQiyUq0/16fublnXDwgzY+bHufptb+40LP4Btx/jvBA
+ tgXKmtXeFKVh5OcpvJu9iiFbyoBSjybXUlU/ZuYeQdOrleefE2eqzdiLKQDG/oSAAlKgTUANJKM
+ GQzMMepdx6XCOdQtir/HYZbE=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b141b18848b98b72;
+	Mon, 23 Nov 2026 11:34:40 +0000
+X-Mizu-Trace-ID: b141b18848b98b72
+X-Migadu-Flow: FLOW_OUT
+From: Fuad Tabba <fuad.tabba@linux.dev>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Isaku Yamahata <isaku.yamahata@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	kvmarm@lists.linux.dev,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	kvm-riscv@lists.infradead.org,
+	Will Deacon <will@kernel.org>,
+	Fuad Tabba <tabba@google.com>
+Subject: [PATCH v3 0/3] KVM: Bound KVM_PRE_FAULT_MEMORY by the vCPU's dirty ring
+Date: Mon, 23 Nov 2026 11:34:32 +0000
+Message-ID: <20261123113435.1170711-1-fuad.tabba@linux.dev>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,94 +81,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261123-tcp-mtu-probing-doc-v1-v3-2-c288c2df9666@gmail.com>
-References: <20261123-tcp-mtu-probing-doc-v1-v3-0-c288c2df9666@gmail.com>
-In-Reply-To: <20261123-tcp-mtu-probing-doc-v1-v3-0-c288c2df9666@gmail.com>
-To: corbet@lwn.net, kuba@kernel.org, edumazet@kernel.org, pabeni@redhat.com, 
- davem@davemloft.net, shuah@kernel.org
-Cc: Yongjian Wang <echoowall@gmail.com>, ncardwell@google.com, 
- kuniyu@google.com, rdunlap@infradead.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, skhan@linuxfoundation.org, horms@kernel.org
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795431849; l=2254;
- i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
- bh=L2mM/OhObLn59aLpNJ9Spn+BLz/qgLoUlYL6TTs8CZQ=;
- b=3V8xSAG8iabgXfHb/kqahTVUGbuhiAxkOHPUCsW3ZCsx63YVBJMhGj9eT4AgqJMBi2224D5Ab
- GlroLvG6p5qDpMJ7QPV0620sAitddv4LfNE36jGAfM1NGJJwWEXoq/J
-X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
- pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
-X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
- auth_id=1323
-X-Original-From: Yongjian Wang <echoowall@gmail.com>
-Reply-To: echoowall@gmail.com
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-From: Yongjian Wang <echoowall@gmail.com>
+Hi folks,
 
-tcp_mtu_probe_floor has no selftest coverage.
+Changes since v2 [1]:
+  - Added patch 2, which warns in api.rst against calling ioctls other
+    than KVM_RUN while an exit is pending. (Sean)
+  - Mentioned riscv as well as arm64 in patch 1's exit_reason
+    paragraph. (Lorenzo)
+  - Collected Lorenzo's Acked-by on patch 3. (thanks!)
 
-Add a test where a full-sized segment keeps timing out without any ICMP
-feedback. After the first detection falls back to tcp_base_mss, check
-that each further retransmission timeout halves the MSS, and that the
-MSS stops at tcp_mtu_probe_floor.
+KVM_PRE_FAULT_MEMORY never checks the vCPU's dirty ring, so one call
+over a large enough range of populated, dirty-logged pages overflows
+it. The first patch stops the loop at the soft limit, as KVM_RUN does.
+The second warns userspace against calling ioctls other than
+KVM_RUN while an exit is pending. The third adds the case to
+pre_fault_memory_test.
 
-Use tcp_retries1=1 and disable TLP, as in
-tcp_mtu_probing_blackhole_no_tlp_retries1_is_1.pkt, so that every
-retransmission comes from the RTO timer.
+Pre-faulting isn't the only ioctl that can push past the ring's
+reserve. On x86, KVM_SET_MSRS does too when it writes the wall clock or
+the Hyper-V hypercall page. A guest can also push past the reserve
+within one exit, for example through the arm64 ITS. What those paths
+should do when the ring fills is an open question for the dirty ring
+API, which I don't think belongs in this series.
 
-Signed-off-by: Yongjian Wang <echoowall@gmail.com>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- .../tcp_mtu_probing_blackhole_floor.pkt            | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+I didn't include the kvm_dirty_ring_check_request() rewrite that Sean
+sketched on v1, since I think it can lose a request. It tests the
+request first and clears it afterwards. If the vCPU is scheduled out in
+between, loongarch sets the PV preempted flag in guest memory and x86
+updates a Xen guest's runstate area, either of which pushes an entry.
+When that push makes the ring soft full, the request it makes is then
+cleared, and the vCPU runs with the ring soft full until its next push.
+Clearing first and re-setting, as the code does now, doesn't have that
+window.
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole_floor.pkt b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole_floor.pkt
-new file mode 100644
-index 000000000000..dd040d9beca0
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole_floor.pkt
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test that after black hole detection, each further retransmission timeout
-+// halves the MSS, but not below tcp_mtu_probe_floor.
-+
-+`./defaults.sh
-+sysctl -q net.ipv4.tcp_mtu_probing=1
-+sysctl -q net.ipv4.tcp_base_mss=1024
-+sysctl -q net.ipv4.tcp_mtu_probe_floor=300
-+sysctl -q net.ipv4.tcp_retries1=1
-+sysctl -q net.ipv4.tcp_early_retrans=0`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1460,nop,nop,sackOK>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
-+  +.1 < . 1:1(0) ack 1 win 65535
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 write(4, ..., 1460) = 1460
-+   +0 > P. 1:1461(1460) ack 1
-+  +.3 > P. 1:1461(1460) ack 1
-+
-+// The first detection falls back to tcp_base_mss.
-+  +.6 > . 1:1025(1024) ack 1
-+
-+// Each further timeout halves the MSS.
-+ +1.2 > . 1:513(512) ack 1
-+
-+// Half of 512 is below tcp_mtu_probe_floor, so the floor is used.
-+ +2.4 > . 1:301(300) ack 1
-+
-+// The MSS does not go below the floor.
-+ +4.8 > . 1:301(300) ack 1
-+  +.1 < . 1:1(0) ack 1461 win 65535
+Based on Linux 7.4-rc2 (7475ea8b58616; also applies to kvm-x86/next
+cbe54fc3462b3 with git am -3).
 
+Cheers,
+/fuad
+
+[1] https://lore.kernel.org/all/20261117074428.7544-1-fuad.tabba@linux.dev/
+
+Fuad Tabba (3):
+  KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty ring is full
+  KVM: Warn userspace against ioctls while an exit is pending
+  KVM: selftests: Test KVM_PRE_FAULT_MEMORY against a full dirty ring
+
+ Documentation/virt/kvm/api.rst                |  20 ++--
+ include/linux/kvm_dirty_ring.h                |   5 +
+ .../selftests/kvm/pre_fault_memory_test.c     | 102 ++++++++++++++++++
+ virt/kvm/kvm_main.c                           |   5 +
+ 4 files changed, 126 insertions(+), 6 deletions(-)
+
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
 -- 
-Git-157)
-
+2.47.3
 
