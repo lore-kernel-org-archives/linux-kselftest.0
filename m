@@ -1,81 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795455412;
-	b=FDrofl5PgYoqvIVG0CoRsyF4BVnIdATtApuY1iNK8lT7Ly6yb6HqdoqZ9Z/nGM7HhkLN
-	 dq93OloMwzrEB/tLC4Bd+mIlbCEnnr3dYWs9G1sYeG0QcEikXrSG265WXRb/KJB/s+ZkS
-	 cK74hbkHrMyL/mh/tVwI8K6Kh7uKJHSID3Lu5kjhgReMsevPM6VJcI/hNKiHxLS6TrJR/
-	 yfr8vZd7k0X5Norh7hJFDuR8taWB5xNMVLX16fyBOaTXqDy7i4AJHHwu9Mqp+zJAeNtM7
-	 4+Cio72XGbC+YRlTmGFW2EtxSKpSNZQIsPd1pDOYE/H0ssxioaRX1sz1C4ftwfe5Z4g==
+	t=1795455524;
+	b=ZM+myI7q2Ljt8IVt6X+da6U53HTC90/TAhIQfjVeozFhqrkctxJZfx8zXjVB09XwHt2i
+	 BAv3VGNeuCnn5z4OS7hJGbYVWoFGD+oLCvu5FDQPN7Xca9XDWdX3vP6I2dzcQpdsLVKqf
+	 pK6dAEKMpZVge9KEzP8GCpbk946tDHoF2mQYOj7ytIwxezSRhlNqyGcQUO3MKSpqmmVOf
+	 T78jJcHk+MqL+sEEHOdzESmdL2vNKE/uz6gyWcXMhg/cbiYUgo9t0MMsuLD4ZRXObWpsL
+	 x5zYsUkvGFK2B1hcY+TKKe7zS6CU/lavji4pF2yKtgPHQVKgr19v1DuxTRp2zXodGkg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795455412;
-	h=Received:DKIM-Signature:Received:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:X-SA-Exim-Mail-From:
-	 X-SA-Exim-Scanned;
-	bh=worv+Y03ljvU23jf61f6lVoQSFBcO1gUtcVibu/cXn8=;
-	b=M1OiJMCl7VPytwK4e39stqbQccj5h+MbVqmOul899qoDqz/vtaC8XSdl34yVyi1yu+Ax
-	 rkAHTHj7dIsvL81SKmdT8GfDpXz07kOspZRL3B5pt6UqH1JRLand2yCZc20MAPIFtMRSt
-	 Sj8zZAXahjfiiZpDGFPMVwK2BfMiEmJzZEi85j/73txY9ksXjY25B0mGhYTVSFklQCLHD
-	 rOkC6echM6XFU4hOzFaciHOQEpTpzNjg3bRNNsYAOeiBI5spi53xrxSHTl1Bb3kG8Qj8S
-	 lV1N47DJn53egfNM86UY5riqfoT82lTjOIxt3WOcf5Ii/7UuWv+rDXzLikBB6rutaxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795455524;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:Date:
+	 Message-Id:To:Cc:In-Reply-To:References:X-Mailer;
+	bh=ON4hm5xX/TESJ2KwEmSXnqTeTKDgHlHTMudm7RJl7Pg=;
+	b=JeA3a0HO78wBpFrtBIbzlDx+lbLSjR5lnu1tbw/IF1C/eQ6sOH3NnC88FoMHMjmZ11Np
+	 gV23ldFJFRnxgi8qp5LL9+OuxbgQZDntAZ7OR7+Dco58QjVn0p1sr4lWWbCoHbko6APDQ
+	 2VI5AFSAbQKWJdEHQODV/e6Hl+u37x3kfHmunHR8amnZxQSq12RNa3IvayzST23JQIGsq
+	 BdPw/L63IgDRpsNXAyx4wuXmQQ/0DRrNwzLmGYOgwQt36UGDcvnTTFWvd/CgDVUiPH1ip
+	 4stt7wXPb2OGeGH3jvBJi6OBpzs6xomyKToi10aGT4ZcXhO2mk+IrHvFa60egWFJjVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SJk8boVo;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="O3/3Z4Rp";
+	arc=none smtp.remote-ip=74.125.229.9
+Received: from mail-dy2-f9.google.com (mail-dy2-f9.google.com [74.125.229.9])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED096606A69E;
-	Mon, 23 Nov 2026 17:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5C5606A31E
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 17:38:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC5C5606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SJk8boVo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F671F000C0;
-	Mon, 23 Nov 2026 17:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795455411;
-	bh=worv+Y03ljvU23jf61f6lVoQSFBcO1gUtcVibu/cXn8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=SJk8boVobebpbSdbYgq+ftbo1Hu42e9YjaF2dfLHBZ1M7fH90f13dklbfXyjek4KM
-	 +yXJYaFac1o47GUKLAKEwIfPpHNwhem1lMn4A7/2Mzi6YofnonARX+s6yIeIYUJWNF
-	 N3lJm6rLkZ534B1Xu3KSZHUmH4ud8cAOv3R+qjkR8VKlLQQCNWbE3qA0z7GBzQI3Y1
-	 955gnreLohaj+uevvYp4aNE+VDxjSpvxYmRISbfcvM2FqEtYHy04ITMqnGrrGxkQza
-	 pwIlD9bEFTsy4xcXXzPJevZPQSvLns/RP3AmZTZKrSYk8sGmeMMalYsRfE9MbZh3Fm
-	 C7wSD1bRpQTMg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1xVXyC-000000027Gl-3QWM;
-	Mon, 23 Nov 2026 17:36:48 +0000
-Date: Mon, 23 Nov 2026 17:36:48 +0000
-Message-ID: <86cxrvzbyn.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Jia He <justin.he@arm.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sascha Bischoff <Sascha.Bischoff@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] KVM: arm64: nv: Don't request or attempt L1 VNCR mapping without vncr_tlb
-In-Reply-To: <20261123150917.2679600-3-justin.he@arm.com>
-References: <20261123150917.2679600-1-justin.he@arm.com>
-	<20261123150917.2679600-3-justin.he@arm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O3/3Z4Rp
+Received: by mail-dy2-f9.google.com with SMTP id 5a478bee46e88-3862cc30b3aso838957eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 09:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795455523; x=1796060323; darn=vger.kernel.org;
+        h=references:in-reply-to:cc:to:message-id:date:from:subject
+         :content-transfer-encoding:content-type:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ON4hm5xX/TESJ2KwEmSXnqTeTKDgHlHTMudm7RJl7Pg=;
+        b=O3/3Z4Rpdei0zf2ssZjF8HctgbmIYu+0xB+R4Xqy7bfrD4NtDWhP2KX1SRyqltULNS
+         SG+/1MorElxDVxNciiim/ZqvgRNZTaVqTcWKb2gqLSUcq2AJQhq/acgDOSSHPDFMbWMA
+         O1Imv3q+fywKqH9GotJcqflI6ww5n/91ofTcDw0qeutvG3T+IhyC2+SVjoJ6tSxiXyMz
+         XsX5ngXLGr31AMO+w1Ck5yjV17mm9wHXRZeo/OSPmNisxtpLUcbWo5tgpGoULVRraTZA
+         UTxJa8j1IBb2RamgNO1t149HhHaZAhYTGvPZhzmXTs8aR7VqBCC6JzqoZkwaMYh82svG
+         CxGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795455523; x=1796060323;
+        h=references:in-reply-to:cc:to:message-id:date:from:subject
+         :content-transfer-encoding:content-type:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ON4hm5xX/TESJ2KwEmSXnqTeTKDgHlHTMudm7RJl7Pg=;
+        b=qf5HwtLZwdH3CQBt0c9ifrbg7lwuZPc9zFaQ9iRP15dPu5XlDI4bwcVdd1PcIp6tds
+         E5GdGyguK9/BLt+s7Y9ThGi9+M30rzQXaGppcNTi7zZYkIVcR6qzmpQKYR63knZsts/G
+         aWpfCV2kI0C3Ty6VHvTvCFS+2ibtGc8zjFooG2w9ZK5thlMDtj7NUgFb4Cqe9Y3WTSFC
+         QCaOuC0AzGUXlfgbM9TC7hVdTuSHKM5r5h+z9kxoBGRLjs6YhTe7I+n64DmHle2jVp6s
+         v/VsgKwcQN1iwXXXLw0lRJU1rs9puFNk98QwtVKQJgO7vQj9oYD5LUniN31qRk4xfSxA
+         4wqg==
+X-Forwarded-Encrypted: i=1; AL+hErGGKFrk+z9SFHU/+AGx0HucFgvZTybTVUEroO5FlrJNpOOoAVqtELQ4LSFjQcsJXee+x+o/kK81yc18+B8bmK4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z85rQtfKabmFI6TPlDFvhlLrP73Tai+8fVXN6alE14w2pzilCrx
+	ahzmi69TFeTmUjK2YmtUihwVgO7/GvXHfqfc6N5QDR4Zrvw9vN8VRy7I
+X-Gm-Gg: AZFdTZffeZRLnDvLItuRQVlh9ZRJQIUqx8Wbp3q5/S8eI23KyhV6M6tKOunMi9tR6Z8
+	GewPCh5KsJUhr0f2GDT7yJj7YVs0fhxDuF3bfG8gPiUwYUblx/PTMvyDjOasV7vwfzfN82cDA1V
+	mqcimmoQ74RGENsQlp8arckbOZ1dYYFOcxtcJY9+9tpjGJ6X4rzuum8T72an+wYSIq6gZSn1Gwg
+	n0VQVU7SiREC5fkcmr8SAsAtXX45O2scZS5BEP3Gl5PtwdNFvjeM2xw7GERDr4pzNVbMC0FoeYB
+	b0o0x7q2U9uqzprGdXtH7kRFFv+x71RFG1scrurbADVqUYzkXOJepz0Jep60abr3/jUwdhy68UA
+	JqAZ7/X2IRfXmoL49JizR1sMHZM5vgP9c5JkxtwoyjJchFClURTLf6xRH/zAdWp8JHAViSjSqqe
+	oXAGcCqk6VU+T1R1hf1n/zeoXeRehg6zsXEnVGj3Cn/6XLR5bi2nsl0oMKRe5CDu/BCQ0pe994p
+	/TG6Lhc5w78VO7M4Bu+qThVljcNe1L3Ru4csLLyswaG2MzRs4rrv9zFdYq6d0QZ2Xc5NsWzQYes
+	bHCvLFx1k1wsb+Q8TWjjg0zxKOrPy50Xn6iH9qDeFKve7tb83V898Ff/FEjFOo3c524kKxjKIDu
+	/GYIZpD9FFkbOM5+bkI5piM1P+G3ijlyJW+Q5FBZen3oJM9J0LzHAI+lScvDyjQ==
+X-Received: by 2002:a05:7301:6408:b0:36a:270:ce76 with SMTP id 5a478bee46e88-38570f2b27dmr13093027eec.33.1795455522859;
+        Mon, 23 Nov 2026 09:38:42 -0800 (PST)
+Received: from localhost (n106-71-19-159.sun21.vic.optusnet.com.au. [106.71.19.159])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-38567abb870sm31532302eec.25.2026.11.23.09.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 09:38:42 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,68 +88,33 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: justin.he@arm.com, oupton@kernel.org, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, Sascha.Bischoff@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 24/27] selftests/damon/sysfs.sh: add basic tests for
+ admin/reports/
+From: Aveline Noir <jm5905938@gmail.com>
+Date: Tue, 24 Nov 2026 03:49:25 +1100
+Message-Id: <179545256510.4.17741169185712698444.b4-reply@b4>
+To: SJ Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, damon@lists.linux.dev, 
+ Lian Wang <lianux.mm@gmail.com>, linux-kselftest@vger.kernel.org, 
+ linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>
+In-Reply-To: <20261121210013.130397-25-sj@kernel.org>
+References: <20261121210013.130397-1-sj@kernel.org>
+ <20261121210013.130397-25-sj@kernel.org>
+X-Mailer: b4 0.16.0
 
-On Mon, 23 Nov 2026 15:09:16 +0000,
-Jia He <justin.he@arm.com> wrote:
-> 
-> vcpu->arch.vncr_tlb is only allocated when ID_AA64MMFR4_EL1.NV_frac
-> advertises FEAT_NV2. When NV_frac is cleared to 0 (or E2H0 is selected),
-> vncr_tlb is NULL for the lifetime of the vCPU.
-> 
-> Don't set KVM_REQ_MAP_L1_VNCR_EL2 in kvm_vcpu_load_hw_mmu() when
-> vncr_tlb is NULL. The only other place that sets this request is
-> kvm_translate_vncr(), which only runs on a FEAT_NV2 VNCR abort. Warn and
-> return early in kvm_map_l1_vncr() if vt is NULL before disabling
-> preemption and taking kvm->mmu_lock.
-> 
-> Signed-off-by: Jia He <justin.he@arm.com>
-> ---
->  arch/arm64/kvm/nested.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-> index 4d83281a7a28..2f52c128f3a7 100644
-> --- a/arch/arm64/kvm/nested.c
-> +++ b/arch/arm64/kvm/nested.c
-> @@ -979,7 +979,8 @@ void kvm_vcpu_load_hw_mmu(struct kvm_vcpu *vcpu)
->  				vcpu->arch.hw_mmu = get_s2_mmu_nested(vcpu);
->  		}
->  
-> -		if (__vcpu_sys_reg(vcpu, HCR_EL2) & HCR_EL2_NV)
-> +		if (vcpu->arch.vncr_tlb &&
-> +		    (__vcpu_sys_reg(vcpu, HCR_EL2) & HCR_EL2_NV))
->  			kvm_make_request(KVM_REQ_MAP_L1_VNCR_EL2, vcpu);
+Hi SJ,
 
-How do we even get here? Now that you have short-circuited the vcpu
-state loading, I can't see how this code is reachable before we've
-actually initialised the relevant state.
+On Sat, 21 Nov 2026 13:00:08 -0800 SJ Park wrote:
 
-What am I missing?
+> Update sysfs.sh DAMON selftest to cover basic file operations for the
+> sysfs files under the admin/reports/ directory.
 
->  	}
->  }
-> @@ -1761,6 +1762,9 @@ static void kvm_map_l1_vncr(struct kvm_vcpu *vcpu)
->  	struct vncr_tlb *vt = vcpu->arch.vncr_tlb;
->  	pgprot_t prot;
->  
-> +	if (WARN_ON_ONCE(!vt))
-> +		return;
-> +
+LGTM, thanks.
 
-I don't think we want this. Either the code is rock solid, and the
-warning pointless, or we have terrible problems, and I really want to
-see the kernel exploding, specially given that NV is still an
-experimental feature.
+Reviewed-by: Aveline Noir <jm5905938@gmail.com>
 
 Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Aveline Noir
