@@ -1,52 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795441240;
-	b=Z7GWgejy0Tovs9a6GEtgMEdE1yPwrRlALKV0f74TQiJnJt3+oS1jjiBo/QJ9GTLwdMBu
-	 EaclAs6JD3vKdE7qvU46ChoQt2Twzj5ewjhbBKtVnvyBOLlCtGWw1jjfdyjDB1meAK6e9
-	 pNjaQcNhMxnnP2WSGxmvdUVciv0CiCEIh962NcgomxGipLjrM3RKhSey8YWDIsAKnQp2o
-	 DDzciO4KnAzbRpuVAqDZolV2iZh4eAXz+vH2FS2vK16FFrVwpnouBtFhqpvsYdeZZDrAI
-	 wXCU722BwuqULaLAIigHHOKBh0O/3xl6iL1bHKnHG+Iaioxk33j4nRBIWKEZQL/S/Fg==
+	t=1795441650;
+	b=SQEnt1p7PjADCDlZyUTZEzw49krt9Eob3pvTAyxe/mMQXz42EHqWHm2zkm/PHFrFMOsW
+	 cGmhomlEw6tbFslmNUjsGrcS3pipAiFxXGvPgyRcg0G+ln3mt4HvKNXgBSwR8gnM2E5fx
+	 w3qlCFn+KuxQq9NNoMkLRiotiWHRlztzLf7b/dv86FHOmBboIufHKy/SmI9OQkRrmhnVW
+	 FsL0tdauWt8qLJMplh8mA14JE5HKupxUvl1ysi6qlGqj4xs09rooqwPf1ZPgI48v3md8E
+	 +36VVqqFvt0245pDuBBzmGx/IKw00VOOKxZWQoDmXC8e5qS+9vywp4HQGpwF36iL1SA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795441240;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:MIME-Version:Date:Content-Type:
-	 Content-Transfer-Encoding:From:Message-ID:TLS-Required:Subject:To:Cc:
-	 In-Reply-To:References;
-	bh=nziyEOPopQDeZnuCi9xjHTCH+7zInZPDNY/uB2Wtw88=;
-	b=oku5XWhfBjkD5k5a9lXrlOMVfi+ZJQHi54pwvbA/5zVXsGgRWkdEEfWgs/OXzG2EZjV3
-	 48FdDtFsmqysHLG4rBH1I8n2iqboS683KQa1m4AyaTpmmqdn+fTp/uX/XyNfAUQCdg05n
-	 7jl8WZoxWmzYjtBJMnuWfamZhx6FHisarMjMB0bgFcAMMCHeUKLTGJLZg6RiBy28wEmmp
-	 kLbCewpzbri31BXenW90cebd3vE/X1pCHHnd/6F3JLa49e6h/uuuXrLzUVRbZVTRXiohc
-	 L0tCv8TFytaGl7KESF7GT7mbx5IMo0vQfEzp3leCyR8HVBMnaTPiXejF+bGPTNm2W6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795441650;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=YLrN3M1XfLMhZZJEefU5MTc8mdCMhL4DOsawNJPcdvE=;
+	b=Cjj8bZl/l6aqmW/z8mL59wh5xi5ZlVmhwY3BT8BIzywy0MPszYrxGcwbFCzYvTJ9EZLf
+	 FRvb8QamNxgiMJyqcBiixmnJ8W4ygvFwmqavGQTwcyhCSnP9nbVmT9LwYe0YXOswSZ/Lf
+	 yu35NDk/jqbAJVmTzrwijclNHy4UwvBRIVHcdOKqmiTuxmuEOtwNBzRkPGUHX5egDnfcT
+	 tGzTuj3pJgkZVRAdSvCZgGJcGCML1VSDTzrDfsdP4iTaMzI7rGKsbpDQXWg+Ky4g+ZWjW
+	 mfwTkT93w8cW8mjB2GGeslva7KoDmdKaXHg2suj+02Y4XqZToozqv4vp39pD4d1C7bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="pq0MgP/a";
-	arc=none smtp.remote-ip=91.218.175.20
-Received: from mta0.migadu.com (out-20.mta0.migadu.com [91.218.175.20])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=U2E3blKh;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=V0xv+J2H;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4769606A339
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 13:40:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4769606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2358606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 13:47:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2358606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pq0MgP/a
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/U/+GZkDiddmQc6MitDabS39SqSg7IIt9wb0rLSnNdA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795441237; v=1; x=1796046037;
- b=pq0MgP/awu/jZm7TxF4AGQIA/kPCZgs475cmX8IH7PNPTBOGskmDnlAlZgDAaOfzcQm5feZc
- 0owMR2Fao3jYNHRKsSy0kljaZ9TEK68pLxv4pSslg2L/WW4r8by8EH9fS4QZFuI11JrBiKQzc1W
- hL/s+FxDQjsznRrehzOhXIjY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ee8e84438da3ae18;
-	Mon, 23 Nov 2026 13:40:29 +0000
-X-Mizu-Trace-ID: ee8e84438da3ae18
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=U2E3blKh;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=V0xv+J2H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795441648;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YLrN3M1XfLMhZZJEefU5MTc8mdCMhL4DOsawNJPcdvE=;
+	b=U2E3blKhCpTMG5U55cymefi684vNSW83fU9cAkSNT8B2p3Ec1SX6Kk/gt0yBuT/DeIbLeA
+	HmQMow4pcbz8uYLh+3zwAZ+YpHe2VDdZkaQcLSf23a4NuRfq5cBPHnzYguPGai4tXFJWjZ
+	nqG/e9S7EjFS7amUQPQxV2GLOHyphE0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-607-DuZBRYbnOe-pOYU2_Bavtg-1; Mon, 23 Nov 2026 13:47:26 +0000
+X-MC-Unique: DuZBRYbnOe-pOYU2_Bavtg-1
+X-Mimecast-MFC-AGG-ID: DuZBRYbnOe-pOYU2_Bavtg_1795441646
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-6b586b0a795so2630825a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 05:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1795441645; x=1796046445; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YLrN3M1XfLMhZZJEefU5MTc8mdCMhL4DOsawNJPcdvE=;
+        b=V0xv+J2HSN1NuVUAQZjFAVgWhJS9eY4gd/lrrpRsjjr8Kr8p0SBzHilovKAKfveNGB
+         dR2w8XYjmUFyD34zlzphdz5RYGaOsWch/8N0jyFkACv4GslVhAfjtuOboh12glRPHc4D
+         AKgI49408j7ZcqtII19BJJgFuOGXwY6fbO6Epn4P2L/+iCn1ABO4e3Elt5ih2nlZ15Jg
+         1zHCmIhVRwaFVXrSSMOUDWCexWxefsJN/xcg4od1O6xGN1c4NuIApQK4/rncVKojJqv9
+         iecKQuFR+2hOsVYxHD/3zmM1toqLTbnRy81dr8Ugvn/5RaVdbMdc5gnd/hDCnBthMJLa
+         +1Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795441645; x=1796046445;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YLrN3M1XfLMhZZJEefU5MTc8mdCMhL4DOsawNJPcdvE=;
+        b=o497xPot7OHOjgvOpwPgYCq2RxvGvEC3aqaAC2tpW++WwRnMP8KilXllpYXzSVOQ7O
+         F07Ey17ccLJ/uKGZNhihr+TAUy1NmO1VU/0vgpC8OI6WZOh4rIMrltHBD97rkG4LB/aJ
+         I376LSTGM0hHWKQdsRsqQByVgE4oo1nUUcg7TMCtlk1asVCq70s/oKcW0iGVz6b/4EIh
+         AOBv8E98NROVLWZ27zUAK01eW9TFsKECbOPGcnvekH2J4wg2OktSMHg/SvAk0oqH0WBa
+         vp6v48k/gzZOZmSTr22vY23umA1bgG9PdJXFc36n+QALlz7dP4UQKGWVw5oisZCDMb+H
+         2rmg==
+X-Forwarded-Encrypted: i=1; AL+hErFPI+sP4ijMZ5Vl89GN7IBRk4H7KgQOdcyKfnwDu3ZmSJMCBKq5fnG2GxY3k57iWjUQa5b68vIe+5aVe82itmE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9PpP4sWxMli8qbLC20yKwJebA/F7cLmVuvYXWgN0jzl/SGa3kN
+	sg/Nh/hE0sXrBFGymeLny9tm2+8YMV3E4JKmDHpwQ86p0OskiM/riexqJJwLgRNTc3dD2qo6F5t
+	LItYEl1k8J5TMfo3t+UeaafFJMHnI/fmr3IuJGtcWOhx8G52kGxv4vsitViiObxcJYFahPw==
+X-Gm-Gg: AZFdTZeUnUKaIsYFJdJixgTSMwPxEnNKXya/KDQMCZMPCb/0LoKhHxTCtr6tKyoHLII
+	mG74/R2VauEoV1azD1xK5nPlRZo622r8yn8VRDb58NkO6BMpVL5VCkcWqyIzP3QzYgq0yzRiYyP
+	SjlEihCmiSHn1N7CgtVYsJPkXnt1QPawyvRN0eZiaqgFsWm5l3YTRep4YVisX4DP9oZhyTt60oq
+	jD7Yjcvrsdk9/fL0KB6vH/AZ9augAhKK0xShN7dhW+hU1Bk2SU/d/usByyZ3/ukLGQ/F0pEg1eo
+	gmltLqHuAX7SeI8huPP4rdPk0SNmD2phmp/AUYifApoAv5BSwdnvQEZh5j8nBCGWE54LZb3AjYU
+	AyCJdj6exGB3h+4KPN0y1Gfbc1SJchdJLeo2/8piiTGngaZLj2pQc3S++ir0CSqk/fy3L9Fnt65
+	1xWvAXLPzFOb5DCKfXYT4OQrjRgjdd5OzyaqHwqaOpKjPV
+X-Received: by 2002:a05:6402:400d:b0:6b5:9849:e328 with SMTP id 4fb4d7f45d1cf-6ba37ebdda1mr7965714a12.39.1795441645558;
+        Mon, 23 Nov 2026 05:47:25 -0800 (PST)
+X-Received: by 2002:a05:6402:400d:b0:6b5:9849:e328 with SMTP id 4fb4d7f45d1cf-6ba37ebdda1mr7965674a12.39.1795441645139;
+        Mon, 23 Nov 2026 05:47:25 -0800 (PST)
+Received: from [192.168.88.30] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba37109c58sm5253555a12.33.2026.11.23.05.47.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2026 05:47:24 -0800 (PST)
+Message-ID: <923664db-2b04-4440-8b07-2965c1e97aa0@redhat.com>
+Date: Mon, 23 Nov 2026 14:47:22 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,92 +112,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Mon, 23 Nov 2026 13:40:27 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-From: hangbin.liu@linux.dev
-Message-ID: <4717cab46b8eec796eb97799240cd6ab92d8c1ed@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH net-next v4 5/5] selftests: seg6: add PSP flavor testing
- for SRv6 End.X
-To: "Andrea Mayer" <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Hangbin Liu" <liuhangbin@kylinos.cn>,
- "Stefano Salsano" <stefano.salsano@uniroma2.it>, "Justin Iurman"
- <justin.iurman@gmail.com>, "Andrea Mayer" <andrea@common-net.org>,
- "Andrea  Mayer" <andrea.mayer@uniroma2.it>
-In-Reply-To: <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
-References: <20261119-srv6_flavors_endx-v4-0-284cdb484eee@kylinos.cn>
- <20261119-srv6_flavors_endx-v4-5-284cdb484eee@kylinos.cn>
- <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v10 2/4] net: hsr: refuse forwarding devices as
+ HSR/PRP ports
+To: Xin Xie <xiexinet@gmail.com>, netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+ kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
+ fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
+ xiaoliang.yang_1@nxp.com, skhawaja@google.com, liuhangbin@gmail.com,
+ stable@vger.kernel.org, sdf.kernel@gmail.com, lukma@denx.de,
+ fmancera@suse.de, danishanwar@ti.com
+References: <20261117141922.20-3-xiexinet@gmail.com>
+ <179514132185.3136.17085396682149520983@kernel.org>
+ <1f2ccb87-9017-4053-b8c8-5b31a211bd21@gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <1f2ccb87-9017-4053-b8c8-5b31a211bd21@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-November 23, 2026 at 12:09 PM, "Andrea Mayer" <andrea.mayer@uniroma2.it> =
-wrote:
->=20
->=20On Thu, 19 Nov 2026 21:55:21 +0800
-> Hangbin Liu <hangbin.liu@linux.dev> wrote:
->=20
->=20>=20
->=20> [snip]
-> >  @@ -1031,6 +1187,25 @@ setup_end_flv_psp()
-> >  SETUP_ERR=3D0
-> >  }
-> >=20=20
->=20>  +setup_endx_flv_psp()
-> >  +{
-> >  + SETUP_ERR=3D1
-> >  +
-> >  + setup_hs_lo_addr 1 1 "${ENDX_CSID_PSP_FUNC}"
-> >  + setup_hs_lo_addr 2 2 "${ENDX_CSID_PSP_FUNC}"
-> >  +
-> >  + # The same SRv6 policies with setup_end_flv_psp except using End.X
-> >  + setup_rt_policy_ipv6 2 1 "3>4:noflv:End.X 4>2:psp:End.X 2>h:psp:En=
-d.X"
-> >  + setup_rt_policy_ipv6 1 2 "1>h:psp:End.X"
-> >  +
-> >  + setup_rt_policy_ipv6 "2:${ENDX_CSID_PSP_FUNC}" 1 \
-> >  + "3>4:next-csid,psp:End.X 4>2,2>h:next-csid,psp:End.X"
-> >  + setup_rt_policy_ipv6 "1:${ENDX_CSID_PSP_FUNC}" 2 \
-> >  + "4>3,3>1,1>h:next-csid,psp:End.X"
-> >  +
-> >  + SETUP_ERR=3D0
-> >  +}
-> >=20
->=20On v3, Sashiko asked whether the End.X tests would pass with End.X
-> working as End. In this topology, the nh6 of each End.X is also the
-> next hop that a lookup of the new DA gives, and the tests pass in both
-> cases. An unreachable route in table 90 for the next SID, on rt-4 for
-> (i.a) and on rt-3 for (i.c), would make End fail and leave End.X
-> working. This is close to what Sashiko suggested on v3. What do you
-> think about adding these two routes to the End.X scenario, each with
-> its defer?
->=20
+On 11/20/26 22:30, Xin Xie wrote:
+> On 20/11/2026 03:22, netdev-bot+sashiko@kernel.org wrote:
+>> Can a plain veth slave still re-enter the xmit path of its own HSR master?
+> 
+> Yes. The redirect case exists without the patch, and the commit message
+> lists it as not covered. seqnr_lock has been held across the port
+> transmit since 06afd2c31d33 and 430d67bdcb04. The patch refuses port
+> types that make no sense as HSR/PRP ports, which covers the syzbot
+> topology, as Sebastian suggested [1].
+What about explicitly detecting the AA deadlock maintaining a per cpu
+status?
 
-Oh,=20for i.a), do you mean add an unreach rt-2 SID on rt-4?
-e.g. fcfcff:2::/32 unreachable? If yes, based on
+	if (<percpu_hst_xmitting>)
+		// warn_on_once && free skb && return
 
-#   (i.a) hs-1 -> hs-2: on the packets with DA=3Dfcff:3::400a, rt-1 inser=
-ts the=20=20=20
-#=20        extra SRH with SID List=3Dfcff:4::e,fcff:3::400a, and rt-4 co=
-nsumes
-#         it.=20
-#=20        Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-=
-2=20=20=20=20=20=20=20=20
-#=20  (i.c) hs-1 -> hs-2: on the packets with DA=3Dfcbb:0:34a9::, rt-1 in=
-serts the=20=20
-#=20        extra SRH with SID List=3Dfcff:4::e,fcbb:0:34a9::, and rt-4 c=
-onsumes
-#         it.
-#         Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
+	<set percpu_hst_xmitting>
+	spin_lock_bh(&hsr->seqnr_lock);
+	hsr_forward_skb(skb, master);
+	spin_unlock_bh(&hsr->seqnr_lock);
+	<clear percpu_hst_xmitting>
 
-I think we should add the unreach rt-4 SID on rt-3, e.g. fcff:4::/32 and =
-fcbb:4::/32,
-because we need to use the neighbour route on rt-4 to redirect packet to =
-rt-3 after
-End action. What do you think?
+/P
 
-Thanks
-Hangbin
