@@ -1,63 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.105
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795415163;
-	b=00hNekylmu1D3opnHmRsJSNPapAh9bfS39d1eIioSLfM1G8WssG4YOSbu0f9cjDJVow/
-	 mJi3OUGJx95kqjxSvfx4BMC6d/zbWfi8r8FITaEFf5JPGFfp74H+j62Y8SQzEzyHotrf/
-	 ed1SKlXi4bkIVq9TTYnssl7ebBVNXLkSaRuDb3lfA790nz/HJdmYztiSXw0eWAHGps+TK
-	 cUjWtHmm/JSEwyCweNLIM0fs3r0pbHHayKeuVFdbXrFcWqSJAeMTs5mMb5HvUamXFIkMZ
-	 3v1s3yH3X1nikEloLEhcEjiUnqJyJw0E9ewtHo+uJcDA6l3f2C1lNfN2GcWCpD9WZuA==
+	t=1795417403;
+	b=q2oWbCkCaR6TQwLwnS3XwQ8xsXNdwCzgD6hjbBjcWdVmLXuvDs6zcoCCYPjB4mUL0usr
+	 qdp5uahD+0WvCPiGIbAVXXNVoOwrjyT+m5EgfQh3EG5NpAswzOBZxNftRsjLtlFB0SS7W
+	 EN9fFjvl8TZFn9GqaJULnZ4zSsyFEC1yIbEkV9Rb/tgXquhMkEpDVsAgOMsBjlenp5ZeM
+	 G+YY/Y0tibjGN6rAvzRfrP44ROKoxXX7GXOmmNBZQFkoYzHxO0aKx9LqAuzu/STjWuRII
+	 /DApQebyrYyaJQunLaQ3ywKw8/dLy3fgUy3rQY/NCHdeanXo2bBUsX8iNWs3meh4XMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795415163;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795417403;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=TIdffghSJlSSvoACGCvht+x8YKlpMwi7tdF6MONLBA4=;
-	b=k25fHAAWmgJaoco538PmMxtw5+FlZYE4u6LmYd+LKitRwWuP+Ah4XCP9amMOR8tyuSqO
-	 91U3NWABqLkpmsz+5WZvk3m2bE/W/IE2KjZpZt8UiXLRxyp7SaWXiZpFPU+RdssKnGbNK
-	 NDzB5yeQ7YGFOkoFM7i43Wzcr38tv5XsW4e3mExUa8jDQSJl7oCxFz5isdqzA0nClYkGU
-	 8IYIMJgBFNtkyzRMAuYKAu4JuWCiQiXx1hXbOxQy0Ubl8yJZT63w9WXJrxVZ/zgAK7o7c
-	 15Vc9HqdMJN/rhsH/Smc0qdrLALcSmxfT1KK7mq8qITO41nQB5dn44DVWzZwQmOeoaQ==
+	bh=66EgM4zK7IG8zCwjPTbi5vNEz/2nI2TGX5jJdEmsI1w=;
+	b=3f5TkPYFlv98HwsK6RC6LPnq0uhUSXqZVYXTGH17ufwO0Y/Iu99d6jcvS0QHZQEjcDx0
+	 aeQuLbLcQBoLcO/HqqBrBceKrtrUf2tbZol98WaevZ+hc/wyURviL/HalBbkDVhhoLZU5
+	 NH1A+N9T5fUgP5JkUgitaLxk1sqbYu8BYoyY02rUEPu0EIHN2BJt9GI5zhw7kJiev88YU
+	 yR+j6x8F7CRiKPSAzBW+X0fimudut8FjiRedqUPRtxZtzo+Esd+OrDigCtcKWsuVLnSCV
+	 XK4QMh65f94zRrQ4Q6H3E6Hm6L1gf+w0gxyStIdpoALe9oUdCc+fMw9tq3sOJ1MWbGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DAaQFNYa;
-	arc=none smtp.remote-ip=95.215.58.105
-Received: from mta1.migadu.com (out-105.mta1.migadu.com [95.215.58.105])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="L/sdxyYw";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E63606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 06:26:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4E63606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5AA606A31A;
+	Mon, 23 Nov 2026 07:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DAaQFNYa
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8RgpuFL/0AjtN2cxvRLOw38i1czpAgoobTTA4kOjNqQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795415159; v=1; x=1796019959;
- b=DAaQFNYaB9OMJiILK5/bfHawyRPHShFZ6hCB9dnApCfsxAI48qbKX9Wt/eLr7fmpT9K62xmo
- 0XPn0qJdr7gyQlR3o2na864V8ev8b/RF2BDWTuTtKcyiD90iChr8Os0tvcr0M3/4kFTzwmoOZJB
- QPMN499XFSKH/g0YWFGBZHF4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id ed972c9e76fd63aa;
-	Mon, 23 Nov 2026 06:25:46 +0000
-X-Mizu-Trace-ID: ed972c9e76fd63aa
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 23 Nov 2026 14:25:41 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
-Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <ricardo@marliere.net>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] selftests: pass the timeout override to tests run
- in a netns
-Message-ID: <20261123062541.GK10218@Liu-laptop>
-References: <20261120-kselftest-run-timer-v2-0-9802690a370b@xs4all.nl>
- <20261120-kselftest-run-timer-v2-1-9802690a370b@xs4all.nl>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L/sdxyYw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D6F1F000C6;
+	Mon, 23 Nov 2026 07:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795417403;
+	bh=66EgM4zK7IG8zCwjPTbi5vNEz/2nI2TGX5jJdEmsI1w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=L/sdxyYwswL8f2rMWAqr3ihbnMkAIAtcHSXZRSy1l2QDyg2A5hK52dS56/KD4UCo7
+	 1ScMdhRxOaGteIvmGFmYqewqT2eyLZrYpFuwojA56X3B23UiCtYFXm8vId9JR350MW
+	 9U4SPAhiFXoTw+42YLk72O8/c6kIaTa1XF6dNdym/wWvhVdQ1zCsOhNgtJQ6ufyDVE
+	 m+fALj0z0zXsa3XoifoTRsQjrMkTs7CpOnqPalJtmgSlX4AAC+65LdUeDTpOz/we0s
+	 y4UHq0Vu3UKF4UdufTGdwVKu8ZGlpr0fM64QnMSUs3yPdgkW/YiLNcq+bVI9sj1qu5
+	 vBNGDLVQc1tsA==
+Date: Sun, 22 Nov 2026 23:03:21 -0800
+From: Drew Fustini <fustini@kernel.org>
+To: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+Cc: joro@8bytes.org, palmer@dabbelt.com, tony.luck@intel.com,
+	reinette.chatre@intel.com, tomasz.jeznach@linux.dev, jgg@ziepe.ca,
+	james.morse@arm.com, ben.horgan@arm.com, xiaqinxin@huawei.com,
+	will@kernel.org, robin.murphy@arm.com, pjw@kernel.org,
+	aou@eecs.berkeley.edu, alex@ghiti.fr, Dave.Martin@arm.com,
+	babu.moger@amd.com, kevin.tian@intel.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, shuah@kernel.org,
+	randy.dunlap@infradead.org, cuiyunhui@bytedance.com,
+	yuanzhu@bytedance.com, iommu@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [RFC PATCH v2 0/4] resctrl: Assign registered devices to
+ resource groups
+Message-ID: <awPlOY9vr8Mqq2vJ@thelio>
+References: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,38 +69,29 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261120-kselftest-run-timer-v2-1-9802690a370b@xs4all.nl>
+In-Reply-To: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
 
-On Fri, Nov 20, 2026 at 06:25:28AM -0500, Jori Koolstra (CIQ) wrote:
-> When run_kselftest.sh is invoked with -n, each test is run by in_netns()
-> in a new bash process, which sources runner.sh again and then calls
-> run_one(). Sourcing runner.sh resets its global settings, which is why
-> in_netns() explicitly passes on logfile. kselftest_override_timeout is
-> not passed on, so -o/--override-timeout is silently ignored for tests
-> that are run in a network namespace and they use the timeout from their
-> settings file or the default instead.
-> 
-> Pass kselftest_override_timeout to the netns shell as well.
-> 
-> Fixes: 9d0b4ad82d61 ("kselftest/runner.sh: add netns support")
-> Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
-> ---
->  tools/testing/selftests/kselftest/runner.sh | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> index 45fb8ec38493..bbb2e61f323c 100644
-> --- a/tools/testing/selftests/kselftest/runner.sh
-> +++ b/tools/testing/selftests/kselftest/runner.sh
-> @@ -169,6 +169,7 @@ in_netns()
->  		BASE_DIR=$BASE_DIR
->  		source $BASE_DIR/kselftest/runner.sh
->  		logfile=$logfile
-> +		kselftest_override_timeout=$kselftest_override_timeout
->  		run_one $DIR $TEST
->  	EOF
->  }
+On Mon, Nov 16, 2026 at 03:13:39PM +0800, Zhanpeng Zhang wrote:
+> This RFC lets resctrl groups include devices as well as CPU tasks. It
+> uses the RISC-V IOMMU QoS ID extension as the first provider and builds
+> on Drew Fustini's CBQRI resctrl v12 series [1] on Linux v7.4-rc1.
 
-Thanks for the fix.
+It does not seem like riscv-iommu in qemu models qosid. Are you testing
+this on a hardware implementation?
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> Feedback would be particularly helpful on:
+> 
+>   * The provider registration and lifetime contract, including how to
+>     represent devices that share a tagging context.
+>   * The bus/name token versus using an existing sysfs identity.
+>   * The scope of protection after a command queue failure. If an update
+>     leaves the hardware state uncertain, the current code prevents ID
+>     reuse by blocking group removal and future mounts, including for
+>     groups unrelated to the failed update. Would reserving only the
+>     affected old and target IDs be sufficient?
+
+It seems like blocking future mounts would be too much since resctrl
+should still be able to handle cpu tasks.
+
+Thanks,
+Drew
