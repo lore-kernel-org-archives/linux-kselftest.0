@@ -1,76 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795465106;
-	b=uuobfx5mWKgz5kza50QY5/70Uc/XRhBPsLJP0vYZCmsi5lIA6rqrEZZaTTXTdeKmkRQW
-	 wHGEFZXTNyYzDyg4ZFrQ328aklsuKRdSYJriR/hp6zEdvVi9SQjEwLIcAHDeynAqyJ4XG
-	 8Wo2j731CD0KzNy/JyEcPCQyV3+Cfh5fNDL/pwzo7zcWUMObfQWhdmoWOZZwhZjIYYpHz
-	 zIuRnFCBm+gvjYeJfvbIhPqfksUXjrJRY8thHYlH3o4lfo3akzak7mjsk+fBUOTBHmETG
-	 yXx8cnp/xJoyUqU+EephDdXxPqZGe2VKHyx4O7fNJRTBIQXiQdBtBqKEur7sd3+pdqQ==
+	t=1795466976;
+	b=JNpYQQOzy8U2XfU/ZwhuZQf7Ect2HNCnQm1dNq4xlXmGnHrAwiVkLUsCs6KmVg9p0IcA
+	 bLHPeump3SdF9xCiOfNqmApd+j/U5RsUlcGFxidDP//SkQRMyQdCF/Co9pNvJ7Olf4R/x
+	 GDViWo/bMQtMua7NoWZSqVNzPTst7/wr/BN0uaQDfdOozxzTIwcB1IZsKXYmMPRe97LET
+	 Wb9pfPtzq1XfpLv20PGVOdgyphvbvvaZL2AkxCF5RM9F2pPIEYbsRJBbPuxVPVOogEnne
+	 TQug2QKeck8Fii7YoJwQKD3tgMtyaK6rDMW1CvtwzYfAiuYYSE7u5WI89Sz0r0e/Y/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795465106;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=8AUjLkJf+AzfntX6iFDwsoJRr0FO8Zc2d0H24MDxBvI=;
-	b=5qjDrhLWQJ2tBo552pH8dySfLUau+cXiTrfAMuWXsF8E2SqhCYgfd2JOtoDfOKs8s+Bb
-	 CZjo2TOO2UCPWMMauUueGXtZ9MrwU4MegOL0CyxBTpOYqYsKJmmT6yE7cRD5HZUtdSib8
-	 2D9mxI6hEM1SV7rAZN3kM6GZDALitg235KDkFTVcHLJGkj4bpzrQMA6+opoDEmIV0zsyw
-	 E9QvfvQKdbxYfjv2jh9iNny+L6RJQhjQ5w4aFwSKLUxPYilHDQTzALS74kecZXbLDccsW
-	 5uoTSEdMFtjkD0W9E6J+Vu3a+QlzY9VS8WB4X0THdrPjcyk1P8YEgfs9/WsTGpc/SIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795466976;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=rf1cWBs3NuwQOZ32do9Ka6iqVwTFh5JLcgleNWm+Twc=;
+	b=RGj3jj3rVYaozTmgbMx69WTFAsxeYVz2azXKDp3dZE/SB006vq2vUTzYVQuVTWu2uzL5
+	 ZRoLeG9WzMz5ufO1b5JSUGOKCzhcdx43iRUGEEbL39XBUoAXHEpVqPKCj6kzF4P3NZZXH
+	 Qn81Gk5crnIFJ5JJzDJ0plZxJ+RK18gIdkxKEYTqwMDMAs+ZqMlOLGdi1Vp8ZRmZjJT6c
+	 aSzzrUVmxxYzhvU+0hWnQGG5lq8sOafQqTW+i9ZOr6dWGMHpw1k8B8fu9Vd3UUmISRRAA
+	 goiTUsHxVJdIQh96M3Av4t0vMDImit08EO/rB1ezoJYQ7oh/zqA9ZeUzheN+4N9uchA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UVyzKebp;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ID7BSUHZ;
+	arc=none smtp.remote-ip=216.40.44.15
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D833A606A31E;
-	Mon, 23 Nov 2026 20:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE58C606A335;
+	Mon, 23 Nov 2026 20:49:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE58C606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UVyzKebp
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 674E81F000C0;
-	Mon, 23 Nov 2026 20:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795465106;
-	bh=8AUjLkJf+AzfntX6iFDwsoJRr0FO8Zc2d0H24MDxBvI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UVyzKebpzwIv1Yn/drpovJ7QjKcAtXZdZD3OApmocb00ceKrmEfJyDHHIOPR6rxGL
-	 dTlkkM2zSU+UbZRpUQ+0dvozMcV8vxWcZeWOo0r5n6suKMFSxE8JBMe1jVb3u4rql3
-	 ms3Ao00f7Pon1f08VL7Hn46kMq6Iz6j3sYGeU35V56ovusnZnR6pYUrnDPbWr/p+wb
-	 gIPYdrgT9PV8u20SWsFW944fnSAR4vKt9Jf/y5k3dQM9rNHyJbrWrSx4gBe9b8kfLw
-	 1jiBkulqoMOpNt8DLyxG67WYmZUqfyURRMTL1VvHecFgRyFtDF6VEFNUqMvhuv5ulT
-	 aypeV1ThO2hjw==
-Date: Mon, 23 Nov 2026 22:18:22 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Andy Lutomirski <luto@amacapital.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	"Hallgrimur H. Gunnarsson" <halg@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Serge Hallyn <sergeh@kernel.org>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	David Howells <dhowells@redhat.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Singh KP <kpsingh@kernel.org>, linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-	containers@lists.linux.dev, keyrings@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for
- user namespacesg
-Message-ID: <awSfjslSDxyWvrHt@kernel.org>
-References: <20261119104208.782900-1-halg@google.com>
- <20261119104208.782900-2-halg@google.com>
- <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
- <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com>
- <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
- <awSVO9Zc-233M7_P@kernel.org>
- <awSWK7o9PCk4ApM8@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ID7BSUHZ
+Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 03577809AA;
+	Mon, 23 Nov 2026 20:49:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id CA0092002B;
+	Mon, 23 Nov 2026 20:49:31 +0000 (UTC)
+Date: Mon, 23 Nov 2026 15:49:30 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Danish Khateeb <danishkhateeb03@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Beau Belgrave
+ <beaub@linux.microsoft.com>, Shuah Khan <shuah@kernel.org>,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing/user_events: Handle ioctls from 32-bit
+ tasks
+Message-ID: <20261123154930.1c81e606@gandalf.local.home>
+In-Reply-To: <20260928171424.199202-1-danishkhateeb03@gmail.com>
+References: <20260928171424.199202-1-danishkhateeb03@gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,91 +63,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <awSWK7o9PCk4ApM8@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: CA0092002B
+X-Stat-Signature: 4nmdmbybdr9wkkd97g7rrkap68ckt551
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18/vAFX0gv+vT4NjsiBt3LFD5olN82X8vE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=rf1cWBs3NuwQOZ32do9Ka6iqVwTFh5JLcgleNWm+Twc=; b=ID7BSUHZRFjKEc/W6mPjWEYnHL/77L/MPVSLqJ5J8U2bmRs+vd79+oGIcZ3hUKVkQFCj9m2AzCaZw1ciBiEIdHcsw9TiQkX2j6dnzg8XtMXu/LrGaJqFDNb3cZ/7PDCSprUuRrW1CM95TtfWT4z6/747duzT+5je0CV3SauQhpo=
+X-HE-Tag: 1795466971-233234
+X-HE-Meta: U2FsdGVkX18bBG8rW2vr5gukCrBwstVbNsH+TXxQeu3aCsJjj8JRxyxC4B2YcJ0q0vQYjQYjdrE6CF+Kbrm3L5XzK7SgX2JSvEnP3UDrTJQW91VumbQpsuqVp+5TUcvaNZYoP63Aa3BjewstabByFrgYpPPgCIYkd09jJElPNtO+NoaUl5mnz63KNbgVbncgs2O2RWYQ12gHKy1yfx0R7uJ9NQ/4h5DiBDDnPb2mAipV85BBMcCQvd6gPhRjiPjE0BMoexiqJ3DeoHsvL6Y3A6u49gqD9n6X491zQDLl8mEeuRoTc0h1rvLJc/hZcDU7uhc1qpauKmkj2X4YKzJ534xoDjLMrWXAIzsp7DcxcnoBGeDKPk4FNQ==
 
-On Mon, Nov 23, 2026 at 09:38:23PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Nov 23, 2026 at 09:35:16PM +0200, Jarkko Sakkinen wrote:
-> > On Mon, Nov 23, 2026 at 09:22:29AM -0800, Casey Schaufler wrote:
-> > > On 11/20/2026 9:09 AM, Andy Lutomirski wrote:
-> > > >> On Nov 19, 2026, at 2:52 PM, Andy Lutomirski <luto@kernel.org> wrote:
-> > > >> ﻿On Thu, Nov 19, 2026 at 2:43 AM Hallgrimur H. Gunnarsson
-> > > >> <halg@google.com> wrote:
-> > > >>> When a process creates a new user namespace, it receives a full set of
-> > > >>> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
-> > > >>> in scope, several of these capabilities (such as CAP_NET_ADMIN and
-> > > >>> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
-> > > >>> containers never need. However, there is currently no configurable way
-> > > >>> to withhold such capabilities from user namespaces while still granting
-> > > >>> them to workloads that require them.
-> > > >>
-> > > >> One thought (from the rootns thread): the other decent sized attack
-> > > >> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
-> > > >> bit.
-> > > >>
-> > > >> A sort of horrible solution (but maybe not so awful) would be to
-> > > >> declare that the bits in cap_userns aren't actually capability bits,
-> > > >> and that you need the bit in cap_userns *and* the bit in cap_effective
-> > > >> to do sensitive things, and that mounting needs cap_userns to have
-> > > >> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
-> > > >>
-> > > >> I want to sleep on this.  It might actually solve several problems,
-> > > >> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
-> > > >> or whatever.
-> > > > I slept on it. Here’s a counterproposal.  I’m not saying I think this
-> > > > is better than this patch set, but I think it’s worth weighting the
-> > > > options.
-> > > >
-> > > > Define a whole new set of privilege bits.  As a
-> > > > poorly-painted-bikeshed option, I’ll call them eprivs (for exposure
-> > > > privileges - it’s a crappy name but at least it’s pronounceable).
-> > > 
-> > > I played with a mechanism I called "chits" (all the good terms for security
-> > > bits have been consumed for a very long time) that looks a lot like
-> > > what you're proposing. I did it to address the CAP_SYS_ADMIN problem,
-> > > where any use of the capability opens up a whole barrel of worms.
-> > > I cannot, unfortunately, find my patches. :( The basic approach is:
-> > > 
-> > > A process has an optional set of chits. A process without a chit set is
-> > > unaffected by the mechanism. A process with a chit set is allowed only
-> > > those operations for which it has a chit. The existing but empty chit set
-> > > allows no operations. A process may drop a chit, but not the set, which,
-> > > again, can be empty.
-> > > 
-> > > Because I was after CAP_SYS_ADMIN, I envisioned a call
-> > > 	cap_able_chit(capability, chit-list)
-> > > but there's no reason there couldn't be a
-> > > 	chit_able(chit-list)
-> > > as well.
-> > > 
-> > > I wrote this as an LSM, but the system-wide aspect of it made that
-> > > a questionable choice.
-> > > 
-> > > If you have any interest, I could dig more deeply to try to find the
-> > > patches. Otherwise, I'm happy to look at what you come up with.
-> > 
-> > What if eprivs or chits would take each capability and subvidide
-> > them into pieces? CAP_MAC_ADMIN would be formally a set of chits
-> > (or eprivs).
-> > 
-> > And process having e.g., CAP_MAC_ADMIN, would actually have the
-> > set of chits that are included to CAP_MAC_ADMIN.
-> > 
-> > Without that type of relation there's just a space full of chit
-> > ;-)
+On Mon, 28 Sep 2026 12:14:23 -0500
+Danish Khateeb <danishkhateeb03@gmail.com> wrote:
+
+> The DIAG_IOCSREG, DIAG_IOCSDEL and DIAG_IOCSUNREG ioctl numbers are
+> defined with pointer types, so their size field is 4 for 32-bit
+> userspace and 8 for 64-bit userspace. user_events_data has no
+> compat_ioctl handler, so on a 64-bit kernel every one of these ioctls
+> from a 32-bit task fails with -ENOTTY and such a task cannot register
+> any user events.
 > 
-> This would not prevent from combining your own collections of chit
-> that do not map to any specific cap, only that each cap should map
-> to a specific set.
+> struct user_reg and struct user_unreg are packed and only use fixed-size
+> fields, so they have the same layout for 32-bit and 64-bit tasks. Add a
+> compat_ioctl handler that maps the 32-bit ioctl numbers to the native
+> ones and passes the argument through compat_ptr().
+> 
+> Fixes: 7f5a08c79df3 ("user_events: Add minimal support for trace_event into ftrace")
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Danish Khateeb <danishkhateeb03@gmail.com>
+> ---
 
-With decompose/compose relation it would neither matter if caps
-would have for some reason the same chit. Internally task could
-have just this sets and caps can be dynamically refreshed if
-the process' set has all the chits that compose it.
+Note, because this was never supported on 64 bit machines, I'm putting it
+into my queue for the next merge window. It's not a regression, it is
+actually a feature. That is, the new feature is: Support 32 bit tasks on 64
+bit machines.
 
-I.e., that would make caps a cached result refresh, and chits
-the actually stored security tokens.
-
-Br, Jarkko
+-- Steve
