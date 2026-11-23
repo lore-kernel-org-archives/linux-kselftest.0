@@ -1,61 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795446580;
-	b=sS9g2kv9IowwNbqYOCYudQuYHJmBJh5P9rohqBShGmjRII6SDq8wDkoNMmFsTewPg69M
-	 OgxlTUky9nTgYmLfwuNZiKMyXb9zn0xXyFPBPSoxo+ZRjOJ25MsiTHjNoyZMjjbPkc7Fb
-	 LnBJL9ma6A2B2Re4DM+H4lBD7FF/em/JQiNOUkfeh1AcrcAPZvFJkIAbMejdvZUey2a4u
-	 Q1c5xnJ2KsQEZMJtEWKMe9kMbBrAY69ulpxJlIa6sZLiZtv5Z2tG9OmlSERELsM1F5Ly4
-	 xTz9QmLDuzGXW0HVmQRvLku1bCqgjiclLhC0Cc/X7AtEC3IEIgE+wWBJHs9YvOVBOow==
+	t=1795446586;
+	b=1IXKWd2z+BCIA/Dya2hw1ELupjBw9Nb9bYJRDLA4luZymftHIhwWYeIQ327UindjL9Hs
+	 WqV9ew5epBs706pEjuWReQCRtT7XEJ1rOxywGu3s893rqY2owAL98ee/VjLCEYX/uRGZj
+	 kHPsldJD5xFeu+E4xOcBJwt4tw8QD5gDrXedlh7tKvtDVWhF48EcNP+rCmkQvUjBL6SMw
+	 eSvoIP68nu7wz47IdCe7DNrBZHHpu6sJI9klOYJXb7Ud7/w4KghtCcj6tAtUjryp4U829
+	 6zCBLO1C7tVL/12puyLppxKPw3uNKY1Uox+o7J162tarfKOxsRRhFJQjj3gFrN28CWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795446580;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=NyOktFiiDK2ucPq8E+Ur0m2cBgjFWaJL3PEUR7BXbI8=;
-	b=nHc8zChMySZVGuNB7lIoQV2/8WDCMWivc+hpWGLerTKSb2JUeceJbg7rDCEavXH7tReI
-	 VnTpnAP6Q9Q64EWZRNEKXbtEajvHcoJzs6hOTdd2TguIJHcgC1IymQ3U3iK44pqQBe5wf
-	 NDDx8+fN2kyOdxDGucEPYcDSTnAZAYqgpzg1ORA5H+YKSL49MwyDgP+V/0jjKrcwbreFy
-	 /5mHK30Nyx0oPmLy+5KCm4MhrBfWkCohTT7D5tZdUM6ktQCmtKVOp9Ac41uJiWcBM25DF
-	 3qlPhRclDAjWcjDzWNeLv6qVKOOI8vGGLPja6W8C5Jyqib33V8H4MAxy1QAevLtCTmw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795446586;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=dnrRfjLKmIHDzHFw2YMyKPd3bYE0BLJV4hjG0NzpuHY=;
+	b=Jd6OFtQMPmUj2kCkK0IhAO4w7pgXveAzDelTzTmrmRwqfPz5/pS9YlUWsrwWAa6hJU8/
+	 NMddgnss2SjVIsxNs0Z3K3rUEPinwBJcUVw61T6wU758V9H8e0EIn+AD7mAvlodoWN4Aq
+	 ItR2ssAuqgLQwvwRENv9pk+tVbEa0UOFUcTEvpqXHJ1QDhwFHOuAV1kY7Alz/iSWCksJz
+	 UH3ayA8Q32ER+Lrm7PE2iOhF+yP7J0ujh5KHOSevAP1XCvMYC/TP4Pu+2TGa7P+Nvt/+A
+	 Q/JtA+aqsyTDNmy/xHAzVncEJ8h9QN/5hHlR5dSN8kfM5lOrD9sbkDXOfjp4+jLo2cA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YzkwPKUh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B9x6wQRX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BE0606A31A;
-	Mon, 23 Nov 2026 15:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1615606A31E;
+	Mon, 23 Nov 2026 15:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YzkwPKUh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF45E1F000C6;
-	Mon, 23 Nov 2026 15:09:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B9x6wQRX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A2F1F000C6;
+	Mon, 23 Nov 2026 15:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795446580;
-	bh=NyOktFiiDK2ucPq8E+Ur0m2cBgjFWaJL3PEUR7BXbI8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YzkwPKUhz87lk+UO0uia0fJp82Y0FG56zyiDzzVQ4bo4fpAfGMut+r7wsI5F4qdZG
-	 fnVZV6VyJ6Mcdydv1gvzbY23GNEwm/JxnLqzRZfZ2fTPtzdDu2fqMcBz+nlUIZ8WDW
-	 yhCW38hYEmMyvCD5XXAwRuJMCGObEL/tcbEdukBJLEl+J1H8epYf75pRwKQi12fMUb
-	 TPLkrwYN5L7xf7X9uwD8+qi47PnccRxmp7/PwuzcnC1tS8bo591k5zOVBld/Fw53Sp
-	 8WquC6AIE7VcJcK/+8Sg4Kx/bNFuvIyMgTi/8zZbMUFjJVt1KzvDjDTjEoxUbLmCpd
-	 d8Cm5JH8I5+Pw==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jason Angelov <jasonangelov@ucla.edu>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	SJ Park <sj@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	Aveline Noir <jm5905938@gmail.com>
-Subject: [PATCH v3 3/3] mm/damon/tests/core-kunit: test DAMOS_FILTER_TYPE_AGE_MS interval changes
-Date: Mon, 23 Nov 2026 07:09:27 -0800
-Message-ID: <20261123150929.81797-4-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261123150929.81797-1-sj@kernel.org>
-References: <20261123150929.81797-1-sj@kernel.org>
+	s=k20260515; t=1795446586;
+	bh=dnrRfjLKmIHDzHFw2YMyKPd3bYE0BLJV4hjG0NzpuHY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=B9x6wQRXV+lRd06FkMrkTcZJeaS8e3jKOIyXDTANXZqBMOvrR7KOjDyWtCjEChBDL
+	 j5Y71qINNgguMOorYNzL7fKWDS1xnps2HarzILPgiCJxVqW9l/EC7xCStdAaT/eej2
+	 RJyu8K2qXQou6Nv7kib6MPEB7zCBTWIZYIEwOLADYEg6x/lWkemMCtYlnUVk+utNKl
+	 LWINkzV/1Ome0GRNKk4Mwe/dZFz44LhqCnu7ys9jz8oLXgsulh3anRrU76m0FTriFc
+	 32562AhcsRlcrH3xdfq4ALU+mZnwxHQP766Mmn+QFltMAR685VD564pFHboFGfb1qm
+	 s/gtz/HsAkX0g==
+Date: Mon, 23 Nov 2026 15:09:37 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atish.patra@linux.dev>, kvm-riscv@lists.infradead.org, Will Deacon <will@kernel.org>, 
+	Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v3 2/3] KVM: Warn userspace against ioctls while an exit
+ is pending
+Message-ID: <awRKhCne0gG1gKZN@gremlin>
+References: <20261123113435.1170711-1-fuad.tabba@linux.dev>
+ <20261123113435.1170711-3-fuad.tabba@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,112 +65,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261123113435.1170711-3-fuad.tabba@linux.dev>
 
-From: Jason Angelov <jasonangelov@ucla.edu>
+On Mon, Nov 23, 2026 at 11:34:34AM +0000, Fuad Tabba wrote:
+> KVM_PRE_FAULT_MEMORY sets run->exit_reason to KVM_EXIT_DIRTY_RING_FULL
+> when it stops on a full dirty ring. If an MMIO exit is pending at that
+> point, the next KVM_RUN on arm64 and riscv doesn't complete it. Rather
+> than document that case alone, which could suggest that other ioctls
+> are safe, warn against invoking any ioctl other than KVM_RUN before a
+> pending exit is completed.
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-DAMOS_FILTER_TYPE_AGE_MS defines an inclusive range for age in
-milliseconds to filter for target regions. Aggregation interval can be
-changed by users or intervals auto-tuning features.
+Very much agree with Sean's take here that we should instil sufficient fear in
+users at doing silly things (also in general not only KVM :).
 
-Add a kunit test for each:
+I wonder if we could add some specific examples or broad description of why it's
+unwise for better effect, though? Comments below.
 
-- convert region age to milliseconds, correct behavior at boundaries
-  for defined filter range
-- DAMOS_FILTER_TYPE_AGE_MS filter keeps correct behavior even when
-  aggregation interval changes
+In general though:
 
-Signed-off-by: Jason Angelov <jasonangelov@ucla.edu>
-Reviewed-by: Aveline Noir <jm5905938@gmail.com>
-Reviewed-by: SJ Park <sj@kernel.org>
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 66 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 156f74832c405..3b2b745b85469 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -1838,6 +1838,71 @@ static void damos_test_age_ms_filter_is_core(struct kunit *test)
- 			damos_filter_for_ops(DAMOS_FILTER_TYPE_AGE_MS));
- }
- 
-+static void damos_test_age_ms_filter_interval_changes(struct kunit *test)
-+{
-+	struct damos_filter filter = {
-+		.type = DAMOS_FILTER_TYPE_AGE_MS,
-+		.matching = true,
-+		.range_min = 200,
-+		.range_max = 400,
-+	};
-+	struct damon_ctx *ctx;
-+	struct damon_target *t;
-+	struct damon_region *r;
-+	int err;
-+
-+	ctx = damon_new_ctx();
-+	if (!ctx)
-+		kunit_skip(test, "ctx alloc fail");
-+	t = damon_new_target();
-+	if (!t) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "target alloc fail");
-+	}
-+	damon_add_target(ctx, t);
-+	r = damon_new_region(0, DAMON_MIN_REGION_SZ);
-+	if (!r) {
-+		damon_destroy_ctx(ctx);
-+		kunit_skip(test, "region alloc fail");
-+	}
-+	damon_add_region(r, t);
-+	ctx->attrs.aggr_interval = 100000;
-+
-+	/* An age of 100 ms is below the 200 ms lower bound. */
-+	r->age = 1;
-+	KUNIT_EXPECT_FALSE(test, damos_filter_match(ctx, t, r, &filter,
-+			ctx->min_region_sz, &err));
-+
-+	/* An age of 200 ms matches the inclusive lower bound. */
-+	r->age = 2;
-+	KUNIT_EXPECT_TRUE(test, damos_filter_match(ctx, t, r, &filter,
-+			ctx->min_region_sz, &err));
-+
-+	/* At a 200 ms interval, age 1 matches the lower bound. */
-+	ctx->attrs.aggr_interval = 200000;
-+	r->age = 1;
-+	KUNIT_EXPECT_TRUE(test, damos_filter_match(ctx, t, r, &filter,
-+			ctx->min_region_sz, &err));
-+
-+	/* An age of 400 ms matches the inclusive upper bound. */
-+	r->age = 2;
-+	KUNIT_EXPECT_TRUE(test, damos_filter_match(ctx, t, r, &filter,
-+			ctx->min_region_sz, &err));
-+
-+	/* At a 50 ms interval, age 8 matches the upper bound. */
-+	ctx->attrs.aggr_interval = 50000;
-+	r->age = 8;
-+	KUNIT_EXPECT_TRUE(test, damos_filter_match(ctx, t, r, &filter,
-+			ctx->min_region_sz, &err));
-+
-+	/* An age of 450 ms exceeds the 400 ms upper bound. */
-+	r->age = 9;
-+	KUNIT_EXPECT_FALSE(test, damos_filter_match(ctx, t, r, &filter,
-+			ctx->min_region_sz, &err));
-+
-+	damon_destroy_ctx(ctx);
-+}
-+
- static void damos_test_filter_out(struct kunit *test)
- {
- 	struct damon_target *t;
-@@ -2600,6 +2665,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_commit_ctx_keeps_quota),
- 	KUNIT_CASE(damon_test_valid_probe_params),
- 	KUNIT_CASE(damos_test_age_ms_filter_is_core),
-+	KUNIT_CASE(damos_test_age_ms_filter_interval_changes),
- 	KUNIT_CASE(damos_test_filter_out),
- 	KUNIT_CASE(damos_test_apply_scheme_filtered_sz),
- 	KUNIT_CASE(damos_test_apply_scheme_filter_sz_unchanged),
--- 
-2.47.3
+> ---
+>  Documentation/virt/kvm/api.rst | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 89eb6be9bc6e3..980ef0cdc1c91 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6974,10 +6974,13 @@ to the byte array.
+>
+>        The pending state of the operation is not preserved in state which is
+>        visible to userspace, thus userspace should ensure that the operation is
+> -      completed before performing a live migration.  Userspace can re-enter the
+> -      guest with an unmasked signal pending or with the immediate_exit field set
+> -      to complete pending operations without allowing any further instructions
+> -      to be executed.
+> +      completed before performing a live migration.  In general, userspace should
+> +      exercise extreme caution when invoking ioctls other than KVM_RUN prior to
+> +      completing the original operation.
+
+Perhaps worth saying why? E.g. (as I understand it) that for these exits the
+operation is only completed on the next KVM_RUN, and that KVM relies on state
+left over from the exit (including parts of struct kvm_run such as exit_reason)
+to do so, so any ioctl invoked in between might clobber that state?
+
+I see you intentionally avoided documenting the pre-fault case on its own, but
+with the above stated I think a concrete example might be example here, like
+e.g.:
+
+"For example, if you were to ... that would result in ... which would absolutely
+ruin your day because ..."
+
+Kinda thing :)
+
+
+> +
+> +      Userspace can re-enter the guest with an unmasked signal pending or with
+> +      the immediate_exit field set to complete pending operations without
+> +      allowing any further instructions to be executed.
+>
+>  ::
+>
+> --
+> 2.47.3
+>
+>
+
+--
+Cheers, Lorenzo
