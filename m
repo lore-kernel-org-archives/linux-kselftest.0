@@ -1,60 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795446800;
-	b=fGskinJngdN5k5Y9XsJdxujOGYuEBCBVeUsXLCiHCQ2W+FwEHWTBA6Rc5NxBZx5NifsC
-	 2maokH9mxp2FGDDe9HHok2w6zYgdTZlzIX7eORzQQ6L3IuFPrYIx220xVr+n7Pupm0uSX
-	 4lFmCaTjRta4bSuRNi0YATUzxC/Faqklb292mQDzcQkNNXAITZwJOe5dAnYo+3q6SXUGp
-	 odiYXN+5GdoWj40sJx/LZjuRHoOmNaglk1Ml6fqD1gw+w9UfOkaUZ/Tf7PvywwQE4r2+E
-	 hM/TnB3pQqu0HV8A7dPU2eFAxNtakCFa5RH8nCw8GJsUAu2FQeyOpRvP67WTHLImCCw==
+	t=1795447479;
+	b=UDH6pJMpInGD1vj51B5Sf/UlTeqsos/gAaoQQN9SWX2LMPcCs9FwT8OMkt6yA85WdA4l
+	 Thy6qYkOpyhjuR/Yybi1tewdYR22poEFU0DSuqVITc8I5YOanMv3658PVvQc+TzKY6lQ8
+	 Iz5iM0137WQACxwd2eBjkcSUZi7KaRdmLihIMK9t9xK5d0dziG4ZXNA91K5g9Wtyu8wA4
+	 VQjYspPtYwXbeTZHzcrqoDZUDKad7qu/eDtb9wLJEF92B5Ecz+wktHT0qQMfJ2NmP4fKe
+	 wI0EPq1S5y5zfkm1qulvZ+i8FaWfJBK0rAZIS5jYOSRd74m628azwEmn253DAmlyxgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795446800;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=p8iGZMS1VQT5g45aPmXwRX2Ggq134Vf+4sc1iINAHRg=;
-	b=Phb6AQ7KzhQKtDaNKYyq4zau87V5Xm6jGxtLRlS4DcSgcrX04t6QzfNVIIRLxZNEPPzy
-	 lUbjUMNmAdahe4dZqwdXXHM2mdt4MknbVQrrjbHnN+9VKxuMbA+RRqRDr4IW1l/C2bXiK
-	 Q/7tDGnMrUM14TJovDSvqPPzl5x5buGxy9ur/1odec+eXm1pBifnyKMEMxLyMfjmQqdL1
-	 I19S6WUBgUI43LuOkyt9MdMWZvirodwMNYdFsNU0yntUGlvYDifq+1n8HnAOd5KL1ZJGx
-	 h57H/6lGPqDJWcu/KM/p60kxDv50hEXoCeqpBRwc8ACOfmRgFs5r4fYbcjxCxp+3/yQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795447479;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type;
+	bh=Hh8fRu5vFtpaCjWKRWOVh0V8299B/cNlEtDS6Intpqo=;
+	b=QsE31MATCsEh2sRQ6t2375ryj8NgJs1TT0m3gPtrfemV8ep7MuBnIK4ZBBP7OF7FkJCn
+	 Gu2quuI8kC2c53qrSEOZ3uZFkwNwAiDxjJvjoJACW1VM9UNKtEbytYaGTyRr6wuRXJF/C
+	 Wd/1XqUU9q9wAst2mO5PHB+5jChyhRI0Dd1PWVdQhSy2D6M/42DB7wuQJ9337Ef+IkR37
+	 MncEXL8LHG8hDcNyApRTKVajgws07hzk9anXWhJo5hpQS/GJdMiKWi1QVDkcbVlhcNssc
+	 BkvDeNV6S/vDR/T56Sy0g+am+WkdMPNuJ7oG22jJjWOlQQTrewcvIbbYdeMNnUJ2ESw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXY31ala;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="ZnRu5R/j";
+	arc=none smtp.remote-ip=91.218.175.111
+Received: from mta0.migadu.com (out-111.mta0.migadu.com [91.218.175.111])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDFE606A31A;
-	Mon, 23 Nov 2026 15:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC61606A321
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:24:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AC61606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXY31ala
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D20F1F000CA;
-	Mon, 23 Nov 2026 15:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795446799;
-	bh=p8iGZMS1VQT5g45aPmXwRX2Ggq134Vf+4sc1iINAHRg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fXY31alaB0u9au+E4xSMKcuTQIfRhQ4BPGDLp+oUMYHbYT8u7IlCmzaE6xrQOxD3z
-	 sqoo+K7mO7QdpSPUj4Mtn6lerSYJwuO6Hwm7vC3y52cpQidFPN7id5CpajhpYjEfb4
-	 XwoRFhPRAmsZ7V23OidYWxA+H1Em/2GNVFatbGKP/ppp5wbuRJoTdKAsFM7X8cxCJ/
-	 cZhDKDI2K1nIrSVeN7++5eoNuDy7N+KlfIpGUp0yxabT2kKl8WGwa7c901ARhhrJet
-	 OI1cZ+lZ6Shj9xWDvrWKhgWGaFBZmhgPS+iSSMzRSjMXV+TNoD4dAMFAl8S4Jyyp4t
-	 XJgsg+2uV6dfw==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mattathias Pinchover <mattathias.pinchover@uber.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	SJ Park <sj@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v3 3/6] mm/damon/tests/core-kunit: test sz_ops_filter_passed_last
-Date: Mon, 23 Nov 2026 07:13:04 -0800
-Message-ID: <20261123151309.82675-4-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261123151309.82675-1-sj@kernel.org>
-References: <20261123151309.82675-1-sj@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZnRu5R/j
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=gnvbL4VdHXSgoWEMo9YirAKMsnzbccETpFKUkQOB1eY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795447475; v=1; x=1796052275;
+ b=ZnRu5R/jegKRQwGIblsnoG3qnjDNS+9TNClqycIO5QPuw57xpruKPDqbY5vMK/m3JBrzEg0x
+ qnBIUSyyBgB8Kp2nZmLvqWKV27rKrrVA/O8Hk5tDxMDV1ieZRhlV0c3GM6lZBp9A32hxpq4zy2+
+ mD21572Prb3rBmui16/+2HsI=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d649afc6fe5d21ee;
+	Mon, 23 Nov 2026 15:24:35 +0000
+X-Mizu-Trace-ID: d649afc6fe5d21ee
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5c144eb2f43so9675e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 07:24:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErEHU9G32qD1UrvyRe9MBxAd2N62eneRYWEA03U8GtNYjrxKPppu5Ko76MV/KZsEI5hLXnq/agxscn9vk3o3Ir4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/BiMUbQPZgvz38J97f1xK2pbvXTQogz7wV1bklvsc/eL5Yl2PY
+	K92FL2dWCBy5SyfpatCgSth2HVIyZFPjzRCapLVAoAcFo2B5U5TnMvceRph7dI/8+/vRgraxA42
+	6XcYpkXwYDmMiCkPFR/aB5BOFxBRWQhoJ/EfepYOj
+X-Received: by 2002:a05:6512:1591:b0:5c1:4cc8:2f22 with SMTP id
+ 2adb3069b0e04-5c21a249d31mr226456e87.8.1795447474671; Mon, 23 Nov 2026
+ 07:24:34 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,135 +66,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261123113435.1170711-1-fuad.tabba@linux.dev>
+ <20261123113435.1170711-3-fuad.tabba@linux.dev> <awRKhCne0gG1gKZN@gremlin>
+In-Reply-To: <awRKhCne0gG1gKZN@gremlin>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Mon, 23 Nov 2026 15:23:58 +0000
+X-Gmail-Original-Message-ID: <CA+EHjTyM4_P5v0cHEiarq5XAb2A0Esshb762BLuuKnyBvH=y+w@mail.gmail.com>
+X-Gm-Features: Aa3M54ohqjfMpFnSPURFY6Wicp7yckb5JMX6NA8ywvncNdbk8_vZnEW0TzRhLu0
+Message-ID: <CA+EHjTyM4_P5v0cHEiarq5XAb2A0Esshb762BLuuKnyBvH=y+w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] KVM: Warn userspace against ioctls while an exit
+ is pending
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atish.patra@linux.dev>, kvm-riscv@lists.infradead.org, 
+	Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Mattathias Pinchover <mattathias.pinchover@uber.com>
+On Mon, 23 Nov 2026 at 15:09, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
+[...]
+> Very much agree with Sean's take here that we should instil sufficient fear in
+> users at doing silly things (also in general not only KVM :).
+>
+> I wonder if we could add some specific examples or broad description of why it's
+> unwise for better effect, though? Comments below.
+>
+> In general though:
+>
+> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Add a kunit test for the sz_ops_filter_passed_last DAMOS
-stat.  The test runs kdamond_apply_schemes() for multiple apply intervals
-with a stub apply_scheme() operation that reports a given ops
-filter-passed size, and checks that the stat is set to the value of the
-last apply interval rather than the accumulated value, and that it is
-kept unchanged until the next apply interval is completed.
+Thanks!
 
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Mattathias Pinchover <mattathias.pinchover@uber.com>
-Reviewed-by: SJ Park <sj@kernel.org>
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 93 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+> > ---
+> >  Documentation/virt/kvm/api.rst | 11 +++++++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index 89eb6be9bc6e3..980ef0cdc1c91 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -6974,10 +6974,13 @@ to the byte array.
+> >
+> >        The pending state of the operation is not preserved in state which is
+> >        visible to userspace, thus userspace should ensure that the operation is
+> > -      completed before performing a live migration.  Userspace can re-enter the
+> > -      guest with an unmasked signal pending or with the immediate_exit field set
+> > -      to complete pending operations without allowing any further instructions
+> > -      to be executed.
+> > +      completed before performing a live migration.  In general, userspace should
+> > +      exercise extreme caution when invoking ioctls other than KVM_RUN prior to
+> > +      completing the original operation.
+>
+> Perhaps worth saying why? E.g. (as I understand it) that for these exits the
+> operation is only completed on the next KVM_RUN, and that KVM relies on state
+> left over from the exit (including parts of struct kvm_run such as exit_reason)
+> to do so, so any ioctl invoked in between might clobber that state?
+>
+> I see you intentionally avoided documenting the pre-fault case on its own, but
+> with the above stated I think a concrete example might be example here, like
+> e.g.:
+>
+> "For example, if you were to ... that would result in ... which would absolutely
+> ruin your day because ..."
+>
+> Kinda thing :)
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index a5ca4bfe2f0db..d256e6b7de73a 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -2541,6 +2541,98 @@ static void damon_test_last_region_quota_reset(struct kunit *test)
- 	damon_destroy_ctx(ctx);
- }
- 
-+/* bytes that damos_test_apply_scheme_passed_stub() reports per region */
-+static unsigned long damos_test_sz_passed;
-+
-+static unsigned long damos_test_apply_scheme_passed_stub(struct damon_ctx *c,
-+		struct damon_target *t, struct damon_region *r,
-+		struct damos *s, unsigned long *sz_filter_passed)
-+{
-+	*sz_filter_passed = damos_test_sz_passed;
-+	return 0;
-+}
-+
-+/* run one apply interval and return the last apply interval's passed bytes */
-+static unsigned long damos_test_apply_interval(struct damon_ctx *c,
-+		struct damos *s)
-+{
-+	c->passed_sample_intervals = s->next_apply_sis;
-+	kdamond_apply_schemes(c);
-+	return s->stat.sz_ops_filter_passed_last;
-+}
-+
-+static void damos_test_sz_ops_filter_passed_last(struct kunit *test)
-+{
-+	struct damos_access_pattern pattern = {
-+		.min_sz_region = 0,
-+		.max_sz_region = ULONG_MAX,
-+		.min_nr_accesses = 0,
-+		.max_nr_accesses = UINT_MAX,
-+		.min_age_region = 0,
-+		.max_age_region = UINT_MAX,
-+	};
-+	struct damos_watermarks wmarks = {};
-+	struct damos_quota quota = {};
-+	struct damon_ctx *c;
-+	struct damon_target *t;
-+	struct damon_region *r;
-+	struct damos *s;
-+
-+	c = damon_new_ctx();
-+	if (!c)
-+		kunit_skip(test, "ctx alloc fail");
-+	c->ops.apply_scheme = damos_test_apply_scheme_passed_stub;
-+
-+	s = damon_new_scheme(&pattern, DAMOS_STAT, 0, &quota, &wmarks,
-+			NUMA_NO_NODE);
-+	if (!s) {
-+		damon_destroy_ctx(c);
-+		kunit_skip(test, "scheme alloc fail");
-+	}
-+	damos_set_filters_default_reject(s);
-+	damon_add_scheme(c, s);
-+
-+	t = damon_new_target();
-+	if (!t) {
-+		damon_destroy_ctx(c);
-+		kunit_skip(test, "target alloc fail");
-+	}
-+	damon_add_target(c, t);
-+
-+	r = damon_new_region(0, DAMON_MIN_REGION_SZ);
-+	if (!r) {
-+		damon_destroy_ctx(c);
-+		kunit_skip(test, "region alloc fail");
-+	}
-+	damon_add_region(r, t);
-+
-+	KUNIT_EXPECT_EQ(test, s->stat.sz_ops_filter_passed_last, 0);
-+
-+	/* each value is for the last apply interval only, not cumulative */
-+	damos_test_sz_passed = 1000;
-+	KUNIT_EXPECT_EQ(test, damos_test_apply_interval(c, s), 1000);
-+	KUNIT_EXPECT_EQ(test, damos_test_apply_interval(c, s), 1000);
-+	KUNIT_EXPECT_EQ(test, s->stat.sz_ops_filter_passed, 2000);
-+
-+	damos_test_sz_passed = 300;
-+	KUNIT_EXPECT_EQ(test, damos_test_apply_interval(c, s), 300);
-+	KUNIT_EXPECT_EQ(test, s->stat.sz_ops_filter_passed, 2300);
-+
-+	damos_test_sz_passed = 0;
-+	KUNIT_EXPECT_EQ(test, damos_test_apply_interval(c, s), 0);
-+	KUNIT_EXPECT_EQ(test, s->stat.sz_ops_filter_passed, 2300);
-+
-+	/* not yet the time to apply, so the last value should be kept */
-+	damos_test_sz_passed = 500;
-+	damos_test_apply_interval(c, s);
-+	c->passed_sample_intervals = s->next_apply_sis - 1;
-+	kdamond_apply_schemes(c);
-+	KUNIT_EXPECT_EQ(test, s->stat.sz_ops_filter_passed_last,
-+			500);
-+
-+	damon_destroy_ctx(c);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -2585,6 +2677,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_rand),
- 	KUNIT_CASE(damos_test_esz_goal_temporal),
- 	KUNIT_CASE(damon_test_last_region_quota_reset),
-+	KUNIT_CASE(damos_test_sz_ops_filter_passed_last),
- 	{},
- };
- 
--- 
-2.47.3
+:)
+
+I'm not sure it would help, tbh. I think a reason or an example would
+have the effect Sean wanted to avoid [1], where a reader takes an
+ioctl that doesn't match it to be safe.
+
+Cheers,
+/fuad
+
+[1] https://lore.kernel.org/all/av5CBjbeidUUWiLq@seanjc-mac.roam.internal/
