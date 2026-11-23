@@ -1,44 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795427914;
-	b=TDtRn+sC3zNz3/76iCKTPj+RHUHazgQsv6Wxsablb39L3rYfw2Byk5erBuuVSV612TzY
-	 6MKjSqfeC86p2lIJtej9arM6wmn7yEP88o3xlN2rPtzCUxRTqSIxoa43DvX7HlrtMn1yp
-	 GKi+eoYVzfV7+sX5y/WToudotfAgCXnHWysA09hSi5Vw1YxbW5enZ8YEamiS3gsUQchWM
-	 b+Rx6h05Pak/GXafeP2QrDeynjGwiw1N2No19tNnstSwqldaZ8j8YIqZfFL9rxUbExuNB
-	 2FqdGocmon4jjsNyAkUWTpvMnHeLDXOB+PycXC32rvA72yIQaRw1SaCjmcZwjVq0+sw==
+	t=1795428443;
+	b=jkot2pbr/47DFLtwBmeyHzd9keRUG65NwKLUdruR2mcdoIKot4DcbNZhIb84+Xp48C1D
+	 6Lkj4dmaSpN4gk7NU6VMiyrGeqMvzi4iS2+cki88q+h1mDxZrfj/E/6dS7PqP0qDvrrBa
+	 Nx1xHD45cuw+DBFLLHMXdh4iMGQoU7Gu7JNFsFmOkYyc/B7Uwbt2l29WKFnqHlBi6wngF
+	 5ZAlm+16JY/SPSnPCKS+whShWt1LMenBQpFQ4SIuO+Ynn3NSlGvsCgasIRf6/AS7QXhyV
+	 QoXRUJGPllJov+EuR4vzZ1icbxJR4p7Jzljwr8dfT5dJ8BZ/1bNVlTy5xUoXyglL4Yg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795427914;
-	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
-	 X-Spam-Status:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=2Z7Xz619FeC8badztBau88EEBfdSMK9atrKun47QtBs=;
-	b=FicYp1w7Ix0kC/FJtMACvcKp1TcEr0P5u2a0oysTmhfHpSOmZTAs4vLkegIdovbE+4Zz
-	 DJt0V6zppH5yWLcfPPOuJQ2OvjXn0r3kDlytQeIeMo18Oc0iW4Rq2MxOaS5HEF1jYd+7+
-	 Hfd3LQpUYTHdXTxaOo55yqofYrbxAqlKo6m2BBCDu+mCo7j/KgvZKwAcwPhqvjBdwfyDl
-	 HUdWfxZVJiztESwdlEB173+emOjBLTZb8bxNE2uVsu9siDhF2NyYDFF8ZmGlXI6GjRU6Q
-	 sN1VlIuyXhuMOgHPu8tlACr3ebJQLObIxKI2WY0BQYLBGAnyBF6OB1yA1ftFZ3cRb1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795428443;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=ZCV7rj7O3YjHOcFzGHR54dLdeKT96fbmxzbKfW4RNF8=;
+	b=U/zdVnIvCSTf01IEBpIFBDX0osaMdVVEDGBDaSJNyO717g0sTImvGamZN58acf0An094
+	 X0G8Sr26ISBWH5LvcX9QLSXn6VVTNrjgJ440spa4oYXTC1GBzA5mNKetr0B40xN/DrB5w
+	 dFNBTaCybxXhhNWJrbb6MEhoksH09RN7vqyCoXcNoUNXhOvckX0uYnsxing6u5Ufacm6G
+	 67tbS89zjl/FVeZuEvbhrousdZ9jz/8FDbKAT/MgNh73USiQwJMwEaViHnhAnIL0sycsV
+	 xwWZeOv2XE67DllstYjx+Rr2CxErydCBrAGRxN7lqMtJQON/wyiZIsyaM9KYXCSl7/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZBw0kU1N;
+	arc=none smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4174606A31A;
-	Mon, 23 Nov 2026 09:58:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F4174606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 04DE5200DEE; Mon, 23 Nov 2026 17:58:32 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 2BDE3200DE8;
-	Mon, 23 Nov 2026 17:58:30 +0800 (AWST)
-Message-ID: <89b987c0-8b88-468c-8d60-33dfaa060cad@davidgow.net>
-Date: Mon, 23 Nov 2026 17:58:27 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99D9606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:07:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B99D9606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZBw0kU1N
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-33fb4680717so8584969eec.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 02:07:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795428442; x=1796033242; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZCV7rj7O3YjHOcFzGHR54dLdeKT96fbmxzbKfW4RNF8=;
+        b=ZBw0kU1NfuA6MMWFZd7loTUe6EObCzE9PO+rq4XlEa3TcdREvmtLf4bUe9hjhD64fu
+         HS/LcN7/9x+lK6mmuMUW1IahoFvznTlrAuq58edyJ8dsCdOmbv6cp9MNTb8g15Kkhu6A
+         A6OmSP6fDWRrHs4SxaqVXJLA1urjyRtsifcEsziyIPwPksR/h7+RmL2++5EAtvlsfuQ1
+         mQfUvFIXP0Ghc816rVF5xXut3sDOYksnaMNm7slg7orir13++tGmQFCbF9ti611bi1f2
+         uqI2XX5SSlxuYIM4blteogqPM6FXwUrwxi560hj4NrbeihKKWQmLD4ZNzxMH+OVTBAPx
+         skyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795428442; x=1796033242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZCV7rj7O3YjHOcFzGHR54dLdeKT96fbmxzbKfW4RNF8=;
+        b=lgNwAivjWQcVkCCR7jpZy320esmaTv3fjxqo1BtKvShbiOAdYRsAtVKuSPECIrXb/w
+         BN9+b1oaSc428viDJ+KT5uprAtsOIVTZHMEpCJpx/Wiju967a6GCoh5gqBHbU3dyhE9i
+         36ekYb1UujsAK5PbceTQkK0WRUNemsnKUSnN4fE5XUt9jCeEaPTX6O1fWLr/lhbaxR2o
+         qtRHH4szy3JqzX7uTu+I+SnLAsN1Zi+crML9tKmZSwXzrGpomiQFsJ8FFdT0wDiJZSsn
+         pHHAg6a9Wt/qv01FrPEnISsorzl6ZQb6exrdZzz3gqz0EGjteCBX5yzrfH8SK4kB7+LS
+         wDAw==
+X-Forwarded-Encrypted: i=1; AL+hErHQoNSiLqr3aGOD65T684beLSpJK1EQpgfck+uZ6hqmazW9hWUMtpL2I/7PAOFLHz63YkTcm233/lCvbnt/Rj4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Coe5R/z8aIALGdfkcws5piQZZ66Eld8PA2NioFSrW7j36STz9
+	FglT6nZMijsGZUoGeem+4jJfG7JHforL7+9OcX8fgxKEnSXZcfTr/GBo
+X-Gm-Gg: AZFdTZf9r+9Z0bwhwNqvWVExjEldWU1q7Klzhu9jxuTpi5hjzbEQOrjn0iJTerKOQBX
+	h4xv/lSSa7bZPNZcZrhqovDAiLmqEiRTXNKDE7wrtL3DVFHTP4zCZep5gXMDFYph3+ZFmuIW4F+
+	7jRHkoZZXvB66YAjm/YsDvnyDcr6RuSGsbvmsuvAEOD8vxGUo2zZLQqoBpiIb1e6DdOjLe188jt
+	RreJvy5PFseaWPOuOPWlcqV4vl2/SW+p7Hf/udr1qbCFHY+akId4c4DHOL11O0JVUcDbTFTZnFJ
+	uxf8bwAdGVqvIoAH78JbuqYBCkE8jXsA5HOj35qQDH4POqXNIPjU56galIcHC7OzN3Kdf/E4m2N
+	/cDTzx2YynrKo3n5WqqsfeQTGjik5Y2x1XwZpTN4hUJZsIw5yuVUHJmUebcBEtnOf5q/EnHS8iE
+	vK4WqR0eW17A1X/o3sjHZjaMOrlyUDCuv0z96sDagKXeBKwGq0M7k57j0b2CqAW9epXAR2ZbSDU
+	/mFfm9L6gTCiSv0AYn9agsx8TJcRHKEh3lo2pAnNuoi7ifePS3YQuG7XRCpc/GER5tBUl6mw4dy
+	/KL3f5nrVQyCJK2t9lOj5hkYq8/8ei51ndKBwjiaww==
+X-Received: by 2002:a05:7300:f498:b0:386:a716:916b with SMTP id 5a478bee46e88-386a7169544mr5039152eec.31.1795428441777;
+        Mon, 23 Nov 2026 02:07:21 -0800 (PST)
+Received: from 10-86-27-207.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385672c6f31sm34145673eec.15.2026.11.23.02.07.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 02:07:21 -0800 (PST)
+From: Gokul K <gokul02k@gmail.com>
+To: Tianrui Zhao <zhaotianrui@loongson.cn>,
+	Bibo Mao <maobibo@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Cc: Sean Christopherson <seanjc@google.com>,
+	Song Gao <gaosong@loongson.cn>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] KVM: LoongArch: selftests: MAINTAINERS coverage and a VM leak
+Date: Mon, 23 Nov 2026 15:36:59 +0530
+Message-ID: <20261123100701.1679376-1-gokul02k@gmail.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -48,110 +102,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] kunit: tool: Count failed suites with only skipped
- tests
-To: "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
-Cc: raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- brendan.higgins@linux.dev
-References: <CAGQButum4PYb4A+hmqg-bJZbf4L3KkH6rT9tn-0_NTs3xLhGYw@mail.gmail.com>
- <CAGQButurzJT6fQqqxO9xD0GABME=AtGeYS0kQf-jDFSqKH6GaA@mail.gmail.com>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <CAGQButurzJT6fQqqxO9xD0GABME=AtGeYS0kQf-jDFSqKH6GaA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 06/11/2026 à 02:14, Louis H. Poulin II a écrit :
-> A suite can report not ok while all its child cases are skipped.
-> The parser retains the suite status as FAILURE but counts only the
-> skipped children. The run status is then derived from those counts and
-> incorrectly reports SKIPPED.
-> 
-> When a suite reports failure and the child aggregate is SKIPPED, add
-> a failed count for the suite, as is already done when child aggregate
-> is SUCCESS. Cover a correctly numbered failing suite with a skipped
-> child.
-> 
-> Fixes: d65d07cb5b01 ("kunit: tool: improve compatibility of
-> kunit_parser with KTAP specification")
-> 
-> Signed-off-by: Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
-> ---
+Two small fixes to the LoongArch KVM selftests. Patch 2 frees the VM on
+the PMU test's skip path. Patch 1 came out of routing it:
+get_maintainer.pl did not name the LoongArch KVM maintainers for
+tools/testing/selftests/kvm/loongarch/, because the MAINTAINERS entry
+does not cover that directory, so this series would otherwise have
+gone to Paolo, Sean and Shuah only.
 
-Hi Louis,
+Based on loongarch-kvm in linux-loongson.git.
 
-Thanks very much for your patch.
+Patch 2's hunk sits next to the one in "KVM: selftests: Convert comma
+to semicolon" [1], which is not applied yet. They do not overlap and
+apply in either order.
 
-Unfortunately, it looks like your email client has mangled it somewhat:, 
-some of the lines have been wrapped.
+Compile-tested only. Patch 2 builds: tools/testing/selftests/kvm/loongarch/
+pmu_test links for loongarch64 with a GCC 15.2.1 cross compiler, using
+glibc from Debian's loong64 port as the sysroot. The binary was not run.
+Patch 2 changes the PMU-not-enabled skip path, which only runs on a
+LoongArch host whose VM config leaves the PMU off.
 
-This is a known issue with some email programs: particularly with gmail. 
-The file Documentation/process/email-clients.rst has some details about 
-different clients:
-https://docs.kernel.org/process/email-clients.html
+[1] https://lore.kernel.org/all/20260428053204.1018608-1-nichen@iscas.ac.cn/
 
-But I'd personally recommend either using git send-email:
-- https://git-send-email.io
-or the b4 tool:
-- https://b4.docs.kernel.org/en/latest/
+Gokul K (2):
+  MAINTAINERS: Add the LoongArch KVM selftests directory
+  KVM: LoongArch: selftests: Free the VM when the PMU test skips
 
-Those will ensure that the patch will be sent properly, so that 
-maintainers can use git to apply it automatically. I personally use git 
-send-email for my patches, and once it's set up, it works great.
+ MAINTAINERS                                      | 1 +
+ tools/testing/selftests/kvm/loongarch/pmu_test.c | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Apart from that, the patch looks okay from here, but I'll run my full 
-battery of tests once I can apply it.
+-- 
+2.54.0
 
-Cheers,
--- David
-
->   tools/testing/kunit/kunit_parser.py    |  4 +++-
->   tools/testing/kunit/kunit_tool_test.py | 13 +++++++++++++
->   2 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_parser.py
-> b/tools/testing/kunit/kunit_parser.py
-> index d722874b..dce365d1 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -694,7 +694,9 @@ def bubble_up_test_results(test: Test) -> None:
->   	elif test.counts.get_status() == TestStatus.TEST_CRASHED:
->   		test.status = TestStatus.TEST_CRASHED
-> 
-> -	if status == TestStatus.FAILURE and test.counts.get_status() ==
-> TestStatus.SUCCESS:
-> +	# Preserve a failing suite result when its children all pass or skip.
-> +	if (status == TestStatus.FAILURE and
-> +			test.counts.get_status() in (TestStatus.SUCCESS, TestStatus.SKIPPED)):
->   		counts.add_status(status)
-> 
->   def parse_test(lines: LineStream, expected_num: int, log: List[str],
-> is_subtest: bool, printer: Printer) -> Test:
-> diff --git a/tools/testing/kunit/kunit_tool_test.py
-> b/tools/testing/kunit/kunit_tool_test.py
-> index 85ae2175..5fd386d0 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -265,6 +265,19 @@ class KUnitParserTest(unittest.TestCase):
->   		self.assertEqual(kunit_parser.TestStatus.SKIPPED, result.status)
->   		self.assertEqual(result.counts, kunit_parser.TestCounts(skipped=5))
-> 
-> +	def test_failed_suite_with_skipped_child_fails(self):
-> +		output = ['KTAP version 1', '1..1',
-> +			'    KTAP version 1', '    # Subtest: suite', '    1..1',
-> +			'    ok 1 - case # SKIP reason', 'not ok 1 - suite']
-> +		result = kunit_parser.parse_run_tests(output, stdout)
-> +		suite = result.subtests[0]
-> +		self.assertEqual(kunit_parser.TestStatus.SKIPPED, suite.subtests[0].status)
-> +		self.assertEqual(kunit_parser.TestStatus.FAILURE, suite.status)
-> +		self.assertEqual(suite.counts,
-> +			kunit_parser.TestCounts(failed=1, skipped=1))
-> +		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-> +		self.assertEqual(result.counts, suite.counts)
-> +
->   	def test_ignores_hyphen(self):
->   		hyphen_log = _test_data_path('test_strip_hyphen.log')
->   		with open(hyphen_log) as file:
 
