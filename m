@@ -1,86 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795444383;
-	b=XZYhfDl9wOXAuhJT8yw7fbLJaJUzslJXN6wXmVqqcuaRkCfhz6w/5AfUsQsgVG4zBILn
-	 FH1L2vT7nk526Vb8HW5rUjmcgQoAcZ6ufdker44a2mheJ+SVW28xf3j5LIN3YV4VkbvJ1
-	 2KczNUi1LQBaC3QRV8tP4pRYAE4wHuA3+MXBMhaI8sBNDzN9NZqVbYjVPj9zhQEhBvJWT
-	 Uk7G+6SPgskAishNyv8hPWhQvl8o+o9qcJCTDjbSfRf+PIledx3JHqYSKTCIultynoWGd
-	 aD1J1//rm8XvY+0kRiC/9gzqd8EmCKqvzEd3Bx76P6Cc4KR8rrsjz2Hosd2+P1d3Llw==
+	t=1795446122;
+	b=EwYbB/K8mlblD2nKL3FESL9w94DWG3brTdk0OtfIt/eY+Nx0JJ1pFc29mGDI6eQfzTg0
+	 mo4HtB+mSmKYKKm9pMyVR14T3SyWkaSTUTA2Ja70x+jA0ckv3kzHK0my7MQz47p6w3Kec
+	 D7P227Jrr2BRmmO48DnA8iVKpsV/k2egu/hsV3H34IXEQR8c3lFvPxJZ79N9tQsxkAhwk
+	 tXz/3xbS35az+fP4dgsWqrrRPkNBVDoNSg0NZXKq8Fjgf+LofUfPnbP5U0Y0tIJdSwHOC
+	 Nxb5As/EcUvbBNLjcwaMSvL1G9D80pPAP0AcawuTyVfFG1O7M+rNfyh2Wg3QPNKd4HQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795444383;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
-	b=zn6WBtR3fbem5HEaknUmbSBw8xRac2aTxmxS1rJLf1PKRM3dZRHuk5LZNO6Kv4GwWW5q
-	 CPC/kYxq4+ONkcXRrbmSfeVgJoWK8N8tmFrhcpgUiFKvJkOKuPvT4UT2mUlMdlKPbqBsW
-	 SN3NdV7QcwrN/XxD+wm0UWK1y0K9mI6WFRTFAUjw+US2AUcXbql4L/uGp6Ce/pXMFWyGY
-	 4mvu1o0qlQxp9Odtef3k8ipo/6Gc01X8J2yJd9T8gAb5tPLNRCDcw6K4nnp666AwWePVg
-	 gzOr9cwf2UdNLzJkhl4yuMezcMw6NS2cgbh2LBHSFy/JwtAQH2YxuqQwfrzCcUEImng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795446122;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=pOYA2Qi1LlJis/jVtzIzVcnlnxrkX7HcTKZW7RMWJJU=;
+	b=dQp+u7ASPdJUy2TpENgWLUGDnpQqcrfkCSF7AOnl2R+k7EAWOnR7/EapB78sQfdyCsdM
+	 S5xTC4RvHNlU0PJ8M/36luA32fiVrpevG+g52qQ1vB9lCRNieALejhBoKvVeVgu5mK4tB
+	 N9UbIM1itjqY88+7XWHxiH0awD/WjFsdYmp1Tq6k+xqSk9Vh3edUoWoXEMxee2qEzWI8a
+	 7EGhT1W7xMDFtBuAKPOtnU1iZkqhrbHclL3FBsp2fZEgbjJaI7GjDAvK/mDcE/wUNGiVH
+	 wntAIj4cUDpVPuKH3r0prIaXs3Me5jv1NqysFCN8pbvmlLjsIfM9GsdfZLpPUVY5Psg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ZxtcbYaU;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=9m7Ugj8n;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="PFGY/RjX";
+	arc=none smtp.remote-ip=209.85.218.47
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A24606A31A;
-	Mon, 23 Nov 2026 14:33:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68A24606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C561606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:02:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C561606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ZxtcbYaU;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=9m7Ugj8n
-Date: Mon, 23 Nov 2026 15:32:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1795444380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
-	b=ZxtcbYaUCdJCiwN819LIpdx/24DZbqjBfdQLHv34aaGA3g6B99AUapDeSMVBiZcLKI3T/3
-	zvh2H+xflYd9shEF1DUmaoB4pE9tq4NHxRLw1TL+3pyq4dAwkQOodC3IJ9pcaVfam/nZ3b
-	0qRLEUc4B/bPPfvHx9jaW4JMKc0izaPU7RPEumvkTfxbIK9k9jscgM/Bjex0Z9Ek5LfhFW
-	454ibkUJW/nJ5A6c7mDBnQmuH7fMxghGAi5sWAAPImLLNK5rzrSGiEKP2/GZjuuX/ryNKS
-	+49/kTIbVt0lPKuGZKVyLVapuH4rqCR+iXqoePOK0d9F8hnQ5Ma/c4nuOtY++Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1795444380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
-	b=9m7Ugj8nI5t0iqfjMRoRoinvgwt82fY/F0wRU3yw60HfzxIXFwcVx1R9IMTqDI5BsG8Ath
-	nAsai9NTuok7EuCg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>, bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Waiman Long <longman@redhat.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>, cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf-next] selftests/bpf: Disable preemption around
- css_rstat_updated()
-Message-ID: <20261123143258.N1ETiMUU@linutronix.de>
-References: <20261121082843.44614-1-kmehltretter@gmail.com>
- <DN26CP5BB6O7.23ALW6CZUBYSD@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFGY/RjX
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c4cb6834eaaso572822566b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 07:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795446120; x=1796050920; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pOYA2Qi1LlJis/jVtzIzVcnlnxrkX7HcTKZW7RMWJJU=;
+        b=PFGY/RjXbySdDDj/pp6OdOvHoO/0OOP8E7WNKI70NcGhBkY4msp0/7Vx5qsuwJfvdL
+         I/hrefBfj31N7LpxF1azSYXgIqtw5bsCsHQsASenFuwavkFlY4tWEw/tl1AxFykZji3N
+         xMRbo0+XVluQPZ8sXqtWkaUM+VvArmxnAKZXiEAquJBE/+62gRn5exC5U2aqkd1qbRqZ
+         rwMP836ZeG8yzYTByyr2vhshRX05z5PnfT0qh1x32mwKThJvqFE8FFULPthw7TlrYXDt
+         S+Z8uA0PkopmzFGyMZmXIoQnQEdzKq8DxfG8Rmtp+t8Y8nhYCrmt3tB/vbimaxocWHsd
+         OGhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795446120; x=1796050920;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pOYA2Qi1LlJis/jVtzIzVcnlnxrkX7HcTKZW7RMWJJU=;
+        b=VfPpadDpkBAociyFF/e0UCEGNyqrfFsasZn6ikfFfCN6U4LhmxqHXsfk5RASKuc6ud
+         pZ2bdkL7+x0lok1nvJ8vSIgunA4Djuo7de4KUAPkvauSsZ0UO4bM0oJUh8jm8AkA+KTK
+         SUe5b6pdWGCT5mTvwibrjELIPV5qCTBpGukcYJAn+wZmiGs9FFDFdyPfu8n/bvJI5oLz
+         xARtDyftnFF/gxLsFIZ1oZzQIgqLqwRwduiQ0B89SWiPF0lzALGWnnBRJJrjv/Gm2u57
+         KnvvkWwZ4AfFW/67dwWwQojn8KboJn0ihQYVAz278R2mq75PMggq5Xv8RIGqXyjMolku
+         KjKw==
+X-Gm-Message-State: APuU4Z9szNEHezKr4daL/ux+SrPfzuC1ECLUGCX2L0lhDxuaF/QcaE33
+	f+Shf1MlWSY1b+cX0dUMdQQWrsdyv/PRIWQpy09lfRm8qAFKtQN+Vbqa
+X-Gm-Gg: AZFdTZdqgGXFxmdja22EXC1ulum9SnCZgwN+AGSFY2u9iAn8VizXpbFU4S8MvDYEwqi
+	pnubCQXCWC7xMas+Mx7vE9Ey9d+kP48zWGWTCVXeUYe8kjHJGC8CDeHWJBDo0DdoymLwmJiZMc0
+	pBbHjitfsorxY+W/65nwxLqaHO5XSEHunVQbztrfEjVbfcrBUdDHHQ3b0FL9WOAsw4kh4h7pSNP
+	nIBbz/0JGOfeANVP+LJCdRudIbQOoRgOOw0Zm46oYv0ORdxOnAORdkm1FTx6kPeZtrkyfPWpJ+z
+	q9LU4ags43+mhn8YDXiJXA3e5gPfX6SjPxuOxSLHFgQhw24vOKInLbw1YhQO6TgmapgZAUs/4Qh
+	3chYccCmmDo0RvxRBdYq08K4CbuUqz/6QMPxsnwvjsXa6h4d3PcizWIawD3iY94IjcnCoySfggJ
+	23w7ILK8t+vjOVCQz6EpMx58/WHUErFxAiO9vlMvzyn91yZZl2mJvhJAI6bAPFeVkd5xcp0r+zV
+	kUpSuJlFyIMDzNw01ezsRL0vnVEIbD4flBF4XiYMO0DEt9E+12hYQJI91F5494+aVX7gJsk3ukM
+	sy0AkO+cLghFxeNVhIZINTZxFYnwC1JHEwbd0ywFZQecBKwb3jSyDNzwKKCHFGGickT5tjnPf31
+	IPFIpgcIjVtI3oRPS6n52
+X-Received: by 2002:a17:906:9c84:b0:c44:16ad:c31d with SMTP id a640c23a62f3a-c513a3a720fmr1021359566b.4.1795446120175;
+        Mon, 23 Nov 2026 07:02:00 -0800 (PST)
+Received: from localhost.localdomain (86-95-26-230.fixed.kpn.net. [86.95.26.230])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513afc42bbsm418398366b.61.2026.11.23.07.01.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 07:01:58 -0800 (PST)
+From: Ezra George <georgeezra017@gmail.com>
+To: Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ezra George <georgeezra017@gmail.com>
+Subject: [PATCH] selftests: pidfd: declare pidfd_poll_test TAP plan
+Date: Mon, 23 Nov 2026 16:01:27 +0100
+Message-ID: <20261123150127.635412-1-georgeezra017@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,32 +95,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DN26CP5BB6O7.23ALW6CZUBYSD@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On 2026-11-23 00:47:15 [+0000], Alexei Starovoitov wrote:
-> On Sat, Nov 21, 2026 at 12:28 AM Karl Mehltretter <kmehltretter@gmail.com> wrote:
-> > trace_cgroup_path_lock. On PREEMPT_RT this leaves preemption and
-> > interrupts enabled. On non-RT it masks interrupts, satisfying the
-> > assertion.
-> 
-> let's fix the kfunc instead
-> 
-> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> index de816a4..d72fe72 100644
-> --- a/kernel/cgroup/rstat.c
-> +++ b/kernel/cgroup/rstat.c
-> @@ -131,6 +131,7 @@ __bpf_kfunc void css_rstat_updated(struct cgroup_subsys_state *css, int cpu)
->  	if (unlikely(cpu < 0 || cpu >= nr_cpu_ids || !cpu_possible(cpu)))
->  		return;
->  
-> +	guard(preempt)();
->  	__css_rstat_updated(css, cpu);
+pidfd_poll_test.c uses the low-level kselftest.h helpers, but does not
+call ksft_print_header() or ksft_set_plan(1) before reporting its result.
 
-This looks like the only call site which did not disable preemption on
-its own (the other are either NMI or have get_cpu()).
+This produces incomplete TAP output and a plan mismatch:
 
->  }
+  # Planned tests != run tests (0 != 1)
 
-Sebastian
+Add the TAP header and declare the single expected result.
+
+Tested: tools/testing/selftests/pidfd/pidfd_poll_test 1
+Signed-off-by: Ezra George <georgeezra017@gmail.com>
+---
+ tools/testing/selftests/pidfd/pidfd_poll_test.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
+index 232304f818c7..416a136bb6eb 100644
+--- a/tools/testing/selftests/pidfd/pidfd_poll_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
+@@ -31,6 +31,9 @@ int main(int argc, char **argv)
+ 
+ 	fds.events = POLLIN;
+ 
++	ksft_print_header();
++	ksft_set_plan(1);
++
+ 	if (argc > 2)
+ 		ksft_exit_fail_msg("Unexpected command line argument\n");
+ 
+-- 
+2.43.0
+
