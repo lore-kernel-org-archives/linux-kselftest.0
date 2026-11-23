@@ -1,55 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795463976;
-	b=GRGhUe19GV1CwB5vzO8BraPGoeOT7bN+bBivzoGXATpg7SsKUkn84nT9R7xLpChliuQi
-	 VKZh4Kj9lbgUZbXwo4Vfn4t8OEHPjhtxuxYFS/gDNM8cFYLFCoV6igsyvGvoPuCknJBuA
-	 0Fw3PUVaeP/YWGvDXQ0COH97gnIja3Ab/h5Zncd3BFqhao0ZNFBdMYiEAnkDyySEfzSjL
-	 8vsqiZ5gn24u2FyNeeTPuCQodvt1uyLf1xCbOyNUkkJEFGqVntjAY3u817Uu3mUwDAOqq
-	 IQK7pWwa5jZ6aQgkls5UePCHau8ADA6rzs54iXNwM9HczTujtWmQM8VOEWMNv44qu7A==
+	t=1795464870;
+	b=xhen6FjjXLGi/W+oMfPZ2P7GkZgfNLLMUarS75gaHU9RcE5MAserZ5EH9LrPVIQwVHNI
+	 4NLRclaIcJBB0H4dRAR66rq55HWW3dFavM6jr7cN1icLzp3kQjQGYUoAzwNnYkEM7nx3c
+	 2TUNVwHzkdJINJrWGDKtohq21Nf1/TK3rJ+MeMmpOWyDJqKcp7Ymq/TGanwfm71BACSnu
+	 NMkUR1kH9uUAq9U9CAmXpd+ybnAVdoXcxq9DnHtwprcuOQyht3HhkOBIfJei+hvqXDUqQ
+	 WR/23xZWYJ7QvfsrbA6juDdHlxlrVhtqN9kUc1BenNH65PjwvlkjDe7Z1wL0ByMZ9Gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795463976;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-Rspamd-Queue-Id:X-Stat-Signature:X-Spam-Status:X-Rspamd-Server:
-	 X-Session-Marker:X-Session-ID:DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=ZNbXBfNTO0fkyqJpgqenKi8rMrZeuWlZGWMB2B9tSTE=;
-	b=KoUVH0NaXhNqEVgZA1dp+xkZ51gSS6faYppl2e2pTPKQkUVbA3vhMAIaey03elzSGh0i
-	 5a5DApjHfnKOaXT+iqdHq9kdJ/YYeqQKe/UG/TJivqevFGes3HsJcpUMWjMjbHzpiXKAF
-	 QQr6ra5BL1IBJNus7NcPglJ72F0z3HVUC/Z7ccU66Og38uH2CbeZ8nyBasiTndgMKb3Kz
-	 oBQpjD06eeqMLRJEbljBAwX/ccgm7WBJoAsiyVBclF0+wjLwsu25zv1cQSzAdB8kynqjy
-	 Ah5m9hNingbEx8MJEjFAxbbTpo8mzjpS+qMYY7KtT07gY5naYpkcAtRh2+pq9aKBC4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795464870;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+	bh=SKSnthlrVLK0ONivHUUb2WWqe4zjQ/MAmFiGwKLAN0U=;
+	b=Ow02suQueHJVY3ztJ+T9ELCxnwfFJefF6QkzaT7OaDIAg4ntDQLKBg8QAGfMgz5yFMgZ
+	 KVT+MhRBqPZB8kn8HK19/7Ooj/qp9tWbMG8MpU6lyKrjnlZAEKMxFRI+X2LsN2ONEI0d3
+	 rVQkwEzEUzKVosFYDtP24Wp8fGWIQ8NYPv7HDLIF8S37pr+DD2+VDHU4/VvTSlwekwl6n
+	 O80jbo2FZljCgHxXapl3/id8QEFtIEjPDStZx8qLelNK1Yx7GmnyerpfkWoECPLKJSWbB
+	 Zh9NfjN+JbbnEuKQKgDXSmljX4TPrZhB44BnF1JPAVofesw7yOjxBUCBBsWFl34GstA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=tmEBZJIm;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=ks6A74Va;
+	arc=none smtp.remote-ip=185.246.84.56
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209A4606A31E;
-	Mon, 23 Nov 2026 19:59:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 209A4606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E439606A31E;
+	Mon, 23 Nov 2026 20:14:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E439606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=tmEBZJIm
-Received: from omf10.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id DFFC680971;
-	Mon, 23 Nov 2026 19:59:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 28CA13D;
-	Mon, 23 Nov 2026 19:59:26 +0000 (UTC)
-Date: Mon, 23 Nov 2026 14:59:18 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, linux-kselftest
- <linux-kselftest@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH] tracing/selftests: Make sure trace_printk is set to top
- instance
-Message-ID: <20261123145918.0d7f3728@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=ks6A74Va
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id ECA701A17A2;
+	Mon, 23 Nov 2026 20:14:26 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id AA112601E1;
+	Mon, 23 Nov 2026 20:14:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8D0C811E6A9CF;
+	Mon, 23 Nov 2026 21:14:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1795464865; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=SKSnthlrVLK0ONivHUUb2WWqe4zjQ/MAmFiGwKLAN0U=;
+	b=ks6A74VaTAi+ez9pFScgXV39CcJytHQPqcjVoHiHRpoSdlwmlOtGdFptdOq0hTMkuTehvc
+	YJh3HutnAUP1t4BYUcxGyfCSUXY2k/BNq9yZjdIIyrNNzL8hw2FbbQ/TsUnYbDJKMWZS6x
+	eOE1mfOqKJ85sfi9fie5Ou8bhFOTfxy4fWDmMT5zkDRGcPp/T8qxfrgw7lGf2UPgRzLIo2
+	rzNOnDxyQbEK+NtZYNY4ZgANztZBxc8BYLiaLsgAns6Xm8efQQxKEzLXRNajZgqXkn1jkJ
+	S6Imnby+d/lTGop/4YhoaoNwLD2gjjho9cs5/7NdXFy2Qc+/vLdqye+VG+qIRQ==
+From: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Jakub Kicinski <kuba@kernel.org>,
+	davem@davemloft.net,
+	Eric Dumazet <edumazet@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Breno Leitao <leitao@debian.org>,
+	matttbe@kernel.org
+Cc: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>,
+	thomas.petazzoni@bootlin.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: drv-net: pause: detect the link partner from the remote side
+Date: Mon, 23 Nov 2026 21:14:05 +0100
+Message-ID: <20261123201406.479904-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,74 +81,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 28CA13D
-X-Stat-Signature: hgrz3uyr311sg5h7isysrg7czimairt3
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+sdHlsPREMg0Mr5WaqVHQMrbDKAwQwaTE=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=ZNbXBfNTO0fkyqJpgqenKi8rMrZeuWlZGWMB2B9tSTE=; b=tmEBZJImdXo0GlRBLGG9UucuYerRP7qQXPM/VqlM3JI5h/BKGl0HacyXXbB6Cp5fNvwy4QizO6syEULY5+Hn0aDM9Kwmr/o5HrQDt7CNGMFsFmXbjEJjXn6dFOTQ9ONCQoYIEsm0pEPwRGfEsmeV16zOpz6Dq8XiGv6AdZR/p5E=
-X-HE-Tag: 1795463966-961497
-X-HE-Meta: U2FsdGVkX19diIAY0Lc1gKibLW6OutddK+lv8YadxSDrdEKf8H01kTg48u7G3f4YYSJCufAKYGelbTq3s8C1IebOzb3GOXFzcZo8HANhbomsTAQ7Sh+4MNoVpkdE47AjhhfzGNXFVfMG7g1I3/+1Td6FoDDCw+sU9lg3AJNHjZe/g2vFWKta8eXjuWTUB8wB0E87klMORXprRaoDYPyJ2iGTCFO3Y/yIZpz2X0gHzyrQ7f2MsRUhK46pldMDyrb1KcA3bQ3XQIjZbW1IzpWbRqbDQB0WdcLsuyO4YWeNhXbsq/p+EYiaNxFNFu8gB/xLG086SEwckL44CZrG/XX5eWIbw/iJJkRFEkvonr4KfH+ny0Aey6V+lZnvTMuhD8mg8wXNDZ08b4g43lc5sl3ZZpVJyuScBQ84
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Steven Rostedt <rostedt@goodmis.org>
+The logic used to detect if the kselftest remote we're interacting with
+is directly connected to us uses link renegotiation to flap the link,
+that way we know if there's a switch between the remote and the DUT.
 
-In order to debug a kernel crash, the boot command line added
-the traceprintk flag to have trace_printk() go to the persistent ring
-buffer. When the fix was found, the command line wasn't updated.
+However the current logic is racy. It triggers a link renegotiation,
+wait for the link to come back up locally, and looks on the remote if
+the link flap counter changed.
 
-Later, when running the ftrace selftests, the direct function tests were
-failing. The reason for this was because these tests would load the
-ftrace-direct.ko module which would add a trampoline that did a
-trace_printk. The test would then search the top level instance buffer for
-the trace_printk output. The issue is that the kernel command line had
-moved the destination to the persistent ring buffer causing the writes of
-trace_printk to go there and not the top level instance and because the
-tests did not find the output it was looking for, they failed.
+It's possible that this entire cycle happens locally before the peer
+reports the link flap, in which case it reports that we're not directly
+connected to the peer when we actually are.
 
-Update the tests to set the trace_printk destination to the top level
-instance at the start of the tests to force the output to go there so that
-the tests will not fail in such a case again.
+Solve that by reversing the logic : Trigger a link renegotiation on the
+peer, and check if we see the link flap locally. The current
+wait_for_aneg() already waits for a full "up - down - up" cycle, so
+it doens't really matter which side of the link flaps first here.
 
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+This was found in the stmmac CI setup, between an Intel I350-T4 card and
+an iMX8mp + KSZ9131 board. The Pause test was failing seemingly at
+random, due to the link flap occuring either on the host or the remote
+first.
+
+Fixes: 8f897f26ef34 ("selftests: drv-net: pause: Validate the pause autonegotiation with a partner")
+Signed-off-by: Maxime Chevallier (Netdev Foundation) <maxime.chevallier@bootlin.com>
 ---
- .../testing/selftests/ftrace/test.d/direct/ftrace-direct.tc  | 5 +++++
- .../testing/selftests/ftrace/test.d/direct/kprobe-direct.tc  | 5 +++++
- 2 files changed, 10 insertions(+)
+ .../testing/selftests/drivers/net/hw/pause.py | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
-index d75a8695bc21..359257123e6d 100644
---- a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
-+++ b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
-@@ -2,6 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- # description: Test ftrace direct functions against tracers
+diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
+index ca4a55e59c30..31518b7ec53b 100755
+--- a/tools/testing/selftests/drivers/net/hw/pause.py
++++ b/tools/testing/selftests/drivers/net/hw/pause.py
+@@ -90,8 +90,8 @@ def controllable_lp(cfg):
+     For low level ethtool tests, we need to have the remote directly connected
+     to the local host (i.e. not through a switch).
  
-+# Make sure trace_printk goes to the main buffer
-+if [ -f options/trace_printk_dest ]; then
-+	echo 1 > options/trace_printk_dest
-+fi
-+
- rmmod ftrace-direct ||:
- if ! modprobe ftrace-direct ; then
-   echo "No ftrace-direct sample module - please make CONFIG_SAMPLE_FTRACE_DIRECT=m"
-diff --git a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-index e52e470a1f8f..b22e3fb1c468 100644
---- a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-+++ b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-@@ -3,6 +3,11 @@
- # description: Test ftrace direct functions against kprobes
- # requires: kprobe_events
+-    This is tested by taking triggering a link renegotiation and checking the
+-    carrier_changes counter on the partner.
++    This is tested by triggering a link renegotiation on the remote and
++    checking that the local link flaps.
  
-+# Make sure trace_printk goes to the main buffer
-+if [ -f options/trace_printk_dest ]; then
-+	echo 1 > options/trace_printk_dest
-+fi
-+
- rmmod ftrace-direct ||:
- if ! modprobe ftrace-direct ; then
-   echo "No ftrace-direct sample module - please build with CONFIG_SAMPLE_FTRACE_DIRECT=m"
+     :returns: True if the remote is our link partner
+     """
+@@ -99,17 +99,17 @@ def controllable_lp(cfg):
+     if controllable is not None:
+         return controllable
+ 
+-    before = int(cmd(f"cat /sys/class/net/{cfg.remote_ifname}/carrier_changes",
+-                     host=cfg.remote).stdout)
+-
+-    ret, _ = ethtool_ret(f"-r {cfg.ifname}", is_get=False)
++    ret, _ = ethtool_ret(f"-r {cfg.remote_ifname}", is_get=False,
++                         host=cfg.remote)
+     if ret != 0:
+-        raise KsftSkipEx(f"ethtool -r {cfg.ifname} failed: {errno.errorcode.get(ret, ret)}")
++        raise KsftSkipEx(f"ethtool -r {cfg.remote_ifname} failed: {errno.errorcode.get(ret, ret)}")
+ 
+-    wait_for_aneg(cfg, link_drop=True)
++    try:
++        wait_for_aneg(cfg, link_drop=True)
++        cfg.lp_controllable = True
++    except TimeoutError:
++        cfg.lp_controllable = False
+ 
+-    cfg.lp_controllable = int(cmd(f"cat /sys/class/net/{cfg.remote_ifname}/carrier_changes",
+-                                  host=cfg.remote).stdout) > before
+     return cfg.lp_controllable
+ 
+ def require_controllable_lp(cfg):
 -- 
-2.53.0
+2.56.1
 
