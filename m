@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795406348;
-	b=TjY2u0R/u9EeQCEmhQlcvFwDr79MSpA/bkF6DqhcmfFDraAyWQcmFPJjM67sCt2r+qDi
-	 Kyy8RX96AlODIXCtxzNV77u4S0fKyfLFTiHtd/j8KxzOnWttS/SFHROElCJCHEpM0ysMj
-	 ZslJ9Lh+QYgABBrbLEqkbYmpLuSMZaxECajmDRaUHDrU6ddSojzcYGiV3r82RNDDEKFzN
-	 mS7pKEi2NKCLTYDD2otbELbXahlduXyo44F+is7FGuk656aPg+U4S61ETU5alx3+aeVET
-	 sBhUuUl0FtJMoA8TKmqOMx48U4eTzzGhiSsAta7zMOq97a/MFJC/IXFbVZBHnEBRAUQ==
+	t=1795406353;
+	b=DQmYJkGhpsKIF3ZgWBr1GYSatSPwe4uZ0VQ2sxxl9IwTUe8LnMKFH72od2o5A1dOmu+s
+	 UvM3DQvwFA2V0QOLPI+/QIM6M7xPogUKA5V3JWvycsI5+GGBx6mlJclw23NbCF7Yyy+x+
+	 TMqtnPtKActbjj+AzKUJxNN14GMdF4nEmirXvClEpKuwSxphyFOUQS8PBLhL9OCJNrlK8
+	 cvAZNq4ltolHOKovCIqLebaTvp5hg2A6ZATfbBAruJm7g13J9NZMgwhdy87ZRXBEG03H7
+	 5HFbXM5FlsKa9v7G22P00LfbSoaXUuLeV+Hrs0Rq+6HmZ5LEvXvuLGaGYivhWTVe9Og==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795406348;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795406353;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=40vOlkrsn5bcKQ9hugL/8J0cEKMjQf6aWMjTelXnSIM=;
-	b=SCpd7O1M7ANUn99JeYcGiIQAhiw46L6ffkGHOnlAOCh8+xN9KZLB8l0dhuNXsFMJuImg
-	 m298KyzLZvNJ3kaB0MQX2GlBiKUOBrPG19l9uZi66TN4Sx4t+9o2eJwDGaiF7ZGWLk4XU
-	 pjcskF1wAdjPj11xUswzJptO7aAa3ht7Q+tFQBakXWUFobqTRiiR/mH2Ad0TbDL5L5SCA
-	 XZkjnvycRBTkLb+XS/DIOJlRX1b0X9PPrrtNtAE6A3xunWH+Z+ZC7RDvYPBc20VVJjEqR
-	 0avsoSpLLPbnPpdXMikUWDlTC/rRUyWSdGEPPjAp0mY7cairw281trYxlmvZY9gaMSg==
+	bh=9Qk8eItz01Sdldz0OQYKp5tRtKQzSzN8U2aRMjlYMCQ=;
+	b=kukn3Xml9sbZ2kLIS16JrpwqjZHuKJo8v6NRmLUtWIBhvZjp+0qOy+0urkyc8+0kRmGs
+	 YBEEJAZhkLx6L++qECvhE1z+idcIbN5xMKZvTLWXpuxxZ6WBDybVJVroMeQur+9TFOaZ6
+	 Gt86wsoqEn9Eb/gdHpjpKlj1gTKYAyKMWyjjb3JlfRwftrYIzxycPjXaMsJuJgy+UXESn
+	 QDXy2WKaiOicm3i987HHt35Vc7XCvixSEG1LWeIvsIxdxCqAsV6z8mn49gve0tmqnfw/T
+	 wtn7L+eFJtADMJasQqclJt+zZm3QSzf98j/sjGlbd6joBZup3lAzgDj0WzTEKKGMP0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwpXlY9m;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LI9kqZRI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E86606A31E;
-	Mon, 23 Nov 2026 03:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A831D606A31A;
+	Mon, 23 Nov 2026 03:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwpXlY9m
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF5911F000C6;
-	Mon, 23 Nov 2026 03:59:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LI9kqZRI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152571F000D3;
+	Mon, 23 Nov 2026 03:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795406348;
-	bh=40vOlkrsn5bcKQ9hugL/8J0cEKMjQf6aWMjTelXnSIM=;
+	s=k20260515; t=1795406352;
+	bh=9Qk8eItz01Sdldz0OQYKp5tRtKQzSzN8U2aRMjlYMCQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=HwpXlY9m2MBcwL/YhwYMz6mfik0O2RI/E/w2eT2ygBowvuJAhkGJs7nnahQTnKTKP
-	 8Ee+z834dDifrLMV3MMs4l9E4kXfenECjvkRwGNuVxKwGHL31wZ1h/lwIDC7ZEqwg1
-	 NIWjlnqtgadvmpYubS9ucWnEiBUnYMYRn0obS8Apcm+UA/6crGIcJoBHE/+ZzojP6G
-	 F0JqFAh8SpfCI7Mij80dA/1DlL+7oFhD4PDf57ffUCTymAInDj2Y2WS/Idz2lf4ZKw
-	 DIdRTBvCz+EYWhCwRlCdQx7BFgnoMC11R4Sntu+VTZJirlUQvl7p9NcjFUdhw3fjib
-	 +P3Vz1CgAegyw==
-Subject:
- Re: [PATCH net-next v2 02/11] net: reserve extra TX headroom for local egress
+	b=LI9kqZRIdvueOIL9Q3zh8pZORRyV4SzppDjO7mtFAaNgb/zjabvjVKqjFGnmBAWkG
+	 t35W9yfHEWwsdyRlGm4hYGO92OJaP3TnN7fBpCLGtO50ZidxWQdUGzmZcVdhjvslU/
+	 OBRe6/JPsNT5ys0vJjGqJR25hZt26loJWCpsNzekkt+9QsugZ3CUe+dqAundI6kJEo
+	 8tbHF9pdk+zDj63nA4ny+jMOwwa2yYaWDd5DFzGQV3ROgI9JAUZV3BrriNRVxscyMi
+	 RvnmDBnx+L+JuU5QUGRo2k5j10E1WRqB1dJDviGn3wPzVeEHXgragjD63sDikaJiA8
+	 g2kl7jwYxm6GA==
+Subject: Re: [PATCH net-next v2 03/11] net: set tx_extra_headroom of the peer
+ on XDP attach
 From: netdev-bot+sashiko@kernel.org
 To: tianyi@cloudflare.com
 Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
@@ -67,11 +67,11 @@ Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
  runyu.xiao@seu.edu.cn, song@kernel.org, linux@leemhuis.info,
  wang.zhan@smartx.com, yonghong.song@linux.dev, n0ps1edzz@gmail.com,
  tianyi.gao@linux.dev
-Date: Mon, 23 Nov 2026 03:59:04 +0000
-Message-ID: <179540634443.3135.6612168607080086679@kernel.org>
-In-Reply-To: <20261119013830.36935-3-tianyi@cloudflare.com>
-References: <20261119013830.36935-3-tianyi@cloudflare.com>
-X-sashiko-severity: Low
+Date: Mon, 23 Nov 2026 03:59:08 +0000
+Message-ID: <179540634863.3135.17027370406892686055@kernel.org>
+In-Reply-To: <20261119013830.36935-4-tianyi@cloudflare.com>
+References: <20261119013830.36935-4-tianyi@cloudflare.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -84,81 +84,98 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] The documentation for tx_extra_headroom, added in commit "net:
-  add tx_extra_headroom and netdev_get_alloc_headroom()", says without…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] Native XDP on veth still copies every locally generated
+  packet, and the commit message implies this patch fixes that.
 
 --
 
-net: reserve extra TX headroom for local egress
+net: set tx_extra_headroom of the peer on XDP attach
 
-This patch makes several allocation paths use the new
-netdev_get_alloc_headroom*() helpers instead of LL_RESERVED_SPACE() and
-LL_RESERVED_SPACE_EX(). The converted paths are the IPv4/IPv6
-append_data paths, the IPv4/IPv6 raw hdrincl paths, the three AF_PACKET
-transmit paths and AF_XDP copy mode, so their locally generated packets
-get dev->tx_extra_headroom when they are allocated. Paths that expand
-existing packets on demand, and the fragmentation paths, are left alone
-on purpose.
+While the peer of a veth or netkit device has an XDP program, this patch
+sets tx_extra_headroom of the device to XDP_PACKET_HEADROOM minus
+needed_headroom, so locally generated packets have the headroom XDP
+needs. netdev_update_tx_extra_headroom() recalculates the value on XDP
+attach, on detach, and when an upper device propagates its program
+through netif_xdp_propagate().
 
-> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-> index 5d6f5f5fc0ed2..dedea01c6adc6 100644
-> --- a/net/ipv4/ip_output.c
-> +++ b/net/ipv4/ip_output.c
-> @@ -988,7 +988,7 @@ static int __ip_append_data(struct sock *sk,
->  	mtu = cork->gso_size ? IP_MAX_MTU : cork->fragsize;
->  	paged = !!cork->gso_size;
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 85b7c61015c7c..6e053f612d720 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+
+[ ... ]
+
+> @@ -10677,6 +10678,41 @@ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode)
+>  	return prog ? prog->aux->id : 0;
+>  }
 >  
-> -	hh_len = LL_RESERVED_SPACE(rt->dst.dev);
-> +	hh_len = netdev_get_alloc_headroom(rt->dst.dev);
+> +static void __netdev_update_tx_extra_headroom(struct net_device *dev,
+> +					      struct net_device *peer)
+> +{
+> +	unsigned int needed_headroom = READ_ONCE(dev->needed_headroom);
+> +	unsigned int tx_extra_headroom = 0;
+> +
+> +	if (peer && dev_xdp_prog_count(peer) &&
+> +	    needed_headroom < XDP_PACKET_HEADROOM)
+> +		tx_extra_headroom = XDP_PACKET_HEADROOM - needed_headroom;
 
-[Severity: Low]
-This isn't a bug, but does the documentation added earlier in the series
-promise more than this patch delivers?
+[Severity: Medium]
 
-Documentation/networking/netdevices.rst says, with no exceptions:
+Does this avoid the copy for native XDP on veth? The commit message says:
 
-  tx_extra_headroom is extra headroom for locally generated packets. The
-  stack adds it when it allocates such a packet for the device, so that
-  headers pushed later, for example at TC egress, fit without a
-  reallocation.
+  XDP on the peer of a veth or netkit device
+  then copies every packet. Generic XDP copies it in
+  netif_skb_check_for_xdp(), and native XDP on veth in
+  veth_convert_skb_to_xdp_buff().
 
-The comment above netdev_get_alloc_headroom_hlen() in
-include/linux/netdevice.h describes the same contract.
+veth_convert_skb_to_xdp_buff() still copies whenever the head is not a
+page fragment:
 
-This is the only patch in the series that converts allocation sites.
-Several places that allocate a locally generated packet for a specific
-device still reserve only LL_RESERVED_SPACE(dev) at the end of the
-series:
-
-  net/ipv4/arp.c:arp_create()
-  net/ipv4/igmp.c:igmpv3_newpack() and igmp_send_report()
-  net/ipv4/ipconfig.c:ic_bootp_send_if()
-  net/ipv6/mcast.c:mld_newpack() and igmp6_send()
-  net/ipv6/ndisc.c:ndisc_alloc_skb()
-
-For example:
-
-net/ipv6/ndisc.c:ndisc_alloc_skb() {
-    int hlen = LL_RESERVED_SPACE(dev);
-    int tlen = dev->needed_tailroom;
+drivers/net/veth.c:veth_convert_skb_to_xdp_buff() {
+    ...
+	if (skb_shared(skb) || skb_head_is_locked(skb) ||
+	    skb_is_nonlinear(skb) ||
+	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
+		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
     ...
 }
 
-So if tx_extra_headroom is set through the tcx decl tag or
-VETH_INFO_TX_EXTRA_HEADROOM, ARP, ND, IGMP and MLD packets will still be
-reallocated by bpf_skb_adjust_room(), or copied for XDP on the veth
-peer.
+skb_head_is_locked() is true when !skb->head_frag. The local paths that
+now add tx_extra_headroom are __ip_append_data(), raw_send_hdrinc(),
+packet_snd() and xsk_build_skb(). All of them allocate the head with
+alloc_skb() or sock_alloc_send_pskb(), so head_frag is 0 and these
+packets are still copied.
 
-Could the general sentence list the covered paths instead? A later
-paragraph in the same section already lists UDP, raw, AF_PACKET and
-AF_XDP copy mode for the XDP case. Another option would be to convert
-these allocation sites as well.
+veth has ndo_bpf, so dev_xdp_mode() picks XDP_MODE_DRV by default. In
+that default case, every locally generated skb sent to the peer gets up
+to 256 extra bytes of headroom. This can push small packets into a
+larger kmalloc bucket, and no copy is saved.
+
+The generic XDP path does look fixed. netif_receive_generic_xdp() only
+checks cloned, nonlinear and headroom, not head_frag.
+
+The note below the --- line says a follow-up veth series will fix the
+head_frag condition, but git am drops that note. Could the commit message
+say that native XDP on veth still copies after this patch?
+
+The new text in Documentation/networking/netdevices.rst has the same gap:
+
+  When the peer has an XDP program, locally generated UDP, raw and
+  AF_PACKET packets and AF_XDP packets in copy mode have enough headroom
+  for it.
+
+Should it mention that native XDP on veth still copies these packets?
 
 [ ... ]
 
