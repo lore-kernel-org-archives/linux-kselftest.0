@@ -1,79 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795444259;
-	b=pcMPjUN6Puc9w2glIje7cy9ZtNAF6Xe+IRfveUls8Dx8ITaNyLsb9tmre8e9rP1FmhAK
-	 JM+grJ70wezEVCTXp2mX0gEce09BVefgdZ2o2Z8pSWUbUEp5braVOkMYajyTOkEMawOu3
-	 60hzpo/UOdoJchqosRdTt8mdEcpfVDvJ1dnYgjKwmMRDImfgm0jAvon5IzzEbCjaGaGpC
-	 uHem82U2/YEB9u5y6Ibb5K+XEMH5zB/jsNM9Oxz5BCmqA2R135xpXa32vqtdBgkC3RSMU
-	 tBHoRWxr23jMcHMk1ASJjo21yXxtIVDHqSENCfnP7KHWG6hNC1OjICx2fY5bNnz83Rw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795444259;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=YpQWtFa83ovXMaGUTAuU4K1uHoQoSXre+B8cs94dP0k=;
-	b=YOhGgxaELhI1tcvJraCqSGcXGu4wwHxjHsIv/SYfUXK4VXvwiRjVPr78WO2ooYTbHYET
-	 nhwzuFBcP2KX1S6JCEwY8m0jjb8NXk4XyY9xeuRteHSTZNx28fSH5N8cZkBhlfd5VS1zJ
-	 9a26hXg+NRCykDDBAm9hCnV7ty/fFQwdBkKn81bTqaWJgDAa/cS1BM+91Ly4sJ53VCNIC
-	 GtOZf8jpvw7t1DSO7EQs1ZyEpYXwOxGSffpTsgB5jHlugGKwlyBrD5O2YpciScQlvmIxa
-	 5A187r47fFtKVCos+sVF/myD6+hM+kElryZXhI+hSmXVv3yBHuh3tHNxYOwiySDTq3Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HJvPObtI;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BE6606A31E;
-	Mon, 23 Nov 2026 14:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HJvPObtI
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795444258;
-	b=f1Z4qJl6ly2yW1TxtNtjTsK3jPycPl2zaydogG5dnxLPfAMInni+0EVbaXfCfqyp4Lif
-	 P7O/5DnswoAuOtvD89xxs52O/sNgqFn2hUBwsilEexr4IOY/JXfg+VRY0lZfQ032X33M6
-	 nVuqNBQLs+0KNNflzrnjialfUfpMW8HG6ktGKt7Zy24qRxDwmpbtQd/y39P0ZUSxRF8j7
-	 jQrTb8I1mPdrLI1Sh0PZheQMLxzzSVO/w5/zJunzghe6P3Ln8PeNQtCZUXRCeBwi8KVD0
-	 iQLKtTJLVuPlaUQPexKNKCk6/S+Tcapw3CBNEhrpBsYxPgEDOrN5kvWb4tjHYLwQr6g==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795444258;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=YpQWtFa83ovXMaGUTAuU4K1uHoQoSXre+B8cs94dP0k=;
-	b=0zriazBEz8iMn58LKPiMb7B0IkvxtoWC9pIvD1Mta/qlxJY6tugxJSJd5jTuzNeNKMWl
-	 XBMQx2sOIhQSfF0rGhbr6whif4wf74BulWwkXpsYDnrgI9cn+lqd68tflk1Eiiaq2HKm6
-	 oc9KGPe1Gx7Fg0SmwfD4cyIMR5tyjH9W0jnnZBUACw3Xr3mSldaURBYxFNHJY/w0aQ26J
-	 sev7ZDcTqaCvzAvT+pGi2/TPtfvdf+J8dnmQXg8VdkEvUQOi81FBTIUS3eV9fwVLcShqB
-	 Phri/U0LwihpcQBcc13sr2RrjDGLJNn+yoU8ESGM8mP2b1z0dkpQ4SOpSz0xMXV4L7A==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795444383;
+	b=XZYhfDl9wOXAuhJT8yw7fbLJaJUzslJXN6wXmVqqcuaRkCfhz6w/5AfUsQsgVG4zBILn
+	 FH1L2vT7nk526Vb8HW5rUjmcgQoAcZ6ufdker44a2mheJ+SVW28xf3j5LIN3YV4VkbvJ1
+	 2KczNUi1LQBaC3QRV8tP4pRYAE4wHuA3+MXBMhaI8sBNDzN9NZqVbYjVPj9zhQEhBvJWT
+	 Uk7G+6SPgskAishNyv8hPWhQvl8o+o9qcJCTDjbSfRf+PIledx3JHqYSKTCIultynoWGd
+	 aD1J1//rm8XvY+0kRiC/9gzqd8EmCKqvzEd3Bx76P6Cc4KR8rrsjz2Hosd2+P1d3Llw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795444383;
+	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
+	b=zn6WBtR3fbem5HEaknUmbSBw8xRac2aTxmxS1rJLf1PKRM3dZRHuk5LZNO6Kv4GwWW5q
+	 CPC/kYxq4+ONkcXRrbmSfeVgJoWK8N8tmFrhcpgUiFKvJkOKuPvT4UT2mUlMdlKPbqBsW
+	 SN3NdV7QcwrN/XxD+wm0UWK1y0K9mI6WFRTFAUjw+US2AUcXbql4L/uGp6Ce/pXMFWyGY
+	 4mvu1o0qlQxp9Odtef3k8ipo/6Gc01X8J2yJd9T8gAb5tPLNRCDcw6K4nnp666AwWePVg
+	 gzOr9cwf2UdNLzJkhl4yuMezcMw6NS2cgbh2LBHSFy/JwtAQH2YxuqQwfrzCcUEImng==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ZxtcbYaU;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=9m7Ugj8n;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C39C01F000CA;
-	Mon, 23 Nov 2026 14:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795444258;
-	bh=YpQWtFa83ovXMaGUTAuU4K1uHoQoSXre+B8cs94dP0k=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=HJvPObtIxM3vQI5HbUEbV7YeJFPPm5bl2cvj9PL1GhZxyD16zj8DSrHO1kW9URSvQ
-	 Spnztbg97kCis2IPjSx6lxE5PbUDLhRypaJYbbPlh356hHZtvVVJIOOa32A6Cd/BbP
-	 w/M0Popo538HIZXzzcpmhDQwPGqJjhcxRAA5DQJG6w+lUKCRkK0n729vTpH5KBxUjU
-	 EwNRsuFaYXgsmZZNlefNqemekMxAXriurUS1VOyXEqyHtoMfFRVFPXemyTya54MRev
-	 JQ3Qkpru/ZUOEpl6e5dJHav7HzTA/DwaqXZk90Ohf3VbmoIGbPQSQTOIgJWhwr4A7Z
-	 OEGQx2Ky3QoHA==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 5087D4C4E6;
-	Mon, 23 Nov 2026 14:30:52 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Mon, 23 Nov 2026 15:30:44 +0100
-Subject: [PATCH net 2/2] selftests: fib_tests: test IPv6 source address of
- a VRF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A24606A31A;
+	Mon, 23 Nov 2026 14:33:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68A24606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ZxtcbYaU;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=9m7Ugj8n
+Date: Mon, 23 Nov 2026 15:32:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1795444380;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
+	b=ZxtcbYaUCdJCiwN819LIpdx/24DZbqjBfdQLHv34aaGA3g6B99AUapDeSMVBiZcLKI3T/3
+	zvh2H+xflYd9shEF1DUmaoB4pE9tq4NHxRLw1TL+3pyq4dAwkQOodC3IJ9pcaVfam/nZ3b
+	0qRLEUc4B/bPPfvHx9jaW4JMKc0izaPU7RPEumvkTfxbIK9k9jscgM/Bjex0Z9Ek5LfhFW
+	454ibkUJW/nJ5A6c7mDBnQmuH7fMxghGAi5sWAAPImLLNK5rzrSGiEKP2/GZjuuX/ryNKS
+	+49/kTIbVt0lPKuGZKVyLVapuH4rqCR+iXqoePOK0d9F8hnQ5Ma/c4nuOtY++Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1795444380;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
+	b=9m7Ugj8nI5t0iqfjMRoRoinvgwt82fY/F0wRU3yw60HfzxIXFwcVx1R9IMTqDI5BsG8Ath
+	nAsai9NTuok7EuCg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>, bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Waiman Long <longman@redhat.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>, cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH bpf-next] selftests/bpf: Disable preemption around
+ css_rstat_updated()
+Message-ID: <20261123143258.N1ETiMUU@linutronix.de>
+References: <20261121082843.44614-1-kmehltretter@gmail.com>
+ <DN26CP5BB6O7.23ALW6CZUBYSD@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,118 +90,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-2-f667ab150ade@free.fr>
-References: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-0-f667ab150ade@free.fr>
-In-Reply-To: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-0-f667ab150ade@free.fr>
-To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, Simon Horman <horms@kernel.org>, 
- Nicolas Dichtel <nicolas.dichtel@6wind.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Vincent Jardin <vjardin@free.fr>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795444251; l=2772;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=0STye+l3ERrEJAJtqNrYiXotiM7u53bz2yrMtrVkjkw=;
- b=qiwPhBIlFTL8P4Yn34sxtIoj06Mm3Ue5AhtHH4xD9ba9H8BugQcMgpAc8QVmOoq6hpBtK//VX
- +mjKP9j5lUoDgwNA+YSJGRgPe1HzSz+3LwFEWhEyaGjg/4eurXAuvy1
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DN26CP5BB6O7.23ALW6CZUBYSD@gmail.com>
 
-From: Vincent Jardin <vjardin@free.fr>
+On 2026-11-23 00:47:15 [+0000], Alexei Starovoitov wrote:
+> On Sat, Nov 21, 2026 at 12:28 AM Karl Mehltretter <kmehltretter@gmail.com> wrote:
+> > trace_cgroup_path_lock. On PREEMPT_RT this leaves preemption and
+> > interrupts enabled. On non-RT it masks interrupts, satisfying the
+> > assertion.
+> 
+> let's fix the kfunc instead
+> 
+> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+> index de816a4..d72fe72 100644
+> --- a/kernel/cgroup/rstat.c
+> +++ b/kernel/cgroup/rstat.c
+> @@ -131,6 +131,7 @@ __bpf_kfunc void css_rstat_updated(struct cgroup_subsys_state *css, int cpu)
+>  	if (unlikely(cpu < 0 || cpu >= nr_cpu_ids || !cpu_possible(cpu)))
+>  		return;
+>  
+> +	guard(preempt)();
+>  	__css_rstat_updated(css, cpu);
 
-Check the IPv6 source address of a route of a VRF through a device
-that only has an IPv6 link-local address:
-  - the address of another device of the VRF
-  - then the one of the VRF device once it has one
-  - then the one of the output device
+This looks like the only call site which did not disable preemption on
+its own (the other are either NMI or have get_cpu()).
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
----
- tools/testing/selftests/net/fib_tests.sh | 47 +++++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+>  }
 
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index d7ac3c727f704..e211ea5a945ef 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -14,7 +14,7 @@ TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
-        ipv4_mpath_list ipv6_mpath_list ipv4_mpath_balance ipv6_mpath_balance \
-        ipv4_mpath_balance_preferred ipv4_mpath_oif ipv4_mpath_oif_nh \
-        ipv4_mpath_oif_vrf ipv6_mpath_oif ipv6_mpath_oif_nh ipv6_mpath_oif_vrf \
--       fib6_ra_to_static fib6_temp_addr_renewal"
-+       ipv6_saddr_vrf fib6_ra_to_static fib6_temp_addr_renewal"
- 
- VERBOSE=0
- PAUSE_ON_FAIL=no
-@@ -3228,6 +3228,50 @@ ipv6_mpath_oif_vrf_test()
- 	cleanup
- }
- 
-+ipv6_saddr_vrf_check()
-+{
-+	local saddr="$1"
-+	local desc="$2"
-+	local route_get="$IP -6 route get 2001:db8:10::1 vrf vrf-123"
-+
-+	run_cmd "$route_get | grep -q 'src $saddr '"
-+	log_test $? 0 "$desc"
-+}
-+
-+ipv6_saddr_vrf_test()
-+{
-+	echo
-+	echo "IPv6 source address selection with VRF test"
-+
-+	setup
-+
-+	if ! $IP link add name vrf-123 up type vrf table 123 &> /dev/null; then
-+		echo "SKIP: Could not add a VRF device."
-+		cleanup
-+		return
-+	fi
-+
-+	set -e
-+	$NS_EXEC sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1
-+	$IP link set dev dummy0 master vrf-123
-+	$IP link add dummy1 up master vrf-123 type dummy
-+	$IP -6 route add 2001:db8:10::/64 vrf vrf-123 dev dummy1
-+	set +e
-+
-+	ipv6_saddr_vrf_check "2001:db8:1::1" \
-+		"Output device with a link-local address only"
-+
-+	$IP address add 2001:db8:100::1/128 dev vrf-123 nodad
-+	ipv6_saddr_vrf_check "2001:db8:100::1" \
-+		"Address of the VRF device before those of other devices"
-+
-+	$IP address add 2001:db8:2::1/64 dev dummy1 nodad
-+	ipv6_saddr_vrf_check "2001:db8:2::1" \
-+		"Address of the output device first"
-+
-+	cleanup
-+}
-+
- ################################################################################
- # usage
- 
-@@ -3320,6 +3364,7 @@ do
- 	ipv6_mpath_oif)			ipv6_mpath_oif_test;;
- 	ipv6_mpath_oif_nh)		ipv6_mpath_oif_nh_test;;
- 	ipv6_mpath_oif_vrf)		ipv6_mpath_oif_vrf_test;;
-+	ipv6_saddr_vrf)			ipv6_saddr_vrf_test;;
- 	fib6_ra_to_static)		fib6_ra_to_static;;
- 	fib6_temp_addr_renewal)		fib6_temp_addr_renewal;;
- 
-
--- 
-2.43.0
-
-
+Sebastian
