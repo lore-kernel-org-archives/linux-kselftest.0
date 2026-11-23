@@ -1,61 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.79
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795409970;
-	b=yd8+H+n5MBEIXrBzyqPNYXl8KMprVLb07nXOsC1HhFA7jV0NzH8gtdAn91lb/MQsBKbt
-	 sBXrb5WbYCIXyQCkaXE9AMbfMSfVylrjcqZARrHx0tiDYA+y8EPXDrFqjkI46YaH1LPjq
-	 mhOnivoh6irzfDWMSoSYsLAjHxpRJtndyxHzcNXaGKAcVeKCfMJ3wNXvubBEaApOaTZq6
-	 WQEuu8CyB4x+RLsFVaP0JsCOKj/+QRUZAvGux/r2a9fv4sIRPCZ5OfZ7i9K9o9MdzpVrf
-	 PWue2Y+tqEx8tWMHf79BOLV/pwtBnXFciDRuJydY/4fdRQ4raqQmYRGXqankWLHlC9A==
+	t=1795411342;
+	b=zGn0pgL9muZygDjSUnjbqqbtzitxwLtYIz9qR9NwKCGKUtcM0t9y5U2ismvnuU5dXjNk
+	 UZKtVudSINcrYjRl9j2hYQUkTybERNlsba5tjCPCBrPI+Oz6uHtGA5tV3jH2E9CQywoMo
+	 fGLnQVWZYr1A5Wc+T55pPL9rqqpV3pvJ70fYGkmfyngKPB910950+xueO0CKt7VAKKXBI
+	 b2ID+aw1Dg/TNkjD3+hXX2XGk7b0VrzhrsjnUg1igho/xyx3EQdlgKBfj5ceLaLUJ6J8h
+	 76Oiu5SvyVbSdwfXxyglIWrgQ8ZgmWI9Gv9zmt730kBckp1B3SkBlZRjTGBBHufBBCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795409970;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=1U2qKwXOycH72CjwahmU01vcSa577mKU1ZxaRp8GTkc=;
-	b=4XHZzQRX7WYMJNGbSYmo8jWKQP3PbDFX/3oYq3nWZUbRZ1LqZsanYf2ZisyiYzsY+R7N
-	 MMfqCier8Mgskjn43yLAZlv6zLb0phuYex4UQ4yCpj5zfKn/I8+rubwl9DaKA8+IDhdh4
-	 Zk8mEA+1Us7lUJcKsJgwsYMzt5Shu39x88IogM7s5S5hbesxcEbJmB22D+19j7KURmrnW
-	 zJTaw4CvnYR3UdHXl8JWExcbL4wMVvsWfv2aX7UJvhWJq/sPadRm1h+r/tZDUElDkBZ52
-	 +Q3oQYcI5Kort4SbkjeIZ4Ga9UttH1arHq5/W5YM+QN84dfFd9zWKRgGqdmhJZC3sSw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795411342;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=iy36ClD91OuaesY/Ay9KrdFH02xOa7KlfGzGZS847ZU=;
+	b=h23kLX7FuMgFMSYAFsxJeo95QJVzP7RvvnPPRcWlnRGylcOfFNcCruT1G8e7M+ol1hts
+	 Q3LAlecDwzSQoTUNerhqxi1dBJO+zT/kTLT+kANrosF7gzBI2c9Bh/iN3HyrOxHLciygS
+	 IroX3wvSKLDvS8L8/r5mz6UGZYVJptCZlLzd4Y0c8anEi8riL/usXI40FCjuguzw4gMc9
+	 T3dy0LgdVkZNjn61wq7LLA5NbWmNJRCkI0QvM4NZDmCEYGwcY45QyxgrP5FyYazosjA8v
+	 tynZ33LuDv1qb1p+dKUSTak67vKAHZoaBJcxAyNe0ULSOSZStij7VsE2I/VXIQGc5KA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hnIwpHbv;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="rorQCa/B";
+	arc=none smtp.remote-ip=91.218.175.79
+Received: from mta0.migadu.com (out-79.mta0.migadu.com [91.218.175.79])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD76606A31E;
-	Mon, 23 Nov 2026 04:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC48606A320
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 05:22:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BC48606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hnIwpHbv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B652D1F000EF;
-	Mon, 23 Nov 2026 04:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795409969;
-	bh=1U2qKwXOycH72CjwahmU01vcSa577mKU1ZxaRp8GTkc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=hnIwpHbvHzpVcwFrad7ro6tQJJ++RxjZrEEvd2QM5duiW6MS0lcbDyA5fIqP4rLdS
-	 JEyePJ0BvQe18TcvXDslB+50V6HCvtFsElvuJQJnUv/72tiPiH6VN6J+JW7uIvlQD2
-	 Ilga4cIbYkxz22Jhw5XU7yoL+Z3cHXKUfMzx8/oVbf3OOtefwJ1vzWpMlsmYJ2aKXG
-	 E61aaM65sSbqAovSqxUeHUkd3yxqteefWv2EQdylMUjLFQQ3cp2q0ZyeYmZ71XjhyG
-	 RCcwDp6tZZ1u6h4vKHg3cAXyH628tPsgEJumjY/XBPOPpRm/sGHJ26lWKvb8yOZI8O
-	 sBGja96oO3Psg==
-Subject: Re: [PATCH net-next v4 6/7] net: devmem: resolve physical map_dev for
- leased RX bindings
-From: netdev-bot+sashiko@kernel.org
-To: almasrymina@google.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, bestswngs@gmail.com, daniel@iogearbox.net,
- razor@blackwall.org, dw@davidwei.uk, sdf.kernel@gmail.com,
- bobbyeshleman@meta.com, dtatulea@nvidia.com
-Date: Mon, 23 Nov 2026 04:59:28 +0000
-Message-ID: <179540996833.3135.12827693293026536068@kernel.org>
-In-Reply-To: <20261120045918.1239746-7-almasrymina@google.com>
-References: <20261120045918.1239746-7-almasrymina@google.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rorQCa/B
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=D82Nd0c2N+O4K4PuYhgfhJVwNjk6bdjRGsOrqQiK2r4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795411339; v=1; x=1796016139;
+ b=rorQCa/BO2A211dkndlN3Z5a+4JYq5futjumyEheZuePk96gq4WCr5xxiiNzN0OOhnmMz6xT
+ ZYy/qBo+xlUR66fL2yeW3qkEcIsDDLIhN3QNJbE0KaQZEtKr3kVQkRYp3Ks+Ws7sc8Yb57Wk7p6
+ 1lORLH0C+OVV/3QD07YeWkuk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id d4f9441bda4b8cfe;
+	Mon, 23 Nov 2026 05:22:19 +0000
+X-Mizu-Trace-ID: d4f9441bda4b8cfe
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 23 Nov 2026 13:22:07 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: tianyi@cloudflare.com, kuba@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me,
+	skhan@linuxfoundation.org, kernel-team@cloudflare.com,
+	tianyi.gao@linux.dev
+Subject: Re: [PATCH net-next v5 3/3] selftests: net: veth: propagate
+ bad-settings check failures to exit status
+Message-ID: <20261123052207.GG10218@Liu-laptop>
+References: <20261121182217.4609-1-emmaonana18@gmail.com>
+ <20261121182217.4609-4-emmaonana18@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,74 +71,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261121182217.4609-4-emmaonana18@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Hi Omokefe,
+On Sat, Nov 21, 2026 at 07:22:17PM +0100, Omokefe Emmanuel Onanaroghene wrote:
+> Three more checks in veth.sh print "fail - set operation successful
+> ?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
+> "bad setting: reducing RX nr below peer TX with XDP set", and "bad
+> setting: increasing peer TX nr above RX with XDP set". A kernel that
+> wrongly accepts any of these invalid operations would be reported yet
+> the script would still exit 0. Wrap each fail branch so it sets ret=1.
+> 
+> Reported-by: Tianyi Gao <tianyi@cloudflare.com>
+> Link: https://lore.kernel.org/all/CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com/
+> Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+> ---
+>  tools/testing/selftests/net/veth.sh | 26 +++++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+> index 7a2bbed0263e7..6eeb123aaf885 100755
+> --- a/tools/testing/selftests/net/veth.sh
+> +++ b/tools/testing/selftests/net/veth.sh
+> @@ -474,9 +474,13 @@ if [ $CPUS -gt 1 ]; then
+>  	ip netns exec $NS_DST ethtool -L veth$DST rx 1 tx 2 2>/dev/null
+>  	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
+>  	printf "%-60s" "bad setting: XDP with RX nr less than TX"
+> -	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+> -		section xdp 2>/dev/null &&\
+> -		echo "fail - set operation successful ?!?" || echo " ok "
+> +	if ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+> +		section xdp 2>/dev/null; then
+> +		echo "fail - set operation successful ?!?"
+> +		ret=1
+> +	else
+> +		echo " ok "
+> +	fi
+>  
+>  	# the following tests will run with multiple channels active
+>  	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
+> @@ -484,16 +488,24 @@ if [ $CPUS -gt 1 ]; then
+>  	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+>  		section xdp 2>/dev/null
+>  	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
+> -	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
+> -		echo "fail - set operation successful ?!?" || echo " ok "
+> +	if ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null; then
+> +		echo "fail - set operation successful ?!?"
+> +		ret=1
+> +	else
+> +		echo " ok "
+> +	fi
+>  	CUR_RX=2
+>  	CUR_TX=2
+>  fi
+>  
+>  if [ $CPUS -gt 2 ]; then
+>  	printf "%-60s" "bad setting: increasing peer TX nr above RX with XDP set"
+> -	ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null &&\
+> -		echo "fail - set operation successful ?!?" || echo " ok "
+> +	if ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null; then
+> +		echo "fail - set operation successful ?!?"
+> +		ret=1
+> +	else
+> +		echo " ok "
+> +	fi
+>  	chk_channels "setting invalid channels nr" $DST 2 2
+>  fi
+>  
+> -- 
+> 2.43.0
+> 
 
-Low priority / nit picks for your consideration:
+This one and patch 2 are fixing the same issue in the same test. Why bother
+with two patches?
 
-- [Low] The commit message for "net: devmem: resolve physical map_dev for
-  leased RX bindings" describes a use-after-free and has no Fixes: tag.
-
---
-
-net: devmem: resolve physical map_dev for leased RX bindings
-
-This commit makes netdev_nl_get_dma_dev() return the physical backing
-netdev when an RX queue is leased. That netdev is used as map_dev for
-net_devmem_bind_dmabuf() and is locked around the call. With map_dev now
-always the physical DMA device, the commit drops the
-!netif_is_queue_leasee(dev) guard in net_devmem_dev_unregister(), so
-leased RX bindings get unmapped when the physical netdev unregisters.
-
-> Previously, netdev_nl_bind_rx_doit() passed netdev as both map_dev and
-> bind_dev to net_devmem_bind_dmabuf(), so leased RX bindings stored the
-> virtual netdev in binding->map_dev without tracking the physical backing
-> netdev at all. When the physical backing netdev unregistered while a
-> leased RX binding was active, net_devmem_dev_unregister() did not match
-> the physical netdev and mp_dmabuf_devmem_uninstall() on the virtual
-> queue skipped unmapping because rxq->lease was set, leaving the dmabuf
-> attachment mapped against the freed physical dma_dev until
-> __net_devmem_dmabuf_binding_free() triggered a use-after-free in
-> dma_unmap_sg_attrs().
-
-[ ... ]
-
-> Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-
-[Severity: Low]
-Should this commit carry Fixes: tags? The use-after-free described above
-seems to come from two earlier commits together.
-
-The first is 222b5566a02d ("net: Proxy netdev_queue_get_dma_dev for leased
-queues"). It made devmem bind-rx possible on a virtual leasee such as
-netkit, but netdev_nl_bind_rx_doit() still passed the virtual netdev as
-both map_dev and bind_dev.
-
-The second is c4466d2c3e77 ("net: devmem: unmap dma_buf synchronously on
-queue uninstall"). It added the guard in net_devmem_dev_unregister() that
-this patch removes:
-
-    if (!netif_is_queue_leasee(dev))
-        net_devmem_dmabuf_binding_unmap(binding);
-
-c4466d2c3e77 fixed the non-leased form of the same use-after-free and has
-two Fixes: tags. Without a tag here, could stable trees that contain both
-commits keep the leased form unfixed? For example:
-
-Fixes: 222b5566a02d ("net: Proxy netdev_queue_get_dma_dev for leased queues")
-Fixes: c4466d2c3e77 ("net: devmem: unmap dma_buf synchronously on queue uninstall")
-
-The fix also depends on earlier patches in this series that the commit
-message doesn't mention. netif_lease_valid() comes from "net: guard memory
-provider RX queue open and close on unregister". bind_dev is only always
-populated after "net: devmem: always populate bind_dev and detach both
-devices on unregister".
-
-If this commit were backported alone, wouldn't it fail to build or behave
-differently? Could the commit message list these dependencies?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261120045918.1239746-1-almasrymina%40google.com
+Thanks
+Hangbin
