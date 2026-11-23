@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795457622;
-	b=1sLg7N0WS2v027k6EbMTm4kYmQIEaQa/MGcAJr/SVfDj05XWBzJiaP+7tz6GX7fabj2+
-	 CZnwgEHwRZrLGdBa0JmMjvdMulaa0chi1f145U8m18VMiCo3pD2GuGHlRyb0iZ9zy+nB7
-	 fgN7evf1IXhwGewJ7IiOP94oZGhLOLuhcx0L7I7SQ3HAqkem4SITLPg8x/zeIu0Gtl7LO
-	 CNWcpoapeW6tGZ0HwghA0eDTBh/ZfTmIHynVH5mBFGB9urVPi1tOtpIiHb5MzEP3gpl2m
-	 zWNs3zGisQcH+vmFxCsJ/NnYyFq8TVWCeMbLI37bhgXZWdfrLxe386lK6UF3B8qHqdA==
+	t=1795457761;
+	b=jME0xGNoXx7DN1ejIRwrafbwBFPfR0dvMjj0rHqXnlsWNiv51eBy+TKJDqqnKytp+PgD
+	 CGvkiGSTHPWpOz0V9YaUYfu4V3kFCxqG46Y7rWEvGkEXcIfDzsEyKlJEr0sT2wsp2pPcM
+	 lynZJZl1M1xWL0sW+HDDJxJD3ow+n0aOpapHMCljkh1R7akI1qOd0eeU/Kdq4sTDPhCrO
+	 lOsFqV1UZw+nirRhYhoFYP1TmFPqhRRUOzNX/2A8a7OyakNHbn2x929uv3kOS+K510/tU
+	 xCb5pMUrmOkDWRko6Gg35Clc88uqSmLX/pPBoMMCp8jAqTwrui4NhymaMWrJe4SHNLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795457622;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795457761;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
 	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=JF9DK5BWLD1MHzXf1P6k3Cfpg7JcJUIjQB9CILaEZzU=;
-	b=Yr027wPcYmq0iMuY/aLiJ0xHGrNwpuYtr871gRuwc3wLYAJMA9opqhjUg7MprhCtAkwy
-	 zxZhkOjg6mCD1HRPr2//gT8l10P7NR1jGQvvxJWgmqbDBdSZ+hOXeOZbE+vJ+FGkR3uL2
-	 uGsr7NwJhZIFFQga/ZlY7MeKhisu3OfqVyuCjD0BX+9oLkcT4HZSrNtqTPsMbJO12rTmW
-	 rJsvbflfYF4kj4O1LmPk4p9UX3KXtP52RRpVghOpoZ0S/mHTL2+f34X6uEjwfsSfeVOz6
-	 L5Xu10GJop9j2EaVC/VM2gKUA91qXiflftLK81Pw3WnnqNkCoqyBm2dLkWYw0UzDu+g==
+	bh=TFQZ5Vfgmmi8vCbKTEjvDQ3KYqVEpaJ0qjUpV/3d3M4=;
+	b=ky3dOn43K+9rig1NNfkAwsk5jnkPzbWGqq3XlWTBnSIN9Ilhay9YW4uSQIXsuwM1r/O+
+	 B03p0CjsTHD4BOEKKOkZu29U1vVjz50OGGtGfCssOEmpsLmOqpYKHieCnDDwyNdi7s6yn
+	 fWu6IQCnZiN3lvn12xo63SsudEfrNyZRV18HZ/1jYOO7MOuDcc82riPqdd7SbQXwE41+B
+	 mUgto9g6ZMeLBTS5ZzY3tuVqM9Qanpgvmj+/E51OwJUX9Rzwy2H4imzox+ZbZYmUbsbwT
+	 t9ErfATTrd9eQq+A+r5biZppHRljOgpgHn3j7gRO7eIbJExaV/1Kb0q0BOU7nc65c7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="LQWETw6/";
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SnwkbDEy;
+	arc=none smtp.remote-ip=209.85.214.181
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A895606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 18:13:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A895606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF915606A335
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 18:16:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF915606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LQWETw6/
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b6b22be970so1364686b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:13:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SnwkbDEy
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2f06ff94acfso10979955ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:16:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795457621; x=1796062421; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795457760; x=1796062560; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=JF9DK5BWLD1MHzXf1P6k3Cfpg7JcJUIjQB9CILaEZzU=;
-        b=LQWETw6/ke0AGLdFlDY+tyTnXcM9ROpZvf/O9lyXAKa6wTIzmashTimz/E8kj1KApA
-         wb4OsxJEdFKQdpnrylbAc42fPkjMV9KF6K5tcEN6czX3uToTayip/oLkXxIG44Oewo2j
-         MnnCSjRgOJKruiyA99C3EbhjfljR7wIStjR/a84mepa1x1FVSs1JtWc0fFVh63kUIson
-         HJov0EerlPzZQ4dQgXomLFGaaoxSNLWEYtE5swf8nnXCl6H6b0kleCeF4Zv70ND1cx5a
-         IX5N0gwKAPBH3iEnAfOKtpavO5WHYBp1Hokm1R1yD5Y8sY5kTe7kVg+IWh4KLrEAjnli
-         PRhA==
+        bh=TFQZ5Vfgmmi8vCbKTEjvDQ3KYqVEpaJ0qjUpV/3d3M4=;
+        b=SnwkbDEy7R5RfHQQSfC2IHq5U5qRGFOPZ4+4QU1jhS/YzWsRlnPiO93us36lhFnc8u
+         YNMjrxA7nuB4U6dKaj/v2yM647DDyn5+EKHe+cttoR4aotNCn73ospUsA4R+SShhg3c9
+         qaNC/RohSxY8x+n3JgJLn+oZT1BG2OeLoZAZKjc0RhtfPNw/dBUYvibafyH67Wo+/2Z1
+         GzZoB5xSDV8TLW+9QAYybiArBeGByysm5iR/ZbCPWwg2vz7nf92dBaHu6cxIaKQRNb9A
+         k69ZOgu5aF6ijnNWZ7UMHNU8AFIqd3m09CkOgswuxwtxxsLKCLKWTfi7UG6lfHoLDAKd
+         29ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795457621; x=1796062421;
+        d=1e100.net; s=20260707; t=1795457760; x=1796062560;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JF9DK5BWLD1MHzXf1P6k3Cfpg7JcJUIjQB9CILaEZzU=;
-        b=dxnMGTt+PtCItk3Z5sRPi82N9mOMZ4gaOnElGOxocmLL0IIJ2G1Tr1rCSBO3C0yJ+l
-         vSZ/RV4BybGEUbdgN031Z2xC7ApkZFEqA6/K+1cLJjsNmAwr26X8aMkun8CUnjnEsYoq
-         0sStXjJ4uYSVh8ydgExS+HdHTDHYM3rJTYfq1C56i56MNbmBFxY5c5LLLjccORZ2zQwB
-         P9mwzBxE/ybWjH6C1/huFLfDWjQcusG9dR5945tuBD+qE9ynL2Z7NHsp31oUCNKnf3CM
-         reQLkBK2u65YmDI+8iIMlh/bL8K2mRCU7nLDxlJ1eZGuQoBVzLos6DUMY8B2qITXChrb
-         oR/g==
-X-Forwarded-Encrypted: i=1; AL+hErFC5hmpjafOIPmpYm0rSUWdJm56yKqb9grZZ17X3jWz9DtU26iYoXu01W0psfB0UiGmVLm0yPU/6GkohuQpi5M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+/IHBxFcTwcj22L2Lomvw9Y/eiTAEuCeURFYuHPVyGjQoOpxXg
-	s0MnBLeiPnriIcjPnQYgUYC7GKof/V4kLQQNY+Ku65mulBRoPlvA7nwauVVCp2CFow==
-X-Gm-Gg: AZFdTZdKRgWXcNUHq2dhKL1anDVH4Y4fRH0IOIf5bvihKCM7S2VxfYr2Q0Wj80Tj6sL
-	rGeWjMhr1qmWDOJ6jWbX+aBs9yvPOrj80/okrmWHcP4+SO+53K09XsOd40LPkFWZ2z6Kizrf49B
-	fFJn8k1WQGrhl6hvxr+LRzhngTuxUFwAYxxJUzJ4eldn94KfmnL76Yr++gCl9ks9hnZNu5bDbuP
-	Bcmcl6+T+wwG0BJDbDuN0AQcVwxEUXsyUhj95VDQfnp/dWTocoCKSVjjuBErd7gpkOM7HPdsnA9
-	oUyNoHiNhqaH0UcXhXLSpOvEXpjEvZDESfwsKD5YKN7BcIA6iOM7nVGCJWM9CEgS84wRrrUwDRZ
-	EMZhY5c6oJW/luSWVQyPhF5IcaqGzXi1Ljn3F5lqzofNtFUw3qmZay8j00sM9mU1Yl4NNgwriIi
-	rEY1GkRGKelVea3PxnYotkikfxRCkeJeWpLpEEH+TyFVuSrn7a8hU90MNkDWfjNK0Dpw2DUAC6p
-	4L5PWgEg4w9QB/g54CHtWXmcGYevOSyAhAhkdwvgKU4ohf7YVa/FxYnrxzul8953+A/oFoaObxD
-	0LpLtXJ0LbE3eHzqMWNg1sHLMiaiv0Ub2w/7eWynyMQcKO/QiH9HByC34y4Dua3p
-X-Received: by 2002:a05:6a00:9084:b0:89e:9c7e:fd56 with SMTP id d2e1a72fcca58-8c87c768251mr11001006b3a.33.1795457620349;
-        Mon, 23 Nov 2026 10:13:40 -0800 (PST)
+        bh=TFQZ5Vfgmmi8vCbKTEjvDQ3KYqVEpaJ0qjUpV/3d3M4=;
+        b=e8LlS7MyLEx+ZQ1Wnt9GVTCHJaAL2j2QCu28mkw1xTtakr0Iy9h+bo45ieYLcNcL41
+         DQ9ridw7geQXEyiO0RR4E06U6IMH5ZJ96mp7dQICPtbeBsTU6cyWL3VQEiPo+p95LEEq
+         iodXSKCr6Z0WhOWtg65ui0BfSz4FALDGEFL289KlhTNwDcTytYzmRCX/v3uVQcaQzOFd
+         2fSMK3kLs0RrCiDRAywGm21YLDDmlT8/Q64mO1hta2VKE9V4MTwXl3PcvLYjNijJ3uyH
+         Xs7OsRRVhWHYPKhGUMOl2bznp/Gy00FqFTzBalwdDeTKH5bZhoo0U7hyhf3/hMZw0hZ0
+         z9nA==
+X-Forwarded-Encrypted: i=1; AL+hErFD0YBUo3omKHM1SHQMdh8FSYYa1qivbJmAKoomgcdawZzMnDtBsXvij7Z5cYOccTsiup8f0eLyVGRatN6AKI0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/OONRJX5kqUc9LMqCRJFg0tvMxA8shXqZdd+avqxrmDsbfsfMN
+	XbE9f/tq5A6en5s3iHlJGoQ2FL8q2047EMMtvo78nJ5VOtcCHMT5AS5jT2ZBCkEdnA==
+X-Gm-Gg: AZFdTZc1TKoYlR0TLUb/tX4/s1NIQiiIk42XhMO/XVxigZOBKKXLMQat7Las9NI9fjk
+	6AmlXBlhOCzlqLDnnehVoqeKNLkhcUmKis8sfTVuNiRalM1gURemCaF7hxa2GI/4o9UjBBIrvPv
+	f9fUPsqKum9X/tQRweAgwWmyBIIFx0/R/R3sCFH6wwTmIQxHn3bhsm6cujgDINCWV5UEkYC2irR
+	rWjj7xT61EzjPiKm4IMZIO5LUwJT7MosRSV+3G/fBbjTvuH2x/CjdeS5U2ixxT4JeZALirqfr/U
+	cmdG3SE3Hdr1CR1PhYloArNDfGTOWItY2KduhL7YPOcxbqtWyVgao791JqEvKFPNmYY28P6/nkH
+	TVNutZaxdeXXqmnviY8MrmvZSiJPaIdKli8UlA96faj5I0HSuAKy0scItDb06ZEyi8hpb8qGuBx
+	SFIIGDMnfLLGNnW5aWPMHTZnlu+zxJ+FqE4MUExvlb/k3Dc5lOtNv1VVMotG6zM2V/EZuSos88W
+	OK7zGnHAeFnVNRYShEoyQBRg3s6sC4F39P+EdTgtnY3fQOyKuZHXKMlkyxhjSQ/0nnAinsuJuOn
+	jawH3Y7nmDz+STNHIOBfextoPpsHc5aivNXv6xB3duTr2RWGTeiwYXtbu2n4uGKE
+X-Received: by 2002:a17:903:94b:b0:2f0:3618:f170 with SMTP id d9443c01a7336-2f03f1acb10mr114729435ad.66.1795457759518;
+        Mon, 23 Nov 2026 10:15:59 -0800 (PST)
 Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87285c263sm5956386b3a.11.2026.11.23.10.13.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f120016sm57723715ad.58.2026.11.23.10.15.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 10:13:38 -0800 (PST)
+        Mon, 23 Nov 2026 10:15:58 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,8 +90,8 @@ Precedence: list
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 10:13:37 -0800
-Message-Id: <DN2SLUVNO0L5.3NUHFPC0J7QTG@google.com>
+Date: Mon, 23 Nov 2026 10:15:58 -0800
+Message-Id: <DN2SNNBMY48X.2HS6KSB38QPK3@google.com>
 Cc: <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
  <linux-mm@kvack.org>, "Alexander Graf" <graf@amazon.com>, "Andrew Morton"
@@ -104,55 +104,31 @@ Cc: <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>,
  Dunlap" <rdunlap@infradead.org>, "Samiullah Khawaja" <skhawaja@google.com>,
  "Shuah Khan" <skhan@linuxfoundation.org>, "Suren Baghdasaryan"
  <surenb@google.com>, "Vlastimil Babka" <vbabka@kernel.org>
-Subject: Re: [PATCH v4 07/19] liveupdate: Add helpers to track the files
- that LUO manages
+Subject: Re: [PATCH v4 09/19] mm/shmem_luo: Leave freeing the preserved
+ state to finish()
 From: "David Matlack" <dmatlack@google.com>
 To: "Pratyush Yadav" <pratyush@kernel.org>, "David Matlack"
  <dmatlack@google.com>
 X-Mailer: aerc 0.21.0
 References: <20261111002358.1842967-1-dmatlack@google.com>
- <20261111002358.1842967-8-dmatlack@google.com>
- <2vxzbj7j3ga2.fsf@kernel.org>
-In-Reply-To: <2vxzbj7j3ga2.fsf@kernel.org>
+ <20261111002358.1842967-10-dmatlack@google.com>
+ <2vxz33sv3ef3.fsf@kernel.org>
+In-Reply-To: <2vxz33sv3ef3.fsf@kernel.org>
 
-On Fri Nov 20, 2026 at 3:15 AM PST, Pratyush Yadav wrote:
+On Fri Nov 20, 2026 at 3:55 AM PST, Pratyush Yadav wrote:
 > On Wed, Nov 11 2026, David Matlack wrote:
->> @@ -788,8 +797,7 @@ int luo_file_finish(struct luo_file_set *file_set)
->>  		luo_file_finish_one(file_set, luo_file);
->> =20
->>  		if (luo_file->file) {
->> -			xa_erase(&luo_preserved_files,
->> -				 luo_get_id(luo_file->fh, luo_file->file));
->> +			luo_untrack_file(luo_file->fh, luo_file->file);
+[...]
+> I think some of this is already fixed by [0]. It holds the folios until
+> finish, but only in the success case. On failure to parse seals for
+> example, it leaks them. Except, as Sashiko also points out, in
+> memfd_luo_retrieve_folios() the folios are freed.
 >
-> This looks dangerous.
+> I don't think this is strictly related to your series so can you please
+> send something on top of [0] to fix these bugs, and perhaps drop this
+> patch?
 >
-> Since the previous patch set luo_file->file when xa_insert() failed,
-> this will trigger in a failed retrieve. Except, the file was never
-> tracked to begin with.
->
-> While I don't see anything that actually breaks because of this today,
-> I think it is a bug in the making.
->
-> I think the below is a bit better. Although this change probably makes
-> more sense in the previous patch, since that introduced the problem.
-> This patch should just replace the xa_erase() with luo_untrack_file().
->
-> 	if (luo_file->file)
-> 		fput(luo_file->file);
->
-> 	if (luo_file->retrieve_status > 0)
-> 		luo_untrack_file(luo_file->fh, luo_file->file);
+> [0] https://lore.kernel.org/kexec/20261110175855.2437084-3-pratyush@kerne=
+l.org/
 
-Good catch, I'll fix this in the previous patch in v5.
-
-(But luo_untrack_file() needs to be called before fput() in case the
-latter drops the last reference.)
-
-So:
-
-	if (luo_file->retrieve_status > 0)
-		luo_untrack_file(luo_file->fh, luo_file->file);
-
-	if (luo_file->file)
-		fput(luo_file->file);
+Sure, I'll drop this patch from v5 and send the fixes separately on top
+of your series.
