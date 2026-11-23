@@ -1,61 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795446586;
-	b=1IXKWd2z+BCIA/Dya2hw1ELupjBw9Nb9bYJRDLA4luZymftHIhwWYeIQ327UindjL9Hs
-	 WqV9ew5epBs706pEjuWReQCRtT7XEJ1rOxywGu3s893rqY2owAL98ee/VjLCEYX/uRGZj
-	 kHPsldJD5xFeu+E4xOcBJwt4tw8QD5gDrXedlh7tKvtDVWhF48EcNP+rCmkQvUjBL6SMw
-	 eSvoIP68nu7wz47IdCe7DNrBZHHpu6sJI9klOYJXb7Ud7/w4KghtCcj6tAtUjryp4U829
-	 6zCBLO1C7tVL/12puyLppxKPw3uNKY1Uox+o7J162tarfKOxsRRhFJQjj3gFrN28CWg==
+	t=1795446607;
+	b=1zyzwdmBwn+KoHqc0pn4sTpOY7h26dT40F1nyA66TIhixOYVRBRczrotJF7gI13Xx6jw
+	 4p5cbZi5Y8/RlwcV7umtJqwZKA/ULBRenRjrsXSKqSaEKCF33mhK9Y0tLjOTckdNUpdx5
+	 xJCjyR4rrsHrYVKtgpRbB9tTsMm/ZDcqQwsOwQcPhy2loajnoCFPQg8rV/eHEEXLdWh7o
+	 EuWj12h0WqCzuxSpjfJDCc0GLhsPPShjy6h38mrVg0+u9bGLLyLV4Y7bhmustPsnX98+a
+	 1dOxUnjFL07+zHdMvnj3wqo9Ds3m5EQB4JZKux8eXGhWIYouFpCqWsuQCN8Dmoi7bjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795446586;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=dnrRfjLKmIHDzHFw2YMyKPd3bYE0BLJV4hjG0NzpuHY=;
-	b=Jd6OFtQMPmUj2kCkK0IhAO4w7pgXveAzDelTzTmrmRwqfPz5/pS9YlUWsrwWAa6hJU8/
-	 NMddgnss2SjVIsxNs0Z3K3rUEPinwBJcUVw61T6wU758V9H8e0EIn+AD7mAvlodoWN4Aq
-	 ItR2ssAuqgLQwvwRENv9pk+tVbEa0UOFUcTEvpqXHJ1QDhwFHOuAV1kY7Alz/iSWCksJz
-	 UH3ayA8Q32ER+Lrm7PE2iOhF+yP7J0ujh5KHOSevAP1XCvMYC/TP4Pu+2TGa7P+Nvt/+A
-	 Q/JtA+aqsyTDNmy/xHAzVncEJ8h9QN/5hHlR5dSN8kfM5lOrD9sbkDXOfjp4+jLo2cA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795446607;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=dz52cAd06DhrS+w2eA1gjA1iPlJT/ApD0Ocp67pISs8=;
+	b=s/WMhT3OYiVfxcIWk2eVgmnwGMpfF5INspHoOg0cmJ7QOGheoBnTfrjCjv01Xho8Wa7m
+	 EhS6hF4R2kV07om1sUNKO08qx9v/1elArBbHNjWbn9OafWE1E95kdaAZOEDxfBIT+IblI
+	 xvs13WedzOjojnqGhVbyIC3XQJ90HA5TlC4KwvMfbt/S1cVsoElnjKjC5Nu7fwKZAnTFN
+	 fCJGpxr7FxQRypy+rdryoYWhbiQaXpdHF9RkfLmglZmznCtojzqhTA+c5MAIMzi5uSLf9
+	 PU7aJwqZUQ5RMUaJqD1+mTBJaq67Itbz5NQH/nLpWl/D96NZ9Q96+Ffzmb7UE5gmXBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B9x6wQRX;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlLoUKzr;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1615606A31E;
-	Mon, 23 Nov 2026 15:09:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64E606A31A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:10:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC64E606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B9x6wQRX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A2F1F000C6;
-	Mon, 23 Nov 2026 15:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795446586;
-	bh=dnrRfjLKmIHDzHFw2YMyKPd3bYE0BLJV4hjG0NzpuHY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=B9x6wQRXV+lRd06FkMrkTcZJeaS8e3jKOIyXDTANXZqBMOvrR7KOjDyWtCjEChBDL
-	 j5Y71qINNgguMOorYNzL7fKWDS1xnps2HarzILPgiCJxVqW9l/EC7xCStdAaT/eej2
-	 RJyu8K2qXQou6Nv7kib6MPEB7zCBTWIZYIEwOLADYEg6x/lWkemMCtYlnUVk+utNKl
-	 LWINkzV/1Ome0GRNKk4Mwe/dZFz44LhqCnu7ys9jz8oLXgsulh3anRrU76m0FTriFc
-	 32562AhcsRlcrH3xdfq4ALU+mZnwxHQP766Mmn+QFltMAR685VD564pFHboFGfb1qm
-	 s/gtz/HsAkX0g==
-Date: Mon, 23 Nov 2026 15:09:37 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
-	Wei-Lin Chang <weilin.chang@arm.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atish.patra@linux.dev>, kvm-riscv@lists.infradead.org, Will Deacon <will@kernel.org>, 
-	Fuad Tabba <tabba@google.com>
-Subject: Re: [PATCH v3 2/3] KVM: Warn userspace against ioctls while an exit
- is pending
-Message-ID: <awRKhCne0gG1gKZN@gremlin>
-References: <20261123113435.1170711-1-fuad.tabba@linux.dev>
- <20261123113435.1170711-3-fuad.tabba@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlLoUKzr
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b2f59de176so2747710b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 07:10:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795446606; x=1796051406; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dz52cAd06DhrS+w2eA1gjA1iPlJT/ApD0Ocp67pISs8=;
+        b=KlLoUKzrAGBBjUKAIUzd57PO8Cutrhk/YnNNmvLeoU8J31Qs8DD54B8ZjCOkDLESRr
+         6emwUFKoeBsortM28AeKr0oQoZPg1di8fYgh/gAVQrMYMilfo+Dw+N4/5P9SCkzixzvA
+         vdIQ62ZfNnXfgGfYzkmxCR/gKLkHtcX4v6cMggVulMnBKIwxnkAiazOZlqft8gahmHhD
+         a5twDQyC/AxYuV2jp4FUXCxpHwxQ3ffDeBVS0lD1+wD8ECPwVGWDv/1XT8TyeuwShEUT
+         n1jSSigjcGSjbDB6fFqpvWuNMP3ZANkq4U6efkTHBFvP10Mg5E/3S67np9oTHQqoFnLy
+         bhPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795446606; x=1796051406;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dz52cAd06DhrS+w2eA1gjA1iPlJT/ApD0Ocp67pISs8=;
+        b=EVFKE1RPxlCmI8EiFVXBaeaXvyftn22YtOwla+hs14JGyWkJxRBzedAGZW72U4X0V2
+         Sz8sRmAxJnnkAwHYyCufcz32Crx4q+dzoEThdWM9ttasi9VHjBdqVGV8QoY+r6HpJUaA
+         bXQSzfEsRybQgUACtep6EF+DeoiZnq1HibMfvUiL4jA08PlMduC1lrTdGqWJ3rZ1LI6P
+         p25NPQTu8s+JDMUdGCnsUyMBQExVYDmRTvQovgbClGhy9Ap8qNDkiKt6VC6v7Bw9F96g
+         ShC8pZvS6K4vBBO8KTLlybkBmlJxRhp/FLPYUZDYDETDD/SNRlQK6vsEkqAJNUQ2QNFX
+         nmFw==
+X-Forwarded-Encrypted: i=1; AL+hErERca2M29uO2j9kCxHNmvc98EtPymOUL9OLTNZFBpzX0zEiU9nMFL/BNaVQt67jihI9imxDJ37ftsaGmCEVTbI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/C++xKrB5bFZHA47I7T/bJEsJo96kzQPNMkrwu+G2IGdvGPUtm
+	hJxeF+rOMnz01PmTfaV7WLlxyguBlAtFdtqm91ze5gchYToke+CmA0pE
+X-Gm-Gg: AZFdTZeiJkDeXzR7aaOvCQNXaNpAxh8P8hcUJdsjGcvdfsd1+kaolePOresPRPC10b8
+	EXhOaPfsW/5eamQo2SMU3BVyfbpSGMbkJhRre/B8p9DVXBeZJL64Im5kLoKfYbAgap5dai/l+Ju
+	K8Q1CToOF7cxsPMDTPERW790BE0r3+vvhd7S+5tUe+6wTwRAGDjeTaJntfpunZlCKEEklKU08C3
+	AfVtvcHggUTTRB0UjQgdvml84AlB480fy1VXXHV1a2G57l/w24MAMyewqSdGvZYytoWHjnMVz0+
+	GdKJoQbBWLAqfWNGECadcsX9W8NpyhjR7M7Wf18nFauXjJ1SfyQOiUMT7cV0eVYCemxgFociZNY
+	DqdkLotIKPlOHvMtsl692+ER9WM2jaDs5QxYsW4GXUyY/QCGTryOBwUqpPdkNMyacKUVYfQNCML
+	5dziTu9x87hu6Rx3tNx7I4xwA13HXMz+hs1p3UWKnZ/2DdeiOihLGJlvj1NE4ePPmIfAosjnQu4
+	WxWkxzDncec+iupI59K/bR38oFHX7HXsTwaPGfwfh44iKeoi7e7WUppB8g/O3VD+2K9LWYJns7d
+	i2KR4lBs7yX8oubNBuDLDOohV4yUUhDBR5VPc4Yhy4GJxYcUHaERVy7+O05UqlPVK1OXtJl4qdz
+	/SiF6Wy5qc4EjyCkC
+X-Received: by 2002:a05:6a00:928a:b0:89e:6bef:70f9 with SMTP id d2e1a72fcca58-8c87bfa8116mr10077691b3a.27.1795446606284;
+        Mon, 23 Nov 2026 07:10:06 -0800 (PST)
+Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c86d821637sm5956464b3a.0.2026.11.23.07.10.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 07:10:05 -0800 (PST)
+From: Kurt Lin <lylin1023@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Song Hu <husong@kylinos.cn>,
+	Mina Almasry <almasrymina@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	muchun.song@linux.dev,
+	osalvador@suse.de,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/mm: restore hidden hugetlb reservation scenarios
+Date: Mon, 23 Nov 2026 23:09:58 +0800
+Message-ID: <20261123150958.2212229-1-lylin1023@gmail.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <apqBn7tWDHQeMrzB@kernel.org>
+References: <apqBn7tWDHQeMrzB@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,77 +111,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261123113435.1170711-3-fuad.tabba@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 23, 2026 at 11:34:34AM +0000, Fuad Tabba wrote:
-> KVM_PRE_FAULT_MEMORY sets run->exit_reason to KVM_EXIT_DIRTY_RING_FULL
-> when it stops on a full dirty ring. If an MMIO exit is pending at that
-> point, the next KVM_RUN on arm64 and riscv doesn't complete it. Rather
-> than document that case alone, which could suggest that other ioctls
-> are safe, warn against invoking any ioctl other than KVM_RUN before a
-> pending exit is completed.
+On Fri, Sep 04, 2026 at 11:30:23AM +0300, Mike Rapoport wrote:
+> And this code breaks our CI e.g:
 >
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+> https://github.com/linux-mm/linux-mm/actions/runs/33040981840/job/98414290236
 
-Very much agree with Sean's take here that we should instil sufficient fear in
-users at doing silly things (also in general not only KVM :).
+The hugetlb category in that run hit its 300 s timeout inside
+charge_reserved_hugetlb.sh.
 
-I wonder if we could add some specific examples or broad description of why it's
-unwise for better effect, though? Comments below.
+With the stray 'continue' gone, the "more than reservation" and "more
+than cgroup limit" cases run. They expect the write to fail, but
+write_hugetlbfs_and_get_usage() still waits for the full reservation,
+so most of these cases spend 60 s in wait_for_file_value() before
+moving on. The CI log shows this: hugetlb.2MB.rsvd.current stays at 0
+for 60 polls in three cases, and the run is killed during the fourth.
 
-In general though:
+Skipping the wait when a failure is expected, on top of this patch:
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+--- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+@@ -252,7 +252,7 @@ function write_hugetlbfs_and_get_usage() {
+       "$cgroup" "$path" "$method" "$private" "$reserve"
+     local write_result=$?
+ 
+-    if [[ "$reserve" != "-n" ]]; then
++    if [[ "$reserve" != "-n" ]] && [[ "$expect_failure" != 1 ]]; then
+       wait_for_hugetlb_memory_to_get_reserved "$cgroup" "$size"
+     fi
+   fi
 
-> ---
->  Documentation/virt/kvm/api.rst | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 89eb6be9bc6e3..980ef0cdc1c91 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6974,10 +6974,13 @@ to the byte array.
->
->        The pending state of the operation is not preserved in state which is
->        visible to userspace, thus userspace should ensure that the operation is
-> -      completed before performing a live migration.  Userspace can re-enter the
-> -      guest with an unmasked signal pending or with the immediate_exit field set
-> -      to complete pending operations without allowing any further instructions
-> -      to be executed.
-> +      completed before performing a live migration.  In general, userspace should
-> +      exercise extreme caution when invoking ioctls other than KVM_RUN prior to
-> +      completing the original operation.
+takes the script from over 600 s to 64 s in a virtme-ng guest, with
+all 56 cases passing (only 28 ran before), and run_vmtests.sh -t
+hugetlb to 83 s.
 
-Perhaps worth saying why? E.g. (as I understand it) that for these exits the
-operation is only completed on the next KVM_RUN, and that KVM relies on state
-left over from the exit (including parts of struct kvm_run such as exit_reason)
-to do so, so any ioctl invoked in between might clobber that state?
+Song, would you like to fold this into a v2, or should I send it as a
+separate patch?
 
-I see you intentionally avoided documenting the pre-fault case on its own, but
-with the above stated I think a concrete example might be example here, like
-e.g.:
-
-"For example, if you were to ... that would result in ... which would absolutely
-ruin your day because ..."
-
-Kinda thing :)
-
-
-> +
-> +      Userspace can re-enter the guest with an unmasked signal pending or with
-> +      the immediate_exit field set to complete pending operations without
-> +      allowing any further instructions to be executed.
->
->  ::
->
-> --
-> 2.47.3
->
->
-
---
-Cheers, Lorenzo
+I found and tested this with the help of an AI coding assistant.
