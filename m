@@ -1,111 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795443003;
-	b=NF6tNbMZCXCJenKf11P5dueepilzKSTqsOLo0YqbFBWDOQv6woi5gucDUKh3nQFKT6Bb
-	 mAXt52fNf38f4IMM44BeMHQWATAiGp/pVLWkv+FC4Vm639E071AWap7E3Gf09PFBhqipc
-	 wzVjrOIvw2bWO/oW6tYM67btp7JNlx8M3gQSSyO/Jgx47cCYUaSRfAqoUk4MvMX8jmMHq
-	 2yCoEir9C9miGtjSSDGtMvz+2IGx7XS9N7eEM6uYkQULsydfWbMuufvoy4fjJCq+wfksZ
-	 sU8y01Sbmg5EC/oBEc16iPU8b26fn//sRSpkXjL+ShzkJDNcrEodU3iNrgDK4fvwp4A==
+	t=1795443050;
+	b=uodd9qDBZIjg6QoKxZjRKYjXsNkUwT8XRIiCUSbkhYN061uDW/f1pQNmz/lL/2mOn9KV
+	 ScCZ0TFV5khURxaR/Td4aBOlriK95m1sg/7VWc8dJRehsRywVJVtLGgR3KcR9L0jlqqTu
+	 ZgovBtLZdpWJouxt314n4jHxKA+mlzKWzOp865Pb2Yvby30xGS61R34cKntfkHxXSpNrQ
+	 EX7cmXhLuTL65dsmSqRiXCxa/URc1mzx85K63mQ08Rf0fgIYDVZxppaDiLxnsCaEdDu/6
+	 I3dJvwGtSZ3stBOq8exTHCKcEakD6VABN2hiyMFIFwKR+8biQHtPw0tTCgvH58J5N1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795443003;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795443050;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=QgZcTbM3Kqv6H+uxjoWsyk/LUvsEFgztRPahYNF7SRI=;
-	b=wi6jTov36Q4cQWkuzCEowCHfrAShySeArzumxolKLAxrZRNpF8M05eyPJ+7s8ZOopHmw
-	 SgscuJzNDGfItifFLu5vCvYmU32cYmHtEUdYFztlkmS1nStQQF701XNv+A7GXo2wNlAA8
-	 chHSwNeWVOhuElFX1FuXCSP4EaNlGcCP6FUfdxONgkjt/n2WeEcv/4rwVqbGrLl9AmUmD
-	 R2TJ3zO5q+Beb5xJfwncmfBYLV0nUIlODG/5QhkWSPXr7Nwl8GabBr+5kLW5STqh4+vdd
-	 Cy2X3gt9y7P+2J7cR2+KFUIN7//T34ucw+TKl/KG7F3tTwQbyYs4MgvQ0wC9RXeeJhw==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=2CrQ8byNBxWbycTnDL6KtWcb6fchKu5DyLo4nJng2g8=;
+	b=dXdMDYilsc+4+KRqyFY4St3F/c5qFC8GtuqSplSavoJwulbkEsUD2Qo4z8qg8mnQNppY
+	 CPNWGHWgTGqhp47NhPpNqVEsiQ5Rsg24AnypfdVY5r4+kx/Q/JE5Yf3J2yR68Z7c6PrgH
+	 EFLFeBpW45HvAZ3xVcj2YEi7wzfY8OXr+oILWkSAe5qK69uAfgcS2vVswkyadZkDMiS1y
+	 fYfoIGAixRELSdf/60s8Afps1whhlSRB/TqHYK28kELGYVDXAkrhegenbAh1ARg1SEbNX
+	 CqzfwPIHuY0iLvupxmJQppbkuhqG+mrq+1tD+yjMsXtTQR9Ljc8UBhF3XPAXS3h4FoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Paa77cZC;
-	arc=none smtp.remote-ip=209.85.208.43
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=QO9MixTI;
+	arc=none smtp.remote-ip=209.85.221.42
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FED606A68E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 14:10:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48FED606A68E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7E0606A31F
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 14:10:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A7E0606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Paa77cZC
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b88d143160so4002054a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 06:10:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=QO9MixTI
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48e20ed3b9dso2994512f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 06:10:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795443000; x=1796047800; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+        d=suse.com; s=google; t=1795443049; x=1796047849; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=QgZcTbM3Kqv6H+uxjoWsyk/LUvsEFgztRPahYNF7SRI=;
-        b=Paa77cZChyyChxxqH0++ZoHrNdr+ZwfEV5r3GB0JbKAt390gQbZVBTLUQK/SdI9upz
-         xGXlAKnQc/LOSJ125nn0daxggCAOvLBF68qypSE/tHYltYiQq8Ftq7d7gBBmmiTAM3A9
-         iSdT2mbU+8CzXHhDDd6dqQc3SRWZNKOyny4bRIuFL7Gbac1DRYadRvefq4UjuhQ6IJOc
-         NYBjw8WW4q549KfSprr7Q2nsQsODiY+WQPIb9Zc7n5aYf5+nZPXZifAFkI7OPkOSaeot
-         m9b6+PCrJwa55p6340Xphnr9GVkalxKvS5OaP2qnFVst3wc999+6WwFX15JlNcWfWtKh
-         5Jdg==
+        bh=2CrQ8byNBxWbycTnDL6KtWcb6fchKu5DyLo4nJng2g8=;
+        b=QO9MixTI3SP6WzE673jroWTo4bM4VJt8wUzo6e26AhlaT1vPZku4GxlHYdZkB++1gL
+         6oDwK0YsLcoirbLz7+R/HCxBIoWRYpkSTs1ly9d0bUqWGuA/B2RjKRD/plP378Q2yBID
+         HgVgBVcwprrmqfdg9S9BK9pe1GOlQHNzDsrEXaINo05GNOxqnpyBuWbO/D+BOguSdtck
+         51mqjOQaJ99KVbwqD3cLe4GSow9FCrIQvndomR5pb3XB7G1NhkSUPWhFHCKsMXhyR06t
+         X+dHBs69Du8+rc0SQFdHBTb+O4PnXaWtVWycxi2/IVtqCeZotAjOc+BGgpVj1nglB3nY
+         Zjjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795443000; x=1796047800;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1795443049; x=1796047849;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QgZcTbM3Kqv6H+uxjoWsyk/LUvsEFgztRPahYNF7SRI=;
-        b=BEKiVyKicOwzmsySqYqfF3ivMFv9kkZ5oKzRr47szfABTcPprX194NayIVqRKKDGkL
-         Y5HNFV5/XNcapsB60F76fVD42zpdmUZxg/MC8bsbIq6quDhMGyXC9iRDVfZjtYrrR1a/
-         cpr1JxcG2S/h9xmDboDrKrmrNISRG4oicAc4//cZmT+DKMmZ6kmlhHJkYwL9dmrkbj3I
-         XND/g/07Zja6BFWnd+ogVM35st4Kza+ualDY7WLP4Gj/qNtXh/9VQe+22xHjkAuaUkD6
-         4Xpz198ot84BHces1irDLFVz0tPvnpU1FdQMQVw6dweuCx3cOMzCpc7svih/o2nMs2No
-         rM0g==
-X-Forwarded-Encrypted: i=1; AL+hErFTRtGgeOpjrnaapZVSY+Ed+7lf4P8SefAAx06n//YBw0EpQfFZuAcQTqh/ugcFRAIdv6bi6TkkhxllNcHRdDI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+4L4IHUf0SnJnrFa7l9QtQJYbAmzCC1G0kAA1kvrxbO8PfVdgD
-	ay4Xgqeqt9buaFQlE3IDLqkqMKLCwtr4CzyvFv8kLLCxLrjumQIek86hEDjDzUudxqg=
-X-Gm-Gg: AZFdTZcWmcGfy7yHZLkK018WO+dB7S+j7hJVXsjSNdlWg73WsR7FLyZQaUEN4wTl4xd
-	tu8A8N7RrIP3K60zrx3oyhnCXSDLFkiI8Wx+lKmecLB7OK9hidBIjMNESssYroSR62k4VfSCknD
-	ZuMqsAZdq8meBg9ulEjsY8T9h7jc8gxGFQmz3JVc/82hjfH8okcR7tOmEVe0w5A5wK7RRWsVg8R
-	1F8yQoMHeMSl6J5zgTKOMPsCh6P/4Jmy3RhEOotRq0NQ/vHWM285Zn+k4YlHZsTb5e1gXDSy5sF
-	t7dqL/nXf5biSx/66V0Mmd9L9izw+O/cfWnvwvrv8+vmBwXP6+0rsGIP/9CiZ8W+e7VZp8bskh3
-	EzzUKTNlVPM3NDpya6HsVjkGhwuwuPii12JlTC5KRzN/cA7jJ8v4jPoCahEtUUWP1Rv3sFPntC/
-	THLzmx3ydOassTMmIvqsf/WUAQRGghDP7XnGpHI3L2EGB5YeG12bYelhJyqNmIlzkPrzH6Tve6R
-	Tt5C1Y9LqK8EsLGjDepHdfe6csJsJC6d2HE3uRDUT+wQxoLOGcMQNj2rsl7sin6amQG+cv5rbKV
-	/hHfjJBNkntTmhqJc7e3Ae2/M1wq8FaJ/S1Ju0fVIjSGySg=
-X-Received: by 2002:a05:6402:1953:b0:6ba:ad05:3fec with SMTP id 4fb4d7f45d1cf-6baad054b87mr2592953a12.29.1795442999662;
-        Mon, 23 Nov 2026 06:09:59 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:a])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba370fbf0esm5388027a12.23.2026.11.23.06.09.57
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 23 Nov 2026 06:09:59 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: hangbin.liu@linux.dev,
-	kuba@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	skhan@linuxfoundation.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH net-next v5 3/3] selftests: net: veth: propagate bad-settings check failures to exit status
-Date: Mon, 23 Nov 2026 14:09:47 +0000
-Message-ID: <20261123140946.13992-2-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261121182217.4609-4-emmaonana18@gmail.com>
-References: <20261121182217.4609-1-emmaonana18@gmail.com> <20261121182217.4609-4-emmaonana18@gmail.com>
+        bh=2CrQ8byNBxWbycTnDL6KtWcb6fchKu5DyLo4nJng2g8=;
+        b=PwpkiLnPSo8wkeBTwEfbV7Bwonz7/bIVWG8VqczlTSlKSvYprlT0zXwP1NVknGaNfy
+         RdZAtzir6PLE11COgETwJXpJviO2vzTMo0+ts+6iT5R5QjXfX+ZDglrOFbwvTWgM07vc
+         d88oIvewPFavjNxNhEs9bn9hcYhjKmBDwAyj4hrnkzRYBSLWr9MfeoUTsoOD9L0H0YNU
+         Bl7wIvnj3SG+zoKUyhlZcXS1klkL0nMK9Z0rn6Xeh64ySMMmMtHoSnZ6EnjU7Uigc4AV
+         3NKarm3gZ1kK7p9M/5Nh5osEaWSiUT4wlqCNyGcSu7Ss6mtUpY3fCouf7AmB/u9zCSy2
+         ujgw==
+X-Forwarded-Encrypted: i=1; AL+hErFSNPEPNt4a1G2EorOesa9NHQcON7zqyXqXm/NkNFvYts3RLqbkLuwP8lJZcnVgEKc7b1Y8ojzawpTXxKqjuIo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8hRNHxwicwdPRTmV9QDO9GkrZ3xBWgSuK/uInS8bop3YOOJzkE
+	8F9LcZDWIEicWZbVoIxaBl9BHYtjUPoj5oRKqdZc0s5Wlie4LcEV4kMfi4KhYv91naM=
+X-Gm-Gg: AZFdTZdkbb7AoV+LJMSzzHPJwrdNAUIgLW7w/TYHSaT4EsJS6UWTjX0d0g264gPUmVn
+	WJo4e+jKubevfwvtsxEp4tvh6zbuKlPZmdwOTDyoVXg4ELgyNuiWuHs/FWn2fcNJsoE5T8d9xaO
+	Mmiatm1Jgq7UXObedIIQUWB/ib+R8zL/izgZgFJzCSI61La7soknWzCLkwbgpPobHZ81pzPVzWW
+	XY+fDCkWCn4uRvuXhip498rOcDHno53rGuIgbHbPxnUjOsekBYYQB4KovOdF5GNo4h0DFSNy6o3
+	/yZNbA1gjCYYaGaMKG8w7RKJT8Ix0kUv4FzuL2oxXfxUpgW4N9wb1ntnmV2JBHp8d85nBEOZSy4
+	2nQKInM/6NPCwAZfXLbd5K5pYL4fDPghp0R0PsHLU87AxuA1ZitZCJU1B6nkQgzSJ95w4L0W1Go
+	zaUNlga+5aYPjGj0/4RPs+N6MNP/CU24an3QXgnoQGfPPjuut3IhgkKZ82upjByg9ZL0+l4mNlS
+	ty8sw2vLeSJVTYmSVmM4mCipR/sVTcuNXISda5rWKqJHdnknv5TUTvDpo16ayI7cqYSMzxBMBOR
+	7KZTlGtlAIJghlmjLXfbesZ6q/aYaAI=
+X-Received: by 2002:a05:6000:230e:b0:4a6:5a2a:f4c4 with SMTP id ffacd0b85a97d-4abb7d45653mr27120870f8f.37.1795443048856;
+        Mon, 23 Nov 2026 06:10:48 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab658e2d1bsm23448524f8f.8.2026.11.23.06.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 06:10:48 -0800 (PST)
+Date: Mon, 23 Nov 2026 15:10:46 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] selftests/livepatch: run the tests with prebuilt
+ test modules
+Message-ID: <awRJZokKoPXdbyW3@pathway.suse.cz>
+References: <20261110161050.2451750-1-sashal@kernel.org>
+ <20261110161050.2451750-5-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,22 +104,34 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20261110161050.2451750-5-sashal@kernel.org>
 
-Hi Omokefe,
+On Tue 2026-11-10 11:10:50, Sasha Levin wrote:
+> The tests are skipped unless the machine running them has a kernel
+> build directory, in $KDIR or /lib/modules/$(uname -r)/build. They do
+> not need one when the test modules were built with the selftests,
+> because the scripts load the modules from test_modules/.
+> 
+> As a result the tests are skipped on a machine running an installed
+> selftests tree without the kernel devel files, for example one
+> installed with
+> 
+>   make O=/tmp/kselftest TARGETS=livepatch kselftest-install
+> 
+> although the modules are there.
+> 
+> Run the tests when the test modules are available, so that they can
+> run without the kernel devel files. Without the modules, keep skipping
+> the tests when there is no kernel build directory to build them with.
+> 
+> Fixes: 54ee3526796f ("selftests: livepatch: Avoid running the tests if kernel-devel is missing")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-On Sat, 21 Nov 2026 19:22:17 +0100 Omokefe Emmanuel Onanaroghene wrote:
-> Three more checks in veth.sh print "fail - set operation successful
-> ?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
-> "bad setting: reducing RX nr below peer TX with XDP set", and "bad
-> setting: increasing peer TX nr above RX with XDP set". A kernel that
-> wrongly accepts any of these invalid operations would be reported yet
-> the script would still exit 0. Wrap each fail branch so it sets ret=1.
+Looks good and seems to work:
 
-If you squash this patch with patch 2, feel free to keep my tag on
-the result.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
 
-Reviewed-by: Tianyi Gao <tianyi@cloudflare.com>
-
-Cheers,
-Tianyi
+Best Regards,
+Petr
