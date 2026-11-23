@@ -1,96 +1,42 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.43.24
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795421435;
-	b=UruPV6mEMAFCFtUyrtifZFZ3ZG8aFocsLWfq0U8K1/ukOrvJjAI7KA1RKQE99D3qrXQn
-	 YLp35Ng4TVCqVL1Ueop2JtVKwP4IDXSu6+bjAmIqS/SdPupaNG5JDFQpEPDEcUEcmwjMc
-	 QLODPTtoqV1MF6JDMt9dHo/4zYwNYlzhQXj56oOzXZwQ4QQBn8qe2btlZQnmLR5/yq6f7
-	 sVq/hkY54VX8+Z3dyeLGv2U2Im40+oa0xrDuYgdbJaMmR4zrvD5u0Z6g0uYZ4lcRrNRgf
-	 zCGJd6n/tPVNNAj85UgXoMyC/5lXUjP19k9zuA3bSJjMvix4zWGBLJrfxehEZQU+PAg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795421435;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=yFCqd4c8p9Cms/L1QxIcwZsgx91DTEEaA9d4yZVBpyY=;
-	b=Ls5JC1rNRybH0GvlNfxR408ophipr06C9pnQF0MfV8uxSiN4Y1Nyas0P9jf1wwOc//Zc
-	 6sHQinPaHoaJb0om9dBpvwaneoJG0g+3qg4ASxI75B6jXggu3KcnQzt3iwP+NSr4+qnZh
-	 x/jElQRsk0aj+ksXZLzRezB+uD2Wl0Bd43NP3K9fSgil0Qt+dNts1Uo9GbUQgyuJOl6e6
-	 N0Dmnwhrp7u73yTq6gtIGXkMxWVzWawHr4t88rTQZ+AGzfOQC0lJPNZVVRO5aadG0XFQj
-	 5UpbDGnevqPBO4NBDoB0kujT9uP71FeDeK0NzyS4crRJGv3j65cILjsw5g4db8dFwfA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=khLgo4PX;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.43.24
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012024.outbound.protection.outlook.com [52.101.43.24])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795422982;
+	b=dgb7kg5aa6j/qcnviD/N4Q20gXPVotCsskqtXP3HMon57xtCkVPQDQ2shR/3s9CojGE6
+	 xRWPuLLjjehGM+xQayjQBjZ8dlsyCuxffn/6dEvqEGiECtdZXXwV8n9it2QPpar4zYOOs
+	 jWopkHTkQI2hVlkKXqjnNu6wo20Nmb7cLI6jGLeDNi1kUmwk/+8iK7LF8rDMjYqcmSCGh
+	 NcRaIwf654/Ca7SraMib4ZdKdY7XuBMCiRN5ssBaaqAHXKDZNTwCxPhIC4p74oSHx9H7p
+	 fsSduPlslPWhV7jiz0TRSMEwJmtiO73MNzZV546sgxdYB/2SaKAVEPjWLPOgEBC36Xg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795422982;
+	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
+	 X-Spam-Status:Received:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
+	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=YQq5R+2ayVIIHKhYloe/MGgwdbjtPC3ORQbDZEoOQqU=;
+	b=xN3MsuPYxZe9WGSPNqVFdKqK8iY7SqtAMJ7LUG+dBkyy32c5JN1/LYITFZmCLA/31VQ7
+	 TtspoNpZMAqwO0QsOlfsQQskK9Bj226vf4oEDufndIXExx4pg3UtfP7ndVLX1+O4iCkdl
+	 f7Yu1uc2o833p+J8BCNpjTCCy0MBQWHIeoMzxVDVjTp3TN1XAlHbvMUDxBXacr6OuXk0J
+	 Vq7yjfn4kOYx34hpPanNRacyvO84a9xyvucJG6oddjqFPdbvDdobExud9KKS3uVM2Wld5
+	 GBeQ2inAtHXzF1F84mtT08SoYUgou06oHmDtAvscAizj1Od672DaVl56K21WepWVe2Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=davidgow.net;
+	spf=pass smtp.mailfrom=davidgow.net;
+	arc=none smtp.remote-ip=203.29.242.92
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDC3606A6B7;
-	Mon, 23 Nov 2026 08:10:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BDC3606A6B7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=khLgo4PX
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Nj4ixymjJgCoD+lNcWpDXYEd001ZiLS2yH4MiSxTricbqEyV/RaIxyQQlyLZli1CnkdfovDOur3Ys3Lv+/ce4gmsd7B6jp10qZZjFDnQP8X7Fsi70Q85jeqafM2PGaMPsayXsPyhkYF6K4AjrdT0ODCYMAbnIdnxG51kCvG3fAk+lH5EPvkJfzfxrbKcbgY1kVrCw9fIwqwImPVG8+r5ufLtuIFiyrfYJS4gnxKxMeISSeAFUyE6mCfbVaiFed3Q74H1FFvB0EM8dUCi111kXnyvy2zI4Oc4MUr92JtOzfWqgUltNnrqFYQ/RNGBu6rpfOv7BPKCNWC2MJP1QoniFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yFCqd4c8p9Cms/L1QxIcwZsgx91DTEEaA9d4yZVBpyY=;
- b=egNXAv7kxCONVx5yHntw9NH8DlmzM7/Xqp6vzOBhpYM2kNSU8lgRzjmj57cDWlD9nExazwH1oRj9BmAhm8kgqyYoH6hcyjGeYQOPLghgd/MRVW8LsxiahwUOMis0Sk9L7uv9rTlHtTo0Gpp4jCM59lmvR5fUpUVK8UTbbJub8to6VYeQwpB9N1o3b7NN00Qh/FXc8DVbFLerwKgw5fvH8tFre2clctb8f222ZHWSgS3fRgxc7qTs+AR/2BnEpbAfvllAanS7O+P4Pg2zPEu998JGU1gtPuyfTd9+w9QxDpD4djufgI9vhA5hFY3/lavbIm5FJZjg9S5S+huv5wQ+mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yFCqd4c8p9Cms/L1QxIcwZsgx91DTEEaA9d4yZVBpyY=;
- b=khLgo4PXEloBBRhk2wRUurzufS6ke9cogIIBdc/Q06t+L94fzL3AFFTOtBGGXFTr9GlHUr0g9/EFO2FE0Ll1HaNRHmM8aCj6p+/gJgmXWv0WCr0Q/Ek+bYm5xfTq1d6beREPCrcdF2HpKvsF8gw/eYJZimKYrhzOnvzzgXgfA1KMDeEqmonyWRfnac4GLbby0EdU1Q9b4Miz2KUOHqv20fePTFDk8jQ6SAecsub6hcrhCP3Qfli3kBjZpnAlIec1lmErpMvn8sbKiZ5fF7txLYuSM/aPtED8VPMDQew/oHmlTTCJqLPrNwmTIkU0te2lJShcZH+PoXp4JphOYmfBmw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
- by CHBPR12MB497579.namprd12.prod.outlook.com (2603:10b6:610:33d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.14; Mon, 23 Nov
- 2026 08:10:30 +0000
-Received: from LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
- ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0639.012; Mon, 23 Nov 2026
- 08:10:30 +0000
-Date: Mon, 23 Nov 2026 10:10:22 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-	pabeni@redhat.com, edumazet@kernel.org, willemb@google.com,
-	horms@kernel.org, razor@blackwall.org, dsahern@kernel.org,
-	shuah@kernel.org, bridge@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, kyuwoncho18@gmail.com
-Subject: Re: [PATCH net 2/2] selftests: bridge_mdb: Test failed source list
- replace
-Message-ID: <20261123081022.GB3126678@shredder>
-References: <20261122072504.2623702-2-idosch@nvidia.com>
- <179541888360.3135.4706984344785286288@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <179541888360.3135.4706984344785286288@kernel.org>
-X-ClientProxiedBy: TLZP290CA0009.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:9::18) To LV8PR12MB9407.namprd12.prod.outlook.com
- (2603:10b6:408:1f9::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876E4606A31E;
+	Mon, 23 Nov 2026 08:36:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 876E4606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 5DFEF200DE7; Mon, 23 Nov 2026 16:36:13 +0800 (AWST)
+X-Spam-Level: 
+Received: from shelley.lan (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id B745E200749;
+	Mon, 23 Nov 2026 16:36:11 +0800 (AWST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,67 +46,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|CHBPR12MB497579:EE_
-X-MS-Office365-Filtering-Correlation-Id: 70a4b1e0-1a0e-4952-1099-08df49393da0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|7416014|23010399003|18002099003|22082099003|261026140227099003|261026121527099003|261022105027099003|261028144727099003|56012099006|10067099003|4143699003|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	hvVa3H+kK3oGQ/qDLC7J3zEKD/HieDSZ2r4n0Y0A9B1x17BAWnW5Fqm5m290h4ml9SYCj3LRhTXHi1ey+KH61pfL0kUOcif3EqgpCClJTXvMid0DbKT4ydowWI1D560PmNc+1Wf/Cx7nq2SvMkPClxNnyNRA+GnriAVgcdFdlRmVEPwPw8uyUlq5rJL1d1UjNem7RMHpPS/g2PhPGt/b9vn2GffT0A/Cqxg5jrktqmOVND/xexOkE/ZXUl4mphVuLPCYTUfDYrSyl+6ds0/8Ky/FAYi6CD1xkSLhtvCK9wFBjBnjdjh8ypYOVL2K9WTTdjf+exZ9nPT9AIGsYZ08q3BtaNAKx7Nq4VqDEssLkuhLkysoaxQXzwNqAdtX6NS2NkVgoJ9DxcQDlAt25tqW9toSrc/txMQjrr9oM2KC1u/hT8/ewy+S5hvV5DHBw56zLhdTKq/CIYdQJgZ/iC5w5wzB3SBirOwC/doH30TUNImC0omls6fpcH6TDPFno/G/JVfK0LjKhMqNUkxudagpx1soAx8AauyaY68+vycx/YKSjLOv0yh5fQm19KCu/be0XwZ777sDnddsig2CXCHcwMCy4VXsuu+CKUEwWOx/YT7SSgKCY4VY8V0YyhRW6rfdFAIo2t4lucijgB162hItuQVJdKwvSsHLkeU+wEo2N4I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(23010399003)(18002099003)(22082099003)(261026140227099003)(261026121527099003)(261022105027099003)(261028144727099003)(56012099006)(10067099003)(4143699003)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QOrY1kyXDXIIGhbmmdoNtbXLUoGPH+sRNmqVB7aVch+x5ykJII0gq3NItpFq?=
- =?us-ascii?Q?+zUmM6moa2HG3Z6d7L636he+giqpUEahcSrOYm+jc9VEdh7gAf/1zA8LU5MJ?=
- =?us-ascii?Q?5XDx0hyTT+HFih/eri6ek6p14VL2j4G23kzDX/B0+mSodYxWxpUnjhLq2JX4?=
- =?us-ascii?Q?GNEINUanLGSptMc9JyQ8T10DXueJGLR/3b4YtZzv0hWwimiLcXT/Q2alTEz6?=
- =?us-ascii?Q?sFXQxTf3waynl0UsX31uBPLmxh5ezctxIxWtBYVS3+jybwRSffjcTopFHy51?=
- =?us-ascii?Q?nEWqUMro4HsECVhTaf3e7muXvmJLyA3Xq+He+42Rr4nATy1b3OnfTV2YlXCO?=
- =?us-ascii?Q?jkotAhllQjt4/uBEcg6NAbM2N+QEbYfpGHbtBA7fY2DOk8o+jLX0U5dVldt5?=
- =?us-ascii?Q?oW4G9q62xFUjr2yzSrIOEOQAJEVJdoiORK45IVg40Q+ZJad2sd8qShu8Q6CQ?=
- =?us-ascii?Q?vT5JGkl8MUgNF6Bj+ZroV35e/e/AWiEbojOid0ODTY96jCNfPNhyDy11HJr/?=
- =?us-ascii?Q?wfbbZoqUOKndyKtcgdMHC52m9YbCfuUXaDP1crFxsyt0rHluIw2yLYpMJRko?=
- =?us-ascii?Q?237NA0cPVfYPcIOg1fgnTWIZMRS4cpCbMls4eZ4inouM0t0WRSY6HoglspIL?=
- =?us-ascii?Q?xQ9JiuxYrDrKYzkSxk5SodS2X/kscamjT/AGGXYW/gcicXtCJlBrQDgs3vsz?=
- =?us-ascii?Q?t6fqxtrCWnGR69o4HHS/JlhSBSKDNyOq5kCzAFIPfy3ReMoQflD8PAy9rhR4?=
- =?us-ascii?Q?PpVrlag00tMVvGhjIWpcjUCuUgA24PXSHvQbrh3x2EcA/pHl2XnxX1pRRpv5?=
- =?us-ascii?Q?YGD5sBzwP/e7V2bqDyoXK3GR4ckI1wqf4QuV8hGuNj1LaTJQaTAADs8VN5tD?=
- =?us-ascii?Q?3medhHz6LerDr8/OAehHskTxXeqIQ4bK7P1W7WpvyOhJ38yZ9B9R6bl3w8N7?=
- =?us-ascii?Q?tDX+0vgaNZEmGfqzoz9wCfb8n9fv5zFwJOb9Q1sS1ghtbkquqy2we91McpQg?=
- =?us-ascii?Q?WEnGrL11JrKiZsT8r70WIE2g0SKtW0k3bPH45V6IbVssUvUDUgzA2YC9gnuG?=
- =?us-ascii?Q?66gc3eH1wnja3IRc3T7KLjIHMAnBJRJP1AqmQB+ks9JD28YP+trxL475JW+R?=
- =?us-ascii?Q?sYCrig+91gEUQO14QEkg1I1NLdnaq2STJRlMj6zNc/OYZqV4bdlec3ibnAcp?=
- =?us-ascii?Q?zTgBOVmLy+A177I/CH8UrQfUdKha6IqFLiwI2cXSJWQS/FDNdp2KXPr7ovZO?=
- =?us-ascii?Q?NAYlIAs2l/f/nbYFP3rOz2DBKDev3AiOE1gbDAGxDG3RnxZicmn8qERlUBnI?=
- =?us-ascii?Q?b1Uv9kTH79ZJMsnB+Bq2QX5r5P3oH8sVWkCb/AIHIEkPGmbHKz9C0wBKnH4T?=
- =?us-ascii?Q?xs6aNGJxEne4RL1P6IvXT8Yhh34TtZj+9TsbXJNmvklT1YLaB1jO+C/Z6W3t?=
- =?us-ascii?Q?FajOBoJYnJWTjE0SgSrwRGj8wTWW/GvGFcjY9eyS/XMZGDQMqiYbKoUVAmCh?=
- =?us-ascii?Q?fJnNh5rH/sV82VxkFaXpt5D384asVkrjVHLn2hM0VSD9NXg3xsrZGxkw1Kzf?=
- =?us-ascii?Q?HxIRufQ9R9ZENyjp5fkR2Kg6SHk1Yv9lf5x3V9SphuiGScq7kHQ4mtk9C7me?=
- =?us-ascii?Q?FBF3NcUaW3ZrehGvLKnGeLYib5k663xxPcscgd+Tl9jy/gimGBJJXjBeUUuc?=
- =?us-ascii?Q?Oxv+IzXcjqBfCPssUa19Qk5gPyKirt5Mcj33vuRPd0N12PGX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70a4b1e0-1a0e-4952-1099-08df49393da0
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2026 08:10:30.6729
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: REqVHsZpkX7OXYIHJBL4CiZM2oZDz9ZCckCoBriOrqp8h/UQMQNzgR4SA99MQZP18Q228DtklI7EcYxOeGrQ5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CHBPR12MB497579
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] kunit: configs: enable power sequencing kunit test
+ cases in all_tests.config
+From: David Gow <david@davidgow.net>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20261023-pwrseq-kunit-all-tests-v1-1-a60f8637527c@oss.qualcomm.com>
+References: <20261023-pwrseq-kunit-all-tests-v1-1-a60f8637527c@oss.qualcomm.com>
+Date: Mon, 23 Nov 2026 16:35:58 +0800
+Message-Id: <179542295841.535454.11266216634040814856.b4-review@b4>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=334; i=david@davidgow.net;
+ h=from:subject:message-id; bh=9MR1xPUMfveOhrhPbpSQmFvgrJfEW/DAQdeMmmiYImc=;
+ b=owEBiQJ2/ZANAwAIAcYipzoZDNtCAcsmYgBrA/r4RcSggMqdwtKsSO7cGab7z7z0GA7cpK/y9
+ iGKaFUrTXuJAk8EAAEIADkWIQSmmTCaqhqZOsxDGC7GIqc6GQzbQgUCawP6+BsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQxiKnOhkM20KkYRAAiHD218XlVwIlgAKXj1GZOnD0zZzRDhl
+ OMtPcGBM8nNoiqkyCoIiU9kMy9zm16kJJHBy+X9/NGzbZ866TUx4kkI0/h5R/DpQjb4bkALBVuM
+ y7lTpS+eS/2NFejMA7J9y8OX5P4XwYZhHVt0LzBytlbc1y86XywqGhLhaA+g799nz0pZhMaXFmx
+ nwUmG+jTKn3Yt0e36YiP5VzRkpYpCnt3Gb3oohJTzvUL/GVhQW5caJSts5gmhtScd4+0YQtT0zn
+ RdilTFkfaN/BmEU1fEyrROpGDbaIi2PUI0u8AfmnWrIHSnGmu7CvPq5ahgbClpmYc2EwhmqSh8w
+ B9GiBW0QQS2E0aUVeh8dSzVNdybDKI1ICwx86/kh/flB6ccNQ1vnVeAeKbgXumO2Y4pT+Theffo
+ vOaXTgUoLYIKEqrgx62xZBlj04o/7Yw2moUxvK+pSDp26954uj/CUvu5lvSgMkJwJ5QfVw/w226
+ HlJ3qVZvyt3EQ3owkrQaR1KLkgP7pYwd/OuFRn+xMJszxJHbyN2PB4RzUPkSXRA+a2swFzeAN7L
+ cn869iJExOVUrHieIQf76yWVmb5pkuBMD7dywLsYdXjo0zSBXJ68fyZihMEnUuabQpqD+WGif2a
+ Oc4svaJQy2hqJecuEsm7e35OY4/4Nkr4z/MmL9LVSmXGgQyA5KzU=
+X-Developer-Key: i=david@davidgow.net; a=openpgp;
+ fpr=3B0A53B1D9DF6AAC59C230322A821C5AD66AB03F
 
-tl;dr - I believe the patch is fine as-is.
+On Fri, 23 Oct 2026 12:07:49 +0200, Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com> wrote:
+> Enable CONFIG_POWER_SEQUENCING in all_tests.config to ensure the kunit
+> test cases for power sequencing core can be built with this config.
 
-On Mon, Nov 23, 2026 at 07:28:03AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> [Severity: Medium]
-> The add and the failed replace both use temp, filter_mode exclude and the
-> default proto. The test then only checks whether the (S, G) entries exist.
-> Would a partly applied replace of an existing source be caught here?
+Reviewed-by: David Gow <david@davidgow.net>
 
-Does the patch claim to fix that? Does the selftest claim to catch this?
-No.
+-- 
+David Gow <david@davidgow.net>
