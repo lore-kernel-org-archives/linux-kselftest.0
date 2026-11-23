@@ -1,57 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795473157;
-	b=NGAuzZ5Y/OjoeF43qOVZ4+C18IB7v4Q2Urt5F7ridxvSDO7fpOGa4tzS8Gdkn+qFDzVK
-	 eajjJAhSswK0oip2PWa/eN33eB5AE7vIjjbKt8SZ4m7H/kQkaAATa7PFZdzBJcNHYz5WW
-	 nVRG6ytV31ocNnhXE4gjciWyJ3Q4b7Oe/YQhcbN7HLBRBxCWze4veSkgf1AnvITzMb8Fc
-	 Gcy9CH+ykiLG5DCzomkUReZWYThMkrtwr2sODtdEGLR4TDPld/ot6W3CBkGXtMCLZlhEf
-	 gWGtebT0tgPeB0aw5J5+2w8+IMz/pdYlo6DCxuGm7Ljoa0o+c9+mtXaZ4LTjGmh6fyw==
+	t=1795474335;
+	b=p2dOgdOEvqAFBropP4AeBJ0NhAkGbZTepfdUQjoJ46y7mYtle2nUakScrxCe/L0UAgOD
+	 LnHcZIRhKRIJer7tuyhFD+ib9kpS3uyeNw/7NSlEA7f7q2ufJIcckEVLobrtDo6hQKlML
+	 DTc+o0J5f5Lkz4jyPHN3yve9fNIiCiO9zpiSGU7rOD/v1scxrbvWEBVQFQr9ie6nqTxsn
+	 0pVQ3pIFQXlQXyW/m3GT41DacSS1Okrbij1mfTliDKOUHalq3WueDH0AJV+JfSBs05oK/
+	 CuE8+WtQRznlzI4QqzS29KAteCdM9bAtv1KjZkSLkzkjc+VV0hBreH321fd9NaXF1SQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795473157;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 User-Agent:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=VZBmX+wJbHFR1TFVelBEGt/GVLJYNNJoOLGKVI23VUs=;
-	b=L4xG+eCTlYZHrmoehOGK7iXdAzu1m8Jq4t+rDombrHalXS6qCbgX9RyFtyvRq7+RyvHn
-	 GWaGDaG3qAlctI5WTiSivhwoee+qsb8jOTW1PVC0wGVusMN8XOsd/nX9HfPX0xORbfm90
-	 MprGZsIxN4m4guo14tt0k8u8eL8UuMzfEj3V2zg9Q+xjIsNNt45wAV1cIRe1WYsO4ZgjO
-	 sB9hQlcT/REZoepztIlwXhdMH0Jv6pVAPr3J1dEZ6HfUcNi/DEJDSw5ep5ffRqm9b0Krt
-	 CuzfDgZtg+FSES7SM9qtFiiDe78kUgHYbKjACS87WwaYy4UE5nwh5xTJYOvscEkyvZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795474335;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=UmTaUK4reXUwzVb93oXwVlnxEqXXaEADfB6OR4M7V58=;
+	b=PtZKRDbcPc4I40dXzGStm9Rnqq38AAFNCmg2wZcteG2WwAAFpJePee9hgMvHwpjncaZ/
+	 dGim1WIUBnvVKVBwJ4HSDUewzSKRNx+Lg9yGQzFXPn3BXt/X/TpGKJROCpKl2Tgx7QjqD
+	 mmXY5epxIIlTt3pXOXcCS8o8mQ2v5Y3gXxkfxoIN8mc8nSmjp80vZ+fjCAjCsJEeFNyC7
+	 wtrEUsfOsXFPpIIbn0bhtfKPMdz5YGBqzkpnc7UNScP/6Eyav4AHxuvOJYbGo4xPj2Ubk
+	 4ciUfMmKYfNGR2GcycD01FWaITtd5U+Tj9i1AWI7JyiFOT8YX3xYEOFokHOpx59UVcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ph/1n0yx";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f+3vFAhu;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46365606A31E;
-	Mon, 23 Nov 2026 22:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 7E103606A31E;
+	Mon, 23 Nov 2026 22:52:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ph/1n0yx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45EB31F000C0;
-	Mon, 23 Nov 2026 22:32:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f+3vFAhu
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id BEF0E1F000E6;
+	Mon, 23 Nov 2026 22:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795473156;
-	bh=VZBmX+wJbHFR1TFVelBEGt/GVLJYNNJoOLGKVI23VUs=;
-	h=From:To:Cc:Subject:Date;
-	b=Ph/1n0yx+rsyjeZERwwNt6HBU9wJtqFiLdUYajjIqk5gcPQhHvyXJFz2FdeKEflAG
-	 scJ3R7Frhzw3GDTuoq6TUwpjuT6T821KI4RHCa6/Zt5Js9SFuYxcH4asTsgBQuCpuM
-	 7VOJ+7I7ETKMm9BkBMfgTG9g08cLkKQfgv7v/JnBrqF4l9QqHq3mHMgR8/IUyRHQOZ
-	 oB1hBemONwpgkpF2LvbAbUaBsQg30ZOngEf2OUTAgSYHffMLD5XOdMsYxljueOxwEi
-	 oqztnJ6f+y4ek2RhU+7gf0L5E3ybUdd8w5u3qeGRnTIBzE4tgMwdtUtuIKFxBMHRZd
-	 kA3Wy9+vnWmww==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/ftrace: Remove non-existent CONFIG_RESERVE_MEM from config
-Date: Tue, 24 Nov 2026 07:32:32 +0900
-Message-ID: <179547315291.329986.16935545207857031949.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-User-Agent: StGit/0.19
+	s=k20260515; t=1795474335;
+	bh=UmTaUK4reXUwzVb93oXwVlnxEqXXaEADfB6OR4M7V58=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=f+3vFAhuzOymo1wUHu3CjVrRJ8d97kRmIwZcfNT6OA1diC3POPAbn26MrKqHAAO/U
+	 3xfHUsCYISsflIvXy0pEIgZu0CepKwoQEUQVJsYermjHB+B0whND6XDCMtNxqnzu7N
+	 sY2HNaGEj/JzD/9EaHsanI9E67O1NNEIMNnf6LH1Xufe7WcGYo/o0EHsYi6L2UIQD0
+	 vBjtguOuXzWh15X8b1DP6ZcPTjzLdhidOalEs0xyw3pHnpxXHvR3rC0qZQIGf3D0gf
+	 3Q4ZZSYKrRrKxiwz1ZEjfOqsDJfnX+9GD38vsVl3n3TLdDgt0e803rhdLbrwHhN8LL
+	 ZAdXHhNHrAMbw==
+Date: Tue, 24 Nov 2026 00:52:11 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	"Hallgrimur H. Gunnarsson" <halg@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Serge Hallyn <sergeh@kernel.org>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	David Howells <dhowells@redhat.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Singh KP <kpsingh@kernel.org>, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	containers@lists.linux.dev, keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for
+ user namespacesg
+Message-ID: <awTDm_EpFNwH9uEy@kernel.org>
+References: <20261119104208.782900-1-halg@google.com>
+ <20261119104208.782900-2-halg@google.com>
+ <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+ <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com>
+ <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
+ <awSVO9Zc-233M7_P@kernel.org>
+ <6a0539de-1a66-4dfd-a21d-aee48ab18f3f@schaufler-ca.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,48 +80,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <6a0539de-1a66-4dfd-a21d-aee48ab18f3f@schaufler-ca.com>
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+On Mon, Nov 23, 2026 at 01:58:41PM -0800, Casey Schaufler wrote:
+> On 11/23/2026 11:35 AM, Jarkko Sakkinen wrote:
+> > On Mon, Nov 23, 2026 at 09:22:29AM -0800, Casey Schaufler wrote:
+> >> On 11/20/2026 9:09 AM, Andy Lutomirski wrote:
+> >>>> On Nov 19, 2026, at 2:52 PM, Andy Lutomirski <luto@kernel.org> wrote:
+> >>>> ﻿On Thu, Nov 19, 2026 at 2:43 AM Hallgrimur H. Gunnarsson
+> >>>> <halg@google.com> wrote:
+> >>>>> When a process creates a new user namespace, it receives a full set of
+> >>>>> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
+> >>>>> in scope, several of these capabilities (such as CAP_NET_ADMIN and
+> >>>>> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
+> >>>>> containers never need. However, there is currently no configurable way
+> >>>>> to withhold such capabilities from user namespaces while still granting
+> >>>>> them to workloads that require them.
+> >>>> One thought (from the rootns thread): the other decent sized attack
+> >>>> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
+> >>>> bit.
+> >>>>
+> >>>> A sort of horrible solution (but maybe not so awful) would be to
+> >>>> declare that the bits in cap_userns aren't actually capability bits,
+> >>>> and that you need the bit in cap_userns *and* the bit in cap_effective
+> >>>> to do sensitive things, and that mounting needs cap_userns to have
+> >>>> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
+> >>>>
+> >>>> I want to sleep on this.  It might actually solve several problems,
+> >>>> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
+> >>>> or whatever.
+> >>> I slept on it. Here’s a counterproposal.  I’m not saying I think this
+> >>> is better than this patch set, but I think it’s worth weighting the
+> >>> options.
+> >>>
+> >>> Define a whole new set of privilege bits.  As a
+> >>> poorly-painted-bikeshed option, I’ll call them eprivs (for exposure
+> >>> privileges - it’s a crappy name but at least it’s pronounceable).
+> >> I played with a mechanism I called "chits" (all the good terms for security
+> >> bits have been consumed for a very long time) that looks a lot like
+> >> what you're proposing. I did it to address the CAP_SYS_ADMIN problem,
+> >> where any use of the capability opens up a whole barrel of worms.
+> >> I cannot, unfortunately, find my patches. :( The basic approach is:
+> >>
+> >> A process has an optional set of chits. A process without a chit set is
+> >> unaffected by the mechanism. A process with a chit set is allowed only
+> >> those operations for which it has a chit. The existing but empty chit set
+> >> allows no operations. A process may drop a chit, but not the set, which,
+> >> again, can be empty.
+> >>
+> >> Because I was after CAP_SYS_ADMIN, I envisioned a call
+> >> 	cap_able_chit(capability, chit-list)
+> >> but there's no reason there couldn't be a
+> >> 	chit_able(chit-list)
+> >> as well.
+> >>
+> >> I wrote this as an LSM, but the system-wide aspect of it made that
+> >> a questionable choice.
+> >>
+> >> If you have any interest, I could dig more deeply to try to find the
+> >> patches. Otherwise, I'm happy to look at what you come up with.
+> > What if eprivs or chits would take each capability and subvidide
+> > them into pieces? CAP_MAC_ADMIN would be formally a set of chits
+> > (or eprivs).
+> >
+> > And process having e.g., CAP_MAC_ADMIN, would actually have the
+> > set of chits that are included to CAP_MAC_ADMIN.
+> 
+> That would require that chits have the same inheritance rules as
+> capabilities, and I think that's a really bad idea. I was an active
+> member of the P1003.1e/2c committee that defined capabilities, and
+> was a major advocate of their inclusion in Linux. I wish that I
+> could say they've been successful, but root still rules the roost.
+> I attribute that to the complexity that arose from trying to address
+> privilege via setuid and privilege bracketing at the same time.
+> Chits (or eprivs) as a finer granularity version of capabilities
+> would make granular privilege even harder to sell than it is now.
 
-CONFIG_RESERVE_MEM does NEVER exist in Kconfig. The reserve_mem= boot
-parameter and reserve_mem_find_by_name() are built unconditionally in
-mm/memblock.c, and persistent ring buffer instances via trace_instance=
-do not require a separate Kconfig option either.
+Perhaps (or likely'ish). I'm just unpurging what I meant (even if it
+ought to be wrong):
 
-Remove the non-existent CONFIG_RESERVE_MEM=y entry from the ftrace
-selftest config fragment and the boottime test README.
+1. You can create F(C) -> S where C is set of caps and S is a set
+   of chits.
+2. G(S) -> C, which finds using some heuristics a set C for which
+   F(C) = S. 
 
-Fixes: e666e6528359 ("selftests/ftrace: Add generic boot tracing test framework")
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- tools/testing/selftests/ftrace/boottime/README |    1 -
- tools/testing/selftests/ftrace/config          |    1 -
- 2 files changed, 2 deletions(-)
+> 
+> > Without that type of relation there's just a space full of chit
+> > ;-)
+> 
+> Which is one of the reasons I haven't published anything about them.
+> Even with the scheme being (a lot) simpler than capabilities I don't
+> see it as something I have the resources to complete. If Andy wants to
+> drive the process I'm willing to contribute where I can.
 
-diff --git a/tools/testing/selftests/ftrace/boottime/README b/tools/testing/selftests/ftrace/boottime/README
-index 1eb0191d75d4..5371907c7f0d 100644
---- a/tools/testing/selftests/ftrace/boottime/README
-+++ b/tools/testing/selftests/ftrace/boottime/README
-@@ -45,7 +45,6 @@ Additional feature-specific config options enable respective testcases:
- - `CONFIG_EPROBE_EVENTS=y` (for eprobe tests)
- - `CONFIG_FPROBE_EVENTS=y` (for fprobe and tracepoint probe tests)
- - `CONFIG_FUNCTION_TRACER=y` (for tracer options)
--- `CONFIG_RESERVE_MEM=y` (for persistent ring buffer tests)
- 
- Usage
- -----
-diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-index 29f05f7c6e2c..c43f24755c64 100644
---- a/tools/testing/selftests/ftrace/config
-+++ b/tools/testing/selftests/ftrace/config
-@@ -22,7 +22,6 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_PREEMPTIRQ_DELAY_TEST=m
- CONFIG_PREEMPT_TRACER=y
- CONFIG_PROBE_EVENTS_BTF_ARGS=y
--CONFIG_RESERVE_MEM=y
- CONFIG_SAMPLES=y
- CONFIG_SAMPLE_FTRACE_DIRECT=m
- CONFIG_SAMPLE_TRACE_EVENTS=m
+You should e.g., RFC patch. We're exactly in the situation where
+the skill of not knowing what you're doing is the skill that 
+should be applied with pride ;-)
+
+Br, Jarkko
+
 
