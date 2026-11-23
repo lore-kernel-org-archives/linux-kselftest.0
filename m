@@ -1,76 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795409870;
-	b=05a+Jp7bwIQfpH68V2fP1Krzh/a/fY5myCdG5eU6a3RcccuNPEakE88RyUxAfPWembKz
-	 EV1vpwEtYifaIu4TV8PwToaOI8e4Qk3juMr7ml0NAFzkr67a8+l4HqSuYErQbccToO9Kh
-	 v577Odge+azz1alikFb4wBEHmGQC2QuP/CI3irNgrJemajfUDIAuWAfno9wdkpxodQ1Ko
-	 1P6X/G8sS93mOoYtnyMADvRdahVSTVIHBOSkvRRJBHGXBvPRjlVBkxRoVQkAVME7890nD
-	 1C9yWGuollh8spLYfZxGM63cO9kbVCGmVSdKVB79HDa0iC8/7fTpqqvZx2PY+QeDSkQ==
+	t=1795409964;
+	b=Ve1pHfGAECFARTfP55+Ht92n8oWwm69zqjlIinBEGqPB1XGJzrz9lpQ10TbvOBL9/4gx
+	 q6vQFCKIYRSy+FZsgXFlSO1Oys4Hg7jTVSaDGyU2cMQdosfPTmejbu08OWcFFlObdeed2
+	 Ic/Y54LHvT0xzXMChNaBjMVT1RlUJvpJhB6Kt8AmkxIWDa6g5pLdtMI9yC7s939sHg+I+
+	 uqWlXjhtYIhG3JVim11NEOP9WFCswtXuIaHKjBmE7xqXuj5RQckjWA37S70OymrYUZvwX
+	 tAsh61JBwb93u341oO59vbCqyLc6lER1hVJLOKTH6n64Gp75j+MKUvGuHQn9llAEucw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795409870;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=M1ogYisayK/yxmuo72t/sVdbTsG2vWA7R4e91rM/8ts=;
-	b=2w4zkwMl31M2QvMQa+3yHOdhn2NJwkXQ6dVEqvtLN6jhwAvLAY8nP4bSTkU/8p5WjgkL
-	 FLYYTsxOVPcQP7OPOUD+if+UXinnjQNhBC3COlP2E+ov+meJ7HgGemA0LIXdVZKF4D61T
-	 rWx9wh/X5C7PidAt5Txjjzb0blfWhAUtJOl2RPvdddRXZj7lxcVcUl74S0ASfqRVLKM9/
-	 njrxAQDh0TjJfFVr044M90FnQcwRhaVcEhNspfwxgx06ffTV0dzUvF28GMJ9s9xb8vJBK
-	 8mwBtbwVDfeaCy2JyS8U/mIoCkNWfT5G4p/NBw3xz9ZYcuPRDdKEe5HLzuoChiFFK7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795409964;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=KeB2HYL85s/Mu7yCSeBrdMNizv+fbYqDFnOtgJjrFg0=;
+	b=5cBUVdpuwm/1jm8lgQRqD8RHN6qhnrZ6z87W4YNqVGeRdsTE6yV3xNpHH3qcdpmq7XUA
+	 kTjQwz3EHHJtW3j7jdBXGi51bkZQ0x9tJTtaa7S0hbkpxgQ6QCLHv/gnPOc4yjg31N0sH
+	 msGvk/1XNr7ztfdJWYHQA6bkXvPDoZm7jKXnIJR7IK1IJ/5XwdP6ZB8xfpr1xyOgV88h8
+	 PkOiBxhn46F/lO2TqBKVJCgPU33JdataKoTtdydHCknma6CWwJHu3+jikGDjjqQ0oWsjT
+	 dNYHkrdW2nH9L/lebA52L6qRnwpWlpgcicBXQ1Zt0m65+XCF0WDcDjn+aidhtC94KXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--tweek.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="WGE87fb/";
-	arc=none smtp.remote-ip=74.125.82.70
-Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=keLiDn7f;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7247D606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 04:57:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7247D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5265606A31A;
+	Mon, 23 Nov 2026 04:59:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WGE87fb/
-Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-16bc6f3fdb1so1788889c88.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 20:57:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795409868; x=1796014668; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=M1ogYisayK/yxmuo72t/sVdbTsG2vWA7R4e91rM/8ts=;
-        b=WGE87fb/HYX7KY3xOT8g91dyOLRPNbt47aVq7HHWwHmG1bRdT3N+EJcqJSSRWLpm9K
-         IxrgNjzq6giF4ffKrOrIAUpUpVoLlqbpHpy6AhCpFV/ZRPr1VjmlrSmcPHYmzXFnf+qX
-         mLgYZm7ckZqhNJzKXNB/jBmLewQeLUQNZUFZ3zpIo3xgmIMvrbxS4aOvWQgaeAaAP4PK
-         qwJ5tdmmQPQu7R+nfv+LRUmURN7NPhFFlw2wsPdrY4J6phfv36Q2Ih5CrlO7zFriwtMQ
-         DFToaGEWKVzS/0xuHFTAEY43M+gJwk8yRZGkEk1vwfgTV/0UzETvtXpx/YorjabrIXkj
-         n16Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795409868; x=1796014668;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=M1ogYisayK/yxmuo72t/sVdbTsG2vWA7R4e91rM/8ts=;
-        b=uE82BPxX6KjfFo8WF1bJ4rXh/vd43wbO9u66liT6tqcUOVCTncHFHTlfWkmHptoHGS
-         M8RGqEmaI7yZFxz+f3tVZ0GRmPudkNZsxnefwzUY2fgoP49xrPKv+FNmdWoYtgduf4eU
-         ns6qX9JGhXfEJW1uLxy9eU5VqMImGWXtfDuMwiB1ezHidb/Gf5I7uvBBPVnm9vidml6/
-         zUD4FigepXArvZgxfi9zNzd074nURLQGxoB3FLRhkIQIgiDx1DuL6jFk5mxr4KzHHO3u
-         5lTZqQWmSXS9OTih5ghrwe1KdAgzA1pILgu/6JxAoHvYU/bT+UNWSXF9RJ6inK/qmkyH
-         N0Gw==
-X-Forwarded-Encrypted: i=1; AL+hErGOPNG/CEiuN12KarAdCXiXGOLXcNis7A0SlLLaaGOh0aKZ89A0BmZZXqAuWpggpgxTetcFPwhOo0aytJ6mIFQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+jJIGgx3w9q8N9zqGjU+Ok9SUS53AGnxVz9x4VS67FTakaWY5W
-	pC3c4JeQOWE822HdECs+1zuWs1zMw8cKdU55KgwtxWT3ajOnkFPfWVkvTnQULkRRU87qfZvI3Ac
-	dvA==
-X-Received: from dlbts19-n1.prod.google.com ([2002:a05:7022:b053:10b0:1a3:1342:a32d])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2508:b0:1b2:3497:5998
- with SMTP id a92af1059eb24-1b5568f03abmr9773066c88.36.1795409868143; Sun, 22
- Nov 2026 20:57:48 -0800 (PST)
-Date: Mon, 23 Nov 2026 15:57:30 +1100
-In-Reply-To: <20261123045730.1960346-1-tweek@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=keLiDn7f
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644321F000CF;
+	Mon, 23 Nov 2026 04:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795409964;
+	bh=KeB2HYL85s/Mu7yCSeBrdMNizv+fbYqDFnOtgJjrFg0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=keLiDn7f0BCwH6BK0OwuPO4BTcdZESYCANM3/8si6lYOmemEhY3o11NljGgYNDfA8
+	 v4ACW5fgLV1zmcZYWKic1zkrMoomPfNFY6vB1zFYy7Q6Xoj0ro3IuxD3vLoOE4J6YE
+	 gEx/0mz2XE/ndlHmUZ4XssW/TSCAtnDdkWT2UJYmFIQe7QtMfYVQ0d3y5ne1mV37kD
+	 NlBkPyerXfNZ1LG4Aedn7sN3/R8bim4qiuWEQ9Q/j+8GNGRpr1+txOEUH6S4jwVYNG
+	 ata6yzlnqqhB6wd2yJSSLddab4Z7n7awYUwsh50cZvzzZREX4OkwruigmwQYbIlgot
+	 J3AtIR7tPN+fg==
+Subject: Re: [PATCH net-next v4 3/7] net: guard memory provider RX queue open
+ and close on unregister
+From: netdev-bot+sashiko@kernel.org
+To: almasrymina@google.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, bestswngs@gmail.com, daniel@iogearbox.net,
+ razor@blackwall.org, dw@davidwei.uk, sdf.kernel@gmail.com,
+ bobbyeshleman@meta.com, dtatulea@nvidia.com
+Date: Mon, 23 Nov 2026 04:59:22 +0000
+Message-ID: <179540996293.3135.6100605132431454773@kernel.org>
+In-Reply-To: <20261120045918.1239746-4-almasrymina@google.com>
+References: <20261120045918.1239746-4-almasrymina@google.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,144 +64,79 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261123045730.1960346-1-tweek@google.com>
-X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261123045730.1960346-3-tweek@google.com>
-Subject: [PATCH bpf 2/2] selftests/bpf: Verify gen_loader skips BPF token preparation
-From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Sid Nayyar <sidnayyar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 
-Add a token/obj_gen_loader_no_token subtest that mounts a delegated
-bpffs over /sys/fs/bpf in an isolated mount namespace and verifies that
-bpf_object__gen_loader() does not acquire a BPF token when:
- - /sys/fs/bpf has implicit token delegation enabled,
- - opts.bpf_token_path points to a delegated bpffs, or
- - LIBBPF_BPF_TOKEN_PATH points to a nonexistent path.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
----
- .../testing/selftests/bpf/prog_tests/token.c  | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
+Low priority / nit picks for your consideration:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing=
-/selftests/bpf/prog_tests/token.c
-index f2f5d36ae00a..2aeb814ea376 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -1051,6 +1051,79 @@ static int userns_obj_priv_implicit_token_envvar(int=
- mnt_fd, struct token_lsm *l
- 	return -EINVAL;
- }
-=20
-+static int verify_gen_loader_no_token(const struct bpf_object_open_opts *o=
-pts)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gen_opts);
-+	struct priv_prog *skel;
-+	int err;
-+
-+	skel =3D priv_prog__open_opts(opts);
-+	if (!ASSERT_OK_PTR(skel, "gen_loader_open"))
-+		return -EINVAL;
-+
-+	err =3D bpf_object__gen_loader(skel->obj, &gen_opts);
-+	if (!ASSERT_OK(err, "gen_loader_init"))
-+		goto out;
-+
-+	err =3D bpf_object__load(skel->obj);
-+	if (!ASSERT_OK(err, "gen_loader_load"))
-+		goto out;
-+
-+	if (!ASSERT_EQ(bpf_object__token_fd(skel->obj), -1, "gen_loader_token_fd"=
-) ||
-+	    !ASSERT_OK_PTR(gen_opts.insns, "gen_loader_insns") ||
-+	    !ASSERT_GT(gen_opts.insns_sz, 0, "gen_loader_insns_sz") ||
-+	    !ASSERT_OK_PTR(gen_opts.data, "gen_loader_data") ||
-+	    !ASSERT_GT(gen_opts.data_sz, 0, "gen_loader_data_sz"))
-+		err =3D -EINVAL;
-+
-+out:
-+	priv_prog__destroy(skel);
-+	return err;
-+}
-+
-+static int userns_obj_gen_loader_no_token(int mnt_fd, struct token_lsm *ls=
-m_skel)
-+{
-+	LIBBPF_OPTS(bpf_object_open_opts, opts);
-+	struct priv_prog *skel;
-+	char buf[256];
-+	int err;
-+
-+	/* Mount delegated BPF FS over /sys/fs/bpf and confirm normal load uses i=
-t. */
-+	err =3D sys_move_mount(mnt_fd, "", AT_FDCWD, "/sys/fs/bpf", MOVE_MOUNT_F_=
-EMPTY_PATH);
-+	if (!ASSERT_OK(err, "move_mount_bpffs"))
-+		return -EINVAL;
-+
-+	skel =3D priv_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "normal_implicit_token_load"))
-+		return -EINVAL;
-+	if (!ASSERT_OK_FD(bpf_object__token_fd(skel->obj), "normal_load_token_fd"=
-)) {
-+		priv_prog__destroy(skel);
-+		return -EINVAL;
-+	}
-+	priv_prog__destroy(skel);
-+
-+	/* Implicit /sys/fs/bpf token must not be created during gen_loader. */
-+	if (verify_gen_loader_no_token(NULL))
-+		return -EINVAL;
-+
-+	/* Explicit bpf_token_path must also be ignored during gen_loader. */
-+	snprintf(buf, sizeof(buf), "/proc/self/fd/%d", mnt_fd);
-+	opts.bpf_token_path =3D buf;
-+	if (verify_gen_loader_no_token(&opts))
-+		return -EINVAL;
-+
-+	/* Invalid LIBBPF_BPF_TOKEN_PATH must not fail offline gen_loader. */
-+	err =3D setenv(TOKEN_ENVVAR, "/nonexistent/bpffs", 1 /*overwrite*/);
-+	if (!ASSERT_OK(err, "setenv_invalid_token_path"))
-+		return -EINVAL;
-+	err =3D verify_gen_loader_no_token(NULL);
-+	unsetenv(TOKEN_ENVVAR);
-+	if (err)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- static bool kallsyms_has_bpf_func(struct ksyms *ksyms, const char *func_na=
-me)
- {
- 	char name[256];
-@@ -1243,6 +1316,15 @@ void serial_test_token(void)
-=20
- 		subtest_userns(&opts, userns_obj_priv_implicit_token_envvar);
- 	}
-+	if (test__start_subtest("obj_gen_loader_no_token")) {
-+		struct bpffs_opts opts =3D {
-+			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
-+			.progs =3D bit(BPF_PROG_TYPE_XDP),
-+			.attachs =3D ~0ULL,
-+		};
-+
-+		subtest_userns(&opts, userns_obj_gen_loader_no_token);
-+	}
- 	if (test__start_subtest("bpf_token_info")) {
- 		struct bpffs_opts opts =3D {
- 			.cmds =3D bit(BPF_MAP_CREATE),
---=20
-2.56.1.750.gf70dc682cf-goog
+- [Low] The commit message has no Fixes: tag, even though the patch
+  changes behaviour in existing lease-redirect code.
 
+--
+
+net: guard memory provider RX queue open and close on unregister
+
+This patch adds a netif_lease_valid() helper that checks netif_is_alive()
+under netdev_lock(). netif_mp_open_rxq() now uses it to reject opening a
+memory provider on a leased physical device that is unregistering.
+netif_mp_close_rxq() and netif_rxq_cleanup_unlease() now use it to clear
+mp_params instead of reconfiguring a dying physical queue.
+
+> These issues were discovered during AI code review (Sashiko) of the
+> earlier non-leased devmem unregister series and confirmed by code
+> inspection (not observed in production or reproduced on real hardware).
+> Tested with the nl_netdev.py selftest on netdevsim added in this series.
+>
+> Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+[Severity: Low]
+Should this commit carry a Fixes: tag?
+
+The patch changes how existing lease redirection code behaves in
+net/core/netdev_rx_queue.c. Both states it closes can be reached on
+current kernels.
+
+In netif_mp_open_rxq(), a memory provider can be installed on a physical
+device that is already NETREG_UNREGISTERING, when the call comes through
+a leasee that is still registered.
+
+In netif_rxq_cleanup_unlease() and netif_mp_close_rxq(),
+netdev_rx_queue_reconfig() can be called on a dying physical device. For
+example:
+
+unregister_netdevice_many_notify()
+  dev_memory_provider_uninstall()
+  call_netdevice_notifiers(NETDEV_UNREGISTER)
+    netkit_notifier()
+      netkit_check_lease_unregister()
+        unregister_netdevice_many()   /* on the leasee */
+          ...
+            netif_rxq_cleanup_unlease()
+              __netif_mp_close_rxq()   /* reconfigures phys queue */
+
+Here is where this code came from:
+
+  5602ad61ebee ("net: Proxy netif_mp_{open,close}_rxq for leased queues")
+      added the lease-redirected open/close paths and
+      netif_rxq_cleanup_unlease()
+
+  581d28606cdd ("net: remove the netif_get_rx_queue_lease_locked() helpers")
+      added the direct netdev_lock(dev) on the physical device
+
+  37314c9dbe95 ("net: Stop leased rxq before uninstalling its memory provider")
+      gave netif_rxq_cleanup_unlease() its current form, with the
+      mp_params snapshot
+
+Would something like this be appropriate?
+
+  Fixes: 5602ad61ebee ("net: Proxy netif_mp_{open,close}_rxq for leased queues")
+
+Without a Fixes: tag, stable and backport tooling may skip this for
+kernels that already ship queue leasing.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261120045918.1239746-1-almasrymina%40google.com
