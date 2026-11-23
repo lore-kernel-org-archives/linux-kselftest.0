@@ -1,96 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795394053;
-	b=P+F+7xOQiLJOXmCsxssjvLFL8eTWzH++qaWnjAF1GcgPKGdtz/tomwQDS3vTpXkA/6Tw
-	 feO933TftUdvMxITQhE3VSjc5rhBEQHJsA1eNjZeLFV9b0jyn1PoD/lRhqoejknBoXQpk
-	 7+hFyAqOjWRHN791ddleEuv7/vkwPGK1+/4ifT6t/iDAaptugCPR8kdyCuv5mGFLDqP/1
-	 2CNI3J3xIQu0mkwcikHbdp5KW0YzkxG3wLSYzKU058yhbQzQ5H1WadVj+lhkTSWGq1K+d
-	 4CbuSB5UqD5/L8bCWz53OYYSjAORz6PncMaznwUfCZrjvDbUm9BNMgDcpCJd6JZq3RA==
+	t=1795394390;
+	b=wkR17IfvotiDZVaJ1nwcvGSQcpOKIC86iqa+iXWa9cxlfkMg6FVEJtk5kbj+1wQbSdZY
+	 5dCXJvLZ2eEgRAJS93yiGGMALdsBkNoeZGdROG/WZOqFTQQ07rsHfu6HBPTJzjEArN7+Y
+	 Z+JiIbvg6Hyx9rBBAL+5+OT6g2n5Nqc6Dh9CN8G9HJ30HL8nFtk6Gh/VznjQOWTGd+eWU
+	 7gFcpNdM+MxjbqTJ1q6GvRYseQG8wLEhEztaIFqMbt5+beEfQ0yFgSVrmXFwku4NYhkWb
+	 /o/CZihtXzFNfw+hXeBJ5jeSD0lR3SAGh5wG+rMNmwikSpw6yoHe8CrmFt/kC8OpZVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795394053;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=y2zkbDuNdyLgS9VK0BRjp9YHIzBcoYoYpmcLinVfQTY=;
-	b=JRE2pz165d2/cgK/v62YHhoKHQyGM/lC4P4mOrpDDoOPcWM25IsTqQJnO43A9dKK1ZMa
-	 YoJGdMT/I5eGWcduplcaBU55sL2/fbvEubCcMoge1aX/0WaON94/6U2hUYuc5bHWoB1A0
-	 JPgiCT+gLIWGfauez/5vubW/jQMsnWzIoApHnCoIaYXMWuBjKL7C/1ijKyhs22DQIHi3i
-	 GpqKR+0tHLeux8mvqwfG+O/6PEn2YtevoknvLn2P9lLx9PUQntTn9XPVa4AivgtbDhp9L
-	 OR3/EbYgpKkz/K4+UVDeyDeIFgG0KvhPlR6bp7z6ka39zNVhtSDXQSJMASiUyYryBzw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795394390;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=PoQAgAi4SsG/ALVfUnoUkJyn+DyGMuCfLxAQhCZvy1U=;
+	b=GJHzsyXOo0H6H1aQ6RlR8veU31WCbBKk2I78A6BqBKpux2U9yQL9nd/jE9uIErv2FguM
+	 DT7ceDugUbQa1BziJVbn5L5TKFC77D96RBGZWvjNSWmWCYuH+uFXVWeOH9nzFgIo1ePPh
+	 eFHQV3f4oE6rs7MX73N68mlU2GRyXnO1/B1IVXDc1qL3A4ryPdQiyU/ZHAxm2hxW+cdB8
+	 Ts5rta9JEO0PRpVZ1A3ntOnzx5uamovgDlyTxG3bjKgEINmMUCRTV9qDqNO7Pvb9ATSEE
+	 7CnVPSbSZzWkf34z2dB18t8WqjuLlJzzF9AJCxIJWfIJWLv2lxBh9iq39+qAryMH3KA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iMotbwmo;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jQyg0+hy;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB08606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 00:34:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BB08606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44EE606A31A;
+	Mon, 23 Nov 2026 00:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iMotbwmo
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4ac95761c85so20087345e9.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 16:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795394051; x=1795998851; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=y2zkbDuNdyLgS9VK0BRjp9YHIzBcoYoYpmcLinVfQTY=;
-        b=iMotbwmoucrMKCJdQ6/o309j1Jw40JxSU6aZshmDWO+iadVDisK6gU0bHp51Gmo4V8
-         3fIC+ghxhZr4ydlcMGJmo2YvCUd+dA8b0a/qUh7RE4RDaaYnQryjPWxQAb1g7eIwZrCL
-         g5FBbU3y+cwL7xNaBi2TYbs7gZ75bPGjhudjl1xkRVCbI5LEB4LkNP0Dnmgbc0Om3CeY
-         3i8OvVNsd/LM184DAHMBGnigHUxucvHQ9mv8yZdNYmFV2n0fcEJUrJeqI7NesEpNS3Bw
-         kpAI7wUcwRD/q42wlIKJqyPjQpQ1vlYVRXccU2fPGxfODMxzRaopYeA+BTnm/ZyuTGK/
-         cYzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795394051; x=1795998851;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=y2zkbDuNdyLgS9VK0BRjp9YHIzBcoYoYpmcLinVfQTY=;
-        b=13cXN7Y43jv1ELvBF0OP7rKI6NsFqw6O1DmB9fa2OVi3bmxistbpU+a3P6FYhqOqB6
-         KoHVOugz23aSmQ2xjDAzzx54woZ3+VtZHGJlOSN1alMi8iJ1M6CMw9bDbS1eNXgvvsDc
-         wcWADXqqeg9Pow9FERwUqfx8VjmcIO5JgtZ1vBUHOkXXJE1D1eiVmKYnEGzrUXDquJQk
-         U5w6mekc10AoN7M/pMYyvMgf70AN081dr86rHPSfxJYbxgXWOBaUW1dR8Xu9/mCLbr6q
-         iQaoxkdBGpF3OmYyQCyPeV51wjVfcIvcit9iyQj6SJiku/Cc9ClqXz9tHX71pZr/bVyI
-         bSkw==
-X-Forwarded-Encrypted: i=1; AL+hErHwRMikUDnMk8nIMmEl1cG/zP5SQsMXn3oCZzKIROPuGWNQvzvKATAbox9hlyrHItTl7r/IuvIEuWK40W8R7Q8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/J5v5MAYV3hLMxrng45C5azlfZIveXbTvbWQphIPs/z2PSWJ7M
-	7uaK6NkDgCUVTjqjUmmkabVEnbf2dLba7PkMMmsOFDhsq8bKwY/lavex
-X-Gm-Gg: AZFdTZeA8NPDmUdFjpP7lzFQ2POXeW/GxcGGSJu/Ki6LEA0D8ivuxo3bHEmjztSV5DW
-	VuhYMUXwkcgVxgU7ItMpVVmd09meC1rGJvjv+K7NNNTlielcNPAZNuFR5rkP0e7H6NoIznFv8xM
-	kHX9MQu/h1Frc+BTvUnUnP691PI5/YKBMCJPi4lvz3FMvuvSOxPokRh9OK0RTacSjX/xcOQMVHB
-	ZYliRxKODVwBKKu/NpaLcB1DL9c9igOvmwYVj/gk689j6fl7NYstVPZNrbusf4bWkaOA9gzIs86
-	xy2rHq5hN4xLyqrcpPfceUDbmYkXAZkzJQYpsRbcmujOUO51Gamu42XsaQzNTD3rJl3jxcgVdyq
-	KoDw8gtRIw4L9b31wpwDUFw9CxbQZRfFIRXRLyiOfA0ILxwmzkQdzfJMKAWOXGhVDmuA8dcSwZC
-	DYmyZbVxFgXH1EPgJhRfuxiyWB1i0glBOr9BMUkXGtKTpinSsQrErq/6kZtfGatnmXEcmd+7C4z
-	jXnaeurLFfTIz4KzbtBiPbbPVMGxBoKG2nP0Kd0y2QtWEBxgyYz7pV45/Xmz4Ycg41Z2F/5bsfE
-	pp268dJz9YO+gryRWqHCwEidOs6dBhHWmh7CYU8aSFSQcgoMVAFb/MZBl4oY8IjmG88UkkjK7Rt
-	/ciAn2V2lLALh/Z0N40qUT2z/LE6+0MfAv1fIHhDuEC/xyvtZIptpRlRzdlg/0s/KsnQxyN5ZMC
-	2klT210xFE
-X-Received: by 2002:a05:600c:500c:b0:4bb:82f7:549f with SMTP id 5b1f17b1804b1-4bb8881409bmr227020335e9.19.1795394051194;
-        Sun, 22 Nov 2026 16:34:11 -0800 (PST)
-Received: from fre3dom.speedport.ip (p200300e37f1deb6597bc525ce8f19e94.dip0.t-ipconnect.de. [2003:e3:7f1d:eb65:97bc:525c:e8f1:9e94])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb9066f6e6sm111751525e9.3.2026.11.22.16.34.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 16:34:10 -0800 (PST)
-From: Javid Rzayev <javid.rzyv@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Javid Rzayev <javid.rzyv@gmail.com>
-Subject: [PATCH] KVM: selftests: Use __vmread() for the optional HOST_IA32_PERF_GLOBAL_CTRL field
-Date: Mon, 23 Nov 2026 01:33:50 +0100
-Message-ID: <20261123003350.198278-1-javid.rzyv@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jQyg0+hy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879B01F000CA;
+	Mon, 23 Nov 2026 00:39:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795394389;
+	bh=PoQAgAi4SsG/ALVfUnoUkJyn+DyGMuCfLxAQhCZvy1U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jQyg0+hyIOUk5ZUyV35FWjse5XowVORSf874N4s6kc8mr2FsoTNaawGmqqpQCkjS9
+	 ZwDRYmI0saY6rlsrczcP/rB3PIa+akAwyvKzcK6reziBxFWamgV8edcWzxXSOCdAcY
+	 Np1I9BaTgKWLXBX6ABscXy97xhTu9tsuTO9Me0ecZeUgnJdsAjxTXyn1dCCxzZTSii
+	 zA1vphX2daI3J96L1I3YIK+1wqe0d7mHE6Al2pPzx2EiI/qR6tbwLTDXTVj+nkoYfM
+	 C7UMQ/NlJxXLnP6PHPmAga4Em6YJjVb2Q7UYely1UtvU/ZjJlCrzjLca4VHj4ei9ZR
+	 ZTn3txTyJls3Q==
+Content-Type: multipart/mixed; boundary="===============8029890971532200664=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,63 +49,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <1a25d1706794155410612608bd28a535e5f6796b96cd294439b19f55ac467c82@mail.kernel.org>
+In-Reply-To: <20261122235757.3456048-9-irogers@google.com>
+References: <20261122235757.3456048-9-irogers@google.com>
+Subject: Re: [RFC PATCH v1 08/11] riscv: unwind_user: Support Minimal DWARF CFI and FP user unwinding
+From: bot+bpf-ci@kernel.org
+To: irogers@google.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arch@vger.kernel.org
+Cc: jpoimboe@kernel.org,rostedt@goodmis.org,peterz@infradead.org,mingo@redhat.com,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,linux-arm-kernel@lists.infradead.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,linux-riscv@lists.infradead.org,acme@kernel.org,namhyung@kernel.org,linux-perf-users@vger.kernel.org,mhiramat@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,ardb@kernel.org,linux-efi@vger.kernel.org,maz@kernel.org,oupton@kernel.org,kvmarm@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,indu.bhagat@oracle.com,jremus@linux.ibm.com,wnliu@google.com,dylanbhatch@google.com,irogers@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mas
+ on@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 23 Nov 2026 00:39:45 +0000 (UTC)
 
-The HOST_IA32_PERF_GLOBAL_CTRL VMCS field exists only if the CPU supports
-the "load IA32_PERF_GLOBAL_CTRL" VM-exit control, which is not always the
-case.  E.g. when running on an Intel VM in Google Cloud with nested
-virtualization enabled and no vPMU, VMREAD of this field fails.
+--===============8029890971532200664==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-init_vmcs_guest_state() copies the field into GUEST_IA32_PERF_GLOBAL_CTRL.
-The write already uses __vmwrite() because the field is optional, but the
-read uses vmread(), which asserts on failure since commit 4e824a04d4fa
-("KVM: selftests: Always assert that vmreadz() succeeds").  As a result,
-nested VMX tests (e.g. state_test, smm_test, nested_close_kvm_test) fail
-with:
+> riscv: unwind_user: Support Minimal DWARF CFI and FP user unwinding
 
-  vmread[0x2c04] hit VM-Fail
+TL;DR:
+- Nits only: a comment names a nonexistent __compat_vdso_rt_sigreturn symbol
+- The !CONFIG_MMU branch in the sigreturn unwinder looks like dead code, since
+  Kconfig requires MMU
 
-Read the field with __vmread() and copy it only if the read succeeds.
+> diff --git a/arch/riscv/kernel/compat_signal.c b/arch/riscv/kernel/compat_signal.c
+> --- a/arch/riscv/kernel/compat_signal.c
+> +++ b/arch/riscv/kernel/compat_signal.c
 
-Fixes: 4e824a04d4fa ("KVM: selftests: Always assert that vmreadz() succeeds")
-Signed-off-by: Javid Rzayev <javid.rzyv@gmail.com>
+[ ... ]
+
+> +#ifdef CONFIG_UNWIND_USER
+> +/**
+> + * compat_unwind_user_sigreturn() - Unwind an RV32 compat vDSO rt_sigreturn frame
+> + * @state: Current user unwind state.
+> + *
+> + * Return: true if @state was at __compat_vdso_rt_sigreturn and advanced to the
+> + * interrupted 32-bit user context, false otherwise.
+> + */
+
+This isn't a bug, but __compat_vdso_rt_sigreturn does not appear to exist
+anywhere in the tree.
+
+arch/riscv/kernel/compat_vdso/rt_sigreturn.S just includes
+../vdso/rt_sigreturn.S, so the compat vDSO symbol is also
+__vdso_rt_sigreturn, which COMPAT_VDSO_SYMBOL(mm->context.vdso,
+rt_sigreturn) resolves through compat__vdso_rt_sigreturn_offset.
+
+Could the comment say "the compat vDSO __vdso_rt_sigreturn" instead?
+
+> diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+> --- a/arch/riscv/kernel/signal.c
+> +++ b/arch/riscv/kernel/signal.c
+
+[ ... ]
+
+> +#ifdef CONFIG_UNWIND_USER
+
+[ ... ]
+
+> +	frame = (struct rt_sigframe __user *)state->sp;
+> +#ifdef CONFIG_MMU
+> +	if (!mm->context.vdso)
+> +		return false;
+> +	sigret = (unsigned long)VDSO_SYMBOL(mm->context.vdso, rt_sigreturn);
+> +#else
+> +	sigret = (unsigned long)&frame->sigreturn_code;
+> +#endif
+
+Can the !CONFIG_MMU branch here ever be built?
+
+This function is inside #ifdef CONFIG_UNWIND_USER, and UNWIND_USER is only
+selected by HAVE_UNWIND_USER_FP and HAVE_UNWIND_USER_CFI.  The Kconfig
+change in this patch selects both only when MMU is set:
+
+	select HAVE_UNWIND_USER_CFI if MMU
+	select HAVE_UNWIND_USER_FP if MMU
+
+So CONFIG_UNWIND_USER=y on riscv implies CONFIG_MMU=y, and the
+&frame->sigreturn_code path can never be compiled or tested.  Should the
+#ifdef CONFIG_MMU / #else be dropped, leaving only the vDSO lookup?  A
+nommu variant could come together with the Kconfig change that enables it.
+
+
 ---
-Tested on a Google Cloud n2-standard-128 VM (Intel, nested
-virtualization enabled, no vPMU) running next-20261120:
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-  before: 15 nested VMX tests fail with "vmread[0x2c04] hit VM-Fail"
-  after:  all of them pass
-
-mmu_stress_test hits the 120s kselftest timeout both before and after
-the patch; that is unrelated (the test scales with the host size).
-
- tools/testing/selftests/kvm/lib/x86/vmx.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/x86/vmx.c b/tools/testing/selftests/kvm/lib/x86/vmx.c
-index 5a06746eb..4b3e439ee 100644
---- a/tools/testing/selftests/kvm/lib/x86/vmx.c
-+++ b/tools/testing/selftests/kvm/lib/x86/vmx.c
-@@ -348,6 +348,8 @@ static inline void init_vmcs_host_state(void)
-  */
- static inline void init_vmcs_guest_state(void *rip, void *rsp)
- {
-+	u64 val;
-+
- 	vmwrite(GUEST_ES_SELECTOR, vmread(HOST_ES_SELECTOR));
- 	vmwrite(GUEST_CS_SELECTOR, vmread(HOST_CS_SELECTOR));
- 	vmwrite(GUEST_SS_SELECTOR, vmread(HOST_SS_SELECTOR));
-@@ -363,8 +365,8 @@ static inline void init_vmcs_guest_state(void *rip, void *rsp)
- 	vmwrite(GUEST_IA32_DEBUGCTL, 0);
- 	__vmwrite(GUEST_IA32_PAT, vmread(HOST_IA32_PAT));
- 	__vmwrite(GUEST_IA32_EFER, vmread(HOST_IA32_EFER));
--	__vmwrite(GUEST_IA32_PERF_GLOBAL_CTRL,
--		  vmread(HOST_IA32_PERF_GLOBAL_CTRL));
-+	if (!__vmread(HOST_IA32_PERF_GLOBAL_CTRL, &val))
-+		__vmwrite(GUEST_IA32_PERF_GLOBAL_CTRL, val);
- 
- 	vmwrite(GUEST_ES_LIMIT, -1);
- 	vmwrite(GUEST_CS_LIMIT, -1);
--- 
-2.47.3
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45087188604
+--===============8029890971532200664==--
