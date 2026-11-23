@@ -1,99 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795453911;
-	b=P5Yeha7kKM2dnOoDoIo9bGzTJWGosF4mpasEKphyBfaX4TIglXvkPSQInG62FHD4gIq2
-	 auo9vcLQNk6+eBd78HmewK6i14JI8tpJMgb9hQWK9lheNN3yS1l/2aZVEaUDiLaV1NnQM
-	 AJeUl9+eKS5miMRWr9LwCB01tZoHaKeGAXy/wa/qI0kLeARheOk02qpaEkgYa4ZxsAght
-	 1B7ipJ7uj4DsnLrOLdyWIy87nxhYbTiXhVnp3esBQqL9Fq8ohPvQ8BtPy70PT3c0VtBPS
-	 ho+sk43GEm9CbeWZ+2hGns8uUGTglJ2VWaorGu1XKPKesWnGWsynQQhbzFpBDDVkXgw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795453911;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=6zmRgo0gFPagKYr2g+7G2GW6y5yAil61y9s8jKpkWdI=;
-	b=0oVmH0jn4UX40J0IpQ9bHXfUpUh/6lvt7JM0ftaOMEFhbiFXnJ4S4z9DsSlzLi2GxQjG
-	 T70NVtGwv0r46nVFM6iVMLjiswtEe2Oft0sBfnQw0sl14YZ8n84yEY87arqvp/zJcecrt
-	 Z7cfe9IsRmBH2F1O+wQ6didTitvqT5LLBEUavxIRZLeemBCy5YUSSretkRD97n/ZdFwci
-	 GOpOXObQT6lNzRoEk4SV63Kq9u4LuPOQeWb66C8YQ51GIdpkhzQIM4lkF83qfvwyatadl
-	 aA8cEpl4uztURp5E8leWcEnqwGDcsc2Wm6lyXcpwXrn/KdV6KdMH3W3NbP8DT03Z/XQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudlinux.com;
-	spf=pass smtp.mailfrom=cloudlinux.com;
-	dkim=pass header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=cG0siZSF;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.47
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795454410;
+	b=l26j+WVR05nWeiG8rQTMeG9P9Bi/Q0bdatF0W2ogkglbku55ujlelBG/U04KQUYAebRA
+	 IYSJTekqJixoNv3veIiUdyhkLdzNRNMky2gc60TGo4jOvOxwlXjZS/uCqcazITHVYDU32
+	 P2JjFlKaulq/393HcstOgCrTqYP+enVkYOAsefLADsBRQ7hObldCWIfWrq619d2yI2UIg
+	 YinlV98QVhdDp2wKJma9UaRFgoUFwFKb4BO4T4WWaOrhB7TwPciXrGeMGifDzxTpRY1jA
+	 4kEcayVvchenPXsWuU8hfjy7r3j7Pshj9W5Fd6+XTYsbeyIMqFLpnwk0xZETuoyiuIA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795454410;
+	h=Received:DKIM-Signature:Received:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:X-SA-Exim-Mail-From:
+	 X-SA-Exim-Scanned;
+	bh=oGfpPu9gr9IBoVaVzDyYn6H9qOc8GM5ox900QdAqGB8=;
+	b=Y2Gl4RBhZ/kEBrCo+RiaHDJ1qu/liRslSEhUOcQ6zwcfSWYf3YtbncIrBN7TIZuF9SSQ
+	 pqLhAoc9Q9E2ljxuJU+WVDAW5UpeuoQBbZ1YUomYoNPXeDZV7xQnaU9No3qlZDubbEeCO
+	 9tnHI4YzaFLLKEu7xq+AJU6KwE0L+cYuXhnnF6JOBg0aZdasIniDZ7f+D8qhB8IRDZVPN
+	 +qBIPY2CrYdwgu+6rZ2tckYEVC/FoVuHWHqKfsAQLuHGGyJXn8qwVGoRQpAkYtqd77bd1
+	 +awhmS5A448TMx+9DUx5ZThFSOUBRjGLPp+CUVpHRepOZ3xXVV9JakGUX98yRsUBRWA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UnEfzNiL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07D0606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 17:11:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C07D0606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cloudlinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudlinux.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE4606A31F;
+	Mon, 23 Nov 2026 17:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=cG0siZSF
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c4395d31228so577947466b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 09:11:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795453909; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Tu4HryCmTX4hDFzeUrMcFUhSHB5XMbdSXFx4/FAux3rVRbGfzQauPEpaUjrPXaG/jT
-         FKp0h943zsgBgI2ueDSwQFJkR7Mj7Mqy6vXfelowDijGLsJvM6zDqhd+La5ilqUfpn5Q
-         SuYYFfyUf4UrrgpLNTWKZ426CaBQ2zSmXFpukW0sRcsEgAwd2NBQFpeoEdPLKRa+UmyJ
-         SlBE/X3w7SkCeMYa4rePp8t8YBG31Yfb4xzc43t7ggoK0pzXGVK5vMaKMLc49VDmfXXh
-         oItTk+Hge1wioKLhGaHkSbecTnQm8gL99u7EaU9Zcs/92Ace7GKeCes4XxjLioVWryUX
-         5RBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=6zmRgo0gFPagKYr2g+7G2GW6y5yAil61y9s8jKpkWdI=;
-        fh=XVgT3D0Vb63ibM7LIDRxew2PpEOLTWbdaeen9RTwit0=;
-        b=nCYTb4nXKlEodJiOHPS9B5MnFsB/JC7sBTnSNMKQA3kFEKfsvm3fUdY1NGgyN+QPQY
-         KXlySgcj2mVYEI51VoQhTbY9szdMx4DoOtkbNa/UPvUnvNeJFf7sGbfUhnEZpJe1FHkZ
-         DbC3g13I/f8jdj+RxO4VxVNPSBpjb/DDJn27miPBuKN4G2pjIwOtxgfi+jV+e2Z9Oaik
-         16qtfxdc71FpDsmAO1z2EuRveKdBaRuMrFSlJy2Jp/XX3Iv3UM0i9ZSTPYCI50iRdmFX
-         2ZwhNp9trAsUQ5Qku7wtrkRYVy/IXOg5ZOhpA5pBWHjPPvTv98qUhBvpYtoEaoiULGdk
-         2TvA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudlinux.com; s=google; t=1795453909; x=1796058709; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6zmRgo0gFPagKYr2g+7G2GW6y5yAil61y9s8jKpkWdI=;
-        b=cG0siZSFYTpd4R6ZgQYJ8SXc+bG8ElcPj1nCBKcIlsZY4shb3awIkUOvQn5pkSc/b1
-         lHPS1ExBDwp3M3cWTFoG7f0+Z5cx6Necf4BvTT5DlfzagAveWt3Tm6oSaG9VsQW8cltU
-         GxbnXZvB4TRLielIYojVRurnjfGdsldtDi7GIsCla93CpWdxcqza94lGl6K2cioZt3Mv
-         XIKvTFrwZUnX7pjtmu8DjwRXwK+reMjdG2Sxetn3ND3EaqRCfymK4LZGFl3s8TJ4Tzrr
-         j0uxvZOoNSKTYXINbEvfcK3Xf5gco+Ed0Jx9vbG/998jlDxaPtjtPqcf5F/3IpAkttME
-         Ksag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795453909; x=1796058709;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=6zmRgo0gFPagKYr2g+7G2GW6y5yAil61y9s8jKpkWdI=;
-        b=jan3MqjiCG6eP2+VwT+l8p+UIGFbaBlsIVk5uQkDowNNtkNiGj0W9jTiBouCqh9ZRu
-         h8FDTIH9wFRu1fPNXG3JUdYLWSm581qQjJrzSZTOXHBrUMw26v7YiZpZlS01lKpfl/W8
-         Kej1mqphqevMMxI2MHVuF28QqpgiqFHxU+oa1J9CXUXIx7QAEaerAAd2kbyuPaqkivZN
-         Of8B0jEHgW3ul+QYtUvjwuSfjJyCGvTaQabYg08iu+SybNvAPrB5MALOo8TQxglkUDwm
-         KxpxDoUDTP2yoRhJTXQNferrVmzWE5H/ZQ5frSMIRAWJbB2+b20aMlLVZb/MZRs9XfH3
-         9D0w==
-X-Forwarded-Encrypted: i=1; AL+hErHLOqmzwVK8HqxAihOXgeHVPYONWPZR+mdE9SB27Ac9HP94PbpPyOCv6GrIR/tbUqq+YBjkU2vTv7i70uSjowg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+b8qI0a3X+heSKlYkP9jvnxauQ4GMtabK9AiKBmkSw5hNbGLp9
-	7G3zVP8EmKX+QvJO1j6UKdwUpFj1/4Fpbe76/Mpzc6+tfcCKI7YvH4aDs+0NGt08A7qSSj++J0n
-	da3CLj74slWP+nK/RfdBZCbnzR9on/qpug24k87QBNg==
-X-Gm-Gg: AZFdTZc5NiDbBXaPPhgpFzbkVQmW+3bdooKzmlPXZFE7zMQuuJinStYE9yWY9ZmVdTx
-	UZbiT6ZLLy7r4kCwzxlNmEJ7Jq+iZ3+IRpfdm8Xzp4ELGPN5g42DUuesUZkG7qqnRBQjzfubcVs
-	iFU3dfmTd4vl3TX7522gRlRK6tu07wachq0w8ovx8WiXR3eaSoeMm5ODzeCryWoM9WzhfcwmNoA
-	+tQZ8RD6Ed/IwdNl9FSI1G489yC8Xq+Oy6hjZxNgzwCk2SKO/BSMcCqmjSMsp1uLqgx1BLTJouG
-	RV+BCpjEJ/hSACF83FFn85oIu8MQIcxXxrWlYV7Bp1LuLHVrQ6l2Mb6ktQvGnSxZglInUn955ms
-	wvGikfhIOVqmfDinVGaKBCGqEHPgQ2BP7+g==
-X-Received: by 2002:a17:906:f10a:b0:c49:b8ec:a9e3 with SMTP id
- a640c23a62f3a-c513aad202amr871113566b.43.1795453909164; Mon, 23 Nov 2026
- 09:11:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UnEfzNiL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E221F000C6;
+	Mon, 23 Nov 2026 17:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795454409;
+	bh=oGfpPu9gr9IBoVaVzDyYn6H9qOc8GM5ox900QdAqGB8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=UnEfzNiLgh2CDX2b+d3Smms3qMKcqnyozT00s6XocFhOkS7x2tV931WGfPqKEvQpB
+	 w2dWPboF0hP8MbVd7XATAoaa6Z79hwZfCqldawUWJyWvweCzL8qiQTG6aQ3ctQFD6m
+	 3fr0ypskBJLYsAOeuB8ip7R/vGMHEB5JEz8av9um4SKPhBDBLltdmfS/UhA/3xpOf2
+	 MXvAbcklkyy60QPzz6ODPBkb7BBQOSbo4ZB6HkRXaxbQ2oLFRFMoPdbkNXkWo8D3kA
+	 UGGqsHMwv3y2H69Bm6JLDKSv3CG8t5RG4Pli+HDcwa4Szhw4drNnm8IKiwopEEMXKB
+	 kpBR+3IKTHeGw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1xVXi2-000000026r2-3t1k;
+	Mon, 23 Nov 2026 17:20:07 +0000
+Date: Mon, 23 Nov 2026 17:20:06 +0000
+Message-ID: <86eccbzcqh.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jia He <justin.he@arm.com>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sascha Bischoff <Sascha.Bischoff@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Lorenzo Stoakes <ljs@kernel.org>
+Subject: Re: [PATCH 1/3] KVM: arm64: Don't load hardware vCPU state before first run
+In-Reply-To: <20261123150917.2679600-2-justin.he@arm.com>
+References: <20261123150917.2679600-1-justin.he@arm.com>
+	<20261123150917.2679600-2-justin.he@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,27 +85,75 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <awGr_tB3QXwnW1G2@kernel.org> <20261123165638.2161305-1-rmustafin@cloudlinux.com>
-In-Reply-To: <20261123165638.2161305-1-rmustafin@cloudlinux.com>
-From: Rustam Mustafin <rmustafin@cloudlinux.com>
-Date: Tue, 24 Nov 2026 00:11:37 +0700
-X-Gm-Features: Aa3M54qI_gigBtcVlB0bVVMCDfPwHMSLIUBI_RteTpbOu_KmpWlOErFZfJySAUQ
-Message-ID: <CAG6=z5tCJNyaPbOBYRCskXTCGkbJ_Zteg9Y-N_FFdU6Ag5FxDA@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests: tpm2: test that io_uring reads ignore the
- file offset
-To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Shuah Khan <shuah@kernel.org>, Jaewon Yang <yong010301@gmail.com>, 
-	linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: justin.he@arm.com, oupton@kernel.org, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, Sascha.Bischoff@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, ljs@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-> +#!/bin/sh
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+[+ Lorenzo]
 
-This should be GPL-2.0-only, as you asked on the RFC; I copied the line
-from the neighbouring scripts. I can send a v4 with only that change, or
-you can fix it up when applying, whichever you prefer.
+Hey Jia,
 
-Br,
-Rustam
+On Mon, 23 Nov 2026 15:09:15 +0000,
+Jia He <justin.he@arm.com> wrote:
+> 
+> KVM_PRE_FAULT_MEMORY calls vcpu_load() as soon as KVM_ARM_VCPU_INIT has
+> completed. On arm64, however, kvm->arch.sysreg_masks, the trap
+> configuration, vncr_tlb and nested vGIC state are only set up on the
+> first KVM_RUN in kvm_arch_vcpu_run_pid_change().
+
+I think I'm going to queue a patch disabling prefaulting immediately,
+and then we can fix this crap.
+
+> 
+> Running the full vcpu_load() path before then reads unsanitised guest
+> sysregs and touches uninitialised nested state: get_s2_mmu_nested()
+> populates nested_mmus[] from raw VTTBR_EL2/VTCR_EL2/HCR_EL2 values, FGT
+> and HCRX_EL2 are written before kvm_calculate_traps() has run, and
+> kvm_vgic_load() can enter vgic_v3_load_nested() early. In particular, if
+> userspace creates an EL2 vCPU with ID_AA64MMFR4_EL1.NV_frac cleared to 0
+> (so vncr_tlb is never allocated), sets HCR_EL2.NV=1 and an EL1 PSTATE,
+> and calls KVM_PRE_FAULT_MEMORY, kvm_vcpu_load_hw_mmu() queues
+> KVM_REQ_MAP_L1_VNCR_EL2. The next KVM_RUN then dereferences a NULL
+> vncr_tlb in kvm_map_l1_vncr() with preemption disabled and kvm->mmu_lock
+> held for read:
+> 
+>   [   73.636014] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000078
+>   [   73.801972] pc : kvm_map_l1_vncr+0x48/0x2d0
+>   [   73.884820] Call trace:
+>   [   73.887253]  kvm_map_l1_vncr+0x48/0x2d0 (P)
+>   [   73.891422]  check_nested_vcpu_requests+0xb8/0x168
+>   [   73.896200]  check_vcpu_requests+0x2a0/0x428
+>   [   73.900458]  kvm_arch_vcpu_ioctl_run+0x2d8/0x6d8
+>   [   73.905062]  kvm_vcpu_ioctl+0x388/0xaf0
+> 
+> KVM_PRE_FAULT_MEMORY still needs generic vcpu_load() to set
+> kvm_running_vcpu for dirty-ring tracking in mark_page_dirty_in_slot(),
+> but kvm_arch_vcpu_pre_fault_memory() only walks and populates
+> &kvm->arch.mmu and does not use any hardware vCPU state. Skip the arch
+> vcpu_load()/vcpu_put() callbacks until vcpu_has_run_once() is true. In
+> KVM_RUN, vcpu->pid is set under vcpu->mutex right after
+> kvm_arch_vcpu_run_pid_change() succeeds and before
+> kvm_arch_vcpu_ioctl_run() calls vcpu_load().
+> 
+> Since kvm_running_vcpu can now be set without VHE state on the CPU, use
+> host_ctxt->__hyp_running_vcpu in VHE enter_vmid_context() (matching
+> nVHE)
+
+Can you clarify under which circumstances we end-up on the TLB
+invalidation path? Simply faulting things in should not result in
+invalidation. Unless we end-up with MMU notifiers firing?
+
+> and check vcpu_has_run_once() in vgic_maintenance_handler().
+
+I have similar questions here. It isn't obvious how you end-up getting
+a VGIC MI if you don't run and don't load the state on the CPU.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
