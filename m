@@ -1,107 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795446607;
-	b=1zyzwdmBwn+KoHqc0pn4sTpOY7h26dT40F1nyA66TIhixOYVRBRczrotJF7gI13Xx6jw
-	 4p5cbZi5Y8/RlwcV7umtJqwZKA/ULBRenRjrsXSKqSaEKCF33mhK9Y0tLjOTckdNUpdx5
-	 xJCjyR4rrsHrYVKtgpRbB9tTsMm/ZDcqQwsOwQcPhy2loajnoCFPQg8rV/eHEEXLdWh7o
-	 EuWj12h0WqCzuxSpjfJDCc0GLhsPPShjy6h38mrVg0+u9bGLLyLV4Y7bhmustPsnX98+a
-	 1dOxUnjFL07+zHdMvnj3wqo9Ds3m5EQB4JZKux8eXGhWIYouFpCqWsuQCN8Dmoi7bjg==
+	b=IW2n/EjIBZoLfWvT5EZASDyfBhxQAtVNJ0Mq8/h9BKdzhXqEtVlDxbZnl17b8cjccM3u
+	 9y8isaJEDB/Sx5uqq9Q75NWRdXofpw26V7GOgsajhPa0YmbCrKAPthRZMIoTyvKXQpCCb
+	 VcPhp2tbol52N5JM7PizZi76N09CnTLmGQN6OAfgpZW6OT7dgRQRL08Ah/ctMet1AvE3G
+	 h2OYuFcFmDimnIc0EJBEAjneCaISH4ftK7jTitYMBXKXuGL4mTuvdY5VIfPj3BX6Bog4H
+	 pSN4AsEISDzbKw2/juJOpTKk9OoudmyHLWW3J5daWgVxWqHG0czaf1yi+23WFVfVCGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795446607;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=dz52cAd06DhrS+w2eA1gjA1iPlJT/ApD0Ocp67pISs8=;
-	b=s/WMhT3OYiVfxcIWk2eVgmnwGMpfF5INspHoOg0cmJ7QOGheoBnTfrjCjv01Xho8Wa7m
-	 EhS6hF4R2kV07om1sUNKO08qx9v/1elArBbHNjWbn9OafWE1E95kdaAZOEDxfBIT+IblI
-	 xvs13WedzOjojnqGhVbyIC3XQJ90HA5TlC4KwvMfbt/S1cVsoElnjKjC5Nu7fwKZAnTFN
-	 fCJGpxr7FxQRypy+rdryoYWhbiQaXpdHF9RkfLmglZmznCtojzqhTA+c5MAIMzi5uSLf9
-	 PU7aJwqZUQ5RMUaJqD1+mTBJaq67Itbz5NQH/nLpWl/D96NZ9Q96+Ffzmb7UE5gmXBQ==
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=DjXxkJO09Tc2aC2/WFAZoPPM/xCjKbBvMJqJr4rhthQ=;
+	b=ifDFrd6TL3VFwz8y7oX0dSRmoFeKDQ2rKrLO457vtq2/89H6TEwQKGO+TcWcwLp7Iqpo
+	 I3Yk9gvaiasTC34pqsdaqtIYsOLJS/rf6j0hnrlVOlFvUItlVNakTmsFQIOJubK6zxWNp
+	 ZJE7DbuSUtuMhNFyYu8xoXYsXE2TIv59gOwdAAFKEc8LIkY4RvyLSRA/rSEaSILArGffP
+	 u0mcRncYURLNVtfOmDFEWPxKjlqsYpV4NRQ/t3cfsVVM7+c6U03GC25iTc/JQEKfqwHlN
+	 YI0Yi+9sWL3e3QJi3nh10qSfHndg/NHTGfD/yj9k5za51RV8CKllVL4R4Rn99fTk2Rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlLoUKzr;
-	arc=none smtp.remote-ip=209.85.210.178
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64E606A31A
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:10:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC64E606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=UAmNmUqH;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5EE606A31E;
+	Mon, 23 Nov 2026 15:10:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D5EE606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlLoUKzr
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8b2f59de176so2747710b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 07:10:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795446606; x=1796051406; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dz52cAd06DhrS+w2eA1gjA1iPlJT/ApD0Ocp67pISs8=;
-        b=KlLoUKzrAGBBjUKAIUzd57PO8Cutrhk/YnNNmvLeoU8J31Qs8DD54B8ZjCOkDLESRr
-         6emwUFKoeBsortM28AeKr0oQoZPg1di8fYgh/gAVQrMYMilfo+Dw+N4/5P9SCkzixzvA
-         vdIQ62ZfNnXfgGfYzkmxCR/gKLkHtcX4v6cMggVulMnBKIwxnkAiazOZlqft8gahmHhD
-         a5twDQyC/AxYuV2jp4FUXCxpHwxQ3ffDeBVS0lD1+wD8ECPwVGWDv/1XT8TyeuwShEUT
-         n1jSSigjcGSjbDB6fFqpvWuNMP3ZANkq4U6efkTHBFvP10Mg5E/3S67np9oTHQqoFnLy
-         bhPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795446606; x=1796051406;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dz52cAd06DhrS+w2eA1gjA1iPlJT/ApD0Ocp67pISs8=;
-        b=EVFKE1RPxlCmI8EiFVXBaeaXvyftn22YtOwla+hs14JGyWkJxRBzedAGZW72U4X0V2
-         Sz8sRmAxJnnkAwHYyCufcz32Crx4q+dzoEThdWM9ttasi9VHjBdqVGV8QoY+r6HpJUaA
-         bXQSzfEsRybQgUACtep6EF+DeoiZnq1HibMfvUiL4jA08PlMduC1lrTdGqWJ3rZ1LI6P
-         p25NPQTu8s+JDMUdGCnsUyMBQExVYDmRTvQovgbClGhy9Ap8qNDkiKt6VC6v7Bw9F96g
-         ShC8pZvS6K4vBBO8KTLlybkBmlJxRhp/FLPYUZDYDETDD/SNRlQK6vsEkqAJNUQ2QNFX
-         nmFw==
-X-Forwarded-Encrypted: i=1; AL+hErERca2M29uO2j9kCxHNmvc98EtPymOUL9OLTNZFBpzX0zEiU9nMFL/BNaVQt67jihI9imxDJ37ftsaGmCEVTbI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/C++xKrB5bFZHA47I7T/bJEsJo96kzQPNMkrwu+G2IGdvGPUtm
-	hJxeF+rOMnz01PmTfaV7WLlxyguBlAtFdtqm91ze5gchYToke+CmA0pE
-X-Gm-Gg: AZFdTZeiJkDeXzR7aaOvCQNXaNpAxh8P8hcUJdsjGcvdfsd1+kaolePOresPRPC10b8
-	EXhOaPfsW/5eamQo2SMU3BVyfbpSGMbkJhRre/B8p9DVXBeZJL64Im5kLoKfYbAgap5dai/l+Ju
-	K8Q1CToOF7cxsPMDTPERW790BE0r3+vvhd7S+5tUe+6wTwRAGDjeTaJntfpunZlCKEEklKU08C3
-	AfVtvcHggUTTRB0UjQgdvml84AlB480fy1VXXHV1a2G57l/w24MAMyewqSdGvZYytoWHjnMVz0+
-	GdKJoQbBWLAqfWNGECadcsX9W8NpyhjR7M7Wf18nFauXjJ1SfyQOiUMT7cV0eVYCemxgFociZNY
-	DqdkLotIKPlOHvMtsl692+ER9WM2jaDs5QxYsW4GXUyY/QCGTryOBwUqpPdkNMyacKUVYfQNCML
-	5dziTu9x87hu6Rx3tNx7I4xwA13HXMz+hs1p3UWKnZ/2DdeiOihLGJlvj1NE4ePPmIfAosjnQu4
-	WxWkxzDncec+iupI59K/bR38oFHX7HXsTwaPGfwfh44iKeoi7e7WUppB8g/O3VD+2K9LWYJns7d
-	i2KR4lBs7yX8oubNBuDLDOohV4yUUhDBR5VPc4Yhy4GJxYcUHaERVy7+O05UqlPVK1OXtJl4qdz
-	/SiF6Wy5qc4EjyCkC
-X-Received: by 2002:a05:6a00:928a:b0:89e:6bef:70f9 with SMTP id d2e1a72fcca58-8c87bfa8116mr10077691b3a.27.1795446606284;
-        Mon, 23 Nov 2026 07:10:06 -0800 (PST)
-Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c86d821637sm5956464b3a.0.2026.11.23.07.10.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 07:10:05 -0800 (PST)
-From: Kurt Lin <lylin1023@gmail.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Song Hu <husong@kylinos.cn>,
-	Mina Almasry <almasrymina@google.com>,
-	David Hildenbrand <david@kernel.org>,
-	muchun.song@linux.dev,
-	osalvador@suse.de,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=UAmNmUqH
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69FCC143D;
+	Mon, 23 Nov 2026 07:10:02 -0800 (PST)
+Received: from entos-yitian-01.Arm.com (unknown [10.168.196.233])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 203273F632;
+	Mon, 23 Nov 2026 07:09:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795446605; bh=CoKGKHf3X6ePMybvJ0+rBCrZ9GSS1W96TB5Eff/LIWs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UAmNmUqHY/Vl2F24ON3PyeqyELFzQxo9KglHjT7r0aOexNfnPrReUWA2lq2aORq+g
+	 IwAjGM1CL3qCrV3R5kaMhzRauDjZqgWx8vIzXJgRqyIgaM/8FJLKo/Shiymg53Qnln
+	 J0lwHZDL78emthTkO6XsSH6TFciD8PvGcxwXexgQ=
+From: Jia He <justin.he@arm.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sascha Bischoff <Sascha.Bischoff@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/mm: restore hidden hugetlb reservation scenarios
-Date: Mon, 23 Nov 2026 23:09:58 +0800
-Message-ID: <20261123150958.2212229-1-lylin1023@gmail.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <apqBn7tWDHQeMrzB@kernel.org>
-References: <apqBn7tWDHQeMrzB@kernel.org>
+	Jia He <justin.he@arm.com>
+Subject: [PATCH 0/3] KVM: arm64: Fix pre-first-run KVM_PRE_FAULT_MEMORY vcpu_load() issues
+Date: Mon, 23 Nov 2026 15:09:14 +0000
+Message-Id: <20261123150917.2679600-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,40 +77,50 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 04, 2026 at 11:30:23AM +0300, Mike Rapoport wrote:
-> And this code breaks our CI e.g:
->
-> https://github.com/linux-mm/linux-mm/actions/runs/33040981840/job/98414290236
+KVM_PRE_FAULT_MEMORY calls vcpu_load() as soon as KVM_ARM_VCPU_INIT has
+completed. On arm64, VM and vCPU state such as kvm->arch.sysreg_masks,
+trap controls, vncr_tlb and nested vGIC setup is only initialised on the
+first KVM_RUN in kvm_arch_vcpu_run_pid_change().
 
-The hugetlb category in that run hit its 300 s timeout inside
-charge_reserved_hugetlb.sh.
+Running the full arch vcpu_load() path before then reads unsanitised
+guest sysregs and touches uninitialised nested state. In particular, if
+a VMM creates an EL2 vCPU with ID_AA64MMFR4_EL1.NV_frac cleared to 0,
+sets HCR_EL2.NV=1 and an EL1 PSTATE, and calls KVM_PRE_FAULT_MEMORY,
+kvm_vcpu_load_hw_mmu() queues KVM_REQ_MAP_L1_VNCR_EL2 without a
+vncr_tlb. The next KVM_RUN then dereferences NULL in kvm_map_l1_vncr()
+with preemption disabled and kvm->mmu_lock held for read.
 
-With the stray 'continue' gone, the "more than reservation" and "more
-than cgroup limit" cases run. They expect the write to fail, but
-write_hugetlbfs_and_get_usage() still waits for the full reservation,
-so most of these cases spend 60 s in wait_for_file_value() before
-moving on. The CI log shows this: hugetlb.2MB.rsvd.current stays at 0
-for 60 polls in three cases, and the run is killed during the fourth.
+Patch 1 skips the arch vcpu_load()/vcpu_put() callbacks until
+vcpu_has_run_once() is true, and adjusts VHE enter_vmid_context() and
+vgic_maintenance_handler() accordingly. Generic vcpu_load() still sets
+kvm_running_vcpu for dirty-ring tracking, and pre-faulting only populates
+&kvm->arch.mmu.
 
-Skipping the wait when a failure is expected, on top of this patch:
+Patch 2 checks that vncr_tlb is allocated before setting
+KVM_REQ_MAP_L1_VNCR_EL2 and adds a WARN_ON_ONCE(!vt) check in
+kvm_map_l1_vncr().
 
---- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-+++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-@@ -252,7 +252,7 @@ function write_hugetlbfs_and_get_usage() {
-       "$cgroup" "$path" "$method" "$private" "$reserve"
-     local write_result=$?
- 
--    if [[ "$reserve" != "-n" ]]; then
-+    if [[ "$reserve" != "-n" ]] && [[ "$expect_failure" != 1 ]]; then
-       wait_for_hugetlb_memory_to_get_reserved "$cgroup" "$size"
-     fi
-   fi
+Patch 3 extends nv_pre_fault_memory_test to cover pre-first-run
+pre-faulting. The cases that do not need EL2 run on all hosts. On an
+unfixed kernel, the staged nested context case triggers the "Separate
+virtual IRQ/FIQ settings not supported" WARN while the test still
+passes, so the kernel log must be checked as well.
 
-takes the script from over 600 s to 64 s in a virtme-ng guest, with
-all 56 cases passing (only 28 ran before), and run_vmtests.sh -t
-hugetlb to 83 s.
+Jia He (3):
+  KVM: arm64: Don't load hardware vCPU state before first run
+  KVM: arm64: nv: Don't request or attempt L1 VNCR mapping without
+    vncr_tlb
+  KVM: selftests: arm64: Test KVM_PRE_FAULT_MEMORY before first KVM_RUN
 
-Song, would you like to fold this into a v2, or should I send it as a
-separate patch?
+ arch/arm64/kvm/arm.c                          |  17 +-
+ arch/arm64/kvm/hyp/vhe/tlb.c                  |   3 +-
+ arch/arm64/kvm/nested.c                       |   6 +-
+ arch/arm64/kvm/vgic/vgic-init.c               |   2 +-
+ .../kvm/arm64/nv_pre_fault_memory_test.c      | 335 ++++++++++++++++--
+ 5 files changed, 321 insertions(+), 42 deletions(-)
 
-I found and tested this with the help of an AI coding assistant.
+
+base-commit: aebb7274476403040d582c61478df8f4a7bf9cd3
+-- 
+2.34.1
+
