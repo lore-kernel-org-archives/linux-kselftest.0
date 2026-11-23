@@ -1,75 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795409862;
-	b=v2Jv6JWBqurqtJlUnSXNFKOQwitP/gRqNfNjhZgfkkUs/vGqW4Q9TCrJZyLLyuJnMPiR
-	 IZzOUpDJRu2OYe3Y0AI1xgTZ+772otvPXTkb7HtAKkAi0zX9uwnhmqi1Jjm24xAAG9vxl
-	 3B+Qdn7+KSnRHHmBESJzwgZvCQvVYRr5qAbtZ4gbkHpAvut4/CBLNTH+Yy6aPlvWB6Ray
-	 U3dvpmZr9nRkC+ltheaeDi9/6Vbps/FYtfrRitc7Ls6yHubocKfF6c7+WgrjUJiEOGE2S
-	 8fGl684VVLdqV2Ge/WvnAzSRz91cZSYQWtfhiDevDlpFhMiMOqI2o+yCyZVK5lKsEtA==
+	t=1795409870;
+	b=05a+Jp7bwIQfpH68V2fP1Krzh/a/fY5myCdG5eU6a3RcccuNPEakE88RyUxAfPWembKz
+	 EV1vpwEtYifaIu4TV8PwToaOI8e4Qk3juMr7ml0NAFzkr67a8+l4HqSuYErQbccToO9Kh
+	 v577Odge+azz1alikFb4wBEHmGQC2QuP/CI3irNgrJemajfUDIAuWAfno9wdkpxodQ1Ko
+	 1P6X/G8sS93mOoYtnyMADvRdahVSTVIHBOSkvRRJBHGXBvPRjlVBkxRoVQkAVME7890nD
+	 1C9yWGuollh8spLYfZxGM63cO9kbVCGmVSdKVB79HDa0iC8/7fTpqqvZx2PY+QeDSkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795409862;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795409870;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=d2RCGmDzrb5brbldUzpcvvEwJ92ts5K49mJH6OL4I80=;
-	b=x0lfirEQLlOKY0TWi1sHy0TArPhxlpoN5ZERMXa61wyXvHXCnIRltsktuQYkWwev9Ecf
-	 2FpyeFhfDui+QO/dDUarcrZv93XtQpoQgGzc4Gvh5nEOUMHb0hqRx56LQlMvjMW02uhkq
-	 x58U+tUyQII/kbBo4Bh585gl4SQhtrN0GO0VuNm6+7ze/V2g9/jyaUKLGwVGhUR0Vz2gl
-	 xQx/b9kt95MZ3KX6RhtlI8uWBQRPQ8tKfcBOKAzI8YSHuK26f3FHjaDQqDusfnaM/GyTS
-	 odsJ0oN8x50nVGfO6oyU9UxDNn0brS93FxDA2Sx+/IFz+kpNX89sJRPQDyR/DjenCEA==
+	bh=M1ogYisayK/yxmuo72t/sVdbTsG2vWA7R4e91rM/8ts=;
+	b=2w4zkwMl31M2QvMQa+3yHOdhn2NJwkXQ6dVEqvtLN6jhwAvLAY8nP4bSTkU/8p5WjgkL
+	 FLYYTsxOVPcQP7OPOUD+if+UXinnjQNhBC3COlP2E+ov+meJ7HgGemA0LIXdVZKF4D61T
+	 rWx9wh/X5C7PidAt5Txjjzb0blfWhAUtJOl2RPvdddRXZj7lxcVcUl74S0ASfqRVLKM9/
+	 njrxAQDh0TjJfFVr044M90FnQcwRhaVcEhNspfwxgx06ffTV0dzUvF28GMJ9s9xb8vJBK
+	 8mwBtbwVDfeaCy2JyS8U/mIoCkNWfT5G4p/NBw3xz9ZYcuPRDdKEe5HLzuoChiFFK7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--tweek.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Dpl/krmu";
-	arc=none smtp.remote-ip=209.85.210.197
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="WGE87fb/";
+	arc=none smtp.remote-ip=74.125.82.70
+Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3E6606A31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 04:57:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF3E6606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7247D606A31E
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 04:57:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7247D606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Dpl/krmu
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8a079256596so2083838b3a.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 20:57:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WGE87fb/
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-16bc6f3fdb1so1788889c88.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 20:57:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795409861; x=1796014661; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795409868; x=1796014668; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:from:subject
          :message-id:references:mime-version:in-reply-to:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=d2RCGmDzrb5brbldUzpcvvEwJ92ts5K49mJH6OL4I80=;
-        b=Dpl/krmumFWDZ8weJNtsc7VFttCu8/mywfOPbRZVNXnUX71YB63uuDbHO74K4ys2fa
-         KuIA5+12ye35M9QY1u+YFLtdZzN9Iu3tnMnXeZRgosaytOxo1EfWlf9sGdVLnwn6+WKq
-         Od5TaVgOdrxKOcVHPLxwVjRf+2sRTFESFJwlH4WthMcwgjdSdbbHXF21IJCailRQB6a7
-         8VNBc+59Rc99Z0pUDUr5tJ6Ialg25li4avNJy9mQCmMPAFjLKdNe0Z+Vq2ZkiP/x3/AL
-         0R+tFXzaXIcijylYk2wbQCrBcj8fwKgnwGAVz4wWHCdl1U/obHWLPpGIkSvhBiuGgkiG
-         4hqw==
+        bh=M1ogYisayK/yxmuo72t/sVdbTsG2vWA7R4e91rM/8ts=;
+        b=WGE87fb/HYX7KY3xOT8g91dyOLRPNbt47aVq7HHWwHmG1bRdT3N+EJcqJSSRWLpm9K
+         IxrgNjzq6giF4ffKrOrIAUpUpVoLlqbpHpy6AhCpFV/ZRPr1VjmlrSmcPHYmzXFnf+qX
+         mLgYZm7ckZqhNJzKXNB/jBmLewQeLUQNZUFZ3zpIo3xgmIMvrbxS4aOvWQgaeAaAP4PK
+         qwJ5tdmmQPQu7R+nfv+LRUmURN7NPhFFlw2wsPdrY4J6phfv36Q2Ih5CrlO7zFriwtMQ
+         DFToaGEWKVzS/0xuHFTAEY43M+gJwk8yRZGkEk1vwfgTV/0UzETvtXpx/YorjabrIXkj
+         n16Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795409861; x=1796014661;
+        d=1e100.net; s=20260707; t=1795409868; x=1796014668;
         h=content-transfer-encoding:content-type:cc:to:from:subject
          :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=d2RCGmDzrb5brbldUzpcvvEwJ92ts5K49mJH6OL4I80=;
-        b=00ZdCFLXu07yIrekclDMn6iHYOWhKceAnR8JCE6ucV+FaSZTZ6Suf4k02VwfVV65Cs
-         e1ZKfUFWuyUD6FRxwApS5cg7BL8vGxgabzTr9p2TprzZwzCv8wTkrutpfnBNDzipXJJ+
-         sr8gPx1O5R4oArTZqjPl2Xs6b1Nj+Ehp4ok230m6odighw5edQp3k63wq/rdDZaNEVi/
-         2CgYQHjqgEYj30R3fWoB/0b1vQY4BKQUGH5by/3g3v/2An9RoVqqYUGQrA1f7wPJE3g6
-         QZtk1NWoOkNC9O0+PsjnHoZSbJQyRld+IoE3V5VPlsJiXMhAiAV9gLpgOgLFxAIvD+iK
-         w9rg==
-X-Forwarded-Encrypted: i=1; AL+hErGh3PYt1gaBusKFW31F2qozVzMMRaBRa7VGDorlGd3fqRsW9dn3iCcOdKVU9gyKJG2vPvB8+lt6hYzTzA9urWk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8SlCj7CxjpJdqZ2rTmPNUKsbjZITtdaq0QpDXsCWNApD0fjHwT
-	/Fio/NypEmjSdGnWi3JxbKOFASVEAQoP0reZ3J+NqLMEgj4SgsbjbGONtFZiJfMBTnvSi/b3Y54
-	zdQ==
-X-Received: from pfud19.prod.google.com ([2002:a05:6a00:10d3:b0:88c:e369:e5a4])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:c791:b0:3fa:162b:d209
- with SMTP id adf61e73a8af0-4014ae820a3mr9794641637.15.1795409860920; Sun, 22
- Nov 2026 20:57:40 -0800 (PST)
-Date: Mon, 23 Nov 2026 15:57:29 +1100
+        bh=M1ogYisayK/yxmuo72t/sVdbTsG2vWA7R4e91rM/8ts=;
+        b=uE82BPxX6KjfFo8WF1bJ4rXh/vd43wbO9u66liT6tqcUOVCTncHFHTlfWkmHptoHGS
+         M8RGqEmaI7yZFxz+f3tVZ0GRmPudkNZsxnefwzUY2fgoP49xrPKv+FNmdWoYtgduf4eU
+         ns6qX9JGhXfEJW1uLxy9eU5VqMImGWXtfDuMwiB1ezHidb/Gf5I7uvBBPVnm9vidml6/
+         zUD4FigepXArvZgxfi9zNzd074nURLQGxoB3FLRhkIQIgiDx1DuL6jFk5mxr4KzHHO3u
+         5lTZqQWmSXS9OTih5ghrwe1KdAgzA1pILgu/6JxAoHvYU/bT+UNWSXF9RJ6inK/qmkyH
+         N0Gw==
+X-Forwarded-Encrypted: i=1; AL+hErGOPNG/CEiuN12KarAdCXiXGOLXcNis7A0SlLLaaGOh0aKZ89A0BmZZXqAuWpggpgxTetcFPwhOo0aytJ6mIFQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+jJIGgx3w9q8N9zqGjU+Ok9SUS53AGnxVz9x4VS67FTakaWY5W
+	pC3c4JeQOWE822HdECs+1zuWs1zMw8cKdU55KgwtxWT3ajOnkFPfWVkvTnQULkRRU87qfZvI3Ac
+	dvA==
+X-Received: from dlbts19-n1.prod.google.com ([2002:a05:7022:b053:10b0:1a3:1342:a32d])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2508:b0:1b2:3497:5998
+ with SMTP id a92af1059eb24-1b5568f03abmr9773066c88.36.1795409868143; Sun, 22
+ Nov 2026 20:57:48 -0800 (PST)
+Date: Mon, 23 Nov 2026 15:57:30 +1100
 In-Reply-To: <20261123045730.1960346-1-tweek@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,8 +82,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261123045730.1960346-1-tweek@google.com>
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
-Message-ID: <20261123045730.1960346-2-tweek@google.com>
-Subject: [PATCH bpf 1/2] libbpf: Skip BPF token preparation when generating loader
+Message-ID: <20261123045730.1960346-3-tweek@google.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Verify gen_loader skips BPF token preparation
 From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
 To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -96,44 +96,127 @@ Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, bpf@vger.kernel.o
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-When obj->gen_loader is set, libbpf emits loader instructions instead of
-issuing BPF syscalls on the host. Every other kernel-interaction step in
-bpf_object_prepare() (such as bpf_object__probe_loading() and
-bpf_object__load_vmlinux_btf()) already short-circuits on obj->gen_loader,
-but bpf_object_prepare_token() does not.
+Add a token/obj_gen_loader_no_token subtest that mounts a delegated
+bpffs over /sys/fs/bpf in an isolated mount namespace and verifies that
+bpf_object__gen_loader() does not acquire a BPF token when:
+ - /sys/fs/bpf has implicit token delegation enabled,
+ - opts.bpf_token_path points to a delegated bpffs, or
+ - LIBBPF_BPF_TOKEN_PATH points to a nonexistent path.
 
-As a result, offline loader generation (e.g. bpftool gen skeleton -L)
-probes /sys/fs/bpf and honors LIBBPF_BPF_TOKEN_PATH. Worse, if the build
-host has a BPF token-delegated bpffs mounted, bpf_object_prepare_token()
-sets obj->token_fd, causing bpf_object__create_map() and
-bpf_object_load_prog() to set BPF_F_TOKEN_FD in map_flags/prog_flags.
-Because gen_loader copies those flags into the loader blob without
-serializing any token_fd, the generated loader fails at runtime.
-
-Return early in bpf_object_prepare_token() when obj->gen_loader is set.
-
-Fixes: 6b434b61b4d9 ("libbpf: Wire up BPF token support at BPF object level=
-")
 Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
 ---
- tools/lib/bpf/libbpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../testing/selftests/bpf/prog_tests/token.c  | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fb8a1f07c5b6..388facd11c38 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5212,6 +5212,9 @@ static int bpf_object_prepare_token(struct bpf_object=
- *obj)
- 	bool mandatory;
- 	enum libbpf_print_level level;
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing=
+/selftests/bpf/prog_tests/token.c
+index f2f5d36ae00a..2aeb814ea376 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -1051,6 +1051,79 @@ static int userns_obj_priv_implicit_token_envvar(int=
+ mnt_fd, struct token_lsm *l
+ 	return -EINVAL;
+ }
 =20
-+	if (obj->gen_loader)
-+		return 0;
++static int verify_gen_loader_no_token(const struct bpf_object_open_opts *o=
+pts)
++{
++	LIBBPF_OPTS(gen_loader_opts, gen_opts);
++	struct priv_prog *skel;
++	int err;
 +
- 	/* token is explicitly prevented */
- 	if (obj->token_path && obj->token_path[0] =3D=3D '\0') {
- 		pr_debug("object '%s': token is prevented, skipping...\n", obj->name);
++	skel =3D priv_prog__open_opts(opts);
++	if (!ASSERT_OK_PTR(skel, "gen_loader_open"))
++		return -EINVAL;
++
++	err =3D bpf_object__gen_loader(skel->obj, &gen_opts);
++	if (!ASSERT_OK(err, "gen_loader_init"))
++		goto out;
++
++	err =3D bpf_object__load(skel->obj);
++	if (!ASSERT_OK(err, "gen_loader_load"))
++		goto out;
++
++	if (!ASSERT_EQ(bpf_object__token_fd(skel->obj), -1, "gen_loader_token_fd"=
+) ||
++	    !ASSERT_OK_PTR(gen_opts.insns, "gen_loader_insns") ||
++	    !ASSERT_GT(gen_opts.insns_sz, 0, "gen_loader_insns_sz") ||
++	    !ASSERT_OK_PTR(gen_opts.data, "gen_loader_data") ||
++	    !ASSERT_GT(gen_opts.data_sz, 0, "gen_loader_data_sz"))
++		err =3D -EINVAL;
++
++out:
++	priv_prog__destroy(skel);
++	return err;
++}
++
++static int userns_obj_gen_loader_no_token(int mnt_fd, struct token_lsm *ls=
+m_skel)
++{
++	LIBBPF_OPTS(bpf_object_open_opts, opts);
++	struct priv_prog *skel;
++	char buf[256];
++	int err;
++
++	/* Mount delegated BPF FS over /sys/fs/bpf and confirm normal load uses i=
+t. */
++	err =3D sys_move_mount(mnt_fd, "", AT_FDCWD, "/sys/fs/bpf", MOVE_MOUNT_F_=
+EMPTY_PATH);
++	if (!ASSERT_OK(err, "move_mount_bpffs"))
++		return -EINVAL;
++
++	skel =3D priv_prog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "normal_implicit_token_load"))
++		return -EINVAL;
++	if (!ASSERT_OK_FD(bpf_object__token_fd(skel->obj), "normal_load_token_fd"=
+)) {
++		priv_prog__destroy(skel);
++		return -EINVAL;
++	}
++	priv_prog__destroy(skel);
++
++	/* Implicit /sys/fs/bpf token must not be created during gen_loader. */
++	if (verify_gen_loader_no_token(NULL))
++		return -EINVAL;
++
++	/* Explicit bpf_token_path must also be ignored during gen_loader. */
++	snprintf(buf, sizeof(buf), "/proc/self/fd/%d", mnt_fd);
++	opts.bpf_token_path =3D buf;
++	if (verify_gen_loader_no_token(&opts))
++		return -EINVAL;
++
++	/* Invalid LIBBPF_BPF_TOKEN_PATH must not fail offline gen_loader. */
++	err =3D setenv(TOKEN_ENVVAR, "/nonexistent/bpffs", 1 /*overwrite*/);
++	if (!ASSERT_OK(err, "setenv_invalid_token_path"))
++		return -EINVAL;
++	err =3D verify_gen_loader_no_token(NULL);
++	unsetenv(TOKEN_ENVVAR);
++	if (err)
++		return -EINVAL;
++
++	return 0;
++}
++
+ static bool kallsyms_has_bpf_func(struct ksyms *ksyms, const char *func_na=
+me)
+ {
+ 	char name[256];
+@@ -1243,6 +1316,15 @@ void serial_test_token(void)
+=20
+ 		subtest_userns(&opts, userns_obj_priv_implicit_token_envvar);
+ 	}
++	if (test__start_subtest("obj_gen_loader_no_token")) {
++		struct bpffs_opts opts =3D {
++			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
++			.progs =3D bit(BPF_PROG_TYPE_XDP),
++			.attachs =3D ~0ULL,
++		};
++
++		subtest_userns(&opts, userns_obj_gen_loader_no_token);
++	}
+ 	if (test__start_subtest("bpf_token_info")) {
+ 		struct bpffs_opts opts =3D {
+ 			.cmds =3D bit(BPF_MAP_CREATE),
 --=20
 2.56.1.750.gf70dc682cf-goog
 
