@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795469675;
-	b=RvTPa54PQmW6+1zweR0/AFRZygaZEqSXsjEhC505eVvWpppd6HTiwvfekdCJEwrun8rS
-	 9WFUM+1h3AzvQtuFh4AmWIIMzWlRUckgfHE/9+XY9pVQoahfhy87Wjn2lFnG4agfkZrCz
-	 DLCvb4/tdBxIFR1cd9/53rwrz+/g7sw+LPvTkKpPvhrxLAyiAFV5rZ9SrnM14yDqm1NgA
-	 lixgUtirIUOUhJNjZV9ifKxjlaX6Eh3WpSHx2XECudHHXB0t06ATd4kueSSmtFvQFHOuD
-	 hN3zymFPEezEbFKkqn94cuJTuiQVZEHR6L0cFF0+q4uPOpv/QT5+IWL+QS/I0xxKEGA==
+	t=1795469673;
+	b=SIU4ywRDaZYE9ZNOOgxYhXr6ChqPt81OlVg4EIv4LOtQ/wDPsyK2jFgJsN7XOG54yJBz
+	 VSaA10lhVAWuGrdkZ2Yn1wtlVWpYWm0syGtt7Kv1QHFiegbTQKPRIZ4Xbi7wUcwOxo8sV
+	 bvI7XkveZRuVAq4roEaNZXyRHhUIzKcTszujSDz3rlkn3BRdCLJSgvIs4dptI/2tg0b+T
+	 qF+bNtJqDrqmKeqh56cQzInK48l2vJxwhaaWTanlzZNSEfvWSX09LcK7mO0ozG2glcuEc
+	 XoCLQd+UZc8EwcuN06ynPmi+YunK7uWhdtS+6XP0MiIHH28tvPVWuPmFT5we2/ge9hg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795469675;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795469673;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=9/No1l1Kc63z3bylzGTqguL7lglbI2czanvjCA3a2mY=;
-	b=iKfkvpmzEqybNxjQWVRuS60dQl5BOHunmyvI1WoLdtwFnlnFiIA2JdOdu+vPYXwccfft
-	 zRbNx6osJ4a3B3UlctkEJ75HHTzDGA2JBE6XkIwXmmFea0CSu0tHwZIFWltcRbTyM9+hQ
-	 6xHlFXFZ05e0CSrv7WXK9Yv+f5UHGvjx4B01NyBssPWTu2Zf8fm1J2IfxsbpI1zk4UT5t
-	 vvHy+FeMHuvjNhMJBrqYtfzwnSbOx1Ra3Yn/ChYCgzq7zUTknmTsgP7IgEgBT5tKsynFX
-	 yPibzMxDDv3Stoy8VxAjJqX92j6YoLj5Oa6zOBPrUgYPtQfK2sJVR+qPktdMdBXbfNQ==
+	bh=ZeKQ14LjWbrBOwF34ZwIHkM7l1+rx5qTxWiWJLrmWQk=;
+	b=E6c1XL9LeekRGyaGckgMVfpdgX2iCndFj6mWCqBjE4Gf+Mt+4F8fxeFP7vkONJYZobQx
+	 Gw7QrGNtbXeUPAxyt3mi6CwqJrkgxa2qpBLL9nFsQrymn/Bq+x2TkaSmaDBl5KNKWhRli
+	 LWD8oqwlq62zQvcdr2waKGxtQupyAPwD1Ad09OjTh2YGOa5pdXyvD+dOnDgUkXiD0RY6F
+	 JXev6Z/864WCOtNeRXaHlmQ0/Ok1SjuP3H2/1ZBSTzkDTmHNBLlcztbOmUV2XF9Le/WEL
+	 zNCvBIOVJf5xnDXVrFfyHxNyJXluCzk18KtY/DIu4tDy6f15dTyLebTvhc9u8P4bp6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkTUJ8k4;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mPesezdj;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C87606A327;
-	Mon, 23 Nov 2026 21:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkTUJ8k4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 993141F000E1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF50606A31E;
 	Mon, 23 Nov 2026 21:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mPesezdj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E5CC1F000D8;
+	Mon, 23 Nov 2026 21:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795469675;
-	bh=9/No1l1Kc63z3bylzGTqguL7lglbI2czanvjCA3a2mY=;
+	s=k20260515; t=1795469672;
+	bh=ZeKQ14LjWbrBOwF34ZwIHkM7l1+rx5qTxWiWJLrmWQk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dkTUJ8k4dnEXI3c187Ferhu/z9D7afOKibujKNvAH3gBnHsNU14B8dRif9zh2eIyz
-	 WiU6eKdKAG3KZ9j8CYeKUz9X9JpUiyqlUn6iAUjCyiNzqRUZLgiseyjVAYMp+ZJbA/
-	 Byz3QkVetyMQUQjJplfguXV1iLal9Pf7cLhk+Y7NQ46BQkrGLDEdcxZ5zq3zrtDcyt
-	 WgjdCfIRdXXkxABUXXnLESji/9h6K8K+WO7+NmyDHoGFAQfAMl6Rdk8D9dWhI36Ov9
-	 gblfc6EP1WO7xm2KTEgR4pmpFfcA08deaHa11Nd43K0U/1a+ddezgba54TZgLZz/gW
-	 HNVCI8EXznn9w==
-Subject: Re: [PATCH net-next v3 09/11] net/mlx5e: TC, reject tunnel keys
- without a tunnel device
+	b=mPesezdjcoLgb6a+8xflRctT8RCs/SR6BDgG7TMB52zm36Uc4MpUA736ZAcGID7MU
+	 cG2t6qZ83jF0taKsDvTqn047oPGx1YiMDtsCpGW5I4IteyoiHdt6C+tY/tLFwQDFNL
+	 5NTIZLj2OG3TJtHH8EmI09x8KeI/Rj7S6lIEGw7bjhgJMpXYAHygkcRaQ3Q9qrbO8R
+	 /L8K2OA3rw6x+RXH43oS+rf1MZnDO3gDikYkrlZqz6d1Rk6U6sGXSjGvM5tLwHvzos
+	 F+zw+JKHb0zqUiPRv3Uwi7YRQN39s5gIroBrCW1zpWk595bqdCCocpCwiCv2ksWW84
+	 boywKXzuTHPBQ==
+Subject: Re: [PATCH net-next v3 08/11] net/mlx5e: TC, offload RX queue mapping
+ in NIC flows
 From: netdev-bot+sashiko@kernel.org
 To: acassen@corp.free.fr
 Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
@@ -53,11 +53,11 @@ Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
  idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
-Date: Mon, 23 Nov 2026 21:34:33 +0000
-Message-ID: <179546967317.3135.11320901240553136005@kernel.org>
-In-Reply-To: <20261122213200.3207385-10-acassen@corp.free.fr>
-References: <20261122213200.3207385-10-acassen@corp.free.fr>
-X-sashiko-severity: Low
+Date: Mon, 23 Nov 2026 21:34:30 +0000
+Message-ID: <179546967077.3135.3838730458941932181@kernel.org>
+In-Reply-To: <20261122213200.3207385-9-acassen@corp.free.fr>
+References: <20261122213200.3207385-9-acassen@corp.free.fr>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -70,81 +70,139 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-- [Low] The new rejection in __parse_cls_flower()
-  (drivers/net/ethernet/mellanox/mlx5/core/en_tc.c) returns the extack…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] TC skbedit rx_queue rules are not protected when the channel
+  count is reduced, so their traffic is dropped without any warning.
+- [Low] tc_act_can_offload_rx_queue() reads
+  flow->priv->channels.params.num_channels without a lock and without…
 
 --
 
-net/mlx5e: TC, reject tunnel keys without a tunnel device
+net/mlx5e: TC, offload RX queue mapping in NIC flows
 
-This commit rejects flower rules that use enc_* dissector keys when
-filter_dev is not a tunnel device. It applies to both NIC and eswitch
-flows. Before this change those keys were silently dropped from the
-hardware match.
+This adds offload of TC skbedit queue_mapping to mlx5e NIC flows. The
+rule's destination is set to the channel's direct TIR, the same way
+ethtool steering rules work. The action must be the last one and cannot
+follow a terminating action.
 
-Link: https://github.com/acassen/research/tree/main/UPF-flow-steering [1]
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c
+> new file mode 100644
+> index 0000000000000..32598a2163009
+> --- /dev/null
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c
+> @@ -0,0 +1,67 @@
 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-> index 2326fb21da66b..eab4d5417ce24 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-> @@ -2786,6 +2786,17 @@ static int __parse_cls_flower(struct mlx5e_priv *priv,
->  		err = mlx5e_tc_verify_tunnel_ecn(priv, f, &match_inner_ecn);
->  		if (err)
->  			return err;
-> +	} else if (dissector->used_keys &
-> +		   (BIT_ULL(FLOW_DISSECTOR_KEY_ENC_KEYID) |
-> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IPV4_ADDRS) |
-> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IPV6_ADDRS) |
-> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_PORTS) |
-> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_CONTROL) |
-> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IP) |
-> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_OPTS))) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "Tunnel keys are only supported on tunnel devices");
+[ ... ]
+
+> +static bool
+> +tc_act_can_offload_rx_queue(struct mlx5e_tc_act_parse_state *parse_state,
+> +			    const struct flow_action_entry *act,
+> +			    int act_index,
+> +			    struct mlx5_flow_attr *attr)
+> +{
+
+[ ... ]
+
+> +	if (act->rx_queue >= flow->priv->channels.params.num_channels) {
 
 [Severity: Low]
-Is this extack message accurate for NIC mode flows?
 
-In NIC mode the filter_dev passed down is always the mlx5e netdev itself:
+Is this read of priv->channels.params.num_channels safe against a
+concurrent channel change?
 
-mlx5e_setup_tc_cls_flower()
-    return mlx5e_configure_flower(priv->netdev, priv, cls_flower,
-                                  flags);
+The NIC flower offload path runs without RTNL, because mlx5e_setup_tc()
+sets:
 
-The only indirect block registration in mlx5 is the
-flow_indr_dev_register() call in mlx5e_rep_tc_netdevice_event_register(),
-and only the uplink representor init path calls it. So tunnel filter_devs
-only exist in switchdev mode.
+	f->unlocked_driver_cb = true;
 
-In NIC mode, a rule such as "tc filter add dev <mlx5 netdev> ingress
-flower skip_sw enc_dst_ip ..." takes this path:
+and mlx5e_configure_flower()->parse_tc_actions() does not take
+priv->state_lock either.
 
-mlx5e_setup_tc_cls_flower()->mlx5e_configure_flower()->mlx5e_tc_add_flow()
-    ->mlx5e_add_nic_flow()->parse_cls_flower()->__parse_cls_flower()
+Meanwhile, ethtool set_channels rewrites the whole struct in
+mlx5e_switch_priv_channels() while holding state_lock and RTNL:
 
-The rule is still rejected with -EOPNOTSUPP. However, the message tells
-the user to use a tunnel device, and a rule added on a vxlan or gretap
-device would never reach mlx5 in NIC mode.
+	priv->channels = *new_chs;
 
-The follow-up patch "net/mlx5e: TC, match the tunnel key without a tunnel
-device" changes this string to "Tunnel keys other than enc_key_id require
-a tunnel device". Wouldn't that wording mislead NIC mode users in the
-same way for the remaining enc_* keys?
+So a "tc filter add" that races with "ethtool -L" is a plain data race
+on num_channels, which KCSAN would report.
 
-Could the message say that these keys need switchdev mode and a tunnel
-device, or use a different message for NIC flows?
+The commit message says:
 
-> +		return -EOPNOTSUPP;
->  	}
->  
->  	err = mlx5e_flower_parse_meta(filter_dev, f);
+  "Direct TIRs exist up to the maximum channel count. The rule always
+  points to a valid one."
+
+That claim depends on this unannotated read always returning a value
+<= max_nch. This check is the only bound applied before
+tc_act_parse_rx_queue() indexes res->channels[] through
+mlx5e_rx_res_get_tirn_direct().
+
+Would it make sense to use READ_ONCE() here, or to also check
+act->rx_queue against mlx5e_rx_res_get_max_nch(priv->rx_res)?
+
+> +		NL_SET_ERR_MSG_MOD(extack, "RX queue index out of range");
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static int
+> +tc_act_parse_rx_queue(struct mlx5e_tc_act_parse_state *parse_state,
+> +		      const struct flow_action_entry *act,
+> +		      struct mlx5e_priv *priv,
+> +		      struct mlx5_flow_attr *attr)
+> +{
+> +	attr->nic_attr->rx_tirn = mlx5e_rx_res_get_tirn_direct(priv->rx_res,
+> +							       act->rx_queue);
+
+[Severity: Medium]
+
+The rx_queue range check in tc_act_can_offload_rx_queue() runs only when
+the rule is added. Nothing looks at the TIR number stored here again.
+
+What happens to this rule if the channel count is later reduced, for
+example with "ethtool -L <dev> combined N" where N <= rx_queue?
+
+mlx5e_add_offloaded_nic_rule() installs nic_attr->rx_tirn as the FTE
+destination. When the channel becomes inactive, the RQT behind that TIR
+is redirected to the drop RQ in
+mlx5e_rx_res_channel_deactivate_direct():
+
+	err = mlx5e_rqt_redirect_direct(&res->channels[ix].direct_rqt, res->drop_rqn, NULL);
+
+The hardware rule keeps matching, so all matching traffic is dropped.
+The rule is not rejected and the user is not told.
+
+ethtool ntuple rules use the same direct TIRs, and the ethtool core
+protects them: it refuses the reduction through
+ethtool_get_max_rxnfc_channel() in net/ethtool/common.c.
+mlx5e_ethtool_set_channels() has no equivalent check for TC rules.
+
+The commit message notes this:
+
+  "ethtool refuses such a change for its own rules but nothing tracks
+  the queues of TC rules."
+
+Could the driver track the highest rx_queue used by TC rules and refuse
+a channel reduction below it in mlx5e_ethtool_set_channels(), the same
+way ethtool rules are handled?
+
+> +	attr->action |= MLX5_FLOW_CONTEXT_ACTION_FWD_DEST;
+> +
+> +	return 0;
+> +}
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261122213200.3207385-1-acassen%40corp.free.fr
