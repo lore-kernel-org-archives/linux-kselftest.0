@@ -1,60 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795429174;
-	b=BJXNpBxXl9QY/TkeoRVWGp2e+oPSZOgeqt/JKSSRpcwK9yNzj3SROofWta2qxQ+9QvQT
-	 2XVOJKGpLGL4Vqa3Z9hUW9eHA8awQ48iHr58oTyZOWAIiT+K2uk/vWJ+++gEVtCg+Qnwb
-	 DXaeYcL/5sugyRnRDXNz99F6OMv4g195UtwobH7f2Q2Mxvct15GUSzSRXxgKDCGZgTVYR
-	 RpWki9zU+zRvblS0+gDBQDusj1UOfyjX2aGv4kjY9G2gb7XOSXYIfO7nFU1/s9/SDfRwD
-	 KR78RzA2zEySrxSRol05L/fDKDGs+07QhmeH/Qj5UNaoOEntEnrzFeU5+8xjxG+RYzg==
+	t=1795429396;
+	b=iUsbQ/V3xGV/cXLFyAwPypQgfdEgvSBQqwmckiH49ZAb2Rwpl4/BGuywJY9Ot4XlJK72
+	 TNb/PUJuTAppsWp1YCQVsrBgkwhnPbdji1cAQIjQt3eryS5Z/Y0hR+wIwBbEjq4AMHh6x
+	 5TJ+D5rheGpDvd420thGrWAwn7xV8AS+iU/z1EN4AW6Zr72GsPEqu1s6wF0d0Domu2Mgj
+	 731Tz+dXsc/UivbAtWFIOGIE+4SKx6KRlcW4dzd30cjnIfixgSGfpCPsq2RHcBnx9cn+7
+	 jve0gHzh7+cssE1VATwuNbjGI9/IFOz85ssmwvCajsqWUk6n6SUiUgXQ9dpNrvirx9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795429174;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=F8v/n8HAlGN35GNXNOZO9vza3hTM28edWtZoDu3Dyfk=;
-	b=iwP5+Dp2EzwhzyCIWxbbl/ni51Q1WSERTO2Cm0hKZ19YW7rKwMQQC65SSRcQuyDueA4n
-	 7ySnFRmY0h8FFuBzGXWRiD94ZQs1YAzCXmXFnKhzgh1GHq0DY7x4vprRo4tQWl5Zz3UsX
-	 WESY81a4W9vQdVvM5yQrxHsO1PTUt54JYZHbbof8lyxNz2ybkoIufbUqbsUMFsAriEuG6
-	 4M5LlGxAr7aSAnZi4hrUaixSo8hQzrXNX+AxwDDdqUpYq2ZmW52sUYt4p91YQI8mvROeO
-	 vB7n+B29yXaUTuR/m5+k6S77jtQyEJimJ7SGWAaHyXcezpXRd7T5Y6XIwmznBzNGwWA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795429396;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=7NOkncDiU72MUe5hxrWsyOKUGF/TU53c+ikwwmhNSAc=;
+	b=LBF90rD1+es4N793jtV3+8zPMqh9mOjDDmMmL9dKvNUR40fJV2ZsKHMdPkm4packdZ9D
+	 P5UtwZoTgd7eDMedUcOFgkFwIYHG0VspqTPiVcfIxxtiJ5MyrXGLIC0Fg0uwFE5rXY+c9
+	 vwLg0H8eCbqN1Vq3PX5h5pTb5HuDdp4CiL1cPCkNUqQJPTHcjpWpkvEpi/mUArPiHzUgE
+	 My6bCaWCkhh7/SrA872Y+DtqSKuulMhxUIf4yPSUWDmsxbrhHIMpnlFfJy6vIkovUDuxz
+	 2rky5VdlbabuHr5upQQFlt9VLcnJTHBSy3AcFSMnKpDpNDg0qFU2ZM1EiEJ7bp564dA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Z5ez2xK/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Ug+D0yS2;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760D1606A31A;
-	Mon, 23 Nov 2026 10:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AFF606A337
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:23:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2AFF606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z5ez2xK/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF941F000C6;
-	Mon, 23 Nov 2026 10:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795429174;
-	bh=F8v/n8HAlGN35GNXNOZO9vza3hTM28edWtZoDu3Dyfk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Z5ez2xK/vqwV0tZavLQQZIYA/oXS5T7++ezWNmN5QyAk53WoRLb38ns2iajFu//Bq
-	 dfOLooumBywho0Oe7HQRkmD2Q/y4I8q3wGilEalvciQbk05haexQWxEWZBt2P/w2KC
-	 Tt4gUSPm0fUpPtOkKMUxDTOqxlWwBgp0EjmzOxE+ZV7eJxjTgm78d8BNxw62yW2s2t
-	 xHGqB88Wj0FI8lr7uBXwhOj/GvPDI8DzGr4oIY9PW1AW6Y9a8aWwxBm54iGjXXuXTw
-	 SxDu52AR0bmppIOJ0AmOFCar4nAtqj4VOjBTk13BJiavMryMqGZWGZ6eqoHCMxT6XW
-	 a4v6K44LDSnqA==
-Subject: Re: [PATCH net v6 1/2] vxlan: reset the remote's dst cache when
- snooping moves a MAC
-From: netdev-bot+sashiko@kernel.org
-To: ilskdw@gmail.com
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- kuniyu@google.com, mschiffer@universe-factory.net, nicolas.dichtel@6wind.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Mon, 23 Nov 2026 10:19:32 +0000
-Message-ID: <179542917290.3135.7119976710700884013@kernel.org>
-In-Reply-To: <20261119095256.42005-2-ilskdw@gmail.com>
-References: <20261119095256.42005-2-ilskdw@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Ug+D0yS2
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb85e07aadso37338685e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 02:23:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795429394; x=1796034194; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7NOkncDiU72MUe5hxrWsyOKUGF/TU53c+ikwwmhNSAc=;
+        b=Ug+D0yS2qNQ2sYwj0HwakxRh7IdRVNW16ol8ZAuyq6aEHP6yqqk41CKTOVixP3Oid2
+         I6lPY2yx6kuw78ejRps1a4py1MUeYD6znmyE6d3aAgmKvT6YUTQoiuk7I1TEPfyXkYOG
+         EUnLi4Md1/5+qnk1uj5cU9TcJJy7xqZXaOwkQabn1/UiK6/c81jWqHt17qHYfa8690gB
+         GA/po/g72RaJKYECf2lRcnSY3lslk8RE/GKsfBJ3LU7lVr9/EtyDJ13IxoLvpISOj4OA
+         NEztltUa7HCryRbcM+7dePQOmZ1jpVWwEHGwNLZigabBGijtdWQXdY/6Z1bzAb8wL6zs
+         q+pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795429394; x=1796034194;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7NOkncDiU72MUe5hxrWsyOKUGF/TU53c+ikwwmhNSAc=;
+        b=yvnaJIw9D9ZEzKizChkazn85kpkyvTXOcDi4pBEMeMDfEwJjbFNm22osDQP6bFm+CE
+         MJiRnh+pWBleaIPTzS0nj4yEqdxeJUnVWl/pLZLpiZZGJw64/fjYMTM4lHyVHLIx23Rd
+         aF1gNUyCFqJk2MRMnQ4wxWUUt3MXM7BHUzGEJ5zqhMWqmXdtChaaO/dius7LF8A99PVt
+         SMwzb3LC1Q0QpiHRNJTJzWaqhuGrz5sfsf/zOz3rLt3Dm5aDspJnq5cKex7pwkuh0jm7
+         rLkcqrE0pt4B/OJ47PNxarIZG2ya386An7SkivbqW8jyj6ryITSG/KPeKZjksJy+i95Y
+         5UrA==
+X-Forwarded-Encrypted: i=1; AL+hErFWSxABm495xdN+ukxJUfVQZtAdOXkdunRkn7h2JO/nBE4yMGPmlHRRXNeJo0WZy+TEIRUsZ+KI9UiIX6YL8Yg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8XcwJ9PDRc/e5oWKuX1WEI5azDN7p1I1pkG9wQezPlF6M+hN7N
+	mkHBJvgOetRYiJJJYPaEZ14b1NoF4XNR9H+TYOxuHY2MFgGNVDXu3CIOxBZjssSb81I=
+X-Gm-Gg: AZFdTZfSiKLMEsKNlWxpNu5dD1rul5vIH7ZaA76YBAoM8yeqc5BaUg0tQx3Arm+8CfE
+	Wd9MuJONp9yvQEKuYfA0ZSlcEsNB2kyfWZ2r5kVQOYz6A05No4toUhZ4181CgyK59FMg5q5da9F
+	vlMa9Bx49qK45LFRhuIoZ1k0lHuyX1E2yGuD9Mh3EMXPNmkAOZCP2gTC4v3FKlra0hOIo3qis6f
+	otR7QgDEpx2UvLTAOrLA7Ym1CftYV3yK5LSm4AtvkM7i0Kha9b96kBiRptF+gYgAouw2PllozF0
+	ENihmO8XRSLSWgyCnnrA6RRUqZEuBA9MRrxtStyuSwCa1mJI+iwUu/J9nO79hgVseX8LwCJaP/3
+	OSyWtID/raNmU3qr4NrRkPTHW26PFs8OmGywcjtDNWzQTInLmvVKeN5Iz5dbt/xN64gWAwFdojR
+	1J5CrNDbOa6NbcCIvAfAz5lARl3VIVZNC37NpN6pT+p5q4NVqRwiG/HNYuVOy00cIvplkXZBAlq
+	CNp1Aq4OV+bhrg6RN2JNYq1Reov8zxBYMxY70qLPYWSquz4wTQx4YOZ6TXGcZp2WZKKrkWZ+KzV
+	IY6SAgEIn3UFIWqe
+X-Received: by 2002:a05:600c:3555:b0:4a1:f377:5c68 with SMTP id 5b1f17b1804b1-4bb8881da76mr222583975e9.34.1795429394115;
+        Mon, 23 Nov 2026 02:23:14 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853b216esm382108625e9.12.2026.11.23.02.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 02:23:13 -0800 (PST)
+Date: Mon, 23 Nov 2026 11:23:11 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] selftests/livepatch: clean the test modules
+ without a kernel build directory
+Message-ID: <awQUD16CDFpCTxaQ@pathway.suse.cz>
+References: <20261110161050.2451750-1-sashal@kernel.org>
+ <20261110161050.2451750-3-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,168 +103,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110161050.2451750-3-sashal@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Tue 2026-11-10 11:10:48, Sasha Levin wrote:
+> "make clean" removes the test modules only when KDIR exists, and KDIR
+> defaults to the build directory of the running kernel. Modules built
+> for another kernel are therefore left in the source tree by a plain
+> "make clean" on a machine without the running kernel's devel files,
+> for example after building them as KernelCI does:
+> 
+>   make -C tools/testing/selftests O=<kernel> KDIR=<kernel> TARGETS=livepatch
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+The two parameters "O=<kernel> KDIR=<kernel>" do not make much sense
+to me. The command starts compiling other selftests. I get:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+$> make -C tools/testing/selftests  O=<kernel> KDIR=<kernel> TARGETS=livepatch
+Makefile:4: *** Package alsa not found, please install alsa development package or add directory containing `alsa.pc` in PKG_CONFIG_PATH.  Stop.
+test_execve.c:4:10: fatal error: cap-ng.h: No such file or directory
+    4 | #include <cap-ng.h>
+      |          ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [../lib.mk:226: /prace/ai/kernel/linux-livepatching/tools/testing/selftests/capabilities/test_execve] Error 1
+/usr/bin/ld.bfd: cannot find -lcap: No such file or directory
+collect2: error: ld returned 1 exit status
 
-- [Medium] The patch does not close the stale dst_cache problem it says
-  it fixes.
-- [Low] The re-check under the lock in vxlan_snoop_move() runs its tests
-  in a different order from the lockless fast path in vxlan_snoop().
+It works well when I omit the two parameters:
 
---
+$> make -C tools/testing/selftests TARGETS=livepatch
+make: Entering directory '/prace/ai/kernel/linux-livepatching/tools/testing/selftests'
+  CC       test_klp-call_getpid
+env -u KBUILD_OUTPUT make -C /prace/ai/kernel/linux-livepatching modules KBUILD_EXTMOD=/prace/ai/kernel/linux-livepatching/tools/testing/selftests/livepatch/test_modules
+  CC [M]  test_klp_atomic_replace.o
+  CC [M]  test_klp_callbacks_busy.o
 
-vxlan: reset the remote's dst cache when snooping moves a MAC
+Are these parameters really used by the KernelCI?
+Could you please provide link to a build log?
 
-When vxlan_snoop() sees a known MAC arrive from a different remote, it
-now resets the remote's dst_cache, updates remote_ifindex and clears
-offloaded, matching what vxlan_fdb_replace() does. It compares
-remote_ifindex only for IPv6 link-local sources. The remote update now
-runs in a new helper, vxlan_snoop_move(), which holds vxlan->hash_lock
-and checks the entry again once the lock is taken.
+>   make -C tools/testing/selftests TARGETS=livepatch clean
+> 
+> Removing external modules does not need a configured kernel. Clean
+> them through the kernel source tree that contains the selftests, and
+> do not pass on O= or KBUILD_OUTPUT, which the kernel Makefile would
+> take as its build directory.
 
-> diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-> index d11028b374721..8738be39e6019 100644
-> --- a/drivers/net/vxlan/vxlan_core.c
-> +++ b/drivers/net/vxlan/vxlan_core.c
-> @@ -1434,6 +1434,51 @@ static int vxlan_fdb_get(struct sk_buff *skb,
+> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
+> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+> @@ -32,8 +32,11 @@ ifdef BUILD_TEST_MODS
+>  	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+>  endif
+>  
+> -# Ensure that KDIR exists, otherwise skip the clean target
+> +# Cleaning external modules needs no configured kernel, so clean them
+> +# through the kernel source tree that contains this directory. The kernel
+> +# Makefile would take an O= or KBUILD_OUTPUT passed on from the selftests
+> +# build as its build directory, so drop them.
+> +clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
+>  clean:
+> -ifneq ("$(wildcard $(KDIR))", "")
+> -	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+> -endif
+> +	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(TESTMODS_DIR)/../../../../.. \
+> +		clean KBUILD_EXTMOD=$(TESTMODS_DIR)
 
-[ ... ]
+Otherwise, the change seems to do the job.
+So, maybe just the sample command in the commit message is wrong.
 
-> +static enum skb_drop_reason vxlan_snoop_move(struct net_device *dev,
-> +					     struct vxlan_fdb *f,
-> +					     const u8 *src_mac,
-> +					     union vxlan_addr *src_ip,
-> +					     u32 ifindex)
-> +{
-> +	struct vxlan_dev *vxlan = netdev_priv(dev);
-> +	struct vxlan_rdst *rdst;
-> +
-> +	lockdep_assert_held(&vxlan->hash_lock);
-> +
-> +	/* The entry may have changed before the lock was taken */
-> +	if (hlist_unhashed(&f->fdb_node))
-> +		return SKB_NOT_DROPPED_YET;
-> +
-> +	if (rcu_access_pointer(f->nh) ||
-> +	    (f->state & (NUD_PERMANENT | NUD_NOARP)))
-> +		return SKB_DROP_REASON_VXLAN_ENTRY_EXISTS;
-> +
-> +	rdst = first_remote_rcu(f);
-> +	if (vxlan_snoop_same_remote(rdst, src_ip, ifindex))
-> +		return SKB_NOT_DROPPED_YET;
-
-[Severity: Low]
-Is this check order intended? The lockless path in vxlan_snoop() calls
-vxlan_snoop_same_remote() before the NUD_PERMANENT | NUD_NOARP test. Here
-the static-state test runs first.
-
-Consider this sequence:
-
-CPU A in vxlan_snoop() sees a dynamic entry with a different remote and
-calls spin_lock(&vxlan->hash_lock).
-
-Before CPU A gets the lock, "bridge fdb replace <mac> dst <src_ip>
-permanent" runs vxlan_fdb_update_existing() under hash_lock. That sets
-f->state = NUD_PERMANENT, and vxlan_fdb_replace() sets
-remote_ip = src_ip.
-
-CPU A then takes the lock, and vxlan_snoop_move() returns
-SKB_DROP_REASON_VXLAN_ENTRY_EXISTS.
-
-The packet is dropped, even though it came from the remote the static
-entry now points to. The lockless path would have accepted the same
-packet.
-
-Would it make sense to move the same-remote check ahead of the
-static-state check? The nh check would have to stay first, since
-first_remote_rcu() is not valid for nexthop entries.
-
-> +
-> +	if (net_ratelimit())
-> +		netdev_info(dev,
-> +			    "%pM migrated from %pIS to %pIS\n",
-> +			    src_mac, &rdst->remote_ip.sa, &src_ip->sa);
-> +
-> +	dst_cache_reset(&rdst->dst_cache);
-> +	rdst->remote_ip = *src_ip;
-> +	rdst->remote_ifindex = ifindex;
-
-[Severity: Medium]
-Does this fully close the stale dst_cache window the patch is meant to
-fix?
-
-vxlan_xmit_one() does not take hash_lock. It copies the remote into the
-lookup key well before it looks at the dst_cache:
-
-drivers/net/vxlan/vxlan_core.c:vxlan_xmit_one() {
-    ...
-		ifindex = rdst->remote_ifindex;
-
-		if (addr_family == AF_INET) {
-			key.u.ipv4.src = cfg->saddr.sin.sin_addr.s_addr;
-			key.u.ipv4.dst = rdst->remote_ip.sin.sin_addr.s_addr;
-    ...
-}
-
-Later it calls udp_tunnel_dst_lookup(), which does dst_cache_get_ip4(),
-then ip_route_output_key() on a miss, then dst_cache_set_ip4().
-
-Cache validity is purely time based:
-
-net/core/dst_cache.c:dst_cache_per_cpu_get() {
-    ...
-	if (unlikely(!time_after(idst->refresh_ts,
-				 READ_ONCE(dst_cache->reset_ts)) ||
-    ...
-fail:
-	idst->refresh_ts = jiffies;
-	return NULL;
-}
-
-Here is a possible sequence:
-
-CPU1 (vxlan_xmit_one)            CPU2 (vxlan_snoop_move)
-key.u.ipv4.dst = old remote A
-                                 dst_cache_reset()  /* reset_ts = J0 */
-                                 rdst->remote_ip = B
-<jiffy tick, now J0+1>
-dst_cache_get_ip4()
-  miss, refresh_ts = J0+1
-ip_route_output_key() for A
-dst_cache_set_ip4(route for A)
-
-After that, every later lookup on CPU1 passes the time_after(refresh_ts,
-reset_ts) test. The IPv4 obsolete check only fails when the route genid
-changes.
-
-Would packets with outer daddr B then keep using the next hop chosen for
-A? That is the blackhole the commit message describes, and it would
-last until something like "ip route flush cache" or another reset.
-
-Doing the stores before dst_cache_reset() does not seem to help, since
-CPU1 can still read A before either of them. Would this need a re-check
-or a generation check between the route lookup and dst_cache_set, or an
-rdst replaced via RCU?
-
-vxlan_fdb_replace() and the other dst_cache_reset() users follow the
-same pattern.
-
-> +	rdst->offloaded = false;
-> +	vxlan_fdb_notify(vxlan, f, rdst, RTM_NEWNEIGH, true, NULL);
-> +
-> +	return SKB_NOT_DROPPED_YET;
-> +}
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119095256.42005-1-ilskdw%40gmail.com
+Best Regards,
+Petr
