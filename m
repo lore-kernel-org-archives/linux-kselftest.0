@@ -1,74 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795446630;
-	b=MuQb3SsjxBVwNFuDmGOHZMQA3sW9UMbbn4g3GFhmlf2WqdSnF9mLwRqSXXRfcV9hbhj8
-	 HWdbkDMd73bAOiTpAv39eexGeE0EwJvlPEhAbHFWE06MVg/OkXBTKt8F6/c26oOjjbL6k
-	 GFDOii+bDbXWoDv5sK1Y7aAwzFhAKZbxWr3eNQvmiZFfZK4ct399Mlgxjl1dg4X5Eb8ik
-	 7ZpN3ztww8Wdw3MddIwO/n0kMZKq242tUALO5azyFQYr/1G2smNN3dSh5YtI66S2pz2Go
-	 43Bb4z0M+hIG/+k1GoHB7qvuBJY2N8pmjvolyOqr6Oh3wdtSXTT7GsYcwjE9JC5oTzw==
+	t=1795446797;
+	b=zN1FR6JRmH7wbr0/FYGb3GkYIsJX86wv6VgB5X3FTVX0iutmkEqjP0L79wuq3zxN1FjF
+	 RFILNF0bF1CyIg3rHqJg+akFFFjIL8HaQ5298BS5lrioPqYL0MDd+wqunj9Cj+j3gYlpV
+	 cqNZjIehfaqZFyuxUC0mCTXjI28xD17tv2lgQxcC+zI4105LebXEHPFQtmLwiCGghbMSV
+	 OrmFnvh1TFz9IiE5omt2danGA7UWkb2xcOx3HRFdeHf9EvwiXhRkAjDcMD0kg5N+orCqa
+	 EDL4W82ghTsiQFn3DxTGx3wToC5h/0RzNLMdZ/RO2AWT1mzP1yzOtz+SizMBGEDZbvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795446630;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=QD0nNj4E35Kis9XWNnLNRRy+zAstNQ9se2vTJvGkvqI=;
-	b=j1RpjSIA8jhI8I4iEydL+i5iL+gJJd+hGGPPIiiUlybUE1gK5kb5dY2CFhlVns99aZ6j
-	 XAFh71vqDdU/hzaLKYiQ7RGBcpTYDcLZbKkel4ZpK0jGQDH67ocr/CBlQrtQiVGRWirzy
-	 /Xuvp0BEqlnCMS1FeKm+sGcUqmlGPNIt/GQ88nKpF+lvnSEhVoL+4uxG6bjbOEQbOuk4f
-	 iCL3rp6Al6e3GONgq9ThoxA7epLrZiYYCGb5mX9E3Q+O+wgUJEtNqtlbBrauzRQiyQKZR
-	 OyxAWxYVKAR/G3K+XR958e/H3632P89pyNyN7BfAE1Zg7LSbUmtVMdGRotHw7aKlzcQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795446797;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=Rgusygp+RlAE67y/ngtutPu5kD5yNG5Fz8DTmip9El4=;
+	b=kf5Zx52esWVP6Xjq2dDLDMEISH1KCov2ES/JVyWtc9bqp0Zj7NBRiDGlma2Hsy9HK35t
+	 it1mrjwinAJdWhBaJR7vKaD4jaxl0CdzdF+F5hIuyG9reU5QpSfGTqhviTRDTu6Q9gLoj
+	 5qyZlujxtsWb7T3Q2c3dFWpPte1rYcJBvgCdOMdZB9lcdEa7kZh4QiQamxPZLoVEI8Coj
+	 0fE2b/8G7Nyk2n5kbcAaANoxVvkxdnHJawDrfGurUtKaRahECM9u8tMe1dC1GiDYd96+4
+	 /S1yVQyaycMxDo/v6hNXPKvDRCCNo0p5p+vGbjKNWxlRLe42ojiX3dlqDh3RWprYHHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="OE2u4eg/";
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BBE606A31F;
-	Mon, 23 Nov 2026 15:10:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0BBE606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ie1STN6V;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68F8606A31A;
+	Mon, 23 Nov 2026 15:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=OE2u4eg/
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25D0A176B;
-	Mon, 23 Nov 2026 07:10:26 -0800 (PST)
-Received: from entos-yitian-01.Arm.com (unknown [10.168.196.233])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D3EAF3F632;
-	Mon, 23 Nov 2026 07:10:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795446629; bh=KAV5zzw6aH2fqGdF4DX2/b+XyZ6zGL5MKFGisav5AaE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OE2u4eg/Mu7QwC9WS7aQnXK0x/7kz34F5Q6JK++tfMEDiigrh94zkDz1NQ1W3EsgA
-	 BhE0e9WOwq9h1s6bmDGBC5k+kVSGrGE6+7TZTZlLkSUYse36Qe8iQ0IWGt0qn8l+Iz
-	 N4A8iPh6zS+hYmtljF0FAOas2lG4UvQksiPU3UdQ=
-From: Jia He <justin.he@arm.com>
-To: Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sascha Bischoff <Sascha.Bischoff@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ie1STN6V
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3601F000CA;
+	Mon, 23 Nov 2026 15:13:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795446796;
+	bh=Rgusygp+RlAE67y/ngtutPu5kD5yNG5Fz8DTmip9El4=;
+	h=From:To:Cc:Subject:Date;
+	b=ie1STN6VSXka1O5wuIlHmb2D+6VN2EcNXv6egd3sZtpNduYhKEt/3sI8rK2YwKQ9V
+	 FjjIiDBGekIsRy7TiF9wgpxj8EZuar+wU6vXs4hCw9dNwIFEm2WApWuZ728w6Xoz0q
+	 0cqvdn2Ox02VUSJZaJG5Yjv4Vq61qxeX49R8vFzRGTJyxkxrrFswoeC94M/ufSy/M3
+	 f/bIrYcFlRTJbVoKXRi9NgEcnN8q8PwybX2QkSD2/ZFd8BZTctau+LmZZ7aUjIJASR
+	 0UoX81gFt4ylmLkQd2OEaOZ+m41nB6t69/Vh2hDlqC9MSn3GDzeKDaHhUJopqTg3VE
+	 eiTls4YAeRpyA==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Jia He <justin.he@arm.com>
-Subject: [PATCH 3/3] KVM: selftests: arm64: Test KVM_PRE_FAULT_MEMORY before first KVM_RUN
-Date: Mon, 23 Nov 2026 15:09:17 +0000
-Message-Id: <20261123150917.2679600-4-justin.he@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261123150917.2679600-1-justin.he@arm.com>
-References: <20261123150917.2679600-1-justin.he@arm.com>
+	linux-mm@kvack.org
+Subject: [PATCH v3 0/6] mm/damon: add sz_ops_filter_passed_last DAMOS stat
+Date: Mon, 23 Nov 2026 07:13:01 -0800
+Message-ID: <20261123151309.82675-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,415 +67,104 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend nv_pre_fault_memory_test to exercise KVM_PRE_FAULT_MEMORY before
-the first KVM_RUN.
+From: Mattathias Pinchover <mattathias.pinchover@uber.com>
 
-Without EL2, cover immediate_exit on the first KVM_RUN, retrying after a
-failed first KVM_RUN, and pre-faulting while the vCPU moves from the
-main thread to a worker thread for its first run and back to the main
-thread for its second run. The two threads are pinned to different CPUs
-when at least two are available.
+DAMOS stat sz_ops_filter_passed shows the total bytes that passed
+operations layer-handled DAMOS filters, accumulated from the beginning
+of the scheme's execution.  Users who want the amount for only the
+latest apply interval, e.g., the size of a workload's anonymous memory
+that is cold as of now, have to keep the previous value in user space
+and compute the difference.  To know how many apply intervals a
+difference covers, they have to rely on nr_snapshots.  But nr_snapshots
+is increased once per target per apply interval, so the computation is
+complicated for contexts having multiple targets.
 
-With EL2, additionally cover an EL2 vCPU with ID_AA64MMFR4_EL1.NV_frac
-cleared to 0 and HCR_EL2.NV=1 at EL1h (the NULL vncr_tlb reproducer), an
-EL2 vCPU with a vEL1 context and asymmetric HCR_EL2.IMO/FMO staged before
-the first run, and the same thread handoff. An unfixed kernel reports
-the staged context case only as a WARN in the kernel log; the test
-itself still passes.
+This series introduces a new DAMOS stat, sz_ops_filter_passed_last.  It
+shows the amount of sz_ops_filter_passed increase in the last apply
+interval of the scheme.  It is updated at the end of each apply
+interval, and kept unchanged until the next apply interval is
+completed.  Like the other DAMOS stats, it is exposed under the stats/
+directory of the scheme in the DAMON sysfs interface, and refreshed
+together with the other stats when refresh_ms expires or
+update_schemes_stats is written.
 
-Signed-off-by: Jia He <justin.he@arm.com>
----
- .../kvm/arm64/nv_pre_fault_memory_test.c      | 335 ++++++++++++++++--
- 1 file changed, 298 insertions(+), 37 deletions(-)
+Patches sequence
+================
 
-diff --git a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-index 09c1db303856..6dbcf3b0ef13 100644
---- a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-+++ b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-@@ -1,15 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * nv_pre_fault_memory_test - Test KVM_PRE_FAULT_MEMORY on a vCPU whose
-- * last-run context is nested.
-- *
-- * The guest enters vEL2, sets up its EL2 translation configuration into the
-- * real EL1 registers then ERETs to vEL1 and exits to userspace so its vCPU
-- * last-run context is nested backed by a shadow stage 2 MMU.
-- *
-- * Assert that pre-faulting ignores that and targets the canonical stage-2
-- * page tables only.
-+ * nv_pre_fault_memory_test - Test KVM_PRE_FAULT_MEMORY on arm64 before the
-+ * first KVM_RUN, across vCPU thread changes, and, with nested virtualisation,
-+ * from a live nested context.
-  */
-+#include <pthread.h>
-+#include <sched.h>
-+
-+#include "kvm_syscalls.h"
- #include "kvm_util.h"
- #include "processor.h"
- #include "test_util.h"
-@@ -22,6 +20,18 @@
- #define TEST_MEM_SIZE		SZ_2M
- #define TEST_MEM_GPA		SZ_1G
- 
-+static void guest_el1_touch_and_done(void)
-+{
-+	u64 offset;
-+
-+	GUEST_ASSERT_EQ(get_current_el(), 1);
-+
-+	for (offset = 0; offset < TEST_MEM_SIZE; offset += SZ_4K)
-+		READ_ONCE(*(u64 *)(TEST_MEM_GPA + offset));
-+
-+	GUEST_DONE();
-+}
-+
- static void guest_el1_code(void)
- {
- 	u64 offset;
-@@ -97,22 +107,56 @@ static void pre_fault(struct kvm_vcpu *vcpu, u64 gpa, u64 size)
- 	TEST_ASSERT_EQ(range.size, 0);
- }
- 
--int main(void)
-+static void expect_ucall_sync(struct kvm_vcpu *vcpu, u64 expected)
-+{
-+	struct ucall uc;
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+		TEST_ASSERT_EQ(uc.args[1], expected);
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+}
-+
-+static void expect_ucall_done(struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_DONE:
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+}
-+
-+static struct kvm_vm *setup_test_vm(bool has_el2, bool has_sve,
-+				    void *guest_fn, struct kvm_vcpu **vcpu_out)
- {
- 	struct kvm_vcpu_init init;
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
--	struct ucall uc;
- 	u64 npages;
- 
--	TEST_REQUIRE(test_supports_el2());
--	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
--
- 	vm = vm_create(1);
- 
- 	kvm_get_default_vcpu_target(vm, &init);
--	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
--	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-+	if (has_el2)
-+		init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-+	else
-+		init.features[0] &= ~BIT(KVM_ARM_VCPU_HAS_EL2);
-+	if (has_sve)
-+		init.features[0] |= BIT(KVM_ARM_VCPU_SVE);
-+
-+	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_fn);
- 	kvm_arch_vm_finalize_vcpus(vm);
- 
- 	npages = TEST_MEM_SIZE / vm->page_size;
-@@ -120,39 +164,256 @@ int main(void)
- 				    TEST_MEM_SLOT, npages, 0);
- 	virt_map(vm, TEST_MEM_GPA, TEST_MEM_GPA, npages);
- 
-+	*vcpu_out = vcpu;
-+	return vm;
-+}
-+
-+static void test_nested_post_run_pre_fault(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	pr_info("Testing post-run pre-fault from nested vEL1 context\n");
-+	vm = setup_test_vm(true, false, guest_code, &vcpu);
-+
- 	/* Run the guest until it has ERET'd from vEL2 to vEL1. */
- 	vcpu_run(vcpu);
--	switch (get_ucall(vcpu, &uc)) {
--	case UCALL_SYNC:
--		TEST_ASSERT_EQ(uc.args[1], 1);
--		break;
--	case UCALL_ABORT:
--		REPORT_GUEST_ASSERT(uc);
--		break;
--	default:
--		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
--	}
-+	expect_ucall_sync(vcpu, 1);
- 
- 	/*
- 	 * The vCPU's last-run context is vEL1, so its hw_mmu is a shadow
--	 * stage-2 MMU.
--	 *
--	 * Pre-faulting must ignore that and populate the canonical stage-2.
-+	 * stage-2 MMU. Pre-faulting must ignore that and populate the
-+	 * canonical stage-2.
- 	 */
- 	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
- 
- 	/* Resume at vEL1 and touch the prefaulted range. */
- 	vcpu_run(vcpu);
--	switch (get_ucall(vcpu, &uc)) {
--	case UCALL_DONE:
--		break;
--	case UCALL_ABORT:
--		REPORT_GUEST_ASSERT(uc);
--		break;
--	default:
--		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	expect_ucall_done(vcpu);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+/*
-+ * Pre-fault before the first KVM_RUN with ID_AA64MMFR4_EL1.NV_frac == 0
-+ * (no vncr_tlb) and HCR_EL2.NV=1 at EL1h.
-+ */
-+static void test_pre_first_run_no_nv2(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	u64 val;
-+
-+	pr_info("Testing pre-first-run pre-fault with NV_frac=0 and HCR_EL2.NV=1\n");
-+	vm = setup_test_vm(true, false, guest_el1_touch_and_done, &vcpu);
-+
-+	/* Copy the EL2 S1 configuration into the EL1 sysregs for vEL1. */
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL2)));
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2)));
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL1),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL2)));
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL1),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL2)));
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPACR_EL1), 3ULL << 20);
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VBAR_EL1),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VBAR_EL2)));
-+	vcpu_set_reg(vcpu, ARM64_CORE_REG(sp_el1),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SP_EL2)));
-+
-+	val = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR4_EL1));
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR4_EL1),
-+		     val & ~ID_AA64MMFR4_EL1_NV_frac);
-+
-+	val = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2));
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2),
-+		     (val & ~HCR_EL2_TGE) | HCR_EL2_NV | HCR_EL2_RW);
-+	vcpu_set_reg(vcpu, ARM64_CORE_REG(regs.pstate),
-+		     PSR_MODE_EL1h | PSR_F_BIT | PSR_I_BIT | PSR_A_BIT | PSR_D_BIT);
-+
-+	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
-+
-+	vcpu_run(vcpu);
-+	expect_ucall_done(vcpu);
-+
-+	val = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2));
-+	TEST_ASSERT(!(val & HCR_EL2_NV),
-+		    "Expected HCR_EL2.NV to be masked RES0, got 0x%lx", val);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+/*
-+ * Stage a vEL1 context with asymmetric HCR_EL2.IMO/FMO before the first
-+ * KVM_RUN. If pre-faulting loads this context onto the CPU, the nested vGIC
-+ * code hits a WARN in the kernel log. The test itself still passes, so this
-+ * case needs a kernel log check.
-+ */
-+static void test_pre_first_run_nested_ctxt(void)
-+{
-+	u64 orig_hcr, orig_pstate;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	pr_info("Testing pre-first-run pre-fault with staged vEL1 context\n");
-+	vm = setup_test_vm(true, false, guest_code, &vcpu);
-+
-+	orig_hcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2));
-+	orig_pstate = vcpu_get_reg(vcpu, ARM64_CORE_REG(regs.pstate));
-+
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2),
-+		     HCR_EL2_E2H | HCR_EL2_RW | HCR_EL2_VM | HCR_EL2_IMO);
-+	vcpu_set_reg(vcpu, ARM64_CORE_REG(regs.pstate),
-+		     PSR_MODE_EL1h | PSR_F_BIT | PSR_I_BIT | PSR_A_BIT | PSR_D_BIT);
-+
-+	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
-+
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2), orig_hcr);
-+	vcpu_set_reg(vcpu, ARM64_CORE_REG(regs.pstate), orig_pstate);
-+
-+	vcpu_run(vcpu);
-+	expect_ucall_sync(vcpu, 1);
-+	vcpu_run(vcpu);
-+	expect_ucall_done(vcpu);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+struct handoff_args {
-+	struct kvm_vcpu *vcpu;
-+	int cpu;
-+};
-+
-+static void maybe_pin_self_to_cpu(int cpu)
-+{
-+	if (cpu >= 0)
-+		pin_self_to_cpu(cpu);
-+}
-+
-+static void *first_run_worker(void *arg)
-+{
-+	struct handoff_args *h = arg;
-+
-+	maybe_pin_self_to_cpu(h->cpu);
-+	pre_fault(h->vcpu, TEST_MEM_GPA + SZ_1M, TEST_MEM_SIZE - SZ_1M);
-+
-+	vcpu_run(h->vcpu);
-+	expect_ucall_sync(h->vcpu, 1);
-+	return NULL;
-+}
-+
-+/*
-+ * Pre-fault in the main thread, run the vCPU for the first time in a worker
-+ * thread, then pre-fault and run it again in the main thread. This changes
-+ * vcpu->pid both before and after the first run. If at least two CPUs are
-+ * available, the two threads are pinned to different CPUs.
-+ */
-+static void test_thread_handoff(bool has_el2)
-+{
-+	struct handoff_args h = { .cpu = -1 };
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	cpu_set_t allowed;
-+	int cpu, cpu0 = -1;
-+	pthread_t thr;
-+
-+	pr_info("Testing pre-fault across a thread handoff (%s vCPU)\n",
-+		has_el2 ? "EL2" : "EL1");
-+
-+	CPU_ZERO(&allowed);
-+	kvm_pthread_getaffinity(pthread_self(), &allowed);
-+	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
-+		if (!CPU_ISSET(cpu, &allowed))
-+			continue;
-+		if (cpu0 < 0) {
-+			cpu0 = cpu;
-+		} else {
-+			h.cpu = cpu;
-+			break;
-+		}
-+	}
-+	if (h.cpu < 0)
-+		pr_info("Only one CPU available, not testing CPU migration\n");
-+
-+	maybe_pin_self_to_cpu(cpu0);
-+	vm = setup_test_vm(has_el2, false,
-+			   has_el2 ? guest_code : guest_el1_code, &vcpu);
-+	pre_fault(vcpu, TEST_MEM_GPA, SZ_1M);
-+
-+	h.vcpu = vcpu;
-+	kvm_pthread_create(&thr, NULL, first_run_worker, &h);
-+	kvm_pthread_join(thr, NULL);
-+
-+	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
-+	vcpu_run(vcpu);
-+	expect_ucall_done(vcpu);
-+
-+	kvm_pthread_setaffinity(pthread_self(), &allowed);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_pre_first_run_el1(void)
-+{
-+	int feature = KVM_ARM_VCPU_SVE;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	pr_info("Testing pre-first-run pre-fault with immediate_exit\n");
-+	vm = setup_test_vm(false, false, guest_el1_touch_and_done, &vcpu);
-+	pre_fault(vcpu, TEST_MEM_GPA, vm->page_size);
-+
-+	vcpu->run->immediate_exit = 1;
-+	ret = __vcpu_run(vcpu);
-+	TEST_ASSERT(ret == -1 && errno == EINTR,
-+		    "Expected -EINTR on immediate_exit, got ret=%d errno=%d",
-+		    ret, errno);
-+	vcpu->run->immediate_exit = 0;
-+
-+	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
-+	vcpu_run(vcpu);
-+	expect_ucall_done(vcpu);
-+	kvm_vm_free(vm);
-+
-+	if (!kvm_check_cap(KVM_CAP_ARM_SVE)) {
-+		pr_info("SVE not supported, skipping failed first KVM_RUN test\n");
-+		return;
- 	}
- 
-+	pr_info("Testing pre-fault after a failed first KVM_RUN\n");
-+	vm = setup_test_vm(false, true, guest_el1_touch_and_done, &vcpu);
-+	pre_fault(vcpu, TEST_MEM_GPA, vm->page_size);
-+
-+	ret = __vcpu_run(vcpu);
-+	TEST_ASSERT(ret == -1 && errno == EPERM,
-+		    "Expected -EPERM before SVE finalisation, got ret=%d errno=%d",
-+		    ret, errno);
-+
-+	pre_fault(vcpu, TEST_MEM_GPA + vm->page_size, vm->page_size);
-+	vcpu_ioctl(vcpu, KVM_ARM_VCPU_FINALIZE, &feature);
-+	vcpu_run(vcpu);
-+	expect_ucall_done(vcpu);
- 	kvm_vm_free(vm);
-+}
-+
-+int main(void)
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
-+
-+	test_pre_first_run_el1();
-+	test_thread_handoff(false);
-+
-+	if (!test_supports_el2()) {
-+		pr_info("EL2 not supported, skipping nested tests\n");
-+		return 0;
-+	}
-+
-+	test_nested_post_run_pre_fault();
-+	test_pre_first_run_no_nv2();
-+	test_pre_first_run_nested_ctxt();
-+	test_thread_handoff(true);
-+
- 	return 0;
- }
+Patch 1 introduces the stat to the DAMON core.  Patch 2 exposes it via
+the DAMON sysfs interface.  Patch 3 adds a kunit test.  Patches 4-6
+update the design, usage, and ABI documents, respectively.
+
+Tests
+=====
+
+I ran the DAMON kunit tests (all 50 pass, including the new one), built
+mm/damon/ with W=1 (no warnings), built htmldocs (no new warnings
+compared to mm-new), and ran checkpatch.pl --strict on the patches (it
+reports a warning and an error on each patch because it does not
+recognize the Assisted-by tag, and four alignment checks on patches 2
+and 3 for the continuation line alignment that the existing DAMON code
+uses).
+
+I also ran the DAMON selftests in a QEMU VM without KVM, on mm-new and
+on mm-new with this series.  On mm-new, 12 tests pass, 2 fail
+(sysfs_update_schemes_tried_regions_wss_estimation.py and
+damos_tried_regions.py), and 1 is skipped (sysfs_memcg_path_leak.sh,
+because kmemleak is not available).  With this series, 13 pass, 1 fails
+(the wss_estimation one), and the same one is skipped, so I saw no
+failure that mm-new does not also have.
+
+None of the selftests read the new stat, so I also checked it on a
+live kernel.  In the same kind of VM running this series, I started two
+Docker containers, each running a Python process that allocates 512 MiB
+and 2 GiB of anonymous memory and then holds it.  Each process was
+monitored by its own kdamond, using the vaddr operations set and a
+stat scheme with an anon operations layer filter, with refresh_ms set
+to 1000.  Output from sz_ops_filter_passed_last was correct:
+
+    # cd /sys/kernel/mm/damon/admin/kdamonds
+    # cat 0/contexts/0/schemes/0/stats/sz_ops_filter_passed_last
+    546385920
+    # cat 1/contexts/0/schemes/0/stats/sz_ops_filter_passed_last
+    2157043712
+
+Tool use
+========
+
+Claude (Anthropic) assisted with the code, kunit test, documents, and
+changelogs of this series, as noted by the Assisted-by: tags.  I
+reviewed all of it and ran the tests listed above.
+
+Changes from v2
+- v2: https://lore.kernel.org/20261117-damon-sz-ops-b4-v2-0-439888fa04ac@uber.com
+- Collect R-b: from SJ.
+Changes in v2:
+- Patch 2: join the attribute declaration onto one line
+- Patch 3: call damos_set_filters_default_reject() before adding the
+  scheme
+- Patch 4: keep only the stats list bullet, dropping the explanation
+  that the stat is not accumulated
+- Patch 5: wrap the stats line in the usage document
+- Link to v1: https://patch.msgid.link/20261116-damon-sz-ops-b4-v1-0-1cffe7227e6d@uber.com
+
+Mattathias Pinchover (6):
+  mm/damon/core: introduce sz_ops_filter_passed_last stat
+  mm/damon/sysfs-schemes: add sz_ops_filter_passed_last file
+  mm/damon/tests/core-kunit: test sz_ops_filter_passed_last
+  Docs/mm/damon/design: update for sz_ops_filter_passed_last
+  Docs/admin-guide/mm/damon/usage: update for sz_ops_filter_passed_last
+  Docs/ABI/damon: update for sz_ops_filter_passed_last
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  7 ++
+ Documentation/admin-guide/mm/damon/usage.rst  |  9 +-
+ Documentation/mm/damon/design.rst             |  2 +
+ include/linux/damon.h                         |  6 ++
+ mm/damon/core.c                               |  5 +
+ mm/damon/sysfs-schemes.c                      | 16 ++++
+ mm/damon/tests/core-kunit.h                   | 93 +++++++++++++++++++
+ 7 files changed, 135 insertions(+), 3 deletions(-)
+
+
+base-commit: 60a393b8ae5d63691c0ea9b21571441911afd81a
 -- 
-2.34.1
-
+2.47.3
