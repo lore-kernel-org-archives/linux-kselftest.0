@@ -1,58 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795405159;
-	b=k5FdzzWGVo8ydQ6d3NwIRHn7TWwDGcNaAgnCeLEF9VibQbADes2U2PioLP4krCg9efTm
-	 TfYMFhzJUnUnbG+6Q3O+lkpjPycdDtixkWv1yExt5NJPp7F2sja93CGw+yEyR80edc9y/
-	 FAHQSxA4woRICzNn2HPz7Z1BPIru3qShYw3HSP1HbLrBOrSrXaJmFNOHFfYPpT5BTpyZL
-	 zdfI3+gl45w8/gXsPIg+y7g5nSnWRbmJahO8FqaQo814OhmVAl1noKLAhfKKWXYemA1og
-	 Lsvhnp1db29TMlMKZWPE2hHyKV/HcADUJ1/HKhqauE6/wvO9MTP9e1IiodGy4RcUTGg==
+	t=1795406344;
+	b=ZSO9PRbbgjLgycahuN85/j1QBj2P+LvFsComxrzsN7rvyF0LRiBZ53AuDNM1Lbe9b9Kh
+	 Kf8PFYHjjn30ZNcNFn/uzr8OqfFW1snMpnIDUhv5i35JysqhV1/3kojA0J3JtUFXasFFg
+	 7aSFtXuU05MNKWN97duFDpXKg6XiKkTSOT0y0G9MyJnUKJPULZmXKAPmQ1NWie1HNOjmv
+	 2Z4BBnA5L48eYl1Ka6tRVJss/CVzyjGbDZ71pQZ/nJ8OowKpfBjRQBbCYhYc+NiaUdgmR
+	 +YUhm+hV7WfKSxf2xQj9pEnKS12vDGmtGsogUUl1D7pCQ8ul5XRXxE2sUI6wKos5koQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795405159;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:References:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=W4LfZy3z6M6i+9hH2IjYH+xMWfI5utefQOsrdUG7c0o=;
-	b=YyEEHYI9+VJOnsTFXtYPaOja1tzhekjLv57/7LR0Lf9mvGAC9DBlGPlpWqBoEXhrvAOg
-	 XfkSuiaYwZIykAWRygd4S/EmhhLk3kj3mvPRHuzB/LNpEVPSL1Zz85RE6FmNTegx1C3Po
-	 BrX/chgixK+sXk2tY+8y7b1unakgewz3Fgu88p3qKfuVoNMtjJDkfQdPsGqjoFToGElXq
-	 cljChSLUJ8BYUowu2cX4bTHBsmikF821AL/fBeFdrLiqZun/rSy11MJjEFjQB8uNVs5Z7
-	 6HKMbNxYmpAyqYcFdQI0vyYAxTVi/4htffEANyOZgRADoiXUqaMNZdVqt75pg2jLWGg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795406344;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=B3cIwgW8xrh8Ndjtv3N49JH+sVnVexWtWgTwsy9Ru1w=;
+	b=LP0dtx9CHSwI34l1p3UHaCLUJd0/RVkuL4zEgO+Rg8rQz0iDHGqwmQoFD2us++cH4UTQ
+	 2/2A539OiVEAyKVPxG3WCsXLXdao2lB7T6cwHdD+680HPV9xozC714ruTJUmWFdDOmaZm
+	 JDFyMuxB9fsxMFztSNMb2v4KFNnqPdcnDiM3/I8mSqtdtQwx3OrFaLG1rtjLDyP2Si/fv
+	 UABNwA6fjgysUiG44+hEvIRPOdck8ylqak4pQ4J8X7wr4wlvjpAUbSDRbuvXz9bY0vN2U
+	 FuEEs6dKnDPMujU0FP5jxPEAmii45mvjPto9TmE4d1r/7+ggnWdpxZReNuBDuS4S6ZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=MYrwN4Ay;
-	arc=none smtp.remote-ip=113.46.200.227
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O97asVKD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5E7606A31A;
-	Mon, 23 Nov 2026 03:39:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F5E7606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84266606A31A;
+	Mon, 23 Nov 2026 03:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=MYrwN4Ay
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=W4LfZy3z6M6i+9hH2IjYH+xMWfI5utefQOsrdUG7c0o=;
-	b=MYrwN4AydIC7GkCsxHsHcp5MBmlfxoKIR39qAxjci4JNoZWJs7H7/FU/uTgQs9uEBbkfnHVEv
-	x7Qhmwh6nVkk15eYfC0jT6y2PnAO19PrwQCZZpAgyNVDQnUJHR/ovSc0epxLAbZS7VLnG8GQNs4
-	ZKe+ijxOuz6J1towdxP8HII=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4jXs9D56klznTwv;
-	Mon, 23 Nov 2026 11:38:24 +0800 (CST)
-Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0B42040578;
-	Mon, 23 Nov 2026 11:39:15 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemk200008.china.huawei.com
- (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 23 Nov
- 2026 11:39:13 +0800
-Message-ID: <eb5c7773-4c90-420f-bd2e-c930a1ec9fa4@huawei.com>
-Date: Mon, 23 Nov 2026 11:39:13 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O97asVKD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED9A1F000C6;
+	Mon, 23 Nov 2026 03:59:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795406344;
+	bh=B3cIwgW8xrh8Ndjtv3N49JH+sVnVexWtWgTwsy9Ru1w=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=O97asVKDwkxOeeadFeh3J9aPbXrLb+FCaT6AqdP03OlYyX73QkkH0sLQNrvIdeVRk
+	 GyZieTnJahFjBX+EFSm2odWmdyjyeEUUr5Q/RbYHCe8Vo88X3Oxda/ynAgXB1higF/
+	 VGsxksAIvrawwdjWd4CRhlBEJPW3cFwVZgXehrd8PfdlYuNE25SF+6xWoqt3QtOlM4
+	 5TgAdSGRVCAEmWjhE1uUgJ5Jg+93E9wsSu53y1agyNl8IGXMM74MRZs8GOqu1EVfZ7
+	 a6E9WEWtBBMXMOIolzew8v/xvWLCHdDh2j4YDInUcEvaPLJUsHCSczPH0FgVyuT6k4
+	 ZL9L1f7gnLSGQ==
+Subject: Re: [PATCH net-next v2 01/11] net: add tx_extra_headroom and
+ netdev_get_alloc_headroom()
+From: netdev-bot+sashiko@kernel.org
+To: tianyi@cloudflare.com
+Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@kernel.org, davem@davemloft.net, horms@kernel.org, dkeogh@amazon.com,
+ hawk@kernel.org, daniel@iogearbox.net, dwmw2@infradead.org,
+ dtatulea@nvidia.com, noren@nvidia.com, alasdair@mcwilliam.dev,
+ willemdebruijn.kernel@gmail.com, maciej.fijalkowski@intel.com,
+ sdf@fomichev.me, magnus.karlsson@intel.com, dsahern@kernel.org,
+ idosch@nvidia.com, ast@kernel.org, john.fastabend@gmail.com,
+ donald.hunter@gmail.com, andrew+netdev@lunn.ch, corbet@lwn.net,
+ skhan@linuxfoundation.org, shuah@kernel.org, rdunlap@infradead.org,
+ leitao@debian.org, ast@fiberby.net, danieller@nvidia.com, kuniyu@google.com,
+ bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
+ nh-open-source@amazon.com, stephen@networkplumber.org, gustavoars@kernel.org,
+ one-d-wide@protonmail.com, ameryhung@gmail.com, andrii@kernel.org,
+ aroulin@nvidia.com, anilkaushikwireless@gmail.com, demosthenes.ra@gmail.com,
+ eddyz87@gmail.com, emil@etsalapatis.com, hangbin.liu@linux.dev,
+ ihor.solodrai@linux.dev, jiayuan.chen@linux.dev, jolsa@kernel.org,
+ joe@dama.to, memxor@gmail.com, lirongqing@baidu.com, louis.scalbert@6wind.com,
+ mkl@pengutronix.de, martin.lau@linux.dev, mkarsten@uwaterloo.ca,
+ mattbobrowski@google.com, michael.bommarito@gmail.com, razor@blackwall.org,
+ runyu.xiao@seu.edu.cn, song@kernel.org, linux@leemhuis.info,
+ wang.zhan@smartx.com, yonghong.song@linux.dev, n0ps1edzz@gmail.com,
+ tianyi.gao@linux.dev
+Date: Mon, 23 Nov 2026 03:59:00 +0000
+Message-ID: <179540634013.3135.970023281433843364@kernel.org>
+In-Reply-To: <20261119013830.36935-2-tianyi@cloudflare.com>
+References: <20261119013830.36935-2-tianyi@cloudflare.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,216 +83,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v21 00/15] arm64: entry: Convert to Generic Entry
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <mark.rutland@arm.com>,
-	<oleg@redhat.com>, <shuah@kernel.org>, <kees@kernel.org>,
-	<luto@amacapital.net>, <wad@chromium.org>, <peterz@infradead.org>,
-	<ada.coupriediaz@arm.com>, <linusw@kernel.org>, <kevin.brodsky@arm.com>,
-	<anshuman.khandual@arm.com>, <thuth@redhat.com>, <james.morse@arm.com>,
-	<yeoreum.yun@arm.com>, <vladimir.murzin@arm.com>, <broonie@kernel.org>,
-	<ryan.roberts@arm.com>, <liqiang01@kylinos.cn>,
-	<mathieu.desnoyers@efficios.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20261111114225.3977243-1-ruanjinjie@huawei.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20261111114225.3977243-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemk200008.china.huawei.com (7.202.194.74)
 
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
+Low priority / nit picks for your consideration:
 
-在 2026/11/11 19:42, Jinjie Ruan 写道:
-> This series converts arm64 to the generic entry infrastructure.
-> 
-> Currently, architectures such as x86, RISC-V, LoongArch, PowerPC and
-> S390 use generic entry, which significantly reduces maintenance burden
-> and improves code elegance.  arm64 already adopted generic IRQ entry
-> in commit b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"),
-> making it the right time to complete the conversion.
-> 
-> This work brings arm64 in line with other major architectures,
-> reducing duplicated code and enabling future improvements like
-> Syscall User Dispatch and rseq time slice extension optimizations.
-> 
-> What this series does
-> =====================
-> 
-> Patch  1-2: Fix two issues related to rseq and pseudo single-step.
-> Patch 3-12: Do some minor refactoring to gradually align the generic
->             entry code, without functional changes intended.
-> Patch   13: Officially switch ARM64 to the generic entry, used the
->             functions provided by the framework, and deleted the
->             duplicate code corresponding to ARM64.
-> Patch   14: Inline el0_svc_common() function to prevent performance
->             regression.
-> Patch   15: Add related ptrace test cases and rseq test cases for two
->             bug fixes.
+- [Low] At this commit, Documentation/networking/netdevices.rst says
+  tx_extra_headroom is "at most 512 bytes" and include/linux/netdevice.h…
+- [Low] At this commit, the new documentation describes behaviour that is
+  not implemented yet.
 
-Gentle Ping.
+--
 
-> 
-> Testing
-> ========
-> 
-> Observable (non-ABI) changes worth calling out:
-> 
-> - The traceable functions on the syscall path change: syscall_trace_enter,
->   syscall_trace_exit and el0_svc_common.constprop.0 are replaced by
->   trace_syscall_enter, trace_syscall_exit and syscall_enter_audit, the
->   same names x86, RISC-V, LoongArch already expose.
-> 
-> - CONFIG_DEBUG_RSEQ becomes unselectable on arm64 once GENERIC_ENTRY is
->   set (rseq_syscall() becomes a no-op stub).  The equivalent check is
->   done by __rseq_debug_syscall_return(), enabled with the "rseq_debug="
->   boot option.
-> 
-> The new added selftests pass, and the rseq test also passes with
-> "rseq_debug=1" after the conversion.
-> 
-> On a KVM VM (2 vCPU pinned, LOCKDEP off), with the same config, the
-> syscall hot path shows no measurable regression. Each row below is
-> the mean of 10 runs:
-> 
->     | Benchmark                         | baseline | generic entry |
->     | --------------------------------- | -------- | ------------- |
->     | UnixBench System Call Overhead    | 879982   | 877908        |
->     | perf bench syscall basic 1M (ns)  | 197.29   | 197.37        |
-> 
-> Both differences are within the noise, so there is no measurable impact
-> on syscall overhead.
-> 
-> Stress-ng (syscall and cpu) and the kselftests (breakpoints, arm64/abi,
-> arm64/fp, vDSO) were also run and all pass.
-> 
-> The hackbench, ptrace stress, Pseudo-NMI and rr test suite [1] reported
-> for v20 were not repeated as the code unchanged apart from the rebase.
-> 
-> On gVisor with systrap mode, the Syscall User Dispatch (SUD) feature
-> yields a slightly lower performance gain on arm64 (3% ~ 5%), similar to
-> that on x86 [2].
-> 
-> Result: the average over 1M getpid calls, ns/op
-> 
->     | KVM VM Configuration | SUD    | no-SUD | Savings % |
->     | -------------------  | -----  | -------| --------- |
->     | 2 vCPU, pinned       | 4269.8 | 4509.5 | 5.3%      |
->     | 4 vCPU, pinned       | 4175.4 | 4369.1 | 4.4%      |
->     | 8 vCPU, pinned       | 4352.6 | 4485.4 | 3.0%      |
-> 
-> Note that this series does not yet enable SUD or the rseq time slice
-> extension on arm64: SUD additionally needs
-> ARCH_SUPPORTS_SYSCALL_USER_DISPATCH [3] and the rseq slice extension
-> needs HAVE_GENERIC_TIF_BITS [4], neither of which arm64 selects today.
-> The numbers above are the motivation for enabling them in a follow-up.
-> 
-> The new selftests and tests are helped by an agent.
-> 
-> Testing follow-up that still requires real hardware:
-> 
-> - MTE: run the MTE selftests on real hardware; part of them do not run
->   under QEMU.
-> 
-> [1]: https://github.com/rr-debugger/rr/wiki/Building-And-Installing#tests
-> [2]: https://github.com/google/gvisor/commit/a45d6227b521012109cde9a942d644d778eb773b
-> [3]: https://lore.kernel.org/all/20260721081858.1169276-16-ruanjinjie@huawei.com/
-> [4]: https://lore.kernel.org/all/20260320104222.1381274-1-ruanjinjie@huawei.com/
-> 
-> The series is rebased on v7.4-rc1 and also available at:
->         https://github.com/ruanjinjie-eng/linux/commits/arm64_generic_entry_v21
-> 
-> Changes in v21:
-> - Rebased on v7.4-rc1.
-> - Pseudo-single-step patch rewritten as a bugfix.
-> - Rseq patch rewritten as a bugfix and moved to the front.
-> - Retitle and update the commit message.
-> - Selftests: replace the 2 SYSEMU tests with 5 tests that reproduce
->   the problems fixed by the commit ac2081cdc4d99 ("arm64: ptrace:
->   Consistently use pseudo-singlestep exceptions") series and the rseq
->   issue.
-> - Solve the sashiko commit message issue.
-> - Link to v20: https://lore.kernel.org/all/20260930101805.1770358-1-ruanjinjie@huawei.com/
-> 
-> Changes in v20:
-> - Add a kselftest covering the syscall-exit pseudo-step
->   and single-step behaviour.
-> - Reword the first patch: it skips the pseudo-step for the emulated
->   syscall rather than "fixing a redundant exit stop", and drop the
->   Fixes: tag and Reviewed-by.
-> - Add Tested-by.
-> - Cover letter: document the observable changes and the testing
->   follow-ups.
-> - Link to v19: https://lore.kernel.org/all/20260922035510.1090299-1-ruanjinjie@huawei.com/
-> 
-> Changes in v19:
-> - Rebased on v7.3-rc4.
-> - Fix build problem as Karl pointed out.
-> - Remove has_syscall_work() later to make it more clear.
-> - Add gvisor test data.
-> - Link to v18: https://lore.kernel.org/all/20260902095537.602517-2-ruanjinjie@huawei.com/
-> 
-> For changes in v7 to v17, please refer to the individual patch threads:
-> - v17: https://lore.kernel.org/all/20260721081858.1169276-1-ruanjinjie@huawei.com/
-> - v16: https://lore.kernel.org/all/20260629130616.642022-1-ruanjinjie@huawei.com/
-> - v15: https://lore.kernel.org/all/20260511092103.1974980-1-ruanjinjie@huawei.com/
-> - v14: https://lore.kernel.org/all/20260320102620.1336796-1-ruanjinjie@huawei.com/
-> - v13: https://lore.kernel.org/all/20260317082020.737779-1-ruanjinjie@huawei.com/
-> - v12: https://lore.kernel.org/all/20260203133728.848283-1-ruanjinjie@huawei.com/
-> - v11: https://lore.kernel.org/all/20260128031934.3906955-1-ruanjinjie@huawei.com/
-> - v10: https://lore.kernel.org/all/20251222114737.1334364-1-ruanjinjie@huawei.com/
-> - v9: https://lore.kernel.org/all/20251204082123.2792067-1-ruanjinjie@huawei.com/
-> - v8: https://lore.kernel.org/all/20251126071446.3234218-1-ruanjinjie@huawei.com/
-> - v7: https://lore.kernel.org/all/20251117133048.53182-1-ruanjinjie@huawei.com/
-> 
-> Jinjie Ruan (15):
->   arm64: ptrace: Fix spurious pseudo-single-step for
->     PTRACE_SYSEMU_SINGLESTEP
->   arm64: ptrace: Check rseq critical section before reporting syscall
->     exit
->   arm64: ptrace: Add syscall_enter_audit() helper
->   arm64: ptrace: Open-code seccomp check in syscall_trace_enter()
->   arm64: ptrace: Rename and clean up syscall_trace_enter()
->   arm64: syscall: Invert the exit-path flags check in el0_svc_common()
->   arm64: ptrace: Pass thread flags to trace enter/exit
->   arm64: ptrace: Extract arm64_syscall_exit_to_user_mode_work() helper
->   arm64: ptrace: Only run syscall exit work when exit work flags are set
->   arm64: syscall: Use exit-specific flags check in el0_svc_common()
->   arm64: syscall: Simplify el0_svc_common() syscall exit path
->   arm64: ptrace: Return bool from arm64_syscall_trace_enter()
->   arm64: entry: Convert to generic entry
->   arm64: Inline el0_svc_common()
->   selftests/arm64: Add ptrace single-step and rseq syscall-exit tests
-> 
->  arch/arm64/Kconfig                            |   2 +-
->  arch/arm64/include/asm/entry-common.h         |  77 ++++++++
->  arch/arm64/include/asm/syscall.h              |   5 +-
->  arch/arm64/include/asm/thread_info.h          |  16 +-
->  arch/arm64/kernel/debug-monitors.c            |   8 +
->  arch/arm64/kernel/entry-common.c              |   2 +-
->  arch/arm64/kernel/ptrace.c                    | 115 ------------
->  arch/arm64/kernel/signal.c                    |   2 +-
->  arch/arm64/kernel/syscall.c                   |  34 ++--
->  tools/testing/selftests/arm64/Makefile        |   2 +-
->  tools/testing/selftests/arm64/ptrace/Makefile |  12 ++
->  .../selftests/arm64/ptrace/ptrace_common.h    | 101 ++++++++++
->  .../selftests/arm64/ptrace/rseq_syscall_pc.c  | 130 +++++++++++++
->  .../selftests/arm64/ptrace/rseq_syscall_pc.h  |  22 +++
->  .../arm64/ptrace/rseq_syscall_pc_asm.S        |  45 +++++
->  .../arm64/ptrace/single_step_signal_handler.c | 121 ++++++++++++
->  .../arm64/ptrace/single_step_spsr_ss.c        |  79 ++++++++
->  .../arm64/ptrace/single_step_syscall_stop.c   | 138 ++++++++++++++
->  .../arm64/ptrace/sysemu_singlestep.c          | 172 ++++++++++++++++++
->  19 files changed, 923 insertions(+), 160 deletions(-)
->  create mode 100644 tools/testing/selftests/arm64/ptrace/Makefile
->  create mode 100644 tools/testing/selftests/arm64/ptrace/ptrace_common.h
->  create mode 100644 tools/testing/selftests/arm64/ptrace/rseq_syscall_pc.c
->  create mode 100644 tools/testing/selftests/arm64/ptrace/rseq_syscall_pc.h
->  create mode 100644 tools/testing/selftests/arm64/ptrace/rseq_syscall_pc_asm.S
->  create mode 100644 tools/testing/selftests/arm64/ptrace/single_step_signal_handler.c
->  create mode 100644 tools/testing/selftests/arm64/ptrace/single_step_spsr_ss.c
->  create mode 100644 tools/testing/selftests/arm64/ptrace/single_step_syscall_stop.c
->  create mode 100644 tools/testing/selftests/arm64/ptrace/sysemu_singlestep.c
-> 
+net: add tx_extra_headroom and netdev_get_alloc_headroom()
 
+This adds a tx_extra_headroom field to struct net_device. It also adds the
+netdev_get_alloc_headroom(), netdev_get_alloc_headroom_hlen() and
+netdev_get_alloc_needed_headroom() helpers for sites that allocate locally
+generated packets. Nothing sets the field yet (later patches in the series
+set it from XDP, TC egress and a veth attribute), and the unused
+LL_RESERVED_SPACE_EXTRA() macro is removed.
+
+> diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
+> index 7620d3fcb8dce..4341e9e443bab 100644
+> --- a/Documentation/networking/net_cachelines/net_device.rst
+> +++ b/Documentation/networking/net_cachelines/net_device.rst
+> @@ -35,6 +35,7 @@ unsigned_short                      gflags
+
+[ ... ]
+
+>  unsigned_short                      needed_headroom             read_mostly                             LL_RESERVED_SPACE/ip_finish_output2
+> +unsigned_short                      tx_extra_headroom           read_mostly                             netdev_get_alloc_headroom/__ip_append_data
+
+[ ... ]
+
+> diff --git a/Documentation/networking/netdevices.rst b/Documentation/networking/netdevices.rst
+> index 6a87f09e70158..f593b242da9cc 100644
+> --- a/Documentation/networking/netdevices.rst
+> +++ b/Documentation/networking/netdevices.rst
+> @@ -441,6 +441,19 @@ from a notifier.
+>  
+>  Drivers **must not** generate nested notifications of the ops-locked types.
+>  
+> +TX headroom reservation
+> +=======================
+> +
+> +``tx_extra_headroom`` is extra headroom for locally generated packets. The
+> +stack adds it when it allocates such a packet for the device, so that
+> +headers pushed later, for example at TC egress, fit without a
+> +reallocation. It is at most 512 bytes.
+
+[Severity: Low]
+Is this text accurate at this point in the series? This commit does not
+convert any allocation site. __ip_append_data() still sizes its headroom
+with LL_RESERVED_SPACE(), and nothing calls the new
+netdev_get_alloc_headroom*() helpers yet.
+
+The net_cachelines/net_device.rst row above names __ip_append_data as a
+reader of tx_extra_headroom. That is also only true after the next patch.
+
+This changes nothing at runtime, because the field is always 0 here. The
+next commit, "net: reserve extra TX headroom for local egress", converts
+__ip_append_data(), __ip6_append_data(), raw_send_hdrinc(),
+rawv6_send_hdrinc(), the AF_PACKET paths and AF_XDP copy mode. After that
+commit the docs match the code.
+
+Could these documentation updates move into that patch, so the docs match
+the code at every bisect point?
+
+[ ... ]
+
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 0325c6f2a7d14..392e6fc81e347 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+
+[ ... ]
+
+> @@ -2196,6 +2195,8 @@ struct net_device {
+>  	 */
+>  	unsigned int		mtu;
+>  	unsigned short		needed_headroom;
+> +#define NETDEV_TX_EXTRA_HEADROOM_MAX	512
+> +	unsigned short		tx_extra_headroom;
+
+[Severity: Low]
+Nothing in this commit uses NETDEV_TX_EXTRA_HEADROOM_MAX. Even so,
+netdevices.rst above already says the field "is at most 512 bytes".
+Nothing writes tx_extra_headroom yet, so there is nothing to clamp.
+
+Later in the series, every write goes through
+__netdev_update_tx_extra_headroom(), which does:
+
+	WRITE_ONCE(dev->tx_extra_headroom,
+		   min(tx_extra_headroom, NETDEV_TX_EXTRA_HEADROOM_MAX));
+
+The inputs are bounded as well. bpf_find_tx_extra_headroom() in the
+verifier rejects larger values, and veth applies
+NLA_POLICY_MAX(NLA_UINT, NETDEV_TX_EXTRA_HEADROOM_MAX) to
+VETH_INFO_TX_EXTRA_HEADROOM. So the documented limit holds by the end of
+the series.
+
+Would it be cleaner to add the define and the "at most 512 bytes" sentence
+in the same patch as the first code that uses them?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119013830.36935-1-tianyi%40cloudflare.com
