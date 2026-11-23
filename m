@@ -1,56 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795461359;
-	b=y4wY0Oeutm8tKv6aq1JjNGSo14kHJfoE+Kun/K8P2/qkD99Z3J378oTFdaY4lq+KUmmG
-	 PFYmaoTbvTuTmMHSoXKm56sksDIivGOwuPhfqyg672PeUzb3WMXAjH6ZUuqOwOyVEc39e
-	 hyMpeL/dj7YCC0oifJfr+TOaz9T8wUj+noDMDkV4dYFuQYXruOwUHNMjVEJMGoKLu3TZ7
-	 fBiJR3FXfRF/j0YkVfkJFTm7jqC6j/0UNyaUMgpIEpkF3cxyKAIWvfjT5FFIEr4vIV/Jv
-	 WPGyv/OD7yppzHWPbtrfCXFZYFou99p9G1RDTcptq/6Ot/LkzV7Jm0Da5VDDIWgPEzA==
+	t=1795462516;
+	b=KVodzSI4ciIMzpz4oekWX6TYG4PMI46WYGENtIssFWJiRvzMZgAPXFNwJtWmux3wrJZq
+	 VYkpZ4l01AFG2PevgRGNmaOi7tKEW7Ld0gpopukRKV41L6/YzHE+dySTA1mjBB7Jzp3RX
+	 hcBIWAtuL+ssIBUARAAUXymv2RWONUuczNBbrthnmPW5ST4l0DwAKTWTcz+dhnsQeUyA7
+	 BQ3ni1FHyiHoKcfgIppPKVFsuPILWP/ZD1dv+rRmT814VLwW2iQ5GFYKDHsmqxBgs4Yt5
+	 Atv6j6GKgumsN1SfdQm+5rQdtj4igNqNcSotaHAG5+n8Gdv8CQ66FjK7mWKPJNISyxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795461359;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795462516;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=PvW4g6854DmgXR4PJGdaXsGlS+qMtRehARbQ3GAMNvs=;
-	b=kdIIXJdSL3k7gxmJDpuK3INihzn5BWltIGMPHtjHuDkzZ6Tc7EZKZDynZNlycWZBS0fl
-	 bEmSiX09tArfM81ugp8LWFb9OY0c6WzqQS7233cuOnksucw7DzM7XCyQ7pmzmeLzEIOeH
-	 s2GX8EhYkah9CULd3UxssGgtnyikjQBcFW5pAXaLR8FpCbcwTt+CoeyonfwxdB6YuqzaQ
-	 O/EMcJ/k1+Slv67hL1F4BKwvyrX2M64SUjN9g0Sxsllg2LWBZYeb7BEGkSGhb6Ly+Ovy7
-	 EFkGVowKYPbFYAgoeZV7z27zl659g0UeCGFupaVIOIyvHe1cM49l/mqpqUO8a6fRqOg==
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=HEYr25BwavW4B0nOGSoBgW57x7aoPk1h9WB+MxPRJ64=;
+	b=5GxfzTXZnOwmRjJy6kLhD1CPM8A9U2k3UhOLcUah0kODI5Wclr7F6xpcNSVfM8gK4WWN
+	 LaRmcqnJMbOYPqzDt+cwprvqngv4znUOvb3Z4HxCV0MOQ8wuz8vZIpjkFUP6s2O5WmDHN
+	 ekqxhMYwTaJqO7jOegfP2rEm4Ko2ShAeyY/cQDFmonijCB8cOEN38JmKecwvGVLpUcnvh
+	 ArhsA3pVO3/cXb+NoiKOQhd9ANLFjIr1fZaZyaoO/2VLZ0g4SW62qMfNhdRjgSiv6b9SO
+	 vbDI7/pLgvedrezUCWiSj9tIChiIgAit9+Qp/wYz5aIRX/GplMUkO5rXG5Gx9rgiMJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZUeJKkoO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nB2Qms66;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6DE0A606A32D;
-	Mon, 23 Nov 2026 19:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 3EDD4606A31A;
+	Mon, 23 Nov 2026 19:35:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZUeJKkoO
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 963B01F00A01;
-	Mon, 23 Nov 2026 19:15:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nB2Qms66
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id E34091F000C4;
+	Mon, 23 Nov 2026 19:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795461359;
-	bh=PvW4g6854DmgXR4PJGdaXsGlS+qMtRehARbQ3GAMNvs=;
+	s=k20260515; t=1795462515;
+	bh=HEYr25BwavW4B0nOGSoBgW57x7aoPk1h9WB+MxPRJ64=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZUeJKkoO+n5PbaowjiMJA2PUR8NZVJDGadCFC5uRagLWmV4RSWr/Hr2Kqw9jtpq1F
-	 pEgAYgYfudCkygpgwktdVfM7458ZPWwk6v8t3ctxO9ZOCk8ShiueDy+dCwbzGsjLhC
-	 ekUQ9O9N/QmlNKsNolEgw5qE1IaQRCrgp+wbBu9IuVEFUo4F5XXfv0YApBu3V+2N/V
-	 IIQtLgjCJS8BF0PqZuwwNGy/8GuwAmGmGi3hQ1ViS0FekpAX/IyPvfnAjliEPzc+r9
-	 nYAzT+BbyXnd1hn00K8tzO52fIwL1KbobUoGGCVy5z69J+p6ZSgofAWVW15gErqCDC
-	 T0M9mM8BrQ63Q==
-Date: Mon, 23 Nov 2026 21:15:55 +0200
+	b=nB2Qms66XD3m7ZFDdqumsz3O75zEBJR3hO0COkHwXQeCNxLtD6cs6LAZ4JTYySHDz
+	 jSg/+/+avc0A3vbj4dDLsNs/G9gBO5b5YeXTols78J6ds3V725snBllIozgbwbT4Uw
+	 WhDNHahlXVr+SI21zxlXpXeCcB5H7jxaGkYIuOncPEqQuP4T+OQMfaBEPjhb233EG+
+	 fWqI+ly+/aARaBGdC3mebxWb004oPLrrsdJyyN1B+G3PeGJ9IY8kSqxYys9LH7n5ck
+	 /v2axwcsM4QZY0LnftV9ZR1Z8Bx2iouZMAvZRJpopVyZAtzJuc1gmgNagSKtaTA8+6
+	 6jQ8HaOPqlJ6g==
+Date: Mon, 23 Nov 2026 21:35:12 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Rustam Mustafin <rmustafin@cloudlinux.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Shuah Khan <shuah@kernel.org>, Jaewon Yang <yong010301@gmail.com>,
-	linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	"Hallgrimur H. Gunnarsson" <halg@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Serge Hallyn <sergeh@kernel.org>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	David Howells <dhowells@redhat.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Singh KP <kpsingh@kernel.org>, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	containers@lists.linux.dev, keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: Do not allow io_uring for /dev/tpm0 and
- /dev/tpmrm0
-Message-ID: <awSQ61-xFIsMY6N4@kernel.org>
-References: <awBff_fSk9HDh896@kernel.org>
- <20261123173321.2363162-1-rmustafin@cloudlinux.com>
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for
+ user namespacesg
+Message-ID: <awSVO9Zc-233M7_P@kernel.org>
+References: <20261119104208.782900-1-halg@google.com>
+ <20261119104208.782900-2-halg@google.com>
+ <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+ <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com>
+ <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,231 +78,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261123173321.2363162-1-rmustafin@cloudlinux.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
 
-On Tue, Nov 24, 2026 at 12:33:21AM +0700, Rustam Mustafin wrote:
-> io_uring passes its own file offset to the TPM character devices, although
-> they are opened with nonseekable_open(): IORING_OP_READ copies sqe->off
-> into ki_pos without checking FMODE_PREAD, and loop_rw_iter() hands it to
-> ->read(). This offset used to index data_buffer and allowed out-of-bounds
-> reads. The devices keep a single command and response per open file, which
-> does not fit asynchronous requests.
+On Mon, Nov 23, 2026 at 09:22:29AM -0800, Casey Schaufler wrote:
+> On 11/20/2026 9:09 AM, Andy Lutomirski wrote:
+> >> On Nov 19, 2026, at 2:52 PM, Andy Lutomirski <luto@kernel.org> wrote:
+> >> ﻿On Thu, Nov 19, 2026 at 2:43 AM Hallgrimur H. Gunnarsson
+> >> <halg@google.com> wrote:
+> >>> When a process creates a new user namespace, it receives a full set of
+> >>> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
+> >>> in scope, several of these capabilities (such as CAP_NET_ADMIN and
+> >>> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
+> >>> containers never need. However, there is currently no configurable way
+> >>> to withhold such capabilities from user namespaces while still granting
+> >>> them to workloads that require them.
+> >>
+> >> One thought (from the rootns thread): the other decent sized attack
+> >> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
+> >> bit.
+> >>
+> >> A sort of horrible solution (but maybe not so awful) would be to
+> >> declare that the bits in cap_userns aren't actually capability bits,
+> >> and that you need the bit in cap_userns *and* the bit in cap_effective
+> >> to do sensitive things, and that mounting needs cap_userns to have
+> >> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
+> >>
+> >> I want to sleep on this.  It might actually solve several problems,
+> >> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
+> >> or whatever.
+> > I slept on it. Here’s a counterproposal.  I’m not saying I think this
+> > is better than this patch set, but I think it’s worth weighting the
+> > options.
+> >
+> > Define a whole new set of privilege bits.  As a
+> > poorly-painted-bikeshed option, I’ll call them eprivs (for exposure
+> > privileges - it’s a crappy name but at least it’s pronounceable).
 > 
-> Add tpm_common_read_iter() and tpm_common_write_iter(), which fail io_uring
-> requests with -EIO, and AIO requests, which the new callbacks would
-> otherwise enable. A multishot read uses a synchronous kiocb, so also reject
-> IOCB_NOWAIT attempts and requests from io-wq workers. read() and write()
-> are not affected, as the VFS still calls ->read() and ->write() for them.
+> I played with a mechanism I called "chits" (all the good terms for security
+> bits have been consumed for a very long time) that looks a lot like
+> what you're proposing. I did it to address the CAP_SYS_ADMIN problem,
+> where any use of the capability opens up a whole barrel of worms.
+> I cannot, unfortunately, find my patches. :( The basic approach is:
 > 
-> readv() and writev() now reach the new callbacks instead of the VFS loop
-> over ->read() and ->write(). A readv() can split a response, for example
-> the 10-byte header into one buffer and the body into another, so the
-> callbacks keep that loop and call tpm_common_read() and tpm_common_write()
-> once per iovec.
+> A process has an optional set of chits. A process without a chit set is
+> unaffected by the mechanism. A process with a chit set is allowed only
+> those operations for which it has a chit. The existing but empty chit set
+> allows no operations. A process may drop a chit, but not the set, which,
+> again, can be empty.
 > 
-> Update the tpm2 io_uring selftest to expect -EIO, and check that the
-> rejected request leaves the whole response for the following read().
+> Because I was after CAP_SYS_ADMIN, I envisioned a call
+> 	cap_able_chit(capability, chit-list)
+> but there's no reason there couldn't be a
+> 	chit_able(chit-list)
+> as well.
 > 
-> Assisted-by: Claude:claude-opus-5-5
-> ---
-> This applies on top of [PATCH v3] selftests: tpm2: test that io_uring
-> reads ignore the file offset:
-> https://lore.kernel.org/all/20261123165638.2161305-1-rmustafin@cloudlinux.com/
+> I wrote this as an LSM, but the system-wide aspect of it made that
+> a questionable choice.
 > 
-> Changes in v2:
-> - message starts with the use case, rewrapped (Jarkko)
-> - drop the CONFIG_IO_URING guards (Jarkko)
-> - drop Suggested-by and the Link to the review
-> - selftest part on the Python UringTest of the v3 selftest
-> 
-> preadv2() and pwritev2() at offset -1 now reach the new callbacks, so
-> RWF_SYNC, RWF_DSYNC, RWF_APPEND and RWF_NOAPPEND are accepted and ignored
-> instead of failing with -EOPNOTSUPP in the VFS loop.
-> 
-> v1 (RFC): https://lore.kernel.org/all/20261120142116.1630010-1-rmustafin@cloudlinux.com/
-> 
->  drivers/char/tpm/tpm-dev-common.c          | 70 ++++++++++++++++++++++
->  drivers/char/tpm/tpm-dev.c                 |  2 +
->  drivers/char/tpm/tpm-dev.h                 |  2 +
->  drivers/char/tpm/tpmrm-dev.c               |  2 +
->  tools/testing/selftests/tpm2/tpm2_tests.py | 11 ++--
->  5 files changed, 82 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-> index 553fc6aca94d..5189c1d72058 100644
-> --- a/drivers/char/tpm/tpm-dev-common.c
-> +++ b/drivers/char/tpm/tpm-dev-common.c
-> @@ -13,8 +13,10 @@
->   * Device file system interface to the TPM
->   */
->  #include <linux/poll.h>
-> +#include <linux/sched.h>
->  #include <linux/slab.h>
->  #include <linux/uaccess.h>
-> +#include <linux/uio.h>
->  #include <linux/workqueue.h>
->  #include "tpm.h"
->  #include "tpm-dev.h"
-> @@ -253,6 +255,74 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
->  	return ret;
->  }
->  
-> +/*
-> + * Reject io_uring and AIO. IORING_OP_READ_MULTISHOT requests use a
-> + * synchronous kiocb, so also check for NOWAIT attempts and io-wq workers.
-> + */
-> +static bool tpm_iter_is_async(struct kiocb *iocb)
-> +{
-> +	return !is_sync_kiocb(iocb) ||
-> +	       (iocb->ki_flags & IOCB_NOWAIT) ||
-> +	       (current->flags & PF_IO_WORKER);
-> +}
-> +
-> +/* Preserve the VFS fallback's per-iovec read/write semantics. */
-> +ssize_t tpm_common_read_iter(struct kiocb *iocb, struct iov_iter *to)
-> +{
-> +	struct file *file = iocb->ki_filp;
-> +	ssize_t ret = 0;
-> +
-> +	if (tpm_iter_is_async(iocb) || !user_backed_iter(to))
-> +		return -EIO;
-> +
-> +	while (iov_iter_count(to)) {
-> +		size_t len = iter_iov_len(to);
-> +		ssize_t nr;
-> +
-> +		nr = tpm_common_read(file, iter_iov_addr(to),
-> +				     len, &iocb->ki_pos);
-> +		if (nr < 0) {
-> +			if (!ret)
-> +				ret = nr;
-> +			break;
-> +		}
-> +		ret += nr;
-> +		iov_iter_advance(to, nr);
-> +		if (nr != len)
-> +			break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +ssize_t tpm_common_write_iter(struct kiocb *iocb, struct iov_iter *from)
+> If you have any interest, I could dig more deeply to try to find the
+> patches. Otherwise, I'm happy to look at what you come up with.
 
-These should be static.
+What if eprivs or chits would take each capability and subvidide
+them into pieces? CAP_MAC_ADMIN would be formally a set of chits
+(or eprivs).
 
-> +{
-> +	struct file *file = iocb->ki_filp;
-> +	ssize_t ret = 0;
-> +
-> +	if (tpm_iter_is_async(iocb) || !user_backed_iter(from))
-> +		return -EIO;
-> +
-> +	while (iov_iter_count(from)) {
-> +		size_t len = iter_iov_len(from);
-> +		ssize_t nr;
-> +
-> +		nr = tpm_common_write(file, iter_iov_addr(from),
-> +				      len, &iocb->ki_pos);
-> +		if (nr < 0) {
-> +			if (!ret)
-> +				ret = nr;
-> +			break;
-> +		}
-> +		ret += nr;
-> +		iov_iter_advance(from, nr);
-> +		if (nr != len)
-> +			break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  __poll_t tpm_common_poll(struct file *file, poll_table *wait)
->  {
->  	struct file_priv *priv = file->private_data;
-> diff --git a/drivers/char/tpm/tpm-dev.c b/drivers/char/tpm/tpm-dev.c
-> index 74488f0a7b78..9c2f0ad826be 100644
-> --- a/drivers/char/tpm/tpm-dev.c
-> +++ b/drivers/char/tpm/tpm-dev.c
-> @@ -62,6 +62,8 @@ const struct file_operations tpm_fops = {
->  	.open = tpm_open,
->  	.read = tpm_common_read,
->  	.write = tpm_common_write,
-> +	.read_iter = tpm_common_read_iter,
-> +	.write_iter = tpm_common_write_iter,
->  	.poll = tpm_common_poll,
->  	.release = tpm_release,
->  };
-> diff --git a/drivers/char/tpm/tpm-dev.h b/drivers/char/tpm/tpm-dev.h
-> index 34efb1ffa491..2f2186e6f094 100644
-> --- a/drivers/char/tpm/tpm-dev.h
-> +++ b/drivers/char/tpm/tpm-dev.h
-> @@ -28,6 +28,8 @@ ssize_t tpm_common_read(struct file *file, char __user *buf,
->  			size_t size, loff_t *off);
->  ssize_t tpm_common_write(struct file *file, const char __user *buf,
->  			 size_t size, loff_t *off);
-> +ssize_t tpm_common_read_iter(struct kiocb *iocb, struct iov_iter *to);
-> +ssize_t tpm_common_write_iter(struct kiocb *iocb, struct iov_iter *from);
->  __poll_t tpm_common_poll(struct file *file, poll_table *wait);
->  
->  void tpm_common_release(struct file *file, struct file_priv *priv);
-> diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
-> index 19e8f2779265..0c8c1a1b0b3b 100644
-> --- a/drivers/char/tpm/tpmrm-dev.c
-> +++ b/drivers/char/tpm/tpmrm-dev.c
-> @@ -49,6 +49,8 @@ const struct file_operations tpmrm_fops = {
->  	.open = tpmrm_open,
->  	.read = tpm_common_read,
->  	.write = tpm_common_write,
-> +	.read_iter = tpm_common_read_iter,
-> +	.write_iter = tpm_common_write_iter,
->  	.poll = tpm_common_poll,
->  	.release = tpmrm_release,
->  };
-> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-> index dc4e642450d6..dc1814e0c701 100644
-> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> @@ -9,6 +9,7 @@ from tpm2 import ProtocolError
->  import unittest
->  import logging
->  import struct
-> +import errno
->  
->  class SmokeTest(unittest.TestCase):
->      def setUp(self):
-> @@ -386,15 +387,15 @@ class UringTest(unittest.TestCase):
->                            tpm2.TPM2_PT_FIXED, 1)
->          try:
->              client.tpm.write(cmd)
-> -            # Offset 10 stays inside the response, so an unpatched kernel
-> -            # skips the header instead of reading out of bounds
-> -            res, rsp = uring_read(client.tpm.fileno(), 4096, 10)
-> +            res, _ = uring_read(client.tpm.fileno(), 4096, 10)
-> +            # The rejected read must leave the whole response in place
-> +            rsp = client.tpm.read(4096)
->          finally:
->              client.close()
->  
-> -        self.assertGreaterEqual(res, 10)
-> +        self.assertEqual(res, -errno.EIO)
->          sz, rc = struct.unpack('>II', rsp[2:10])
-> -        self.assertEqual(sz, res)
-> +        self.assertEqual(sz, len(rsp))
->          self.assertEqual(rc, 0)
->  
->      def test_read_tpm(self):
-> -- 
-> 2.52.0
-> 
+And process having e.g., CAP_MAC_ADMIN, would actually have the
+set of chits that are included to CAP_MAC_ADMIN.
 
-I think it would be best if you would squash the test part to your
-other patch that adds python test. You can then change the license
-too while at it.
-
-I.e. add the whole test as part of this patch set.
+Without that type of relation there's just a space full of chit
+;-)
 
 Br, Jarkko
