@@ -1,42 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795425382;
-	b=CJ5Ink/T4TX2Bn5wVYkEM/5MCn8VKtupQEYBGupJfIO5fblf4QMxXIzHgGK9uYa6Q9GU
-	 S4YKHTfOVIn/5Kj8GJ/t5Ubi3DoQPxHQ2u0l1coEAFmYjxUQoqh2IBTb2jq7sduoED8ej
-	 bsrIqpg+ADW8oNgkUdaeOggiUJ/fLBYkH6ZnPPaKN+bipxlO5tMahwHa4N31pSAoZtfkW
-	 prGwqD5zlraE0314FccM6vNAwbE3BaOV1UWPw+jsd+tY+YgVlfSCFqmYrlMrTO8QeeKmM
-	 eMsT7XwgCSzlu8n2OuHl3lgtIVMchdai47EK1a5yeWZsPLl6Oaqg1gj/rXDGBBkypAQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795425382;
-	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
-	 X-Spam-Status:Received:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=mqD6jU+t4/7BDqwKcYC5doGDsa7FtGatu2yPza1Zim4=;
-	b=nHbQpxhCvHrDj5y4UUwfpaqvOndJAi7Gjuq4zauk9Huhjn/2UFuKxTNBW/KbygIJ5X2L
-	 7CoK1Vk2zsQiIoqA38wh8UbisKQn+2kCyjSP27XdnamKTTL/LKtfB6+8NBSph3btMHFLt
-	 Dx4Zj8cmDOgmfhyLUd6635nK0L/VvJRcXxEP/xZLWD644d9Ejzo/Q6/DquBSBFP3lIL3k
-	 LwaJkWULhmcWy84utM573K+WaHH357QGwT+qYweIwcgj9pRYBFbNwv0xa7SBaHYSgAsHv
-	 SP7e79WB7KrPmcdxbW3F1RPVF6uuic6Pd7CBRSFt1bE5ixLNlRpl4EI5MlXRfUDETIQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.58
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795425387;
+	b=yGj30kxD7AAW0qJWIl0cvdZCkLiPKisqUGa+6UGtptBvzBO+cqaQuPXMO8wJ3fcacJer
+	 Ee/cUFrlMNevadsPhqIYlyI49cw5HZb7JzV719CklIpemb7cGPk4Z/wsYmyFmUxu4pBkT
+	 06DznqIYIii717f30UmfPvPVPuSDSkKdfbBGO9DLAsMzp8IRZho0bhGwhgjDCyu5J7qcx
+	 N/SpxY70VBmWxdtTfD5wnlPT8cMT+e4DQt727AKlxYqomjoP2cFs/0dxbcLzuCcnzq8dl
+	 LBQCAiQs2KywIwKtxOnQb0A6WosM95M7oegclU+75bpotBphuGBDSbqEyPFLl9P/1QA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795425387;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=9pPlie6jD8tf7aBjNcRGiCnZbjLLtP2caQghIpmYvHc=;
+	b=s2vSJMXJjvZSMvyNp+TsvobpeoK/cDWXPqIOuqWV8srf2855vJhjUJTxsYIQsutVRtbK
+	 MWI7268ZFXIAcEHaYPPIqWK0ILvH9/R/JLLxFIAlHfA2qupYUIpXTyAYL2tOlCbNLc4mu
+	 0eQwvSrv6YfMTQ7gRi6OjrD9UMcvD3A86Y/cfAeEtILVf9WE8nnmAuOPFpfBJ66mY6jl7
+	 tXuKnF5jiiyN6PQYpTHPt/urPbHblwcgujr/mnSQBVTG3Mfh72kQperBApkkTEdqH85CP
+	 H+P9AGSMh6Q95lhd+3BnG+sWdgNOjrV+D/6pUmERNNt3cQIiJb8Sk1THdzeOvHP2lqQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amd.com;
+	spf=fail smtp.mailfrom=amd.com;
+	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=bZ3EBCOV;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.58
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013058.outbound.protection.outlook.com [40.107.201.58])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D1D606A31A;
-	Mon, 23 Nov 2026 09:16:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0D1D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 9566A200DEB; Mon, 23 Nov 2026 17:16:19 +0800 (AWST)
-X-Spam-Level: 
-Received: from shelley.lan (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 1CC19200DE2;
-	Mon, 23 Nov 2026 17:16:17 +0800 (AWST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E7A606A31F;
+	Mon, 23 Nov 2026 09:16:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37E7A606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=bZ3EBCOV
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Sv9b03zWJH9F2dGx+pk0jGGj2u5bnBKFLqmo9OAp+yJKjnhTErFjsfSDLZgRrY1AscesuYGqQQlKLJFmkTYQv4DNk932jurqTaDUqQ8z4s4MvJa83Bz1IJxfO7dCvqpPVAOHg7XhsrzJXbk267u2ZXIVaQiuwDr9N2Gj/DfEjv7iT135DFTPkw8lzCcg/72WlPJWURgX3VLKObCiYGemhkjsTu6OnH6raxMR7KRc5YcmqtxHPuC7ZKzDRap+tAfWXITfHW1ZJomipPyTdU/oUdvqFXK1kIQsAcQetbGK2znwo0TyMv6fpweyiBmqDF+8P+JVe7BzpnnieDyYHFF9wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9pPlie6jD8tf7aBjNcRGiCnZbjLLtP2caQghIpmYvHc=;
+ b=pwZzwWjgosvcSkejABdMLXRGHVwb3JJsTwvYxLtT4ZnU4xeQaEYXWkaSJPX3BZwcWcsUnyUnkVPqb0vYQo4czBQt7P3XTCIy+nTqa5sD8soBSGB+HdCG0iVOI77YS6rxHDZa4C3bTIHOz/nZ5iEoOhmSrTkNyMlwLKO7ne+Dc395eGBGT5B70tBHz+ZpFTDFB/IYC2T8jTdyH1L5sQv+16LKZnZ6raf0G6cYpRQ5WG7kslW2uQ6i9kFKTcJu+04uhVgL3QeZ3FTN0OsEU5gTkh3xaIxmPpLmBV8idCdWvNX6lW40fM7GTvzwbkaNpN01p65wiz/C5N/8jsXrRhPJ+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9pPlie6jD8tf7aBjNcRGiCnZbjLLtP2caQghIpmYvHc=;
+ b=bZ3EBCOVNSZub0+BMuojVU1Ekn8oQ3PZB6Js+tQNGjcO6H170yQXZOY0ebIqtKcowr46r2yO5fNwAN+S3FbSSz/JSxq+mD6b4GZIHv+vHpD8Ogq9PkDn+SkS5Ej1ONckwI8evHWsoYWkdiPHA8Ajm7MR9ee2GLuCOa6c3yrBHbg=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Mon, 23 Nov
+ 2026 09:16:23 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0639.012; Mon, 23 Nov 2026
+ 09:16:23 +0000
+Message-ID: <4f9c0bb3-1de1-4c8a-bce2-436818c61cf3@amd.com>
+Date: Mon, 23 Nov 2026 10:16:16 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] udmabuf: map huge page backed ranges with PMDs
+To: =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+ Natalie Vock <natalie.vock@gmx.de>, "T.J. Mercier" <tjmercier@google.com>,
+ "Yang, Philip" <Philip.Yang@amd.com>
+Cc: linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <qiliang.yuan@linux.dev>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Philipp Stanner <phasta@kernel.org>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>, Shuah Khan <shuah@kernel.org>
+References: <20261122-feat-udmabuf-huge-pfnmap-v1-0-dcba888940c2@linux.dev>
+ <20261122-feat-udmabuf-huge-pfnmap-v1-2-dcba888940c2@linux.dev>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20261122-feat-udmabuf-huge-pfnmap-v1-2-dcba888940c2@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0103.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a9::16) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -46,51 +103,227 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] Documentation: kunit: Fix
- KUNIT_DEFINE_ACTION_WRAPPER() argument order
-From: David Gow <david@davidgow.net>
-To: Kees Cook <kees@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
- Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
-In-Reply-To: <20260921000021.i.218-kees@kernel.org>
-References: <20260921000021.i.218-kees@kernel.org>
-Date: Mon, 23 Nov 2026 17:16:04 +0800
-Message-Id: <179542536414.535454.3568090867594251024.b4-review@b4>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=387; i=david@davidgow.net;
- h=from:subject:message-id; bh=ve5F3PWRwJ1+mdHnTtW68cuiRYfMdw9eOxO8XfQDUqQ=;
- b=owEBiQJ2/ZANAwAIAcYipzoZDNtCAcsmYgBrBARg9EKSA+oTpiu4IrtbCGrX90D+/qU3AMzfX
- jKXag5cyRCJAk8EAAEIADkWIQSmmTCaqhqZOsxDGC7GIqc6GQzbQgUCawQEYBsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQxiKnOhkM20LC6BAAsYKNuGtzgfJvmAi62InYdtil8mc5I5H
- mTVwj4DsKJjZnNDJe1jkyUZj3RHNVlCyTWfOTOQmK5Hot9Zow3+t0znTt6WBENgzYyHGeUpdwW/
- OCGTrftFkSmYfXGufUG7OFBwrD6CCpDe95AFTZBtN09rv7GJnCtVZlNN1Cy+ppCiZLsbVJJo6qf
- TgRnQ8NL1n3h63TQda7mBaIGOX50iFo5Zl66le3wf7l/RrsahlHs0rJVEqWUuTa/KyPCrkWAtHn
- fGPPgN5PieiVklW35EOW7ID/3M00U45p0YS5Kz6rgyu7lXgjd8vXXJf7iba4j0WJTtkHYXEkz3G
- hwgg1iLMhar0IukLRWBFqXdg/zpWFw6FiUPrlc3BtULuB8NMhIxyhUhtPBtDbW4ODK9HB9KmAKJ
- KE3eN9YhYRownKuxFtGRuUUqhGO1L2HWKVbBWRZ/4hTNg5ONelEh39i2omMZ6WTfbGTynb0YSPJ
- tQ2W9gbNyETb3HbitTu7QECFpIRG7/qRVbF0TQ8qtrQek5MjZHoZhxxURj0B0MhTrpu0rTIn6+4
- 5Hbeu2OTqlLkUcqTTU9l9FgTw1+oQnm0a4h5U81QdC5lGy9nZgu68AZXmU1qNTK0pQw2Zk1x1hw
- DIGyAuIyMHLnZNyS1ImGY14Fcdauz27ArfydFcPaLedg5xRMEC1k=
-X-Developer-Key: i=david@davidgow.net; a=openpgp;
- fpr=3B0A53B1D9DF6AAC59C230322A821C5AD66AB03F
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SA1PR12MB7224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54d2ebab-0818-4b2e-0a6b-08df49427152
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|10067099003|56012099006|11063799006|4143699003|261026140227099003|261026121527099003|261028144727099003|261022105027099003|261021135927099003|261021123027099003|261021121427099003|261102123227099003|261009223027099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	E3DKU/djzoIr+dVPWD/jfusrs7rw6kjxuUzCSmljm2AccKrCPBgp13XhS60Rnjdi7YqcCZpWyawuSCjmQ41xaQNQdIgjRiHTqqvBICVr5dh/P3J7OCtpXrU5M7NE4WDYARBLS8mArKvSUVsyhJR15DH+xPcII2DFIeJrSr1RAbXHA9kFf7d8VtlTsXot03DrssRxNhwDZtdCGUfrnOOCH+Ndti4vFIRelD0tPG8+DEyzSlzn1cij3WAHRjw4jpqclgyMQVBsm6N32AyFdXDXVmum4pLa12WfIG22f8h+ulJ8EVlSRVKWXDA8dFxFMO1wdbe4hne4OGU6zzKZqx3GAS8tjLRJ94JHpU303Pg2zrPREDJIjq2YD4qWEyzZb60fFCC+fMfDdELTyAQHaesSLtRVx2CS/+UAm1M+TXHwtqsLL3SDXAgZd4h9E/uYI5inIYsAM1qFkxcXB37B+7xV8Uqg/WMO1Di1uvuQUCJnBtHO+PciO6lNrhaLizRMMwlCm6EVfgSk1msyl8bh+pdh8QD2S/BZ0c/VCkkd0NH/jJALRjrwvrjdw2lSNDqsjNUIdJqYZSSB6DYtSlzuadx7Sl20wZK6isczUbhkayuaMQO64MtGDzYTgFFHdbq4CinYMZGR3tw6J5A3MiRXDyqeqh/KM5BsYvB0SwjiSnggTqc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(10067099003)(56012099006)(11063799006)(4143699003)(261026140227099003)(261026121527099003)(261028144727099003)(261022105027099003)(261021135927099003)(261021123027099003)(261021121427099003)(261102123227099003)(261009223027099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dkpoUktVemdKeUR3R3grK3VIZ2pVbHBqN0JCSzBvcmpyMUhUSVZ5MHF2Q05K?=
+ =?utf-8?B?dDl4WTRVU0orNE5rejA0NWw4RkdNdk8rUUJKYUJkZ1lhMW1HTHNOeFhQdHha?=
+ =?utf-8?B?SDJvazRIeHhhVitwQUdCVDRwZFd0Y0ExeVMyOVpKUEtHdGo2YVBOSW5BbDZZ?=
+ =?utf-8?B?OEhJcG9RMnQ3YWJua0xQUElCMk5qa0FUOUFxOHJQbDhrbjk3MEltTzRJV1RB?=
+ =?utf-8?B?aHVOazVWNGR6UUt5ZWR6SXRpU2tDUkkvSk1KRmN5N2szODUzeVlNM25pMC9j?=
+ =?utf-8?B?SkZVVlZHZUhCQ3NpNHora0xURzNRbUNVWUpyWVppV0VWU0VOK2E1ZUFtZ3ZW?=
+ =?utf-8?B?ZmdqOHQ5aGxzdEpPREY4b1NJUWFRNXc3M3Yzb09paFhjdi8wQktwVkp0bUU2?=
+ =?utf-8?B?VnA3djlCNTF2MUxzM1U2dUliYzczVmp1NzJ1eE9zRkdlUTM0dWpIY093Z3lv?=
+ =?utf-8?B?RklidUIyMi9NSG9CUDZUaFdUWlQzc0psV3NFcitRb3dvTFdsOHZQOWl6UGFk?=
+ =?utf-8?B?SjNQWWtiRDVtWkk3RzBOZmRsZFRFYjM3T09mU3p3NjFwcWVNcnF6c25BKzJp?=
+ =?utf-8?B?UW5iMkIxbnhiYXl1eXV1WDFmNG44UTBzQUhWbHlkMDlJN3VITzZiZVZ1cXhs?=
+ =?utf-8?B?bzFFUFVRTnUrZnJtQm1Va3BSK01XcVVmK1pNMDlKN0dXc2Vyc2hKa09NajJl?=
+ =?utf-8?B?UmE4SjZJL0hyd2E4MnBxWkNBRUNRcE43a0ZYS3M4NitCcFNwdzFxWEh4T1lj?=
+ =?utf-8?B?N0dFbGlqN21qVExCRzBhQ1Vnakw4cTQwdGZManVPOXJIaGN2R1FOdjNOV1Fk?=
+ =?utf-8?B?Ujl3a1Zlak5DUmZMVUM4MFpyRXczT0I0a2Vua3ZwcW9hRlJXRGZQcTRlUmdK?=
+ =?utf-8?B?bmlkYXYxQXhFdHNFcEt3VHRING9HdVIvNURkbXVRL2UrcC94SVhZZ05kVnFE?=
+ =?utf-8?B?VzhBeGZOVXVvcWxDVzgrNlNtK09rc2tVV1ZiLzk0OVNiTGFMd3RmcVBLRUlL?=
+ =?utf-8?B?MW5sM1ViVVZ3WldPRkxaWFdkUzU1aVFWYVBlZWtKc1ZkZXl5bnp6K2o2SXl5?=
+ =?utf-8?B?Mzk0cHRTcHRWdE05U0ZUcCtvK3NDMkVGSXJ4eEVyblFnc2FlKy9rVUE5dGxG?=
+ =?utf-8?B?VzAvVWlpMXlvdTRlNllQTTVsNVd2NmlDU2xPTTkwSS83UVJSTFdTRFdBb3Ar?=
+ =?utf-8?B?RDU1Vk9LYkVxK3BNK3ptSmFWYUgyQWdkQk1VSHNhN0ZPQ0ZRSm4xZURZODV0?=
+ =?utf-8?B?ODRhRy96Ui9SL0dxUmpmSGdWaGxjTmZERW9rQ0JmUSt0eTNwd3ZocDk4Wkh6?=
+ =?utf-8?B?cTVLWlFoL3krR3RKcHppTWk3VWxHZkJGc2ZjSlJjVzBGUHhwcy83NW5za2dr?=
+ =?utf-8?B?dFdmeVdrOFhna1ZmOVhVSUtNSXpTdUNCeGsvckhMV3BTVkVnQk9ZdDRoWmRa?=
+ =?utf-8?B?QUMzMmt5b0hTV2t2bENBZDJXZi81bHVTbzdqTE9vbjUvWS9aZ3piVWhQQ0hH?=
+ =?utf-8?B?S2l4c3k0aGpaSkxST2JqODRlcHZuSENrRHVoOVZYdFovak5jSHQ4VnoyZ0Y0?=
+ =?utf-8?B?UzhaaHhkNStSQ1RYTDFHS096ZkkxdXRrYXgxWnhIUVlpallUNmU5YmFIc3Jl?=
+ =?utf-8?B?Um91dGpXSlVjYnBtWlpmK0RhUHkySUZZY2RHdjlnbWtxTGVJanlISHg3dXRn?=
+ =?utf-8?B?UjNRZFp3eVFiVjZPcVFSNzhOSjFuNkVkTHpTYjA4SzdQTDVqWGZxVmZCN3NK?=
+ =?utf-8?B?elcyRjNwK0g0REh0NUkwRldselh3dVBIZlNDS3dOL3k5SUk1Y1pvaFVnQWM0?=
+ =?utf-8?B?aW1HSy96MW93TXBSeDBoS3VjWVpJL2dMN0ZzbEFPUURCd2F1YXdSOFhPR2JL?=
+ =?utf-8?B?NDRsTk5aazZ1cllTN3J3ckJVZ3J4T1QzOEhHVmhDaDNEbnRudUpDK3NCQ0RH?=
+ =?utf-8?B?a2xhV3Zkb2lHZzM3ajZFR0E1czF4azAwQUMrNmlGU2x4NjlSb1RrVDV4SXd3?=
+ =?utf-8?B?WFVWbzI5bmRwWDdNaTJRRUQzSk02MlBHZ29pc1VPOENsYlFUanJieVl6QnFD?=
+ =?utf-8?B?cUl3VWNybUE3MEU3VkRFS0RtMjd0SFUwOGtJOGtEZFBhSzJrWWtOVmhlV2RB?=
+ =?utf-8?B?aElpdlR2eFM5anp4cXZTdmR0L085UUxvTTVRZnd0SUt6aUtHY08ycWNzOHR3?=
+ =?utf-8?B?eXFrcDNlajlNQ0hOZHJaUk44T2NxdlNZclVPQXB6V0ZNaXR3bGZtY0sxcWd6?=
+ =?utf-8?B?RThrR0xFcDd5akIyRDFrZmJTa3hQaW1xLzBTRXg1S09rUG9qeTVqaXk1bzhx?=
+ =?utf-8?Q?IuxAVED1/JgdC/wBOe?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54d2ebab-0818-4b2e-0a6b-08df49427152
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2026 09:16:23.1785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QuXtSclDgUGOIh1K2bhitejeVC2Q5XHE8ZxW6MrPknJw+rutWInJ5PZeWxG1UuSV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
 
-On Sun, 20 Sep 2026 17:00:25 -0700, Kees Cook <kees@kernel.org> wrote:
-> The macro is
-> 
->   #define KUNIT_DEFINE_ACTION_WRAPPER(wrapper, orig, arg_type) ...
-> 
-> so it defines "wrapper" which calls orig(arg_type). The example names
-> them the other way round. Swap the two order.
-> 
-> [...]
+Hi Thomas, Natalie, T.J. and Philip,
 
-Reviewed-by: David Gow <david@davidgow.net>
+could you guys take a look at this?
 
--- 
-David Gow <david@davidgow.net>
+IIRC we wanted to do the same thing for TTM and DMA-buf heaps, but at least the TTM approach failed and we had to revert it.
+
+If I'm not completely mistaken it should now work fine and is quite a nice performance improvement when mapping large stuff into the CPU page tables.
+
+Regards,
+Christian.
+
+On 11/22/26 08:37, Qiliang Yuan wrote:
+> QEMU and crosvm hand guest memory to the host renderer and display as
+> udmabufs for virtio-gpu blob resources. The guest memory is a memfd that
+> is often backed by 2 MiB huge pages, and the host process mmap()s the
+> dma-buf to access it with the CPU.
+> 
+> udmabuf maps every page with its own PTE: the first fault inserts a PFN
+> for each 4 KiB page of the whole VMA. Mapping and touching 4 GiB this way
+> takes over 200 ms and a million PTEs, although the memory behind it is
+> 2048 huge pages.
+> 
+> Add a ->huge_fault() handler that maps a PMD-sized range with one PMD
+> when it is backed by an aligned run of contiguous PFNs, and falls back to
+> PTEs otherwise. Have the pre-mapping on the first fault skip the ranges
+> the handler will map, so that their PTEs don't take the place of the
+> PMDs, and keep pre-mapping everything when the VMA can't have PMDs.
+> 
+> Mapping a udmabuf over a memfd filled with data and reading a byte of
+> each 4 KiB page through the mapping, base and patched kernels alternating
+> over 3 rounds of 5 runs (7 for shmem 4K), median of the per-round medians
+> and range in parentheses:
+> 
+>   backing    size        before (ms)         after (ms)   change
+>   hugetlb    256M   13.3 (13.3-13.7)      1.7 (1.7-1.8)     -87%
+>   hugetlb      1G   53.6 (53.0-53.7)      6.5 (4.2-6.6)     -88%
+>   hugetlb      4G      211 (211-212)   23.6 (17.6-25.2)     -89%
+>   hugetlb      8G      423 (422-424)   45.8 (45.8-47.2)     -89%
+>   shmem THP    1G   52.8 (52.5-53.1)      6.3 (5.8-6.8)     -88%
+>   shmem THP    4G      210 (207-214)   20.7 (19.5-21.1)     -90%
+>   shmem 4K     1G   52.0 (51.6-52.7)   51.8 (51.5-52.9)       0%
+>   shmem 4K     4G      209 (209-211)      208 (208-209)       0%
+> 
+> Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
+> ---
+>  drivers/dma-buf/udmabuf.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 68 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+> index 018937435356e..f9c908f8b53a2 100644
+> --- a/drivers/dma-buf/udmabuf.c
+> +++ b/drivers/dma-buf/udmabuf.c
+> @@ -44,12 +44,63 @@ struct udmabuf {
+>         struct miscdevice *device;
+>  };
+> 
+> +/*
+> + * Return whether the PMD-sized range of @vma at @addr is backed by one aligned
+> + * run of contiguous PFNs, which can then be mapped with a single PMD.
+> + */
+> +static bool udmabuf_pmd_mappable(struct vm_area_struct *vma, unsigned long addr,
+> +                                unsigned long *pfn)
+> +{
+> +       struct udmabuf *ubuf = vma->vm_private_data;
+> +       const pgoff_t nr = PMD_SIZE >> PAGE_SHIFT;
+> +       unsigned long first;
+> +       pgoff_t pgoff, i;
+> +
+> +       if (!IS_ENABLED(CONFIG_ARCH_SUPPORTS_PMD_PFNMAP))
+> +               return false;
+> +
+> +       if (!IS_ALIGNED(addr, PMD_SIZE) || addr < vma->vm_start ||
+> +           vma->vm_end - addr < PMD_SIZE)
+> +               return false;
+> +
+> +       pgoff = vma->vm_pgoff + ((addr - vma->vm_start) >> PAGE_SHIFT);
+> +       if (pgoff >= ubuf->pagecount || ubuf->pagecount - pgoff < nr)
+> +               return false;
+> +
+> +       first = page_to_pfn(ubuf->pages[pgoff]);
+> +       if (!IS_ALIGNED(first, nr))
+> +               return false;
+> +
+> +       for (i = 1; i < nr; i++) {
+> +               if (page_to_pfn(ubuf->pages[pgoff + i]) != first + i)
+> +                       return false;
+> +       }
+> +
+> +       *pfn = first;
+> +       return true;
+> +}
+> +
+> +#ifdef CONFIG_ARCH_SUPPORTS_HUGE_PFNMAP
+> +static vm_fault_t udmabuf_vm_huge_fault(struct vm_fault *vmf,
+> +                                       unsigned int order)
+> +{
+> +       unsigned long pfn;
+> +
+> +       if (order != PMD_ORDER ||
+> +           !udmabuf_pmd_mappable(vmf->vma, vmf->address & PMD_MASK, &pfn))
+> +               return VM_FAULT_FALLBACK;
+> +
+> +       return vmf_insert_pfn_pmd(vmf, pfn, vmf->flags & FAULT_FLAG_WRITE);
+> +}
+> +#endif
+> +
+>  static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+>  {
+>         struct vm_area_struct *vma = vmf->vma;
+>         struct udmabuf *ubuf = vma->vm_private_data;
+>         pgoff_t pgoff = vmf->pgoff;
+>         unsigned long addr, pfn;
+> +       bool pmd_ok;
+>         vm_fault_t ret;
+> 
+>         if (pgoff >= ubuf->pagecount)
+> @@ -61,7 +112,12 @@ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+>         if (ret & VM_FAULT_ERROR)
+>                 return ret;
+> 
+> -       /* pre fault */
+> +       /*
+> +        * Pre-fault the rest of the VMA, except for the ranges that
+> +        * udmabuf_vm_huge_fault() maps with a PMD once they are accessed.
+> +        */
+> +       pmd_ok = thp_vma_allowable_order(vma, vma->vm_flags, TVA_PAGEFAULT,
+> +                                        PMD_ORDER);
+>         pgoff = vma->vm_pgoff;
+>         addr = vma->vm_start;
+> 
+> @@ -69,6 +125,14 @@ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+>                 if (addr == vmf->address)
+>                         continue;
+> 
+> +               if (pmd_ok && IS_ALIGNED(addr, PMD_SIZE) &&
+> +                   (vmf->address & PMD_MASK) != addr &&
+> +                   udmabuf_pmd_mappable(vma, addr, &pfn)) {
+> +                       pgoff += (PMD_SIZE >> PAGE_SHIFT) - 1;
+> +                       addr += PMD_SIZE - PAGE_SIZE;
+> +                       continue;
+> +               }
+> +
+>                 if (WARN_ON(pgoff >= ubuf->pagecount))
+>                         break;
+> 
+> @@ -89,6 +153,9 @@ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+> 
+>  static const struct vm_operations_struct udmabuf_vm_ops = {
+>         .fault = udmabuf_vm_fault,
+> +#ifdef CONFIG_ARCH_SUPPORTS_HUGE_PFNMAP
+> +       .huge_fault = udmabuf_vm_huge_fault,
+> +#endif
+>  };
+> 
+>  static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
+> 
+> --
+> 2.43.0
+> 
+
