@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795477172;
-	b=a8OjVmW4vwoewmJOYbMwi7MI2d0P5c12nDpwHaPKWtVC8nr8XAa1EJVc6ul9oY3uOPi1
-	 EPthsOCoV0lEF2iqFqKfcA6JRkN2sEO9CW0PLCV8O1pde5yFoh+qCgccJ+dKugKLpZEWi
-	 nE2yyN4fxmE4nVStjoBUgRDquVcmXrkb1GKFehReYg2fYEFPUmYByCGmt+Jiqe5GAiBEE
-	 oVtRJ8tUs2/uStt6r/+cu/1N5E5XXQbJDJaAn8XoeKZQhu0AG12MR465VIxtdyABdat5L
-	 3fKzzNXeGj73XxasnVL3vU07gGAMeqSMQr6fSUP/IyqkledHCoBU2rwGDchxXPD0nKQ==
+	t=1795477173;
+	b=KttrRSAZGcDx1V+55Yh4FdRkhJ9CNJnBzFu5aQ2kbV0kX8vIHy+IFaWEeBgbfHtqh/bM
+	 Bj2UwRmo5iqRQ/Qf3ldUM13Fq1KCLAe2TMRvqt++ycXeawEyDviWdKWMLQpkhbHiCWq+f
+	 2gWtmVmIoL+Qq6mm22/jP8uK+R/SPyiGE8/5dsPi3BoulvzFY3TVlxVO4fytroWoXKNNo
+	 KDi2e3rK99I81amUm7waJpQ8/CUiyAmftfWDKYbk4f4FnLoIdD9gLIm+UlbHFDZmoKphZ
+	 e5B+WlAK9OlJf1Hklth855uK7ZU9qkbFiX4UWgHJB6h4Gewb3BnaS5xEML+lYlrmciQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795477172;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795477173;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=NNY7sb7Lc3fUr2Yc/4c0jbyfUC5yRtKrBOqqupJLhM4=;
-	b=U9Yf4Ihk2HPdY3vleURzqzqA6Ho3H1aHCzXffwoX8wXGmohGR6ITFJDC0bBtJGJkEyd2
-	 Qd0XN8vzPuNbJDzM1YaWKMC/2t6kpf8WXSKxj9tMrXiVDw+oxSTQ3BhSOALrmIX8eYfW9
-	 QWER0FNkYUbYk4Yu+iiAe7CCFHTxLewbxfx5E6ukHxTcVdp+ongs1Mjls3QFtXGRypz5b
-	 O4vv4HzdKOgj9m32/iMT27JJqUb1VC/okG3mcQrAMPLmbhxQs131LAj75wsLg7PT1I+et
-	 isQpE5g3LAxJEtQWQ6uec2LYigafLcbEwaCywWpBza04g2TKUOtjUG347bTni8fMIIA==
+	bh=jD/Uo5Sm8+i/ieJeV7+ABTYqLpoO7saGHVcOyMdie6k=;
+	b=oSyHLHlS5vRzfjGFu4xT4Y7O8Mmwk179zS6vTUqjrz4DEITCDHnYfPuRKDN5BatqeW0B
+	 /GETkuVwdIsNZRHLgPK6t0h6nIFeSflnAMNbmXuUgmOyJruHxZr1tRPhHv3DoiC64juUH
+	 OaeQeXhPsUqZMGT2bpsxRM8bvmRGoMlciJtxP2Yr0sVJ49yYqnicf7XIXwXqw38x/gdBH
+	 T9JjjRlziqUHLfTLI0p8JJO5kRMicbAy3F43yESGo6yVaKzLYh8aNrBzrMyEodDy1YXZA
+	 Cw9GxIBYzzckWcxlsHcj1z+wM6yRcWUrVdWawlifquCh8xjdKhGkmzt2nvFalvLc5aQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Nl5Sf5CJ;
-	arc=none smtp.remote-ip=209.85.167.197
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="bVBa/noY";
+	arc=none smtp.remote-ip=209.85.210.69
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C480C606A334
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 23:39:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C480C606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12324606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 23:39:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12324606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Nl5Sf5CJ
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4b2d1eb484aso4364203b6e.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:39:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bVBa/noY
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-83edc5c5ae9so4058283a34.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:39:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795477171; x=1796081971; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795477172; x=1796081972; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NNY7sb7Lc3fUr2Yc/4c0jbyfUC5yRtKrBOqqupJLhM4=;
-        b=Nl5Sf5CJkUm3W9+jcd7iU6B9Cs+k4BUqPo8Wy8+bdX5qmWn6w6hnUYpzOWkGkpqu03
-         iy4AI3elPN7Q93LX2/SdhiXUpzt7B+LSiLuFL7xGN0OYIuws+2K5qAUvIi7xOe5i58YY
-         1hOiYCX5Tb5ghmTPkQ1PGBTmHdM6SU60uxVtr45Ol7tonZ/g5eyts6S2qm/W+8I2mkyj
-         9fxXTrijZyy6nRC9f3MnGormjsekuNctZe2jU5kXqr+MitAmFcIgnNS25ow0vbcwep08
-         TnWtcpCuGa9PEYsywjWSoCbEstgQCoozUXC5P7WLRx5tRH1DYqc+1OCn+6UUvJzKAHcH
-         PurQ==
+        bh=jD/Uo5Sm8+i/ieJeV7+ABTYqLpoO7saGHVcOyMdie6k=;
+        b=bVBa/noYdg6NBooTPkqUKk4EyIfZBtZuoEW5xBipkfue3XzZVgY3gmhtC+xw4eZWSl
+         O55XiC92uvqiDilyhmc15pnZJk83Po+8BlpX1sHRWL+0cTmcYnW0UcK3tLr6JG/yOinT
+         onZFbht2zN5cJfpIY8qjkr2w10y3wpkf89EA9MwVdYbwHTgC58srNBTt+C++AgO/Q3+p
+         O8j2W8/lWMALfEAkLJogFiFx6uVkISRtz1s/JgZ5HGpDcgv1wCedp2TauowanhKPAC0q
+         zAgDQyv4uZ2k9xgRP2a4M0O50to7P0E4phaT6S/w93Q9lShF6ZZJD4/yPV25ypOKuDMD
+         asPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795477171; x=1796081971;
+        d=1e100.net; s=20260707; t=1795477172; x=1796081972;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NNY7sb7Lc3fUr2Yc/4c0jbyfUC5yRtKrBOqqupJLhM4=;
-        b=uRcbGCQMcM3/ZhWjmrPYPsxMxNv2LyTj2y1cPWqyGusCFQ1qLfXrnGX15W6ke92UcN
-         MeiFOvRWK/uBWbcgoESB08SAkhqm/agJiggJQRRyoVIl9FrrU0y0EIlu6hYE4c5mfdac
-         1Oz7TMhFbjAYdT10bDAfWAXX0dD0Lrml6tDzIjEJNfyG++DW4n3ETleWLBAV4hDwv/2Y
-         B9eP/8CHLdO8ks2PJLyXQxj7w8/d8cDjwFhUOsl6N1Ifgv0UIAkE42S6O+N0+cNRjKmP
-         fNo8vUlIL8W+K7qSrNC+pXvI85ToPoecyHnmg8d+HbzsP9scWSwUAFfdSNiD79dGOr5E
-         xdlg==
-X-Forwarded-Encrypted: i=1; AL+hErHQirelPy9rxJCNMoJjIrcPV+dnfu1C+D5D/Hpu/J1eXAqRzpd9cL4D6FDAyFnaf9fF4VjBxE9/XqdnH1Mq4eY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/XRrZr+moy+WyTwqwMbkP2xahBjOmJ/bd4YOpGs6Nxgjyce1bX
-	PWziYcRnbENbqL29XmWc5Urgp5dFRfLKI01QjvrnlGaQoB5OAd3w25FUHbDjETHeSOikiiq9TSH
-	g/d9bpg5WZ8mYLA==
-X-Received: from iobdo25.prod.google.com ([2002:a05:6602:4619:b0:9ca:bcca:dd8b])
+        bh=jD/Uo5Sm8+i/ieJeV7+ABTYqLpoO7saGHVcOyMdie6k=;
+        b=WIOT9eewKOLFgW5UFAL/QvddOGFDK7W00npv65oH2zmi/X/JkW8FuVcLjo53GmFVbQ
+         uKBPuG9Hsjn6sR1QTBR8b112ci5xDTRhhsAfsyxftX9doZKxLLXUlzgdPkFkWJh7KwMU
+         Ofdc6jlAHn+1AvUZ3qFeyaJ0BEyrWUGn1sJYXBPhqV5wE66rJLA15QNuaiKGK2hMVbWm
+         0IVZbp3ezfBG5m9txWpNPPJnztVbP03g7zjjUd0Fjcol9atF2xLZ+flH8oN68SexGw4a
+         fK+PAIz+GIRlzC7mtZBxWs1QukIl57WqLQUZs6Oo0nOYpEJXZ6uD+9FfStraC2mdo31E
+         a8iw==
+X-Forwarded-Encrypted: i=1; AL+hErH83MCO7kvBY0lli1KqnbC+zILl+69IJnet8KxDVTFad0AsLLzsvJWP8zC9aTVK6hIgJfgVaKfJcXB3CPjG8U4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8jCyP7diAOihc3KVkmzFyHtiIVU6dh+zyMnWz3rcpF4VefQZhI
+	ekl6fe+jUL3xVUczF9zoZ3QAfps5dPmIBqlzZDqoBiSA4trUOrGalEbFaXIRg83LsfbzSItwoKw
+	HeOctzD75NYDG9g==
+X-Received: from ilnv16.prod.google.com ([2002:a92:c810:0:b0:549:aa38:c185])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:6615:b0:573:1dfa:f0cf with SMTP id 5614622812f47-57a0a404865mr13656920b6e.51.1795477170400;
- Mon, 23 Nov 2026 15:39:30 -0800 (PST)
-Date: Mon, 23 Nov 2026 23:39:06 +0000
+ 2002:a05:6808:3a0c:b0:573:1dfa:f0cc with SMTP id 5614622812f47-57a0b245af5mr15842784b6e.41.1795477171636;
+ Mon, 23 Nov 2026 15:39:31 -0800 (PST)
+Date: Mon, 23 Nov 2026 23:39:07 +0000
 In-Reply-To: <20261123233924.3970932-1-dmatlack@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261123233924.3970932-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.56.1.809.ga0b61035b5-goog
-Message-ID: <20261123233924.3970932-2-dmatlack@google.com>
-Subject: [PATCH v5 01/18] liveupdate: Remove the list of steps from
- luo_preserve_file()'s comment
+Message-ID: <20261123233924.3970932-3-dmatlack@google.com>
+Subject: [PATCH v5 02/18] liveupdate: Pass user argument to file preserve and retrieve
 From: David Matlack <dmatlack@google.com>
 To: kexec@lists.infradead.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -99,43 +98,399 @@ Cc: Alexander Graf <graf@amazon.com>, Andrew Morton <akpm@linux-foundation.org>,
 	David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Remove the numbered list of steps from the kernel-doc comment of
-luo_preserve_file(), along with the sentence that introduces it, which
-repeats the first sentence of the previous paragraph.
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-The list only restates what the code does, and goes stale whenever the
-code changes.
+Allow userspace to pass a file-handler-specific argument structure when
+preserving or retrieving an FD via LUO. File handlers may need
+additional context during preservation or retrieval, such as the file to
+restore into on retrieve, or other handler-specific parameters, without
+introducing separate ioctls for each file type. Whether the argument is
+required, optional, or unused is defined by the file handler.
 
-Suggested-by: Pratyush Yadav (Google) <pratyush@kernel.org>
+Extend struct liveupdate_session_preserve_fd and
+struct liveupdate_session_retrieve_fd with a 64-bit arg field pointing
+to a handler-defined argument structure that begins with a 32-bit size
+field. Because IOCTL_OP validates a minimum size up to the token field,
+existing callers passing the 16-byte struct remain compatible and have
+arg zero-filled by copy_struct_from_user().
+
+Add parg and rarg (struct liveupdate_arg_spec) to
+struct liveupdate_file_ops, initialized via LIVEUPDATE_ARG(_struct,
+_min_last), which records the full struct size and minimum required size
+while enforcing at compile time that handler argument structures begin
+with a 32-bit size field. When arg is non-zero, LUO validates the
+minimum size and copies the user argument via copy_struct_from_user() up
+to the handler's expected size and passes the kernel copy in
+struct liveupdate_file_op_args, or returns -EOPNOTSUPP if the handler
+does not accept an argument.
+
+The argument only applies to the retrieve that restores the file.
+Retrieving a token that was already retrieved returns the existing file,
+so fail with -EBUSY if a non-zero argument is passed then, instead of
+silently ignoring it.
+
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 ---
- kernel/liveupdate/luo_file.c | 12 ------------
- 1 file changed, 12 deletions(-)
+ include/linux/liveupdate.h       | 44 +++++++++++++++++++
+ include/uapi/linux/liveupdate.h  | 14 +++++++
+ kernel/liveupdate/luo_file.c     | 72 ++++++++++++++++++++++++++++++--
+ kernel/liveupdate/luo_internal.h |  5 ++-
+ kernel/liveupdate/luo_session.c  |  6 ++-
+ 5 files changed, 133 insertions(+), 8 deletions(-)
 
+diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
+index 6051abc0612c..7543f5d648d3 100644
+--- a/include/linux/liveupdate.h
++++ b/include/linux/liveupdate.h
+@@ -22,6 +22,36 @@ struct liveupdate_flb;
+ struct liveupdate_session;
+ struct file;
+ 
++/**
++ * struct liveupdate_arg_spec - Specification of a file handler user argument.
++ * @size:     Full size of the argument structure in the current kernel.
++ * @min_size: Minimum valid user-supplied size (offsetofend of the last
++ *            required field).
++ */
++struct liveupdate_arg_spec {
++	size_t size;
++	size_t min_size;
++};
++
++/**
++ * LIVEUPDATE_ARG - Validated specification of a file handler argument struct.
++ * @_struct:   The argument structure type.
++ * @_min_last: The last required member in @_struct.
++ *
++ * All file handler argument structures passed via
++ * &liveupdate_session_preserve_fd.arg or &liveupdate_session_retrieve_fd.arg
++ * must begin with a 32-bit @size field so they can be extended compatibly.
++ * Use this macro to initialize &liveupdate_file_ops.parg and
++ * &liveupdate_file_ops.rarg.
++ */
++#define LIVEUPDATE_ARG(_struct, _min_last)				\
++	{								\
++		.size = sizeof(_struct) +				\
++			BUILD_BUG_ON_ZERO(offsetof(_struct, size) != 0) + \
++			BUILD_BUG_ON_ZERO(sizeof_field(_struct, size) != sizeof(u32)), \
++		.min_size = offsetofend(_struct, _min_last),		\
++	}
++
+ /**
+  * struct liveupdate_file_op_args - Arguments for file operation callbacks.
+  * @handler:          The file handler being called.
+@@ -40,6 +70,11 @@ struct file;
+  *                    is not preserved. Set by the handler's .preserve()
+  *                    callback, and must be freed in the handler's
+  *                    .unpreserve() callback.
++ * @arg:              Kernel copy of the user-provided argument for .preserve()
++ *                    and .retrieve(), or %NULL if none was provided. Allocated
++ *                    to the handler's expected argument size with any trailing
++ *                    bytes beyond the user-supplied size zero-filled. Valid
++ *                    only for the duration of the callback.
+  *
+  * This structure bundles all parameters for the file operation callbacks.
+  * The 'data' and 'file' fields are used for both input and output.
+@@ -51,6 +86,7 @@ struct liveupdate_file_op_args {
+ 	struct file *file;
+ 	u64 serialized_data;
+ 	void *private_data;
++	const void *arg;
+ };
+ 
+ /**
+@@ -68,6 +104,12 @@ struct liveupdate_file_op_args {
+  *                resources in the session.
+  * @finish:       Required. Final cleanup in the new kernel.
+  * @get_id:       Optional. Returns a unique identifier for the file.
++ * @parg:         Optional. Specification of the user argument structure
++ *                accepted by @preserve, initialized via LIVEUPDATE_ARG(). If
++ *                unset, non-zero user arguments are rejected with -EOPNOTSUPP.
++ * @rarg:         Optional. Specification of the user argument structure
++ *                accepted by @retrieve, initialized via LIVEUPDATE_ARG(). If
++ *                unset, non-zero user arguments are rejected with -EOPNOTSUPP.
+  * @owner:        Module reference
+  *
+  * All operations (except can_preserve) receive a pointer to a
+@@ -84,6 +126,8 @@ struct liveupdate_file_ops {
+ 	bool (*can_finish)(struct liveupdate_file_op_args *args);
+ 	void (*finish)(struct liveupdate_file_op_args *args);
+ 	unsigned long (*get_id)(struct file *file);
++	struct liveupdate_arg_spec parg;
++	struct liveupdate_arg_spec rarg;
+ 	struct module *owner;
+ };
+ 
+diff --git a/include/uapi/linux/liveupdate.h b/include/uapi/linux/liveupdate.h
+index 4043d4038712..a460f4cdb608 100644
+--- a/include/uapi/linux/liveupdate.h
++++ b/include/uapi/linux/liveupdate.h
+@@ -126,6 +126,10 @@ struct liveupdate_ioctl_retrieve_session {
+  * @size:  Input; sizeof(struct liveupdate_session_preserve_fd)
+  * @fd:    Input; The user-space file descriptor to be preserved.
+  * @token: Input; An opaque, unique token for preserved resource.
++ * @arg:   Input; User-space pointer to a file-handler-specific argument
++ *         structure starting with a 32-bit size field, or 0 if unused.
++ *         If the size is larger than the kernel supports and the extra
++ *         bytes are not zero, the ioctl fails with -E2BIG.
+  *
+  * Holds parameters for preserving a file descriptor.
+  *
+@@ -149,6 +153,7 @@ struct liveupdate_session_preserve_fd {
+ 	__u32		size;
+ 	__s32		fd;
+ 	__aligned_u64	token;
++	__aligned_u64	arg;
+ };
+ 
+ #define LIVEUPDATE_SESSION_PRESERVE_FD					\
+@@ -160,6 +165,10 @@ struct liveupdate_session_preserve_fd {
+  * @fd:    Output; The new file descriptor representing the fully restored
+  *         kernel resource.
+  * @token: Input; An opaque, token that was used to preserve the resource.
++ * @arg:   Input; User-space pointer to a file-handler-specific argument
++ *         structure starting with a 32-bit size field, or 0 if unused.
++ *         If the size is larger than the kernel supports and the extra
++ *         bytes are not zero, the ioctl fails with -E2BIG.
+  *
+  * Retrieve a previously preserved file descriptor.
+  *
+@@ -173,12 +182,17 @@ struct liveupdate_session_preserve_fd {
+  * attempts to retrieve the token fail with the same error code. Failed
+  * retrieves are not retried.
+  *
++ * Retrieving a token that was already retrieved successfully returns a new file
++ * descriptor for the same file. Passing a non-zero @arg in that case fails
++ * with -EBUSY, since @arg only applies to the retrieve that restores the file.
++ *
+  * Return: 0 on success, negative error code on failure (e.g., invalid token).
+  */
+ struct liveupdate_session_retrieve_fd {
+ 	__u32		size;
+ 	__s32		fd;
+ 	__aligned_u64	token;
++	__aligned_u64	arg;
+ };
+ 
+ #define LIVEUPDATE_SESSION_RETRIEVE_FD					\
 diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
-index a39992da504f..a42b60356d52 100644
+index a42b60356d52..3987ab86a3c1 100644
 --- a/kernel/liveupdate/luo_file.c
 +++ b/kernel/liveupdate/luo_file.c
-@@ -214,18 +214,6 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
-  * unpreserved or successfully finished in the next kernel, preventing the file
-  * from being prematurely destroyed.
+@@ -126,6 +126,7 @@
+ #include <linux/xarray.h>
+ #include <linux/slab.h>
+ #include <linux/string.h>
++#include <linux/uaccess.h>
+ #include "luo_internal.h"
+ 
+ static LIST_HEAD(luo_file_handler_list);
+@@ -202,11 +203,48 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+ 	return false;
+ }
+ 
++static int luo_copy_user_arg(const void __user *uptr, const void **argp,
++			     const struct liveupdate_arg_spec *spec)
++{
++	u32 user_size;
++	int err;
++
++	if (!uptr)
++		return 0;
++	if (!spec->size)
++		return -EOPNOTSUPP;
++
++	if (get_user(user_size, (const u32 __user *)uptr))
++		return -EFAULT;
++	if (user_size < spec->min_size)
++		return -EINVAL;
++	if (user_size > PAGE_SIZE)
++		return -E2BIG;
++
++	void *karg __free(kfree) = kmalloc(spec->size, GFP_KERNEL);
++	if (!karg)
++		return -ENOMEM;
++
++	err = copy_struct_from_user(karg, spec->size, uptr, user_size);
++	if (err)
++		return err;
++
++	/*
++	 * The size was fetched again with the rest of the argument, and may have
++	 * changed since it was checked. Give the handler the checked size.
++	 */
++	*(u32 *)karg = user_size;
++
++	*argp = no_free_ptr(karg);
++	return 0;
++}
++
+ /**
+  * luo_preserve_file - Initiate the preservation of a file descriptor.
+  * @file_set: The file_set to which the preserved file will be added.
+  * @token:    A unique, user-provided identifier for the file.
+  * @fd:       The file descriptor to be preserved.
++ * @arg:      User-space pointer to the handler argument structure, or NULL.
   *
-- * This function orchestrates the first phase of preserving a file. It performs
-- * the following steps:
-- *
-- * 1. Validates that the @token is not already in use within the file_set.
-- * 2. Ensures the file_set's memory for files serialization is allocated
-- *    (allocates if needed).
-- * 3. Iterates through registered handlers, calling can_preserve() to find one
-- *    compatible with the given @fd.
-- * 4. Calls the handler's .preserve() operation, which saves the file's state
-- *    and returns an opaque private data handle.
-- * 5. Adds the new instance to the file_set's internal list.
-- *
-  * On success, LUO takes a reference to the 'struct file' and considers it
-  * under its management until it is unpreserved or finished.
+  * This function orchestrates the first phase of preserving a file. Upon entry,
+  * it takes a reference to the 'struct file' via fget(), effectively making LUO
+@@ -227,10 +265,13 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+  *         -EBADF if the file descriptor is invalid.
+  *         -ENOSPC if the file_set is full.
+  *         -ENOENT if no compatible handler is found.
++ *         -EOPNOTSUPP if @arg is non-NULL and the handler takes no arg.
++ *         -EINVAL, -E2BIG or -EFAULT if @arg can't be copied.
+  *         -ENOMEM on memory allocation failure.
+  *         Other erros might be returned by .preserve().
+  */
+-int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
++int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd,
++		      const void __user *arg)
+ {
+ 	struct liveupdate_file_op_args args = {0};
+ 	struct liveupdate_file_handler *fh;
+@@ -266,10 +307,14 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+ 	if (err)
+ 		goto err_fput;
+ 
++	err = luo_copy_user_arg(arg, &args.arg, &fh->ops->parg);
++	if (err)
++		goto err_module_put;
++
+ 	err = xa_insert(&luo_preserved_files, luo_get_id(fh, file),
+ 			file, GFP_KERNEL);
+ 	if (err)
+-		goto err_module_put;
++		goto err_free_arg;
+ 
+ 	err = luo_flb_file_preserve(fh);
+ 	if (err)
+@@ -293,6 +338,7 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+ 	if (err)
+ 		goto err_kfree;
+ 
++	kfree(args.arg);
+ 	luo_file->serialized_data = args.serialized_data;
+ 	luo_file->private_data = args.private_data;
+ 	list_add_tail(&luo_file->list, &file_set->files_list);
+@@ -306,6 +352,8 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
+ 	luo_flb_file_unpreserve(fh);
+ err_erase_xa:
+ 	xa_erase(&luo_preserved_files, luo_get_id(fh, file));
++err_free_arg:
++	kfree(args.arg);
+ err_module_put:
+ 	module_put(fh->ops->owner);
+ err_fput:
+@@ -535,6 +583,7 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+  * luo_retrieve_file - Restores a preserved file from a file_set by its token.
+  * @file_set: The file_set from which to retrieve the file.
+  * @token:    The unique token identifying the file to be restored.
++ * @arg:      User-space pointer to the handler argument structure, or NULL.
+  * @filep:    Output parameter; on success, this is populated with a pointer
+  *            to the newly retrieved 'struct file'.
   *
+@@ -554,10 +603,13 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+  *          kernel.
+  * Return: 0 on success. Returns a negative errno on failure:
+  *         -ENOENT if no file with the matching token is found.
++ *         -EOPNOTSUPP if @arg is non-NULL and the handler takes no arg.
++ *         -EINVAL, -E2BIG or -EFAULT if @arg can't be copied.
++ *         -EBUSY if @arg is non-NULL and the file was already retrieved.
+  *         Any error code returned by the handler's .retrieve() op.
+  */
+ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+-		      struct file **filep)
++		      const void __user *arg, struct file **filep)
+ {
+ 	struct liveupdate_file_op_args args = {0};
+ 	struct luo_file *luo_file;
+@@ -584,6 +636,13 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+ 	}
+ 
+ 	if (luo_file->retrieve_status > 0) {
++		/*
++		 * The argument only applies to the retrieve that restores the
++		 * file. Don't silently ignore it.
++		 */
++		if (arg)
++			return -EBUSY;
++
+ 		/*
+ 		 * Someone is asking for this file again, so get a reference
+ 		 * for them.
+@@ -593,10 +652,15 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+ 		return 0;
+ 	}
+ 
++	err = luo_copy_user_arg(arg, &args.arg, &luo_file->fh->ops->rarg);
++	if (err)
++		return err;
++
+ 	args.handler = luo_file->fh;
+ 	args.session = luo_session_from_file_set(file_set);
+ 	args.serialized_data = luo_file->serialized_data;
+ 	err = luo_file->fh->ops->retrieve(&args);
++	kfree(args.arg);
+ 	if (err) {
+ 		/* Keep the error code for later use. */
+ 		luo_file->retrieve_status = err;
+@@ -995,6 +1059,6 @@ int liveupdate_get_file_incoming(struct liveupdate_session *s, u64 token,
+ 				 struct file **filep)
+ {
+ 	return luo_retrieve_file(luo_file_set_from_session_locked(s),
+-				 token, filep);
++				 token, NULL, filep);
+ }
+ EXPORT_SYMBOL_GPL(liveupdate_get_file_incoming);
+diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+index dac6644bfb18..e0be84acb33b 100644
+--- a/kernel/liveupdate/luo_internal.h
++++ b/kernel/liveupdate/luo_internal.h
+@@ -101,14 +101,15 @@ int __init luo_session_setup_incoming(u64 sessions_pa);
+ int luo_session_serialize(void);
+ int luo_session_deserialize(void);
+ 
+-int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd);
++int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd,
++		      const void __user *arg);
+ void luo_file_unpreserve_files(struct luo_file_set *file_set);
+ int luo_file_freeze(struct luo_file_set *file_set,
+ 		    struct luo_file_set_ser *file_set_ser);
+ void luo_file_unfreeze(struct luo_file_set *file_set,
+ 		       struct luo_file_set_ser *file_set_ser);
+ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+-		      struct file **filep);
++		      const void __user *arg, struct file **filep);
+ int luo_file_finish(struct luo_file_set *file_set);
+ int luo_file_deserialize(struct luo_file_set *file_set,
+ 			 struct luo_file_set_ser *file_set_ser);
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index 74bc66929f4b..0d7533f0bde6 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -268,7 +268,8 @@ static int luo_session_preserve_fd(struct luo_session *session,
+ 	int err;
+ 
+ 	guard(mutex)(&session->mutex);
+-	err = luo_preserve_file(&session->file_set, argp->token, argp->fd);
++	err = luo_preserve_file(&session->file_set, argp->token, argp->fd,
++				u64_to_user_ptr(argp->arg));
+ 	if (err)
+ 		return err;
+ 
+@@ -291,7 +292,8 @@ static int luo_session_retrieve_fd(struct luo_session *session,
+ 		return argp->fd;
+ 
+ 	mutex_lock(&session->mutex);
+-	err = luo_retrieve_file(&session->file_set, argp->token, &file);
++	err = luo_retrieve_file(&session->file_set, argp->token,
++				u64_to_user_ptr(argp->arg), &file);
+ 	mutex_unlock(&session->mutex);
+ 	if (err < 0)
+ 		goto err_put_fd;
 -- 
 2.56.1.809.ga0b61035b5-goog
 
