@@ -1,76 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795393369;
-	b=1xAXtJ7z9SbNtOEoD7vep0ylgMN2Z6CnABswnj9TeWTCnQAsCKxOsGQh0VxPz+B3NgUt
-	 /s2KttENA0Mm3Ah+hUxuiebjHG6MXTqxsjsPVgG0mMN+4sGd8vGzC5KpJv7qyZW+3lFa7
-	 leq5Bp8gt6tLw0IFGWpcVaOMtjnxDbZjKzYbnD/iHb5lIUZwvdPyFsRhiqvj0K5Ejy25K
-	 sqLYjqj+yLit5kOMcDz9UBbQ+S+vW6YzQ6t8SFqatOfgoP5AmQRcBhZIAc4yylXf37B/t
-	 qhYrsmCrSGXq9T8RskPZ0sy/A74F6j/gL/Hlhc8QzgY0Gy6Sb3KyxwR6vzMqxXLfegQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795393369;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Jz1NKIIKgCd2mV0Gf7xePKwq1B4TLlq2GWrC4ESjcAQ=;
-	b=a+6O0JxlwYaBpVCXQfVMzuYNe3tCXOU3MoO5Giw4bz0QmdnhpaVDWFUk3v0JHNPQnhDf
-	 PCJuxlz1alW4wVoaNhNVOIhOAjP1MOJfU6yhUjBNpUw+eTJKeiXaqNKaXPtWGpnF/Qrq0
-	 0KJKDfPGP26rRVLhyRsYEYjPDQ/FwM5scHZkYT9gUjfHFwwzL3LTf9IhhPeSsYphBO96Y
-	 jArE78YtFPlJZEI7n4CAoWD6F7gOt6JhCSQj+D2pzk/x3YZnjZPbIf5OmxRKKhSotDhSr
-	 hHGD8JutIcsVsX0FvyksE+iZbpldx4X9AJpty0tANV+m5TRox7jwsk4PJ3aVumAa1eA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D9PzkT11;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795393516;
+	b=xgCRToRUsdefwXlOsaHXzQCLOsBTnsGERc73mFAVgHZi84NTT0903YzCoTTV1bigpV31
+	 TB3b3FY22QFG/+/M7teIU7VhU5cZTPbgzRwD9lgJoKy4teoxoqN/WBn/ZAUmCOEKG3qGu
+	 2ZjBZ1/FVHBQODdhYAa34KcyNC7bdntJuWJwIsY27vvjHvmTsRSIpl+NNWwWb3+JFJZJa
+	 y/YcOe7n0cO105k4IuLIOmpyzLQnYrZ2vPQql0uTXNcWaJ7sx+B8uWjvxysJZ40A1DfxX
+	 QZMp9Ur/0UGi8mROzTGix/FcwtjUo2YBjD3GPF7JuIhWLugboS+Ul6WEiIAzRlCnq7g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795393516;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=mNi3Pj05CGsYEOdmgVQU43MsXqlDog8eO7vY1bFFNz8=;
+	b=H3J0IBkF5b9kFJsk+54owKeOzfzkGbTgFeyMaeCbl70FAlUb9R1OUoN6aKiP4vol6eus
+	 KD2QBAIeOP9YxiZBuqbG5mu9/YlAg2tTYoCmSgZH04NQCdGwBIxkt1AWdjc0zm2rLiOkp
+	 znQdCFyMBCAiFQO+lDwImkIYMhuPVL44epqe/Y7+P60WhnQIgJeZTlItBbFer+1Hetgh2
+	 9rubSKEfxyHnkdlM1Sz1kHDAYzTEKe5AdUjMW0TrMfq0mk2SIiyOFhjWlXj3yZ0f7ruHB
+	 gq+3/qsXLZQUAQEjyu+4PwXcBzAXf46c7kzdHA04xhq4jjptPAXOmZfg9xj+B80/XcA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=moerukM7;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 4BF32606A31A;
-	Mon, 23 Nov 2026 00:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744D1606A31A;
+	Mon, 23 Nov 2026 00:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D9PzkT11
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 15F751F000C6;
-	Mon, 23 Nov 2026 00:22:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=moerukM7
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795393516;
+	b=vtWm/x6N/8x0ZfaclbI4bNeGNxTadQb70U3zfg0f3/pB5GDJ42pZ+BQKOPwOccfOLT/o
+	 f4DuVchgAvSETj/JnubuWhVE7ZV3bV5f4AWyVaEDBuM32jewelycdNN15q3+hXlCPKoN6
+	 sz2lGAYPpyWk6ENActxbFpGFwagKT2UtttxZGG2ZSzn6NS7oNciibw+i+aOVUhbVTfiGK
+	 jvodzJbia3ZkwcWfbbbnU9L02oSyGfaXsGRHYjZqYt1HqJ6BtUXxvHlkdRUhII2QjAnfB
+	 N3xTHBh8BCkRA2zs6fMCwvIlbrSuImE8L9xtL3pMEabR8vp8M5r9xG5NADHuSch5vNQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795393516;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=mNi3Pj05CGsYEOdmgVQU43MsXqlDog8eO7vY1bFFNz8=;
+	b=UMN0zonV17BlvBrW2r93vG59hPibKG8PV6iRYcu7FIofbW4j+IdF2DuFByce3QfBb6P5
+	 +c3nYhUP0M2GIs97DmYHJzejCItDoSF4cGZEyyUMXfcTqn28MKpsNqdLXTXGjN3iZyKxu
+	 Ia6e60hObol4ltisV8U5mt+zg8/9jBKqy34trMKZxq9c5o9hM7/yPpKRLw3A+LOVZChw3
+	 IBzX+OhDNph6BsHhBqLDzq9iMfPDvgV0cL7+SnTNzV5SDtG4aFx3xJGHeNXgEgkL71VIi
+	 1HJf+kZfv+7jfg08KR0EmNwrryYr9HZKOypsbgSzfOn9P+hYXid2QH+kBjbzXcnUuaQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 403661F000CA;
+	Mon, 23 Nov 2026 00:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795393368;
-	bh=Jz1NKIIKgCd2mV0Gf7xePKwq1B4TLlq2GWrC4ESjcAQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=D9PzkT11tfiXFbsmqjxDg4JVSIMsco9OtJLz8dJ3yn2/dEcJVEzcRbuZCSLbL4pIQ
-	 NF9VESCGoar573rnroMuamO3celH4JvkzdLprPXCbFU0eHdwWCBjioF8vNDqae4K2U
-	 w/0Pd5FZ5y+8wjRW+NkSdYPoaeBvmJBFPMnYS7EPPkexL9VZEZPlE0IRVWk8zCdpaZ
-	 My/rP7StpwNbAYvw30XqtjzLOGJXEtSw56b1hzxXaQXLqgX64NeFtM52qSXjYW5fUI
-	 mEYW9GYl79/y4A7eEhdM8pWZ1fxk4ooDT4Y4OMfTFDAx9aWat5amCSC7XxETL0zCHh
-	 2siz7HXceBmwQ==
-Date: Mon, 23 Nov 2026 02:22:44 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awOHVCpztLQv4Uwv@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awOEa303zNUDrzA3@kernel.org>
- <awOFGIWekH9-vlhM@kernel.org>
+	s=k20260515; t=1795393516;
+	bh=mNi3Pj05CGsYEOdmgVQU43MsXqlDog8eO7vY1bFFNz8=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=moerukM74iTxFpwzAPQ0DwYsOpTGrqhe7usGkqMA1+B0GIs9fF3jIfiLL89HMi1qC
+	 onwART7oMOBdPUqHR30Lg4MOpk7bk4Jvkcfo1J2/BXq1gd7P2aWmA80uxxJQB/lX8T
+	 d3COi4xWlyV1/3d3GiiWa4ieeGUIjZ3lDB/1iBkCWt0r/7dXR9V0yLfzlaVltNqqBa
+	 xH+6q7ZvdyUkFLIR8O6bslTJBLoif9u7Ww2hC9fKEhlcst7EgucexbU0SR7xEjptRI
+	 eMPtfUmcru78Igybd78bzKRoKw67TndpMPdixYd4eSzsNFFHSi4ZC1itN4YK7mJ9hs
+	 wwNHuncvQdL3Q==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 942A64C251;
+	Mon, 23 Nov 2026 00:25:12 +0000 (UTC)
+From: Mani Tofigh via B4 Relay <devnull+mt4022.columbia.edu@kernel.org>
+Subject: [PATCH bpf v2 0/4] bpf: Don't spin on rhtab bucket locks with IRQs
+ disabled
+Date: Sun, 22 Nov 2026 19:25:11 -0500
+Message-Id: <20261122-bpf-rhtab-irqs-disabled-v2-0-207aedcc2215@columbia.edu>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,43 +84,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awOFGIWekH9-vlhM@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNTQ6CMBCFr0Jm7Zi2kgquvIdh0Z9BxiBgC0RDu
+ LsFD+DyvXzvewtECkwRLtkCgWaO3HcpqEMGrjHdnZB9yqCE0lKKE9qhxtCMxiKHV0TP0diWPLp
+ c59qVJGpSkNZDoJrfu/kGaQTVr4yTfZAbN+eGNRzHPnz2/1nu8N+rWaLEsjjnvtRGFIW7ur6dn
+ pbNkfwE1bquX8j9x9XYAAAA
+X-Change-ID: 20261103-bpf-rhtab-irqs-disabled-c4646c9e0fe2
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Mykyta Yatsenko <yatsenko@meta.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Thomas Graf <tgraf@suug.ch>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, tz2294@columbia.edu, 
+ Mani Tofigh <mt4022@columbia.edu>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795393512; l=1885;
+ i=mt4022@columbia.edu; s=20261026; h=from:subject:message-id;
+ bh=Cdk7sFLE8Ms1z4MWODP6tHICAcN6MvIKq/Q+cx9TxjA=;
+ b=QyYqJhTCgCxEks59roKvMT4SIBstHsjhnIxEryfr9INyqeC5lbUDBSQ6oPuQ4tjfrpB4lRR+z
+ oVc1iV/TsnpBD7LzTsVaP0lWipwJWgMeQj752iWKnKn9mJvarl6D5mf
+X-Developer-Key: i=mt4022@columbia.edu; a=ed25519;
+ pk=gljCMQDuxyKPmd5y37CRpEJGSPXDV1MyAnHBhCgXl0I=
+X-Endpoint-Received: by B4 Relay for mt4022@columbia.edu/20261026 with
+ auth_id=1322
+X-Original-From: Mani Tofigh <mt4022@columbia.edu>
+Reply-To: mt4022@columbia.edu
 
-On Mon, Nov 23, 2026 at 02:13:16AM +0200, Jarkko Sakkinen wrote:
-> On Mon, Nov 23, 2026 at 02:10:23AM +0200, Jarkko Sakkinen wrote:
-> > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
-> > > SYSCALLS
-> > > ========
-> > > 
-> > > Two new system calls are proposed:
-> > > 
-> > > 1. userland_open(): open an opaque staircase-initialized container
-> > >    object (modeled on Intel SGX enclave initialization with separate
-> > >    build and live states) with no embryonic state, opting selected
-> > >    shared namespaces in via an allow-list instead of unshare semantics.
-> > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
-> > >    extents for a container user namespace in a single atomic system
-> > >    call.
-> > 
-> > Andy, perhaps a bit too far of the box idea but I'll just throw this out.
-> > 
-> > An alternative to userland_open() would a file e.g., virtual device
-> > file, and necessary wiring for open().
-> > 
-> > Then the added syscall surface would reduce only to userns_set_idmap(),
-> > and it adds more robustness to access control (e.g. who can create
-> > containers).
-> > 
-> > What do you think of this?
-> 
-> Also, easy way to detect the feature. This does make sense to me.
+A BPF program with IRQs disabled can run inside a bucket lock's critical
+section on its own CPU, e.g., a kprobe on the hash function the resize
+worker calls with the lock held.  An insert or delete of that bucket
+then spins forever, and a lookup can retry forever.
 
-This as a side-effect would enable LKM compilation, and reorganization
-of the beef of the core feature as a driver. Not sure what would be
-the best location for the driver tho, perhaps just drivers/userland.
+v2 follows Alexei's trylock design (patch 1) and Mykyta's lookup change
+(patch 2), turns it on for rhtab (patch 3) and adds a selftest (patch
+4).  The kvmalloc(GFP_ATOMIC) in rhashtable_insert_rehash() is left for
+a follow-up.
 
-I.e., full decoupling from the syscalls.
+Reproducer: https://github.com/manitofigh/files/blob/main/linux-repros/rhashlock.c
 
-Br, Jarkko
+---
+Changes in v2:
+- Trylock the bucket lock with IRQs disabled instead of failing every
+  insert and delete (Alexei)
+- Drop bpf_disable_instrumentation() from rhtab (Alexei)
+- Don't retry lookups with IRQs disabled (Mykyta)
+- Add a selftest
+- Link to v1: https://patch.msgid.link/20261103-bpf-rhtab-irqs-disabled-v1-1-9874d96a088c@columbia.edu
+
+---
+Mani Tofigh (4):
+      rhashtable: Add trylock_irqsoff for callers that can't spin
+      rhashtable: Don't retry trylock_irqsoff lookups with IRQs disabled
+      bpf: Don't spin on rhtab bucket locks with IRQs disabled
+      selftests/bpf: Test rhtab deletes from inside a resize
+
+ include/linux/rhashtable-types.h                 |  3 ++
+ include/linux/rhashtable.h                       | 45 ++++++++++++++++++++++--
+ kernel/bpf/hashtab.c                             | 17 ++-------
+ lib/rhashtable.c                                 |  9 +++--
+ tools/testing/selftests/bpf/prog_tests/rhash.c   | 34 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/rhash_resize.c | 34 ++++++++++++++++++
+ 6 files changed, 122 insertions(+), 20 deletions(-)
+---
+base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
+change-id: 20261103-bpf-rhtab-irqs-disabled-c4646c9e0fe2
+
+Best regards,
+--  
+Mani Tofigh <mt4022@columbia.edu>
+
+
