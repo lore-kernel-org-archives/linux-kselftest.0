@@ -1,60 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.163.189.90
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795471003;
-	b=Y5MkeXoPDFt8g8rTF6QTIUqW1zA8Dx1ZEEjoOQk87pyQ1q7+b6dNmSZ9480JoAgEfUJH
-	 dNehxFBT83AXVBLklFwANMI4A519h7iFr4493vUWNVJbr+vMfDq0SjQfWkPmp1vhGdZPw
-	 rw3FiKMKOLN8oQuHUMirQfDJNYn906BbAqMSgJt9UWRFIuGlAloC/6kY6ITx5Ny/C58Z+
-	 u7DjhcgH6zQnpioyOXvecOh9ufUiPpifFQWN3CuMwKrXcy1ylZtbY60mH/OmoJJ12O35w
-	 0reBAcxcPZWX/Ov6cvfhykNjMRzd33MORXiXJKACXBgswApjjX2e7ugD+dFYswacRbg==
+	t=1795471129;
+	b=gEyzBpstWyOVx9VYhQ86jjMnPyNehEUkmz18D31F1GkQ+4MtXd0VjlpFpXhunaEww1JP
+	 9yzZLpZl7RB7DzvqFZROncX18fuVVY1v4w7KljsKBxzKKszIEUlYFu//cXhZzbxmWf6eP
+	 +uAiQWdnOTHszJiWHXq4SZby3j7BhxFUj1J8cNOBfFd3z5mIP/fk9XoOGFKUFSUhhALKz
+	 i2h5/TxeGqeKumuZ8XWrycyIE/a6xEjEb5Rl2MkFWzsp1IuoyQ0OkAUsFV8dneLjru+od
+	 uVlrFF4x+3+Cm0EUawk87USnsu1/ceyyZEIJlMaRR59UnYHAAyFoAspBqOJE9Rwv0Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795471003;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Stat-Signature:
-	 X-Spam-Status:X-Rspamd-Server:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=se2Dv26Z/48b9YJDecdodAx/gKOEn8umjmUKLpeNdcE=;
-	b=Dro1AoBulFQxoWKCHTXbCe5QQ9ZXlLjBSSaz0K0ADKtfkPebH6nf+O1aTOxnhizW9pxr
-	 KULftUjXwZ5HV9NqRAU5qN/uwzY9b6suzwwETNawWTI+QOhkpCeunf94Ceeeo6zrFvExV
-	 VB8t4cULeFhkIXwESBejHiZIjqU/Vs+RnvBYWrhKlvYJRd0+7nUgmyEOE0fPg90MxUMQL
-	 UWJLkiKKbsCJ/64zvQRqZjdXTmbNNsukaBTHjZ6vUKfnEBH9hBgAAYXNJV0wiL9T4ZBnr
-	 1HLToG9dH+bqvJR0EJPWwWE5MuCxMbAzLcTEKmavyyAJKQv5Cay1hJvWSPWLgSGxm5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795471129;
+	h=DMARC-Filter:DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
+	 X-Sonic-ID:Received:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=5mfQoHHU7yW7lgBOVTdWKSOxY0Ql9ccpfJGLZOeJlhE=;
+	b=yPxbI9FPs6tPlndlPy/A1TnCJKl/ZxHlwwgysWT9j76UWUKJ9BFK3oaIwd0WOXpghYDL
+	 GDxXFXmPykuUJpaZA7WmPhMr9nCwvINpvHJqw6jx0NhuwZwu9CvABhtcZ/CtzH3R+lqAz
+	 7VFWbxktCSgfzzhduCxilKAdPcrhN6iMtV0aR3H3le2pM25+EuZt10mWtsjy9dD/qOGrm
+	 af0OtDSaZgBfDCf0kKSe71MafAqDQigHCq3yT/ytAQsBK5nBpAtPRBSbE5ptqUdY7GxqX
+	 aPXH0e+ZAHIsx2SEHENImrXmgU5C4J1omN9a8nszim3JQRdo/k/JX/qxLh2eQo4MEpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=W+34totZ;
-	arc=none smtp.remote-ip=216.40.44.17
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=schaufler-ca.com;
+	spf=pass smtp.mailfrom=schaufler-ca.com;
+	dkim=pass header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=Ng2q5Yqq;
+	arc=none smtp.remote-ip=66.163.189.90
+Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BC2606A31E;
-	Mon, 23 Nov 2026 21:56:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81BC2606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B795E606A32C
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 21:58:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B795E606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=W+34totZ
-Received: from omf06.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id B0CC1A8676;
-	Mon, 23 Nov 2026 21:56:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 7C94520010;
-	Mon, 23 Nov 2026 21:56:38 +0000 (UTC)
-Date: Mon, 23 Nov 2026 16:56:32 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jeff Barnes <jeffbarnes@linux.microsoft.com>
-Cc: mhiramat@kernel.org, shuah@kernel.org, mathieu.desnoyers@efficios.com,
- reddybalavignesh9979@gmail.com, richard.weiyang@gmail.com,
- michael.bommarito@gmail.com, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] tracing/user_events: Share event state with
- existing threads
-Message-ID: <20261123165632.2c8ee68c@gandalf.local.home>
-In-Reply-To: <20261006164720.3940272-3-jeffbarnes@linux.microsoft.com>
-References: <20261002153934.798176-1-jeffbarnes@linux.microsoft.com>
-	<20261006164720.3940272-1-jeffbarnes@linux.microsoft.com>
-	<20261006164720.3940272-3-jeffbarnes@linux.microsoft.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=Ng2q5Yqq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1795471127; bh=5mfQoHHU7yW7lgBOVTdWKSOxY0Ql9ccpfJGLZOeJlhE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:Content-Type:From:Subject:Reply-To:Content-Type; b=Ng2q5YqqKGhQ6E0aQKYxjuWtB4iRVLcStAcTY65eXhmF30rtBZnRS7HW4aIg36nPIKJ9aQNDI7XbQF4wHlLraHeGkLbu29qGjt6KcZTnQad1KIUkEviq2jvCsgTEvXt2wrts2QayZVqml+MKqvh27qQMXh4cq6Q/YQZyh5otWbVRYEwrZJmpr1+vxmrLRe4aHIUDTNj+3RPg/5LTpqkNDGFuUlZ/wfb0rFN4+FCwpXR5jAp5ElRg2xAFMlCsEzkK8nnro511H1evWghfGDGhU6rhN7sJ/6VSRLcphu3G/QAEqeMujZPzTNjdHKaK92GXAlfPxYWUD0Rr7G7hA6prrA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1795471127; bh=1+ng/PAptC0XGDpgvm3vrJAPMNqjQ1tOnkBT6GCtDB7=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=gtneVtj4JVXOoHaFag40cKJF55Zy3wG7nyJLWqEgoK5bUA3J1g140RaYss8v7GZvblWEB978/bU1ph9le0TZbq6XHe/cU2061U848ZZuoTXtpFBc1EkZbgxQOZzx4X03rrnM9Uw2TvUcDOXBf2do4HERtiavPzniZLyRwRIfY2x9pK55mTLRp3V1YiiiStQrAUyxxgMbSSFTB07sFwhAb6OR8uncaatpXXqQiXCxjhq0ilzhYhHCWZHLkEyBL4NJ62+4+K6OuRFrVBA0V/FRZ4+ofPJquaw5Raay1V6z+ma/kosS+qCq7MP68kjwoDi3NgxM2BwVCl85E+uNh2H8mg==
+X-YMail-OSG: n6Q_G00VM1mndtEdQbMfoyB9msomQJYaJNIMXX1J8oDZaAutjg7JG4VVlkU70fz
+ XcWPkPK_Osl3IJj4ifZlcaWX1gjEqffg.Sttmda0GmRYhUC4TbwDuWnCs8nVNxeh1JRbvpK4nS2e
+ ylFJ0Q8B5b1Z9YhTBBILRs9YJWsLkhiGybG9fqY882CgqcondACd35ZvADk5Wc_x2e_X.KeiyCSG
+ 6dG43yRlq4pdNKLtbSnKRBY3t_VXHPA_Z3lKRJqpOuSMcVwm1gKLPeZAHBbIPhZTWzar0_A7DFdL
+ 8Yz3EytY3KWm1vD1klkCgwKDU0XIomRly4Dh9Zh.etjBDGKlehC0.hHJmSDAH5EANPGzhSK4bTz7
+ 2xj8ucr2iW0Ei6t3nAbw6bxiYPEJ4b9UfxhybCw0xRAszI11kYds4tcZ2bpeU4kOPsxS8sH9T4Uq
+ VIGPBFCaEWLA0bA4AVZ7ixGetsECpAPUUL6jRaCED1tI1_Q1hfHSFoAdJ7VgmVESBG.kpU8rC1VJ
+ zOOWqs5WNivJZ7O9OBzratP2uo925k.BSXLQTLS1RFmABMgemOkF4UlEkb_6xBqP041FJ1HITgQ5
+ YKVm9AQGl6d6O2dVCkF6433EhHgV2nPMRWlgsPeEw.1YkutoTgdVeKex7GjXWms35.dz7HWHEBZp
+ hWPoXoRwKGCttn7MKc_Av715lxrswP9UKArFLnwz0fCRamK3TT0y.leHeojH60GskbhfBaKLczmv
+ c_x7QCl8WI2VqyI4Eal2jfxQo70Q.nEUVdjPdUolAFr7LJTng09TmIFVRSeAKJqlEpnjZvDZY2sD
+ sPdZmZkAwhzz0ftOw1HGxjM7MOF56eI8D3TG6hKG9bogfYgSgiGxI9A2k0y0e8f6Za5rvDo3croh
+ eTFh81XjzX9P8jM2vWRr0xWRweO.WjKXEeoHPDt1.j1dMDXx0Pc0gjrl61SDHV2TQ5PCFV7Mh0bp
+ kVJbIqIDijGsn5JontjC5u8VEL.1O7J44UFqt3jtxo45njCyTQYB8LV2ytLC.n42QPalrlWHEgZC
+ FiUq9NohawAfWbNHHM5mwA225zLYqEGXXmdU55KeTkDbgoO0NPpByVZ6tJtwswjBcfHGSaH_uGpb
+ HOrGY5KBs6ws.HkMSExG.vtts.0buJ7XmxTQY99tIMTLx4YtCy5LjXYxSXvIQ8hDhOvuFKFPQRAd
+ S1iMX._T_zbfuLzJF6xgKY8537ObtvsbQefcHVXUcMbf6autZ0TBzGC7GUOz4_4tCmNZpeGMwr4Q
+ hVGwuEOIo3VUDysDOoqFMNVNFAEEd.MNinO0o_wcWZeAgmgZPP5CeheLuLlbSGIf4abrIslWldyg
+ 7l3Wsvdp2OWbiXpIY5r.SmHnJ.EmbwhIqYHxwzGgW620beW3WV7kYIKm.h92xb8tk1_QLdCIOvIc
+ cpaI5kV_XeC2OA1uT8FE0X1s2mKtynPur6We0z9vGY.UfP35EYIK9.OQXfitlpq_D_7CbVyc4XEs
+ pfwPB1t2oY5NO6tomkIaxI3pKNlWsqCiDXnXs5otyZjfRRPDpWDFWyz40AlpLzu8IOyocZGrgy1U
+ hl4kcE4I2mWlh7NYvskBtAeF_jQ8EZ2AlRT7SzvyZ7vbz8ti1mhNv6mx0OJJU6sGJuMWB1Z0QxkZ
+ VgBuy_V.tvlAv60qSPHUn4sTuroTVt3P9gpamovLXbqlJhDTIMyoXJU_8Mfa1AvDkYVFDeo.KIHX
+ L_3_sNzN9ybe51VuQkiHGA78vTy7H1Z3y3XHjMlcWaUsuf.sUrNxvcXGHhCGLiNFKkDmjCJuKG3a
+ urMZrCI3Skxkdv2IcWBFEf.ReSsQumtGhefs3znurkPC00hd5_tycwXRTBRqCVX7bwJK4r754qFl
+ AskTNC4WoT5DLcanPr8L0ir5l8ya_6JxcnnjA50h3bCD42HFI_w5XWGkX6BTZU.YhSZ3jS7xCiC0
+ _693oLmM7hKnm24W.34HgFdG1tte8rN.OL3WXLaoIWbvvGzEUB2RFk6XdAHEjw1q6DwCAbCJQ885
+ JEaNmS0LT2hNs.2bznE46o8RvqgvAcYuhSiFcNk3gMF84yvgJV1aggcYwMSAZNqndX1G4ufT_cbC
+ fQbceHHPmUncK9omw.p5FYz8H_bWK9Lbov9AU2CZXGI14Zsar5m4AHLUySfrXhNX4OV4YnlUw4zK
+ Y743hNvVXEO2auTaHrTwXUgBq9katjee04U0D5z5Ez21vc_LDSstvheoucaqOMuttXSWUvjC_P6W
+ dvRANTPjTR_Ru4t3qUO9mUXwNZJ72Hr9MG9wZXRwKqeJade.H3mRpX8g.zM3FSZC7krqM3DfSd.r
+ 7ew--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: a08fa82a-0c30-4e08-8166-acf25c44b381
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Mon, 23 Nov 2026 21:58:47 +0000
+Received: by hermes--production-gq1-7c58b65db6-rd56z (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f0e77ddbdbd531f59d72e05fb2f71575;
+          Mon, 23 Nov 2026 21:58:44 +0000 (UTC)
+Message-ID: <6a0539de-1a66-4dfd-a21d-aee48ab18f3f@schaufler-ca.com>
+Date: Mon, 23 Nov 2026 13:58:41 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,148 +84,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 7C94520010
-X-Stat-Signature: 6sa3ug34qu5mdm8ksdka44npyc15x34t
-X-Rspamd-Server: rspamout06
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/uBX6/3tbn76JHR3U5aQYtJrpJS9Koy88=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=se2Dv26Z/48b9YJDecdodAx/gKOEn8umjmUKLpeNdcE=; b=W+34totZkPIIsNWWYcmmOVB17FzfxSGPV1pqe/pEVdZWKOWqsaOFSQ/dBRKzfmu972RTG01JhMYUHqaUiOfeoW+I61nooD5LmoynGjsx0cEIXOQq2B9MFOEyBqvvixWXabTav8lk2O8+ckxk/KUAuSCEit70OysErm5NvJwmD08=
-X-HE-Tag: 1795470998-466939
-X-HE-Meta: U2FsdGVkX1+RoU68q4rtQsUxPbFc20Cs6LH5N7dhfrhJtss/kxET501XK/uyQwS5wCFTShkk5qjJpPgY8n+Hvc0W6bilHo7m2c4lcYgzInhZ4P+rcRlrOXrZJJCMAAj74QXduUtAgJ3ieny6Rklvefr5Koqv8Xrm6b68XeW9GoJJE5UCaZzWdTkUSicbbBRihEjCmU6DhkPfmUWH+qBTs7n6gnEZQgs+aphWfE1a0y6KQ9+4Yd+J0X68NWldCEUXZ/42JSioTm8n7cqR/JmH1NM6/X7hR7nRW4MpDt94HzzWPO3qMkVYlDJ7xWfk7sk5msyBKTGzjQJudB065Xv2AEBiSash9WNa
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for user
+ namespacesg
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Andy Lutomirski <luto@kernel.org>,
+ "Hallgrimur H. Gunnarsson" <halg@google.com>,
+ Christian Brauner <brauner@kernel.org>, Serge Hallyn <sergeh@kernel.org>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ David Howells <dhowells@redhat.com>, Kees Cook <kees@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, Jonathan Calmels <jcalmels@3xx0.net>,
+ Jann Horn <jannh@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?=
+ <gnoack@google.com>, Singh KP <kpsingh@kernel.org>,
+ linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-api@vger.kernel.org, containers@lists.linux.dev,
+ keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20261119104208.782900-1-halg@google.com>
+ <20261119104208.782900-2-halg@google.com>
+ <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+ <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com>
+ <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
+ <awSVO9Zc-233M7_P@kernel.org>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <awSVO9Zc-233M7_P@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.27100 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Tue,  6 Oct 2026 12:47:19 -0400
-Jeff Barnes <jeffbarnes@linux.microsoft.com> wrote:
+On 11/23/2026 11:35 AM, Jarkko Sakkinen wrote:
+> On Mon, Nov 23, 2026 at 09:22:29AM -0800, Casey Schaufler wrote:
+>> On 11/20/2026 9:09 AM, Andy Lutomirski wrote:
+>>>> On Nov 19, 2026, at 2:52 PM, Andy Lutomirski <luto@kernel.org> wrote:
+>>>> ﻿On Thu, Nov 19, 2026 at 2:43 AM Hallgrimur H. Gunnarsson
+>>>> <halg@google.com> wrote:
+>>>>> When a process creates a new user namespace, it receives a full set of
+>>>>> capabilities (CAP_FULL_SET) scoped to that namespace. While namespaced
+>>>>> in scope, several of these capabilities (such as CAP_NET_ADMIN and
+>>>>> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes and
+>>>>> containers never need. However, there is currently no configurable way
+>>>>> to withhold such capabilities from user namespaces while still granting
+>>>>> them to workloads that require them.
+>>>> One thought (from the rootns thread): the other decent sized attack
+>>>> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
+>>>> bit.
+>>>>
+>>>> A sort of horrible solution (but maybe not so awful) would be to
+>>>> declare that the bits in cap_userns aren't actually capability bits,
+>>>> and that you need the bit in cap_userns *and* the bit in cap_effective
+>>>> to do sensitive things, and that mounting needs cap_userns to have
+>>>> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
+>>>>
+>>>> I want to sleep on this.  It might actually solve several problems,
+>>>> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
+>>>> or whatever.
+>>> I slept on it. Here’s a counterproposal.  I’m not saying I think this
+>>> is better than this patch set, but I think it’s worth weighting the
+>>> options.
+>>>
+>>> Define a whole new set of privilege bits.  As a
+>>> poorly-painted-bikeshed option, I’ll call them eprivs (for exposure
+>>> privileges - it’s a crappy name but at least it’s pronounceable).
+>> I played with a mechanism I called "chits" (all the good terms for security
+>> bits have been consumed for a very long time) that looks a lot like
+>> what you're proposing. I did it to address the CAP_SYS_ADMIN problem,
+>> where any use of the capability opens up a whole barrel of worms.
+>> I cannot, unfortunately, find my patches. :( The basic approach is:
+>>
+>> A process has an optional set of chits. A process without a chit set is
+>> unaffected by the mechanism. A process with a chit set is allowed only
+>> those operations for which it has a chit. The existing but empty chit set
+>> allows no operations. A process may drop a chit, but not the set, which,
+>> again, can be empty.
+>>
+>> Because I was after CAP_SYS_ADMIN, I envisioned a call
+>> 	cap_able_chit(capability, chit-list)
+>> but there's no reason there couldn't be a
+>> 	chit_able(chit-list)
+>> as well.
+>>
+>> I wrote this as an LSM, but the system-wide aspect of it made that
+>> a questionable choice.
+>>
+>> If you have any interest, I could dig more deeply to try to find the
+>> patches. Otherwise, I'm happy to look at what you come up with.
+> What if eprivs or chits would take each capability and subvidide
+> them into pieces? CAP_MAC_ADMIN would be formally a set of chits
+> (or eprivs).
+>
+> And process having e.g., CAP_MAC_ADMIN, would actually have the
+> set of chits that are included to CAP_MAC_ADMIN.
 
->  static void user_event_mm_attach(struct user_event_mm *user_mm, struct task_struct *t)
->  {
->  	unsigned long flags;
-> @@ -817,14 +831,18 @@ void user_event_mm_remove(struct task_struct *t)
->  	might_sleep();
->  
->  	mm = t->user_event_mm;
-> +
-> +	spin_lock_irqsave(&user_event_mms_lock, flags);
-> +
->  	t->user_event_mm = NULL;
->  
-> -	/* Clone will increment the tasks, only remove if last clone */
-> -	if (!refcount_dec_and_test(&mm->tasks))
-> +	/* Clones and attached tasks increment this count. */
-> +	if (!refcount_dec_and_test(&mm->tasks)) {
-> +		spin_unlock_irqrestore(&user_event_mms_lock, flags);
->  		return;
-> +	}
->  
-> -	/* Remove the mm from the list, so it can no longer be enabled */
-> -	spin_lock_irqsave(&user_event_mms_lock, flags);
-> +	/* Prevent new tasks from attaching after the last-task transition. */
->  	list_del_rcu(&mm->mms_link);
->  	spin_unlock_irqrestore(&user_event_mms_lock, flags);
+That would require that chits have the same inheritance rules as
+capabilities, and I think that's a really bad idea. I was an active
+member of the P1003.1e/2c committee that defined capabilities, and
+was a major advocate of their inclusion in Linux. I wish that I
+could say they've been successful, but root still rules the roost.
+I attribute that to the complexity that arose from trying to address
+privilege via setuid and privilege bracketing at the same time.
+Chits (or eprivs) as a finer granularity version of capabilities
+would make granular privilege even harder to sell than it is now.
 
+> Without that type of relation there's just a space full of chit
+> ;-)
 
-Actually the above can be written better as:
+Which is one of the reasons I haven't published anything about them.
+Even with the scheme being (a lot) simpler than capabilities I don't
+see it as something I have the resources to complete. If Andy wants to
+drive the process I'm willing to contribute where I can.
 
-@@ -832,26 +832,22 @@ static void delayed_user_event_mm_put(struct work_struct *work)
- void user_event_mm_remove(struct task_struct *t)
- {
- 	struct user_event_mm *mm;
--	unsigned long flags;
- 
- 	might_sleep();
- 
- 	mm = t->user_event_mm;
- 
--	spin_lock_irqsave(&user_event_mms_lock, flags);
-+	scoped_guard(spinlock_irqsave, &user_event_mms_lock) {
-+		t->user_event_mm = NULL;
- 
--	t->user_event_mm = NULL;
-+		/* Clones and attached tasks increment this count. */
-+		if (!refcount_dec_and_test(&mm->tasks))
-+			return;
- 
--	/* Clones and attached tasks increment this count. */
--	if (!refcount_dec_and_test(&mm->tasks)) {
--		spin_unlock_irqrestore(&user_event_mms_lock, flags);
--		return;
-+		/* Prevent new tasks from attaching after the last-task transition. */
-+		list_del_rcu(&mm->mms_link);
- 	}
- 
--	/* Prevent new tasks from attaching after the last-task transition. */
--	list_del_rcu(&mm->mms_link);
--	spin_unlock_irqrestore(&user_event_mms_lock, flags);
--
- 	/*
- 	 * We need to wait for currently occurring writes to stop within
- 	 * the mm. This is required since exit_mm() snaps the current rss
->  
-> @@ -894,11 +912,25 @@ static bool
->  current_user_event_enabler_exists(struct user_event_group *group,
->  				  unsigned long uaddr, unsigned char bit)
->  {
-> -	struct user_event_mm *user_mm = current_user_event_mm();
-> +	struct user_event_mm *user_mm = current->user_event_mm;
-> +	unsigned long flags;
->  	bool exists;
->  
->  	lockdep_assert_held(&group->reg_mutex);
->  
-> +	if (!user_mm) {
-> +		spin_lock_irqsave(&user_event_mms_lock, flags);
-> +
-> +		user_mm = user_event_mm_find_locked(current->mm);
-> +
-> +		if (user_mm) {
-> +			refcount_inc(&user_mm->tasks);
-> +			current->user_event_mm = user_mm;
-> +		}
-> +
-> +		spin_unlock_irqrestore(&user_event_mms_lock, flags);
-> +	}
-
-and this with:
-
-@@ -919,22 +915,17 @@ current_user_event_enabler_exists(struct user_event_group *group,
- 				  unsigned long uaddr, unsigned char bit)
- {
- 	struct user_event_mm *user_mm = current->user_event_mm;
--	unsigned long flags;
- 	bool exists;
- 
- 	lockdep_assert_held(&group->reg_mutex);
- 
- 	if (!user_mm) {
--		spin_lock_irqsave(&user_event_mms_lock, flags);
--
-+		guard(spinlock_irqsave)(&user_event_mms_lock);
- 		user_mm = user_event_mm_find_locked(current->mm);
--
- 		if (user_mm) {
- 			refcount_inc(&user_mm->tasks);
- 			current->user_event_mm = user_mm;
- 		}
--
--		spin_unlock_irqrestore(&user_event_mms_lock, flags);
- 	}
- 
- 	if (!user_mm)
-
--- Steve
-
-> +
->  	if (!user_mm)
->  		return false;
->  
-> @@ -906,8 +938,6 @@ current_user_event_enabler_exists(struct user_event_group *group,
->  	exists = user_event_enabler_exists(user_mm, uaddr, bit);
->  	mutex_unlock(&event_mutex);
->  
-> -	user_event_mm_put(user_mm);
-> -
->  	return exists;
->  }
->  
-
+>
+> Br, Jarkko
