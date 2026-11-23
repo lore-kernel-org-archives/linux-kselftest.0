@@ -1,64 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.203
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.105
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795412881;
-	b=5AEQEJ9/SV3DW6QFhCsfshb2DEBcB3hLhWD1d2wNg43GlwcF5bn/jpTV2DrHlJ88e6RO
-	 VW1xHJok4WJd/74gdsMwiFu0ucIwWfZTlQQsM8eH34vSc8/vZag4SlMKrRsDXQXwBGb1/
-	 Q0cyucLgm5wLGfMXtLyCu8LsYJxNb1Es6J6eRdE8nTlj8s1ex4hnBs7lKzTceAIiFlZAu
-	 v2dgE+RO/HRB+vFJRTtyNHqQz9VEKy/rvhUG3cGBsHmXJbqN4md5g0tATld/Q7bq1qMmN
-	 dj8JaF1fnR5DFJVaot3pAnNHfP8QgtMhErucz+BEaG9le1A6dMb8plvLiPTotEOTz2Q==
+	t=1795415163;
+	b=00hNekylmu1D3opnHmRsJSNPapAh9bfS39d1eIioSLfM1G8WssG4YOSbu0f9cjDJVow/
+	 mJi3OUGJx95kqjxSvfx4BMC6d/zbWfi8r8FITaEFf5JPGFfp74H+j62Y8SQzEzyHotrf/
+	 ed1SKlXi4bkIVq9TTYnssl7ebBVNXLkSaRuDb3lfA790nz/HJdmYztiSXw0eWAHGps+TK
+	 cUjWtHmm/JSEwyCweNLIM0fs3r0pbHHayKeuVFdbXrFcWqSJAeMTs5mMb5HvUamXFIkMZ
+	 3v1s3yH3X1nikEloLEhcEjiUnqJyJw0E9ewtHo+uJcDA6l3f2C1lNfN2GcWCpD9WZuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795412881;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795415163;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=dDm8enaXt6KUbR62lsJrwlrH92JPOg+x+WMgonNOw3Q=;
-	b=bY7DzAb7LE2so8s8xicMHTS7ikpcmMyzjQ+m9h7K0hJ+usfCydfIBRFL9o8dN5CU7dDy
-	 0g9AOd4JJEusrscfYWUNzdUnkSMXBh25PpLHaCLWMb+xD6b0iBI1UAQT8zo/ltdWeiwFI
-	 dHHZp4qfsteQPwuG9eebz42Y89a7OpMRbgkgCvUc+a9afEJc57+dcyUe0sQaWSJt9dozS
-	 Q8dEZBHoBZCwUzSEN9cH/6ito8c/B85XOfarMZvZZd7CIIneOfKMZZT+8PSF74uTeL77S
-	 g+WIT9zCDvedkszdruSKKpzOoFFmZNNBitPTa+yASI5U/H1vG86382iGcmHSQmm6MqA==
+	bh=TIdffghSJlSSvoACGCvht+x8YKlpMwi7tdF6MONLBA4=;
+	b=k25fHAAWmgJaoco538PmMxtw5+FlZYE4u6LmYd+LKitRwWuP+Ah4XCP9amMOR8tyuSqO
+	 91U3NWABqLkpmsz+5WZvk3m2bE/W/IE2KjZpZt8UiXLRxyp7SaWXiZpFPU+RdssKnGbNK
+	 NDzB5yeQ7YGFOkoFM7i43Wzcr38tv5XsW4e3mExUa8jDQSJl7oCxFz5isdqzA0nClYkGU
+	 8IYIMJgBFNtkyzRMAuYKAu4JuWCiQiXx1hXbOxQy0Ubl8yJZT63w9WXJrxVZ/zgAK7o7c
+	 15Vc9HqdMJN/rhsH/Smc0qdrLALcSmxfT1KK7mq8qITO41nQB5dn44DVWzZwQmOeoaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HXAj5Cwg;
-	arc=none smtp.remote-ip=95.215.58.203
-Received: from mta1.migadu.com (out-203.mta1.migadu.com [95.215.58.203])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DAaQFNYa;
+	arc=none smtp.remote-ip=95.215.58.105
+Received: from mta1.migadu.com (out-105.mta1.migadu.com [95.215.58.105])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC7D606A696
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 05:48:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDC7D606A696
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E63606A31E
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 06:26:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4E63606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HXAj5Cwg
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DAaQFNYa
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=wtYxCaOhkKaQS027UbI65HwTad/cCHg0b6t7j6tNI4g=;
+DKIM-Signature: a=rsa-sha256; bh=8RgpuFL/0AjtN2cxvRLOw38i1czpAgoobTTA4kOjNqQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795412879; v=1; x=1796017679;
- b=HXAj5Cwg8JsdMEX62RtpSz1rJnRKfzMWAnrTfQotgWRYxcmbPv2WbmgemNP215ltoagybytd
- YsU9CabcszyCy1aNewKGYbWPoD50BP0XfZMzrL8ZE37EK1bO4byuDkvSGcvcWjiFUkI/tnjr54l
- bxqQH/KvuSiF8+JWjaarDMYE=
+ t=1795415159; v=1; x=1796019959;
+ b=DAaQFNYaB9OMJiILK5/bfHawyRPHShFZ6hCB9dnApCfsxAI48qbKX9Wt/eLr7fmpT9K62xmo
+ 0XPn0qJdr7gyQlR3o2na864V8ev8b/RF2BDWTuTtKcyiD90iChr8Os0tvcr0M3/4kFTzwmoOZJB
+ QPMN499XFSKH/g0YWFGBZHF4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 02b9e5797aee865d;
-	Mon, 23 Nov 2026 05:47:58 +0000
-X-Mizu-Trace-ID: 02b9e5797aee865d
+Received: by mta10.migadu.com with ESMTPS id ed972c9e76fd63aa;
+	Mon, 23 Nov 2026 06:25:46 +0000
+X-Mizu-Trace-ID: ed972c9e76fd63aa
 X-Migadu-Flow: FLOW_OUT
-Date: Mon, 23 Nov 2026 13:47:54 +0800
+Date: Mon, 23 Nov 2026 14:25:41 +0800
 From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH net-next] selftests: net: sk_connect_zero_addr: fix
- mislabeled connect diagnostic
-Message-ID: <20261123054754.GI10218@Liu-laptop>
-References: <20261120063011.21557-1-emmaonana18@gmail.com>
+To: "Jori Koolstra (CIQ)" <jkoolstra@xs4all.nl>
+Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <ricardo@marliere.net>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] selftests: pass the timeout override to tests run
+ in a netns
+Message-ID: <20261123062541.GK10218@Liu-laptop>
+References: <20261120-kselftest-run-timer-v2-0-9802690a370b@xs4all.nl>
+ <20261120-kselftest-run-timer-v2-1-9802690a370b@xs4all.nl>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,36 +69,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261120063011.21557-1-emmaonana18@gmail.com>
+In-Reply-To: <20261120-kselftest-run-timer-v2-1-9802690a370b@xs4all.nl>
 
-Hi Omokefe,
-On Fri, Nov 20, 2026 at 07:30:11AM +0100, Omokefe Emmanuel Onanaroghene wrote:
-> The connect() failure branch reports "bind fd2", copy-pasted from the
-> bind() block above. Name the failing call.
+On Fri, Nov 20, 2026 at 06:25:28AM -0500, Jori Koolstra (CIQ) wrote:
+> When run_kselftest.sh is invoked with -n, each test is run by in_netns()
+> in a new bash process, which sources runner.sh again and then calls
+> run_one(). Sourcing runner.sh resets its global settings, which is why
+> in_netns() explicitly passes on logfile. kselftest_override_timeout is
+> not passed on, so -o/--override-timeout is silently ignored for tests
+> that are run in a network namespace and they use the timeout from their
+> settings file or the default instead.
 > 
-> Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+> Pass kselftest_override_timeout to the netns shell as well.
+> 
+> Fixes: 9d0b4ad82d61 ("kselftest/runner.sh: add netns support")
+> Signed-off-by: Jori Koolstra (CIQ) <jkoolstra@xs4all.nl>
 > ---
->  tools/testing/selftests/net/sk_connect_zero_addr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/testing/selftests/kselftest/runner.sh | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/net/sk_connect_zero_addr.c b/tools/testing/selftests/net/sk_connect_zero_addr.c
-> index 4be418aefd9f7..4441e9c62fde5 100644
-> --- a/tools/testing/selftests/net/sk_connect_zero_addr.c
-> +++ b/tools/testing/selftests/net/sk_connect_zero_addr.c
-> @@ -46,7 +46,7 @@ int main(void)
->  	}
->  e
+> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> index 45fb8ec38493..bbb2e61f323c 100644
+> --- a/tools/testing/selftests/kselftest/runner.sh
+> +++ b/tools/testing/selftests/kselftest/runner.sh
+> @@ -169,6 +169,7 @@ in_netns()
+>  		BASE_DIR=$BASE_DIR
+>  		source $BASE_DIR/kselftest/runner.sh
+>  		logfile=$logfile
+> +		kselftest_override_timeout=$kselftest_override_timeout
+>  		run_one $DIR $TEST
+>  	EOF
+>  }
 
-An "e" here?
+Thanks for the fix.
 
-Thanks
-Hangbin
->  	if (connect(fd2, (struct sockaddr *)&bind_addr, sizeof(bind_addr))) {
-> -		error(1, errno, "bind fd2");
-> +		error(1, errno, "connect fd2");
->  		goto out_err2;
->  	}
->  
-> -- 
-> 2.43.0
-> 
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
