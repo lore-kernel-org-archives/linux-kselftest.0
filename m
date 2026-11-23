@@ -1,104 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795460302;
-	b=ldqEElCx8HtgFu9bv6m96whZ7G8xcisWakeme0ZraP3c0qa35GwNdWlrNlVjjlMG9KTy
-	 aiD/DyU/KSpDNtxfqHky2nfygcou1R2L5LnjBFf1CuWzMbEMO5pw/EIHRRHc7orXQCGBB
-	 mBTbPpoWLinxZnvYAYKK3WbUbfPtcDAfz3avKMyoh1AH+rfPDKlCu/rU8haINDlIc04Rj
-	 qkbl8DLfPcimKDb1yquE4/jd1WyXtcg5rBOml/iBDg390HUAK+6EwUKt88F5t/lvCvFut
-	 tUqt+FWQsZQMWtnG+qlgKQppZ/6MOQV5LxlVs+fWJvufMqGF7xzkia5Q5PzUw/Je7XQ==
+	t=1795460752;
+	b=TokO1glceRIDzqOKOK7A57YQs1FfobHcpNPP0NqIEBFYmR0EG13xvh6+tFh3XHjysI53
+	 q+X/3aZKTTAQXZgM17r5CcuJkm4op+rZ+WzUZ/XK551pzg3D06p3zAs3St+6H0B3WK5NH
+	 SydGTF996tBEcaDTQlK2DPRPE3VttVRkdvK3m/nV33me7v/z+K9sBo/DlixUCZgpEkiYV
+	 7Xit/S9ePm4yiN7IxdJHnKhq/pB+tBUo3mU3A+HGSol8CgetFrh5VjqvzO6OJ9TIOBd8K
+	 oOpV99ZSERgmltdU2Sk6T2OsSMzwHj4QIupLuTbEffu57tZPVcZDTCbgJ87gjFxvlfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795460302;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=qQMIxscI/2LNyHZOcxmAS+nacwY3kAAmlBeTIs6xu84=;
-	b=0NR+p7+mZizAUal7H3JdnHqvKquo0PMfKxyy9hav/37scaVwTcdrZkxeMhbeggt+vib1
-	 +DmmoAU6g9tQyd52uJ1pHevWJQos2zAVt2VGB18XeOlprQ2LaBOCEZDaLYP8K9MBkWN1S
-	 IypUm8CS9pp8r0aW2gVr1e2fLKZPl7UD9Irxm8PExseNev/p909F9SNgy8heDFtzmkaBw
-	 nwPVcWKD3PCM/LuRL6eZJuvXMSUOrhzxDb0N5IZ1atczR1OhsFz0JflWtNZlwCYP0H0SM
-	 CaQy5zK8ztUtwKK746CV3BCuRoX0dXAx+8hirfww5/HPF0FSsvnrH6eEwKxbxpvDfQA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795460752;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=TeHWyBrOcFP+atvl9yPuIzA/2fWSUI+VCyFKYuru20A=;
+	b=Fv7w1sFUAUqr2asksnN690q4uFgi2R6F7xFNdXtVwNA9ESlik5q4GfHDbqY0hsgaiuW3
+	 N8NnkZ32wwiop7oxSR852HoappaynmkeJKwmIg7WDfUe9GbwdfsRq29e2ieXZkV38WDtr
+	 CN+ZBR/NL7Y0NX3IrRq2nVI/H1SVftrC+urfAk6YZbeoHsHvbUoMBAMtKP3aHEp5fYnBY
+	 TRpre5TPVMRt2oWZxxfca5j+Z4swmRrd2EegEdwvRFg/imFm05Q1Tsw0uT/q37ph6u1yP
+	 ZFBzzK+7SIIVxfYS+s6FT8ux21s51J1/bdOLrtqVKVwtCdWQfERtEyVydWvYz0n+bHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N8uQQ9zq;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jaRJ2OfV;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D834606A338
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 18:58:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D834606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 00D74606A68B;
+	Mon, 23 Nov 2026 19:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N8uQQ9zq
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2f03eeda984so19384325ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 10:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795460301; x=1796065101; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qQMIxscI/2LNyHZOcxmAS+nacwY3kAAmlBeTIs6xu84=;
-        b=N8uQQ9zqCvLqVkvnyvnVbhu+6TV7nHRiuw+8iRBZfCP5sGACm3CbzXAMEwlnKlxL6c
-         2sp8gle6z6Nvld8z9gE4YXYb7aPFYU+gEa1ohnkRRMAStkzIuy7V2r/y/K/0J6iB+waH
-         mMLs6lZiTKTylnbAJcn6T2nfkY46Uf2w2gEuYFRe0wczJ0CNVU9UT9hISPgInUnORpg1
-         2lOGA6HgNYht13HNxkqXa3S5zYgTxigIinQ5XUV//kWjYQuE+d72qZWdXL5sG2KRO18x
-         qLggypraDEysFWmyspN1PjVMcw4fHM26RghWTseWkYClowQXphvD5Ag7nq8mdjn7iXhm
-         6XnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795460301; x=1796065101;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qQMIxscI/2LNyHZOcxmAS+nacwY3kAAmlBeTIs6xu84=;
-        b=BZL87T+Wm8my2bB90iYVHoCXJglF+2NlWf/D9GsgRp/cFiNMX3YBIryZGEl86SP6PA
-         K6RH+XNjhCN7Wfo/SrUy3XB3a3QTN0x+9By7Gadwwg7OStOVgvZfHVM742j5/CWsF62O
-         v3HEM1gJstCDaOMVLryxE/8oPPkOb5e4YCV65p6kQexeS7PoqfT9XedoCsyvjlebopWo
-         PBcxUdeBtaRHkBxycinJbP9De3d91mpvDTXsrC9nbMycBsdSKAwkO4uLfFNX6ajBKWoC
-         FLT/2PjPu5F59UAe27/DJFd6e82Wio8750/ZfLOkYWEaUqZ/mp0PzsOuzqQV9AmmgS3w
-         AQ3w==
-X-Forwarded-Encrypted: i=1; AL+hErGBIjax8WTtoT7WREbfUb5WL73hzUfPPc6gWAT/1xwMj76ZgAT8kFknPj7+DRSsteVw77DHnze3EDX3J5mNFmM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/S1/upuj7K3INkSkVtwID8YrmTp+AojCIv8ZqzBaVQTJvaBvV0
-	dTeD4C48cbkBy9FntwVgHV2JIPjkgiOOQooSLjzfIR0GfCr3THbrG/Kb
-X-Gm-Gg: AZFdTZfCsPg85YjiQKBmOYx3DAPubO4SpHmr/Oeh8erM2U8SOp+L6/AwrVOSNy7RJUh
-	6N4Qtk16zEn2jZImnCfUUgEfH8WUgC5zdE2XOtXXtzVckFeSVjboQ8GDDGYpKjDmQ8J4iVMhgkX
-	2zAgpkus5wF6W0INxx8Du2byWu5hxpHSOzYX+7NHwHAT75FdR1fiKLLPNqj/Ny3D+RiTn6ivg48
-	NyD/Qp756/tAh+BqGk9arPr/zvqyi1MnCfdYfAcogBXxic0y7wmtdxAI/b00iCWZkBV9V4WCthD
-	oieahprN5SKcS+gCvScswRnorPSYF007AOED/yAJDA8Wycr7z0iLxDIMyfKhyPa+g4a8I1cRRp/
-	rXh57lxKToW9E1bF8gqFz3dmc+diT0p6DC1LLhL3dtbjgTZvd8rQKlLJdfYE9/9gd/juCoGigrQ
-	WEXdoHS5UMtnadxsuFe2eXh5ood8QJ7M7fxYoCojqjUv93DaPvgmkTJPY44cZz1eK3+/ix0n5XO
-	ZevtLqiaYiHhgEa2LGOfIuiwWNQp8Q8gYRf5igTz0JbuiFC03nmwkCyOw0MND77LlbdNWGWs5xZ
-	bsDKP3WzQ5ZKB9mTabUWOmGtSnmWxJHGEFhSJop/0Yaoi8vN4wG1/BazVKKYhbUIqS0U3OIhLTG
-	o8dan
-X-Received: by 2002:a17:90b:2c84:b0:3b4:409:f173 with SMTP id 98e67ed59e1d1-3b41c7b6060mr11582462a91.5.1795460301096;
-        Mon, 23 Nov 2026 10:58:21 -0800 (PST)
-Received: from localhost.localdomain ([103.248.15.45])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b2156c2sm7758540a91.0.2026.11.23.10.58.16
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 23 Nov 2026 10:58:20 -0800 (PST)
-From: Zhefu Peng <ilskdw@gmail.com>
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	kuniyu@google.com,
-	mschiffer@universe-factory.net,
-	nicolas.dichtel@6wind.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v6 1/2] vxlan: reset the remote's dst cache when snooping moves a MAC
-Date: Tue, 24 Nov 2026 00:58:11 +0600
-Message-ID: <20261123185811.53107-1-ilskdw@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <179542917290.3135.7119976710700884013@kernel.org>
-References: <20261119095256.42005-2-ilskdw@gmail.com> <179542917290.3135.7119976710700884013@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jaRJ2OfV
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A3BBE1F00AD3;
+	Mon, 23 Nov 2026 19:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795460751;
+	bh=TeHWyBrOcFP+atvl9yPuIzA/2fWSUI+VCyFKYuru20A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jaRJ2OfVEuvqdG975r9fAobz+sNSNcjw7JAuozjNAQrqTsrEhzqP14WwyLd7J+Vfw
+	 D7j5JTqVpBtoJuDJdHw1+qHXkuT5Bx3mKGHJisL5u0aXr8xsRAO+RqUbcfq2JvY2Eh
+	 9pa3vszMU+UpZ3gjDE2jXwRC6R3l2nNjeegSfFG+AR2AHeC04BnsiGgo+ozeWIhlEj
+	 qc9BEvH6WoY5pPxoxgpEvApr9DL9BOEEbG+eXGHGvdgPekhqjfX52I+LszVUiRyiD6
+	 lRdlD+zRtqC1MPkd6cUz/TavqU4jE0xIvbIdw9hrG4xhFq24LvCYAfN8X/9tACtyNe
+	 fy1veLnPZMC2A==
+Date: Mon, 23 Nov 2026 21:05:47 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Rustam Mustafin <rmustafin@cloudlinux.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>, Jaewon Yang <yong010301@gmail.com>,
+	linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests: tpm2: test that io_uring reads ignore the
+ file offset
+Message-ID: <awSOi_89tLwQhfk9@kernel.org>
+References: <awGr_tB3QXwnW1G2@kernel.org>
+ <20261123165638.2161305-1-rmustafin@cloudlinux.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,29 +60,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261123165638.2161305-1-rmustafin@cloudlinux.com>
 
-> [Severity: Low]
-> Is this check order intended? The lockless path in vxlan_snoop() calls
-> vxlan_snoop_same_remote() before the NUD_PERMANENT | NUD_NOARP test. Here
-> the static-state test runs first.
+On Mon, Nov 23, 2026 at 11:56:38PM +0700, Rustam Mustafin wrote:
+> Test that an IORING_OP_READ request on /dev/tpm0 and /dev/tpmrm0
+> returns the whole pending response from its start, although sqe->off
+> points past the response header. The offset stays inside
+> priv->data_buffer, so an unpatched kernel fails the test on the
+> returned header without an out-of-bounds access.
+> 
+> Signed-off-by: Rustam Mustafin <rmustafin@cloudlinux.com>
+> ---
+> Changes in v3:
+> - rewrite in Python as tpm2_tests.UringTest, run by test_uring.sh
+>   (Jarkko)
+> - io_uring through liburing-ffi (liburing 2.4+)
+> - test_uring.sh skips when liburing-ffi is missing or
+>   io_uring_queue_init() fails
+> 
+>  tools/testing/selftests/tpm2/Makefile      |  2 +-
+>  tools/testing/selftests/tpm2/test_uring.sh | 15 +++++
+>  tools/testing/selftests/tpm2/tpm2_tests.py | 71 ++++++++++++++++++++++
+>  3 files changed, 87 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/tpm2/test_uring.sh
+> 
+> diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
+> index a9bf9459fb25..44630fb980fa 100644
+> --- a/tools/testing/selftests/tpm2/Makefile
+> +++ b/tools/testing/selftests/tpm2/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+>  include ../lib.mk
+>  
+> -TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
+> +TEST_PROGS := test_smoke.sh test_space.sh test_async.sh test_uring.sh
+>  TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
+> diff --git a/tools/testing/selftests/tpm2/test_uring.sh b/tools/testing/selftests/tpm2/test_uring.sh
+> new file mode 100755
+> index 000000000000..bb6e2e10162e
+> --- /dev/null
+> +++ b/tools/testing/selftests/tpm2/test_uring.sh
+> @@ -0,0 +1,15 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+> +
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +
+> +[ -e /dev/tpm0 ] || exit $ksft_skip
+> +[ -e /dev/tpmrm0 ] || exit $ksft_skip
+> +read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
+> +[ "$tpm_version" = 2 ] || exit $ksft_skip
+> +
+> +python3 -c 'import sys, tpm2_tests
+> +sys.exit(not tpm2_tests.uring_available())' || exit $ksft_skip
+> +
+> +python3 -m unittest -v tpm2_tests.UringTest 2>&1
+> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+> index ffe98b5c8d22..dc4e642450d6 100644
+> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+> @@ -331,3 +331,74 @@ class AsyncTest(unittest.TestCase):
+>  
+>          self.assertEqual(rc, 22)
+>          async_client.close()
+> +
+> +def uring_available():
+> +    import ctypes.util
+> +
+> +    name = ctypes.util.find_library('uring-ffi')
+> +    if not name:
+> +        return False
+> +    lib = ctypes.CDLL(name)
+> +    ring = ctypes.create_string_buffer(1024)
+> +    if lib.io_uring_queue_init(1, ring, 0) < 0:
+> +        return False
+> +    lib.io_uring_queue_exit(ring)
+> +    return True
+> +
+> +def uring_read(fd, size, off):
+> +    import ctypes.util
+> +
+> +    lib = ctypes.CDLL(ctypes.util.find_library('uring-ffi'))
+> +    lib.io_uring_get_sqe.restype = ctypes.c_void_p
+> +    lib.io_uring_prep_read.argtypes = [ctypes.c_void_p, ctypes.c_int,
+> +                                       ctypes.c_void_p, ctypes.c_uint,
+> +                                       ctypes.c_uint64]
+> +    ring = ctypes.create_string_buffer(1024)
+> +    ret = lib.io_uring_queue_init(1, ring, 0)
+> +    if ret < 0:
+> +        raise OSError(-ret, 'io_uring_queue_init')
+> +    try:
+> +        buf = ctypes.create_string_buffer(size)
+> +        lib.io_uring_prep_read(lib.io_uring_get_sqe(ring), fd, buf, size, off)
+> +        ret = lib.io_uring_submit(ring)
+> +        if ret < 0:
+> +            raise OSError(-ret, 'io_uring_submit')
+> +        cqe = ctypes.c_void_p()
+> +        ret = lib.io_uring_wait_cqe(ring, ctypes.byref(cqe))
+> +        if ret < 0:
+> +            raise OSError(-ret, 'io_uring_wait_cqe')
+> +        # cqe->res follows the 64-bit user_data
+> +        res = ctypes.c_int.from_address(cqe.value + 8).value
+> +    finally:
+> +        lib.io_uring_queue_exit(ring)
+> +
+> +    return res, buf.raw
+> +
+> +class UringTest(unittest.TestCase):
+> +    def read_response(self, flags):
+> +        client = tpm2.Client(flags)
+> +        fmt = '>HII III'
+> +        cmd = struct.pack(fmt,
+> +                          tpm2.TPM2_ST_NO_SESSIONS,
+> +                          struct.calcsize(fmt),
+> +                          tpm2.TPM2_CC_GET_CAPABILITY,
+> +                          tpm2.TPM2_CAP_TPM_PROPERTIES,
+> +                          tpm2.TPM2_PT_FIXED, 1)
+> +        try:
+> +            client.tpm.write(cmd)
+> +            # Offset 10 stays inside the response, so an unpatched kernel
+> +            # skips the header instead of reading out of bounds
+> +            res, rsp = uring_read(client.tpm.fileno(), 4096, 10)
+> +        finally:
+> +            client.close()
+> +
+> +        self.assertGreaterEqual(res, 10)
+> +        sz, rc = struct.unpack('>II', rsp[2:10])
+> +        self.assertEqual(sz, res)
+> +        self.assertEqual(rc, 0)
+> +
+> +    def test_read_tpm(self):
+> +        self.read_response(0)
+> +
+> +    def test_read_tpmrm(self):
+> +        self.read_response(tpm2.Client.FLAG_SPACE)
+> -- 
+> 2.52.0
+> 
 
-No, it should match the fast path. I'll swap the two checks, keeping
-the nexthop check first, if there is another revision.
+Thank you.
 
-> [Severity: Medium]
-> Does this fully close the stale dst_cache window the patch is meant to
-> fix?
+It's just best not to spread tests to multiple languages without
+any special reasons, that's all.
 
-No. This is the window discussed for v2 and v5:
 
-https://lore.kernel.org/netdev/20261115040600.61033-1-ilskdw@gmail.com/
-https://lore.kernel.org/netdev/20261119095246.41685-1-ilskdw@gmail.com/
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-A transmit that copied the old remote into its key before the reset
-can refill the cache in a later jiffy. vxlan_fdb_replace() and the
-other dst_cache_reset() users have the same window. Closing it needs a
-generation check in the transmit path or replacing the remote through
-RCU, which would change vxlan_fdb_replace() as well, so I would rather
-propose it separately for net-next. This patch fixes the deterministic
-case, where every move keeps the stale route.
+Br, Jarkko
