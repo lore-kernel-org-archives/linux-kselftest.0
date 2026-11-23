@@ -1,98 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795443368;
-	b=OTh8U97/j6ltFSo48kmruIvlWQE/U+87AHonE22PPcoz/Jgn0aAPmwYLnUGekRTGsI1t
-	 zaGnyQYyJe1Jx2EAV5j7+4OMuRv7yfhxYAgWiHNbQywmxCaxxWRK95y18+C+xAxb6qVmv
-	 E0NGDiCYI0Bmam0d0U/L+5YDuAsq1tZ5J8ZcbalE91KPe7iG3Ha5t6CTY7nb63h2a4xqg
-	 KgA4VXbrhUPlQlcnRkfNGT4Mltkqz9tNjh6qoSUp4vP+LyHzwePDvV9h4it95EIMAbdEp
-	 SSyO4D1H49b4HTN5PoG8k5492Eun7Hs43xjZHru6lhj7Xphoj1Iuqs0JKvPXaz7MXCw==
+	t=1795443795;
+	b=HDYXVFR5EnPYMMNGX+p4xl/uRUlAw0HCI5EPF0+LK9POraGB+LMbwvnECqlTgzko3OD3
+	 d3vkjvl2N+jmDvYJ7MZhozsuJ5NbYDFSW243Bbx/pL9od7UMSHzibHLUTOvj6AcJVyy9W
+	 6mPcrCgSO6+4lHxBl5uHW8weNWmINXHqr/TwfcuEoMAFJISjgGrIUoC+hbnV+h+iZtyxc
+	 vdHSo5ltpzNqzPqAwSp1KHMCJ9yyyU8sdOTceW1usCk4oQA7dSgTeh0FUIJRo/h9gb03e
+	 0h1Z8UlqTBRHbJrDftBDxuISYqH/sY5XpEQVfDC5KyaBMTqHgMTx7bWIVyMXkZxtu+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795443368;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=Zfh0a6qWB7cgYhlh/JVDBYrhyvShnRR27oz/yTBM+wI=;
-	b=M7kSR2rmkwVtao0sYXRnIjtPGulPR6EpgArpDIX181luf9ad4BO2Cpg+KRwFWqajQyul
-	 jkq90Y4cLRwsmaVYPxqGpFb9qS4aul2F2S4hGtHpmfhy66ARbwdNEQqMeMsxUNAIOV2eC
-	 +B8A02OG/QmB0cCDMt6srPGhOtexcG6SBKa6VGzd34NpSij608+j1pQdHfXgNQUegp61v
-	 wXG/GexBDUkQJQi4abQMQc5BToNjtGKvQ5kALYHl0bpEPCuaZjhIqJduKy5foOgIxuPr4
-	 ASECn4N7xez2YZW+dnp58EDthptobW+kPs5W5WU6l96kIioNtbroQJJTyboq1xkZYdg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795443795;
+	h=Received:DKIM-Signature:Received:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:X-SA-Exim-Mail-From:
+	 X-SA-Exim-Scanned;
+	bh=UqgaRl/LQSFKZbxctWfIJSioOqpnACPmqjUCBtWSvIA=;
+	b=i+WaCVurvu2lwK68qQ7+5i61dZFT2AP/2je2aRxlhE/JfY5N+mR+rAD2XS0AKFU8pmPT
+	 yfZdbI/v4IekjPn6dI4iWvPu8oxVXv3C0iO9Yagjhlg/ZUBKn/E2q7m6fPFLc4LpHQyu2
+	 j6VFB8oaA7HdAPOClMKHe1wsuu5cA+0mWwPIOu3YkWrOWIYg17Ptsw337M83Zuy3xlIEe
+	 FY/YTSmx/0ysiXgUsG9QRwX9MK/ARRfQuKVPRZDG4GCmpEhPkxCrETImSmYs523BwzhVA
+	 zkV4QMJyflfkcd5NW2A19i6iSdFC0/a6MgF2G2ijfDRHV1No8oI7vQdnSb7N5t0WDrA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=MzQ3w9nU;
-	arc=none smtp.remote-ip=209.85.221.50
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hlcNvac6;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D63C606A31F
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 14:16:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D63C606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659FD606A31A;
+	Mon, 23 Nov 2026 14:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=MzQ3w9nU
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4ac109a8a12so1903299f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 06:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795443367; x=1796048167; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Zfh0a6qWB7cgYhlh/JVDBYrhyvShnRR27oz/yTBM+wI=;
-        b=MzQ3w9nUw2sUyJnn/xbL3lFnkOFDs10fQ939b1r9lh3GObb6YW0PbtbT/rdjeJ4rmx
-         WqEZhQyPqHwQC6iJ2D06RqjGMiDjPGz2ndgRMGNbdLktctaNAa+Vyj3hZv6GTYbcMIoL
-         9idjx98FhZGu2zcC/Xro2yLz7tAulmBVYILxyScBaaBn4fepRtuAXY3joaRDNfuHXkq3
-         Qtle4B4BdgjgO34ulYlM/LfdtfEiRrwIiytmyNcfZMbXLq3flUVQw49XdxkFS44h2lw+
-         /idJvNMYlizMxO+MngmekHSGiaLc5am23Jeu+LvaGV//bAcJTBCyb3o6XyKKYbFYqFLx
-         pBLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795443367; x=1796048167;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Zfh0a6qWB7cgYhlh/JVDBYrhyvShnRR27oz/yTBM+wI=;
-        b=nTtNI4Tku/xa+jm0Zc9jIHGc9Mc679eBr50siZpolmd/tZczNylT14o4mKXClI/hBf
-         sQNM6vguTSAdIGaFW+y/DggSKDtAOkoQNdCZXEhWBA43nVU8FhFjmGybMa6aAhHlsnrS
-         jEXZEmc7vA/xIJpbQqZh9Lq/Ww3pRlWPhqs0w7PqlMEQpXdCnAP2HLv6mps8uI/RKWMp
-         Sq+GGTd0eIT9D+bBWMEZSZkhfpxXy3dGcZId+v+RVBLI2y14w0uMkX9PRASFfi/Sh41J
-         3XjQKvIIzujnbyFuFi2BozyHF7UITPPhZuZTWaeVl5ib5hgtDbJitMlKwc1eAEauKeOG
-         sOyw==
-X-Forwarded-Encrypted: i=1; AL+hErE75RjKy0ORWd3w0xrPs/55pTNNpY+LruPOHryJdDt6oQYXg4OTAqvwwWltUYI6KxhLkwCk1pVXnE8lu+E7tRY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+ssrDv3A54he2VKraURekAkytwFSbARq/3hxixiiEpH4L/UtSh
-	OglmpAvuXizJwoDP5w0BmFs6mifq7Mdp/So6RwQGZ8AEVE6VyBXCio8FlU49g4yj1Q0=
-X-Gm-Gg: AZFdTZerCWrdwk3E70CArv3hZK0yL++RFS9szXhjvPFu7Qhw9o3/Itk7rbIwKTpiPZq
-	wxMLl4gNkHtzpTXSc6k33e3AsUqP45vB/VDwnY9pGLsOE/M+CyFOqaeUN1W8FyXF1cYFIe6RFi8
-	k/PPhv7TmUXn6sNB8Gw/hWmLYi9r73U7m9kPJ3XkVaOwkI+Py+ncfWN2M2YDKmxjHqsKqiUTRkD
-	/teNYvto+fjdttorQjMsrHZldY4tkjcU6yrCmqvCEMHbSSW6TUljo2/t0QLNdeNWqrBVW3Mnlr7
-	0/dnY7ZrQimWhvqNFOHA1VZtqqk3VpBDTQ+lXTyL5PkGvTqr1zpnF7Tr6yFeJVtIXyQI2OCwZCy
-	7W1SbaSKQFkXNRSaKZmhtIJjqDVNoifnQPKZ1H7NtQH1/KB+JKHnbEgZ5Xl3WlZutcFHHqyrmx8
-	M6KYToSlmu1u9nfpXftQ3re8/sCAJt/qfL3R4WNzLahwBmQLZNijUm77zSeYmPIClbLAOZcOM/3
-	ONGg4XsexYHRjzRPhNg5ya192IUme7BFxxTarhd8gg81TTpfMoSz2K/wXQfMpbV+gLcFranYzg0
-	BqIHw8H9TIbhihr30m6MnSXoDKimNGQ=
-X-Received: by 2002:a05:6000:298e:20b0:488:7496:15b5 with SMTP id ffacd0b85a97d-4abb4c7ab74mr15920212f8f.47.1795443366598;
-        Mon, 23 Nov 2026 06:16:06 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b110d56sm21672571f8f.40.2026.11.23.06.16.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 06:16:06 -0800 (PST)
-Date: Mon, 23 Nov 2026 15:16:03 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] selftests/livepatch: build and run the tests
- outside the running kernel
-Message-ID: <awRKo4D-H2sHFfwR@pathway.suse.cz>
-References: <20261110161050.2451750-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hlcNvac6
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1F61F000D0;
+	Mon, 23 Nov 2026 14:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795443794;
+	bh=UqgaRl/LQSFKZbxctWfIJSioOqpnACPmqjUCBtWSvIA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=hlcNvac6vwok/7CieJjhHh3PFZe3EyPF7vLUnjW/zfIxKZyPr+iDkUp1VjUF/qJhc
+	 ryq9ScXld34BM0RBzO8yLA6gI2vNM8AjOMdzTZNXrHzT7eUTWgjEghYaGZHafT5DKl
+	 fXt9GWwRwFRSCqWX1YfTidD1dokw4IV2jm6Kfhk77hjiEP8RnoomGkmRdfn7qIsw1B
+	 +xLNzebD3QrGUi/CeKvbpfEzHCdtTGNSALkq8rqw2Y66IJoSwNNdK+0Xh45C15q92l
+	 ixB4qLF+XzgxQbF6O+43m2qeKOEQjFUFoN05BFhsHi/UlZfd4igw+9p4MrqKUhAkdY
+	 VyvX2OJG40u5A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1xVUwq-000000021WE-0roY;
+	Mon, 23 Nov 2026 14:23:12 +0000
+Date: Mon, 23 Nov 2026 14:23:11 +0000
+Message-ID: <86fqwrzkxc.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Isaku Yamahata <isaku.yamahata@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Oliver Upton <oupton@kernel.org>,
+	kvmarm@lists.linux.dev,
+	Wei-Lin Chang <weilin.chang@arm.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	kvm-riscv@lists.infradead.org,
+	Will Deacon <will@kernel.org>,
+	Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v3 0/3] KVM: Bound KVM_PRE_FAULT_MEMORY by the vCPU's dirty ring
+In-Reply-To: <20261123113435.1170711-1-fuad.tabba@linux.dev>
+References: <20261123113435.1170711-1-fuad.tabba@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,40 +85,74 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110161050.2451750-1-sashal@kernel.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: fuad.tabba@linux.dev, pbonzini@redhat.com, seanjc@google.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, isaku.yamahata@intel.com, rick.p.edgecombe@intel.com, ljs@kernel.org, alexandru.elisei@arm.com, oupton@kernel.org, kvmarm@lists.linux.dev, weilin.chang@arm.com, anup@brainfault.org, atish.patra@linux.dev, kvm-riscv@lists.infradead.org, will@kernel.org, tabba@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Tue 2026-11-10 11:10:46, Sasha Levin wrote:
-> The livepatch selftests build their test modules against the running
-> kernel and skip every test without its devel files, so they do not
-> work when built for one kernel and run on another, as CI systems do.
-> In KernelCI, 36 of 69 kselftest builds of mainline fail to compile the
-> modules because the kernel lacks CONFIG_LIVEPATCH, and where the
-> modules do build, the installed tests skip themselves.
+On Mon, 23 Nov 2026 11:34:32 +0000,
+Fuad Tabba <fuad.tabba@linux.dev> wrote:
 > 
-> - Patch 1 skips the modules and tests when livepatch is not enabled.
-> - Patch 2 lets "make clean" remove the modules without a kernel build
->   directory.
-> - Patch 3 builds the modules against the kernel in O= or KBUILD_OUTPUT.
-> - Patch 4 runs the tests with the installed modules, without the devel
->   files.
+> Hi folks,
 > 
-> Tested on x86_64 against kernels built with O= and in place, a kernel
-> without livepatch and the Debian headers. The modules build and clean
-> in every case, and the installed tests pass 8/8 in a VM without devel
-> files, where they were all skipped before.
+> Changes since v2 [1]:
+>   - Added patch 2, which warns in api.rst against calling ioctls other
+>     than KVM_RUN while an exit is pending. (Sean)
+>   - Mentioned riscv as well as arm64 in patch 1's exit_reason
+>     paragraph. (Lorenzo)
+>   - Collected Lorenzo's Acked-by on patch 3. (thanks!)
+> 
+> KVM_PRE_FAULT_MEMORY never checks the vCPU's dirty ring, so one call
+> over a large enough range of populated, dirty-logged pages overflows
+> it. The first patch stops the loop at the soft limit, as KVM_RUN does.
+> The second warns userspace against calling ioctls other than
+> KVM_RUN while an exit is pending. The third adds the case to
+> pre_fault_memory_test.
+> 
+> Pre-faulting isn't the only ioctl that can push past the ring's
+> reserve. On x86, KVM_SET_MSRS does too when it writes the wall clock or
+> the Hyper-V hypercall page. A guest can also push past the reserve
+> within one exit, for example through the arm64 ITS. What those paths
+> should do when the ring fills is an open question for the dirty ring
+> API, which I don't think belongs in this series.
+> 
+> I didn't include the kvm_dirty_ring_check_request() rewrite that Sean
+> sketched on v1, since I think it can lose a request. It tests the
+> request first and clears it afterwards. If the vCPU is scheduled out in
+> between, loongarch sets the PV preempted flag in guest memory and x86
+> updates a Xen guest's runstate area, either of which pushes an entry.
+> When that push makes the ring soft full, the request it makes is then
+> cleared, and the vCPU runs with the ring soft full until its next push.
+> Clearing first and re-setting, as the code does now, doesn't have that
+> window.
+> 
+> Based on Linux 7.4-rc2 (7475ea8b58616; also applies to kvm-x86/next
+> cbe54fc3462b3 with git am -3).
+> 
+> Cheers,
+> /fuad
+> 
+> [1] https://lore.kernel.org/all/20261117074428.7544-1-fuad.tabba@linux.dev/
+> 
+> Fuad Tabba (3):
+>   KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty ring is full
+>   KVM: Warn userspace against ioctls while an exit is pending
+>   KVM: selftests: Test KVM_PRE_FAULT_MEMORY against a full dirty ring
+> 
+>  Documentation/virt/kvm/api.rst                |  20 ++--
+>  include/linux/kvm_dirty_ring.h                |   5 +
+>  .../selftests/kvm/pre_fault_memory_test.c     | 102 ++++++++++++++++++
+>  virt/kvm/kvm_main.c                           |   5 +
+>  4 files changed, 126 insertions(+), 6 deletions(-)
+> 
+> 
+> base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
 
-My only open problem is the "O=<kernel> KDIR=<kernel>" parameters
-mentions in the commit message in the 2nd patch. They do not work
-for me.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-Otherwise, this patchset looks ready for linux-next.
+	M.
 
-I am going to push it (with removing the problematic parameters from
-the commit message) by the end of this week unless anyone complains
-in the meantime.
-
-Best Regards,
-Petr
+-- 
+Without deviation from the norm, progress is not possible.
