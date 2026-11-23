@@ -1,67 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.79
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.146
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795411342;
-	b=zGn0pgL9muZygDjSUnjbqqbtzitxwLtYIz9qR9NwKCGKUtcM0t9y5U2ismvnuU5dXjNk
-	 UZKtVudSINcrYjRl9j2hYQUkTybERNlsba5tjCPCBrPI+Oz6uHtGA5tV3jH2E9CQywoMo
-	 fGLnQVWZYr1A5Wc+T55pPL9rqqpV3pvJ70fYGkmfyngKPB910950+xueO0CKt7VAKKXBI
-	 b2ID+aw1Dg/TNkjD3+hXX2XGk7b0VrzhrsjnUg1igho/xyx3EQdlgKBfj5ceLaLUJ6J8h
-	 76Oiu5SvyVbSdwfXxyglIWrgQ8ZgmWI9Gv9zmt730kBckp1B3SkBlZRjTGBBHufBBCA==
+	t=1795412350;
+	b=1UevrdqLc4EztlolBKq5IShTYl9tTAQbnKzfd4FSsIGciLRPT06TumzAqTWMkfY7s3XZ
+	 /qztpGIYROcE304A8ScSywKnbMTJV1562UhsUOxftEg+rVYpGmfsTGomtNWZrvaeHqYT5
+	 ocEQ0RSGEaJr9U6gkRO1D6f/ZD4WRRjUj54rTOY0NIBYzKLI+yAM4Qz8MxMdLyTECSjF2
+	 9cxMpGAPx9sCsOrZgy4oE6OvV6lw+vae+Z5QZWCkyT37A2dwbgLkoI3vCDcz6HY8v9gJ1
+	 2i1P43xVT8yOWgBH4bH3b7C39RqvZh3J+Q+qH6k7mlvJ55iPLpKNhUSlAfoEYdQRp1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795411342;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795412350;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=iy36ClD91OuaesY/Ay9KrdFH02xOa7KlfGzGZS847ZU=;
-	b=h23kLX7FuMgFMSYAFsxJeo95QJVzP7RvvnPPRcWlnRGylcOfFNcCruT1G8e7M+ol1hts
-	 Q3LAlecDwzSQoTUNerhqxi1dBJO+zT/kTLT+kANrosF7gzBI2c9Bh/iN3HyrOxHLciygS
-	 IroX3wvSKLDvS8L8/r5mz6UGZYVJptCZlLzd4Y0c8anEi8riL/usXI40FCjuguzw4gMc9
-	 T3dy0LgdVkZNjn61wq7LLA5NbWmNJRCkI0QvM4NZDmCEYGwcY45QyxgrP5FyYazosjA8v
-	 tynZ33LuDv1qb1p+dKUSTak67vKAHZoaBJcxAyNe0ULSOSZStij7VsE2I/VXIQGc5KA==
+	bh=9fZC67cJJ/GjqV+nhFxv50Ir/g4Ncc4bsSbtF+FPqMU=;
+	b=hIaTe/29ptmf+n/0hUzWb2xCYqFLSmpths14BCgX54S9uEbsYkJtdvMHj/w9HyO43uCC
+	 4tHJGXR9DfWAnG1zARWmHeDvzyf8cz65NNHU3s3sxVdUOl6WNEnTVBpnqElkf49dNdIvR
+	 lummeQTkkEiiBmyURwWeDk/GcJniCnswftpbhUqrLVdMsLlp3V6O/hK6uGCFtARRjdj1B
+	 qcray4nURBOXjG6BekaBTn00SOv7KBALnV01Lbo3abAcSeeIJrPcplyHzr3wdux60jvbg
+	 HG9wC9VTosPJ/FzusnNEAQ8Zl4TUf+/MiH5cN6k18ooBU9xmm2CTkXzlwyIQlPTWsEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="rorQCa/B";
-	arc=none smtp.remote-ip=91.218.175.79
-Received: from mta0.migadu.com (out-79.mta0.migadu.com [91.218.175.79])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OJheM6XN;
+	arc=none smtp.remote-ip=95.215.58.146
+Received: from mta1.migadu.com (out-146.mta1.migadu.com [95.215.58.146])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC48606A320
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 05:22:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BC48606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75E6606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 05:39:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A75E6606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rorQCa/B
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OJheM6XN
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=D82Nd0c2N+O4K4PuYhgfhJVwNjk6bdjRGsOrqQiK2r4=;
+DKIM-Signature: a=rsa-sha256; bh=GGgKl6H2K6gHd6hfWzXd1Bt9/gcGE2YwIrAA2CbG6HE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795411339; v=1; x=1796016139;
- b=rorQCa/BO2A211dkndlN3Z5a+4JYq5futjumyEheZuePk96gq4WCr5xxiiNzN0OOhnmMz6xT
- ZYy/qBo+xlUR66fL2yeW3qkEcIsDDLIhN3QNJbE0KaQZEtKr3kVQkRYp3Ks+Ws7sc8Yb57Wk7p6
- 1lORLH0C+OVV/3QD07YeWkuk=
+ t=1795412347; v=1; x=1796017147;
+ b=OJheM6XNmkjKLELNqpyXr1iE+WMP8bwEStj1ztPkWTyBCt43i7svWeJ5eQF7MvEVAGKFPuDl
+ 0NcZYGSB55t39ls9W4uFbaHdWJBxoohMz6bWoxQ74kf+rlSv1gI8maU/M3n6hq8p5+IL0BU3j3h
+ vTbtM7KzjNxxcqb0jyn1C6tE=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id d4f9441bda4b8cfe;
-	Mon, 23 Nov 2026 05:22:19 +0000
-X-Mizu-Trace-ID: d4f9441bda4b8cfe
+Received: by mta10.migadu.com with ESMTPS id 80c29ab3a696dce2;
+	Mon, 23 Nov 2026 05:39:07 +0000
+X-Mizu-Trace-ID: 80c29ab3a696dce2
 X-Migadu-Flow: FLOW_OUT
-Date: Mon, 23 Nov 2026 13:22:07 +0800
+Date: Mon, 23 Nov 2026 13:38:56 +0800
 From: Hangbin Liu <hangbin.liu@linux.dev>
 To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: tianyi@cloudflare.com, kuba@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me,
-	skhan@linuxfoundation.org, kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH net-next v5 3/3] selftests: net: veth: propagate
- bad-settings check failures to exit status
-Message-ID: <20261123052207.GG10218@Liu-laptop>
-References: <20261121182217.4609-1-emmaonana18@gmail.com>
- <20261121182217.4609-4-emmaonana18@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+Subject: Re: [PATCH net-next] selftests: net: reuseport_addr_any: report
+ epoll_wait timeouts honestly
+Message-ID: <20261123053856.GH10218@Liu-laptop>
+References: <20261120065855.22628-1-emmaonana18@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,80 +70,36 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261121182217.4609-4-emmaonana18@gmail.com>
+In-Reply-To: <20261120065855.22628-1-emmaonana18@gmail.com>
 
-Hi Omokefe,
-On Sat, Nov 21, 2026 at 07:22:17PM +0100, Omokefe Emmanuel Onanaroghene wrote:
-> Three more checks in veth.sh print "fail - set operation successful
-> ?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
-> "bad setting: reducing RX nr below peer TX with XDP set", and "bad
-> setting: increasing peer TX nr above RX with XDP set". A kernel that
-> wrongly accepts any of these invalid operations would be reported yet
-> the script would still exit 0. Wrap each fail branch so it sets ret=1.
+On Fri, Nov 20, 2026 at 07:58:55AM +0100, Omokefe Emmanuel Onanaroghene wrote:
+> receive_once() waits 3ms for a packet but only checks for errors
+> (i < 0). On timeout (i == 0) it falls through and uses ev.data.fd
+> uninitialized. recv() on a garbage fd fails with a misleading
+> "failed to recv" (or worse, blocks or returns a bogus fd). Report
+> the timeout for what it is; errnum 0, since epoll_wait sets no
+> errno on timeout.
 > 
-> Reported-by: Tianyi Gao <tianyi@cloudflare.com>
-> Link: https://lore.kernel.org/all/CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com/
 > Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
 > ---
->  tools/testing/selftests/net/veth.sh | 26 +++++++++++++++++++-------
->  1 file changed, 19 insertions(+), 7 deletions(-)
+>  tools/testing/selftests/net/reuseport_addr_any.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-> index 7a2bbed0263e7..6eeb123aaf885 100755
-> --- a/tools/testing/selftests/net/veth.sh
-> +++ b/tools/testing/selftests/net/veth.sh
-> @@ -474,9 +474,13 @@ if [ $CPUS -gt 1 ]; then
->  	ip netns exec $NS_DST ethtool -L veth$DST rx 1 tx 2 2>/dev/null
->  	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
->  	printf "%-60s" "bad setting: XDP with RX nr less than TX"
-> -	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
-> -		section xdp 2>/dev/null &&\
-> -		echo "fail - set operation successful ?!?" || echo " ok "
-> +	if ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
-> +		section xdp 2>/dev/null; then
-> +		echo "fail - set operation successful ?!?"
-> +		ret=1
-> +	else
-> +		echo " ok "
-> +	fi
+> diff --git a/tools/testing/selftests/net/reuseport_addr_any.c b/tools/testing/selftests/net/reuseport_addr_any.c
+> index 1c43401a1c807..2e8aa83f68dd0 100644
+> --- a/tools/testing/selftests/net/reuseport_addr_any.c
+> +++ b/tools/testing/selftests/net/reuseport_addr_any.c
+> @@ -155,6 +155,8 @@ static int receive_once(int epfd, int proto)
+>  	i = epoll_wait(epfd, &ev, 1, 3);
+>  	if (i < 0)
+>  		error(1, errno, "epoll_wait failed");
+> +	if (i == 0)
+> +		error(1, 0, "epoll_wait timed out waiting for packet");
 >  
->  	# the following tests will run with multiple channels active
->  	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
-> @@ -484,16 +488,24 @@ if [ $CPUS -gt 1 ]; then
->  	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
->  		section xdp 2>/dev/null
->  	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
-> -	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
-> -		echo "fail - set operation successful ?!?" || echo " ok "
-> +	if ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null; then
-> +		echo "fail - set operation successful ?!?"
-> +		ret=1
-> +	else
-> +		echo " ok "
-> +	fi
->  	CUR_RX=2
->  	CUR_TX=2
->  fi
->  
->  if [ $CPUS -gt 2 ]; then
->  	printf "%-60s" "bad setting: increasing peer TX nr above RX with XDP set"
-> -	ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null &&\
-> -		echo "fail - set operation successful ?!?" || echo " ok "
-> +	if ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null; then
-> +		echo "fail - set operation successful ?!?"
-> +		ret=1
-> +	else
-> +		echo " ok "
-> +	fi
->  	chk_channels "setting invalid channels nr" $DST 2 2
->  fi
->  
+>  	if (proto == SOCK_STREAM) {
+>  		fd = accept(ev.data.fd, NULL, NULL);
 > -- 
 > 2.43.0
 > 
 
-This one and patch 2 are fixing the same issue in the same test. Why bother
-with two patches?
-
-Thanks
-Hangbin
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
