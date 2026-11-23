@@ -1,45 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795394423;
-	b=ESMgCN9ZZgoS4z/OCBgyB3HS9Dkn7roBbXCGgoe35Ibe/HG6SZuPVQGQcYN+HLWXOWnE
-	 BlN2W1ci7YBloCUWrCri8VV/P4lOrVx6MzF5C3/5EfV1VD6rrRRgqgwLvxzQAAwweQO0t
-	 q6XK9/AJrTD0FmL22vCSnv9ppblFPPYLQkP0IUuOkg1DlJuQ7wy0rKARDKluK8uygEFAj
-	 O/jqyJQo2jtXL+Gt7ZFswjgaFYFQ4psrUMrvUYDuICjV2cgRBegfDL25fMFzVAZykVUv/
-	 oj+ugR6cUM/To8iCfZzTqaSaVsRjlnOZhsmA3HCh4U0J+1tRgJpk+NLP7gHZvEnABag==
+	t=1795394761;
+	b=xxV0xAZ5ywzMxoQvI6PL9Z2N4gkI4Vw31WWM0bUaQI/DTjryRIueKBhTxZEf/S6INOeh
+	 7Iqsp5TOTALS8ZP1v30sQoCG8mxZDpujufXST6tVuiQrjLf+yQbt7yHqrVu02el1RBZGw
+	 hWf/hEcIweyUvCeoxmCJUb2Rsq1zIxOSGZCpR7IK3ceRIOza/d2pqgTeDrNgynbV0gKT/
+	 63/HV8t12g9cDlQjBQWpzUXJtXWgSEzy3oA7e+xKZgnLiKtuCXXCtnH0EklQqaUrFxc+o
+	 e6QZr7RzFXYce7nAXB1S97ZtaGiWAs/eZvY5hLdfIrDdCa4zZUpFKSVBrniekdQAnuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795394423;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=vvX7FxyAeqZ8LNbdDutoA2XUQbgC5esuzUM1lgllSu8=;
-	b=YE3q5Ur8dEZQAySLUOJAL7cF4qRjQCHPo7aZ4GN5OzZKWfqFJEAuXmuK/8+es0R33drn
-	 d1+OvY8aAVA89uZHBkRGt56937QL5QSUgyH1FtZjAGkCTkHizfLtvugVBdz1R2AtsEztE
-	 Qe+slYZuR4bCpxJeJ51mrYqFU+Pe5Z0lP4jfAfTEBs1XNZMdZmSXS/61PktMo+cZbKWuG
-	 3AdTu4Dy5nuJa+YGc6ySxKTOH3i8NO4Ilz82hay4rUGHNnn29p8sUnbPP496L37tWzetA
-	 qkLsbWxPPRlYlsNx9ZMGtj2klur/qGU/xrXdapNYzMjtiYoPmfmTU8sKuu9w+kO8GTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795394761;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=TlGQ+s1w0re2RtxBjjhAHjiKtshlusVceD/sHg+v24E=;
+	b=uHAZ8SeFqXvI7lRRCq2z6HY4BEQ7qLlg2oFh/uEcQ89glVthQ0Paww49WYyEj1N+Ploq
+	 9aBVHxw/c158orSrwVKuBDrtNR2wasmDtagJp2g4WhoHPzRHGo5fZZQGq0gT4hJM6qKBw
+	 tlljBkpWnf1WjcEzU4SyN+GeA7zmOJpT1oBJsvSs/a45oCBX0MyhGpsfzVtjQA8mzq/Gs
+	 Ip8EiZDr1JIeR46H9pltTmnj83QGnyyBb4F+QN6mDvwAk5j/Q1/+KxQ56Ijfr/MLaeO8N
+	 J7C6lpf7JdeDeUZ8sz0KjanxbXqKbpbKeujH6K9XbNLgvICKxOSeFGa4Xu5J6wM0K0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXEHzbfF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xjQNwyU6;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405D5606A69A;
-	Mon, 23 Nov 2026 00:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3C5606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 00:46:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E3C5606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXEHzbfF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67FBE1F000CF;
-	Mon, 23 Nov 2026 00:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795394422;
-	bh=vvX7FxyAeqZ8LNbdDutoA2XUQbgC5esuzUM1lgllSu8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JXEHzbfF8FivyAPYlaHLt/sjbu+sMiIjeW4J+JAcZF6DHPGHnSyZEpAWSwINg/QtG
-	 qMvwlT/dWevDFNZE3EmB0+EkujzNQv14fIUwxBlg1u97hvPQJwRQnnmknUtnGSLqKp
-	 +w5Um1rJbFy/7SBBmUFzG6PI0EN+0XZSOaBoPzsvzRgHkXsEq4GgASFguFoLMWjWp8
-	 pki1qgTUTfJ2n1dkykh8Sx93oxX6Z8qzQ4/xFm3kvMlIB6UOQ+FNx+6SDa9dAoC1g2
-	 a4qmqFwXmDraqu/60o0Pgvn+4KIPfMe0B0GUm210pl1FgrO0ZXdh5vy5fgaMO4wlqy
-	 O+/vKLTVv+O+A==
-Content-Type: multipart/mixed; boundary="===============5817084910596839964=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xjQNwyU6
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f05bc71e01so9117675ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2026 16:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795394761; x=1795999561; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TlGQ+s1w0re2RtxBjjhAHjiKtshlusVceD/sHg+v24E=;
+        b=xjQNwyU6MYR+Sv9DqBxkCsB1ojg0HIKyMipAx4s6KRT5IYdJvl+GnVSxTRanDwlO4b
+         OjsHRhZlksxkgGyYo9uQR4xnsH9smwEzvZB0U0xWIc7WLxA20JEVyHvBNfOB3Q6RKyJl
+         W3Omp6JWwiCVAkQ9a9ECTstSvDMsiW2opPGebxfCTT5SlPd+dIB1fYQxZJhDwkFAzhym
+         zUVWh9jYqyhJ1lPaR/5BHmGuhw1iLZ2Ep7uY5F2lH9rP296aefHI8qNbvrd9S8rKbf0P
+         oiX4dY0ljie0g+etEjHvsK3G0VGKqx3XN4ZOcK3unI0mprBibWrDrY0Vx0uR0JHB3rXt
+         eoGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795394761; x=1795999561;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TlGQ+s1w0re2RtxBjjhAHjiKtshlusVceD/sHg+v24E=;
+        b=qOG3e0RhIGg41r99S3B5r03Wqj7bK9NhKOtRvQgeTVKA7wyU17q1nXXNMrL+XzSX9a
+         107o9NsrhiBnnUP71GCfN1Ri2nHur3TF95u1a+nOCjZUxsl16FJv8NDDRelh9+73hjU6
+         MCK7NKuXNN4nd6b7JcJehCP1I0VXXxjyl19GgpRgoUb+ScXZngVX9gSpZzqo+rj/GL1a
+         8Lh69xI5jEScWtHxa/prejz5PESUNV964Bx/uV4YBvMPmQQVc4I7wGSoGqNhW3/psfad
+         rtNmfkNpUrqpQ/vsQQ+rtbvDd12eoRyMlwQCzA4gINBAYcekb56X9IYinmhuqetq0j4K
+         PDlw==
+X-Forwarded-Encrypted: i=1; AL+hErEsPoVcwb3aMRN/kl0apGQCVwGhO71CVsVe9bH9vB6FKJHMKHar5CcT1yJSPBIZKk+1rP6HpHLXR3eq3bnqYuk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9JRmaOVSJ8KjlTKpdAzP92jFxu5p0k1S8DmbNfX7N1EyMb8R7Z
+	P2IwHOk9YNIu4IwZr+Qf6X0HPkULwR0kjUPEj72vbEPj9HZ7JmieKyZ6
+X-Gm-Gg: AZFdTZesv1sCJIpf1OEbE03v2gSWFzuwcvf+Dr7KSQknzGBDdHIsTxy0hJ4jy+O+o7f
+	LekYCUypa01aDtwxthwc5O4HYwEVV1Gs7GEk8UbqEXfXx1pK3cBDd1umxAZvkzCog5p5iro5/Zv
+	OZgT0e0tVExrCiPkzPrSGSEyHO/9cvqeEzNMc60U3cuuTRFz+OmJhWoJx1WxBCWDN5MLE/1ytC6
+	BdjluCec2zWmZzdC/HQ66CWSkETF54DDCnvWuHVXckFRkZ11dW2JE2InsCYuYMAc7n5XXQ2NN/T
+	m8460Q/KhmncFl4qHeyGbgvL/v0uyH/LeMjyIWtzFSP8DtU0/zV76JhAHiHYhVCako3Sm08/sz7
+	Ww9ZzRwNVtKbr02K9Omq+kbNidX6JpNqJG+WIz6qqg8b7t+zIXg27tsOfcKW5Obw/vYZT1o+hkU
+	99HNDjWVE0gJk0YHsfnSO3j3k5sQwgMxV2fxLJIAP6Zfd73yfo7lbzThDNvZDD539u5uwQyqebE
+	FP772FtRzAw2Z9ldR4lYL/gNZ+T4JlQy7mMBu1Jqs+ycFKxdxDloryqZt00JsjnBud/zmwyb6KH
+	Xo/9823kxzQgRR3nmgXxJ0YOIKO+M5zNU1CekjrGXefSKl4YLzPddFzw5P1H6cbYcGeDQzfrqAT
+	2hSHr0UyHlhMLKNBt9KwaMKVTBkCzKL6GaiU=
+X-Received: by 2002:a17:90b:1802:b0:3b1:64d3:f308 with SMTP id 98e67ed59e1d1-3b41c955a0bmr8991155a91.43.1795394760621;
+        Sun, 22 Nov 2026 16:46:00 -0800 (PST)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad48786sm15174661a91.9.2026.11.22.16.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Nov 2026 16:46:00 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 23 Nov 2026 00:45:59 +0000
+Message-Id: <DN26BQ6CGT3J.2WZ83RCCF7HDD@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+Cc: "John Fastabend" <john.fastabend@gmail.com>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Kuniyuki
+ Iwashima" <kuniyu@google.com>, "Willem de Bruijn" <willemb@google.com>,
+ "Neal Cardwell" <ncardwell@google.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Sechang Lim" <rhkrqnwk98@gmail.com>, "Mattia Meleleo"
+ <mattia.meleleo@coralogix.com>, "Michal Luczaj" <mhal@rbox.co>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf 00/11] fix misc sockmap issues
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,139 +114,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7e1d3d4067c817a0ae6137044406af1138613ce289199ca065c65fc6d611f990@mail.kernel.org>
-In-Reply-To: <20261122235757.3456048-4-irogers@google.com>
-References: <20261122235757.3456048-4-irogers@google.com>
-Subject: Re: [RFC PATCH v1 03/11] scripts, unwind: Add build-time .eh_frame minifier
-From: bot+bpf-ci@kernel.org
-To: irogers@google.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arch@vger.kernel.org
-Cc: jpoimboe@kernel.org,rostedt@goodmis.org,peterz@infradead.org,mingo@redhat.com,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,linux-arm-kernel@lists.infradead.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,linux-riscv@lists.infradead.org,acme@kernel.org,namhyung@kernel.org,linux-perf-users@vger.kernel.org,mhiramat@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,ardb@kernel.org,linux-efi@vger.kernel.org,maz@kernel.org,oupton@kernel.org,kvmarm@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,indu.bhagat@oracle.com,jremus@linux.ibm.com,wnliu@google.com,dylanbhatch@google.com,irogers@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mas
- on@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 23 Nov 2026 00:40:18 +0000 (UTC)
 
---===============5817084910596839964==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat, Nov 21, 2026 at 02:30 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+> This series fixes misc issues in sockmap. Most of them are old.
 
-> scripts, unwind: Add build-time .eh_frame minifier
+Jiayuan,
+thanks for the follow up,
+but the fixes are way too heavy. bots are correct.
+The patches introduce more bugs than the fix.
+Pls ask your bot to think of absolultely minimal fixes that do not
+introduce new states.
 
-TL;DR:
-- On big-endian build hosts, min_eh_frame may silently skip minifying every
-  object, so the size reduction is lost
-- Kconfig depends on UNWINDER_DWARF_CFI, which is defined only later in the
-  series
-- min_eh_frame is missing from scripts/.gitignore
-
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -528,6 +528,16 @@ config HAVE_UNWIND_USER_CFI
->  	select UNWIND_USER
->  	select UNWIND_DWARF_CFI
->
-> +config UNWINDER_DWARF_CFI_MINIFY
-> +	bool "Minify .eh_frame tables at build time"
-> +	depends on UNWINDER_DWARF_CFI
-
-A subsystem pattern flags this as potentially concerning: a depends on
-naming a symbol that no Kconfig file defines.
-
-UNWINDER_DWARF_CFI is not defined anywhere at this commit, so this option
-evaluates to n on every architecture.  That leaves the hostprogs-always
-entry in scripts/Makefile, the cmd_min_eh_frame hooks in Makefile.lib,
-Makefile.build, Makefile.vmlinux_o and rust/Makefile, and
-scripts/min_eh_frame.c itself unreachable here, so the results quoted in
-the commit message cannot be reproduced from this commit.
-
-The symbol is defined later in the series, in 6cf5792e969e ("x86/unwind:
-Add Minimal DWARF CFI kernel unwinder"), efdfa5f38673 ("arm64/unwind: Add
-Minimal DWARF CFI kernel unwinder") and 90a680847a32 ("riscv/unwind: Add
-Minimal DWARF CFI kernel unwinder"), so this looks like a forward
-reference rather than a misspelling, and bisection is not broken.
-
-Would it make sense to reorder the series so the unwinder Kconfig symbol
-comes before its consumers?
-
-> +	default y
-> +	help
-> +	  Strip unneeded callee-saved register opcodes and coalesce PC-advance
-> +	  bytecodes in .eh_frame sections at build time, reducing kernel unwind
-> +	  table memory usage while ensuring only Minimal DWARF CFA bytecodes
-> +	  remain in vmlinux and modules.
-
-[ ... ]
-
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -12,6 +12,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
->  hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_builder
->  hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_gen
->  hostprogs-always-$(CONFIG_TRACEPOINTS)			+= tracepoint-update
-> +hostprogs-always-$(CONFIG_UNWINDER_DWARF_CFI_MINIFY)	+= min_eh_frame
-
-Should /min_eh_frame be added to scripts/.gitignore?
-
-Every other host program built here has an entry there (/kallsyms,
-/sorttable, /tracepoint-update, /insert-sys-cert, and so on), and
-git check-ignore -v scripts/min_eh_frame matches no rule.  After an in-tree
-build with the option enabled, the binary shows up as untracked and could be
-picked up by git add -A.  No later commit in the series adds the entry.
-
-[ ... ]
-
-> diff --git a/scripts/min_eh_frame.c b/scripts/min_eh_frame.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/scripts/min_eh_frame.c
-
-[ ... ]
-
-> +int main(int argc, char **argv)
-> +{
-
-[ ... ]
-
-> +		if (memcmp(map, ELFMAG, SELFMAG) == 0 &&
-> +		    map[EI_DATA] == ELFDATA2LSB &&
-> +		    map[EI_CLASS] == ELFCLASS64)
-> +			rc = process_elf64(map, (size_t)st.st_size);
-
-main() checks that the target object is little-endian, but not the byte
-order of the host the tool runs on.  process_elf64() then reads and writes
-the ELF header, section header, symbol and Elf64_Rela fields as native
-structs, and only the .eh_frame payload goes through get_le32()/put_le32().
-
-On a big-endian build host cross-compiling an x86_64, arm64 or riscv64
-kernel, the first check in process_elf64() sees the bytes 01 00 of e_type
-as 0x0100:
-
-    if (ehdr->e_type != ET_REL)
-        return 0;
-
-Won't every object then be silently left unminified while the build still
-succeeds?  CONFIG_UNWINDER_DWARF_CFI_MINIFY is default y and its help text
-says only Minimal DWARF CFA bytecodes remain in vmlinux and modules, but on
-such a host nothing is stripped, coalesced or dropped, and nothing reports
-it.
-
-Other ELF host tools in scripts/ handle this: scripts/elf-parse.c picks
-rle/rbe accessors from EI_DATA, and scripts/mod/modpost.c applies
-TO_NATIVE() to the ELF header fields.
-
-The resulting kernel should still work, since kernel/unwind/dwarf_cfi.c
-parses unminified CIEs and FDEs, but the documented size reduction would
-not apply.
-
-Could this either fail the build with a message when the host is not
-little-endian, or read the ELF header, section, symbol and rela fields
-through le16/le32/le64 accessors as elf-parse.c does?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45087188604
---===============5817084910596839964==--
+pw-bot: cr
