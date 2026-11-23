@@ -1,63 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795417403;
-	b=q2oWbCkCaR6TQwLwnS3XwQ8xsXNdwCzgD6hjbBjcWdVmLXuvDs6zcoCCYPjB4mUL0usr
-	 qdp5uahD+0WvCPiGIbAVXXNVoOwrjyT+m5EgfQh3EG5NpAswzOBZxNftRsjLtlFB0SS7W
-	 EN9fFjvl8TZFn9GqaJULnZ4zSsyFEC1yIbEkV9Rb/tgXquhMkEpDVsAgOMsBjlenp5ZeM
-	 G+YY/Y0tibjGN6rAvzRfrP44ROKoxXX7GXOmmNBZQFkoYzHxO0aKx9LqAuzu/STjWuRII
-	 /DApQebyrYyaJQunLaQ3ywKw8/dLy3fgUy3rQY/NCHdeanXo2bBUsX8iNWs3meh4XMg==
+	t=1795418884;
+	b=teeR6JI5Sil9VG6k/XjBBnssaBvq/j4P9Kz3ixTBKj5sEaKkoMhe2uLXT1pKGNbrhmuu
+	 oafPGb0oXgbTBOm6zelb4Aq9+GA5PTuDA8hKW8rmfw/8dIjMuwwyvl2By6TaMv8rUu8p5
+	 1OwEKXgESNlunI34d7dP0m2ZkkpxYdYfGF6jCo5NBmMUxjHJ5aGXNF83r8zdDgeLPwCwZ
+	 zdGocxWm+SgVFMa+fdxgsDMdLxJtw7GyqKLfnPw6en4dx7QGyE6XoMv1az5efJGWxJ4Lb
+	 KoKn7bybdeHPXx78QvMuh8EUbuNe7+cRC86F61HOv7mgK+LRQRtmCp7GksetPraQUdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795417403;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=66EgM4zK7IG8zCwjPTbi5vNEz/2nI2TGX5jJdEmsI1w=;
-	b=3f5TkPYFlv98HwsK6RC6LPnq0uhUSXqZVYXTGH17ufwO0Y/Iu99d6jcvS0QHZQEjcDx0
-	 aeQuLbLcQBoLcO/HqqBrBceKrtrUf2tbZol98WaevZ+hc/wyURviL/HalBbkDVhhoLZU5
-	 NH1A+N9T5fUgP5JkUgitaLxk1sqbYu8BYoyY02rUEPu0EIHN2BJt9GI5zhw7kJiev88YU
-	 yR+j6x8F7CRiKPSAzBW+X0fimudut8FjiRedqUPRtxZtzo+Esd+OrDigCtcKWsuVLnSCV
-	 XK4QMh65f94zRrQ4Q6H3E6Hm6L1gf+w0gxyStIdpoALe9oUdCc+fMw9tq3sOJ1MWbGw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795418884;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=JR6Iu4izND+o7EkZgh6TIoF3sPp+Q9MpVOR8wNz04Uk=;
+	b=LA+bylAdwUG4JxpfxtaBgS5bxc4xn+ZOxBglq6V2j45kEdlYSNUOoKbiS9rB3Bj2aXmj
+	 yq0290MQUKSLxO/5tVY5fq93R6c9BqOlaDO7UwIhUFSlufdZU+7ifFv9tDlZOsAC+qmCF
+	 YFYLKLhKqgASKOJQCqUH/85aKNPGTfdhHWZJYF7yCLzezuGq1tpe4cv9M9HVb0s0PUAud
+	 gSWCUQ/ugwPl2N6TjRm5BWH3Y6ypTRoLKI7eQ7hcvoKkIXimbAKbst+ikxGc1ng59TIVG
+	 x7MUNapW9Y6dirw4td196zkT/prGc/YwJkYwvzDu2vTKCZC77miYoKyMTxmdz8+1teg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="L/sdxyYw";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=foSVDFke;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5AA606A31A;
-	Mon, 23 Nov 2026 07:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050A4606A31A;
+	Mon, 23 Nov 2026 07:28:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L/sdxyYw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D6F1F000C6;
-	Mon, 23 Nov 2026 07:03:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=foSVDFke
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992C51F000C4;
+	Mon, 23 Nov 2026 07:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795417403;
-	bh=66EgM4zK7IG8zCwjPTbi5vNEz/2nI2TGX5jJdEmsI1w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=L/sdxyYwswL8f2rMWAqr3ihbnMkAIAtcHSXZRSy1l2QDyg2A5hK52dS56/KD4UCo7
-	 1ScMdhRxOaGteIvmGFmYqewqT2eyLZrYpFuwojA56X3B23UiCtYFXm8vId9JR350MW
-	 9U4SPAhiFXoTw+42YLk72O8/c6kIaTa1XF6dNdym/wWvhVdQ1zCsOhNgtJQ6ufyDVE
-	 m+fALj0z0zXsa3XoifoTRsQjrMkTs7CpOnqPalJtmgSlX4AAC+65LdUeDTpOz/we0s
-	 y4UHq0Vu3UKF4UdufTGdwVKu8ZGlpr0fM64QnMSUs3yPdgkW/YiLNcq+bVI9sj1qu5
-	 vBNGDLVQc1tsA==
-Date: Sun, 22 Nov 2026 23:03:21 -0800
-From: Drew Fustini <fustini@kernel.org>
-To: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-Cc: joro@8bytes.org, palmer@dabbelt.com, tony.luck@intel.com,
-	reinette.chatre@intel.com, tomasz.jeznach@linux.dev, jgg@ziepe.ca,
-	james.morse@arm.com, ben.horgan@arm.com, xiaqinxin@huawei.com,
-	will@kernel.org, robin.murphy@arm.com, pjw@kernel.org,
-	aou@eecs.berkeley.edu, alex@ghiti.fr, Dave.Martin@arm.com,
-	babu.moger@amd.com, kevin.tian@intel.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, shuah@kernel.org,
-	randy.dunlap@infradead.org, cuiyunhui@bytedance.com,
-	yuanzhu@bytedance.com, iommu@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [RFC PATCH v2 0/4] resctrl: Assign registered devices to
- resource groups
-Message-ID: <awPlOY9vr8Mqq2vJ@thelio>
-References: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
+	s=k20260515; t=1795418883;
+	bh=JR6Iu4izND+o7EkZgh6TIoF3sPp+Q9MpVOR8wNz04Uk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=foSVDFkecBOEdYbs2RnoyFmZTnjyVcZsZQCq+mwgFP5ttgsQ6WOFEzDU9RR8clAa7
+	 7ftxPNYYCag35HYYoYtL+MUnqYZk0jHBauhdLQNhJogxVM1yMvng32rpQdvz+0sOpJ
+	 apWWJV5V/VM/aWpSSMahVTKmIQh4AxfHwmyUgWBERAtR8cCCcPDeVJK535S0Z5in8q
+	 I+eY+c1kM0o3igqnb9Qcs3rPcA7hQ2hZ97f/lUzdNtLPqlvawi3ahGgZ4FJU9ZTJtt
+	 PkYoj3QNEXi1Ffka1Agbo+kJWl++asitPHNa0PUO+w9kd+6CbMnt1oan+UToaT3ndK
+	 Q5y/TA1rEWu5g==
+Subject:
+ Re: [PATCH net 1/2] bridge: mcast: Fix source list rollback on failure
+From: netdev-bot+sashiko@kernel.org
+To: idosch@nvidia.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ pabeni@redhat.com, edumazet@kernel.org, willemb@google.com, horms@kernel.org,
+ razor@blackwall.org, dsahern@kernel.org, shuah@kernel.org,
+ bridge@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ kyuwoncho18@gmail.com
+Date: Mon, 23 Nov 2026 07:28:02 +0000
+Message-ID: <179541888207.3135.7176816464038643772@kernel.org>
+In-Reply-To: <20261122072504.2623702-1-idosch@nvidia.com>
+References: <20261122072504.2623702-1-idosch@nvidia.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,31 +65,163 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261116071338.35991-6-zhangzhanpeng.jasper@bytedance.com>
 
-On Mon, Nov 16, 2026 at 03:13:39PM +0800, Zhanpeng Zhang wrote:
-> This RFC lets resctrl groups include devices as well as CPU tasks. It
-> uses the RISC-V IOMMU QoS ID extension as the first provider and builds
-> on Drew Fustini's CBQRI resctrl v12 series [1] on Linux v7.4-rc1.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-It does not seem like riscv-iommu in qemu models qosid. Are you testing
-this on a hardware implementation?
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
-> Feedback would be particularly helpful on:
-> 
->   * The provider registration and lifetime contract, including how to
->     represent devices that share a tagging context.
->   * The bus/name token versus using an existing sysfs identity.
->   * The scope of protection after a command queue failure. If an update
->     leaves the hardware state uncertain, the current code prevents ID
->     reuse by blocking group removal and future mounts, including for
->     groups unrelated to the failed update. Would reserving only the
->     affected old and target IDs be sufficient?
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-It seems like blocking future mounts would be too much since resctrl
-should still be able to handle cpu tasks.
+- [High] This patch makes a failed `NLM_F_REPLACE` keep the (*, G) source
+  entries that existed before the request, but it keeps them in the…
 
-Thanks,
-Drew
+--
+
+bridge: mcast: Fix source list rollback on failure
+
+This commit changes the rollback in br_mdb_add_group_srcs(). On failure, it
+now deletes only the source entries that the current add or replace
+operation created, marked with a new BR_SGRP_F_NEW flag. Source entries
+that existed before an NLM_F_REPLACE request are kept, which also avoids a
+WARN_ON_ONCE() when a source appears more than once in the list.
+
+Closes: https://lore.kernel.org/netdev/179489219555.3099318.10297266282803881244@gmail.com/
+
+> diff --git a/net/bridge/br_mdb.c b/net/bridge/br_mdb.c
+> index 0adcd1524ab24..be65976c2f32f 100644
+> --- a/net/bridge/br_mdb.c
+> +++ b/net/bridge/br_mdb.c
+
+[ ... ]
+
+> @@ -883,31 +884,24 @@ static int br_mdb_add_group_src(const struct br_mdb_config *cfg,
+>  	if (err)
+>  		goto err_del_sg;
+>  
+> -	ent->flags = BR_SGRP_F_INSTALLED | BR_SGRP_F_USER_ADDED;
+> +	ent->flags = BR_SGRP_F_INSTALLED | BR_SGRP_F_USER_ADDED |
+> +		     (ent->flags & BR_SGRP_F_NEW);
+>  
+>  	return 0;
+>  
+>  err_del_sg:
+> -	__br_multicast_del_group_src(ent);
+> +	if (ent->flags & BR_SGRP_F_NEW)
+> +		__br_multicast_del_group_src(ent);
+>  	return err;
+>  }
+
+[ ... ]
+
+> @@ -917,11 +911,16 @@ static int br_mdb_add_group_srcs(const struct br_mdb_config *cfg,
+>  			goto err_del_group_srcs;
+>  	}
+>  
+> +	hlist_for_each_entry(ent, &pg->src_list, node)
+> +		ent->flags &= ~BR_SGRP_F_NEW;
+> +
+>  	return 0;
+>  
+>  err_del_group_srcs:
+> -	for (i--; i >= 0; i--)
+> -		br_mdb_del_group_src(pg, &cfg->src_entries[i]);
+> +	hlist_for_each_entry_safe(ent, tmp, &pg->src_list, node) {
+> +		if (ent->flags & BR_SGRP_F_NEW)
+> +			br_multicast_del_group_src(ent, false);
+> +	}
+
+[Severity: High]
+With NLM_F_REPLACE, the pre-existing sources that are now kept on failure
+were already changed by br_mdb_add_group_src() earlier in the loop. Is that
+state ever restored?
+
+For each pre-existing source in the new list, br_mdb_add_group_src() first
+changes the source timer:
+
+	if (cfg->filter_mode == MCAST_INCLUDE &&
+	    cfg->entry->state == MDB_TEMPORARY)
+		mod_timer(&ent->timer, now + br_multicast_gmi(brmctx));
+	else
+		timer_delete(&ent->timer);
+
+Then this call chain rewrites the existing (S, G) port group and notifies
+user space:
+
+br_mdb_add_group_src_fwd()
+  br_mdb_add_group_sg()
+    br_mdb_replace_group_sg()
+
+	pg->flags = flags;
+	pg->rt_protocol = cfg->rt_protocol;
+	...
+	br_mdb_notify(cfg->br->dev, mp, pg, RTM_NEWMDB);
+
+Finally, the ent->flags assignment above overwrites the source flags and
+drops bits such as BR_SGRP_F_SEND.
+
+If a later source fails, this loop deletes only the BR_SGRP_F_NEW entries.
+br_mdb_replace_group_star_g() then returns before it updates the parent:
+
+	err = br_mdb_replace_group_srcs(cfg, pg, brmctx, extack);
+	if (err)
+		return err;
+
+	pg->flags = flags;
+	pg->filter_mode = cfg->filter_mode;
+	...
+
+So the (*, G) keeps its old configuration, but the kept sources and their
+(S, G) entries carry the new one. User space has also already received
+RTM_NEWMDB for the (S, G) changes.
+
+This failure is easy to trigger. A source of 0.0.0.0 or :: passes
+is_valid_mdb_source(), but br_multicast_new_group_src() rejects it, so the
+request fails with -ENOSPC. The selftest in the next patch ("selftests:
+bridge_mdb: Test failed source list replace") uses this trigger. It only
+checks that the (S, G) entries still exist, not their flags or timers.
+
+Some states this can leave behind:
+
+(a) A permanent INCLUDE (*, G) {S1} is replaced with a temporary INCLUDE
+source list S1,0.0.0.0. S1's timer is now armed on a permanent pg, and
+(S1, G) has lost MDB_PG_FLAGS_PERMANENT. After GMI,
+br_multicast_group_src_expired() sees INCLUDE mode and does this:
+
+	if (pg->filter_mode == MCAST_INCLUDE) {
+		br_multicast_del_group_src(src, false);
+		if (!hlist_empty(&pg->src_list))
+			goto out;
+		br_multicast_find_del_pg(br, pg);
+
+That deletes S1 and its (S1, G) entry, and then the permanent (*, G) entry.
+
+(b) A temporary INCLUDE (*, G) {S1} is replaced with a permanent
+S1,0.0.0.0. S1's timer is deleted, and the pg timer is only armed in
+EXCLUDE mode, so the temporary entry never ages out.
+
+(c) An EXCLUDE (*, G) {S1} is replaced with INCLUDE S1,0.0.0.0. (S1, G)
+loses MDB_PG_FLAGS_BLOCKED while (*, G) is still EXCLUDE with S1 listed.
+Traffic from S1 is then forwarded to a port that should exclude it.
+
+The commit message says this patch fixes the case where:
+
+    sources from the new source list that already existed before the replace
+    are deleted together with their (S, G) entries instead of being kept.
+
+In case (a), aren't those sources and their (S, G) entries still deleted,
+only one GMI later, together with the permanent (*, G) entry?
+
+Could the replace path validate or allocate everything before it touches
+existing entries? Alternatively, it could save the per-source and (S, G)
+state and restore it on failure.
+
+>  	return err;
+>  }
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261122072504.2623702-1-idosch%40nvidia.com
