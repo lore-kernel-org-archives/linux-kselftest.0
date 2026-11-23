@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795469671;
-	b=yf31Ps2K52iaajtA1pv8X8uaBULuh0Ye0gEju6tkEkqoAhqxilG3DR+LAUZNhEQCvpK/
-	 1YrC0Hlk5YhdVXvdB5Nspbp0quc2uxK28foCLR7Q3t37GavAF/dgUvE/g+PU7nMvPxJ+F
-	 J4WsUuuWmvEI3efmohT9mOYvL8I/Qx95DXqwhU6oAMQTNMHB9AryGf60wB5Jl04w4QNxk
-	 36SjM0S5u1p6LF2xJkZhr5Be47lKfDns7iuvy3L5g5EOb68hkDIQEcJJpAN/nHTobiJn5
-	 nCLxsk3iToh7+GjZ6bWudtJ44E1upCTykl/Kw3wtthVgZZCoHP68KEydbz60kqEkx3Q==
+	t=1795469675;
+	b=RvTPa54PQmW6+1zweR0/AFRZygaZEqSXsjEhC505eVvWpppd6HTiwvfekdCJEwrun8rS
+	 9WFUM+1h3AzvQtuFh4AmWIIMzWlRUckgfHE/9+XY9pVQoahfhy87Wjn2lFnG4agfkZrCz
+	 DLCvb4/tdBxIFR1cd9/53rwrz+/g7sw+LPvTkKpPvhrxLAyiAFV5rZ9SrnM14yDqm1NgA
+	 lixgUtirIUOUhJNjZV9ifKxjlaX6Eh3WpSHx2XECudHHXB0t06ATd4kueSSmtFvQFHOuD
+	 hN3zymFPEezEbFKkqn94cuJTuiQVZEHR6L0cFF0+q4uPOpv/QT5+IWL+QS/I0xxKEGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795469671;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795469675;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=TgTDGjA1vu3ITyK8LqQZ+WlN+jZzmZ3C1YMQuZCn/d0=;
-	b=TGJfKTlqci0gOreibBKVsZOWZsfQ3l0kW7jGjiIB8dCSzSdnDyr3g6J9M3/k03K8wfqg
-	 QsdanZyQAGGAdMFEbqghThxID0LtNlR8UNuM1tHZBMpHE+Kj3ZFem96bAXOfJe4nLgjKc
-	 GTUBGTMK0NK/+eXM6K0sFP0oJj5UgRiIy65NEj9tJ/5SWJ/YUe661D/nCe2tfU1uVJ1ww
-	 KDj0dcYfEaHH5B4T1306E3kbKfTDMLMTgwqQPsErl77VwGz6v2Ug/0OrH0C3nHcYbh4N7
-	 cpPkONBSRJjW+huT9HEC0tPhIpkW9PiCs534tlv+EkVUWgdSahhF8Zoi2FZa9zOcu4w==
+	bh=9/No1l1Kc63z3bylzGTqguL7lglbI2czanvjCA3a2mY=;
+	b=iKfkvpmzEqybNxjQWVRuS60dQl5BOHunmyvI1WoLdtwFnlnFiIA2JdOdu+vPYXwccfft
+	 zRbNx6osJ4a3B3UlctkEJ75HHTzDGA2JBE6XkIwXmmFea0CSu0tHwZIFWltcRbTyM9+hQ
+	 6xHlFXFZ05e0CSrv7WXK9Yv+f5UHGvjx4B01NyBssPWTu2Zf8fm1J2IfxsbpI1zk4UT5t
+	 vvHy+FeMHuvjNhMJBrqYtfzwnSbOx1Ra3Yn/ChYCgzq7zUTknmTsgP7IgEgBT5tKsynFX
+	 yPibzMxDDv3Stoy8VxAjJqX92j6YoLj5Oa6zOBPrUgYPtQfK2sJVR+qPktdMdBXbfNQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcBcxhyR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkTUJ8k4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC67606A31E;
-	Mon, 23 Nov 2026 21:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C87606A327;
+	Mon, 23 Nov 2026 21:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IcBcxhyR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804EF1F000E6;
-	Mon, 23 Nov 2026 21:34:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkTUJ8k4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 993141F000E1;
+	Mon, 23 Nov 2026 21:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795469670;
-	bh=TgTDGjA1vu3ITyK8LqQZ+WlN+jZzmZ3C1YMQuZCn/d0=;
+	s=k20260515; t=1795469675;
+	bh=9/No1l1Kc63z3bylzGTqguL7lglbI2czanvjCA3a2mY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=IcBcxhyR4VbK4Mb/Hyod8Au7YBRbwMbtsbD5iGsFSC50bQRSr/3deRu5Z7l4yA/I5
-	 WzVabW9Ks5TjCKzGRUpYe4JtOA9eM7mPj+O1gHxH8Kua97TRWtdKf7sWumVNcN47lZ
-	 PoFkaUAE86qaOK7FMZWruwTuG+MjyeNc7qYfGEuy9JM2r+fSuIQqev3olX49mlvE6Y
-	 J3W5lymUhvbbJp1RCiEO4/0ofLxbvRHT3MvpaWQuAGvudlgtmHp5NufWMcCVBkYqOP
-	 7USw/YBJdr7UCJTT6bsnv0tL82fbO/XShF5ixB0P/IuM10k1LzOBzXY6hB69Tr0WPh
-	 u6LKXOzzJxE0w==
-Subject: Re: [PATCH net-next v3 07/11] selftests: forwarding: tc_flower: test
- the enc_key_id mask
+	b=dkTUJ8k4dnEXI3c187Ferhu/z9D7afOKibujKNvAH3gBnHsNU14B8dRif9zh2eIyz
+	 WiU6eKdKAG3KZ9j8CYeKUz9X9JpUiyqlUn6iAUjCyiNzqRUZLgiseyjVAYMp+ZJbA/
+	 Byz3QkVetyMQUQjJplfguXV1iLal9Pf7cLhk+Y7NQ46BQkrGLDEdcxZ5zq3zrtDcyt
+	 WgjdCfIRdXXkxABUXXnLESji/9h6K8K+WO7+NmyDHoGFAQfAMl6Rdk8D9dWhI36Ov9
+	 gblfc6EP1WO7xm2KTEgR4pmpFfcA08deaHa11Nd43K0U/1a+ddezgba54TZgLZz/gW
+	 HNVCI8EXznn9w==
+Subject: Re: [PATCH net-next v3 09/11] net/mlx5e: TC, reject tunnel keys
+ without a tunnel device
 From: netdev-bot+sashiko@kernel.org
 To: acassen@corp.free.fr
 Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
@@ -53,11 +53,11 @@ Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
  idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
-Date: Mon, 23 Nov 2026 21:34:28 +0000
-Message-ID: <179546966804.3135.7021273084185929997@kernel.org>
-In-Reply-To: <20261122213200.3207385-8-acassen@corp.free.fr>
-References: <20261122213200.3207385-8-acassen@corp.free.fr>
-X-sashiko-severity: Medium
+Date: Mon, 23 Nov 2026 21:34:33 +0000
+Message-ID: <179546967317.3135.11320901240553136005@kernel.org>
+In-Reply-To: <20261122213200.3207385-10-acassen@corp.free.fr>
+References: <20261122213200.3207385-10-acassen@corp.free.fr>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -70,140 +70,81 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] In match_enc_key_id_mask_test() (tc_flower.sh lines 295-305),
-  the capability probe adds a filter on $h2 with stderr discarded and…
-- [Low] In match_enc_key_id_mask_test()
-  (tools/testing/selftests/net/forwarding/tc_flower.sh, lines 290-293),…
+- [Low] The new rejection in __parse_cls_flower()
+  (drivers/net/ethernet/mellanox/mlx5/core/en_tc.c) returns the extack…
 
 --
 
-selftests: forwarding: tc_flower: test the enc_key_id mask
+net/mlx5e: TC, reject tunnel keys without a tunnel device
 
-This adds match_enc_key_id_mask_test() to tc_flower.sh. The test sends
-frames over two gretap devices with keys 300 and 600. It checks that a
-flower filter with enc_key_id 256/0xf00 on an external gretap device
-matches only the key inside the mask, and that a probe filter on $h2
-decides whether the test runs at all.
+This commit rejects flower rules that use enc_* dissector keys when
+filter_dev is not a tunnel device. It applies to both NIC and eswitch
+flows. Before this change those keys were silently dropped from the
+hardware match.
 
-> diff --git a/tools/testing/selftests/net/forwarding/tc_flower.sh b/tools/testing/selftests/net/forwarding/tc_flower.sh
-> index b58909a931129..0f725ec174687 100755
-> --- a/tools/testing/selftests/net/forwarding/tc_flower.sh
-> +++ b/tools/testing/selftests/net/forwarding/tc_flower.sh
+Link: https://github.com/acassen/research/tree/main/UPF-flow-steering [1]
 
-[ ... ]
-
-> @@ -280,6 +281,64 @@ match_vlan_test()
->  	log_test "VLAN match ($tcflags)"
->  }
->  
-> +match_enc_key_id_mask_test()
-> +{
-> +	local ret
-> +
-> +	RET=0
-> +
-> +	# A tunnel device has no offload to take a skip_sw filter
-> +	if [[ $tcflags == "skip_sw" ]]; then
-> +		return 0
-> +	fi
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+> index 2326fb21da66b..eab4d5417ce24 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+> @@ -2786,6 +2786,17 @@ static int __parse_cls_flower(struct mlx5e_priv *priv,
+>  		err = mlx5e_tc_verify_tunnel_ecn(priv, f, &match_inner_ecn);
+>  		if (err)
+>  			return err;
+> +	} else if (dissector->used_keys &
+> +		   (BIT_ULL(FLOW_DISSECTOR_KEY_ENC_KEYID) |
+> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IPV4_ADDRS) |
+> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IPV6_ADDRS) |
+> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_PORTS) |
+> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_CONTROL) |
+> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_IP) |
+> +		    BIT_ULL(FLOW_DISSECTOR_KEY_ENC_OPTS))) {
+> +		NL_SET_ERR_MSG_MOD(extack,
+> +				   "Tunnel keys are only supported on tunnel devices");
 
 [Severity: Low]
-Is this comment accurate as a general statement? The commit message makes
-the same claim:
+Is this extack message accurate for NIC mode flows?
 
-  "A tunnel device takes no skip_sw filter."
+In NIC mode the filter_dev passed down is always the mlx5e netdev itself:
 
-Several drivers offload flower rules on gretap devices through indirect
-blocks. In drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:
+mlx5e_setup_tc_cls_flower()
+    return mlx5e_configure_flower(priv->netdev, priv, cls_flower,
+                                  flags);
 
-mlx5e_get_tc_tun() {
-    ...
-	else if (netif_is_gretap(tunnel_dev) ||
-		 netif_is_ip6gretap(tunnel_dev))
-		return &gre_tunnel;
-    ...
-}
+The only indirect block registration in mlx5 is the
+flow_indr_dev_register() call in mlx5e_rep_tc_netdevice_event_register(),
+and only the uplink representor init path calls it. So tunnel filter_devs
+only exist in switchdev mode.
 
-mlx5e_rep_check_indr_block_supported() then accepts such devices via
-mlx5e_tc_tun_device_to_offload(). The nfp driver
-(nfp_fl_is_netdev_to_offload()) and ice also handle gretap devices.
+In NIC mode, a rule such as "tc filter add dev <mlx5 netdev> ingress
+flower skip_sw enc_dst_ip ..." takes this path:
 
-The limit seems to come from this test's topology: an external gt-ex
-device, no enc_src_ip/enc_dst_ip match, and frames generated in software.
-It doesn't seem to apply to tunnel devices in general.
+mlx5e_setup_tc_cls_flower()->mlx5e_configure_flower()->mlx5e_tc_add_flow()
+    ->mlx5e_add_nic_flow()->parse_cls_flower()->__parse_cls_flower()
 
-Could the comment and the commit message say that instead? This path also
-returns without log_test or log_test_skip, so nothing in the skip_sw pass
-shows that the hardware enc_key_id mask paths had no coverage.
+The rule is still rejected with -EOPNOTSUPP. However, the message tells
+the user to use a tunnel device, and a rule added on a vxlan or gretap
+device would never reach mlx5 in NIC mode.
 
-> +
-> +	# An old tc refuses the mask and an old kernel drops it
-> +	tc filter add dev $h2 ingress protocol ip pref 1 handle 101 flower \
-> +		$tcflags enc_key_id 256/0xf00 action drop 2> /dev/null
-> +	tc filter show dev $h2 ingress pref 1 | grep -q "enc_key_id 256/0xf00"
-> +	ret=$?
-> +	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower \
-> +		2> /dev/null
-> +	if [[ $ret -ne 0 ]]; then
-> +		echo "SKIP: tc or the kernel lacks the enc_key_id mask"
-> +		return 0
-> +	fi
+The follow-up patch "net/mlx5e: TC, match the tunnel key without a tunnel
+device" changes this string to "Tunnel keys other than enc_key_id require
+a tunnel device". Wouldn't that wording mislead NIC mode users in the
+same way for the remaining enc_* keys?
 
-[Severity: Medium]
-Can this probe hide a regression in the kernel's enc_key_id mask handling?
+Could the message say that these keys need switchdev mode and a tunnel
+device, or use a different message for NIC flows?
 
-The kernel side is already in this tree. TCA_FLOWER_KEY_ENC_KEY_ID_MASK is
-in the flower policy, and fl_set_key() parses it:
-
-net/sched/cls_flower.c:fl_set_key() {
-    ...
-	fl_set_key_val(tb, &key->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID,
-		       &mask->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID_MASK,
-		       sizeof(key->enc_key_id.keyid));
-    ...
-}
-
-fl_dump_key() dumps it through fl_dump_key_val().
-
-If either path breaks, the grep fails and the function returns 0 before
-log_test. RET and EXIT_STATUS stay unchanged, so the script still reports
-PASS instead of FAIL. The result of the filter add is also not checked, and
-its stderr is discarded.
-
-The commit message is right that log_test_skip would turn the whole
-script's exit status into a skip. But a silent return makes an in-tree
-kernel regression look the same as an old tc.
-
-By comparison, check_tc_erspan_support() in forwarding/lib.sh only checks
-whether tc accepts the syntax:
-
-	tc filter add dev $dev ingress pref 1 handle 1 flower \
-		erspan_opts 1:0:0:0 &> /dev/null
-
-It does not use the kernel's dump output to decide whether to skip.
-
-The probe also depends on the exact text "enc_key_id 256/0xf00". That
-output format comes from an iproute2 change that the commit message
-doesn't reference. Released tc prints enc_key_id as a bare value. If the
-final iproute2 output formats the key or the mask differently, wouldn't
-the main test never run anywhere, with no failure reported?
-
-Would it work better to probe only whether tc accepts the syntax? A mask
-missing from the dump, or a failed match, on the current kernel could then
-go through check_err and log_test.
-
-[ ... ]
+> +		return -EOPNOTSUPP;
+>  	}
+>  
+>  	err = mlx5e_flower_parse_meta(filter_dev, f);
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261122213200.3207385-1-acassen%40corp.free.fr
