@@ -1,61 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.162
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795447630;
-	b=Zl4qL7a04/8qtVJsdr5fO6xMsQnt1LuryNol9zp4QkbRLmMlIZeh1iGh7xY3EH+kW6a6
-	 TsCQvmZY+ptsHaAAepQ+LkGi1VSfBebJWR5gMW96VwSm+CoH4vGcvr7FV3Ah5MJIcg1u0
-	 +r47llJgcEP2+ROjpUrutihqkV67PfjLULvN4UaU+VBMGcgcVzsS2N6PNM5WOAvxabn8y
-	 KQuhe2D+UUh2nbsenZg8+uZrRadu0ktNVpDZQxw6oTY0fygH49qtKOjwS//9DqJVzjZ08
-	 0g29nDGjulzahhyJ9AKgti1zfmNiSdT9XmMcrasZ1hI6rqHOic62bbT6mXrcl8r7Rng==
+	t=1795447680;
+	b=0D9etC673BjlmSO4Je5hV5PlR3O8izEOssrUNB2WzuCzuom+89MZ+jlEFq2PTNy/kmBI
+	 RGB5RKoeJxYy6lfD+UGQGYnZx14vYsc27YJnuEJzAGn/it1ET1ZSMzpVWq4EaAc+p7i/l
+	 TW01Lb7Ioziapr2fJrzw/KKX/nRZgrWs4Cs40bUe2CM19G5F5AGfZyHYmZv1HjTBeLkeD
+	 ibW5siKUNE8MYMRGYROEeGXVGqCZSRyIJTBWwfVEDCj85vU3zvzUA7KHbPpYi2rG2KWUf
+	 90qElHaZC22N/x63Lf4nuoP9Wf6MqWOzOSMnGL5ruOTvLzR6bHxq1p2dXpz9ZNcbumA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795447630;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=9TZM6XuQCVdejYnoblYTNL9KeRxvPg2JJEEUf+a0CiE=;
-	b=ILA4+T/o1nGBxc5h9eCFdRHAduMKrcu9h6Dqntn+S34gseMzzAxvW1EMD54XnRZumWGH
-	 wR8Dtsww+pH8JeG9FkslmNQ7Syf5/+gwNkOAAsAeXeSJKNxWgMMTFyMUEv9+ETynplJbZ
-	 CINbBdFLl8UUs6e77szDLt2OzEHRHnWT2wIM7yanqjEP7mwpAWd+b921hHYPU9K5h1LMB
-	 R1sJ0fZ6QwevVjc6QhkdKt4/ImrCBMJKsVk5F/U8oYnrhdK17aKhQPCjQzF9b0t3KAUgd
-	 sY7gwj7/f3aPSmdcrjkqgXfNMMCxqPkaCVI46z9ZRmdemHKYnRBwov2FPITZbuRteZw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795447680;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=qqPm8nIXX4WQfxkaIgzNJF0S+baXAN/1l3nC3wPYeW4=;
+	b=eNtfNMBTA367BYQ3BJENv+iwsc9foOD7pTmxFnKmOlEW25/8zMQum1xx+8nJYIGq35td
+	 nTGNWLqHLQ5h/Tg3uwJNV53XnPiOUj+DyMukumiKuY+z2BC7/DJvskw/y8vD7M/+qm4n/
+	 3jPO98YCRL2GJ9hJpBzebXrzngZQpDuLuRO5xJ8Bh9ILzbJ/lzUb9ssF94fJtn+e+eloI
+	 y/gMUtK5x/oSOBjxtDwF8xTPYMSXEXShvSOjN8H7XVRJHGYohOkfa8sDIYIfeQ6qVx2FR
+	 2GztS/NSCb7WXb35VLbl1l5UD0mTUHIcw8aFNAYIzXVPjYsh1t3fhHw64iPKaUfe3KQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e9Uq4Xe1;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="ZrWMK/wE";
+	arc=none smtp.remote-ip=91.218.175.162
+Received: from mta0.migadu.com (out-162.mta0.migadu.com [91.218.175.162])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F93606A31E;
-	Mon, 23 Nov 2026 15:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCAF606A32C
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 15:27:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CCAF606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e9Uq4Xe1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F14A1F000CA;
-	Mon, 23 Nov 2026 15:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795447629;
-	bh=9TZM6XuQCVdejYnoblYTNL9KeRxvPg2JJEEUf+a0CiE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=e9Uq4Xe1qpaATaiDo5wOIGfM+EwwcSQCdX2R2WULHbjBs1ZKYHp5YWudfo93wnIy5
-	 /EhRUZq0GSxcIuK9YxYvHnRR5XYYZ4V2QQ7T4acP62KJQSB0P4u2p+GsiWTqdMR5Fi
-	 z+ih5lmoVRpbnEDzOThc0xJ4cyzHo+8go0bQAqSuS2gcJiuVz/EZRvD5IQWJa8vj0J
-	 Dvg9kXq7oPJFI6klRrQcc37C/KER5hExgJomgHTE/a0s4Zfgc9yNZhTDqX/6URCxR3
-	 ti4Ppj9+UFttR1Ut9xW8NOhqoUUxbYhCt7YJZHZFqIEDcO9rh1rdwELZoH2asAErZr
-	 KGA11e44z4i3Q==
-Date: Mon, 23 Nov 2026 15:27:01 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Alexandru Elisei <alexandru.elisei@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
-	Wei-Lin Chang <weilin.chang@arm.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atish.patra@linux.dev>, kvm-riscv@lists.infradead.org, Will Deacon <will@kernel.org>, 
-	Fuad Tabba <tabba@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's
- dirty ring is full
-Message-ID: <awRaeD7ut2Y5Lv8n@gremlin>
-References: <20261123113435.1170711-1-fuad.tabba@linux.dev>
- <20261123113435.1170711-2-fuad.tabba@linux.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZrWMK/wE
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=RaXo+fAW62LWJslzHq4Otn1HbGUNnvp5PQhq2O++7UE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795447678; v=1; x=1796052478;
+ b=ZrWMK/wE2w3Ag3kzKzBFC6Svxz2/OtKKzECu4rt9o+L2v+6Nii4cSgJ2fLWLuN8qrhLMJJ8i
+ K7wLODYxWBtAXrxBD4eqW/czlpCjRP+O2h/85sUClefqfpowHRVuLzN5nLapA8dldQpIyOlx1+h
+ Qmm3anflY4rHLwun+K3Y58EQ=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ec5cb40c4e5406b8;
+	Mon, 23 Nov 2026 15:27:57 +0000
+X-Mizu-Trace-ID: ec5cb40c4e5406b8
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/9] bpf: Add log support for tracing link_create
+Date: Mon, 23 Nov 2026 23:27:34 +0800
+Message-ID: <20261123152743.19629-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,129 +84,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261123113435.1170711-2-fuad.tabba@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 23, 2026 at 11:34:33AM +0000, Fuad Tabba wrote:
-> Pre-faulting can map a dirty-logged page writable, which pushes it to
-> the vCPU's dirty ring. KVM_RUN exits with KVM_EXIT_DIRTY_RING_FULL
-> before the ring overflows, but the pre-fault loop never checks it, so
-> one call can push more entries than the ring has free, which trips the
-> WARN in kvm_dirty_ring_push() and overwrites entries userspace hasn't
-> harvested. On x86:
->
->   WARNING: arch/x86/kvm/../../../virt/kvm/dirty_ring.c:225 at kvm_dirty_ring_push+0x7a/0xd0
->   Call Trace:
->    make_spte+0x2cc/0x450
->    kvm_tdp_mmu_map+0x5e1/0x7f0
->    kvm_tdp_page_fault+0x12c/0x1b0
->    kvm_mmu_do_page_fault+0x181/0x250
->    kvm_arch_vcpu_pre_fault_memory+0x136/0x1d0
->    kvm_vcpu_pre_fault_memory+0xcf/0x180
->    kvm_vcpu_ioctl+0x455/0x770
->
-> Stop the loop once the ring is soft full, with the check KVM_RUN makes
-> before entering the guest. Return the pages already processed, or
-> -ENOSPC when there aren't any, since a retry can't succeed until
-> userspace harvests and resets the ring. s390 has the ioctl but no ring,
-> so give kvm_dirty_ring_check_request() a stub.
->
-> The check also sets run->exit_reason to KVM_EXIT_DIRTY_RING_FULL. On
-> arm64, KVM_RUN completes a pending MMIO exit only if exit_reason is
-> still KVM_EXIT_MMIO, and on riscv KVM_RUN does the same for its MMIO,
-> SBI and CSR exits. If a pre-fault stops on a full ring while such an
-> exit is pending, the next KVM_RUN doesn't complete it and the guest
-> repeats the instruction that caused the exit. Userspace can avoid that
-> by completing the exit with KVM_RUN before pre-faulting.
+I'm planning to add syscall common attrs support for LINK_CREATE cmd.
 
-Thanks for adding!
+This is the second series for the plan, that adds syscall common attrs
+support for LINK_CREATE of tracing prog and cgroup prog.
 
->
-> Fixes: bc1a5cd002116 ("KVM: Add KVM_PRE_FAULT_MEMORY vcpu ioctl to pre-populate guest memory")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+BTW, address Andrii's review [1] in patch 5:
+1. Change if (!OPTS_ZEROED(opts, iter_info_len)) to if
+   (!OPTS_ZEROED(opts, log_opts)).
+2. Add comment to iter_info and iter_info_len that they are
+   deprecated, and use iter.info and iter.len instead.
 
-Thanks! LGTM so:
+Links:
+[1] https://lore.kernel.org/bpf/CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com/
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Changes:
+v2 -> v3:
+* Add log support for bpf_check_attach_btf_id_multi().
+* Add more selftests to cover more logs for link creation failures.
+* Update some log messages in patch 1. (Alexei)
+* Add log for dst attach type check in bpf_check_attach_target(). (Alexei)
+* Update some log messages in patch 2. (Alexei)
+* Pass 'log' to btf_attach_func_proto() and btf_distill_func_proto() in
+  bpf_check_attach_btf_id_multi(). (Alexei)
+* Add a log msg in check_dup_ids() when dup ids. (Alexei)
+* Add a log msg in bpf_tracing_multi_attach() when it returns
+  -EOPNOTSUPP. (Alexei)
+* Swap function names between iter_info and iter_info_len selftests.
+  (Sashiko)
+* v2: https://lore.kernel.org/bpf/20261114150610.84507-1-leon.hwang@linux.dev/
 
-> ---
->  Documentation/virt/kvm/api.rst | 9 +++++++--
->  include/linux/kvm_dirty_ring.h | 5 +++++
->  virt/kvm/kvm_main.c            | 5 +++++
->  3 files changed, 17 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index e95c9cda085d9..89eb6be9bc6e3 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6544,6 +6544,7 @@ Errors:
->    ENOENT     The specified `gpa` is outside defined memslots.
->    ENOEXEC    The vCPU has not been initialised (arm64).
->    EINTR      An unmasked signal is pending and no page was processed.
-> +  ENOSPC     The vCPU's dirty ring is full and no page was processed.
->    EFAULT     The parameter address was invalid.
->    EHWPOISON  A poisoned host page was encountered.
->    EOPNOTSUPP Mapping memory for a GPA is unsupported by the
-> @@ -6588,7 +6589,9 @@ case, the ioctl can be called in parallel.
->
->  When the ioctl returns, the input values are updated to point to the
->  remaining range.  If `size` > 0 on return, the caller can just issue
-> -the ioctl again with the same `struct kvm_map_memory` argument.
-> +the ioctl again with the same `struct kvm_pre_fault_memory` argument.
-> +If that fails with ENOSPC, the vCPU's dirty ring has to be harvested
-> +and reset first.
->
->  On x86, shadow page tables cannot support this ioctl because they
->  are indexed by virtual address or nested guest physical address.
-> @@ -8957,7 +8960,9 @@ Therefore, the ioctl must be called *before* reading the content of
->  the dirty pages.
->
->  The dirty ring can get full.  When it happens, the KVM_RUN of the
-> -vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL.
-> +vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL, and
-> +KVM_PRE_FAULT_MEMORY on the vcpu will process no more pages until the
-> +ring has been harvested and reset.
->
->  The dirty ring interface has a major difference comparing to the
->  KVM_GET_DIRTY_LOG interface in that, when reading the dirty ring from
-> diff --git a/include/linux/kvm_dirty_ring.h b/include/linux/kvm_dirty_ring.h
-> index eb10d87adf7d5..729615ae0cf4d 100644
-> --- a/include/linux/kvm_dirty_ring.h
-> +++ b/include/linux/kvm_dirty_ring.h
-> @@ -60,6 +60,11 @@ static inline void kvm_dirty_ring_push(struct kvm_vcpu *vcpu,
->  {
->  }
->
-> +static inline bool kvm_dirty_ring_check_request(struct kvm_vcpu *vcpu)
-> +{
-> +	return false;
-> +}
-> +
->  static inline struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring,
->  						   u32 offset)
->  {
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index cf4cb586f1407..ac8b94a386e4a 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -4461,6 +4461,11 @@ static int kvm_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
->  			break;
->  		}
->
-> +		if (kvm_dirty_ring_check_request(vcpu)) {
-> +			r = -ENOSPC;
-> +			break;
-> +		}
-> +
->  		r = kvm_arch_vcpu_pre_fault_memory(vcpu, range);
->  		if (WARN_ON_ONCE(r == 0 || r == -EIO))
->  			break;
-> --
-> 2.47.3
->
->
+v1 -> v2:
+* Add log_opts support for bpf_program__attach_iter() API in libbpf.
+* Add test to verify the log for freplace max_ctx_offset case.
+* Update a subtest to verify the log_opts in bpf_program__attach_iter()
+  API.
+* Add log for freplace max_ctx_offset case. (bot+bpf-ci)
+* Drop unnecessary bpf_verifier.h include. (bot+bpf-ci)
+* Change log to "Invalid tracing attach_type.\n" when the link
+  attach_type is not prog->expected_attach_type. (bot+bpf-ci)
+* Change BPF_XDP to BPF_TRACE_FEXIT in tracing link_create test.
+  (bot+bpf-ci)
+* Drop dead iter.len check in libbpf. (bot+bpf-ci, Sashiko)
+* Add OPTS_ZEROED(opts, iter) check. (bot+bpf-ci, Sashiko)
+* Swap log positions of iter_info and iter_info_len. (Sashiko)
+* Update bpf_program__attach_iter() to use iter.info and iter.len.
+  (Sashiko)
+* v1: https://lore.kernel.org/bpf/20261109140816.5196-1-leon.hwang@linux.dev/
 
---
-Cheers, Lorenzo
+Leon Hwang (9):
+  bpf: Add log support for tracing link_create
+  bpf: Add log support for tracing_multi link_create
+  bpf: Add log support for iter link_create
+  bpf: Add log support for cgroup prog link_create
+  libbpf: Add log_opts support for BPF_TRACE_ITER
+  selftests/bpf: Test tracing link_create logs
+  selftests/bpf: Test tracing_multi link_create logs
+  selftests/bpf: Verify iter link_create logs
+  selftests/bpf: Verify cgroup prog link_create logs
+
+ include/linux/bpf-cgroup.h                    |   6 +-
+ include/linux/bpf.h                           |   9 +-
+ include/linux/bpf_verifier.h                  |   3 +-
+ include/linux/trace_events.h                  |   7 +-
+ kernel/bpf/bpf_iter.c                         |  27 +-
+ kernel/bpf/cgroup.c                           |  76 +-
+ kernel/bpf/syscall.c                          |  30 +-
+ kernel/bpf/trampoline.c                       |   5 +-
+ kernel/bpf/verifier.c                         |  51 +-
+ kernel/trace/bpf_trace.c                      |  27 +-
+ tools/lib/bpf/bpf.c                           |  23 +-
+ tools/lib/bpf/bpf.h                           |   8 +
+ tools/lib/bpf/libbpf.c                        |   5 +-
+ tools/lib/bpf/libbpf.h                        |   3 +-
+ .../selftests/bpf/prog_tests/cgroup_link.c    | 324 ++++++++
+ .../selftests/bpf/prog_tests/iter_link.c      | 156 ++++
+ .../selftests/bpf/prog_tests/tracing_link.c   | 741 ++++++++++++++++++
+ .../selftests/bpf/progs/tracing_link_ctx.c    |  17 +
+ .../selftests/bpf/progs/tracing_link_multi.c  |  36 +
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   5 +
+ 20 files changed, 1484 insertions(+), 75 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_link.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_link_ctx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_link_multi.c
+
+-- 
+2.55.0
+
