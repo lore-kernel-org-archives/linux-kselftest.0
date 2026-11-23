@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795431862;
-	b=YM0iJDYRu8X84v4F9ZDGlX+zQzYeRoZnvcLbwO8nAeqg4GxXSZPrE1ylLMn4f1Zt6TzG
-	 B9iOdyibBF5/392N8l7YKyQJb83tRC2QiBBAacf1vvJ4BpAPOVj1Kf5skJnH4lhQ51SMF
-	 XySez1c6Gy71cohl74FeqxOiTnWcUO/cZpiuOlSlzmdWfHiKr0NGBAk4hw/Bd5eFX/64K
-	 Ccddj1RIfkVYhUjelQvl6ZWPGrvHBwMh+h91zc3zLyqdaxFgOXOPMh1t16DX9hky2Rw3x
-	 ivjZa5ZSCjmdUZJ8q5g0+HcaGLx4ToqSHQBwd2SnoOsjXvCOD7b6/wFC4uZyTPwIiRg==
+	t=1795431864;
+	b=p2ifFMQwaBs5QRXrY4c99WoEBNR8uOu1m74X8vZep6tvABi2c1Qk6w4ClYEUnZXEbgBq
+	 x3M8vWmEYFdy3LI2Cvu//KHbB62UgVAb4oQ5ymuSuZM8y5mpuuOsaeTZEl3qk8x0i7IDH
+	 4gjP5Xn5dC1+63h89JISGjYZ6QNg+PsYVJby20fOO3YJXy6mDbMtEUcYUbuviuKgAMIsJ
+	 C0KHlvehfRHubLWeqjrSMvOsOmYAD2gbW3UAikJG7Yhv23n31e7+UZ4lu25NEgaC1/IzO
+	 lksqL1gYzXPWUSWHrCPH0Rt7PDv8aAOPzJorWRVzWfjqHyVkVr/kV17saCVb0L4urLg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795431862;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795431864;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=cp7jVLyfy7qosA+llzUSJcDBk8mNpOqESOfJOfHRX9A=;
-	b=juEfmuR6sQhMuH0zEfLIpgaiciN1uwXgmVU9jXWz0lfUmFAShkXBf+8Ciy1lCY2AmgyR
-	 9YxsCNJIlAjhFZyW/H7y7EKtF+54rk/hzJ345imcNk4R/V6yOQ3Seipdou2bIoit1s/p+
-	 kHRC5eXg/BsGmebBbJV2NJhtWhTCiY95nDvLqtGB8tqMZPSXilAfsGTw/bV8Qkh07qpC0
-	 dV2MXbHsmJ88HIXvPI4V7etAI0Iv7BFhZ75wRx4ohS9de/lqxogQyD64+4NqL+llQ7EUu
-	 pHtIYRrGyJgQM1Ze4m3HyfbFMaNKB/bT2j+lQd93gSG9HEWoKq4LmlDn6YGhNYpfAPQ==
+	bh=Sy1hEmrM6yrrP/2YFylQYTk/EF85CVn0Vom/iqjAOJQ=;
+	b=KI6CB+9LuJnw2tkj5ket5u0osQ0gqSP908CTgoqLrvpAV1ek7zEDyxMkKSY/wtTqP77u
+	 7Z8prC3f0hhrXN9EUQcal9HvAgPOZbIIQtviUW12sqngclTXqRIG9B0tEGp3adRpRcMUf
+	 drsJbe/fdOJlUhPKMIJzBUvhNbDHalZdxc5xbkbV81TIvVUnjT/T6oWa+MO4psXEzmRJW
+	 Dt5+rMPVWDgY8TmvDi64ZhBIpz/dD8Dph/4wz16Ho+fL6GZEimlvlcnyt20mEagNG9f9t
+	 72Fi8ZIVuAgnGZJWWOSBb6qRHXSUFrFYD7XnQtlmOPnL6CUYcMF6sYWGl9gdIVmodgA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BKRnsZzE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WzbVDYhF;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB18606A69A;
-	Mon, 23 Nov 2026 11:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A1E606A6BE;
+	Mon, 23 Nov 2026 11:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BKRnsZzE
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WzbVDYhF
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795431861;
-	b=F5PvO9ZS5AljJn307vyVy85ut+kJ44hEqi7tQiDRxa0MGd8ALGfEqu1tcoT/iOx72drD
-	 J6ykQvK554EX4yuolPZjxir1IePxjs5vrOxietCR+u2x/WcIF5CxjiKH9oLxfG3NgpHU8
-	 r19dK0TURpoUJ5Yi5T2SPI+A7wFTsRsi/JwpnPguvcBxWGGlH519QWvbuZ4OhLlsaPStr
-	 d3zu0LJIrjRbGGbz1rPcXICnlRcEH1SlvSWp2pr3vlXpTzVTwplXoTqrNugNMdHLEc6yx
-	 8ir3q/viMjSKB72+JdC+uAWf7UQwUYbZR6Fv5m5ccgfY//gPWRiKPfpEdZlpnOxTlnw==
+	t=1795431863;
+	b=a7WG+aTPt+51rEexSG8w+kiqNVtJhmnv9LBFeRbvgRdIyJRmfpiGKqdwMOA+KquMp3Ou
+	 GzPzHnyZT3vuq/ucPlLezqdcCPI6PrUhSanZ7Fvkn7LbF9leQ4xvGVe4KFFTIv9TQ5SPW
+	 P2wGR4O9gmVVSgCukLoVOL7lxaV6Cmnh7aLcu4Q4C31mbkwMI6LPPQQR6tSkAsKRAIHGe
+	 XYWCALbHE6SvY/Cjq3pxyANcOWwo0ShRpJepreEwU2hyL4treRmSHeyKxNPfATz8btH0e
+	 9lBMfiT0zBaNaf86pVQTGYtl3mqNE0FDT7PF7ok0XSZYoHzl0LMgxlLcRG1f8NlzH5g==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795431861;
+	c=relaxed/relaxed; t=1795431863;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=cp7jVLyfy7qosA+llzUSJcDBk8mNpOqESOfJOfHRX9A=;
-	b=UJL+/BFeS9c4PXrMgSrLgBru6i2ePrATGUw1Mc4QL9gbvtS6d6P2JXu3USh+9/Dn6y4M
-	 7nGHUkqKf0RMJkDfd3NA6Xn4o8YHk3k8mw9oHnGrvWuR1HPTqdVx2XJBswCZ1G1S5RAnb
-	 MgfTwQZviqb19wjxs8s1/nnTgx0kFZ/XKhPxxrfh6UdK3zDs2gZkOcY36Yxp5LyjE1HHp
-	 uJHDWGhPm41UsAXWZqTNTVPtCoUuZNAk7UoF4unKH7qLggNGOjEj6vcjoWepy8inVlLIA
-	 BMdtA7JcPJY6egwhRoDQnk00raXQM844TS88NaCTRGFswzWQuXFDu/yqQt26Tr60FJw==
+	bh=Sy1hEmrM6yrrP/2YFylQYTk/EF85CVn0Vom/iqjAOJQ=;
+	b=RWHKTixiit2fWNJTXUiPR68aSEdgGmZT9yVanxN544rzUwXyMwvxaTYyi7/rWEm7TYCL
+	 szkjoJo49Q46i50ZqF5gQqhabFprE8J3xz7qBzs3/ry6m4WbIHL1RMWdrvcnNAqgYVTUs
+	 IFmUEnYQUhOsWF196ld5elyd/3PzI4sUVX5TvJC/ngEqedJTMEV37C86ih6eOuQSxEmaW
+	 XnuHOoXTFuwo36rJPJ6MEaEPCsXxjkdxlsBFRYbhh+Z4tuk8nby91LIey8AZTYy8TZrAT
+	 f1S07Nhuh8KGpBgSGqLMC2M8ny5D40/6E8HhSlFP9oog54Mszjkpny2DSW0ubN96vag==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8A40F1F000CA;
+	by smtp.kernel.org (Postfix) with ESMTPS id A50721F000D0;
 	Mon, 23 Nov 2026 11:04:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795431861;
-	bh=cp7jVLyfy7qosA+llzUSJcDBk8mNpOqESOfJOfHRX9A=;
+	s=k20260515; t=1795431863;
+	bh=Sy1hEmrM6yrrP/2YFylQYTk/EF85CVn0Vom/iqjAOJQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=BKRnsZzEVevC2TEytdcaXJWmAHhZyNsbVtd7iT7CgJ8LTnIwZXLkL+hqZ+E9Emx7a
-	 g2zbAFV8SRUIVjI8S4zl499kuVIF9klWzoKDwuC0B8QwOZGDu+MU2+b/WuZd2qU/44
-	 nUFmGfttSZ22enQith15gVrqODP3YTeIXBCanTT+Ibc92sKR2MmlKgCOgI5xXP7uHF
-	 FjjF7DrvuE89JAoJneczRJmRQTLECOKTCEENSJIhGq9ST13by3IZB7DOHNJRiC2W3d
-	 bS5gcEoWFn0JmVlK9R9VEXNiH4acEaKTqXnV9yrcA0XMutI8/bSAnqfcXWIIiWPxZ0
-	 XUQMbELzyQQkQ==
+	b=WzbVDYhFk5c784oIDyHqHTGWV7yl+uKLxKdtnmNonYOMy0PdYlCcJyZ674i/G5+Qg
+	 sqwsa+zVGFG9vuwHhuUY23P/oSZPb1s3Ap8LA4/QhngFJkZ3UED46AKPsa/Wd6KuVE
+	 8UmFrujZ9V82bzOSuKep0ueC0p/tf1HVZgMI52Vrd9NlDqdVPqkZsX4IcftkyHxESD
+	 JAwJTpAbVXncuAewnAE5PfYmQL/ZD4bLeaucDfwBmKIjYRdA30ECI3DCO/yf+MXSvT
+	 cpUUokads0YmkZXG14AISswYbFY20hBNtuUKeUBZXm5lvspmwchlfkdvKBDeZbXU+T
+	 avGuy1mGcHhFw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 1B5784C436;
+	by lkml.kernel.org (Postfix) with ESMTP id 3691F4C43A;
 	Mon, 23 Nov 2026 11:04:11 +0000 (UTC)
 From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
-Date: Mon, 23 Nov 2026 19:04:09 +0800
-Subject: [PATCH net-next v3 1/2] tcp: document black hole detection for
- tcp_mtu_probing
+Date: Mon, 23 Nov 2026 19:04:10 +0800
+Subject: [PATCH net-next v3 2/2] selftests/net: packetdrill: test
+ tcp_mtu_probe_floor
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261123-tcp-mtu-probing-doc-v1-v3-1-c288c2df9666@gmail.com>
+Message-Id: <20261123-tcp-mtu-probing-doc-v1-v3-2-c288c2df9666@gmail.com>
 References: <20261123-tcp-mtu-probing-doc-v1-v3-0-c288c2df9666@gmail.com>
 In-Reply-To: <20261123-tcp-mtu-probing-doc-v1-v3-0-c288c2df9666@gmail.com>
 To: corbet@lwn.net, kuba@kernel.org, edumazet@kernel.org, pabeni@redhat.com, 
@@ -94,11 +94,11 @@ Cc: Yongjian Wang <echoowall@gmail.com>, ncardwell@google.com,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
  netdev@vger.kernel.org, skhan@linuxfoundation.org, horms@kernel.org
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795431849; l=2508;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795431849; l=2254;
  i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
- bh=Frl+i4oYaux9oiKFjwNbjA51vHapvkpGWp30QDI+s2s=;
- b=f5etkxrWA6fQgRh+NwtBZBF3MUJxwU5qu/NnCZXzkgU3bAw/BDpDr6GyWU5H+bZLECY3ZseNL
- auuw2Q3ESx9BVoH9aIW/ea6xjO817LDQ1sKX66b19N2MTOge9NmLrDr
+ bh=L2mM/OhObLn59aLpNJ9Spn+BLz/qgLoUlYL6TTs8CZQ=;
+ b=3V8xSAG8iabgXfHb/kqahTVUGbuhiAxkOHPUCsW3ZCsx63YVBJMhGj9eT4AgqJMBi2224D5Ab
+ GlroLvG6p5qDpMJ7QPV0620sAitddv4LfNE36jGAfM1NGJJwWEXoq/J
 X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
  pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
 X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
@@ -109,61 +109,66 @@ Content-Transfer-Encoding: 7bit
 
 From: Yongjian Wang <echoowall@gmail.com>
 
-ip-sysctl.rst says that tcp_mtu_probing=1 enables MTU probing once an
-ICMP black hole is detected, but not when that happens or what TCP
-does then.
+tcp_mtu_probe_floor has no selftest coverage.
 
-Describe both, as implemented in tcp_write_timeout() and
-tcp_mtu_probing(). Also add the missing defaults of tcp_mtu_probing
-and tcp_base_mss.
+Add a test where a full-sized segment keeps timing out without any ICMP
+feedback. After the first detection falls back to tcp_base_mss, check
+that each further retransmission timeout halves the MSS, and that the
+MSS stops at tcp_mtu_probe_floor.
+
+Use tcp_retries1=1 and disable TLP, as in
+tcp_mtu_probing_blackhole_no_tlp_retries1_is_1.pkt, so that every
+retransmission comes from the RTO timer.
 
 Signed-off-by: Yongjian Wang <echoowall@gmail.com>
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
 Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
- Documentation/networking/ip-sysctl.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../tcp_mtu_probing_blackhole_floor.pkt            | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 0b7bfbd98a92..a4a28b452d25 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -412,6 +412,8 @@ tcp_base_mss - INTEGER
- 	Path MTU discovery (MTU probing).  If MTU probing is enabled,
- 	this is the initial MSS used by the connection.
- 
-+	Default: 1024
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole_floor.pkt b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole_floor.pkt
+new file mode 100644
+index 000000000000..dd040d9beca0
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole_floor.pkt
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test that after black hole detection, each further retransmission timeout
++// halves the MSS, but not below tcp_mtu_probe_floor.
 +
- tcp_mtu_probe_floor - INTEGER
- 	If MTU probing is enabled this caps the minimum MSS used for search_low
- 	for the connection.
-@@ -711,6 +713,26 @@ tcp_mtu_probing - INTEGER
- 	- 1 - Disabled by default, enabled when an ICMP black hole detected
- 	- 2 - Always enabled, use initial MSS of tcp_base_mss.
- 
-+	A black hole is detected when the retransmission timer fires after
-+	the handshake and retransmissions have stayed unacknowledged for as
-+	long as tcp_retries1 retransmissions would take with an RTO starting
-+	at 200 ms and doubling each time, which is 3 seconds with the
-+	default tcp_retries1. This time is counted from the first
-+	retransmission and only checked when the timer fires, so a flow
-+	with a 200 ms RTO detects the black hole at the fifth timeout,
-+	about 6 seconds after the original transmission.
++`./defaults.sh
++sysctl -q net.ipv4.tcp_mtu_probing=1
++sysctl -q net.ipv4.tcp_base_mss=1024
++sysctl -q net.ipv4.tcp_mtu_probe_floor=300
++sysctl -q net.ipv4.tcp_retries1=1
++sysctl -q net.ipv4.tcp_early_retrans=0`
 +
-+	With value 1, the first detection enables MTU probing and lowers
-+	the MSS to tcp_base_mss if it is larger. After that, and from the
-+	first detection with value 2, each timeout at which a black hole is
-+	still detected lowers search_low to half its MSS, capped at
-+	tcp_base_mss but never below tcp_mtu_probe_floor or tcp_min_snd_mss,
-+	and lowers the MSS to match if it is larger. Once MTU probing is
-+	enabled, the connection also probes for a larger MSS, as with
-+	value 2.
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
 +
-+	Default: 0
++   +0 < S 0:0(0) win 65535 <mss 1460,nop,nop,sackOK>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
++  +.1 < . 1:1(0) ack 1 win 65535
++   +0 accept(3, ..., ...) = 4
 +
- tcp_probe_interval - UNSIGNED INTEGER
- 	Controls how often to start TCP Packetization-Layer Path MTU
- 	Discovery reprobe. The default is reprobing every 10 minutes as
++   +0 write(4, ..., 1460) = 1460
++   +0 > P. 1:1461(1460) ack 1
++  +.3 > P. 1:1461(1460) ack 1
++
++// The first detection falls back to tcp_base_mss.
++  +.6 > . 1:1025(1024) ack 1
++
++// Each further timeout halves the MSS.
++ +1.2 > . 1:513(512) ack 1
++
++// Half of 512 is below tcp_mtu_probe_floor, so the floor is used.
++ +2.4 > . 1:301(300) ack 1
++
++// The MSS does not go below the floor.
++ +4.8 > . 1:301(300) ack 1
++  +.1 < . 1:1(0) ack 1461 win 65535
 
 -- 
 Git-157)
