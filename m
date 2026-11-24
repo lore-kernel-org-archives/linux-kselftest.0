@@ -1,62 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795535798;
-	b=yD5y0aeRdga7tzT8/DfFqOqXw14INgt+Ld+jKrkE+3jX0adBSpu2oAYJAD8dU85V52vM
-	 D9i+Ox+S7JELtkG/8yu8uJTaNcH8zHyzCVkBxthdxuo76SV5KqS6Mo7aboun0e7GeHuAx
-	 UbzkSEbeUXSUf6PbyH9IO3u/NyYzzQRUl0hnC/oJ3pNx6jnJt7DERBuB8gZrzUUcj6Ws8
-	 CpCChR48dhRjqlnoQdmlVNEZs1XMKGcP5qD8f8Q9PMijlMVLKqSnzW9qLbT3QcqgBVt5z
-	 kGkz24B9zXK5dONDCn6dKnhLb+GK6yEJ77zwe1pqXLSRjW4PSn+5EiblNg9M4wPQugA==
+	t=1795536924;
+	b=tDBsG5gI0PURnq9qcFVu7XUjf/m61ASmIggXD31OJLhHJ1FXYdZMWc64Npw7Lz0RSADt
+	 2lRln0IAptCj8dUr9ttsIjRFi4ommhopUvg3eduKvTYUmrJ2rbmIlxMUVtMcadUwyIvE0
+	 lWwsMTo1NApnBJKlDHUDWzvwXl51euLkhUCEHxBnrXDerVGfwmkvUp1Mz7TBOJxM1glJl
+	 koD0FxR7kkQ2K2P3WkKQ6l4CDZsn6IA20Azvw32CU3OM5cbPACE3kF8NykG6fmVOUEDFg
+	 bb0nA6t3yRPwG6XB/4RwegcRloM+dRqHZSU6/ayZ26nc020QEJ0c3ODu+r3U+I1v0yA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795535798;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=Qxe57lMNKukT31B5po2sqaJC36RczLL5Kjvfjsw19PE=;
-	b=wACyMK/ba0lv9ovk3HFKeZIh9ztJVBMSDW5sPOLsDZCK9ArB08nzXFO/O8KmHt9DlxGQ
-	 LY842TpMPx+YrJQyrP3dfYghTrsd5uF5lq3rCRfx1RFC6CHtwNECzUSbLFbkNozSrf+Tw
-	 gRjnI86GgjkopXQC4oI0JjOLTdivt3FJjrE6ffxGTV2qeuX1Bkp+DIRA4e5vOape5t7N+
-	 KHmoQOuUPRW9XWVHwotg8cu5WVve+AcgLkpAWJ7XtQ8CtkLOsQhTrzfjOfl5/M08D0chn
-	 1QPbIRatc3J0JNeVVP+nPulEmxaKUQo0KxAW4uTqI6mCJRZzEgvUkFpQ2g11MDdUgyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795536924;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=uiQNVYXgIUG4G11/OroKN5uES2cSMZOjSb9VYOv68PE=;
+	b=gYQa2/nEDoiZ7cmM5T4UfXc3NknK3Gkmw+rzDZ75QcSPRTyjALnriB9ONX+Tt7s/IzK9
+	 bMovZj9UptEEDiE2tY8gXREkJTIXlDm3JXdtagGlVUM0ucSjVFS8nQIOhp6IF9B6cjjuX
+	 aRr4OOzjBkiQhtJ5PdOpZr/QT0JSZTlObqnYDtM+U9qkLNe0Z22ApCA4Bzuqhg6TdnwNx
+	 4efeq9UuYT4um9c543VFnDxhKt8QJdAy4y3P+P/ouQR9oeXhi6TeYaNaGRqc+9Yqn9ZSc
+	 3sh5uB3Rtqwl5p01J2lq3zySsFu5M0jN4jcQuZ4EqUE5gKr2asa8z2MqiYfCFTAntaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=THR5ispW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H8BWmock;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AA4606A31E;
-	Tue, 24 Nov 2026 15:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392B8606A326;
+	Tue, 24 Nov 2026 16:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=THR5ispW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2321F000ED;
-	Tue, 24 Nov 2026 15:56:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H8BWmock
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE951F000C0;
+	Tue, 24 Nov 2026 16:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795535797;
-	bh=Qxe57lMNKukT31B5po2sqaJC36RczLL5Kjvfjsw19PE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=THR5ispWIaQhB99nOBAFofxpXpIdVAm0fVy4q/IRS0YyUrMS3CEitYtmLbH6xHugX
-	 Qn10JvblAN3uvpDEThmUsLP3Y2AXQi193V9kzuglJ8mJF17SQhJLshAaGFUVKVrQb2
-	 DUoCd8qf1clkuijJUW+6N8NidmmVcmm+06BclEOn/peTAQtIkjJjK4+wA6KvzLZ9W5
-	 xoPktGHzfyWwv6uM6+PY2ZE645rhYAbtNsWUsMx5zBQ0mpg9AsIIhc1N8L/CDCX3xq
-	 7cy7PCXjjiAopz7zlF57wAlPnrkqefqLW74ltkMHCMVgthE/4yEahj5KhelBsOQrwz
-	 FIEhsgU7ovhbA==
-Subject: Re: [PATCH net v8 2/2] selftests: net: test joining genetlink groups
- no family owns
-From: netdev-bot+sashiko@kernel.org
-To: anilkaushikwireless@gmail.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, idosch@nvidia.com,
- nicolas.dichtel@6wind.com, jacob.e.keller@intel.com, jiri@resnulli.us,
- fw@strlen.de, martineau@kernel.org, v3rdant.xiang@gmail.com,
- aliceryhl@google.com, linux-kernel@vger.kernel.org, nhorman@tuxdriver.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 24 Nov 2026 15:56:36 +0000
-Message-ID: <179553579621.3135.2576494122860587206@kernel.org>
-In-Reply-To: <20261123155503.2497063-3-anilkaushikwireless@gmail.com>
-References: <20261123155503.2497063-3-anilkaushikwireless@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795536923;
+	bh=uiQNVYXgIUG4G11/OroKN5uES2cSMZOjSb9VYOv68PE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=H8BWmock2kg3Y65KbONZTDD+P77pV0AReiFEwNO/8wNxZzlADqJCRU23dwB06Tpwz
+	 toHpTMwMC78MdeLKigJWU8Yua3frMvc3trZLPDEpiZflAQ2HGt0E6AiNmQK3tUBz/4
+	 B243BptkvfiQ7mmDRJWbIa6HyDSez2FBzZ/tYMaDwgNJkEh9+xCpHUwdAuxVH8U7Y2
+	 ZmicHBtvlUKgppOMtWxXf+n6OOWIvmgpuK1sdlUJ1LShq1tyfFJ+YCVg1egVNgi9lk
+	 FjGYn04B7zd8coT3wJ/k/43mS26yY3iDgX3EgIEOh+1SSOvvniIc81i6hOa58rJR4u
+	 7DpRetjVHD8ow==
+Message-ID: <bd804c6d-0294-40b9-a6eb-2b1ab2ad357e@kernel.org>
+Date: Tue, 24 Nov 2026 17:15:16 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,143 +51,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] selftests: drv-net: pause: detect the link partner
+ from the remote side
+Content-Language: fr
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+ davem@davemloft.net, Eric Dumazet <edumazet@kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Bobby Eshleman <bobbyeshleman@meta.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Breno Leitao <leitao@debian.org>,
+ thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261123201406.479904-1-maxime.chevallier@bootlin.com>
+ <4148e81b-ec5b-4374-b74f-4f5cba175c7b@kernel.org>
+ <fb92bc0b-ab3f-49ac-b4a5-5368c87b3a7e@bootlin.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
+ YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
+ c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
+ WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
+ CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
+ nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
+ TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
+ nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
+ VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
+ 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
+ YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
+ AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
+ EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
+ /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
+ MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
+ cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
+ iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
+ jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
+ 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
+ VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
+ BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
+ ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
+ 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
+ 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
+ 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
+ mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
+ Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
+ Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
+ Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
+ x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
+ V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
+ Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
+ HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
+ 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
+ Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
+ voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
+ KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
+ UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
+ vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
+ mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
+ JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <fb92bc0b-ab3f-49ac-b4a5-5368c87b3a7e@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On 24/11/2026 15:28, Maxime Chevallier wrote:
+> On 11/24/26 12:29, Matthieu Baerts wrote:
+>> Hi Maxime,
+>>
+>> On 23/11/2026 21:14, Maxime Chevallier (Netdev Foundation) wrote:
+>>> The logic used to detect if the kselftest remote we're interacting with
+>>> is directly connected to us uses link renegotiation to flap the link,
+>>> that way we know if there's a switch between the remote and the DUT.
+>>>
+>>> However the current logic is racy. It triggers a link renegotiation,
+>>> wait for the link to come back up locally, and looks on the remote if
+>>> the link flap counter changed.
+>>>
+>>> It's possible that this entire cycle happens locally before the peer
+>>> reports the link flap, in which case it reports that we're not directly
+>>> connected to the peer when we actually are.
+>>>
+>>> Solve that by reversing the logic : Trigger a link renegotiation on the
+>>> peer, and check if we see the link flap locally. The current
+>>> wait_for_aneg() already waits for a full "up - down - up" cycle, so
+>>> it doens't really matter which side of the link flaps first here.
+>>>
+>>> This was found in the stmmac CI setup, between an Intel I350-T4 card and
+>>> an iMX8mp + KSZ9131 board. The Pause test was failing seemingly at
+>>> random, due to the link flap occuring either on the host or the remote
+>>> first.
+>>
+>> Thank you for the fix, but it looks like it is introducing new issues on
+>> BCM57508:
+>>
+>>
+>> https://netdev.bots.linux.dev/branch_deltas/net-next-hw-2026-11-24--08-00.html
+> 
+> Arg seems that on this setup, the remote (I don't know which one it is) doesn't
+> support 'ethtool -r', damn :(
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+These hosts are running Fedora 44. They have ethtool 7.0. I can upgrade
+to the latest from F44 repos (7.2) if it can help.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> I'll take another approach then.
+> 
+>>
+>> Do you mind looking at that, and mask this test on your side for the two
+>> boards you mentioned, please? :)
+> 
+> Np, tests are masked on all boards though, I've done more runs and the race
+> shows on all of them (all are now connected to the same type of NIC).
 
-- [Medium] In tools/testing/selftests/net/nl_genl_mcast.py, _free_ids()
-  decides whether it runs in init_net by comparing the inode of…
-- [Low] bind_before_family() in
-  tools/testing/selftests/net/nl_genl_mcast.py first checks that NET_DM…
+Thanks!
 
---
+Cheers,
+Matt
 
-selftests: net: test joining genetlink groups no family owns
-
-This adds a Python selftest that checks Generic Netlink multicast group
-IDs that no family owns cannot be joined. It covers
-setsockopt(NETLINK_ADD_MEMBERSHIP), bind() with a group mask, and
-loading drop_monitor after a bind(). The free IDs come from a family
-dump, and the checks are meant to be skipped outside the initial
-network namespace.
-
-> diff --git a/tools/testing/selftests/net/nl_genl_mcast.py b/tools/testing/selftests/net/nl_genl_mcast.py
-> new file mode 100755
-> index 0000000000000..4e86a5556b627
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/nl_genl_mcast.py
-
-[ ... ]
-
-> +def _free_ids(ctrl):
-> +    """Return the IDs in 1..32 that no family owns."""
-> +    # Outside init_net, the dump skips the families that are not netnsok,
-> +    # but their groups are still owned.
-> +    try:
-> +        netns = os.stat('/proc/self/ns/net').st_ino
-> +        init_netns = os.stat('/proc/1/ns/net').st_ino
-> +    except OSError as e:
-> +        raise KsftSkipEx("cannot check the network namespace") from e
-> +    if netns != init_netns:
-> +        raise KsftSkipEx("not in the initial network namespace")
-
-[Severity: Medium]
-Does comparing against /proc/1/ns/net actually detect init_net?
-
-/proc/1 is resolved in the PID namespace of the procfs mount. Some
-containers have their own PID and network namespaces, for example Docker
-or Podman without --net=host, or systemd-nspawn. There, PID 1 is the
-container's init and shares the test's non-init netns. The inodes match,
-so this skip doesn't fire.
-
-In that netns, ctrl_dumpfamily() hides the families that are not
-netnsok:
-
-net/netlink/genetlink.c:ctrl_dumpfamily() {
-    ...
-	if (!rt->netnsok && !net_eq(net, &init_net))
-		continue;
-    ...
-}
-
-genl_bind() still walks the global genl_fam_idr with no netns or netnsok
-filter, so the groups of those families are still owned.
-
-acpi_event_genl_family in drivers/acpi/event.c is one example. It has an
-mcast group, no .netnsok, and is registered on any ACPI system. The
-NET_DM events group is another one if drop_monitor is loaded on the
-host.
-
-Those IDs then land in the free list. In join_free(),
-setsockopt(NETLINK_ADD_MEMBERSHIP) on the acpi_event group succeeds. On
-the NET_DM group without CAP_SYS_ADMIN it raises PermissionError. Either
-way, ksft_raises(FileNotFoundError) fails.
-
-In bind_mask(), netlink_bind() keeps the bits that genl_bind() accepted,
-so ksft_eq(_members(sk), 0) fails as well.
-
-Because of this, the commit message statement "these checks are skipped
-outside the initial one" doesn't hold in that setup.
-
-Separately, a non-root user can't stat /proc/1/ns/net, because it needs
-ptrace read access to PID 1. That gives EACCES, and the OSError branch
-skips the tests. Should the commit message mention this case?
-
-[ ... ]
-
-> +def bind_before_family(ctrl) -> None:
-> +    """A free ID joined with bind() stays unjoined when a family takes it."""
-> +    names = [fam['family-name'] for fam in ctrl.getfamily({}, dump=True)]
-> +    if 'NET_DM' in names:
-> +        raise KsftSkipEx("NET_DM is already registered")
-> +
-> +    free = _free_ids(ctrl)
-> +    with _sock() as sk:
-> +        sk.bind((0, sum(_bit(gid) for gid in free)))
-> +
-> +        # Looking up the family loads drop_monitor.
-> +        try:
-> +            ids = _groups(ctrl.getfamily({'family-name': 'NET_DM'}))
-> +        except NlError as e:
-> +            raise KsftSkipEx("drop_monitor is not available") from e
-
-[Severity: Low]
-Should drop_monitor be unloaded again once this test is done?
-
-ctrl_getfamily() autoloads it here:
-
-net/netlink/genetlink.c:ctrl_getfamily() {
-    ...
-	request_module("net-pf-%d-proto-%d-family-%s",
-		       PF_NETLINK, NETLINK_GENERIC, name);
-    ...
-}
-
-No exit path in bind_before_family() removes the module again. That
-covers the success path, the "NET_DM got no group ID that was free"
-skip, and an assertion failure.
-
-Every later run on the same boot then hits the "NET_DM is already
-registered" skip at the top of bind_before_family(). So this check runs
-at most once per boot, and reruns only report SKIP.
-
-> +
-> +        if not any(gid in free for gid in ids.values()):
-> +            raise KsftSkipEx("NET_DM got no group ID that was free")
-> +
-> +        for name, gid in ids.items():
-> +            ksft_eq(_members(sk) & _bit(gid), 0,
-> +                    comment=f"member of NET_DM {name}")
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123155503.2497063-1-anilkaushikwireless%40gmail.com
