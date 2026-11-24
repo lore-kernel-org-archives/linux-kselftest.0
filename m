@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795545006;
-	b=LexCLPmn8umJn0qu9POd5LQFIjkmxpaDo39P0TJAybSYZVhey8tXhyhkRpEhzVo5rPfO
-	 l/7Hy0lPNeUoaYD7TC25kD6JQV0jquryfNYc6AAWkhUQq0FY9Be4V2kE86sjQT8f6jqu/
-	 3UObin4bhzt1zLpAvf0oWFM8FWhBqu3Tbhho/aGdC1CcstSV7MNdBaUOWZ1Fl/E0ysUpU
-	 My+BBOZ/kgPPLw9aORZy7iKH+VvZ/v9hBoJwpvb0v9zvJwz1cBmqkT6BcxNphDjO6xEWT
-	 fsWB4ZmgygeDV8IaVdQxDQKF+5MJtzOJ6TIRANUUxOboW8pSf29oCjrI7cVl3yGah3g==
+	t=1795545004;
+	b=W2Gf8tykwhGW0SnmdOMF2FNJcTQ2w9MvTiZfQY3j5zWExnq2rmouG9BNE4YbTjBitAGn
+	 tNEl2lURG6X/ev3tQDDHyCrOJgJmXhQ4RxOygOig9T70mFT6SKP11aZcn4JNLh51zl2/z
+	 yMnw0o9nIXiFYMIgA19dUu2zvDtO4p3GcA/+nBGb4ZrWqJnqfyq/NuETJdYVtDZskLR+w
+	 EdkM94iHXpCbaUUSAqr29f4aEIA8hc2Ewt0ezry5/E0wUMbJOPSdwT/M9a4s1aOYRuA8a
+	 01+bq/yDuIeWj497KB3pUou+NQi+lonaThAyvodsw1bguPyw8VYzR8XJKHbHkThzeSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795545006;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795545004;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=n1KgB2umdvRrwuuScjEMOJBrlsXEpK550A6Xh9JgX3s=;
-	b=jNTiaj13mlFmQW1MOovDrh6fheJUO9WR23czkHT0LjlOBVZA5WYvE8edUto6bMLdlnrK
-	 7PUG6lMJwT007UAkSmhVILBfJoZZFxsvLtZsXTSqOpZhyOOrwcQ6bVhBuKueAuydG1ibi
-	 90YaN7kZFC+x0av1lPwHWUGTftMD0tpPNLBF8XxQ64V82pyRjKnlq+CZdT+VgxWeRJnXG
-	 LK8u1oukLEjeKU8AL0tEDfXcojrjgTdLy7LvRdG6s4df7Tf5+Mu+47MCuuF5UuqUCT/3e
-	 yFbZrbyw2bCvz6V56TlBC6b9buknQKmvPutWk86C6SCqXgJM+HVWPba7m1Cus/EHNRQ==
+	bh=DbMNuqLBralp6JqQQXwQMiUu0oCpgkS443CYex4YaM0=;
+	b=1RPA/o+afrRNLgwl6aP9l1iwqS/ql2boAnf4VKhgKDuyJzDp4t3ZxQ1HQYDJHyvuMvKD
+	 +sVu7xrl0pHWBv6N3P6WcFbYRSIZQ3wN29AVVirPBkNI7xRtiDqZp9RF/AR8LA9zEymdU
+	 srC2uvhDLdxYkGof+XSrhaStCsXSIYmsQ+CM23vMIQArRYOQlZOhnS5uDg8HKn7rZu8u1
+	 KOToBvGperos/bjwwg9tIEJLBWkhtCterynUXcR2PY93zf7U8ZtZPagxLMugaqqc/xIy3
+	 eqwwVKGTKYuv9Cg/h49q+UYiMJ9ajElbuuDM6wtEWtoj6VWTkT4IAOtslGajj4xl1YQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d4wDJMtc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ll91411+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6B7606A330;
-	Tue, 24 Nov 2026 18:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9078F606A31E;
+	Tue, 24 Nov 2026 18:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d4wDJMtc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2331F000C6;
-	Tue, 24 Nov 2026 18:30:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ll91411+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1183B1F000C6;
+	Tue, 24 Nov 2026 18:30:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795545006;
-	bh=n1KgB2umdvRrwuuScjEMOJBrlsXEpK550A6Xh9JgX3s=;
+	s=k20260515; t=1795545003;
+	bh=DbMNuqLBralp6JqQQXwQMiUu0oCpgkS443CYex4YaM0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=d4wDJMtcIHKnhp3EBugWt1R6dL4xch7LNsy3qdkcrHvQxIoFNn5irw4jFV2o3YJoO
-	 uu1/VaxDuGXUGAbBx/IlawwmYjr6pNiPGsgKRVluSmiYEPa0DtJPvZ2+9DGXPqg6Rl
-	 bUyjn/Ss1n24VeUM9jprDnAUzqvNRUYmEg09d8ny/+8chyAjT2g9jSlcwL9dufhBGq
-	 bgljjgkLvJFCwSmLf6FCUabe2ot7IxnNnM2bftsIoga8WvAE7C344/xL6qZRPm0ymr
-	 fS3QNjfoRrCrqRRI759ToMVmAI7JyG+89aRjj613ZxwJ3GAiTqektXQXkrNVuG7q34
-	 0pu+7AZ0x5f/Q==
-Subject: Re: [PATCH net 3/4] udp: Ignore a connect()-set device in the bind
- conflict check
+	b=Ll91411+oopHN4Rwuq7hcIHToDhESzFrZSScQ7ullShnMnif+HUBeBc27kK2qiRqi
+	 GQSVM9rLyznnR4eBu4GtwurJhw+H2C0pG/CF7dHO5OPl0KeFVGug7zwaZKKTS4vnVU
+	 D7jdjUSkBMwEfOs3qQiWiWmCW+2JuJn0QHxd5Zn5JDm31+/P0k9MmiHFi4X2/eJkYB
+	 zwmkcZLo175i/Hi0AAiEgDsvepjYEsP2fLA+v/78ZMQ6hHdGum6yiOb1gdHROKNjW1
+	 iJEek1ihMW54dftJh/3mUYwZsOJ+xhXSNxhtTM31464p+EJsImvS/OydVWxhYCA6Hz
+	 idLSSJ+v1kdDg==
+Subject: Re: [PATCH net 2/4] udp: Keep the bound device on disconnect unless
+ connect() set it
 From: netdev-bot+sashiko@kernel.org
 To: juanagusnicco@gmail.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
@@ -49,11 +49,11 @@ Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  willemdebruijn.kernel@gmail.com, willemb@google.com, e@erig.me,
  shuah@kernel.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Tue, 24 Nov 2026 18:30:04 +0000
-Message-ID: <179554500493.3135.4927369151169103128@kernel.org>
-In-Reply-To: <20261120174341.35873-4-juanagusnicco@gmail.com>
-References: <20261120174341.35873-4-juanagusnicco@gmail.com>
-X-sashiko-severity: High
+Date: Tue, 24 Nov 2026 18:30:02 +0000
+Message-ID: <179554500253.3135.7129341529911265513@kernel.org>
+In-Reply-To: <20261120174341.35873-3-juanagusnicco@gmail.com>
+References: <20261120174341.35873-3-juanagusnicco@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -69,7 +69,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 3 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,173 +77,114 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Incomplete fix: the port hijack in the commit message still
-  works through the local address that connect() narrows.
-- [Medium] Incomplete fix: the L2TP/IPv6 bind conflict check still trusts
-  a device that connect() set.
-- [Medium] On a socket bound to a VRF (L3 master), the bind conflict
-  check still uses a device that connect() narrowed, not the device…
-- [Medium] Race: the lockless check in udp_bound_dev_if()
-  (net/ipv4/udp.c:134) reads flag, then device, then flag again, and…
+- [Medium] The commit message says that clearing sk_bound_dev_if on
+  disconnect "is only safe for a device that connect() set", and…
+- [Low] The committed message leaves out or blurs user-visible behaviour
+  changes of a Cc: stable patch.
+- [Low] __udp_disconnect() now does an unlocked read-modify-write of
+  sk->sk_userlocks: `WRITE_ONCE(sk->sk_userlocks, sk->sk_userlocks &…
+- [Low] __udp_disconnect() takes a snapshot (`u8 userlocks =
+  READ_ONCE(sk->sk_userlocks)`) and later uses it to decide whether to…
 
 --
 
-udp: Ignore a connect()-set device in the bind conflict check
+udp: Keep the bound device on disconnect unless connect() set it
 
-This patch changes the UDP bind conflict checks in udp_lib_lport_inuse()
-and udp_lib_lport_inuse2() so they ignore a device that connect() set on
-another socket. SOCK_CONNECT_DEV records that case. A new lockless helper,
-udp_bound_dev_if(), reads the flag, then the device, then the flag again.
-Matching smp_wmb() calls are added in the connect, disconnect and
-SO_BINDTODEVICE paths.
+This patch adds a SOCK_CONNECT_DEV flag to sk_userlocks. The flag records
+that __ip6_datagram_connect() set the bound device on a socket that had
+none, and SO_BINDTODEVICE and SO_BINDTOIFINDEX drop it. __udp_disconnect()
+now clears sk_bound_dev_if only when the flag is set, which stops a socket
+from clearing a device that the user or a cgroup program set.
+
+> This changes connect(AF_UNSPEC) for UDP, ping, raw and L2TP sockets,
+> which all use __udp_disconnect(): a device that connect() did not set
+> is now kept, so changing it afterwards needs CAP_NET_RAW, as on a
+> socket that never disconnected.
+
+[Severity: Low]
+Does this paragraph cover all of the behaviour changes?
+
+In __ip6_datagram_connect(), connect() to a link-local peer can replace
+a VRF master M with a slave S. old_dif is non-zero there, so
+ip6_datagram_connect_dev() does not set SOCK_CONNECT_DEV. Disconnect now
+keeps S, where it used to reset the device to 0, and binding back to M
+then needs CAP_NET_RAW.
+
+So a device that connect() did set is now kept, and the sentence above
+doesn't cover that. The change is only described in the notes below the
+--- line, and those notes won't be in the commit that stable backporters
+read.
+
+__udp_disconnect() is also called from raw_abort() in net/ipv4/raw.c and
+from udp_abort() (SOCK_DESTROY and bpf_sock_destroy). Those paths now keep
+a device set by the user or by a cgroup program as well.
+
+Could the commit message mention the VRF change and the abort paths?
 
 > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 9f1f45afee532..a13bf32cbdb99 100644
+> index 446729b41d661..9f1f45afee532 100644
 > --- a/net/ipv4/udp.c
 > +++ b/net/ipv4/udp.c
-> @@ -131,11 +131,35 @@ EXPORT_PER_CPU_SYMBOL_GPL(udp_memory_per_cpu_fw_alloc);
->  #define MAX_UDP_PORTS 65536
->  #define PORTS_PER_CHAIN (MAX_UDP_PORTS / UDP_HTABLE_SIZE_MIN_PERNET)
+> @@ -2195,6 +2195,7 @@ static int udp_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
 >  
-> -static bool udp_lport_same_bind(const struct sock *sk, const struct sock *sk2)
-> +static int udp_bound_dev_if(const struct sock *sk)
-> +{
-> +	int dif;
-> +
-> +	if (READ_ONCE(sk->sk_userlocks) & SOCK_CONNECT_DEV)
-> +		return 0;
-> +	/* Pairs with the smp_wmb() before SOCK_CONNECT_DEV is cleared. */
-> +	smp_rmb();
-> +	dif = READ_ONCE(sk->sk_bound_dev_if);
-> +	/* Pairs with the smp_wmb() after SOCK_CONNECT_DEV is set. */
-> +	smp_rmb();
-> +	if (READ_ONCE(sk->sk_userlocks) & SOCK_CONNECT_DEV)
-> +		return 0;
-> +	return dif;
-> +}
+>  int __udp_disconnect(struct sock *sk, int flags)
+>  {
+> +	u8 userlocks = READ_ONCE(sk->sk_userlocks);
+
+[Severity: Low]
+Can this snapshot be stale by the time it is used to clear
+sk_bound_dev_if?
+
+Ping and raw sockets use __udp_disconnect() as their ->disconnect, and
+l2tp_ip6_disconnect() calls it. All of them get there from
+inet_dgram_connect(AF_UNSPEC) without lock_sock(). Only udp_disconnect()
+takes the socket lock.
+
+Take an IPv6 ping, raw or L2TP socket connected to a link-local peer, so
+it has device X and SOCK_CONNECT_DEV set:
+
+thread B: __udp_disconnect()
+    userlocks = READ_ONCE(sk->sk_userlocks);   /* has SOCK_CONNECT_DEV */
+
+thread C: __udp_disconnect() completes
+    sk_bound_dev_if = 0, SOCK_CONNECT_DEV cleared
+
+thread A: setsockopt(SO_BINDTODEVICE, Y)
+    sock_bindtoindex_locked()
+        /* device is 0, so no CAP_NET_RAW check */
+        sk_bound_dev_if = Y, SOCK_CONNECT_DEV cleared
+
+thread B resumes:
+    if (userlocks & SOCK_CONNECT_DEV) {
+        WRITE_ONCE(sk->sk_bound_dev_if, 0);
+
+Disconnect then clears the device that SO_BINDTODEVICE set. For ping, raw
+and L2TP this contradicts "a device that connect() did not set is now
+kept". The result matches the pre-patch behaviour, and the window is
+small.
+
+>  	struct inet_sock *inet = inet_sk(sk);
+>  	/*
+>  	 *	1003.1g - break association.
+> @@ -2204,15 +2205,19 @@ int __udp_disconnect(struct sock *sk, int flags)
+>  	WRITE_ONCE(inet->inet_daddr, 0);
+>  	inet->inet_dport = 0;
+>  	sock_rps_reset_rxhash(sk);
+> -	WRITE_ONCE(sk->sk_bound_dev_if, 0);
+> -	if (!(sk->sk_userlocks & SOCK_BINDADDR_LOCK)) {
+> +	if (userlocks & SOCK_CONNECT_DEV) {
+> +		WRITE_ONCE(sk->sk_bound_dev_if, 0);
 
 [Severity: Medium]
-Can a full connect() and disconnect() cycle on sk2 happen entirely
-between the two loads of sk_userlocks here?
+The commit message says clearing the device "is only safe for a device
+that connect() set", and this still clears it without a bind conflict
+check. Does that hold for L2TP/IPv6?
 
-The writers are ip6_datagram_connect_dev(), __udp_disconnect(), the
-error path in __ip6_datagram_connect() and sock_bindtoindex_locked().
-They hold only lock_sock() of the other socket. This reader holds only
-hslot->lock or hslot2->lock.
-
-Say the victim runs connect(fe80::1%eth0) and then connect(AF_UNSPEC)
-between the two flag loads:
-
-CPU1 (attacker bind)                 CPU2 (victim)
-udp_bound_dev_if(sk2)
-  READ_ONCE(sk_userlocks)   /* clear */
-                                     ip6_datagram_connect_dev()
-                                       set SOCK_CONNECT_DEV
-                                       sk_bound_dev_if = eth0
-  READ_ONCE(sk_bound_dev_if) /* eth0 */
-                                     __udp_disconnect()
-                                       sk_bound_dev_if = 0
-                                       clear SOCK_CONNECT_DEV
-  READ_ONCE(sk_userlocks)   /* clear */
-  return eth0
-
-udp_bound_dev_overlap() then compares eth0 with the attacker's eth1 and
-admits the bind. The victim, however, holds the port on every device.
-
-On PREEMPT_RT, spin_lock_bh() in udp_lib_get_port() does not disable
-preemption, so the binding task can be preempted between the loads. On
-other kernels a hardirq or NMI can open the same window. The attacker
-can retry SO_BINDTODEVICE plus bind() at almost no cost.
-
-The notes after the commit message acknowledge this window and leave it
-open. Since this is tagged for stable, would it be better to close it
-here? A sequence count, a lock shared with the writers, or a single
-field that records the bind-time device would each do it.
-
-[ ... ]
-
-> @@ -157,14 +182,13 @@ static int udp_lib_lport_inuse(struct net *net, __u16 num,
->  		    sk2 != sk &&
->  		    (bitmap || udp_sk(sk2)->udp_port_hash == num) &&
->  		    (bitmap || !sk2->sk_reuse || !sk->sk_reuse) &&
-> -		    (!sk2->sk_bound_dev_if || !sk->sk_bound_dev_if ||
-> -		     sk2->sk_bound_dev_if == sk->sk_bound_dev_if) &&
-> -		    inet_rcv_saddr_equal(sk, sk2, true)) {
-> +		    inet_rcv_saddr_equal(sk, sk2, true) &&
-> +		    udp_bound_dev_overlap(dif, sk2)) {
-
-[Severity: High]
-Does the hijack in the commit message still work if the attacker binds
-a specific address instead of [::]?
-
-On connect, a socket bound to a wildcard address gets a narrowed local
-address and is rehashed:
-
-net/ipv6/datagram.c:ip6_datagram_dst_update() {
-    ...
-	if (ipv6_addr_any(&sk->sk_v6_rcv_saddr)) {
-		sk->sk_v6_rcv_saddr = fl6->saddr;
-		inet->inet_rcv_saddr = LOOPBACK4_IPV6;
-		if (sk->sk_prot->rehash)
-			sk->sk_prot->rehash(sk);
-    ...
-}
-
-__ip4_datagram_connect() does the same for IPv4:
-
-	if (!inet->inet_rcv_saddr) {
-		WRITE_ONCE(inet->inet_rcv_saddr, fl4->saddr);
-		if (sk->sk_prot->rehash)
-			sk->sk_prot->rehash(sk);
-	}
-
-Suppose the victim is narrowed to one specific address and the attacker
-binds a different one. inet_rcv_saddr_equal() returns false before
-udp_bound_dev_overlap() runs, so the bind is admitted. In
-udp_lib_lport_inuse2(), the rehashed victim is not in any of the hslot2
-buckets that get scanned.
-
-Later the victim calls connect(AF_UNSPEC). A wildcard bind never sets
-SOCK_BINDADDR_LOCK, so __udp_disconnect() calls inet_reset_saddr() and
-the victim goes back to the wildcard address. The attacker's more
-specific socket then wins the lookup.
-
-This IPv4 sequence needs neither a link-local peer nor SO_BINDTODEVICE:
-
-  victim:   bind(0.0.0.0:P), connect(8.8.8.8:53)  /* narrows to 192.168.1.5 */
-  attacker: bind(127.0.0.1:P)                     /* admitted */
-  victim:   connect(AF_UNSPEC)
-
-After this, the attacker receives the victim's loopback traffic to
-port P. The commit's own example also looks exploitable if the attacker
-binds [2001:db8::a]:P instead of [::]:P.
-
-The notes after the commit message mention this window and leave it for
-a separate patch, and nothing later in the series addresses it. The
-commit message says the patch stops an unprivileged user from binding a
-port that another user's socket holds, and it is tagged for stable.
-Should the address case be fixed together with the device case?
-
-[ ... ]
-
-> @@ -194,13 +219,12 @@ static int udp_lib_lport_inuse2(struct net *net, __u16 num,
->  		    sk2 != sk &&
->  		    (udp_sk(sk2)->udp_port_hash == num) &&
->  		    (!sk2->sk_reuse || !sk->sk_reuse) &&
-> -		    (!sk2->sk_bound_dev_if || !sk->sk_bound_dev_if ||
-> -		     sk2->sk_bound_dev_if == sk->sk_bound_dev_if) &&
-> -		    inet_rcv_saddr_equal(sk, sk2, true)) {
-> +		    inet_rcv_saddr_equal(sk, sk2, true) &&
-> +		    udp_bound_dev_overlap(dif, sk2)) {
-
-[Severity: Medium]
-This converts the UDP conflict checks. Does the L2TP/IPv6 bind check
-still trust a device that connect() set?
-
-l2tp_ip6_connect() calls __ip6_datagram_connect(). On an L2TP/IPv6
-socket bound with no device, ip6_datagram_connect_dev() therefore sets
-both sk_bound_dev_if and SOCK_CONNECT_DEV. __l2tp_ip6_bind_lookup()
-still compares the raw device:
+For UDP, the next patch in the series ("udp: Ignore a connect()-set device
+in the bind conflict check") makes udp_lib_lport_inuse() and
+udp_lib_lport_inuse2() treat a SOCK_CONNECT_DEV device as 0. That patch
+only changes udp.c, and __l2tp_ip6_bind_lookup() still compares the raw
+device:
 
 net/l2tp/l2tp_ip6.c:__l2tp_ip6_bind_lookup() {
     ...
@@ -253,81 +194,80 @@ net/l2tp/l2tp_ip6.c:__l2tp_ip6_bind_lookup() {
     ...
 }
 
-Take the same sequence as in the commit message:
+l2tp_ip6_connect() goes through __ip6_datagram_connect(), and
+l2tp_ip6_disconnect() calls __udp_disconnect(). An l2tp_ip6 socket needs
+no capability, because inet6_create() checks CAP_NET_RAW only for
+SOCK_RAW. The module also loads automatically through
+MODULE_ALIAS_NET_PF_PROTO_TYPE().
 
-  victim:   bind([::], conn_id X), connect(fe80::1%eth0)
-  attacker: SO_BINDTODEVICE(eth1), bind([::], conn_id X)
-  victim:   connect(AF_UNSPEC)
+Could an unprivileged user do the following?
 
-l2tp_ip6_bind() skips the victim (eth0 vs eth1) and admits the
-attacker. Then l2tp_ip6_disconnect()->__udp_disconnect() clears the
-victim's device because SOCK_CONNECT_DEV is set. The victim now holds
-conn_id X on every device, while the attacker's socket is still in
-l2tp_ip6_bind_table.
+1. attacker: bind conn_id X with no device, which holds X on every device
+2. attacker: connect(fe80::1%eth1), so the device becomes eth1 and
+   SOCK_CONNECT_DEV is set
+3. victim: SO_BINDTODEVICE(eth0), bind conn_id X. This succeeds because
+   the attacker's eth1 is skipped.
+4. attacker: connect(AF_UNSPEC), which puts the device back to 0 with no
+   conflict check
+5. attacker: connect() to the victim's real peer G. The peer is not
+   scoped, so the device stays 0, and l2tp_ip6_connect() moves the socket
+   to the head of l2tp_ip6_bind_table.
+6. l2tp_ip6_recv() takes the first match, so the attacker gets G's L2TP
+   packets for conn_id X that arrive on eth0
 
-sk_add_bind_node() added the attacker's socket at the head of that
-table. So l2tp_ip6_recv() would match it first for control frames from
-fe80::1 that arrive on eth1 for tunnel X.
+Without this sequence, the victim's bind in step 3 would fail with
+EADDRINUSE.
 
-The previous patch in the series lists L2TP as a __udp_disconnect()
-user, and nothing later in the series changes this lookup. Should
-__l2tp_ip6_bind_lookup() also ignore a device that connect() set?
+A related point: l2tp_ip6_bind() never sets SOCK_BINDADDR_LOCK. So
+__udp_disconnect() always calls inet_reset_saddr() on L2TP sockets, and
+the bound address gets wider too.
+
+There is also a VRF case that this patch introduces. Take a socket bound
+to VRF master M that connects to a link-local peer on slave S. It gets
+device S without SOCK_CONNECT_DEV because old_dif is non-zero, and it now
+keeps S after disconnect instead of going back to 0.
+
+Another VRF socket's bind of M:P is then allowed, because S != M in
+udp_lib_lport_inuse(). Before this patch, that bind conflicted with the
+socket's device 0.
+
+__udp_disconnect() doesn't clear sk_v6_daddr. So for datagrams from its
+former peer, the S-bound socket then scores higher than the M-bound one.
+
+Is the series meant to handle the L2TP/IPv6 and VRF cases as well?
+
+> +		WRITE_ONCE(sk->sk_userlocks,
+> +			   sk->sk_userlocks & ~SOCK_CONNECT_DEV);
+
+[Severity: Low]
+Is this read-modify-write of sk_userlocks safe without the socket lock?
+
+For ping, raw and L2TP sockets this runs from inet_dgram_connect(AF_UNSPEC)
+-> prot->disconnect without lock_sock(). Other code updates the same u8
+with plain read-modify-writes under the socket lock, and that lock doesn't
+exclude this path. Those writers include SO_SNDBUF in sk_setsockopt():
+
+    sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+
+The others are SO_RCVBUF, SO_BUF_LOCK, sock_bindtoindex_locked() and
+ip6_datagram_connect_dev().
+
+An update that lands between this load and store is lost or undone. A
+SOCK_SNDBUF_LOCK that was just set can vanish. A buffer lock bit that
+SO_BUF_LOCK just cleared can come back. A SOCK_CONNECT_DEV set by a
+concurrent connect() can be dropped.
+
+The plain sk->sk_userlocks load inside WRITE_ONCE() also races with those
+writers, so KCSAN is likely to flag it.
+
+Before this patch, the unlocked path only read sk_userlocks. The notes
+argue that a lost update cannot cause a bind overlap. Does that argument
+also cover the other bits in this byte?
+
+>  	if (!(userlocks & SOCK_BINDADDR_LOCK)) {
+>  		inet_reset_saddr(sk);
 
 [ ... ]
-
-> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-> index 0296207dbeb0b..37a093f74724e 100644
-> --- a/net/ipv6/datagram.c
-> +++ b/net/ipv6/datagram.c
-> @@ -141,9 +141,12 @@ EXPORT_SYMBOL_GPL(ip6_datagram_release_cb);
->  
->  static void ip6_datagram_connect_dev(struct sock *sk, int old_dif, int dif)
->  {
-> -	if (!old_dif && dif)
-> +	if (!old_dif && dif) {
->  		WRITE_ONCE(sk->sk_userlocks,
->  			   sk->sk_userlocks | SOCK_CONNECT_DEV);
-> +		/* Pairs with the second smp_rmb() in udp_bound_dev_if(). */
-> +		smp_wmb();
-> +	}
->  	WRITE_ONCE(sk->sk_bound_dev_if, dif);
->  }
-
-[Severity: Medium]
-For a socket bound to a VRF master, can udp_bound_dev_if() still return
-the slave that connect() picked instead of the device bind() reserved?
-
-In __ip6_datagram_connect(), sk_dev_equal_l3scope() accepts a slave0
-scope id on a socket bound to vrf0. ip6_datagram_connect_dev(sk, vrf0,
-slave0) then writes sk_bound_dev_if = slave0. It does not set
-SOCK_CONNECT_DEV, because old_dif is non-zero.
-
-udp_bound_dev_if() then returns slave0 for that socket.
-udp_bound_dev_overlap() and udp_lport_same_bind() treat slave0 as the
-reserved device.
-
-For example, user A binds vrf0 X:P and connects to fe80::1%slave0.
-Another user then binds vrf0 X:P. udp_bound_dev_overlap(vrf0, A)
-compares vrf0 with slave0, finds no overlap, and admits the bind, even
-though A reserved vrf0.
-
-With the earlier patch in this series, __udp_disconnect() keeps slave0
-because the flag is clear. A never returns to vrf0, and the other user
-alone receives the port's traffic on the other slaves of vrf0.
-
-The early return for reuseport can go wrong the same way. Say B is
-owned by A's user, uses SO_REUSEPORT and is bound to slave0, and its
-scan reaches A first. Then udp_lport_same_bind(B, slave0, A) is true,
-and udp_lib_lport_inuse() returns 0 before it sees socket C. C belongs
-to another user and is bound to slave0 X:P.
-
-The commit message says:
-
-  A VRF master that connect() narrowed to one of its interfaces does not
-  get the flag and is compared as before.
-
-Is it safe to compare as before here? Would recording the bind-time
-device, instead of using a flag, also cover this case?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261120174341.35873-1-juanagusnicco%40gmail.com
