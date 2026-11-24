@@ -1,94 +1,110 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795524612;
-	b=sQ6ooD8Sfbtc5RoUXDRkCkn53EPd0SwUjwnEZR9PkKQ8UWT21cJZC4IJFnQjZyASyznU
-	 51sAE1mfRebQLH8R4LDUJcEkbMerysr7Gj140MfQ4B6gauLvzXa9TU62ZqibVcX2G/Im1
-	 Ohy0xXqpoYS44HonQ/UKidsbjiQGW7eU39W5XQhzRQH9YreS8Evs2uENrG0CwAk5lSDgL
-	 YyOKel/7GgGIgF87crX6p+iejpXEAHLV5VS5oc1+gGWYT6aKHh9ofKPA6WyT+7ixBP8Dj
-	 HPKhIR0g+b6Q4Vwc2aGM42B6a+BAMkasbcoYi5IaeMn0OcynAf6z5qWDJBc+BH9xU4g==
+	t=1795525035;
+	b=Y/avzTzKhrJ1+c9nU/+nStqqLa5F8/IHb7CFpWl2oyUiZ4SFAj+yE1Ztd+T+EmU4DUQf
+	 k9GACWlbIAkDMKWYaKiuQgP473sgtf9FygMTPy9duNHOLd1K74FryqqiaV9TsInbXnJGb
+	 OoTWaj6ZQR/ySdSd7vzCcK8Q6jwgfkMpSk3y6j619Nj8E2cepr/aC0S6EuCg370LW/2B+
+	 o5qjujAAGCP2k3hbQjnU3EwvPqpL7wx4zfq+rKnWtEpNAzflGbRI52SPbWuDZ0v3IJeWA
+	 8Zgm67FUG5HhqGpl8yqrodgymT3+s6LU38RleufHQkUJMGm//8sh6jyI5Rh7S86PyDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795524612;
-	h=Received:DKIM-Signature:Received:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 X-SA-Exim-Connect-IP:X-SA-Exim-Rcpt-To:X-SA-Exim-Mail-From:
-	 X-SA-Exim-Scanned;
-	bh=fkcXNh2S892P26zeb4v8GatV81GnIFMuUNe4sWAuvks=;
-	b=GUcPvP2SMr9qLHzUpssieGrgCs2eWdDvTIB0I0pJanUYES12weTuDNOCBJtxczRelQYl
-	 HLdTcxvmPDdaZjfF8HzHigGwSFkHBz3R0UJJI4y9D2KKN8kxcqG7ZRWinIyTKO43Db3IL
-	 cZ9KhkVpxK0qFGjwMamHY7PCJLHn4Vp/AXz1FrnGFxy2f4YWgOB8JqnvOkGeKJyzDZyg1
-	 BJXkwq+6LWDwrBziwRyzQWwrHZeOoQEsg+wpqkcSPAx+GaqXkaDJhPuqVQBAsWuNJXkQv
-	 H7w51ZWQvX9Qp4SBc/wKzxRy9C3plkzS3JxM+Pwrqo9UfkBZ/A6m0XCMnFnufqrKx9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795525035;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=XvBo39oa7bpeKA03NVP1pIOBu5yhj0WFEtus/hl+7BI=;
+	b=z17phJJrSP2XSFtnNvTRe6dYgn+fHplgSoGFNJXetWfDep4VD0gh4q3zbMH+wEl7NzKu
+	 r4kYPmIyW1h6tLLccaMe2zLCo8UsmVaakrPrL0h6Eho0A8Dr7eLqACnyqSZKV+m5PQ8pa
+	 zae8EWl+cgKhe5Am8USdhUBsNcMNGxwlmDvXjroJK8yShOXK3p8w9DxwLborz68bD0mld
+	 3wqtTePnhF017e9MqUMuVuciZbeGFOTI1gVBNCg7R5JNO5b4olXfKPTS3d3f+5k1c6jki
+	 U4bRYvYPdyLpV8Z7HCwV/8ULvlKPCPuMVAYZPZo7sW0FMkOEmP4HgAVfb3QOn/Nbl8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gr2PEFt6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b8rrhvUi;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF30606A31E;
-	Tue, 24 Nov 2026 12:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE18D606A31E;
+	Tue, 24 Nov 2026 12:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gr2PEFt6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B391F000C0;
-	Tue, 24 Nov 2026 12:50:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b8rrhvUi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 715FE1F000C4;
+	Tue, 24 Nov 2026 12:57:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795524610;
-	bh=fkcXNh2S892P26zeb4v8GatV81GnIFMuUNe4sWAuvks=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Gr2PEFt6Nif4bgQBkTr20iv52muiiKwwK0cRcdA2K0e825bGiSD/zpBb8TnonFISy
-	 fxqG4PZIaD/LsMIx6VJ2b9q82i6NAso2o9l3lcff2wZgZkU/fYbcM/T1MqnYuWA5Tg
-	 3OeTKCka90kyPatC5NxqPl3gda+lX38e3x5q9Xv9FcQFwO5Hm6v6qeV1eyZY8VMU3F
-	 31mirC74x45EEyhE3MU0Q/la2PlvYX/UX1LzUgFtaIRv/t1AIgC+BMlOFtbXOH4PID
-	 x2aHnvY+gDaxfJFp3TjoCIPM2cpf8Lj3JiVjlcrTrKDx8/nQN8aFOKLv7UkpNWOquZ
-	 swhINiwhDxj8w==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1xVpyK-00000002Zmv-16Az;
-	Tue, 24 Nov 2026 12:50:08 +0000
-Date: Tue, 24 Nov 2026 12:50:07 +0000
-Message-ID: <868q2iz94w.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Justin He <Justin.He@arm.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey
- Gouly <Joey.Gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki
- Poulose <Suzuki.Poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin
- Marinas <Catalin.Marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark
- Rutland <Mark.Rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean
- Christopherson <seanjc@google.com>,
+	s=k20260515; t=1795525035;
+	bh=XvBo39oa7bpeKA03NVP1pIOBu5yhj0WFEtus/hl+7BI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=b8rrhvUikY9XPyDwKdD2TMncflHFV8e+wbmxKQ4QphZNP2Jy8JD9raSLZHpmEz87w
+	 pMrrYBdpEQVTqFZGUDWVh4W0hgY67f2uM7pg618hvw1Kd052+gWy5QcJi9w4le2e1j
+	 +EBnfO/uOfUZ+qBakCkEG+YOuc2VXLkWafL2iyWlH8DzCSNBeWBDOqqTuTDR9DAGlD
+	 mhHkY5C5hAEEhv4DBaaUFN4m/Ct6ICFKkc0e352cbU0s9HgZUFuvM7I69GHTmnJ/N7
+	 lQQlJbfexhk+yLLgjzrUklGWTK8HXxqPNMehxV6c8/t3OXjHMACvOgYobee95K/7FB
+	 ep9mRUzvMKasQ==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <shuah@kernel.org>,
-	Sascha
- Bischoff <Sascha.Bischoff@arm.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Lorenzo
- Stoakes <ljs@kernel.org>, Dan Carpenter <dan@pereq.eu>
-Subject: Re: [PATCH 1/3] KVM: arm64: Don't load hardware vCPU state before first run
-In-Reply-To: <AS2PR08MB978600ED2150F773D3E1631DF7442@AS2PR08MB9786.eurprd08.prod.outlook.com>
-References: <20261123150917.2679600-1-justin.he@arm.com>
-	<20261123150917.2679600-2-justin.he@arm.com>
-	<86eccbzcqh.wl-maz@kernel.org>
-	<AS2PR08MB978600ED2150F773D3E1631DF7442@AS2PR08MB9786.eurprd08.prod.outlook.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Stuart Clark <stuclar@meta.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Simon Horman <horms@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mina Almasry <almasrymina@google.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	kernel-team@meta.com,
+	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Tao Cui <cuitao@kylinos.cn>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Wei <dw@davidwei.uk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 01/15] xdp: Let memory providers offer XDP a view of their net_iovs
+Date: Tue, 24 Nov 2026 13:56:36 +0100
+Message-ID: <20261124125654.183091-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261124112707.118678-1-bjorn@kernel.org>
+References: <20261124112707.118678-1-bjorn@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -97,77 +113,160 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: Justin.He@arm.com, oupton@kernel.org, fuad.tabba@linux.dev, Joey.Gouly@arm.com, seiden@linux.ibm.com, Suzuki.Poulose@arm.com, yuzenghui@huawei.com, Catalin.Marinas@arm.com, will@kernel.org, Mark.Rutland@arm.com, pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, Sascha.Bischoff@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, ljs@kernel.org, dan@pereq.eu
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Adding Dan to this loop, as I reckon something else is amiss.
+Currently, a net_iov is memory that the kernel does not read.
+netmem_address() and skb_frag_address() give NULL for it, and XDP
+code, which takes buffer addresses the same way, cannot read it
+either. Some providers back net_iovs with memory that the CPU can
+reach and XDP must read, such as the UMEM of an AF_XDP socket that
+receives in the device's buffer layout, later in this series. io_uring
+zcrx could do the same.
 
-On Tue, 24 Nov 2026 01:39:23 +0000,
-Justin He <Justin.He@arm.com> wrote:
-> 
-> Hi, Marc
-> 
-> > -----Original Message-----
-> [...]
-> > > KVM_PRE_FAULT_MEMORY calls vcpu_load() as soon as
-> > KVM_ARM_VCPU_INIT has
-> > > completed. On arm64, however, kvm->arch.sysreg_masks, the trap
-> > > configuration, vncr_tlb and nested vGIC state are only set up on the
-> > > first KVM_RUN in kvm_arch_vcpu_run_pid_change().
-> > 
-> > I think I'm going to queue a patch disabling prefaulting immediately,
-> > and then we can fix this crap.
-> > 
-> Fine with me. I'll rebase on top of it and have v2 re-enable
-> pre-faulting together with the load/put change.
+Such memory is net_iov and not pages because it is user memory pinned
+with GUP. mm owns the struct page fields that page_pool takes over
+(lru, where pp_magic and pp live, and mapping), a chunk larger than a
+page lies inside a hugetlb folio instead of being a page of its own,
+and the provider keeps state per chunk. io_uring zcrx wraps pinned
+user pages in net_iovs for the same reasons.
 
-Don't worry about that. I can fix that myself when applying the
-patches.
+Let a net_iov area offer an XDP view, an address for each of its
+net_iovs that XDP code may read and write. Add xdp_netmem_address()
+for the head of an XDP buffer and xdp_frag_address() for its
+fragments, and use them in bpf_xdp_pointer(), bpf_xdp_copy_buf(),
+bpf_xdp_pull_data() and the tail growth of bpf_xdp_adjust_tail().
 
+The area keeps the address and size of the view and the log2 of the
+net_iov size, so net_iov i lies at xdp_vaddr + (i << xdp_shift). For
+pages the helpers give page_address(), and for a net_iov without a
+view they give NULL. dmabuf and io_uring zcrx areas are allocated
+zeroed, so they offer no view. AF_XDP sinks are the first to offer
+one.
 
-> > > Since kvm_running_vcpu can now be set without VHE state on the CPU, use
-> > > host_ctxt->__hyp_running_vcpu in VHE enter_vmid_context() (matching
-> > > nVHE)
-> > 
-> > Can you clarify under which circumstances we end-up on the TLB
-> > invalidation path? Simply faulting things in should not result in
-> > invalidation. Unless we end-up with MMU notifiers firing?
-> > 
-> I found this by code inspection, not from a failure. A TLBI from a stage-2
-> BBM or an MMU notifier can hit this path during pre-faulting, but before
-> the first run hw_mmu is canonical, so it makes no difference. As Lorenzo
-> said, I'll drop this hunk.
+XDP may read a net_iov only through these helpers, and only if its
+provider offers a view. Such buffers must not become skb frags or
+xdp_frames. For the core and the stack every net_iov stays unreadable,
+netmem_address() and skb_frag_address() still give NULL, and
+skb->unreadable is still set for every net_iov frag. Other readers get
+NULL for a net_iov with a view too, so they fail closed.
 
-vcpu->arch.hw_mmu being the canonical one before the first run doesn't
-hold anymore, since a7602ea542d4e ("KVM: arm64: nv: Initialize hw_mmu
-to NULL for nested vCPUs"), as userspace can configure things for an
-L2, before first run, and bad things happen otherwise.
+The other rules for providers stay. Native XDP runs next to a provider
+only if it opts in, and providers without an XDP view still need
+header split. AF_XDP sinks are exempt from both through MP_XDP_ONLY.
 
-But the observation remains: if an MMU notifier occurs for any reason
-while pre-faulting (likely a concurrent reclaim), we get the "not
-quite loaded" vcpu in enter_vmid_context(). If vcpu->arch.hw_mmu is a
-valid (non-null) pointer, then we will restore whatever is in that
-structure when reaching exit_vmid_context(), and that's not what is
-intended.
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
+---
+ include/net/netmem.h |  8 ++++++++
+ include/net/xdp.h    | 34 ++++++++++++++++++++++++++++++++++
+ net/core/filter.c    |  8 ++++----
+ 3 files changed, 46 insertions(+), 4 deletions(-)
 
-So I think we need that sort of exclusion. Either we track what is
-actually properly loaded (using __hyp_running_vcpu as you did before,
-or by checking whether the vcpu is in a valid state).
-
-I think we have a somewhat similar breakage with 5651590be08a6 ("KVM:
-arm64: Load the vcpu in KVM_SET_VCPU_EVENTS"): as vcpu_load() now
-becomes sensitive to vcpu_has_run_once() being true, we can't tell
-anything of the state that is going to be evaluated by the event
-injection helper.
-
-We could prevent the non-running injection in KVM_SET_VCPU_EVENTS, but
-that's also a change in the API...
-
-	M.
-
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index fb693bc1702a..4cf4ee1cd55d 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -104,6 +104,14 @@ struct net_iov_area {
+ 	/* Array of net_iovs for this area. */
+ 	struct net_iov *niovs;
+ 	size_t num_niovs;
++	/* XDP view, see xdp_netmem_address(): XDP may read and write net_iov i
++	 * at xdp_vaddr + (i << xdp_shift), xdp_vsize bytes in all. NULL if the
++	 * provider offers none. The core and the stack take every net_iov as
++	 * unreadable either way.
++	 */
++	void *xdp_vaddr;
++	size_t xdp_vsize;
++	unsigned int xdp_shift;
+ };
+ 
+ static inline struct net_iov_area *net_iov_owner(const struct net_iov *niov)
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 07231adfb5f8..1629e347b71f 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -164,6 +164,40 @@ xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
+ #endif
+ }
+ 
++/* XDP view of net_iovs: a memory provider may give XDP an address for its
++ * net_iovs, see &net_iov_area.xdp_vaddr. XDP code may read and write a
++ * net_iov only through these helpers, and only if its provider offers a
++ * view; such buffers must not become skb frags or xdp_frames. For the core
++ * and the stack every net_iov stays unreadable: netmem_address() and
++ * skb_frag_address() give NULL for it. A net_iov without a view gives NULL
++ * here too, so a reader that does not use these helpers fails closed.
++ */
++static __always_inline void *xdp_net_iov_address(const struct net_iov *niov)
++{
++	const struct net_iov_area *area = net_iov_owner(niov);
++
++	if (!area->xdp_vaddr)
++		return NULL;
++	return area->xdp_vaddr +
++	       ((unsigned long)net_iov_idx(niov) << area->xdp_shift);
++}
++
++/* Address of @netmem, which a driver uses as the head of an XDP buffer */
++static __always_inline void *xdp_netmem_address(netmem_ref netmem)
++{
++	if (netmem_is_net_iov(netmem))
++		return xdp_net_iov_address(netmem_to_net_iov(netmem));
++	return __netmem_address(netmem);
++}
++
++/* Address of the bytes of @frag of an XDP buffer */
++static __always_inline void *xdp_frag_address(const skb_frag_t *frag)
++{
++	void *addr = xdp_netmem_address(skb_frag_netmem(frag));
++
++	return addr ? addr + skb_frag_off(frag) : NULL;
++}
++
+ static __always_inline void
+ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
+ 		 int headroom, int data_len, const bool meta_valid)
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f42ecfb5841f..d5774b2577e7 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4310,7 +4310,7 @@ void bpf_xdp_copy_buf(struct xdp_buff *xdp, unsigned long off,
+ 			break;
+ 
+ 		ptr_off += ptr_len;
+-		ptr_buf = skb_frag_address(next_frag);
++		ptr_buf = xdp_frag_address(next_frag);
+ 		ptr_len = skb_frag_size(next_frag);
+ 		next_frag++;
+ 	}
+@@ -4338,7 +4338,7 @@ void *bpf_xdp_pointer(struct xdp_buff *xdp, u32 offset, u32 len)
+ 		u32 frag_size = skb_frag_size(&sinfo->frags[i]);
+ 
+ 		if  (offset < frag_size) {
+-			addr = skb_frag_address(&sinfo->frags[i]);
++			addr = xdp_frag_address(&sinfo->frags[i]);
+ 			size = frag_size;
+ 			break;
+ 		}
+@@ -4429,7 +4429,7 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
+ 	if (unlikely(offset > tailroom))
+ 		return -EINVAL;
+ 
+-	memset(skb_frag_address(frag) + skb_frag_size(frag), 0, offset);
++	memset(xdp_frag_address(frag) + skb_frag_size(frag), 0, offset);
+ 	skb_frag_size_add(frag, offset);
+ 	sinfo->xdp_frags_size += offset;
+ 	if (rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
+@@ -12835,7 +12835,7 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
+ 		skb_frag_t *frag = &sinfo->frags[i];
+ 		u32 shrink = min_t(u32, delta, skb_frag_size(frag));
+ 
+-		memcpy(xdp->data_end, skb_frag_address(frag), shrink);
++		memcpy(xdp->data_end, xdp_frag_address(frag), shrink);
+ 
+ 		xdp->data_end += shrink;
+ 		sinfo->xdp_frags_size -= shrink;
 -- 
-Without deviation from the norm, progress is not possible.
+2.56.1
+
