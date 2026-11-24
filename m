@@ -1,98 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795556868;
-	b=5of2+WSuvZUl4zkc//NSw1Hm17VIjUBo4Y7iCYXEp8QwCbWa4l1VZ0yb0PqGUQdVp+1y
-	 3KotxyIrKMyjWsZbyX4ovm8f3f4G1bvU9FeaFjdQrJFtwIURvJ3iyp5aIMi3iJFreWBkf
-	 Es3bua3kOfC+DCm93DvPPI3jWEZQn6Iuv9ccN6N1eMxhH7h4LMpeALsYj/9yEnz/VBvkP
-	 J33kvJ9C1py8gZZVjX/nZ6HgFBja73SAYl74GcSRyov14S+momKckNHvE7AlqYdlQgHO3
-	 bPrvo/KBMtoP9GhgYw50rG0fN1mhLNqnwbBXoF0f5ijyXMyQykP4yRupTcDs5mHYffg==
+	t=1795557003;
+	b=0+pakhWDyLX9BzWj+hnoGsjcX45q0RgY/WQS+CULfXHLWYz9M4QA1Cd0ij+v/pCDkUhg
+	 E4a408EPCuErTO3jCLlNzHnaldt4LCaInzKaflJMs4FWLW1JRO12PlRj2LLz2DSElqtLE
+	 QA8rugoSX+WxM2a+knvLiUEi3D7xExYIRInFTO5bmPa3CBbBuqZ0bkUi050UWUdlGxmfa
+	 B9FcLivvSP3XrIYLAViY5QAcIJ0li2V2v64Qae2pzMx+14HY12u4zDhqNQCpDNICRTVoc
+	 kL8RfEeJK5VpCfneX5bRe5jbhK/34/m7Yk+E369n8X+aW50NuWxG3qk/IavBOumd+xg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795556868;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795557003;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=F43DS6uF+VZY73OcpChGKxZymyIRHTvoEsGpRassCKw=;
-	b=CysD98N4RBmrSLH4KpcPGSmxGJNGK8YbMtk2KSU/OmJtjW0GQBW/BtPZGriKZom+9a+9
-	 thNWSFw+QjW3+aCa6rFZGrnhEVqMcsMVBxMMU9fus9geEOi6t5b2adZsjTPHg1zHrs1k0
-	 m9IAk+jAaaFLpmbMYuaeEM0eLJ3xD5ZKJ/XbsSNBn3ysR380FVf1Q7vPq0KGhY/7/ptxO
-	 ozRYyJey5QBCPEgid3/ZWXLBdpgBwUEMo9Qz9sjF8UI9Om+ROFWrHpXWnrwmuGlKv/8aW
-	 s7Yci5rTgtCJgohzuRvA43ORuRWGkVbpsEkcLAPSbKfAkbxDy/p2E2En17tKoqS6e4A==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=70XYBogHCXCBdw3YSd/sa8Nm9h583bMMPGxQWoXbuvc=;
+	b=dhTx8jRFTPq/mNHoDE+wCzh5oZkN2KvJO3k0Kn+AdBGiuVN7wGPzJpmA47kM+86mgYde
+	 Tqd2gxx0TBURzNOraIBCs7D35NaNv/7RaUiyvp8hRmqgVnds1P3yUC+/D8Y/3Xr6RDLpA
+	 A7AuzapcVMkh//8V5qnYqNH1whFCAUzGVKMBhF7dlgXZwwwjvcUdyu7CyBDouSOMyIGfv
+	 E+JDzpb/jHtm6zni48tVx5MqDyQTC9OK2Ult2zn/HTrepcPa6C5Yk5qVHtnkbxDHDqC0j
+	 Oph/S0Cxad8rhRcEWqSgW+yYPpcNDECuTItltRjJwoUp9swGG2AHgC+qmHB8UIFY4Lw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="NCjMwkm/";
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fp1Mhntr;
+	arc=none smtp.remote-ip=209.85.221.48
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F9E606A321
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 21:47:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35F9E606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792AA606A31E
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 21:50:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 792AA606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NCjMwkm/
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4bba5e1b9f9so19695e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:47:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fp1Mhntr
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48ff6bd58b8so473742f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:50:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795556866; x=1796161666; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F43DS6uF+VZY73OcpChGKxZymyIRHTvoEsGpRassCKw=;
-        b=NCjMwkm/CfTBm3rjRtM5Fi9y2811ZZ7R9VlLyqcxqvhLBTRQYXnfe6UG5hWXEa7THo
-         lmXEhwSxX35dWoAP/Fpsi7mV1/EF8dKg6VTfvchlCDxGFwlj4F9dryFhw/KCTzJPmzGF
-         ck6glT1WosE8d+8+PZembYMKaZ9XLdOSwxczNOyvFSTvDLl7N8YNsKru2uhftK3WSfIN
-         I4hrG4DN8KupTdflQr+yImbACP/vJf2SRcCYfZumkWwLK3tPsu1edMsOuuoXQY/uTSjy
-         0EAEkTyXkcyeAvKIMAhssD+8HMH1XD6XA4biQTuolPwlBJqygHBae+9nT6KPd4XLR82j
-         ShKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795556866; x=1796161666;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1795557002; x=1796161802; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=F43DS6uF+VZY73OcpChGKxZymyIRHTvoEsGpRassCKw=;
-        b=WJz+nwq3SSetIoVGSa0X4D0dfiiKrNT0QdKW66C2+0y4cm3rg7SmA4mU7yf0ko1n8U
-         pj3dIpxuZ009N+dasEKpiBCiohGUh0/x8UYpQSdcwKsMsXPZgvklkp6r6M3f+AGzkvju
-         /7xPJD13VXtDlDo9bGi5T859sO5qSWGrKGsx0HycNKPbQmBudjM/89aqW51bfS69PZgK
-         YLmaNbUHpqMTEn5gAuU3iz0FJ9KR9eVMPM1mb79HY6NuBy3v88vTlrEJFHpBs0shDYkW
-         KiatvnNltRfPvODt47cAvr03S9JH/jpK+vJTqC38+6YP3rDl6SLr4LjZGwT6+osZ8KIo
-         fDNA==
-X-Forwarded-Encrypted: i=1; AL+hErHkDmRFG4MhipUj1gkjmaTBLq5wB6T9dp8Re+EmJA2GXfe3n6bTY5mK9y6Zs2nVnx+bB8VZJ+JwjIL9B73Owlk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8rcJRyKS/Y5ffJiDM6imcd9ipY4f2gnkmLjNedQD2yftxEJCJf
-	ZSA0q1+JQhBDHmd560Dn36IjU0bJVFhyU3UpIdlxQpdUFG6Pl4AAoUW7
-X-Gm-Gg: AZFdTZdf/F4Gb5iDXh3/CdfunObFxqCLLE1wsXWDpxin1RElriWHlRu0yl3Pqavk8BE
-	rVrjG3PG7WaO5bN8KdjrPT+XGVXbQW8XQRUUdjXNIGnDtk2Mlz/pLJMZUbvyUQn8yNekyj7jfqp
-	IhIXCYERHdO8Zz4uUCJNm0qutJJglBTU6w8AMOvMcpu7HwRdDbE/A8Za+eKsS1Fisd6tV4aCgIT
-	Ou3hBg/fc8dCmKSp2npIFDawiRrAe2SBs3Vc7cgp7l4sUrdkp8Be4oD8j6foAOPz6RE5vrvGg+f
-	0MV09LrVWdy6QdAmSat0GAS+delxPKW0pMnSdpfA6BkLST8ataVwCFtUYGT2ZB1VDLxL2RPhJ+A
-	Yb+HBr7SQ/76rOQOC7asExj5Uj6W++1EgAI40D2ffcJ6Q7cC4ediTxhgxvXTYEjtLtzutwyM4B2
-	t/NT5nHrOVeavSlBEHwuElOKow3m4j1s4bs5IbOkhGlIEXd0Qy1k1c5doWR1CafZgrWO0lyz+zy
-	dbyhsvqkePK6K7cjVvohk5vLwqQkX7gnmGnEjsJIPJ9A9OeTij2aG6MucPPsy4fyAR67Qs090UA
-	GytEiWBlsx4qbPqBMXSndm7uYw9nWMDwZs4+k4X7kLG+XJdJaGO9MZYLEExedZO9GOZadQ==
-X-Received: by 2002:a05:600c:154c:b0:4ad:5ec2:d3b3 with SMTP id 5b1f17b1804b1-4bb887f43d8mr314245795e9.1.1795556866565;
-        Tue, 24 Nov 2026 13:47:46 -0800 (PST)
+        bh=70XYBogHCXCBdw3YSd/sa8Nm9h583bMMPGxQWoXbuvc=;
+        b=fp1MhntrLogHIUip4FbRNJKgWHj0LrTc8fZZovGtzElIDsO9y0NOAIL6mqq35lixzC
+         AwmfPCM/wLJd1kp/v46CitnfBIH12MWpgZr8aJZ9uK+eZz24zYRUlwADwEaNNft/PSYD
+         9Y2ieWJ9h6JfkronDg3awtzO/DkFNEG/2dQYe0sR5it+ERZ6uT+LJMmO5GbLUh93nefu
+         VUlqC7eFCZ98QJQFZoO90yVKuuRukiBGyhi8yzXNZ4YJ931B5azsQqNPH7C2UEj6hM+h
+         lazIEN1nFiHKmHlrjcWublPnYkeXVLNeH9Ts3DJMUTc40lD0CuzsuBG/fbJno8piySZQ
+         pfbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795557002; x=1796161802;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=70XYBogHCXCBdw3YSd/sa8Nm9h583bMMPGxQWoXbuvc=;
+        b=tk9HCtQgzyjBr567Kn3VOAtI1bPTxlaxG1V+6SjTBWgMSoCrAVNumr3k8lIRTt6OqC
+         cvPmTcjbaQnqrHSQUeAWUPQNQcjN//idowxtJ2u768E8O3lxUsD3mtN5H5IlIvw2RyP7
+         N7gWLuB59Ss1HsDf8KG7gnOOpIH8dEEM+br2Pnvp5cEaGdNvrLP9tnmAa23I4NTja+Yg
+         ZZ4UiBRO46bL7KoVg/S2Vc+dXTSKIp7zEe15cZ3EXbDv0fzZscOUn4SyPvR0rsZOIFHh
+         AzCkVKh04Iy43Dv+d9qsoQ65A9vDHxpld+wkVWrY4hD9OqTU7ZNcRkOtdeth0IxmRj2a
+         j/ZA==
+X-Forwarded-Encrypted: i=1; AL+hErFNKUOkoocaPv7Z9zllVDdz1pSS0uuMZ5Oc8wgQ/6g8ydTGEzqNELZ/njSuif8Y/ewUEoQJaKaVnLJaR3nLU3c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z93iqneDVTRS9/SfX84ZoqPJcePVKkOoktYrIFfTrNSdcYUQZYh
+	BWa1I7EmMPCfpiKJqiyA7tDQfJBLRLWUAIigPhtWSJbd98lMkKNoanhg
+X-Gm-Gg: AZFdTZc/JyhtsdGKRZ3fGAYEJ5ea1PxP7AfXoM1/vGMepw1T+UmguNCt+7fRfOFvk+P
+	LkmmCZKe7mIPJr67d+DVkhP52dld0rwbbXoM/8q/Z5ct09m+j+CoDVEYQrONh8qjc1jPqF/uwOe
+	RIgMThTHYPZWpDWRSw/vK6dQpO6R+gXhTZDrA51I6uhhzWaTazim0O9+Up9SyLRCrjgjZ652TTD
+	anb4vpgdGkkeiaZHOFy399SXf8uyLROcWjdB352ejVPv3DSM6dCJAW6Jh+yOY1jw6zdPdSnb5CR
+	sPKPSEIO/Y9q7s9TBvdn9kLJKualqzCZQdViUYCr8U6/L7xpqbKB9bskUirk8Ml9pXFHB8K97mu
+	pUdQGNPprcmGTxPDKGSxUR+18L9TqbI1w+o+ozYIAUe2thMcTnTPI0g0REkzN+ymf45677ApokH
+	2cDWScyfhPXAfGk/zCPLvJdMnFrtqpJhOoiB+58znggsMhoWcIFYpPG1in/gaN4puJl5LAun7u8
+	E3xrR5ufWQ+Mv/ide7wPUhDET4+25xCb1oEADBaYXRz3Tdyc0cL026NQ79hYgP1r6P6TmNLV54s
+	FNfV37sxftwSPpGSXlp+yU933z5q8zWuCkKNlmGXEOYLsK2UpO5UNdFiWopAvAzBSF+VCTv01oY
+	b6E4rdb2wiNh6Pkk=
+X-Received: by 2002:a05:6000:2310:b0:491:2367:1dca with SMTP id ffacd0b85a97d-4b3fd477a9amr13343648f8f.3.1795557001928;
+        Tue, 24 Nov 2026 13:50:01 -0800 (PST)
 Received: from Nuel20.localdomain ([105.118.4.83])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884865a2sm476404005e9.3.2026.11.24.13.47.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab5ffcad11sm29188507f8f.0.2026.11.24.13.49.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 13:47:46 -0800 (PST)
+        Tue, 24 Nov 2026 13:50:01 -0800 (PST)
 From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+To: hangbin.liu@linux.dev
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	skhan@linuxfoundation.org,
-	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Subject: [PATCH net-next v2] selftests: net: sk_connect_zero_addr: fix mislabeled connect diagnostic
-Date: Tue, 24 Nov 2026 22:47:36 +0100
-Message-ID: <20261124214736.13398-1-emmaonana18@gmail.com>
+	emmaonana18@gmail.com
+Subject: Re: [PATCH net-next] selftests: net: sk_connect_zero_addr: fix mislabeled connect diagnostic
+Date: Tue, 24 Nov 2026 22:49:47 +0100
+Message-ID: <20261124214947.13846-1-emmaonana18@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261123054754.GI10218@Liu-laptop>
+References: <20261123054754.GI10218@Liu-laptop>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,31 +109,11 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The connect() failure branch reports "bind fd2", copy-pasted from the
-bind() block above. Name the failing call.
+On Mon, 23 Nov 2026 13:47:54 +0800 Hangbin Liu wrote:
+> An "e" here?
 
-Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
----
-v2:
-  - Drop a stray line that crept into v1's diff hunk.
-v1: https://lore.kernel.org/all/20261120063011.21557-1-emmaonana18@gmail.com/
-  - Initial posting.
- tools/testing/selftests/net/sk_connect_zero_addr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for catching it. Fixed in v2.
+https://lore.kernel.org/all/20261124214736.13398-1-emmaonana18@gmail.com/
 
-diff --git a/tools/testing/selftests/net/sk_connect_zero_addr.c b/tools/testing/selftests/net/sk_connect_zero_addr.c
-index 4be418aefd9f7..4441e9c62fde5 100644
---- a/tools/testing/selftests/net/sk_connect_zero_addr.c
-+++ b/tools/testing/selftests/net/sk_connect_zero_addr.c
-@@ -46,7 +46,7 @@ int main(void)
- 	}
- 
- 	if (connect(fd2, (struct sockaddr *)&bind_addr, sizeof(bind_addr))) {
--		error(1, errno, "bind fd2");
-+		error(1, errno, "connect fd2");
- 		goto out_err2;
- 	}
- 
--- 
-2.43.0
+Omokefe
 
