@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795535796;
-	b=oLELV17Sqtr7P5PJgVa9yguR7+t300+tjmUHtoyv3xUahfCibo3XMExgn6OnDqX8D16g
-	 QUsA7wSFtZ7FrAaiH8JDdK942bkvOrbnLPqEuUJLf3H56P3UL/+j4QpIHyYBGlJnZOjfb
-	 W7TvbZG3vstqtzUiadvJYHY4er/3nT7EOjkMCJx46we69xsk4aC3dKjWVmbqeS4YzW05c
-	 Xjc8NRW1+9SJ96AMtnFyCu1akZMNFM/j0MU688OdcLwfU7ew5ZGRuv6qLlMfj2UJBg5iL
-	 fxpPpBFVSpTS9YMma/zN7CR1COWc3yQGDW0n1kkTVpf/ru7on6qk087FHDMKRWkia5Q==
+	t=1795535798;
+	b=yD5y0aeRdga7tzT8/DfFqOqXw14INgt+Ld+jKrkE+3jX0adBSpu2oAYJAD8dU85V52vM
+	 D9i+Ox+S7JELtkG/8yu8uJTaNcH8zHyzCVkBxthdxuo76SV5KqS6Mo7aboun0e7GeHuAx
+	 UbzkSEbeUXSUf6PbyH9IO3u/NyYzzQRUl0hnC/oJ3pNx6jnJt7DERBuB8gZrzUUcj6Ws8
+	 CpCChR48dhRjqlnoQdmlVNEZs1XMKGcP5qD8f8Q9PMijlMVLKqSnzW9qLbT3QcqgBVt5z
+	 kGkz24B9zXK5dONDCn6dKnhLb+GK6yEJ77zwe1pqXLSRjW4PSn+5EiblNg9M4wPQugA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795535796;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795535798;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=cp9qvJzAYDDQdk38T0+e5AQe8omtVBjXWGNOkDO7CrY=;
-	b=GGVPYO82lLwvAUtkXx/A2k/u0aeNJaTLcH3gePzM6HysVa/WK/5HZzHJx8yUBpq2qndw
-	 ot32Y7FkJKQUH2BBo7pLVNLcmgVeQiN2Oj+SemaJ2Ii8QJm4BP5bcl/aEOwUgNDAJfILZ
-	 86EVbGV4U1ke+SgV/A3etMQPnfjgoDUOGanpmK4eKylDebqlnnjTGXtt3wPhaoYvfqROu
-	 oyNhIth9+cEoTtm0aOj6LCaZ96Kb6Rawa9d6cWLS9IarUQT+99Lw2cCbPiSC5mPSZ+vKH
-	 RBWH2amsFLXL8yOfJZCfo5kQj2Y/I2jxy/R4wnelrvyjvVdGHVZNDvhEN0YYtxxgxcA==
+	bh=Qxe57lMNKukT31B5po2sqaJC36RczLL5Kjvfjsw19PE=;
+	b=wACyMK/ba0lv9ovk3HFKeZIh9ztJVBMSDW5sPOLsDZCK9ArB08nzXFO/O8KmHt9DlxGQ
+	 LY842TpMPx+YrJQyrP3dfYghTrsd5uF5lq3rCRfx1RFC6CHtwNECzUSbLFbkNozSrf+Tw
+	 gRjnI86GgjkopXQC4oI0JjOLTdivt3FJjrE6ffxGTV2qeuX1Bkp+DIRA4e5vOape5t7N+
+	 KHmoQOuUPRW9XWVHwotg8cu5WVve+AcgLkpAWJ7XtQ8CtkLOsQhTrzfjOfl5/M08D0chn
+	 1QPbIRatc3J0JNeVVP+nPulEmxaKUQo0KxAW4uTqI6mCJRZzEgvUkFpQ2g11MDdUgyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j0t+J8Ce;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=THR5ispW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE06606A327;
-	Tue, 24 Nov 2026 15:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AA4606A31E;
+	Tue, 24 Nov 2026 15:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j0t+J8Ce
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2BB1F000D4;
-	Tue, 24 Nov 2026 15:56:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=THR5ispW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2321F000ED;
+	Tue, 24 Nov 2026 15:56:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795535795;
-	bh=cp9qvJzAYDDQdk38T0+e5AQe8omtVBjXWGNOkDO7CrY=;
+	s=k20260515; t=1795535797;
+	bh=Qxe57lMNKukT31B5po2sqaJC36RczLL5Kjvfjsw19PE=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=j0t+J8CeRganGFdwxySeSsw/MNGzMiwH6I3Hgz25CS/gZceM5Lnth6f9FvgGq12S9
-	 xmci9Ar3KEedv7ftTaHvxdjR+3G3XnqfDNzJpzBRFILLIPKGdGs7893MNC9PIKyBFu
-	 D3Lk/ot7c9qA+dkNbQdh8dwRBbv3reLCvmPl1tj0TG9Ecb7QIvTFRKp6MbIhKybvq+
-	 p0cMqhgPGRhE5x6zpvt0i8nTitPYKB7+Yewje64KugW3xdUjD10l5LrkRf5nOK4Kjz
-	 nHsA0Zy85f05PSNw0q9f8BnXGhZYyXdPog+44fbEUFm5oANQ5CSShY66FFrICXmJ/8
-	 HzzLFzrY6/1qA==
-Subject: Re: [PATCH net v8 1/2] genetlink: Reject joining multicast groups no
- family owns
+	b=THR5ispWIaQhB99nOBAFofxpXpIdVAm0fVy4q/IRS0YyUrMS3CEitYtmLbH6xHugX
+	 Qn10JvblAN3uvpDEThmUsLP3Y2AXQi193V9kzuglJ8mJF17SQhJLshAaGFUVKVrQb2
+	 DUoCd8qf1clkuijJUW+6N8NidmmVcmm+06BclEOn/peTAQtIkjJjK4+wA6KvzLZ9W5
+	 xoPktGHzfyWwv6uM6+PY2ZE645rhYAbtNsWUsMx5zBQ0mpg9AsIIhc1N8L/CDCX3xq
+	 7cy7PCXjjiAopz7zlF57wAlPnrkqefqLW74ltkMHCMVgthE/4yEahj5KhelBsOQrwz
+	 FIEhsgU7ovhbA==
+Subject: Re: [PATCH net v8 2/2] selftests: net: test joining genetlink groups
+ no family owns
 From: netdev-bot+sashiko@kernel.org
 To: anilkaushikwireless@gmail.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
@@ -50,10 +50,10 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
  fw@strlen.de, martineau@kernel.org, v3rdant.xiang@gmail.com,
  aliceryhl@google.com, linux-kernel@vger.kernel.org, nhorman@tuxdriver.com,
  shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 24 Nov 2026 15:56:34 +0000
-Message-ID: <179553579407.3135.13476478403966318528@kernel.org>
-In-Reply-To: <20261123155503.2497063-2-anilkaushikwireless@gmail.com>
-References: <20261123155503.2497063-2-anilkaushikwireless@gmail.com>
+Date: Tue, 24 Nov 2026 15:56:36 +0000
+Message-ID: <179553579621.3135.2576494122860587206@kernel.org>
+In-Reply-To: <20261123155503.2497063-3-anilkaushikwireless@gmail.com>
+References: <20261123155503.2497063-3-anilkaushikwireless@gmail.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,10 +67,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,108 +78,131 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] Check-then-act race (TOCTOU) between the ownership/capability
-  check in genl_bind() and the point where af_netlink sets the…
+- [Medium] In tools/testing/selftests/net/nl_genl_mcast.py, _free_ids()
+  decides whether it runs in init_net by comparing the inode of…
+- [Low] bind_before_family() in
+  tools/testing/selftests/net/nl_genl_mcast.py first checks that NET_DM…
 
 --
 
-genetlink: Reject joining multicast groups no family owns
+selftests: net: test joining genetlink groups no family owns
 
-With this commit, genl_bind() returns -ENOENT when no genetlink family
-owns the requested multicast group. Unprivileged users can then no longer
-join free group IDs that a privileged family takes later. netlink_bind()
-skips such IDs in a bind() mask instead of failing, and
-setsockopt(NETLINK_ADD_MEMBERSHIP) returns the error.
+This adds a Python selftest that checks Generic Netlink multicast group
+IDs that no family owns cannot be joined. It covers
+setsockopt(NETLINK_ADD_MEMBERSHIP), bind() with a group mask, and
+loading drop_monitor after a bind(). The free IDs come from a family
+dump, and the checks are meant to be skipped outside the initial
+network namespace.
 
-Link: https://lore.kernel.org/netdev/179324692107.3134.14443689892607921337@kernel.org/
-
-> diff --git a/net/netlink/genetlink.c b/net/netlink/genetlink.c
-> index 5cc1037d4917e..e5d4f3c4e22ac 100644
-> --- a/net/netlink/genetlink.c
-> +++ b/net/netlink/genetlink.c
+> diff --git a/tools/testing/selftests/net/nl_genl_mcast.py b/tools/testing/selftests/net/nl_genl_mcast.py
+> new file mode 100755
+> index 0000000000000..4e86a5556b627
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/nl_genl_mcast.py
 
 [ ... ]
 
-> @@ -1825,7 +1827,7 @@ static int genl_bind(struct net *net, int group)
->  {
->  	const struct genl_family *family;
->  	unsigned int id;
-> -	int ret = 0;
-> +	int ret = -ENOENT;
->  
->  	down_read(&cb_lock);
->  
-> @@ -1841,6 +1843,7 @@ static int genl_bind(struct net *net, int group)
->  			continue;
->  
->  		grp = &family->mcgrps[i];
-> +		ret = 0;
->  		if ((grp->flags & GENL_MCAST_CAP_NET_ADMIN) &&
->  		    !ns_capable(net->user_ns, CAP_NET_ADMIN))
->  			ret = -EPERM;
+> +def _free_ids(ctrl):
+> +    """Return the IDs in 1..32 that no family owns."""
+> +    # Outside init_net, the dump skips the families that are not netnsok,
+> +    # but their groups are still owned.
+> +    try:
+> +        netns = os.stat('/proc/self/ns/net').st_ino
+> +        init_netns = os.stat('/proc/1/ns/net').st_ino
+> +    except OSError as e:
+> +        raise KsftSkipEx("cannot check the network namespace") from e
+> +    if netns != init_netns:
+> +        raise KsftSkipEx("not in the initial network namespace")
 
 [Severity: Medium]
-The commit message says "This does not cover a family that is
-unregistered between the check and the point where the membership bit is
-set."
+Does comparing against /proc/1/ns/net actually detect init_net?
 
-Can that window still leave a socket as a member of a group ID that no
-family owns? That is the state this patch is meant to prevent.
+/proc/1 is resolved in the PID namespace of the procfs mount. Some
+containers have their own PID and network namespaces, for example Docker
+or Podman without --net=host, or systemd-nspawn. There, PID 1 is the
+container's init and shares the test's non-init netns. The inodes match,
+so this skip doesn't fire.
 
-genl_bind() decides ownership under down_read(&cb_lock). It then drops
-cb_lock and returns 0. The caller sets the bit later, and holds only
-netlink_table_grab() when it does:
+In that netns, ctrl_dumpfamily() hides the families that are not
+netnsok:
 
-netlink_bind()
-    err = nlk->netlink_bind(net, group + 1);  /* cb_lock taken, dropped */
+net/netlink/genetlink.c:ctrl_dumpfamily() {
     ...
-    netlink_table_grab();
+	if (!rt->netnsok && !net_eq(net, &init_net))
+		continue;
     ...
-    nlk->groups[0] = (nlk->groups[0] & ~0xffffffffUL) | groups;
+}
 
-netlink_setsockopt(NETLINK_ADD_MEMBERSHIP) follows the same pattern
-through netlink_update_socket_mc().
+genl_bind() still walks the global genl_fam_idr with no netns or netnsok
+filter, so the groups of those families are still owned.
 
-One possible interleaving:
+acpi_event_genl_family in drivers/acpi/event.c is one example. It has an
+mcast group, no .netnsok, and is registered on any ACPI system. The
+NET_DM events group is another one if drop_monitor is loaded on the
+host.
 
-CPU0                              CPU1
-bind() to group X of family F
-  genl_bind() returns 0
-  up_read(&cb_lock)
-                                  genl_unregister_family(F)
-                                    genl_lock_all()
-                                    genl_unregister_mc_groups()
-                                      __netlink_clear_multicast_users(X)
-                                        /* CPU0 bit not set yet */
-                                      clear_bit(X, mc_groups)
-                                    idr_remove()
-  netlink_table_grab()
-  sets bit X in nlk->groups
+Those IDs then land in the free list. In join_free(),
+setsockopt(NETLINK_ADD_MEMBERSHIP) on the acpi_event group succeeds. On
+the NET_DM group without CAP_SYS_ADMIN it raises PermissionError. Either
+way, ksft_raises(FileNotFoundError) fails.
 
-After this, the socket is a member of X and X has no owner.
+In bind_mask(), netlink_bind() keeps the bits that genl_bind() accepted,
+so ksft_eq(_members(sk), 0) fails as well.
 
-A later family G can be given X by find_first_zero_bit() in
-genl_allocate_reserve_groups(). An unprivileged user can trigger that
-registration with CTRL_CMD_GETFAMILY -> request_module().
+Because of this, the commit message statement "these checks are skipped
+outside the initial one" doesn't hold in that setup.
 
-Nothing checks the socket again. It would get G's notifications even when
-the group has GENL_MCAST_CAP_NET_ADMIN or GENL_MCAST_CAP_SYS_ADMIN set.
+Separately, a non-root user can't stat /proc/1/ns/net, because it needs
+ptrace read access to PID 1. That gives EACCES, and the OSError branch
+skips the tests. Should the commit message mention this case?
 
-The unregister side usually needs a privileged rmmod, but an unprivileged
-user can keep calling bind() until an admin unloads a module.
+[ ... ]
 
-Module init error paths, such as ila_init(), seg6_init() and fou_init(),
-can also unregister a family. That can happen after a request_module()
-the attacker triggered, if init fails partway.
+> +def bind_before_family(ctrl) -> None:
+> +    """A free ID joined with bind() stays unjoined when a family takes it."""
+> +    names = [fam['family-name'] for fam in ctrl.getfamily({}, dump=True)]
+> +    if 'NET_DM' in names:
+> +        raise KsftSkipEx("NET_DM is already registered")
+> +
+> +    free = _free_ids(ctrl)
+> +    with _sock() as sk:
+> +        sk.bind((0, sum(_bit(gid) for gid in free)))
+> +
+> +        # Looking up the family loads drop_monitor.
+> +        try:
+> +            ids = _groups(ctrl.getfamily({'family-name': 'NET_DM'}))
+> +        except NlError as e:
+> +            raise KsftSkipEx("drop_monitor is not available") from e
 
-There is also a side effect. F->bind(i) ran for the old family, but on
-close genl_unbind() would call G->unbind(i). The family bind and unbind
-callbacks could then get out of balance.
+[Severity: Low]
+Should drop_monitor be unloaded again once this test is done?
 
-Could this be closed fully? One option is to recheck ownership, or a
-registration generation, under netlink_table_grab() before setting the
-bit. Another is to clear stale members of a group ID when it is given to
-a new family.
+ctrl_getfamily() autoloads it here:
+
+net/netlink/genetlink.c:ctrl_getfamily() {
+    ...
+	request_module("net-pf-%d-proto-%d-family-%s",
+		       PF_NETLINK, NETLINK_GENERIC, name);
+    ...
+}
+
+No exit path in bind_before_family() removes the module again. That
+covers the success path, the "NET_DM got no group ID that was free"
+skip, and an assertion failure.
+
+Every later run on the same boot then hits the "NET_DM is already
+registered" skip at the top of bind_before_family(). So this check runs
+at most once per boot, and reruns only report SKIP.
+
+> +
+> +        if not any(gid in free for gid in ids.values()):
+> +            raise KsftSkipEx("NET_DM got no group ID that was free")
+> +
+> +        for name, gid in ids.items():
+> +            ksft_eq(_members(sk) & _bit(gid), 0,
+> +                    comment=f"member of NET_DM {name}")
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123155503.2497063-1-anilkaushikwireless%40gmail.com
