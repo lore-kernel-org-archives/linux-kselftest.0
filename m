@@ -1,98 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795534656;
-	b=HegttjvNTBkA7jFeXXCoQatk36a5+KR3LLMeRcQTme2D4LtjtoEHH/UxwnPruhxDxW7r
-	 LnBDuP1CkKUzXRfYpXtUqNOqqemoimq2OBa2nqveF7ulMLff23g81rsfAqT2u4JuLHbD1
-	 RiVKDfKhIM9c6UtwTWN07dMCOFWPp190JLIgjHfDjEeYQa5RVxFTJYlPNbzQVFUSt88Vh
-	 5dnzbm6TiIFcPfoddgEJRkuGoXgpiTmCtREqERmqHDmVEIDXfJ93QsFyaiSORIEtmBY5G
-	 KEIm4ivL0fbYYe+2qhgzT0cTBAtByDFNWIbqHjogSYoCfImLpo3qis9enJAn7bRkB9w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795534656;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=IsBrotR3j96Rkwb/nV560EebvGBw3c92J6kccQNMbWI=;
-	b=TYU7YyuOXLqahJC09dpxl1iVQ+Al1lufG3HF1QOcyFaoYJ9mrQQaiX7+F4UyBBuaHqPu
-	 baD1WeolzhOpDwfA/81C3AW94aihfJExj7Mt6aDzYJVnO2lmQxypTnn7sQo0HBZ/CvVNk
-	 dVDIgNOqLmyOsyG+YGXc97jUuhTFTd3PC/goFSR1/lPpDxBjIqdv/nBF6bh86aSmlRRv7
-	 tUK6Cqz+lkjs9gdS5C06IBlS0mh0ZVBaGcmKwjjlTEuYbHpFAqmt+kVbBidbPYMPWbiY0
-	 uP/0Z8QT9IxhVj6H+YGkYnMJCmS5UHojhVLH6tm5v2xrw2YKnjwpQyAM0nrO/asbGqA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=FImm2RV3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.53
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013053.outbound.protection.outlook.com [40.93.201.53])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=57.103.84.194
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795534663;
+	b=nmysj21qN4s48mT5+8bKOLQaSTZpVK9YAbbF/G4nKjI2P45f4+pT2n7BWKiUhrJHjqC7
+	 TexcvdHectlUIReVLE3AUZvcY5Kqq8wv0DrSmV0kRO91QZ2+l81UTnz9hmSq7yHZGRe1q
+	 VFWCM3KCXAyme1nIvxCTzXyjVl8wPM3/ESRv+wOPTjd+Ww8oNov5cI7AqlBKNOfNCtuf+
+	 vQBXhwtOEw+JlQvFdEjGwHxMos04P8LCv9ZspD4BwfjiQ2Nv0wdBTycMTRQwUXzwt8ZQW
+	 yFSmjWQn3G2R9jxULB/IYSo6hf949TVr2VImYurtjhi3nFZgfeizbmDqv8Nqxx3/6+Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795534663;
+	h=DMARC-Filter:Received:X-ICL-RepId:Dkim-Signature:
+	 mail-alias-created-date:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+	 X-Authority-Info-Out:X-JNJ;
+	bh=a4/TKQ+wKHrlBE/R2BQwO1pp5Mk2i+jmrSZqyGVPftI=;
+	b=oMqPpz+0D71AFHawaTvcIHECdPEJs45aTMOzzNyAGcttE5krcvmU3CuGQ/LW4V8vNfXP
+	 tZCJOL67ZgX3h5kAa7LzWbOiOTdDdRy97FjuXpiFESWB0Qja7oh06c3YE6kCtl/y/OcQ1
+	 3dStPz7RN75i/BQwudYih0SZtN3jgzzBo0MUK79xWYE2eKCzB6w7M3d0L3arSCSpTCc9B
+	 G7J6a/Z/ROvaeEQJIKdJ1jJcThaW5k87lvQMbSxcZw5AeZwiMMe8Tri73xP5+yu7Ox1vE
+	 QS07K1pLa185niVf8dVm3Awa78XTM0lwtbSUvWLeRMmQ1hgPFcfcqksxvxj6e/KJT4g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=verdict.gg;
+	spf=pass smtp.mailfrom=verdict.gg;
+	dkim=pass header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=NuMEq1tH;
+	arc=none smtp.remote-ip=57.103.84.194
+Received: from outbound.qs.icloud.com (qs-2007g-snip4-3.eps.apple.com [57.103.84.194])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F5E606A31E;
-	Tue, 24 Nov 2026 15:37:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93F5E606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E3A606A32D
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 15:37:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6E3A606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=FImm2RV3
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PF/+nwD587uqryOE3zQ/kWbHiAJJRPC0ee9HRRrbnv9txdU3B4J4AkeAVtjxqeql18EQXQik0fWZs7K/TVjxIU4e1pGzIvqgyyHfIS0lpz1vvnqZq0ib6kZ62utNCJ1pBmPx+vdqWYRlN50BckteM6K+QtRB+byHZIOUios8QWh77hyURwRnkMYRbIMhzMi55mnHAKj1wyxdmO+/K4CLom7TGs3OH3bYSc/Q1MB8XOZglQBowxtV3ShfvTXnYxOmu2UHMVL5GAF8hi9Huc0CYMitpkf7Mgzi7hApxbxagGtEzzqs1vtWkJke/jw13L9USwEg5LHIOPaHKKeRIpEnMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IsBrotR3j96Rkwb/nV560EebvGBw3c92J6kccQNMbWI=;
- b=nBz8s3hAJnVHun9amnZf4KWKSj+CAR+DcsX0aLSYrG6ZuQ1k8UpCEumlxQIl1BjjNB6i8SAwysykPtG4tCJ7uqHXDvX0Ytk838z1eHcsP8dxKBaqbiiKr18KPBWu9SClmpszXt13xKz0LOQHn+BXU/N4NlcvuCGNsb72HIfVCUQ3U1+WDlwISj/j9z5/UvXhPuglW2qg5Vo225TR2A12JUNZNXN63QFSMRS6+/Gk3z1fXWVXvAQ9IF0PzMzDlZJ+6K4qEykdtV0LkHs7EZbw7Ub0puIsD+xBLQS6N8GG4WDRza+/DjXcjRzFrMfmCcWECrbT/CxRh89S6oyqsqw7BQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IsBrotR3j96Rkwb/nV560EebvGBw3c92J6kccQNMbWI=;
- b=FImm2RV3hLPhmsS//1gljv7UsFHYSUq2UsyE2XPb20sKLkrfWMoeexOFLfeKqQtVkrO+m3COTk2mCv44qifKGKIbbZMx2CeKnOGPMdwsuE1WzqWukoKQhlOen4er9cLzp+KeaJd9P7sLu3mujrgZwwVdMi8/oYkSge827jAOnz+nXrhjBHZy8PHI8KXXFeC07FzPxwzbLHyQXc78vynMQsFDixQN4avmZuEGp42YS972PJHKycfh5NTSYbCGfTX/jywft2lvwMpaiwFwh/dh3Vpnn+ngK+2Vv+yjFIPR8GLAm2MqzG6VMDnkPETApoaUXZEWczH4bevuqNZM6Eo14w==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CYXPR12MB9385.namprd12.prod.outlook.com (2603:10b6:930:e2::13)
- by CHBPR12MB319464.namprd12.prod.outlook.com (2603:10b6:610:409::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.4; Tue, 24 Nov
- 2026 15:37:31 +0000
-Received: from CYXPR12MB9385.namprd12.prod.outlook.com
- ([fe80::f8b:8279:83a9:3591]) by CYXPR12MB9385.namprd12.prod.outlook.com
- ([fe80::f8b:8279:83a9:3591%3]) with mapi id 15.21.0639.012; Tue, 24 Nov 2026
- 15:37:31 +0000
-Date: Tue, 24 Nov 2026 17:37:19 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Yifei Sun <yifei.sun@inria.fr>
-Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=NuMEq1tH
+Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-2d-60-percent-9 (Postfix) with ESMTPS id 1D245180029C;
+	Tue, 24 Nov 2026 15:37:41 +0000 (UTC)
+X-ICL-RepId: 01a20e34-a5e7-7768-926c-09d915193913
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1795534661; x=1827070661; bh=a4/TKQ+wKHrlBE/R2BQwO1pp5Mk2i+jmrSZqyGVPftI=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=NuMEq1tHQtL2bFMonP/ptefWz59VB80MfCvlN1ik5Uw3c9sAuy27/EpJWFUgYjPsMTYyFgLAFwRBpvFnxqG5ChrJX/HLFkptxA3IRMni65qtvLPbmZJADMCFZ5TCRJMhF2i352+DjuqkJbuiir76xD94AaaqsU3D3Vq+TrqM2yByuWWB90BIPdORAW8hw/qps5rdYcS6JK4jO2apnpYYqPsZz4/6dMsfqSPIrX2YbomnVAhJSBNYetAcb+UwuYVTXzJuzzJ5oCUdenF2Hln1qFsnoVUlDkXbQbqZIJxeCIkPcbypCURHleNj1le5BECng83/l64o87wDGt5l8Iv2SQ==
+mail-alias-created-date: 1621344842221
+Received: from DelNac.mail.msk (unknown [17.57.155.37])
+	by p00-icloudmta-asmtp-us-east-2d-60-percent-9 (Postfix) with ESMTPSA id 2210318002A7;
+	Tue, 24 Nov 2026 15:37:39 +0000 (UTC)
+From: Vladimir Vdovin <deliran@verdict.gg>
+To: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 1/2] ipv4: keep scanning the leaf when a nexthop
- object is unusable
-Message-ID: <20261124153719.GA3946712@shredder>
-References: <20261121182031.36626-1-yifei.sun@inria.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261121182031.36626-1-yifei.sun@inria.fr>
-X-ClientProxiedBy: TL2P290CA0025.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:3::20) To CYXPR12MB9385.namprd12.prod.outlook.com
- (2603:10b6:930:e2::13)
+	Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Vladimir Vdovin <deliran@verdict.gg>
+Subject: [PATCH net-next 1/2] ipv4: Don't cache a pmtu above the device mtu of a path
+Date: Tue, 24 Nov 2026 18:37:29 +0300
+Message-ID: <20261124153730.56549-2-deliran@verdict.gg>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261124153730.56549-1-deliran@verdict.gg>
+References: <20261124153730.56549-1-deliran@verdict.gg>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,123 +72,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CYXPR12MB9385:EE_|CHBPR12MB319464:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b01e4ce-bbfe-40e2-2ad9-08df4a40da04
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|23010399003|366016|261009223027099003|22082099003|18002099003|3023799007|56012099006|11063799006|261028144727099003|261102123227099003|261026121527099003|261026140227099003|261022105027099003|261021121427099003|261021123027099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	MpjU+vaA6cEANZFycE1u2CRyZPbOGW+vQt/kO75oOrK5LlB+b8VLepkpABU3t9JD/oaxGtEvn3ZHvHKXs8CcVMNWDlw5mIySCtHEnaOA7K5357wvyAtCoj+dtInDEwvjvzklmwwM55wyzxnj+O3RZtfMWi4LtfgufbLNdSJxXjn78HwN22yIgqDM7VWhdb7Kh2+AT8D02wSnNtW67QJNcGGLo+Y1e5gaE3dpW1SO58dWgFROMK4fSQn2MZMCEdNeQOwBu5INc8jGTpGcT2enj75KZW/3EPdKJCGr8ntzQVpi0FvBgpTECNiinu+xNppKFj+g/rbXpi1wnrWverp7aaqBj4uP/7CUP65/+EUBr+wp2ir0wQI59BhY32BWju+EMfv+A92mYXkC1tGRVAB9Zr0b2LnxEpoL7FTRA/BjDTLpI0+Erj+RHWxhkZTcdWRHYC4VoB4fUaDV97383J5iiaGjOWOa2+S3aQ2/Jjx0S/PWYSoMN406Ad5tv2LbsCWe4t7DHZm+4QTQjRcEfjuIIdLvzVSwfZKY+IBi4oeTWUCCKckVVQOjsmvvP8lpnjx6XGvTLhJl5vTHffQ44tHUK5cqWIaubUkdeXL8c/2VgKvqqcovu2Sb7S4y0S3fo90JgugUtcjlwaivNtQGeLX+/8GR9PxkYBcpFEDgCx5RjVs=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYXPR12MB9385.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(23010399003)(366016)(261009223027099003)(22082099003)(18002099003)(3023799007)(56012099006)(11063799006)(261028144727099003)(261102123227099003)(261026121527099003)(261026140227099003)(261022105027099003)(261021121427099003)(261021123027099003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6SqiFbASqJ5EIOwa+8Z1RdC0BirQAcPFTbDc89gPiuQGVXcFcQpU+k3QMYNl?=
- =?us-ascii?Q?ZS5gkPQQ9VwWbcuh/p+34RSBL37jVoLNeDhVwyi5JNHhGdufdYzDtXCa+6d7?=
- =?us-ascii?Q?Dipyfz1aP1l0pLyyMQmfkFwxGNp70OkA2ZYmQIgsoeyXLv0dTrAkQbnD+iy3?=
- =?us-ascii?Q?foqVQsbEMqY8Q/kJJaxyVMMR2HqIz/+0GNW2L6Ke273uotUg7Qzq5teMD7TA?=
- =?us-ascii?Q?T338JPHm31vqPtS+EacNtJVGwXCgm2225A0mgTnsTWzEs8Q0FgJfntV82/8j?=
- =?us-ascii?Q?wgpsVb+of0/qmlbr+v6bEFBvpmGmvKig7w9nJz91xaiUtXnLST2waY5uZgec?=
- =?us-ascii?Q?WL1grBaFlot0PDZcZaAQUh834wdZA+bw2rTD8VSx3rFhf1k8VyKhCKC7GDhW?=
- =?us-ascii?Q?Ww0AtP9EA7aRtzgq4h+786R+Vp9DPpNkjD0wR4XqKZZ1CCUWhf04koJscnzn?=
- =?us-ascii?Q?uT9XgJ7+gR2l+TjIiiwacEhfYmyRWugwccLO4uyLx4WzxG6aAtVIArXDIpV8?=
- =?us-ascii?Q?FG9Z8e1ZmgL1FZGcbfmrzTtAZu60NS9u8jZ/2/wNZt3NSrQHPLqLkhiPWMEH?=
- =?us-ascii?Q?crGhCKGSKaKnP4tWGlPBVGxkAXA0Yh5wXQjwewYdqHiV+jEos3gaOYJncfpE?=
- =?us-ascii?Q?J785HMrrVS1GAxbtcZif+2hFOXcOt3aJ+7V72t44WyLaoMBU7QAxVrgg5LN8?=
- =?us-ascii?Q?/e0lR1gUzWQtfH34oA/94NqaqZmfwWboVADI0nOpRsLXlUa4VUF/wIMJWLnz?=
- =?us-ascii?Q?msKohu3EiwrdtxoRdi6kWA1E+tLrBVeRHuUF8wFcIMQ9UVKWNbF+yjFXqoqn?=
- =?us-ascii?Q?U5ke5jDqQBJqMjPvxEhxdnQf6LuzOHsUSZpmr1DB38y5fm68z/a5dR10WI4H?=
- =?us-ascii?Q?bxAQqoymHtWbIO5nqO0OV4RJx307CvGN9TgnKwB1FE+sq9HT/py/50JuWIN7?=
- =?us-ascii?Q?dlenhWjdoN/iqFuG4yJp9REwXp8+tg57pvq6b/BQXxxog62prQbOZLdbdXC8?=
- =?us-ascii?Q?4IcvqrdCVxFQP2H6txyz5loV4eOxw9KtVv2VTgelxD5awYzJyYAs58n2j06i?=
- =?us-ascii?Q?uzkLHzBzWTN8SL8cLPOdjZRI4uU24u/NjCiTcHisb5vDzqGYvfl3Kdx4IhDj?=
- =?us-ascii?Q?X91wib8fB+RRSvqIv1TmAjf4uirNcWoPiRc2P2z2rxhv2KGeRk5XovRA81N3?=
- =?us-ascii?Q?Bo8Dz6aRMzdeJUA+8Xzu+zI13BnsrZXfzoR4lHWETk4B9bPLlDNtXeEyztES?=
- =?us-ascii?Q?oJ5Ptic3YSfBneADIVzt3lC9QBFoXmZ0f3QAMZS80JNw24gVHaDm7aBse023?=
- =?us-ascii?Q?p0081lpSENR5booIWOch1srMi/H5uXy/F6KWRU9Rp5QUr7NazwrmCar/zkVS?=
- =?us-ascii?Q?4CVrNGjeXrw3IxesWoyXa4vXWNl8U8IT8ulOjCfqdbKKVvZLQ/Pax4QWoYoK?=
- =?us-ascii?Q?LDgGsAReixNIBiZtVrGr0+zpy274IZ3/uptp4eYgJ1zvAnjGq/OfyGu/2U65?=
- =?us-ascii?Q?37XCy95J7HxUPTrelVYxaLkJVo4UpRtbiwYFa6MJO6MrNw4VGqpV+OVmeZlX?=
- =?us-ascii?Q?oiKpIQzv67f2FzwxS/oiS81H1vT8+2FPLjOJFepfhyEs8ZciNrgT2Vfrivcc?=
- =?us-ascii?Q?/nOBbuf9NUHT3PM3wvgRbnBNKsXGwVtV2XEdquOVx0cwWjFRCwPLuFf7nJNc?=
- =?us-ascii?Q?+owFqtRe14HqY6muDk3kFoubeKthTehVYvXwqhJARfBR1NP6?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b01e4ce-bbfe-40e2-2ad9-08df4a40da04
-X-MS-Exchange-CrossTenant-AuthSource: CYXPR12MB9385.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2026 15:37:31.0527
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qtndigsNOiJyfKIRO+9OEnMh25eo+EO/V9dHNZ6t1scbJ9X0N0j7+nSjs2kr1loCWzxw5xl84/Rs/ZUzEy3teg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CHBPR12MB319464
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA2MSBTYWx0ZWRfX6bwSdr7J+Bsz
+ OOHEog9q3oEMVQB80nAfbkFg/9jkFkVNVQUT6iza1uIQeN+8r9PX7OK9bcQrspSTw5KuD7v76FG
+ T1mrrz5hsVl0qiVBKIt63jxiTHGqpnCPiZdr1byvlLj0r9+MzllqEnVFxJQDm2Qwg2YsKLliUet
+ ZTwS2P9lEcafUTZx+KwRRm9fxlrtLipd6QRL1DQVgi8hau9BTQJWeeRd3eZw3CGmkigajSbsTzy
+ B0NZsU4Sx1n3GwCUCScRxvIzwmRHekh96cy529467+/hHhYnltf7OCekibmrk4lVHn1PezVpzGc
+ 1QPV75RQIwz3cyUYCMJZbjzFZOS+xwHu/70FXa77zGEXMuMKnlxMfI4DO80szg=
+X-Proofpoint-GUID: Ss7ZWyaXy2Gg7w-tLdGV8P_0Nu8TGoxK
+X-Proofpoint-ORIG-GUID: Ss7ZWyaXy2Gg7w-tLdGV8P_0Nu8TGoxK
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA2MSBTYWx0ZWRfXzUtRMhFdQcLz
+ FKGBtJ7lAQ9m0rKl89LryayFObVQupLR7i2ar5tR/03Ko3TtH6ty1O2pYbqyxkOedFOVOT1LCwi
+ /BwelpDe98j0123b1PqAPNefqCpFjx8=
+X-Authority-Info-Out: v=2.4 cv=XZAcX455 c=1 sm=1 tr=0 ts=6b05af45
+ cx=c_apl:c_pps:t_out a=bsP7O+dXZ5uKcj+dsLqiMw==:117
+ a=bsP7O+dXZ5uKcj+dsLqiMw==:17 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=wbbCu9YnSpm8ZdSLOl1R:22 a=_mclknXjrhVi08tC7Eh6:22 a=Ikd4Dj_1AAAA:8
+ a=nEgrKjKUNF7mAgnr5RMA:9
+X-JNJ: AAAAAAABTQRjrQ40IhbTpkO4CXHNIgwj9RwaoKJMn7w7dn8l9Kc0Wc5xhumSxLVSdXSABa
+ 6VaRf9BHfaTVmF3Oxo5SyxCRYUU8qrVgMu8PqhANLSn3zk8EVqv7SyrHo3t3hN6WkfpaZX
+ RdDOCwx7nVaL502DwF0BsZjYp/+M7t9E/0QD1Iuu7Ev6vI6qGsPd+HYCsd5s7FNsAqd9AO
+ diwVO0ZjrYXNoCXSl7ibVmoBPIuapTgNVcYSt3dYarHwKGBFLbTkT6Ax2mCtwvnLbl0ng2
+ rzn2NHlMibaPV0ROXg04jrffDk2QH6QeldGRJgK9+U4nImGmA26az58MNwOJF1RO22mW/Q
+ UE0bc0iFTh+6inYLhueKVhsQ740+HjCNnVD+OS1EzrCKjk2pRosuqAreXPZhWxCKdFESUL
+ GwhPGqQH1Eo7n6j5pABKsJqIpNbGjtc1nOQ3obtxU3RmIe3MUR1S0bpIwK2DQpNBjXakbQ
+ IddQ6IzGkTkAyH7i2ph+B8huuzBYH/D1EsPa2hHGnOPFBDwoy+vx8zrvE2alWpPlp0nW3W
+ why5q5/1nA8K0Q0W8ANQW29VSiXKzu10fZxH+CrCCZM4r+YN5bJBa0ocAurE+ypQ1lI/BT
+ 2YMMO1FlIn83JVKzCaxSZG2C5EybFrM/A0o26731Hvc6HZY2SiGXKIQD2GNIHm9PSy3n+7
+ B9EkFZ1w5INJBhdv5pUJvpDPRPcWMvQV3C85uuaDiPXwCo1+J1c2pwxLRUYQtRrWZCRMLh
+ EdAHGxiNbxcblRGdgsEvKTvopxK2MxLCQQW7yx9nAf9OcPSVJq/ZOYTPS6P6Tomt6Iv+gX
+ tK44SVwDTrWvE6RB2tMj25xjkwEFyZAOMw==
 
-Diff itself looks correct. A few comments on the commit message below.
-Please wait for the AI review (tomorrow) before posting v2.
+The mtu of a Fragmentation Needed is cached on every path of a multipath
+route, checked against the path the lookup picked only. A path whose
+device mtu is below it gets a pmtu it can't carry: packets above the
+device mtu pass the pmtu check and are dropped at the device, no ICMP
+comes back, and the flows on that path blackhole until the exception
+expires.
 
-On Sat, Nov 21, 2026 at 07:20:16PM +0100, Yifei Sun wrote:
-> With veth1 on 172.16.1.0/24 and veth3 on 172.16.2.0/24:
-> 
-> ```console
-> $ ip nexthop add id 12 via 172.16.1.2 dev veth1
-> $ ip route add 10.0.0.0/24 nhid 12
-> $ ip route add 10.0.0.0/16 via 172.16.2.2 dev veth3
-> $ ip route get fibmatch 10.0.0.1 oif veth3
-> RTNETLINK answers: No route to host
-> ```
+Skip such a path.
 
-Strip the markdown formatting:
+Suggested-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+---
+ net/ipv4/route.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- # ip nexthop add ..
- # ip route add ...
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index d0930ae4c5ae..0d992dc46c60 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -1094,6 +1094,8 @@ static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu)
+ 				nhc = fib_info_nhc(res.fi, nhsel);
+ 				if (!nhc)
+ 					break;
++				if (mtu > READ_ONCE(nhc->nhc_dev->mtu))
++					continue;
+ 				update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
+ 						      jiffies + net->ipv4.ip_rt_mtu_expires);
+ 			}
+-- 
+2.56.0
 
-> 
-> When the /24's nexthop object has no path on veth3, fib_table_lookup()
-> backtracks past the /16 in the same leaf. A socket bound to veth3 then
-> ARPs for the destination instead of the gateway. Try the next alias,
-> as for inline nexthops.
-
-s/Try the next/Fix by trying the next/
-
-> 
-> Encountered this while work on a unrelated IPv4 SADR patch (not sure if
-> this is even needed...)
-> 
-> In QEMU with lockdep on 5e2976e52671, the selftest and device-bound
-> ping and UDP failed before the fix and passed after it.
-
-The last two paragraphs belong under the '---'.
-
-> 
-> Fixes: af7888ad9edb ("ipv4: Refactor nhc evaluation in fib_table_lookup")
-> Signed-off-by: Yifei Sun <yifei.sun@inria.fr>
-> ---
->  net/ipv4/fib_trie.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/net/ipv4/fib_trie.c b/net/ipv4/fib_trie.c
-> index 394df1de1281..2a670e9b0417 100644
-> --- a/net/ipv4/fib_trie.c
-> +++ b/net/ipv4/fib_trie.c
-> @@ -1591,7 +1591,7 @@ out_reject:
->  						     &nhsel);
->  			if (nhc)
->  				goto set_result;
-> -			goto miss;
-> +			continue;
->  		}
->  
->  		for (nhsel = 0; nhsel < fib_info_num_path(fi); nhsel++) {
-> @@ -1622,7 +1622,6 @@ set_result:
->  			return err;
->  		}
->  	}
-> -miss:
->  #ifdef CONFIG_IP_FIB_TRIE_STATS
->  	this_cpu_inc(stats->semantic_match_miss);
->  #endif
-> 
-> base-commit: d5b89d55a322b632e2b465b392a4c1d9d338db9c
