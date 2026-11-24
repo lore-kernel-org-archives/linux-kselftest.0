@@ -1,61 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795534233;
-	b=xBnIdbnjgJjEGXiDs3HrhFDSujdLv2P0gIZvfzpV2P5XWGvxwxddOyZPrZyFo0lf5TJD
-	 dvZzi0l4sIDIWs4RijIEvZuEnSVAYEPnWg4Wg0Ufy88SQB+nes2D6j8MH2JoDjdcN2YWE
-	 XZ64P5RLu12RBOOyEPvFWUqe+S6JycnnKnpzHzmiWFKeMsA5pAmGgs+ufDIFGaveHxk4i
-	 TLN97KLYlvtqvkROeOY41DnbBmFJgWDGHJ3KDhd9oXYZzPdn2p10E+lXcbnEEsEvreTv5
-	 0Qxjiv9h8MFs7WijBzBQ/Oijcu8Bc+cvGMaq77piaNLHuve2kKBTT63nWl6eC/B6Jcw==
+	t=1795534512;
+	b=2/1Mc2Xb5ijbveg/ktRKh0XSV6P587i1gk+nIPRz+U+hM/t5B07AB2kztTADNXf9d0tV
+	 Tl7qmHgFxw6nizI7cXI+56pm4nHg8foshZ8FJRhUQwAsmun39IJZqdL8DIR8krtTygbd+
+	 0tO7ExxzeXMGCnN7izQEyuMFpTu+11FJEmyz+TJw/wHnl5XgMrndGKRa3BKtrG2NJyqto
+	 d2oeqCuBl77erMHYyPkZzOssGIoR4mCzZNKn/XrqjVXUgxknDyiakzK5gQ7ai9VzSXn3L
+	 YSm6tO0JznDuk+DNVhkcG0/RDf3bCrkB6Q32vLgJmJgJ6k1vZ9jaO5V2MFHK6zHGCrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795534233;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=7VqeTp+8dmN7UADd/YQEmvCTwc4psl0zm6amATEWXmw=;
-	b=5rHbEmkvNDv7wZ//Y1ScQ+gGXwbtkIPWHbC/FfGqe3NkjChz4XgBkal/e527T6Ah3Lx5
-	 Y66RqfcC5TW01AjHOf994szr3XkTH2C7dC/BoygZoebmNs6BFaSymcd1B66UlX18Ontov
-	 vM8ucFHYRMJSmuqZpJztcAB7n/bx+7H2XRQQuaN5rAIarHR/RDhSez/Yo/exckaUuHKXR
-	 Iit7Z/0Cuh49xXQMO0zEhjnpX8F0hmaiDwrXJLzUrA4h+5pjOpRLdjjyn8ZY4ezFS00m/
-	 YkAA4S93+eH7k4FXmq1PAuP52umYqmD3TNt7B9EO87YrBavSUD5HxkcOJTr/7qTo8gQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795534512;
+	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
+	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
+	 X-Get-Message-Sender-Via:X-Authenticated-Sender:X-Source:
+	 X-Source-Args:X-Source-Dir;
+	bh=klZintxQyYJYwY5myxqCQjOAc4cylym1ddpi2+pureo=;
+	b=FewwlfW6LfiAH2ich5oVyWjfwaFWNUwpYS+3Z4ALVsVVP59/Cab3B3wGhhKJRxpYQJE+
+	 yD9Grb94ChFvLbweR08FsKXH8D1B8lba2FwC/OlfgNIAgJDfTyyWKS17HZfvBXGgpsrJR
+	 6MqMRC8QSWhKNFMuzsr6UBFIGej5Ohgx4iPywHKLApbNZVNS8aHnaquz7YYGL7tLMUylg
+	 iIE2YdpSdwDNdfV9Y4DvaO7Od2JxrE4IFrB9Gt4OGi+wtX60XXqt5thpteTL6UMV/qobZ
+	 Xx+8A5cW5ddRZ1FumhHfz9HDpOfQGHu007kW8vt7ZQAp4wNq4svGgHTCtyUE3FdMGXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KPi+q1Tc;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=oss.cyber.gouv.fr;
+	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
+	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=m869IuFC;
+	arc=none smtp.remote-ip=51.159.188.251
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D98606A31E;
-	Tue, 24 Nov 2026 15:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA986606A329;
+	Tue, 24 Nov 2026 15:35:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA986606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KPi+q1Tc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5694C1F0093C;
-	Tue, 24 Nov 2026 15:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795534232;
-	bh=7VqeTp+8dmN7UADd/YQEmvCTwc4psl0zm6amATEWXmw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=KPi+q1TcfEnO+g4sjKqUzjApmnS260AuE8cvRp+z3Jf1sC/rkMlhbY946zPxyr2Q8
-	 zEjWI32tTY3/z3BRWgfRyjUqRzcwpZMCIyfPKxbnxkrZS1FTx2/T9edFlRLU2aifb1
-	 DOvBg+haxxeE/4u8Xlj4BInkEOUPHeyQ02JZFg1gOLxTu0ABbMUXCMYCxO+tJjmx2C
-	 Qw6DwoxhDLaTIZhdGFuhN/XJHBGxMajQ95qz1fwcCrRDUgclS3fep3RVmUrgcl52P7
-	 iDWzDk8QfAheox1gL+208oWfqXZB6BYFkPSHXvb1erOE85q2sT63oMqrmCSIMIQ2Zk
-	 FCUDf094wV5+w==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	SJ Park <sj@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	Aveline Noir <jm5905938@gmail.com>
-Subject: [PATCH 4/4] mm/damon/tests/core-kunit: add test for damon_call()
-Date: Tue, 24 Nov 2026 07:30:20 -0800
-Message-ID: <20261124153021.90142-5-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261124153021.90142-1-sj@kernel.org>
-References: <20261124153021.90142-1-sj@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=m869IuFC
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Message-Id:Date:References:In-Reply-To:Cc:
+	To:From:Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:Reply-To:
+	Sender:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=klZintxQyYJYwY5myxqCQjOAc4cylym1ddpi2+pureo=; b=m869IuFCZ56sFzF6YGHIyLQyao
+	acT+0/t10rbhtJs9aj1qffr17801dvFZhZEibRgF5f6veiM9Yp/QSpp79ckYa7UqSzoLah8+5LJY5
+	2Oth4VxxvvY3trVPD1dccd2a/kBOt0pWwX47mAmxD3eOqsWxcoJApUbly1x+6ws7jJV/hwaNQAVKN
+	Kgi7Md44Qb+AUL2jWlKd2qSOLPctlBb/VDkyKJx6yBeg9rPulx6TDGHDu24kaPh5bawR7hJBqvfFn
+	K2menaiugLNK3/PxABZVALSgRkCrxgLfchiJ23hWCrvQXwGfKU3blpoucp+TO6AkUG2Ckw/N/+eCr
+	djg/Yk1Q==;
+Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:31657 helo=archlinux.local)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.100.1)
+	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
+	id 1xVsXx-00000002UiG-19zg;
+	Tue, 24 Nov 2026 16:35:03 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,77 +62,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH -next -v2 0/8] lockdown: fix the securityfs interface
+ and add tests
+From: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: nicolas.bouchinet@oss.cyber.gouv.fr, xiujianfeng@huawei.com, 
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
+ kalevi@kolttonen.fi, linux-security-module@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, lujialin4@huawei.com
+In-Reply-To: <20261110132818.2231593-1-caixinchen1@huawei.com>
+References: <20261110132818.2231593-1-caixinchen1@huawei.com>
+Date: Tue, 24 Nov 2026 16:34:52 +0100
+Message-Id: <179553449228.44882.5530794140051904297.b4-review@b4>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=268;
+ i=nicolas.bouchinet@oss.cyber.gouv.fr; h=from:subject:message-id;
+ bh=PtCh7thz3Q2YttE8bAQqBYCLHdlzWubcG5d5XY0mS8E=;
+ b=owGbwMvMwCU2peIRu9mVXWKMp9WSGLJZ1y3s9gw7d2B2nbJAk8ztoNroCXtqzML857Sr69+q1
+ 567Xk+jo5SFQYyLQVZMkWWT27m+2bnKj1x+tx2EmcPKBDKEgYtTACZy+wwjw3HxU5b/A/NFReKj
+ p5ptWcwTM/fX7CfZ1psn7kov3tX/8wPDX6nWEytUj92SeFy8dMaJSS2LV6RvLf5YfMmyZuXquo1
+ PNvECAA==
+X-Developer-Key: i=nicolas.bouchinet@oss.cyber.gouv.fr; a=openpgp;
+ fpr=FB48DC6D172A3DE30BA94B0DA548BF06BE454ED7
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-From: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
+For your information, your e-mail subjects starts with '[PATCH -next -v2 x/8]'
+and break tools like b4 that help tracking your contributions, could you
+fix it to [PATCH v3 x/8] ?
 
-A newly allocated damon_ctx has call_controls_obsolete set, meaning no
-kdamond is available to handle call requests.  damon_call() should
-return -ECANCELED in that case instead of queueing the request and
-waiting forever.  When call_controls_obsolete is unset and
-damon_call_control->repeat is set, damon_call() should return 0
-without waiting for kdamond.  Add a kunit test for the two cases.
+Thanks in advance,
 
-Signed-off-by: Sailesh Nandanavanam <saileshnandanavanam@gmail.com>
-Tested-by: Aveline Noir <jm5905938@gmail.com>
-Reviewed-by: Aveline Noir <jm5905938@gmail.com>
-Reviewed-by: SJ Park <sj@kernel.org>
-Signed-off-by: SJ Park <sj@kernel.org>
----
-Changes from v2
-- v2: https://lore.kernel.org/20261118063755.37749-1-saileshnandanavanam@gmail.com
-- Collect R-b: from SJ.
-- Rebase to the latest mm-new.
-Changes from v1
-(https://lore.kernel.org/20261117172219.26725-1-saileshnandanavanam@gmail.com,
- https://lore.kernel.org/20261117174834.29182-1-saileshnandanavanam@gmail.com)
-- Merge the two tests into damon_test_call().
-- Drop the list_empty()/call_controls.next expectations.
-- Drop list_del() on the stack-allocated control.
-- Post as a single patch.
-
- mm/damon/tests/core-kunit.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index a27545602680a..4446574a35652 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -2724,6 +2724,27 @@ static void damos_test_sz_ops_filter_passed_last(struct kunit *test)
- 	damon_destroy_ctx(c);
- }
- 
-+static void damon_test_call(struct kunit *test)
-+{
-+	struct damon_ctx *ctx;
-+	struct damon_call_control control = {};
-+	int ret;
-+
-+	ctx = damon_new_ctx();
-+	if (!ctx)
-+		kunit_skip(test, "ctx alloc fail");
-+
-+	ret = damon_call(ctx, &control);
-+	KUNIT_EXPECT_EQ(test, ret, -ECANCELED);
-+
-+	ctx->call_controls_obsolete = false;
-+	control.repeat = true;
-+	ret = damon_call(ctx, &control);
-+	KUNIT_EXPECT_EQ(test, ret, 0);
-+
-+	damon_destroy_ctx(ctx);
-+}
-+
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -2771,6 +2792,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damos_test_esz_goal_temporal),
- 	KUNIT_CASE(damon_test_last_region_quota_reset),
- 	KUNIT_CASE(damos_test_sz_ops_filter_passed_last),
-+	KUNIT_CASE(damon_test_call),
- 	{},
- };
- 
 -- 
-2.47.3
+Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
