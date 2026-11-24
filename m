@@ -1,62 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795482433;
-	b=J2CO5pfozSxV4a7G7E2xdvaPV91KkoM80LXoqPlN9ClwomnVCeuj8I6m9jOWoeCLRREk
-	 ww6zTPURlTvbe9OvcvwgFQ032xG5XwmkSmYQjHz/LjlVR1LaEjDWaBI+lOOtgynMiw5/m
-	 emoYXbjNexUqMh+odvjjUVtwwZsr9Jbb1kLtV9f0NqylDf2IsOswHJ7A8TYeQRwX1rrLF
-	 V8TdBVHoaQzdSBl72PnmJm4IUaFAU0K6MPLhWMafw4MBVgMuU9enGTlFpQloUIP34x72e
-	 Me39G4xL1ZuOZzmKo37NTz7okywtBBST69z4g0z3Wccm48alSfsagElQj1B1JBvfqNw==
+	b=28DOdV6FKSkTPDXHBI3n4HFKSJWpeKqn5+IqrD+8M5gHPHOw3yBf3wIgRZrA4x+Juk2t
+	 l/MS695/5l1/x9WBiOvBJqtM//z1cHov4Tb22wbNCELfD2FrcQuDi1Xi/xbhlXqLlCng5
+	 C9pSmq60oxFvxz25YJQZBCnO/X1Fnx/uf4eNwYsHrc62nrl+2ILuJcmtagpPR0Um5RZpe
+	 XWETcXjp6oNe0f6xFDaY77PyC4Epqs9YhCGPvxfUg20Ik5EhTOU/A/CEM8KPs9m/sbH6+
+	 kB9ySLK1RvH/GThmSIbKQTe4mP67UeYp7Am1XnM3r7B/D//p10yAdMcGcvOf6xsxWJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795482433;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=GaC+coiRxB+HJ68ZP4ImTvThBADzflMqQJW3Mj6rbrI=;
-	b=E9f8Vt2RRHNEOYGDLdXIMuqeaLeNcRlUeYrybKF2xaD9C7c/NPhsW+8TqZggXZkr9A+i
-	 tjZAc7O6p0Ly6rTPBDyaeFO+eCRUoF4zHtaaz0Ur329wDRUb9zVopsagoLsRHrzpriquY
-	 jhWycJQyiNJZq2jFpgcbkpcQd3IzkM9GSdU2gGEeRmxQme4MMw2LDucx6fI3lmsOAvVze
-	 L5QKkhUSnP4+9Eaebm3pOEcGmr/nLl4pYfNpg9OnaQe5FryiqyBQeAAmoRd/dar2Lio9L
-	 momAFRYIGdThaUgeCK5+AzuCoPfnoR6wYTrIpXeX1FwHjXo86YthQWop3coTOZBRorg==
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version;
+	bh=YeHV7Op7NZOhpz5xRkPrpsuWyQC4bgaI84CldFtQozc=;
+	b=zdNbt/dZ6QEMuoQQ+Kgh2hsTs30h+T1g/bk68ssyx5ttafo07fsBX+9vvJe/RJ4DsTvm
+	 LfuilTVF06Xn2iOh9+JLAjXFGM6jRbcjmKK3BBK3hKiyZS+RTOmZkDwwXLvJlkvC8gj/l
+	 mWlP8Lot5NAoYjySPccPLauW9y3eUZzNDSU/qIybZJy8hE4MD03Wx7Gqthufm5YDiDQNo
+	 m6NFfP+zCtALanIDV5k7O8BCaVwXA2k5xwGUF/QTVQ13UYvZZbwCdX8yKIxYPAyUeRVOH
+	 RQ4djJWoXy80YYVUoO3O53T+zcqj4TFlA+UbNxJZCP4gv+XUYdMIz1h0LuEmrU+t1gg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=meta.com;
 	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=cJyG1S8P;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=PfvVOBda;
 	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1937606A6A7;
-	Tue, 24 Nov 2026 01:07:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1937606A6A7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDFA606A335;
+	Tue, 24 Nov 2026 01:07:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BDFA606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=cJyG1S8P
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ANJwPIb2407513;
-	Mon, 23 Nov 2026 17:06:41 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=PfvVOBda
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 6ANJw1ne519510;
+	Mon, 23 Nov 2026 17:06:34 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=GaC+coiRxB+HJ68ZP4ImTvThBADzflMqQJW3M
-	j6rbrI=; b=cJyG1S8PKenYrMD9JiWCifq0QZ8Bf1e6nWVbDdns1+Upsu9FNWIu1
-	2MwBsxZoihU+UVuC62ygq+OdVhqGkh3ZtqikVCPSdh0KUNgiPZf1Kr/i02xLjQn2
-	gTHO5CDnXW49PuOe2g0h47Wem+wFmOH4Xa07r7XaiQihVh8ssox77rneVvhS5K5i
-	/9WXohcGwRa7wz19mXAuBMIO5fEIgRRaY1Y592+ugHphezqJerkIwAQpLki29bLw
-	AFjofEGpial3q9JI+Zw+9hiIfRycqWK9xcGRWHdJlJrf52Dt3trjcjCpyzQUzQGP
-	K3oBiEFVDXHzUHXv5YKVe9I5QNeEJsvrg==
+	pps82601-s2048-2026-q3; bh=YeHV7Op7NZOhpz5xRkPrpsuWyQC4bgaI84Cld
+	FtQozc=; b=PfvVOBdafI2UTXdVCukPpSv7cCHn+cg2Bk7cJGcHAf0Btw0huzxNU
+	ZhFNeyr5cSNYvxvjWsWoE3lH1Ohtr7VNjjLv7Wdi/s1nzo0mzUNgq3OcA5g2xGhw
+	3NrA5mI57lv5oWnzSayXBkQL2e4W3Xv9s9BolU/+V/4uOnjVXxK/u5w/QG8Cnx2s
+	OI76Q2yqoH91YDA48cYSXeB7t72bRQBt/kV6YoWCQ7y3xtlcf0oFSlOLnt6vMuIv
+	Yn4jRFLyXeLiQvJDQLp4CXraMXJAQVKVaZ2RIvFV1D+bc+jQTlGnSdN+AXIgAR3x
+	CTR0chkS+tvViBnmoTTCOdW0zq/Y+abgA==
 Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4j3a0awwja-1
+	by m0089730.ppops.net (PPS) with ESMTPS id 4j37nse9tb-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 23 Nov 2026 17:06:40 -0800 (PST)
-Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 23 Nov 2026 17:06:34 -0800 (PST)
+Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
+ (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 24 Nov
- 2026 01:06:39 +0000
+ 2026 01:06:32 +0000
 From: Todd Freed <toddfreed@meta.com>
 To: <netdev@vger.kernel.org>
 CC: "David S. Miller" <davem@davemloft.net>,
@@ -91,10 +91,11 @@ CC: "David S. Miller" <davem@davemloft.net>,
 	<tariqt@nvidia.com>,
         Wei Wang <weiwan@google.com>,
         Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>
-Subject: [PATCH net v7 8/9] selftests: drv-net: psp: test that ipv4 psp packets aren't fragmented
-Date: Mon, 23 Nov 2026 17:06:00 -0800
-Message-ID: <20261124010601.3995693-9-toddfreed@meta.com>
+	<willemdebruijn.kernel@gmail.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH net v7 6/9] ipv6: don't send redirects for decrypted skbs
+Date: Mon, 23 Nov 2026 17:05:58 -0800
+Message-ID: <20261124010601.3995693-7-toddfreed@meta.com>
 X-Mailer: git-send-email 2.53.1
 In-Reply-To: <20261124010601.3995693-1-toddfreed@meta.com>
 References: <20261124010601.3995693-1-toddfreed@meta.com>
@@ -109,180 +110,113 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Lu8N98dBBE1NRny0gCncr_whVioksvaO
-X-Proofpoint-GUID: Lu8N98dBBE1NRny0gCncr_whVioksvaO
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDAwNCBTYWx0ZWRfXzdb7+iRjcEj6
- rO1l2vs/kDujqAjTJgrTPkOxTiE6Erhm+JNAMPs+Igr8aB35UFdMbvnroly035MY2yE7qW8YLnv
- VF3gYXeBxniz2phq8tY5jYs1Kx1Zswk=
-X-Authority-Analysis: v=2.4 cv=FeCiV5+6 c=1 sm=1 tr=0 ts=6b04e320 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=b9gncdGx c=1 sm=1 tr=0 ts=6b04e31a cx=c_pps
  a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
  a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=wpfVPzegXHpEFt3DAXn9:22 a=VabnemYjAAAA:8 a=ClODYU1lsHz8rMzznhwA:9
- a=O8hF6Hzn-FEA:10 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDAwNCBTYWx0ZWRfX2zFqfJ0PfS8B
- H8zHQZCqJmlCXLqzJrXZBa6kY3UrAGGW7f21SABeOugqJWOVnOQ7PP+p5Bn3N8kHrQNVF2IGk9T
- plJHZ3ZmTJI5u6o3VZBGdr+4Y2QA04yKMcs8YeBYtT5TuYABpNmpRYmvblqeBrFXDUNzN5U+Y19
- +xNJnamsDCkptiHAdQWHuGpH6swd6bhbJS2dBJywvd64LUTEp5mX40StmszZK3xoXoy7Hun/C4J
- XPO7/WHOflVbYPyV3W5bcSBXknV29Wvw8H0XspB8Z3wvc9jKTn2nQG1pF1Pej+OHFZm7sSOCkLk
- lXv42jNMyxU9yacUe2sVJYS8zUuy/u6TcGUAB5ilf7FJvAQ+FvE74i3vNwK8mwYhd5infqQgAFi
- PFr1yUUNC4aGzJXY1Ge84pKq++yNE5WUhM91fNbp+zeD28ORW43VfbFjoBbUcFzkFanaxR7uW4f
- WjdU6k6y6HD6gFzVZ5Q==
+ a=855S8uPTkML1Oy45N9_h:22 a=9R54UkLUAAAA:8 a=VabnemYjAAAA:8 a=VwQbUJbxAAAA:8
+ a=8wgS_IX-37W2Gv-HzOkA:9 a=YTcpBFlVQWkNscrzJ_Dz:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: JeCyvsclCCevEFZfnW68YU0-CXk7TpQi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDAwNCBTYWx0ZWRfX2RFJ16vjcOT9
+ BEa94gg4+U6LsuuhAlCVFPvRNv7ZmoHdzcfPmnCr0ox3nCTpnYFHxH1pm/h98tuPYqLD0v5hSmJ
+ R0buJNBarP9bIA/yC3N/Wp99Bz9+2j5ViSurSQrqyUsV7tGAnijrhC3F+LECNzarCf3yOoKSflG
+ qvTGFM6OuEfiUh991dlRt7/rW/zKTGltCRKGOHQ+b2gWR21ZRhSDpy3Nlb9wZ45fR4B4v25Fku/
+ lJhRDwqmKhHAexyNrKFQkjmeJUTMUwPym/vUK2nFlzhIh0FyU5OCoi3heIIc6UOYTnsU6l0Q1/G
+ DP46VTF7FIBhlk2HsxwJDBxQut7kaeKbWa4Sc3I/YQnjs8GSD6BzbcZHydvI5rNL7hG3fhWGKl8
+ xnPR/8eyPTGVF1v9QVWn8nrTLmdE4idjvGce2tnbn6F2hYKf0J7eBwf+PBPwwZ09VVOP/qsBaBF
+ CoyMPRIQjh2xzQPmPjA==
+X-Proofpoint-GUID: JeCyvsclCCevEFZfnW68YU0-CXk7TpQi
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDAwNCBTYWx0ZWRfX6G1/pMMdGMDQ
+ mleJI7kIleOim6rjqbxsJz1bzqflXwdKcFgO17qq+XFLXbx1LLneCvFMLaNnhwX5TjVD3IGNV67
+ mC3FPXOvmxznHXPTo73B5pYitt5ornI=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-23_05,2026-11-23_01,2025-10-01_01
 
-Make the IPv4 packets of a PSP TCP socket need fragmenting, and check
-that they're dropped (IpFragFails) and not transmitted unencrypted.
+When ip6_forward() forwards a packet back out of the interface it came
+in on, it sends an NDISC Redirect to the packet's source. The Redirected
+Header option quotes as much of the invoking packet as fits in the
+minimum IPv6 MTU. If the device had decrypted the packet (as indicated
+by skb->decrypted), the redirect sends part of it back out onto the
+network in cleartext.
 
-TCP sizes its segments from the route MTU. With IP_PMTUDISC_OMIT, IP
-fragments them to the device MTU, and doesn't set DF. So the test sets a
-route MTU of twice the larger of the two device MTUs (at most 65535) on
-both ends (the peer's MSS limits ours too), keeping the device and
-source address of the current route, and IP_PMTUDISC_OMIT on the socket.
-TCP MTU probing (tcp_mtu_probing 2, or 1 once a black hole is detected)
-can cap the MSS at the probing base, so the test turns it off. If the
-peer isn't on-link, or the socket's MSS doesn't need fragmenting, the
-test is skipped.
+The redirect is built by ndisc_send_redirect(), not icmp6_send(), so the
+previous patch for ICMPv6 errors doesn't cover it. On IPv4 the redirect
+goes through __icmp_send(), which the patch for ICMP errors covers.
 
-A software filter on the peer counts, and drops, the IPv4 fragments
-which reach it from the socket's address, and the test asserts there are
-none. IpFragFails is per netns, so it only confirms that the packets
-were dropped.
+Both PSP and kTLS RX device offload can get a decrypted skb forwarded:
 
-While both route MTUs are in place, a new ssh connection to the remote
-over these addresses can stall: its segments are sized from the route
-MTU, and sent with DF set. So the local route is added last, and removed
-before the next remote command.
+ - mlx5 decrypts PSP packets whatever their destination address. A PSP
+   packet encrypted with the server's key but addressed to another host
+   on the link, and routed via the server, is decrypted and forwarded.
+ - kTLS RX device offload keeps decrypting a connection's packets after
+   its local address is removed. With TCP early demux disabled
+   (net.ipv4.ip_early_demux=0), they are then forwarded. With early
+   demux, ip6_forward() drops them, as early demux attached the socket.
 
-No IPv6 test: the stack only fragments IPv6 TCP packets when something
-like IPVS sets ignore_df on them (see "net: don't fragment decrypted
-skbs"), which this test doesn't set up.
+Note that the forwarded packet itself is dropped by
+sk_validate_xmit_skb() because of skb->decrypted.
 
-Without the fix in "net: don't fragment decrypted skbs", the packets are
-fragmented, and the fragments go out unencrypted. They reach the peer,
-IpFragFails doesn't move, and the test fails.
+Reproduced with mlx5 (ConnectX-7), with a client C, a server S and a
+peer P on the same link. On S, forwarding is enabled on the interface
+only:
 
+  sysctl -w net.ipv6.conf.eth0.force_forwarding=1
+
+PSP:
+
+ - C routes P's address via S:
+     ip -6 route add P/128 via S dev eth0
+ - C connects to a TCP server on P, with PSP on its socket using S's
+   key.
+ - S's device decrypts the segments C sends, and ip6_forward() routes
+   them back out of eth0 towards P. S sends the redirect.
+
+kTLS:
+
+kTLS RX device offload only decrypts the flows of local kTLS sockets, so
+the packets have to belong to a connection to S that is no longer
+delivered locally:
+
+ - S has a second address S2 on the prefix. C opens a kTLS connection
+   to S2, with kTLS RX device offload on S.
+ - S disables TCP early demux (net.ipv4.ip_early_demux=0), then removes
+   S2 while C keeps sending.
+ - S's device keeps decrypting the connection's records, S forwards them
+   back out of eth0, and sends C redirects quoting them in cleartext.
+
+With this patch, no redirect is sent for the decrypted packets (in both
+cases), and packets which weren't decrypted still get one.
+
+Don't send redirects for decrypted skbs, as for skbs decapsulated from
+IPsec.
+
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261117203137.804424-1-toddfreed%40meta.com
+Fixes: 784abe24c903 ("net: Add decrypted field to skb")
+Cc: stable@vger.kernel.org
 Signed-off-by: Todd Freed <toddfreed@meta.com>
 ---
- tools/testing/selftests/drivers/net/psp.py | 95 +++++++++++++++++++++-
- 1 file changed, 94 insertions(+), 1 deletion(-)
+ net/ipv6/ip6_output.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index cae369d8ab63..9c1d4c59b1ac 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -22,10 +22,12 @@ from lib.py import KsftSkipEx, KsftFailEx, CmdExitFailure
- from lib.py import NetDrvEpEnv, NetDrvContEnv
- from lib.py import Netlink, NlError, PSPFamily, RtnlFamily
- from lib.py import NetNSEnter
--from lib.py import bkg, rand_port, wait_port_listen
-+from lib.py import bkg, ctl_file_write, rand_port, wait_port_listen
- from lib.py import ip, tc
- 
- TCP_ULP = 31
-+IP_MTU_DISCOVER = 10
-+IP_PMTUDISC_OMIT = 5
- 
- 
- def _get_outq(s):
-@@ -822,6 +824,97 @@ def data_send_ipv6_exthdr(cfg, opt, val):
-             _close_psp_conn(cfg, s)
- 
- 
-+def _ipv4_snmp(key):
-+    """ An Ip: counter of this netns, from /proc/net/snmp """
-+    with open("/proc/net/snmp", encoding="utf-8") as f:
-+        ip_lines = [line.split() for line in f if line.startswith("Ip:")]
-+    return int(ip_lines[1][ip_lines[0].index(key)])
-+
-+
-+def _ipv4_route_mtu(dst, mtu, host=None):
-+    """ Add a route to @dst with @mtu, keeping the device and source of
-+    the current one, which must be on-link. Returns the defer removing it.
-+    """
-+    route = ip(f"-4 route get {dst}", json=True, host=host)[0]
-+    if route.get("gateway"):
-+        raise KsftSkipEx(f"{dst} isn't on-link")
-+    try:
-+        ip(f"route add {dst}/32 dev {route['dev']} src {route['prefsrc']} "
-+           f"mtu {mtu}", host=host)
-+    except CmdExitFailure as e:
-+        raise KsftSkipEx(f"can't set the route mtu to {dst}: {e}") from e
-+    return defer(ip, f"route del {dst}/32 dev {route['dev']}", host=host)
-+
-+
-+def data_send_ipv4_frags(cfg):
-+    """ Test that IPv4 packets of a PSP TCP socket aren't fragmented """
-+    cfg.require_ipver("4")
-+    _init_psp_dev(cfg)
-+
-+    # Fragments which get out reach the remote. Set up the count before
-+    # connecting, so a skip doesn't leave the responder mid key exchange.
-+    # The socket's source is the one the kernel picks, which may not be
-+    # LOCAL_V4, and the fragments would leave through the route's device
-+    rem = cfg.remote_addr_v["4"]
-+    route = ip(f"-4 route get {rem}", json=True)[0]
-+    if route["dev"] != cfg.ifname:
-+        raise KsftSkipEx(f"{rem} isn't routed through {cfg.ifname}")
-+    loc = route["prefsrc"]
-+    remote_frags = _remote_count(cfg, "ip",
-+                                 f"src_ip {loc} dst_ip {rem} ip_flags frag")
-+    if not remote_frags:
-+        raise KsftSkipEx("can't count fragments on the remote")
-+
-+    # TCP sizes its segments from the route MTU. With IP_PMTUDISC_OMIT, IP
-+    # fragments them to the device MTU. Set a route MTU above the device
-+    # MTU on both ends, since the peer's MSS limits ours too. While both
-+    # are in place, a new ssh connection to the remote over these addresses
-+    # can stall, so add the local one last, and remove it first.
-+    mtu = min(2 * max(cfg.dev['mtu'], cfg.remote_dev['mtu']), 65535)
-+    _ipv4_route_mtu(loc, mtu, host=cfg.remote)
-+    local_route = _ipv4_route_mtu(rem, mtu)
-+
-+    # With MTU probing on, TCP can cap the MSS at the probing base, whatever
-+    # the route MTU
-+    ctl_file_write("/proc/sys/net/ipv4/tcp_mtu_probing", 0)
-+
-+    s = _make_psp_conn(cfg, 0, "4")
-+    try:
-+        rx_assoc = cfg.pspnl.rx_assoc({"version": 0,
-+                                       "dev-id": cfg.psp_dev_id,
-+                                       "sock-fd": s.fileno()})
-+        tx = _spi_xchg(s, rx_assoc['rx-key'])
-+        cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                            "version": 0,
-+                            "tx-key": tx,
-+                            "sock-fd": s.fileno()})
-+        s.setsockopt(socket.IPPROTO_IP, IP_MTU_DISCOVER, IP_PMTUDISC_OMIT)
-+        mss = s.getsockopt(socket.IPPROTO_TCP, socket.TCP_MAXSEG)
-+        if mss + 40 <= cfg.dev['mtu']:
-+            raise KsftSkipEx(f"mss {mss} needs no fragmenting")
-+
-+        fails = _ipv4_snmp("FragFails")
-+        # The packets are dropped, so the send may not complete (with a
-+        # jumbo device MTU, the socket buffer can take all of it)
-+        s.settimeout(3)
-+        try:
-+            s.sendall(b'f' * 200000)
-+        except socket.timeout:
-+            pass
-+        fails = _ipv4_snmp("FragFails") - fails
-+
-+        # Before the next ssh to the remote, see above
-+        local_route.exec()
-+
-+        # Fragments would go out unencrypted: the packets must be dropped
-+        # instead of fragmented. FragFails is per netns, so it only
-+        # confirms the drop: the remote count is what decides.
-+        ksft_eq(remote_frags(), 0, comment="fragments reached the remote")
-+        ksft_gt(fails, 0, comment="packets dropped instead of fragmented")
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
- def _get_psp_ver_ip_variants():
-     for ver in range(4):
-         for ipv in ("4", "6"):
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index 5b19683f08e0..d8ffe3837874 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -619,9 +619,12 @@ int ip6_forward(struct sk_buff *skb)
+ 	/* IPv6 specs say nothing about it, but it is clear that we cannot
+ 	   send redirects to source routed frames.
+ 	   We don't send redirects to frames decapsulated from IPsec.
++	   Nor to frames decrypted by the device: the redirect would quote
++	   them in cleartext.
+ 	 */
+ 	if (IP6CB(skb)->iif == dev->ifindex &&
+-	    opt->srcrt == 0 && !skb_sec_path(skb)) {
++	    opt->srcrt == 0 && !skb_sec_path(skb) &&
++	    !skb_is_decrypted(skb)) {
+ 		struct in6_addr *target = NULL;
+ 		struct inet_peer *peer;
+ 		struct rt6_info *rt;
 -- 
 2.53.1-Meta
 
