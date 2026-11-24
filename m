@@ -1,76 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795483699;
-	b=lIUwg84VrnGe9DCmz/uO6Vd87HiRl5XVUyHdbsKeOhj3VyTzWXvoZn5V+TrGrk1laaL0
-	 03mRD51F0vJojULPfVOdaL6aUWeFqBmHKcMDx1BV02+ag/XSg9vh7YoPa+Hvk29iHlmiv
-	 SwS2vSbSsEfmMRPpFHyDUzjaOifWmGc4yMtBGJd46yHfX4MprIVjyP9VgjyLKE4QYEack
-	 giPDh5RTH/et427+2t+scxQvlvON6P77xWMOlYo2yfBWK8Z0fwvhemZGVUmqLCESvCXDC
-	 XdDMZ78AP9OLAwOgxYM7cqrwjBITGpyee0QojKGizii8Qmg+crRF3rE3SC+N1pE0/Pw==
+	t=1795483923;
+	b=0UnI8KNLv+Xn/70jQurMxT2LTLfIbKGnAcCo6ao2e+zY1xyeRHsIU0nSkOY1alyS2Q5K
+	 Ks+g8j/HSksr/FEKW5pQhj2zTj7ToX+Fp/KxwOqhsQ5NblEnHRnNd+eqIuD4MDVw4Twae
+	 IpJCVXQd9+CCFiv8ByQQmyfVOpmOdz8AudoeN/NVM9qP0tSi4K0OlhCmK/UuWK7nYtxC5
+	 ATuD2NwZb8socLyts8KW2SOl3XTOLUMqw4W4jEsyZmDjNlwVoeo6YyzPb20IKwURWQY61
+	 junygNF3MPRC6fsknDntunLCbReEIxld2sqtkkfrDJqUipd8PG5ELZY5TOqvq5Cc4mA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795483699;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=rR3LoSS/CnHxEjvm/yoRjwsCnx6t2+6QYn8uLZ0saD0=;
-	b=tMN4xXCS0H7P3ZTQ2JSV9aB6CnVRmzvjG5HOgoYMmuDGXT9PB0eWoVZg1tUIpBNsiL2a
-	 VxgN4hvAaNffHE1kuF1poJKfuq2lP+zaS1in/svrTQk0mIQqsyw7bl/xzYX5VmrZaeW9P
-	 C4CBbsTxwuaX+ekIxTwOEgPmOGL/rbOHaYHovDVs1DHXBed9J1O4aNpqVt0go6mC7XUeJ
-	 DiZ3s54XwTEAkCUP72C3tisgZhKQW3+tv6SKLIUXax215qauuiBjC3KqMdiLJQyeZwG8r
-	 otQa0aLURaAtXthtWyYCOR/KMKt1H6iLUDvkoQLEiZoxwau382tr7yPS1BfoSvXX7yA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795483923;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=wJGHOnV3Wb5MH8wxspaaUtnx8HHTgvKjZzB/OFvjafQ=;
+	b=RCoZVvqOOyZByYr80oF8NVTYl9ajE+p7QYObMJrcU47EJjvCfRnpY1Lcpjv5+9Sxp08O
+	 /degaJ85c+mfq45E5v1H8M2Pd3lH6IXN0GjYORXzdlQmUxp5EX11cz2mWHbKRP5ybA7/I
+	 07/rZRVK7+8lV1ZT6xy7WTjuD2X+LBAINJshEou55t1sLmME6wbeDMzdzqkc8hI41l1wS
+	 i1egliU0+qGBeYv+jLFbN+BdWUMruxo1dtSt5AJCQ+mg2cSdiCCPhpY8D//S7FOphYJp0
+	 Xtdcxp9T7IU1JCnuDHgfPEUGRQf0k/hm44sQWmLlUGFLB0jaClw5a2+roXrjMkmGDNw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MhiLjCcn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 512B7606A31E;
-	Tue, 24 Nov 2026 01:28:19 +0000 (UTC)
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=iLM0r9WK;
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7868D606A322;
+	Tue, 24 Nov 2026 01:31:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7868D606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MhiLjCcn
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 5186A1F000C4;
-	Tue, 24 Nov 2026 01:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795483699;
-	bh=rR3LoSS/CnHxEjvm/yoRjwsCnx6t2+6QYn8uLZ0saD0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MhiLjCcnHp95T7HuSLpsxG3/eXdkRaSIRPl4sr8N1U5eHtYO0TTNagpfp9FvmkyLY
-	 poVwlubetpPDij/MC3k1nK/9BUf5UjQy69XH3Y/lHA+UmTSurdUcg8YSSYFXRbKlTD
-	 jcbh79HqiPBRN4crGCI4oilTmV8umW0Wa4zCjU7Akv5fnudGwO1FhYCxPW8ulDClTP
-	 6fMW/Dcsm2g3xZssBeJt/iJjwdDF3L/cHmN6TjWY3Hoes81OGCWTlNSXOZmWrEz+K0
-	 9hcKPTnRxdqfj1RyZC5Qoh8kkYy8ExXwELZeyHET1akIkufbVIPoo5520mFH4jAWpG
-	 gH3wNwAHcfRDA==
-Date: Tue, 24 Nov 2026 03:28:15 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awToL2PFNKVgIfqs@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awTmJIErjasO4lqq@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=iLM0r9WK
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=iLM0r9WKvBVd2prX0d8nA4eKKXvlD9VA+HTOyT9MgD3RY335t43lM4rnSlVVSMZmYVW3/1kctV9E7
+	 6Qr0n01y+/xLNeMLwqQjo0SUw9N9Aqqn+d7xXIlIaUFwVFsfyKbU5FGY7Q4irlD06uvbLwo3u0WHYh
+	 vV9vlaQLlU1XLg0c=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46b04e90834a-e1acf;
+	Tue, 24 Nov 2026 09:31:52 +0800 (CST)
+X-RM-TRANSID:2ee46b04e90834a-e1acf
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from openEuler-24.03.03 (unknown[104.224.130.48])
+	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26b04e8edf00-0e029;
+	Tue, 24 Nov 2026 09:31:52 +0800 (CST)
+X-RM-TRANSID:2ee26b04e8edf00-0e029
+From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To: netdev@vger.kernel.org
+Cc: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Alice Mikityanska <alice.kernel@fastmail.im>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/6] ip tunnels: Enable BIG TCP packets
+Date: Mon, 23 Nov 2026 17:31:18 -0800
+Message-ID: <20261124013124.3693-1-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,48 +76,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awTmJIErjasO4lqq@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
-> On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
-> > SYSCALLS
-> > ========
-> > 
-> > Two new system calls are proposed:
-> > 
-> > 1. userland_open(): open an opaque staircase-initialized container
-> >    object (modeled on Intel SGX enclave initialization with separate
-> >    build and live states) with no embryonic state, opting selected
-> >    shared namespaces in via an allow-list instead of unshare semantics.
-> > 2. userns_set_idmap(): configure all UID, GID, and project ID map
-> >    extents for a container user namespace in a single atomic system
-> >    call.
-> 
-> I played on patching systemd and userns_set_idmap() alone does already
-> a lot of good. I'm figuring out userland_open() integration next.
-> 
-> For the test implementation I probe the opcode's and dependening on that
-> use either "userland path" or "fallback path".
-> 
-> This auto-probing is done so that I can commit the patches to my kernel
-> test harness, which already has systemd, and try them out when built
-> against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
-> 
-> The project builds a hybrid ISO, which is a bootable bootc/composefs
-> based operating system, and has toolbx bundled i.e., a reasonable test
-> environment for all of this. It is also device-installable via "npx
-> @puu/install"
-> 
-> I had to level the harness up a lot so that I could realistically test
-> lockdown-hibernate but it is is also pretty good emulation environment
-> for any possible container features.
+Following vxlan and geneve, this series allows BIG TCP on ipip, gre,
+gretap, sit, ip6tnl, ip6gre and ip6gretap, which also covers their FOU
+and GUE encapsulation. The UDP length of FOU and GUE is already handled
+since commit 47282504ad21 ("udp: Support BIG TCP GSO packets where they
+can occur").
 
-Kernel is ukified and systemd-boot is used as the boot loader i.e., for
-kernel testing purposes corresponds to something like Silverblue except
-not using GRUB.
+Each driver patch bumps tso_max_size to GSO_MAX_SIZE in the setup of
+the device, like vxlan and geneve do. The default gso_max_size and
+gso_ipv4_max_size stay at 64KB. vti, erspan and ip6erspan are left
+alone.
 
-Br, Jarkko
+Patch 6 extends big_tcp_tunnels.sh, which already covers vxlan, geneve
+and bareudp, to check that BIG TCP packets go through all these devices,
+without encapsulation and with FOU and GUE, with and without veth tx
+checksum offload. sit is only checked with checksum offload, as GRO does
+not build sit packets larger than 64KB.
+
+With iperf3 over veth in a KVM guest, raising gso_max_size from 64KB to
+196608 gives +20% to +39% depending on the tunnel, see the commit
+messages for the numbers.
+
+This work was done with the help of an AI coding assistant.
+
+Haishuang Yan (6):
+  ipip: Enable BIG TCP packets
+  gre: Enable BIG TCP packets
+  sit: Enable BIG TCP packets
+  ip6_tunnel: Enable BIG TCP packets
+  ip6_gre: Enable BIG TCP packets
+  selftests: net: big_tcp_tunnels: Cover IP tunnels
+
+ net/ipv4/ip_gre.c                             |   2 +
+ net/ipv4/ipip.c                               |   1 +
+ net/ipv6/ip6_gre.c                            |   2 +
+ net/ipv6/ip6_tunnel.c                         |   1 +
+ net/ipv6/sit.c                                |   1 +
+ .../testing/selftests/net/big_tcp_tunnels.sh  | 131 +++++++++++++++++-
+ 6 files changed, 135 insertions(+), 3 deletions(-)
+
+
+base-commit: eb6d6c80d35449c27471b1874f13066c09a8964d
+-- 
+2.43.0
+
+
+
