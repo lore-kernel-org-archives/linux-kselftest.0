@@ -1,69 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.162
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795497646;
-	b=edGWo5saIsMoTJgiAR+GUKRyIBSHI+TI/TkKhPrR4zXL8mzyleA97ZGYAdxArZ0kdU7m
-	 fje/H+7hx7i4kQDg/2PdgL2RwKAW3m7wEbcPgAFP0oUxcqxwym10b7/v9w8QhbucwimcT
-	 XKNwT29/pGXy5IMDYFAcQPSpzbzeUWcTOGpJ7RRoS2nlgfFjdebc/lj3UrbNRQlIRzuXj
-	 X9s4QKyewi1TthIESa04osB8qJ+9lN1wfc5uvvJBnAM1dF+cTTSqy8d9vlkGr9puYwOfF
-	 bzgkmfKwpPKF20ITt8o7fmLBT3j+w3a7EArm0oR2LDJOrN9p/CYd3lL2F6d3u1wdX4g==
+	t=1795497806;
+	b=nURTDU1q4YOzFDNaC48gCQEuIO5UQYLXf63Bd+hrmKeLAg82USBHGWlyDmkREwdg+yW4
+	 L+jH8ASLqRwafB62jM7C+JHMBxkRsJYWqMpICK2KTpE54Qj/Z/lMl+bz3wXjj3+xfdlzB
+	 z7YLMrGb6YYjdrznjMhsEoPGJDUcw1VZgpGoM/y2c082shOLhkq8boTlMs/+XPazP5VB7
+	 I+LkVlgFTOWoD+gWjvpt3GCd5BtpDFKFixk1i1f28pBmB+hpgZu4bK+0GFckGMtA6lwYG
+	 rFOvmpcERY+M5+wN0it3RM1V+C/QbJiGSzOrKyqZIV+lbfYZd/HRkWsTXG648sSNjFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795497646;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795497806;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=HHEfeb/HG/M+BRVHRw4kn8MAzbxsATW49wX/1og7PUs=;
-	b=ojvC4c5IKXY6TCwtKQOHZOfHzRpTh9A9dFoLtLmbgXLf3bixyMvJYMkM6AYuLfvfpNwr
-	 lhQrCR4n9B5obvc7+gdNnIiyxKPxaWaHdKLnvkIlZ3OmVgPce9tWJ3byX4OOxJYqy62vD
-	 09BGOa4GTSnN5eXjPSIJpzaTHMJCNlAyAEUfRTzlXwizxzbfJq22dmnM1u1DHPG4cD0qO
-	 a28FsLqS9wZQGlbDOtV6YqNlQr38FsB+RXvvc2oTnfURDIKKpsWpLC80As5+ng72RoGYh
-	 /6/i3dh9iWvV7itNT5vsO0CXFC2Hb5NvB2mNeWFeFiklVmo+qFAZ0/Te4Bsy6/S3xbw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=qEvIk+aHNDceYWGtYqNUvdpoCP1Y0OFLjkamC7OJOgs=;
+	b=1nSETu3YX1jO2WC6eCsF1W8AFd8Iiqiec6qgB9rjDwRHTsGBsTKZriADeE0brN8L+hF+
+	 COlYQ5XK1k408mGK5wwJ4tMY4WQOB1AKfg/pgV7Aijcottl+AqjdPtspSeMWZhyQQBm/i
+	 RuomNwJUMM87uuAIWNiIRqBfdMaFxzfXqOdmDHfegfrRaLy7yxLKh2w3VPPUkQtu97+bo
+	 p1QBU6R4Ohwb9IkLF8YIHHuaHv0vNTTl29rIIn9k1A/b5qBvdZMLrmVh0wxI0s1s+n2s3
+	 6I9h7h8hdjEMlHPZP/DvQoCmIvKNGGbEOsvrvEt+RneqENKMJFBw9lEuktAFccfHx/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PsJkKPTH;
-	arc=none smtp.remote-ip=91.218.175.138
-Received: from mta0.migadu.com (out-138.mta0.migadu.com [91.218.175.138])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xXPugBxM;
+	arc=none smtp.remote-ip=91.218.175.162
+Received: from mta0.migadu.com (out-162.mta0.migadu.com [91.218.175.162])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B27D606A326
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 05:20:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B27D606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC27606A321
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 05:23:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DC27606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PsJkKPTH
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xXPugBxM
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/FLpDUQaN5zSNJauElzR553aGFbKTy0m62Qa9BEG34w=;
+DKIM-Signature: a=rsa-sha256; bh=DmzO0Sk4kjvl9NzB/hFxZeqrskX83I/OHqCcDGtmZfk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795497644; v=1; x=1796102444;
- b=PsJkKPTH7oTCW1wmCW4uRkE/h5HX+Z/oMjXGD8MlvNB0mB6c3jIxta5gVTrYx6DBfNgP2O0B
- ol8eNLmqWwwHt7GKP19R/6oVm7RHivu7wF1fkuquZO6JuAcqlKsA6p5Z/y4SDRoCBs8NaM/n0xV
- ijJConrDx0Bwu7tHVJm758oU=
+ t=1795497803; v=1; x=1796102603;
+ b=xXPugBxMP+28DxutyNPzKPouigEmCdMrXvYbCshiS2azD8ytHez4mQfLJmcpmUbLWIBVtIKT
+ QxCpfl/ewMIMLl6VN7RgzDC0TFqfMWFgA2GHFDPKvPJnG8n+qO25mV/K53ZM2+DdsJYdOHkvnha
+ MvcB29+kOzNTTpBtM3EYiSnc=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0d2e7a79f004113c;
-	Tue, 24 Nov 2026 05:20:36 +0000
-X-Mizu-Trace-ID: 0d2e7a79f004113c
+Received: by smtp.migadu.com with ESMTPS id e92b5db1fdfb7210;
+	Tue, 24 Nov 2026 05:23:23 +0000
+X-Mizu-Trace-ID: e92b5db1fdfb7210
 X-Migadu-Flow: FLOW_OUT
-Date: Mon, 23 Nov 2026 21:20:29 -0800
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Waiman Long <longman@redhat.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Puranjay Mohan <puranjay@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2] cgroup/rstat: disable preemption in
- css_rstat_updated()
-Message-ID: <20261124052001.GB555944@shakeel.butt@linux.dev>
-References: <20261124031642.40616-1-kmehltretter@gmail.com>
+Message-ID: <f634fd52-fe7a-46ef-ad2b-3b4a90b7154f@linux.dev>
+Date: Tue, 24 Nov 2026 13:23:11 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,25 +58,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261124031642.40616-1-kmehltretter@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] MAINTAINERS: Add the LoongArch KVM selftests
+ directory
+To: Gokul K <gokul02k@gmail.com>
+Cc: Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ Sean Christopherson <seanjc@google.com>, Song Gao <gaosong@loongson.cn>,
+ linux-kernel@vger.kernel.org
+References: <20261123100701.1679376-1-gokul02k@gmail.com>
+ <20261123100701.1679376-2-gokul02k@gmail.com>
+Content-Language: en-US
+From: Zenghui Yu <zenghui.yu@linux.dev>
+In-Reply-To: <20261123100701.1679376-2-gokul02k@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 24, 2026 at 04:16:42AM +0100, Karl Mehltretter wrote:
-> BPF programs can call css_rstat_updated() with preemption enabled.
-> The kfunc calls __css_rstat_updated(), which requires preemption to
-> be disabled while it queues an rstat update. A cgroup iterator can
-> hit the lockdep assertion on both RT and non-RT kernels. The
-> cgroup_hierarchical_stats selftest can also hit it on PREEMPT_RT:
-> spin_lock_irqsave() on trace_cgroup_path_lock leaves preemption and
-> interrupts enabled there.
+On 11/23/26 6:07 PM, Gokul K wrote:
+> The KVM/LoongArch entry covers tools/testing/selftests/kvm/*/loongarch/
+> and lib/loongarch/, but not tools/testing/selftests/kvm/loongarch/,
+> where the tests themselves live. The */loongarch/ pattern needs a
+> directory between kvm/ and loongarch/, so it does not match it.
 > 
-> Disable preemption in the BPF wrapper after validating the CPU and
-> before calling __css_rstat_updated().
+> As a result get_maintainer.pl omits the LoongArch KVM maintainers and
+> loongarch@lists.linux.dev for patches to those tests. arm64, riscv, s390
+> and x86 each list both forms.
 > 
-> Fixes: 36df6e3dbd7e ("cgroup: make css_rstat_updated nmi safe")
-> Reported-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Closes: https://lore.kernel.org/r/20251119111402.153727-1-jiayuan.chen@linux.dev/
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> Signed-off-by: Gokul K <gokul02k@gmail.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f53047aa8d3c..fed2245b979f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14327,6 +14327,7 @@ F:	arch/loongarch/include/uapi/asm/kvm*
+>  F:	arch/loongarch/kvm/
+>  F:	tools/testing/selftests/kvm/*/loongarch/
+>  F:	tools/testing/selftests/kvm/lib/loongarch/
 
-Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+This line is redundant and can be removed.
+
+> +F:	tools/testing/selftests/kvm/loongarch/
+>  
+>  KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+>  M:	Huacai Chen <chenhuacai@kernel.org>
