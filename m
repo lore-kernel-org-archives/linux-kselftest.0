@@ -1,81 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795545347;
-	b=pOZoYMM/PMlLvLO5AhnJ6HoGWjPog2WQh5VdCGjWdbj/TW/vVnbl0o56lLXj5elz6wPF
-	 CtRljG2Yl+nZEXqLKjc2qPW+f5JK/xa7jjzgMa8z2qLODx4xa2C8bHtAhZxwovgjsD+yo
-	 z1H851qPho0wjjG9g4Rolnan6dqVOVVB/vKNxtGaPZR0rifu0ss65eHpO+zpv4Hi2ALeF
-	 8RmT/081BM2oU0V8fjWiLKTMvJPYU3exWA8Ts1F4BQ+yAMPNlH3d4Ck0R4mCv3mMCOWRE
-	 mR5F87pB6PT1bcK7Tn4s8J+QCQx2D4Q3c7RLHyptXVZ5CaCBIErAFzU3p/WQxQLcHnw==
+	t=1795547266;
+	b=CsJYGf6G/UAyvI2AsZmodzJg9LzEwJzF5AWSNUI2/LAgWWiZ1YqTmtaSTFDABXHLNjKc
+	 T191bKGtfFg0GOqvIJTyTOwXtG3LeDCrA9YS6tclga37qLcl8vDk+/T8jjFYROmQrJQru
+	 9dJE/CRkjUi00+IvwSvGVDL1NExP7lT/w2f9vbdRgWiBUmGF5TK4qlXcZusSfoltvkUZc
+	 n2/5RlVahEnMsXsqBxA1Pp/7RDrGENsCX5vohBCfuVWWVJCkBleLygW9liFSE5pAJ+OZg
+	 DcvXBsJiOdAzxq9F0SD8UPEb9mPOS2ttVztoz6JfeFbzQskeyn/Ncejkszrj3hLVp+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795545347;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=NH+LCPbT58VTTOKIoQohmGo8BCrcjnPK+zFjIzwgB7Y=;
-	b=zCuf3WKPKArafRG0pyuce/nSAzbT3/wwDyBIqC9YWIjG3fC8kH4KHi7P4lNwRgEJHqWK
-	 rUVZr5HxvDgXDs+X49b59GBxyqWJfbFZa0IFudDgo03hmyQxEp9GLjODo/pAl7WXQ1e3N
-	 2a26DVcgPh4dOcnrOJ7js7LadQV7rYrU1eGTCuJhJ36DCJe81b8D9kf8blesxu8jgyfzr
-	 IuxpX/tG4FJRPdfjtkOFdsAcGCGCBkwobbRBRlS0yIY6+DMwb1dA1FnA2iN30gFcQ+Pzw
-	 bz/zaJJmYpE5jCE+Kd8c86VnE1XSlDLK5EhzNucMurI0METtMlKfodHaR5vLXiU7LMA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795547266;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=2hvsQ2s+JmeC1O4RxfSoWmDQJ01X3ndusdsZNhaRzvY=;
+	b=xjA9PC7XW3NtjtYoPrxz5kxZnQbw/1b+AmSi0PQf3o8prZh+fWCy1Mwqw9IbAMxjZxeF
+	 3zzI1rjdaEU7OpO4ItYikOebRon0Efo1V/AOBYeLCSP/XpQTzMtUN/ztjA07ciWmQ0RZV
+	 BVgzPLgd8st6uZKHubC0lmlrY1atmiWDX/kF60UGOyjDFuQbaHsN40lz6s7sOYf49mujI
+	 uN0B9AfNRwL2cKBVTDEFmKNz5Up5embu+PIny9Pq4xD/bKO7sMhezDW3lTfN/npo5yW/S
+	 q5X+FBO6hT8Ri6R4Xls5gZPDvk8tEkm/wnJLYJyLdRVa2Nw+I8C15iUQrYWmvd8fYSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGNhEOdl;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b="Zluu/EFq";
+	arc=none smtp.remote-ip=216.40.44.11
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 3C8B8606A321;
-	Tue, 24 Nov 2026 18:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59FC606A31E;
+	Tue, 24 Nov 2026 19:07:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D59FC606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGNhEOdl
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id CA1681F000D8;
-	Tue, 24 Nov 2026 18:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795545346;
-	bh=NH+LCPbT58VTTOKIoQohmGo8BCrcjnPK+zFjIzwgB7Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YGNhEOdlnPN871G/X9PPWV2KDkNfg6lDAYL74NQ4uMZDrqBjOHxooLjxN6J9DJyuN
-	 epQrEamKS5eGTLTDPRfDiX5spXFiq6j1WSiqUG/PtKfJ1tZSmLYqwKylZQhk9WPX7B
-	 bEM8oPgYlXgUet8cYtuVzgh8rRxJEj8ZgkcD4hk3pA4UHghl4N8J0BPQIsCsPCZAFd
-	 +kJTyztWJCLJ50m3BrED2g/opMxeaUu7STWXnyQ8A3/RFw4OBjGhmM9kNWyBlQHyvc
-	 cKvYRL1apD8f0X5RwzYPerXPlVzxh1JZGzc30tc5hQHHP60AIzOQqgM3p4OYptBszq
-	 3eYlMbouXqYYQ==
-Date: Tue, 24 Nov 2026 20:35:42 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awXY_gKSqi-L5V30@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awTmJIErjasO4lqq@kernel.org>
- <awToL2PFNKVgIfqs@kernel.org>
- <awUGkYoyDXp4P5LJ@kernel.org>
- <awULfmZR-pESj2EC@kernel.org>
- <awVInf04kGC0uZZo@kernel.org>
- <awVRz8XC54nfevtW@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Zluu/EFq
+Received: from omf11.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 5886D120C6D;
+	Tue, 24 Nov 2026 19:07:38 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id 6DD3F2002C;
+	Tue, 24 Nov 2026 19:07:36 +0000 (UTC)
+Date: Tue, 24 Nov 2026 14:07:34 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 06/15] tracing/filters: Fix quoted operand parsing in
+ function event filter
+Message-ID: <20261124140734.65f7c57b@gandalf.local.home>
+In-Reply-To: <undine-1795048701823215055-2066a0c9c680e81e@undined.local>
+References: <179323784538.740114.15323117974242744566.stgit@devnote2>
+	<179323790096.740114.15868280894145147902.stgit@devnote2>
+	<20261117191421.41cc174c@gandalf.local.home>
+	<undine-1795048701823215055-2066a0c9c680e81e@undined.local>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,63 +64,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awVRz8XC54nfevtW@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 6DD3F2002C
+X-Stat-Signature: 3id4qze1yjbq3obs73j4y9abjcbq1fjb
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+9ezuQCN/o8BTizhDxixwXOI4E2GMTmIk=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=2hvsQ2s+JmeC1O4RxfSoWmDQJ01X3ndusdsZNhaRzvY=; b=Zluu/EFqYtHqV5wzct1naS2/mEzCIHVhbu1tHeC/p8mC33K35lehvDD1lCDfGsko+oqVOuaSgK2s0dsP+2CtK5JXCob8uobwKyJ4u15sZRJO7/EKF0dUgTi2CLTHZykSDeHbThj4IGZx2mWvDsSb6ogy6EL9nunyJ8BQ4uNs3U8=
+X-HE-Tag: 1795547256-243944
+X-HE-Meta: U2FsdGVkX1934XH8xZfhz4L4nUsjadgjpkAUamuTs242LvDIVzh1fabQxko9Qa++ADtWxWti05M1VvYcyzbpNyGNdxl4tqULsDc9w09mHeZ1KTjTHj7FZN0x2urS1FHGncinqe3MNYDvCCSiEI723XBOBZh5ESdzSCvD4HcTPxjvxd2/9+gWcADUz0FI4c4zb7jSchJWnKN2wF7rS8etiW4OT3hq8sGgFnE+Ax889NzGZdxhLdqA3v0AvHNeQu1rOLRlnjJZD7W/MHcnlblZvXm7AudkfBEvRBLycOVB+hW8OxNw5+fMydzbvkeJnUvEf1w815aDkykx3E+Avtg+aSEQuyWmEm63
 
-On Tue, Nov 24, 2026 at 10:58:55AM +0200, Jarkko Sakkinen wrote:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=vault
+On Thu, 19 Nov 2026 09:38:21 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> For this issue, we need to use "perf record" to reproduce it. It seems
+> that expected behavior [1], only perf can set filter to
+> ftrace:funtion event. From the tracefs, ftrace:function event does
+> not have filter .
 > 
-> The key function to look up from here is spawn_userland_container():
+> /sys/kernel/tracing # ls events/ftrace/function/
+> format  hist    id
 > 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/br2-external/patches/systemd/0010-nspawn-Start-containers-in-an-experimental-userland.patch?h=main
+> But perf (perf_event_open + ioctl(PERF_EVENT_IOC_SET_FILTER)) can
+> set the filter to ftrace:function event e.g.
 > 
-> It demonstrates an initialization flow that ends up cleanly with
-> clone(). userland_share_host_ns() demonstrates the ioctl I added
-> previous week i.e., USERLAND_SHARE_NSFD, which is used to punch those
-> host namespaces that the guest actually needs. This is the allow-list
-> part, which is usually the favorable principle over deny-list.
+> perf record -e ftrace:function --filter 'ip == "schedule"' -a -- sleep 1
+> 
+> This should succeed, but it fails without this patch because parse_pred()
+> stops at the closing "(double quote). 
+> 
+> failed to set filter "ip == "schedule"" on event ftrace:function: Operation not permitted
+> 
+> With this patch, the perf succeeds to run.
 
-This proves that bootstrap ends with clone3(CLONE_INTO_USERLAND), which
-the most important property to prove at first.
+Ah this is filter logic that can only be hit by perf. That's because it
+does magic to have the function event's ip field to be automatically
+treated as functions.
 
-The second part is "hotpluggability" property (hmm... is that even a
-word). I have early local patches for this but they ares still unpushed.
-I need to test this again with real hardware as I did in ad-hoc manner
-previously. I don't think QEMU is acceptable for this alone.
+OK.
 
-However, it is not really rocket science with these tools, and it would
-require effort to get these completely wrong, especially if they are
-stressed even slightly with bare-metal hardware:
-
-	nspawn: Hotplug device nodes into userland containers via udev
-
-	Defer absent /dev bind sources when starting a container in a userland,
-	keep the userland mount namespace fd open in the supervisor, and attach
-	an sd_device_monitor to the supervisor event loop. When matching device
-	nodes or optional API devices appear, update the container scope's
-	DeviceAllow= property, populate the dev node and /dev/{char,block}
-	symlink via its root fd, and attach the device mount with
-	MOVE_MOUNT_T_MNTNS.
-
-	machined: Allow bind mounts on user-namespaced containers
-
-	When experimental support is enabled, bind_mount_in_namespace() attaches
-	mounts via MOVE_MOUNT_T_MNTNS without entering the target's namespaces
-	and refuses to fall back to namespace_fork() for foreign user
-	namespaces.
-
-	mount-util: Attach live namespace mounts with MOVE_MOUNT_T_MNTNS
-
-	When experimental support is enabled, create missing target mountpoints
-	through the target's root fd and attach bind mounts and dissected images
-	directly into the target mount namespace fd instead of forking a
-	setns() helper process. Fall back to namespace_fork() when the kernel
-	does not support MOVE_MOUNT_T_MNTNS.
-
-They are variation of the same pattern, and pretty obvious even from the
-descriptions. When they are known to work, I'll push them.
-
-Br, Jarkko
-
-
+-- Steve
