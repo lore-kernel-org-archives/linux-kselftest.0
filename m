@@ -1,77 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795491478;
-	b=V4ZoQcpmc2NNGwmHlYv2Aj+X1p64KgSp8juzaxxkjeq8tHdo8l78tz9nTmy4E3IyIgGZ
-	 ioAWUg1Kg7NXT+5EUwqUJ6G3zgu23oRSa9wqbQMsYBvI5vgcAokj3W10xBNuQEwjCeBYJ
-	 lH7Wg+W2Q4vpipu0siAfun+o7MolPy82Dur0Zy4H+6d8VxLVTBbbQXz5xpj2ZI7SKL1H2
-	 JKF7HY21lx3tzxOD+58DLoIHasJy3l7N9A0yWx83G3XEvAlXjNw29SKbeAz/QjMDJZP1P
-	 fB5UEIcWWLcWhtbejSNaTYTimJE2B+7hrAVEAneUtHBz/0l4fpMJnH2b1lvJ5jnbZPg==
+	t=1795491609;
+	b=p/awllZP2kIJjJKvc0Z5tP6cTmuEVyX1wpeiWskb/r+/RKUwe3ZNudMfN/EAfxSREi56
+	 E0b1JKf0sl7GZmR9laWchAOFbtTGb4Xeu3kVemqH0cGrPgizrWdnIrEK6M5jd2XEJKYl8
+	 Ef39rJERmjasBH8VseveD8v1QVaTbhJW/TpK/hT14pxcAPVBdbtsSVvCPUPFYQm20jI1E
+	 Q6bCKubOeYoSPbgpI1/DWV7hGqd+siDhh5EqUVn9kwP77QFTAhxac4qw5aXvCoe6h84Oz
+	 G0evCKz/ev052+fUL8/DvG7L+1LGnCa08r37VWLI2pnz12lvFWCEqezOD2hRr2zH1jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795491478;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=+eRa9i7CtmafJcWw1IGcHObp/3OCLe48VR0aUW22rk4=;
-	b=gWC0k/Ad59Sh32o33pILtLOU+W0kxGAulryxOaAl4U1ukLPlkrdpJVqc41DtUmO6vv0n
-	 BnMDuSkGCzjEpTR+EIURVwmbuwZ0RNeMfWrU+DHDEG380+J8Klzl8v/AQIJhUFf9NyOju
-	 /Qu9jbl3nzvyDI19zNEu08Zy9pAYLh0cbiMB41mbUps8evA9gAxaaeqC5MhG0mAmhwlwk
-	 HlxknTFxoTb/BtiYB8ZpXXc0GKjxbcApdEkZ23U0pkWTX2x5+rfuFK5oLsl227tjiBFgJ
-	 61JREQAsC0oZRKnn7OmJDRlofJTc2Hg3K2qLJ1/jfvyE5NZSSjtLiiRNfB//AfRmS4A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795491609;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=RY/pscAY0kqIVuCD/VQ32rz7Pi/um+3HxodO4+2UNto=;
+	b=LSim6T0K/yRNsObXCum7K1+craNeS47TONCx/M7v3Bg6ftjY+nhpDgqSVyN0EaYhpeB0
+	 BFkL/U8M/hK55N152OTwjZ07lMuV+gEeeYumBiJDGIjl6O09JNxfHFYSfjV0H0ThETQhX
+	 olNSX6rvnGagj4RayRBRwmVo0tSUjKSBTecOk+8GaMcL1dKgxeK6Qw+qvR6NeXXc9W4pH
+	 qlgPHVhCOGb85fHuWrytaltED5GLYptI3WXYANsfJWNi6iFnwG/EIVxdeYLwItnxr0Q4x
+	 KYNs1p/Is2rLnH1CLDO6Qu0PBR6zDEIvtESUr5cp0SNFWM3DsyYhi+CBc3WNcNfuKXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hl37Zxfq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ux1GbTh3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 5AAC3606A31E;
-	Tue, 24 Nov 2026 03:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AC7606A33E;
+	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hl37Zxfq
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id CDC1A1F000C4;
-	Tue, 24 Nov 2026 03:37:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ux1GbTh3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8E31F000D0;
+	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795491477;
-	bh=+eRa9i7CtmafJcWw1IGcHObp/3OCLe48VR0aUW22rk4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Hl37Zxfq1YEb/KW6XeaIPjFuYb4guOvBMUFj3yJB/7niV5bf4UPy09XENiuDlE9Ro
-	 LAgxCwk64dt6h019EHmRmYSy46uw6JBtlDnXyxDEfQX2za1Sme7AvkduutqDAAccg9
-	 O+Dod/5SGwPR3ree5ZExwPLvTmHgQeo/k1s9iYM7Rj72CZFTed3+mVRzYLxvI0gfY+
-	 l4vATV8jbRU+l6KcJ25ccKrWiDViDDYUk+XZ25WsEq+cE9ZhnAmulrMGJH7do/ALdP
-	 xRi/t7qoD6nkbm8NsRwRO0e3p3o3XyK9D2KYBactsLrtGTZB1RIpE1U2DD9tJEzf3j
-	 OOlFdDsneTPpg==
-Date: Tue, 24 Nov 2026 05:37:53 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awUGkYoyDXp4P5LJ@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awTmJIErjasO4lqq@kernel.org>
- <awToL2PFNKVgIfqs@kernel.org>
+	s=k20260515; t=1795491608;
+	bh=RY/pscAY0kqIVuCD/VQ32rz7Pi/um+3HxodO4+2UNto=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Ux1GbTh3CA/X/Qf0RuADeg3n1CUz3oQVOAoxxrkWnv3sfv7CXBR/uSuXyTr5UGYjv
+	 Modlqm5XxzUWgrvw5Q/kz8hicAmZ+wrFKOAkvMoJIKYCWtWgkvMVP4Xl3Nts2PuM5r
+	 OnEwtaydO2QtLM3PbXHbaeARqwi+N2RZ5es7WQ9LOqkIp8/flDCdiluZKQijp0hQKB
+	 DI069/jcUJJ8NLWMnkBxGl93/QTSZG/vNCvnN5F+PVvsYwYkBFVn6/lvbvIrTZwl0t
+	 FjbDg5XfOM6PjkbOtYyzNBPcjenBNKZKFY5jLSs8hyCaOsr3d7Zj/E5OED9h8YNqHf
+	 jYgzA5xf9y13w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B442D39302D7;
+	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,68 +53,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awToL2PFNKVgIfqs@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix
+ file_reader/on_open_non_sleepable_first on overlayfs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179549160725.3263417.1033641608398909493.git-patchwork-notify@kernel.org>
+Date: Tue, 24 Nov 2026 03:40:07 +0000
+References: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
+In-Reply-To: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
+To: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Tue, Nov 24, 2026 at 03:28:19AM +0200, Jarkko Sakkinen wrote:
-> On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
-> > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
-> > > SYSCALLS
-> > > ========
-> > > 
-> > > Two new system calls are proposed:
-> > > 
-> > > 1. userland_open(): open an opaque staircase-initialized container
-> > >    object (modeled on Intel SGX enclave initialization with separate
-> > >    build and live states) with no embryonic state, opting selected
-> > >    shared namespaces in via an allow-list instead of unshare semantics.
-> > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
-> > >    extents for a container user namespace in a single atomic system
-> > >    call.
-> > 
-> > I played on patching systemd and userns_set_idmap() alone does already
-> > a lot of good. I'm figuring out userland_open() integration next.
-> > 
-> > For the test implementation I probe the opcode's and dependening on that
-                                            ~~~~~~~~
-					    syscalls
+Hello:
 
-> > use either "userland path" or "fallback path".
-> > 
-> > This auto-probing is done so that I can commit the patches to my kernel
-> > test harness, which already has systemd, and try them out when built
-> > against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
-> > 
-> > The project builds a hybrid ISO, which is a bootable bootc/composefs
-> > based operating system, and has toolbx bundled i.e., a reasonable test
-> > environment for all of this. It is also device-installable via "npx
-> > @puu/install"
-> > 
-> > I had to level the harness up a lot so that I could realistically test
-> > lockdown-hibernate but it is is also pretty good emulation environment
-> > for any possible container features.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Fri, 20 Nov 2026 14:59:02 +0800 you wrote:
+> From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
 > 
-> Kernel is ukified and systemd-boot is used as the boot loader i.e., for
-> kernel testing purposes corresponds to something like Silverblue except
-> not using GRUB.
+> on_open_non_sleepable_first fails every time when the test_progs binary
+> is on overlayfs, as under /home and /tmp in a virtme-ng guest:
+> 
+>   run_test:FAIL:err unexpected err: actual 4 != expected 0
+> 
+> [...]
 
-Experimental systemd patches:
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Fix file_reader/on_open_non_sleepable_first on overlayfs
+    https://git.kernel.org/bpf/bpf-next/c/f5931061c005
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/commit/?h=main&id=e4d6b15da3376ad09c0c575cedf467f69db32a52
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The patches are layered per syscall feature:
 
-- 1-5: userns_set_idmap
-- 6-10: userland_open()
-
-Virtual device would add path/mount complexity and generally dependency
-to mounts i.e., I think it was an awful idea. At least initially this
-feels fairly lean way of doing container things now that I've trialed
-systemd-nspawn a bit.
-
-I'll update the patches over time.
-
-Br, Jarkko
