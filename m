@@ -1,99 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.42
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795528213;
-	b=DPZ4NOkQmbt559pqkI4xzBAH+IcNHjiZsK+W+Hl+1hMyFOXrrkdms0p4Gr3Js4vwZ8jK
-	 O4JoAawLsYVnsnQb+Mu5z57aNaZrv9zSRWBqQXsqaYOiqyIpJ50bb207aK2vM2CFhtc8S
-	 b7DlWPHf4/d4aYXKUJMjJz8pMrOJcNQsnqda4Fayj/PYZoVfzbHXbVOrNtlbXyU26DZGu
-	 Ze+XHjc5aVSg9ZHg4skbE/62ZHlEQk6Nlgi2NcQWhb2O0RreASMBk+qDdxC/qPPCutZSP
-	 EmdC4Vm92JWglDd5bZwBVlmG1yIuzqJZP50C3/+E1Ylm83ts7Fe96m1pD8ZZnouLoRA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795528213;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795528529;
+	b=nCFSJxa8CWVd4x7IrE2tStTP0DQSa4Z2TaJ1A9PPY02OscYpksExhsh0LCohRTicy2ti
+	 sMTX8RaqP9EW0YeLmOC+6VIlJKVsM5Gr9JjVUWED1a2IjmAS1D+z015iLvMP8qqRh7DOP
+	 eE9ZdVUel+8GVLeIy0vz/z2U+DZkQZBt3addgAF0iWoXOPV7sJ3J7oSs0sRDZdIsJ1u6M
+	 VO7q/ymVpLsDPcg6OfTPgDYiJwiRJ7+2Ke2OszHHdW47eFGSg9x6/DKuxWu692w2UUxSG
+	 hGt05UY/t8TkashUO8/TvFrTzfjp9AjL3E14VWHZ/d6c+dx2A7H5iSUPkg+vu6zCgyg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795528529;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=XTPCHg4unEN6vtUDvCIgxfYMZVabwQIC4dv3+3CL15w=;
-	b=gFmrN9pd1xpNscsZ+wChGUDiUYMziQlSR1Q+ScELJFwNrWgd7dSXwaS+WteLt/5IkKsm
-	 bCvJFxS6z1CUjlK7FLtkLmyVuq6tYUt7vd6PRXgiARDJ2MSceArvw0eli4IDm1jdGUrSP
-	 BGT2PnD9GlFG34+4tQrIsp2OXSYQAIAwpnJM9NnvIcoXrNMH6795ZVrB7CKzCyJ9Z7xTt
-	 pwJuOvdvGlD9RCTK6508YkESGNihfUEX4bfaWCzWDu5vEywX5YyZarnNMlp3LyvOHyzWW
-	 YqmraQy0uKo/jfm9FrFOb2rYcoqv77cqq6XvV3tG12ytSpkqlAo/84djyVqdhn1yd2w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=googlemail.com;
-	spf=pass smtp.mailfrom=googlemail.com;
-	dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=A8I4Yhd3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Reply-To:Subject:To:Cc:
+	 References:From:Content-Language:Organization:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=I1beTTuDkHcJrFtkrdIEDwGOge1ar4jfKSDiYm+SAes=;
+	b=1qle7wbABlKJAlH6HdRrjkgEVscD+0alWUVwNp3lYCHxeI+Lp6C0rj3HaQeOFUei3EUZ
+	 MPi0CHi2Ex41/LIXyub164Z3tL+8PG2Kwsu4IUaq2k/a5ugTUwaa1Q0TJoIVjEoSaEClR
+	 VHgkKC+D1GdvmF9K/t85eqW2sVeHmVYVQwuXBkx/ZMaZpcrDH1Vnb7yfS/nhOP7oDDRx5
+	 3lV1L1nc+pgvzjps58Tsane7p7jo94TpCY6zglT9R49lGTA+oMgF3+FueVV3n5H7w9eHE
+	 AGEnlzygzVr/uEsLsDOak5lBY/5g2VJin0sRfJArrBKn0pDz5t6xE+WDhQuFSoSrgTw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=6wind.com;
+	spf=pass smtp.mailfrom=6wind.com;
+	dkim=pass header.d=6wind.com header.i=@6wind.com header.a=rsa-sha256 header.s=google header.b=Y2bsdeUG;
+	arc=none smtp.remote-ip=209.85.218.42
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10EF606A32C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:50:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C10EF606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBEA606A322
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:55:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEBEA606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=A8I4Yhd3
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4bb606491faso24852045e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 05:50:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795528211; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IfF/92bKjfcjUw0RZMD6K/ZH7BQ+XhJ6KirQlM6BrlwIPGwpMb6rH1woiiEJCEtezO
-         mxP2dwXlwRu0gZe2svSQ8MvxE5l9ynuv/Tuwj6qHZXbBKK8dlPvFhXszjZOT/lIyxMwz
-         MgV9Z91kItplKcjcDnVshQWhJLx7G9xPRrXpSEucZ5X78djVllu9Wvt7EZzNGZre0eg6
-         Atrh1Q/nnLh9GqBTYZbH7sFxF9aAeLfgDLLI+1tW0Nb8bFsoTM7P2aRcGTwFccejND20
-         p2C5r6ntsjkOseYBpXSRa8ert2IZVKF79iDNavssEU+wpa/ApuitZ3Aad3oCjFvON+z2
-         QhfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=XTPCHg4unEN6vtUDvCIgxfYMZVabwQIC4dv3+3CL15w=;
-        fh=nCFBK+CUSWz9WPYBwZptvBV9nfl1sKmipASx6AAD6fU=;
-        b=K8v7B/r/0Dl/kH346Npq/TQZc8842gSV090YmCBnEGylH4vwqXRxDfBuBxCje9Tin1
-         Goqjt7AKnE882xUQz6QMcaPX+Dk+cC9aAAFxFuhPStt7EaykYpK6TAFYnQkaGkwuIsCA
-         tLhGF2rp3OkHQHha6mVmeVJXqIJGV/8g4/FLSlhlzw1+7igiyn29ASv/10tTG/qkwu+t
-         YSG+9H/WayGCt5v2I5iR4XVFXxCkdeqTfGIvD775pOi1Wt44j/Svlv57TWdZNs6qc0+c
-         GxPGZBw8NxsZBYerNAL1rJEvAEurSAku+0iKRawSYCkBkmnLqZW7q9+mTPxxyS5T/Fqo
-         CGiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=6wind.com header.i=@6wind.com header.a=rsa-sha256 header.s=google header.b=Y2bsdeUG
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c505a0acbc1so56839866b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 05:55:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20260707; t=1795528211; x=1796133011; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XTPCHg4unEN6vtUDvCIgxfYMZVabwQIC4dv3+3CL15w=;
-        b=A8I4Yhd3hz3WrVqqp6QMzsDrRJ3HJpUPxahpoSPUafEcj3SFymXcsAZEIf+a8ALG0Y
-         V6s6xA+Ay4lWI9NhS7nxfL6F29mbmiE0uOfCYQxnOZUS20qgiOGqYoApJy9HRpK68tu/
-         HSDE3IpIQJQ4GKB5Z7mVIff3PBnaum/E2gzkgJ+jFNG6YlWz7P5hX0VEOjoFbkoF1lDn
-         8Ndrqr7MabRwOciYR7MGfzUJA7NWdJsl6TU8hPnym7YlbmO7JaMnO34+0kr0IDyXTgzd
-         2RYMtv2kGAXDO2iT8hQ8hVHgIcSefON4ja9k6LVugyoh7mCZfqIgxnZvX+r5RFBAMb5n
-         NOnw==
+        d=6wind.com; s=google; t=1795528527; x=1796133327; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=I1beTTuDkHcJrFtkrdIEDwGOge1ar4jfKSDiYm+SAes=;
+        b=Y2bsdeUGRkhvEwUU7zA+Ccwi7nQaUwSHzxZBaZ4811Twitth90vemfuauNp3AqPTj5
+         FzQ2ayO2yIqj2+f5itd7nxfGgGmg46Y42OdYNwLVeKI1BvNLReA7ROzQg5P5QM1jfE+x
+         ERu6bMFz1PNLPKVM/wxS0Z1Ggk2SW9lhivGplwZnVpSMC5fdYcuB/Cn9qGdq4URirwED
+         van4HZN7J1SKjJ9KU/JspZfLnbHYMonP2cokgyoMnPREAQDWLkuFpvMwLbwyKFxv/WZy
+         DH7TB2xui6Lg3bS8WmzuzW2wxpA7MXXUCrNaKcxy+XTz28I3PPQMyWL6amYPir4Ud9ax
+         32Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795528211; x=1796133011;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20260707; t=1795528527; x=1796133327;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=XTPCHg4unEN6vtUDvCIgxfYMZVabwQIC4dv3+3CL15w=;
-        b=PMyAk8Sh5B9KerMxFFwXhPK+siauhmlm8V6Jsc1Cps1kd0jtj+Ujj/PSKiPpqUpcQh
-         wXX0hJG9GhaKDwN6fCfcfQLx4wstdkMpr8MmLK6AZ3ALjX12JGrRkgXIgwTzDBH0FQ4M
-         E7rU+4DNPeTIWydd8ix+JLIo5s5Zh3Wluj5mXWeP3jbtGRAJAxzFNjvVevxYjFt52A5V
-         qpHoDhVKVpBHvDbdJNvscwWkRK8wPK6KlrpX5A/Q083KGByCzJWVy/k8LsswZA5uDGDJ
-         KHowNANJaImCQnkTf5Nk6/XQAZona5lXD/sdjqUAe36aHT4CgK4HUCgdDo2EWRR3no3x
-         Vbgg==
-X-Forwarded-Encrypted: i=1; AL+hErEAP6ZbdKDLjVKUNdwtXCXjYtgvhdEI6Nkf7rs7++zgVKGezbQ09yItcwLTO/C+pGRk8+IbMHzx4JmVOLg7AB8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9s/A43mkTZUoqOaOs8nJuomty6uvDZ4o+jy0Ar0lELJb3b9egh
-	jVKqPZzPRZIRDhD5+g1G/afUWOGKlP/4vTYd8FRAw4loTBfYzQu/lh6JsBB/V6SS/tujMQyGmgb
-	xgrm211av9tqFZfzu/ObIl8F34zr1mys=
-X-Gm-Gg: AZFdTZetbS2BteL+b8akQ7kjidK/t2zUzlNQC5Kq10ufNl6CmlJfQGS2akz7CJmtAvC
-	OX2Rcy7cDdrEyU5z3uPOgHD/KXmbdlCtAR2h4sp4WWctSajgdK2UWZEfcT6BxIrVGBAa57SySoP
-	0n+5NOyMsB5zCXfuhB/MlEMlLxgQePa/uH/4nlc9jAaxhg6K5X1wtxJYgjxoJNbuibIedbZzDbP
-	5E1N12l4ci5OT5Jtztr0VkRcRC3omnHutNAV6K/XF56dNU/k7pas79jVhZ4BvCYvp4nNaC3a+ni
-	H0gpvH6WCywIj1Ce4eDM/CsslTkeHy2+OaDtYkMNj4tAe3Ayru+rjHII0dFwKnwKsRNcdl4QMOk
-	zd8JZERt9vMmF+OfaGkpzjjhy86y+/MHiN/S9cBZbX4PfttUeahDe
-X-Received: by 2002:a05:600c:800e:b0:4bb:7757:fe58 with SMTP id
- 5b1f17b1804b1-4bb8881b9d7mr305306125e9.19.1795528210579; Tue, 24 Nov 2026
- 05:50:10 -0800 (PST)
+        bh=I1beTTuDkHcJrFtkrdIEDwGOge1ar4jfKSDiYm+SAes=;
+        b=puSdS9ggb/dkT2ulUhSDl+zYKjs9xCawBeSanaOpbT4886CsroMlbsVhvnae7BmP5f
+         PjsHs3CNxEnm8Cv8z2OHSQjEkAuz7hvXY8XqSkqED/jdzzgTESH/7Zje0aD8mlKp0wdx
+         8bT6rRcqQlZrgfkiqRtbsrXdcasPdt7tCBqI9grzOKzjIy31iH1F+F6s3EvsaQzavatL
+         fSIS37lPgGe+dWeYIBYrZwEqOK4MXxLOphYJhDujW/AGPtFvrkA192NuWSvAalhztJDJ
+         +auA7o5tvavBVQdG8YUCSfT9Pz7eF/7JjBQS9WG9TljLRF+k1hNkfXOXtJaUIEgB3FeE
+         0oCg==
+X-Forwarded-Encrypted: i=1; AL+hErFfXnnXsR+dzLhXuZUUwaEmnG8ij+TNJWzxMgE4O8SedqH27MAVuOMyMI2ogQ3BxMxT2hijXnlz/1NLxBGHNPc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/d2nmY2H+2jtyu3vfjejm38wiAp7wq9l1y3jpp2BugYrKWJGc8
+	pxWjHqnGhUMuMZDK9elk7JEH0o1YN5OSDXLxspwS+CCrv17HeHYaMqJbipvne/Z4xuo=
+X-Gm-Gg: AZFdTZd7MF1B6+ND2/QMiiq6DH4HQYjg/N3Ga67IUioQod2HW0ZXsWL0sdOwjtsXjo3
+	nW9gtJBiuLivXqMcWcR9JGJNVZlSOJ7g4m1+7nKJQ8eTRGxeV2909fc3we5DpIG+bwT4vxkYcfY
+	fcLyL/vXATe+qI3tA8ngnHImGxpns8Juf6CxIas+2EY6Jr7993M/lmT+FtTna5gxMDe/oMb6rII
+	HIgSAe27FYC3U3hDGLhDMVayEJ5WFxAcoWHjN56LD7BS4IHYfUWch7S1oQ3TZOUIiPYSYh8RVLc
+	owrAPRD5/v1HXpj1KpsysMs8YbynsgaeZSWrRCwfNAQn7+ruU3bx/BWKcXQ9IchEKzt57/yZ2K3
+	vV6D2l9+0kPtQ6T8c5LQSgFOTUo08zQO9Xf5Oc+LIKjjOY7lPdvN1Cv4h5zZAdp1WKwzTd3Lon2
+	Xduwxwvt2fY47ptABv+LbTEk/YJg3iRWZ5bYZU5+mYJXnlCLdYRthJI87a5Aqb32rEpDpTJSaBk
+	f0LGCIP6L9MTGKZjrdcf2RuHN7GH66//IQqKn23semAAoJ7Fh6AqfdveGX6qcgx9Rb/XqEqYRNi
+	QVvcYGBYfULpuveYl8hSVgbH69/avXNFjGb4wO0QcSchLggsLNRh2OQzoq2wKbzbvbFL2kuUw85
+	c5BjRaWXGM6v0CZ/FQKBifD+4qjM=
+X-Received: by 2002:a17:906:2b5b:b0:c29:4634:5c8f with SMTP id a640c23a62f3a-c513a284994mr1056327766b.0.1795528527042;
+        Tue, 24 Nov 2026 05:55:27 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ad01afbsm518330366b.5.2026.11.24.05.55.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 05:55:26 -0800 (PST)
+Message-ID: <8f0c4cb5-8754-4636-abdd-ccec7ad5d932@6wind.com>
+Date: Tue, 24 Nov 2026 14:55:25 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,133 +93,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261124-v2_20230123_tjmercier_google_com-v6-0-dce12fa03ad6@redhat.com>
- <20261124-v2_20230123_tjmercier_google_com-v6-6-dce12fa03ad6@redhat.com>
-In-Reply-To: <20261124-v2_20230123_tjmercier_google_com-v6-6-dce12fa03ad6@redhat.com>
-From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date: Tue, 24 Nov 2026 14:49:55 +0100
-X-Gm-Features: Aa3M54qkPJ8C4GRzLQzCC_QtBShd4rpGnT89RPbtOkkrzzkAiMVQPjTTZfQmmls
-Message-ID: <CAJ2a_DeDF+9pbLKS9pcX4Tot4xZZ-K7HydKnDjW6TWC5bvREzQ@mail.gmail.com>
-Subject: Re: [PATCH v6 6/7] selinux: Restrict cross-cgroup memcg charging
-To: Albert Esteve <aesteve@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>, 
-	Jens Wiklander <jenswi@kernel.org>, Sumit Garg <sumit.garg@kernel.org>, 
-	Philipp Stanner <phasta@kernel.org>, airlied@gmail.com, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, op-tee@lists.trustedfirmware.org, 
-	echanude@redhat.com, mripard@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net 1/2] ipv6: check the scope of the best source address
+ candidate in a VRF
+To: vjardin@free.fr, David Ahern <dsahern@kernel.org>,
+ Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-0-f667ab150ade@free.fr>
+ <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-1-f667ab150ade@free.fr>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-1-f667ab150ade@free.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 24 Nov 2026 at 14:05, Albert Esteve <aesteve@redhat.com> wrote:
->
-> The security_current_memcg_charge_task() and
-> security_current_memcg_charge_cgroup() hooks allow security modules to
-> control which processes may charge or transfer memcg memory to another
-> process's cgroup, named by a pidfd, or to an arbitrary cgroup named by
-> a cgroupfd, both passed in charge_fd. Without a policy implementation,
-> either hook is a no-op and the restriction is not enforced.
->
-> On SELinux-managed systems the only limit is CAP_SYS_RESOURCE. A
-> domain that holds both dma-heap access (today's only exporter that
-> opts-in) and that capability, can charge memory to any cgroup outside
-> its own subtree. Since the capability is all-or-nothing, SELinux
-> policy cannot express which targets such a domain may charge to.
->
-> Implement both selinux_memcg_charge_task() and
-> selinux_memcg_charge_cgroup() using avc_has_perm() with a new cgroup
-> object class and a new charge_to permission. Both charge_fd flavours
-> ultimately charge a cgroup, so one permission covers them and the
-> target type keeps the distinction: for the pidfd path the target is
-> the referred task's SID, as there is no cgroup object to take a label
-> from; for the cgroupfd path it is the cgroup directory's inode SID,
-> which comes from the genfscon entry for cgroupfs unless the directory
-> is relabeled.
->
-> The checks run when the charge target is resolved, before the
-> CAP_SYS_RESOURCE baseline is evaluated, and apply to every explicit
-> charge_fd target, including the caller's own subtree, so policy needs
-> a rule even for self-charging. Policy authors can then grant
-> cross-cgroup charging selectively, for example:
->
->   allow allocator_app_t client_app_t:cgroup charge_to;
->   allow allocator_app_t cgroup_t:cgroup charge_to;
->
-> Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> ---
->  security/selinux/hooks.c            | 19 +++++++++++++++++++
->  security/selinux/include/classmap.h |  1 +
->  2 files changed, 20 insertions(+)
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 6c4c64d6e904..76a714107ae4 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -2204,6 +2204,23 @@ static int selinux_capable(const struct cred *cred, struct user_namespace *ns,
->         return cred_has_capability(cred, cap, opts, ns == &init_user_ns);
->  }
->
-> +static int selinux_memcg_charge_task(const struct cred *to)
-> +{
-> +       const struct cred *cred = current_cred();
-> +
-> +       return avc_has_perm(cred_sid(cred), cred_sid(to),
-
-Small nit:
-`cred_sid(current_cred())` could be simplified using `current_sid()`
-
-> +                           SECCLASS_CGROUP, CGROUP__CHARGE_TO, NULL);
-> +}
-> +
-> +static int selinux_memcg_charge_cgroup(const struct file *file)
-> +{
-> +       const struct cred *cred = current_cred();
-> +       struct inode_security_struct *isec = inode_security(file_inode(file));
-> +
-> +       return avc_has_perm(cred_sid(cred), isec->sid, SECCLASS_CGROUP,
-> +                           CGROUP__CHARGE_TO, NULL);
-> +}
-> +
->  static int selinux_quotactl(int cmds, int type, int id, const struct super_block *sb)
->  {
->         const struct cred *cred = current_cred();
-> @@ -7683,6 +7700,8 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
->         LSM_HOOK_INIT(capget, selinux_capget),
->         LSM_HOOK_INIT(capset, selinux_capset),
->         LSM_HOOK_INIT(capable, selinux_capable),
-> +       LSM_HOOK_INIT(memcg_charge_task, selinux_memcg_charge_task),
-> +       LSM_HOOK_INIT(memcg_charge_cgroup, selinux_memcg_charge_cgroup),
->         LSM_HOOK_INIT(quotactl, selinux_quotactl),
->         LSM_HOOK_INIT(quota_on, selinux_quota_on),
->         LSM_HOOK_INIT(syslog, selinux_syslog),
-> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-> index 90cb61b16425..1f1f2fc4d35d 100644
-> --- a/security/selinux/include/classmap.h
-> +++ b/security/selinux/include/classmap.h
-> @@ -181,6 +181,7 @@ const struct security_class_mapping secclass_map[] = {
->         { "user_namespace", { "create", NULL } },
->         { "memfd_file",
->           { COMMON_FILE_PERMS, "execute_no_trans", "entrypoint", NULL } },
-> +       { "cgroup", { "charge_to", NULL } },
->         /* last one */ { NULL, {} }
->  };
->
->
-> --
-> 2.55.0
->
->
+Le 23/11/2026 à 15:30, Vincent Jardin via B4 Relay a écrit :
+> From: Vincent Jardin <vjardin@free.fr>
+> 
+> When a packet is sent through a device of a VRF, ipv6_dev_get_saddr()
+> first checks the addresses of that device and of the VRF device.
+> It stops there when the best of them has a scope that fits the
+> destination.
+> 
+> Since the commit abb9a68d2c64 ("ipv6: take care of scope when
+> choosing the src addr"), that is what the scopedist of the best
+> candidate is tested for.
+> 
+> scopedist is only written when the rule scope compares 2 candidates.
+> With a single candidate, the rules stop at the first one, which only
+> tells that there was no candidate yet, then scopedist is read without
+> having been written.
+> 
+> It is 0 with CONFIG_INIT_STACK_ALL_ZERO, which passes the test:
+> a device that only has an IPv6 link-local address sends to
+> global destinations with that link-local address,
+> although another device of the VRF has a global address.
+> 
+>   # ip link add site2 type vrf table 30
+>   # ip link set site2 up
+>   # ip link add dummy0 type dummy
+>   # ip link set dummy0 master site2 up
+>   # ip addr add fd00:91::1/64 dev dummy0 nodad
+>   # ip link add dummy1 type dummy
+>   # ip link set dummy1 master site2 up
+>   # ip -6 route add fd00:93::/64 vrf site2 dev dummy1
+>   # ip -6 route get fd00:93::1 vrf site2
+>   fd00:93::1 dev dummy1 table 30 src fe80::5cb7:13ff:fe96:87ac metric 1024 pref medium
+> 
+> When the scope rule does run, scopedist is negative, whether the scope
+> fits or not: the test fails, and the other devices of the VRF are
+> checked too. One of their addresses can then win on a later rule,
+> the longest matching prefix for instance, over the address of the VRF
+> device, which the first lookup is meant to prefer.
+> 
+> So let's compare the scope of the best candidate with the scope of the
+> destination instead.
+> 
+> This issue was found for a development of a UDP tunnel device with
+> IPv6 addresses in a VRF selecting an IPv6 link-local source
+> address for a global destination: then it was confirmed with the
+> fib_tests.sh case of the next commit, whose first two checks fail without
+> this fix on a CONFIG_INIT_STACK_ALL_ZERO=y kernel.
+> 
+> Fixes: abb9a68d2c64 ("ipv6: take care of scope when choosing the src addr")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
