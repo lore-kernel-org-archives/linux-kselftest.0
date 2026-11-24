@@ -1,49 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795491609;
-	b=p/awllZP2kIJjJKvc0Z5tP6cTmuEVyX1wpeiWskb/r+/RKUwe3ZNudMfN/EAfxSREi56
-	 E0b1JKf0sl7GZmR9laWchAOFbtTGb4Xeu3kVemqH0cGrPgizrWdnIrEK6M5jd2XEJKYl8
-	 Ef39rJERmjasBH8VseveD8v1QVaTbhJW/TpK/hT14pxcAPVBdbtsSVvCPUPFYQm20jI1E
-	 Q6bCKubOeYoSPbgpI1/DWV7hGqd+siDhh5EqUVn9kwP77QFTAhxac4qw5aXvCoe6h84Oz
-	 G0evCKz/ev052+fUL8/DvG7L+1LGnCa08r37VWLI2pnz12lvFWCEqezOD2hRr2zH1jg==
+	t=1795492562;
+	b=Vx5f6nkUXlZncOFmtk6+RY2tSQqM+PaF4fH9ISbslTi8KEjeLifDLzTrmrGVSPLdk0tc
+	 Od0uaplm47UjYItJ3pzpgxcl2zu0v/djHBLFfYmnskV/jWPhaOZ37DVOGStaaF1D+4Pm5
+	 p3B/ToZdvRSUpbPVwCkfJoX4ivbGMLTaT4fsx5zl8dGbqf/F4xugVtjr89MmgRRgqbWlH
+	 2E3R0oF3wCcVU4v7AGd/Pa9UZSKuzkKlW1T+3/NmXDT/J/vjEHnyAUBy4rJ4QPyCp3UQC
+	 0n84LEjrw0lsdNHM74T3q/oP4DxFM9OMuu7vtakL3Hm+WIMfW3h9BPJEz5uoKDZY7Gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795491609;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=RY/pscAY0kqIVuCD/VQ32rz7Pi/um+3HxodO4+2UNto=;
-	b=LSim6T0K/yRNsObXCum7K1+craNeS47TONCx/M7v3Bg6ftjY+nhpDgqSVyN0EaYhpeB0
-	 BFkL/U8M/hK55N152OTwjZ07lMuV+gEeeYumBiJDGIjl6O09JNxfHFYSfjV0H0ThETQhX
-	 olNSX6rvnGagj4RayRBRwmVo0tSUjKSBTecOk+8GaMcL1dKgxeK6Qw+qvR6NeXXc9W4pH
-	 qlgPHVhCOGb85fHuWrytaltED5GLYptI3WXYANsfJWNi6iFnwG/EIVxdeYLwItnxr0Q4x
-	 KYNs1p/Is2rLnH1CLDO6Qu0PBR6zDEIvtESUr5cp0SNFWM3DsyYhi+CBc3WNcNfuKXQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795492562;
+	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
+	 X-Spam-Status:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=Dsw35PX7hCcW1qKge/zhNdyX7SMaBaKsuKoMAnrPlU0=;
+	b=xGeY8mzBm2XtqzN0L3jNjEyMJRcqYc1bVLPkEczVkhvG1NCu+Sa8sJM3nD6tbOQWlCUi
+	 28HsYL3z5BEyHzH9M3tT/xsDSAUk4Ral7A7CxrWBhL2k1r/zPDsb8nyMvDUuUgEzRZh8X
+	 qqYpjnTOvdyrSUVCs1DvDeX9jVzyjou4xOJXLePJEkwAeuqUfGlUtlACgtRY9WiZLKbMk
+	 B/26NhmyvefWF0IAMRCcohBGbrx4zhRxkRywKolDZy0j6w7IFA38duOD7UP9wYIVGfM9k
+	 cLfiiM25Njmv3WDQAerGEsRTVVDnB0zsdeTwlojy75SCszOoipJdX7M7Bey7peIg2pQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ux1GbTh3;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=davidgow.net;
+	spf=pass smtp.mailfrom=davidgow.net;
+	arc=none smtp.remote-ip=203.29.242.92
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AC7606A33E;
-	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ux1GbTh3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8E31F000D0;
-	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795491608;
-	bh=RY/pscAY0kqIVuCD/VQ32rz7Pi/um+3HxodO4+2UNto=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Ux1GbTh3CA/X/Qf0RuADeg3n1CUz3oQVOAoxxrkWnv3sfv7CXBR/uSuXyTr5UGYjv
-	 Modlqm5XxzUWgrvw5Q/kz8hicAmZ+wrFKOAkvMoJIKYCWtWgkvMVP4Xl3Nts2PuM5r
-	 OnEwtaydO2QtLM3PbXHbaeARqwi+N2RZ5es7WQ9LOqkIp8/flDCdiluZKQijp0hQKB
-	 DI069/jcUJJ8NLWMnkBxGl93/QTSZG/vNCvnN5F+PVvsYwYkBFVn6/lvbvIrTZwl0t
-	 FjbDg5XfOM6PjkbOtYyzNBPcjenBNKZKFY5jLSs8hyCaOsr3d7Zj/E5OED9h8YNqHf
-	 jYgzA5xf9y13w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B442D39302D7;
-	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64376606A31E
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:56:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64376606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id E918E200E10; Tue, 24 Nov 2026 11:55:58 +0800 (AWST)
+X-Spam-Level: 
+Received: from shelley.lan (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 6F19A200E0B;
+	Tue, 24 Nov 2026 11:55:57 +0800 (AWST)
+From: David Gow <david@davidgow.net>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <raemoar63@gmail.com>
+Cc: David Gow <david@davidgow.net>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: [PATCH] kunit: tool: Autodetect a default architecture
+Date: Tue, 24 Nov 2026 11:55:46 +0800
+Message-ID: <20261124035547.907987-1-david@davidgow.net>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,43 +56,90 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix
- file_reader/on_open_non_sleepable_first on overlayfs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179549160725.3263417.1033641608398909493.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Nov 2026 03:40:07 +0000
-References: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
-In-Reply-To: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
-To: Hang Zhengyang <hang.zhengyang1010@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
 
-Hello:
+kunit.py always defaults to using UML (--arch=um) for building / running
+tests, but it is only available on x86 architectures. Instead, attempt to
+select a better default: UML on x86, or the host architecture otherwise. A
+cut-down version of the map from uname -m -> Linux kernel architecture from
+scripts/subarch.include is used to detect this, but it only includes the
+most common ones for now.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Ultimately, this should be replaced by something in the architecture
+config, which we'll be replacing anyway, so something simple like this
+should suffice for now.
 
-On Fri, 20 Nov 2026 14:59:02 +0800 you wrote:
-> From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
-> 
-> on_open_non_sleepable_first fails every time when the test_progs binary
-> is on overlayfs, as under /home and /tmp in a virtme-ng guest:
-> 
->   run_test:FAIL:err unexpected err: actual 4 != expected 0
-> 
-> [...]
+Signed-off-by: David Gow <david@davidgow.net>
+---
+ tools/testing/kunit/kunit.py           | 27 +++++++++++++++++++++++++-
+ tools/testing/kunit/kunit_tool_test.py |  3 +++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix file_reader/on_open_non_sleepable_first on overlayfs
-    https://git.kernel.org/bpf/bpf-next/c/f5931061c005
-
-You are awesome, thank you!
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 91d234ac3b57..41ca3d32bdc5 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -9,6 +9,7 @@
+ 
+ import argparse
+ import os
++import platform
+ import re
+ import shlex
+ import sys
+@@ -340,6 +341,30 @@ def get_default_jobs() -> int:
+ 		return ncpu
+ 	raise RuntimeError("os.cpu_count() returned None")
+ 
++# Map from host architecture (uname -m) -> default KUnit architecture
++# Should be 'um' for architectures supporting UML, or the name of the
++# qemu_config otherwise (typically the kernel arch name).
++# See scripts/subarch.include for a reference.
++default_arch_map = {
++		'i386': 'um',
++		'i486': 'um',
++		'i586': 'um',
++		'i686': 'um',
++		'x86_64': 'um',
++		'aarch64': 'arm64',
++		'sun4u': 'sparc64',
++		's390x': 's390',
++		'loongarch64': 'loongarch',
++		'ppc64': 'powerpc64',
++}
++
++def get_default_arch() -> str:
++	host_uname_arch = platform.machine()
++	if host_uname_arch in default_arch_map:
++		return default_arch_map[host_uname_arch]
++
++	return host_uname_arch
++
+ def get_default_build_dir() -> str:
+ 	if 'KBUILD_OUTPUT' in os.environ:
+ 		return os.path.join(os.environ['KBUILD_OUTPUT'], '.kunit')
+@@ -384,7 +409,7 @@ def add_common_opts(parser: argparse.ArgumentParser) -> None:
+ 				  'string passed to the ARCH make param, '
+ 				  'e.g. i386, x86_64, arm, um, etc. Non-UML '
+ 				  'architectures run on QEMU.'),
+-			    type=str, default='um', metavar='ARCH')
++				  type=str, default=get_default_arch(), metavar='ARCH')
+ 
+ 	parser.add_argument('--cross_compile',
+ 			    help=('Sets make\'s CROSS_COMPILE variable; it should '
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 85ae21754bdf..6b5f32ed25f6 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -742,6 +742,9 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.linux_source_mock.build_kernel.return_value = True
+ 		self.linux_source_mock.run_kernel.return_value = all_passed_log
+ 
++		self.default_arch_mock = mock.patch('kunit.get_default_arch').start()
++		self.default_arch_mock.return_value = 'um'
++
+ 	def test_config_passes_args_pass(self):
+ 		kunit.main(['config', '--build_dir=.kunit'])
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.56.1
 
