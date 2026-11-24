@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795543173;
-	b=nm6YRO6bd60U5Bum5P99bEGRIiUooIH7AiiB+VIdIrnEb9QtVKbmDTcW5Dd2jyyaIcsL
-	 H2sI1FjwwkoRE+CvTyiHh/btZ00VZYV+7a3uwFQXJ48MRtDKRKw199DSmBItqCFUj2i0u
-	 g7LV+p5N55ZVrANRGBDp1S38Sqg4KUf+3IWcBAN5B+6QVVk8Imar+H47pevWM2nL3d9T5
-	 7eHPcP/UYk89xQkUdVMPI5uytrtV6jU+GgZe1QK0N0bGi771QiDTO++tpBx9JxWjvWMsr
-	 7/jlZ/yAnE0K7Nj9ogWwRyY82X1IJQMbkbR78xyW03/s44arDnDCRvXqI56JGE6h3Jw==
+	t=1795543180;
+	b=KJbgXeR66WB5L48Y9o/9vOiNg3sy6k7BE5EDgCDXG1MS3b5CoBqrXmxIDk+CNU7Uhwks
+	 LJEmGrfcsvgSFqGsYDS+De9zSlQIky/gaUFjoojs963a16yMysATQhSYXwQcCzxZIhc+g
+	 nV+oKaQv6OheBh/KRffj5o2zxwTCp8/Y1jwWwjBaDXtMqTzxontOlGnD2JZMvi0MUzc+z
+	 tZesPcaNZ46HFRWJwmL8SpXd1HCsJMqO0r0Zj7GAVmu+ztSDmXED7NkIwPl1QvtutmYip
+	 oDfCyogJgpj4Z37JceQTH7ErJWIp2oYdctGUafxVoheTc8iWJahpoBOdiDXlMp9SHow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795543173;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795543180;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=VstwBcVMyFIpXX/g8y4uvl7osWjH+5lZKKsPgtW24Oc=;
-	b=CeWwDAHvjkeIGncA0c1bytmGUwdIzCSELuIwfOLmQMKNt1M936xY956Pn3udxlAFdHsV
-	 ZyaG8nd730mxR2DPnSEvDs/r5w6xruy1Bd1TBWECypDwsS9gDRtluvVYZeDImct1IUaqi
-	 gMBO26kRDDkxvqUk0N9gRxnphhJ5iHS6WRSENnvNAxAlOOWT3AGPdMx3d0uxrrbQ+Ok3k
-	 rEX9dBtRuWEJBbVbaz1cVqTVsTBwWud6lHdL74or4Gzm5sorKsktsMouUpA1Z95y4CvdI
-	 BDTs3IoX7Nx22g2XddOKO52Faqge2Muc/NMmndJ737Rn4QxPY8apBbva1GtFmyors3w==
+	bh=uaTj/IgjFnkwmASVrKkLUw8romAE2cVY2R2st4Lr99E=;
+	b=pgJg8LUSyiTNRWrH2OghPGtG9oxEXrCeCeWuaJr4IeUhKjfTOvV4FFqYF49s8ch9zqes
+	 abWiYXBVY5Nl5ByxxNj/ifyKQ/H6HsdUEgj8nv5rmwQrOBOlYTNWlNcNNpblrVyLqLKM6
+	 5QkpRAbWa5N8ahF4azUKgDtlvPA4MX20jgevyamopvcvKgxnN3tHBd6BWviTwnSN4wvHx
+	 Li4DOGgane74MgPFs8uRLGXU+4wEbZz41Owm+EsAvVWSzTeqgIylFUQaJ32N1Bru4TbcS
+	 4FV5M9/jFv7t0DnEb0vNhNJb/S+i+vCGRbBcbCtLurjOkmaHQ9bdmcx0mH1dEsVHyMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Jrr002Km;
-	arc=none smtp.remote-ip=209.85.208.48
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=ablhK58t;
+	arc=none smtp.remote-ip=209.85.208.43
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92209606A31E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 17:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92209606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F10606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 17:59:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3F10606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Jrr002Km
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6ae305e3bd9so8217470a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 09:59:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=ablhK58t
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b894d9a075so5304160a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 09:59:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795543171; x=1796147971; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1795543177; x=1796147977; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VstwBcVMyFIpXX/g8y4uvl7osWjH+5lZKKsPgtW24Oc=;
-        b=Jrr002KmZMdjmj84UDe2P0H7GbLpNHFvoTA1wnEQ7c9pgiAZ1SZ0l3cbfYhBCB7LJ3
-         fplxaTNGi73FiLhUHANqUifOA+wK/1+BfHxDb70iH3tqlY568hSPfTpSHaosctnTYZSj
-         oNKaulN4KG2nyP9MIVLBzomPgdG+DwroARfjl7szX1wNIi8+s6vSA+HGUdnMZmjQ+YtY
-         1ZliiDyJJoHHxCQ8a5DnytA2Nx40aBdXtlpvai9K2CH103KNbQhCPL8R3wnA06tPTh2h
-         e++7Mo8NH2rgA6uG69VEmdjXOYB6/pnwGnvAQQkTr/dmKMwKqHJ6FwIu+TNUTutQgO4p
-         xLyQ==
+        bh=uaTj/IgjFnkwmASVrKkLUw8romAE2cVY2R2st4Lr99E=;
+        b=ablhK58t8MX2Gx9UkaoIkzL9AwdBhG+jhN7/JyA92ASWxcX3KuQRaPXU/sv2p/Doui
+         LLdVv4w2HJP3jvDcSLlkR4x0f8lxYbu2Th76mnUvU/1//q548yfXfPf1y47o0t/nr213
+         cx9qQE4fdbqjJTN3b7qTXmJQWEChes/ZHF7nVn3lPKUZO+BXU4yK5htEeRzA00bLNlbm
+         Rexd5gkY+Z30hujxDUGmX6ycFjtvJwWguQ0qIa/LbA/5TLbclZWcNh3mZUtjFnPIx8fT
+         JDnsdEg/PGybouR5+vOCHt8e5VCYcnhMNGBpMblnEPhIqr/ThraupuDOkUyqhAwu5NfE
+         nKzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795543171; x=1796147971;
+        d=1e100.net; s=20260707; t=1795543177; x=1796147977;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VstwBcVMyFIpXX/g8y4uvl7osWjH+5lZKKsPgtW24Oc=;
-        b=1Gk0v5qyTRjQlYw0kyKxysTTyKh1zmReOyG7Q3ExS7fdQOcHQvoWa2vjviU/tiZHVF
-         bTL5dNLdL8hPIf+Xu1mQscG73Gdh8pYs8wHNA2K/OqzJUmJTlbh+Dz1vHe2T0An/d/Pd
-         rbBwf7Hjr0dWMAJbn3+ltlxl2BbTmoYVbBqbaijQDZJ3+YXGRF6i5UfSWkzGMDioaH1l
-         yiLSdvRsKcCq7n28WpRXOKT5ZatdcXqJjGvEy3uajhV4MeplsPxhNELV9NzJPxBdlrTe
-         oiqmVcKoU5rBlfq0a07FE7xri1tYSbidn0Gx+cNaVb5BSxGAGP2x6JcKnRYJy3OjBIcR
-         4Dlw==
-X-Forwarded-Encrypted: i=1; AL+hErEBa0fbjoOI+3KiNxxutz8Cywi+dCgE/8SwRe9oYt5pkorh8EmNBcqbdxoGd3KNW1BFC+QMSefop/QgKgYpXc4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8Acnb39P8dKUdh6jOR/3hpAe2y/oErIGCk9kqP+reXFTjVPBAV
-	XFauWt7yg6YLsJfbYmPe9ITxx5XzgSb9VBoLHy/FsLJb+tqOe9+14fHTeU0jiDhyvDg=
-X-Gm-Gg: AZFdTZe68DUXM4zfYEba7Ntzs3f31wDRoD8KH2aohJKuw8LCp6poXmz5xXzPZ8Xrg2M
-	5ppY1jf19wVjYCraiUhRVnbsdS2LUJfRJJyRJhu859gS5JamCrPAVW3w/2YTv60lYXcdkyg/NJ2
-	WTW5zL9ZmeGuoge/VlKUdOWuKL3P+8X4hvO3Ubq8Xjq9vCdXKUz1ab6tPJXZH3E6ciiUyXBGw49
-	yLqMRLJMKYeCxQxsvU4MLdeEVuNGhQpI+u84CAQvbNIUaDFKiiLhVnsyxYTLIYI/UP00rupWKZk
-	NvExU0JFW59L5PTw6kvc1LUCRr2gmnOcC1IM+WF6ATf/qR4Nk28qJ3ZoPmFQw+JjSf+g/amiTwb
-	OnQcRkE0siJVo3EFEG5DTnQDEYlbOEHoC8CpxFbJJFTbTI351j0mSKWhOGK6sal5+NsjT+4UBYo
-	tayjX6ArCrVWHSqSIxkaTBIaC6xUOoDGQjWZ4g7jio/jB+Uo4zXEj8TqrXYReNWzJm2aI5AauxM
-	2Mt5My2US/MA0b9FuIRVyv1+TmgqpiU9e/npPlLm3s6MpqHTF/DQ5lMjv/0S2eCNDW8bITJnRzN
-	VRwk9i8udqnJafsmIhIs6PXEvhb8sTrMNrX5forShi67jA0=
-X-Received: by 2002:a05:6402:15c3:b0:6b5:9133:309f with SMTP id 4fb4d7f45d1cf-6ba37c7a619mr8952583a12.2.1795543170978;
-        Tue, 24 Nov 2026 09:59:30 -0800 (PST)
+        bh=uaTj/IgjFnkwmASVrKkLUw8romAE2cVY2R2st4Lr99E=;
+        b=qCLZAY2uUGxWL8FgAKao17xUkKn81tI+k0BIG4Yb2flnpEUiAVW4gRzNtPgAIpnNB4
+         5XcR7BNGjDkTYGVx74rY6enUtCZ+ibjEFrbz25IA5mW1L0vb02UDo6fjeWftmUzWyVt7
+         D1WnFYk8Yj4IpHWDTBWsmvHyZwtIwt5XHbmvJEQzu9kZXnxQ4cExoZRiY68xFVZnqN4Y
+         ek0kPVgsgyZnrpq4M7N3JnGUWwzDzvcap41cjaqk+7xwhfEj2KeBCnkK+oX0YU4EFj/0
+         pN2Tmzi5X0XebagGd/M+LRld9Dje7MmD016nnprjEbrfxw8jjabkYh6DNdh9818TKQ/G
+         ZjjA==
+X-Forwarded-Encrypted: i=1; AL+hErEkq5jx9SC0X9OXoHidbsWlwniaPD7NKz+RWPCUnrpaT2xyn8JlcKeSJGKexwyuDD2fOWzwuKp6cz+QV34MHJ8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9nAk/rnn/wpciPnsLfucTq7i+c6MaZ9RnfbCwEt+ebovjQO0N2
+	jm/DSNrnWXaHaEzwAPvgGkIhExWeX7EcajwXIUFVIx/KykTR8s+wohgfOXoK+wCpDJA=
+X-Gm-Gg: AZFdTZdVz/TiH9ZCZzpyj7A/UE9LOruwy8JyaVYRPVJpYuy/cvZ6URZbs1V4qiZofv7
+	SfhEws34DQM+eq5mon1nx8eHLx6dvK9nkPxLhDM4qCsWld17K3Oz2wnjBKIKKJpzLbZJJa+UNer
+	9AkOpBhq9q8QOPU47Xq/+a0j99I/3Wk3PUIfaMnTFSloD3SlQUIgH9ASdxIkLgEOizrcs+Gwy76
+	7ch4uxHmWqbsG1ViL9qEguleRoENoR08WDY/8Lq7rb46MsYe84z+Exz2DFoC25dzG1cRfwnCzYk
+	CHQDqQoOP5xv9YvvUqgT8CdkXdpYV87SD4z8pZP0/TECaXqR2Pp8prQ/a4/qjVo7yqJEGSiwDok
+	tuNefR8H6k2Xqoo7pUmY5DT6dCbKjMqIxDkBZn3nEdOoNQZI/zakDLaPqeIJGj8/rMHgcIsYTyg
+	gPsqCWVgonrG0a6I6qLLV7zc3unbhYBujp1V8LuO5dx5qEsJEZ777YsNNlNwVEgklKqAm/bkGmo
+	FN1l4Khl+g6s/pLY69rY5e75QH8NSnMgni7GszIXwIHujaYIRaZxqSINGAYyszfdJLuVU9vKVMU
+	kw6zpxtEBQ/78oeSLpy4q17P/bWz/2T3A4OZq434J1mw33c=
+X-Received: by 2002:a05:6402:2389:b0:6bb:1e07:2eae with SMTP id 4fb4d7f45d1cf-6bb1e073294mr273795a12.9.1795543177340;
+        Tue, 24 Nov 2026 09:59:37 -0800 (PST)
 Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.59.23
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.59.31
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 09:59:29 -0800 (PST)
+        Tue, 24 Nov 2026 09:59:36 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -149,9 +149,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Jeff Layton <jlayton@kernel.org>,
 	Tianyi Gao <tianyi.gao@linux.dev>,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 09/11] veth: add VETH_INFO_TX_EXTRA_HEADROOM
-Date: Tue, 24 Nov 2026 17:58:22 +0000
-Message-ID: <20261124175824.60470-10-tianyi@cloudflare.com>
+Subject: [PATCH net-next v3 10/11] netlink: specs: rt-link: add veth attributes
+Date: Tue, 24 Nov 2026 17:58:23 +0000
+Message-ID: <20261124175824.60470-11-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261124175824.60470-1-tianyi@cloudflare.com>
 References: <20261124175824.60470-1-tianyi@cloudflare.com>
@@ -166,239 +166,90 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Packets that a namespace sends through a veth pair can be encapsulated
-on another device, for example by a program at TC egress of the host
-uplink. The veth device cannot see this, so the packets are reallocated
-on the uplink.
+Describe the veth attributes in rt-link.yaml, so that YNL can set and
+read them. The next patch uses them to test VETH_INFO_TX_EXTRA_HEADROOM.
 
-Add VETH_INFO_TX_EXTRA_HEADROOM, so that the CNI plugin can set the
-headroom for both devices when it creates the pair. It cannot be changed
-later, like IFLA_NETKIT_HEADROOM.
-
-Store the value in struct veth_priv, and add ndo_get_tx_extra_headroom
-so that the core reads it whenever it recalculates tx_extra_headroom.
-The value cannot be written to tx_extra_headroom itself, because the
-core recalculates tx_extra_headroom from scratch when XDP on the peer
-or a program at tcx egress is attached or detached. A new field in
-struct net_device would also work, but it would grow struct net_device.
-
-IFLA_NETKIT_HEADROOM, added by commit b9ed315d3c4c ("netkit: Allow for
-configuring needed_{head,tail}room"), is similar but differs in two
-ways:
-
-- it is the total headroom of the device and sets needed_headroom;
-- it is a u16. The new attribute is a uint, as commit 374d345d9b5e
-  ("netlink: add variable-length / auto integers") recommends.
+YNL includes linux/veth.h from the source tree with get_hdr_inc, which
+needs the source header guard to differ from the installed one. Prefix
+the guard with _UAPI, as commit 8066e388be48 ("net: add UAPI to the
+header guard in various network headers") did for other network
+headers. headers_install strips the prefix, so the installed header does
+not change.
 
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
-The iproute2 patch for VETH_INFO_TX_EXTRA_HEADROOM will be posted after
-this series is accepted.
+v3:
+- Add the maximum of tx-extra-headroom (Sashiko).
 
 v2:
-- New patch, replaces IFLA_TX_EXTRA_HEADROOM for headers pushed on
-  another device (Willem, Stephen).
+- New patch.
 ---
- Documentation/networking/netdevices.rst |  5 +++
- drivers/net/veth.c                      | 44 +++++++++++++++++++++++++
- include/linux/netdevice.h               |  5 +++
- include/uapi/linux/veth.h               |  1 +
- net/core/dev.c                          |  3 ++
- 5 files changed, 58 insertions(+)
+ Documentation/netlink/specs/rt-link.yaml | 16 ++++++++++++++++
+ include/uapi/linux/veth.h                |  4 ++--
+ tools/net/ynl/Makefile.deps              |  3 ++-
+ 3 files changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/networking/netdevices.rst b/Documentation/networking/netdevices.rst
-index 280ad3bf5559..a427e445ba35 100644
---- a/Documentation/networking/netdevices.rst
-+++ b/Documentation/networking/netdevices.rst
-@@ -464,6 +464,7 @@ values:
- * ``XDP_PACKET_HEADROOM`` (256 bytes) minus ``needed_headroom``, when the
-   peer of a veth or netkit device has an XDP program
- * the headroom that the programs at tcx egress of the device declare
-+* ``VETH_INFO_TX_EXTRA_HEADROOM`` of a veth device
+diff --git a/Documentation/netlink/specs/rt-link.yaml b/Documentation/netlink/specs/rt-link.yaml
+index 81b58633911d..c7967a9b3cc6 100644
+--- a/Documentation/netlink/specs/rt-link.yaml
++++ b/Documentation/netlink/specs/rt-link.yaml
+@@ -2368,6 +2368,19 @@ attribute-sets:
+         name: mode
+         type: u8
+         enum: ovpn-mode
++  -
++    name: linkinfo-veth-attrs
++    name-prefix: veth-info-
++    header: linux/veth.h
++    attributes:
++      -
++        name: peer
++        type: binary
++      -
++        name: tx-extra-headroom
++        type: uint
++        checks:
++          max: 512
  
- The kernel updates ``tx_extra_headroom`` when an XDP program is attached
- to or detached from the peer, to reserve the headroom that XDP needs.
-@@ -485,6 +486,10 @@ tail call targets, freplace programs and programs at tcx ingress are
- ignored. Loading a program whose tag is above 512 or does not parse fails
- with ``-EINVAL``. Loading a program with two tags fails with ``-EEXIST``.
- 
-+``VETH_INFO_TX_EXTRA_HEADROOM`` is for headers that are pushed on another
-+device, for example at TC egress of the uplink. It is set for both
-+devices of a veth pair when the pair is created.
-+
- NETDEV_INTERNAL symbol namespace
- ================================
- 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 2051f6e04432..973040c371dc 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -77,6 +77,7 @@ struct veth_priv {
- 	struct bpf_prog		*_xdp_prog;
- 	struct veth_rq		*rq;
- 	unsigned int		requested_headroom;
-+	unsigned int		tx_extra_headroom;
- 	netdevice_tracker	peer_tracker;
- };
- 
-@@ -1548,6 +1549,13 @@ static void veth_set_rx_headroom(struct net_device *dev, int new_hr)
- 	rcu_read_unlock();
- }
- 
-+static unsigned int veth_get_tx_extra_headroom(const struct net_device *dev)
-+{
-+	const struct veth_priv *priv = netdev_priv(dev);
-+
-+	return priv->tx_extra_headroom;
-+}
-+
- static int veth_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 			struct netlink_ext_ack *extack)
- {
-@@ -1699,6 +1707,7 @@ static const struct net_device_ops veth_netdev_ops = {
- 	.ndo_set_features	= veth_set_features,
- 	.ndo_features_check	= passthru_features_check,
- 	.ndo_set_rx_headroom	= veth_set_rx_headroom,
-+	.ndo_get_tx_extra_headroom = veth_get_tx_extra_headroom,
- 	.ndo_bpf		= veth_xdp,
- 	.ndo_xdp_xmit		= veth_ndo_xdp_xmit,
- 	.ndo_get_peer_dev	= veth_peer_dev,
-@@ -1800,6 +1809,7 @@ static int veth_newlink(struct net_device *dev,
- 	struct net *peer_net = rtnl_newlink_peer_net(params);
- 	struct nlattr **data = params->data;
- 	struct nlattr **tb = params->tb;
-+	unsigned int tx_extra_headroom = 0;
- 	int err;
- 	struct net_device *peer;
- 	struct veth_priv *priv;
-@@ -1822,6 +1832,10 @@ static int veth_newlink(struct net_device *dev,
- 		tbp = tb;
- 	}
- 
-+	if (data && data[VETH_INFO_TX_EXTRA_HEADROOM])
-+		tx_extra_headroom =
-+			nla_get_uint(data[VETH_INFO_TX_EXTRA_HEADROOM]);
-+
- 	if (ifmp && tbp[IFLA_IFNAME]) {
- 		nla_strscpy(ifname, tbp[IFLA_IFNAME], IFNAMSIZ);
- 		name_assign_type = NET_NAME_USER;
-@@ -1843,6 +1857,9 @@ static int veth_newlink(struct net_device *dev,
- 
- 	netif_inherit_tso_max(peer, dev);
- 
-+	priv = netdev_priv(peer);
-+	priv->tx_extra_headroom = tx_extra_headroom;
-+
- 	err = veth_init_queues(peer, tbp);
- 	if (err)
- 		goto err_register_peer;
-@@ -1876,6 +1893,9 @@ static int veth_newlink(struct net_device *dev,
- 	else
- 		snprintf(dev->name, IFNAMSIZ, DRV_NAME "%%d");
- 
-+	priv = netdev_priv(dev);
-+	priv->tx_extra_headroom = tx_extra_headroom;
-+
- 	err = veth_init_queues(dev, tb);
- 	if (err)
- 		goto err_register_dev;
-@@ -1898,6 +1918,8 @@ static int veth_newlink(struct net_device *dev,
- 	rcu_assign_pointer(priv->peer, dev);
- 	netdev_hold(dev, &priv->peer_tracker, GFP_KERNEL);
- 
-+	netdev_update_tx_extra_headroom(dev);
-+
- 	veth_disable_gro(dev);
- 	/* update XDP supported features */
- 	veth_set_xdp_features(dev);
-@@ -1940,9 +1962,29 @@ static void veth_dellink(struct net_device *dev, struct list_head *head)
- }
- 
- static const struct nla_policy veth_policy[VETH_INFO_MAX + 1] = {
-+	[VETH_INFO_UNSPEC]	= { .strict_start_type =
-+				  VETH_INFO_TX_EXTRA_HEADROOM },
- 	[VETH_INFO_PEER]	= { .len = sizeof(struct ifinfomsg) },
-+	[VETH_INFO_TX_EXTRA_HEADROOM] =
-+		NLA_POLICY_MAX(NLA_UINT, NETDEV_TX_EXTRA_HEADROOM_MAX),
- };
- 
-+static size_t veth_get_size(const struct net_device *dev)
-+{
-+	return nla_total_size(sizeof(u64)); /* VETH_INFO_TX_EXTRA_HEADROOM */
-+}
-+
-+static int veth_fill_info(struct sk_buff *skb, const struct net_device *dev)
-+{
-+	const struct veth_priv *priv = netdev_priv(dev);
-+
-+	if (nla_put_uint(skb, VETH_INFO_TX_EXTRA_HEADROOM,
-+			 priv->tx_extra_headroom))
-+		return -EMSGSIZE;
-+
-+	return 0;
-+}
-+
- static struct net *veth_get_link_net(const struct net_device *dev)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
-@@ -1971,6 +2013,8 @@ static struct rtnl_link_ops veth_link_ops = {
- 	.policy		= veth_policy,
- 	.peer_type	= VETH_INFO_PEER,
- 	.maxtype	= VETH_INFO_MAX,
-+	.get_size	= veth_get_size,
-+	.fill_info	= veth_fill_info,
- 	.get_link_net	= veth_get_link_net,
- 	.get_num_tx_queues	= veth_get_num_queues,
- 	.get_num_rx_queues	= veth_get_num_queues,
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 2486b0d10474..94acbf3ea581 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1416,6 +1416,9 @@ struct netdev_net_notifier {
-  *	appropriate rx headroom value allows avoiding skb head copy on
-  *	forward. Setting a negative value resets the rx headroom to the
-  *	default value.
-+ * unsigned int (*ndo_get_tx_extra_headroom)(const struct net_device *dev);
-+ *	Return the headroom that the device adds to tx_extra_headroom.
-+ *	The caller must hold RTNL and be under RCU read context.
-  * int (*ndo_bpf)(struct net_device *dev, struct netdev_bpf *bpf);
-  *	This function is used to set or query state related to XDP on the
-  *	netdevice and manage BPF offload. See definition of
-@@ -1688,6 +1691,8 @@ struct net_device_ops {
- 						       struct sk_buff *skb);
- 	void			(*ndo_set_rx_headroom)(struct net_device *dev,
- 						       int needed_headroom);
-+	unsigned int		(*ndo_get_tx_extra_headroom)(
-+					const struct net_device *dev);
- 	int			(*ndo_bpf)(struct net_device *dev,
- 					   struct netdev_bpf *bpf);
- 	int			(*ndo_xdp_xmit)(struct net_device *dev, int n,
+ sub-messages:
+   -
+@@ -2427,6 +2440,9 @@ sub-messages:
+       -
+         value: ovpn
+         attribute-set: linkinfo-ovpn-attrs
++      -
++        value: veth
++        attribute-set: linkinfo-veth-attrs
+   -
+     name: linkinfo-member-data-msg
+     formats:
 diff --git a/include/uapi/linux/veth.h b/include/uapi/linux/veth.h
-index 52b58e587e23..04cb408e5b3a 100644
+index 04cb408e5b3a..d22a29b1bbb2 100644
 --- a/include/uapi/linux/veth.h
 +++ b/include/uapi/linux/veth.h
-@@ -5,6 +5,7 @@
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef __NET_VETH_H_
+-#define __NET_VETH_H_
++#ifndef _UAPI__NET_VETH_H_
++#define _UAPI__NET_VETH_H_
+ 
  enum {
  	VETH_INFO_UNSPEC,
- 	VETH_INFO_PEER,
-+	VETH_INFO_TX_EXTRA_HEADROOM,
- 
- 	__VETH_INFO_MAX
- #define VETH_INFO_MAX	(__VETH_INFO_MAX - 1)
-diff --git a/net/core/dev.c b/net/core/dev.c
-index dd34daf5f3b4..76007f788bdf 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10693,6 +10693,9 @@ static void __netdev_update_tx_extra_headroom(struct net_device *dev,
- 	    needed_headroom < XDP_PACKET_HEADROOM)
- 		tx_extra_headroom = XDP_PACKET_HEADROOM - needed_headroom;
- 	tx_extra_headroom += tcx_tx_extra_headroom(dev);
-+	if (dev->netdev_ops->ndo_get_tx_extra_headroom)
-+		tx_extra_headroom +=
-+			dev->netdev_ops->ndo_get_tx_extra_headroom(dev);
- 
- 	WRITE_ONCE(dev->tx_extra_headroom,
- 		   min(tx_extra_headroom, NETDEV_TX_EXTRA_HEADROOM_MAX));
+diff --git a/tools/net/ynl/Makefile.deps b/tools/net/ynl/Makefile.deps
+index f8850444d240..39abd83c014f 100644
+--- a/tools/net/ynl/Makefile.deps
++++ b/tools/net/ynl/Makefile.deps
+@@ -43,7 +43,8 @@ CFLAGS_psp:=$(call get_hdr_inc,_LINUX_PSP_H,psp.h)
+ CFLAGS_rt-addr:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
+ 	$(call get_hdr_inc,__LINUX_IF_ADDR_H,if_addr.h)
+ CFLAGS_rt-link:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
+-	$(call get_hdr_inc,_LINUX_IF_LINK_H,if_link.h)
++	$(call get_hdr_inc,_LINUX_IF_LINK_H,if_link.h) \
++	$(call get_hdr_inc,__NET_VETH_H_,veth.h)
+ CFLAGS_rt-neigh:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
+ 	$(call get_hdr_inc,__LINUX_NEIGHBOUR_H,neighbour.h)
+ CFLAGS_rt-nexthop:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
 -- 
 2.56.0
 
