@@ -1,90 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795480331;
-	b=Wl1ddBGm90tl4shjpG6o90Kfi4FJXTsxiVzc+PD98VUFY1uM3ehX1Mo/wciyYkbcZECY
-	 NAQjYQEqMucZcGThrVTH5xmeMroYzfYJ0oROZSXJK3UEvMat59V2uWIzi5LqXRI9uda0U
-	 n7zKmkqx1WLrArBFfXPS/A2zQFOO+wq/DIh/NfVRERBuv3YqrE6THfLL7c5qhBjO5yJmL
-	 PGA27MVBhS+8ISQq9GAmIAxYvR4jhGdraAZugWk5loaDDHYZN+y1G05W3Y3JP+UPlayym
-	 sl+Zlzh2Dms0s52Htp7azBm4y+d05pMxl0913OQ2OwYie/N8QzLCqn7pKIOvFq16Jvg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795480331;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:MIME-Version:Content-Transfer-Encoding:X-Scanned-By;
-	bh=eKWVen9daKTJsoD/eXPcUoAAKSeQd3877rfSkKBgQW8=;
-	b=VNY7fFEXJFAwAygVS6KizPKSMsg85M+3M0VBb2GQgAyhu3usnwje3FZaFTdzRxZOqf3+
-	 chQsmoME1yA6k+2g/ISa6wEYVWgp6C3CGaYbM+0dIQEPe1RJ+A92dwFeZ5udoFE+YH0oo
-	 29lmiTXfXc44kme1fRX0DpdENgcAG7WwbzyWASnV9FN0m1QdFm93XBujzpdVXYm9seM6d
-	 YMNiDfRNkC4oFleM8Oj+30+amA0jHLTnt/TIXTwZNvplCwQGnVa2tQfcTB+I0KhM8319n
-	 6wnbldoGkSIHAfmVjr1GfnA7FZc/l2Boq9VmoSDM/Kj8XBz9oJK773Vpc00cRzOwQ5w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HirhgVmX;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.208.177
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1795481693;
+	b=Q2Eg8IE64brxeSN+5t5ajEGX5OKejKqqeQ9m+4F6zcpzLEromNOvm6KuKv8g9sTuxt7L
+	 bGYMrrbvKWEiV8Wj/oasAKE/iCV6qEiMHZjjiNEQk+0Fu5hP96yBv0f4g3vE/+WNgjR1s
+	 Xj4WGu1x83OO9MG5a6GfwoMj6nEnDkmrynQgE4HY18PeYmLKIvKHDTYdOD/osrlRJDFs9
+	 7OjeH9aCd6Jg8sNnWR1tZ8jG/Kh1A3Ia6YAT65NM07SPUt09BS9SZENudj384mNZ7KhJQ
+	 9N1RXfziFRreX9W+pNUmnBE0x/exYQ6P4bwRgsSTccN5+WibrqTMj8prlESn2EO563A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795481693;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=iEKEeKCLRaE3702Za70pxElLp2Z9ygHS6e2aDItiwcY=;
+	b=LTat9M98tJEa4w4tR8PpDw31b/7/yZTlEHYAy55cM9YMXwX6XAAAnzRJj0wb7/FZiDEN
+	 /FjaEj74eV8Cnxz82W50OzeUyGazrsMQEEWkjBDCvUecs8nuqA8mRiqHxR/dJeeGapNmn
+	 dM5ekd80kVCy1sHKgo6aFayPF7j4T1y3O3NjGSe3O9ZTwkcRXmBchkamgTGz7Orxa5FmO
+	 hTLf+q4T+yzN/C+sAowJPCk8vy6uqOMo6VpcH8JnV7bOZDkuFDATI/j6hC7jsvwxx7V2Q
+	 xC22nQdudcY3KXf+Rn7D170uJhN5ENcF4kKYPS1AsgjYTqGQ0urBNXt3WvdVdpuOuUg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=amacapital.net;
+	spf=pass smtp.mailfrom=amacapital.net;
+	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=o5Dxd8NH;
+	arc=fail smtp.remote-ip=209.85.208.177
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14054606A31E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 00:32:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14054606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EC8606A32D
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 00:54:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31EC8606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HirhgVmX
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795480329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eKWVen9daKTJsoD/eXPcUoAAKSeQd3877rfSkKBgQW8=;
-	b=HirhgVmXhKuO8cP/NpW7KffywXBo/WAPAPzBAxCQxM25TnxWlekCY3lb8voJbaesRGPJ7o
-	EbIhQEWchZh3XWX0c2YZZCNYd3/nZWLari4N8GcFt2I2DXTdBbwYjwFuG3WB8m10fBF0Hg
-	ONcjdkgrpKqKDEW9/1HBEg6vAXs5Qkw=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-113-wU5SBA5wO7axXUgiWwgM-w-1; Tue,
- 24 Nov 2026 00:32:04 +0000
-X-MC-Unique: wU5SBA5wO7axXUgiWwgM-w-1
-X-Mimecast-MFC-AGG-ID: wU5SBA5wO7axXUgiWwgM-w_1795480322
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 58B1D19560AD;
-	Tue, 24 Nov 2026 00:32:00 +0000 (UTC)
-Received: from harpatil-mac.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F36F81801A60;
-	Tue, 24 Nov 2026 00:31:54 +0000 (UTC)
-From: Harshal Patil <harpatil@redhat.com>
-To: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>
-Cc: Muchun Song <muchun.song@linux.dev>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Frank van der Linden <fvdl@google.com>,
-	Yosry Ahmed <yosry@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Harshal Patil <harpatil@redhat.com>
-Subject: [RFC PATCH] mm: memcontrol: let a cgroup opt out of HugeTLB accounting
-Date: Mon, 23 Nov 2026 19:31:45 -0500
-Message-ID: <20261124003145.80705-1-harpatil@redhat.com>
+	dkim=pass (2048-bit key) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=o5Dxd8NH
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-3ace304021eso38080071fa.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 16:54:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795481691; cv=none;
+        d=google.com; s=arc-20260327;
+        b=hxFyVuLdw0gQWL7I+KlZmnASoODq3oaqsfzWPFnKUTFu4VZHssuv/McDe+IXtyxrbS
+         DmUHXHEjFCny0sbyuIVdnXbQyoXq/gOlUOwpwYQI++7ZeBae41qgWqCYy9c5G1SmKy/e
+         RaGI1xyfc9xcuiehY2rW64u4plNeesiIEvaP3SnTzbfczEXfV3u3nMatv+fIT4Xk1y9z
+         aAhsgvxxFjCyMOQ+dIdC9U9HBzhtRPBwOIRAHgWaaC3pXT1IG+/kdAVsNKtj0hiUfH2h
+         MF8x2mYbQ3G+rrztnyOiSeHMtn5hgUG/mFtDkq897/T7ACtcd0ZPYii+rel44fyr70mY
+         kZfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iEKEeKCLRaE3702Za70pxElLp2Z9ygHS6e2aDItiwcY=;
+        fh=RAyX1L25TsuhGVZH9sNW3MQtXoo/PHDHcw+L7AkWjsg=;
+        b=pdOh4LyW7tbSL1q63pLWlHvL3oo54rjvChRFNn5MrvBlMWVAFodt5I4HWSNQbfzdtR
+         ntrQdVuLcP1JLeK9wmrLa6KcQI8ug57qmgpSOIoSbee+YNAmz94RpcHr3GVkrpLAKy22
+         mKSNpqeUzGHJuAzMG6zC1ZUv9CaPvADknD28WAAuhYm5TjhNhDlXvr5zhz3Q2XJ8fjWX
+         dtYYBTRaYEFq7TMvA3gMHpcE9sMFbytZi8nhDRlKZI+BdsZX9M+sGi6knPlxbVC6a7ZQ
+         Jo0ymLuUUzC4bAXVAae+sYv8zFyJcavNFUMI2+f9XXHklksdtLv5pyi99CbIgMW5ULO6
+         xS0A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1795481691; x=1796086491; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=iEKEeKCLRaE3702Za70pxElLp2Z9ygHS6e2aDItiwcY=;
+        b=o5Dxd8NHFXX2cE4R0WwhlruqtyJ5oTB6aI2dShZR/o5Rl58IMbHEEZjajXUrFyVu6/
+         8mXqmn+2VD5DRqMrlSibhb4wjce6v4IMfd8hvEFR7waf34/GvyabBuqgI4p+wbzUebY0
+         PtVFDm2OmwUbfHnzZpw5hKcBjamTr9Fljw9+QPc3P/TonvAJ4LRkPwKgsZdKsQQj+mTE
+         gHnJr5r7k81sZSurhg7E3ROWf7AMbZ6pikX+mz0df5BOgQbMUJnldE9O9hdgpAtnaY8t
+         3eeU1jniYS96HJMurxAIjQuVWVUuh1b/3Y2+peQtrHa7ShTn5WwZEpwbSSr9cvsD8FqF
+         /4qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795481691; x=1796086491;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iEKEeKCLRaE3702Za70pxElLp2Z9ygHS6e2aDItiwcY=;
+        b=VSpm99hj8GFmSECN5vqPng1djKkdpITqWU+yhAQN+l3OA6OyODAKjpmLT3j/nIy+GB
+         R07NYWu/wW9x3Ec40HhA43Sga20BFsNDWzhQKNHI6pM6s9wTzwbHz439jlNMtHtYecrI
+         oF/QVCffGiMCWJ3iZHscM2X0z60y/GTRDWbkgYWy2l994IgsqJznh4zF89SsyLHeTI/X
+         /Zp8xsWyM2gbTGZus44Ev6ru/KJ9K+1F3rYkssaCXpfAW0n2FhDDe7QnvxcA/43BJer3
+         +7QPHe1tsRAgvpDkTicvzENm+hAvMid4z4gESTLr0tJjmOa7P60wUlLeKHZrZWzBp5Bk
+         w3+w==
+X-Forwarded-Encrypted: i=1; AL+hErEfm6htTpu7f1nb1GZ+22v/cLJOBlH2PUYGLnPlcyngytLddhoXOjfknkLHLJ8FnVO4335n00OFNP530mji/rE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/y7g6rtAdz2xvtte0AaZfvr1yo+AeP4DAf2t8InpV4i85IJzGv
+	bJWnNJD1aN0k01ZSPefOpn48KBo6Oh0eyYB4FeRvp7fdUdtTROG6ORldg1BBCRh7EyqbW9jR7vX
+	4xAZfC+se+bmVWTA5MWuAqhBVZAYIotq5QrD1UYic
+X-Gm-Gg: AZFdTZey7gYXQNMGG+7x43VPUe78dhj505L13haJX8y+45HRes9qlIXJ1RQw7RFS5g+
+	P3aAzMtj2/sSd0dl1b8fo74ehNZ8bxm5RJ2NCkoz1C3lAgKzaq6mKwmYy43yvKkMVBuV45VDWoL
+	6+VSwaOSW8M5XXrs/UOO9Byd73paObkGPwVlZKhA/Sz3PeL9aHuA5xxLcfszzdjVMCfeMwzZSq4
+	ncCxnayqVRApxFeCI7OhlNfc8EnyhN6OZIqymR4jPNtQcZViaCx/g2JHs+U9ffha4Hd4wGacB98
+	tJdP2aICasEDwyIOTEBcExPVYPC11VfSZ2OYRSYUfaQwQ82/ihcajiAI1sWolnaDuzZ+z7+ETr1
+	qlkTOuJtY/CGqtnk0Ipt/gOsyWS5edk43t2h5C9c=
+X-Received: by 2002:a05:6512:618:20b0:5c0:165:16c3 with SMTP id
+ 2adb3069b0e04-5c1bc85f246mr2665281e87.64.1795481691103; Mon, 23 Nov 2026
+ 16:54:51 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,639 +104,312 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+References: <20261119104208.782900-1-halg@google.com> <20261119104208.782900-2-halg@google.com>
+ <CALCETrVqc+1bjH1bhqHee9bsUdk2B6314z7PMexbsnNpMhk14g@mail.gmail.com>
+ <CALCETrV=zSxb6sgA08DLiK2bQovdMEj9ycG=Cc71mLn2C5Pgeg@mail.gmail.com> <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
+In-Reply-To: <4db941ba-3001-4019-8910-63e534b29f89@schaufler-ca.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Mon, 23 Nov 2026 16:54:39 -0800
+X-Gm-Features: Aa3M54oMS94l-c6quSe09sYNPHMWYafhDwaB4QCI_jHSdqjrERKiY6yBrUdD7_4
+Message-ID: <CALCETrX7_HidtLAjAh=D0m2Fn=1ZkfMBiXUVXbjyu+xDY19u0A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] userns: introduce capability bounding set for user namespaces
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Andy Lutomirski <luto@kernel.org>, "Hallgrimur H. Gunnarsson" <halg@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Serge Hallyn <sergeh@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, David Howells <dhowells@redhat.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Jann Horn <jannh@google.com>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Singh KP <kpsingh@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	containers@lists.linux.dev, keyrings@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since commit 8cba9576df60 ("hugetlb: memcg: account hugetlb-backed memory
-in memory controller"), cgroup v2 can be mounted with
-memory_hugetlb_accounting, which charges HugeTLB folios to the memory
-controller. The option is global: it applies to every cgroup on the
-machine, or to none.
+On Mon, Nov 23, 2026 at 9:22=E2=80=AFAM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+>
+> On 11/20/2026 9:09 AM, Andy Lutomirski wrote:
+> >> On Nov 19, 2026, at 2:52=E2=80=AFPM, Andy Lutomirski <luto@kernel.org>=
+ wrote:
+> >> =EF=BB=BFOn Thu, Nov 19, 2026 at 2:43=E2=80=AFAM Hallgrimur H. Gunnars=
+son
+> >> <halg@google.com> wrote:
+> >>> When a process creates a new user namespace, it receives a full set o=
+f
+> >>> capabilities (CAP_FULL_SET) scoped to that namespace. While namespace=
+d
+> >>> in scope, several of these capabilities (such as CAP_NET_ADMIN and
+> >>> CAP_NET_RAW) expose broad kernel attack surface that many sandboxes a=
+nd
+> >>> containers never need. However, there is currently no configurable wa=
+y
+> >>> to withhold such capabilities from user namespaces while still granti=
+ng
+> >>> them to workloads that require them.
+> >>
+> >> One thought (from the rootns thread): the other decent sized attack
+> >> surface here is CAP_MOUNT_ADMIN.  Which doesn't exist as a capability
+> >> bit.
+> >>
+> >> A sort of horrible solution (but maybe not so awful) would be to
+> >> declare that the bits in cap_userns aren't actually capability bits,
+> >> and that you need the bit in cap_userns *and* the bit in cap_effective
+> >> to do sensitive things, and that mounting needs cap_userns to have
+> >> NSCAP_MOUNT_ADMIN *and* cap_effective to have CAP_SYS_ADMIN.
+> >>
+> >> I want to sleep on this.  It might actually solve several problems,
+> >> e.g. controlling creation of ipv4 and ipv6 loopback or tunnel devices
+> >> or whatever.
+> > I slept on it. Here=E2=80=99s a counterproposal.  I=E2=80=99m not sayin=
+g I think this
+> > is better than this patch set, but I think it=E2=80=99s worth weighting=
+ the
+> > options.
+> >
+> > Define a whole new set of privilege bits.  As a
+> > poorly-painted-bikeshed option, I=E2=80=99ll call them eprivs (for expo=
+sure
+> > privileges - it=E2=80=99s a crappy name but at least it=E2=80=99s prono=
+unceable).
+>
+> I played with a mechanism I called "chits" (all the good terms for securi=
+ty
+> bits have been consumed for a very long time) that looks a lot like
+> what you're proposing. I did it to address the CAP_SYS_ADMIN problem,
+> where any use of the capability opens up a whole barrel of worms.
+> I cannot, unfortunately, find my patches. :( The basic approach is:
+>
+> A process has an optional set of chits. A process without a chit set is
+> unaffected by the mechanism. A process with a chit set is allowed only
+> those operations for which it has a chit. The existing but empty chit set
+> allows no operations. A process may drop a chit, but not the set, which,
+> again, can be empty.
+>
+> Because I was after CAP_SYS_ADMIN, I envisioned a call
+>         cap_able_chit(capability, chit-list)
+> but there's no reason there couldn't be a
+>         chit_able(chit-list)
+> as well.
 
-That is a problem for hierarchies that give a workload a HugeTLB budget of
-its own. Kubernetes is one [7]. A pod requests huge pages as a resource
-that is separate from memory and comes from a preallocated pool. The
-kubelet turns the request into hugetlb.<size>.max, and sets memory.max
-from the memory limit of the pod alone. With the option on, a pod with
-memory.max=96M and hugetlb.2MB.max=64M that uses 64M of huge pages and 80M
-of other memory exceeds memory.max: it is OOM-killed, or gets SIGBUS when
-it faults a huge page. Raising memory.max by the HugeTLB limit does not
-restore the old behaviour either, because the pod can then use 160M of
-non-HugeTLB memory while the scheduler placed it for 96M.
+This is quite pronounceable, but I'm not sure I could submit a
+patchset with a chitlist with a straight face :)
 
-The accounting was made opt-in because such setups exist [1][2]. But the
-choice is made once per machine, by whoever mounts cgroup v2, and systemd
-mounts it with the option since v259 [3]. A workload manager that runs
-under that systemd cannot keep the separate accounting for the part of the
-hierarchy that it owns. That a mixed machine would need a more localized
-control was raised when the option was added, and deferred until it came
-up [4][5][6].
+I feel like, in our brave new world, much of the work here is defining
+the interface and how it should work, and our little AI interns have
+gotten quite good at actually writing the code.  So my grand plan is
+to let people contemplate it until next week (i.e. after the
+Thanksgiving holiday) before actually producing any code here.
 
-Add memory.hugetlb_accounting, a file on non-root cgroups that defaults to
-1. Writing 0 keeps HugeTLB folios used by the cgroup and its descendants
-out of their memory accounting. The folios do not become unaccounted: they
-are charged to the parent of the cgroup, or to the parent of the topmost
-ancestor that opted out. Charging the parent, instead of skipping the
-charge, has two effects:
+I was imagining something like:
 
- - The cgroups above keep the complete picture that the mount option
-   gives them, up to the root, whose memory.stat still counts the folios.
+prctl(PR_EPRIVS_AND, mask1, mask2, mask3, mask4);
 
- - A cgroup cannot use the file to escape a limit of an ancestor, so
-   writing it needs no privilege beyond the permissions of the file.
+(i.e. define the things to be 64 * 4 bits max until we add a new
+prctl, which will hopefully be along time.)  And to maybe make mask4
+be specifically arch-dependent bits, because I think EPRIV_X86_LDT
+would be an excellent addition.  (I say this with some chagrin because
+I fixed some gnarly vulns quite a while ago in modify_ldt, and I
+missed smp_mb(), and someone rooted it.)
 
-The file is not delegatable. Like memory.max, it is a setting that a
-parent makes for its child; a delegatee could otherwise move the HugeTLB
-usage of its own cgroup out of the limit that the delegator put on it.
+>
+> I wrote this as an LSM, but the system-wide aspect of it made that
+> a questionable choice.
 
-Folios keep the charge that they got when they were allocated. A change of
-the file only affects folios allocated afterwards, in the same way as a
-remount with or without the mount option.
+I'm thinking not an LSM.  The goal would be to make it available everywhere=
+.
 
-Extend the hugetlb memcg selftest to check, in a three-level hierarchy,
-that the usage is charged to the parent of the topmost cgroup that opted
-out, that a descendant cannot opt back in, and that the root counts the
-pages in every case.
+(If you missed the other thread, I'm also imagining adding
+CLONE_NO_NNP, only allowed with CLONE_NEWUSER, which would *clear*
+no_new_privs.  LSM would have a chance to veto this, but the default
+behavior would be to allow it.  This would allow running an entire
+system with no_new_privs set for all normal tasks including PID1 while
+still running conventional distros in containers.)
 
-Link: https://lore.kernel.org/all/CAPTztWY8eDSa1qKx35hTm5ef+e13SDnRHDrevc-1V1v7-pEP3w@mail.gmail.com/ [1]
-Link: https://lore.kernel.org/all/ZRQQMABiVIcXXcrg@dhcp22.suse.cz/ [2]
-Link: https://github.com/systemd/systemd/pull/39486 [3]
-Link: https://lore.kernel.org/all/ZRrI90KcRBwVZn%2Fr@dhcp22.suse.cz/ [4]
-Link: https://lore.kernel.org/all/20231002162133.GC5054@cmpxchg.org/ [5]
-Link: https://lore.kernel.org/all/CAKEwX=OwrMNMAvve9a965mBJm8as+njtXE993VcnKXdccd5GEw@mail.gmail.com/ [6]
-Link: https://github.com/kubernetes/kubernetes/issues/144131#issuecomment-7104174643 [7]
-Signed-off-by: Harshal Patil <harpatil@redhat.com>
----
-Hi,
+>
+> If you have any interest, I could dig more deeply to try to find the
+> patches. Otherwise, I'm happy to look at what you come up with.
+>
+> >
+> > An epriv is not permission to do something *to* an object; it=E2=80=99s
+> > permission to do something that exposes a meaningful attack surface
+> > within the kernel. So there=E2=80=99s no ns_has_epriv because there is =
+no
+> > object.  These are kind of the opposite of object capabilities.
+> > Additionally, an epriv never grants the ability to do something that
+> > one couldn=E2=80=99t do in an epriv-less world.
+> >
+> > For now, all tasks have all eprivs, even not-yet-defined ones, unless
+> > user code or config explicitly changes this.  (Maybe some day secure
+> > boot might remove certain eprivs.)
+> >
+> > There should never be a check like ns_capable || has_epriv. It=E2=80=99=
+s also
+> > &&, or perhaps caps are not checked at all.
+> >
+> > Example eprivs include:
+> >
+> > EPRIV_FSOPEN_VIRT: may fsconfig, fsopen, etc a virtual fs like fuse or
+> > tmpfs or overlayfs.
+> >
+> > EPRIV_CLONE_TREE: may clone a mount tree
+> >
+> > EPRIV_MOVE_MOUNT: may move mounts around (but only if you also have
+> > CAP_SYS_ADMIN on the correct namespace, of course)
+> >
+> > EPRIV_FIREWALL_TC: may configure any firewalling configuration or tc
+> > configuration (this includes iptables, nftables, and ebtables)
+> >
+> > EPRIV_NET_RAW: may use raw/packet sockets (like CAP_NET_RAW)
+> >
+> > EPRIV_TUNTAP: may create and attach to tun/tap interfaces
+> >
+> > EPRIV_IP_LOOPBACK: may set up IPv4 and IPv6 loopback using whatever
+> > new facility we add
+> >
+> > EPRIV_NETLINK: may use netlink at all
+> >
+> > EPRIV_NET_ADMIN: may use traditional CAP_NET_ADMIN abilities (all
+> > CAP_NET_ADMIN checks will also check EPRIV_NET_ADMIN)
+> >
+> > EPRIV_OPEN_FILE_HANDLE: May use open_by_handle_at, etc.
+> >
+> > EPRIV_UNSHARE_USERNS: may unshare userns
+> >
+> > EPRIV_UNSHARE_NONUSERNS: may unshare any other namespace
+> >
+> > EPRIV_MOUNT_CGROUPv1, EPRIV_MOUNT_CGROUPv2: may create a new mount of
+> > these subsystems
+> >
+> > EPRIV_PTRACE: there are lots of different variations that might make se=
+nse.
+> >
+> > EPRIV_MOUNT_PROC_PIDONLY: may mount proc-pidonly
+> >
+> > EPRIV_MOUNT_PROC_NOTPIDONLY: may mount proc not-pidonly
+> >
+> > EPRIV_MOUNT_SYSFS: may mount sysfs
+> >
+> > Example eprivs that are questionable:
+> >
+> > EPRIV_DMESG: the kernel log is a specific object, and I think it's
+> > better to control access using something kernel-log-specific.
+> >
+> >
+> >
+> > There is no operation that increases eprivs -- even without
+> > no_new_privs set, a task will never gain an epriv, nor will a child
+> > ever have an epriv that its creator did not have at the time the child
+> > was created.
+> >
+> > The evolution rules could be as simple as, on fork/clone, the child
+> > inheriting exactly the parent's eprivs.
+> >
+> > Or we could bind eprivs to a userns instead of a task, but that could
+> > be more limiting and awkward than we want.
+> >
+> >
+> > What do you all think?
+> >
+> >
+> > FWIW, I had an LLM make an inventory (surely not exhaustive) of
+> > recent-ish CVEs and how they relate to this list.  (The below is the
+> > only part of this email that is LLM-generated, although I added
+> > EPRIV_SYSFS because I didn't realize that nonroot userns could mount
+> > it until I asked an LLM, sigh.)  To me, the list and its breakdown
+> > suggests that there is quite a lot of room for meaningful attack
+> > surface reductions while still leaving large parts of userns
+> > available, and that my epriv proposal captures much of this but the
+> > cap_userns proposal may be too coarse-grained.
+> >
+> > (I also asked about eBPF, and my LLM came up with a lot of CVEs, but
+> > there's an existing BPF token mechanism and I therefore did not
+> > propose EPRIV_LOAD_EBPF.)
+> >
+> > --- begin LLM output ---
+> >
+> > **EPRIV_FSOPEN_VIRT:** CVE-2022-0185*, CVE-2023-0386*, CVE-2023-2640*,
+> > CVE-2023-32629*, CVE-2025-38499*
+> >
+> > **EPRIV_CLONE_TREE:** CVE-2025-38499* (only if the check also covers
+> > the relevant internal mount-cloning path; explicit `open_tree()`
+> > restrictions alone are insufficient)
+> >
+> > **EPRIV_MOVE_MOUNT:** CVE-2025-37988
+> >
+> > **EPRIV_FIREWALL_TC:** CVE-2022-25636, CVE-2022-1015, CVE-2022-1016,
+> > CVE-2022-32250, CVE-2022-34918, CVE-2022-48911*, CVE-2022-2588,
+> > CVE-2023-32233, CVE-2023-35001, CVE-2023-4004, CVE-2023-4015,
+> > CVE-2023-4244, CVE-2023-5197, CVE-2023-6817, CVE-2023-3609,
+> > CVE-2023-4623, CVE-2023-4921, CVE-2024-1086, CVE-2024-0607,
+> > CVE-2024-27397, CVE-2024-26925, CVE-2025-38001, CVE-2026-23111
+> >
+> > **EPRIV_NET_RAW:** None identified.
+> >
+> > **EPRIV_TUNTAP:** None identified as requiring TUN/TAP. Some
+> > packet-triggered exploits may optionally use it, but that does not
+> > establish it as a necessary blocker.
+> >
+> > **EPRIV_IP_LOOPBACK:** None identified.
+> >
+> > **EPRIV_NETLINK:** Also those blocked by `EPRIV_FIREWALL_TC`, insofar
+> > as the documented attack paths use netlink. No additional CVEs
+> > identified.
+> >
+> > **EPRIV_NET_ADMIN:** Also those blocked by `EPRIV_FIREWALL_TC`,
+> > insofar as the vulnerable operations require `CAP_NET_ADMIN`. No
+> > additional CVEs identified.
+> >
+> > **EPRIV_OPEN_FILE_HANDLE:** CVE-2025-38306*
+> >
+> > **EPRIV_UNSHARE_USERNS:** Also those blocked by `EPRIV_FSOPEN_VIRT`,
+> > `EPRIV_MOVE_MOUNT`, `EPRIV_FIREWALL_TC`, `EPRIV_OPEN_FILE_HANDLE`,
+> > `EPRIV_MOUNT_CGROUPv1`, and `EPRIV_MOUNT_SYSFS`, plus CVE-2025-38058*.
+> > More generally, blocks the documented unprivileged user-namespace
+> > setup for the entire inventory when no usable user namespace already
+> > exists.
+> >
+> > **EPRIV_UNSHARE_NONUSERNS:** Also the namespace-dependent attack paths
+> > blocked by `EPRIV_FIREWALL_TC`, `EPRIV_MOVE_MOUNT`,
+> > `EPRIV_MOUNT_CGROUPv1`, `EPRIV_MOUNT_SYSFS`, and many of those blocked
+> > by `EPRIV_FSOPEN_VIRT`. Coverage depends on whether the necessary
+> > non-user namespaces already exist.
+> >
+> > **EPRIV_MOUNT_CGROUPv1:** CVE-2022-0492*
+> >
+> > **EPRIV_MOUNT_CGROUPv2:** None identified.
+> >
+> > **EPRIV_PTRACE:** None identified.
+> >
+> > **EPRIV_LOAD_EBPF:** None identified.
+> >
+> > **EPRIV_MOUNT_PROC_PIDONLY:** None identified.
+> >
+> > **EPRIV_MOUNT_PROC_NOTPIDONLY:** None identified.
+> >
+> > **EPRIV_MOUNT_SYSFS:** CVE-2025-22089*
+> >
+> > CVEs not cleanly blocked by an operation-specific bit
+> > Excluding the two EPRIV_UNSHARE_* gates:
+> >
+> > - CVE-2025-38058: No explicit unmount privilege. The vulnerable race
+> > involves umount(2) and path lookup.
+> >
+> > - CVE-2022-0492: The cgroup-v1 mount bit covers the documented
+> > new-mount attack path, but not necessarily configuration of
+> > release_agent on an existing writable hierarchy.
+> >
+> > - CVE-2025-38499: The correct gate depends on which filesystem-context
+> > or internal cloning operation reaches clone_private_mnt(). I would not
+> > count EPRIV_CLONE_TREE as a definitive blocker without checking the
+> > exact call paths.
 
-When memory_hugetlb_accounting was added, Michal asked what would happen
-on a machine that runs a mixed bag of containers, some of them not ready
-for the new accounting [4]. Johannes and Nhat said that more localized
-control could be added on top of the global flag if it ever came up
-[5][6]. I think it has now, in Kubernetes [7], and this is my attempt at
-that control. I would like to hear whether it is the right shape before
-I take it any further.
 
-Some background on how we got here. I work on Kubernetes. Huge pages are
-a separate resource for us: they come from a preallocated pool, a pod
-asks for them next to its memory, and we set memory.max from the memory
-limit alone and hugetlb.<size>.max from the hugepage limit. That is the
-kind of setup the option was made opt-in for [1][2], and we never opted
-in. But systemd v259 started to pass memory_hugetlb_accounting whenever
-the kernel supports it, with no way to leave it out [3], and Ubuntu 26.04
-ships that version. So our users got the new accounting with a distro
-upgrade.
 
-For example, for a pod that asks for 96M of memory and 64M of huge pages,
-Kubernetes sets memory.max=96M and hugetlb.2MB.max=64M. With the option
-on, that pod is OOM-killed when it uses its 64M of huge pages and then
-80M of anonymous memory, and in the other order it gets SIGBUS on the
-huge pages. Both run fine with the option off. I wrote up this and the
-other cases, with the tests behind them, in [8].
-
-I first looked for a way to deal with this in Kubernetes, and tried a few
-things with the same workloads.
-
-The obvious one is to set memory.max to the memory limit plus the
-hugepage limit. The pod above then runs, but its memory limit no longer
-limits memory: with no huge pages in use it ran with 152M of anonymous
-memory under a 96M limit. That changes what the limit means for every
-existing pod.
-
-Adjusting memory.max as the HugeTLB usage changes does not work either.
-Even with a 50ms poll, anonymous memory allocated right after the huge
-pages still hits the old limit. This is the polling scheme that Nhat's
-cover letter for the mount option describes as "cumbersome and buggy"
-[9].
-
-Raising the limit and having a userspace agent enforce the real one
-works for pods that stay within their memory, but one that does not can
-stay over its limit for a whole poll interval.
-
-Remounting cgroup v2 without the option works, and it is what we will
-document for now. But it is machine wide, and it takes the accounting
-away from everything else on the machine too.
-
-So I could not find anything in userspace that gives a pod back a limit
-on just its non-HugeTLB memory, and that is what existing pods are sized
-for.
-
-With this patch Kubernetes would write 0 to the cgroup that holds all
-pods, and to the cgroups of host services that it puts a memory limit
-on. The rest of the machine keeps the accounting that the mount option
-asked for, and the root still counts every huge page.
-
-The patch, the tests and this text were developed with an AI coding
-assistant (Claude). I have reviewed them and ran the tests.
-
-[1] https://lore.kernel.org/all/CAPTztWY8eDSa1qKx35hTm5ef+e13SDnRHDrevc-1V1v7-pEP3w@mail.gmail.com/
-[2] https://lore.kernel.org/all/ZRQQMABiVIcXXcrg@dhcp22.suse.cz/
-[3] https://github.com/systemd/systemd/pull/39486
-[4] https://lore.kernel.org/all/ZRrI90KcRBwVZn%2Fr@dhcp22.suse.cz/
-[5] https://lore.kernel.org/all/20231002162133.GC5054@cmpxchg.org/
-[6] https://lore.kernel.org/all/CAKEwX=OwrMNMAvve9a965mBJm8as+njtXE993VcnKXdccd5GEw@mail.gmail.com/
-[7] https://github.com/kubernetes/kubernetes/issues/144131#issuecomment-7104174643
-[8] https://harche.github.io/2026/11/23/notes-on-kubernetes-issue-144131-hugepages.html
-[9] https://lore.kernel.org/all/20231006184629.155543-1-nphamcs@gmail.com/
-
- Documentation/admin-guide/cgroup-v2.rst       |  44 ++++
- include/linux/memcontrol.h                    |   9 +
- mm/memcontrol.c                               |  78 ++++++-
- .../selftests/cgroup/test_hugetlb_memcg.c     | 210 +++++++++++++++++-
- 4 files changed, 335 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 9e3c67b02..461d041e1 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -245,6 +245,8 @@ cgroup v2 currently supports the following mount options.
-         * HugeTLB pages utilized while this option is not selected
-           will not be tracked by the memory controller (even if cgroup
-           v2 is remounted later on).
-+        * A cgroup can be exempted, together with its descendants, by
-+          writing "0" to its memory.hugetlb_accounting file.
- 
-   pids_localevents
-         The option restores v1-like behavior of pids.events:max, that is only
-@@ -1478,6 +1480,45 @@ The following nested keys are defined.
- 	current memory usage for subsequent reads through the same
- 	file descriptor.
- 
-+  memory.hugetlb_accounting
-+	A read-write single value file which exists on non-root
-+	cgroups.  The default value is "1".
-+
-+	Determines whether HugeTLB memory used by the cgroup and its
-+	descendants is charged to them. The file only has an effect
-+	if cgroup v2 is mounted with the memory_hugetlb_accounting
-+	option.
-+
-+	If set to "0", HugeTLB memory used by the cgroup or by any of
-+	its descendants is charged to the parent of the cgroup
-+	instead. If several cgroups on the path to the root have the
-+	file set to "0", it is the parent of the topmost one. The
-+	cgroups above therefore keep accounting for the memory, and
-+	the file cannot be used to escape their limits. A descendant
-+	cannot turn the accounting back on for itself.
-+
-+	This is meant for hierarchies where a workload manager gives
-+	its workloads a HugeTLB budget of their own, with the HugeTLB
-+	controller, next to a memory.max that covers only their other
-+	memory. Without the exemption such a workload reaches its
-+	memory.max as soon as it uses its huge pages.
-+
-+	HugeTLB folios that are allocated while a cgroup is exempt do
-+	not show up in its memory.current, nor in the "hugetlb" entry
-+	of its memory.stat, but in those of the cgroup that is charged
-+	for them. A HugeTLB fault in an exempt cgroup still results in
-+	SIGBUS if the cgroup that is charged, or one above it, is at
-+	its memory.max and reclaim fails. The failure is counted in the
-+	memory.events of the cgroup whose limit was hit and of its
-+	ancestors, not in those of the exempt cgroup.
-+
-+	Like the limits of a cgroup, the file is meant to be written
-+	by the parent, and is not delegatable.
-+
-+	HugeTLB folios keep the accounting that they got when they
-+	were allocated. A change of the file only affects folios that
-+	are allocated afterwards.
-+
-   memory.oom.group
- 	A read-write single value file which exists on non-root
- 	cgroups.  The default value is "0".
-@@ -1815,6 +1856,9 @@ The following nested keys are defined.
- 		Amount of memory used by hugetlb pages. This metric only shows
- 		up if hugetlb usage is accounted for in memory.current (i.e.
- 		cgroup is mounted with the memory_hugetlb_accounting option).
-+		HugeTLB memory of cgroups that are exempt through
-+		memory.hugetlb_accounting is reported in the cgroup that
-+		is charged for it.
- 
-   memory.numa_stat
- 	A read-only nested-keyed file which exists on non-root cgroups.
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 980358bc6..bcb6e74af 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -342,6 +342,15 @@ struct mem_cgroup {
- 	 */
- 	bool oom_group;
- 
-+#ifdef CONFIG_HUGETLB_PAGE
-+	/*
-+	 * Charge HugeTLB folios used by this memcg and its descendants to
-+	 * them? If not, the folios are charged to the parent of this memcg.
-+	 * Only relevant with the memory_hugetlb_accounting mount option.
-+	 */
-+	bool hugetlb_accounting;
-+#endif
-+
- #ifdef CONFIG_ZSWAP
- 	/*
- 	 * Prevent pages from this memcg from being written back from zswap to
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 091401cec..24e35d02e 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1738,11 +1738,37 @@ static bool memcg_accounts_hugetlb(void)
- {
- 	return cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING;
- }
-+
-+/*
-+ * A cgroup can keep HugeTLB folios out of its own memory accounting, and out
-+ * of that of its descendants, with memory.hugetlb_accounting. Such folios are
-+ * charged to the parent of the topmost cgroup that opted out. That way the
-+ * cgroups above still account for the memory, and the file cannot be used to
-+ * escape their limits.
-+ *
-+ * The root cgroup has no such file, so there always is a parent to return.
-+ */
-+static struct mem_cgroup *hugetlb_charge_target(struct mem_cgroup *memcg)
-+{
-+	struct mem_cgroup *target = memcg;
-+
-+	for (; memcg; memcg = parent_mem_cgroup(memcg)) {
-+		if (!READ_ONCE(memcg->hugetlb_accounting))
-+			target = parent_mem_cgroup(memcg);
-+	}
-+
-+	return target;
-+}
- #else /* CONFIG_HUGETLB_PAGE */
- static bool memcg_accounts_hugetlb(void)
- {
- 	return false;
- }
-+
-+static struct mem_cgroup *hugetlb_charge_target(struct mem_cgroup *memcg)
-+{
-+	return memcg;
-+}
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- static void memcg_stat_format(struct mem_cgroup *memcg, struct seq_buf *s)
-@@ -4370,6 +4396,9 @@ mem_cgroup_css_alloc(struct cgroup_subsys_state *parent_css)
- 		return ERR_CAST(memcg);
- 
- 	page_counter_set_high(&memcg->memory, PAGE_COUNTER_MAX);
-+#ifdef CONFIG_HUGETLB_PAGE
-+	WRITE_ONCE(memcg->hugetlb_accounting, true);
-+#endif
- #ifdef CONFIG_ZSWAP
- 	memcg->zswap_max = PAGE_COUNTER_MAX;
- 	WRITE_ONCE(memcg->zswap_writeback, true);
-@@ -4568,6 +4597,9 @@ static void mem_cgroup_css_reset(struct cgroup_subsys_state *css)
- 	page_counter_set_max(&memcg->memory, PAGE_COUNTER_MAX);
- 	page_counter_set_max(&memcg->swap, PAGE_COUNTER_MAX);
- 	WRITE_ONCE(memcg->oom_group, false);
-+#ifdef CONFIG_HUGETLB_PAGE
-+	WRITE_ONCE(memcg->hugetlb_accounting, true);
-+#endif
- #ifdef CONFIG_ZSWAP
- 	WRITE_ONCE(memcg->zswap_max, PAGE_COUNTER_MAX);
- 	WRITE_ONCE(memcg->zswap_writeback, true);
-@@ -5221,6 +5253,36 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
- 	return nbytes;
- }
- 
-+#ifdef CONFIG_HUGETLB_PAGE
-+static int memory_hugetlb_accounting_show(struct seq_file *m, void *v)
-+{
-+	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
-+
-+	seq_printf(m, "%d\n", READ_ONCE(memcg->hugetlb_accounting));
-+
-+	return 0;
-+}
-+
-+static ssize_t memory_hugetlb_accounting_write(struct kernfs_open_file *of,
-+					       char *buf, size_t nbytes,
-+					       loff_t off)
-+{
-+	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-+	int ret, hugetlb_accounting;
-+
-+	ret = kstrtoint(strstrip(buf), 0, &hugetlb_accounting);
-+	if (ret)
-+		return ret;
-+
-+	if (hugetlb_accounting != 0 && hugetlb_accounting != 1)
-+		return -EINVAL;
-+
-+	WRITE_ONCE(memcg->hugetlb_accounting, hugetlb_accounting);
-+
-+	return nbytes;
-+}
-+#endif /* CONFIG_HUGETLB_PAGE */
-+
- static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
- 			      size_t nbytes, loff_t off)
- {
-@@ -5300,6 +5362,14 @@ static struct cftype memory_files[] = {
- 		.seq_show = memory_oom_group_show,
- 		.write = memory_oom_group_write,
- 	},
-+#ifdef CONFIG_HUGETLB_PAGE
-+	{
-+		.name = "hugetlb_accounting",
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+		.seq_show = memory_hugetlb_accounting_show,
-+		.write = memory_hugetlb_accounting_write,
-+	},
-+#endif
- 	{
- 		.name = "reclaim",
- 		.flags = CFTYPE_NS_DELEGATABLE,
-@@ -5436,7 +5506,10 @@ int __mem_cgroup_charge(struct folio *folio, struct mm_struct *mm, gfp_t gfp)
-  * already been obtained and charged to the appropriate hugetlb cgroup
-  * controller (if it is enabled).
-  *
-- * Returns ENOMEM if the memcg is already full.
-+ * The folio is charged to the memcg of @mm, or to one of its ancestors if
-+ * that memcg is exempt through memory.hugetlb_accounting.
-+ *
-+ * Returns ENOMEM if the memcg that is charged is already full.
-  * Returns 0 if either the charge was successful, or if we skip the charging.
-  */
- int mem_cgroup_charge_hugetlb(struct folio *folio, struct mm_struct *mm,
-@@ -5450,7 +5523,8 @@ int mem_cgroup_charge_hugetlb(struct folio *folio, struct mm_struct *mm,
- 		!memcg || !cgroup_subsys_on_dfl(memory_cgrp_subsys))
- 		goto out;
- 
--	if (charge_memcg(folio, memcg, gfp))
-+	/* The ancestors of memcg are pinned by the reference we hold on it. */
-+	if (charge_memcg(folio, hugetlb_charge_target(memcg), gfp))
- 		ret = -ENOMEM;
- 
- out:
-diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-index 8c5aced81..54e34ee79 100644
---- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-+++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-@@ -17,12 +17,12 @@
- #define PROTECTION (PROT_READ | PROT_WRITE)
- 
- /* borrowed from mm/hmm-tests.c */
--static long get_hugepage_size(void)
-+static long get_meminfo(const char *tag)
- {
- 	int fd;
- 	char buf[2048];
- 	int len;
--	char *p, *q, *path = "/proc/meminfo", *tag = "Hugepagesize:";
-+	char *p, *q, *path = "/proc/meminfo";
- 	long val;
- 
- 	fd = open(path, O_RDONLY);
-@@ -53,7 +53,7 @@ static long get_hugepage_size(void)
- 		p = buf;
- 
- 	val = strtol(p, &q, 0);
--	if (*q != ' ') {
-+	if (*q != ' ' && *q != '\n') {
- 		/* Error parsing the file */
- 		return -1;
- 	}
-@@ -61,6 +61,11 @@ static long get_hugepage_size(void)
- 	return val;
- }
- 
-+static long get_hugepage_size(void)
-+{
-+	return get_meminfo("Hugepagesize:");
-+}
-+
- static int set_file(const char *path, long value)
- {
- 	FILE *file;
-@@ -196,13 +201,197 @@ static int test_hugetlb_memcg(char *root)
- 	return ret;
- }
- 
-+struct opt_out_args {
-+	const char *root;
-+	const char *child;
-+	const char *parent;
-+	const char *grandparent;
-+	bool parent_charged;
-+	bool grandparent_charged;
-+};
-+
-+static bool opt_out_charged(const char *name, long delta, bool charged)
-+{
-+	if (charged && values_close(MB(8), delta, 10))
-+		return true;
-+	if (!charged && delta < MB(2))
-+		return true;
-+
-+	ksft_print_msg("hugetlb usage should%s be charged to the %s.\n",
-+		       charged ? "" : " not", name);
-+	ksft_print_msg("%s memory increased by %ld\n", name, delta);
-+	return false;
-+}
-+
-+static long root_hugetlb(const char *root)
-+{
-+	return cg_read_key_long(root, "memory.stat", "hugetlb ");
-+}
-+
-+/*
-+ * Use 4 hugepages in the child. They must never be charged to the child, and
-+ * be charged to the parent and the grandparent as the caller expects.
-+ * memory.current is hierarchical, so a charge to the parent also shows up in
-+ * the grandparent. Wherever the charge lands, the root must count the pages.
-+ */
-+static int hugetlb_opt_out_program(const char *cgroup, void *arg)
-+{
-+	struct opt_out_args *args = arg;
-+	long root, child, parent, grandparent, cur;
-+	int ret = EXIT_FAILURE;
-+	void *addr;
-+
-+	root = root_hugetlb(args->root);
-+	child = cg_read_long(args->child, "memory.current");
-+	parent = cg_read_long(args->parent, "memory.current");
-+	grandparent = cg_read_long(args->grandparent, "memory.current");
-+	if (root < 0 || child < 0 || parent < 0 || grandparent < 0) {
-+		ksft_print_msg("fail to read the memory usage.\n");
-+		return EXIT_FAILURE;
-+	}
-+
-+	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, 0, 0);
-+	if (addr == MAP_FAILED) {
-+		ksft_print_msg("fail to mmap.\n");
-+		return EXIT_FAILURE;
-+	}
-+	write_data(addr);
-+
-+	cur = cg_read_long(args->child, "memory.current");
-+	if (cur < 0 || !opt_out_charged("child", cur - child, false))
-+		goto out;
-+
-+	cur = cg_read_long(args->parent, "memory.current");
-+	if (cur < 0 ||
-+	    !opt_out_charged("parent", cur - parent, args->parent_charged))
-+		goto out;
-+
-+	cur = cg_read_long(args->grandparent, "memory.current");
-+	if (cur < 0 || !opt_out_charged("grandparent", cur - grandparent,
-+					args->grandparent_charged))
-+		goto out;
-+
-+	/* memory.stat is flushed lazily, give the root time to catch up */
-+	cur = cg_read_key_long_poll(args->root, "memory.stat", "hugetlb ",
-+				    root + LENGTH, 30, DEFAULT_WAIT_INTERVAL_US);
-+	if (cur < 0 || !opt_out_charged("root", cur - root, true))
-+		goto out;
-+
-+	munmap(addr, LENGTH);
-+	cur = cg_read_long(args->grandparent, "memory.current");
-+	if (cur < 0 || cur - grandparent >= MB(2)) {
-+		ksft_print_msg("memory usage should go back down.\n");
-+		ksft_print_msg("grandparent memory is now %ld, was %ld\n",
-+			       cur, grandparent);
-+		return ret;
-+	}
-+
-+	return EXIT_SUCCESS;
-+
-+out:
-+	munmap(addr, LENGTH);
-+	return ret;
-+}
-+
-+static int test_hugetlb_memcg_opt_out(char *root)
-+{
-+	char *grandparent, *parent = NULL, *child = NULL;
-+	struct opt_out_args args;
-+	int ret = KSFT_FAIL;
-+
-+	grandparent = cg_name(root, "hugetlb_memcg_grandparent");
-+	if (!grandparent || cg_create(grandparent)) {
-+		ksft_print_msg("fail to create cgroup.\n");
-+		goto out;
-+	}
-+
-+	if (cg_write(grandparent, "cgroup.subtree_control", "+memory")) {
-+		ksft_print_msg("fail to enable the memory controller.\n");
-+		goto out;
-+	}
-+
-+	parent = cg_name(grandparent, "parent");
-+	if (!parent || cg_create(parent)) {
-+		ksft_print_msg("fail to create cgroup.\n");
-+		goto out;
-+	}
-+
-+	if (cg_write(parent, "cgroup.subtree_control", "+memory")) {
-+		ksft_print_msg("fail to enable the memory controller.\n");
-+		goto out;
-+	}
-+
-+	child = cg_name(parent, "child");
-+	if (!child || cg_create(child)) {
-+		ksft_print_msg("fail to create cgroup.\n");
-+		goto out;
-+	}
-+
-+	if (cg_read_long(child, "memory.hugetlb_accounting") < 0) {
-+		ret = KSFT_SKIP;
-+		goto out;
-+	}
-+
-+	set_nr_hugepages(20);
-+	if (get_meminfo("HugePages_Free:") < 4) {
-+		ksft_print_msg("not enough free hugepages.\n");
-+		ret = KSFT_SKIP;
-+		goto out;
-+	}
-+
-+	args.root = root;
-+	args.child = child;
-+	args.parent = parent;
-+	args.grandparent = grandparent;
-+
-+	/* The child opts out: its hugetlb usage is charged to the parent. */
-+	if (cg_write(child, "memory.hugetlb_accounting", "0"))
-+		goto out;
-+	args.parent_charged = true;
-+	args.grandparent_charged = true;
-+	if (cg_run(child, hugetlb_opt_out_program, &args))
-+		goto out;
-+
-+	/* The parent opts out too: the grandparent is charged, not the parent. */
-+	if (cg_write(parent, "memory.hugetlb_accounting", "0"))
-+		goto out;
-+	args.parent_charged = false;
-+	if (cg_run(child, hugetlb_opt_out_program, &args))
-+		goto out;
-+
-+	/* The child cannot turn the accounting back on for itself. */
-+	if (cg_write(child, "memory.hugetlb_accounting", "1"))
-+		goto out;
-+	if (cg_run(child, hugetlb_opt_out_program, &args))
-+		goto out;
-+
-+	/* The grandparent opts out as well: only the root counts the pages. */
-+	if (cg_write(grandparent, "memory.hugetlb_accounting", "0"))
-+		goto out;
-+	args.grandparent_charged = false;
-+	if (cg_run(child, hugetlb_opt_out_program, &args))
-+		goto out;
-+
-+	ret = KSFT_PASS;
-+out:
-+	if (child)
-+		cg_destroy(child);
-+	if (parent)
-+		cg_destroy(parent);
-+	cg_destroy(grandparent);
-+	free(child);
-+	free(parent);
-+	free(grandparent);
-+	return ret;
-+}
-+
- int main(int argc, char **argv)
- {
- 	char root[PATH_MAX];
- 	int has_memory_hugetlb_acc;
- 
- 	ksft_print_header();
--	ksft_set_plan(1);
-+	ksft_set_plan(2);
- 
- 	has_memory_hugetlb_acc = proc_mount_contains("memory_hugetlb_accounting");
- 	if (has_memory_hugetlb_acc < 0)
-@@ -214,6 +403,7 @@ int main(int argc, char **argv)
- 	if (get_hugepage_size() != 2048) {
- 		ksft_print_msg("test_hugetlb_memcg requires 2MB hugepages\n");
- 		ksft_test_result_skip("test_hugetlb_memcg\n");
-+		ksft_test_result_skip("test_hugetlb_memcg_opt_out\n");
- 		ksft_finished();
- 	}
- 
-@@ -240,5 +430,17 @@ int main(int argc, char **argv)
- 		break;
- 	}
- 
-+	switch (test_hugetlb_memcg_opt_out(root)) {
-+	case KSFT_PASS:
-+		ksft_test_result_pass("test_hugetlb_memcg_opt_out\n");
-+		break;
-+	case KSFT_SKIP:
-+		ksft_test_result_skip("test_hugetlb_memcg_opt_out\n");
-+		break;
-+	default:
-+		ksft_test_result_fail("test_hugetlb_memcg_opt_out\n");
-+		break;
-+	}
-+
- 	ksft_finished();
- }
-
-base-commit: 15f114dac9a7bde1796f0e54e22726fd31cfa8a5
--- 
-2.54.0 (Apple Git-157)
-
+--=20
+Andy Lutomirski
+AMA Capital Management, LLC
