@@ -1,50 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=57.103.84.194
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=57.103.84.231
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795534663;
-	b=nmysj21qN4s48mT5+8bKOLQaSTZpVK9YAbbF/G4nKjI2P45f4+pT2n7BWKiUhrJHjqC7
-	 TexcvdHectlUIReVLE3AUZvcY5Kqq8wv0DrSmV0kRO91QZ2+l81UTnz9hmSq7yHZGRe1q
-	 VFWCM3KCXAyme1nIvxCTzXyjVl8wPM3/ESRv+wOPTjd+Ww8oNov5cI7AqlBKNOfNCtuf+
-	 vQBXhwtOEw+JlQvFdEjGwHxMos04P8LCv9ZspD4BwfjiQ2Nv0wdBTycMTRQwUXzwt8ZQW
-	 yFSmjWQn3G2R9jxULB/IYSo6hf949TVr2VImYurtjhi3nFZgfeizbmDqv8Nqxx3/6+Q==
+	t=1795534665;
+	b=hwzJcAHkWDHB+JBoJjWbCzzz1rv1o7TGuTA5FDLT+pa8STmu3rlshctKzfIvQggamNKV
+	 jKN/rZ4VZ7xkE9o5pI1PprWlrsH3N0NV5XpZaPWAlCMRgEVDl7p2oDC23lPhLuT5LOnak
+	 zjPOxjUVir+zLqOHMR4t+qfn7Quj2MOsd/jkuC8sBGKUK6V8fUDbs0TfZ3EB01uZZGgxc
+	 qf1c0ig6Y1jp4NRX+TqjPYoUbmnYvv75LkyKZ6i0C8OYartsHnNviuJb7zZ6yYiSSGNUV
+	 jK5zxVlC0dIFSlQ491k08/FdEcHzG9bhLrJVINLDnDtppGl6kNddtvYoUWWpjdecZiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795534663;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795534665;
 	h=DMARC-Filter:Received:X-ICL-RepId:Dkim-Signature:
 	 mail-alias-created-date:Received:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
-	 X-Authority-Info-Out:X-JNJ;
-	bh=a4/TKQ+wKHrlBE/R2BQwO1pp5Mk2i+jmrSZqyGVPftI=;
-	b=oMqPpz+0D71AFHawaTvcIHECdPEJs45aTMOzzNyAGcttE5krcvmU3CuGQ/LW4V8vNfXP
-	 tZCJOL67ZgX3h5kAa7LzWbOiOTdDdRy97FjuXpiFESWB0Qja7oh06c3YE6kCtl/y/OcQ1
-	 3dStPz7RN75i/BQwudYih0SZtN3jgzzBo0MUK79xWYE2eKCzB6w7M3d0L3arSCSpTCc9B
-	 G7J6a/Z/ROvaeEQJIKdJ1jJcThaW5k87lvQMbSxcZw5AeZwiMMe8Tri73xP5+yu7Ox1vE
-	 QS07K1pLa185niVf8dVm3Awa78XTM0lwtbSUvWLeRMmQ1hgPFcfcqksxvxj6e/KJT4g==
+	 Content-Transfer-Encoding:X-Proofpoint-Spam-Info:X-Authority-Info-Out:
+	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-JNJ;
+	bh=BmUU93uhr5OsPAnEIhNQgL1kE5fNwW5hzTfoPEFRphw=;
+	b=I0LTjGkca3SVt09jUwYoBAL8xG11Ppw1KhhVi9ISjfDDN/1vTFXunjO3TCJVSRV0Hr+b
+	 9msJxyN32udqZuBR84U7NVumV+/AuCKj9M1QjGCl4vNoG60zfOM25Hf3ao4I69X8pJN79
+	 2A0JpMLfCQZMv1I0tbQC9sy6chf98xNVQctzRJBHuGa5oOgtMlO6nL+rfkUPKgG/i13kD
+	 2yF5a13jq6W29i4hH7hQf2fdQsf4pdbmqTHGxeX1XxDwp6Pa8ZAOwR+hR6/mbZ51GsoHf
+	 Rf6OMeI40ucHv3t/4PPb3p8aYKbE/88wse8uNEhCNHMOouKHfF/L4iVo+C0rDl08bCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=verdict.gg;
 	spf=pass smtp.mailfrom=verdict.gg;
-	dkim=pass header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=NuMEq1tH;
-	arc=none smtp.remote-ip=57.103.84.194
-Received: from outbound.qs.icloud.com (qs-2007g-snip4-3.eps.apple.com [57.103.84.194])
+	dkim=pass header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=Hvw5pVnx;
+	arc=none smtp.remote-ip=57.103.84.231
+Received: from outbound.qs.icloud.com (qs-2007j-snip4-11.eps.apple.com [57.103.84.231])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E3A606A32D
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 15:37:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6E3A606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD8D606A682
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 15:37:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFD8D606A682
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=NuMEq1tH
+	dkim=pass (2048-bit key, unprotected) header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=Hvw5pVnx
 Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-2d-60-percent-9 (Postfix) with ESMTPS id 1D245180029C;
-	Tue, 24 Nov 2026 15:37:41 +0000 (UTC)
-X-ICL-RepId: 01a20e34-a5e7-7768-926c-09d915193913
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1795534661; x=1827070661; bh=a4/TKQ+wKHrlBE/R2BQwO1pp5Mk2i+jmrSZqyGVPftI=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=NuMEq1tHQtL2bFMonP/ptefWz59VB80MfCvlN1ik5Uw3c9sAuy27/EpJWFUgYjPsMTYyFgLAFwRBpvFnxqG5ChrJX/HLFkptxA3IRMni65qtvLPbmZJADMCFZ5TCRJMhF2i352+DjuqkJbuiir76xD94AaaqsU3D3Vq+TrqM2yByuWWB90BIPdORAW8hw/qps5rdYcS6JK4jO2apnpYYqPsZz4/6dMsfqSPIrX2YbomnVAhJSBNYetAcb+UwuYVTXzJuzzJ5oCUdenF2Hln1qFsnoVUlDkXbQbqZIJxeCIkPcbypCURHleNj1le5BECng83/l64o87wDGt5l8Iv2SQ==
+	by p00-icloudmta-asmtp-us-east-2d-60-percent-9 (Postfix) with ESMTPS id 2752D18002BC;
+	Tue, 24 Nov 2026 15:37:43 +0000 (UTC)
+X-ICL-RepId: 01a20e34-ade2-714c-809d-5fbc2ff6bde9
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1795534663; x=1827070663; bh=BmUU93uhr5OsPAnEIhNQgL1kE5fNwW5hzTfoPEFRphw=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=Hvw5pVnxAC+O6k5JcJQuMYXHGcDdGPH1PC2DxiiRMVpWAFaWXj+bW2pgOPSpJ1TKdSdlGne3NTy7pn6K0YJ3rnONHyY+hQipHF9uyzbNa8OM5gAfFty68BWINJ5t1SFrjPy7c3QB9Dh5UkRy+Rs4AETtMQVhkr99+1RQFZMHbyZEY8YzGqtBIeyUkRX95yc3gE59RCOfSti9gsw3WtokmDIlfDSNRyL7uet+iBeFBnmVGqXv67MrkE9G4NuHpD8GmAqTrQgXCN3Xs/gWucMwtVCk4o3yqKi6ZNOvnFqTi4osyonnw1977WxcPo6NWXg+GU+XCCOoi8tVELGY8HKQ6Q==
 mail-alias-created-date: 1621344842221
 Received: from DelNac.mail.msk (unknown [17.57.155.37])
-	by p00-icloudmta-asmtp-us-east-2d-60-percent-9 (Postfix) with ESMTPSA id 2210318002A7;
-	Tue, 24 Nov 2026 15:37:39 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-2d-60-percent-9 (Postfix) with ESMTPSA id 26A8518002A8;
+	Tue, 24 Nov 2026 15:37:41 +0000 (UTC)
 From: Vladimir Vdovin <deliran@verdict.gg>
 To: David Ahern <dsahern@kernel.org>,
 	Ido Schimmel <idosch@nvidia.com>,
@@ -57,9 +57,9 @@ To: David Ahern <dsahern@kernel.org>,
 Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vladimir Vdovin <deliran@verdict.gg>
-Subject: [PATCH net-next 1/2] ipv4: Don't cache a pmtu above the device mtu of a path
-Date: Tue, 24 Nov 2026 18:37:29 +0300
-Message-ID: <20261124153730.56549-2-deliran@verdict.gg>
+Subject: [PATCH net-next 2/2] selftests: net: pmtu: Add a multipath test with paths of different MTU
+Date: Tue, 24 Nov 2026 18:37:30 +0300
+Message-ID: <20261124153730.56549-3-deliran@verdict.gg>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261124153730.56549-1-deliran@verdict.gg>
 References: <20261124153730.56549-1-deliran@verdict.gg>
@@ -73,64 +73,157 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA2MSBTYWx0ZWRfX6bwSdr7J+Bsz
- OOHEog9q3oEMVQB80nAfbkFg/9jkFkVNVQUT6iza1uIQeN+8r9PX7OK9bcQrspSTw5KuD7v76FG
- T1mrrz5hsVl0qiVBKIt63jxiTHGqpnCPiZdr1byvlLj0r9+MzllqEnVFxJQDm2Qwg2YsKLliUet
- ZTwS2P9lEcafUTZx+KwRRm9fxlrtLipd6QRL1DQVgi8hau9BTQJWeeRd3eZw3CGmkigajSbsTzy
- B0NZsU4Sx1n3GwCUCScRxvIzwmRHekh96cy529467+/hHhYnltf7OCekibmrk4lVHn1PezVpzGc
- 1QPV75RQIwz3cyUYCMJZbjzFZOS+xwHu/70FXa77zGEXMuMKnlxMfI4DO80szg=
-X-Proofpoint-GUID: Ss7ZWyaXy2Gg7w-tLdGV8P_0Nu8TGoxK
-X-Proofpoint-ORIG-GUID: Ss7ZWyaXy2Gg7w-tLdGV8P_0Nu8TGoxK
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA2MSBTYWx0ZWRfXzUtRMhFdQcLz
- FKGBtJ7lAQ9m0rKl89LryayFObVQupLR7i2ar5tR/03Ko3TtH6ty1O2pYbqyxkOedFOVOT1LCwi
- /BwelpDe98j0123b1PqAPNefqCpFjx8=
-X-Authority-Info-Out: v=2.4 cv=XZAcX455 c=1 sm=1 tr=0 ts=6b05af45
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA2MSBTYWx0ZWRfX2bMOWvnmVPrP
+ HIxpvaGDrfMjxdlCAvG2P0K2PHeuT+THL8sTsqD5xlLaiZlhSfNqd2QOV78Bhcj/bfXywaqM4jK
+ rdEE0ImJNa3FRCy/OwcTqtu37FYWAcY=
+X-Authority-Info-Out: v=2.4 cv=PYZqFShd c=1 sm=1 tr=0 ts=6b05af47
  cx=c_apl:c_pps:t_out a=bsP7O+dXZ5uKcj+dsLqiMw==:117
  a=bsP7O+dXZ5uKcj+dsLqiMw==:17 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=wbbCu9YnSpm8ZdSLOl1R:22 a=_mclknXjrhVi08tC7Eh6:22 a=Ikd4Dj_1AAAA:8
- a=nEgrKjKUNF7mAgnr5RMA:9
-X-JNJ: AAAAAAABTQRjrQ40IhbTpkO4CXHNIgwj9RwaoKJMn7w7dn8l9Kc0Wc5xhumSxLVSdXSABa
- 6VaRf9BHfaTVmF3Oxo5SyxCRYUU8qrVgMu8PqhANLSn3zk8EVqv7SyrHo3t3hN6WkfpaZX
- RdDOCwx7nVaL502DwF0BsZjYp/+M7t9E/0QD1Iuu7Ev6vI6qGsPd+HYCsd5s7FNsAqd9AO
- diwVO0ZjrYXNoCXSl7ibVmoBPIuapTgNVcYSt3dYarHwKGBFLbTkT6Ax2mCtwvnLbl0ng2
- rzn2NHlMibaPV0ROXg04jrffDk2QH6QeldGRJgK9+U4nImGmA26az58MNwOJF1RO22mW/Q
- UE0bc0iFTh+6inYLhueKVhsQ740+HjCNnVD+OS1EzrCKjk2pRosuqAreXPZhWxCKdFESUL
- GwhPGqQH1Eo7n6j5pABKsJqIpNbGjtc1nOQ3obtxU3RmIe3MUR1S0bpIwK2DQpNBjXakbQ
- IddQ6IzGkTkAyH7i2ph+B8huuzBYH/D1EsPa2hHGnOPFBDwoy+vx8zrvE2alWpPlp0nW3W
- why5q5/1nA8K0Q0W8ANQW29VSiXKzu10fZxH+CrCCZM4r+YN5bJBa0ocAurE+ypQ1lI/BT
- 2YMMO1FlIn83JVKzCaxSZG2C5EybFrM/A0o26731Hvc6HZY2SiGXKIQD2GNIHm9PSy3n+7
- B9EkFZ1w5INJBhdv5pUJvpDPRPcWMvQV3C85uuaDiPXwCo1+J1c2pwxLRUYQtRrWZCRMLh
- EdAHGxiNbxcblRGdgsEvKTvopxK2MxLCQQW7yx9nAf9OcPSVJq/ZOYTPS6P6Tomt6Iv+gX
- tK44SVwDTrWvE6RB2tMj25xjkwEFyZAOMw==
+ a=HxOO8S7qDNDRVQTpMkN7:22 a=1-P0SRgB0hgiDeu8hSP7:22 a=W74Lhd9-C7prWGa38HQA:9
+X-Proofpoint-GUID: BUejfQcTUNiKPssilSLA_do0t2B1yxcm
+X-Proofpoint-ORIG-GUID: BUejfQcTUNiKPssilSLA_do0t2B1yxcm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA2MSBTYWx0ZWRfXypqbsGHB+jab
+ i5T9W+vpY3vdCb2JOFUilmlRJwfIba2fDVDUA/65rQ0Pm8IPTAel/cekDwTeR3DdS4c2bpEA7n+
+ RamoNyv6IWqOOo5TPkfaMqWoKrPR7dD1j837qXaC+FnYnGs/aBpSIrp+91a1+sA2iI4jEzXV1bs
+ 7cb0fOsMjyNbznMVMlUkudjeKSCddNp0vXrb+XW83WskwpCUPjvvSKURXenl3OMkKMrA0ytsZXx
+ pJSNKDVi3YLzS9debOt62faMsA6xulAPo+kEmBB381ynji/jtxSqfBBqoM42B8zvr9QlUsVi1qa
+ jRCOE/Mw0SREBO/dLDMitGVJShw4ijA/HwYTz+JyrkMtNa+lCm/WZ1sRsuOTZg=
+X-JNJ: AAAAAAABUR1p02ohqzzoZgrJ5V/iVr9Pvv7cQg/bY+CmgjOrBfNpC0LKrIfjcrTHmwzIlS
+ qIHqwoY3/M9lc4NxhRjWeB9ixontFMW06SCTIkVLcdUl8Z9zySUARLzBkvfifzqVBYBx7X
+ FrcoMOwQkPj4L0YP/nlKpN1kHmiIVSfNZhQoHbwPjwNQuXt8yoY85jbnsiUmY5vfYZCEN8
+ +hnE7LIHLaMkRvVorqenuDw2/ML2jJEOqW09U0/GX53RkU9Z+QkT8TqbqYchFBqSnCsMS8
+ +Xebo2FpBcZzyCIP1huJp/Erz/oUGxXtIXU7flkoAzE+wHIwGdjPlDIp3NpY6VqwSOeoXR
+ nPA/PtgLDy8/Ubuds3TC2vyucBudOQiKoJwHupI3ECIUsXkTdHkwhi1jInsfKPx+W+Tv+e
+ Pe7VqGGOlSHEWrxidmZTbMzvNeIuZk1hzWpa1ndh+5ktGpVTAopxPbm3QEfleSIjDIz1cQ
+ ZxtvXNG+CzjXLTTPfhO7RhP15TM8LfkH57MPLp0+gyFcBB4DwuYKmYDonfOPFVwNTd8gv1
+ sL4RgWv64/4j/aOGZhMRAsGBHU/VpIZzFSAe37IFYrj/+wYLhGCo6JRIxjl6oASPSGMoBf
+ mHKxVsbUMmPnl3Ns/ReCs/wnyEvoejkgWKh6h0Vl/1CBpt8eJBW+a16jqtT6zKTOtKzH/e
+ wi+SGA0Dfv4y1om9lJnsj5My5QJzoHj0+YLuQ8ohFiokBvRlQU6bFZ89dR6UBA8W8HJMlo
+ inoDVIipu+2X1BaAV4t2U1o9FOrWU7XpwCXTnneK/Zix9tc6yiVYtSgfqsaFJGCt2N+eeM
+ b47pIOwNaqCdlIzGMqd5bTD/Cl3x1BZOGg==
 
-The mtu of a Fragmentation Needed is cached on every path of a multipath
-route, checked against the path the lookup picked only. A path whose
-device mtu is below it gets a pmtu it can't carry: packets above the
-device mtu pass the pmtu check and are dropped at the device, no ICMP
-comes back, and the flows on that path blackhole until the exception
-expires.
+Add pmtu_ipv4_mp_asym_exceptions: the topology of pmtu_ipv4_mp_exceptions
+with an MTU of 1400 behind one router, and 1350 on the link to the other
+router with 1300 behind it. Pick a flow through each router, a source
+address as the IPv4 multipath hash covers addresses only by default, and
+check that a Fragmentation Needed from the first router is cached on its
+path only, as the second one can't carry 1400, then that a flow through
+the second router lowers the PMTU of both paths.
 
-Skip such a path.
+Without the preceding patch the test fails with both legacy nexthops and
+nexthop objects.
 
-Suggested-by: Ido Schimmel <idosch@nvidia.com>
 Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 ---
- net/ipv4/route.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/net/pmtu.sh | 74 ++++++++++++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index d0930ae4c5ae..0d992dc46c60 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1094,6 +1094,8 @@ static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu)
- 				nhc = fib_info_nhc(res.fi, nhsel);
- 				if (!nhc)
- 					break;
-+				if (mtu > READ_ONCE(nhc->nhc_dev->mtu))
-+					continue;
- 				update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
- 						      jiffies + net->ipv4.ip_rt_mtu_expires);
- 			}
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index c7cd271714ef..a5d602a453c9 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -203,6 +203,13 @@
+ #	on host A and B on lo reachable via both routers. Host A and B
+ #	addresses have multipath routes to each other, b_r1 mtu = 1500.
+ #	Check that PMTU exceptions are created for both paths.
++#
++# - pmtu_ipv4_mp_asym_exceptions
++#	Same topology as pmtu_ipv4_mp_exceptions, with b_r1 mtu = 1400,
++#	a_r2 mtu = 1350 and b_r2 mtu = 1300. Pick a flow through each router
++#	and check that a Fragmentation Needed from R1 creates a PMTU
++#	exception on the path via R1 only, as the path via R2 can't carry
++#	1400, then that a flow through R2 lowers the PMTU of both paths
+ 
+ source lib.sh
+ 
+@@ -272,7 +279,8 @@ tests="
+ 	list_flush_ipv6_exception	ipv6: list and flush cached exceptions	1
+ 	pmtu_ipv4_route_change		ipv4: PMTU exception w/route replace	1
+ 	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1
+-	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions	1"
++	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions	1
++	pmtu_ipv4_mp_asym_exceptions	ipv4: PMTU multipath exceptions, asym MTU	1"
+ 
+ # Addressing and routing for tests with routers: four network segments, with
+ # index SEGMENT between 1 and 4, a common prefix (PREFIX4 or PREFIX6) and an
+@@ -350,6 +358,7 @@ tunnel6_b_addr="fd00:2::b"
+ tunnel6_mask="64"
+ 
+ host4_a_addr="192.168.99.99"
++host4_a_net="192.168.97"
+ host4_b_addr="192.168.88.88"
+ 
+ dummy6_0_prefix="fc00:1000::"
+@@ -2407,6 +2416,69 @@ test_pmtu_ipv4_mp_exceptions() {
+ 	check_pmtu_value "1500" "${pmtu_a_R2}" "exceeding MTU (veth_A-R2)" || return 1
+ }
+ 
++# Pick a source address out of ${host4_a_net} for a flow from host A to
++# ${1} through ${2}: the IPv4 multipath hash covers addresses only by
++# default
++mp_flow_via() {
++	dst="${1}"
++	oif="${2}"
++
++	for i in $(seq 1 32); do
++		flow="${host4_a_net}.${i}"
++		${ns_a} ip route get ${dst} from ${flow} |
++			grep -q " dev ${oif} " && echo "${flow}" && return
++	done
++
++	return 1
++}
++
++test_pmtu_ipv4_mp_asym_exceptions() {
++	setup namespaces routing multipath || return $ksft_skip
++
++	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
++	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
++	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
++	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
++
++	# Source addresses for mp_flow_via(), with routes back to them
++	run_cmd ${ns_a} ip route add local ${host4_a_net}.0/24 dev lo
++	run_cmd ${ns_r1} ip route add ${host4_a_net}.0/24 via ${prefix4}.${a_r1}.1
++	run_cmd ${ns_r2} ip route add ${host4_a_net}.0/24 via ${prefix4}.${a_r2}.1
++
++	# Set up initial MTU values: 1400 behind R1, 1350 to R2, 1300 behind R2
++	mtu "${ns_a}"  veth_A-R1 2000
++	mtu "${ns_r1}" veth_R1-A 2000
++	mtu "${ns_r1}" veth_R1-B 1400
++	mtu "${ns_b}"  veth_B-R1 1400
++
++	mtu "${ns_a}"  veth_A-R2 1350
++	mtu "${ns_r2}" veth_R2-A 1350
++	mtu "${ns_r2}" veth_R2-B 1300
++	mtu "${ns_b}"  veth_B-R2 1300
++
++	flow_r1="$(mp_flow_via ${host4_b_addr} veth_A-R1)" || {
++		err "  no flow through veth_A-R1 found"; return 1; }
++	flow_r2="$(mp_flow_via ${host4_b_addr} veth_A-R2)" || {
++		err "  no flow through veth_A-R2 found"; return 1; }
++
++	# A Fragmentation Needed from R1 is cached on the path via R1, not on
++	# the path via R2, whose link can't carry 1400
++	run_cmd ${ns_a} ping -I ${flow_r1} -q -M want -i 0.1 -c 1 -s 1800 "${host4_b_addr}"
++
++	pmtu_a_R1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R1)"
++	pmtu_a_R2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R2)"
++	check_pmtu_value "1400" "${pmtu_a_R1}" "exceeding MTU via R1 (veth_A-R1)" || return 1
++	check_pmtu_value "" "${pmtu_a_R2}" "exceeding MTU via R1 (veth_A-R2)" || return 1
++
++	# The lower MTU behind R2 lowers the PMTU of both paths
++	run_cmd ${ns_a} ping -I ${flow_r2} -q -M want -i 0.1 -c 1 -s 1280 "${host4_b_addr}"
++
++	pmtu_a_R1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R1)"
++	pmtu_a_R2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R2)"
++	check_pmtu_value "1300" "${pmtu_a_R1}" "exceeding MTU via R2 (veth_A-R1)" || return 1
++	check_pmtu_value "1300" "${pmtu_a_R2}" "exceeding MTU via R2 (veth_A-R2)" || return 1
++}
++
+ usage() {
+ 	echo
+ 	echo "$0 [OPTIONS] [TEST]..."
 -- 
 2.56.0
 
