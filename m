@@ -1,101 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795518265;
-	b=rL4Sk2S6tQN86UkAzYh3wF5qeb8vmIFqN10ObWK6pUg6Zgg3iqlo8EfnWDXlcw/1hf4+
-	 tK+0des5vwLDJxt2fOHL45cSN6I2DrKWSPhc0Qf7ilA6kH/tv1FqUXaL9FIbeRJuc2fsa
-	 PhyABbQVizN5dVlE7OONC2h7m7gZw8Umo3oiebw5jrtXdgXU72U8zRDd48hfPIjIo5H/P
-	 AUuvFhI2o26ovqY2y4bizV7U4B7DrrcMwp7srd0VnOQ0uqRvP/hzK7IAF3bfBXmNg6weR
-	 /PAUaCJznUXVmvH606eRShJK6X3CgB2cmRKNX6QDxZuLDFb2OW6HIWpLE95ZVJH5mtg==
+	t=1795518448;
+	b=x7ZZKxbgSwfQbi9gBy+15Zqzkcw5LI1UUmFhiej7/I+IX7tLoRvJQ75KsCJ5GPDYsKM6
+	 o/j5CxXNOXgMqzCLBqnRKAKFuKCJmi5OwDHlhySUnB2JEPidBg1kZaFxLc2ZQc7e6Ha6A
+	 RFObGJZ0/Of+BEPs+8RMvXNWqGU7+rQORNsDV6csQaly16cQmo9bBeK79+mG4D7Gu4IgY
+	 lIeHI1ujkjEVK2RDii3HBtU+BrSClnOWuTiLVDDsWFW9Oc4ytF8JjBD9KvFpCpTENw/V0
+	 ZelWHGUjF10DzP6DgVDE8jmqmPhq6W9Aq8ITY5y2pUC9N0tGRlPV+IEXvSkRWuAMYrw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795518265;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=EuBOUwwiL3IP1HDk4+dxaacGJaiYkefTCK8JBEZyKe4=;
-	b=Az1ihGKe++aQiZBh4q+PfXvkSwsxZ7qaxsjsn/d+VZtcL2V0eEiJ+IW2Z3SiKr3Zpdi4
-	 Yo7pdl7ZOMF3GySvXhwguvHdziYT2/KTetMg85IPvs7ezO26BrRvHKNcFCIC+s/qGxsyu
-	 bVxStlAxY4zhwW1Xnn/lmhIYN62yIPQVaurZXnhn1fO29YrhtkdAIfDPZcW6Ftl4Y18bl
-	 LkPIrXN5dDP42kFSNAr1hhQJ64mZEcMR68hXvkXMkyW5PkFnt9JEtYjX53rz/q4EzZtgS
-	 fb9mK9nC5urs6o+f+E4PNraNqGwbefktVxS19PdS9wdj5NFUgzVMjDJv1EreY7Pg3DQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795518448;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=NPlVhPCIZl8GiH7a8flrLUPFA/vM4GEBifZKh2FcAuU=;
+	b=DRAi1Y5hnnsK04gEiWgSjome0EbMQaOCLrNyNlXPL557D7XnEG4wM/YE+9CTPPhlozqX
+	 UbuDKup1lZIRu/w8+r3vfddF3hGuVh0YG8TlRicdz6//av+Ap08mfuoxZzTYDeWFDCd1o
+	 +bzdqwiWORyMxdUcUgErgMSvyl3QzyxDFXVOeCE8n0ABQUWqTP6AGff66DD0ordXjNxoY
+	 0NOdaKQGvowDrpx+vQgIPSI7K7HN7wdkAdy3fmo8+va+U9tAd65L+jrxaGai1YEiBF2PA
+	 p11qVuSG55wiPOHLJFjBWL4CswZPChIMKaJY1AZNTzaFaXCtS63d0WZyWNDZt/xK8Bg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=DGCTDoFb;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OYi00JXt;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=SitU1Tuz;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38AA606A339
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 11:04:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C38AA606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34953606A31E
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 11:07:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34953606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=DGCTDoFb
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb6886d30aso41896565e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:04:24 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OYi00JXt;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=SitU1Tuz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795518447;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NPlVhPCIZl8GiH7a8flrLUPFA/vM4GEBifZKh2FcAuU=;
+	b=OYi00JXtnQeRvNyKFw+HZ2u+GyIMK6ve7TQngUQ9Lag5s30IZa8q1hSyhYYHXu4/ALfX2H
+	OjTZUFt6IHoy8Jyg4Pwu8unhEXnOQR0z9KmRg2UvrIdDmNnyZUgqieKNHr5bmnNzmibpm8
+	tP2xjsmjAsi2/hqFBh+S632ljuPPgnE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-440-k0lu2OU5PO2icG83WE-iUA-1; Tue, 24 Nov 2026 11:07:25 +0000
+X-MC-Unique: k0lu2OU5PO2icG83WE-iUA-1
+X-Mimecast-MFC-AGG-ID: k0lu2OU5PO2icG83WE-iUA_1795518444
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48e0ef019a4so2638709f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:07:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795518263; x=1796123063; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EuBOUwwiL3IP1HDk4+dxaacGJaiYkefTCK8JBEZyKe4=;
-        b=DGCTDoFbikauyFIMqdrHOrgjM62cX402e4khRkckTqUWicey3hvdiitxOdhi/LnQPX
-         aTSOrLQRZq2jH9Y9HZ72TUNBL+mjYSlxq3wKIKY+J08+lRpR5XH6w6BPHngOnvO6QvYy
-         K9rCe6e8DtXTP61QTMxyUUJudVvqxpDN/1U8QuRhNNn9bEMn0RR3myK/dJcgxSJrZubd
-         CKXN9aoTK9JF5tX0QeeMKR1TS/4kkIzzvAKHJTVkPuh99aZY/qVa33Q89BL0SheCGNn2
-         52/MjgbVpwEywoE7zhkDzXASJFbSKeX+OlotoymZqP3SalM6HZM5s77bBz1an88vPSsa
-         JHtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795518263; x=1796123063;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1795518444; x=1796123244; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EuBOUwwiL3IP1HDk4+dxaacGJaiYkefTCK8JBEZyKe4=;
-        b=Zeu61BILFxwO5zmazslnEjCVD5DXHmCHcjzBXVhxb7LzWSBchq78slhYVM1NN9/hqQ
-         1N6/grw14l5bTNvDcG/4CGRMy3bR2nECC/NQQa2huHIq3tBszaeGUDyl6PsGDhp0M6/H
-         WVWLZjp269yvKZKuk/NmCrq8mGLPeBSzM8Ji4OlNHBbpWqZWaQ6zEnK6dFD0HXSJ903n
-         c1OuAZ7rF246bQcZ8izhzcFUmZissXE8nc4tRBD63cQ2/gpJ6V986+O1KqTH1L/laXQ/
-         GPSR6gQ5c0QVn8WEbFtst/ZeEKBtjKKrezjcaSiHkJknMGnqtJOPuVJi1/eVg50L9EKt
-         2aOg==
-X-Forwarded-Encrypted: i=1; AL+hErFU0bphgjYNV2hURJIGX4Z6CAAF6cj1cPQBdD5k3xkSwBtFvGuX/2AzL+ZOObtNkkcD4dKvcZBQBXB46ntPi/A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+B3h2naeUbAOl5eAhFozfH1hU+57ivA/99X6u6Fs6MSLL+THo2
-	wYXJOI0Np27ZBNhyy74r6QiT0E77hkiYa6Z7VL8hIzVrRtYrsZCcuBFDWnWVpKsL0Is=
-X-Gm-Gg: AZFdTZe0eXv+CRTzlFjSXUVvPTQnq6u+woXnHiJiHeafP2ESU45SThPtiC0/nslSelR
-	Mn2iH6zgdDtixpW2J5d/oTqGK1BnY5HHbTVfqPA7Ai77DaWJ4SzlL0jqPC1zmdCI/8hANBLnJLl
-	NNVZF7LzhFwn1iOCPsz0LT/Ocpd14sO2qKEt8BVBdT56dhj0c+/YaU+uEL059dL6zh9kJGNtRkk
-	J9DWxly9uIZZB1IYoMvOjhrliFCbrKRbUo389qnnBPljri1Lf3PhIX5s5loBprEJjmBcYQVStP8
-	/DVUWByvTs5XZKJ/LceOM8elZKUFzvGHyYOEgjMEFgDyZlN0H1x4F40iIH9P18PkeFOpRwCT28H
-	pMDk38pguAsg7t1hBACDcK8vo7soBRaDAI+SjGqIUie9sds83ulg6myNozg7yrMXVfv12U2T4uL
-	miwN++84XpDcZnwO5GEF8YgXSzn6FpIiJlBTJH/QB9B+OY0cIdqnDYuBUu59U18oBEurne6QkuN
-	+OpZNBM/3uasdN7xwJcgT6gRmLYmrpo57yds3t0AXZLUvA5B0Iku53MLD1j5lBAzbwSU5Jj08tg
-	wmFBip495gvxTjqyoCRjhXD+5Pjwuwc=
-X-Received: by 2002:a05:600c:e41a:b0:4bb:9959:54b8 with SMTP id 5b1f17b1804b1-4bb9959552emr100442045e9.32.1795518263196;
-        Tue, 24 Nov 2026 03:04:23 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884865b1sm422020975e9.5.2026.11.24.03.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 03:04:22 -0800 (PST)
-Date: Tue, 24 Nov 2026 12:04:20 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] selftests/livepatch: clean the test modules
- without a kernel build directory
-Message-ID: <awVvNNnQPGyNWb96@pathway.suse.cz>
-References: <20261110161050.2451750-1-sashal@kernel.org>
- <20261110161050.2451750-3-sashal@kernel.org>
- <awQUD16CDFpCTxaQ@pathway.suse.cz>
- <20261123154433.1188237-1-sashal@kernel.org>
+        bh=NPlVhPCIZl8GiH7a8flrLUPFA/vM4GEBifZKh2FcAuU=;
+        b=SitU1TuzSpfITjVZshQbgJpyKVCokMRHXEa6+qt/sl5QTAG00MUDpglQ4WJdfUOUHw
+         3oam4EMlg6F9VvMzEBCCmtVaJi3nRRge6A0dRQvmAzCHXpQs3Xncnq1XwDGxNd9+Gh/s
+         d2xoqmTHOhReqmu/LSMRkfzQcQAFCA9b2yBakZ/aODxc6FNueVe5k6IsghaVb5n4Eof0
+         g0VrupCBJCFvkT6m3TBZfMYID2ZHleLG3gzEEuLkZQAnjuldI3wfigp8sr+IQUmE2/lk
+         UW9aYmVsMpPRYAO4njY/nDv71vjTUk771nUCWjFJy0Alw6Jg2u9WEiqbFOAf1f11JqEa
+         fZdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795518444; x=1796123244;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NPlVhPCIZl8GiH7a8flrLUPFA/vM4GEBifZKh2FcAuU=;
+        b=G1jo87PYHl9ZaDsGP9EY2Cpi2RGSbwGtcUTTxPbqJTTUyI8q4uI1ehCNV6yJcrx/NY
+         2eAMfPLNpBtki/UYsvDssIQMbmX8WNmwwkbHud1EMzMPbtglCpRvMpNpGSjr2K+Fz3Vp
+         yuySD/SM32Seyz39oOcpVkecYtq+l+xX1Fut+ty1dmYN6G9+w0RVsDHR/alvvBvNrOME
+         T8xF2udsTDKuEqBcll1g0yQeI0YHTEIpq4u6XJW52WWkwE6YNMaZq2b+ymuKfjw/HM2A
+         UcJadlnVUMfrFxaeT+FxBt3Zz8WcikPTQLKFgRvLDEf9Hmy1v403ipejmVUFcNLbPPOD
+         sSxg==
+X-Forwarded-Encrypted: i=1; AL+hErFLF8qBz9fdF05swdwZRmkHvZS3RI0xK18z1BUogfeVZuoFLNmMBOMxHUGYVY2i8zzI03Vzg7ItDydBN6RymR4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8xjBM6WjxWgFqBySCOffWz/Pi5DHTHdRYesDQIgr6EF0OCNPaN
+	ZGbDm2H/Ns54r9bLGkzq9A6Te5DR5sTSFYw97objlExQ0Q/AQvRI34GiWw3ceY437OtTVm6cYns
+	sy0twV8FVeWxrXtkIAWpUYZcYteN5bjnAYuZhYEylmYLOUmxPHMI8UYgrA+jepaWlPhEG5A==
+X-Gm-Gg: AZFdTZcOY9bLkgq8FPxY8vU0GxHlAFAbqVz8h/WK1GW1WMwiSWtsc7/JEsaPJXVNsLh
+	XNJmf2VG62k1xvBOeuMt2VUrdfVTSwVx/n9cyfafM3DQUaVnQVYqNLVzVuIF4S5m8zDCaoqIwfv
+	rEqRlUBjmDpZcp9gZ9oE7e+l4pz5BhT/4duhQa3O6LOpDNSCosJasd3UekB6yk2W7kXItCOwT7g
+	iszxF5uC5eCXB743p21bjvvC7bYMcZHTZ9DjEAYRyTXxVKKu4vhgBdYN/Z1Gz0NcIBThL8kupgM
+	Up7E4c804Ab2eEbC6AmYpImOqntm/43afOd/BLv+eKQUoBkvXKRAZXs5jmG8jPRcgDNVAidpket
+	WMV+x4psdX6VFlQtYqB8OomAbXAIfzY8XbFajE/uLQhWRrSi0P8Oyeh1eCWf/IteXs4oJpPjBYa
+	EmzQEpjItShgZpsF7gH2byhjBYjl0rXhfPJWo/e1mE4IPh
+X-Received: by 2002:a5d:5d0a:0:b0:4a7:e4c7:2795 with SMTP id ffacd0b85a97d-4abb71cbe31mr32232532f8f.36.1795518443958;
+        Tue, 24 Nov 2026 03:07:23 -0800 (PST)
+X-Received: by 2002:a5d:5d0a:0:b0:4a7:e4c7:2795 with SMTP id ffacd0b85a97d-4abb71cbe31mr32232488f8f.36.1795518443567;
+        Tue, 24 Nov 2026 03:07:23 -0800 (PST)
+Received: from [192.168.88.30] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab658e2d55sm27608496f8f.5.2026.11.24.03.07.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 03:07:22 -0800 (PST)
+Message-ID: <adb6840a-26cc-4b66-a732-abe9f6bba60f@redhat.com>
+Date: Tue, 24 Nov 2026 12:07:20 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,52 +112,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261123154433.1188237-1-sashal@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 3/7] net: guard memory provider RX queue open
+ and close on unregister
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, Weiming Shi <bestswngs@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
+ Stanislav Fomichev <sdf.kernel@gmail.com>,
+ Bobby Eshleman <bobbyeshleman@meta.com>, Stanislav Fomichev <sdf@fomichev.me>
+References: <20261120045918.1239746-1-almasrymina@google.com>
+ <20261120045918.1239746-4-almasrymina@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20261120045918.1239746-4-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon 2026-11-23 10:44:33, Sasha Levin wrote:
-> On Mon, Nov 23, 2026 at 11:23:11AM +0100, Petr Mladek wrote:
-> > The two parameters "O=<kernel> KDIR=<kernel>" do not make much sense
-> > to me. The command starts compiling other selftests. I get:
-> >
-> > $> make -C tools/testing/selftests  O=<kernel> KDIR=<kernel> TARGETS=livepatch
-> > Makefile:4: *** Package alsa not found, please install alsa development package or add directory containing `alsa.pc` in PKG_CONFIG_PATH.  Stop.
+On 11/20/26 05:59, Mina Almasry wrote:
+> When an RX queue is leased from a physical backing net_device to a
+> virtual net_device (e.g., netkit), memory provider operations reach the
+> physical net_device through rxq->lease and lock it directly via
+> netdev_lock(dev) rather than looking it up via
+> netdev_get_by_index_lock().
 > 
-> Sorry, <kernel> was a placeholder for the kernel build directory. Pasted
-> as is, the shell takes "<kernel>" as redirections, so make gets an empty
-> O= and no TARGETS at all, and its output goes to a file named
-> "TARGETS=livepatch". If that's what happened, that file and an empty
-> "KDIR=" are now at the top of your tree.
+> Introduce a netif_lease_valid() helper checking netif_is_alive(dev)
+> under netdev_lock(dev) and use it in the lease-aware callers while
+> keeping __netif_mp_open_rxq() and __netif_mp_close_rxq() unaware of
+> queue leasing:
+> 
+> 1. In netif_mp_open_rxq(), if the leased physical device is already
+>     unregistering (!netif_lease_valid(dev)), netdev_get_by_index_lock()
+>     on the virtual netdev succeeds before cascaded unregistration runs,
+>     allowing a new memory provider to be installed on the physical device
+>     while it is unregistering. Reject the open with -ENODEV.
+> 
+> 2. In netif_mp_close_rxq() and netif_rxq_cleanup_unlease(),
+>     __netif_mp_close_rxq() reconfigures the physical RX queue so that it
+>     can continue operating with a regular page_pool when the physical
+>     netdev outlives the virtual queue or memory provider. When the
+>     physical backing netdev is itself unregistering
+>     (!netif_lease_valid(dev)), its queue will not outlive the lease and,
+>     matching the non-leased unregistration path (where
+>     dev_memory_provider_uninstall() detaches the provider without calling
+>     netdev_rx_queue_reconfig()), the physical queue should not be
+>     reconfigured. However, unlike non-leased queues,
+>     mp_dmabuf_devmem_uninstall() on the physical netdev does not match
+>     bound_rxqs (which stores the virtual rxq), leaving
+>     phys_rxq->mp_params populated until socket teardown or the virtual
+>     leasee's netif_rxq_cleanup_unlease() runs. When
+>     !netif_lease_valid(dev), skip __netif_mp_close_rxq() and clear
+>     mp_params on the physical queue directly so that a subsequent
+>     netif_rxq_cleanup_unlease() or dev_memory_provider_uninstall() sees
+>     !mp_ops and does not uninstall a second time.
+> 
+> These issues were discovered during AI code review (Sashiko) of the
+> earlier non-leased devmem unregister series and confirmed by code
+> inspection (not observed in production or reproduced on real hardware).
+> Tested with the nl_netdev.py selftest on netdevsim added in this series.
+> 
+> Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> ---
+>   net/core/dev.h             |  7 +++++++
+>   net/core/netdev_rx_queue.c | 31 ++++++++++++++++++++++++++-----
+>   2 files changed, 33 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/core/dev.h b/net/core/dev.h
+> index 4e9e8cd156977..50cfede051db1 100644
+> --- a/net/core/dev.h
+> +++ b/net/core/dev.h
+> @@ -119,6 +119,13 @@ bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
+>   bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
+>   bool netif_is_queue_leasee(const struct net_device *dev);
+>   
+> +static inline bool netif_lease_valid(const struct net_device *dev)
+> +{
+> +	netdev_assert_locked(dev);
+> +
+> +	return netif_is_alive(dev);
+> +}
+> +
+>   void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
+>   			      const struct pp_memory_provider_params *p);
+>   
+> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+> index a7261fedd5e76..98b51b2ac8ee1 100644
+> --- a/net/core/netdev_rx_queue.c
+> +++ b/net/core/netdev_rx_queue.c
+> @@ -270,7 +270,12 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+>   	}
+>   
+>   	netdev_lock(dev);
+> -	ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
+> +	if (netif_lease_valid(dev)) {
+> +		ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
 
-I see. I have never used these parameters so I could not imagine
-what the value would be :-)
+I'm sorry for the late feedback, but it looks like the above patter could/should
+be embedded into a single helper?
 
-> > Are these parameters really used by the KernelCI?
-> > Could you please provide link to a build log?
-> 
-> Yes. This is from Saturday's x86_64 build of mainline:
-> 
->   make --silent --keep-going --jobs=8 O=/tmp/kci/kernel_build \
->        INSTALL_PATH=/tmp/kci/kernel_build/kselftest_install \
->        KDIR=/tmp/kci/kernel_build ARCH=x86_64 SRCARCH=x86 \
->        CROSS_COMPILE=x86_64-linux-gnu- -C tools/testing/selftests all
-> 
->   https://files.kernelci.org/kbuild-gcc-14-x86-kselftest-6b01150f99c74e1a99a2a261/build.log.gz
-> 
-> > So, maybe just the sample command in the commit message is wrong.
-> 
-> Yes, it should have used a real path:
-> 
->   make -C tools/testing/selftests O=/tmp/build KDIR=/tmp/build TARGETS=livepatch
+I mean something alike:
 
-This works for me.
+bool netif_lock_if_alive(const struct net_device *dev)
+{
+	netdev_lock(dev);
+	if (netif_is_alive(dev))
+		return true;
+	netdev_unlock(dev);
+	return false;
+}
 
-> Please keep O= and KDIR= in it, though. The paragraph is about modules
-> built for a kernel other than the running one, and that's how they get
-> built without this series.
+That could be possibly later used elsewhere.
 
-OK. I'll use the variant with the real paths.
+Other opinions welcome!
 
-Best Regards,
-Petr
+/P
+
