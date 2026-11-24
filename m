@@ -1,160 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795543184;
-	b=Kl4m8QWd6rC/O5rlZO+rTHUi1ZdTSxkZA4/idSTDM8CbbgQrccOicfSOGcFGkpf/L+dU
-	 /FUmdsnWEXCpjF2dxnw6sJuM9LuVawJJl8N1V4jlwlp/SZtwoNFMtA1z1qA+Zpagc5NHQ
-	 YkNSg51LIZn9nga+hQcv0QOBUSbJC0INX3YLzDp30wVfOg4UmehwCc13eVK3C437wFwaf
-	 Npzvu2jePbj6i2mfPJ1jDJrnQcf2q/CuSOs64KlSMGwYQ01mOC4uwrx9F+w5+fxhLVcTl
-	 yLZ0ln7nZjRPRM54wLXOBnUIUa01Qk3IzXKZYOjk3RKgW9MtwADRn4CzdckR66MjZ5A==
+	t=1795543841;
+	b=aXw3dnZlhSFTBlebfqz58kjUQbeDG/lvfFeiNobVro4y/NPeihkTnun6SZUU5QAwbGh3
+	 LzUNGkUXLU8MHd2GsgxtePO5RysHAR3jNgVqukhXpZm+Pk0WNT8yaK1vKCYNq0bExGCSX
+	 6DbbXwPTVSCYxMQkG0hOO7I5pEn8pBnF8OPhIQ8+Q/3mhh5mWfWTpx1ox99Csk8q1osmR
+	 FwIWOceyWlAp+nxpDLnGVF+B47idtJqoV+bQaHmhcUwhC2mDD1G/h4OHKfh5iS8xz7o/D
+	 GVb8bQQKBlreweYWgwKM7Hd/K+53Mao9uEyOcaXm9fv5L1RMnPRHdXYxoAJRJ1u1gcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795543184;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795543841;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
-	b=2DA4mPWq+IPIiD7pRq03+fcXip3i5JnOhz2kicIFufT/oWvmM+ZUEyvZ2uEVMfjkBxzV
-	 1394MVBbVcGF1Qf1e62z2DJvf9S4Xb7Ml4SCWGPbTeGaTKLJLfE9fu4q8hb0+9/XZaLxK
-	 bjF2+O5YN1OVazGRQHJG4oexZqZFY44wgbmUB4RPHtE4CMbLOCDeb5ENGTj6X/D5ss/q7
-	 Z9LnldqK9ceIad9Nto61g6xxY+PXSVE+Uw8DSpudiZE2KA/NWMafgzXajmdKCuHUlCJXQ
-	 q3mWZPx/zjtNT420xyXRRmUpryCMiAZPxF3L+82wBojjqk9JWimOI6tll5jUjKIZGbQ==
+	bh=gzqoe745QeOptXrgCOHl8A6oH8ajIqyYK3/iDvfFSMg=;
+	b=Kq+/IJyblHAjVZZhU6L3Q3TN5IePUIgNviumbuEGf1r4RVM+GRe21+EcCsJDndheQGnX
+	 AfVJemfxpgZwhp0w1YuM5UZAI/pkrMcjUfk6v3Kraj5Z4r7n/1nzYuQ8owCxpr6gty+10
+	 GTvCVqXa4cX3IHJR82Ti8bjjDhzjM2NL2sUi+EaS1YsgeJCpf8+THdLo2GppkHJGtxAdr
+	 C1jT0YhGVocnKZ9QR/I3wbnFKoBp4OVyhrMhR9t6XcPsQurLl5/ZDlvHcZ1K5TPjd6lPp
+	 NuLgleHDC+mDhYjyRRzxbKKgloQ1qfDbezKS8Lgp35iBgaqS3cCph83F8+pwoDygnPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QxTcKneD;
-	arc=none smtp.remote-ip=209.85.208.46
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nbZ+Jkj4;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE44606A329
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 17:59:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FE44606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FEB606A337;
+	Tue, 24 Nov 2026 18:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QxTcKneD
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6b47c1a3c74so6597837a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 09:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795543183; x=1796147983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
-        b=QxTcKneDwvtdOC299tZn9xw97835cRZXmaZkQk24rVeZzk4RK3GSF9B7EOMZ3kEhoO
-         671efgyHRPVjZXZ+A54xg7e9c4/anntqhSxPrZLviczRUjperlfAkuTQrXzSfptTxs+7
-         7nnsfJyBHgRATtpRGt7HLHlIAI0ukVdn7RIgqXLaUXAESe/Zi01SMmzxPMd4lAg1/OLj
-         TVinkAgOcMc9w45Z3I2NYyn+pXSMrO65ayYEv7snxF3UkwMl2Nn+VVBNqyNRMDRx6WGP
-         QlIOepd0ewcKo9WNI3SVcLfrQxBhViEtlvY+OP+b7CPCx6Esl7eDPIBDfLb7jiwd4ZOJ
-         ERrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795543183; x=1796147983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
-        b=1NvXSCVLMGb+tRQEPgybapZzXROpTmrguyrt5eHRu86Fg6a5BW8bIACYGVnH/tqpwJ
-         SZi6w9TyPXcvOcJ/TSIdimsxnVZT8nXEFD3EixDHAEJRgFrvCTyLThNIXLD162d2Jasq
-         4m66Y88YMVTQISWjD26FpGcPU10uJ8D5r3mpLCumMXt3Pl5aeXB17SP7xS0I1nY+ucIJ
-         NqBqg6JpZ+4EhTcGgcZ8LGQfcVH2PJoSPQ+guajfiUX4XFBzKfvDcGWxrKTx5+zuJcKc
-         qZdpdOESg6dy4h0ci5ZQ+aQ7BjJ9HWjx/W18jq93Buu7YmzRR7Z+BZzg1Q66djNnDh95
-         v+cw==
-X-Forwarded-Encrypted: i=1; AL+hErG0RUcoxELSoXcyzRdYyNXnHthL41GG3s/QDIxm5X5UEFM7hl3h30bcnPCqTkLb2rnoMpjtGsduA8a6yFQY53Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9uNKTtYACyN5FX14KEPCOwa+1N/Bm5DPI9a1pZUgQeSZqR0f2q
-	RxOBTyjV2L98DTlc1tM/NbMf1h2hTEfif1IBxF9OhF8XYwkMszVVgYtCH/MKZql/vck=
-X-Gm-Gg: AZFdTZcMtEC50Nopw57VFvY0JDKX9HWPhjBouxapmQxbUPYUnS7fEyaQdWgQ4K1uRku
-	h7WvEPBcTKaQXcOgVezfVmokcutJBw2z+ONTK/YCyXb9YHrGXWo4qLZljUlTtklH1GdAMyStAOw
-	2QfMKf1AyLi3GDy6ZSY1+ykN2601lvVbh1npe0b3gxx9v5e3IEzQO5ewj5vDL/hcwfD+l4kLXOk
-	TSuW+Y5t/Nn4CDCxIeQMgu1bPBOQhUIoT96IfjpKbycnUOZRq4949JUESsFmHk2QQa+QS6esPDg
-	QXzsHHvoV98h1Gw7vNjjMMmdr/q/FOYMZX2JuNZpveKsEpLBVWwo+xZqr3aM/l86lHD9kXEroEq
-	lsoiP2+OjfMkKRy6+m9o3BfjsF16YF8ZnkjIDWSlngYBJ5qpx+Avu3CRfoZUvDsCNmoZ28WJM3q
-	jgeJDRMpHOn4YbaziUMZQFuQTHTIGQT5ILv0lpLtRa7uAkuo1mK215CfVxHtLYkmKnwUGwL0u6v
-	X+eYO88IsZYIpfb+cWDKYxJM//WVZgxmq3We1VYhGQjDgW7kiPnR/pdcsTGKvyeK/vJiCb9KNin
-	dkvNzvsVTnP+8MBeQ46VVig6x9fiDrsJ/2UAfyQEcGOq/4k=
-X-Received: by 2002:a05:6402:13d2:b0:6b7:e902:5e23 with SMTP id 4fb4d7f45d1cf-6ba37ea6d00mr12237778a12.33.1795543182884;
-        Tue, 24 Nov 2026 09:59:42 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.59.37
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 09:59:42 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>,
-	David Keogh <dkeogh@amazon.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Nimrod Oren <noren@nvidia.com>,
-	Alasdair McWilliam <alasdair@mcwilliam.dev>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nbZ+Jkj4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9162D1F000D0;
+	Tue, 24 Nov 2026 18:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795543840;
+	bh=gzqoe745QeOptXrgCOHl8A6oH8ajIqyYK3/iDvfFSMg=;
+	h=From:To:Cc:Subject:Date;
+	b=nbZ+Jkj4H1L1lWFy3wN1OgJBx39lrNyQJ6gjP7g1jhj+P2MeaeACi5B1A52KPB46T
+	 oD3lua2wtKY3mj4nhoKK91kEmOoiTqPRcOodORly2b0q6ppPDH2vx7c9QsfIswA8m6
+	 VqclsG3svi9yvTVW1NXORDP9HEmW4+oDhmQYwm7rFAUHF8Ik90UYzwLcCUnPU8UpCR
+	 Ej82EWhdWahYDnPw3qNTbM//LAt1bUy9Y+BDEM5HaCpdytCmNw9ZYpNAu9ZWs3qA1q
+	 TAc4BxCdeNhbLfhaQRNzlgdfDxF5sB9iE2F1TkMMmiC7kScaCoTXo897DmWDoS+n5B
+	 AdKBmni6l4Xkg==
+From: Sasha Levin <sashal@kernel.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Breno Leitao <leitao@debian.org>,
-	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	bpf@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	nh-open-source@amazon.com,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	"Remy D. Farley" <one-d-wide@protonmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andy Roulin <aroulin@nvidia.com>,
-	Anil Kaushik <anilkaushikwireless@gmail.com>,
-	Demos Ra <demosthenes.ra@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Hangbin Liu <hangbin.liu@linux.dev>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Joe Damato <joe@dama.to>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Li RongQing <lirongqing@baidu.com>,
-	Louis Scalbert <louis.scalbert@6wind.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Michael Bommarito <michael.bommarito@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Runyu Xiao <runyu.xiao@seu.edu.cn>,
-	Song Liu <song@kernel.org>,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Wang Zhan <wang.zhan@smartx.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Zhou Qiuyue <n0ps1edzz@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Jeff Layton <jlayton@kernel.org>,
-	Tianyi Gao <tianyi.gao@linux.dev>,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 11/11] selftests: net: tx_extra_headroom: test the veth attribute
-Date: Tue, 24 Nov 2026 17:58:24 +0000
-Message-ID: <20261124175824.60470-12-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261124175824.60470-1-tianyi@cloudflare.com>
-References: <20261124175824.60470-1-tianyi@cloudflare.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: Skip the sample module BTF probes without module BTF
+Date: Tue, 24 Nov 2026 13:10:38 -0500
+Message-ID: <20261124181038.2362595-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -166,143 +62,107 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Create a veth pair with VETH_INFO_TX_EXTRA_HEADROOM set to 64 bytes
-through YNL and move the peer to another netns. Check that both ends
-report 64, and that tx_extra_headroom of the peer is 64. The test reads
-it at tcx ingress, because an attach at tcx egress would recalculate
-the value set at creation. Then check that tx_extra_headroom of the
-sending end is 64. With XDP on the peer it is 64 + 256, because the two
-values are added. Also check that a value above 512 is rejected.
+btf_probe_event.tc and btf_typecast_accepted.tc probe sample_timer_cb()
+in the trace-events-sample module and cast its argument to struct
+foo_timer_data, so they need the BTF of that module. Without
+CONFIG_DEBUG_INFO_BTF_MODULES the module has no BTF, the probe is
+rejected with "No BTF entry for this probe point" and both tests fail.
 
-The helpers leave the RtnlFamily socket to garbage collection, as
-link_netns.py does.
+A "make kselftest-merge" config can end up without module BTF. The net
+and drivers/net selftest configs set CONFIG_DEBUG_INFO_BTF_MODULES=n,
+and only CONFIG_DEBUG_INFO_BTF_INLINE from the bpf config turns it back
+on, which needs pahole 1.32. KernelCI builds its kselftest kernels this
+way with pahole 1.31, and both tests fail on all the boards that run
+them.
 
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
+Check for /sys/kernel/btf/trace_events_sample. Without it
+btf_probe_event.tc is unsupported and btf_typecast_accepted.tc skips
+only the sample_timer_cb() probes.
+
+Fixes: 7d8d6ad659c0 ("tracing/probes: Add a new testcase for BTF typecasts")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-v3:
-- Check the value set at creation at tcx ingress of the peer (Sashiko).
+ .../ftrace/test.d/dynevent/btf_probe_event.tc |  3 +++
+ .../test.d/dynevent/btf_typecast_accepted.tc  | 22 ++++++++++++++-----
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
-v2:
-- Test VETH_INFO_TX_EXTRA_HEADROOM with YNL only (Jakub). The IFLA
-  tests of v1 4/8 are gone, so the patch no longer carries
-  David Keogh's sign-off.
-- Drop the VLAN case of v1 4/8. In v2 no code copies
-  tx_extra_headroom to a stacked device.
----
- .../selftests/net/tx_extra_headroom.py        | 70 +++++++++++++++++--
- 1 file changed, 66 insertions(+), 4 deletions(-)
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+index bf71368c31a4a..d832eca058de1 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_probe_event.tc
+@@ -8,6 +8,9 @@ if ! lsmod | grep -q trace_events_sample; then
+   modprobe trace-events-sample || exit_unresolved
+ fi
+ 
++# The typecast below needs the BTF of the module
++[ -e /sys/kernel/btf/trace_events_sample ] || exit_unsupported
++
+ echo 0 > events/enable
+ echo > dynamic_events
+ 
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc b/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc
+index dd5552727054c..50d303f7acc9f 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/btf_typecast_accepted.tc
+@@ -25,6 +25,12 @@ if ! lsmod | grep -q trace_events_sample; then
+   modprobe trace-events-sample || exit_unresolved
+ fi
+ 
++# The sample_timer_cb() probes need the BTF of the module
++SAMPLE_BTF=
++if [ -e /sys/kernel/btf/trace_events_sample ] ; then
++  SAMPLE_BTF=yes
++fi
++
+ if [ "$FPROBES" ] ; then
+   # 1. Test basic typecast on fprobe
+   echo 'f:fpevent1 vfs_read name=(file)file->f_path.dentry->d_name.name:string' >> dynamic_events
+@@ -42,8 +48,10 @@ if [ "$FPROBES" ] ; then
+   echo 'f:fpevent8 vfs_read pid=(task_struct,group_leader)$current->pid' >> dynamic_events
+ 
+   # Test this_cpu_read and this_cpu_ptr on fprobe
+-  echo 'f:fpevent9 sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
+-  echo 'f:fpevent10 sample_timer_cb ptr=this_cpu_ptr((foo_timer_data,timer)t->counter)' >> dynamic_events
++  if [ "$SAMPLE_BTF" ] ; then
++    echo 'f:fpevent9 sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
++    echo 'f:fpevent10 sample_timer_cb ptr=this_cpu_ptr((foo_timer_data,timer)t->counter)' >> dynamic_events
++  fi
+ fi
+ 
+ if [ "$KPROBES" ] ; then
+@@ -63,8 +71,10 @@ if [ "$KPROBES" ] ; then
+   echo 'p:kpevent8 vfs_read pid=(task_struct,group_leader)$current->pid' >> dynamic_events
+ 
+   # Test this_cpu_read and this_cpu_ptr on kprobe
+-  echo 'p:kpevent9 sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
+-  echo 'p:kpevent10 sample_timer_cb ptr=this_cpu_ptr((foo_timer_data,timer)t->counter)' >> dynamic_events
++  if [ "$SAMPLE_BTF" ] ; then
++    echo 'p:kpevent9 sample_timer_cb name=(foo_timer_data,timer)t->name:string count=this_cpu_read((foo_timer_data,timer)t->counter)' >> dynamic_events
++    echo 'p:kpevent10 sample_timer_cb ptr=this_cpu_ptr((foo_timer_data,timer)t->counter)' >> dynamic_events
++  fi
+ fi
+ 
+ # Verify the events exist in dynamic_events
+@@ -77,7 +87,7 @@ if [ "$FPROBES" ] ; then
+   grep -q "fpevent6 " dynamic_events
+   grep -q "fpevent7 " dynamic_events
+   grep -q "fpevent8 " dynamic_events
+-  if lsmod | grep -q trace_events_sample; then
++  if [ "$SAMPLE_BTF" ] ; then
+     grep -q "fpevent9 " dynamic_events
+     grep -q "fpevent10 " dynamic_events
+   fi
+@@ -92,7 +102,7 @@ if [ "$KPROBES" ] ; then
+   grep -q "kpevent6 " dynamic_events
+   grep -q "kpevent7 " dynamic_events
+   grep -q "kpevent8 " dynamic_events
+-  if lsmod | grep -q trace_events_sample; then
++  if [ "$SAMPLE_BTF" ] ; then
+     grep -q "kpevent9 " dynamic_events
+     grep -q "kpevent10 " dynamic_events
+   fi
 
-diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
-index 02ae509ae8c2..cc33c4fa60bb 100755
---- a/tools/testing/selftests/net/tx_extra_headroom.py
-+++ b/tools/testing/selftests/net/tx_extra_headroom.py
-@@ -3,15 +3,17 @@
- 
- """Tests for tx_extra_headroom."""
- 
-+import errno
- import socket
- import struct
- from pathlib import Path
- 
--from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_gt
-+from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_gt, ksft_raises
- from lib.py import KsftSkipEx, KsftFailEx
- from lib.py import ksft_busy_wait, ksft_variants, KsftNamedVariant
- from lib.py import cmd, defer, ip, bpftool, bpf_prog_map_ids
- from lib.py import NetNS, NetNSEnter
-+from lib.py import Netlink, NlError, RtnlFamily
- 
- BPF_OBJ = Path(__file__).parent / "tx_extra_headroom.bpf.o"
- XDP_OBJ = Path(__file__).parent / "lib/xdp_dummy.bpf.o"
-@@ -37,9 +39,34 @@ def _setup_addrs(peer_ns, dev, peer):
-         ip(f"neigh replace {addr} lladdr {peer_mac} dev {dev} nud permanent")
- 
- 
--def _setup_veth(peer_ns):
-+def _add_veth(tx_extra_headroom):
-+    """Create veth0 and veth1 with VETH_INFO_TX_EXTRA_HEADROOM through YNL."""
-+    # Without names, the peer is created first and becomes veth0.
-+    rtnl = RtnlFamily()
-+    rtnl.newlink(
-+        {
-+            "linkinfo": {
-+                "kind": "veth",
-+                "data": {"tx-extra-headroom": tx_extra_headroom},
-+            },
-+        },
-+        flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
-+    )
-+
-+
-+def _veth_tx_extra_headroom(name):
-+    """Return VETH_INFO_TX_EXTRA_HEADROOM of veth device name."""
-+    rtnl = RtnlFamily()
-+    link = rtnl.getlink({"ifname": name})
-+    return link["linkinfo"]["data"]["tx-extra-headroom"]
-+
-+
-+def _setup_veth(peer_ns, tx_extra_headroom=None):
-     """Create veth0 in the current netns and its peer veth1 in peer_ns."""
--    ip("link add veth0 type veth peer name veth1")
-+    if tx_extra_headroom is None:
-+        ip("link add veth0 type veth peer name veth1")
-+    else:
-+        _add_veth(tx_extra_headroom)
-     ip(f"link set veth1 netns {peer_ns}")
-     _setup_addrs(peer_ns, "veth0", "veth1")
- 
-@@ -353,6 +380,39 @@ def test_tag_max() -> None:
-     ksft_eq(bss["tx_extra_headroom"], TX_EXTRA_HEADROOM_MAX)
- 
- 
-+def test_veth_info() -> None:
-+    """Check that VETH_INFO_TX_EXTRA_HEADROOM adds to tx_extra_headroom."""
-+    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
-+        _setup_veth(peer_ns, tx_extra_headroom=64)
-+        ksft_eq(_veth_tx_extra_headroom("veth0"), 64)
-+        map_id = _load_progs()
-+        # An attach at tcx egress recalculates tx_extra_headroom, so read
-+        # the value set at creation at tcx ingress of the peer first.
-+        with NetNSEnter(str(peer_ns)):
-+            ksft_eq(_veth_tx_extra_headroom("veth1"), 64)
-+            _attach_tcx("veth1", "ingress", "record")
-+        _send_udp4()
-+        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 1)
-+        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
-+        with NetNSEnter(str(peer_ns)):
-+            bpftool("net detach tcx_ingress dev veth1")
-+        _attach_tcx("veth0", "egress", "record")
-+        _send_udp4()
-+        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 2)
-+        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
-+        _attach_xdp(peer_ns)
-+        _send_udp4()
-+        ksft_eq(_read_bss(map_id)["tx_extra_headroom"],
-+                64 + XDP_PACKET_HEADROOM)
-+
-+
-+def test_veth_info_above_max() -> None:
-+    """Check that a value above the maximum is rejected."""
-+    with NetNS() as ns, NetNSEnter(str(ns)), ksft_raises(NlError) as cm:
-+        _add_veth(TX_EXTRA_HEADROOM_MAX + 1)
-+    ksft_eq(cm.exception.error, errno.ERANGE)
-+
-+
- def main() -> None:
-     """Run all test cases."""
-     if "/sys/fs/bpf type bpf" not in cmd("mount").stdout:
-@@ -367,7 +427,9 @@ def main() -> None:
-               test_push_detach,
-               test_push_peer_xdp,
-               test_push_two_progs,
--              test_tag_max])
-+              test_tag_max,
-+              test_veth_info,
-+              test_veth_info_above_max])
-     ksft_exit()
- 
- 
+base-commit: 8d7fe9885c62fc9a95bf55d9db244d9672a8aadc
 -- 
-2.56.0
+2.53.0
 
