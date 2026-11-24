@@ -1,44 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795503792;
-	b=OHBWbkK+fOqgpLihSQxrzKB4uYt6nXzm5gNBI8YJgoAconUH2FyHyE1dBBQr7p5UXowW
-	 V/PvpDRKjgQtPP8c5NhlszZ1gVPHx6tOTe0P+zEc4K0xifOQ8K1GuTj3hvIS/c0sVarEM
-	 5MDASDG6sBVMJ2pX3//KerfZlNXse+fe0cevjs3AsG4uoMmjgvdoxv1FRfqlJJ1/pTOq6
-	 jd9I7jNcPQ1u3aOVjkv29RVg4owMvoDZsBx39opSaDTt0eAtv1FAMYaS46bHosF4KZVhu
-	 UFXQFvnfPCZZo8oTrK49wASY2L5b0iDNk5mWcrNgfmpQHxaNSHQOcsGyuycQlSJPrFw==
+	t=1795504325;
+	b=MGVF2X8a6yAQr+7a8QEB2G0tWyqAU0gblEOOTuJLnzwDlEKVXFozXH43lRmw2AojE1aJ
+	 wLcL2z4So1sI5Mb5F+hK3NWht7O5g7Ejoap3XyYCb6GwVwPgXvrkqtyTbL7Qj7+TRV3G6
+	 UJrvvK6pnC352iNEqBI0PoJBEoYobmYamtPp+mZv50xv0+YUBeQGSfF/BVfvBVRpX+d9V
+	 1O+xYkXd7uvMA8zYKbxdsiDuGpiWy5krV4GVV6nrTUa/U/DEqh5Duc6F/cyINJgofW+qE
+	 crF77SmnRRhxACgYDWZAnwvtJunymhd66pUXAj0APIN0ITYommPWnBYvKaMZMVm/jJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795503792;
-	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
-	 X-Spam-Status:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=pgULmPX2IkV37esTIr12RjyMbe7G+CyAVZ6L97k4TXY=;
-	b=Q2EktUxnXxGiNyY5wSOyRzXdKfXzbjY8YFghVUsdV/FDfvdBFAvNr6vh+1G4EXGLGDeA
-	 nzv15qV5Kx7j3McE3B4Pai0+J99mBzi1/f8mG7L2KRjz0Xyn3csN+GR0imn9ilSoDOjN+
-	 QntyJRgEJenEn+o1a/7XXAQA+qPZ8o0Xgiy9vloZlJ8KIs0NJzeXecTAAXJdHkOIx+gCA
-	 ZLlKBLZL8HTWJBLpBFLAflDPwtwvpDTCi2FiZARNYa3n59cJ6wHVNy0VFmdEdouUA3GNT
-	 s4AxtHH1wfnDq0nbIKARp1g50AtShoyTv0Q5lBUtqY5MFJQ/Kx+YPs0IzDd++zEv9lg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795504325;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=6QXAXo10l0TvFvhpv3tVGjIuXn4/S262Qsw7qAFYFbM=;
+	b=3SLgkVyrZ3gpjGp+aNCBRjBGJhv2XkA8Wv0KtoVn+7SaWzFVN7qfskKvmsjQ909IsqBb
+	 Y4zXuXYcbdDbnRezGBmCo4yKJgrnNVMjwYnQzfwoXJ2++MX9b1b1LeZFgb+G8ruiSK1vL
+	 3wQdjos5lJQixigwjcUK6OKGlbfdRH316Aj/X4Rfu1LF/9bpgO7owVRSiYlzZC5Oj6UOP
+	 Vp/ZoQNFmsCPQ1UI57xoOIGDm4NmYmvx/UrYtKUSrpuOuYRPYoNn4yYvsOu7M8b3kAZnn
+	 Gpp7dOI05VWlJ0cgnbtDNR2/52/Nwe63tEwA7rldElgTJ9f5qbDVPGcnoWcL9nBd/FQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=JXlgG38D;
+	arc=none smtp.remote-ip=115.124.30.130
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E92C606A31E;
-	Tue, 24 Nov 2026 07:03:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E92C606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 38363200E22; Tue, 24 Nov 2026 15:03:09 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 0CBBD200DE8;
-	Tue, 24 Nov 2026 15:03:04 +0800 (AWST)
-Message-ID: <b3285ace-e89b-4d2e-bbd0-14e7a80609ac@davidgow.net>
-Date: Tue, 24 Nov 2026 15:03:00 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB1D606A31E;
+	Tue, 24 Nov 2026 07:12:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EB1D606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=JXlgG38D
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1795504319; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=6QXAXo10l0TvFvhpv3tVGjIuXn4/S262Qsw7qAFYFbM=;
+	b=JXlgG38DE1hVQIlEPYkFWeIxzRP+Gpj+/Vt2+059lz6QR0Xi9OW3NnVDOBCZtlIHgAwkZ8IBfw48W4xLpkK0bvrGaONLYUCfioy+K6LmtihxZ2CDZE6N7hYGd/KB9RpEDVijPzNsaYk5TI6zqB0aHrZVGW0+5kunZscBAf6FLrU=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=yaoyuan@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0XFNklbI_1795504317;
+Received: from localhost(mailfrom:yaoyuan@linux.alibaba.com fp:SMTPD_---0XFNklbI_1795504317 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 24 Nov 2026 15:11:57 +0800
+Date: Tue, 24 Nov 2026 15:11:56 +0800
+From: Yao Yuan <yaoyuan@linux.alibaba.com>
+To: Jia He <justin.he@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/3] KVM: selftests: arm64: Test KVM_PRE_FAULT_MEMORY
+ before first KVM_RUN
+Message-ID: <6gdla4edbwa6e2s36libskrg5h3glxq3tdl7blthke42sbuqb7@tpczgelv4vud>
+References: <20261123150917.2679600-1-justin.he@arm.com>
+ <20261123150917.2679600-4-justin.he@arm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -48,89 +68,209 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] rust: doctest: fix line numbers after crate-level
- attributes
-To: git@younes.io, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
- <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261107-rust-doctest-line-fix-v2-1-a66528f0a7c3@younes.io>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <20261107-rust-doctest-line-fix-v2-1-a66528f0a7c3@younes.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261123150917.2679600-4-justin.he@arm.com>
 
-Le 08/11/2026 à 00:36, Younes Akhouayri via B4 Relay a écrit :
-> From: Younes Akhouayri <git@younes.io>
-> 
-> When a doctest starts with a crate-level attribute such as
-> `#![expect(...)]`, KUnit reports failures one line too early, and
-> `line!()` returns a line number that is one too low.
-> 
-> This happens because `rustdoc` moves those attribute lines out of the
-> test body and puts them above the `main` function it generates. The
-> generator works out where the body starts by counting the lines above
-> `main`, but it does not know that some of those lines were moved there
-> from the body. So every line after a moved attribute is mapped one line
-> too early (or more, if there are several such attributes).
-> 
-> For example, adding `assert_eq!(36, 0);` as line 36 of
-> `rust/kernel/init.rs` (inside the doctest that starts with
-> `# #![expect(clippy::undocumented_unsafe_blocks)]`) gives:
-> 
->      # rust_doctest_kernel_init_rs_2: ASSERTION FAILED at rust/kernel/init.rs:35
-> 
-> Twelve in-tree doctests start like this, e.g. in `bits.rs`, `devres.rs`,
-> `init.rs` and `std_vendor.rs`.
+On Mon, Nov 23, 2026 at 03:09:17PM +0800, Jia He wrote:
+> Extend nv_pre_fault_memory_test to exercise KVM_PRE_FAULT_MEMORY before
+> the first KVM_RUN.
+>
 
-A quick note that the ones in bits.rs are nested in a macro, so the 
-location is dubious anyway, and this doesn't fix it. Others all looked good.
+Hi Jia He,
 
-> 
-> Fix it by counting the attribute lines that `rustdoc` moved (every
-> `#![...]` line above `main`, except the `#![allow(unused)]` that
-> `rustdoc` adds itself) and taking them into account when computing
-> where the body starts.
-> 
-> `rustdoc` always starts its output with that `#![allow(unused)]`, so
-> check for it before relying on the layout. If a future `rustdoc` (or a
-> crate-level `#![doc(test(attr(...)))]`) changes it, print a warning once
-> and keep the previous behaviour rather than failing the build: the tests
-> still run, only the reported line numbers would be off.
-> 
-> Only single-line attributes are handled, which covers every doctest in
-> the tree today.
-> 
-> With this change, the example above reports `rust/kernel/init.rs:36`,
-> and doctests without such attributes keep reporting the same lines as
-> before.
-> 
-> Fixes: a66d733da801 ("rust: support running Rust documentation tests as KUnit ones")
-> Signed-off-by: Younes Akhouayri <git@younes.io>
+> Without EL2, cover immediate_exit on the first KVM_RUN, retrying after a
+> failed first KVM_RUN, and pre-faulting while the vCPU moves from the
+> main thread to a worker thread for its first run and back to the main
+> thread for its second run. The two threads are pinned to different CPUs
+> when at least two are available.
+
+I suggest to list them for better readability e.g:
+
+Test cases for w/o EL2:
+1. Immediate_exit on the first KVM_RUN
+2. Retrying pre-fault after a failed first KVM_RUN.
+3. Pre-faulting while moving the vCPU between 2 threads.
+(more details of 3 can be given in code implementation there)
+
+> With EL2, additionally cover an EL2 vCPU with ID_AA64MMFR4_EL1.NV_frac
+> cleared to 0 and HCR_EL2.NV=1 at EL1h (the NULL vncr_tlb reproducer), an
+> EL2 vCPU with a vEL1 context and asymmetric HCR_EL2.IMO/FMO staged before
+> the first run, and the same thread handoff. An unfixed kernel reports
+> the staged context case only as a WARN in the kernel log; the test
+> itself still passes.
+>
+> Signed-off-by: Jia He <justin.he@arm.com>
 > ---
-> Changes in v2:
-> - Check that the generated test starts with `#![allow(unused)]` before
->    subtracting the moved lines; otherwise warn once and keep the old
->    behaviour, instead of clamping with `saturating_sub` (Miguel).
-> - Note in the comment and commit message that only single-line
->    attributes are handled.
-> - Link to v1: https://patch.msgid.link/20261027-rust-doctest-line-fix-v1-1-0c13185a58b6@younes.io
-> ---
+>  .../kvm/arm64/nv_pre_fault_memory_test.c      | 335 ++++++++++++++++--
+>  1 file changed, 298 insertions(+), 37 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
+> index 09c1db303856..6dbcf3b0ef13 100644
+> --- a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
+> +++ b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
 
-Thanks very much. This looks good to me!
+...
 
-Reviewed-by: David Gow <david@davidgow.net>
+> +
+> +/*
+> + * Pre-fault before the first KVM_RUN with ID_AA64MMFR4_EL1.NV_frac == 0
+> + * (no vncr_tlb) and HCR_EL2.NV=1 at EL1h.
+> + */
+> +static void test_pre_first_run_no_nv2(void)
 
-Cheers,
--- David
+This may not necessary per Marc's comment on patch 2 ?
+
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	u64 val;
+> +
+> +	pr_info("Testing pre-first-run pre-fault with NV_frac=0 and HCR_EL2.NV=1\n");
+> +	vm = setup_test_vm(true, false, guest_el1_touch_and_done, &vcpu);
+> +
+> +	/* Copy the EL2 S1 configuration into the EL1 sysregs for vEL1. */
+> +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1),
+> +		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL2)));
+> +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1),
+> +		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2)));
+
+...
+
+> +
+> +static void *first_run_worker(void *arg)
+> +{
+> +	struct handoff_args *h = arg;
+> +
+> +	maybe_pin_self_to_cpu(h->cpu);
+> +	pre_fault(h->vcpu, TEST_MEM_GPA + SZ_1M, TEST_MEM_SIZE - SZ_1M);
+> +
+> +	vcpu_run(h->vcpu);
+> +	expect_ucall_sync(h->vcpu, 1);
+> +	return NULL;
+> +}
+> +
+> +/*
+> + * Pre-fault in the main thread, run the vCPU for the first time in a worker
+
+Minor: the pre-fault happens in worker thead yet, see first_run_worker().
+
+> + * thread, then pre-fault and run it again in the main thread. This changes
+> + * vcpu->pid both before and after the first run. If at least two CPUs are
+> + * available, the two threads are pinned to different CPUs.
+> + */
+> +static void test_thread_handoff(bool has_el2)
+> +{
+> +	struct handoff_args h = { .cpu = -1 };
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	cpu_set_t allowed;
+> +	int cpu, cpu0 = -1;
+> +	pthread_t thr;
+> +
+> +	pr_info("Testing pre-fault across a thread handoff (%s vCPU)\n",
+> +		has_el2 ? "EL2" : "EL1");
+> +
+> +	CPU_ZERO(&allowed);
+> +	kvm_pthread_getaffinity(pthread_self(), &allowed);
+> +	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
+> +		if (!CPU_ISSET(cpu, &allowed))
+> +			continue;
+> +		if (cpu0 < 0) {
+> +			cpu0 = cpu;
+> +		} else {
+> +			h.cpu = cpu;
+> +			break;
+> +		}
+> +	}
+> +	if (h.cpu < 0)
+> +		pr_info("Only one CPU available, not testing CPU migration\n");
+> +
+> +	maybe_pin_self_to_cpu(cpu0);
+> +	vm = setup_test_vm(has_el2, false,
+> +			   has_el2 ? guest_code : guest_el1_code, &vcpu);
+> +	pre_fault(vcpu, TEST_MEM_GPA, SZ_1M);
+> +
+> +	h.vcpu = vcpu;
+> +	kvm_pthread_create(&thr, NULL, first_run_worker, &h);
+> +	kvm_pthread_join(thr, NULL);
+> +
+> +	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
+> +	vcpu_run(vcpu);
+> +	expect_ucall_done(vcpu);
+> +
+> +	kvm_pthread_setaffinity(pthread_self(), &allowed);
+> +
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +static void test_pre_first_run_el1(void)
+> +{
+> +	int feature = KVM_ARM_VCPU_SVE;
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	int ret;
+> +
+> +	pr_info("Testing pre-first-run pre-fault with immediate_exit\n");
+                                             ^^^^
+The vcpu->run->immediate_exit = 1 happens afte the pre_fault, thus
+s/with/then/ looks more accurate here if this is the desired behavior.
+
+> +	vm = setup_test_vm(false, false, guest_el1_touch_and_done, &vcpu);
+> +	pre_fault(vcpu, TEST_MEM_GPA, vm->page_size);
+> +
+> +	vcpu->run->immediate_exit = 1;
+> +	ret = __vcpu_run(vcpu);
+> +	TEST_ASSERT(ret == -1 && errno == EINTR,
+> +		    "Expected -EINTR on immediate_exit, got ret=%d errno=%d",
+> +		    ret, errno);
+> +	vcpu->run->immediate_exit = 0;
+> +
+> +	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
+> +	vcpu_run(vcpu);
+> +	expect_ucall_done(vcpu);
+> +	kvm_vm_free(vm);
+> +
+> +	if (!kvm_check_cap(KVM_CAP_ARM_SVE)) {
+> +		pr_info("SVE not supported, skipping failed first KVM_RUN test\n");
+> +		return;
+>  	}
+>
+> +	pr_info("Testing pre-fault after a failed first KVM_RUN\n");
+> +	vm = setup_test_vm(false, true, guest_el1_touch_and_done, &vcpu);
+> +	pre_fault(vcpu, TEST_MEM_GPA, vm->page_size);
+> +
+> +	ret = __vcpu_run(vcpu);
+> +	TEST_ASSERT(ret == -1 && errno == EPERM,
+> +		    "Expected -EPERM before SVE finalisation, got ret=%d errno=%d",
+> +		    ret, errno);
+> +
+> +	pre_fault(vcpu, TEST_MEM_GPA + vm->page_size, vm->page_size);
+> +	vcpu_ioctl(vcpu, KVM_ARM_VCPU_FINALIZE, &feature);
+> +	vcpu_run(vcpu);
+> +	expect_ucall_done(vcpu);
+>  	kvm_vm_free(vm);
+> +}
+> +
+> +int main(void)
+> +{
+> +	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
+> +
+> +	test_pre_first_run_el1();
+> +	test_thread_handoff(false);
+> +
+> +	if (!test_supports_el2()) {
+> +		pr_info("EL2 not supported, skipping nested tests\n");
+> +		return 0;
+> +	}
+> +
+> +	test_nested_post_run_pre_fault();
+> +	test_pre_first_run_no_nv2();
+> +	test_pre_first_run_nested_ctxt();
+> +	test_thread_handoff(true);
+> +
+>  	return 0;
+>  }
+> --
+> 2.34.1
+>
