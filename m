@@ -1,86 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.202
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.66
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795498299;
-	b=30eFzszE66kfEkUAAOka7Ln2iigZfVOjKXQvb8X0BkceMFrMCPOh4iSGlesdl+eUqEQg
-	 9Bj80eVI6tTjKfwZtS3QM+vViHnJF45UPutzyaKQjMUBM5Ga43R6UR3VpS0diRXyQ4Fnj
-	 XS4H+eO4FQKEEFqs9d7kDRPDzqNGjFx/ayDQXsWZ/3NNuHi6K2xEkuqNFge+qVScWB+O/
-	 4ghWrEJ0kMHwJYjEgmTPvhWnKSxo/+Fs1/6pGBplGfOOD2E2VcAnrTNtkQEgPFl4o11yR
-	 7rbHB4FH4pD2O9GmV8vIRtWyJuUjDnBM7Vi3drdjNUltq93oJ05pacjqa80K0o4vHKw==
+	t=1795499262;
+	b=5PDivWBMy/PeX0qwHAwmRlGpqGzHu8QCvjQEjTiLahrmNonYXbf883v/xJF/AXt05kgK
+	 LBy8owXlL+fMOMNizbrzpY4KC0eHXIsJVL/G5LS7MZGrlDj8foXVbLuJfCThsQKTdL3J0
+	 +xsP7tAtawAuWwI2wizKyTtKYEOriTDa1aJB8aZPPOAYeVOaZOKp5DoroVsa6JfBHfzPk
+	 kHitr5VpkpNd6UCzu4LLAuFV0OSK6HvOe0wd74yvuTAGpmezB3kpZCka1sKFTWtJp7m1a
+	 Ve73nTVNmHpoNMokdfHLpUWENA63QV+TEJvVei+ZSp5b/eTBcUhi+rLXlZuf+6yiEkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795498299;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=MHGUggYwA3gp5Hl40fLruxFZvaBCGWgXTV8JidRQovM=;
-	b=PUJSMQU9eE8Htz/9hXetRzIGYYQyFBCIOOSKGmR2cNTIHWpH0N7xnQyNxYUP86WUiac1
-	 vGpCFGJ9nDv6G+BucDHqVFXYGnwlVKZM2ZJ5NicJjTcYklHmUCC3Gjf7nOqqOY83fjagN
-	 VUU8U0bP6ustfAcP0L5x7tWgM0HqQQBN0cJfHjz7z5CzbGn5SSwtAV5tAAUTrvUy/ULMh
-	 uBSIPqUKZjgh2xwBnNZvHOEAadfE92zp/z6Rbpy9ho6yob1sjiL+ioKe5/e4BsCFJfrGA
-	 CC6XlxWrlo0iefIgUIMhBF30fcHuUKPCnbI/0AU2Lo7jcZiAUh+7yTL8QphcmAhEIhg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795499262;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=2942f0EcNrAJjC2YXD+QtpsaftZMjyCf5nWFdFWQhug=;
+	b=KSHY4UVWtg25NpLW4KnLedjbNJafTYk1RIwpHvpo6chg8nl9UKmGHOxWwtohnJAGANEZ
+	 aYjF4nct1DnLhoUu5J03vDYuO+Rgy2L03760U8uB6QAIKm1yiFU5AzcSGlyKLPRwc3yAs
+	 +AGwIoEuwAvcbw6c+zdswKi+2kq+oynFA4jhETgwrpF2JwXbU9x613cq1u72nrjyWMpRU
+	 o6lKDYRfe41w1R6OjN+JUDw6bEAPGOW6C9dZErC5Ol6RKiCleqFvCs3azFkNZp8EnMqiZ
+	 HrCwTkvoCiiY1AgqkHyvPM46St1u5Kv4o+bLk7JfaXA9XxHTm5Ki160INCsjNIEkEZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IL2OexmH;
-	arc=none smtp.remote-ip=74.125.227.202
-Received: from mail-pi2-f10.google.com (mail-pi2-f10.google.com [74.125.227.202])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ByuXYzgB;
+	arc=none smtp.remote-ip=95.215.58.66
+Received: from mta1.migadu.com (out-66.mta1.migadu.com [95.215.58.66])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D42A606A322
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 05:31:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D42A606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8D9606A31E
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 05:47:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE8D9606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IL2OexmH
-Received: by mail-pi2-f10.google.com with SMTP id 41be03b00d2f7-cd697a57d7eso1163390a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 21:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795498299; x=1796103099; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=MHGUggYwA3gp5Hl40fLruxFZvaBCGWgXTV8JidRQovM=;
-        b=IL2OexmHvHFKYHluRIKtNYMqUEc5MTXHSaKYpwbh+Hj/xk9TMIYcyvQeRcQZBqGbLx
-         JvrRAPkJzFw22AtCCgQtKJTaef7PeUHoR84RpieUxP1PXls7QB3w9/r66UxCDpukSGB4
-         ReTmmwpM6RYXhALKZRMzc1Plj6nB8PoGLzkzXTS+Cgj4gsrYY+Ya7onI1BmnTaOLPyIn
-         3xdPootTOygbq5YGD5Gugw0IPDBsx29+1QlBAEBZD6otGftJu8Rmcb7+uvXGQ/kFU7t9
-         t1JTqcWTEoBb/hXzW9xSJk83RaFgh97gpXTz1R8zNB0szVMIZ3akveKMEiYVkKT+PbyA
-         +95w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795498299; x=1796103099;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MHGUggYwA3gp5Hl40fLruxFZvaBCGWgXTV8JidRQovM=;
-        b=x5GE988WKjKCunyktVvgxgGPBB1tUjbJOlH2N27rDwva/OP1wSxtePu5UWR0N9QWFz
-         HZqVnyFXXfT7ABtotxerx3m67RxM9WXS7sl62yJmSiJMpZT6ch9mHxAp9ry8DOzTTr5k
-         cEz/ONMknINEvhsNo761GthoZ1Nx7FVPlMEYO015YYwtU20UzpiXb8f4dRxgF5mRIlIp
-         wzzNcIv9Jy7CRJLEMm5tehppqn/7lJYAr7AiHSmQv5jwO+hnJapo5Twbuqc0Rz0miQ5q
-         OlRYKHUQ4HTUpEENN0kRxwor9LyXJVXquj8C7+uPUSGwvoI9Yn8zqtsLRsfVwbJjT4Yr
-         XazA==
-X-Forwarded-Encrypted: i=1; AL+hErEvpCQpkQ98BrTtd4MVsFt4y6bc2IC3ZCemEpLeb9Ct0TkGaQaZX65aTGQ1V3sgJmrQnuiREqGXq9PjNVFwxnE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z++ptyEOw+Jqd4UpWqD99jnCwEiYoSugS1Y1gI6YqTm2JwQgPJZ
-	pBOgXYwC73tfpLD7l07Ihiq35pnUxBJDN545bbBSjtAz1fWetE/OvtA9
-X-Gm-Gg: AZFdTZdgq+IRTSqgVM1grQnlCRCPIDAinKnDLWHbs/7R5Nxfjw0jYeolAmHh/ZZb8RO
-	rpo1hSPKVmlZ4yh0+QMzAI0ApnD4w5G+f1+0/rPz/0mKCgtY6ADJgM2i0NdCegh9F1XZSokm5Ke
-	mE7NrZEJQJCIzyd6uBAsrvVf/ORWmAh6aLErUaWrkM/t/WiIuXYsG21uwLA3lS3u2GowWMPTbYw
-	rHUD1oGYAC3ROR8Lo+qC2h2f1GUefUd57oRxRfgXQl73tNNytqNoVdXscCwzqjkuGIPxrAKFVCW
-	NBd06niKX43JDyYFkBG5HKNiRV90g8E2XNfZPkhoFhKacXXUiBILBx5Ma0GOKt76Ctlctp9DNPI
-	p1j5zBz1thQbNWVhHztU0p73vP6ctMnqiH9Ir0ZhNQs0ZXLFpS9j4If10gqTX/LL3lUWsJd9kPn
-	89ee2p5ej0e/D3twCQhWRIUI9GS+6aJssF/rfV3A6u6bv2mFNUALFNsFrtAMxHWSCvz2IFUBz55
-	55BwLSPAiujFOp5WsmVFHUxSzDNbyTlxfSLrM+Jkim7WQkZn4pfjwIgw5Ry9i8Gez0gJrQr1raT
-	AvgWlX6YLXAHfBhZwdEvPluAeO55eRLTHd1VdgZdu720ceKfMxPu
-X-Received: by 2002:a05:6a20:7d9b:b0:3e0:dc12:8908 with SMTP id adf61e73a8af0-4014e25b4f1mr12376756637.81.1795498298665;
-        Mon, 23 Nov 2026 21:31:38 -0800 (PST)
-Received: from [192.168.22.174] ([114.246.237.251])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6c9c7dcbsm6562442a12.0.2026.11.23.21.31.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 21:31:38 -0800 (PST)
-Message-ID: <286b4604-fb68-452c-b131-d3847669726f@gmail.com>
-Date: Tue, 24 Nov 2026 13:31:29 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ByuXYzgB
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=55+Ze73XLUGRyfH+eSGT9jj/xqUX21ySQEW4J4NGZB4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795499258; v=1; x=1796104058;
+ b=ByuXYzgBoh+ohL9ZAYveFmqMTDk2NG/fF+SMBXsOF2tw2u7NCcBopxADzWrOkk/JyDPmdLhR
+ fGAKA8AKCqdo4TdQvV6zO/vpjOXv7wg9R+3p22ASlvdUtKxabIf962LlvV+cWd/M0lujvBG1vK8
+ wAF1J+TZTFcNesmcZSE/iYIc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 9ce4ce6d35c60903;
+	Tue, 24 Nov 2026 05:47:38 +0000
+X-Mizu-Trace-ID: 9ce4ce6d35c60903
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 24 Nov 2026 13:47:29 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net-next v4 5/5] selftests: seg6: add PSP flavor testing
+ for SRv6 End.X
+Message-ID: <20261124054729.GA14932@Liu-laptop>
+References: <20261119-srv6_flavors_endx-v4-0-284cdb484eee@kylinos.cn>
+ <20261119-srv6_flavors_endx-v4-5-284cdb484eee@kylinos.cn>
+ <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
+ <4717cab46b8eec796eb97799240cd6ab92d8c1ed@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,97 +75,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 RESEND 2/5] KVM: riscv: Avoid THP adjustment for
- existing 4K G-stage leaves
-To: Jinyu Tang <jinyu.tang@linux.dev>, Anup Patel <anup@brainfault.org>,
- Anup Patel <apatel@ventanamicro.com>, Atish Patra <atish.patra@linux.dev>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Andrew Jones <andrew.jones@oss.qualcomm.com>,
- Conor Dooley <conor.dooley@microchip.com>,
- Yong-Xuan Wang <yongxuan.wang@sifive.com>, Nutty Liu
- <nutty.liu@hotmail.com>, Jinyu Tang <tjytimi@163.com>,
- Gong Shuai <gong.shuai@sanechips.com.cn>
-References: <20260815102833.864330-1-jinyu.tang@linux.dev>
- <20260815103245.864925-1-jinyu.tang@linux.dev>
-From: Gong Shuai <gsh517025@gmail.com>
-In-Reply-To: <20260815103245.864925-1-jinyu.tang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4717cab46b8eec796eb97799240cd6ab92d8c1ed@linux.dev>
 
-Hi Jinyu,
-
-On 8/15/2026 6:32 PM, Jinyu Tang wrote:
-> When dirty logging is disabled after a G-stage PMD mapping has been
-> split, the fault path may see a 4K G-stage leaf while the backing host
-> page is still THP-backed. The existing kvm_riscv_gstage_map_page()
-> comment says that this path should update the small leaf and leave huge
-> mapping recovery to a later ioctl path.
+On Mon, Nov 23, 2026 at 01:40:27PM +0000, hangbin.liu@linux.dev wrote:
+> November 23, 2026 at 12:09 PM, "Andrea Mayer" <andrea.mayer@uniroma2.it> wrote:
+> > 
+> > On Thu, 19 Nov 2026 21:55:21 +0800
+> > Hangbin Liu <hangbin.liu@linux.dev> wrote:
+> > 
+> > > 
+> > > [snip]
+> > >  @@ -1031,6 +1187,25 @@ setup_end_flv_psp()
+> > >  SETUP_ERR=0
+> > >  }
+> > >  
+> > >  +setup_endx_flv_psp()
+> > >  +{
+> > >  + SETUP_ERR=1
+> > >  +
+> > >  + setup_hs_lo_addr 1 1 "${ENDX_CSID_PSP_FUNC}"
+> > >  + setup_hs_lo_addr 2 2 "${ENDX_CSID_PSP_FUNC}"
+> > >  +
+> > >  + # The same SRv6 policies with setup_end_flv_psp except using End.X
+> > >  + setup_rt_policy_ipv6 2 1 "3>4:noflv:End.X 4>2:psp:End.X 2>h:psp:End.X"
+> > >  + setup_rt_policy_ipv6 1 2 "1>h:psp:End.X"
+> > >  +
+> > >  + setup_rt_policy_ipv6 "2:${ENDX_CSID_PSP_FUNC}" 1 \
+> > >  + "3>4:next-csid,psp:End.X 4>2,2>h:next-csid,psp:End.X"
+> > >  + setup_rt_policy_ipv6 "1:${ENDX_CSID_PSP_FUNC}" 2 \
+> > >  + "4>3,3>1,1>h:next-csid,psp:End.X"
+> > >  +
+> > >  + SETUP_ERR=0
+> > >  +}
+> > > 
+> > On v3, Sashiko asked whether the End.X tests would pass with End.X
+> > working as End. In this topology, the nh6 of each End.X is also the
+> > next hop that a lookup of the new DA gives, and the tests pass in both
+> > cases. An unreachable route in table 90 for the next SID, on rt-4 for
+> > (i.a) and on rt-3 for (i.c), would make End fail and leave End.X
+> > working. This is close to what Sashiko suggested on v3. What do you
+> > think about adding these two routes to the End.X scenario, each with
+> > its defer?
+> > 
 > 
-> However, transparent_hugepage_adjust() runs before that G-stage lookup
-> and rewrites the fault GPA to the PMD base. If the original fault is not
-> at the PMD base, the lookup can find and update the wrong 4K leaf.
+> Oh, for i.a), do you mean add an unreach rt-2 SID on rt-4?
+> e.g. fcfcff:2::/32 unreachable? If yes, based on
 > 
-> Check the original fault GPA in transparent_hugepage_adjust(). If it
-> already has a 4K G-stage leaf, skip THP adjustment and keep handling the
-> fault at PAGE_SIZE granularity.
+> #   (i.a) hs-1 -> hs-2: on the packets with DA=fcff:3::400a, rt-1 inserts the   
+> #         extra SRH with SID List=fcff:4::e,fcff:3::400a, and rt-4 consumes
+> #         it. 
+> #         Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2        
+> #   (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:34a9::, rt-1 inserts the  
+> #         extra SRH with SID List=fcff:4::e,fcbb:0:34a9::, and rt-4 consumes
+> #         it.
+> #         Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
 > 
-> Signed-off-by: Jinyu Tang <jinyu.tang@linux.dev>
-> ---
->   arch/riscv/kvm/mmu.c | 14 +++++++++++++-
->   1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index bfd6168ebe30..2fabcd409991 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -500,10 +500,21 @@ static int get_hva_mapping_size(struct kvm *kvm,
->   
->   static unsigned long transparent_hugepage_adjust(struct kvm *kvm,
->   						 struct kvm_memory_slot *memslot,
-> +						 struct kvm_gstage *gstage,
->   						 unsigned long hva,
->   						 kvm_pfn_t *hfnp, gpa_t *gpa)
->   {
->   	kvm_pfn_t hfn = *hfnp;
-> +	u32 ptep_level;
-> +	pte_t *ptep;
-> +
-> +	/*
-> +	 * Keep the existing split G-stage leaf and update the original
-> +	 * faulting 4K page in the vCPU fault path.
-> +	 */
-> +	if (kvm_riscv_gstage_get_leaf(gstage, *gpa, &ptep, &ptep_level) &&
-> +	    !ptep_level)
-> +		return PAGE_SIZE;
->   
->   	/*
->   	 * Make sure the adjustment is done only for THP pages. Also make
-> @@ -730,7 +741,8 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
->   	 * so do not promote them through the THP helper.
->   	 */
->   	if (!logging && !is_hugetlb && vma_pagesize == PAGE_SIZE)
-> -		vma_pagesize = transparent_hugepage_adjust(kvm, memslot, hva, &hfn, &gpa);
-> +		vma_pagesize = transparent_hugepage_adjust(kvm, memslot, &gstage,
-> +							   hva, &hfn, &gpa);
->   
->   	if (writable) {
->   		mark_page_dirty_in_slot(kvm, memslot, gfn);
+> I think we should add the unreach rt-4 SID on rt-3, e.g. fcff:4::/32 and fcbb:4::/32,
+> because we need to use the neighbour route on rt-4 to redirect packet to rt-3 after
+> End action. What do you think?
 
-Thanks for your work.
+ (i.a) hs-1 -> hs-2: on the packets with DA=fcff:3::400a, rt-1 inserts the
+       extra SRH with SID List=fcff:4::e,fcff:3::400a, and rt-4 consumes it.
+       Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
+ (i.b) hs-2 -> hs-1: on the packets with DA=fcff:1::0af1, rt-2 inserts the
+       extra SRH with SID List=fcff:3::e,fcff:1::0af1, and rt-3 consumes it.
+       Path: hs-2 -> rt-2 [ -> rt-3 ] -> rt-1 -> hs-1
+ (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:34a9::, rt-1 inserts the
+       extra SRH with SID List=fcff:4::e,fcbb:0:34a9::, and rt-4 consumes it.
+       Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
+ (i.d) hs-2 -> hs-1: on the packets with DA=fcbb:0:43a9:31a9:10a9::, rt-2
+       inserts the extra SRH with SID List=fcff:3::e,fcbb:0:43a9:31a9:10a9::,
+       and rt-3 consumes it.
+       Path: hs-2 -> rt-2 [ -> rt-3 ] -> rt-4 -> rt-3 -> rt-1 -> hs-1
 
-Tested this patch on v7.4-rc4.
+Ah, add unreach rt-4 SID (fcbb:0:4000::/36) on rt-3 will break the path for (1.d)
+testing, as we use End action on rt-3 and redirect via the route. Can we just
+add the unreach route (fcff:4::/32) on rt-3 for (1.a) ?
 
-FYI:
-https://lore.kernel.org/qemu-devel/95fe4c53-fe13-4e0c-abbc-bbb546850560@gmail.com/
-
-Tested-by: Gong Shuai <gong.shuai@sanechips.com.cn>
-
-Best regards,
-Shuai
-
+Thanks
+Hangbin
