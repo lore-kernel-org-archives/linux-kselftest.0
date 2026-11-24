@@ -1,56 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795488348;
-	b=a81ebIvtkg8KF22bD3Qonu0t2R7bx1WM3vgi4pWNN35Xk8q38MOwp6sKe4Q5BjwmYncw
-	 oJBbuCVcOM7SbONwJNVqXa7lk1Ifxt9eBmB9kXiu0wCYIwj3uUJcDGeJsUydTSS4mbhfX
-	 wqDYjKnOcmLUGbHlF6z+kN2+y9d7I3oh13beC+pPxVqyxYe+gD3XbLB44nvpbEacIYO+u
-	 l+zHiImrApsMIbfuc6tJ+Cj5T1FiI/RyBKEZjlV8gWGDoZUHIlGHN+DkFhNKpnF26FhEt
-	 9vm+3zqWpFOK8J4vsUIGrv0l4K7epS5OQ/5MVgMj4TfSKpy7mrTAl1/whE1EGSU3kkQ==
+	t=1795488442;
+	b=LqwVCUfnaNZ59xbgJnDs2mTmXEaJX3hIDR413KYH5E/c14BeBlyZgEiQ0Pyf5uGLOFTB
+	 2xxW2+ePJOKWaLFKbUpwuZm7jugclNtVq8J1RpzQY6BcUZdh4Wa0wj68x7UuPeHmTk+qg
+	 kf8gEqAWVxTCEecmuGXkMDVrF3aj/0yURxWyGo4D0LoTdRibmNtjqtQrkA4DmQfsox+4V
+	 F0Lt9TiVy3pZul4mMjrqW/XVDHdQ9lZcncxzyOBzM8T2RhlOFtApvMbCR5B/z3IcB/mVo
+	 giEKOJfH5exxo6RmoTFlD80bH8gKaYItIRWf84CWDoDu0eulkdWTQkGMtIcLcL8hStA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795488348;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer;
-	bh=yaYHO1oIUImCUU9cwe2iK7VU7fd58ViuOl0ZzvsW4bE=;
-	b=fRLFvesZCndZ60HYNcPGL2e4/Rp7DUMGeOHRLld3Q00yMsjKQIuF1kSgc6hWFgakPZ7a
-	 C9usVKAx+WpN4IbTmNWpuuO76HaUcQbxNmN3iCLEtX23EJNCREIfNdgljgkiBrARpBYIj
-	 dw2riYadrHx2/Jtgh6+QAhaH3ZwzOvroWksdx4PAkmQHOsxlVPOKiPK+lViSPoH4eZda4
-	 VOfxUV3I9gYVyVYPjuoY0v/wHRapist5KlWHHIFKvmYvtUe7cQCnrshkt+Xe61+lqlKIN
-	 MDxL5EnsKQL5CvE9yhX3Aeeg02Sq/dLkmOx9ZfKWTW6etO7rZnuJIDNJPASJcn8jtAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795488442;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=4Ak85eFE9JxCR3zMmp1Y1erF3ON9qQ7ryAUtMmLoOyI=;
+	b=TZv77kT7uFXLG712DANEAmNbH4jBNhFbGn0Jx/PY6aFZKxkK5plJ83FW72TDC/eT1Jm/
+	 foX37ZsbD6QN5cno0u8zUICgvURJWX+5fmJ6b+jeQLggO55mgDjWtA3xEJe/TNFcAacYR
+	 cgs/6NRP8wRfPDHauNoPWAkT/I66JdALMXkWS3Wa56FdcJsRRKVo/xIoAX0lNbnsnLgqB
+	 5grvYLxLISCUsvqZXnu+MKrKYcOcTMfnN1LfGtWsnxLL98V6C3R7KJbCWC55YM7uOt9bZ
+	 +eP8lsz9ttgLBlPQSMod1KP5cYlxgqX3935Iingf+0nQrSeBM+fZG7mscZbGakR+gYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l8bdwhGJ;
-	arc=none smtp.remote-ip=91.218.175.137
-Received: from mta0.migadu.com (out-137.mta0.migadu.com [91.218.175.137])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="bxNEDSI/";
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82577606A31E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 02:45:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82577606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08B4606A322
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 02:47:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F08B4606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l8bdwhGJ
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qzpTQoDwS6cLGZFWNs52zI9mgbGStu6J7WvVy1Ad8aQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795488345; v=1; x=1796093145;
- b=l8bdwhGJOV2vct01XP7BGjpirV3yy9MLuJxOSpO/pWutOmkBQ8woLZD4t3VqUND22dlv6Xjl
- FxCDselGfgNpAJjZDpdp0/kSKPdLrRKHZF506N0nUs/VeKUAXDJkv6jH4eKQFTzJWT8QT5zNg7w
- WLamZUF7khKbloGN65oeE/oM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0ed6ca40b76e6384;
-	Tue, 24 Nov 2026 02:45:45 +0000
-X-Mizu-Trace-ID: 0ed6ca40b76e6384
-X-Migadu-Flow: FLOW_OUT
-From: Qiliang Yuan <qiliang.yuan@linux.dev>
-Date: Mon, 23 Nov 2026 21:45:02 -0500
-Subject: [PATCH v2 3/3] selftests/udmabuf: test mapping a huge page backed
- udmabuf
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=bxNEDSI/
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795488441;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Ak85eFE9JxCR3zMmp1Y1erF3ON9qQ7ryAUtMmLoOyI=;
+	b=bxNEDSI/tsvFPUN8OOz9wMpSpRThQkz4wWjwwOdK2N+lFBlNDBQUFgUvZbnvL/RWoRV5Oh
+	e8QZhLfhS2V/puL59+Li661eJAZwtg14+UDCBxNeDdq2VXx1I+lDnL1tQ388kKfBv22FS8
+	xgebY99l5H2fMSxdDeInWa7ajAGlRE0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-263-X0zwz4szNye-pJzbouK3Pw-1; Tue,
+ 24 Nov 2026 02:47:17 +0000
+X-MC-Unique: X0zwz4szNye-pJzbouK3Pw-1
+X-Mimecast-MFC-AGG-ID: X0zwz4szNye-pJzbouK3Pw_1795488434
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B741618002E2;
+	Tue, 24 Nov 2026 02:47:12 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 37B94588;
+	Tue, 24 Nov 2026 02:47:08 +0000 (UTC)
+Message-ID: <407316d0-24b6-44a3-b4c7-90a4b3695fae@redhat.com>
+Date: Mon, 23 Nov 2026 21:47:07 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,171 +71,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261123-feat-udmabuf-huge-pfnmap-v2-3-3254f801fc36@linux.dev>
-References: <20261123-feat-udmabuf-huge-pfnmap-v2-0-3254f801fc36@linux.dev>
-In-Reply-To: <20261123-feat-udmabuf-huge-pfnmap-v2-0-3254f801fc36@linux.dev>
-To: Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Philipp Stanner <phasta@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>, 
- Vivek Kasireddy <vivek.kasireddy@intel.com>, Shuah Khan <shuah@kernel.org>
-Cc: =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
- "T.J. Mercier" <tjmercier@google.com>, Philip Yang <Philip.Yang@amd.com>, 
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Qiliang Yuan <qiliang.yuan@linux.dev>, 
- Natalie Vock <nat@pixelcluster.dev>
-X-Mailer: b4 0.13.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 1/3] tick/sched: Make tick_nohz_full_mask and
+ HK_TYPE_KERNEL_NOISE cpumask consistent
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Ridong Chen <ridong.chen@linux.dev>,
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Thomas Gleixner <tglx@kernel.org>, cgroups@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20261123041209.382726-1-longman@redhat.com>
+ <20261123041209.382726-2-longman@redhat.com> <awSvBOgM9WSj-1hH@pavilion.home>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <awSvBOgM9WSj-1hH@pavilion.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-udmabuf maps the ranges of a buffer that are backed by huge pages with
-PMDs, provided the mapping covers whole PMDs at an aligned address.
+On 11/23/26 4:24 PM, Frederic Weisbecker wrote:
+> Le Sun, Nov 22, 2026 at 11:12:07PM -0500, Waiman Long a écrit :
+>> When the nohz_full boot parameter is first set, the cpu list parameter is
+>> passed directly to tick_nohz_full_setup() to set up tick_nohz_full_mask
+>> cpumask. Then the HK_TYPE_KERNEL_NOISE cpumask will be set up as the
+>> inverse of given cpu list parameter. Some of the timer code and RCU
+>> uses tick_nohz_full_mask directly while other timer code, scheduler
+>> and other subsystems use the HK_TYPE_KERNEL_NOISE cpumask.
+>>
+>> With CONFIG_PM_SLEEP_SMP && !CONFIG_PM_SLEEP_SMP_NONZERO_CPU config
+>> options, the boot CPU will be cleared from tick_nohz_full_mask if set
+>> while the corresponding HK_TYPE_KERNEL_NOISE cpumask isn't touched.
+>> The nohz_full entry in kernel-parameters.txt does state that the boot
+>> CPU will be forced outside the range to maintain the timekeeping. So it
+>> makes sense that the HK_TYPE_KERNEL_NOISE should be modified accordingly.
+>>
+>> Fix this inconsistency problem by adding a new cpumask_set_cpu() init
+>> function to be called by tick_nohz_init() when the boot CPU is cleared
+>> from tick_nohz_full_mask.
+>>
+>> PM_SLEEP_SMP_NONZERO_CPU depends on ARCH_SUSPEND_NONZERO_CPU which can
+>> only be set for the PowerPC architecture. Moreover CONFIG_PM_SLEEP_SMP is
+>> on by default, it means most kernels will not allow CPU 0 to be set in
+>> the tick_nohz_full_mask and hence should be set in HK_TYPE_KERNEL_NOISE
+>> cpumask.
+>>
+>> Fixes: 6f1982fedd59 ("sched/isolation: Handle the nohz_full= parameter")
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+>
+> If you like, it would be nice to remove tick_nohz_full_mask and rely on
+> the housekeeping mask instead.
 
-The existing tests of huge page backed buffers only map a few pages, so
-they never get a PMD mapping or check what is read through one.
+That will be a bigger change. It can be done later on. For this fix 
+commit, I want to make it simpler.
 
-Map a 64 MiB udmabuf backed by 2 MiB huge pages and read back what was
-written to the memfd, with a different pattern in each huge page: through
-a mapping of the whole buffer, which must be PMD aligned for a 64-bit
-task when THP support is built in, through a mapping at an unaligned
-offset, and from a forked child that inherits the mapping of the whole
-buffer.
+BTW, sashiko had also noted that when arch_irq_work_has_interrupt() 
+returns false, tick_nohz_full_mask will be cleared and 
+tick_nohz_full_running will be set back to false in tick_nohz_init(). I 
+am not quite sure on the best way to handle this. Should we just 
+disallow nohz_full to be set when !arch_irq_work_has_interrupt() or 
+should we allow tick_nohz_full_mask and HK_TYPE_KERNEL_NOISE cpumask to 
+diverge? What do you think?
 
-Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
----
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 97 ++++++++++++++++++++++-
- 1 file changed, 96 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index d78aec662586b..6eaef1b3aee01 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -14,6 +14,7 @@
- #include <sys/ioctl.h>
- #include <sys/syscall.h>
- #include <sys/mman.h>
-+#include <sys/wait.h>
- #include <linux/memfd.h>
- #include <linux/udmabuf.h>
- #include "kselftest.h"
-@@ -130,6 +131,98 @@ static int compare_chunks(void *addr1, void *addr2, off64_t memfd_size)
- 	return ret;
- }
- 
-+#define HPAGE_SIZE	(2UL << 20)
-+#define HUGE_BUF_SIZE	(32 * HPAGE_SIZE)
-+
-+/* Check that @len bytes mapped at @addr match @mem at @off */
-+static bool check_huge_mapping(char *addr, char *mem, off_t off, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i += getpagesize()) {
-+		if (addr[i] != mem[off + i])
-+			return false;
-+	}
-+	return true;
-+}
-+
-+/* Check that @len bytes of @buf at @off read back what was written to @mem */
-+static bool check_huge_range(int buf, char *mem, off_t off, size_t len)
-+{
-+	char *addr;
-+	bool ok;
-+
-+	addr = mmap(NULL, len, PROT_READ, MAP_SHARED, buf, off);
-+	if (addr == MAP_FAILED)
-+		return false;
-+
-+	ok = check_huge_mapping(addr, mem, off, len);
-+	munmap(addr, len);
-+	return ok;
-+}
-+
-+/*
-+ * Map a udmabuf backed by 2MB huge pages, which can be mapped with PMDs, and
-+ * read it back from a PMD-aligned address, a sub-range at an unaligned offset
-+ * and a forked child that inherits the mapping.
-+ */
-+static void test_huge_mapping(int devfd)
-+{
-+	struct udmabuf_create create = {};
-+	int memfd, buf, status;
-+	bool thp, aligned, ok;
-+	char *mem, *addr;
-+	pid_t pid;
-+	size_t i;
-+
-+	memfd = create_memfd_with_seals(HUGE_BUF_SIZE, true);
-+	mem = mmap_fd(memfd, HUGE_BUF_SIZE);
-+	/* Give each huge page its own pattern */
-+	for (i = 0; i < HUGE_BUF_SIZE; i += getpagesize())
-+		mem[i] = (char)(i / getpagesize() + i / HPAGE_SIZE);
-+
-+	create.memfd = memfd;
-+	create.size = HUGE_BUF_SIZE;
-+	buf = ioctl(devfd, UDMABUF_CREATE, &create);
-+	if (buf < 0) {
-+		ksft_test_result_fail("%s: [FAIL,test-8]\n", TEST_PREFIX);
-+		ksft_test_result_skip("%s: [SKIP,test-9]\n", TEST_PREFIX);
-+		goto out;
-+	}
-+
-+	/* The address is only aligned for 64-bit tasks with THP support */
-+	thp = sizeof(long) == 8 &&
-+	      !access("/sys/kernel/mm/transparent_hugepage", F_OK);
-+	addr = mmap(NULL, HUGE_BUF_SIZE, PROT_READ, MAP_SHARED, buf, 0);
-+	aligned = addr != MAP_FAILED &&
-+		  (!thp || !((unsigned long)addr % HPAGE_SIZE));
-+	ok = aligned && check_huge_mapping(addr, mem, 0, HUGE_BUF_SIZE);
-+	if (ok)
-+		ksft_test_result_pass("%s: [PASS,test-8]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_fail("%s: [FAIL,test-8]\n", TEST_PREFIX);
-+
-+	ok = check_huge_range(buf, mem, HPAGE_SIZE + getpagesize(),
-+			      5 * HPAGE_SIZE + 3 * getpagesize());
-+	pid = addr == MAP_FAILED ? -1 : fork();
-+	if (!pid)
-+		_exit(check_huge_mapping(addr, mem, 0, HUGE_BUF_SIZE) ? 0 : 1);
-+	if (pid < 0 || waitpid(pid, &status, 0) != pid ||
-+	    !WIFEXITED(status) || WEXITSTATUS(status))
-+		ok = false;
-+	if (addr != MAP_FAILED)
-+		munmap(addr, HUGE_BUF_SIZE);
-+	if (ok)
-+		ksft_test_result_pass("%s: [PASS,test-9]\n", TEST_PREFIX);
-+	else
-+		ksft_test_result_fail("%s: [FAIL,test-9]\n", TEST_PREFIX);
-+
-+	close(buf);
-+out:
-+	munmap(mem, HUGE_BUF_SIZE);
-+	close(memfd);
-+}
-+
- int main(int argc, char *argv[])
- {
- 	struct udmabuf_create create;
-@@ -138,7 +231,7 @@ int main(int argc, char *argv[])
- 	void *addr1, *addr2;
- 
- 	ksft_print_header();
--	ksft_set_plan(7);
-+	ksft_set_plan(9);
- 
- 	devfd = open("/dev/udmabuf", O_RDWR);
- 	if (devfd < 0) {
-@@ -268,6 +361,8 @@ int main(int argc, char *argv[])
- 
- 	close(buf);
- 	close(memfd);
-+
-+	test_huge_mapping(devfd);
- 	close(devfd);
- 
- 	ksft_print_msg("%s: ok\n", TEST_PREFIX);
-
--- 
-2.43.0
+Cheers,
+Longman
 
