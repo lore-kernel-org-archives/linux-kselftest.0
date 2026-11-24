@@ -1,158 +1,114 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.66
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795554024;
-	b=cpKjHB0HZgTGGzIO0wteh76OuP+jMGisX79BRCmMdm9eOj5F5u6r1nTbSJSeF2EJeUI8
-	 KA/xwWCu8PO9s8cvBWWbnypOdH0wusQe3y+WvZ0I3+BXY1jM7faiEYr5e0tyKSOS4mjMH
-	 K6pmhcy849mEjICXlXsuLh7vGJO1kbqPewxol9MAerCFydjVUDkwBBC7AOsSUh1RGNbfa
-	 lQoS8U1SsUD/TRjAx27LoJjN1pPN6gEiUw82xN3VS03OfzPAWQ2y2EnE6qOBPMYmg2egs
-	 M4805XwMgxmIVG1S7eLF+HjHsvVVK6ip+RhsreLtGoQgy0uSgKtUX2F4SRfLT8dOeFQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795554024;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=jjv1mIIKh04y4Zd7iYGk4WPmgR8svfKmyDKnirK3Tdw=;
-	b=3BajkVaUQ1xoJkJtc9yjab1SQqqsU9FCdlqkzrRm29ugdqPt6WnyPO7Ok/fZ2txzHv/T
-	 qtby/Y1pLsiW6fO3fECPcTnyysZTfvA7Kg8myX2hq5Y7C1iS0IQiijpYbfVevO8MBQX69
-	 uTw6PDHOUxG2M47anPwdbaDoJAOtcm6ajQ4qb+iGc4wfktivnn9Zglc07EnvLt3qO1L0k
-	 ymr9SBljm+apxC+ggN/dFGw+7NxJovlFpf4p3oqC6fwarmyDEQU49fCyCM8mcYyLN96jn
-	 51Klp2YwZADum1hjpbBxV/1wTWi5Hy/fO611oyRQZmMOB0U5H/C3vGnIrswic07N+Tw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=s3l6xpxK;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.196.66
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013066.outbound.protection.outlook.com [40.93.196.66])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795554293;
+	b=BSlOX03q/IgPSNFBKaBSH6unu19wEO2aJg8rc/IRqtYfQGMjmbN9sPKvEWOj6cXjl6LX
+	 oBB1pU45CTg4TnpID69uhubR59Ral6zkMKx7GUcmJPLJ784GgLkB5CAyFD9aczKuC92gx
+	 AtSGoy1ySFSORB0+OX8mDBkcTCsh3cj2OhK4UBzgYMzY8hpDhiF8IU6aEoj48TwY/7nUO
+	 CX72sw/rWJlOePE8cWeQEtjn1Y7G+UUfnZYJJ3TNtbXSGUxWMqN4Lc+4A5bAE+aNXCeGQ
+	 lM3riwTSvW3bSetE3zBpb5SsK/W3cTrWHN7HsetdK6spffpFoVENYKXlkGvOj8NwDLA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795554293;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=ZF0ZEZpoHEm8FUy6RriCEdgOQWszqmxkXH9zAhTRnuM=;
+	b=OL9Ha49r5TKVoyOYITDnJqI1c/KlkbnKQlk41w0jmzgHfavHRLGjrKgSj2SvCrn8iUrg
+	 C9AS81yvjAOBn1F4L7LOGM10u7qE3W+RsmBgcsbhjUHdXLOS0xDVy7khKQQYwoRyU7E/h
+	 TDfyf6NJTTU6Fh/j524RYdfeHoSBWr/xzyp3UXTsKle7jz4+/H6s2sha/SyglJ2L5rJ6f
+	 7q2soS6bQkEQmpZ9Tf40oXmrrhaRrcCOn3bT2frb2xLFy7vH1NRQZyMoX7yxLdpMeC3bf
+	 Yix+ztUUcYHBzRpXObja/GchRPJKwxNm+sso5EPyIfxeKFjLSpkr8WxZQbyShtaxBuQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=g28aLKz1;
+	arc=none smtp.remote-ip=209.85.216.47
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0318606A32D;
-	Tue, 24 Nov 2026 21:00:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0318606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9BF606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 21:04:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC9BF606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=s3l6xpxK
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wzA/PFwNEYjYE62OyeMNBApiaqqduK4V0Ev1iac1jZtoH43rkf9+gtjXfkyHxK1FcWGYnVPvs8O8+a+iNMfZpLiedmxE5Lkr50pYF1bZ1QTQOpkc+yj0YibUvpuPOf+X2S69o8KBgc5v/Xh8Z/sCHUc4WI6Ub+fLp5Cdq5Dgc+Dfq/w3s3tNzGxPWBsIzIAs1RNzeC3mgrCiimK7gOHgBq7qV+uiqPWKiwkH+i06naZcd6kl60xbc3gzWPaeqrC2MLzyQ1NNhLX7WrJD0ZChSYKXRia3Swo0Pb5RYFkrVHs20D5UFNEWBRdITKM7fSdTzGMS2XH2q22FBAux/8K+GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jjv1mIIKh04y4Zd7iYGk4WPmgR8svfKmyDKnirK3Tdw=;
- b=YQwppcOu7iMkg+OsEZ05kUkzpStC4NKsxmcJGLjWtB+rkAChL8O8xNd+Ut/MlfaYxLM4wD+ir8CrKh6M3HAGgofF7s3o76/lrsAOFzjaKAEvn5OoUDch/Pf996KQ8UqItFL90Vz+XRUF0KXEoxy9ZYvkB1QOEJWRWsJg6Gv6WhIespinTRUZBD3872Km3FTKq1iKv1nrz9FsprKGr9k04nlgWyI7nAj5rp+uch41VZTtrd+VehhxAvdi1EcqhjWN+v10vxFXLd+GPqITqss21askUl7UdTGUF3AFHgihMfJJKTmb/XY4K5WigASIburqiIsIKpQu0sV1KQ4c5ip7zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jjv1mIIKh04y4Zd7iYGk4WPmgR8svfKmyDKnirK3Tdw=;
- b=s3l6xpxKdMnMnkuz9VhhUc/A7JThxawOeRqHcd7Ixq0xbwJPnOdbmmtgUk0XpkxFycDyfsWCGCUrEx7QSAEQY1650XvNOUBogVd1AcW+3PYPM/ecQMh8WxRGRh/H+qzJfztlgYbORrlF1zizIw7LWMuIfoeBVHuvmByF8khzQ6iwiwY3j4RFiBq3xQTLJYaJQ8HX7e60BXhKG4JHLctBPVnzCry7h8xIW6VxCdGS6gKTw3TW4ulq3nJfkwAtWmMPUxhk8Kp3/ohh3Ou2cUHDtNPGXT0MjljKwAkYrr2q9VTEJc3TUZNh+5AAdE9z0b/q0ABhSWL89uBgT1TQ/FcasQ==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SN6PR12MB2814.namprd12.prod.outlook.com (2603:10b6:805:72::33)
- by SA1PR12MB9245.namprd12.prod.outlook.com (2603:10b6:806:3a7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Tue, 24 Nov
- 2026 21:00:12 +0000
-Received: from SN6PR12MB2814.namprd12.prod.outlook.com
- ([fe80::9a18:413c:9702:8f59]) by SN6PR12MB2814.namprd12.prod.outlook.com
- ([fe80::9a18:413c:9702:8f59%6]) with mapi id 15.21.0639.012; Tue, 24 Nov 2026
- 21:00:12 +0000
-Date: Tue, 24 Nov 2026 16:00:10 -0500
-From: Yury Norov <ynorov@nvidia.com>
-To: "Gregory Price (Meta)" <gourry@gourry.net>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Oscar Salvador <osalvador@suse.de>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Brendan Jackman <brendan.jackman@linux.dev>,
-	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Johan Hovold <johan@kernel.org>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Alistair Popple <apopple@nvidia.com>, SJ Park <sj@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Kees Cook <kees@kernel.org>, Kairui Song <kasong@tencent.com>,
-	Barry Song <baohua@kernel.org>, Qi Zheng <qi.zheng@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Xu Xin <xu.xin@linux.dev>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Lorenzo Stoakes <ljs@kernel.org>, Pedro Falcato <pfalcato@suse.de>,
-	Jann Horn <jannh@google.com>, Chris Li <chrisl@kernel.org>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Youngjun Park <youngjun.park@lge.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, Waiman Long <longman@redhat.com>,
-	Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Dan Williams <djbw@kernel.org>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-cxl@vger.kernel.org,
-	linux-doc@vger.kernel.org, driver-core@lists.linux.dev,
-	damon@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 01/60] nodemask: add node-state iterators
-Message-ID: <awX62m6zlghC05jo@yury>
-References: <20261120-private_nodes_v6-v1-0-74f5f9a115c2@gourry.net>
- <20261120-private_nodes_v6-v1-1-74f5f9a115c2@gourry.net>
- <awMK9V6TbU9Xtzn9@yury>
- <179544248227.412063.16491857533875192357.b4-reply@b4>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <179544248227.412063.16491857533875192357.b4-reply@b4>
-X-ClientProxiedBy: BN9P220CA0004.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:408:13e::9) To SN6PR12MB2814.namprd12.prod.outlook.com
- (2603:10b6:805:72::33)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=g28aLKz1
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3adac5c10e3so2645496a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795554292; x=1796159092; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZF0ZEZpoHEm8FUy6RriCEdgOQWszqmxkXH9zAhTRnuM=;
+        b=g28aLKz1/vk1teVjbcIPkNcd+jviH35OTnSBF4Aur2p/SgxXayaDiC3/qrqEP+QOzW
+         fruQkmxUBLokFnvIFLbz9oO4LVNt6Ep0DE7iSFPn//1QvfIoqRvRwEJ+HyE6jFt7njYg
+         BJ6xQdHpiE/rQ9WA4Kn0BLemn3L0Cd7YGiyIA3YatPo2y5a82nWPdN6ku28bU5++AnGe
+         H0yVPn7P3MRaxiSafIjCFPNpxz1+UF9MjBGBBPpQQAhNLwdlSyONyn19Vizm3lEeLCQO
+         K08v8jDFUyHfvOq16BkK7K7Rk2eIFXpJ0ecLYayPCW36+Zhmo7lJnl1TZ/cjXp3/f2uU
+         uomA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795554292; x=1796159092;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZF0ZEZpoHEm8FUy6RriCEdgOQWszqmxkXH9zAhTRnuM=;
+        b=nPwznah7hYBMGc77vi6L3B8mf6FX0UmwMDIEZarRIgWyq480N+QWD+RQTiqxW+iQzg
+         EOKdGHaEcjMy6KyEvR2s3fxKbugkbJC/ZaS/FDfFYYC4ITNPXFQGPy4tMBemQd/bICUS
+         mhEbewUi3UaU/MEvQdr7Au7HMdRRVCbNOJ0s/v8nFpV6L3HukLDo06IkQP0zgAUb+lx1
+         fVfbgJfPFhTW9V4HnDRi+1b/eJgx3QaIFFpiKdKuXxiyWxLsNHET0yyNbgLvvtT4rjqZ
+         URBDqjrCdrX3JQbsnSDkgt2+hRehwm/S6Zw6hs2V4lLT2h7c2YQ6Xne2aXnPxAsDmhF9
+         9+Hg==
+X-Forwarded-Encrypted: i=1; AL+hErHacYqUPQwsNDkBxeiis9o9W5rsX9nNUTyPP8B2fp27CvQTftnqI/MEBAVcsWtXirhfYqOY+kBTri2XZHh97TY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8qqZV7wjrMotK95mSrtViSgTHdX1+/O6ok9umqkWRgy2w8lmcD
+	elI8T6vBzb2MQ5pqk44fQo8DXHvuymhgRez0DYyo95vgw25QQUCVjDG0
+X-Gm-Gg: AZFdTZeKMoQMpa4Zzwq0wBuX6dPKoXZZrVLqB3SEwbk9wv7XcnnnPzciS3H1WqMAFly
+	YQuMhe9WB0GwhqUlIsNYqQpO+Gsgpp0Mvt4BLql5kj9jXXPchSJUKESXwo/nI7L0yaZkeg/CTiR
+	pzpPb3lCCXAO6wn9cPDsAaEXpVqt+Ejp2iW8ruPYBe2kIZgL4yBfmVDR8zoB4b6CTvuWh7FdOQ8
+	/v6hkHonNJ0u5fYwG3ua+xcd8JkrIItf/WGK5x3YrBvB3WBsZN6zatR8K4Dk9rw/wDP0PnvuJkg
+	tBsuDIogaVzAe8VzmgoSJm7R4YS3BUHB+Qs5RW4/PG8rptST6q9yWtF8NfKKAsbQ7gb7u50a6mt
+	j8eEbaID4Y+GBM8EBJr24jLzaCzcgA/ysmzucpORr/jZYB6OsG+hdlN7Z2ujz5rOgNjhogWpUZ/
+	WKJiYmPXxivTk/2bdURABVcmDCLGbUD+RAx3bp3dsnlKDRiKIhfQ3Bj0JmYWQ4JWLKcCH+LrImc
+	SBjyQMmzsOdJ1z+u9mEuagvZi4ahKg3lLzXF4BszL3wbuL9Y+z7QB4jaxQUAHcns4+z+XFbIM47
+	QIxks7kNZu+D1OeP3CCc5LflAiIFB1agjErEmeMsxYFVmru9gnc92h9ixFZEH0y7hZQPXfMa20G
+	R6qPAdIfNQgQ+hTC6LPLhmsZ1KurpA1Ly3w==
+X-Received: by 2002:a17:90b:3e81:b0:3b0:a9de:9884 with SMTP id 98e67ed59e1d1-3b41c92a389mr12844093a91.40.1795554292022;
+        Tue, 24 Nov 2026 13:04:52 -0800 (PST)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41adcafe0sm25947628a91.16.2026.11.24.13.04.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 13:04:51 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Nov 2026 21:04:50 +0000
+Message-Id: <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
+Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, "Maciej Fijalkowski"
+ <maciej.fijalkowski@intel.com>, "Tianyi Gao" <tianyi@cloudflare.com>,
+ "Octavian Purdila" <tavip@google.com>,
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, "Alexander
+ Lobakin" <aleksander.lobakin@intel.com>, "Ilias Apalodimas"
+ <ilias.apalodimas@linaro.org>, "Lorenzo Bianconi" <lorenzo@kernel.org>,
+ "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>, "Magnus Karlsson"
+ <magnus.karlsson@intel.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Eric Dumazet" <edumazet@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>, "Simon Horman" <horms@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v8 bpf 0/7] xdp: fix page_pool leaks
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Slawomir Stepien" <sst@poczta.fm>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "David S . Miller" <davem@davemloft.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>
+In-Reply-To: <20261124104016.532341-1-sst@poczta.fm>
+References: <20261124104016.532341-1-sst@poczta.fm>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -162,81 +118,252 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2814:EE_|SA1PR12MB9245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9347f340-d6f3-4f83-827a-08df4a6dee49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|10070799003|366016|23010399003|10067099003|56012099006|11063799006|4143699003|261021121427099003|261102123227099003|22082099003|6133799003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	fgkd3OzRnSAvoGcdjsAe3uNhI9s9Pbkslz2vW2/gxCqtyreRamJ2IEIGocp7bKFVCUUzwImeXhoOXqEjICUQZ+0VS3YTaggEXQ+ybQ71vhmLLKVAHIcqh7vW3BLVckhC53mQNhJWjauP3V6U2QyWEuY7pcYJYZYHEh6tBsgTO2gPGVhZE6FcRsF0hdhrhvbGE2v+5gZdQOPMy7R/owlf4rFWCDcN59R4js1v/nxYDlYZhWMnSkUlPY7K6oFxlWZLncFaOLvlSvzxtbL+odvJ+CzN7PdYy152kBxZRKzEK2HAWmlCg9XZJ4ArbJYWl/OtTPulx4FbMpR+DXT9ap9Pm5KGiLoE0FTmrWgeVLA2IccXTPWWS36bbEnkf6WLno8kipjQ0/w1PuGUYGwVX7oE3XBdjCwbtphnpnFaC1hBEMbxvgbefy3FWMdMOWhbKX2BbHoTrTOW18UtQrvLaRgYlFs599BEGbUANwRgljg+JObzxx1B4SoHLkmWY+OupVOvFDzeXxsvF2n4PwtbyhmZeeSi50RBU+SM4+ZQ0MWr4/8qDCm/L4J0KDSZvdZZIwxQKlx+xVtMUmSigligQmC8FgKSW3nAwKfQDf0VylGNB10clDcd4CtzmxKGDB0vWO8Gt46ur31yp68z5h7u8LHSw1yVzLOOuQ/Y/syaFKYKVxY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2814.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(10070799003)(366016)(23010399003)(10067099003)(56012099006)(11063799006)(4143699003)(261021121427099003)(261102123227099003)(22082099003)(6133799003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?lyl85Xv3fhesIPLeycCkaFybRKJ34uQuDibWvKU5AY6uZlXfBQ65O1p7YvAG?=
- =?us-ascii?Q?PkyYgYLe7iNzqCCPgouRZrXlsuUaxZWn/pg6HOmqNZZj0h83jSf2cP/uxgIW?=
- =?us-ascii?Q?CCW86034F5qiPat10OCStCeS8Pmw+N9phXIdZscpIhYGYlmc7/TDqWPV0Xa4?=
- =?us-ascii?Q?Ay/4f0zLF5jAdeXsTenIkBeOiv/ut4olLduwNbNSJl2TTgPkzSaLYRWP0/kA?=
- =?us-ascii?Q?hOb4NZDxEi6vaq8bbwPoBI9R0MpPOM0atXpQ2M+DAgxNj9mdVesy1b4R3xRe?=
- =?us-ascii?Q?Q93KsVu0zUbKxGKE6Z7hvzWVFMEk+xor0nppHHmV6xIFev/WGys4uWD7DdAl?=
- =?us-ascii?Q?4lLNoiMxqHNl+RZ4FGZzc+OtiRRxYRPwT96Aw2QArtjLH5h/uxUFnIIzn7Rc?=
- =?us-ascii?Q?scJJqyETQUmL5ah4aV7Q7Vif//BGaeeQuwBWjQqU6LxkVh4jZ5RUb4YGMiQp?=
- =?us-ascii?Q?Kpln2LC+2ABGY2qgLKdT5kCqlbODnNbD8+nEuLEFMnciIOzh3yUFDoa7C5jc?=
- =?us-ascii?Q?DbTFnKCKtAhpZxEYRCtFWTGcVQToTwWKT7NrUoTCsfnMFK1pX6jEw3RRueha?=
- =?us-ascii?Q?X0svnLqYHz5u4LYrR0oWMcn+gzkF5Vp9HEZdkCFNhgg5Hl5wbxhFsjs358vH?=
- =?us-ascii?Q?qa8+l8k2v4d1TXGv1t+R0SYRN0be2/+/oSZrdEmtxqStWYay53nm/MsRb18n?=
- =?us-ascii?Q?p3/oYrKkxuORNlvDS8QItuWk2ajNrLlYz3Gvg5tspRPyk8lgeyuwV9xZ897M?=
- =?us-ascii?Q?ONO3Gai7AbbsN15couN2omI5YeVUCXtKU1aL1L37Ii36SnXZi2THlk9ceKZL?=
- =?us-ascii?Q?wvur6EzfSvWZt4kdtZc/6gpTjUd+e5q9obOzoC0KiNBfkqPBv9vkMl/Pf/7L?=
- =?us-ascii?Q?eepALf6IZ30Loo7UPUyyje+Gt7x6kAffBTxUYbjGI/4pPkW9oKaVKo8LibOY?=
- =?us-ascii?Q?Ln9jPBAk8ilf6MMeZTdGUTfWxInVn90V4LtpLM9AZkS8DOhYWukNSv3ldb7I?=
- =?us-ascii?Q?6J+sfvHqn7e/qWlxunjU+4HyyygCQjKApug2uTMwDKWrxOuYS1/XQA1hXkV8?=
- =?us-ascii?Q?V2qs7+i1zHykjxqKc2R4ptj5vKrXOzEWe+GPbHWVO51OnKW2NPxqlP57h21J?=
- =?us-ascii?Q?KwfHVSDevPLTvE1SX1qbbkUSAKl25oRpxc2rjZSmSmapwEbRdCItTwAN6x+1?=
- =?us-ascii?Q?Cq2dwAZf7jP4KgTbeBY98+CM6dFeDgbOE8EUlEoEDYxulnVaU79MJKpWXCD2?=
- =?us-ascii?Q?oGlYkVTbl/ElTR8Y4cEpDWh5BgInuYr31HXSrDr24oEmmd94wTUHBfxIo5KI?=
- =?us-ascii?Q?7Jf4N7tpUdAUl9rrJHcuTCDmOhualHiC7p8OoWo8rMouvSXKObFrQwvR3Ynj?=
- =?us-ascii?Q?twIRQ2At4jyhqolbnUbAOE+yka0pcYEqb3DSOk/oMzti9YviNMtNPN0Sw/m2?=
- =?us-ascii?Q?MTZo9pE4mgiuTUjJ+XIUGFN3oJ2RJuA1TJs/nrTDFzkpjhG5lq4ekFeR5M+n?=
- =?us-ascii?Q?dMFiskhcVUHefgqFrW2wcLDnqRKwqRSczA3CRily70aAWDXGN18AsPF1Txq3?=
- =?us-ascii?Q?Jy4PIWNhDR0XSDr8al9oxwjbG0vdvv6oMzF+Vn4GynRVnqILtthkDd7Fen7U?=
- =?us-ascii?Q?H9GRUbN5AMU5sNEtUickR07I0RbYVlUtBJV2eWldR/9CS/aOCqJoSv4P9JrX?=
- =?us-ascii?Q?7Y2jWpAs6jwzDijrncu+unJVOGm4mtQHgzjnGVq2SePKHry8SQgJq/rqXjpT?=
- =?us-ascii?Q?DgnIhSzHDbmmsMeba/3xSNfuhWNJ6TxcCs90NEspDOvzRA5+6TB8?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9347f340-d6f3-4f83-827a-08df4a6dee49
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2814.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2026 21:00:12.1844
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7d9nWnGlSsha9Mzyfzuo8O1ajjPwmA5+pwYtPFzuTfGiKubPpUn4hBTm3tooE3DqsNdJIJImecJef72UZzrs3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB9245
 
-On Mon, Nov 23, 2026 at 09:01:22AM -0500, Gregory Price (Meta) wrote:
-> On 2026-11-22 10:32 -0500, Yury Norov wrote:
-> > On Fri, Nov 20, 2026 at 01:08:52PM -0500, Gregory Price via B4 Relay wrote:
-> > > From: "Gregory Price (Meta)" <gourry@gourry.net>
+On Tue, Nov 24, 2026 at 02:40 AM Slawomir Stepien <sst@poczta.fm> wrote:
+> Patch 1 prepares bpf_prog_test_run_xdp() for patch 3. Generic XDP runs
+> on the rxq info of the device queue, which is shared with test_run; with
+> patch 3 alone, any packet through generic XDP on lo makes later
+> multi-buffer test runs free their frags as page_pool pages. Restoring
 
-...
+The store into the shared rxq is the problem.
+Patch 3 does it for every packet on every CPU, for linear skbs too.
+The comment in include/net/xdp.h says that rxq must not be updated
+during NAPI poll.
+On Dudu's patch I proposed to put rxq on stack:
+https://lore.kernel.org/bpf/DMAP8LNBJRPN.2THUHLKURP25G@gmail.com/
+It works for veth too.
+An skb leaves veth as a MEM_TYPE_PAGE_SHARED frame, like today.
+No need for xdp_convert_skb_to_buff(), veth_xdp_get_pp(), pp_cow,
+rq->xdp_mem and patch 6.
 
-> for_each_node_mask_and() would be more consistent, change just requires
-> passing node_state[N_MEMORY_X] instead of just the node state bit.
-> 
-> > > +	for_each_and_bit(node, nodes_addr(mask),			\
-> > > +			 nodes_addr(node_states[state]), MAX_NUMNODES)
-> > > +
-> > 
-> > Please use nr_node_ids instead of MAX_NUMNODES.
-> > 
-> 
-> I followed for_each_node_mask() which uses MAX_NUMANODES but let me
-> look.
+Patches 6 and 7 never free a page_pool frag. Jiayuan's test does:
+https://lore.kernel.org/bpf/20260911135711.109338-3-jiayuan.chen@linux.dev/
 
-This is my glitch - I have a series switching the codebase to the
-runtime nr_node_ids, but didn't merge it yet. So please continue using
-MAX_NUMNODES. I'll add you in CC for that series, so you'll be aware.
+Below replaces patches 1-5.
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index faa837a..8bb015c 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -63,7 +63,6 @@ struct veth_rq {
+ 	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
+ 	struct net_device	*dev;
+ 	struct bpf_prog __rcu	*xdp_prog;
+-	struct xdp_mem_info	xdp_mem;
+ 	struct veth_rq_stats	stats;
+ 	bool			rx_notify_masked;
+ 	struct ptr_ring		xdp_ring;
+@@ -642,6 +641,7 @@ static int veth_xdp_tx(struct veth_rq *rq, struct xdp_buff *xdp,
+ }
+ 
+ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
++					  struct xdp_rxq_info *rxq,
+ 					  struct xdp_frame *frame,
+ 					  struct veth_xdp_tx_bq *bq,
+ 					  struct veth_stats *stats)
+@@ -657,7 +657,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 		u32 act;
+ 
+ 		xdp_convert_frame_to_buff(frame, xdp);
+-		xdp->rxq = &rq->xdp_rxq;
++		rxq->mem.type = frame->mem_type;
++		xdp->rxq = rxq;
+ 		vxbuf.skb = NULL;
+ 
+ 		act = bpf_prog_run_xdp(xdp_prog, xdp);
+@@ -669,7 +670,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 			break;
+ 		case XDP_TX:
+ 			orig_frame = *frame;
+-			xdp->rxq->mem.type = frame->mem_type;
+ 			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+ 				trace_xdp_exception(rq->dev, xdp_prog, act);
+ 				frame = &orig_frame;
+@@ -681,7 +681,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+ 			goto xdp_xmit;
+ 		case XDP_REDIRECT:
+ 			orig_frame = *frame;
+-			xdp->rxq->mem.type = frame->mem_type;
+ 			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+ 				frame = &orig_frame;
+ 				stats->rx_drops++;
+@@ -746,6 +745,9 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+ 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+ 	int i;
+ 
++	/* the buff holds plain page references from here on */
++	xdp->rxq->mem.type = MEM_TYPE_PAGE_SHARED;
++
+ 	get_page(virt_to_page(xdp->data));
+ 	if (likely(!xdp_buff_has_frags(xdp)))
+ 		return;
+@@ -755,6 +757,7 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+ }
+ 
+ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
++					struct xdp_rxq_info *rxq,
+ 					struct xdp_buff *xdp,
+ 					struct sk_buff **pskb)
+ {
+@@ -773,7 +776,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+ 	/* SKB "head" area always have tailroom for skb_shared_info */
+ 	frame_sz = skb_end_pointer(skb) - skb->head;
+ 	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+-	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
++	/* the prog can free only frags and they came from skb_pp_cow_data() */
++	rxq->mem.type = MEM_TYPE_PAGE_POOL;
++	xdp_init_buff(xdp, frame_sz, rxq);
+ 	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
+ 			 skb_headlen(skb), true);
+ 
+@@ -794,6 +799,7 @@ drop:
+ }
+ 
+ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
++					struct xdp_rxq_info *rxq,
+ 					struct sk_buff *skb,
+ 					struct veth_xdp_tx_bq *bq,
+ 					struct veth_stats *stats)
+@@ -815,7 +821,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	}
+ 
+ 	__skb_push(skb, skb->data - skb_mac_header(skb));
+-	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
++	if (veth_convert_skb_to_xdp_buff(rq, rxq, xdp, &skb))
+ 		goto drop;
+ 	vxbuf.skb = skb;
+ 
+@@ -830,7 +836,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	case XDP_TX:
+ 		veth_xdp_get(xdp);
+ 		consume_skb(skb);
+-		xdp->rxq->mem = rq->xdp_mem;
+ 		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+ 			trace_xdp_exception(rq->dev, xdp_prog, act);
+ 			stats->rx_drops++;
+@@ -842,7 +847,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 	case XDP_REDIRECT:
+ 		veth_xdp_get(xdp);
+ 		consume_skb(skb);
+-		xdp->rxq->mem = rq->xdp_mem;
+ 		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+ 			stats->rx_drops++;
+ 			goto err_xdp;
+@@ -914,6 +918,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			struct veth_xdp_tx_bq *bq,
+ 			struct veth_stats *stats)
+ {
++	struct veth_priv *priv = netdev_priv(rq->dev);
++	struct xdp_rxq_info rxq = {
++		.dev = rq->dev,
++		.queue_index = rq - priv->rq,
++	};
+ 	int i, done = 0, n_xdpf = 0;
+ 	void *xdpf[VETH_XDP_BATCH];
+ 
+@@ -928,7 +937,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			struct xdp_frame *frame = veth_ptr_to_xdp(ptr);
+ 
+ 			stats->xdp_bytes += xdp_get_frame_len(frame);
+-			frame = veth_xdp_rcv_one(rq, frame, bq, stats);
++			frame = veth_xdp_rcv_one(rq, &rxq, frame, bq, stats);
+ 			if (frame) {
+ 				/* XDP_PASS */
+ 				xdpf[n_xdpf++] = frame;
+@@ -943,7 +952,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			struct sk_buff *skb = ptr;
+ 
+ 			stats->xdp_bytes += skb->len;
+-			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
++			skb = veth_xdp_rcv_skb(rq, &rxq, skb, bq, stats);
+ 			if (skb) {
+ 				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+ 					netif_receive_skb(skb);
+@@ -1149,9 +1158,6 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
+ 						 NULL);
+ 		if (err < 0)
+ 			goto err_reg_mem;
+-
+-		/* Save original mem info as it can be overwritten */
+-		rq->xdp_mem = rq->xdp_rxq.mem;
+ 	}
+ 	return 0;
+ 
+@@ -1180,7 +1186,6 @@ static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
+ 	for (i = start; i < end; i++) {
+ 		struct veth_rq *rq = &priv->rq[i];
+ 
+-		rq->xdp_rxq.mem = rq->xdp_mem;
+ 		xdp_rxq_info_unreg(&rq->xdp_rxq);
+ 
+ 		if (delete_napi)
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index d6c9dc6..1d89b6f 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1349,6 +1349,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	struct netdev_rx_queue *rxqueue;
+ 	struct skb_shared_info *sinfo;
+ 	struct xdp_buff xdp = {};
++	struct xdp_rxq_info rxq;
+ 	int i, ret = -EINVAL;
+ 	struct xdp_md *ctx;
+ 	void *data;
+@@ -1417,8 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	}
+ 
+ 	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
+-	rxqueue->xdp_rxq.frag_size = PAGE_SIZE;
+-	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
++	xdp_init_buff(&xdp, PAGE_SIZE, &rxqueue->xdp_rxq);
+ 	xdp_prepare_buff(&xdp, data, headroom, linear_sz, true);
+ 	sinfo = xdp_get_shared_info_from_buff(&xdp);
+ 
+@@ -1426,6 +1426,11 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	if (ret)
+ 		goto free_data;
+ 
++	/* generic XDP uses the same rxq and its frags can be smaller */
++	rxq = *xdp.rxq;
++	rxq.frag_size = PAGE_SIZE;
++	xdp.rxq = &rxq;
++
+ 	size = linear_sz;
+ 	if (unlikely(kattr->test.data_size_in > size)) {
+ 		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 6140fd9..fe9f222 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5684,6 +5684,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+ 	void *orig_data, *orig_data_end, *hard_start;
+ 	struct netdev_rx_queue *rxqueue;
+ 	bool orig_bcast, orig_host;
++	struct xdp_rxq_info rxq;
+ 	u32 mac_len, frame_sz;
+ 	__be16 orig_eth_type;
+ 	struct ethhdr *eth;
+@@ -5707,6 +5708,13 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+ 	if (skb_is_nonlinear(skb)) {
+ 		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+ 		xdp_buff_set_frags_flag(xdp);
++		/*
++		 * The frags came from skb_pp_cow_data(). xdp_rxq is shared
++		 * with other CPUs and with BPF_PROG_TEST_RUN, so use a copy.
++		 */
++		rxq = rxqueue->xdp_rxq;
++		rxq.mem.type = MEM_TYPE_PAGE_POOL;
++		xdp->rxq = &rxq;
+ 	} else {
+ 		xdp_buff_clear_frags_flag(xdp);
+ 	}
+@@ -5719,6 +5727,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+ 	orig_eth_type = eth->h_proto;
+ 
+ 	act = bpf_prog_run_xdp(xdp_prog, xdp);
++	xdp->rxq = &rxqueue->xdp_rxq;
+ 
+ 	/* check if bpf_xdp_adjust_head was used */
+ 	off = xdp->data - orig_data;
+
+pw-bot: cr
