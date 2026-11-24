@@ -1,67 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795492592;
-	b=04OYiUzMBd9bqPQVo/OZMAbyifbofUOYs+h+lUQA0xEzsj+ERX+9lc0qojE20fObNUXA
-	 6rIVaCQdq28vTltbqcgz9tlB3D2jZTCgCaOt6qmouMvW7avutZC7gvMtTj4JiJNkfYFkX
-	 ZtxGBGNHzAlnAu3b4tIYpMzPFFjiXUbuZGQ6+DhHK8LfKLwAZryQMMXYxfeXd4d2riQif
-	 VF6Uftm3XPYrSUCJO0yGT8kGfZSTS6/Oh5JPoZi0IUo4bj+h1i3hLHE5u+L7lJH8Y28xG
-	 E9S2SOPeJ9kQhFXpHQl4NhXGd3vZTMf8AVhB8uBDoxpXg1eWyH3gs4rMONq9K1EXt4A==
+	t=1795492738;
+	b=VC1eQlpNlCPQrk4Sv+b1eUAFET0+tak82dIsasf2rB/n8wUJbju3CSuRWJJGVLm+wYRm
+	 mRYeEw/c+7QQzj8AohBg8U6BoraaRD6no6s57pptbxBLzMVuKoBnY81KBNdjz5PFYDl5W
+	 Zj3NCTnznCG4B5Jdwg+Ui9Kn6gDKEI3ZjxtHLzi+DK8qgsdiHtXSnPu7tcbiy87YUWKhq
+	 mDp8gsPw9zv7L79iKQPtpWul7R9TXP75Kp/388lUx/Cw/bjGe/ZouTrSThs2KxIU+RjmF
+	 8uQ03b23MXzqNLjeDZhIiNmDZ053iHLYzfr6SwnbPcmE552m7FVi1sn0r80B6Ss6WaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795492592;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=EIBmlYOi3ApaAiATtJHu4JtR5iiov1p7BtaCf5Hg4Pw=;
-	b=wVBz7QQakQLRJ/F2AJOqRuDwuXBXWYiWlSuqrZBlw71wwlQbMi+NCS5AiTk3RRekGR1S
-	 l3bfDD64t48DHrDeoi5hxS9V4fILw41kL72hgc4McVSWbJV0bm7XAj+OOM8DsxtFlUM/3
-	 SsL1BqsxbEb9i7ob/dJ1TLaIgc5o+xvi0wI2UpIwjb4kaeyeVhDo5bbrDS/XcO/yuNATb
-	 nlXk1cEu6qbynBo/S6Iv4yD//Ex7GEtdutQGq4/0JQHuJTsBqOOT9TolqvrOIgYeZ+00c
-	 Sefq6Uh9kDlhVfPr3nHgcduMgdbDhMoIHoIuqxFLD6zNXhko1lKfWT3/ihSDsd/nECA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795492738;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=NS45uIMLO58QIZFdFsRqQwpuveO9a35GIgn0ekSZke8=;
+	b=DjUTnBsukSIeG/MLC9+o2XR6K6YQkXkfiBlc2+fG2S08gioJ5xHVOTvCA1GZcxrB9Kl4
+	 WPbPoKLW5vXb5K2CLyn7eWt08FFPUxpxwj6b5P871fTG5di912CMv3j4sAdpVVBy4zibT
+	 OA5ZSuSDEQTsJa7xJ9qlEAt5hPsBwHdnxP7u9Eh1OZ2cEn1ReOJhAVtBuzRATrCg2fjH2
+	 hFfE8orV4KWOz+AjD+8T+8+/KAdaGW6bXaEO+YW83SjK3i6A83SEgmVYXg+RM6i8B+vmO
+	 he67MgF3qP5UE/e2Y2yAEd9DBl9y6RJ0fxBKHQEzfAEeNmqs2VY15XcHF3H/aidd51w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LydSVxDX;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aTy5+RVI;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5C7606A69A
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:56:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A5C7606A69A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 32163606A338;
+	Tue, 24 Nov 2026 03:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LydSVxDX
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795492590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EIBmlYOi3ApaAiATtJHu4JtR5iiov1p7BtaCf5Hg4Pw=;
-	b=LydSVxDX5oNI2oP+vlu2t0HMtY/UzvEZ+tI381IOcRkjl3Ehlt/vyRJQeU4QZOiJLg0Pfp
-	fGgt1jZnBOabsf3Zf5RIz9QObF54VYV2H35kd3hOCwDsnqkCFUiUNxtVE7Yj9vmLUTL2qT
-	hUksywJefFrCWpC35vE4byXFqgzrQ1U=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-448--VzRuqE8PEOi6MGeA_xtQA-1; Tue,
- 24 Nov 2026 03:56:25 +0000
-X-MC-Unique: -VzRuqE8PEOi6MGeA_xtQA-1
-X-Mimecast-MFC-AGG-ID: -VzRuqE8PEOi6MGeA_xtQA_1795492582
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F71819540C5;
-	Tue, 24 Nov 2026 03:56:21 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E848F18004FE;
-	Tue, 24 Nov 2026 03:56:16 +0000 (UTC)
-Message-ID: <790b34ba-17da-47c8-8416-ad0b7d721415@redhat.com>
-Date: Mon, 23 Nov 2026 22:56:15 -0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aTy5+RVI
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 0A6C91F000C6;
+	Tue, 24 Nov 2026 03:58:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795492737;
+	bh=NS45uIMLO58QIZFdFsRqQwpuveO9a35GIgn0ekSZke8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=aTy5+RVIdr9BQCwJGNCU+JGZNyIuBkeW2PKcNU22mYFHbK02ep8bNci6jVvu2FCjC
+	 mWD0vUNBFxa16W5/KVosNO/h3a9BHaXz88hq25B1gm3Zqah/8hjvcSRZXUfBfkLoGd
+	 Lq2QZT48f80Cew+fSSoIoW7VwpGEA5V5tWetW2qZ5rC3QM8ebIt3fnGNCa/k9PNyiv
+	 NjXdmCWJsT+P2rZTLcXiveeiQayLn2A4pDDsqdPMUVibLOmgdiSguA2lhUHpOS/zcY
+	 Mob1v+oAmz4/cXBraQV7HBSKGBYGrScyIJwnm6LX73iBJi5oQWeFb2pivVAFOqfaIb
+	 Ue3TCbDSwse1A==
+Date: Tue, 24 Nov 2026 05:58:54 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Lennart Poettering <lennart@poettering.net>,
+	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awULfmZR-pESj2EC@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <awTmJIErjasO4lqq@kernel.org>
+ <awToL2PFNKVgIfqs@kernel.org>
+ <awUGkYoyDXp4P5LJ@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,162 +82,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 2/3] sched/isolation: Forbid the boot CPU from
- being domain isolated
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>, Thomas Gleixner <tglx@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <guopeng.zhang@linux.dev>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20261123041209.382726-1-longman@redhat.com>
- <20261123041209.382726-3-longman@redhat.com>
- <7dbec7f4-35d0-4351-a61d-ab0a649c41d6@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <7dbec7f4-35d0-4351-a61d-ab0a649c41d6@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <awUGkYoyDXp4P5LJ@kernel.org>
 
-On 11/23/26 10:27 PM, Ridong Chen wrote:
->
->
-> On 11/23/2026 12:12 PM, Waiman Long wrote:
->> It is reported that with CONFIG_CPUSETS=n, a kernel booted with
->> isolcpus=domain,0 hits the BUG() in select_fallback_rq() during boot
->> [1]. At boot time, cpu 0 is the only CPU online and an unbound kworker
->> cannot be run on a domain isolated CPU causing kernel panic.
->>
->> Sashiko also reports that domain isolating the boot CPU can break system
->> suspend and trigger a BUG_ON() [2]. So it is problematic if the boot CPU
->> is domain isolated.
->>
->> There may be other kernel subsystems that have problem if the boot CPU
->> is domain isolated as most of them won't take into account the fact that
->> boot CPU is currently allowed to be domain isolated. Given the fact
->> that the boot CPU is likely to be disallowed from the nohz_full list,
->> it makes sense that we should not allow the boot CPU from being set in
->> the isolcpus boot parameter as well. This will also avoid the kind of
->> problems listed above.
->>
->> Do that by clearing the boot CPU from the isolcpus range when it is
->> specified in the boot command line. A warning may also be printed when
->> that happens. If the users want to have boot CPU in the managed_irq
->> or nohz isolation list, a standalone isolcpus boot parameter will be
->> needed instead of combining domain and other flags in the same isolcpus
->> boot parameter.
->>
->> This is indeed a change in behavior which is customer visible. So the
->> kernel-paremeters.txt is updated to mention the fact that boot CPU
->> cannot be isolated.
->>
->> [1] 
->> https://lore.kernel.org/lkml/20261117144817.265109-1-mathieu.desnoyers@efficios.com
->> [2] 
->> https://sashiko.dev/#/patchset/20261108180849.1268263-1-longman%40redhat.com
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->
-> This fixes a boot-time BUG(), so it seems worth a Fixes?
+On Tue, Nov 24, 2026 at 05:37:58AM +0200, Jarkko Sakkinen wrote:
+> On Tue, Nov 24, 2026 at 03:28:19AM +0200, Jarkko Sakkinen wrote:
+> > On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
+> > > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
+> > > > SYSCALLS
+> > > > ========
+> > > > 
+> > > > Two new system calls are proposed:
+> > > > 
+> > > > 1. userland_open(): open an opaque staircase-initialized container
+> > > >    object (modeled on Intel SGX enclave initialization with separate
+> > > >    build and live states) with no embryonic state, opting selected
+> > > >    shared namespaces in via an allow-list instead of unshare semantics.
+> > > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
+> > > >    extents for a container user namespace in a single atomic system
+> > > >    call.
+> > > 
+> > > I played on patching systemd and userns_set_idmap() alone does already
+> > > a lot of good. I'm figuring out userland_open() integration next.
+> > > 
+> > > For the test implementation I probe the opcode's and dependening on that
+>                                             ~~~~~~~~
+> 					    syscalls
+> 
+> > > use either "userland path" or "fallback path".
+> > > 
+> > > This auto-probing is done so that I can commit the patches to my kernel
+> > > test harness, which already has systemd, and try them out when built
+> > > against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
+> > > 
+> > > The project builds a hybrid ISO, which is a bootable bootc/composefs
+> > > based operating system, and has toolbx bundled i.e., a reasonable test
+> > > environment for all of this. It is also device-installable via "npx
+> > > @puu/install"
+> > > 
+> > > I had to level the harness up a lot so that I could realistically test
+> > > lockdown-hibernate but it is is also pretty good emulation environment
+> > > for any possible container features.
+> > 
+> > Kernel is ukified and systemd-boot is used as the boot loader i.e., for
+> > kernel testing purposes corresponds to something like Silverblue except
+> > not using GRUB.
+> 
+> Experimental systemd patches:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/commit/?h=main&id=e4d6b15da3376ad09c0c575cedf467f69db32a52
+> 
+> The patches are layered per syscall feature:
+> 
+> - 1-5: userns_set_idmap
+> - 6-10: userland_open()
+> 
+> Virtual device would add path/mount complexity and generally dependency
+> to mounts i.e., I think it was an awful idea. At least initially this
+> feels fairly lean way of doing container things now that I've trialed
+> systemd-nspawn a bit.
+> 
+> I'll update the patches over time.
 
-The boot time bug reported by Mathieu requires a rather special config 
-that is not common and I doubt it will be used at all in production. So 
-I don't intend for this to go to stable and it is also a slight change 
-in user visible behavior. It is also a long standing issue that is hard 
-to pinpoint a Fixes tag.
+"userland_open" is just a name as I don't have anything better for the
+time being (perhaps <something>fd() e.g., containerfd(), would work
+better).
 
->
->
->> ---
->>   .../admin-guide/kernel-parameters.txt         |  7 +++---
->>   kernel/sched/isolation.c                      | 22 +++++++++++++++----
->>   2 files changed, 22 insertions(+), 7 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt 
->> b/Documentation/admin-guide/kernel-parameters.txt
->> index 930cee4de79a..1c8bf3583b0b 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -2954,11 +2954,12 @@ Kernel parameters
->>                   You can move a process onto or off an "isolated" 
->> CPU via
->>                 the CPU affinity syscalls or cpuset.
->> -              <cpu number> begins at 0 and the maximum value is
->> -              "number of CPUs in system - 1".
->> +              <cpu number> begins at 0 and the maximum value
->> +              is "number of CPUs in system - 1". However boot
->> +              CPU (cpu 0) cannot be domain isolated as it
->> +              may cause problem with some kernel subsystems.
->>                 managed_irq
->> -
->>                 Isolate from being targeted by managed interrupts
->>                 which have an interrupt mask containing isolated
->>                 CPUs. The affinity of managed interrupts is
->> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
->> index c0c8b8862cbd..de8152351450 100644
->> --- a/kernel/sched/isolation.c
->> +++ b/kernel/sched/isolation.c
->> @@ -231,6 +231,7 @@ static int __init housekeeping_setup(char *str, 
->> unsigned long flags)
->>   {
->>       cpumask_var_t non_housekeeping_mask, housekeeping_staging;
->>       unsigned int first_cpu;
->> +    int boot_cpu = smp_processor_id();
->>       int err = 0;
->>         if ((flags & HK_FLAG_KERNEL_NOISE) && !(housekeeping.flags & 
->> HK_FLAG_KERNEL_NOISE)) {
->> @@ -253,12 +254,25 @@ static int __init housekeeping_setup(char *str, 
->> unsigned long flags)
->>         first_cpu = cpumask_first_and(cpu_present_mask, 
->> housekeeping_staging);
->>       if (first_cpu >= nr_cpu_ids || first_cpu >= setup_max_cpus) {
->> -        __cpumask_set_cpu(smp_processor_id(), housekeeping_staging);
->> -        __cpumask_clear_cpu(smp_processor_id(), non_housekeeping_mask);
->> +        __cpumask_set_cpu(boot_cpu, housekeeping_staging);
->> +        __cpumask_clear_cpu(boot_cpu, non_housekeeping_mask);
->>           if (!housekeeping.flags) {
->> -            pr_warn("Housekeeping: must include one present CPU, "
->> -                "using boot CPU:%d\n", smp_processor_id());
->> +            pr_warn("Housekeeping: must include one present CPU, 
->> using boot CPU:%d\n",
->> +                boot_cpu);
->>           }
->> +    } else if ((flags & HK_FLAG_DOMAIN) &&
->> +           cpumask_test_cpu(boot_cpu, non_housekeeping_mask)) {
->> +        /*
->> +         * If the same isolcpus boot parameter covers both domain and
->> +         * managed_irq/nohz, the boot CPU will also be removed from the
->> +         * managed_irq/nohz isolation list. Users have to use a 
->> separate
->> +         * isolcpus boot parameter for them if they want to include the
->> +         * boot CPU.
->> +         */
->> +        pr_warn("Housekeeping: Boot CPU must not be domain isolated, 
->> clearing %d from isolcpus range\n",
->> +             boot_cpu);
->> +        __cpumask_set_cpu(boot_cpu, housekeeping_staging);
->> +        __cpumask_clear_cpu(boot_cpu, non_housekeeping_mask);
->>       }
->>         if (cpumask_empty(non_housekeeping_mask))
->
-> The code change itself looks good to me.
->
-> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
-> Thanks.
->
-Thanks,
-Longman
-
+Br, Jarkko
