@@ -1,172 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=2 smtp.remote-ip=52.101.72.70
-ARC-Seal: i=3; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795508039;
-	b=vd3nZOKu9QOumuzTofd+F4SXYJwdI82iTTjXo4blJ5aaERBwKA0BPLmrEtszT+t55Svm
-	 RHYcZ038WBujMU5hRlpU6jJGHrEd+ecgcqS+cPJbNJMffwgSSnY2PJXACW/7f/m4afFme
-	 U/B8B1mwV1Zy3ORfZF7BxiLQnkUCz7rp8oqEhwumstm8amaPE5AdSfp4JbCJ/qihh2Ooe
-	 PkFbFylJUlFL+6bTCQMKkfr6sQNwDL1QQZ9DmSFHSQxf5QKAucJ3yjA59EIp9flIyy52L
-	 bApJR27FQz+UtxqYubgdkE/V7UaTzdF8v+Vf6WNoWVCfNfdj8+7zH25AsnfgKnNgy2w==
-ARC-Message-Signature: i=3; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795508039;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:CC:Subject:Thread-Topic:
-	 Thread-Index:Date:Message-ID:References:In-Reply-To:Accept-Language:
-	 Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 Authentication-Results-Original:x-ms-traffictypediagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:x-checkrecipientrouted:
-	 nodisclaimer:X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam-Untrusted:
-	 X-Microsoft-Antispam-Message-Info-Original:
-	 X-Forefront-Antispam-Report-Untrusted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:
-	 X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
-	 X-EOPAttributedMessage:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
-	 X-MS-PublicTrafficType:X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=qz/Gy0kGZ3xNNuVlmOOkcX3nwfAD+QZVVlSBXV4mxxY=;
-	b=FS3CHDXs40MhkcB3FxJuB6J5iTDtXDv1fSuXbo4PHU1vSXeoJV6LhNktBNHfGMSjMpYR
-	 16QszWsFiIhik1Cpzl6f/LC4vtu//0wct3D8xmMf52JVXmYlu7kxx978O5RhUwUCraZC8
-	 A4jzlJyhSeI42tWCTQFto8MlDauOegsvsdPg8eCs4LaLwRxrYemwDhvLqyHBJYaNq1HOu
-	 4NkEGHPnDnx19WYtLlC4g5i13lPIlqpyGhk7DKXxTvsBxAhdHWz0k2pL8WKSeDWI+mzUm
-	 Yf1O9Ue5hpu2uYA6Qcujybf/8GhGM0crT5RP1jdRWuS03WJpCDDCkJZOPKgkzhUuurw==
-ARC-Authentication-Results: i=3; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=ULTvYK51;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=ULTvYK51;
-	arc=pass header.oldest-pass=2 smtp.remote-ip=52.101.72.70
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013070.outbound.protection.outlook.com [52.101.72.70])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795508386;
+	b=qBVsg27/PaLnQYPMMUnW0MLKjUBgqrX4Od9xISpNxKL2fQQaXxyj7XbfqSTFx24g85Kh
+	 8I4F3VfanQSKQ5zM5jQXwIelu5f666ekMJrbAGeczGmkAhc4tmPXB+HC8RL1TS/mlgI2v
+	 jdV3ay23uUth84zG9ChAVylsDtleGNNUrTop7agQoGb2wEPHT9kgvsvuDthlLNX7JUvs7
+	 FIe5zx/k35v0Jq7eAljWA49ri7fNIo063nTwfXDdphZN7+G8bZf1CiVRVsIT1Fmv1P2zg
+	 6LkKB7QS4Lq717zpbyhxopLCMAfWYKkC/g9rGoQ6YXO/mlPJqt4YHFx4yGT72udsDOw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795508386;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=E9abjPcthtIyY+MMEtQrTLzJvidQaqZjoo58q53HUoc=;
+	b=4bL36zJAWuFafEASIHo+41ON0b9Uclh5QYwRub0Szu22knTeTYftxtDPxYgRBgrZKwgO
+	 1bm7S1Ua8X1btUZss8aZa0fb1AGoQkbbcDbAR3C31m7wUEPBMlefzk1cO2W7vk3++FhiF
+	 vaEzOe0WY6WqQG+j71x9PKfQtLkCYxwwxe/pCcGWq7BJyImQ2ffgJf8Aqgj3R8GN6Faol
+	 0NRyY5Q/6YkXoRt0Ed08s73iseo7U0h9jThxh0GTKoPLgwo4Ao/CGJ7D+KIjW+Zpec1Vi
+	 08hE+A35CEE3Dvz2VHTqguR8+evlzlPpXGjYh/A4tGXaNmxyD7ecnXVl3zS3gszc7AQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e3O83Rok;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB5D606A31E;
-	Tue, 24 Nov 2026 08:13:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4AB5D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 10324606A330;
+	Tue, 24 Nov 2026 08:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=ULTvYK51;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=ULTvYK51
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=pOGjaq4HOA3/qQ3cnCtVLybUYD3UVJ8zZKS/T0sPcusSkKy48KzBoZ8WGp5aUM5lfsBUG3z0/ieYzbnf/w5RzYyqOTliGaZfXzpsSBe8egF0OFb6Zug1dsV6l0S+zuxX4ukeQH0nVQXx22EoM4H2L/tphrqkswG+R7ikeIkfYpvZkifon9z7hY5zGZHHm0bgUU2s7H1kp1lF/Qr1QqfqxhV8PFztY5nZuBYX4EJx1PDP5e6+DeeSwBlKhl10ck0BQ/ktXkKlebOQd0etOrrjbPn4l92K3UwGXzRZEzZzYuxDNyTwlQ3LX87cQbe/l+yyW2e7R6KFwVR2k+DPmHIDfw==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qz/Gy0kGZ3xNNuVlmOOkcX3nwfAD+QZVVlSBXV4mxxY=;
- b=gwIqLfh1O1trvwO9z4JC3pfrQp4EIR2nlUJiKEQ1B9H7xez0WtTM3BfKQ8vshyhzabAMimBzh//WevfMUOOaPnprAjAsvA7qVySPOmm/gCgXUNbyQbtNndvtOtiiMQc7EcBoHs7gLHG/PCCWD7CaisD32IsNc+2lO/IGOK4o/KO5S7Sms4cDUoxMRS+mVtgYpo/wvpIQVeikeuXtyUPfoT8ymVxOIZwlvZepEY8OGiV6+U9p5MQbaTMuScPsRaFIbmzmDv/4d5E2Gh5oI6ut4MZbaL/RRLfMzZo/brD5TFlki8oKiyghPAXDpV/wjfFUH/B9LRB6vjM/RLWh3UETdQ==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=linux.alibaba.com smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qz/Gy0kGZ3xNNuVlmOOkcX3nwfAD+QZVVlSBXV4mxxY=;
- b=ULTvYK51fe4Y3ek/F/eGMzIIDOJUmVM/WdAQ4dHY4PWe2wlYiBTMulKDc2jMIRfdWQ97bjVeQywBPrhIsxlB7HZrAmHw1x89QMy2eQgfnVJTAHsAO62LnmuhPI5X6737F+sWlYKDEviCuxSfkMFuXKbDr3erNOgW6Fq8ppAgZqU=
-Received: from DU7P250CA0021.EURP250.PROD.OUTLOOK.COM (2603:10a6:10:54f::10)
- by GVXPR08MB10787.eurprd08.prod.outlook.com (2603:10a6:150:150::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.14; Tue, 24 Nov
- 2026 08:13:44 +0000
-Received: from DB1PEPF000509E9.eurprd03.prod.outlook.com
- (2603:10a6:10:54f:cafe::a8) by DU7P250CA0021.outlook.office365.com
- (2603:10a6:10:54f::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.6 via Frontend Transport; Tue, 24
- Nov 2026 08:13:44 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 4.158.2.129) smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DB1PEPF000509E9.mail.protection.outlook.com (10.167.242.59) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.5
- via Frontend Transport; Tue, 24 Nov 2026 08:13:43 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HoOUkFfMy94lTtv1eOM1wTHLZkJodCb+eSPWBiLeCMu7r/HgjVxTDoZre2RE46fUIEb7Feh75OQXPhCz5aOlZOuDvNbzf4a/HgQgh/vGD9NJC2k/5MCa3sOBwHKjtxUSNLF//5TbBJtUgwkCVVXhgiwx+VjX2LemaqaVxHOnm/xMMW8G4+7fneAMZDWNsrDsOmbejlLpFf9AZz5LeN6TKwzDjHwPIvIup7GL6yhWmM4OKJEHNg0nDDnd+9w3sLuuCzt9Laz4KdguYGWDbF0FySOaBhJyZ5BnlbsaI0blrt6jSV8n8WZ/9f64hRjtNdQpvpIpTEsCdcHtuE3BgZNFQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qz/Gy0kGZ3xNNuVlmOOkcX3nwfAD+QZVVlSBXV4mxxY=;
- b=mJsLq6B3BfiJZbb6xX3zAQeAlvqAz/DqUfUwHJK4P4SNfDwaXzgZbb7L26ABpGNI0eAoe7xw0cpDFAu7sjWO7ZRQezkNx6dUcT6hbeQFnEg7iT75MFJBhVRD08UDFDIbDa+2O0WeAJt9dv3GjrAh8QfpKxmTqIZRzA2AccV8sitqJGRaI2GQVeWNHnnzlDNlamDF91YzqPg1Y27XTl427EUdgQ28DgoNfYSqQxED2wqDYWNlzCVms37S96fOUu5+N9wOGJ1Ey92iNH02LpTvn6Lo3HXJmzdmyDlbV7AsqPl3JX0nh6PrOFp2GjyJcg9zFYkJJpWV1mGa8WxunZU0bA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qz/Gy0kGZ3xNNuVlmOOkcX3nwfAD+QZVVlSBXV4mxxY=;
- b=ULTvYK51fe4Y3ek/F/eGMzIIDOJUmVM/WdAQ4dHY4PWe2wlYiBTMulKDc2jMIRfdWQ97bjVeQywBPrhIsxlB7HZrAmHw1x89QMy2eQgfnVJTAHsAO62LnmuhPI5X6737F+sWlYKDEviCuxSfkMFuXKbDr3erNOgW6Fq8ppAgZqU=
-Received: from AS2PR08MB9786.eurprd08.prod.outlook.com (2603:10a6:20b:605::22)
- by PAVPR08MB9532.eurprd08.prod.outlook.com (2603:10a6:102:312::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Tue, 24 Nov
- 2026 08:13:00 +0000
-Received: from AS2PR08MB9786.eurprd08.prod.outlook.com
- ([fe80::d721:dfdb:2f83:155]) by AS2PR08MB9786.eurprd08.prod.outlook.com
- ([fe80::d721:dfdb:2f83:155%6]) with mapi id 15.21.0639.012; Tue, 24 Nov 2026
- 08:12:59 +0000
-From: Justin He <Justin.He@arm.com>
-To: Yao Yuan <yaoyuan@linux.alibaba.com>
-CC: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Fuad
- Tabba <fuad.tabba@linux.dev>, Joey Gouly <Joey.Gouly@arm.com>, Steffen Eiden
-	<seiden@linux.ibm.com>, Suzuki Poulose <Suzuki.Poulose@arm.com>, Zenghui Yu
-	<yuzenghui@huawei.com>, Catalin Marinas <Catalin.Marinas@arm.com>, Will
- Deacon <will@kernel.org>, Mark Rutland <Mark.Rutland@arm.com>, Paolo Bonzini
-	<pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan
-	<shuah@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH 3/3] KVM: selftests: arm64: Test KVM_PRE_FAULT_MEMORY
- before first KVM_RUN
-Thread-Topic: [PATCH 3/3] KVM: selftests: arm64: Test KVM_PRE_FAULT_MEMORY
- before first KVM_RUN
-Thread-Index: AQHde1zMDs/Q2stDPkmFlaiiFOxCN7c8z3MAgAAP9EA=
-Date: Tue, 24 Nov 2026 08:12:59 +0000
-Message-ID:
- <AS2PR08MB97864B308EA8B8528C915E71F7442@AS2PR08MB9786.eurprd08.prod.outlook.com>
-References: <20261123150917.2679600-1-justin.he@arm.com>
- <20261123150917.2679600-4-justin.he@arm.com>
- <6gdla4edbwa6e2s36libskrg5h3glxq3tdl7blthke42sbuqb7@tpczgelv4vud>
-In-Reply-To: <6gdla4edbwa6e2s36libskrg5h3glxq3tdl7blthke42sbuqb7@tpczgelv4vud>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Authentication-Results-Original: mx.microsoft.com 1; dkim=none (message not
- signed) header.d=none;dmarc=none action=none header.from=arm.com;
-x-ms-traffictypediagnostic:
-	AS2PR08MB9786:EE_|PAVPR08MB9532:EE_|DB1PEPF000509E9:EE_|GVXPR08MB10787:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc736694-008b-49ca-667b-08df4a02db1a
-x-checkrecipientrouted: true
-nodisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|6133799003|22082099003|18002099003|11063799006|56012099006|261009223027099003|261021123027099003|4143699003|261022105027099003|261102123227099003|261026121527099003|261028144727099003|261026140227099003|261021121427099003|261022075727099003|38070700021|10067099003;
-X-Microsoft-Antispam-Message-Info-Original:
- AX1HtReWUdlZcdnO+CMnqysIMYU1xT1G+hmVq0uv0B7KcLC0LZIVZmWFSsMVB2k6M2ssd98zgo3fWKrMzl8lMeJtH/0M7TyLKhELE2PfgYgurgpmtAQu2gIBct983bZSD2Csi1kRG24JgBullG7JHhGDci8Yb8gE2LrlhC5VuzmNewyRwGsxFyj8p52ZqrzWXl2Euh/pqgmiwxnZTrdn+tOtuk0HZvWQBkTh4W6bBUTjzVHk50FnclIDbtEgPWOLIa8+keHiawGH9/LRt9SadpfkjKxw2/7JH8en3ua846oCQb/gLp0UuWIapyRTl4fn7UUMNI3+x4aQRZkItjQ7F1dCYu4iZRh/RKtSAJVvocD1YjaH4gU3ObPkegjZk1rXewth5Fh9VFMgyqGocxnp5OpgbbcSgOnxY9ESIR0kgqQUzzcaS7tO2bmC9rAf3jJej4xhnXJ8EVWW3OswZpv+bwNeO/golaY1zvfOS5kJSKykF5ITSI2WeBFqelDCH6Cwf7unhSRXxIIy1Ecgy28vxcOiuvcv+e4lMrFW0mzHN7ElrKMPr0vdPZr9/MzarSqQXHEg7/IX7KIlCxgTizSN6r1VQZXVLcwViqHbwtHs8D55O8pORJDBgvmT2fLUSSYHp7jY3rgvr6+LA3IZQTAC1nI19U5IcTN5452PbOjoGuVjypYml3kjE8DNWTpurGBK0LcUvMux1MXHFGhS+7+b+dDWm+IrvWaWxCbTws90jH8=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9786.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(6133799003)(22082099003)(18002099003)(11063799006)(56012099006)(261009223027099003)(261021123027099003)(4143699003)(261022105027099003)(261102123227099003)(261026121527099003)(261028144727099003)(261026140227099003)(261021121427099003)(261022075727099003)(38070700021)(10067099003);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e3O83Rok
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id CDE391F000CA;
+	Tue, 24 Nov 2026 08:19:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795508385;
+	bh=E9abjPcthtIyY+MMEtQrTLzJvidQaqZjoo58q53HUoc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=e3O83RokhWRQvZwd1DE9oTpgGvx6IqeB+fzR6eFpiyChO2W7NR7MJQGtBcoiAgXR8
+	 Wn3CnXsXOg60lEc79jyvbWLaENSpj7epk3SWKZSxsfG/TzzsD96HViD8sVrUPvjHiI
+	 Uu3bfmaxPEXAcEMAc1H7CfoY+IZGDYCSroILEOWmGmLpFtMqe71KxLTvROwTUBBEjK
+	 ZVvaTxYXqgEAgFgyKpJXSMDUSEV3VLF1gE9e9SbjHCr8Ql87moA1+n2j36wPzWax7i
+	 zLVJg4VgAJDdKWFmBmBJnIeOjxrS95srOseTu7pz6bMmjmadSVRv7TQ8qDqTHAkRSB
+	 BmAIIyq5qxSzQ==
+Date: Tue, 24 Nov 2026 10:19:41 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Lennart Poettering <lennart@poettering.net>,
+	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awVInf04kGC0uZZo@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <awTmJIErjasO4lqq@kernel.org>
+ <awToL2PFNKVgIfqs@kernel.org>
+ <awUGkYoyDXp4P5LJ@kernel.org>
+ <awULfmZR-pESj2EC@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -176,203 +83,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
- M8w5XoAvbCgZqXlLlN8xuX2LOOzCUC+ZwZdTSidU/mlZyIud66IbvHJkHWoOuWAA1RpFPqKhyU94+UpK2YXbhbQYuwubvxZL3jl+dLiTRML0wKr7arOCZOWU9Mp/st+0MRYFqOrTpeCHIyeWcyYXmBNIWZiEnUCzs9bX6S7lEe1WuwG8U8sUurv6MHMzs7PU3tpRp0AJBp4oVqF1e3Jw0gCmVqv66+T0nufn8hSpMIdEZHNE3lCypgTmDKppNPzaem2ja83kpnOOvjV/SGX5/7gWvdAldOc1pEM8Mt1Z0mmU7REvjd9qMYolS1YT8RD3y+zNav6Wjp9AErEk2dvAVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9532
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DB1PEPF000509E9.eurprd03.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	73dbc1b7-6f28-4c6f-8746-08df4a02c0fc
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|23010399003|14060799003|35042699022|36860700016|6133799003|18002099003|261009223027099003|22082099003|261021123027099003|261021121427099003|261022105027099003|261022075727099003|261026140227099003|261026121527099003|261028144727099003|56012099006|4143699003|10067099003|261102123227099003|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	MAmWPjgPCyNsAxtWjyZOdah6ck8OpZyO2j6VvhCXaMoHbd2Z/KhU0H1GXuf3tvJJ/dqkHFe37K1n7tJAjUmrTqW0JgjaiWSJJv+zzxnnHuy5zbx7ML5ZkUXkF1OXpo2rQ0DtzmzVvP8BziAQsq6Dkyn75riMa0C0MM4d8drCi//J7m5mVKyK0mFYvtlDoTkRiJaD4rNKhUifFZlwBVHAYd5Zc4PwuaAVj0b3VH71pCUKg6bs9WZ5/a1dCuwtnKnmX5+GfTv+NUkAPu9oEPvp5w9KfGvz6Ve0Zg5f/2RCI2bpGVrJIM3lhSFHC9xv7sAel0MkrDNJLCzy9DSkxwUXH3r81kd/INzj58UfUfsznW+/9Ll8c7qWS0bQurKwirgRlec5Mn97gj6L9kuY00DMetY6jc/1M2Cupxhu+jbI6aefTHi8ucdt57x0zzOwXA3cFJvyppMmL4rQfCNUrg/O8QQGbK8fyh7OmCJvugDZgFmyA0qsEIR7Bw0apV9Lyf+++/SVLr/ZLJVBg4jVugzvJtSrW+15O9h8e3r7Ad+bhOfsbj3/yPjO0TTVI2fvQdlPJKBehRQ6BqwVP51hHFBippNieGQwNYsOYeD41mM1DXxLIVjBmWDUqNYHPNaj4hB2IIXPI9Lj46TJpOmXJcnFtw1YiTy4UrOrsIXimvuUD7Uv0v2vSNKLmzVEhxXRObV9frXsSxJWcBwGmqJlOgxBNw==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(23010399003)(14060799003)(35042699022)(36860700016)(6133799003)(18002099003)(261009223027099003)(22082099003)(261021123027099003)(261021121427099003)(261022105027099003)(261022075727099003)(261026140227099003)(261026121527099003)(261028144727099003)(56012099006)(4143699003)(10067099003)(261102123227099003)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	Cip4GZA5M42L44/xcxV02lLPlup+OXePszWFJmgRKvXKbAi+c6wQpRX/vQUJuAp+zHJw0LXYYUP/H13WMlexoaKfXrd5pYYeRyhU+wu7GN0Q0x/uByr8pqgJX6u1iTvTqE2POMdPWNwnlbRhjFEjO+AaRP6vvzlaZ1kQwvIu26WH1T9DAkxLaAYRvj50974ZyCxsAeq4nKhtsJ1VmKhQt4hluBstz+oMO7UH6gWSlvL79aSKcaQpi9PFdR5ONoqiLG3zcR/zx6YjXkvzuGtrzV1A9M0vg0WB4VcPpyLpjPWLBlV8fSQynFbgsrgSXedr7ZC4HuOWcsqRHibSphcFJ8FDTh3giDtBwvMHhhHusTXk6jKCRwDVH5E0A4NhTuRTXXqaQBi+a+eejGNx+qm4VGCssxYsKYdstOTW+5cW9aaV6DCuAX4A+v4fpX2CHjsu
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2026 08:13:43.5161
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc736694-008b-49ca-667b-08df4a02db1a
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB1PEPF000509E9.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB10787
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <awULfmZR-pESj2EC@kernel.org>
 
-Hi Yao,
+On Tue, Nov 24, 2026 at 05:58:58AM +0200, Jarkko Sakkinen wrote:
+> On Tue, Nov 24, 2026 at 05:37:58AM +0200, Jarkko Sakkinen wrote:
+> > On Tue, Nov 24, 2026 at 03:28:19AM +0200, Jarkko Sakkinen wrote:
+> > > On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
+> > > > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
+> > > > > SYSCALLS
+> > > > > ========
+> > > > > 
+> > > > > Two new system calls are proposed:
+> > > > > 
+> > > > > 1. userland_open(): open an opaque staircase-initialized container
+> > > > >    object (modeled on Intel SGX enclave initialization with separate
+> > > > >    build and live states) with no embryonic state, opting selected
+> > > > >    shared namespaces in via an allow-list instead of unshare semantics.
+> > > > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
+> > > > >    extents for a container user namespace in a single atomic system
+> > > > >    call.
+> > > > 
+> > > > I played on patching systemd and userns_set_idmap() alone does already
+> > > > a lot of good. I'm figuring out userland_open() integration next.
+> > > > 
+> > > > For the test implementation I probe the opcode's and dependening on that
+> >                                             ~~~~~~~~
+> > 					    syscalls
+> > 
+> > > > use either "userland path" or "fallback path".
+> > > > 
+> > > > This auto-probing is done so that I can commit the patches to my kernel
+> > > > test harness, which already has systemd, and try them out when built
+> > > > against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
+> > > > 
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
+> > > > 
+> > > > The project builds a hybrid ISO, which is a bootable bootc/composefs
+> > > > based operating system, and has toolbx bundled i.e., a reasonable test
+> > > > environment for all of this. It is also device-installable via "npx
+> > > > @puu/install"
+> > > > 
+> > > > I had to level the harness up a lot so that I could realistically test
+> > > > lockdown-hibernate but it is is also pretty good emulation environment
+> > > > for any possible container features.
+> > > 
+> > > Kernel is ukified and systemd-boot is used as the boot loader i.e., for
+> > > kernel testing purposes corresponds to something like Silverblue except
+> > > not using GRUB.
+> > 
+> > Experimental systemd patches:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/commit/?h=main&id=e4d6b15da3376ad09c0c575cedf467f69db32a52
+> > 
+> > The patches are layered per syscall feature:
+> > 
+> > - 1-5: userns_set_idmap
+> > - 6-10: userland_open()
+> > 
+> > Virtual device would add path/mount complexity and generally dependency
+> > to mounts i.e., I think it was an awful idea. At least initially this
+> > feels fairly lean way of doing container things now that I've trialed
+> > systemd-nspawn a bit.
+> > 
+> > I'll update the patches over time.
+> 
+> "userland_open" is just a name as I don't have anything better for the
+> time being (perhaps <something>fd() e.g., containerfd(), would work
+> better).
 
-> -----Original Message-----
-[...]
->=20
-> > Without EL2, cover immediate_exit on the first KVM_RUN, retrying after =
-a
-> > failed first KVM_RUN, and pre-faulting while the vCPU moves from the
-> > main thread to a worker thread for its first run and back to the main
-> > thread for its second run. The two threads are pinned to different CPUs
-> > when at least two are available.
->=20
-> I suggest to list them for better readability e.g:
->=20
-> Test cases for w/o EL2:
-> 1. Immediate_exit on the first KVM_RUN
-> 2. Retrying pre-fault after a failed first KVM_RUN.
-> 3. Pre-faulting while moving the vCPU between 2 threads.
-> (more details of 3 can be given in code implementation there)
->=20
-Will do in v2.
+What I did at late 2025 was simply going through the old ML discussions
+for David's patches and addressed the remarks one by one. Then I
+improved the patch set bit further until other stuff came along, and I
+forgot the whole thing for some time.  Last week's burst was really
+unwritten todo list starting to remind about itself in flashbacks.
 
-> > With EL2, additionally cover an EL2 vCPU with ID_AA64MMFR4_EL1.NV_frac
-> > cleared to 0 and HCR_EL2.NV=3D1 at EL1h (the NULL vncr_tlb reproducer),=
- an
-> > EL2 vCPU with a vEL1 context and asymmetric HCR_EL2.IMO/FMO staged
-> before
-> > the first run, and the same thread handoff. An unfixed kernel reports
-> > the staged context case only as a WARN in the kernel log; the test
-> > itself still passes.
-> >
-> > Signed-off-by: Jia He <justin.he@arm.com>
-> > ---
-> >  .../kvm/arm64/nv_pre_fault_memory_test.c      | 335 ++++++++++++++++--
-> >  1 file changed, 298 insertions(+), 37 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test=
-.c
-> b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-> > index 09c1db303856..6dbcf3b0ef13 100644
-> > --- a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-> > +++ b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
->=20
-> ...
->=20
-> > +
-> > +/*
-> > + * Pre-fault before the first KVM_RUN with ID_AA64MMFR4_EL1.NV_frac =
-=3D=3D
-> 0
-> > + * (no vncr_tlb) and HCR_EL2.NV=3D1 at EL1h.
-> > + */
-> > +static void test_pre_first_run_no_nv2(void)
->=20
-> This may not necessary per Marc's comment on patch 2 ?
->=20
-I'd like to keep it. It is the reproducer for the NULL vncr_tlb
-dereference that patch 1 fixes, not a test for patch 2. With patch 2
-dropped, it becomes the regression test for patch 1. I'll add that to
-the comment.
+There's not much more in API sense to do except maybe syscall rename and
+associated prefixes in constants etc. My Git branch has additional fixes
+(e.g., more LSM plumbing) on top of this but they don't change the gist
+of this by any possible way so no new RFCs for the time being.
 
-> > +{
-> > +	struct kvm_vcpu *vcpu;
-> > +	struct kvm_vm *vm;
-> > +	u64 val;
-> > +
-> > +	pr_info("Testing pre-first-run pre-fault with NV_frac=3D0 and
-> HCR_EL2.NV=3D1\n");
-> > +	vm =3D setup_test_vm(true, false, guest_el1_touch_and_done, &vcpu);
-> > +
-> > +	/* Copy the EL2 S1 configuration into the EL1 sysregs for vEL1. */
-> > +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1),
-> > +		     vcpu_get_reg(vcpu,
-> KVM_ARM64_SYS_REG(SYS_SCTLR_EL2)));
-> > +	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1),
-> > +		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2)));
->=20
-> ...
->=20
-> > +
-> > +static void *first_run_worker(void *arg)
-> > +{
-> > +	struct handoff_args *h =3D arg;
-> > +
-> > +	maybe_pin_self_to_cpu(h->cpu);
-> > +	pre_fault(h->vcpu, TEST_MEM_GPA + SZ_1M, TEST_MEM_SIZE -
-> SZ_1M);
-> > +
-> > +	vcpu_run(h->vcpu);
-> > +	expect_ucall_sync(h->vcpu, 1);
-> > +	return NULL;
-> > +}
-> > +
-> > +/*
-> > + * Pre-fault in the main thread, run the vCPU for the first time in a =
-worker
->=20
-> Minor: the pre-fault happens in worker thead yet, see first_run_worker().
->=20
-Right, both threads pre-fault. I'll fix the comment.
+The most up to date version:
 
-> > + * thread, then pre-fault and run it again in the main thread. This ch=
-anges
-> > + * vcpu->pid both before and after the first run. If at least two CPUs=
- are
-> > + * available, the two threads are pinned to different CPUs.
-> > + */
-> > +static void test_thread_handoff(bool has_el2)
-> > +{
-> > +	struct handoff_args h =3D { .cpu =3D -1 };
-> > +	struct kvm_vcpu *vcpu;
-> > +	struct kvm_vm *vm;
-> > +	cpu_set_t allowed;
-> > +	int cpu, cpu0 =3D -1;
-> > +	pthread_t thr;
-> > +
-> > +	pr_info("Testing pre-fault across a thread handoff (%s vCPU)\n",
-> > +		has_el2 ? "EL2" : "EL1");
-> > +
-> > +	CPU_ZERO(&allowed);
-> > +	kvm_pthread_getaffinity(pthread_self(), &allowed);
-> > +	for (cpu =3D 0; cpu < CPU_SETSIZE; cpu++) {
-> > +		if (!CPU_ISSET(cpu, &allowed))
-> > +			continue;
-> > +		if (cpu0 < 0) {
-> > +			cpu0 =3D cpu;
-> > +		} else {
-> > +			h.cpu =3D cpu;
-> > +			break;
-> > +		}
-> > +	}
-> > +	if (h.cpu < 0)
-> > +		pr_info("Only one CPU available, not testing CPU
-> migration\n");
-> > +
-> > +	maybe_pin_self_to_cpu(cpu0);
-> > +	vm =3D setup_test_vm(has_el2, false,
-> > +			   has_el2 ? guest_code : guest_el1_code, &vcpu);
-> > +	pre_fault(vcpu, TEST_MEM_GPA, SZ_1M);
-> > +
-> > +	h.vcpu =3D vcpu;
-> > +	kvm_pthread_create(&thr, NULL, first_run_worker, &h);
-> > +	kvm_pthread_join(thr, NULL);
-> > +
-> > +	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE);
-> > +	vcpu_run(vcpu);
-> > +	expect_ucall_done(vcpu);
-> > +
-> > +	kvm_pthread_setaffinity(pthread_self(), &allowed);
-> > +
-> > +	kvm_vm_free(vm);
-> > +}
-> > +
-> > +static void test_pre_first_run_el1(void)
-> > +{
-> > +	int feature =3D KVM_ARM_VCPU_SVE;
-> > +	struct kvm_vcpu *vcpu;
-> > +	struct kvm_vm *vm;
-> > +	int ret;
-> > +
-> > +	pr_info("Testing pre-first-run pre-fault with immediate_exit\n");
->                                              ^^^^
-> The vcpu->run->immediate_exit =3D 1 happens afte the pre_fault, thus
-> s/with/then/ looks more accurate here if this is the desired behavior.
->=20
-Yes, will fix.
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=vault
 
-Thanks,
-Jia He (Justin)
+Br, Jarkko
+
 
