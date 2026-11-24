@@ -1,110 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795525204;
-	b=xsd5cjfTxbqp50lPooXiXYlLFJwMbHP5Jv8vhrt2uXvfw+l9K0bc5o4k8alG4LcLeFar
-	 9VmTH/ZkaS8RomDCKn9OIt8OhawSv7qJZI6UqQm1h4W440X2WmW8+d5sHmWOfzVZSwgDc
-	 9eQxwPq1MNFSv1SfXyKOOPG9P5ttihKgBkSsoHdhITMvUFX4X5aev8bkq/alrYfF+t21S
-	 +qm2ogZ0gQOx6xXioGpC3IVJXCvx083aXSeA5P2Y9eAjQx6L32jHCnTjdosgktTUEXRK+
-	 DgGUdWB0EpW1I0vVoNdREx49b0jDDz8PbpJM8ybyDhqTE+mhtM4gVDwn6BjuktsQtqw==
+	t=1795525463;
+	b=Skc3rXh2+T15GbR4HVnDAv1CPyff5xGloMmjWnzqyqrbXe5qAw3S9qxJ2UeBALhrRhKw
+	 1PhSWOgrnE21Xx6kioL4KjEHlTZbG/5VoI4U0Ygpybfdk9mHyK2/J5lj3DWfFvFJsey/D
+	 BxR0IGlqll2Sfw9l0kiw2DKk+Y5KalSlQVHPTzUcmcL1TYXUhtmdMq3dEoxU6ihnSEjlH
+	 HIcFCa2lFHjN1RjlmPcuphk/x/1cPJmvh6ONSO+15BFQNVnVjLzVkDt+9Rw0ZcYmaxrJS
+	 QuSJXqmUY8tWt5v4aUDrUbbcETkd4pMvKSwzIDdaKDc5GCnSmtkZEC43WncIz949F2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795525204;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=71BoVSHnE+GD+Dgl6FXGb+jcMgjjSfPvCEpcdkQChEA=;
-	b=HF21hN101rY8uVx+ZGk+DxpY50TADwheJrb+opcEj1Cr6/mUBNWwf632xYmT7ZkIS2Dx
-	 I80X4ulEVlsZqN0xscBlV1aWZPIY7SmO1psQ7D1Idful32gD3ZWjXWV56B9BnsweGFBqG
-	 lmCxzv62FnF5G1y9kGoqh4hJPtqVotbt1M/7WA6kl/7bdnYijS+RUDWjJfHwRxbOfD8ey
-	 SEs+NUnuLhLItjb2vXqw7JoX5Qd6+avZnlfn4x7MmdVDZjziRCFEC0T1rbLG2idy7KkuJ
-	 7LlivEtY+hidPhxO7pT7LzCBsi16eP0pWqclsXN0PW8XO1pDQcnNqe5Bm/w2elwCoEA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795525463;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Developer-Signature:X-Developer-Key:X-Scanned-By;
+	bh=1VGhrilOrIVUd7NQcN6hWODsfVyfTY1/1MG6x6kIma0=;
+	b=5aoQ43G4l/yU/uO3nqw081zelaaTFVlEDB1rr2JfLHAAaB1JyhRUkzMXr0NLVit/+7Ss
+	 RXhysSsour17eL1isS/l19pEcpZTN+3W3CjdPAxQLV7jMj7L/DeQCttYyxkxB9icMQHyX
+	 UTqx9TLsc4JoBjto973AfnMr8BVNLif/qGt+1LtjcX41DHhcLeAoXvJIGr3iaid4ZH3n4
+	 79ZpawFErszn+/JIIYvO88ZR1gAhUYndqtFL/p2WciSYlF15KawM+MNcdShajDnMlGtwS
+	 sMLkkwJBQUATjYSFFL7z4Fnq7Walgijadtiw5qZmzX5mTLAA4F2XhjXmc3I43UN4WJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E86WLCWj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iYA78xEB;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EA8606A322;
-	Tue, 24 Nov 2026 13:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678B0606A327
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:04:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 678B0606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E86WLCWj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B07E1F000EB;
-	Tue, 24 Nov 2026 12:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795525203;
-	bh=71BoVSHnE+GD+Dgl6FXGb+jcMgjjSfPvCEpcdkQChEA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=E86WLCWjW/dY4qNrjCcvSgN4bRHl901N+otwhHt70E0TMaHKYQSW5I7hgi+LAGxfq
-	 ZxNXgrh4lDpc6FDf/Ynrj5beVp71XcI3kUJbPuyDC4L1kF+VdDMWhEaviqH8TeWdtT
-	 ui4VnFe4H8joiI1mUVh/PJymfuXR6hUdk5HyA07d5ojk+4UV+16icOSL07RlUFMNZ0
-	 mx536iKYMFFus57c2465mz+u5d3TSknYeFbxhIdG1UalTGK8RID02MDxV8BE3BBhWD
-	 TKo/PI5cNDXZUzeAxaaPYg1+VuMIHiTA9Wvzf9HoyVw45e9tab4/NjtsVR9P9euQQi
-	 GyQNqx6hdrYeA==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Stuart Clark <stuclar@meta.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mina Almasry <almasrymina@google.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	kernel-team@meta.com,
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Tao Cui <cuitao@kylinos.cn>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	David Wei <dw@davidwei.uk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-rdma@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 15/15] Documentation: networking: Describe AF_XDP RX in the device's layout
-Date: Tue, 24 Nov 2026 13:56:50 +0100
-Message-ID: <20261124125654.183091-15-bjorn@kernel.org>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261124112707.118678-1-bjorn@kernel.org>
-References: <20261124112707.118678-1-bjorn@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iYA78xEB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795525460;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1VGhrilOrIVUd7NQcN6hWODsfVyfTY1/1MG6x6kIma0=;
+	b=iYA78xEBTLwFu/juY1o991mIqkTESiN3rrcxrEuLhnRpr6lpmHJiuzZlemXQX14O/AioVX
+	F9GEd+dnTWSy0IzHNFjORHOBl0L6xvjNqI9BwkcBq5F/bNk/9CuOm4Zm74uN2xXcc0viH7
+	g3b0EpuHN1NYEuFo424DbqPN36X2u5A=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-692-K65r4GWQN3uUAcKHjQCkKA-1; Tue,
+ 24 Nov 2026 13:04:15 +0000
+X-MC-Unique: K65r4GWQN3uUAcKHjQCkKA-1
+X-Mimecast-MFC-AGG-ID: K65r4GWQN3uUAcKHjQCkKA_1795525450
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D38B51944B1C;
+	Tue, 24 Nov 2026 13:03:57 +0000 (UTC)
+Received: from aesteve-thinkpadp1gen8.rmtes.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1F8AF1956087;
+	Tue, 24 Nov 2026 13:03:46 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v6 0/7] memcg: dma-buf cgroup accounting and charge
+ transfer
+Date: Tue, 24 Nov 2026 14:03:34 +0100
+Message-Id: <20261124-v2_20230123_tjmercier_google_com-v6-0-dce12fa03ad6@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -114,154 +73,233 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43O3WrDMAwF4Fcpvl6GJP8lvdp7lBISW0481mY4I
+ WyUvPucMraOXCx3OhJ8Rzcxcoo8iuPhJhLPcYzDNQfzdBCub64dF9HnLAjIgIaymKnOswQkWU+
+ vF04ucqq7YejeuHbDpQhKBRdaNFqCyMx74hA/7hWnc859HKchfd4bZ1y33zjS//iMBRRGkrGAT
+ poKXxL7vpme81Gs+kw/IgLhDpGyyMEwk/el024jykfR7hBlFm3pySnXlkbZjah+RQS1Q1RZxBK
+ rBtACQLsR9YOIe37Uq+i4sjpQUzX+j7gsyxcDO6a/GQIAAA==
+X-Change-ID: 20260508-v2_20230123_tjmercier_google_com-f44fcfb16530
+To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
+ Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>, 
+ "T.J. Mercier" <tjmercier@google.com>, 
+ Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+ =?utf-8?q?Ondrej_Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>, 
+ Jens Wiklander <jenswi@kernel.org>, Sumit Garg <sumit.garg@kernel.org>, 
+ Philipp Stanner <phasta@kernel.org>, 
+ =?utf-8?q?Ondrej_Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>
+Cc: airlied@gmail.com, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+ linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ op-tee@lists.trustedfirmware.org, Albert Esteve <aesteve@redhat.com>, 
+ echanude@redhat.com, mripard@kernel.org
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795525424; l=9579;
+ i=aesteve@redhat.com; s=20260827; h=from:subject:message-id;
+ bh=si3R7b0kcAGLEUfejc/PsZKusnANP7SCv7uuLauSWDw=;
+ b=tJGGA22KuFlVrI5rdm5SUwjA4Gc4/fTVuyvaq/v/YYF5DA/eXjf40+QU/bS9kCDYD82+zs2Hm
+ Dxn5Vd7+N1LC5MIaX9NH1jtOk0iod58Bz11JySE6hKyVamsSmtm8lMS
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=zI2RBeZgocwYm3AkJW4CtjoJnKoDZrfBl1xe5Ed6h+U=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-For applications, XDP_UMEM_DRV_LAYOUT changes who owns a chunk and
-when, what the XDP program may read and write, which verdicts it may
-return, and how chunks come back. None of it is documented yet.
+Shared-memory allocator services (e.g., Android's gralloc)
+allocate dma-bufs on behalf of client processes in different
+cgroups. Today those allocations are charged to the allocator's
+own cgroup, leaving client cgroups with no visibility into their
+actual memory consumption and defeating resource limits.
 
-Describe for application writers the setup and its errors, the
-program, receiving and giving chunks back, need_wakeup, devices that
-need DMA syncs, and how TX shares the chunks.
+This series adds memory cgroup accounting for dma-buf allocations,
+building on T.J. Mercier's earlier series [1] and incorporating
+feedback from previous versions and LPC discussions [2].
 
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
+Patch 1 introduces the MEMCG_DMABUF stat and the
+obj_cgroup_reserve_dmabuf()/obj_cgroup_cancel_dmabuf() and
+mem_cgroup_commit_dmabuf()/mem_cgroup_uncharge_dmabuf() helpers
+in mm/memcontrol.c
+
+Patch 2 wires up the charging policy: dma_buf_export() stores
+exp_info.objcg and updates the stat, a new charge_fd field in
+DMA_HEAP_IOCTL_ALLOC accepts a pidfd or cgroupfd to identify
+the target cgroup, and __GFP_ACCOUNT is removed from system-heap
+allocations to avoid double counting.
+
+Patch 3 adds DMA_BUF_IOCTL_XFER_CHARGE, a general ioctl on any
+dma-buf fd to transfer charges post-allocation. This covers the
+double-hop allocator case (SurfaceFlinger -> gralloc -> kernel)
+and works for buffers from any exporter that opts in. Charging
+is gated by dmabuf->objcg being set at export time, ensuring that
+transfer is only applied for buffers backed by system memory where
+size reflects actual bytes. If the receiving cgroup lacks capacity
+for the charge, the ioctl returns -ENOMEM and the original charge
+is preserved.
+
+Patches 4-6 add access control for cross-cgroup charging. Letting
+userspace decide who to charge needs to be a privileged operation
+because it has material impact on OOM decisions and resource limits.
+Charging outside the caller's own memcg subtree requires
+CAP_SYS_RESOURCE. On top of that, LSM hooks gate the two charge_fd
+flavours: security_current_memcg_charge_task() for the pidfd path
+and security_current_memcg_charge_cgroup() for the cgroupfd path.
+
+Both flavours ultimately charge a cgroup, so the SELinux
+implementation gates the two with a single cgroup:charge_to
+permission. The target type keeps the distinction.
+The checks run at target resolution, before the CAP_SYS_RESOURCE
+baseline, and cover the caller's own subtree, so policy needs
+a rule even for self-charging. The SELinux controls are covered
+by new selinux-testsuite tests [4].
+
+Patch 7 adds selftests. The tests and vmtest script were mostly
+written by an LLM, closely following the style of the surrounding
+tests and the virtme-ng setup. All code has been reviewed and tested.
+
+Known limitations:
+
+- Single-owner model: a dma-buf carries one memcg charge regardless
+  of how many processes share it. The owner is deterministic, set
+  at allocation time and moved only by an explicit XFER_CHARGE.
+- Only memcg accounting. CMA heaps would additionally need dmem
+  controller integration.
+- If a transfer fails (e.g., the receiving cgroup is at its limit),
+  the buffer remains charged to the original cgroup. The allocator
+  (userspace) is expected to handle failures (retry, free, ...).
+- The LSM hooks are intentionally narrow. Broader cgroup access
+  controls (e.g., for the memfd/kexec handover case [2]) could be
+  a separate effort reusing the same pattern.
+- Only system heap sets exp_info.objcg today. Other exporters
+  (DRM, V4L2, etc.) can opt in by setting it, but are not
+  covered by this series.
+- Related to the above: lazy backing-store allocation is not supported.
+  This can be extended later, e.g., by adding a flag on the dma-buf
+  struct for explicitly marking when memory is committed.
+
+Note on TTM/GPU accounting [3]: that effort charges system memory
+allocated for GPU buffers per page, with its own stats (gpu_active
+and gpu_reclaim). This series charges at the dma-buf level, for
+memory with no memory.stat category of its own; exporters whose
+memory is already charged by their allocator must not opt in, so
+the two do not overlap.
+
+[1] https://lore.kernel.org/cgroups/20230109213809.418135-1-tjmercier@google.com/
+[2] https://lpc.events/event/20/contributions/2416/
+[3] https://lore.kernel.org/all/20260706052330.1110909-1-airlied@gmail.com/
+[4] https://github.com/SELinuxProject/selinux-testsuite/pull/111
+
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
 ---
- Documentation/networking/af_xdp.rst | 114 +++++++++++++++++++++++++++-
- 1 file changed, 113 insertions(+), 1 deletion(-)
+Changes in v6:
+- Unify SELinux perms into cgroup:charge_to
+- Drop the current cred argument from the LSM hooks
+  and rename signatures to security_current_memcg_charge_*
+- Add selinux-testsuite coverage for the charge_to controls
+- Rebased to v7.4-rc4
+- Link to v5: https://patch.msgid.link/20261117-v2_20230123_tjmercier_google_com-v5-0-1ce975f2a9ad@redhat.com
 
-diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-index 538e71adb759..4e37a6074a52 100644
---- a/Documentation/networking/af_xdp.rst
-+++ b/Documentation/networking/af_xdp.rst
-@@ -429,7 +429,9 @@ There is also an option to set the headroom of each single buffer in
- the UMEM. If you set this to N bytes, it means that the packet will
- start N bytes into the buffer leaving the first N bytes for the
- application to use. The final option is the flags field, but it will
--be dealt with in separate sections for each UMEM flag.
-+be dealt with in separate sections for each UMEM flag. With the
-+XDP_UMEM_DRV_LAYOUT flag, chunks are pages that the device fills in
-+its own layout, see the "Device Buffer Layout" section.
- 
- SO_BINDTODEVICE setsockopt
- --------------------------
-@@ -761,6 +763,116 @@ processing. Note that the Tx batch API guarantees that it will provide
- a batch of Tx descriptors that ends with full packet at the end. This
- to facilitate extending a zero-copy driver with multi-buffer support.
- 
-+Device Buffer Layout
-+====================
-+
-+In zero-copy mode, the driver fills one UMEM frame per buffer, at the
-+UMEM headroom, and needs a receive path of its own for AF_XDP. With
-+the XDP_UMEM_DRV_LAYOUT UMEM flag, the device places buffers in UMEM
-+chunks as it places them in the pages of its page pool: several
-+buffers may share a chunk, a packet may span chunks, and the device
-+picks the offsets. The XDP program reads and writes packets in place,
-+in the UMEM, but the kernel stores none of its own structures in the
-+chunks.
-+
-+The UMEM backs the page pools of the bound queue through a memory
-+provider, so the driver needs no AF_XDP code. A driver supports the
-+mode if it runs native XDP with XDP_REDIRECT, takes its receive
-+buffers from a page pool of netmem that allows such providers, and
-+can restart a queue.
-+
-+Setting up
-+----------
-+
-+* Register the UMEM with XDP_UMEM_DRV_LAYOUT, aligned chunks of
-+  PAGE_SIZE, and no headroom. The UMEM must hold more chunks than the
-+  queue keeps posted to the device and in its page pool cache, 128
-+  chunks with 4K pages, or the bind fails with ENOSPC. The first
-+  number depends on the driver, the ring size and the MTU.
-+
-+* Attach a native XDP program to the device itself through netlink,
-+  not through a BPF link or an upper device such as a bond, before the
-+  bind. The bind fails with ENOENT without one. The program cannot be
-+  detached while the UMEM backs the queue (EBUSY).
-+
-+* Put chunks on the FILL ring before the bind. The bind starts the
-+  queue with the chunks it finds there, and the queue drops packets
-+  while it has none.
-+
-+* Bind with XDP_USE_NEED_WAKEUP, as only a wakeup restarts a queue
-+  that used up the FILL ring, and with XDP_USE_SG to receive packets
-+  that span chunks. A bind without XDP_USE_NEED_WAKEUP fails with
-+  EINVAL. XDP_COPY fails with EOPNOTSUPP, as does a device
-+  without native XDP_REDIRECT or queue management. One socket per
-+  queue receives: a second socket with an RX ring gets EBUSY, and so
-+  does any socket with an RX ring once the receiving socket is gone.
-+  Sockets that share the UMEM with XDP_SHARED_UMEM may transmit.
-+
-+The XDP program
-+---------------
-+
-+The program works on the packet in place, in the UMEM: direct packet
-+access, bpf_xdp_load_bytes(), bpf_xdp_store_bytes(), dynptrs,
-+bpf_xdp_adjust_head(), bpf_xdp_adjust_tail(), bpf_xdp_adjust_meta()
-+and the RX metadata kfuncs work as with pages, on every buffer of the
-+packet. What the program writes is in the UMEM for the application to
-+see. The kernel keeps its own data, such as the fragment list of a
-+packet that spans buffers, in kernel memory, so the application cannot
-+change what the kernel relies on. The application may still change
-+the packet at any time, also while the program runs: two reads of the
-+same bytes may differ.
-+
-+Buffers of the bound queue may only go to its receiving socket. Every
-+verdict but XDP_REDIRECT drops the packet, XDP_PASS included, and
-+redirects to anything but the receiving socket fail.
-+
-+Redirect through an XSKMAP entry that holds the receiving socket.
-+
-+Receiving
-+---------
-+
-+A FILL entry lends a whole chunk to the kernel, by its address. Each
-+buffer of a packet becomes one RX descriptor that points at the data,
-+anywhere in a chunk, and XDP_PKT_CONTD chains the buffers of a packet
-+as described in the multi-buffer section. Metadata that the program
-+wrote is in front of the first buffer, where the program put it; a
-+packet whose metadata does not fit in front of its first buffer, in
-+the same chunk, is dropped.
-+
-+The kernel gives a chunk back with XDP_RX_CHUNK_FREE in the options of
-+an RX descriptor:
-+
-+* On a descriptor with data, the flag means that the kernel is done
-+  with the chunk of that descriptor. The application owns the whole
-+  chunk again.
-+
-+* A descriptor with length zero, at the address of a chunk, only gives
-+  that chunk back. The kernel posts one when the device let go of the
-+  chunk after its last buffer reached the socket. Such a descriptor is
-+  never part of a packet.
-+
-+A chunk may go on the FILL ring again once it came back and the
-+application is done with all its buffers. The kernel never gives back
-+single buffers, so a packet that the application holds keeps its
-+chunk. Chunks whose buffers all stayed in the kernel, as for dropped
-+packets, stay lent.
-+
-+The kernel asks for a wakeup on the FILL ring only while it has run
-+out of FILL entries; recvmsg() or poll() then restarts the queue. With
-+preferred busy polling, the application's poll runs the queue's NAPI.
-+
-+Devices that need DMA syncs work as they do with page pools: the
-+kernel syncs a chunk for the device when the FILL ring lends it, and
-+the driver syncs each buffer for the CPU before the program runs.
-+
-+Transmitting
-+------------
-+
-+Sockets in this mode transmit in copy mode. A buffer that the
-+application received may go on the TX ring. Its chunk may go on the
-+FILL ring only once the chunk came back and every TX descriptor that
-+points into it is on the COMPLETION ring.
-+
- Sample application
- ==================
- There is a xdpsock benchmarking/test application that can be found at
--- 
-2.56.1
+Changes in v5:
+- Reject dma-buf reservations above INT_MAX pages to avoid
+  nr_pages truncation (Sashiko)
+- Require CAP_SYS_RESOURCE for charge requests targeting outside
+  caller's own memcg subtree (Sashiko)
+- Hold an obj_cgroup instead of a memcg in the dma-buf struct (Thomas Hellström)
+- Restore mem_cgroup_commit_dmabuf() so dma_buf_export() does not
+  reach into memcg stat internals
+- Resolve the cgroup and run the LSM check against the same file
+  in get_obj_cgroup_from_fd()
+- The cgroupfd hook now takes the file and checks the inode SID,
+  so genfscon-labeled cgroups are covered
+- Rename the LSM hooks to security_memcg_charge_{task,cgroup}()
+- Replace dma_buf object class in SELinux with process2:charge_to
+  and cgroup:charge_to
+- Link to v4: https://lore.kernel.org/r/20261104-v2_20230123_tjmercier_google_com-v4-0-1819a017000b@redhat.com
+
+Changes in v4:
+- Remove memcg_account flag; exp_info.memcg != NULL is the opt-in
+- Centralize memcg bookkeeping in dma_buf_export()
+- Drop mem_cgroup_commit_dmabuf()
+- Make mem_cgroup_transfer_charge() generic (not dma-buf specific)
+- Add EXPORT_SYMBOL_GPL for reserve/cancel (system_heap is tristate)
+- Reorder: move xfer ioctl before LSM patches
+- Serialize dmabuf->memcg updates with the dma-buf resv lock instead of cmpxchg
+- Link to v3: https://lore.kernel.org/r/20261027-v2_20230123_tjmercier_google_com-v3-0-78d2c4cb8647@redhat.com
+
+Changes in v3:
+- Split mem_cgroup_charge_dmabuf() into reserve/commit/cancel three-phase API
+- Extract mem_cgroup_get_from_fd() helper shared by allocate and xfer paths
+- Rename __padding to flags in struct dma_buf_transfer_charge
+- Fix UAF race: move mod_memcg_state() before cmpxchg in transfer
+- Add memcg_account opt-in flag; xfer returns -EOPNOTSUPP if unset
+- Wrap dma_buf_charge_cgroup hook in #ifdef CONFIG_CGROUPS
+- Fix TOCTOU in SELinux charge_cgroup xattr length handling
+- Link to v2: https://lore.kernel.org/r/20261021-v2_20230123_tjmercier_google_com-v2-0-ef6ee2dd8c5c@redhat.com
+
+Changes in v2:
+- Move charge_pid_fd to charge_fd, accepting cgroupfd in addition
+  to pidfd per Christian König.
+- New DMA_BUF_IOCTL_XFER_CHARGE ioctl for post-allocation charge
+  transfer on any dma-buf, not just dma-heap buffers per Christian König
+  and T.J. Mercier.
+- Moved __GFP_ACCOUNT removal to patch 1 per Barry Song.
+- dma-buf charge/uncharge helpers take struct dma_buf * directly
+  to avoid the need for caller to manage size calculations.
+- Added test_xfer_charge_cgroupfd_self to dmabuf-heap selftests.
+- Added LSM and SELinux hooks for cgroupfd-based charging.
+- Rebased to v7.3-rc7.
+- Link to v1: https://lore.kernel.org/r/20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com
+
+---
+Albert Esteve (6):
+      dma-heap: charge dma-buf memory via explicit memcg
+      dma-buf: transfer objcg charges via DMA_BUF_IOCTL_XFER_CHARGE
+      lsm: Add memcg_charge_task LSM hook
+      lsm: Add memcg_charge_cgroup LSM hook
+      selinux: Restrict cross-cgroup memcg charging
+      selftests/dmabuf-heaps: Add dma-buf memcg accounting tests
+
+T.J. Mercier (1):
+      memcg: Add MEMCG_DMABUF accounting infrastructure
+
+ Documentation/admin-guide/cgroup-v2.rst            |   6 +
+ drivers/dma-buf/dma-buf.c                          |  45 +++
+ drivers/dma-buf/dma-heap.c                         |  27 +-
+ drivers/dma-buf/heaps/cma_heap.c                   |   3 +-
+ drivers/dma-buf/heaps/system_heap.c                |  19 +-
+ drivers/tee/tee_heap.c                             |   3 +-
+ include/linux/dma-buf.h                            |  10 +
+ include/linux/dma-heap.h                           |   4 +-
+ include/linux/lsm_hook_defs.h                      |   2 +
+ include/linux/memcontrol.h                         |  56 +++
+ include/linux/security.h                           |  12 +
+ include/uapi/linux/dma-buf.h                       |  26 ++
+ include/uapi/linux/dma-heap.h                      |   7 +
+ mm/memcontrol.c                                    | 271 +++++++++++++
+ security/security.c                                |  31 ++
+ security/selinux/hooks.c                           |  19 +
+ security/selinux/include/classmap.h                |   1 +
+ tools/testing/selftests/cgroup/Makefile            |   2 +-
+ tools/testing/selftests/cgroup/test_memcontrol.c   | 447 ++++++++++++++++++++-
+ tools/testing/selftests/dmabuf-heaps/config        |   1 +
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 237 ++++++++++-
+ tools/testing/selftests/dmabuf-heaps/vmtest.sh     | 226 +++++++++++
+ 22 files changed, 1440 insertions(+), 15 deletions(-)
+---
+base-commit: 8d7fe9885c62fc9a95bf55d9db244d9672a8aadc
+change-id: 20260508-v2_20230123_tjmercier_google_com-f44fcfb16530
+
+Best regards,
+--  
+Albert Esteve <aesteve@redhat.com>
 
