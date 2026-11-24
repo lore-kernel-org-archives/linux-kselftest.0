@@ -1,80 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795538648;
-	b=WOH68iU61AeF26Tl+baKoRVqJzj9JQU3L31kYuvPt4Ai+WzgsIuIge5B/KhVNTvU3yyL
-	 x9uqL3WnaM6kdOmOpHXp1A142rQv3fuWxWvwm2RPtZJ55j8Y6XP6R0zQoOEnzQjQKikKd
-	 7vToebH8pEMxVAkL5OQ0ZXkMkxFXStXyCgnHObXTfHBUPHDQl4r4SNdAiV46r7+UTzzDG
-	 rIXz/CnkCQUUfxDD65YXeiMyojWN613gPlmP9IHjXttC0DWsQmADdffSYyvr6qwesakuC
-	 yVLWqAZ09xWHh/wcLQFQ2PjXmH9eHcIHu3Fw5F5KPQ2Xr5nrUd+ZRG7juwI+9yxRxzw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795538648;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=U3xnSH+BmaWYcojS6vbFOMgwGWNHdEs82Sghjm/1X/E=;
-	b=C7XYGvIsFkq5NZ4kye2B9TxzIH3Y4/YAk7+uq0Nh1SzT2DLhDDEEhEVdWwpc1KiAaLA9
-	 zvU1bmTJsoKOH5yt7ZHkto5oexfrLgVq/VBGvH+Wqa12QZ2k2+V7d0ABOaaVw+GoUayTw
-	 cEmIs95T8RqTqWP9lHXURq8fMknyy6b8vE/ywY8wpvb9iJjSkrKxbn6CTc+6uxBBmxmra
-	 Ba5y5GzDpsyi7tqcnlcR5qqkWTfDrnBdZtsOmh47aXVBPtEYtkHPyAvwMHC2pNp7JXgcn
-	 4A/T8koHOCE4G+IwL+sRAFx/OxgEAdRDa4bND0XVMnrMQMEvQGAP5xmbBuc0QjiPLzg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RHHYFuK+;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795539190;
+	b=NgwStRfu0Jd9BbJrAksCCbxgjzue+KLqoqpQY9HtAU0+rlXpxtGsJqxqg0EvR3rsjoXh
+	 qjrHIMqZ78AaZpXVab7+qfQZdSyCZxjlyVBjfDc7SFUeitxmzTu/hzRhb1huRBD52fgEU
+	 kolTZHFd8ZDx+BvPfKCNfqFey97TdOimHjMz2/2B3wbiiEba9OLeh+324SCrgAcDXDo6s
+	 DO46g4jqnGAXxz9mz8DdM3MlmTcFmk/jwx8W9k+8QkJ/0AZhnOulwDxqTBPVt57HSoMXJ
+	 5y4sUJ615nnVwEX2j+63UV3JM30HG//Kyuqt3b1tlApUxRAfQ5fqXZUEQVu2iTK81Pg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795539190;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=x/uzChQMb312nOxPDZxs+qjo+ZN0ijU/g8Mc3JJQonU=;
+	b=kJmg+wwQsdgjhmeBdTNZnrLOVAFcqKs+THtoHGY7PSUGewpIzNA3Y/+7XOuMGkjF/xCG
+	 ORItpHSVxawjiXCpfTp26aZsYM2rda1M3nHON5MmKs9Tc4PHRtT8YfdvCYz12FjokNtAV
+	 Z17SKWijI3ZiIc92R4HeYUyB5EGAB0C+FfZGsyE7lfDZx+dmwfZezC3nNb69Qc3Eko7o2
+	 rgPqUwwp+v38PKDwwlIVWz5P1+jVb9iXyEHgwzEaUe0cUkJyDt22kKfPR7s/Dk06heLUL
+	 A1eVuuvWxNXTj3agAeuZeuQS+moT3VNxMLKmCp8Jf2Erb1qeaUUYUKzvrtXKHATWZqQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OOMLAS+X;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F26606A330;
-	Tue, 24 Nov 2026 16:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501D2606A33D;
+	Tue, 24 Nov 2026 16:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RHHYFuK+
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795538647;
-	b=yy22FEfsnzQLH7g2usbnb5eX/0am2FRhHB2npE/zLF6Og8DVnLroB0xzIPKsYFLW38V4
-	 npoFAGEfx1MmIMYA/OiJO5AZ1mWJTD4wtpn0+TCwT+QXwQTwDaej9B1N+RrDGmRPy4MeU
-	 OWxJVP0C5o8cfoS6Z/hDcHC7wm++TmDTMzO/cOdLkfBa7++YcNwZq++t26z+LiFETa4F+
-	 2BVUD+Zau8h+ndfGcSs9oXc81dVT0i7g9Vez2ywc7P7RTF/AHi3cKMG4BuyQDsVAETPIr
-	 UT4Ix8YDOS3q+S4CCpscPgOAREqmOkxdpTG8Nkc2qNmNrF/rB1+bPcKBq8l5vCIhhpA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795538647;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=U3xnSH+BmaWYcojS6vbFOMgwGWNHdEs82Sghjm/1X/E=;
-	b=Zv0K9koEEpsk6tgCFZNEyazTaPXpSfREeZJMxEEdrYKgz2v1+wfptValUR8K6qI2g/l3
-	 QJelpmrqpDN0vxndbPzTS8h5WbVBUKoW8qIhqAzlOe0zIJywuK9HhXZb9FiZqTN6tQm1x
-	 n1f4SBLUK9cPEaguiTkArGmcWrRpPtjxqUPOmHp1LnQpBEdV1mJYeNRCpSGqq80Mmt0eD
-	 upYr6YI0FjxxPrWSTEjeYg0Ex3JJcjm/eCgS2eiNP9hd+55PwWC3lNgvxLE8HdPnat1C0
-	 u4K4bfoOiwgm5Mcr5ohpoOd1n9xdNe8yUdIYkI2SZklEO55m//B8GBLkm+0qmpRsvAQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 138C41F000C0;
-	Tue, 24 Nov 2026 16:43:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OOMLAS+X
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE8E1F000CA;
+	Tue, 24 Nov 2026 16:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795538647;
-	bh=U3xnSH+BmaWYcojS6vbFOMgwGWNHdEs82Sghjm/1X/E=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=RHHYFuK+EbcMGqn+CLHRLz+NcwD5HH0sr4QqHI9Xu6Cdt+/X8J6C2/b1GF/s19D+Q
-	 4JsCdowIN4M3MXk1wMj8jr1wxmS82xSfsGZ8hgJDs///klQdvPF/yg8qIE2BdY0zR8
-	 wHvjurcHs4itoGCBPOBCdGVZD6f2SXqjiB3eeFMkZdVnM0IlIJcFiPQr9mSHR0wADP
-	 FpcLiC5gdm5eMVBYJozCauOHHuPl+zsgyYSgkxuk7vV815QUX305kaQibjn5yv0BgB
-	 JbwGCOu9LJIcIXn3tOSUZSBkdCEUgr3i5eZcPrZr8MIPpVrrLamyp2Q8dmPVI4dUZS
-	 BpqsLEXyqP0dQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 622404CACC;
-	Tue, 24 Nov 2026 16:43:51 +0000 (UTC)
-From: "Louis H. Poulin II via B4 Relay" <devnull+poulin.louis.student.oaklandcc.edu@kernel.org>
-Subject: [PATCH v2 0/2] kunit: tool: Preserve failures in parsed KTAP
- results
-Date: Tue, 24 Nov 2026 11:43:50 -0500
-Message-Id: <20261124-kunit-v2-v2-0-e1adbcad6b48@student.oaklandcc.edu>
+	s=k20260515; t=1795539189;
+	bh=x/uzChQMb312nOxPDZxs+qjo+ZN0ijU/g8Mc3JJQonU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OOMLAS+XbhdnRS7DFxO90ypKtA8PGcVdJZbFI8gljDKch9WCYldkuqZ0kVwuUPZ+6
+	 DJ+PTxVWWPKOiF2iDRt9r3OeLjBPpdenXE1GXapKuoJRyr6FpYRvufwl+XROSY9yho
+	 jTkO8I/BbuB2Mkrtl3WoqPT+Xs9IYfiNc7ya8gNP9Dsm9gZcXM2/h8MvhRFX5GC6r+
+	 fRqG6Z3nr0a1Jpuy2CUXl8X+fANf3mDC+7/YbBfvSpwDRDyqgtrkhl2KY8WxIVvPH2
+	 qZNW4e5PmXeu/A1b+1ldGiTLSLO6MI3VOERij/AB6KsjOvpZThacNm0hGusbxOvNzs
+	 iXZmwZ+SG1Z0g==
+Date: Tue, 24 Nov 2026 16:53:01 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Justin He <Justin.He@arm.com>, Oliver Upton <oupton@kernel.org>, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <Joey.Gouly@arm.com>, 
+	Steffen Eiden <seiden@linux.ibm.com>, Suzuki Poulose <Suzuki.Poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <Catalin.Marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <Mark.Rutland@arm.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, Dan Carpenter <dan@pereq.eu>
+Subject: Re: [PATCH 1/3] KVM: arm64: Don't load hardware vCPU state before
+ first run
+Message-ID: <awW1Q2Y9vCdxpjtG@gremlin>
+References: <20261123150917.2679600-1-justin.he@arm.com>
+ <20261123150917.2679600-2-justin.he@arm.com>
+ <86eccbzcqh.wl-maz@kernel.org>
+ <AS2PR08MB978600ED2150F773D3E1631DF7442@AS2PR08MB9786.eurprd08.prod.outlook.com>
+ <868q2iz94w.wl-maz@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,68 +69,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
- vPSU3UzU4B8JSMDIzNDQyMT3ezSvMwS3TIj3RQDi1QzS0szCzNzIyWg8oKi1LTMCrBR0bG1tQB
- 9Lc+LWgAAAA==
-X-Change-ID: 20261124-kunit-v2-d08e69968672
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>
-Cc: Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
- "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795538631; l=1626;
- i=poulin.louis@student.oaklandcc.edu; s=20261123;
- h=from:subject:message-id;
- bh=FMmuGf0BvxD0W/kVIvoDe3PsvdyB9kbT8Oxfr84qE2A=;
- b=R/6HJuE+JO6Wx1KCO8BgcX6FZE6aa2X3Rvu4wlCprUZwj+kKrgu17Au3kouPr40TRp1JSvJ+Y
- 4wbeMPw5Du6A0CVyEIQ0own1xh0BDIFU4GpSTjxToTP3TXJe+XqjMaS
-X-Developer-Key: i=poulin.louis@student.oaklandcc.edu; a=ed25519;
- pk=LwBiuOLz0gqWTufz54rXgw2coado8UrJcWQ13DbYfxw=
-X-Endpoint-Received: by B4 Relay for
- poulin.louis@student.oaklandcc.edu/20261123 with auth_id=1616
-X-Original-From: "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
-Reply-To: poulin.louis@student.oaklandcc.edu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <868q2iz94w.wl-maz@kernel.org>
 
-The KUnit tool's saved-log parser does not consistently propagate two
-failure conditions. A suite reporting not ok with only skipped children
-leaves the run SKIPPED. A result with an out-of-sequence number can
-still be counted as successful, so kunit.py parse may exit 0 for that
-malformed log.
+On Tue, Nov 24, 2026 at 12:50:07PM +0000, Marc Zyngier wrote:
+> Adding Dan to this loop, as I reckon something else is amiss.
+>
+> On Tue, 24 Nov 2026 01:39:23 +0000,
+> Justin He <Justin.He@arm.com> wrote:
+> >
+> > Hi, Marc
+> >
+> > > -----Original Message-----
+> > [...]
+> > > > KVM_PRE_FAULT_MEMORY calls vcpu_load() as soon as
+> > > KVM_ARM_VCPU_INIT has
+> > > > completed. On arm64, however, kvm->arch.sysreg_masks, the trap
+> > > > configuration, vncr_tlb and nested vGIC state are only set up on the
+> > > > first KVM_RUN in kvm_arch_vcpu_run_pid_change().
+> > >
+> > > I think I'm going to queue a patch disabling prefaulting immediately,
+> > > and then we can fix this crap.
+> > >
+> > Fine with me. I'll rebase on top of it and have v2 re-enable
+> > pre-faulting together with the load/put change.
+>
+> Don't worry about that. I can fix that myself when applying the
+> patches.
+>
+>
+> > > > Since kvm_running_vcpu can now be set without VHE state on the CPU, use
+> > > > host_ctxt->__hyp_running_vcpu in VHE enter_vmid_context() (matching
+> > > > nVHE)
+> > >
+> > > Can you clarify under which circumstances we end-up on the TLB
+> > > invalidation path? Simply faulting things in should not result in
+> > > invalidation. Unless we end-up with MMU notifiers firing?
+> > >
+> > I found this by code inspection, not from a failure. A TLBI from a stage-2
+> > BBM or an MMU notifier can hit this path during pre-faulting, but before
+> > the first run hw_mmu is canonical, so it makes no difference. As Lorenzo
+> > said, I'll drop this hunk.
+>
+> vcpu->arch.hw_mmu being the canonical one before the first run doesn't
+> hold anymore, since a7602ea542d4e ("KVM: arm64: nv: Initialize hw_mmu
+> to NULL for nested vCPUs"), as userspace can configure things for an
+> L2, before first run, and bad things happen otherwise.
 
-Patch 1 preserves the suite's reported failure in aggregate counts.
-Patch 2 marks out-of-sequence result records as failed. It depends on
-patch 1 for a malformed parent suite whose child tests are all skipped.
+Yeah sorry, didn't pull locally so missed that...!
 
-Tested: kunit_tool_test.py (100 tests, all pass) and strict checkpatch
-on both patches. No live kernel run was performed.
+>
+> But the observation remains: if an MMU notifier occurs for any reason
+> while pre-faulting (likely a concurrent reclaim), we get the "not
+> quite loaded" vcpu in enter_vmid_context(). If vcpu->arch.hw_mmu is a
+> valid (non-null) pointer, then we will restore whatever is in that
+> structure when reaching exit_vmid_context(), and that's not what is
+> intended.
 
-Changes in v2:
-- Resend using b4; v1 was mangled by line wrapping in the mail client
-  (reported by David Gow).
-- Rebase onto v7.4-rc1; no changes under tools/testing/kunit since v1.
-- Patch 1: move the Fixes: tag adjacent to Signed-off-by:. No code change.
-- Patch 2: no change.
+We might also get not-concurrent MMU notifier fun with direct reclaim like:
 
-v1: https://lore.kernel.org/r/CAGQButum4PYb4A%2Bhmqg-bJZbf4L3KkH6rT9tn-0_NTs3xLhGYw@mail.gmail.com
+kvm_vcpu_pre_fault_memory()
+  -> vcpu_load()
+    -> kvm_running_vcpu set
+    -> kvm_arch_vcpu_load()
+      [ skipped with this patch, !vcpu_has_run_once() ]
+  -> kvm_arch_vcpu_pre_fault_memory()
+    -> user_mem_abort()
+      -> kvm_s2_fault_pin_pfn()
+        ...
+        -> get_user_pages_unlocked()
+          -> < try to fault in >
+            [ direct reclaim, tries to unmap a page from another VM ]
+            -> [ mmu notifier ]
+              -> kvm_unmap_gfn_range()
+                -> kvm_stage2_unmap_range()
+                  ...
+                  -> enter_vmid_context()
+                    [ assumes kvm_running_vcpu's hw_mmu is in VTTBR_EL2
+		      so exit_vmid_context() 'restores' it ]
 
-Signed-off-by: Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
----
-Louis H. Poulin II (2):
-      kunit: tool: Count failed suites with only skipped tests
-      kunit: tool: Fail on out-of-sequence test numbers
+Yeah anyway in general this is clearly _wrong_ so right thing is to keep
+that bit.
 
- tools/testing/kunit/kunit_parser.py    | 15 +++---
- tools/testing/kunit/kunit_tool_test.py | 92 ++++++++++++++++++++++++++++++++--
- 2 files changed, 98 insertions(+), 9 deletions(-)
----
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-change-id: 20261124-kunit-v2-d08e69968672
+>
+> So I think we need that sort of exclusion. Either we track what is
+> actually properly loaded (using __hyp_running_vcpu as you did before,
+> or by checking whether the vcpu is in a valid state).
 
-Best regards,
--- 
-Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
+Yup makes sense!
 
+>
+> I think we have a somewhat similar breakage with 5651590be08a6 ("KVM:
+> arm64: Load the vcpu in KVM_SET_VCPU_EVENTS"): as vcpu_load() now
+> becomes sensitive to vcpu_has_run_once() being true, we can't tell
+> anything of the state that is going to be evaluated by the event
+> injection helper.
+>
+> We could prevent the non-running injection in KVM_SET_VCPU_EVENTS, but
+> that's also a change in the API...
 
+OK so fear is Dan's vcpu load in kvm_arm_vcpu_set_events() now ends up
+doing naff all before vcpu_has_run_once() and thus the bug he fixes might
+be a thing again?
+
+Or is the concern something else?
+
+For the bug I think probably it's fine because the issue there was that you
+had an unload without a load AFAICT, but Jia's change also updates
+kvm_arch_vcpu_put() to be symmetrical, so that should be OK?
+
+>
+> 	M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
+
+--
+Cheers, Lorenzo
