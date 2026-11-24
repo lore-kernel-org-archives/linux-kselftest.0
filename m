@@ -1,57 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.115
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.122
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795488319;
-	b=kjB8WFkimz6lWyx+66cnm9SK6inKKeE0EcrjRjJ1uWCCEt2fV6f1U5Nr+esl3tC4bgd7
-	 IT0YVxeIWCtR6WuejZC6uxA4meJNxTqrhD9GR/0cxMmTeTLcnjIF9jwpIoP1IwOGrusKd
-	 mzF+YuKF6rzJru+CvRyY/zz9YTFsrgYPzlIf89zK0knTIdLxSx4a0dmnkX7cPycBM1Hg8
-	 mMuDhiskjLEdKe3zIYRKDKKo2C8aRa2wq3pvyZxNUeOxBUUCsgNlT1oNoVNju32dgyeHa
-	 6eg66IV+8xkkWhlY/iEJp/7DfVibqNshfdTVebUcOnSn8dq/H16O8rBrwNMoXcZUANA==
+	t=1795488329;
+	b=K9qo47hUZicbwE+3ZwbLvsjuKk7cIpmvq+cR5dVvXrgF3UYgzkscTqMTl3Z28n6bzVYH
+	 VonlSQI8Xo6wPAYqO3wZPEmNbPNgVZeuOMu1RIcCV3BbawFixIYHXmSwuYzLlLDHuWISt
+	 ubY76qTPjDA3qcJLYXzDwYLXjbVbQqH2EpjKHvrMaDMbBimU5bnt45Aec26PP2Nb+DwlF
+	 dFMHuKTp1IvZLY+EiDZ7r3ApkU7XRhnYwGj2ck260BIWDcz8GoC4JqXK1HJFJg3MCcRrT
+	 oCL3Dk8ZA1X0nQmJ7EwPLK8BKUhXuO8C/erVLpxvLjMLTeqtZKK/AzZXylkLgds8mzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795488319;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795488329;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
-	 Cc:X-Mailer;
-	bh=q5EFTCLEHdRIRVIc1WLoQhbVHhzNw1gURxAgzmPnF6A=;
-	b=hZaREgVU7W+h9EObkoPCSlAL2XDz+2Bxi2JgrTlCmX6E+g0B+6rJjdBKoRpx1bH5qfmj
-	 kuBGrL4CZcGZ99Cykn4Segv8eybNDvR9JPiiLChLaL9sDGcR4m26rhTfzYEFsh6tOuL8N
-	 Ln3sM4V1mB2CofMy36yxBnMNkxgUJ9wq7xj+DZercIM5xYB/wIGLlfnzTgIV03hS7UoQ6
-	 G0W0nTl45aFnq9z1Owm1/PWBMVgEPVPYh1wNZzQnFSdeIDG4uqp5q6mziAjBSfKOOg2Yz
-	 aEUkNGt/SN5J7VonMeEuSLfj3wwgR8ngDKN6bdv+ELLxhHdVc+sldZCQcB9SFdAkSZA==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer;
+	bh=vuMUxPysB/1urRDiZMBo6ZFDyIl3iyp8gh63KhQA1W8=;
+	b=4t0P8dqpVfsJwzURixhlih2geM3ig7WUuJW8Kl+lrBzfAyC1FM1nlufcM93g3VZO/7oX
+	 bWn3YYGhdP2ysDSIFlfcx/EwSlYPXqyErR9LSzYnmrU3nn9PVJ4Hlbakyy/nTADEC+JN6
+	 trTMh48lOrpkJyIj0TxdRg0gjP+vnDTPBRKjTrCbIUDZTWE37tAXnN719oqSbJxTOS1u/
+	 /CYdrl601YjFmaplRSdP8HOHHMwHQCyAN+BRcNB4no5y/vvf1b20JiNvAh89CexKDEnls
+	 1WMwJly2OxpHNDKUlpgu+CTjzWZadXZti5qHNWzSkJw2HiOmts9M5Egl6zbEsRGP8lg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ke2hc9QV;
-	arc=none smtp.remote-ip=91.218.175.115
-Received: from mta0.migadu.com (out-115.mta0.migadu.com [91.218.175.115])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ldjmdt9G;
+	arc=none smtp.remote-ip=91.218.175.122
+Received: from mta0.migadu.com (unknown [91.218.175.122])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE3B606A321
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 02:45:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CBE3B606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FCE606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 02:45:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4FCE606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ke2hc9QV
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ldjmdt9G
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ir4B76zlkpWj23djjJNSYj9nLGcKKUpZKOTxUa3rwUQ=;
+DKIM-Signature: a=rsa-sha256; bh=avW9nH3puyO3JSpJgGfK8ZUUD/Us802ZWqb3w8fnLEU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795488315; v=1; x=1796093115;
- b=Ke2hc9QVRkuhStqGmPaOOBCDAP5IcnOLBP2ePRL+ohPxepLVVPwa5HvKlzZZ905gkRMuSydh
- 1zv2N0WLnE2iPv4FXuTJkyPC5n0IJhcNA6uog2JCqZ0n1IbYeUzw7rDvLoHZrZydRRdtHQJ6cl3
- pf5IR+AbKBiLfUekTjVgpAQo=
+ t=1795488326; v=1; x=1796093126;
+ b=Ldjmdt9G7Pu1ZfKRL33KgKlGxWvBCapE4tZSfH4YMJnXqhrG7P1Ug3U44qADK0pJKahh01x8
+ xABCGBhVvn01Hh2qc8ePmeaIrZgwSlZ/Xp+xYLmT9B18wncSL9W1kcTD3ByOR3mXR2JwBO1vTE0
+ 806wg3ZOOR3iZZEdodeeqXcs=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9e699e5a7949427e;
-	Tue, 24 Nov 2026 02:45:14 +0000
-X-Mizu-Trace-ID: 9e699e5a7949427e
+Received: by smtp.migadu.com with ESMTPS id 0b85e04eba94820c;
+	Tue, 24 Nov 2026 02:45:25 +0000
+X-Mizu-Trace-ID: 0b85e04eba94820c
 X-Migadu-Flow: FLOW_OUT
 From: Qiliang Yuan <qiliang.yuan@linux.dev>
-Subject: [PATCH v2 0/3] udmabuf: speed up mmap() of huge page backed
- buffers
-Date: Mon, 23 Nov 2026 21:44:59 -0500
-Message-Id: <20261123-feat-udmabuf-huge-pfnmap-v2-0-3254f801fc36@linux.dev>
+Date: Mon, 23 Nov 2026 21:45:00 -0500
+Subject: [PATCH v2 1/3] dma-buf: align large mappings to PMD boundaries
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,10 +61,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIACv6BGsC/3WNzQ7CIBCEX6XZsxhYf4qefA/TAy2L3URpA4XUN
- H13sYlHj99k5psFIgWmCNdqgUCZIw++AO4q6HrjHyTYFgaUeFYKlXBkJpHsy7TJiT6Vwuj8y4z
- igCeNNVpZ1wRlPgZyPG/qe1O45zgN4b09ZfVNf1L8L81KSGG71mitL0fZ4e3JPs17SxmadV0/6
- Sq7dMAAAAA=
+Message-Id: <20261123-feat-udmabuf-huge-pfnmap-v2-1-3254f801fc36@linux.dev>
+References: <20261123-feat-udmabuf-huge-pfnmap-v2-0-3254f801fc36@linux.dev>
+In-Reply-To: <20261123-feat-udmabuf-huge-pfnmap-v2-0-3254f801fc36@linux.dev>
 To: Sumit Semwal <sumit.semwal@linaro.org>, 
  =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
  Philipp Stanner <phasta@kernel.org>, Gerd Hoffmann <kraxel@redhat.com>, 
@@ -79,55 +76,38 @@ Cc: =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
  Natalie Vock <nat@pixelcluster.dev>
 X-Mailer: b4 0.13.0
 
-QEMU and crosvm export virtio-gpu blob resources from guest memory as
-udmabufs, which the host renderer and display mmap(). The guest memory is
-often backed by 2 MiB huge pages, yet udmabuf maps it 4 KiB at a time:
-mapping and touching a 4 GiB buffer inserts a million PTEs and takes over
-200 ms.
+A dma-buf exporter whose buffer is backed by physically contiguous memory
+can map it with PMDs from a ->huge_fault() handler, which only works where
+the user address and the buffer offset are aligned alike to PMD_SIZE.
 
-Patch 1 has mmap() of a dma-buf align large mappings to PMD boundaries,
-which any exporter mapping contiguous memory with PMDs needs, such as the
-proposed VFIO dma-buf mmap() [1]. Patch 2 maps the huge page backed
-ranges of a udmabuf with PMDs, which cuts the time to map and touch it
-by 87-90% for hugetlb and shmem THP backed buffers and leaves 4 KiB
-backed ones as they are. Patch 3 adds selftests.
+dma_buf_fops has no ->get_unmapped_area(), so mmap() places a dma-buf at
+whatever page aligned address the default allocator returns. A 4 GiB
+udmabuf, for one, lands 616 KiB past a 2 MiB boundary, and then none of
+its PMD-sized ranges can be mapped with a PMD.
 
-[1] https://lore.kernel.org/r/20260527102319.100128-1-mattev@meta.com
+Use thp_get_unmapped_area(), as filesystems that support huge mappings
+do. It aligns a mapping that covers at least one whole PMD to the buffer
+offset and leaves smaller mappings where they would be placed anyway.
 
 Signed-off-by: Qiliang Yuan <qiliang.yuan@linux.dev>
+Reviewed-by: Christian König <christian.koenig@amd.com>
 ---
-V1 -> V2:
-- 1/3: Add Reviewed-by (Christian König).
-- 2/3: Pre-fault only the faulting PMD range when the VMA can't have
-  PMDs, so that disabling THP after a PMD was mapped no longer has
-  vmf_insert_pfn() walk into that PMD (Sashiko review).
-- 3/3: Give each huge page its own data pattern, skip the alignment
-  check for 32-bit tasks and read the inherited mapping in the forked
-  child (Sashiko review).
+ drivers/dma-buf/dma-buf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-A fault racing with prctl(PR_SET_THP_DISABLE) can still see a PMD
-installed by a concurrent fault. Lorenzo's series in mm/core fixes this
-in the core mm for all PFN maps with ->huge_fault() [2].
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 5c6957f8839a8..015a03c8d04db 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -608,6 +608,7 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
+ static const struct file_operations dma_buf_fops = {
+ 	.release	= dma_buf_file_release,
+ 	.mmap		= dma_buf_mmap_internal,
++	.get_unmapped_area = thp_get_unmapped_area,
+ 	.llseek		= dma_buf_llseek,
+ 	.poll		= dma_buf_poll,
+ 	.unlocked_ioctl	= dma_buf_ioctl,
 
-[2] https://lore.kernel.org/r/20261117-huge-pfnmap-fault-races-v2-0-276007e73bcb@kernel.org
-
-v1: https://lore.kernel.org/r/20261122-feat-udmabuf-huge-pfnmap-v1-0-dcba888940c2@linux.dev
-
----
-Qiliang Yuan (3):
-      dma-buf: align large mappings to PMD boundaries
-      udmabuf: map huge page backed ranges with PMDs
-      selftests/udmabuf: test mapping a huge page backed udmabuf
-
- drivers/dma-buf/dma-buf.c                         |  1 +
- drivers/dma-buf/udmabuf.c                         | 85 +++++++++++++++++++-
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 97 ++++++++++++++++++++++-
- 3 files changed, 178 insertions(+), 5 deletions(-)
----
-base-commit: c408466a4dfaee4b12587e926c5b85e68c8b3c40
-change-id: 20261121-feat-udmabuf-huge-pfnmap-3258272d077e
-
-Best regards,
 -- 
-Qiliang Yuan <qiliang.yuan@linux.dev>
+2.43.0
 
