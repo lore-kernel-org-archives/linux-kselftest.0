@@ -1,61 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795535458;
-	b=Tl5RaekS3BOrHQhTFdVUl1oWS63HcV1k2LS1nNSK0gLCYqRigYO6fFilh3E0b7liuiHK
-	 lMKBA9gBna/D5D24HHPO2Ztc5IhY7BWcBDVRNxB0HeJCrdAR+YKdjBconMViAw1o3cDnT
-	 k9iBie2DOhiIBGLCJpM+oGIvwZHM87sd7rYyB3cT1NXP4tYnS2RZm6hn0DOx5+HrCuOUV
-	 GE/cg9dnf9AZ263ZZ/paNuyyFKwLvPl/AwvaQ//DUf5Z5fAM/Fr5E5GYXr5YZFe4tMAU5
-	 cFM8Acf4v5ghv+8RT1c5KmyaLyHfaqjnjqZL8m94B5fYKe0zQLWVogdDQIgSy9NZVyA==
+	t=1795535796;
+	b=oLELV17Sqtr7P5PJgVa9yguR7+t300+tjmUHtoyv3xUahfCibo3XMExgn6OnDqX8D16g
+	 QUsA7wSFtZ7FrAaiH8JDdK942bkvOrbnLPqEuUJLf3H56P3UL/+j4QpIHyYBGlJnZOjfb
+	 W7TvbZG3vstqtzUiadvJYHY4er/3nT7EOjkMCJx46we69xsk4aC3dKjWVmbqeS4YzW05c
+	 Xjc8NRW1+9SJ96AMtnFyCu1akZMNFM/j0MU688OdcLwfU7ew5ZGRuv6qLlMfj2UJBg5iL
+	 fxpPpBFVSpTS9YMma/zN7CR1COWc3yQGDW0n1kkTVpf/ru7on6qk087FHDMKRWkia5Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795535458;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=8CqJm7M0yv4/2wYmOKC/zfDe65AOuxRbGrFH0p4VsnE=;
-	b=13wscOtAnWV1Z11cHaUjc9yAgkaVkCAkkbfiZmeyNupuYpx/jyxdYbcKdr1Wu5OkbWz+
-	 ILbubrJw06ykA4UP+hRSzfXwQ4IUTpzAMc9JhU4aWBUvQ1f6QGBhfeKhHc5A+3gXQgr47
-	 QBdCVRmmxAO51uyNq1lEGOONOdfK1S0CtIX0mGzwZki/sZ0BHuqgZHth7R4WlcDZ6feIk
-	 O267lF5AtUJXa6m4LfxmJ7kyLPwnYD6CqOHjSrVECTbU6Y9kOWVr5DE7PX7iXhpTEIT9j
-	 jL8XKiIr6rSEAZRPXsy9NEDjMemqnA+d/2Rz9xJ08rzt9HFgk3aXw11U1sdTIxhpxPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795535796;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=cp9qvJzAYDDQdk38T0+e5AQe8omtVBjXWGNOkDO7CrY=;
+	b=GGVPYO82lLwvAUtkXx/A2k/u0aeNJaTLcH3gePzM6HysVa/WK/5HZzHJx8yUBpq2qndw
+	 ot32Y7FkJKQUH2BBo7pLVNLcmgVeQiN2Oj+SemaJ2Ii8QJm4BP5bcl/aEOwUgNDAJfILZ
+	 86EVbGV4U1ke+SgV/A3etMQPnfjgoDUOGanpmK4eKylDebqlnnjTGXtt3wPhaoYvfqROu
+	 oyNhIth9+cEoTtm0aOj6LCaZ96Kb6Rawa9d6cWLS9IarUQT+99Lw2cCbPiSC5mPSZ+vKH
+	 RBWH2amsFLXL8yOfJZCfo5kQj2Y/I2jxy/R4wnelrvyjvVdGHVZNDvhEN0YYtxxgxcA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ciedm+7r;
-	arc=none smtp.remote-ip=216.40.44.11
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j0t+J8Ce;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BF7606A31E;
-	Tue, 24 Nov 2026 15:50:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5BF7606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE06606A327;
+	Tue, 24 Nov 2026 15:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=ciedm+7r
-Received: from omf08.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 8A3DB120A81;
-	Tue, 24 Nov 2026 15:50:55 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id 0DECA20029;
-	Tue, 24 Nov 2026 15:50:52 +0000 (UTC)
-Date: Tue, 24 Nov 2026 10:50:47 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Sarah Emery <sarah.emery@canonical.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, Paul
- Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, Hui Wang
- <hui.wang@canonical.com>
-Subject: Re: [PATCH v2] selftests/ftrace: Account for 8-byte aligned
- trace_marker_raw events
-Message-ID: <20261124105047.23c39b69@gandalf.local.home>
-In-Reply-To: <20261010234645.173550-1-sarah.emery@canonical.com>
-References: <20261010234645.173550-1-sarah.emery@canonical.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j0t+J8Ce
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2BB1F000D4;
+	Tue, 24 Nov 2026 15:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795535795;
+	bh=cp9qvJzAYDDQdk38T0+e5AQe8omtVBjXWGNOkDO7CrY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=j0t+J8CeRganGFdwxySeSsw/MNGzMiwH6I3Hgz25CS/gZceM5Lnth6f9FvgGq12S9
+	 xmci9Ar3KEedv7ftTaHvxdjR+3G3XnqfDNzJpzBRFILLIPKGdGs7893MNC9PIKyBFu
+	 D3Lk/ot7c9qA+dkNbQdh8dwRBbv3reLCvmPl1tj0TG9Ecb7QIvTFRKp6MbIhKybvq+
+	 p0cMqhgPGRhE5x6zpvt0i8nTitPYKB7+Yewje64KugW3xdUjD10l5LrkRf5nOK4Kjz
+	 nHsA0Zy85f05PSNw0q9f8BnXGhZYyXdPog+44fbEUFm5oANQ5CSShY66FFrICXmJ/8
+	 HzzLFzrY6/1qA==
+Subject: Re: [PATCH net v8 1/2] genetlink: Reject joining multicast groups no
+ family owns
+From: netdev-bot+sashiko@kernel.org
+To: anilkaushikwireless@gmail.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, idosch@nvidia.com,
+ nicolas.dichtel@6wind.com, jacob.e.keller@intel.com, jiri@resnulli.us,
+ fw@strlen.de, martineau@kernel.org, v3rdant.xiang@gmail.com,
+ aliceryhl@google.com, linux-kernel@vger.kernel.org, nhorman@tuxdriver.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 24 Nov 2026 15:56:34 +0000
+Message-ID: <179553579407.3135.13476478403966318528@kernel.org>
+In-Reply-To: <20261123155503.2497063-2-anilkaushikwireless@gmail.com>
+References: <20261123155503.2497063-2-anilkaushikwireless@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,88 +66,120 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 0DECA20029
-X-Stat-Signature: 6pjgmfyk6na7sr1sycakuaamwqz1gft4
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+5ChBTssD8JBhJ43i6DVvb8POD/Y8N1Yg=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=8CqJm7M0yv4/2wYmOKC/zfDe65AOuxRbGrFH0p4VsnE=; b=ciedm+7rPzFY39V1r/cvvdx6q6owk4Jag/6O4PoItZZzFzqanHP688mg9Gb5Oh8DAIl5ElX9hAGtd4xvwVtuDV9KZjYwhlR7kx27PvdvmP+Hn1s0UF0bD6uKGSJDi7KdS/Byl5VkKUQjCCaIb7h9lirr4Xi7kjsIDto1Dd0T7k8=
-X-HE-Tag: 1795535452-708807
-X-HE-Meta: U2FsdGVkX18/ONp8OX8bgHDSKuPF05HxfDxMiVtEkw4nm9gPOmmhU+1iKHvaS7MctvvnPU3uz/UK5nWJqwcJ3J9XTxe4VJFueYHSl+dGf6OYjM0uGJcHMzMXz2fLevfyVLDzY3eUWc/c+tkBDKP7vbOCuuXDk2mPXb+UxfTUtFczlcipjLDwDyGWBDrv24U7KBE1+8VP7N9QqokLOns0rBqh01jYqa4AGlTX94+pdZA1S8G99unk9MdLJ2VNBeCs4CvZ7Jkf4E82ucy/WsGULzSJSVvrhoGycWVMWVOIa1xzklSxdH8U3SUz2pseyNEqiP4FborzvJO0mgIkcbU2kxPZwVTqgGHAXFDTaam9QYsZoEBiBFj96GhscrO30peOKpq/guBOaGT4XFlSjfn4Zg==
 
-On Sun, 11 Oct 2026 01:46:45 +0200
-Sarah Emery <sarah.emery@canonical.com> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-> trace_marker_raw.tc expects the length of each raw event to be rounded
-> up to a multiple of 4 bytes. That is not the case when the ring buffer
-> forces 8-byte alignment of events (CONFIG_HAVE_64BIT_ALIGNED_ACCESS):
-> the id plus the data is rounded up to a multiple of 8 bytes instead, so
-> trace_pipe shows 8 * N + 4 items. This was seen on riscv64.
-> 
-> Make the test accept either rounding.
-> 
-> Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
-> Reported-by: Hui Wang <hui.wang@canonical.com>
-> Closes: https://lore.kernel.org/all/20260607072431.125633-3-hui.wang@canonical.com/
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-The Closes tag is for bug reports not previous version of patches.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Do you have the link to the email that shows riscv64 fails? That would be
-what you would add to the closes line.
+- [Medium] Check-then-act race (TOCTOU) between the ownership/capability
+  check in genl_bind() and the point where af_netlink sets the…
 
-> Signed-off-by: Sarah Emery <sarah.emery@canonical.com>
-> ---
-> Original v1 patch from Hui Wang was posted in June and only patch 1/2
-> was merged (commit c37e0a4b79a6).
-> This is a v2 for commit 2/2, addressing reviews.
-> 
-> Changes since v1:
->  - Drop kconfig_enabled() and the CONFIG_HAVE_64BIT_ALIGNED_ACCESS
->    lookup. The review of v1 objected that it depends on the kernel config
->    being readable from the test environment. The test now accepts the
->    4 and 8 byte roundings based on what trace_pipe prints.
->  - The expected length for the 8 byte case is unchanged (8 * N + 4).
->  - Rebase on 65f26d15f7db ("selftests/ftrace: Fix trace_marker_raw test
->    on 64K page kernels"), which changed how the test writes its events.
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> index f985ff391463..dd2b94be0947 100644
-> --- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> @@ -67,7 +67,8 @@ test_multiple_writes() {
->  	# add a little buffer
->  	echo stop > trace_marker
+--
+
+genetlink: Reject joining multicast groups no family owns
+
+With this commit, genl_bind() returns -ENOENT when no genetlink family
+owns the requested multicast group. Unprivileged users can then no longer
+join free group IDs that a privileged family takes later. netlink_bind()
+skips such IDs in a bind() mask instead of failing, and
+setsockopt(NETLINK_ADD_MEMBERSHIP) returns the error.
+
+Link: https://lore.kernel.org/netdev/179324692107.3134.14443689892607921337@kernel.org/
+
+> diff --git a/net/netlink/genetlink.c b/net/netlink/genetlink.c
+> index 5cc1037d4917e..e5d4f3c4e22ac 100644
+> --- a/net/netlink/genetlink.c
+> +++ b/net/netlink/genetlink.c
+
+[ ... ]
+
+> @@ -1825,7 +1827,7 @@ static int genl_bind(struct net *net, int group)
+>  {
+>  	const struct genl_family *family;
+>  	unsigned int id;
+> -	int ret = 0;
+> +	int ret = -ENOENT;
 >  
-> -	# Check to make sure the number of entries is the id (rounded up by 4)
-> +	# Check to make sure the number of entries is the id (rounded up by 4,
-> +	# or by 8 on architectures forcing 8 byte alignment of ring buffer events)
->  	awk '/.*: # [0-9a-f]* / {
->  			print;
->  			cnt = -1;
-> @@ -77,9 +78,12 @@ test_multiple_writes() {
->  					i++;
->  					cnt = strtonum("0x" $i);
->  					num = NF - (i + 1);
-> -					# The number of items is always rounded up by 4
-> +					# The number of items is rounded up by 4
-> -					cnt2 = int((cnt + 3) / 4) * 4;
-> +					cnt4 = int((cnt + 3) / 4) * 4;
-> -					if (cnt2 != num) {
-> +					# With forced 8 byte alignment, the id (4 bytes) plus the data
-> +					# is rounded up to a multiple of 8, and the id is not counted
-> +					cnt8 = int((cnt + 3) / 8) * 8 + 4;
+>  	down_read(&cb_lock);
+>  
+> @@ -1841,6 +1843,7 @@ static int genl_bind(struct net *net, int group)
+>  			continue;
+>  
+>  		grp = &family->mcgrps[i];
+> +		ret = 0;
+>  		if ((grp->flags & GENL_MCAST_CAP_NET_ADMIN) &&
+>  		    !ns_capable(net->user_ns, CAP_NET_ADMIN))
+>  			ret = -EPERM;
 
-Instead of doing both checks, it should check 4bytes first and then 8 if
-that fails. Although, it would be better if it knew it was running on an
-architecture that doesn't support 4 byte alignment.
+[Severity: Medium]
+The commit message says "This does not cover a family that is
+unregistered between the check and the point where the membership bit is
+set."
 
--- Steve
+Can that window still leave a socket as a member of a group ID that no
+family owns? That is the state this patch is meant to prevent.
 
+genl_bind() decides ownership under down_read(&cb_lock). It then drops
+cb_lock and returns 0. The caller sets the bit later, and holds only
+netlink_table_grab() when it does:
 
-> +					if (num != cnt4 && num != cnt8) {
->  						exit 1;
->  					}
->  					break;
+netlink_bind()
+    err = nlk->netlink_bind(net, group + 1);  /* cb_lock taken, dropped */
+    ...
+    netlink_table_grab();
+    ...
+    nlk->groups[0] = (nlk->groups[0] & ~0xffffffffUL) | groups;
 
+netlink_setsockopt(NETLINK_ADD_MEMBERSHIP) follows the same pattern
+through netlink_update_socket_mc().
+
+One possible interleaving:
+
+CPU0                              CPU1
+bind() to group X of family F
+  genl_bind() returns 0
+  up_read(&cb_lock)
+                                  genl_unregister_family(F)
+                                    genl_lock_all()
+                                    genl_unregister_mc_groups()
+                                      __netlink_clear_multicast_users(X)
+                                        /* CPU0 bit not set yet */
+                                      clear_bit(X, mc_groups)
+                                    idr_remove()
+  netlink_table_grab()
+  sets bit X in nlk->groups
+
+After this, the socket is a member of X and X has no owner.
+
+A later family G can be given X by find_first_zero_bit() in
+genl_allocate_reserve_groups(). An unprivileged user can trigger that
+registration with CTRL_CMD_GETFAMILY -> request_module().
+
+Nothing checks the socket again. It would get G's notifications even when
+the group has GENL_MCAST_CAP_NET_ADMIN or GENL_MCAST_CAP_SYS_ADMIN set.
+
+The unregister side usually needs a privileged rmmod, but an unprivileged
+user can keep calling bind() until an admin unloads a module.
+
+Module init error paths, such as ila_init(), seg6_init() and fou_init(),
+can also unregister a family. That can happen after a request_module()
+the attacker triggered, if init fails partway.
+
+There is also a side effect. F->bind(i) ran for the old family, but on
+close genl_unbind() would call G->unbind(i). The family bind and unbind
+callbacks could then get out of balance.
+
+Could this be closed fully? One option is to recheck ownership, or a
+registration generation, under netlink_table_grab() before setting the
+bit. Another is to clear stale members of a group ID when it is given to
+a new family.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123155503.2497063-1-anilkaushikwireless%40gmail.com
