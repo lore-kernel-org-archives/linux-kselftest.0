@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795483923;
-	b=0UnI8KNLv+Xn/70jQurMxT2LTLfIbKGnAcCo6ao2e+zY1xyeRHsIU0nSkOY1alyS2Q5K
-	 Ks+g8j/HSksr/FEKW5pQhj2zTj7ToX+Fp/KxwOqhsQ5NblEnHRnNd+eqIuD4MDVw4Twae
-	 IpJCVXQd9+CCFiv8ByQQmyfVOpmOdz8AudoeN/NVM9qP0tSi4K0OlhCmK/UuWK7nYtxC5
-	 ATuD2NwZb8socLyts8KW2SOl3XTOLUMqw4W4jEsyZmDjNlwVoeo6YyzPb20IKwURWQY61
-	 junygNF3MPRC6fsknDntunLCbReEIxld2sqtkkfrDJqUipd8PG5ELZY5TOqvq5Cc4mA==
+	t=1795483926;
+	b=FHY0mmoCIEPww2443oD532SeOHisDMaT6dKOQSnFSGax+P4SgzBv5WaNGYT+JhoeMkV9
+	 2eiw5/wC/8QcYvK1R6a9SIiPVDB9NdZ7f7+PvUvJMfQ2dA6AKJeyB2BnMsn9KfXl2OPlj
+	 9To+pWBMe2NRKoalNSAGOt3oHr/zMWdgo/OayJTRYMm3DnjEUIqPDMMmPRL2wBNevhFSo
+	 /tTNa2HkbQp8Fswpu+pLvE1eVSNspdvmsoR8pCQ+PO826MtXjqxFovjPG37nYP+ZdRCmJ
+	 lAkqOONqWqH4OTMkIpSZL0DdJBWB1tfdSKYg4yHxwjai9HgueDdG9v4DM7UwNHJ9O7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795483923;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795483926;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=wJGHOnV3Wb5MH8wxspaaUtnx8HHTgvKjZzB/OFvjafQ=;
-	b=RCoZVvqOOyZByYr80oF8NVTYl9ajE+p7QYObMJrcU47EJjvCfRnpY1Lcpjv5+9Sxp08O
-	 /degaJ85c+mfq45E5v1H8M2Pd3lH6IXN0GjYORXzdlQmUxp5EX11cz2mWHbKRP5ybA7/I
-	 07/rZRVK7+8lV1ZT6xy7WTjuD2X+LBAINJshEou55t1sLmME6wbeDMzdzqkc8hI41l1wS
-	 i1egliU0+qGBeYv+jLFbN+BdWUMruxo1dtSt5AJCQ+mg2cSdiCCPhpY8D//S7FOphYJp0
-	 Xtdcxp9T7IU1JCnuDHgfPEUGRQf0k/hm44sQWmLlUGFLB0jaClw5a2+roXrjMkmGDNw==
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=lWYIIShJOlJiI3HAIOOlkWjUg5h7k/nHaxRbuLK/H7c=;
+	b=KK2OZtbdhVhMmJwqe6Jw3mMJc0IyI9wItf/xZNXDsoVRuPeCrTq92hY4kt7f8Mis3ZMU
+	 yojUWtyrvF38N7k0Mw3IUTqDTsNtGRzzucp4YIAAK1wyan1pSx/8VLSd4AzaKPt8zLFtS
+	 8NFWOInPyf6HaXGLi+2s92eyxBarvqokQKqk4TSzfD/R5Z1mZjVnoOqBbpym9/TuTX7s1
+	 s8YcGS2eEznm1nVT4HUzOW0zNRdWl+5hbEfE+CmK2Owyd64Vg597RvrRRHKoMG/cqYQ+i
+	 wcto50eQ31YJpcYwsxeewbVskRMhZyqhxmW/CPQvIKYaAKE9IBtTn9hNmddgYQPi9Ig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=iLM0r9WK;
-	arc=none smtp.remote-ip=111.22.67.137
-Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7868D606A322;
-	Tue, 24 Nov 2026 01:31:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7868D606A322
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=T8T9I30W;
+	arc=none smtp.remote-ip=111.22.67.151
+Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418D8606A335;
+	Tue, 24 Nov 2026 01:32:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 418D8606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=iLM0r9WK
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=T8T9I30W
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=iLM0r9WKvBVd2prX0d8nA4eKKXvlD9VA+HTOyT9MgD3RY335t43lM4rnSlVVSMZmYVW3/1kctV9E7
-	 6Qr0n01y+/xLNeMLwqQjo0SUw9N9Aqqn+d7xXIlIaUFwVFsfyKbU5FGY7Q4irlD06uvbLwo3u0WHYh
-	 vV9vlaQLlU1XLg0c=
+	b=T8T9I30WfKIzaLz2jpqG+PmJ8n7dwBhT7PJgU5HB35tzKRJpyJc6a5tUTImZ46p44u8trDFWR7BpE
+	 UPOUsswYb6u9iOouXGI27H6A3af8hnMY4cMIgSxc03820jI7lguGDZdCVL8QOKZIPs6uO3xeOfJ3CT
+	 5nYLyr1y8/QRcIPo=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46b04e90834a-e1acf;
-	Tue, 24 Nov 2026 09:31:52 +0800 (CST)
-X-RM-TRANSID:2ee46b04e90834a-e1acf
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66b04e90dfa5-0e478;
+	Tue, 24 Nov 2026 09:31:57 +0800 (CST)
+X-RM-TRANSID:2ee66b04e90dfa5-0e478
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
-Received:from openEuler-24.03.03 (unknown[104.224.130.48])
-	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26b04e8edf00-0e029;
-	Tue, 24 Nov 2026 09:31:52 +0800 (CST)
-X-RM-TRANSID:2ee26b04e8edf00-0e029
+Received:from  (unknown[104.224.130.48])
+	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26b04e8edf00-0e05f;
+	Tue, 24 Nov 2026 09:31:57 +0800 (CST)
+X-RM-TRANSID:2ee26b04e8edf00-0e05f
 From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: netdev@vger.kernel.org
 Cc: David Ahern <dsahern@kernel.org>,
@@ -63,10 +63,12 @@ Cc: David Ahern <dsahern@kernel.org>,
 	Alice Mikityanska <alice.kernel@fastmail.im>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 0/6] ip tunnels: Enable BIG TCP packets
-Date: Mon, 23 Nov 2026 17:31:18 -0800
-Message-ID: <20261124013124.3693-1-yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH net-next 1/6] ipip: Enable BIG TCP packets
+Date: Mon, 23 Nov 2026 17:31:19 -0800
+Message-ID: <20261124013124.3693-2-yanhaishuang@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261124013124.3693-1-yanhaishuang@cmss.chinamobile.com>
+References: <20261124013124.3693-1-yanhaishuang@cmss.chinamobile.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,47 +80,45 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Following vxlan and geneve, this series allows BIG TCP on ipip, gre,
-gretap, sit, ip6tnl, ip6gre and ip6gretap, which also covers their FOU
-and GUE encapsulation. The UDP length of FOU and GUE is already handled
-since commit 47282504ad21 ("udp: Support BIG TCP GSO packets where they
-can occur").
+Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and
+commit 03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP
+on UDP tunnels. ipip can carry BIG TCP packets as well: the outer IPv4
+header gets its total length from iph_set_totlen() on output, the GSO
+and GRO paths already handle IPv4 BIG TCP, and FOU and GUE encapsulation
+set the UDP length with udp_set_len() since commit 47282504ad21 ("udp:
+Support BIG TCP GSO packets where they can occur").
 
-Each driver patch bumps tso_max_size to GSO_MAX_SIZE in the setup of
-the device, like vxlan and geneve do. The default gso_max_size and
-gso_ipv4_max_size stay at 64KB. vti, erspan and ip6erspan are left
-alone.
+Bump tso_max_size up to GSO_MAX_SIZE so that the admin can use BIG TCP
+with ipip. The default gso_max_size and gso_ipv4_max_size stay at 64KB,
+so nothing changes unless they are raised explicitly.
 
-Patch 6 extends big_tcp_tunnels.sh, which already covers vxlan, geneve
-and bareudp, to check that BIG TCP packets go through all these devices,
-without encapsulation and with FOU and GUE, with and without veth tx
-checksum offload. sit is only checked with checksum offload, as GRO does
-not build sit packets larger than 64KB.
+iperf3 TCP over ipip between two netns connected by veth, without
+encapsulation, 3 runs of 10 seconds each, in a KVM guest with 8 vCPUs
+on an Intel Core i7-14700 host:
 
-With iperf3 over veth in a KVM guest, raising gso_max_size from 64KB to
-196608 gives +20% to +39% depending on the tunnel, see the commit
-messages for the numbers.
+  gso_max_size/gso_ipv4_max_size 65536:   94.2,  97.4,  97.2 Gbit/s
+  gso_max_size/gso_ipv4_max_size 196608: 133.7, 128.5, 130.5 Gbit/s (+36%)
 
-This work was done with the help of an AI coding assistant.
+A later patch in this series extends big_tcp_tunnels.sh to cover ipip
+without encapsulation, and with FOU and GUE.
 
-Haishuang Yan (6):
-  ipip: Enable BIG TCP packets
-  gre: Enable BIG TCP packets
-  sit: Enable BIG TCP packets
-  ip6_tunnel: Enable BIG TCP packets
-  ip6_gre: Enable BIG TCP packets
-  selftests: net: big_tcp_tunnels: Cover IP tunnels
+Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+---
+ net/ipv4/ipip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- net/ipv4/ip_gre.c                             |   2 +
- net/ipv4/ipip.c                               |   1 +
- net/ipv6/ip6_gre.c                            |   2 +
- net/ipv6/ip6_tunnel.c                         |   1 +
- net/ipv6/sit.c                                |   1 +
- .../testing/selftests/net/big_tcp_tunnels.sh  | 131 +++++++++++++++++-
- 6 files changed, 135 insertions(+), 3 deletions(-)
-
-
-base-commit: eb6d6c80d35449c27471b1874f13066c09a8964d
+diff --git a/net/ipv4/ipip.c b/net/ipv4/ipip.c
+index 15189e1fa06..74af06b1d94 100644
+--- a/net/ipv4/ipip.c
++++ b/net/ipv4/ipip.c
+@@ -416,6 +416,7 @@ static void ipip_tunnel_setup(struct net_device *dev)
+ 	dev->addr_len		= 4;
+ 	dev->lltx		= true;
+ 	netif_keep_dst(dev);
++	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
+ 
+ 	dev->features		|= IPIP_FEATURES;
+ 	dev->hw_features	|= IPIP_FEATURES;
 -- 
 2.43.0
 
