@@ -1,53 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795500563;
-	b=vPjVkCL4E7YsnWD4kVkKdUZokZIQ6mmFycM3isLftt74w3hk5HguyKSk8zQIumsDj0L3
-	 Gx4IqVCXlztt5EGnXssLUkVC9FhlQOtUyuwOzi0AuVOOq3Jy4ZGnVAz6RJ67fQn5pSDi5
-	 YKZicLxODvG7Y/LpsBTgDDcJx3+HCC+u+8Uol4WaQQ8LhJDW2NzwN09T9TuLzc7J1E8ej
-	 xj5+YpkEC6GONR4uusNChTSriphUgsLdQu6q2Ljcpxc/601LXh2NYSbm2A2XY4On2vNIH
-	 gtAPzQwQPJp3uTXk9uXo+FVYiiPraV3tUZyW8ZWXNxT9AEYNc1Rgx0Of6g/5xugZeNQ==
+	t=1795500962;
+	b=oA+tQlWcXKHp1wb0GqxoIOoKd0UJXFEuYYKckMsEb6b46IgiIRUD8iFwihKoxsEIPIaV
+	 LY6wzjJvsdHVFqYilmetnKjltrgx+h2TSLohO5Ey0A5rKTCHYL9nVdK11pT5cswI52GQQ
+	 ut5VXU3+YS8CVefgP/vfqncsSpF54tjVFiGhu8iY12ZxfN/d998csSsTcmqDXPkemZzv4
+	 UJeFOKFiO1BbJJ73oLgxQjBYK0RsoImE4TrqYwA9nHk2lCqhVUTSNNV6o5b3lKFMKr6I8
+	 mKNFkVsMRNM8aabfd1IEz8Ao4+ALCuLaCivwUstTWLW6Y9aF675p1o9VIQH1c+bobmw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795500563;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ZiCXabKfHhYbZeIBFwG/TNKCYBFaBhpLKQ8XdiplvWI=;
-	b=aIMqtHRPoE9cMfof1QTXNou3fQBGPQQexuL/vly8xisGUTakyS50VcFULHhcufTxALaA
-	 4+uWowA33isLH0zOC6c7F/3KRMGpT3TYGH/g/xrKObLKVukbmEZWo9l3j5L0XIx2J1qK6
-	 KPHyDO/65KMlrmBfU0P5pd1/G4hDTkog4Mc//Oa/m3MlTRrl1mcjmpC1AZuTY6HTq0B1K
-	 /87Fc6+xAjIUlTIirrfRudS/6KPrb301JlmDrXyaUWB391zVaQnTDJsgYEogUJpEOFadT
-	 w37X93PwNiaXVLWnyXWwnO/od5LaMz/nk16+ztcFwkLSZD/h7crMfGmN+nyRMBedtbA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795500962;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=3deHkPqpB7aHIFtQfKEsOnKFQwe46sRzUxi3JwWt7Jc=;
+	b=zInDHHUCfolWGImlSQQLPKOlhTuJpIwh+I9OS09IZ1DTZnky6Gu4mPu1R6H85xjSYnMZ
+	 ZmWFjgigB8/JRw2TpeV6nDnyFYebQIrZxKciLTWelC2fyCt5jPSncAhZsG3Yp1D8IzUYJ
+	 XVmj5V/nmChw2JCcb7aY/eeQtUrzwHtw+7L6Oxeuf8ihiCOe44pT564zWAu7hQmnjX+kt
+	 +syp5qptIdE6F+FHX/Wb2nkdZeuv/sC0bdmsSwxPOiYtIdze1W5JhwBSubF95u9GYeyk0
+	 2nNQY+9/c3qdEvZ3e2byczvwQuVwG8ECGk6ApmEB5nH8RocYuDS7LAAfpvMs14vTLvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jkZM8bPG;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="AqX/eGmV";
+	arc=none smtp.remote-ip=95.215.58.130
+Received: from mta1.migadu.com (out-130.mta1.migadu.com [95.215.58.130])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89D6606A321;
-	Tue, 24 Nov 2026 06:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E79F606A322
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 06:16:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E79F606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jkZM8bPG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA641F000E1;
-	Tue, 24 Nov 2026 06:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795500563;
-	bh=ZiCXabKfHhYbZeIBFwG/TNKCYBFaBhpLKQ8XdiplvWI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=jkZM8bPGQJn73YwYo7UrRQ+QC0oGSM5Ly4453kMmQpMoMK8BxyvYjDHrAyBWdmv+z
-	 g9lmt7iEfSkIX3oogPIVyTAbXqIYfikBGk24oY0/syyobZnVzt5zJRTn/8ngxuqa/K
-	 SFrPA8+aNfrFvwnMorWWPUZuKCI0bde04/KyqBQcTk90+q+eDUTgjQp5ZQ7FPnPKWz
-	 4N/aKUjEcoGpBsszm8Ls1+OalKMN53A2KCgxZ1yvf/h7PwDjP3E50TOWeYhCfCHo98
-	 OT2WR27oqhizhJTs0i60w+FVKawaM15WJ6pfWzRwNF+Lt9vBcIgnhgd0SRabYA+yvR
-	 n/3+VQ4r9t7Ew==
-Date: Mon, 23 Nov 2026 20:09:16 -1000
-Message-ID: <31830f3e8397a30033702d0769825573@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>, Waiman Long <longman@redhat.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Jiayuan Chen <jiayuan.chen@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2] cgroup/rstat: disable preemption in css_rstat_updated()
-In-Reply-To: <20261124031642.40616-1-kmehltretter@gmail.com>
-References: <20261124031642.40616-1-kmehltretter@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AqX/eGmV
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LA4NmeSrzCxncZ07MmMv0SrpIWpbrAp0rnNZHVKIsfI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795500959; v=1; x=1796105759;
+ b=AqX/eGmV6096XQyrXkOjds70SO1IW+mSTfk0jip+i5MLP8gkyxpdwxScbitqacEkScBepdiy
+ krRwGdOxEHnvRJ3dlLZ/Dq1xrUL0OKwzL3pxtF2scz4q8IXbNFFIAViHnaJhlZghT8BIHXJcp4q
+ K93pnXhRBT7xy6CZg2OXQ7VE=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e6a0bea410b7952c;
+	Tue, 24 Nov 2026 06:15:58 +0000
+X-Mizu-Trace-ID: e6a0bea410b7952c
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	sdf@fomichev.me
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Xu Kuohai <xukuohai@huawei.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/2] bpf, lsm: fix bpf_setsockopt() on a half set up child in inet_csk_clone
+Date: Tue, 24 Nov 2026 14:15:35 +0800
+Message-ID: <20261124061544.254586-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -57,14 +86,147 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Applied to cgroup/for-7.4-fixes with the following tag added:
+security_inet_csk_clone() is called at the end of inet_csk_clone_lock().
+The child is locked, which is why the hook is in
+bpf_lsm_locked_sockopt_hooks, but it is not set up yet:
+icsk->icsk_ca_ops and the ipv6_pinfo still point to the ones of the
+listener, and the timers are not initialized.
 
-  Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+So bpf_setsockopt() from a lsm_cgroup prog is wrong there for:
 
-Thanks.
+ - TCP_CONGESTION: puts icsk->icsk_ca_ops, which the child holds no
+   reference on.
+ - IPV6_TCLASS, IPV6_AUTOFLOWLABEL: write to the ipv6_pinfo of the
+   listener.
+ - SO_KEEPALIVE, TCP_KEEPIDLE: arm the keepalive timer before
+   tcp_init_xmit_timers() sets it up.
 
---
-tejun
+Options considered:
+ 1. Remove the hook from bpf_lsm_locked_sockopt_hooks, as commit
+    5416c9aea832 ("bpf: Fix the kernel crash caused by bpf_setsockopt().")
+    did for socket_sock_rcv_skb. Not done, setting options like
+    SO_PRIORITY on the child is what the hook is used for and it works.
+ 2. Make these options work. This needs the child set up before the
+    hook, too much for a fix.
+
+So give the hook its own bpf_setsockopt() and return -EOPNOTSUPP for
+these options there. bpf_getsockopt() is left as is.
+
+For example, SO_KEEPALIVE ends up with:
+
+  Oops: general protection fault, probably for non-canonical address 0xfbd59c0000000025: 0000 [#1] SMP KASAN PTI
+  KASAN: maybe wild-memory-access in range [0xdead000000000128-0xdead00000000012f]
+  RIP: 0010:__run_timers+0x5d2/0xab0
+  Call Trace:
+   <IRQ>
+   run_timer_base+0x107/0x190
+   run_timer_softirq+0x1a/0x40
+   handle_softirqs+0x251/0xa70
+   __irq_exit_rcu+0x1a8/0x260
+   irq_exit_rcu+0xe/0x30
+   sysvec_apic_timer_interrupt+0xc2/0x110
+   </IRQ>
+
+Fixes: 9113d7e48e91 ("bpf: expose bpf_{g,s}etsockopt to lsm cgroup")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ include/linux/bpf.h  |  1 +
+ kernel/bpf/bpf_lsm.c | 12 ++++++++++++
+ net/core/filter.c    | 37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1dd9db16f324..207a3be3138d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4159,6 +4159,7 @@ extern const struct bpf_func_proto bpf_task_storage_delete_proto;
+ extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
+ extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
++extern const struct bpf_func_proto bpf_sk_clone_setsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_nodelay_proto;
+ extern const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto;
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index ae23511fd811..fa71f52a055c 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -79,6 +79,15 @@ BTF_ID(func, bpf_lsm_inet_conn_established)
+ #endif
+ BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
+ 
++/* List of LSM hooks that trigger on a locked child socket which is not
++ * set up yet, bpf_setsockopt is restricted there.
++ */
++BTF_SET_START(bpf_lsm_clone_sockopt_hooks)
++#ifdef CONFIG_SECURITY_NETWORK
++BTF_ID(func, bpf_lsm_inet_csk_clone)
++#endif
++BTF_SET_END(bpf_lsm_clone_sockopt_hooks)
++
+ /* List of LSM hooks that trigger while the socket is _not_ locked,
+  * but it's ok to call bpf_{g,s}etsockopt because the socket is still
+  * in the early init phase.
+@@ -282,6 +291,9 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_setsockopt:
+ 		if (prog->expected_attach_type != BPF_LSM_CGROUP)
+ 			return NULL;
++		if (btf_id_set_contains(&bpf_lsm_clone_sockopt_hooks,
++					prog->aux->attach_btf_id))
++			return &bpf_sk_clone_setsockopt_proto;
+ 		if (btf_id_set_contains(&bpf_lsm_locked_sockopt_hooks,
+ 					prog->aux->attach_btf_id))
+ 			return &bpf_sk_setsockopt_proto;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 53c042b267ab..77abc4cb9db5 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5938,6 +5938,43 @@ const struct bpf_func_proto bpf_sk_setsockopt_proto = {
+ 	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
++/* security_inet_csk_clone() runs at the end of inet_csk_clone_lock(), the
++ * child is locked but not set up yet: its timers are not initialized, it
++ * holds no reference on icsk_ca_ops and an IPv6 child still points to the
++ * ipv6_pinfo of the listener.
++ */
++BPF_CALL_5(bpf_sk_clone_setsockopt, struct sock *, sk, int, level,
++	   int, optname, char *, optval, int, optlen)
++{
++	switch (level) {
++	case SOL_SOCKET:
++		if (optname == SO_KEEPALIVE)
++			return -EOPNOTSUPP;
++		break;
++	case SOL_TCP:
++		if (optname == TCP_KEEPIDLE || optname == TCP_CONGESTION)
++			return -EOPNOTSUPP;
++		break;
++	case SOL_IPV6:
++		if (optname == IPV6_TCLASS || optname == IPV6_AUTOFLOWLABEL)
++			return -EOPNOTSUPP;
++		break;
++	}
++
++	return _bpf_setsockopt(sk, level, optname, optval, optlen);
++}
++
++const struct bpf_func_proto bpf_sk_clone_setsockopt_proto = {
++	.func		= bpf_sk_clone_setsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
++	.arg5_type	= ARG_MEM_SIZE,
++};
++
+ BPF_CALL_5(bpf_sk_getsockopt, struct sock *, sk, int, level,
+ 	   int, optname, char *, optval, int, optlen)
+ {
+-- 
+2.43.0
+
