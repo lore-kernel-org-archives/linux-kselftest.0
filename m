@@ -1,51 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795492562;
-	b=Vx5f6nkUXlZncOFmtk6+RY2tSQqM+PaF4fH9ISbslTi8KEjeLifDLzTrmrGVSPLdk0tc
-	 Od0uaplm47UjYItJ3pzpgxcl2zu0v/djHBLFfYmnskV/jWPhaOZ37DVOGStaaF1D+4Pm5
-	 p3B/ToZdvRSUpbPVwCkfJoX4ivbGMLTaT4fsx5zl8dGbqf/F4xugVtjr89MmgRRgqbWlH
-	 2E3R0oF3wCcVU4v7AGd/Pa9UZSKuzkKlW1T+3/NmXDT/J/vjEHnyAUBy4rJ4QPyCp3UQC
-	 0n84LEjrw0lsdNHM74T3q/oP4DxFM9OMuu7vtakL3Hm+WIMfW3h9BPJEz5uoKDZY7Gg==
+	t=1795492592;
+	b=04OYiUzMBd9bqPQVo/OZMAbyifbofUOYs+h+lUQA0xEzsj+ERX+9lc0qojE20fObNUXA
+	 6rIVaCQdq28vTltbqcgz9tlB3D2jZTCgCaOt6qmouMvW7avutZC7gvMtTj4JiJNkfYFkX
+	 ZtxGBGNHzAlnAu3b4tIYpMzPFFjiXUbuZGQ6+DhHK8LfKLwAZryQMMXYxfeXd4d2riQif
+	 VF6Uftm3XPYrSUCJO0yGT8kGfZSTS6/Oh5JPoZi0IUo4bj+h1i3hLHE5u+L7lJH8Y28xG
+	 E9S2SOPeJ9kQhFXpHQl4NhXGd3vZTMf8AVhB8uBDoxpXg1eWyH3gs4rMONq9K1EXt4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795492562;
-	h=DMARC-Filter:Received:X-Spam-Checker-Version:X-Spam-Level:
-	 X-Spam-Status:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Dsw35PX7hCcW1qKge/zhNdyX7SMaBaKsuKoMAnrPlU0=;
-	b=xGeY8mzBm2XtqzN0L3jNjEyMJRcqYc1bVLPkEczVkhvG1NCu+Sa8sJM3nD6tbOQWlCUi
-	 28HsYL3z5BEyHzH9M3tT/xsDSAUk4Ral7A7CxrWBhL2k1r/zPDsb8nyMvDUuUgEzRZh8X
-	 qqYpjnTOvdyrSUVCs1DvDeX9jVzyjou4xOJXLePJEkwAeuqUfGlUtlACgtRY9WiZLKbMk
-	 B/26NhmyvefWF0IAMRCcohBGbrx4zhRxkRywKolDZy0j6w7IFA38duOD7UP9wYIVGfM9k
-	 cLfiiM25Njmv3WDQAerGEsRTVVDnB0zsdeTwlojy75SCszOoipJdX7M7Bey7peIg2pQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795492592;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=EIBmlYOi3ApaAiATtJHu4JtR5iiov1p7BtaCf5Hg4Pw=;
+	b=wVBz7QQakQLRJ/F2AJOqRuDwuXBXWYiWlSuqrZBlw71wwlQbMi+NCS5AiTk3RRekGR1S
+	 l3bfDD64t48DHrDeoi5hxS9V4fILw41kL72hgc4McVSWbJV0bm7XAj+OOM8DsxtFlUM/3
+	 SsL1BqsxbEb9i7ob/dJ1TLaIgc5o+xvi0wI2UpIwjb4kaeyeVhDo5bbrDS/XcO/yuNATb
+	 nlXk1cEu6qbynBo/S6Iv4yD//Ex7GEtdutQGq4/0JQHuJTsBqOOT9TolqvrOIgYeZ+00c
+	 Sefq6Uh9kDlhVfPr3nHgcduMgdbDhMoIHoIuqxFLD6zNXhko1lKfWT3/ihSDsd/nECA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LydSVxDX;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64376606A31E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:56:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64376606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id E918E200E10; Tue, 24 Nov 2026 11:55:58 +0800 (AWST)
-X-Spam-Level: 
-Received: from shelley.lan (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 6F19A200E0B;
-	Tue, 24 Nov 2026 11:55:57 +0800 (AWST)
-From: David Gow <david@davidgow.net>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>
-Cc: David Gow <david@davidgow.net>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: [PATCH] kunit: tool: Autodetect a default architecture
-Date: Tue, 24 Nov 2026 11:55:46 +0800
-Message-ID: <20261124035547.907987-1-david@davidgow.net>
-X-Mailer: git-send-email 2.56.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5C7606A69A
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:56:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A5C7606A69A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LydSVxDX
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795492590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EIBmlYOi3ApaAiATtJHu4JtR5iiov1p7BtaCf5Hg4Pw=;
+	b=LydSVxDX5oNI2oP+vlu2t0HMtY/UzvEZ+tI381IOcRkjl3Ehlt/vyRJQeU4QZOiJLg0Pfp
+	fGgt1jZnBOabsf3Zf5RIz9QObF54VYV2H35kd3hOCwDsnqkCFUiUNxtVE7Yj9vmLUTL2qT
+	hUksywJefFrCWpC35vE4byXFqgzrQ1U=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-448--VzRuqE8PEOi6MGeA_xtQA-1; Tue,
+ 24 Nov 2026 03:56:25 +0000
+X-MC-Unique: -VzRuqE8PEOi6MGeA_xtQA-1
+X-Mimecast-MFC-AGG-ID: -VzRuqE8PEOi6MGeA_xtQA_1795492582
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F71819540C5;
+	Tue, 24 Nov 2026 03:56:21 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E848F18004FE;
+	Tue, 24 Nov 2026 03:56:16 +0000 (UTC)
+Message-ID: <790b34ba-17da-47c8-8416-ad0b7d721415@redhat.com>
+Date: Mon, 23 Nov 2026 22:56:15 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,91 +71,162 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 2/3] sched/isolation: Forbid the boot CPU from
+ being domain isolated
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>, Thomas Gleixner <tglx@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20261123041209.382726-1-longman@redhat.com>
+ <20261123041209.382726-3-longman@redhat.com>
+ <7dbec7f4-35d0-4351-a61d-ab0a649c41d6@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <7dbec7f4-35d0-4351-a61d-ab0a649c41d6@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-kunit.py always defaults to using UML (--arch=um) for building / running
-tests, but it is only available on x86 architectures. Instead, attempt to
-select a better default: UML on x86, or the host architecture otherwise. A
-cut-down version of the map from uname -m -> Linux kernel architecture from
-scripts/subarch.include is used to detect this, but it only includes the
-most common ones for now.
+On 11/23/26 10:27 PM, Ridong Chen wrote:
+>
+>
+> On 11/23/2026 12:12 PM, Waiman Long wrote:
+>> It is reported that with CONFIG_CPUSETS=n, a kernel booted with
+>> isolcpus=domain,0 hits the BUG() in select_fallback_rq() during boot
+>> [1]. At boot time, cpu 0 is the only CPU online and an unbound kworker
+>> cannot be run on a domain isolated CPU causing kernel panic.
+>>
+>> Sashiko also reports that domain isolating the boot CPU can break system
+>> suspend and trigger a BUG_ON() [2]. So it is problematic if the boot CPU
+>> is domain isolated.
+>>
+>> There may be other kernel subsystems that have problem if the boot CPU
+>> is domain isolated as most of them won't take into account the fact that
+>> boot CPU is currently allowed to be domain isolated. Given the fact
+>> that the boot CPU is likely to be disallowed from the nohz_full list,
+>> it makes sense that we should not allow the boot CPU from being set in
+>> the isolcpus boot parameter as well. This will also avoid the kind of
+>> problems listed above.
+>>
+>> Do that by clearing the boot CPU from the isolcpus range when it is
+>> specified in the boot command line. A warning may also be printed when
+>> that happens. If the users want to have boot CPU in the managed_irq
+>> or nohz isolation list, a standalone isolcpus boot parameter will be
+>> needed instead of combining domain and other flags in the same isolcpus
+>> boot parameter.
+>>
+>> This is indeed a change in behavior which is customer visible. So the
+>> kernel-paremeters.txt is updated to mention the fact that boot CPU
+>> cannot be isolated.
+>>
+>> [1] 
+>> https://lore.kernel.org/lkml/20261117144817.265109-1-mathieu.desnoyers@efficios.com
+>> [2] 
+>> https://sashiko.dev/#/patchset/20261108180849.1268263-1-longman%40redhat.com
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>
+> This fixes a boot-time BUG(), so it seems worth a Fixes?
 
-Ultimately, this should be replaced by something in the architecture
-config, which we'll be replacing anyway, so something simple like this
-should suffice for now.
+The boot time bug reported by Mathieu requires a rather special config 
+that is not common and I doubt it will be used at all in production. So 
+I don't intend for this to go to stable and it is also a slight change 
+in user visible behavior. It is also a long standing issue that is hard 
+to pinpoint a Fixes tag.
 
-Signed-off-by: David Gow <david@davidgow.net>
----
- tools/testing/kunit/kunit.py           | 27 +++++++++++++++++++++++++-
- tools/testing/kunit/kunit_tool_test.py |  3 +++
- 2 files changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 91d234ac3b57..41ca3d32bdc5 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -9,6 +9,7 @@
- 
- import argparse
- import os
-+import platform
- import re
- import shlex
- import sys
-@@ -340,6 +341,30 @@ def get_default_jobs() -> int:
- 		return ncpu
- 	raise RuntimeError("os.cpu_count() returned None")
- 
-+# Map from host architecture (uname -m) -> default KUnit architecture
-+# Should be 'um' for architectures supporting UML, or the name of the
-+# qemu_config otherwise (typically the kernel arch name).
-+# See scripts/subarch.include for a reference.
-+default_arch_map = {
-+		'i386': 'um',
-+		'i486': 'um',
-+		'i586': 'um',
-+		'i686': 'um',
-+		'x86_64': 'um',
-+		'aarch64': 'arm64',
-+		'sun4u': 'sparc64',
-+		's390x': 's390',
-+		'loongarch64': 'loongarch',
-+		'ppc64': 'powerpc64',
-+}
-+
-+def get_default_arch() -> str:
-+	host_uname_arch = platform.machine()
-+	if host_uname_arch in default_arch_map:
-+		return default_arch_map[host_uname_arch]
-+
-+	return host_uname_arch
-+
- def get_default_build_dir() -> str:
- 	if 'KBUILD_OUTPUT' in os.environ:
- 		return os.path.join(os.environ['KBUILD_OUTPUT'], '.kunit')
-@@ -384,7 +409,7 @@ def add_common_opts(parser: argparse.ArgumentParser) -> None:
- 				  'string passed to the ARCH make param, '
- 				  'e.g. i386, x86_64, arm, um, etc. Non-UML '
- 				  'architectures run on QEMU.'),
--			    type=str, default='um', metavar='ARCH')
-+				  type=str, default=get_default_arch(), metavar='ARCH')
- 
- 	parser.add_argument('--cross_compile',
- 			    help=('Sets make\'s CROSS_COMPILE variable; it should '
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 85ae21754bdf..6b5f32ed25f6 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -742,6 +742,9 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.build_kernel.return_value = True
- 		self.linux_source_mock.run_kernel.return_value = all_passed_log
- 
-+		self.default_arch_mock = mock.patch('kunit.get_default_arch').start()
-+		self.default_arch_mock.return_value = 'um'
-+
- 	def test_config_passes_args_pass(self):
- 		kunit.main(['config', '--build_dir=.kunit'])
- 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
--- 
-2.56.1
+>
+>
+>> ---
+>>   .../admin-guide/kernel-parameters.txt         |  7 +++---
+>>   kernel/sched/isolation.c                      | 22 +++++++++++++++----
+>>   2 files changed, 22 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt 
+>> b/Documentation/admin-guide/kernel-parameters.txt
+>> index 930cee4de79a..1c8bf3583b0b 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -2954,11 +2954,12 @@ Kernel parameters
+>>                   You can move a process onto or off an "isolated" 
+>> CPU via
+>>                 the CPU affinity syscalls or cpuset.
+>> -              <cpu number> begins at 0 and the maximum value is
+>> -              "number of CPUs in system - 1".
+>> +              <cpu number> begins at 0 and the maximum value
+>> +              is "number of CPUs in system - 1". However boot
+>> +              CPU (cpu 0) cannot be domain isolated as it
+>> +              may cause problem with some kernel subsystems.
+>>                 managed_irq
+>> -
+>>                 Isolate from being targeted by managed interrupts
+>>                 which have an interrupt mask containing isolated
+>>                 CPUs. The affinity of managed interrupts is
+>> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+>> index c0c8b8862cbd..de8152351450 100644
+>> --- a/kernel/sched/isolation.c
+>> +++ b/kernel/sched/isolation.c
+>> @@ -231,6 +231,7 @@ static int __init housekeeping_setup(char *str, 
+>> unsigned long flags)
+>>   {
+>>       cpumask_var_t non_housekeeping_mask, housekeeping_staging;
+>>       unsigned int first_cpu;
+>> +    int boot_cpu = smp_processor_id();
+>>       int err = 0;
+>>         if ((flags & HK_FLAG_KERNEL_NOISE) && !(housekeeping.flags & 
+>> HK_FLAG_KERNEL_NOISE)) {
+>> @@ -253,12 +254,25 @@ static int __init housekeeping_setup(char *str, 
+>> unsigned long flags)
+>>         first_cpu = cpumask_first_and(cpu_present_mask, 
+>> housekeeping_staging);
+>>       if (first_cpu >= nr_cpu_ids || first_cpu >= setup_max_cpus) {
+>> -        __cpumask_set_cpu(smp_processor_id(), housekeeping_staging);
+>> -        __cpumask_clear_cpu(smp_processor_id(), non_housekeeping_mask);
+>> +        __cpumask_set_cpu(boot_cpu, housekeeping_staging);
+>> +        __cpumask_clear_cpu(boot_cpu, non_housekeeping_mask);
+>>           if (!housekeeping.flags) {
+>> -            pr_warn("Housekeeping: must include one present CPU, "
+>> -                "using boot CPU:%d\n", smp_processor_id());
+>> +            pr_warn("Housekeeping: must include one present CPU, 
+>> using boot CPU:%d\n",
+>> +                boot_cpu);
+>>           }
+>> +    } else if ((flags & HK_FLAG_DOMAIN) &&
+>> +           cpumask_test_cpu(boot_cpu, non_housekeeping_mask)) {
+>> +        /*
+>> +         * If the same isolcpus boot parameter covers both domain and
+>> +         * managed_irq/nohz, the boot CPU will also be removed from the
+>> +         * managed_irq/nohz isolation list. Users have to use a 
+>> separate
+>> +         * isolcpus boot parameter for them if they want to include the
+>> +         * boot CPU.
+>> +         */
+>> +        pr_warn("Housekeeping: Boot CPU must not be domain isolated, 
+>> clearing %d from isolcpus range\n",
+>> +             boot_cpu);
+>> +        __cpumask_set_cpu(boot_cpu, housekeeping_staging);
+>> +        __cpumask_clear_cpu(boot_cpu, non_housekeeping_mask);
+>>       }
+>>         if (cpumask_empty(non_housekeeping_mask))
+>
+> The code change itself looks good to me.
+>
+> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+> Thanks.
+>
+Thanks,
+Longman
 
