@@ -1,169 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=2 smtp.remote-ip=40.107.162.18
-ARC-Seal: i=3; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795484602;
-	b=yDjeyUrhniS7EMjw1TtbP37mstq+7SQhUwDmt9NysAYQB4a5IyKkY8DKWmxV4ImsZrGV
-	 CtSjBSz1KAeJ0JGa8/b1mZQwpAPmY/UDPNtenhWErvuzqgKjZJldimsJtZFFffNnOnrgA
-	 3rqzeKCDIdW2Zj/OFqjPyi0ilLcXS10KoxIJ9beEBj7Iihs4XhweZOOdWA37lpfd84BZ2
-	 zb7XKTP73ECAHcQ69Lbu/NbHXm0T2Z70c5fQ38N8ib1HT/c9tZsJ8JGecdwDPHL1Uan7D
-	 LrZd9dvTSZmQe3RLgOFuv9HcMofjyT+Fn+EvDBBb8k04l/rNnDEr5guYhvagLAgZmIA==
-ARC-Message-Signature: i=3; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795484602;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:CC:Subject:Thread-Topic:
-	 Thread-Index:Date:Message-ID:References:In-Reply-To:Accept-Language:
-	 Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 Authentication-Results-Original:x-ms-traffictypediagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:x-checkrecipientrouted:
-	 nodisclaimer:X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam-Untrusted:
-	 X-Microsoft-Antispam-Message-Info-Original:
-	 X-Forefront-Antispam-Report-Untrusted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:
-	 X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
-	 X-EOPAttributedMessage:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
-	 X-MS-PublicTrafficType:X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=+OfxTU0F9WhDQCF8cCpgV3eT66r30xdLJnuaQvm36lA=;
-	b=fq2HwHp/20MW1ivNh8le6sv7IDf+EzHOqBcaXzJ5+jG+mqB7HjWMKRAmUdcle0S+oVml
-	 5vKg1QtUDqLcuyGQPigGLRjbQlxX4BMkNgNic9vG5P6dOSy7Uu7pexDEbC9T6ApGbz1uB
-	 EDvdw4TmbFWhaxBxXgxR6zTcG9Kx2ukg2VaAmyseOPT2kPjXry3cdyDdLb8dKjM2gBhuM
-	 Uz6AACOLhWd8Y+mqb5jHAI5uMQLUw6H49eOTzTc/7jbOdCMBTTK9pxkCzZ7Zvj5KywRJt
-	 fBnz2Z+poLDy6KOMIrZgFpZQD6viB1BviFVOkBJVDuPyoTVsdftdlSQgImNB9uEgAYg==
-ARC-Authentication-Results: i=3; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=MojHjn0H;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=MojHjn0H;
-	arc=pass header.oldest-pass=2 smtp.remote-ip=40.107.162.18
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013018.outbound.protection.outlook.com [40.107.162.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.199
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795486098;
+	b=R6+8LqunZgWnGJQoV487+yPokbUN+GZFFX+NreWkGK63vBtVbBweGIjs3DY2A6a+7u6K
+	 DKNN3Ro/tmx1HqwHx5K/2kA/VgtubpgXg/ngCVU0xG7KYlGtOMgcKUyaZZmTf3uO/btyq
+	 0yRlLjl8JATQCvab1YdwYi1QbQ7p0VN9li6heUaoWnNuR64cVKEp6MHw7wU/i4JSgyjLs
+	 gittsxaiMiT5+T/kXB7Im6MXnGLQMbrtuQ1hK0BuTvm2evOw7uE2TycVON48ossGFCcma
+	 huPotmRftR5oF8J0/Pg0XXxwiCIa/0rL/L79NC7DR0l1qMtoIRNYT68by9Rr426XloQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795486098;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=NchLoveV8GAmEVcdvt/HbGTy1HBhpZqGtds5PtZR8P4=;
+	b=JUL8kJYIh+Bzib4QxwKP/9siWnQhiwurWc31RyDRHzZ14ChLTW+IpEHW+D48zaRJ8oCP
+	 SYqdCYSCVlQm/NoRhFhhPFnkqEsFlQ3BF18rwLVcxRttZDzTIUTTluhlwa3t7ek4qSV4W
+	 C8qFd2/Q3AecVTXmHmErN6vTwBzZZYFD7d/8A4hxDOukF6aBPKtZjdts45abEp93MWzKs
+	 aa1MMiAp8fB74ZQ8s64Wz0bXrL+Rb+jwBznET3B2dG1YPmZEERNpNBCyailro/8DyI5zF
+	 MvswZ1sva6lCrS5GjAuZ41cDFM/x82CC8Prr1fYbQ2x8X49xmRSrXOlm5V13oqHRnmA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aF8rVkBE;
+	arc=none smtp.remote-ip=209.85.210.199
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F69606A31E;
-	Tue, 24 Nov 2026 01:43:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1F69606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83597606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 02:08:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83597606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=MojHjn0H;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=selector1 header.b=MojHjn0H
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=jdhB3eSRNeEOajlEnRoeOBFP9cVWZ9vLt5nVNkTPo6WcHCMPlxQNeWl/Tbd5AVT3NSDiyau+FNyELR0x6WfmmgqZheW4Fyevu/WGM4vukg9Lp9FCZ7iJOalUoegnTjfkiUzIKZQaNySsjUZ+kR2ArZ2H0IcDDqzT8KYESNTRfURb5RhPjDRpSo56lDZx+Tzu7aFcxKlhgMHpov2I079NECoX5PulsurG/XmzEE4GYQLHuA5nTJtlwSvZxHzXqOx4q3DEiMckirJzcHKWMXZsQxKX3fNWxDsyko9cbfSX7wF4twgBsd/IUX8r6+dgyGf0UJjuFjJcuakWtp4PAGdYoA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+OfxTU0F9WhDQCF8cCpgV3eT66r30xdLJnuaQvm36lA=;
- b=Yco0D1JRZjahY877dFkvfmQnz3SIzMvk5sEEelEiRMf+4G5bsu3c6PHJElJBuT5ocoyZd7F7CjFIIG74GkIVs9BA3YhWv9oi036l7/wDSYSmY5JkUsRrd0z71L1uw80mVE4KVSJ40Q46RwWwjGacD22wgTzzTZMBKgSCyfM+ZgI+ueSPEOfzBvlfOid0SEvjbJ63n7zXDKCvi89h/a0a6hl9CHr/p+9PX+OziKk0nuKcC+jheckuzSMfpktmwx3BADJy0me7H7NCQzmhpPNAaeJP2Q+j/4j3JmqMBehBro7Wg7cHC/aH4XhQSRtTi7vwzKzpS6Gkv9ppuIPQxrDrOg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+OfxTU0F9WhDQCF8cCpgV3eT66r30xdLJnuaQvm36lA=;
- b=MojHjn0HIavRUofodc8xSWnoZNo3MWfFxHkfA2ChD5YGSps2pIQ0o6XAuOiep0FCuE/P4parxtV54DKFVzGj+Zv1K0UKb1bbUgz9qs7zLyUHG3o685z8luTfqx/IxqHUgJiueWHk+OGkm354KJ7BczuAjRyOWbK9/+VICKZTQPg=
-Received: from OS6P279CA0008.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:30::9) by
- DU0PR08MB8495.eurprd08.prod.outlook.com (2603:10a6:10:404::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.639.14; Tue, 24 Nov 2026 01:43:17 +0000
-Received: from CPH1EPF0000051A.eurprd04.prod.outlook.com
- (2603:10a6:e10:30:cafe::51) by OS6P279CA0008.outlook.office365.com
- (2603:10a6:e10:30::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; Tue,
- 24 Nov 2026 01:43:17 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 4.158.2.129) smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- CPH1EPF0000051A.mail.protection.outlook.com (10.167.241.229) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.3
- via Frontend Transport; Tue, 24 Nov 2026 01:43:16 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YHPp30NgrwSHNOeZzWVZdw3EH2fEAp4ogcg37rxZ5rPpKet5BbLn+A2CF9sjc2pLHvhKft4JvTCMpsSwHGlDHFD3H1/K74RhvvZs1VCD7SWRX6wAmWILTWJK64zz8o7IBoHP5PZm1sbDLOEUYzRyfs5evkChytouivzzMepuz3n+gfgCfXAWl+RTMTMUyZDBHsMoWKbWTiyuRBGJ5L2X0AMS1C/67Oe5r3CZWNZ1AZt1d1HISs1sqkmW2fp+t0G6zYU5X8dABLS6zOskADd5deC9+Fc0pnvwXU5DXzje7p1hGUUFFPjWEpRs3O2xLUJBXns5d7PnpFt+NdEuT3/pRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+OfxTU0F9WhDQCF8cCpgV3eT66r30xdLJnuaQvm36lA=;
- b=brHhjBbui6ei2DsH+sehJps9eO5yH2U0VIuCLA11IFospEKO5f2PpegS585HzoswS3e1EOY2Ybt1AO8a3dDj7zOxO7ctXtCNCkFtqbWrruH0eYl0JsAqBPJLu7kdg+UkaDCuonRZh/oXIylM59X2vXPzxgLAQPOHrvqBrQQnch541vULLn6dRN4H8QknuennoSsXnGnUz45lsJgU103I/55Sp0nfCqH4WkQ0CH7g/RZlSTSmJCM5sP1A0OuvaPKPTkdaMeYx2kh3AgQbj7kmqKjtwQbsENMS4w2txW3vkv5vqnJeWAXprL79YHSnE8ENmhkHlxeRM0KN2HjoJ7Nliw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+OfxTU0F9WhDQCF8cCpgV3eT66r30xdLJnuaQvm36lA=;
- b=MojHjn0HIavRUofodc8xSWnoZNo3MWfFxHkfA2ChD5YGSps2pIQ0o6XAuOiep0FCuE/P4parxtV54DKFVzGj+Zv1K0UKb1bbUgz9qs7zLyUHG3o685z8luTfqx/IxqHUgJiueWHk+OGkm354KJ7BczuAjRyOWbK9/+VICKZTQPg=
-Received: from AS2PR08MB9786.eurprd08.prod.outlook.com (2603:10a6:20b:605::22)
- by AS8PR08MB9072.eurprd08.prod.outlook.com (2603:10a6:20b:5c0::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Tue, 24 Nov
- 2026 01:42:42 +0000
-Received: from AS2PR08MB9786.eurprd08.prod.outlook.com
- ([fe80::d721:dfdb:2f83:155]) by AS2PR08MB9786.eurprd08.prod.outlook.com
- ([fe80::d721:dfdb:2f83:155%6]) with mapi id 15.21.0639.012; Tue, 24 Nov 2026
- 01:42:42 +0000
-From: Justin He <Justin.He@arm.com>
-To: Marc Zyngier <maz@kernel.org>
-CC: Oliver Upton <oupton@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, Joey
- Gouly <Joey.Gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, Suzuki
- Poulose <Suzuki.Poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, Catalin
- Marinas <Catalin.Marinas@arm.com>, Will Deacon <will@kernel.org>, Mark
- Rutland <Mark.Rutland@arm.com>, Paolo Bonzini <pbonzini@redhat.com>, Sean
- Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Sascha
- Bischoff <Sascha.Bischoff@arm.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH 2/3] KVM: arm64: nv: Don't request or attempt L1 VNCR
- mapping without vncr_tlb
-Thread-Topic: [PATCH 2/3] KVM: arm64: nv: Don't request or attempt L1 VNCR
- mapping without vncr_tlb
-Thread-Index: AQHde1zGBYkDnXd0PECWl1ojk9sLurc767UAgACG5SA=
-Date: Tue, 24 Nov 2026 01:42:42 +0000
-Message-ID:
- <AS2PR08MB97860AD10162A11B52229A44F7442@AS2PR08MB9786.eurprd08.prod.outlook.com>
-References: <20261123150917.2679600-1-justin.he@arm.com>
-	<20261123150917.2679600-3-justin.he@arm.com> <86cxrvzbyn.wl-maz@kernel.org>
-In-Reply-To: <86cxrvzbyn.wl-maz@kernel.org>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Authentication-Results-Original: mx.microsoft.com 1; dkim=none (message not
- signed) header.d=none;dmarc=none action=none header.from=arm.com;
-x-ms-traffictypediagnostic:
-	AS2PR08MB9786:EE_|AS8PR08MB9072:EE_|CPH1EPF0000051A:EE_|DU0PR08MB8495:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8bfcce44-5bfa-447b-abee-08df49cc4f84
-x-checkrecipientrouted: true
-nodisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|38070700021|261102123227099003|10067099003|261021123027099003|56012099006|11063799006|4143699003|261026121527099003|261021121427099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- J/KH1gyCY4Wq1sPtv/rIgXOCGCSNWhcT06frMypuoZEAykR55AkseoE1gZ+AYotJmPVCQX/BE317TcxG1rPOAomdRaQWxFxGTNed23ZaiLSQQ2L35BHclmMmeVma2ACAHNo2mmkEfUnSCehOi/3Ob526hUvcv6xhqwQZg0irIdrKTDbn0y5G6rPRUxh/hAM6QPFhzRdCkljwVEHSTrxOC7yooPkjZimJU6512tTrJ7LkDhwYi4tezbZ6LgNsAZIB8B7PC6OwH6EmUDG5wO50ube+O753ymbBFg6aA2dBo88+vp5/IVmGJQPRt73pDFfpUmWUFAZEY4xvcpMO6NgyTcyiv9ZfYl701CmmhA9VzwJkXB7wmS1r6Fw+0zxtdOWJ6YO9b3OOY2Bfq928BQ490CBnKp8bMj+8ZEF3OBVY8ZQI39ygqzitK6XpP7kx3k8qTARRRYktpF5VgbUU+8KQhiGYNSMk+ukqPCRqU752WzaFTJ9k30KjB5YkrK0qkFUXoFa048F2XJbas+GSU3V1eBbAsEvmqpaYasghxmFhb2vw/Odlp4k8veSw5LajcGGZqbHCUx5hHQMZf8JX326G1xTILW2eABsx+HTj2AlO5w1Zx33K7sPoWhhewGd5ugJ4hUBFtBIrFJuGDRPGij9mDlOCk4g4d8872T1WmR8+VObWRq7Lqh/VUAQQLnKz2pqOVnqqxTD0PwPP2Dd86yfARB1yTVbrGOBPXJBs1j26yrg=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9786.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(38070700021)(261102123227099003)(10067099003)(261021123027099003)(56012099006)(11063799006)(4143699003)(261026121527099003)(261021121427099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aF8rVkBE
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8a01e2962a1so3060729b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 18:08:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795486096; x=1796090896; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NchLoveV8GAmEVcdvt/HbGTy1HBhpZqGtds5PtZR8P4=;
+        b=aF8rVkBEsLL/S2vc1JQUsQZCtHz2f7i5dsPRbLIJeReolLMMHSXUmuRr2PB3kSLaoT
+         sYU8EBF29IyThtUbCKfQ7ZFC407yKUih/Jd3whX/F+Yir4YZxC9Y8rfB4rWclfEJVCUf
+         e5cHK8scbIGfHYQSnxoIYuwmznchUhf+u0fmKYCiZWK1Rv18w1ZnpeidfeK5m6pe+IwL
+         mlwfCRckXsUsSlHmQP5w/R2OYv6nes3PqKkvNQxVRzw1RJM/GP32FtwvGH8ibrTFn9bJ
+         IjMjoUQAlIwZqlYf5oBjQQO7CNUPTFaDxRp3dBH0rASBvyrJfj2OT9kh867rSt6HH49H
+         ZCQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795486096; x=1796090896;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NchLoveV8GAmEVcdvt/HbGTy1HBhpZqGtds5PtZR8P4=;
+        b=dOQgrAEzQ/pIMgbwi3ybRHRWDHEWGMg2l+bjPyHGWDKWZjPBeM8nakfzRvZWFzV0Y1
+         8E8COQ1KRTpqOLHGwdrXAGV9XCTadHi9UE3tbekODTzxC3UYhnPiurghQmytXP3W27ep
+         52+IS8hFSw2EFyWTAI95Awdc7iZMa8eocAs98vxqOAfxAQqudd1KC/hRQ+Jo8EpGgkEH
+         x8y3Yfnobxk0CHAQtBJmQ/QQzo4Kcw5pjxrqeNd2E8O6uwTx6UTpUwSHaCjbnbVUkZDA
+         ajnyfd9m9m29zpuoVg1O29+V8n5yW7WxO8YAMAVs2a2ETXbU7IYIH+w/CIF1s7W5W1Ua
+         zlPQ==
+X-Forwarded-Encrypted: i=1; AL+hErEnrjYKg8thkJEHaP+IW2BwgDtgHhHm6oX6oXduX7KTIR0eX9wnGmrqwMRQ3tdUwWzIld1CvDhy666DlHS+WZ4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/HWh9ggnhJpz094QLuSO0u7L2XdcDfiEIpijLll04xQLQZgHWS
+	CjLMx2Gl6Dcb/TJNvGgIsrKMKpGr5t0AYnFykCmTFz6knwz9sqdYkuuLsFclX1WkfRq42c0U8rx
+	g1UHnJCMW
+X-Received: from pggo21-n1.prod.google.com ([2002:a05:6a02:8295:10b0:cdd:9f2e:53df])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:1014:b0:3e2:729c:9bcb
+ with SMTP id adf61e73a8af0-4014ed47ab8mr13500344637.65.1795486095299; Mon, 23
+ Nov 2026 18:08:15 -0800 (PST)
+Date: Tue, 24 Nov 2026 02:08:14 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -172,103 +75,899 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
- VtJNyp8iYa6lZsKwfHLPblufKmv23HZ6BFf1+7fo5SdLKBj8FVNFwdoWXqLhIPugbcF6n5Q/T1xfVEQgZQXf+fjqjEYXeGXjAW/Kx2ty4Om/fHPVwFqwmR8eHzAqXglyUBWNXEBl5YpPey3GX5Hko+GbIDqSSlEwUt4XFKCgUFJ1NxKYvAiWWB6q8o2zeR+OfwReqxLF21xdzstjgHYLfX7jVOgitXMBlGJ0WguxVztQ1zIlHIxl2MTtg1o87+2Pm9ZgSIczxIerOKRiLQornspVnPrUugua/i5gb9WjXeiAVm16D5eYuDG/fY+L2aGM7ryo4Al/AYHu9FO1ahwaww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9072
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- CPH1EPF0000051A.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	c2a35d7f-d287-4fb8-a425-08df49cc3b46
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|14060799003|35042699022|7416014|23010399003|36860700016|82310400026|10067099003|4143699003|11063799006|261021121427099003|56012099006|261021123027099003|261102123227099003|261026121527099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	4nILW1SRTbS8Opwu8SK2cZp0x1Ly15Qtledfu/l4Eh8a29uUnoso8K+YaLe7Qcvo7KjwwZVrbvicERJqx0lXCiGfcPEB4/9Qfy7+ZbOV5QC6BA09aEbS/PelMaHNH/sDRk2KgkPKkwLy6C5wzPpWL5FQ07V0cIiZMgT4KGRugResfuTeBGrGBe7jb/U+VwcUAphszbsahqGnTFmLX6xp1BffDzYKbeK8/hUV255dOpBz6NDNwLAubDSZEPNfVcQqxd9prWWnm4JCgTmQIOiHD/4b7KCWZdMZrdVcflphAqT20ydrwBEpS+Yj22wgW6O+75mWnPoZIAMBy2y5UcRAOd5m9tGG49OZcMkgDqhOuQazwxI6ApPxDCXNIX3fy2oxyr7C4BuV8gBbuWVB8V9iwV6naYO9+WCTx4jeVXbZB2n9qtWou7OTojOh9V48pK7miPBNMXLIcvf3mAVMZy0Te2dF+ErMxv6AW88Y6klxl1OFMTg4P0ZDw8fRXwb2OyX6NgzErZZ5CjUnpP2ltUB3zC6ZawXDNOyad0ETtvNI5Uzvc3WmzTdcHxGWaSHd+QgelhoH8NGTSsRme0guUH2q4iTY6ewPxc/asKRGhFcA79kOlfGgFwVu5BHuFLwd+dvFUWQ/PTqtZiNRv4IBZCQ9PvfwP8bKhXA4TxTj8BCoy92uswmhI77U+ugKazRROs7yxd23F49lKEg8Jn9LFYfeuw==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(14060799003)(35042699022)(7416014)(23010399003)(36860700016)(82310400026)(10067099003)(4143699003)(11063799006)(261021121427099003)(56012099006)(261021123027099003)(261102123227099003)(261026121527099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	mk/Wyh8duP0ixz6Wsbx/E9Vzg4hMgFEezA/5szG8q9A27nPEM3Ju6a/lAm4Ri5Ieh5c6h0khLDCwtPjc0ZHDbqNMGk9Cupbg95j2m0jDU+TcCwoJRxSA26UqqwD2xN+sIChQUb6DQaWMYreulPH2oVt+7KYPDmUWlcHLWnnfWplj1EzY1sjTHDEO0q4cv5oIX5p4WQqYk0ysoZfOxLyO8Rfw12VByNm6vAEgKIWplWC/B1Qshz45KF4z+9sb8AsGNb9JteUcHEeUdclGIMuQuxslGKh72w4w5bAy8/PJHNnW0p7tRvihmincQ31Zi4OcIhKwhkxWpINjk1niPbRYlNbwNoOYvWxPl4ZGCdCAqpUnU8MK/nhI/2yuByhlClxlYCsW1toB6yzGQgElCkpEDm2tMd3u4hIHgH+vp3tW7kECVYMGF/yS07m45vrbtsoW
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2026 01:43:16.4698
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bfcce44-5bfa-447b-abee-08df49cc4f84
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CPH1EPF0000051A.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8495
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
+Message-ID: <20261124020814.1679635-1-jrhilke@google.com>
+Subject: [PATCH] vfio: selftests: Add NVMe driver
+From: Josh Hilke <jrhilke@google.com>
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Josh Hilke <jrhilke@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
+Add a VFIO selftest driver for NVMe controllers. It binds to any PCI
+function with the NVMe PCI class code 01:08:02, so vfio_pci_driver_test
+can run on the NVMe SSDs that are common in servers, and on the nvme
+device that QEMU emulates.
 
+NVMe has no memory-to-memory copy command, so the driver implements a
+memcpy through the logical blocks at the start of the first active
+namespace. memcpy_start() writes @src to the logical blocks from LBA 0,
+waits for the write, and then queues @count reads of the same blocks into
+@dst. The driver must wait for the write because the controller can run
+the commands of a queue in any order. All @count reads are in flight when
+memcpy_start() returns. The driver spreads the reads over up to 16 such
+queues, because one queue holds only as many commands as the controller
+allows, 2047 on the QEMU device. The memcpy commands go on I/O queues
+that have interrupts disabled. send_msi() sends a flush on one more I/O
+queue that has interrupts enabled.
 
-> -----Original Message-----
-[...]
-> On Mon, 23 Nov 2026 15:09:16 +0000,
-> Jia He <justin.he@arm.com> wrote:
-> >
-> > vcpu->arch.vncr_tlb is only allocated when ID_AA64MMFR4_EL1.NV_frac
-> > advertises FEAT_NV2. When NV_frac is cleared to 0 (or E2H0 is selected)=
-,
-> > vncr_tlb is NULL for the lifetime of the vCPU.
-> >
-> > Don't set KVM_REQ_MAP_L1_VNCR_EL2 in kvm_vcpu_load_hw_mmu()
-> when
-> > vncr_tlb is NULL. The only other place that sets this request is
-> > kvm_translate_vncr(), which only runs on a FEAT_NV2 VNCR abort. Warn
-> and
-> > return early in kvm_map_l1_vncr() if vt is NULL before disabling
-> > preemption and taking kvm->mmu_lock.
-> >
-> > Signed-off-by: Jia He <justin.he@arm.com>
-> > ---
-> >  arch/arm64/kvm/nested.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-> > index 4d83281a7a28..2f52c128f3a7 100644
-> > --- a/arch/arm64/kvm/nested.c
-> > +++ b/arch/arm64/kvm/nested.c
-> > @@ -979,7 +979,8 @@ void kvm_vcpu_load_hw_mmu(struct kvm_vcpu
-> *vcpu)
-> >  				vcpu->arch.hw_mmu =3D
-> get_s2_mmu_nested(vcpu);
-> >  		}
-> >
-> > -		if (__vcpu_sys_reg(vcpu, HCR_EL2) & HCR_EL2_NV)
-> > +		if (vcpu->arch.vncr_tlb &&
-> > +		    (__vcpu_sys_reg(vcpu, HCR_EL2) & HCR_EL2_NV))
-> >  			kvm_make_request(KVM_REQ_MAP_L1_VNCR_EL2,
-> vcpu);
->=20
-> How do we even get here? Now that you have short-circuited the vcpu
-> state loading, I can't see how this code is reachable before we've
-> actually initialised the relevant state.
->=20
-> What am I missing?
->=20
-> >  	}
-> >  }
-> > @@ -1761,6 +1762,9 @@ static void kvm_map_l1_vncr(struct kvm_vcpu
-> *vcpu)
-> >  	struct vncr_tlb *vt =3D vcpu->arch.vncr_tlb;
-> >  	pgprot_t prot;
-> >
-> > +	if (WARN_ON_ONCE(!vt))
-> > +		return;
-> > +
->=20
-> I don't think we want this. Either the code is rock solid, and the
-> warning pointless, or we have terrible problems, and I really want to
-> see the kernel exploding, specially given that NV is still an
-> experimental feature.
->=20
-Agreed. I'll drop this patch in v2. Patch 2/3 was only meant as a defensive=
- check,
-and patch 1/3 should be sufficient.
+The driver overwrites the first max_memcpy_size bytes of the namespace.
+Do not use a device that holds data you want to keep.
 
-Thanks,
-Jia He (Justin)
+On some controllers, a DMA error from the unmapped-IOVA tests leaves the
+submission queue in an error state that only a Function Level Reset
+clears. After a failed memcpy, the driver disables the controller, resets
+the function with VFIO_DEVICE_RESET, and initializes the controller
+again.
+
+The driver needs a controller that supports the NVM command set, 4 KiB
+memory pages, at least two I/O queue pairs, and MSI-X, along with
+a namespace that has no metadata and a logical block size of at most 4 KiB.
+Controllers that need one of the quirks in drivers/nvme/host/pci.c are
+not supported.
+
+The driver uses the definitions in include/linux/nvme.h through a
+symbolic link, like the other drivers do with their kernel headers.
+
+Users can verify the driver in QEMU with these commands, after they
+build the kernel and the VFIO selftests:
+
+truncate -s 64M /tmp/nvme.img
+vng \
+--run arch/x86/boot/bzImage \
+--user root \
+--disable-microvm \
+--memory 4G \
+--cpus 4 \
+--qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
+--qemu-opts="-device intel-iommu,intremap=on,caching-mode=on" \
+--qemu-opts="-drive file=/tmp/nvme.img,if=none,id=nvm,format=raw" \
+--qemu-opts="-device nvme,serial=deadbeef,drive=nvm,addr=10.0" \
+--append "console=ttyS0 intel_iommu=on" \
+--exec "modprobe vfio-pci && \
+  ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:10.0 && \
+  ./tools/testing/selftests/vfio/scripts/run.sh \
+  ./tools/testing/selftests/vfio/vfio_pci_driver_test"
+
+Signed-off-by: Josh Hilke <jrhilke@google.com>
+---
+Testing:
+- Built VFIO and KVM selftests on x86_64 (dynamic and static) and VFIO selftests on arm64 (static).
+- QEMU nvme (x86_64): vfio_pci_driver_test 35/35 passed (default and nsid=2); msix_qsize=1 and max_ioqpairs=1 failed at their expected assertions.
+- Samsung PM175x VF (x86_64): vfio_pci_device_test 5/5, vfio_pci_driver_test 35/35, and KVM irq_test passed.
+- Samsung PM174X VF (arm64): vfio_pci_device_test 5/5 and vfio_pci_driver_test 35/35 passed.
+
+ Documentation/driver-api/vfio-selftests.rst   |   4 +
+ .../selftests/vfio/lib/drivers/nvme/nvme.c    | 745 ++++++++++++++++++
+ .../selftests/vfio/lib/drivers/nvme/nvme.h    |   1 +
+ tools/testing/selftests/vfio/lib/libvfio.mk   |   1 +
+ .../selftests/vfio/lib/vfio_pci_driver.c      |   2 +
+ 5 files changed, 753 insertions(+)
+ create mode 100644 tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c
+ create mode 120000 tools/testing/selftests/vfio/lib/drivers/nvme/nvme.h
+
+diff --git a/Documentation/driver-api/vfio-selftests.rst b/Documentation/driver-api/vfio-selftests.rst
+index 9d39a22519d6..b26040c48d5d 100644
+--- a/Documentation/driver-api/vfio-selftests.rst
++++ b/Documentation/driver-api/vfio-selftests.rst
+@@ -39,10 +39,14 @@ includes driver support for the following devices:
+ - Intel IOAT (I/O Acceleration Technology) DMA engines
+ - Intel DSA (Data Streaming Accelerator)
+ - NVIDIA Falcon engines (found in many NVIDIA GPUs, e.g., GTX 1080 or RTX 2080)
++- NVMe controllers
+ 
+ Note that using Intel DSA devices requires setting the module parameter
+ ``vfio_pci.disable_denylist=Y`` to allow ``vfio-pci`` to bind to DSA devices.
+ 
++Note that the NVMe driver overwrites the start of the first active namespace.
++Do not use an NVMe device that holds data you want to keep.
++
+ Setting up Devices
+ ------------------
+ 
+diff --git a/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c b/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c
+new file mode 100644
+index 000000000000..6f82e0ddf309
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c
+@@ -0,0 +1,745 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <stddef.h>
++#include <string.h>
++#include <unistd.h>
++
++#include <asm/barrier.h>
++#include <linux/align.h>
++#include <linux/errno.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/pci_ids.h>
++#include <linux/pci_regs.h>
++#include <linux/sizes.h>
++#include <linux/stddef.h>
++#include <linux/types.h>
++
++#include <libvfio.h>
++
++/* nvme.h needs uuid_t from libuuid and struct_group(). */
++#include <uuid/uuid.h>
++
++#ifndef struct_group
++#define struct_group(NAME, MEMBERS...)	\
++	__struct_group(/* no tag */, NAME, /* no attrs */, MEMBERS)
++#endif
++
++#include "nvme.h"
++
++#define NVME_ADMIN_QID			0
++#define NVME_MSI_QID			1
++#define NVME_MAX_POLL_QUEUES		16
++#define NVME_IO_MSIX_VEC		1
++#define NVME_ADMIN_QUEUE_DEPTH		64
++
++/* A queue of depth N holds N - 1 commands. msiq has one in flight. */
++#define NVME_MSI_QUEUE_DEPTH		2
++
++/*
++ * Ring entries for all polled queues together. This bounds max_memcpy_count so
++ * tests that churn through many memcpys, such as memcpy_storm, finish within
++ * their timeouts on slow controllers.
++ */
++#define NVME_POLL_TOTAL_ENTRIES		8192
++
++/* Rings for the polled queues, plus page alignment of each ring. */
++#define NVME_POLL_RINGS_SIZE		(NVME_POLL_TOTAL_ENTRIES *		\
++					 (sizeof(struct nvme_command) +		\
++					  sizeof(struct nvme_completion)) +	\
++					 NVME_MAX_POLL_QUEUES * 2 * SZ_4K)
++
++#define NVME_PRP_LIST_ENTRIES		(SZ_4K / sizeof(__le64))
++
++/* The driver builds one PRP list page, which covers 2 MiB at any offset. */
++#define NVME_MAX_XFER_SIZE		SZ_2M
++#define NVME_MIN_LBA_SHIFT		9
++#define NVME_MAX_LBA_SHIFT		12
++#define NVME_TIMEOUT_MS			5000ULL
++#define NVME_CAP_TIMEOUT_UNIT_MS	500ULL
++#define NVME_POLL_INTERVAL_US		1000
++
++struct nvme_queue {
++	/* Byte offsets of the submission and completion rings in the region. */
++	u64 sq_offset;
++	u64 cq_offset;
++
++	/* Number of entries in each ring. */
++	u32 depth;
++
++	/* Commands submitted whose completions are not yet consumed. */
++	u32 inflight;
++
++	/* Queue identifier, which also selects the doorbell registers. */
++	u16 qid;
++
++	u16 sq_tail;
++	u16 cq_head;
++
++	/* Expected phase tag of the next completion entry. */
++	u16 cq_phase;
++};
++
++struct nvme_state {
++	struct nvme_queue adminq;
++	/*
++	 * I/O queue whose completions raise device->driver.msi. It carries
++	 * only the flush command of nvme_send_msi().
++	 */
++	struct nvme_queue msiq;
++	/*
++	 * I/O queues whose completions raise no interrupt. They carry all
++	 * memcpy commands. Their rings start at poll_rings.
++	 */
++	struct nvme_queue pollq[NVME_MAX_POLL_QUEUES];
++	u32 nr_pollqs;
++
++	/* Doorbell register stride in bytes, derived from CAP.DSTRD. */
++	u32 db_stride;
++
++	/* The namespace that the memcpy commands use. */
++	u32 nsid;
++
++	/* Power-of-two shift for converting bytes to logical blocks. */
++	u32 lba_shift;
++
++	/* Result of the write in nvme_memcpy_start(). */
++	int memcpy_err;
++
++	/* DMA buffers addressed by the byte offsets held in adminq and msiq. */
++	struct nvme_command admin_sq[NVME_ADMIN_QUEUE_DEPTH] __aligned(SZ_4K);
++	struct nvme_completion admin_cq[NVME_ADMIN_QUEUE_DEPTH] __aligned(SZ_4K);
++	struct nvme_command msi_sq[NVME_MSI_QUEUE_DEPTH] __aligned(SZ_4K);
++	struct nvme_completion msi_cq[NVME_MSI_QUEUE_DEPTH] __aligned(SZ_4K);
++
++	/* Identify data, written by the device. */
++	struct nvme_id_ctrl id_ctrl __aligned(SZ_4K);
++	struct nvme_id_ns id_ns __aligned(SZ_4K);
++	__le32 ns_list[NVME_IDENTIFY_DATA_SIZE / sizeof(__le32)] __aligned(SZ_4K);
++	/*
++	 * PRP lists for @src and @dst of the current memcpy. Every command of a
++	 * memcpy uses the same two buffers, so the queued commands share them.
++	 */
++	__le64 prp_src[NVME_PRP_LIST_ENTRIES] __aligned(SZ_4K);
++	__le64 prp_dst[NVME_PRP_LIST_ENTRIES] __aligned(SZ_4K);
++	u8 poll_rings[] __aligned(SZ_4K);
++};
++
++static inline struct nvme_state *to_nvme_state(struct vfio_pci_device *device)
++{
++	return device->driver.region.vaddr;
++}
++
++static inline struct nvme_command *nvme_sq(struct vfio_pci_device *device,
++					   struct nvme_queue *q)
++{
++	return device->driver.region.vaddr + q->sq_offset;
++}
++
++static inline struct nvme_completion *nvme_cq(struct vfio_pci_device *device,
++					      struct nvme_queue *q)
++{
++	return device->driver.region.vaddr + q->cq_offset;
++}
++
++/* Offset of the SQ tail doorbell of @qid, or the CQ head doorbell if @cq. */
++static u64 nvme_db_offset(struct nvme_state *state, u16 qid, bool cq)
++{
++	return NVME_REG_DBS + (2 * qid + cq) * state->db_stride;
++}
++
++static void nvme_ring_sq_db(struct vfio_pci_device *device,
++			    struct nvme_queue *q)
++{
++	struct nvme_state *state = to_nvme_state(device);
++
++	/* Make the commands visible to the device before the doorbell. */
++	dma_wmb();
++	writel(q->sq_tail,
++	       device->bars[0].vaddr + nvme_db_offset(state, q->qid, false));
++}
++
++static void nvme_ring_cq_db(struct vfio_pci_device *device,
++			    struct nvme_queue *q)
++{
++	struct nvme_state *state = to_nvme_state(device);
++
++	/* Finish reading the completion before releasing the slot. */
++	dma_rmb();
++	writel(q->cq_head,
++	       device->bars[0].vaddr + nvme_db_offset(state, q->qid, true));
++}
++
++static void nvme_queue_init(struct vfio_pci_device *device,
++			    struct nvme_queue *q, u16 qid, u32 depth,
++			    u64 sq_offset, u64 cq_offset)
++{
++	q->sq_offset = sq_offset;
++	q->cq_offset = cq_offset;
++	q->depth = depth;
++	q->inflight = 0;
++	q->qid = qid;
++	q->sq_tail = 0;
++	q->cq_head = 0;
++	q->cq_phase = 1;
++
++	memset(nvme_sq(device, q), 0, depth * sizeof(struct nvme_command));
++	memset(nvme_cq(device, q), 0, depth * sizeof(struct nvme_completion));
++}
++
++static void nvme_sq_push(struct vfio_pci_device *device, struct nvme_queue *q,
++			 const struct nvme_command *cmd)
++{
++	struct nvme_command *sq = nvme_sq(device, q);
++
++	memcpy(&sq[q->sq_tail], cmd, sizeof(*cmd));
++	sq[q->sq_tail].common.command_id = q->sq_tail;
++	q->sq_tail = (q->sq_tail + 1) % q->depth;
++	q->inflight++;
++}
++
++static void nvme_sq_submit(struct vfio_pci_device *device, struct nvme_queue *q,
++			   const struct nvme_command *cmd)
++{
++	nvme_sq_push(device, q, cmd);
++	nvme_ring_sq_db(device, q);
++}
++
++/* Consume the next completion on @q if the device has posted it. */
++static bool nvme_cq_consume(struct vfio_pci_device *device, struct nvme_queue *q,
++			    struct nvme_completion *cqe)
++{
++	struct nvme_completion *entry = &nvme_cq(device, q)[q->cq_head];
++
++	if ((le16_to_cpu(READ_ONCE(entry->status)) & 1) != q->cq_phase)
++		return false;
++
++	/* Do not read the completion before the phase tag is observed. */
++	dma_rmb();
++	memcpy(cqe, entry, sizeof(*cqe));
++
++	/* The controller inverts the phase tag on each pass through the ring. */
++	q->cq_head = (q->cq_head + 1) % q->depth;
++	if (q->cq_head == 0)
++		q->cq_phase ^= 1;
++	q->inflight--;
++
++	return true;
++}
++
++static int nvme_cq_wait(struct vfio_pci_device *device, struct nvme_queue *q,
++			struct nvme_completion *cqe)
++{
++	int timeout_ms = NVME_TIMEOUT_MS;
++
++	while (!nvme_cq_consume(device, q, cqe)) {
++		if (timeout_ms-- == 0)
++			return -ETIMEDOUT;
++		usleep(NVME_POLL_INTERVAL_US);
++	}
++
++	nvme_ring_cq_db(device, q);
++
++	return 0;
++}
++
++/* Return the Status Code Type and Status Code of @cqe. */
++static u16 nvme_status(const struct nvme_completion *cqe)
++{
++	return (le16_to_cpu(cqe->status) >> 1) & NVME_SCT_SC_MASK;
++}
++
++/*
++ * The driver overwrites the first max_memcpy_size bytes of the namespace. Do
++ * not use a device that holds data you want to keep.
++ */
++static int nvme_probe(struct vfio_pci_device *device)
++{
++	u32 class_code;
++
++	class_code = vfio_pci_config_readl(device, PCI_CLASS_REVISION) >> 8;
++
++	return class_code == PCI_CLASS_STORAGE_EXPRESS ? 0 : -EINVAL;
++}
++
++static u32 nvme_submit_admin_cmd(struct vfio_pci_device *device,
++				 struct nvme_command *cmd)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	struct nvme_completion cqe = {};
++	int ret;
++
++	nvme_sq_submit(device, &state->adminq, cmd);
++	ret = nvme_cq_wait(device, &state->adminq, &cqe);
++	VFIO_ASSERT_EQ(ret, 0, "Admin command 0x%x timed out",
++		       cmd->common.opcode);
++	VFIO_ASSERT_EQ(nvme_status(&cqe), 0,
++		       "Admin command 0x%x failed with status 0x%x",
++		       cmd->common.opcode, nvme_status(&cqe));
++
++	return le32_to_cpu(cqe.result.u32);
++}
++
++/* Return the number of I/O queue pairs that the controller allocated. */
++static u32 nvme_set_num_queues(struct vfio_pci_device *device, u16 nr_queues)
++{
++	struct nvme_command cmd = {};
++	u32 nr_sqs, nr_cqs;
++	u32 result;
++
++	cmd.features.opcode = nvme_admin_set_features;
++	cmd.features.fid = cpu_to_le32(NVME_FEAT_NUM_QUEUES);
++	cmd.features.dword11 = cpu_to_le32((u32)(nr_queues - 1) << 16 |
++					   (nr_queues - 1));
++
++	/* Dword 0 holds zero-based counts: SQs in bits 15:0, CQs in bits 31:16. */
++	result = nvme_submit_admin_cmd(device, &cmd);
++	nr_sqs = (result & 0xffff) + 1;
++	nr_cqs = (result >> 16) + 1;
++
++	/* A queue pair needs one SQ and one CQ. */
++	return min(nr_sqs, nr_cqs);
++}
++
++static void nvme_identify(struct vfio_pci_device *device, u32 nsid, u8 cns,
++			  void *buf)
++{
++	struct nvme_command cmd = {};
++
++	cmd.identify.opcode = nvme_admin_identify;
++	cmd.identify.nsid = cpu_to_le32(nsid);
++	cmd.identify.dptr.prp1 = cpu_to_le64(to_iova(device, buf));
++	cmd.identify.cns = cns;
++
++	nvme_submit_admin_cmd(device, &cmd);
++}
++
++static void nvme_enable_irqs(struct vfio_pci_device *device)
++{
++	/*
++	 * Admin completions always use vector 0. Require at least two MSI-X
++	 * vectors so I/O completions use vector 1 and admin commands never
++	 * signal the eventfd that the tests check.
++	 */
++	VFIO_ASSERT_GE(device->msix_info.count, 2,
++		       "Device must support at least 2 MSI-X vectors");
++
++	device->driver.msi = NVME_IO_MSIX_VEC;
++	vfio_pci_msix_enable(device, 0, NVME_IO_MSIX_VEC + 1);
++}
++
++/*
++ * Poll CSTS.RDY until it equals @rdy. The controller sets RDY after CC.EN
++ * changes from 0 to 1, and clears it after CC.EN changes from 1 to 0. Wait for
++ * the CAP.TO worst case in 500 ms units, and at least 5 seconds.
++ */
++static int nvme_wait_rdy(struct vfio_pci_device *device, bool rdy)
++{
++	void *bar0 = device->bars[0].vaddr;
++	int timeout_ms;
++	u32 csts;
++	u64 cap;
++
++	cap = readq(bar0 + NVME_REG_CAP);
++	timeout_ms = max(NVME_TIMEOUT_MS,
++			 NVME_CAP_TIMEOUT(cap) * NVME_CAP_TIMEOUT_UNIT_MS);
++
++	for (;;) {
++		csts = readl(bar0 + NVME_REG_CSTS);
++		/* A function that does not respond returns all ones. */
++		if (csts == ~0U)
++			return -ENODEV;
++		if (rdy && (csts & NVME_CSTS_CFS))
++			return -EIO;
++		if (!!(csts & NVME_CSTS_RDY) == rdy)
++			return 0;
++		if (timeout_ms-- == 0)
++			return -ETIMEDOUT;
++		usleep(NVME_POLL_INTERVAL_US);
++	}
++}
++
++static int nvme_disable_ctrl(struct vfio_pci_device *device)
++{
++	void *bar0 = device->bars[0].vaddr;
++	u32 cc;
++
++	cc = readl(bar0 + NVME_REG_CC);
++	if (cc & NVME_CC_ENABLE)
++		writel(cc & ~NVME_CC_ENABLE, bar0 + NVME_REG_CC);
++
++	return nvme_wait_rdy(device, false);
++}
++
++static void nvme_enable_ctrl(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	void *bar0 = device->bars[0].vaddr;
++	u32 aqa, cc;
++	u64 cap;
++	int ret;
++
++	VFIO_ASSERT_NOT_NULL(bar0);
++
++	vfio_pci_cmd_set(device, PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER |
++			 PCI_COMMAND_INTX_DISABLE);
++
++	ret = nvme_disable_ctrl(device);
++	VFIO_ASSERT_EQ(ret, 0, "Controller did not disable (CSTS 0x%x)",
++		       readl(bar0 + NVME_REG_CSTS));
++
++	cap = readq(bar0 + NVME_REG_CAP);
++	VFIO_ASSERT_TRUE(NVME_CAP_CSS(cap) & NVME_CAP_CSS_NVM,
++			 "Controller does not support the NVM command set");
++	VFIO_ASSERT_EQ(NVME_CAP_MPSMIN(cap), 0,
++		       "Controller does not support 4 KiB memory pages");
++	state->db_stride = 4 << NVME_CAP_STRIDE(cap);
++
++	nvme_queue_init(device, &state->adminq, NVME_ADMIN_QID,
++			NVME_ADMIN_QUEUE_DEPTH,
++			offsetof(struct nvme_state, admin_sq),
++			offsetof(struct nvme_state, admin_cq));
++	nvme_queue_init(device, &state->msiq, NVME_MSI_QID, NVME_MSI_QUEUE_DEPTH,
++			offsetof(struct nvme_state, msi_sq),
++			offsetof(struct nvme_state, msi_cq));
++
++	/*
++	 * No command creates the admin queue. Its depth and ring addresses go
++	 * into controller registers instead.
++	 */
++	aqa = (NVME_ADMIN_QUEUE_DEPTH - 1) << 16 | (NVME_ADMIN_QUEUE_DEPTH - 1);
++	writel(aqa, bar0 + NVME_REG_AQA);
++	writeq(to_iova(device, state->admin_sq), bar0 + NVME_REG_ASQ);
++	writeq(to_iova(device, state->admin_cq), bar0 + NVME_REG_ACQ);
++
++	/*
++	 * Configure the NVM command set, 4 KiB memory pages, round-robin
++	 * arbitration, and 64-byte SQ and 16-byte CQ entries. The PRP math in
++	 * nvme_set_prp() depends on 4 KiB pages. Then enable the controller.
++	 */
++	cc = NVME_CC_CSS_NVM | NVME_CC_AMS_RR | NVME_CC_IOSQES | NVME_CC_IOCQES;
++	writel(cc, bar0 + NVME_REG_CC);
++	writel(cc | NVME_CC_ENABLE, bar0 + NVME_REG_CC);
++
++	ret = nvme_wait_rdy(device, true);
++	VFIO_ASSERT_EQ(ret, 0, "Controller did not become ready (CSTS 0x%x)",
++		       readl(bar0 + NVME_REG_CSTS));
++}
++
++static void nvme_create_io_queue(struct vfio_pci_device *device,
++				 struct nvme_queue *q, bool ien)
++{
++	u16 flags = NVME_QUEUE_PHYS_CONTIG;
++	struct nvme_command cmd = {};
++
++	if (ien)
++		flags |= NVME_CQ_IRQ_ENABLED;
++
++	cmd.create_cq.opcode = nvme_admin_create_cq;
++	cmd.create_cq.prp1 = cpu_to_le64(to_iova(device, nvme_cq(device, q)));
++	cmd.create_cq.cqid = cpu_to_le16(q->qid);
++	cmd.create_cq.qsize = cpu_to_le16(q->depth - 1);
++	cmd.create_cq.cq_flags = cpu_to_le16(flags);
++	cmd.create_cq.irq_vector = cpu_to_le16(ien ? device->driver.msi : 0);
++	nvme_submit_admin_cmd(device, &cmd);
++
++	memset(&cmd, 0, sizeof(cmd));
++	cmd.create_sq.opcode = nvme_admin_create_sq;
++	cmd.create_sq.prp1 = cpu_to_le64(to_iova(device, nvme_sq(device, q)));
++	cmd.create_sq.sqid = cpu_to_le16(q->qid);
++	cmd.create_sq.qsize = cpu_to_le16(q->depth - 1);
++	cmd.create_sq.sq_flags = cpu_to_le16(NVME_QUEUE_PHYS_CONTIG);
++	cmd.create_sq.cqid = cpu_to_le16(q->qid);
++	nvme_submit_admin_cmd(device, &cmd);
++}
++
++/*
++ * Split the region from poll_rings to its end evenly between the polled
++ * queues. Each queue gets the largest depth that fits, up to the CAP.MQES
++ * limit.
++ */
++static void nvme_init_pollqs(struct vfio_pci_device *device)
++{
++	u64 offset = offsetof(struct nvme_state, poll_rings);
++	struct nvme_state *state = to_nvme_state(device);
++	u64 bytes, sq_bytes, cq_bytes, cap;
++	u32 depth, i;
++
++	cap = readq(device->bars[0].vaddr + NVME_REG_CAP);
++	bytes = (device->driver.region.size - offset) / state->nr_pollqs;
++	VFIO_ASSERT_GT(bytes, 2 * SZ_4K);
++	depth = min_t(u64, NVME_CAP_MQES(cap) + 1, (bytes - 2 * SZ_4K) /
++		      (sizeof(struct nvme_command) +
++		       sizeof(struct nvme_completion)));
++	VFIO_ASSERT_GT(depth, 1);
++
++	sq_bytes = ALIGN((u64)depth * sizeof(struct nvme_command), SZ_4K);
++	cq_bytes = ALIGN((u64)depth * sizeof(struct nvme_completion), SZ_4K);
++
++	for (i = 0; i < state->nr_pollqs; i++) {
++		nvme_queue_init(device, &state->pollq[i], NVME_MSI_QID + 1 + i,
++				depth, offset, offset + sq_bytes);
++		offset += sq_bytes + cq_bytes;
++	}
++}
++
++static void nvme_create_io_queues(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	u32 granted, i;
++	u32 last_qid;
++	u64 db_end;
++
++	granted = nvme_set_num_queues(device, 1 + NVME_MAX_POLL_QUEUES);
++	VFIO_ASSERT_GE(granted, 2,
++		       "Controller granted %u I/O queue pairs, need at least 2 (1 MSI + 1 polled)",
++		       granted);
++	state->nr_pollqs = min_t(u32, granted - 1, NVME_MAX_POLL_QUEUES);
++
++	/* The CQ head doorbell of the last queue is the highest one. */
++	last_qid = NVME_MSI_QID + state->nr_pollqs;
++	db_end = nvme_db_offset(state, last_qid, true) + sizeof(u32);
++	VFIO_ASSERT_LE(db_end, device->bars[0].info.size);
++
++	nvme_init_pollqs(device);
++
++	nvme_create_io_queue(device, &state->msiq, true);
++	for (i = 0; i < state->nr_pollqs; i++)
++		nvme_create_io_queue(device, &state->pollq[i], false);
++}
++
++/* Use the first active namespace for the memcpy commands. */
++static void nvme_find_nsid(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++
++	/* The list holds the active NSIDs above 0, in increasing order. */
++	nvme_identify(device, 0, NVME_ID_CNS_NS_ACTIVE_LIST, state->ns_list);
++	state->nsid = le32_to_cpu(state->ns_list[0]);
++	VFIO_ASSERT_NE(state->nsid, 0, "Controller has no active namespace");
++}
++
++/*
++ * Record the logical block size of the namespace. The LBA Format that FLBAS
++ * selects reports it as a power-of-two shift.
++ */
++static void nvme_set_ns_geometry(struct nvme_state *state)
++{
++	struct nvme_lbaf *lbaf;
++
++	lbaf = &state->id_ns.lbaf[nvme_lbaf_index(state->id_ns.flbas)];
++
++	VFIO_ASSERT_NE(le64_to_cpu(state->id_ns.nsze), 0,
++		       "Namespace %u has size 0", state->nsid);
++	VFIO_ASSERT_EQ(le16_to_cpu(lbaf->ms), 0,
++		       "Namespace %u has metadata, format it without metadata",
++		       state->nsid);
++	VFIO_ASSERT_GE(lbaf->ds, NVME_MIN_LBA_SHIFT,
++		       "Namespace %u has an invalid LBA data size", state->nsid);
++	VFIO_ASSERT_LE(lbaf->ds, NVME_MAX_LBA_SHIFT,
++		       "Namespace %u has logical blocks larger than 4 KiB",
++		       state->nsid);
++
++	state->lba_shift = lbaf->ds;
++}
++
++static void nvme_set_limits(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	u64 max_size, nsze;
++	u8 mdts;
++
++	/*
++	 * The controller accepts at most 2^MDTS pages of CAP.MPSMIN size per
++	 * command, and MDTS 0 means no limit. CAP.MPSMIN is 0, which makes a
++	 * page 4 KiB. Both limits are powers of two of at least 4 KiB, so the
++	 * result is a whole number of logical blocks.
++	 */
++	mdts = state->id_ctrl.mdts;
++	max_size = NVME_MAX_XFER_SIZE;
++	if (mdts && mdts < 32)
++		max_size = min_t(u64, max_size, (u64)SZ_4K << mdts);
++
++	/* All memcpy operations use the logical blocks from LBA 0. */
++	nsze = le64_to_cpu(state->id_ns.nsze);
++	if (nsze < max_size >> state->lba_shift)
++		max_size = nsze << state->lba_shift;
++
++	device->driver.max_memcpy_size = max_size;
++	/* A ring of depth entries holds at most depth - 1 commands. */
++	device->driver.max_memcpy_count = state->nr_pollqs *
++					  (state->pollq[0].depth - 1);
++}
++
++static void nvme_init(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++
++	VFIO_ASSERT_GE(device->driver.region.size, sizeof(*state));
++	memset(state, 0, sizeof(*state));
++
++	nvme_enable_irqs(device);
++	nvme_enable_ctrl(device);
++
++	nvme_identify(device, 0, NVME_ID_CNS_CTRL, &state->id_ctrl);
++	nvme_find_nsid(device);
++	nvme_identify(device, state->nsid, NVME_ID_CNS_NS, &state->id_ns);
++	nvme_set_ns_geometry(state);
++	nvme_create_io_queues(device);
++	nvme_set_limits(device);
++}
++
++static void nvme_remove(struct vfio_pci_device *device)
++{
++	nvme_disable_ctrl(device);
++	vfio_pci_cmd_clear(device, PCI_COMMAND_MASTER);
++	vfio_pci_msix_disable(device);
++}
++
++/*
++ * Return the controller to a working state after a failed command. On some
++ * controllers, a PCIe target abort, which the unmapped-IOVA tests trigger on
++ * purpose, leaves the submission queue in an error state that only a Function
++ * Level Reset clears. Disable the controller first so it stops DMA before the
++ * reset arrives.
++ */
++static void nvme_recover(struct vfio_pci_device *device)
++{
++	nvme_disable_ctrl(device);
++	vfio_pci_device_reset(device);
++	vfio_pci_msix_reenable(device, 0, device->driver.msi + 1);
++	nvme_enable_ctrl(device);
++	nvme_create_io_queues(device);
++}
++
++/*
++ * prp1 points at @buf. If the transfer reaches one more page, prp2 points at
++ * it. If it reaches more, prp2 points at @prp_list, which holds the address
++ * of each page after the first. CC.MPS is 0, which makes a page 4 KiB.
++ */
++static void nvme_set_prp(struct vfio_pci_device *device,
++			 struct nvme_command *cmd, iova_t buf, u64 size,
++			 __le64 *prp_list)
++{
++	u64 first = SZ_4K - (buf & (SZ_4K - 1));
++	u64 nr_entries, i;
++
++	VFIO_ASSERT_TRUE(IS_ALIGNED(buf, 4), "PRP1 0x%lx is not dword aligned",
++			 buf);
++	cmd->rw.dptr.prp1 = cpu_to_le64(buf);
++	if (size <= first)
++		return;
++
++	nr_entries = DIV_ROUND_UP(size - first, SZ_4K);
++	VFIO_ASSERT_LE(nr_entries, NVME_PRP_LIST_ENTRIES);
++	for (i = 0; i < nr_entries; i++)
++		prp_list[i] = cpu_to_le64(buf + first + i * SZ_4K);
++
++	if (nr_entries == 1)
++		cmd->rw.dptr.prp2 = prp_list[0];
++	else
++		cmd->rw.dptr.prp2 = cpu_to_le64(to_iova(device, prp_list));
++}
++
++/*
++ * Build a read or write command covering @size bytes from LBA 0, transferring
++ * to or from @buf. @size must be a whole number of logical blocks.
++ */
++static void nvme_prep_rw_cmd(struct vfio_pci_device *device,
++			     struct nvme_command *cmd, u8 opcode,
++			     iova_t buf, u64 size, __le64 *prp_list)
++{
++	struct nvme_state *state = to_nvme_state(device);
++
++	VFIO_ASSERT_GT(size, 0);
++	VFIO_ASSERT_TRUE(IS_ALIGNED(size, 1ULL << state->lba_shift));
++
++	memset(cmd, 0, sizeof(*cmd));
++	cmd->rw.opcode = opcode;
++	cmd->rw.nsid = cpu_to_le32(state->nsid);
++	nvme_set_prp(device, cmd, buf, size, prp_list);
++	cmd->rw.length = cpu_to_le16((size >> state->lba_shift) - 1);
++}
++
++static int nvme_io_wait(struct vfio_pci_device *device, struct nvme_queue *q)
++{
++	struct nvme_completion cqe;
++	int ret;
++
++	ret = nvme_cq_wait(device, q, &cqe);
++	if (ret)
++		return ret;
++
++	return nvme_status(&cqe) ? -EIO : 0;
++}
++
++/*
++ * Copy @src to @dst through the logical blocks from LBA 0 of the namespace.
++ * A write stores @src first. Then the driver queues @count reads of those
++ * blocks into @dst, spread over the polled queues.
++ *
++ * Unlike the vfio_pci_driver_ops contract, this function does not return at
++ * once. It waits for the write to complete. The controller can run the
++ * commands of a queue in any order, and the reads must see the data of the
++ * write. All @count reads are in flight when this function returns.
++ */
++static void nvme_memcpy_start(struct vfio_pci_device *device,
++			      iova_t src, iova_t dst, u64 size, u64 count)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	struct nvme_command cmd;
++	u64 i;
++
++	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_write, src, size,
++			 state->prp_src);
++	nvme_sq_submit(device, &state->pollq[0], &cmd);
++	state->memcpy_err = nvme_io_wait(device, &state->pollq[0]);
++	if (state->memcpy_err)
++		return;
++
++	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_read, dst, size,
++			 state->prp_dst);
++	for (i = 0; i < count; i++)
++		nvme_sq_push(device, &state->pollq[i % state->nr_pollqs], &cmd);
++	for (i = 0; i < min_t(u64, count, state->nr_pollqs); i++)
++		nvme_ring_sq_db(device, &state->pollq[i]);
++}
++
++static int nvme_memcpy_wait(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	int ret = state->memcpy_err;
++	u32 i;
++
++	for (i = 0; !ret && i < state->nr_pollqs; i++) {
++		while (!ret && state->pollq[i].inflight)
++			ret = nvme_io_wait(device, &state->pollq[i]);
++	}
++
++	if (ret)
++		nvme_recover(device);
++
++	return ret;
++}
++
++static void nvme_send_msi(struct vfio_pci_device *device)
++{
++	struct nvme_state *state = to_nvme_state(device);
++	struct nvme_command cmd = {};
++
++	cmd.common.opcode = nvme_cmd_flush;
++	cmd.common.nsid = cpu_to_le32(state->nsid);
++
++	nvme_sq_submit(device, &state->msiq, &cmd);
++	VFIO_ASSERT_EQ(nvme_io_wait(device, &state->msiq), 0);
++}
++
++const struct vfio_pci_driver_ops nvme_ops = {
++	.name = "nvme",
++	.region_size = sizeof(struct nvme_state) + NVME_POLL_RINGS_SIZE,
++	.probe = nvme_probe,
++	.init = nvme_init,
++	.remove = nvme_remove,
++	.memcpy_start = nvme_memcpy_start,
++	.memcpy_wait = nvme_memcpy_wait,
++	.send_msi = nvme_send_msi,
++};
+diff --git a/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.h b/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.h
+new file mode 120000
+index 000000000000..32258e9c9311
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.h
+@@ -0,0 +1 @@
++../../../../../../../include/linux/nvme.h
+\ No newline at end of file
+diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+index eff95828719e..9d33d29043c2 100644
+--- a/tools/testing/selftests/vfio/lib/libvfio.mk
++++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+@@ -18,6 +18,7 @@ endif
+ LIBVFIO_C += drivers/mlx5/mlx5.c
+ LIBVFIO_C += drivers/nv_falcon/nv_falcon.c
+ LIBVFIO_C += drivers/igb/igb.c
++LIBVFIO_C += drivers/nvme/nvme.c
+ 
+ LIBVFIO_OUTPUT := $(OUTPUT)/libvfio
+ 
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+index b31abfe2c7ff..f54b4ac505dd 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+@@ -9,6 +9,7 @@ extern struct vfio_pci_driver_ops ioat_ops;
+ extern struct vfio_pci_driver_ops mlx5st_ops;
+ extern struct vfio_pci_driver_ops nv_falcon_ops;
+ extern struct vfio_pci_driver_ops igb_ops;
++extern struct vfio_pci_driver_ops nvme_ops;
+ 
+ static struct vfio_pci_driver_ops *driver_ops[] = {
+ #ifdef __x86_64__
+@@ -18,6 +19,7 @@ static struct vfio_pci_driver_ops *driver_ops[] = {
+ 	&mlx5st_ops,
+ 	&nv_falcon_ops,
+ 	&igb_ops,
++	&nvme_ops,
+ };
+ 
+ void vfio_pci_driver_probe(struct vfio_pci_device *device)
+-- 
+2.56.1.831.g720f3f5937-goog
+
