@@ -1,111 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795556716;
-	b=UdoD+ZpJD8Nk/S16GOwKbgNmtbMlOWFjRGNIMk/560LKwkacVNL1X7IyrQItkbKLHNO+
-	 v7VYWTUneKvKUxguLo347Lgd5GeqCbA5UIjhUJTGEO4y41l1bUXoIrYVHoK51ZoU5FKI4
-	 n64hrAOs61v1h5Otcsn11hHsWA5AeLMxMY8MIaoMnHrYKc3B9nTllms2q4tYMsoN+IWYo
-	 QUdmZewShOkf7naNLLYXfGGjh8PqvHQWWHfP3kZKZqbaA1wL0TaMNjuS96adBof5O60q4
-	 yMvtVIZHfDp7YRgs9wPbwtYQ0B3naHk60bJJHF43PPgFzTML5hHz3u6m67+CLgTRxow==
+	t=1795556868;
+	b=5of2+WSuvZUl4zkc//NSw1Hm17VIjUBo4Y7iCYXEp8QwCbWa4l1VZ0yb0PqGUQdVp+1y
+	 3KotxyIrKMyjWsZbyX4ovm8f3f4G1bvU9FeaFjdQrJFtwIURvJ3iyp5aIMi3iJFreWBkf
+	 Es3bua3kOfC+DCm93DvPPI3jWEZQn6Iuv9ccN6N1eMxhH7h4LMpeALsYj/9yEnz/VBvkP
+	 J33kvJ9C1py8gZZVjX/nZ6HgFBja73SAYl74GcSRyov14S+momKckNHvE7AlqYdlQgHO3
+	 bPrvo/KBMtoP9GhgYw50rG0fN1mhLNqnwbBXoF0f5ijyXMyQykP4yRupTcDs5mHYffg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795556716;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795556868;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=bTez84NgMvGMhhtSTu0NJdSFRdBYeMlDyeUBe50JSsA=;
-	b=1TKaVYhl1yCPZBYe88MNlYjA7Xca03hwzeRMuGoy0bo4jo6wD3PKDxqajCNpyB+aDkQI
-	 yWSsNN3FTiV6Dbo1B9+a/W+ddRf4xD9AO6TYgVAnRn9pJziBaN27TiKHlIBUYcXpBf392
-	 Ab4wdr+3sapOPofSesIG4H/MkUDiPLpZOzpgE6Nn92pe7jRQ32d7VoUkOw7g+LBnT6ica
-	 41dU5f7ppuK0Jzj1J/Z3OehHf6gxrijNqGGDsTqVn9IY5FWuAm00bqJAZsX5TRLJoQO3z
-	 ku60DZcDMcCJX0XbiIewgrMFGx9sU5X8vxRrGOcR3DV3fIZAhriKYsJTI0AZTHtI3tw==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=F43DS6uF+VZY73OcpChGKxZymyIRHTvoEsGpRassCKw=;
+	b=CysD98N4RBmrSLH4KpcPGSmxGJNGK8YbMtk2KSU/OmJtjW0GQBW/BtPZGriKZom+9a+9
+	 thNWSFw+QjW3+aCa6rFZGrnhEVqMcsMVBxMMU9fus9geEOi6t5b2adZsjTPHg1zHrs1k0
+	 m9IAk+jAaaFLpmbMYuaeEM0eLJ3xD5ZKJ/XbsSNBn3ysR380FVf1Q7vPq0KGhY/7/ptxO
+	 ozRYyJey5QBCPEgid3/ZWXLBdpgBwUEMo9Qz9sjF8UI9Om+ROFWrHpXWnrwmuGlKv/8aW
+	 s7Yci5rTgtCJgohzuRvA43ORuRWGkVbpsEkcLAPSbKfAkbxDy/p2E2En17tKoqS6e4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="m/Pk4GYk";
-	arc=none smtp.remote-ip=209.85.221.42
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="NCjMwkm/";
+	arc=none smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2684606A682
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 21:45:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2684606A682
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F9E606A321
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 21:47:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35F9E606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m/Pk4GYk
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4a35df85cc8so382201f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:45:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NCjMwkm/
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4bba5e1b9f9so19695e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 13:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795556714; x=1796161514; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bTez84NgMvGMhhtSTu0NJdSFRdBYeMlDyeUBe50JSsA=;
-        b=m/Pk4GYkd4a0n+3Ofirfb5f+ITK8dBGDcfib4ub3zN7yISODpaZZ5mJ5xBGmohTMYt
-         HC7ka87JswHaOTPQyJ2T/rBoIAHPU9Kte/ev8XNaH+LB9KAFn6P/J5WfJaMewXaCyVEG
-         +3yJrJ2m3ARt37tDdBCJe3Ox2Njb1uwPHBdgPNxtWDoFpF+iLv0VEeCkzKO9gPk5IDyH
-         q6AngNbo4UkQsLr0pz0cnQuMxwod4OQDXtRK7gTiOmWsqCUJKO97VGkdDcxNG6QVk62E
-         XC1LvLd9nXySVrMogVq4z3of5DmjXxYhi61MhUGmzZ/xNFo3niBYWfIP+9FY1iLgXvmZ
-         V8IA==
+        d=gmail.com; s=20260707; t=1795556866; x=1796161666; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=F43DS6uF+VZY73OcpChGKxZymyIRHTvoEsGpRassCKw=;
+        b=NCjMwkm/CfTBm3rjRtM5Fi9y2811ZZ7R9VlLyqcxqvhLBTRQYXnfe6UG5hWXEa7THo
+         lmXEhwSxX35dWoAP/Fpsi7mV1/EF8dKg6VTfvchlCDxGFwlj4F9dryFhw/KCTzJPmzGF
+         ck6glT1WosE8d+8+PZembYMKaZ9XLdOSwxczNOyvFSTvDLl7N8YNsKru2uhftK3WSfIN
+         I4hrG4DN8KupTdflQr+yImbACP/vJf2SRcCYfZumkWwLK3tPsu1edMsOuuoXQY/uTSjy
+         0EAEkTyXkcyeAvKIMAhssD+8HMH1XD6XA4biQTuolPwlBJqygHBae+9nT6KPd4XLR82j
+         ShKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795556714; x=1796161514;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bTez84NgMvGMhhtSTu0NJdSFRdBYeMlDyeUBe50JSsA=;
-        b=F0vFr3qdD0oyVrm4ZRRqEmLMp8LlcKsFT6GVwUR5eaaES5svmPNypIXEMdI/+jLyJ7
-         lcJN+fFafaYC2jkRwg4IFN64F5cgZ4AbLS6CTvQFEIzfTmM5UXwZVrkj9YpGJE4AjF0p
-         mF3yFzKV1YaiLieV4Fx3yALUpSqulmL5FAuzeNOwTbSs35pceFCvPu5pvUZekBTqSEa6
-         I+dESJO1y+X67G6T3FcUwfgkJ7QjH/llditjrK57m492LZAbXPtkw5Vqzpvv/7MaeHQe
-         mXhRANVPfCFUZXthjyA/kM981IaSQKbGMNl8nP7rnPSOxiSey0R1YTqQFUQzomhj/GNI
-         G2mA==
-X-Forwarded-Encrypted: i=1; AL+hErFHIWR4Kgo3YB7W9uZQFVl6eQOE2qA1yT63Ci8RYAcvtgTSkzoovR9iL3uBdJU32fQ7j8l/KRPbt48iV1Z6Gxw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8XvCxxzGcKHSgFB5d5dTId1jlDsCUrAiDw1LHCgBz1Jb1/rs0e
-	/FV9DIdisL7tlQTwKooIW0f6CP+5EtShpj1tie6ctH+I7rXaDajGH3U+
-X-Gm-Gg: AZFdTZfdB8LDG/pcSpaUHtABX5zaDeljBso5Iisczd7dRtqG1QTVsMtaLcXgCffOlEU
-	rQ+f3uw14cUjvvzw+2x8uFuY48fUjEKF60j92iEx0NzOm+oXaa4I7LNnP1hHxdzf3DtX0F5ldsY
-	hY2BPhptqmVMbSLa/gfQC5YJPVy/l3ZMpLy6jX7/XPYBg+2W6JqQ3knp2qKWklWTvfw4lDW8rXv
-	1AJmUdQGMe52gDRzpknU0TwkUL4yqtJmSTLRpQjPAWhmHv84vM8Re5kuqSrgPzAVSkzl1vfcn4h
-	y3xm12sa74mNBwq6k9DR+uyKkPfJVDqEoaiGvs8ivB/v/2MYrLFhokuLGifPpkqPui4hkYZ3h7m
-	vq+l0Wpb7cfnnN0W4CyOyKaIEiXvyZmwEnbSM5Z80MGgXJxL5W71vymLu5tae4AcAS7OZfhTv5N
-	agSkgfSeXeoLYN2RUqi0RJUMedin4K96SzXcDX/AEiyw1a4TzddPB/SfL1BXsJ4nGrHpBuCjFMD
-	+NhmV2Vv2eJXeK97ClP3amwTJD1Pwj2OIMIv7y5TID6E3Yx2v3dif/9OOkOWqwZrvIcpieoKo7b
-	1Xasb13ohgjWBuVF2Wad1vC2ucNPKDzBbegrw+2SkzlxHIIZnR0J58LAi81CvpKRYtfjkw==
-X-Received: by 2002:a05:6000:184f:b0:4ab:cb33:9b87 with SMTP id ffacd0b85a97d-4abcb33a2e9mr33409232f8f.5.1795556714219;
-        Tue, 24 Nov 2026 13:45:14 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795556866; x=1796161666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=F43DS6uF+VZY73OcpChGKxZymyIRHTvoEsGpRassCKw=;
+        b=WJz+nwq3SSetIoVGSa0X4D0dfiiKrNT0QdKW66C2+0y4cm3rg7SmA4mU7yf0ko1n8U
+         pj3dIpxuZ009N+dasEKpiBCiohGUh0/x8UYpQSdcwKsMsXPZgvklkp6r6M3f+AGzkvju
+         /7xPJD13VXtDlDo9bGi5T859sO5qSWGrKGsx0HycNKPbQmBudjM/89aqW51bfS69PZgK
+         YLmaNbUHpqMTEn5gAuU3iz0FJ9KR9eVMPM1mb79HY6NuBy3v88vTlrEJFHpBs0shDYkW
+         KiatvnNltRfPvODt47cAvr03S9JH/jpK+vJTqC38+6YP3rDl6SLr4LjZGwT6+osZ8KIo
+         fDNA==
+X-Forwarded-Encrypted: i=1; AL+hErHkDmRFG4MhipUj1gkjmaTBLq5wB6T9dp8Re+EmJA2GXfe3n6bTY5mK9y6Zs2nVnx+bB8VZJ+JwjIL9B73Owlk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8rcJRyKS/Y5ffJiDM6imcd9ipY4f2gnkmLjNedQD2yftxEJCJf
+	ZSA0q1+JQhBDHmd560Dn36IjU0bJVFhyU3UpIdlxQpdUFG6Pl4AAoUW7
+X-Gm-Gg: AZFdTZdf/F4Gb5iDXh3/CdfunObFxqCLLE1wsXWDpxin1RElriWHlRu0yl3Pqavk8BE
+	rVrjG3PG7WaO5bN8KdjrPT+XGVXbQW8XQRUUdjXNIGnDtk2Mlz/pLJMZUbvyUQn8yNekyj7jfqp
+	IhIXCYERHdO8Zz4uUCJNm0qutJJglBTU6w8AMOvMcpu7HwRdDbE/A8Za+eKsS1Fisd6tV4aCgIT
+	Ou3hBg/fc8dCmKSp2npIFDawiRrAe2SBs3Vc7cgp7l4sUrdkp8Be4oD8j6foAOPz6RE5vrvGg+f
+	0MV09LrVWdy6QdAmSat0GAS+delxPKW0pMnSdpfA6BkLST8ataVwCFtUYGT2ZB1VDLxL2RPhJ+A
+	Yb+HBr7SQ/76rOQOC7asExj5Uj6W++1EgAI40D2ffcJ6Q7cC4ediTxhgxvXTYEjtLtzutwyM4B2
+	t/NT5nHrOVeavSlBEHwuElOKow3m4j1s4bs5IbOkhGlIEXd0Qy1k1c5doWR1CafZgrWO0lyz+zy
+	dbyhsvqkePK6K7cjVvohk5vLwqQkX7gnmGnEjsJIPJ9A9OeTij2aG6MucPPsy4fyAR67Qs090UA
+	GytEiWBlsx4qbPqBMXSndm7uYw9nWMDwZs4+k4X7kLG+XJdJaGO9MZYLEExedZO9GOZadQ==
+X-Received: by 2002:a05:600c:154c:b0:4ad:5ec2:d3b3 with SMTP id 5b1f17b1804b1-4bb887f43d8mr314245795e9.1.1795556866565;
+        Tue, 24 Nov 2026 13:47:46 -0800 (PST)
 Received: from Nuel20.localdomain ([105.118.4.83])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b110d56sm29025201f8f.40.2026.11.24.13.45.03
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884865a2sm476404005e9.3.2026.11.24.13.47.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 13:45:13 -0800 (PST)
+        Tue, 24 Nov 2026 13:47:46 -0800 (PST)
 From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-To: hangbin.liu@linux.dev,
-	tianyi@cloudflare.com
-Cc: kuba@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
 	skhan@linuxfoundation.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev,
-	emmaonana18@gmail.com
-Subject: Re: [PATCH net-next v5 3/3] selftests: net: veth: propagate bad-settings check failures to exit status
-Date: Tue, 24 Nov 2026 22:44:58 +0100
-Message-ID: <20261124214458.12800-1-emmaonana18@gmail.com>
+	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Subject: [PATCH net-next v2] selftests: net: sk_connect_zero_addr: fix mislabeled connect diagnostic
+Date: Tue, 24 Nov 2026 22:47:36 +0100
+Message-ID: <20261124214736.13398-1-emmaonana18@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261123052207.GG10218@Liu-laptop>
-References: <20261123052207.GG10218@Liu-laptop>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -117,12 +104,31 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Mon, 23 Nov 2026 13:22:07 +0800 Hangbin Liu wrote:
-> This one and patch 2 are fixing the same issue in the same test.
-> Why bother with two patches?
+The connect() failure branch reports "bind fd2", copy-pasted from the
+bind() block above. Name the failing call.
 
-You're correct, squashed into one propagation patch in v7
-https://lore.kernel.org/all/20261124214025.11603-1-emmaonana18@gmail.com/
+Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+---
+v2:
+  - Drop a stray line that crept into v1's diff hunk.
+v1: https://lore.kernel.org/all/20261120063011.21557-1-emmaonana18@gmail.com/
+  - Initial posting.
+ tools/testing/selftests/net/sk_connect_zero_addr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Omokefe
+diff --git a/tools/testing/selftests/net/sk_connect_zero_addr.c b/tools/testing/selftests/net/sk_connect_zero_addr.c
+index 4be418aefd9f7..4441e9c62fde5 100644
+--- a/tools/testing/selftests/net/sk_connect_zero_addr.c
++++ b/tools/testing/selftests/net/sk_connect_zero_addr.c
+@@ -46,7 +46,7 @@ int main(void)
+ 	}
+ 
+ 	if (connect(fd2, (struct sockaddr *)&bind_addr, sizeof(bind_addr))) {
+-		error(1, errno, "bind fd2");
++		error(1, errno, "connect fd2");
+ 		goto out_err2;
+ 	}
+ 
+-- 
+2.43.0
+
