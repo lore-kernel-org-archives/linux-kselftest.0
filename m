@@ -1,78 +1,80 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795538649;
-	b=l8UYy9XOlbIvFvpyVdfi04son0A0TT9DELfiganT1uJlK/28bfPs+gSPtP9/mwR0cUbo
-	 Lkl5bKk2RyQR/gR9Sx9t2uXQEsLm1X5G7ZQ6dxgIUYx6ccmxjgQNHXc7gILRfUcHNxao2
-	 WEqS21krEjvIqgdUsf9FE92tPwM0KzheShS5s4vLkbFPtnYbJPafqcX0H+aYM4OWECqy6
-	 dykDDHA7Jp7qhnar20+6R9gOOcZaIcPwbGBYDeAvSZwfhUNT8oK7/tOBMROLlu48hUg9K
-	 aeTXZRKKrgziocU8yiauJ0hVTM/TjVnHT0X2hWWdFxiv/IhZAxjY10cR4byCaB/ZcqQ==
+	t=1795538648;
+	b=WOH68iU61AeF26Tl+baKoRVqJzj9JQU3L31kYuvPt4Ai+WzgsIuIge5B/KhVNTvU3yyL
+	 x9uqL3WnaM6kdOmOpHXp1A142rQv3fuWxWvwm2RPtZJ55j8Y6XP6R0zQoOEnzQjQKikKd
+	 7vToebH8pEMxVAkL5OQ0ZXkMkxFXStXyCgnHObXTfHBUPHDQl4r4SNdAiV46r7+UTzzDG
+	 rIXz/CnkCQUUfxDD65YXeiMyojWN613gPlmP9IHjXttC0DWsQmADdffSYyvr6qwesakuC
+	 yVLWqAZ09xWHh/wcLQFQ2PjXmH9eHcIHu3Fw5F5KPQ2Xr5nrUd+ZRG7juwI+9yxRxzw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795538649;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=2kGWDLp/BfGH9hESLhfoFwYnNZbaS5sbCerz9BqE1+A=;
-	b=3BgGvfW0ZJlf1ZdICs/wU5gWvCxLbmd/GDMaM9CAHGOp8jKNG7fxeudzDILmgn3f2PAt
-	 B00MruqBOEQYBQ4EA8EYsB/L4WxbRovwjJZD/OY3rtR7af1i9MmlIQ3851q8UNA3MKmG3
-	 QcuMnnaJf8/3n51yQbjvhIIsLtDf8mYu+l/BhBKzyXImZsAxbjpgh34jtlMlYUXUzA3bk
-	 Gf0Fh5479nnHiMazhmIgIsJ+xU4wcl8CmbpHcXCqd0nrfiuV+toCEwIff6pZqyoSaRj0x
-	 sVhu8BCKjqfyzIY11D19rjmooW5a6/xg2P8BsE8jBf9SkzD3JYx9mdk/ZpECpv7iaPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795538648;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=U3xnSH+BmaWYcojS6vbFOMgwGWNHdEs82Sghjm/1X/E=;
+	b=C7XYGvIsFkq5NZ4kye2B9TxzIH3Y4/YAk7+uq0Nh1SzT2DLhDDEEhEVdWwpc1KiAaLA9
+	 zvU1bmTJsoKOH5yt7ZHkto5oexfrLgVq/VBGvH+Wqa12QZ2k2+V7d0ABOaaVw+GoUayTw
+	 cEmIs95T8RqTqWP9lHXURq8fMknyy6b8vE/ywY8wpvb9iJjSkrKxbn6CTc+6uxBBmxmra
+	 Ba5y5GzDpsyi7tqcnlcR5qqkWTfDrnBdZtsOmh47aXVBPtEYtkHPyAvwMHC2pNp7JXgcn
+	 4A/T8koHOCE4G+IwL+sRAFx/OxgEAdRDa4bND0XVMnrMQMEvQGAP5xmbBuc0QjiPLzg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d030bkLI;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RHHYFuK+;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC13D606A323;
-	Tue, 24 Nov 2026 16:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F26606A330;
+	Tue, 24 Nov 2026 16:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d030bkLI
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RHHYFuK+
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795538648;
-	b=Y+17EtfAOOOsWiA4RutXCN9XoIF7H+XQdwMzWmFDW27Tso/M1SjSPdl+GY1W6RLS8Uhx
-	 46sJZh3Ap2gE5CbucsZmEXzVSfKMK5vj0fZBrNCgF1eH+s1R2q2mtvUwZMveC5tdptclc
-	 DRvu7v+tyPpALC3xEnjmNF3ZJTg+eEj+JIuYugPOToebIWXFA5a//IYFk4s0LmqIRY8P8
-	 8AfLLtdqQn68Yhz9ZFJR2CqfyG7LS6336PGSzjGiLnUAqxXVUur4QBzLXINCb3onwVRmV
-	 jIwecdNAVaYDKYENWWKaSj3tf1XCrH31HzfhErk5d5QByDJFn4ZqGQWy9knlvZzDAWA==
+	t=1795538647;
+	b=yy22FEfsnzQLH7g2usbnb5eX/0am2FRhHB2npE/zLF6Og8DVnLroB0xzIPKsYFLW38V4
+	 npoFAGEfx1MmIMYA/OiJO5AZ1mWJTD4wtpn0+TCwT+QXwQTwDaej9B1N+RrDGmRPy4MeU
+	 OWxJVP0C5o8cfoS6Z/hDcHC7wm++TmDTMzO/cOdLkfBa7++YcNwZq++t26z+LiFETa4F+
+	 2BVUD+Zau8h+ndfGcSs9oXc81dVT0i7g9Vez2ywc7P7RTF/AHi3cKMG4BuyQDsVAETPIr
+	 UT4Ix8YDOS3q+S4CCpscPgOAREqmOkxdpTG8Nkc2qNmNrF/rB1+bPcKBq8l5vCIhhpA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795538648;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=2kGWDLp/BfGH9hESLhfoFwYnNZbaS5sbCerz9BqE1+A=;
-	b=f139UdWOs0ke+67pm+W/6ttBKwUbLtk0rDQvd7xcH+u82e8hsaYMtKvVfD0+JHJXjMB0
-	 jmAdNVy2JqeBtFO8MwpU6eXnsw6MDDaijkI15qZxnWziBUHxw+3QmEipFFKtABtPv0ZD2
-	 vcJUBtBKogMzGgRH82GAIsrNMiiHXYmDJtbHmqY6qoDl6/Iqh0kRJj39xHNXrF39bjcJw
-	 bnQ+dzyp5uVklfH2u1YHAKnpvCOzPqFfCccIYvW16dFvNISNf8SbdPKVND5ia6reCNiMA
-	 UfxsoOsEILOm9N9cr9cinh3OsdUSCf2fm0t6meZ69nkUU8XlLfjmxa3+pHqbRDu6sUQ==
+	c=relaxed/relaxed; t=1795538647;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=U3xnSH+BmaWYcojS6vbFOMgwGWNHdEs82Sghjm/1X/E=;
+	b=Zv0K9koEEpsk6tgCFZNEyazTaPXpSfREeZJMxEEdrYKgz2v1+wfptValUR8K6qI2g/l3
+	 QJelpmrqpDN0vxndbPzTS8h5WbVBUKoW8qIhqAzlOe0zIJywuK9HhXZb9FiZqTN6tQm1x
+	 n1f4SBLUK9cPEaguiTkArGmcWrRpPtjxqUPOmHp1LnQpBEdV1mJYeNRCpSGqq80Mmt0eD
+	 upYr6YI0FjxxPrWSTEjeYg0Ex3JJcjm/eCgS2eiNP9hd+55PwWC3lNgvxLE8HdPnat1C0
+	 u4K4bfoOiwgm5Mcr5ohpoOd1n9xdNe8yUdIYkI2SZklEO55m//B8GBLkm+0qmpRsvAQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2DC301F01561;
+	by smtp.kernel.org (Postfix) with ESMTPS id 138C41F000C0;
 	Tue, 24 Nov 2026 16:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795538648;
-	bh=2kGWDLp/BfGH9hESLhfoFwYnNZbaS5sbCerz9BqE1+A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=d030bkLIiQZVSzu2W9LONcD52mM6g8bLLJiM4TW8q39f3hrQ6NqV4USf8eUqxlk6U
-	 KYjc37drYpYBiD15AS2FJmWDTdpTrc9xvpNpCl97EqYqE7yeoShjYU1Jz/bHpjhHyX
-	 qd5Q+Z36qFoP8yrotqpOHBdwKmT5Q/b1Jv5KRdo5E5+BzbZg7Rq+DFxq8/3VANq2Ds
-	 UY+xicQRlzmdM8vc8N9KV00ze8fqi4cXcx76+W3Saveum0sdZe50PlpAzQE2lCDBRi
-	 3mMDX9jRkBly0x6V9BUyrNPLpazdCLVN80tzQRmAFi6fqjW/QzKsoNqQW+JLK7Nma0
-	 uRxWlenMa9nVw==
+	s=k20260515; t=1795538647;
+	bh=U3xnSH+BmaWYcojS6vbFOMgwGWNHdEs82Sghjm/1X/E=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=RHHYFuK+EbcMGqn+CLHRLz+NcwD5HH0sr4QqHI9Xu6Cdt+/X8J6C2/b1GF/s19D+Q
+	 4JsCdowIN4M3MXk1wMj8jr1wxmS82xSfsGZ8hgJDs///klQdvPF/yg8qIE2BdY0zR8
+	 wHvjurcHs4itoGCBPOBCdGVZD6f2SXqjiB3eeFMkZdVnM0IlIJcFiPQr9mSHR0wADP
+	 FpcLiC5gdm5eMVBYJozCauOHHuPl+zsgyYSgkxuk7vV815QUX305kaQibjn5yv0BgB
+	 JbwGCOu9LJIcIXn3tOSUZSBkdCEUgr3i5eZcPrZr8MIPpVrrLamyp2Q8dmPVI4dUZS
+	 BpqsLEXyqP0dQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id A994C4CADC;
+	by lkml.kernel.org (Postfix) with ESMTP id 622404CACC;
 	Tue, 24 Nov 2026 16:43:51 +0000 (UTC)
 From: "Louis H. Poulin II via B4 Relay" <devnull+poulin.louis.student.oaklandcc.edu@kernel.org>
-Date: Tue, 24 Nov 2026 11:43:52 -0500
-Subject: [PATCH v2 2/2] kunit: tool: Fail on out-of-sequence test numbers
+Subject: [PATCH v2 0/2] kunit: tool: Preserve failures in parsed KTAP
+ results
+Date: Tue, 24 Nov 2026 11:43:50 -0500
+Message-Id: <20261124-kunit-v2-v2-0-e1adbcad6b48@student.oaklandcc.edu>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,193 +85,67 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261124-kunit-v2-v2-2-e1adbcad6b48@student.oaklandcc.edu>
-References: <20261124-kunit-v2-v2-0-e1adbcad6b48@student.oaklandcc.edu>
-In-Reply-To: <20261124-kunit-v2-v2-0-e1adbcad6b48@student.oaklandcc.edu>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
+ vPSU3UzU4B8JSMDIzNDQyMT3ezSvMwS3TIj3RQDi1QzS0szCzNzIyWg8oKi1LTMCrBR0bG1tQB
+ 9Lc+LWgAAAA==
+X-Change-ID: 20261124-kunit-v2-d08e69968672
 To: Brendan Higgins <brendan.higgins@linux.dev>, 
  David Gow <david@davidgow.net>
 Cc: Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
  kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
  "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795538631; l=7561;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795538631; l=1626;
  i=poulin.louis@student.oaklandcc.edu; s=20261123;
  h=from:subject:message-id;
- bh=9gIm8lwEHUBfPgQsOux5N4mfKiU+6pcgKwtui91p1t4=;
- b=f4nQNOjB4AHdvJL1btW6LZtQfAeiO1Vg0vrOlewhReNYB94rc1wHXYHf9SKuDY3j/MMWwxD6k
- 5wmnTQeIjl1DuIN03PB/4/dKhhO0FEhY+a0tBjltfV/jRgYc0OI9Hmv
+ bh=FMmuGf0BvxD0W/kVIvoDe3PsvdyB9kbT8Oxfr84qE2A=;
+ b=R/6HJuE+JO6Wx1KCO8BgcX6FZE6aa2X3Rvu4wlCprUZwj+kKrgu17Au3kouPr40TRp1JSvJ+Y
+ 4wbeMPw5Du6A0CVyEIQ0own1xh0BDIFU4GpSTjxToTP3TXJe+XqjMaS
 X-Developer-Key: i=poulin.louis@student.oaklandcc.edu; a=ed25519;
  pk=LwBiuOLz0gqWTufz54rXgw2coado8UrJcWQ13DbYfxw=
 X-Endpoint-Received: by B4 Relay for
  poulin.louis@student.oaklandcc.edu/20261123 with auth_id=1616
 X-Original-From: "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
 Reply-To: poulin.louis@student.oaklandcc.edu
-Content-Transfer-Encoding: 7bit
 
-From: "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
+The KUnit tool's saved-log parser does not consistently propagate two
+failure conditions. A suite reporting not ok with only skipped children
+leaves the run SKIPPED. A result with an out-of-sequence number can
+still be counted as successful, so kunit.py parse may exit 0 for that
+malformed log.
 
-KTAP requires numbering to start at 1 and increase by one at each
-nesting level. The parser notes a mismatch as an error but can still
-mark an ok or skipped result as successful. A saved log with duplicate
-numbers can make kunit.py parse exit 0.
+Patch 1 preserves the suite's reported failure in aggregate counts.
+Patch 2 marks out-of-sequence result records as failed. It depends on
+patch 1 for a malformed parent suite whose child tests are all skipped.
 
-After decoding ok or SKIP, mark a wrongly numbered result as FAILURE.
-The result record is malformed even if the test assertion printed ok.
-It then contributes to both failed and error counts. This avoids a
-broader policy of failing on every parse error, which would also
-change late-plan handling. The preceding patch preserves this failure
-when a parent suite has only skipped children.
+Tested: kunit_tool_test.py (100 tests, all pass) and strict checkpatch
+on both patches. No live kernel run was performed.
 
-This change covers numbering mismatches only. A missing numbered line
-can flag subsequent results whose numbers differ from their expected
-positions. Other malformed or truncated logs retain their existing
-status policy.
+Changes in v2:
+- Resend using b4; v1 was mangled by line wrapping in the mail client
+  (reported by David Gow).
+- Rebase onto v7.4-rc1; no changes under tools/testing/kunit since v1.
+- Patch 1: move the Fixes: tag adjacent to Signed-off-by:. No code change.
+- Patch 2: no change.
 
-Commit 14e594a1fc8b ("kunit: tool: fix count of tests if late test
-plan") deliberately kept a parsed pass despite missing results after
-a late plan. Its fixture also had an unrelated ok 4 result. Number
-that result as ok 1 to keep the plan test focused, and cover a wrong
-first number separately. Add duplicate, SKIP, nested-suite, missing
-number and CLI exit-code tests.
+v1: https://lore.kernel.org/r/CAGQButum4PYb4A%2Bhmqg-bJZbf4L3KkH6rT9tn-0_NTs3xLhGYw@mail.gmail.com
 
 Signed-off-by: Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
 ---
- tools/testing/kunit/kunit_parser.py    | 11 ++---
- tools/testing/kunit/kunit_tool_test.py | 79 ++++++++++++++++++++++++++++++++--
- 2 files changed, 82 insertions(+), 8 deletions(-)
+Louis H. Poulin II (2):
+      kunit: tool: Count failed suites with only skipped tests
+      kunit: tool: Fail on out-of-sequence test numbers
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index dce365d1..38547312 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -423,11 +423,6 @@ def parse_test_result(lines: LineStream, test: Test,
- 	else:
- 		test.name = match.group(4)
- 
--	# Check test num
--	num = int(match.group(2))
--	if num != expected_num:
--		test.add_error(printer, f'Expected test number {expected_num} but found {num}')
--
- 	# Set status of test object
- 	status = match.group(1)
- 	if skip_match:
-@@ -437,6 +432,12 @@ def parse_test_result(lines: LineStream, test: Test,
- 		test.status = TestStatus.SUCCESS
- 	else:
- 		test.status = TestStatus.FAILURE
-+
-+	# A malformed result must not make the run successful.
-+	num = int(match.group(2))
-+	if num != expected_num:
-+		test.add_error(printer, f'Expected test number {expected_num} but found {num}')
-+		test.status = TestStatus.FAILURE
- 	return True
- 
- def parse_diagnostic(lines: LineStream) -> List[str]:
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 5fd386d0..6a3011de 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -410,13 +410,78 @@ class KUnitParserTest(unittest.TestCase):
- 	def test_parse_late_test_plan(self):
- 		output = """
- 		TAP version 13
--		ok 4 test4
-+		ok 1 test1
- 		1..4
- 		"""
- 		result = kunit_parser.parse_run_tests(output.splitlines(), stdout)
--		# Missing test results after test plan should alert a suspected test crash.
-+		# Keep this test focused on a late plan, not result numbering.
- 		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
--		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=2))
-+		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=1))
-+
-+	def test_wrong_first_number_fails(self):
-+		output = ['KTAP version 1', '1..1', 'ok 4 - fourth']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts, kunit_parser.TestCounts(failed=1, errors=1))
-+
-+	def test_repeated_test_number_fails(self):
-+		output = ['KTAP version 1', '1..2', 'ok 1 - first', 'ok 1 - second']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts,
-+			kunit_parser.TestCounts(passed=1, failed=1, errors=1))
-+
-+	def test_missing_number_fails_later_results(self):
-+		output = ['KTAP version 1', '1..3',
-+			'ok 1 - first', 'ok 3 - third', 'ok 4 - fourth']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts,
-+			kunit_parser.TestCounts(passed=1, failed=2, errors=2))
-+
-+	def test_wrong_numbered_skip_fails(self):
-+		output = ['KTAP version 1', '1..1', 'ok 2 - skipped # SKIP reason']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts, kunit_parser.TestCounts(failed=1, errors=1))
-+
-+	def test_wrong_numbered_suite_result_fails(self):
-+		output = ['KTAP version 1', '1..1',
-+			'    KTAP version 1', '    # Subtest: suite', '    1..1',
-+			'    ok 1 - case', 'ok 2 - suite']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		suite = result.subtests[0]
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, suite.subtests[0].status)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, suite.status)
-+		self.assertEqual(suite.counts,
-+			kunit_parser.TestCounts(passed=1, failed=1, errors=1))
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts, suite.counts)
-+
-+	def test_wrong_numbered_nested_case_fails(self):
-+		output = ['KTAP version 1', '1..1',
-+			'    KTAP version 1', '    # Subtest: suite', '    1..1',
-+			'    ok 2 - case', 'ok 1 - suite']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		suite = result.subtests[0]
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, suite.subtests[0].status)
-+		self.assertEqual(suite.counts,
-+			kunit_parser.TestCounts(failed=1, errors=1))
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts, suite.counts)
-+
-+	def test_wrong_numbered_suite_with_skipped_child_fails(self):
-+		output = ['KTAP version 1', '1..1',
-+			'    KTAP version 1', '    # Subtest: suite', '    1..1',
-+			'    ok 1 - case # SKIP reason', 'ok 2 - suite']
-+		result = kunit_parser.parse_run_tests(output, stdout)
-+		suite = result.subtests[0]
-+		self.assertEqual(kunit_parser.TestStatus.SKIPPED, suite.subtests[0].status)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, suite.status)
-+		self.assertEqual(suite.counts,
-+			kunit_parser.TestCounts(failed=1, skipped=1, errors=1))
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts, suite.counts)
- 
- def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
- 	return kunit_parser.LineStream(enumerate(strs, start=1))
-@@ -797,6 +862,14 @@ class KUnitMainTest(unittest.TestCase):
- 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
- 		self.print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
- 
-+	def test_parse_duplicate_number_exits_failure(self):
-+		with tempfile.NamedTemporaryFile(mode='w+', delete=True) as log:
-+			log.write('KTAP version 1\n1..2\nok 1 - first\nok 1 - second\n')
-+			log.flush()
-+			with self.assertRaises(SystemExit) as result:
-+				kunit.main(['parse', log.name])
-+		self.assertEqual(result.exception.code, 1)
-+
- 	def test_exec_no_tests(self):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
- 		with self.assertRaises(SystemExit) as e:
+ tools/testing/kunit/kunit_parser.py    | 15 +++---
+ tools/testing/kunit/kunit_tool_test.py | 92 ++++++++++++++++++++++++++++++++--
+ 2 files changed, 98 insertions(+), 9 deletions(-)
+---
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+change-id: 20261124-kunit-v2-d08e69968672
 
+Best regards,
 -- 
-2.56.1
+Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
 
 
