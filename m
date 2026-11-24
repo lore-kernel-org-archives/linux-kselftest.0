@@ -1,107 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795491228;
-	b=NIk65ODV8uBPfgy6DsutHEZG0qvD0Y0JtG6+sBexqmeL8/1EaAHl0rT7riuV9JgRXXKG
-	 /AA5SLZztfft6tDt0Ir8sq+H+Lkw49+0Mmr+WasstNXWyYmzFgjwkgYbSEaeNtU9JhVIl
-	 mAxP/PHCgOsptt9pFIL/ynp95NTWA07TotAW5ClMHg+3yfd1g4QtHwvICS+q01rrifwqc
-	 lLlgLRJ+pWtWawGmC6N7XltFeWOt0SxmMyix6k+KZnYGOFDA0ZT+7c8//6roC6G1bUPqW
-	 MP55s0EGAdmGswfSUSSzBC3n6jYf8WTNyfeS02etxefxc67JcHFNWkw2vLdVRRT6fgw==
+	t=1795491478;
+	b=V4ZoQcpmc2NNGwmHlYv2Aj+X1p64KgSp8juzaxxkjeq8tHdo8l78tz9nTmy4E3IyIgGZ
+	 ioAWUg1Kg7NXT+5EUwqUJ6G3zgu23oRSa9wqbQMsYBvI5vgcAokj3W10xBNuQEwjCeBYJ
+	 lH7Wg+W2Q4vpipu0siAfun+o7MolPy82Dur0Zy4H+6d8VxLVTBbbQXz5xpj2ZI7SKL1H2
+	 JKF7HY21lx3tzxOD+58DLoIHasJy3l7N9A0yWx83G3XEvAlXjNw29SKbeAz/QjMDJZP1P
+	 fB5UEIcWWLcWhtbejSNaTYTimJE2B+7hrAVEAneUtHBz/0l4fpMJnH2b1lvJ5jnbZPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795491228;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=+aG4MNfkbYBkCJSsJvADe/q3LoG/+w55119ipXSrHN0=;
-	b=DE1UkA74D0heKbWX0SKTsSO2zd2wUekJ9/lMC7jhtvaSgubBX2LmC5eVrWAMtnt90gWk
-	 VrBIarja8/Q/x6Iqrf9gXU27vcl5NefP+85YhOe2vo8c8xDVSlYWDP7fDpyM3ZQ4+Wof1
-	 u8QEca0anPv9HelHTyfgI2I9A1+ABrPhCbQrFMS/Rkt8XycRXj3JRV+MfzUboNIdaVPoi
-	 iTqMeXtDFvPr5DzEks6EwifuVvz56Y4dEEdS1WHVf8xnQy0ntTt/icDbzUOEN6BUQvOoT
-	 VFwlERsxUaJG3ADSTeb5nfykcwTkbVzNth5F60QzRwhKujTHgPJCiIKZGwJwd9MNd3A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795491478;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=+eRa9i7CtmafJcWw1IGcHObp/3OCLe48VR0aUW22rk4=;
+	b=gWC0k/Ad59Sh32o33pILtLOU+W0kxGAulryxOaAl4U1ukLPlkrdpJVqc41DtUmO6vv0n
+	 BnMDuSkGCzjEpTR+EIURVwmbuwZ0RNeMfWrU+DHDEG380+J8Klzl8v/AQIJhUFf9NyOju
+	 /Qu9jbl3nzvyDI19zNEu08Zy9pAYLh0cbiMB41mbUps8evA9gAxaaeqC5MhG0mAmhwlwk
+	 HlxknTFxoTb/BtiYB8ZpXXc0GKjxbcApdEkZ23U0pkWTX2x5+rfuFK5oLsl227tjiBFgJ
+	 61JREQAsC0oZRKnn7OmJDRlofJTc2Hg3K2qLJ1/jfvyE5NZSSjtLiiRNfB//AfRmS4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PMJ7jBSk;
-	arc=none smtp.remote-ip=74.125.227.132
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hl37Zxfq;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DFD606A327
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:33:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0DFD606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 5AAC3606A31E;
+	Tue, 24 Nov 2026 03:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PMJ7jBSk
-Received: by mail-pj2-f4.google.com with SMTP id d9443c01a7336-2f066a193bbso19825575ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2026 19:33:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795491227; x=1796096027; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+aG4MNfkbYBkCJSsJvADe/q3LoG/+w55119ipXSrHN0=;
-        b=PMJ7jBSk+76u+aS4R71dbTfXgO8kgDR3AoAU0QOxKZzj0hPYIk0m8+2OtlnQB15CX7
-         7BBniUJartqZMNQcoU1c9pE9MdTH0doYGo9GEEIGLGVjGBtBT+VH2YDknAZlUPOjZ+W9
-         YWzIYxr0FiSRZoPU9ndOwrjTNWr1hWbIr7i5hor4xcGB6gTkVEWzB/ngzSi1tqrQ3DjS
-         JhslKDd0pn5BelpvdnkLKplltbYMqnhBNz5YZUzZ3T7feiuW3If0MEzRHH9hwONyae4w
-         6ztGBr+oXTB4cgokhCBPSVwhgC0QkFUixb4BQ/bkPBqyQ8UhDgYIKnf03KUkCG4B2lFK
-         HqBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795491227; x=1796096027;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+aG4MNfkbYBkCJSsJvADe/q3LoG/+w55119ipXSrHN0=;
-        b=NRIwKf+XmH3ZL3hKyKV13ymVUkYoAQMIs07glm5Lk27juUEHn+ekwNWPyTfVH2vLgL
-         CKt+2ewWhUpQ1KzBLHoL5/k/6xt0hxLkTND00lMrB0F1MGe4NnHEZaQ3r1fBRQIkqUeR
-         kND99aPa/Zm+gcTCvNzIF4eBqAUBQG8YjMxONJPnJW94/UdbbbcwPWyxKo67mUTJr45Y
-         O3p1WX/JAPttjyMSaWXNAffwAgpTBxsC80V6PCiE8Aus5hy2vj6CqMMekloitJHhmRQJ
-         n9GcOR85c0SGjL5SA2S1FDaPVAoWyEy+b8mPc/PXW2ESd2ne2GpnbZevkbVNE6lVJ4rA
-         58Qg==
-X-Forwarded-Encrypted: i=1; AL+hErGLOZ/q6sSY+qd8anJI8OGeU6SwNcenU9AgcipinICEb1hhQoe1nAMoY761/7p3EVwEsxvzisX8Epe2L33ncqY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+6N1gxtHfxG5FVh+O2M3SuDvvjOfC35FGnSYWtctuC5GNLSy2j
-	WpU52uMAp2Dqpb/aU1CxgkBjsWcz0Rvow0hT/6hjteHf7mFiyGLZhXux
-X-Gm-Gg: AZFdTZdwMbXpHaFQzvb1mekmPqD4LCFMK6MA/qvzYVifd3goItUbTsuY2TdK3cxa3C/
-	kS8sh9WvtcGAi/JGtvnOu6QnAzlGnWa/ZR+dunF1he5dceBCGctuSGef1h/Fo+JT6i8KhF4Cn+A
-	hN78hprLkuYaz0nDGMjyPf8Rm1LznO2jxBsp335pBpuiBeH/P24f9fRBIoO1iDhy2jGHUyrWHOQ
-	I6ti21LECYQvwT+ujkGpyot1TNmagxjgTdChDyXOB9f3liy8S42bDKjKmzTFFXE9+KQ3DL+SBI7
-	fwTJWuvnydWKy0YspaYtnYu9nxj7TU5FDBxStptmh7dkttkPMjUeTaOgYHYrYlHp8mB9EJnFLZL
-	aEbBpl3hsTQl2bZzwVreZ0l3JWsJ/yhtxweNeRpY0BxfP1vdtk7Hu3Zvue93mwc6XRmkOgnV22X
-	ipFrHFfIYSxohAQoOlMNEJZ69Y7C4oFA/pZ+3l3jjLlFFTsEYNNzvHZMC37unyb9BOgsVvk18sM
-	EaxQdxtUFB/sa9j8B8jFjLwDd+T/QjLR5D3roaX2o+VGZ/7032+lAIQY9uAnDnZ6QoTY/Z/6pAf
-	jB6S3pnsVIwA0cxDW+Vhn1Pm5Lqd23KnzonMRBfrRg==
-X-Received: by 2002:a05:6300:218b:b0:3f8:f0b1:e7c0 with SMTP id adf61e73a8af0-4014da5fc3emr12855841637.59.1795491227174;
-        Mon, 23 Nov 2026 19:33:47 -0800 (PST)
-Received: from q-Legion-Y7000-IRX9.. ([223.86.210.47])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87077bff6sm6495773b3a.3.2026.11.23.19.33.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 19:33:46 -0800 (PST)
-From: Bingyu Xian <shanbeeyoo@gmail.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Andrew Jones <andrew.jones@linux.dev>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Quan Zhou <zhouquan@iscas.ac.cn>,
-	Bingyu Xian <shanbeeyoo@gmail.com>,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] KVM: selftests: Test steal-time dirty logging and RISC-V STA transitions
-Date: Tue, 24 Nov 2026 11:33:28 +0800
-Message-Id: <20261124033328.612894-3-shanbeeyoo@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261124033328.612894-1-shanbeeyoo@gmail.com>
-References: <20261124033328.612894-1-shanbeeyoo@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hl37Zxfq
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id CDC1A1F000C4;
+	Tue, 24 Nov 2026 03:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795491477;
+	bh=+eRa9i7CtmafJcWw1IGcHObp/3OCLe48VR0aUW22rk4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Hl37Zxfq1YEb/KW6XeaIPjFuYb4guOvBMUFj3yJB/7niV5bf4UPy09XENiuDlE9Ro
+	 LAgxCwk64dt6h019EHmRmYSy46uw6JBtlDnXyxDEfQX2za1Sme7AvkduutqDAAccg9
+	 O+Dod/5SGwPR3ree5ZExwPLvTmHgQeo/k1s9iYM7Rj72CZFTed3+mVRzYLxvI0gfY+
+	 l4vATV8jbRU+l6KcJ25ccKrWiDViDDYUk+XZ25WsEq+cE9ZhnAmulrMGJH7do/ALdP
+	 xRi/t7qoD6nkbm8NsRwRO0e3p3o3XyK9D2KYBactsLrtGTZB1RIpE1U2DD9tJEzf3j
+	 OOlFdDsneTPpg==
+Date: Tue, 24 Nov 2026 05:37:53 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Lennart Poettering <lennart@poettering.net>,
+	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awUGkYoyDXp4P5LJ@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <awTmJIErjasO4lqq@kernel.org>
+ <awToL2PFNKVgIfqs@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,401 +81,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <awToL2PFNKVgIfqs@kernel.org>
 
-KVM writes to a guest steal-time structure must be recorded in the guest
-RAM dirty log. Enable dirty logging on the shared-area memslot in the
-common per-vCPU test path, clear initialization dirty bits after the
-first run, and force runnable scheduling delay before checking that the
-subsequent accounting write marks the expected page dirty.
+On Tue, Nov 24, 2026 at 03:28:19AM +0200, Jarkko Sakkinen wrote:
+> On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
+> > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
+> > > SYSCALLS
+> > > ========
+> > > 
+> > > Two new system calls are proposed:
+> > > 
+> > > 1. userland_open(): open an opaque staircase-initialized container
+> > >    object (modeled on Intel SGX enclave initialization with separate
+> > >    build and live states) with no embryonic state, opting selected
+> > >    shared namespaces in via an allow-list instead of unshare semantics.
+> > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
+> > >    extents for a container user namespace in a single atomic system
+> > >    call.
+> > 
+> > I played on patching systemd and userns_set_idmap() alone does already
+> > a lot of good. I'm figuring out userland_open() integration next.
+> > 
+> > For the test implementation I probe the opcode's and dependening on that
+                                            ~~~~~~~~
+					    syscalls
 
-On RISC-V, additionally exercise three SBI STA transitions: disabling an
-active shared area, re-enabling the same area, and replacing an active
-registration directly with a new area at the end of a second host page.
-Clear the dirty log after each transition, arrange runnable contention on
-the pinned CPU with a bounded monotonic timeout, and compare sequence and
-stolen time against a stopped-vCPU snapshot so valid zero-increment skips
-are permitted. After active replacement, verify that the old page remains
-both unchanged and clean.
+> > use either "userland path" or "fallback path".
+> > 
+> > This auto-probing is done so that I can commit the patches to my kernel
+> > test harness, which already has systemd, and try them out when built
+> > against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
+> > 
+> > The project builds a hybrid ISO, which is a bootable bootc/composefs
+> > based operating system, and has toolbx bundled i.e., a reasonable test
+> > environment for all of this. It is also device-installable via "npx
+> > @puu/install"
+> > 
+> > I had to level the harness up a lot so that I could realistically test
+> > lockdown-hibernate but it is is also pretty good emulation environment
+> > for any possible container features.
+> 
+> Kernel is ukified and systemd-boot is used as the boot loader i.e., for
+> kernel testing purposes corresponds to something like Silverblue except
+> not using GRUB.
 
-Use per-architecture hooks for protocol-specific lifecycle cases instead of
-adding #ifdefs in main(). These SBI enable/disable operations match those
-used by the Linux RISC-V guest CPU online and CPU-down callbacks, while the
-selftest exercises the SBI protocol directly rather than booting Linux.
-Drop the v1 MADV_DONTNEED check, which discarded guest page contents and
-did not model migration.
+Experimental systemd patches:
 
-Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Bingyu Xian <shanbeeyoo@gmail.com>
----
-Changes in v2:
-- Move accounting dirty-log checks into the common per-vCPU loop and
-  remove the added #ifdefs from main().
-- Test RISC-V disable, re-enable of the same area, and direct active
-  replacement separately; drop the v1 MADV_DONTNEED case.
-- Isolate registration dirty bits with kvm_vm_get_dirty_log() and arrange
-  bounded runnable contention instead of assuming unconditional updates.
-- Align the two-page region and boundary offset to getpagesize().
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/commit/?h=main&id=e4d6b15da3376ad09c0c575cedf467f69db32a52
 
- tools/testing/selftests/kvm/steal_time.c | 233 ++++++++++++++++++++---
- 1 file changed, 206 insertions(+), 27 deletions(-)
+The patches are layered per syscall feature:
 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index 82b94a82d..276eb03a6 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -8,6 +8,7 @@
- #include <time.h>
- #include <sched.h>
- #include <pthread.h>
-+#include <linux/bitmap.h>
- #include <linux/kernel.h>
- #include <asm/kvm.h>
- #ifdef __riscv
-@@ -29,11 +30,17 @@ static u64 guest_stolen_time[NR_VCPUS];
- 
- static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
- 					   struct kvm_vcpu *vcpus[]);
-+static long force_steal_time(void);
- 
- #if defined(__x86_64__)
- 
- /* steal_time must have 64-byte alignment */
- #define STEAL_TIME_SIZE		((sizeof(struct kvm_steal_time) + 63) & ~63)
-+#define NR_LIFECYCLE_TESTS	0
-+
-+static void check_steal_time_lifecycle(void)
-+{
-+}
- 
- static void check_status(struct kvm_steal_time *st)
- {
-@@ -115,6 +122,11 @@ static void check_steal_time_uapi(void)
- 
- /* PV_TIME_ST must have 64-byte alignment */
- #define STEAL_TIME_SIZE		((sizeof(struct st_time) + 63) & ~63)
-+#define NR_LIFECYCLE_TESTS	0
-+
-+static void check_steal_time_lifecycle(void)
-+{
-+}
- 
- #define SMCCC_ARCH_FEATURES	0x80000001
- #define PV_TIME_FEATURES	0xc5000020
-@@ -239,6 +251,7 @@ static void check_steal_time_uapi(void)
- 
- /* SBI STA shmem must have 64-byte alignment */
- #define STEAL_TIME_SIZE		((sizeof(struct sta_struct) + 63) & ~63)
-+#define NR_LIFECYCLE_TESTS	3
- 
- static gpa_t st_gpa[NR_VCPUS];
- 
-@@ -329,6 +342,129 @@ static void steal_time_dump(struct kvm_vm *vm, u32 vcpu_idx)
- 	pr_info("\n");
- }
- 
-+static gpa_t lifecycle_second_gpa;
-+
-+static void sta_lifecycle_guest(void)
-+{
-+	sta_set_shmem(ST_GPA_BASE, 0);
-+	GUEST_SYNC(0);
-+	GUEST_SYNC(1);
-+
-+	sta_set_shmem(INVALID_GPA, 0);
-+	GUEST_SYNC(2);
-+	GUEST_SYNC(3);
-+
-+	/* Re-enable the same area, as the guest CPU online callback does. */
-+	sta_set_shmem(ST_GPA_BASE, 0);
-+	GUEST_SYNC(4);
-+	GUEST_SYNC(5);
-+
-+	/* Replace the active registration without disabling it first. */
-+	sta_set_shmem(lifecycle_second_gpa, 0);
-+	GUEST_SYNC(6);
-+	GUEST_SYNC(7);
-+	sta_set_shmem(INVALID_GPA, 0);
-+	GUEST_DONE();
-+}
-+
-+static void sta_lifecycle_run(struct kvm_vcpu *vcpu, unsigned int stage)
-+{
-+	struct ucall uc;
-+
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+		TEST_ASSERT_EQ(uc.args[1], stage);
-+		break;
-+	case UCALL_DONE:
-+		TEST_ASSERT_EQ(stage, 8);
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+	default:
-+		TEST_FAIL("Unexpected STA lifecycle exit at stage %u", stage);
-+	}
-+}
-+
-+static void check_sta_page(struct sta_struct *st, struct sta_struct *before)
-+{
-+	TEST_ASSERT(st->sequence != before->sequence && !(st->sequence & 1),
-+		    "Expected a completed STA update, sequence=%u", st->sequence);
-+	TEST_ASSERT(st->steal > before->steal, "STA stolen time did not advance");
-+	TEST_ASSERT_EQ(st->flags, 0);
-+	TEST_ASSERT_EQ(st->preempted, 0);
-+}
-+
-+static void check_steal_time_lifecycle(void)
-+{
-+	struct sta_struct snapshot, before, *first, *second;
-+	size_t host_page_size = getpagesize();
-+	unsigned long dirty = 0;
-+	unsigned int gpages;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, sta_lifecycle_guest);
-+	gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, 2 * host_page_size);
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE,
-+				    1, gpages, KVM_MEM_LOG_DIRTY_PAGES);
-+	/* Also exercise an STA structure ending at a host page boundary. */
-+	WRITE_AND_SYNC_TO_GUEST(vm, lifecycle_second_gpa,
-+				ST_GPA_BASE + 2 * host_page_size - sizeof(struct sta_struct));
-+	first = addr_gpa2hva(vm, ST_GPA_BASE);
-+	second = addr_gpa2hva(vm, lifecycle_second_gpa);
-+
-+	/* Establish active updates on the first page before testing disable. */
-+	sta_lifecycle_run(vcpu, 0);
-+	before = *first;
-+	/* Registration writes zeroes and dirties the page independently. */
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	force_steal_time();
-+	sta_lifecycle_run(vcpu, 1);
-+	check_sta_page(first, &before);
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT_EQ(dirty, BIT(0));
-+
-+	sta_lifecycle_run(vcpu, 2);
-+	snapshot = *first;
-+	/* Entry before the disable call may have updated the old area. */
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	force_steal_time();
-+	sta_lifecycle_run(vcpu, 3);
-+	TEST_ASSERT(!memcmp(first, &snapshot, sizeof(snapshot)),
-+		    "Disabled STA shared page was modified");
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT_EQ(dirty, 0);
-+	ksft_test_result_pass("STA disable stops shared page updates\n");
-+
-+	sta_lifecycle_run(vcpu, 4);
-+	before = *first;
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	force_steal_time();
-+	sta_lifecycle_run(vcpu, 5);
-+	check_sta_page(first, &before);
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT_EQ(dirty, BIT(0));
-+	ksft_test_result_pass("STA re-enable resumes shared page updates\n");
-+
-+	sta_lifecycle_run(vcpu, 6);
-+	/* Snapshot after the last entry that could still update the old area. */
-+	snapshot = *first;
-+	before = *second;
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	force_steal_time();
-+	sta_lifecycle_run(vcpu, 7);
-+	check_sta_page(second, &before);
-+	TEST_ASSERT(!memcmp(first, &snapshot, sizeof(snapshot)),
-+		    "Old STA shared page was modified after replacement");
-+	kvm_vm_get_dirty_log(vm, 1, &dirty);
-+	TEST_ASSERT_EQ(dirty, BIT(1));
-+	ksft_test_result_pass("STA active replacement updates only the new page\n");
-+
-+	sta_lifecycle_run(vcpu, 8);
-+	kvm_vm_free(vm);
-+}
-+
- static void check_steal_time_uapi(void)
- {
- 	struct kvm_vm *vm;
-@@ -368,8 +504,13 @@ static void check_steal_time_uapi(void)
- 
- /* steal_time must have 64-byte alignment */
- #define STEAL_TIME_SIZE		((sizeof(struct kvm_steal_time) + 63) & ~63)
-+#define NR_LIFECYCLE_TESTS	0
- #define KVM_STEAL_PHYS_VALID	BIT_ULL(0)
- 
-+static void check_steal_time_lifecycle(void)
-+{
-+}
-+
- struct kvm_steal_time {
- 	__u64 steal;
- 	__u32 version;
-@@ -466,22 +607,58 @@ static void check_steal_time_uapi(void)
- }
- #endif
- 
-+struct steal_time_worker {
-+	bool stop;
-+	struct timespec deadline;
-+};
-+
- static void *do_steal_time(void *arg)
- {
--	struct timespec ts, stop;
-+	struct steal_time_worker *worker = arg;
-+	struct timespec ts;
- 
--	clock_gettime(CLOCK_MONOTONIC, &ts);
--	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
--
--	while (1) {
-+	while (!READ_ONCE(worker->stop)) {
- 		clock_gettime(CLOCK_MONOTONIC, &ts);
--		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
-+		if (timespec_to_ns(timespec_sub(ts, worker->deadline)) >= 0)
- 			break;
- 	}
- 
- 	return NULL;
- }
- 
-+/* The caller is pinned; its worker inherits the same CPU affinity. */
-+static long force_steal_time(void)
-+{
-+	struct steal_time_worker worker = {};
-+	struct timespec ts;
-+	pthread_t thread;
-+	cpu_set_t cpuset;
-+	long start, delay;
-+	int cpu = sched_getcpu();
-+
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	worker.deadline = timespec_add_ns(ts, 5 * NSEC_PER_SEC);
-+	start = get_run_delay();
-+	kvm_pthread_create(&thread, NULL, do_steal_time, &worker);
-+	kvm_pthread_getaffinity(thread, &cpuset);
-+	TEST_ASSERT(CPU_COUNT(&cpuset) == 1 && CPU_ISSET(cpu, &cpuset),
-+		    "Worker failed to inherit parent's CPU affinity");
-+
-+	do {
-+		sched_yield();
-+		delay = get_run_delay() - start;
-+		clock_gettime(CLOCK_MONOTONIC, &ts);
-+	} while (delay < MIN_RUN_DELAY_NS &&
-+		 timespec_to_ns(timespec_sub(ts, worker.deadline)) < 0);
-+
-+	WRITE_ONCE(worker.stop, true);
-+	kvm_pthread_join(thread, NULL);
-+	TEST_ASSERT(delay >= MIN_RUN_DELAY_NS,
-+		    "Timed out waiting for runnable delay: expected >= %lu ns, got %ld",
-+		    MIN_RUN_DELAY_NS, delay);
-+	return delay;
-+}
-+
- static void run_vcpu(struct kvm_vcpu *vcpu)
- {
- 	struct ucall uc;
-@@ -509,7 +686,8 @@ static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
- 	/* Create a VM and an identity mapped memslot for the steal time structure */
- 	vm = vm_create_with_vcpus(nr_vcpus, guest_code, vcpus);
- 	gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE * nr_vcpus);
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, gpages, 0);
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE,
-+				    1, gpages, KVM_MEM_LOG_DIRTY_PAGES);
- 	virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, gpages);
- 
- 	return vm;
-@@ -518,26 +696,31 @@ static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
- int main(int ac, char **av)
- {
- 	struct kvm_vcpu *vcpus[NR_VCPUS];
-+	unsigned long *dirty_log;
-+	unsigned int dirty_npages, page;
- 	struct kvm_vm *vm;
--	pthread_t thread;
--	cpu_set_t cpuset;
- 	long stolen_time;
- 	long run_delay;
- 	bool verbose;
--	int i, cpu;
-+	int i;
- 
- 	verbose = ac > 1 && (!strncmp(av[1], "-v", 3) || !strncmp(av[1], "--verbose", 10));
- 
- 	/* Set CPU affinity so we can force preemption of the VCPU */
--	cpu = pin_self_to_any_cpu();
-+	pin_self_to_any_cpu();
- 
- 	vm = vm_create_steal_time(NR_VCPUS, guest_code, vcpus);
- 
- 	ksft_print_header();
- 	TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
--	ksft_set_plan(NR_VCPUS);
-+	TEST_REQUIRE(!access("/proc/self/schedstat", R_OK));
-+	ksft_set_plan(2 * NR_VCPUS + NR_LIFECYCLE_TESTS);
-+	dirty_npages = memslot2region(vm, 1)->region.memory_size / getpagesize();
-+	dirty_log = bitmap_zalloc(dirty_npages);
-+	TEST_ASSERT(dirty_log, "Failed to allocate dirty log");
- 
- 	check_steal_time_uapi();
-+	check_steal_time_lifecycle();
- 
- 	/* Run test on each VCPU */
- 	for (i = 0; i < NR_VCPUS; ++i) {
-@@ -547,30 +730,24 @@ int main(int ac, char **av)
- 
- 		/* First VCPU run initializes steal-time */
- 		run_vcpu(vcpus[i]);
-+		/* Exclude initialization writes from the accounting dirty log. */
-+		kvm_vm_get_dirty_log(vm, 1, dirty_log);
-+		force_steal_time();
- 
- 		/* Second VCPU run, expect guest stolen time to be <= run_delay */
- 		run_vcpu(vcpus[i]);
-+		kvm_vm_get_dirty_log(vm, 1, dirty_log);
-+		for (page = 0; page < dirty_npages; page++)
-+			TEST_ASSERT_EQ(!!test_bit(page, dirty_log),
-+				       page == i * STEAL_TIME_SIZE / getpagesize());
-+		ksft_test_result_pass("vcpu%d shared page update is marked dirty\n", i);
- 		stolen_time = SYNC_FROM_GUEST_AND_READ(vm, guest_stolen_time[i]);
- 		run_delay = get_run_delay();
- 		TEST_ASSERT(stolen_time <= run_delay,
- 			    "Expected stolen time <= %ld, got %ld",
- 			    run_delay, stolen_time);
- 
--		/* Steal time from the VCPU. The steal time thread has the same CPU affinity as the VCPUs. */
--		run_delay = get_run_delay();
--		kvm_pthread_create(&thread, NULL, do_steal_time, NULL);
--		kvm_pthread_getaffinity(thread, &cpuset);
--		TEST_ASSERT(CPU_COUNT(&cpuset) == 1 && CPU_ISSET(cpu, &cpuset),
--			    "Worker failed to inherit parent's CPU affinity");
--
--		do
--			sched_yield();
--		while (get_run_delay() - run_delay < MIN_RUN_DELAY_NS);
--		kvm_pthread_join(thread, NULL);
--		run_delay = get_run_delay() - run_delay;
--		TEST_ASSERT(run_delay >= MIN_RUN_DELAY_NS,
--			    "Expected run_delay >= %ld, got %ld",
--			    MIN_RUN_DELAY_NS, run_delay);
-+		run_delay = force_steal_time();
- 
- 		/* Run VCPU again to confirm stolen time is consistent with run_delay */
- 		run_vcpu(vcpus[i]);
-@@ -588,6 +765,8 @@ int main(int ac, char **av)
- 		}
- 		ksft_test_result_pass("vcpu%d\n", i);
- 	}
-+	free(dirty_log);
-+	kvm_vm_free(vm);
- 
- 	/* Print results and exit() accordingly */
- 	ksft_finished();
--- 
-2.34.1
+- 1-5: userns_set_idmap
+- 6-10: userland_open()
 
+Virtual device would add path/mount complexity and generally dependency
+to mounts i.e., I think it was an awful idea. At least initially this
+feels fairly lean way of doing container things now that I've trialed
+systemd-nspawn a bit.
+
+I'll update the patches over time.
+
+Br, Jarkko
