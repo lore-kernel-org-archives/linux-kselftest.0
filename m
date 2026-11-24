@@ -1,89 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795529483;
-	b=yiZu/r2FMVypC6ykJNcJRkK74PINOjvLa/BNCZMoHBDu8ehrGGOfh2Bu64g/QMv4RuMy
-	 ZSPgsByQ7ZV4wn6hDT8yNGCXzXi6TOU6YTJdiwDTAISBHQFsA/hWUDUAisPd6piCSX3gE
-	 pkaa03XLA126DySKwyvLDBtmq/FrlxD31pTE+3A03t1iGcL4Ao5essoJDFg/5XP84nbH/
-	 ZQ7chZPFSSCOrmRMJo4aqwH/EaUtc0F4Uw4xHMkSltKWzyp1ifnA4+DuEJz0VFlmgr3GV
-	 ORfBPieVH3ZfD/IAXPhT/I3RY1VeFPgtwkgRUABuGe5GQphoTbAfexJFz9+vB+g5RVg==
+	t=1795529541;
+	b=mmEPePAUGhUEQAHS1+BVVkanDGl/FUvaoFMVgWTRKFTKErG/tUhRg8yegV6mtpSzaVH+
+	 h3GMFhG5GJA38uJ2E72dq/74WQeYH2wvjuPZjaRIvmf284oqmOHxRF74ev9bC5RdNpxLm
+	 bba7E+iTeU3qWOl2bHYsWS4zx1pchIizeq1Qk25puHITSl6/0/Y96f+oDJmzITjsm569r
+	 Dy8M8he74Gtx0MFzezgcuDt0ms7BV6yzZ25S6R7FawHcCV3AMzgRebSbn6kzkfkMfWPD3
+	 lvd1Iox2zOepxAxNxOSgRA2cHOLhLrfQqaSo7UtNQZeOgF5mBOsZobIpMm5F77ZnNpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795529483;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795529541;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Reply-To:Subject:To:Cc:
-	 References:From:Content-Language:Organization:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=mGhkRCw615KqlCBkyhl7izYjlZJ6697FMj2w/c0mOoU=;
-	b=FQBcEHxcs3HZ9gh54GjtdsONmjuDUEvwLQhhUvmWXfRtPyqz/vLdYvII9pob4I169aUk
-	 Az2CrQOyTXKvgSPaD7IMA3qhb3tvSQ2MqduRqDEDXwYYnS20dab1oCehchyOnqS8loQ6Z
-	 0zLkhNVeJk+3HmSsLuVcHJ2XJM+xM5OU3I+a11wuIr4XO48du7aqG/25/HrMqF0SR9t2a
-	 DnS6CcLlZR3duYndMnIY3qWzg9AmR6viZhsN9NbduJK0q5GklUQbzOVOOLjjyTDrTRfEK
-	 uQkfLrUSCTPcxYM6APbKlYYBeQ/N4z2ExRCTDC9puFfIbNlsZpkNwc0bdposQ6jwO3Q==
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=1xGMs6jT7TfzD1rWb/wp0MZUHeeMb6G/nblIX2zqKoc=;
+	b=Ti1fBWBzjGWcxLFZV1StkHo7K5blRGs7k+uGGumxuJr7r8a41l+i4q8FUY8IDqH3JXz1
+	 ZIpb/jaVy0ySs3ER4V+B2eQNGIDZWzcePB+s5q1bcVaun7O34+0bgsjOrPf582cvintA6
+	 eQVMKw7ToGT6rUyowScJQ/H/m+BfZDRYxFvNI08IigZrcNFQAN3v6kNy3bbIAzHQMtmct
+	 yKZbHXXjrBCBPBZ6DHrOrRGBif6PReFoMBM0XuKt1ko43E4rcl7USqNaKdQB0udWDbDOK
+	 UmkyyT/fFCZP9J4LPENcJOVIjIpq98B/6AYauq1WbxSJpSMJXPxBhqNUuMEnZYKrg2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=6wind.com;
-	spf=pass smtp.mailfrom=6wind.com;
-	dkim=pass header.d=6wind.com header.i=@6wind.com header.a=rsa-sha256 header.s=google header.b=UqGS2jrm;
-	arc=none smtp.remote-ip=209.85.221.45
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=c+5KiT+9;
+	arc=none smtp.remote-ip=209.85.208.51
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24F4606A31E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:11:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A24F4606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00AA606A335
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:12:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E00AA606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.a=rsa-sha256 header.s=google header.b=UqGS2jrm
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4a8eed31158so380022f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 06:11:22 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=c+5KiT+9
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b8b20b2538so5394307a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 06:12:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1795529481; x=1796134281; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=mGhkRCw615KqlCBkyhl7izYjlZJ6697FMj2w/c0mOoU=;
-        b=UqGS2jrmomUXTfSDQ6lU8rH1S4h5PwOcG+jyYnSApYEu8Vqs1dR3qJasCCgI88ZKxP
-         LACCySEQCDFbJ41eaG9DzZh/tZinbuHkXgs71GpgL69xwyxYpWgCeXtkYPfloFcOhk3p
-         +rtJUhyRhAXY3tvDU23/ZAEJEFwhtl7Iv+Fud9pwqyksdP22YBjS0MPpxRKY8vGD5JIX
-         AaSsrU6qFOiAs85CwG8ORJzaKfcKNG/apu0sVLbwWutWrMQrbwDEvSjHKR8qplD67i10
-         SJdHEfpBixq6/mvg1bA53jZ0iWUHPu3X3Lqgx+fbv0DpRwmTUtPlQEQ1mTYn2h/I0iIZ
-         +9RQ==
+        d=mojatatu.com; s=google; t=1795529538; x=1796134338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1xGMs6jT7TfzD1rWb/wp0MZUHeeMb6G/nblIX2zqKoc=;
+        b=c+5KiT+93GkBxGQDnZLhMfbzB4uOpSJpkhB557s6VSmMDjh/WdWRmKGYd9rfHEpK83
+         LLjyPPVRzMGVtn/owlTnBaSun1o3TfKtlYqcIUt88P9eCh4VtBNAbSTMfk1DKYHPfoGJ
+         8/U/ct1dPt4Z+AdpQeggupLl8qwi8szv+PsUA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795529481; x=1796134281;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :content-language:from:references:cc:to:subject:reply-to:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mGhkRCw615KqlCBkyhl7izYjlZJ6697FMj2w/c0mOoU=;
-        b=s14O1LF+XsYGMVxn6ur2wyETBSdycqw3MgCYf3eH5UAE5lDqpWfceAol/irJCr87zu
-         sWGwH7XI6uYwlbX44GN3cYwd5dWrpwhxd5JhlYBSFTL+cPe5Yx+5dRhqV9e8fXtHd/GW
-         lTdtoAZx+Nr+eDq+LoRBCr62LHTToMGoBkcB2ZS6IMHHinZJRTM+yIAhrlhA9fR0MCYf
-         i1OuqjTnzB/3oVTYPpdQNMUcjcb0EiMksVRErZejfrvVng2f7N0LZjL4hAqJAtaj3y3J
-         mEVPYq2xtDILjhL+PtWC+n16kQiR6uw0ZnsFlbZcY+9o2UhcV0xeAk/+r7NIn/KuvsBN
-         xwHQ==
-X-Forwarded-Encrypted: i=1; AL+hErE+CLuBN/mmsed4z+8G6voudcVqze2PbU66F5KhquZSlPuQiM3RaEzJjcCJ9Lg3rUbYujYTeLYiDqyeEESUNoc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9/mSA8Nhzc2m6q2jzypWFUxh+QByeru4eIJAkq3oYtZoUfNh6p
-	ym07AEpVulgSUvSlaw+NURjGrj2anQKlJ4Z/m7GLEy42kMIqBGwbwE+YHUsX2lnBDvU=
-X-Gm-Gg: AZFdTZf/yZm4vhP6o9fpbrwBh3+DSQHvay5Av36DXBoGf8Wb/+ZYToRtoYKE6YcXIdo
-	mdu39LH2zNrof4ALoaW4pbgIf8Jgwll72ONExn6gc2Ic8oDsnOvgylqP9hbI6VeeYBoZCIMBdws
-	NQxX87Y7CeOWXdGklkD3StzFKWsoI7GZyXvZ2WOTFio0rEaVZxFjQh1Pwk6//TjVw2Tx3hJmrhZ
-	p7Jz07UPJF+edhLyynlqesESGQFwR1jPT1kQkEUtIQKV7nQCmW1ZBLkIbwn/KoVKzvL1C363KVF
-	VxacMGZcdPRpjG6JNMlu9fF6JdmOBRhBDQH20DSoGdweSZw+gr6WYeu6SusGdtDkHiolRVH2sy+
-	SJb5IPZnuqk9u+cE3YrTDTDp7LLUBqUbCkpCMVJ9NaIb+LPYbGDdeIwpEsNWEB2TJqfwU7WPIDF
-	ARA/NL38K1t030z+CTJYa3wyruNSL5jww4zB3rEtn24J245tHjeIp5yjKcdQcXR4YqTi7lf7g3X
-	cbzc42PRtA4f4QqHjqycpouG0bFXBGeKDV+fQik04ItcJNuyGn7Yu7bRlC0qkcZnI+i9YkrrpvX
-	0Yu15S0fXBKiS9MgUtRA4n7EuWuKcUcLdz/DWWYDqGvXaXVln0tAT9cYEMGJEu7dP7IFdkFofI5
-	bzx1XcgwdZf9qtY6qpn2PQyKC968=
-X-Received: by 2002:a5d:5d0a:0:b0:4a5:d259:4c57 with SMTP id ffacd0b85a97d-4abab7df50dmr33724301f8f.2.1795529480872;
-        Tue, 24 Nov 2026 06:11:20 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6baa397asm29001139f8f.48.2026.11.24.06.11.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2026 06:11:20 -0800 (PST)
-Message-ID: <51cf7a82-6680-4ac9-b714-8bb28afb65fc@6wind.com>
-Date: Tue, 24 Nov 2026 15:11:19 +0100
+        d=1e100.net; s=20260707; t=1795529538; x=1796134338;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1xGMs6jT7TfzD1rWb/wp0MZUHeeMb6G/nblIX2zqKoc=;
+        b=Su81QdmlFqO+gBhDeQTpb3K59x/i2NH0mpxjlklLIijTUiANZVChx2WAJf8n3/mLqw
+         E6d9XKBb5I9Q8Rci+qQoTyQyBCQ77ah3xh5a0IxFc1GZsTl9HVv/SpjUQ+PI4NfWJUQX
+         EVjuxWILdl5TXWwtp/k0sr1GXICf4UPdFNFGiYOVIAdMmYzZQNkTCNJnuYhzg6VtHRkw
+         DNQKija9qIDwyoF/9XSH3ChiirnNDZ8db1Uu+J2W0NcDIFH+Ao6SL8HXHkRH7VN6tB/W
+         nAUZIqFJIJKp0LplDtfGU4w8supStXCLZlmSU1ROey8zzNaHuyJGAsN2zkAA91XoaQKJ
+         lBIQ==
+X-Forwarded-Encrypted: i=1; AL+hErGWa2M6+4WfKDOz4eml0b+UI7Fid4HwHqj5iUD6PNG1+kyRG5RAYehmgsbsDWsSorkI1BXLwR8mgZxKuHCBL5c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9G57BBtlGSDICyg3lnUpZHHSZISmPGGvuR/rNFGzeGbGM93P4u
+	CP/lBoiXwWqrWJYlVLZuwZ5geUjG2VkPZVScHA7X+XVLQO6fQnp8rvYpkDQaq6Q/kQ==
+X-Gm-Gg: AZFdTZckyqH2P5u/cY/zP4tCZkQzAftJ/8BCDOALFrm+jEw767mrZGtiwJ2AxxwiRkK
+	204rfuUurjZMwWJyj6qqaizmOwubOJXSD53Qxb5V1ux8aV6IwnGCCcQg355L4kgRdj7yAC9H0Zz
+	sX42A4n/ibroGD20nenzWCfGLqKieCMUin4iAIUMVwTZS5qUHChN0dPsQbk9OxlgqkjsVnp5p75
+	WYfx7jIRaF+4/0Nt9RWdcvmlgpEmHWNrJ0hKwfnWO/yo6suD5/OQRNnlG4desFtmBYGmtfa7sQ/
+	UNez5Xl3oBMoSGd2u4OtYwNiGDgSi4wdr3CalKYD8pnD6odjDSjdjWSEVCxtqHGsiO3Go4ngFJq
+	iJDxLB4PQgZc/kJ6AZfR8BL/PQE/tjYBuSEpRIjh4M1gi9N5beWTVU8khPEKMeIUqWCXiwTjzXv
+	eZUskLlT8mq3xoV1C0opmTxLP9bJyrhLq4olp2OwHRdNbJ80i32xqMtUjKVZcZxEajU6laca19I
+	x+ExupTkrrPHemrrrljpMkmKKHJgLsYbW/OYwWKqW9HT0HQnAwXakSxt4nz/hZebt6tSuE23z87
+	BbjI3jFeUDVOLFzTKiGGy3hxwJdjuAx4gjTWi6Z0eODcGTg4Pv1lYHCw0jU7+iZMf9/6B1TklP4
+	b46Mz9p4/7ikzTOotOS00
+X-Received: by 2002:a05:6402:1596:b0:6bb:6c8:c4d2 with SMTP id 4fb4d7f45d1cf-6bb06c8ce30mr1085338a12.31.1795529537654;
+        Tue, 24 Nov 2026 06:12:17 -0800 (PST)
+Received: from mbili.waya ([64.203.83.2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba7b9570e9sm5032739a12.36.2026.11.24.06.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 06:12:17 -0800 (PST)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Simon Horman <horms@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	linux-rt-devel@lists.linux.dev,
+	Victor Nogueira <victor@mojatatu.com>,
+	Edward Adam Davis <eadavis@qq.com>,
+	Po Liu <Po.Liu@nxp.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	syzbot+0054fed3dc9085390f51@syzkaller.appspotmail.com,
+	shaos <shawnq1@163.com>,
+	sashiko-bot@kernel.org
+Subject: [PATCH net v4 0/3] net/sched: act_gate: bound the cycle time and refuse schedule entries shorter than 10 us
+Date: Tue, 24 Nov 2026 09:12:07 -0500
+Message-Id: <ACT-WEXM.v4.r0.20261124074514@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,33 +112,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net 2/2] selftests: fib_tests: test IPv6 source address of
- a VRF
-To: vjardin@free.fr, David Ahern <dsahern@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-0-f667ab150ade@free.fr>
- <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-2-f667ab150ade@free.fr>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <20261123-for-upstream-ipv6-vrf-saddr-scope-v1-v1-2-f667ab150ade@free.fr>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 23/11/2026 à 15:30, Vincent Jardin via B4 Relay a écrit :
-> From: Vincent Jardin <vjardin@free.fr>
-> 
-> Check the IPv6 source address of a route of a VRF through a device
-> that only has an IPv6 link-local address:
->   - the address of another device of the VRF
->   - then the one of the VRF device once it has one
->   - then the one of the output device
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+An act_gate schedule is armed from TCA_GATE_BASE_TIME and
+TCA_GATE_CYCLE_TIME, both unchecked u64 attributes that are read into a
+signed ktime_t.  A cycle time above S64_MAX turns negative on that read
+and the cycle arithmetic that follows wraps.
+
+That arms the timer in the past.  Every expiry then recomputes the same
+past time, so the timer softirq never finishes and the task that
+installed the action spins until the watchdog reports a soft lockup.
+
+A schedule entry of a few nanoseconds reaches the same state from the
+other direction: the entry interval is the period the hrtimer runs at, so
+the handler is always behind its own next expiry and the action holds a
+core for as long as it exists.
+
+  1/3  cap base_time and cycle_time at KTIME_MAX, and make every
+       start-time computation saturate instead of wrapping.
+  2/3  require at least 10 us per schedule entry.
+  3/3  cover the refusals, the largest accepted base time and cycle time,
+       and both sides of the interval boundary in the tdc action tests.
+
+Edward Adam Davis posted a v3 that capped cycle_time at S64_MAX and moved
+the attribute to NLA_S64.  That refuses the reported value but leaves the
+invariant to the wrap: base_time is read the same way into the same
+arithmetic and stays unbounded, so an accepted pair can still compute a
+start the timer was never meant to take.  The type change is also
+unnecessary; S64_MAX is a fine range for NLA_U64.
+
+Alexei Starovoitov traced the stall to this action on the syzbot thread
+and sketched the saturating arithmetic used here:
+https://lore.kernel.org/netdev/DN37NBGPJJG9.2DSVDCKS3UYTV@gmail.com/
+
+This series keeps NLA_U64 for both attributes and bounds the computed
+start time rather than one input's value.  cycle_time = 0 stays accepted:
+it means "derive the cycle from the entry intervals".
+
+The 10 us entry floor comes from the measured cost of one expiry rather
+than a device's frame time, and 2/3 states the margin it leaves.  The
+100 us floor proposed for taprio was withdrawn for narrowing working uAPI
+and for a margin it never explained; this floor answers both.
+
+Changes in v4:
+- Reworked as a three-patch series on the current net tree.
+- Bound base_time and cycle_time at KTIME_MAX, keeping NLA_U64.
+- Saturating start-time arithmetic, shared with the catch-up path.
+- Minimum entry interval, with its measured cost and its tdc coverage.
+
+v1 -> v2: reject an out-of-range cycletime instead of clamping it.
+v2 -> v3: move the range check into the netlink policy.
+
+Jamal Hadi Salim (3):
+  net/sched: act_gate: bound the cycle time and start time arithmetic
+  net/sched: act_gate: refuse schedule entries shorter than 10 us
+  selftests: tc-testing: act_gate: cover the new cycle time and interval
+    limits
+
+ net/sched/act_gate.c                          |  45 +++--
+ .../tc-testing/tc-tests/actions/gate.json     | 189 ++++++++++++++++++
+ 2 files changed, 217 insertions(+), 17 deletions(-)
+
+-- 
+2.43.0
+
