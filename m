@@ -1,81 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795530508;
-	b=5fAuhZ3sD9WXi04TKGi6KRijxsaeyX8EZkTEzQKl4wEzomrXNf+vnKwc5ozibxzHqNET
-	 VoUCe2kz2kcWny0Gf1u/fg8qcMfioruy+vkGORo4UOZObxB3ioz262XFoJRlgDz4Msw5H
-	 UmJgmuQ4/tJkCGggHRod3jWy341IJZhB1G6siL5Me1rmC03y096TE9b+saGIR7ITtfNA1
-	 RDwsoDYSYta+HEVh+9eZM8hDD0m43hpxxy+9Xkoe1x7JobwfMKKVEeauZh4MOztmqAECQ
-	 flT5NeQVD5K+0BylxP63zlL5me9yFSWHOuSCMfUF9G+Hyt1ZmCW7O+LbOlucBZvr+LQ==
+	t=1795530525;
+	b=r7vNI3qSIFvWQdPmIJnyTygxlH/7ZlpPZFpkyHEMK/6kpXJV57yvBBwgK5bP7tKc5yCU
+	 +Hf8RGMoxTNbX72rrJdSaVuCPCe16gVw9ygR3U39s/zS4bXyxTvJ4LpCzk8UVj8969J8c
+	 ebjkG1XWnBnaDj42SkmeG6HaoaO48Q+vGmjNNzYR66BKHAsU6yqcB1i09wMEsqu2oFCxu
+	 fnaceW6Lu5IlSMpwP5JQ14c5q98/k3NlZro3G+WrgLJEDlX9AvWgkQRotV6xEJexoYTzE
+	 W9gD/YiaFerDZslDNLOEKYBM/VsDNxHOGEm53y7lUTqzoE0aFiZGbpLK1ECfzw2l/ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795530508;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=iryZQVDWMboCr+mzKmPFMcC4rJjIhj+mBGOAQYXnrgQ=;
-	b=jByThJzkVVH1snROHGvzzZRmxvqG+hlLzWwoihpG/sl6snDk3NyyHV3ohkOQu0xwxcoU
-	 dY6Kcn6u+BKtr8sCLG+vFkKAj1Ol6ACEyWknj3NJM9eaJjDVW0PmBOxdwfn7FPfrrJicV
-	 wdiWgQ8ghe/Yy20xUxlauQkRVU3O0GQUSo03a/0G6X7jfLz7K/QR8UnNdbg9zhtcWnyDI
-	 arir6yF2rXyYayBtWlNUBv5jI7nbBOIlbK+RB0QwO0Ve3RGi7dXKq/LSDyO0EgfubBCT6
-	 Y+ywt9YlSRWzJPMY5/lP5e2YRh/ziegRtAenqOK7KJTv/sN97xlmFfsJ04//UtwHmTA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530525;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Last-TLS-Session-Version;
+	bh=LH4a4hHP4+iSjT21Gj0fTiK9neIkhLuhZMVIe6xvia0=;
+	b=GTN8ZAlv9K3U/SAcQ25BIO1CgGcbZWSoNoSLv2Hr/xZgVwVbXsXakGHXUKlAOuKBN7MI
+	 XBof5tdRkNY0tcfNKbJB1DgASDl8vBFd+c+TFrPT1iItgg2OeQU0KVXgnoLJhgZxSQ+ee
+	 zsIHNd5QhNPDqwY1N3Z31538W3rdcUYskY1lRFMLlwCFGvs+n0w2rFPqnouS2QENXgt3c
+	 /Xw5DFtnbyUQyH7XWRsdCWcHlqpfUXm8Hs8rfEVccDKUUgiinHj0fH54SCje0fi7JTrO7
+	 omnazRKpJVzAsxlyoK6KD0AT/bz9ryrEw/EJSTnvgucvdzeHVo3ELLTPdn6pL6W97Ig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=SuUdRgmn;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=lwtvOzvB;
+	arc=none smtp.remote-ip=185.246.84.56
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9C4606A31E
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:28:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE9C4606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A61A606A31E;
+	Tue, 24 Nov 2026 14:28:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A61A606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=SuUdRgmn
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOB4VkE2236219;
-	Tue, 24 Nov 2026 14:28:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=iryZQV
-	DWMboCr+mzKmPFMcC4rJjIhj+mBGOAQYXnrgQ=; b=SuUdRgmnxoRKE7RsLy2xSW
-	0g/8sLa8/aFDv4r7IKiEumfvoyl9Zzb1nI5a1zmSHU+ZGbrM8OQ31oTEl3ClUyrj
-	tfFHV/YNzy1nWe3vC10E+IYJmLQdPe2361ME/ibS8Wkt4zvl2rNHZnNckjRxzGc/
-	doj0JVjWuoCDE1digOadraJnMiLa3vyckkfTnxGUjkQOpxytuWyZ+mZob+6BcCAb
-	em+wI76RSyKIrhE4Tbt+uTZJueWcNi+YYfDNJXJ6I8CgSgSNnvVL47s32Jf63TD6
-	R+Ra9z9BUss8ZIJ4/IZIExgB8XdsKUibWSuzeNaK5n14YskRnMveQM918N95ZtyA
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34fkg2yw-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 24 Nov 2026 14:28:21 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOCoR9U3374824;
-	Tue, 24 Nov 2026 14:28:20 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4j5axkr9fu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Nov 2026 14:28:20 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AOESDdk39059860
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Nov 2026 14:28:13 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4A0C12004E;
-	Tue, 24 Nov 2026 14:28:13 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DD0552004B;
-	Tue, 24 Nov 2026 14:28:10 +0000 (GMT)
-Received: from [9.124.211.71] (unknown [9.124.211.71])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 24 Nov 2026 14:28:10 +0000 (GMT)
-Message-ID: <0b39ff0e-ee51-45f1-a361-5f0cb49d92b5@linux.ibm.com>
-Date: Tue, 24 Nov 2026 19:58:09 +0530
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=lwtvOzvB
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id C0D371A17C2;
+	Tue, 24 Nov 2026 14:28:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 95019601E1;
+	Tue, 24 Nov 2026 14:28:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D29D611E6983A;
+	Tue, 24 Nov 2026 15:28:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1795530511; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=LH4a4hHP4+iSjT21Gj0fTiK9neIkhLuhZMVIe6xvia0=;
+	b=lwtvOzvBfTausWjF1yMGdOURL2wkFwGYG5dPFuaZEAqBxxsQew8BGJp/NBCEDD7ilggNaR
+	PjILLjJzjQSZlnqQj6d2N9CMtRVZR3eIrKyd3zXYUdyFXjfmF8CjFPSa+E8ToJvTkk4Cbh
+	VGVVJWjsWxSWVNAxSqgQwodVe7BMNUcY3Lf6hyldH+viILoEl4AG0XuJSCZee70rmK8blD
+	WXcr8AGORCRMmFVzFv0gf2xaJAtduRIG0JJe3nYfU4hjrWtyFmd+aNbPNzTQYVQYcXdrCk
+	cYasnytEzuj4VLjqgMWgE+Wscnmn/LQdGhw9otHIW3uGRuRLDxt5D6fBGisXaw==
+Message-ID: <fb92bc0b-ab3f-49ac-b4a5-5368c87b3a7e@bootlin.com>
+Date: Tue, 24 Nov 2026 15:28:22 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,83 +63,79 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/7] Subject: [PATCH] selftests/powerpc/rtas: consolidate
- TEST_GEN_PROGS definitions
-To: Shirisha G <shirisha@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc: linux-kselftest@vger.kernel.org, maddy@linux.ibm.com,
-        venkat88@linux.ibm.com
-References: <20260918052321.932660-1-shirisha@linux.ibm.com>
- <20260918052321.932660-7-shirisha@linux.ibm.com>
+Subject: Re: [PATCH net] selftests: drv-net: pause: detect the link partner
+ from the remote side
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+ davem@davemloft.net, Eric Dumazet <edumazet@kernel.org>,
+ Willem de Bruijn <willemb@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Bobby Eshleman <bobbyeshleman@meta.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Breno Leitao <leitao@debian.org>,
+ thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261123201406.479904-1-maxime.chevallier@bootlin.com>
+ <4148e81b-ec5b-4374-b74f-4f5cba175c7b@kernel.org>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Content-Language: en-US
-From: Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <20260918052321.932660-7-shirisha@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <4148e81b-ec5b-4374-b74f-4f5cba175c7b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA1NSBTYWx0ZWRfX0pZweAluiFvj
- bf05hTBKthK8xpt45M5cunFlYj0SyDYzz6rQLZ71K2ScTtW7xa6xklO4UIYjqrrn+l/YDyV9Sie
- XyWmPZflKDmQUcZiQ+R+IRfYLW+NeaKpomZ3s+vwC4XyP5rdqeSme1DtqFH+7RqXdo4QeTdz1bc
- OzPooxv66K3ye9eCOVGDJqEIrkovwkKXi9Un+y/5e+4SpGWkdRTAymehXQ5peu+OiGIvwPrtoaR
- B39XTp7Q5O0gj7wK2wnW0PsL8dKSP3DErRE8XevzrFyH5HsS3ClX4wAXD02439K/c/Ef830xjaK
- JFY1F8SnpI2baAag6Er9eDQCIk0k0D2HsiSz3E597uIS22K3dG9sDWatAtI15DkjxqtX9JuGWUj
- vU7BjH9ilElwJvHrOfkcSXvHWE5FtqBxcARn4IMQ/ZK4Z6p2sRrTi6LVf2YVD8UBCt0rywkadHy
- BZSUHpYBEf2rZOvjGaA==
-X-Proofpoint-ORIG-GUID: H7BOJJMqW5UG_I3VeXGFmdSMWdLjl--Y
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA1NSBTYWx0ZWRfX8bOgBtIT48d2
- rvToiAwD0ZucaaUZxH1ZbToTXN85aeD+do7o2URi220YskacrY12hU2JG/OdW8sFpjrAO+LegBy
- KJeSys9bKSzlqcVNf4XEP66HRW7nNCI=
-X-Authority-Analysis: v=2.4 cv=A9z5rKWG c=1 sm=1 tr=0 ts=6b059f05 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=d9toeekAIwPyeozeaWsA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: H7BOJJMqW5UG_I3VeXGFmdSMWdLjl--Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-24_02,2026-11-23_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- bulkscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611240055
+X-Last-TLS-Session-Version: TLSv1.3
 
 
 
-On 18/09/26 10:52, Shirisha G wrote:
-> Use a single TEST_GEN_PROGS assignment followed by incremental additions
-> for the RTAS selftests binaries.
->
-> Signed-off-by: Shirisha G <shirisha@linux.ibm.com>
-> ---
->   tools/testing/selftests/powerpc/rtas/Makefile | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
->   create mode 100644 tools/testing/selftests/powerpc/rtas/Makefile
->
-> diff --git a/tools/testing/selftests/powerpc/rtas/Makefile b/tools/testing/selftests/powerpc/rtas/Makefile
-> new file mode 100644
-> index 000000000000..eb30f62c5636
-> --- /dev/null
-> +++ b/tools/testing/selftests/powerpc/rtas/Makefile
-> @@ -0,0 +1,16 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# RTAS tests
-> +
-> +TEST_GEN_PROGS := rtas_rtc_test
-> +TEST_GEN_PROGS += nvram_test
-> +TEST_GEN_PROGS += rtas_proc_test
-> +TEST_GEN_PROGS += fadump_test
-> +TEST_GEN_PROGS += rtas_flash_test
+On 11/24/26 12:29, Matthieu Baerts wrote:
+> Hi Maxime,
+> 
+> On 23/11/2026 21:14, Maxime Chevallier (Netdev Foundation) wrote:
+>> The logic used to detect if the kselftest remote we're interacting with
+>> is directly connected to us uses link renegotiation to flap the link,
+>> that way we know if there's a switch between the remote and the DUT.
+>>
+>> However the current logic is racy. It triggers a link renegotiation,
+>> wait for the link to come back up locally, and looks on the remote if
+>> the link flap counter changed.
+>>
+>> It's possible that this entire cycle happens locally before the peer
+>> reports the link flap, in which case it reports that we're not directly
+>> connected to the peer when we actually are.
+>>
+>> Solve that by reversing the logic : Trigger a link renegotiation on the
+>> peer, and check if we see the link flap locally. The current
+>> wait_for_aneg() already waits for a full "up - down - up" cycle, so
+>> it doens't really matter which side of the link flaps first here.
+>>
+>> This was found in the stmmac CI setup, between an Intel I350-T4 card and
+>> an iMX8mp + KSZ9131 board. The Pause test was failing seemingly at
+>> random, due to the link flap occuring either on the host or the remote
+>> first.
+> 
+> Thank you for the fix, but it looks like it is introducing new issues on
+> BCM57508:
+> 
+> 
+> https://netdev.bots.linux.dev/branch_deltas/net-next-hw-2026-11-24--08-00.html
 
-Each test patch should add its own TEST_GEN_PROGS entry. Please move
-these lines into the patches that introduce the corresponding tests.
+Arg seems that on this setup, the remote (I don't know which one it is) doesn't
+support 'ethtool -r', damn :(
 
-- Sourabh Jain
-> +
-> +top_srcdir = ../../../../..
-> +include ../../lib.mk
-> +
-> +$(TEST_GEN_PROGS): utils.h
-> +
-> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/powerpc/include
-> +CFLAGS += -Wall -Werror
+I'll take another approach then.
+
+> 
+> Do you mind looking at that, and mask this test on your side for the two
+> boards you mentioned, please? :)
+
+Np, tests are masked on all boards though, I've done more runs and the race
+shows on all of them (all are now connected to the same type of NIC).
+
+Thanks for the report !
+
+Maxime
+
+> pw-bot: cr
+> 
+> Cheers,
+> Matt
 
