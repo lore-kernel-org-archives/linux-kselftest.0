@@ -1,84 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795516852;
-	b=kPF3mT2sOguNhz1Up8BGvjxBGv/DP2BUL+6CGENFh4FYp9kR5+SgfR4xjXp1AAcJPoWv
-	 mbylaY2zbtOwkbfnfQNQJqebE4/OSF4XUz2szBEFgewIK0ub9jHiKJWjtj9Wu+5iMChKl
-	 Yp7saXD60IMTBEOkM0O6ke5fyxF8/DXbgi41evwOh1bv884tnAcZnG14AGYEp8Pk2fy9h
-	 t91UoiGbpiC1uv+J3R4xJ3d2vsJ4rXjfREZdcPpzP5FxmKztzKukT9qAfbqGPDsJKphnA
-	 zQRUAk/J/JriXnINgeLqVNlv6Efc3lIJlIKaN7YNDG1BBKQjEZ6rJwGRWBDxoIQucZg==
+	t=1795518265;
+	b=rL4Sk2S6tQN86UkAzYh3wF5qeb8vmIFqN10ObWK6pUg6Zgg3iqlo8EfnWDXlcw/1hf4+
+	 tK+0des5vwLDJxt2fOHL45cSN6I2DrKWSPhc0Qf7ilA6kH/tv1FqUXaL9FIbeRJuc2fsa
+	 PhyABbQVizN5dVlE7OONC2h7m7gZw8Umo3oiebw5jrtXdgXU72U8zRDd48hfPIjIo5H/P
+	 AUuvFhI2o26ovqY2y4bizV7U4B7DrrcMwp7srd0VnOQ0uqRvP/hzK7IAF3bfBXmNg6weR
+	 /PAUaCJznUXVmvH606eRShJK6X3CgB2cmRKNX6QDxZuLDFb2OW6HIWpLE95ZVJH5mtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795516852;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 DKIM-Signature;
-	bh=WFelugwLNPTLGIsm1EbRuqynel4zd3FFYDI8cAMlECY=;
-	b=TYimkdhXRLuyneVGj0Fitg2SpugkIgTOfeDNXGtESItKK/+KeabfqNgoBbRZ3SWeuxyh
-	 W5HQCS9PMuqcq2LmYl/53qNCUUQtjhFW86Ljxw3Nnf+RM+S9NDXNh/2Eys8ejaSFrxaXI
-	 Zju3YIvKxiw8OFSwFwKQqUSfrht6m9IBYfFdbWoWOd3KJmXlfx+2G7nq9d7haydkJFsFy
-	 RAXCYSZMjyAA9L/5mXbJohaZQ1AepyCsNSkYx0cEwb1t2P/WwJvqR2AdD3M5cDpChQbgj
-	 RuVSFw6toYEEmMURQzBZITyygvbPAlEQoFKvvuPGKrSeyqu4E4ctaiEVF6WDJkLgOwQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795518265;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=EuBOUwwiL3IP1HDk4+dxaacGJaiYkefTCK8JBEZyKe4=;
+	b=Az1ihGKe++aQiZBh4q+PfXvkSwsxZ7qaxsjsn/d+VZtcL2V0eEiJ+IW2Z3SiKr3Zpdi4
+	 Yo7pdl7ZOMF3GySvXhwguvHdziYT2/KTetMg85IPvs7ezO26BrRvHKNcFCIC+s/qGxsyu
+	 bVxStlAxY4zhwW1Xnn/lmhIYN62yIPQVaurZXnhn1fO29YrhtkdAIfDPZcW6Ftl4Y18bl
+	 LkPIrXN5dDP42kFSNAr1hhQJ64mZEcMR68hXvkXMkyW5PkFnt9JEtYjX53rz/q4EzZtgS
+	 fb9mK9nC5urs6o+f+E4PNraNqGwbefktVxS19PdS9wdj5NFUgzVMjDJv1EreY7Pg3DQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=STm0VC+e;
-	arc=none smtp.remote-ip=217.74.67.49
-Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=DGCTDoFb;
+	arc=none smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19174606A32C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 10:40:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19174606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38AA606A339
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 11:04:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C38AA606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=STm0VC+e
-Received: from localhost (unknown [80.68.231.31])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Tue, 24 Nov 2026 11:40:46 +0100 (CET)
-From: Slawomir Stepien <sst@poczta.fm>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Tianyi Gao <tianyi@cloudflare.com>,
-	Octavian Purdila <tavip@google.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Slawomir Stepien <sst@poczta.fm>
-Subject: [PATCH v8 bpf 7/7] selftests/bpf: Grow test_run and generic XDP frags after a test run
-Date: Tue, 24 Nov 2026 11:40:16 +0100
-Message-ID: <20261124104016.532341-8-sst@poczta.fm>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261124104016.532341-1-sst@poczta.fm>
-References: <20261124104016.532341-1-sst@poczta.fm>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=DGCTDoFb
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb6886d30aso41896565e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 03:04:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795518263; x=1796123063; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EuBOUwwiL3IP1HDk4+dxaacGJaiYkefTCK8JBEZyKe4=;
+        b=DGCTDoFbikauyFIMqdrHOrgjM62cX402e4khRkckTqUWicey3hvdiitxOdhi/LnQPX
+         aTSOrLQRZq2jH9Y9HZ72TUNBL+mjYSlxq3wKIKY+J08+lRpR5XH6w6BPHngOnvO6QvYy
+         K9rCe6e8DtXTP61QTMxyUUJudVvqxpDN/1U8QuRhNNn9bEMn0RR3myK/dJcgxSJrZubd
+         CKXN9aoTK9JF5tX0QeeMKR1TS/4kkIzzvAKHJTVkPuh99aZY/qVa33Q89BL0SheCGNn2
+         52/MjgbVpwEywoE7zhkDzXASJFbSKeX+OlotoymZqP3SalM6HZM5s77bBz1an88vPSsa
+         JHtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795518263; x=1796123063;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EuBOUwwiL3IP1HDk4+dxaacGJaiYkefTCK8JBEZyKe4=;
+        b=Zeu61BILFxwO5zmazslnEjCVD5DXHmCHcjzBXVhxb7LzWSBchq78slhYVM1NN9/hqQ
+         1N6/grw14l5bTNvDcG/4CGRMy3bR2nECC/NQQa2huHIq3tBszaeGUDyl6PsGDhp0M6/H
+         WVWLZjp269yvKZKuk/NmCrq8mGLPeBSzM8Ji4OlNHBbpWqZWaQ6zEnK6dFD0HXSJ903n
+         c1OuAZ7rF246bQcZ8izhzcFUmZissXE8nc4tRBD63cQ2/gpJ6V986+O1KqTH1L/laXQ/
+         GPSR6gQ5c0QVn8WEbFtst/ZeEKBtjKKrezjcaSiHkJknMGnqtJOPuVJi1/eVg50L9EKt
+         2aOg==
+X-Forwarded-Encrypted: i=1; AL+hErFU0bphgjYNV2hURJIGX4Z6CAAF6cj1cPQBdD5k3xkSwBtFvGuX/2AzL+ZOObtNkkcD4dKvcZBQBXB46ntPi/A=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+B3h2naeUbAOl5eAhFozfH1hU+57ivA/99X6u6Fs6MSLL+THo2
+	wYXJOI0Np27ZBNhyy74r6QiT0E77hkiYa6Z7VL8hIzVrRtYrsZCcuBFDWnWVpKsL0Is=
+X-Gm-Gg: AZFdTZe0eXv+CRTzlFjSXUVvPTQnq6u+woXnHiJiHeafP2ESU45SThPtiC0/nslSelR
+	Mn2iH6zgdDtixpW2J5d/oTqGK1BnY5HHbTVfqPA7Ai77DaWJ4SzlL0jqPC1zmdCI/8hANBLnJLl
+	NNVZF7LzhFwn1iOCPsz0LT/Ocpd14sO2qKEt8BVBdT56dhj0c+/YaU+uEL059dL6zh9kJGNtRkk
+	J9DWxly9uIZZB1IYoMvOjhrliFCbrKRbUo389qnnBPljri1Lf3PhIX5s5loBprEJjmBcYQVStP8
+	/DVUWByvTs5XZKJ/LceOM8elZKUFzvGHyYOEgjMEFgDyZlN0H1x4F40iIH9P18PkeFOpRwCT28H
+	pMDk38pguAsg7t1hBACDcK8vo7soBRaDAI+SjGqIUie9sds83ulg6myNozg7yrMXVfv12U2T4uL
+	miwN++84XpDcZnwO5GEF8YgXSzn6FpIiJlBTJH/QB9B+OY0cIdqnDYuBUu59U18oBEurne6QkuN
+	+OpZNBM/3uasdN7xwJcgT6gRmLYmrpo57yds3t0AXZLUvA5B0Iku53MLD1j5lBAzbwSU5Jj08tg
+	wmFBip495gvxTjqyoCRjhXD+5Pjwuwc=
+X-Received: by 2002:a05:600c:e41a:b0:4bb:9959:54b8 with SMTP id 5b1f17b1804b1-4bb9959552emr100442045e9.32.1795518263196;
+        Tue, 24 Nov 2026 03:04:23 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884865b1sm422020975e9.5.2026.11.24.03.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 03:04:22 -0800 (PST)
+Date: Tue, 24 Nov 2026 12:04:20 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] selftests/livepatch: clean the test modules
+ without a kernel build directory
+Message-ID: <awVvNNnQPGyNWb96@pathway.suse.cz>
+References: <20261110161050.2451750-1-sashal@kernel.org>
+ <20261110161050.2451750-3-sashal@kernel.org>
+ <awQUD16CDFpCTxaQ@pathway.suse.cz>
+ <20261123154433.1188237-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,228 +105,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795516849; bh=WFelugwLNPTLGIsm1EbRuqynel4zd3FFYDI8cAMlECY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=STm0VC+ek9TIpVheZ/4/x7tmiA49norvQ4c89q3dZVCOPjkQHkaqblXoWksmCvCnF
-	 S4dVfPnlFS1z6h5HhN1mbIl5UaLOaWQH+192OmRdOQU8dOBBieKbx0zh/lxx7uqynv
-	 gaDjivdClbYsufi500tdav8Pez1By1JOtJEawJ8s=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261123154433.1188237-1-sashal@kernel.org>
 
-Add two xdp_adjust_tail subtests for frag_size of the rxq info a
-program runs with:
+On Mon 2026-11-23 10:44:33, Sasha Levin wrote:
+> On Mon, Nov 23, 2026 at 11:23:11AM +0100, Petr Mladek wrote:
+> > The two parameters "O=<kernel> KDIR=<kernel>" do not make much sense
+> > to me. The command starts compiling other selftests. I get:
+> >
+> > $> make -C tools/testing/selftests  O=<kernel> KDIR=<kernel> TARGETS=livepatch
+> > Makefile:4: *** Package alsa not found, please install alsa development package or add directory containing `alsa.pc` in PKG_CONFIG_PATH.  Stop.
+> 
+> Sorry, <kernel> was a placeholder for the kernel build directory. Pasted
+> as is, the shell takes "<kernel>" as redirections, so make gets an empty
+> O= and no TARGETS at all, and its output goes to a file named
+> "TARGETS=livepatch". If that's what happened, that file and an empty
+> "KDIR=" are now at the top of your tree.
 
-- xdp_adjust_frags_tail_grow_ingress_ifindex grows the last frag of a
-  9000 byte test_run packet with ingress_ifindex set to a veth device.
-  test_run allocates PAGE_SIZE frags, so the grow must succeed.
+I see. I have never used these parameters so I could not imagine
+what the value would be :-)
 
-- xdp_adjust_frags_tail_grow_lo_after_test_run does a test run, then
-  sends a UDP packet a bit larger than a page over lo with a generic XDP
-  frags program attached, or is skipped with 64K pages. Generic XDP
-  copies the packet into a page_pool head page and a frag, which can be
-  a part of a page, so growing the frag must fail with -EOPNOTSUPP. The
-  program asks for more than any tailroom, so nothing is written even
-  when the grow is allowed.
+> > Are these parameters really used by the KernelCI?
+> > Could you please provide link to a build log?
+> 
+> Yes. This is from Saturday's x86_64 build of mainline:
+> 
+>   make --silent --keep-going --jobs=8 O=/tmp/kci/kernel_build \
+>        INSTALL_PATH=/tmp/kci/kernel_build/kselftest_install \
+>        KDIR=/tmp/kci/kernel_build ARCH=x86_64 SRCARCH=x86 \
+>        CROSS_COMPILE=x86_64-linux-gnu- -C tools/testing/selftests all
+> 
+>   https://files.kernelci.org/kbuild-gcc-14-x86-kselftest-6b01150f99c74e1a99a2a261/build.log.gz
+> 
+> > So, maybe just the sample command in the commit message is wrong.
+> 
+> Yes, it should have used a real path:
+> 
+>   make -C tools/testing/selftests O=/tmp/build KDIR=/tmp/build TARGETS=livepatch
 
-Signed-off-by: Slawomir Stepien <sst@poczta.fm>
----
- .../bpf/prog_tests/xdp_adjust_tail.c          | 138 ++++++++++++++++++
- .../test_xdp_adjust_frags_tail_grow_lo.c      |  25 ++++
- 2 files changed, 163 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
+This works for me.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index be0c36871911..ead6c0be960e 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -4,6 +4,7 @@
- #include <linux/if_link.h>
- #include <net/if.h>
- #include "xdp_dummy.skel.h"
-+#include "test_xdp_adjust_frags_tail_grow_lo.skel.h"
- 
- static void test_xdp_adjust_tail_shrink(void)
- {
-@@ -406,6 +407,139 @@ static void test_xdp_adjust_frags_tail_shrink_after_generic(void)
- 	xdp_dummy__destroy(skel);
- }
- 
-+/*
-+ * test_run allocates PAGE_SIZE frags, so a program may grow the last one up
-+ * to the end of its page, also when ingress_ifindex picks the rxq info of
-+ * another device.
-+ */
-+static void test_xdp_adjust_frags_tail_grow_ingress_ifindex(void)
-+{
-+	const char *file = "./test_xdp_adjust_tail_grow.bpf.o";
-+	struct xdp_md ctx = { .data_end = 9000 };
-+	struct netns_obj *ns = NULL;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u8 *buf = NULL;
-+	int err, ifindex;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.ctx_in = &ctx,
-+		.ctx_size_in = sizeof(ctx),
-+	);
-+
-+	if (getpagesize() != 4096) {
-+		test__skip();
-+		return;
-+	}
-+
-+	obj = bpf_object__open(file);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+
-+	prog = bpf_object__next_program(obj, NULL);
-+	if (!ASSERT_OK(bpf_object__load(obj), "load"))
-+		goto out;
-+
-+	ns = netns_new("xdp_adjust_tail_ns", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto out;
-+
-+	SYS(out, "ip link add veth_xat0 type veth peer name veth_xat1");
-+	ifindex = if_nametoindex("veth_xat0");
-+	if (!ASSERT_GT(ifindex, 0, "veth ifindex"))
-+		goto out;
-+	ctx.ingress_ifindex = ifindex;
-+
-+	buf = malloc(16384);
-+	if (!ASSERT_OK_PTR(buf, "alloc buf 16Kb"))
-+		goto out;
-+	memset(buf, 1, 16384);
-+
-+	/* Test case add 10 bytes to last frag */
-+	topts.data_in = buf;
-+	topts.data_out = buf;
-+	topts.data_size_in = 9000;
-+	topts.data_size_out = 16384;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
-+
-+	ASSERT_OK(err, "9Kb+10b");
-+	ASSERT_EQ(topts.retval, XDP_TX, "9Kb+10b retval");
-+	ASSERT_EQ(topts.data_size_out, 9000 + 10, "9Kb+10b size");
-+out:
-+	free(buf);
-+	netns_free(ns);
-+	bpf_object__close(obj);
-+}
-+
-+/*
-+ * The frags generic XDP gets from skb_pp_cow_data() can be parts of a
-+ * page_pool page, so its rxq info must not allow growing them. test_run
-+ * must not change that for lo.
-+ */
-+static void test_xdp_adjust_frags_tail_grow_lo_after_test_run(void)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+		.sin_port = htons(9),
-+	};
-+	struct test_xdp_adjust_frags_tail_grow_lo *skel;
-+	struct netns_obj *ns = NULL;
-+	static char payload[60000];
-+	int fd = -1, lo, i, len, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.repeat = 1,
-+	);
-+
-+	/* larger than the head generic XDP copies the packet into */
-+	len = getpagesize() + 500;
-+	if (len > (int)sizeof(payload)) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_xdp_adjust_frags_tail_grow_lo__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		return;
-+
-+	ns = netns_new("xdp_adjust_tail_ns", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto out;
-+
-+	SYS(out, "ip link set dev lo up");
-+	lo = if_nametoindex("lo");
-+	if (!ASSERT_GT(lo, 0, "lo ifindex"))
-+		goto out;
-+
-+	/* a test run in this netns, before generic XDP sees a packet on lo */
-+	prog_fd = bpf_program__fd(skel->progs.xdp_grow_frags);
-+	ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &topts), "test_run");
-+
-+	if (!ASSERT_OK(bpf_xdp_attach(lo, prog_fd, XDP_FLAGS_SKB_MODE, NULL),
-+		       "attach generic XDP"))
-+		goto out;
-+
-+	/*
-+	 * a linear skb with little headroom: generic XDP copies it into a
-+	 * page_pool head page and a frag
-+	 */
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (ASSERT_GE(fd, 0, "socket"))
-+		ASSERT_EQ(sendto(fd, payload, len, 0, (struct sockaddr *)&addr,
-+				 sizeof(addr)), len, "sendto");
-+	for (i = 0; i < 100 && skel->data->grow_ret == 1; i++)
-+		usleep(10000);
-+	bpf_xdp_detach(lo, XDP_FLAGS_SKB_MODE, NULL);
-+
-+	ASSERT_EQ(skel->data->grow_ret, -EOPNOTSUPP, "grow frag on lo");
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	netns_free(ns);
-+	test_xdp_adjust_frags_tail_grow_lo__destroy(skel);
-+}
-+
- void test_xdp_adjust_tail(void)
- {
- 	int page_size = getpagesize();
-@@ -426,4 +560,8 @@ void test_xdp_adjust_tail(void)
- 		else
- 			test_xdp_adjust_frags_tail_grow_4k();
- 	}
-+	if (test__start_subtest("xdp_adjust_frags_tail_grow_ingress_ifindex"))
-+		test_xdp_adjust_frags_tail_grow_ingress_ifindex();
-+	if (test__start_subtest("xdp_adjust_frags_tail_grow_lo_after_test_run"))
-+		test_xdp_adjust_frags_tail_grow_lo_after_test_run();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
-new file mode 100644
-index 000000000000..207346b14ad8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+/* 1 until the program saw a packet with frags */
-+int grow_ret = 1;
-+
-+SEC("xdp.frags")
-+int xdp_grow_frags(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+
-+	if (grow_ret != 1 || bpf_xdp_get_buff_len(xdp) <= data_end - data)
-+		return XDP_PASS;
-+
-+	/*
-+	 * More than the tailroom of any frag, so nothing is written: the
-+	 * result only tells if frag_size of the rxq allows a grow at all.
-+	 */
-+	grow_ret = bpf_xdp_adjust_tail(xdp, 0x10000);
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.56.0
+> Please keep O= and KDIR= in it, though. The paragraph is about modules
+> built for a kernel other than the running one, and that's how they get
+> built without this series.
 
+OK. I'll use the variant with the real paths.
+
+Best Regards,
+Petr
