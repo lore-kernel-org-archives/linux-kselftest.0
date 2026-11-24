@@ -1,85 +1,85 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795560670;
-	b=kPCI9vQmom2U9U3o0hSMeAuvZzn2vvzyUbOUpvtDsJzXAGOInVrwqCD9AE9eg1iYajB3
-	 W6TjF4i4We88WqYNfKqZ1ZcdE/APL2N7k/9npgOnqsBOZfafMVZWCbFSXb+poU7hGUQVj
-	 RflPCTJ6lhV2xi8WBMZaXSc3rDQ8xggoH1dusrlpd2iPwtmDZUr0oDJds/J768ZoNnP2R
-	 j/5J2n9PnpsavdaYCcA4cJNlYV4CFbR+6UoEztxrG6r/99bexFVkj/UqpSzFOmsX2HE6f
-	 YsxN1X+4jJXZs5LAS/9COJqBF/ahdKfOal/rQ1gs2kX44LkU6BbYWx8XVVngJs2kh1w==
+	t=1795560672;
+	b=tRSY2Wz6WElPFbipk9LFHOm2iy8D25PxKVIoyMaxJfqJgf6/4ZXcKkjSDRIz+AckFlWy
+	 LinIBpW7GHGmesdUKss0/FLHvaFVgYNIQa02MhvpQi3mIFQoJlfQRJ3neBEKm5skhch8b
+	 cFZjtk/H3Omo9QSmU6DhbD1OkfZG+7OPScNktjjFzAH9BotsEZigq5KyIVa4Itt9HkIZf
+	 lHsn6hPfBtBsTREcxjsdsv3LntL7GnihU5TnCA/8DXskuXNvXOJLRSI5Gs9zgkxJgwiGK
+	 OFrhc4QwnxfmzoMt8exsT7xZavB7RfyuUhSTXIf6WsrqlKFuk9+YAtQRhRzyfOSQRJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795560670;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795560672;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=8fbqFXfnJmZ5wlNeBVcYahiL5PvY2DhQX6o+WRRQBHU=;
-	b=l4SjBqKlKDJERjzjMQN1XatZPaJsEmGKQR9zV+MbWF/ijDtvhNxgEVnVi1ac1Aefvb+T
-	 h01jyKrI2sjnqmPLcpMDNQBP3KlUJfHJgiHkKCTs8hd10lfQ1EcZSFIsGZY2Q/OushIKj
-	 hcUr92RGF39m7z94Djo5f3yViokQ56apfq64f7nd48zN0FRaMb4RcUcTb4L7lAaYAhzZa
-	 u0p5aot71IiThaAOyC56acTRyP2DRvSNWW8UkXDCyI8IQzj1PGv+l+UK+3KN2+t4dSmpj
-	 WTD3R8Yptc8STUpg02BuulqL3uQ+wPWvO3Cjtpe4uWS7PzwaiQFoqWgsg82G/trO7yw==
+	bh=liov99GJPDwRp7LfHV3OU/QCtwG0K/vL8qG58IkGVsE=;
+	b=heC6Mv8gcO5F/JCuZA/SMgiasl9itxBBb2p56gT+HCiO//HXqaU2z96idEyl2LUCbobd
+	 X1y4t8pPOWV2hQyLUAB3fSE3HPvNE4cvhKZ+MjEEuqfnfVvIsda2GCMg468pr+ciFbBKl
+	 /trME56+Bx15ahmEIvCXcnA3EcxDaVY5Ir3eQDhtFKQqymoI7Fl+ApQN3IrUqsUQ4FFX4
+	 DZGRfDpbdI3yDyq824QRzwbt7z0UDTQ9MwoJ6GyvG8ROP5W5U+mDe0hnDDv6z3SWkEzid
+	 W3V3vC9V0kqHb81tHmStcE0rlZWjQwlfBBsv780dpaO6pf5luGJz26lpBgFXR30guWQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GCdFeoTW;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c7CCnyK8;
 	arc=none smtp.remote-ip=209.85.128.45
 Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DFB606A69C
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:51:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1DFB606A69C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3128606A692
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:51:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3128606A692
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GCdFeoTW
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4bb6ba3b244so52560975e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:51:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c7CCnyK8
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4bb6c7b6dbdso47504655e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:51:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795560668; x=1796165468; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795560670; x=1796165470; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8fbqFXfnJmZ5wlNeBVcYahiL5PvY2DhQX6o+WRRQBHU=;
-        b=GCdFeoTWhhvd2pA4jmshxSJGXNPRUZNH67/i8ObsgUB1JZxDHmGK3mdIOqwQPjyViC
-         lz6/JqDiNWB92qK4G43yckMYusH5A0jEpSUcDChtrQ6VSXVxfuz2xPRCklFLkg+eF9Tx
-         TDQcXH9ldQ5ozQcKo2tG9Gb7uuEJWtP7rRcsK8lPetm7LWwbVXJmtbqcP5nPLaOTAhUZ
-         aST/YzJnKL6jDsMzAqYBcvuNdkte+C4841S8XhQdI5n9zuM+xhTeLFWwEvMwg1Uet0JA
-         A9jNjlb7B3B9ZRLtQixaO8caFViJteaXCYBhn4QZB6maKkNhABs4DmYMDYZVjmOGLqz0
-         v/ag==
+        bh=liov99GJPDwRp7LfHV3OU/QCtwG0K/vL8qG58IkGVsE=;
+        b=c7CCnyK8URyZ9d10mCgzJpitaKd/+AjqVzwHrg5k51Vx9aWB+J/Ux9cNLFtfPYcnbQ
+         Gid+Ipfb+j/Wp5m2fAgCoGN6OPnVS+N3Ft7w1GeZ/zICiIMte/cRknVcxiuoMMQ4dpqE
+         i1iDRNZsV9jVs5BbJJaq1mcTuZ/3K1jGXIe+v2agmaiFiDCGhTNqRzKRr14MkTdTBJ3r
+         l+n5Ip1fcds/4evknI73/99/exlvJiOV1O/GfJQ+MqsQ09CkSO51OmKGyXW21k7EOw2Q
+         j6T8Zk29kZaV9y591HUMDnQUD+jJDdry9jfzSW8SLM6LrNHQDnZ9gweXI3h4YPJMpzKv
+         a/1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795560668; x=1796165468;
+        d=1e100.net; s=20260707; t=1795560670; x=1796165470;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8fbqFXfnJmZ5wlNeBVcYahiL5PvY2DhQX6o+WRRQBHU=;
-        b=ca+LnNeLi/51TFlflr95POeQxrn8en7UpfI1Kmpx51EmVuHfoI6wbrO4FQKzINEMyD
-         sCNVPiFzeasVipmyaTsBKEgLHXDVkWpYIpXquKPrEIkzH6b3+iau7C/5stJd5V3Z6Znj
-         tm6j4RQjVoDzagh4uHMGj/a8fj6gjmmb/Mv+TmK//VSus95vII06xSIf/O2UG4en6AEB
-         qmBDnJMIOCnKr/XNMuTXb/ZR3srGs2gfUTQ3ksDeguDyVQ1/VpgWt4sm4BmPuETUhflv
-         DqSYZ4JbdYcqyWtain4TwKclXCGH5joLYLXa0/GMa4UVaYAcyDvyM2X7xGUJr9nNqQFO
-         VujQ==
-X-Forwarded-Encrypted: i=1; AL+hErEpb5wuDFJD7BFuLFRYIwbWwhI8PL/KznOrmUPVmTYWo5pTsP5Ob7A0dqqc4cHqIa+4sCRARzk3oEA4fq4D/Ak=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+S5HbEcjesF3+GCl9LGBSxUVTnuT8TUK3EntTKbxQfiTwUboNN
-	FNR1FpnGciMT8RlfMIRw2iU8ZQorON7e5lFt/MHbELd+h1U9Lh+rue0=
-X-Gm-Gg: AZFdTZc8gbZfageChL/9qnfcWb+Jjg9MqWU1npal7edZKatyC60K2lyIQabmfDdAX8E
-	59Co/i8J354dVfU9H9RLn0hOfUq/dqripG5U0IVKUrQx3On1/i9+0t0563gQgJPcyv3PYCd/Cjw
-	fH2RkJC6wmblZyAqNDhA1wpHpiWPoKKMw9pgsHRJmFxo6dVrSlCXM56jM4sXPs6bOui9oTZNqwX
-	frO8Px0ae8q9dqkUwcx4h+HWkw2kjqho+sKmfKT8FRNuRCJl+s3J9PIqs1DJb3dQRUIQbDTPzkY
-	FtOM/xShQG8Lf/a9IZuDTTOR+H1tPxuzLw9DOnAjt3KXBoR34178jRquQOevh8KIFu431lBHS3d
-	voZceHyXfHXdsO62k9+l3GG41VQKoMwXNyLCzqXc0j9Q9EijbsHSoKdBlDhEHQJMEC7p/UNkGxC
-	+0BhaZBpl2IiQA2zDAvqRie9Qy0dekMtjkftndjbrXA20wjMsrBlvMYJ1E4XwyxNC2U/VkjifMM
-	Xs5H4lUS7WcV5B+ijt29u8oZlFmquMZEbd7Fq15q6BAJtC/Ut81Wl5rfJBp0DvW2E0nxUPHB8ME
-	YO+j/TQXuA/h9GlugB8eCiLG7fvDPGTtkev2qbNC19Zi0unnOakLK6EjBdu/N9UmgbbuaE0oJVH
-	bUQDm7yEvF5KP42IY3l45gMwzc3iDs/vZVnGen9cdaEcMtUxD4gcHy8MZLG3nd7mFA5RpZAOqug
-	qBH/rrHvHUgfdKmUEuqrWG1ERfncTyNeRi
-X-Received: by 2002:a05:600c:4f0d:b0:4bb:5c97:f4b1 with SMTP id 5b1f17b1804b1-4bb8881941bmr368118945e9.24.1795560668275;
-        Tue, 24 Nov 2026 14:51:08 -0800 (PST)
+        bh=liov99GJPDwRp7LfHV3OU/QCtwG0K/vL8qG58IkGVsE=;
+        b=menQgiQyDGCe5kEBqA6XmNgNNcIsPjK06VX9v20jR6Bt/5A7E0jQMSTU8fgYxifAgq
+         P9GTcQIRYU4Bgevd0KeMcu63G7kmgOukzhCRTc6Y8xUH+pXCnjatQAo/LTWEprunrrOo
+         BgYFqzMaZfrgw3a/ZLAtnbwJAXgAQqvBv+WzU70651qQ5mg3DKZygwOs0aewWze5osh/
+         ivXTH8/FfChXPUyut/19QiewcZ/stnKoykgaVPAU5C+bJFuyLC4W2yGk/TxJpN5NnLos
+         XQlONyqxIZGG+Oq0uOskehUy1nAAX/4XpuM9FyBePsYyOW1h+vf3gjJdzfG760WcSJw5
+         RpMQ==
+X-Forwarded-Encrypted: i=1; AL+hErFajVIcqIp3pobzNKSRnPD3dN6IPZz95hPJSvxKlSGAAiiOgxU/i7t88pTCrQHS68/H0m5BkA1O+K69bJWAUkg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+ikgqglhgJkIU/s+5mKHqM+HB4EgWxtLMQ5e0H2/de+/Pf5Ij3
+	H6jo9TxMX7jKE8hqHV4UGb51+QPAlqNKylGVNtbTNfqdKEzHd20lF8Y=
+X-Gm-Gg: AZFdTZcI8xk0IEkbkidiJHqRWh2bjtZy+U5FV1q5uNZUrP4hbkuzAuIdd9GV2vTDd+5
+	kxqPYlw7HjoK1zu4G3pewgmBgF5dcp/sw7p6+RHwzeVfEfoJE3iBvxnlkS1CSyvgStzujKP9c4h
+	1lGTndql39uAILo5V/PLLJ72fRKKEr8QdMV61PR6jxUTdXBCNZaAsBf5rmLeQjsptnHAr8Sbah6
+	ygLVHYbWVMRM2btwYV/gPpBavnUuRT97gLlduZRVKKewudzwE5YGv84n5wadCKY7Wyeb8iuHmlW
+	JoqUjTMGiGH8UjWP1PAS2DqAzyLwWOIxi1/GaSGgjjvXskz0eeYftMqfjFRlSQhjsFKaZG1nPdJ
+	ejb9D+nlmCQ3eaHXBuCUbdnpGtGx1m6R4+lnz3m51vI+4KclMC/VMVda9fdBzCFfitg8ipNvb6o
+	GGNjc+ZIVvALTQafcBAyo7tCsTO2NL9EpYbY+rXzg6mUd4ujTb6KnP8YZtZvLTS2jbWtvaPmK2M
+	PhezVABGXlVNkbxzqIOojGVzO59cAcIHYeyi0IbkOVgLt+4pYSgQuK87oHadMZ3QsY/Jpfe2zxe
+	XyxKo9YgJNKXZt6t9XK6SJT7nw5WCcOoVwrrxhs1Is1UoFo0AETzAXrUYqxRQdOgPmeludV1zIS
+	s7NhfIdF7BRoDSQ2fXto+hRDIoX/brX50TofuhzWK6+uzh+yPKJkYYmh4G4+E2yan7l2M+kGkU2
+	qgup1Oa7sNjFmvefA4Nj1srsbYumrKlnwq
+X-Received: by 2002:a05:600c:8b11:b0:4a1:df52:3e36 with SMTP id 5b1f17b1804b1-4bb8881d194mr335283135e9.27.1795560670058;
+        Tue, 24 Nov 2026 14:51:10 -0800 (PST)
 Received: from localhost.localdomain (dynamic-2a02-3100-2ec1-8a00-a10d-4335-1e05-e7ae.310.pool.telefonica.de. [2a02:3100:2ec1:8a00:a10d:4335:1e05:e7ae])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853a1e8bsm393839525e9.9.2026.11.24.14.51.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853a1e8bsm393839525e9.9.2026.11.24.14.51.08
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 14:51:07 -0800 (PST)
+        Tue, 24 Nov 2026 14:51:09 -0800 (PST)
 From: Tobias Philipp <tphilipp@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tobias Philipp <tphilipp@gmail.com>,
@@ -107,9 +107,9 @@ Cc: Tobias Philipp <tphilipp@gmail.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/4] bpf: Align lpm_trie map values to 8 bytes
-Date: Tue, 24 Nov 2026 23:50:53 +0100
-Message-ID: <20261124225055.87344-3-tphilipp@gmail.com>
+Subject: [PATCH bpf-next v2 3/4] bpf: Align devmap values to 8 bytes
+Date: Tue, 24 Nov 2026 23:50:54 +0100
+Message-ID: <20261124225055.87344-4-tphilipp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261124225055.87344-1-tphilipp@gmail.com>
 References: <20261124225055.87344-1-tphilipp@gmail.com>
@@ -124,114 +124,50 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The verifier checks the alignment of PTR_TO_MAP_VALUE accesses only
-against the offset within the value and assumes that the value itself
-starts on an 8-byte boundary. It accepts BPF_DW atomics and 64-bit
-load-acquire/store-release at 8-byte aligned offsets of a value.
+dev_map_lookup_elem() and dev_map_hash_lookup_elem() return &obj->val
+as the map value. In struct bpf_dtab_netdev, val follows
+"unsigned int idx" and is at offset 52 on 64-bit and 28 on 32-bit
+architectures, so it is only 4-byte aligned.
 
-lpm_trie stores the value directly behind the key bytes, at
-node->data + trie->data_size, where data_size is key_size - 4 and can
-be anything from 1 to 256. Nodes come from bpf_mem_alloc, which returns
-8-byte aligned objects (on 32-bit architectures since the previous
-patch), and data[] is at offset 24 (64-bit) or 16 (32-bit) in the node.
-So the value is 8-byte aligned only if data_size is a multiple of 8.
-For an IPv4 trie (key_size 8, data_size 4) it is 4 mod 8.
+devmap is read-only for BPF programs, but the verifier assumes that map
+values are 8-byte aligned and accepts a 64-bit load-acquire at offset 0
+of a struct bpf_devmap_val value on 64-bit architectures. The arm64 JIT
+emits LDAR for it, which raises an alignment fault on a misaligned
+address. FEAT_LSE2 does not change that, because Linux does not set
+SCTLR_EL1.nAA. The fault is not fixed up.
 
-On arm64 the JIT emits LSE atomics or LDXR/STXR loops, LDAR and STLR
-for these instructions. All of them raise an alignment fault on a
-misaligned address. FEAT_LSE2 relaxes that for LSE atomics that stay
-within a 16-byte block, and for LDAR/STLR only if SCTLR_EL1.nAA is
-set, which Linux does not do. The fault is not fixed up. This oops is
-from a 64-bit atomic add at offset 8 of an IPv4 lpm_trie value, which
-crosses a 16-byte boundary (Linux 7.3.5 under QEMU, HVF on an
-FEAT_LSE2 host):
+Mark val as __aligned(8). On 64-bit it moves to offset 56 and the size
+of struct bpf_dtab_netdev stays 64 bytes. On 32-bit the verifier
+rejects 64-bit load-acquire, so the misaligned value is harmless there.
+Aligning it anyway keeps all map values 8-byte aligned and grows the
+struct from 36 to 40 bytes. Entries are allocated with kmalloc, which
+provides at least 8-byte alignment.
 
-  Mem abort info:
-    ESR = 0x0000000096000021
-    FSC = 0x21: alignment fault
-  Internal error: Oops: 0x96000021 [#1] SMP
-  pc : bpf_prog_cc9155b98965fc5e+0x64/0x90
-  Call trace:
-   bpf_prog_cc9155b98965fc5e+0x64/0x90 (P)
-   bpf_dispatcher_xdp_func+0x14/0x28
-   bpf_test_run+0x11c/0x360
-   bpf_prog_test_run_xdp+0x358/0x548
+This patch was written with the help of an AI coding assistant
+(Claude Opus 5.5).
 
-On x86-64 a locked 8-byte access at 4 mod 8 is a split lock when it
-crosses a cache line, which is fatal in kernel mode on CPUs with split
-lock detection ("Split lock detected").
-
-Round data_size up to a multiple of 8 when computing the value offset
-and the node size, like hashtab does for keys. IPv4 nodes grow by 4
-bytes, IPv6 nodes (data_size 16) are unchanged. Add a BUILD_BUG_ON()
-for the offset of data[], which the alignment of the value relies on.
-
-This patch and the previous one have to be applied together. Without
-the previous patch, nodes are at 4 mod 8 on 32-bit architectures and
-this patch misaligns the IPv4 value there, which is aligned today by
-accident. Without this patch, the previous one misaligns it.
-
-This was found with AI assistance while trying to verify the
-correctness of map value accesses with formal methods. The patch was
-written with the help of an AI coding assistant (Claude Opus 5.5).
-
-Fixes: b95a5c4db09b ("bpf: add a longest prefix match trie map implementation")
+Fixes: 880442305a39 ("bpf: Introduce load-acquire and store-release instructions")
 Signed-off-by: Tobias Philipp <tphilipp@gmail.com>
 ---
- kernel/bpf/lpm_trie.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ kernel/bpf/devmap.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 4d6f25db9..44ad5c163 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -286,7 +286,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 	if (!found)
- 		return NULL;
- 
--	return found->data + trie->data_size;
-+	return found->data + round_up(trie->data_size, 8);
- }
- 
- static struct lpm_trie_node *lpm_trie_node_alloc(struct lpm_trie *trie,
-@@ -302,7 +302,7 @@ static struct lpm_trie_node *lpm_trie_node_alloc(struct lpm_trie *trie,
- 	node->flags = 0;
- 
- 	if (value)
--		memcpy(node->data + trie->data_size, value,
-+		memcpy(node->data + round_up(trie->data_size, 8), value,
- 		       trie->map.value_size);
- 
- 	return node;
-@@ -597,8 +597,14 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 
- 	raw_res_spin_lock_init(&trie->lock);
- 
--	/* Allocate intermediate and leaf nodes from the same allocator */
--	leaf_size = sizeof(struct lpm_trie_node) + trie->data_size +
-+	/* Allocate intermediate and leaf nodes from the same allocator.
-+	 * The key bytes are padded to a multiple of 8 bytes, because the
-+	 * verifier assumes that map values are 8-byte aligned. Objects from
-+	 * bpf_mem_alloc are 8-byte aligned, so data[] must be as well.
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index 1b8f0d7f8..0ef24e3f9 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -70,7 +70,10 @@ struct bpf_dtab_netdev {
+ 	struct bpf_prog *xdp_prog;
+ 	struct rcu_head rcu;
+ 	unsigned int idx;
+-	struct bpf_devmap_val val;
++	/* Returned to BPF programs as the map value, which the verifier
++	 * assumes to be 8-byte aligned.
 +	 */
-+	BUILD_BUG_ON(offsetof(struct lpm_trie_node, data) % 8);
-+	leaf_size = sizeof(struct lpm_trie_node) +
-+		    round_up(trie->data_size, 8) +
- 		    trie->map.value_size;
- 	err = bpf_mem_alloc_init(&trie->ma, leaf_size, false);
- 	if (err)
-@@ -766,8 +772,9 @@ static u64 trie_mem_usage(const struct bpf_map *map)
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	u64 elem_size;
++	struct bpf_devmap_val val __aligned(8);
+ };
  
--	elem_size = sizeof(struct lpm_trie_node) + trie->data_size +
--			    trie->map.value_size;
-+	elem_size = sizeof(struct lpm_trie_node) +
-+		    round_up(trie->data_size, 8) +
-+		    trie->map.value_size;
- 	return elem_size * READ_ONCE(trie->n_entries);
- }
- 
+ struct bpf_dtab {
 -- 
 2.54.0 (Apple Git-157)
 
