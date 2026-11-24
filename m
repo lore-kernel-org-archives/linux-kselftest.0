@@ -1,100 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795530289;
-	b=vm2Wm/rvQ1ltNxOwMJ7ZJ8KBTAIRr/abVQe9994YUNtpvDlj5NjnuQHI66+ZHkNj6oTw
-	 3eDd4QqX3cTVY9lJdIOWHAG3DJ7O/EvUxBq5beMqATG2opQ0FzGRT/tbfHND9ZTLLmTtb
-	 qjsgOUYUaKML6ZhTSDRX9FhsBgDxVQhG0uu0oyh7aH+lU3CLld5gJGj1wE3xY0SBapH88
-	 LUpI2mbaeoyeEZYCuTY2cYxcFF3mPmFyfCIry+ZP35OmeognwpuyH5YS+tAbvzphcuOUY
-	 Gopys7tfzWBFvbpVTJNiiZnP1Z6tsrN3X3ZwC767WTUJnbEh8YfIx+JF0EHJVE8xz5A==
+	t=1795530508;
+	b=5fAuhZ3sD9WXi04TKGi6KRijxsaeyX8EZkTEzQKl4wEzomrXNf+vnKwc5ozibxzHqNET
+	 VoUCe2kz2kcWny0Gf1u/fg8qcMfioruy+vkGORo4UOZObxB3ioz262XFoJRlgDz4Msw5H
+	 UmJgmuQ4/tJkCGggHRod3jWy341IJZhB1G6siL5Me1rmC03y096TE9b+saGIR7ITtfNA1
+	 RDwsoDYSYta+HEVh+9eZM8hDD0m43hpxxy+9Xkoe1x7JobwfMKKVEeauZh4MOztmqAECQ
+	 flT5NeQVD5K+0BylxP63zlL5me9yFSWHOuSCMfUF9G+Hyt1ZmCW7O+LbOlucBZvr+LQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795530289;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=KXE7cnFOP3ln9NR3eVHLPVzp6B5Ml9Wh1PqMmVWUxaw=;
-	b=S+b4mUk9gFYUavxdGXGMGSLKtmS8AmAsYu95yPN5k9vzk7nadanPAjS46oDT5yl2elLl
-	 7gKILqBpiSlX+OxeYpbcCjSbbE3w7aMdXCWf6UeT9t+PJbfjat2oPDe3P3siG1jcGI/Q3
-	 vRMLN9N4DDJT2k8hboX2GZvA3/qW6pDWi+LBIllilHrsETsR6Jql/XrFlg8s74qOVCxm2
-	 +iEc66FgJMPJDU3uNo+GKBVg8P1VnbOBhRINPczshUeZG7bltwov4u/erjVNLB+eS43ds
-	 wY9a/y5Y5QIWFYUWOc+ha6PI+04zYJ+JLp+SNVXvb/13BmXMnth3UNh11iGblw7qHrw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530508;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-GUID:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=iryZQVDWMboCr+mzKmPFMcC4rJjIhj+mBGOAQYXnrgQ=;
+	b=jByThJzkVVH1snROHGvzzZRmxvqG+hlLzWwoihpG/sl6snDk3NyyHV3ohkOQu0xwxcoU
+	 dY6Kcn6u+BKtr8sCLG+vFkKAj1Ol6ACEyWknj3NJM9eaJjDVW0PmBOxdwfn7FPfrrJicV
+	 wdiWgQ8ghe/Yy20xUxlauQkRVU3O0GQUSo03a/0G6X7jfLz7K/QR8UnNdbg9zhtcWnyDI
+	 arir6yF2rXyYayBtWlNUBv5jI7nbBOIlbK+RB0QwO0Ve3RGi7dXKq/LSDyO0EgfubBCT6
+	 Y+ywt9YlSRWzJPMY5/lP5e2YRh/ziegRtAenqOK7KJTv/sN97xlmFfsJ04//UtwHmTA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudlinux.com;
-	spf=pass smtp.mailfrom=cloudlinux.com;
-	dkim=pass header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=NsYXFd4w;
-	arc=none smtp.remote-ip=209.85.128.178
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=SuUdRgmn;
+	arc=none smtp.remote-ip=148.163.156.1
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726FA606A326
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:24:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 726FA606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cloudlinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudlinux.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9C4606A31E
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 14:28:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE9C4606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=NsYXFd4w
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b4dbdc9592so12192597b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 06:24:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudlinux.com; s=google; t=1795530287; x=1796135087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KXE7cnFOP3ln9NR3eVHLPVzp6B5Ml9Wh1PqMmVWUxaw=;
-        b=NsYXFd4w1jowqyHVsz+D0NKs5uG9b1AQQZIL27miMJkZX02Uf1ioJfz7iPtRa/QXYo
-         iEp036fziKdqn6D6sDQoIZDiJf1sK4CCgmX0UbSUf8l6piP0WhralLuFU6k6GbkIUKtc
-         cXlnorAM40+68QjcAh8y9dBdrqMh9gWhSLMmzx5Yf8VMWSr4sTDjwsWD2hqfSx8KUShq
-         4LcbcbtuYjTYQL37uNkXyn3YbVBzY0mujKvoq6WL0vm9Klm2i9H4KYihKsm+3PQncqap
-         niZVh5pe8g/LRphMUZK3W4xR9a5pioVJJCTSbCPI6zCsbYv+RGIT1A02s5AnoCEAgpBj
-         xPLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795530287; x=1796135087;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KXE7cnFOP3ln9NR3eVHLPVzp6B5Ml9Wh1PqMmVWUxaw=;
-        b=YE+kgZh8lHGTqjXxvDGWh5mC3hQ1AewJqEAs501lQ8e5gmoefkXVJGxEoSyZlImzQD
-         PShTy91N5SQ4rII0T3pdio0uPfp22Z5IcM3nv/U8seKPvQkHGrkI3GfOokq7QP7pa0B6
-         cRafBCqeJtvGPj6jcDXE9xPo+7Loy1whTjuVEdDr41h90qVMhejXcfX8DEs8FHH1uC0Y
-         MJCwus+C5XUWct7Qdmwj0ErNikblEBT1W9fph22ab9LL7GjGaU8SM2kOMSWBbZdqeAtS
-         jwwXI3BtIMUhlXbJPu3VODti1JCIxl1h/ALhhp2VUUN5G/JwZxjeZDstD+0R00d7W0Cs
-         Bn2A==
-X-Forwarded-Encrypted: i=1; AL+hErH5VP0cuUzbZR9M/IwtpgfXpQytxi+DkwGZ7P8L7tMW10+HqgZN4rZm7VwMyPIbD6bl3MGuGNruO/GRttHm0i4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+xseqEU4+eRn26svGR6PkIb75BwMHXx9jf1uCL70B9wq5yRQYF
-	d84HdlRoyKpzcBM52TSAdxRc8zLR8bV0/ErPm5JsDmFucP02ePW7xACAMA8Mo4/5s4U49WbRZcc
-	r70JU1V4=
-X-Gm-Gg: AZFdTZe3wMBIt+MlafVTmZX4aUGHVFZy8lK+2zhviDg0HOdlguwCyeDfpV3f2gQcBSQ
-	kkzFGHGQa4n9CLVECXXptNFbiatpr7zpDmq+WCGzxECwixIgoxjJt7W474ItGBYvsqOVgTK/Xzj
-	qO7eu7KNIJh7IHWw+OVy8N1NQpBCHOq4vHf8U0ZfbMXLHw4ecYyh3H5i/kX5ai3qrQyj5za3Eep
-	ZPhl0W4NgljlxIyBQYpAa81qDDF4ZwDbGtfYn7ydP0QsNL9+iQrnCv5MmQBZkFx7jBIn5g4fyfE
-	Kqcc5BaEMTYFYnYmp+QRmgYpfBzW4uEbX4goPA94kJ9yGAJvRRu82c+3IOF+LOgFh4YJAPLnCIa
-	k3TKo47AvyvOVDx3PdIYySCw3UxYBFVYLz+Gz/CSnMbyA/AoKUQEsiMccLxCdj4wFw6b7CFZ9cO
-	OZyInANRxx9ON9++pNvTpgOYsld7qpvJXJabcEb01V8Gvlw0mjYw2/ANJL2dO+ygcYHcfgcmI86
-	eEg2hDazmjHcT3hQW9ew0PUplueu/62st/nspOvRfer1hektqQXKvncSvMDULCMjPDKpa6MLxpG
-	fDuSRbDGLnyHRi6gEAQ4Tx1Egiaqx1m3F/hZgg==
-X-Received: by 2002:a05:690c:4d47:b0:8b3:22c:b420 with SMTP id 00721157ae682-8b520329516mr63869277b3.5.1795530287265;
-        Tue, 24 Nov 2026 06:24:47 -0800 (PST)
-Received: from rmustafin-laptop ([27.79.41.63])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b52033c2d4sm58062957b3.36.2026.11.24.06.24.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 06:24:46 -0800 (PST)
-From: Rustam Mustafin <rmustafin@cloudlinux.com>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Shuah Khan <shuah@kernel.org>,
-	Jaewon Yang <yong010301@gmail.com>,
-	linux-integrity@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rustam Mustafin <rmustafin@cloudlinux.com>
-Subject: [PATCH v3 2/2] selftests: tpm2: test that io_uring reads are rejected
-Date: Tue, 24 Nov 2026 21:24:32 +0700
-Message-ID: <20261124142432.368943-3-rmustafin@cloudlinux.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20261124142432.368943-1-rmustafin@cloudlinux.com>
-References: <20261124142432.368943-1-rmustafin@cloudlinux.com>
+	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=SuUdRgmn
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOB4VkE2236219;
+	Tue, 24 Nov 2026 14:28:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=iryZQV
+	DWMboCr+mzKmPFMcC4rJjIhj+mBGOAQYXnrgQ=; b=SuUdRgmnxoRKE7RsLy2xSW
+	0g/8sLa8/aFDv4r7IKiEumfvoyl9Zzb1nI5a1zmSHU+ZGbrM8OQ31oTEl3ClUyrj
+	tfFHV/YNzy1nWe3vC10E+IYJmLQdPe2361ME/ibS8Wkt4zvl2rNHZnNckjRxzGc/
+	doj0JVjWuoCDE1digOadraJnMiLa3vyckkfTnxGUjkQOpxytuWyZ+mZob+6BcCAb
+	em+wI76RSyKIrhE4Tbt+uTZJueWcNi+YYfDNJXJ6I8CgSgSNnvVL47s32Jf63TD6
+	R+Ra9z9BUss8ZIJ4/IZIExgB8XdsKUibWSuzeNaK5n14YskRnMveQM918N95ZtyA
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34fkg2yw-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 24 Nov 2026 14:28:21 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOCoR9U3374824;
+	Tue, 24 Nov 2026 14:28:20 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4j5axkr9fu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Nov 2026 14:28:20 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AOESDdk39059860
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Nov 2026 14:28:13 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4A0C12004E;
+	Tue, 24 Nov 2026 14:28:13 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DD0552004B;
+	Tue, 24 Nov 2026 14:28:10 +0000 (GMT)
+Received: from [9.124.211.71] (unknown [9.124.211.71])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Nov 2026 14:28:10 +0000 (GMT)
+Message-ID: <0b39ff0e-ee51-45f1-a361-5f0cb49d92b5@linux.ibm.com>
+Date: Tue, 24 Nov 2026 19:58:09 +0530
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,140 +85,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7/7] Subject: [PATCH] selftests/powerpc/rtas: consolidate
+ TEST_GEN_PROGS definitions
+To: Shirisha G <shirisha@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
+Cc: linux-kselftest@vger.kernel.org, maddy@linux.ibm.com,
+        venkat88@linux.ibm.com
+References: <20260918052321.932660-1-shirisha@linux.ibm.com>
+ <20260918052321.932660-7-shirisha@linux.ibm.com>
+Content-Language: en-US
+From: Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <20260918052321.932660-7-shirisha@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA1NSBTYWx0ZWRfX0pZweAluiFvj
+ bf05hTBKthK8xpt45M5cunFlYj0SyDYzz6rQLZ71K2ScTtW7xa6xklO4UIYjqrrn+l/YDyV9Sie
+ XyWmPZflKDmQUcZiQ+R+IRfYLW+NeaKpomZ3s+vwC4XyP5rdqeSme1DtqFH+7RqXdo4QeTdz1bc
+ OzPooxv66K3ye9eCOVGDJqEIrkovwkKXi9Un+y/5e+4SpGWkdRTAymehXQ5peu+OiGIvwPrtoaR
+ B39XTp7Q5O0gj7wK2wnW0PsL8dKSP3DErRE8XevzrFyH5HsS3ClX4wAXD02439K/c/Ef830xjaK
+ JFY1F8SnpI2baAag6Er9eDQCIk0k0D2HsiSz3E597uIS22K3dG9sDWatAtI15DkjxqtX9JuGWUj
+ vU7BjH9ilElwJvHrOfkcSXvHWE5FtqBxcARn4IMQ/ZK4Z6p2sRrTi6LVf2YVD8UBCt0rywkadHy
+ BZSUHpYBEf2rZOvjGaA==
+X-Proofpoint-ORIG-GUID: H7BOJJMqW5UG_I3VeXGFmdSMWdLjl--Y
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA1NSBTYWx0ZWRfX8bOgBtIT48d2
+ rvToiAwD0ZucaaUZxH1ZbToTXN85aeD+do7o2URi220YskacrY12hU2JG/OdW8sFpjrAO+LegBy
+ KJeSys9bKSzlqcVNf4XEP66HRW7nNCI=
+X-Authority-Analysis: v=2.4 cv=A9z5rKWG c=1 sm=1 tr=0 ts=6b059f05 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=d9toeekAIwPyeozeaWsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: H7BOJJMqW5UG_I3VeXGFmdSMWdLjl--Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-24_02,2026-11-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611240055
 
-Test that IORING_OP_READ on /dev/tpm0 and /dev/tpmrm0 fails with -EIO and
-that the following read() returns the whole response. The test needs
-liburing-ffi (liburing 2.4+) and is skipped without it.
 
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Rustam Mustafin <rmustafin@cloudlinux.com>
----
- tools/testing/selftests/tpm2/Makefile      |  2 +-
- tools/testing/selftests/tpm2/test_uring.sh | 15 +++++
- tools/testing/selftests/tpm2/tpm2_tests.py | 72 ++++++++++++++++++++++
- 3 files changed, 88 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/tpm2/test_uring.sh
 
-diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
-index a9bf9459fb25..44630fb980fa 100644
---- a/tools/testing/selftests/tpm2/Makefile
-+++ b/tools/testing/selftests/tpm2/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- include ../lib.mk
- 
--TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
-+TEST_PROGS := test_smoke.sh test_space.sh test_async.sh test_uring.sh
- TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
-diff --git a/tools/testing/selftests/tpm2/test_uring.sh b/tools/testing/selftests/tpm2/test_uring.sh
-new file mode 100755
-index 000000000000..516985ef20af
---- /dev/null
-+++ b/tools/testing/selftests/tpm2/test_uring.sh
-@@ -0,0 +1,15 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -e /dev/tpm0 ] || exit $ksft_skip
-+[ -e /dev/tpmrm0 ] || exit $ksft_skip
-+read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
-+[ "$tpm_version" = 2 ] || exit $ksft_skip
-+
-+python3 -c 'import sys, tpm2_tests
-+sys.exit(not tpm2_tests.uring_available())' || exit $ksft_skip
-+
-+python3 -m unittest -v tpm2_tests.UringTest 2>&1
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index ffe98b5c8d22..6fe60e00ff06 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -9,6 +9,7 @@ from tpm2 import ProtocolError
- import unittest
- import logging
- import struct
-+import errno
- 
- class SmokeTest(unittest.TestCase):
-     def setUp(self):
-@@ -331,3 +332,74 @@ class AsyncTest(unittest.TestCase):
- 
-         self.assertEqual(rc, 22)
-         async_client.close()
-+
-+def uring_available():
-+    import ctypes.util
-+
-+    name = ctypes.util.find_library('uring-ffi')
-+    if not name:
-+        return False
-+    lib = ctypes.CDLL(name)
-+    ring = ctypes.create_string_buffer(1024)
-+    if lib.io_uring_queue_init(1, ring, 0) < 0:
-+        return False
-+    lib.io_uring_queue_exit(ring)
-+    return True
-+
-+def uring_read(fd, size):
-+    import ctypes.util
-+
-+    lib = ctypes.CDLL(ctypes.util.find_library('uring-ffi'))
-+    lib.io_uring_get_sqe.restype = ctypes.c_void_p
-+    lib.io_uring_prep_read.argtypes = [ctypes.c_void_p, ctypes.c_int,
-+                                       ctypes.c_void_p, ctypes.c_uint,
-+                                       ctypes.c_uint64]
-+    ring = ctypes.create_string_buffer(1024)
-+    ret = lib.io_uring_queue_init(1, ring, 0)
-+    if ret < 0:
-+        raise OSError(-ret, 'io_uring_queue_init')
-+    try:
-+        buf = ctypes.create_string_buffer(size)
-+        lib.io_uring_prep_read(lib.io_uring_get_sqe(ring), fd, buf, size, 0)
-+        ret = lib.io_uring_submit(ring)
-+        if ret < 0:
-+            raise OSError(-ret, 'io_uring_submit')
-+        cqe = ctypes.c_void_p()
-+        ret = lib.io_uring_wait_cqe(ring, ctypes.byref(cqe))
-+        if ret < 0:
-+            raise OSError(-ret, 'io_uring_wait_cqe')
-+        # cqe->res follows the 64-bit user_data
-+        res = ctypes.c_int.from_address(cqe.value + 8).value
-+    finally:
-+        lib.io_uring_queue_exit(ring)
-+
-+    return res
-+
-+class UringTest(unittest.TestCase):
-+    def read_response(self, flags):
-+        client = tpm2.Client(flags)
-+        fmt = '>HII III'
-+        cmd = struct.pack(fmt,
-+                          tpm2.TPM2_ST_NO_SESSIONS,
-+                          struct.calcsize(fmt),
-+                          tpm2.TPM2_CC_GET_CAPABILITY,
-+                          tpm2.TPM2_CAP_TPM_PROPERTIES,
-+                          tpm2.TPM2_PT_FIXED, 1)
-+        try:
-+            client.tpm.write(cmd)
-+            res = uring_read(client.tpm.fileno(), 4096)
-+            # The rejected read must leave the whole response in place
-+            rsp = client.tpm.read(4096)
-+        finally:
-+            client.close()
-+
-+        self.assertEqual(res, -errno.EIO)
-+        sz, rc = struct.unpack('>II', rsp[2:10])
-+        self.assertEqual(sz, len(rsp))
-+        self.assertEqual(rc, 0)
-+
-+    def test_read_tpm(self):
-+        self.read_response(0)
-+
-+    def test_read_tpmrm(self):
-+        self.read_response(tpm2.Client.FLAG_SPACE)
--- 
-2.52.0
+On 18/09/26 10:52, Shirisha G wrote:
+> Use a single TEST_GEN_PROGS assignment followed by incremental additions
+> for the RTAS selftests binaries.
+>
+> Signed-off-by: Shirisha G <shirisha@linux.ibm.com>
+> ---
+>   tools/testing/selftests/powerpc/rtas/Makefile | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+>   create mode 100644 tools/testing/selftests/powerpc/rtas/Makefile
+>
+> diff --git a/tools/testing/selftests/powerpc/rtas/Makefile b/tools/testing/selftests/powerpc/rtas/Makefile
+> new file mode 100644
+> index 000000000000..eb30f62c5636
+> --- /dev/null
+> +++ b/tools/testing/selftests/powerpc/rtas/Makefile
+> @@ -0,0 +1,16 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# RTAS tests
+> +
+> +TEST_GEN_PROGS := rtas_rtc_test
+> +TEST_GEN_PROGS += nvram_test
+> +TEST_GEN_PROGS += rtas_proc_test
+> +TEST_GEN_PROGS += fadump_test
+> +TEST_GEN_PROGS += rtas_flash_test
+
+Each test patch should add its own TEST_GEN_PROGS entry. Please move
+these lines into the patches that introduce the corresponding tests.
+
+- Sourabh Jain
+> +
+> +top_srcdir = ../../../../..
+> +include ../../lib.mk
+> +
+> +$(TEST_GEN_PROGS): utils.h
+> +
+> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/powerpc/include
+> +CFLAGS += -Wall -Werror
 
