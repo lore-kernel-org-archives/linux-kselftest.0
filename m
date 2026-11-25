@@ -1,66 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.250
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567312;
-	b=J3bcZ9VpVUdf5ipAMSjzGQe6xb6LBgPAsCXF//JGBcGLFgukwuhWJ2mO+RQOaMbXqP5s
-	 9BmrifYI2E/L1IHnf1xE2DYGC7GemAPg+QbE0k2S9UEvT0NoeUfsgcnjFeGOI433WKVMs
-	 M6kdZvCoF/QY7YaW3Wp451LijiPLraiQb/JQ7X25EKR3yGzsHxRD2+R3BB8XoPwgrHvMU
-	 DkhyBVe6HWj87qmDQT+UQ2iyBOnHIbad6L7ggi2G5x+9KZsNnjVAIyEA80YJHgTYjFqj7
-	 eF4OihRQfObsECDiWt6qmHjEvIEtt3Ojm5InjUa8rW2TvjbJQNdnbkxHhvmt9aqVlOA==
+	t=1795567485;
+	b=y4P+bH4dfY6SUU3+7z3rlwcTbxbWN2eNgWkp+Jq97HCIxkpgmdSVcBuTCzfzwAIEkzqp
+	 k9gJ5pF864kQqt/6IR7EJvhKJj4CXv8yU6PWSpE+gmqy6ZxQLtchGOjVN9LlwpKtdoc3y
+	 AK0KFw4M6Np1L6e6SRVXylQQPafMQbnXUT17uNbp0soszD6CJwefsMRDipQqfdRDecRUh
+	 kw246BRe+DbQYM5C4MuipK92t/zQprH/ZvDdheC/t/1PNmREjdY4CCu21mp7RGiREAxgk
+	 7+jfuDHpAUpRT/imM6pTEPWcKBrbwsGnmP7sl22nGGwZdr4yEXtTPNPZT9/jMA7yIlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567312;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=8Az4QnI06D29dHXRhcW0bCRSFOGyh4xpIpsF5fwFiHs=;
-	b=pPt/JQLptoAo3QkjSy6yaw6FhK44LYRT/uYBXq9WIPZE0yfZ/4q7ypwI3PY8jZZwZ/0J
-	 iafEuOpkbA2+zzQNBI4EyMEW8j/fUC9y2rhevUK8hs2o5VSbpwidp++mJIYEDBqbOmOck
-	 g3Gd1/Xr9I8aT4xA/ztAzoZVPyONE9zN3rZry2k5kUgSHGbrWO/i3mPPPb8lWQhgaHyNo
-	 qX5QAmS8+Jv4QkZdlQUrXrsFUkIapsLGxRH/0ffHXniqv1L6I7jLKKZpATVRrPUzawn6w
-	 gnhhz8OCVxm+HHoGcb194bQuHjQ6cwMTCnp9fVGa97dWb477gUfZ6yUFjFujShTfs7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567485;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Stat-Signature:X-Rspamd-Server:
+	 X-Rspamd-Queue-Id:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=eLqiru6IB8X1vm5kTLkMtYcaQdNbgpYL+qb0lIcTVWo=;
+	b=dh7vNYk8T032bTY+7e7l+CZf93MQYVZffhgLGh3G32IFRSCDdvv2jv5bQIPoZlM7A8+2
+	 w2HqPWskB4jshFRSeZcacVGmLYIvvP0X7OJuZKARtk3F/N/WUXKb+975NOwRsFkqajaio
+	 YLwmm1fFpaAxhUF7mi0SXZjwFGwLCXp6036g7cuCgVFZK8CZeIktBsKa+0tNlwI5cC0un
+	 RWIFsm/VN40Nb19raz8k76A9FhH6pQa7wasxFACNcxetXLmRPfb6J1/39/NBXZMdUpgd9
+	 Q7B3iG8QSSDOOjCvllx6xwRFJLho7ZgZiJGuyosiN/+1MTkr2BhD1BXzQKDpFrRcM/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pKlQ4H04;
-	arc=none smtp.remote-ip=91.218.175.250
-Received: from mta0.migadu.com (out-250.mta0.migadu.com [91.218.175.250])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=XByrIElw;
+	arc=none smtp.remote-ip=216.40.44.15
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A7B606A321
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 00:41:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57A7B606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B06606A321;
+	Wed, 25 Nov 2026 00:44:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9B06606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pKlQ4H04
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5i8hmMKtVuUHVs5NH7TmYS/sUbqisINq3nsbH7cRRPs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795567309; v=1; x=1796172109;
- b=pKlQ4H04THnNWoJVfS2vJcLHgsjI4fgwR5aF3d91SzckFaOwOTevyGi+53tCLOOVa1QE11e9
- 0Y9XpYJeQxoLo0YBLR9qpsMt7V+kJEAfGLP+EIu2xs2VhFrGHfeshsOvs+aV58l1Kta1f8hB+ZL
- A1aETZ3s5AVT8+mlLpBGg8NQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id c69787d82d27ec28;
-	Wed, 25 Nov 2026 00:41:49 +0000
-X-Mizu-Trace-ID: c69787d82d27ec28
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 25 Nov 2026 08:41:33 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
-Cc: tianyi@cloudflare.com, kuba@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me,
-	skhan@linuxfoundation.org, kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH net-next v7 0/2] selftests: net: veth: propagate check
- failures to exit status
-Message-ID: <20261125004133.GA19338@Liu-laptop>
-References: <20261124214025.11603-1-emmaonana18@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=XByrIElw
+Received: from omf14.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 6B4F21C486B;
+	Wed, 25 Nov 2026 00:44:37 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id 75B8730;
+	Wed, 25 Nov 2026 00:44:35 +0000 (UTC)
+Date: Tue, 24 Nov 2026 19:44:34 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 13/15] tracing/filters: Fix error positions for CPUS
+ mask parsing
+Message-ID: <20261124194434.21d76102@robin>
+In-Reply-To: <179323796570.740114.12151091552524337676.stgit@devnote2>
+References: <179323784538.740114.15323117974242744566.stgit@devnote2>
+	<179323796570.740114.12151091552524337676.stgit@devnote2>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,61 +62,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261124214025.11603-1-emmaonana18@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ytcodhten8f6ckybsp8n438zaez9mz7b
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 75B8730
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18JBBogJHR+mPThdh6z8Vw6dGAN+/JMwyk=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=eLqiru6IB8X1vm5kTLkMtYcaQdNbgpYL+qb0lIcTVWo=; b=XByrIElwAmEiIV9tx4H+Gzi8X3Z0/D0XREouLdnKhWOv/fcS5n8QxJFB6GeoXRCZ6aA4UHUdlTCRjDaFHS52kuGwOGSghyUjoRGefPbwNCzddQmphIoos1HaB9u5mRenfpYgnxOs9xtxb5uBKVB5ra8mHfIx/DZXZj/TzvQf6ZQ=
+X-HE-Tag: 1795567475-545701
+X-HE-Meta: U2FsdGVkX19eY7ChfWCVUrNiHsjN5Stn/IWM6xZezIl6wvc2QvZUQPV8qfUSdBoYMH6uWWGglgFGfMQT/F79WxgQ171wPoYGOGnyJdq5Jt+JbzebhhcWOc6XxuMISBHG+OH7uZ88vVlOcug49ltEzkbd1coa7zoycgnAXfWhI+j5ZVaaalsC4LidI9ijgoTkGYL8trmUdgw72xUpJw37VbL+I/C7KnegeR+A4/vWAfX0/3SI9XQ52Q0Ti33EfI/HBsGMXabUQ2TsBe7hZHm+JdniUw4CACbGvOi+YByLuZDdz4HYw3LSe4+dw7KRU2uo40W9QNFEMhWgCI2n+QTqIhomJowG69CK
 
-On Tue, Nov 24, 2026 at 10:40:23PM +0100, Omokefe Emmanuel Onanaroghene wrote:
-> Four checks in tools/testing/selftests/net/veth.sh report failures
-> without setting ret, allowing the script to exit 0 even when a check
-> fails. Set ret=1 in chk_channels() and the three "bad setting"
-> negative tests identified by Tianyi during review of v2.
+On Thu, 29 Oct 2026 10:39:25 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> Patch 1 fixes the invalid TX channel test, which used nproc + 1
-> to determine an out-of-range value. However, nproc can be lower
-> than num_possible_cpus() when CPU affinity or cpusets restrict
-> a process, meaning the kernel may accept the requested queue count.
-> This could cause false failures on a correctly functioning
-> kernel once the propagation patch makes failures honest.
+> In parse_pred(), CPUS mask error paths report incorrect error positions:
+> - Checking 'str[i++] != '\'{'\'' post-increments 'i' before calling
+>   parse_error(), shifting the error caret one character past the
+>   missing brace position.
+> - In the CPUS operator check and comparison function selection check,
+>   'pos + i' points to the CPUS operand or past it instead of the
+>   unsupported operator.
 > 
-> Use the kernel-reported max_tx + 1 instead, ensuring the
-> attempted value always exceeds the device's supported maximum.
-> Spotted by Sashiko AI review of v2.
+> Check 'str[i] != '\'{'\'' before incrementing 'i', and pass 'pos + op_pos'
+> for the operator checks so the error caret points accurately.
 > 
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > ---
-> v7:
->   - Fix [1/2] subject numbering, lost in v6's send
-> v6: https://lore.kernel.org/all/20261124211645.5751-1-emmaonana18@gmail.com/
->   - Squash the two propagation patches into one  and add
->     Tianyi's tags.
-> v5: https://lore.kernel.org/all/20261121182217.4609-1-emmaonana18@gmail.com/
->   - Retarget to net-next and drop the Fixes tags
->   - Move the invalid-tx fix first, so no commit in the series can
->     report a false failure on a correct kernel.
->   - Fix the subject prefix on the invalid-tx patch, lost in v4's
->     send.
-> v4: https://lore.kernel.org/all/20261119003003.40482-1-emmaonana18@gmail.com/
->   - Patch 2: use if/else instead of "&& { ...; } ||" chains, keep
->     lines within 80 columns (thanks Tianyi for the review).
->   - Add patch 3 deriving the invalid tx value from the kernel maximum.
-> v3: https://lore.kernel.org/all/20261116084107.6675-1-emmaonana18@gmail.com/
->   - Add Tianyi Gao's Tested-by to patch 1 (thanks!).
->   - Add patch 2 fixing the remaining three checks.
-> v2: https://lore.kernel.org/all/20261115214702.50817-1-emmaonana18@gmail.com/
->   - Correct Fixes tag to 1ec2230fc721.
-> v1: https://lore.kernel.org/all/20261115212117.48496-1-emmaonana18@gmail.com/
->   - Initial posting.
+> Changes in v4:
+>  - Drop Fixes and Cc: stable tags since these error position fixes are
+>    cleanups.
+> Changes in v3:
+>  - Group error position fixes for CPUS mask parsing into a single patch
+>    targeting commit 39f7c41c908b and commit 3cbec9d7b93d.
+> ---
+>  kernel/trace/trace_events_filter.c |    7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> Omokefe Emmanuel Onanaroghene (2):
->   selftests: net: veth: derive invalid-tx test value from kernel max
->   selftests: net: veth: propagate check failures to exit status
-> 
->  tools/testing/selftests/net/veth.sh | 31 +++++++++++++++++++++--------
->  1 file changed, 23 insertions(+), 8 deletions(-)
-> 
-> -- 
-> 2.43.0
+> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+> index 9b1100769676..1a9a1cc8daa2 100644
+> --- a/kernel/trace/trace_events_filter.c
+> +++ b/kernel/trace/trace_events_filter.c
+> @@ -1932,16 +1932,17 @@ static int parse_pred(const char *str, void *data,
+>  		case OP_BAND:
+>  			break;
+>  		default:
+> -			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
+> +			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + op_pos);
+>  			goto err_free;
+>  		}
+>  
+>  		/* Skip CPUS */
+>  		i += 4;
+> -		if (str[i++] != '{') {
+> +		if (str[i] != '{') {
+>  			parse_error(pe, FILT_ERR_MISSING_BRACE_OPEN, pos + i);
 
-For the series
+Instead of moving the i++ to below, couldn't you just make the above:
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+  			parse_error(pe, FILT_ERR_MISSING_BRACE_OPEN, pos + i - 1);
+
+?
+
+-- Steve
+
+
+
+>  			goto err_free;
+>  		}
+> +		i++;
+>  		maskstart = i;
+>  
+>  		/* Walk the cpulist until closing } */
+> @@ -2029,7 +2030,7 @@ static int parse_pred(const char *str, void *data,
+>  			}
+>  		}
+>  		if (pred->fn_num == FILTER_PRED_FN_NOP) {
+> -			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
+> +			parse_error(pe, FILT_ERR_INVALID_OP, pos + op_pos);
+>  			goto err_free;
+>  		}
+>  
+
