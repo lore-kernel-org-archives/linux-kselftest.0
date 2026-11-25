@@ -1,88 +1,159 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=131.188.11.21
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795627751;
-	b=LB/srVO64/6+3XTxg+snIO8twmaHxxB6VKhnkQauf8MDV6/pTobjww7At66FqjXn39dE
-	 adYI9john0UU+PYwN6wNS6tkewMdwud0UJzJVA+hSpa3CyHpCVrncYcU3IxC/84nTuIwB
-	 t2wM87m7gd+BwmDDLarFpTn15XeHRH7rWEmeAhZbds03sBZ4QEi4a97XZmoqERZwe0/l2
-	 yCBEBgPlsuLULSUxH/GjfvYTmIMr2oFCRESmuVSrThAO2RHZ53cEZVspxrgoxTbUpp4Qu
-	 +1sqMi3vHVcAAkX2Gp0msLpcFghFOlJTHC3ks6LVOmjgL57hPOUnhGput9zsS1HCZcw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795627751;
-	h=DMARC-Filter:DKIM-Signature:Received:X-Virus-Scanned:X-RRZE-Flag:
-	 X-RRZE-Submit-IP:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=kk4HSfep6lD7JbkZrDPTxgrBwIlCPCupQVQtAuMl/dQ=;
-	b=5UBfzWC6BUxNifl2OytnaIrFySmkcsnBRSYVVlVXS0ZtlufSbwLJLerPu2NSr9xBpYsA
-	 H/71HxDD4yGHtI2DMrk0HhgIgbvWXZ1TYXmy/Z2/kcp8tTwdiDL/UZywwKLQ+Ox1o7o22
-	 ypvuDmWzNp2o+BpTivRVhZ1RiCVLMzY8DrwtRnaA3z4xeOHZdb1AtGYZDkPmxx5iWegrn
-	 APt07PINjdNzmX2MCh+SuRDclkELi7vWjoz4rGwMa0WXIPB6LqfRf3X/Ls2r3tYP1YnVm
-	 r5aQzinyuwfJrw5Q+p75l5jDY5gqVdgvOrWwVVuYm6pOlbmGsO2MMIDtr8eLy2aY3Yw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fau.de;
-	spf=pass smtp.mailfrom=fau.de;
-	dkim=pass header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=lLpuowNO;
-	arc=none smtp.remote-ip=131.188.11.21
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.55
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795627797;
+	b=AzZueaxs0xOpKQMDwI5wedpUB2kMhkplpzOXksDtTNC5KkO5REALyLGPXBbH9RfRApSD
+	 pREgKVmggSt6LT19ACMIyOVLYjFaxSJhN6KrXW/vvAvNIE34yPzboUQ9Z2WLicxeJ9EMQ
+	 s8iq3WjdeJ3grXi6foSlgkeyMTvxO8cWKc83W30A7awTYLMaMfuYxfCO5Y9WBNXX7b+ro
+	 JwrGXpIgCvZfF3sQjgOEmXAAus9qdi04+Sj5akiwS89CcXfvljChPsyjbEiPjvMpusOLD
+	 4h2cqnqNcizYzKVsh1EYliDZin46ce8OqtlygvkG2x67/SZvDxgDl55XtDxsHRGbVUA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795627797;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=gtE1ORfttJBbVDCk2rU4kzSWC8bZM3qjD/p/ShxG7IQ=;
+	b=wpFxTfRf81dE4DO0y257e1ibIijsOHW86gJV0OT7YHVhHOpI8mD7fWV95ZVGmppgbO1w
+	 EYQpRj5q/MDsHHrqiiN3Os6dpESj4l9PS4S35Nd7BhCL7AYqEV5akpT9lsYp46LZeGRn/
+	 Mb/QFjwYzIRdKEhPFs0Z3ObMhuyFbpMPxR8HDDxalmVUudqKPvAjnugdUGW5GS3If51Fu
+	 YCCGsvXgdkKyhJY8UuslEyMVJmsy5iGI+MCPH/qnLX4y/jS4xBiv/Qcb8jYg9QGYFCxUg
+	 m+7rpSa+Vb4eAqrj2Ietd4xJzjWTUiL+0XZFYuqc+Eg92t4NE+wz/cOzleSEjcJ9l3w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BgYpbJea;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.55
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011055.outbound.protection.outlook.com [40.93.194.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970D8606A31E;
-	Wed, 25 Nov 2026 17:29:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 970D8606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF530606A31E;
+	Wed, 25 Nov 2026 17:29:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF530606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=lLpuowNO
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1795627749; bh=kk4HSfep6lD7JbkZrDPTxgrBwIlCPCupQVQtAuMl/dQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
-	 Subject;
-	b=lLpuowNO8sqSxDnLqUsbXyPemn9qNAM5d1WoenUiwYbXHRuL/8sRJGdk5IDYitiTz
-	 XvcUZPrbZvbPR+46r4EpvqPyIcuU0KcAz1cQsQYuuSB3HDOtk31CdOt7prI3vb1EyC
-	 Wu2v4US5jzCG03/S8e+eT55HZ079Bnykd9O6CmHnXEaz6ghAbKRlBsPyy6J6uD4VwJ
-	 Csg8jivuSI5UQK6MwWEsunhyMbROaL0sk+2+vHBEIFNrloBWM3IDEGuOptKPOVU9qA
-	 yNXPgifwTWsQdDkTssCD3z5PBd3DZZuB44SPr8D44JKzvfD8dMwJvNW7p7nPmHZo/C
-	 pkLzvDhVoAo/Q==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4jZRVr6lH5zPkpl;
-	Wed, 25 Nov 2026 18:29:08 +0100 (CET)
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:59e
-Received: from luis-tp.epfl.ch (unknown [IPv6:2001:620:618:5b8:2:80b3:0:59e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1+mXuB51AtwrTnI/EBm3xGZ6zuWk22nc0w=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4jZRVn4tKZzPkS4;
-	Wed, 25 Nov 2026 18:29:05 +0100 (CET)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Alexei Starovoitov <ast@kernel.org>,
-	bpf@vger.kernel.org
-Cc: Luis Gerhorst <luis.gerhorst@fau.de>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Henriette Herzog <henriette.herzog@rub.de>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 4/4] selftests/bpf: Test nospec after stack writes of calls and atomics
-Date: Wed, 25 Nov 2026 18:12:52 +0100
-Message-ID: <254382ea54ff319c0dcf8c93642f5850b276b549.1795625597.git.luis.gerhorst@fau.de>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <cover.1795625597.git.luis.gerhorst@fau.de>
-References: <20261125-nospec-result-reply-d60fdc6da8ef@fau.de> <cover.1795625597.git.luis.gerhorst@fau.de>
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BgYpbJea
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XGv8ggejiKYgRA4XwsTymacWQ39bbQUHST68Bl4b+D855cbhD0+SM76FGtqkw/uEBgvr0Diq6czkq/U1hBs+jntAbNCa81KMU+V1sp7Wus2Khg6YbBk/9NCbc89LF20N8F4G6NHphoIibHajoYmzQO4Ez1cUyINdwt0XUuuAhyAC4Uv6i0QWisb2RmbdJFaFbvp9VUfvvAXFG3QGOarzKGR6ZMVGMeDgjwqoBD4uenQUH9Ijc/widgZTXNmcFsZcKlW9EK+ytGpDKQpaB3+t66nrsTeGCxEiNNWNPy4cpKHB9YEHFUFjBfeXSTNI2JieRrW6v8lbn0ndoVZweBwuHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gtE1ORfttJBbVDCk2rU4kzSWC8bZM3qjD/p/ShxG7IQ=;
+ b=L7McMASK1mUIcTk3hOiBE1eSm0Opyij8BXpuI8L1xfr4QYaGwo2AKVTLC3Z2O0t2vzHBPShnVDZMDI/CKws+tHVm+re1TQJaFAaEAKOg50VvKfl7trCsEIz3SbzZ7kGNE4DxvExVnf2AJ41dtD6SUQ4Xq1amIWscv/teKagIQ1wJpkSin1SHqnrIOeP2l7XgPBVZV9DPTvApBl7lOCVj8JGBfB6fh/2LoFFMZSxFyQX9M5ByZLsL6Uq745qwQNIC28qJ8bWfVXxOPyaXiuY2WB0coDfslcvd+3I/VcEAVN9eXtACHSgesal98xI1SgttWF3MrAAN0QMX3oTLR1fL7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gtE1ORfttJBbVDCk2rU4kzSWC8bZM3qjD/p/ShxG7IQ=;
+ b=BgYpbJea/YbiFFCZEzOo8FWTJ9qPRWfxAA9ZGBLGhBAAI8CVXdn5P2QftclCa74HmxwRqwzR22aMHjpRSfZ3+2731EcG2pk1H+G7XqjGBYsHiD9fMQBSWiK25gvee5hE8PibETajrBS8MZFeNMa8CKgcatA/PZ/fR/5w0R3e6JXzSMWpSAbViL9MqwdJudK2bI1E9oTg3RByg3Fjfh/cNstV3r1aHQSt4oT5HX4wTHR9Ez2xGfuMUvZxPv+Vg9nVNm121XDPiY0A5Opc2kK2ilEXAlMeyE80Dw8UotYrFXr3KWx3dfw/g8LeW2B3VRqaS8OHK1tRuNYOFgJYBvM6sQ==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SN6PR12MB2814.namprd12.prod.outlook.com (2603:10b6:805:72::33)
+ by CY8PR12MB8314.namprd12.prod.outlook.com (2603:10b6:930:7b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.14; Wed, 25 Nov
+ 2026 17:29:49 +0000
+Received: from SN6PR12MB2814.namprd12.prod.outlook.com
+ ([fe80::9a18:413c:9702:8f59]) by SN6PR12MB2814.namprd12.prod.outlook.com
+ ([fe80::9a18:413c:9702:8f59%6]) with mapi id 15.21.0639.012; Wed, 25 Nov 2026
+ 17:29:47 +0000
+Date: Wed, 25 Nov 2026 12:29:46 -0500
+From: Yury Norov <ynorov@nvidia.com>
+To: "Gregory Price (Meta)" <gourry@gourry.net>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oscar Salvador <osalvador@suse.de>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Brendan Jackman <brendan.jackman@linux.dev>,
+	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+	Ying Huang <ying.huang@linux.alibaba.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Byungchul Park <byungchul@sk.com>,
+	Alistair Popple <apopple@nvidia.com>, SJ Park <sj@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Kees Cook <kees@kernel.org>, Kairui Song <kasong@tencent.com>,
+	Barry Song <baohua@kernel.org>, Qi Zheng <qi.zheng@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Baoquan He <baoquan.he@linux.dev>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+	Xu Xin <xu.xin@linux.dev>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Lorenzo Stoakes <ljs@kernel.org>, Pedro Falcato <pfalcato@suse.de>,
+	Jann Horn <jannh@google.com>, Chris Li <chrisl@kernel.org>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Youngjun Park <youngjun.park@lge.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>, Waiman Long <longman@redhat.com>,
+	Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Dan Williams <djbw@kernel.org>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-cxl@vger.kernel.org,
+	linux-doc@vger.kernel.org, driver-core@lists.linux.dev,
+	damon@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
+	nvdimm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/60] Private NUMA nodes
+Message-ID: <awcbCkFUNfBp3ANM@yury>
+References: <20261120-private_nodes_v6-v1-0-74f5f9a115c2@gourry.net>
+ <awMdeK8O-5mffg2m@yury>
+ <179537469194.412063.13456998694958645706.b4-reply@b4>
+ <awNavE8dAGr-amfQ@yury>
+ <179542121527.412063.3452837736734095837.b4-reply@b4>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <179542121527.412063.3452837736734095837.b4-reply@b4>
+X-ClientProxiedBy: MN0PR04CA0019.namprd04.prod.outlook.com
+ (2603:10b6:208:52d::33) To SN6PR12MB2814.namprd12.prod.outlook.com
+ (2603:10b6:805:72::33)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,259 +163,207 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2814:EE_|CY8PR12MB8314:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5d88457-3d2b-4b10-0448-08df4b19b3e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10070799003|261009223027099003|22082099003|10067099003|18002099003|6133799003|261028144727099003|261026140227099003|261021123027099003|261102123227099003|261022105027099003|261022075727099003|261021121427099003|261026121527099003|4143699003|56012099006|5023799004|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	S6a7ir1CjBjuN1oV+qaB35nNB4bQGn5y/wfHeFzO4FdU0Ur+JtBtCwKtb05ZDx4TsmyJ7AZCB4neEi96R+tWIJ/vBRRJqmwzBN2EynZNaUXfjL2lQL8YfHQ+N7c7+BTWXC6kaSRNjbw9rltkecIxW66pAmiNs4HckJfh+mMI+ybrywCiWzomYg8BY23U1IhsQwIJldYP9UPHRv/VtjujSDL9EK/l2Ov6HXWKXEl32IOHcXjCE3DTbxyPlntX0P9KTmcG0mS1bhFZquxoNz8T+Tpdcb0bsB0Twwn71THBuWTDNKB2t8Xvvxd3HQQv4GGq9vEau9z45W6RogYZ40BKRo9ay9PbDtAw3OTBNsEPD+Kt4xrIE+44MuschiBtQZJDqiS9eOvOKttEHDBG7XG+AzeDp8ta5cMyj3j7eb0qQuoUzl1DofDGnML9M0dm3aQiWwvgg0mlYPelqgWFsxt+UPZx64nqsYOWrZfsoa20WbdXUcQajmuyaOAOUEryE8lyS9aVtMBx1Amdl5tmX4d18IJs5tX8Jczw77t+I5tVc0sAaslUw89bmF+yFasSujac/87ggGXVE/u6aI22ynHtdssBBlIPBuJ+zgcA/ShWUzJ7UgU8D5hFaqgONzoJ0TbKcYyiL1TsX9fpKwnm/xpe9mU5fYNYuibSpYeVzbTXl54=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2814.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10070799003)(261009223027099003)(22082099003)(10067099003)(18002099003)(6133799003)(261028144727099003)(261026140227099003)(261021123027099003)(261102123227099003)(261022105027099003)(261022075727099003)(261021121427099003)(261026121527099003)(4143699003)(56012099006)(5023799004)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?wJ3WfKdNOzaNDTQKLpLp26qyY/Yenu41z+NJ6qCYXXXBOYbXGa/jxipQYAfi?=
+ =?us-ascii?Q?/RH8t+w7BabiOqko9r+QLr/z+Ez9mPVfX4EIjxEHrCNtPq5PZs1oBphPV9U7?=
+ =?us-ascii?Q?CQNmDqYaNLkXZg1xKQZLOqPVlJ5m9VMLe9i6w6XfwqJkkRtzXNK+dn6fgeKP?=
+ =?us-ascii?Q?P0Nwy8FmrVad4YE7kA4Sqv+QMuPbPQgpzveFino/VDckdPK8pNVvHOMdvbZ3?=
+ =?us-ascii?Q?h/X9SBqmnZiE+bz3M79jT+2ghYXm9YYRtf9GbFvy/oHBT3M+iD4nYAS61Ipz?=
+ =?us-ascii?Q?Vwmuq0MzWckFxQ3NuxzDHpTIj5Pgq45z7BWa/QqFqfHhkDsehlv4LIXVPjYW?=
+ =?us-ascii?Q?JsS4C37Ij2qz01fDj8iG82aNaE8rDKWZ7vU1mPoxpMy50RA3HDIYKo1pSn4v?=
+ =?us-ascii?Q?dCP+FfyA1F5azHHZQ3LvRhlqFmOzWSnulSaEanj1X5qJLIn+054rCPsiu8RM?=
+ =?us-ascii?Q?ytlzQV4iX5tYQj2w294ILZRx6YRi2sDjXsWWuasx5BRz0ypR+suDkt0/dKWD?=
+ =?us-ascii?Q?u/GaGp8u4frIavMByyr9k8dlokzbB9IyuUovDsyPWZuZn5sd6Klg/LkbrjHQ?=
+ =?us-ascii?Q?Bs2qIVANsHj02VgTpUAVzD2M1/anddkxOAp3jLLg3nZ/t/qkKuh+Eaznm1Ur?=
+ =?us-ascii?Q?L/E1knY8HOHIwj+/MV3UutdLSMoXXEKXoFqcLdNG1CFDpAefKvlGFoNlo5wu?=
+ =?us-ascii?Q?LjHrpQBCJJPDtAARgUfx6gD9AlWUim5xzzP382LRfDFuakQjfP1QQ0/lMEXF?=
+ =?us-ascii?Q?ylU/f5ZGFnrdQxvNaXl3npHrllQ7BDuZ+R2CgEnnv6lUyUEiEOGJqnp1TZoF?=
+ =?us-ascii?Q?3qRxEWEG3isJq4qcX2gjorAXBdrHHjnnmCdHP0VpYoP/6fHWeh5LE1XgmCXe?=
+ =?us-ascii?Q?dE8ShDfs+oSTGiGV22Kcc6gqpWK6IZ2oQOjogV7MtJ5TNsrntnA0JVH+VblA?=
+ =?us-ascii?Q?5QeLB0bbabhQ8VAT5pORPKImriLvQ3uFWmnfCjnWziI1HpxL07aofgVVnYTS?=
+ =?us-ascii?Q?k8luCkMAuRgJttOyyzUnUplEn8OmVHljRl314SkGzcUdjJ/P9F0ammXh2mEs?=
+ =?us-ascii?Q?tUEsS6EQhcClN3n1RQMBLwa5XrycrZ77taqdkPLvUc1vf+lgDXSSmzfEAo8K?=
+ =?us-ascii?Q?7FfHaEo0Jh6ncaJ1Q+tISamzveSmdWc2mSWtHzUfw3kcw9fh2m8jqJJJ0cQ3?=
+ =?us-ascii?Q?ORJAECzM0aT15DMaSnsUH8J+yiAgeQNpHRMuNN6385sZtjjSrQyAPm2zRBAW?=
+ =?us-ascii?Q?hKCULe+SSWU5Ygz+Dkfbe5yo8F/Wa8G/qe+3IOhT0lHnzJYP+3qQGEXBfouv?=
+ =?us-ascii?Q?Ry2LMabSh7zQWGy7RUGSHHyZ04hiCWNomg7FIVjNZZFjp4ZXdY/aPlpRG5hF?=
+ =?us-ascii?Q?QlIQaLc14KU7Q3g+gJ/pr3429+aveCP04a0JXHpS5KiDVHgo5YPvo4eWG7Aw?=
+ =?us-ascii?Q?i/DA5XxjSMM5dgsEURsA7Y7Uja1e5071wRM9ed7K16ych/IsNYzwSBkSYZNP?=
+ =?us-ascii?Q?Pt9P+g6vSvfh4Sl5Sn4cue8q7zNvnn1y/jEHZltnoYDnkrnNDSR6CJZ9Xpiz?=
+ =?us-ascii?Q?tv7lU0gcXzMMwzw1iZEK+w0Q2cnqTRNKskhAacQGZZsuxDZwTuzc4eLW8hgt?=
+ =?us-ascii?Q?HZduGXrRI7Ma4uTyelrPof9+w6vlHs9ubCMAH+Bo9/q9++Ok7ZRe+Xv1LpsV?=
+ =?us-ascii?Q?x+Mt5QY6t1EFtryt8qabgPseHjTTDnKfXf36m0iWfI6+BwqGWCfDkbsoCYwF?=
+ =?us-ascii?Q?/1glgq5ypjqNx5oa7HwOAsuTSob5JSK6S7C2pf7FVIPhwaLihmAH?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5d88457-3d2b-4b10-0448-08df4b19b3e5
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2814.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 17:29:47.6685
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: efay+3I/SGVXTOgozIoQvNMiu2Rw1tWrsU7vICz6j0zKlJYopkRTzZVUnSP4yfoxaqwvwfqxWbP5Xb5vM51/SA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8314
 
-Check that a nospec follows an insn that writes to the stack if the insn
-is not a BPF_MEM store:
+On Mon, Nov 23, 2026 at 03:06:55AM -0500, Gregory Price (Meta) wrote:
+> On 2026-11-22 16:12 -0500, Yury Norov wrote:
+> > On Sun, Nov 22, 2026 at 02:11:31PM -0500, Gregory Price (Meta) wrote:
+> > > On 2026-11-22 11:51 -0500, Yury Norov wrote:
+> > > > On Fri, Nov 20, 2026 at 01:08:51PM -0500, Gregory Price via B4 Relay wrote:
+> > > > > This is v6 of the Private NUMA node series. The series falls into four
+> > > > > parts, each building on the one before:
+> > > > > 
+> > > > >    1-18  mm: introduce N_MEMORY_COMMON
+> > > > 
+> > > > I walked through this part, mostly. It looks like you can substantially
+> > > > decrease the patch count if you keep N_MEMORY meaning unchanged, and
+> > > > add another type, like N_MEMORY_NOALLOC.
+> > > > 
+> > > 
+> > > I don't see how this would reduce the patch count substatially, you
+> > > still need to convert existing N_MEMORY users and need to differentiate
+> > > between general purpose memory nodes and private memory nodes.
+> > 
+> > Please check this quick attempt with my codex. The patch count is reduced
+> > to 52:
+> > 
+> > https://github.com/norov/linux/tree/private-nodes-v6-n-memory-folded
+> > 
+> ... snip ...
+> 
+> Patch count is not what we want to be optimizing for here.
+> 
+> Your branch carries the same code (+3 lines net actually).
 
-- a call of bpf_ringbuf_reserve_dynptr(), which initializes a dynptr on
-  the stack
-- a BPF_ATOMIC insn
-
-Also check that a program is rejected if it requires a nospec that does
-not fit: in front of a jump with the smallest offset, or behind a store
-that is between such a jump and its target. The programs are valid. They
-are rejected because of a limit of insn patching that exists for every
-insn the verifier inserts there: the jump can not be widened. The tests
-document that the programs are not loaded without the nospec in this
-case, not that they should be rejected. No test covered these error
-paths so far.
-
-Two more cases reach code that no test runs so far:
-
-- a store that is only reached speculatively: do_check() ends the
-  speculative path at it because a nospec follows, and the store is
-  replaced as dead code
-- a backward jump with a nospec in front of it, whose 16-bit offset
-  bpf_adj_moved_insn() adjusts
-
-The programs that need more than an unprivileged program may do are
-loaded with CAP_BPF but without CAP_PERFMON, so that Spectre v1 and v4
-are mitigated for them.
-
-Assisted-by: Claude:claude-mythos-5-2
-Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
----
- .../selftests/bpf/progs/verifier_unpriv.c     | 201 ++++++++++++++++++
- 1 file changed, 201 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index a54b5a58b945..12d5e9e66890 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -1035,6 +1035,71 @@ __naked void stack_write_nospec_slot_index(void)
- "	::: __clobber_all);
- }
+Line count is neither the metrics.
  
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 4096);
-+} map_ringbuf SEC(".maps");
-+
-+/* The helper initializes the dynptr on the stack. */
-+SEC("socket")
-+__description("unpriv: Spectre v4 nospec after stack write in helper")
-+__success __success_unpriv
-+__caps_unpriv(CAP_BPF)
-+__retval(0)
-+#ifdef SPEC_V4
-+__xlated_unpriv("r4 = r10")
-+__xlated_unpriv("r4 += -16")
-+__xlated_unpriv("call")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r1 = r10")
-+#endif
-+__naked void helper_stack_write_nospec_result(void)
-+{
-+	asm volatile ("					\
-+	r1 = %[map_ringbuf] ll;				\
-+	r2 = 8;						\
-+	r3 = 0;						\
-+	r4 = r10;					\
-+	r4 += -16;					\
-+	call %[bpf_ringbuf_reserve_dynptr];		\
-+	r1 = r10;					\
-+	r1 += -16;					\
-+	r2 = 0;						\
-+	call %[bpf_ringbuf_discard_dynptr];		\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ringbuf_reserve_dynptr),
-+	  __imm(bpf_ringbuf_discard_dynptr),
-+	  __imm_addr(map_ringbuf)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("unpriv: Spectre v4 nospec after atomic stack write")
-+__success __success_unpriv
-+__caps_unpriv(CAP_BPF)
-+__retval(2)
-+#ifdef SPEC_V4
-+__xlated_unpriv("r1 = 1")
-+__xlated_unpriv("*(u64 *)(r10 -8) = r1")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("lock *(u64 *)(r10 -8) += r1")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("r0 = *(u64 *)(r10 -8)")
-+__xlated_unpriv("exit")
-+#endif
-+__naked void atomic_stack_write_nospec_result(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	lock *(u64 *)(r10 - 8) += r1;			\
-+	r0 = *(u64 *)(r10 - 8);				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
- __noinline int nospec_global_func(int x)
- {
- 	return x + 1;
-@@ -1072,4 +1137,140 @@ __naked void nospec_backward_call(void)
- "	::: __clobber_all);
- }
- 
-+/*
-+ * The jump is reached with a pointer in r6 on a speculative path only, so a
-+ * nospec is required in front of it. Its offset is the smallest one that a
-+ * jump can have, and the nospec is between the jump and its target: the offset
-+ * can not be adjusted for the nospec.
-+ *
-+ * The program is valid, it is only rejected because the verifier can not widen
-+ * a jump when it patches a program. Any insn that is inserted between such a
-+ * jump and its target has the same effect. Without the nospec the program
-+ * would not be safe, so it must not be loaded. If jumps can be widened one day,
-+ * this program has to be accepted.
-+ *
-+ * The insns that are only executed speculatively are removed as dead code, so
-+ * they must not be between the jump and its target.
-+ */
-+SEC("socket")
-+__description("unpriv: nospec does not fit in front of a jump")
-+__success __failure_unpriv
-+__msg_unpriv("cannot be patched due to 16-bit range")
-+__caps_unpriv(CAP_BPF)
-+__retval(0)
-+__naked void nospec_jump_out_of_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r6 = r0;					\
-+	r7 = 0;						\
-+	if r0 < 0x100 goto l1_%=;			\
-+	/* executed only speculatively */		\
-+	r6 = r10;					\
-+	goto l1_%=;					\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+l1_%=:	.rept 32765;					\
-+	r1 = 0;						\
-+	.endr;						\
-+	if r7 != r6 goto l0_%=;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Like above, but for the nospec behind a store to the stack that is between
-+ * the jump and its target.
-+ */
-+SEC("socket")
-+__description("unpriv: nospec does not fit behind a store")
-+__success __failure_unpriv
-+__msg_unpriv("cannot be patched due to 16-bit range")
-+__caps_unpriv(CAP_BPF)
-+__retval(0)
-+__naked void nospec_result_jump_out_of_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r7 = 0;						\
-+	goto l1_%=;					\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+l1_%=:	*(u64 *)(r10 - 8) = r7;				\
-+	.rept 32764;					\
-+	r1 = 0;						\
-+	.endr;						\
-+	if r7 != r6 goto l0_%=;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* The store is only reached speculatively and is replaced as dead code. */
-+SEC("socket")
-+__description("unpriv: Spectre v4 nospec after dead stack write")
-+__success __success_unpriv
-+__retval(0)
-+#ifdef SPEC_V4
-+__xlated_unpriv("if r0 == 0x0 goto pc+2")
-+__xlated_unpriv("goto pc-1")
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("exit")
-+#endif
-+__naked void dead_stack_write_nospec_result(void)
-+{
-+	asm volatile ("					\
-+	w7 = 0;						\
-+	w7 ^= w7;					\
-+	w0 = w7;					\
-+	if r0 == 0 goto l0_%=;				\
-+	*(u64 *)(r10 - 8) = r0;				\
-+l0_%=:	exit;						\
-+"	::: __clobber_all);
-+}
-+
-+/*
-+ * The jump is reached with a pointer in r6 on a speculative path only. Its
-+ * offset is adjusted for the nospec in front of it.
-+ */
-+SEC("socket")
-+__description("unpriv: nospec in front of a backward jump")
-+__success __success_unpriv
-+__retval(0)
-+#ifdef SPEC_V1
-+__xlated_unpriv("nospec")
-+__xlated_unpriv("if r7 != r6 goto pc-6")
-+__xlated_unpriv("r0 = 0")
-+__xlated_unpriv("exit")
-+#endif
-+__naked void nospec_backward_jump(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r6 = r0;					\
-+	r7 = 0;						\
-+	if r0 < 0x100 goto l1_%=;			\
-+	/* executed only speculatively */		\
-+	r6 = r10;					\
-+	goto l1_%=;					\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+l1_%=:	r1 = 0;						\
-+	r1 = 0;						\
-+	if r7 != r6 goto l0_%=;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.56.1
+> The patch reduction comes from squashing the per-subsystem conversions
+> into one 16-file commit.
 
+No, and I mentioned that.
+
+> It also broke get_mempolicy(MPOL_F_MEMS_ALLOWED) - it now returns
+> memoryless nodes even if the system doesn't have a private node.
+>
+> > The more important thing is that N_MEMORY and the proposed N_MEMORY_NOALLOC
+> > is a disjoint, contrary to N_MEMORY and N_MEMORY_COMMON.
+> 
+> The proposal here is not novel - version 5 was also disjoint:
+> https://lore.kernel.org/linux-mm/20260720193431.3841992-5-gourry@gourry.net/
+
+Alright, this is the important piece of information, and it's not
+highlighted in the cover letter at all.
+
+For the next iteration, please use the [PATCH v7] tag to highlight that
+there's some history and background for the current design.
+
+The cover letter is wordy enough to exceed my ability to perceive the 
+plain text, TBH. I followed it to, maybe, a MODEL section, and then
+switched to the actual code. I don't think I'm alone here.
+
+Can you please structure it so the really important things will be
+mentioned in the first ~20 lines, and please provide links to the
+previous iterations.
+ 
+>    N_MEMORY and N_MEMORY_PRIVATE are mutually exclusive states.
+> 
+> I moved away from that because it changes the definition of N_MEMORY.
+> 
+> The subset model is easy to understand
+> 
+> N_MEMORY               - a node has memory
+>  -> N_HIGH_MEMORY      - subset of N_MEMORY
+>  -> N_NORMAL_MEMORY    - subset of N_MEMORY
+>  -> N_MEMORY_COMMON    - subset of N_MEMORY
+>  -> N_MEMORY_PRIVATE   - subset of N_MEMORY
+>                          (COMMON and PRIVATE partition N_MEMORY)
+>  -> N_MEMORY_<FEATURE> - subset of N_MEMORY
+>                          all N_MEMORY_COMMON
+> 			 some N_MEMORY_PRIVATE
+> 
+> It's additive. Users pick the set of nodes they want for their purpose
+> and don't have to cobble sets together or remember special helpers.
+> Users don't even need to know about private nodes most of the time
+> (mempolicy being the one major exception here).
+
+Do you support private nodes for HIGH_MEMORY? 
+
+If yes, it would look like:
+
+N_MEMORY
+ -> N_HIGH_MEMORY
+    -> N_NORMAL_MEMORY
+ -> N_MEMORY_COMMON
+ -> N_MEMORY_PRIVATE
+
+If no, I'd organize it like:
+
+N_MEMORY
+ -> N_HIGH_MEMORY
+    -> N_NORMAL_MEMORY
+       -> N_MEMORY_COMMON
+       -> N_MEMORY_PRIVATE
+
+Does it mean that COMMON and PRIVATE is a disjoint in this model(s)?
+If so, the COMMON is excessive. If not, can a node be COMMON and
+PRIVATE at the same time? What would it mean?
+
+I didn't understand the N_MEMORY_<FEATURE> passage. Can you please
+elaborate on the 'all this, some that' part?
+
+> In the disjoint model, N_MEMORY no longer means "has memory". Recovering
+> that set requires new helpers, and the meaning changes silently for
+> every in-tree and out-of-tree user. Anything that wanted "has memory"
+> quietly misses private nodes.
+> 
+> Either way you have to audit each N_MEMORY reference and decide whether
+> it wants that state or a feature variant (N_MEMORY_RECLAIM, COMPACTION).
+> 
+> The difference is how a missed site fails. In the joint model the
+> zonelist and the common-memory folio checks backstop allocation and
+> access, so a missed placement site costs some additional work.
+>
+> In the disjoint model a missed site silently drops a node from stats
+> and accounting - or worse fails to allocate per-node meta data.
+> 
+> So no, I do not think we should go back to the disjoint model.
+
+You already did that analysis I was looking for, but discussed it only
+in reply to my question... In v7 please wrap the design decision up in
+the cover letter.
+
+I feel convinced, despite that hierarchical approach seemingly
+requires to touch more subsystems. But I would like to get feedback
+from those followed v5 and earlier discussions.  
+ 
+> > > and n_memory_noalloc is not a good name.
+> > 
+> > sure, i'm not attached to any particular name. although,
+> > n_memory_common nothing better to me. it answers the question
+> > 'what for this thing' even worse.
+> > 
+> 
+> happy to wordsmith the names here.
+> 
+> N_MEMORY_GENERAL? _DEFAULT?  _COMMON felt intuitive but I am happy
+> to rename it whatever.
+
+If common and private is a disjoint, you need a single flag to cover
+both states. Or I miss something on it?
+
+Also, it looks like the 'COMMON' memory is one that available to MM
+allocator and other API. Maybe N_MEMORY_MM then, if you still need the
+name?
