@@ -1,112 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795575760;
-	b=fN/av4zOG+id0Q7M2070ghURD6daPDtjyEoyNHdJoezMj9mtcfWWOiwETXqwu9S8tqn4
-	 46BMHjVzRM6xR+a8NacsI7Ek1LsZa8Bb9Fhamq0P+1EkGJSqfWst9ru3xzB6K/0AIw+ya
-	 rWC8JYNeXI2mYymaWWZw0mkQunplgMkiPsMaYCX+8Gk9e7YzKj9UC/sHoO58c2VaNWvqb
-	 TGVFosm2yKaisT7nale/0YGkBz8tgNDqkBxm0YqkM2wLb85DS7jUXVnFehDrlEeAQCelz
-	 rvuqaWn31ReHQugXNrwWLU9SaEGwPXKibNaC+XXrblYvRnrLmT/Dhl6VsbRUTlk4ijQ==
+	t=1795576614;
+	b=gfOjPFvNu7gvE58X/7SNizGQ8IZMNNTXmZxksLSjqH9HVRFqCR2Oqu2G8FF8G1Z6J2H1
+	 N94/zE4W2be5yvl1mYyUVxs2jTvxA+xROY4oXOYJPfQt1nN3bHiwG/ZA5cj4gFCdjDHJv
+	 MxJJNi3mYGCj/Cmj9xfg0BnSqQTelEpGQeXcFZmOz8dKBDoZv9O/F55jQ972AmvCRbOvI
+	 7tlhEuC8PJgoj43vidPu9TDc2FaOx1PdjtcdjGTaiH6hSQG5cWeRESPW64dGk14kGvwEo
+	 3G6x/y4H628CHmNnuIIJI42o3TQLooDg3cCMNL6XNojWmA7RDlg2S6dnY110dLso+nA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795575760;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=Mj+S0OCJmwZBCexwj1UBIiBIBoUjlZPG6A8NDn0wRDc=;
-	b=4i3i920H3f33DPUXxfqY5P2zB89mOkrOcyfV/O7T2fo4n6ENmkyIGoPxqmM6mQoVP5fT
-	 G+rELPDL+7SMluT2lFUBZMwmVFpSzyR6VQEdXCcO3vBiteyrvV+4n7BnkiIUduzhFhwvE
-	 BrZI1cRFR8rasgAuizp8YPtnslRKIo1e0hbSxNYnl7AB6zZEyYWR8bz7L5jQDMw+aFj0N
-	 buFLRu1LFSwkcRGkS3Ix6XXhnNrqc7SujFPOHauTQU0NppI+6JNZSHzzSTdIXMQ+kEsQa
-	 OIberucT7Ow1qkVAx1NWrbVmLGdIql3YtHvlzmEv+ml2kOKUXQy1JDcfwS4WW2n4ryg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795576614;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:Date:
+	 From:To:Cc:Subject:Message-Id:In-Reply-To:References:X-Mailer:
+	 Mime-Version:Content-Type:Content-Transfer-Encoding:X-Virus-Scanned:
+	 X-Virus-Status;
+	bh=hxTBbzJHEKVwGJg01FIKFcQnVDEoJyS+/2z4anXy+k4=;
+	b=mkFkgyWQmYB4L/1thZS3Lumtbh8W6IykFuu95ZAhZ96r8IDhPbrpazU7wuar7WSQP0Gh
+	 pAhNF3zMIkdhl00clLsYvUfHdaXFewSJdx3MoH0tB4XCnyGMuhwMKUMnQlfL6z93VxGF2
+	 G97FzESsIcqzI4wmzIdow7Q+T4TFouMFySAES8dZP0qwznIHkPHLOYSFM5RCeJMPFhdL+
+	 fOw/5SgrB48MUIycBTO1S9mUi9eOljVH30eUB+DxKCOS87HrsGYB/hJEEsleuq6FSHE83
+	 EiHRTh8MKsgvpTLzmA7LTocwvuME+rNxhpBSznam8sfJskm+dj88yJai/efM9VnFzgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tCd2zNLG;
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60BF606A323
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 03:02:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C60BF606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	dmarc=pass header.from=uniroma2.it;
+	spf=pass smtp.mailfrom=uniroma2.it;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=T4hnDlVL;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b="NXD/C3hd";
+	arc=none smtp.remote-ip=160.80.4.34
+Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C984B606A31E;
+	Wed, 25 Nov 2026 03:16:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C984B606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tCd2zNLG
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b0ae87069dso2187523a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 19:02:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795575759; x=1796180559; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Mj+S0OCJmwZBCexwj1UBIiBIBoUjlZPG6A8NDn0wRDc=;
-        b=tCd2zNLGnXe27TOvg3Nsz35+Byxb+vmFt56s3OM1ujZaghvtCNHHsRIR3YgL2f76Gt
-         qRAgSe7g8RVRytFGdJzCrBNQxJ9z9387sYot4IQUEAfqw9ixE9QBj6S+YbDQ+jLlEChY
-         EMCGu6AK8SSZ/uNPZB96MBlT+/8o9Yt0SzlYEs7UL4+eB2bhnPJKt4obwaYlAZO5HkEr
-         F4L9ZaayyXlejIj4ERqBQ9zZatOaT68JRM5VT5r0oRY4awazV3OAZqH7i4Kb5jbNkqan
-         4eP76rCcqG1qt6TMRnhsJ31kg35lPbxjP9t0zzeSpX0k0AJBn6hDJGu1BhCvexrkE1Hd
-         fsxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795575759; x=1796180559;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Mj+S0OCJmwZBCexwj1UBIiBIBoUjlZPG6A8NDn0wRDc=;
-        b=l/eQOtsc2pzGsM/CykO2NT950KGot8wSvLmgJMgR5kJ2uUS9DECi6AdbPEHwudfBYQ
-         SwhX4xquONWxSPZ+d/Ejp8lWDqsQiunnqAg9vfCLWbr3at1VzAZE9oDYuHR0jknKYwWa
-         KaRGt7LS5XG4Vu+LD99m2tyWWNq2pTixoVRfGl1mOEEpirVgZ61qc1b4MYuR19PfE/kR
-         /lBwug/gUv03djhbyWVArYEDpiPR5KRQuc83x0TDUE5ssk1OxLgAoRuD5Mp50KrqSNUg
-         VeJZwMLiH5/vGRQOU0NrEVIDUe8UuvKtUkXFRzusE4ZEpPoYEiwtgZP79tdWiaAnLkT/
-         d4hw==
-X-Forwarded-Encrypted: i=1; AL+hErGWUST7dhBeBdVgNJWh4MWRTjCFUwKa1v+445qKzuejVSfoR7d057SwJoAwkKSy9Ewis207r+m7KeQk0m1nhaY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Yg4vqnmbCO8fdEjDSE1AFCGoEqvQv1S/8KiRXNLrbxxp/PvT0
-	utMv9raWcNshZY9CpdV21ByiQeyTZkdQlrWSEi4Sg6866IINOkyUplPM
-X-Gm-Gg: AZFdTZcYf2hSxNl/lVVjlWzJAac/8UKodtRUxEbtUVaIVuOMSU+/D5t5R612eJ2jvUV
-	VzIztfYXu7SNOOxhKO2sSoQz4kkivgLlJ+5uqEVxd5eJ61+Dg6uJYNo5fH0pBp8zgLviCJDjleg
-	JalpU+QU01Op7F24A6YptaMGu7CKOIjpPkH2ocf4vTq0OWjql4zh8Frhl5RNcKG/uyUpU2a2HWt
-	wVrnk6RBDQuzws5AbudNEfLTWqlvwv+CaaJtCiE6HqG1/wtUeJHlO3hj4shFwHMst5lwJM4WUZa
-	oK7yINGaCrvpPR8YVgqkQe4Kd6LfSG6QdganZw6Bex9pe+J30sY7Ne1mFF69Q/23IqfAgQoeE+h
-	JysVUubg/xwJQRenRwJLa2IW4osLiUH24Ejl859m73uD5OhqQ2KokjWj1J0IRvxbq4dVE8HGwCZ
-	Y+9Hx47Vyorhk+w+OTPsdMtsvY4z+jKJj3k79n6LL/MOKvs6wIMMmmOgbd19ESHAb0qerB3gxpH
-	yieftiSIWdxXiVXlDezlkmX0YwaEbZO4QIDW/s23xSv3Pzly5BqYK0FMAve3hiSIuDqGs9YIlqV
-	R0aaHx08tAxkSxSN6ybxqFned/R+pM+LB/piV5XeNT0f849n5/d2CHRbqHrbSbPiQM3bjZJ8Fe0
-	qUSwqqKsVHhXLhhoJiplfZZDH8LWHUQp8VAL6ogcADB0PBUW/sXlZcnU=
-X-Received: by 2002:a17:90b:4ad0:b0:3b3:cae0:2b68 with SMTP id 98e67ed59e1d1-3b41c95e7cbmr16230428a91.48.1795575758907;
-        Tue, 24 Nov 2026 19:02:38 -0800 (PST)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41aab4729sm24999098a91.0.2026.11.24.19.02.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2026 19:02:38 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 03:02:37 +0000
-Message-Id: <DN3YHFL4G7NM.36YOROLVGCSN3@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: Fix kallsyms parsing with long Rust
- symbols
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
- <shuah@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
- <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
- <work@onurozkan.dev>
-In-Reply-To: <20261124-selftests-bpf-rust_sym-v1-1-32c450d0c4ee@marliere.net>
-References: <20261124-selftests-bpf-rust_sym-v1-1-32c450d0c4ee@marliere.net>
-Content-Transfer-Encoding: 8bit
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=T4hnDlVL;
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=NXD/C3hd
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6AP3GJa3010051;
+	Wed, 25 Nov 2026 04:16:24 +0100
+Received: from lubuntu-18.04 (unknown [160.80.103.126])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 61AFC1227EB;
+	Wed, 25 Nov 2026 04:16:15 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1795576576; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hxTBbzJHEKVwGJg01FIKFcQnVDEoJyS+/2z4anXy+k4=;
+	b=T4hnDlVLZAFbc4OfNSryAiBmEeE35ytLR9djf2f+4qF6umz5McQXVUl6uf9d+2DLAEIr/z
+	tujVoWEaMsueWlDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1795576576; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hxTBbzJHEKVwGJg01FIKFcQnVDEoJyS+/2z4anXy+k4=;
+	b=NXD/C3hdb01sILs31a0MHe/SgTTq8VHpY9h/hiPjAKb6cQiUL2tSDUzhPr40SHeXAHasql
+	qqsW3rDZi116hZY7dksjKsUq6KNWiLbrSrmievFod9b21TXpYoDIHrWl713UWKoPPAe/PL
+	yXmHOCHuSLXGJ7CSv3AOZzqh/VfcPQroxMCKWhB/J3NPWRbNwQOOGK7Qu5nbBfLhKgVxs5
+	Bu6i1j/f68d6ioiGj+Qzj+D3+HuEKHc6xcj/NU/Q6DcHStma5ztn06HYqgfS6jdEEy9VlP
+	T8+7WnS06vxFRBgMbc1Pc4ULMaromYa82QrvY1FQHUhyCjgfdYDV9pDmtuza3w==
+Date: Wed, 25 Nov 2026 04:16:14 +0100
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan
+ <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Hangbin Liu <liuhangbin@kylinos.cn>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Justin Iurman
+ <justin.iurman@gmail.com>,
+        Andrea Mayer <andrea@common-net.org>,
+        Andrea
+ Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net-next v4 5/5] selftests: seg6: add PSP flavor testing
+ for SRv6 End.X
+Message-Id: <20261125041614.98d96a37cd5a5e082729cc62@uniroma2.it>
+In-Reply-To: <20261124054729.GA14932@Liu-laptop>
+References: <20261119-srv6_flavors_endx-v4-0-284cdb484eee@kylinos.cn>
+ <20261119-srv6_flavors_endx-v4-5-284cdb484eee@kylinos.cn>
+ <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
+ <4717cab46b8eec796eb97799240cd6ab92d8c1ed@linux.dev>
+ <20261124054729.GA14932@Liu-laptop>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,37 +96,58 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-On Tue, Nov 24, 2026 at 03:33 PM Ricardo B. Marlière (SUSE) <ricardo@marliere.net> wrote:
-> -	char func[256], buf[256];
-> +	char func[512], buf[1024];
+On Tue, 24 Nov 2026 13:47:29 +0800
+Hangbin Liu <hangbin.liu@linux.dev> wrote:
 
-can we drop buf ?
+Hi Hangbin,
+thanks for looking further into it.
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index e871a26..06f6553 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -64,7 +64,7 @@ void free_kallsyms_local(struct ksyms *ksyms)
- static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
- {
- 	FILE *f;
--	char func[256], buf[256];
-+	char func[512];
- 	char symbol;
- 	void *addr;
- 	int ret;
-@@ -80,9 +80,7 @@ static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
- 		return NULL;
- 	}
- 
--	while (fgets(buf, sizeof(buf), f)) {
--		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
--			break;
-+	while (fscanf(f, "%p %c %511s%*[^\n]\n", &addr, &symbol, func) == 3) {
- 		if (!addr)
- 			continue;
- 
+> [snip]
+>
+>  (i.a) hs-1 -> hs-2: on the packets with DA=fcff:3::400a, rt-1 inserts the
+>        extra SRH with SID List=fcff:4::e,fcff:3::400a, and rt-4 consumes it.
+>        Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
+>  (i.b) hs-2 -> hs-1: on the packets with DA=fcff:1::0af1, rt-2 inserts the
+>        extra SRH with SID List=fcff:3::e,fcff:1::0af1, and rt-3 consumes it.
+>        Path: hs-2 -> rt-2 [ -> rt-3 ] -> rt-1 -> hs-1
+>  (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:34a9::, rt-1 inserts the
+>        extra SRH with SID List=fcff:4::e,fcbb:0:34a9::, and rt-4 consumes it.
+>        Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
+>  (i.d) hs-2 -> hs-1: on the packets with DA=fcbb:0:43a9:31a9:10a9::, rt-2
+>        inserts the extra SRH with SID List=fcff:3::e,fcbb:0:43a9:31a9:10a9::,
+>        and rt-3 consumes it.
+>        Path: hs-2 -> rt-2 [ -> rt-3 ] -> rt-4 -> rt-3 -> rt-1 -> hs-1
+>
+> Ah, add unreach rt-4 SID (fcbb:0:4000::/36) on rt-3 will break the path for (1.d)
+> testing, as we use End action on rt-3 and redirect via the route. Can we just
+> add the unreach route (fcff:4::/32) on rt-3 for (1.a) ?
 
-pw-bot: cr
+Right, an unreachable /36 in place of the underlay route breaks the
+consumed SRH test of (i.d). The exact route for the (i.c) container
+fcbb:0:42a9:20a9:: on rt-3 does not, as the End there looks up
+fcbb:0:43a9:31a9:10a9::.
+
+A route on rt-3 for (i.a) is a good idea. It checks the End.X 3>4
+without flavors, which the routes on rt-4 for (i.a) and on rt-3 for
+(i.c) do not check.
+
+On rt-3, fcff:4::/32 is already in table 90, as the underlay route via
+rt-4. Adding the unreachable one gives "RTNETLINK answers: File exists",
+and with "ip route replace" it takes the place of the underlay route.
+For (i.a) on rt-3, I would add an unreachable route only for
+fcff:4::2af1, the SID after End.X 3>4. The underlay route stays as it
+is, and the defer only has to delete the new route. I added it to the
+routes in my other reply.
+
+I would keep the route on rt-4 too. With your /32 on rt-3, put in with
+"ip route replace", and without the route on rt-4, all the tests pass
+when only the End.X 4>2 with PSP works as End.
+
+Ciao,
+Andrea
