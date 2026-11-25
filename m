@@ -1,77 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.216
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795593845;
-	b=wYi7z9QM8jftGpKyoTbxsM4x2PRXnIM+8wHonzwPNe3/NGzDKflXMEujpMKqN4pMArYD
-	 7WnE4eTH5uy7N9MNa0t9MxcZKMU8JFZMoZzJEgaK7jFiTx+LVPjy78TeUWU+4T2zV2icg
-	 /Z0HbvM9RQhW7lmBMFdQiwLOJa2A6Ulw9ZiPrAgcnozNBnQ37ZKQvyb6WEKKabEXz1gZz
-	 8vHpvX3lC/eQB7TFdgW7m35d1/Gfw/tJxQ+mhOQuNT/paQE/vib/soB7B82iiR5/Bw/52
-	 SaWBeOXFqUiU7chtuR9rJ4XFYa/4fnLLXJDuQumKd3CbFAaOD0MTQMFJxTCebjTkYMg==
+	t=1795594693;
+	b=35FQmQA2ySmb8KSfPPwlyMU3+QdGV8aTe+djUAS/EvFxNzBAR0neSz8EjC1lnVm0jyWi
+	 5wXW7jmKSew2myjiQZZANh6AwvFZhjd4+9O1SnFg8GgYp0pbsDk8iPp2DWUoyRgeWJXS3
+	 wqUMrtzCjEOmHsTWdDps6EhXC1FVg91UFCIozN93W6Ub3M0RKdVQ5eKKKrzCjDq2EY3a2
+	 2qdKWuZihYbe1y4ARdp667Z5IsoIw4Jhgw2AAx4BFnKjw/jcuiRQzG5vuvN70hXSLpFNn
+	 ZYAqtUlEB2vyEm2UiDFJI47VsVKGJtJm2kjhZXG9hrOzWWS6JLNZM4tKSEuSpq+iE6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795593845;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=MF+BeYOYB/DDN2WqUgwsfUKlmP3/0fwiowwJ6a2JiFM=;
-	b=F3h4zdyBdQ5unaoIjyaKqe3Ei3ldk9VgE2AWGx0NGFxVgAdF8wofA00rPkYLG4IxL3le
-	 J6wJCIO7hlrPdJvizdVjJ1eIuybHhCPi5tZZXBsLMHjs/oUOtTP26siDOit7ns55mjOe8
-	 rwci8frmvayUJH+cuS2s3atC9PlvQqpzqyAEvYzWSSemLJwL+BwHf7RV3bJ/n5xcKT0kI
-	 Q1GPyttBcg4oXwvhQW9N39pzA7JZsahr7FlrVxMCjWS1/lrlqUHItcucj5jpm85r7zc1T
-	 4OwJ1QtUpRFw4Lq4jW+SCpYlYudyYyc1OjeRVRZmO2/Mo7SmFHW20W973x6QHciWVHg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795594693;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=MbyGB8U9YRrniG9snzlWgjemL8IXXkOYk25rFewhrkE=;
+	b=zcGDSqfdkexhsYqIX0HuTFYOWsFhwpn7kALZWHzjq4nocJTntyK9qAOj2WkwJarGcO9u
+	 L7MhDOrlhJKYEZ8P+IZ6ADWJ/scSSLI5Vp8IPg/N7oNMN1TRDrOQu4nvfGToqaQv+Zpp/
+	 CNAUmH7Kj1E3NtFs5xQaJB5T56OilqX0b77z6H12W/e6WK88fNjsHfvS2MPGzRMRY6A/T
+	 EoGiBAq1OhLZkxXprgJ/Y2ILjXlGT2DjFnAtISPqyYuNYR3S3xBwmeSmZehefBHaFkvW8
+	 UqunvrKQa7Occerx3vDasNBkwMlkCAeXMRvahwLLgb53ULhxYue4FLYKCn5Dh6JclbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=vtf9RvK1;
-	arc=none smtp.remote-ip=195.10.208.51
-Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org [195.10.208.51])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Ycn2FL+t;
+	arc=none smtp.remote-ip=113.46.200.216
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FFA606A31E;
-	Wed, 25 Nov 2026 08:04:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43FFA606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEEA606A327;
+	Wed, 25 Nov 2026 08:18:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AEEA606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=vtf9RvK1
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4jZByd3kPvzv2;
-	Wed, 25 Nov 2026 09:03:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1795593837;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MF+BeYOYB/DDN2WqUgwsfUKlmP3/0fwiowwJ6a2JiFM=;
-	b=vtf9RvK1asx4ncEtiIjWTUSRYEpo+ytI2Va/SmnKkleHvokSqFLNTcmoOX5mpDQIbcxV0P
-	rqGsBIw9mb5sZh+LbSdvwONhnExtYNRyUHWHQVfTBY7ZoXQcG9nyg+SKFptdBoW0tTNUkH
-	oHAjl7383G92v4DcIJ7LPaJb2Q3k6EtdgHQVbNb6UDij7GR9xkmw4aG9b1/PTgxfm/Ucz7
-	pBFO5amZLmMYhXK12UahyR60tNQ9C+KvEr884HzWSMliJKuMbiMhotcqENSzJZwkb1GF1K
-	LmubKo+WnHos4+jIttgVcK64hu8Mv7m1fedsShtSZbYkcecxTWjPcWXGV4uvUw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of ralf@mandelbit.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=ralf@mandelbit.com
-From: Ralf Lici <ralf@mandelbit.com>
-To: David Ahern <dahern@nvidia.com>
-Cc: netdev@vger.kernel.org,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 00/11] ipv6: validate cached dsts against the netns route generation
-Date: Wed, 25 Nov 2026 09:03:41 +0100
-Message-ID: <20261125080341.57521-1-ralf@mandelbit.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261125003554.54371-1-dahern@nvidia.com>
-References: <20261125003554.54371-1-dahern@nvidia.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Ycn2FL+t
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=MbyGB8U9YRrniG9snzlWgjemL8IXXkOYk25rFewhrkE=;
+	b=Ycn2FL+tIkW1u9EHTKdSwJpvHnV15x8giz6KN/9y5ezCzneFIfeGfOxKe4NyUIApTEOQh4Dla
+	LDNrQ2Y+DenE39xInHvztvM4CrczFu3AC2fGRJ0QkdpSEvvHRHQzV4rNgKxvGBpKQNhuzM2DgTF
+	oYFztxIbNZ16gF5xCo2eLRc=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4jZCG62Fvmz1T4fK;
+	Wed, 25 Nov 2026 16:17:18 +0800 (CST)
+Received: from kwepemk300018.china.huawei.com (unknown [7.202.194.246])
+	by mail.maildlp.com (Postfix) with ESMTPS id F249F40579;
+	Wed, 25 Nov 2026 16:18:07 +0800 (CST)
+Received: from [10.34.206.67] (10.34.206.67) by kwepemk300018.china.huawei.com
+ (7.202.194.246) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 25 Nov
+ 2026 16:18:07 +0800
+Message-ID: <bbc7ff8b-ef89-45e1-9f6c-3596c5e5c921@huawei.com>
+Date: Wed, 25 Nov 2026 16:18:06 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,48 +62,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jZByd3kPvzv2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next -v2 6/8] lockdown: bound the status string with
+ scnprintf
+To: Cai Xinchen <caixinchen1@huawei.com>,
+	<nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <kalevi@kolttonen.fi>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+References: <20261110132818.2231593-1-caixinchen1@huawei.com>
+ <20261110132818.2231593-7-caixinchen1@huawei.com>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <20261110132818.2231593-7-caixinchen1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemk300018.china.huawei.com (7.202.194.246)
 
-I'm not sure what happened here but it seems like you've sent this
-series with envelope sender dahern@KCJPDQ2QL4.localdomain. My server
-took it with a spam score of 12.9; lore says the message-ids are
-unknown, and patchwork doesn't have it (vger very likely rejected it).
-So, only the people on Cc have it, and patch 02/11 never reached even my
-mailbox.
+On 11/10/2026 9:28 PM, Cai Xinchen wrote:
+> Use scnprintf() instead of sprintf() when composing the lockdown status
+> string in lockdown_read().  The current set of levels fits well within the
+> 80 byte buffer, but sprintf() provides no protection if more or longer
+> labels are added later.  scnprintf() makes the buffer bounds explicit.
+> 
+> Store the level label strings in named arrays and point the matching
+> lockdown_reasons[] entries at them.  Their sizes are compile-time
+> constants, so a BUILD_BUG_ON() can verify that the status buffer is large
+> enough for all level labels, their trailing spaces, and the brackets
+> around the active one.
+> 
+> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
+> ---
+>   security/lockdown/lockdown.c | 28 +++++++++++++++++++++++-----
+>   1 file changed, 23 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index 84efd533fe5a..26cac7628a48 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -14,13 +14,17 @@
+>   #include <linux/lsm_hooks.h>
+>   #include <uapi/linux/lsm.h>
+>   
+> +static const char lockdown_label_none[] = "none";
+> +static const char lockdown_label_integrity[] = "integrity";
+> +static const char lockdown_label_confidentiality[] = "confidentiality";
+> +
+>   /*
+>    * These are descriptions of the reasons that can be passed to the
+>    * security_locked_down() LSM hook, used for the denial message and the
+>    * securityfs status file.
+>    */
+>   static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+> -	[LOCKDOWN_NONE] = "none",
+> +	[LOCKDOWN_NONE] = lockdown_label_none,
+>   	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
+>   	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
+>   	[LOCKDOWN_EFI_TEST] = "/dev/efi_test access",
+> @@ -41,7 +45,7 @@ static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>   	[LOCKDOWN_DBG_WRITE_KERNEL] = "use of kgdb/kdb to write kernel RAM",
+>   	[LOCKDOWN_RTAS_ERROR_INJECTION] = "RTAS error injection",
+>   	[LOCKDOWN_XEN_USER_ACTIONS] = "Xen guest user action",
+> -	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+> +	[LOCKDOWN_INTEGRITY_MAX] = lockdown_label_integrity,
+>   	[LOCKDOWN_KCORE] = "/proc/kcore access",
+>   	[LOCKDOWN_KPROBES] = "use of kprobes",
+>   	[LOCKDOWN_BPF_READ_KERNEL] = "use of bpf to read kernel RAM",
+> @@ -50,7 +54,7 @@ static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>   	[LOCKDOWN_TRACEFS] = "use of tracefs",
+>   	[LOCKDOWN_XMON_RW] = "xmon read and write access",
+>   	[LOCKDOWN_XFRM_SECRET] = "xfrm SA secret",
+> -	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+> +	[LOCKDOWN_CONFIDENTIALITY_MAX] = lockdown_label_confidentiality,
+>   };
+>   
+>   static enum lockdown_reason kernel_locked_down;
+> @@ -137,6 +141,16 @@ static ssize_t lockdown_read(struct file *filp, char __user *buf, size_t count,
+>   	char temp[80] = "";
+>   	int i, offset = 0;
+>   
+> +	/*
+> +	 * Size the buffer for the worst case: the active level is
 
-On Tue, 24 Nov 2026 17:35:39 -0700, David Ahern <dahern@nvidia.com> wrote:
->    rebound under the global fnhe_lock (rt_bind_exception()). Narrowing
->    the invalidation back to subtrees would bring back the cookie race
->    the series removes. If the exception refresh shows up under churn, a
+The comment is incorrect, the total length is the same whichever level 
+is active.
 
-That's not the case: my v5 [1] keeps the per-node scope and closes the
-race by sampling the node's serial during the lookup. Invalidating the
-whole netns is a matter of preference, not a requirement.
+> +	 * confidentiality, with brackets and trailing spaces, plus the
+> +	 * terminating NUL.  The label sizeof() values include their own
+> +	 * NULs, so only three more bytes are needed.
+> +	 */
+> +	BUILD_BUG_ON(sizeof(temp) < sizeof(lockdown_label_none) +
+> +				    sizeof(lockdown_label_integrity) +
+> +				    sizeof(lockdown_label_confidentiality) + 3);
+> +
+>   	for (i = 0; i < ARRAY_SIZE(lockdown_levels); i++) {
+>   		enum lockdown_reason level = lockdown_levels[i];
+>   
+> @@ -144,9 +158,13 @@ static ssize_t lockdown_read(struct file *filp, char __user *buf, size_t count,
+>   			const char *label = lockdown_reasons[level];
+>   
+>   			if (kernel_locked_down == level)
+> -				offset += sprintf(temp+offset, "[%s] ", label);
+> +				offset += scnprintf(temp + offset,
+> +						    sizeof(temp) - offset,
+> +						    "[%s] ", label);
+>   			else
+> -				offset += sprintf(temp+offset, "%s ", label);
+> +				offset += scnprintf(temp + offset,
+> +						    sizeof(temp) - offset,
+> +						    "%s ", label);
+>   		}
+>   	}
+>   
 
-[1] https://lore.kernel.org/netdev/cover.1795537128.git.ralf@mandelbit.com/
-
-> David Ahern (11):
->   ipv6: allocate the exception entry before removing the one it replaces
->   ipv6: keep a superseded pcpu dst working until its holders notice
->   ipv6: don't insert a PMTU exception whose MTU could not be stored
->   ipv6: invalidate the failing dst in ip6_link_failure()
->   ipv6: tell route dumps about exception inserts with a table sequence
->   ipv6: validate dsts against the netns route generation
->   ipv6: make rt_genid_bump_ipv6() a plain counter increment
->   nexthop: factor out nh_has_f6i()
->   nexthop: bump the IPv6 route generation on group changes
->   ipv6: stamp dsts with the generation sampled before the FIB lookup
->   selftests: net: pmtu: check that a deleted cached exception stays
->     deleted
->
-
-When you resend, please add Reported-by tags where the series fixes
-issues I reported in this thread: the reuse of a rebuilt pcpu dst
-(10/11), stale exceptions treated as misses (6/11), superseded pcpu dsts
-released with dst_dev_put (2/11) and, if the series addresses it, the
-bundle-child release.
-
--- 
-Ralf Lici
-Mandelbit Srl
