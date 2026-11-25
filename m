@@ -1,57 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795570497;
-	b=F1sZK/FmwAkgU0xMHV1MyLBM/X/EbMurnKD5tUulDAkV3B4glkvB0Fc17r5LOvcCP8fw
-	 QlqwIr/N6sQdDfmdq/CKjmyShQQa0bP3zwFn52Cblj/wjgyPd+milQ82JVazESvVYyXrb
-	 2lZrfddVP5FbVKv6zE1jn4n+8cz0P48Ml/HGMaD2X536ua4kuLXs3wRx2zXQX+p/L1Dw8
-	 A2L4tT7v8AbLB8w5zDpYd1S6g/8vCJQrlWi5abpEtmWLboBNbYFBzc2W9qnI0X8HKEq1K
-	 1Cd7xsbk9XjiRSCHmrdZLn9qKZOf13VoIkshT6jFWEZqQPD4eZFXE02QJoaCMLXT5KA==
+	t=1795570499;
+	b=cnjcET1bejSolIZHmvoeO2Zo9d6WRU9DAJ3+SKSHJEQdEM10n9SrzhryLFVHsHW84E+c
+	 1PUF8d2pKo0NVARN7+Y7A/4khFclCeHLI9yUeSltxCqJBL+/0mHcF0mqU1XXG3ndkz3kV
+	 7UZVVQR4uMkU9+RlOASeBknrjI1I6P4K7sE1PYn2zkOcI++CiYPKbH0J8NTTrI+qGrffg
+	 Q825bWsEJkJBS6zwi46NRc3tDeFJAVojD05eE/5e9n5MdvgDnDCsRLfOiBnF2YhX7SQ74
+	 1249CGIXiynKTIRDLqFmS8JTeX+JxJr/VGuTMBR7/VXxVtN2DqItXv15lATGe8jm+qQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795570497;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795570499;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=DA59jyb89Y1wxXmPx1cwYGs8UOHaUM5ztUYSrDEo/88=;
-	b=vwhYbwIhMDJgtaramw1iYVt33phmQHx0PO9q3khxmf3HkABBPaj8pnBlMU1qnoqNgtLT
-	 vEm9UvwOpYrNGWM4bpB9nZffGVRHYx6cuf/Ev7V5WId1bjMeyo5N0grOZRZBJ2PH5pN90
-	 LPELZfgcghRTSps1iGzZSN8rigb6IIZfwO7DTImKXMH8e4/G80HIEk0Z5ny92obfbTqH7
-	 DQWrlBRRS1+QaYi4A7VS0gdDGUpFCvWDkj8rHCRoMiZI4elz/XE5PuH/g3zAb6YuM81/h
-	 BKuJu/uxLqC57aoIwGyRply3VLg/L/0GZoWdrcNX0fZfcrdQRdaA2yg7HpaoeIUuaiQ==
+	bh=ISBgR7gESgw4ZES9JGQDlJ1ooxeV9C8odGf+egbdKG0=;
+	b=HscXtg9W5YiDtmJQC5Wr+TtEsLjEh74oerqT8MHU4jcAqL+GigfUF1qe7FqniofQuUt3
+	 XoORP6syYc07VY7Z8MpOyFf+mUvybdw34NQ8cQ61fn7wPKlqKioxNz8Jpk/JZtdzIQm1A
+	 DZr9xbo9aTIaFrE7qddgaNFOE81DH5V1MRXVE5v1Il+eHdzR0/id6NJ5BipsAXSxxkdBT
+	 mMsQbFqB8k/9tW13AiuY5y+JDvuoxZKu9XlEN2xldCjGpmB1UpX/qXlATLSV4x9W7vEBF
+	 fIenYF8sSLGUi92g6/pHD25IzrOGF8aSLzSeiL8urnz8C0KeNsEpdX+FLMsWZrr340w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VAaa+eIv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DUKoyJB6;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5208606A681;
-	Wed, 25 Nov 2026 01:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C12606A33A;
+	Wed, 25 Nov 2026 01:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VAaa+eIv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4BD71F000E1;
-	Wed, 25 Nov 2026 01:34:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DUKoyJB6
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE2791F00A01;
+	Wed, 25 Nov 2026 01:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795570496;
-	bh=DA59jyb89Y1wxXmPx1cwYGs8UOHaUM5ztUYSrDEo/88=;
+	s=k20260515; t=1795570498;
+	bh=ISBgR7gESgw4ZES9JGQDlJ1ooxeV9C8odGf+egbdKG0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VAaa+eIvaBoQmnXpkApc6jm4WQecmvkX58MDKhJZONqlGKlLTjblnSFdgqhLtveYo
-	 u4MNnJzvAxtc761OHVU+pw6wN0HH9C11yPJjNFBPZqyC68PlYDRaOJSXfdh05iJmin
-	 jGHxa7p7SXCZpjfiXCXfzb4OFmBU7IBBSjUhsAn65Kq6NYHrlVMaBmoTFCEBrhTGx/
-	 m5Uz+/GXlbhb69wdqb3figGMhFlPZxkdZz84xwlW5NXIkLLoSwYaDmnINMAOi/9Vpb
-	 v1oMvxeloA57PyJkDd8xvCoDZ3ATdYoui+Xs89KZ5x0qBfbrw70m9C8N5vfFsVPxpt
-	 YsUryFCEC+GPg==
-Subject: Re: [PATCH net-next 2/6] gre: Enable BIG TCP packets
+	b=DUKoyJB6GOhGYlMCU4ndLe/8YcEiOLjypzmVCVs2b/s3bkFKeF7okDDnCEADkPYI2
+	 Q/YZWXb19/7J75cTBc+aOHpv/mHOEg0h+p7ov/UmlCqaCEahKmapQLIjnbLOZ7D5+S
+	 Dh6kbvTR21oo8jA8XRyAYoGBNOMkNsRmWkY6Qp1qMODCNRRSnn+7vDyYx3gdtEy864
+	 11d/pof8pV/kRIso/4tbnO6AlxQTugh7fXHE6Aw9fsAW1dDRBgs6C3+XxZRUIuzePS
+	 S4elv1Dvzl6wOiKEW06vFkUayyHEVAMCSHa09pKV3sY9gFgKQBvKrJ8JVtWYiV8km9
+	 bTyMKdIcv5bDg==
+Subject:
+ Re: [PATCH net-next 6/6] selftests: net: big_tcp_tunnels: Cover IP tunnels
 From: netdev-bot+sashiko@kernel.org
 To: yanhaishuang@cmss.chinamobile.com
 Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  horms@kernel.org, shuah@kernel.org, alice.kernel@fastmail.im,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 25 Nov 2026 01:34:55 +0000
-Message-ID: <179557049527.3135.5031926005314724834@kernel.org>
-In-Reply-To: <20261124013124.3693-3-yanhaishuang@cmss.chinamobile.com>
-References: <20261124013124.3693-3-yanhaishuang@cmss.chinamobile.com>
-X-sashiko-severity: Low
+Date: Wed, 25 Nov 2026 01:34:57 +0000
+Message-ID: <179557049725.3135.4073142828865813935@kernel.org>
+In-Reply-To: <20261124013124.3693-7-yanhaishuang@cmss.chinamobile.com>
+References: <20261124013124.3693-7-yanhaishuang@cmss.chinamobile.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -64,87 +65,192 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
-- [Low] This patch turns on BIG TCP for gre and gretap (tso_max_size =
-  GSO_MAX_SIZE in ipgre_tunnel_setup()/ipgre_tap_setup()).
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] In the main loop of
+  tools/testing/selftests/net/big_tcp_tunnels.sh (lines 373-374), the…
+- [Low] The commit message says fou and fou6 are loaded "like pmtu.sh
+  does".
+- [Low] The comment in run_ip_tunnel() (big_tcp_tunnels.sh lines 338-339)
+  explains the skipped sit csum-off case as "GRO does not build sit…
 
 --
 
-gre: Enable BIG TCP packets
+selftests: net: big_tcp_tunnels: Cover IP tunnels
 
-This commit raises tso_max_size to GSO_MAX_SIZE for gre and gretap
-devices, so an admin can use BIG TCP on them by raising gso_max_size and
-gso_ipv4_max_size. erspan is not changed, and the defaults stay at 64KB.
+This patch extends big_tcp_tunnels.sh to run the BIG TCP checks over
+ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap. They run without
+encapsulation and with FOU, and with GUE on an IPv4 underlay. sit runs
+only with veth tx checksum offload enabled, and fou/fou6 are loaded with
+modprobe before the tests start.
 
-> diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-> index f8a7c43535020..41ec54dcbfdcc 100644
-> --- a/net/ipv4/ip_gre.c
-> +++ b/net/ipv4/ip_gre.c
-> @@ -1007,6 +1007,7 @@ static void ipgre_tunnel_setup(struct net_device *dev)
->  {
->  	dev->netdev_ops		= &ipgre_netdev_ops;
->  	dev->type		= ARPHRD_IPGRE;
-> +	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
->  	ip_tunnel_setup(dev, ipgre_net_id);
->  }
+> diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
+> index 9c1482b842bfc..9f185eb20652e 100755
+> --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
+> +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
+
+[ ... ]
+
+> @@ -240,6 +330,26 @@ if ! ip link help 2>&1 | grep gso_ipv4_max_size &> /dev/null; then
+>  	exit "$ksft_skip"
+>  fi
+>  
+> +# $1: tunnel type, $2: tunnel family, $3: traffic family, $4: encapsulation
+> +run_ip_tunnel() {
+> +	local csum_offload
+> +
+> +	for csum_offload in on off; do
+> +		# GRO does not build sit packets larger than 64KB, so with
+> +		# software GSO on the sender there is nothing big to receive.
 
 [Severity: Low]
+Is this the real reason the csum-off sit case has nothing big to receive?
 
-The commit message says FOU and GUE are covered because they "set the UDP
-length with udp_set_len()". That covers transmit. Is the receive side in
-net/ipv4/fou_core.c also ready for these packets?
+In csum-off mode, do_test() counts packets over 64KB on PREROUTING
+-i tun1, after decapsulation. The sender did software GSO, so those
+packets can only exist if receive-side GRO aggregated them.
 
-Take gre over FOU/GUE with gso_ipv4_max_size raised. A GSO packet larger
-than 64KB leaves __ip_local_out() with an outer tot_len of 0, set by
-iph_set_totlen(). udp_set_len() also sets uh->len to 0.
+ipip and gre get that aggregation through ip_tunnel_rcv():
 
-On the receiver, ip_rcv_core() accepts this through iph_totlen(), and
-__udp4_lib_rcv() accepts it through udp_get_len(). The skb then reaches
-fou_recv_pull() and gue_udp_recv(). Both of them do this:
-
-net/ipv4/fou_core.c:fou_recv_pull() {
+net/ipv4/ip_tunnel.c:ip_tunnel_rcv() {
     ...
-	if (fou->family == AF_INET)
-		ip_hdr(skb)->tot_len = htons(ntohs(ip_hdr(skb)->tot_len) - len);
+	gro_cells_receive(&tunnel->gro_cells, skb);
     ...
 }
 
-Doesn't this wrap when tot_len is 0? For plain FOU it becomes 0 - 8 =
-65528. For GUE it becomes 0 - (8 + 4 + optlen).
+sit has no gro_cells and ends in a plain netif_rx():
 
-That non-zero length is written back into the outer header, while the skb
-can hold up to 512KB. It breaks the convention that a tot_len of 0 means
-"use skb->len".
+net/ipv6/sit.c:ipip6_rcv() {
+    ...
+		dev_sw_netstats_rx_add(tunnel->dev, skb->len);
 
-No in-kernel reader seems to misbehave on this value. After the pull, the
-skb is resubmitted as IPPROTO_GRE and goes through
-gre_rcv()->ipgre_rcv()->ip_tunnel_rcv(). That path only reads daddr and
-tos from the outer header before it drops the header.
+		netif_rx(skb);
+    ...
+}
 
-The wrong length is still visible in two places:
+veth also has GRO disabled by default (veth_disable_gro()), and the test
+never enables it. So the 64KB limit for encapsulated packets (the
+p->encapsulation check in skb_gro_receive()) never applies here, because
+sit packets don't go through GRO at all on this receive path.
 
-- raw IPPROTO_GRE sockets, which get the outer header back through the
-  skb_push() in raw_rcv()
-- the header quoted by icmp_send() when no tunnel matches
+Would it be more accurate to say that sit does not use gro_cells on
+receive? The commit message gives the same explanation.
 
-The big_tcp_tunnels.sh extension later in this series runs this path with
-FOU and GUE.
+> +		if [ "$1" = sit ] && [ "$csum_offload" = off ]; then
+> +			continue
+> +		fi
+> +		setup_tunnel "$1" "$2" "$csum_offload" "$3" "$4" || exit "$?"
+> +		do_test "$2" "$3" "$csum_offload" || exit "$?"
+> +		cleanup_tunnel "$2" "$4"
+> +	done
+> +}
+> +
+> +# fou is not loaded on demand when built as a module
+> +modprobe -q fou
+> +modprobe -q fou6
 
-The AF_INET6 branch in both functions has the same pattern for
-payload_len. The later ip6_tunnel and ip6_gre patches in the series make
-that branch reachable, and no later patch changes fou_core.c.
+[Severity: Low]
+The commit message says fou and fou6 are loaded "like pmtu.sh does".
+pmtu.sh, however, turns a modprobe failure into a skip:
 
-Would something like iph_set_totlen(iph, iph_totlen(skb, iph) - len) fit
-here? Another option is to skip the adjustment when tot_len is 0.
+tools/testing/selftests/net/pmtu.sh:setup_fou_or_gue() {
+    ...
+		modprobe fou || return $ksft_skip
+    ...
+		modprobe fou6 || return $ksft_skip
+    ...
+}
 
-The gretap change in ipgre_tap_setup() exposes the same path.
+Here the errors are silenced and the result is not checked. If fou or
+fou6 is not available, won't the script report a failure instead of a
+skip?
+
+setup_ip_tunnel()
+    ip -netns "$1" fou add port "$FOU_PORT" ... || return 1
+setup_tunnel()
+    setup_ip_tunnel ... || return 1
+run_ip_tunnel()
+    setup_tunnel ... || exit "$?"
+
+The script then exits 1, after the vxlan, geneve, bareudp and
+encap-none cases have already passed. A kernel that passed
+big_tcp_tunnels.sh before this patch would now fail it.
+
+tools/testing/selftests/net/config sets CONFIG_NET_FOU=y and
+CONFIG_IPV6_FOU=m, so only kernels built with a different config are
+affected.
+
+Could a modprobe failure here exit with ksft_skip, or skip only the fou
+and gue cases?
+
+>  WORKDIR=$(mktemp -d)
+>  trap cleanup EXIT
+>  setup
 
 [ ... ]
+
+> @@ -254,3 +364,18 @@ for tunnel in vxlan geneve bareudp; do
+>  		done
+>  	done
+>  done
+> +for encap in none fou gue; do
+> +	run_ip_tunnel ipip 4 4 "$encap"
+> +	for traffic_family in 4 6; do
+> +		run_ip_tunnel gre 4 "$traffic_family" "$encap"
+> +		run_ip_tunnel gretap 4 "$traffic_family" "$encap"
+> +	done
+> +	# GUE is only supported on an IPv4 underlay
+> +	[ "$encap" = gue ] && continue
+> +	run_ip_tunnel sit 4 6 "$encap"
+
+[Severity: Medium]
+Is this comment accurate? net/ipv6/fou6.c defines gue6_build_header()
+and registers GUE for IPv6 tunnels:
+
+net/ipv6/fou6.c:fou6_init() {
+    ...
+	ret = ip6_tnl_encap_add_ops(&gue_ip6tun_ops, TUNNEL_ENCAP_GUE);
+    ...
+}
+
+Also, pmtu.sh in the same directory already runs
+pmtu_ipv4_gue6_exception and pmtu_ipv6_gue6_exception.
+
+The continue also comes before the sit line, and sit uses an IPv4
+underlay. Like ipip, sit sets up its encap with ip_tunnel_encap_setup()
+and calls ip_tunnel_encap() in ipip6_tunnel_xmit(). pmtu.sh also tests
+sit over gue4. Was sit meant to be skipped for GUE?
+
+As written, sit, ip6tnl, ip6gre and ip6gretap never get BIG TCP coverage
+with GUE. The earlier patches in the series still raise tso_max_size for
+these devices whatever the encap type.
+
+The loop also doesn't match the new file header:
+
+    # and over ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap tunnels,
+    # without encapsulation and with FOU and GUE.
+
+It doesn't match the commit message either, which says "with GUE too on
+an IPv4 underlay".
+
+Could the continue move below the sit line, with the comment corrected?
+Could GUE also be run for the IPv6 underlay tunnels?
+
+> +	for traffic_family in 4 6; do
+> +		run_ip_tunnel ip6tnl 6 "$traffic_family" "$encap"
+> +		run_ip_tunnel ip6gre 6 "$traffic_family" "$encap"
+> +		run_ip_tunnel ip6gretap 6 "$traffic_family" "$encap"
+> +	done
+> +done
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261124013124.3693-1-yanhaishuang%40cmss.chinamobile.com
