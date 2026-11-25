@@ -1,96 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795581074;
-	b=whPC00aB2KejeSD0tfSTQv3b+gz46VXA6xFHrAppjtZ4SE2uUGCODr6zzioS3876OZtN
-	 1WRouEkWZ+ez1JbnaoQ4d/jwGfi42uTRFvV5doNzb3/wjoIoq1E/iLw1xkP5DJ7UmQsFy
-	 zxHqL4x6TYAw8LjvVSbCXnBJqZYOTh5OLQUWdnrl1fQPxEgQ3e48cWPgFHwyc+Egci8PA
-	 V3EOwMeBoPHFY8xPVnfSD+qR86VUPJV5iWgFz/8rPB6plvuenkfCIn6nP2jCnie+WFQs8
-	 ISqk9TzPfuiYJVNxu5wK6zRGu4wXT+oRgN6D4dc6U8zji4HOGYtVSPt2M80QKYFgmvg==
+	t=1795582121;
+	b=VTrJLOcbGhMIW4SVxIg0CWo4pL5/GRW/p/vF8Amoz5NhwEoqQJ0msfEL/lgSgBhuoAs0
+	 7KJ402Z6KU/Go2RAyfMpGFU7UDJIK6uRs/NkPXMdKt7q8xiNiXzWhlGCxMl36yOvj8RZD
+	 tCRVyhOM1cMkIb/CLJfH/SdTa/KourQ7cLNyg7aKfTbS1fN1sp4A6mhM0sqKv++0qhMto
+	 L8Hj1EpF6bcl8wWdIT7ocqumdNC75uWrSHVwFhkRJi2qlH6K7jNsFVKPypT/fv9VS9ryi
+	 EDObXQf18J/IvEM+9NkchsmIpDeaBUd8AskIeQTr1wG+1944XrU3UmXTa82yR3n1s8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795581074;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795582121;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:To:Cc:Message-ID:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=LqCAbsFv75X8FpT2kuDVemXn9DMtQ2UrANDaKURHbUU=;
-	b=Q5R74eW7agwvZwNerPq8dVNizv9RY0UcIgU7mrxIYIuIdUiW7BDnsumgxIauEBNiAeva
-	 5xmP2tW/G5kJYJIjLwbxG+Ukt4rsLfNTleXU6HHAvRj3OhjyUcUNPUflhGPt4zRLVPAQM
-	 zJ0i7SXGUbkTU5dPebJyiY6CZbb3abda4aFDG+3Itl17PpN5VfWURgsi2QHpU3r/QXm42
-	 dBU/KbLAKOlMy6UDhsRs6rnOi4uXorEH5ZYaKczcgNgPKLVBD00W2JMhsCzYzIXZ52NCy
-	 llK+VOlBGc1vCqt7SU7eLt8HV2bmxmWmOEGcPo2uwYEUrIgDZCcvKIuvNy19KDGvDDA==
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=ibCE/HqS/x5d7xPsRoXs/I+gnefhANY9+jawDpdhc1o=;
+	b=QcH2cnfI5rBIdfrlF8XZ5zdockCCT9uHRghCKN+tll9J4gIKI9ILK0w0SzSQwkRv0S6x
+	 gCqhyXomv8VjeZwSBzxGkvYnuorvQOV+3nNrEegiEtzykpjg4HvVMUWpLqxAZQ5M+IquI
+	 DANnyTwRyFufzIpbXeH0yglFBEIFrMxNwXlMy8U/K/iMUUfZOgkIe+eL7Ag5YarBOBTqr
+	 TLM/HlaeIZYJPQUGIY4OMHx7M+bnYIdF9GDAlejgS8rXkp1t2SmJtEXTqWt7HZZMkjbxV
+	 Riuy+d1GJaJT1qHU85BdtB7egk91kVBNS40jmJg3UxzEVrsLjuROAmkePaCPtt4UuKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9xaBilI;
-	arc=none smtp.remote-ip=209.85.160.178
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q5r8IgEQ;
+	arc=none smtp.remote-ip=209.85.215.175
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C747606A323
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 04:31:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C747606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE44606A321
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 04:48:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1BE44606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9xaBilI
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-55d2b4a99d4so48884261cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 20:31:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q5r8IgEQ
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cde84cb8803so1278013a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 20:48:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795581073; x=1796185873; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:message-id:cc:to:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LqCAbsFv75X8FpT2kuDVemXn9DMtQ2UrANDaKURHbUU=;
-        b=t9xaBilIOSfrKNfdyYoYv0fqw8MH2K4V/ls2xdv/XMF2Y7q+0FeBKT08Y8d356eHZx
-         ZZrO0XeB7oddmjUFHDeCZuq09o6W4o3F5l679+WsVsjdpvVjrBPpYqTziW7ImtZ350k8
-         p1iBOcySHX2sS+BpiR9BlFHzYvx1Xf5ON00IpOEVWKdWm1jVnlRFvOGGzkWOZ7Fji893
-         S8y5w1WZGalKSlup2KqBhICVzJi2gliF55C2HldJQMjAtm7KkLZy2sC67sVDx8rhKCws
-         c1q3Kwib5FBhJNmqRxDoxocCrWBe2NOGQ4Hdek/jYKrlEBbApxyLcDVCiAAO6dN3AfZl
-         nEug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795581073; x=1796185873;
-        h=content-transfer-encoding:content-type:message-id:cc:to:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1795582120; x=1796186920; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LqCAbsFv75X8FpT2kuDVemXn9DMtQ2UrANDaKURHbUU=;
-        b=IX1JScLMgCbXewODnRK9QayrkHONF0hjV2nl+qMZVFOKpfIRVBZXMRorR/O+5p12EV
-         7vA6IhlRYmBXMe7gUGtFFwJXE6ObXnbevnrqlE0S43qdzFjQuZcawSGSZkZock9TR9LF
-         NIiaafq0U1OTRL6oIQufgFhY0yh4PwLpq/LWLg5Jy/Ql52bmm6DdCxn1IaA5jEiaASNf
-         ymPeRR+kit3EIDNNushsvt6mYB4EPLdkz2qiLo0S0EFKAwMa/l3nKNn7KYt+gU1HDWgI
-         OivZ1085gPVI6fpjgfAyzqcA4JQic73XEw0PJKi8M6lw84cdQV3TBucPMAfCVDgqTHPF
-         faog==
-X-Forwarded-Encrypted: i=1; AL+hErG2w27QMCcke6eAlTCRVwGwVpw0MQ+L7hvMOYEthm6XmJdTcVRayDGn6YXiIytlLR+9NocqJtHeAzL3vgv6UzM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/oPIikeXNtciI1Sd8TPPHKwIb3/REDW7ErluFKYI1SfLKYHqtG
-	+VTS9EF2a6tcyKgsyyRzFfTTjW19Mp5sRBUeX6vqv+y3XlpHhvXZGOo=
-X-Gm-Gg: AZFdTZdyVxPUy16kxcE8kaRIPKSwIkudpMnhJ9PB+ZYhM1McRayeVnVqUGUUCtfK5Ic
-	lFhXiLsl8YmRT5YjICS+UYBrsQchRmDQkTH1sujTAbHaU3wS82FEaTX/YinXJbQMV+HXCWeeQEG
-	2TTCeOiNnfc4EVv8pSmM2d8VFXePP4qK3UFopgXc92bNwGPKOZLq1KF6YkO1PJNaWwfPmzJ2vpg
-	bh3Ia5eGBBduYka1sGXzUCTixq728T/N7Ld+R9ZqUyKsmGa1mM/J4yOVpJJmQmuYisJU2lQvIac
-	Fzs8GZ8SWWb5jyuJl5h+gY4CEMaw9ADai2QZ6NOzp0AK2+Y4LR76/0pCtj33FYEqrbkkJ3vrRtG
-	v8oHp3sscj2NysFzwYsficnULuUywa1xQeY3Oxq/+BeSrUvidfMsFdoDwyyUamXMG2P3G1FkJvA
-	FHWaXBszaShHKZrZR9P1tlbnf1taYD9/XqBCCJ+sVm1aQDuMhrkdE4YTbktQ4fcDAHL7WP9gu7O
-	Z0tgOfk87HAUugkXeFSZl/Fk2/V3ga2p0nE3Q9NuKv5k1+u28IRGRF6K3+u0hRX4jAQZ8QMaCZo
-	oMQb09upFyxkFPFMDLrsZqYhhbsLkKXlneVc4iqvfTMcZEgnvklk8lRnbp4a3gVbLo0JwQC3xBf
-	IE57jvhADxk4VZNpUxmysFFxkcOs+TeHKH7cyrydia6zmV2IcBhjL0RFxOf/2IoL7NIT49F7y01
-	5SQ2SWhiI+97Q9wQY=
-X-Received: by 2002:ac8:6545:0:b0:55c:f5a5:3900 with SMTP id d75a77b69052e-55d76aa8574mr311966681cf.62.1795581072923;
-        Tue, 24 Nov 2026 20:31:12 -0800 (PST)
-Received: from [127.0.1.1] (207-237-119-98.s2383.c3-0.nyr-cbr1.nyr.ny.cable.rcncustomer.com. [207.237.119.98])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d7889f8absm143087821cf.27.2026.11.24.20.31.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 20:31:12 -0800 (PST)
-From: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
-Date: Wed, 25 Nov 2026 04:31:11 -0000
-Subject: [PATCH RESEND v2] Documentation: kunit: document --summary and
- --failed
- options
-To: david@davidgow.net, brendan.higgins@linux.dev, corbet@lwn.net
-Cc: danielmaraboo@gmail.com, raemoar63@gmail.com, skhan@linuxfoundation.org,
- rdunlap@infradead.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <179558107134.36587.13120861622026385297@gmail.com>
-Content-Type: text/plain; charset=utf-8
+        bh=ibCE/HqS/x5d7xPsRoXs/I+gnefhANY9+jawDpdhc1o=;
+        b=Q5r8IgEQAmZbYJu/A0c1xG1xuchmY4XyU1eozZEou/bXUSlaOHvyFcCRnbc2hKTb1b
+         iglr9abON268kxwAoma+YRgC3gh7pA/14dUTq5OlXiDNpbQ0+v1SFSktNKRNyNmEyiKb
+         47KeutDVhlW3vsl2b9ZFlsgXdyFYmXYFlYtcyc8eOmFnqWbTn9XOJAPV+9SVeDz9p99T
+         NT07Po7olJPfieXLKL1nZwScFHcb16SUup5ZGhPZCoT4TgR3YB1qpv25DyotThsL6ubO
+         46H2mGwDbyEdbSgX9c3drUv7TYiUZ0x+Qpk1ecIfGHq1rj2gXUBjnXPoTpf3wktMdeMa
+         FG2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795582120; x=1796186920;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ibCE/HqS/x5d7xPsRoXs/I+gnefhANY9+jawDpdhc1o=;
+        b=2tgEvOoBu5o//kWSAqMUHPeUSEk9i8i1BcROtOE2ZKXUH8I3xFLq54CVXqA1kXl7XM
+         CuiKYr0eoZe2jZlE5z7qhDZHrjuL3IDR8KzkhzbGQ2Z4fNmSSJQkSh/GwPUzABsZbYKF
+         f9mj/gf6Bzf4HlcCTx+j/NpWxuASrXVXgbbeSBsZ1ZlGmSKLKylXcXMU1YzCDyxC59t+
+         d4HrcJ4hJ9fy+Zy7/k29CEy15njpEKZ7T2VulvVNtq/+Y0QstX9zckPAFEeCESip7LvI
+         NQ7W0DXMTsc9/GWVIdjeNP9lluTuAybvnUNY9Z0kBEGL/q1Ri/+hTv4z+bM0QbTDIwG8
+         WnMQ==
+X-Forwarded-Encrypted: i=1; AL+hErE7H6iJ39jcQjQCPnbT/pK0oAhz831+oZ7XPtnfCFy5gQNtaurRkNKTEBHSJyRc9iEo+Ki/9DozFLfs4tk018w=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+YZ4nTyq131wLLR02QCcjCB5QiESfrTWQ1ZMk+O1ZP/EO1XQOr
+	NCFfADSW+Cvr9O9r373ZCG1VnIc9IkG+1rLswIrYWFvCIj3JM7ZyDscvVL9zCbPD
+X-Gm-Gg: AZFdTZe1t9YaCBJDajNrmokH5artHW8nPRNjvWpxMNkeF2pq+YCzV3dPfTLzyqK/TFH
+	eU2EZ7IBA7GdG3YxTNLBbwfo7MTPDLhj2lj4oplY3eLK7tI0PiRXjNZQG46A0oLWi3RcywRtDel
+	DyvpKmI2bkzOaePvf7jl+JmUqCqMUCFw+APp2TLrHPpc7E7X/qhpKZU0smFwUQ2c6hT3AeLuugZ
+	BBZd+WoyMisE9giq9iTENrBNLZ8es+vZBD9bgr6D3xjbnedpy6Xx40rgQqSPzUVOySh3AP575h8
+	KmDVqTQWhIvLzeZfMst/JrF+7GEQqHT5TMKxvrfmC0V5YGpfbxMTX9QWOySiqgDl5206NxKgDYk
+	Ia9fG0gLpzIrpr4vilzu90QpoIk/FBdjPQpSzBx8KFEPHmmmE4T/8pyXzRn165Iz+7ZxxCt0UmZ
+	/AGiJ/P11i6vDZMJelLzvBNse7R9wKhcI43TkfhvDn+Kjj4BpyZrq7ZMYvL8GwLhtD5RjKu5dJ5
+	SK5+atSnvwMgzjvEvvK5bLnEXRbErZWxj4M0QQP+WzigmOZZCtIjWLWspwGnf/JxNR+vRBrSAHE
+	FT+O2oBommiepWo7izXqsvStoSDN0iBnqo2GAv5k3bGfzgUqTnN2JEwZ4N+X1UCUU/g4jK/XRHl
+	oHNsLJ07mt5JuBn9WMytI177Fku2GAmzGmA==
+X-Received: by 2002:a17:90b:4a48:b0:3b4:1884:984c with SMTP id 98e67ed59e1d1-3b41c7b573amr15749170a91.6.1795582120219;
+        Tue, 24 Nov 2026 20:48:40 -0800 (PST)
+Received: from localhost ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ecbd0bsm28760169a91.15.2026.11.24.20.48.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 20:48:39 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Nov 2026 04:48:39 +0000
+Message-Id: <DN40QM3CLBU9.3GC3UR9AVWNZF@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Use a 32-bit compare in the array map
+ gen_lookups
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yuan Chen" <chenyuan@kylinos.cn>, <bpf@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Shuah
+ Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+In-Reply-To: <20261115102559.465375-2-chenyuan@kylinos.cn>
+References: <20261115102559.465375-1-chenyuan@kylinos.cn> <20261115102559.465375-2-chenyuan@kylinos.cn>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,52 +102,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
 
-Commit 062a9dd9bad7 ("kunit: tool: Only print the summary") and commit
-3c67a2c09b3c ("kunit: tool: print failed tests only") added the --summary
-and --failed options to kunit.py, but the matching entries in the
-run_wrapper documentation were never added.
+On Sun, Nov 15, 2026 at 02:25 AM Yuan Chen <chenyuan@kylinos.cn> wrote:
+> Use BPF_JMP32_IMM() for the three compares, as commit 70504de0bb62
+> ("xsk: Use a 32-bit compare in xsk_map_gen_lookup") did for
+> xsk_map_gen_lookup().
 
-Add descriptions for both options next to the other output options, so
-the documentation lists the arguments the tool actually accepts.
+bpf-ci is right. The sparc64 JIT has no BPF_JMP32.
+build_insn() returns -EINVAL for the new compare.
+Every prog with a lookup in an array loses the JIT there.
+With CONFIG_BPF_JIT_ALWAYS_ON the load fails with -ENOTSUPP.
+The riscv64 JIT adds two zero extensions, one for r0 and one for the imm.
+The bug needs a map of 16 Gbytes.
+imo it's not worth changing the code of every lookup for that.
 
-An LLM-based coding assistant helped draft these entries; I checked them
-against kunit.py and kunit_parser.py.
+can we skip the inlining for such maps ?
+map_gen_lookup() returns -EOPNOTSUPP, like for BPF_F_INNER_MAP.
+bpf_do_misc_fixups() then calls ops->map_lookup_elem().
+All three compare u32 with u32.
+The emitted code stays the same for all other maps.
+Then patch 2 has nothing to check. Drop it.
 
-Reviewed-by: Daniel Pereira <danielmaraboo@gmail.com>
-Signed-off-by: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
----
-Resending: no changes since v2 (26 Oct), only Daniel's Reviewed-by added.
+bpf_do_misc_fixups() has the same compare in front of bpf_tail_call().
+With max_entries 0x80000000 the index 0x80000005 calls prog 5.
+The diff doesn't fix that one.
 
-Changes in v2:
-- Moved the tool disclosure into the changelog text; the Assisted-by
-  trailer is no longer described in Documentation/process.
 
- Documentation/dev-tools/kunit/run_wrapper.rst | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index cecc110a..641ab50a 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -327,6 +327,14 @@ command line arguments:
- - ``--junit``: If set, stores the test results in JUnit XML format and prints to `stdout` or
-   saves to a file if a filename is specified.
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 508706d..89c22c7 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -227,6 +227,10 @@ static int array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ 	if (map->map_flags & BPF_F_INNER_MAP)
+ 		return -EOPNOTSUPP;
  
-+- ``--summary``: If set, prints only the summary line for parsed test
-+  results, rather than the result of every individual test. Does nothing
-+  if ``--raw_output`` is set.
++	/* The imm of BPF_JGE is sign extended. It cannot hold such max_entries. */
++	if (map->max_entries > S32_MAX)
++		return -EOPNOTSUPP;
 +
-+- ``--failed``: If set, prints only the tests that failed or crashed, along
-+  with the summary line, once all tests have run. Does nothing if
-+  ``--raw_output`` is set.
+ 	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
+ 	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
+ 	if (!map->bypass_spec_v1) {
+@@ -302,6 +306,10 @@ static int percpu_array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *ins
+ 	if (map->map_flags & BPF_F_INNER_MAP)
+ 		return -EOPNOTSUPP;
+ 
++	/* The imm of BPF_JGE is sign extended. It cannot hold such max_entries. */
++	if (map->max_entries > S32_MAX)
++		return -EOPNOTSUPP;
 +
- - ``--filter``: Specifies filters on test attributes, for example, ``speed!=slow``.
-   Multiple filters can be used by wrapping input in quotes and separating filters
-   by commas. Example: ``--filter "speed>slow, module=example"``.
+ 	BUILD_BUG_ON(offsetof(struct bpf_array, map) != 0);
+ 	*insn++ = BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, offsetof(struct bpf_array, pptrs));
+ 
+@@ -1496,6 +1504,10 @@ static int array_of_map_gen_lookup(struct bpf_map *map,
+ 	const int map_ptr = BPF_REG_1;
+ 	const int index = BPF_REG_2;
+ 
++	/* The imm of BPF_JGE is sign extended. It cannot hold such max_entries. */
++	if (map->max_entries > S32_MAX)
++		return -EOPNOTSUPP;
++
+ 	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
+ 	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
+ 	if (!map->bypass_spec_v1) {
 
-base-commit: c03c1a14507dfaf8b856c2608f9ac216021fc222
--- 
-2.34.1
+> Fixes: b2157399cc98 ("bpf: prevent out-of-bounds speculation")
 
+Wrong tag. At that commit array_map_alloc() has:
 
+  if (array_size >= U32_MAX - PAGE_SIZE)
+          return ERR_PTR(-ENOMEM);
+
+elem_size is 8 or more, so max_entries is below 0x20000000.
+The same is true at 81ed18ab3098, which bpf-ci proposes.
+The limit went away in commit 1bc5975613ed ("bpf: Eliminate
+rlimit-based memory accounting for arraymap maps").
+
+pw-bot: cr
