@@ -1,109 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795582216;
-	b=13Ab+NElaekdPFsH7SXfdT8BraHd6bJbhgm8Q1qAYYtwfLwxgEYBDFZEWSm8PgR3vOzj
-	 93eioiaur8zwK/2f3Tzm+ChYf6IY2McY0zAp4uPxmlctlSoZAAi6vH93wfpHoUIlGbUjk
-	 pR8Q2hXsQ922zxTzx8qGfVy3Jrlrc4vjJ9/z9xVwuVueVxsCLn/5z6ePj2pamIPHfPRZy
-	 CMp6P8fS08Iq7DjdT20IN7FWwFe+lKu6C+MOdE0M7VH8Z2w4fTiJnAijVelcCtztM9As9
-	 RI+A6VfnQznpYRcY38wvPfw9d70z1nfOxBUoS109odBEsES9KZXg/rjSNvsCk8x0Fkw==
+	t=1795584166;
+	b=neIiNEn2BIM/nXmyd3lLchFwCAS7uGudmd9Q3Ki1hodEY8zNMtQZbbQfFPMKcozGbbge
+	 em8trta33QfcU/yzy/Qcuy8l2KCAZ/qzl4Kpy9yjehpYyhz4yE24VJQBTO/Fypnjyv1Ah
+	 NiAiKeIXmiUqUp8CExbfSCFRgrKdMiCOoCNL27BJWNDwRVaT1EKeeo4B2YkJMO4DgmSY4
+	 l+WC/foVWqZrFWb5mp434/5c4lElpGSoC2HhyhUSDQjC1XLRXcmhaVskkBkocZ037p59q
+	 N1n4D6lHaewO+KUqSPX3z/AyOJAdVlnC9gDC7PHoch8NZwdcmsIEzW5pzAxClRX3a/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795582216;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=WZpqROJT0TFZ0N9AeyXaUSyo/Ga6Gz526tDibJ18xQ0=;
-	b=iWRj0xO9QBdLhR9YEeko1mLe+rtrYDEO/7urSPY0Xw4mG6D+LfxzK1kapvAxKFdLhKIo
-	 8bQo3A07nRB06RdX1nt+cLgc/N+ZzMA3gf8wCKjoNEXIrldzloGZ2yfyhBwIYOF+a913/
-	 bXCNFmDxvJECCWHqB0NKMJ6NCYKh6bv2er9X/zAFrPayUnK33OhdC+H9sHY2BRrj/TWZw
-	 Lg05nMQohiicAnFK3QfN4nBzFqQiO+5kXhkFQkC0xeMFRe9jCmYAuY/Fv/sazavwthh+J
-	 Gm1b1Li2La6cYQjl9QmYB6JKVHCTErmF+bw13xsp0BYjVQVlsVK9O0VCAq9cFoBkM3Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795584166;
+	h=DMARC-Filter:DKIM-Signature:Received:X-Spam-Checker-Version:
+	 X-Spam-Level:X-Spam-Status:DKIM-Signature:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=TFe8kWdY8+vGgOw97zdkNQZl05mCmGUxolLHHDOwS3M=;
+	b=dTO2nsmKsYa1YCb7rj+5FqSlhv/EwU1/4TCqJn6Vg1k0ut2malMOMCgIMjTGW36H/+Y5
+	 11DR165U8u1nqEctoBbLNZG39gAJXVD6mU/kCPhy1VHxAGLw8WZxTI4qhK3aLYCNTuzA0
+	 BIU+/eAnJW/yshCqQJgdJcbpEUCI7I/ESdCkGjo9nym5FO9N6YQpsnskFJMmH387ESe80
+	 ++sU5S3xG4HN2BiskCzQ663HxAgrnCoe3qKW40hr7kCswAeFvS9PHz3kg25D2MOL8Rjov
+	 0M6iO18Za+H8gdUxANREFyzjIe2BLjPE5H1PKGfjWMU6AL9/Yc8Pvv4N5MQrfZid47Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="LuIyU/xm";
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=davidgow.net;
+	spf=pass smtp.mailfrom=davidgow.net;
+	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=VSf8pxjw;
+	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=JUpeCONF;
+	arc=none smtp.remote-ip=203.29.242.92
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED545606A326
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 04:50:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED545606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A4F606A31E;
+	Wed, 25 Nov 2026 05:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45A4F606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LuIyU/xm
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f04b676219so29168625ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 20:50:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795582215; x=1796187015; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WZpqROJT0TFZ0N9AeyXaUSyo/Ga6Gz526tDibJ18xQ0=;
-        b=LuIyU/xmh3BDPSXKUR92JkBXXf570oqi3Y8UK36zn1m+izg3teFHRAvTAlsB9d4Yrt
-         jiyFW/a/MDgD+SiC5LcOCuHZl/d0LZ9ojLoiBiRbLUPiAXPE8V1tn04Z+xZZ9S02OkHv
-         q74wRiIEDaVGWFMdQDDSj8tnr6h4jMIfQmwG8BpiH8brOWUXWyLafDX1bdQcLxyv3+Xk
-         2qTfSxK48tIV1vEIW0cJO/CVnuRR6zspU4WW7VZfJtZDjxb1iPSXnQfotUjBi4HNNeuy
-         HVpkZPW9A3Lq8RWbFGAs1/Whr/lJFzu2iS7gC2zjV4p1SX5A+QZxBfDnIkWGH6l0Zzy+
-         7YnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795582215; x=1796187015;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WZpqROJT0TFZ0N9AeyXaUSyo/Ga6Gz526tDibJ18xQ0=;
-        b=DZFellOBp9O38RtN1GFDCbBiPuSIFIHOJcZrP9JFb08ZpKVbOGRh6o/5Jzb/QTkziy
-         RCzwlOZ7cCNddhwIE5ULukVmAala8BNHrJ0024YKHzzAbznzJmy+W7IDzzNrHBXkTPak
-         4BiX3KRyzslhLPCbc+Zk5Q0hFOBQX+Odw2m7n+6WLS0RvfGTyQSB5c+9axGo+UqjylSt
-         sTboWY/TRyrB0lHmU8CZHgcZFHsCwPNoHEEfABU0Y8rMZZq2VFVNRGwYoUgTgZ7hxUfM
-         pmrdVpOf/Cm1vxNmqxV6A795RZIqeksT0rKA6fXLe4m0Kt9g+XU15d+qruWKX8NZXoZ2
-         uQ5Q==
-X-Forwarded-Encrypted: i=1; AL+hErFXk/x4zPGQ5jhvYjavXLMFosXYC7KjzggPclhMAzEcG82a+8+Xf0D2I1zSAJESZAuoFbzoVrOwZBl9cXll4CE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+apgd2p5YSKCCKJnK6wKJUOKgG5l4sV/gxB34ZG+ZeRO+H4wZd
-	/lPcLLZGe66AixUo/FaFMUzFXLl8qKZnW4L90Qd/3Rg01Np3N+pKbTDV
-X-Gm-Gg: AZFdTZcXytfO9Kg64gCUjAVYPlKkwghw3fJS/giGk6lRLw5S+It27CNC7PD1N4z/SuS
-	RUIFMVeGjnUwncGa6NSfw/Wy4V3L6skrvrCIwVK/AuDpH7FN0YCZeUxunajISWSvSaqlTEEed2X
-	SbG70ZVrzAhhX0xkx/nzGz58IU9I6fFbv8ruCtGirAiKZ8RQm3+mh+NuTeUldUUnBJ4AaAHFN1y
-	CRjO5yS8JmkxHUxIBApwt7xP6IeTXfywRXNBNC2W3qWZDd8b257EchFRjfV1uldxwAnuurHrMZQ
-	l7uGVGknKlnwWaMOtp8Gjiwh/3eIx5Rze0H4HNwkFjLgsy9WFuR/ew2VRWrU5CWCfnSdI8/Qx9E
-	mqpBaKX37uIxC1Mxei6qQ61VU267EzKklq2CvoaYaZyw2hC/hnVuLoqMz0xEecjT78DZrrQyvQL
-	q26qBRivp14tj+H9nghUcpJ8pSyegotiX3tkioyo4n8d84QVpjqnCKFy4h2ZcG6xzw5Yae98rxr
-	2bcEzx155wLrfbDdYWIe9HdSCoIUjxxi7AM61xDcqiv0PBdwN3rjfYG8WA++/x/djUAYEWkOgf6
-	NLskDZYyHxxBIo3PzWLRLAuuiUo1gjpWoiSLGdnxAcwFcG9rFNssGGxZUFBZOZl9843cBs8Hd6L
-	7PZaX/PmZDge6jUWK+zyiZeH2VPSGHrdlLnnBXSo7TDM/aPSpEK8Iwa8=
-X-Received: by 2002:a17:903:b4f:b0:2f0:22fe:65e5 with SMTP id d9443c01a7336-2f03f1d0f8amr148657735ad.60.1795582214938;
-        Tue, 24 Nov 2026 20:50:14 -0800 (PST)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0457fd68dsm70131345ad.39.2026.11.24.20.50.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2026 20:50:14 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 04:50:13 +0000
-Message-Id: <DN40RTGK98VJ.2XIDDVK3YL2ZC@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tobias Philipp" <tphilipp@gmail.com>, <bpf@vger.kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski"
- <kuba@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Felix Fietkau"
- <nbd@nbd.name>, =?utf-8?q?Thibaut_VAR=C3=88NE?= <hacks@slashdirt.org>,
- "Stijn Tintel" <stijn@linux-ipv6.be>, "Daniel Mack" <daniel@zonque.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 2/4] bpf: Align lpm_trie map values to 8
- bytes
-In-Reply-To: <20261124225055.87344-3-tphilipp@gmail.com>
-References: <20261124225055.87344-1-tphilipp@gmail.com> <20261124225055.87344-3-tphilipp@gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (4096-bit key, unprotected) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=VSf8pxjw;
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=JUpeCONF
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1795584157;
+	bh=xr0HC8i4KGobGXLmwmE5z7g7HssNFJIM52pToW7kcNE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VSf8pxjwvCl6fHV18yMG5iOVMZEo7tsJyhn1WZGwykjVQQMmf0IfY6q1jpBtvdLUD
+	 CPZuDhMJLZ0HMwii7tLtTT0KTBWq6H/abiLKlAQHNApbHagZtEFWlO1xognhc9+P9m
+	 O/04l0agbXIJC7kXjHjY+f3H2H2xIvGjGoHEDZPCqMonywAlODqJgpc+su6poIaa2Q
+	 F0E6QTYFJRUxaeTF8jPgDSlnev9+LUNbORSF8nOAlV/Y9iZAVlFzbsol6Jd/Fm+0Dq
+	 K1lc0gETbgkZRJ4tOngjnqIEVQP+xwf6gHC4jRQVGrekwlL/vKG5Cj6spSdJeiTYlG
+	 SzysJPIetolyR3t1c0IsPPvUsCk2ZdaQAy+MmmBt9o9OKKHAKw+/6Xi77G5YHBzkbX
+	 7ULeivWV8bKqYnXOAp4cPutnK7irxfDpcCK0SYDkgiYL71jr+HWplQTSaiiaBVZ9XX
+	 P8UN4vSUmQ0qpeXUypbVBjef9/UVapPnIq/jQsamOL34yq0GTBM3iNpbvB8POyBCOL
+	 VM3CWs7TQm6G1l1MoOQgDjeB6nVlRjrftgOuccdDTEOmPlgvm3F3FCpVnNKwxKZL1s
+	 9eJMpmeTgjyzv6dxGwwMZby9YPREALXbY/eZf7MgbURXeK6G1rTG6yGm4BQFCL79ko
+	 mQ2CDn5VbZSlD4tAbi3fLAKQ=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 127F31EAD76; Wed, 25 Nov 2026 13:22:37 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1795584155;
+	bh=xr0HC8i4KGobGXLmwmE5z7g7HssNFJIM52pToW7kcNE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JUpeCONF6x0WItKx1v5RfHoxE4CPuJC7dChmKX+FWSDfG10aSX/CkvZ15z3ABW9gT
+	 slAibKUXw+fHuyRFjLwFvPN5TG3aVLYmf98Ff+Dbf0annbeLI96d2iaeAgDSrw2NkY
+	 kJ76LwAjtbl45voNBIa9yLiVSbUL30M/mc1aKNYfuhtCgc8RoOig+jijL/mKKcAYeu
+	 AsGlp3eL903EC4Mh0yOq4FGASxtKxuXjytmeTpZaAlTzp+n0qfT4PQDYbghDhtUHRO
+	 5Uuy+gvQ69KSszso/92MFQkI3LLtvt4zcwUpIR0/YxMM98PbfskT9FtweP9fiFzzTq
+	 r0Hx3W5lo2i6uMgIIMaM5WTASfqayXzMho97KXXwUnIzh9aDNQ4rLpS5Ahed3+mVV2
+	 Z4+NZIr5nnrozRMopew1lEjifPU0zlER4XeYh8lhHycWEbHLbBloovgIV4Bt7btoK7
+	 EZtL3PMEOqZ89jzL/wPS6KJQjWxGCSJ+FtDj087I8onEi3/J0XKAsNl8F6EB4dUDIy
+	 lohjE0mJMf+N1AF+jMVT6KM7IVLZKOVAfKC5ztAxj1iayOSou6Qyj3mEp+5BCbNnUH
+	 bxrjUrLRIH4Al8VbewBh7AptKO2GkGXQKGbavSa6obo0fbxL05Bpoz/+HiYInF5/Ak
+	 3QMuKmDqIa7pcBFxY4QWOGbQ=
+Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id B49EF1EAD6F;
+	Wed, 25 Nov 2026 13:22:35 +0800 (AWST)
+Message-ID: <7c8034d9-4f56-49be-b3c2-7764114bf599@davidgow.net>
+Date: Wed, 25 Nov 2026 13:22:32 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,110 +83,110 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] kunit: tool: Count failed suites with only skipped
+ tests
+To: poulin.louis@student.oaklandcc.edu,
+ Brendan Higgins <brendan.higgins@linux.dev>
+Cc: Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+References: <20261124-kunit-v2-v2-0-e1adbcad6b48@student.oaklandcc.edu>
+ <20261124-kunit-v2-v2-1-e1adbcad6b48@student.oaklandcc.edu>
+Content-Language: en-US
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20261124-kunit-v2-v2-1-e1adbcad6b48@student.oaklandcc.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 02:50 PM Tobias Philipp <tphilipp@gmail.com> wrote:
-> misaligned address. FEAT_LSE2 relaxes that for LSE atomics that stay
-> within a 16-byte block, and for LDAR/STLR only if SCTLR_EL1.nAA is
-> set, which Linux does not do. The fault is not fixed up. This oops is
+Le 25/11/2026 à 00:43, Louis H. Poulin II via B4 Relay a écrit :
+> From: "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
+> 
+> A suite can report not ok while all its child cases are skipped.
+> The parser retains the suite status as FAILURE but counts only the
+> skipped children. The run status is then derived from those counts and
+> incorrectly reports SKIPPED.
+> 
+> When a suite reports failure and the child aggregate is SKIPPED, add
+> a failed count for the suite, as is already done when child aggregate
+> is SUCCESS. Cover a correctly numbered failing suite with a skipped
+> child.
+> 
+> Fixes: d65d07cb5b01 ("kunit: tool: improve compatibility of kunit_parser with KTAP specification")
+> Signed-off-by: Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
+> ---
 
-Not quite. With nAA == 0 LDAR/STLR have the same 16-byte rule.
-nAA == 1 removes that rule for them.
+Thanks very much: this patch survived the sending process successfully.
 
-> Round data_size up to a multiple of 8 when computing the value offset
-> and the node size, like hashtab does for keys. IPv4 nodes grow by 4
-> bytes, IPv6 nodes (data_size 16) are unchanged. Add a BUILD_BUG_ON()
-> for the offset of data[], which the alignment of the value relies on.
+I do think that it's a little bit confusing to, depending on the status 
+of the suite, suddenly get an extra test failure in the result count. 
+But ultimately, it's probably less confusing than having the failure 
+disappear altogether, so I'm okay with it.
 
-4 bytes can move all nodes of a map to the next kmalloc bucket.
-There is no need to grow. prefixlen is at most 2048 and flags has one bit.
-Make both u16. Bytes that bpf_mem_alloc asks from kmalloc on 64-bit:
+Two other suggestions:
+- The test data should live in tools/testing/kunit/test_data alongside 
+all of the other test KTAP.
+- It'd be nice to update _summarize_failed_tests() to count these. It 
+should be as simple as extending the 'len(failed_subtests) == 
+len(test.subtests)' check to also compare against 0, as far as I can 
+tell. (Note, though, that this doesn't trigger by default unless there 
+are >=100 tests run, so you may wish to hack that out to test it.)
 
-  data_size  value_size  today  this patch        u16
-  ---------  ----------  -----  ----------------  ---
-  4          28          64     68, kmalloc-96    60
-  4          60          96     100, kmalloc-128  92
-  16         16          64     64                64
-  20         12          64     68, kmalloc-96    60
+With those, I think this would be good.
 
-BUILD_BUG_ON() and four copies of round_up() go away.
-So does the new comment. It's not in kernel multi-line style.
-32-bit still needs patch 1.
-This is in place of patch 2.
+Cheers,
+-- David
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 4d6f25d..72084ac 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -25,8 +25,8 @@ struct lpm_trie_node;
- 
- struct lpm_trie_node {
- 	struct lpm_trie_node __rcu	*child[2];
--	u32				prefixlen;
--	u32				flags;
-+	u16				prefixlen;
-+	u16				flags;
- 	u8				data[];
- };
- 
-@@ -40,6 +40,12 @@ struct lpm_trie {
- 	rqspinlock_t			lock;
- };
- 
-+/* The verifier assumes that map values are 8-byte aligned */
-+static size_t trie_value_off(const struct lpm_trie *trie)
-+{
-+	return round_up(offsetof(struct lpm_trie_node, data) + trie->data_size, 8);
-+}
-+
- /* This trie implements a longest prefix match algorithm that can be used to
-  * match IP addresses to a stored set of ranges.
-  *
-@@ -286,7 +292,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 	if (!found)
- 		return NULL;
- 
--	return found->data + trie->data_size;
-+	return (void *)found + trie_value_off(trie);
- }
- 
- static struct lpm_trie_node *lpm_trie_node_alloc(struct lpm_trie *trie,
-@@ -302,7 +308,7 @@ static struct lpm_trie_node *lpm_trie_node_alloc(struct lpm_trie *trie,
- 	node->flags = 0;
- 
- 	if (value)
--		memcpy(node->data + trie->data_size, value,
-+		memcpy((void *)node + trie_value_off(trie), value,
- 		       trie->map.value_size);
- 
- 	return node;
-@@ -557,6 +563,8 @@ out:
- #define LPM_DATA_SIZE_MAX	256
- #define LPM_DATA_SIZE_MIN	1
- 
-+static_assert(LPM_DATA_SIZE_MAX * 8 <= U16_MAX);
-+
- #define LPM_VAL_SIZE_MAX	(KMALLOC_MAX_SIZE - LPM_DATA_SIZE_MAX - \
- 				 sizeof(struct lpm_trie_node))
- #define LPM_VAL_SIZE_MIN	1
-@@ -598,8 +606,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 	raw_res_spin_lock_init(&trie->lock);
- 
- 	/* Allocate intermediate and leaf nodes from the same allocator */
--	leaf_size = sizeof(struct lpm_trie_node) + trie->data_size +
--		    trie->map.value_size;
-+	leaf_size = trie_value_off(trie) + trie->map.value_size;
- 	err = bpf_mem_alloc_init(&trie->ma, leaf_size, false);
- 	if (err)
- 		goto free_out;
-@@ -766,8 +773,7 @@ static u64 trie_mem_usage(const struct bpf_map *map)
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	u64 elem_size;
- 
--	elem_size = sizeof(struct lpm_trie_node) + trie->data_size +
--			    trie->map.value_size;
-+	elem_size = trie_value_off(trie) + trie->map.value_size;
- 	return elem_size * READ_ONCE(trie->n_entries);
- }
- 
+>   tools/testing/kunit/kunit_parser.py    |  4 +++-
+>   tools/testing/kunit/kunit_tool_test.py | 13 +++++++++++++
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index d722874b..dce365d1 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -694,7 +694,9 @@ def bubble_up_test_results(test: Test) -> None:
+>   	elif test.counts.get_status() == TestStatus.TEST_CRASHED:
+>   		test.status = TestStatus.TEST_CRASHED
+>   
+> -	if status == TestStatus.FAILURE and test.counts.get_status() == TestStatus.SUCCESS:
+> +	# Preserve a failing suite result when its children all pass or skip.
+> +	if (status == TestStatus.FAILURE and
+> +			test.counts.get_status() in (TestStatus.SUCCESS, TestStatus.SKIPPED)):
+>   		counts.add_status(status)
+>   
+>   def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest: bool, printer: Printer) -> Test:
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 85ae2175..5fd386d0 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -265,6 +265,19 @@ class KUnitParserTest(unittest.TestCase):
+>   		self.assertEqual(kunit_parser.TestStatus.SKIPPED, result.status)
+>   		self.assertEqual(result.counts, kunit_parser.TestCounts(skipped=5))
+>   
+> +	def test_failed_suite_with_skipped_child_fails(self):
+> +		output = ['KTAP version 1', '1..1',
+> +			'    KTAP version 1', '    # Subtest: suite', '    1..1',
+> +			'    ok 1 - case # SKIP reason', 'not ok 1 - suite']
 
-pw-bot: cr
+For consistency, can we put this in a file in 
+tools/testing/kunit/test_data -- that's what the other tests here do, 
+and it makes it easier to debug the failures, IMO.
+
+If you _really_ want to keep it here (which is fine if you have a really 
+good reason, though I'd want to hear it), can we at least reformat it to 
+have one line per line: as is, it's quite difficult to read.
+
+> +		result = kunit_parser.parse_run_tests(output, stdout)
+> +		suite = result.subtests[0]
+> +		self.assertEqual(kunit_parser.TestStatus.SKIPPED, suite.subtests[0].status)
+> +		self.assertEqual(kunit_parser.TestStatus.FAILURE, suite.status)
+> +		self.assertEqual(suite.counts,
+> +			kunit_parser.TestCounts(failed=1, skipped=1))
+> +		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
+> +		self.assertEqual(result.counts, suite.counts)
+> +
+>   	def test_ignores_hyphen(self):
+>   		hyphen_log = _test_data_path('test_strip_hyphen.log')
+>   		with open(hyphen_log) as file:
+> 
+
