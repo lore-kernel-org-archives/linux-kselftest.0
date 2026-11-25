@@ -1,88 +1,167 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795621650;
-	b=lecANkvKj/sicrmu7SITKgqdB/NUQ9BPhvweZm6Jq7Z0qQKwrcExz8JG92EzObFoGuAc
-	 5TPDQb0PV5XlE7FPALeg7zDyGS0K5EqjYig7uCzemOkieQdotFE5p+o2OQGQ3SE66oqzU
-	 lw+ZRNMR1uyNOjflZsVHF57z035YAzljHwvuwj/hwuQLq9wZoYCpMvDhKx+PQQIGdWo6/
-	 N9DoWLSPRdb+sj/wd6DMytcYHqpwbyTkfCzTI5gwfsGGso9ns2iucPRNm6InPsKGh3ale
-	 g2B0zm3ZqiV42lDBfmuD3qKB9PKlG+OQZ+yDxiHQQlyvQ7dG30PNTku9uer3PEfbp5Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795621650;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Hdtm1Cjt8si2zXvxnXIwwBJ380UcY/zgg0civLIThwU=;
-	b=yePvoirZs87ItwZyUvEaDFSlVrGXVZglxJCQicFZ3y2lLpotrGA5xzLq2uLHuYlZx83u
-	 G3Z34ZemNjQp8zMhmk3uHbyNn2bGvwsyALllWXnH/rN0VmAwyH2rKpAHJ5FYgGI59CS7C
-	 0yAnJgnJI1igNtb/5JJYrBi6gE9C+umj+Y5x4SZ5H9wnrPU4rLXgN3mdSTl02W2bRI8DT
-	 4fCQGyvSvTJQ2xgrppiQAZouN97MemSlTS5t+U/gtrVf93a/ZS2ajVYoFHlsjG0FhWI0Z
-	 G0SgWb5xC91jwBMXk8zszE7wXEs3p7sTB+MWTwMTPwHM6K3q0fjDYYfHZyAcBzoOnNg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=jGDGjNhy;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=192.198.163.7
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1795622336;
+	b=0BoUwcObxJ7RLYfiofhLu6lKm4woVuttHcnCmoM7CeOj9Ibe7PZ7yZc1sHcNQQp8TN39
+	 zGULeoc6CmwHWyjXo4pkMPErqz64pxc/KcFcFGKcwTggN4UqkH8DZSuz5jHwx5K4dLpxO
+	 D64biGG58zPreuas4XvX6X0Wilm97aO+12mOdHpf9F+z00IMUUYWXAXBCH5bjxdGuTJCE
+	 siV0g5cyYI38kvvA++ZZ4yXwT8vpkuXoCc5kbWGIxJZdP0PfNn2evp8DPrcxLIyPXwGgm
+	 wLvM4fyIjPyMRhmmI8E5+POl4ZzojkAk3p/dluheKF+zJQcTV+4a8h65GgnL5/oOTDA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795622336;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:DKIM-Signature:Received:Received:Date:From:To:CC:Subject:
+	 Message-ID:References:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=22jzem2ZFLEp+FV2Af5l4tryurkZKznzx86Yb9g/TtA=;
+	b=xUn1XeMFDqSMTxvBGeVvF6bHn0oE/HYkSkNwg/Ackz+utyRMdb+OlqMhArX8uvotBMQh
+	 iZBpd6inzYFLTsechUq+olVeKXjcSNDFNkyz8RzkB4jFmeRJSflB2PaAZvXfZAcw3Twru
+	 h31TXxYn9+B7AWDPzOuQw5zXEyNdTSTBP40XpExo6kMen/AYmzVcY0E5wrgDTXGLdD94I
+	 iRfayeGo/Ny9uPZmyLwUx5unNutKIlKNAyOZIZ6lekso18r6YckOz/sT9GAg9VSMqVkHg
+	 MSmjFKzWpJw/N4ZxKsyqd7x6vM2RdxOYIv9MnAvEnWeDnbL3/UnIfkLekxvI2q5SKog==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=SL4jKB01;
+	dkim=fail reason="signature verification failed" header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=kgV+Gc1q;
+	arc=fail smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D04E606A33B
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 15:47:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D04E606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A84C606A32E;
+	Wed, 25 Nov 2026 15:58:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A84C606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=jGDGjNhy
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4bb702a7548so53124115e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 07:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1795621647; x=1796226447; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Hdtm1Cjt8si2zXvxnXIwwBJ380UcY/zgg0civLIThwU=;
-        b=jGDGjNhycbGEqS5V+G1uw7ArrQPCLOtIxJ9T8nofWVFLDIB9iL/uLCYJYB1rnQ+Y4p
-         MEs2oDSVBXLZHXCwAXJWDZna2kdsbf5U7M10aevHRzfMCIiJsSUp8q3StKfmpnfsvSsN
-         JPxqaVy6vLyVS20Gt4qi+JUX4z1wQvgzg4oakV/9sQFh2onRtrZhx1fe3/J5GPcTO8Rt
-         1Q82SzgpoPE4CNrb1AJMk3gOt/oRKkMQgI+1m7dvAmPEZ31PjtudfzI6c2JkZwiOKL0g
-         lFcFUdzQDsKpouOIO7Ze6GsTnB2tmK8bA/ESronJIpxzWWL3ZMO4REqHDjSehJcOHDLr
-         maew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795621647; x=1796226447;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Hdtm1Cjt8si2zXvxnXIwwBJ380UcY/zgg0civLIThwU=;
-        b=FeOAsBoTqpnQ38F/ejUS51aL1y3cz5shrZQcrS2e6qQhTN8uDkf0jO12uf/tbldYnw
-         oaAOONWaqXqXJ5nh2W4jr3g+BscDOoJR+R3uzGK3ENzNc0TK8p733uZFjaV7GJ7vQjk1
-         28zX0j63ugx0z5UaTr0vOUip7DRM3/YFtBBFHQI5u5hrjgtJXT/x/qkoszRCnfs4BnpC
-         oAn1m46PRxYPy7DUy5EaudfqGGn/1T5qXg+jyQFzkHyaAjvYRp9wVv57Qq3wNWp2Vrgb
-         FSRIj0EosU7wcPjiYUONKypyyO8PA9g95znlCGhLHY2Dnx3zxJDPXp8DiWSTH5xss3Yz
-         y9cA==
-X-Forwarded-Encrypted: i=1; AL+hErEx0d0YJeRq/REWP8D9WjVnm1vEHtgzR2AyYZE1uW397pQ+OiISAS31tUZIhhAoXqweISj4J/DlvTmWuzmlJRs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+JKGUbexcrl2tWcRV+yF90LaasmGfligK/wMdAKbxdXRx7xuql
-	4KpmDJxOb1Q7mGSt0jaLLT+Anc81WlZ73XutCMNuaEFSk0Ovt6uWZn8dVQD24Qr1PjQ=
-X-Gm-Gg: AZFdTZfxAxG2uuX992eXCzpWE+iOhXh7dbamlPPtXWX8VI55cPbVFNXbny8t3RLsujV
-	sccd+LQqkYrLQS9NgYYZmsoPzK2fwhObQvJW36rCisir6LjQy081mPwM3FJkWJ1xM0xNjXwx+cC
-	5p/vSZEq36lK8ijsFDJxTfm9MSiAPohj1GtJbIIubeLNcaWcG0bczzbvj9H8Kfr7BkozTyujMNx
-	Rba6SnqvUJaHDrzxmk/MmVzPFZhbSk/8PUeHM8Dc+hw5zmu4q5I7g+Y4lx/t6P24/kBCTKyX3xH
-	5rOpcBQX1jRP/5tu48c00hR0uatGnmZ83Fe+uMMqq65MbmAQT7Lbobg8de7K+mirJuhAlsEs2Dd
-	pUWG+oU2y4JyddYGk9Tyt+zVPvGAHb9OZtpCHgnW39NUUeHcmRt/aQfde7WIsY0HulCV3NIPtzc
-	TGbMvSXLhqWXqk59l+kGzvOqSniQnJnrM2vSPe/Ge67yFzD3pnY78G/wwxRBwUBHabX+Gs0U+ns
-	v69BVtg+VUVN0x+PHlwj/TXMewIcEvn0HnUc/pcnj45NVDMSwWOEQhnoyV+vqcKss1hJpIEAIZ7
-	Wd5MvBUIuahqyQbfr8NwKRvoU5VzdWLuSw==
-X-Received: by 2002:a05:600c:3b8a:b0:4ba:761:c0c5 with SMTP id 5b1f17b1804b1-4bb8880f0e0mr374641285e9.5.1795621647405;
-        Wed, 25 Nov 2026 07:47:27 -0800 (PST)
-Received: from [192.168.1.3] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884b39b6sm485293665e9.12.2026.11.25.07.47.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 07:47:26 -0800 (PST)
-Message-ID: <6a874faa-04d0-4c8f-aa23-2a80fa1fa379@linaro.org>
-Date: Wed, 25 Nov 2026 15:47:25 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=SL4jKB01;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=selector1 header.b=kgV+Gc1q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795622336; x=1827158336;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Z8Rl4qJ/wG+1VaqciQ5pQCXo5IXzh1qcpowHXXL5JT8=;
+  b=SL4jKB01caKXRCxEqlaltjKy1IC6ClNDfJawiD+6/SH/RzQaXz25tCDq
+   RchQVeiEyKWh2xYje5UX06hhss8zLNJPi/kL9CpOrem8iEN7eStmC7FCO
+   d1b8DkMCuZPM0bEnT6QKJm3GWWKN25Add1aeHxtcuEK+9j9NxX9STFthe
+   fcc6OhYU29M8KIb9TCDWRhGeayoj4OL2JmQa0pP2bXJ2bUfJrjtd/jtpL
+   KMOA9wZV/5aGrTZ5hIwG7Yw9bfCjWMnh6MWZRrXd0t8QSKC5e+Uhs34am
+   rEfBz/Wioe6PhvPc/7F+8Czd0y3cqKufFRfWJPsod0RaPlhK+AYakcVjL
+   g==;
+X-CSE-ConnectionGUID: U56jnSAbSsqUkuCI6RY4nQ==
+X-CSE-MsgGUID: DZBjb4l0Tq6IOct8aejC/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4364376"
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="4364376"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 07:37:24 -0800
+X-CSE-ConnectionGUID: IOOm1t/QRMmpcfAxe8zeTw==
+X-CSE-MsgGUID: +9zH+A23SJuXGBeEXyZtwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
+   d="scan'208";a="11778445"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 07:28:19 -0800
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57; Wed, 25 Nov 2026 07:28:18 -0800
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57 via Frontend Transport; Wed, 25 Nov 2026 07:28:18 -0800
+Received: from CH4PR04CU002.outbound.protection.outlook.com (40.107.201.50) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57; Wed, 25 Nov 2026 07:28:17 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RdbFdOe3mKHpGXfeubEwdf8DfcKEc1nZH6iqreuYNdYR4U9j37Z9k+GHlslzVNC3DesNr3cPZ1l7RI9+0vbPAFC6rFP5QAzZ3CQccKu3XvoZ0veEFtswosmAgtxv5maD+Q2XM3v4SwlLlerh6akbZCcy8M1HKhEGsODjda6m77z96FdztDRYxC8uPHGcpYCYJ01N7k1/NHZWwMWWblC+DRXgyh3SmzMENUdcgJnGQCeAPsAcPIR0cPjWAWtl3OPFp9WvFiD7YKGsvYUKqCT0cwy+6aM68/cfJqfuqQMmDLcjaPYuRaeGBZpKqWXhN5hkYyteW4Jprr52LKQ3yLWO0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+Y01RI4dLpy0VZdx6J6Hqnc84/tqxy/bEC1Kl8WeXXE=;
+ b=b+R3LN2wmoxY0/q0AjCywQjB6C0Q5vx97BmVB8BFzUYHEDxhiPeUsxMI4lh1lsGl3+U8GL4/xIMTBIC3S4670mDa49n9icky7Uvmnuvbuv/V7JyEK7gNI0HcLQ/OYOQDVOBpVnuG5ghfoIhsh8LtoMZkemC+u0LE/09IkD60StPN8CkJg7P6iN71zMfQqcq73xg3m/MnayOodei75wuLxYuMxs+CcMJL5QzFlmdPPrrrOC5cenuSFLkcAIyC1rw8xdCB9D9rDQeMqPM7o4i1W/T29VATxXHkBVja06Seal/LTf3uOerEuEpCorNyAAKoEy4W4dU4QHXz31038zeLyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+Y01RI4dLpy0VZdx6J6Hqnc84/tqxy/bEC1Kl8WeXXE=;
+ b=kgV+Gc1q0vueBCxiPfuVWY99hJ/Apxx8rMIhA0+d0N6gvvXWofu8HX0RTb5RBsYITk9c2n7oepDOwW2L1rSRSflVP2i14Ya3UWrzIEI1qYgnyeqalGLM+Gsxo7cvidrOk/ax3PGQUz9MispiI1oe4XF1JvgqINMuCJgf6ef/EhE=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV2PR11MB868673.namprd11.prod.outlook.com
+ (2603:10b6:408:422::13) by SJ0PR11MB5168.namprd11.prod.outlook.com
+ (2603:10b6:a03:2dc::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Wed, 25 Nov
+ 2026 15:28:14 +0000
+Received: from LV2PR11MB868673.namprd11.prod.outlook.com
+ ([fe80::5bfd:6afe:a9db:b7de]) by LV2PR11MB868673.namprd11.prod.outlook.com
+ ([fe80::5bfd:6afe:a9db:b7de%4]) with mapi id 15.21.0662.004; Wed, 25 Nov 2026
+ 15:28:14 +0000
+Date: Wed, 25 Nov 2026 16:28:02 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+CC: Magnus Karlsson <magnus.karlsson@intel.com>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
+	<memxor@gmail.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	"Alexander Duyck" <alexanderduyck@fb.com>, Saeed Mahameed
+	<saeedm@nvidia.com>, "Tariq Toukan" <tariqt@nvidia.com>, Mark Bloch
+	<mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Michael Chan
+	<michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	<bpf@vger.kernel.org>, <netdev@vger.kernel.org>, "Stuart Clark"
+	<stuclar@meta.com>, Stanislav Fomichev <sdf@fomichev.me>, Simon Horman
+	<horms@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Mina Almasry
+	<almasrymina@google.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Randy Dunlap
+	<rdunlap@infradead.org>, <kernel-team@meta.com>, Dimitri Daskalakis
+	<dimitri.daskalakis1@gmail.com>, Bobby Eshleman <bobbyeshleman@meta.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>, Kees Cook <kees@kernel.org>, "Breno
+ Leitao" <leitao@debian.org>, Maxime Chevallier
+	<maxime.chevallier@bootlin.com>, Tao Cui <cuitao@kylinos.cn>, Vadim Fedorenko
+	<vadim.fedorenko@linux.dev>, "Mike Marciniszyn (Meta)"
+	<mike.marciniszyn@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, Martin Karsten <mkarsten@uwaterloo.ca>,
+	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, "Pavel
+ Begunkov" <asml.silence@gmail.com>, <linux-rdma@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 05/15] xdp: Run programs on buffers that must
+ not hold kernel structures
+Message-ID: <awb+gg7b1JlsmqDh@boxer>
+References: <20261124112707.118678-1-bjorn@kernel.org>
+ <20261124125654.183091-5-bjorn@kernel.org>
+ <awb9GzkXa9Z9LxuP@boxer>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <awb9GzkXa9Z9LxuP@boxer>
+X-ClientProxiedBy: DUZP191CA0002.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:10:4f9::12) To LV2PR11MB868673.namprd11.prod.outlook.com
+ (2603:10b6:408:422::13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,215 +171,127 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 00/33] ARM64 PMU Partitioning
-To: Colton Lewis <coltonlewis@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Russell King <linux@armlinux.org.uk>, Jonathan Corbet <corbet@lwn.net>,
- Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Shuah Khan <skhan@linuxfoundation.org>,
- Alexandru Elisei <alexandru.elisei@arm.com>,
- Mingwei Zhang <mizhang@google.com>,
- Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
- kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oupton@kernel.org>
-References: <20261119185215.632334-1-coltonlewis@google.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20261119185215.632334-1-coltonlewis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR11MB868673:EE_|SJ0PR11MB5168:EE_
+X-MS-Office365-Filtering-Correlation-Id: da75ce1f-2f0c-49f1-1ce9-08df4b08b90b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|261026121527099003|11063799006|10067099003|4143699003|56012099006|5023799004|261102123227099003|261021123027099003|261009223027099003|261021121427099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info: RyXmQ+9IN1ozeSFe0T54k6nEw/c8hKa9aD3JoFueI3Iw02WlM8dMfbgFwJ8spzXsvSDghAgIJKHKXROJUCtcSZy+4X3Qj1D+Hnldkr5I8uPYUBsofdBJ4rHgxDuREmheOuD2lEByn3ghVIoITglsqn1qrsNoNNbVtrXk9RGZQmP3axAqLpnd9usgzAXCCnYR4UARReYNAgNFuS4Oq1ra7C4cwEleh0h/BZ9dSpXHi5yP0ppzoJ7MSxqPy3dlm/URm+ZTW5SRE3Aad+XeyKKjUWiZfTo+dGZrJBbZCz6l/TZDE/x5ae6hyn1/jWWA6eOp1z2VWLLxVos5ozc0nwBLyXGdowbHVSzHZi5ptvZqjRAmObDR9/SAgI15GvsLHhbz1j9xew/9P+sqzkqRSq8zyihz9lWA2Va4FNYF/3iGgNc/2IIU4LfDDxn6w7uaSNrXXNMLFg52DvHznKcmMqK6wQ7BTOnE02J2RSMRLRMQWlanTMds7JNKi6unZDx5DCzeWR5wKl9UG7AjiTyvEaX+OIswThyXRUM4EONxhmOGTcmC3vQAl02KWPwBEWh1GMdfco94O3uJqAvej2KNEZ9f4NUAwbGX+L+U6uPjVmFN2p/v3pNhW0MTeTwZbbwdLj/3A/QnvLvkjZmPj7IPWPJ5ltwzHMd6wunMMzdvgxeYv7Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR11MB868673.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(261026121527099003)(11063799006)(10067099003)(4143699003)(56012099006)(5023799004)(261102123227099003)(261021123027099003)(261009223027099003)(261021121427099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?+NmNS3cK/9/grGlK+zjxDFgfFtzKaarpdaDocANdAXhAa9t61cJNz+oY3N?=
+ =?iso-8859-1?Q?ITG+8erhob5ECMd0dF9ABI+wmJzpIGiO6FkMdJl3tha3EspJeMwklj1buR?=
+ =?iso-8859-1?Q?KIzF5tWWwtpWYOp0ZtuOgy14awnfptOIbQROaIPOBfBUQSwxFDrh4WQ4uE?=
+ =?iso-8859-1?Q?du9mjNT+ZzmiwBlvHTP3DW7e1CKEnA3ea8Pv4lylurfT+wEsriHWvGTmDN?=
+ =?iso-8859-1?Q?stJclTUBjapyooxJEvGJ6boqWAeJNpTgzb7S+U5mclUDn9egHel1D4+gU7?=
+ =?iso-8859-1?Q?yUm3MJn5j5lU0fGcBVBV9eanIv3aOoh0ylIoWEbNF1ibCRBIQDCjCyTr0Y?=
+ =?iso-8859-1?Q?sqUN2ovnFoDIt1J09WixSSK/xPGzM7quuaTykUJIdulGI3BDEgws0C3DSS?=
+ =?iso-8859-1?Q?bhcziT/LBt+wxwiO8kd9TMGPqnp9Va1qT4iTsBUjOeSbzQhXVKpZ0M11dc?=
+ =?iso-8859-1?Q?DPkKIBEK3vQCdU8GhU3dd0F3+J0v2MZwekkhfPoS+61S4LUxZeMxh9RrT8?=
+ =?iso-8859-1?Q?o3vh62Fbn+9RBv/4HFeWZep9zToSRP+Y6vKwG66WsR/SQRL+NvgzB8BG2I?=
+ =?iso-8859-1?Q?ld0qaEkd3eI1HUjyV4a+LAAKh/tInwF7SgrRnSYfkjjnG5tITaMSV6iZp5?=
+ =?iso-8859-1?Q?DHw4HpvSSyh5D9C2jR7HCGxAa3qBQDO51zP+LVs1FIUDhE6uaG85ca3I5a?=
+ =?iso-8859-1?Q?G7+nsg+9nYSnaLtdp+7bD/zSGz7+Ye+egtW9Adt9J/+z+TmXRpug0XStOm?=
+ =?iso-8859-1?Q?69jf7uJsjVWTaFYEE80/MKd11OvP7okkpXyajYspcm0vkVF/oBay5s/8om?=
+ =?iso-8859-1?Q?Fou7oDmsCp731OyD1V3/CXis7RQshBFkC6zzVsSKD6MT7CjbpH9zfkJfNK?=
+ =?iso-8859-1?Q?UxcWnTzJLxOmZ0BoAAYtAzv6q6DIAeGIlmNI6NAsNI+nyChubW84mhkeeh?=
+ =?iso-8859-1?Q?uYjHOrbHbpXl3us9jaBMJGK3VWJw+E36SgH3JUhlM7ZXq/ZdMlVxiXE0TU?=
+ =?iso-8859-1?Q?7rUe5+UpWNWUIs0DPrLmqRbuTkCI9ZQS7iRY3gnRZcyapCRTQjXlTSJL1H?=
+ =?iso-8859-1?Q?Y7w+ztuBa6V7tVG49gUnMrzQLd1rNxg4Wr0oTf50pPbBrnXjLVZoXtO8ry?=
+ =?iso-8859-1?Q?T109NWUi7hMWD9gmLYeVrRGGLMMmdZFOhQHzfKQq8ciiEkPoLSofxxUEcV?=
+ =?iso-8859-1?Q?Q3pY/5yOcQCXxfFMYFSDh8qO/1rGh+CoNoewA1Q8bIfKe15/y6Tz5OmEuQ?=
+ =?iso-8859-1?Q?1XQAArsIcceZFG3NK0W/b2VxViCZXM1CJ6uQ2xE+Cjl5Qy2BdR8GI3zbb0?=
+ =?iso-8859-1?Q?dfjHMQRWmX1TK4lv/vSlUnsYv3E4GT9hrT/zCklhyBCTA5+jayO3XkffW6?=
+ =?iso-8859-1?Q?VnHBrJqs+oGTVfQYy8lZMKXzS+qt3sfufGlntfmQO7EjJuY8Pxls8vprHB?=
+ =?iso-8859-1?Q?V+P5kp1hdL0tUl/SApsWWmmnLG9UOLKk9uEFp7aJT3uUOGEpZSqJgiaa05?=
+ =?iso-8859-1?Q?sPBz/BWUxDRXYU3VtRGjRNSbJOH1jfY8MXX+2SW7AffwCqX0MC6zmP6Xo/?=
+ =?iso-8859-1?Q?lUAl+BSXKcHbiMPd/IMa8+Uieh533UvEaqU+ijOIvtpAzIrlbbi2joRYwr?=
+ =?iso-8859-1?Q?EMv/xb4cHC7hzD5bxlf71LoXIDGySMkI8MOO2QS+D8fT6cxkJV8a8tpSW8?=
+ =?iso-8859-1?Q?6Fp71MUPYT/QLXH5w0KBy+79txoF1t7yWuskvYeeImDnfkqOeNPTcumJzl?=
+ =?iso-8859-1?Q?U8c1jx5U68Am+eOulTxfzyHPPUy2TDxXw5WaT1ppdbAvQIYUy1OuYGIsoP?=
+ =?iso-8859-1?Q?rI+P8mqm37molVyRC49ye/OKdwPbaRE=3D?=
+X-Exchange-RoutingPolicyChecked: kRerBZReCD5Y2G45gBbfilcoKe1NUCTWFmRbR2Vqk0D3kHQi1phYD3QUrWi+pbKhztne5l9ksPmX99jutmDj7OdE/S79hqGIg5eLXgQv++wAvf2K7+wn6L8SgCGJRi0nxsWB82crkzQOY+nEpYS5JgmXV/H6PTCgtuUaV9sskWJvt45cGNxF22MNAHGLJLOvVBVPRO/o5DCyNjLpHyUZO3/GXkqtUzjHIDMIfCVyTTzJOR5X51j36kF+nXCpueHxSmxFQlGiXkxxuobUeyj/9pdeFfv2A0USGSdazD0QgyvRpi6djnbPEI5bObUT5NETachxeGvEMI+wDQm8M7N+Yg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: da75ce1f-2f0c-49f1-1ce9-08df4b08b90b
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR11MB868673.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 15:28:14.7012
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TZPN7h1dI74joVs6vGGuvw3kzKecalKBk7lHsrNyE+lEjSg5OhSJHS5o5GnlnM2AA2Y4hl8rWtLYx/KSfIHyGjraYW5IYF7FZdck/TZRkts=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5168
+X-OriginatorOrg: intel.com
 
+On Wed, Nov 25, 2026 at 04:22:03PM +0100, Maciej Fijalkowski wrote:
+> On Tue, Nov 24, 2026 at 01:56:40PM +0100, Björn Töpel wrote:
+> > Currently, the core refuses native XDP programs next to a memory
+> > provider. An AF_XDP sink needs XDP to steer its packets and to use the
+> > RX metadata kfuncs. Its buffers are UMEM chunks that XDP may read
+> > through the kernel mapping, but that userspace may write at any time,
+> > also while the kernel reads them. If drivers build XDP buffers on them
+> > as on pages, the core puts kernel structures into them, such as the
+> > shared info of a multi-buffer packet, the xdp_frame of XDP_TX and
+> > redirects, and the skb of XDP_PASS.
+> > 
+> > Let programs run on sink buffers as on pages, and keep every kernel
+> > structure out of them.
+> > 
+> > A sink offers an XDP view of its UMEM, so drivers build the buffer as
+> > for a page, while netmem_address() and skb_frag_address() still give
+> > NULL for sink net_iovs. Programs and helpers read and write the packet
+> > in place, fragments included. xdp_prepare_buff() tells a sink head by
+> > its address, with one range check under a static key, and marks the
+> > buffer before the driver adds fragments. Other buffers pay nothing
+> > while no sink is bound.
+> > 
+> > A marked buffer keeps its shared info in the queue, with
+> > XDP_FLAGS_SINFO_EXT, set up when the driver registers a sink page pool
+> > as its memory model.
+> > 
+> > A sink buffer may only go to the AF_XDP socket of its queue. The core
+> > turns XDP_TX and XDP_PASS into XDP_DROP, so drivers need no checks of
+> > their own. XDP_ABORTED and invalid verdicts reach the driver, which
+> > traces them and drops the packet. Frame conversion and skb
+> > construction refuse sink buffers too, so devmap and cpumap drop them,
+> > and sink net_iovs never become skb frags, so every net_iov frag stays
+> > unreadable.
+> > 
+> > As userspace may change the bytes meanwhile, the kernel takes bounds
+> > only from its own fields, and only the program and its helpers read
+> > the bytes. A helper that reads bytes twice must check a copy.
+> > 
+> > Signed-off-by: Björn Töpel <bjorn@kernel.org>
+> > ---
+> >  include/net/netmem.h          |  5 ++-
+> >  include/net/page_pool/types.h |  7 ++--
+> >  include/net/xdp.h             | 60 +++++++++++++++++++++++++++++++++--
+> >  net/core/xdp.c                | 46 +++++++++++++++++++++++++--
+> >  4 files changed, 108 insertions(+), 10 deletions(-)
+> 
+> >  	xdp_frame->data = xdp->data;
+> > @@ -763,6 +812,11 @@ static __always_inline u32 bpf_prog_run_xdp(const struct bpf_prog *prog,
+> >  	 */
+> >  	u32 act = __bpf_prog_run(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
+> >  
+> > +	/* Sink buffers go to the AF_XDP socket of their queue, or nowhere */
+> > +	if (static_branch_unlikely(&xdp_sink_key) && xdp_buff_is_sink(xdp) &&
+> > +	    (act == XDP_PASS || act == XDP_TX))
+> > +		act = XDP_DROP;
+> 
+> I think it would be better to follow SEC(xdp.frags) approach and from
+> verifier POV disallow progs doing anything different than XDP_REDIRECT...?
 
+Or that wouldn't work if XDP progs are still global per interface.
 
-On 19/11/2026 18:51, Colton Lewis wrote:
-> This series creates a new PMU scheme on ARM, a partitioned PMU that
-> allows reserving a subset of counters for more direct guest access,
-> significantly reducing overhead. More details, including performance
-> benchmarks, can be read in the v1 cover letter linked below.
 > 
-> PMU partitioning is controlled via the KVM API using
-> `KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION` and
-> `KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS` vCPU device attributes. When
-> partitioning is enabled for a VM, userspace must explicitly configure a
-> guest event counter count strictly less than the maximum general-purpose
-> counters implemented by the PMU (leaving at least one general-purpose
-> counter for the host) prior to calling `KVM_ARM_VCPU_PMU_V3_INIT`. The
-> number of general-purpose counters implemented by each host PMU is
-> exposed in sysfs at
-> `/sys/bus/event_source/devices/<pmu>/caps/num_counters`. A QEMU patch
-> demonstrating how to use the uAPI is sent separately.
+> Here you affect whole system.
 > 
-> An overview of what this series accomplishes was presented at KVM
-> Forum 2025. Slides [1] and video [2] are linked below.
+> Also, I don't follow currently why xdp pass is not allowed, management
+> traffic gonna be dead on this queue.
 > 
-> v10:
-> 
-> * Rebase on top of v7.4-rc3.
-> 
-> * Add nested virtualization (`FEAT_NV` / `FEAT_NV2`) support covering
->    both an Emulated L2 PMU (`vHPMN == N_L1`, `TPM == 1`, where L1 keeps
->    all `N_L1` counters and emulates L2 via L1 `perf` events) and a
->    Sub-partitioned L2 PMU (`vHPMN < N_L1`, `TPM == 0`, creating a
->    three-way split across `0..vHPMN-1` for L2, `vHPMN..N_L1-1` for L1,
->    and `N_L1..N_phys-1` for L0) (Oliver Upton). Because ARM64 provides
->    only a single physical `MDCR_EL2.HPMN` field, hardware can split the
->    PMU into two counter ranges at a time rather than three. Key design
->    decisions and supporting changes:
-> 
->    - Keep physical `MDCR_EL2.HPMN = N_L1` at all times (`vHPMN` boundary
->      and event filtering): Lowering physical `HPMN` to `vHPMN` while
->      running L2 was considered and rejected because it would move L1's
->      hypervisor counters (`vHPMN..N_L1-1`) into the same physical
->      `>= HPMN` range as L0's host counters (`N_L1..N_phys-1`), where a
->      single set of physical `MDCR_EL2.{HPME,HPMD,HLP}` bits governs both
->      and breaks host/guest isolation; it would also fail for
->      `vHPMN == 0` on hardware without `FEAT_HPMN0`. Instead, when
->      `vHPMN < N_L1`, L0 keeps physical `HPMN = N_L1` and sets
->      `MDCR_EL2.{TPM,TPMCR}` in L2, forwarding `vHPMN..N_L1-1` traps to
->      L1 and handling `0..vHPMN-1` plus `PMCCNTR_EL0` in L0 directly
->      against physical registers. This preserves L0 isolation and
->      supports `vHPMN == 0` on all hardware; L2 events still count
->      directly in hardware without L0 `perf_event` scheduling, at the
->      cost of trapping L2 PMU accesses to L0 and rewriting per-counter
->      filter registers on `L1 <-> L2` transitions. In L1
->      (`is_hyp_ctxt()`), L0 emulates `vHPMN`, `vMDCR_EL2.HPMD`, and
->      `vMDCR_EL2.HCCD` via `PMEVTYPER<n>_EL0` and `PMCCFILTR_EL0`.
-> 
->    - Dynamically multiplex `vPMCR_EL0.E` and `vMDCR_EL2.HPME`: Because
->      both `0..vHPMN-1` and `vHPMN..N_L1-1` sit below physical
->      `HPMN = N_L1`, hardware gates both with physical `PMCR_EL0.E`.
->      Rather than unconditionally trapping `PMCR_EL0` and `PMCNTEN*` for
->      all `FEAT_NV` VMs (which would penalize Emulated L2 PMU where
->      `vHPMN == N_L1`), L0 dynamically enables `MDCR_EL2.TPMCR` and
->      `HDFG{R,W}TR_EL2.PMCNTEN` only when `vHPMN < N_L1`. L0 keeps
->      architectural `PMCR_EL0` and `PMCNTENSET_EL0` in memory, sets
->      physical `PMCR_EL0.E` to `vPMCR_EL0.E || vMDCR_EL2.HPME`, masks
->      disabled sub-ranges out of physical `PMCNTENSET_EL0`, and gates
->      overflow delivery per domain. Trapped `PMSWINC_EL0` writes (also
->      enabled via `HDFGWTR_EL2` when `vHPMN < N_L1`) flush live registers
->      and reuse `kvm_pmu_software_increment()` to prevent cross-partition
->      chaining.
-> 
->    - Bias 32-bit counters on mismatched `vPMCR_EL0.LP != vMDCR_EL2.HLP`
->      (`FEAT_PMUv3p5`): When `LP == HLP`, physical `PMCR_EL0.LP` matches
->      both domains directly and `PMEVCNTR<n>_EL0` stays untrapped in L1.
->      When `vHPMN < N_L1` and `LP != HLP`, rather than ignoring the
->      mismatch (breaking 32-bit overflow interrupts) or falling back to
->      `perf_event` emulation mid-flight (requiring reservation teardown),
->      L0 forces physical `PMCR_EL0.LP = 1` (64-bit overflow), dynamically
->      traps `HDFG{R,W}TR_EL2.PMEVCNTRn_EL0`, and biases counters in the
->      32-bit sub-range `2^32` events below 64-bit overflow
->      (`0xffffffff00000000 | low32`) while tracking their upper-32-bit
->      offsets and re-biasing outside interrupt/NMI context. Because
->      `HDFG{R,W}TR_EL2.PMEVCNTRn_EL0` is a single trap bit covering all
->      event counters (`0..30`), L1 counter reads/writes trap across both
->      sub-ranges while `LP != HLP`, with zero overhead when `LP == HLP`.
-> 
->    - Baseline nested support (both Emulated and Sub-partitioned L2):
->      separate implemented and accessible counter masks by using
->      `nr_pmu_counters` directly in `kvm_pmu_implemented_counter_mask()`,
->      masking trapped guest reads of `PMCNTEN*`, `PMINTEN*`, and `PMOVS*`
->      with `kvm_pmu_accessible_counter_mask()`, and ignoring
->      `MDCR_EL2.HPMN` in userspace `KVM_GET_ONE_REG` / `KVM_SET_ONE_REG`
->      (`set_pmreg()`, `get_pmreg()`, `get_pmcr()`) so saving/restoring a
->      nested vCPU paused below EL2 preserves all VM-implemented counters
->      and true `PMCR_EL0.N`; preserve host counter reservations across
->      `IN_NESTED_ERET` / `IN_NESTED_EXCEPTION` transitions to avoid host
->      `perf` reschedules on emulated L2 traps; read live hardware
->      `PMSELR_EL0` in `check_mdcr_hpmn()` when untrapped; and forward
->      fine-grained traps for selector-indexed `PMXEVTYPER_EL0` and
->      `PMXEVCNTR_EL0` to L1.
-> 
-> * Expose the number of general-purpose counters implemented by the PMU
->    in sysfs under `/sys/bus/event_source/devices/<pmu>/caps/num_counters`
->    so userspace VMMs can query host PMU counter capacity when configuring
->    a partitioned PMU (James Clark).
-> 
-> * Make `__vcpu_rmw_sys_reg()` atomic on the local CPU using
->    `try_cmpxchg_local()` to prevent read-modify-write races with GICv3
->    pseudo-NMI PMU interrupt handlers (`kvm_pmu_handle_guest_irq()`),
->    which are not masked by `local_irq_save()` (Sashiko AI Review).
-> 
-> * Construct `mdcr_el2` in a local variable before assigning
->    `vcpu->arch.mdcr_el2` once in `kvm_arm_setup_mdcr_el2()`, and mask
->    GICv3 pseudo-NMIs (`local_daif_save()`) across hardware PMU context
->    switches and `MDCR_EL2` updates (Sashiko AI Review).
-> 
-> * Prioritize kernel-owned pinned event groups (`is_kernel_event()`)
->    ahead of userspace pinned events in `perf_event_groups_cmp()` /
->    `perf_less_group_idx()` so kernel-owned per-CPU pinned events (such as
->    the hardlockup NMI watchdog if toggled at runtime) are scheduled before
->    userspace pinned events when `perf_pmu_resched_update()` reschedules
->    events out of guest-reserved counters (James Clark, Sashiko AI Review).
-> 
-> * Move `kvm_vcpu_reload_pmu()` from `arch/arm64/kvm/pmu-emul.c` to
->    `arch/arm64/kvm/pmu.c` in `KVM: arm64: Reorganize PMU functions`.
-> 
-> * Add `kvm_pmu_is_partitioned()`, `kvm_pmu_guest_counter_mask()`,
->    `kvm_pmu_handle_guest_irq()`, `kvm_pmu_host_start()`, and
->    `kvm_pmu_host_stop()` stubs to `arch/arm/include/asm/arm_pmuv3.h` to
->    fix 32-bit `ARCH=arm` builds (kernel test robot).
-> 
-> * Allow identical VM-wide PMU device attributes
->    (`KVM_ARM_VCPU_PMU_V3_SET_PMU`, `KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS`,
->    and `KVM_ARM_VCPU_PMU_V3_ENABLE_PARTITION`) to be applied across all
->    vCPUs when userspace initializes vCPUs sequentially (`CPU_FOREACH`),
->    validate `kvm_arm_pmu_part_hpmn(n) < max_counters` (requiring
->    `max_counters >= 2` for `n == 0` without `FEAT_HPMN0`), and restrict
->    `kvm->arch.supported_cpus` to `arm_pmu->supported_cpus` when
->    partitioning is enabled.
-> 
-> * Centralize partitioned PMU hardware register dispatch under
->    `kvm_pmu_direct_reg_read()` / `kvm_pmu_direct_reg_write()` with
->    preemption disabled (`kvm_pmu_part_on_cpu()`), guard lazy ownership
->    transitions in `kvm_pmu_part_overflow_status()` with
->    `scoped_guard(preempt)`, avoid matching `reset_unknown()` poison bits on
->    `PMCNTENSET_EL0` / `PMINTENSET_EL1` during `KVM_REQ_RELOAD_PMU`, and
->    schedule `KVM_REQ_RELOAD_PMU` on `KVM_SET_ONE_REG` writes so
->    `vcpu_put()` does not overwrite userspace register writes (Sashiko AI
->    Review).
-> 
-> * Support configuring 0 guest event counters (cycle counter only) on
->    Partitioned PMU hosts without `FEAT_HPMN0` whenever `max_counters >= 2`.
->    Writing `MDCR_EL2.HPMN = 0` without `FEAT_HPMN0` is architecturally
->    `CONSTRAINED UNPREDICTABLE`, which would otherwise prevent userspace
->    from creating a cycle-counter-only partitioned guest on CPUs lacking
->    `FEAT_HPMN0`. Instead, KVM programs physical `MDCR_EL2.HPMN = 1` via
->    `kvm_arm_pmu_part_hpmn()`, reserves and quiesces physical counter 0
->    alongside `PMCCNTR_EL0` so host perf continues using counters `1..N-1`,
->    keeps `MDCR_EL2.TPMCR = 1` so trapped `PMCR_EL0` reads report `N == 0`,
->    and enables fine-grained traps on `PMEVCNTRn_EL0`, `PMCNTEN`,
->    `PMINTEN`, and `PMSWINC_EL0` so counter 0 stays completely hidden
->    (`UNDEFINED` / RAZ / WI) while `PMCCNTR_EL0` remains untrapped on
->    `FEAT_FGT` hosts. Also clamp `MDCR_EL2.HPMN` against `nr_pmu_counters`
->    in `kvm_vcpu_read_pmcr()` and `kvm_pmu_direct_pmcr_read()`, and extend
->    `vpmu_counter_access` to verify `PMCCFILTR_EL0`, live `PMCCNTR_EL0`
->    counting, and trapped `UNDEFINED` / RAZ / WI behavior on counter 0 when
->    `n == 0`.
-> 
-> Tool-assisted development note (generated-content.rst):
-> Several v10 additions (nested virtualization sub-partitioning,
-> cycle-counter-only support without `FEAT_HPMN0`, the userspace `HPMN`
-> masking fix, and cover letter text) were drafted and verified with AI
-> coding assistance (Gemini) and pre-reviewed with Sashiko AI Review. All
-> patches were reviewed, built (`arm64`, `CONFIG_ARM_PMU=n`, 32-bit `arm`),
-> and tested on bare-metal Neoverse V2 and AmpereOne hosts (and under QEMU
-> TCG for the userspace `HPMN` fix).
-> 
-
-Tested-by: James Clark <james.clark@linaro.org>
-
-Re-tested some of the old bugs and ran the Perf tests on a partitioned 
-guest on Orion O6 and N1SDP boards. Also tested some basic Perf commands 
-in a nested guest using your QEMU patches on the FVP.
-
-Had a quick scan through the patches and LGTM. I'm impressed you managed 
-to get the sashiko comments down to just one for such a big patchset.
-
+> > +
+> >  	if (static_branch_unlikely(&bpf_master_redirect_enabled_key)) {
+> >  		if (act == XDP_TX && netif_is_bond_slave(xdp->rxq->dev))
+> >  			act = xdp_master_redirect(xdp);
