@@ -1,93 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795576614;
-	b=gfOjPFvNu7gvE58X/7SNizGQ8IZMNNTXmZxksLSjqH9HVRFqCR2Oqu2G8FF8G1Z6J2H1
-	 N94/zE4W2be5yvl1mYyUVxs2jTvxA+xROY4oXOYJPfQt1nN3bHiwG/ZA5cj4gFCdjDHJv
-	 MxJJNi3mYGCj/Cmj9xfg0BnSqQTelEpGQeXcFZmOz8dKBDoZv9O/F55jQ972AmvCRbOvI
-	 7tlhEuC8PJgoj43vidPu9TDc2FaOx1PdjtcdjGTaiH6hSQG5cWeRESPW64dGk14kGvwEo
-	 3G6x/y4H628CHmNnuIIJI42o3TQLooDg3cCMNL6XNojWmA7RDlg2S6dnY110dLso+nA==
+	t=1795576893;
+	b=J/K6Ai+5veKbldWaE819fWYKJpPMJhaIy+2yGYjxlhsNam/z4X27lrLKkT1nmEtPyIXT
+	 sKwhs1BEyhHN98Q7CxxqLh4OMtVW5k7McLTwVxe5o2ti90xARjTRo1kI9nzhRaKF7LtaB
+	 Q+RNyVI6gtYQ5h696rMEwjLzjVVIoFKu5UsEOs+VkZbu0SQ3kJKNs26s01Oi1HlzxjdVc
+	 fsSPd/VIcsowaH+02xSX6NUpCxFMjVVbVxUSary+t39RKgdszT7d/iy7kC+c9ulez1yzS
+	 WhVghuWRZnmMETo1WGs9+XVGqnbGq757lCjwk38TCEJ5QeEzeD3Q/zZBmrzHfNjVJhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795576614;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:Date:
-	 From:To:Cc:Subject:Message-Id:In-Reply-To:References:X-Mailer:
-	 Mime-Version:Content-Type:Content-Transfer-Encoding:X-Virus-Scanned:
-	 X-Virus-Status;
-	bh=hxTBbzJHEKVwGJg01FIKFcQnVDEoJyS+/2z4anXy+k4=;
-	b=mkFkgyWQmYB4L/1thZS3Lumtbh8W6IykFuu95ZAhZ96r8IDhPbrpazU7wuar7WSQP0Gh
-	 pAhNF3zMIkdhl00clLsYvUfHdaXFewSJdx3MoH0tB4XCnyGMuhwMKUMnQlfL6z93VxGF2
-	 G97FzESsIcqzI4wmzIdow7Q+T4TFouMFySAES8dZP0qwznIHkPHLOYSFM5RCeJMPFhdL+
-	 fOw/5SgrB48MUIycBTO1S9mUi9eOljVH30eUB+DxKCOS87HrsGYB/hJEEsleuq6FSHE83
-	 EiHRTh8MKsgvpTLzmA7LTocwvuME+rNxhpBSznam8sfJskm+dj88yJai/efM9VnFzgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795576893;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=x882e7OTmAYxUut6y8OPWB+mfBqKYDNjHUdHSvwO/Ow=;
+	b=t1Ix21OSfFjhVV0N0tOdhfqygvKlHZOYl7ZF2AhfDJhsvygzmEsdv2HKHD9/jbJ4RFFU
+	 zPAfGxBohfmkAVmdELhDtDobTlrmB+f1APRQmKmVWalciHIaxbtZtPnhYtrIR0Wkk5OG7
+	 T+jbdAdNISbFe+xP425BdtylpT9rXaa5XPOnFML9gqFskb/t5FUkhH9adzsIBTRB7Sqt0
+	 9wOZdgknQzn54gId5dgKp+7J/G0AZmaYL7nDIPYyN7SMDd0UsG6GRYyXJn4QmHtwOdHZT
+	 b2eyxIi5LYOAYY2Dd91QdpMhl5kOgzvNkagvRuDWO3YM9EY1NzqTVOIRoiOyBLcQMQg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=uniroma2.it;
-	spf=pass smtp.mailfrom=uniroma2.it;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=T4hnDlVL;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b="NXD/C3hd";
-	arc=none smtp.remote-ip=160.80.4.34
-Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C984B606A31E;
-	Wed, 25 Nov 2026 03:16:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C984B606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0hr5G6Ci;
+	arc=none smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BAA2606A323
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 03:21:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BAA2606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=T4hnDlVL;
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=NXD/C3hd
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6AP3GJa3010051;
-	Wed, 25 Nov 2026 04:16:24 +0100
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 61AFC1227EB;
-	Wed, 25 Nov 2026 04:16:15 +0100 (CET)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1795576576; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hxTBbzJHEKVwGJg01FIKFcQnVDEoJyS+/2z4anXy+k4=;
-	b=T4hnDlVLZAFbc4OfNSryAiBmEeE35ytLR9djf2f+4qF6umz5McQXVUl6uf9d+2DLAEIr/z
-	tujVoWEaMsueWlDA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1795576576; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hxTBbzJHEKVwGJg01FIKFcQnVDEoJyS+/2z4anXy+k4=;
-	b=NXD/C3hdb01sILs31a0MHe/SgTTq8VHpY9h/hiPjAKb6cQiUL2tSDUzhPr40SHeXAHasql
-	qqsW3rDZi116hZY7dksjKsUq6KNWiLbrSrmievFod9b21TXpYoDIHrWl713UWKoPPAe/PL
-	yXmHOCHuSLXGJ7CSv3AOZzqh/VfcPQroxMCKWhB/J3NPWRbNwQOOGK7Qu5nbBfLhKgVxs5
-	Bu6i1j/f68d6ioiGj+Qzj+D3+HuEKHc6xcj/NU/Q6DcHStma5ztn06HYqgfS6jdEEy9VlP
-	T8+7WnS06vxFRBgMbc1Pc4ULMaromYa82QrvY1FQHUhyCjgfdYDV9pDmtuza3w==
-Date: Wed, 25 Nov 2026 04:16:14 +0100
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Hangbin Liu <liuhangbin@kylinos.cn>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Justin Iurman
- <justin.iurman@gmail.com>,
-        Andrea Mayer <andrea@common-net.org>,
-        Andrea
- Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net-next v4 5/5] selftests: seg6: add PSP flavor testing
- for SRv6 End.X
-Message-Id: <20261125041614.98d96a37cd5a5e082729cc62@uniroma2.it>
-In-Reply-To: <20261124054729.GA14932@Liu-laptop>
-References: <20261119-srv6_flavors_endx-v4-0-284cdb484eee@kylinos.cn>
- <20261119-srv6_flavors_endx-v4-5-284cdb484eee@kylinos.cn>
- <20261123050952.21dc46abdf5fe4fa235bb68d@uniroma2.it>
- <4717cab46b8eec796eb97799240cd6ab92d8c1ed@linux.dev>
- <20261124054729.GA14932@Liu-laptop>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0hr5G6Ci
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-386cf1041cdso614391eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 19:21:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795576892; x=1796181692; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=x882e7OTmAYxUut6y8OPWB+mfBqKYDNjHUdHSvwO/Ow=;
+        b=0hr5G6CiYwviZ48zaFQj1P2lBE1BZI28rhQg/97jLtjNS4k+9YIzro5JBC+nnhbGi0
+         TuFxd/JwRym2eyvsjKppO6aEkqIVCyMjJOue3YzcyqDqTaivIX7Z9omDLJPcjujOiHPf
+         3vONMosmapHms46Za13J5qGttrAwgfX9ajcciGxnfHoyTxhjpP1tXVPEd19NP8e8GYf+
+         7Brv1edZxDBWs4J3zfeM8Bsy0mX6Rnnj1B4Btj1kW0Btg1PmbpKtNsyAS7ud7BtdIEO6
+         LAxNC8lQNDQBTq50pzTueurl7xU3RBBmCZWv0RzRBEtUDxlUFgVZ9O9v6dJoAjICg1HX
+         kNWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795576892; x=1796181692;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=x882e7OTmAYxUut6y8OPWB+mfBqKYDNjHUdHSvwO/Ow=;
+        b=QWzzYkmVRFl8SVSfiwvw2LB+kQv68UtMymA/K9vLI5bUIhGR6DHSdMS6MozFjvnKDq
+         Vi8Ydm+NjwZRisBv0ka9h0R2+EZN6TMDq7lM4dFa7DJMsa+zxO3hiej1Jluja8mmjQMD
+         AcoG2Lx7k8yKa1/wtSLYFRl4SigZGJUb3mdn4aUeSUaX7HKVXadjQ1oSP22C+aI6p+cA
+         rrZN4p89+aJTN5bEioB3minw4JPb7HzR8Vw5Z5sXJ9ZySDMUIFYvUHY7c9uss0UqY5a+
+         0SrRG5qA5iKTzvDH8AYWdq4BkLNBz0M6P60Og0mEIwH/+koLDVGpLc+34T8dHn05GGwS
+         VdGQ==
+X-Forwarded-Encrypted: i=1; AL+hErEp0GZUYWWgQk3DphExthL755nq7WG3PIIwa0GVmxVtSEogG4PW8SqamOuxkX/ygzTzfDy0l4E1R166gkom724=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/YYMkgIJwxxUWrFBPrKmIRhmya/HDn+y7Jd3RBl+lwtHHRT3oE
+	UsuZQozcvqCRiEvdiqyOYVKnqeBWcUsujqlI9Ljc/XMoKYDlvOO8MkCC
+X-Gm-Gg: AZFdTZfoLHGhBpkaADaNl9N5MRM5o29z4WW7SIIxWfdhPUaBJzVU7CJgWjmPlOT9How
+	60uCMQg6FGD9BURBPukV3izrBcPoYCs6bf/WhDEGkMLYinA17fbIyt1MhyJuu2LORWis62k1heX
+	8iCiCpewPP+6T5JOo44QK0cw5lxNSD9KqKXdrBHrUEPRasunpd6mMqJWa2o0ONHN6ngO9ApUPUn
+	h17FJa1cJEERgb4yh4skmJq4CK37WPM7ycAeoxPDmk1XiFyNFfR0Q8flMg6Os4P+o6oG3c5AkSU
+	8N0VuYyQ1riATvu3XT/Hq6SbYtuxcwHvkBr1ndBDg8K60UuhoYm3g9vH0f+EK6nbu1+7HrCMvWG
+	GTPDfb1yxAJvioBvJeRUHhZcc7Aw7DCtNZ7v09fXFIKj76rPXcZUwTpKaBmIb6DxJn3CFdbI9ll
+	h95sPg3aUmo0fH5bmIOMA4BHDq4sKoFHFJv8TQZk11TVfqKL88Lu1O3sHQ5LTYURtNWpqiiVlmT
+	kzoWVEqFAtoLBSD5y9FIVmOhb4HSCNEyl8YziTLInYfOKjN8czdNaUCPxJDKr0Zj9lAFs+wmwWH
+	AYPZpif0LctMxPffUgBvRRCoLBeyrBq2+zNxmMkJGkICX8+dGm06UIBaEZH2Hx96MWm7nzsZrOq
+	uhU5bZJ6vn6fEX74Sq9W3n16EGUNcIGF4fxdbOJQMKWqHh4loA6HDb/tuGJB/xXyHuYeHa++AtI
+	Q=
+X-Received: by 2002:a05:693c:835b:b0:386:b5ad:b719 with SMTP id 5a478bee46e88-386b5adc3cdmr7111743eec.33.1795576891727;
+        Tue, 24 Nov 2026 19:21:31 -0800 (PST)
+Received: from ramen-dev-security-2.asia-south1-c.c.ramen-dev-345017.internal (90.156.200.35.bc.googleusercontent.com. [35.200.156.90])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-386c7c62a91sm7256012eec.17.2026.11.24.19.21.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 19:21:31 -0800 (PST)
+From: Anil Kaushik <anilkaushikwireless@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	idosch@nvidia.com,
+	nicolas.dichtel@6wind.com,
+	jacob.e.keller@intel.com,
+	jiri@resnulli.us,
+	fw@strlen.de,
+	martineau@kernel.org,
+	v3rdant.xiang@gmail.com,
+	aliceryhl@google.com,
+	linux-kernel@vger.kernel.org,
+	nhorman@tuxdriver.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	anilkaushikwireless@gmail.com
+Subject: Re: [PATCH net v8 1/2] genetlink: Reject joining multicast groups no family owns
+Date: Wed, 25 Nov 2026 03:21:23 +0000
+Message-Id: <20261125032123.2664525-1-anilkaushikwireless@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <179553579407.3135.13476478403966318528@kernel.org>
+References: <20261123155503.2497063-2-anilkaushikwireless@gmail.com> <179553579407.3135.13476478403966318528@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -96,58 +114,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 24 Nov 2026 13:47:29 +0800
-Hangbin Liu <hangbin.liu@linux.dev> wrote:
+On Tue, Nov 24, 2026 at 03:56:34PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Can that window still leave a socket as a member of a group ID that no
+> family owns? That is the state this patch is meant to prevent.
 
-Hi Hangbin,
-thanks for looking further into it.
+Yes, and the commit message says so. This window is not new: it is the
+same for groups with GENL_MCAST_CAP_* today. Closing it was patch 2 of
+v5, which was not accepted:
+https://lore.kernel.org/netdev/20261110121831.01412fb9@kernel.org/
 
-> [snip]
->
->  (i.a) hs-1 -> hs-2: on the packets with DA=fcff:3::400a, rt-1 inserts the
->        extra SRH with SID List=fcff:4::e,fcff:3::400a, and rt-4 consumes it.
->        Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
->  (i.b) hs-2 -> hs-1: on the packets with DA=fcff:1::0af1, rt-2 inserts the
->        extra SRH with SID List=fcff:3::e,fcff:1::0af1, and rt-3 consumes it.
->        Path: hs-2 -> rt-2 [ -> rt-3 ] -> rt-1 -> hs-1
->  (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:34a9::, rt-1 inserts the
->        extra SRH with SID List=fcff:4::e,fcbb:0:34a9::, and rt-4 consumes it.
->        Path: hs-1 -> rt-1 [ -> rt-4 ] -> rt-3 -> rt-4 -> rt-2 -> hs-2
->  (i.d) hs-2 -> hs-1: on the packets with DA=fcbb:0:43a9:31a9:10a9::, rt-2
->        inserts the extra SRH with SID List=fcff:3::e,fcbb:0:43a9:31a9:10a9::,
->        and rt-3 consumes it.
->        Path: hs-2 -> rt-2 [ -> rt-3 ] -> rt-4 -> rt-3 -> rt-1 -> hs-1
->
-> Ah, add unreach rt-4 SID (fcbb:0:4000::/36) on rt-3 will break the path for (1.d)
-> testing, as we use End action on rt-3 and redirect via the route. Can we just
-> add the unreach route (fcff:4::/32) on rt-3 for (1.a) ?
+So this patch only covers joining an ID before its family is
+registered, which an unprivileged user can do at any time. The window
+needs a family unregister during the join.
 
-Right, an unreachable /36 in place of the underlay route breaks the
-consumed SRH test of (i.d). The exact route for the (i.c) container
-fcbb:0:42a9:20a9:: on rt-3 does not, as the End there looks up
-fcbb:0:43a9:31a9:10a9::.
+The selftest issue on patch 2 is right, I will send a v9 for it.
 
-A route on rt-3 for (i.a) is a good idea. It checks the End.X 3>4
-without flavors, which the routes on rt-4 for (i.a) and on rt-3 for
-(i.c) do not check.
+pw-bot: cr
 
-On rt-3, fcff:4::/32 is already in table 90, as the underlay route via
-rt-4. Adding the unreachable one gives "RTNETLINK answers: File exists",
-and with "ip route replace" it takes the place of the underlay route.
-For (i.a) on rt-3, I would add an unreachable route only for
-fcff:4::2af1, the SID after End.X 3>4. The underlay route stays as it
-is, and the defer only has to delete the new route. I added it to the
-routes in my other reply.
-
-I would keep the route on rt-4 too. With your /32 on rt-3, put in with
-"ip route replace", and without the route on rt-4, all the tests pass
-when only the End.X 4>2 with PSP works as End.
-
-Ciao,
-Andrea
+Thanks,
+Anil
