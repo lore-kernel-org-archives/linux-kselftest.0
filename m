@@ -1,74 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795635548;
-	b=HQUrgx+/Zb9svwvJWcgFIvMb4efxUUGG3YmtyUl0le99NPuRvMTyhUmRgj0SYF2GV0Sp
-	 e6M2lAHUJEArJDKwMT4kOANwUWuBqpMsNshCMcsJfWl0tNwRzz/ajnEQSRYEyfP/eGjdw
-	 T0vx+rgvtKnaCMyn47QI32IY/KBhZpCF/B8MbcDF+u1NA9J6vIxJiMS/JCLbDlcjiN9Qe
-	 uqUWxbi7D0ODbWIuWwriFUDKYsxabdp5AiWWs4gJquwYCauy7PW/nzj3Knas4Fh17gqxc
-	 e1E/52BAFcwrj20X6iuVuvHf4QybihRccx83UtV3kc6jZSDPXWc5kTfbML+1hn710yw==
+	t=1795635625;
+	b=XTV+SUcP9BG3wStHSUIxnMjBDqGSMOVZvkOEhD4en51jqmANg6JpUeskaS2LMNLe2VM/
+	 yv/Zmw9h/SJvOJaS6066gownlNZPMv36YMP7jhg1z8FRuWblZaqZ6VmRq7IAIyAs7vmxt
+	 dCdX8rXKUyS8MnMkZ9twh0Kp08yEXucFF3q6iUaiS9nGwUY7K0ghpUk3NfqnSxyl+pwR+
+	 WfYpWT2e1N11ACqUixKzQZ+tWT7rWmYSMndsB00aBShgd53fcMMjHr8L6Eu2qMskMHDDP
+	 r3nZ7CTp1zdm/TDszNHfuKbF34aPqDuLbnQwvQytEK8tTtpa2ZRKSCiq58w3h2Sep6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795635548;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type;
-	bh=4JIpkbzf9JBuRi7wi/hXUTx/9PeRcB5EF6i+tZhvo4s=;
-	b=eWrIgM3lZBYS/dNOvlDNrDGoX3hMjdPR1osVnf320EBsk862pk+xzQIW8gZ2CDBFXhA/
-	 QTaxlBzEEm/x+i/IN28C7x+G45dWKbH26ZdrFplqJ/x3XY5VrgYXYumuk5EVO7njyOXox
-	 1stbnTuljktvuZfXj+MqXpQNAAG4HZwKrR4d+lCMze+f/ZDkuSQ1Oe/JYFps8zzTeU7r5
-	 CleLMaIudqtukPVzI6AcdwP9pAyHZGyfGxS9SQHntjz1GM6y+4tA8x3gXN2UImEUgUJVl
-	 /zh19lZ8w5Ij86IZWXOizF1t0/nq3HxFjnsmmn2aQ7E8loUpLgk+hsTg/Qq44L+0X1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795635625;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
+	bh=9A011GwDGlG1py2D4N87gJQuX8ar0m5xB7Oz/LEhEnE=;
+	b=zQ/h5gXRMQV7f9qf/fzxVMo0L9/Zet5/tC0LWJ54o42g1B+tXG7iRHtFxEuyoTTV1y2U
+	 VasPUwte5HUpI3U1TRUOG8BNozY9LTY8f1aSnHoFjAmAOmlab79qmMsi2oPBsS9v/m93Z
+	 CsWldmWucxvrTSP4Jm3nGJUSa20kmbmyKlc3+x7zQ34r/ounfdlMTT/SxVLqTUQVJNmqT
+	 oKXVFBj73U1Y2tycPY2DZLnJgHir2IxNzFL3g7wFKEju+kw9CzVtZpk/uK5tZz78/p6yP
+	 lbt3jEiggTqUo3EHa3hCfLr7XHLZIE8fcjs5yPpLO74tisQrXXdudcvgHrhCWO4EcdQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QbuEShLi;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Eckaxjdg;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2113606A321;
-	Wed, 25 Nov 2026 19:39:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F12606A31E
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:40:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4F12606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QbuEShLi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EE21F000C4;
-	Wed, 25 Nov 2026 19:39:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795635547;
-	bh=4JIpkbzf9JBuRi7wi/hXUTx/9PeRcB5EF6i+tZhvo4s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=QbuEShLi544NaqUt1tLMA3EEz4cc//Z80hoJf2oz3FNzqzd1oMQc6bu7mZPjIM3L4
-	 aPysv0MrQF5mpM3fjFSc3MzO1wpRIQP98KRBYcuP6Y8MfZd1zitnhm7W8gIj9K5XZR
-	 AxCa+Ytjhw7GZsJEpUSHLenk7kb7Uiv6eOTwsekLT01X1ipiUViZmzpQgE+cSMK2Tg
-	 wWfzRS+gFM8Y5CCIus+57t1dQZM1giVuQkMOezHnsargX42ERMy2dp+kQp4dTKLuAs
-	 ZbUerKPMxG37Rl81ezxfLltmCIUycyfjK1ziTtnQqeQPCLPw2MCu34fOxsQhmYZVKz
-	 gALHJ2T8i6w7w==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, andrew+netdev@lunn.ch, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- ilias.apalodimas@linaro.org, alexanderduyck@fb.com, saeedm@nvidia.com,
- tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org,
- michael.chan@broadcom.com, pavan.chebbi@broadcom.com, corbet@lwn.net,
- shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
- stuclar@meta.com, sdf@fomichev.me, horms@kernel.org, martin.lau@linux.dev,
- almasrymina@google.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- rdunlap@infradead.org, kernel-team@meta.com,
- dimitri.daskalakis1@gmail.com, bobbyeshleman@meta.com,
- mohsin.bashr@gmail.com, kees@kernel.org, leitao@debian.org,
- maxime.chevallier@bootlin.com, cuitao@kylinos.cn,
- vadim.fedorenko@linux.dev, mike.marciniszyn@gmail.com, kuniyu@google.com,
- jiayuan.chen@linux.dev, mkarsten@uwaterloo.ca, razor@blackwall.org,
- dw@davidwei.uk, asml.silence@gmail.com, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 02/15] xdp: Keep the shared info of a buffer in
- kernel memory
-In-Reply-To: <179561567996.3135.9952128421877275714@kernel.org>
-References: <20261124125654.183091-2-bjorn@kernel.org>
- <179561567996.3135.9952128421877275714@kernel.org>
-Date: Wed, 25 Nov 2026 20:39:04 +0100
-Message-ID: <87ld6gog4n.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Eckaxjdg
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2f046b0adc0so35916705ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795635624; x=1796240424; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9A011GwDGlG1py2D4N87gJQuX8ar0m5xB7Oz/LEhEnE=;
+        b=EckaxjdgaDF5mThZ4+h58P4VsPDsi/ZeXmTrk0WIn2vCojkLZ2+iVD6aqESiUlTAJi
+         GgnmvTYLeGf+I3rqtT0QQNuZ+mBtlw9UhSSrpHKR8dDqPfj7X41Hagst2vxi5D28oNpE
+         ttoMoVQ+5E1Q8PpqGSAa7LAypesEvx4t+Sz0XdGILvgX4t3d7K710Lv2DlceWs0bIByl
+         PEPsS6Xes30JsdmoNteiXgDmPBYD0y+THHCC1z++EMeOhzhywmjTXrq4hXu39+2uV6sT
+         Vyj71u76ScKty8RpJhPt1HWS8kgHtX4gVo150Ccn0EFxMEoeJSTjuyWX+D8KUH+xpy9D
+         qFMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795635624; x=1796240424;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9A011GwDGlG1py2D4N87gJQuX8ar0m5xB7Oz/LEhEnE=;
+        b=hd9shHZFRQWAZqmnfmXlAnlVkyoI7bNOvfhoojQNEkGPer5KcDcJdgMQi04mmgiyi0
+         7QMxjs7h583rZ8JM2CtTSuoGRpvgTJn+kzEEH0CqC44ImQn1NybXKNhHDT4JVN1pQGoz
+         bZP9VMkucqrzS5KtiT58kNVm47IfV9J7/4Iv6UfL8JVjj2W9MYeOQbBsSS68N9toKn74
+         CoWfAC7DRKt4zqJRunsDcA2a7IFP+qrnZ3zOfwL29xJ/KjtzY0wvJBXdjN2LD++sIJXp
+         /QF36Z93eaI8mn6C52pRFd9pUS0+LbuX0mUJk9e7a0YgUckEcia2ada0q49ovxrTp1Op
+         Sm7A==
+X-Forwarded-Encrypted: i=1; AL+hErG+KtSryGm3gkCilv6rSNW+9P3ZMFW8/xQzaGvufxDo6KueIILCU2haR3MaJROqHIEX4IX96/wlaGT0TBkopGI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/NaFEhbUlcs5fVI30UXNRWMip6Kix8EkHjtjo+F8ryaQEhuIz9
+	xZ6Dxlq2A6sEnnbrxmGkvE6nqkZQFl0NJlUx8xU2UnvIC9fql4tCOFku0NIdf2cATQxG43jWjoO
+	jZE+n3vyz
+X-Gm-Gg: AZFdTZfs/TsVc+nufs82i42FS1BdTyHcku/7ilWXMZFEEnE+8EG9dbbXmz03xs7WItu
+	Rq3nSTUbWb77j8L6KdUB/Yt+dUmejdYngIMW7WsV4Y4bQBffbJJMJh3RGsyb8/AdAGIejIIl3ry
+	IJ8oCuTJo8P8FRomB9AqL0OVe0BmLdH6mbia647X9YPkZFDTua/MKBz4g7euGWZ/WfsHgBgSib1
+	c5bKkeRxDQvlv1QUANHQmHhrRQecsHEkwKLLgc4CRMVGOblb9Uy3+9WKWaYwH8APQLN6PVLYW0a
+	suOtLEVrzPgg3ANQbccLMmV0lpZ30fp8WKhm0pd7FJdYRupqpCyytkHB3HNXGjVZTwDynVXHo6s
+	/DlCGGf+PoDIzXqpPy9XB/oWU0worUES6YwKn3nzWqK1EWDHD0diFmQpYcKIvcy3exxdirJA7xY
+	iwI9qbO8c37TuZcaags7r9gr5gy2xCQU0+wsiE7Xxr8eZGiMPeJcJZJd7ciPV1VTph+w991Jn9a
+	4mMQSBUXfGK2aw0Gn3s5c09FH77V5Yh64b2CJhVAwWI41OYPbS7wXRr940GWqX7Z+RyWCboYf99
+	Eg08YnQ1WvCWkg7A+bNYmTCGBV+9eY54ruuFxBuDeT0sa5jpZJERd+YgW+EM20A5G8rsMrPUyqc
+	gU5eG/U76DA==
+X-Received: by 2002:a17:90b:35c2:b0:3a8:c0cd:57f3 with SMTP id 98e67ed59e1d1-3b41c8e0c7emr16015888a91.18.1795635623451;
+        Wed, 25 Nov 2026 11:40:23 -0800 (PST)
+Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d026d6fsm9518881a12.19.2026.11.25.11.40.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 11:40:22 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,146 +89,119 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Nov 2026 11:40:22 -0800
+Message-Id: <DN4JPCW1VT9K.1HWW8L3LMPE35@google.com>
+From: "David Matlack" <dmatlack@google.com>
+To: "Aaron Lewis" <aaronlewis@google.com>, <kvm@vger.kernel.org>
+Cc: <alex@shazbot.org>, <dmatlack@google.com>, <jgg@nvidia.com>, "Kees Cook"
+ <kees@kernel.org>, "Andy Lutomirski" <luto@amacapital.net>, "Will Drewry"
+ <wad@chromium.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v4 4/5] selftests: harness: Support custom command-line
+ options
+X-Mailer: aerc 0.21.0
+References: <20261114132200.113697-1-aaronlewis@google.com>
+ <20261114132200.113697-5-aaronlewis@google.com>
+In-Reply-To: <20261114132200.113697-5-aaronlewis@google.com>
 
-netdev-bot+sashiko@kernel.org writes:
+On Sat Nov 14, 2026 at 5:21 AM PST, Aaron Lewis wrote:
+> Also update test_enabled() to match exact option characters rather than
+> tolower(opt) so custom options that differ only by case (such as 'R') do
+> not mistakenly match built-in single-case options like '-r'.
 
-> Thank you for your contribution! Sashiko AI review found more severe
-> issue(s) in other patches of this series. This mail is only an FYI, in case
-> you want to address the nit picks below when you respin.
->
-> Low priority / nit picks for your consideration:
->
-> - [Low] A comment is now stale.
->
-> Pre-existing issues:
-> - [High] This problem wasn't introduced by this patch, but the patch's
->   commit message names it and the series leaves it open.
->
-> --
->
-> xdp: Keep the shared info of a buffer in kernel memory
->
-> This patch lets an RX queue keep the skb_shared_info of its XDP buffers
-> in kernel memory, allocated by xdp_rxq_info_reg_ext_sinfo(). Buffers
-> with the new XDP_FLAGS_SINFO_EXT flag look up their shared info there.
-> For such buffers xdp_data_hard_end() reserves no tailroom, and frame
-> and skb conversion refuse them.
->
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index 1629e347b71fb..944418111a86e 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->
-> [ ... ]
->
->> @@ -212,17 +226,27 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
->>  
->>  /* Reserve memory area at end-of data area.
->>   *
->> - * This macro reserves tailroom in the XDP buffer by limiting the
->> - * XDP/BPF data access to data_hard_end.  Notice same area (and size)
->> - * is used for XDP_PASS, when constructing the SKB via build_skb().
->> + * This reserves tailroom in the XDP buffer by limiting the XDP/BPF data
->> + * access to data_hard_end.  Notice same area (and size) is used for
->> + * XDP_PASS, when constructing the SKB via build_skb(). Buffers with
->> + * %XDP_FLAGS_SINFO_EXT keep the shared info elsewhere and reserve none.
->>   */
->> -#define xdp_data_hard_end(xdp)				\
->> -	((xdp)->data_hard_start + (xdp)->frame_sz -	\
->> -	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
->> +static __always_inline void *xdp_data_hard_end(const struct xdp_buff *xdp)
->> +{
->> +	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
->> +
->> +	if (xdp->flags & XDP_FLAGS_SINFO_EXT)
->> +		tailroom = 0;
->> +	return xdp->data_hard_start + xdp->frame_sz - tailroom;
->> +}
->
-> [Severity: Low]
-> This isn't a bug, but should the comment in bpf_xdp_adjust_tail() be
-> updated along with this change?
->
-> net/core/filter.c:bpf_xdp_adjust_tail() {
->     ...
-> 	/* Notice that xdp_data_hard_end have reserved some tailroom */
-> 	if (unlikely(data_end > data_hard_end))
-> 		return -EINVAL;
->     ...
-> }
->
-> xdp_data_hard_end() no longer reserves tailroom for XDP_FLAGS_SINFO_EXT
-> buffers. For those buffers this bound reaches the end of the frame, and
-> frame_sz is the only limit.
+Please also explain the has_positive change, since it's not obvious
+from the diff. How about replacing this paragraph with something like:
 
-Yes, will fix.
+  Pass the full optstring (including custom options) to test_enabled()
+  so that getopt() correctly parses custom options that take an
+  argument. Since test_enabled() now sees custom options, only update
+  has_positive for the filter options (-t, -f, -v, -r). Otherwise a
+  lowercase custom option would be treated as a positive filter that
+  matches nothing, and every test would get filtered out. Similarly,
+  match exact option characters rather than tolower(opt) so that custom
+  options that differ only by case (such as -R) do not get treated as
+  built-in options (such as -r).
 
->>  
->>  static inline struct skb_shared_info *
->>  xdp_get_shared_info_from_buff(const struct xdp_buff *xdp)
->>  {
->> +	/* Kernel structures stay out of memory that userspace may write */
->> +	if (unlikely(xdp->flags & XDP_FLAGS_SINFO_EXT))
->> +		return xdp->rxq->ext_sinfo;
->> +
->>  	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
->>  }
->
-> [Severity: High]
-> This is a pre-existing issue, not one introduced by this patch. The
-> commit message gives it as the motivation:
->
->     Classic AF_XDP zero copy keeps it in the tail of a UMEM chunk, where
->     userspace can rewrite it.
->
-> Is classic AF_XDP zero copy meant to stay exposed? XSK pool buffers
-> never get XDP_FLAGS_SINFO_EXT, either here or later in the series. Later
-> in the series only xdp_sink_mark() sets the flag, and only for
-> MP_XDP_ONLY page pools.
->
-> So xsk_buff_add_frag() still writes the fragment list into the UMEM
-> tail:
->
-> xsk_buff_add_frag()
->   __xdp_buff_add_frag(head, ...)
->     xdp_get_shared_info_from_buff(head)
->       xdp_data_hard_end(head)
->
-> That is the tailroom that xsk_pool_get_rx_frame_size() reserves when
-> XDP_UMEM_SG_FLAG is set.
->
-> Userspace can rewrite nr_frags and frags[] of chunks it has handed over
-> through the fill ring while NAPI builds a multi-buffer packet. Can a
-> forged nr_frags then overflow sinfo->frags[]? __xdp_buff_add_frag()
-> only checks:
->
-> 	} else if (unlikely(nr_frags == MAX_SKB_FRAGS)) {
-> 		return false;
->
-> With a value above MAX_SKB_FRAGS, it writes frags[nr_frags] past the
-> end of the chunk.
->
-> On XDP_PASS, xdp_copy_frags_from_zc() in net/core/xdp.c has the same
-> problem:
->
-> 	xinfo = xdp_get_shared_info_from_buff(xdp);
-> 	nr_frags = xinfo->nr_frags;
->
-> 	for (u32 i = 0; i < nr_frags; i++) {
->
-> There is no bound on nr_frags here. It indexes skb_shinfo()->frags[] of
-> the new skb and copies from skb_frag_address() of the forged frag
-> netmems. xsk_rcv_zc() also sizes its RX ring reservation from nr_frags.
->
-> Triggering this needs a zero-copy AF_XDP socket with XDP_UMEM_SG_FLAG
-> and an attached XDP program.
->
-> Could the commit message say that classic zero copy stays out of scope?
-> Or could MEM_TYPE_XSK_BUFF_POOL buffers use ext_sinfo as well?
+[...]
 
-This is older than this series, and the series does not change it.
-Classic is out of scope here.
+> +/**
+> + * struct test_harness_cli_opts - Custom command-line options for test h=
+arness
+> + * @optstring: getopt option string; must not conflict with harness opti=
+ons.
+> + * @handler: Callback to handle custom options; returns KSFT_PASS or KSF=
+T_FAIL.
+> + * @help: Optional callback to print custom option help text.
+> + */
+> +struct test_harness_cli_opts {
+> +	const char *optstring;
+> +	int (*handler)(int opt, char *optarg);
+> +	void (*help)(void);
+> +};
 
-I'll work with Magnus and Maciej to get a fix out for classic.
+KSFT_PASS and KSFT_FAIL are test result codes, which seems like an odd
+fit for a callback that handles a command-line option. Please follow the
+usual kernel convention instead and have the handler return 0 on success
+and non-zero on error, e.g. in test_harness_argv_check():
+
+	default:
+		if (opts && opts->handler && !opts->handler(opt, optarg))
+			break;
+
+and in the next patch:
+
+	static int opts_handler(int opt, char *optarg)
+	{
+		if (opt =3D=3D 'b') {
+			...
+			return 0;
+		}
+
+		return -EINVAL;
+	}
+
+The @handler kernel-doc above will need to be updated to match.
+
+Also, kselftest.rst explicitly lists which kernel-doc comments to pull
+in from kselftest_harness.h, so this comment won't show up in the
+rendered docs as-is. Please add kernel-doc for test_harness_run_opts()
+too, and add both to the "Helpers" list in
+Documentation/dev-tools/kselftest.rst so test authors can discover how
+to add custom options.
+
+[...]
+
+> +#define OPTSTRING_LEN 128
+
+kselftest_harness.h is included by a lot of tests, so please use a more
+specific name (e.g. KSFT_OPTSTRING_LEN) to avoid clashing with something
+a test defines, or hard-code it locally.
+
+> +
+> +static void optstring_append_custom(char *optstring, size_t size,
+> +				    const struct test_harness_cli_opts *opts)
+> +{
+> +	const char *c;
+> +
+> +	if (!opts || !opts->optstring)
+> +		return;
+> +
+> +	assert(strlen(optstring) + strlen(opts->optstring) < size);
+> +
+> +	for (c =3D opts->optstring; *c; c++) {
+> +		if (isalnum(*c))
+> +			assert(!strchr(optstring, *c));
+> +	}
+
+assert() compiles out if a test is built with -DNDEBUG, in which case
+these checks silently disappear, and nothing else in kselftest_harness.h
+uses assert(). Please follow what the harness already does for misuse
+it detects at runtime (e.g. "Illegal usage of low-level ksft APIs in
+harness test") and for bad command-line options: print an error with
+ksft_print_msg() and fail. e.g. have optstring_append_custom() return an
+error and test_harness_run_opts() return KSFT_FAIL, the same way it
+handles a failure from test_harness_argv_check(). That also avoids
+pulling <assert.h> into every test that includes the harness.
