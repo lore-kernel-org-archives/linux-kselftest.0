@@ -1,86 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795635625;
-	b=XTV+SUcP9BG3wStHSUIxnMjBDqGSMOVZvkOEhD4en51jqmANg6JpUeskaS2LMNLe2VM/
-	 yv/Zmw9h/SJvOJaS6066gownlNZPMv36YMP7jhg1z8FRuWblZaqZ6VmRq7IAIyAs7vmxt
-	 dCdX8rXKUyS8MnMkZ9twh0Kp08yEXucFF3q6iUaiS9nGwUY7K0ghpUk3NfqnSxyl+pwR+
-	 WfYpWT2e1N11ACqUixKzQZ+tWT7rWmYSMndsB00aBShgd53fcMMjHr8L6Eu2qMskMHDDP
-	 r3nZ7CTp1zdm/TDszNHfuKbF34aPqDuLbnQwvQytEK8tTtpa2ZRKSCiq58w3h2Sep6Q==
+	t=1795635789;
+	b=nu3LWheMd/PSSb1wOKC2MG0PCJi8ZRbFAGLQvNH02xGp2wD1Mb7wXoNyTH8xEzYVtOi+
+	 84ZQGIckw0hW40uzd98xW1WT2JLCfx0gR+O4/7s6s6nURM8eNWv7dM09HP/k25ImaaOQ7
+	 1c/9EgLo+m1vK8J7JFbwR5YiN+flThUmYpFYMVdKeNtzLOHd/0w8XENDusZ0SQ3M+YMFy
+	 4ZjMTfGOnWIq/r8lq1UGId5J04/s3FTTHY3yJmlmZJLFsuO6HYEGg9KU7vjFngmKmZMMC
+	 gzY6/DIJjIQyQXJqe7pl/xbZ+faBZeDsjoqZOmGNOppwDwITtzoKSKedyBtZNW1iEJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795635625;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
-	bh=9A011GwDGlG1py2D4N87gJQuX8ar0m5xB7Oz/LEhEnE=;
-	b=zQ/h5gXRMQV7f9qf/fzxVMo0L9/Zet5/tC0LWJ54o42g1B+tXG7iRHtFxEuyoTTV1y2U
-	 VasPUwte5HUpI3U1TRUOG8BNozY9LTY8f1aSnHoFjAmAOmlab79qmMsi2oPBsS9v/m93Z
-	 CsWldmWucxvrTSP4Jm3nGJUSa20kmbmyKlc3+x7zQ34r/ounfdlMTT/SxVLqTUQVJNmqT
-	 oKXVFBj73U1Y2tycPY2DZLnJgHir2IxNzFL3g7wFKEju+kw9CzVtZpk/uK5tZz78/p6yP
-	 lbt3jEiggTqUo3EHa3hCfLr7XHLZIE8fcjs5yPpLO74tisQrXXdudcvgHrhCWO4EcdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795635789;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=MLc4/6k9Z6sxMwo5Ugfr+gMYCrDQyFv5j935bfc4lHg=;
+	b=0+j9OmUKBgDnpXmxqqXR7VXlVd57wa/S3/JDFylYumfqlkk0nP9+/CU3FKJCelvhpegm
+	 qQG+bcoaqaGvIeJdMRPqkKAfHyctjGxvZcq2q1Nzo2McCK3ZlYjtegKF1oxqqpXLLt/dD
+	 vbhOUQHcuNrQ3/qX6yO8tQCrL506hb1VjIxxx5bfFq+dBWt05DswG9TD7xj6ckXYwvpJR
+	 B8XoKXirqzwuLYdRihrebYDwjMdfdFoV8LK0q5rC/sxaDPRzYD5oyGGzamaDtFjJmJdNg
+	 0E4P0tN0zOkNLxc1Tz7nJivYnOYfSJwCJjVvxSCbKQHtpgakxwDn/8yx01WfXRErXxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Eckaxjdg;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IlB4xbnc;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F12606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:40:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4F12606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6667606A321;
+	Wed, 25 Nov 2026 19:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Eckaxjdg
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2f046b0adc0so35916705ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:40:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795635624; x=1796240424; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9A011GwDGlG1py2D4N87gJQuX8ar0m5xB7Oz/LEhEnE=;
-        b=EckaxjdgaDF5mThZ4+h58P4VsPDsi/ZeXmTrk0WIn2vCojkLZ2+iVD6aqESiUlTAJi
-         GgnmvTYLeGf+I3rqtT0QQNuZ+mBtlw9UhSSrpHKR8dDqPfj7X41Hagst2vxi5D28oNpE
-         ttoMoVQ+5E1Q8PpqGSAa7LAypesEvx4t+Sz0XdGILvgX4t3d7K710Lv2DlceWs0bIByl
-         PEPsS6Xes30JsdmoNteiXgDmPBYD0y+THHCC1z++EMeOhzhywmjTXrq4hXu39+2uV6sT
-         Vyj71u76ScKty8RpJhPt1HWS8kgHtX4gVo150Ccn0EFxMEoeJSTjuyWX+D8KUH+xpy9D
-         qFMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795635624; x=1796240424;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9A011GwDGlG1py2D4N87gJQuX8ar0m5xB7Oz/LEhEnE=;
-        b=hd9shHZFRQWAZqmnfmXlAnlVkyoI7bNOvfhoojQNEkGPer5KcDcJdgMQi04mmgiyi0
-         7QMxjs7h583rZ8JM2CtTSuoGRpvgTJn+kzEEH0CqC44ImQn1NybXKNhHDT4JVN1pQGoz
-         bZP9VMkucqrzS5KtiT58kNVm47IfV9J7/4Iv6UfL8JVjj2W9MYeOQbBsSS68N9toKn74
-         CoWfAC7DRKt4zqJRunsDcA2a7IFP+qrnZ3zOfwL29xJ/KjtzY0wvJBXdjN2LD++sIJXp
-         /QF36Z93eaI8mn6C52pRFd9pUS0+LbuX0mUJk9e7a0YgUckEcia2ada0q49ovxrTp1Op
-         Sm7A==
-X-Forwarded-Encrypted: i=1; AL+hErG+KtSryGm3gkCilv6rSNW+9P3ZMFW8/xQzaGvufxDo6KueIILCU2haR3MaJROqHIEX4IX96/wlaGT0TBkopGI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/NaFEhbUlcs5fVI30UXNRWMip6Kix8EkHjtjo+F8ryaQEhuIz9
-	xZ6Dxlq2A6sEnnbrxmGkvE6nqkZQFl0NJlUx8xU2UnvIC9fql4tCOFku0NIdf2cATQxG43jWjoO
-	jZE+n3vyz
-X-Gm-Gg: AZFdTZfs/TsVc+nufs82i42FS1BdTyHcku/7ilWXMZFEEnE+8EG9dbbXmz03xs7WItu
-	Rq3nSTUbWb77j8L6KdUB/Yt+dUmejdYngIMW7WsV4Y4bQBffbJJMJh3RGsyb8/AdAGIejIIl3ry
-	IJ8oCuTJo8P8FRomB9AqL0OVe0BmLdH6mbia647X9YPkZFDTua/MKBz4g7euGWZ/WfsHgBgSib1
-	c5bKkeRxDQvlv1QUANHQmHhrRQecsHEkwKLLgc4CRMVGOblb9Uy3+9WKWaYwH8APQLN6PVLYW0a
-	suOtLEVrzPgg3ANQbccLMmV0lpZ30fp8WKhm0pd7FJdYRupqpCyytkHB3HNXGjVZTwDynVXHo6s
-	/DlCGGf+PoDIzXqpPy9XB/oWU0worUES6YwKn3nzWqK1EWDHD0diFmQpYcKIvcy3exxdirJA7xY
-	iwI9qbO8c37TuZcaags7r9gr5gy2xCQU0+wsiE7Xxr8eZGiMPeJcJZJd7ciPV1VTph+w991Jn9a
-	4mMQSBUXfGK2aw0Gn3s5c09FH77V5Yh64b2CJhVAwWI41OYPbS7wXRr940GWqX7Z+RyWCboYf99
-	Eg08YnQ1WvCWkg7A+bNYmTCGBV+9eY54ruuFxBuDeT0sa5jpZJERd+YgW+EM20A5G8rsMrPUyqc
-	gU5eG/U76DA==
-X-Received: by 2002:a17:90b:35c2:b0:3a8:c0cd:57f3 with SMTP id 98e67ed59e1d1-3b41c8e0c7emr16015888a91.18.1795635623451;
-        Wed, 25 Nov 2026 11:40:23 -0800 (PST)
-Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d026d6fsm9518881a12.19.2026.11.25.11.40.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 11:40:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IlB4xbnc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B731F000C0;
+	Wed, 25 Nov 2026 19:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795635789;
+	bh=MLc4/6k9Z6sxMwo5Ugfr+gMYCrDQyFv5j935bfc4lHg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=IlB4xbncT7TdKfveO1rm1FT2gCv4IrTSQ05brtd2009HIOI86yf1t3YO9xQcOpuqm
+	 plQ3clS+mv14LdeWvVQeB80S43PeuiptlMEkhkm7cvp4Zc0wqB9563ctgrQ+Fi2TMq
+	 sLGpJdYdnBreL+XLlfv1CXxOCcvZ1CNSI24CocAOUeNwUwRrfpnACcwrDRfjpuPgpH
+	 s7/V3e5TEknLqvfFLiOoFQ+VvEaIl4LLR0jAZ92VEtv7Zo2MQs03phRdNTCbhi+zQl
+	 WQGXej1P1//AE8xrQwLbF466qrnPQPcZCp8bOtqmfAvdFovymXQuqLh8M2zCmK3wX9
+	 N6hMNK3MH/JTw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ ilias.apalodimas@linaro.org, alexanderduyck@fb.com, saeedm@nvidia.com,
+ tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org,
+ michael.chan@broadcom.com, pavan.chebbi@broadcom.com, corbet@lwn.net,
+ shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ stuclar@meta.com, sdf@fomichev.me, horms@kernel.org, martin.lau@linux.dev,
+ almasrymina@google.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ rdunlap@infradead.org, kernel-team@meta.com,
+ dimitri.daskalakis1@gmail.com, bobbyeshleman@meta.com,
+ mohsin.bashr@gmail.com, kees@kernel.org, leitao@debian.org,
+ maxime.chevallier@bootlin.com, cuitao@kylinos.cn,
+ vadim.fedorenko@linux.dev, mike.marciniszyn@gmail.com, kuniyu@google.com,
+ jiayuan.chen@linux.dev, mkarsten@uwaterloo.ca, razor@blackwall.org,
+ dw@davidwei.uk, asml.silence@gmail.com, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 03/15] net: Add memory providers that only feed
+ XDP
+In-Reply-To: <179561568417.3135.7506567631056689365@kernel.org>
+References: <20261124125654.183091-3-bjorn@kernel.org>
+ <179561568417.3135.7506567631056689365@kernel.org>
+Date: Wed, 25 Nov 2026 20:43:05 +0100
+Message-ID: <87h5h4ofxy.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,119 +77,116 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 11:40:22 -0800
-Message-Id: <DN4JPCW1VT9K.1HWW8L3LMPE35@google.com>
-From: "David Matlack" <dmatlack@google.com>
-To: "Aaron Lewis" <aaronlewis@google.com>, <kvm@vger.kernel.org>
-Cc: <alex@shazbot.org>, <dmatlack@google.com>, <jgg@nvidia.com>, "Kees Cook"
- <kees@kernel.org>, "Andy Lutomirski" <luto@amacapital.net>, "Will Drewry"
- <wad@chromium.org>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 4/5] selftests: harness: Support custom command-line
- options
-X-Mailer: aerc 0.21.0
-References: <20261114132200.113697-1-aaronlewis@google.com>
- <20261114132200.113697-5-aaronlewis@google.com>
-In-Reply-To: <20261114132200.113697-5-aaronlewis@google.com>
 
-On Sat Nov 14, 2026 at 5:21 AM PST, Aaron Lewis wrote:
-> Also update test_enabled() to match exact option characters rather than
-> tolower(opt) so custom options that differ only by case (such as 'R') do
-> not mistakenly match built-in single-case options like '-r'.
+netdev-bot+sashiko@kernel.org writes:
 
-Please also explain the has_positive change, since it's not obvious
-from the diff. How about replacing this paragraph with something like:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+>
+> - [Medium] This patch adds MP_XDP_ONLY providers, which by design sit
+>   next to native XDP and AF_XDP.
+>
+> --
+>
+> net: Add memory providers that only feed XDP
+>
+> This patch lets a memory provider mark itself XDP-only with MP_XDP_ONLY.
+> Such a provider needs no header split and does not block native XDP. A pa=
+ge
+> pool takes it only when the driver sets PP_FLAG_ALLOW_XDP_ONLY_NETMEM. The
+> XDP install, XDP propagate and ethtool rings checks move from
+> dev_get_min_mp_channel_count() to the new dev_mp_blocks_xdp().
+>
+>> diff --git a/net/core/dev.c b/net/core/dev.c
+>> index 4ca8a9f5a7a5c..8a1d5a284e53c 100644
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+>
+> [ ... ]
+>
+>> @@ -11146,6 +11146,23 @@ int dev_change_xdp_fd(struct net_device *dev, s=
+truct netlink_ext_ack *extack,
+>>  	return err;
+>>  }
+>>=20=20
+>> +/* Native XDP runs next to XDP-only providers only, see %MP_XDP_ONLY */
+>> +bool dev_mp_blocks_xdp(const struct net_device *dev)
+>> +{
+>> +	const struct memory_provider_ops *ops;
+>> +	unsigned int i;
+>> +
+>> +	netdev_assert_locked_ops_compat(dev);
+>> +
+>> +	for (i =3D 0; i < dev->real_num_rx_queues; i++) {
+>> +		ops =3D dev->_rx[i].mp_params.mp_ops;
+>> +		if (ops && !(ops->flags & MP_XDP_ONLY))
+>> +			return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+>> +
+>
+> [Severity: Medium]
+> Should the AF_XDP zero-copy setup paths use this helper too?
+>
+> Two callers still use dev_get_min_mp_channel_count(). It counts every
+> provider by mp_priv, including XDP-only ones:
+>
+> net/xdp/xsk_buff_pool.c:xp_assign_dev() {
+>     ...
+> 	if (dev_get_min_mp_channel_count(netdev)) {
+> 		err =3D -EBUSY;
+> 		goto err_unreg_pool;
+> 	}
+>     ...
+> err_unreg_pool:
+> 	if (!force_zc)
+> 		err =3D 0; /* fallback to copy mode */
+>     ...
+> }
+>
+> drivers/net/netkit.c:netkit_xsk() {
+>     ...
+> 	if (!create || !dev_get_min_mp_channel_count(phys))
+> 		ret =3D phys->netdev_ops->ndo_bpf(phys, &xdp_lower);
+>     ...
+> }
+>
+> Later in the series, xsk_sink_bind() installs an MP_XDP_ONLY provider
+> (xsk_sink_ops) on q0. After that, a classic AF_XDP socket that binds q1 on
+> the same device would see this:
+>
+>   bind with XDP_ZEROCOPY fails with -EBUSY
+>   bind without a mode flag falls back to copy mode and does not report it
+>   XSK pool creation through a netkit leased queue returns -EBUSY
+>
+> The result also seems to depend on bind order. Suppose the classic
+> zero-copy socket binds q1 first. The sink can then still be installed on
+> q0, because __netif_mp_open_rxq() only checks the pool of its own queue:
+>
+> net/core/netdev_rx_queue.c:__netif_mp_open_rxq() {
+>     ...
+> 	if (rxq->pool && !xdp_only) {
+>     ...
+> }
+>
+> So the same end state (sink on q0, zero copy on q1) is accepted in one
+> order and refused in the other. Is that intended?
 
-  Pass the full optstring (including custom options) to test_enabled()
-  so that getopt() correctly parses custom options that take an
-  argument. Since test_enabled() now sees custom options, only update
-  has_positive for the filter options (-t, -f, -v, -r). Otherwise a
-  lowercase custom option would be treated as a positive filter that
-  matches nothing, and every test would get filtered out. Similarly,
-  match exact option characters rather than tolower(opt) so that custom
-  options that differ only by case (such as -R) do not get treated as
-  built-in options (such as -r).
+No, that's not intended. The device-wide check in
+xp_assign_dev()/netkit_xsk() predates this work, and a sink on another
+queue does not stop native XDP. I'll switch both to dev_mp_blocks_xdp()
+in the next version, so the bind order no longer mattters.
 
-[...]
-
-> +/**
-> + * struct test_harness_cli_opts - Custom command-line options for test h=
-arness
-> + * @optstring: getopt option string; must not conflict with harness opti=
-ons.
-> + * @handler: Callback to handle custom options; returns KSFT_PASS or KSF=
-T_FAIL.
-> + * @help: Optional callback to print custom option help text.
-> + */
-> +struct test_harness_cli_opts {
-> +	const char *optstring;
-> +	int (*handler)(int opt, char *optarg);
-> +	void (*help)(void);
-> +};
-
-KSFT_PASS and KSFT_FAIL are test result codes, which seems like an odd
-fit for a callback that handles a command-line option. Please follow the
-usual kernel convention instead and have the handler return 0 on success
-and non-zero on error, e.g. in test_harness_argv_check():
-
-	default:
-		if (opts && opts->handler && !opts->handler(opt, optarg))
-			break;
-
-and in the next patch:
-
-	static int opts_handler(int opt, char *optarg)
-	{
-		if (opt =3D=3D 'b') {
-			...
-			return 0;
-		}
-
-		return -EINVAL;
-	}
-
-The @handler kernel-doc above will need to be updated to match.
-
-Also, kselftest.rst explicitly lists which kernel-doc comments to pull
-in from kselftest_harness.h, so this comment won't show up in the
-rendered docs as-is. Please add kernel-doc for test_harness_run_opts()
-too, and add both to the "Helpers" list in
-Documentation/dev-tools/kselftest.rst so test authors can discover how
-to add custom options.
-
-[...]
-
-> +#define OPTSTRING_LEN 128
-
-kselftest_harness.h is included by a lot of tests, so please use a more
-specific name (e.g. KSFT_OPTSTRING_LEN) to avoid clashing with something
-a test defines, or hard-code it locally.
-
-> +
-> +static void optstring_append_custom(char *optstring, size_t size,
-> +				    const struct test_harness_cli_opts *opts)
-> +{
-> +	const char *c;
-> +
-> +	if (!opts || !opts->optstring)
-> +		return;
-> +
-> +	assert(strlen(optstring) + strlen(opts->optstring) < size);
-> +
-> +	for (c =3D opts->optstring; *c; c++) {
-> +		if (isalnum(*c))
-> +			assert(!strchr(optstring, *c));
-> +	}
-
-assert() compiles out if a test is built with -DNDEBUG, in which case
-these checks silently disappear, and nothing else in kselftest_harness.h
-uses assert(). Please follow what the harness already does for misuse
-it detects at runtime (e.g. "Illegal usage of low-level ksft APIs in
-harness test") and for bad command-line options: print an error with
-ksft_print_msg() and fail. e.g. have optstring_append_custom() return an
-error and test_harness_run_opts() return KSFT_FAIL, the same way it
-handles a failure from test_harness_argv_check(). That also avoids
-pulling <assert.h> into every test that includes the harness.
