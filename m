@@ -1,73 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795593617;
-	b=kbAXf29K9HJZLQdZ8hSmAM+BVj8aQ2LGtG9kjzU53EUs3p2qQdsYtTCB07fZGdELLg1U
-	 kBKsEeRzahl6Hnx/aDrs8aZl1XXkx4ssUWbtElsniU3cB+zQXk06kyQGOrwJ82ilsNOH9
-	 XYWzY3zcyqlvUkPUVAVEWCNUvt3LYwiLLNcGlbHBIQdx0yTbUC/D1C9a62ViANQZL18uj
-	 f+m5Yo0hb/DnQO6vbFTSuiL/xoYcJVb37k0wcns9IXcZW1wR48x8o0/XZM3pQnjJmP9w8
-	 6ot/A4dgQ9fSTlgU49pv+gcKU9W5VrIsMGhP3ouRj25a9wuu58l9GLaxLLZWENrkyog==
+	t=1795593845;
+	b=wYi7z9QM8jftGpKyoTbxsM4x2PRXnIM+8wHonzwPNe3/NGzDKflXMEujpMKqN4pMArYD
+	 7WnE4eTH5uy7N9MNa0t9MxcZKMU8JFZMoZzJEgaK7jFiTx+LVPjy78TeUWU+4T2zV2icg
+	 /Z0HbvM9RQhW7lmBMFdQiwLOJa2A6Ulw9ZiPrAgcnozNBnQ37ZKQvyb6WEKKabEXz1gZz
+	 8vHpvX3lC/eQB7TFdgW7m35d1/Gfw/tJxQ+mhOQuNT/paQE/vib/soB7B82iiR5/Bw/52
+	 SaWBeOXFqUiU7chtuR9rJ4XFYa/4fnLLXJDuQumKd3CbFAaOD0MTQMFJxTCebjTkYMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795593617;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=3JXKHxrVmfq0TiEVcdvg17Zz9dDLxpeu9nQ6Vk0bf9U=;
-	b=pxr3AIkOQuG15AYRjbEf0CgmkA+MB26X6RO5v+VrCcMYvVhDUWDUYrb8X0OhrTVlmy0d
-	 wC+lG/4xMWUPrlbLscz5NgNFNWZ2Xz0AcAyILDB2xK0BvcGHl3GS8b5zI3uyveuPNH/Ud
-	 kAxbT3Xu9vcGYsL4BD+U9EyJ6hMN/wlchiBBIV6kVuuY/FgxbBISs6GvZuARtmmW/tb2N
-	 kilQUiFsjOrgpUX4QamtCsQt/+WIO70+FBV5ISVEDFD9sCHgaL2qrwJdP5hjIrQPN16gX
-	 Y+AJU8+BOJaf05SuREMHVVMuAoy+0XTBfAFx/KBPTukvO+J189t728IGHM2FxIyCs8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795593845;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
+	bh=MF+BeYOYB/DDN2WqUgwsfUKlmP3/0fwiowwJ6a2JiFM=;
+	b=F3h4zdyBdQ5unaoIjyaKqe3Ei3ldk9VgE2AWGx0NGFxVgAdF8wofA00rPkYLG4IxL3le
+	 J6wJCIO7hlrPdJvizdVjJ1eIuybHhCPi5tZZXBsLMHjs/oUOtTP26siDOit7ns55mjOe8
+	 rwci8frmvayUJH+cuS2s3atC9PlvQqpzqyAEvYzWSSemLJwL+BwHf7RV3bJ/n5xcKT0kI
+	 Q1GPyttBcg4oXwvhQW9N39pzA7JZsahr7FlrVxMCjWS1/lrlqUHItcucj5jpm85r7zc1T
+	 4OwJ1QtUpRFw4Lq4jW+SCpYlYudyYyc1OjeRVRZmO2/Mo7SmFHW20W973x6QHciWVHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dVZLEuUu;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=vtf9RvK1;
+	arc=none smtp.remote-ip=195.10.208.51
+Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org [195.10.208.51])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC62D60A2610;
-	Wed, 25 Nov 2026 08:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FFA606A31E;
+	Wed, 25 Nov 2026 08:04:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43FFA606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dVZLEuUu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DA11F000C0;
-	Wed, 25 Nov 2026 08:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795593616;
-	bh=3JXKHxrVmfq0TiEVcdvg17Zz9dDLxpeu9nQ6Vk0bf9U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dVZLEuUu30Bp0Mh++rmExNRXqzfiexWadppURIK/+VKrCSdKwgsrU5sSKafqAoMVX
-	 RtpJk1zM4M8Ozkq3n2tUfIqN+dazbRh0Uk7tMt4ZKtCp7Ik1X2ra2vvZj3cHCkYNkX
-	 zuXHvYHAOKfV4dqS/c9v6ph+IVGU+V0EM3zsIhN334mSVLff8iGgpVz0EnVdps9F9v
-	 lvttxclF3v13FajsFkdWXUAd9uDcBXebqbW8913/zEe90DATxMaaeCz18gzbwRYCac
-	 3vztu/ALwxVnGZRTyZ/1AgydZcZmYQzBw8Vsp4D0WPSLc0s4EKB6yJgnt7x2ZIftB3
-	 QdvdlQRkUaauA==
-Date: Wed, 25 Nov 2026 00:00:15 -0800
-From: Oliver Upton <oupton@kernel.org>
-To: Dan Carpenter <dan@pereq.eu>
-Cc: Marc Zyngier <maz@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Christoffer Dall <c.dall@virtualopensystems.com>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Sebastian Ott <sebott@redhat.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Karthik Bhargavan <karthik@pereq.eu>,
-	=?iso-8859-1?Q?Cl=E9ment?= Blaudeau <clement@cryspen.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] KVM: arm64: nv: Replace a pending SError when
- injecting a new one
-Message-ID: <awaVj0Aa6dMSksxX@kernel.org>
-References: <20261125-double_exception-v2-0-224689d8a764@pereq.eu>
- <20261125-double_exception-v2-5-224689d8a764@pereq.eu>
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=vtf9RvK1
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4jZByd3kPvzv2;
+	Wed, 25 Nov 2026 09:03:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1795593837;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MF+BeYOYB/DDN2WqUgwsfUKlmP3/0fwiowwJ6a2JiFM=;
+	b=vtf9RvK1asx4ncEtiIjWTUSRYEpo+ytI2Va/SmnKkleHvokSqFLNTcmoOX5mpDQIbcxV0P
+	rqGsBIw9mb5sZh+LbSdvwONhnExtYNRyUHWHQVfTBY7ZoXQcG9nyg+SKFptdBoW0tTNUkH
+	oHAjl7383G92v4DcIJ7LPaJb2Q3k6EtdgHQVbNb6UDij7GR9xkmw4aG9b1/PTgxfm/Ucz7
+	pBFO5amZLmMYhXK12UahyR60tNQ9C+KvEr884HzWSMliJKuMbiMhotcqENSzJZwkb1GF1K
+	LmubKo+WnHos4+jIttgVcK64hu8Mv7m1fedsShtSZbYkcecxTWjPcWXGV4uvUw==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of ralf@mandelbit.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=ralf@mandelbit.com
+From: Ralf Lici <ralf@mandelbit.com>
+To: David Ahern <dahern@nvidia.com>
+Cc: netdev@vger.kernel.org,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 00/11] ipv6: validate cached dsts against the netns route generation
+Date: Wed, 25 Nov 2026 09:03:41 +0100
+Message-ID: <20261125080341.57521-1-ralf@mandelbit.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261125003554.54371-1-dahern@nvidia.com>
+References: <20261125003554.54371-1-dahern@nvidia.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,67 +81,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125-double_exception-v2-5-224689d8a764@pereq.eu>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jZByd3kPvzv2
 
-Hi Dan,
+I'm not sure what happened here but it seems like you've sent this
+series with envelope sender dahern@KCJPDQ2QL4.localdomain. My server
+took it with a spam score of 12.9; lore says the message-ids are
+unknown, and patchwork doesn't have it (vger very likely rejected it).
+So, only the people on Cc have it, and patch 02/11 never reached even my
+mailbox.
 
-On Wed, Nov 25, 2026 at 09:56:20AM +0300, Dan Carpenter wrote:
-> The kvm_inject_serror_esr() function injects SErrors as the name
-> implies.  The bug is that it doesn't handle already pending errors
-> correctly in nested virtualization.
-> 
-> In vanilla KVM the kvm_inject_serror_esr() function always sets
-> the SError to pending.  However with nested KVM, it might set it
-> to pending or it might deliver the SError directly.  We can only
-> have one pending error at a time.  Imagine we enter the function
-> with an SError pending already.  In the current code if we decide
-> to pend the new error that's fine, everything works.  However if
-> we decide to deliver it directly then the pend flags should be
-> cleared but they are not.  So we deliver the SError directly and
-> then the SError that was pending on the next exit or entry.
+On Tue, 24 Nov 2026 17:35:39 -0700, David Ahern <dahern@nvidia.com> wrote:
+>    rebound under the global fnhe_lock (rt_bind_exception()). Narrowing
+>    the invalidation back to subtrees would bring back the cookie race
+>    the series removes. If the exception refresh shows up under churn, a
 
-I could use a bit more color on how we got here. From what I can tell
-this state is only possible if userspace changed the routing / masking
-of the SError outside the context of a KVM_RUN. Otherwise, if the SError
-is deliverable on guest exit we perform the injection prior to exiting
-to userspace.
+That's not the case: my v5 [1] keeps the per-node scope and closes the
+race by sampling the node's serial during the lookup. Invalidating the
+whole netns is a matter of preference, not a requirement.
 
-Thanks,
-Oliver
+[1] https://lore.kernel.org/netdev/cover.1795537128.git.ralf@mandelbit.com/
 
-> Clear the pend flags unconditionally at the start of the function.
-> 
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/all/sashiko-outbox-229065@kernel.org/
-> Fixes: ce66109cec86 ("KVM: arm64: nv: Take "masked" aborts to EL2 when HCRX_EL2.TMEA is set")
-> Fixes: 77ee70a07357 ("KVM: arm64: nv: Honor SError exception routing / masking")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Dan Carpenter <dan@pereq.eu>
-> ---
-> v2: New patch
-> ---
->  arch/arm64/kvm/inject_fault.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/inject_fault.c b/arch/arm64/kvm/inject_fault.c
-> index aa2011cc0d5a..0f6a89b65074 100644
-> --- a/arch/arm64/kvm/inject_fault.c
-> +++ b/arch/arm64/kvm/inject_fault.c
-> @@ -361,6 +361,10 @@ int kvm_inject_serror_esr(struct kvm_vcpu *vcpu, u64 esr)
->  {
->  	lockdep_assert_held(&vcpu->mutex);
->  
-> +	/* A new SError replaces any that is already pending. */
-> +	vcpu_clear_flag(vcpu, NESTED_SERROR_PENDING);
-> +	*vcpu_hcr(vcpu) &= ~HCR_EL2_VSE;
-> +
->  	if (is_nested_ctxt(vcpu) && kvm_serror_target_is_el2(vcpu))
->  		return kvm_inject_nested_serror(vcpu, esr);
->  
-> 
-> -- 
-> 2.53.0
-> 
-> 
+> David Ahern (11):
+>   ipv6: allocate the exception entry before removing the one it replaces
+>   ipv6: keep a superseded pcpu dst working until its holders notice
+>   ipv6: don't insert a PMTU exception whose MTU could not be stored
+>   ipv6: invalidate the failing dst in ip6_link_failure()
+>   ipv6: tell route dumps about exception inserts with a table sequence
+>   ipv6: validate dsts against the netns route generation
+>   ipv6: make rt_genid_bump_ipv6() a plain counter increment
+>   nexthop: factor out nh_has_f6i()
+>   nexthop: bump the IPv6 route generation on group changes
+>   ipv6: stamp dsts with the generation sampled before the FIB lookup
+>   selftests: net: pmtu: check that a deleted cached exception stays
+>     deleted
+>
+
+When you resend, please add Reported-by tags where the series fixes
+issues I reported in this thread: the reuse of a rebuilt pcpu dst
+(10/11), stale exceptions treated as misses (6/11), superseded pcpu dsts
+released with dst_dev_put (2/11) and, if the series addresses it, the
+bundle-child release.
+
+-- 
+Ralf Lici
+Mandelbit Srl
