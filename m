@@ -1,79 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795641478;
-	b=K+tAK4EkLzS9i9oHTfLHw49+m36Cy2IZVVe7e9XUVYU9F2d4oiZy603ZvGK0z7q/v8qf
-	 D1t+SI7dfOkwtX0xs6KiwKOnZWshjgb4lZ0C+Vu9Zc3yme4Jxn8BPY9MqECBmOh1sDLuL
-	 lS3Y3S7XTCipiYKN7a+Gb7dYX09aL36Div8/W8wjvtB1olyPOEVkbdMWb1EycoRz0xkHJ
-	 5xelsXnqV8+uGCGYJsErGx93WyRxbH60U1blYC4GPubTpRmcpR3m3m6xmZkdsaQ+cL1pT
-	 LvQ44m9wMQOCdAYV6jjkZJGFJHQ60+LNHNzkDwqUwceSUnlXKXyoXZNqc2LPEDxw/hw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795641478;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KMUJkdmWR9o36UWMZ54x3x27bnMAHlQEQEtkk7tI4lc=;
-	b=0vIuqKCtwjSs/F4QcJlPs41dKV0rhH0N8lF3/l2uhmgbQTcm0UQl9gY5orOSzazZBfFY
-	 RD5kskEYMdztdH4vTN+NVnN1u9TrQIVuCFrgZlsDjRPFc2hNQ2+eNVQ51ft7WiNUbCw6J
-	 UDZ9ooBBRj4tLSZAdLQAdGtj/InSfaLgwmwRon14RcziHlCbw2k/Lr5qKg4SsAYzfE6/a
-	 pZS8H40ozPCNMMlhFQTRGQgqok8+dVUQ1fDnU5lSXHEmDiq9LAsnrWn335cJ7oaBKJlz6
-	 4KX+VsRBeBXvGk35F3dKsUIzWavrBrmjx62FHuUtgibo9NUl/tUFWzMGaqpokBzKNmA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C+nZQ+9g;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556A1606A338;
-	Wed, 25 Nov 2026 21:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C+nZQ+9g
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795641477;
-	b=MtIxSGjcLMsw+gaNh9z1i877mxElKjQ2Mjk7f8b+Bd5IypM11Vaox4XiXfWPTllybzJW
-	 aPhs7CD+KOCLG+gmZyZ8Cms06gOHClrKA+TAfM6L/4QiRKuMYhFJQr1H2HE9sk4aFBNWK
-	 uo2dpFdgKXY6HYh1DjYmoTk4VXOH0OC3lU2tCVDDRIHyhzDTf8yM0MiwWuHNDzrCiAzL3
-	 MvyW1q6Ukq3ipXEUC70gtwKWYazFwzGn11QWUGEASSY8dv5Mwqv3WpswW/adL4kLzKSjW
-	 QHyAIFSixpjR8XGYSwzZj7auAYdv5fiwoPoc/bXGpovHi58gAMlQo/ww4/E2YTpK4rQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795641477;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KMUJkdmWR9o36UWMZ54x3x27bnMAHlQEQEtkk7tI4lc=;
-	b=YZhwX4QzzNPMYtVQdv/YU5Jnd7Qg4AyDSVPY9s7go7MtLCztLM/97fT45IwPQp2QqmAP
-	 +VRHLeDXGiwRsQYnZM4N/fX2WiZy0XExvnFCvdVwDswXaL5eWTMvHhgOXk8ytn/eSC9R2
-	 kSzoY9QqBlnibwujy80/1DW28LQdUSpV9iZLuwHflLHclDFNofGgbcnl8KTXf4lyfvCVN
-	 O9Qca+g1K6fiR+7c5lZUpAQVz3jLKHSYXYMRl81pN/UVbgdKrcqQWtRX05ghX6OLUyS8a
-	 18oXFpxXjREhxLq+A3zReuhHeiFjNlMPB4y684UYf0KPGq/lFnY34Mr9P7kEiRxv5+g==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795641932;
+	b=eb58C0mSgJRXW0eNKEUsebOQCEdMQ6DEGrZF5B7zd6zFAdfIRryPOdsGgOO4DCSMEDbV
+	 yaogRMz19/9HNkEyAcu72d/E5q29g4Te5O+rAPmwNYgVa8EHuAJI8JOdEXRVNBSaa7v8v
+	 llM0+Pnp7TXvXcRUxrTtgVq73tHH9B91V+J79jlaMjozXlnrEIqxifYO5I5EV4mAO/5RB
+	 QwMU7Tw/kcCbLopOpydjwWM4lLzEkpQJG5oC5gdHgcMLkZIxacmaFw5yVJv9tz9eQOJNZ
+	 PmukMdzh35VAUihkogcGKkoLMXBhel2tmm70jEHndqrQgAsJmXI4YOI/W9rNSE2pPZw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795641932;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
+	b=JNgWsGgPD8VQgF4ghlE9P2fVhnbLyeZN8DTMAcbIwYi/aygfybYXQS8rn+HSjGKwdyZ7
+	 fhpsizIHRePouqcx1jsrBNjkrJnxyz2dbDmXrIDCo+qbAznk7sZSAPuhQH7/Frmxi1LH6
+	 /m87cbczFoTSgcBeDpl/0YFhlCc58OaAcGZpBKeBAcHVGD8MEdY0q3Iz+rtok3JZvjeGd
+	 GK3hRw/uxrfey1IIq78PQmxNhB1QF2emPuE1cKuz8/MbV9uGx0KIY0l/WnsfUndFc6Re1
+	 IFNBQGaAb+SA4pAmV42lYRQsEJXI4dRPWfy+OYy8tlk3FVChTbeo2zp0NdpPd6hYLsg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RI0PEVo8;
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 611A81F000CA;
-	Wed, 25 Nov 2026 21:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795641477;
-	bh=KMUJkdmWR9o36UWMZ54x3x27bnMAHlQEQEtkk7tI4lc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=C+nZQ+9gEInkH4MHMEcpsUQCAHyNACe+vDVyoLa8E8SIEJtLIawBpPUQFZ6SDcKLW
-	 v0HCcPMVJ53AHet17bcSh/kCSscoRuTDIz7cHdTZh1fVjHfqHAq9k1LtFaSLw66CDM
-	 tjAHIx29ZNI783v2lB1im9WSEkD78XD8GqxVL32kC0Qydckufqd/IYJcnRPonSjRcS
-	 m1ICt4FJFVybdxpB/jkUNS76i+vghPPHUUmlJuoE6P9z+19ataRfZC/R50EDEal2Kl
-	 6uMWeCRdxGcl0Lu893/F8dtyrbBn8R8P1W7mw4LZwqnnk6TNQqBG6jAbDx90t6SbqR
-	 Csv8vwU3Sb99g==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id D9CA24D063;
-	Wed, 25 Nov 2026 21:17:46 +0000 (UTC)
-From: Kalash Nainwal via B4 Relay <devnull+kalash.nexthop.ai@kernel.org>
-Date: Wed, 25 Nov 2026 14:17:46 -0700
-Subject: [PATCH net-next v2 1/2] tcp: add net.ipv4.tcp_l3mdev_exempt_ports
- sysctl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D2E606A330
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 21:25:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3D2E606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RI0PEVo8
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4bb9d8e8e90so34408775e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 13:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795641930; x=1796246730; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
+        b=RI0PEVo8e/bM5LpLPZ+ED0hsyThViRRY4VFXcvOC3yq8ssab9D3GWTn/NExxaMUXZ/
+         SCEfAUzxIznLHW4X8Ux3FmsnGjVl8+Tu2I50vFro4UF290hC+aOGoCx3seQbB/Kkai92
+         i2zbpMXrHM1e+hdoZw3s9g8KJwVNLFn1XzFiXMwhZLLCZapmock/E0+9J3LFHctwNKM2
+         1wJUObs/t1OyGzg2ZnBNFqAphLTJMLH8yCwqrFBvoaxKN25zrCKYmaShH0vjh09I3jpG
+         Uz4nqzrg6/yfBT6SdKciD9tyk2az1dmjbdzWK08Rn0x/RK7kdBz6as33XNA2CJWx8x3B
+         BHwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795641930; x=1796246730;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
+        b=PJYofZQlcchYh53YfYRS7Jn1oYmGnb48SqwuiatMAMB9Z+cG+wWnDmACUR9v/CH9H5
+         hvpWU599HnfsngkRJkVnjvaLrRoTzVOZivxzBtn2WIF/SIhp+02hAvdLHTxkUh7EBXNV
+         czXikO8rywfns0Wa+0L2OspLRPyuaw9fSmozFgeJ7VDgrZrqeR1C59kvIBXKS0yljh5U
+         EmPQlhG3tZeRDjn7wqn6j5pHJgmd1S01d4j4WO29QhkG4AzN9fl0qn5jeJUEcdKK7LGW
+         Rj70z7irljcIKs/wILD1YWw811bPcRDBOyLlfzdm7VBSU77Z9/t3rB1EWBTLeEUK1LbO
+         A26Q==
+X-Forwarded-Encrypted: i=1; AL+hErFlHbOVmnMcJGSaLSCfsqs+3BCMgGj3rTN6udODVP/xDazR1Vp7dusRn/wo96XTXYWaqNFt5Y9RmOb8DbtCECI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+aER7AT04D74TisbBU0Hr9JGERgXI6n3c//Ar13gKxnqVUSQmT
+	QndfdMZi9zqFZS2JCARlcQyRozVyPbZL2DrGQjVP/iMQ9So3F9zYHeg2
+X-Gm-Gg: AZFdTZcbPnIxhzY8VBUWTwkU9HCEfyu3PY5j56eI+F3s3NA3rHhKUPddtyoYQF0v8uL
+	nushgi5Z/7Dm5XFgFWN2ipW3/HhuMxIaFF4W/goaYflIH45shw6UwGJReiRR14RQFKlEJMTRJBj
+	hjcwOIMhaMmJjpdfHc3partl65UevwOfrPhLKkkeN8QqWpMx/Pqw4a7ceoc1nH8O27GMfkmMq4K
+	9gJHVtwwkxz+8ZAr/LIkno9UL0kxamxG3UwmVq+S6Uxy/nfhtcI7TBMqES+eWMSl0bjJqEkd09s
+	vRj9AW5/4V6pWLJiES6vJGxhHSAzpV9RZCnE/ifGF18x23hBGJlM+3HNEkDGeCDaBqNbv/jEwol
+	27jQwvKrXGNwmwbfQp7VC+rXEt524BXLfiELP6nkaGdxfotRpTsrKKMwMQPNQmhUG8HtQ7nvjtP
+	QIc5d58vk12LjR5omxQgfSBT096kzoI/i44L79vtnJFUi95NCZ/u9GH5+Ngcrhov9PvcFR38QIf
+	LkA+r3vT7C+SJJBysyIFTT9dU0KQM9XGMps7ErOzK4NSJAVm7E7tAo11PF4JVbhYOfBHx4eauqB
+	12yPX+W1dpQWTzXbaa8etECZ2dzvlocrJc6Ak/ps2G4S3vWxv7jdhbJmMAX9yb8HnA==
+X-Received: by 2002:a05:600c:4584:b0:4bb:5de1:e90f with SMTP id 5b1f17b1804b1-4bb88819bcdmr380720815e9.31.1795641929874;
+        Wed, 25 Nov 2026 13:25:29 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853c9170sm615777065e9.14.2026.11.25.13.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 13:25:29 -0800 (PST)
+Date: Wed, 25 Nov 2026 21:25:28 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
+ Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin
+ <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
+ Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ kernel-team@android.com, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-modules@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+Message-ID: <20261125212528.239ab6bf@pumpkin>
+In-Reply-To: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+References: <20261113221248.3535369-11-wusamuel@google.com>
+	<20261113221248.3535369-13-wusamuel@google.com>
+	<0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,244 +117,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261125-tcp-l3mdev-exempt-ports-v2-1-b920f3ff8f5e@nexthop.ai>
-References: <20261125-tcp-l3mdev-exempt-ports-v2-0-b920f3ff8f5e@nexthop.ai>
-In-Reply-To: <20261125-tcp-l3mdev-exempt-ports-v2-0-b920f3ff8f5e@nexthop.ai>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, David Ahern <dsahern@kernel.org>, 
- Ido Schimmel <idosch@nvidia.com>, Neal Cardwell <ncardwell@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Joel Granados <joel.granados@kernel.org>, 
- netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Kalash Nainwal <kalash@nexthop.ai>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7950; i=kalash@nexthop.ai;
- h=from:subject:message-id;
- bh=wcvbsSxrpUoGrMTeVR92LKZ2d/1VPd07LUNBhBCdv/E=;
- b=owEB7QES/pANAwAKAdTKslu1X9B2AcsmYgBrB1B5nkFonQ0McocwlQjUpz7qpWYDKx3oTjwv+
- yOECR9vkRKJAbMEAAEKAB0WIQSWKdfHnHcAucb08LDUyrJbtV/QdgUCawdQeQAKCRDUyrJbtV/Q
- dg4XDACErpMjRUK2baFsuftBCJhgFzZ4OKyxfuEFa7S1LNHmwI0pHweLkzvC9nwx4ldOCjEd3YJ
- ClngCf9jo8r8pXFYWkBqXnsEGcd31D/NLgQ4eGIInTwPUtIcoYRv92oOJHQYj8HKRuzPVDC2Pd7
- T1rPrquj9mVrMfDIEeCpUSdKfkxnxNKR+4XHX4QEHKs+KK8mkHfE6nIGEaRG6GK+9bdBUM+PSEm
- hHK2J1WfuZqZO1qvJ+i5dWV/svYa0GpYRMovjtQ6VfUpm+5Q2u1nMGDByfVoERQ/yeTSN9YiwM+
- EvahxJ5V/ao3OzRvQKdBF7X8dz5s6WTLkMj/cTv2Ehd+wv5KEEhWjfVzkcNaKezPB0Sv2ISbr2E
- 00jl5pdeh1X1xvnxfqz1T6Ydt7g89b1aFnRj/gE6GAJHs1NO4M765f6avP3aMg5ex/6fd5Ku1R9
- cAcsSFIY34GUcCCcco/Zk1iv4SR6k2fX8c1a2WyY6U+nHSUjSTNWnKgTayRrj/v+87P24=
-X-Developer-Key: i=kalash@nexthop.ai; a=openpgp;
- fpr=9629D7C79C7700B9C6F4F0B0D4CAB25BB55FD076
-X-Endpoint-Received: by B4 Relay for kalash@nexthop.ai/default with
- auth_id=1588
-X-Original-From: Kalash Nainwal <kalash@nexthop.ai>
-Reply-To: kalash@nexthop.ai
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-From: Kalash Nainwal <kalash@nexthop.ai>
+On Wed, 25 Nov 2026 17:45:36 +0100
+Petr Pavlu <petr.pavlu@suse.com> wrote:
 
-With tcp_l3mdev_accept=1, an unbound listener also matches connections
-that arrive in a VRF. If a VRF-bound listener exists on the same port
-and both use SO_REUSEPORT, the lookup returns whichever is first in the
-listen bucket, not the VRF-bound one. Since AF_INET and AF_INET6
-reuseport sockets are inserted at opposite ends of the bucket, the same
-setup can pick the VRF-bound listener for IPv4 and the unbound one for
-IPv6.
+> On 11/13/26 11:12 PM, Samuel Wu wrote:
+> > KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
+> > symbol name or prefix across module symbols in one pass.
+> > module_get_kallsym() walks the module list from the head and runs an
+> > export bsearch() for every symbol index.
+> > 
+> > Add module_kallsyms_find_name(), and put the shared query struct in
+> > linux/kallsyms.h, so we have a more efficient linear walk.
+> > 
+> > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > ---
+> > [...]
+> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> > index 1ff8ce857d92..72006c9bad42 100644
+> > --- a/kernel/module/kallsyms.c
+> > +++ b/kernel/module/kallsyms.c
+> > @@ -406,6 +406,63 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+> >  	return -ERANGE;
+> >  }
+> >  
+> > +/**
+> > + * module_kallsyms_find_name - Find a module symbol by name or prefix
+> > + * @symnum: in: index to start at; out: index of the match. The index
+> > + *          counts the symbols of the searched modules in list order.
+> > + * @q: name query; if @q->modname is set, only that module is searched
+> > + * @value: set to the symbol address
+> > + * @name: set to the symbol name (KSYM_NAME_LEN bytes)
+> > + * @module_name: set to the module name (MODULE_NAME_LEN bytes)
+> > + *
+> > + * Undefined (SHN_UNDEF) symbols are skipped.
+> > + *
+> > + * Return: 0 on a match, or -ENOENT.
+> > + */
+> > +int module_kallsyms_find_name(unsigned int *symnum,
+> > +			      const struct kallsyms_name_query *q,
+> > +			      unsigned long *value, char *name,
+> > +			      char *module_name)  
+> 
+> Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
+> with similar names. Adding module_kallsyms_find_name() adds more to the
+> confusion, being similar to module_kallsyms_lookup_name() and
+> find_kallsyms_symbol_value().
 
-This breaks, for example, a BGP daemon with a TCP-MD5 key only on its
-VRF-bound listener: IPv6 peers in the VRF reach the unbound listener
-and the session comes up without MD5.
+I've thought of splitting the file in two.
+Separating the core symbol table functions from the /proc/kallsyms code.
+Might help here as well.
+The cut goes just above the extra structure the /proc code uses.
+Three functions have to be made non-static, none are that internal.
 
-Add net.ipv4.tcp_l3mdev_exempt_ports, a per-netns port list in the
-same format as ip_local_reserved_ports. For a listed port, an unbound
-listener does not match connections that arrive in a VRF, so only a
-listener bound to the VRF or to the receiving device can take them.
-Only listener lookup changes. Other ports and default-VRF traffic are
-not affected. The default is empty.
+David
 
-Signed-off-by: Kalash Nainwal <kalash@nexthop.ai>
----
- Documentation/networking/ip-sysctl.rst             | 24 ++++++++++++++++++++++
- .../net_cachelines/netns_ipv4_sysctl.rst           |  1 +
- include/net/ip.h                                   | 15 ++++++++++++++
- include/net/netns/ipv4.h                           |  3 +++
- net/ipv4/inet_hashtables.c                         |  5 +++++
- net/ipv4/sysctl_net_ipv4.c                         | 21 +++++++++++++++++++
- net/ipv6/inet6_hashtables.c                        |  4 ++++
- 7 files changed, 73 insertions(+)
-
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 3cc80d9b024..c66b9420cdf 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -619,6 +619,30 @@ tcp_l3mdev_accept - BOOLEAN
- 
- 	Default: 0 (disabled)
- 
-+tcp_l3mdev_exempt_ports - list of comma separated ranges
-+	TCP ports for which tcp_l3mdev_accept does not apply to listener
-+	lookup. When tcp_l3mdev_accept is enabled, a listen socket that is
-+	not bound to a device also matches connections that arrive in an L3
-+	domain (e.g., a VRF). For a port in this list, such a socket does
-+	not match these connections; only a listen socket bound to the L3
-+	master device or to the receiving device can accept them.
-+	Connections that do not arrive in an L3 domain are not affected.
-+	This applies to both IPv4 and IPv6.
-+
-+	Only the choice of listen socket changes. Lookup of established
-+	sockets and bind() port conflict checks still follow
-+	tcp_l3mdev_accept.
-+
-+	This is useful when the same port has both an unbound listener and
-+	a listener bound to a VRF, and VRF connections must reach the
-+	VRF-bound one (for example, when only it has TCP-MD5 or TCP-AO
-+	keys configured).
-+
-+	The format is the same as ip_local_reserved_ports, e.g.
-+	"179,5000-5010". Writing to the file replaces the current list.
-+
-+	Default: empty
-+
- tcp_low_latency - BOOLEAN
- 	This is a legacy option, it has no effect anymore.
- 
-diff --git a/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst b/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
-index 2833ce6cba1..062153c2793 100644
---- a/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
-+++ b/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
-@@ -150,6 +150,7 @@ struct_ping_group_range         ping_group_range
- atomic_t                        dev_addr_genid
- unsigned_int                    sysctl_udp_child_hash_entries
- unsigned_long*                  sysctl_local_reserved_ports
-+unsigned_long*                  sysctl_tcp_l3mdev_exempt_ports                                   read_mostly         __inet_lookup_listener/inet6_lookup_listener
- int                             sysctl_ip_prot_sock
- struct_mr_table*                mrt
- struct_list_head                mr_tables
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 5035b313a26..a5f9efe15b2 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -396,6 +396,21 @@ static inline bool inet_port_requires_bind_service(struct net *net, unsigned sho
- }
- #endif
- 
-+/* For ports listed in net.ipv4.tcp_l3mdev_exempt_ports, a listener that
-+ * is not bound to a device does not match connections received on an L3
-+ * master device slave, even with tcp_l3mdev_accept=1. Only listener
-+ * lookup uses this. Applies to IPv4 and IPv6.
-+ */
-+static inline bool tcp_port_l3mdev_exempt(const struct net *net,
-+					  unsigned short port)
-+{
-+#if defined(CONFIG_SYSCTL) && defined(CONFIG_NET_L3_MASTER_DEV)
-+	if (net->ipv4.sysctl_tcp_l3mdev_exempt_ports)
-+		return test_bit(port, net->ipv4.sysctl_tcp_l3mdev_exempt_ports);
-+#endif
-+	return false;
-+}
-+
- __be32 inet_current_timestamp(void);
- 
- /* From inetpeer.c */
-diff --git a/include/net/netns/ipv4.h b/include/net/netns/ipv4.h
-index 3efbc7f4b4f..bff91c8b30c 100644
---- a/include/net/netns/ipv4.h
-+++ b/include/net/netns/ipv4.h
-@@ -271,6 +271,9 @@ struct netns_ipv4 {
- 
- #ifdef CONFIG_SYSCTL
- 	unsigned long *sysctl_local_reserved_ports;
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+	unsigned long *sysctl_tcp_l3mdev_exempt_ports;
-+#endif
- 	int sysctl_ip_prot_sock;
- #endif
- 
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 860145d810e..063f6dd00a6 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -362,6 +362,11 @@ static inline int compute_score(struct sock *sk, const struct net *net,
- 
- 		if (!inet_sk_bound_dev_eq(net, sk->sk_bound_dev_if, dif, sdif))
- 			return -1;
-+
-+		if (!sk->sk_bound_dev_if && sdif &&
-+		    tcp_port_l3mdev_exempt(net, hnum))
-+			return -1;
-+
- 		score =  sk->sk_bound_dev_if ? 2 : 1;
- 
- 		if (sk->sk_family == PF_INET)
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 9df93ad219d..153b21f607a 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -903,6 +903,13 @@ static const struct ctl_table ipv4_net_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
-+	{
-+		.procname	= "tcp_l3mdev_exempt_ports",
-+		.data		= &init_net.ipv4.sysctl_tcp_l3mdev_exempt_ports,
-+		.maxlen		= 65536,
-+		.mode		= 0644,
-+		.proc_handler	= proc_do_large_bitmap,
-+	},
- #endif
- 	{
- 		.procname	= "tcp_mtu_probing",
-@@ -1708,10 +1715,21 @@ static __net_init int ipv4_sysctl_init_net(struct net *net)
- 	if (!net->ipv4.sysctl_local_reserved_ports)
- 		goto err_ports;
- 
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+	net->ipv4.sysctl_tcp_l3mdev_exempt_ports =
-+		kzalloc(65536 / 8, GFP_KERNEL);
-+	if (!net->ipv4.sysctl_tcp_l3mdev_exempt_ports)
-+		goto err_l3mdev_ports;
-+#endif
-+
- 	proc_fib_multipath_hash_set_seed(net, 0);
- 
- 	return 0;
- 
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+err_l3mdev_ports:
-+	kfree(net->ipv4.sysctl_local_reserved_ports);
-+#endif
- err_ports:
- 	unregister_net_sysctl_table(net->ipv4.ipv4_hdr);
- err_reg:
-@@ -1729,6 +1747,9 @@ static __net_exit void ipv4_sysctl_exit_net(struct net *net)
- 	unregister_net_sysctl_table(net->ipv4.ipv4_hdr);
- 	kfree(table);
- 	kfree(net->ipv4.sysctl_local_reserved_ports);
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+	kfree(net->ipv4.sysctl_tcp_l3mdev_exempt_ports);
-+#endif
- }
- 
- static __net_initdata struct pernet_operations ipv4_sysctl_ops = {
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index 1eea584d80d..43c52b56e8b 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -141,6 +141,10 @@ static inline int compute_score(struct sock *sk, const struct net *net,
- 		if (!inet_sk_bound_dev_eq(net, sk->sk_bound_dev_if, dif, sdif))
- 			return -1;
- 
-+		if (!sk->sk_bound_dev_if && sdif &&
-+		    tcp_port_l3mdev_exempt(net, hnum))
-+			return -1;
-+
- 		score =  sk->sk_bound_dev_if ? 2 : 1;
- 		if (READ_ONCE(sk->sk_incoming_cpu) == raw_smp_processor_id())
- 			score++;
-
--- 
-2.43.0
-
+> 
+> I suggest calling it module_kallsyms_query_name() to match the
+> kallsyms_name_query parameter and to express that this is a structured
+> query, as opposed to a simple by-name lookup. It might be a good idea to
+> similarly stick to "query" instead of "find" in kernel/kallsyms.c.
+> 
+> Otherwise, this looks ok to me from the modules perspective. Feel free
+> to add:
+> 
+> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+> 
 
