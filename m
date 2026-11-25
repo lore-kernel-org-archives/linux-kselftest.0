@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795629548;
-	b=2fJFGPmVpebWxoYzNTrNOYdhmzqs6M9HhQ1Dlt09TwvI0bC+9tgCITy+3xOJYdNomvBk
-	 1jvAAf9emOEb534ks6N3XF5uAOYMhnpWc0+OdFGgvycsB2CyVoWjFAFIKTXRdOVDfQKn3
-	 HZ7tAzQLe4T4+YRv3l2n862DJQMJqqvMBlDMK1nQQQhzpNM8HtGJDbHc8PqZba9RakSek
-	 5T8+vaS4fB1lQmenqMaDvLrTicr4jbJIsxn0bzJ8SG0CJwAhjuMV15YAXe5hrWf4JcXBZ
-	 iFRzA1LFBxHwRTKSPQSqBL8d0ESQ09u1sINL0vOHuVOxYsuSYQvzhSY5K7OMsz/AITw==
+	t=1795629804;
+	b=depQe8IqaVkPN9kNLs7eFWm8r/0elV8wVqnm4gKSAscRlHxYsnBXhDNWqPx+LG10zFxE
+	 xO/HQBm/Lpq341qrENOpTmOg/6STvvU4Xm/5ByoIxZiP9KTfzwKD2o0hZVIBb/f7MFhaB
+	 1yOggwZRu7fnO88uZIk2heSarHHSq1X5ypol3CqoYszDGMFPUXJruSWNgx+WUNdQ+oJgi
+	 6zZcoBPjIUKhV2ND+H2J8MaBqx/3M0KwEEyNYqEIVMQyB4oLW8t0LSSvZtBU+U4MBKIkz
+	 iceVVkko3cMpvFI1ddKGiJS3OetGK6Xwo1NWShn03R8GCSHcZht/9R02kRRLVnbZG2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795629548;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795629804;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=V3ql+trEST5GBe5icgHLs8egrkIrOnsTHov8GZtBedQ=;
-	b=IRL+TEZa9riOlSqg5J9cKmL9fDdJqmzOdBXiM8Zb/AxLJrtw73oRgxSbkxrNPRmrCqzs
-	 f6nALoHqcWhM+BuvUVxfXztTdytRfEmKwj5l9ZH2EwQ7T63VlueiVm02SjUWiwYbVbEbt
-	 1MvMhyY+aHhPVOEXZ+h8RisvRSDCJSxgIFJ7CFzw8uOMwPZ64cnlKhFCREt9Q6odjeFyi
-	 D3WPeJIthfwVkYeQIo/gS5XrjzZz3KycfBz8tCMqz1Q+Kkqey32908F9DsUabznYXSwSS
-	 PvAfp7pfqcGp52/rIiX2G2MxzpxpaL1RfdZO7AF6X3FTl0cFjya+0ua5fKRRdnY1Wvg==
+	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
+	bh=X+1AYy7Mp2a7SBL4ePYq/G5iDJIRCdCJCue8L7l5f3k=;
+	b=zCO97s2t//5+lWm1x+0W5XPVOztBDyfSDYxTPuzzIh9m+scAE3oHojcSXjzMCejbAELj
+	 54sKp5aa/sy+M7eZKI6ifeviL+vbtr+dRXB7Jj+vPxiW4Bydc5yJshHeNGYGscI1O9jJ2
+	 aHd5aSM1Ijev/DVTjQ7MM8+YK29j1/dt+wKT7DnIaRuEZgXTjefpWtk+w3H4Wi57dHRVV
+	 g6Rg3I9nnfd4mtSqEPeQXNwuQn3PWQQ96ks2ODApKMM1dasRijWBhAc+Z8KZ4eM8ViGgF
+	 85edyr3gIjfP7ZUYaSFnenRJa9WlSvKAuY5INEepbJWHbWgD2FQh6MkeV/aauPnmwwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oT5p5Fx+;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=A95H94SU;
+	arc=none smtp.remote-ip=209.85.214.181
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49946606A326
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 17:59:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49946606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48165606A323
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:03:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48165606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oT5p5Fx+
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdebab6fdb3so244241a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 09:59:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=A95H94SU
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2f0464dd6b6so37765925ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:03:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795629548; x=1796234348; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=google.com; s=20260707; t=1795629804; x=1796234604; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=V3ql+trEST5GBe5icgHLs8egrkIrOnsTHov8GZtBedQ=;
-        b=oT5p5Fx++T4ed75RtobLIo1wtLMtV+LHgUa6zJCsI6AsAvAWbzTbQGIzyyvVUqvwqL
-         2bCnshfZscfckv9/9Nnd8V8Y8iaH6XyFa31/Ur5wvDyKnwTR7auXXrCHnSC6x1LPBapQ
-         eMkanzaE241TyVD93LyVjc3gSLwkssy6lDnerYVCkflCM4ffPmNb+r+Ezbt9+R54IpXR
-         4SIc2sRTQyb/DGFTuf4b/DlU79BK66QeK7hfMVhgZqgbDUqBNkNqSW6SIkzOWXbYdT0c
-         ekYkl0rxCRDF22VxgGXkbPw0XxL15Ms2nHdVlVadiGrwGcKPgHA1IYH8yVFAb1lvVms3
-         QnEQ==
+        bh=X+1AYy7Mp2a7SBL4ePYq/G5iDJIRCdCJCue8L7l5f3k=;
+        b=A95H94SU9aU41X9Qdw1IDB9XFy9sE+pVMkssDqz5UP6xSP3vg85yutqk/5Ml20CrFx
+         8csRNqN1wMi5HgLKS+Za1S6ObBSTEG16G5Wadl0S/zdF+vZuNph+oXSFiv5qjvVqsHCs
+         /+QNk36QzE0ZAeuPGsRdGF5/vNYWdE5/DNEYfiPVfRivzQTnSlIiQfpXE+6Nq6HLZQD3
+         I726J+6XoLyFWiRRWW1cLvOUnTi4MsweX+FHvrqFfe2XJ9ihDPu8JNrm9da3ym2IIWq1
+         QfQY75kYGmaA/GkOicVMnxrkmTt6nz3SpYVpXZRuI34K+WOMApV1T46NwXAed7AlVt8h
+         lqMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795629548; x=1796234348;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20260707; t=1795629804; x=1796234604;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=V3ql+trEST5GBe5icgHLs8egrkIrOnsTHov8GZtBedQ=;
-        b=cbK/BZ2HMpdC0RaLGierMeW7kz/lCXDuvrVZtzkD10K+TsRnxYNtDQbplVIdbTAWxa
-         96D2E6sWjLyq5+xS3z1eAXRUc9IA9K1tlum+LA2yYLX21Q8JlnxgkAJThWXDKjTVD5gK
-         S6SPRvXzwzz3JlH2oMKmmKqFHNvjN5s1lcwjx7raGxKPXhFVDHAnSPuFU9Ncz1TonVJA
-         3oyZT2LnQdNpLc1tBnv2OGeoVQamNHiit5nY1jvi1ahN6+frxJKIpf8/A9ggI94jBy7G
-         OEjmpw4sqV2Xgo0vYcbXq+moGRhnIEUUyRxdnzknmrLNyAbQ597FIPu0uy7XZ/LPcYiY
-         O27Q==
-X-Forwarded-Encrypted: i=1; AL+hErHmobPMY0obrz7z2Vw7lLNXCiGZpV3OUI9R6YaOtC5wcfjRMpH23cBWTMmK46/+Eb1XJUDTbCWmJI0EH7dAuzQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/5XLKI3bOYKC75KrzvCr3MAAbK/mbnEp91QC4xBENGZKyCOMJp
-	FB/q57EoBGst3pufS6xHv43WxbsR8tsRq54nJ5TEQ/lRq6vVc1wQPw+6yhf9JMywZA==
-X-Gm-Gg: AZFdTZc4MHwyjb7oe2VKJ8Mul8FBz29ctqMuXW1VVkX1ty/FWE7SKdjc7vpupHGdYdj
-	AfjoYr1MW7XMMz9MxAXdifrc53A7Ie214ARC176D+nXkRF/yuNvreM0OxJP554CtGw++zQ6A69d
-	Oz2/jzoQT9udw+uZ3iQN6NFk1x4bQj+gRTIkXssRFd2iQwcYscNYw9SvZcZ1c0IP+ODM0lUY/VU
-	HA8KsSDpd7DNy61i/xIym2dGQ/x62uG3rvYye8ndD/2/12zVF8w80maTSHC/J2fDQDIDvIMMiKY
-	0ToPpmFyyZG6jzzsAqAt6IIH2TUqwyFYj7XGgFHHYvoqMuvHtMwthCNiPNBhRlRa7W0jR+Lq+5I
-	bET0uxT75lczSi2dvCaFNUnRDra0WdCWTiyJEi5LESkuXHiJemz7gvccI1kq1ANmvjkOL0ctPtD
-	mZSLxIvjlawlvzA9UuNUa7IrcqdqgIX1Wd8O3kOR4zny3klr4WsAT8Rkx2a4gOm5bBTAxXsanoh
-	QTaUfrxzhCkaQzwwRkt+9XUSy2POvCm4HOP4lRASkWFmQ2kwWHUGAUvQX/+IXF4WTnSO1cWPi/f
-	GKpPS/w1rZWK63ZCF+wT+u64L7RaHLYjVdF3qtLlI07vH+n2lzB7lBXgdjn/Hs3m
-X-Received: by 2002:a17:90a:e7d0:b0:3ab:5832:72af with SMTP id 98e67ed59e1d1-3b41c9cfc12mr15413655a91.32.1795629546987;
-        Wed, 25 Nov 2026 09:59:06 -0800 (PST)
+        bh=X+1AYy7Mp2a7SBL4ePYq/G5iDJIRCdCJCue8L7l5f3k=;
+        b=n+cqVR+5CtAxFWDJGOfcoEY/yN90FW0WpmoHYj/D0T4q36+I0H2ENt5ADuUeXniz/w
+         2+hrPUcvS7iQA/J5pnJS1nVyb+9ft3ECAgDTjweIe4zI5wUuexDm3yGBXYLMWCGTN6ti
+         aq5WP3/oZ+ZTunRV8oYxrYx/o7u7VALmUslSfyM/cQfRC7Xq2axbKLNa3z3sTHKX/ajv
+         pl+Nzn60OYDzy83FhkbpLeZvQn0nhaDllY4Q6D0whYwAhArD2FW6zF0/AK87+TmaaGSz
+         21SM453ye7tmzCAf5KUTmGRZ10fi7FyZX8KecBKkqm5kSGROTxqoqgHymQ5/LB2mwV7G
+         oTDQ==
+X-Forwarded-Encrypted: i=1; AL+hErF3NzGM1hvaLi0p+1qQAnrB6/Dr31cSqJgdzrtMDM77U0Azr1tacy3bNjGvYVWivCfkmoOb7p4ltSCPey8XNq4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+PkvLsAkgiUs4uQTzqEbQPYhzoplOvGqDTOhrN78UrYnoW1bZw
+	A97TtSXq31eYLbw55+M0nNNZ70TyAubGErF29vmqUk3WEIRWgOfgUUzST5VcKRcT0w==
+X-Gm-Gg: AZFdTZeV35UX4ZttiYsAawVTARCVH6DxqpIX+iMXKkPOoU7zSJ0iag3rf4GvsT+yUKZ
+	SuyeWJlQRS86SZzptozif7OMMa2kiKSgGK9yA0r7VakBVJS+LpXrAnZJVzVpiY/yUjOA+dH21YF
+	7sx2+X1cU8MhAF/YuQY09Qh9i17On+ZxJMfCwlZ3i10Q4enDQbQrBHE7lYKaNGA7+WTvfs/RkgN
+	iUaQtmxGIvVW1krg6tP3iMKA3+8K5y9R+II6nTAttpB/OV7i+uRdeSoBG8RTyIALb8xq/FBYI/w
+	mCyGyburgBYZxOLcnTpVjcx/puC17Bg+1c1GAVcCd4dTJWx1nqPdbwfwubXXeUUwFaJZu2BZKAB
+	MOGUJX8k92n1hr7Shi6ys748OJDTw+korFLm+TGcrKT2LpISCMaXDGGRtI2FtUac2num29gZkFX
+	THeVWPpmbNeLldp4UX7cXbCZf2V8sH3X5LbkWUldzg6JmIsXPacmp19DuqciLKgdQcN0D/mOAIM
+	M/487+7KezKxRznE7FpmiUmzp2pUA9hPc01K0x54JlYeNeBX6AtCCJmFwRJhzdJVEQ/qzuR/MoN
+	jhvtS3wG701zrrhy/FikQXisWW+cREZvcc5wXE8oTreHniStmuLxxlndKykTQ7qrBw==
+X-Received: by 2002:a17:902:f54c:b0:2e8:9820:80cf with SMTP id d9443c01a7336-2f03f1cfbe5mr188390265ad.58.1795629802894;
+        Wed, 25 Nov 2026 10:03:22 -0800 (PST)
 Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41abb2076sm29085960a91.2.2026.11.25.09.59.06
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f14a432sm91361725ad.75.2026.11.25.10.03.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 09:59:06 -0800 (PST)
+        Wed, 25 Nov 2026 10:03:21 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,8 +90,11 @@ Precedence: list
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 09:59:05 -0800
-Message-Id: <DN4HJTFG5WHY.1BIGOM7LNESZA@google.com>
+Date: Wed, 25 Nov 2026 10:03:21 -0800
+Message-Id: <DN4HN2W6ZVES.289H6BZD9U7KB@google.com>
+From: "David Matlack" <dmatlack@google.com>
+To: "Vipin Sharma" <vipinsh@google.com>, "David Matlack"
+ <dmatlack@google.com>
 Cc: <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
  <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>, <linux-mm@kvack.org>,
  <linux-kselftest@vger.kernel.org>, <linux-pci@vger.kernel.org>,
@@ -109,74 +112,37 @@ Cc: <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
  <schnelle@linux.ibm.com>, <skhan@linuxfoundation.org>,
  <skhawaja@google.com>, <vivek.kasireddy@intel.com>, <witu@nvidia.com>,
  <yanjun.zhu@linux.dev>, <yi.l.liu@intel.com>
-Subject: Re: [PATCH v6 11/27] vfio/pci: Retrieve preserved device files
- after Live Update
-From: "David Matlack" <dmatlack@google.com>
-To: "Vipin Sharma" <vipinsh@google.com>, "David Matlack"
- <dmatlack@google.com>
+Subject: Re: [PATCH v6 07/27] vfio/pci: Preserve vfio-pci device files
+ across Live Update
 X-Mailer: aerc 0.21.0
 References: <20261102153656.1431701-1-vipinsh@google.com>
- <20261102153656.1431701-12-vipinsh@google.com>
- <DMZMRTXS7OSC.M79XF39ZVEWE@google.com>
- <20261125003759.GD3545683.vipinsh@google.com>
-In-Reply-To: <20261125003759.GD3545683.vipinsh@google.com>
+ <20261102153656.1431701-8-vipinsh@google.com> <auzftbPFO_6XBYVw@google.com>
+ <20261117220059.GA2250529.vipinsh@google.com>
+ <DMZLLYOVIGOU.1RXWYJN6UQTM@google.com>
+ <20261124234830.GB3545683.vipinsh@google.com>
+In-Reply-To: <20261124234830.GB3545683.vipinsh@google.com>
 
-On Tue Nov 24, 2026 at 10:55 PM PST, Vipin Sharma wrote:
-> On Thu, Nov 19, 2026 at 05:01:19PM -0800, David Matlack wrote:
->> This is a lot of complexity for one commit, and it's hard to review. I'd
->> like to start with the simplest approach and build from there: implement
->> can_finish() and have it return false until the device is fully
->> retrieved, i.e. retrieved and taken over by VFIO_DEVICE_BIND_IOMMUFD.
->> Then finish() only needs to free the incoming state and call
->> pci_liveupdate_finish().
+On Tue Nov 24, 2026 at 4:22 PM PST, Vipin Sharma wrote:
+> On Thu, Nov 19, 2026 at 04:06:38PM -0800, David Matlack wrote:
+>> The incoming kernel computes its own virt[] and write[] masks and
+>> requires both to match exactly with what's in vfio_pci_core_device_ser,
+>> otherwise it fails the retrieve. On take-over it uses the preserved
+>> value for bits in virt and its own freshly initialized value for the
+>> rest, like your option 1.
 >
-> Closing session FD is not retriable. If it returns an error then
-> userspace won't be able to retry. So, only option will remain to reboot
-> the host.
->
-> VFIO doesn't need to impose this restriction. We discussed in LPC to not
-> block finish() as this call can only be tried one time in LU if
-> session is leaked.
+> For now, we will be rejecting any changes and in future when we add
+> userspace opt-in mechanism then we can loosen this check, am I right?
 
-Right, if userspace closes the session before taking over all of its
-devices, the session is leaked and the only way to recover is to reboot.
-I'm ok with that in the first series. It only happens if userspace
-misbehaves, and the device is left running with its memory still
-preserved, so nothing gets corrupted.
+Yes, any difference fails the retrieve.
 
-I'm not opposed to improving finish() so that it handles devices that
-weren't taken over and closing the session always succeeds. But that can
-go in a follow-up series. It doesn't have to be in the first series, and
-including it makes the first series larger, harder to review, and harder
-to merge.
+I don't think the opt-in would loosen the check. What changes is the
+masks the incoming kernel expects: it builds its emulation for the
+device with the opt-in bits recorded in struct vfio_pci_core_device_ser,
+so a device that opted in to new emulation still matches. Devices that
+didn't opt in get the baseline emulation and keep matching older
+kernels.
 
->> It also has a nice side effect: LUO calls can_finish() on every file in
->> a session before finishing any of them, so a memfd in the same session
->> that the device DMAs into can't be finished before the device has been
->> taken over.
->
-> If userspace has two session, memfd in one and vfio in another, we will
-> still have risk, where memfd is retrieved correctly and may be
-> closed/released due to a process crash but VFIO device still acessing mem=
-ory
-> by continuing its DMA and potentially corrupting memory.
-
-True, but resetting the device in finish() doesn't protect against that
-either. The device is only reset when its own session is finished, which
-can be after the memfd in the other session has been freed.
-
-With iommufd (i.e. not noiommu), memfds mapped into a VFIO device must
-be preserved in the same session, and iommufd enforces that
-dependency [1]. noiommu is inherently unsafe in many ways, so I don't
-think we need to worry about this one case there.
-
-> I am still inclined to let finish proceed without blocking via
-> can_finish(). I can try splitting patches.
-
-Please go with can_finish() in this series, and send the finish()
-improvements as a separate series on top. Splitting them into separate
-patches within this series still leaves this series larger and harder to
-review.
-
-[1] https://lore.kernel.org/all/20261025021930.674647-16-skhawaja@google.co=
-m/
+Separately, if we later find specific differences that are safe to
+accept (e.g. a newer kernel allowing writes to a bit that used to be
+read-only), we could relax the comparison for those. But that's
+independent of the opt-in.
