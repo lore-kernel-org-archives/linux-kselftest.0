@@ -1,79 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795613754;
-	b=fjKkFXlyR9pfVYkuOBVGHWFGke1AwT6YE+rjmgs0/YAr7mTwwVPXhPUcNIeMQRC+Iut2
-	 JGCUMUmTpRDbHEf8St6QTDpiRTpQSprSwSkcJBeoi+9/zuXD+68n3LylofXJnSBa0LLnW
-	 +nHZkrgBPDzCq4NCZfzO4oxByq8tQAzSIvp5T50N1HJZIf+pc/2ar3RZci4y866+p5w6x
-	 yx7dPzmsiUTtddlEuktl+rB7g6l7S4ct/pXUREMZ8bwYYt+XaVauoA8D5EVGaG3YJK5pY
-	 VOhSxqa58xnU7UPG+a3OkHI5QBToYCMlxnZAqD4V5i8wixdb3PJpw/h3QSTjRDZnm9w==
+	t=1795614221;
+	b=mVrYM/gz5t6ISv9DFqvskfbNx3vhe1MKLa49pQ3wixexU2NyMuF3oBEOeiPjLgkm5iLk
+	 Dk2CfyCPbeQJuY4R3H38NAqfFG9NkvdQhrtPvUnR1jaufL8ziqLoLx3CeUyQlbnaQgf05
+	 /sjQx7xyD31bn2QxL9NXrFv3eVVPAI/VSERJOI/tgnSyjNnouPbl2RIx/BeNwajVK/zQ3
+	 wYDM0R6GT85VRiEgFDnDGe69/KEkPseT8SjOOIlra4bFb/9bFOdLCTtjmMpm/hzZOlsRA
+	 ZORgzppmDoqAvmK/1lnIp5FofSsvJJu41mchsquX/4kM/kiEJQ/4ODC6ou0YPauV22w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795613754;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:Date:To:cc:
-	 Subject:In-Reply-To:Message-ID:References:MIME-Version:Content-Type;
-	bh=sMVLaCsZfua1FXc6eqgSrhaf5aLDUKXRh3463gesKjA=;
-	b=jD9vsUihzYKoXWh1+BuDOk2WFzODPoWH2pCw7F97Dg4EKgOAJPYb8LDICLyUBxUUCnAc
-	 SrmKYr3PH1VWl2Zo2PkO3jCF70D9xR98pOsxyec2RfcvO5MjP3VBs9cuxqGzYYwlKQ0ri
-	 qzxyMmGPyzkLSbAOwDhLfvqlIpnho5ADmqmDVVIf9v4rmAwauGgJkku/0zN4VnKLyaTgb
-	 QKlL6vCchJ8B6oqs2Q73+dk+JiZjd1vcnU72cI6jeMy9enq6tBiJIcyz99VLhYNbJFarM
-	 7ySrzJP1xdkRQs/AvoEmr2Y3ckTEBupxn6MyLkZJQdKd15cCm1VVoOhfrcwsoYV6sEg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795614221;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ZkneC5LQ+6dBKeyQZYnqczFByIf9fYmbADKKT3AxPBo=;
+	b=PLcEMaJdqsPt04OsuSV3Errz5olI362pOQ/EeMWwJSYcgOpRDvQMsrsVNsLiUB6vdJEJ
+	 ElVJijEoAlED5qPExDMhND3XpM1+nHrxUsUxFAiviLYJtuH1LMGipodSY5A19E/Lqsxqe
+	 Jf3aRYPdL0oodgmIpe2A4xVYzo+oyfJ5jfabNR+qUf+RDNzWzds6VGPQmmNEMrEZ4ezxZ
+	 nt9k21eOsC/HxdXcQHde/tTlIMfyHVcLwUUQb0ht4Ar5/90zUgjofMxPicGlRoM6GVjK6
+	 HVtB0X/NOst8XKyzpXFcKXYk7jImqZus7nvVgoNF+jCWlym2GLJXAKCG1N2aYsAHpTA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=JJ1Ep+IC;
-	arc=none smtp.remote-ip=198.175.65.12
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A1CAmMQG;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D00606A329;
-	Wed, 25 Nov 2026 13:35:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2D00606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6418D606A31E;
+	Wed, 25 Nov 2026 13:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=JJ1Ep+IC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795613754; x=1827149754;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=1e5Dk/+eHsZ1l5I1tk3VuGlTcyFCG8sOMZ/3BywUnEk=;
-  b=JJ1Ep+ICGP7yZSo3Cg5sW7fFubadenZDM7NBad+7+6SF2SIgmO31qKaR
-   RigINg780Drekf/O0Wn5+rj0PsCcMM7ERoNqFmrLppEK0wI/nc/5IXzXL
-   A6i/pJMU93Qe9QiTq+iY9daa2n4aAGJ8S55ek3sAs59PtaXZq8gR0GSGh
-   HbAh7XBfmcTKN25EZKoq5lbuovNyreshKqfx3ABUlxTt5osnhu/rV+DMx
-   DaxN6oYPOyEy4+IoFnpqahwxgo99q0bg5nKfcaIdO8axk4+3NZhEVGeCo
-   2B7/gLqSYQra925ZLvtnkOV4UkzDgNJTmWYQbUdOlMQNWJuOj6eYJgTVg
-   w==;
-X-CSE-ConnectionGUID: /y134ROzS7ipCKNHq2wRaQ==
-X-CSE-MsgGUID: RhKuKuXKRgigPf+mJ48U4A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4394731"
-X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
-   d="scan'208";a="4394731"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 05:35:53 -0800
-X-CSE-ConnectionGUID: EktULjI+TEyOqMp0HSpAaw==
-X-CSE-MsgGUID: ViRb8WpMRBi9VV4ysbg3dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,232,1787036400"; 
-   d="scan'208";a="11678817"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.96])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 05:35:48 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 25 Nov 2026 15:35:44 +0200 (EET)
-To: Priyank Rathod <rathodpriyank@google.com>
-cc: Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-    Lukas Wunner <lukas@wunner.de>, Manivannan Sadhasivam <mani@kernel.org>, 
-    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-    Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-    linux-pci@vger.kernel.org, linux-doc@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 1/3] PCI/ASPM: Add internal pcie_aspm_inhibit()
- helper
-In-Reply-To: <20261125-pcie-link-endpoints-v8-1-19d49c17c05f@google.com>
-Message-ID: <115e024d-f49b-256f-550c-7a64b546a076@linux.intel.com>
-References: <20261125-pcie-link-endpoints-v8-0-19d49c17c05f@google.com> <20261125-pcie-link-endpoints-v8-1-19d49c17c05f@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A1CAmMQG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852EC1F000C4;
+	Wed, 25 Nov 2026 13:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795614220;
+	bh=ZkneC5LQ+6dBKeyQZYnqczFByIf9fYmbADKKT3AxPBo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=A1CAmMQGn06htVNrv9uK8g49thsvEyl+UNBOI8al4+iamso8CaWyJNjAQlw7pfmyo
+	 2CI6C0cXb32Rsy5Lw1hdQGnPVPuXUetAr33hLpMqILdoOF1LCdtxhvyFhh7+oypC5z
+	 KArsc5KLwuSkA/5dRdXzS9iyC5P/KrdVPm34LxNQ/PaXfcv8FWRq8LGFvjMzkIvxop
+	 2Qbd2jRRwsatbu88CyGRIhb/qeAsFtNEAYc3GXwhCmmn8bCT+PbCAfji6p4M/YCXXQ
+	 yElBp1vME52YVi9akcbpzMFJ9v5Ix7eZlXAZa4xJx/j3r4pFYI7zQjpPDLsonWqBYr
+	 h8sY1aCmLsnAA==
+Message-ID: <380e029a-2d9a-43ee-9048-c4b490c11f41@kernel.org>
+Date: Wed, 25 Nov 2026 14:43:29 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,170 +51,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] mm: fix soft-dirty false positives in mprotect() of
+ large folios
+To: Shivank Garg <shivankg@amd.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Dev Jain <dev.jain@arm.com>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+ Andrei Vagin <avagin@gmail.com>, Paul Gofman <pgofman@codeweavers.com>,
+ Bharata B Rao <bharata@amd.com>, Daniel Wade <danjwade95@gmail.com>,
+ Yin Tirui <yintirui@gmail.com>, Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261125-b4-mm-soft-dirty-fixes-v1-0-538e3cdb618c@amd.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261125-b4-mm-soft-dirty-fixes-v1-0-538e3cdb618c@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 25 Nov 2026, Priyank Rathod wrote:
+On 11/25/26 14:32, Shivank Garg wrote:
+> mprotect() handles the PTEs of a large folio as one batch, and marks the
+> whole batch dirty with pte_mkdirty() if any of its PTEs is dirty.  On
+> x86, powerpc, riscv and s390, pte_mkdirty() also sets the soft-dirty
+> bit, so after clear_refs, mprotect() marks unwritten pages soft-dirty.
+> With 64K mTHP on x86-64, all 240 unwritten pages of a 1MiB region are
+> reported soft-dirty; with my fix, none are.
 
-> Internal PCIe services such as Lane Margining at the Receiver need to
-> temporarily keep ASPM disabled on a link and restore its prior policy
-> afterward without clobbering link->aspm_disable, link->aspm_default,
-> L1 PM Substates, or Clock PM state.
-> 
-> pci_disable_link_state() permanently sets link->aspm_disable, and
-> pci_enable_link_state() intentionally refuses to clear it.  Introduce a
-> PCI-internal, reference-counted pcie_aspm_inhibit() helper:
-
-As you've discovered, pci_disable_link_state() and pci_enable_link_state() 
-are not symmetric pairs, which is problematic for some use cases like 
-this one.
-
-There's a series to fix that and to me it looks a prerequisite for this 
-LMR series so you shouldn't be duplicate that effort with this inhibit 
-thing.
-
-Perhaps help in reviewing that ASPM series, and/or, if the work has 
-stalled with things left to address, ask the previous submitter if you 
-could take over in finishing that series.
-
-> - Track temporary inhibitors via aspm_inhibit_cnt on struct pcie_link_state
->   under pci_bus_sem and aspm_lock.
-> - Force state = 0 in pcie_config_aspm_link() whenever aspm_inhibit_cnt is
->   non-zero, so concurrent policy or sysfs changes still update the saved
->   state cleanly and take effect once all inhibitors release.
-> - Return -EPERM rather than overriding firmware-enabled ASPM when the OS
->   lacks ASPM control, and return 0 when ASPM support is disabled.
-
-Generally, don't describe things that are not real lists using bullet 
-points (LLM tend to overuse bullets).
+Why do we care? Just over-indicate soft-dirty. It's valid, and the whole feature
+is full of holes and buggy as hell.
 
 -- 
- i.
+Cheers,
 
-> 
-> Signed-off-by: Priyank Rathod <rathodpriyank@google.com>
-> ---
->  drivers/pci/pci.h       |  6 +++++
->  drivers/pci/pcie/aspm.c | 70 +++++++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 76 insertions(+)
-> 
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 77efa4c5c960..e24a6dbf48ce 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -1150,6 +1150,7 @@ void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
->  void pci_configure_ltr(struct pci_dev *pdev);
->  void pci_bridge_reconfigure_ltr(struct pci_dev *pdev);
->  void pcie_encode_t_power_on(u32 t_power_on_us, u8 *scale, u8 *value);
-> +int pcie_aspm_inhibit(struct pci_dev *pdev, bool inhibit);
->  #else
->  static inline void pcie_aspm_remove_cap(struct pci_dev *pdev, u32 lnkcap) { }
->  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
-> @@ -1163,6 +1164,11 @@ static inline void pcie_encode_t_power_on(u32 t_power_on_us, u8 *scale, u8 *valu
->  	*scale = 0;
->  	*value = 0;
->  }
-> +
-> +static inline int pcie_aspm_inhibit(struct pci_dev *pdev, bool inhibit)
-> +{
-> +	return 0;
-> +}
->  #endif
->  
->  #ifdef CONFIG_PCIE_ECRC
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index b039b57f8466..0d43dc517098 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -245,6 +245,8 @@ struct pcie_link_state {
->  	u32 clkpm_enabled:1;		/* Current Clock PM state */
->  	u32 clkpm_default:1;		/* Default Clock PM state by BIOS */
->  	u32 clkpm_disable:1;		/* Clock PM disabled */
-> +
-> +	unsigned int aspm_inhibit_cnt;	/* Reference count of inhibitors */
->  };
->  
->  static bool aspm_disabled, aspm_force;
-> @@ -1055,6 +1057,10 @@ static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
->  	/* Enable only the states that were not explicitly disabled */
->  	state &= (link->aspm_capable & ~link->aspm_disable);
->  
-> +	/* Temporary inhibition overrides configured policy without mutating it */
-> +	if (link->aspm_inhibit_cnt)
-> +		state = 0;
-> +
->  	/* Can't enable any substates if L1 is not enabled */
->  	if (!(state & PCIE_LINK_STATE_L1))
->  		state &= ~PCIE_LINK_STATE_L1SS;
-> @@ -1538,6 +1544,70 @@ static int __pci_disable_link_state(struct pci_dev *pdev, int state, bool locked
->  	return 0;
->  }
->  
-> +/**
-> + * pcie_aspm_inhibit - Temporarily inhibit or re-allow ASPM on a link
-> + * @pdev: PCI device below the link (Downstream component of the link)
-> + * @inhibit: True to inhibit ASPM, false to release the inhibition
-> + *
-> + * Maintain a reference count of temporary ASPM inhibitions on @pdev's
-> + * upstream link without altering link->aspm_disable, link->aspm_default,
-> + * or Clock PM state.  On the first inhibitor, ASPM is disabled in LNKCTL
-> + * (Downstream component before Upstream component per PCIe r6.0 sec 7.5.3.7).
-> + * When the last inhibitor releases, the configured ASPM policy is restored.
-> + *
-> + * Return: 0 on success, -EINVAL if @pdev has no ASPM link state or on an
-> + * unbalanced release, -EBUSY on counter overflow, or -EPERM if the OS
-> + * lacks ASPM control while firmware has ASPM enabled on the link.
-> + */
-> +int pcie_aspm_inhibit(struct pci_dev *pdev, bool inhibit)
-> +{
-> +	struct pcie_link_state *link;
-> +	int ret = 0;
-> +
-> +	if (!pdev)
-> +		return -EINVAL;
-> +
-> +	if (!aspm_support_enabled)
-> +		return 0;
-> +
-> +	down_read(&pci_bus_sem);
-> +	mutex_lock(&aspm_lock);
-> +
-> +	link = pcie_aspm_get_link(pdev);
-> +	if (!link) {
-> +		ret = -EINVAL;
-> +		goto unlock;
-> +	}
-> +
-> +	if (inhibit) {
-> +		if (aspm_disabled && link->aspm_enabled) {
-> +			pci_warn_once(pdev,
-> +				      "can't inhibit ASPM; OS doesn't have ASPM control\n");
-> +			ret = -EPERM;
-> +			goto unlock;
-> +		}
-> +		if (link->aspm_inhibit_cnt == UINT_MAX) {
-> +			ret = -EBUSY;
-> +			goto unlock;
-> +		}
-> +		if (++link->aspm_inhibit_cnt == 1)
-> +			pcie_config_aspm_link(link, 0);
-> +	} else {
-> +		if (WARN_ON_ONCE(!link->aspm_inhibit_cnt)) {
-> +			ret = -EINVAL;
-> +			goto unlock;
-> +		}
-> +		if (--link->aspm_inhibit_cnt == 0 && !aspm_disabled)
-> +			pcie_config_aspm_link(link, policy_to_aspm_state(link));
-> +	}
-> +
-> +unlock:
-> +	mutex_unlock(&aspm_lock);
-> +	up_read(&pci_bus_sem);
-> +
-> +	return ret;
-> +}
-> +
->  int pci_disable_link_state_locked(struct pci_dev *pdev, int state)
->  {
->  	lockdep_assert_held_read(&pci_bus_sem);
-> 
-> 
+David
