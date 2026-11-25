@@ -1,75 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587419;
-	b=P56lTt8EGQU2hkYXoJcrm10wLjYrJvmFI6K4N7dY3T8NKQz9Wbf+WwDaBmlKOpOo7GGo
-	 iT+3uFvAJf+VQq+zd/xHUiYCrrwbQipXZk0du8wZHi9VMK3oIT6DuH4aVYnb2JGn8CWyc
-	 FV/sW8k9Obrm1/TeJ0fvTMgnn4knq2dtwF4e9KO2D3BUR5y9bT2G5jm9CJINs0PRiOfTF
-	 Lu3IFh5+97vdti+3cB0Xg+lejsjh6FdCOlIkL+J0rNKmFfeJBjbb2jVyaa4C+uOUQSWHS
-	 3bbJpubg68o2Xo0wlOQVdAaqVuIR71ZCKZ18/QVgSt0TZPJndRHBSr9b7Il7XaVqXBg==
+	t=1795587795;
+	b=tOTLWM3wYrd7IU04XH4DJhq+j3Vo7rM9UsvGGxR7w3pZaQKex1Vh3Jjqz/D5R9DZP6DK
+	 mM5TpfnLxJSiuUwr5REKgFmufIYm+Ty/uxNzi1+/eDoaqcFC+e4KA5PtzqglbMfE7IDIQ
+	 2oOrFVHsPqpUyxfQd9FLyLCcTXnEwbxq0qs6LNSQO01LL4Bz0Pkyq9GxHjCQ8lBWG1d42
+	 OrzVmEX9PP50Mau6TZJdX4wx39KMxy+YICMYsZFIPC/3K6giexV5uiK/Wwk6g7eetq7SW
+	 ePmSdQWPB98E0Wz5n1/YK9DbDI5E1lQwz+ZXVSfnWl70q4voavQskZB9aX/q0yND7KA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587419;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=B0szZcyaY7NP1HowgKnJWSVhbM1uN8jco8rE2rfxzUA=;
-	b=INWXBMKmAl/UbBC4k0pTBQRVWAf+iRh9GL8/lBQnOQABclAZMUhoCLNS67GFxdXzjwTz
-	 ZNugirjfROzL/T37gFrcTiUypNdEnjC4fVLI71PV6tSJNh6zCUoKSTT3hYtaVvlIN7YDG
-	 vQWZ35AHBqbQHURcCvX/YrFpkpdFMxjpRus7rvOAh/G98QR9ENNqqtfJdlnPdhZBrkNG3
-	 vvSagrZ+jmkAduFbY2RQlcIZVCVW4grCFHabEoXmT3a1+Uv80HeHDoQ152cQ8XMYcuJuS
-	 IoJNIJT/ToWN+CF/MiM9ldWpqy/vwgx+O1JVM/NLL4v+VI8a8t4Zj2j8jDIlEHWaoRQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587795;
+	h=DMARC-Filter:DKIM-Signature:Received:X-Spam-Checker-Version:
+	 X-Spam-Level:X-Spam-Status:DKIM-Signature:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=r5R+OI5w6Wey7KShfjFB5dyA5yUeklrNOEuXPSSexSY=;
+	b=C5/xmsPQtT/07WzGDGgBLt6SrcN4Jv9wc/zmamtATbxNksJXEdztVivI7C4/DrQYB9V8
+	 zH/4/LpFA30nNe/27nNPyx4GneW6lKp+iKVfmLlBCtvi9kpA9EKp0ZsB9c1r+go/kttEj
+	 LtUmNFUscgiF6ronvajg2A1uglpCix0THScaGDffENoHGODB3SJSfTmrnraRqjbC4Ip2u
+	 VCR9Mygqeq1uFWaga5GZC/1CgYaA8tD+OzTnMf9jcbRfjq9Df+Q/GO2jI4g11s4seZkCw
+	 qq1hB3DHO2yTaxcJBbznTewFMqQnVJA/nX6fL2e/aJ/75UJ5Ph1716pFH4WWJd2FlSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LJpTIGT8;
-	arc=none smtp.remote-ip=209.85.210.199
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=davidgow.net;
+	spf=pass smtp.mailfrom=davidgow.net;
+	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=Fukq2irA;
+	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b="Gb/L/6UM";
+	arc=none smtp.remote-ip=203.29.242.92
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E96F606DE7B
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:16:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E96F606DE7B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA148606A31E;
+	Wed, 25 Nov 2026 06:23:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA148606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LJpTIGT8
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8a06750c74fso3902400b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:16:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587418; x=1796192218; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=B0szZcyaY7NP1HowgKnJWSVhbM1uN8jco8rE2rfxzUA=;
-        b=LJpTIGT83cKcxQDhhMuek4OwdgkdQKkLxYONCLmTepeyOwwiDEqpA9PI3PrOY8XcnW
-         qBDwpKFXtz0XIpAR5Dq9NgplU/l2p/ADVoH7Mm5ymwO7xGNy/SpVvRtOaXSdsLLi5G25
-         i79iMt6EXqwRF1s3apdVBesej5O7itpdAfaK/CheRhK+FRwAZgRLX/ob6cSskRGhwqvV
-         ZWWo8Me1Ubrs4vQJqXgefYbt/X8NmL0zrd4kz2ZMiZlml0oGdd/AuWxGQnVIhh1z+uZh
-         pzdWsnNoz6uGgypKUUOT4Uf8kjKdew9+9OF4Nu8IUXmfkp/lVmFql3ye6f7qmIGe1LLq
-         chkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587418; x=1796192218;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=B0szZcyaY7NP1HowgKnJWSVhbM1uN8jco8rE2rfxzUA=;
-        b=ca9cF78SkIcM3Zh926BKDGdLMXXjSttWHU2zDfb9JabJOgitTfbQwV3/tKPESUkCKw
-         CRuYtIRT2f2Rn0eMuZUCZb1KVN27ntvBdEMPljZ7B36pK7rfOYgiGT2EN095en3Xgwkv
-         zXbfGmeGpTBSjYfDf86vNxhXSq9VAt4GlsGTxWdJ0ENmZwtTNQo8zr3um50D2RMzkVAW
-         wDdiBcsaTcOYu2OvfFTmdLk3xMPQ417uJn8b+lb0S/6/jDrbN66cFJKufTIXsNUrcCyb
-         9PUV7OxfYNo5UYI1OSRIyPpbK57lQBWMsqCmVDJ10y4qECXlKrI40n764K0VHTSTyfp/
-         +djA==
-X-Forwarded-Encrypted: i=1; AL+hErE5PLD6hI5bN9rmYxxWsDVwJJRPCuzHNi7kG/8kM0pgOGcAWk64rE1P1pDyTkTu9OCowJS9YUTc7bnh3plT7dI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8H4quFmD4AUDc3bD0piLLRER38O400eIxeXo2sSi6OxesI80hI
-	QTh5pChL/JC+9+Mhxr4smHTjqapLz65x2WFkXv/BpMu4khU+JM97IKInEgkCDxBfKlBv2TXFyiP
-	5oFaTENqcXg==
-X-Received: from pgin21-n1.prod.google.com ([2002:a05:6a02:8795:10b0:cdb:932c:948b])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:8095:b0:3dd:85a8:cac8
- with SMTP id adf61e73a8af0-4014c949c92mr14160775637.31.1795587417428; Tue, 24
- Nov 2026 22:16:57 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:23 -0800
-In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=Fukq2irA;
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=Gb/L/6UM
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1795587791;
+	bh=03p9BfUgLsUDUL9nX2wwVFpZWUlKJx5s1cP92PW09LI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Fukq2irAvPlPUk9iF5jdmlYYc/gizjMWIJyCriNMbOtxmoKeQ8lQZiBE73k2KlPaP
+	 ze5pTP1iswks0eCar3eU/+PueQpePQmK6EZCg3UgyjyvxSZckP3NjY/ElVgIojp3Bi
+	 FmpcOySAqlCwGTFJzZvrIHJMjVekzR8jGrmpEeC1fTGk/IKE76hCrT+C1yJaN2IP3B
+	 0hlmdfTwEFRZ7v3yXzgW8fOzEMoYnRi2JvWG/V4o++yJO0wwC3j0jbCqfDsByIV5xV
+	 eHY4sjeWzNJ+IMUdY7HbRG4AlA4qf6oycgnXbEP61LkuOXW6LDokgKUP8nwroHeMIM
+	 TZST/a0efMit0yEIFjV5bRwj8A0eJTWtmaMaRtVH++HY/I62deYXIoNgqcsMTMVXSD
+	 Iva7o633lBkdd6JUpPbGbjIKL96SuwKqnWd77ZRbsjgfMJPTsB5wehK+IahSxWn0CZ
+	 F0KLI5g1rktInC9bPmTn4D9YKr+eE/l/NCLSXvvn0/sHcRlQkrJFHm8MxSVehohIok
+	 HYysaYSh86gwjsCZK/NX7VktsWt5d9fC72iyQSI7cp09OgMitHJJfdz5d/heJWZNxO
+	 LOJzHjhw/BXcpCghvBe3xvWGfQwYRgZcE1On1+pzk9b1AxClkVZkirztHZNPFYnPmY
+	 W+YSbBuSp8xWjTw3A6PBZA5c=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 7ADE71EAD83; Wed, 25 Nov 2026 14:23:11 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1795587789;
+	bh=03p9BfUgLsUDUL9nX2wwVFpZWUlKJx5s1cP92PW09LI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Gb/L/6UMoeVvp1v9O1slsag6QQOW4ZGNf8A6kpJn3fDB+GmJmwhuXogY4AL14xScg
+	 6uBCRR+AqGwjQx3p4OE+21RQibWbq/89Jbxn88lqGDrksZltAm+XSGqehF+NSaHPNB
+	 cS3e3SLdLHdto9Cv90S76peRUqWdeUTZyNSxb9ZyIc/oStTcaCbwUf3KDofennt4sl
+	 mk8+6n8eQZHA7Lpu9f84oD3zdOD2rjiSesWp5n4M3NqRZ++yvRxX3/i22zCvUgDGZN
+	 mE4Jh4myT9jv665qFiq96DPS46mmO0dgGZg5UaVqugrDx5Wzlc8BQ2mYJo+qfWVCuj
+	 ryEaUvaJjvoKjiPKSm3+anjVfl6Qv2iRwcZQzLq+zUxRN0iNVilFVUOvxCKPXYh8dQ
+	 NBcHz/lCOafDSCKCJSTenkBlGcfS54aWzcusenj94GBcoGk9P+iXEPkguu4ceUa0ZR
+	 6Uq5C9B313CcvCpoZ8VxM7z/sRNWkzmi9XN61tI2juRuYY4ipSfmF+4gcbfYfMxu7G
+	 KWGrTCWmDP0dlCSLvQRK7meqzhhE41dIdndTGbCXMvritl2rgUJQWTM4gSHS6IGD0D
+	 x2gZY2fI/CpA/xVFCPymGnXQUtY7Df5gfvES+q4g/xwyLGrXmd1x5zU+508Jl/MKR4
+	 WSfHr/hm8SLGVy3FHymUOeAY=
+Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 38C251EAD76;
+	Wed, 25 Nov 2026 14:23:09 +0800 (AWST)
+Message-ID: <f2271237-2998-4d21-9973-d0174da23389@davidgow.net>
+Date: Wed, 25 Nov 2026 14:23:06 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,80 +82,106 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261125061523.1540234-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-31-irogers@google.com>
-Subject: [RFC PATCH v2 30/30] MAINTAINERS: Add DWARF CFI stack unwinding entry
-From: Ian Rogers <irogers@google.com>
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org
-Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org, 
-	mingo@redhat.com, tglx@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com, 
-	x86@kernel.org, catalin.marinas@arm.com, will@kernel.org, 
-	mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, pjw@kernel.org, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	linux-riscv@lists.infradead.org, acme@kernel.org, namhyung@kernel.org, 
-	linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org, 
-	nathan@kernel.org, llvm@lists.linux.dev, nsc@kernel.org, 
-	linux-kbuild@vger.kernel.org, ojeda@kernel.org, 
-	rust-for-linux@vger.kernel.org, ardb@kernel.org, linux-efi@vger.kernel.org, 
-	maz@kernel.org, oupton@kernel.org, kvmarm@lists.linux.dev, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, indu.bhagat@oracle.com, jremus@linux.ibm.com, 
-	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: fix uninitialized err and static suite kfree()
+ when disabled
+To: Ian Rogers <irogers@google.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>
+Cc: Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Elkin Cruz <elkin@google.com>
+References: <20261119170636.1520696-1-irogers@google.com>
+Content-Language: en-US
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20261119170636.1520696-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add a MAINTAINERS entry for Minimal DWARF CFI stack unwinding covering
-the core .eh_frame / .eh_frame_hdr bytecode interpreter and KUnit tests,
-the user-space PT_GNU_EH_FRAME VMA unwinder, the x86-64 DWARF CFI kernel
-unwinder, the build-time .eh_frame minifier and analyzer scripts, the
-standalone tools/unwind/ CFI verifier, and the deferred user-space CFI
-kselftest.
 
-Also add arch/*/include/asm/unwind_user*.h to USERSPACE STACK UNWINDING
-so architectural unwind_user headers on x86, arm64, riscv, and future
-ports are routed to the user-space unwinding maintainers.
+Le 20/11/2026 à 01:06, 'Ian Rogers' via KUnit Development a écrit :
+> Commit e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
+> removed the zero-initialization of 'err' in kunit_run_all_tests(),
+> overlooking two live consumers of 'err':
+> 
+> 1. When KUnit is disabled at runtime (kunit.enable=0) while any suite or
+>     attribute filter is configured (via kunit.filter_glob, kunit.filter, or
+>     CONFIG_KUNIT_DEFAULT_FILTER*), kunit_run_all_tests() sets suite_set to
+>     normal_suite_set (pointing directly into the static .kunit_test_suites
+>     linker section when init_num_suites == 0) and jumps to free_out before
+>     kunit_filter_suites() runs. At free_out, 'if (err)' reads uninitialized
+>     stack memory and either calls kunit_free_suite_set() on static linker
+>     symbols (panicking at boot) or stores them in kunit_boot_suites.
+> 2. When kunit.filter is set without kunit.filter_glob,
+>     kunit_filter_suites() never initializes *err on the success path (or
+>     on !copy OOM), so 'if (*err)' reads uninitialized stack memory and
+>     aborts KUnit execution.
+> 
+> Check kunit_enabled() before merging or filtering suites and jump directly
+> to 'out', initialize 'err' to 0 in both kunit_run_all_tests() and
+> kunit_filter_suites(), and report -ENOMEM when suite pointer copy
+> allocation fails.
+> 
+> Found via an x86_64 LLVM=1 (Clang 21.1.8) allyesconfig audit with
+> -Wconditional-uninitialized enabled; fix and changelog drafted with an AI
+> coding assistant. Build-tested under LLVM=1 W=1 (-Werror) and
+> -Wconditional-uninitialized; not boot-tested with KUnit kernel parameters.
+> 
+> Fixes: fb6988b83b4c ("kunit: fix use-after-free in debugfs when using kunit.filter")
+> Fixes: e38f53f04824 ("kunit: Return void from kunit_run_all_tests()")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- MAINTAINERS | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Nice catch, thanks!
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 44540a1eb2b8..0584279d745e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9496,6 +9496,21 @@ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- F:	drivers/media/usb/dvb-usb-v2/dvb_usb*
- F:	drivers/media/usb/dvb-usb-v2/usb_urb.c
- 
-+DWARF CFI STACK UNWINDING
-+M:	Ian Rogers <irogers@google.com>
-+L:	linux-trace-kernel@vger.kernel.org
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	arch/x86/kernel/unwind_dwarf.c
-+F:	include/linux/unwind_dwarf_cfi.h
-+F:	kernel/unwind/dwarf_cfi*.c
-+F:	kernel/unwind/user_cfi.c
-+F:	scripts/eh_frame_min.py
-+F:	scripts/min_eh_frame.c
-+F:	tools/include/linux/unwind_dwarf_cfi.h
-+F:	tools/testing/selftests/perf_events/unwind_user_cfi.c
-+F:	tools/unwind/
-+
- DYNAMIC DEBUG
- M:	Jason Baron <jbaron@akamai.com>
- M:	Jim Cromie <jim.cromie@gmail.com>
-@@ -29300,6 +29315,7 @@ USERSPACE STACK UNWINDING
- M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Steven Rostedt <rostedt@goodmis.org>
- S:	Maintained
-+F:	arch/*/include/asm/unwind_user*.h
- F:	include/linux/unwind*.h
- F:	kernel/unwind/
- 
--- 
-2.56.1.831.g720f3f5937-goog
+Reviewed-by: David Gow <david@davidgow.net>
+
+Cheers,
+-- David
+
+>   lib/kunit/executor.c | 15 +++++++++------
+>   1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index c798a02470d8..5525f4da0bc9 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -189,8 +189,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>   
+>   	const size_t max = suite_set->end - suite_set->start;
+>   
+> +	*err = 0;
+> +
+>   	copy = kzalloc_objs(*copy, max);
+>   	if (!copy) { /* won't be able to run anything, return an empty set */
+> +		*err = -ENOMEM;
+>   		return filtered;
+>   	}
+>   	copy_start = copy;
+> @@ -382,7 +385,12 @@ void kunit_run_all_tests(void)
+>   		__kunit_suites_start, __kunit_suites_end,
+>   	};
+>   	size_t init_num_suites = init_suite_set.end - init_suite_set.start;
+> -	int err;
+> +	int err = 0;
+> +
+> +	if (!kunit_enabled()) {
+> +		pr_info("kunit: disabled\n");
+> +		goto out;
+> +	}
+>   
+>   	if (init_num_suites > 0) {
+>   		suite_set = kunit_merge_suite_sets(init_suite_set, normal_suite_set);
+> @@ -391,11 +399,6 @@ void kunit_run_all_tests(void)
+>   	} else
+>   		suite_set = normal_suite_set;
+>   
+> -	if (!kunit_enabled()) {
+> -		pr_info("kunit: disabled\n");
+> -		goto free_out;
+> -	}
+> -
+>   	if (filter_glob_param || filter_param) {
+>   		filtered_suite_set = kunit_filter_suites(&suite_set, filter_glob_param,
+>   				filter_param, filter_action_param, &err);
 
