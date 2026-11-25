@@ -1,128 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795624825;
-	b=XRjZbQ0Usgg7QAO77KpGqzSkczrhWw9gAWEoNIMQUphyTsDw2Pg8spz3gC7Naoigb07r
-	 ZkNEx7+kqSTh8TVI5dC8TS6q0OGchaBVgUA8TaWpG/sEPmjEdzgCW0Ol/PZex6GvD37qb
-	 eRxxzmltPqLa6ZOn7MF2Qw5RykKO6roqYIsn6y2I6tSWK7HdBPayKuLOsa9iiAeCWNhTU
-	 qhsu2HC0mm5E/J1nhpmOa+lJHPB+kDohUvGMXGR9g4yh/VeYCBQOqw3vZVloZdbuZl8sd
-	 OeuFI5TEvwdOZo4I5/DE920vot3FkiK0uHsFDTPPtAzpAMOg2doo+Ea8D4CpezsGv0w==
+	t=1795625140;
+	b=xrj6Pn8x4A6RWyJ9EeR0E/0kYifn3MzMsyrAzDqhcjIA2L3rEeJ3XURoZnk4chMvNTOQ
+	 Bdx/iMSvN2tpfwKjibQ8BJnQn00g6LQqtdxB3LGcpugP4e+7D6MJRH0V6LLhosF8bSSVP
+	 fJvzUideOQG/EXAlcBwsCm0YZ8qGH1YKTROMrVtRMynoLHmbF6P36bZdybF2EZ9LPDRq7
+	 Y2TJQaRHqa25gHaFKsZmT9SYPtLWLUD6CxvNxUJiDiFsUOmoLs/kAyezn0IHgI4VmYr53
+	 vTZq0vIX616gREuh4ho5rHQHdOy4LfVla8oYKwpSYW5gL6kzETs/i1diy/QKyWEhcfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795624825;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=kt6tgv5UI7YQxebVkamxE0GgtDlTk5lb2NrVmJtOzk0=;
-	b=E5Q5XIc9tkZfb6/O+0+BdyZ8flJ0Rt4LyaKW7MyrBVGG0WvXpVDKtQGRlW6sSKtWvDmT
-	 HL3439dqbdLkcFUU/3Ki3DJfNLcg+GP9NURfhd6LYGapd6yOLz8P9p5TMjw+TnJEqb9XT
-	 Ml0eb97vGJ93AnoZpLzSCmzwMZHnGANUvFwNDFniNHNqD6MhK92eRsRR8rqNvvkAAGv2d
-	 OMEb1e0+et9md0t3rzPumvarSBBubHMEB20Uv9D43aJytmKyiPrYdfmxv0uaco33G+I5C
-	 vuGCLDugnLilCoHypjo4wQoT/wywt5Yg8Pe9x/tbuDt9FJTOoR8qJ9y73HExxqrFUQA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795625140;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
+	b=k0DO39MKHIXzYric1+oLn2C7ytycGPhuX/k+Ow5f5BlyxLKH3bEciS08pMFjvQDFoHud
+	 G2G8UoIYdISwDLpWNLprGd/F09sZc3OhOmUg3UEXQ70GGrNaC5mOjhjKwBeGQfk2yKFZe
+	 UI+DkwTV1YV6R8nvUCFw8r0v8anaW4MspW0Ys4PQJhK41Bb1k/DSgMqSHdWAVsBPXZTcu
+	 Hoq+kzwPbdNbfAVgbdo9ezSbndK2hYQ7+05blO2xmryv8dIsrEcN9HF59+TdTF/bZ+7xb
+	 QUQot+F65J85IiHixylLFEvitKejQij/NiiFqmz71m3eTeD8j+5O5s6bukjvnKTJ7jQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=queasysnail.net;
-	spf=pass smtp.mailfrom=queasysnail.net;
-	dkim=pass header.d=queasysnail.net header.i=@queasysnail.net header.a=rsa-sha256 header.s=fm1 header.b=bLFxljkf;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=3yATzR9k;
-	arc=none smtp.remote-ip=202.12.124.156
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=VeMZMFlK;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BC8606A33B
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:40:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99BC8606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270E3606A32A
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:45:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 270E3606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=queasysnail.net header.i=@queasysnail.net header.a=rsa-sha256 header.s=fm1 header.b=bLFxljkf;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=3yATzR9k
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 25DEF7A0623
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:40:23 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Wed, 25 Nov 2026 11:40:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1795624820; x=
-	1795711220; bh=kt6tgv5UI7YQxebVkamxE0GgtDlTk5lb2NrVmJtOzk0=; b=b
-	LFxljkf8085SNZFqKfvwrHAtqBoWplskS4EhTwcIOygIXlMpueYzouSuFbldC+sP
-	uIsVUp5qryri8PYOAkXTiIofqD+z7hcVXLM6foT03VpU6o216TmvQvhwWEsRMeBk
-	vpgbY/BxXgj0NfhvAXm5WGFf6O51stvBstlDJJryy2UvELQeENzebFaGcM7ULfJt
-	/j/g7LTh3jnC8y2mshporPnkNlWpwxe7sp/qy7kjq20L4EfPujxKLjye1wAt1Pwn
-	x1bXMevQWust2/xNGvbVvzlIx1EuyUm5u53M+ABMrVlgvFViIfMi+uRNEKqgR+IW
-	HJ52SX+3wLjv0bLjTM4Aw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1795624820; x=1795711220; bh=kt6tgv5UI7YQxebVkamxE0GgtDlTk5lb2Nr
-	VmJtOzk0=; b=3yATzR9kKoed0T8n2E4dRzPtrHf/ieP926YExKWer2F3SHLsc6Q
-	pt+aTSxrDYiVcXV3AyRMwN9EDVRID12bCcvXcEaQ+TgV9GzrXfNi/PrUiq2gTh6B
-	xu2O7qegtF8oyUBb2e+qAwvx11PvSMUuGIqqsxahZoAXssmg4pbOo4pJ/QW/XXF5
-	qHBTYoCgwrJ1/5bAFyD43wqMgelFjrj8FNROs+lxsnWDdOfMwtN05VzZjqjLlkGe
-	KSxXzvfp6GOJ6RZbwutHio2Y/0Kox5YZZ4oOPJfE4DxX0r9LVQnDJlB8Zlg0f0Nb
-	6dY1iGyyZ79tHNfDXrUVc9byIwvUPSbYahw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=queasysnail.net a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1795624820; d=queasysnail.net;
-	mf=PHNkQHF1ZWFzeXNuYWlsLm5ldD4=;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm1:rsa-sha256:GyCVu9DQ/5NIGh+yfZ+m91aabDQ8lz/0HFkPi56/7bbKCPb
-	QnsKyiOl7hjbXA/yD1dveNORVzyNl78RGyqjyNj1HQs4W8Tn51tzkBy57oiD4k7j
-	RBalZcliYpRbqqkA7aSBoQicajgJkXshidTc/uS6D+gbQfQePX+ZrkDsCaiXvQT8
-	VlJ29d8WChHO5RRtOQ9zq2a64gz+6WTKirhOnOXb28QLd6HmdgmuMsJdunEyyQ64
-	5RjLNTY7Siq1FVgHOHr9ft6hweryY7unmbRJbrnZtHXkmva94C7v1rWFd48zKqiE
-	dry78vx8oWLL7CNe39+gWTAAykLF5gNeX9YeSyg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-disposition,content-type,date,feedback-id,from,
-	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:VzbQwFow4I5mRyZL14MErE8FiLGvx6AWvz4eEeOhShY=:YHstVPHYNyvX4vpDklnY2CZmSxeOHydrehDj1hnjaY0=;
-X-ME-Sender: <xms:dA8Ha6tSp93tD8jvM5G0qJTMnepTAo6f1pAjC7Yp1JSi512NImkJ_g>
-    <xme:dA8Ha98SrhOq8nep0rEnZMXo53cHYdk5A8Y--PwT07Vcq-Fsu_7uCCh94X7OZW41l
-    63D1H9MT7cHhu_TEJgTjYBpA0hKpOALC7eP8ZFySlBcZ_IfFZUE7Clh>
-X-ME-Received: <xmr:dA8Ha8l-ogOVA0EZTJQ4E8rw3SNPJEh8bwv7KgSkNCHYhN7SKrYyK9-m334>
-X-ME-Proxy-Cause: dmFkZTEkqydggF2VGN09a7SrKmgF7tz60VqDezGtPw/dRKooC7tyMsvMNLlCXGAviBqhDU
-    93cLkBtcTF/ucCBSar36wkl3kd33JvHYspVdYeyipUmqt/l60Mse+Gn+BTfLSEw9fQzJCl
-    yc7P8ea1mUpj5FldO3/aAmMN86Pwjz0uDh17n6Ww+tHCXnDH8anNJewq9AHIh8nXBSQH9Z
-    NiV5XIMnehotIcMXVnD9pelppKHC5sYdrWwLE+Ye5A3bbtPEmFnwyOEZWbArkJNG04fNaB
-    Db9QfGSYpAbQHWjYavuTzy0ax5RCEaY5cx8EBsnpJaoiUhT9FfKmmDN1TKMN8fKzwr2CLz
-    vhm6Ft83kwzkesm1UcSf06EM+1IQaqji53VKv96ManUWeW99JSgoZG06nLHJs4zbru7r42
-    cJnAMx9i12DJKeVeEhIZRtnRp1/ASlDe6thOSFfV0mNlTC9sGqOjoc1qE4LFV06Zg6Sd0W
-    dXCaUVEsbiLRi8rvAwT9kThBXqIQa2AXWJ079Tk8y6n5EYoH15BZfLde0ga+L+0MXS/Z5T
-    r0YRiMhFD+piPTcm2oP9XLqwsH2+ccusawVN2GJRnIP4AlgMUPt4u6Td6tJXfsaD64tBAq
-    WpSoO9KOQZXDahQexVB7pwmv3/3A8uZDFTIebqWNt2br4QIAZcWX3KLHeOPg
-X-ME-Proxy: <xmx:dA8Ha1PdyooxCku436jFU77-C4URK2gN2pMC6p4x8wYfUdobLXPWUA>
-    <xmx:dA8HazIMvC3g0mfBxNeiKTuPQC6it0t6GaMQVIDaQGRtSqtO2YlV4Q>
-    <xmx:dA8Ha4GbVkIe3gILDtnjNUZm_KCAwUYw0tK0luxoj_1Bq96MGfWqWw>
-    <xmx:dA8Ha8AhLyZTomI_2pyw10xnx1OaeryX9UlK4oGIacs2CMc99ivcVw>
-    <xmx:dA8Ha7fZaUimu3PLLh1tMaFCuDqVE2-pgwYmBKtbXcxgVcIOkX9AGJum>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Nov 2026 11:40:20 -0500 (EST)
-Date: Wed, 25 Nov 2026 17:40:18 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Felipe Pereira Stival via B4 Relay <devnull+v0idpwn.gmail.com@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Felipe Pereira Stival <v0idpwn@gmail.com>
-Subject: Re: [PATCH net 2/2] selftests: tls: add a poll test for a queued
- KeyUpdate
-Message-ID: <awcPcsS705o0Qacv@krikkit>
-References: <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-0-8e25101e7be6@gmail.com>
- <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-2-8e25101e7be6@gmail.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=VeMZMFlK
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-491971ac844so5413995f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 08:45:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795625138; x=1796229938; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
+        b=VeMZMFlK4XeBzwrDD6z4Doe5ujZ5PmFlBvgdtXgvDNgqyB2+a2sCMN2wk+r327T/uW
+         /r2BhYppBsmLCfA6wEf9rqAgdyevRRA01ag2IXLdtngT05rT8V5qUBbFQDnjjQgYE2gf
+         VRO105Wv3wS0sYOzpdh62UmMxKFuJZsiAfPK9beaxT/i9ZUHpkfJOUrelw8QBpX9lGS4
+         m35Q/nRZpkrOo84dL5yj6BJK1saMLREXy289b+W8lcU1Li54eo2LPH2XZ2BzxTKFv4V2
+         TU/7Cyf6kqOyQ8kgJ2U5PgB/NbN2a8Bu0WSQShF93YOhfgaUMd2kQPQDvfuKKEMIIK8r
+         gfQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795625138; x=1796229938;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
+        b=yVl5hm5h5R4rh7WxydhZCqf1ttr1Sk0IEAQgcacJTkE5b2MOgooJFWNbgoY78l5pIX
+         LSr+4iYLb9TwBmQHDk0cAjv4PKU/1jK5s0+NcLzDPXin80q0oyauh7gU5K7dNoBr2vyR
+         TmACAMt54sF8U0NI5aoFsznFYdbRur0yEck6yxWwzjByBUDYCGIF20kB2HxseW5Y6jRp
+         OQiAuJOi40duWfGJ3oRLxzplrBkt2md4B3wHzOPy2QsmBWqSW51Rlsuew60frhTKQ8s/
+         omZflpeK1trgo9A1z373P3et7K563t/eGQW7aDUzKwe8LRfiCEoMSct+aSImo3pzyaI2
+         JuwQ==
+X-Forwarded-Encrypted: i=1; AL+hErG52PrHeVSaUuo1rQiMtB6dW5OLiAiXMTkDoe/9BmVfbdpeno7Q1EoW5RbEqyHrzKcgqYqhXCcVnYdK0lmkyVY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9CTucHinv8JfDa0NIVMu7246sOUNVL+wR69rpBGOc7MX+4jQe+
+	pH9rEDNy9k/MtvPWN9SCGbgUM3yh02ckib1jU9MIGXGBghJWTngkqR7N04iaPclE+OA=
+X-Gm-Gg: AZFdTZf2yfODE8FEU/3dvPKh9UEK+2pBvkJi476Pmw0MmuSev28Fre33z/HEUT/5aR6
+	x1/80pqq2gYV2g/SZLDJSiGtJ0EujZgSUGMwuTk+Q4tkTnsYLbe+e8n+Aaq+f980YAz2+SsrAbh
+	fhrCM/ExyYJDK9nYtrZVRKw4vofNR/D6yk6ZOGQ+O7imxmx7YE9f0SuxMRfNjrZc9sANoT3sUys
+	zGQrgsQjZet7ErflOUVrI9S6k/tDmBuIgW5yKmh4VRWFVpnwgUgfVzZ8RSHlNt3qOQVgEAay4Rq
+	RsU6My9uhNmXm27nxW8ee8HDwtBGSBdKJXDh73GuGRVjwJLXQSO0p0vPGJI7uqqy4GQ2onTITNO
+	sDO8zEhJDjnePHaTgUn8hNk+E3kxw4InF3IZBhUNsBInihHkiUL5Nd6pVV5jTT12Ac4jOGBmEZz
+	hVOsBfMj39WQ4GyKX87PHad53i7O5ESC8Zmp6C1D274duM8ugOBPfd700nt7PMz0wUZU0Wc4jsS
+	z76QoqoFdonQpBOejQnSmaiwJRCzYpcX6vYGFA7DlRsoaqhb8zKjmJPDADHkfacbdKExLDGxBVg
+	+tr5iNdYp6PUCx9Sqd+ARqwxwGIvSG9ZM9IiS3M1zx10pCeDKAhK55u0PwgkLVDlgA==
+X-Received: by 2002:a05:6000:4617:b0:48d:f464:6989 with SMTP id ffacd0b85a97d-4abb18cbe2cmr35982135f8f.27.1795625138335;
+        Wed, 25 Nov 2026 08:45:38 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b110c50sm34852448f8f.37.2026.11.25.08.45.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 08:45:37 -0800 (PST)
+Message-ID: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+Date: Wed, 25 Nov 2026 17:45:36 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,24 +92,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-2-8e25101e7be6@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-13-wusamuel@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-13-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-2026-11-18, 17:35:49 -0300, Felipe Pereira Stival via B4 Relay wrote:
-> From: Felipe Pereira Stival <v0idpwn@gmail.com>
+On 11/13/26 11:12 PM, Samuel Wu wrote:
+> KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
+> symbol name or prefix across module symbols in one pass.
+> module_get_kallsym() walks the module list from the head and runs an
+> export bsearch() for every symbol index.
 > 
-> Check that poll() reports a read event when a recv() for data has
-> decrypted and queued a KeyUpdate. Once the KeyUpdate has been read,
-> check that poll() doesn't report a record sent with the new key.
+> Add module_kallsyms_find_name(), and put the shared query struct in
+> linux/kallsyms.h, so we have a more efficient linear walk.
 > 
-> Assisted-by: Claude:claude-fable-5-2
-> Signed-off-by: Felipe Pereira Stival <v0idpwn@gmail.com>
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
 > ---
->  tools/testing/selftests/net/tls.c | 40 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
+> [...]
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index 1ff8ce857d92..72006c9bad42 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -406,6 +406,63 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+>  	return -ERANGE;
+>  }
+>  
+> +/**
+> + * module_kallsyms_find_name - Find a module symbol by name or prefix
+> + * @symnum: in: index to start at; out: index of the match. The index
+> + *          counts the symbols of the searched modules in list order.
+> + * @q: name query; if @q->modname is set, only that module is searched
+> + * @value: set to the symbol address
+> + * @name: set to the symbol name (KSYM_NAME_LEN bytes)
+> + * @module_name: set to the module name (MODULE_NAME_LEN bytes)
+> + *
+> + * Undefined (SHN_UNDEF) symbols are skipped.
+> + *
+> + * Return: 0 on a match, or -ENOENT.
+> + */
+> +int module_kallsyms_find_name(unsigned int *symnum,
+> +			      const struct kallsyms_name_query *q,
+> +			      unsigned long *value, char *name,
+> +			      char *module_name)
 
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
+with similar names. Adding module_kallsyms_find_name() adds more to the
+confusion, being similar to module_kallsyms_lookup_name() and
+find_kallsyms_symbol_value().
+
+I suggest calling it module_kallsyms_query_name() to match the
+kallsyms_name_query parameter and to express that this is a structured
+query, as opposed to a simple by-name lookup. It might be a good idea to
+similarly stick to "query" instead of "find" in kernel/kallsyms.c.
+
+Otherwise, this looks ok to me from the modules perspective. Feel free
+to add:
+
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
 -- 
-Sabrina
+Thanks,
+Petr
