@@ -1,72 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795630965;
-	b=ddAP9G2DTFT4ePILKeH+LEAoOqwxf9JjTOt7ccoygxO7mnXRHMs+8N4v2bhuV54wzR22
-	 u3G/3ooVWThboMEwxHjLwW5YMEBWw5q8fpE1nT2ISbhgpauQFEnIfcWE6LSTSyXBQJC4P
-	 RTuHhnTMybE8LPEJU6xVYWrHmEjAwA9X78gbPxgOLmLeJyYR/o729hVFeL1Ymt+dGWqfT
-	 a9bsuK+7GGeBW/Zdessn1byWi8Lv3pWA8ikR9rwnlMgsIIMtNIWXnJiz8yuxlB4tbf1pO
-	 Q0P5YR4WUrkvcIYhfNO91kmj0PeMUhqVDfntKosJRUcyTn58xD7emwmv7LukYYbjB+g==
+	t=1795634093;
+	b=KuxTOS8/dsiiRvsEOG9kmAyx1Fjq+pVw2uL6wmDBU/uPDlbPdp1nplKoeWqi/3ODv2Tc
+	 jVGTZs+r5mMKqMwZM9SzVCTZdW/RmFDajfLLDJUj1NgfLRTcAU6ByVFGUNclOw8Ef+YNZ
+	 NaiPT7GrBtYQFN08ukX7r4sWk5XCyUKX+ILUau/LGF4jKjO90Zg/6wCB5D2h+htIroSPk
+	 lkNMvER7Vr3rpwC9RWvS+h1einxIn0TPFxvveULRmN3LI/eihyIu1Yrx10hUnAbvmBWYu
+	 UymrE5KXG3FvKLjjjETHfsKDAnaaIYO5Z/hhp350e6lkhgrUh6Ni8pqH5n0aQR6jecw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795630965;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=6qR++cFUSbUPUEmO+yBbsbTsqe4WGzx7vfqPrLzKD+Y=;
-	b=3ZKVcBTpNC6/JCS6uJ032o5JNcQV8NVAJio/uXSh5uFmmtIo/5fXFpfWAGpBy/sQUZIB
-	 +X9ycRAob22E+JGQMyJq+My+kAj773MQmwh47aihpPB8izt7ZXwRCTPAjbGcf+qg5tbnL
-	 jOf5jn70aEaWpHiiwbB6K1k6TcW8cHNug8MrurE1+xIm+Zy53kkMhd+Rdwk7ookJ7mH6D
-	 86WaXlJ+8IctuWDdwV0v5OoxTYwdWEMaY4uqv8V+UMqCmkdDJDKM0XvVtMFJWkAeIuysu
-	 xaAYiljwddDJasrjNLxMPEYqcn6mfIt09CmbK0puRUAz7ogOJ0Vo0Jci9tLc52oLi7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795634093;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=63JxpqsX0+4spykxt7lp1E0tcGyKvLEmW+in0KkChYM=;
+	b=Hnnkxushy0H3+0sVQl61ga2OYij6yr3hfRXHS7FQ1ZbcgtJqlfx5OqqgSAClIcbyRa7r
+	 dJ44VVdGpsdscoLi+Nxvjgf65Q/6mHFNPejKmaH2fnNB5paqa6dOarnEl625Lo+Lbj2az
+	 e0IWDwx5uQyFjkQAuTKHJc7nSL+fkcUjyj83/VdypbYrq2tT79tQrgjdNaLfJbOjJhCv4
+	 B3UpaemKrr9T2UaD3hso0PXk+kCFn2VrMzsmj38+oabXH1fUVzA1Bfp+hg9zleuyen5h0
+	 tRzxB7E8knubVtWXhtdoSkzDZjCBAWZMhozaX+raILzoInQ2m9B7MxnsGIhxp5oo3lQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=dhj3qKPr;
-	arc=none smtp.remote-ip=216.40.44.11
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=blockcast.net;
+	spf=pass smtp.mailfrom=blockcast.net;
+	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=BdsluJAJ;
+	arc=none smtp.remote-ip=209.85.214.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3541D606A33C;
-	Wed, 25 Nov 2026 18:22:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3541D606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB2E606A334
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:14:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCB2E606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=dhj3qKPr
-Received: from omf19.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id C90DE120F71;
-	Wed, 25 Nov 2026 18:22:38 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id 2158E20028;
-	Wed, 25 Nov 2026 18:22:27 +0000 (UTC)
-Date: Wed, 25 Nov 2026 13:22:25 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Gary Guo" <gary@garyguo.net>
-Cc: "Ian Rogers" <irogers@google.com>, <linux-kernel@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <jpoimboe@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
- <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
- <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
- <pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
- <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>, <acme@kernel.org>,
- <namhyung@kernel.org>, <linux-perf-users@vger.kernel.org>,
- <mhiramat@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <bpf@vger.kernel.org>, <nathan@kernel.org>,
- <llvm@lists.linux.dev>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
- <ojeda@kernel.org>, <rust-for-linux@vger.kernel.org>, <ardb@kernel.org>,
- <linux-efi@vger.kernel.org>, <maz@kernel.org>, <oupton@kernel.org>,
- <kvmarm@lists.linux.dev>, <shuah@kernel.org>,
- <linux-kselftest@vger.kernel.org>, <indu.bhagat@oracle.com>,
- <jremus@linux.ibm.com>, <wnliu@google.com>, <dylanbhatch@google.com>
-Subject: Re: [RFC PATCH v2 00/30] unwind: Minimal DWARF CFI unwinding for
- user and kernel space
-Message-ID: <20261125132225.00254c37@gandalf.local.home>
-In-Reply-To: <DN4FM3TBOJ9T.2QOOL77P5HETO@garyguo.net>
-References: <20261125061523.1540234-1-irogers@google.com>
-	<DN4FM3TBOJ9T.2QOOL77P5HETO@garyguo.net>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=BdsluJAJ
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2f07a960666so41051645ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blockcast.net; s=google; t=1795634092; x=1796238892; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=63JxpqsX0+4spykxt7lp1E0tcGyKvLEmW+in0KkChYM=;
+        b=BdsluJAJHD/evAcJTF4hQ7wYcuZgNGW1w2kvC4Z5dG9Hi8V+fwwGeFY5EhB34+YFvu
+         Tn4pNRuQ8XQ77OuT7xZ5wQqmigOO+oXPUIihrlFL/XHZf7D8UwTAirJCmvU9G24TX8Xw
+         fGiiwkYpOe/5FlkyRi3R981fewGh5UCdg7MTyackpGjXuEuGC69yzx871njurMoFSwLv
+         JUO9NTu0hSjwdgfYSBHTXx6gSHQMTs8uPyx6BmuJ2I7+QFL8oxofzLs6iJv5xLQDP0qC
+         iqojYPQz9RihV4LX8kVOf4yQ8Ics0KUtKOa1jTtX2YEx/JjIzH+EP5enRID3OEpTs7y9
+         v7Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795634092; x=1796238892;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=63JxpqsX0+4spykxt7lp1E0tcGyKvLEmW+in0KkChYM=;
+        b=lHHZLvqrg3fp9eI8X5nr3i2QvNh/IfTIiww6cqZ80M8gxtA0eca3LbMeeH9s5HzXAx
+         Au3jdZlzJZG8l6yHOJd/+k/gjYcp9ml+Yo0VEzFOYownUXWI6MSI1OKjlMsO6f+3Dhhh
+         vu4gp6hgQINZaG9A90RpJsDijT5gyh3Ib9Jloj6CaHVatBdQvZNCSK7flwwwCL28Ci5u
+         KB+FmwSWnSWOdyOFQDOTIXhbJPb4V7xySkDkXxcnYM4CCboYblvA9XAtx74BVxwMX3oQ
+         rTSDVvNDswTYUBHr1g/BZy7yfAdloACG2o4fwoAC5nhihbOfNha9w9ASle8qh5uB3wQD
+         bJlQ==
+X-Forwarded-Encrypted: i=1; AL+hErGpsYSRri2hdTBelbliFaJKErVKrEFJGvwCouwwXMMgTQzQLqybU805FneTAj+8xHKKWe8BdgqoREtUtLqP35g=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Vjdx4EhgByqrN1trWvz/4qQSQ3LeKTRHUTUpHTzVUEj9oeV2F
+	3GtJdQW8lWGb5LBG9ykJZraAlFBrq/O4owXrD8QipDp5p7jJQ5VkFvfgdsb+51so9P0=
+X-Gm-Gg: AZFdTZcsJxwzny29kQ4HEu6aS3Ip0HHQV/yDrzqZ2ADGbHV36NcoCVCqJUjv1Lbvv8K
+	btjMVsh6sCVGpRjwmWPNEguJhksifHTWrnOFQADPJVXbiMEOf/uZBk1zgVbwVpJrkRL+sb6K3Uc
+	EIlBRajz4xEcWOYiXi3yaCFtNTjIE2IEA5pA0vTINA/sNobdM8S3jSLaRfrAnovfimIw1LlXHln
+	avct22rb3YOvRTjLEiDV/lHKR8lg9L6usIH4Ir1yhjqJryCbRa+JBNx6rtKmxc8nhBHG7pu11NI
+	1m2/0LJWFNgsXCp/Ho27bI7i0ZmApFIGM1mS6zHa5Za98eZPKswfRzbrBVBN4dEBIrsvN1MtFDy
+	S/nYvYg4zS5FdKbrp5gWUfco6pfv8k5L49XXma0zDoN0EJ9y35XbpAjzproyRcybgF0XfMsnVnQ
+	vgRhwGIM/nBCblM0iQeKehf96SsqhpfW2UcE24uZDYTt5hhv2uPGEsG0pU3zpoiLpnV0L+PgBmS
+	NFhuumG6RRChEkDKj/pWqVeIHuRMb/M4qHiBW6GmlBQtL/n+O0PfgsNADZ2gMlg0mGkdSPRgyc0
+	13eE85DbUfeHDibk0DA5p2RoopDw4FE9wNJA86zrLJOuUUJhF+JzcglSKyAA+LKTHl0oYO+p0fz
+	sDo8aHotXoWF11seZ2iEr3ocw5EMHrRqSV3bklGI2hPOa9pzCOdw=
+X-Received: by 2002:a17:902:e5c5:b0:2f0:345a:25ab with SMTP id d9443c01a7336-2f03f18dbf9mr193440235ad.59.1795634092161;
+        Wed, 25 Nov 2026 11:14:52 -0800 (PST)
+Received: from devbox.ts.blockcast.net ([69.25.95.32])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105b66sm92413855ad.51.2026.11.25.11.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 11:14:51 -0800 (PST)
+From: Omar Ramadan <omar@blockcast.net>
+To: Taehee Yoo <ap420073@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 00/12] amt: add an IPv6 outer transport
+Date: Wed, 25 Nov 2026 19:14:38 +0000
+Message-ID: <20261125191450.2497936-1-omar@blockcast.net>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,24 +103,161 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 2158E20028
-X-Stat-Signature: bmxmyx7zbff3tj5wzgboeoe9y8ngdg7c
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/Cm47ggEMe5tkUQwuPIv9j4yoOc3+2FwI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=6qR++cFUSbUPUEmO+yBbsbTsqe4WGzx7vfqPrLzKD+Y=; b=dhj3qKPrnd5Ol5oStgJ72xjormeA1wf1DO/RZc9kjGarZplof6LxOCEYEKKVU+6U05bo+jnrn30dh3AQ2S2utOXzBrNDvJP6ChCp0OiNHXA0Mz5Qca51KujLnC0+gny5rgFtqYDHuEEGrRoB4ayAc52wJ7NqKJRyFXoq+87Y6Bg=
-X-HE-Tag: 1795630947-362156
-X-HE-Meta: U2FsdGVkX18ShW9pI+/3LezhiP+sfLyAz5bbFmDR0Cg79ArNrSxS4kGp2fzzjf2A8iMOExZ79Wjpfg5dnD2BuvcnWnPjmIUJbGqbBkLfSiaYUFYSqR7ZAyP5O5UzEvRDCN589rXn1aP6/jRut7zfB+DDsEhPmN5DqCQvkQ7ZfZK1DiZPYS6+dvk+POli+n6GtTpGQ+j2vtl3LmQVHr+SzbA0nhYCBgifjijh6DwBsiIDVGFv0Nn3Ybo7aD+vHLlpczM4CVbNSwTPAeoiNfZ1pIRQfuRQQygtba8VmRY7xWxfdUk9RhDQhUICoUNpPyMEpj3E7lFTHILx587J1If+CzVdP12M+SkIwx9akUq8SAeuSlUzaZ2IKhNYhFH5nvIw0f5ED6Ry586F6FXLp5r+/Q==
+Content-Transfer-Encoding: 8bit
 
-On Wed, 25 Nov 2026 16:28:02 +0000
-"Gary Guo" <gary@garyguo.net> wrote:
+The amt driver runs AMT (RFC 7450) only over IPv4: the relay and the
+gateway bind one AF_INET UDP socket and every message is routed and
+sent with the IPv4 helpers. RFC 7450 defines the protocol over either
+IP version, with an IPv6 form of the Relay Advertisement, so a gateway
+on an IPv6-only access network cannot reach an amt relay today.
 
-> A quick question: how do you plan to get this working on 32-bit ARM which has
-> its own EHABI?
+This series adds an IPv6 outer transport to both modes. The outer family
+is fixed when the link is created: an IPv6 local address
+(IFLA_AMT_LOCAL_IP6) selects IPv6, and the inner multicast family stays
+independent, so an IPv6 tunnel carries IGMP/IPv4 and MLD/IPv6 alike.
 
-Do we care? Isn't ARM 32 mostly deprecated at this moment? Or at least not
-adding new features.
+Use case, which Jakub asked about on v1: Blockcast runs amt relays and
+gateways to deliver multicast video over networks that do not carry
+multicast natively, and some of those access networks are IPv6-only.
+The gateway side has to reach a relay from such a network, and the
+relay has to answer it, so both ends need the IPv6 form.
 
--- Steve
+Patches 1-5 convert the relay: the AF_INET6 socket, the IPv6 Relay
+Advertisement, tunnel state keyed on a union amt_addr, and the
+Membership Query, Membership Update and Multicast Data paths, which
+share one amt_udp_xmit() instead of IPv6 twins of each sender.
+Multicast Data over IPv6 is checked against the tunnel MTU and never
+fragmented. Patch 6 sizes headroom and MTU for the 40-byte outer header.
+Patches 7-8 convert the gateway; the learned IPv6 relay address is
+published under a seqlock because, unlike the IPv4 one, it cannot be
+stored in one access. Patch 9 adds the netlink attributes, last, so
+that no intermediate commit can create a half-working IPv6 device.
+Patch 10 adds the AMT headers and selftests to MAINTAINERS, and
+patches 11-12 add selftests. amt_v6.sh uses the same tools as amt.sh
+(smcroute, socat, nc) plus jq, and tcpdump for one check that it skips
+without it.
+
+The series is based on net-next 24630ff92eff, which merged net with the
+six-patch "amt: relay tunnel lifetime, validation and request-path
+hardening" series (net v7). It depends on that series: the tunnel
+creation, MAC and per-source cap that patch 3 re-keys are the ones it
+introduced.
+
+The IPv6 Relay Advertisement is sent from the address the Discovery was
+sent to, as RFC 7450 s5.1.2 requires, so a gateway can discover the
+relay through an anycast or secondary address. A Discovery sent to a
+multicast group, or from ::, is not answered, since neither can be
+used as an address. The IPv4 Advertisement has always been sent from
+local_ip, which breaks the same case for an IPv4 gateway. This series
+leaves that alone: it changes the behaviour of existing IPv4 relays and
+is not needed by the IPv6 code. The IPv4 control senders also look the
+route up with a zero TOS while the packet carries AMT_TOS, which is the
+mismatch that patch 2 avoids for IPv6; that is a possible separate fix
+for net.
+
+The IPv6 socket is bound to the underlying link. That makes the IPv6
+route lookups strict about the output interface, as the IPv4 ones
+already are, and keeps link-local peers on other links out of the
+tunnel table. An IPv6 gateway accepts a zero UDP checksum on Multicast
+Data only, as RFC 7450 s5.2.3.3 requires; a relay requires the
+checksum on everything.
+
+The IPv6 tunnel MTU follows the route's path MTU, as on every IPv6 UDP
+tunnel in the tree. RFC 7450 s5.3.3.6.1 and s6.1 want a relay to offer
+a switch that turns dynamic tunnel MTU adjustment off. The IPv6 stack
+gives a tunnel no way to do that: it records every Packet Too Big in a
+route exception before it looks up the socket, and "mtu lock" does not
+apply to IPv6. So this series does not offer the switch. Patch 5
+explains this in detail.
+
+Received headers are handled as commit 3656a79f94c4 ("amt: re-read skb
+header pointers after every pull") requires. amt_rcv(),
+amt_request_handler() and amt_update_handler() copy the outer source
+address by value before any pull, or after the last one. The discovery
+and advertisement handlers take header pointers only after their last
+pskb_may_pull(), and the send paths never pull the received skb.
+
+The iproute2 support is a separate iproute2-next patch:
+https://lore.kernel.org/netdev/20261125170100.3054010-iproute2-omar@blockcast.net/
+The selftests skip when iproute2 or the kernel lacks the attributes.
+
+IFLA_AMT_LOCAL_IP6, IFLA_AMT_DISCOVERY_IP6 and IFLA_AMT_REMOTE_IP6 are
+the next three values after IFLA_AMT_MAX_TUNNELS in this series. The
+net-next amt limits series appends IFLA_AMT_MAX_GROUPS and
+IFLA_AMT_MAX_SOURCES at the same position, so whichever of the two
+lands second renumbers its attributes after the other's.
+
+Changes in v2 (netdev's Sashiko review of v1, and net v7):
+ - The base is net-next 24630ff92eff. The three net prerequisites of v1
+   are now in net, as v7 of the hardening series. v1's "amt: send the
+   relay General Query directly" is not needed any more, and the GSO fix
+   was done differently: the device still offers software GSO, so the
+   tunnel MTU check in 5/12 is made per segment with
+   skb_gso_validate_network_len() instead of assuming a single packet.
+ - v1 3/13 and 5/13 are one patch now (3/12). v7 made the Request
+   handler stateless and moved tunnel creation to the authenticated
+   Membership Update, so the endpoint key is carried through
+   amt_tunnel_lookup(), amt_tunnel_get_or_create(), amt_update_tunnel()
+   and the new amt_relay_mac(), which both handlers use for the MAC.
+   The ICMPv6 Destination Unreachable for a full tunnel table is gone,
+   as v7 drops such a Request silently.
+ - 2/12: route on AMT_TOS through the flow label (Medium on 4/13, Low on
+   2/13); count route and allocation failures with DEV_STATS_INC();
+   drop a Discovery from ::. A failure of ip6_local_out() is still not
+   counted, as udp_tunnel6_xmit_skb() returns void and passing a device
+   would add control messages to the tunnel's byte counters.
+ - 4/12: the Membership Query and the relay's General Query take the
+   gateway endpoint as a union amt_addr, for v7's stateless Request.
+ - 5/12: at most one Packet Too Big per multicast packet (High on 6/13),
+   not one per tunnel; the inner family comes from the parsed version,
+   not skb->protocol (Low); a tunnel MTU below IPV6_MIN_MTU, which a
+   source would ignore, only drops the payload.
+ - 7/12 (8/13): the message says that none of the new sender code can run
+   yet and that the amt_send_membership_update() conversion changes no
+   IPv4 behaviour (Low).
+ - 8/12 (9/13): an Advertisement is accepted only if its UDP length is
+   that of the device's family (Low); the deferred Query check in
+   amt_membership_query_handler() uses amt_from_relay(); the IPv4 half
+   of the 0.0.0.0 fix is net v7 3/6 (Medium).
+ - 9/12 (10/13): the policy of the existing IPv4 attributes is net v7
+   4/6, so the hunk that refused a 16-byte value is dropped (Low).
+ - 11/12 (12/13): disc_answer() reports a harness failure separately, so
+   the ff02::1 check cannot pass because the capture never ran (Medium);
+   the script skips without CONFIG_IPV6 before creating any link (Low).
+   CONFIG_IP_MROUTE is already in the net selftests config.
+ - Fixed by net v7 and inherited: the Update handler use-after-free
+   (High, 5/13), the duplicate-tunnel race and the zero-key MAC (Medium,
+   3/13).
+
+Assisted-by: LLM
+
+Omar Ramadan (12):
+  amt: create an AF_INET6 encapsulation socket for an IPv6 outer address
+  amt: send the Relay Advertisement over IPv6
+  amt: key relay tunnels on a union amt_addr endpoint
+  amt: send the Membership Query over IPv6
+  amt: forward multicast data over IPv6
+  amt: size the encapsulation headroom by the outer IP version
+  amt: send the AMT gateway control plane over IPv6
+  amt: receive the AMT gateway control plane over IPv6
+  amt: add netlink attributes for an IPv6 outer transport
+  MAINTAINERS: amt: cover the amt headers and selftests
+  selftests: net: add amt_v6.sh for an IPv6 outer transport
+  selftests: net: add amt_gw_v6.sh for the IPv6 netlink attributes
+
+ MAINTAINERS                              |   3 +
+ drivers/net/amt.c                        | 861 ++++++++++++++++++-----
+ include/net/amt.h                        |  60 +-
+ include/uapi/linux/amt.h                 |  13 +
+ tools/testing/selftests/net/Makefile     |   2 +
+ tools/testing/selftests/net/amt_gw_v6.sh | 207 ++++++
+ tools/testing/selftests/net/amt_v6.sh    | 355 ++++++++++
+ 7 files changed, 1301 insertions(+), 200 deletions(-)
+ create mode 100755 tools/testing/selftests/net/amt_gw_v6.sh
+ create mode 100755 tools/testing/selftests/net/amt_v6.sh
+
+
+base-commit: 24630ff92eff08500ec4772728d4b1fa08c28f47
+-- 
+2.47.3
+
