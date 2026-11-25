@@ -1,88 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.238
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795589820;
-	b=1Lzh48DVGcKaEwpqxf9nv+pD4YEniNkK97GmH9hnPpQ16DOSmp+EkYYMzdJFbqXdE3ec
-	 5yrLyOqhaWPVYi78qw+LCLU0RWVZMycyD/Zwi7o2jSmynJJzhnr8QJ2xInBMPJKypuiTT
-	 cN3fbTGZkxAevCaanaR/AJAmw5N1l+BJxmCGeFuz7iKvxRGSWFKpRcBMpQhSlhJKLBhF1
-	 VzK9l8eSPub5tpW1OIbuHsIwzCw7LLyEECf7nqZ6cnbnG2MLwyeym5c0nv8vmRuL15Fa8
-	 tLYRkLCtemJ2FRBQCARWWUssLoU3ZYtAG20Ar+V+EhKHSLHsVAZdlFf2+LR5AwwhP0w==
+	t=1795590223;
+	b=0LpIQ3lJkzYr9hjZVLOQkH9bWqTXEva4A4biMJuZQMPBdMOir9LisiM0SaOwfTuzFDGj
+	 HhOVnK6P9zCh+QDR4gA/vWBJu8lIHci8z/v6AjG134yQ1jxRoe0TRhzMpYuTqaLrEpzYX
+	 X9N2b871RXLvvr0hTPCazLa83KVJKsaQsV1AO/1rGoTB7vfZLcR/Hit1v0ejFXLGbEeyB
+	 WYPHfdg94FcDodgzbSJkHHEYqFRIT+ZeFRD1S2usEDFtNQvbX608jtpGTX5X0t1gfo+MT
+	 8+QkJkSXxGW24lVs5VzG74tR/BxDOtrYHPzqUh+dfeacvAespQJUSmKci7dG/mAai9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795589820;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=ec2abqXUKspUvFH12/nCiZwBysoielu6/ZVveaDMOS8=;
-	b=OcIEtkzU/qiC8I/F8L0fH0yvQ7AdycQclmDoqKs7IiM/v1Dvb/2BtOBljpJ0zT5FytSX
-	 VXNUY5OoJgxUVy87/WZZzIPtqMXXpJocsfLF6xmN4DGhtwVODZEWgkxkQ5ePFLPSGkbQv
-	 97dJZ1PFz1mBSknLqCK11qkNu87Sc+esB8vLz5+E/Nbrt8RyFv+8sj9jq/lBk3+nEDVHR
-	 JApWKhgHHM9X9pfVvqA//EX1dtrVq1m9TuXS8Cn8XEIathNwyjiHFRtqkdNLQiw4VtspC
-	 Zl3n5wuWcqi5ARf+w/hMNVve219GYDQHHdenDAqsELXH8ga3lQqnKgzkB5jRp2tYxRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795590223;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=UQC/K0jJ85LGO+otAnkAPpagW90dChlO7NHeMGClZuc=;
+	b=3rihWYan7hSHoxxGxAUJLXJUPuTeQM6Q2LZUpRVxS8AqgzmGSbrTsJV9Q1UluADqm6I8
+	 gZOz3InJHIL/cb2D96rxNb6NaYLvaSNMND6ezg2LVxanBoqc/AjWgzrJA984LRJ5x2GJy
+	 MNSxQ6kmmqrj5VNsUMOs0WMLEC5BQ0bgPnkwsKp1dD5OR6kILVcajMNuGEeluxooY9W+0
+	 qdhrSlDvg+ZtCkzIWcOz85Nz3DmVETQr/elPjOVyNnL+jYmD4NjY8Ld7iazgPVyH8XKSQ
+	 HvK6H/LMgO04zdBKP0iTAGRwRDv9rwvpFhbRXv6Ho2aa68fZ2gwPcAckU5eC0KSFxlw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=pereq.eu;
-	spf=pass smtp.mailfrom=cryspen.com;
-	dkim=pass header.d=pereq.eu header.i=@pereq.eu header.a=rsa-sha256 header.s=google header.b=cnNYt40i;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dSnKZM7S;
+	arc=none smtp.remote-ip=91.218.175.238
+Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4BE606A323
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:56:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D4BE606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pereq.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cryspen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2405E606A323
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 07:03:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2405E606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pereq.eu header.i=@pereq.eu header.a=rsa-sha256 header.s=google header.b=cnNYt40i
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4bb64c99d2fso51126285e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:56:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pereq.eu; s=google; t=1795589818; x=1796194618; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ec2abqXUKspUvFH12/nCiZwBysoielu6/ZVveaDMOS8=;
-        b=cnNYt40iXG92j6E6qBDN44Wmrue5gwiRsv7hp9XoJQpBoKCOW+sJyLiEEtC3Zc0qmn
-         1BzTdMo/YtczcgfCqlUrKi/H8y0nqp/LDJXFlDqup3m42oYQ1BelR2Y3Pa4dXDhPSrbx
-         9raLIXLLyytEPCPGsiue7SwW0AJFyBEKH2EPQyDeQ+hurvIugUtC/X4h+F++QsbcMPFe
-         mHCnjhIR8eUtgPC7SexUakQLB06zFS1lZfTRCoSrduW06xv0UYK7Bpt01dm8pJ7iv+SB
-         NWaoJa++JIvCD9MuWnOgQrG3dzHii75cXTFi83jZTLFO+oYwitsHN6OMHJZEdodgWmTJ
-         b/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795589818; x=1796194618;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ec2abqXUKspUvFH12/nCiZwBysoielu6/ZVveaDMOS8=;
-        b=HhmQJuO0KG+6rjha9JzowM6dv3LmaEtGqXJ5OtSqscMrokYOjp+xrv0ET1ybnExXHV
-         2O73Y6aqGc1yiCCpBs6rDBbhfTOlTyAAJyX6uRfOtYc/y6Gi+StzEgpIqzYpzqjdtvlB
-         mY+eW6IdVpE/gvBOZIDQmrjkucKOOsf16O0hdPHoqmQLy3C4uRGeQKr98n1zUDKq77YI
-         KlPiCzvMGEZNi1AdNMD4ZzqVcNT7bZ/z3mZg7nxfLgJo4c5nQaD4VfMpb7IQAsHEI+Xs
-         +0Q6miREDVHqNqCQ2yo35TTO9he8LCkUbpQLymyWlzS/6BhEMwCdOw5bMB3H1v1grdqM
-         2e5A==
-X-Forwarded-Encrypted: i=1; AL+hErHt47/6FSb3hcqOBKtjtjeSmSp7f4Owa6SlsNodzZxx7mjr+ZMWaOBwo9l/ac5Moit5DdUK8sWO8fY9JwUqXNQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8w7g+piMj/52r8ABMFtRPQYoesCTqbN9CnDP7QVrWs2ipp9ReW
-	HryVfE/CeVuN9BUpXVaORKPLw9Qrl4VLvaFgfLrxX2a9HV9x2C5aohvr0vxrK4/KIEs=
-X-Gm-Gg: AZFdTZe7gvg/hnUAyCF3SV8uHmbwSH22sPDshEMPhp/IiSs7pm6NPrzT+yUnbMJRHlc
-	xllfZCLmZ6ZneUFYsXmqBE7iLlf/eall4CLw03T/09mdCn6p4aYGxmmE2FFiG21yO17ZITZaaS0
-	Sgslx8l2rSvkQJDVdOKRf/1PYxNPuOos4KWtjK2fyJW9yMgfSphT9/vdVW/SWUfIz8Pv7m+Jfb9
-	eLFV6yHFesQegDP5amIoBGQrMRk3nvRKOMUMLUiQsmdrQe9hVxaqRlWfUIoppN9qm5tRZ1yCQIb
-	vPOxzbS1NR2SXSNCosUcSJ1G8pwv4P17V06UmAfUXSQaZqWAAw2HlgDrzY+SN4pTuI7/cnXFbSe
-	1I8jmZxwfhN79wLuXraPNLbUxBnMm/qgr+NnHwTe2JIY2rxiuH/RhsoIorDNRTPZT8psSY9Ao7+
-	kogHFOB2iOPg9nmNyUp4Ltfb2ATksU12KZGFCBf5Hy3P2MIR4o9e7M3tYwuUStaTZMGw6AHHViQ
-	PhRRQwKVGHRIk8J31ECdrSOZYfjMrJkuUlJFryTqzSwHxSYrI1a85v0XY/CTeF0inlXLN4B0FiI
-	itTYV3VmqaRH6p4CE/s=
-X-Received: by 2002:a05:600c:3b94:b0:4bb:6f41:39be with SMTP id 5b1f17b1804b1-4bb8880ca3cmr426651375e9.15.1795589817865;
-        Tue, 24 Nov 2026 22:56:57 -0800 (PST)
-Received: from localhost ([2c0f:3d00:6be:8900:ce5e:9212:ea4b:f30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884a3a3dsm482555715e9.10.2026.11.24.22.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 22:56:57 -0800 (PST)
-From: Dan Carpenter <dan@pereq.eu>
-Date: Wed, 25 Nov 2026 09:56:23 +0300
-Subject: [PATCH v2 8/8] KVM: arm64: selftests: Test that a vcpu reset
- clears the vcpu's state
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dSnKZM7S
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pDXq/bQPSOMDN96qcxBcP6kE+pu/jJa6f6lXStcnJfo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795590220; v=1; x=1796195020;
+ b=dSnKZM7S8pcgEUSfUaqX9x15qUN3wIbkER/KukO0s2FTP+/MO1UcyZOSVRu7/OLdtFA7S4gc
+ ANK7XVXyWfaEo4zj5fSLCcZhAYu6bzDjZjon5r+EGj+qCRzWwsCPAOtsMOOLlfiR6RedeztVARM
+ 9TQ2Xar9lPEXUVxUsdb0ZgKg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 54d1b2241158fd04;
+	Wed, 25 Nov 2026 07:03:39 +0000
+X-Mizu-Trace-ID: 54d1b2241158fd04
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	kpsingh@kernel.org,
+	matt@bobrowski.net
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Xu Kuohai <xukuohai@huawei.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2 1/2] bpf, lsm: fix bpf_setsockopt() on a half set up child in inet_csk_clone
+Date: Wed, 25 Nov 2026 15:03:21 +0800
+Message-ID: <20261125070330.16625-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,277 +86,154 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261125-double_exception-v2-8-224689d8a764@pereq.eu>
-References: <20261125-double_exception-v2-0-224689d8a764@pereq.eu>
-In-Reply-To: <20261125-double_exception-v2-0-224689d8a764@pereq.eu>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Fuad Tabba <fuad.tabba@linux.dev>, Joey Gouly <joey.gouly@arm.com>, 
- Steffen Eiden <seiden@linux.ibm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Zenghui Yu <yuzenghui@huawei.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Christoffer Dall <c.dall@virtualopensystems.com>, 
- Rusty Russell <rusty@rustcorp.com.au>, 
- Marcelo Tosatti <mtosatti@redhat.com>, Sebastian Ott <sebott@redhat.com>, 
- Eric Auger <eric.auger@redhat.com>, James Morse <james.morse@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, 
- Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>
-Cc: Karthik Bhargavan <karthik@pereq.eu>, 
- =?utf-8?q?Cl=C3=A9ment_Blaudeau?= <clement@cryspen.com>, 
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- Dan Carpenter <dan@pereq.eu>, linux-kernel@vger.kernel.org, 
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.16.0
+Content-Transfer-Encoding: 8bit
 
-Add a test to check that KVM_ARM_VCPU_INIT (which resets a vcpu) has
-reset all the things it was supposed to.
+security_inet_csk_clone() is called at the end of inet_csk_clone_lock().
+The child is locked, which is why the hook is in
+bpf_lsm_locked_sockopt_hooks, but it is not set up yet:
+icsk->icsk_ca_ops and the ipv6_pinfo still point to the ones of the
+listener, and the timers are not initialized.
 
-The test dirties as much of the vcpu state as it can, resets the vcpu,
-and compares every register in KVM_GET_REG_LIST with a freshly
-initialised vcpu.  The are a few things which we must not clear such as
-MPIDR_EL1, which userspace configures and the reset keeps, and the
-CLIDR_EL1 and CCSIDR counters which keep counting.
+So bpf_setsockopt() from a lsm_cgroup prog is wrong there for:
 
-The test runs with and without EL2.
+ - TCP_CONGESTION: puts icsk->icsk_ca_ops, which the child holds no
+   reference on.
+ - IPV6_TCLASS: writes to the ipv6_pinfo of the listener.
+ - SO_KEEPALIVE, TCP_KEEPIDLE: arm the keepalive timer before
+   tcp_init_xmit_timers() sets it up.
 
-Signed-off-by: Dan Carpenter <dan@pereq.eu>
+Options considered:
+ 1. Remove the hook from bpf_lsm_locked_sockopt_hooks, as commit
+    5416c9aea832 ("bpf: Fix the kernel crash caused by bpf_setsockopt().")
+    did for socket_sock_rcv_skb. Not done, setting options like
+    SO_PRIORITY on the child is what the hook is used for and it works.
+ 2. Make these options work. This needs the child set up before the
+    hook, too much for a fix.
+
+So give the hook its own bpf_setsockopt() and return -EOPNOTSUPP for
+these options there. bpf_getsockopt() is left as is.
+
+For example, SO_KEEPALIVE ends up with:
+
+  Oops: general protection fault, probably for non-canonical address 0xfbd59c0000000025: 0000 [#1] SMP KASAN PTI
+  KASAN: maybe wild-memory-access in range [0xdead000000000128-0xdead00000000012f]
+  RIP: 0010:__run_timers+0x5d2/0xab0
+  Call Trace:
+   <IRQ>
+   run_timer_base+0x107/0x190
+   run_timer_softirq+0x1a/0x40
+   handle_softirqs+0x251/0xa70
+   __irq_exit_rcu+0x1a8/0x260
+   irq_exit_rcu+0xe/0x30
+   sysvec_apic_timer_interrupt+0xc2/0x110
+   </IRQ>
+
+Fixes: 9113d7e48e91 ("bpf: expose bpf_{g,s}etsockopt to lsm cgroup")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- tools/testing/selftests/kvm/Makefile.kvm       |   1 +
- tools/testing/selftests/kvm/arm64/vcpu_reset.c | 210 +++++++++++++++++++++++++
- 2 files changed, 211 insertions(+)
+v1 -> v2 : fix some issues reported by AI.
+---
+ include/linux/bpf.h  |  1 +
+ kernel/bpf/bpf_lsm.c | 13 +++++++++++++
+ net/core/filter.c    | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 95867977beb3..cbd05070a2e3 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -201,6 +201,7 @@ TEST_GEN_PROGS_arm64 += arm64/sea_to_user
- TEST_GEN_PROGS_arm64 += arm64/set_id_regs
- TEST_GEN_PROGS_arm64 += arm64/smccc_filter
- TEST_GEN_PROGS_arm64 += arm64/stage2_block_transitions
-+TEST_GEN_PROGS_arm64 += arm64/vcpu_reset
- TEST_GEN_PROGS_arm64 += arm64/vcpu_width_config
- TEST_GEN_PROGS_arm64 += arm64/vgic_init
- TEST_GEN_PROGS_arm64 += arm64/vgic_irq
-diff --git a/tools/testing/selftests/kvm/arm64/vcpu_reset.c b/tools/testing/selftests/kvm/arm64/vcpu_reset.c
-new file mode 100644
-index 000000000000..cdc051e4b897
---- /dev/null
-+++ b/tools/testing/selftests/kvm/arm64/vcpu_reset.c
-@@ -0,0 +1,210 @@
-+// SPDX-License-Identifier: GPL-2.0-only
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1dd9db16f324..207a3be3138d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4159,6 +4159,7 @@ extern const struct bpf_func_proto bpf_task_storage_delete_proto;
+ extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
+ extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
++extern const struct bpf_func_proto bpf_sk_clone_setsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_nodelay_proto;
+ extern const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto;
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index ae23511fd811..bec940efd354 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -79,6 +79,16 @@ BTF_ID(func, bpf_lsm_inet_conn_established)
+ #endif
+ BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
+ 
 +/*
-+ * vcpu_reset - Test that resetting a vcpu that has run with KVM_ARM_VCPU_INIT
-+ * puts it back in the state of a new vcpu.
-+ *
-+ * Before the reset, the vcpu has an MMIO read waiting for userspace and a
-+ * pending SError, and userspace has written to every register it can.  After
-+ * the reset, every register must match a new vcpu's, except the ones in
-+ * preserved_regs[], which must keep the value userspace wrote, and the
-+ * counters, which keep counting.  No SError may be pending, and the next
-+ * KVM_RUN must not complete the MMIO read.
++ * List of LSM hooks that trigger on a locked child socket which is not
++ * set up yet, bpf_setsockopt is restricted there.
 + */
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
++BTF_SET_START(bpf_lsm_clone_sockopt_hooks)
++#ifdef CONFIG_SECURITY_NETWORK
++BTF_ID(func, bpf_lsm_inet_csk_clone)
++#endif
++BTF_SET_END(bpf_lsm_clone_sockopt_hooks)
 +
-+#define MMIO_ADDR	0x8000000ULL
-+#define MAX_REG_SIZE	256
-+
+ /* List of LSM hooks that trigger while the socket is _not_ locked,
+  * but it's ok to call bpf_{g,s}etsockopt because the socket is still
+  * in the early init phase.
+@@ -282,6 +292,9 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_setsockopt:
+ 		if (prog->expected_attach_type != BPF_LSM_CGROUP)
+ 			return NULL;
++		if (btf_id_set_contains(&bpf_lsm_clone_sockopt_hooks,
++					prog->aux->attach_btf_id))
++			return &bpf_sk_clone_setsockopt_proto;
+ 		if (btf_id_set_contains(&bpf_lsm_locked_sockopt_hooks,
+ 					prog->aux->attach_btf_id))
+ 			return &bpf_sk_setsockopt_proto;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 53c042b267ab..f17b3c5dd473 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5938,6 +5938,48 @@ const struct bpf_func_proto bpf_sk_setsockopt_proto = {
+ 	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
 +/*
-+ * Registers that a reset keeps: the configuration that userspace sets for the
-+ * vcpu, and the counters, which are VM-wide and change on their own.
++ * security_inet_csk_clone() runs at the end of inet_csk_clone_lock(), the
++ * child is locked but not set up yet: its timers are not initialized, it
++ * holds no reference on icsk_ca_ops, an IPv6 child still points to the
++ * ipv6_pinfo of the listener and a MPTCP subflow has no msk.
 + */
-+#define DEMUX_CCSIDR	(KVM_REG_ARM64 | KVM_REG_SIZE_U32 | KVM_REG_ARM_DEMUX | \
-+			 KVM_REG_ARM_DEMUX_ID_CCSIDR)
-+
-+static bool is_preserved(u64 id)
++BPF_CALL_5(bpf_sk_clone_setsockopt, struct sock *, sk, int, level,
++	   int, optname, char *, optval, int, optlen)
 +{
-+	if ((id & ~(u64)KVM_REG_ARM_DEMUX_VAL_MASK) == DEMUX_CCSIDR)
-+		return true;
++	bool mptcp = sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk);
 +
-+	switch (id) {
-+	case KVM_ARM64_SYS_REG(SYS_MPIDR_EL1):
-+	case KVM_ARM64_SYS_REG(SYS_CLIDR_EL1):
-+		return true;
++	switch (level) {
++	case SOL_SOCKET:
++		if (optname == SO_KEEPALIVE ||
++		    (optname == SO_SNDBUF && mptcp))
++			return -EOPNOTSUPP;
++		break;
++	case SOL_TCP:
++		if (optname == TCP_KEEPIDLE || optname == TCP_CONGESTION ||
++		    (optname == TCP_NOTSENT_LOWAT && mptcp))
++			return -EOPNOTSUPP;
++		break;
++	case SOL_IPV6:
++		if (optname == IPV6_TCLASS)
++			return -EOPNOTSUPP;
++		break;
 +	}
-+	return false;
++
++	return _bpf_setsockopt(sk, level, optname, optval, optlen);
 +}
 +
-+static bool is_counter(u64 id)
-+{
-+	return id == KVM_REG_ARM_TIMER_CNT || id == KVM_REG_ARM_PTIMER_CNT;
-+}
-+
-+static void guest_code(void)
-+{
-+	READ_ONCE(*(u64 *)MMIO_ADDR);
-+	GUEST_FAIL("The MMIO read completed");
-+}
-+
-+struct regs {
-+	struct kvm_reg_list *list;
-+	u8 (*val)[MAX_REG_SIZE];
++const struct bpf_func_proto bpf_sk_clone_setsockopt_proto = {
++	.func		= bpf_sk_clone_setsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
++	.arg5_type	= ARG_MEM_SIZE,
 +};
 +
-+static void get_regs(struct kvm_vcpu *vcpu, struct regs *r)
-+{
-+	u64 i;
-+
-+	r->list = vcpu_get_reg_list(vcpu);
-+	r->val = calloc(r->list->n, MAX_REG_SIZE);
-+	TEST_ASSERT(r->val, "calloc() failed");
-+	for (i = 0; i < r->list->n; i++) {
-+		TEST_ASSERT(KVM_REG_SIZE(r->list->reg[i]) <= MAX_REG_SIZE,
-+			    "Register 0x%llx is too big", r->list->reg[i]);
-+		TEST_ASSERT(!__vcpu_get_reg(vcpu, r->list->reg[i], r->val[i]),
-+			    "Can't read register 0x%llx", r->list->reg[i]);
-+	}
-+}
-+
-+static void free_regs(struct regs *r)
-+{
-+	free(r->list);
-+	free(r->val);
-+}
-+
-+/* Write the inverse of each register, or failing that, flip its bit 0 */
-+static void dirty_regs(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_reg_list *list = vcpu_get_reg_list(vcpu);
-+	u8 val[MAX_REG_SIZE];
-+	struct kvm_one_reg reg = { .addr = (u64)val };
-+	u64 i, j, size;
-+
-+	for (i = 0; i < list->n; i++) {
-+		reg.id = list->reg[i];
-+		size = KVM_REG_SIZE(reg.id);
-+		if (__vcpu_get_reg(vcpu, reg.id, val))
-+			continue;
-+		for (j = 0; j < size; j++)
-+			val[j] = ~val[j];
-+		if (!__vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg))
-+			continue;
-+		for (j = 0; j < size; j++)
-+			val[j] = ~val[j];
-+		val[0] ^= 1;
-+		__vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-+	}
-+	free(list);
-+}
-+
-+static void assert_reg_eq(u64 id, const u8 *got, const u8 *want, const char *what)
-+{
-+	u64 size = KVM_REG_SIZE(id);
-+	u64 g = 0, w = 0;
-+
-+	if (!memcmp(got, want, size))
-+		return;
-+
-+	memcpy(&g, got, size < 8 ? size : 8);
-+	memcpy(&w, want, size < 8 ? size : 8);
-+	TEST_FAIL("Register 0x%llx is 0x%lx after the reset, %s 0x%lx",
-+		  (unsigned long long)id, (unsigned long)g, what, (unsigned long)w);
-+}
-+
-+static struct kvm_vm *create_vcpu(bool el2, struct kvm_vcpu **vcpu)
-+{
-+	struct kvm_vcpu_init init;
-+	struct kvm_vm *vm;
-+
-+	vm = vm_create(1);
-+	kvm_get_default_vcpu_target(vm, &init);
-+	if (el2)
-+		init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-+	else
-+		init.features[0] &= ~BIT(KVM_ARM_VCPU_HAS_EL2);
-+	*vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+	return vm;
-+}
-+
-+static void test_reset(bool el2)
-+{
-+	struct kvm_vcpu_events events = {};
-+	struct regs new, before, after;
-+	struct kvm_vcpu *vcpu, *ref;
-+	struct kvm_vm *vm, *ref_vm;
-+	u64 i, id;
-+
-+	/*
-+	 * A new vcpu: initialised again to undo what the library set up, and
-+	 * through its first KVM_RUN without running any code.
-+	 */
-+	ref_vm = create_vcpu(el2, &ref);
-+	vcpu_ioctl(ref, KVM_ARM_VCPU_INIT, &ref->init);
-+	vcpu_run_complete_io(ref);
-+	get_regs(ref, &new);
-+
-+	vm = create_vcpu(el2, &vcpu);
-+	virt_map(vm, MMIO_ADDR, MMIO_ADDR, 1);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_MMIO);
-+	TEST_ASSERT(!vcpu->run->mmio.is_write, "Expected an MMIO read");
-+	memset(vcpu->run->mmio.data, 0x5a, sizeof(vcpu->run->mmio.data));
-+
-+	events.exception.serror_pending = true;
-+	vcpu_events_set(vcpu, &events);
-+
-+	dirty_regs(vcpu);
-+	get_regs(vcpu, &before);
-+
-+	vcpu_ioctl(vcpu, KVM_ARM_VCPU_INIT, &vcpu->init);
-+
-+	vcpu_events_get(vcpu, &events);
-+	TEST_ASSERT(!events.exception.serror_pending, "An SError is still pending");
-+
-+	/* Completes the MMIO read if it is still pending */
-+	vcpu_run_complete_io(vcpu);
-+	get_regs(vcpu, &after);
-+
-+	TEST_ASSERT_EQ(new.list->n, after.list->n);
-+	TEST_ASSERT_EQ(before.list->n, after.list->n);
-+	for (i = 0; i < after.list->n; i++) {
-+		id = after.list->reg[i];
-+		TEST_ASSERT_EQ(id, new.list->reg[i]);
-+		TEST_ASSERT_EQ(id, before.list->reg[i]);
-+
-+		if (is_counter(id))
-+			continue;
-+		if (is_preserved(id))
-+			assert_reg_eq(id, after.val[i], before.val[i], "userspace wrote");
-+		else
-+			assert_reg_eq(id, after.val[i], new.val[i], "a new vcpu has");
-+	}
-+
-+	free_regs(&new);
-+	free_regs(&before);
-+	free_regs(&after);
-+	kvm_vm_free(vm);
-+	kvm_vm_free(ref_vm);
-+}
-+
-+int main(void)
-+{
-+	bool el2 = test_supports_el2();
-+
-+	ksft_print_header();
-+	ksft_set_plan(el2 ? 2 : 1);
-+
-+	test_reset(false);
-+	ksft_test_result_pass("reset without EL2\n");
-+
-+	if (el2) {
-+		test_reset(true);
-+		ksft_test_result_pass("reset with EL2\n");
-+	}
-+
-+	ksft_finished();
-+}
-
+ BPF_CALL_5(bpf_sk_getsockopt, struct sock *, sk, int, level,
+ 	   int, optname, char *, optval, int, optlen)
+ {
 -- 
-2.53.0
+2.43.0
 
