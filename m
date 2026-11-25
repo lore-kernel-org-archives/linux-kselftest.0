@@ -1,76 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795588338;
-	b=h+SfMWqQKGSE1En4zwOaW37z7nC8BZwHEZJyuJH91IGdRoqmiG7feZc/gOzkFhNYP/jB
-	 C+OiPxY8Z5r96sYkbgYCX4BRaHuBVDs6sVVoqxO5ZdYHeQXLxC0PwmfOqEdLIVBS+gR/S
-	 /Rplni/KCwHxDBvY+D/OmSeF/n/jSs6dxJk3iuPNMXIJ7+pV5HwTMTAEuErm+t0yZjoJP
-	 gpMqxWN9kMY6M6xLld3/8XbQD2ZXbnRSjyKep7D8salqHKhaiCObMfGU8xmf08TeR8FWc
-	 +Nn7L2VpdvEzvlBD8hXen0JFOqs60i7aZgBcrsZCVzxWv7W8TatZmZWIzuHVVcZoqyA==
+	t=1795588437;
+	b=yhyojFn4Y0AUvtPWFkHJcY0M33yu3slunZpCnZFJlcq8r/CE34PHA60B6YGHCEecTnNp
+	 h60SvFC7If2kM09hKSX6YzmvJiAUANkgOF3CvIfjfzuq8flKnxTwRQ9sHOEo1Te1AaPLS
+	 3zynRLcRiBay8YOnmFc5Hv1dXkmvfwwjR43AnZ3I9xqn7H21qcWtIXIjbyv5RK2Gjqr98
+	 6KzCNXnVabvVky/lKV8m949E2ReEvYA5W/+BAur8GJsaHuzju1jT66QAGw1hm/LbkG/Gw
+	 9ohZDmt467FC9a7qSl2ZCdc6OH5ha+2Nh9l77lafNVnOrCyjY+i5cnMe4DaX/52Z1Zw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795588338;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=KHXzp+84iLQUjnjlG0As4PHmQ5NglIl63AJkWeb4QbE=;
-	b=K7sy8hB2crpIdWqHFAIpMkTzzzoTOa+pUSgYDY6CIsgswANEUFZRwtinZH8TbBLOgQhJ
-	 JoIW6hBivBPGAGXXYQkSomkm/Q93lyhiftTw49wqoOgaXxG47Yjo1O3/8qFBNz7FVzeH8
-	 Ty3Ioq3EHJZCH8j03Cax8P02xiCe2e6JaM14uAHg7PQK1E9N65YdZ4J5pt/YzU9hSZvsv
-	 w4POFWoMwgVYSWwmmERFdAWtvZayJ5auYx+g4tctIsKxsXWqDVz2dF+d3X6rNu/mw03Qz
-	 uD2JhqUqjYDRgbP7jFjvYsL9ABmB2t5ox4NFSYamCR1VOqKOdEn1wskKDwiWxaUEPeg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795588437;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=JtR1J/tjzg5++JWccn3tur0BBmBLKynjew31a07ikO4=;
+	b=jvC2xPeBvLEsZFgRvD1zXxbe7S1fjGkPe7GH2DcNN062CWDblOZVEZhgyKPrz81nUdAC
+	 O+OB30udGPbgIpVaXowfbGng8Ni+wxUcfwk4Thqgeuj6a3BDYEiNlAuyAyFp6RKfVqt5Y
+	 oMmYupUzDMlrmBsj3K3MuNZ9u9XvJHOceLzU1MrXVVkCLo3gMVIrgAye4neS445vH0Xhs
+	 y2DV6SzO2gJy/N2j7Ow5AsXkZfRQGMsMq6gemh78DD7c4+rS7gWckx1y72BK1kzftj/Ff
+	 Hx+DM7sKy1ExLIfGGb/AuEWK8pht0NeAzsCKeI+6qDtjSqwNw2gCVB7DY2TlUV9SvLA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WqNWpXUL;
-	arc=none smtp.remote-ip=209.85.214.197
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=jBbWCYfH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4B9606A33E
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:32:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD4B9606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B6A606A321;
+	Wed, 25 Nov 2026 06:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WqNWpXUL
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2f053f9631cso61935695ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:32:17 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=jBbWCYfH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC041F000C0;
+	Wed, 25 Nov 2026 06:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795588337; x=1796193137; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KHXzp+84iLQUjnjlG0As4PHmQ5NglIl63AJkWeb4QbE=;
-        b=WqNWpXULC+EIH0Lll03C1uAj8+QrlYSD6zZ6l5JmPh/M1qVqVhFjKf1DAP/h0XH+KH
-         cMte7N7XbzS/N9OvTXLLoC+sGA5G2xbShvF+4cJj6tEInwRWNttMVGBqz2glvCS+dMfJ
-         d0q+4YWI79W4lv5g+HPVVgbHZzwo33ECEMwke6VxTFjmA2MukGUWh3u/jPuwibwGjKyU
-         hwX9fyZBFP1YFHmsNAJA5jd9as88utou1zUXya0zQhjhZnPciF0hhW5RWJOUMIwnuLBq
-         ppPhhUM5AMRpFaGN67H1TejRcGStauT42VkuhlENdmrQrqD19o0xkHW1r20Awb6H/Btr
-         q6Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795588337; x=1796193137;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KHXzp+84iLQUjnjlG0As4PHmQ5NglIl63AJkWeb4QbE=;
-        b=p/3BGOxZeO6h0qTyaflNJ+rEPPzgmvS7T2CUE2vF8bdf6rDdNLfJSgXcMUU4xQnnGM
-         9T19INLN8KQgEzCm5vOqEldoOxGxYf8E29UGVqRI/FdHWeCyVT5gzII/Po60Oay3sx6b
-         J+sBWNTlqWMCd1Bf4Wx0F/XxsV4P0jk65ODArcY0vFzTMV4txUOJ0H7WQ1x1xDvfg2jA
-         ScDETjY9QUL7u8TFG6NYevqn9lvkUwasQyL1h285C01RjchSInJek6oM4OgFGtseIGMW
-         +PwhwsFIKIqSK1b4B4JnegoLGM3G4OpuMlLe1M2yK8SZJTA7aWprrd34CiV1gbmA8fgh
-         gGyA==
-X-Forwarded-Encrypted: i=1; AL+hErGAW05HnawhoH1FGl+PkiZZ2un/+itYoLkGf84/4yZlDy+xpyAXIyy72ZajaKMfPhSgvxV9j+2WP1E/hnHLd+4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+AHxQv0PVvpes8Lz3DQV/PgH8yA/zlQ0kRc1R+60br5RUMz05/
-	y9zrrIf8yPfHOo20Dlj5YuB1tXyCUIYcopbFlucxdhFj8wD+tRJtQ1TwizAwzk3WG16MdafHe0w
-	72MTgSlJGe5Gfq1i/rfHa5HdScDGIfjk8tw==
-X-Received: from plbms15.prod.google.com ([2002:a17:903:acf:b0:2e1:326b:da73])
- (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:19cb:b0:2ed:2856:6442 with SMTP id d9443c01a7336-2f03f1eaa0fmr179076345ad.28.1795588336373;
- Tue, 24 Nov 2026 22:32:16 -0800 (PST)
-Date: Wed, 25 Nov 2026 06:32:15 +0000
-In-Reply-To: <20261125002808.GA1198022@bhelgaas>
+	d=linux-foundation.org; s=korg; t=1795588436;
+	bh=JtR1J/tjzg5++JWccn3tur0BBmBLKynjew31a07ikO4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=jBbWCYfHkceRQwvYbmv9tmw2C1uexEIzRdCmOWyDVi4/rSFuItNFxXrpynITgIuXR
+	 O+QpKrRuLFP8bxw2naRGIao9oXlgMo6TI417BzR9HkdPVAgL/ncVvPu7vgMO+QTlAN
+	 MPyd+MjU/TnhwNHp0APcwXwe620cz84gvalUTwfs=
+Date: Tue, 24 Nov 2026 22:33:55 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Qingshuang Fu <fuqingshuang@kylinos.cn>
+Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, Shuah
+ Khan <shuah@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/proc: skip fd-003-kthread if run as non-root
+Message-Id: <20261124223355.15a364523377daf5cf2734cb@linux-foundation.org>
+In-Reply-To: <20261120062933.3169112-1-fuqingshuang@kylinos.cn>
+References: <20261120062933.3169112-1-fuqingshuang@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,33 +58,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-References: <20261012-pcie-link-endpoints-v7-0-36aba9c91f10@google.com>
- <20261110002437.2376944-1-rathodpriyank@google.com> <20261124174411.4183038-1-rathodpriyank@google.com>
- <20261125002808.GA1198022@bhelgaas>
-X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125063215.1499950-1-rathodpriyank@google.com>
-Subject: Re: [PATCH v7 0/2] PCI: Add Lane Margining at the Receiver debugfs interface
-From: Priyank Rathod <rathodpriyank@google.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, 
-	"=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>, Lukas Wunner <lukas@wunner.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, linux-pci@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Bjorn,
+On Fri, 20 Nov 2026 14:29:33 +0800 Qingshuang Fu <fuqingshuang@kylinos.cn> wrote:
 
-Thanks =E2=80=94 I have rebased the series onto v7.4-rc1 and just posted it=
- as v8:
-https://lore.kernel.org/r/20261125-pcie-link-endpoints-v8-0-19d49c17c05f@go=
-ogle.com
+> /proc/$KERNEL_THREAD/fd can only be opened with ptrace access, so
+> openat() on the "fd" directory of a kernel thread returns EACCES
+> when the test is run as non-root.  kernel_thread_fd() conflates this
+> with "process is userspace process", the scan over /proc runs to
+> completion without finding a usable descriptor and the test exits
+> with 1 (KSFT_FAIL) instead of 4 (KSFT_SKIP):
+> 
+>   $ ./fd-003-kthread; echo $?
+>   1
+> 
+> Distinguish the two cases and skip the test like the rest of
+> selftests/proc does when privileges are missing, so that unprivileged
+> runs report "skip" instead of a false failure.
+> 
 
-(There are no dependencies on anything in pci/next beyond v7.4-rc1;
-drivers/pci/pcie/Kconfig just has a minor context difference in pci/next
-after the PCIE_EDR cleanup.)
+Fair enough.
 
-Thanks,
-Priyank
+> --- a/tools/testing/selftests/proc/fd-003-kthread.c
+> +++ b/tools/testing/selftests/proc/fd-003-kthread.c
+> @@ -36,6 +36,7 @@
+>   *
+>   * Return /proc/$PID/fd descriptor if process is kernel thread.
+>   * Return -1 if a process is userspace process.
+> + * Return -EACCES if run as non-root.
+>   */
+>  static int kernel_thread_fd(unsigned int pid)
+>  {
+> @@ -88,6 +89,8 @@ static int kernel_thread_fd(unsigned int pid)
+>  	fd = -1;
+>  	if (flags & PF_KHTREAD) {
+>  		fd = openat(dir_fd, "fd", O_RDONLY|O_DIRECTORY);
+> +		if (fd == -1 && errno == EACCES)
+> +			fd = -EACCES;
+>  	}
+>  	close(dir_fd);
+>  	return fd;
+> @@ -168,6 +171,8 @@ int main(void)
+>  		pid++;
+>  	}
+>  	/* EACCES if run as non-root. */
+> +	if (fd == -EACCES)
+> +		return 4;
+>  	if (pid >= 1024)
+>  		return 1;
+
+Why "4"?
+
+(and why didn't they call it EACCESS.  Also s/creat/create/)
