@@ -1,114 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.75
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795600296;
-	b=3n1cz2nb+3ajWexk/LGslXd/wGiw0S1KKAsJ94WiJktd7GHd4qd9TgH7qmo0o0OkOpQo
-	 AXcbrW1r8RWzIjTMXGu+7KQP2SxAUia3cn8pq8Auzxhlc1aRk5D1qCCHqoUUHHIUPOVp/
-	 WO/zy2C/gd0JG4NCMjlNAAUTFkkt8DF/GTlyXZ3sknQD1OSVDh31jWLkvew/+uLosykMC
-	 0TsijPCRw1rOSnzCobiX2I2F6m4V9AdMp9cVSFUdKBU361+RupLQaPmZA/CHkUMsA+R1i
-	 2Bp1Y2etsoopGP3LRDf2+TJfjuJ/6ToZsB/DqRQwmaPZPvvtpnkUL33UNWs9mt6l9mg==
+	t=1795601545;
+	b=hJqIf2CWd8Ah7AzMM7+wr+zinBszGqnshKcAogE8yOgVoEvBd3GO+DqkEeV7fAdub146
+	 Fygs6zw+ne2a19tJJYXmxFD+7ojMW0wTAMHFz6FkjZ2tT+ED92MrgIw/wwYiTcgrKrSbc
+	 Jmrb+DL24GbStBEX2smyou6I7d3FlRBCU3fl5GY40OOpXA8w2kceEOkBYNmcSc9UNZCCz
+	 rCUDwdKTu9eJcpU/2oTi9PevkQpguZh+ONJqTQ+PVWnNKXVgvBsRtEIfLHMEH82yDRxlp
+	 QkKCk/Gojv12L9tKuXcniXUbvKuXAaqVgn7KgiYzpi/lgIhQgZrEgD6bPXMHc9SSHtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795600296;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=ExEdfB9WwLHoUe7nHSiClkfqem+8Ndsrh2CmQFmZ+3c=;
-	b=bcL0tJex05zSai8MuvwbnaeVjcHdfqPdhzSqWndFO+F7MlzymDidBwmdyQSPat40jpZv
-	 QLYQoy920wcKIUoyfHZYCGXX36oe2IQLEI2Ux1LXQOG9igq0wvH584wf0WWhmvfmXUEe5
-	 xRf+JsaT/clUQ7wx7+Um4jLXLN6uAaL01gsmZqI+Wc8YmkpL5laIPSecB6oaxzf3uH0qx
-	 L82f2pisNg3CfLqV/HcgzZsQk0t/Rj5aUb7Pl8PxxfR2eriQMK3Fq9bsQgHqAZztfWMZV
-	 GWQzfa92OKpaA6sxEcprduRpbMojw3fIGbGXKysBKPZCiubwzkzp23FsYAk+j7mcgcg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795601545;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 DKIM-Signature;
+	bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
+	b=2LBaDFabIwydJb/mwkR/kd+PksYpvKnQUsNa3X3ero9fPQzWfdTG8Va+p/KFZO16BK0B
+	 WK73dZvUGdSpfzGU+ca4WoUTQb+DAIp1t4Hr/h2+l8/J9lNUyQ8pzzM1Hp2y6xa7zrX2o
+	 ElffygGmIGZlxcWRh3hLsc60fr/hzZOWJNLhXUqwZvCCZKjJ5+2FM1/miXKTgGpoF/hB9
+	 USgecfNdD4emzx+KgvPK1b9v6PihxvNXo1zc/tGYCwP/ecU9SQKXEbSkuYvSy8F18r2ae
+	 sNf2jrttneclxmxSZBLDflpKc9BLxCkhogWi5sBlHpNEAbbvkv3u57zEKWePelwOAvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=pereq.eu;
-	spf=pass smtp.mailfrom=cryspen.com;
-	dkim=pass header.d=pereq.eu header.i=@pereq.eu header.a=rsa-sha256 header.s=google header.b=ZOTq6OpF;
-	arc=none smtp.remote-ip=209.85.221.51
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=poczta.fm;
+	spf=pass smtp.mailfrom=poczta.fm;
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b="CkSW/lbI";
+	arc=none smtp.remote-ip=217.74.67.75
+Received: from smtpo75.interia.pl (smtpo75.interia.pl [217.74.67.75])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54CE4606A326
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 09:51:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54CE4606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pereq.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cryspen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55756606A31E
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:12:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55756606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=pereq.eu header.i=@pereq.eu header.a=rsa-sha256 header.s=google header.b=ZOTq6OpF
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4a7b8abe209so4256556f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 01:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pereq.eu; s=google; t=1795600295; x=1796205095; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ExEdfB9WwLHoUe7nHSiClkfqem+8Ndsrh2CmQFmZ+3c=;
-        b=ZOTq6OpFmLPEfwnp9q8dUA0AGMbQltxU+d0PUMHlX0ejPnYg8xRfbNG+MkMuq8ouPF
-         5RwWDOgzMMtcvTSE1C/hLlzuPiUQZYX3PnnJM9OCcyC4YCghxnmn2ED1I7REeawXpTCc
-         MyodRJH3uu2ySM5gCJ/RnduJiUL0Nhy4hv+PIvQmV/D1LKJfK2K6YOZlhp9JNcVh5a2t
-         LEDl9PGb5xEqTHmHMEv9sbGjoXm3iZeDTi5n+DkZ471czuXyZ1YJfsLVhMxtY1DpivDr
-         iRWqJ0kdppUTHXR3FCsll2AVQl7nQYqA+aC7/G4RW9Ncsk96ZIwgi+Vay6i6h04XGVfy
-         /Vtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795600295; x=1796205095;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ExEdfB9WwLHoUe7nHSiClkfqem+8Ndsrh2CmQFmZ+3c=;
-        b=LAt1zWZEyxYhP4wbF8ZY3R2MOvt+4GDqNAHFhcexGm99amk1aR9COAgp3YVfEsJx9K
-         mbHpRvkOY1Q8jt6BZwgF54XW2YTWTYdyfN67EahsVcxDWpMuMthsSxO7wDdNc8FschjK
-         rYx+DgoR/0/ddRXY61XFDSjZvd+e49ooqazEHR79kgGmLTcp5Zx5rgWmgcvkk7xWKRHL
-         oJDl++V9GeqFCje0tV/RKt2Xmics+P8WK2DvXpbK1HaOmQN9qLFYngjC7nHSNeLvd/ti
-         z6H5US+mpSxUOOlAaINtpAYLIPl4MLVwk9mszLKdT5L0JXtTu/tK1QDQfcvs7PYcmr5W
-         CupQ==
-X-Forwarded-Encrypted: i=1; AL+hErHqQwmYDJR9O44GulHNoFgJjaHhuSxxtZIW1wQv0f2B8FVypcnMvlE5aNWbk+hfceTAayFPt4ZV3UzmidKKNVc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8SnUjxu0nYDkAfXOWWKYCyd7qTtpzoib7Sx14y7WAENQXAY0fy
-	GhhbFAF9tSLsaatYmcIOj47Yi6koJY7e5Wv7htRr3PmoWg0Q1fXqCtnTQi7LEJJHXFY=
-X-Gm-Gg: AZFdTZd4EMW1hdnTxJsmkRI/pIpTrGTdAOrFL7u7TJw4XclxDCDR1+n0slxnr9mJC5B
-	I5Ttn98/z4HZ1kcK7e5uLXDsKCUJS414r0n5qBpHzk5G3lBFVYfvNNQlh85k5kgkUpPpqjs21Js
-	8BZL7RXPMgKD44+w/iIdAbnDhkSZ2BF58+ncMfuytKfI/Qe15sfYfecVsZME5k3Zxp6nnClDHxF
-	/9klHu31eMEhGj/10lEIZeV09QUIJqAuCJzX5VvGIq2HbaFgUYQAzGZW8X+JUluKu2Si+NoZtNw
-	YdoProi1hP07bkLT6jyKc1nTG+jpU+eA86PEDgRKDGFkJleRFApr04SHEGX0vUBUmEcdUzC4N3i
-	jKuxr8t/Nu8PZN56K0iz9qhnFv40SABmsYR4oWkWxD5sAS8LcjZ/13s1fJjAI1BLiHu0C3nQrcw
-	3iofeGF+eBd2M6bqo/JSz4FPI40KBpYQcKTSpAiSnAEDXata4cZMH+PXUCGtPuf7WexqfBVl/R+
-	OWItORsnFlgoC+b1ulQm+t+0mLBi3lquiEC60ubvo75yV+Ira0ar9jqAtpZQiK+W3qhT2tSDbBr
-	uxYak0cUPwhhtogzomA=
-X-Received: by 2002:a05:6000:4617:b0:4a9:760f:1824 with SMTP id ffacd0b85a97d-4abb19c153bmr33040480f8f.21.1795600294485;
-        Wed, 25 Nov 2026 01:51:34 -0800 (PST)
-Received: from localhost ([2c0f:3d00:6be:8900:ce5e:9212:ea4b:f30])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b8b7888sm32867213f8f.42.2026.11.25.01.51.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 01:51:34 -0800 (PST)
-Date: Wed, 25 Nov 2026 12:51:30 +0300
-From: Dan Carpenter <dan@pereq.eu>
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Christoffer Dall <c.dall@virtualopensystems.com>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Sebastian Ott <sebott@redhat.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Karthik Bhargavan <karthik@pereq.eu>,
-	=?iso-8859-1?Q?Cl=E9ment?= Blaudeau <clement@cryspen.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] KVM: arm64: nv: Replace a pending SError when
- injecting a new one
-Message-ID: <awavokPJT7G8J2fX@stanley.mountain>
-References: <20261125-double_exception-v2-0-224689d8a764@pereq.eu>
- <20261125-double_exception-v2-5-224689d8a764@pereq.eu>
- <awaVj0Aa6dMSksxX@kernel.org>
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=CkSW/lbI
+Received: from nr200 (unknown [80.68.231.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+	Wed, 25 Nov 2026 11:12:16 +0100 (CET)
+Date: Wed, 25 Nov 2026 11:12:14 +0100
+From: Slawomir Stepien <sst@poczta.fm>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	jiayuan.chen@linux.dev
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Tianyi Gao <tianyi@cloudflare.com>,
+	Octavian Purdila <tavip@google.com>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 bpf 0/7] xdp: fix page_pool leaks
+Message-ID: <awa0fvxzngTtIYVd@nr200>
+References: <20261124104016.532341-1-sst@poczta.fm>
+ <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -120,40 +85,268 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <awaVj0Aa6dMSksxX@kernel.org>
+In-Reply-To: <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
+	t=1795601540; bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=CkSW/lbIqxnu8SM9tcMd1jFWP+JUPVIDM2ul10ZUK7lVhSvMMJzkHv7Xp+aJxyrbJ
+	 wDgTnnHiqKXewKZWk7C019oOIGT1rQGLx5j3f0qVM9Bp6wP6hixWKM7PL/zSLaM4fh
+	 bB8oAhTY6n2EL6PjyrxTj/ycnOiSLEIgMXvIMZ/Y=
 
-On Wed, Nov 25, 2026 at 12:00:15AM -0800, Oliver Upton wrote:
-> Hi Dan,
+On lis 24, 2026 21:04, Alexei Starovoitov wrote:
+> On Tue, Nov 24, 2026 at 02:40 AM Slawomir Stepien <sst@poczta.fm> wrote:
+> > Patch 1 prepares bpf_prog_test_run_xdp() for patch 3. Generic XDP runs
+> > on the rxq info of the device queue, which is shared with test_run; with
+> > patch 3 alone, any packet through generic XDP on lo makes later
+> > multi-buffer test runs free their frags as page_pool pages. Restoring
 > 
-> On Wed, Nov 25, 2026 at 09:56:20AM +0300, Dan Carpenter wrote:
-> > The kvm_inject_serror_esr() function injects SErrors as the name
-> > implies.  The bug is that it doesn't handle already pending errors
-> > correctly in nested virtualization.
-> > 
-> > In vanilla KVM the kvm_inject_serror_esr() function always sets
-> > the SError to pending.  However with nested KVM, it might set it
-> > to pending or it might deliver the SError directly.  We can only
-> > have one pending error at a time.  Imagine we enter the function
-> > with an SError pending already.  In the current code if we decide
-> > to pend the new error that's fine, everything works.  However if
-> > we decide to deliver it directly then the pend flags should be
-> > cleared but they are not.  So we deliver the SError directly and
-> > then the SError that was pending on the next exit or entry.
+> The store into the shared rxq is the problem.
+> Patch 3 does it for every packet on every CPU, for linear skbs too.
+> The comment in include/net/xdp.h says that rxq must not be updated
+> during NAPI poll.
+> On Dudu's patch I proposed to put rxq on stack:
+> https://lore.kernel.org/bpf/DMAP8LNBJRPN.2THUHLKURP25G@gmail.com/
+> It works for veth too.
+> An skb leaves veth as a MEM_TYPE_PAGE_SHARED frame, like today.
+> No need for xdp_convert_skb_to_buff(), veth_xdp_get_pp(), pp_cow,
+> rq->xdp_mem and patch 6.
+
+Thanks for these points. This approach is less complex. Let me play with it and I will respin it in
+v9.
+
+> Patches 6 and 7 never free a page_pool frag. Jiayuan's test does:
+> https://lore.kernel.org/bpf/20260911135711.109338-3-jiayuan.chen@linux.dev/
+
+Jiayuan Chen, can I use your selftest then in v9? :)
+
+> Below replaces patches 1-5.
 > 
-> I could use a bit more color on how we got here. From what I can tell
-> this state is only possible if userspace changed the routing / masking
-> of the SError outside the context of a KVM_RUN. Otherwise, if the SError
-> is deliverable on guest exit we perform the injection prior to exiting
-> to userspace.
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index faa837a..8bb015c 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -63,7 +63,6 @@ struct veth_rq {
+>  	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
+>  	struct net_device	*dev;
+>  	struct bpf_prog __rcu	*xdp_prog;
+> -	struct xdp_mem_info	xdp_mem;
+>  	struct veth_rq_stats	stats;
+>  	bool			rx_notify_masked;
+>  	struct ptr_ring		xdp_ring;
+> @@ -642,6 +641,7 @@ static int veth_xdp_tx(struct veth_rq *rq, struct xdp_buff *xdp,
+>  }
+>  
+>  static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+> +					  struct xdp_rxq_info *rxq,
+>  					  struct xdp_frame *frame,
+>  					  struct veth_xdp_tx_bq *bq,
+>  					  struct veth_stats *stats)
+> @@ -657,7 +657,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+>  		u32 act;
+>  
+>  		xdp_convert_frame_to_buff(frame, xdp);
+> -		xdp->rxq = &rq->xdp_rxq;
+> +		rxq->mem.type = frame->mem_type;
+> +		xdp->rxq = rxq;
+>  		vxbuf.skb = NULL;
+>  
+>  		act = bpf_prog_run_xdp(xdp_prog, xdp);
+> @@ -669,7 +670,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+>  			break;
+>  		case XDP_TX:
+>  			orig_frame = *frame;
+> -			xdp->rxq->mem.type = frame->mem_type;
+>  			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+>  				trace_xdp_exception(rq->dev, xdp_prog, act);
+>  				frame = &orig_frame;
+> @@ -681,7 +681,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+>  			goto xdp_xmit;
+>  		case XDP_REDIRECT:
+>  			orig_frame = *frame;
+> -			xdp->rxq->mem.type = frame->mem_type;
+>  			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+>  				frame = &orig_frame;
+>  				stats->rx_drops++;
+> @@ -746,6 +745,9 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+>  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+>  	int i;
+>  
+> +	/* the buff holds plain page references from here on */
+> +	xdp->rxq->mem.type = MEM_TYPE_PAGE_SHARED;
+> +
+>  	get_page(virt_to_page(xdp->data));
+>  	if (likely(!xdp_buff_has_frags(xdp)))
+>  		return;
+> @@ -755,6 +757,7 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+>  }
+>  
+>  static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+> +					struct xdp_rxq_info *rxq,
+>  					struct xdp_buff *xdp,
+>  					struct sk_buff **pskb)
+>  {
+> @@ -773,7 +776,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+>  	/* SKB "head" area always have tailroom for skb_shared_info */
+>  	frame_sz = skb_end_pointer(skb) - skb->head;
+>  	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> -	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
+> +	/* the prog can free only frags and they came from skb_pp_cow_data() */
+> +	rxq->mem.type = MEM_TYPE_PAGE_POOL;
+> +	xdp_init_buff(xdp, frame_sz, rxq);
+>  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
+>  			 skb_headlen(skb), true);
+>  
+> @@ -794,6 +799,7 @@ drop:
+>  }
+>  
+>  static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+> +					struct xdp_rxq_info *rxq,
+>  					struct sk_buff *skb,
+>  					struct veth_xdp_tx_bq *bq,
+>  					struct veth_stats *stats)
+> @@ -815,7 +821,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	}
+>  
+>  	__skb_push(skb, skb->data - skb_mac_header(skb));
+> -	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
+> +	if (veth_convert_skb_to_xdp_buff(rq, rxq, xdp, &skb))
+>  		goto drop;
+>  	vxbuf.skb = skb;
+>  
+> @@ -830,7 +836,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	case XDP_TX:
+>  		veth_xdp_get(xdp);
+>  		consume_skb(skb);
+> -		xdp->rxq->mem = rq->xdp_mem;
+>  		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+>  			trace_xdp_exception(rq->dev, xdp_prog, act);
+>  			stats->rx_drops++;
+> @@ -842,7 +847,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	case XDP_REDIRECT:
+>  		veth_xdp_get(xdp);
+>  		consume_skb(skb);
+> -		xdp->rxq->mem = rq->xdp_mem;
+>  		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+>  			stats->rx_drops++;
+>  			goto err_xdp;
+> @@ -914,6 +918,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct veth_xdp_tx_bq *bq,
+>  			struct veth_stats *stats)
+>  {
+> +	struct veth_priv *priv = netdev_priv(rq->dev);
+> +	struct xdp_rxq_info rxq = {
+> +		.dev = rq->dev,
+> +		.queue_index = rq - priv->rq,
+> +	};
+>  	int i, done = 0, n_xdpf = 0;
+>  	void *xdpf[VETH_XDP_BATCH];
+>  
+> @@ -928,7 +937,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct xdp_frame *frame = veth_ptr_to_xdp(ptr);
+>  
+>  			stats->xdp_bytes += xdp_get_frame_len(frame);
+> -			frame = veth_xdp_rcv_one(rq, frame, bq, stats);
+> +			frame = veth_xdp_rcv_one(rq, &rxq, frame, bq, stats);
+>  			if (frame) {
+>  				/* XDP_PASS */
+>  				xdpf[n_xdpf++] = frame;
+> @@ -943,7 +952,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct sk_buff *skb = ptr;
+>  
+>  			stats->xdp_bytes += skb->len;
+> -			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+> +			skb = veth_xdp_rcv_skb(rq, &rxq, skb, bq, stats);
+>  			if (skb) {
+>  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+>  					netif_receive_skb(skb);
+> @@ -1149,9 +1158,6 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
+>  						 NULL);
+>  		if (err < 0)
+>  			goto err_reg_mem;
+> -
+> -		/* Save original mem info as it can be overwritten */
+> -		rq->xdp_mem = rq->xdp_rxq.mem;
+>  	}
+>  	return 0;
+>  
+> @@ -1180,7 +1186,6 @@ static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
+>  	for (i = start; i < end; i++) {
+>  		struct veth_rq *rq = &priv->rq[i];
+>  
+> -		rq->xdp_rxq.mem = rq->xdp_mem;
+>  		xdp_rxq_info_unreg(&rq->xdp_rxq);
+>  
+>  		if (delete_napi)
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index d6c9dc6..1d89b6f 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1349,6 +1349,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  	struct netdev_rx_queue *rxqueue;
+>  	struct skb_shared_info *sinfo;
+>  	struct xdp_buff xdp = {};
+> +	struct xdp_rxq_info rxq;
+>  	int i, ret = -EINVAL;
+>  	struct xdp_md *ctx;
+>  	void *data;
+> @@ -1417,8 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  	}
+>  
+>  	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
+> -	rxqueue->xdp_rxq.frag_size = PAGE_SIZE;
+> -	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
+> +	xdp_init_buff(&xdp, PAGE_SIZE, &rxqueue->xdp_rxq);
+>  	xdp_prepare_buff(&xdp, data, headroom, linear_sz, true);
+>  	sinfo = xdp_get_shared_info_from_buff(&xdp);
+>  
+> @@ -1426,6 +1426,11 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  	if (ret)
+>  		goto free_data;
+>  
+> +	/* generic XDP uses the same rxq and its frags can be smaller */
+> +	rxq = *xdp.rxq;
+> +	rxq.frag_size = PAGE_SIZE;
+> +	xdp.rxq = &rxq;
+> +
+>  	size = linear_sz;
+>  	if (unlikely(kattr->test.data_size_in > size)) {
+>  		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 6140fd9..fe9f222 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -5684,6 +5684,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	void *orig_data, *orig_data_end, *hard_start;
+>  	struct netdev_rx_queue *rxqueue;
+>  	bool orig_bcast, orig_host;
+> +	struct xdp_rxq_info rxq;
+>  	u32 mac_len, frame_sz;
+>  	__be16 orig_eth_type;
+>  	struct ethhdr *eth;
+> @@ -5707,6 +5708,13 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	if (skb_is_nonlinear(skb)) {
+>  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+>  		xdp_buff_set_frags_flag(xdp);
+> +		/*
+> +		 * The frags came from skb_pp_cow_data(). xdp_rxq is shared
+> +		 * with other CPUs and with BPF_PROG_TEST_RUN, so use a copy.
+> +		 */
+> +		rxq = rxqueue->xdp_rxq;
+> +		rxq.mem.type = MEM_TYPE_PAGE_POOL;
+> +		xdp->rxq = &rxq;
+>  	} else {
+>  		xdp_buff_clear_frags_flag(xdp);
+>  	}
+> @@ -5719,6 +5727,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	orig_eth_type = eth->h_proto;
+>  
+>  	act = bpf_prog_run_xdp(xdp_prog, xdp);
+> +	xdp->rxq = &rxqueue->xdp_rxq;
+>  
+>  	/* check if bpf_xdp_adjust_head was used */
+>  	off = xdp->data - orig_data;
 > 
+> pw-bot: cr
 
-Yes, but the main reason is that I'm changing the way
-kvm_nested_sync_hwstate() works in patch 7.  Now every stored SError
-stays in NESTED_SERROR_PENDING across handle_exit() so this situation
-will become more common.
-
-I will include that in the commit message when I resend.
-
-regards,
-dan carpenter
-
+-- 
+Slawomir Stepien
