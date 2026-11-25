@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.128.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1795641314;
-	b=W5YGuMEfm4VNAc2vzPKIbVPbmgRtZ6cMhdEf0W7u81HwjzWxogw4rItpCfQ9w1xKH676
-	 dExc4wPpDcii9zXjtPaOMfwiWdWycWTxhlY3ddBRXO6ekl7u0oA8bm9Zo4A3HxIjbGkyQ
-	 pw/pgFGb13oZ1RK7qacYJtZxYTZY4nalWCgg0m+s/x+g+z883pU28lHFXd4Kxyk1Tpgmx
-	 LfNQ+6NZZN0ZzWMjx+0D31vbVfgeXUnjK7y6yM6QRKB5Me/8UtBmTukry/jBJEdQHHIHe
-	 7EOENhUh4YHGVPMRtf+RY+emtl5TdAoQ0Ir0p5G769ydPV6c9FOLmunmQUZt6zNSq3Q==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795641432;
+	b=Lri0tbHPVZ6oW13tBhepwu2BWGLC6GsLFs37cvEeKw6P7hs89otHK2kLG+JQLt0Uz9DL
+	 HJJ2PDM0L+Af5lxLIqIXlMcKlcODGtyrqtg5H4zpRzul0uSfk7HECBM6jU+CPug++mBI5
+	 FLm22Zg9PgI8USRJ8RSxFWutRrxV35nSYZC4WtqNdtLHFV7U6GxP8KfPyn/c644/RsZoI
+	 37/+DvI1Jvzjn0Z27sIzps6jSoiQJh9pS1g2gJgTOxfKaHqMAj3GKdStq7JYk/2teSFVp
+	 M7tachTA+LJZ/dSg/Bu7WJfCXIyiF/UEmvmk65ihwgHyO1ZKzs8txlCojMKs8FchFLQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795641314;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795641432;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=v2Q5BQdNA5CO0G0HRlTvOkzonEqCKg9Nq/F3I2z+4W8=;
-	b=Mkt9Rzk6bXV0s5K7xiYmZgynMM/wlugYpg3iFf9Hm3wWbkbpPGg+3LJRYqABmsHtgdo8
-	 2GpUiZ+WbO5btUH4QHaopEyZHEDrdojkA4UQnvgMLyNJEmrBqK1eTC+u5FIVYGQtGxYW8
-	 zUMnzQ7qJ9y8Srr0iQXlC8jCoEq3wA2YArx+tpKx02hsN3gq/VG0c28LnBKb2gt3RLnUP
-	 1oDXHafqg+lO+TfIYaLhEwARTEJHYCB0+W8kCDdxb+HsN4GFBAvF2w8T8nDvrn/Gz87tu
-	 K9AaVRh4NGbYMn0GNH11GS9MBKAdGn7wu6eV7F9CCezKZSRID/PH+7bzzqq6o3/layg==
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=Xpq+0pwaGJzipp07jmvO3ANvw3Qwr0iR1BtMYGqpL5Y=;
+	b=H/D78N9gYeLe5s2NzfWbv73Myi1U6sLHb4HU1bvannztUnqnrN3rFTl0pAlZJk9Q3XNp
+	 YfugCI0onsJxpR0lVt3BH6sCZz7z3wjy51PZT4y7A8KYrCRkbFPPOzxJ+I9HLcESYWTDY
+	 H7xVDt6e3GqW/MW/xLasaXLrqJCltScCkVigDGICJ8hfrppRRYY3hE0jqovdgfnnA+Hm7
+	 dKzifZHohadxmmRz30LA3qjyOUkr4bSU7RdKzhklcZS3nM4k6NlObwBr6m6SwuHBxfbUb
+	 v0RCRhjVdF6amow+pr2dFxwTXoKPH8VY1LFPim9KjPZE9t5WXpd6243ebPOZLrdsYGQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nexthop.ai;
 	spf=pass smtp.mailfrom=nexthop.ai;
-	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=ZFZGa1Mu;
-	arc=fail smtp.remote-ip=209.85.128.176
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	dkim=pass header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b="ikCqdo/J";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.171
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B814606A323
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 21:15:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B814606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D0E606A326
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 21:17:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 26D0E606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=ZFZGa1Mu
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-8b4d26094beso56275627b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 13:15:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795641313; cv=none;
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.a=rsa-sha256 header.s=google header.b=ikCqdo/J
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8b4d07494b0so72957567b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 13:17:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795641430; cv=none;
         d=google.com; s=arc-20260327;
-        b=E2DzBxPHk6TRmKz7MoSivc/fJnlnvktesFXkHjC4KCb2kGq2FxK4KN6YVj2fMz5KmG
-         ZCZaYmlGsH+6yPgSxEv4b7tqGLSMLyA39Jfpj7Gjj0OhjmV9aWwLo5Jk1i6IiNbWEQDd
-         gMv53sTSXH4fFiuhqE608JIyfT23IkSFaVqdPr2cyxM8rDw3c4u0vu6wWtnqdCoZmdPy
-         oULNoZ7Z61Uo8K8eZi/tcCYfdGtd04SsTLXkT1o4VMQTaYl0hPI5wtjdWdaKlIRNSjzC
-         +e8nUuNqQH+WfMM+OvsS8vYXVFU7a30wQCKZpYaTu7c1C9m5NxeaD0va35tipq7l2Olp
-         SoDA==
+        b=PCmN5xZjtzNEWfCTyARhhkxzAiyJJKBre5ezHflqzJ6t8ejM/98XHqisjnb9U8JhoQ
+         EaeZRyvdJRmKzOwmgJgRtcNKKQJELR7yG0to+NznHafBibQsZahznpLEXUPrMz0TulqI
+         2hzdzZWe92dJLMMG6NpW6w1jezvCJWKVNZEvillmJRu4Rk06Kr5yNlhxWWPo/Tsmtshw
+         S3rTJyW22cOAdKddxv/gLWxBrv9tIHBTBtRv71QKjd46MlQLPwc/3K5XLzA9o7OGIlzd
+         LstTYLUpnMVC85WnB69gGUq+cNGbnkkPrn64+0NRRhjhEnTIKCckRyIB4AVF6iI8eJAh
+         sKNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=v2Q5BQdNA5CO0G0HRlTvOkzonEqCKg9Nq/F3I2z+4W8=;
-        fh=8M8THUTfWVgQ4ylvbsi8ziAPFuBEk7lfxJaBbtY3CyM=;
-        b=YgeK8nX4vxM/8KdBcKLDqYs97OGJMtWRgZhMfbpzQqk4v3eKRlfCVHzA/HdDrIIOoZ
-         Rg8aZpC2oS/QgQ7+NjzvOIAvWi/r6G+/tu8YMlcXp0xVFbKarfvImODCNrkdleyjuaxD
-         sdxwqus6jQ6qMrtavJLdlLvRrv3r3KVlreEX4epylIMNbxm+BrNWy8Cs0bWQeRZ1DU3B
-         fWAZLm6Jb4qtlDCsX0JvB2H6yBPqQWstJEAGRYfWs9YNI9eo61t/rAir9fTaoJ3tvhJ/
-         rrKA5Z/jffX1C+nMUbRxuOsLPRt6j7dDfnVKvxSu/9qlGAxuUbMFNco4QMUQozLDYheT
-         RFPQ==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Xpq+0pwaGJzipp07jmvO3ANvw3Qwr0iR1BtMYGqpL5Y=;
+        fh=1tb8+ZcFurCLqrcx6hZehPK45kkVEECH2xBW7M4rEF0=;
+        b=RSN2C8BM9MClROoX05du7n54IiXNpaDeV4a/AzwKa6kmn/ptdnrKOnhkEqSLORnray
+         sntJ3tfbcRVaXPxeD6QP1WFCWox2H1LV2pEA4v5uaXM8arS4/t00Sq84Bt7Z7ZomfF99
+         Kl5gpg7jbE2PGJf6U9oXUscAvwLeIb6QER7rKJ1EXc1Uv7t8GHDWPBJLtumz2CFuPSn0
+         0VffRFG3JKPNHjRZEDBDj2Cn+n5/vK+46KdjOMzX9E1gA7nU5jPb+J5+TQEuHIsVFF3e
+         3OEd8r/e2QGejTju5TsLcPibtFzIXe/YyRguoDhT2o07KkJ0Y60Ik7Ou9XosoExl5Geb
+         WmIg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1795641313; x=1796246113; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=v2Q5BQdNA5CO0G0HRlTvOkzonEqCKg9Nq/F3I2z+4W8=;
-        b=ZFZGa1MuixAy7IjqsLRjY3SC2wAYhkVYCbqN/PVHdn1TM6cmbtD2eRYhqN8A+siVVP
-         btUqX/zenGSbVIfr02R/5p+0+h+5DzzOrdwaY/Gelrhz4Vx6jIZfKk57P1PkCT49sU8x
-         b3NiMSXkhqHdA0ObMv+/ZNPMqaIR3PVmzpf6/hwl9/dvbvOCH1caXW56EXHVRxrh44Y2
-         9LjVNlPYZwwZt6QTPK7OElvfcE09PMvp/BsN5xFr5rpQ3/ySs+4K73CK0Fb0PikHcIG0
-         LovIokxWXQN7mPthNCukcvqbGvJBoG4gjzp2fUpJCzr1kcepNE3+QV6ajRdTd+P3DNMP
-         h9mw==
+        d=nexthop.ai; s=google; t=1795641430; x=1796246230; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Xpq+0pwaGJzipp07jmvO3ANvw3Qwr0iR1BtMYGqpL5Y=;
+        b=ikCqdo/Js06OZnjno0W+kIv1CiD0oR8ObGMHXOscIUzGqP28wgQViOHE7omuITw0BX
+         0k6cs0KjS+RXzmw6xE3ijiInaPQr2YTNUkoruz+Xsr5SXXKxLYZsAHzv/bm/il9q5gD7
+         hd+2fQw+XlkJZL1mT+6udr4PlowS0oxRoTFtBpOFHp5ZCTuFSxpI9tH1kYrhjWRUC+Op
+         LsBmuYcllItowU4p2kLnw+34e7kDcgDwdlGhTL+r2AIPOoNm25DfC5QaHYR6/00Dke38
+         oh3XTh0v2gEbor9gNFvPrq4rZGrpFqfZH+KDVveZM2Mj4dQB27ephNT789CrGGk0cooX
+         LjnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795641313; x=1796246113;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=v2Q5BQdNA5CO0G0HRlTvOkzonEqCKg9Nq/F3I2z+4W8=;
-        b=wLv2jXkDGb8n4Xvm/ppVaClgeehgtpBImOs8gZgLCH5Q/5IPMPnNyop6qUgGgDVKAt
-         8Jf6Mcz2S+J5Mstm7x71TC+/ZcAnOInmbFjHXG5WZ0g/LpSfOJG2L4mNfiDflaSb3+et
-         qVE2wt2GyHNA+RVxyop6p+T+scxQ3Of2j6BIqqXmSafHT76Tmy/dTkSNxrhduQuCxB51
-         CidjmaW6iOZi1DjTdHU0IyDd+gOwLVS6Xu54NjvwBYYLLguiVE5Y/xyTRWTJ1YMGha6P
-         8PagJT5pPOngOo0UaZ/hCa5JvScJVE03knl0FKhIcVx+OhIcOIX8TFBdA6bKXxkdgXQT
-         Y0JA==
-X-Forwarded-Encrypted: i=1; AL+hErGBqRrHBxpRcVNmFD03i2DUw4ND5QdixRZMWBDKifRMO1zSstgXDEmoFydHjLSVjMmG+FFKvHN4+EoGcPswP1A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/jrEWhdjDelUViUMmE+300nbqP5kBNNKYt7WyWfnxQoX4ZO1Vi
-	6WfU6cRSBy8SqIQGkovZak2KR/DDpKRd4wvXZ6a9xnP5sK1/VaiG/iagQuAk71lrp9YVPsB/bgi
-	Ig6Q53wly4tDjBMtScbxgzz3kqxUBwqqNPr/1q6SOMg==
-X-Gm-Gg: AZFdTZcFeguekjN29UaJwRIKEGL4tVaUYetiXz5ABtchQbBvubXLSR6xiJfpu1NSvVD
-	avP0pHwgv5bur2IvS4XAyIpo1TIDZSJJemFZiQELLSIcWAcx42oSvr/v0sWfmnGH8FEVvAWsQq9
-	VNX2AJgycFX2BhpeklxSQBKY05e91CYeAMzHu5CCUuTcNTBnP3KDxZ/Ncuvxq33bJmUasFcyVHG
-	6gXGy3u63lnHVs6QIUnuyX173Cr+1uG+l+jxyzRKs4qRO3T+1j7nuzisdabCwwmtA7yhEM5wciC
-	Gx3Cu/MgIbDEyFjt2pGbnnyWi/OmBK+87KSKDDkO3nVKsn/dCMJHEaCA/7bKsfHLB7oPf44Fhq6
-	NNt3nwEEplcrQJpDtu2CfIvNZ8iZQz+maM7ejtzBvQbz3w8om6RWgUi+8yO+ZuHY3TF4/
-X-Received: by 2002:a05:690c:4d41:b0:8b3:527b:d18f with SMTP id
- 00721157ae682-8b520456090mr78329377b3.11.1795641313439; Wed, 25 Nov 2026
- 13:15:13 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795641430; x=1796246230;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Xpq+0pwaGJzipp07jmvO3ANvw3Qwr0iR1BtMYGqpL5Y=;
+        b=S5qo5Lrf6axKYOXkpzSslRiKvG9zh3wuU5vQLqGaTWLe/8zKePWeoW49rO2x4ynar6
+         2zSdwCyq/1+G8HCn96dRWKSonsS+k1ez46wJg/g5xwGSFSOxpqS3wbXQzZEKeuaKeV6s
+         lzvV+FoyghO2qFNiyLw0ERjhYNp9fGEB4D6dtrHAnTq4tUx6zUaU5gF8xuSMWZsF9AfY
+         QJK7+HXuxOc96++DzSu1X2qpydLAVyEZ8OlSySx9UufIjxbNQFum4KA7AjyavWuvUQns
+         pbwzJgKCdwNLGskhJ/PV2/lWIMxEct2t7bX+ZFlYXKx2E2Dy30NHpTwHZXEbafM0JCyo
+         BzAw==
+X-Forwarded-Encrypted: i=1; AL+hErHkFUDLPcwiLcOsFz7e6NZRYlpcTWbpP5mbl8ha/XOEsYBVmGl7imLdrqXYlg1FWtvZ4iPI4CBZtpcvoptq9Eo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+I33SmRlPdc/HyrGl5IGqlAzX5BOMV2gviuulem2bDxYVZacy/
+	ERGo+kKW0VMLZPCWDSxGdU1t5ZxZc4iyRTTuSqvYQPuJKGaJyYbUf8953TctsJGsFh+bmY+iXcn
+	EppWjf0UNsEf3jY4dR9mqFDuelDY4rPxy2rzLJ9vtDA==
+X-Gm-Gg: AZFdTZdkSLzzhzTHBB/yR9072M5Z65Fmjzv5WheMGsgvH8BVdfW1bk/eDI/hKE6XQB9
+	0DYcula4I+Cgj/HyDPBDhOjTJ1Ps8ZvK4ipUvwaK1t+sC81fOurBnDy3vBoeyhtduTfgfJcoVzq
+	LQ/0O9Oih9bBv0JSEMxIcpxUQDJokrq3LB/ypPQAN/YgBiD2phGclNV/4CUJWQyWAmwChah8fxo
+	TGhgCAMQWEyM1qU5ZMjocfJb1gdbSOOJ8wpJc03gjCr1Sd69q1LJKs6ezZ/K6VXDWaIPg+iXWWL
+	mY1CQoVjpjTQLWsTCq0ht96sDeR+tM4n79PyoLkJZiobBfqrXYp5Wgo8RwDm7cGTY1JUHUD74CG
+	VGKaqLxFYXRjY2/7wRhOPg1b2/hDReE5EPYpgD4pKKDOf5SWWspk6+5DF9zJhz7j5XnW4
+X-Received: by 2002:a05:690c:6e8b:b0:8b4:c69d:17e3 with SMTP id
+ 00721157ae682-8b520501322mr76798817b3.32.1795641430719; Wed, 25 Nov 2026
+ 13:17:10 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,13 +104,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261120-tcp-l3mdev-exempt-ports-v1-1-ccc2a3a6cd09@nexthop.ai> <179556272605.3135.9300919500524716345@kernel.org>
-In-Reply-To: <179556272605.3135.9300919500524716345@kernel.org>
+References: <20261120-tcp-l3mdev-exempt-ports-v1-2-ccc2a3a6cd09@nexthop.ai> <179556272812.3135.6671930746959900620@kernel.org>
+In-Reply-To: <179556272812.3135.6671930746959900620@kernel.org>
 From: Kalash Nainwal <kalash@nexthop.ai>
-Date: Wed, 25 Nov 2026 14:15:02 -0700
-X-Gm-Features: Aa3M54pDddf1z2GThzIkP6Ya0YrZfZnwcPcCDFy0GPN_7KFQAEfTKsiiMCChi8o
-Message-ID: <CAAv61uTjxQD6WUU-ZH1YG6Q_rOzPD5MKtAJvRQnmpm-nqFAs1g@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/2] tcp: add net.ipv4.tcp_l3mdev_exempt_ports sysctl
+Date: Wed, 25 Nov 2026 14:17:00 -0700
+X-Gm-Features: Aa3M54qAjb6VOUA_FXJBwfwYAI4hdIT50Z_FnPsv-oL5ve_wAb0briVt4LVCUPY
+Message-ID: <CAAv61uR_cfj-tcqjf2q1KYDVxENmwJmjfR0M08Jk65iiQaj2Mw@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/2] selftests: net: add tcp_l3mdev_exempt_ports test
 To: netdev-bot+sashiko@kernel.org
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, 
 	pabeni@redhat.com, horms@kernel.org, corbet@lwn.net, 
@@ -118,48 +119,39 @@ Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
 	netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the review. v2 addresses these as follows.
+On Tue, Nov 24, 2026 at 4:25=E2=80=AFPM <netdev-bot+sashiko@kernel.org> wro=
+te:
+>
+> Thank you for your contribution! Sashiko AI review found 5 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 2 =C2=B7 Low: 3
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
+>
+> - [Medium] vrf_and_unbound_listeners() in
+>   tools/testing/selftests/net/tcp_l3mdev_exempt_ports.sh waits for the=E2=
+=80=A6
+> - [Medium] selftests: net: missing VRF and l3mdev prerequisite checks in
+>   setup()
+> - [Low] The negative checks treat any non-zero exit from nettest as the
+>   expected 'did not get the connection' result.
+> - [Low] In unbound_listener()'s 'exempt, VRF conn to unbound listener
+>   rejected' subtest (lines 117-125), the server is started in the=E2=80=
+=A6
+> - [Low] selftests: net: tcp_l3mdev_exempt_ports.sh bypasses lib.sh
+>   helpers
+>
 
-> [Medium] fix the lookup instead of adding a sysctl
-
-I kept the sysctl. With both listeners present, today's result is
-stable but depends on creation order and address family. Making the
-VRF-bound listener always win would change that for every
-tcp_l3mdev_accept user and may break some existing clients,
-so v2 keeps the default and makes the new behavior user configurable
-per port.
-
-That said, I can change the default lookup instead if maintainers prefer that.
-
-The per-port scope is intended: on a listed port, a VRF with no
-listener of its own refuses the connection instead of falling back to
-the unbound listener.
-
-The sk_incoming_cpu tie does not apply to listed ports: the unbound
-socket returns -1 before any score is added.
-
-> [Medium] the docs say more than the code does
-
-Fixed. The docs now say that only listener lookup changes, and that
-established lookup and bind() conflict checks still follow
-tcp_l3mdev_accept.
-
-> [Low] a listener bound to the receiving device also matches
-
-Fixed in the docs.
-
-> [Low] CONFIG_NET_L3_MASTER_DEV
-
-Fixed. The sysctl, field and bitmap now exist only with
-CONFIG_NET_L3_MASTER_DEV, next to tcp_l3mdev_accept.
-
-> [Low] net_cachelines documentation
-
-Fixed.
-
-> [Low] bitmap updates are not atomic
-
-This is the same handler and behavior as ip_local_reserved_ports, and
-it only matters for a single write longer than a page. I left it as
-is.
+Thanks. All of these are fixed in v2: the test waits for the listeners
+with ss, skips when VRF is not supported, fails if setup fails, requires
+a timeout from the listener that must not get the connection, and uses
+ALL_TESTS and check_gen_prog.
