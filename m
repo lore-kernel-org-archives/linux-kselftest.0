@@ -1,58 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795610197;
-	b=EINln7UXTHBD5s43hOD+iNQkxMNx2WeZuZN0Z/TCjiIXMICLgNPIx4eZY50jpI5vr1/H
-	 o/GMak5i1dle3n+uqDaVRFqcxCknjGqIYMO2PqOGyXh4BOAGVGMwnKoJ6nxQoOgWBVPy7
-	 TQybaskLuw5mlX0PHJMZEN0YWSSttKdC1TKUvv3ouWOixBqNVrhg7px2H6PeXDKU123yn
-	 SazxG63wbuyXUdayvcGpieagMzk868kOyvWQ4oWxk0GHYzY4pQDUqm0MEDo356/0YQpvr
-	 wcWqnifnYIzQoeLUIMiOw4hWuizbrx1Vjr4n4isG6W+imJ/51juJDWJ92hbpjZfimlA==
+	t=1795610215;
+	b=P6d/DgLaml6sRcvYLd+WrFFl2A4bNvjBgmBRPfggiOJx8X8S5/SzIjm9scm4RvSnKG+/
+	 VxovMPxkwKjRJOcmPd6FCELaimYx2xokqpDlzWREApJruYdj8Mo62+D0jw5C6KkFAUyrw
+	 Q8bQVqjnLpKYuaIJiU/5k+4hFh4K7nF2wHQBkcBdCaxKAMAT8qhnKKyedFIw/wU/S2Jo6
+	 N2wCQ8S12IMfXsuEchu/6+OAruvr0YCVMTsEtVoReM1+aZeqD9Gqp2ZK6IQlYJgQFwoo/
+	 YNPjzQ4e44NMEmMiotDepeb16RT2YeJ8JZwEe2HPGtE6ktqtVcG0dEIu9kt4r9Eiyhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795610197;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795610215;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=LQhKS/4BijX82m4yhwQ/2gAbbajO9/DdsdLr6IGtdH8=;
-	b=Ny6MjgcNjfd3f870ZvFMF++lrKh6zXR9oHGqWBmjFQFZ0uAXUo5EnUbSIqdSlNPK4lse
-	 Pn6AMmoqpwBIXRmcM1FLtTfRr2oslwUAF0DrPTKjiwNJa9nssXNiS809MurMh0w1+D9V7
-	 c/mXERFB74pqcO9xlFMZgCzdjVxrG5eenZKnQPitdExywSHaXkBmO1Z2PRrZKmJZUH7rJ
-	 mDSauNth5fWdfzMI+9fUhEqoiikvFUJW/qS6CcWiU+qwLc3bbDhGsmg0Kgc7KUGaWhNBU
-	 OLmGRLl3jUemwPqpgiExIIoT3IYcLjVInltqfF7L7sOgDmc85GgUVkM1Dp8YeQgra4A==
+	bh=+5FMk/SdVDW2nWnHSrzI8xlrVGDF8ncp2jQw4zwEyc4=;
+	b=kVLcgslfg7QC/eYolrBgzStiTVXLXGdNRD0V6HZFKWeeCwM5NO1oMVicuAh9yP2Qkz+S
+	 TDyf73ZmdDpeScM2m9jKFTq1WBJ40k/aau5g+ss0/LqiOwJsQL4/VZ0BWfM1UTtbEZQRx
+	 NXJ+EFlAqbiVRgcChqXEpC4i31OH1HBLA7bdJJKaZ3ufBtLltU9eygAqfH49wAJqgneyj
+	 reWfpICyjHnmZwhhZ7+rGdakMUzNn/+xzFMRpz5a+1YmjKwyMz0nTt3yQAIYkUVDWe2iK
+	 Wj3tEA+93dY67wjs2Z72rf3CHGdTM06MpLNZhtOSpiVcPcCqb0vRfAOR47Ec35TPMMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UwSvVDc1;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="i6Da6/9Q";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F89606A31E;
-	Wed, 25 Nov 2026 12:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAE3606A326;
+	Wed, 25 Nov 2026 12:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UwSvVDc1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F1F1F000C0;
-	Wed, 25 Nov 2026 12:36:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i6Da6/9Q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99B41F000C6;
+	Wed, 25 Nov 2026 12:36:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795610197;
-	bh=LQhKS/4BijX82m4yhwQ/2gAbbajO9/DdsdLr6IGtdH8=;
+	s=k20260515; t=1795610214;
+	bh=+5FMk/SdVDW2nWnHSrzI8xlrVGDF8ncp2jQw4zwEyc4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UwSvVDc1KlVX9DCQ2QsnXyL9xPuBtsrHUgw17GdO975KQqtADloS8MX/0PjM3X2Nt
-	 AAdubcobONjzXepewzxw7JGQT3dnAjbiQkv77Z+9fPROI+O+4UMlM8EyHj+JSxQzqv
-	 wkEHvfT9RsV1H8XeNLDAl/uZ5YfAkvkQ1jeX0dRAU3ClWkeahyFQEiRpjnGB0lt7eP
-	 ZPDPQmJa3mbjCiF/J+jT5EqD/gH+ok8+yH1EPUee/zTlXu7UlgLWb9xhv0ALYddNfe
-	 pNfqLwSpWMmdf2n59Ca4djwyl5ILYlELbl1Lk3qagMnCKfsi472YI6bXNGnc7Y9cIR
-	 TluWcHQYn4smQ==
-Date: Wed, 25 Nov 2026 12:36:32 +0000
+	b=i6Da6/9QG7+xJWge26mZa/kI07vKMbeFJy2lpzK9lsHG7NgXwVVYT6bDTM0Y7X6jM
+	 /ElsQU1AntNDnyvsWBvehY6flvGiVIlzrdFXTQ1iin6ZACrjCQLIXRef2I64SUSx8h
+	 OCRL+0UeK2Zl4Ck/L9NiDwXwbAu1EixBUZgdtAIuULrwGNPlclljAO/vIo3gdWwHLf
+	 sIn03irdGIjzeiTK5l5vHdiNPPhOIzuoCIbiW9WYYC9Jy09oe9IbVFvmY8vncS8KlZ
+	 ViQAykr5gO4VN1dKPrEUGo3dkg0+9c5Pvak0nCevMCinxzGun14x1KHNfUwpJLEmC9
+	 sMcuy56rE//zw==
+Date: Wed, 25 Nov 2026 12:36:49 +0000
 From: Simon Horman <horms@kernel.org>
-To: Felipe Stival <v0idpwn@gmail.com>
-Cc: netdev-bot+sashiko@kernel.org, john.fastabend@gmail.com,
-	kuba@kernel.org, sd@queasysnail.net, davem@davemloft.net,
-	edumazet@kernel.org, pabeni@redhat.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, rdunlap@infradead.org, shuah@kernel.org,
+To: Felipe Pereira Stival <v0idpwn@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 1/2] tls: don't hide a queued KeyUpdate from poll()
-Message-ID: <20261125123632.GV31322@horms.kernel.org>
-References: <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-1-8e25101e7be6@gmail.com>
- <179538279534.3135.17423952957860887247@kernel.org>
- <B373FE61-88E2-4F2B-9796-01B39ACF7635@gmail.com>
+Subject: Re: [PATCH net 2/2] selftests: tls: add a poll test for a queued
+ KeyUpdate
+Message-ID: <20261125123649.GW31322@horms.kernel.org>
+References: <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-0-8e25101e7be6@gmail.com>
+ <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-2-8e25101e7be6@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,16 +68,15 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <B373FE61-88E2-4F2B-9796-01B39ACF7635@gmail.com>
+In-Reply-To: <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-2-8e25101e7be6@gmail.com>
 
-On Mon, Nov 23, 2026 at 08:46:43AM -0300, Felipe Stival wrote:
-> > Can a poller that is already waiting still miss the KeyUpdate here?
+On Wed, Nov 18, 2026 at 05:35:49PM -0300, Felipe Pereira Stival wrote:
+> Check that poll() reports a read event when a recv() for data has
+> decrypted and queued a KeyUpdate. Once the KeyUpdate has been read,
+> check that poll() doesn't report a record sent with the new key.
 > 
-> Yes, any record tls_sw_recvmsg() puts on rx_list has no wakeup for
-> concurrent polls. This predates this patch, and I'd say it belongs in a
-> separate discussion.
-
-Yes, that seems reasonable to me.
+> Assisted-by: Claude:claude-fable-5-2
+> Signed-off-by: Felipe Pereira Stival <v0idpwn@gmail.com>
 
 Reviewed-by: Simon Horman <horms@kernel.org>
 
