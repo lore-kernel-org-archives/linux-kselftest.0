@@ -1,58 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795592945;
-	b=hCQMNDg+b2VjGvVGoqeHNt4JMkGp1yYRheZV4neLjC8jLWdM3kMJoXn2LrL63maxPe4V
-	 ONpIP/yKnPs5vFC+ap7Kt3u8WkHTTn6RWQx8ztShOHfRkQ17w7xxONjg8nZV72kawod/0
-	 07/kfHb0q4H9MYlEeY9fxAPlRzdKqoyDqP5wklgZAR7Lua7TyKI1EXNU2yAUdlPPGzHpu
-	 RmyNO9N4IKEAxhl4qCeigg73MDm8B5QXUIjS+YJnQnOiIEHhzxI9K/RAz6+kq/hC3NdCZ
-	 pjlys3QMJ0/vUxynPc21CCYsn35a1Hm0iEhg+/3dm1NzlAxnsZvKspMImvI8noVEYIQ==
+	t=1795592968;
+	b=h+XX55Qdje2lO8QWeHLuVXDaw+dZiorTbR0N/dynoMjW+g8v8rsdpU/olU6s3BHcvjVS
+	 2D0ehjkBB3Bf77yOMaeMs95vIMenz3y7pVk/sZFZ5F0fYFIhYs5PtMGGMv/p2hrjmxzAF
+	 r1evff5v1VOv7KczzNHRsaD1qTgEDb7chcCnF8Pqy5XIln4PGwLWoPm+MT/GfXxc6Va4a
+	 GMTDqIgzXXC6GwTlvEmCViMZ5evOJph83aYjL1Hkvn1JNBht/fW4Qgg0ivpjuz0DZE2GR
+	 qjolXi8xZtN3T4p16+R/z3V38ecZUk5PA9uohsULnD0eRmVe664Tu8zHh59nMnZ2J3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795592945;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=NHziLxnIYyaGgH9iRMQeAbyOtg13/DENqLY2yDhYbX8=;
-	b=kxeVZmq5YIpjYiyJnt3G5n4A2FaOEU3bFMMqnCoSyCafbmJjZf7VI1BSJ5xc2HXP400P
-	 K1ODkIz/3JyaVs1aaf6qbUU78WOmyDihVrBhNQzoPTtUSe6+FY1LBsfvcKmdomzV7L3GX
-	 4EhXr6StMFHjppGBuNLV40l2bgAdfdEPPe3exfcv86Tf0rNiD0xQOVT6jjE0DGRYwl+bM
-	 vXYtAmLyYrLp/LBUmgvHNwESIRjUxiq8XGvcXblHZfmnhZCw4Lyq5FyRkOjb8QE+P5oGT
-	 awitj0T1UYsUjLr7qBw41PEUZmLSFmDp0LLL3gNr+rdUDq81EqvaZ3CxCJ+q6NBwdvQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795592968;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=XbkWYxcnakfZmA9T1+I7Na0TVwpp2fb1Ta7OHaIvM0I=;
+	b=VrzZSJ/Dlt5NVFDZV57Kh7xsMDw+L6+66lFanNgxiWfkWGxJeNTWZQcwXvb83BJH5N04
+	 mxFqq+e7Cb0b5GYggBGdmyUtxeWrMnhp2ZO6lsInJdI/wQurEAjtwoJqPWiv5VipKHeVg
+	 d6ACbAjFfIBjGhZcAQ64O2iYTNU0RIvmB4UtSyzysjX730m0T+8dQi10zLmZcs8oeUEhM
+	 YhD/IMnJ70vC5qZ4oetEnFfRBHj6BcPmtk2coB0GFnzZeOJ4gnM4mAD5LBdltH7dJzt3e
+	 HpU0kPVtm59E1maKO0v1eQaNDAskc99FN5w0zt4udXzPSu5ZsDHbT+t7Hd9pZg28RZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f+0gcdtW;
+	arc=none smtp.remote-ip=74.125.82.170
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D543A606A32D;
-	Wed, 25 Nov 2026 07:49:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D543A606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: abb7b9c6e8a411f19a56ed5b684f684d-20261125
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:b541b372-0249-414a-b05f-4931f132ded4,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:90e84ad07b0fbd8a599329838e687d2c,BulkI
-	D:nil,BulkQuantity:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0|15|52|99,
-	EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
-	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: abb7b9c6e8a411f19a56ed5b684f684d-20261125
-X-User: fuqingshuang@kylinos.cn
-Received: from [10.42.20.11] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <fuqingshuang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 410151515; Wed, 25 Nov 2026 15:48:57 +0800
-Message-ID: <fac38220-6a40-49e1-bd37-732519e74a88@kylinos.cn>
-Date: Wed, 25 Nov 2026 15:48:55 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909B0606A336
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 07:49:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 909B0606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f+0gcdtW
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-38431138772so7016982eec.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 23:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795592967; x=1796197767; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XbkWYxcnakfZmA9T1+I7Na0TVwpp2fb1Ta7OHaIvM0I=;
+        b=f+0gcdtWduOA98ocpZ4P6otkLCvczzq5SVzcJN944awqW2BkygzVvyoH8NnFAjOdDC
+         NFW3hqkG7IECoi+jABlU55SYHKQ0pftH3nyRlALERlmFS0q7Pu2GY6ZD5BXZPCVMD9ed
+         q0jgKCuk0GykdiPKK7dnysrp0HvR2Swlt+fyJgW75NECl5gRN/AtsBF/bwm/0UcFIfQC
+         ZAOyEyQaUjbAYgykQJQ0PlmIoKy6xGeE7TxnRPiMhbVa/O95oNWm+3JF4qWA0xa/u8Cn
+         SEwrM1F88/TeZZg0W+0lbdPsFFwi66oEcGXUJ34dVnaG0VjVHwH5oX5HNKyO83uAcnCS
+         95bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795592967; x=1796197767;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XbkWYxcnakfZmA9T1+I7Na0TVwpp2fb1Ta7OHaIvM0I=;
+        b=J3Iv9dPX0Bwq809idepeFWZS+y/VDwDoQ6F1TMFy5Xtcv6afKvqKjLSAOwog+9faKe
+         nPCP9px4LkrkGftq1izQGp24nKgORPMhMobSmhAnY9O6lzB8q+TJwpE//OHWmMJih7T4
+         q70lwbwBCKZ0UW2GWMOKxeKiBwEV3w1Re0AjGKzULiAknpeoMK/RHvAkGsCAcXyYhjzG
+         QOd1hEkzKxHBk81zZPG7O5tSRN2CY4PDvtFJAolzPpDLUrhhackDYEXt1ywizBQLA8ey
+         PHq2LWS0wJAyzzK3qQVEzWGPp9XlCUurDgbLvUwDrTV6+gPztIphZQQx99mYecMXpp64
+         uL2A==
+X-Forwarded-Encrypted: i=1; AL+hErFZMo4R2J702GhcBhw4spySXnYgJ9W99dT2DJEWQEoHw/OpnbAr4LdQfADcQ6r2hQdN4Et/0SVw2fYSWZTtdp4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Z4O1AQfZyanIcb3hoHOyaP1Cr7sWc7D3yLeN0/sNisp+7cfNz
+	i1tdjcULanXQtTDbiV059hGUBkFPo93/JEUYwSMuP5y+iNcEFa+6Opln
+X-Gm-Gg: AZFdTZf79DT14Eny1+Lwmm1t5VS+E3cSuxIuD/z5IJbOQHFbQtz18fwBWeVncKy3lWu
+	OciKvcme0gDGRqvCnec33x5/OulmL8Suj+fSOpMulo8VC8hzlKED2eY5kxZnU96LPwFG05SlhSM
+	YkAVTLgLm+xmG+wnVs1+SnH1tgB5sX1uaj0/tdzQBXjnRq2EEFBDG5zA1KdbZ4rNmrqyvqWaHLU
+	dOJdSstBbzl1dattFBfkIbdx1AAjhbxwD2bYCpW6fwOXAA+E2L/03TX02SKnpEXwVGKyoMDx72Z
+	ugG4Lrrj4p7g0rahSsD27oktYUdYtSwYmfK2OqYxemFeZ+7YDCsINzlQ9YExr7x6VMdzuy3asEQ
+	If8Qiqj4GxmZPY9vjwKA9io9ztj+Ncx9feb5PMc2eqK/PUyBskvqifYbDh8JhaAQ/06GFs9+zfE
+	j6u2jWU1NDS5IbVOCs+enwXRywTTsFcWXHsUvs8Cp6DMawErTcEZkpzdLgVaP6Isj0D2xqDTkJb
+	GJQlx8YCA1KyH+WQP8+U8IRNqEiZEh0tmVdUNSVVwDeRvZ4yx4RFfVT8pzuhxOGdguD8PsIAzhZ
+	M+XdPfWvm2tppsBDZ7pyLs+7AAw7qz/aUajJTV/H/CcR5wSIPdU=
+X-Received: by 2002:a05:7301:dd8b:b0:372:32a1:b384 with SMTP id 5a478bee46e88-38571510675mr19309829eec.33.1795592966558;
+        Tue, 24 Nov 2026 23:49:26 -0800 (PST)
+Received: from gmail.com ([2a03:2880:9ff:40::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-386c7c62a91sm9502217eec.17.2026.11.24.23.49.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 23:49:26 -0800 (PST)
+Date: Tue, 24 Nov 2026 23:48:56 -0800
+From: Narcisa Vasile <narcisav.kernel@gmail.com>
+To: Joe Damato <joe@dama.to>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, edumazet@google.com,
+	horms@kernel.org, narcisav.kernel@gmail.com,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: uso: check datagram
+ sizes at the receiver
+Message-ID: <awaS6Koc55ducrm6@gmail.com>
+References: <20261125013838.3823834-1-joe@dama.to>
+ <20261125013838.3823834-2-joe@dama.to>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,74 +103,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/proc: skip fd-003-kthread if run as non-root
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
- Shuah Khan <shuah@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261120062933.3169112-1-fuqingshuang@kylinos.cn>
- <20261124223355.15a364523377daf5cf2734cb@linux-foundation.org>
-Content-Language: en-US
-From: Qingshuang Fu <fuqingshuang@kylinos.cn>
-In-Reply-To: <20261124223355.15a364523377daf5cf2734cb@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261125013838.3823834-2-joe@dama.to>
 
-在 2026/11/25 14:33, Andrew Morton 写道:
-> Fair enough.
+On Tue, Nov 24, 2026 at 05:38:35PM -0800, Joe Damato wrote:
+> The receiver only checks the total number of bytes received, which is
+> the same whether the peer gets one datagram per segment or a single
+> unsegmented datagram.
 > 
->> --- a/tools/testing/selftests/proc/fd-003-kthread.c
->> +++ b/tools/testing/selftests/proc/fd-003-kthread.c
->> @@ -36,6 +36,7 @@
->>    *
->>    * Return /proc/$PID/fd descriptor if process is kernel thread.
->>    * Return -1 if a process is userspace process.
->> + * Return -EACCES if run as non-root.
->>    */
->>   static int kernel_thread_fd(unsigned int pid)
->>   {
->> @@ -88,6 +89,8 @@ static int kernel_thread_fd(unsigned int pid)
->>   	fd = -1;
->>   	if (flags & PF_KHTREAD) {
->>   		fd = openat(dir_fd, "fd", O_RDONLY|O_DIRECTORY);
->> +		if (fd == -1 && errno == EACCES)
->> +			fd = -EACCES;
->>   	}
->>   	close(dir_fd);
->>   	return fd;
->> @@ -168,6 +171,8 @@ int main(void)
->>   		pid++;
->>   	}
->>   	/* EACCES if run as non-root. */
->> +	if (fd == -EACCES)
->> +		return 4;
->>   	if (pid >= 1024)
->>   		return 1;
+> Run socat with -v, which logs the length of each datagram received,
+> and check that the peer received one datagram per segment with the
+> expected sizes.
 > 
-> Why "4"?
+> Signed-off-by: Joe Damato <joe@dama.to>
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  tools/testing/selftests/drivers/net/hw/uso.py | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
 
-4 is KSFT_SKIP.  The convention in selftests/proc is a bare "return 4"
-on skip paths -- 9 tests do it, e.g.:
-
-	proc-loadavg-001.c:32
-	proc-net-dev-lseek.c:35
-	proc-self-syscall.c:40
-	proc-self-wchan.c:30
-	setns-dcache.c:56
-	setns-sysvipc.c:55
-
-Notably proc-pid-vm.c includes kselftest.h and still returns a bare
-4 at the end of main().  So the bare 4 just follows the directory's
-existing style.
-
-> 
-> (and why didn't they call it EACCESS.  Also s/creat/create/)
-
-Ha.  Renaming it now would break 50 years of userspace, but I agree
-the historical spelling is unfortunate.
-
--- 
-Qingshuang Fu
-
+Reviewed-by: Narcisa Vasile <narcisav.kernel@gmail.com>
