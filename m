@@ -1,55 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795588877;
-	b=V8fY8GRR2V5mhNRPhO7/uJxlH/vw/his9BG5Zl17NdCgTdwCt0xGa8MR3Lkvng5L0knT
-	 wBn7XXNjZfGETImqYtBxvrmE1/BATTHt+F71J9LwJkqpnlOZlTG/xhPiFTWMJ+nkBeUDi
-	 kHBFCBU2uw0otTWv6JQT6KXdNovKZeIQWGoLXu1BwphmD8hZ9IH65VFtNrU30pFlZBRxx
-	 s7U3eIFZWrlv8nSG+Rkke9ZhU5gpvoyWJRscQ/jOfTh5TQkp1mesLgd5zqUwb+hygovbQ
-	 uo3SA0PlEwOYlEZ68pwld6YCflHp5vax5es573HvfHc0e7LdP9uxr7lQZsxVA43iMMA==
+	t=1795588880;
+	b=CjbOp3V0437rUEsGdOYKx6OztIFtwb8ekMnCdAQG5YGbBLY2rjMpiPI4PLSMa4O3cNt+
+	 ggvKOXGvcu6HphSeQMiCwzHYJQrebYVZFG090W/ZUfteRytbeMbPiXXfft0IZpaoijX6Y
+	 bHH55W1KOidgg2ya9LKCcD/glUC8LqzFGNSL5f34PQmakAYhczdeE/qkq3/sgQzrUUDXb
+	 YNTQTcSiepYPvRHjLS6YkkUMb0ZXm3s/B7vt5bkFHH3Lz+TI8Yq5u9RQYilZ9Q8YpHESG
+	 iDSH06ocRgztS1IIUFhuTFx/GznZuJcaTfOweY5sWOYn35dOQmmYIA3Vn075MQ3ByzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795588877;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795588880;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=jXPtIz69YE1EXIfctFPM9q44zXNnKosM9rIAEAlt/gM=;
-	b=2faFralFkqWMf7O0cNKokzE+/ABo9RVLiKwIib58OXpbbUg8/JdxSWmg56iDL4+uCHFy
-	 EpnPVeRVe0iavJibu3AH9Nkx0zwbYACPweYTMBxtCb0+ouXhF6AkREhBsZ5TDE2VrEzE+
-	 3LPSf4OSMXIrVxcug7AwPPDTXRSyFgaWJ/aJpjNlSE43kGIDYPYrunHmeuJHgvkOY9ryA
-	 m4zd6BgSMdHPn/G8rltPR/tnbZ0SyM2PgSMMXh6YQHvXGRqLhd30841RyjEENPVky7UZP
-	 f5BcqACtlkJpvug4/1awVPcZSOhcehFIO/DIK345lEEG1oQDHdIZgENxwauXnYiJ1xw==
+	 To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=26ZGboEXDfqbGrgTiA5PM+t9Kn/E+QCP4q2JnEUv5Uc=;
+	b=NMFMpt4NO6gkiIl8K89TUL5IZrF/7sik5YkGxAPv9SSz5bgZAHo77h+mF3cNSVkQCgX3
+	 QKFGuLW8Xsw8CIMT1yWOaj+/OQ+FclRQ4NJehSRGhchWEgKbVc1bJq5jpusxWUY8yAfIP
+	 zYqt16UoqeZJAdrAVodteXlOVNgxo1qaRveKuW/LegMMPBGjWYlO5gWivwMrTtVuxxaPz
+	 xGLi2utR/OOlZKzGal5ErlaGZ2V51qrtFHkPVIxi6uBk8H14bkoGasscom9ID5UsZvEaE
+	 b8ZzLB2QCvIhHO7nMP4VCsbTyefg63+SvKvdIRH7cr6I/bnpbMS/wCKcoaZvH5LQcVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=igOsq9VV;
-	arc=none smtp.remote-ip=111.22.67.135
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21037606A31E;
-	Wed, 25 Nov 2026 06:41:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21037606A31E
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=gnofGUHu;
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A2B606A326;
+	Wed, 25 Nov 2026 06:41:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56A2B606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=igOsq9VV
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=gnofGUHu
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=igOsq9VVs8hnw3xqSjKHQ7sf+qSFWDrrk42oa0SYwFySOX/lUjWFMY/UEq5SaQHT+WwXzLeLI0rQg
-	 ktF5JG5wLjBSRl6pU2GL/8uXqMM0RHKApZsG7pkgW0nEuieniPbCpSpKt3h5LMlOHY+QB5oaXTwgZD
-	 TFpU8TOPgNaKQxpg=
+	b=gnofGUHuOuLLqQ2cYG9F1vK5n4nenLK/8qQBpz/Z88QyRh8KKQlaXzW0ZlegCiE7CwscRLFIEKGDo
+	 U1mcnvTV+CfWNEl4tIsm0Fbc7HjSnbsSI5KS+wMhf2pnGxIBDvayR0CGGAFPUiL2BNEJOFk9ZNy6lm
+	 rd4q4ElKZDD+lxmo=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76b06830992c-4fbb9;
-	Wed, 25 Nov 2026 14:41:13 +0800 (CST)
-X-RM-TRANSID:2ee76b06830992c-4fbb9
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86b068306580-eef64;
+	Wed, 25 Nov 2026 14:41:11 +0800 (CST)
+X-RM-TRANSID:2ee86b068306580-eef64
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[180.106.213.53])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86b068305c60-3c15c;
-	Wed, 25 Nov 2026 14:41:13 +0800 (CST)
-X-RM-TRANSID:2ee86b068305c60-3c15c
+Received:from home-ubuntu-251 (unknown[180.106.213.53])
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86b068305c60-3c156;
+	Wed, 25 Nov 2026 14:41:11 +0800 (CST)
+X-RM-TRANSID:2ee86b068305c60-3c156
 From: Jingjing Xu <xujingjing@cmss.chinamobile.com>
 To: netdev@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org,
@@ -62,11 +61,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	annaemesenyiri@gmail.com,
 	idosch@nvidia.com,
 	hangbin.liu@linux.dev
-Subject: [PATCH net-next v2 2/3] selftests: net: enable receive metadata independently of its value
-Date: Wed, 25 Nov 2026 06:41:09 +0000
-Message-ID: <20261125064110.1396439-3-xujingjing@cmss.chinamobile.com>
-In-Reply-To: <20261125064110.1396439-1-xujingjing@cmss.chinamobile.com>
-References: <20261125064110.1396439-1-xujingjing@cmss.chinamobile.com>
+Subject: [PATCH net-next v2 0/3] selftests: net: fix receive metadata and failure reporting
+Date: Wed, 25 Nov 2026 06:41:07 +0000
+Message-ID: <20261125064110.1396439-1-xujingjing@cmss.chinamobile.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,50 +75,44 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-so_rcv_listener passes the expected mark or priority to setsockopt() as
-its SO_RCVMARK or SO_RCVPRIORITY enable flag. Consequently, expecting zero
-also disables the ancillary message being tested. A zero mark or priority
-is valid, but invoking the listener with -M 0 or -P 0 fails with ENOMSG.
+Separate the failure-status correction from the zero-value tests, as
+requested by Hangbin Liu. The first patch repairs script failure reporting,
+the second enables reception independently of the expected metadata, and
+the third adds the zero mark/priority cases to the existing test.
 
-Use a separate nonzero flag to enable reception and keep opt.val solely
-for checking the received value.
+Changes in v2:
+- Split the exit-constant correction into a standalone fix (Hangbin Liu).
+- Put both fixes before the added regression cases.
+- Retain Hangbin Liu's Reviewed-by only on the receive-enable fix.
+- Wrap that setsockopt() call to stay within 80 columns; behavior unchanged.
+- Rebase onto net-next 57f165ff2f30.
 
-This issue was found with AI-assisted source review and reproduced using
-real UDP sockets. Zero and nonzero mark/priority tests pass over IPv4 and
-IPv6 after the fix; the zero cases fail on the original helper.
+v1:
+https://lore.kernel.org/netdev/20261122154912.1272447-1-xujingjing@cmss.chinamobile.com/
+Split request:
+https://patchwork.kernel.org/comment/27396929/
+Core-fix review:
+https://patchwork.kernel.org/comment/27396955/
 
-No kernel instrumentation or fault injection was used.
+Validation used the existing host kernel and real IPv4/IPv6 UDP sockets
+in private mount/network namespaces. The original four cases pass before
+and after the fixes. A user-space mismatched-metadata sender makes those
+four cases fail: the original script exits 0; patch 1 exits 1. Extended zero
+cases with the original listener fail 4/8 and exit 1. The complete series
+passes 8/8 and exits 0. All helpers build with gcc -Wall -Werror -O2.
+No kernel instrumentation or kernel fault injection was used. The negative
+sender fixture deliberately changes only user-space metadata arguments.
+No hardware test suite was run.
 
-Fixes: c935af429ec2 ("selftests: net: add support for testing SO_RCVMARK and SO_RCVPRIORITY")
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
-Signed-off-by: Jingjing Xu <xujingjing@cmss.chinamobile.com>
----
+Jingjing Xu (3):
+  selftests: net: report SO_RCV test failures to the runner
+  selftests: net: enable receive metadata independently of its value
+  selftests: net: cover zero receive mark and priority
+
  tools/testing/selftests/net/so_rcv_listener.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/test_so_rcv.sh    | 6 ++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/so_rcv_listener.c b/tools/testing/selftests/net/so_rcv_listener.c
-index bc5841192aa6..a57fff256cc2 100644
---- a/tools/testing/selftests/net/so_rcv_listener.c
-+++ b/tools/testing/selftests/net/so_rcv_listener.c
-@@ -65,6 +65,7 @@ static void parse_args(int argc, char *argv[])
- 
- int main(int argc, char *argv[])
- {
-+	int enable = 1;
- 	int err = 0;
- 	int recv_fd = -1;
- 	int ret_value = 0;
-@@ -88,7 +89,8 @@ int main(int argc, char *argv[])
- 		goto cleanup;
- 	}
- 
--	err = setsockopt(recv_fd, SOL_SOCKET, opt.rcvname, &opt.val, sizeof(opt.val));
-+	err = setsockopt(recv_fd, SOL_SOCKET, opt.rcvname,
-+			 &enable, sizeof(enable));
- 	if (err < 0) {
- 		perror("Recv setsockopt error");
- 		ret_value = -errno;
-base-commit: 57f165ff2f30491bc3511d24a52ca516751a268b
 -- 
 2.53.0
 
