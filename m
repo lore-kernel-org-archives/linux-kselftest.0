@@ -1,75 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795596721;
-	b=ekGzGsjWzhCMXFCCXeiy1IN2N9tbniblBObPxdha/sKrN0zsK7jVygiQDTSRIQU+vJpd
-	 8wkXQn2aQosdmZf1fU/xqRvhOob+yNy5TrICZaoFASZEZ9dIUhxbqInjSBjD5G7cn6KXN
-	 VWRMGOW1bW4yVcVVxhPm8O1DSfbQjJor/B/aEJI1RCAJ5T4AlZDirSe1oKkkfqmskTd8D
-	 SYwha1vgzXGmDKvqagl51dYgd1IAnS2ywjKszPPNODn51K7mtBE8397hN3mz8E4p1+Jhk
-	 2JzuBl5BLwRvbfl3EKN8uWazAQlPy3WxAbnvqJdeCl1NACocHOR8d+BDIi9785DJCqQ==
+	t=1795597549;
+	b=LhUFaABYFAsIW/Te9f/SCcSnULswNWLYeuKYEiUDi57dNBF3NJwHkg+ovt9fzk+kuomN
+	 ycpGsfEE0mBai+jw44LSkYyBKtDNYAdpOjH//BTsbYPghlSWcd3ozRU24B5Ko2MXKgIfn
+	 1Xxszc3sES4DTDumrHUXx0EcC0cALSvVXoLu8PeJo091vTPvSFlkKEt/9UOj9jKfp+rL4
+	 3d77gnTly17C+qxCf8B9ojda5Brm0ijghI39aVxxcPv3K4cNKFyt0uZgc04hZDCgdv5ni
+	 XeTZA30Hil3S8ILmf1yI09e9O/fUE1VhfgbDP8HX3/ks5FxKqf1nuy/UItAPaENLvLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795596721;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:X-CID-META:
-	 X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=xkBQOJtHC0lvEY+rBYunFY5GQKJ3kOPXvh+IUTXWI0g=;
-	b=T5OmNa+akpgJ7vJCErkpP5Z+bY8C5qb/7Dp3OJmO63aQn910lECTxHG8JjLmyWzgce20
-	 nzPDrW8ncV6Cz31/p2GjZUOAdjpiq/zkw1+0tYGQloq1MHL604uK1iWwSa/HrQaLeRgrG
-	 XE7jBOpMBlJ0+ibyWxRvnNKFNIDFbQDbklVOB6AnESwingK5iq94zeZgz+uemCE6P6hfn
-	 Rf1eftsdRwmvP8bdayJXgta29P9nOcCl2aNfpeNL/rnHRzNyv1rdRlfmuhdEP7qpiw8uS
-	 MnMswpHfJkSEAA4CYsjnPj0jAzdUSvUdoZ/af8L4GOYoV6lNqBVZpfhhrmJYDNbiH0g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795597549;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding:X-Scanned-By;
+	bh=ZVRLnElhNvuZJWzd4HxxMUfBfr0VMyiNrxcwUirwnQA=;
+	b=F/k1uOhBGNz0Xf+jLh+A/VKQ+2iT2Bd/2irAzYqmGbSsOYbIUlVcPf9wL1dbvdjJeFki
+	 QMiAk+UHaNTdQh7PmhWQHhNXFc3jaS8bTGpWfO4mwLKG0ytBAm9NG/ydQmu0Ctjncwprq
+	 fxIgNkiaq7SLfKyC0MfFNlnsqKEKa8ip0HKJsLAveob3rnPC/fhhOUXYpNKbiEA+kF/Na
+	 R8PRthjtXYbHkJ7KMQtSZ2DTukfpt/qUj/6ZcBKkXOmTr/4RgLyfYvCUq7ihaUsw3K4+3
+	 VOqh+dYeuRzsymfa6wq5/kSDfodXV5se7oo66fdYUtUf1W7oj3OxUaWHh+KTireHS2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XaVR8mBT;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1632606A323;
-	Wed, 25 Nov 2026 08:51:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1632606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 7499e49ce8ad11f19a56ed5b684f684d-20261125
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:9832daa8-c891-441e-8720-9dc9578cd3bc,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:9832daa8-c891-441e-8720-9dc9578cd3bc,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:8a5213e8bdf8dcb89ad097d2b2b49f7b,BulkI
-	D:2611251651543Q3MVRI4,BulkQuantity:0,SF:17|19|64|66|78|80|81|82|83|102|12
-	7|153|841|850|865|898|915,TC:nil,Content:0|15|50|99,EDM:-3,IP:-2,URL:0,Fil
-	e:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,D
-	KR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7499e49ce8ad11f19a56ed5b684f684d-20261125
-X-User: maguicai@kylinos.cn
-Received: from localhost.localdomain [(36.106.123.207)] by mailgw.kylinos.cn
-	(envelope-from <maguicai@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 145562270; Wed, 25 Nov 2026 16:51:50 +0800
-From: Guicai Ma <maguicai@kylinos.cn>
-To: Sung Byeongchan <tjdqudcks0424@naver.com>
-Cc: Micah Morton <mortonm@chromium.org>,
-	Paul Moore <paul@paul-moore.com>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	James Morris <jmorris@namei.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58B9606A32C
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 09:05:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E58B9606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XaVR8mBT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1795597547;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZVRLnElhNvuZJWzd4HxxMUfBfr0VMyiNrxcwUirwnQA=;
+	b=XaVR8mBTT5PExWs8C/nuQsda3ipp9EYWai2pLqJ9cDBHcobRvOEFR/Pn8Cn0tX9yg18tJE
+	7x/xtYeDfRIwv0ks0UK0Mw0tEGbO7V3HTmY+BBPDgjCmHFFP2I8x7EqEWeR1iAC1CKd6fN
+	GR2dDp4BVKm+YMhGFB/BLb61W+3VzkU=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-42-MOXhwPDOOKS9MeiG2eZqmA-1; Wed,
+ 25 Nov 2026 09:05:44 +0000
+X-MC-Unique: MOXhwPDOOKS9MeiG2eZqmA-1
+X-Mimecast-MFC-AGG-ID: MOXhwPDOOKS9MeiG2eZqmA_1795597542
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E3F121800540;
+	Wed, 25 Nov 2026 09:05:40 +0000 (UTC)
+Received: from poros-thinkpadp16vgen1.tpbc.com (unknown [10.44.48.12])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1E708195B3C5;
+	Wed, 25 Nov 2026 09:05:34 +0000 (UTC)
+From: Petr Oros <poros@redhat.com>
+To: netdev@vger.kernel.org
+Cc: Petr Oros <poros@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/safesetid: test GID policy with mismatched real IDs
-Date: Wed, 25 Nov 2026 03:51:47 -0500
-Message-ID: <20261125085147.1577733-1-maguicai@kylinos.cn>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <899af06e29dd599246082096e27edd51eda1fb27.1791023194.git.tjdqudcks0424@naver.com>
-References: <cover.1791023194.git.tjdqudcks0424@naver.com> <899af06e29dd599246082096e27edd51eda1fb27.1791023194.git.tjdqudcks0424@naver.com>
+	Randy Dunlap <rdunlap@infradead.org>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Ivan Vecera <ivecera@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v5 00/14] dpll: add a simulated DPLL device driver
+Date: Wed, 25 Nov 2026 10:05:07 +0100
+Message-ID: <20261125090522.3777494-1-poros@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,48 +90,267 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Sat, 3 Oct 2026 19:34:16 +0900, Sung Byeongchan wrote:
-> +#define GID_POLICY "2000:2001\n"
+The DPLL subsystem has no in-tree driver that can run without real
+hardware, so core changes and userspace tooling are hard to exercise in
+CI, and the pin-on-pin and reference sync paths see almost no coverage
+outside the vendors' labs. This series adds dpllsim, a simulated DPLL
+device driver, together with selftests that run against it.
 
-Because 2001 has no self-rule, verify_ruleset() logs an "insecure policy
-detected" warning and inserts 2001:2001 on every run. Adding 2001:2001
-here (as safesetid-test.c does with 2:2/3:3) keeps dmesg clean.
+The driver is controlled through configfs, following gpio-sim. Writing a
+clock ID into a device directory and setting "live" to 1 registers a
+DPLL device with the core. Pins are directories under pins/ with their
+type, frequency, direction and priority as attributes, and all of them
+are registered when the device goes live. The split between creating
+the configuration and going live keeps the register and unregister
+paths reachable from userspace, so they can be exercised repeatedly
+without reloading the module.
 
-> +	policy = fopen(GID_POLICY_FILE, "w");
-> +	if (!policy) {
-> +		perror("fopen gid policy");
-> +		return -1;
-> +	}
+The patches follow the shape of the zl3073x introduction. The
+driver starts with the device alone, then gains pins and the static pin
+operations one at a time (state, priority, frequency, phase adjustment),
+and every feature patch is followed by the selftest that covers it. The
+last two patches add concurrency stress tests and reference tracker
+leak tests for the lifecycle paths.
 
-If SafeSetID is not built in or enabled in the active LSM list, fopen()
-fails with ENOENT and main() exits 1 instead of 4 (ksft_skip). Returning
-4 on ENOENT, and adding CONFIG_SECURITY_SAFESETID=y to
-tools/testing/selftests/safesetid/config (like landlock/config does),
-would avoid false failures on kernels without SafeSetID active.
+The simulation loop (lock state machine, phase and frequency
+measurements, monitoring features), the topology features (MUX pin
+hierarchies, reference sync, media failure injection), netdevsim
+integration and device mode setting follow in two further series once
+this one is in, to stay within the 15 patch limit.
 
-> +	for (i = 0; i <= CAP_LAST_CAP; i++) {
-> +		if (prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_IS_SET, i, 0, 0) != 0) {
-> +			fprintf(stderr, "unexpected ambient capability %d\n", i);
-> +			return -1;
-> +		}
-> +	}
+The driver and the selftests were developed with an LLM coding
+assistant (Claude Code) working under my direction. I chose the
+configfs design, the split into one feature per patch and the test
+scenarios, and I reviewed every line. The assistant wrote most of the
+code and the first drafts of the changelogs, and it found and fixed
+bugs by running the suite on the lab host. The series then went
+through several rounds of an LLM based patch reviewer whose findings
+were fixed, and through a mutation test in which deliberately broken
+driver and core code was caught by the tests.
 
-When built with newer headers and run on an older kernel,
-PR_CAP_AMBIENT_IS_SET returns -1 with EINVAL for unknown capabilities.
-Checking `== 1` (or ignoring -1/EINVAL) avoids false failures there.
+The selftests live in tools/testing/selftests/drivers/dpll and run
+with "make -C tools/testing/selftests TARGETS=drivers/dpll run_tests".
+The feature, stress and reference leak scripts create dpllsim devices.
+The basic script, which only reads, takes the first hardware DPLL device
+when there is one and creates a dpllsim device otherwise. With
+DPLL_DEV_ID=<id> the basic and feature scripts run against an existing
+device, so the same suite exercises real hardware, and
+DPLL_DRIVER=<module name> picks the first device of that driver, dpllsim
+for a simulated one. The whole suite was run through the kselftest
+runner in a KVM guest with CONFIG_KASAN, CONFIG_PROVE_LOCKING and
+CONFIG_DPLL_REFCNT_TRACKER enabled, and the basic and feature scripts
+were run with DPLL_DRIVER=ice against the DPLL of an ice E810 host,
+where the pin state and priorities of the hardware are left as they
+were. All pass with no warnings in dmesg, on ice the priority test skips
+on the EEC device, whose spare pin sits at the lowest priority already.
 
-> +	pidfd = syscall(SYS_pidfd_open, child, 0);
+---
+v5:
+- address the findings of the netdev AI review of v4 and the ones of
+  v3 that v4 left open
+- dpllsim: document the phase adjust range, its granularity and its
+  reset, that a pin state set over netlink is not kept across a live
+  transition either and the errors of a live write for the clock ID;
+  the Kconfig help no longer promises pin topologies
+- selftests: skip when dpllsim is built in, check before every test
+  that the pin is still spare and do not let a second signal cut the
+  teardown short, in the stress workers neither
+- selftests: take a pin only when every device it is registered on
+  shows which input it uses or reports unlocked, and leave the NCO
+  input, which iproute2 prints as a pin of unknown type so far, and
+  both pins of a connected reference sync pair alone
+- selftests: leave manual mode out of the state test until the
+  simulator can change its mode, and run the deferred restores only
+  when the test ends early
+- selftests: raise the priority of the test pin only when the
+  selection does not consider it, so that it cannot take over from the
+  reference, and try no priority above 255, which ice truncates to 8
+  bits
+- selftests: offer a disconnected pin to the selection of a device
+  provided by the user only when it ranks below the reference on every
+  device it is registered on, and step the phase adjust and the
+  frequency by small amounts instead of going to the ends of the range
+- selftests: write the current phase adjust back before the test, like
+  the priority and the frequency
+- selftests: fail when a device does not report its mode or a pin its
+  state, both are mandatory
+- selftests: do not hand a stress worker a clock-id range in which a
+  leftover device sits, and fail the test when the devices of a worker
+  cannot be removed
+- selftests: report live objects without a tracked reference as leaks,
+  move the ref_tracker probe test to the library, drop the final check
+  of dpll_reftrack.sh, which repeated the one before it, and skip the
+  leak check when a device was left behind
+- selftests: keep the standard pin layout and the removal of what the
+  ref_tracker probe leaves behind in the library, name the reason of a
+  refused restore and skip a state flood of no changes
+- MAINTAINERS: list the selftests under the DPLL subsystem as well
+- dpllsim: say in the documentation that a failed live write does not
+  name the pin
+- selftests: the basic test goes without the lock for a run against a
+  given device, a failed pin dump of the stress tests is one failure
+  and a too narrow phase adjust range fails on the created device
+- dpllsim: drop the initial reference of the pins group with the device
+- selftests: make the run directory private, skip a stress test whose
+  count is not a positive number and keep the deferred state restore
+  armed when a restore is refused
+- selftests: pass over the clock-ids of devices left behind by an
+  earlier run, require mountpoint and fail a leak check whose tracker
+  dir is gone
+- selftests: skip on a failed device dump only when the kernel has no
+  DPLL netlink family, and look a device the user named up in the dump
+- selftests: report a value that cannot be read back as such, pass over
+  clock-ids other simulated devices hold and return the status of a
+  failed restore
+- selftests: run the cleanup from the INT and TERM handlers, a signal
+  that came while a script exited ended the exit trap before it, and
+  track a device that fails half way and cannot be removed
+- selftests: skip the state test when the selection took the pin since
+  the spare check, and take a device that was there before the run for
+  none of the run in the cleanup and in the leak check of the stress
+  script
+- dpllsim: say on deploy and undeploy that the callers hold the
+  subsystem mutex
+- selftests: fail the run when a deferred restore fails, a refused
+  restore could leave a pin changed behind a skip
+- dpllsim: say why the lock status error is NONE and split the
+  documentation sentence on values set over netlink
+- selftests: say why a failed exec redirection in the lock and the
+  waits of the deploy cycle are safe
+- selftests: skip the deferred restore of the priority, frequency and
+  phase adjust tests once they restored the pin themselves
+- selftests: run a deferred restore only while the pin is changed, take
+  a refused restore of the priority, frequency and phase adjust tests
+  like the state test does, and give the clock-id check a public name
+- selftests: count the tuned pin as changed from before the set, so
+  that a signal during the set restores it too, and track the device of
+  the deploy cycle that fails half way
+- selftests: say why the prereq check passes on a kernel without DPLL
+  and why the priority test tries 1 and 7
+- selftests: skip the priority test when the selection took the pin
+  since the spare check, as the state test does, and move the range of
+  a stress worker past every taken one
+- correct comments and changelogs that did not match the code or the
+  iproute2 dpll tool
+- drop the tags of patches 6 and 8, whose tests were reworked, the
+  other patches keep theirs
 
-Using __NR_pidfd_open (with an #ifndef fallback like selftests/pidfd)
-avoids requiring glibc >= 2.36.
+v4:
+- address the findings of the netdev AI review of v3
+- dpllsim: keep the priority and the frequency set over netlink apart
+  from the configured values, so that every live transition starts from
+  what configfs holds and the attributes keep showing it
+- dpllsim: document the pin limit, the frequencies per pin type, the
+  errors of the live write and what happens to values set over netlink;
+  correct the comments on what the subsystem mutex covers
+- selftests: tell a failed device or pin dump from a system without
+  devices or pins, and fail instead of skipping when the simulated
+  device cannot be created
+- selftests: pick the spare input pin by all its parent devices, bail
+  out before touching a pin whose current priority, frequency or phase
+  adjust could not be written back, restore the reference after the
+  test pin in manual mode, do not let a refusal hide an earlier failure
+- selftests: signal only workers that are still children of the script,
+  never delete a device named by the environment or one that existed
+  before, record the mounts before mounting
+- selftests: keep the files of freed objects out of the reference
+  tracker snapshot, fail when the tracker is built in but records
+  nothing, skip the final leak check when a device was left behind
+- selftests: log deferred restores that fail, tell failed pin queries
+  from missing attributes in the remaining places, fail a stress worker
+  that a signal interrupted, enable CONFIG_IKCONFIG_PROC for the
+  tracker probe
+- drop the claim that configfs implies no stable ABI
+- add the Reviewed-by given to patches 2, 5, 6 and 14 of v3 (Ivan
+  Vecera) and keep the other tags, except on patches 7 and 9, where
+  the behaviour of the driver changed and which ask for a new look
 
-Tested on arm64 under KVM with KASAN (v7.4-rc3-178-g20eef29b7c84): the
-two forbidden cases fail on the unpatched kernel and all four pass with
-1/2 applied, including when run after safesetid-test.sh in TEST_PROGS
-order.
+v3:
+- move the selftests from tools/testing/selftests/drivers/net/dpll to
+  tools/testing/selftests/drivers/dpll, with the shared library as a
+  TEST_FILES entry of that directory, so that the tests sit where the
+  drivers do
+- let dpllsim refuse pin states that are not valid in the device mode:
+  connected is refused in automatic mode, which the simulator runs in,
+  as Documentation/driver-api/dpll.rst allows it there only for pins
+  with the connected override capability (Ivan Vecera)
+- make the pin state test follow the mode of the device under test and
+  check on the simulator that connected is refused in automatic mode;
+  cycle the stress tests through the states of automatic mode only
+- add DPLL_DRIVER to pick the device of a given driver, or the simulator
+  with DPLL_DRIVER=dpllsim, on a system that has hardware DPLL devices
+- describe what the leak check waits for instead of a concurrent dump
+  holding references, which nothing does (Ivan Vecera)
+- carry the Reviewed-by and the set Acked-by of v2 over to the patches
+  whose code did not change or only moved; patches 2, 5 and 6 changed
+  and ask for a new look
 
-Tested-by: Guicai Ma <maguicai@kylinos.cn>
+v2:
+- sort tools/testing/selftests/drivers/net/dpll/config alphabetically
+  and make the scripts clean under the shellcheck run of the netdev CI
+  (quoted exit and return values, shellcheck directives for the globals
+  shared between the library and the scripts and for the optional
+  argument of dpllsim_setup_standard_device())
 
-Thanks,
-Guicai
+v4: https://lore.kernel.org/all/20261112130359.840795-1-poros@redhat.com/
+v3: https://lore.kernel.org/all/20261109093523.931201-1-poros@redhat.com/
+v2: https://lore.kernel.org/all/20261105151852.1844305-1-poros@redhat.com/
+v1: https://lore.kernel.org/all/20261103093910.596225-1-poros@redhat.com/
+---
+
+Petr Oros (14):
+  dpll: dpllsim: Add simulated DPLL device driver
+  selftests: dpll: add test library and device lifecycle tests
+  dpll: dpllsim: Add configurable pins
+  selftests: dpll: add pin enumeration and property tests
+  dpll: dpllsim: Add support to set input pin state
+  selftests: dpll: add pin state tests
+  dpll: dpllsim: Add support to get/set priority on input pins
+  selftests: dpll: add pin priority test
+  dpll: dpllsim: Add support to set frequency on pins
+  selftests: dpll: add pin frequency test
+  dpll: dpllsim: Add support to adjust phase
+  selftests: dpll: add pin phase adjust test
+  selftests: dpll: add concurrency stress tests
+  selftests: dpll: add reference leak tests
+
+ Documentation/driver-api/dpllsim.rst          |  102 ++
+ Documentation/driver-api/index.rst            |    1 +
+ MAINTAINERS                                   |    9 +
+ drivers/dpll/Kconfig                          |    1 +
+ drivers/dpll/Makefile                         |    1 +
+ drivers/dpll/dpllsim/Kconfig                  |   16 +
+ drivers/dpll/dpllsim/Makefile                 |    4 +
+ drivers/dpll/dpllsim/core.c                   |  483 +++++++
+ drivers/dpll/dpllsim/dpll.c                   |  502 +++++++
+ drivers/dpll/dpllsim/dpllsim.h                |  103 ++
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/drivers/dpll/Makefile |   17 +
+ tools/testing/selftests/drivers/dpll/config   |    8 +
+ .../selftests/drivers/dpll/dpll_basic.sh      |  256 ++++
+ .../selftests/drivers/dpll/dpll_features.sh   |  881 ++++++++++++
+ .../selftests/drivers/dpll/dpll_lib.sh        | 1182 +++++++++++++++++
+ .../selftests/drivers/dpll/dpll_reftrack.sh   |  111 ++
+ .../selftests/drivers/dpll/dpll_stress.sh     |  639 +++++++++
+ tools/testing/selftests/drivers/dpll/settings |    1 +
+ 19 files changed, 4318 insertions(+)
+ create mode 100644 Documentation/driver-api/dpllsim.rst
+ create mode 100644 drivers/dpll/dpllsim/Kconfig
+ create mode 100644 drivers/dpll/dpllsim/Makefile
+ create mode 100644 drivers/dpll/dpllsim/core.c
+ create mode 100644 drivers/dpll/dpllsim/dpll.c
+ create mode 100644 drivers/dpll/dpllsim/dpllsim.h
+ create mode 100644 tools/testing/selftests/drivers/dpll/Makefile
+ create mode 100644 tools/testing/selftests/drivers/dpll/config
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_basic.sh
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_features.sh
+ create mode 100644 tools/testing/selftests/drivers/dpll/dpll_lib.sh
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_reftrack.sh
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_stress.sh
+ create mode 100644 tools/testing/selftests/drivers/dpll/settings
+
+-- 
+2.56.1
+
