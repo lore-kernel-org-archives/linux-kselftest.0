@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587374;
-	b=CWN5/j85nRszMU66ZcMae0due80iZ91QPAAlRtoAxVjXkW5NgPZ24gIJGhKJYKwfS1Tx
-	 +q2jHXIIlUXshbKbxgzltvlFoYQkOV1osQJVUIwOt3q0T0AjGTiKWvf6dFjY2QOrJS2P+
-	 ED+138bK0LR8D0z0QgnX9czQ0ZimFzBN1CbiAxgCcMIBwcU3hb/JZnzcI9aNVjFQFzzUy
-	 0+Cac8ZZiC/pSJYe+G1x+jPLWPzD7wXo/HM6PepdyvnRDUgfh7TKGMNLGEf5H/kSpvn2Q
-	 ZIZ3jP3mlj/dFtsdp7rXomSwJOkc6QTXipt3YiEt4OYK0mXyx/Z2EFdy+bViioYlK1g==
+	t=1795587376;
+	b=DI9hw43EzRxwKiIVH2pSJr1s88Ls8cEuYE5I8ye7e6Of2dt8jCYzLWhxoZUAQ7stmoi8
+	 tFukDWZThYIZs4Upl7CRTPIMakHZgXclApbZavJTW9/XQvj1WFXAHTVWXwFaCnFBQbz9h
+	 Qe+Jv+q7XBgWHC35A3T0fR2tJTdqE1FIYoDPysNQTGryd0+jF6PdbHHGRJ+XXtOVzdpBB
+	 se8E5IWZSBQhRcSaU5PJOwZMzMqNwj7EARYMo0pq0ExSed9e7wDiNkOAyPa7LU1C3/+Mb
+	 wNrzxgnPHuYJSHdvsk6v4W5xZGBAYlx59GTF0EOM1Tovj+8FY+bLYOg7rFMU+N77QNQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587374;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587376;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=+3YNbw7npHYIz6vJpu6w5t/t1EQu1XAkIQnaB2DVcXE=;
-	b=Wke48bcuyRqvHpALljtoOCAz0FKRTfyNwLcHbyOK5/ORlKy6Yyb5G0ETp6VUIXOdkEzi
-	 8GGztJxonqsjfj1f5Gu/uXJR7zDhStTx4vHh3nOnPzTbypYx/hNfRSabpz7eYnmuhIlzY
-	 xKbTUEbqPH7TracNWlXYfT99vqHAdIWqsYazDfu5ra1/j6Rdem6nWHUgW+ZOS5BbmPzJ8
-	 VjxihR8g1L4a7pfV3qQ5aYCHllEMLn0Aw4bruXqD2mwlHHrZiuL10v3L+TDV/NZInN9mI
-	 BOlExoVGRNA909impmldtdjOcPiwwX6eR3Q549Ye3y3tdvmRvGrfOObOBIqGDJQ5Z7Q==
+	bh=GGDahMitB3LSpaFaJkVUo1Pzx9kbamS5IbDP2+gBQRY=;
+	b=3OHyEJb9crbU/6AV+Z4SwvxEyu7yBIQ2VTNlWmjT0bmcqNi0i8K5LLbHHsxku7D0F4qz
+	 VpFEw7Yx0eNNGB9LDQAG30THAy1b+2KLi8wT5yLQ9EFlyR9KmUe+1IH2EIQStC6DgeTy0
+	 n2uV7nFE6PTuwJG5KfSC1uwTB2MYCBYSKUPykZyW7mrZBRDisQcFjk+5IFU7Z7+sJeEJh
+	 ZFuNOczU/KkKqo1r5J5R6r9yYWWfPa6B/O5rm8QYJASN98kiFfS1hNtcA8qdwaIjZZG7S
+	 OVtjlLJRDO1EpADE8liKHFSCagXB28vf3vNRb2ClMX1Bz4SaW9UMuQSEfg4y/tI8XuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iLdYEq6j;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NC8TFIwL;
+	arc=none smtp.remote-ip=74.125.82.70
+Received: from mail-dl1-f70.google.com (mail-dl1-f70.google.com [74.125.82.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204E86070241
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:16:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 204E86070241
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B0C60A3818
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:16:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13B0C60A3818
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iLdYEq6j
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-386c3309469so1559984eec.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:16:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NC8TFIwL
+Received: by mail-dl1-f70.google.com with SMTP id a92af1059eb24-154e9d2d94fso393086c88.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:16:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587373; x=1796192173; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795587375; x=1796192175; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+3YNbw7npHYIz6vJpu6w5t/t1EQu1XAkIQnaB2DVcXE=;
-        b=iLdYEq6jPFG1k6lRURVTYgkpU0tn2xfKdgxbC9QNFC6g3K7bQcnhf9FCdYqi9Xo5uo
-         SBN5Gv4/P2cgIp08qAw8QZoMsboROqKfZkGHPwrTxb0h0vSuGg6jqfV7Pdsi5ps2gvAH
-         OdOhZYiJQTNxO6ZwFaUem9SrQ3LA7rcXlYT8RxQANhUprqB2xFBi/FVwPlL4f59N8akj
-         B398DOc9rQ7NbwrKpH2N76vv0eAPJUQve1bVdW9SfzaT6L7W8lPsXM/WaRPCqvSfTtUy
-         Gbw8nVhHeASvK7e1vBllLSDnJplJRmM16lY1l5+ob+71ZDXfeVq7x0A0bpDEjTwFslrT
-         ATvw==
+        bh=GGDahMitB3LSpaFaJkVUo1Pzx9kbamS5IbDP2+gBQRY=;
+        b=NC8TFIwLTkPbzeWjMCBEzMycXowBO7nwlg1PQhGSIEdoRdcynFgU3xj0z346DalUvK
+         CclzOOgsc08nnESEFqDQN8grEdC2dvQQay+O8qqF/cXS/Sx/3fHPHv22bsBKHsHYhqhL
+         N7MKQrt38DWZocIKvHgSCP6atdy4p9PvnCrh+EVUWREweUMREZchFqy91Sxrc/M3Gq0x
+         4IxBXWtMXRPrVFIYr3Tg854QTdurR/WVRTSLuOea9bx7plqd3QRfrjLI4E++6f3fadBC
+         EcD9m8j1xBeixoCWAUp7sngoetkh00EBHTIE3CwevkPOOdyD58gjHWhr5ITeQvpeR1pk
+         iPrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587373; x=1796192173;
+        d=1e100.net; s=20260707; t=1795587375; x=1796192175;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+3YNbw7npHYIz6vJpu6w5t/t1EQu1XAkIQnaB2DVcXE=;
-        b=Z9hsrJNf0JzX8oNt0ktk+yGfIjGHRYB9GvbCOPsqxAdHMrNG6EtPCtRHOctvLhDU8C
-         tFmGDuUjtCjpqJ869GYSNpU0b4dzYz4ICSiXIePz96MEoZr/oUtSpkKwSFRAKD/ywGiy
-         ccm5i3zZpUlKLbbTxRUNOrtjXYorbtlCLmQ488SFP5x7lEIUXf3fpxfqJtytaLfw3g3g
-         ko9SimkECDcI6SH18jp7DAMuAZum1ylbjJ61S+0fSXJ63AxMGd6JHMySBQojJrt5jWKe
-         IVcDpsvpPK/7Y7Zpokh3Wl82jWmCLk1/RLoGonDof6R03oLQ0H2VUlePmO3IXUXCCRm/
-         Bi8A==
-X-Forwarded-Encrypted: i=1; AL+hErEVnDF44F969lnC3LkBX8nA+DTc/bjDfRrZtBI7yJ/7QUDVe/s0yUEc+127cYcwqqq1VeG53Dv0afBnsexPfE0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8ewzVuvrhfiytBrQWQCIXl+ZQa6SHhEY6JPp0oP13VOJn8yOjy
-	tW/qC24eKV1SUpnv5trXwbQStK+nUdRld+l7QGxuSYNGi8hCk+ugsy8rXPQO+3vojBnc/oEGltk
-	KZggNxR0YZw==
-X-Received: from dybou2.prod.google.com ([2002:a05:7300:e5c2:b0:384:c70c:3c65])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:d809:20b0:386:b070:6f1c
- with SMTP id 5a478bee46e88-386b0707151mr8742111eec.21.1795587372849; Tue, 24
- Nov 2026 22:16:12 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:01 -0800
+        bh=GGDahMitB3LSpaFaJkVUo1Pzx9kbamS5IbDP2+gBQRY=;
+        b=ynB30ET2BgRWQLcEz/pk4wNPeoW7Zye3LhpZixeEVe04w0qcFp3aBqNXolrJdWNgqt
+         rbOY0cMpZAS8t/6erLF9eepttnUI3wteV5S7NpYaiWp9iFd0YkWpBk1nMScsaVGf3CJ7
+         6hnhB+MeMhPLrCJeQuIQQJfHDgQ65LxCATGnyDaYftp6LiCn/gKZvbvynyNK5n3jJ5IR
+         LeUmQBgygQv9oKU6UuXc2SN2m3f7CwJg945PlZ7gINmemiT7X/pyACmc1B+g/0b97aai
+         WWOzSYU5Ra2OY1wWgqfdjbnRKJJwYBTUvnUQek2n13T+XHoirHxj0wGFcSmKZS6HTgVn
+         +35g==
+X-Forwarded-Encrypted: i=1; AL+hErEKFVZPTJc88e7xtxWKMcYTr/rAraKZiBdpxxqf9AoVmy2V0yeRYB1hPJqotp1qtadp60vOCtXjTHQ2VGoSw+I=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8leG9SWlsfIVTMCLnjwUnB8GsczKgvQ9dZ07ibOGgZ5DkmlhtG
+	TPDBAn4RP9p6DRpDP91a9k4m6yjAF4bXaJmkx4muMJKejHUDf5z35zJToThL//C6qn1tj9E4e2s
+	mfgZBKP2kiA==
+X-Received: from dloo27-n2.prod.google.com ([2002:a05:7023:a5b:20b0:1b5:8761:cc11])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:b902:b0:1a5:9abb:fdd7
+ with SMTP id a92af1059eb24-1b556877a2bmr15589113c88.9.1795587374885; Tue, 24
+ Nov 2026 22:16:14 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:02 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-9-irogers@google.com>
-Subject: [RFC PATCH v2 08/30] vmlinux.lds.h: Allow architectures to emit
- custom RO_DATA sections
+Message-ID: <20261125061523.1540234-10-irogers@google.com>
+Subject: [RFC PATCH v2 09/30] efi/libstub: Disable unwind tables in x86 and
+ RISC-V EFI stubs
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -103,39 +103,41 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add an optional ARCH_RODATA_SECTIONS hook inside RO_DATA() so
-architectures using runtime .eh_frame / .eh_frame_hdr kernel unwinding
-can place unwind tables inside write-protected RO_DATA without leaving
-them in unmapped rodata/data gap pages.
+Pass -fno-unwind-tables and -fno-asynchronous-unwind-tables when
+building x86 and RISC-V EFI libstub objects so enabling kernel-wide
+asynchronous unwind tables under CONFIG_UNWINDER_DWARF_CFI does not emit
+unwanted .eh_frame sections into the standalone EFI boot stub.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- include/asm-generic/vmlinux.lds.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/firmware/efi/libstub/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 3eb732942d69..1bde7a2a19d0 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -472,6 +472,10 @@
- #endif
- #endif
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index bbab12b8eb4b..19c2822eb302 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -19,7 +19,8 @@ cflags-$(CONFIG_X86)		:= $(filter-out -mcmodel=kernel \
+ 				     $(PADDING_CFLAGS), $(cflags-y))
+ cflags-$(CONFIG_X86_32)		+= -march=i386
+ cflags-$(CONFIG_X86_64)		+= -mcmodel=small
+-cflags-$(CONFIG_X86)		+= -fPIC
++cflags-$(CONFIG_X86)		+= -fPIC -fno-unwind-tables \
++				   -fno-asynchronous-unwind-tables
+ # Nothing enables IBT while the stub runs, so ENDBR would only take space.
+ cflags-$(CONFIG_X86)		+= $(call cc-option,-fcf-protection=none)
  
-+#ifndef ARCH_RODATA_SECTIONS
-+#define ARCH_RODATA_SECTIONS
-+#endif
-+
- /*
-  * Read only Data
-  */
-@@ -554,6 +558,7 @@
- 	RO_EXCEPTION_TABLE						\
- 	NOTES								\
- 	BTF								\
-+	ARCH_RODATA_SECTIONS						\
- 									\
- 	. = ALIGN((align));						\
- 	__end_rodata = .;
+@@ -29,7 +30,9 @@ cflags-$(CONFIG_ARM)		+= -DEFI_HAVE_STRLEN -DEFI_HAVE_STRNLEN \
+ 				   -DEFI_HAVE_MEMCHR -DEFI_HAVE_STRRCHR \
+ 				   -DEFI_HAVE_STRCMP -fno-builtin -fpic \
+ 				   $(call cc-option,-mno-single-pic-base)
+-cflags-$(CONFIG_RISCV)		+= -fpic -DNO_ALTERNATIVE -mno-relax
++cflags-$(CONFIG_RISCV)		+= -fpic -DNO_ALTERNATIVE -mno-relax \
++				   -fno-unwind-tables \
++				   -fno-asynchronous-unwind-tables
+ cflags-$(CONFIG_LOONGARCH)	+= -fpie
+ 
+ cflags-$(CONFIG_EFI_PARAMS_FROM_FDT)	+= -I$(srctree)/scripts/dtc/libfdt
 -- 
 2.56.1.831.g720f3f5937-goog
 
