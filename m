@@ -1,74 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795636518;
-	b=LXpXwyhcI4/0rBI3m3huL5um3m6xQg3lHz1iZWccBQcgcYO/wqQOepZFpsN4RK7ez210
-	 2rpsrz8Eeav1xo7c2a1+JhnywrmapTHc4/nQevEznBkBGkw9xy65nLMUC5yBql9QydTTO
-	 VhDCJVjq8Xh6b+OVw5uCLdOYUBaYXJHxrYoN/nBNd5ADKVXRjrh4fA0OkwbTIk8R2+MEP
-	 2Dhpikt33bXXNUJati9m7qm0JpYzuPUofnSoCbhyOjsNwEVVs0WujDoWyDseojUADNVsr
-	 Yyy2OZQsdpfBZmYBuEb2fZaIfEpOO8+8xLj1ICCnofmDTjzS3cqDg9XvBgTspPRcofg==
+	t=1795636570;
+	b=tSrhY9OPYH7OedOVc8jhlMrjpRObJeQMvss+FW6NDz2XWAqNW9BbacDBjOnWOWkt8LPb
+	 +vbZUcb8IPk8XIn3XlHWfhJy6BKNE93yTf46zGGDktB34zcLyHkwMwmdScgSC1/wGD00k
+	 ZWnYBlqOXr8Ikg1FVKyMGO29G7udg0lT2PmmyCGaxaJxIlGyvZZ+FcPi64zb4Wpetm0vr
+	 VIqQHaWtTrhoW7NdoTGypbZoePoFRk8i6tWjfYY59+2suWanHCLJBpHJQTSAqAPxB22od
+	 YyuIGw61KChtLDhpA8LWvbdxYZbync7Ny7+suYpEkQcRzxI9CK9n3eIBPHWzAGqBkOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795636518;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=VrIp4UuqLML5zpUv0LIQhFdRxW0WUPrcltu+dCKTMog=;
-	b=QWljTnWZmzvAABewFbTfQRxKyph2OXMAgAlCjuK2kknHuNcywPS/OV1J6uWw1iOEQd5q
-	 XTGKYRE80zwVyf57r786FQc3em+u2vrH6GFxDdlOD+CocrmuAuNMQIaZ0ViWLohhv8ubt
-	 5H65kBaE+PGm7c90+07OBre2KumFIgmnPPkVOL/bUs58EHxMuoIFeY01SNfJWL+9QDzTd
-	 Z79Y8DtIapz9H5UMOM6sgJlfsVsJzuzq5vDRP1+qVYtsbMnirdXL93ZHF35v5Kx3q62SF
-	 UdWoAZFQzAPGJitCGhM7qCBlSvsJYv+zA49yExdWynOowu74Afoclt09hWUMs+4CJuQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795636570;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=8L/FhEtu1AibEOTL3+giqF5YaBf2Hqhjfa+0JnWkQw8=;
+	b=0dD6VEU3zqXWT55vfKi7u43nn0p7JTTcXjEKvjSvGmAPr8dtG1dJilfJ+3HLuQRJcea9
+	 cxLtlLke0WfhZimS8UmtQuEEIWTAMxnOw/vI5pJi9IdO1y9T2rx65Xba4t8yn+9kj09RV
+	 KZ3lTW5OzwATvbD9QCt54N7u8Rq04A6r9WOlhMLzwDqhbCJ3KPbSo4NK7iSaOi9/nc1Rj
+	 Yqte6vkRaPiFhqanQrKwQwkUNVcrOgu9WTJNK4coLnfRepqnH7fjqvMs6xkGEmIUJcIRN
+	 65VKc9FecqMb7VFYNubRRh0ZUk84F30T7pTP3DpFl+5Ls6nIbBcrrRyw47Pj4wF9Pxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VmiPb1GP;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=inllcyXl;
+	arc=none smtp.remote-ip=209.85.210.181
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51A3606A31E;
-	Wed, 25 Nov 2026 19:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97E4606A323
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:56:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E97E4606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VmiPb1GP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24701F000C0;
-	Wed, 25 Nov 2026 19:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795636518;
-	bh=VrIp4UuqLML5zpUv0LIQhFdRxW0WUPrcltu+dCKTMog=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=VmiPb1GPuDA6ow86f3h2bazo85jvyVYrUQV2gIgHZCgaomEbofTdGb3RMcFUtMhJO
-	 jdBW4BDreQ/vv4ARIMr8y2swl56nQUBP+UkamajNlGHoElThPcrewcLVNAYIpwXn7s
-	 Vw/UtrRoutLi9SyvavmJ3enQth1LCcIJqp5g3enbdNXFjGfBG9hScQoHnpgF09sEen
-	 0tgPlU8F6jrXZzvSVEWrDIgvciP76cpxZIsI0cr/vCpUvsZL7gQ3O5ZL3cHExno5hO
-	 OI2dST0GFsWmYaULP+iZiuq9XkSkX174R/WmcmdU3UxWpmPf1YjtRKy0YL8zDWUdEa
-	 WEuo+1p95Sznw==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, andrew+netdev@lunn.ch, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- ilias.apalodimas@linaro.org, alexanderduyck@fb.com, saeedm@nvidia.com,
- tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org,
- michael.chan@broadcom.com, pavan.chebbi@broadcom.com, corbet@lwn.net,
- shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
- stuclar@meta.com, sdf@fomichev.me, horms@kernel.org, martin.lau@linux.dev,
- almasrymina@google.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- rdunlap@infradead.org, kernel-team@meta.com,
- dimitri.daskalakis1@gmail.com, bobbyeshleman@meta.com,
- mohsin.bashr@gmail.com, kees@kernel.org, leitao@debian.org,
- maxime.chevallier@bootlin.com, cuitao@kylinos.cn,
- vadim.fedorenko@linux.dev, mike.marciniszyn@gmail.com, kuniyu@google.com,
- jiayuan.chen@linux.dev, mkarsten@uwaterloo.ca, razor@blackwall.org,
- dw@davidwei.uk, asml.silence@gmail.com, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 05/15] xdp: Run programs on buffers that must
- not hold kernel structures
-In-Reply-To: <179561569289.3135.1423395269344157578@kernel.org>
-References: <20261124125654.183091-5-bjorn@kernel.org>
- <179561569289.3135.1423395269344157578@kernel.org>
-Date: Wed, 25 Nov 2026 20:55:14 +0100
-Message-ID: <8733soofdp.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=inllcyXl
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8c20d68c83fso3925329b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795636569; x=1796241369; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=8L/FhEtu1AibEOTL3+giqF5YaBf2Hqhjfa+0JnWkQw8=;
+        b=inllcyXl28y6OSvEWETty6YA1zFXFK7SM1qNH5/VjAs+tvrdn9RtwNWmL6RMO1FMg2
+         sD1PX38paSWk0g8AJcdJikOXUsPUBUwVvcYXJ8MoOgIx+k2cZspOVRHXyIOjnmWLpBm/
+         uNRZ6PmfTre0bIOEZQjrIwZqlMbD25myWb+KsozHSDorcntYo7PGJ5UWE/41Meb1XHpa
+         3+ytCilFnkJ+nCSmEr3Rya4VGoWgfCeASfX8ifzVgK5yFzA8nwLkU/wWminodiAKpwrA
+         ebJVimGXj9uqEehzoHeDoE0uDpDxMTfqfIo/V5QRqPPr0ndiV/L4bMPHlmB/cuZpIFJe
+         4W8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795636569; x=1796241369;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8L/FhEtu1AibEOTL3+giqF5YaBf2Hqhjfa+0JnWkQw8=;
+        b=AeFHGtaiv/v6gw4OxiPmoNDOQoVO+rhiLaaVZBUxGBOUPtR/l4Fhpq4zFjFRvBtu/A
+         PGvHTqFMtzqEkx5Dwv5y/rW8BdHGkZ4Z56J4vNkE8uQ0nx3GAoTXLG8wz9mmfoICUfgu
+         wnzaHruAdlHziuIx5v78gGnGgeRZLSyfHMxsFXYVqgb49/a7ifZ8+KU62MiZeEB4iTYD
+         NLHPAY1G15XYY93sMixKZp3tU2Q8kF3gi8onxuQaWRzc2gFx5qaznWKqxiJiITnm8iM8
+         xnIK0ws86HJvQGOtTQNw+KB8781w/jKZJPOTj3Kh0j6XJU4c3BC7giLZGlzlUkPKi6e1
+         XVpw==
+X-Forwarded-Encrypted: i=1; AL+hErEbkloN22cHjOhPz+JB1t/2fMhDbPCVbzIwFQH17bku3fng2dsQi3IV5y+idU8hjTgpscBy+EBn8KBa23NzVA0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/773qv9k3jsUntzq8okfJDFRg/9uMV+7+pj3slp9Va7TbgJlN4
+	IM8nkiIw7d3cCNd6QWjU1K5+yziRORxmVK8zhLN58x+rC2ha5aBO5xkSH+1QX5asMQ==
+X-Gm-Gg: AZFdTZfPn414AxTCS1ZfMBk+2gz98l0SJ9m2nvhIRUWqubWNge21NHr1yNHcCP+nZiQ
+	WvR5HmLSp4uoMQwITEMkVFtlxt1s9cPmxvoD+corm6suOf8hwrQ5xtmYknxsk5yBWtKaOq9GfVM
+	JTkU9cgvzlsHRf+296ms7pEL8yxpNYPdSWh1GkFYYXxzuzQG6Hoaka+jSE1pHlbNiiBO9uagWvo
+	OQeazJl2wwz6HR2t3q5U4ZRwdkONMZo7odToIABbBCxexyklAJrYSqU2wkUE1ZzgxQR0mRQTuHs
+	3Z7rnBwnypmkw5O9HjGCqW5rc6V3EH0+RyJeLn5GThjB+GBqZJDcO3M0ygMA1wYWuxAICm71Ynd
+	6QyEI7hJ5GVP13qFgkNtns/hJqbJPLdvYWVbqLHA1RqRsQOjBeHiCQpSaGu5f0DnTADNROWi9XS
+	qRTFR77cVrzGan7Un4GcqxW1ZuqHiiZYUDGh+YdaBRUoqI9OJInobsY/439/6oRAm+8pQs9cC+6
+	qb9Oz/5qLLrVV9vMY/FNl1kcunAvmp46if005LV0PJQ65khjpDDMbuZlcOB86y/XyK+MO1foiHb
+	B9sKqkYKRdF4g2NONZSUUYSKCxSTfpJarMjvkPQhWd3dlbFoWxOf2ivM4fPaU0NA5uLqQ0w8PQb
+	3jqAbvLGfkQ==
+X-Received: by 2002:a05:6a20:2d24:b0:3fb:2086:9051 with SMTP id adf61e73a8af0-4014ed47929mr12701525637.41.1795636568487;
+        Wed, 25 Nov 2026 11:56:08 -0800 (PST)
+Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8cbe173453dsm6295218b3a.25.2026.11.25.11.56.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 11:56:07 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,129 +88,104 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Nov 2026 11:56:07 -0800
+Message-Id: <DN4K1F1Z8M9L.25VB33PVA6VDO@google.com>
+Cc: <alex@shazbot.org>, <dmatlack@google.com>, <jgg@nvidia.com>, "Kees Cook"
+ <kees@kernel.org>, "Andy Lutomirski" <luto@amacapital.net>, "Will Drewry"
+ <wad@chromium.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kselftest@vger.kernel.org>, "Sean Christopherson"
+ <seanjc@google.com>
+Subject: Re: [PATCH v4 5/5] vfio: selftests: Allow a size for
+ vfio_dma_mapping_perf_test
+From: "David Matlack" <dmatlack@google.com>
+To: "Aaron Lewis" <aaronlewis@google.com>, <kvm@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20261114132200.113697-1-aaronlewis@google.com>
+ <20261114132200.113697-6-aaronlewis@google.com>
+In-Reply-To: <20261114132200.113697-6-aaronlewis@google.com>
 
-netdev-bot+sashiko@kernel.org writes:
+On Sat Nov 14, 2026 at 5:22 AM PST, Aaron Lewis wrote:
+> +/*
+> + * Parses "[0-9]+[kmgt]?".
+> + */
+> +static u64 parse_size(const char *size)
 
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 =C2=B7 Low: 1
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
->
-> - [High] The new XDP_FLAGS_SINK contract in include/net/xdp.h says a
->   helper that checks bytes and reads them again later must check a copy,=
-=E2=80=A6
-> - [Low] The commit message opens with "Currently, the core refuses native
->   XDP programs next to a memory provider." That was no longer true when=
-=E2=80=A6
->
-> --
->
-> xdp: Run programs on buffers that must not hold kernel structures
->
-> This lets native XDP programs run on AF_XDP sink buffers (UMEM chunks
-> that userspace may write at any time). Such buffers are marked with
-> XDP_FLAGS_SINK and XDP_FLAGS_SINFO_EXT, and their shared info moves into
-> the rxq. XDP_TX and XDP_PASS become XDP_DROP, and frame and skb
-> construction refuse sink buffers.
->
->> Currently, the core refuses native XDP programs next to a memory
->> provider. An AF_XDP sink needs XDP to steer its packets and to use the
->
-> [Severity: Low]
-> Is this opening sentence still accurate at this point in the series?
++Sean
 
-I'll address this in the next version.
+This is a copy of parse_size() from KVM selftests
+(tools/testing/selftests/kvm/lib/test_util.c), which points to a broader
+problem: VFIO and KVM selftests keep growing duplicate copies of the
+same basic helpers. Besides parse_size(), this series adds
+timer_get()/timer_elapsed_ns(), which overlap with KVM's
+timespec_elapsed()/timespec_to_ns(), and VFIO selftests have their own
+VFIO_ASSERT*() macros that serve the same purpose as KVM's
+TEST_ASSERT().
 
-> The previous commit, "net: Add memory providers that only feed XDP",
-> already exempts MP_XDP_ONLY providers in dev_mp_blocks_xdp():
->
-> net/core/dev.c:dev_mp_blocks_xdp() {
->     ...
-> 		if (ops && !(ops->flags & MP_XDP_ONLY))
-> 			return true;
->     ...
-> }
->
-> That commit also relaxed the dev_xdp_prog_count() check in
-> __netif_mp_open_rxq() for XDP-only providers.
->
-> This patch touches neither net/core/dev.c nor netdev_rx_queue.c. Could
-> the message be reworded so it doesn't suggest that this patch lifts the
-> refusal?
->
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index 944418111a86e..c7cb0ba4e16f4 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->
-> [ ... ]
->
->> @@ -95,6 +99,15 @@ enum xdp_buff_flags {
->>  	 * frame, see xdp_data_hard_end(): the frame must hold nothing else.
->>  	 */
->>  	XDP_FLAGS_SINFO_EXT		=3D BIT(3),
->> +	/* AF_XDP sink memory, see %MP_XDP_ONLY: the buffer may only go to the
->> +	 * AF_XDP socket of its queue. Userspace may write it at any time,
->> +	 * also while the kernel reads it. So the kernel takes bounds only
->> +	 * from its own fields, and only the XDP program and its helpers read
->> +	 * the bytes. A helper that checks bytes and reads them again later
->> +	 * must check a copy, see bpf_syncookie_th(). Nothing builds a frame
->> +	 * or an skb in the buffer.
->> +	 */
->> +	XDP_FLAGS_SINK			=3D BIT(4),
->
-> [Severity: High]
-> Where is bpf_syncookie_th() defined? I can't find it in this commit or
-> later in the series. This comment is the only place the name appears.
->
-> The syncookie helpers that XDP programs can call still read th->doff
-> twice from packet memory:
->
-> net/core/filter.c:bpf_tcp_raw_gen_syncookie_ipv4() {
->     ...
-> 	if (unlikely(th_len < sizeof(*th) || th_len !=3D th->doff * 4))
-> 		return -EINVAL;
->
-> 	mss =3D tcp_parse_mss_option(th, 0) ?: TCP_MSS_DEFAULT;
->     ...
-> }
->
-> tcp_parse_mss_option() then reads doff again to decide how many option
-> bytes to walk:
->
-> 	int length =3D (th->doff * 4) - sizeof(struct tcphdr);
->
-> bpf_tcp_raw_gen_syncookie_ipv6() does the same thing. So does
-> bpf_tcp_gen_syncookie(), which checks doff and then re-parses the
-> options through tcp_v4/v6_get_syncookie().
->
-> The verifier only checks th_len bytes, because arg2 is ARG_PTR_TO_MEM and
-> arg3 is ARG_MEM_SIZE_OR_ZERO. With a sink buffer, a userspace thread can
-> change doff from 5 to 15 between the check and tcp_parse_mss_option().
-> Could the parse then read up to 40 bytes beyond the region the verifier
-> checked?
->
-> xdp_sink_mark() also sets XDP_FLAGS_SINFO_EXT on sink buffers, so
-> xdp_data_hard_end() reserves no shared-info tailroom. A program can grow
-> the tail to the end of the frame. If the TCP header sits at the end of
-> the last UMEM chunk, can the extra read go past xdp_vaddr + xdp_vsize
-> and fault in NAPI context?
->
-> Classic AF_XDP zero copy has the same double fetch, but there the
-> shared-info tailroom keeps the extra read inside the chunk.
->
-> Should this patch add the copy-and-check that the comment describes for
-> these helpers? Or, if it is meant to come later, should the comment
-> point to something that already exists?
+This isn't just about the tests themselves, it's also about the
+libraries. libvfio uses VFIO_ASSERT*() internally and gets linked into
+KVM selftests, so a KVM test that uses libvfio (e.g. irq_test) ends up
+with two different assert implementations depending on which library
+the failure came from. And libvfio can't use any of KVM's helpers, since
+VFIO selftests don't link against libkvm. We need to figure out a common
+place for these helpers that both libvfio and libkvm (and probably other
+selftests too) can use.
 
-Yeah, the double read of th->doff is real, and older than this series.
-I'll think about a fix.
+That doesn't need to block this series though.
+
+[...]
+
+>  TEST_F(vfio_dma_mapping_perf_test, dma_map_unmap)
+>  {
+> -	const u64 size =3D SZ_1G;
+> +	const u64 page_size =3D variant->page_size ?: getpagesize();
+> +	const u64 size =3D test_params.size;
+>  	const int flags =3D variant->mmap_flags;
+>  	struct dma_region region;
+> =20
+> -	ksft_print_msg("mmap size =3D %lluG\n", (unsigned long long)(size / SZ_=
+1G));
+> +	if (!IS_ALIGNED(size, page_size))
+> +		SKIP(return, "Size 0x%llx is not aligned to page size 0x%llx",
+> +		     (unsigned long long)size, (unsigned long long)page_size);
+> +
+> +	ksft_print_msg("mmap size =3D %s\n", test_params.size_str);
+
+The page size calculation, alignment check, and ksft_print_msg() are
+all duplicated in dma_map_unmap_from_file(). How about:
+
+ - Print the size once in main(), since it's the same for every test.
+
+ - Move the alignment check into a helper and call it at the top of
+   both FIXTURE_SETUP()s. Roughly:
+
+	static bool skip_if_size_unaligned(struct __test_metadata *_metadata,
+					   u64 page_size)
+	{
+		page_size =3D page_size ?: getpagesize();
+		if (IS_ALIGNED(test_params.size, page_size))
+			return false;
+
+		SKIP(return true, "Size 0x%llx is not aligned to page size 0x%llx",
+		     (unsigned long long)test_params.size,
+		     (unsigned long long)page_size);
+	}
+
+	FIXTURE_SETUP(vfio_dma_mapping_perf_test)
+	{
+		if (skip_if_size_unaligned(_metadata, variant->page_size))
+			return;
+
+		...
+	}
+
+   The harness won't run the test if setup skips (see
+   vfio_dma_mapping_mmio_test.c for an example), and doing the check
+   first avoids setting up the IOMMU and device for tests that are going
+   to be skipped anyway.
+
+With that,
+
+Reviewed-by: David Matlack <dmatlack@google.com>
