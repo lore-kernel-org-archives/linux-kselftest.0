@@ -1,58 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567485;
-	b=y4P+bH4dfY6SUU3+7z3rlwcTbxbWN2eNgWkp+Jq97HCIxkpgmdSVcBuTCzfzwAIEkzqp
-	 k9gJ5pF864kQqt/6IR7EJvhKJj4CXv8yU6PWSpE+gmqy6ZxQLtchGOjVN9LlwpKtdoc3y
-	 AK0KFw4M6Np1L6e6SRVXylQQPafMQbnXUT17uNbp0soszD6CJwefsMRDipQqfdRDecRUh
-	 kw246BRe+DbQYM5C4MuipK92t/zQprH/ZvDdheC/t/1PNmREjdY4CCu21mp7RGiREAxgk
-	 7+jfuDHpAUpRT/imM6pTEPWcKBrbwsGnmP7sl22nGGwZdr4yEXtTPNPZT9/jMA7yIlA==
+	t=1795567761;
+	b=Ew4+HivZeSsb4cWtlcNK7hynDATYXplkMTxcczzrvxVxc8nTHzZrhT+3dIyFUMync6zV
+	 TQi8ZVOzqLPcqJk+aZYhhGynfSVaJcPWilbQowrt3kTXw1LNHtL4KNgZQ+IDmIQITx9F0
+	 lwiH50AkfdhKRFDkAHi9YJGiwQq/Uw874SBIpmO7RW2KchNbRKNMergu8YIGdmf6RIFgM
+	 6pOuah6uPpGD39R77IZPOFJS55ztgFfWNmNL8kB/mJ3UqqrzXYA31tPAx4QdzKDPy0rby
+	 OXKCRvT2aCWeCY5sc7QMc5WZAtcWeO4ZDx4MK3pUWNxiSA7d2PYKxCji00xY5StIFgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567485;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Stat-Signature:X-Rspamd-Server:
-	 X-Rspamd-Queue-Id:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=eLqiru6IB8X1vm5kTLkMtYcaQdNbgpYL+qb0lIcTVWo=;
-	b=dh7vNYk8T032bTY+7e7l+CZf93MQYVZffhgLGh3G32IFRSCDdvv2jv5bQIPoZlM7A8+2
-	 w2HqPWskB4jshFRSeZcacVGmLYIvvP0X7OJuZKARtk3F/N/WUXKb+975NOwRsFkqajaio
-	 YLwmm1fFpaAxhUF7mi0SXZjwFGwLCXp6036g7cuCgVFZK8CZeIktBsKa+0tNlwI5cC0un
-	 RWIFsm/VN40Nb19raz8k76A9FhH6pQa7wasxFACNcxetXLmRPfb6J1/39/NBXZMdUpgd9
-	 Q7B3iG8QSSDOOjCvllx6xwRFJLho7ZgZiJGuyosiN/+1MTkr2BhD1BXzQKDpFrRcM/w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567761;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=OSLpuH99oHeompfwZo3B6N7fbfKpZMQZXzH6A19PzVM=;
+	b=V9MYAMDK/A/wkVaOC0qqWXThuGa7d/0R0i8+x16ItoRMCPH6enECtzO9Z6sGrXBxCTen
+	 xn2XXYqN5PNAv0swyyzKiFfmhoxbcp5aV8EquCXPHPKoJXJLuwL8gjOhC0+ragG5UCcB7
+	 CypwkI8bjfclF0IwuDPqY6Z3KvNYMYpuMQRixN7LDELv9+KTMK1pllDdCfTAwyQfYeEj3
+	 ouAZAstTEUWBqtftxEdPyZV26noqo7+XwSPGoGZvWQLok+LH91Czaqw8BnK+NIOTGew8g
+	 8uhmka6kLyiR5C9BZDa9ZrA3xD46S615DoH7E82QnuLl6eQkF5Oss2HYzY8v6FsjU4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=XByrIElw;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--tweek.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oTyRTbMG;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B06606A321;
-	Wed, 25 Nov 2026 00:44:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9B06606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4229606A31E
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 00:49:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4229606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=XByrIElw
-Received: from omf14.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 6B4F21C486B;
-	Wed, 25 Nov 2026 00:44:37 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id 75B8730;
-	Wed, 25 Nov 2026 00:44:35 +0000 (UTC)
-Date: Tue, 24 Nov 2026 19:44:34 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 13/15] tracing/filters: Fix error positions for CPUS
- mask parsing
-Message-ID: <20261124194434.21d76102@robin>
-In-Reply-To: <179323796570.740114.12151091552524337676.stgit@devnote2>
-References: <179323784538.740114.15323117974242744566.stgit@devnote2>
-	<179323796570.740114.12151091552524337676.stgit@devnote2>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oTyRTbMG
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2efa9aea3c0so66055735ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 16:49:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795567760; x=1796172560; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=OSLpuH99oHeompfwZo3B6N7fbfKpZMQZXzH6A19PzVM=;
+        b=oTyRTbMGmb7tBPj7rG68hAy0GONLcoOD0DoRc3AIxteCajXU6YmT2Ov330PckDwljQ
+         NAzfTYxtoxuWO3y1XoVr6/kWNY53DNjXsi6NTBI7ZpwOHRCka+57XPUh2k0s9ozX55Hn
+         rs74TpBXb2itpQI1P4kx2qsl+6YHp2hgiEWMaWOnAI7jfFJXfspy1WxqeLuItsobX3Qo
+         aeiLQuDW+J/jQVh65DhiMUpOYNju/0o/GwYmZkdZuMkeh8pSrkCWwmFEtBC5gBZRvJmW
+         yo+xLrEPkh+xJk6egO1BQTUDyj5B0so/KV8EfamlU6dS9tcGvsH9YnreMJ96rtwS5cpJ
+         5DNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795567760; x=1796172560;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=OSLpuH99oHeompfwZo3B6N7fbfKpZMQZXzH6A19PzVM=;
+        b=OnOBecUNugITI6/qOQOPLqP0zfJqA/cDRpafoDcjyBrnqZ9T7mnXTQ0PzmeNiuaGec
+         nE4Owp3FYF37yLwDUN28JP7eEBvqoZnCMVqff0Xa6tE1ymYkkZWseA34kmAHBHHW82Lk
+         AFwP9huD/knfIkefCvJFtfDcznxmc6GLhiZrFG7gkoOj0b07Q+iqWpQzB7WRNXPAixmI
+         d0NQUAIWxJDg63xE3WStAGo80ZVoNlPj+JKnrKK5coPSr14G3jVMjLfvt509y4C1VInL
+         97y06sYjyme3eHtweXEci9Kl7TGRvyZeaoiKWhw5kho61w17kwCFVVuCCfRNKsAFZHJH
+         YNSg==
+X-Forwarded-Encrypted: i=1; AL+hErGWdXkDehEzRv234O+EbEgYFqTQB/O0Dd7myUTU8Rx8tfdPfb6rpGDBN592AJQ1qTt0Nheg/Pu4TZXnROuAkgk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+FP+/mimnSwkgwnJvgppNJy64vAEAhdXj/qrk1YXBt3v+LgQH8
+	X2fYZLJ0j/u7MJ72MZJALnLVp51bSXLyUCecOF7w8MGPpnhEMiniwOqTO0RQAWd1HtVkoxvaNHo
+	IIw==
+X-Received: from pfbcr10.prod.google.com ([2002:a05:6a00:f0a:b0:8b6:29f9:ce4c])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:2587:b0:3ed:bdfd:23a8
+ with SMTP id adf61e73a8af0-4014ce5d1femr17540776637.61.1795567759846; Tue, 24
+ Nov 2026 16:49:19 -0800 (PST)
+Date: Wed, 25 Nov 2026 11:49:08 +1100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,88 +77,72 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: ytcodhten8f6ckybsp8n438zaez9mz7b
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 75B8730
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18JBBogJHR+mPThdh6z8Vw6dGAN+/JMwyk=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=eLqiru6IB8X1vm5kTLkMtYcaQdNbgpYL+qb0lIcTVWo=; b=XByrIElwAmEiIV9tx4H+Gzi8X3Z0/D0XREouLdnKhWOv/fcS5n8QxJFB6GeoXRCZ6aA4UHUdlTCRjDaFHS52kuGwOGSghyUjoRGefPbwNCzddQmphIoos1HaB9u5mRenfpYgnxOs9xtxb5uBKVB5ra8mHfIx/DZXZj/TzvQf6ZQ=
-X-HE-Tag: 1795567475-545701
-X-HE-Meta: U2FsdGVkX19eY7ChfWCVUrNiHsjN5Stn/IWM6xZezIl6wvc2QvZUQPV8qfUSdBoYMH6uWWGglgFGfMQT/F79WxgQ171wPoYGOGnyJdq5Jt+JbzebhhcWOc6XxuMISBHG+OH7uZ88vVlOcug49ltEzkbd1coa7zoycgnAXfWhI+j5ZVaaalsC4LidI9ijgoTkGYL8trmUdgw72xUpJw37VbL+I/C7KnegeR+A4/vWAfX0/3SI9XQ52Q0Ti33EfI/HBsGMXabUQ2TsBe7hZHm+JdniUw4CACbGvOi+YByLuZDdz4HYw3LSe4+dw7KRU2uo40W9QNFEMhWgCI2n+QTqIhomJowG69CK
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
+Message-ID: <20261125004911.3937193-1-tweek@google.com>
+Subject: [PATCH bpf 0/3] bpftool: Reject non-autoload programs for light skeletons
+From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Leon Hwang <leon.hwang@linux.dev>
+Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Sid Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 29 Oct 2026 10:39:25 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+When generating a light skeleton (bpftool gen skeleton -L),
+bpf_object__load() skips non-autoload programs (e.g. SEC("?...")), but
+bpftool still emits struct bpf_prog_desc and link fields for all
+programs. This causes the loader program to store subsequent program FDs
+into preceding struct fields and leave trailing prog_fd fields
+unpopulated (0).
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> In parse_pred(), CPUS mask error paths report incorrect error positions:
-> - Checking 'str[i++] != '\'{'\'' post-increments 'i' before calling
->   parse_error(), shifting the error caret one character past the
->   missing brace position.
-> - In the CPUS operator check and comparison function selection check,
->   'pos + i' points to the CPUS operand or past it instead of the
->   unsupported operator.
-> 
-> Check 'str[i] != '\'{'\'' before incrementing 'i', and pass 'pos + op_pos'
-> for the operator checks so the error caret points accurately.
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
-> Changes in v4:
->  - Drop Fixes and Cc: stable tags since these error position fixes are
->    cleanups.
-> Changes in v3:
->  - Group error position fixes for CPUS mask parsing into a single patch
->    targeting commit 39f7c41c908b and commit 3cbec9d7b93d.
-> ---
->  kernel/trace/trace_events_filter.c |    7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-> index 9b1100769676..1a9a1cc8daa2 100644
-> --- a/kernel/trace/trace_events_filter.c
-> +++ b/kernel/trace/trace_events_filter.c
-> @@ -1932,16 +1932,17 @@ static int parse_pred(const char *str, void *data,
->  		case OP_BAND:
->  			break;
->  		default:
-> -			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
-> +			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + op_pos);
->  			goto err_free;
->  		}
->  
->  		/* Skip CPUS */
->  		i += 4;
-> -		if (str[i++] != '{') {
-> +		if (str[i] != '{') {
->  			parse_error(pe, FILT_ERR_MISSING_BRACE_OPEN, pos + i);
+Following the discussion on the earlier "skip non-autoload programs"
+series [1] and Andrii's feedback [2], this series returns to the initial
+approach [3] of rejecting non-autoload programs when generating light
+skeletons, while incorporating the prior review feedback (moving
+bpf_object__gen_loader()/bpf_object__load() earlier in do_skeleton() so
+post-load autoload adjustments are observed and documenting the
+restriction in bpftool-gen.rst).
 
-Instead of moving the i++ to below, couldn't you just make the above:
+Supporting runtime toggling of non-autoload programs in light skeletons
+was considered, but does not fit cleanly with signed light skeletons
+where the attested loader blob should remain authoritative.
 
-  			parse_error(pe, FILT_ERR_MISSING_BRACE_OPEN, pos + i - 1);
+Patch 1 splits the two SEC("?kprobe") verifier failure tests out of
+test_global_percpu_data.c (which is in LSKELS_EXTRA) before Patch 2
+rejects them, so selftests continue to build at every commit. Patch 2
+implements the rejection in bpftool. Patch 3 adds a selftest verifying
+the rejection.
 
-?
+[1] https://lore.kernel.org/bpf/20260918040919.3402577-1-tweek@google.com/
+[2] https://lore.kernel.org/bpf/CAEf4BzaeKXEC-gBbxo36wdAGwwZxqkL6pV=3Doo0dk=
+e4S2BmuRmg@mail.gmail.com/
+[3] https://lore.kernel.org/bpf/20260904031912.2133476-2-tweek@google.com/
 
--- Steve
+Thi=C3=A9baud Weksteen (3):
+  selftests/bpf: Move verifier failure tests out of
+    test_global_percpu_data
+  bpftool: Reject non-autoload programs for light skeletons
+  selftests/bpf: Test non-autoload rejection in light skeletons
+
+ .../bpf/bpftool/Documentation/bpftool-gen.rst |  4 +-
+ tools/bpf/bpftool/gen.c                       | 68 +++++++++++--------
+ .../selftests/bpf/prog_tests/bpftool_gen.c    | 30 ++++++++
+ .../bpf/prog_tests/global_data_init.c         |  3 +-
+ .../bpf/progs/test_global_percpu_data.c       | 23 -------
+ .../progs/test_global_percpu_data_failure.c   | 30 ++++++++
+ 6 files changed, 106 insertions(+), 52 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_gen.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_da=
+ta_failure.c
 
 
-
->  			goto err_free;
->  		}
-> +		i++;
->  		maskstart = i;
->  
->  		/* Walk the cpulist until closing } */
-> @@ -2029,7 +2030,7 @@ static int parse_pred(const char *str, void *data,
->  			}
->  		}
->  		if (pred->fn_num == FILTER_PRED_FN_NOP) {
-> -			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-> +			parse_error(pe, FILT_ERR_INVALID_OP, pos + op_pos);
->  			goto err_free;
->  		}
->  
+base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
+--=20
+2.56.1.831.g720f3f5937-goog
 
