@@ -1,106 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.216
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795596265;
-	b=CYfEGX4P1DYzKNZ4UlFa7ZZLFuBS8uo4w4sr7Wr1069K0s7ZG1wLiZZMbG+OXqFrrWIn
-	 mafGVUeIGwwXM6HIJ7bO87j0Qu7/snN00Bu8v5BKtUwBv1Krw+jXc9FwwZoFHRmJUlNtQ
-	 zHSR/pC+wiCF9GSiJgb+1MLH6F6KAdz8jw5jLGx3YxZx1VrsaGNhlwboZpRCXsce7NwJi
-	 8a1qS8YIS39ypQHt9fjL7Jb51wuvL08PBEpqPOfjm2z10NsmDNgEJWcUGjfE/o5j2Sk8b
-	 8qE2COEBjaWg7Pwl5Sk3dSLCWEfIEUEPXPU3u80dNUtYukf/HYP7MRWvHjyrL2KI4Xw==
+	t=1795596571;
+	b=dmE+rR1q5UvkXWIXyFzKMORQyiWPSx7LmKdG8DGZ6GTksZHulFItX941KVLcvD/j+GC3
+	 RKsvH56Kso+byDs0mScCEd2fcYA631Tih7NQFiL7Fmd7nDj3SqX2uO0PVbKunWjjw7u1X
+	 sGvku6Vl4o5r7odyqdbyUHQfP0M4zf6JfCUVqHJLz2TdeYTle6jUa1hFk8p2QLmu72JsG
+	 RzanJlgVyDeXD8qQCaZJgJJE7SNaWdbG8plKiLSuLv9agD/UoQaCJqDPgBmKKvUtTRTVW
+	 4MyMtRCBznHq3oR8znwWrd/XirRCMYOLAubjkXvJMDuTXg79barEO5DDXSJJTBd6HjA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795596265;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=lPFYialRWG4pRS4OT1uh519VBoCu1VzItcljyeAUzHU=;
-	b=ya3pVRwIzR+ewatC6YFa9vLi1yRlSxDEiicRkrEz+32Ont6ufOVB1yVprxlSQW0IK/ip
-	 n0qCUPpef+oArVLzVEZvK63wmJQEzrWabK3KdWky0WRJdV8iMa8I3gr19uePIMgCgj5FW
-	 PHN2O1i4z0LgNu24yvDUWz7/FYfpDgn9SMZ/gDKq5sc6Drt9IvSeO0D5N5tqczi7jO57j
-	 3gNLKpcA/qujcP8VtsvweypyxoH6UqiNdxBY2yAtRb/KOhJTWxKV1TCTxt5QNybwBnTo0
-	 O2MXzhreGzs59saQtvzEQeh6mXH01fKmmWwGL+mb8nwrBRxTZIfgq7wousEu3PxANLw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795596571;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=06PO7r5fywxUcb1upikYj195xr8JzyPRVP1dBZO2gWM=;
+	b=fwJnUZ8rJklD1/73oD2ThFNf++Mff1iKUQiSXuDT++LZ1QlG001Ff5o2y5EXvNiClVW/
+	 /hrcQiJhdPPVoS0NsjPKAiNdvcUfDzMfUNM+1+5h+O50SdDMDDkOt3UkjrTylvobMHcdp
+	 ieGEWRDvvwUvGt+oEWG7k48GnpWqdnKWkYhoWHJ3qhC62Vjm+5Z6WwvGAE4cu1AYHIici
+	 0WaY69ElbjRYv882Px0ZBqc/4B4SN8+vRxIuP76EnQG4Mw4CCqs6+oz5NiaJfXaFLhC8f
+	 HL56tQ6uI+YbFfNz8Mv1L5d/WQF00pG3f/UAResWCT0HifQ4yza5fZzlnfoRICI2aYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SvniTco1;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=JO6GoKUr;
+	arc=none smtp.remote-ip=113.46.200.216
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB245606A327
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 08:44:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB245606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307CD606A326;
+	Wed, 25 Nov 2026 08:49:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 307CD606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SvniTco1
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f0481b35c9so31770925ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 00:44:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795596264; x=1796201064; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lPFYialRWG4pRS4OT1uh519VBoCu1VzItcljyeAUzHU=;
-        b=SvniTco1NUSUtvFcoYZ0pgwBrsTVcjU87S1hUrTrJyFmUsyENhoIOScLvhwMGkbLuL
-         crXEPfrkxUMG2y8MsFu3xB5AFPvmCIE9b0hx05ZepVsUWe3XH+F5bNHrwacvZuxswKux
-         SPDw4FzfkycSozQxoisv3hb11k4/iqsEXBqs8xjqwbNw4x/0W9CZQCTXmCeVD+eRxCCG
-         LbhpvGxuoAMlKVfZ4hIiHvjQL13hA8gGIew0cezJbNolZcFlAhOfy0qHWJhJkG285vpA
-         ev4FMA+eP50cNFVfQMgJBk7OVG6NSG34uDJoQLSj3uaTLrF+KV8Djus0iMd+Go73+heL
-         uVHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795596264; x=1796201064;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lPFYialRWG4pRS4OT1uh519VBoCu1VzItcljyeAUzHU=;
-        b=RxPLKDKPisVB9ySIr5BPwosuCBA7L+atBFGzDKk/7GJ8bPDFd+Cjefga8tfyCkppy8
-         kE5i1KvUzliLVFnpGw+rkg4ARftSNQdatmPeudw6OJLA9lPwiw2qSFGjoczF9ubVXAkv
-         mvuR6m4POVt2c8zoPjugOlDCTi+ARS8u3tFci8XjnQwPYhPFKYcePYoI0ci991CVLOIR
-         wnLC47N4yx4qeUhv6/n446Cow2kYar0A+wQ/RvAfU3ikE0zhKpCADgEzAusFZL+0XxLG
-         LBmxAWFOlNbAlG6HB1XWrPBT3mFOL5tuy9XG+OGHVDvmDab3Sqx7fL7p8PgDV5KSAQ3t
-         L8nA==
-X-Forwarded-Encrypted: i=1; AL+hErFEzk8QQQ5522SzQ4RmRVGrrqoImXsRTUf++f/C0wVTl+Hagq9QrKCIf1yTJgrspa/9IyLutUsp5TQtgTF8BK0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8VwIDut62bFiqR01BH6kQv6nP3r3zm0s69E/osuitdJYZY7f5U
-	d8mjEQ9AitezykjnBSE5FwzbWEROBcf1AC8B/MQosaf+n+qipgm1ERun
-X-Gm-Gg: AZFdTZefdjYWdiYXWpM7M3ZcPh2pGkvSmBog/FOlViMhqKnU2WywQvzdV4nXQiebTRc
-	vfxkbA6K6HHSjZwUABxbfmocU+/19yzImsCUeIkBncPrgBbMKqgywTsXrIURNymlIFImrKDvaBv
-	FR8uNt0Vu5PINUJaQ0Tc5wmDWTE9/zJvS9WWPL3JnUr1UR/65s+Dp/Erf6dIO2XOfQp3xONwODQ
-	OqQP4OjOAXdEvJyXQmNuSI5heqxjTCqvufEyWvH2RkbGnaaLj/wLYPJemWzShAAMxK4Lh9lP1vD
-	1RWeMMtZUn+5kq4aFhmJp9qkVnlG7DeXMEurVgxf5QvnEgNiWntFN0Z7Cj/zdOkSEyWWcd4l2j1
-	MqndUrsRNDnPuxJNilw93e3O/iUdoROew2zCowZZwZ7xEetljmyODyqsovyXn9gsv9QC7Uts7kr
-	buzEq/G8xdZFkrdhekPHUaIsOe9Npcy22nQ9i4zmyVQJyN0j8N1X98YKaKtzCu6RGhhFFktkPnC
-	bAOIyTZQgYeiuPRXSO5nAaWsItlbyRtchiPQuT0Q0DT0YFYAh5bQ2YbLSm3iS8fmhJ3mrT08rJW
-	9AE5+hqDqCKu4ri+ACFffVN2XmXr2OGJPOq+Ppmo2b7gcdHRH8Y1okTXVEyZ+ZNXQYtDJIlp3y4
-	0wV+9Hwb7W+FBY6498w1oFD6K6Gvbw7btgdH+FM68
-X-Received: by 2002:a17:902:ea0c:b0:2f0:3123:899c with SMTP id d9443c01a7336-2f03f0c1f37mr159122655ad.5.1795596263959;
-        Wed, 25 Nov 2026 00:44:23 -0800 (PST)
-Received: from LDYT9Q2G2M.pvgl.sap.corp ([2a09:bac5:cad3:119::1c:2e7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c1a8asm81877485ad.24.2026.11.25.00.44.19
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 25 Nov 2026 00:44:23 -0800 (PST)
-From: Zhiqi Zhang <zhiqizhangg@gmail.com>
-To: pablo@netfilter.org,
-	fw@strlen.de,
-	phil@nwl.cc
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhiqi Zhang <zhiqizhangg@gmail.com>
-Subject: [PATCH v2] selftests: netfilter: fix nft_nat_zones.sh diagnostics
-Date: Wed, 25 Nov 2026 16:44:16 +0800
-Message-ID: <20261125084416.23282-1-zhiqizhangg@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261124071926.8818-1-zhiqizhangg@gmail.com>
-References: <20261124071926.8818-1-zhiqizhangg@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=JO6GoKUr
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=06PO7r5fywxUcb1upikYj195xr8JzyPRVP1dBZO2gWM=;
+	b=JO6GoKUrYIQ1Q/CtomcPhUsGSMJNu09OP53TAY4OZ8LFILvTKj0c2EVoGl1PyxEefItW6XMFm
+	gXXRBQz912EBRwKwl/EJPKZR0G9imlYG8ylzqbtp3wTOkLRNNuYUFoqwcxg23bv45VFb8Ri2htX
+	MEE/k1BPuGN7EbJIahNz43A=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4jZCy70pPpz1T4Gk;
+	Wed, 25 Nov 2026 16:48:31 +0800 (CST)
+Received: from kwepemk300018.china.huawei.com (unknown [7.202.194.246])
+	by mail.maildlp.com (Postfix) with ESMTPS id C6AE64057D;
+	Wed, 25 Nov 2026 16:49:20 +0800 (CST)
+Received: from [10.34.206.67] (10.34.206.67) by kwepemk300018.china.huawei.com
+ (7.202.194.246) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 25 Nov
+ 2026 16:49:20 +0800
+Message-ID: <dfb1128d-feef-4729-b31c-a52f937dd92b@huawei.com>
+Date: Wed, 25 Nov 2026 16:49:19 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,69 +62,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next -v2 2/8] lockdown: remove useless decrement
+ operation
+To: Cai Xinchen <caixinchen1@huawei.com>,
+	<nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <kalevi@kolttonen.fi>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+References: <20261110132818.2231593-1-caixinchen1@huawei.com>
+ <20261110132818.2231593-3-caixinchen1@huawei.com>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <20261110132818.2231593-3-caixinchen1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemk300018.china.huawei.com (7.202.194.246)
 
-nft_nat_zones.sh starts all client pings in the background and then
-uses a bare wait to collect them. In bash, wait with no arguments
-returns zero after all known children have been waited for, so a ping
-failure does not set ret. The diagnostic after that wait is also outside
-the client loop, so it would name only the final client even if it ran.
+On 11/10/2026 9:28 PM, Cai Xinchen wrote:
+> From: Kalevi Kolttonen <kalevi@kolttonen.fi>
+> 
+> Signed-off-by: Kalevi Kolttonen <kalevi@kolttonen.fi>
 
-Store each ping PID and wait for it next to the matching client
-namespace. This makes failed pings set ret and reports the client that
-actually failed.
+Nit: checkpatch.pl warns on this patch, it's better to have a commit 
+description.
 
-The veth0 ICMP counter mismatch path checks the 10.3.0.99 key but dumps
-10.3.99 for debugging. Dump the same key that was checked.
-
-OpenAI Codex helped analyze the Sashiko review and draft this respin. I
-reviewed the changes.
-
-Signed-off-by: Zhiqi Zhang <zhiqizhangg@gmail.com>
----
-Changes in v2:
-- Track each ping PID and wait per client instead of adding echo after a
-  bare wait.
-- Report the client whose ping failed instead of reusing the final loop
-  value.
-- Fix the veth0 ICMP debug dump key from 10.3.99 to 10.3.0.99.
-
- .../selftests/net/netfilter/nft_nat_zones.sh        | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/netfilter/nft_nat_zones.sh b/tools/testing/selftests/net/netfilter/nft_nat_zones.sh
-index d935c967dd..9397f09d0c 100755
---- a/tools/testing/selftests/net/netfilter/nft_nat_zones.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_nat_zones.sh
-@@ -167,11 +167,16 @@ ip netns exec "$gw" sysctl -q net.ipv6.fwmark_reflect=1 > /dev/null
- for i in $(seq 1 "$maxclients"); do
-   cl=$(eval echo \$cl"$i")
-   ip netns exec "$cl" ping -i 0.5 -q -c 3 10.3.0.99 > /dev/null 2>&1 &
-+  ping_pids[$i]=$!
- done
- 
--wait || ret=1
--
--[ "$ret" -ne 0 ] && "FAIL: Ping failure from $cl" 1>&2
-+for i in $(seq 1 "$maxclients"); do
-+  cl=$(eval echo \$cl"$i")
-+  if ! wait "${ping_pids[$i]}"; then
-+    ret=1
-+    echo "FAIL: Ping failure from $cl" 1>&2
-+  fi
-+done
- 
- for i in $(seq 1 "$maxclients"); do
-    if ! ip netns exec "$gw" nft get element inet raw inicmp "{ 10.1.0.3 . \"veth$i\" . 10.3.0.99 }" | grep -q "{ 10.1.0.3 . \"veth$i\" . 10.3.0.99 counter packets 3 bytes 252 }"; then
-@@ -185,7 +190,7 @@ done
- if ! ip netns exec "$gw" nft get element inet raw inicmp "{ 10.3.0.99 . \"veth0\" . 10.3.0.1 }" | grep -q "{ 10.3.0.99 . \"veth0\" . 10.3.0.1 counter packets $((3 * maxclients)) bytes $((252 * maxclients)) }"; then
-     ret=1
-     echo "FAIL: counter icmp mismatch for veth0: { 10.3.0.99 . \"veth0\" . 10.3.0.1 counter packets $((3 * maxclients)) bytes $((252 * maxclients)) }"
--    ip netns exec "$gw" nft get element inet raw inicmp "{ 10.3.99 . \"veth0\" . 10.3.0.1 }" 1>&2
-+    ip netns exec "$gw" nft get element inet raw inicmp "{ 10.3.0.99 . \"veth0\" . 10.3.0.1 }" 1>&2
- fi
- 
- if [ $ret -eq 0 ]; then
--- 
-2.54.0 (Apple Git-157)
+> ---
+>   security/lockdown/lockdown.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index 263dcc80d839..8648508d49b2 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -130,10 +130,8 @@ static ssize_t lockdown_write(struct file *file, const char __user *buf,
+>   		return PTR_ERR(state);
+>   
+>   	len = strlen(state);
+> -	if (len && state[len-1] == '\n') {
+> +	if (len && state[len-1] == '\n')
+>   		state[len-1] = '\0';
+> -		len--;
+> -	}
+>   
+>   	for (i = 0; i < ARRAY_SIZE(lockdown_levels); i++) {
+>   		enum lockdown_reason level = lockdown_levels[i];
 
