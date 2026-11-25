@@ -1,75 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795580366;
-	b=PAaTwjqd9tTtB6YXnGdZa9dqYqWGHf16Tmunp6YpzjPBgZ03MMav6Cfi89I3kj61Qddt
-	 odUx6SmiM62/HdYQP9vV2+BXYpjMHvqSb3Iw7x4XHIvSMgWx7RyD3CeWF6+U/jq98frSo
-	 kL3C0XFjTJ7RkOG/xpROg2bcOvGbR4aUA/n9bMeCUzPOpOra2XVLlMjBBqf10JAPJXtFS
-	 O/Zg92dSMsVkvGSHAX6YW7VmMrKM0UilI1tF8poT5IG18qMpQ65d9qDG3irGrtsk8zr6O
-	 pWatb5j4DUPbhesq+9Z1q4CZ1E48L5h5S7Xx+IiAeYC4dC0/pEsDnvzfV1yZmioyFHg==
+	t=1795581074;
+	b=whPC00aB2KejeSD0tfSTQv3b+gz46VXA6xFHrAppjtZ4SE2uUGCODr6zzioS3876OZtN
+	 1WRouEkWZ+ez1JbnaoQ4d/jwGfi42uTRFvV5doNzb3/wjoIoq1E/iLw1xkP5DJ7UmQsFy
+	 zxHqL4x6TYAw8LjvVSbCXnBJqZYOTh5OLQUWdnrl1fQPxEgQ3e48cWPgFHwyc+Egci8PA
+	 V3EOwMeBoPHFY8xPVnfSD+qR86VUPJV5iWgFz/8rPB6plvuenkfCIn6nP2jCnie+WFQs8
+	 ISqk9TzPfuiYJVNxu5wK6zRGu4wXT+oRgN6D4dc6U8zji4HOGYtVSPt2M80QKYFgmvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795580366;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795581074;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=Oens5qXCsD8jpfBNXUvH4+dKgq/K5SeSAeCwMcB/zwc=;
-	b=M3X+uj5hv/xcImSRcWvE228s6auLAID45H5in2ngODIqCQaMjNoaXSk8oon6I1k6IjgZ
-	 KelDBdDZrR0sfKVRd08JSvT0LV1t1iQTmtBOZLaVZfUIVFX+iOe5rsmkvHfz/PCDR++5r
-	 PhoNZmTFer4yrVzDIlAbdlQWSaeWPx3ptHuCtNJPdoBLPgDxom6n2JKwJlRM4Vu/pfzbA
-	 nplhPNzCO1qw9qbliELf4eO0fZvldRHn/igO/+aPpFNmiU7RUo4QMErq/e+TxaI4PsI+4
-	 4g5+tLSiivUcHpsh8NHzZrXJCPKwhbrQSmIYEwlDUcL9cH8pf4uf+61kmPIrhA91Lwg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Date:Subject:To:Cc:Message-ID:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=LqCAbsFv75X8FpT2kuDVemXn9DMtQ2UrANDaKURHbUU=;
+	b=Q5R74eW7agwvZwNerPq8dVNizv9RY0UcIgU7mrxIYIuIdUiW7BDnsumgxIauEBNiAeva
+	 5xmP2tW/G5kJYJIjLwbxG+Ukt4rsLfNTleXU6HHAvRj3OhjyUcUNPUflhGPt4zRLVPAQM
+	 zJ0i7SXGUbkTU5dPebJyiY6CZbb3abda4aFDG+3Itl17PpN5VfWURgsi2QHpU3r/QXm42
+	 dBU/KbLAKOlMy6UDhsRs6rnOi4uXorEH5ZYaKczcgNgPKLVBD00W2JMhsCzYzIXZ52NCy
+	 llK+VOlBGc1vCqt7SU7eLt8HV2bmxmWmOEGcPo2uwYEUrIgDZCcvKIuvNy19KDGvDDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fm6Zl6+A;
-	arc=none smtp.remote-ip=209.85.215.198
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9xaBilI;
+	arc=none smtp.remote-ip=209.85.160.178
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F29D606A33B
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 04:19:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F29D606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C747606A323
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 04:31:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C747606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fm6Zl6+A
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc4ac5feaa4so3037067a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 20:19:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9xaBilI
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-55d2b4a99d4so48884261cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 20:31:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795580366; x=1796185166; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Oens5qXCsD8jpfBNXUvH4+dKgq/K5SeSAeCwMcB/zwc=;
-        b=fm6Zl6+AQCgULwpDzN3QamZ2OiVTRubCTK034RobimYX7H/c2D5iaWj9P5i6TtdtKp
-         dVcLqyi+rpr9W5HuNFp5lzz4OVaGcdk/wMqS6YzQLcqim1XLhCAgs6UrWv5uSxIDPWJH
-         OzUH/erYkN6HdQAfWrk5DFmVoseCnYyRQh2VbFziG2nDqJgW7tVm8UkKkmx6WeyTO5vY
-         SeqcHzIgOPyxbG1NIru5cXl3u0QnCoH1kpmntze+EXZZ/A/iWylb8ZGgFi4/7Ky+EFCt
-         PQfqK/9f69dbjiEvuc1i1vKgCSv2CXaBDJ1SnX/3JRQ2zYuVCafp8Um8LLjvaB9pqsAj
-         dvfg==
+        d=gmail.com; s=20260707; t=1795581073; x=1796185873; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:message-id:cc:to:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LqCAbsFv75X8FpT2kuDVemXn9DMtQ2UrANDaKURHbUU=;
+        b=t9xaBilIOSfrKNfdyYoYv0fqw8MH2K4V/ls2xdv/XMF2Y7q+0FeBKT08Y8d356eHZx
+         ZZrO0XeB7oddmjUFHDeCZuq09o6W4o3F5l679+WsVsjdpvVjrBPpYqTziW7ImtZ350k8
+         p1iBOcySHX2sS+BpiR9BlFHzYvx1Xf5ON00IpOEVWKdWm1jVnlRFvOGGzkWOZ7Fji893
+         S8y5w1WZGalKSlup2KqBhICVzJi2gliF55C2HldJQMjAtm7KkLZy2sC67sVDx8rhKCws
+         c1q3Kwib5FBhJNmqRxDoxocCrWBe2NOGQ4Hdek/jYKrlEBbApxyLcDVCiAAO6dN3AfZl
+         nEug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795580366; x=1796185166;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1795581073; x=1796185873;
+        h=content-transfer-encoding:content-type:message-id:cc:to:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Oens5qXCsD8jpfBNXUvH4+dKgq/K5SeSAeCwMcB/zwc=;
-        b=xFaOzqEZc6ZHqAo0zMpQbxW+CgYe5vKmt3eXaaFw0vORB+aSZXTHR1cf/Jdsb8WxXi
-         PwqolBGWmGSG5zws8BqO371SNnvEDMIHWv6tJAHtApg50mBf5zI2iDzEr+NGAR8pg3Gq
-         LP70ySZ9jw4/NvYz4EcB0HgvKuLVQNry6s6ZBYEm0vQxO7BjSpcPkdj1Tj+AZvF9LqPC
-         n1twHRMk2AuAgxpogfplh1R0XCZU3z++xlcz8XC9Lr5cYD+29L4KX39A93g7ra5D6ojA
-         OhZrbwgwsybZJLUD4RVnOYHEZNV15ZKLvjoIrKbLxPWA+VGlNztmLOKJ4fmMG4jGVUfT
-         94gw==
-X-Forwarded-Encrypted: i=1; AL+hErExfXPkRD01NB7n+t5wV33v4au9h6gDmZQxAPfIXEQYOn6+wxadwLL3F3fQJ8f4xZU17odMTvCFTkhnZDeIQSQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/QRV7fKizdoCbfHZ7o03ZBjvyfDnOMyyRxYgwNOggjkqWOLgwh
-	UG5cXEbG/ufnPRnKINwiiLpEZTwdGXiqLhb1+HyE8FJ6ZxXbtdCXzAvuasQeBbTC9OokoiWZ+6+
-	UlHyw3/78jZS95napYZAmB0M4xg==
-X-Received: from pgam23.prod.google.com ([2002:a05:6a02:2b57:b0:cc7:492f:3ac1])
- (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6300:218b:b0:3f9:cc40:dcb with SMTP id adf61e73a8af0-4014ce517bbmr15339624637.33.1795580365500;
- Tue, 24 Nov 2026 20:19:25 -0800 (PST)
-Date: Wed, 25 Nov 2026 04:19:00 +0000
-In-Reply-To: <20261125041900.3243569-1-dylanbhatch@google.com>
+        bh=LqCAbsFv75X8FpT2kuDVemXn9DMtQ2UrANDaKURHbUU=;
+        b=IX1JScLMgCbXewODnRK9QayrkHONF0hjV2nl+qMZVFOKpfIRVBZXMRorR/O+5p12EV
+         7vA6IhlRYmBXMe7gUGtFFwJXE6ObXnbevnrqlE0S43qdzFjQuZcawSGSZkZock9TR9LF
+         NIiaafq0U1OTRL6oIQufgFhY0yh4PwLpq/LWLg5Jy/Ql52bmm6DdCxn1IaA5jEiaASNf
+         ymPeRR+kit3EIDNNushsvt6mYB4EPLdkz2qiLo0S0EFKAwMa/l3nKNn7KYt+gU1HDWgI
+         OivZ1085gPVI6fpjgfAyzqcA4JQic73XEw0PJKi8M6lw84cdQV3TBucPMAfCVDgqTHPF
+         faog==
+X-Forwarded-Encrypted: i=1; AL+hErG2w27QMCcke6eAlTCRVwGwVpw0MQ+L7hvMOYEthm6XmJdTcVRayDGn6YXiIytlLR+9NocqJtHeAzL3vgv6UzM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/oPIikeXNtciI1Sd8TPPHKwIb3/REDW7ErluFKYI1SfLKYHqtG
+	+VTS9EF2a6tcyKgsyyRzFfTTjW19Mp5sRBUeX6vqv+y3XlpHhvXZGOo=
+X-Gm-Gg: AZFdTZdyVxPUy16kxcE8kaRIPKSwIkudpMnhJ9PB+ZYhM1McRayeVnVqUGUUCtfK5Ic
+	lFhXiLsl8YmRT5YjICS+UYBrsQchRmDQkTH1sujTAbHaU3wS82FEaTX/YinXJbQMV+HXCWeeQEG
+	2TTCeOiNnfc4EVv8pSmM2d8VFXePP4qK3UFopgXc92bNwGPKOZLq1KF6YkO1PJNaWwfPmzJ2vpg
+	bh3Ia5eGBBduYka1sGXzUCTixq728T/N7Ld+R9ZqUyKsmGa1mM/J4yOVpJJmQmuYisJU2lQvIac
+	Fzs8GZ8SWWb5jyuJl5h+gY4CEMaw9ADai2QZ6NOzp0AK2+Y4LR76/0pCtj33FYEqrbkkJ3vrRtG
+	v8oHp3sscj2NysFzwYsficnULuUywa1xQeY3Oxq/+BeSrUvidfMsFdoDwyyUamXMG2P3G1FkJvA
+	FHWaXBszaShHKZrZR9P1tlbnf1taYD9/XqBCCJ+sVm1aQDuMhrkdE4YTbktQ4fcDAHL7WP9gu7O
+	Z0tgOfk87HAUugkXeFSZl/Fk2/V3ga2p0nE3Q9NuKv5k1+u28IRGRF6K3+u0hRX4jAQZ8QMaCZo
+	oMQb09upFyxkFPFMDLrsZqYhhbsLkKXlneVc4iqvfTMcZEgnvklk8lRnbp4a3gVbLo0JwQC3xBf
+	IE57jvhADxk4VZNpUxmysFFxkcOs+TeHKH7cyrydia6zmV2IcBhjL0RFxOf/2IoL7NIT49F7y01
+	5SQ2SWhiI+97Q9wQY=
+X-Received: by 2002:ac8:6545:0:b0:55c:f5a5:3900 with SMTP id d75a77b69052e-55d76aa8574mr311966681cf.62.1795581072923;
+        Tue, 24 Nov 2026 20:31:12 -0800 (PST)
+Received: from [127.0.1.1] (207-237-119-98.s2383.c3-0.nyr-cbr1.nyr.ny.cable.rcncustomer.com. [207.237.119.98])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d7889f8absm143087821cf.27.2026.11.24.20.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 20:31:12 -0800 (PST)
+From: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
+Date: Wed, 25 Nov 2026 04:31:11 -0000
+Subject: [PATCH RESEND v2] Documentation: kunit: document --summary and
+ --failed
+ options
+To: david@davidgow.net, brendan.higgins@linux.dev, corbet@lwn.net
+Cc: danielmaraboo@gmail.com, raemoar63@gmail.com, skhan@linuxfoundation.org,
+ rdunlap@infradead.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, workflows@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <179558107134.36587.13120861622026385297@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,444 +100,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261125041900.3243569-1-dylanbhatch@google.com>
-X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125041900.3243569-3-dylanbhatch@google.com>
-Subject: [PATCH v2 2/2] selftests/livepatch: Add cond_resched() transition tests
-From: Dylan Hatch <dylanbhatch@google.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Shuah Khan <shuah@kernel.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dylan Hatch <dylanbhatch@google.com>
-Content-Type: text/plain; charset="UTF-8"
 
-Add a livepatch kselftest (test-cond-resched.sh) and helper module
-(test_klp_cond_resched) to verify that livepatch transitions complete
-when sole-runnable CPU-bound tasks spin in kernel cpu_relax() +
-cond_resched_tasks_rcu_qs() loops and are kicked via klp_send_signals():
+Commit 062a9dd9bad7 ("kunit: tool: Only print the summary") and commit
+3c67a2c09b3c ("kunit: tool: print failed tests only") added the --summary
+and --failed options to kunit.py, but the matching entries in the
+run_wrapper documentation were never added.
 
-1. './test-cond-resched.sh kthread' pins a SCHED_FIFO kthread spinning
-   in cond_resched_tasks_rcu_qs() on an isolated target CPU (while
-   enabling the RV sched:opid monitor via tracefs when available) and
-   verifies that klp_send_signals() reschedules and transitions it.
-2. './test-cond-resched.sh usertask' spins a normal userspace task
-   (!(PF_KTHREAD | PF_USER_WORKER)) inside a kernel cond_resched() loop
-   via /proc/test_klp_cond_resched without checking signal_pending(),
-   verifying that klp_send_signals() forces it through __schedule() as
-   well.
+Add descriptions for both options next to the other output options, so
+the documentation lists the arguments the tool actually accepts.
 
-Note that because _cond_resched() is a no-op under CONFIG_PREEMPTION=y,
-a sole runnable spinning task enters __schedule(SM_PREEMPT) via
-preempt_schedule_irq() with an in-kernel interrupt pt_regs frame on the
-stack. Passing these tests without another runnable task on the CPU
-therefore requires arch_stack_walk_reliable() to support unwinding
-across in-kernel exception frames (such as x86_64 with
-CONFIG_UNWINDER_ORC=y); on architectures or configs where
-arch_stack_walk_reliable() currently rejects in-kernel exception frames
-(arm64, powerpc, s390, or x86 with CONFIG_FRAME_POINTER=y), these tests
-expose the lack of exception-boundary reliable unwinding.
+An LLM-based coding assistant helped draft these entries; I checked them
+against kunit.py and kunit_parser.py.
 
-Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+Reviewed-by: Daniel Pereira <danielmaraboo@gmail.com>
+Signed-off-by: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
 ---
- tools/testing/selftests/livepatch/Makefile    |   3 +-
- .../selftests/livepatch/test-cond-resched.sh  | 204 ++++++++++++++++++
- .../selftests/livepatch/test_modules/Makefile |   1 +
- .../test_modules/test_klp_cond_resched.c      | 141 ++++++++++++
- 4 files changed, 348 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/livepatch/test-cond-resched.sh
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
+Resending: no changes since v2 (26 Oct), only Daniel's Reviewed-by added.
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index a080eb54a215d..14741d8da4209 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -11,7 +11,8 @@ TEST_PROGS := \
- 	test-ftrace.sh \
- 	test-sysfs.sh \
- 	test-syscall.sh \
--	test-kprobe.sh
-+	test-kprobe.sh \
-+	test-cond-resched.sh
+Changes in v2:
+- Moved the tool disclosure into the changelog text; the Assisted-by
+  trailer is no longer described in Documentation/process.
+
+ Documentation/dev-tools/kunit/run_wrapper.rst | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+index cecc110a..641ab50a 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -327,6 +327,14 @@ command line arguments:
+ - ``--junit``: If set, stores the test results in JUnit XML format and prints to `stdout` or
+   saves to a file if a filename is specified.
  
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/livepatch/test-cond-resched.sh b/tools/testing/selftests/livepatch/test-cond-resched.sh
-new file mode 100755
-index 0000000000000..800a783df94e0
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-cond-resched.sh
-@@ -0,0 +1,204 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
++- ``--summary``: If set, prints only the summary line for parsed test
++  results, rather than the result of every individual test. Does nothing
++  if ``--raw_output`` is set.
 +
-+. $(dirname $0)/functions.sh
++- ``--failed``: If set, prints only the tests that failed or crashed, along
++  with the summary line, once all tests have run. Does nothing if
++  ``--raw_output`` is set.
 +
-+MOD_LIVEPATCH=test_klp_livepatch
-+MOD_RESCHED=test_klp_cond_resched
-+SUBTEST="${1:-all}"
-+
-+case "$SUBTEST" in
-+	all|kthread|usertask) ;;
-+	*)
-+		echo "Usage: $0 [all|kthread|usertask]" >&2
-+		exit 1
-+		;;
-+esac
-+
-+setup_config
-+
-+if [[ $(nproc) -lt 2 ]]; then
-+	skip "test-cond-resched requires at least 2 online CPUs"
-+fi
-+
-+# Pin the test runner (and a userspace busy-loop so global timers such as
-+# klp_transition_work stay on CPU 0) to CPU 0, and disable RT bandwidth
-+# throttling and the DL fair_server on TARGET_CPU so our SCHED_FIFO spinner
-+# remains the sole runnable task until klp_send_signals() fires at
-+# SIGNALS_TIMEOUT (15s).
-+TARGET_CPU=$(($(nproc) - 1))
-+FAIR_RUNTIME_FILE="$SYSFS_DEBUG_DIR/sched/fair_server/cpu$TARGET_CPU/runtime"
-+if [[ ! -w "$FAIR_RUNTIME_FILE" ]]; then
-+	skip "fair_server debugfs control ($FAIR_RUNTIME_FILE) not available"
-+fi
-+
-+taskset -cp 0 $$ >/dev/null
-+
-+ORIG_RT_RUNTIME=$(sysctl -n kernel.sched_rt_runtime_us)
-+ORIG_FAIR_RUNTIME=$(cat "$FAIR_RUNTIME_FILE")
-+RV_DIR="$SYSFS_TRACING_DIR/rv"
-+ENABLED_OPID=0
-+USER_SPIN_PID=""
-+BG_BUSY_PID=""
-+
-+function cleanup_cond_resched() {
-+	if [[ -e /proc/test_klp_cond_resched ]]; then
-+		echo 1 > /proc/test_klp_cond_resched 2>/dev/null || true
-+	fi
-+	if [[ -n "$USER_SPIN_PID" ]]; then
-+		wait "$USER_SPIN_PID" 2>/dev/null || true
-+	fi
-+	if [[ -n "$BG_BUSY_PID" ]]; then
-+		kill "$BG_BUSY_PID" 2>/dev/null || true
-+		wait "$BG_BUSY_PID" 2>/dev/null || true
-+	fi
-+	rmmod $MOD_RESCHED 2>/dev/null || true
-+	if [[ -e "$SYSFS_KLP_DIR/$MOD_LIVEPATCH" ]]; then
-+		echo 0 > "$SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled" 2>/dev/null || true
-+		loop_until '[[ ! -e "$SYSFS_KLP_DIR/$MOD_LIVEPATCH" ]]' || true
-+	fi
-+	rmmod $MOD_LIVEPATCH 2>/dev/null || true
-+	if [[ "$ENABLED_OPID" -eq 1 ]]; then
-+		echo "!sched:opid" > "$RV_DIR/enabled_monitors" 2>/dev/null || true
-+		echo nop > "$RV_DIR/monitors/sched/opid/reactors" 2>/dev/null || true
-+	fi
-+	echo "$ORIG_FAIR_RUNTIME" > "$FAIR_RUNTIME_FILE" 2>/dev/null || true
-+	sysctl -q kernel.sched_rt_runtime_us="$ORIG_RT_RUNTIME" 2>/dev/null || true
-+	cleanup
-+}
-+trap cleanup_cond_resched EXIT INT TERM HUP
-+
-+sysctl -q kernel.sched_rt_runtime_us=-1
-+echo 0 > "$FAIR_RUNTIME_FILE"
-+
-+taskset -c 0 bash -c 'while :; do :; done' &
-+BG_BUSY_PID=$!
-+
-+if [[ -f "$RV_DIR/available_monitors" ]] &&
-+   grep -q '^sched:opid$' "$RV_DIR/available_monitors"; then
-+	echo printk > "$RV_DIR/monitors/sched/opid/reactors" 2>/dev/null || true
-+	if ! grep -q '^sched:opid$' "$RV_DIR/enabled_monitors"; then
-+		echo sched:opid > "$RV_DIR/enabled_monitors" && ENABLED_OPID=1
-+	fi
-+fi
-+
-+function check_rv_opid() {
-+	local opid_err
-+
-+	opid_err=$(dmesg -r | awk -v last="$LAST_DMESG" 'p { print } $0 == last { p = 1 }' |
-+		   grep 'rv: monitor opid does not allow' || true)
-+	if [[ -n "$opid_err" ]]; then
-+		echo -e "\n$opid_err" >&2
-+		return 1
-+	fi
-+	return 0
-+}
-+
-+function user_spin_started() {
-+	dmesg -r | awk -v last="$LAST_DMESG" 'p { print } $0 == last { p = 1 }' |
-+		grep -q "$MOD_RESCHED: user_spin_read: spinning"
-+}
-+
-+# Test 1: Verify a sole-runnable CPU-bound kthread spinning in cond_resched()
-+# transitions cleanly via klp_send_signals() -> __schedule().
-+if [[ "$SUBTEST" == "all" || "$SUBTEST" == "kthread" ]]; then
-+	start_test "CPU-bound kthread spinning in cond_resched() transition"
-+
-+	load_mod $MOD_RESCHED target_cpu=$TARGET_CPU spawn_kthread=1
-+	load_lp $MOD_LIVEPATCH
-+
-+	if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]]; then
-+		echo -e "FAIL\n\n"
-+		die "livepatch kselftest(s) failed"
-+	fi
-+
-+	disable_lp $MOD_LIVEPATCH
-+	unload_lp $MOD_LIVEPATCH
-+
-+	if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]]; then
-+		echo -e "FAIL\n\n"
-+		die "livepatch kselftest(s) failed"
-+	fi
-+
-+	unload_mod $MOD_RESCHED
-+
-+	OPID_RC=0
-+	check_rv_opid || OPID_RC=1
-+
-+	check_result "% insmod test_modules/$MOD_RESCHED.ko target_cpu=$TARGET_CPU spawn_kthread=1
-+$MOD_RESCHED: cond_resched_kthread_fn: spinning in cond_resched()
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: signaling remaining tasks
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH
-+% rmmod $MOD_RESCHED
-+$MOD_RESCHED: stopped"
-+
-+	if [[ "$OPID_RC" -ne 0 ]]; then
-+		die "RV sched:opid violation detected during klp_send_signals()"
-+	fi
-+fi
-+
-+# Test 2: Verify a normal userspace task (!(PF_KTHREAD | PF_USER_WORKER))
-+# spinning inside a kernel cond_resched() loop (without checking
-+# signal_pending()) transitions cleanly via klp_send_signals() -> __schedule().
-+if [[ "$SUBTEST" == "all" || "$SUBTEST" == "usertask" ]]; then
-+	start_test "CPU-bound user task spinning in kernel cond_resched() transition"
-+
-+	load_mod $MOD_RESCHED target_cpu=$TARGET_CPU
-+
-+	cat /proc/test_klp_cond_resched >/dev/null &
-+	USER_SPIN_PID=$!
-+	loop_until 'user_spin_started' ||
-+		die "user task failed to enter kernel spin"
-+
-+	load_lp $MOD_LIVEPATCH
-+
-+	wait "$USER_SPIN_PID"
-+	USER_SPIN_PID=""
-+
-+	if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]]; then
-+		echo -e "FAIL\n\n"
-+		die "livepatch kselftest(s) failed"
-+	fi
-+
-+	disable_lp $MOD_LIVEPATCH
-+	unload_lp $MOD_LIVEPATCH
-+	unload_mod $MOD_RESCHED
-+
-+	OPID_RC=0
-+	check_rv_opid || OPID_RC=1
-+
-+	check_result "% insmod test_modules/$MOD_RESCHED.ko target_cpu=$TARGET_CPU
-+$MOD_RESCHED: user_spin_read: spinning in cond_resched()
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: signaling remaining tasks
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH
-+% rmmod $MOD_RESCHED
-+$MOD_RESCHED: stopped"
-+
-+	if [[ "$OPID_RC" -ne 0 ]]; then
-+		die "RV sched:opid violation detected during klp_send_signals()"
-+	fi
-+fi
-+
-+exit 0
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index a13d398585dcb..1502ff9070b88 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -6,6 +6,7 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_callbacks_demo.o \
- 	test_klp_callbacks_demo2.o \
- 	test_klp_callbacks_mod.o \
-+	test_klp_cond_resched.o \
- 	test_klp_kprobe.o \
- 	test_klp_livepatch.o \
- 	test_klp_mod_patch.o \
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c b/tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
-new file mode 100644
-index 0000000000000..19ff9dffd96bc
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
-@@ -0,0 +1,141 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * test_klp_cond_resched.c - Helper module for testing livepatch transitions
-+ * while CPU-bound kthreads or user tasks spin in kernel cond_resched() loops.
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/completion.h>
-+#include <linux/cpumask.h>
-+#include <linux/kernel.h>
-+#include <linux/kthread.h>
-+#include <linux/module.h>
-+#include <linux/proc_fs.h>
-+#include <linux/processor.h>
-+#include <linux/rcupdate.h>
-+#include <linux/sched.h>
-+#include <linux/smp.h>
-+
-+static int target_cpu = -1;
-+module_param(target_cpu, int, 0444);
-+MODULE_PARM_DESC(target_cpu, "CPU to pin spinner task to");
-+
-+static bool spawn_kthread;
-+module_param(spawn_kthread, bool, 0444);
-+MODULE_PARM_DESC(spawn_kthread, "Spawn a SCHED_FIFO kthread spinner on load");
-+
-+static struct task_struct *cond_resched_tsk;
-+static struct proc_dir_entry *proc_entry;
-+static DECLARE_COMPLETION(spinner_started);
-+static bool stop_spin;
-+
-+static void spin_until_patched(void)
-+{
-+	bool saw_pending = false;
-+
-+	while (!READ_ONCE(stop_spin)) {
-+		if ((current->flags & PF_KTHREAD) && kthread_should_stop())
-+			break;
-+		if (test_thread_flag(TIF_PATCH_PENDING))
-+			saw_pending = true;
-+		else if (saw_pending)
-+			break;
-+		cpu_relax();
-+		cond_resched_tasks_rcu_qs();
-+	}
-+}
-+
-+static int cond_resched_kthread_fn(void *data)
-+{
-+	sched_set_fifo_low(current);
-+	pr_info("%s: spinning in cond_resched()\n", __func__);
-+	complete(&spinner_started);
-+
-+	spin_until_patched();
-+
-+	sched_set_normal(current, 0);
-+	while (!kthread_should_stop())
-+		schedule_timeout_interruptible(HZ);
-+
-+	return 0;
-+}
-+
-+static ssize_t user_spin_read(struct file *file, char __user *buf,
-+			      size_t count, loff_t *ppos)
-+{
-+	int ret;
-+
-+	if (*ppos > 0)
-+		return 0;
-+
-+	ret = set_cpus_allowed_ptr(current, cpumask_of(target_cpu));
-+	if (ret)
-+		return ret;
-+
-+	sched_set_fifo_low(current);
-+	WRITE_ONCE(stop_spin, false);
-+	pr_info("%s: spinning in cond_resched()\n", __func__);
-+
-+	spin_until_patched();
-+
-+	sched_set_normal(current, 0);
-+	*ppos = 1;
-+	return 0;
-+}
-+
-+static ssize_t user_spin_write(struct file *file, const char __user *buf,
-+			       size_t count, loff_t *ppos)
-+{
-+	WRITE_ONCE(stop_spin, true);
-+	return count;
-+}
-+
-+static const struct proc_ops user_spin_ops = {
-+	.proc_read	= user_spin_read,
-+	.proc_write	= user_spin_write,
-+};
-+
-+static int __init test_klp_cond_resched_init(void)
-+{
-+	if (target_cpu < 0)
-+		target_cpu = cpumask_last(cpu_online_mask);
-+	if ((unsigned int)target_cpu >= nr_cpu_ids || !cpu_online(target_cpu))
-+		return -EINVAL;
-+
-+	proc_entry = proc_create("test_klp_cond_resched", 0600, NULL,
-+				 &user_spin_ops);
-+	if (!proc_entry)
-+		return -ENOMEM;
-+
-+	if (spawn_kthread) {
-+		cond_resched_tsk = kthread_create_on_cpu(cond_resched_kthread_fn,
-+							 NULL, target_cpu,
-+							 "klp_cond_resched/%u");
-+		if (IS_ERR(cond_resched_tsk)) {
-+			int ret = PTR_ERR(cond_resched_tsk);
-+
-+			cond_resched_tsk = NULL;
-+			proc_remove(proc_entry);
-+			return ret;
-+		}
-+		wake_up_process(cond_resched_tsk);
-+		wait_for_completion(&spinner_started);
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit test_klp_cond_resched_exit(void)
-+{
-+	WRITE_ONCE(stop_spin, true);
-+	if (cond_resched_tsk)
-+		kthread_stop(cond_resched_tsk);
-+	proc_remove(proc_entry);
-+	pr_info("stopped\n");
-+}
-+
-+module_init(test_klp_cond_resched_init);
-+module_exit(test_klp_cond_resched_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Livepatch test: CPU-bound cond_resched() transition");
+ - ``--filter``: Specifies filters on test attributes, for example, ``speed!=slow``.
+   Multiple filters can be used by wrapping input in quotes and separating filters
+   by commas. Example: ``--filter "speed>slow, module=example"``.
+
+base-commit: c03c1a14507dfaf8b856c2608f9ac216021fc222
 -- 
-2.56.1.839.g22a8290db9-goog
+2.34.1
+
 
