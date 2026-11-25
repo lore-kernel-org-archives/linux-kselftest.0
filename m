@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795634100;
-	b=qFwpEnZ5rkrnCen2+DyK6ORYpnbQ7TXzswkiTzehxuf3mxz38UL2IEJ6jmWf5/xKNXSb
-	 KR9/WfbXMARnY/KxfwXD08exrujYmdslnhu4X6YKdxXJPHcmnZOmnIZTUyCIjK1lBLgnm
-	 uf30xnIwo677FSpkgByu7TmYsi13pHFpx38NfocDJYU49QP1MFkxB3H9o8nZ6AXlvZsDp
-	 S24nzsO9MiuQNLzvpcp0QtXT4rKFg3lDwS3VA+oLbjRASsfzn9yUSx2YqH7GWPZ9iUgTi
-	 jrGgudzFmgAAK2VrfLfYnMEzLeRvW/lByZ2Pt4mlbSr1tQjHeUtPv1fWiUgrQJJ7fhQ==
+	t=1795634101;
+	b=T1K1UQq2pkGVoVxsh9DR56QQCY4mH/e5GQ4WzaqPyWssqJNGk6HEHhVN7kIvUky9ahVG
+	 6AtErrL6FErBS9GGQl6wt6EJxrQg9rtjk3XLy2Qxs+bDiSTSekMd28e2l3ckgGa3Yqr7k
+	 /6BVZsgvnQlD+IY1LeWcf+C1yzrlCPqGIDXXaNc78f4C81o0RaMrU6qMJr+xc+HaNuaa4
+	 J6rEEX+moqFDmaITdXxN9dxZabERKP/j2QxdY1WrU8p9tBO9cQTXzQtXPw2FdVLDT+nIP
+	 Tr2BDD4RC35lFHYusHSFUfSNBP3sOLL1Q+UG5crxYgqjp4qxsEsBAyNXVKTLbRracbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795634100;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795634101;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=VXAZ8Kr8JXgDmkXxStkx6xLqLFftpXmGJY9tWvIpUSg=;
-	b=LkU6XQsRmB708/XO4pVtJxzY3fYoPXA9+LPmZjK8f5xaIRe+KGOXK+/Pu+ZgxLJmUZtt
-	 rtnXC0815jj2Jj+qcLJyYDwQdYl+n6mQ7LskWfxIqRxMGdEmnQ9colISycSXXKtpu8+RC
-	 TwpUfFV9WPexzM86GO2NDZjyo8dBdL5E58WZwg0iV4J61Zy+5aco93hiksKZcQu082usi
-	 tgAunA6+WKBO/g3I4ZXQcax+RtaGCn8BKEs1yh+nC60j2woclFPFLDPuotYXNXft9DJaN
-	 T2t0yruK445/FYXVRsI7bB3qKUp7JUsX3kzfsmHDMvxwjV9mrjYUN3zbELgl8vspUuQ==
+	bh=RQ0qOYB/39Na/Yq4hwyOeXHfqpAHtgIw+NnAsae8SXo=;
+	b=tSg8EbBsjEYxck+m+CT+P2/Bc6d15pO2YjzhHBIK8XTUat0PX+IWnXiWZYFAi2JLzmcB
+	 TKQuEU0cKYRiVUjEZJZIsDF13R1XxBnoYK3K+A5Aan60/kdhJ5VGRg1OVgz9clEFihw8z
+	 AwT5Ir4SZ90aar94uaZJ37p92eHP11SPMFGom+GaTeDqO5UbVaITu1TdXxm4X1WWQ7Std
+	 7qSxPf8bodL4bMoK1QJXoeCp5GanlMoQNwUkPhRdBIcAOaTjGlFxYMZSkMrltVj6GxZ0X
+	 862NK7TrT3O5PZWQL5f7JwvWpB2oVVMnClBJMQKyJmL7WsHTbF2vnYIwkWCiZDTp0CA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=blockcast.net;
 	spf=pass smtp.mailfrom=blockcast.net;
-	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=I1L3kDCh;
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=DfL9MmBx;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB9560A2607
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:14:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EB9560A2607
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731D360A260C
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:15:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 731D360A260C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=I1L3kDCh
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2f07a960666so41054475ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:14:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=DfL9MmBx
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2f0464dd6b6so38309335ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:15:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1795634099; x=1796238899; darn=vger.kernel.org;
+        d=blockcast.net; s=google; t=1795634101; x=1796238901; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VXAZ8Kr8JXgDmkXxStkx6xLqLFftpXmGJY9tWvIpUSg=;
-        b=I1L3kDChQj82UIPOyRZDxTzUME45aFpYjNUMisXCMVqfQem2OtYrPwZdBZtgRf6zNz
-         xn11OVsrrASx97OT/akVIuPIsPeqrxhq9ZFK/KCyjhWuybxMQ80q4VruVsYmi71KiMis
-         7aM3hGVwxtRIIJKJGG8y+grsbPzGmItD62WCl4omrKcz+AlQscbAhlTOFi/evaYOq29j
-         m3D9tgw+tHjkowJbSA/yfuL2qTDmDuBA76oSKxRHu6mxZSgyvtpBjz5p/Ydhtg60scOa
-         whbjvc61+kAyKv0DUqr5pc9xeQ3+pHVnaT+JdzfqpodpZPrPtpW32b96PPHXEm/zWIb/
-         8PoA==
+        bh=RQ0qOYB/39Na/Yq4hwyOeXHfqpAHtgIw+NnAsae8SXo=;
+        b=DfL9MmBxHLNIrneAJzkABBCadW5CUPH10Suv9KIUmuiMYUg/Tj0PJ2cJ9lWOFluUa3
+         7LHMbLAU4eDtrxzz5vbMCpBZXANW/VsrJjg58laKT+wtfGcAzpfz0zsWXFp7sQpoo9NV
+         vgKla2lZCtSeabMIDIILOgQFK/hebgkx2JdL9uPbpLhPeNXdzx4Vph+DxnkR+54jmLZb
+         BHBaepE6QH+z1L3qAWpTZLIHQHLLBSoNkf4Q12yi4kcjTadL2T7N3GNgZV6hIoBAcenc
+         Vn66n1oaz3HczDeE9ImE8IC8HHOQ82j1TqIjOmO1qW1r5BJHcaX+b0yTiLpF9TnlHtNR
+         VB+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795634099; x=1796238899;
+        d=1e100.net; s=20260707; t=1795634101; x=1796238901;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VXAZ8Kr8JXgDmkXxStkx6xLqLFftpXmGJY9tWvIpUSg=;
-        b=NC59xgXT2eBI8sE1aoL+Z/L9R9kQkBBzRc3EA24OL87Fahjow240iKvjnoaH/IF+px
-         Y7CgrPI9+PCEtkrP3nrgolkB6lGMhPFoANaK5S6V+MjPae1cMZQZm/Z1SivhkIDeYPdw
-         nzwT6r8wWuJsrTuo8ymNh+opwXErfYzjI3t6zL5ek8K27dRnnfJDna41rsJdv2vx/o7v
-         aIIcd1gVNxyeG50lHgqEED+3M0EV/w8yL5WqPZeIYE8j06ySRdnGsHqxDAeEqWQQ8p70
-         X064kE8OUXcaUg7AxytVL8PVHENUXTO1qTj63+NKOMJdyEmXe6mCEKNAUenC6B2GHRhn
-         8iBQ==
-X-Forwarded-Encrypted: i=1; AL+hErFYGfLOJHU0Iqa3W9Bh33mYPD17FVrvnBviO6h4UmFr8ZtVODuHCfJQnWfrK8cCt+oxv5KyGEg7iZe5v4+FjFs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/rgaPaZ/PGs910A1FkskfYxvAw3XmfahjyhG332MX5tJVdl0kV
-	jqeP+nkaNV4sUTqgOukL7U+/v9wqXKX6ONLd6hRRH3rYn2j4eeN5ti6ZJI8IfscCffk=
-X-Gm-Gg: AZFdTZemFmnE4LnoThxCi7Lk/q+m3ZoNwpDvHaQFLwgVcW2AyAHJSZWDxIJXGcb0F7g
-	Z7dlBv0hl1t3bN76e06WKLVrJRmlZnXxXXon0tTWia8EvkG0xrAZpYe4N3R0M7DfREfBTdCo2oR
-	CKubBwEwhLq7GLZUbCyiBj4MrqPEdT2BcmLHVVgEdK3LYT+dHIXb5td3Gx8wqGgaFUEvoTPfJPa
-	bZ9gAilkZnKQB+9nMAeDX1dsWKpYcYi0zaPEmM4AkKG5nM6McTrsV70Fso3TEu346vcmpDXY7yd
-	39/dGA1phVdVW2neYevJiAtX0hOjeSdi4mOcI7wbVnV1klBXpfPkbswxRd2hXajTBX7xLX++M3b
-	VcHBbeNn/4HL2iau286kedEbLJO/3p4FluonedLe5BYrPZz4/B6B/Z1kWnfz15mPdzPwU1EbNpo
-	IKju45JJhYYyyejLu5Rnv9rq3u/4xRYyjs0ljyxw8S4wu8M9l9ZibvfYlpU+htJuBBAwCjvFhBR
-	wYI13X69f47z7NWuUQO8Jh13aGcsDm+f6ymofXOrp2rkQX1EwZu7LuHK19+J/NdQRyi6clG4KQI
-	gUr326p5Aps05KTD+5XGmtnLmSwEnaXQjriqHZVnIHxnzqHrO9tX+qDeZmcfJGbjjkzHEhzhaiR
-	epg7E5QwVMPTvwlti8JCDe1F2cKDbHAfAiLLpKFgGsV/elTgH9mBf
-X-Received: by 2002:a17:902:da83:b0:2ef:e5b9:5841 with SMTP id d9443c01a7336-2f050c1d8cemr177773115ad.35.1795634099295;
-        Wed, 25 Nov 2026 11:14:59 -0800 (PST)
+        bh=RQ0qOYB/39Na/Yq4hwyOeXHfqpAHtgIw+NnAsae8SXo=;
+        b=UTOuoo9G/lManbWu7n5+6o6Llh6B1RBtJO8IN/i3BDCxX8inlZdJt4vceVhWjTjdKf
+         lv2g6BwjSz9sQ1FArlcVGhJ4ML5J7kYj1xKt1rDdVXMsHHiD2//LZE1s8Gr3gQlchnt2
+         5M7MvHhGXTlh00YN5Z9jHgGHDTqt/ZXcO2qT/oQXj/TnWjvHOg/N4XpZKID6oENjlxKQ
+         LmvWGT1GcXMxyVxwFK3OmZgwq8Hqv0zIX9Ev2XbDMSZDzuRNwvjHvHkMti0O0HqmrEvz
+         R6Fcm91HhtFOLed2dH9p4pBuK3UE7ypL+G2L3e/BoWqE5rYBfrctufCR25tnBfd2NyZw
+         D7NA==
+X-Forwarded-Encrypted: i=1; AL+hErHemGSLnRXY+351ESOPKy/ivG22GXpMpx/iLsEGyBA7d4aY72Bdl9N09ImNa2j6sz69x5cz0+L13UZ4EZVpBKg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8o6XlqU5oxwXT4oaYsLrXygMGaWnm7D0hdX3sUX7k4/Vs5pHNE
+	/7jP4q/7QdnRSGSC89n7jo+KhXznCtYdfNimP96jPyE+A83R5892LUhu5L0QahIV35s=
+X-Gm-Gg: AZFdTZfJfF/vnS/bB5xShUuM2Lcbk5DEc2KR/K91mHXRAbMDjnTdYK75gQCRHU3zxyQ
+	Kq7NMLix6oU4gW6fx2zFPzVuMJNiRiT9v3ePWLzPZAVa0PzFXdIIYzafejCYhyPyPmcFzKPEFRG
+	idGcpTh49Rlf5jffGWZLhe/0Y/A3KSafcy6oNkKVqME+SUEGuR4n8S+CCixa7G6t0WJ72WSdRJa
+	zw+3kBnwqwknVAvncr2TN7dbQELI2POpTHw8APwSU58iV8ssMSyUpSW1NF6tZc3uWYQW7oqWukb
+	1yIjZp32mvkZVo1EZgRMiYAfrWrbo6I2YnUkTPTWaWIwy/kY0PzV/ijrPWQubs+kOt4v6h5jBIw
+	9G9JE7lqVPbFCyeSGlFattamZPExBNoB4H9oVTLfmfLZesDoYw1vQuWYupgNba9Cn7eR7zlCeKM
+	+qT1KSpumOwam+f3HAi3/cUIaRRSkE0GoRX4OnvpzX93P2FK+sQ1J9Bqiv4kHsg82QLbWSZvRwg
+	Dm9unvqX8F98xbHZQOr2B21pr3be4rEXkI7AXXTaHzVgpAzLvS/56J6VqNiPMKhXMzbq0S3rUYC
+	s2LbL3aaTSeZuM/lqnyWhmwE3QdFp3JnxyCiXKoN+w3H91Ppf1Cfl5ZP69iFmLhWhiVl0FS1bXn
+	tA7yWXLZizElYIrIHhrgtfusvEI14kNbrg21DLPtAva1iV7NH4As=
+X-Received: by 2002:a17:902:ec8b:b0:2e8:6ae2:75db with SMTP id d9443c01a7336-2f03f18a9c9mr172756885ad.41.1795634100805;
+        Wed, 25 Nov 2026 11:15:00 -0800 (PST)
 Received: from devbox.ts.blockcast.net ([69.25.95.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105b66sm92413855ad.51.2026.11.25.11.14.57
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105b66sm92413855ad.51.2026.11.25.11.14.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 11:14:58 -0800 (PST)
+        Wed, 25 Nov 2026 11:15:00 -0800 (PST)
 From: Omar Ramadan <omar@blockcast.net>
 To: Taehee Yoo <ap420073@gmail.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -91,9 +91,9 @@ Cc: Simon Horman <horms@kernel.org>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 05/12] amt: forward multicast data over IPv6
-Date: Wed, 25 Nov 2026 19:14:43 +0000
-Message-ID: <20261125191450.2497936-6-omar@blockcast.net>
+Subject: [PATCH net-next v2 06/12] amt: size the encapsulation headroom by the outer IP version
+Date: Wed, 25 Nov 2026 19:14:44 +0000
+Message-ID: <20261125191450.2497936-7-omar@blockcast.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261125191450.2497936-1-omar@blockcast.net>
 References: <20261125191450.2497936-1-omar@blockcast.net>
@@ -108,276 +108,109 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-amt_send_multicast_data() routes and transmits the relay's copy of a
-multicast packet only over IPv4, so an IPv6 relay could establish
-tunnels but not deliver traffic through them.
+The amt device reserves AMT_RELAY_HLEN or AMT_GW_HLEN of headroom and
+subtracts the same amount from the stream device's MTU. Both assume a
+20-byte IPv4 outer header. An IPv6 outer header is 40 bytes, so on an
+IPv6 device an inner packet in the last 20 bytes below the MTU would
+not fit the stream device once encapsulated, and ip6_fragment() drops
+it: nothing sets ignore_df on the tunnel skb.
 
-Size the copy's headroom for the outer family and send it through
-amt_udp_xmit(), which already carries the Membership Query over either
-family. The IPv4 route lookup still sets no DSCP. A copy that cannot be
-sent is still freed, but it is now counted in tx_dropped and freed with
-a drop reason; before, nothing recorded the drop, as amt_dev_xmit()
-returns NETDEV_TX_OK for the packet. The inner protocol stays
-independent of the outer family, so an IPv6 tunnel carries both IPv4 and
-IPv6 multicast.
+Add AMT_RELAY_HLEN6 and AMT_GW_HLEN6, pick between the IPv4 and IPv6
+sizes in amt_hlen(), and use amt_hlen() wherever the device sizes its
+headroom and MTU: at newlink and on NETDEV_CHANGEMTU of the stream
+device.
 
-RFC 7450 s5.3.3.6.3.2 forbids a Fragment header on a Multicast Data
-message sent over IPv6, and s5.3.3.6.2.2 wants an IPv6 payload that
-exceeds the tunnel MTU dropped with a Packet Too Big to its source.
-The device MTU is derived from the link MTU only, so a smaller path MTU
-to a gateway is found at the route. The scrub in amt_udp_xmit() clears
-ignore_df, so ip6_fragment() never adds a Fragment header, but on its
-own it drops such a packet and sends the Packet Too Big to the relay
-itself. amt_send_multicast_data() therefore routes first and compares
-the inner packet with the route's MTU less the outer headers and the
-AMT header. The device offers software GSO, so a GSO skb is checked
-per segment with skb_gso_validate_network_len(), before the tunnel
-offloads are set up. A payload that does not fit is dropped.
-
-A multicast packet can match every tunnel, and an attacker can create
-tunnels, so the Packet Too Big is not sent per tunnel. Each failing
-tunnel only lowers a value, and amt_dev_xmit() sends one Packet Too Big
-through icmpv6_ndo_send(), as ip6_tunnel does, after it has walked all
-tunnels, reporting the smallest failing tunnel MTU. A tunnel MTU below
-IPV6_MIN_MTU is left out, as a source ignores a smaller Packet Too Big,
-so such a tunnel only drops the payload. The inner version is the v6
-flag the caller already computed, not skb->protocol.
-
-The tunnel MTU follows the route's path MTU, which ICMPv6 Packet Too
-Big messages lower, as it does on every IPv6 UDP tunnel in the tree.
-RFC 7450 s5.3.3.6.1 and s6.1 ask a relay that adjusts the tunnel MTU
-dynamically to offer a way to turn that off. The IPv6 stack gives a
-tunnel no such way: udpv6_err() records the lowered MTU in a route
-exception before it looks up a socket, "mtu lock" does not stop it
-(IPv6 path MTU discovery is not optional, see __ip6_rt_update_pmtu()),
-and ip6_skb_dst_mtu() ignores the socket's pmtudisc inside a tunnel's
-transmit. This series does not add one. The route MTU never drops
-below IPV6_MIN_MTU, as a smaller Packet Too Big is ignored, so a forged
-Packet Too Big can at most lower the tunnel MTU to 1280 bytes less the
-outer headers; an IPv6 payload between that and 1280 bytes is then
-undeliverable.
-
-skb_tunnel_check_pmtu() is not used: with reply false it only updates
-the route's PMTU and sends nothing. An IPv4 payload is dropped without
-an ICMP error, since icmp_send() does not answer multicast datagrams,
-and it is not fragmented before encapsulation as s5.3.3.6.2.1 asks for
-DF=0. The IPv4 tunnel does not do that either; it clears DF on the
-outer header instead.
-
-With this, every relay message has an IPv6 path: Discovery and
-Advertisement, Request and Membership Query, Membership Update and
-Multicast Data.
+amt_v6() is still false for every device, so there is no functional
+change.
 
 Assisted-by: LLM
 Signed-off-by: Omar Ramadan <omar@blockcast.net>
 ---
- drivers/net/amt.c | 126 +++++++++++++++++++++++++++++++---------------
- 1 file changed, 85 insertions(+), 41 deletions(-)
+ drivers/net/amt.c | 26 +++++++++++++++-----------
+ include/net/amt.h |  7 +++++++
+ 2 files changed, 22 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index 7e8219a0c..823367e82 100644
+index 823367e82..cb2ce552b 100644
 --- a/drivers/net/amt.c
 +++ b/drivers/net/amt.c
-@@ -1237,26 +1237,51 @@ static void amt_req_work(struct work_struct *work)
- 				 msecs_to_jiffies(100));
+@@ -104,6 +104,14 @@ static unsigned int amt_ip_hlen(const struct amt_dev *amt)
+ 	return amt_v6(amt) ? sizeof(struct ipv6hdr) : sizeof(struct iphdr);
  }
  
-+/* RFC 7450 s5.3.3.6: a Multicast Data message sent over IPv6 must not
-+ * carry a Fragment header, so a payload larger than the tunnel MTU is
-+ * dropped, and an IPv6 source is sent a Packet Too Big. An IPv4 source is
-+ * not told, as icmp_send() never answers a multicast datagram. The tunnel
-+ * MTU follows the route's path MTU, as on every IPv6 UDP tunnel.
-+ */
-+static u32 amt_tmtu(const struct dst_entry *dst)
++/* Headroom the device reserves for its outer encapsulation. */
++static unsigned int amt_hlen(const struct amt_dev *amt)
 +{
-+	return dst_mtu(dst) - sizeof(struct ipv6hdr) - sizeof(struct udphdr) -
-+	       sizeof(struct amt_header_mcast_data);
++	if (amt->mode == AMT_MODE_RELAY)
++		return amt_v6(amt) ? AMT_RELAY_HLEN6 : AMT_RELAY_HLEN;
++	return amt_v6(amt) ? AMT_GW_HLEN6 : AMT_GW_HLEN;
 +}
 +
-+/* True if @skb, the inner packet before encapsulation, or any segment of
-+ * it, is larger than @tmtu.
-+ */
-+static bool amt_tmtu_exceeded(const struct sk_buff *skb, u32 tmtu)
-+{
-+	if (skb_is_gso(skb))
-+		return !skb_gso_validate_network_len(skb, tmtu);
-+	return skb->len > tmtu;
-+}
-+
- /* Route an AMT-encapsulated skb to @daddr and send it over the device's
-  * outer family. The caller has already pushed the AMT header; @dscp only
-- * steers the IPv4 route lookup.
-+ * steers the IPv4 route lookup. Over IPv6 the caller may pass the route it
-+ * already looked up in @dst, which is consumed; otherwise it is looked up
-+ * here.
-  */
- static int amt_udp_xmit(struct amt_dev *amt, struct sock *sk,
- 			struct sk_buff *skb, const union amt_addr *daddr,
--			__be16 sport, __be16 dport, dscp_t dscp)
-+			__be16 sport, __be16 dport, dscp_t dscp,
-+			struct dst_entry *dst)
- {
- 	struct rtable *rt;
- 	struct flowi4 fl4;
- 
- 	if (amt_v6(amt)) {
--		struct dst_entry *dst;
--
--		dst = amt_route6(amt, sk, &amt->local_ipv6, &daddr->ip6,
--				 sport, dport);
--		if (IS_ERR(dst)) {
--			netdev_dbg(amt->dev, "no route to %pI6c\n",
--				   &daddr->ip6);
--			return PTR_ERR(dst);
-+		if (!dst) {
-+			dst = amt_route6(amt, sk, &amt->local_ipv6,
-+					 &daddr->ip6, sport, dport);
-+			if (IS_ERR(dst)) {
-+				netdev_dbg(amt->dev, "no route to %pI6c\n",
-+					   &daddr->ip6);
-+				return PTR_ERR(dst);
-+			}
+ /* Snapshot the outer source address of a received AMT message. */
+ static void amt_outer_saddr(const struct amt_dev *amt,
+ 			    const struct sk_buff *skb, union amt_addr *addr)
+@@ -3903,10 +3911,10 @@ static int amt_newlink(struct net_device *dev,
+ 		amt->qrv = READ_ONCE(amt->net->ipv4.sysctl_igmp_qrv);
+ 		amt->qri = 10;
+ 		dev->needed_headroom = amt->stream_dev->needed_headroom +
+-				       AMT_RELAY_HLEN;
+-		dev->mtu = amt->stream_dev->mtu - AMT_RELAY_HLEN;
++				       amt_hlen(amt);
++		dev->mtu = amt->stream_dev->mtu - amt_hlen(amt);
+ 		dev->max_mtu = dev->mtu;
+-		dev->min_mtu = ETH_MIN_MTU + AMT_RELAY_HLEN;
++		dev->min_mtu = ETH_MIN_MTU + amt_hlen(amt);
+ 	} else {
+ 		if (!data[IFLA_AMT_DISCOVERY_IP]) {
+ 			NL_SET_ERR_MSG_ATTR(extack, tb[IFLA_AMT_DISCOVERY_IP],
+@@ -3929,10 +3937,10 @@ static int amt_newlink(struct net_device *dev,
  		}
- 		/* iptunnel_xmit() scrubs the IPv4 tunnel skb, but
- 		 * udp_tunnel6_xmit_skb() does not, so drop the inner
-@@ -1357,26 +1382,58 @@ static bool amt_send_membership_update(struct amt_dev *amt,
- 	return false;
- }
  
-+/* Send the relay's copy of a multicast packet to one gateway. Over IPv6 a
-+ * payload that does not fit the tunnel MTU is dropped, and *@ptb is lowered
-+ * to that MTU so that amt_dev_xmit() can send a single Packet Too Big to
-+ * the source once it has walked every tunnel.
-+ */
- static void amt_send_multicast_data(struct amt_dev *amt,
- 				    const struct sk_buff *oskb,
- 				    struct amt_tunnel_list *tunnel,
--				    bool v6)
-+				    bool v6, u32 *ptb)
- {
- 	struct amt_header_mcast_data *amtmd;
-+	struct dst_entry *dst = NULL;
- 	struct sk_buff *skb;
--	struct iphdr *iph;
--	struct flowi4 fl4;
--	struct rtable *rt;
- 	struct sock *sk;
-+	int err;
+ 		dev->needed_headroom = amt->stream_dev->needed_headroom +
+-				       AMT_GW_HLEN;
+-		dev->mtu = amt->stream_dev->mtu - AMT_GW_HLEN;
++				       amt_hlen(amt);
++		dev->mtu = amt->stream_dev->mtu - amt_hlen(amt);
+ 		dev->max_mtu = dev->mtu;
+-		dev->min_mtu = ETH_MIN_MTU + AMT_GW_HLEN;
++		dev->min_mtu = ETH_MIN_MTU + amt_hlen(amt);
+ 	}
+ 	amt->qi = AMT_INIT_QUERY_INTERVAL;
  
- 	sk = rcu_dereference_bh(amt->sk);
- 	if (!sk)
- 		return;
- 
--	skb = skb_copy_expand(oskb, sizeof(*amtmd) + sizeof(*iph) +
-+	if (amt_v6(amt)) {
-+		u32 tmtu;
-+
-+		dst = amt_route6(amt, sk, &amt->local_ipv6, &tunnel->addr.ip6,
-+				 amt->relay_port, tunnel->source_port);
-+		if (IS_ERR(dst)) {
-+			netdev_dbg(amt->dev, "no route to %pI6c\n",
-+				   &tunnel->addr.ip6);
-+			DEV_STATS_INC(amt->dev, tx_dropped);
-+			return;
-+		}
-+
-+		tmtu = amt_tmtu(dst);
-+		if (amt_tmtu_exceeded(oskb, tmtu)) {
-+			dst_release(dst);
-+			/* A source ignores a Packet Too Big below
-+			 * IPV6_MIN_MTU, so a tunnel that small is only
-+			 * dropped for.
-+			 */
-+			if (tmtu >= IPV6_MIN_MTU && (!*ptb || tmtu < *ptb))
-+				*ptb = tmtu;
-+			DEV_STATS_INC(amt->dev, tx_dropped);
-+			return;
-+		}
-+	}
-+
-+	skb = skb_copy_expand(oskb, sizeof(*amtmd) + amt_ip_hlen(amt) +
- 			      sizeof(struct udphdr), 0, GFP_ATOMIC);
--	if (!skb)
-+	if (!skb) {
-+		dst_release(dst);
- 		return;
-+	}
- 
- 	/* amt_dev_xmit() pulled the Ethernet header without moving the mac
- 	 * header. The tunnelled payload has no link-layer header, so the
-@@ -1385,18 +1442,7 @@ static void amt_send_multicast_data(struct amt_dev *amt,
- 	skb_reset_mac_header(skb);
- 	skb_reset_inner_headers(skb);
- 	if (udp_tunnel_handle_offloads(skb, true)) {
--		kfree_skb(skb);
--		return;
--	}
+@@ -4053,11 +4061,7 @@ static int amt_device_event(struct notifier_block *unused,
+ 			amt_dellink(amt->dev, &list);
+ 			break;
+ 		case NETDEV_CHANGEMTU:
+-			if (amt->mode == AMT_MODE_RELAY)
+-				new_mtu = dev->mtu - AMT_RELAY_HLEN;
+-			else
+-				new_mtu = dev->mtu - AMT_GW_HLEN;
 -
--	memset(&fl4, 0, sizeof(struct flowi4));
--	fl4.flowi4_oif         = amt->stream_dev->ifindex;
--	fl4.daddr              = tunnel->addr.ip4;
--	fl4.saddr              = amt->local_ip;
--	fl4.flowi4_proto       = IPPROTO_UDP;
--	rt = ip_route_output_key(amt->net, &fl4);
--	if (IS_ERR(rt)) {
--		netdev_dbg(amt->dev, "no route to %pI4\n", &tunnel->addr.ip4);
-+		dst_release(dst);
- 		kfree_skb(skb);
- 		return;
- 	}
-@@ -1410,17 +1456,12 @@ static void amt_send_multicast_data(struct amt_dev *amt,
- 		skb_set_inner_protocol(skb, htons(ETH_P_IP));
- 	else
- 		skb_set_inner_protocol(skb, htons(ETH_P_IPV6));
--	udp_tunnel_xmit_skb(rt, sk, skb,
--			    fl4.saddr,
--			    fl4.daddr,
--			    AMT_TOS,
--			    ip4_dst_hoplimit(&rt->dst),
--			    0,
--			    amt->relay_port,
--			    tunnel->source_port,
--			    false,
--			    false,
--			    0);
-+	err = amt_udp_xmit(amt, sk, skb, &tunnel->addr, amt->relay_port,
-+			   tunnel->source_port, 0, dst);
-+	if (err) {
-+		DEV_STATS_INC(amt->dev, tx_dropped);
-+		kfree_skb_reason(skb, SKB_DROP_REASON_IP_OUTNOROUTES);
-+	}
- }
- 
- /* Send a Membership Query in reply to an unauthenticated Request.
-@@ -1464,7 +1505,7 @@ static bool amt_send_membership_query(struct amt_dev *amt,
- 	else
- 		skb_set_inner_protocol(skb, htons(ETH_P_IPV6));
- 	return amt_udp_xmit(amt, sk, skb, daddr, amt->relay_port, dport,
--			    inet_dsfield_to_dscp(AMT_TOS));
-+			    inet_dsfield_to_dscp(AMT_TOS), NULL);
- }
- 
- static netdev_tx_t amt_dev_xmit(struct sk_buff *skb, struct net_device *dev)
-@@ -1482,6 +1523,7 @@ static netdev_tx_t amt_dev_xmit(struct sk_buff *skb, struct net_device *dev)
- 	struct iphdr *iph;
- 	bool data = false;
- 	bool v6 = false;
-+	u32 ptb = 0;
- 	u32 hash;
- 
- 	iph = ip_hdr(skb);
-@@ -1575,8 +1617,10 @@ static netdev_tx_t amt_dev_xmit(struct sk_buff *skb, struct net_device *dev)
- 			}
- 			continue;
- found:
--			amt_send_multicast_data(amt, skb, tunnel, v6);
-+			amt_send_multicast_data(amt, skb, tunnel, v6, &ptb);
++			new_mtu = dev->mtu - amt_hlen(amt);
+ 			dev_set_mtu(amt->dev, new_mtu);
+ 			break;
  		}
-+		if (ptb && v6)
-+			icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, ptb);
- 	}
+diff --git a/include/net/amt.h b/include/net/amt.h
+index 245947113..eabe6fa7a 100644
+--- a/include/net/amt.h
++++ b/include/net/amt.h
+@@ -434,9 +434,16 @@ struct amt_dev {
+ #define AMT_GW_HLEN (sizeof(struct iphdr) + \
+ 		     sizeof(struct udphdr) + \
+ 		     sizeof(struct amt_gw_headers))
++/* IPv6-outer gateway headroom: the outer header is a struct ipv6hdr. */
++#define AMT_GW_HLEN6 (sizeof(struct ipv6hdr) + \
++		      sizeof(struct udphdr) + \
++		      sizeof(struct amt_gw_headers))
+ #define AMT_RELAY_HLEN (sizeof(struct iphdr) + \
+ 		     sizeof(struct udphdr) + \
+ 		     sizeof(struct amt_relay_headers))
++#define AMT_RELAY_HLEN6 (sizeof(struct ipv6hdr) + \
++			 sizeof(struct udphdr) + \
++			 sizeof(struct amt_relay_headers))
  
- 	dev_kfree_skb(skb);
+ static inline bool netif_is_amt(const struct net_device *dev)
+ {
 -- 
 2.47.3
 
