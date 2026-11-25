@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795597619;
-	b=cDQ/CizdkdsqrbRJxLX10I5S6OLtw46flaFDTvwdxZ+VqDFo+DlpItjg8AZ+jHl/NHy1
-	 ZMqK/BUidj1Vl9p+2FpH7F276NoI13LWObzPpr0CH69qLYhlrp0m1s4NSbsTj+sogEGOg
-	 +MRfqfMsGeO3NTbio8sNSQ7/XTR8zkmRnfOeZw0jVc2/U4WEF2Ko7JoILJfr/fl335OW9
-	 vebjLM3ZcXbnFIG4dfpX+CPl2Ph3Mr2q+3C0B6sD/mds2iFu4C0U7jT81Nf08YkOiWowe
-	 Kr5+IWvh0tPLLgb0uCH6I0H3P/D6t1y4Fn9Kt8q5kqKYBw5qDKhyqasKAlhCIcjZgvg==
+	t=1795597625;
+	b=kFus74VbO+sTEmny2pyOSUJ1Sr97phH6FbA0PxkBkT0zenctGUWUf919ML/RuyaSrZqe
+	 6WvsX7cyUftX4Pi/r95suxZeXhKznxwbeiZo6YhQQyNfMYY6r3UnMjfKC8x6NW534LMhP
+	 f42KNYWKJO471oDBScWScFssJ8n934i7aVAGQogUsErwF3eygOVM4LalXgLym5jdFQOyU
+	 iOqnBnMwMjsCTVxwc5U0DEuGsT9TF5OhyjA0NFDL36RzdO3yrw1KklemvxidmuvMWrRuP
+	 qdaXMpnBKonJI7EvZKzSeKylC8WpF3q+LtHkwElYApUljOTrzk1fruYGutaVogt+IOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795597619;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795597625;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=AhItLfQpACoVrUIQY9O8ef7LhhRQGiQcSZF4DsZLEwg=;
-	b=Mts3uok75sv3J99OqsJ7gjtsh+zMPCUjOCBCeeq4lXq+JqA/s7DHjN+evZHQA8RitwqS
-	 oXe6gVDmqBjCQLkOSgtKVkBEONBMdnW0+evpTRCI9qU1DUU94xLQSFz8UiWjedjRzk7bt
-	 xiPilUTboYlavYxNEG1SKv4/TAsytcy6kConNJuW0kAXWmwFtxo9O6Hyy2ixBp/8qDEGM
-	 CedvORNYnOtd1nLHD04oNJB99auVxlrMCWPnIVPyjwX4Z3Ex7wzxJ8RHA0M1WzbXOyPDx
-	 8CARcNopl5g4dvDlTV4607VzKMiZxXTtV4JVypXcBZGufuPu+7Yjcydf6wS4HHUneLA==
+	bh=HcIo24kfHLgWS5tsXZIJGFMII3A+Q8wCvJgPUAWij4A=;
+	b=u1VW/O4rjFBC5FDb+jwolwmpmYdOhLrcZUMgf/dqcZafnkCzg91BAv/oZ/2hLj3nKJCT
+	 gctaTH8j4X1QjP9XV51fR5aKvq8PQGC/h1R9n3oW3ymyH+YkAKXV4eDHt4W/4vh2pi6fl
+	 NSUZTtuSzzh04QHUyTzoRIf9wZI25wZrGxFubw22OKvC3f8eoCVHJvFuAQZtmeLW3629V
+	 OMbmbRVwN5pft7aiq7I20bEcElE4D69JoccSfyrEHbpo1C7tLIfYMsKxjZgX208XvfjxI
+	 qsw7Cg+g5T+7VI37dhG5w6cRykVDUfFtc1mhP6RfVxR7+H/+Hjb6orGbsB8dA4BWVXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=CjLBVK8x;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HXTHtJ+q;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F41E606A329
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 09:06:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F41E606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9D0606A326
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 09:07:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F9D0606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=CjLBVK8x
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HXTHtJ+q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795597617;
+	s=mimecast20190719; t=1795597624;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AhItLfQpACoVrUIQY9O8ef7LhhRQGiQcSZF4DsZLEwg=;
-	b=CjLBVK8xbyWTXPTSl1IBfrpbkh5HVySG6aNT9v8uPoF/v2oWRRxec4uV543M9hVFOuFLZ3
-	ST+8ah2QU80op2mNIeEWLrgf67VegTCk/6YiR4u36ShntGf6Z+JbDrjqjOGEZes50SeRmr
-	o64IKQD1XHwjlPMzKIKbtpHAsgmwnWg=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=HcIo24kfHLgWS5tsXZIJGFMII3A+Q8wCvJgPUAWij4A=;
+	b=HXTHtJ+qeX9JOstOyn2WPJTUvC5NsK7CsXJhp0ysktN9L+17vlIBp97PEQJt8V+s/17+Ag
+	Hy/sUsbQygANWgouZuhA2MXG5yC58njgTHhyOF3PA6zoChw3YK6w7Jy56j1ue0AC7fJfJZ
+	dsSDNsLEX26vHmqOTWmUf8s2ADVxMls=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-610-f3fAmtryPziXVw4BqE7Vog-1; Wed,
- 25 Nov 2026 09:06:55 +0000
-X-MC-Unique: f3fAmtryPziXVw4BqE7Vog-1
-X-Mimecast-MFC-AGG-ID: f3fAmtryPziXVw4BqE7Vog_1795597612
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-643-h1cLITB5NO65oor8GdFCMQ-1; Wed,
+ 25 Nov 2026 09:07:00 +0000
+X-MC-Unique: h1cLITB5NO65oor8GdFCMQ-1
+X-Mimecast-MFC-AGG-ID: h1cLITB5NO65oor8GdFCMQ_1795597618
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A19C0195D005;
-	Wed, 25 Nov 2026 09:06:52 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DA72A18004FC;
+	Wed, 25 Nov 2026 09:06:57 +0000 (UTC)
 Received: from poros-thinkpadp16vgen1.tpbc.com (unknown [10.44.48.12])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 391EC195B3C8;
-	Wed, 25 Nov 2026 09:06:48 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 10026195B3C9;
+	Wed, 25 Nov 2026 09:06:52 +0000 (UTC)
 From: Petr Oros <poros@redhat.com>
 To: netdev@vger.kernel.org
 Cc: Petr Oros <poros@redhat.com>,
@@ -80,9 +80,9 @@ Cc: Petr Oros <poros@redhat.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v5 12/14] selftests: dpll: add pin phase adjust test
-Date: Wed, 25 Nov 2026 10:05:19 +0100
-Message-ID: <20261125090522.3777494-13-poros@redhat.com>
+Subject: [PATCH net-next v5 13/14] selftests: dpll: add concurrency stress tests
+Date: Wed, 25 Nov 2026 10:05:20 +0100
+Message-ID: <20261125090522.3777494-14-poros@redhat.com>
 In-Reply-To: <20261125090522.3777494-1-poros@redhat.com>
 References: <20261125090522.3777494-1-poros@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -97,277 +97,511 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Add a test that reads the phase adjustment range and granularity a pin
-advertises, picks another value, sets it, reads it back and restores the
-original value. On the device the script created that is the largest
-multiple of the granularity inside the range, or the smallest one when
-that is already the current value. On a device provided by the user it
-is the value one granularity step away from the current one, the end of
-the range can be a large phase step there, 2.1 ms on zl3073x. The test
-skips when the dpll tool lacks the phase-adjust keyword of pin set. A
-pin that reports no phase adjustment, no range or a range too narrow to
-pick a different value is a skip on a device provided by the user and a
-failure on the device the script created, whose pins report a wide
-range.
+Extend the stress script with tests that register and unregister
+devices from several processes at once and that keep a number of
+devices with many pins live at the same time, checking that every one
+of them is visible on netlink with all its pins.
 
-The core refuses a value outside the advertised range and one that is
-not a multiple of the granularity a driver reports, the current value
-included, so a pin that sits at such a value could not be put back. The
-test bails out on either before it touches the pin. It then writes the
-current value back, which changes nothing and which the core refuses
-with EOPNOTSUPP for a driver without a setter, and defers the restore
-once that went through, so that an interrupted run restores the value
-too.
-
-The granularity is only reported by drivers that have the core enforce
-one. Without it the target on the created device is computed with a
-granularity of 1 and the step on hardware is 1 ns, and a driver may
-refuse it for a granularity of its own or for any other constraint the
-interface does not advertise. A refused set is therefore a skip on a
-device provided by the user, with the reason the tool reported, and a
-failure on the device the script created, whose simulator accepts every
-value its range and granularity allow. The test ends there, a value that
-was not set has nothing to read back.
+The workers run in subshells, so the parent cannot track the device a
+worker has in flight. Each worker removes it from its own exit trap
+instead, and the parent reserves a range of clock IDs for every worker,
+so that the devices of a worker cannot collide with those of another
+worker or of the parent and whatever a killed worker left behind can be
+removed by name, at the end of the test and from the cleanup handler. A
+range in which a device of such a name exists already, left behind by an
+earlier run, is not handed to a worker, and a worker clears the name of
+the device of the parent it inherits, so that neither is removed with
+the devices of the worker. A worker whose devices cannot all be removed
+is a failure and stays recorded for the cleanup handler. A helper that a
+worker stuck in the kernel runs, the mkdir of a device for one, can
+outlive the forced kill of the worker, and what it creates afterwards
+stays behind. The handler stops the recorded workers together with the
+jobs of the shell, gives them a few seconds to run their exit traps
+before forcing the survivors, and goes on without a worker that does not
+die, since one stuck in the kernel would hang the teardown. A worker
+that a signal interrupts exits with the status of the signal, inside a
+trap $? is the status of whatever ran last and the worker could pass for
+one that finished. bash reaps a worker as soon as it exits, so a
+recorded pid may have been handed out again by the time the handler
+runs, and it signals a pid only while that is still a child of the
+script. Deleting a device treats a part of it that is gone by the time
+its step runs as removed, so that a removal running concurrently with
+the one of a worker does not turn into a spurious failure. The workers
+inherit the open lock file of the library, so the lock is held until the
+script and every worker have exited.
 
 Reviewed-by: Ivan Vecera <ivecera@redhat.com>
 Acked-by: Jiri Pirko <jiri@nvidia.com>
 Signed-off-by: Petr Oros <poros@redhat.com>
 ---
 v5:
-- on a device provided by the user step from the current phase adjust
-  by the granularity or by 1 ns, the end of the range is a phase step
-  of 2.1 ms on zl3073x
-- check that the pin is still spare before the test
-- write the current phase adjust back before the restore is deferred,
-  like the priority and the frequency tests do
-- name the reason the tool reported when the restore fails
-- report a value that cannot be read back as such, not as a wrong one
-- fail on the created device when the range is too narrow to pick
-  another value, a skip there would hide a regression of the simulator
-- skip the deferred restore once the test restored the phase adjust
-  itself, a refused repeat would fail the run
-- leave the deferred restore out when nothing was changed, and take a
-  refused restore of the test like the state test does, a skip when
-  nothing failed before it, the deferred one tries again
-- count the pin as changed from before the set of the new value, see
-  patch 6
-- the 2.1 ms of zl3073x in the description is S32_MAX ps, the end of
-  the phase adjust range the driver advertises
+- say in the commit message that what a stuck helper creates after the
+  forced kill stays behind, as the comment in the code does
+- do not hand a worker a clock-id range in which a device of this
+  name exists already, clear the inherited name of the device of the
+  parent in the worker, and keep a worker whose devices could not be
+  removed recorded and fail the test
+- ignore further signals in the TERM and INT handlers of the workers
+  as well, and remove the device in flight from the handlers, a signal
+  that came while a worker exited ended its exit trap
+- drop the reseeding of RANDOM in the workers, bash does that for a
+  subshell, and a sentence about the jobs builtin that does not hold
+- keep the name prefix of the stress devices in one place
+- say in a comment that the INT trap of a worker takes effect, bash
+  starts it with INT ignored but lets it trap the signal
+- report a failed pin dump of the many devices test once
+- say that the range allocator must not be called from a subshell
+- skip the concurrency and many devices tests when their counts are
+  not positive numbers, and the many devices test when
+  STRESS_PINS_PER_DEVICE is above 128
+- check the clock-ids of a worker against every device in the dpllsim
+  directory, by name and by clock-id, not only against the names of its
+  own devices
+- a device the many devices test fails to create and cannot remove is
+  tracked for the cleanup handler now, see patch 2
+- call the clock-id check of the library by its public name, see patch 2
+- move the range of a worker past every taken one as the allocator of
+  the library does for a clock-id, the test failed after three ranges
+  that devices of earlier runs held
 
 v4:
-- bail out when the current value lies outside the advertised range,
-  it could not be restored
-- tell a failed query from a pin without a phase adjust or a range and
-  log a deferred restore that fails
+- signal a recorded pid only while it is still a running child of the
+  script, bash reaps finished workers on its own and the pid may have
+  been reused
+- rename the "maximum devices" test to "many devices" and check that
+  every device shows all its pins
+- say what happens to a helper of a worker that is stuck in the kernel
+- exit a signalled worker with the status of the signal, it could pass
+  for one that finished
 
 v3:
 - follow the move of the selftests to
   tools/testing/selftests/drivers/dpll
 
-v4: https://lore.kernel.org/all/20261112130359.840795-13-poros@redhat.com/
-v3: https://lore.kernel.org/all/20261109093523.931201-13-poros@redhat.com/
-v2: https://lore.kernel.org/all/20261105151852.1844305-13-poros@redhat.com/
-v1: https://lore.kernel.org/all/20261103093910.596225-13-poros@redhat.com/
----
- .../selftests/drivers/dpll/dpll_features.sh   | 144 ++++++++++++++++++
- .../selftests/drivers/dpll/dpll_lib.sh        |  15 ++
- 2 files changed, 159 insertions(+)
+v2:
+- quote the failed and ret expansions (netdev CI shellcheck)
 
-diff --git a/tools/testing/selftests/drivers/dpll/dpll_features.sh b/tools/testing/selftests/drivers/dpll/dpll_features.sh
-index acaf61b36624c1..ebcd0d09293b7d 100755
---- a/tools/testing/selftests/drivers/dpll/dpll_features.sh
-+++ b/tools/testing/selftests/drivers/dpll/dpll_features.sh
-@@ -35,6 +35,7 @@ ALL_TESTS="
- 	test_pin_state_transitions
- 	test_pin_priority_get_set
- 	test_pin_frequency_set_get
-+	test_pin_phase_adjust_set_get
- "
+v4: https://lore.kernel.org/all/20261112130359.840795-14-poros@redhat.com/
+v3: https://lore.kernel.org/all/20261109093523.931201-14-poros@redhat.com/
+v2: https://lore.kernel.org/all/20261105151852.1844305-14-poros@redhat.com/
+v1: https://lore.kernel.org/all/20261103093910.596225-14-poros@redhat.com/
+---
+ .../selftests/drivers/dpll/dpll_lib.sh        |  30 +-
+ .../selftests/drivers/dpll/dpll_stress.sh     | 289 +++++++++++++++++-
+ 2 files changed, 310 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/dpll/dpll_lib.sh b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
+index 11152d958bca9d..6f07837a7d9deb 100644
+--- a/tools/testing/selftests/drivers/dpll/dpll_lib.sh
++++ b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
+@@ -62,8 +62,9 @@ dpll_lib_check_prereqs()
+ # DPLL_LOCK_FILE before it mounts or creates anything and skips when
+ # another run holds it. A run of the feature tests against a device the
+ # user provided takes it as well, two of them would change the same
+-# pins. The file lives under /run rather than in the world-writable
+-# /tmp, where a planted symlink could redirect the open.
++# pins. The workers a script forks inherit the open file and keep the
++# lock until they exit. The file lives under /run rather than in the
++# world-writable /tmp, where a planted symlink could redirect the open.
+ DPLL_RUN_DIR="/run/dpll-selftest"
+ DPLL_LOCK_FILE="$DPLL_RUN_DIR/lock"
+ DPLL_LOCK_FD=""
+@@ -697,8 +698,12 @@ dpllsim_undeploy()
  
- ##############################################################################
-@@ -456,6 +457,149 @@ test_pin_state_transitions()
- 	log_test "DPLL pin state transitions"
+ # Take the device offline and remove it together with all its pins.
+ # Every step is attempted even when an earlier one failed, the return
+-# value is non-zero when any did. A device that does not exist counts as
+-# deleted.
++# value is non-zero when any did. A device that does not exist counts
++# as deleted, and so does a part of it that is gone by the time its
++# step runs, the live file of the undeploy and the pin or device
++# directory of an rmdir, so that a removal running concurrently, or an
++# earlier one whose later steps failed, does not turn into a spurious
++# failure here.
+ dpllsim_delete_device()
+ {
+ 	local dev_path="$DPLLSIM_CFG/$1"
+@@ -706,12 +711,12 @@ dpllsim_delete_device()
+ 
+ 	[ -d "$dev_path" ] || return 0
+ 
+-	dpllsim_undeploy "$1" || ret=1
++	dpllsim_undeploy "$1" || [ ! -e "$dev_path/live" ] || ret=1
+ 	for pin_path in "$dev_path"/pins/*/; do
+ 		[ -d "$pin_path" ] || continue
+-		rmdir "$pin_path" || ret=1
++		rmdir "$pin_path" || [ ! -d "$pin_path" ] || ret=1
+ 	done
+-	rmdir "$dev_path" || ret=1
++	rmdir "$dev_path" || [ ! -d "$dev_path" ] || ret=1
+ 
+ 	return "$ret"
+ }
+@@ -743,6 +748,17 @@ dpllsim_alloc_clock_id()
+ 	DPLLSIM_CLOCK_ID=$((DPLLSIM_NEXT_CLOCK_ID++))
  }
  
-+test_pin_phase_adjust_set_get()
++# Set DPLLSIM_CLOCK_ID to the first of $1 consecutive clock-ids unique
++# within this test run and move the allocator past them, for a worker
++# that derives the clock-ids of its devices from it. A device the parent
++# creates afterwards cannot collide with one of the worker. Must not be
++# called from a subshell, the move of the allocator would be lost.
++dpllsim_alloc_clock_id_range()
 +{
-+	local before target after json min max gran step reason
++	DPLLSIM_CLOCK_ID=$DPLLSIM_NEXT_CLOCK_ID
++	DPLLSIM_NEXT_CLOCK_ID=$((DPLLSIM_NEXT_CLOCK_ID + $1))
++}
++
+ # Add the pins of the standard layout, see below, to a device that is
+ # not live. Return 1 when a pin cannot be added.
+ dpllsim_add_standard_pins()
+diff --git a/tools/testing/selftests/drivers/dpll/dpll_stress.sh b/tools/testing/selftests/drivers/dpll/dpll_stress.sh
+index 1596c3f1e70b55..20b3132e8a3db0 100755
+--- a/tools/testing/selftests/drivers/dpll/dpll_stress.sh
++++ b/tools/testing/selftests/drivers/dpll/dpll_stress.sh
+@@ -13,14 +13,27 @@ source "$SCRIPTDIR/dpll_lib.sh"
+ 
+ ALL_TESTS="
+ 	test_rapid_create_delete
++	test_concurrent_workers
+ 	test_pin_state_flooding
++	test_many_devices
+ 	test_deploy_cycle
+ "
+ 
+ STRESS_ITERATIONS=${STRESS_ITERATIONS:-20}
+ STRESS_STATE_CHANGES=${STRESS_STATE_CHANGES:-50}
++STRESS_DEVICES=${STRESS_DEVICES:-5}
++# The simulator accepts up to 128 pins per device (DPLLSIM_MAX_PINS)
++STRESS_PINS_PER_DEVICE=${STRESS_PINS_PER_DEVICE:-10}
++STRESS_CONCURRENT_PROCS=${STRESS_CONCURRENT_PROCS:-4}
++STRESS_WORKER_ITERATIONS=${STRESS_WORKER_ITERATIONS:-10}
+ 
+ CREATED_DEVICES=()
++BACKGROUND_PIDS=()
++# Prefix of the name of a stress device, the clock-id follows
++STRESS_DEV_PREFIX="st"
++# Base clock-ids of the workers in flight, their devices are named
++# $STRESS_DEV_PREFIX<base + iteration>
++WORKER_BASES=()
+ 
+ track_device()
+ {
+@@ -38,18 +51,129 @@ untrack_device()
+ 	CREATED_DEVICES=("${remaining[@]}")
+ }
+ 
++# Remove whatever a worker started from the given base clock-id left
++# behind, which is the device in flight when the worker had to be killed.
++# A device that does not exist counts as deleted. Return 1 when a device
++# could not be removed.
++delete_worker_devices()
++{
++	local base=$1
++	local i name ret=0
++
++	for i in $(seq 1 "$STRESS_WORKER_ITERATIONS"); do
++		name="$STRESS_DEV_PREFIX$((base + i))"
++		if ! dpllsim_delete_device "$name"; then
++			log_info "cannot delete device $name"
++			ret=1
++		fi
++	done
++	return "$ret"
++}
++
++# Return 0 when no device left behind by an earlier run uses one of the
++# clock-ids a worker started from the given base clock-id would take.
++# Such a device is not this run's, it must not be removed with the
++# devices of the worker, and it may hold the clock-id, see
++# dpllsim_alloc_clock_id.
++worker_names_free()
++{
++	local base=$1
++	local i
++
++	for i in $(seq 1 "$STRESS_WORKER_ITERATIONS"); do
++		dpllsim_clock_id_taken $((base + i)) && return 1
++	done
++	return 0
++}
++
++# Return 0 while the process is a running child of this shell. bash
++# reaps a background child as soon as it exits and only keeps its status
++# for a later wait, so the pid of a worker that is gone can be handed
++# out again. A process that reused it has another parent, which is how
++# it is told apart, and it must never be signalled. A child that has
++# exited but was not reaped yet is a zombie, state Z in
++# /proc/<pid>/stat, and counts as gone, or a wait on it would spin until
++# the forced kill.
++pid_running()
++{
++	local stat state ppid
++
++	# The state and the parent pid follow the parenthesized command
++	# name, which may contain spaces and parentheses. The ".*" is
++	# greedy, so the expression strips everything up to the last ") "
++	# of the line, and a ")" inside the name is harmless.
++	stat=$(sed 's/^.*) //' "/proc/$1/stat" 2>/dev/null) || return 1
++	read -r state ppid _ <<< "$stat"
++	[ "$ppid" = "$$" ] && [ "$state" != "Z" ]
++}
++
++# Return 0 once none of the given processes runs any more, 1 when some
++# still does after about five seconds.
++pids_gone()
++{
++	local i pid alive
++
++	for i in $(seq 1 50); do
++		alive=0
++		for pid in "$@"; do
++			pid_running "$pid" && alive=1
++		done
++		[ "$alive" -eq 0 ] && return 0
++		sleep 0.1
++	done
++	return 1
++}
++
+ cleanup()
+ {
+ 	# A second signal must not abort the teardown half way.
+ 	trap '' INT TERM
+ 
+-	local dev
++	local pid dev base
++	local pids=() shell_jobs=()
++
++	# A worker forked right before the signal arrived may not be
++	# recorded yet, so the jobs of the shell are taken as well.
++	mapfile -t shell_jobs < <(jobs -p)
++	mapfile -t pids < <(printf '%s\n' "${BACKGROUND_PIDS[@]}" \
++				   "${shell_jobs[@]}" | grep . | sort -u)
++	# Only a process that is still a running child of this shell is
++	# signalled, see pid_running, a recorded pid may have been reused
++	# since its worker finished.
++	for pid in "${pids[@]}"; do
++		pid_running "$pid" && kill "$pid" 2>/dev/null
++	done
++	# Give the workers a few seconds to run their exit traps, then
++	# force the survivors and give those a few seconds to die. A
++	# worker stuck in the kernel does not die of the forced kill
++	# before whatever it waits for returns, and neither does a helper
++	# it runs, the mkdir of a device for one, which outlives the
++	# worker then. So only the workers that are gone are waited for
++	# and the teardown goes on without the rest. The removal of what
++	# such a worker or helper left behind can then fail or race with
++	# it, which is logged like any other failed removal, and what a
++	# stuck helper creates afterwards stays behind.
++	pids_gone "${pids[@]}"
++	for pid in "${pids[@]}"; do
++		pid_running "$pid" && kill -KILL "$pid" 2>/dev/null
++	done
++	pids_gone "${pids[@]}"
++	for pid in "${pids[@]}"; do
++		if pid_running "$pid"; then
++			log_info "worker $pid did not exit, giving up"
++		else
++			wait "$pid" 2>/dev/null
++		fi
++	done
+ 
+ 	defer_scopes_cleanup
+ 	for dev in "${CREATED_DEVICES[@]}"; do
+ 		dpllsim_delete_device "$dev" ||
+ 			log_info "cannot delete device $dev"
+ 	done
++	for base in "${WORKER_BASES[@]}"; do
++		delete_worker_devices "$base"
++	done
+ 	# The device whose creation a signal interrupted is recorded by the
+ 	# library alone, a double delete of a tracked one is harmless.
+ 	if [ -n "$DPLLSIM_CREATED_NAME" ]; then
+@@ -77,7 +201,7 @@ create_stress_device()
+ {
+ 	local clock_id=$1
+ 	local num_pins=$2
+-	local name="st$clock_id"
++	local name="$STRESS_DEV_PREFIX$clock_id"
+ 	local i type freq dir prio
+ 	local dirs=(input output)
+ 
+@@ -161,6 +285,110 @@ test_rapid_create_delete()
+ 	log_test "DPLL rapid create/delete ($STRESS_ITERATIONS iterations)"
+ }
+ 
++# The exit trap of a worker. The worker runs in a subshell, so
++# track_device() cannot reach CREATED_DEVICES of the parent. Remove the
++# device in flight from the exit trap instead, or killing the worker
++# leaks it. The trap saves the exit status first, so that the removal
++# cannot mask a failed iteration. The handlers of TERM and INT pass it the
++# status a shell reports for the signal, inside a trap $? would be the
++# status of whatever ran last and an interrupted worker could pass for one
++# that finished. They ignore any further signal first, or a second one
++# would end the removal half way, and call it themselves, a signal that
++# comes while the worker exits is handled before the exit trap gets to the
++# removal, and the exit of the handler would end the exit trap there.
++worker_exit()
++{
++	local status=${1:-$?}
++
++	trap - EXIT
++	trap '' TERM INT
++	if [ -n "$DPLLSIM_CREATED_NAME" ]; then
++		dpllsim_delete_device "$DPLLSIM_CREATED_NAME"
++		DPLLSIM_CREATED_NAME=""
++	fi
++	exit "$status"
++}
++
++# Create and delete STRESS_WORKER_ITERATIONS devices with clock-ids
++# following the given base, in a subshell. Each worker derives its own
++# unique clock-ids from a range reserved for it, so its devices can never
++# be confused with those of another worker or of the parent. The parent
++# records the base of every worker, so that the device a killed worker
++# left behind can be removed by name.
++concurrent_worker()
++{
++	local base=$1
++	local i name failed=0
++
++	# The name of a device of the parent is inherited and must not be
++	# removed by the exit trap of the worker.
++	DPLLSIM_CREATED_NAME=""
++	trap worker_exit EXIT
++	# bash starts a worker with INT ignored, as it does every
++	# asynchronous command without job control, but lets the worker trap
++	# it. Only a signal ignored when the script started cannot be.
++	trap 'trap "" TERM INT; worker_exit 143' TERM
++	trap 'trap "" TERM INT; worker_exit 130' INT
++
++	for i in $(seq 1 "$STRESS_WORKER_ITERATIONS"); do
++		if ! create_stress_device $((base + i)) 3; then
++			failed=$((failed + 1))
++			continue
++		fi
++		name=$DPLLSIM_CREATED_NAME
++		dpllsim_delete_device "$name" ||
++			failed=$((failed + 1))
++	done
++
++	[ "$failed" -eq 0 ]
++}
++
++test_concurrent_workers()
++{
++	local pid base failed=0
++	local -a remaining=()
 +
 +	RET=0
 +
-+	if [ -z "$PIN_TUNE_ID" ]; then
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "no spare input pin"
-+		return
-+	fi
-+	if ! dpll_pin_set_supports phase-adjust; then
-+		log_test_skip "DPLL pin phase-adjust set/get" \
-+		    "dpll tool lacks pin set phase-adjust"
-+		return
-+	fi
-+	pin_tune_spare "DPLL pin phase-adjust set/get" || return
++	stress_counts_valid \
++	    "DPLL concurrent workers ($STRESS_CONCURRENT_PROCS processes)" \
++	    STRESS_CONCURRENT_PROCS STRESS_WORKER_ITERATIONS || return
 +
-+	# A query that failed is not a pin without a phase adjust.
-+	if ! before=$(dpll_pin_get_phase_adjust "$PIN_TUNE_ID") ||
-+	   ! json=$(dpll_pin_json "$PIN_TUNE_ID"); then
-+		check_err 1 "pin $PIN_TUNE_ID query failed"
-+		log_test "DPLL pin phase-adjust set/get"
-+		return
-+	fi
-+	if [ -z "$before" ]; then
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "phase adjust not reported"
-+		return
-+	fi
-+	if ! [[ "$before" =~ ^-?[0-9]+$ ]]; then
-+		check_err 1 "phase adjust '$before' is not a number"
-+		log_test "DPLL pin phase-adjust set/get"
-+		return
-+	fi
++	for _ in $(seq 1 "$STRESS_CONCURRENT_PROCS"); do
++		# Devices an earlier run left behind may hold clock-ids, the
++		# range moves past them as dpllsim_alloc_clock_id does for a
++		# single one. There are only so many, a free range comes.
++		while :; do
++			dpllsim_alloc_clock_id_range \
++				$((STRESS_WORKER_ITERATIONS + 1))
++			base=$DPLLSIM_CLOCK_ID
++			worker_names_free "$base" && break
++		done
++		WORKER_BASES+=("$base")
++		concurrent_worker "$base" &
++		BACKGROUND_PIDS+=($!)
++	done
 +
-+	# Pick a target inside the advertised range different from the
-+	# current value and a multiple of the granularity.
-+	min=$(jq -r '.["phase-adjust-min"] // empty' <<< "$json")
-+	max=$(jq -r '.["phase-adjust-max"] // empty' <<< "$json")
-+	gran=$(jq -r '.["phase-adjust-gran"] // empty' <<< "$json")
-+	if [ -z "$min" ] || [ -z "$max" ]; then
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "no adjust range"
-+		return
-+	fi
-+	# The core refuses a value outside the range or off the
-+	# granularity, the current one included. A pin that sits at such a
-+	# value could not be put back, so bail out before the restore is
-+	# scheduled.
-+	if [ "$before" -lt "$min" ] || [ "$before" -gt "$max" ]; then
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "current phase adjust outside the adjust range"
-+		return
-+	fi
-+	if [ -n "$gran" ] && [ $((before % gran)) -ne 0 ]; then
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "current phase adjust not a granularity multiple"
-+		return
-+	fi
-+	# For a driver without a phase adjust setter the core refuses the
-+	# current value as well, writing it changes nothing otherwise. The
-+	# restore is deferred once that went through.
-+	if ! dpll_pin_set_phase_adjust "$PIN_TUNE_ID" "$before"; then
-+		reason=${DPLL_LAST_ERR%%$'\n'*}
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "cannot write the phase adjust back${reason:+, $reason}"
-+		return
-+	fi
-+	TUNE_CHANGED=0
-+	defer tune_restore dpll_pin_set_phase_adjust "$PIN_TUNE_ID" "$before"
++	for pid in "${BACKGROUND_PIDS[@]}"; do
++		wait "$pid" || failed=1
++	done
++	BACKGROUND_PIDS=()
 +
-+	if [ -n "$DPLL_CREATED_DEVICE" ]; then
-+		# The simulator is checked at the ends of its range. Shell
-+		# division truncates towards zero, so round the bounds towards
-+		# the inside of the range explicitly, which matters for
-+		# negative ones.
-+		[ -n "$gran" ] || gran=1
-+		target=$((max / gran * gran))
-+		[ "$target" -gt "$max" ] && target=$((target - gran))
-+		if [ "$target" = "$before" ]; then
-+			target=$((min / gran * gran))
-+			[ "$target" -lt "$min" ] && target=$((target + gran))
++	check_err "$failed" "some concurrent workers failed"
++
++	# A worker whose devices could not all be removed stays recorded,
++	# so that the cleanup handler tries again.
++	for base in "${WORKER_BASES[@]}"; do
++		if ! delete_worker_devices "$base"; then
++			check_err 1 "cannot delete the devices of worker $base"
++			remaining+=("$base")
 +		fi
-+	else
-+		# On hardware the end of the range can be a large phase step,
-+		# 2.1 ms on zl3073x, which the outputs see once the pin becomes
-+		# the reference. Step by the granularity, or by 1 ns when the
-+		# driver reports none, towards the inside of the range.
-+		step=${gran:-1000}
-+		target=$((before + step))
-+		[ "$target" -gt "$max" ] && target=$((before - step))
-+	fi
-+	if [ "$target" = "$before" ] || [ "$target" -gt "$max" ] ||
-+	   [ "$target" -lt "$min" ]; then
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "range too narrow"
-+		return
-+	fi
++	done
++	WORKER_BASES=("${remaining[@]}")
 +
-+	# A driver may enforce a granularity it does not report or another
-+	# constraint, a skip on a device the user provided, the simulator
-+	# accepts every value its range and granularity allow.
-+	TUNE_CHANGED=1
-+	if ! dpll_pin_set_phase_adjust "$PIN_TUNE_ID" "$target"; then
-+		TUNE_CHANGED=0
-+		reason=${DPLL_LAST_ERR%%$'\n'*}
-+		dpll_log_test_skip_or_fail "DPLL pin phase-adjust set/get" \
-+		    "cannot set phase-adjust=$target${reason:+, $reason}"
-+		return
-+	fi
-+	after=$(dpll_pin_get_phase_adjust "$PIN_TUNE_ID")
-+	if [ -z "$after" ]; then
-+		check_err 1 "cannot read the phase adjust back"
-+	elif [ "$after" != "$target" ]; then
-+		check_err 1 "phase-adjust expected $target, got '$after'"
-+	fi
-+
-+	# A refused restore is taken like in the state test, the deferred
-+	# one tries again.
-+	if ! dpll_pin_set_phase_adjust "$PIN_TUNE_ID" "$before"; then
-+		reason=${DPLL_LAST_ERR%%$'\n'*}
-+		reason=${reason:+, $reason}
-+		if [ "$RET" -eq 0 ]; then
-+			dpll_log_test_skip_or_fail \
-+			    "DPLL pin phase-adjust set/get" \
-+			    "cannot restore phase-adjust$reason"
-+			return
-+		fi
-+		check_err 1 "cannot restore phase-adjust$reason"
-+	else
-+		TUNE_CHANGED=0
-+	fi
-+	after=$(dpll_pin_get_phase_adjust "$PIN_TUNE_ID")
-+	if [ -z "$after" ]; then
-+		check_err 1 "cannot read the restored phase adjust back"
-+	elif [ "$after" != "$before" ]; then
-+		check_err 1 "phase-adjust not restored, got '$after'"
-+	fi
-+
-+	log_test "DPLL pin phase-adjust set/get"
++	log_test "DPLL concurrent workers ($STRESS_CONCURRENT_PROCS processes)"
 +}
 +
- test_pin_frequency_set_get()
+ test_pin_state_flooding()
  {
- 	local before target after reason json near=true
-diff --git a/tools/testing/selftests/drivers/dpll/dpll_lib.sh b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
-index 3930f51a87d618..11152d958bca9d 100644
---- a/tools/testing/selftests/drivers/dpll/dpll_lib.sh
-+++ b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
-@@ -467,6 +467,11 @@ dpll_pin_get_prio()
- 	__dpll_pin_dev_field "$1" "$2" '.prio'
+ 	local clock_id name dev_id pin_ids pin_id i last state fails=0
+@@ -231,6 +459,63 @@ test_pin_state_flooding()
+ 	log_test "DPLL pin state flooding"
  }
  
-+dpll_pin_get_phase_adjust()
++test_many_devices()
 +{
-+	__dpll_pin_field "$1" '.["phase-adjust"]'
++	local i clock_id created=0 visible dev_id pin_ids
++	local test_devs=() clock_ids=()
++
++	RET=0
++
++	stress_counts_valid "DPLL many devices ($STRESS_DEVICES devices)" \
++	    STRESS_DEVICES STRESS_PINS_PER_DEVICE || return
++	if [ "$STRESS_PINS_PER_DEVICE" -gt 128 ]; then
++		log_test_skip "DPLL many devices ($STRESS_DEVICES devices)" \
++			      "STRESS_PINS_PER_DEVICE is above 128"
++		return
++	fi
++
++	for i in $(seq 1 "$STRESS_DEVICES"); do
++		dpllsim_alloc_clock_id; clock_id=$DPLLSIM_CLOCK_ID
++		create_stress_device "$clock_id" \
++				     "$STRESS_PINS_PER_DEVICE" || break
++		track_device "$DPLLSIM_CREATED_NAME"
++		test_devs+=("$DPLLSIM_CREATED_NAME")
++		clock_ids+=("$clock_id")
++		created=$((created + 1))
++	done
++
++	if [ "$created" -lt "$STRESS_DEVICES" ]; then
++		check_err 1 "created only $created of $STRESS_DEVICES devices"
++	fi
++
++	# Every created device must be visible on netlink with all its
++	# pins.
++	visible=0
++	for clock_id in "${clock_ids[@]}"; do
++		dev_id=$(dpll_device_wait_by_clock_id "$clock_id" dpllsim) ||
++			continue
++		visible=$((visible + 1))
++		if ! dpll_pin_ids_read pin_ids dpll_pin_get_ids "$dev_id"; then
++			check_err 1 "pin dump failed"
++		elif [ "${#pin_ids[@]}" -ne "$STRESS_PINS_PER_DEVICE" ]; then
++			check_err 1 "device $dev_id has ${#pin_ids[@]} pins"
++		fi
++	done
++	if [ "$visible" -ne "$created" ]; then
++		check_err 1 "only $visible of $created devices visible"
++	fi
++
++	for i in "${test_devs[@]}"; do
++		if dpllsim_delete_device "$i"; then
++			untrack_device "$i"
++		else
++			check_err 1 "cannot delete device $i"
++		fi
++	done
++
++	log_test "DPLL many devices ($STRESS_DEVICES devices)"
 +}
 +
- ##############################################################################
- # Pin setters
- #
-@@ -526,6 +531,16 @@ dpll_pin_set_frequency()
- 			     2>&1 >/dev/null)
- }
- 
-+# $2: phase adjust in ps
-+dpll_pin_set_phase_adjust()
-+{
-+	local pin_id=$1
-+	local phase_adjust=$2
-+
-+	DPLL_LAST_ERR=$(dpll pin set id "$pin_id" phase-adjust \
-+			     "$phase_adjust" 2>&1 >/dev/null)
-+}
-+
- ##############################################################################
- # dpllsim configfs interface
- #
+ test_deploy_cycle()
+ {
+ 	local clock_id name i
 -- 
 2.56.1
 
