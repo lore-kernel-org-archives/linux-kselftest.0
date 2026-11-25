@@ -1,55 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795630260;
-	b=efhHOS9mknDDh7g3OO3Hv0MxUsmy93ySr5JQYkkoTASZu66O34jKOTux9ota4njc3qfP
-	 2zPUeYZtDc2FYItK6N7A6j90CyxDuYDpaU2Q/JxXTuDhXyKX+jbi8x6O6BPlEk5VHl61+
-	 92ynYffmdVi2PdGEia+rEMmKyE1czVjwCnDR/Ns9EM50gLXRJfo7j5y/kmwLm9vWVWCXb
-	 o5/SJPPk6HGaT1rzSTsgnudIf/yv04eStcw8Yb7X0y6kw9Zt0c7Olzb/uD0yqctIbabrW
-	 gy+XZLlspm0kDtjZZNRquFWoI4FGazWiWQogPZIk+pxsFJnbltsW/WPoPMGJUBulR9g==
+	t=1795630497;
+	b=Frmdh4bNrsZ1tSqmpWEleKbj5vTsbd1WUmhO7h3+YpWaUc90vmwBMD89LPyxAwex80z2
+	 tfImDjgAhdiwpvQnQXZQRj0BGxtFa8TFCrrUwseg8QImoCzRihJ3JQltsr6LhdM4F+r6x
+	 Yv25Ttfu3yPVndBt0hLHaDGJK/5MG+JFMWfC/XuB2NgwbEI1/q23ucUeqAwm88HBeuKdE
+	 9X8+2YsHci04cIvrQtT6MqhMKA7VmrrQTcJkYcL8XBcMeRkuIQL6DGUNwUUoi7S+x3RVy
+	 6gaNCpN/hNamHgo5WsjrNK2a/4vvA5ZQE/QnlfRyws1oZ5cn7CD4hKds9euP3QdtRRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795630260;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=mWutYmcI+akmXQxpptAbrI1MPXq/0LbtGQvDAhb+8lc=;
-	b=FuVs3a3mGmwDnreuttt6sXOOtbO9Lp22oSDH9mTV9QiT7fgkMJOekMEnz5RtvcVCgwvm
-	 rTmgGHKGAawKyrVNpGWoNJIN8o+qApqgebr2flrzSIBmJ4ygYTPFvktVhFN6uAsDY38x0
-	 lXpl9867pnlcNmQ6sX+SwXe7qNNcyZXEHFO8Rjo2kqRBXEa61tnQnO9mdqZ5mZgz/MMg5
-	 RwJqYyYqXMZBB3CBEoW/rnKtvkFD+9SWCavD+/AVD7h3fdEfqVBhs/o1klq1Dfpaum656
-	 02QCbBCv5WmbuGU8p4KGYsKYlNjtCQ1wyUyv5CLRe+/blXyVbHxJI8HqaWO/M1dV2AQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795630497;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=VtvIgmARk0ylTz1Vb55Uz9jsAfEsRaDu6ZRMFkPArig=;
+	b=kG5six1sq+5je3ZgLUdGtLE1ZQK/jyAMkGbjTEL7nCRanTyJJCXdmOP33XcNk/cNzUSt
+	 85P8tmF0Po7C9R9GKR32W+Qy6QgcC3/CP9XxBj7qEpQvGTurFVHTeb9NEdJhR8QQnavOm
+	 UMNgnHOoNiFntq74ClOUJW2BsQAKAFMvRVgTuCgBQhCp7XSsxsUgY9fia2LAZ1CYSxTD3
+	 hqmcTHy8P/WAZMV1hgkmhcefSiODht6z5/xAca0u0Cfdo71F9/Nniozp56d0672uAAVo0
+	 wV6lA4Z36Wb5qBvgC28iKTmg0Au1vn9mJIjXD+M+v6fsDqgpGvl9f8LzmbfBwD/aBDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cryOxmxh;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GkRxM0I3;
+	arc=none smtp.remote-ip=209.85.128.170
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27D7F606A33A
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF773606A684
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:14:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF773606A684
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cryOxmxh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8554B1F00A00
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:10:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795630259;
-	bh=mWutYmcI+akmXQxpptAbrI1MPXq/0LbtGQvDAhb+8lc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=cryOxmxhtxlO1KGB/8E7JN8u0pgaKXd3JfHXEiXiM3jywuj6bBaW4BgKUhlY0vOn5
-	 IRXgAVvaQEst61cU10Xf9IbAPGIF63V0ngPxRuWlorWxW/PXrORyW7RMkd+6gnIj4I
-	 sNBHuTav0OQ+N1FYkaYGb6y+HMWlbi09hcM/yHFxVfOF1O8AAyvTQl74HE86bBvMe1
-	 nAPONnqT8P7FU65MTtfMdc5sgAR86zMi9+zJCrcug0m1cp3GT9Qme9gYiu/dp8nm1Z
-	 jvxQ/mOzqfZLn2XIk9nSCZlxNvF77m00LYYlD1MzR/STyzH+FDQA1zPn3MUzFUAuCj
-	 YmL0d19DIxg0g==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5c14f3dab66so5829643e87.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:10:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErHhA9zT/XBg9ITqvsJ1Q8e/H2znvGS2O+NgXnXNm72cGVqxuhNkLoxh1qdGSGMJ0hit34fkcn/+QVRIOSkRvuo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+OjRo24ONL2gfS1ETh4z86qUytb2ZXl6cZpDq3mi7iWUGcVy4/
-	COIqm7Qxew790uJJwvoa1S/EfvFliQN1MeVx5hFauVeBQYbkmOttGTYDCaMCPQ7UhW2mxLsLEeS
-	718MPxrU4Ym15MytMXuA2OkRWIs0oyhI=
-X-Received: by 2002:a05:6512:4018:b0:5c1:56f5:da02 with SMTP id
- 2adb3069b0e04-5c1b79fc73emr5241671e87.1.1795630258316; Wed, 25 Nov 2026
- 10:10:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GkRxM0I3
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8b32daac9d7so33484017b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:14:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795630495; x=1796235295; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VtvIgmARk0ylTz1Vb55Uz9jsAfEsRaDu6ZRMFkPArig=;
+        b=GkRxM0I3I9rw9mLuQwX/dgq1if9czrDya769L7oT8W7BXPcs6ii0XDH+75MEXs9q75
+         9laMkh98+PVzu7I8zowc0qlg1rh+e+5kRkZsR8kOxQRgYjWDbn3DQuikB/DpDkqxZX3m
+         hcKTMgHq2SxoCgrCl1r8B5p5I/aOM7hjR2xkU9YVSuoU2lu08e5FgFmsLYpNkp0XBvz1
+         SrVDiKbu/CFB+dXKsYh9nJbMKZy7ngbjxR1M6HiHQ7gz8OHG1NIlTjVWujmI+lE5mNgv
+         A4RRvaLxog6eQ+YwYTSyjW1T6Ul5YW7CCSBhAZRhjQpLNFgXXflxTCfgTQh/eQqBMTRX
+         lpDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795630495; x=1796235295;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VtvIgmARk0ylTz1Vb55Uz9jsAfEsRaDu6ZRMFkPArig=;
+        b=milyzsjzoDXDQKQxVU4fuR62O96Ei4pnIoTQPm8FDPwGQShI023uZVZE37UZKT14LD
+         TKbKynZgniKrg4kiAj4BGS5IDzR4zzHfEgIVMPOWCc4l5K5HKszw6MyqbmHEGU20IA7Z
+         tf/8eloZXfOiSIqPXNWo9ALgZRm6AVW4h5xxPp5ysKpgmkOnRxHIySdhA4fRMT6g16KM
+         TNP35fInUsmPCq0spMMqFdG+PU/RzocOKEwYgBKB1dJ8zRBCBDMl1wcTTLT9GYt3RFJV
+         Wq0yKFybmdL5N8Ji0fSmrv2Q13/66gX9LS6a2kj6sYJdPgOX+IwaKvBfMdujDqRrEI4L
+         +OlA==
+X-Forwarded-Encrypted: i=1; AL+hErE4LgyYfXChf21MOA4bprzIzmqFY+KRkPaxj+5+hdP43URvvJXNaF80K1yw9VJLWLrbxRSKSjSfxoGrwe0dk40=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8vMslmoq/7W/3z1gfRfyyC63TZiVYQTSxcGCn+ucduCuWoeKNR
+	OxxDjokmJTR6CxQxEzD9laPZU6GZi3fCcs6dC88VaIgjB8k5qLPKJAntys+aji0=
+X-Gm-Gg: AZFdTZckiHONRFG1vL1SZ54KxPR/TeSkOvTHVnDf4lEVNrXc4OquCF7EM2Tg3KLfV85
+	9Nyu3VlNU9GpkQZRtuFLE3BgoXwLYVkZGzcHxmgR2zCMjFmLqd46I2+7PpAHlUnF0AxrqjGa5v/
+	91ml0EFISdA94bwZPkbRZxCJU3VblqAnYE6sfyMkSyj3tJtrc4FMlDzybjCN9Yz9wFVCQgXxFl5
+	5rynY+58QiTXmFg8Hd7SVmSmqpLD0d4fOCmDP8nnPyZOSTXZzZE20uktPFW+PoggrvOM+MWqN/C
+	W5yNKoBIvOtVH8CLmwpYRiz1rS3SFotxosrzsUQwgGnoje/1g6OE8VpgPDFYw+hh0EDYlxrLdvL
+	B2exlhGMgGAB1GJPzHzPgQqrSqYRUslLhKWLuq3cbGQ0BJo4qwPaVMU3zxVAtgmPfQ9E1IvT+V1
+	3puf0tuzcjiPwh+QcPh5dRzGPmzuwLst5qxD/SoTc0AgrLHhRbygukMG+68s+clMFeYVqrJ5mx9
+	MWmwV1WCbLxYuyNYkyKGOtbtG634zOSW//E+iIeCy+5VENKKTVi6YjCxBICzy4ZxtQ545A57uzk
+	/CJ8lrwm4fy+xWpVsdPDUasqC928IYPBEmQ=
+X-Received: by 2002:a05:690c:38b:b0:8b4:f6be:d2b7 with SMTP id 00721157ae682-8b518e8aa37mr74974367b3.6.1795630494808;
+        Wed, 25 Nov 2026 10:14:54 -0800 (PST)
+Received: from 3511.attlocal.net ([2600:1702:7a3e:17b0::c])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b5201b8cdbsm74546187b3.1.2026.11.25.10.14.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 10:14:54 -0800 (PST)
+From: Arav Verma <svav2021@gmail.com>
+To: w@1wt.eu,
+	linux@weissschuh.net
+Cc: shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/3] tools/nolibc: fix standard conformance of a few string functions
+Date: Wed, 25 Nov 2026 12:14:50 -0600
+Message-ID: <20261125181453.814976-1-svav2021@gmail.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,43 +96,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111114225.3977243-1-ruanjinjie@huawei.com> <20261111114225.3977243-16-ruanjinjie@huawei.com>
-In-Reply-To: <20261111114225.3977243-16-ruanjinjie@huawei.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 25 Nov 2026 19:10:43 +0100
-X-Gmail-Original-Message-ID: <CAD++jLkCmejeNE2dZASY0crxe-Q23QJ05fqvEvP69YuJrETYPw@mail.gmail.com>
-X-Gm-Features: Aa3M54oIDRMFXP1RpUMFXoUcM7tXj2uiaN-FyRQN7L3lknX3zpF2wKbegX-ttpU
-Message-ID: <CAD++jLkCmejeNE2dZASY0crxe-Q23QJ05fqvEvP69YuJrETYPw@mail.gmail.com>
-Subject: Re: [PATCH v21 15/15] selftests/arm64: Add ptrace single-step and
- rseq syscall-exit tests
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, 
-	oleg@redhat.com, shuah@kernel.org, kees@kernel.org, luto@amacapital.net, 
-	wad@chromium.org, peterz@infradead.org, ada.coupriediaz@arm.com, 
-	kevin.brodsky@arm.com, anshuman.khandual@arm.com, thuth@redhat.com, 
-	james.morse@arm.com, yeoreum.yun@arm.com, vladimir.murzin@arm.com, 
-	broonie@kernel.org, ryan.roberts@arm.com, liqiang01@kylinos.cn, 
-	mathieu.desnoyers@efficios.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 12:43=E2=80=AFPM Jinjie Ruan <ruanjinjie@huawei.com=
-> wrote:
+A few nolibc functions deviate from the C standard in corner cases:
+strchr()/strrchr() do not find the terminating NUL, strstr() returns
+NULL for an empty needle, and atoi()/atol() do not skip leading
+whitespace or accept a '+' sign.
 
-> Add tests for the arm64 syscall-exit and single-step behaviour fixed by
-> the following commits. Each test fails on a kernel without the fix it
-> covers and passes with it.
-(...)
-> Link: https://lore.kernel.org/all/20200710130702.30658-1-will@kernel.org/
-> Link: https://lore.kernel.org/all/20200524043827.GA33001@juliacomputing.c=
-om/
-> Link: https://lore.kernel.org/all/1eed6d69-d53d-9657-1fc9-c089be07f98c@li=
-naro.org/
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+Fix them and add test cases. The new tests fail without the fixes. The
+results were also compared against glibc.
 
-This patch also looks like it should be sent in tandem with the other
-fix, patch 1/15.
+Arav Verma (3):
+  tools/nolibc: fix strchr() and strrchr() for the NUL terminator
+  tools/nolibc: fix strstr() with an empty needle
+  tools/nolibc: make atoi() and atol() skip whitespace and accept '+'
 
-Yours,
-Linus Walleij
+ tools/include/nolibc/stdlib.h                |  5 +++++
+ tools/include/nolibc/string.h                | 12 +++++-------
+ tools/testing/selftests/nolibc/nolibc-test.c |  9 +++++++++
+ 3 files changed, 19 insertions(+), 7 deletions(-)
+
+-- 
+2.47.3
+
