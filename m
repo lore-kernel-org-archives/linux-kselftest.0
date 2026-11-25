@@ -1,102 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=131.188.11.21
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795626982;
-	b=Kirq/2ReS29p9gsqHzXbWqgw2ZZ9BgueGEuqgBCea4NX0g0hEGQPEMHgZ69mJZRqYKdI
-	 lh1oKZl8W8kXyqcdeNz6dOcmCbSpLRNUxDIrtC6bh+xCg4UbJ1t6QhGyAkzU5rJ37+ikq
-	 KooSBVI84bdmkro7bO0dJ6E422nJUgUGNzW7LXga8s6RBaw01cPZTINJsiCOhizfrcT5E
-	 ubSLiyIGZnhYqU6rUvQepO4NR5RrkQhgLNqRlgjbX7z5Q8RqVQoPUPdQ3Aq4QfDygvBA6
-	 jth3WqIDqNr3hjEZjp10rsF1pAkNfvfxsAHXhSy5zj3CKAerbnVqy6hYPoyCSTPj9ww==
+	t=1795626990;
+	b=mgcaXigPg0r83lqr3P3QYz2Jfk1g23j4jbAtpaKqCLL9NIXO3v5DiRgwoGAZoXo4qtIV
+	 4crB0pRqf30UURgwQp+0+1A/wEcFLalG5oZmt+AfDNckjlOaqXNcQeMfNEwydiFWGKKE6
+	 jjAe68MHTwTIdEYN8ZMcYB9fjEXmXzVObKur6ybL0tGB0F7rVrZxeNfR4HdwkPXFJbq3n
+	 XjhYJyQxh/tWrYXvd3vspXSkDAlUYfDR11seW71Am0ZQHeEfU+NIvacO8j/B/GsLo54nW
+	 Gt0eVZTk4m+VRRQOXmO7ZkPHzlOn7+/W6x2X3r/d6riB1br5IsrXdOllVDa+DqMWaSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795626982;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=0XJ99uewa+KtsNo9XkOKtjKPjKDCzD0NbSDxZp+Yar8=;
-	b=zku+FotcWAL0WVARPwyksZoMgc8GwoSC4dN38IWYLK4xFWp9lzOF+Akpm2SvSaLzRELn
-	 2z7znefd7NedpHzYr3wcz5057+vnC6LxrYgF3H5QWjzbAc8ukxkBM6EXVYlJy6X/ZAufE
-	 wMaB/sf+gOdoyI7n4Px4+bVjzOECXsLdbvimU5hKN56fdPQUTaCEXvk2DGJn6zDVdyGjn
-	 zfmfxoS8MbcACs+YUtpOnFxvOss8MOgOVrnWa1chhcNwVjO9LO9k1w/yReQntkPJgXdAz
-	 /0aPorSl3DViemxxu+3MIWFdfASmOUsMK30njaQOT0LAfIQ/KdndS3t7STBrkat1xtA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795626990;
+	h=DMARC-Filter:DKIM-Signature:Received:X-Virus-Scanned:X-RRZE-Flag:
+	 X-RRZE-Submit-IP:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=IZRnxm3T2lBlIWWQ6Nc4qn6VvbG+TU4FXDFG3luI9a4=;
+	b=UJdJP3dABmeg2tad7KpJVW1MCWgucBkj3VbxdIu1h34Mgf/LclbI8oEj+4PCdu0XsFts
+	 MfYJBul/WixhtjI7zd4Zjoi7t9utCIwr/foHaSAOYc0K1I7+Z2K4hFmCFejzUj7zOxSD0
+	 BhSOkDae0taJ6iJoTC601e13VlGmtiONearHbUjDRH31TtQDGCle8K10HpVRlXgLXUUpS
+	 pVrzoi3uTYGDs/fsjL7aaj5tEwVlqALN4IKOXhd+wpVMqzKOCGATOp4YGBj04nr4d5o4P
+	 EBhoj0156FlxBjgmsaUw9lzkF1LK/JBKkxhxndyPxHyu3Wr6jIMZuDTATm+zGBh7tJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nxNDVcFB;
-	arc=none smtp.remote-ip=192.198.163.17
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=fau.de;
+	spf=pass smtp.mailfrom=fau.de;
+	dkim=pass header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=wD1nXRr8;
+	arc=none smtp.remote-ip=131.188.11.21
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC682606A331;
-	Wed, 25 Nov 2026 17:16:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC682606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69958606A329;
+	Wed, 25 Nov 2026 17:16:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69958606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nxNDVcFB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795626982; x=1827162982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WcuGcUE+EwZ5wRASadJcsmh+YFYYe0xIYYtZnCYENIY=;
-  b=nxNDVcFBI0Nvo64YuGRcS7VtYKVFHTsSDpRIrn+WEsCfNferl98GqX7N
-   iwQRPEXXZVxCWF60oBCS3ounNsYqe9msh8gG17ZMg+sdYlYOkujnDElzh
-   D8m72XmRs/XHbvY9qGS5H4Kn8AN+V8g5lEXIrK1lbL0U57BqSg+VXGekT
-   I7ewDWEHtxNj4qOxrCbqNRkgYkb7WHqtY5ogDRkOIOa6uGy+eeaGYkB6Y
-   wBqC9/5DvhSuLkX7wh61jqwe05mRTiU/6xBmWGJOjsyVT1Pz21TxDNpxL
-   0osJKFq8pLvc6B+TEgCtJqUb5e4F3eV2Q5twd6U8ouESzujN9shUm9+C9
-   g==;
-X-CSE-ConnectionGUID: yxxcYkikSnaIQFt9/qwm/w==
-X-CSE-MsgGUID: /FIixgudRTiPeQE1lEhU5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11977"; a="4504445"
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="4504445"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2026 08:45:12 -0800
-X-CSE-ConnectionGUID: N09VVOjbRLiZ5trnYphJjA==
-X-CSE-MsgGUID: KqMnJCIJQsSP7hGHZ+fvdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,233,1787036400"; 
-   d="scan'208";a="11802730"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 25 Nov 2026 08:45:06 -0800
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xWG7C-00000001S7G-0Bev;
-	Wed, 25 Nov 2026 16:45:02 +0000
-Date: Thu, 26 Nov 2026 00:44:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shivank Garg <shivankg@amd.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Dev Jain <dev.jain@arm.com>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Peter Xu <peterx@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-	Andrei Vagin <avagin@gmail.com>,
-	Paul Gofman <pgofman@codeweavers.com>,
-	Bharata B Rao <bharata@amd.com>, Daniel Wade <danjwade95@gmail.com>,
-	Yin Tirui <yintirui@gmail.com>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shivank Garg <shivankg@amd.com>
-Subject: Re: [PATCH 1/3] mm: move the soft-dirty fallbacks up in pgtable.h
-Message-ID: <20261126003542.QALFbvl0-lkp@intel.com>
-References: <20261125-b4-mm-soft-dirty-fixes-v1-1-538e3cdb618c@amd.com>
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=wD1nXRr8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1795626981; bh=IZRnxm3T2lBlIWWQ6Nc4qn6VvbG+TU4FXDFG3luI9a4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
+	 Subject;
+	b=wD1nXRr8NS8eQkznKgULqLRQ5KX7k3CbQeD+HtsbGurT9KX0c4JvsyUm5jEKDvFuF
+	 AwcBAWHf+MEHaQO9TDpPKMiWG2n7Pix9J2HSxLv1xGq2XW/L78Y+4guddTWHDW4+Ml
+	 aCQfdgVtQkuqNyzJ9XAKNDTrZdrzZTlIaxX+3Ai44l5V53JbVdZa96v5ZHARUhZY3j
+	 oOeWhKK/oazDOnL3eKKp+1MrPoSfKN+Uf7kR7HYZUWBKc2ya1tQwlBNM/VpVRfxeNC
+	 tQKInFGlyS/+vwYEiO+58ts5E1N+ohbhuzyXE7kTxjdhizkBGXv+RhrxTF7YtUmR2C
+	 vFHUIaJIP7dQA==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4jZRD55v2qzPjw1;
+	Wed, 25 Nov 2026 18:16:21 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck5.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:59e
+Received: from luis-tp.epfl.ch (unknown [IPv6:2001:620:618:5b8:2:80b3:0:59e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX1+50KPzeeuxrztJo64+ljyXz0WqhT2StxE=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4jZRD23bg3zPkSN;
+	Wed, 25 Nov 2026 18:16:18 +0100 (CET)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Alexei Starovoitov <ast@kernel.org>,
+	bpf@vger.kernel.org
+Cc: Luis Gerhorst <luis.gerhorst@fau.de>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Henriette Herzog <henriette.herzog@rub.de>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 0/4] bpf: Emit nospec after every insn that stores to the stack
+Date: Wed, 25 Nov 2026 18:12:48 +0100
+Message-ID: <cover.1795625597.git.luis.gerhorst@fau.de>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261125-nospec-result-reply-d60fdc6da8ef@fau.de>
+References: <20261125-nospec-result-reply-d60fdc6da8ef@fau.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,65 +92,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125-b4-mm-soft-dirty-fixes-v1-1-538e3cdb618c@amd.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Shivank,
+This is an alternative to patches 4 and 5 of [1]. It applies on top of
+patches 1-3 of that series.
 
-kernel test robot noticed the following build errors:
+check_stack_write_fixed_off() sets nospec_result for every insn that
+stores to the stack and must not be bypassed speculatively: a BPF_MEM
+store, a BPF_ATOMIC insn, or a call of a helper or kfunc that
+initializes a dynptr, an iterator or the flags of bpf_local_irq_save()
+there. bpf_convert_ctx_accesses() emits the nospec only after BPF_MEM
+stores.
 
-[auto build test ERROR on 98f6b507621822477db7ec7cef8519de0dd243c4]
+[1] handles the other two cases per insn: patch 4 also emits the nospec
+after BPF_ATOMIC insns, patch 5 makes do_check() continue a speculative
+path behind a call because no nospec follows it. This series emits the
+nospec after every insn with nospec_result instead, whatever the insn
+is. do_check() is not changed: it can end a speculative path at each of
+these insns, and the store of a call is covered for Spectre v4 like
+every other store to the stack.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shivank-Garg/mm-move-the-soft-dirty-fallbacks-up-in-pgtable-h/20261125-133227
-base:   98f6b507621822477db7ec7cef8519de0dd243c4
-patch link:    https://lore.kernel.org/r/20261125-b4-mm-soft-dirty-fixes-v1-1-538e3cdb618c%40amd.com
-patch subject: [PATCH 1/3] mm: move the soft-dirty fallbacks up in pgtable.h
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20261126/20261126003542.QALFbvl0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261126/20261126003542.QALFbvl0-lkp@intel.com/reproduce)
+The nospec behind a call has to be inserted without taking the aux data
+from the call, because the passes that follow still rewrite the call.
+bpf_patch_insn_data() can not do that: it moves the aux data to the last
+insn of the patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/20261126003542.QALFbvl0-lkp@intel.com/
+  patch  content
+  -----  ------------------------------------------------------------------
+  1      bpf_insert_insns(), which inserts insns in front of or behind an
+         insn that keeps its aux data, and its use where a patch only
+         inserts. No functional change.
+  2      tests for the converted callers that no test reached
+  3      the fix: a pass that emits the nospec in front of an insn with
+         nospec, and behind an insn with nospec_result
+  4      tests for the nospec behind calls and atomics
 
-All errors (new ones prefixed by >>):
+The main downside is that bpf_insert_insns() needs a buffer of its own
+to build the patch, because the callers pass env->insn_buf. This adds
+insert_buf with INSN_BUF_SIZE insns (256 bytes) to bpf_verifier_env.
 
-   In file included from arch/arm/kernel/asm-offsets.c:14:
->> include/linux/mm.h:972:19: error: call to undeclared function 'pgtable_supports_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     972 |         VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-         |                          ^
-   include/linux/mm.h:985:19: error: call to undeclared function 'pgtable_supports_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     985 |         VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-         |                          ^
-   include/linux/mm.h:1000:19: error: call to undeclared function 'pgtable_supports_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1000 |         VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-         |                          ^
-   3 errors generated.
-   make[3]: *** [scripts/Makefile.build:185: arch/arm/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1417: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+[1] https://lore.kernel.org/bpf/20261125040820.947816-1-alexei.starovoitov@gmail.com/
+
+Luis Gerhorst (4):
+  bpf: Add bpf_insert_insns() to insert insns next to an insn
+  selftests/bpf: Test the insns that bpf_insert_insns() inserts
+  bpf: Emit nospec after every insn with nospec_result
+  selftests/bpf: Test nospec after stack writes of calls and atomics
+
+ include/linux/bpf_verifier.h                  |   2 +
+ kernel/bpf/fixups.c                           | 351 +++++++++---------
+ kernel/bpf/verifier.c                         |   3 +
+ .../bpf/progs/verifier_percpu_addr.c          |  31 ++
+ .../selftests/bpf/progs/verifier_unpriv.c     | 201 ++++++++++
+ .../selftests/bpf/progs/verifier_zext.c       |  57 +++
+ 6 files changed, 477 insertions(+), 168 deletions(-)
 
 
-vim +/pgtable_supports_soft_dirty +972 include/linux/mm.h
-
-027232da7c7c1c Kiryl Shutsemau    2018-07-26  967  
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  968  /* Use when VMA is not part of the VMA tree and needs no locking */
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  969  static inline void vm_flags_init(struct vm_area_struct *vma,
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  970  				 vm_flags_t flags)
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  971  {
-277a1ae3879a82 Chunyan Zhang      2025-11-13 @972  	VM_WARN_ON_ONCE(!pgtable_supports_soft_dirty() && (flags & VM_SOFTDIRTY));
-9ea35a25d51b13 Lorenzo Stoakes    2025-11-25  973  	vma_flags_clear_all(&vma->flags);
-9ea35a25d51b13 Lorenzo Stoakes    2025-11-25  974  	vma_flags_overwrite_word(&vma->flags, flags);
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  975  }
-bc292ab00f6c7a Suren Baghdasaryan 2023-01-26  976  
-
+base-commit: 81c6c8c608b6075846d3bd5b6f57958300a56eda
+prerequisite-patch-id: 6079fc600b6711222dba245601eab9d1b76f0ecc
+prerequisite-patch-id: 1f8ba1a2f5b8b7bf73dea4349ccd7b2679f4ffaf
+prerequisite-patch-id: 2a97f28aef89f4281e7205a16f2210d3a95581b2
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.56.1
+
