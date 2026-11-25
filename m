@@ -1,61 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795592652;
-	b=EfkvIO9T9Fk2ZJE2OV/8JG/p7JFtV5Xyf8cxSX3Ae5NT/2zYiGnoA2VZyPlAaJZCa1Yi
-	 tavOp3qSkZ0L2HXbiNp47zKjv+BYWR8rBqvLvuoCHZPYjIXA21+n+PsCh1wyRpBgmno7V
-	 ILXsDePiGRtQ6MWMsUIf7fMfZ6qkm0z3/zgnGViXt8HRAw0jvN810KN2JIE80/AQzl1qw
-	 554mv/mZWOf+RxgU1Y0zqMmSZs5Ja7/DzbedIeh6+zWoIESqs+WWzW8oeH5seHy60Dz4B
-	 UCEdcR2iQyfXezYFjEG4wf2brHEGZ2MxvfridYoYZVxdMcv3cMOK1Z5IRyBrp1Im6QA==
+	t=1795592945;
+	b=hCQMNDg+b2VjGvVGoqeHNt4JMkGp1yYRheZV4neLjC8jLWdM3kMJoXn2LrL63maxPe4V
+	 ONpIP/yKnPs5vFC+ap7Kt3u8WkHTTn6RWQx8ztShOHfRkQ17w7xxONjg8nZV72kawod/0
+	 07/kfHb0q4H9MYlEeY9fxAPlRzdKqoyDqP5wklgZAR7Lua7TyKI1EXNU2yAUdlPPGzHpu
+	 RmyNO9N4IKEAxhl4qCeigg73MDm8B5QXUIjS+YJnQnOiIEHhzxI9K/RAz6+kq/hC3NdCZ
+	 pjlys3QMJ0/vUxynPc21CCYsn35a1Hm0iEhg+/3dm1NzlAxnsZvKspMImvI8noVEYIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795592652;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=KGPByt1l/w2w5NVSgCv2fP9X+uQOLitOIGrz+voENZ4=;
-	b=aUVEq9Xinln5/52dkm9Fd6U4rgeaP1HUKnukcXunMP8rnn1cpXuMOngFLjRU4fSHkHll
-	 aG4NCqlAmLhz/5tdgY5c747d4gHuRHFue4NlQt3RfxR3sLUNNIKtCe9cM4IMvO8zO4sUh
-	 l1XXcB+GG8NpEZJjpMljjT+zWZUulxVdQszY6UFwmeo6r1VOiFY8VcRko+DJT8zxoI7gF
-	 C5I+Ne4Qe16R2ytRI9AuKdISosu/JQeH6Go8rpbq+llpniqCN489dxaeCg+6CfQtz8v0R
-	 Dak1yc+5rIGBLHsSbo94zABkjjhZvQkkVsEbaVsSgQj4iCElRB3lSFe1qpoRquOdNZw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795592945;
+	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
+	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=NHziLxnIYyaGgH9iRMQeAbyOtg13/DENqLY2yDhYbX8=;
+	b=kxeVZmq5YIpjYiyJnt3G5n4A2FaOEU3bFMMqnCoSyCafbmJjZf7VI1BSJ5xc2HXP400P
+	 K1ODkIz/3JyaVs1aaf6qbUU78WOmyDihVrBhNQzoPTtUSe6+FY1LBsfvcKmdomzV7L3GX
+	 4EhXr6StMFHjppGBuNLV40l2bgAdfdEPPe3exfcv86Tf0rNiD0xQOVT6jjE0DGRYwl+bM
+	 vXYtAmLyYrLp/LBUmgvHNwESIRjUxiq8XGvcXblHZfmnhZCw4Lyq5FyRkOjb8QE+P5oGT
+	 awitj0T1UYsUjLr7qBw41PEUZmLSFmDp0LLL3gNr+rdUDq81EqvaZ3CxCJ+q6NBwdvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mOTYLjeo;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=kylinos.cn;
+	arc=none smtp.remote-ip=124.126.103.232
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EA6606A321;
-	Wed, 25 Nov 2026 07:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mOTYLjeo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1BC1F000C4;
-	Wed, 25 Nov 2026 07:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795592651;
-	bh=KGPByt1l/w2w5NVSgCv2fP9X+uQOLitOIGrz+voENZ4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=mOTYLjeoSuWpYR+AWHxkzZH/8kuw+oTfJZrBa+eZH/RZg7dC8oyxWEZEOlh/1dmFr
-	 DEoR5cBmihCIzEQGG/tuNQMzU6n5c6FItNMz3+jfpKUXOI3EaONmV9aoL1+38Ewzip
-	 7ZTBg5Oq7Js+Pkt94LaeGDNslRp+C8QGRMd42PScLGVEJvMjl5wM7FzkvjaCSpiCMe
-	 WPiljurDQMF3MSqAkwcZXaxKpkCk1Bbo80MrABk8VgLJKaDZQG9k774d4n1UO/yaR5
-	 hUiNGCq8gDJdpx0sN+PoR4XP0ptEXjuGAIsuYNCVl8USZMXeQxQopUNyfAjjH6iF6C
-	 CktNrPUkcEpRA==
-Subject:
- Re: [PATCH] selftests: netfilter: fix missing echo in nft_nat_zones.sh
-From: netdev-bot+sashiko@kernel.org
-To: zhiqizhangg@gmail.com
-Cc: pablo@netfilter.org, fw@strlen.de, phil@nwl.cc, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Wed, 25 Nov 2026 07:44:10 +0000
-Message-ID: <179559265058.3135.11860282333221465868@kernel.org>
-In-Reply-To: <20261124071926.8818-1-zhiqizhangg@gmail.com>
-References: <20261124071926.8818-1-zhiqizhangg@gmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D543A606A32D;
+	Wed, 25 Nov 2026 07:49:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D543A606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: abb7b9c6e8a411f19a56ed5b684f684d-20261125
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:b541b372-0249-414a-b05f-4931f132ded4,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:90e84ad07b0fbd8a599329838e687d2c,BulkI
+	D:nil,BulkQuantity:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0|15|52|99,
+	EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
+	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: abb7b9c6e8a411f19a56ed5b684f684d-20261125
+X-User: fuqingshuang@kylinos.cn
+Received: from [10.42.20.11] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <fuqingshuang@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 410151515; Wed, 25 Nov 2026 15:48:57 +0800
+Message-ID: <fac38220-6a40-49e1-bd37-732519e74a88@kylinos.cn>
+Date: Wed, 25 Nov 2026 15:48:55 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,117 +62,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/proc: skip fd-003-kthread if run as non-root
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+ Shuah Khan <shuah@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261120062933.3169112-1-fuqingshuang@kylinos.cn>
+ <20261124223355.15a364523377daf5cf2734cb@linux-foundation.org>
+Content-Language: en-US
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+In-Reply-To: <20261124223355.15a364523377daf5cf2734cb@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+在 2026/11/25 14:33, Andrew Morton 写道:
+> Fair enough.
+> 
+>> --- a/tools/testing/selftests/proc/fd-003-kthread.c
+>> +++ b/tools/testing/selftests/proc/fd-003-kthread.c
+>> @@ -36,6 +36,7 @@
+>>    *
+>>    * Return /proc/$PID/fd descriptor if process is kernel thread.
+>>    * Return -1 if a process is userspace process.
+>> + * Return -EACCES if run as non-root.
+>>    */
+>>   static int kernel_thread_fd(unsigned int pid)
+>>   {
+>> @@ -88,6 +89,8 @@ static int kernel_thread_fd(unsigned int pid)
+>>   	fd = -1;
+>>   	if (flags & PF_KHTREAD) {
+>>   		fd = openat(dir_fd, "fd", O_RDONLY|O_DIRECTORY);
+>> +		if (fd == -1 && errno == EACCES)
+>> +			fd = -EACCES;
+>>   	}
+>>   	close(dir_fd);
+>>   	return fd;
+>> @@ -168,6 +171,8 @@ int main(void)
+>>   		pid++;
+>>   	}
+>>   	/* EACCES if run as non-root. */
+>> +	if (fd == -EACCES)
+>> +		return 4;
+>>   	if (pid >= 1024)
+>>   		return 1;
+> 
+> Why "4"?
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0 (1)
+4 is KSFT_SKIP.  The convention in selftests/proc is a bare "return 4"
+on skip paths -- 9 tests do it, e.g.:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+	proc-loadavg-001.c:32
+	proc-net-dev-lseek.c:35
+	proc-self-syscall.c:40
+	proc-self-wchan.c:30
+	setns-dcache.c:56
+	setns-sysvipc.c:55
 
-- [High] The patch fixes a statement that can never run, so it does not
-  do what the commit message says.
-- [Medium] The diagnostic this patch turns into a real message, `echo
-  "FAIL: Ping failure from $cl"` on line 174 of…
+Notably proc-pid-vm.c includes kselftest.h and still returns a bare
+4 at the end of main().  So the bare 4 just follows the directory's
+existing style.
 
-Pre-existing issues:
-- [Low] On the veth0 icmp counter-mismatch path in
-  tools/testing/selftests/net/netfilter/nft_nat_zones.sh, the check on…
+> 
+> (and why didn't they call it EACCESS.  Also s/creat/create/)
 
---
-
-selftests: netfilter: fix missing echo in nft_nat_zones.sh
-
-The patch adds a missing echo to the ping failure diagnostic in
-nft_nat_zones.sh. Without it, the shell tries to run the message string
-as a command. The commit message says this makes ping failures get
-reported the same way as the script's other failure paths.
-
-> diff --git a/tools/testing/selftests/net/netfilter/nft_nat_zones.sh b/tools/testing/selftests/net/netfilter/nft_nat_zones.sh
-> index d935c967dd13b..f15bfd33739f1 100755
-> --- a/tools/testing/selftests/net/netfilter/nft_nat_zones.sh
-> +++ b/tools/testing/selftests/net/netfilter/nft_nat_zones.sh
-> @@ -171,7 +171,7 @@ done
->  
->  wait || ret=1
->  
-> -[ "$ret" -ne 0 ] && "FAIL: Ping failure from $cl" 1>&2
-> +[ "$ret" -ne 0 ] && echo "FAIL: Ping failure from $cl" 1>&2
-
-[Severity: High]
-
-Can this echo ever run? The script is #!/bin/bash, and the loop above
-starts the pings in the background without saving their PIDs:
-
-  ip netns exec "$cl" ping -i 0.5 -q -c 3 10.3.0.99 > /dev/null 2>&1 &
-
-In bash, a bare wait with no arguments returns zero once all background
-jobs finish, whatever their exit status. The only trap in the script is
-on EXIT, so no trapped signal can make wait fail either. That means
-"wait || ret=1" never sets ret.
-
-ret is set to 0 near the top of nft_nat_zones.sh, and nothing else
-assigns it before this check. All the other ret=1 assignments come
-later. So [ "$ret" -ne 0 ] looks to be always false, both before and
-after this patch.
-
-If that's right, the "command not found" and 127 symptom described in
-the commit message can't happen on an unmodified run. A failed client
-ping would also still go unreported here.
-
-Would it make more sense to replace "wait || ret=1" with a per-PID wait?
-For example, save pids[$i]=$! in the ping loop, then call
-wait "${pids[$i]}" for each client and set ret and print the failure on
-error. nft_flowtable.sh in the same directory uses wait $lpid this way.
-
-Also, before d6905f088d2b the loop checked $? right after "ping ... &".
-That is also always 0, so it looks like ping failure detection never
-worked at this point. Backporting with the current Fixes: tag would not
-bring back any ping failure detection.
-
-[Severity: Medium]
-
-Which client will this message name? cl is the loop variable from the
-background ping loop:
-
-  for i in $(seq 1 "$maxclients"); do
-    cl=$(eval echo \$cl"$i")
-    ip netns exec "$cl" ping ... &
-  done
-
-After the loop, cl always holds the namespace for i == maxclients (100,
-or 40 with KSFT_MACHINE_SLOW=yes). A failure from client 5, for example,
-would be reported as coming from the last client.
-
-The socat failure path later in the script prints $cl inside its loop,
-so it names the correct client:
-
-  echo "FAIL: Failure to connect for $cl" 1>&2
-
-The wrong name came in with d6905f088d2b, when the message moved out of
-the loop. Since this patch presents the line as the fix for ping failure
-reporting, could the respin also report from inside a per-client wait
-loop?
-
-[ ... ]
-
-[Severity: Low]
-
-This is a pre-existing issue, and this patch did not introduce it. It is
-in the same script, outside the quoted hunk. On the veth0 icmp counter
-mismatch path, the check looks up one key and the debug dump looks up a
-different one:
-
-  if ! ip netns exec "$gw" nft get element inet raw inicmp "{ 10.3.0.99 . \"veth0\" . 10.3.0.1 }" | grep -q ...
-      ...
-      ip netns exec "$gw" nft get element inet raw inicmp "{ 10.3.99 . \"veth0\" . 10.3.0.1 }" 1>&2
-
-Should 10.3.99 in the debug dump be 10.3.0.99, to match the key that was
-checked?
+Ha.  Renaming it now would break 50 years of userspace, but I agree
+the historical spelling is unfortunate.
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261124071926.8818-1-zhiqizhangg%40gmail.com
+Qingshuang Fu
+
