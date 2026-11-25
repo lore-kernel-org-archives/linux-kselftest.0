@@ -1,100 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795589680;
-	b=slUp5GpVpPzTFM8OEqqHfF+WywLXxboCiDq7DNGHju7meaICY4SJbtZC8oTDpFPHFica
-	 UR3Gnjo8DueT2FRdzk+Xh5rMgmyLopIwjUP4/or7y/nP1DD7WNe0ksrFM7c25ScSAtEa2
-	 V1p2eVb976oUe6tp6/kueo/3x02+nx8wH6Sp94fc60WIJj0aLIkNLEKOo5eyZVThXRCP6
-	 kgF2BrVvVxlN7Aj5cAdfIHr3zMJ7mHmWIqjMlheIgtiREnYwQ6v5J7nA3ho4Z6UcVpc3a
-	 CE/RhYD0JW7612ci/395mCkRDpaUoNbHzUpVv5EvBXSiJVQ/cN7Po1gne7lG7ItBO+g==
+	t=1795589734;
+	b=lvj3y4KQGpbgoB9Ky9x/1gMzmcZaM3lsrS5mfzmsl8AjQldBvMYRVcO3sii+bZhI0yQO
+	 qcKy6S2eO8GIsLv4LYYGhft39xoXVaL0wwGOjqhqVONNCvuNFLKXlQyK7vChTpZi/9ko1
+	 4jgaGUtVocXofTw7fMBQp86VcJvA0JY8Cc2fj62H4xMZErq46orFmobIYJyZQZO/sJBuN
+	 i5zL60/2mf9VLGw+IPLrga2zFaYAJqjaTh7Gf15MlUhIVhKcTam74ktawGzCDfMKDsDpW
+	 75L+j39E/4j3MZ2IT5cBB71FZoAiKO/gUR77zJSrxshbybJ997AyzKTbMyINxOSnjgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795589680;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795589734;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=6WKlTv2ikV+tMBOUuWFLT86t7HrmSdz2dy/v4nMSeg4=;
-	b=UKsAR5H8qnvXF/Q+W3s8xkZQrQz9TtJT9VhPkVso2VRIhg8RslosLs15j2VZsUFgnGwp
-	 vaDw/U3/FWTQPlOHbsa0IiurZOVIgpA8q/emdtMiylv02MH17wVgPgG/DQjXuOVYS0mzM
-	 J+1/elO/JSwsX1O8gmTyQa/Bo0n1zC/Gsod6ZO+jSk78ErOyj/3QrNPlYkZNCab2HuIqn
-	 atbF0ofrAkSrGDkVm1tId8XZXZS5MbRcFkW+o18Dfa72Kd7CHoIw5hYdlZM6KMNKxPenM
-	 nx8Q66LHPEXK+9UutYDfS6YQSruCKfGRN+JLyvK0xSm4s8HrbUs7pUJXYkz5kt4HDRQ==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=JPRUbVIzxn2NwG5vGsxVyrASfvomYL0+/SGbKSIacUs=;
+	b=QRg/eS5zgpK8OJr7HCfruPz0tbdOP5P3pgabayk8ywPNN2YdTw+aQ93EsJdKsRK67plf
+	 x7xVdAeUAyIHPaNnJ48JnJPSe2t8/msVGAGxuCvYmAIhEkBgVIjJ3GlJQGxaMJ7F97ih5
+	 ZGlymf//9Td/3geALGdDkr9DaiTaeKWvGubyBxG0a7cALZBweS6aTqoCGXRLToL4GnX26
+	 s8pscRrIIAzRVDfV2gedED0GcHRuOUS8Ip57lGGwl2m3vQBDM3DBi+/boyjT+4TS1XOUe
+	 Ffhodwg8G9zn1DH4OOOOIIFA89jo3EDIp+5ScJ3WYprfSeb+nA4HJhixwuGOEhbc9uw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudlinux.com;
-	spf=pass smtp.mailfrom=cloudlinux.com;
-	dkim=pass header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=LtslzANr;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="EwB/KxDt";
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14DF606A32C
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:54:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D14DF606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cloudlinux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudlinux.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDFD606A33C
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 06:55:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DDFD606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudlinux.com header.i=@cloudlinux.com header.a=rsa-sha256 header.s=google header.b=LtslzANr
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ae2b7e1e17so3494889a91.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:54:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EwB/KxDt
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f0afdb97abso177395ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2026 22:55:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudlinux.com; s=google; t=1795589679; x=1796194479; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6WKlTv2ikV+tMBOUuWFLT86t7HrmSdz2dy/v4nMSeg4=;
-        b=LtslzANrqDUVC6r2xqMAWZBJ7DJK4fPKRmJG+V4ApFtevl+agm1IC2jxj6tLW702N6
-         hZl+5tjJ6AdLSCmorONIJXAzep5CrzQrJDZjvJFD8sX20v7/eqKQuUhDMXLL9fdIcmjT
-         gxbMTOe8m92fmSru8vTiDYw+RMACfurJ1fxHqbSB1DnkKnk11srDCMGpbnDh3FKXVhcs
-         eZhPwhzf9J+Je9wlyYskzdaKnGxd2vmvcdURSjcmfRPgCaW3KqTAaJAphetV2Z44ilhj
-         +qx/x+ITeojXo6sA8JinDHUoVeifTKLvv2ukJ3BU5w4bND2/D+gNrTRxgBP1c9RnqREt
-         E4qw==
+        d=google.com; s=20260707; t=1795589733; x=1796194533; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JPRUbVIzxn2NwG5vGsxVyrASfvomYL0+/SGbKSIacUs=;
+        b=EwB/KxDt0HU7yu8uaDUQclnyVHMQAB9XbmrNiOaub+5kcxI0KkkIHknt2RYWVhVvtz
+         jBXQEcmwbxEIlIDvjJIgjVVgouPod3dlLCQBPAotmuJPl0B7/o6m0inVzjxGFVozgPDE
+         KcyNfoiHKV4b+ovUOKuTIuvjG3RuUAPEfV0grz1d/wAwXRRTGT5K0Kb+cm6alr0aUBwo
+         1pCBOZFRCp7VjxOQvQOh6O1YL5XpBcTTH0GoxQAKG44+Rwd2XmLYhYW0N55hJIapEuSE
+         hRory7GoOjeYXhAvk+cce7U3gwyNYby+cdXlGC0tOHa5y/Ru+36nmsS9VKUi/iEiLs2I
+         u71Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795589679; x=1796194479;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6WKlTv2ikV+tMBOUuWFLT86t7HrmSdz2dy/v4nMSeg4=;
-        b=f3bAiYt7LVvwo7hc6dWps3gBQjcd9OYQJ4El0r8Lkcdik4BnOQTAiskinCVOii6Pt4
-         +72Y3sJc06TbQCH823BUWxfEVSXwpADf0dkYgwF1a+kUBD9gjkRsZC9Y3FKYIzK3YcPf
-         G5rJpbpMad78O/5jZCn0g11wHZxIjTNO/Gq4U4igpOatX8V1/dzwIWZRrNpdXnY9FZqU
-         cKzWHMHxzw4N2A6GWeEwS1xFIAS5IsO9gbV7YKp5kRgpJ3hnqeydcIfB4iWRGzY4IwwB
-         cL4yerSITUsADZdihzeC0TTPqWnalRhlKs6iNxjvDzv10CUa5sy0fcOGZUlJ5vGodydU
-         2WlA==
-X-Forwarded-Encrypted: i=1; AL+hErGtA2PqBIlLkQyf5qITGSI5NR1NbLrNafFqTcxm/wpjmT1O+ybrLP33o/FPwAs6DipD15IkpA69ptB19AcPruo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8gFMeaa7LmCI0P1b7mH/vxaYdNh4tDsiD6PaGNRsRyL+X3KTKb
-	l+Pb4jwvLtqRj8FLAJDYwFm/ZyW2CUUHqIRbYgNQ80uckZcQkD0QmdDWwPDO0eV9TS4=
-X-Gm-Gg: AZFdTZeXzsM7RdSVnXC4LHtnG9M4vqGgABcZPY9uDBVKKlK24xCndE7UuzUCYi+69kd
-	xk/OqnIBx7TYANtu+SKH/dtHHFJJyaHbW0lm7hrCFXf/kRpBNSDMRp/uIattOPnCgDA+r5jPvB/
-	1oWeO9hDts1eS7VE2iNcuwPXydrQKZ1AnySI1NhK8uQb0DalVj90yk5WazI7lFA0xNk8HEaXAYZ
-	O8nicfi5wrg+508p80VmH1XLDiJTz4yonU9NpqmQBHHf9fLfqTFgkupONZtEaUoZ42ntKRqiUXp
-	jcSjqAT1suF/soH9d5/b0MAhaTZZtRlchFkggAmECfPbjjeSHJbd/Sspn6wKiLwfIsPz4kbX7lU
-	eUn/hEsPWykYoMPAmPbHh964B2U9rF5zn638NEVWeoz8Yoip2xuChikAfbwAAPvBtipm3x7NtF5
-	Gctffnwl9Eg2RjUF9gNYKw8Pe7yGxZvdYn9DmSDQk+pnsEw8aV3txD2FvR+a2PSv6TU4UQHoekm
-	7ljY3MObAaFJJYo7sEISXYEjKObWRblwWzQd3oiv9Elb5jfg88r4GUoWBImJtRsO89BO1lS17CL
-	wjQ1nduTpx+qAIeEthEUbxEjh/pmd3+18Zge
-X-Received: by 2002:a17:90b:2c87:b0:3ab:f2a9:cacd with SMTP id 98e67ed59e1d1-3b41c94df73mr16354240a91.49.1795589678991;
-        Tue, 24 Nov 2026 22:54:38 -0800 (PST)
-Received: from rmustafin-laptop ([27.79.41.63])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad46ef5sm26149320a91.8.2026.11.24.22.54.36
+        d=1e100.net; s=20260707; t=1795589733; x=1796194533;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JPRUbVIzxn2NwG5vGsxVyrASfvomYL0+/SGbKSIacUs=;
+        b=icL7FzePzXLhGy3dpicdysxputaWQ3CuvJ49oSXOAoHJ83hVa5FegpU/PttgaJh3IW
+         dK3dCLFATwhmms6m/ilCapcvhlfJEKxLH+Y+pkTj8eOQGNn7KEfcSGjdxXucXxIMMREy
+         RXsgt3Xps3mzHsnYGpQfz3roflaxtBTWl8YV2/e6Usp4WR+fuiQuT/fx4dSrZ61GBPBS
+         N/MsN89nZyIgRgS03O+CPD1WDrgQW9eb2PsPFwiArTgvLD0i2K0ZYvlKAcExmBrHRsIH
+         F4Q7TpyTp7SxqTMxiMCadpbz74Guad3RPdiySsprc/UoIOpg9g682pYLWkdudjO1czVr
+         8wXQ==
+X-Forwarded-Encrypted: i=1; AL+hErHoNGAmiVZ+HBkD5gxO3iVBzHzeDPHqgINh8+MUcCf2yTjh+aonSZ3OyamY0nMrFfY+ySFyymCsOCcGuLZYUFM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+xQibYC2n3tYl8gXeBOilt5Ijl6avB+YKDiSA3/9xZOvg1sn6b
+	orHvndDj9qLewUjLE9I4RJQJGKKZR3rfdOhIJt0FqUfQhDBffdCh64pmEcU7jflZyg==
+X-Gm-Gg: AZFdTZdRynIdfQBqN8CGW5oreLCHQN89EEXt1JOg32ZE1im4dzD4ZeN8iA4YEpMTGOk
+	osNi/rJi3ixRRlxoBxRbiEZGlPVxwtfbcIoiBRv15ipwszKyAs49eiouO8hU/ubwYRufA2wW5c1
+	4WJCBvJJPPqEIUtoq+PVRMCK6xt1vdBM+6+wJdykQact8TgB9Gbiu9V5n1HiDLih3dLajvT0Uxt
+	3V8Io2taSNFTs65usEBu7slDq/COo2SsW4uml8iE8veQrb3JmR+G1Q7qDvS/k6a9sORiw2cw6pf
+	fAFe4/GFdU6QOLQVm7oi36SEoDTjqAewfVHCM50yRn+iXn+fGvbMzmYnQ+oqjsHMNsS5itkO7P5
+	BPlFn0qrvUiYM73UbNkt5Ufoc1xenFUeIUkNOhLTnTZt6oHPqn4xF4hGspPftg4O9d4Mr3K+jzx
+	YVBcGtlQD6cFgfZhLIbZGqJR9fMZ1wIXEjZ+QyxBHZe/v1Nl9vL5R9d1TSA/6GvwrP7RCY8kIko
+	yDpXfaChZ64DnVvjYsQlfmpFdRF1TIYUk5LzTHR55PBuXvDO8CuaXhwCQ3QrOeWkdJJSsYX6PwK
+	wUWEL8fkUbTfhmcEfJUSZ5TxYkylpeiH9GEbQaNvD2cR4JJaJNdmWzb2SgxSTxKoyyE=
+X-Received: by 2002:a17:903:298c:b0:2e6:1013:ad57 with SMTP id d9443c01a7336-2f0666c0739mr15428995ad.12.1795589731845;
+        Tue, 24 Nov 2026 22:55:31 -0800 (PST)
+Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cfebdbasm8167972a12.13.2026.11.24.22.55.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 22:54:38 -0800 (PST)
-From: Rustam Mustafin <rmustafin@cloudlinux.com>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Shuah Khan <shuah@kernel.org>,
-	Jaewon Yang <yong010301@gmail.com>,
-	linux-integrity@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rustam Mustafin <rmustafin@cloudlinux.com>
-Subject: [PATCH v3 2/2] selftests: tpm2: test that io_uring reads are rejected
-Date: Wed, 25 Nov 2026 13:54:29 +0700
-Message-ID: <20261125065429.1483868-2-rmustafin@cloudlinux.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20261125065429.1483868-1-rmustafin@cloudlinux.com>
-References: <awXHzblUfp05jZSQ@kernel.org>
- <20261125065429.1483868-1-rmustafin@cloudlinux.com>
+        Tue, 24 Nov 2026 22:55:30 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:55:27 -0800
+From: Vipin Sharma <vipinsh@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, ajayachandra@nvidia.com, 
+	alex@shazbot.org, amastro@fb.com, ankita@nvidia.com, apopple@nvidia.com, 
+	bhelgaas@google.com, chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net, 
+	graf@amazon.com, jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, 
+	jrhilke@google.com, julianr@linux.ibm.com, kees@kernel.org, kevin.tian@intel.com, 
+	leon@kernel.org, leonro@nvidia.com, lukas@wunner.de, mattev@meta.com, 
+	michal.winiarski@intel.com, parav@nvidia.com, pasha.tatashin@soleen.com, praan@google.com, 
+	pratyush@kernel.org, rananta@google.com, rdunlap@infradead.org, rientjes@google.com, 
+	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, schnelle@linux.ibm.com, 
+	skhan@linuxfoundation.org, skhawaja@google.com, vivek.kasireddy@intel.com, witu@nvidia.com, 
+	yanjun.zhu@linux.dev, yi.l.liu@intel.com
+Subject: Re: [PATCH v6 11/27] vfio/pci: Retrieve preserved device files after
+ Live Update
+Message-ID: <20261125003759.GD3545683.vipinsh@google.com>
+References: <20261102153656.1431701-1-vipinsh@google.com>
+ <20261102153656.1431701-12-vipinsh@google.com>
+ <DMZMRTXS7OSC.M79XF39ZVEWE@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,140 +110,213 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DMZMRTXS7OSC.M79XF39ZVEWE@google.com>
 
-Test that IORING_OP_READ on /dev/tpm0 and /dev/tpmrm0 fails with -EIO and
-that the following read() returns the whole response. The test needs
-liburing-ffi (liburing 2.4+) and is skipped without it.
+On Thu, Nov 19, 2026 at 05:01:19PM -0800, David Matlack wrote:
+> On Mon Nov 2, 2026 at 7:36 AM PST, Vipin Sharma wrote:
+> > Enable userspace to retrieve preserved VFIO device files after a Live
+> > Update by implementing the retrieve() and finish() file handler
+> > callbacks.
+> >
+> > During retrieve():
+> >  * Validate the handed-over struct vfio_pci_core_device_ser header,
+> >    sizes, and flags.
+> > [...]
+> 
+> Please make the commit messages in this series easier to read. They are
+> mostly long bulleted lists of everything the code does, which is hard to
+> follow and largely repeats the diff. A commit message should explain, in
+> prose, what problem the patch solves and why it solves it this way, and
+> only call out details that a reviewer can't easily get from the code.
+> This applies to most of the patches in the series (e.g. PATCH 07 and
+> PATCH 13 too).
+> 
 
-Signed-off-by: Rustam Mustafin <rmustafin@cloudlinux.com>
----
+ I will do a better a job in the next version.
 
- tools/testing/selftests/tpm2/Makefile      |  2 +-
- tools/testing/selftests/tpm2/test_uring.sh | 15 +++++
- tools/testing/selftests/tpm2/tpm2_tests.py | 72 ++++++++++++++++++++++
- 3 files changed, 88 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/tpm2/test_uring.sh
+> > Do not implement can_finish(): closing a retrieved LUO session invokes
+> > finish, and refusing can_finish() would leak the session and leave
+> > unclaimed devices running. Instead, finish() always completes:
+> >  * If the retrieved device was claimed by opening it via
+> >    VFIO_DEVICE_BIND_IOMMUFD (which consumes vdev->liveupdate_incoming;
+> >    subsequent patches replace the open-time reset with non-reset
+> >    take-over, reject opening incoming devices other than via retrieve(),
+> >    and protect incoming kept-running devices across runtime PM, dev_set
+> >    resets, and non-noiommu boots), finish() simply completes its PCI
+> >    Live Update participation.
+> >  * If the device was not claimed (never retrieved, retrieve() failed, or
+> >    retrieved but never bound via VFIO_DEVICE_BIND_IOMMUFD),
+> >    vfio_pci_core_liveupdate_reset() logs one pci_warn() naming the
+> >    device, clears PCI_COMMAND_MASTER, resets the function, and restores
+> >    the inherited pci_saved_state just as closing the device would. If
+> >    the device has a function reset but is not reset, e.g. because
+> >    pci_dev_trylock() contends with a concurrent driver unbind, latch
+> >    vdev->liveupdate_reset_pending so vfio_pci_core_unregister_device()
+> >    completes the function reset and state restoration via
+> >    vfio_pci_core_liveupdate_reset_locked() under the device lock held by
+> >    device_release_driver(). Opening the device after finish() resets it
+> >    like any open, so it drops the latch.
+> >  * If the device was not retrieved, look it up under pci_dev_lock(),
+> >    which waits for a vfio-pci probe in progress. If it is bound to
+> >    vfio-pci, finish it as above. If it has no driver, clear bus
+> >    mastering and reset it. Otherwise leave it to the bound driver.
+> >  * Call pci_liveupdate_finish() and kho_restore_free() on every path.
+> 
+> This is a lot of complexity for one commit, and it's hard to review. I'd
+> like to start with the simplest approach and build from there: implement
+> can_finish() and have it return false until the device is fully
+> retrieved, i.e. retrieved and taken over by VFIO_DEVICE_BIND_IOMMUFD.
+> Then finish() only needs to free the incoming state and call
+> pci_liveupdate_finish().
 
-diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
-index a9bf9459fb25..44630fb980fa 100644
---- a/tools/testing/selftests/tpm2/Makefile
-+++ b/tools/testing/selftests/tpm2/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- include ../lib.mk
- 
--TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
-+TEST_PROGS := test_smoke.sh test_space.sh test_async.sh test_uring.sh
- TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
-diff --git a/tools/testing/selftests/tpm2/test_uring.sh b/tools/testing/selftests/tpm2/test_uring.sh
-new file mode 100755
-index 000000000000..516985ef20af
---- /dev/null
-+++ b/tools/testing/selftests/tpm2/test_uring.sh
-@@ -0,0 +1,15 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -e /dev/tpm0 ] || exit $ksft_skip
-+[ -e /dev/tpmrm0 ] || exit $ksft_skip
-+read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
-+[ "$tpm_version" = 2 ] || exit $ksft_skip
-+
-+python3 -c 'import sys, tpm2_tests
-+sys.exit(not tpm2_tests.uring_available())' || exit $ksft_skip
-+
-+python3 -m unittest -v tpm2_tests.UringTest 2>&1
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index ffe98b5c8d22..6fe60e00ff06 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -9,6 +9,7 @@ from tpm2 import ProtocolError
- import unittest
- import logging
- import struct
-+import errno
- 
- class SmokeTest(unittest.TestCase):
-     def setUp(self):
-@@ -331,3 +332,74 @@ class AsyncTest(unittest.TestCase):
- 
-         self.assertEqual(rc, 22)
-         async_client.close()
-+
-+def uring_available():
-+    import ctypes.util
-+
-+    name = ctypes.util.find_library('uring-ffi')
-+    if not name:
-+        return False
-+    lib = ctypes.CDLL(name)
-+    ring = ctypes.create_string_buffer(1024)
-+    if lib.io_uring_queue_init(1, ring, 0) < 0:
-+        return False
-+    lib.io_uring_queue_exit(ring)
-+    return True
-+
-+def uring_read(fd, size):
-+    import ctypes.util
-+
-+    lib = ctypes.CDLL(ctypes.util.find_library('uring-ffi'))
-+    lib.io_uring_get_sqe.restype = ctypes.c_void_p
-+    lib.io_uring_prep_read.argtypes = [ctypes.c_void_p, ctypes.c_int,
-+                                       ctypes.c_void_p, ctypes.c_uint,
-+                                       ctypes.c_uint64]
-+    ring = ctypes.create_string_buffer(1024)
-+    ret = lib.io_uring_queue_init(1, ring, 0)
-+    if ret < 0:
-+        raise OSError(-ret, 'io_uring_queue_init')
-+    try:
-+        buf = ctypes.create_string_buffer(size)
-+        lib.io_uring_prep_read(lib.io_uring_get_sqe(ring), fd, buf, size, 0)
-+        ret = lib.io_uring_submit(ring)
-+        if ret < 0:
-+            raise OSError(-ret, 'io_uring_submit')
-+        cqe = ctypes.c_void_p()
-+        ret = lib.io_uring_wait_cqe(ring, ctypes.byref(cqe))
-+        if ret < 0:
-+            raise OSError(-ret, 'io_uring_wait_cqe')
-+        # cqe->res follows the 64-bit user_data
-+        res = ctypes.c_int.from_address(cqe.value + 8).value
-+    finally:
-+        lib.io_uring_queue_exit(ring)
-+
-+    return res
-+
-+class UringTest(unittest.TestCase):
-+    def read_response(self, flags):
-+        client = tpm2.Client(flags)
-+        fmt = '>HII III'
-+        cmd = struct.pack(fmt,
-+                          tpm2.TPM2_ST_NO_SESSIONS,
-+                          struct.calcsize(fmt),
-+                          tpm2.TPM2_CC_GET_CAPABILITY,
-+                          tpm2.TPM2_CAP_TPM_PROPERTIES,
-+                          tpm2.TPM2_PT_FIXED, 1)
-+        try:
-+            client.tpm.write(cmd)
-+            res = uring_read(client.tpm.fileno(), 4096)
-+            # The rejected read must leave the whole response in place
-+            rsp = client.tpm.read(4096)
-+        finally:
-+            client.close()
-+
-+        self.assertEqual(res, -errno.EIO)
-+        sz, rc = struct.unpack('>II', rsp[2:10])
-+        self.assertEqual(sz, len(rsp))
-+        self.assertEqual(rc, 0)
-+
-+    def test_read_tpm(self):
-+        self.read_response(0)
-+
-+    def test_read_tpmrm(self):
-+        self.read_response(tpm2.Client.FLAG_SPACE)
--- 
-2.52.0
+Closing session FD is not retriable. If it returns an error then
+userspace won't be able to retry. So, only option will remain to reboot
+the host.
 
+VFIO doesn't need to impose this restriction. We discussed in LPC to not
+block finish() as this call can only be tried one time in LU if
+session is leaked.
+
+> 
+> That gets rid of vfio_pci_core_liveupdate_reset(),
+> vfio_pci_core_liveupdate_reset_locked(),
+> vfio_pci_liveupdate_finish_lookup() and its bridge and device locking,
+> liveupdate_reset_pending, and most of the finish documentation. If you
+> want to handle the other scenarios (devices that are never retrieved or
+> never bound, devices bound to other drivers, unbind racing with finish),
+> please add them in separate commits on top, each with its own
+> justification.
+> 
+> As for closing the session leaking it and leaving unclaimed devices
+> running: that only happens if userspace closes the session without
+> taking over all of its devices, and leaving the device running with its
+> memory still preserved is safe. Resetting the device in that case is
+> something that can be added later.
+> 
+> It also has a nice side effect: LUO calls can_finish() on every file in
+> a session before finishing any of them, so a memfd in the same session
+> that the device DMAs into can't be finished before the device has been
+> taken over.
+
+If userspace has two session, memfd in one and vfio in another, we will
+still have risk, where memfd is retrieved correctly and may be
+closed/released due to a process crash but VFIO device still acessing memory
+by continuing its DMA and potentially corrupting memory.
+
+I am still inclined to let finish proceed without blocking via
+can_finish(). I can try splitting patches.
+> 
+> > +static int
+> > +vfio_pci_liveupdate_attach_incoming(struct vfio_pci_core_device *vdev,
+> > +				    struct vfio_pci_liveupdate_incoming *in)
+> > +{
+> > +	guard(mutex)(&vdev->vdev.dev_set->lock);
+> > +
+> > +	if (vdev->liveupdate_incoming || vdev->liveupdate_claimed ||
+> > +	    !pci_liveupdate_is_incoming(vdev->pdev))
+> > +		return -EBUSY;
+> > +
+> > +	vdev->liveupdate_incoming = in;
+> > +	return 0;
+> > +}
+> 
+> The pci_liveupdate_is_incoming() check here is redundant with the one in
+> vfio_pci_liveupdate_retrieve(). Nothing can clear it in between, since
+> only finish() should do that (see below) and LUO holds the session mutex
+> across both retrieve and finish.
+> 
+> The liveupdate_claimed check is redundant too: LUO only lets a token be
+> retrieved successfully once, PATCH 12 prevents opening an incoming
+> device any other way, and the liveupdate_incoming check already prevents
+> attaching twice.
+
+I will remove it.
+
+> 
+> > +	if (!pci_liveupdate_is_incoming(pdev) ||
+> > +	    ser->cfg_size != pdev->cfg_size) {
+> > +		ret = -EINVAL;
+> > +		goto out_put_dev;
+> > +	}
+> 
+> If the device isn't incoming here, that's a kernel bug. The previous
+> kernel only preserves the file after pci_liveupdate_preserve()
+> succeeds, the PCI core marks the device incoming when it's enumerated,
+> and only VFIO's finish() should clear it. So this should be a
+> WARN_ON_ONCE().
+
+I will add a WARN_ON_ONCE().
+
+> 
+> > +	if (pci_liveupdate_is_incoming(pdev))
+> > +		pci_liveupdate_finish(pdev);
+> > +}
+> 
+> Likewise, the device must still be incoming here, so
+> pci_liveupdate_finish() can be called unconditionally.
+> 
+
+Yes, I will remove it.
+
+> > +static inline void
+> > +vfio_pci_liveupdate_unregister_dev(struct vfio_pci_core_device *vdev)
+> > +{
+> > +	struct pci_dev *pdev = vdev->pdev;
+> > +
+> > +	scoped_guard(mutex, &vdev->vdev.dev_set->lock) {
+> > +		/*
+> > +		 * Complete a reset that finish() could not do, see
+> > +		 * vfio_pci_liveupdate_finish_vdev().
+> > +		 */
+> > +		if (vdev->liveupdate_reset_pending) {
+> > +			vfio_pci_core_liveupdate_reset_locked(vdev);
+> > +			vdev->liveupdate_reset_pending = false;
+> > +		}
+> > +		vfio_pci_liveupdate_free_incoming(vdev);
+> > +	}
+> > +
+> > +	if (pci_liveupdate_is_incoming(pdev))
+> > +		pci_liveupdate_finish(pdev);
+> > +}
+> 
+> VFIO should only call pci_liveupdate_finish() from its finish()
+> callback (see the kernel-doc of pci_liveupdate_finish()).
+> 
+> If vfio-pci is unbound from an incoming device before finish(), it
+> should just leave the device and its Live Update state alone. That's
+> fine: if vfio-pci is bound to the device again, the device is still
+> incoming and can still be retrieved. And once the device has been
+> retrieved, LUO holds a reference to the device file until finish(), so
+> vfio_unregister_group_dev() already blocks unbinding it like it does for
+> any other open device file.
+> 
+> If userspace binds a different driver to the device instead, that's
+> userspace's problem. The PCI core documentation already says it is the
+> user's responsibility to ensure that incoming preserved devices are
+> bound to the correct driver.
+> 
+> So I don't think the unbind path needs any Live Update handling at all.
+
+I think this should be doable.
+
+> 
+> >  #ifdef CONFIG_VFIO_PCI_LIVEUPDATE
+> >  	bool			liveupdate_frozen;
+> >  	bool			liveupdate_intx_disabled;
+> > +	bool			liveupdate_claimed;
+> > +	bool			liveupdate_reset_pending;
+> > +	struct vfio_pci_liveupdate_incoming *liveupdate_incoming;
+> >  #endif
+> 
+> With the simpler finish(), I don't think liveupdate_claimed or
+> liveupdate_reset_pending are needed.
+> 
+> PATCH 13 later inverts liveupdate_claimed into liveupdate_kept_running
+> and uses it to block dev_set resets while a preserved device is still
+> running. That can use pci_liveupdate_is_incoming() instead. It blocks
+> resets until finish() rather than until take-over, but since finish()
+> now requires take-over, userspace controls that window. If some flag is
+> still needed later, please introduce it once with its final name and
+> meaning instead of adding it here and inverting it in PATCH 13.
