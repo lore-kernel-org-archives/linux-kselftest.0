@@ -1,111 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795629929;
-	b=OWFwycRyxVx0+m5s0wAhsZz7NX8HueRKh1K+wD3Fw0MaHUvk4qG61SWDDr0fQOCmRRat
-	 Yj9vpPN3dWXPDkaRamJ6hSCPnm1NZqYY946xHh1RtYhTKnsnojooKy/s/IdPsLcq/7yMl
-	 ptE0WYxY06TAUOw4GdnZDHoxF6WUknOKw8tgVYIFn5E+0oMvF65ubGsoIpjDu5wpzpE0V
-	 icaYtaUgrSYcDw+ovBKkGYrOAO8Wh8Zge4FyufeG4j6mkDLLNViF0ksaD0+s8C7hNkF+2
-	 6/du0Xj4BkMh7GNfJoBpHG9cETM5wOECPSzPOWZoqYA0xUB5zYx3MLgxAnXhdeoc2RA==
+	t=1795630116;
+	b=H3IonOkcMz6nmg+LsJYwwwJtSSLj5qTc0R7W1Z6FUtHg5e2akzgXH+gZN8NjXM5MsZa2
+	 YSdQVsZcGXFl2e00eOKlEZxD7Ykq7LZhpkkMbdqYsO8ZREakSYdQ3TLDOsTelqi2qGlkn
+	 GZ0DoozmekKB2UFyFt7Lmnq2OjD8/sMlFKcgWqThMwGFRjQ/rH4Xg8v2TPJaVafJfOaZq
+	 HPczea8ZYTH9D8ToNGDNDnYF+beshZwO+X3MTNtVez2qgaQ0U/t3W7PIxg2FPcWgmbggK
+	 VlpIQ8rwA7G7dKLnTvcWLU5uVdBHGYi2Eh+OMpLGSETcIwyBBPJeLm85dplYMwo9TXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795629929;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type:Content-Transfer-Encoding;
-	bh=gq3lctPAnaFDAVkMBu87KEcU4DFbiZw2CZrSkFgNdv0=;
-	b=LDUwm4s8Qhb2+uvx9AUTacQSoaO4aLyyQYMdUaP8S9D8qWU9Bszs0tz3esEwir6yQDIJ
-	 sSPYObWmRxn7zUxj0i8wE+dotHvAKOSU5DPHNuh9gRu2yuEJfSHFsuXqnRygrZGNLbJVz
-	 uMX0LAaLnsULzfUK770r1+EG/mnneF7hvaQvJnYoSYZOkP1OyvAmuL5BY21LXX2tI2aEk
-	 V3oYfF0tc5THfBhNCe7hwqlnaNe0OH+XmgCeORLvHRn0MhIzd6xESHiC09n5iaP4dhNI8
-	 l6y+2Lbteo4nH9KirzhyYDi3gR3Sion+tKLsU4Yz1dns7eSK/tQRr28wfcUg2tZlZeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795630116;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=eNx5ZwxwQF3pCAIZSJDgbBLvyG1xG91t2PRrZIJMuvY=;
+	b=2LZDQ4FroWytD8A/AAIuBSx9g4z6NPoyMSCGPd10G8gWRVYLqXXJe1w9iFFrIiZEn3z2
+	 FSAehcGsqjVKrKHkcvRLIqPZK2iZ1pJehZMSzcyakffX6NXpMFMLtMietXkKZ/191yOW9
+	 oI63SIttMCDPpD9+Oz6tRmT3sVqckKIHMzRat4IjHKyks1SbY2iQQlNvkEajN6AksQt6T
+	 HLhozVpPmNendFN1M9Qpje2dRoKnNEQJkInyXRj00YaPHwLGOavwq4/KasTDzhiqXZneR
+	 P89VlGcVL687CofGHH16m80rxWFaoeGuSpFkE1I/qr/L779pRHyGEeD4+gPAImArXJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fastmail.im;
-	spf=pass smtp.mailfrom=fastmail.im;
-	dkim=pass header.d=fastmail.im header.i=@fastmail.im header.a=rsa-sha256 header.s=fm3 header.b=LoEInkYK;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=HFn1e3OJ;
-	arc=none smtp.remote-ip=202.12.124.148
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hz1BodnZ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554E3606A333
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:05:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 554E3606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.im
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2AF606A31E
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=fastmail.im header.i=@fastmail.im header.a=rsa-sha256 header.s=fm3 header.b=LoEInkYK;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=HFn1e3OJ
-Received: from ams-compute-01.internal (ams-compute-01.internal [10.64.2.61])
-	by mailfout.stl.internal (Postfix) with ESMTP id 990401D00625
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 13:05:27 -0500 (EST)
-Received: from ams-imap-19 ([10.64.2.39])
-  by ams-compute-01.internal (MEProxy); Wed, 25 Nov 2026 13:05:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.im; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1795629920;
-	 x=1795716320; bh=gq3lctPAnaFDAVkMBu87KEcU4DFbiZw2CZrSkFgNdv0=; b=
-	LoEInkYKTNn327V/ZsN+4DUhSLmhoHiZWVl+SqszlI5edoio/0SsH6yXEVPw4FKK
-	SUpda78W0L4XbEHNizhz+v7VDWBghFEQB82LlzDvuGvBq7Cm8kXSKHDBibnZOXjD
-	+GOil/fJulzrJWCZiW0KB8v9xjC0XNZhsa0ZYyuzsVETVoGz76mgwLH4r0WFa4Oq
-	SYzqgTknc/6nPBPQJD3n1pqVSNOdSokbKxKc4nHkwNbfkhmQ55NpgwUqZT2dnXqv
-	uzGWSgymCfbxWM364ijt/IVZXoAuE94S+gtc4kgIDHMszU06zpWOOhlJnaq49RWB
-	YIhsuGSCt0gBZx2Qnp3nqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795629920; x=
-	1795716320; bh=gq3lctPAnaFDAVkMBu87KEcU4DFbiZw2CZrSkFgNdv0=; b=H
-	Fn1e3OJ5JHQBM2BjfRRMovLEl8ZlXSpPisedTf4GLuZgameMeUeT9tm8/hmt/KrR
-	wLBVtHn4t5Qmb/s2KCDKjfRNF/ybnCcb70jX0teWrSWKLE8kf6sY57ljuDTSIIPa
-	bXlOe73p64bWVJ0wlsji/31YU/06zIAwDnVfqM3L1z2OltUxHBlb+rPD9f2s/GZ2
-	pMy4p4vmZifIlzarfBa5ZJKi7z4TR6B/Nhnchhwnw9GOwceVWeY3gLDPopj93kgv
-	VY47SJ9M8evjha1YMtP0aLHTFyOhTDgYCeR2Gm1AwiHLcCJEEUnzzzW1QXdnAxCb
-	DsNyu5Muwr7zuEgbBVqjQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=fastmail.im a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1795629920; d=fastmail.im;
-	mf=PGFsaWNlLmtlcm5lbEBmYXN0bWFpbC5pbT4=;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm3:rsa-sha256:i/qYqqEOiFBpKYCjuWjteYdbwRgEjiLVXeZp2dhJoRtep/5
-	6ELz/TxQtbaM6w7W9GVqP42to/jFa0swLMKbDhxaDiWkTj39IHTEeWKHMe3mk+f1
-	bpF0o9MxwDaIKgXB0h1tpI3y+LcLsZRbiCOaOUbkzQo5bR5iW1XcTY7clsR5NL67
-	vPgRFN6V7tURA+tLHw//qHOih8tPwquhYl+icBmJSXf7mv150gAPmI6JvYGLJb85
-	VoI1aOH4YH4qIBkMLKaUFqCj0TXE1HgPA0vgNuVQ+jEDmLyCb5YAdeOl0SfE1r7x
-	hRTNxZy3WO/oh9+no1gLx1vfu17SjJlUGl9I6Yg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:IEyVUc2R//xhEGEphG7IDG66ZkpiFyZ3FP6KGpVAk2g=:756KKTwRcKpirNmTmOP5ZFUYVirFIXOStTDGQD4Ad5k=;
-X-ME-Sender: <xms:WyMHaxUnJutPelKlH5b3eZF6S5gA-_Iao5j5fR5pibxsohZKEEFkTg>
-    <xme:WyMHa8ZVRn-mCxy94SJ9gjC9Om_Tyrv5eB3rluFHUwZO7rc6WrL_mceVlVnD9M-HP
-    uEJKARx0MgJ6nXBkWdlDWMHSp9uAhkKyyc_9nB3Mqwv1Nzi6Dupsr5pQA>
-X-ME-Proxy-Cause: dmFkZTG3IahGvKYf+slUa5xPUppAJQM0Tl4EtXiPI1a1U2PtkCa13BIsLl81Ygt7hPYIkN
-    3TA0vAXvoh2Bbi9WaoCpACgBTj21h9U5pue9pNSCdhrbqcMqWeKmOiL4i5guQjv5jHl+ZZ
-    qtUIo773PWtDcYvmJ09Mt+fxk3FtQ02mkJg5+I4WGaqvbxtf86Wj3v/NnObeXa7wGx3/nT
-    Aas86WiLS3I0MSKSmTRw9eSPe2RtEBLL4dhRBI9u6zqJYSloql6MMLrvXJz4Snj665b6Jk
-    WC7YRRLTkQUt6Ama4pXg/GQGPZMd9MohnnK9E4IAwxKyIVhVMUUu+J7J3QC7/mxp+1r9Dk
-    WbvyKcpWltLPx1pwSSNKkldHpLduspvQQEFYsxw+6fHeas69/LB1ozhyh0fz0z4djukHZu
-    a9T8DVnhlZz47OMPY0Boa/yAj8xyysF2Jg4PYNAKwivtct0rgysXHx8ueWP3jw0qXhoHSw
-    YHqRIVYuyRvyi7Qld+Y7lpkqaiyWNXiQMQFipIp12Vy/1ydSV/yeEF9hF7UtHAXyzI9sf1
-    SUzzvncRluQA+9a/Req+zEIJWXpkqncTYiO+X5vBWiOGMX8dQNbFuQW3f+U5Y+/fseeniG
-    F0e8gufCqLgmrP5y7W3serqPQ+h5JsNbTNLfdipNwrelJj/xli0Y/gjQ9Eeg
-X-ME-Proxy: <xmx:XSMHa7Eg50aMgG0uIYuCdLB14X9Ty6_GapR8wBXseVA28kFfArcVsQ>
-    <xmx:XSMHa-2QYd6WXyuc-9PM-g8ADPc8sbWWWszymDZxEfsGnQr1VkjBWQ>
-    <xmx:XSMHa7KtJRHkmXDMLjaGNn_EwKi_VHJNRRKV15c9lXaGoYYV507Lcw>
-    <xmx:XSMHa70s27AxGdhG_yg7lbMO07XFvj2KRqz0QokoV9C9hksjIyopuA>
-    <xmx:YCMHa0x6rD5Vy7RsiqF3DhkSaB25yh4e7iLU665XAZ8BuWcLGaeX3S8w>
-Feedback-ID: i559e4809:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 232242F8005A; Wed, 25 Nov 2026 13:05:15 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hz1BodnZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03EA11F00A19
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:08:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795630116;
+	bh=eNx5ZwxwQF3pCAIZSJDgbBLvyG1xG91t2PRrZIJMuvY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=hz1BodnZcBZT/KUwNGE15a/sxBOr1vuiHCkTfm7U6wkJkAQdx0ore508uH+2Dx2cx
+	 YU6ThbEHy3L5YaWUAx1ZkYdNoqGrUskSAJKSsLpYfKR/ewNgQuQelvtdeWq+anG+tf
+	 hux2kmccH24GanEaohs+3C8bKyd85w2TaippKDpmJLPYoe8o6vCBtighNFHySpYc/2
+	 9rxxShcP+EpmowKq2i0l6jHMgeuarQlzPXHXtN3tDoj/ReAseB5Tyi8llFQ2q4Lb5o
+	 Cn1apVqM9Ied3S1tfgh0b9UyremBYtzFylKEiEko+rBtW1FCZsepAENxuWxwQ95/ww
+	 hH6qxEtD8gFSw==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5c15956ce07so5665917e87.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:08:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErGu7bY7TRLlmYwBtBRJpVaGCfEoXeCMj/4epIjJnh1u4WKnqNY7xZNedBZCgpZYQdWEnbH82l4t7QQXgavbvIE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+VVNIUZvWEeK9yyQrO3VyAetYqqvsGDe/3fmo3ZtpSg+wR0zSZ
+	Ji44APzBIOll+d8ya07a2zEa+xPcbou7V+dnbcC30/mL4cw5NHtr1UTIRUXrZhKFY1+OOvoAbn+
+	tFZdF+bzJLsYgTtuoi9Nw+yAg2FxhudU=
+X-Received: by 2002:a05:6512:85c6:10b0:5c3:182f:bac5 with SMTP id
+ 2adb3069b0e04-5c3182fbd1fmr1537008e87.0.1795630114620; Wed, 25 Nov 2026
+ 10:08:34 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,252 +59,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Wed, 25 Nov 2026 20:04:52 +0200
-From: "Alice Mikityanska" <alice.kernel@fastmail.im>
-To: "Haishuang Yan" <yanhaishuang@cmss.chinamobile.com>,
- netdev@vger.kernel.org
-Cc: "David Ahern" <dsahern@kernel.org>, "Ido Schimmel" <idosch@nvidia.com>,
- "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <d95b320a-d7de-4a93-9714-192894bb5b76@app.fastmail.com>
-In-Reply-To: <20261124013124.3693-7-yanhaishuang@cmss.chinamobile.com>
-References: <20261124013124.3693-1-yanhaishuang@cmss.chinamobile.com>
- <20261124013124.3693-7-yanhaishuang@cmss.chinamobile.com>
-Subject: Re: [PATCH net-next 6/6] selftests: net: big_tcp_tunnels: Cover IP tunnels
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20261111114225.3977243-1-ruanjinjie@huawei.com> <20261111114225.3977243-2-ruanjinjie@huawei.com>
+In-Reply-To: <20261111114225.3977243-2-ruanjinjie@huawei.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Wed, 25 Nov 2026 19:08:22 +0100
+X-Gmail-Original-Message-ID: <CAD++jL=mQ8h=6zGUBcc3F9mrafft7V0_tx=jTuv6U7y0ivqNqw@mail.gmail.com>
+X-Gm-Features: Aa3M54q6226d-LNf-pEP1kf8MunikGkNJM-jG6MXhZoLCqA1MQYdS9z2y0_SJt8
+Message-ID: <CAD++jL=mQ8h=6zGUBcc3F9mrafft7V0_tx=jTuv6U7y0ivqNqw@mail.gmail.com>
+Subject: Re: [PATCH v21 01/15] arm64: ptrace: Fix spurious pseudo-single-step
+ for PTRACE_SYSEMU_SINGLESTEP
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, 
+	oleg@redhat.com, shuah@kernel.org, kees@kernel.org, luto@amacapital.net, 
+	wad@chromium.org, peterz@infradead.org, ada.coupriediaz@arm.com, 
+	kevin.brodsky@arm.com, anshuman.khandual@arm.com, thuth@redhat.com, 
+	james.morse@arm.com, yeoreum.yun@arm.com, vladimir.murzin@arm.com, 
+	broonie@kernel.org, ryan.roberts@arm.com, liqiang01@kylinos.cn, 
+	mathieu.desnoyers@efficios.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 24, 2026, at 03:31, Haishuang Yan wrote:
-> Now that ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap allow BIG
-> TCP too, run the same checks over them as for vxlan, geneve and
-> bareudp, without encapsulation and with FOU, and with GUE too on an
-> IPv4 underlay.
->
-> sit only carries IPv6, and is only run with veth tx checksum offload
-> enabled: GRO does not build sit packets larger than 64KB, so with
-> software GSO on the sender the receiver does not see any BIG TCP
-> packet.
->
-> fou is not loaded on demand when it is built as a module, so load fou
-> and fou6 first, like pmtu.sh does.
->
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-> ---
->  .../testing/selftests/net/big_tcp_tunnels.sh  | 131 +++++++++++++++++-
->  1 file changed, 128 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh 
-> b/tools/testing/selftests/net/big_tcp_tunnels.sh
-> index 9c1482b842b..9f185eb2065 100755
-> --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
-> +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
-> @@ -1,7 +1,9 @@
->  #!/usr/bin/env bash
->  # SPDX-License-Identifier: GPL-2.0
->  #
-> -# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp 
-> tunnels.
-> +# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp 
-> tunnels,
-> +# and over ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap 
-> tunnels,
-> +# without encapsulation and with FOU and GUE.
-> 
->  source "$(dirname "$0")/lib.sh"
-> 
-> @@ -17,6 +19,8 @@ CLIENT_IP6="2001:db8::1:2"
->  CLIENT_IP4_TUN="192.168.2.2"
->  CLIENT_IP6_TUN="2001:db8::2:2"
-> 
-> +FOU_PORT=5555
-> +
->  # Kselftest framework requirement - SKIP code is 4.
->  ksft_skip=4
-> 
-> @@ -71,15 +75,80 @@ setup_bareudp() {
->  	return 1
->  }
-> 
-> +# $1: tunnel type, $2: traffic family
-> +# Prints the IP protocol carried by FOU for this tunnel.
-> +fou_ipproto() {
-> +	case "$1" in
-> +	ipip)
-> +		echo 4
-> +		;;
-> +	sit)
-> +		echo 41
-> +		;;
-> +	ip6tnl)
-> +		if [ "$2" = 4 ]; then
-> +			echo 4
-> +		else
-> +			echo 41
-> +		fi
-> +		;;
-> +	*)
-> +		echo 47
-> +		;;
-> +	esac
-> +}
-> +
-> +# Create an IP tunnel device, with FOU or GUE encapsulation if requested.
-> +# $1: netns, $2: device, $3: tunnel type, $4: tunnel family,
-> +# $5: traffic family, $6: encapsulation (none, fou or gue),
-> +# $7: local underlay address, $8: remote one
-> +setup_ip_tunnel() {
-> +	local encap_args=()
-> +	local fou_args=()
-> +	local mode=()
-> +
-> +	if [ "$4" = 6 ]; then
-> +		fou_args=(-6)
-> +	fi
-> +	if [ "$6" = fou ]; then
-> +		ip -netns "$1" fou add port "$FOU_PORT" \
-> +			ipproto "$(fou_ipproto "$3" "$5")" "${fou_args[@]}" ||
-> +			return 1
-> +	elif [ "$6" = gue ]; then
-> +		ip -netns "$1" fou add port "$FOU_PORT" gue "${fou_args[@]}" ||
-> +			return 1
-> +	fi
-> +	if [ "$6" != none ]; then
-> +		encap_args=(encap "$6" encap-sport auto encap-dport "$FOU_PORT")
+On Wed, Nov 11, 2026 at 12:43=E2=80=AFPM Jinjie Ruan <ruanjinjie@huawei.com=
+> wrote:
 
-Suggestion: also set encap-csum to cover correct handling of the outer
-UDP checksum (IPv4 underlay), especially for the software checksum case
-(but useful for csum offload too). encap-udp6-csum (incorrectly called
-encap-csum6 in iproute2 help) should be on by default, but encap-csum
-seems to be off by default.
+> PTRACE_SYSEMU_SINGLESTEP sets both _TIF_SYSCALL_EMU and _TIF_SINGLESTEP.
+> Since commit ac2081cdc4d99 ("arm64: ptrace: Consistently use
+> pseudo-singlestep exceptions"), syscall_trace_exit() injects a
+> pseudo-single-step SIGTRAP (si_code SI_USER) whenever _TIF_SINGLESTEP is
+> set, including for an emulated system call.
+>
+> That pseudo-step was added for PTRACE_SINGLESTEP: the system call runs,
+> and the tracer must get a stop at the return address to inspect the
+> result. An emulated system call does not run, and its syscall-enter-stop
+> already reports the SVC, as the x86 implementation and generic entry
+> (report_single_step()) both say. The extra stop is wrong:
+>
+> 1) Stepping armed before the SVC (the normal case). The SVC exception
+>    leaves the step pending (SPSR_EL1.SS is 0, Arm ARM D2.11.5.1), so the
+>    hardware step is taken at the return address anyway, and the tracer
+>    now stops there twice without the tracee executing anything:
+>
+>         syscall-enter-stop  pc=3DL
+>         pseudo-step         pc=3DL    si_code=3DSI_USER  <- added by that=
+ commit
+>         hardware step       pc=3DL    si_code=3DTRAP_TRACE
+>         hardware step       pc=3DL+4
+>
+> 2) Stepping armed after the SVC, e.g. a tracer resuming a
+>    PTRACE_EVENT_SECCOMP stop with PTRACE_SYSEMU_SINGLESTEP. The first
+>    stop is the pseudo-step at L, so the instruction at L is not
+>    executed before the step is reported. Before that commit, and on
+>    x86, the first stop follows the instruction at L.
+>
+> Skip the pseudo-step when _TIF_SYSCALL_EMU is set, as generic entry
+> does. The behaviour of PTRACE_SYSEMU_SINGLESTEP goes back to what it was
+> before that commit. PTRACE_SINGLESTEP is unaffected and still gets the
+> pseudo-step, so both problems fixed by that commit stay fixed.
+>
+> Only tracers using PTRACE_SYSEMU_SINGLESTEP see the difference. Measured
+> in QEMU, L is the instruction after the SVC:
+>
+>   case          before that commit   v7.4-rc1      this patch
+>   normal        L, L+4               L, L, L+4     L, L+4
+>   after seccomp L+4                  L             L+4
+>
+> Fixes: ac2081cdc4d99 ("arm64: ptrace: Consistently use pseudo-singlestep =
+exceptions")
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
-> +	fi
-> +	if [ "$3" = ip6tnl ]; then
-> +		if [ "$5" = 4 ]; then
-> +			mode=(mode ipip6)
-> +		else
-> +			mode=(mode ip6ip6)
-> +		fi
-> +	fi
-> +
-> +	ip -netns "$1" link add "$2" type "$3" "${mode[@]}" \
-> +		local "$7" remote "$8" "${encap_args[@]}"
-> +}
-> +
-> +# $1: tunnel type, $2: tunnel family, $3: veth tx csum offload,
-> +# and for IP tunnels: $4: traffic family, $5: encapsulation
->  setup_tunnel() {
-> +	local name="${1^^}"
-> +
-> +	if [ "${5:-none}" != none ]; then
-> +		name="$name/${5^^}"
-> +	fi
->  	if [ "$2" = 4 ]; then
->  		SERVER_IP="$SERVER_IP4"
->  		CLIENT_IP="$CLIENT_IP4"
-> -		echo "Setting up ${1^^} over IPv4, veth tx csum offload $3"
-> +		echo "Setting up $name over IPv4, veth tx csum offload $3"
->  	else
->  		SERVER_IP="$SERVER_IP6"
->  		CLIENT_IP="$CLIENT_IP6"
-> -		echo "Setting up ${1^^} over IPv6, veth tx csum offload $3"
-> +		echo "Setting up $name over IPv6, veth tx csum offload $3"
->  	fi
-> 
->  	case "$1" in
-> @@ -95,6 +164,10 @@ setup_tunnel() {
->  		setup_bareudp "$CLIENT_NS" tun0 "$CLIENT_IP" "$SERVER_IP" ||
->  			return 1
->  		;;
-> +	*)
-> +		setup_ip_tunnel "$CLIENT_NS" tun0 "$1" "$2" "$4" "$5" \
-> +			"$CLIENT_IP" "$SERVER_IP" || return 1
-> +		;;
->  	esac
->  	ip -netns "$CLIENT_NS" link set tun0 up
->  	ip -netns "$CLIENT_NS" addr replace "$CLIENT_IP4_TUN/24" dev tun0
-> @@ -115,6 +188,10 @@ setup_tunnel() {
->  		setup_bareudp "$SERVER_NS" tun1 "$SERVER_IP" "$CLIENT_IP" ||
->  			return 1
->  		;;
-> +	*)
-> +		setup_ip_tunnel "$SERVER_NS" tun1 "$1" "$2" "$4" "$5" \
-> +			"$SERVER_IP" "$CLIENT_IP" || return 1
-> +		;;
->  	esac
->  	ip -netns "$SERVER_NS" link set tun1 up
->  	ip -netns "$SERVER_NS" addr replace "$SERVER_IP4_TUN/24" dev tun1
-> @@ -127,9 +204,22 @@ setup_tunnel() {
->  	ip netns exec "$SERVER_NS" ethtool -K link1 tx-checksumming "$3" > /dev/null
->  }
-> 
-> +# For IP tunnels: $1: tunnel family, $2: encapsulation
->  cleanup_tunnel() {
-> +	local fou_args=()
-> +	local ns
-> +
->  	ip -netns "$CLIENT_NS" link del tun0
->  	ip -netns "$SERVER_NS" link del tun1
-> +	if [ "${2:-none}" = none ]; then
-> +		return 0
-> +	fi
-> +	if [ "$1" = 6 ]; then
-> +		fou_args=(-6)
-> +	fi
-> +	for ns in "$CLIENT_NS" "$SERVER_NS"; do
-> +		ip -netns "$ns" fou del port "$FOU_PORT" "${fou_args[@]}"
-> +	done
->  }
-> 
->  cleanup() {
-> @@ -240,6 +330,26 @@ if ! ip link help 2>&1 | grep gso_ipv4_max_size &> 
-> /dev/null; then
->  	exit "$ksft_skip"
->  fi
-> 
-> +# $1: tunnel type, $2: tunnel family, $3: traffic family, $4: encapsulation
-> +run_ip_tunnel() {
-> +	local csum_offload
-> +
-> +	for csum_offload in on off; do
-> +		# GRO does not build sit packets larger than 64KB, so with
-> +		# software GSO on the sender there is nothing big to receive.
-> +		if [ "$1" = sit ] && [ "$csum_offload" = off ]; then
-> +			continue
-> +		fi
-> +		setup_tunnel "$1" "$2" "$csum_offload" "$3" "$4" || exit "$?"
-> +		do_test "$2" "$3" "$csum_offload" || exit "$?"
-> +		cleanup_tunnel "$2" "$4"
-> +	done
-> +}
-> +
-> +# fou is not loaded on demand when built as a module
-> +modprobe -q fou
-> +modprobe -q fou6
-> +
->  WORKDIR=$(mktemp -d)
->  trap cleanup EXIT
->  setup
-> @@ -254,3 +364,18 @@ for tunnel in vxlan geneve bareudp; do
->  		done
->  	done
->  done
-> +for encap in none fou gue; do
-> +	run_ip_tunnel ipip 4 4 "$encap"
-> +	for traffic_family in 4 6; do
-> +		run_ip_tunnel gre 4 "$traffic_family" "$encap"
-> +		run_ip_tunnel gretap 4 "$traffic_family" "$encap"
-> +	done
-> +	# GUE is only supported on an IPv4 underlay
-> +	[ "$encap" = gue ] && continue
-> +	run_ip_tunnel sit 4 6 "$encap"
-> +	for traffic_family in 4 6; do
-> +		run_ip_tunnel ip6tnl 6 "$traffic_family" "$encap"
-> +		run_ip_tunnel ip6gre 6 "$traffic_family" "$encap"
-> +		run_ip_tunnel ip6gretap 6 "$traffic_family" "$encap"
-> +	done
-> +done
-> -- 
-> 2.43.0
+This patch looks like something that should be sent separately and
+even considered
+for stable.
+
+Can you please send this patch separately to the arm64 maintainers as
+a fix?
+
+Yours,
+Linus Walleij
