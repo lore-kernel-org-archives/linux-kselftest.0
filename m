@@ -1,79 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.75
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795601545;
-	b=hJqIf2CWd8Ah7AzMM7+wr+zinBszGqnshKcAogE8yOgVoEvBd3GO+DqkEeV7fAdub146
-	 Fygs6zw+ne2a19tJJYXmxFD+7ojMW0wTAMHFz6FkjZ2tT+ED92MrgIw/wwYiTcgrKrSbc
-	 Jmrb+DL24GbStBEX2smyou6I7d3FlRBCU3fl5GY40OOpXA8w2kceEOkBYNmcSc9UNZCCz
-	 rCUDwdKTu9eJcpU/2oTi9PevkQpguZh+ONJqTQ+PVWnNKXVgvBsRtEIfLHMEH82yDRxlp
-	 QkKCk/Gojv12L9tKuXcniXUbvKuXAaqVgn7KgiYzpi/lgIhQgZrEgD6bPXMHc9SSHtA==
+	t=1795604617;
+	b=QCi7qAx/KdMFkogiV9/h3h7MeFfChXOQwr2Yn6j2TuAslMgEsoO66GTBYdLe459MR4yb
+	 PGYO8w/StoA5Z2PHE9aNA/QJAo3ulZCeJ6MQJdAI83EEEnqTVDU0/rdHbwjAp3TBpY7Py
+	 IiaXOoWyLxx/nV2lmiIWkjiNx656CKVVW2hV1yP+K6BJ8GASWThnhdKbyo4mATIhPo9Gs
+	 gVpKRlJAfI4BWySJklZ6IYeapZ37jw+g8kzQ1d2tLa1cev12Luw2lfXtI7XznzbzerfMH
+	 ZANA94mK8QQb9hZRyYKvqp0kw9Aft4pbxAKax5/fQuUMRQM7XuPquILR1bm3/4xH9eA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795601545;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 DKIM-Signature;
-	bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
-	b=2LBaDFabIwydJb/mwkR/kd+PksYpvKnQUsNa3X3ero9fPQzWfdTG8Va+p/KFZO16BK0B
-	 WK73dZvUGdSpfzGU+ca4WoUTQb+DAIp1t4Hr/h2+l8/J9lNUyQ8pzzM1Hp2y6xa7zrX2o
-	 ElffygGmIGZlxcWRh3hLsc60fr/hzZOWJNLhXUqwZvCCZKjJ5+2FM1/miXKTgGpoF/hB9
-	 USgecfNdD4emzx+KgvPK1b9v6PihxvNXo1zc/tGYCwP/ecU9SQKXEbSkuYvSy8F18r2ae
-	 sNf2jrttneclxmxSZBLDflpKc9BLxCkhogWi5sBlHpNEAbbvkv3u57zEKWePelwOAvQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795604617;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:
+	 DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Last-TLS-Session-Version;
+	bh=01q8TemiEbPQScbgUzDguyMv2m06hdvW9i45NWYmZMY=;
+	b=abMBUQ/H6mjBq+k+7UJXacjGXY7xYh1C0wubFZV4wPUX/uNqYXUSEBDlH1hWQ/qFBbiq
+	 DS1ZHfTS912SCpEGyJbuN9cbSJpBxN1y3F6z3csxIAZRjaGYi6u/zZLn34ivYh2iXcMxh
+	 MVQlZisMRMHfqfGrNBLLQvWII5q0z/WSQ69588rA1sAAtMbuJ03pIYA0NfzmD3c+kf50d
+	 aXCKFCyuV4rajX47aQN6d7DoB9gypw5iMAsVBdhNN3aEED/nDy+clgykuKwp502rd7NN9
+	 DVxy5WbeEYctjvKinWwr4DX05ypgpDf8rZV2VQW9fmaCkwblB/jvU+PT6VWO72tswkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b="CkSW/lbI";
-	arc=none smtp.remote-ip=217.74.67.75
-Received: from smtpo75.interia.pl (smtpo75.interia.pl [217.74.67.75])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=marliere.net;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b="XQMJ/SGD";
+	arc=none smtp.remote-ip=209.85.160.41
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55756606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:12:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55756606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41734606A32D
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 11:03:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41734606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=CkSW/lbI
-Received: from nr200 (unknown [80.68.231.31])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Wed, 25 Nov 2026 11:12:16 +0100 (CET)
-Date: Wed, 25 Nov 2026 11:12:14 +0100
-From: Slawomir Stepien <sst@poczta.fm>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	jiayuan.chen@linux.dev
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Tianyi Gao <tianyi@cloudflare.com>,
-	Octavian Purdila <tavip@google.com>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 bpf 0/7] xdp: fix page_pool leaks
-Message-ID: <awa0fvxzngTtIYVd@nr200>
-References: <20261124104016.532341-1-sst@poczta.fm>
- <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b=XQMJ/SGD
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4a77dcc4ca0so2995751fac.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 03:03:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795604615; x=1796209415;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=01q8TemiEbPQScbgUzDguyMv2m06hdvW9i45NWYmZMY=;
+        b=f8tz2EoIUnOsCK0nuSN2Tn9K6ujbrXlkqHSB1jl7LHqovYcHme0GF3IL3esvM0W9WD
+         FcvM1GiGWPcIBxPCmnWe7o1wZjcv9Q+AkYLb0/GMsAYN1wqWsS/hC6fsavgypc/W0wet
+         NbjMNZ6qruR64+k86U/4dUGIjPDBUhbG1zHMUh1mOlkyhS0HBc+GsEsNX3PeDdY9/YD/
+         YdaA/WH+zktp78UgdSj5R8AfjOkKPT5R54jV/68YuOunRw5iFTqgasCRoFn0AbcOO57T
+         E0TfFUxGkxejEIUIvKeN29qW33vF4U48v6KwRjwQzsGpfyG9L/zSb9P6XT3oVXwuvVHR
+         AZhQ==
+X-Forwarded-Encrypted: i=1; AL+hErHAtHb4JNQtocml3R9QdYVDXqYiwrLJn89NFqG3rEdPKix9y7IMlGaVJgFfCfilNezKRlU/Mri1x8Z2lrI5gyM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8thwd0rXX+GrGepzZJb8WMk9GeO37wIVSjk8Juh31VDlx9zORz
+	xXJfltuAxFymlwZSIszcGU42E/AQpPBv4QhlhYBWDG9/LcbcWmjTha2x
+X-Gm-Gg: AZFdTZcLUqDv2LI6AtvUJb7ErB+F9qnPscHFukbpsz6MKUeq6icglILdkshtIjDNjMz
+	I7ndDRDettRTWQqET5L8qsxjfRHgi0McUIbbHJJAUYtnbS/d0WLm2r6e+3Y3YcGQeYRwfoOKw55
+	dXd/bKWfaGPGJRvgNHEcAVc9Pkp0uzxGD2/xm8G+o4TftjHuA3UchMXCXXpobiy5DneXlFNiJPA
+	tLGe3v7E9R3wzN0TM6LyCY+RDmHSo96WDeB61sjsP4ugPIBdxKCVBdwnAtKUjiJYk7wcaXKvv1Q
+	LeVoMbY5X87U0TyK06NoDtnJpf8ZNfgFLZQCSq/dgRogw9Ra1uSpmDIHAy6hLHBpkNW8fjYejSU
+	NG8B2NajnfzE1vHvPryYKyugdRzsxn98iAO5saZyDWoBH7vpn+XHeTvKgPI2ngp24hq5a196VF4
+	03xGnLdj/piBqrJCU5QtawI7xgeXyCT6sZj5SLgGyefectbbIp1GmSvuFc59q26WU2MUmUvNQKV
+	+ZoWtEVc8dBONoBoBARXpfWzfbtVPw+DCtJZkAREt+hE+qimHvlwCYi3gBAXlQTzfHW4mKB8tMT
+	d0+DePNYRNSgVBhe1K+96Lbh5p4SRM6AWuFAqBSk3NTpqy5N6XL5si7GPZwMpQBjJwdHbeTyxeI
+	EIl8I18keLTKo/f/nG/fWoDJHjaoxVAg=
+X-Received: by 2002:a05:6870:be92:b0:49e:4895:2366 with SMTP id 586e51a60fabf-4bc8208f78dmr16261363fac.36.1795604614931;
+        Wed, 25 Nov 2026 03:03:34 -0800 (PST)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc5b07d766sm15946324fac.2.2026.11.25.03.03.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 03:03:33 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7B25F605F4;
+	Wed, 25 Nov 2026 11:03:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1795604610;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=01q8TemiEbPQScbgUzDguyMv2m06hdvW9i45NWYmZMY=;
+	b=XQMJ/SGDl7Kg0X/2qnCdY3LpM1KMcJbFQ0pxQypPzVhm8COHEUxisIbsIrBUB90w/W7C6l
+	FiBNXIOvemLL7PGLJVDh3yMuTAj/lkfMZgpOElbRUHkvtK18Z4KkiAksbjtqBZXBkX3bnl
+	mOTh6XYG7PnBSeAaKBb5eolC7iYERs3DcwClqhAkrqbZEqO3kyX9rPGZAxmJcuERDotPgU
+	QiRWiWezc2dDmfpEMG9UMCgo/Gh+D7fF9RK3boj2/WhejBFcMPCfluXH6ebsw8UXjlggSz
+	lHH+Lat1Ni9B2+Jtpp3ogCZ6W/pLwFgDVD9wog+yicNu06IqZxSUoryofd6iHw==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Wed, 25 Nov 2026 08:03:18 -0300
+Subject: [PATCH v2] selftests/bpf: Fix kallsyms parsing with long Rust
+ symbols
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,270 +94,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795601540; bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	b=CkSW/lbIqxnu8SM9tcMd1jFWP+JUPVIDM2ul10ZUK7lVhSvMMJzkHv7Xp+aJxyrbJ
-	 wDgTnnHiqKXewKZWk7C019oOIGT1rQGLx5j3f0qVM9Bp6wP6hixWKM7PL/zSLaM4fh
-	 bB8oAhTY6n2EL6PjyrxTj/ycnOiSLEIgMXvIMZ/Y=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261125-selftests-bpf-rust_sym-v2-1-6cf5cff663e6@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAHXABmsC/4WOQQ6CMBBFr0K6ttoWMMGV9zDEtGWQGihkphAJ4
+ e62eACX7/+Zl78xAnRA7JZtDGFx5EYfQZ0yZjvtX8BdE5kpoa5SqoIT9G0ACsTN1HKcKTxpHTh
+ UphTGKJ1XmsXnCaF1n0P8qH9Ms3mDDcmWLowm4Aa1t12Kou0yaAqAqewchRHXY9Yik+TvgkVyy
+ XNli1I0whYA90Fj7wDh7CGwet/3LxkB9r/uAAAA
+X-Change-ID: 20261124-selftests-bpf-rust_sym-e9b50bb2a39a
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>, 
+ Alexei Starovoitov <ast@kernel.org>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openssh-sha256; t=1795604604; l=2430;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=v1+J5AyYE1mm1bqUO9cvlJ/WDdBXeTNjZKb0Tx2U1oQ=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QJv0PKQKIyXStomhGvoJ0TsvTJMYIsGcFuJ7wxLe8AAzeOf5WIoX9JVkQRmWrWDvJCSavAZ19If
+ MyhLG1oF5KQg=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
-On lis 24, 2026 21:04, Alexei Starovoitov wrote:
-> On Tue, Nov 24, 2026 at 02:40 AM Slawomir Stepien <sst@poczta.fm> wrote:
-> > Patch 1 prepares bpf_prog_test_run_xdp() for patch 3. Generic XDP runs
-> > on the rxq info of the device queue, which is shared with test_run; with
-> > patch 3 alone, any packet through generic XDP on lo makes later
-> > multi-buffer test runs free their frags as page_pool pages. Restoring
-> 
-> The store into the shared rxq is the problem.
-> Patch 3 does it for every packet on every CPU, for linear skbs too.
-> The comment in include/net/xdp.h says that rxq must not be updated
-> during NAPI poll.
-> On Dudu's patch I proposed to put rxq on stack:
-> https://lore.kernel.org/bpf/DMAP8LNBJRPN.2THUHLKURP25G@gmail.com/
-> It works for veth too.
-> An skb leaves veth as a MEM_TYPE_PAGE_SHARED frame, like today.
-> No need for xdp_convert_skb_to_buff(), veth_xdp_get_pp(), pp_cow,
-> rq->xdp_mem and patch 6.
+load_kallsyms_local_common() reads /proc/kallsyms with a 256-byte line
+buffer and stops parsing at the first line sscanf() cannot handle. Since
+commit b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to
+512"), symbols may be up to 511 characters, and on CONFIG_RUST=y kernels
+some mangled Rust symbols (e.g. drm_panic_qr helpers) overflow the buffer.
+fgets() splits such a line, the remainder fails to parse and every symbol
+after it is silently dropped.
 
-Thanks for these points. This approach is less complex. Let me play with it and I will respin it in
-v9.
+As a result ksym_get_addr() returns 0 for symbols like bpf_fentry_test1 and
+bpf_testmod_*, address lookups resolve to the last loaded symbol, and
+bpf_get_ksyms() fails with -EINVAL. This breaks bpf_cookie, fill_link_info,
+kprobe_multi_test, kprobe_multi_testmod_test, kprobe_multi_bench_attach,
+tracing_multi_bench_attach and stacktrace_ips.
 
-> Patches 6 and 7 never free a page_pool frag. Jiayuan's test does:
-> https://lore.kernel.org/bpf/20260911135711.109338-3-jiayuan.chen@linux.dev/
+Parse the file with fscanf() instead, bounding the symbol name to
+KSYM_NAME_LEN and discarding the rest of the line, as kallsyms_find()
+already does.
 
-Jiayuan Chen, can I use your selftest then in v9? :)
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+Changes in v2:
+- Took Alexei's suggestion to drop buf and use fscanf() directly
+- Link to v1: https://patch.msgid.link/20261124-selftests-bpf-rust_sym-v1-1-32c450d0c4ee@marliere.net
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> Below replaces patches 1-5.
-> 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index faa837a..8bb015c 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -63,7 +63,6 @@ struct veth_rq {
->  	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
->  	struct net_device	*dev;
->  	struct bpf_prog __rcu	*xdp_prog;
-> -	struct xdp_mem_info	xdp_mem;
->  	struct veth_rq_stats	stats;
->  	bool			rx_notify_masked;
->  	struct ptr_ring		xdp_ring;
-> @@ -642,6 +641,7 @@ static int veth_xdp_tx(struct veth_rq *rq, struct xdp_buff *xdp,
->  }
->  
->  static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
-> +					  struct xdp_rxq_info *rxq,
->  					  struct xdp_frame *frame,
->  					  struct veth_xdp_tx_bq *bq,
->  					  struct veth_stats *stats)
-> @@ -657,7 +657,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->  		u32 act;
->  
->  		xdp_convert_frame_to_buff(frame, xdp);
-> -		xdp->rxq = &rq->xdp_rxq;
-> +		rxq->mem.type = frame->mem_type;
-> +		xdp->rxq = rxq;
->  		vxbuf.skb = NULL;
->  
->  		act = bpf_prog_run_xdp(xdp_prog, xdp);
-> @@ -669,7 +670,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->  			break;
->  		case XDP_TX:
->  			orig_frame = *frame;
-> -			xdp->rxq->mem.type = frame->mem_type;
->  			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
->  				trace_xdp_exception(rq->dev, xdp_prog, act);
->  				frame = &orig_frame;
-> @@ -681,7 +681,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->  			goto xdp_xmit;
->  		case XDP_REDIRECT:
->  			orig_frame = *frame;
-> -			xdp->rxq->mem.type = frame->mem_type;
->  			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
->  				frame = &orig_frame;
->  				stats->rx_drops++;
-> @@ -746,6 +745,9 @@ static void veth_xdp_get(struct xdp_buff *xdp)
->  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
->  	int i;
->  
-> +	/* the buff holds plain page references from here on */
-> +	xdp->rxq->mem.type = MEM_TYPE_PAGE_SHARED;
-> +
->  	get_page(virt_to_page(xdp->data));
->  	if (likely(!xdp_buff_has_frags(xdp)))
->  		return;
-> @@ -755,6 +757,7 @@ static void veth_xdp_get(struct xdp_buff *xdp)
->  }
->  
->  static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
-> +					struct xdp_rxq_info *rxq,
->  					struct xdp_buff *xdp,
->  					struct sk_buff **pskb)
->  {
-> @@ -773,7 +776,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
->  	/* SKB "head" area always have tailroom for skb_shared_info */
->  	frame_sz = skb_end_pointer(skb) - skb->head;
->  	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> -	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
-> +	/* the prog can free only frags and they came from skb_pp_cow_data() */
-> +	rxq->mem.type = MEM_TYPE_PAGE_POOL;
-> +	xdp_init_buff(xdp, frame_sz, rxq);
->  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
->  			 skb_headlen(skb), true);
->  
-> @@ -794,6 +799,7 @@ drop:
->  }
->  
->  static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
-> +					struct xdp_rxq_info *rxq,
->  					struct sk_buff *skb,
->  					struct veth_xdp_tx_bq *bq,
->  					struct veth_stats *stats)
-> @@ -815,7 +821,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	}
->  
->  	__skb_push(skb, skb->data - skb_mac_header(skb));
-> -	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
-> +	if (veth_convert_skb_to_xdp_buff(rq, rxq, xdp, &skb))
->  		goto drop;
->  	vxbuf.skb = skb;
->  
-> @@ -830,7 +836,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	case XDP_TX:
->  		veth_xdp_get(xdp);
->  		consume_skb(skb);
-> -		xdp->rxq->mem = rq->xdp_mem;
->  		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
->  			trace_xdp_exception(rq->dev, xdp_prog, act);
->  			stats->rx_drops++;
-> @@ -842,7 +847,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	case XDP_REDIRECT:
->  		veth_xdp_get(xdp);
->  		consume_skb(skb);
-> -		xdp->rxq->mem = rq->xdp_mem;
->  		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
->  			stats->rx_drops++;
->  			goto err_xdp;
-> @@ -914,6 +918,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->  			struct veth_xdp_tx_bq *bq,
->  			struct veth_stats *stats)
->  {
-> +	struct veth_priv *priv = netdev_priv(rq->dev);
-> +	struct xdp_rxq_info rxq = {
-> +		.dev = rq->dev,
-> +		.queue_index = rq - priv->rq,
-> +	};
->  	int i, done = 0, n_xdpf = 0;
->  	void *xdpf[VETH_XDP_BATCH];
->  
-> @@ -928,7 +937,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->  			struct xdp_frame *frame = veth_ptr_to_xdp(ptr);
->  
->  			stats->xdp_bytes += xdp_get_frame_len(frame);
-> -			frame = veth_xdp_rcv_one(rq, frame, bq, stats);
-> +			frame = veth_xdp_rcv_one(rq, &rxq, frame, bq, stats);
->  			if (frame) {
->  				/* XDP_PASS */
->  				xdpf[n_xdpf++] = frame;
-> @@ -943,7 +952,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->  			struct sk_buff *skb = ptr;
->  
->  			stats->xdp_bytes += skb->len;
-> -			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
-> +			skb = veth_xdp_rcv_skb(rq, &rxq, skb, bq, stats);
->  			if (skb) {
->  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
->  					netif_receive_skb(skb);
-> @@ -1149,9 +1158,6 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
->  						 NULL);
->  		if (err < 0)
->  			goto err_reg_mem;
-> -
-> -		/* Save original mem info as it can be overwritten */
-> -		rq->xdp_mem = rq->xdp_rxq.mem;
->  	}
->  	return 0;
->  
-> @@ -1180,7 +1186,6 @@ static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
->  	for (i = start; i < end; i++) {
->  		struct veth_rq *rq = &priv->rq[i];
->  
-> -		rq->xdp_rxq.mem = rq->xdp_mem;
->  		xdp_rxq_info_unreg(&rq->xdp_rxq);
->  
->  		if (delete_napi)
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index d6c9dc6..1d89b6f 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1349,6 +1349,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	struct netdev_rx_queue *rxqueue;
->  	struct skb_shared_info *sinfo;
->  	struct xdp_buff xdp = {};
-> +	struct xdp_rxq_info rxq;
->  	int i, ret = -EINVAL;
->  	struct xdp_md *ctx;
->  	void *data;
-> @@ -1417,8 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	}
->  
->  	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
-> -	rxqueue->xdp_rxq.frag_size = PAGE_SIZE;
-> -	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
-> +	xdp_init_buff(&xdp, PAGE_SIZE, &rxqueue->xdp_rxq);
->  	xdp_prepare_buff(&xdp, data, headroom, linear_sz, true);
->  	sinfo = xdp_get_shared_info_from_buff(&xdp);
->  
-> @@ -1426,6 +1426,11 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	if (ret)
->  		goto free_data;
->  
-> +	/* generic XDP uses the same rxq and its frags can be smaller */
-> +	rxq = *xdp.rxq;
-> +	rxq.frag_size = PAGE_SIZE;
-> +	xdp.rxq = &rxq;
-> +
->  	size = linear_sz;
->  	if (unlikely(kattr->test.data_size_in > size)) {
->  		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 6140fd9..fe9f222 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -5684,6 +5684,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	void *orig_data, *orig_data_end, *hard_start;
->  	struct netdev_rx_queue *rxqueue;
->  	bool orig_bcast, orig_host;
-> +	struct xdp_rxq_info rxq;
->  	u32 mac_len, frame_sz;
->  	__be16 orig_eth_type;
->  	struct ethhdr *eth;
-> @@ -5707,6 +5708,13 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	if (skb_is_nonlinear(skb)) {
->  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
-> +		/*
-> +		 * The frags came from skb_pp_cow_data(). xdp_rxq is shared
-> +		 * with other CPUs and with BPF_PROG_TEST_RUN, so use a copy.
-> +		 */
-> +		rxq = rxqueue->xdp_rxq;
-> +		rxq.mem.type = MEM_TYPE_PAGE_POOL;
-> +		xdp->rxq = &rxq;
->  	} else {
->  		xdp_buff_clear_frags_flag(xdp);
->  	}
-> @@ -5719,6 +5727,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	orig_eth_type = eth->h_proto;
->  
->  	act = bpf_prog_run_xdp(xdp_prog, xdp);
-> +	xdp->rxq = &rxqueue->xdp_rxq;
->  
->  	/* check if bpf_xdp_adjust_head was used */
->  	off = xdp->data - orig_data;
-> 
-> pw-bot: cr
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 6d7a4b8c4ab8..5f558280856f 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -64,7 +64,7 @@ void free_kallsyms_local(struct ksyms *ksyms)
+ static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
+ {
+ 	FILE *f;
+-	char func[256], buf[256];
++	char func[512];
+ 	char symbol;
+ 	void *addr;
+ 	int ret;
+@@ -80,9 +80,7 @@ static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
+ 		return NULL;
+ 	}
+ 
+-	while (fgets(buf, sizeof(buf), f)) {
+-		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
+-			break;
++	while (fscanf(f, "%p %c %511s%*[^\n]\n", &addr, &symbol, func) == 3) {
+ 		if (!addr)
+ 			continue;
+ 
 
--- 
-Slawomir Stepien
+---
+base-commit: 81c6c8c608b6075846d3bd5b6f57958300a56eda
+change-id: 20261124-selftests-bpf-rust_sym-e9b50bb2a39a
+
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+
