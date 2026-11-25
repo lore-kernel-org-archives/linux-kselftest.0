@@ -1,75 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795630961;
-	b=xPll4LJQho4A9/kWfs0arfi1GEoiLZer4mldoC0Mhm1jWaMJu9w8jC4ic51ugwBs5Dui
-	 R2Tw6lXThJTVImbgJIo5dbLBSat1/MyOrwdOOCPSt2p9W/9mbSvYTKzq+DY8KhWCIO5Bh
-	 YOxxle6ZjRVctR3tTAhycXB3HaYKq50hB6lYbSx+x0SF92PsXA5KMoyx0oNKm427SAd/L
-	 VYcV407w8jwRlAPFxsLkWyw9rJZq+W9UJvv13QkDXxQ0RHzMMdh5FcYR5/w6vHUwzm7Zr
-	 Q/km1O59Gw05cHCmKgLIU5oI13yj5WUCt9bXCjjDx1vU50PZiBnfmVR2rTPG40YXlbw==
+	t=1795630965;
+	b=ddAP9G2DTFT4ePILKeH+LEAoOqwxf9JjTOt7ccoygxO7mnXRHMs+8N4v2bhuV54wzR22
+	 u3G/3ooVWThboMEwxHjLwW5YMEBWw5q8fpE1nT2ISbhgpauQFEnIfcWE6LSTSyXBQJC4P
+	 RTuHhnTMybE8LPEJU6xVYWrHmEjAwA9X78gbPxgOLmLeJyYR/o729hVFeL1Ymt+dGWqfT
+	 a9bsuK+7GGeBW/Zdessn1byWi8Lv3pWA8ikR9rwnlMgsIIMtNIWXnJiz8yuxlB4tbf1pO
+	 Q0P5YR4WUrkvcIYhfNO91kmj0PeMUhqVDfntKosJRUcyTn58xD7emwmv7LukYYbjB+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795630961;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=sfEVlacBV97ie02thpjOgM2D6cDC2tSVCZoWDEnfrKo=;
-	b=M771oZS4qIwUt24gyb8iPWl6+KTIpr+EfgjaqoARrwqG0eT2ATsvmdWjjoSi8c+wRPKm
-	 oIxtJFBcnJqM/YV9nqAW3ULVzrF68rDQpbaroFeqqzUYa9RW2BaWfR66xBQjG/7l0JCVN
-	 M6R8nwjQkVqFswYFY7QdR7U1ZfSoPQJGSEL2dHt3saF8gjrb0fMoG3eycMkPJ0KDDO72q
-	 7Hu7vY3ERnMaZSXGI4bJyav1zobQDGI+bXR1P8VrWlqK+9N7F05CjJeC+W/9fxHr7Os5X
-	 D9FHkjI4VEDei6aIyaEp7qchr4s3krqD9XBxO9vKeTVLNGXdo0FWWzcMAQYziLGgSww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795630965;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=6qR++cFUSbUPUEmO+yBbsbTsqe4WGzx7vfqPrLzKD+Y=;
+	b=3ZKVcBTpNC6/JCS6uJ032o5JNcQV8NVAJio/uXSh5uFmmtIo/5fXFpfWAGpBy/sQUZIB
+	 +X9ycRAob22E+JGQMyJq+My+kAj773MQmwh47aihpPB8izt7ZXwRCTPAjbGcf+qg5tbnL
+	 jOf5jn70aEaWpHiiwbB6K1k6TcW8cHNug8MrurE1+xIm+Zy53kkMhd+Rdwk7ookJ7mH6D
+	 86WaXlJ+8IctuWDdwV0v5OoxTYwdWEMaY4uqv8V+UMqCmkdDJDKM0XvVtMFJWkAeIuysu
+	 xaAYiljwddDJasrjNLxMPEYqcn6mfIt09CmbK0puRUAz7ogOJ0Vo0Jci9tLc52oLi7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XltHJeJc;
-	arc=none smtp.remote-ip=209.85.214.198
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=dhj3qKPr;
+	arc=none smtp.remote-ip=216.40.44.11
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B252606A333
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 18:22:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B252606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3541D606A33C;
+	Wed, 25 Nov 2026 18:22:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3541D606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XltHJeJc
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2f0291cc0f2so76128885ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 10:22:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795630961; x=1796235761; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sfEVlacBV97ie02thpjOgM2D6cDC2tSVCZoWDEnfrKo=;
-        b=XltHJeJcafnoz7rWSdh67DNM8cUVU33Kf/95Saqoq1SakVT7WitG6OsBqDZPGchsCE
-         y/G1PGTFqEJu0lBEmJpEIiHh2bs+IcYU8n5pRQb6MCXjpvL2vVXWyjr78fxLTeBKFKQH
-         LbZNOzgfAlbMrtPg3br43/a0SJZBBByAaTgwqOI1btWwBNj5Ty//bbU2AK1YZTsmpv+P
-         Rx1sqeQZDnE6Me/PAQ2VZSIlCF1Pj+UVs+co5YrbldjuVaIcAFJ5jyFNTi9XJNwyBgom
-         juH/Li+nPLPJ/sXNQ9fbhC3+mMLejxLcvsDBSkMQCDsTkfuIdqvNpOGCTIPpHqYCNwEs
-         6FOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795630961; x=1796235761;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=sfEVlacBV97ie02thpjOgM2D6cDC2tSVCZoWDEnfrKo=;
-        b=AnJA99//3VCQLQvwoI+gFKmLRPluGEX8OC3GJgU5KF/LafCujc94RtNfzDRY3zAyyA
-         P81U/9mR/LsFawj83HBouvL6SKizuiTpBfF1pjHzNxT88uldsa23sbW8NL6rHd1AJxRE
-         t+WyddGXQdRAYi08Swjkml3i5yuT5npOBxsLt7SiaqVgpD5Qehihw+Hv5wRi177SOUfm
-         gvLc8YqljQqHu2pz34i1KJzDyC0qhsbz92vCFFu9+PBpnfgvrXzbzCDiCzPD2cQDG7kx
-         TWQ2f39Zdm+41TK1E9XhuBoBbaqGv26AWYtFDI1Y6nXQpJ6v/IDkC9ckXefJwfDUm8PE
-         pBYQ==
-X-Forwarded-Encrypted: i=1; AL+hErHt8W/SgI1rwx9ZwNOYLSydDfAoPRZcNHll2L2iVrUIOtltP+DRGRNFzArJQFEbTScDCB9siyu7Q9MuYadJnz0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+K1R8SgWyP62K8t2F7bAdrfmrkrjYQecVYSVgWG9Ap9eaB2CsQ
-	GdecVHA3VJ1yR9IHp7/y/ml0GO6EbwO3SfAdGQvL1HqVg0VZ9zKzSo4PJpYyKA1z+3QTdD203Mu
-	PZoUpUBXRAMqOJGmKqb4X/4j3jIgq+dT86A==
-X-Received: from plau5.prod.google.com ([2002:a17:903:3045:b0:2f0:349:b3a4])
- (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:ce85:b0:2f0:3e44:4761 with SMTP id d9443c01a7336-2f03f25e801mr195497385ad.54.1795630960732;
- Wed, 25 Nov 2026 10:22:40 -0800 (PST)
-Date: Wed, 25 Nov 2026 18:22:40 +0000
-In-Reply-To: <115e024d-f49b-256f-550c-7a64b546a076@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=dhj3qKPr
+Received: from omf19.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id C90DE120F71;
+	Wed, 25 Nov 2026 18:22:38 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id 2158E20028;
+	Wed, 25 Nov 2026 18:22:27 +0000 (UTC)
+Date: Wed, 25 Nov 2026 13:22:25 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Gary Guo" <gary@garyguo.net>
+Cc: "Ian Rogers" <irogers@google.com>, <linux-kernel@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <jpoimboe@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+ <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
+ <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+ <pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+ <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>, <acme@kernel.org>,
+ <namhyung@kernel.org>, <linux-perf-users@vger.kernel.org>,
+ <mhiramat@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>, <bpf@vger.kernel.org>, <nathan@kernel.org>,
+ <llvm@lists.linux.dev>, <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+ <ojeda@kernel.org>, <rust-for-linux@vger.kernel.org>, <ardb@kernel.org>,
+ <linux-efi@vger.kernel.org>, <maz@kernel.org>, <oupton@kernel.org>,
+ <kvmarm@lists.linux.dev>, <shuah@kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <indu.bhagat@oracle.com>,
+ <jremus@linux.ibm.com>, <wnliu@google.com>, <dylanbhatch@google.com>
+Subject: Re: [RFC PATCH v2 00/30] unwind: Minimal DWARF CFI unwinding for
+ user and kernel space
+Message-ID: <20261125132225.00254c37@gandalf.local.home>
+In-Reply-To: <DN4FM3TBOJ9T.2QOOL77P5HETO@garyguo.net>
+References: <20261125061523.1540234-1-irogers@google.com>
+	<DN4FM3TBOJ9T.2QOOL77P5HETO@garyguo.net>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,32 +75,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261125-pcie-link-endpoints-v8-0-19d49c17c05f@google.com>
- <20261125-pcie-link-endpoints-v8-1-19d49c17c05f@google.com> <115e024d-f49b-256f-550c-7a64b546a076@linux.intel.com>
-X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
-Message-ID: <20261125182240.2292209-1-rathodpriyank@google.com>
-Subject: Re: [PATCH v8 1/3] PCI/ASPM: Add internal pcie_aspm_inhibit() helper
-From: Priyank Rathod <rathodpriyank@google.com>
-To: "=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Lukas Wunner <lukas@wunner.de>, Manivannan Sadhasivam <mani@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, linux-pci@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 2158E20028
+X-Stat-Signature: bmxmyx7zbff3tj5wzgboeoe9y8ngdg7c
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/Cm47ggEMe5tkUQwuPIv9j4yoOc3+2FwI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=6qR++cFUSbUPUEmO+yBbsbTsqe4WGzx7vfqPrLzKD+Y=; b=dhj3qKPrnd5Ol5oStgJ72xjormeA1wf1DO/RZc9kjGarZplof6LxOCEYEKKVU+6U05bo+jnrn30dh3AQ2S2utOXzBrNDvJP6ChCp0OiNHXA0Mz5Qca51KujLnC0+gny5rgFtqYDHuEEGrRoB4ayAc52wJ7NqKJRyFXoq+87Y6Bg=
+X-HE-Tag: 1795630947-362156
+X-HE-Meta: U2FsdGVkX18ShW9pI+/3LezhiP+sfLyAz5bbFmDR0Cg79ArNrSxS4kGp2fzzjf2A8iMOExZ79Wjpfg5dnD2BuvcnWnPjmIUJbGqbBkLfSiaYUFYSqR7ZAyP5O5UzEvRDCN589rXn1aP6/jRut7zfB+DDsEhPmN5DqCQvkQ7ZfZK1DiZPYS6+dvk+POli+n6GtTpGQ+j2vtl3LmQVHr+SzbA0nhYCBgifjijh6DwBsiIDVGFv0Nn3Ybo7aD+vHLlpczM4CVbNSwTPAeoiNfZ1pIRQfuRQQygtba8VmRY7xWxfdUk9RhDQhUICoUNpPyMEpj3E7lFTHILx587J1If+CzVdP12M+SkIwx9akUq8SAeuSlUzaZ2IKhNYhFH5nvIw0f5ED6Ry586F6FXLp5r+/Q==
 
-Hi Ilpo,
+On Wed, 25 Nov 2026 16:28:02 +0000
+"Gary Guo" <gary@garyguo.net> wrote:
 
-Thanks for the feedback.  I reached out to Manivannan, Bjorn, and you on
-the ASPM thread to check whether Manivannan has a v4 in progress or if I
-can take over finishing the core ASPM changes cleanly first, and to align
-on the per-state counter API details before implementing it.
+> A quick question: how do you plan to get this working on 32-bit ARM which has
+> its own EHABI?
 
-Also noted on avoiding bullet lists in commit messages, and I will fix the
-port->dev lifetime issue in pci_lmr_release() that sashiko-bot flagged on
-patch 2/3 when preparing the next revision on top of the ASPM prerequisite.
+Do we care? Isn't ARM 32 mostly deprecated at this moment? Or at least not
+adding new features.
 
-Thanks,
-Priyank
+-- Steve
