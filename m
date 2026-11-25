@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.229.135
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.46
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795644628;
-	b=hSjp23tTXOx4wWF/afm5o1MxEPOh/zMsVMNjES/Rv4UHWgU3M7gcjyld9qDcpeMeF3M/
-	 8673d3roo2DPssyi4+ptmrCKEVIoR83PWabTbvryfpi5dXVcSQcue5KYykM7QPoe9kCmc
-	 Y2mvFMCP7zzxFgNQjF2f5SsxFnWfxT9tlHhqK9wswLkUUinv3EGJzBOWFLlPA8BZZLCtH
-	 Hr7Nr7NSk+5AkO+qybmZNQRTWjNJkUjSpXEwfwN8MzH5gCvM33ilmH2V5jthPdu2utM+4
-	 C4jRrctFAB0tc+8TVoXZdR7TT000tO1844qOueTZj07Cez5icLdX8KoAfEH5E8k55Jw==
+	t=1795647919;
+	b=HUT0Ov3O/ny4WMaFumAA4Hs7PbpR9Enj2D8T7Yjsq5AOXt7N2UoeXFG3KT1GM5aSLnTP
+	 CCR7n8JaoSafnsXO46WRvyTHTMn3npCfDbbUFYfgAm77OdwHl8PWjzvlc+nbkpJ3F49fI
+	 xLvhXtpRsMGKqxXgxqCVxBhih3zY6++ppAEbIpQLixuwHHBGqUCb3xOSSXI7C4VfOA0rS
+	 eLgBQLq/uPqpfYbIJhy8ITITbqYxqk+I97FuX07pkhr/V1jWRRe2R3fQ/HbT3+VV7tZS8
+	 8zgTzeos7xG1XEs5xVlzAjsgkqnivIOoFfVtjyGpY13GChi8zvs6yIjUpcb7Ws+ZBsw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795644628;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795647919;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=CkBk2j5ivR/mh7ILFij97SNuJfGxESxh8j6/caNV86A=;
-	b=Yxd7vmXHpUE/6vjFIV7rtp0Nsad2qVDAoESRjxa0KS4ehbb1yLS57moLHoSjhuYDFCgk
-	 U2jbLtd6+y3o79YAOw9Hs39HQIvJChKkgGF6JwCOXDbjwFwKOmWrANyfc6CqJf1aXJuoQ
-	 VgfpC0NgA8b3ikWjOHnW0PE1E0zhI33LJbte7h7GG2/UvK34Emrc7joZr89f5Vt+mkEQT
-	 WD00rvXslOWcLTf58TRQrxERhR+qpQa0Hw/cikWmACNElqv1pBS9UC88MMSRcAZe7qUgt
-	 n30ySU5i4QO+i4T5E2PtBSJhB7lG8d30B2PRMPHopfsqQlsHdRZLWKAls0hEJLIOOlA==
+	bh=CUsk4JOA/Gc1KFGSW+8tuCRNrI5ZcDI7rXD/0VX8tFY=;
+	b=eCeE6rN4azpvl7q2lbevDx1Z38iZ0gcqvWksOnVHcRayM2LlO8y2BDydeME5b2oEaeMy
+	 gsk9zDRhjIqSgJ2Fmj/9rGXLrZzLV1lXqsbN3P7C169cwCHA/rEeIramvptjV4tbUQ2ut
+	 VBDbdMPIzWrMIyRUK/u6WfuCKwZ8F9uV4517QFQE3sFOGPeYLjgS+y3ObyVk0eTH4HCqv
+	 NGj9lrJur02BgF+d6S8sBcu4TyWPlmKKPQL8WkSi0BXELxToXoxtG26+JUaOf7U+x5+zy
+	 5VRnGI9st2Vft47pYuLnolPqBtmR2v5IzkzUFEqzY1R3qxtGYL19e2SWFD7dxxYDZyg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E2F33SEK;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.229.135
-Received: from mail-dl2-f7.google.com (mail-dl2-f7.google.com [74.125.229.135])
+	dmarc=pass header.from=student.oaklandcc.edu;
+	spf=pass smtp.mailfrom=student.oaklandcc.edu;
+	dkim=pass header.d=student.oaklandcc.edu header.i=@student.oaklandcc.edu header.a=rsa-sha256 header.s=google header.b=e7+Vs4DD;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.46
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272F1606A31E
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 22:10:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 272F1606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1442606A321
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 23:05:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1442606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=student.oaklandcc.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=student.oaklandcc.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E2F33SEK
-Received: by mail-dl2-f7.google.com with SMTP id a92af1059eb24-139b659a45eso694454c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 14:10:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795644627; cv=none;
+	dkim=pass (2048-bit key) header.d=student.oaklandcc.edu header.i=@student.oaklandcc.edu header.a=rsa-sha256 header.s=google header.b=e7+Vs4DD
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-679aeeddc6bso6179093d50.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 15:05:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795647918; cv=none;
         d=google.com; s=arc-20260327;
-        b=RoZNBPiqynCnEFVIobWaXe3PntU1ygUxKnuvN1kQeVN5b/bRkRe9MHlY+DCWJDLOOX
-         641I9Y+qKeKVjWILyFptHQOG9AmZrgj2z2Rc9cnT34o31Iyj0r2faOJwcvEYux37fdiv
-         m+qjT3RjhcOZ7Z4CEb6HxhDc4PNJfX98Pqsox2xg9LIhswNstdnPRszPINYgtR3d8yP7
-         YNfzQjs6EhNAK0FNbjsh726s/rMYwAOOVXJZMIGVPR3zMfXtz6U08ekP3CYptN29jPy2
-         2gVvAdaPmEgz0Bp+bNBDvIXoRP/3Ghqp+/xGbTMkanLckxEq5CpVmqLGt21U5MYF/z/7
-         nDwQ==
+        b=e4sZ3Y5m59T6W+lX0Tf856MilOZYus2SJbvqhP0Mti8lci5cI2yLMoqhIyNtYg85Jq
+         rNEIzVU5SpL4ojHfE01aduFZDpTsrVqqNQb7S6cQSjny3jhywupE00ln8tJAbaoBIPZw
+         5H87VqeANaW5W482A6wBba8U9GS3NguETRPj9mCeFLwZSGoWGptGDIYBWFs9M9WXFO6F
+         tnkePiqfApL/HUq3rl3nr3fmRB5SQsO8nHBKcXNEaArMmJawbgWYmW1CJiuuUn/n7srV
+         nOrYfRGTz7fhvtg/bg6WdXlI4BgX8nTkDJ5/EXI9gu9bgTIpJozGC22qODzjMFsKFbHj
+         aGRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=CkBk2j5ivR/mh7ILFij97SNuJfGxESxh8j6/caNV86A=;
-        fh=R+eNJl7v9qbkHJUAZL6bezgL7OK0dVdbHrledkuFdzc=;
-        b=Bt9WO5kmNZiXI9e153yOoPwJl7HoZYs2IXHKDE9AAaN6A6h4g2op10Dk+0Jvc2G92D
-         u9CLSKg/akSsGO/6uiiB7Bg83i+m/KsR1kfncSTiIhSrIWfGpDBAt5zdxRegx1fwZ0eZ
-         hn43/c7rlYVJAtYoERPPZ+nS1sZdtMpHtu+FNgGELmWoSPCHS/QQi7spJWAhVkfiVF+C
-         cuvrCx5/FVnHQg67zBtIaoV8o09RtXR7eE1SH8RZ9CplnRZjBRjCoFGIRoe+PT4ZQZcG
-         vI+TrAbN+cZ9j8Vy7ZBCSdZIVicN10rZO1JbL76iaig+3G6DAHZs6FzOU38tY8BPT8vh
-         tiBw==;
+        bh=CUsk4JOA/Gc1KFGSW+8tuCRNrI5ZcDI7rXD/0VX8tFY=;
+        fh=GiTEZ4QS7z9ryy75ZcCzwQYTZyKzKlTqWPdwGC8Wp+k=;
+        b=ZN9MIuHhYW3haHPNhtnvTH79QFnU9jgoLHGas9CeAGjkpJIPTD2oGdN6A8yvYQTylw
+         lCq6F4R93xBAQHFwlLGh+RCu03gYPfrGk0YoMthB50OfH8B7UFVCVNK2CivwsTXSFULB
+         glJvbqtBETZ5ff0NGlynBC2m3kALB286yzsktYKCF8b6M9/Mv8peMVoKAcPaiEZ8UdZr
+         5bj/SUe7kfQ3y7SECkRjOLXF4glWfFvnxghEvrKzzk1qtb/T/bsZbVAuDKcHoJWFl+pd
+         CeKP3ygcg8CWe87iFjJnrjRA8zghEhDfk2THskmMVU5xY9xpw5cl4vBlRbJlIs7jrGHH
+         cIpA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795644627; x=1796249427; darn=vger.kernel.org;
+        d=student.oaklandcc.edu; s=google; t=1795647918; x=1796252718; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CkBk2j5ivR/mh7ILFij97SNuJfGxESxh8j6/caNV86A=;
-        b=E2F33SEKMppxGebUZlDdnoDy2ah80Ba3VF2XrORg85gV5GXRinr/f3rJMfefdQ9bHe
-         qoN8G6mIWgsXOHhlrbSbDQSALGHDWittkCQlXpOhSdqn3qmZ9/UCKHkp+AgGScaz6YfG
-         eej+x/QOCmlFbssSKtBrttRBNBlhyWXMayOzFKUnc80zXhCKIusyN3HUVxQGpoKWFZGJ
-         6xyHOpcgkGsOKGcWLJVhRS9zT0x/7yKtJc+iDtkpDMfGzyRfad0h4Up/E5Y7kYn/CTrJ
-         lloJMm5f4uUllV1V6ki7jbtwylpDtSyaJVbkzNl/T1Yttpfm8R6KNwJifFIAZAEDwzeL
-         BaZw==
+        bh=CUsk4JOA/Gc1KFGSW+8tuCRNrI5ZcDI7rXD/0VX8tFY=;
+        b=e7+Vs4DDJo1B2Q1iI2PWxZfCmS6brvA/bVQum+7hECoCGsqT0ia9Ukqc2CLFa/YIbZ
+         QjUnxOQCuekDq3cFSgGlcnJIpvXhZ+0QKIM7IEyjvevz99ijO9ZnFkkHKAMjjbE263Qz
+         T6c29MLxr9BGfpOwcsiy0YIErsjV5DYSthPz4xWgsHMnRVcr3RCQjCTNxj7RuB3FwLs2
+         8impjS9W5pffnie64PXtIMQAmm2N1fiSZ2bnPgsf17iaipVIzK0Gc4Owd4lJ/RSmKnVh
+         W5dXGU/DGXBTn0awUjPlDEizQ5PrUKZApRvixQkn9XvCK29jJU0KVg0zbeNNIPleP9+0
+         aG1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795644627; x=1796249427;
+        d=1e100.net; s=20260707; t=1795647918; x=1796252718;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=CkBk2j5ivR/mh7ILFij97SNuJfGxESxh8j6/caNV86A=;
-        b=uue++Wotsf2OXwUNXdzBM+IL3xAONcBS1xj1npE7ySUlzd2C9E2LrcXWKYn0h3nmOn
-         m5gVtIhmF31zrXnDy5RS3+KUxChnLNIRmjXYIGEcGzY+GDopKU5sQRCs/XuReogNuM+J
-         KV69Ho7Dlc0eG1nS7zqObm/T6Hc3f5NWU1PhPzxQJyfXVsOj6j1KqIgVb1O+n2zr14ma
-         R9RWLqaLPWfq3go289+Ohg+Go5a6oMllgGlv/AIQ2CLRHK6RIKaRJapR+TPNZpFMO52q
-         MT/lsGwBVf2WflREtKsbKgQGmudxUoqCvu4xL318SCQl7nudfHqrvT5JTSuKoQLHC8DW
-         qjtg==
-X-Forwarded-Encrypted: i=1; AL+hErE795lcdxMQP/PnH3g4jcto33yr51iwXYjRhgEXW961I3Aif36m/IX700DG9yx4xEFuV4BeGXX7cHpgpBKzEPs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/9/wT8J00pdfQNBNzxJBxflxsm8ACqaqbvGZyXUaK0hwg09j8R
-	cQVuMcl9g1rxIoAMDguXuOtaOMpb82eiRBpDCUkJVgRcdTJN6nQ9SeKYIj6vTHnZsWKoB65Eruy
-	54WAJcIEWqDG3CVU/yiz3RUc8+w1S0Q==
-X-Gm-Gg: AZFdTZfntQ/hofshE9F0TcuI4aHcqdkrCYIGTeYIsW9Imcb/hL+4WTMxyvtQYxwNvJ7
-	7s/C8UAPybg/LzCD9dB1BRDwlLf4r4TJDmA8iPoWabfUmALtIQt/gfUdlKpSaUAWiHQNzKdx8Yl
-	wh8DQj8jFee6l3VEiwB5SV/K/F4RTUMmPjUQXHAXlSV7uWh65nAPq3PPbonKcv5TtTzhzVBuauF
-	tIrJjxCSUtdgU/e//7zmOIZPQYjtwqRyOGgGt69T4MippiMIuB7UZcDNswMoqUIo+Rpzg5kmh9Q
-	2ok8gYsC8I0wqibWTnuuIbpela1NiYEQOFByL6McwI400hQmcTbjG41mVzGcMWJ87XY0oPWnyIj
-	ohwwnxX7vMonwfxRsZsMO53hSVVlaGDjLKYbR
-X-Received: by 2002:a05:701a:8148:10b0:143:2719:f800 with SMTP id
- a92af1059eb24-1b556908ecdmr17988038c88.40.1795644627021; Wed, 25 Nov 2026
- 14:10:27 -0800 (PST)
+        bh=CUsk4JOA/Gc1KFGSW+8tuCRNrI5ZcDI7rXD/0VX8tFY=;
+        b=nFOrTFDMlqwdlD67wANN8PonyT7yC9+aXUxO0LKBU/tRrBr/HsT6rNc9WHG7pOmd0g
+         JPU+95ggvurwDXIVmn/uODRPHZ5mYVDwHYUf9Wv/JUBOBIoh7JD1AqgMVSMSk3WdXhOU
+         Xw8nOcxP0k50KHXInVpMxL5r4EbE35DXaqySPO5ZbbIiu4yGPPTsfP1877tnaxhtN4aE
+         tfOFUY0WJ3nXEq3GVUoRDxxYZqdzf53ylCgFrnYX1ruISSkGERpT51FQ+ShROsp0r7fc
+         W1OoI5o8oPUR1Fkf3xkY8TQ2407L74SyJ9k26LveZlrY9/Oit7Rn9XN3CzxEOEGLcSzu
+         DtNw==
+X-Forwarded-Encrypted: i=1; AL+hErGDmmVqoqkpqkOFyxa7XzMD/KhRxnQraP4iTiS848r6p8qaS3V4PNqx5gSe1wL7ZOZoXf4HtiiWZzOd1FYfHQI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Uwwkgs7VvapETPyJP1QWhHd8fiW6LFhl4HCI1yjPwtHuLjFrM
+	jwWzasZkNDuoE1xE+6DW6cZ8LvLjFUZ2wvdXKQVBhaJndzV942kXDzXuIXfMMlKbtfwyWe5sbHO
+	GA0vuRxudMDA50RGNP0kgfIIf+3i3H/KHa+bKB5vbZg==
+X-Gm-Gg: AZFdTZfsyU++1j340RXSc/F0KQDQCeC02nIf51zRVZn+PZKJJ/NTyC34YVWFhqb3741
+	2cnN58w7LPnyu8hS8HqyB7FlMizDF4P2skO1PJSfUNjfEPw2Izla3NcdC9ndFpMBtVmUrEaO79k
+	NRdssT1FKzYJ6ow6eVmlSei8qajMYftqlVVkw7NvsXxZnKJ7+pKJ9FhvF0llGV661kSfdoE+dWI
+	LyGUMqUNG9Th0J0+jAmm+jM8ELzWX/UgmHmas+RcV3PxqiLSMlmaD/pHGlw/Sjqvk0YiPeXJDb1
+	Ngk6jAFT1VL7eeLFHAZFYRoSGG+gh5+JuxqSB/WEXkp73qUW0C9p2d9hLA4gC8Q9oDxfrACech2
+	rDsKgQpLhIMpSh/ZWy4qw4h4EuCG6u0ECY5tqp4nMQ+RynQm74NPWS/AOGZEmCkkGuKn4lRxq2A
+	7/HgR0b5+SLR3HlPA2g+qXY/jh2TTcUocn9pEnit8zkDKBRe7Oq5tPGw==
+X-Received: by 2002:a05:690e:bc7:b0:67d:bdf4:f432 with SMTP id
+ 956f58d0204a3-67df42ccf49mr6310765d50.11.1795647917923; Wed, 25 Nov 2026
+ 15:05:17 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,157 +104,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261124153636.91854-1-sj@kernel.org>
-In-Reply-To: <20261124153636.91854-1-sj@kernel.org>
-From: Ravi Jonnalagadda <ravis.opensrc@gmail.com>
-Date: Wed, 25 Nov 2026 14:10:15 -0800
-X-Gm-Features: Aa3M54o3hTkahzH_49Bjbc7Zx-dgkzZBTJlliNIgBcED_vBed0zNdkBdD-nvRds
-Message-ID: <CALa+Y14BNfdWH3yBY+ky1+Sb0YvRzW=gRcKKyGWWaBQkysPUkA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/27] mm/damon: let users report their data attribute findings
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, damon@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org
+References: <20261124-kunit-v2-v2-0-e1adbcad6b48@student.oaklandcc.edu>
+ <20261124-kunit-v2-v2-2-e1adbcad6b48@student.oaklandcc.edu> <a8ddf62a-071e-485b-883d-95088ef50ba4@davidgow.net>
+In-Reply-To: <a8ddf62a-071e-485b-883d-95088ef50ba4@davidgow.net>
+From: "Poulin, Louis" <poulin.louis@student.oaklandcc.edu>
+Date: Wed, 25 Nov 2026 18:05:05 -0500
+X-Gm-Features: Aa3M54pKK9wFagi79A7F5Aq1lIG5lvOo_v3I9SHXFaydZ24r_eqXrQ36m_To4fc
+Message-ID: <CAGQButtBSOMZCeRX1ks=AoO4QEQ-w1LaNX8KUVep0t=raohL9w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: tool: Fail on out-of-sequence test numbers
+To: David Gow <david@davidgow.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi SJ,
+On 25/11/2026 13:22, David Gow wrote:
+> Hmm... I distinctly recall there being a reason we didn't fail in this
+> case: I think it was due to some tests being triggered early, so having
+> two concatenated KTAP outputs in the kernel log at boot. That seems
+> fixed, though, so I don't have a fundamental objection to this.
 
-I tested v2 as it is in mm-new, and wanted to share what I saw.
+I had an opportunity to do some digging so I did. I do not have a real
+boot log holding two outputs; what I have is below.
 
-How I tested:
+lore, messages where the error text appears in a log (links at the end):
 
-The guest is x86_64 with 8 CPUs and 4 GiB of RAM in two NUMA nodes.
-A paddr context watches 1 GiB of node 1, the physical range
-[4 GiB, 5 GiB).  Every 5 ms DAMON samples an address in each region,
-and the context's probes decide whether that sample counts as a hit.
-User reports are submitted through the sysfs producer files.
+  [1] 2022-02-11, Ricardo Ribalda: kunit.py run --arch=x86_64 with PCI,
+      USB4 and USB4_KUNIT_TEST enabled gives "plenty of" "[ERROR] Test
+      property-entry: Expected test number N but found N+1" (numbers as
+      he wrote them). He writes that with the previous patch reverted
+      "all works fine".
+  [2] 2022-11-01, Mauro Chehab: i915 mock selftests loaded twice, the
+      dmesg re-assembled by hand (the "TAP version" lines first) so
+      that kunit.py parse would read it. It printed "Expected test
+      number 2 but found 1", both suites [PASSED], "Ran 36 tests:
+      passed: 36, errors: 1".
+  [3] 2022-11-07, Daniel Latypov: two plain files standing in for
+      module output in debugfs (he could not get module tests to work
+      locally), read in one kunit.py parse run with a patch of his:
+      both suites [PASSED], "Expected test number 2 but found 1",
+      "Ran 2 tests: passed: 2, errors: 1". He writes that the top
+      level test counter resets between modules, "iirc".
+  [4] 2023-10-04, Michal Wajdeczko: kunit-test.ko, then
+      kunit-example-test.ko: "Expected test number 1 but found 7",
+      "Ran 12 tests: passed: 6, skipped: 6, errors: 1". His patch
+      resets the suite counter right before running tests.
+  [5] 2024-05-14, Stephen Boyd: kunit.py run --arch=s390 printed
+      "Expected test number 1 but found N" (N = 2..9) before each of
+      eight [PASSED] suites; the run ends with "The kernel seems to
+      have crashed". His message does not discuss those lines. I have
+      not reproduced them.
+  [6] 2025-10-23, Sander Vanheule: regmap tests printed "Expected test
+      number 7 but found 8" (up to "23 but found 24") on passing
+      parameterized cases, in a run with tens of thousands of log
+      lines from a dev_warn() his patch added. He proposed
+      dev_warn_once() instead and Mark Brown agreed. I do not know
+      the cause.
 
-The context has three probes:
+My runs: QEMU x86_64, KUnit built as modules, dmesg saved after
+kunit-example-test.ko loaded, parsed with v7.4-rc1 kunit.py without and
+with this series. The counter fix is 2e3c94aed51e ("kunit: Reset suite
+counter right before running tests"), in v6.7 and v6.6.13.
 
-- one with a REPORT_MADE filter for user_report, matching=Y, allow=Y:
-  it counts the samples that find a report;
-- one with the same filter but matching=N: it counts the samples that
-  find no report;
-- one with no filter: it counts all samples.
+  v6.5      No top-level plan. Example alone ("ok 1") and after
+            kunit-test.ko ("ok 6"): exit 0 with one error ("missing
+            subtest result line"); the same with the series.
+  v6.6      After kunit-test.ko: "ok 6 example" under "1..1". Exit 0
+            with one error ("Expected test number 1 but found 6");
+            with the series, exit 1, failed 1, errors 1. Example
+            alone ("ok 1"): exit 0, no errors; the same with the
+            series.
+  v7.4-rc1  "ok 3 example" under "1..3", alone and after
+            kunit-test.ko: exit 0, no errors; the same with the
+            series.
 
-For each test I compared the hits of the first two with the number
-they should be, as a share of all samples.
+Two outputs concatenated, built from the saved dmesg (v6.5 with one
+"KTAP version 1" line added in front, as in [2]):
 
-I tried four cases:
+  v6.5      Exit 0 with "Expected test number 2 but found 1"; with
+            the series, exit 1, failed 1, errors 1.
+  v6.6 and  The first output is parsed and the second is not; exit 0,
+  v7.4-rc1  the same with the series.
 
-1. A report that starts exactly at the sampled address, with
-   addr_unit 1 and 4096.
-2. A report over the whole watched range, kept fresh by one to
-   sixteen writers re-submitting it, slowly and then as fast as they
-   can.  Every sample should find it.
-3. Reports with an empty or inverted range, next to one valid report.
-4. A REPORT_MADE filter on a vaddr context instead of paddr.
+Synthetic: two top-level blocks ("KTAP version 1", "1..1", one suite)
+in one file, the second numbered 1, numbered 2, or "not ok". Both
+parsers print the first block and exit 0; the second block, including
+its "not ok", does not appear in either output.
 
-The DAMON KUnit suites pass.
+> That being said, if anyone's using the KUnit KTAP parser for
+> non-KUnit-y things which would fall afoul of this, now's the time to
+> speak up!
 
-What I saw
+In the tree, kunit_parser is imported by kunit.py, kunit_json.py,
+kunit_junit.py and kunit_tool_test.py; I checked with grep and a GitHub
+code search of torvalds/linux (its one other hit, in
+tools/verification/rvgen, is an unrelated variable name). I have no
+information about out-of-tree users.
 
-Case 1 works now: with the addr_unit fix in v2, those reports match.
-Thanks.
+> For the comments: I think they need to be more specific about what
+> we're doing (and targeted at people reading the code, not people
+> looking at the changes in the patch).
 
-Cases 2 to 4 do not behave as I expected:
+In the v3 I have prepared (not sent), the comment reads "Mark the test
+as failed if it is not correctly numbered." The original comment stays
+in test_parse_late_test_plan(), whose input is now "ok 1 test1" before
+"1..4" (SUCCESS, errors=1).
 
-2. As the submit rate goes up, two things go wrong:
-   - with matching=Y, the probe misses the report more and more
-     often, although it is always there;
-   - with matching=N, the probe matches more and more often, although
-     it should never match.
-3. Empty and inverted reports are accepted.  They never match, but
-   they take queue slots, and enough of them push the valid report
-   out.
-4. On a vaddr context the filter is accepted but has no effect.
+> Do you think it'd be sensible to consolidate a few of them into a
+> smaller number of more complicated examples. [...] it'd be great to
+> have the test inputs in separate files in tools/testing/kunit/
+> test_data/ as with most of the other tests.
 
-Where it comes from
+The seven inline tests are two tests that read
+test_data/test_wrong_test_numbers.log and
+test_data/test_wrong_suite_numbers.log. The first log has repeated,
+skipped and failed results with the wrong number; the second has a
+wrongly numbered suite, a wrongly numbered nested case and a wrongly
+numbered suite with a skipped case.
 
-Case 2: a busy report queue (13/27, 14/27)
+> [...] I'm not sure we need to separately verify that this causes a
+> specific exit code given we're already testing that it gives tests
+> with TestStatus.FAILURE above [...]
 
-When a lookup finds the report queue locked, for example by a submit,
-it answers "not found" rather than "don't know".  For matching=Y that
-is a miss; for matching=N it is a match.  The more writers, the busier
-the queue, and the more samples go wrong.
+The CLI exit-code test is removed.
 
-The right answer here is 100 % of samples for matching=Y and 0 % for
-matching=N.  What I measured (the last column is the share of submits
-refused as busy):
+Louis
 
-  writers               matching=Y   matching=N   refused submits
-  1, one submit per ms     99.5 %        0.5 %          0.1 %
-  1, back to back          45.5 %       55.3 %          0.2 %
-  4, back to back          49.0 %       51.3 %         60.2 %
-  16, back to back         15.6 %       84.9 %         79.9 %
-
-The numbers vary somewhat between boots; the trend does not.
-
-Could a lookup that finds the queue busy skip that sample instead of
-counting it as a miss?
-
-Cases 3 and 4: input checks
-
-Two smaller things, both about inputs that are accepted but cannot
-work:
-
-- Submit accepts a report whose start equals its end, or is above it
-  (22/27, 23/27).  It never matches but takes a queue slot: with 1000
-  of them after a valid report, the valid one is found in only 4 % of
-  samples.  Return -EINVAL for these?
-- A vaddr context accepts a REPORT_MADE filter (16/27), but the vaddr
-  operations never evaluate it.  Refuse it for non-paddr contexts for
-  now?
-
-A minor nit in the cover letter: the loop
-"echo submit > producer_state" runs in producers/, so it fails with
-"Permission denied".  It should be "echo submit > 0/producer_state".
-
-Thanks,
-Ravi
-
----
-The case 2 setup, for reference (paddr, node 1 = [4 GiB, 5 GiB)):
-
-  A=/sys/kernel/mm/damon/admin
-  C=$A/kdamonds/0/contexts/0
-  echo 1 > $A/kdamonds/nr_kdamonds
-  echo 1 > $A/kdamonds/0/contexts/nr_contexts
-  echo paddr > $C/operations
-  echo 1 > $C/addr_unit
-  echo 5000 > $C/monitoring_attrs/intervals/sample_us
-  echo 100000 > $C/monitoring_attrs/intervals/aggr_us
-  echo 100 > $C/monitoring_attrs/nr_regions/min
-  echo 100 > $C/monitoring_attrs/nr_regions/max
-  echo 1 > $C/targets/nr_targets
-  echo 1 > $C/targets/0/regions/nr_regions
-  echo $((4 << 30)) > $C/targets/0/regions/0/start
-  echo $((5 << 30)) > $C/targets/0/regions/0/end
-
-  # probe 0: matching=Y, probe 1: matching=N, probe 2: no filter
-  echo 3 > $C/monitoring_attrs/probes/nr_probes
-  for i in 0 1; do
-      F=$C/monitoring_attrs/probes/$i/filters
-      echo 1 > $F/nr_filters
-      echo report_made > $F/0/type
-      echo user_report > $F/0/filter_report_type
-      echo Y > $F/0/allow
-  done
-  echo Y > $C/monitoring_attrs/probes/0/filters/0/matching
-  echo N > $C/monitoring_attrs/probes/1/filters/0/matching
-
-  # one producer covering the whole watched range
-  P=$A/reports/producers
-  echo 1 > $P/nr_producers
-  echo user_report > $P/0/report_type
-  echo $((4 << 30)) > $P/0/addr_start
-  echo $((5 << 30)) > $P/0/addr_end
-  echo on > $P/0/producer_state
-  echo on > $A/kdamonds/0/state
-
-The writers are 1 to 16 copies of a small loop that writes "submit"
-to $P/0/producer_state for 10 s, with a 1 ms sleep (the first row) or
-none.  Hits are read from the damon_region_aggregated tracepoint's
-probe_hits.
+[1] https://lore.kernel.org/r/CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com
+[2] https://lore.kernel.org/r/20221101134334.59500e01@maurocar-mobl2
+[3] https://lore.kernel.org/r/CAGS_qxpZokOs5vEhiiTtD4_c0h79MabGm4dmQ=C%2Bt0qoZEc6iQ@mail.gmail.com
+[4] https://lore.kernel.org/r/20231004205700.1511-1-michal.wajdeczko@intel.com
+[5] https://lore.kernel.org/r/9be47cd74b62ba8e4a36f3139fc8d275.sboyd@kernel.org
+[6] https://lore.kernel.org/r/833a6495c2b16e1da90c19826839191eec21e6f2.camel@svanheule.net
