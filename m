@@ -1,64 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795720134;
-	b=RYbcFsudyjssXttSkimrksD2OiYo66sPDdfp1NspDQKwWuoMezFCuyTd943m0aEfnMRn
-	 CckC/ZDfhBTh4dIZcpy8gynqo6Tg/0L4dUW0e8BLt/Z1h8VOCgzWVM2Vphjm2TvuOStjp
-	 yvQsc2nJRRdkEAmTxIGmyMuVzw3guw6WX0QKYTwu7Ugl/kZn/ZGtzE1x+oGF0wZbHqvSX
-	 +5K2LJdqkNyArXqTJUI5kC/KDAu57NnG3lB6lmJYpFRutVbWuIfzNxsEh2tp6z90XqWMO
-	 8VEUqscr+POsh3x3y3mZWZmN0N+3YnvC3sm+Wzoaye8Rea2ZFb4K5k0iqYiuQFjvt4w==
+	t=1795720617;
+	b=hNj5O0cbBF9SlM3sqSYrLSSbvXTnHbmnyUOj9zWLkmNc5rrnpSh9ADLJK/tn+ujN75DO
+	 bB1+UZDhg9s3NbLJh4XK4dniXvLkjrDRd5ngYJIVShqwO8cPuoOdmCx7RSUl4fARcyn+F
+	 NanIfqAM0VVDUW/KfNjHCo/f7B7MUjMEPR0FI7CNL7founNZT5mih4xyqAO62O7WOOuzZ
+	 +0snu3MZLEpaO6ES7+BZ4YEYxeZJJuIP0V3vExu8WoX0pRS5uzVFsMcDOCnFNHMp29AjX
+	 1H9wP7oRQcoZggqMH7bboKyHe0loYvnqwZgFrQYSS07V690WlpK26gx90BRfye3ZAMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795720134;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
-	bh=gzDN1QG2r+ew53MNcYjRJsztIJ6bXJi3dv7JbJUryts=;
-	b=r6RFK2eeT3bJYOUZr3iW1n7EvaEf/R5zweh3d4uV4lDJlZJ1k/plkkx+5AA+ry+mssmp
-	 gH6QRrZvdW5JzBBHBYyeZxcJR+SmFiWO9+FzFrlLY5IuuJfBvQCCcOt8HKO38AfGRpOvo
-	 9wBypGi456J6853NUcrhhJtUux2IrHAEk9CAsHwrQKluedMSVn5PFsQIh1ZNtYShvGcAm
-	 Q3FAARb7hQb/CDY47GjVm8jO8CN0Fug9otjiQSHmsEsFlEN6z8ZzVeWV7FpkqHS51CKpP
-	 LChREAUHSsA1cBcliwsPYAemwCOcqPjQBgYZMlCRQbKh0Tj21VAm2IqAVELEF0eb8WA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795720617;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=NZtY45FGkTmV1jsVONpLrGSZDkTyzaPfcIcXdwBvd8s=;
+	b=bmKtDjOWFoVNdnlNhmlun31C4zvHjg6c4Q/+qThYhNj+RIA0rs60Ph3GPPGR+N2tjMOv
+	 3+BbxRJP9Cu06GDgUg4iXKHOhkHVLKA+64SCfqNbx8M7782HJn4KZW1pIbn72U1oWUXOw
+	 HxunEQWqTjVZ9/zHw80Gli1TQHJHRHo5A4UIY31Z2NEPmniZ+qK9DCsa/HhipVgRScCQb
+	 dmtg90HUiBI+Ir0wmAKmVoLhlIlwVIS/8kdpPNUfw2AArXouhueyh7f16Tjyy1amA41vy
+	 RnsVsLcOCScRA2rbyL+pQ9sKleFzA8uB8AD+BnsZoPZs0HhfYsr+ubJzidwkuKy7EaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZjhVBDf7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GS5FAyek;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C459606A32E;
-	Thu, 26 Nov 2026 19:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9F1606A684;
+	Thu, 26 Nov 2026 19:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZjhVBDf7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06DF91F000C0;
-	Thu, 26 Nov 2026 19:08:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GS5FAyek
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA4E1F000D0;
+	Thu, 26 Nov 2026 19:16:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795720132;
-	bh=gzDN1QG2r+ew53MNcYjRJsztIJ6bXJi3dv7JbJUryts=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=ZjhVBDf7i01xUwHDBDd6t5Dd9jfrgoOKt66dR9QNrrc7L0T0YpubcyqvMK0wbN/ia
-	 N5atc2f24UBtRU0S+Od103hhN6aomFIo4lUV8NH7otae9s9CkrP1XNak7SusKsyuNi
-	 JkL+MoY04YXrIsQU1zFKVFP9T3f4PE1zgUKcKB7/NL84/k+6u74vQKvJZyupKIEt0o
-	 AZfV4KXHHyeCjiK2GYQNrImZuCoSUW/eVZRcsXIQFlsap0dkg8rCu7Ve55neanZp3M
-	 VUneTvy83IDOxnbJ490HE8Lefc1MHbwcbYRzOzVKlpqtjxIzuSYB9j8bRAoC5SerdJ
-	 hF+qL17Mb0c0Q==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Chris Down <chris@chrisdown.name>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,  Mike Rapoport
- <rppt@kernel.org>,  Pratyush Yadav <pratyush@kernel.org>,  Alexander Graf
- <graf@amazon.com>,  Baoquan He <baoquan.he@linux.dev>,  Jonathan Corbet
- <corbet@lwn.net>,  Shuah Khan <skhan@linuxfoundation.org>,
-  kexec@lists.infradead.org,  linux-mm@kvack.org,
-  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  kernel-team@meta.com
-Subject: Re: [PATCH 2/9] kho: Make bootmem reservations visible to fleet
- monitoring
-In-Reply-To: <20261113003059.056dd036a6546756@chrisdown.name> (Chris Down's
-	message of "Fri, 13 Nov 2026 00:30:59 -0800")
-References: <cover.1794383544.git.chris@chrisdown.name>
-	<c41c639fc5f453d60a265ba42a233f2ea5b48319.1794383544.git.chris@chrisdown.name>
-	<179443886218.2329176.10742245280418377061.b4-review@b4>
-	<20261113003059.056dd036a6546756@chrisdown.name>
-Date: Thu, 26 Nov 2026 19:08:48 +0000
-Message-ID: <2vxz4id3wgu7.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20260515; t=1795720617;
+	bh=NZtY45FGkTmV1jsVONpLrGSZDkTyzaPfcIcXdwBvd8s=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=GS5FAyek4rmsv/62JCIZEzjSMYL2joihLtthb/bFtY62xEkM0QkdKgUcfNaDYjqAK
+	 2hfY2W17dPdVAj123g2fjv2gLBZtwkakLvtpSovjYwtfX04GuM0tQVR+Vs9bCdoGNf
+	 mTWoqz48jpVl7YL1Z02r+8lmPXGB4hlQykYw6y/x8YseCdzxFsI+Sej6vAQEz6yF14
+	 6a5F8vpc2ndE6ELGofmCk4/xfBN8urN40iZfUGSlyLw3ViE0vsuE591YBzi3uAwkSj
+	 aDQ19FFwT/jisDSPErge6K7zACBLEtNhLnHFhoHOSXE1KfUquFmsyHRu0CuOF7leR9
+	 Qd8YYZfXYJ1Bg==
+Subject: Re: [PATCH net-next v2 03/12] amt: key relay tunnels on a union
+ amt_addr endpoint
+From: netdev-bot+sashiko@kernel.org
+To: omar@blockcast.net
+Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Thu, 26 Nov 2026 19:16:56 +0000
+Message-ID: <179572061610.3135.16297939691113808529@kernel.org>
+In-Reply-To: <20261125191450.2497936-4-omar@blockcast.net>
+References: <20261125191450.2497936-4-omar@blockcast.net>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,64 +64,127 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
 
-On Fri, Nov 13 2026, Chris Down wrote:
-> Pasha Tatashin writes:
-[...]
->>> Today the collector would have to sum kho/out/bootmem_len in debugfs,
->>> which isn't a userspace ABI. In /proc/meminfo, free bootmem contributes
->>> to CmaFree, but the reservation doesn't contribute to CmaTotal. The cma
->>
->>Is this a different bug?
->
-> I think so, yes. Bootmem pageblocks are MIGRATE_CMA, so their free pages are
-> counted in NR_FREE_CMA_PAGES, but totalcma_pages only counts the areas that
-> mm/cma.c knows about.
->
-> zone->cma_pages is a separate problem. It only gets bootmem added by
-> init_cma_reserved_pageblock() in kho_init(), and on a KHO boot we return before
-> we get there.
->
-> I can send patches for those separately if you agree that bootmem should be
-> counted in both. It wouldn't give us the bootmem size though, because CmaTotal
-> would still include any other CMA areas.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-I have a internal bug assigned to me to fix this. It would be great if
-you could fix it for me. I'd owe you a beer ;-)
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-On cold boot it is pretty easy. Call cma_init_reserved_mem() on each
-bootmem region.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-On a KHO boot it gets tricky. Not all of bootmem is CMA, since some of
-it is given out to early boot allocators like memmap. So we need to
-count the pageblocks that we mark as MIGRATE_CMA during MM init. And
-then update totalcma_pages directly, which already sounds kinda iffy.
+- [Medium] This patch makes the per-source tunnel cap compare the full
+  16-byte union amt_addr endpoint with memcmp() (amt_addr_equal()).
+- [Low] The commit message says 'amt_request_handler() and
+  amt_update_handler() take that snapshot on entry, before…
 
-Plugging the accounting directly into kho_bootmem_migratetype() might
-work, but I don't like giving it a side effect. Maybe we do it directly
-in pageblock_migratetype_init_range() and __init_deferred_page()?
+--
 
-None of it is super elegant and I never got around to figuring out
-something good.
+amt: key relay tunnels on a union amt_addr endpoint
 
->
->>I have some concerns about exposing this as a stable API. What if we get
->>rid of bootmem or make it resizable? We only recently renamed it from
->>scratch to bootmem, and we have been exploring for way to optimize it.
->>
->>I would keep this exposed under /sys/kernel/debug/kho/bootmem_size for
->>now, and not worry about it being stable.
->
-> That's fair. I'll move it to /sys/kernel/debug/kho/bootmem_size in v2, and we
-> can look at sysfs again once bootmem has settled down.
+This commit stores the relay tunnel endpoint as a union amt_addr instead
+of a __be32 and matches endpoints with amt_addr_equal(). It adds
+amt_outer_saddr() to snapshot the outer source address and amt_relay_mac()
+to compute the Membership Update MAC over the full endpoint.
 
-Is it really that hard for your collector to sum up the areas. I don't
-mind this change since it is in debugfs and very simple, but I'm curious
-if you really need it.
+> amt_outer_saddr() copies the outer source address of a received message
+> by value into a zeroed union amt_addr. amt_request_handler() and
+> amt_update_handler() take that snapshot on entry, before
+> pskb_may_pull() and iptunnel_pull_header() can reallocate the header,
 
-[...]
+[Severity: Low]
+Is this description accurate for amt_request_handler()?
+
+It holds for amt_update_handler(), where amt_outer_saddr() runs before
+both pskb_may_pull() and iptunnel_pull_header().
+
+In amt_request_handler(), though, the snapshot is taken after the
+function's only pskb_may_pull(), and that handler never calls
+iptunnel_pull_header():
+
+	if (!pskb_may_pull(skb, sizeof(*udph) + sizeof(*amtrh)))
+		return true;
+
+	amt_outer_saddr(amt, skb, &saddr);
+
+The code itself looks fine. ip_hdr() and ipv6_hdr() are derived again after
+the pull, and nothing pulls after the snapshot.
+
+Could the commit message be changed to describe the ordering in
+amt_request_handler() correctly?
+
+> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> index 52ccaca08b5ec..38740e0ace424 100644
+> --- a/drivers/net/amt.c
+> +++ b/drivers/net/amt.c
+
+[ ... ]
+
+> @@ -3198,7 +3231,8 @@ static bool amt_request_handler(struct amt_dev *amt, struct sk_buff *skb)
+>  	 */
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(tunnel, &amt->tunnel_list, list) {
+> -		if (tunnel->ip4 != iph->saddr || READ_ONCE(tunnel->dead))
+> +		if (!amt_addr_equal(&tunnel->addr, &saddr) ||
+> +		    READ_ONCE(tunnel->dead))
+>  			continue;
+>  		per_src++;
+>  		if (tunnel->source_port == udph->source)
+
+[ ... ]
+
+> @@ -3210,15 +3244,12 @@ static bool amt_request_handler(struct amt_dev *amt, struct sk_buff *skb)
+>  	if (!have && (full || per_src >= amt_max_tunnels_per_src(amt)))
+>  		return true;
+>  
+
+[Severity: Medium]
+Does an exact 16-byte compare still make the per-source cap work on an
+IPv6 relay?
+
+amt_tunnel_get_or_create() uses the same exact match before it allocates
+a tunnel:
+
+	list_for_each_entry(tunnel, &amt->tunnel_list, list) {
+		if (!amt_addr_equal(&tunnel->addr, saddr) ||
+		    READ_ONCE(tunnel->dead))
+			continue;
+	...
+	if (amt->nr_tunnels >= amt->max_tunnels ||
+	    per_src >= amt_max_tunnels_per_src(amt)) {
+
+amt_max_tunnels_per_src() caps the count at
+clamp(max_tunnels / 8, 1, AMT_MAX_TUNNELS_PER_SRC). Its comment says it
+limits "the tunnels one verified source address may hold".
+
+On IPv6 this counts per /128. The MAC return-routability check only shows
+that the sender can receive at one /128. An ordinary host usually has at
+least a /64 routed to it (SLAAC or prefix delegation).
+
+The defaults are a max_tunnels of 128 and 16 tunnels per source. Could one
+host run Request -> Query -> Update from eight addresses in its /64, fill
+the table, and keep it full by refreshing last_seen? After that, full
+would be true here and every legitimate gateway would be refused a Query.
+Over IPv4 the same attack needs eight separate IPv4 addresses.
+
+This can't be reached at this commit, since amt_v6() is false. It becomes
+reachable later in the series, when "amt: add netlink attributes for an
+IPv6 outer transport" adds IFLA_AMT_LOCAL_IP6.
+
+The selftest in "selftests: net: add amt_v6.sh for an IPv6 outer
+transport" only checks that two gateways in the same /64 are kept apart.
+
+The commit message only says that the per-source count "compares the
+same way".
+
+Would counting per /64 for IPv6 (or per a configurable prefix) keep the
+cap doing its job? The cap allows up to 16 tunnels per source, so
+separate gateways in one /64 would still be kept apart.
+
+[ ... ]
 
 -- 
-Regards,
-Pratyush Yadav
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125191450.2497936-1-omar%40blockcast.net
