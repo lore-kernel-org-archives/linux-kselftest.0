@@ -1,49 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795726810;
-	b=k/DaoAJWKY0SjXjkhq9JOXV9nAlyInLfU89kvK2i6TpCg7QgKO4vP8au4yERNCgavGzx
-	 qYy7P+WbQte0g7U+InBUiQBaUJ6ZW5AafexC/GNx6V38YcWQJCEOYI+UjmBPzlsJdgnry
-	 SU4dFZBmtA7fAhxymK8huvmEOgVuT0VVY93Qnp0A8+GH300mgugU5AhM8YicayWsscp0b
-	 U9VH74dWoaEYWPD9Qi6Z7gmb7e7v+miwsZmysAD4g6WkVMQ0+t+Bae/mjagW7WujL7ppY
-	 RNNaWh0xEnuNA2MOxK9oc6u1arO16ileXypoaJwWLLi0WIaN7H6f5dXf4l5PmcCbB+Q==
+	t=1795727122;
+	b=LwO3w040fKWndpecndNyQnE7CZrRHW0s3A2kH9l7Y45dMe3eYSoOQDho+evmQsulrhsc
+	 vIcfUBNRTDo9zKVC4RqrUbYKeT5Ue/vhaOboiYTVjIKRB/SjRpzI5y/fRPuSkSrfOZkhx
+	 mptKXNYOLKDteVvsQUmeUm74iNMgzulZ5047woWbl3C16WbW012WTZCA73AIaeEZm0RW5
+	 mRy3++Y8Q5IEz95H6g/cSz7aGNVIeo3B3CDwFpA9j9Hvy8AnCA1RZEga1wMb7nZaLRDX8
+	 exBky3KKkULdazymXG8FS3F1cC7V2OZW68cZGiCxF7TTpYvd3FGBTPc4zGf6767YzlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795726810;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=L2EUDWrGprysBtTQg6JNgt9Au2GThQvZuOs0KqhjIOc=;
-	b=LYIqHWFPzu6XF9pjsiuql3pJcesU5Ptma0Bj+8y98EkkJqFwCx3Mf+tsmWkWTU7Us90x
-	 2F0TsYflr/2pVwzM/3RKAgCRL+YhE0BvbU2vv60CTTjjrkbRdedZ7T4np6GTZhWhm2V1Z
-	 axu96DeU0x8GwRyZbl81vFbGqZ/VjCTg3dGGQh2m6XeLuw2R5vuL7/M5MJgYQjdyXUi9d
-	 kLMMeik8+Of3PC+ddbzvI+sIJQCqVtFJe083cmwMYzN2zYeqOZbX40ketNAt53iiPo5LX
-	 k8ESQiOmmRTwCLDX99HPMExYPGEX0GkESx8+ND8aMYIAn4kGHxY4fvdoUHu6TsBxXxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795727122;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=AU7tOSqACc9VyYU5/W+85LR+3JDiRbQenA7UWq30CHA=;
+	b=0W8qpDIaHjYMuKrXeBmTaeHU4rEjdhDjFkOWd+po8NKWK68pMDv00Oa6P4jFU3o/GDXd
+	 +g037Od6S4+3KRzW4Gy/P9zjRgp+lob6dbLXcAxUj+Xd6EKWy9+o+VhVsEzsbHfghukkU
+	 wWKSwaoJ4BFel6VlFufvx5DMiC3DEuC9FaPTn+zqsANrGFcLfqAGHtAOR98mTM1I78SHq
+	 huSe2NeM5lbAsgFxhp3Yl75qksVwGYW1JBRY5coRUyFvm+BkbgkkfaOFDquw18X9ub40d
+	 kMIcRP3mhXVhERRosO3sOirUY9qWeG2qJ6BWy3QYH2hzr2bLalgyJlj5x7cjuFSNSCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=acxnUDQv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wt0fHBhL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B226606A323;
-	Thu, 26 Nov 2026 21:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E84606A31C;
+	Thu, 26 Nov 2026 21:05:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=acxnUDQv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72D31F000C1;
-	Thu, 26 Nov 2026 21:00:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wt0fHBhL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC82D1F000C1;
+	Thu, 26 Nov 2026 21:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795726809;
-	bh=L2EUDWrGprysBtTQg6JNgt9Au2GThQvZuOs0KqhjIOc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=acxnUDQvYX7IUP6aztJayBqdQ+yBjo1O220TVMSoV6okvGms61PVW0Ga6u/m0JMeD
-	 oqgKZTFgaaKrbkPHwGYXZGf+Pl2nBeD7HwKwwl7Nnzz9tE5+JU5FahrMfbCmHBPnkT
-	 JDL1xZUwUJIR+myWD2TH/0QPZu8pbD4Js6KAyqZutBrfhW1BVmwcnf3lJNL5Xz/lz7
-	 FVrIcn2XWXAeBNpS3ZD1E+S7wUj8KbSQcOLFxAGABistMtV4Ay0Gm5usIC2a/WS7xU
-	 Zpc4Zm0sJNDsxeruF1D1Jq1AM6F+n44Y3F2cxFPdMhCDKx0pjdgPKL6yd8sgtiS7tP
-	 mVLSxW+i0Ahbw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE82F3803326;
-	Thu, 26 Nov 2026 21:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1795727122;
+	bh=AU7tOSqACc9VyYU5/W+85LR+3JDiRbQenA7UWq30CHA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Wt0fHBhLL+7Pgvgh93wEdtikhQUD5HaQHHmaaaAjoGno/76fnASf8aeqAUArImqzc
+	 dHGrInSnTiSFpb8X5yLGjsNDJi/vFg99UYYUwX19go1BZ0FmuAfqZRJKrvtgf2LQ9X
+	 7g/JPSydtTjYIRIVIyAQkiFAH/Sg55RSKCikZQnar5I1L0MIrpNK7liWP7vz3jz1Z/
+	 JjIWVFWePSLI+7LrtPBX3iGRWYb7SBWme6MqWqHcYeMluuSEnKpZIE/LBFhGdvWgoc
+	 fZGUUrYZ3Zb3TY2rXmnc317EeU4lPD4kflZHbnTl4xQbf/c5WK5m/Y21lOip9XY9Sj
+	 kReDhxCqZhrAg==
+From: SJ Park <sj@kernel.org>
+To: Ravi Jonnalagadda <ravis.opensrc@gmail.com>
+Cc: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v2 00/27] mm/damon: let users report their data attribute findings
+Date: Thu, 26 Nov 2026 13:05:14 -0800
+Message-ID: <20261126210514.97428-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CALa+Y15wc4bgERo_FEwxL4m-NUjx=_o0yPipUN+ymv7HTSUL0g@mail.gmail.com>
+References: 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,61 +67,51 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/6] bpf: Add log support for tracing
- link_create
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179572680824.617567.1633909900114303634.git-patchwork-notify@kernel.org>
-Date: Thu, 26 Nov 2026 21:00:08 +0000
-References: <20261125143138.47174-1-leon.hwang@linux.dev>
-In-Reply-To: <20261125143138.47174-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, kpsingh@kernel.org, matt@bobrowski.net,
- shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org
 
-Hello:
+On Wed, 25 Nov 2026 23:03:27 -0800 Ravi Jonnalagadda <ravis.opensrc@gmail.com> wrote:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Wed, 25 Nov 2026 22:31:32 +0800 you wrote:
-> I'm planning to add syscall common attrs support for LINK_CREATE cmd.
+> Hi SJ,
 > 
-> This is the second series for the plan, that adds syscall common attrs
-> support for LINK_CREATE of tracing prog and cgroup prog.
-> 
-> BTW, address Andrii's review [1] in patch 5:
-> 1. Change if (!OPTS_ZEROED(opts, iter_info_len)) to if
->    (!OPTS_ZEROED(opts, log_opts)).
-> 2. Add comment to iter_info and iter_info_len that they are
->    deprecated, and use iter.info and iter.len instead.
+> On Wed, 25 Nov 2026 18:04:15 -0800 SJ Park <sj@kernel.org> wrote:
 > 
 > [...]
+> > This is the expected result.  The implementation is more strict for type
+> > matching.  If it is unclear, it says the type is not matched.
+> >
+> > For example, if filter type is PGIDLE_SET and we cannot confirm it, it is
+> > treated as not PGIDLE_SET.  For example, DAMON could fail at confirming that if
+> > it was unable to get the folio for the probing memory due to some races.
+> 
+> That makes sense, thank you for explaining.
+> 
+> [...]
+> > In my humble opinion, , the user could work around this issue by not submitting
+> > the report too frequently.
+> >
+> > But the more important question is, if the user really need to do this kind of
+> > frequent report submissions.  I have no clue at the moment.  If it turns out
+> > so, we could improve kernel side.
+> 
+> Agreed, user reports through sysfs are unlikely to be submitted this
+> often.  The main reason I tested at high submit rates was future
+> hardware samplers, which would produce reports much faster than a
+> user would.  I was checking how the queue holds up under that kind of
+> load.
 
-Here is the summary with links:
-  - [bpf-next,v4,1/6] bpf: Add log support for tracing link_create
-    https://git.kernel.org/bpf/bpf-next/c/be52e74c3df1
-  - [bpf-next,v4,2/6] bpf: Add log support for tracing_multi link_create
-    https://git.kernel.org/bpf/bpf-next/c/3e5de7a1a5a8
-  - [bpf-next,v4,3/6] bpf: Add log support for iter link_create
-    https://git.kernel.org/bpf/bpf-next/c/892d17776b75
-  - [bpf-next,v4,4/6] bpf: Add log support for cgroup prog link_create
-    https://git.kernel.org/bpf/bpf-next/c/554864149321
-  - [bpf-next,v4,5/6] libbpf: Add log_opts support for BPF_TRACE_ITER
-    https://git.kernel.org/bpf/bpf-next/c/72fb27b0551d
-  - [bpf-next,v4,6/6] selftests/bpf: Test tracing and cgroup link creation logs
-    https://git.kernel.org/bpf/bpf-next/c/42fe7db4d6b6
+Thank you for confirming the agreement and clarifying the context.  That all
+makes sense to me.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> I am happy to discuss this further once this series is in and
+> you share more on the next milestones.
+
+Sure!  Once I sure this will be landed, I will share more details about the
+next plans on the beyond-page table accessed-bit extension project roadmap
+thread [1].
+
+[1] https://lore.kernel.org/all/20260525225208.1179-1-sj@kernel.org/
 
 
+Thanks,
+SJ
+
+[...]
