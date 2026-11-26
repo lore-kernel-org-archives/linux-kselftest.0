@@ -1,88 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.194
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795689925;
-	b=3RN3jzBXYTNn+p/X9E/zstyffaG5NY1GQznC1ShCb/i1hJtxhA6wzgAoJZXEzzpayLyu
-	 0+pJlbcE7KGTWRanyHXUJUf3c1URERKKW7X0o4Mo/j8Nr8x/wzkhiOL5/dnWjhGLiCBwa
-	 J1DBV5fa8Xcj0GF8/+iMGxEP6K9NjCMkVNPH9i8kUOik/aKnWpIF51lHuQQtDmC6URvlG
-	 zEyD8o6SCYP2CK6GptUy+/KZu/x69JTJ1cXzEwEpAFJJ5Gp9o0+OpJ5L09B3yR2yAWEGR
-	 bFZLOAZ/Vg3BABMsF1sIDHCeiyROYR8jN/pxWckGM9anCR6m6sTt5P4iPGd192JGErQ==
+	t=1795694586;
+	b=dHV9puxC16jrfTsLEa65/eJIclz8knGf/r8FZpFdnss84847xRbJI0GReBBs7Ef87Ila
+	 zFXnWn/P2cVdHApescKiIeeF6bmv1cA2hgXAgKvTuvt41owqnZw0eQspCXsy45hI3fesx
+	 vSTsv6SDGi4QtO9wDRQxLnOvapwTRtxF8F6jM1mqDWKmPFgERC4pjyO/sFi6fqyWIUlS5
+	 XKhFV4MbbWPP55DEabNMAryxJzNloXqipRjN8nqZnNMa4VQ/YCvuWvIFvVYbmQxx7QEhW
+	 sYvfQe0jnudCHIsCsJKnboBG7EQSJSqb7zwA7Z0wb6RuEBpADtv1kM/tqpsqKzLxOfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795694586;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-	b=5ia75LmdG7P4ebm8oc9UtmRzHSy9CM6ndKV3+ejegnnf960MJPUm+AnGyir2janIuycz
-	 y4ObVXDgTj7NIeBqyYE8zypeZPkYNJekfy7ZqPfsQmh5WjBzgJ7atyFPQTcS/Nf7q9k11
-	 L1KQtWZ+0t59dOHVbNE4zJN6uYw4qzQwl+1VnqksRrM/vPVbpihar0cN8bmxkH+uMFkA9
-	 l2BfWDCWFitHAQ5I+NA7+jIwq7wDeR4rA4bRT4rIz/8nAiJD0y3MNFJAoqczs0OKMJ4Xq
-	 xJoVjXm5I8B0h1DjVoMmN7pqQV7DePlz4awSsWxeuy0g6jdvf1yKm+hKbek3rBA3BXA==
+	bh=qoA088dkvLhrSXa5HLwvBJYzOxS+97oQxq1vAdRFubo=;
+	b=x8Ri+vQhNc24wiWGNJqTQMFcS5S6isnp0to7qcU4vXPYWV1GNVvx0sAYhCk7kYPCR+v2
+	 ePVCNT5CrgOOf0bqzBq4C1R7iR4Oeaay9RS3YNzO44acnzpbfx+tyw1+Aj1j9ST7CNE8l
+	 N0EiB1fnaG1hCGPOoSZREJrxVU6BEaAYbuvHvX1WngblizLfUFpac0zWr15/JNxG3KW5w
+	 Vjsf7AwTUjVLAYg6HaYsmzQggBVSo54PThx8DwAK6E8Vp1heq0RdUs0402H0s54xjf9+N
+	 efgzdoOYu+KAyGtfxsY8N/Dq9i5+lTtvvRVPbhTI+D0kUIak68rkjLxehnSQmxfnHHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="fb/AnGuu";
-	arc=none smtp.remote-ip=209.85.221.45
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HyMa7aTX;
+	arc=none smtp.remote-ip=91.218.175.194
+Received: from mta0.migadu.com (out-194.mta0.migadu.com [91.218.175.194])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA79C606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA79C606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF9C606A334
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 12:03:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CF9C606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=fb/AnGuu
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4a34ffd3e39so3732223f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795689923; x=1796294723; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-        b=fb/AnGuufRVSuumZI6EQLA6cj75+M3xYaDzd0Gy6RIfFD9vTufZ0ocvqMKbKkCMuJU
-         HCBXLOxx8vgikybvFGaP8kOTEPC96KRwXnjjGdmpRLIAP3v7/cEX49ZmqXzavqZRuij3
-         yAgWXhNLnFWVkhqNg9FhZPzLqKHj3vih4TQBrzWrYFpbfSQ4U8bI/qVviCwdNFG1GKRg
-         Hxn6CMjZT5DpBlzV5e6WnYlgdhQXs2yNA/UJVS7jWkPiOHnO8ZNEWlUFaREDrgmI9OpC
-         SZzobCPy89LxilfHUkDRa5QJboD//JYUx9AJLoSKPUrVgXCRpyowQ5xPdH3/qHs9I8jV
-         3Rpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-        b=UOzco3EnPCmFQl9VcrieypuyabppGNE4j1SK7e/+UJycSVVk/CB86Bu5JJ/Gqbkr69
-         j0VcfLJ4FYmYEEF1d2/B+5BMwQsK4t2QAhW0kE1ya8gNC3NFlB/uao9OxWYn9GAIIUAC
-         zj8mmXBgzele7dsCdcpei4r8X97PbmESMP30nJeQSPu82omSsXXlquMMzj5iig1egQ6j
-         sdzZ3Ud00xKfV4mo6LIKeX3cpt3oaqAh1Dg7MBl5/s1cCrcoxLuSToJaqDHyig5nXtW9
-         ju5GV0uy1jMsfsFwt8Jpgp8DNJNtAkj7A3Z8IJwZcwVaByG2CpooUX4x0dQFHL550Jm5
-         Kreg==
-X-Forwarded-Encrypted: i=1; AL+hErGtoQ6ShV1VL7ICblYDbNU+tH7U+egSoszw8M6y1eFVJiW3QB4xOh39eiVpI3uXwViKDVEfzFizVOasA79FxvI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9jDh485MblRBJreJsjic0EWxZtImdDRJLalOrR9QLXS4rFXZew
-	doYfMxxi2mcszdKMmrbABc4eZmpNw3lctkqh2QouNUDqz4cEXlnWNMlgD2xGB0tR3ts=
-X-Gm-Gg: AZFdTZfR8qj9FXAXeVNGhgrOHukpNIRPmozz82wwtoA1Rccx0ZfZxXZd6x0BDITqpnC
-	a7cjIA6xwvUtIzZ9EHctHkzu4R+89gh/pYebx+VBBfqR9gonQRXkar26HhpdjIEkqlsyCj9H61N
-	60RINxsCuH9aQLcsqE+763bT83/26/9NuRdPUiske3pVRw7gG2q9RG5cJjOWOjJuz94uQ3qIrSG
-	utSumA3ZMQf4YSEiNB5IVexTKCk8YMxi424oDJDiRm5lJprIn+vdXG1ZuSxyFHutlrDXjBMTeLJ
-	J3BzQppI4H7FM8wmDvHxY9na31p5MAz3LIdTNA2DVj5aNxUHJOHcJReB8dKqZlZZ87ymWtdgY/+
-	a0k6QXWZsFfzh2+9aKqt5HWriXVJl4ViUF91I/0AzRq2xOoLv4+CQZArfowAnptG446Krg5qrJQ
-	N8M+ENq5Nezlt9hLSgpX5CRvuqGGfYHDtxsFCHeP5vyRPmwctZSz+68uFC2YF7ojhbfLCjUUc8J
-	C3LmDi3U9jv4iedYs2R+5mNEmuJncLMS4jUZg0fLvnAQkyUA5FjgvXkeEwGXmc8JJQtuWBWEIEe
-	FZZgnMIf3e/5N3NYuXpbWvfoEkXQ+izi0v2etXBM+ClgmUFI+4SmoYCqgM2WTK6Q4g==
-X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
-        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
-Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
-Date: Thu, 26 Nov 2026 11:45:21 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HyMa7aTX
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=qpihMKwKeEshqRGiOU+LJxx2L01+RYwZPY1UI4N9uQ4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795694583; v=1; x=1796299383;
+ b=HyMa7aTXe/NrTr9HLhd00TRaFsn7aIF5jCJgwtdB5x8XflIfc9C69TtPBrpMrf4tYEWfvyIv
+ W/Fi9bdlGnpQGspXPlEowfjErVYOIFbZepprLKET93X2Clmh1yu1hMce8zXZv0Cc3dDODqbNWKg
+ zi7lm33+fUzDqGlf244w100I=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id bff048c27b98143b;
+	Thu, 26 Nov 2026 12:03:02 +0000
+X-Mizu-Trace-ID: bff048c27b98143b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <eb8abbc0-3028-4bd6-9010-0a855305e294@linux.dev>
+Date: Thu, 26 Nov 2026 20:02:54 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,56 +59,66 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- ioctl to /proc/kallsyms
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
+Subject: Re: [PATCH bpf v2 1/2] bpf, lsm: fix bpf_setsockopt() on a half set
+ up child in inet_csk_clone
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: bpf@vger.kernel.org, kpsingh@kernel.org, matt@bobrowski.net,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
  Kumar Kartikeya Dwivedi <memxor@gmail.com>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
  Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-14-wusamuel@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Stanislav Fomichev
+ <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Xu Kuohai <xukuohai@huawei.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261125070330.16625-1-jiayuan.chen@linux.dev>
+ <awcUm4PvuYb3nGxM@devvm16445.scu0.facebook.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <awcUm4PvuYb3nGxM@devvm16445.scu0.facebook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/13/26 11:12 PM, Samuel Wu wrote:
-> To find a few kernel symbols, users such as libbpf parse all of
-> /proc/kallsyms, which is several MB and text based.
+
+
+On 11/26/26 1:04 AM, Stanislav Fomichev wrote:
+> On 11/25, Jiayuan Chen wrote:
+>> security_inet_csk_clone() is called at the end of inet_csk_clone_lock().
+>> The child is locked, which is why the hook is in
+>> bpf_lsm_locked_sockopt_hooks, but it is not set up yet:
+>> icsk->icsk_ca_ops and the ipv6_pinfo still point to the ones of the
+>> listener, and the timers are not initialized.
+>>
+>> So bpf_setsockopt() from a lsm_cgroup prog is wrong there for:
+>>
+>>  - TCP_CONGESTION: puts icsk->icsk_ca_ops, which the child holds no
+>>    reference on.
+>>  - IPV6_TCLASS: writes to the ipv6_pinfo of the listener.
+>>  - SO_KEEPALIVE, TCP_KEEPIDLE: arm the keepalive timer before
+>>    tcp_init_xmit_timers() sets it up.
+>>
+>> Options considered:
+>>  1. Remove the hook from bpf_lsm_locked_sockopt_hooks, as commit
+>>     5416c9aea832 ("bpf: Fix the kernel crash caused by bpf_setsockopt().")
+>>     did for socket_sock_rcv_skb. Not done, setting options like
+>>     SO_PRIORITY on the child is what the hook is used for and it works.
 > 
-> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
-> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
-> and optionally in a single module with module_filter, or all modules by
-> default. Each call returns one match and its position; pos + 1 continues
-> the search, until -ENOENT. The output returns the address, the size, and
-> optional name and module buffers. A buffer that is too small gives
-> -ENAMETOOLONG and the required size.
+> [..]
+> 
+>>  2. Make these options work. This needs the child set up before the
+>>     hook, too much for a fix.
+> 
+> What is too much? Moving security_inet_csk_clone to happen at the end of
+> tcp_create_openreq_child? Or is it more involved?
 
-The kallsyms data in the kernel can change between two
-KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
-Should the mechanism provide a way to detect such changes, likely by
-tracking and exposing some kind of generation number, or is it
-unnecessary?
+It is more involved. The end of tcp_create_openreq_child() only fixes
+the timers. icsk_ca_ops is set by tcp_ca_openreq_child() and pinet6 is
+switched in tcp_v6_syn_recv_sock(), both after
+tcp_create_openreq_child() returns. For MPTCP, subflow->conn is set
+even later, in subflow_syn_recv_sock().
 
--- 
-Thanks,
-Petr
+
