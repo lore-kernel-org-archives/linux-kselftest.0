@@ -1,60 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795720627;
-	b=rdURSHX1GuXLyeQSw29T3kHo3eU5nEfYZlGpGtDScbzEazwbMqKoUDGGuHRd25A6/8+2
-	 IymuOhTrnjyh1s2syUkTvN9Zr/+Knzor3zImBOinuybQWBmLnVSqyI7CbF/jQF3xGxr+D
-	 YqtXYxTg8KQ49McE+s+LlALPPZIhc6HolkXXY9MAWetIMSXAlXsjgwzL3+JLTF9fgIG8Y
-	 GgHkIZBTViy35e+uasBFdzyFPZCPKA5r04M64Jx6G2HtSVl75c3E4vBZLJfx4IdasUh/h
-	 YGmX2WRnDyfFdEnzqzrlWS7a9eptO44r7FdHPPqFVEkMa/JmKD7fXWkSoFEfFNG+Org==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795720627;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=TeBv919u0tdzRATsjRKyQB2JzyijIcDOw/pARemxP80=;
-	b=dpALJ/hJIlxeSmmdW43+aw8jnA0MTU6VIk+BtbWqmbteur/4lQ7fbC14ji0w33ZlUpv4
-	 ndQt4+ZWwwlWFYNZ6h75mlX8NaN2ReEAdGr13lK0D7ubE80PX8ekaLKP5X4ujdCGa2lig
-	 immiZyg51J1w2SWcUS5bIZhF3Xwrb4M1Vr5SReRe6ell7u+/+Plgg1JPajzqDBiJjuUH4
-	 f9IHrsyaKd7t3+I4JVo7KUCqYQ4N7YUllG1GqCjAKzu99qMjZ+UhykDdoT9utMFSDOrmS
-	 Df+ckUX/tAQ/0GMEtbOpIPxyVXMcLNu6771hRKJ0onxn3xnvEFw6VSwFo4zP9l+myBQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H4oVjYa0;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.56
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795721062;
+	b=N4NLr9/NvO26FEwMj7sLG+eQL4ztU6t8DqXPFGxt+cyJzHDeMczRBRMV34x6Ac17nEz6
+	 gDz3MUPmaxC0kSeZ6I8h+X74n4Oe/qUrKiJC3eSWncJcYBMR5QfwHR+FIU3jt0xw52FE1
+	 rjPVsVoW731JchvF1Cp+K/v7u7s/1gCt0IAdzaTlri7sX0/sjSOXo8IwW7STz0uvR8Zed
+	 0wH14MPzCQPC4iinrJ/CHT5DHkfOw21VwBUqDnE3lOByPByhdCDTYseGhgtSyC6VydkUd
+	 /DO9cVonaR8Ss/9N4IzDD0LnjIJDIykblQZaIFrIe3NBbhsQ8F3Q9YI/AdZLWUvPQwA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795721062;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=2zT+yAmhvE7wj4OvqmtPVc/NxcpzCQ+2i5Rw6/CHKNY=;
+	b=v0AXdZJE0gOsSA4P9X3UMUuHwJ2aXhmFpSuLbMfYhttVeURO4fxypkjBySdPFs9q5RCk
+	 VfONTmxzvmiPCgtAx+1YL/CzaOEm+9ZFQKxq1pgGnR+aveN0wMs66q263cN3s/NGoAMqy
+	 vCjcGx257odeYC++l/ktWHzfWwaCv/uWR1tXCrnq6W4702pmCEWBSrJwIRCAvXelglqb/
+	 HsYVRysOFBFaTBN6Dt0fqadW6k/z5oJlRCKj5RXMXV0jhe0naVC2w5XM+Cfqm5aZdRzBc
+	 4vFELq4bOnw49JBFLi5/rFM8qolfjVRSRhZhiG0p/bMpHTFWB1naBxrNvobGv4QmmHw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BKny7DKs;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.56
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010056.outbound.protection.outlook.com [52.101.201.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6097D606A31E;
-	Thu, 26 Nov 2026 19:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A278E606A31C;
+	Thu, 26 Nov 2026 19:24:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A278E606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H4oVjYa0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C641F000D4;
-	Thu, 26 Nov 2026 19:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795720626;
-	bh=TeBv919u0tdzRATsjRKyQB2JzyijIcDOw/pARemxP80=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=H4oVjYa0yd00ENrH/AFrETnameCBDXf7RwHVT48HgftH5wKOaY2YRZF8R8C5ThMUI
-	 jcqOMw+CN6JXTkUHLDZ+T+B2n1COVN4btv2XxscVZpsr5Dc3lkolMGdrvGPtMimc6K
-	 NPcIowyAktvYl/oKk7fIycCb5tksJt1gNnvPkgVXBrWeuzlxDueqQkueHEZTHnzRpb
-	 VHzuut/K549ECV4rybQOhaowKgTFgT4AE4vHMpG8Kqk5+lz6aTk0+46rrt8sKiBYpN
-	 fRniFDWapuXffZwEkDI7F1QYu2JG38yLs4bwGBAmOThwYX6Po44KzSfPl33tklJYCv
-	 VNc7J7gXkAq0Q==
-Subject: Re: [PATCH net-next v2 12/12] selftests: net: add amt_gw_v6.sh for
- the IPv6 netlink attributes
-From: netdev-bot+sashiko@kernel.org
-To: omar@blockcast.net
-Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Thu, 26 Nov 2026 19:17:05 +0000
-Message-ID: <179572062595.3135.5756555149194177847@kernel.org>
-In-Reply-To: <20261125191450.2497936-13-omar@blockcast.net>
-References: <20261125191450.2497936-13-omar@blockcast.net>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BKny7DKs
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lc6k3fkRYHvKF5s6SMQCesdU4EwS1+upSkFWj+EzZV5Q+bTY3tfg260ygbugEPZ5Z/ofon19WrydEevIsHwDLoIkXj7ZOJPyMsmNxxvqzT08UXTaRzLtNqnN/JD0sJzmpCTLcaVYnvAtSUdAOEflHYOMIgJuZbqv8eaZLAC4veb8rE5wl08Xt1510U9t0HiNMbsRxpYrLhSA2QTxiBLCnMgirFw+Vvm0OQZGtaZIjCh3UU4Fl8wOSz2qEzl95rgCGlJMVyA/VgjmkmHNdQVwHulMbCsZKDGPb82KvDxCwCtUu6ATlHlGNN7A99bT8G0aVxcmIGv6STei7ICDGgSnqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2zT+yAmhvE7wj4OvqmtPVc/NxcpzCQ+2i5Rw6/CHKNY=;
+ b=vS0SX1Pu6iNPJoitCZsNLL/HgjgzhpA7cNurh74JjjkxVBBunjjVSGGbLTCSn8jksZmXsYQFR8I9Ki9B0BFdKi3QEnLC7IALQ9Orz3+7nBlFr94U/dnq8mtn5uJkNSoS6dYKjYPrN+t/T4Rxq2Nvqs/BX0JR8PEZsyyECJrzhRwBTXfUOrxReeU16GsJMnTZrCVuUT/F7HsCOk/sWHTol9K9twseBAmrCXSUiDQmkrZ099PiM88am53jG6wiehKCeuVtTUCRGJcWxyqVqofF8xkqmgWuFEZBixD6LdQKJ8hTvs10ySjKZYR9T1DbVBU00yf41FtiWOXnZrHIlFWirA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2zT+yAmhvE7wj4OvqmtPVc/NxcpzCQ+2i5Rw6/CHKNY=;
+ b=BKny7DKsKf/yYhLSAO4aRAs5l3OvUthjl4ZJ6AMvT1tNsbNI1NrZhea7w2T24d0RnqI0R/6Cp45s3M0z/w+/0Valvj81LDWYFTL1dyDLwf0vpsIafeuQ7OGZ/00Jom7L9oKJpawt8VSpaHAuogGsHXmO56IYb8OeVZvutHa8Lph4wAc2vpXCybgQAFv3LDH0p+V0Rl/Pm90qiFruDifq8riYQTS1+wD3O+zWtzhzRkzilxUsWdpMtN3QoLX4Wsco8S+jJecnkbDENYqkas6MyodLAsfZoli9tv6HxMPYchUYB/ehKv2BN7W1vZLw2vZ9+nZeRoq9wgR2gY2TpFb5iw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13)
+ by CY8PR12MB7244.namprd12.prod.outlook.com (2603:10b6:930:57::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Thu, 26 Nov
+ 2026 19:24:16 +0000
+Received: from LV8PR12MB9407.namprd12.prod.outlook.com
+ ([fe80::208b:424e:47e9:8a96]) by LV8PR12MB9407.namprd12.prod.outlook.com
+ ([fe80::208b:424e:47e9:8a96%4]) with mapi id 15.21.0662.004; Thu, 26 Nov 2026
+ 19:24:16 +0000
+Date: Thu, 26 Nov 2026 21:24:07 +0200
+From: Ido Schimmel <idosch@nvidia.com>
+To: Yifei Sun <yifei.sun@inria.fr>
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	willemb@google.com, horms@kernel.org, razor@blackwall.org,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] ipv4: keep scanning the leaf when a nexthop
+ object is unusable
+Message-ID: <20261126192407.GA1010466@shredder>
+References: <20261126162538.2509994-1-yifei.sun@inria.fr>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261126162538.2509994-1-yifei.sun@inria.fr>
+X-ClientProxiedBy: TL2P290CA0004.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:2::13) To LV8PR12MB9407.namprd12.prod.outlook.com
+ (2603:10b6:408:1f9::13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,185 +98,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9407:EE_|CY8PR12MB7244:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1c377f3-bcb4-4b6d-66b6-08df4bf2dc89
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10067099003|11063799006|56012099006|261026121527099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	Cz0yR0PZDtEtQ6GnbLfLW5/8nhHPFXzAMgptOQrNYAiRKzA09FRGmjwoDTLn6RqSiBw8lflakRcAE6JShzF4S6TqeklJl+Ei3M8cqWx1if6Dpe5Rn5QC1VysFKD9j4PgSwSP49hZ9cnnqKX9yKEFIjTFDXYNTAlz31fU9zq2ZQSUlXGj93ouE32fnuECYO3TMuVk5vSr7SLls9pu6aF5DsZazbEMT9XSj9Nbaub2vtDnxQ/RcpSFxXaPWRzmIAsqslfpl7W4WcYQeVEHcxU98+7BHEKguxLBAx7wd3ubSsubbVG76QHQuhX7CZfxity3Wl/kq7NTNaVENKSDN2GglvWjr7LyW4NF7dsgQpxzajgh6rhkIhVUeqgRD7Ii5zVJ+om75f5s9IgImE+vMmzwPslWcBu8uCeeOkiph7FW2ZXOrtKoOanqtz/hhp5vH000PmUgRJv7P0RhXbOk1VMAdv9r9O31C8Kd8LBqIcvNhug/VyHcds8CmIkpG/NELcwvn4MQAUs3XebyhqfA1LQPvoqfuFeGUxfTcjMO+U92JM1SRI3FsPsZSpI8z7vqNFcAhqb8DON3ike4WrLHkneEiLpJPoZyprnpiCe4SYI39WuGolamkwQfviVmcb0MG6HQ8SC0PSo6jrbdyxAqZYmup1db8xM0XOvNQ0jyX/vMTu0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9407.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10067099003)(11063799006)(56012099006)(261026121527099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?jeJnERz2HygE3XsEPf+Brh473qirWjE58SxmofQw7KiBGKYFjyvbl+9lBusW?=
+ =?us-ascii?Q?OiPsyCCO6FVS2cApkrqTLFmHY8MwlcnEOENV2IyNgB4heEEyo1suStHzuuOY?=
+ =?us-ascii?Q?eF9Z0ZfA1aRJRpvmmtnI+VR+rCyIS4Iw+vHP/fo+0YzF6gflbp5HmaETaP2B?=
+ =?us-ascii?Q?F4c3d2GHdW3ax3n58s8uh4hVmFy866NnKVwmQn5/n4PppoYb8oq0gS4TLIya?=
+ =?us-ascii?Q?7uVQNt9E3r3yRigh6UmE39gbTywFXpYgAUDWrywg22tAUHySB4KhKtjYg97n?=
+ =?us-ascii?Q?2iBGOeELbEAy4cHqleCT7/kymnwIksTQNz1SJEPxCfIti67T49HGMWYi15ZL?=
+ =?us-ascii?Q?klfnMWojliRIG8umWjR9puXf9iDmZb5ZhKaaLrjz02xl/C8CDsral/urPxWl?=
+ =?us-ascii?Q?iAxAZ3WkGjI7vOOeDZ28tbgVSKJ3Xe8FRIGgz/AYIAx+q4cbimaZOIBQVZqo?=
+ =?us-ascii?Q?GFKqEVhMfNDX+D0zSO4FKUQ0EQYimapWuAVDalhqwcI+YHNrBUa5Z2IZ8tP5?=
+ =?us-ascii?Q?otS/3++G/55qkGsW1xs2c0i4/xnXXbcOsL2j0hUzMyoJd15uvCAt8FiwSM86?=
+ =?us-ascii?Q?p9WoCH2qkY+zzXIh/s+G4hHAkCBMY6bAbngCIRY526ZSs1VK4uFB3wdXJ3u4?=
+ =?us-ascii?Q?6fq9UEvP1Lx9TkhAOFWK9Pt+9Ab32Yy+Q/eVlsuexzx5dev7acIzSZ4DMebP?=
+ =?us-ascii?Q?p+e9u7NgoHlB9fcv55oVjcqWTebC5Wh2zdT5SEb0krW/2SiMmUCRZ92IajJl?=
+ =?us-ascii?Q?z/R5TXlRglyq4p+0BkXVJUPK5lspolqW/Ur0RgEBSD7IRrbAa/Jyx2JAVdJy?=
+ =?us-ascii?Q?o8igg1bLTExmDVY4yzC+8eWHCACB0UdgquEjHIczrdqC9XtG462yvGquMRi5?=
+ =?us-ascii?Q?ChMDEx2CNKZ8Y0+vk4nZ031Xa468l6Gg8jC9T9mPO4muH9EiEBOaJ0JvrZXK?=
+ =?us-ascii?Q?7i30YjxUCx12bKdQ/8WEm7vO0xVf7hX2zKJOxCHcwA/Zq8ahQW0/vK4HLLJc?=
+ =?us-ascii?Q?GUWHODTH3TqPP/LxRKb7lSyT53FDlJXtUS4+L4z+5JgUkMhzOL3DZKM0ajVR?=
+ =?us-ascii?Q?ZyXyWjNRZJIghPjMlN8EPllRJdfKanrbzedQRa3giFze/iRlzveSp6v3/f2a?=
+ =?us-ascii?Q?9jmTBUbE6CXhG+UQuNRzqkq7HtcagGEEzbB22+HQ41U2/GK+zXkz/Bm2h0QF?=
+ =?us-ascii?Q?GI2+YRZtS/Nl2VmMzDYuk5cqt4hmelfynOIYisdv/sXfLM8c+dOWh6iTm4Kg?=
+ =?us-ascii?Q?ZDeWwu5dulGWuxOJkQdc8ohRhcKuingBNQMBKaGbVTYQzOsVGvkzsDTXvN4l?=
+ =?us-ascii?Q?6M2vdF3NSVQKImx+lJFzPCkt4joR+BDyEOjGw5u8MqKisUEss6+DHEW6g4AB?=
+ =?us-ascii?Q?pELOsc35SRxNUMYRxkGENH4iXX9PkCizLORTNasLCc4w0I5cDgpPsbzBqJPJ?=
+ =?us-ascii?Q?atzB8cFvC14BOKyDmHu9rQYGzYOyUmeUPqvZsrjgTAIv9wBNoukSRTKUwosQ?=
+ =?us-ascii?Q?JXBfbe9xgF+9dctW+5tGxTB9mv6irTsNy5xE9oulaNWkPOUBrLGJjovIHivY?=
+ =?us-ascii?Q?QNuXY/9NkPBPcDOJ6S/8KDtxiNVzbUMdBVtshCMtwKjXi55ojyiZA4m3gcm4?=
+ =?us-ascii?Q?K1HEB+xegE+N2MW4UkSuHvdYcMSn2Ql6uv6nABMsotXFiJ+RjLi8w5UJ5YBO?=
+ =?us-ascii?Q?Eqnaq4w90ujAIEEJNc2ueeX0Bo7MiTsmXcwU4oZqMCDu6LwF?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1c377f3-bcb4-4b6d-66b6-08df4bf2dc89
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9407.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2026 19:24:16.5420
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VsEL/AupU57sLsSpklz14NSWyJE2CQQMsOgo/H5XGi/VWKDq9aER+MLCN4dW7c1EReYZP0Hlaq2VpXbu3xFFgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7244
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+On Thu, Nov 26, 2026 at 05:25:37PM +0100, Yifei Sun wrote:
+> With veth1 on 172.16.1.0/24 and veth3 on 172.16.2.0/24:
+> 
+>   # ip nexthop add id 12 via 172.16.1.2 dev veth1
+>   # ip route add 10.0.0.0/24 nhid 12
+>   # ip route add 10.0.0.0/16 via 172.16.2.2 dev veth3
+>   # ip route get fibmatch 10.0.0.1 oif veth3
+>   RTNETLINK answers: No route to host
+> 
+> When the /24's nexthop object has no path on veth3, fib_table_lookup()
+> backtracks past the /16 in the same leaf. A socket bound to veth3 then
+> ARPs for the destination instead of the gateway. Fix this by trying the
+> next alias in the same leaf. The lookup already does this when no
+> inline nexthop is usable.
+> 
+> Fixes: af7888ad9edb ("ipv4: Refactor nhc evaluation in fib_table_lookup")
+> Signed-off-by: Yifei Sun <yifei.sun@inria.fr>
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 1
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] In probe_v6_gateway()
-  (tools/testing/selftests/net/amt_gw_v6.sh, lines 48-64), the first…
-- [Medium] In probe_v6_gateway()
-  (tools/testing/selftests/net/amt_gw_v6.sh, lines 66-80), the probe…
-- [Low] selftests: net: missing CONFIG_AMT skip handling in
-  probe_v6_gateway()
-
---
-
-selftests: net: add amt_gw_v6.sh for the IPv6 netlink attributes
-
-This adds a netlink-only companion to amt_v6.sh. It checks that the IPv6
-local and discovery addresses of AMT gateways and relays read back through
-amt_fill_info(), and that each invalid combination is refused with the
-expected extack message. A probe at the start skips the test when iproute2
-or the kernel lacks IPv6 AMT support.
-
-> diff --git a/tools/testing/selftests/net/amt_gw_v6.sh b/tools/testing/selftests/net/amt_gw_v6.sh
-> new file mode 100755
-> index 0000000000000..92e48d2f54a5c
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/amt_gw_v6.sh
-
-[ ... ]
-
-> +probe_v6_gateway()
-> +{
-> +	local got
-> +
-> +	if ! add_amt amtprobe mode gateway local "$V6_LOCAL" \
-> +	     discovery "$V6_DISC"; then
-> +		case "$ADD_ERR" in
-> +		*"IPv6 address in an IPv4 attribute"*)
-> +			# An older iproute2 on this kernel: the rule that
-> +			# refuses the 16-byte IPv4 attribute is what ran.
-> +			RET=0
-> +			log_test "16-byte IPv4 address attribute is refused"
-> +			echo "SKIP: iproute2 lacks IPv6 AMT support"
-> +			exit "$ksft_skip"
-> +			;;
-> +		*"Local attribute is required"*|*"expected rather than"*|\
-> +		*"IPv6 support is disabled"*)
-> +			echo "SKIP: no IPv6 AMT support: $ADD_ERR"
-> +			exit "$ksft_skip"
-> +			;;
-> +		esac
-> +		echo "FAIL: cannot create an IPv6 gateway: $ADD_ERR"
-> +		exit "$ksft_fail"
-> +	fi
-
-[Severity: Low]
-What happens here on a kernel built without CONFIG_AMT, or where the
-amt module cannot be loaded?
-
-In that case __rtnl_newlink() in net/core/rtnetlink.c finds no link
-ops for "amt" and fails the request with -EOPNOTSUPP and the extack
-message "Unknown device type". ADD_ERR then holds "Error: Unknown
-device type.", or "RTNETLINK answers: Operation not supported" from
-an iproute2 that does not print extack. Neither matches any arm of the
-case statement, so probe_v6_gateway() prints "FAIL: cannot create an
-IPv6 gateway" and exits with ksft_fail.
-
-An iproute2 with no amt link support at all ends up in the same place.
-It cannot parse the mode, local and discovery arguments, so it
-typically fails with "Garbage instead of arguments" before anything
-is sent to the kernel.
-
-Both are missing prerequisites, not failures of the code under test.
-The comment above probe_v6_gateway() says only failures of the code
-under test should be reported as FAIL. amt.sh already handles the
-iproute2 side by checking ip link help for amt before it starts.
-
-Would it make sense to do the same check here, and to add "Unknown
-device type" and "Operation not supported" to the skip arm? The test
-would then report SKIP rather than FAIL on such a setup.
-
-[Severity: Medium]
-Can the first case arm in probe_v6_gateway() ever match? I could not find
-the string "IPv6 address in an IPv4 attribute" anywhere in the kernel
-tree. It only shows up here and in probe_v6_relay() in amt_v6.sh.
-
-As far as I can tell, the only thing that refuses a 16-byte
-IFLA_AMT_LOCAL_IP or IFLA_AMT_DISCOVERY_IP is the policy in
-drivers/net/amt.c:
-
-amt_policy[] {
-    ...
-	[IFLA_AMT_LOCAL_IP]	= NLA_POLICY_EXACT_LEN(sizeof(__be32)),
-    ...
-	[IFLA_AMT_DISCOVERY_IP]	= NLA_POLICY_EXACT_LEN(sizeof(__be32)),
-    ...
-}
-
-validate_nla() checks that policy before amt_validate() or amt_newlink()
-runs. When the length is wrong, nla_validate_range_unsigned() in
-lib/nlattr.c reports:
-
-		if (binary)
-			NL_SET_ERR_MSG_ATTR_POL(extack, nla, pt,
-						"binary attribute size out of range");
-
-Take an iproute2 that packs the IPv6 literal into the IPv4 attribute.
-Wouldn't ADD_ERR be "Error: binary attribute size out of range." in that
-case? That string matches none of the arms, so the script reaches the
-"FAIL: cannot create an IPv6 gateway" exit on a correct kernel, not the
-intended PASS and SKIP.
-
-The commit message also says:
-
-    this kernel refuses it ("IPv6 address in an IPv4
-    attribute").
-
-Does any rule in this series emit that message? The skip list in
-probe_v6_relay() in amt_v6.sh has the same pattern, so it would also
-report FAIL instead of SKIP with such an iproute2.
-
-> +	got=$(amt_field amtprobe discovery)
-> +	ip -n "$GW" link del amtprobe
-> +	if [[ "$got" != *:* ]]; then
-> +		# A kernel with the IPv6 attributes names the missing
-> +		# discovery address this way, and must have refused the
-> +		# 16-byte IPv4 attribute that an older iproute2 sent.
-> +		add_amt amtprobe mode gateway local "$V4_LOCAL"
-> +		ip -n "$GW" link del amtprobe 2>/dev/null
-> +		if [[ "$ADD_ERR" == *"of the local family is required"* ]]; then
-> +			echo "FAIL: 16-byte IPv4 attribute read back as '$got'"
-> +			exit "$ksft_fail"
-> +		fi
-
-[Severity: Medium]
-Can this FAIL branch be reached through anything other than a userspace
-limitation?
-
-If the probe link was created, the exact-length policy on
-IFLA_AMT_LOCAL_IP and IFLA_AMT_DISCOVERY_IP means iproute2 sent 4-byte
-attributes, not 16-byte ones. A readback without a colon here, or an
-empty one from the "// empty" in amt_field(), would come from one of two
-sources:
-
-- an iproute2 that truncated 2001:db8:a::1 and 2001:db8:a::2 to
-  32.1.13.184. The kernel correctly accepts that as a valid IPv4 unicast
-  local and discovery address.
-- an iproute2 that prints IFLA_AMT_DISCOVERY_IP6 under a JSON key other
-  than discovery.
-
-The follow-up check then creates an IPv4 gateway with no discovery
-address. On this kernel, amt_validate() rejects every such gateway with
-the same message:
-
-	if (data[IFLA_AMT_LOCAL_IP6] ? !data[IFLA_AMT_DISCOVERY_IP6] :
-				       !data[IFLA_AMT_DISCOVERY_IP]) {
-		NL_SET_ERR_MSG_MOD(extack,
-				   "Discovery attribute of the local family is required");
-
-So doesn't this branch always print "16-byte IPv4 attribute read back"
-and exit with ksft_fail, even though the kernel did what it should?
-
-The commit message describes this case as:
-
-    If such
-    an iproute2 gets an IPv4 device back from a kernel that has the IPv6
-    attributes, recognised by its "Discovery attribute of the local family
-    is required" message, the refusal is broken and the probe fails.
-
-The four truncated bytes cannot be told apart from a real IPv4 address.
-Is there a kernel refusal that could be broken here, or should this case
-be a SKIP?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125191450.2497936-1-omar%40blockcast.net
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
