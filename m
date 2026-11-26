@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795720626;
-	b=N/9ChCbi3w34zWQDzK8xCUhLPzca2lwwZnZufLJy/OXfujNoBz478pJODX0Cco0G9PuO
-	 8siaKgtImufMZs1cyUOXtYRJ2RXoC+IKrAO+3a8n434Le4wyDAykLi1bE2QTHjUK50XFj
-	 nT2Iwcw08EcPUg5kZ3ow8i/A63aEys0l9+n74rLKdX1URweR0wQIZPM1/0syeURmD/15x
-	 kz350LCY++MSJOLAfK7muvaFaDFq01MSLznxaPQdRUTCspoGWPmveJryrOL/IS5SFBHb8
-	 HDNnefSx1hSpqbCc8dl1gxayUcgjF0edz5lUfgKSWfBkJ0feLZ1H3vqTV/CJ24mVLeQ==
+	t=1795720624;
+	b=3yvnrJ3VupTYVbvd51tCYwhs2iGYctJZ5pDNwjrJKamqdmfYDU/zFdXOh82DXlbIyS6L
+	 7jY+4BdF1QTbeEhooEod6RreA91fqoY+VZBfUfRFgOSG6CaKqo3iCeTy5PQ7wPz3xvGjB
+	 oFSHogUC8dEU5NCQUkhVkt7Pr61GqQ24HBgBIjg1j0elMIceQsamGxGU8HrewdRFHoT1J
+	 lrAhqQf0LC1ClOyNy/Mps8+G1VCbbd6d27gNDBRCct+f5wlMZw0/OAfgC+bMcQURPo6v/
+	 76VzixOxX1S86r2vtPZ1rcpUdUWyBGlktTI+12mWKeg0JZvw9lQBKCerhAvmxql4D2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795720626;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795720624;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=WDme1QdEj+83k+T3SXxy9P/XoCYbV5jh4bto230OVDk=;
-	b=HKjjgi2JIh0Z4xByiJ3B7vrc77oqwpvegseV+bYnKb4EHwxFqtBfj4LkUVNkQ5ha48Qj
-	 daQSG/l/Q+Yig6Y24vk+u13ClG09LU0SBjMcFVZ8QvG0YNp4fcKMes2R+WjE1mGixBjIk
-	 vZ7kX4inPUsXtnAaBhemQZRz+v+1wMy8iNFH1vnmVZvDkA68b7f+UDNgj2E+5g89YR46s
-	 v4wOdEe5mk/igXez2JaxrKRtL7Hp20f0qiQ531w9lJT+xTwj0AEQ30Y6L0lZHrTIc+tLE
-	 Qv2YosykOjn/VwJdrpck2w0KzeBpFCzKQ1RwNJmNh6M7uY6kZNWgInqJkmXkZ9qLeVg==
+	bh=N65HqPxX/ELug8Pbigt0amqo727I7WkvGhbQ0Xq8tKg=;
+	b=4lHf5dDZKpJETGKM30BJjxaWW0XnByGSdFiQdsxaI+ZK2KAk6eP5DiuyI7ZDjDaFVjr8
+	 iv8C0H7TQcCBKNNAIHPQi25kUYVYbvEVpDQG+4fsgMoMuI5IwEBhcf9sziT8Y37iQVDzt
+	 u5NQSisZjLXPF4scl5MSqunsgDkgpM5eKFLk0K+Co/4ZGrVaxFWxrm3u/ec4kOBlzlLVB
+	 LysAzJzBuDhC7Q51jXUJvbaY4rL/eI6417NYgmU9aX0WRVOk4Esb7/fBfykg6GUZ/5d/X
+	 zHIkmzvnnzkpvQXEjZ0cJLYZ6VKy8s6C4GrvPVH5j5ez2UWKNmExx4K4D2Ge0G/MujA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WlHqVF2y;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GB70a263;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DBB606A329;
-	Thu, 26 Nov 2026 19:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34643606A33C;
+	Thu, 26 Nov 2026 19:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WlHqVF2y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD1E1F00A01;
-	Thu, 26 Nov 2026 19:17:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GB70a263
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224641F000EC;
+	Thu, 26 Nov 2026 19:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795720625;
-	bh=WDme1QdEj+83k+T3SXxy9P/XoCYbV5jh4bto230OVDk=;
+	s=k20260515; t=1795720623;
+	bh=N65HqPxX/ELug8Pbigt0amqo727I7WkvGhbQ0Xq8tKg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=WlHqVF2yhvtPTr9dSYS6xrAT0F9d/ys7MCvMpQyPvouv++yGgiierKoKer1xnKITR
-	 AjiIzsw5UeP5GQ4D70OOSC8atxpU5fKECOQgLkBIfiIF3SWHOie6I//tAWhR3QjG5w
-	 Bp+diahQZe/ujbGEshiCFuBEmdER5bvvalRym1UNSxktHKumRmdvazN6v4XulOH5/I
-	 rkIIEAcjPesiG0CvzogCDTS28kPbKkxNyG4bpvxdQin7CFXXS1lm1r9N4F7UHIGC6e
-	 1v7KdMVM7jy+am4JUCMVPadYOebZKWzzJNMi0/fwhw219Pj8lRh9lubFaO6hx+vKDl
-	 6758WpYqnELjw==
-Subject: Re: [PATCH net-next v2 11/12] selftests: net: add amt_v6.sh for an
- IPv6 outer transport
+	b=GB70a263uFekhs/KQMkwZkMvIac6Ti8UaJ7eOBbO5veapd1qw59m9TGwLrIUU0149
+	 Qyat30ZexBv4uF4DGHeebXD5fsvWgNFurQY4Xl6gTRXa8bvfYdB42T5mDA5qFlbLp8
+	 InPTjGohrdLr97LCg2AK9uvdadynnIVYFzi0Nddj1lcb55irkgiU1vEY4kdZwSo4Na
+	 Cn2aowxlpopkmwsnlu/tT5ekCzKJB/01CSW7bfdWbnvnpQH5YDa+XI6dXQCa1OdVL0
+	 rYXB0VQYhARMV75Zde0GTG+KvyrS9McRUCpjhkYgTmRmkynmiVnYBV7jrUy5NNvjGH
+	 bdQjvoEtqJIfg==
+Subject: Re: [PATCH net-next v2 08/12] amt: receive the AMT gateway control
+ plane over IPv6
 From: netdev-bot+sashiko@kernel.org
 To: omar@blockcast.net
 Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Thu, 26 Nov 2026 19:17:04 +0000
-Message-ID: <179572062428.3135.4041633001964825666@kernel.org>
-In-Reply-To: <20261125191450.2497936-12-omar@blockcast.net>
-References: <20261125191450.2497936-12-omar@blockcast.net>
-X-sashiko-severity: Medium
+Date: Thu, 26 Nov 2026 19:17:02 +0000
+Message-ID: <179572062268.3135.2896747109290971474@kernel.org>
+In-Reply-To: <20261125191450.2497936-9-omar@blockcast.net>
+References: <20261125191450.2497936-9-omar@blockcast.net>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,141 +65,84 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] probe_v6_relay() in tools/testing/selftests/net/amt_v6.sh is
-  meant to skip in one case it cannot recognise.
-- [Medium] selftests: net: probe_v6_relay() fails instead of skipping
-  without CONFIG_AMT
-- [Low] The commit message overstates how closely amt_v6.sh mirrors
-  amt.sh.
+- [Low] This patch changes how an IPv4 gateway handles Relay
+  Advertisements, and the commit message does not say so.
 
 --
 
-selftests: net: add amt_v6.sh for an IPv6 outer transport
+amt: receive the AMT gateway control plane over IPv6
 
-This adds amt_v6.sh, a variant of amt.sh in which the AMT gateway and
-relay use an IPv6 outer link, with a second gateway on the same link.
-It checks discovery through a secondary relay address, IPv4 and IPv6
-multicast forwarding, tunnel MTU handling, that a Discovery sent to
-ff02::1 gets no answer, and rediscovery after down/up. A probe skips the
-test when the kernel or iproute2 lacks IPv6 AMT support.
+This patch lets an IPv6 AMT gateway receive Advertisements, Membership
+Queries and Multicast Data over an IPv6 outer header. The learned IPv6
+relay address is published under a new seqlock. A zero UDP checksum is
+now accepted only for Multicast Data on an IPv6 gateway.
 
-> amt_v6.sh is amt.sh with the gateway<->relay link moved to IPv6, and a
-> second gateway on that link:
+> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> index 6158e13f5520f..7dd1d544ff14e 100644
+> --- a/drivers/net/amt.c
+> +++ b/drivers/net/amt.c
 
 [ ... ]
 
-> The namespaces, inner addresses and smcroute (S,G) routes are those of
-> amt.sh, and the scripts use the same tools, plus jq.
+> @@ -2662,27 +2719,48 @@ static bool amt_advertisement_handler(struct amt_dev *amt, struct sk_buff *skb)
+>  	struct amt_header_advertisement *amta;
+>  	int hdr_size;
+>  
+> -	hdr_size = sizeof(*amta) + sizeof(struct udphdr);
+> +	/* The IPv6 form (RFC 7450 s5.1.2) has the same header and nonce, with
+> +	 * a 16-byte relay address in place of ip4.
+> +	 */
+> +	hdr_size = sizeof(struct udphdr) +
+> +		   (amt_v6(amt) ? sizeof(struct amt_header_advertisement_v6) :
+> +				  sizeof(*amta));
+>  	if (!pskb_may_pull(skb, hdr_size))
+>  		return true;
+>  
+> -	amta = (struct amt_header_advertisement *)(udp_hdr(skb) + 1);
+> -	if (!amta->ip4)
+> +	/* The two forms differ only in their length, and the device's family
+> +	 * picks one, so a message of the other form is not accepted.
+> +	 */
+> +	if (ntohs(udp_hdr(skb)->len) != hdr_size)
+>  		return true;
 
 [Severity: Low]
-Is "plus jq" accurate? amt.sh already uses jq in test_remote_ip() and
-test_query_egress().
+Is this new length check meant to apply to IPv4 gateways as well?
 
-Also, amt_v6.sh does not carry over test_query_egress() from amt.sh.
-That test installs clsact and flower egress counters on amtr for IGMP
-(ip_proto 2) and MLD query (ICMPv6 type 130) packets, and it fails if a
-relay General Query leaves through the amt device. The
-send_mcast_torture4 and send_mcast_torture6 runs are not carried over
-either.
+When amt_v6() is false, hdr_size is 8 + 12 = 20. With this check an IPv4
+gateway now drops every Advertisement whose UDP length is not exactly 20.
+That includes the 24-byte form that carries an IPv6 relay address.
 
-This series adds the IPv6-outer General Query path:
+Before this patch amt_advertisement_handler() only did a minimum
+pskb_may_pull() and had no length check. An IPv4 gateway would accept the
+24-byte form and store the first 32 bits of the IPv6 address as
+remote_ip. It would then send its Requests to an unrelated IPv4 host.
 
-  amt_send_igmp_gq() / amt_send_mld_gq()
-    -> amt_send_membership_query()
+The commit message says:
 
-Should the egress check be added here as well? If not, could the commit
-message say that these checks were dropped, instead of describing the
-script as amt.sh with the link moved to IPv6?
+    The IPv4 comparison it replaces is the one "amt: reject a gateway Query
+    or Data from 0.0.0.0" fixed in net for IPv4, so this patch carries only
+    the IPv6 half.
 
-> diff --git a/tools/testing/selftests/net/amt_v6.sh b/tools/testing/selftests/net/amt_v6.sh
-> new file mode 100755
-> index 0000000000000..9d3e4a20676c3
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/amt_v6.sh
-> @@ -0,0 +1,355 @@
+It does not mention that IPv4 Advertisement parsing changes too. The check
+is still unchanged at the end of the series.
+
+If the old IPv4 mis-parse counts as a bug, could it be split out and sent
+to net with a Fixes: tag, as was done for the 0.0.0.0 fix? Otherwise,
+could the changelog state that the IPv4 behaviour changes?
+
+>  
+> +	amta = (struct amt_header_advertisement *)(udp_hdr(skb) + 1);
+>  	if (amta->reserved || amta->version)
+>  		return true;
 
 [ ... ]
-
-> +# An iproute2 without IPv6 AMT support either rejects the address or packs
-> +# it into the 4-byte IFLA_AMT_LOCAL_IP, which this kernel refuses and an
-> +# older one takes as an IPv4 address. A kernel without IPv6 AMT support
-> +# ignores IFLA_AMT_LOCAL_IP6 and asks for a local address. Skip in those
-> +# cases only.
-> +probe_v6_relay()
-> +{
-> +	local err got
-> +
-> +	if ! err=$(ip -n "$RELAY" link add amtprobe type amt mode relay \
-> +		   local "$RELAY6" dev br_gw 2>&1); then
-> +		case "$err" in
-> +		*"Local attribute is required"*|*"expected rather than"*|\
-> +		*"IPv6 address in an IPv4 attribute"*)
-> +			echo "SKIP: no IPv6 AMT support: $err"
-> +			exit "$ksft_skip"
-> +			;;
-> +		esac
-> +		echo "FAIL: cannot create an IPv6 relay: $err"
-> +		exit "$ksft_fail"
-> +	fi
-
-[Severity: Medium]
-Does this also skip when the amt link type is not available at all?
-
-On a kernel built without CONFIG_AMT, or where the amt module cannot
-be loaded, rtnl_link_ops_get() finds no "amt" ops and __rtnl_newlink()
-returns -EOPNOTSUPP with the extack "Unknown device type". An iproute2
-that does not know the amt link type at all rejects the command line
-before anything reaches the kernel.
-
-Neither error text matches any of the three case patterns. In both
-cases probe_v6_relay() prints "FAIL: cannot create an IPv6 relay" and
-exits with ksft_fail. A kselftest run on a config without AMT would
-then report a failure rather than a skip.
-
-amt.sh avoids the iproute2 half of this with its ip link help check
-before setup. Should amt_v6.sh do the same? Should it also treat a
-missing amt device type as a skip, for example by matching "Unknown
-device type" or by checking that the amt module can be loaded first?
-
-[Severity: Medium]
-Does this skip in the packed-attribute case described in the comment
-above and in the commit message?
-
-If iproute2 packs the 16-byte IPv6 literal into IFLA_AMT_LOCAL_IP, the
-kernel refuses it during generic netlink policy validation, before
-amt_validate() runs:
-
-drivers/net/amt.c:amt_policy[] {
-    ...
-	[IFLA_AMT_LOCAL_IP]	= NLA_POLICY_EXACT_LEN(sizeof(__be32)),
-    ...
-}
-
-NLA_POLICY_EXACT_LEN() is an NLA_BINARY range of 4..4. A 16-byte
-attribute therefore fails in nla_validate_range_unsigned(), which
-returns -ERANGE with the extack "binary attribute size out of range".
-
-That string matches none of the three patterns. As far as I can tell,
-nothing in the tree emits "IPv6 address in an IPv4 attribute"; it only
-appears in amt_v6.sh and amt_gw_v6.sh.
-
-In that case, wouldn't the probe print "FAIL: cannot create an IPv6
-relay" and exit with ksft_fail instead of ksft_skip?
-
-probe_v6_gateway() in the later patch "selftests: net: add amt_gw_v6.sh
-for the IPv6 netlink attributes" repeats the same pattern, so this is
-still there at the end of the series.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125191450.2497936-1-omar%40blockcast.net
