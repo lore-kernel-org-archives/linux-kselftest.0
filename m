@@ -1,58 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795709496;
-	b=ChIYswIqv7Eu52Mb8H2J4+zg1hGENcQJFhCdKutwoSkevn3zKl0AJ+cCmUb9Lrpbu89h
-	 XtpWk6l3fzUDZXhy9F6hsCLSRxlyTxWDSCFW5vYqVBHQpX2YhikNpjHHZqRHYGDI549tl
-	 34cebYEzF8q7cR0FASPTWu5VNuGaDSlnLQkM1EjBSxD2Y92qTWuOacJOutr2bgfk9XDgg
-	 vhFB0Si2pjOABZr9pUBd3F08s/mpoWZWhLhaYLgNT6baY4OqViEreP4+Zm24mfVkQBmf1
-	 0u4HueOdEzuKw6CzdzF/8rUvz2AyIBIwocuQT7MqytFXHEWl8D5QUHsR8j3HREDuBOA==
+	t=1795709964;
+	b=BDX53zS1520s7PJ7xd1RC9xtPcuDsU0o1gHLCmDoqqfAVAXbrCCWYwCdCDCpSkRFBe6T
+	 I06GPwCiV+uH73F+JFJmgaWRGLmu8zfydQCqC255BEY9gZjyqCCinQMbLaejFr6BNBKiX
+	 5rkdVO/w9zBGDCLb1Vu2P6nv6PP21C7LTwtuUHrlWmJIFv/dlj+V+Og3Q9z5hbj6StEb2
+	 eoXwspQIRtDyCYLfN8pbOPoJd7DpaWkLreyq2g1HBUnPJbDed4wZGvx5mlfMwoRN4tTyq
+	 Mft3tQuPTxQHA2K5lEp7ofsJk5fdrIPnHqhT65XQnCLKWjj24avVAXXQd/z/wIGvK4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795709496;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 X-Cookie;
-	bh=PndWGLfIPHhkLT7wWeXkF6zasrlrMwqpJFZ4kXLIVgA=;
-	b=ocCedF8qpda81woycYt/HRmjvaxzPafIn+80wKypbQFViufKrV2FvGBaEhwsQCl1IqB6
-	 OVkkF3VkACUpHV5B6B2vKOsbN6nfMGY2ja9CnGtRaPOla8ej040wgWlqUqUwP8KboRNa5
-	 4iqxTy31oXGnL/ZVBrhGFazC614u0nEfFkSg3kvoU1S0vgq3/oBxofmYTZtGCJ6Msphrb
-	 zGFOCVU6rf15EjRgjog9uci4jrweact5+E4hWWUqL2TU8ClPh7u1YpNyIonrYdB3OEx95
-	 c1phrEsn8BsESdymMQaIeDY+ONwG1HoupO3yU/edmbGov7vtBEFM66Qc9MIIb9e5D5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795709964;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=qbYUQnraIR9RiROQnfT4JURPWt6f6uoEIDxWbSfFuL8=;
+	b=SjRDCrTHB9O+Cs/NOFoHMvKE1MsWa4iOn4O/7OwxO7fVjYqUUQ7opShBRf3lglRfkh6f
+	 Xay584Pfd3kZnIdrpCOCeCBZJ14BEge/Sdy3OHlBoSoR9z7lpAuciZ+Z2mPJQ0v2bRbLC
+	 s/Q5DjU4XS5QxKmqPkOomFeeOlzUfE6eCdcQmNYEG8kFtYc2jQu8NuJ6b6o0MYjb06nWB
+	 B35qADgpBkNvJTpwu6/OihOjrLXIidufr/ST38HKyQgwmL6BI8yvzPAoEuncv9slV/Vau
+	 P6qhMCLhVXV8ou4N/n57rNNZmU+Yq8GfDyRRv+fC0o2StxVDwQ+aKki898zYCcecmLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qv7w+0cL;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0656C606A31C;
-	Thu, 26 Nov 2026 16:11:36 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=qulIGXwJ;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74C9606A326
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 16:19:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C74C9606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qv7w+0cL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A13E1F000C6;
-	Thu, 26 Nov 2026 16:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795709495;
-	bh=PndWGLfIPHhkLT7wWeXkF6zasrlrMwqpJFZ4kXLIVgA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Qv7w+0cLz2JdED5tHUu2UuErAR4/SBdDlCw9fF7lO83ZiDTnz+W2PuzJ69iEHagZp
-	 9glRJzWCg23UObMuQTGVd3HYahaNBLJqZzKHvsMHFx8fEYVe8M+7RHeQNzourpXhLb
-	 ABtqsIAjYqeDyu4/rbufAlLmM3PJliI4VxGej8zSrq4l+3NkZDMHbUU/DuIfQTGCHT
-	 sN9rgySP1Tn2SoKiqoJiVK0pbAHwiNB/YOHCjBdfm+WCNIpSGdzriSAVLXWVGiLwN6
-	 /yL/5QWlzgbDQGrKtWPYthWkRsXncO85SokFUP++grCoMUO7ysxYL9Ex+4RCd4/IOx
-	 LwysMme+JO6fw==
-Date: Thu, 26 Nov 2026 16:11:31 +0000
-From: Mark Brown <broonie@kernel.org>
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Ben Copeland <ben.copeland@linaro.org>, linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests: ALSA: pcmtest: Load the module when it is
- missing
-Message-ID: <bd9dd7ee-a946-4901-9c94-13fdd35523d1@sirena.org.uk>
-References: <20261126035526.1779288-1-sammiee5311@gmail.com>
- <20261126035526.1779288-3-sammiee5311@gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=qulIGXwJ
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D6C51BA8;
+	Thu, 26 Nov 2026 08:19:20 -0800 (PST)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDA4A3F86F;
+	Thu, 26 Nov 2026 08:19:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795709963; bh=+1cJobFx/hmnyVcD3xqPnhuB7i0y5kiN28v6vnttq4A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qulIGXwJ46lk8EKkfjw7bm3rSRREKytZAsyObgI/DstFralkoSqrrdb4g3sbT+Ihw
+	 tZO1QS8NdE9bkevlNJYbgoC05KS86LorIedHR5Pf3Fqk5PzGLvt3M/HN+0bGoKwAa1
+	 bRZV8Nv4nXeHbadXlUoJTiOh36PmXpbyoIREgppA=
+Date: Thu, 26 Nov 2026 16:19:19 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Long Wei <longwei27@huawei.com>
+Cc: will@kernel.org, shuah@kernel.org, mark.rutland@arm.com,
+	broonie@kernel.org, kevin.brodsky@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, hewenliang4@huawei.com
+Subject: Re: [PATCH] selftests/arm64: signal: fix inverted feature mask in
+ diagnostics
+Message-ID: <awhcB558hdejyj66@arm.com>
+References: <20261114081013.964933-1-longwei27@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,53 +62,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yW60I46ndAXTBx2V"
-Content-Disposition: inline
-In-Reply-To: <20261126035526.1779288-3-sammiee5311@gmail.com>
-X-Cookie: Sank heaven for leetle curls.
-
-
---yW60I46ndAXTBx2V
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20261114081013.964933-1-longwei27@huawei.com>
 
-On Thu, Nov 26, 2026 at 12:55:25PM +0900, HyeongJun An wrote:
-> test-pcmtest-driver skips when the pcmtest debugfs files are missing.
-> The driver has no device to bind to, so nothing loads the module, and the
-> test skips even on a kernel that builds it.
+On Sat, Nov 14, 2026 at 04:10:13PM +0800, Long Wei wrote:
+> When a testcase is skipped because an incompatible CPU feature is
+> present, test_init() reports the feature set with:
+> 
+>         feats_incompatible & ~feats_supported
+> 
+> That is the set of incompatible features which are *not* supported,
+> i.e. always empty, instead of the incompatible features which actually
+> triggered the skip.  As a result the diagnostic prints an empty list and
+> gives no hint about why the test was skipped.
+> 
+> Use the supported set so the offending feature is reported:
+> 
+>         feats_incompatible & feats_supported
+> 
+> Fixes: 32de73e89099 ("kselftest/arm64: signal: Allow tests to be incompatible with features")
+> Signed-off-by: Long Wei <longwei27@huawei.com>
 
-> Run modprobe once before skipping, as the net pktgen test does. The
-> module stays loaded. In the default order the test runs after mixer-test
-> and pcm-test, so the extra card does not change what they check.
-
-> @@ -171,6 +172,9 @@ FIXTURE_SETUP(pcmtest) {
->  		SKIP(return, "This test needs root to run!");
-> =20
->  	err =3D read_patterns();
-> +	/* nothing loads the module on its own, so ask for it */
-> +	if (err && !system("modprobe -q snd-pcmtest"))
-> +		err =3D read_patterns();
-
-It'd be polite to unload the module if we caused it to be loaded, though
-potentially more trouble than it's worth.  I'm also not sure if this
-does the right thing if someone decided to build the driver in (to make
-it easier to deploy onto a test system for example).
-
---yW60I46ndAXTBx2V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmsIWjIACgkQJNaLcl1U
-h9AyNgf/Vav3oI4f/yKn7v2f8IMW0a2ujBNxDys8GG15Vy0bQr0u4HKph3pQKHH0
-RilJbSRzLg4R3QC6j5MQjHc5TuOoIQGF3HNX0c4vHhft6ZkRNYP2PWkvgywsJPqE
-2OjdsvxNDK1Tmg/pWx2umwM2Q29++KgLCyRYImaYj13jIoGqmlKOLe8R0aN5GhhX
-n5sZ4nmU2T7NA9jS2Sbzudbt4POpCFaDUduw3wU8a4Lm3M/w8OU0smZhzQQnIYEA
-FVI2pZMEBpwV3R1j9Z50XtWHEsqTqy8Dpp8rRkhSbZIq1rAr7qigDiLViGVcWqH1
-hG44k0NXHjTMgYTga69VqXyhmEE7cA==
-=F4/q
------END PGP SIGNATURE-----
-
---yW60I46ndAXTBx2V--
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
