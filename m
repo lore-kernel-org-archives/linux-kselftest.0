@@ -1,76 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795704118;
-	b=nD0A2G4cRmKIV0b//htLP5J4h4D6PpPeazWeQ58AUdEfv9CAn3fH72v3vESsBKYBybrB
-	 9fZC3K9HU5+lAGhLpICfZ1vZJVfNNic1G25LZDX8q5ZqMvJNttK+nUVniiP4U8y5MEhrB
-	 8A3uhOh0aHZPRzqz7QNaRBzo1fKEb4C4ccefDvmUhDykeytVolcj3A/2LXCNAOsoNS71B
-	 /MvKzSHy5hESD+yY80z7m58zyBpl10Ai8j6PDXqKVIUrvSuOEtRat+FWkGs1kfRq4GHpW
-	 rc2qeZFq08ZeC1ANJKWnR5uQqWeRswaPdNbJgcJ954xxz4z+2VaXsUIIYkMVf4qF8KA==
+	t=1795704438;
+	b=JehB1U67RWryZIckWQ5edJSWT2tPEU45G2PafSF7Noiy/BElTfngzMQtmaPAAyC+uwas
+	 UvjnaQnaMNh4/FnmNMAYeVV8HOimJZGNTK3A1M8bV1UlM4dn/vSSa4ubTfnhm0jeYMFDU
+	 XQ35mITBQWfhKNes/GJqL/DdGvD/9rLzOU13pTNRf5bEHCRFFGkNcdU/znS8HUqNsCBOJ
+	 SlZrk4jip0EeGegK5nGIiXaUyNCiHo2+bbr3ikoFdRQ/aDbsoji39FB9ub74yVgXy6vj/
+	 ZMlSpAVBenbxrk2I3Q1Z21674+9N3a6hCvwn3zNNFFGlxIq+957/2TYCabjeh4FGttw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795704118;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=rdNueW4QXzChDxHqUnOiyjaxZJ2JAneVGEC0pK9unoo=;
-	b=fEBy3OiSNHQHrokqbC67uyry9Wj3XjGbn2v9K3KD6+wAiX2YOXCEUR7LXKkQTh68nq+U
-	 dvwNFB6A/PbS6wrDGw0/wKlNCq4hJd+Srw4++Ckr4IRCDwhsooq42F5XQ+/NueOFJ1JIr
-	 2xjCfCDRYyuN91ai0DfkRtNz/vMsyAZg1V+dCj8hwbozYruMLQ5zGdiA+XFT7xvRyB9u5
-	 X8/+cM1G5p+p8b6zt4Ib09oOzbwlUNR++2EzcgdznSMCHlqTrHCGk2OqdtTnuN4NoJtDu
-	 OBqF/pG+TU9JK/8rviR97/d5I3RLJGe3rjmYNC4Va7wLk6JvoqCjXUeUNQUWAG+RsNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795704438;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=/q/pFzvKWu2mEF9/DwcsF9YD9/DZAPV7fZSCS+XMqKU=;
+	b=I9HbsfXmLCHEC6qHvnlq6ioN5E4ZyqhvCqBRY0UsBVm6b20FUa9+hmmUpO4btsTxdhLQ
+	 heaXDGQslhxntp32g28w10Qhr326zviSRyBPqyz/YY0P5MDg7ILuUwNdA/TyexJtMPSjZ
+	 D34h7T+Y89rQcrrZfwol1jLHVcOwxR5dylglt0lEc3Ci07kO4TfbuztWjJwsUXTMKQsJN
+	 z/sEvUi/+ECMTvu7lQ+BYRH7nVybFyNAdzJHb7qtFCtpQ7QvyFd9/2S3wrcYqUQ4koF/N
+	 jMhqkbnsY72MmkT2Ih+q3b0GLgmooJMipNjazEHuCltCe2kHjGnOF5O7e6mgQbKe68Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=irjBJ4pO;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TnusCb4W;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E7E606A31C;
-	Thu, 26 Nov 2026 14:41:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05E7E606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4035606A31C;
+	Thu, 26 Nov 2026 14:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=irjBJ4pO
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=rdNueW4QXzChDxHqUnOiyjaxZJ2JAneVGEC0pK9unoo=; b=irjBJ4pOaN8hlYqdi9z0/tZ5QE
-	T9+aD1Td7neEkAk3fz+FM6LDYPbo9nBVGUAdvGjvdarYhQNG+NlYK1h6aumaKO7FtCJntoqhtgDOm
-	VOUyC9rheVuZQmN033KGXuAzQ0F9gMTwF3u+wuCeu1VIgCR2qm5Ce+aBHdXNP67zeYoWnmqO4Nwzk
-	5+M7vfYK9XJWC3fQBL0WSYHC+NElfrz/DL4WYaw7MDm/qK7NvoYEayG2L4RiG5t8tbCg70xbRr1NU
-	JxjvifuZl1C5RgCEcF87Q/g5KUooFMY36uVFmyMZEoJNO75wd9dJnLsk/63VxxBV9Xdj/JDvss41q
-	wbZFYs1g==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xWafY-00000005V92-1py9;
-	Thu, 26 Nov 2026 14:41:52 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 63146303082; Thu, 26 Nov 2026 15:41:51 +0100 (CET)
-Date: Thu, 26 Nov 2026 15:41:51 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] sched, livepatch: Fix transition stall for
- CPU-bound tasks
-Message-ID: <20261126144151.GC83911@noisy.programming.kicks-ass.net>
-References: <20261125041900.3243569-1-dylanbhatch@google.com>
- <20261126142919.GG49833@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TnusCb4W
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2621F000C0;
+	Thu, 26 Nov 2026 14:47:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795704438;
+	bh=/q/pFzvKWu2mEF9/DwcsF9YD9/DZAPV7fZSCS+XMqKU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=TnusCb4W4Q6qbGBNI/+jR7w8yDxVE4LJQfEBrhJ6cZFXGapUzlFTf3WMBxxMNbUeZ
+	 7XJ/CuvWT5y24oUsLfgecaKlBERKAz1OzmvH50dDghi/kAdDc0zfT9mh8zFHgxnxJu
+	 d4213BuLgwWQeuNAyBZprdzTrjEavQFzp1Diram+4u+iv6nTh1l8/GrXGMoVUHOMI9
+	 1sPHXVNf29OWNBJH6tDfAM7PWd+sx8uzQvzorHEsGxE3CVabagg/fy2XvHRTynXB+N
+	 Fc+8hJenVdWTNp/VftnqWgECRoEPV00Er7wPt4ljJzK42a8ezXl+OsKC368ooFspUy
+	 4Mb6SuTqCNYoA==
+Subject: Re: [PATCH net v9 2/2] selftests: net: test joining genetlink groups
+ no family owns
+From: netdev-bot+sashiko@kernel.org
+To: anilkaushikwireless@gmail.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, idosch@nvidia.com,
+ nicolas.dichtel@6wind.com, jacob.e.keller@intel.com, jiri@resnulli.us,
+ fw@strlen.de, martineau@kernel.org, v3rdant.xiang@gmail.com,
+ aliceryhl@google.com, linux-kernel@vger.kernel.org, nhorman@tuxdriver.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+Date: Thu, 26 Nov 2026 14:47:17 +0000
+Message-ID: <179570443724.3135.6495722482046462156@kernel.org>
+In-Reply-To: <20261125144514.2717012-3-anilkaushikwireless@gmail.com>
+References: <20261125144514.2717012-3-anilkaushikwireless@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,118 +66,163 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261126142919.GG49833@noisy.programming.kicks-ass.net>
 
-On Thu, Nov 26, 2026 at 03:29:19PM +0100, Peter Zijlstra wrote:
-> On Wed, Nov 25, 2026 at 04:18:58AM +0000, Dylan Hatch wrote:
-> > Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
-> > live-patching") moved klp_sched_try_switch() from _cond_resched() into
-> > __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
-> > This causes livepatch transitions to stall when CPU-bound kthreads,
-> > PF_USER_WORKER threads (such as vhost-<pid>), or user tasks in long
-> > kernel loops spin with cond_resched():
-> > 
-> > 1. Even when __schedule() is entered via preemption or an unfreezable
-> >    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
-> >    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
-> >    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
-> > 2. A sole runnable task spinning in the kernel never gets
-> >    TIF_NEED_RESCHED set during sched_tick(). In klp_send_signals(),
-> >    wake_up_state(task, TASK_INTERRUPTIBLE) is a no-op for a
-> >    TASK_RUNNING task, and set_notify_signal() sets TIF_NOTIFY_SIGNAL
-> >    without TIF_NEED_RESCHED, so the resulting reschedule IPI returns to
-> >    kernel mode without entering __schedule().
-> > 
-> > Patch 1 fixes both issues by dropping the TASK_FREEZABLE check from
-> > klp_sched_try_switch() (relying on stack_trace_save_tsk_reliable() in
-> > klp_check_stack()) and kicking still-running unmigrated tasks via
-> > resched_cpu() in klp_send_signals() (as well as waking interruptibly
-> > sleeping PF_USER_WORKER tasks).
-> 
-> So I didn't get a reply on my v1 comment, and I still have the same
-> quesiton; how isn't any of this a problem for the freezer?
-> 
-> The intent was to make sure that a patch problem is a freezer problem
-> and we fix both together.
-> 
-> Both cases above would also delay freezing, no?
-> 
-> It seems I have overlooked try_to_freezer() /
-> kthread_freezable_should_stop(). Those should also do the patching
-> thing. And then its a matter of adding either of those to whatever loops
-> you think are lacking.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Perhaps something like so?
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
----
-diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-index 0a8c6c4d1a82..479e35b4f2cf 100644
---- a/include/linux/freezer.h
-+++ b/include/linux/freezer.h
-@@ -9,6 +9,7 @@
- #include <linux/wait.h>
- #include <linux/atomic.h>
- #include <linux/jump_label.h>
-+#include <linux/livepatch_sched.h>
- 
- #ifdef CONFIG_FREEZER
- DECLARE_STATIC_KEY_FALSE(freezer_active);
-@@ -56,6 +57,7 @@ extern void thaw_process(struct task_struct *p);
- static inline bool try_to_freeze(void)
- {
- 	might_sleep();
-+	klp_try_to_freeze();
- 	if (likely(!freezing(current)))
- 		return false;
- 	if (!(current->flags & PF_NOFREEZE))
-@@ -87,7 +89,11 @@ static inline void thaw_processes(void) {}
- static inline void thaw_kernel_threads(void) {}
- static inline void thaw_process(struct task_struct *p) {}
- 
--static inline bool try_to_freeze(void) { return false; }
-+static inline bool try_to_freeze(void)
-+{
-+	klp_try_to_freeze();
-+	return false;
-+}
- 
- static inline void set_freezable(void) {}
- 
-diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
-index 065c185f2763..8b9acffa3b64 100644
---- a/include/linux/livepatch_sched.h
-+++ b/include/linux/livepatch_sched.h
-@@ -18,8 +18,18 @@ static __always_inline void klp_sched_try_switch(struct task_struct *curr)
- 		__klp_sched_try_switch();
- }
- 
-+static __always_inline void klp_try_to_freeze(void)
-+{
-+	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
-+	    !(current->flags & PF_NOFREEZE)) {
-+		guard(preempt)();
-+		__klp_sched_try_switch();
-+	}
-+}
-+
- #else /* !CONFIG_LIVEPATCH */
- static inline void klp_sched_try_switch(struct task_struct *curr) {}
-+static inline void klp_try_to_freeze(void) {}
- #endif /* CONFIG_LIVEPATCH */
- 
- #endif /* _LINUX_LIVEPATCH_SCHED_H_ */
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index fdb8fb07f40b..87a13421da7a 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -198,6 +198,8 @@ bool kthread_freezable_should_stop(bool *was_frozen)
- 
- 	might_sleep();
- 
-+	klp_try_to_freeze();
-+
- 	if (unlikely(freezing(current)))
- 		frozen = __refrigerator(true);
- 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] In bind_before_family()
+  (tools/testing/selftests/net/nl_genl_mcast.py), the `finally:` block…
+- [Low] _free_ids() in tools/testing/selftests/net/nl_genl_mcast.py
+  decides it is in init_net by comparing…
+- [Low] _members() in tools/testing/selftests/net/nl_genl_mcast.py calls
+  sk.getsockopt(SOL_NETLINK, NETLINK_LIST_MEMBERSHIPS, 64) and decodes…
+
+--
+
+selftests: net: test joining genetlink groups no family owns
+
+This adds a Python selftest. It checks that Generic Netlink multicast
+group IDs no family owns cannot be joined with setsockopt() or bind(). It
+also checks that a socket bound to free IDs does not become a member of
+the NET_DM groups once drop_monitor is loaded.
+
+> diff --git a/tools/testing/selftests/net/nl_genl_mcast.py b/tools/testing/selftests/net/nl_genl_mcast.py
+> new file mode 100755
+> index 0000000000000..8bbe3d22225cf
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/nl_genl_mcast.py
+
+[ ... ]
+
+> +# include/uapi/linux/nsfs.h
+> +NET_NS_INIT_INO = 0xEFFFFFF9
+
+[ ... ]
+
+> +def _free_ids(ctrl):
+> +    """Return the IDs in 1..32 that no family owns."""
+> +    # Outside init_net, the dump skips the families that are not netnsok,
+> +    # but their groups are still owned.
+> +    if os.stat('/proc/self/ns/net').st_ino != NET_NS_INIT_INO:
+> +        raise KsftSkipEx("not in the initial network namespace")
+
+[Severity: Low]
+Can this check ever match on kernels older than commit 9b0240b3ccc325
+("netns: use stable inode number for initial mount ns")?
+
+That commit added NET_NS_INIT_INO to include/uapi/linux/nsfs.h. Before
+it, the ns.inum of init_net was a dynamically allocated proc inode number
+(PROC_DYNAMIC_FIRST and up), so this comparison never matches.
+
+join_free(), bind_mask() and bind_before_family() all call _free_ids()
+first. On those kernels all three subtests would skip, even when run in
+the initial network namespace. The printed reason, "not in the initial
+network namespace", would also be wrong.
+
+The companion fix "genetlink: Reject joining multicast groups no family
+owns" has a Fixes: tag, so it is a likely backport candidate for stable
+trees such as 6.12, 6.6, 6.1 and 5.15. If this test is backported with
+it, the fix would never be exercised there.
+
+The commit message explains why the fixed inode number is used, but it
+does not mention this limitation. Would a fallback help here? For
+example, the test could compare against the inode of /proc/1/ns/net when
+the fixed value is not in use. Another option is a skip message that
+states the actual condition.
+
+[ ... ]
+
+> +def _members(sk):
+> +    buf = sk.getsockopt(SOL_NETLINK, NETLINK_LIST_MEMBERSHIPS, 64)
+> +    # An array of u32 in host byte order
+> +    words = struct.unpack(f'={len(buf) // 4}I', buf)
+> +    return sum(w << (32 * i) for i, w in enumerate(words))
+
+[Severity: Low]
+Could _members() decode uninitialised bytes when the socket has more
+than 512 groups?
+
+In netlink_getsockopt(), the NETLINK_LIST_MEMBERSHIPS case stops copying
+once the user buffer is full. It then reports the full required size
+anyway:
+
+net/netlink/af_netlink.c:netlink_getsockopt() {
+    ...
+		opt->optlen = ALIGN(BITS_TO_BYTES(nlk->ngroups), sizeof(u32));
+    ...
+}
+
+do_sock_getsockopt() in net/socket.c writes this value back to user
+space without clamping it. CPython's socket.getsockopt() then resizes
+the returned bytes object to that length. Everything past the 64 bytes
+the kernel actually wrote is left uninitialised.
+
+For a genetlink socket, nlk->ngroups follows mc_groups_longs *
+BITS_PER_LONG, and that grows on demand in genl_allocate_reserve_groups()
+and genl_validate_assign_mc_groups(). If it goes above 512, the
+full-value ksft_eq() checks in join_free() and bind_mask() could fail
+because of garbage high bits.
+
+Would it be safer to decode only the first min(len(buf), 64) bytes, or
+to size the buffer from the returned optlen?
+
+[ ... ]
+
+> +def bind_before_family(ctrl) -> None:
+> +    """A free ID joined with bind() stays unjoined when a family takes it."""
+> +    names = [fam['family-name'] for fam in ctrl.getfamily({}, dump=True)]
+> +    if 'NET_DM' in names:
+> +        raise KsftSkipEx("NET_DM is already registered")
+> +
+> +    free = _free_ids(ctrl)
+> +    try:
+> +        with _sock() as sk:
+> +            sk.bind((0, sum(_bit(gid) for gid in free)))
+> +
+> +            # Looking up the family loads drop_monitor.
+> +            try:
+> +                ids = _groups(ctrl.getfamily({'family-name': 'NET_DM'}))
+> +            except NlError as e:
+> +                raise KsftSkipEx("drop_monitor is not available") from e
+
+[ ... ]
+
+> +    finally:
+> +        # So that the next run can load it again
+> +        cmd("modprobe -q -r drop_monitor", fail=False)
+
+[Severity: Medium]
+Can this finally block turn the "drop_monitor is not available" skip into
+a failure?
+
+With shell=None, cmd() in lib/py/utils.py splits the string into a list
+and runs it through subprocess.Popen() without a shell. If modprobe is
+not on PATH, Popen() raises FileNotFoundError. fail=False only ignores a
+non-zero exit code, not a failure to start the command.
+
+An exception raised in a finally block replaces the pending one. The
+KsftSkipEx raised when getfamily() fails with NlError is then lost.
+ksft_run() catches the FileNotFoundError under except BaseException and
+counts the test as a failure, with a traceback.
+
+Without modprobe, request_module() in the kernel would also fail. That
+makes the NlError path the one taken in exactly this environment. The
+cleanup also runs when the test never loaded drop_monitor.
+
+modprobe may only be in /sbin or /usr/sbin, and the test may run with a
+PATH that excludes them. In that case even the success path would end in
+FileNotFoundError and be reported as a failure.
+
+Would it help to run modprobe -r only after getfamily() succeeds, or to
+catch OSError around the cleanup?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125144514.2717012-1-anilkaushikwireless%40gmail.com
