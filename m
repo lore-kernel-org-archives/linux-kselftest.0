@@ -1,63 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795660338;
-	b=neFBJHswe5L52YbNTDpuQuwqmWgnSezmHlLrIiI2bYKGKTPMwJXOaqZdaeTwMM9/1bTb
-	 A10uu7I9Bh8oQXaBLHimcrGboSMXQfpBtO435S54lmWbNaEDOy8VLwhZ0AwadDElxZMkP
-	 /EoCsOF+j4PIJDrkVxemxhaLAymqjwgq0mD+F+Tl6rglqZgLejmF0zccGfm+/5Grm6Z45
-	 fOcwdxYxfnTFNOmuAV9pFQOvTTW/Q8zD3fpHzQOS+Ae+Ne8rrvSZMRGoUKGJ3Ie1q4unX
-	 XWXNq+7/QBhRk7XoEV5lCcc2x7VAeRnLyiYezeu9RqQtMWx2bocWrsV8LlZzGa4QscQ==
+	t=1795661448;
+	b=3sU0hF9gdMyg8Djlsjjg4u69GTVyMaukj1j0WNqlte3SQloiiQzTEBlg32gLVHysVFpv
+	 JJ/FGsXAHkoP9aj8UQmBQeabHHI2HC2+NpflpdR0n/aPGViqed6OwLK6hEaWpnYgbrzfY
+	 QmxjlUwtZkdJOp15lCD8M4VH47w/66kVQSxyucT+yBHDj2Lawwpt1us510Zpa50wIN6Go
+	 zlZnhFg8xcLrgxmMZkElPla6JkeOH/aru+kEdTZfguh7Y8M3nGxb5ySJNdZPa4s+0xcSF
+	 1T55P1E5CsWcZrPnbp4/nezFIEl5wNnxHRImmgnXIvs+SEDAgNErtqqYuTc0lvbiI2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795660338;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
-	b=n1gaku03fzj8L/6VwKtvfv7euPW/26oOCXXbjZgI5RsHyTYtcDF2Ld0IqZ8B8Nzm64aZ
-	 thkvdGZNTPekF4PBp7Jnzb/tA/CHDh0te4vPb0o1lSAdjvG9dO9RDS+MrJ9VKG5a6GwGr
-	 8+e/ZrvPJ436R7oNrWwadOxBQQR6HsBdTrYMK8J1Z/0XqOmbu619b3jJB5TxpippnhRbA
-	 VEf3xpfSdeZ8oqppEg2xU8paiXoM8X4XKpvoC15lpB/hNx2/i4WE8v44wqCWsUx1+hbyG
-	 ltVao6Lt6yUfEZby+VITCA/LcIfYLXjnz6Jpc7wi6Mpk012y2TFMNRQUPlV+KUGLoaw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795661448;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=tjFdlVVA7ekWCX0fNqw/SC5FFs7MiHWieiFjZJkC8e8=;
+	b=sgI2sJ3CX6t7dNM/jGEx1sCTrsWkotVZnZ4Q2coP2htP8X/aSnQD/bDFGsmtllAmTuQj
+	 SbD35/TS1Gg/Ryb+jdj16zThr33vxp0EHivsBaC8+x4emPxfHTJEXxXXpNBjvGH277CU4
+	 i6wbANLrCL+eNTpO0FXyG+obpOpSuEvwqiKYIKl8aZkb6Lxkp3TSBNoeBr5VHE8L8j3xk
+	 rDhuX3ccExP+VBp15tT4SRzKIbLpaT1sySY+ft2vJA1cQ3kDXdrUSWRo1Ws645Md2Qhea
+	 Jw1oBMttl4jORfUDXN1/3BVlWXG/IX6s5o5EPXC2MB0Fpy1HrDSWacdmGfhLvx728fQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9Gijhty;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0FF606A684;
-	Thu, 26 Nov 2026 02:32:17 +0000 (UTC)
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=RDJwM465;
+	arc=none smtp.remote-ip=111.22.67.151
+Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228CA606A323;
+	Thu, 26 Nov 2026 02:50:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 228CA606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9Gijhty
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8331F000EC;
-	Thu, 26 Nov 2026 02:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795660337;
-	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=a9GijhtyQzJcusURtjJI85TgzfzAw4hyxdARYAWJ1mt2HK2xQ1MurZT4yBT2QCBZa
-	 GDteM3ql/5w3nNOCHj/+f8f/0M3Fcggx5NbnYeZoZWtKe6YjjPe+udkMhSJztKjcj1
-	 yHZ78F8bXiFOjUoVF2J7m5DxtzsXyfC/RcDQnudYn/zfGseCbV1BxYK4Q5h2e5fH5G
-	 cngEVkgDFdBF/9AnBmj8TSwH/WGniNUcI0aqHkiYBYgjftM0rFvjUPGBxpNyKlbLJa
-	 qRgGwEqdMTd82xxdJYqubOxx1TE/dI/UTYEEo3ojYvF/mfIPngDtnqm8MR+UBJrI0i
-	 YlEX7gmOsJkRg==
-From: netdev-bot+sinfo@kernel.org
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Tonghao Zhang <tonghao@bamaicloud.com>,
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
- "jiangjiehua (A)" <jiangjiehua1@huawei.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/3] bonding: ignore updelay when no active links for
- broadcast mode
-Date: Thu, 26 Nov 2026 02:32:15 +0000
-Message-ID: <179566033583.3294.7595995030938204309@kernel.org>
-In-Reply-To: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
-References: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=RDJwM465
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=RDJwM465hiRtcq2s0DiYhflvlDWymGKWrcBg7hZ5TVE6+A+DIk2CFyR4xm3kVwSU+1GZCeY/S0omw
+	 ToL+s9uA8RGy2Q4JsEsEF5yBjVDQAjKBWefd4mB61Pgf+i/iHp2oygGqMr2Wz3WdVoN8QT6tMjcCuI
+	 5HtsRcm9JkD1AYtg=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66b079e82045-23635;
+	Thu, 26 Nov 2026 10:50:43 +0800 (CST)
+X-RM-TRANSID:2ee66b079e82045-23635
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from  (unknown[104.224.130.48])
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86b079e693eb-59c24;
+	Thu, 26 Nov 2026 10:50:43 +0800 (CST)
+X-RM-TRANSID:2ee86b079e693eb-59c24
+From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To: netdev@vger.kernel.org
+Cc: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Alice Mikityanska <alice.kernel@fastmail.im>,
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 1/6] ipip: Enable BIG TCP packets
+Date: Wed, 25 Nov 2026 18:50:10 -0800
+Message-ID: <20261126025015.10416-2-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
+References: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,22 +79,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi!
+Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and
+commit 03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP
+on UDP tunnels. ipip can carry BIG TCP packets as well: the outer IPv4
+header gets its total length from iph_set_totlen() on output, the GSO
+and GRO paths already handle IPv4 BIG TCP, and FOU and GUE encapsulation
+set the UDP length with udp_set_len() since commit 47282504ad21 ("udp:
+Support BIG TCP GSO packets where they can occur").
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+Bump tso_max_size up to GSO_MAX_SIZE so that the admin can use BIG TCP
+with ipip. The default gso_max_size and gso_ipv4_max_size stay at 64KB,
+so nothing changes unless they are raised explicitly.
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+iperf3 TCP over ipip between two netns connected by veth, without
+encapsulation, 3 runs of 10 seconds each, in a KVM guest with 8 vCPUs
+on an Intel Core i7-14700 host:
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account.
+  gso_max_size/gso_ipv4_max_size 65536:   94.2,  97.4,  97.2 Gbit/s
+  gso_max_size/gso_ipv4_max_size 196608: 133.7, 128.5, 130.5 Gbit/s (+36%)
 
-*IMPORTANT*: If you do repost (for other reasons) - please include
-the relevant info in the cover letter or commit messages.
+A later patch in this series extends big_tcp_tunnels.sh to cover ipip
+without encapsulation, and with FOU and GUE.
+
+Reviewed-by: Alice Mikityanska <alice.kernel@fastmail.im>
+Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+---
+ net/ipv4/ipip.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/net/ipv4/ipip.c b/net/ipv4/ipip.c
+index 15189e1fa06..74af06b1d94 100644
+--- a/net/ipv4/ipip.c
++++ b/net/ipv4/ipip.c
+@@ -416,6 +416,7 @@ static void ipip_tunnel_setup(struct net_device *dev)
+ 	dev->addr_len		= 4;
+ 	dev->lltx		= true;
+ 	netif_keep_dst(dev);
++	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
+ 
+ 	dev->features		|= IPIP_FEATURES;
+ 	dev->hw_features	|= IPIP_FEATURES;
 -- 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+2.43.0
+
+
+
