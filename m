@@ -1,79 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795697927;
-	b=MOHOnKKn+Vv5vzZTxvbj37C9gdbvp9RVW0XKjQKOaafycTG9q0O6MraDIce5IDdXOJ4W
-	 VvQM1yj0q5yqtNSaFfKACqjq3zn286wDiTxkM9vTwDllObs17RXfpK2hWY0bTuy+fFItq
-	 pjWPVqae4wc4Au8Ulwp2qCpeNEj0mp9XMSa/3y5L0+xCgm96ojLaPVo/ucQD7rZzCG6L7
-	 OkiZsAYTFXGOII5mzsow/JS+11ThaV1dZg+mgEPxT2ovm4nWuZzkjgRzqfE4PVoeT5f0W
-	 gEveP+FOMIVjC0pMnzOONUMBO63lznfqfGrFStSCOnpOJwI/mS/DULZ7unBjXIlyQ+A==
+	t=1795698807;
+	b=fJjfqFzeluOTiiAJrkhU9scxueq1pPuJlSTofBnYvJkmeMPo8NVWzk/wKeQ4bI+TJbVQ
+	 zXSl4C93BB3jWzZfGWglKcjZ7Mb9hd/05ShNodsaJghvYpnavhzZ4MGwTZY7mIbWopA7l
+	 GvtXbHSbVRgJQuXspKvp9iSJGekJb4KQO/KbtbDEDqNzXbAUPRvuLNxVv3FsOJpd0oTTN
+	 aAsp38nLi5uOQIU6tfLSuFoWCe16d2Ok4aIWHHfzMY2ab6NSbSy7dJBFovXeKGC/XWwp7
+	 W5hbtYvm/T/x5m9hsiGFTF09GrO5idDEuHw/RkjQ+RpqpAaJsPs7F20pdRoHh1N8DCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795697927;
-	h=DMARC-Filter:DKIM-Signature:Received:X-Spam-Checker-Version:
-	 X-Spam-Level:X-Spam-Status:DKIM-Signature:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=qB3lSYw1rvOjDnaiKBqyMQHLWF/XyU8BdrApZZgC+XM=;
-	b=YFFcQYwFGUKpE7yqdYPUC+dhjrxlkBtu7sxl02VcEskYTRJDqW4Re8hI8ud98bf05rJk
-	 iTTWXgT1XTBlIxL+IwgzvDoSOEc/qVt4dklvj+nCUjddM+H5AVsRG6yuxots2GcKFSWC7
-	 +QGDlFhP1OFB8I/6r5alLMRPRlFP0tG0rT5PaFpgO72lohaQ81NQycm/lIn7UY1fdi7SK
-	 JO0EHqdIwAa9CaUFz0ChItiQ5Wr0887e+x2aj9dLydQcHCotk5aSWt6/fFkj5wkrJnj9m
-	 x0iQvhPSL9mjZ1I+gToIEmThgtqKrC1Y679/Fx6Gs1M6qrsq2ETDSi400ly4AQEtzpw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795698807;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=45M1pglWyzJAfT+SzxQfEEVe/IyIyurkT0fnn9e5xvc=;
+	b=tOhB0y62IPp6nk9agb2KZ6RsZ6cWXyll818GVO48wcE/bihMSdB8sfy36hXOqbTfajuc
+	 t0sq2Px5+8GswCBAzgWYevy2Ga3U3unwq1lzDDDCrT7T/+1O0axcR5Lh/0N7X/O0zAeKM
+	 63aAH8zkHHNFN0TBEojTPeywtP0fgxb4ftyQ3RJlGCZDUNOhS7lNB2LDrPEpWq3joyVKf
+	 l7mVHal2Jt0q24eEVeFfdJx1AFbvIm/DK4OSUOsetLlC22kMupYiCvD67GmpW19J3CYgp
+	 GabJIAlXEbM+44tnfBhQVy9bPUOZ1C8LO+6QAT7+ZRiq8rVikxtbmZa4UX1q+2EZXVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b="iyl/ZXEc";
-	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=eEPD88H4;
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DJyNfUAz;
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A885606A31C;
-	Thu, 26 Nov 2026 12:58:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A885606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245C0606A321
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 13:13:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 245C0606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=iyl/ZXEc;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=eEPD88H4
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1795697924;
-	bh=I3eHiFg8pUDJXxMSmIUcMWSUwT8HFyrcL9KR9V2p1lk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iyl/ZXEcwRa9fhLQMHuw5xr8mwzq7/3sbfcWU8yyu4XllWrKuDBhve+FXYkHqRGRt
-	 fRlR92iZRiwWZwG5nngVwB5bxe2DGSXJ21YFyoFXy3N77vlwYB+q6WFgzu541MWwwq
-	 EBm09k6VLEbCYVUryTztEghOdKOIOMVL/oS2ukQ+neI72UuQ9wr+pyPhMHz2YXwWmi
-	 o9M/4IY6UPrkAQvAHZDcCymA6fPB8em7WUgiNXsoYR9kUKcrLxW48PZtmmn6/URSsK
-	 fuUE/4w1FM2vkfSznM7LbiWvBc8u4ZHZOSlViec3pX5pDYtdkCEFFGuFrD9yctcGTA
-	 nJUPTRDrJRb/1LJ9UBRDgjMF7GYjiTA/Li8iFNik1KDs2og628sa2brsdzsWkTMUjA
-	 CsG0b5Ow8J8e+boYMJjXHAO95AFgOGltNTk7OC/V4k/ms1Js2vuHmu/20C4knX9mIt
-	 ckmE7IfhOUFP/X4PbltLG31AzCNyhDXowbvbJLpk4aERju+42Ku583wqqAAv+n+JnH
-	 BJrEz6RxR8wrRoDmDcT8jaEP0Q3InEX/VvjWj1/MyLh0dlh/Fxz7Vi+G82x6MvSUQ7
-	 hxTVvr4d7dwcTPaGQa49+qWaCxbYe8/xBfTwO/thqU4jOzg21G/zh/YD4FdLm8PZOT
-	 /BfWo5s6kz8ahbqPIBy6h3Sc=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 04EDF1EADB6; Thu, 26 Nov 2026 20:58:44 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1795697921;
-	bh=I3eHiFg8pUDJXxMSmIUcMWSUwT8HFyrcL9KR9V2p1lk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eEPD88H406G08prRpIAmdGOVvA/01wffAeBbEr7aG1GRQ159XXc9Gbk5h6vu403Am
-	 uZr2VAl0gf3ZIQgSmegAngpcaFJVdZJY8vsx9xIM6wmI2YkESskxf3nogKJGHQONY1
-	 ITHpRKPh9Z4QLeoFGRdC2zqFqLvPBwNIFPR2FP8LO9j4f6tt9ajW5Jq18Wm6adj9+y
-	 7mIywaExgL/hbgI9PtfIpOshAt77orbnYRla9yrufZZYmQAte69sk3GBlSQW65Uq3l
-	 hJlU8KzVcCR9oU5aN3hlFQ9W3teKXLZj9tj1vqkQ161NF97lrChxc70Y96w4UmpwPy
-	 b9gfO62Q8ShQh1hYehQX+PnV5lKdB4Ge9qukPqKeYCL8t0ucGf7MLN3yYPkgL4mwcs
-	 CKS4v6jZCWPoqy3LpvsAeqtxnA74dDsyPaBWyq9fRmLUNrkdG03Q9WLL32dgZvbq67
-	 aYQKvLuWhdwRYrI4LmczCpQMSzm1YMsrMUCgchir057eo/jLDzTtSMYAMfnyyGipVd
-	 Wuesk30VUMoEgvydafre4rLffqAPZZg4Km0dY2LblT9JfmxXnpUdnHnzQagRaA2e6B
-	 zD+P5Wv0my3dXm0Gv0aPwjDMZlZyY5jp4NNorMJgF3V/AMdte97znyRXnIPI0widSf
-	 QxEuLzM51HL+hv/OkSUo/b3s=
-Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 739071EADB1;
-	Thu, 26 Nov 2026 20:58:41 +0800 (AWST)
-Message-ID: <e590b8c6-9718-4faf-827b-4afa82002089@davidgow.net>
-Date: Thu, 26 Nov 2026 20:58:39 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DJyNfUAz
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-491846221ffso6092437f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 05:13:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795698805; x=1796303605; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=45M1pglWyzJAfT+SzxQfEEVe/IyIyurkT0fnn9e5xvc=;
+        b=DJyNfUAzWCoUZaHPCGXoNx2PHzBS1sxXZWwwQ8JxZ6e+pdyeJXAUSqYxV1WEDFHtN+
+         jEz7LoSzhwdAPUXI5jfFdsbBdtDtKNgnCrPoYN7aqtpdHBV3Pmj+ZgudAXWUZv7yQ+Ki
+         woAqTh0b0XYKbwd4d3K6/ZTBkrTjBnHtg1nxjd+LR1xdu1mj15qnVQG3wnzfYaBgt0m7
+         NZwtHdwa6UQ+QHINK9GukPP+cJiLc8xz4FdInsyM7fhPzUgbxsjUxH/HmOt0LgTCTFL/
+         bDkYHuP0R4Nw/QvBorzDL33vkfZwk4pDLWhlZHGWI5V9yL3Hbehgoj/GFW5mC7tCKSHb
+         J48Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795698805; x=1796303605;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=45M1pglWyzJAfT+SzxQfEEVe/IyIyurkT0fnn9e5xvc=;
+        b=NjhFlAC7DoCUR8Fpv1nGKb3bghs1m5RQZXLGycZnm5B2dVA//rRvuShKlo/PW+RpzO
+         tZoUF/VsET+Dv5qO/Gha+/pSVoULoWz3Q8ruOhlys9lavp3JrQNSBQ1de21l7dL3P78S
+         I+eZcjTX7/fek8vU/Xb9CI+GorWgqKG8zBcYkskKSB7aTBD2etz0RZwtzGoJBL9AGspT
+         Iigaw+10M6BPQwnj+89bs7NXkPnkAqa9LvNotCS5TXxHGNBRQGPFJOSGczEoTRn5yF33
+         lQEAaUleu2P9zf1hXg3BDqH1RP3QOgSqa64LVvZHPg5dGNLdW8yZgBoUhK1zlFlr8cLM
+         x/pw==
+X-Forwarded-Encrypted: i=1; AL+hErGGz92u2mjRPm5gNzkzIP3aBDehc/gjPSxfjKDesiha07xr1FP4WqPqtJosJmV+t5iHfTQSepfm+aV9PTW7HeE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+josDqFiIH/QNDPIbgK24LYtBk8qO1550mf35rPZMceCm8EK0O
+	BUca2jGHVcTREmFN+L5awtismq4QsmuHh7O8gv4X/8RHlaaoWIdWOjEi
+X-Gm-Gg: AZFdTZcwkahbhXaVm6AkMSOqyl18QNwCeBjWq3EFt6V6qTt1gFJx2xILcREwQvjLQDX
+	XZZYkQF6eZ1mWN7LPRBxifXx+uw4RK3OnS7qKM+Oy73HTODP9btkjeNbWVWWnPh/kQ4sWknw4W/
+	RWzUoAvvugvcRvanMpjjhYA9c0BJP8jXL7ejt5g8z0GOU66dyAc8B7If/el4zkYQlVwm5K62BTo
+	vjDTwLlYYXR+tozDuX8LyhoSgpghxj77BX0tafDKX8engRrgv1o5LRyNl/78WQ56o5XGQ3l1mhU
+	BPwziakrOc82JZ5ukUKqoZpZy52URcajMVuWPxPNCXXKE7lHFtjU4jlKe9od4+QUGdzBIu6tRLZ
+	FkF0pYtV0EitDriIuaVha+a3YbbEz2QI7iWhnrJO9vzWQh4CVFfcfivXiaXrrM8i16qJISmTCe3
+	2hUm1Y2MP4dLcDNpLQ2RlvpfJcT+yhKyKp9aw/LfmLdHPHnQqkzCna29xKnECp6o2NTEyr4Dmsm
+	7HwW2AKEqYIYO+lLNTOC99fOdk6IhKzjsSIEm4srNRQofus8ZifjFrE1A/TqaoVb/LtLAAEA/Uh
+	CCk6xOMua8wUzYptiDqyV0lugiedkLwiZvtFBvV63L3gvAGdAvvrvR803bVDZ6AciWruK0EogZb
+	VS+DfPIIqMfrWwXaMm2K57A==
+X-Received: by 2002:a05:6000:4812:b0:4a9:1b17:4f34 with SMTP id ffacd0b85a97d-4abb57f7036mr38287533f8f.50.1795698805223;
+        Thu, 26 Nov 2026 05:13:25 -0800 (PST)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4ab6c61f558sm41679091f8f.58.2026.11.26.05.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2026 05:13:24 -0800 (PST)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] bpf: account for local storage map elements memory
+Date: Thu, 26 Nov 2026 13:13:17 +0000
+Message-ID: <20261126131318.470837-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,144 +110,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: tool: Preserve suite ancestry in JUnit test
- identities
-To: Matus Daniil <matus.daniil@gmail.com>,
- Brendan Higgins <brendan.higgins@linux.dev>
-Cc: Rae Moar <raemoar63@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-References: <CAJeAFep5wgtRpHwANoeqJkWE38y=9zQQ9e7moQw-3rE47b=wFw@mail.gmail.com>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <CAJeAFep5wgtRpHwANoeqJkWE38y=9zQQ9e7moQw-3rE47b=wFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 14/11/2026 à 17:17, Matus Daniil a écrit :
-> From: Daniil Matus <matus.daniil@mail.ru>
-> 
-> JUnit testcases currently carry only a name. A parameterized KUnit test
-> becomes a nested testsuite named after the test function. Reusing that
-> function in several outer suites therefore produces the same immediate
-> suite name and parameter name in each of them.
-> 
-> For example, cs_dsp_test_run_stop_callbacks is registered in four cs_dsp
-> callback suites with the same "all ops" parameter. GitLab identifies cases
-> by suite name, classname and testcase name. Without a classname, these
-> distinct cases have identical keys in the imported report.
-> 
-> Set classname to the dot-separated ancestor suite names, including the
-> parser's main root. Preserve the existing suite hierarchy, testcase names,
-> statuses and logs. Add a regression using the existing nested log fixture,
-> whose seven testcases otherwise have only five distinct identity tuples.
-> 
-> Validation: all 92 kunit_tool_test.py tests pass. The new regression fails
-> on the unmodified generator. Comparing all 24 log fixtures shows no XML
-> changes other than the added classname attributes.
-> 
-> Fixes: e9e05c72752f ("kunit: tool: Add (primitive) support for
-> outputting JUnit XML")
-> Signed-off-by: Daniil Matus <matus.daniil@mail.ru>
-> ---
+Commit 7490b7f1c02e ("bpf, net: bpf_local_storage memory usage")
+introduced bpf_local_storage_map_mem_usage() to compute the memory usage
+of local storage related maps but left the accounting of the allocated
+element aside. For users of these maps, the elements can quickly make up
+the majority of the memory usage and make the reported memory usage
+quite wrong.
 
-Hi,
+Walk the bucket's list to count the number of elements in the map, note
+that concurrent insertions and deletions can make the count imprecise.
 
-Thanks very much for your patch.
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+---
+ kernel/bpf/bpf_local_storage.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-Unfortunately, it looks like your email client has mangled it somewhat: 
-some of the lines have been wrapped.
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index b12fcec47ffa..6fb95503441e 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -792,11 +792,19 @@ u32 bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
+ u64 bpf_local_storage_map_mem_usage(const struct bpf_map *map)
+ {
+ 	struct bpf_local_storage_map *smap = (struct bpf_local_storage_map *)map;
+-	u64 usage = sizeof(*smap);
++	struct bpf_local_storage_elem *selem;
++	u64 nbuckets = 1ULL << smap->bucket_log;
++	u64 nr_elem = 0;
++	u64 i;
++
++	for (i = 0; i < nbuckets; i++) {
++		rcu_read_lock();
++		hlist_for_each_entry_rcu(selem, &smap->buckets[i].list, map_node)
++			nr_elem++;
++		rcu_read_unlock();
++	}
 
-This is a known issue with some email programs: particularly with gmail. 
-The file Documentation/process/email-clients.rst has some details about 
-different clients:
-https://docs.kernel.org/process/email-clients.html
+-	/* The dynamically callocated selems are not counted currently. */
+-	usage += sizeof(*smap->buckets) * (1ULL << smap->bucket_log);
+-	return usage;
++	return sizeof(*smap) + nbuckets * sizeof(*smap->buckets) + nr_elem * smap->elem_size;
+ }
 
-But I'd personally recommend either using git send-email:
-- https://git-send-email.io
-or the b4 tool:
-- https://b4.docs.kernel.org/en/latest/
-
-Those will ensure that the patch will be sent properly, so that 
-maintainers can use git to apply it automatically. I personally use git 
-send-email for my patches, and once it's set up, it works great.
-
-Cheers,
--- David
-
-
->   tools/testing/kunit/kunit_junit.py     | 10 +++++++---
->   tools/testing/kunit/kunit_tool_test.py | 14 ++++++++++++++
->   2 files changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_junit.py
-> b/tools/testing/kunit/kunit_junit.py
-> index 362207035..d5730aebe 100644
-> --- a/tools/testing/kunit/kunit_junit.py
-> +++ b/tools/testing/kunit/kunit_junit.py
-> @@ -10,7 +10,8 @@ from kunit_parser import Test, TestStatus
->   from typing import Optional
-> 
->   # Get a string representing a tes suite (including subtests) in JUnit XML
-> -def get_test_suite(test: Test, parent: Optional[ET.Element]) -> ET.Element:
-> +def get_test_suite(test: Test, parent: Optional[ET.Element],
-> name_prefix: str = '') -> ET.Element:
-> +	classname = f'{name_prefix}.{test.name}' if name_prefix else test.name
->   	suite_attrs = {
->   		'name': test.name,
->   		'tests': str(test.counts.total()),
-> @@ -26,9 +27,12 @@ def get_test_suite(test: Test, parent:
-> Optional[ET.Element]) -> ET.Element:
-> 
->   	for subtest in test.subtests:
->   		if subtest.subtests:
-> -			get_test_suite(subtest, test_suite_element)
-> +			get_test_suite(subtest, test_suite_element, classname)
->   			continue
-> -		test_case_element = ET.SubElement(test_suite_element, 'testcase',
-> {'name': subtest.name})
-> +		test_case_element = ET.SubElement(test_suite_element, 'testcase', {
-> +			'name': subtest.name,
-> +			'classname': classname,
-> +		})
->   		if subtest.status == TestStatus.FAILURE:
->   			ET.SubElement(test_case_element, 'failure', {}).text = 'Test Failed'
->   		elif subtest.status == TestStatus.SKIPPED:
-> diff --git a/tools/testing/kunit/kunit_tool_test.py
-> b/tools/testing/kunit/kunit_tool_test.py
-> index 85ae21754..d37354c70 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -18,6 +18,7 @@ import os
->   import signal
->   import subprocess
->   import sys
-> +import xml.etree.ElementTree as ET
->   from typing import Iterable
-> 
->   import kunit_config
-> @@ -725,6 +726,19 @@ class KUnitJUnitTest(unittest.TestCase):
->   		self.assertTrue("tests=\"0\"" in result)
->   		self.assertFalse("testcase" in result)
-> 
-> +	def test_nested_test_classnames_junit(self):
-> +		result = self._junit_string('test_is_test_passed-all_passed_nested.log')
-> +		testcases = ET.fromstring(result).iter('testcase')
-> +		self.assertEqual([
-> +			('main.sysctl_test', 'sysctl_test_dointvec_null_tbl_data'),
-> +			('main.sysctl_test.example', 'example_simple_test'),
-> +			('main.sysctl_test.example', 'example_mock_test'),
-> +			('main.sysctl_test', 'sysctl_test_dointvec_table_len_is_zero'),
-> +			('main.sysctl_test', 'sysctl_test_dointvec_table_read_but_position_set'),
-> +			('main.example', 'example_simple_test'),
-> +			('main.example', 'example_mock_test'),
-> +		], [(case.get('classname'), case.get('name')) for case in testcases])
-> +
-> 
->   class KUnitMainTest(unittest.TestCase):
->   	def setUp(self):
-> 
-> base-commit: 97d73c8251226cf27cc6656b4c542869bb8c69fa
+ struct bpf_map *
+--
+2.43.0
 
