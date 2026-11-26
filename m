@@ -1,82 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795684442;
-	b=Kckm+msCOhd36/BNmMnpYQz4CtNwfZ86cSr25AGmJHlVYwn07Xf1tQOwwAtDR/uqNTwo
-	 IDlQsm5jW3TyDPwPmD3TXdpXaOLPDcNHz8A6cuVVNU4XSqcIo62KtaxnMAPXMK45yF48W
-	 hWKKcR+kTDn+7knigjuP/INLuAM4zQyMRUZFBuTv4NLF4ZDoYqFjJrYJ10L6/vSaRNN0r
-	 mYMPsV+e6Y4ErPJk9h7MafXIwrLtLQc0iYn+Ez+jCpcQE2h3F4n+fAAPJ/qCWeR3y9Kaf
-	 epCC2OefefAFS61o6oee/BIV7u6MhJtsM2qS60k2HVEXcJVGCVxwL8cPJsJmwHAJsWQ==
+	t=1795684764;
+	b=3Bpp2r3MGAVpGkUJ4BgXAy+BPVcQoskYeKO0p+pwAWZbBuny2MqYpdohYUoMNd3OEQB9
+	 byqnKyHQqQzqRolXgf3sOp0nLw6OHopPLvhLQYA6hLzPL7Ie3//gj3ZNGqVXIEpd1B/Wb
+	 0/YL8Ta0lLQqnwyQsRCvCYUztj+9Yq+hxKgwvinD2aEpTmSvCJ3IoeP9eHxOtPauhXPUY
+	 kC32rHNlvVohaYsEmrG+b90NCa3s9XHAWznK8SLjcI5lV0afdr2Ic97bZVb0iB69KvYCu
+	 kf4EoyQRz38l4Rsdatd+XMJsuICw7l05Q42tXS/u/OdBP7e7sq6Z6iUqkdlO+4IPRqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795684442;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
-	 X-Proofpoint-Reinject:X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=vZoNY4J2XfOqVAVfCTxllGnPnfy/9sUb/hOJLoDliJQ=;
-	b=zRw4+G93hJcg7AwGQ6KHK9QiYpz22G5kSKbyynzZVqeUuOZBmDoQoCVboEN73dZq06t8
-	 ytrvaqrZpkqBPtzez9aCplvxkYrrlg5hHrJoYvjMZyPXwug3VW8yMw1074BP16fHMOXUk
-	 0I5ExDxbuU6VQ1CvPKmnmYMUrjWL8VrXUC1jgXxF0HvOXWs8zpNxhtLYSusshn6mjkAHI
-	 5O+Co6z+zwShJgr31g5wi2eUfcHyIXKgWss8KQpIA5xnX00BhcBbBdhxbVu9CJ5fCFvut
-	 AefBAZMq8Aeq07s/I/J/d7gKItN9kQfgdOof1YkKqnZZjQGUz+IAPbQtjeEcmXevVCw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795684764;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=Q8yqgBgzTDJmfW5A1DWYJIHW8nL4dwX5V+usI6LVyyo=;
+	b=Sm3KxKKTDweSLN4PNWO1idOBFd6uCqDH+o5qcF8e/v0h1OidooOLrtfEAxEq93pmQuRS
+	 y4NA8WKeozTnZ8a3gYTQAMNjU2NNqP/GWQI0HzN1AoS3peSESH9XRjkm9zWMPfI4sbdJ3
+	 e/jmUGcNl6R0o1fwr8NSRRMTqRmf/YuePYhuTzuzXXQU4z7YZlS9x5qpgHZs3+WB5kxKW
+	 ySqSUTF9exzcabngyqWNszfMKpHvY7OASwlwEuLDKsMvEYIL+a+D68r6BW80tnLwLUXW5
+	 0TKHuQcQC2eJu+aifhsm0/qW7MBuGPMMrFmd+oBkZQVEUx9dBnvuNWyCQjE3K8Cj3pQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b="PM3znO/a";
-	arc=none smtp.remote-ip=148.163.158.5
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m2eWfEDc;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF45606A31C;
-	Thu, 26 Nov 2026 09:14:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1DF45606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C5C606A31C;
+	Thu, 26 Nov 2026 09:19:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=PM3znO/a
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQ7YfOA3658974;
-	Thu, 26 Nov 2026 09:13:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=vZoNY4
-	J2XfOqVAVfCTxllGnPnfy/9sUb/hOJLoDliJQ=; b=PM3znO/aLKks8NgMCTvxGA
-	/eA9zLTjAiOxhyETIxNtpBbac1QBB1FC9Q/fV9mFod7d/exdU4JMPlRWxyNiL7mF
-	J6QXoxaepvXXnEWKfl0+OmBXvbjbydLRdDkbWsayI33ibTopVvEdekP+efS8TL6A
-	dgsB5EbI7aiNOzpQslHZc8Vh8CLgw69qbk8fu9wAYCrxEaCL3r7YKLiv3sloBvWh
-	oIbSJT+GoFlOOd8fdLlqlIO2M4eFIhqJVgY+X3S8YTO2Quo/3eXJ15r8vR4XygfD
-	lVRszGc4b8AJN5EsV855yNe0OuIuamQZkBGcoC/UD6IMxwHuT3xvzNBWdDv8ceog
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34gvg2m0-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 26 Nov 2026 09:13:49 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQ7JGMr3386680;
-	Thu, 26 Nov 2026 09:13:48 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j5a417gwy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Nov 2026 09:13:48 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AQ9Diff47776026
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Nov 2026 09:13:44 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 85FAB20040;
-	Thu, 26 Nov 2026 09:13:44 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 15E122004B;
-	Thu, 26 Nov 2026 09:13:44 +0000 (GMT)
-Received: from [9.68.16.159] (unknown [9.68.16.159])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 26 Nov 2026 09:13:44 +0000 (GMT)
-Message-ID: <d19de976-aa6c-4168-856d-b65e96eabe88@linux.ibm.com>
-Date: Thu, 26 Nov 2026 10:13:43 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m2eWfEDc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC961F000D0;
+	Thu, 26 Nov 2026 09:19:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795684763;
+	bh=Q8yqgBgzTDJmfW5A1DWYJIHW8nL4dwX5V+usI6LVyyo=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=m2eWfEDckBiV4URE17VXZMhzfxL8BBTiDuHqWG7oji0R8xam1bnn93Y4ZKGUc2B1j
+	 wJlaw1uFL9zNDd0+4s5sBHAEdC4PjJToOvhMTv2qMyKoguJVMOH9pGj5jV/0262Jxj
+	 5F7KLJRSx1PLWPMG1Df6RPSaj8nfrV2uESimdttsVM6GJPmfs2UNL/uXl7P5CdDHJ6
+	 Hf4dx19Py7sc9NZdX7E7V3jXTCqKLN8BUSAJXyvpPFq4e4xpd0dz4AKp5PmeCHnVth
+	 Qd16UOqdiIl3H0DljYQH/Ypdusb7S5WiwVwulP2KZwscFIr1F/eWfwE0Hu9AQZnGXj
+	 USnYjonUnVm9g==
+Subject: Re: [PATCH net-next v6] selftests: net: veth: derive invalid-tx test
+ value from kernel max
+From: netdev-bot+sashiko@kernel.org
+To: emmaonana18@gmail.com
+Cc: tianyi@cloudflare.com, hangbin.liu@linux.dev, kuba@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, skhan@linuxfoundation.org,
+ kernel-team@cloudflare.com, tianyi.gao@linux.dev
+Date: Thu, 26 Nov 2026 09:19:21 +0000
+Message-ID: <179568476191.3135.16062946746480831699@kernel.org>
+In-Reply-To: <20261124211645.5751-2-emmaonana18@gmail.com>
+References: <20261124211645.5751-2-emmaonana18@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,164 +67,105 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] KVM: s390: selftests: Add a test for nested guests
- in ESA mode
-To: Yvan Janssens <yvanj@cyber.gent>, Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@kernel.org>, Eric Farman <farman@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261125165604.3074595-1-yvanj@cyber.gent>
- <20261125165604.3074595-3-yvanj@cyber.gent>
-Content-Language: en-US
-From: Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20261125165604.3074595-3-yvanj@cyber.gent>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=CYCdd7rl c=1 sm=1 tr=0 ts=6b07f84d cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=iT8M5YjzDwDgK0uH:21 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22
- a=VnNF1IyMAAAA:8 a=4nKcqwHAdgOrSOTCE1kA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI2MDAzNSBTYWx0ZWRfXygJ6SuRK29FT
- cwXrSOT1Tqul/ZTeoU4DkRzGFLUJKXQ4+/DbGKncV+XU7h53NLdW6oORy7x2G6V08AzUNPZlGJi
- 3WPUZlXLorXmOCAND6kIWhWzdLcGOu8=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI2MDAzNSBTYWx0ZWRfX3TFHXFiIWxy2
- 3/m4VpnCDHR+3mSpU/GukPn60nXfuNUPi6dYct71lICZnnSOH1bo5hxyKErKKqfGLDD9j0jnS2U
- 0o9yU6/E9BQKgWzfTJ9wCOxLHjgl6Mjhp6Xx6f0dKMBohCD9+ABx69YN+E1zbpKBkIdAs1r5Tgs
- 6fAGzkrXjlaBG7xedxEP+hNf4XMs5fiGQsUKSuwLWaZH5Hofi1HjiKnMjMEvyrqJdNs2LdL+nw3
- 0HXgs5WMJFotVGzqkH0H76l6Tb+VATOufa/ik+vhemVnAZ9Hfxamb8tcaFppx/RyI5ShCTwr+7O
- Y1iui75t1iQBjgi7B5iMjrIF/dEoeWTWisbbs7dKk+LfI+l4zryt3YcHRLFkd9FjwldGENx18ib
- 18QZO1d5iOYh2pfkkrsTx4DXRVxwRpxJunI/gTxYo9wYj3rYWBEsRsijR6tfjj4xqM4dirIX0/m
- WOhNRuZvrlE1XLrENNA==
-X-Proofpoint-ORIG-GUID: V1KHpE5rQgT9y7dED-Nhb3RIhxU-9_hM
-X-Proofpoint-GUID: tl9KmaoLWI8Cz60VPl6aqgu1JxS2iSCF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-26_02,2026-11-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611260035
 
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-Am 25.11.26 um 17:56 schrieb Yvan Janssens:
-> Run a nested guest from a state description without the z/Architecture
-> flag, with KVM_CAP_S390_VSIE_ESAMODE enabled, and let it execute STORE
-> FACILITY LIST EXTENDED twice. vsie intercepts the first one of every SIE
-> entry to shadow the facility list guest 2 designates and then has the
-> instruction repeated.
-> 
-> The test checks that the second doubleword of the PSW field, which is not
-> part of an ESA/390 PSW, comes back unchanged, that the PSW points behind
-> the last instruction, and that the first instruction stored the
-> designated list. What the second instruction stored is printed for
-> diagnosis.
-> 
-> The test is skipped without the capability, without interpretive
-> execution for the guest (SIEF2) and without facility 7 in the guest's
-> model.
-> 
-> Signed-off-by: Yvan Janssens <yvanj@cyber.gent>
-> ---
->   tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->   .../selftests/kvm/s390/vsie_esa_test.c        | 180 ++++++++++++++++++
->   2 files changed, 181 insertions(+)
->   create mode 100644 tools/testing/selftests/kvm/s390/vsie_esa_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 283c59d7649c..aef64ec2719c 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -227,6 +227,7 @@ TEST_GEN_PROGS_s390 += s390/shared_zeropage_test
->   TEST_GEN_PROGS_s390 += s390/ucontrol_test
->   TEST_GEN_PROGS_s390 += s390/user_operexec
->   TEST_GEN_PROGS_s390 += s390/keyop
-> +TEST_GEN_PROGS_s390 += s390/vsie_esa_test
->   TEST_GEN_PROGS_s390 += rseq_test
->   TEST_GEN_PROGS_s390 += s390/irq_routing
->   TEST_GEN_PROGS_s390 += mmu_stress_test
-> diff --git a/tools/testing/selftests/kvm/s390/vsie_esa_test.c b/tools/testing/selftests/kvm/s390/vsie_esa_test.c
-> new file mode 100644
-> index 000000000000..a52603e30f63
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/s390/vsie_esa_test.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Test nested guests that run in ESA mode (KVM_CAP_S390_VSIE_ESAMODE).
-> + *
-> + * Guest 2 runs a guest 3 from a state description without the
-> + * z/Architecture flag. Such a state description has the eight-byte ESA/390
-> + * PSW in the first doubleword of the PSW field. vsie rewinds the PSW of
-> + * guest 3 when it has to repeat an instruction; the test uses STORE FACILITY
-> + * LIST EXTENDED, which vsie repeats after it has shadowed the facility list
-> + * guest 2 designates.
-> + */
-> +#include <stdio.h>
-> +#include <string.h>
-> +
-> +#include "kvm_util.h"
-> +#include "test_util.h"
-> +#include "kselftest.h"
-> +#include "sie.h"
-> +#include "facility.h"
-> +#include "ucall_common.h"
-> +
-> +#define G3_MEM_LEN	0x100000UL
-> +/* mso/msl have 1MB granularity */
-> +#define G3_MSO		0x10000000UL
-> +#define G3_START	(2 * 0x1000UL)
-> +/* where guest 3 stores its facility lists, in its first page */
-> +#define G3_STFLE_1	0xf00
-> +#define G3_STFLE_2	0xf80
-> +
-> +#define FAC_STFLE	7
-> +
-> +/* bit 12 of an ESA/390 PSW is one, bit 32 selects 31-bit addressing */
-> +#define ESA_PSW_MASK	0x0008000080000000ULL
-> +#define ESA_PSW_ADDR	0x000000007fffffffULL
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-unused but probably ok to keep in.
+- [Medium] chk_channels() in tools/testing/selftests/net/veth.sh (lines
+  175-196) prints " fail ..." on a mismatch but never sets `ret=1`.
+- [Low] The commit message says that once "failure propagation" is fixed,
+  the false failure "fails the whole script".
 
-> +
-> +/* facility list for guest 3: only the first doubleword is looked at */
-> +#define G3_FAC_0	0x4000100000000001ULL
-> +
-> +static const u8 g3_code[] = {
-> +	0xa7, 0x08, 0x00, 0x00,			/* lhi   %r0,0 */
-> +	0xb2, 0xb0, 0x0f, 0x00,			/* stfle G3_STFLE_1 */
-> +	0xa7, 0x08, 0x00, 0x00,			/* lhi   %r0,0 */
-> +	0xb2, 0xb0, 0x0f, 0x80,			/* stfle G3_STFLE_2 */
-> +	0x83, 0x00, 0x00, 0x44,			/* diag  %r0,%r0,0x44 */
-> +};
-> +
-> +static u64 scb_real;
-> +
-> +static void guest_code(void)
-> +{
-> +	while (1) {
-> +		asm volatile("	sie	0(%[scb])\n"
-> +			     :
-> +			     : [scb] "a" (scb_real)
-> +			     : "memory", "cc");
+--
 
-The guest touches r0, so we probably should add that to the clobber list when applying.
+selftests: net: veth: derive invalid-tx test value from kernel max
 
-Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+The "setting invalid channels nr" check in veth.sh used to try nproc+1
+TX channels. It now reads the TX maximum the kernel reports through
+ethtool -l and tries max+1. The old value can be valid on hosts where
+nproc is less than num_possible_cpus().
 
+> selftests: net: veth: derive invalid-tx test value from kernel max
+>
+> The "setting invalid channels nr" check treats CPUS+1 (CPUS=nproc)
+> as an invalid tx count, but the kernel allows up to max_tx, for veth
 
+[ ... ]
 
+> the ethtool -L call succeeds and chk_channels() reports a false
+> failure. With failure propagation fixed, this fails the whole script.
 
+[Severity: Low]
+Which patch provides the failure propagation fix mentioned here? In this
+tree, chk_channels() only echoes on a mismatch and never sets ret=1:
+
+tools/testing/selftests/net/veth.sh:chk_channels() {
+    ...
+	if [ "$cur_rx" = "$rx" -a "$cur_tx" = "$tx" -a "$cur_combined" = "n/a" ]; then
+		echo " ok "
+	else
+		echo " fail rx:$rx:$cur_rx tx:$tx:$cur_tx combined:n/a:$cur_combined"
+	fi
+}
+
+So before this patch, the CPUS+1 false positive printed a misleading
+"fail" line, but veth.sh still exited with 0.
+
+Suppose the failure propagation change is applied or backported to
+stable without this patch. Then veth.sh would fail on hosts where nproc
+is less than num_possible_cpus(). veth_get_channels() reports max_tx as
+dev->num_tx_queues, and ethnl_set_channels() only rejects
+tx_count > max_tx.
+
+Could the two changes go in the same series, or could this one name the
+dependency? Could it also carry a Fixes tag for the commit that added
+the CPUS + 1 value?
+
+Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
+
+> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+> index 9496b599d722c..bd0d19c49b7cd 100755
+> --- a/tools/testing/selftests/net/veth.sh
+> +++ b/tools/testing/selftests/net/veth.sh
+> @@ -569,7 +569,9 @@ fi
+>  ip netns exec $NS_DST ethtool -L veth$DST combined 2 2>/dev/null
+>  chk_channels "bad setting: combined channels" $DST $CUR_RX $CUR_TX
+>  
+> -ip netns exec $NS_DST ethtool -L veth$DST tx $((CPUS + 1)) 2>/dev/null
+> +MAX_TX=`ip netns exec $NS_DST ethtool -l veth$DST |\
+> +	grep TX: | head -n 1 | awk '{print $2}'`
+> +ip netns exec $NS_DST ethtool -L veth$DST tx $((MAX_TX + 1)) 2>/dev/null
+>  chk_channels "setting invalid channels nr" $DST $CUR_RX $CUR_TX
+
+[Severity: Medium]
+Can this check ever change the test result? The other checkers in
+veth.sh set ret=1 on failure, for example chk_napi_ids(), and
+chk_channels_carrier is called with "|| ret=1". chk_channels() does
+not set ret at all.
+
+The script ends with exit $ret. Suppose the tx_count > max_tx check in
+ethnl_set_channels() or ethtool_set_channels() regressed, and
+ethtool -L tx $((MAX_TX + 1)) were accepted. veth.sh would print "fail"
+and still report success to kselftest.
+
+The same applies to the other chk_channels() checks: "setting tx
+channels", "setting both rx and tx channels" and "bad setting: combined
+channels".
+
+The commit message relies on failure propagation being fixed. Should
+that change be part of this submission, so the updated check actually
+affects the exit status?
+
+>  
+>  if [ $CPUS -gt 1 ]; then
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261124211645.5751-2-emmaonana18%40gmail.com
