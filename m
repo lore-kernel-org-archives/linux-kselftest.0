@@ -1,58 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795699673;
-	b=1gKlcKlbH+JCJk2jPi4oXQQ3zb72vdBHvr8psUp/tGDYO25Nf+wE5e6xnpQei98GklmV
-	 VTWW2d04yxpT0uEAAWHZsz4JM6MNyCGw8t22TNF+M2iojjfHkXC+ziaRbtK7q+4SpPUno
-	 f8BDhpfn5qjW62FrK12Vu1yebWnbQmplbaXxa28zMi0l5DZ23cH/x2xX0gofxSDtO8pVj
-	 NtQ7MBQUe2kY6npZIIp9zTU94BT3n899/zWU7HfmLFhy4Kly0Zlcce5yL3yLZ/oV/7eyJ
-	 aaUxYU5nTsi7nalNsL3QnqDGJcqoMeEshwfoO8EWoBBDYqBLCXd5IqhOky1PhTEKzuQ==
+	t=1795701967;
+	b=KuewT0X/POxysfVLECQuCMaazq6o37wftTLwohPXapoJ3WBYwFblTsFYMDMR3tN39f1C
+	 gEotYPJ6zF9i5N1MhYpvMX9CB0uz3Z++pWBerzuaBMv9JFc1kzblj7z5Z7SqsX224H3Vf
+	 z/TkI2VVZANNmrdAlbuk3A6f3Cb0mQOD2QW8VfO4TL2goYYnHzyzIr6i3T/SyJP524MW/
+	 uxM3nKEob1w9EsD99WvM44yHCa2ikABMaeWQcl4efUOnl0+TW4sGnkTYBOjd4ZpbtlcTl
+	 WFJVwjy0c6tZf3oXHrbda7XBwrlrCLEZ0s2GH8sAYcHU24uuBXpRgepzSpBwvPWqntw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795699673;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=gzzgXOgo3+SNm0ByCjOvIm/1n5ybZt8er0jBZ3680yc=;
-	b=eXdF9XV9OPiJgW1PhtOjNpnxNGH5pNtLUQ4L0OufmplxHKc9h38LgojsIOCyoVJrUqMM
-	 GIIdCdRnm/yT/p7Aw55oTMSpvio+Wt+Bbcg+GOwvmwjQ/jAJEhPJzbLHmJmTs4y/l+CmP
-	 9OcST+yVfgLhlxUYST7ttrqTpb5U51UVCvuilm9TXBUdkYprBVhJdJj1tMbOjKGCFaOeP
-	 ZMMok8in4HNHOwNtevIkjBgaNiUnUOy6FIzv6twHy/JHbyZA1LCF9L1n/9cb8SUBTqT87
-	 oMyv1sY9278/6EybPKiu+FiLE+DXcrIO6+c1nfYUoQ0K/YYRkOkY+s9IqPRvOsZ4WRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795701967;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=/KDx6PRDjEGDYnhz2VHuKJaW+Yap8yQnZ51Ns2dL25s=;
+	b=BM9RJ79VXmpLj/aitAKZSbePqDqEBZr+D5674PoWURJ7cg0WiTRx1oizcVP6LyokUbhO
+	 WZJWZIIrAMlCrftI7Ns6T1FvEBa6kGhUk4SyPYg2JFpv+Bwe5MPrcVI5FHtDlbjDQVMCA
+	 OcrnnBRuuWm6UpJ2EtehXVxZfCDPh1AOplDh437GBWAHbXODQMppQJPpKrse3PPioh0tv
+	 OQIo+by+HHysC0y037RYveBwQQ+442kmPSrMEU0IWTwHX0WDhIwFqsjOgNE52+8pDD1jv
+	 85THDxV0hSgN08VDHvdvqGhFuimKGfdvI50J0J8LzZFxD27CKg5BY49lrtIajZleeBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=11fuKA0Q;
-	arc=none smtp.remote-ip=113.46.200.217
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=R5s36xpL;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDEA606A31C;
-	Thu, 26 Nov 2026 13:27:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EDEA606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9F8606A31C;
+	Thu, 26 Nov 2026 14:06:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D9F8606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=11fuKA0Q
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=gzzgXOgo3+SNm0ByCjOvIm/1n5ybZt8er0jBZ3680yc=;
-	b=11fuKA0QNmqBcJC+Z7+EDBDEdopqwlPjiHPaNdUAff+L4Rfg5ecopOB7c41g4dYkKVWnsOz+7
-	diR70qy0hMLD9NrzKzTwcexrrEJpSqnu718+skXXx/Va432+IohJ+HmaImsfXw3HGXjPhG8bwg/
-	N0Q+ahJUMGyTnAubGLSqDU0=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jZy4b4NSrzcZxn;
-	Thu, 26 Nov 2026 21:26:39 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2EF9B4058C;
-	Thu, 26 Nov 2026 21:27:47 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Thu, 26 Nov 2026 21:27:38 +0800
-Message-ID: <2e7397bb-14fa-4d29-bfb5-620495a40245@huawei.com>
-Date: Thu, 26 Nov 2026 21:27:37 +0800
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=R5s36xpL
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/KDx6PRDjEGDYnhz2VHuKJaW+Yap8yQnZ51Ns2dL25s=; b=R5s36xpLZZgPLm9uLI7A4NQRBp
+	BcPgrPg+UI4fudIwP0wP6NTooKgKiXNWPYZpuS/veOMyx1kOm4nEw771tf7kE1zfnN8w3pELMShiN
+	aYwdVBEvtUzJbAfsPevaUf519f/405eaGSY8InuwM3EgTs8Xb96n3CkaCCQqfQ6QHZJu4X8FdgWw8
+	HBv+R/JOMiqAWTMxYfzFskKB/zrGOeT22awtZfEWXrRhI6AfDVniH/bG/zthugHR4EwOgbilFbKzi
+	KhKsTHLS9qNxHMKPEmWju28vjo5bK0sRpWl9cA9RNj+90TMeK7/tuz3xYlExMN2UGkCAjyAUwQ8Sl
+	0eaVhJPg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xWa6p-00000004qEY-2zZJ;
+	Thu, 26 Nov 2026 14:05:59 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7E534302186; Thu, 26 Nov 2026 15:05:58 +0100 (CET)
+Date: Thu, 26 Nov 2026 15:05:58 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Dylan Hatch <dylanbhatch@google.com>, Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] sched, livepatch: Fix transition stall for CPU-bound
+ tasks
+Message-ID: <20261126140558.GF49833@noisy.programming.kicks-ass.net>
+References: <20261117045254.1048298-1-dylanbhatch@google.com>
+ <20261117045254.1048298-2-dylanbhatch@google.com>
+ <awIMltMpXzhXiDpU@jpoimboe>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,93 +81,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next -v4 01/17] fs: pass struct path to notify_change()
-To: Al Viro <viro@zeniv.linux.org.uk>
-CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
-	<brauner@kernel.org>, <jack@suse.cz>, <amir73il@gmail.com>,
-	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
-	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
-	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
-	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
-	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
-	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
-	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
-	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
-	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
-	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
-	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
-	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
-	<johan@kernel.org>, <john.fastabend@gmail.com>,
-	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
-	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
-	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
-	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
-	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
-	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
-	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
-	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
-	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
-	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
-	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
-	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
-	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
-References: <20261117150542.1169451-1-caixinchen1@huawei.com>
- <20261117150542.1169451-2-caixinchen1@huawei.com>
- <20261117183059.GP989762@ZenIV>
- <32b8d9c9-27d2-4da9-8618-ccfc44dee7a3@huawei.com>
- <20261119052339.GT989762@ZenIV>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <20261119052339.GT989762@ZenIV>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- whupemk100010.china.huawei.com (7.152.184.41)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <awIMltMpXzhXiDpU@jpoimboe>
 
-oh, I get it.
+On Sat, Nov 21, 2026 at 01:55:39PM -0800, Josh Poimboeuf wrote:
 
-I think it would be better to use a new function, such as 
-notify_change_internal，
-to bypass this upperpath check, while retaining the inode check.
+> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> index e058d21d84b75..1ccbae2051c72 100644
+> --- a/kernel/livepatch/transition.c
+> +++ b/kernel/livepatch/transition.c
+> @@ -402,12 +402,22 @@ static void klp_send_signals(void)
+>  		 * Meanwhile the task could migrate itself and the action
+>  		 * would be meaningless. It is not serious though.
+>  		 */
+> -		if (task->flags & PF_KTHREAD) {
+> +		if (task->flags & (PF_KTHREAD | PF_USER_WORKER)) {
+>  			/*
+>  			 * Wake up a kthread which sleeps interruptedly and
+>  			 * still has not been migrated.
+>  			 */
+> -			wake_up_state(task, TASK_INTERRUPTIBLE);
+> +			if (wake_up_state(task, TASK_INTERRUPTIBLE))
+> +				continue;
+> +
+> +			/*
+> +			 * If it's running, force it through __schedule() so
+> +			 * it can switch itself in klp_sched_try_switch().
+> +			 */
+> +			if (task_curr(task)) {
+> +				set_tsk_need_resched(task);
 
-ovl_do_notify_change
-->notify_change_internal(...)
-     ->do_notify_change(..., true)
-          ->security_inode_setattr
-              if (!internal)
-                  security_path_setattr
+That's broken. Preempt state is more than just the TIF bit.
 
-But this leads me to possibly needing to split the inode LSM hooks and 
-the path
-LSM hooks.
-
-On 11/19/2026 1:23 PM, Al Viro wrote:
-> On Wed, Nov 18, 2026 at 05:13:31PM +0800, Cai Xinchen wrote:
->> On whether we want the mount references at all: they are not for NTFS.
->> The path-based LSM hooks need them - Landlock's check walks the hierarchy
->> up from the object with path->mnt->mnt_root and follow_up(), for every
->> layer, and the idmap we pass has to be the one of the mount the path was
->> checked in.
-> Then it won't be happy with overlayfs ones:
->          upper_mnt = clone_private_mount(upperpath);
-> ...
->          upper_layer->mnt = upper_mnt;
-> in ovl_get_upper(),
->                  err = ovl_get_upper(sb, ofs, &layers[0], &ctx->upper);
-> in ovl_fill_super_creds()
-> combined with
-> static inline struct vfsmount *ovl_upper_mnt(struct ovl_fs *ofs)
-> {
->          return ofs->layers[0].mnt;
-> }
->
-> mean that the mount you get won't be attached to anything.  How (un)happy
-> would landlock be with that?
+> +				kick_process(task);
+> +			}
+>  		} else {
+>  			/*
+>  			 * Send fake signal to all non-kthread tasks which are
