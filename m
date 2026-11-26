@@ -1,84 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795653217;
-	b=tJ7/ELTYn0fxs8omewDzjYNvEsIPwgv+s9cySc4AxLLAf7n1VktMfPkZoWV/X5sslU68
-	 yveK2pmjbafpZ9Kt7TvRSkozNLNSVLN4Y+ELbXPu6F8gGllIHcVuEiffs4MJDqKKRdKl7
-	 H8CgYW2j8uB0bPz1MP13wgjTJswjol8X888PXTHo/p9XKYblXh3gGD9Xl8YZQvSOB5l/2
-	 0xSZI9yohwYEnKU5EW37923IU68fAITJf874bzBb+ohKWWv95perNDcM5jAB5leBF1RC7
-	 LcMM/Kc2JN5QGurtVaAQLu/peVXcH4fE0eLN2V+yECJ2d2pVKO/9ceP4AdDcJxdScSA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795653217;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795653751;
+	b=aUHTlGpGzOn8wB+pDaQ+W2djVgUWpfNJfJxLIGYDejOvMSKeCbuOtrTNAYl0F/9gQ3Vr
+	 9zxen9D2xyUF4zf4/IMoFE2E+AxnO6m/fqLKicp75ezJGow1csc9brK3vTaFhvV2EeaNr
+	 CAQs95IyqPTZomDr7mv3gG7IgyychUf5es4ozAT9FTrfk/kv8dSJgHx4ti8Qk0FCUNDzV
+	 12P7qexh8hdOrmDVlnFIlAOiVykAcVKWnS2ps9cKkXTwSxmHWN01Wzfo2NzkWMPcMK0XC
+	 I+IvxNNhTiwRQJfpTp82uxNOd1Y1ukA41KKTm92zwQ148cA8WYWro5wVoPJBWr3Ej0g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795653751;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=n7CSRRc6wmlgTahpgsaeBRSOFvVKDVf8gI4nOytFKB4=;
-	b=2R+HNrXnXNfJkXqTAoxg9+P35Q0NfRljDu+FvfBG2IJmjkRjrIxx6Jgmvc2uSAZm0dao
-	 nDsXy3Tj705w9lfMJoib6zOGcCeSgR6sFy8+AAqgHc08AQ+N3zE450Wz74XbOCSFamAha
-	 3EpMB6wPLI8CBXKZoSSavdslrElMWhnD2I0GrDOLr1FAgF/qntxOim0gD1SHKMtYZVhfS
-	 pqNkI4Pm9eNXTygBQNvMU8KEuLFaCYuSGZ2kBufx6f9uSONNzze9Y6LJqqo/m3T0gRzWS
-	 d99Aiz95tATQ3leOeGchIGCaRYneDBBPF+Iryws1AjB7U/drNo7BKNOOa0MzvyWnOAg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+	b=OYRaTlm4mdymq9IAEzA2Sj5ehjCK6yNUZfEgUw3G0Fat5tzpmKf1stY/3Bk3vv5WB0/I
+	 tu4noiLuaG70xuIgXYgaXRqGVgmt2dUJ5vFe5Miaf9tVSw05+YrPi8Ri30yAx+LkmZW4g
+	 wWuYQMP3apGp2m/Ue1WQKJdbtk+jTiItURfZP2MZjDjfgwWWiTH2dX0EjThNSaNyJa9CA
+	 Otw9x6fLefRbxGEq8tzrA4lo+0q6XSPbm5kwmHCqLdxtg9ZHzYWfsVp8wvczS8Xkv8b9Z
+	 xQfY6SjdO8vwD2w0ds09cUnGSVxbAxnsMF03l48uLRk45Q6LDJPTb9P4nLJBtMw22Ag==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jWsCuCyo;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LpN49+az;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.41
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A66606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:33:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5A66606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC77606A323
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:42:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEC77606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jWsCuCyo
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f06ff94acfso28200665ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:33:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LpN49+az
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c4322d310e7so109260966b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:42:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795653749; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kvSwqemMw5G3Hv48aGdw0+5ngzrU5njmscZ6A+VfGKtzXmmbxKX2f5ZKHHsy4fYv2T
+         6VbClu4xKDaZWx02mRj6FS3tx0JBLVIIKWOZKTNycLWfBzYzZd2eFFH7UqPf59Nnfs5l
+         cYfmptjSM39xm5yF4LluiHVwAGrnn17ZnbmQl+sovTAFeNlhlMo55scdzQoHkd4MaiWI
+         mSjND5mLBqZEBi1dK4GHZj3C7565Xqfh1UVD1DvujBD13UqpY9jJwpsx8jtVeUut+c0j
+         38vjjO2FFTnHYo3jhjuf6inAF+G+U9b7w7XTcjQhG79nPpM5qyZ2I710MLsXQ0tf3xF3
+         ltcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+        fh=shslwOVmMDPDVu0gPGOwV8YKnbGXffPNQwejxSKzBYY=;
+        b=p4KgSt49EXi7GWNA8ZxHQDkSKTJXMjCMasNCNYh7bLR1MrOUow0KVA6B3ouTfxgj0M
+         ziT0/jYlsUwR0gszp8GZTkJJ7ZQux2ijNMJ1D3SDT2zVUhyiAePz7YX92v1XOpp2VzLd
+         MtTwiYaIgRWigZnv7GQImVq6tr/auRCBKYAdMTS0MkeAjY7+GWxgr/d5Qo0tzS/926hS
+         iMs65Mzx77vUFCTmzUOiT0Go4akNHmk/4H0F6Px19uq9FLy0Dwlp2c78I7bmcL+aBEmt
+         xHFqLGtISEJydkyYSq70ST3BRnV3LGA+l2eXxiaa1FvzO9skVJFqYHHQN1oI3YnMUWx7
+         4sqA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795653216; x=1796258016; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=n7CSRRc6wmlgTahpgsaeBRSOFvVKDVf8gI4nOytFKB4=;
-        b=jWsCuCyowIb2n9Rv7XdeLBoSHT+n7g0YGWhHrYh/G0RdYbTbF+56gGVgtVisdc7T89
-         MKawGtG9pHO6Ft+ybk3kmMsiPH+MQDGsejbWohGWmgG8aVaZe7iIhfp6RsC/JOpFiaON
-         MO0rbPj305k5dwkqPK3ddivXEQMTBWTTiu/DbNXI4wP+pZo0lH2TNoTTSF/7iFb+fmBz
-         uaEItEXoD1gh+4J4eUm9FIUIMZh/n3it6jjwxxUyGY7v5bohC0TRCdpjc1kI90Gv0toj
-         q2JHXP9sgeZkxyJDuT5shgUMemp7awDDz3sc8WrT2PFHVCGJZbhYRSPXy2dq7T3bZ8rR
-         r1zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795653216; x=1796258016;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1795653749; x=1796258549; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=n7CSRRc6wmlgTahpgsaeBRSOFvVKDVf8gI4nOytFKB4=;
-        b=2ajJP15vlm6mhVIEfjUiFFmoKCFQJ4BV/DSFS56S5TRwhvVLoDNZGZm4ywdObK3oIS
-         QIJTzR/IUoWwJ2ijJj+KS0SyjMJFF7Yp6L9TJtWaZj4xy/+SQnj0nwuClgn4wkMnco52
-         qSAQNzR1yySRUnyiwbKHSnw19g/RaxF0msZkheA+5u+qnHtXAoaTtJ0O+wvoikTvrq2l
-         L+t835c7ntC7ZCirwR7XISxS1kpSFFMWf5T4eBXMkTdG1Vi8SnXWvKODdn5KtvmUmP1Y
-         n+uQnFXz5J/HFp5srvKAJ+jnJryh+WEkYXYmCbrKOJqU46et7fcLfQHzYub7syzoGybH
-         tLQA==
-X-Forwarded-Encrypted: i=1; AL+hErF1C2yfm1+ypsobByp4Sji37MCFOmDnjHbwGOjIyhMrmWPO62Zf1/b+zLOm9pNtSUJCVimtvAd1hfeTDTR9nsc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8a5jiVhhxe5EkZ1PGesEPGkoqlz7fCPRFCwO0auz6BG5OQiqLH
-	AaSYOscc35Jai7rbdCftooYpZq7gDcxaigLW/wSVtN4teLa+QZ3lmNa5vWNPz63hcg==
-X-Gm-Gg: AZFdTZdx7OEknSVbeAZPgX3ZE7AC4zE4B89L1EF3sAOzPA0pUZ0kD3fveoAQIDxgErW
-	Kl3hC4Yd3ACCEquhtftul0c5/zO5Wj4dQ9zycdAi8TYJed65SMaqRK+u4n85eLhBq4fQFid7mEn
-	SEXpHDIwOHmGMM2jYBZ7xp62BuUf8nl0DrhzFlgqozJM3F/QAIZxxs8Oe42tkSLkGkKTRdzykqH
-	0bmPu7lWayjGxZIIKx8nz3igzxdLn0/DCwOy4os80eMFwETb25WGdx5vJJCa4lKhEaiw+p2RVlB
-	icgK/A2KCXZ1dkz71Lp6hQxK9Q/qkl7wo+wDvqWyT0WJQIM88aWRpHO3MCq327IInuIAdagSGte
-	WkTd8gB8JRGpaWzH039/YWaVMy9EqfEmuwySv1K2FypcBRJtCLlVgmDdHHqaJCXXuyznsQ2bwb9
-	CabfzrqOXalGS3qiS81rbTvVWU1Oc8SWKPIBan8ibvF/wLaSN9Vi8w1Z+U4Jz8bvB89FafSEieJ
-	eRi0WmoG2oeUbZaBAmebmOxDOsnm0QWij3hz6Fq9pXpSibyGiQcfJ8UwCC0w4i1cYRyi4G/fArH
-	PMqdnrsVtrrB6xNDBXZs13IZWnfX7AjN0A8uFzgs4McsGQ+eTVXH4YHGTzXi29ph
-X-Received: by 2002:a17:902:e80b:b0:2e9:9a19:c43 with SMTP id d9443c01a7336-2f03f118277mr192264515ad.15.1795653215229;
-        Wed, 25 Nov 2026 16:33:35 -0800 (PST)
-Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f14a432sm95165955ad.75.2026.11.25.16.33.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 16:33:33 -0800 (PST)
+        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+        b=LpN49+azCIrNLot1wWdZkbi4Wt9+5r7MX19ZP740YGH95NjHPkEZ3J8iTn5nZs2aU0
+         YtfDizzXcozDLpMOLK52IGL19BDPPkZBwwaARaxU027w//2VU6VirePpo9PC6B6/Gvyf
+         w2GVoXFxRvXbXsOKb1KJ+C3LWAAUbXNTn5yq/DRtNMB33KVLBN+E7CMg2n3o0WEACasU
+         2Rm6jn9HoFPOXbo7vWifWbukhD/T5j5US9xUFhxajKYt4rvNrF1rO1KNwomR3ZLuXZ6w
+         QUOmuxgTXoYSvlHBVpUm9Y0LfNn1TpJbekKTAn/WwvKBAhjn4jwfG9HFJEBd61cyDiFr
+         AG6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795653749; x=1796258549;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ZhRPRVq+8pg+E1wbTr8QWwirSLbboBqk1ZBZKkJ4bPE=;
+        b=l8jatvq5UXnhoUhiZd0oO2apyI214gSdmuzSH1o62UNIs4OUCqkYffn7O88PMhJ08c
+         4xTLWVwYroqaRjzG4cowsLShLHzHINB5pLvMgToASJfC+HMUYLGg4O4mXfTqYpJNZyJc
+         B88LLQVnnVhU6OtoTFNfbvwY2y7c006mhk29+5bhH4ng1zVG/maLDxzzZiVHoJQLkhJt
+         ZLQ0LiJUdFnNmbg4tUvNWz+PoUurhFECDiX5tChi7BnUVFUWvPxDBGd5CoYVbR7uUiOQ
+         le6Ix7fmvQP7wnAh7DT1DCZQa4q6fkGS5WerT8+8OZ3bAi1oQwNNTxPA10Kmr+u0OVmO
+         v8FQ==
+X-Forwarded-Encrypted: i=1; AL+hErFf8DSSjLoF2Xb8ZTDG+6YoeuwYagT8wDZJtPg10QEk47triJ8dTJijldl1jzTKDRNO4h9n3HLUOBB4dP/Nsc4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9SEOF+0xCAru6yjo3JYpVkwHyIGBigYCYtPi5EcaGfE6nlQuiw
+	Vo4/rpyo324BItOprvC1MaIxXCoHuxTXnGcRVKBESWJ30HJEbkHIo/YFNkew8d2NClZuYDbCllr
+	BMyEYRjGV8PSxUfvOULtImeNDdKmBmPXTM5TM7MJX
+X-Gm-Gg: AZFdTZf1f6FDZVZNWpsKvldbWpXqxufXz9pC5d96jN/LPuV4dSQ01hHH4ohTUN8iZke
+	2gQkSv3kEAuVxWdb9n6wEeJib2cVhTT4A8EHOWyRj/bca5hHPft65cKWqP/GxKzcuhfj+B8fMgt
+	unkaU3Jrsz0Su3g4Mo0DI4Pp6UJCW7PUmHatxG5c4IVO5Zv6HjMsBCyd//si+evohDsQiENLjgf
+	Sg7f/rkcsUi2b9kAg3QJnZS+X/NS/Debz7KZX99wCwVbu812uYomAB6Dhm+f+v2Iws7w62T5kLO
+	uWpne5OwyP7DxXe0kZ0eInZBbFqtJyV71/AmRwcKM/kCIQHkXsfoc7PvWBVnRb9Xd2ZNBHoCxuq
+	dPTl7K30gT+NLqIx1VSSHKV2YPJRcoE4REVXfntwyPlccxm1M2wdCm4bRzfvXfoRTkkJ9MUWhTl
+	ss5M8+BdjuwWgj
+X-Received: by 2002:a17:907:da1:b0:c50:5275:fb97 with SMTP id
+ a640c23a62f3a-c513acb5e2emr1626085466b.47.1795653748662; Wed, 25 Nov 2026
+ 16:42:28 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,140 +103,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 16:33:32 -0800
-Message-Id: <DN4PXTY768YS.3I99BQYLC8VXI@google.com>
-Cc: "Mostafa Saleh" <smostafa@google.com>, "Daniel Mentz"
- <danielmentz@google.com>, "Samiullah Khawaja" <skhawaja@google.com>,
- <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>, "Logan
- Odell" <loganodell@google.com>, <linux-fsdevel@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 7/7] vfio/selftests: Add observability test for IO
- page table usage
-From: "David Matlack" <dmatlack@google.com>
-To: "Pranjal Shrivastava" <praan@google.com>, "Joerg Roedel"
- <joro@8bytes.org>, "Will Deacon" <will@kernel.org>, "Robin Murphy"
- <robin.murphy@arm.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Kevin Tian"
- <kevin.tian@intel.com>, "Alex Williamson" <alex@shazbot.org>, "David
- Matlack" <dmatlack@google.com>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, "Randy Dunlap" <rdunlap@infradead.org>
-X-Mailer: aerc 0.21.0
-References: <20261001224531.765278-1-praan@google.com>
- <20261001224531.765278-8-praan@google.com>
-In-Reply-To: <20261001224531.765278-8-praan@google.com>
-
-On Thu Oct 1, 2026 at 3:45 PM PDT, Pranjal Shrivastava wrote:
-> Add a new selftest, vfio_nr_pages_test, to validate the iommu-nr-pages
-> fdinfo metric across all IOMMU backends (Type 1 and IOMMUFD native/compat=
-).
-
-What's the status of this series? Should we expect another version
-(e.g. after the discussion on the shrinker RFC and at LPC)?
-
-nit: Please use "vfio: selftests:" as the shortlog prefix for VFIO
-selftests (see Documentation/driver-api/vfio-selftests.rst).
-
-I gave this a try in QEMU with an emulated Intel IOMMU (which uses
-generic_pt, so it reports iommu-nr-pages), on top of this series. It
-fails in every mode except iommufd, which skips. Details below.
+MIME-Version: 1.0
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-13-wusamuel@google.com> <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+In-Reply-To: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 25 Nov 2026 16:42:17 -0800
+X-Gm-Features: Aa3M54rYVczs2SqMo55_UQYl-QiaJqAFTx0CS_STMdfssfUbqw_TSopd5IfB7RE
+Message-ID: <CAG2KctrMMo0j9Mnbg8fdNsSc-eQaaaW51dO4mqwVNn3hfSdx_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
+	David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
 [...]
+> > + */
+> > +int module_kallsyms_find_name(unsigned int *symnum,
+> > +                           const struct kallsyms_name_query *q,
+> > +                           unsigned long *value, char *name,
+> > +                           char *module_name)
+>
+> Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
+> with similar names. Adding module_kallsyms_find_name() adds more to the
+> confusion, being similar to module_kallsyms_lookup_name() and
+> find_kallsyms_symbol_value().
+>
+> I suggest calling it module_kallsyms_query_name() to match the
+> kallsyms_name_query parameter and to express that this is a structured
+> query, as opposed to a simple by-name lookup. It might be a good idea to
+> similarly stick to "query" instead of "find" in kernel/kallsyms.c.
+>
+> Otherwise, this looks ok to me from the modules perspective. Feel free
+> to add:
+>
+> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+>
+> --
+> Thanks,
+> Petr
 
-> +static long read_nr_pages(struct iommu *iommu)
-> +{
-> +	char path[256];
-> +	char line[128];
-> +	FILE *f;
-> +	long val =3D -1;
-> +	int fd =3D iommu->container_fd !=3D -1 ? iommu->container_fd : iommu->i=
-ommufd;
-
-In iommufd mode container_fd is 0, not -1, so this reads the fdinfo for
-stdin, never finds the key, and the test skips with "iommu-nr-pages not
-reported by this IOMMU". libvfio uses a non-zero iommufd to mean
-iommufd mode, so:
-
-	int fd =3D iommu->iommufd ? iommu->iommufd : iommu->container_fd;
-
-Also, consider moving this into the VFIO selftests library (lib/iommu.c
-and libvfio/iommu.h), e.g. as iommu_nr_pages(), so other tests can use
-it and the library can hide which fd to read.
-
-[...]
-
-> +FIXTURE_SETUP(vfio_nr_pages_test)
-> +{
-> +	self->iommu =3D iommu_init(variant->iommu_mode);
-> +	if (!self->iommu)
-> +		SKIP(return, "IOMMU mode %s not supported", variant->iommu_mode);
-> +
-> +	self->device =3D vfio_pci_device_init(device_bdf, self->iommu);
-> +	if (!self->device) {
-> +		iommu_cleanup(self->iommu);
-> +		SKIP(return, "Failed to initialize VFIO device");
-> +	}
-> +}
-
-iommu_init() and vfio_pci_device_init() assert on failure and never
-return NULL, so these checks (and the matching ones in the teardown) can
-be dropped. Please follow the setup in the other VFIO selftests, e.g.
-vfio_dma_mapping_test.c.
-
-[...]
-
-> +	if (!self->iommu || !self->device)
-> +		SKIP(return, "Fixture setup failed");
-
-This can be dropped too. On top of the above, the harness doesn't run
-the test body at all if FIXTURE_SETUP() skips or fails.
-
-[...]
-
-> +	/* Map a page at start */
-> +	region1.size =3D SZ_4K;
-> +	region1.vaddr =3D mmap_reserve(region1.size, region1.size, 0);
-> +	ASSERT_NE(MAP_FAILED, region1.vaddr);
-> +	region1.iova =3D 0x100000;
-> +	iommu_map(self->iommu, &region1);
-
-mmap_reserve() returns a PROT_NONE reservation (it's meant for reserving
-aligned virtual address space, e.g. for mapping BARs), so there's
-nothing for VFIO or iommufd to pin, and iommu_map() fails with -EFAULT:
-
-  #  RUN           vfio_nr_pages_test.vfio_type1_iommu.sparse_mapping_stick=
-y_reclamation ...
-  # .../libvfio/iommu.h:42: Assertion Failure
-  #   Expression: __iommu_map(iommu, region) =3D=3D 0
-  #   Observed: 0xfffffffffffffff2 =3D=3D 0
-  #   [errno: 14 - Bad address]
-
-Please mmap() real anonymous memory instead (PROT_READ | PROT_WRITE,
-MAP_PRIVATE | MAP_ANONYMOUS). With that and the fd fix above, the test
-passes in all 5 modes.
-
-Also, please allocate the IOVAs with iova_allocator rather than
-hardcoding them, so the test doesn't trip over reserved IOVA ranges on
-other platforms. e.g. allocate SZ_2G and use the start and start +
-SZ_1G.
-
-[...]
-
-> +	nr_pages_final =3D read_nr_pages(self->iommu);
-> +
-> +	/* Page tables should remain allocated */
-> +	ASSERT_EQ(nr_pages_final, nr_pages_mapped);
-
-This asserts the behavior that the cover letter describes as the
-problem, and that the IO page table shrinker (or the clean(gap) approach
-Jason suggested on that thread) is meant to change. The test will break
-as soon as empty tables get freed.
-
-I think it would be more useful to check that the accounting tracks the
-page table in both directions. e.g. also map and unmap a range that
-covers an entire table with a single unmap, which generic_pt frees
-today, and check that iommu-nr-pages goes back down. For the sparse
-case, ASSERT_GE(nr_pages_final, nr_pages_initial) would still catch
-underflow without depending on when tables get freed.
+Sounds good, will apply s/find/query/ in v4. Thanks for the review Petr!
