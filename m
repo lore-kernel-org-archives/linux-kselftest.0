@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795686451;
-	b=4NQ5p4LxiosTjbxkq6/46pJdDkt05ckfWoDlmhwnccgs2F6CDczteRhDMaozEBYok00P
-	 cCpejLJ7TYpboa96wRT12H91fLlz+LoPC33/dFx3I3perklGM/wUMiSMHVUdZGu3X+1sn
-	 xybWOTRyXWA1QpXBXF9HEAUWakufma2l/wn745JqCcYdojmCOsPR8CJoOcZVgVns23LMR
-	 36hxAsXqN8iQpASWtlxhbtTZF+Ev6nc20uTzxdSWTm5aJe7sTcVJpVx2x6I5qB9xPop0i
-	 /wfE9cSidtxcLSmQFW6/x7mrNpgxp8tiKomYPJF3evl6Lvuie/gouDfrNufLHbY0QdA==
+	t=1795686452;
+	b=VXeGhsBZI6Le84kwvWIjHecmqvuYKcPjke8E8QMiMEjwuk6c2hlUGHC0t0rflqGyIlXS
+	 VEP2FVh0kxsc99wtZVrKieoB0UBlAXdjpLcEjkhnZa8mZY4hiNAxOcAAlXRXT5e52yzhs
+	 tTGxLUZbXGUQzdw0dDQVxCgWveO3p2OIP6t7NRoIQM/5ogoLOvZeMoiYm5Sj9pgsIPjrw
+	 HCQCMsahDX7q88IS3AOCqZo5gYa5ignWsjS4CSJOyMXVbarHo3hBSPLWLCO1lj9EzoqVk
+	 nl4ZbOdzt2mpRAQBypIcEmBiMYl0EfDQv6JB3zF5HYGtj3wcyXipTMT05Z5RbjCK5Ag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795686451;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795686452;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=XpcFE5yH6jbDnsuHPatF5o9jlPyNmnuNxlmeldGFfP8=;
-	b=le7zd3cIliilriEFp3o05z4xdK5f0++iexCI8imZMC28WbPPkt6Eo8v9qwxsQsAbK9xh
-	 tMRrqCD6SFFxbsbf96RPrQnrNoQ7/gS63Y3vS4SvfOync8YM9hKpSAVOacfk/CJc2le0I
-	 NwHnxRNvCyl1+LvnRj2Gl8sh+PkCpWEV9vckvwtea4k/ZL/XD52gVjtQd19MG3quntpwv
-	 iaX8iLR8c0Qz1mDGHt/+d40PNUKFfnanhLY3VOSTL53/Wd/ujvzl4ix0ax4f53vXcld5R
-	 TR/1X+EJz6rx1v8FBCA+VuqPrHn1sqZFHw+Aae16DuXiv5w6qgerW2rY0FHnmjvizMQ==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=Ebxm1DL45nJQcO9+sb8DXg3JXXQ3y5h9iFkKaPDLveg=;
+	b=YOg22lyaR3vqd9prFepAJBRfd8qcSFRMXkVWB5fkoeVcdU6N3IpGnlimCN5aVsgcjDMR
+	 OtcHuiDpiALzyP3PQOMNENzHvyCuNwoA7aCtoS3WXdXxMIbWAg/hQbZQ68V7DP5ZP5uzF
+	 oG+aWmOLp3b+xJTV0uWme0oxa+x2HRnx0itZQGTBXRxp9q6YkBznEQ1n4AQZ2AifJaQZD
+	 Wyhl/MrMsV4ENHrcDPp2EZLwrr9sRhOM8Lwk1q4x+ZNV2GZP3FA2FUMo4ry9i5VdVr2cC
+	 lVtVzXoJ8//QqITJwtcnCuA7ck2wYGh9aPu4Xs/g8DUG+HApZWEgTfsB5e49lb1L12w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pz1I274b;
-	arc=none smtp.remote-ip=209.85.218.49
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gGKJDkKI;
+	arc=none smtp.remote-ip=209.85.218.42
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA31606A31E
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 09:47:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DA31606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF834606A32D
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 09:47:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF834606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pz1I274b
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c506a231b88so915667866b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 01:47:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gGKJDkKI
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c51bf011392so135000766b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 01:47:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795686449; x=1796291249; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XpcFE5yH6jbDnsuHPatF5o9jlPyNmnuNxlmeldGFfP8=;
-        b=pz1I274bb3JaDemNqdR/CM9tzxoYeezTS5nspEjuTcafiXkOaJI/fb/2vnsSbPj4My
-         SvvEZ7qer5UbPKQ5Byb9/P7ZnOOmKBxO6K4R243EX4v6+VT8IHfPWE1FM9l+2clwjVfY
-         Bm5RE5HL3QgzksJR1Bf5FumtfQL46zsoSpW6KBrzDWpkKCdh0q7qRj/A56ZAUcICyjCA
-         Yar5CS3AxxByziQampabUDCXhYQwEbJPS7c9fKtDQttD5Z04b++4noYTZ0ICA+YZw35I
-         2rDfb4MHI4fEf2CzHl0JlnjMM+tpg7/cv56aFbGENgheb3yrwo23tbefAX7d1rS7GfFl
-         6i+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795686449; x=1796291249;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1795686450; x=1796291250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XpcFE5yH6jbDnsuHPatF5o9jlPyNmnuNxlmeldGFfP8=;
-        b=u7tvyVZK0epQAT9Y0/gTQFTSs400tptL9yEKMyf48f97YNcd2+I0BdIbPx+9NANc95
-         sk9zi+PK/LC4SsMG5igJGZtX3m5I1Ae3qOZ1QffpuQVd3Rlrha/aXR6rNQ6PAbI6R7sJ
-         brLwbakKJKuNlNo9TdBfF067TiGOWXNL4OqzjY5MsPa+sLnN7Or/+DrE3O+le4PcqfXw
-         aim7gv6PCfZYvvRe64X8lM8BkA/i+t63zKCAnlWJBgLw9WpjdtapO51eRCrG8HU1kBDW
-         ceASmzrMI3qMH3Nr6QsZW/5sXmbOP+NdCKvB2U+Wb19KxiA8FTcEohvS3/kElMDdJk+O
-         M5Aw==
-X-Forwarded-Encrypted: i=1; AL+hErFf6/Mrf0oTIIRsT68IVpfVTS3SK8B8ZkfGgAwzd3VWw7/GjD43bFkHJ4V2qa+A2weIgP8YdYHE1RJn3Gzc8rU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+FhmPLJe2lpNFOxHHnWlKhR4p6xbhJhgpgUVNCYvbKRWPXJpNb
-	DCpNQn8LImJ3DTuXPUJiNfWn9sdrMBeHwUQc/cKeIG7T3i5cpKJaBYZi
-X-Gm-Gg: AZFdTZeMtHPpSZ6My8ZCXxJh7gdY/6N9/GBSIHUWthlWAgOtIE71bbvjPN2Dlzikk0J
-	3yc0GEqzcNg8xB+hePkNe0UwgGqaqhCx6lSDedyZDdd9kK8m6naOpE/7x2v3fDigfxz00wInnLS
-	/JHEtQRdNhT9EyPtQXeXzoWw8olx8ug6dlRJ9XJ4qEhiYkfgGP1hwA149ZAHahRXmZ+hFBCn5dA
-	FQMGBB1v7OWt3mbJifSAbV+KoFEnDyoQsFAu8P1HTblOxeZs28ZIaEwiBkX1Maq+ErPFHThRzC/
-	oERB9L+qYkFKVZDK7j/mbVzWUxH0itb42VwOurBO1T/WpmXJ2pnlKcxDU2OUUkQvRv2MaoNFk/n
-	6ZgcMQD+9Kjylx6zvOYe7sHVe9pYEwgE9jOcVh/lvdp91Q620TZ2JO8tHO2bH1N9Fssa+85N1Wx
-	czXN4TVdmKYBXOf5/KTDnAF3MG8Aza6oFOWYdOSuV566a1viQHfNBlm2y/E4Bd7oHOdBiHIUcJ5
-	3L+gDu7cq+wA9CHBojP3luDFMwY45cJDqr1UmI48Epcle8tkLcrsx1bdeG6B9Ct+Giq6COxKl+t
-	Jb/9Hw8BC8HnGs0sJawsp1qxvYx/7HC3j2RDi41P0P1qOnzB
-X-Received: by 2002:a17:907:3f1b:b0:c51:5547:1771 with SMTP id a640c23a62f3a-c5155471892mr1472031966b.13.1795686449194;
-        Thu, 26 Nov 2026 01:47:29 -0800 (PST)
+        bh=Ebxm1DL45nJQcO9+sb8DXg3JXXQ3y5h9iFkKaPDLveg=;
+        b=gGKJDkKIKrjS/e3C0IpipinDtBBDVlS722h1FfEacoDIYwVLYuzltZxsazd3qs8OoQ
+         fUyErCNMV+QWTsLsFx+J18kWkZHo5IIWOmfm1owGHLnOcE6RtBeC2I/TFuX8VSB9zohz
+         YssXA3pkNplcxGq2wPU0a1+BTtmeZhWx+R2HYStPUwc6W716E+imrw95RIweGW4H27GX
+         KxsYVlovMjn7CeyYLC0wE191Pq68TIUxuQl4JD/S0D6La2OBUKjF8GSPbeNOy3z/lnMe
+         Cm+OUgYLyJ6981J3W1kSlz+miMoDxpKzU6IMHLU0iSvBldwvJ0lLIAKOtYxuMhOC+Cs1
+         3mfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795686450; x=1796291250;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Ebxm1DL45nJQcO9+sb8DXg3JXXQ3y5h9iFkKaPDLveg=;
+        b=zT2T8jKbONuN/SokQRj1Yoipk+NUo7qvT3w8F067TaeDxlMF0ngM5MbaW8xU46Hakt
+         IdGSVYR5/QaGzbnD/JT+NzcYfiry/PSxYPkMRaknCBXkOp4GZFXajPVHTAwrZemdbrFz
+         e2fmofnBfHjZ8VpHHd2GUxu+6IxEnYkQ5E+qJAppzDxmJ6abIUV66i3SumxkwkvKIQDU
+         rlrN8+WyCoeR+4bSWpU/IYrZnv4lRkBG5NkEcOXJNrDYnHTLAKb5Rc1bIqmKnBTTQiH/
+         aMdcNEjmScII8YrCIuAqTQhrXuz0sy8cA4XbZl11i+eIdyKNXaF1+++ScyDG0jt/UyzH
+         /Sow==
+X-Forwarded-Encrypted: i=1; AL+hErHKMEVW3I7BQQSgx/3zfYYU9jkFdnZa2Jb0X7JEarlfISnBuEShYyIWucz8733Ub6nr8sRfjd7rLybzjF2KQlk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+VvUqxrTMf6kdXqpE89PZ6C9x3PcxFEc310QF13ZkuFGPd6vdZ
+	36im2Sd7o+OO7iKYPxex3f0UCV9PVcBC8JFtSOd6AEUb1Fw/7KV5PXW0
+X-Gm-Gg: AZFdTZdoD/waC5Lz8l0yOXWVLNYj+E8NET4vtLHxrzxBc5Af07dL9sPD3AIW1JkjjFg
+	LxU2QjYVI+Q18U2tvw/H678o/8l1y0Tl91WlNhLd7Kd9wVb3iJmEAJX5HSUvu9qKgVI3wH7vj8H
+	mo32tsBNN4dLbPWmJVlj3v+D7xvIprho8lqtRCaWlz1Xt8+uxOb0E4KJ2Skuec8v2GP99BzpPGw
+	dg/Io0WCXbNIUK4NPt19MCeEbUqZIWWwSCFQoPxW0L2HTYIy4hAZ0VDEKhCXAouqC5mm04He+F+
+	k6wmRPkfjwSvROefUTiMrYUUGTRxZ4fCyKCVUH7AA7IB/9ft/whuOz/1P0Hm0vgYIqfMncoF7py
+	bkuXdxEU5B/9gdLC4rdfwYrf4NduVfEEPvM7L+EmOznnNksAnQUQvIG7s+QtVvzzxx4Z9f8WK6R
+	OdmDTJSN1wHLodQQbLKW6Wf9wk7HdQTY23ajoiE7+igwELEZ+xxNaQDNWDm6UamTtS/tU+c1xtS
+	zJwZMiyJzMy0xqaZwyHvg6ggikkjCN3xvCQ1uXAj9BOKKlfCmNJDLk+qHFZ6p+m21TNSdx8dIic
+	7YaMOCmHW0vm5sf5791sCa2LL3GA8fux6rBKyR5nlbsFR8k0
+X-Received: by 2002:a17:906:c10e:b0:c41:5e31:5184 with SMTP id a640c23a62f3a-c513a99abe6mr1685897766b.13.1795686450072;
+        Thu, 26 Nov 2026 01:47:30 -0800 (PST)
 Received: from Air-pasichndev ([188.163.8.107])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513b002b9fsm727100666b.78.2026.11.26.01.47.28
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513b002b9fsm727100666b.78.2026.11.26.01.47.29
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 26 Nov 2026 01:47:28 -0800 (PST)
+        Thu, 26 Nov 2026 01:47:29 -0800 (PST)
 From: Andrii Pasichnyk <apasichnik9@gmail.com>
 To: "Jason A . Donenfeld" <Jason@zx2c4.com>
 Cc: wireguard@lists.zx2c4.com,
@@ -89,10 +90,12 @@ Cc: wireguard@lists.zx2c4.com,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 0/2] wireguard: free queued packets on peer removal, and test it
-Date: Thu, 26 Nov 2026 11:47:20 +0200
-Message-ID: <20261126094722.73025-1-apasichnik9@gmail.com>
+Subject: [PATCH net v2 1/2] wireguard: peer: free packets left on the per-peer queues on removal
+Date: Thu, 26 Nov 2026 11:47:21 +0200
+Message-ID: <20261126094722.73025-2-apasichnik9@gmail.com>
 X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261126094722.73025-1-apasichnik9@gmail.com>
+References: <20261126094722.73025-1-apasichnik9@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,38 +107,72 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Removing a peer while its receive queue is busy can leave packets on the
-per-peer queues. Each of them holds a keypair and a peer reference, so
-the peer and the keypair are never freed. Patch 1 frees what is left;
-patch 2 adds the test Jason asked for in the v1 thread to netns.sh.
+peer_remove_after_dead() flushes the crypt workqueue and then disables
+the peer's NAPI. Once a disable is pending, __napi_poll() completes the
+instance after the poll returns even if it used its whole budget, so a
+peer removed while more than one budget of decrypted packets waits on
+rx_queue keeps the rest there. Each entry holds a keypair and a peer
+reference, so the peer is never released; the WARN_ON in rcu_release()
+that checks for leftovers is never reached either.
 
-Tested on net e50972666 with the WireGuard selftest VM (x86_64 KVM):
+Free whatever is left on both per-peer queues once nothing can feed them
+any more: receive entries are single packets, transmit entries lists.
 
-  both patches, 4 vCPUs:      pass
-  both patches, NR_CPUS=1:    pass
-  patch 2 only, NR_CPUS=1:    fail, 4 peers and 4 keypairs
-                              "merely created" in 10 removals
+Reproduced with the WireGuard selftest VM (x86 KVM): remove a peer while
+a UDP flood keeps its receive queue busy, re-add it, bring the session
+back up, repeat, then run the selftest's created/destroyed object check.
+With 1 vCPU the unpatched kernel leaks a peer and its keypair in 25-40%
+of such removals ("wg0: Peer 11: merely created"); with this patch, 0 in
+212 removals. The next patch adds the loop to netns.sh.
 
-Changes in v2:
-- Patch 1: code unchanged. The reproduction paragraph in the commit
-  message is corrected: the first reproducer only put load on the first
-  removal of each run, so "5 in 2140" understated how often this
-  happens. Under load it is 25-40% of removals with 1 vCPU.
-- Patch 2: new, the netns.sh loop from my reply in the v1 thread plus
-  the larger log buffer it needs.
-- Rebased on current net.
+Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+Signed-off-by: Andrii Pasichnyk <apasichnik9@gmail.com>
+---
+ drivers/net/wireguard/peer.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-v1: https://lore.kernel.org/netdev/20261003201625.4572-1-apasichnik9@gmail.com/
-
-Andrii Pasichnyk (2):
-  wireguard: peer: free packets left on the per-peer queues on removal
-  wireguard: selftests: remove a peer under load
-
- drivers/net/wireguard/peer.c                  | 24 +++++++++++++++++++
- tools/testing/selftests/wireguard/netns.sh    | 14 +++++++++++
- .../selftests/wireguard/qemu/kernel.config    |  2 +-
- 3 files changed, 39 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/net/wireguard/peer.c b/drivers/net/wireguard/peer.c
+index 1cb502a93..3e08898ce 100644
+--- a/drivers/net/wireguard/peer.c
++++ b/drivers/net/wireguard/peer.c
+@@ -91,6 +91,25 @@ static void peer_make_dead(struct wg_peer *peer)
+ 	/* The caller must now synchronize_net() for this to take effect. */
+ }
+ 
++/* Each queue entry holds a keypair and a peer reference. Transmit entries
++ * are lists of packets, receive entries single packets.
++ */
++static void peer_purge_queue(struct wg_peer *peer, struct prev_queue *queue,
++			     bool lists)
++{
++	struct sk_buff *first;
++
++	while ((first = wg_prev_queue_peek(queue)) != NULL) {
++		wg_prev_queue_drop_peeked(queue);
++		wg_noise_keypair_put(PACKET_CB(first)->keypair, false);
++		wg_peer_put(peer);
++		if (lists)
++			kfree_skb_list(first);
++		else
++			dev_kfree_skb(first);
++	}
++}
++
+ static void peer_remove_after_dead(struct wg_peer *peer)
+ {
+ 	WARN_ON(!peer->is_dead);
+@@ -122,6 +141,11 @@ static void peer_remove_after_dead(struct wg_peer *peer)
+ 	 * here from process context.
+ 	 */
+ 	netif_napi_del(&peer->napi);
++	/* A NAPI being disabled completes after at most one more poll, which
++	 * may leave packets on rx_queue that still hold references.
++	 */
++	peer_purge_queue(peer, &peer->rx_queue, false);
++	peer_purge_queue(peer, &peer->tx_queue, true);
+ 
+ 	/* Ensure any workstructs we own (like transmit_handshake_work or
+ 	 * clear_peer_work) no longer are in use.
 
 base-commit: e509726660dd06ce107437aecf7c106c9d3fc1e7
 -- 
