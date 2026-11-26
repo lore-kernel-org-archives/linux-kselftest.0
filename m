@@ -1,56 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795660286;
-	b=NJfWXdBUC+9Q0Pl7z1ZhpKJZf9T+6qZ6Oz28xtid4qx9IdzHY/mD9fCCC9lCBe41e+fd
-	 GzOKfzbzQkHMJyW7gEdmLOv04P3ScWteglIKqWZ76HYU8txPb0zBmac1Bb5D31lyKCAGH
-	 McnAf0JPupARvnoWXWiPHbhqNvyaF7qo8HDt10CY63M5XYzj0W+i+C8TIXCMapnTr5Q4a
-	 ig4//X98Gzs90krNpj/gtFEE/y+X3Bl22he1nCYLtdKZRJGyPmiNP22EdPmajcVnO5WPt
-	 ZuOygUExNaEkYRCgctAQF+jAiu95+yR8IgdOs3t/zUMPDpCeb50F2MVv8OridoMvC9Q==
+	t=1795660338;
+	b=neFBJHswe5L52YbNTDpuQuwqmWgnSezmHlLrIiI2bYKGKTPMwJXOaqZdaeTwMM9/1bTb
+	 A10uu7I9Bh8oQXaBLHimcrGboSMXQfpBtO435S54lmWbNaEDOy8VLwhZ0AwadDElxZMkP
+	 /EoCsOF+j4PIJDrkVxemxhaLAymqjwgq0mD+F+Tl6rglqZgLejmF0zccGfm+/5Grm6Z45
+	 fOcwdxYxfnTFNOmuAV9pFQOvTTW/Q8zD3fpHzQOS+Ae+Ne8rrvSZMRGoUKGJ3Ie1q4unX
+	 XWXNq+7/QBhRk7XoEV5lCcc2x7VAeRnLyiYezeu9RqQtMWx2bocWrsV8LlZzGa4QscQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795660286;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer;
-	bh=XoNUqoMOUR4pNg64kYKOFS5cc8mxi4fzlWjxyaA/0Jk=;
-	b=QGfAnzMz/UP2ocDtbbmWgHdbACHrzwGvkDCxGse05ni4EecuYZC5UXh0sdsR+qFdbwww
-	 tboNjpbC/qHZyB/dyn3zG2NlMQvZCiGr4GgbtRfAoQMTYhXVNQkaH8ygMyEtdkr+ZdAvx
-	 iwlet01K0qv4j/h20ND/ktuolEbs0grFE9Vz3AuCBobJDQeVqEDSL3hSnKVyFgLyJj0am
-	 hW/uxBucuUHoT7OYF2TUUTmZ5fOqZgAWIK9LJ2na007b4V66sFgMq4qdWh27tcHgo7PdZ
-	 B6NYcocDaMxrahpAdg9qFPA7+y6LjdfQqtzQDHgoMU+K31J1wcEz/ik5WRyDwO+NxZA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795660338;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:Auto-Submitted:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
+	b=n1gaku03fzj8L/6VwKtvfv7euPW/26oOCXXbjZgI5RsHyTYtcDF2Ld0IqZ8B8Nzm64aZ
+	 thkvdGZNTPekF4PBp7Jnzb/tA/CHDh0te4vPb0o1lSAdjvG9dO9RDS+MrJ9VKG5a6GwGr
+	 8+e/ZrvPJ436R7oNrWwadOxBQQR6HsBdTrYMK8J1Z/0XqOmbu619b3jJB5TxpippnhRbA
+	 VEf3xpfSdeZ8oqppEg2xU8paiXoM8X4XKpvoC15lpB/hNx2/i4WE8v44wqCWsUx1+hbyG
+	 ltVao6Lt6yUfEZby+VITCA/LcIfYLXjnz6Jpc7wi6Mpk012y2TFMNRQUPlV+KUGLoaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HrDUfDaD;
-	arc=none smtp.remote-ip=95.215.58.56
-Received: from mta1.migadu.com (out-56.mta1.migadu.com [95.215.58.56])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9Gijhty;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC6E606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 02:31:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7FC6E606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0FF606A684;
+	Thu, 26 Nov 2026 02:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HrDUfDaD
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9ytP9VIUcsucr3RFXON7iMevk/B43pe2qF9qb3+uaGc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795660283; v=1; x=1796265083;
- b=HrDUfDaDQI5v0C4c3EjTC6lOo5ikPvn3xq8modtIXr/rMeTcCmRz4hXOL6vMcT7Y7EuUzH8k
- MFW/K3XQnOYHL1zowMekC2FmH8V4806jzTVdURZxLslZ91PL874e0p1Eu/ufvHAVoapfKfhEDTf
- chhrFKsx/4z18U8kBiNs0MIY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id e78637e12af0c6eb;
-	Thu, 26 Nov 2026 02:31:23 +0000
-X-Mizu-Trace-ID: e78637e12af0c6eb
-X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Thu, 26 Nov 2026 10:30:57 +0800
-Subject: [PATCH net 3/3] selftests: bonding: add recovery updelay test for
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9Gijhty
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8331F000EC;
+	Thu, 26 Nov 2026 02:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795660337;
+	bh=sS9FIrfW22SIhehTvpH3rdvmtslwIeEYozBr0OvaZe8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=a9GijhtyQzJcusURtjJI85TgzfzAw4hyxdARYAWJ1mt2HK2xQ1MurZT4yBT2QCBZa
+	 GDteM3ql/5w3nNOCHj/+f8f/0M3Fcggx5NbnYeZoZWtKe6YjjPe+udkMhSJztKjcj1
+	 yHZ78F8bXiFOjUoVF2J7m5DxtzsXyfC/RcDQnudYn/zfGseCbV1BxYK4Q5h2e5fH5G
+	 cngEVkgDFdBF/9AnBmj8TSwH/WGniNUcI0aqHkiYBYgjftM0rFvjUPGBxpNyKlbLJa
+	 qRgGwEqdMTd82xxdJYqubOxx1TE/dI/UTYEEo3ojYvF/mfIPngDtnqm8MR+UBJrI0i
+	 YlEX7gmOsJkRg==
+From: netdev-bot+sinfo@kernel.org
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Tonghao Zhang <tonghao@bamaicloud.com>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
+ "jiangjiehua (A)" <jiangjiehua1@huawei.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 0/3] bonding: ignore updelay when no active links for
  broadcast mode
+Date: Thu, 26 Nov 2026 02:32:15 +0000
+Message-ID: <179566033583.3294.7595995030938204309@kernel.org>
+In-Reply-To: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
+References: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,127 +67,22 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261126-bond_broadcast_updelay-v1-3-188e5538d6ca@kylinos.cn>
-References: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
-In-Reply-To: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
-To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Tonghao Zhang <tonghao@bamaicloud.com>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
-Cc: "jiangjiehua (A)" <jiangjiehua1@huawei.com>, 
- Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Hangbin Liu <hangbin.liu@linux.dev>
-X-Mailer: b4 0.16.0
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
+Hi!
 
-Add a recovery updelay test for bonding mode 3. Merge all related tests
-into a single test file.
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
 
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
----
- .../testing/selftests/drivers/net/bonding/Makefile |  3 +-
- .../drivers/net/bonding/mode-2-recovery-updelay.sh | 45 ----------------------
- ...e-1-recovery-updelay.sh => recovery-updelay.sh} | 13 +++----
- 3 files changed, 7 insertions(+), 54 deletions(-)
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index e337c099fb40..c186310c2d6e 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -15,9 +15,8 @@ TEST_PROGS := \
- 	bond_stacked_header_parse.sh \
- 	bond_vlan_real_dev.sh \
- 	dev_addr_lists.sh \
--	mode-1-recovery-updelay.sh \
--	mode-2-recovery-updelay.sh \
- 	netcons_over_bonding.sh \
-+	recovery-updelay.sh \
- # end of TEST_PROGS
- 
- TEST_FILES := \
-diff --git a/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh b/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh
-deleted file mode 100755
-index 2d275b3e47dd..000000000000
---- a/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh
-+++ /dev/null
-@@ -1,45 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--# Regression Test:
--#  When the bond is configured with down/updelay and the link state of
--#  slave members flaps if there are no remaining members up the bond
--#  should immediately select a member to bring up. (from bonding.txt
--#  section 13.1 paragraph 4)
--#
--#  +-------------+       +-----------+
--#  | client      |       | switch    |
--#  |             |       |           |
--#  |    +--------| link1 |-----+     |
--#  |    |        +-------+     |     |
--#  |    |        |       |     |     |
--#  |    |        +-------+     |     |
--#  |    | bond   | link2 | Br0 |     |
--#  +-------------+       +-----------+
--#     172.20.2.1           172.20.2.2
--
--
--REQUIRE_MZ=no
--REQUIRE_JQ=no
--NUM_NETIFS=0
--lib_dir=$(dirname "$0")
--source "$lib_dir"/../../../net/forwarding/lib.sh
--source "$lib_dir"/lag_lib.sh
--
--cleanup()
--{
--	lag_cleanup
--}
--
--trap cleanup 0 1 2
--
--lag_setup_network
--test_bond_recovery mode 2 miimon 100 updelay 0
--test_bond_recovery mode 2 miimon 100 updelay 200
--test_bond_recovery mode 2 miimon 100 updelay 500
--test_bond_recovery mode 2 miimon 100 updelay 1000
--test_bond_recovery mode 2 miimon 100 updelay 2000
--test_bond_recovery mode 2 miimon 100 updelay 5000
--test_bond_recovery mode 2 miimon 100 updelay 10000
--
--exit "$EXIT_STATUS"
-diff --git a/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh b/tools/testing/selftests/drivers/net/bonding/recovery-updelay.sh
-similarity index 72%
-rename from tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh
-rename to tools/testing/selftests/drivers/net/bonding/recovery-updelay.sh
-index 9d26ab4cad0b..05edf9915cc0 100755
---- a/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh
-+++ b/tools/testing/selftests/drivers/net/bonding/recovery-updelay.sh
-@@ -34,12 +34,11 @@ cleanup()
- trap cleanup 0 1 2
- 
- lag_setup_network
--test_bond_recovery mode 1 miimon 100 updelay 0
--test_bond_recovery mode 1 miimon 100 updelay 200
--test_bond_recovery mode 1 miimon 100 updelay 500
--test_bond_recovery mode 1 miimon 100 updelay 1000
--test_bond_recovery mode 1 miimon 100 updelay 2000
--test_bond_recovery mode 1 miimon 100 updelay 5000
--test_bond_recovery mode 1 miimon 100 updelay 10000
-+
-+for mode in 1 2 3; do
-+	for delay in 0 200 500 1000 2000 5000 10000; do
-+		test_bond_recovery mode "${mode}" miimon 100 updelay "${delay}"
-+	done
-+done
- 
- exit "$EXIT_STATUS"
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account.
 
+*IMPORTANT*: If you do repost (for other reasons) - please include
+the relevant info in the cover letter or commit messages.
 -- 
-2.56.0
-
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
