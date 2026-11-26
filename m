@@ -1,67 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795680839;
-	b=e4cV56ryctuMUN7NnHA75bE7ksJHlSj6R/nc6TRH/9JUg6l0wzFm6znJBeOlW21w8mEI
-	 OJtpZc0d2UFGuR80sUbIwohMLfAcgJ+Cgh/TzqOFalFmSbAG/l5UOPKxyhiGq+9koZJV1
-	 jK9wPyG/L6CzmLnmkUr/mipkozkdum0mKhXvFxbMExtsUzaPDMn7LvMen1TOtn+i8Yujk
-	 3JjCGuiAjNd60OKkFH7gnpo2aSkDmhdhcbTSJ8TzvzjrOWoiNRb+kU8/g7ay6diF77YNp
-	 AxuN25gfwpcYOLRMPZyPQxLQ9V+VTQcnb42gCYdmoyhTp2psOW7leN5IHqXtLFQPzqA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795680839;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=du8ZpgKg7y+JSHPGHeVmHsAOuNQnkPoofwWOvxKg+Eo=;
-	b=wpj/cw4m35hgpCrrWfFZASyw7YFDLVEPkHrhlJoKNSk8I9qyApHtNuoE6pEvzBVJy4w9
-	 LhHu3aaTuzox+dr+2TamyRNslKMY0cEHYnw9nJ7iez627LdkI7pDgH5pBiNXGQxbOwVp4
-	 Nk5a2Xhx3u/KNB0MEij3kTKtBjaU9DzPKNu2Z5Bw16rZ7Ey+9puEUzHyiCJGKHQybjs2j
-	 b5bK72b2/Ug4o55nC6gCd5zD2HkNKqWrthA1qdwUsTqgT+7eMzXJyg8YXol9nAEiM1Mo0
-	 nsqJz92xRvwH6hiMe+XNT6wATGd3wG2mrpbRkK32FAjGpqGcveuqQWEKYtsT0VDpFRQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PV7zQK7r;
-	arc=none smtp.remote-ip=91.218.175.124
-Received: from mta0.migadu.com (out-124.mta0.migadu.com [91.218.175.124])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=165.173.180.107
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795681030;
+	b=aQvSVOIFevjRe31kCVdpByC15JHyvmxWriKuBEhwxasTCo6wyJwm1QVvu6KBErthNkN7
+	 ai8rcc3ih03jvyJZI4bpMwE3oeg+X7WTEj8YQID3dxpO+Q2evObDqnSlqlDnKI1VAQtZd
+	 C63oRKR6Xha6D4ZA1c3K24alic0MgtBd+N92XS7PfZNaU6Z2VyS1TJj/59kw9a2swH1Cf
+	 lDvLnGHJbaP+AjZ1hsKJEtycCvwk+nBXtq5PB0z0SzCYpXpw8S3G9euMlFHsDdBlDuItF
+	 9vTEb7Qx0/iK+pb7YNvElVgw/WKioVWLgpHuVaWVGgmMMX0Pdmd9+PVny8zoQSaY6kw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795681030;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Subject:From:To:Cc:
+	 Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:
+	 User-Agent:MIME-Version:X-ZohoMailClient;
+	bh=chm5h2uHfD3RH+9tEQ3/9r/BgZnc+Er/3JnIdSdTH3c=;
+	b=EwTQa10EPxBBJj0sC0vmjbEwRn9GuGH5GWPFBSm/ItAyXDfFQDkTqpYz87GhaFuz2d1b
+	 /SlGUlu+06hYg88JWKmciU5tNY0K+pHUJlnyt6AaMtStZh0+DUEfv4BmzxhfvbgrWPsi6
+	 kD2v1TYH/FU04rGJ1kXL17TycUYXM2ki2sIUtpAptTiTqL4nhx1ZmNMN/BlQAiX9xnDQZ
+	 zy86oGO3yf+6332MDgA6ISAZY8IonxPqk66FUS1apuLFwmXEZF3Dm6Hsxo+GDWBm8lEMR
+	 /oh9QpNYULEjuEKWfVFGfvjCqtHWJEGJ/BYrSRWNPaOgfXKteYip60TzVuNxqrTHkhw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=icenowy.me;
+	spf=pass smtp.mailfrom=icenowy.me;
+	dkim=pass header.d=icenowy.me header.i=@icenowy.me header.a=rsa-sha256 header.s=zmail2 header.b="TgZD9Fm/";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=165.173.180.107
+Received: from sender6-pp-e107.zoho.com (sender6-pp-e107.zoho.com [165.173.180.107])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A755A606A31E
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 08:13:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A755A606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C730606A31E;
+	Thu, 26 Nov 2026 08:17:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C730606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PV7zQK7r
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DI1JO81xWUoyggcDXvguJ3RNZ3fdazMgtO43ps7msp4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795680836; v=1; x=1796285636;
- b=PV7zQK7rTd6Q/ha9e4zKHIZlw0r1teo6g5lXHhQs/62K79gKTdgYlAp5f2zOCIZK/kkaq9ag
- +fN2JGbKwa3jfJj5PRLUWAXkVUwR4ZRI7CB4Xe78NxY2IlBDRiPsSgB20VpGSat8OmFflJWA4O7
- 1a9+RztSFOJBzqvodX8jA7oI=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 56ac476ea61aeb81;
-	Thu, 26 Nov 2026 08:13:56 +0000
-X-Mizu-Trace-ID: 56ac476ea61aeb81
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 26 Nov 2026 16:13:48 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Alice Mikityanska <alice.kernel@fastmail.im>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/6] ip6_gre: Enable BIG TCP packets
-Message-ID: <20261126081348.GG33976@Liu-laptop>
-References: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
- <20261126025015.10416-6-yanhaishuang@cmss.chinamobile.com>
+	dkim=pass (2048-bit key) header.d=icenowy.me header.i=@icenowy.me header.a=rsa-sha256 header.s=zmail2 header.b=TgZD9Fm/
+ARC-Seal: i=1; a=rsa-sha256; t=1795680952; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=d28bMu5UbSY+z1mtwa0xXUQcF8yk9IUj5LS6t3JrWYwOHkC+hr0xyrmXnVk3XefB4U01tg4JY9oUmJ2pmwwQCC1w07+PN9rroRizAPz8r/3hJdFLNw+HGhtlYwvnbKFLKJK7PbkGOwRI88tonwdDzqe3MNiyEPSu5buXesM3Ig8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1795680952; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=chm5h2uHfD3RH+9tEQ3/9r/BgZnc+Er/3JnIdSdTH3c=; 
+	b=R5uXGTCQd1wF0QQ3UjnjxlyZ6Ou4OegdQH3DOVcQLMpBxIXaXFYEotwzmN2jwiBN9E9TVlxeC40GnTaly8SkM1nAaxJ06qM8vwsMIJSRxMuDV/9F2bA5ulF5SlvBsT7fIQRcQT5KeM+XDYof5Mk6dzMwTbfY7+oaikpXfI1KIF4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=icenowy.me;
+	spf=pass  smtp.mailfrom=uwu@icenowy.me;
+	dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: a=rsa-sha256; b=TgZD9Fm/kI6BAnhbIxWr2/n62K2qAEesbhtgfUoLbKty8IEP/wm51K9zk0vpaQDVxeq0QYDiaT+xsSrkEzauZkrfMM0EvmTgBaXRQ1U+8O3rx6DjPmq79+Ch2Hd4YdKdwkcvquUcAV5TamtUVJKbQMfgi/np9/GeBqlHSISaGG5yvTunk4quLux579CabkCN603iLPUES6cgfmcR3r1+TLc3y3LVyQ8kRrh6NVknF0TtqrD3zw+ENCx0r+OvLkKdIKHiBFEIDd6pV0dDKPcHVxoYmCXqd+eNq8ZTcqAS667REextyAijtYFS2JxR2NsDSB5nok/gTbzLFLyXaGv52A==; c=relaxed/relaxed; s=zmail2; d=icenowy.me; v=1; bh=chm5h2uHfD3RH+9tEQ3/9r/BgZnc+Er/3JnIdSdTH3c=; h=Content-Description:Content-ID:Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:List-Subscribe:List-Post:List-Owner:List-Id:List-Archive:List-Help:List-Unsubscribe:MIME-Version:Message-ID:Resent-Sender:Resent-Cc:Resent-Date:Resent-To:Reply-To:Resent-Message-ID:Resent-From:Sender:Subject:To:Date:From:Message-Id:Reply-To:Subject:To:Cc;
+Received: by smtp.zohomail.com with SMTPS id 1795680949924288.2188422629731;
+	Thu, 26 Nov 2026 00:15:49 -0800 (PST)
+Message-ID: <dd22bc951015aabf3bcc86d3c16074d3eb23a070.camel@icenowy.me>
+Subject: Re: [PATCH v9 1/4] riscv: cpufeature: Introduce ISA bases bitmap
+ and rva23u64 detection
+From: Icenowy Zheng <uwu@icenowy.me>
+To: Guodong Xu <guodong.xu@oss.qualcomm.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>,  Paul Walmsley	 <pjw@kernel.org>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou	 <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Randy Dunlap	 <rdunlap@infradead.org>, Radim Krcmar
+ <rkrcmar@qti.qualcomm.com>, 	linux-doc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, 	linux-kernel@vger.kernel.org, Paul
+ Walmsley <paul.walmsley@sifive.com>, Conor Dooley <conor@kernel.org>,
+ linux-kselftest@vger.kernel.org, Andy Chiu <tchiu@tenstorrent.com>, 
+ Florian Weimer <fweimer@redhat.com>, Peter Bergner
+ <bergner@oss.tenstorrent.com>, Zihong Yao	 <zihong.plct@isrc.iscas.ac.cn>,
+ Mark Harris <mark.hsj@gmail.com>, Aurelien Jarno <aurelien@aurel32.net>,
+ Andrew Jones <andrew.jones@linux.dev>
+Date: Thu, 26 Nov 2026 16:15:37 +0800
+In-Reply-To: <4ea9d48592dbf0e1120f7db7305aae37.guodong.xu@oss.qualcomm.com>
+References: 
+	<20261109-rva23u64-hwprobe-v2-v9-0-ae846c5c7178@oss.qualcomm.com>
+	 <20261109-rva23u64-hwprobe-v2-v9-1-ae846c5c7178@oss.qualcomm.com>
+	 <ce886c3a5bf5af34df5c1ac3fefbd86a8f0567ff.camel@icenowy.me>
+	 <4ea9d48592dbf0e1120f7db7305aae37.guodong.xu@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,68 +83,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261126025015.10416-6-yanhaishuang@cmss.chinamobile.com>
+X-ZohoMailClient: External
 
-On Wed, Nov 25, 2026 at 06:50:14PM -0800, Haishuang Yan wrote:
-> Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and
-> commit 03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP
-> on UDP tunnels. ip6gre and ip6gretap can carry BIG TCP packets as well:
-> IPv6 BIG TCP no longer needs a hop-by-hop jumbo header, the GRE header
-> has no length field, the GSO and GRO paths already handle it, and FOU
-> encapsulation sets the UDP length with udp_set_len() since
-> commit 47282504ad21 ("udp: Support BIG TCP GSO packets where they can
-> occur").
-> 
-> Bump tso_max_size up to GSO_MAX_SIZE so that the admin can use BIG TCP
-> with ip6gre and ip6gretap. ip6erspan is left alone. The default
-> gso_max_size and gso_ipv4_max_size stay at 64KB, so nothing changes
-> unless they are raised explicitly.
-> 
-> iperf3 TCP over ip6gre and ip6gretap, with IPv4 traffic between two
-> netns connected by veth, without encapsulation, 3 runs of 10 seconds
-> each, in a KVM guest with 8 vCPUs on an Intel Core i7-14700 host:
-> 
->   ip6gre,    65536:   84.7,  84.4,  90.2 Gbit/s
->   ip6gre,    196608: 117.7, 112.5, 128.4 Gbit/s (+38%)
->   ip6gretap, 65536:  103.1,  97.9, 102.4 Gbit/s
->   ip6gretap, 196608: 123.0, 125.7, 124.8 Gbit/s (+23%)
-> 
-> A later patch in this series extends big_tcp_tunnels.sh to cover ip6gre
-> and ip6gretap with IPv4 and IPv6 traffic, without encapsulation and with
-> FOU and GUE.
-> 
-> Reviewed-by: Alice Mikityanska <alice.kernel@fastmail.im>
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-> ---
->  net/ipv6/ip6_gre.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-> index 26c0e1c4de1..0ace21db3b4 100644
-> --- a/net/ipv6/ip6_gre.c
-> +++ b/net/ipv6/ip6_gre.c
-> @@ -1462,6 +1462,7 @@ static void ip6gre_tunnel_setup(struct net_device *dev)
->  	dev->flags |= IFF_NOARP;
->  	dev->addr_len = sizeof(struct in6_addr);
->  	netif_keep_dst(dev);
-> +	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
->  	/* This perm addr will be used as interface identifier by IPv6 */
->  	dev->addr_assign_type = NET_ADDR_RANDOM;
->  	eth_random_addr(dev->perm_addr);
-> @@ -1934,6 +1935,7 @@ static void ip6gre_tap_setup(struct net_device *dev)
->  	dev->priv_flags &= ~IFF_TX_SKB_SHARING;
->  	dev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
->  	netif_keep_dst(dev);
-> +	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
->  }
->  
->  static bool ip6gre_netlink_encap_parms(struct nlattr *data[],
-> -- 
-> 2.43.0
-> 
-> 
-> 
+=E5=9C=A8 2026-11-26=E5=9B=9B=E7=9A=84 00:16 -0500=EF=BC=8CGuodong Xu=E5=86=
+=99=E9=81=93=EF=BC=9A
+> Hi Icenowy,
+>=20
+> On Mon, 09 Nov 2026 23:56:47 +0800, Icenowy Zheng wrote:
+> > =E5=9C=A8 2026-11-09=E4=B8=80=E7=9A=84 07:47 -0500=EF=BC=8CGuodong Xu=
+=E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> [...]
+>=20
+> > > +enum {
+> > > +	RISCV_ISA_BASE_IMA,
+> >=20
+> > I may have missed something, but would it be worth to add a GC tier?
+> >=20
+> > I think many Linux distros have GC defined as their baseline.
+>=20
+> Thanks for raising this.
+>=20
+> A single bit for 'RV64GC' seems to have no user to me, so I would
+> prefer not to add it. Allow me to explain.
+>=20
+> G is a combination of extensions defined in the early days of the
+> RISC-V ISA spec: the unprivileged manual defines it as an abbreviation
+> for IMAFDZicsr_Zifencei, "our standard general-purpose ISA" [1].
+>=20
+> I checked, and you are right that it is the baseline in practice: GCC
+> defaults riscv64 to -march=3Drv64gc, and Debian, Fedora and Ubuntu
+> (before 25.10) build with that default. But my understanding is, G is a
+> build-time baseline only. Nothing checks for G at run time; on a core
+> without F, D or C, an rv64gc distro userland just takes SIGILL on the
+> first such instruction.
+>=20
+> Anyway, what this series intends to export to user space is the profile
+> level (RVA20U64, RVA22U64, RVA23U64). For example, a glibc-hwcaps design
+> can fall back to rva20u64 when its run-time check finds no rva23u64.
+>=20
+> PS: In those terms the counterpart of rv64gc is RVA20U64 [2]
+> (excluding Zifencei, which the profiles mandate only in the S variants
+> [3] and which, as noted in hwprobe.rst [4], is not intended for direct
+> use by user space).
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Yes, I agree that RVA20U64 should be exposed instead of RV64GC.
+
+>=20
+> RVA20U64 and RVA22U64 came up in the LPC26 discussion as well [5]. I
+> would like to add them in a follow-up, probably not in this series, if
+> the reviewers here agree.
+
+I'm glad to hear this.
+
+Thanks,
+Icenowy
+
+>=20
+> [1] https://github.com/riscv/riscv-isa-manual/blob/main/modules/unpriv/pa=
+ges/naming.adoc
+> [2] https://docularxu.github.io/rva23/rva-mandatory-extensions.html
+> [3] https://github.com/riscv/riscv-profiles/blob/main/src/profiles.adoc,
+>     RVA20U64 section, the note on Zifencei
+> [4] Documentation/arch/riscv/hwprobe.rst, RISCV_HWPROBE_KEY_BASE_BEHAVIOR
+> [5] https://lpc.events/event/20/contributions/2626/
+>=20
+> Guodong
