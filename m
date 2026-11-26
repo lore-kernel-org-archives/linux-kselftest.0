@@ -1,52 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.248
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795680758;
-	b=R4+Dbs9jetcf5SvHWi3ai3Hpy5uhNYxDJ16UqnVh5G+PeLa/dW09nszzbuKQ/BpAGcr9
-	 Ipb1NnBL9UsLCop5mP7q02hrnYxvrgvH0rNU7ifqfLEfWszIyrX+q6zfAahnAd7kQsDC+
-	 b8PgbEVg7sKqESSo9RfbFQjJrSvmKgwMFdiOtfL8AVxCEmRmCoHMNxJZmBiH2dLHeYXsE
-	 Lk96T/mGNRhUPOO46DKCeoi/ZE8D788rwT/DYOVyk9+qKy/OB97jHvmCljhYNt7nitQqB
-	 ti/YgDjv77uL6747nKKcpfTmDV0JBs9QZ/Mulz6vAElVGC219qZswBkU/Gl7kCrkyXw==
+	t=1795680802;
+	b=oEPGCKPkEXjYsJdeZJQJb8YvgDKRdW9phoIEB7/fQtpPnS57TcCd14PgGLnrea+Zdds1
+	 lR0Y8/iUI/C8Gmvj+rTYu/OTSWKekc3Aq3e9/zO23zljvH073thOgeBN/Yszlt6rkiuiI
+	 vcoyvr+isZSjYtc4lwzMx5j0MHJdkeDvpKzgq7aujwjHkvD7aepsvP4A66hrdB/XhSWtn
+	 tAWAG//mDcBW8M7RZUoQZlVlSUEnGmVO0w4Yx7GvuJyT8LyuEzDidOIB/MEgM0Bgwx1Ko
+	 eZDi3amaoxMsOjkvEezQemzp988T6hLltYHjCEZGeRokdcB7IHQTuAsk7fTeZngtc9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795680758;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795680802;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=rLPkJUAGEWARQ2dIgwe2dGKd/2F+KCnofuKYobrMgA4=;
-	b=Sztx2ST/RUydjLhF9oBehQYmh7/cWVfpitNLXkzXtsFJMtpF1rsbr/ZrndfpOIeUG7Xo
-	 rtQWEWaCE4ddWVvClpS7UxAbBu4ZeRM3yUHUWJ+6zTTu2erBGxl5APTBMdgtTVq6OamWk
-	 pNKdpnP8Jq27752W8P8fOEvcM96MvLiToTRSzN+NobiO+TIKRMkmSQJQoPYBMBGj68VYx
-	 X1gLa+kikRrMjTIDud7Powc3cGdMYJ+A0ebSm+am6tt3ssGrvzYZ4yPz6ebohTiJPJCQ8
-	 TBVk/69psRP9gVjYSAkkqCE/F3JP3Uq1LSyBgGfQvan3RTwUVDRn5xVD4WYCuLsuugA==
+	bh=8ngE5yHiDIx7vBCYimPDgiAaC44Sef/mO5m2HnMkQ3g=;
+	b=N9tffTdE7eN9evvCM15kDuADci33Dx1t0a1m4B3U5nyfDl7Bg4qbQZ7uWlVfStyXbvtL
+	 1zknVrxU3o7++xQSHDnSHklZf/9IrtrUsBqr2l1jioY34O6AneKWNg9hMQ1K/D7pYW8yj
+	 +q8DpdW1m24+FFOGBOSY7t3aovgZKQG2qleyl4dF6IOcB0YoqdQCEyNpj7lb/Iwrq2k7V
+	 SIyWCTu+OnWKSP6X6W4Ym6XN08mtcqXbB+XAWkp9283BPXzeuQ8mnScdfPbdqTJp7W3QH
+	 wXCoU2ymBUZGoiMaPOj3b/7RlAKipL8UjbSiQiueXODT6t0OfxkE7XN3G2xn+Mp0ntA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kwxOEwQ1;
-	arc=none smtp.remote-ip=91.218.175.56
-Received: from mta0.migadu.com (out-56.mta0.migadu.com [91.218.175.56])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HDgwxbPG;
+	arc=none smtp.remote-ip=95.215.58.248
+Received: from mta1.migadu.com (out-248.mta1.migadu.com [95.215.58.248])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F669606A31E
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 08:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F669606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C552606A33B
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 08:13:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C552606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kwxOEwQ1
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HDgwxbPG
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SfcdMxFYA0q96NE83XCnix52dNJ48AiBhdfguxOC+wo=;
+DKIM-Signature: a=rsa-sha256; bh=TWd5PYsIUK42+eVyOks+ZcrzBLgJCP2EqIb2/tZIif4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795680755; v=1; x=1796285555;
- b=kwxOEwQ1KvbZ4Q8yWicro8AfcqCZFdNuyL7n3re1nfTIphr6XC3cncgHh8R2C4Z0EWbxUPiN
- w9KvPCCCQ0g7nn0LAupBYtrih6uTOkUvBizwa+f34cVTyLax5ES9ZnQmBg2kJJ0jrVZft8yGDB3
- Xbp2L3zJfXRjio1XupZZ+xVw=
+ t=1795680799; v=1; x=1796285599;
+ b=HDgwxbPGV+SOoxUcQzUMVT9i3l1EcBh1rMtwVT0oMISsd3H3agHFXh+81KT9vrOxXdAPBtdR
+ eUmihKIKfkAsS+QeYGTBfxZ2t8UaCZl8JE2yXizle+mREwib/eH+12RpT/7uGk0OwMN2umtg3LI
+ M3ix4aaPd8vorYG9hnGD+Y18=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 5eb27d89023d6b48;
-	Thu, 26 Nov 2026 08:12:35 +0000
-X-Mizu-Trace-ID: 5eb27d89023d6b48
+Received: by mta11.migadu.com with ESMTPS id 3b2fb38026ca545c;
+	Thu, 26 Nov 2026 08:13:18 +0000
+X-Mizu-Trace-ID: 3b2fb38026ca545c
 X-Migadu-Flow: FLOW_OUT
-Date: Thu, 26 Nov 2026 16:12:28 +0800
+Date: Thu, 26 Nov 2026 16:13:11 +0800
 From: Hangbin Liu <hangbin.liu@linux.dev>
 To: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
@@ -58,10 +58,10 @@ Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
 	Alice Mikityanska <alice.kernel@fastmail.im>,
 	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/6] sit: Enable BIG TCP packets
-Message-ID: <20261126081228.GE33976@Liu-laptop>
+Subject: Re: [PATCH net-next v2 4/6] ip6_tunnel: Enable BIG TCP packets
+Message-ID: <20261126081311.GF33976@Liu-laptop>
 References: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
- <20261126025015.10416-4-yanhaishuang@cmss.chinamobile.com>
+ <20261126025015.10416-5-yanhaishuang@cmss.chinamobile.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,52 +73,49 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261126025015.10416-4-yanhaishuang@cmss.chinamobile.com>
+In-Reply-To: <20261126025015.10416-5-yanhaishuang@cmss.chinamobile.com>
 
-On Wed, Nov 25, 2026 at 06:50:12PM -0800, Haishuang Yan wrote:
+On Wed, Nov 25, 2026 at 06:50:13PM -0800, Haishuang Yan wrote:
 > Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and
 > commit 03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP
-> on UDP tunnels. sit can carry BIG TCP packets as well: the outer IPv4
-> header gets its total length from iph_set_totlen() on output, the GSO
-> path already handles BIG TCP, and FOU encapsulation sets the UDP length
-> with udp_set_len() since commit 47282504ad21 ("udp: Support BIG TCP GSO
-> packets where they can occur").
+> on UDP tunnels. ip6tnl can carry BIG TCP packets as well: IPv6 BIG TCP
+> no longer needs a hop-by-hop jumbo header, the GSO and GRO paths already
+> handle it, and FOU encapsulation sets the UDP length with udp_set_len()
+> since commit 47282504ad21 ("udp: Support BIG TCP GSO packets where they
+> can occur").
 > 
 > Bump tso_max_size up to GSO_MAX_SIZE so that the admin can use BIG TCP
-> with sit. The default gso_max_size and gso_ipv4_max_size stay at 64KB,
-> so nothing changes unless they are raised explicitly.
+> with ip6tnl. The default gso_max_size and gso_ipv4_max_size stay at
+> 64KB, so nothing changes unless they are raised explicitly.
 > 
-> iperf3 TCP over sit between two netns connected by veth, without
-> encapsulation, 3 runs of 10 seconds each, in a KVM guest with 8 vCPUs
-> on an Intel Core i7-14700 host:
+> iperf3 TCP over ip6tnl, with IPv4 traffic between two netns connected by
+> veth, without encapsulation, 3 runs of 10 seconds each, in a KVM guest
+> with 8 vCPUs on an Intel Core i7-14700 host:
 > 
->   gso_max_size 65536:   96.0,  95.4,  98.0 Gbit/s
->   gso_max_size 196608: 136.9, 131.0, 129.8 Gbit/s (+37%)
+>   gso_max_size/gso_ipv4_max_size 65536:   93.0,  90.8,  83.3 Gbit/s
+>   gso_max_size/gso_ipv4_max_size 196608: 134.8, 123.4, 112.8 Gbit/s (+39%)
 > 
-> On the receive side, GRO does not build sit packets larger than 64KB, so
-> the gain comes from the sender when the underlay offloads GSO.
-> 
-> A later patch in this series extends big_tcp_tunnels.sh to cover sit
-> without encapsulation and with FOU and GUE.
+> A later patch in this series extends big_tcp_tunnels.sh to cover ip6tnl
+> with IPv4 and IPv6 traffic, without encapsulation and with FOU and GUE.
 > 
 > Reviewed-by: Alice Mikityanska <alice.kernel@fastmail.im>
 > Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 > ---
->  net/ipv6/sit.c | 1 +
+>  net/ipv6/ip6_tunnel.c | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> index a7ec800216a..97044b1cad2 100644
-> --- a/net/ipv6/sit.c
-> +++ b/net/ipv6/sit.c
-> @@ -1577,6 +1577,7 @@ static void ipip6_tunnel_setup(struct net_device *dev)
->  	dev->max_mtu		= IP6_MAX_MTU - t_hlen;
->  	dev->flags		= IFF_NOARP;
+> diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
+> index 64a184bca46..040012cdf15 100644
+> --- a/net/ipv6/ip6_tunnel.c
+> +++ b/net/ipv6/ip6_tunnel.c
+> @@ -1919,6 +1919,7 @@ static void ip6_tnl_dev_setup(struct net_device *dev)
+>  	dev->lltx = true;
+>  	dev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS;
 >  	netif_keep_dst(dev);
 > +	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
->  	dev->addr_len		= 4;
->  	dev->lltx		= true;
->  	dev->features		|= SIT_FEATURES;
+>  
+>  	dev->features		|= IPXIPX_FEATURES;
+>  	dev->hw_features	|= IPXIPX_FEATURES;
 > -- 
 > 2.43.0
 > 
