@@ -1,62 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795704438;
-	b=JehB1U67RWryZIckWQ5edJSWT2tPEU45G2PafSF7Noiy/BElTfngzMQtmaPAAyC+uwas
-	 UvjnaQnaMNh4/FnmNMAYeVV8HOimJZGNTK3A1M8bV1UlM4dn/vSSa4ubTfnhm0jeYMFDU
-	 XQ35mITBQWfhKNes/GJqL/DdGvD/9rLzOU13pTNRf5bEHCRFFGkNcdU/znS8HUqNsCBOJ
-	 SlZrk4jip0EeGegK5nGIiXaUyNCiHo2+bbr3ikoFdRQ/aDbsoji39FB9ub74yVgXy6vj/
-	 ZMlSpAVBenbxrk2I3Q1Z21674+9N3a6hCvwn3zNNFFGlxIq+957/2TYCabjeh4FGttw==
+	t=1795705630;
+	b=WQj4Vsl50ecdjlvdnuXacfOWzLX2hFIn97yV4UOxswtGesRCLk/CeblWu21F0zy9C6vM
+	 fJ0UEnAOuyRH9OXDtF5kuux2sRWyUdAO4aoae5eJSN6tNHlZudjbA4xTfc9fQaAqneKVT
+	 j2t+X/0lyZNa6bMpaZyt75Yqe5uwZZLBNrWtM7Ys3MPTqoFoSZaNT9x5OggTfm8Ux/dA7
+	 QbNPBocGxGAVFcG11LZlMlxcm/IyE22PhKyMYZ8apAktLqZB6tF989G8EYW4YL5V4S5VR
+	 zdCmKKFYYFBw9R/nTzEU4uQt3Zp9WuhS9iPwmduZQAJT7/EnAntwQNQFN897/wgHc5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795704438;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=/q/pFzvKWu2mEF9/DwcsF9YD9/DZAPV7fZSCS+XMqKU=;
-	b=I9HbsfXmLCHEC6qHvnlq6ioN5E4ZyqhvCqBRY0UsBVm6b20FUa9+hmmUpO4btsTxdhLQ
-	 heaXDGQslhxntp32g28w10Qhr326zviSRyBPqyz/YY0P5MDg7ILuUwNdA/TyexJtMPSjZ
-	 D34h7T+Y89rQcrrZfwol1jLHVcOwxR5dylglt0lEc3Ci07kO4TfbuztWjJwsUXTMKQsJN
-	 z/sEvUi/+ECMTvu7lQ+BYRH7nVybFyNAdzJHb7qtFCtpQ7QvyFd9/2S3wrcYqUQ4koF/N
-	 jMhqkbnsY72MmkT2Ih+q3b0GLgmooJMipNjazEHuCltCe2kHjGnOF5O7e6mgQbKe68Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795705630;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=vsjnvGGljX9pov+p77+0fvVdhwRr+JXPFgWF2Ng3Rww=;
+	b=ZjCIvPuvQIoXaspL3raCWYl82gvHVBdc7ldqNegpG8HZ9riCxx2SU95coo+lJuyc+59B
+	 0GocDoppJYkyQfC/eUbXuThXbXoAFR+t/Kj+aTwWYZS+c3UiEg/ZSefUni9hVckdiHxW4
+	 TsWp+duv7kfW2JOTgLqEFHYEvIpj5ggVjSKykE9wlbEv8XW6VVXQN4Wyz936OBYqz5bfJ
+	 ZlmwTzpKjcjcIDg7BMF43x6NYmLDjy7wS6ffm7sDoRyL5bj3WPj1mTlW6heBBo0kYfHLB
+	 lbetjdRcAYwzDK8+chPzRDbEyqcJ5mDSeYowYcKaLAOnS0IRiUMwEVhN/AuACoAxhdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TnusCb4W;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LoTa01m1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4035606A31C;
-	Thu, 26 Nov 2026 14:47:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE81606A32A;
+	Thu, 26 Nov 2026 15:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TnusCb4W
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2621F000C0;
-	Thu, 26 Nov 2026 14:47:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LoTa01m1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74891F000D3;
+	Thu, 26 Nov 2026 15:07:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795704438;
-	bh=/q/pFzvKWu2mEF9/DwcsF9YD9/DZAPV7fZSCS+XMqKU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=TnusCb4W4Q6qbGBNI/+jR7w8yDxVE4LJQfEBrhJ6cZFXGapUzlFTf3WMBxxMNbUeZ
-	 7XJ/CuvWT5y24oUsLfgecaKlBERKAz1OzmvH50dDghi/kAdDc0zfT9mh8zFHgxnxJu
-	 d4213BuLgwWQeuNAyBZprdzTrjEavQFzp1Diram+4u+iv6nTh1l8/GrXGMoVUHOMI9
-	 1sPHXVNf29OWNBJH6tDfAM7PWd+sx8uzQvzorHEsGxE3CVabagg/fy2XvHRTynXB+N
-	 Fc+8hJenVdWTNp/VftnqWgECRoEPV00Er7wPt4ljJzK42a8ezXl+OsKC368ooFspUy
-	 4Mb6SuTqCNYoA==
-Subject: Re: [PATCH net v9 2/2] selftests: net: test joining genetlink groups
- no family owns
-From: netdev-bot+sashiko@kernel.org
-To: anilkaushikwireless@gmail.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, idosch@nvidia.com,
- nicolas.dichtel@6wind.com, jacob.e.keller@intel.com, jiri@resnulli.us,
- fw@strlen.de, martineau@kernel.org, v3rdant.xiang@gmail.com,
- aliceryhl@google.com, linux-kernel@vger.kernel.org, nhorman@tuxdriver.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Thu, 26 Nov 2026 14:47:17 +0000
-Message-ID: <179570443724.3135.6495722482046462156@kernel.org>
-In-Reply-To: <20261125144514.2717012-3-anilkaushikwireless@gmail.com>
-References: <20261125144514.2717012-3-anilkaushikwireless@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795705630;
+	bh=vsjnvGGljX9pov+p77+0fvVdhwRr+JXPFgWF2Ng3Rww=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=LoTa01m10c/DFZtn0E18pWQOzi4WRWeXm/PToA80poqv9rMEQN4wOov6H0/4L7lJe
+	 uc0iMxmwFZ54pWHI8X2OCZH2jKBPIEEND4+WwURhtUrClzewlh0L3aaAjS+rVRecj8
+	 XDsXgFdK4MM9rLbT8hrf9ackhQi0GjFkweNgeGkr1XlGwCD7HUyhRrNLK+LNLIezHc
+	 MidXYkkfw1prDM8i0QXxEx6X2HNntFP+90SzmYy7rafHgJf5yiBoXzk6VDE6pvcsJ7
+	 78sYnYQl5CRACUTGxXyboRSwKWtxZoqco/WJHBkuZI/EfdeMp6Iv/cJWLs4SV1gw4z
+	 QhZfukUObWyEQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Todd Freed <toddfreed@meta.com>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Boris Pismenny <borisp@nvidia.com>, Cosmin Ratiu
+ <cratiu@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, Donald Hunter
+ <donald.hunter@gmail.com>, Dragos Tatulea <dtatulea@nvidia.com>, Eric
+ Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Jamal
+ Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, Leon
+ Romanovsky <leon@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>, Paolo Abeni
+ <pabeni@redhat.com>, Pedro Tammela <pctammela@mojatatu.com>, Saeed
+ Mahameed <saeedm@nvidia.com>, Simon Horman <horms@kernel.org>, Tariq
+ Toukan <tariqt@nvidia.com>, Wei Wang <weiwan@google.com>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ bpf@vger.kernel.org, =?utf-8?Q?Asbj=C3=B8rn?= Sloth =?utf-8?Q?T=C3=B8nnes?=
+ =?utf-8?Q?en?= <ast@fiberby.net>, Qingfang
+ Deng <qingfang.deng@linux.dev>, Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgense?=
+ =?utf-8?Q?n?= <toke@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah
+ Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Matthieu
+ Baerts <matttbe@kernel.org>, David Ahern <dsahern@kernel.org>, Jonas
+ =?utf-8?Q?K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>, Hangbin Liu
+ <hangbin.liu@linux.dev>
+Subject: Re: [PATCH net-next v3 04/12] psp: add support for socket-less psp
+ associations
+In-Reply-To: <20261124221758.3230929-5-toddfreed@meta.com>
+References: <20261124221758.3230929-1-toddfreed@meta.com>
+ <20261124221758.3230929-5-toddfreed@meta.com>
+Date: Thu, 26 Nov 2026 16:07:06 +0100
+Message-ID: <87cxrriqcl.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,163 +80,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Todd Freed <toddfreed@meta.com> writes:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+> Currently, a PSP association is bound to a TCP socket when it is
+> created, and can hold both an Rx and a Tx key.
+>
+> Add Tx associations which are not bound to a socket, and are referenced
+> by an ID, so that other parts of the stack can attach them to packets.
+> See the subsequent patches, where the tc psp action does just this.
+>
+> Socket-less Rx does not need an association, and the kernel does not
+> keep anything for this case. For Rx, userspace calls the rx-spi-alloc
+> operation, and then uses tc filters that match the corresponding SPI,
+> version, and PSP device. The flower matches for these fields are added
+> in a subsequent patch.
+>
+> Add the following new netlink commands. They are admin-only, and
+> restricted to the netns of the PSP device.
+>
+>   rx-spi-alloc  allocate an Rx SPI and derived key, without a socket.
+>                 The key is delivered to the peer out of band. Also
+>                 returns the number of key rotations of the PSP device
+>                 so far (key-rotations)
+>   assoc-add     create a Tx association and install the peer's key,
+>                 returns its ID
+>   assoc-del     delete a Tx association
+>   assoc-get     get / dump Tx associations; only the SPI is reported
+>
+> Socket associations are not addressed by these commands, so for example
+> assoc-get does not list them.
+>
+> The kernel doesn't enforce key rotation for socket-less Rx the way it
+> does for socket associations. A tc filter which matches a SPI of one
+> generation will also match that SPI if subsequently re-used in another
+> generation. It is up to userspace to deal with this eventuality by
+> removing such rules in time. Userspace may subscribe to rotation
+> notifications for this purpose.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Could you talk about the rationale here? rx-spi-alloc returns the key
+rotations, why not make the generation part of the flower match?
 
-- [Medium] In bind_before_family()
-  (tools/testing/selftests/net/nl_genl_mcast.py), the `finally:` block…
-- [Low] _free_ids() in tools/testing/selftests/net/nl_genl_mcast.py
-  decides it is in init_net by comparing…
-- [Low] _members() in tools/testing/selftests/net/nl_genl_mcast.py calls
-  sk.getsockopt(SOL_NETLINK, NETLINK_LIST_MEMBERSHIPS, 64) and decodes…
+Probably missing something, but seems like natural for the kernel to
+ensure that stale rules wont match reused SPIs?
 
---
 
-selftests: net: test joining genetlink groups no family owns
-
-This adds a Python selftest. It checks that Generic Netlink multicast
-group IDs no family owns cannot be joined with setsockopt() or bind(). It
-also checks that a socket bound to free IDs does not become a member of
-the NET_DM groups once drop_monitor is loaded.
-
-> diff --git a/tools/testing/selftests/net/nl_genl_mcast.py b/tools/testing/selftests/net/nl_genl_mcast.py
-> new file mode 100755
-> index 0000000000000..8bbe3d22225cf
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/nl_genl_mcast.py
-
-[ ... ]
-
-> +# include/uapi/linux/nsfs.h
-> +NET_NS_INIT_INO = 0xEFFFFFF9
-
-[ ... ]
-
-> +def _free_ids(ctrl):
-> +    """Return the IDs in 1..32 that no family owns."""
-> +    # Outside init_net, the dump skips the families that are not netnsok,
-> +    # but their groups are still owned.
-> +    if os.stat('/proc/self/ns/net').st_ino != NET_NS_INIT_INO:
-> +        raise KsftSkipEx("not in the initial network namespace")
-
-[Severity: Low]
-Can this check ever match on kernels older than commit 9b0240b3ccc325
-("netns: use stable inode number for initial mount ns")?
-
-That commit added NET_NS_INIT_INO to include/uapi/linux/nsfs.h. Before
-it, the ns.inum of init_net was a dynamically allocated proc inode number
-(PROC_DYNAMIC_FIRST and up), so this comparison never matches.
-
-join_free(), bind_mask() and bind_before_family() all call _free_ids()
-first. On those kernels all three subtests would skip, even when run in
-the initial network namespace. The printed reason, "not in the initial
-network namespace", would also be wrong.
-
-The companion fix "genetlink: Reject joining multicast groups no family
-owns" has a Fixes: tag, so it is a likely backport candidate for stable
-trees such as 6.12, 6.6, 6.1 and 5.15. If this test is backported with
-it, the fix would never be exercised there.
-
-The commit message explains why the fixed inode number is used, but it
-does not mention this limitation. Would a fallback help here? For
-example, the test could compare against the inode of /proc/1/ns/net when
-the fixed value is not in use. Another option is a skip message that
-states the actual condition.
-
-[ ... ]
-
-> +def _members(sk):
-> +    buf = sk.getsockopt(SOL_NETLINK, NETLINK_LIST_MEMBERSHIPS, 64)
-> +    # An array of u32 in host byte order
-> +    words = struct.unpack(f'={len(buf) // 4}I', buf)
-> +    return sum(w << (32 * i) for i, w in enumerate(words))
-
-[Severity: Low]
-Could _members() decode uninitialised bytes when the socket has more
-than 512 groups?
-
-In netlink_getsockopt(), the NETLINK_LIST_MEMBERSHIPS case stops copying
-once the user buffer is full. It then reports the full required size
-anyway:
-
-net/netlink/af_netlink.c:netlink_getsockopt() {
-    ...
-		opt->optlen = ALIGN(BITS_TO_BYTES(nlk->ngroups), sizeof(u32));
-    ...
-}
-
-do_sock_getsockopt() in net/socket.c writes this value back to user
-space without clamping it. CPython's socket.getsockopt() then resizes
-the returned bytes object to that length. Everything past the 64 bytes
-the kernel actually wrote is left uninitialised.
-
-For a genetlink socket, nlk->ngroups follows mc_groups_longs *
-BITS_PER_LONG, and that grows on demand in genl_allocate_reserve_groups()
-and genl_validate_assign_mc_groups(). If it goes above 512, the
-full-value ksft_eq() checks in join_free() and bind_mask() could fail
-because of garbage high bits.
-
-Would it be safer to decode only the first min(len(buf), 64) bytes, or
-to size the buffer from the returned optlen?
-
-[ ... ]
-
-> +def bind_before_family(ctrl) -> None:
-> +    """A free ID joined with bind() stays unjoined when a family takes it."""
-> +    names = [fam['family-name'] for fam in ctrl.getfamily({}, dump=True)]
-> +    if 'NET_DM' in names:
-> +        raise KsftSkipEx("NET_DM is already registered")
-> +
-> +    free = _free_ids(ctrl)
-> +    try:
-> +        with _sock() as sk:
-> +            sk.bind((0, sum(_bit(gid) for gid in free)))
-> +
-> +            # Looking up the family loads drop_monitor.
-> +            try:
-> +                ids = _groups(ctrl.getfamily({'family-name': 'NET_DM'}))
-> +            except NlError as e:
-> +                raise KsftSkipEx("drop_monitor is not available") from e
-
-[ ... ]
-
-> +    finally:
-> +        # So that the next run can load it again
-> +        cmd("modprobe -q -r drop_monitor", fail=False)
-
-[Severity: Medium]
-Can this finally block turn the "drop_monitor is not available" skip into
-a failure?
-
-With shell=None, cmd() in lib/py/utils.py splits the string into a list
-and runs it through subprocess.Popen() without a shell. If modprobe is
-not on PATH, Popen() raises FileNotFoundError. fail=False only ignores a
-non-zero exit code, not a failure to start the command.
-
-An exception raised in a finally block replaces the pending one. The
-KsftSkipEx raised when getfamily() fails with NlError is then lost.
-ksft_run() catches the FileNotFoundError under except BaseException and
-counts the test as a failure, with a traceback.
-
-Without modprobe, request_module() in the kernel would also fail. That
-makes the NlError path the one taken in exactly this environment. The
-cleanup also runs when the test never loaded drop_monitor.
-
-modprobe may only be in /sbin or /usr/sbin, and the test may run with a
-PATH that excludes them. In that case even the success path would end in
-FileNotFoundError and be reported as a failure.
-
-Would it help to run modprobe -r only after getfamily() succeeds, or to
-catch OSError around the cleanup?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125144514.2717012-1-anilkaushikwireless%40gmail.com
+Bj=C3=B6rn
