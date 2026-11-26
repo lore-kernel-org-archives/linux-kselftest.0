@@ -1,75 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795661471;
-	b=lWkPEkGtZr+H2FEBS7u/lztz9lOIDUDFWkgCheOtSEowEAdaVYDMEvjMc3BNrHMPR5xP
-	 SLB3TmJWgI2mfX52BFsPIVInt/KCkKGUsS2e+elQu6CDM+fqa+Ms7lpHXsMgaFUfE3gME
-	 VlqhzEbifEPBu16NhaRKrO2hTYLHgoK1nZ37gIKBAZLtz43eXiqfyrI3KVoldbpJDXxxa
-	 yEdoDfu7lOfc/1n7e7JYbKEqgsrcd+8oPCtIbooV+5hIb5/zWANMZWGeeUx8FRlHY0R8j
-	 pJdITgOshoFRcmomdENCaCuHdztJOeI9OUgm97T+N8yg77ekdue++MKXGuT3AkV3FRA==
+	t=1795665340;
+	b=vQ++O2k9SqdrDV8SS2n/kgA6pepLxgh/cRdE4w85QiTKIScTa2qpGgIBjbk7iaxRvxNp
+	 TaePSyUPyrPmB17+gRQC1KZLoqMNZf6nivMk+ip7fRRrvMmBklpOBPKyh4lsuOYAmsjrN
+	 NUbswqQt782hnUPzpvOPthvWLyCGqZfTqzZsgmjXei++Nt0vGattB/Xxqj+peKrbiXa9g
+	 ZOZIfymChxjPXAVV+b9L5LNtYijFbQ2JMDee1nKYVsXFKuzySRPlSrXCaMUyT7Hdq+2U0
+	 u7AfSflHJoHuDxmDR/Xd74OdFwngmhOLjAXKWgkCn4FnGSoK9pyJ16kbhb+PchwtFfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795661471;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795665340;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=dOs0QGgrUiUPEdrg7wekwgXMxcapi697ENy3Bj6of1Y=;
-	b=bC4R43HljfxeGf7ug+zNwXpjhTDmc0vb3r45qXcGtZQLdsKczvgnvZmpy6cD+w4xcZgU
-	 nn5OJqQx9T33xebGiCzYS3a5mq6mVC4RDVcWklvIQdsUURwpvcuPRTrhezJU/+jOkt4lc
-	 V1PbhZdivTfbskE0P8rrSczMyyzC05wRTAjm+QhSV2mqsiGz+q4PcvRfaazSAoWuXNkab
-	 5oimKZSVO6SprSAIVni2bwAc59twM3fQIdnfSjWFSk2G3T+ZxpiWvHGjT/qjgFHKNaMVi
-	 ns6mXHc5kYAz3z3tWZAJQz0Rrxo9Rqj3jHIJwLXhlxzJ/dviI/TAWa88Xn6/y33r94w==
+	bh=tjCe/C21ycUvCHGAx37nFv572V9SXkb5hmDpSktqSgU=;
+	b=hFvWZWGuzifpWJM3eQfoPPmu0LmZFz/hRpIBIfH4W2OUTbfgd52V6BKjlEtf4DgDI1k4
+	 kD1gZqQjqal8P5fdtFltTGSGQ6Bf8uUc4zBObabJ+ifx12V3vsvta96EPuTbhjFlQG1lb
+	 AmsoC97OQlTMv3EbKty9GF6qGjYDTflD0ziVNqGcZxiLHDEBsuHDRcTU7ELfFywoNO10i
+	 AyViGQgPpHUdGW1qfRmm7piQWqWAITeiTieR3iOUTxoJxdleuasOgUsiU/aPfzc8GDQJ0
+	 pVAZNb1yjyRnWFWoVu6IjP6NhD867I2zhFK6Rl1808yhFVOygr1rrqv9vY2dGyN0+Fg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=eLXr+8V8;
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA42606A33D;
-	Thu, 26 Nov 2026 02:51:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AA42606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WPismLtF;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF69D606A32E
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 03:55:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF69D606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=eLXr+8V8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WPismLtF
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so3025276a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 19:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=eLXr+8V8txP/Ab6FfLuJnQlU33W4tD7OIXMq0O1XLoqPqL22HPRHK4EVYc3xuuRK7afj/WNMG8ldb
-	 TvF+idFmi81nwwl3d6YwItpYEpLZPw8CDwtxJlAzDAWty1pf/MthD/imaZCIVXE/6QQvARuFlFo/yV
-	 a5PKECBN2lguKlyg=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96b079e9c9d8-5c714;
-	Thu, 26 Nov 2026 10:51:08 +0800 (CST)
-X-RM-TRANSID:2ee96b079e9c9d8-5c714
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[104.224.130.48])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86b079e693eb-59c62;
-	Thu, 26 Nov 2026 10:51:08 +0800 (CST)
-X-RM-TRANSID:2ee86b079e693eb-59c62
-From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To: netdev@vger.kernel.org
-Cc: David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+        d=gmail.com; s=20260707; t=1795665339; x=1796270139; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tjCe/C21ycUvCHGAx37nFv572V9SXkb5hmDpSktqSgU=;
+        b=WPismLtFq5Vzdw8Nn3x6+EU4wIRclxtaK1grWHOPmfnwoDAUZzfXUDY4nq9NAKCLMj
+         GANIvj9Y+FG28A4kXgbmKtWCNMIpcvYZaienVronBs5N3qZ4bo1tguMF7frVTREuTtyv
+         fb5fzAuumNzc3XJwPZjidpRPRYH78Av7k7lkgw9d8WYkpYqrI/TJTmZb63Qne4izOLYO
+         pgNmZByACdJHj5GMwEwH/FZIx4fZlnAiJGnzisoJvAcP8kZwXBXSTGtJrC55kFFdx1a6
+         YwNpePuveMVYnzZ5mQbz9t2LsQOD/clS1vuZIOrz/ZqZvTE1kahiiSnis3MG2byNyVMW
+         qJsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795665339; x=1796270139;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tjCe/C21ycUvCHGAx37nFv572V9SXkb5hmDpSktqSgU=;
+        b=GZdpkZnEEvuuutnjcFzTkulLQ42ImmHT9e79xDQLdeo7iYZGHcLA+L9JqDGSwbTcqi
+         vljk7Uk/3FB2R9swoQKYVE/3uV7hS6e8peKtQ3tEeF1KU5dXZ5IB/noLdMJx9PP+Cgyr
+         8jguGSU/ucC9kGaVM5mDPdRYHXNHa5R3Wgy4jrBbbYB4ZnEyqu0dsIY7bKEtPwtcCz/u
+         Mk9TEp31dO+lWH8k/NkWMcasvWzhAcu3WO8+ecWAQua/WxLu8ctPZMT+jthXcAYxnnvB
+         uuPqmB1P9mlhHVw/JOJaD4Sw/V65w6oF0MQlYQKa3R8OPzEf5u3c7Lsuz0k7OmHebDPu
+         k3fg==
+X-Forwarded-Encrypted: i=1; AL+hErE1xDFhBGDgCkSXx65pgKVW7UEKJc3Kn0NAQgoiUQSPQKxLEBEWvoxtoJgHjmJ0bmQmMRk8trXWY38ivO2VSWE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z86VIxQtfVJ4PBJ5UG6dbHwaRqDYrmxhHtzLD2JouNakl9EUGo1
+	PJSccXyaLUpB0bsP/Yr9SAhm2QiXZsJw5cUlS3Uw8qloKxfDkiKTRDYZ
+X-Gm-Gg: AZFdTZeKh/cu1k4qSkZspE6hg2MsqGFu6EJt9FePBAKKkAnmVEUraGb+uvRId618MkY
+	AE46VpNIILF03CCR/+jPxhrbJqp5ycSNL07+b6dyGD4B0HGX21FQS+GMRy4YTYYB34b/VdQ9yxM
+	SrjLgnnkXhrBpqqv2biU3eovIBTPoehbGHJFiZslOQq9KVhSBE9Nkf9GdT03w8uIgvqihcdForh
+	1vBJjVxikc5SEVGHdHDD338BjG1k48gFpjdabFJBkD2qXqiP2ztP5K+7/hHUG1lAEAnDuriWDyQ
+	aIBxS7yd6HhVePTIh7aXTmG+8+JTAQfEyWY4lo4mGHtrMOGCT+VL82oGQuNXYmnNRn+Va0jq5hb
+	pTy28iL9dYqrfaBy4uJxh76D/DtYvtMVVoMBtzFG2FmFpSuTPfgIa5q1GIJ1AD4w0IefJXeJ2UG
+	TfNAGPnC+HGyjM8tc2rYpP1n5ThvBNxM4ZvE4no0z6LsnnvIg/wWzcDZ80h/CdysqFrAPm2i7WC
+	ekSy8NDpq+OG136xz2nHQZRTE94syO0HPG6zNmc1PUX0INeNlJZn3hOHgsR/NnKiJPxxViPGzHU
+	Oal9XD3hrzYiqFqOtFz3dkoX+trdhhVGGHoMCj4MzFm9BlNBXYBNmCEmuIhrU++heFRDDI30c61
+	hdLZzEJaPiMgWb8nwF8NhND0oJU7uTFQaEu6b/EOJiskevbdAjYRrA1s6h03lLg==
+X-Received: by 2002:a17:90b:57c4:b0:3b0:9cc6:62ba with SMTP id 98e67ed59e1d1-3b41caead33mr17622224a91.38.1795665339096;
+        Wed, 25 Nov 2026 19:55:39 -0800 (PST)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41adcfe23sm30295729a91.15.2026.11.25.19.55.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 19:55:38 -0800 (PST)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Takashi Iwai <tiwai@suse.com>
+Cc: Jaroslav Kysela <perex@perex.cz>,
 	Shuah Khan <shuah@kernel.org>,
-	Alice Mikityanska <alice.kernel@fastmail.im>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+	Ivan Orlov <ivan.orlov0322@gmail.com>,
+	Ben Copeland <ben.copeland@linaro.org>,
+	linux-sound@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 6/6] selftests: net: big_tcp_tunnels: Cover IP tunnels
-Date: Wed, 25 Nov 2026 18:50:15 -0800
-Message-ID: <20261126025015.10416-7-yanhaishuang@cmss.chinamobile.com>
+	linux-kernel@vger.kernel.org,
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH 1/2] selftests/alsa: Add a config file for the test-only options
+Date: Thu, 26 Nov 2026 12:55:24 +0900
+Message-ID: <20261126035526.1779288-2-sammiee5311@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
-References: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
+In-Reply-To: <20261126035526.1779288-1-sammiee5311@gmail.com>
+References: <20261126035526.1779288-1-sammiee5311@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,233 +107,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap allow BIG
-TCP too, run the same checks over them as for vxlan, geneve and
-bareudp, without encapsulation and with FOU and GUE. With FOU and GUE,
-turn on the outer UDP checksum, which is off by default on an IPv4
-underlay, so that it is checked too.
+Some of the ALSA selftests need kernel options that a normal config does
+not enable. test-pcmtest-driver needs the pcmtest driver, seq-ump-test
+needs CONFIG_SND_SEQ_UMP, utimer-test needs CONFIG_SND_UTIMER, and
+aloop-test needs snd-aloop. Without them these tests skip.
 
-sit only carries IPv6, and is only run with veth tx checksum offload
-enabled: unlike the other tunnels it does not use gro_cells on receive,
-so with software GSO on the sender the receiver does not see any BIG
-TCP packet.
+CI systems build their kselftest kernels with make kselftest-merge, which
+merges the config file of each selftest directory, and alsa has none. On
+the KernelCI arm64 kselftest kernel all four options are off, and every
+test-pcmtest-driver case skips.
 
-fou is not loaded on demand when it is built as a module, so load fou
-and fou6 first, and skip the FOU and GUE cases if that fails.
+Add a config file with only these options. mixer-test and pcm-test check
+whatever sound drivers a system has, so no drivers are listed.
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
 ---
- .../testing/selftests/net/big_tcp_tunnels.sh  | 139 +++++++++++++++++-
- 1 file changed, 136 insertions(+), 3 deletions(-)
+ tools/testing/selftests/alsa/config | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 tools/testing/selftests/alsa/config
 
-diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
-index 9c1482b842b..1e8387fce99 100755
---- a/tools/testing/selftests/net/big_tcp_tunnels.sh
-+++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
-@@ -1,7 +1,9 @@
- #!/usr/bin/env bash
- # SPDX-License-Identifier: GPL-2.0
- #
--# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp tunnels.
-+# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp tunnels,
-+# and over ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap tunnels,
-+# without encapsulation and with FOU and GUE.
- 
- source "$(dirname "$0")/lib.sh"
- 
-@@ -17,6 +19,8 @@ CLIENT_IP6="2001:db8::1:2"
- CLIENT_IP4_TUN="192.168.2.2"
- CLIENT_IP6_TUN="2001:db8::2:2"
- 
-+FOU_PORT=5555
-+
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-@@ -71,15 +75,86 @@ setup_bareudp() {
- 	return 1
- }
- 
-+# $1: tunnel type, $2: traffic family
-+# Prints the IP protocol carried by FOU for this tunnel.
-+fou_ipproto() {
-+	case "$1" in
-+	ipip)
-+		echo 4
-+		;;
-+	sit)
-+		echo 41
-+		;;
-+	ip6tnl)
-+		if [ "$2" = 4 ]; then
-+			echo 4
-+		else
-+			echo 41
-+		fi
-+		;;
-+	*)
-+		echo 47
-+		;;
-+	esac
-+}
-+
-+# Create an IP tunnel device, with FOU or GUE encapsulation if requested.
-+# $1: netns, $2: device, $3: tunnel type, $4: tunnel family,
-+# $5: traffic family, $6: encapsulation (none, fou or gue),
-+# $7: local underlay address, $8: remote one
-+setup_ip_tunnel() {
-+	local encap_args=()
-+	local fou_args=()
-+	local mode=()
-+
-+	if [ "$4" = 6 ]; then
-+		fou_args=(-6)
-+	fi
-+	if [ "$6" = fou ]; then
-+		ip -netns "$1" fou add port "$FOU_PORT" \
-+			ipproto "$(fou_ipproto "$3" "$5")" "${fou_args[@]}" ||
-+			return 1
-+	elif [ "$6" = gue ]; then
-+		ip -netns "$1" fou add port "$FOU_PORT" gue "${fou_args[@]}" ||
-+			return 1
-+	fi
-+	if [ "$6" != none ]; then
-+		encap_args=(encap "$6" encap-sport auto encap-dport "$FOU_PORT")
-+		# Check the outer UDP checksum too
-+		if [ "$4" = 4 ]; then
-+			encap_args+=(encap-csum)
-+		else
-+			encap_args+=(encap-udp6-csum)
-+		fi
-+	fi
-+	if [ "$3" = ip6tnl ]; then
-+		if [ "$5" = 4 ]; then
-+			mode=(mode ipip6)
-+		else
-+			mode=(mode ip6ip6)
-+		fi
-+	fi
-+
-+	ip -netns "$1" link add "$2" type "$3" "${mode[@]}" \
-+		local "$7" remote "$8" "${encap_args[@]}"
-+}
-+
-+# $1: tunnel type, $2: tunnel family, $3: veth tx csum offload,
-+# and for IP tunnels: $4: traffic family, $5: encapsulation
- setup_tunnel() {
-+	local name="${1^^}"
-+
-+	if [ "${5:-none}" != none ]; then
-+		name="$name/${5^^}"
-+	fi
- 	if [ "$2" = 4 ]; then
- 		SERVER_IP="$SERVER_IP4"
- 		CLIENT_IP="$CLIENT_IP4"
--		echo "Setting up ${1^^} over IPv4, veth tx csum offload $3"
-+		echo "Setting up $name over IPv4, veth tx csum offload $3"
- 	else
- 		SERVER_IP="$SERVER_IP6"
- 		CLIENT_IP="$CLIENT_IP6"
--		echo "Setting up ${1^^} over IPv6, veth tx csum offload $3"
-+		echo "Setting up $name over IPv6, veth tx csum offload $3"
- 	fi
- 
- 	case "$1" in
-@@ -95,6 +170,10 @@ setup_tunnel() {
- 		setup_bareudp "$CLIENT_NS" tun0 "$CLIENT_IP" "$SERVER_IP" ||
- 			return 1
- 		;;
-+	*)
-+		setup_ip_tunnel "$CLIENT_NS" tun0 "$1" "$2" "$4" "$5" \
-+			"$CLIENT_IP" "$SERVER_IP" || return 1
-+		;;
- 	esac
- 	ip -netns "$CLIENT_NS" link set tun0 up
- 	ip -netns "$CLIENT_NS" addr replace "$CLIENT_IP4_TUN/24" dev tun0
-@@ -115,6 +194,10 @@ setup_tunnel() {
- 		setup_bareudp "$SERVER_NS" tun1 "$SERVER_IP" "$CLIENT_IP" ||
- 			return 1
- 		;;
-+	*)
-+		setup_ip_tunnel "$SERVER_NS" tun1 "$1" "$2" "$4" "$5" \
-+			"$SERVER_IP" "$CLIENT_IP" || return 1
-+		;;
- 	esac
- 	ip -netns "$SERVER_NS" link set tun1 up
- 	ip -netns "$SERVER_NS" addr replace "$SERVER_IP4_TUN/24" dev tun1
-@@ -127,9 +210,22 @@ setup_tunnel() {
- 	ip netns exec "$SERVER_NS" ethtool -K link1 tx-checksumming "$3" > /dev/null
- }
- 
-+# For IP tunnels: $1: tunnel family, $2: encapsulation
- cleanup_tunnel() {
-+	local fou_args=()
-+	local ns
-+
- 	ip -netns "$CLIENT_NS" link del tun0
- 	ip -netns "$SERVER_NS" link del tun1
-+	if [ "${2:-none}" = none ]; then
-+		return 0
-+	fi
-+	if [ "$1" = 6 ]; then
-+		fou_args=(-6)
-+	fi
-+	for ns in "$CLIENT_NS" "$SERVER_NS"; do
-+		ip -netns "$ns" fou del port "$FOU_PORT" "${fou_args[@]}"
-+	done
- }
- 
- cleanup() {
-@@ -240,6 +336,30 @@ if ! ip link help 2>&1 | grep gso_ipv4_max_size &> /dev/null; then
- 	exit "$ksft_skip"
- fi
- 
-+# $1: tunnel type, $2: tunnel family, $3: traffic family, $4: encapsulation
-+run_ip_tunnel() {
-+	local csum_offload
-+
-+	for csum_offload in on off; do
-+		# sit does not use gro_cells on receive, so with software GSO
-+		# on the sender there is nothing big to receive.
-+		if [ "$1" = sit ] && [ "$csum_offload" = off ]; then
-+			continue
-+		fi
-+		setup_tunnel "$1" "$2" "$csum_offload" "$3" "$4" || exit "$?"
-+		do_test "$2" "$3" "$csum_offload" || exit "$?"
-+		cleanup_tunnel "$2" "$4"
-+	done
-+}
-+
-+# fou is not loaded on demand when built as a module
-+ENCAPS=(none)
-+if modprobe -q fou && modprobe -q fou6; then
-+	ENCAPS+=(fou gue)
-+else
-+	echo "SKIP: FOU and GUE tests, could not load fou and fou6"
-+fi
-+
- WORKDIR=$(mktemp -d)
- trap cleanup EXIT
- setup
-@@ -254,3 +374,16 @@ for tunnel in vxlan geneve bareudp; do
- 		done
- 	done
- done
-+for encap in "${ENCAPS[@]}"; do
-+	run_ip_tunnel ipip 4 4 "$encap"
-+	for traffic_family in 4 6; do
-+		run_ip_tunnel gre 4 "$traffic_family" "$encap"
-+		run_ip_tunnel gretap 4 "$traffic_family" "$encap"
-+	done
-+	run_ip_tunnel sit 4 6 "$encap"
-+	for traffic_family in 4 6; do
-+		run_ip_tunnel ip6tnl 6 "$traffic_family" "$encap"
-+		run_ip_tunnel ip6gre 6 "$traffic_family" "$encap"
-+		run_ip_tunnel ip6gretap 6 "$traffic_family" "$encap"
-+	done
-+done
+diff --git a/tools/testing/selftests/alsa/config b/tools/testing/selftests/alsa/config
+new file mode 100644
+index 000000000000..67fa26a87217
+--- /dev/null
++++ b/tools/testing/selftests/alsa/config
+@@ -0,0 +1,6 @@
++CONFIG_DEBUG_FS=y
++CONFIG_SND_ALOOP=m
++CONFIG_SND_PCMTEST=m
++CONFIG_SND_SEQUENCER=m
++CONFIG_SND_SEQ_UMP=y
++CONFIG_SND_UTIMER=y
 -- 
 2.43.0
-
-
 
