@@ -1,57 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795720621;
-	b=U46RpbSguDJiHOgooONq5dlqQa2CFRjXRSioT6kSnQKlVGHlpf17wQVVNmbE9wpKXmY+
-	 X7yWpRQT2cR09uPG7LEeWPSVYS7GtDxW6u2Nfgi+gA3Q0xlFgyVFh/09QAQiY0gUdbN7D
-	 +5pdMgN6/lIhP4jrMVhBXPSo/ulMW+qCwc9tbfZKa/TzsY4pz6SQBza7HmlV92oj6/1Ox
-	 3Op5JLg6KBNAIL6nTiN2QXL514NKQ7fWbk527HngS4nAQ4U46RpMAYYIziYeKyo1EcEPw
-	 YxsfIlFUJFo0TVWKwbZ0gCPNh+ax5XiENz9xGZ9nz2+Mso1jojMbNP68+dazfKXdnYQ==
+	t=1795720616;
+	b=l7yctpNMBBTZj6wkjT49pJNzj+iAKcdEHN9hnalnaSut5ni+UhGFH7nrg73g76QLm2Tn
+	 v47u49phJC7MFLrTbz+mvEB4/mpSHgxUc2sypdjA6rOntZQSx1JfDIV16WyqQ4ySnVlEV
+	 xb78rD+uHPTbq6kdOMRoE8yaNMhKY5JXRPQFIRKvpCQ47/NF01i4FihLLZ275zPJ3LiXj
+	 0Rfjk5OBXds+kMCwhEO0j0e0Aocy9r0SDGVFZh0metVmUL8eTMTKg+qokCpl10RddF16y
+	 J1AS7e3U75f7C6Mp5hMF1XYc7dQOwp4I8ztLiqwqEYy9P1V3Ko5w3nFsgklZx+5P7RQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795720621;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795720616;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=QC9DfUnNWJVMnUf2ONDNYFI/o23hdAko+A6GsVR1Eek=;
-	b=AevqYkU/Pot+ADPxnrBVdwtyRQ8GyDWMYfx2cv+FFGS55O55wXgikKMugg0Y3gIkl3V3
-	 tv79gkCi+m6vjH0W+BbpljMyIWIdF0avjvuf/5FZ9vPl1pT896b9Ck173sL73GMUU7NtX
-	 dVnlU1eQ9aDJYRuZh0j4kfHsyOU3oIxnLUQNi3DtFlcjXWjBNqWf57B3My9akvvuN5f3B
-	 Q3GLGhOISLIDYcC4ykvV99xoEj/ge7MCSVsTUAwD/08PAQjvj7dlFUNFyJi+BsO+bR9ht
-	 RxDF/qTYI13IMM7y9jojcEyh0CUY6rH3NYtskIxCiZcy8ynEG3lQRlsw7pBmrogI5VA==
+	bh=9u7fRQ27JKwPMHMRI8HVbLu3Ly/w1IeOYPfKtu1UK/o=;
+	b=ux7Iaa0I+vXk66oaM4O2IEs1B6/sGmWiBjFxnQcJbDLrdwKOUIoTkve0OD/Dn5JJgdt6
+	 lGH55niRgiviAdUoFWyF7KZh3O6ucdEHw/M3M0K+6g5QRQWiMvGncmw68pZVnr7qOgwsz
+	 QnEbiIRAk6Vh/LhWcvOdqKKwk/xJ0FrSnUmg25zpEYsY4LPEUmT32+Mv8iiX350fUn1Ql
+	 0woaHYOf0A374BB70N1JLjJTwv9Yo8+eirACtPxVcr7SwtS/3XJVE/TqE1Q7iI2F6vxHN
+	 8fZeKWSnrzczfmjupsrakCfDZKpyGfETLWdr6jtrvPB6VLCUpJYHfVEbljw5xONk4EA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rzv+FSSh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=olxQeprM;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27865606A32A;
-	Thu, 26 Nov 2026 19:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D07606A329;
+	Thu, 26 Nov 2026 19:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rzv+FSSh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04FAA1F0093C;
-	Thu, 26 Nov 2026 19:16:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=olxQeprM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066481F000C0;
+	Thu, 26 Nov 2026 19:16:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795720620;
-	bh=QC9DfUnNWJVMnUf2ONDNYFI/o23hdAko+A6GsVR1Eek=;
+	s=k20260515; t=1795720615;
+	bh=9u7fRQ27JKwPMHMRI8HVbLu3Ly/w1IeOYPfKtu1UK/o=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Rzv+FSShHeqQWihtE2UmvqeWgncDIRGoEaFlpg6SmxxE9O21lI7f6PXJ4Ig7KE6a3
-	 eNbh7EyN0IRSHcXUm0Ly9M6AqPCkSwUnlTWSselPzB+zfCgC5xoZzMXV6+AgXlIyMj
-	 XjT535nrKK8IaVkcL6x3QIZN0obby2Lt/erxl6IZq9wz4N/vg60i9Rlo4qZj2obsrQ
-	 IWQeICyp19zLtKM1Ts3EHqrr9uXrMqkZsmmRyWryMWjUuRU4aMorkwA0Sk+1hnvUzP
-	 ek6Gjlo08cn0bg1r++4vK64kpJXqZ1ZMNEacyHVNkWroMzJ90AO3YsU4heUTJMt68z
-	 cdDct9esxmuEA==
-Subject: Re: [PATCH net-next v2 05/12] amt: forward multicast data over IPv6
+	b=olxQeprMulgqGjf255Cn9iNfWmrYFIJkPpm2Qi6+uFTL0Gkz/ExN8w1mhcIE7cXaS
+	 J8OD+0K4CzDwIquWpZThRF3IgqxlBv8TzY/ifp9nHPUwM0rxiJpe37CpIQ0YGCYBSF
+	 Fk8QzQfBB3JKTjgve0aIe3ZDX3rlstXy+O50HK2B9283L40kenewalAAbnDHkRJ/UN
+	 5aVAWnjcUFpBCLuViqP1OpRtX4N/hhgumtBihAld09buGbwJWfTSkGFch6hf1FAQtL
+	 b2aoX3m+6awUjqMmhUq2WlSrc8P2ykbuipMYGTEe7wLXaJUnHYUMvGEmvep4oyYulV
+	 66E2832Rb/0mw==
+Subject:
+ Re: [PATCH net-next v2 02/12] amt: send the Relay Advertisement over IPv6
 From: netdev-bot+sashiko@kernel.org
 To: omar@blockcast.net
 Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Thu, 26 Nov 2026 19:16:59 +0000
-Message-ID: <179572061952.3135.14503580379845323397@kernel.org>
-In-Reply-To: <20261125191450.2497936-6-omar@blockcast.net>
-References: <20261125191450.2497936-6-omar@blockcast.net>
-X-sashiko-severity: Medium
+Date: Thu, 26 Nov 2026 19:16:54 +0000
+Message-ID: <179572061450.3135.6022071464185625512@kernel.org>
+In-Reply-To: <20261125191450.2497936-3-omar@blockcast.net>
+References: <20261125191450.2497936-3-omar@blockcast.net>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -64,153 +65,104 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] When the outer transport is IPv6, amt_tmtu_exceeded()
-  (drivers/net/amt.c:1255) checks a GSO inner IPv6 packet with…
-- [Low] amt_tmtu() (drivers/net/amt.c:1246) computes dst_mtu(dst) -
-  sizeof(struct ipv6hdr) - sizeof(struct udphdr) - sizeof(struct…
+- [Low] The IPv6 control-message helper does not count send failures that
+  happen after the packet is handed to the IPv6 stack.
 
 --
 
-amt: forward multicast data over IPv6
+amt: send the Relay Advertisement over IPv6
 
-This patch lets an IPv6 relay send Multicast Data by routing the copy
-through amt_udp_xmit() for either outer family. Over IPv6 it routes
-first and drops a payload that exceeds the route MTU less the outer
-headers. It then sends one Packet Too Big to the source after it has
-walked all tunnels.
+This patch adds the IPv6 form of the AMT Relay Advertisement
+(struct amt_header_advertisement_v6) and a new amt_send_ctrl_v6() helper.
+The helper routes with ip6_dst_lookup_flow() and sends with
+udp_tunnel6_xmit_skb(). amt_discovery_handler() now answers a Discovery on
+an IPv6 device with this form, sourced from the Discovery's destination
+address.
 
 > diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-> index 7e8219a0cdf9e..823367e8232bb 100644
+> index 3f3205d2df3e8..52ccaca08b5ec 100644
 > --- a/drivers/net/amt.c
 > +++ b/drivers/net/amt.c
-> @@ -1237,26 +1237,51 @@ static void amt_req_work(struct work_struct *work)
->  				 msecs_to_jiffies(100));
->  }
->
-> +/* RFC 7450 s5.3.3.6: a Multicast Data message sent over IPv6 must not
-> + * carry a Fragment header, so a payload larger than the tunnel MTU is
-> + * dropped, and an IPv6 source is sent a Packet Too Big. An IPv4 source is
-> + * not told, as icmp_send() never answers a multicast datagram. The tunnel
-> + * MTU follows the route's path MTU, as on every IPv6 UDP tunnel.
-> + */
-> +static u32 amt_tmtu(const struct dst_entry *dst)
-> +{
-> +	return dst_mtu(dst) - sizeof(struct ipv6hdr) - sizeof(struct udphdr) -
-> +	       sizeof(struct amt_header_mcast_data);
-> +}
-
-[Severity: Low]
-Can this u32 subtraction wrap when dst_mtu(dst) is below 50?
-
-ip6_dst_mtu_maybe_forward() returns the raw RTAX_MTU metric when one is
-set, and ip_metrics_convert() only clamps RTAX_MTU from above. So an
-admin route with something like "mtu 40" is accepted. A large lwtunnel
-headroom (for example seg6 with a big SRH) can also push dst_mtu() below
-the 50 byte overhead.
-
-In that case tmtu becomes roughly 4G, and amt_tmtu_exceeded() never
-fires in amt_send_multicast_data():
-
-	tmtu = amt_tmtu(dst);
-	if (amt_tmtu_exceeded(oskb, tmtu)) {
-
-The copy is still dropped later in the IPv6 output path. Because the
-patch already leaves out tunnel MTUs below IPV6_MIN_MTU, no Packet Too
-Big to the source is lost. However, an skb copy is still made and
-pushed through IPv6 output per tunnel per packet. An ICMPv6 Packet Too
-Big is generated toward the relay's own address, and tx_dropped is not
-counted on the amt device.
-
-Should amt_tmtu() clamp at zero, or should amt_send_multicast_data()
-treat a dst_mtu() smaller than the overhead as exceeded?
-
-> +
-> +/* True if @skb, the inner packet before encapsulation, or any segment of
-> + * it, is larger than @tmtu.
-> + */
-> +static bool amt_tmtu_exceeded(const struct sk_buff *skb, u32 tmtu)
-> +{
-> +	if (skb_is_gso(skb))
-> +		return !skb_gso_validate_network_len(skb, tmtu);
-> +	return skb->len > tmtu;
-> +}
-
-[Severity: Medium]
-Is the transport header reliable at this point for an inner IPv6 GSO
-skb that carries extension headers?
-
-skb_gso_validate_network_len() computes the per-segment length as
-(skb_transport_header - skb_network_header) plus
-skb_gso_transport_seglen(). Earlier, amt_dev_xmit() calls
-ipv6_mc_check_mld(), and ipv6_mc_check_ip6hdr() always resets the
-transport header to just past the fixed IPv6 header:
-
-net/ipv6/mcast_snoop.c:ipv6_mc_check_ip6hdr() {
-    ...
-	skb_set_transport_header(skb, offset);
-    ...
-}
-
-ipv6_mc_check_exthdrs() then returns -ENOMSG for a non-MLD packet before
-it corrects the offset:
-
-	if (ip6h->nexthdr != IPPROTO_HOPOPTS)
-		return -ENOMSG;
-    ...
-	if (nexthdr != IPPROTO_ICMPV6)
-		return -ENOMSG;
-
-	if (!skb_set_transport_header_careful(skb, offset))
-
-So for every IPv6 data packet the transport header stays at nh+40, even
-when Hop-by-Hop or Destination Options headers come before UDP.
-
-For an SKB_GSO_UDP_L4 skb with such headers, the computed segment length
-is short by the length of those extension headers. A segment that is
-larger than tmtu by up to that amount passes this check. In that case
-*ptb is not lowered, no Packet Too Big reaches the source, and the copy
-is encapsulated.
-
-skb_reset_inner_headers() in amt_send_multicast_data() then copies the
-same offset into inner_transport_header. The outer
-ip6_finish_output_gso() validation would also under-count, so the
-oversized segments go out on a path whose route MTU cannot carry them.
-
-This seems to contradict this part of the commit message:
-
-    The device offers software GSO, so a GSO skb is checked
-    per segment with skb_gso_validate_network_len(), before the tunnel
-    offloads are set up. A payload that does not fit is dropped.
-
-Would it make sense to locate the real upper-layer offset (for example
-with ipv6_skip_exthdr()) before validating, or to fix up the transport
-header in amt_dev_xmit() for data packets?
 
 [ ... ]
 
-> @@ -1575,8 +1617,10 @@ static netdev_tx_t amt_dev_xmit(struct sk_buff *skb, struct net_device *dev)
->  			}
->  			continue;
->  found:
-> -			amt_send_multicast_data(amt, skb, tunnel, v6);
-> +			amt_send_multicast_data(amt, skb, tunnel, v6, &ptb);
->  		}
-> +		if (ptb && v6)
-> +			icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, ptb);
->  	}
->
->  	dev_kfree_skb(skb);
+> +/* Send an AMT control message over the IPv6 outer transport from @saddr.
+> + * udp_tunnel6_xmit_skb() adds the UDP and IPv6 headers, including the UDP
+> + * checksum that IPv6 requires. Returns 0 once the message is handed to the
+> + * IPv6 stack.
+> + */
+> +static int amt_send_ctrl_v6(struct amt_dev *amt, const struct in6_addr *saddr,
+> +			    const struct in6_addr *daddr,
+> +			    __be16 sport, __be16 dport,
+> +			    const void *msg, unsigned int len)
+> +{
+
+[ ... ]
+
+> +	skb_reserve(skb, hlen);
+> +	skb_put_data(skb, msg, len);
+> +	skb->priority = TC_PRIO_CONTROL;
+> +	udp_tunnel6_xmit_skb(dst, sk, skb, NULL, saddr, daddr, AMT_TOS,
+> +			     ip6_dst_hoplimit(dst), 0, sport, dport, false, 0);
+> +	err = 0;
+
+[Severity: Low]
+If the packet is dropped after it is handed to the IPv6 stack, should that
+drop show up in amt->dev tx_errors the way it does for the IPv4 control
+messages?
+
+udp_tunnel6_xmit_skb() returns void, and ip6tunnel_xmit() only looks at the
+ip6_local_out() result when a netdev is passed:
+
+include/net/ip6_tunnel.h:ip6tunnel_xmit() {
+    ...
+	err = ip6_local_out(skb_dst_dev_net(skb), sk, skb);
+
+	if (dev) {
+		if (unlikely(net_xmit_eval(err)))
+			pkt_len = -1;
+		iptunnel_xmit_stats(dev, pkt_len);
+	}
+    ...
+}
+
+Since dev is NULL here, a drop by netfilter, neighbour resolution or the
+qdisc is never counted. The IPv4 senders, including
+amt_send_advertisement(), do count it:
+
+	err = ip_local_out(amt->net, sk, skb);
+	if (unlikely(net_xmit_eval(err)))
+		DEV_STATS_INC(amt->dev, tx_errors);
+
+Route lookup and allocation failures in amt_send_ctrl_v6() still increment
+tx_errors. So the IPv4 and IPv6 paths differ only for drops after the
+handoff.
+
+The commit message says:
+
+    Like the IPv4 control messages, it marks the
+    skb TC_PRIO_CONTROL, uses AMT_TOS as the traffic class and passes no
+    netdev, so control traffic stays out of the amt device's tunnel stats.
+
+Passing NULL also hides these post-handoff errors, and the message doesn't
+mention that.
+
+At the end of the series the same udp_tunnel6_xmit_skb(..., NULL, ...);
+err = 0; sequence is still present. That means every later IPv6 control
+sender that uses this helper has the same gap.
+
+> +out:
+> +	rcu_read_unlock();
+> +	return err;
+> +}
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125191450.2497936-1-omar%40blockcast.net
