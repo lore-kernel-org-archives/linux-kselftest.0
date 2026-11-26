@@ -1,134 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795670211;
-	b=udQ345VCm6kY2kSfWYQ3xGRnuIi1VQNP7b7+9D2BTKOsJOerEhSx5m6fH08l/Ws8cHfw
-	 44WIUJj4Cw0NHQhQPKM9IWn5e3tHEFm9a48KKLqaILckYkJ2ccom0+uloohzXF5Adgl5o
-	 99hCA/0B0Csz+EeicvXZ/gXC9K+dLNUw/v6zXq4LK9WIyT5xnlogOPETf7bXz3gxxYm9g
-	 WETRhkc3/msaYvobmP3YCh1hBdKeHip7vVeTH36nCXu/aBea03oSLm+CvvlC5kC8IgQyh
-	 PXtmwXrBY9MA+UBeSnULsUZtDQwQRfsFrZPE2J4J56wMbSAipclfYXuAQbsBhJ/ermA==
+	t=1795672187;
+	b=G3KxbXqwK/Fn2GQrB++0myDcRXmtCJG9284LPagSkTBg7ptt3dqBQuMOspj0xH7VN+4x
+	 pKUarB/NlAIp8/9q6VW9D73+bdyH7CavdDhX5Iq+I6tbjysf6f2MRL7JFxLTzTscCjXRW
+	 fABvv59ARjbbUqiYEh/WQ2Ft9vTP3NG3oZ51qNQyvg+cuNWXxbbvNNIaXmtU/Jqlpn/SJ
+	 X9MHLfywRZs1lpFEJoBDbx45yQjSfBbpst1uBFYMWhxW1tnH8FLVeOm5ESy0PNx9QbI/e
+	 9VJCQirQndu+dtKjWXw/fRuw2/k46cTOsv3Rek9uO3eU12eREoesYqaLYZ9pe98G4NA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795670211;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:
-	 Message-ID:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=qaqMkxiabwZdmuz6/DvNe8PnwuWFIWBk10f+JA29jq8=;
-	b=tmtVI+5x+bb9F2E7ae5KZ3YYqUivajh1pfcY1T53XVpXpZZ3TbnJwk4mSZwBx32VO9zP
-	 3tIrTQps2nhldT68Vw0NVnRWSyXRKV85Bmij/m9qph9W1GuaQxwwBKQi/GzFJVikKPhsH
-	 33+y2qBiFqKGdZA74n4eHJe+36dKTqYIB7LN/HkyMh+nVJZgC6a4qlAdQBYEAbBetRZPz
-	 yO/vgbXukom7G1E9FQ5PAp6CYN62Lzk/0APln0kra/TjpIN56SDUEdeRpeARwAYHtUtcO
-	 dkk+GGN3yUiKn/QMfHq8MFt3ZeiVunbGAMLV/g+kSB6DlgrDfVlVyOsbu35EyTU5O6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795672187;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=ROsfRLpdEJgXSR8nSSa5tcU45iEtZe8T715ZMBCogsQ=;
+	b=ro4dJ8g9RwNAkyMcoDvP5ATG2aYXaJwxkrXk8F8NnjQIDWEgwl0LoDmdmseiY1o0CdSB
+	 WTl6MsZh7sVqUn4IyFdl2F344Jc1h9YNS1NTx04/sJViXpbEr7O7RyFc1lGgiAxi0f85N
+	 I24pB8gwxMcXY8TYZgSxTvL4ji69lYFbKjyry5haA1aUUu2hw2CTcnNvDfbAsJtPXiVrp
+	 Ld5lYPvLgCa+WjlfSlSPp8YlQdI6lg6f3CGKtOTqxRI/8a2YNq2WUYguJIWChLcfnUUtF
+	 4KXTxuNGvW033+ed9Pywv/b/aOZFtt+qtjOf8Fi2A6SQ88XW3Trp+E7Pgbzv9PgNC3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=OIt53Uqc;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=D5yl7FDM;
-	arc=none smtp.remote-ip=205.220.168.131
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	dmarc=pass header.from=shazbot.org;
+	spf=pass smtp.mailfrom=shazbot.org;
+	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=wFjS9Vfh;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=uYqncx3b;
+	arc=none smtp.remote-ip=202.12.124.156
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35FB606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 05:16:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A35FB606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37F9606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 05:49:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E37F9606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=OIt53Uqc;
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=D5yl7FDM
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQ36X9j1647654
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 05:16:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	qaqMkxiabwZdmuz6/DvNe8PnwuWFIWBk10f+JA29jq8=; b=OIt53Uqc1f+vMeFJ
-	KhHrCNpnqug7fCwdv3e7ahd6S+nqP2n8UKF6oPdTH7HEy9+u2GykII0kC/xArNQL
-	S+VnvJLTgqVkdjiEV0fq0dpmqrq1rVlrtGoE826TCmDV9+oZG6Sbm2HXs21xdcU4
-	AbJdkOhUNHt6f5Cyd9esvXBSuHdEFHfF36o6ddl/+x96WcR8KIBFwX2fQevVaXDA
-	5XL+HP3OgfKqHJKegjn0pu2ev+Qoqzt7V53O2VenYhLZU04AuTDziRC6PJnpIC1Z
-	SVzfqfP2Pnj30h0nTfPusHTGccI7r0Ad1NNbJDW85o/Nqsj7wx+55jvpzxrSFfMj
-	Pfg6ow==
-Received: from mail-yx1-f69.google.com (mail-yx1-f69.google.com [74.125.224.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4j61ahttkq-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 05:16:49 +0000 (GMT)
-Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-67dae919cb1so9585201d50.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 21:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1795670209; x=1796275009; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qaqMkxiabwZdmuz6/DvNe8PnwuWFIWBk10f+JA29jq8=;
-        b=D5yl7FDMf9fv8+guvb7NM8edWjQYAxjWFHoCpF9u3BJZk1aiquebqHpZcNuPaRsxET
-         eOtDr0SM/Nn9GMT+8Ja3I6P0LZ/I87g/J8y237L3N+gqqy35tbj2TFfwi2pnQ9sQLHmY
-         fQNbdXCKJOu2vyGs+8SrHJo6IQovJ7dVydxxWrsQOHWEyPetej7myGPzxM4/220aNsif
-         gSGv2yCETSjyZZIamvQDjq00WgpniogclcVwTKrA1ySJUUt4dV5nd8rM5VE8ttFEvPry
-         n1mlPPmjUDDp7d8381f0dWbIE6z0mQwy8X5ULUSQQ50FmxYPPa6DudDUTNPLpkxBwL2L
-         tMSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795670209; x=1796275009;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:subject:cc:to:from:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qaqMkxiabwZdmuz6/DvNe8PnwuWFIWBk10f+JA29jq8=;
-        b=d/2TAOqsi+PJhOc/yS8tYdS4Dhi2yr/+nioydRhCINg4XoPBMUTsAXiCgv1M0HPWT8
-         BMFEYPSwkV5qJee/ne/RoidV98OpIJk9Hvu95X4UxpLEMkiF8J7WGCK5Rz9AhFpXdwIv
-         NcnHXrFLTWCbvfcfGiFvAEdFkn7QK+AIYNgfu68SoMuRnyNWIeehMSrzWglZCAo5AxIn
-         BZPBSihcCqlBrIPfTCjSpL6aGHOFXX/y6Lml05wjyN7o2n1iYfpDSrlzRmpdc7nBC3E6
-         IUC1+aAFdCWh2NfvT+2PMf255SeJ+lYJfB1uULvlaiWxrb7OWaoVZN32CN757C5aL1k+
-         iFWA==
-X-Forwarded-Encrypted: i=1; AL+hErFuAmI+9aYCGBgyOWQBAlQ7XNseQcrzOSjjZgS50K+FkGflKcSrsYNhfimPXeujdDqtiCi901QqYgIFQJ8mKeo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qgAbDkmT8g5syd2EtYNV+L0PNWq5OVFXzEzOfGU2q5xg/kxdu
-	gDtNuprmfbinTLzRrMF1SGf4mvA9it8EBZm2cIQuhLkXhYVVIQpgXvFn0SuXHqLISCGYYJcAjEB
-	gsO64f6gmXo+9SrShfgOfo+HpbJvgPaznjoaHZm5B4isDX+zzIdsmoGIPqhISbdcmSq5CAPI=
-X-Gm-Gg: AZFdTZd+gs/x+kV2uKEa9B/cCZqelrascXCaYLzGIP1E5KLEYg57e02iqL3u6/HirM1
-	/8bdubO6rjoCBu22GQcXJlSMmLJN1ozIwj9K8ddVyN5Ig3htc5CVVDFoIjAFHISRgoD5uISwx24
-	o7xF3iJdmm8sBi+1ZHuGWKkdFQIzE+Vy5F7Ag9GnRJyCVKVF+nFwNwfPZIoUzGIiJFYFHDGAu3D
-	VxNtgLwZjx33jO5phz4YTn2/x3gPZjbeOwg5j8dzeHcQPi+jh9jvdf6kB3HVv/yJ1HWUtRYI+i8
-	sWDaOSEJQBJ7O3P4S7hRVavc2sqVLi7GaE1dfqL428zdc8CNgL8Ih9DEh5okZRWv7/6xez7N5C4
-	JODz4NhHb1qgY315aFRdG7I3S54bdfaGKlMAmRaA2KGGHJiCiUelKKNuS+29eN5JFrdzfFaGUHb
-	l3SHYujqHwKQ==
-X-Received: by 2002:a05:690e:43cf:b0:67c:2ae8:dc65 with SMTP id 956f58d0204a3-67df44e4e20mr4709802d50.46.1795670208713;
-        Wed, 25 Nov 2026 21:16:48 -0800 (PST)
-X-Received: by 2002:a05:690e:43cf:b0:67c:2ae8:dc65 with SMTP id 956f58d0204a3-67df44e4e20mr4709789d50.46.1795670208139;
-        Wed, 25 Nov 2026 21:16:48 -0800 (PST)
-Received: from localhost ([120.244.9.31])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67df31fa545sm9644255d50.2.2026.11.25.21.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 21:16:47 -0800 (PST)
-Date: Thu, 26 Nov 2026 00:16:43 -0500
-Message-ID: <4ea9d48592dbf0e1120f7db7305aae37.guodong.xu@oss.qualcomm.com>
-From: Guodong Xu <guodong.xu@oss.qualcomm.com>
-To: Icenowy Zheng <uwu@icenowy.me>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
-        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Radim Krcmar <rkrcmar@qti.qualcomm.com>, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor@kernel.org>, linux-kselftest@vger.kernel.org,
-        Andy Chiu <tchiu@tenstorrent.com>, Florian Weimer <fweimer@redhat.com>,
-        Peter Bergner <bergner@oss.tenstorrent.com>,
-        Zihong Yao <zihong.plct@isrc.iscas.ac.cn>,
-        Mark Harris <mark.hsj@gmail.com>,
-        Aurelien Jarno <aurelien@aurel32.net>,
-        Andrew Jones <andrew.jones@linux.dev>
-Subject: Re: [PATCH v9 1/4] riscv: cpufeature: Introduce ISA bases bitmap and
- rva23u64 detection
-In-Reply-To: <ce886c3a5bf5af34df5c1ac3fefbd86a8f0567ff.camel@icenowy.me>
-References: <20261109-rva23u64-hwprobe-v2-v9-0-ae846c5c7178@oss.qualcomm.com>
- <20261109-rva23u64-hwprobe-v2-v9-1-ae846c5c7178@oss.qualcomm.com>
- <ce886c3a5bf5af34df5c1ac3fefbd86a8f0567ff.camel@icenowy.me>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=wFjS9Vfh;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=uYqncx3b
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id B744F7A059F
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:49:44 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 26 Nov 2026 00:49:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1795672184;
+	 x=1795758584; bh=ROsfRLpdEJgXSR8nSSa5tcU45iEtZe8T715ZMBCogsQ=; b=
+	wFjS9Vfhyz2LnAU9s/qbug4NnzRRg6qf6//8GTh5sHJScOjMSv4NXQstsaeWCalJ
+	CcWz/LSw8JF7xFncDedh51kDesHUbXMuoklJmzkl1BUXjbA3ASlEhNsvxNUkYP4u
+	YURngAP+8cvVPcDuFqNAORys/GCJHC/5+hi3kpUDRKpSt0azf100Mjd22CAcepvH
+	qvO8kUIErIMQV54FbfboDNyUDX50U17DXhuUXREKOOXtHcirpYZFzDOTKBIL3Nys
+	hau+hnHV/h8xzEOZvSf14LrDUn4vKsQXuUY5EMUadL2eAzJ9pnbLvCoDQ7wUqfg2
+	4OtH/L/rxR1Q6r5r8UFruA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795672184; x=
+	1795758584; bh=ROsfRLpdEJgXSR8nSSa5tcU45iEtZe8T715ZMBCogsQ=; b=u
+	Yqncx3bQ7ThsV8IneyXeZpob6+ar9DSoN/TRWl9ZDplneKzpjYBwlGA/XoFOoicN
+	GGGFnvnNScGnrkiHAcXVNCDeWdUVt7MpNEaHwQsB6cgcPl8Dp4Y7A3Nifo3iB8iJ
+	0pR/jbmglSwsS0ba2+jNEWo/d1rbpWYZZUMaCeCVimQdUUOnmUkObFsvITbfQBKH
+	yp8tLQVWtUmyjdHjPfatrhuEzYuSACLJRvJj1S7mIR1t8QI5fq+Q2zgN4iCxXzbI
+	2MLNaUu5Ka9VIncnQ6I9oRE2ujJkZFpp1rhwnqGEjpLo/6RnTF5c+wb4bNzYBu8A
+	M+6VfPOtjQ3IqhzwtMKBg==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=shazbot.org a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1795672184; d=shazbot.org;
+	mf=PGFsZXhAc2hhemJvdC5vcmc+;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:AmfzaPAFbJqtMKDXWxPEfTtjHu5mFwkHZGukES4VxGDUcPu
+	pOZmjnwRDP/OiHdSssKYXM5flpSNTQAub9VWSqt4f+nMbcJXvcg6uebiF1TwN99m
+	EvPBvkd2DoLc5vL12Q+Tg6BrjzzFqMmaDY1rfG5rpCKJWusO3TMhv8OScBMSjIin
+	29g1PxXu5OuEgDAL3gmAYt1QxZPNMEdsGerHnT0XzvbdSwAdOlORIdq8ecy2FgqT
+	moctJ87EyzZg8QSvrMSwlp+1h1nQFS+7XDCNrKM57sMv+TVcKFJuGzEp+qy+3N8S
+	LFGrKorzzmf1/vJmxTiEdyKpgxHqnMQ2xXgUUng==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:Bl9nqCp27kWf/5oaah6vaGsU/urBWQkRux33v27ERGk=:bvVZ2VjFXPUSSpGG+gCRa91836uS+Xfd/3DHxC4aQlw=;
+X-ME-Sender: <xms:d8gHa_sRilcYTwsFIkuv2J-SykIrWrX4E6egxtqo_ZBFu_h8s01mUw>
+    <xme:d8gHa8cnDXBPj5F6YM_YHzs9u7AS0c_wKXkLsRJkOcE_giKn_8h3XDS2TeXD-bMyT
+    8zOW7GiPRZ1VMpg10MwVScaPKxy3dXIepoZKih6zQtR33mBYyQCSns>
+X-ME-Received: <xmr:d8gHa08KjkeDgVxqR7hY_twPOU77FREP7ebsB_yczAZCSVS3ZO8NvQx7ULsbfw>
+X-ME-Proxy-Cause: dmFkZTFi0nTlvohmCVAJNLLMlX3lgAxsFQmaXQmm/aZNO42lYjHHtYS5y5q2gwSfmkfhBb
+    oIyNARm77oErHFmFqZ4Yz47HvtuqHhKSsbUqS/pDkY4Rsw8BX2FfO6eDvxfiiYtCuzEpOe
+    gNuSf8o5Qw+8ZOVhYYQgxBm4/AWzvPbNUjxeW0/oGTRGIfM4ffqyF85FBiZ6LxVnOXjvKG
+    Elf5rDwSIUpBTYbvVCsxmp3U54ArzdHCSjGnolJsAHps+x5kfkWGjSgMGo/bOKCJ0l3bbL
+    8obBIseBxXitWtsLTCBdAJOGeSKPwQnI/8GdWpF0wMjV6kxmlRmzmmaBh5uRnVSL+UrNJF
+    kDITyIS1wCXkGRZF/g7safZvf5xIXxt72zbyQH6ql4X5q1I9Qc1vLg5TcRZ7e2ZEx4j7LX
+    QQdvdwjjPLhiaut1E/JHfWHGfVHnz1zQgZv0uAOyQsJ9ER3EvGWPmceJUV9O52MlwL2uDy
+    1oS5Q9SIKScBTGlehAoGxU+JUNJK8Cece3bvlHvgLcVNiwM30lzfYUafMghDgGeOXehopP
+    ppXlrj+t6MDGQpsnPoSJHJp6oCjL9Bf5HnF99Yuv102lUfRhNGsIBDuWG10S+kd7b6eGYG
+    d8lvx4JcOBEDg8QHMB3kDpwzDRvhsV0lGzg9rcI4L6eArmGF4YzslJzn9fEQ
+X-ME-Proxy: <xmx:d8gHa_Q9RUr4yEOyHJYr0DyuUBhIXfV-SAhCYXIXnr0hN7_Nnm8NoQ>
+    <xmx:d8gHa9ptMhGbF7cnWNFSlsCYmAcOAz2Pu5aA8Ng0YMRr2vk5H-po3Q>
+    <xmx:d8gHa0lXr_-fer-AdI354tQ3y64yi9n1XfK0p6OCxvQq4YUVdoNcLw>
+    <xmx:d8gHa-fv36xc0Io0NqWZyKDI7Q4rV86x9u7J1JoBHmVoDimpvuKztg>
+    <xmx:eMgHa2W5CDuHlQnB1PVJia4XJaX1dA9H5hJws0cBOwMo-JsoX1l1H0jC>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 26 Nov 2026 00:49:42 -0500 (EST)
+Date: Wed, 25 Nov 2026 22:48:58 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, Sean
+ Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+ alex@shazbot.org
+Subject: Re: [PATCH v3 0/5] vfio: selftests: Automatically detect the IOMMU
+ mode
+Message-ID: <20261125224858.0aaf4f1b@shazbot.org>
+In-Reply-To: <20261109210833.1250548-1-dmatlack@google.com>
+References: <20261109210833.1250548-1-dmatlack@google.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -138,84 +128,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Proofpoint-GUID: N6NmI3jSsngDW9bCpH9iZlwSNb4XAjGE
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI2MDAxOSBTYWx0ZWRfXxOa+poYpe7nM
- D9IDEZDlo8mDnkcyvwRM8NkWOrREGui9Bknrlumt8WbY8AkAsnx+2WVWxszfm1ZuvFh7C0uuqZ2
- +YqAxF87dZps/dLc+3WH2PKK7II0z9Y=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI2MDAxOSBTYWx0ZWRfX3FKy1RsWj0Vq
- 0YrKpXG5zWqxFGi4OPqcqC4i/0mw/wYNdu509zNqJwubZY88rDLTfGsR6Bti8LNzMML2Yz5cWTl
- rZCCzVmqlc8uwqDEJysKFmonL6HkD1dtMLiKQ1HycK1e0aJ1eLy7b+OUahLL13tSa7/nAByzV6p
- /bX43ATTGdEOIkZkfXSyQXTndp/Iqvbww7hB6mSN2LDDmdfc0AA2vetSI+aVwS69iwNV23oYqwy
- V/G6s2AiTgvc4C3R+7iuKEJAtZdX4PEKM/V6kYestgxPDvj1fi6wAxddpbjLeDIUF87zIVQI5xE
- AwhIppT/zwGl7KenY2a8a/WLwy32hPVr264O2pgVeZNsQJO4qa+uJg+OX8nWv5vwW+8vhsM8ADU
- swaAPSudIHvH6mKQ+flzZKtn4t0D3CuCvCIOflg9itYjc/GouzMSJXfhGyPqj6Y6XBpx1E93ikW
- Y+/aRYdp0TnTDsa+3nA==
-X-Proofpoint-ORIG-GUID: N6NmI3jSsngDW9bCpH9iZlwSNb4XAjGE
-X-Authority-Analysis: v=2.4 cv=BbxNQbt2 c=1 sm=1 tr=0 ts=6b07c0c1 cx=c_pps
- a=J+5FMm3BkXb42VdG8aMU9w==:117 a=r1R2P697X4eI0gH+iewh9A==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
- a=xvfqbYfxAAAA:20 a=KF8kK5mtAAAA:8 a=OGjWj8McAAAA:8 a=IWwISAFmO_-9T5kqGVcA:9
- a=qcg49hLlgF0N60+LroqrWnV/Vu4=:19 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=Epx66wHExT0cjJnnR-oj:22 a=zNK5Gj0fNQ2RFkdt29ku:22 a=UYjydHh6ynBBc6_pBLvz:22
- a=bA3UWDv6hWIuX7UZL3qL:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-26_01,2026-11-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 bulkscore=0 adultscore=0 suspectscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611260019
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Icenowy,
+On Mon,  9 Nov 2026 21:08:28 +0000
+David Matlack <dmatlack@google.com> wrote:
 
-On Mon, 09 Nov 2026 23:56:47 +0800, Icenowy Zheng wrote:
-> 在 2026-11-09一的 07:47 -0500，Guodong Xu写道：
+> This series makes the VFIO selftests library automatically detect which
+> IOMMU mode to use, rather than hardcoding iommufd as the default, and
+> makes tests skip, rather than fail, when the IOMMU mode they need is not
+> available. This was suggested by Sean while reviewing the KVM selftest
+> irq_test [1].
+> 
+> iommufd is an optional feature, and VFIO's iommufd support additionally
+> requires CONFIG_VFIO_DEVICE_CDEV. On otherwise functional kernels that
+> only support the legacy VFIO container, the VFIO selftests currently
+> fail with an unhelpful assert:
+> 
+>   tools/testing/selftests/vfio/lib/iommu.c:448: Assertion Failure
+> 
+>   Expression: iommu->iommufd > 0
+>   Observed: 0xffffffffffffffff > 0
+>   [errno: 2 - No such file or directory]
+> 
+> irq_test avoids this by probing for the IOMMU mode itself, but its probe
+> picks iommufd whenever /dev/iommu exists, even if VFIO device cdevs are
+> not available.
+> 
+> Patch 1 makes iommu_init(NULL) pick the most preferred IOMMU mode that
+> is available on the current system, and drops the global
+> default_iommu_mode.
+> 
+> Patch 2 adds iommu_mode_is_available(), iommu_mode_unavailable_msg(),
+> and SKIP_IF_IOMMU_MODE_UNAVAILABLE(), and uses them to skip tests when
+> the IOMMU mode they need is not available.
+> 
+> Patch 3 makes the VFIO selftests library print the names of all known
+> IOMMU modes when passed an unrecognized mode, and the names of the
+> available modes when a test skips because the mode it requested is not
+> available. It also adds iommu_mode_names_all() and
+> iommu_mode_names_available() so that tests can print both lists.
+> 
+> Patch 4 converts irq_test to use the VFIO selftests library to pick the
+> IOMMU mode, and drops its probe_iommu_type().
+> 
+> Patch 5 lists the known and available IOMMU modes in irq_test's help
+> output.
+> 
+> This series is based on vfio/next (vfio-v7.4-rc1).
+> 
+> Testing
+> -------
+> 
+> Tested in a QEMU VM with an emulated igb device behind an emulated Intel
+> IOMMU, bound to vfio-pci, on a kernel with CONFIG_IOMMUFD=y,
+> CONFIG_VFIO_DEVICE_CDEV=y, and CONFIG_VFIO_CONTAINER=y. To simulate
+> kernels with fewer IOMMU modes available, /dev/iommu and /dev/vfio/vfio
+> were deleted in the VM:
+> 
+>  - All IOMMU modes available: All VFIO selftests pass. irq_test -d
+>    passes using iommufd. irq_test -h lists all five IOMMU modes as
+>    available, and irq_test -d -t bogus fails and lists the known modes.
+> 
+>  - Only the legacy VFIO container available (/dev/iommu deleted): All
+>    VFIO selftests pass. The iommufd and iommufd_compat variants and
+>    vfio_iommufd_setup_test skip instead of failing. irq_test -d passes
+>    using vfio_type1v2_iommu. irq_test -d -t iommufd skips and lists the
+>    available modes, as does irq_test -h.
+> 
+>  - No IOMMU mode available (/dev/iommu and /dev/vfio/vfio deleted): All
+>    VFIO selftests and irq_test -d skip with a message explaining why,
+>    and with well-formed TAP output. irq_test -h lists no available
+>    modes.
+> 
+> Also tested with CONFIG_VFIO_GROUP=n (cdev-only VFIO):
+> 
+>  - All VFIO selftests pass, with the iommufd variants running and the
+>    vfio_type1* and iommufd_compat variants skipped. Without the VFIO
+>    group check added in v3, the iommufd_compat variants fail instead.
+>    irq_test -d passes using iommufd, and irq_test -h lists only iommufd
+>    as available.
+> 
+> Changelog
+> ---------
+> 
+> v3:
 
-[...]
+Applied to vfio next branch for v7.5.  Thanks,
 
-> > +enum {
-> > +	RISCV_ISA_BASE_IMA,
->
-> I may have missed something, but would it be worth to add a GC tier?
->
-> I think many Linux distros have GC defined as their baseline.
+Alex
 
-Thanks for raising this.
 
-A single bit for 'RV64GC' seems to have no user to me, so I would
-prefer not to add it. Allow me to explain.
+>  - Require VFIO group support (CONFIG_VFIO_GROUP) for container modes,
+>    including the iommufd_compat modes (patch 1) [Sashiko [2]]
+>  - List the available IOMMU modes in irq_test's help output, alongside
+>    all known modes, and when the requested mode is not available
+>    (patches 3 and 5) [Sean]
+>  - Simplify the -t help text in irq_test (patch 5) [Sean]
+>  - Make the unrecognized IOMMU mode error easier to read (patch 3)
+>    [Sean]
+>  - Rename iommu_type to iommu_mode in irq_test (patches 4 and 5) [Sean]
+>  - Skip vfio_iommufd_setup_test when iommufd is not available (patch 2)
+> 
+> v2: https://lore.kernel.org/kvm/20261103002205.3348519-1-dmatlack@google.com/
+> v1: https://lore.kernel.org/kvm/20261029221710.1871112-1-dmatlack@google.com/
+> 
+> [1] https://lore.kernel.org/kvm/aiIG2L_KdPwuxYA1@google.com/
+> [2] https://lore.kernel.org/kvm/sashiko-outbox-194380@kernel.org/
+> 
+> David Matlack (5):
+>   vfio: selftests: Automatically detect the IOMMU mode in iommu_init()
+>   vfio: selftests: Skip tests when the IOMMU mode is not available
+>   vfio: selftests: Print the IOMMU modes when a requested mode can't be
+>     used
+>   KVM: selftests: Use VFIO selftests library to pick IOMMU mode in
+>     irq_test
+>   KVM: selftests: List the IOMMU modes in irq_test's help output
+> 
+>  tools/testing/selftests/kvm/irq_test.c        |  32 ++--
+>  .../vfio/lib/include/libvfio/iommu.h          |  43 +++++-
+>  tools/testing/selftests/vfio/lib/iommu.c      | 139 ++++++++++++++++--
+>  .../vfio/vfio_dma_mapping_mmio_test.c         |   2 +
+>  .../selftests/vfio/vfio_dma_mapping_test.c    |   4 +
+>  .../selftests/vfio/vfio_iommufd_setup_test.c  |   2 +
+>  .../vfio/vfio_pci_device_init_perf_test.c     |   2 +
+>  .../selftests/vfio/vfio_pci_device_test.c     |   8 +-
+>  .../selftests/vfio/vfio_pci_driver_test.c     |   9 +-
+>  .../selftests/vfio/vfio_pci_sriov_uapi_test.c |   4 +
+>  10 files changed, 205 insertions(+), 40 deletions(-)
+> 
+> 
+> base-commit: 076d7e989cb69f6ded7d60f2a080eb909930061b
 
-G is a combination of extensions defined in the early days of the
-RISC-V ISA spec: the unprivileged manual defines it as an abbreviation
-for IMAFDZicsr_Zifencei, "our standard general-purpose ISA" [1].
-
-I checked, and you are right that it is the baseline in practice: GCC
-defaults riscv64 to -march=rv64gc, and Debian, Fedora and Ubuntu
-(before 25.10) build with that default. But my understanding is, G is a
-build-time baseline only. Nothing checks for G at run time; on a core
-without F, D or C, an rv64gc distro userland just takes SIGILL on the
-first such instruction.
-
-Anyway, what this series intends to export to user space is the profile
-level (RVA20U64, RVA22U64, RVA23U64). For example, a glibc-hwcaps design
-can fall back to rva20u64 when its run-time check finds no rva23u64.
-
-PS: In those terms the counterpart of rv64gc is RVA20U64 [2]
-(excluding Zifencei, which the profiles mandate only in the S variants
-[3] and which, as noted in hwprobe.rst [4], is not intended for direct
-use by user space).
-
-RVA20U64 and RVA22U64 came up in the LPC26 discussion as well [5]. I
-would like to add them in a follow-up, probably not in this series, if
-the reviewers here agree.
-
-[1] https://github.com/riscv/riscv-isa-manual/blob/main/modules/unpriv/pages/naming.adoc
-[2] https://docularxu.github.io/rva23/rva-mandatory-extensions.html
-[3] https://github.com/riscv/riscv-profiles/blob/main/src/profiles.adoc,
-    RVA20U64 section, the note on Zifencei
-[4] Documentation/arch/riscv/hwprobe.rst, RISCV_HWPROBE_KEY_BASE_BEHAVIOR
-[5] https://lpc.events/event/20/contributions/2626/
-
-Guodong
