@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.51
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795654191;
-	b=d+UZyr9zJmdeU+CeL6+tClQelqHplosNscA1+CZ3aroS9lF4dsTjRm1mOBNsq5P7OAke
-	 vBHv/Om+GVY0c2YFoNRpkc9/NbN4aEd/sIGtWyK2VO3Y583u87E0eIvzS+HcXDlFWo1OY
-	 r3K6ZYU2oZ8Ctep0amiRZjjmIXLcnn2ED2zghouyzJ4V9byVFxcCk5zZTmfQD2vc199wA
-	 58EKab97PdcURI3RWe5Rg8rM5G5bJXeMt95cr40ihkij6AyZjo6L7gIzPLUbo5EYvageD
-	 ifwP5T/LYUJkN6yhHOXgjx0VLpDSbGOGzzjj6k9l+0MdKncJjcKs3OqMa4ORZvsHcIA==
+	t=1795654409;
+	b=dS1udcabEs5YFuin0npS/86lTUcgS0Utb78GEXOmYwKN0acUmhSQBMwmHuiLafMnTKwX
+	 GwxOZM0jFMwXfcwaNPgXRLrVQL1ut+SYSnKG1UCwmzgHdrHFFCUwP0yJuCXWUuj7y6LNm
+	 xayK8bw/M6FrWmt2WEQgqzENGuO6xM+Oizn+whba9Adpt+1ArvkmjleXNQLrFJP5IuiER
+	 i9QxrIb3CvFyNdZvVAxUhS/iAkpiHX/9Ss6uDPi196bePpddabi46kWLoztsnlOJq4YVZ
+	 /neSXvElziltiqQ/jT25WJuq6WBQm5EPg0yBrF26252VVAdLkQt3y7CCTZzRXJVOgXA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795654191;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795654409;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=V3xdrz/ADvfzRdkROHvxiyJcnHZIhgxNZVfYGWmlfhc=;
-	b=0hHJG0seJOIHz46tMwXMpd2Ad7MyNii4sc83va+DJYQ0WBGpYMvATvdBxyFOKufxVh68
-	 rfKTnnQvzduMJ/9haq5isRY9TYKkQ31syF3oBWa6dkiXQ1GNkg8+cBgmV+Oog4UUWkenk
-	 KSGa17Hz1seQ0B/v3Mb0tCyXa547GjelO22Z1HOY9t9kJSXd26v2YnYzeIzN8jkreFx/9
-	 0UXsxv7khOPmuGlO3/x1JYgOnQIlPIMxu1p2PD6AGC8KWzORrc4Ds0spDpZmiyXKK5Vh6
-	 Ix6mvMd2F0g7v59CRpsLT+qcYA6o5mo1TnmPhQJBMsdC8IxgPiUQ+veoEz1sR31JHFA==
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
+	b=gk7XpgQRYVPpLQH5RZcjiTaWtkqRv1js6Ft0Nyvwpus+cgUeXVAJfUpUw5F+2m2uKBZ1
+	 HhGk5fQgGmZ/9+pZxJFUYQ7RiuDdGeIKTY+4rdON1BoVAIC1arAWl/29nLDTT7uhJu3yf
+	 4BqeKl5Ad8kgYTgZslpYPVjXtAwFMEoJBwPbJrSiSefGJjJdUMvHz7R/TkmLv8I7aLQsg
+	 /qmT0sO1qqs3+vmw+GElvmT3aHAjJhqHSuK5tLLAJngq/5NN2Enevk10a5N4USBZb3Ymv
+	 CS+v52QwvUPKL3zGXj9o5sY1AroOXvVlG9ejUN2Ul1lPdfwr0fESp3VTplaX2XuiEcw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TD3ha0rn;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.43
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OMbLOmTg;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.51
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B95C606A32A
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:49:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B95C606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F921606A337
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:53:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F921606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TD3ha0rn
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c4322d310e7so110004466b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:49:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795654190; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OMbLOmTg
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c4d2b741ed9so1038065366b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:53:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795654408; cv=none;
         d=google.com; s=arc-20260327;
-        b=PDaoBBfwY+3bWtMAMCPrUIzialnCzrzSmjPcjZgMKkpsWgHE8tShdVYRYsSjfUQoUB
-         pDhX3tAHV2JotMKnqU3lb5FONKG7AE33ieifaoOtOUp0nB6gs0x+inwffydY0/umXs6O
-         GuEw84CWhjt49MkEO+ir/d8t79vmxFToh0VA7yVGpZRgikfZfm3lccfNOOqq7ly8S+aD
-         juk+b9CeqBlsAg9v8aikULq2H0BGjobfW61eLq+yaOVcGzL8liwfo6amRSE9mU0nu0Zk
-         E5G43oMr3BnhCpJtcfn3hcW2yt1HowGYTF6BKOwQLuFRUGQG5WWGDSfiWoGLK+mfEGlp
-         fOaw==
+        b=Q4It6JJ9Z4bOkO1YR9ZbKl1ABzp46bsB5yyAvQ88Y9lBV9LBmCzg4amo3dV40DAcza
+         nGLjugijySHPZ/zyHcTZMPAgcvbOcxQBAzWw58il3SjARpM43hVqLWYG6lXZ94hF0dNB
+         PtEsDFnYZqYwMK8vw7+45mLcHRy4GdL2jLcMthmAmBll3zqGRqvO19QfdYOpuv1ZzH8E
+         5pIny7dJeXVD88KTWTu1McLz8vhI0aKauCFNEofLcUR/N9KUXn4Xd8KEfVao+cxTCqZS
+         JJAxPYE1w2ncC5X00Hz7hHMjlsizLLiv1TrQB+/t70i0kA4v66g7pcdDQZ+MSLfGVZTM
+         lQkQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=V3xdrz/ADvfzRdkROHvxiyJcnHZIhgxNZVfYGWmlfhc=;
-        fh=IZaiAUFaIgpTC6SV6K5nBWCx2wmDrOZUkRaf9EaLEV0=;
-        b=HfFM8eiPBby+rRD6ey78H0ABFQ3mOarvuuchHQLVykaiF1zQks6tnuxOV9jrWutLCr
-         us53NEuDUj5A3E1vahZJQRB/4vRv4eOqGiHXuLjkjVLUNVpdEOLXwcTliiEvVPXDVh1J
-         rj0FfyiFth+ePkR9LEOjd64xPpGUBotbs0kitIM7fvwTE1zEaI731Kdg+S+i5Iki/vhP
-         q/FAGoytW52SsXvmoSPu/5kiRQawgDAVY3/CPhBSe2JyaB5GGCNq9fIgzqYo47KDaWms
-         lsEtbUBAUz7TfN5LB10jEuiDyahzDDnNm8eB44xYt9/vpO2gnviRrJxZgpoNGO6CNaQY
-         EbdA==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
+        fh=gYdBgLKSatMq0j3QtYs0NNlZMzGqg/5uJ661VuuvJw4=;
+        b=DII7MkYdU0T0HJVXr1mGqMWzlahHMRCrfD1RlMFUwxMbHVoEBQO5h97LMQov6l7hZ/
+         k3XvlngnTnIrJdkJS55ENziBG053V0FqJkXNXfYsMWiIosGFGChG/e/xN64lv8r8zljV
+         Uc04dBtpbwpHWy2CVPA3IJR3iD5zElTvRfTiWT/mtPyB6s8qAX0D6DnAwDYOaZDVj6t6
+         lq98s/UUlvA3EjCoTSb/tyevVGaagUEdvnAwSCFjt2vWk9u47FYQojSUSsZ4zA8ChZHa
+         e/avvnfxiCvfW7LvMYQCHTqy0IbVq18slZibliDRfysfM8oH9OilGqj0MTY8MyUpgZNz
+         zjCw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795654190; x=1796258990; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=V3xdrz/ADvfzRdkROHvxiyJcnHZIhgxNZVfYGWmlfhc=;
-        b=TD3ha0rnSCMzB6EDdCanCIo2aztnTVsAWrsh8HrG5Y/aRrFlN2ndLBXw880f1YHLZ/
-         QSfxPbJeIna1/g4lWyiIQwpwJD12i4G3TGAPhErD+7VvOdvbXoNFUGW/sZDUdcKc+k/U
-         fLW/extCpKtDduL/D3vHzyoVyDpb/98nn+tR+abZco9jsGFWEFngZqgt6TnMkhRshp4B
-         KnHYS7XEZFGjKsHdNaQA1fEyq68/xePBost3IMRVEVegEsUL5tFkIeCHeASNeG2SkZb3
-         JP9uGCT2U7VP0g68JLBP9wLuAWo5qxzvzbWaRKXYpp5AAo+d01ZiPGTRjL3TT/PoWk+S
-         RpiQ==
+        d=google.com; s=20260707; t=1795654408; x=1796259208; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
+        b=OMbLOmTgwkBLdVF5EdkYSC2XrgccLIkkqOXgyFgiuHmBsv8YiKTp9E0NEIyhirgYwo
+         BZ+ApH53YZ2KTVkaJNbDjcMue9DCSXid0Du4+70qfpSn/U6BPQcaO0rTHvaEKiMrhjq+
+         cgrO6KnCn2xh6qE6NyajQBDq/7N3cmFb2502QyBeGyuN0J8TZ8STFtPa+xPXpE5PEied
+         9EIDboORco4TC6wv1vXi5MBxzHo/qEkcV1RPpsCU6P4rl7yl2ijcQhep5KTjor4bMPiQ
+         FloIu+x3tOotka6vXyHSWrSW9RsgR8EkvzFkVBto/arghTtNsJHfG3gnYoPBAaEQS9BY
+         49RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795654190; x=1796258990;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=V3xdrz/ADvfzRdkROHvxiyJcnHZIhgxNZVfYGWmlfhc=;
-        b=CC4fasA37xoXFA6bHCaMh7fN98SxMxCbq0Ro7jYZNjjkNwwGoEIPPt7cllmhBwR28b
-         EPeV/M+YrqOdhzSNIAp4zNNcm4Nyi4qm8/b6mUio9bmjpa9PWAo5i/yonh2LQy0F7TR/
-         j+uhPKZQExGePvEIuB2Wh7Q2v+GU/ndHp1+07RcPk+DO5znsCBGg1TUxRU+z3fWwavrr
-         7s47BDr+HuCEcvOo6Jr5J2EO4sMvvQj4YYTkGQOOWhAExdq21GNRd9pX+Fc7WeN3RdG0
-         mrL5onfr1W9LcE/BRJ1UbSCz6dpP06QHJN3y83uHXTkFJ0Wzo5SxYSqDyKX2iaoBUiTc
-         Qh8Q==
-X-Forwarded-Encrypted: i=1; AL+hErHPOem2/NWUBgFrfG0vEf5007tvBYzR5RTugBWYxHYQjz8DI9OMK7rs2vA2Xk3vmZHABW78UhbtpkPgNJBkQ18=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+bEzZw9hpnpE4NhfuDhGiAg5J37UTKSnCBLVV5SF+g5pNxXXBS
-	cfVFp0UHtr99fhcxk/hH0wHR+0QxgmFrOFxB+FcEE3ccEOKypxmz6/BAbYEzjl9dNaUhSUX6c5t
-	97qa6LRbpYr6WK+mcf7Ys23B5Ez1Bid+yQ/8dLSpr
-X-Gm-Gg: AZFdTZfvAyASac75ekNeDxXOqJ0zoKNeywrcL5F76yg2CIIyk/AQrgk9SdF7Mc2t8ug
-	Shm2Yc0xmVBkqiRWHz5X9e0KREBbrttnKU17JpJO01xcVEH53fv90ozv1QosJe5c7nvmUru6D9F
-	LKUkqOeQK/8p7OkN+ysP9rQQumiqnI+IEJY9OlYCkAItlau287hIoGRhaAojs3WdyYvqmJ2T5+N
-	2JuYKA2hxCzrRWY1uLoFUjfptZ19mTOQujQwYlDkGWE6oojUkskPffGXhmPd+eSIG02y/Ln9BVY
-	3mK0SmcGmT/oAEx02sUgbMxE/WjyLOjzR4ASftkhWYJjyTTwl3f73tJHs5HM/xJBCGASpTXq9Or
-	+yqQBa526zI0D9/KJ9YSBt4axvK0RoFQqsRgGdJvRbzuv2TFehWJXsuTWMHRCNpKDKG4=
-X-Received: by 2002:a17:907:e11a:b0:c3f:98d4:dfe2 with SMTP id
- a640c23a62f3a-c513aac21bemr1112327466b.18.1795654189395; Wed, 25 Nov 2026
- 16:49:49 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795654408; x=1796259208;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
+        b=WNwz78dsVKJdCobgHCml13D8gzj5xksIn45V9BZhRzNQSYL42Lyxy8MH2OCcuiJ0ph
+         gFGixKwtxTKsdDQqoBSQWYHXkRSBvsUAM360Z7ruHewn5bL4ejoG2SNSW5/6hCnPzlsm
+         ToyCCosk005SBRuO55vzIr+6ToDq+YHiT/Uhlp4Ht2ynf3BTld6IHddDAnO6viWo4QFK
+         5/yQaJLBeTMhRHXQm2QI1zoLV0c8f4vduTE+a6IvurOPRyBaNsiebIM3xNCfHjZXt6lx
+         B80WgL7ThMC8132TSyxOpzg96B3kAxqiCCooU2jXW3R4C+M4Ed+vOYdAkT80JQy+X0Al
+         cUCw==
+X-Forwarded-Encrypted: i=1; AL+hErE05X2RPYXfQhJS1OygQaCsdpzad6AvQlAfxxBwcAHjyU7+OMIh4ZbQ9W1rvz1PHOtXXYM0PwjhKjfBp0B55e4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+bx0wGQJIEm0RTGQDmbXRqFZa5pw6ZrbEt5IG5aMTtfDL2xQDJ
+	CpMaQNRu35mhj3O1PwTJguu6vec5XuV4wb98PRacvuCnY9zd6WQIfCWRDZ4Q90wFu5IukKBEyOy
+	F/Ii5YpTd2ry3SiBpQAVEUzZ6QtwfzW0Y9VWVcUWP
+X-Gm-Gg: AZFdTZeSvjprfbW5ZZXRkWSi2zMnnTYG7yIiZ6Er3ltCsQb+zk5cV+ZBZ6xjboOR4d/
+	QiQO/pXTJEnfw2SWIrSYNVTFXfqG36P0EBzipGFP6L+xZNxLluHnpcPaGnRt/r53vpi9lh3YdJ2
+	FwBQtXFrivcA8jpE/Esdr+ZrgZQ8teFNDwVRynuUyw+KuO/uTe/Z0Q7miKZIqtGKue89/1XIuc3
+	3CJKElQn+Ow8i8rVlie98zMqH9bWeoDNBMvqb3ruppzNDkHF3W8yMvn3ycRTna3xGSa+lBA+NHS
+	uhaMgtUNxCOKXUWj3lYqaaz+iz9BXI+euX44ZHtOeUwhm/6x5xc7Gvq2mi86tnbMHelpecf3jte
+	Rz7V4QZLG114XxuVkUBzcPGJKiFXNRinIwsNxjGPorgSzZDUSvNFdwAGxfsxmC7SD49U=
+X-Received: by 2002:a17:907:c643:10b0:c2e:4292:d27e with SMTP id
+ a640c23a62f3a-c513a816d3amr1138026566b.22.1795654407168; Wed, 25 Nov 2026
+ 16:53:27 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,14 +105,14 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-15-wusamuel@google.com> <CAEf4BzbdGw4=yWxFqdFuz1U7RBSFqh7baJX=SpBNJJqnaW5P_Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzbdGw4=yWxFqdFuz1U7RBSFqh7baJX=SpBNJJqnaW5P_Q@mail.gmail.com>
+ <20261113221248.3535369-19-wusamuel@google.com> <CAEf4Bza48tGhcUhFRhSSv3qijV0uF8YrAQcLM6Qv9az-8zvK_Q@mail.gmail.com>
+In-Reply-To: <CAEf4Bza48tGhcUhFRhSSv3qijV0uF8YrAQcLM6Qv9az-8zvK_Q@mail.gmail.com>
 From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 25 Nov 2026 16:49:38 -0800
-X-Gm-Features: Aa3M54ol7ULgIQ7PyJ4MZUA4jeAQllgic7NBQxD7ZgZ6wx9FC8B6-VKox80ApLQ
-Message-ID: <CAG2Kctr9Bg+4uz+cKWw79S6qFRPtW_PRDt0rFY73F6WpauXG9g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/9] kallsyms: Add KALLSYMS_QUERY_BY_ADDR
- ioctl to /proc/kallsyms
+Date: Wed, 25 Nov 2026 16:53:16 -0800
+X-Gm-Features: Aa3M54rfuKAHSB0QMI506grzDhwAStyJm9gAvy8QXVpNXfEJd-B8LId_HiOPEPc
+Message-ID: <CAG2Kctq98pvyV=jmN0Di+p7m0AWQKg8+QF5YBvdLi79kTJaKoQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 8/9] libbpf: Resolve typeless ksyms via
+ KALLSYMS_QUERY_BY_NAME ioctl
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
@@ -131,32 +132,100 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
 	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Nov 25, 2026 at 12:25=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Nov 13, 2026 at 2:14=E2=80=AFPM Samuel Wu <wusamuel@google.com> w=
+rote:
+> >
+> > libbpf parses all of /proc/kallsyms to resolve typeless ksyms.
+> >
+> > Use KALLSYMS_QUERY_BY_NAME instead: exact names, plus "<name>.llvm."
+> > prefix matches. Ambiguous matches at different addresses fail the load.
+> > A missing strong extern still fails and a missing weak extern is 0,
+> > without a text scan.
+> >
+> > On any other error (e.g. -ENOTTY on older kernels, or -EPERM), fall bac=
+k
+> > to the text parser.
+> >
+> > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 99 +++++++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 97 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 44134421bd7d..f3f3475a64d3 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -59,6 +59,34 @@
+> >  #define BPF_FS_MAGIC           0xcafe4a11
+> >  #endif
+> >
+> > +#ifndef KALLSYMS_QUERY_BY_NAME
+> > +/* 'f' is PROCFS_IOCTL_MAGIC */
+> > +#define KALLSYMS_QUERY_BY_NAME _IOC(_IOC_READ | _IOC_WRITE, 'f', 48, 0=
+)
+> > +
+> > +enum kallsyms_query_flags {
+> > +       KALLSYMS_QUERY_NAME_PREFIX =3D 0x01,
+> > +};
+> > +
+> > +struct kallsyms_query_sym {
+> > +       __u64 sym_addr;
+> > +       __u64 sym_size;
+> > +       __u64 sym_name;
+> > +       __u64 sym_name_len;
+> > +       __u64 sym_module;
+> > +       __u64 sym_module_len;
+> > +};
+> > +
+> > +struct kallsyms_query_by_name {
+> > +       __u64 size;
+> > +       __u64 query_flags;
+> > +       __u64 query_name;
+> > +       __u64 module_filter;
+> > +       __u64 pos;
+> > +       __u64 sym;
+> > +       __u64 sym_struct_size;
+> > +};
+> > +#endif
+> > +
+>
+> there is no need for this, libbpf in kernel can use kernels' most up
+> to date UAPI headers directly, and on Github we sync necessary UAPI
+> headers into include/ directory, so libbpf source code can be built
+> with latest definitions of kernel UAPI. So you can drop this part
+
+Ack, will drop entire #ifndef block
 [...]
 
-> > +/*
-> > + * Find the /proc/kallsyms entry that covers query_addr, or return -ENOENT.
-> > + * ftrace trampolines and kprobe pages are not resolved yet.
-> > + */
-> > +struct kallsyms_query_by_addr {
-> > +       __u64 size;             /* in - sizeof(struct kallsyms_query_by_addr) */
-> > +       __u64 query_flags;      /* in - must be 0 */
-> > +       __u64 query_addr;       /* in - kernel address */
-> > +       __u64 sym;              /* in - user ptr to struct kallsyms_query_sym */
-> > +       __u64 sym_struct_size;  /* in - sizeof(struct kallsyms_query_sym) */
+> > +
+> > +       while (!ioctl(fd, KALLSYMS_QUERY_BY_NAME, &q)) {
+> > +               if (!ext->is_set) {
+> > +                       ext->is_set =3D true;
+> > +                       ext->ksym.addr =3D sym.sym_addr;
+> > +                       pr_debug("extern (ksym) '%s': set to 0x%llx\n",
+> > +                                ext->name, ext->ksym.addr);
+> > +               } else if (sym.sym_addr !=3D ext->ksym.addr) {
+> > +                       pr_warn("extern (ksym) '%s': resolution is ambi=
+guous: 0x%llx or 0x%llx\n",
+> > +                               ext->name, ext->ksym.addr,
+> > +                               (unsigned long long)sym.sym_addr);
+> > +                       return -EADDRNOTAVAIL;
 >
-> nit: same as in previous patch, I'd keep "sym_size". But hey,
-> "sym_len" is even better and follow same naming as with sym's
-> name/module, no?
+> I think there is ENOTUNIQ which we can utilize here
 
 Ack
 [...]
 
-> > +       return kallsyms_copy_sym_to_user(karg.sym, karg.sym_struct_size, &ksym,
-> > +                                        &m);
+> > +               /* Check exact name and then LTO .llvm.<hash> prefix */
+> > +               err =3D query_ksym_by_name(fd, ext, false);
+> > +               if (!err)
+> > +                       err =3D query_ksym_by_name(fd, ext, true);
 >
-> nit: if it fits under 100 characters, please try to keep code in
-> single-line form as much as possible
+> err =3D err ?: query_ksym_by_name(fd, ext, true /* lto_prefix */);
 
-Ack
-[...]
+Ack- will update in v4. Thanks for the thoughtful review!
