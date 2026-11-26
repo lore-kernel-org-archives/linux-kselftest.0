@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795661468;
-	b=yeQI/S/y4+M5eslaXxt6p/3bRcTPaEaycqiK8iMsoO4uZ2ELewT0u6StzByROSRHj7WD
-	 BLivv0mo9oaGlYOyOHX9p5sE/M3jej8rkFV5a2Me2zq+4O+jdD9X+ZD15XoSa+qJqrgnZ
-	 l05xGlfKmJIIfUV2ZpvRFyLCv5hSNYXGCU8sJ/y7kBl8UHJjsvWIljGNb0qW+QqLJrwd6
-	 ONSFsLzaWrpp0EpPa7eLI8QU3QLGjf7Xsood2GdPE5eEE/F47Ye+9bJMzrAMbMam4Hz2J
-	 PkRTmM1FGbUT+diATwWTQ3UPk0iJB9rlIgMJN+qDMkhuQckekMQzZ3YP7M/iD08qJHQ==
+	t=1795661471;
+	b=lWkPEkGtZr+H2FEBS7u/lztz9lOIDUDFWkgCheOtSEowEAdaVYDMEvjMc3BNrHMPR5xP
+	 SLB3TmJWgI2mfX52BFsPIVInt/KCkKGUsS2e+elQu6CDM+fqa+Ms7lpHXsMgaFUfE3gME
+	 VlqhzEbifEPBu16NhaRKrO2hTYLHgoK1nZ37gIKBAZLtz43eXiqfyrI3KVoldbpJDXxxa
+	 yEdoDfu7lOfc/1n7e7JYbKEqgsrcd+8oPCtIbooV+5hIb5/zWANMZWGeeUx8FRlHY0R8j
+	 pJdITgOshoFRcmomdENCaCuHdztJOeI9OUgm97T+N8yg77ekdue++MKXGuT3AkV3FRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795661468;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795661471;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=UTvwzeMDlYwCgKOPvi6/8ytTUxbKbDf1EkK+RUqXSnU=;
-	b=TeOZI6NfY9OT5TgTYE9MVYNW75AXkzwW+/Zm8SL6Sa7LQCz2OJE92Z2l+0GQE+qPLRBb
-	 mxCfY4+wQTAX1SAuHHMSwui0ThR2KXwg1e0IJRJINP4pDaAHCQ1/dcdOwMtaaIyEB1hSU
-	 ZliGlFUnY3l+DnJLbG3qWcYd6y7wP1/wYAbYVoNjqmXwCfz5x+16hIaL+RLeFw6rk3C8G
-	 1ze3GwaEpTKzLfBMsYA8HzoOewBDzE9VgprqB9/j0RL+tqa59pvJEmz7NPnzeKQQ5SNXH
-	 xzT/xTQ1GBAqshOfRgcCebHQ1sEE+XDvEWJqRlIuthTtg8njg4sxRgQstPwEkHtInpg==
+	bh=dOs0QGgrUiUPEdrg7wekwgXMxcapi697ENy3Bj6of1Y=;
+	b=bC4R43HljfxeGf7ug+zNwXpjhTDmc0vb3r45qXcGtZQLdsKczvgnvZmpy6cD+w4xcZgU
+	 nn5OJqQx9T33xebGiCzYS3a5mq6mVC4RDVcWklvIQdsUURwpvcuPRTrhezJU/+jOkt4lc
+	 V1PbhZdivTfbskE0P8rrSczMyyzC05wRTAjm+QhSV2mqsiGz+q4PcvRfaazSAoWuXNkab
+	 5oimKZSVO6SprSAIVni2bwAc59twM3fQIdnfSjWFSk2G3T+ZxpiWvHGjT/qjgFHKNaMVi
+	 ns6mXHc5kYAz3z3tWZAJQz0Rrxo9Rqj3jHIJwLXhlxzJ/dviI/TAWa88Xn6/y33r94w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=XN1eGnfO;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=eLXr+8V8;
 	arc=none smtp.remote-ip=111.22.67.139
 Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40878606A327;
-	Thu, 26 Nov 2026 02:51:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40878606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA42606A33D;
+	Thu, 26 Nov 2026 02:51:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AA42606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=XN1eGnfO
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=eLXr+8V8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=XN1eGnfOTnXxxOlXBqE9uwp4wOs3HU3FMLO2k93IU+OPZK9MeS+xSmT5cyRy1gerHZ3+Lfehsspbb
-	 vjOQLdMrKChTDykeX5ffPTmWmVNZ3/c1eM3F/+X8SdQ1rbQOum6PGHAbiHTGXEOhEK03C6kUbL1x+l
-	 dsRs9l4Hee3Dta6A=
+	b=eLXr+8V8txP/Ab6FfLuJnQlU33W4tD7OIXMq0O1XLoqPqL22HPRHK4EVYc3xuuRK7afj/WNMG8ldb
+	 TvF+idFmi81nwwl3d6YwItpYEpLZPw8CDwtxJlAzDAWty1pf/MthD/imaZCIVXE/6QQvARuFlFo/yV
+	 a5PKECBN2lguKlyg=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96b079e919d3-5c70f;
-	Thu, 26 Nov 2026 10:50:58 +0800 (CST)
-X-RM-TRANSID:2ee96b079e919d3-5c70f
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96b079e9c9d8-5c714;
+	Thu, 26 Nov 2026 10:51:08 +0800 (CST)
+X-RM-TRANSID:2ee96b079e9c9d8-5c714
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from  (unknown[104.224.130.48])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86b079e693eb-59c4a;
-	Thu, 26 Nov 2026 10:50:58 +0800 (CST)
-X-RM-TRANSID:2ee86b079e693eb-59c4a
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86b079e693eb-59c62;
+	Thu, 26 Nov 2026 10:51:08 +0800 (CST)
+X-RM-TRANSID:2ee86b079e693eb-59c62
 From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: netdev@vger.kernel.org
 Cc: David Ahern <dsahern@kernel.org>,
@@ -64,9 +64,9 @@ Cc: David Ahern <dsahern@kernel.org>,
 	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 4/6] ip6_tunnel: Enable BIG TCP packets
-Date: Wed, 25 Nov 2026 18:50:13 -0800
-Message-ID: <20261126025015.10416-5-yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH net-next v2 6/6] selftests: net: big_tcp_tunnels: Cover IP tunnels
+Date: Wed, 25 Nov 2026 18:50:15 -0800
+Message-ID: <20261126025015.10416-7-yanhaishuang@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
 References: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
@@ -81,46 +81,231 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit f3d0f753f066 ("vxlan: Enable BIG TCP packets") and
-commit 03ebe91b0f61 ("geneve: Enable BIG TCP packets") allowed BIG TCP
-on UDP tunnels. ip6tnl can carry BIG TCP packets as well: IPv6 BIG TCP
-no longer needs a hop-by-hop jumbo header, the GSO and GRO paths already
-handle it, and FOU encapsulation sets the UDP length with udp_set_len()
-since commit 47282504ad21 ("udp: Support BIG TCP GSO packets where they
-can occur").
+Now that ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap allow BIG
+TCP too, run the same checks over them as for vxlan, geneve and
+bareudp, without encapsulation and with FOU and GUE. With FOU and GUE,
+turn on the outer UDP checksum, which is off by default on an IPv4
+underlay, so that it is checked too.
 
-Bump tso_max_size up to GSO_MAX_SIZE so that the admin can use BIG TCP
-with ip6tnl. The default gso_max_size and gso_ipv4_max_size stay at
-64KB, so nothing changes unless they are raised explicitly.
+sit only carries IPv6, and is only run with veth tx checksum offload
+enabled: unlike the other tunnels it does not use gro_cells on receive,
+so with software GSO on the sender the receiver does not see any BIG
+TCP packet.
 
-iperf3 TCP over ip6tnl, with IPv4 traffic between two netns connected by
-veth, without encapsulation, 3 runs of 10 seconds each, in a KVM guest
-with 8 vCPUs on an Intel Core i7-14700 host:
+fou is not loaded on demand when it is built as a module, so load fou
+and fou6 first, and skip the FOU and GUE cases if that fails.
 
-  gso_max_size/gso_ipv4_max_size 65536:   93.0,  90.8,  83.3 Gbit/s
-  gso_max_size/gso_ipv4_max_size 196608: 134.8, 123.4, 112.8 Gbit/s (+39%)
-
-A later patch in this series extends big_tcp_tunnels.sh to cover ip6tnl
-with IPv4 and IPv6 traffic, without encapsulation and with FOU and GUE.
-
-Reviewed-by: Alice Mikityanska <alice.kernel@fastmail.im>
 Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 ---
- net/ipv6/ip6_tunnel.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../testing/selftests/net/big_tcp_tunnels.sh  | 139 +++++++++++++++++-
+ 1 file changed, 136 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index 64a184bca46..040012cdf15 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -1919,6 +1919,7 @@ static void ip6_tnl_dev_setup(struct net_device *dev)
- 	dev->lltx = true;
- 	dev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS;
- 	netif_keep_dst(dev);
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
+diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
+index 9c1482b842b..1e8387fce99 100755
+--- a/tools/testing/selftests/net/big_tcp_tunnels.sh
++++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
+@@ -1,7 +1,9 @@
+ #!/usr/bin/env bash
+ # SPDX-License-Identifier: GPL-2.0
+ #
+-# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp tunnels.
++# Testing for IPv4 and IPv6 BIG TCP over VXLAN, GENEVE and bareudp tunnels,
++# and over ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap tunnels,
++# without encapsulation and with FOU and GUE.
  
- 	dev->features		|= IPXIPX_FEATURES;
- 	dev->hw_features	|= IPXIPX_FEATURES;
+ source "$(dirname "$0")/lib.sh"
+ 
+@@ -17,6 +19,8 @@ CLIENT_IP6="2001:db8::1:2"
+ CLIENT_IP4_TUN="192.168.2.2"
+ CLIENT_IP6_TUN="2001:db8::2:2"
+ 
++FOU_PORT=5555
++
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
+@@ -71,15 +75,86 @@ setup_bareudp() {
+ 	return 1
+ }
+ 
++# $1: tunnel type, $2: traffic family
++# Prints the IP protocol carried by FOU for this tunnel.
++fou_ipproto() {
++	case "$1" in
++	ipip)
++		echo 4
++		;;
++	sit)
++		echo 41
++		;;
++	ip6tnl)
++		if [ "$2" = 4 ]; then
++			echo 4
++		else
++			echo 41
++		fi
++		;;
++	*)
++		echo 47
++		;;
++	esac
++}
++
++# Create an IP tunnel device, with FOU or GUE encapsulation if requested.
++# $1: netns, $2: device, $3: tunnel type, $4: tunnel family,
++# $5: traffic family, $6: encapsulation (none, fou or gue),
++# $7: local underlay address, $8: remote one
++setup_ip_tunnel() {
++	local encap_args=()
++	local fou_args=()
++	local mode=()
++
++	if [ "$4" = 6 ]; then
++		fou_args=(-6)
++	fi
++	if [ "$6" = fou ]; then
++		ip -netns "$1" fou add port "$FOU_PORT" \
++			ipproto "$(fou_ipproto "$3" "$5")" "${fou_args[@]}" ||
++			return 1
++	elif [ "$6" = gue ]; then
++		ip -netns "$1" fou add port "$FOU_PORT" gue "${fou_args[@]}" ||
++			return 1
++	fi
++	if [ "$6" != none ]; then
++		encap_args=(encap "$6" encap-sport auto encap-dport "$FOU_PORT")
++		# Check the outer UDP checksum too
++		if [ "$4" = 4 ]; then
++			encap_args+=(encap-csum)
++		else
++			encap_args+=(encap-udp6-csum)
++		fi
++	fi
++	if [ "$3" = ip6tnl ]; then
++		if [ "$5" = 4 ]; then
++			mode=(mode ipip6)
++		else
++			mode=(mode ip6ip6)
++		fi
++	fi
++
++	ip -netns "$1" link add "$2" type "$3" "${mode[@]}" \
++		local "$7" remote "$8" "${encap_args[@]}"
++}
++
++# $1: tunnel type, $2: tunnel family, $3: veth tx csum offload,
++# and for IP tunnels: $4: traffic family, $5: encapsulation
+ setup_tunnel() {
++	local name="${1^^}"
++
++	if [ "${5:-none}" != none ]; then
++		name="$name/${5^^}"
++	fi
+ 	if [ "$2" = 4 ]; then
+ 		SERVER_IP="$SERVER_IP4"
+ 		CLIENT_IP="$CLIENT_IP4"
+-		echo "Setting up ${1^^} over IPv4, veth tx csum offload $3"
++		echo "Setting up $name over IPv4, veth tx csum offload $3"
+ 	else
+ 		SERVER_IP="$SERVER_IP6"
+ 		CLIENT_IP="$CLIENT_IP6"
+-		echo "Setting up ${1^^} over IPv6, veth tx csum offload $3"
++		echo "Setting up $name over IPv6, veth tx csum offload $3"
+ 	fi
+ 
+ 	case "$1" in
+@@ -95,6 +170,10 @@ setup_tunnel() {
+ 		setup_bareudp "$CLIENT_NS" tun0 "$CLIENT_IP" "$SERVER_IP" ||
+ 			return 1
+ 		;;
++	*)
++		setup_ip_tunnel "$CLIENT_NS" tun0 "$1" "$2" "$4" "$5" \
++			"$CLIENT_IP" "$SERVER_IP" || return 1
++		;;
+ 	esac
+ 	ip -netns "$CLIENT_NS" link set tun0 up
+ 	ip -netns "$CLIENT_NS" addr replace "$CLIENT_IP4_TUN/24" dev tun0
+@@ -115,6 +194,10 @@ setup_tunnel() {
+ 		setup_bareudp "$SERVER_NS" tun1 "$SERVER_IP" "$CLIENT_IP" ||
+ 			return 1
+ 		;;
++	*)
++		setup_ip_tunnel "$SERVER_NS" tun1 "$1" "$2" "$4" "$5" \
++			"$SERVER_IP" "$CLIENT_IP" || return 1
++		;;
+ 	esac
+ 	ip -netns "$SERVER_NS" link set tun1 up
+ 	ip -netns "$SERVER_NS" addr replace "$SERVER_IP4_TUN/24" dev tun1
+@@ -127,9 +210,22 @@ setup_tunnel() {
+ 	ip netns exec "$SERVER_NS" ethtool -K link1 tx-checksumming "$3" > /dev/null
+ }
+ 
++# For IP tunnels: $1: tunnel family, $2: encapsulation
+ cleanup_tunnel() {
++	local fou_args=()
++	local ns
++
+ 	ip -netns "$CLIENT_NS" link del tun0
+ 	ip -netns "$SERVER_NS" link del tun1
++	if [ "${2:-none}" = none ]; then
++		return 0
++	fi
++	if [ "$1" = 6 ]; then
++		fou_args=(-6)
++	fi
++	for ns in "$CLIENT_NS" "$SERVER_NS"; do
++		ip -netns "$ns" fou del port "$FOU_PORT" "${fou_args[@]}"
++	done
+ }
+ 
+ cleanup() {
+@@ -240,6 +336,30 @@ if ! ip link help 2>&1 | grep gso_ipv4_max_size &> /dev/null; then
+ 	exit "$ksft_skip"
+ fi
+ 
++# $1: tunnel type, $2: tunnel family, $3: traffic family, $4: encapsulation
++run_ip_tunnel() {
++	local csum_offload
++
++	for csum_offload in on off; do
++		# sit does not use gro_cells on receive, so with software GSO
++		# on the sender there is nothing big to receive.
++		if [ "$1" = sit ] && [ "$csum_offload" = off ]; then
++			continue
++		fi
++		setup_tunnel "$1" "$2" "$csum_offload" "$3" "$4" || exit "$?"
++		do_test "$2" "$3" "$csum_offload" || exit "$?"
++		cleanup_tunnel "$2" "$4"
++	done
++}
++
++# fou is not loaded on demand when built as a module
++ENCAPS=(none)
++if modprobe -q fou && modprobe -q fou6; then
++	ENCAPS+=(fou gue)
++else
++	echo "SKIP: FOU and GUE tests, could not load fou and fou6"
++fi
++
+ WORKDIR=$(mktemp -d)
+ trap cleanup EXIT
+ setup
+@@ -254,3 +374,16 @@ for tunnel in vxlan geneve bareudp; do
+ 		done
+ 	done
+ done
++for encap in "${ENCAPS[@]}"; do
++	run_ip_tunnel ipip 4 4 "$encap"
++	for traffic_family in 4 6; do
++		run_ip_tunnel gre 4 "$traffic_family" "$encap"
++		run_ip_tunnel gretap 4 "$traffic_family" "$encap"
++	done
++	run_ip_tunnel sit 4 6 "$encap"
++	for traffic_family in 4 6; do
++		run_ip_tunnel ip6tnl 6 "$traffic_family" "$encap"
++		run_ip_tunnel ip6gre 6 "$traffic_family" "$encap"
++		run_ip_tunnel ip6gretap 6 "$traffic_family" "$encap"
++	done
++done
 -- 
 2.43.0
 
