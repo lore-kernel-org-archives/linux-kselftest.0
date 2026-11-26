@@ -1,49 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795689007;
-	b=tVPSv1tRhvZVLSqU3GlsOk94A6sDF7L8AGosH5SAxW17bFYiNV0dGKPM7zXv3iwU6M1J
-	 VNZiL9+tAaTSGovZS2yOj07AzbyxNjhEgq2dIdm5InK3kGpwYA59FNsI5w4Nd1d5jfvC1
-	 Orcj0Hv7HldP58IBLKCqso3w2g03lPyf9qbagT8H1xbEHzDBS4NWGKEyja5Rr+GT9U8Tx
-	 i9qDgMWIRaQQazZryvStAI5ByV1whkascKrXFktQb5KT+ysPrutOBeoL8ky9u8hYp9+Fl
-	 sk0QYo34PdwhalAiDxiD6l246dwIC92fXuc+WrK8pmrzu62MH/gZlSp/sGW+pnWzhSQ==
+	t=1795689925;
+	b=3RN3jzBXYTNn+p/X9E/zstyffaG5NY1GQznC1ShCb/i1hJtxhA6wzgAoJZXEzzpayLyu
+	 0+pJlbcE7KGTWRanyHXUJUf3c1URERKKW7X0o4Mo/j8Nr8x/wzkhiOL5/dnWjhGLiCBwa
+	 J1DBV5fa8Xcj0GF8/+iMGxEP6K9NjCMkVNPH9i8kUOik/aKnWpIF51lHuQQtDmC6URvlG
+	 zEyD8o6SCYP2CK6GptUy+/KZu/x69JTJ1cXzEwEpAFJJ5Gp9o0+OpJ5L09B3yR2yAWEGR
+	 bFZLOAZ/Vg3BABMsF1sIDHCeiyROYR8jN/pxWckGM9anCR6m6sTt5P4iPGd192JGErQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795689007;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=tG1hE/HyfOB8WQTQbRwY2igncordZtbN4VvNsNNGklE=;
-	b=JjZbb6lMSgqbvoJuwHCk66ockW1ErGPLc9Gqdtj8KGKtxFzJuz7vX1xUHJcJoxDovuAF
-	 DLpu4sM0SE8QgBjLOZgVn1NB5Xxu3Z1d7g+KGEsYaQBmyXRsXb4cXs0POzXbTfMxlTy7f
-	 sz0/dkzSMbfnUOkDywMFDmPimwGtIh9JY87Z4ChvmaEt2fyR1HVcbJje7ZCUeKvRsGoPa
-	 /dOnemvgMOc8NbpXDjKoGBQnXLKl1rB+GbRplPhjeJ9HSyQsnas4aODTcWxXg9bWcR3T4
-	 9l3fzXHFFa1QTcxBYt0lUl4bjmnE2luRV1Yi0h725yOw65zC6sTCiXAhbeFiZcO55YQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+	b=5ia75LmdG7P4ebm8oc9UtmRzHSy9CM6ndKV3+ejegnnf960MJPUm+AnGyir2janIuycz
+	 y4ObVXDgTj7NIeBqyYE8zypeZPkYNJekfy7ZqPfsQmh5WjBzgJ7atyFPQTcS/Nf7q9k11
+	 L1KQtWZ+0t59dOHVbNE4zJN6uYw4qzQwl+1VnqksRrM/vPVbpihar0cN8bmxkH+uMFkA9
+	 l2BfWDCWFitHAQ5I+NA7+jIwq7wDeR4rA4bRT4rIz/8nAiJD0y3MNFJAoqczs0OKMJ4Xq
+	 xJoVjXm5I8B0h1DjVoMmN7pqQV7DePlz4awSsWxeuy0g6jdvf1yKm+hKbek3rBA3BXA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bKF0RUc+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="fb/AnGuu";
+	arc=none smtp.remote-ip=209.85.221.45
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AE0606A326;
-	Thu, 26 Nov 2026 10:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA79C606A323
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA79C606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bKF0RUc+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD401F000C4;
-	Thu, 26 Nov 2026 10:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795689006;
-	bh=tG1hE/HyfOB8WQTQbRwY2igncordZtbN4VvNsNNGklE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=bKF0RUc+Q1o1FVoAUC0mKFJqzQZPLgfpF8ex9wjN19LAf+Wwx5PJNPJArzDixpbxY
-	 vifSzDeu35QiWpWYbxK0lxX4vPI3++j+iPIgwMq0tqqpIDg9PTwAiBo5dhUFR7fldR
-	 SnZ6T/EXGLgBZFWA2a43rQf5NJflFyeddotcLEUz98TN0+o7mQJpF6NpUPniR5z3Gc
-	 /xc6hvnC2qy73zhZk3W95sQ69yda5kjGNAnGBQwOv+FGfcw6dKgnbTr1bWdjHqcvqU
-	 p7XQDkLYjnN2E2MCCBvCarwFxQBu/tRK9IC9339yU11kktCTTXA2N70/+TPWWaIZ5e
-	 Tujy15Tnf5PpA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B44A6380A95C;
-	Thu, 26 Nov 2026 10:30:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=fb/AnGuu
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4a34ffd3e39so3732223f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1795689923; x=1796294723; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=fb/AnGuufRVSuumZI6EQLA6cj75+M3xYaDzd0Gy6RIfFD9vTufZ0ocvqMKbKkCMuJU
+         HCBXLOxx8vgikybvFGaP8kOTEPC96KRwXnjjGdmpRLIAP3v7/cEX49ZmqXzavqZRuij3
+         yAgWXhNLnFWVkhqNg9FhZPzLqKHj3vih4TQBrzWrYFpbfSQ4U8bI/qVviCwdNFG1GKRg
+         Hxn6CMjZT5DpBlzV5e6WnYlgdhQXs2yNA/UJVS7jWkPiOHnO8ZNEWlUFaREDrgmI9OpC
+         SZzobCPy89LxilfHUkDRa5QJboD//JYUx9AJLoSKPUrVgXCRpyowQ5xPdH3/qHs9I8jV
+         3Rpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=UOzco3EnPCmFQl9VcrieypuyabppGNE4j1SK7e/+UJycSVVk/CB86Bu5JJ/Gqbkr69
+         j0VcfLJ4FYmYEEF1d2/B+5BMwQsK4t2QAhW0kE1ya8gNC3NFlB/uao9OxWYn9GAIIUAC
+         zj8mmXBgzele7dsCdcpei4r8X97PbmESMP30nJeQSPu82omSsXXlquMMzj5iig1egQ6j
+         sdzZ3Ud00xKfV4mo6LIKeX3cpt3oaqAh1Dg7MBl5/s1cCrcoxLuSToJaqDHyig5nXtW9
+         ju5GV0uy1jMsfsFwt8Jpgp8DNJNtAkj7A3Z8IJwZcwVaByG2CpooUX4x0dQFHL550Jm5
+         Kreg==
+X-Forwarded-Encrypted: i=1; AL+hErGtoQ6ShV1VL7ICblYDbNU+tH7U+egSoszw8M6y1eFVJiW3QB4xOh39eiVpI3uXwViKDVEfzFizVOasA79FxvI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9jDh485MblRBJreJsjic0EWxZtImdDRJLalOrR9QLXS4rFXZew
+	doYfMxxi2mcszdKMmrbABc4eZmpNw3lctkqh2QouNUDqz4cEXlnWNMlgD2xGB0tR3ts=
+X-Gm-Gg: AZFdTZfR8qj9FXAXeVNGhgrOHukpNIRPmozz82wwtoA1Rccx0ZfZxXZd6x0BDITqpnC
+	a7cjIA6xwvUtIzZ9EHctHkzu4R+89gh/pYebx+VBBfqR9gonQRXkar26HhpdjIEkqlsyCj9H61N
+	60RINxsCuH9aQLcsqE+763bT83/26/9NuRdPUiske3pVRw7gG2q9RG5cJjOWOjJuz94uQ3qIrSG
+	utSumA3ZMQf4YSEiNB5IVexTKCk8YMxi424oDJDiRm5lJprIn+vdXG1ZuSxyFHutlrDXjBMTeLJ
+	J3BzQppI4H7FM8wmDvHxY9na31p5MAz3LIdTNA2DVj5aNxUHJOHcJReB8dKqZlZZ87ymWtdgY/+
+	a0k6QXWZsFfzh2+9aKqt5HWriXVJl4ViUF91I/0AzRq2xOoLv4+CQZArfowAnptG446Krg5qrJQ
+	N8M+ENq5Nezlt9hLSgpX5CRvuqGGfYHDtxsFCHeP5vyRPmwctZSz+68uFC2YF7ojhbfLCjUUc8J
+	C3LmDi3U9jv4iedYs2R+5mNEmuJncLMS4jUZg0fLvnAQkyUA5FjgvXkeEwGXmc8JJQtuWBWEIEe
+	FZZgnMIf3e/5N3NYuXpbWvfoEkXQ+izi0v2etXBM+ClgmUFI+4SmoYCqgM2WTK6Q4g==
+X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
+        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
+Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
+Date: Thu, 26 Nov 2026 11:45:21 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,53 +92,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] tls: don't hide a queued KeyUpdate from poll()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179568900552.1733695.4963034201090560383.git-patchwork-notify@kernel.org>
-Date: Thu, 26 Nov 2026 10:30:05 +0000
-References: 
- <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-0-8e25101e7be6@gmail.com>
-In-Reply-To: 
- <20261118-v0idpwn-tls-poll-parked-keyupdate-v1-0-8e25101e7be6@gmail.com>
-To: Felipe Stival <v0idpwn@gmail.com>
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com,
- horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
- rdunlap@infradead.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
+ ioctl to /proc/kallsyms
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-14-wusamuel@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Wed, 18 Nov 2026 17:35:47 -0300 you wrote:
-> A kTLS reader that waits for a read event before each recv() can stall
-> after the peer sends a TLS 1.3 KeyUpdate. I ran into this while testing
-> a kTLS patch for Erlang/OTP.
+On 11/13/26 11:12 PM, Samuel Wu wrote:
+> To find a few kernel symbols, users such as libbpf parse all of
+> /proc/kallsyms, which is several MB and text based.
 > 
-> Erlang does one recv() per read event, with level-triggered epoll.
-> When application data is followed by a KeyUpdate, one recv() can
-> decrypt both records, return the data without an error, and leave the
-> KeyUpdate queued. Because a rekey is now pending, poll() no longer
-> reports the socket as readable. Without another read event, the reader
-> never calls recv() again, never sees the -EIO for the KeyUpdate, and
-> never provides the new key.
-> 
-> [...]
+> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
+> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
+> and optionally in a single module with module_filter, or all modules by
+> default. Each call returns one match and its position; pos + 1 continues
+> the search, until -ENOENT. The output returns the address, the size, and
+> optional name and module buffers. A buffer that is too small gives
+> -ENAMETOOLONG and the required size.
 
-Here is the summary with links:
-  - [net,1/2] tls: don't hide a queued KeyUpdate from poll()
-    https://git.kernel.org/netdev/net/c/285ca329ad4b
-  - [net,2/2] selftests: tls: add a poll test for a queued KeyUpdate
-    https://git.kernel.org/netdev/net/c/d26b244cdec3
+The kallsyms data in the kernel can change between two
+KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
+Should the mechanism provide a way to detect such changes, likely by
+tracking and exposing some kind of generation number, or is it
+unnecessary?
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Petr
