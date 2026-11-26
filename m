@@ -1,99 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.229.139
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795676620;
-	b=JUZUjCo/PJAnMMT2zHKxMRlqUiipLwIi6CizCipJecZ7xIfck5+HJlVeUfPAwiRGQWhj
-	 aIvxvU9NoGLxgj4P/57Dc+pPnWC7rDDYEmBB9opXPGKWFqGnqLkpsvBgBGcfrV+ytYjBY
-	 Xe9/R3l+qZbJHdc4XYNIVcy+6+DumRAWmbWZM2okW3OSFzgazeLt85dagoYq9sh+BjLZ1
-	 ueklTjssJXS5orIB4zZ/iJ4WDxDCBDWBMFMmP7icR2nE0V0K+vpquaMSRTb2hYF0GA3jj
-	 iGvlq8HZKAGLZJKp/usFa74+J+AU1SE8c2hKYVLWKTZK/ACBzF3tu/iXYNrjKQs4JVw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795676620;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=D8z4X9d7XTdPtdZKUVI1Q6jRe3rMzFKexJK1WGJD7qk=;
-	b=Aaw9mKoItJcoFIEFCcyplxd4o7uVy0MNAetoR7Xu/XEbv+ihbAIRCWoR9qIxbJAw0hU/
-	 ytmQ3lmqVnPqUZ4G90QRk1n/Bs+Dd0ZcoMCbPkNINFwNNbNU29MkqYcoOq1a4dkgs/BrH
-	 L7CNuf08i/e1/LWYWFMJK04YhlsrObtBnS5KaAmmslyCnE2l2TCHAh1hz3CLKkUU+BigA
-	 //CYMcNWyU9jo+SvFWwcUhAbQTXsJcokp0MaBAHrzbSRQT4RghXH1XsiJsgU3m6G0UXfE
-	 O3auZmbBcn0qc4XaflHwVQl+JQg8Tz13IAA6SWFXiWCC5nrjyz7JxeJKSpF8NABunRA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fiIYrwvC;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.229.139
-Received: from mail-dl2-f11.google.com (mail-dl2-f11.google.com [74.125.229.139])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795678145;
+	b=vPyKSjHgCmXCFMNRmmAnyssWck80BlDAbhjsFP7hBPNl/T4fUlluhHIMFYp2Oo5gpB8G
+	 SRIYRWN3CwFGZC0IzIXqyU7uP8pwL9gSftd/WPZ38YitcbPddySHv5ne8Pozgg6W/IiTg
+	 qa9IFllJQEHdK4TJiHdcRc/OzoMaNWUQnXeXxSzv/NaXmx2lkfYsZZm8BIDv/rNypJlzr
+	 Mb609+BrS4AM+KTElVmKgf5LCH0M/yr14zHjx3bgKPqyWh95Oh8C8kd5/mH6VkpEPsKwd
+	 cXuKIMNpnt4unFWAOplyYPAxwbyFo517LHyKtWdvwcBG6vuLwiC6E/2orgmRWTIa37Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795678145;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=Slqoilb3q4EZlN+z4xYKdNmmkHqZq4WOd9FM1kAt4Fg=;
+	b=n0E64yrkKh5o2WrD7gEFjkmgnyfA3XurPFP7/LC65fhs9c7CCAw/9d96qifFPncWozjC
+	 QBvjS00QpkyVQcPkzxo5skWl9x5u7Pmg7TtlaiP5oYBUiVyK/wngh95Ib/pC6ouM7muae
+	 GYpIjjaeXSAeQUhOFn/NlbcX3Cp9Oam4nhnoVWVOWktZ/lRxtZbUpgI8dCCVenPB5CLor
+	 reNM3a6TN+Zcd6vJf+uoY3uJa+i8fBPhdqvgKPMWh0mmaSoRdtoW9Zs4xJ5cVUDQasSCl
+	 QpZV0QnHSFnIt4jDwbFNxDqfokW8MlsxO1G2h2jz3e13Ni4+V4SyHSFyNRxLZdCqg+A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=WQzCgywY;
+	arc=none smtp.remote-ip=113.46.200.217
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A80606A321
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 07:03:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23A80606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8667E606A32E;
+	Thu, 26 Nov 2026 07:29:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8667E606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fiIYrwvC
-Received: by mail-dl2-f11.google.com with SMTP id a92af1059eb24-1b345449fcbso310821c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 23:03:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795676619; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pDGFIXzYoV73XyBRIdHByFa0k7CtKPbtwh0h1TuS+OeeNb3gHhDz2uV84JYjOl7O9d
-         P+9RkqGOW3HaAo56lEB3ItoDW21z3HglVZ5X+Bbli9ndjHAXeBkkDKDFgM8AK9QjgvP1
-         2GnjcGXDgrTTu8twjU8UIMvfJx74qWFNtZGKKAk2A7/lBmQ8a3ygCpQsFbNBaJV5PlXU
-         oDZX2m+JzgSCa1Bf3htsG5fH9If6dDV5oIwPgnl1z1RkxdfnUDavFIWNj1VehORKpFXY
-         q+lybBwFilAK1eH9iXEGHHoXqmtwfH6mkTYQfubI/+8s18hrQpd4EDTHBhz5hE//JKpB
-         Yv0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=D8z4X9d7XTdPtdZKUVI1Q6jRe3rMzFKexJK1WGJD7qk=;
-        fh=ghINlHudOMz+yC1VwJ32875UmLObe8B5U6XAWrjZ1Y8=;
-        b=T0FDiYbYjr4w9fuFW6DAmg0gn1L2UiiK/7e6L2cxZ1AIYuSiibtPD9y3FPtcGETm3Q
-         XDjwrTlRl1GgBCoBpqif+JmfpHpFPwALKifPl5rDDrQqFcCJ8LGHLvw6YILaiaeK3v7L
-         3rNHT0pfKD8LOfXNnV/AuP0BkoWCzC1ILDCplkW1bC8CFLJrSa7LlVsYq0cJ9yZbijBv
-         10SUWnerpvPDteqP/7NtCBngNI+K3o8sHLLDrQerlMdbzXWxPzFPeiDrz8gkPlCqetwK
-         35S2KFYk211XYue8YgPZN36JmLPvLrHa8sJ6v/2w2Wdm1Xo4CgfQEAX+mlVxVeb/cRWV
-         rm0g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795676619; x=1796281419; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=D8z4X9d7XTdPtdZKUVI1Q6jRe3rMzFKexJK1WGJD7qk=;
-        b=fiIYrwvCBeZKrYtTaJqUYvru4zXLx56SFmsyIIeLyqI6bBd/eZuJrjH/8vUJlyqSeH
-         2WvxKxC5xA3jcMB05Fq8ZbZwTwuY9JFfsRVIOx/0yHz5FzGfM8zSQ64YLA6GTbnTk0Bp
-         PFHUDxyf5ZbUULgQAEXyD8tTOhGellvjT1GGiCW1McfPoDs4j9cEmzISdp+/VAuqwfH9
-         O5VmU0TYYlgOtHRNVRmgCjHv/pgXICsHD3vvctkRl4C+1Dii84GI+1jouEhNTcjAjwQI
-         JuVIrMMFTpNAFAY433XxzAzcCH9fXRY6JFdWyixnHVBQGpZoyEWR6reYIqlVYmx2uOTa
-         PjYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795676619; x=1796281419;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=D8z4X9d7XTdPtdZKUVI1Q6jRe3rMzFKexJK1WGJD7qk=;
-        b=Fei7GxxsNd+7WPKLw/FmLEzMIwXqJwxHtUY5GYTyHR5zmRnZBU/03K1bDpp7VG4Vfn
-         I1Cf6xfMGWdTcnpu9JGJBMardp90CPOyqpYI32GR+0wmJ0ERiXdlYY3zQs8O1463yi/x
-         eGth+bjCsRw1qqfFlFwImHmjVBYTJWgWPC6ztUC+3IUJ3AlY+fPm0a5PL7BMnSKSbHiI
-         WQH9zEJLA0YHTNlmpzvp0TAHeezMrNQW1q/u3CEpPdYj5Ob7PRnXi0RFNZZ8ACHyrbbv
-         xx1RxJYk1VMvBjed8+UnQanyzC2m+G4yybUJkCKBqreEpjdtviPqGcLvIRO0HkloyQBf
-         nJCA==
-X-Forwarded-Encrypted: i=1; AL+hErHy1DwrflIUNPZAzKJ7sK5vFeun5imRvYJDHWg66i4oN3j9pOg+prgbgXnrHLq9EKj3smoYYiqBAq+T0l271L0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9II5IRXbKmXLb5789EtuFMKdKp4dRJ8hMCQG7iFWVhgomvlKNI
-	2fVGT83Joa3CFtPyGlV4K4X3aGsbnk1ufFmpA/sXBoinuFFClur23aWjgH8NwPLIiDKIW9csrQ8
-	/i0/n7S0H/sg7aaOFHum5LI+lyLz/1w==
-X-Gm-Gg: AZFdTZe3NHEnf7nN1g9rSB9GK44+psbhn6c83HljbFQXbT2/8kwK2nT0bmFpkvbQuD/
-	leM9eK2kfb4sjfFTJo8jByRD+9T12vYKAtBiup/S81UYxVn2HlvP2fOZmJS7kB3Id7BmX1tZD9n
-	i0NE/H3ObOIQifcMZLPH8Oj0u/BP37BXXZvz4BzfsnJHXAyt6WRImLBtEsDQyrQYEIxdLIflfEm
-	XD2UMbSbys7CFmBSzwkJxSRTF6PFCysSGjFhXrDOdccgXuRgMudZMrcTgIevx+RttlQUujQiTl7
-	ZoumVqb4jbnJKPmtoQYcIiSRLNE06sgcOAYb1ii9F6TMlCP0Xc2q0Pntb6sBWCOvo1ncQJdaVZ5
-	ZG1bC+uZ+6I+5Q02e/DphFdjyRxQad+7jfwQ/
-X-Received: by 2002:a05:7022:23aa:b0:1b5:23e7:3387 with SMTP id
- a92af1059eb24-1b55688dd29mr28250607c88.19.1795676619107; Wed, 25 Nov 2026
- 23:03:39 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=WQzCgywY
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Slqoilb3q4EZlN+z4xYKdNmmkHqZq4WOd9FM1kAt4Fg=;
+	b=WQzCgywYA/jx6AJHyEgRsMgSaAlyZ/nzSD3+3nwX7MqZFA21JxotVD2GhoHuFlFI6u+ZUA6Ae
+	OgkRwGzlH0WEfMYxUhls2EbFvW0+SdxNkN++ZtZAqSXv13N7p0B6aaFJz7zP1W6O2QenR4eCYSl
+	Xfp0JSNTB+wisVfnPZBYndM=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jZp6X0mvrzcZxr;
+	Thu, 26 Nov 2026 15:27:48 +0800 (CST)
+Received: from whupemp200008.china.huawei.com (unknown [7.152.184.21])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3970540579;
+	Thu, 26 Nov 2026 15:28:55 +0800 (CST)
+Received: from [10.174.176.113] (10.174.176.113) by
+ whupemp200008.china.huawei.com (7.152.184.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Thu, 26 Nov 2026 15:28:53 +0800
+Message-ID: <6cde295b-4c7b-4878-8fda-3732a2ff7c7d@huawei.com>
+Date: Thu, 26 Nov 2026 15:28:52 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,65 +62,159 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <CALa+Y14BNfdWH3yBY+ky1+Sb0YvRzW=gRcKKyGWWaBQkysPUkA@mail.gmail.com>
- <20261126020416.87656-1-sj@kernel.org>
-In-Reply-To: <20261126020416.87656-1-sj@kernel.org>
-From: Ravi Jonnalagadda <ravis.opensrc@gmail.com>
-Date: Wed, 25 Nov 2026 23:03:27 -0800
-X-Gm-Features: Aa3M54pr7zZt1s4Atym5UQrDZXCPmYeOf41IBUKmR70FxfH89wL-58DBqEGqTME
-Message-ID: <CALa+Y15wc4bgERo_FEwxL4m-NUjx=_o0yPipUN+ymv7HTSUL0g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/27] mm/damon: let users report their data attribute findings
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, damon@lists.linux.dev, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 0/3] bonding: ignore updelay when no active links for
+ broadcast mode
+To: Hangbin Liu <hangbin.liu@linux.dev>, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Tonghao Zhang <tonghao@bamaicloud.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
+Content-Language: en-US
+From: "jiangjiehua (A)" <jiangjiehua1@huawei.com>
+In-Reply-To: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ whupemp200008.china.huawei.com (7.152.184.21)
 
-Hi SJ,
+Hi Hangbin,
 
-On Wed, 25 Nov 2026 18:04:15 -0800 SJ Park <sj@kernel.org> wrote:
+On 11/26/2026 10:30 AM, Hangbin Liu wrote:
+> This patchset fixes updelay handling for bonding broadcast mode (mode 3)
+> to align with bonding documentation section 13.1 paragraph 4: when a
+> bond has no active links, the first link that comes up must be reused
+> immediately even if updelay is configured; when usable links exist,
+> updelay must be honored.
+> 
+> Commit 45fc134bcfad ("bonding: do not set usable_slaves for broadcast
+> mode") tried to fix the second half of that rule by never updating
+> usable_slaves in broadcast mode. That made ignore_updelay permanently
+> false, so updelay was always applied and a broadcast bond with no
+> active links could not recover within the miimon window when one usable
+> slave up.
+> 
+> We revert 45fc134bcfad to restore the enslave/release side of the
+> usable_slaves updates, and add the missing bond_miimon_link_change()
+> case so the snapshot also tracks link-state transitions. Both halves
+> are needed:
+> 
+>    - revert alone: the snapshot is only rebuilt on enslave/release, so
+>      batch enslave with updelay (new slaves start in BOND_LINK_BACK)
+>      leaves count == 0 forever and updelay is never honored, even once
+>      other slaves are usable;
+>    - link_change case alone: with 45fc134bcfad applied,
+>      bond_set_slave_arr() discards the refreshed array for broadcast.
+> 
+> A selftest is added to cover mode 3; the existing mode 1 and mode 2
+> recovery-updelay tests are merged into a single script covering
+> modes 1, 2 and 3.
+> 
+> Before revert 45fc134bcfad:
+>    TEST: mode (3) bond recovery                               [FAIL]
+>            No connectivity
+>    TEST: mode (3) bond recovery                               [FAIL]
+>            No connectivity
+>    TEST: mode (3) bond recovery                               [FAIL]
+>            No connectivity
+> 
+> After revert 45fc134bcfad:
+>    TEST: mode (3) bond recovery                               [ OK ]
+>    TEST: mode (3) bond recovery                               [ OK ]
+>    TEST: mode (3) bond recovery                               [ OK ]
+> 
+> For the second patch, I use test script
+>    ```
+>    ip link add veth0 type veth peer name veth0p
+>    ip link add veth1 type veth peer name veth1p
+>    ip link set veth0p up
+>    ip link set veth1p up
+>    ip link add bond0 type bond mode broadcast miimon 100 updelay 1000
+>    ip link set veth0 down
+>    ip link set veth1 down
+>    ip link set veth0 master bond0 && ip link set veth1 master bond0
+>    ip link set bond0 up
+>    sleep 2
+>    dmesg -C
+> 
+>    # Test A — bullet 1: batch enslave, snapshot stuck at count == 0,
+>    # updelay never honored
+>    ip link set veth0p down
+>    sleep 2
+>    ip link set veth0p up
+>    sleep 1
+>    dmesg | tail -n 5
+> 
+>    # Test B — bullet 2: stale non-empty snapshot, recovery delayed with
+>    # zero usable links
+>    ip link set veth0 nomaster
+>    ip link set veth1 nomaster
+>    ip link set veth0 master bond0
+>    sleep 2 # wait veth0 up
+>    ip link set veth1 master bond0
+>    sleep 2 # veth1 comes up after its own updelay; snapshot stays
+>    # drop both links (bond has zero usable links after this)
+>    ip link set veth0p down
+>    ip link set veth1p down
+>    sleep 2
+>    ip link set veth0p up
+>    sleep 2
+>    dmesg | tail -n 5
+>    ```
+> 
+> With revert only:
+> Test A:
+> [   13.190593] bond0: (slave veth0): link status definitely down, disabling slave
+> [   15.165875] bond0: (slave veth0): link status up, enabling it in 0 ms
+> [   15.165919] bond0: (slave veth0): link status definitely up, 10000 Mbps full duplex
+> Test B:
+> [   20.366724] bond0: (slave veth1): link status definitely down, disabling slave
+> [   20.366957] bond0: now running without any active interface!
+> [   22.341960] bond0: (slave veth0): link status up, enabling it in 1000 ms
+> [   23.382194] bond0: (slave veth0): link status definitely up, 10000 Mbps full duplex
+> [   23.382428] bond0: active interface up!
+> 
+> With the second patch
+> Test A:
+> [    6.208526] bond0: (slave veth0): link status definitely down, disabling slave
+> [    8.184359] bond0: (slave veth0): link status up, enabling it in 1000 ms
+> Test B:
+> [   13.384852] bond0: (slave veth1): link status definitely down, disabling slave
+> [   13.385093] bond0: now running without any active interface!
+> [   15.360849] bond0: (slave veth0): link status up, enabling it in 0 ms
+> 
+> We can see when there is active slave, the second slave follow the
+> updelay rule (Test A). When there is no active slave, the first up
+> slave will be in use immediately (Test B).
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> ---
+> Hangbin Liu (3):
+>        Revert "bonding: do not set usable_slaves for broadcast mode"
+>        bonding: update slave array on link change for broadcast mode
+>        selftests: bonding: add recovery updelay test for broadcast mode
+> 
+>   drivers/net/bonding/bond_main.c                    | 14 +++----
+>   .../testing/selftests/drivers/net/bonding/Makefile |  3 +-
+>   .../drivers/net/bonding/mode-2-recovery-updelay.sh | 45 ----------------------
+>   ...e-1-recovery-updelay.sh => recovery-updelay.sh} | 13 +++----
+>   4 files changed, 12 insertions(+), 63 deletions(-)
+> ---
+> base-commit: 1ab3fb564f20b78615a6d88b8c90da292f29e227
+> change-id: 20261126-bond_broadcast_updelay-cc4cfb6e0e37
+> 
+> Best regards,
+> --
+> Hangbin Liu <liuhangbin@kylinos.cn>
 
-[...]
-> This is the expected result.  The implementation is more strict for type
-> matching.  If it is unclear, it says the type is not matched.
->
-> For example, if filter type is PGIDLE_SET and we cannot confirm it, it is
-> treated as not PGIDLE_SET.  For example, DAMON could fail at confirming that if
-> it was unable to get the folio for the probing memory due to some races.
+Tested on v7.4-rc4 in a virtme-ng guest. Ran recovery-updelay.sh (21/21 
+OK) and the cover-letter Test A/B; both match the expected updelay behavior.
 
-That makes sense, thank you for explaining.
-
-[...]
-> In my humble opinion, , the user could work around this issue by not submitting
-> the report too frequently.
->
-> But the more important question is, if the user really need to do this kind of
-> frequent report submissions.  I have no clue at the moment.  If it turns out
-> so, we could improve kernel side.
-
-Agreed, user reports through sysfs are unlikely to be submitted this
-often.  The main reason I tested at high submit rates was future
-hardware samplers, which would produce reports much faster than a
-user would.  I was checking how the queue holds up under that kind of
-load.  I am happy to discuss this further once this series is in and
-you share more on the next milestones.
-
-[...]
-> I agree this could be confusing.  In a sense, that said, those are working as
-> documented.  There is no documentation saying addr_start should be less than
-> addr_end.  DAMOS filter design documentation mentions "support of the filter
-> types depends on the DAMON operations set".  And the probe filter design
-> documentation says "The filters work the same as DAMOS filters".
-
-Agreed.
-
-[...]
-> Good finding, thank you.  Maybe we could ask Andrew to fix this up, but this
-> might be too minor thing that readers could easily find out themselves...?
-
-Agreed, it is a minor nit; can be ignored.
+Tested-by: JiangJieHua <jiangjiehua1@huawei.com>
 
 Thanks,
-Ravi
+Jiehua
+
