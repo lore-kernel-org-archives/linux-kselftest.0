@@ -1,109 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795698807;
-	b=AO7RGdrYRmZQIszDxUZtC3aPaCtxdSDcOzKbjuXRzUhKrcnlg5pktk6TkTA4IBy1fCUZ
-	 6dcpEz0pUxtfMntmPjBk/NDNwVtGkfoE5BYUZ9lU9BBjwFce8vwXKKGDgtsXxYvZKFwEX
-	 SBaeHh1hKHvLi0UuoDlm+1UbcNsrw+KBnZeAvccpG2dLrm19urdZC6XIZj6p2w5vSXBb2
-	 +a5Rm/JoASo097bBBMXEKz0hBnlcGHlOMjgcVxcWqUh55oVxb5Isv6X3hk4tPyzOKXA8c
-	 RihNy86rNm8S2NktuE8prTi0H5s6u8/Ga3so0/mEz+bMGIIH160yP32A5bUd9Dy0Q4A==
+	t=1795699673;
+	b=1gKlcKlbH+JCJk2jPi4oXQQ3zb72vdBHvr8psUp/tGDYO25Nf+wE5e6xnpQei98GklmV
+	 VTWW2d04yxpT0uEAAWHZsz4JM6MNyCGw8t22TNF+M2iojjfHkXC+ziaRbtK7q+4SpPUno
+	 f8BDhpfn5qjW62FrK12Vu1yebWnbQmplbaXxa28zMi0l5DZ23cH/x2xX0gofxSDtO8pVj
+	 NtQ7MBQUe2kY6npZIIp9zTU94BT3n899/zWU7HfmLFhy4Kly0Zlcce5yL3yLZ/oV/7eyJ
+	 aaUxYU5nTsi7nalNsL3QnqDGJcqoMeEshwfoO8EWoBBDYqBLCXd5IqhOky1PhTEKzuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795698807;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=daRFrpcIrlH42tetS90Eak1tlN3MgASpqpr5j9a3ui4=;
-	b=DOeLydgLGk/mUGU6hJJk62M9zvwJJagA0HLTqHyEKPTaMkzkEWZqlrHSCjrJRLvSXqGt
-	 snL6OZ3ddRpUnN056m5mm/9kkiAkuEKw6cnky5ky125LRDMPODaEvksUd0o6uhrgOK1mj
-	 u0Wdd+N1XK5/HCaCgvC9HKWLJ6TdPVIqRIv1DCRcc0x7F341jLqlqdzXW7MkPtkHQXu18
-	 j8i8PqcWdKxfGRHIdsp0k6tMBwuGiXxE7igSrbE5Y9YzyJzuggzXY9HhfwyB6iX7RfrUT
-	 fXouGICun36Qr2aNTGUNDA3+gNGtnBRI31Y3BvGsdIGRWOUCKrpm6sdrCwkEuvP7xJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795699673;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=gzzgXOgo3+SNm0ByCjOvIm/1n5ybZt8er0jBZ3680yc=;
+	b=eXdF9XV9OPiJgW1PhtOjNpnxNGH5pNtLUQ4L0OufmplxHKc9h38LgojsIOCyoVJrUqMM
+	 GIIdCdRnm/yT/p7Aw55oTMSpvio+Wt+Bbcg+GOwvmwjQ/jAJEhPJzbLHmJmTs4y/l+CmP
+	 9OcST+yVfgLhlxUYST7ttrqTpb5U51UVCvuilm9TXBUdkYprBVhJdJj1tMbOjKGCFaOeP
+	 ZMMok8in4HNHOwNtevIkjBgaNiUnUOy6FIzv6twHy/JHbyZA1LCF9L1n/9cb8SUBTqT87
+	 oMyv1sY9278/6EybPKiu+FiLE+DXcrIO6+c1nfYUoQ0K/YYRkOkY+s9IqPRvOsZ4WRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mxyvLAly;
-	arc=none smtp.remote-ip=209.85.221.43
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=11fuKA0Q;
+	arc=none smtp.remote-ip=113.46.200.217
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7456C606A32A
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 13:13:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7456C606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDEA606A31C;
+	Thu, 26 Nov 2026 13:27:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EDEA606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mxyvLAly
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-491971ac844so6235771f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 05:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795698806; x=1796303606; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=daRFrpcIrlH42tetS90Eak1tlN3MgASpqpr5j9a3ui4=;
-        b=mxyvLAlyUVE+0osyMFx67YYa0114KEwR80/ILtfHiAA06149BQAbxGOFGwWpKis++i
-         vp/WieV9Or02ciaLI4k9Zs5qsmgIlb/CsH3RIO7OwoxKTisggAGnXAnlr2P19JR6e5UC
-         cor3LpmMwQUU90h7Wap+H58UpLiodl+V6i9RHC1hNiym5ndproAqi0U8+aHpRyxlwuSE
-         j7zj23IKUlSx0v9T+mNXDatA6LhXuIh4K0RhA/ay8rH9ONHZTZd2RTrWPft17ANAjRo7
-         wIsSC+bNTK0oamz1+AGbArsgfr0c6o1rRyY0yl4Ir1n+pURb3OV0cGqdh7jdOQ1cgc3q
-         kLSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795698806; x=1796303606;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=daRFrpcIrlH42tetS90Eak1tlN3MgASpqpr5j9a3ui4=;
-        b=GAy8+dvvs07LM99z7VWNhbOcSz9oCCCcF3umeb6Qq9hDYnrlEiGhSm5TPdGKKM5IDU
-         FGmf0YHhEeMO1Hu/oRvXYDnn32omRh2vpAoNHl1rIsGc1ReDKmREp6k67XOCOBAv6H1d
-         4I+0idfo9EChackWEGYMQWxkPkgTbJDqJSiEEYC1JBo+V8iIIGfF/Gcr9MTG8FZiKEVF
-         YhVcfvvjXdGVYzRkgErZMIFu1h5QGlL2iaS2/5i8IRyx1e+5QdSZl3tC7PhD7G1eBKZN
-         aCFX6zKRxkbQUEFyRaZ22eBhMSO0UJ/sB+q4bobzIo59eNTK0HR3xsdzZinhOkESHYud
-         xNAQ==
-X-Forwarded-Encrypted: i=1; AL+hErEtylDe35+wViveRIIaigK884bOjpj8obsJdNsxVsIQ0JZ0Vu8Ep2KNuYJrEfZGCdzmTFgwm1F7UleQ+fPJSlM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/kdPArmQ1lMEYneIAu842fa+5SD87NEfsgLm6DACcRFFk7XamF
-	PMOqBgcUlJHwhL6lPX0DVcAHJ+NkrltZERhs6nbLNVA4fh8/JBu+C/7q
-X-Gm-Gg: AZFdTZcllwSjKXdFYj1S8+t6DsQMSPPJ3JpeWI10/Bn+RONcV009FldiNh/djnKRvAo
-	FCD/v5c+f5fDYQB9TSKTOWeOyBg1n0zBFAIpm6jij0d68EajQYW0e19ej053eA8cUkaqP9RfSm5
-	gFSbv+4w3cwQekfh6fZ1Dd3+JEKMt8uPOYxnjP4GIkyyktNQlVNIS5FqJnMgFUAuYZSgP41/4lC
-	ZS0aUEXfjTwJDXpwFb5fz7IgQBn2eZJTzAnItJq680y+C2qFhInG6JFLn1aP2bJoauOrSsD47Gq
-	1AmrchZI9su7J7Qm4Pxm7tApb3lCXdQg02HrjYmLCa2meRjxb4PuTJhWaYShubW9X0q+3dDveT3
-	tKH7n/FtHGiaO8SaIux3mDxva2GxbD5gRSbPjYfYJzyua+1K5NYPuV/Uqy38t38YCpeK4OcaiDe
-	SvX+8vN3F9oq8dZpnCixjR3HRqUCG6ejYVJPIKYBoJ5dW2Ew9yjdTBSBJXQfcUbrCXDRqTCWThr
-	Q1IsqV6KczadOAWvZTK4qUcyfipR93FRHFOtyDVf7cRxAKKKS/pBHbYBXjuwOchD817OX8/Mnj3
-	AVm0VYglcZb5u+MvvCpKtOSqZCA9CWDm4qQrEn6TaHzTLd7tQXzxkx8SW1/IskiCVFXad+Oz6jz
-	x
-X-Received: by 2002:a05:6000:41d2:b0:48b:1296:52ec with SMTP id ffacd0b85a97d-4abb0c5d65amr39924027f8f.18.1795698805751;
-        Thu, 26 Nov 2026 05:13:25 -0800 (PST)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4ab6c61f558sm41679091f8f.58.2026.11.26.05.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 05:13:25 -0800 (PST)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Amery Hung <ameryhung@gmail.com>,
-	Mahe Tardy <mahe.tardy@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: test task storage memory accounting
-Date: Thu, 26 Nov 2026 13:13:18 +0000
-Message-ID: <20261126131318.470837-2-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261126131318.470837-1-mahe.tardy@gmail.com>
-References: <20261126131318.470837-1-mahe.tardy@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=11fuKA0Q
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=gzzgXOgo3+SNm0ByCjOvIm/1n5ybZt8er0jBZ3680yc=;
+	b=11fuKA0QNmqBcJC+Z7+EDBDEdopqwlPjiHPaNdUAff+L4Rfg5ecopOB7c41g4dYkKVWnsOz+7
+	diR70qy0hMLD9NrzKzTwcexrrEJpSqnu718+skXXx/Va432+IohJ+HmaImsfXw3HGXjPhG8bwg/
+	N0Q+ahJUMGyTnAubGLSqDU0=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jZy4b4NSrzcZxn;
+	Thu, 26 Nov 2026 21:26:39 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2EF9B4058C;
+	Thu, 26 Nov 2026 21:27:47 +0800 (CST)
+Received: from [10.67.110.140] (10.67.110.140) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Thu, 26 Nov 2026 21:27:38 +0800
+Message-ID: <2e7397bb-14fa-4d29-bfb5-620495a40245@huawei.com>
+Date: Thu, 26 Nov 2026 21:27:37 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,94 +62,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next -v4 01/17] fs: pass struct path to notify_change()
+To: Al Viro <viro@zeniv.linux.org.uk>
+CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<brauner@kernel.org>, <jack@suse.cz>, <amir73il@gmail.com>,
+	<andrii@kernel.org>, <apparmor@lists.ubuntu.com>, <ast@kernel.org>,
+	<axboe@kernel.dk>, <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
+	<cel@kernel.org>, <cem@kernel.org>, <chenxiaosong@chenxiaosong.com>,
+	<code@tyhicks.com>, <corbet@lwn.net>, <Dai.Ngo@oracle.com>,
+	<dakr@kernel.org>, <daniel@iogearbox.net>, <dhowells@redhat.com>,
+	<dlemoal@kernel.org>, <dmitry.kasatkin@gmail.com>,
+	<driver-core@lists.linux.dev>, <dsterba@suse.com>,
+	<ecryptfs@vger.kernel.org>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
+	<eric.snowberg@oracle.com>, <exfat@lists.linux.dev>,
+	<georgia.garcia@canonical.com>, <gregkh@linuxfoundation.org>, <hch@lst.de>,
+	<hirofumi@mail.parknet.co.jp>, <hyc.lee@gmail.com>,
+	<ihor.solodrai@linux.dev>, <jlayton@kernel.org>, <jmorris@namei.org>,
+	<johan@kernel.org>, <john.fastabend@gmail.com>,
+	<john.johansen@canonical.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
+	<linkinjeon@kernel.org>, <linux-api@vger.kernel.org>,
+	<linux-block@vger.kernel.org>, <linux-btrfs@vger.kernel.org>,
+	<linux-cifs@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-nfs@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-unionfs@vger.kernel.org>,
+	<linux-xfs@vger.kernel.org>, <liubaolin12138@163.com>,
+	<martin.lau@linux.dev>, <mason@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<matt@bobrowski.net>, <memxor@gmail.com>, <mhiramat@kernel.org>,
+	<miklos@szeredi.hu>, <neil@brown.name>, <netfs@lists.linux.dev>,
+	<ntfs@lists.linux.dev>, <okorniev@redhat.com>, <omosnacek@gmail.com>,
+	<penguin-kernel@i-love.sakura.ne.jp>, <rafael@kernel.org>,
+	<rdunlap@infradead.org>, <roberto.sassu@huawei.com>, <rostedt@goodmis.org>,
+	<selinux@vger.kernel.org>, <senozhatsky@chromium.org>, <serge@hallyn.com>,
+	<sj1557.seo@samsung.com>, <skhan@linuxfoundation.org>, <song@kernel.org>,
+	<stephen.smalley.work@gmail.com>, <takedakn@nttdata.co.jp>, <tom@talpey.com>,
+	<yonghong.song@linux.dev>, <yuezhang.mo@sony.com>, <zohar@linux.ibm.com>,
+	<utilityemal77@gmail.com>, <lujialin4@huawei.com>
+References: <20261117150542.1169451-1-caixinchen1@huawei.com>
+ <20261117150542.1169451-2-caixinchen1@huawei.com>
+ <20261117183059.GP989762@ZenIV>
+ <32b8d9c9-27d2-4da9-8618-ccfc44dee7a3@huawei.com>
+ <20261119052339.GT989762@ZenIV>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <20261119052339.GT989762@ZenIV>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-This tests that the memory increase as we add elements to a
-task_storage. Copy the map_memlock() helper from arena_mem_usage.c.
+oh, I get it.
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- .../bpf/prog_tests/task_local_storage.c       | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
+I think it would be better to use a new function, such as 
+notify_change_internal，
+to bypass this upperpath check, while retaining the inode check.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-index 5b2b56cc3a4f..1415782ad72f 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-@@ -495,6 +495,65 @@ static void test_uptr_map_failure(const char *map_name, int expected_errno)
- 	uptr_map_failure__destroy(skel);
- }
+ovl_do_notify_change
+->notify_change_internal(...)
+     ->do_notify_change(..., true)
+          ->security_inode_setattr
+              if (!internal)
+                  security_path_setattr
 
-+static long map_memlock(int map_fd)
-+{
-+	char path[64], line[128];
-+	long memlock = -1;
-+	FILE *f;
-+
-+	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", map_fd);
-+	f = fopen(path, "r");
-+	if (!ASSERT_OK_PTR(f, "open_fdinfo"))
-+		return -1;
-+	while (fgets(line, sizeof(line), f)) {
-+		if (sscanf(line, "memlock:\t%ld", &memlock) == 1)
-+			break;
-+	}
-+	fclose(f);
-+	ASSERT_NEQ(memlock, -1, "parse_memlock");
-+	return memlock;
-+}
-+
-+static void test_memory_usage(void)
-+{
-+	struct task_local_storage_exit_creds *skel;
-+	struct bpf_program *prog;
-+	int map_fd, task_fd = -1;
-+	long baseline;
-+	u64 value = 12;
-+
-+	skel = task_local_storage_exit_creds__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	/* Just load the map */
-+	bpf_object__for_each_program(prog, skel->obj) {
-+		if (!ASSERT_OK(bpf_program__set_autoload(prog, false), "disable_autoload"))
-+			goto out;
-+	}
-+
-+	if (!ASSERT_OK(task_local_storage_exit_creds__load(skel), "skel_load"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(skel->maps.task_storage);
-+	baseline = map_memlock(map_fd);
-+	if (!ASSERT_GE(baseline, 0, "baseline_greater_zero"))
-+		goto out;
-+
-+	task_fd = sys_pidfd_open(getpid(), 0);
-+	if (!ASSERT_OK_FD(task_fd, "task_fd"))
-+		goto out;
-+
-+	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &task_fd, &value, BPF_NOEXIST), "update_map"))
-+		goto out;
-+
-+	ASSERT_GT(map_memlock(map_fd), baseline, "memory_increase");
-+out:
-+	if (task_fd >= 0)
-+		close(task_fd);
-+	task_local_storage_exit_creds__destroy(skel);
-+}
-+
- void test_task_local_storage(void)
- {
- 	if (test__start_subtest("sys_enter_exit"))
-@@ -521,5 +580,7 @@ void test_task_local_storage(void)
- 		test_uptr_map_failure("empty_uptr_map", EINVAL);
- 	if (test__start_subtest("uptr_map_failure_kstruct"))
- 		test_uptr_map_failure("kstruct_uptr_map", EINVAL);
-+	if (test__start_subtest("memory_usage"))
-+		test_memory_usage();
- 	RUN_TESTS(uptr_failure);
- }
---
-2.43.0
+But this leads me to possibly needing to split the inode LSM hooks and 
+the path
+LSM hooks.
 
+On 11/19/2026 1:23 PM, Al Viro wrote:
+> On Wed, Nov 18, 2026 at 05:13:31PM +0800, Cai Xinchen wrote:
+>> On whether we want the mount references at all: they are not for NTFS.
+>> The path-based LSM hooks need them - Landlock's check walks the hierarchy
+>> up from the object with path->mnt->mnt_root and follow_up(), for every
+>> layer, and the idmap we pass has to be the one of the mount the path was
+>> checked in.
+> Then it won't be happy with overlayfs ones:
+>          upper_mnt = clone_private_mount(upperpath);
+> ...
+>          upper_layer->mnt = upper_mnt;
+> in ovl_get_upper(),
+>                  err = ovl_get_upper(sb, ofs, &layers[0], &ctx->upper);
+> in ovl_fill_super_creds()
+> combined with
+> static inline struct vfsmount *ovl_upper_mnt(struct ovl_fs *ofs)
+> {
+>          return ofs->layers[0].mnt;
+> }
+>
+> mean that the mount you get won't be attached to anything.  How (un)happy
+> would landlock be with that?
