@@ -1,57 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795660270;
-	b=L1FctDiG6/DNNWznoT/Eddbl1QsMRmaw7ndAJv9YbFtDDY+JQx24EXtcMTye1IprGdc0
-	 ol6vxmwQ8sAq23BYmLjeVStotBZAyD6f0TP9ScXmkvJtnJxhp4MuoXNUP57ABdD2EiwaJ
-	 zJkP/DC+xZsbCd6GVQ2K3Vbz/serFenr1RyFzShWlTqj/eMJU3ohHNUCt1YptImmC5xih
-	 yHm2ejElSpHWsU875CjMpCOFOQxx75Y/N56XCCQzWyeXyBovObv1EcLtt+oPNGwB0+qs7
-	 Tb51+7qr22xAyZ3btMDnD1RJRmWHYPdUjY/70aBuFtvtkWqPNxq3tm+6v7OT6sSb1qA==
+	t=1795660274;
+	b=Hv11HKWohMDAzW0ArEOlz39mNIJSun7H4ZRNqeMzl0BjPq4u9Kka7XXTkI017JU35Bt8
+	 rOUVyeZjbT4Rm4PSN5/1ZZUg4IRe2r2jXt3o+PMbkmvWwwJ1P8qnMFtF0sOHRoTzmyR9n
+	 TJrRaitwGaNIJPl9dDjqoXwczXYdrsmchjzaCdxCrL19v6O43inMtnG/vGhhA3WGvX0Ro
+	 hg2rERHHmFaRoO6tX4TnkUpasrawWMv5WLoauXsHaIfhrEE75IHMv+Vf+yGHZ2lP1RUs6
+	 NjN1ScUMOyKqsjveHH5MDrlJE/qMx9PYm0bpEEckVz2XWSzcFFTKGpn5sEkrQ1c1ODA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795660270;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795660274;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer;
-	bh=kMxeDlOyVy246zFNkjFb6a+Vb4c4RNhRRen/Z5ufh8I=;
-	b=lwxXyWZFsiVG8zlSJI4MaaOM9LgZgFq7K2nTaTnaNLY48tpNcR978ENX+GcQxRy7qyIX
-	 2mWgwWZWetkaK2llJehkp/8KGD601PQN4Ke50EybtElc7qX+twQfIt3V6MiQdJtRrQmn9
-	 JqjZV94xPBDLQB0XY98UeQyV88MAkntO2DUGMXgXc3/qYP+xtXel7aubDteaSVzOfTjZ8
-	 RJE+Fo93j7NukGI0kQUMoLpyVR5YV/8K3vepQXnYc39tVNIBTjnGaIRlwXQ2OSCZOWvMf
-	 BVUS0wqEV60ul3DCjRd7UR7wPH0QU4eOhU6IGT23/D9yPOxTsnNSTdCLUbibWmwping==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer;
+	bh=PlLPJEnikDumUId5OPUoeA0R2LExnIMK5NTAdtsyIQs=;
+	b=T9KrEQ5PUJF+xFDT3Kq6ilRKxneTxM675EQmnPKE1qEkiYIl4JW/jPDcB/NhZVNu9ZbO
+	 TLGm3pjeof/yqRRUFA7JJRHRsPkCz2GlVCMuUvievrTR1AuFgE9SiNqy9kWqIc2uZiKGp
+	 AIuKKXn0FHaKqSveUlRCcNGMrUSP4O7a505Y3LueAT54ukpMmsYhke35GmU3v1EHft3/i
+	 dGCT5Y9+AhJi9r36fq23W89Q8+XJ4h4GyjFh8wBhM1nda8Zff+3/ktRXzZOepLKsRGf18
+	 GocS07F/9RnSJvpTtK5DWa1iA4KWfrIkCx5D/YgUkBJneb57mLeZiFiHG7PWiNZrukw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l7tVnGWO;
-	arc=none smtp.remote-ip=91.218.175.35
-Received: from mta0.migadu.com (out-35.mta0.migadu.com [91.218.175.35])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="k/KZ99we";
+	arc=none smtp.remote-ip=91.218.175.42
+Received: from mta0.migadu.com (out-42.mta0.migadu.com [91.218.175.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060A6606A32D
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 02:31:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 060A6606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4069D60A260C
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 02:31:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4069D60A260C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l7tVnGWO
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k/KZ99we
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=en3ED6HDdCtLFu2umCErAM1rLJXWL3SVuTu7Aq5hR8I=;
+DKIM-Signature: a=rsa-sha256; bh=InHibhT9bQrLYoZnMNQjZvZLY7yEnp1XSGdpTAyLP2I=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795660266; v=1; x=1796265066;
- b=l7tVnGWOgrKtXzohludXdLI0s1muEZzOrVp5uwPqF7resYTTsiTgzObnlkTzOmkpYrmboMx0
- 1zzFcA5uGbmP1vZ5cBtXSFicmlHRTIIV/WGCOVIjO/Z4bM3P4QTYKBaDDcnyZyaizjd2uzaezfr
- ptm/8OSJ/OwqPQxXk2tCZ7+A=
+ t=1795660271; v=1; x=1796265071;
+ b=k/KZ99weVIBdY/KZE8pk4QE85uoZxFZ1DojPCT4IKGvXVWGdUx4aOMU98f+itvb3cyjY0t5s
+ k+aoCiSQggTAjFcsQy33DJvFlRsIRrxa/Rf4tTMt6dx1MCwPmDf5+ak/KON9YlNb0OYH4nqjYpf
+ c3NDbyqBYAtSrpguiwleRrt8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 1df46ec555e3532f;
-	Thu, 26 Nov 2026 02:31:05 +0000
-X-Mizu-Trace-ID: 1df46ec555e3532f
+Received: by mta11.migadu.com with ESMTPS id 2ca089d9032a043c;
+	Thu, 26 Nov 2026 02:31:10 +0000
+X-Mizu-Trace-ID: 2ca089d9032a043c
 X-Migadu-Flow: FLOW_OUT
 From: Hangbin Liu <hangbin.liu@linux.dev>
-Subject: [PATCH net 0/3] bonding: ignore updelay when no active links for
- broadcast mode
-Date: Thu, 26 Nov 2026 10:30:54 +0800
-Message-Id: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
+Date: Thu, 26 Nov 2026 10:30:55 +0800
+Subject: [PATCH net 1/3] Revert "bonding: do not set usable_slaves for
+ broadcast mode"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,11 +61,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMUQrCMBAFr1L220ATSwSvIlKSzatGJCnZVJTSu
- zfq5wzMrCQoEULnbqWCV5SYUwN96IjvLt2gYmhMpjdWa2OVzymMvmQX2Ekdlzng6T6KeeDJW/Q
- 4nqjFc8EU37/xhRIqXf9SFv8A1++Stm0HCSsO6H8AAAA=
-X-Change-ID: 20261126-bond_broadcast_updelay-cc4cfb6e0e37
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261126-bond_broadcast_updelay-v1-1-188e5538d6ca@kylinos.cn>
+References: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
+In-Reply-To: <20261126-bond_broadcast_updelay-v1-0-188e5538d6ca@kylinos.cn>
 To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -78,129 +76,79 @@ Cc: "jiangjiehua (A)" <jiangjiehua1@huawei.com>,
  Hangbin Liu <hangbin.liu@linux.dev>
 X-Mailer: b4 0.16.0
 
-This patchset fixes updelay handling for bonding broadcast mode (mode 3)
-to align with bonding documentation section 13.1 paragraph 4: when a
-bond has no active links, the first link that comes up must be reused
-immediately even if updelay is configured; when usable links exist,
-updelay must be honored.
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Commit 45fc134bcfad ("bonding: do not set usable_slaves for broadcast
-mode") tried to fix the second half of that rule by never updating
-usable_slaves in broadcast mode. That made ignore_updelay permanently
-false, so updelay was always applied and a broadcast bond with no
-active links could not recover within the miimon window when one usable
-slave up.
+This reverts commit 45fc134bcfadde456639c1b1e206e6918d69a553.
 
-We revert 45fc134bcfad to restore the enslave/release side of the
-usable_slaves updates, and add the missing bond_miimon_link_change()
-case so the snapshot also tracks link-state transitions. Both halves
-are needed:
+Commit 45fc134bcfad ("bonding: do not set usable_slaves for broadcast mode")
+assumes the bond updelay always applies. However, per commit f8a65ab2f3ff
+("bonding: fix link recovery in mode 2 when updelay is nonzero") and
+section 13.1 paragraph 4 of the bonding documentation, when a slave is
+enslaved and there are no active slaves, the slave should become usable
+immediately once its link comes up, updelay should be ignored.
 
-  - revert alone: the snapshot is only rebuilt on enslave/release, so
-    batch enslave with updelay (new slaves start in BOND_LINK_BACK)
-    leaves count == 0 forever and updelay is never honored, even once
-    other slaves are usable;
-  - link_change case alone: with 45fc134bcfad applied,
-    bond_set_slave_arr() discards the refreshed array for broadcast.
+Before this revert: with no active interfaces, the only slave still waited
+out the 1000 ms updelay before being brought into use.
 
-A selftest is added to cover mode 3; the existing mode 1 and mode 2
-recovery-updelay tests are merged into a single script covering
-modes 1, 2 and 3.
+  [  154.846629] bond0: (slave veth0): link status definitely down, disabling slave
+  [  154.849879] bond0: now running without any active interface!
+  [  159.544736] bond0: (slave veth0): link status up, enabling it in 1000 ms
+  [  160.586299] bond0: (slave veth0): link status definitely up, 10000 Mbps full duplex
+  [  160.603278] bond0: active interface up!
 
-Before revert 45fc134bcfad:
-  TEST: mode (3) bond recovery                               [FAIL]
-          No connectivity
-  TEST: mode (3) bond recovery                               [FAIL]
-          No connectivity
-  TEST: mode (3) bond recovery                               [FAIL]
-          No connectivity
+After this revert: the first slave can be used immediately on link up.
+Subsequent slave veth2 still honor the 1000 ms updelay.
 
-After revert 45fc134bcfad:
-  TEST: mode (3) bond recovery                               [ OK ]
-  TEST: mode (3) bond recovery                               [ OK ]
-  TEST: mode (3) bond recovery                               [ OK ]
+  [   94.106425] bond0: (slave veth0): link status definitely down, disabling slave
+  [   94.109130] bond0: now running without any active interface!
+  [   98.272494] bond0: (slave veth0): link status up, enabling it in 0 ms
+  [   98.273279] bond0: (slave veth0): link status definitely up, 10000 Mbps full duplex
+  [   98.275056] bond0: active interface up!
+  [  110.855705] bond0: (slave veth2): Enslaving as an active interface with an up link
+  [  111.904688] bond0: (slave veth2): link status definitely up, 10000 Mbps full duplex
+  [  114.608488] bond0: (slave veth2): link status definitely down, disabling slave
+  [  117.624491] bond0: (slave veth2): link status up, enabling it in 1000 ms
+  [  118.664636] bond0: (slave veth2): link status definitely up, 10000 Mbps full duplex
 
-For the second patch, I use test script
-  ```
-  ip link add veth0 type veth peer name veth0p
-  ip link add veth1 type veth peer name veth1p
-  ip link set veth0p up
-  ip link set veth1p up
-  ip link add bond0 type bond mode broadcast miimon 100 updelay 1000
-  ip link set veth0 down
-  ip link set veth1 down
-  ip link set veth0 master bond0 && ip link set veth1 master bond0
-  ip link set bond0 up
-  sleep 2
-  dmesg -C
-
-  # Test A — bullet 1: batch enslave, snapshot stuck at count == 0,
-  # updelay never honored
-  ip link set veth0p down
-  sleep 2
-  ip link set veth0p up
-  sleep 1
-  dmesg | tail -n 5
-
-  # Test B — bullet 2: stale non-empty snapshot, recovery delayed with
-  # zero usable links
-  ip link set veth0 nomaster
-  ip link set veth1 nomaster
-  ip link set veth0 master bond0
-  sleep 2 # wait veth0 up
-  ip link set veth1 master bond0
-  sleep 2 # veth1 comes up after its own updelay; snapshot stays
-  # drop both links (bond has zero usable links after this)
-  ip link set veth0p down
-  ip link set veth1p down
-  sleep 2
-  ip link set veth0p up
-  sleep 2
-  dmesg | tail -n 5
-  ```
-
-With revert only:
-Test A:
-[   13.190593] bond0: (slave veth0): link status definitely down, disabling slave
-[   15.165875] bond0: (slave veth0): link status up, enabling it in 0 ms
-[   15.165919] bond0: (slave veth0): link status definitely up, 10000 Mbps full duplex
-Test B:
-[   20.366724] bond0: (slave veth1): link status definitely down, disabling slave
-[   20.366957] bond0: now running without any active interface!
-[   22.341960] bond0: (slave veth0): link status up, enabling it in 1000 ms
-[   23.382194] bond0: (slave veth0): link status definitely up, 10000 Mbps full duplex
-[   23.382428] bond0: active interface up!
-
-With the second patch
-Test A:
-[    6.208526] bond0: (slave veth0): link status definitely down, disabling slave
-[    8.184359] bond0: (slave veth0): link status up, enabling it in 1000 ms
-Test B:
-[   13.384852] bond0: (slave veth1): link status definitely down, disabling slave
-[   13.385093] bond0: now running without any active interface!
-[   15.360849] bond0: (slave veth0): link status up, enabling it in 0 ms
-
-We can see when there is active slave, the second slave follow the
-updelay rule (Test A). When there is no active slave, the first up
-slave will be in use immediately (Test B).
+The stale-empty side of the problem that motivated 45fc134bcfad is
+addressed by the follow-up patch in this series, "bonding: update
+slave array on link change for broadcast mode", which rebuilds the
+array on link transitions, together they keep ignore_updelay correct
+in both directions.
 
 Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
-Hangbin Liu (3):
-      Revert "bonding: do not set usable_slaves for broadcast mode"
-      bonding: update slave array on link change for broadcast mode
-      selftests: bonding: add recovery updelay test for broadcast mode
+ drivers/net/bonding/bond_main.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
- drivers/net/bonding/bond_main.c                    | 14 +++----
- .../testing/selftests/drivers/net/bonding/Makefile |  3 +-
- .../drivers/net/bonding/mode-2-recovery-updelay.sh | 45 ----------------------
- ...e-1-recovery-updelay.sh => recovery-updelay.sh} | 13 +++----
- 4 files changed, 12 insertions(+), 63 deletions(-)
----
-base-commit: 1ab3fb564f20b78615a6d88b8c90da292f29e227
-change-id: 20261126-bond_broadcast_updelay-cc4cfb6e0e37
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 042d7c75548f..d6675e87d06b 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -5140,18 +5140,13 @@ static void bond_set_slave_arr(struct bonding *bond,
+ {
+ 	struct bond_up_slave *usable, *all;
+ 
+-	all = rtnl_dereference(bond->all_slaves);
+-	rcu_assign_pointer(bond->all_slaves, all_slaves);
+-	kfree_rcu(all, rcu);
+-
+-	if (BOND_MODE(bond) == BOND_MODE_BROADCAST) {
+-		kfree_rcu(usable_slaves, rcu);
+-		return;
+-	}
+-
+ 	usable = rtnl_dereference(bond->usable_slaves);
+ 	rcu_assign_pointer(bond->usable_slaves, usable_slaves);
+ 	kfree_rcu(usable, rcu);
++
++	all = rtnl_dereference(bond->all_slaves);
++	rcu_assign_pointer(bond->all_slaves, all_slaves);
++	kfree_rcu(all, rcu);
+ }
+ 
+ static void bond_reset_slave_arr(struct bonding *bond)
 
-Best regards,
---  
-Hangbin Liu <liuhangbin@kylinos.cn>
+-- 
+2.56.0
 
