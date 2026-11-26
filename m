@@ -1,103 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795727487;
-	b=RUoQYrzM/XahBJ6OHhFjF9Ug2AwfNc6D6TuERtCUMzcKLDHdikAa0FB68PUN5Eao13uz
-	 Z25EO4ngDyQpSJtYGQwPk5iK6MDuEbr73aPBu1uTS/W2KXpIubsXJoETQstr67sVpmrxn
-	 rLex6dGpqkgJFOE4txS/qnc39LpdlyOMjzxp2grj1O4pddEBJUaEDAC4zvuINEnGGLdVx
-	 FRNtj+IpR58WSN1tLCBmaehjOug+SqN3nA1rMehOcj7a8WKApzijAnLcQoVcH+MjzGfZu
-	 EUj6jPPOxhy8ZP/U7RPPJwN/G07MKxi0NTVQnXZ5G/IqpHXZIdH+JGTjEe34lpWWkdA==
+	t=1795728027;
+	b=BpiGx9Yl69AV8H8NxRx7x1mLp4j7RB2XBgvE2BETY3v4c16GN/rOcicvqMMqRGZgJ+C6
+	 xJkemJTEGRg1qRiE51mlhCr8Bwhu0TDY7JacPu02gB/P9CqxUCaA2aqu2JffX//7wOle0
+	 ORouVdFerb5SFfR5BMCyPqdYWftRsuj1P2ojZHTKKmsAETDaY1ptuIa6xvaSzDKG+0Sm4
+	 Q2zhuIysfKCdBH4njx1LqJFijpSuzQlrGlA81Nve3v6GQN/1WxC1w2LdvyWosWbj+UfxM
+	 SrlT+MayRh9fea36RqYRabzn/qHp1ik4FtMZJt6xug44ZucwTpvhA31o132qbS9rtpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795727487;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=1eGhF9wa+InSW4Ry7zowJx6R0jLY/ryLtxDc7jirqqQ=;
-	b=iMoxcYzp6QT1ZNcMxV7YDtpB0Q9ZO6LhPi9H9Wf/ycZS/BYiCpPn8i9Qn9aA1uRCwIwZ
-	 O51FKIEKmAC70G9NnNntJEpRdHZot5rODn5/pIpaT2nmMODi/GYhOiza0EqHliaDlO7oR
-	 7EsRgLhYYJTXoZ6gW7lj8oB9UOKLe6fsnaIgKlZa+7HI06dvA68NRbshnrM68arEiFZeg
-	 cdDLzXFPGGamMrkSf14ufaakXcsISGj3gFt/ejLj6dfI94pGgsnHqx1WvbCjLeGqI4Y17
-	 Gc/AyctEs/yso0/vbdqDK1t8dhZbMuLMXjVsgH/nTLR6Bph7OqQrAOCk41LJsvhO7tw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795728027;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=MdLocymIfUOTbasyv0c+gPZHRjx8+cIIkYhve/nhgK0=;
+	b=RbnHKx5Cvs64kpi6pBwoQ7vBicW7Joyd0bVBQr5rsD6O9lS29geMzDN4FT88PatywvsF
+	 OnRzPO+zkVjPMHwUF4pKnyq9Ir9ZfJV/h5Ml1ki8DciYRg4bsZfsUn2dcLG3T0vuYMt16
+	 ZwzYnr2RNTsEibTqHAORUgnZTiogGRKYvrOf5sHAzGFagAQjlv5K4/Ez97+WZj8gOAbrl
+	 WDBvVoox5kIZO+BSv4sKkx8evRPBJiMFYOspudOZ2kk31KVYLmZyipZJGRq52WldhQhvW
+	 7d/xVmmZsD/9ckvogvVs3jXFejJocphafWBGXK5H67dVlPK9pk973ixj48uOG5RmHAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jcLm4e3K;
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KUNHJPAT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021E1606A31E
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 21:11:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 021E1606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45846606A31C;
+	Thu, 26 Nov 2026 21:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jcLm4e3K
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2f04b676219so41049195ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 13:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795727486; x=1796332286; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1eGhF9wa+InSW4Ry7zowJx6R0jLY/ryLtxDc7jirqqQ=;
-        b=jcLm4e3Kr4LRZNOQm7TsamIhRQAYCemljovkkU3TOUej7mwnQKEsCh9AjHMYvZoOIM
-         l6WjPISP+9d68Nz8fiGelOJmiMruep+oH2AhR9EW8yi8zsmxzICA6BN8B4wOM0dO+Fjk
-         adfEy9NCNDiYa+ZsAv/KJ0aYFPBgtcEc8IMwXK577/HgPV5JZFz0vtM+ANoCHTH1js+P
-         yhUINFlY3YWofsCwixNJmIXrh/UvZ7OX0qxK+dfels9uDi6MGxmR+h2nM49pADIPGL1B
-         dLZpsh5cwBqugKHHikoqdcxEaQwitTiFoF5JS7KDOmYNk1kHnIZLlPn5ZDEMYj03o6v7
-         6nQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795727486; x=1796332286;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1eGhF9wa+InSW4Ry7zowJx6R0jLY/ryLtxDc7jirqqQ=;
-        b=gs6qcVTEsolgTWX588MV8ryhikogtxYLcLUP5CjRCmFAPEJ8tGL0SQKV1jAQiVplVd
-         HNFfNwrGJfkiaztBaGFQaJosBoTMF5OQOv9+aQfR5C+HYijB32GdI3oDv42X7v7DELpI
-         lw+lhx/ww/OJVYDErRfU4K3eyEsUuer4PRt4HF3A+5iKvkunaVSZDVss5EHIk6wilLj2
-         stSyLIWtxSquIfk7JPQMcQREXPeVv9M+WxNeZ9IEBi68iLneWl7dw9iDjAAlHcUSWMt8
-         sKrpk6YFuEja9lEQ2XKT2erxozzMIiFYppZOYA5nClW7ZDUL5M6w0Pa2jk4LB70+j0cs
-         b+4Q==
-X-Forwarded-Encrypted: i=1; AL+hErH0PqehRqngYInO2HahAMqB0fTjjn+NYMg6Ac7qgqLlk+jRpNeFcc6tUZuCUATkjAZg38+MLXW4qABEiDHWQgM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z85YCKijqU1Cw8dJJmJHnhQQ34Grxum3/eQVaEUZQj9BjJSilwB
-	39vCG9H0ENpKf7x4DV0A3KkILzGDUR8uHygj5K1qs/BLLuV9E490Lb5c
-X-Gm-Gg: AZFdTZf+Y5AsEjZFlZ+9CstcRwOa0Tx/D9SK5Xnlnb5BDRCe7i+cZlGqBV+11ME3IvX
-	YPSGJMPITXR0uz1F1lm/0En0RE/CnZ2IfcZGFXUsSo0yhSzsV1MMlKJ82wbd+BO9As4EtPVqFj8
-	yvKVWLdfv31FVSullPP+X6w4InuBjssiN16xYR/l4CYSPajXKwJqJyHyF+CpXJLC/J6hZVdc7vT
-	kUa7i9UC19IMnv5kKBQiocxN1uBAxa+d/wAIqQt5RK9+KqLVPk3tpH38iMk5VEL+cLc2PS+Zhyn
-	glgo8kHK5Y2zSQzb8wvqn03o6B+pJWu9HOxpghCwr03qXbb2sPz/safil6+xbUAC7gDPIiotdl8
-	269n1gmI5DgCNo9yKtXjZ/gg2zOub3vLZs7e/iyGVJR4xrariSrBHn53vzz2a9J2PIGSOr2N/dS
-	FMLsWsC+e7T91fC4PeNGZs0LdmiHeua/I62oKlCQ8KbVd67iL7WN/0FIkHIA3e1EWWJz3EkJPdX
-	7fyW1zmAX/T1TjN3Qvk8Bfb8qoc7ltOmceTcec/x8/PPtspirqGYlUMYEc5gIYqB3wxk4DyUdYL
-	GT+l6jxhGvu9izzbR6Zj0YnAc+8kx1YBFyWFTLExN/4iGre1/P35MuKQuL1O3fJDRBskmozCW1J
-	AJrCDB/leB8RkUHBVNj6RY/3srB7qR95lwQ==
-X-Received: by 2002:a17:902:f642:b0:2ed:fdb:b37a with SMTP id d9443c01a7336-2f03ef84acbmr222699935ad.4.1795727486118;
-        Thu, 26 Nov 2026 13:11:26 -0800 (PST)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0dcbe3sm109123135ad.28.2026.11.26.13.11.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2026 13:11:25 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Nov 2026 21:11:25 +0000
-Message-Id: <DN5G9M8G2IKK.Y4INWFA4JESW@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: account for local storage map
- elements memory
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "Christian
- Brauner" <brauner@kernel.org>, "Amery Hung" <ameryhung@gmail.com>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20261126131318.470837-1-mahe.tardy@gmail.com>
-References: <20261126131318.470837-1-mahe.tardy@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KUNHJPAT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF9D1F00893;
+	Thu, 26 Nov 2026 21:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795728026;
+	bh=MdLocymIfUOTbasyv0c+gPZHRjx8+cIIkYhve/nhgK0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=KUNHJPATioGGypSl7o7R9Fb6HfN1LNbyljrOzYJisklOg3vvpvDbHgq44v+szjO1p
+	 0drA4xcFYdXri8DXzpEDDSFpNohPAMb838YAWn1GkcDlRaxM6xqXfbtC4mJBaEGan6
+	 Z9S5m5SXUAgg/rkq8CxNv6vymuLIBCbKZUZaovNXmXvHf/LzYQpm651nBySxdPpzCv
+	 JQPvKZS28BghDnwLphwpZnedbbS3sagSdcV8D3oPHS9LabXQ8O88RbLk9KwCQNimfL
+	 YrqgZtJLrF6F3JkYg8FuvrVSkY5hQc51YXMaDyeKlzSUxKbGpkBn4NYf26MBNhEP9t
+	 c/KQM1ZNsoIMw==
+Subject:
+ Re: [PATCH net-next v2 1/2] tcp: add net.ipv4.tcp_l3mdev_exempt_ports sysctl
+From: netdev-bot+sashiko@kernel.org
+To: kalash@nexthop.ai
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, dsahern@kernel.org,
+ idosch@nvidia.com, ncardwell@google.com, kuniyu@google.com, shuah@kernel.org,
+ joel.granados@kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Thu, 26 Nov 2026 21:20:25 +0000
+Message-ID: <179572802536.3135.6305865608768923950@kernel.org>
+In-Reply-To: <20261125-tcp-l3mdev-exempt-ports-v2-1-b920f3ff8f5e@nexthop.ai>
+References: <20261125-tcp-l3mdev-exempt-ports-v2-1-b920f3ff8f5e@nexthop.ai>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -109,128 +67,140 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Thu, Nov 26, 2026 at 05:13 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> Walk the bucket's list to count the number of elements in the map, note
-> that concurrent insertions and deletions can make the count imprecise.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-No other map_mem_usage() walks the elements. All of them read a counter.
-'bpftool map show' reads memlock of every map.
-An sk_storage map has one selem per socket, so every read of its fdinfo
-is one cache miss per socket.
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-Lets count in map->elem_count, like htab.
-It costs one this_cpu_inc/dec under b->lock. Update and delete take
-that lock already.
-bpf_map_sum_elem_count() and cur_entries in maps.debug start to work
-for local storage maps too.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index b12fcec..6f7c2e5 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -259,14 +259,17 @@ static int bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
- 		return err;
+- [Medium] The commit message names the real cause of the misselection:
+  the lookup returns whichever reuseport listener is first in the listen…
+- [Low] The new net_cachelines documentation row lists
+  sysctl_tcp_l3mdev_exempt_ports as an RX fast-path field:…
 
- 	hlist_del_init_rcu(&selem->map_node);
-+	bpf_map_dec_elem_count(&smap->map);
- 	raw_res_spin_unlock(&b->lock);
+--
 
- 	return 0;
- }
+tcp: add net.ipv4.tcp_l3mdev_exempt_ports sysctl
 
--static void bpf_selem_unlink_map_nolock(struct bpf_local_storage_elem *selem)
-+static void bpf_selem_unlink_map_nolock(struct bpf_local_storage_map *smap,
-+					struct bpf_local_storage_elem *selem)
- {
- 	hlist_del_init_rcu(&selem->map_node);
-+	bpf_map_dec_elem_count(&smap->map);
- }
+This commit adds a per-netns port bitmap sysctl,
+net.ipv4.tcp_l3mdev_exempt_ports. For listed ports, an unbound listener
+does not match connections that arrive through an L3 master device
+(sdif != 0) during listener lookup, even with tcp_l3mdev_accept=1. The
+goal is for VRF connections to reach the VRF-bound listener when both
+listeners use SO_REUSEPORT.
 
- int bpf_selem_link_map(struct bpf_local_storage_map *smap,
-@@ -284,15 +287,18 @@ int bpf_selem_link_map(struct bpf_local_storage_map *smap,
- 		return err;
+> diff --git a/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst b/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
+> index 2833ce6cba1d4..062153c2793c7 100644
+> --- a/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
+> +++ b/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
+> @@ -150,6 +150,7 @@ struct_ping_group_range         ping_group_range
+>  atomic_t                        dev_addr_genid
+>  unsigned_int                    sysctl_udp_child_hash_entries
+>  unsigned_long*                  sysctl_local_reserved_ports
+> +unsigned_long*                  sysctl_tcp_l3mdev_exempt_ports                                   read_mostly         __inet_lookup_listener/inet6_lookup_listener
 
- 	hlist_add_head_rcu(&selem->map_node, &b->list);
-+	bpf_map_inc_elem_count(&smap->map);
- 	raw_res_spin_unlock_irqrestore(&b->lock, flags);
+[Severity: Low]
+This row marks sysctl_tcp_l3mdev_exempt_ports as read_mostly on the RX
+fast path. In struct netns_ipv4, though, the field is added to the
+CONFIG_SYSCTL area next to sysctl_local_reserved_ports. That is outside
+the netns_ipv4_read_rx group:
 
- 	return 0;
- }
+include/net/netns/ipv4.h:
+	__cacheline_group_begin(netns_ipv4_read_rx);
+	u8 sysctl_tcp_moderate_rcvbuf;
+	u8 sysctl_ip_early_demux;
+	u8 sysctl_tcp_early_demux;
+	u8 sysctl_tcp_l3mdev_accept;
+	...
+	__cacheline_group_end(netns_ipv4_read_rx);
 
--static void bpf_selem_link_map_nolock(struct bpf_local_storage_map_bucket *b,
-+static void bpf_selem_link_map_nolock(struct bpf_local_storage_map *smap,
-+				      struct bpf_local_storage_map_bucket *b,
- 				      struct bpf_local_storage_elem *selem)
- {
- 	hlist_add_head_rcu(&selem->map_node, &b->list);
-+	bpf_map_inc_elem_count(&smap->map);
- }
+netns_ipv4_struct_check() in net/core/net_namespace.c also has no
+CACHELINE_ASSERT_GROUP_MEMBER() for it. Other read_mostly RX fields,
+such as sysctl_tcp_l3mdev_accept, do have one.
 
- /*
-@@ -377,7 +383,7 @@ static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 			 * is sleepable: see below.
- 			 */
- 			if (likely(selem_linked_to_map(selem))) {
--				hlist_del_init_rcu(&selem->map_node);
-+				bpf_selem_unlink_map_nolock(smap, selem);
- 				if (sleepable_users)
- 					keep_fields = true;
- 				else
-@@ -556,7 +562,7 @@ int bpf_local_storage_alloc(void *owner,
- 	 * such a storage through the map. b->lock holds off those who find
- 	 * first_selem through the owner and want to unlink it.
- 	 */
--	bpf_selem_link_map_nolock(b, first_selem);
-+	bpf_selem_link_map_nolock(smap, b, first_selem);
- 	raw_res_spin_unlock_irqrestore(&b->lock, flags);
+Should the document leave the fast path columns empty for this field?
+Or should the field move into netns_ipv4_read_rx with a matching
+assertion?
 
- 	return 0;
-@@ -673,14 +679,14 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+>  int                             sysctl_ip_prot_sock
+>  struct_mr_table*                mrt
+>  struct_list_head                mr_tables
 
- 	alloc_selem = NULL;
- 	/* First, link the new selem to the map */
--	bpf_selem_link_map_nolock(b, selem);
-+	bpf_selem_link_map_nolock(smap, b, selem);
+[ ... ]
 
- 	/* Second, link (and publish) the new selem to local_storage */
- 	bpf_selem_link_storage_nolock(local_storage, selem);
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index 860145d810ed4..063f6dd00a64d 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -362,6 +362,11 @@ static inline int compute_score(struct sock *sk, const struct net *net,
+>  
+>  		if (!inet_sk_bound_dev_eq(net, sk->sk_bound_dev_if, dif, sdif))
+>  			return -1;
+> +
+> +		if (!sk->sk_bound_dev_if && sdif &&
+> +		    tcp_port_l3mdev_exempt(net, hnum))
+> +			return -1;
+> +
+>  		score =  sk->sk_bound_dev_if ? 2 : 1;
 
- 	/* Third, remove old selem, SELEM(old_sdata) */
- 	if (old_sdata) {
--		bpf_selem_unlink_map_nolock(SELEM(old_sdata));
-+		bpf_selem_unlink_map_nolock(smap, SELEM(old_sdata));
- 		bpf_selem_unlink_storage_nolock(local_storage, SELEM(old_sdata),
- 						&old_selem_free_list);
- 	}
-@@ -794,8 +800,9 @@ u64 bpf_local_storage_map_mem_usage(const struct bpf_map *map)
- 	struct bpf_local_storage_map *smap = (struct bpf_local_storage_map *)map;
- 	u64 usage = sizeof(*smap);
+[Severity: Medium]
+The commit message gives the cause of the misselection: "the lookup
+returns whichever is first in the listen bucket, not the VRF-bound one".
+Is a per-port opt-in sysctl the right fix for that, rather than a change
+to the lookup itself?
 
--	/* The dynamically callocated selems are not counted currently. */
-+	/* The maps of an owner share its bpf_local_storage. It's not counted. */
- 	usage += sizeof(*smap->buckets) * (1ULL << smap->bucket_log);
-+	usage += (u64)smap->elem_size * max(bpf_map_sum_elem_count(map), 0);
- 	return usage;
- }
+The early return is in inet_lhash2_lookup():
 
-@@ -830,6 +837,10 @@ bpf_local_storage_map_alloc(union bpf_attr *attr,
- 		raw_res_spin_lock_init(&smap->buckets[i].lock);
- 	}
+	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
+		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+		if (score > hiscore) {
+			result = inet_lookup_reuseport(net, sk, skb, doff,
+						       saddr, sport, daddr, hnum, inet_ehashfn);
+			if (result)
+				return result;
 
-+	err = bpf_map_init_elem_count(&smap->map);
-+	if (err)
-+		goto free_smap;
-+
- 	smap->elem_size = offsetof(struct bpf_local_storage_elem,
- 				   sdata.data[attr->value_size]);
+The first reuseport socket that scores above zero is returned at once,
+and the rest of the bucket is never scored. So the higher score for a
+device-bound listener (sk->sk_bound_dev_if ? 2 : 1) has no effect.
+inet6_lhash2_lookup() has the same early return.
 
-@@ -902,6 +913,7 @@ restart:
- 	/* smap remains in use regardless of kmalloc_nolock, so wait unconditionally. */
- 	rcu_barrier_tasks_trace();
- 	rcu_barrier();
-+	bpf_map_free_elem_count(map);
- 	kvfree(smap->buckets);
- 	bpf_map_area_free(smap);
- }
+inet_reuseport_add_sock() requires sk2->sk_bound_dev_if ==
+sk->sk_bound_dev_if, so the unbound and bound listeners are always in
+separate reuseport groups.
 
-pw-bot: cr
+inet_hash() puts AF_INET6 reuseport sockets at the tail of the bucket
+and all other sockets at the head. That explains the IPv4/IPv6
+difference.
+
+With this patch the default list is empty. For every port that is not
+listed, the IPv4/IPv6 inconsistency and the TCP-MD5/AO bypass from the
+commit message still happen.
+
+The new check is also gated on sdif. What about the same setup without
+a VRF? For example:
+
+  - an unbound SO_REUSEPORT listener and an SO_BINDTODEVICE(eth0)
+    SO_REUSEPORT listener on the same port
+  - a SYN arrives on eth0, so sdif == 0
+
+inet_bound_dev_eq() matches both sockets. The unbound listener can still
+win when it is first in the bucket, whatever the sysctl is set to.
+
+Selecting purely by score has caveats of its own. The sk_incoming_cpu
+bonus can raise an unbound IPv6 listener to the score of a bound one
+(1+1 vs 2). Changing the default lookup behavior could also affect
+existing deployments.
+
+Could the commit message explain why a new UAPI knob was chosen instead
+of fixing the selection order in inet_lhash2_lookup() and
+inet6_lhash2_lookup()?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125-tcp-l3mdev-exempt-ports-v2-0-b920f3ff8f5e%40nexthop.ai
