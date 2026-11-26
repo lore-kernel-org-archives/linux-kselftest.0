@@ -1,58 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795658167;
-	b=ifUaC1YSIl+oxoXH9ST0OL4kxc2h/KEs2My9nSp3MzTP0EP8MNc7eRsbiDvuHGsn4Pmn
-	 5y7t973KfV8mxMpFRx0aTVXUvNgFeCkgWzGFrbWpxQv1yr28NZZ5rME1iDEstV/fIDwx8
-	 d64svKFgI5UFNkMNLFlih83pf7M1quOvJ3MOOn0WDdshvfIK0N2gCvwj5xmgz36kbm3+Z
-	 6xpJ4y/mwN9n19NIqIFsmIFuWpayBkHCYREDEh/hO5mzfVbDTrMj4NSN7j88pfaR8mxaX
-	 qUaPd+tLRje7qHLY19sCVTSEzUaIGVLEjpgr1g5YAUGNGVQgw0ki+rcDYDh95kYxLTg==
+	t=1795658664;
+	b=XocKeR67rdk8Obv60Uq0leOO/xeewDPNLPghCo8BRyVLD90PZ/eu5Rim3BCwuEjSp6gx
+	 r6TjsQ70FAS1sxu0x5v61e0Km2u4UvFxd3RyOqrnypZAL79G0xjDWQDFaNri0nsam7/OR
+	 MQ/VXfelaJDsHDDvZUy/gaIktpy2QnpL0j4mKFz2qhoO+3QA8u6N66TiBB02whR0lzB8N
+	 A5Y8UURxVbM/2Yh5M7MD8zOOyGeG06GhuiUxlbEHn7QTaiBWYg6dqEh0GY+MMerf2JHdA
+	 42828Fr8BCixtScvHVnMZ0IL8wjwmAyScXQYfBSS6LSqcuRkimcXXWHt8CaL2qL0Iqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795658167;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=pZPTyuGtPcymdp5cOv8/K4q0eDi6D2+NjC33Tash+54=;
-	b=agJpZRnvKkE+rsxC8i3gCDd32o3G3mpWdusxPRmHGLuW+ATBcozA3ZbwfYZGFBjPuUsB
-	 +F3PE18SdAHPKiBYTJrYsWV+O+jwQwhuVamyqkEAvY9mV4Vsw7UH+JAx57Y0XKT/CrHB6
-	 zz9IfOyCdDYs2j/vQ1MDD1gwy/YdSGoV0yXMljUWl2J9g+IDCXqoXYxX62zGz6bhwfr0H
-	 eoQx6lLfS1b9zhvb7U/rPGIdXQfjtpmj0XzCqVC7O31ZV1qJkfE8UxLfBkX6Mlzt8gYGp
-	 HurpKCdTewGXgtgtHVQKJ/CT/4vJx5pif1qsV9w5WmHA1cgx7piQe9zOUskbkrh+Vgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795658664;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=liXpri4l+8f0qFYwYuywNL9hfYgq5mI2uGuMxDVOQ14=;
+	b=Klghl7BTT+DK1JEiiOIY5n462BXfcqJS4+AtYvb6UC+3TvhE2wD1HCUEcwv1rq8+P829
+	 LkolR4KjpCT3oTZhAMqFLOmrAvw4eDGd2uHZkb6PzMf5/dNiB87wcPL6/vKpzm+UUMRug
+	 k4bSUchpLj8xlyNyPV0TsIVPHQLb4TECjPaXZ7vNp1mZr72CWVnl52Ox4KNXP4rVjB3hv
+	 DgxQVfA1SjvYDUk5cokVFpSIU3VUClQ6u3Jcp+mXhlibE3yc7I4KkXYHfog0bo82cLwO8
+	 1mOrFwkWzreQfTmcR1L9LOsTFpsO6y6i8lujaWQGCwCBBfbfR6ACvK9zyRbc384F4Fg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Yrv4Qefh;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MgkliDEz;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9595606A31E;
-	Thu, 26 Nov 2026 01:56:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9595606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4CB606A31E;
+	Thu, 26 Nov 2026 02:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Yrv4Qefh
-Received: from omf17.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 7648D8022B;
-	Thu, 26 Nov 2026 01:56:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id 9DAD118;
-	Thu, 26 Nov 2026 01:56:03 +0000 (UTC)
-Date: Wed, 25 Nov 2026 20:56:02 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 11/15] tracing/filters: Fix error positions in filter
- parser
-Message-ID: <20261125205602.3699ba86@robin>
-In-Reply-To: <179323794702.740114.679129900715570251.stgit@devnote2>
-References: <179323784538.740114.15323117974242744566.stgit@devnote2>
-	<179323794702.740114.679129900715570251.stgit@devnote2>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MgkliDEz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A8E1F000C6;
+	Thu, 26 Nov 2026 02:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795658664;
+	bh=liXpri4l+8f0qFYwYuywNL9hfYgq5mI2uGuMxDVOQ14=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MgkliDEzz48SDtPEkoj1EzzSbv+0i+SwDuizIFFidXAbXKbaN9ogCauoDp4szR61n
+	 pld4i/EA5lgSprrlPKu3sipbIAtN0nQkVhPi8saJ6u8AqX8sETALWfR3ff00XbzUHW
+	 Q2UtEe7/QFvLqF6YzOGZCKQ7GonA7VIrhH2ekXFjambZEJ5akMBR99FQtHRn0b3OI3
+	 Tbs1rQnNUF1ac0fSfPel71yx8RhtNY17o5XmklfN87u/1MVxSF7E4K/GckW3+FlfDJ
+	 uMeF29fDjLSLXyA2qzBchiqFi/DFfQOSZWlACZXV/CVhBq9+ITmKpDDFHqiHDCl4+3
+	 9opDI4xUrvhpw==
+From: SJ Park <sj@kernel.org>
+To: Ravi Jonnalagadda <ravis.opensrc@gmail.com>
+Cc: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v2 00/27] mm/damon: let users report their data attribute findings
+Date: Wed, 25 Nov 2026 18:04:15 -0800
+Message-ID: <20261126020416.87656-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CALa+Y14BNfdWH3yBY+ky1+Sb0YvRzW=gRcKKyGWWaBQkysPUkA@mail.gmail.com>
+References: 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,35 +66,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 9DAD118
-X-Stat-Signature: hdrjttignmasxxc78qwozdd7ujw6rd95
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+n0Et0sJQWjj8uDsd+6itv3npsQbrPhL4=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=pZPTyuGtPcymdp5cOv8/K4q0eDi6D2+NjC33Tash+54=; b=Yrv4QefhCEf9qsNXK0H1PFo8uR18ZZEd87tdkT15Gq/vhSn9UzAh9ZZ3Fk4gmwOC8VAs1Sp9IkvEm3zfiC2iHzwk9r3j+/eET7qOADz6W6XcbGirskbF7sBHMV/ibglOb9L5yxsM9hrzuzJzWlHI1mtaQ4WCeaRhbq5I1jhjowY=
-X-HE-Tag: 1795658163-212433
-X-HE-Meta: U2FsdGVkX18c7wOS5QWggqhBSdzchK084Ya7bZrEo8TW1picEUt2stpWuBUsOY9E8oG5huD35d1Rcbn9oHbwk3RxSZgpF7RCMb03ekZ/n/xk5vLJN4cSGYC6t7qn/tMYqNnK6l+AeBiY3pH7jTpT+eBG39q6gu0c9AOpR32VItsuMNBcc197abEdxfrIDsShC5TZhmhsLTct/RuQDlFPz0pwuNhrIarBrHc69RlUWlD5KKinu/DS5klZSnTNfHU2diQfepwyaAkGrHr5jmVG7uxLdEksyEH8r3xJg6kt5nHRm0NLiacvMAQRLsqr7R8o1XWCZyfA0E4SZGmBo3FsdlcoxDV890Pay3wFXe/ssv9f3RBAcTLEJ5UL1xJflHF3
+Content-Transfer-Encoding: 8bit
 
-On Thu, 29 Oct 2026 10:39:07 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Hi Ravi,
 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc b/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
-> index 6c190620db47..2c900873ce3c 100644
-> --- a/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
-> @@ -10,6 +10,6 @@ fail() { #msg
->      exit_fail
->  }
->  
-> -ftrace_errlog_check 'event filter parse error' '((sig >= 10 && sig < 15) || dsig ^== 17) && comm != bash' 'events/signal/signal_generate/filter'
-> +ftrace_errlog_check 'event filter parse error' '((sig >= 10 && sig < 15) || ^dsig == 17) && comm != bash' 'events/signal/signal_generate/filter'
->  
->  exit 0
+On Wed, 25 Nov 2026 14:10:15 -0800 Ravi Jonnalagadda <ravis.opensrc@gmail.com> wrote:
 
-This causes older kernels to fail.
+> Hi SJ,
+> 
+> I tested v2 as it is in mm-new, and wanted to share what I saw.
 
-Is there a way to have it check both?
+Thank you for sharing!
 
--- Steve
+[...]
+> 2. As the submit rate goes up, two things go wrong:
+>    - with matching=Y, the probe misses the report more and more
+>      often, although it is always there;
+>    - with matching=N, the probe matches more and more often, although
+>      it should never match.
+> 3. Empty and inverted reports are accepted.  They never match, but
+>    they take queue slots, and enough of them push the valid report
+>    out.
+> 4. On a vaddr context the filter is accepted but has no effect.
+> 
+> Where it comes from
+> 
+> Case 2: a busy report queue (13/27, 14/27)
+> 
+> When a lookup finds the report queue locked, for example by a submit,
+> it answers "not found" rather than "don't know".  For matching=Y that
+> is a miss; for matching=N it is a match.  The more writers, the busier
+> the queue, and the more samples go wrong.
+
+This is the expected result.  The implementation is more strict for type
+matching.  If it is unclear, it says the type is not matched.
+
+For example, if filter type is PGIDLE_SET and we cannot confirm it, it is
+treated as not PGIDLE_SET.  For example, DAMON could fail at confirming that if
+it was unable to get the folio for the probing memory due to some races.
+
+> 
+> The right answer here is 100 % of samples for matching=Y and 0 % for
+> matching=N.  What I measured (the last column is the share of submits
+> refused as busy):
+> 
+>   writers               matching=Y   matching=N   refused submits
+>   1, one submit per ms     99.5 %        0.5 %          0.1 %
+>   1, back to back          45.5 %       55.3 %          0.2 %
+>   4, back to back          49.0 %       51.3 %         60.2 %
+>   16, back to back         15.6 %       84.9 %         79.9 %
+> 
+> The numbers vary somewhat between boots; the trend does not.
+> 
+> Could a lookup that finds the queue busy skip that sample instead of
+> counting it as a miss?
+
+I agree that could reduce the error rate.  But I concern if it could make the
+behavior inconsistent.
+
+In my humble opinion, , the user could work around this issue by not submitting
+the report too frequently.
+
+But the more important question is, if the user really need to do this kind of
+frequent report submissions.  I have no clue at the moment.  If it turns out
+so, we could improve kernel side.
+
+One straightforward way would be introducing a complenting type.  For example,
+we introduced PGIDLE_UNSET to complement PGILDE_SET.  We could add something
+similar for REPORT_MADE, say, REPORT_UNMADE.
+
+Yet more possible kernel side improvement would be making the report queue
+synchronization be more robust to contentions.
+
+> 
+> Cases 3 and 4: input checks
+> 
+> Two smaller things, both about inputs that are accepted but cannot
+> work:
+> 
+> - Submit accepts a report whose start equals its end, or is above it
+>   (22/27, 23/27).  It never matches but takes a queue slot: with 1000
+>   of them after a valid report, the valid one is found in only 4 % of
+>   samples.  Return -EINVAL for these?
+> - A vaddr context accepts a REPORT_MADE filter (16/27), but the vaddr
+>   operations never evaluate it.  Refuse it for non-paddr contexts for
+>   now?
+
+I agree this could be confusing.  In a sense, that said, those are working as
+documented.  There is no documentation saying addr_start should be less than
+addr_end.  DAMOS filter design documentation mentions "support of the filter
+types depends on the DAMON operations set".  And the probe filter design
+documentation says "The filters work the same as DAMOS filters".
+
+I personally tend to prefer keeping code simple over making good user
+experience, as long as it is not causing critical issues like crashes and/or
+leaks.
+
+If it turns out to really confuse users to be real problematic, we could add
+documents or make code changes.
+
+> 
+> A minor nit in the cover letter: the loop
+> "echo submit > producer_state" runs in producers/, so it fails with
+> "Permission denied".  It should be "echo submit > 0/producer_state".
+
+Good finding, thank you.  Maybe we could ask Andrew to fix this up, but this
+might be too minor thing that readers could easily find out themselves...?
+
+Thank you again for your review and testing, Ravi!
+
+
+Thanks,
+SJ
+
+[...]
