@@ -1,53 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.221
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795679385;
-	b=JGpAeg4NGtJiqvF/RIKeaYMocc52BsJcQnl8/VVn0qeq6ArtQ+sU/ByDOsbMtDgJimiC
-	 3FZ6/GuwtHH3EYeblQ25L7lnmEDy4WsrDEWRJoqbxQNJN6z9gQheW6NtmiJCuREPv8SY+
-	 Oajno2nT7EdIcy6l6UsImXt4js1m9x7FPbRXJqGL2P0Cn+QNMCpYiLeG/tF2NjfKO5Gm6
-	 AZm5V47JueMHles3V9rxTbmSs+PUph+vXshXe9NBspCouv7ij39fo6EycdkgsRl1bafpM
-	 +XfhjZ7xMsKPGHvPZYx3c9pa36QetbBi5QGQLPkHn3CSvZ9+0nxetmkHeasJjfDD1Tg==
+	t=1795680331;
+	b=WznpfLNHMIbroJfHGImrUNhk/XwHZvmkncC+Oaik9IO5sEE9cesfaEHSREB5O+sLew+2
+	 ZAhw5sXz/5AGKlWFMpD1FmTdZ5o0a99odiAwbzWLmWxhtLBvCkV10dypO3/aa2yym/mRD
+	 X182omkcfJEybiw/QoCPtRB+VSqT86xO4gQ/CBT5GVlKcKqGbBhnz5x22OMSTPsDWJ+R9
+	 rb7Nz/kNZgtsIcirN61MXtNvkvTgMhQgfq6tQVphQZDe0UzXJeCYBjyXJKND5zMDT+7bb
+	 NW1NDiitLo4dPCq/PAtTT88a1wGuEwciNVb0es2nHFXLIS+jz9ReZEhOcLaQGvgep0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795679385;
-	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=igwBwpxEPpOo7JhISAe3xDcfUw7dJh4domzsW8aHYuQ=;
-	b=efw9I7/IZVSqB10hbk6Aw5LlfY+DH9+470lEKojz9wS3TwuQS6LukjTN6mlKi7967eSB
-	 EcHkbz/4+NQjLlrXdiwnOWr7j9RsUg0wulO6U00LARcfZfz7HqEmGAcVYaGMbBHI1WyJJ
-	 smeZYiI21MRwgixLbPXEKk4gbfDTnMyGYgQi8J1crCNyrObxAJBNlHYHGkMVbq7h0l/ks
-	 tFXNN8mgmJNpSWGSXEFtpeoT+2Qr6DgWFBpbW8ZfT/k5fAR8vy7MLkPrHowXL1xjanEAh
-	 D2Y+Bsq7Gu9Ydbb6xSySIngtaq1qsASuEiD4A9LBb2393tVCsODbgpaW9kJL0mn8hCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795680331;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=8Z15m+NbNiZQiSnpZp29G5Mqn1yjW1kGCZAqukJTahE=;
+	b=CR7L0mScih/49b79E14CHJNrlKTS8JEhDRyKy63DJYHx5BQtcRqJOKPSocmLWlSQwDW8
+	 oux2Fk94WrLaMvSNNsRt5R8GImwKrUBuDFLccO125xjHqbonmqBhud4gtbuaur9rSW6M4
+	 AfC5YX3U8CxD1mDVf8I9ogJ/yy8fBR9WLQKqvfavt/VICppifH5q4o6+ORwAJVab9YpBL
+	 tbWLaqhl5CgWJpjsiHdrBJv7sKQRF+vPCd2muTTyehKWnANQuGiv/n8XkI97iWi3zEfJB
+	 ShJYB8EP86tuQ3sOdbyJrs7Drqldups1gzP4Om530yumff+aYEOa/2hHCGj2ty+Qw/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=weissschuh.net;
-	spf=pass smtp.mailfrom=weissschuh.net;
-	dkim=pass header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=WpWhTqsr;
-	arc=none smtp.remote-ip=159.69.126.157
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="ZJgs/J6y";
+	arc=none smtp.remote-ip=113.46.200.221
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E830606A31C;
-	Thu, 26 Nov 2026 07:49:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E830606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FA4606A321;
+	Thu, 26 Nov 2026 08:05:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49FA4606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.a=rsa-sha256 header.s=mail header.b=WpWhTqsr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1795679382;
-	bh=q/odsP5fELbdmTHt5GCHwLUhJQlCm6xMBYihsTNca3c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WpWhTqsrHGL2yfJ/R/oTw0ol/ZOQxj5yJk5iRzIe/e12d8/GODjbSxtnzKiUs2ebs
-	 j2UDKA0SLlYaBVIs5JE6J79IYIY07136qDldEA2F+PNDoIs7+adGWZjRTsqdLyORbC
-	 rrz/yb4T9ty2sxNUK0Fq1KMvU/ZqsYMEEciUGy84=
-Date: Thu, 26 Nov 2026 08:49:40 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Arav Verma <svav2021@gmail.com>
-Cc: w@1wt.eu, shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] tools/nolibc: fix standard conformance of a few
- string functions
-Message-ID: <ad43e400-f5b7-4291-bc01-cd8deee73c1b@t-8ch.de>
-References: <20261125181453.814976-1-svav2021@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=ZJgs/J6y
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=8Z15m+NbNiZQiSnpZp29G5Mqn1yjW1kGCZAqukJTahE=;
+	b=ZJgs/J6ySKZ7kivw/bNsrZv9YfSOpa1dxfURcrD/y/U+BbkZ21lhEoMSzKtQzH2A50BhzA6KE
+	OCkWEPr+wX16bDinL1RDNPjJ9cfqiXWrQ/6JCADg/tUn67HGXqZZb1wOx/xRKdabF6Mmsemf5x1
+	bNXZXCS7YvEjX9u6UqjBooI=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4jZpxY2NHtzRhQT;
+	Thu, 26 Nov 2026 16:05:05 +0800 (CST)
+Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9042C4056E;
+	Thu, 26 Nov 2026 16:05:24 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemk200008.china.huawei.com
+ (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Thu, 26 Nov
+ 2026 16:05:23 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <oleg@redhat.com>, <linusw@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <mark.rutland@arm.com>, <shuah@kernel.org>,
+	<mathieu.desnoyers@efficios.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH 1/3] arm64: ptrace: Fix spurious pseudo-single-step for PTRACE_SYSEMU_SINGLESTEP
+Date: Thu, 26 Nov 2026 16:05:12 +0800
+Message-ID: <20261126080514.1523978-2-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261126080514.1523978-1-ruanjinjie@huawei.com>
+References: <20261126080514.1523978-1-ruanjinjie@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -57,29 +72,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125181453.814976-1-svav2021@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemk200008.china.huawei.com (7.202.194.74)
 
-On 2026-11-25 12:14:50-0600, Arav Verma wrote:
-> A few nolibc functions deviate from the C standard in corner cases:
-> strchr()/strrchr() do not find the terminating NUL, strstr() returns
-> NULL for an empty needle, and atoi()/atol() do not skip leading
-> whitespace or accept a '+' sign.
-> 
-> Fix them and add test cases. The new tests fail without the fixes. The
-> results were also compared against glibc.
-> 
-> Arav Verma (3):
->   tools/nolibc: fix strchr() and strrchr() for the NUL terminator
->   tools/nolibc: fix strstr() with an empty needle
->   tools/nolibc: make atoi() and atol() skip whitespace and accept '+'
+PTRACE_SYSEMU_SINGLESTEP sets both _TIF_SYSCALL_EMU and _TIF_SINGLESTEP.
+Since commit ac2081cdc4d99 ("arm64: ptrace: Consistently use
+pseudo-singlestep exceptions"), syscall_trace_exit() injects a
+pseudo-single-step SIGTRAP (si_code SI_USER) whenever _TIF_SINGLESTEP is
+set, including for an emulated system call.
 
-Thanks! Applied.
+That pseudo-step was added for PTRACE_SINGLESTEP: the system call runs,
+and the tracer must get a stop at the return address to inspect the
+result. An emulated system call does not run, and its syscall-enter-stop
+already reports the SVC, as the x86 implementation and generic entry
+(report_single_step()) both say. The extra stop is wrong:
 
-I also verified the new tests against musl.
+1) Stepping armed before the SVC (the normal case). The SVC exception
+   leaves the step pending (SPSR_EL1.SS is 0, Arm ARM D2.11.5.1), so the
+   hardware step is taken at the return address anyway, and the tracer
+   now stops there twice without the tracee executing anything:
 
->  tools/include/nolibc/stdlib.h                |  5 +++++
->  tools/include/nolibc/string.h                | 12 +++++-------
->  tools/testing/selftests/nolibc/nolibc-test.c |  9 +++++++++
->  3 files changed, 19 insertions(+), 7 deletions(-)
+	syscall-enter-stop  pc=L
+	pseudo-step         pc=L    si_code=SI_USER  <- added by that commit
+	hardware step       pc=L    si_code=TRAP_TRACE
+	hardware step       pc=L+4
+
+2) Stepping armed after the SVC, e.g. a tracer resuming a
+   PTRACE_EVENT_SECCOMP stop with PTRACE_SYSEMU_SINGLESTEP. The first
+   stop is the pseudo-step at L, so the instruction at L is not
+   executed before the step is reported. Before that commit, and on
+   x86, the first stop follows the instruction at L.
+
+Skip the pseudo-step when _TIF_SYSCALL_EMU is set, as generic entry
+does. The behaviour of PTRACE_SYSEMU_SINGLESTEP goes back to what it was
+before that commit. PTRACE_SINGLESTEP is unaffected and still gets the
+pseudo-step, so both problems fixed by that commit stay fixed.
+
+Only tracers using PTRACE_SYSEMU_SINGLESTEP see the difference. Measured
+in QEMU, L is the instruction after the SVC:
+
+  case          before that commit   v7.4-rc1      this patch
+  normal        L, L+4               L, L, L+4     L, L+4
+  after seccomp L+4                  L             L+4
+
+Fixes: ac2081cdc4d99 ("arm64: ptrace: Consistently use pseudo-singlestep exceptions")
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Linus Walleij <linusw@kernel.org>
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ arch/arm64/kernel/ptrace.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 6a0b3a9b6125..07c80ebe948a 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2486,16 +2486,26 @@ int syscall_trace_enter(struct pt_regs *regs)
+ 	return regs->syscallno;
+ }
+ 
++static inline bool report_single_step(unsigned long flags)
++{
++	if (flags & _TIF_SYSCALL_EMU)
++		return false;
++
++	return flags & _TIF_SINGLESTEP;
++}
++
+ void syscall_trace_exit(struct pt_regs *regs)
+ {
+ 	unsigned long flags = read_thread_flags();
++	bool step;
+ 
+ 	audit_syscall_exit(regs);
+ 
+ 	if (flags & _TIF_SYSCALL_TRACEPOINT)
+ 		trace_sys_exit(regs, syscall_get_return_value(current, regs));
+ 
+-	if (flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP))
++	step = report_single_step(flags);
++	if (step || flags & _TIF_SYSCALL_TRACE)
+ 		report_syscall_exit(regs);
+ 
+ 	rseq_syscall(regs);
+-- 
+2.34.1
+
