@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795651983;
-	b=JB9cpmwc0MbXRERwHCdSkyPEmREFuVH0IAKbb0idXy8vCuVpxy+whXAnS2/22ATps2uy
-	 r8f5phZ0NLFvfXjNLO3WuyqbHvjt80luL0LN/i7NJEUM0+9TIgQJ/14wCPXZ61VJTBYdJ
-	 vkoMRXuyrqtTI5rvC/QkEW2yQDbUILGeUXbSlCuTwg6oSujLYx2oo1vG48YUGL1Wg5W2+
-	 W3UwICs22js7n56GdM5IeoKKSmhyWpIrvcLYaysIdCYh15omEBkQ4YDhzB+pIxjRlhSkB
-	 033gWL4PTufSRNkTnApRULRjOx92vZVq+wizrfMieUX7ZGDeMXZAaX7gO80sx3DA3EQ==
+	t=1795653217;
+	b=tJ7/ELTYn0fxs8omewDzjYNvEsIPwgv+s9cySc4AxLLAf7n1VktMfPkZoWV/X5sslU68
+	 yveK2pmjbafpZ9Kt7TvRSkozNLNSVLN4Y+ELbXPu6F8gGllIHcVuEiffs4MJDqKKRdKl7
+	 H8CgYW2j8uB0bPz1MP13wgjTJswjol8X888PXTHo/p9XKYblXh3gGD9Xl8YZQvSOB5l/2
+	 0xSZI9yohwYEnKU5EW37923IU68fAITJf874bzBb+ohKWWv95perNDcM5jAB5leBF1RC7
+	 LcMM/Kc2JN5QGurtVaAQLu/peVXcH4fE0eLN2V+yECJ2d2pVKO/9ceP4AdDcJxdScSA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795651983;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795653217;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
 	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=F7ZXso7jhWjYiqUU7UwYJiU8JPoYkJS5VDECLxAjalg=;
-	b=vFswO5HJxFj7HBqt0WPuv6Mh8lC6fF7bZcjDyebpjP4DIUqSZv0f2O7PURRryYBCCE0h
-	 Q20yvnft3S6Vv9W5E6NseZWufNP+HV14bsUXhw3jDLup5F53AGEitJHPp8YfVZmPPtPA+
-	 2+pLJmQ8oa6VH86GRHKSlcKBVyVUy+pT63P8EwXYgPLAmdM65GhuOP7AO3lq9jlzl64pR
-	 T7GBGIzn7MTIHdPLc8yh3txdhZ2GPAzwBDIWEhw3VcfO/W1SxMyvqBDF1w/Xr1zdjp7Eg
-	 YymzskhzonufMH9ycTGGIIlMX6VeLyEiPWrJimR2wDo0QXmoHXmeWM0TriaZkGIlI3w==
+	bh=n7CSRRc6wmlgTahpgsaeBRSOFvVKDVf8gI4nOytFKB4=;
+	b=2R+HNrXnXNfJkXqTAoxg9+P35Q0NfRljDu+FvfBG2IJmjkRjrIxx6Jgmvc2uSAZm0dao
+	 nDsXy3Tj705w9lfMJoib6zOGcCeSgR6sFy8+AAqgHc08AQ+N3zE450Wz74XbOCSFamAha
+	 3EpMB6wPLI8CBXKZoSSavdslrElMWhnD2I0GrDOLr1FAgF/qntxOim0gD1SHKMtYZVhfS
+	 pqNkI4Pm9eNXTygBQNvMU8KEuLFaCYuSGZ2kBufx6f9uSONNzze9Y6LJqqo/m3T0gRzWS
+	 d99Aiz95tATQ3leOeGchIGCaRYneDBBPF+Iryws1AjB7U/drNo7BKNOOa0MzvyWnOAg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CRyZoz22;
-	arc=none smtp.remote-ip=209.85.215.174
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jWsCuCyo;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53867606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:13:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53867606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A66606A323
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 00:33:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5A66606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=CRyZoz22
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cddc597d062so3858687a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:13:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jWsCuCyo
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f06ff94acfso28200665ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Nov 2026 16:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795651982; x=1796256782; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795653216; x=1796258016; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=F7ZXso7jhWjYiqUU7UwYJiU8JPoYkJS5VDECLxAjalg=;
-        b=CRyZoz223YPEgFuLspAYVU4C+wiGlk9ZRfC4HfdodSy0pSclT2YuU4hBncddoQ7NAP
-         zKu4VT2oW5ZfFBULJgFASRshVh9mA1r8lP6fnGbhH9xU2mqRmzIvmCWYvB+Kzom27kg5
-         JJFYfPxyGKTK03zpQXmD9E413UorfTlNFa+Rwa99uJ2mqFEPKSmjgNKtfgwMcAAa2/c4
-         Jqk3Tl75ny2JX/QBzMoJ5GTw1mxy+LgQ//NvfV60s+uFw7IkRE2D1pb05BgAhEcW0/G0
-         1p1usltjtOOjzyoVvVnmt3ft9YgNNpYavOWs8OxOi1FPdeQYukgE+XbkeBQ52EeN4OG5
-         +NNA==
+        bh=n7CSRRc6wmlgTahpgsaeBRSOFvVKDVf8gI4nOytFKB4=;
+        b=jWsCuCyowIb2n9Rv7XdeLBoSHT+n7g0YGWhHrYh/G0RdYbTbF+56gGVgtVisdc7T89
+         MKawGtG9pHO6Ft+ybk3kmMsiPH+MQDGsejbWohGWmgG8aVaZe7iIhfp6RsC/JOpFiaON
+         MO0rbPj305k5dwkqPK3ddivXEQMTBWTTiu/DbNXI4wP+pZo0lH2TNoTTSF/7iFb+fmBz
+         uaEItEXoD1gh+4J4eUm9FIUIMZh/n3it6jjwxxUyGY7v5bohC0TRCdpjc1kI90Gv0toj
+         q2JHXP9sgeZkxyJDuT5shgUMemp7awDDz3sc8WrT2PFHVCGJZbhYRSPXy2dq7T3bZ8rR
+         r1zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795651982; x=1796256782;
+        d=1e100.net; s=20260707; t=1795653216; x=1796258016;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=F7ZXso7jhWjYiqUU7UwYJiU8JPoYkJS5VDECLxAjalg=;
-        b=pFmSiKSnQE3ovlVrmKetcdPKCl4qJe2+O0LhtpcyjHB7g6Me2soI36pYvvE2X8X+mh
-         c5oBM8na4JsTb42gtoYzPaY59kKMrLB7KHkI98LEWGCu7VBiEoM2UFf1Sdww3bBEaYgZ
-         H8sttX/KT4SpQpAN+oDVi/jXbPBBPtPszEmsaeYjQ1aC/yfruHiyt4eNnKZpYk+/qazw
-         JfDmnRK2XrjqXc7KUFDN762Zlgf3LXlqjt75OUncwnnTJqcbWxjfaXbyfcRiLfjCYL5M
-         ltW3r7wPDbSf0Q80W/f0MyKZ9J8Qj79S66R8X1DdZxHBCkf+EMK6JVyEE0OzqxBCRqV6
-         uyfQ==
-X-Forwarded-Encrypted: i=1; AL+hErHVfhTv8yfMifKr/qmP0VCF/n6I8rub2Dx/+tUgioX7uLMZ4m6VGIIeSzetnNNLXD5Q4TMoKBmB249pzSajxyI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+kFsqVbk81XcPeP8W4I7kpK66y/8xe0rjY5zbWYKEkjBG/zQfB
-	GvisD/EMzwwJMS2C8hwvX9Vc6/gLyE5W+YMaXrLHZ41twXcUN34njCE4tUf345nuNA==
-X-Gm-Gg: AZFdTZd4FIFyGjQDTmrd6OF2cV1TzNpuwCYvrJchczXPNMai6BR7SFQ09a2JAA9k5ex
-	AbTqgG5Hk8M85l9UAXgn409C2jPE+cFVl92syH02STrsOy5VkStMg8HYnJqqgxqcaZS17VecYpb
-	kVhzyHz2AoFHFfbTcU7s3ySkxqGLhNcWQV24DJ5CYGP5nk5MERzT0gRrBx1CBmjGnoHg6ojRfkm
-	92FVCHTIT1HlwT7EUEGv76yZaAqSp4rnb0kHQvR6OGYV8kQk/Di/JxH/YYPKrpMcWU5wY56zRI9
-	2z/jv8UITD1tB3geco2isN1+dzxrP+52anT17o7Znn83/35Te3q92W3hf3+Jvma0FwBMNokqaRy
-	ZNQ255sXL5cZg6kvXPJA0paSqOsHsD5TthITBxyqLaFMYxvWp846VS6aQ/dHa83bGv/ukbCvHYN
-	lpK+T6ggqKjI1rXFmuui/54xjew/YNOMmDEKSmElvEKQhuAFYVCaz4zwnGAOt4GYw1h92SoRp3q
-	v+0lwv0HpKBSquv19x46SrNpJn3CkPrAbEOiDHjDZK+BIWJ6rCe7/PykeDe7K4HmrtCxYcqKpLe
-	oZkQz6rEvnRuRt5fjm0VjG1KKRmJrlVY7ymI7j4Gd0rahyR/Xg0G3oqAEJCi1VxA
-X-Received: by 2002:a17:90b:1dcd:b0:3b0:968f:fdef with SMTP id 98e67ed59e1d1-3b41c9758d8mr19498651a91.49.1795651980863;
-        Wed, 25 Nov 2026 16:13:00 -0800 (PST)
+        bh=n7CSRRc6wmlgTahpgsaeBRSOFvVKDVf8gI4nOytFKB4=;
+        b=2ajJP15vlm6mhVIEfjUiFFmoKCFQJ4BV/DSFS56S5TRwhvVLoDNZGZm4ywdObK3oIS
+         QIJTzR/IUoWwJ2ijJj+KS0SyjMJFF7Yp6L9TJtWaZj4xy/+SQnj0nwuClgn4wkMnco52
+         qSAQNzR1yySRUnyiwbKHSnw19g/RaxF0msZkheA+5u+qnHtXAoaTtJ0O+wvoikTvrq2l
+         L+t835c7ntC7ZCirwR7XISxS1kpSFFMWf5T4eBXMkTdG1Vi8SnXWvKODdn5KtvmUmP1Y
+         n+uQnFXz5J/HFp5srvKAJ+jnJryh+WEkYXYmCbrKOJqU46et7fcLfQHzYub7syzoGybH
+         tLQA==
+X-Forwarded-Encrypted: i=1; AL+hErF1C2yfm1+ypsobByp4Sji37MCFOmDnjHbwGOjIyhMrmWPO62Zf1/b+zLOm9pNtSUJCVimtvAd1hfeTDTR9nsc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8a5jiVhhxe5EkZ1PGesEPGkoqlz7fCPRFCwO0auz6BG5OQiqLH
+	AaSYOscc35Jai7rbdCftooYpZq7gDcxaigLW/wSVtN4teLa+QZ3lmNa5vWNPz63hcg==
+X-Gm-Gg: AZFdTZdx7OEknSVbeAZPgX3ZE7AC4zE4B89L1EF3sAOzPA0pUZ0kD3fveoAQIDxgErW
+	Kl3hC4Yd3ACCEquhtftul0c5/zO5Wj4dQ9zycdAi8TYJed65SMaqRK+u4n85eLhBq4fQFid7mEn
+	SEXpHDIwOHmGMM2jYBZ7xp62BuUf8nl0DrhzFlgqozJM3F/QAIZxxs8Oe42tkSLkGkKTRdzykqH
+	0bmPu7lWayjGxZIIKx8nz3igzxdLn0/DCwOy4os80eMFwETb25WGdx5vJJCa4lKhEaiw+p2RVlB
+	icgK/A2KCXZ1dkz71Lp6hQxK9Q/qkl7wo+wDvqWyT0WJQIM88aWRpHO3MCq327IInuIAdagSGte
+	WkTd8gB8JRGpaWzH039/YWaVMy9EqfEmuwySv1K2FypcBRJtCLlVgmDdHHqaJCXXuyznsQ2bwb9
+	CabfzrqOXalGS3qiS81rbTvVWU1Oc8SWKPIBan8ibvF/wLaSN9Vi8w1Z+U4Jz8bvB89FafSEieJ
+	eRi0WmoG2oeUbZaBAmebmOxDOsnm0QWij3hz6Fq9pXpSibyGiQcfJ8UwCC0w4i1cYRyi4G/fArH
+	PMqdnrsVtrrB6xNDBXZs13IZWnfX7AjN0A8uFzgs4McsGQ+eTVXH4YHGTzXi29ph
+X-Received: by 2002:a17:902:e80b:b0:2e9:9a19:c43 with SMTP id d9443c01a7336-2f03f118277mr192264515ad.15.1795653215229;
+        Wed, 25 Nov 2026 16:33:35 -0800 (PST)
 Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdec1168866sm83815a12.25.2026.11.25.16.12.59
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f14a432sm95165955ad.75.2026.11.25.16.33.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 16:13:00 -0800 (PST)
+        Wed, 25 Nov 2026 16:33:33 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,421 +90,137 @@ Precedence: list
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 16:12:59 -0800
-Message-Id: <DN4PI3EAYYBF.NM3BHJ2OYRDG@google.com>
-Cc: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] vfio: selftests: Add NVMe driver
+Date: Wed, 25 Nov 2026 16:33:32 -0800
+Message-Id: <DN4PXTY768YS.3I99BQYLC8VXI@google.com>
+Cc: "Mostafa Saleh" <smostafa@google.com>, "Daniel Mentz"
+ <danielmentz@google.com>, "Samiullah Khawaja" <skhawaja@google.com>,
+ <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>, "Logan
+ Odell" <loganodell@google.com>, <linux-fsdevel@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 7/7] vfio/selftests: Add observability test for IO
+ page table usage
 From: "David Matlack" <dmatlack@google.com>
-To: "Josh Hilke" <jrhilke@google.com>, "David Matlack"
- <dmatlack@google.com>, "Alex Williamson" <alex@shazbot.org>
+To: "Pranjal Shrivastava" <praan@google.com>, "Joerg Roedel"
+ <joro@8bytes.org>, "Will Deacon" <will@kernel.org>, "Robin Murphy"
+ <robin.murphy@arm.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Kevin Tian"
+ <kevin.tian@intel.com>, "Alex Williamson" <alex@shazbot.org>, "David
+ Matlack" <dmatlack@google.com>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Randy Dunlap" <rdunlap@infradead.org>
 X-Mailer: aerc 0.21.0
-References: <20261124020814.1679635-1-jrhilke@google.com>
-In-Reply-To: <20261124020814.1679635-1-jrhilke@google.com>
+References: <20261001224531.765278-1-praan@google.com>
+ <20261001224531.765278-8-praan@google.com>
+In-Reply-To: <20261001224531.765278-8-praan@google.com>
 
-On Mon Nov 23, 2026 at 6:08 PM PST, Josh Hilke wrote:
-> The driver overwrites the first max_memcpy_size bytes of the namespace.
-> Do not use a device that holds data you want to keep.
+On Thu Oct 1, 2026 at 3:45 PM PDT, Pranjal Shrivastava wrote:
+> Add a new selftest, vfio_nr_pages_test, to validate the iommu-nr-pages
+> fdinfo metric across all IOMMU backends (Type 1 and IOMMUFD native/compat=
+).
 
-I'm worried about this. Today vfio_pci_driver_test skips NVMe devices
-("No driver found"), so anyone who already passes an NVMe device to the
-VFIO selftests (e.g. to run vfio_pci_device_test) would start losing the
-start of namespace 1 after this patch, without changing anything on
-their end. On a real disk that's the partition table or filesystem
-superblock. A note in the commit message and docs isn't enough
-protection for that.
+What's the status of this series? Should we expect another version
+(e.g. after the discussion on the shrinker RFC and at LPC)?
 
-I'd like the driver to refuse to write anywhere that it can't prove is
-unused. How about something like this:
+nit: Please use "vfio: selftests:" as the shortlog prefix for VFIO
+selftests (see Documentation/driver-api/vfio-selftests.rst).
 
- - Reserve the first 4 KiB of the namespace for a header (a magic string
-   plus the number of bytes after the header the driver has claimed),
-   and do the memcpys in the blocks after it.
-
- - On the first memcpy, read the header. If it's present and covers
-   max_memcpy_size, proceed.
-
- - Otherwise, check that every byte the driver could write (the header
-   plus max_memcpy_size, or just the part past what an existing header
-   already covers) is zero. If it isn't, fail with a message explaining
-   how to zero the range if the user really wants to use this device.
-   If it is, write the header and proceed.
-
-That way things just work on a blank namespace (e.g. the QEMU device in
-your instructions), reruns on the same namespace just work since the
-memcpys never touch the header, and a disk with data on it is refused.
-A crash in the middle of a test doesn't matter either. And since the
-check happens on the first memcpy, tests that only use send_msi() (e.g.
-KVM's irq_test) still work on any NVMe device.
-
-I prototyped this on top of your patch (about 130 lines, mostly one
-function called from the first nvme_memcpy_start()) and
-vfio_pci_driver_test passes 35/35 on QEMU on a fresh namespace and on a
-rerun, and correctly refuses when there's data in the range. The diff is
-at the end of this email.
-
-> +/* nvme.h needs uuid_t from libuuid and struct_group(). */
-> +#include <uuid/uuid.h>
-
-Samiullah's "vfio: selftests: Remove libuuid dependency" removes libuuid
-from the VFIO selftests and adds uuid_t to libvfio, so please drop this
-include and rebase on top of that if it lands first.
-
-> +#include "nvme.h"
-
-This fails to build with clang:
-
-  nvme.h:524:52: error: '_Static_assert' with no message is a C23 extension=
- [-Werror,-Wc23-extensions]
-    524 | static_assert(sizeof(struct nvme_id_ns_nvm) =3D=3D 4096);
-
-include/linux/nvme.h uses the kernel's static_assert(), where the
-message is optional, but <assert.h> has already defined static_assert()
-as _Static_assert(), which requires one before C23. gcc doesn't
-complain, so please build with LLVM=3D1 too. Something like this before
-including nvme.h fixes it:
-
-	/*
-	 * nvme.h uses the kernel's static_assert(), which makes the message
-	 * optional. <assert.h> defines static_assert() as _Static_assert(),
-	 * which needs one before C23.
-	 */
-	#undef static_assert
-	#define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #exp=
-r)
-	#ifndef __static_assert
-	#define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-	#endif
-
-Also, please Cc linux-nvme and the NVMe maintainers on the next version,
-so they're aware that the selftests now depend on include/linux/nvme.h,
-and to get their feedback on the driver, especially the scratch header
-design above.
+I gave this a try in QEMU with an emulated Intel IOMMU (which uses
+generic_pt, so it reports iommu-nr-pages), on top of this series. It
+fails in every mode except iommufd, which skips. Details below.
 
 [...]
 
-> +static void nvme_enable_irqs(struct vfio_pci_device *device)
+> +static long read_nr_pages(struct iommu *iommu)
 > +{
-> +	/*
-> +	 * Admin completions always use vector 0. Require at least two MSI-X
-> +	 * vectors so I/O completions use vector 1 and admin commands never
-> +	 * signal the eventfd that the tests check.
-> +	 */
-> +	VFIO_ASSERT_GE(device->msix_info.count, 2,
-> +		       "Device must support at least 2 MSI-X vectors");
+> +	char path[256];
+> +	char line[128];
+> +	FILE *f;
+> +	long val =3D -1;
+> +	int fd =3D iommu->container_fd !=3D -1 ? iommu->container_fd : iommu->i=
+ommufd;
 
-Please check this in nvme_probe() instead, and fail the probe rather
-than asserting. A device that can't work with the driver shouldn't
-probe successfully. msix_info and the BARs are already set up when
-probe() runs (ioat_probe() already reads BAR0), so the CAP checks in
-nvme_enable_ctrl() (NVM command set, 4 KiB pages) can move to probe()
-too. Only the checks that need admin commands (number of queues,
-namespace format) have to stay in init().
+In iommufd mode container_fd is 0, not -1, so this reads the fdinfo for
+stdin, never finds the key, and the test skips with "iommu-nr-pages not
+reported by this IOMMU". libvfio uses a non-zero iommufd to mean
+iommufd mode, so:
 
-[...]
+	int fd =3D iommu->iommufd ? iommu->iommufd : iommu->container_fd;
 
-> +static void nvme_create_io_queue(struct vfio_pci_device *device,
-> +				 struct nvme_queue *q, bool ien)
-
-nit: ien is hard to read unless you know it's the IEN bit from the spec.
-Please spell it out, e.g. irq_enabled.
+Also, consider moving this into the VFIO selftests library (lib/iommu.c
+and libvfio/iommu.h), e.g. as iommu_nr_pages(), so other tests can use
+it and the library can hide which fd to read.
 
 [...]
 
-> +static void nvme_set_prp(struct vfio_pci_device *device,
-> +			 struct nvme_command *cmd, iova_t buf, u64 size,
-> +			 __le64 *prp_list)
+> +FIXTURE_SETUP(vfio_nr_pages_test)
 > +{
-> +	u64 first =3D SZ_4K - (buf & (SZ_4K - 1));
+> +	self->iommu =3D iommu_init(variant->iommu_mode);
+> +	if (!self->iommu)
+> +		SKIP(return, "IOMMU mode %s not supported", variant->iommu_mode);
+> +
+> +	self->device =3D vfio_pci_device_init(device_bdf, self->iommu);
+> +	if (!self->device) {
+> +		iommu_cleanup(self->iommu);
+> +		SKIP(return, "Failed to initialize VFIO device");
+> +	}
+> +}
 
-nit: Please add something like NVME_CTRL_PAGE_SIZE (like the kernel
-driver has in drivers/nvme/host/nvme.h) and use it instead of SZ_4K
-everywhere the code means the controller's memory page size (CC.MPS),
-e.g. here, in the PRP list and queue alignment, and in
-NVME_PRP_LIST_ENTRIES. That makes it clear that it's unrelated to the
-CPU's page size, which can be 16K or 64K on arm64.
+iommu_init() and vfio_pci_device_init() assert on failure and never
+return NULL, so these checks (and the matching ones in the teardown) can
+be dropped. Please follow the setup in the other VFIO selftests, e.g.
+vfio_dma_mapping_test.c.
 
 [...]
 
-> +	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_read, dst, size,
-> +			 state->prp_dst);
-> +	for (i =3D 0; i < count; i++)
-> +		nvme_sq_push(device, &state->pollq[i % state->nr_pollqs], &cmd);
+> +	if (!self->iommu || !self->device)
+> +		SKIP(return, "Fixture setup failed");
 
-memcpy_start() is supposed to kick off @count memcpy operations, i.e.
-@count DMA reads of @src and @count DMA writes to @dst. This only reads
-@src once. Please do @count writes from @src as well. e.g. keep the
-first write and the wait for it, and then queue the other @count - 1
-writes along with the @count reads. Once the first write completes, the
-blocks already hold @src, and the other writes store the same data, so
-the reads see @src no matter what order the controller runs them in.
+This can be dropped too. On top of the above, the harness doesn't run
+the test body at all if FIXTURE_SETUP() skips or fails.
 
-Note that max_memcpy_count will need to account for the extra commands
-(2 * @count - 1 in flight instead of @count).
+[...]
 
-One possible concern with this is SSD wear. memcpy_storm would write
-around max_memcpy_count * max_memcpy_size (several GiB) per run on a real
-SSD, for each IOMMU mode. That's probably fine on datacenter drives, but
-I'm curious what you think.
+> +	/* Map a page at start */
+> +	region1.size =3D SZ_4K;
+> +	region1.vaddr =3D mmap_reserve(region1.size, region1.size, 0);
+> +	ASSERT_NE(MAP_FAILED, region1.vaddr);
+> +	region1.iova =3D 0x100000;
+> +	iommu_map(self->iommu, &region1);
 
----
+mmap_reserve() returns a PROT_NONE reservation (it's meant for reserving
+aligned virtual address space, e.g. for mapping BARs), so there's
+nothing for VFIO or iommufd to pin, and iommu_map() fails with -EFAULT:
 
-diff --git a/Documentation/driver-api/vfio-selftests.rst b/Documentation/dr=
-iver-api/vfio-selftests.rst
-index b26040c48d5d..567262ac3d55 100644
---- a/Documentation/driver-api/vfio-selftests.rst
-+++ b/Documentation/driver-api/vfio-selftests.rst
-@@ -44,8 +44,10 @@ includes driver support for the following devices:
- Note that using Intel DSA devices requires setting the module parameter
- ``vfio_pci.disable_denylist=3DY`` to allow ``vfio-pci`` to bind to DSA dev=
-ices.
-=20
--Note that the NVMe driver overwrites the start of the first active namespa=
-ce.
--Do not use an NVMe device that holds data you want to keep.
-+Note that the NVMe driver writes to the start of the first active namespac=
-e.
-+To avoid destroying data, it refuses to write unless that space is all zer=
-o,
-+or was zeroed and claimed by an earlier run (marked by a header in the fir=
-st
-+4 KiB).
-=20
- Setting up Devices
- ------------------
-diff --git a/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c b/tools/t=
-esting/selftests/vfio/lib/drivers/nvme/nvme.c
-index 01f38b71a46b..04ae89f31cb2 100644
---- a/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/nvme/nvme.c
-@@ -69,6 +69,21 @@
- #define NVME_CAP_TIMEOUT_UNIT_MS	500ULL
- #define NVME_POLL_INTERVAL_US		1000
-=20
-+/*
-+ * The first NVME_SCRATCH_HDR_SIZE bytes of the namespace hold a header th=
-at
-+ * marks the namespace as scratch space for VFIO selftests. memcpy command=
-s
-+ * use the blocks after it, so the header survives a test that crashes.
-+ */
-+#define NVME_SCRATCH_HDR_SIZE		SZ_4K
-+#define NVME_SCRATCH_MAGIC		"VFIO selftests NVMe scratch v1"
-+#define NVME_SCRATCH_CHUNK		SZ_64K
-+
-+struct nvme_scratch_header {
-+	char magic[32];
-+	/* Bytes after the header that the driver has verified were zero. */
-+	__le64 size;
-+};
-+
- struct nvme_queue {
- 	/* Byte offsets of the submission and completion rings in the region. */
- 	u64 sq_offset;
-@@ -113,6 +128,12 @@ struct nvme_state {
- 	/* Power-of-two shift for converting bytes to logical blocks. */
- 	u32 lba_shift;
-=20
-+	/* First logical block that memcpy commands use, after the header. */
-+	u64 data_slba;
-+
-+	/* Set once nvme_claim_scratch() has verified the scratch space. */
-+	bool scratch_claimed;
-+
- 	/* Result of the write in nvme_memcpy_start(). */
- 	int memcpy_err;
-=20
-@@ -132,6 +153,8 @@ struct nvme_state {
- 	 */
- 	__le64 prp_src[NVME_PRP_LIST_ENTRIES] __aligned(SZ_4K);
- 	__le64 prp_dst[NVME_PRP_LIST_ENTRIES] __aligned(SZ_4K);
-+	/* Bounce buffer for reading and writing the scratch header and space. */
-+	u8 scratch_buf[NVME_SCRATCH_CHUNK] __aligned(SZ_4K);
- 	u8 poll_rings[] __aligned(SZ_4K);
- };
-=20
-@@ -259,10 +282,6 @@ static u16 nvme_status(const struct nvme_completion *c=
-qe)
- 	return (le16_to_cpu(cqe->status) >> 1) & NVME_SCT_SC_MASK;
- }
-=20
--/*
-- * The driver overwrites the first max_memcpy_size bytes of the namespace.=
- Do
-- * not use a device that holds data you want to keep.
-- */
- static int nvme_probe(struct vfio_pci_device *device)
- {
- 	u32 class_code;
-@@ -570,10 +589,12 @@ static void nvme_set_limits(struct vfio_pci_device *d=
-evice)
- 	if (mdts && mdts < 32)
- 		max_size =3D min_t(u64, max_size, (u64)SZ_4K << mdts);
-=20
--	/* All memcpy operations use the logical blocks from LBA 0. */
--	nsze =3D le64_to_cpu(state->id_ns.nsze);
--	if (nsze < max_size >> state->lba_shift)
--		max_size =3D nsze << state->lba_shift;
-+	/* All memcpy operations use the logical blocks after the header. */
-+	nsze =3D le64_to_cpu(state->id_ns.nsze) << state->lba_shift;
-+	VFIO_ASSERT_GT(nsze, NVME_SCRATCH_HDR_SIZE,
-+		       "Namespace %u is too small", state->nsid);
-+	max_size =3D min_t(u64, max_size, nsze - NVME_SCRATCH_HDR_SIZE);
-+	state->data_slba =3D NVME_SCRATCH_HDR_SIZE >> state->lba_shift;
-=20
- 	device->driver.max_memcpy_size =3D max_size;
- 	/* A ring of depth entries holds at most depth - 1 commands. */
-@@ -652,11 +673,11 @@ static void nvme_set_prp(struct vfio_pci_device *devi=
-ce,
- }
-=20
- /*
-- * Build a read or write command covering @size bytes from LBA 0, transfer=
-ring
-+ * Build a read or write command covering @size bytes from @slba, transfer=
-ring
-  * to or from @buf. @size must be a whole number of logical blocks.
-  */
- static void nvme_prep_rw_cmd(struct vfio_pci_device *device,
--			     struct nvme_command *cmd, u8 opcode,
-+			     struct nvme_command *cmd, u8 opcode, u64 slba,
- 			     iova_t buf, u64 size, __le64 *prp_list)
- {
- 	struct nvme_state *state =3D to_nvme_state(device);
-@@ -667,6 +688,7 @@ static void nvme_prep_rw_cmd(struct vfio_pci_device *de=
-vice,
- 	memset(cmd, 0, sizeof(*cmd));
- 	cmd->rw.opcode =3D opcode;
- 	cmd->rw.nsid =3D cpu_to_le32(state->nsid);
-+	cmd->rw.slba =3D cpu_to_le64(slba);
- 	nvme_set_prp(device, cmd, buf, size, prp_list);
- 	cmd->rw.length =3D cpu_to_le16((size >> state->lba_shift) - 1);
- }
-@@ -683,8 +705,92 @@ static int nvme_io_wait(struct vfio_pci_device *device=
-, struct nvme_queue *q)
- 	return nvme_status(&cqe) ? -EIO : 0;
- }
-=20
-+/* Synchronously read or write @size bytes at byte @offset of the namespac=
-e. */
-+static int nvme_scratch_rw(struct vfio_pci_device *device, u8 opcode,
-+			   u64 offset, u64 size)
-+{
-+	struct nvme_state *state =3D to_nvme_state(device);
-+	struct nvme_command cmd;
-+
-+	nvme_prep_rw_cmd(device, &cmd, opcode, offset >> state->lba_shift,
-+			 to_iova(device, state->scratch_buf), size, state->prp_src);
-+	nvme_sq_submit(device, &state->pollq[0], &cmd);
-+
-+	return nvme_io_wait(device, &state->pollq[0]);
-+}
-+
-+static bool nvme_scratch_buf_is_zero(struct nvme_state *state, u64 size)
-+{
-+	u64 *p =3D (u64 *)state->scratch_buf;
-+	u64 i;
-+
-+	for (i =3D 0; i < size / sizeof(*p); i++) {
-+		if (p[i])
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- /*
-- * Copy @src to @dst through the logical blocks from LBA 0 of the namespac=
-e.
-+ * Refuse to overwrite data that the driver did not put there. The namespa=
-ce
-+ * is scratch space if it starts with a header that covers max_memcpy_size=
-.
-+ * Otherwise, claim it by checking that every byte the driver could write =
-is
-+ * zero, and then writing the header. If the header covers less than
-+ * max_memcpy_size, only the bytes past what it covers need to be zero.
-+ */
-+static void nvme_claim_scratch(struct vfio_pci_device *device)
-+{
-+	struct nvme_scratch_header *hdr =3D (void *)to_nvme_state(device)->scratc=
-h_buf;
-+	struct nvme_state *state =3D to_nvme_state(device);
-+	u64 max_size =3D device->driver.max_memcpy_size;
-+	u64 start =3D 0, end, offset, size;
-+	struct nvme_command cmd;
-+	int ret;
-+
-+	ret =3D nvme_scratch_rw(device, nvme_cmd_read, 0, NVME_SCRATCH_HDR_SIZE);
-+	VFIO_ASSERT_EQ(ret, 0, "Failed to read the scratch header");
-+
-+	if (!memcmp(hdr->magic, NVME_SCRATCH_MAGIC, sizeof(NVME_SCRATCH_MAGIC))) =
-{
-+		if (le64_to_cpu(hdr->size) >=3D max_size)
-+			return;
-+
-+		start =3D NVME_SCRATCH_HDR_SIZE + le64_to_cpu(hdr->size);
-+	}
-+
-+	end =3D NVME_SCRATCH_HDR_SIZE + max_size;
-+	for (offset =3D start; offset < end; offset +=3D size) {
-+		size =3D min_t(u64, end - offset, NVME_SCRATCH_CHUNK);
-+
-+		ret =3D nvme_scratch_rw(device, nvme_cmd_read, offset, size);
-+		VFIO_ASSERT_EQ(ret, 0, "Failed to read namespace %u", state->nsid);
-+
-+		VFIO_ASSERT_TRUE(nvme_scratch_buf_is_zero(state, size),
-+				 "Namespace %u: bytes [0x%lx, 0x%lx) are not all zero.\n"
-+				 "The NVMe driver only writes to zeroed space, to avoid\n"
-+				 "destroying data. Zero that range to allow it, e.g.\n"
-+				 "  blkdiscard -z -l %lu /dev/nvmeXn%u\n",
-+				 state->nsid, start, end, end, state->nsid);
-+	}
-+
-+	memset(state->scratch_buf, 0, NVME_SCRATCH_HDR_SIZE);
-+	memcpy(hdr->magic, NVME_SCRATCH_MAGIC, sizeof(NVME_SCRATCH_MAGIC));
-+	hdr->size =3D cpu_to_le64(max_size);
-+
-+	ret =3D nvme_scratch_rw(device, nvme_cmd_write, 0, NVME_SCRATCH_HDR_SIZE)=
-;
-+	VFIO_ASSERT_EQ(ret, 0, "Failed to write the scratch header");
-+
-+	/* Make sure the header survives a reset or FLR of the controller. */
-+	memset(&cmd, 0, sizeof(cmd));
-+	cmd.common.opcode =3D nvme_cmd_flush;
-+	cmd.common.nsid =3D cpu_to_le32(state->nsid);
-+	nvme_sq_submit(device, &state->pollq[0], &cmd);
-+	VFIO_ASSERT_EQ(nvme_io_wait(device, &state->pollq[0]), 0,
-+		       "Failed to flush the scratch header");
-+}
-+
-+/*
-+ * Copy @src to @dst through the logical blocks after the scratch header.
-  * A write stores @src first. Then the driver queues @count reads of those
-  * blocks into @dst, spread over the polled queues.
-  *
-@@ -700,14 +806,19 @@ static void nvme_memcpy_start(struct vfio_pci_device =
-*device,
- 	struct nvme_command cmd;
- 	u64 i;
-=20
--	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_write, src, size,
-+	if (!state->scratch_claimed) {
-+		nvme_claim_scratch(device);
-+		state->scratch_claimed =3D true;
-+	}
-+
-+	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_write, state->data_slba, src, siz=
-e,
- 			 state->prp_src);
- 	nvme_sq_submit(device, &state->pollq[0], &cmd);
- 	state->memcpy_err =3D nvme_io_wait(device, &state->pollq[0]);
- 	if (state->memcpy_err)
- 		return;
-=20
--	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_read, dst, size,
-+	nvme_prep_rw_cmd(device, &cmd, nvme_cmd_read, state->data_slba, dst, size=
-,
- 			 state->prp_dst);
- 	for (i =3D 0; i < count; i++)
- 		nvme_sq_push(device, &state->pollq[i % state->nr_pollqs], &cmd);
+  #  RUN           vfio_nr_pages_test.vfio_type1_iommu.sparse_mapping_stick=
+y_reclamation ...
+  # .../libvfio/iommu.h:42: Assertion Failure
+  #   Expression: __iommu_map(iommu, region) =3D=3D 0
+  #   Observed: 0xfffffffffffffff2 =3D=3D 0
+  #   [errno: 14 - Bad address]
+
+Please mmap() real anonymous memory instead (PROT_READ | PROT_WRITE,
+MAP_PRIVATE | MAP_ANONYMOUS). With that and the fd fix above, the test
+passes in all 5 modes.
+
+Also, please allocate the IOVAs with iova_allocator rather than
+hardcoding them, so the test doesn't trip over reserved IOVA ranges on
+other platforms. e.g. allocate SZ_2G and use the start and start +
+SZ_1G.
+
+[...]
+
+> +	nr_pages_final =3D read_nr_pages(self->iommu);
+> +
+> +	/* Page tables should remain allocated */
+> +	ASSERT_EQ(nr_pages_final, nr_pages_mapped);
+
+This asserts the behavior that the cover letter describes as the
+problem, and that the IO page table shrinker (or the clean(gap) approach
+Jason suggested on that thread) is meant to change. The test will break
+as soon as empty tables get freed.
+
+I think it would be more useful to check that the accounting tracks the
+page table in both directions. e.g. also map and unmap a range that
+covers an entire table with a single unmap, which generic_pt frees
+today, and check that iommu-nr-pages goes back down. For the sparse
+case, ASSERT_GE(nr_pages_final, nr_pages_initial) would still catch
+underflow without depending on when tables get freed.
