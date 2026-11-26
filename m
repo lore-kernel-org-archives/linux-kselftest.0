@@ -1,76 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795703575;
-	b=3ljPzOjcbI6gq5UP+golZFABptT9i3bR/Dyv4rjAeNNKUGecb7fp2zLDSKW8CgViln7r
-	 8A7y0ynJlJW3m3Iv9S1y0eKUSBWoRwZouU3SdnoCIt3K2MuHBoTcScy16mwHcwmjwCd/8
-	 Iq4ILif8ER6HbKmqgFuA1oujKbOjQmTelX37KSuiB1WMMlcWC8DJdITCiyxpYdNx1q0V6
-	 7Rg/yazUTVd40ZN17cc2KbphGht0gjD+5msYSEWebjFX1IN7+1J5AXY3R73Pj7uyFLrEV
-	 NAUpJethZKAYbwDqQsAU0RwsVZydTq4nt4uG1H29dX/BpsSOj6NSGmb7l/uXuJTgsAQ==
+	t=1795703890;
+	b=WPsvAhRxCFsyvmbEdXnGIp4sb8qtoVIHe3LZxgantTjhTiLqWiZqjpwPMH/FJrvLdqA9
+	 44sMOGPuGpuP/fiU/SAk0R62WIm5VpxuU6EiYL+2w+d0LvSjy3sKuaUYGtwd09Le2Cl9G
+	 HACRsM5CttDzAWcjNy6IUrlu/FZ0P+B2dHxhZ09FbM8WSj5HiYO+k+QfVCoDrcR3S8Ij/
+	 40p2W0MV2wY4zIdfd/KgehnBJh963A1L+tBDEPKv5ZB50tbHKjdngrtftsGLKRh6EEMlh
+	 umQJnN/GC2nlncA0aVDEnjh/iim/5Jjl0hoVzEzA+toNtLtMTX9EiyxcSy60Do8NpaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795703575;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=lh7RPirw1fOLix78b5McENzWSQPv2ScyL9X0ufdtQao=;
-	b=RtfF0jTxz52UoQrZ2YuxDTjTdKfQzlnDACaR0yrMgjpKyoVhSZvuGdQM+OQ8rKI1lFmB
-	 xtbEKH9q+uV5o3ov28SjObsyhFf2UbUZSFXQx9Z57AzV77O/LgbY4XMmwZ/QJC4UKxNeQ
-	 Et5ibvDjG/wqElNe9YZJvti0v/nCoNDh/xdRcfA0zUTaODMluZwjBkY26Pepk1yrdXbtI
-	 /YrODVYJA+nwm33w58+PZLlglJddpVsLFkTRgcbiC6in+WIAAzA6xAofdm564pnklckiR
-	 OCsHrxX6IpSR4lmOAx18A0XZR/WiKbnka8gY50tS6DUp84Qk+f+NqGvR9+ArzTExiSg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795703890;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:In-Reply-To:References:Organization:X-Mailer:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
+	 X-Proofpoint-Reinject:X-Authority-Analysis:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=TwYtFIIgARqtGbMM7qPTE29IrecbQ9zr89kNyuGkh8s=;
+	b=fIMUz6S0V//6b324bv4X7Vz2SoXZELD1rCVzrn9n0RSqRNnIIAw+qsFoKyPMBlRO6urj
+	 8UyMPrNlQrfi8e+8AOsBRfJdK1CFZzXpfuPIkHo919EU444OuBIawtd7TDdfEgyd4c2mM
+	 5YKxFJSd8w66EDdIgO/DtHSGZuFFLGsZb53Ue9t1D3Dga45+zU69gQw9+m43ITk2PABn8
+	 2U2isyb7qQFs0lFUMeP3qPNu2CmqalSWDGVuo04rO1Llkb5OOup4QkO0n+8Ce4Anum/2v
+	 CItQS+UdMbixS57r8bGFGaztSmI2w3Ywr73qK+kkH8KXBX2tr6mY4/izmJx0hxJHjyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HrNCUEeT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=qBcCtccu;
+	arc=none smtp.remote-ip=148.163.156.1
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28024606A683;
-	Thu, 26 Nov 2026 14:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E036A606A32E;
+	Thu, 26 Nov 2026 14:38:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E036A606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HrNCUEeT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28361F000C4;
-	Thu, 26 Nov 2026 14:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795703574;
-	bh=lh7RPirw1fOLix78b5McENzWSQPv2ScyL9X0ufdtQao=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=HrNCUEeTAhOWR1IQilGFsl5Z0M6KEHvI3p4ZWhkWJYc1d/3XH4HfTdnseq1layVul
-	 lOtNqTbJpsHUKstbpbjjtYqQX69nCKvS5+PsgDzzf+Cq+KWqngjIzTc3iBme6+zoSc
-	 M39ST3oF5CJCTOEMq0tDLWmyrVIJ5lRYcY+rJT1R90HPfLeCv7IHwb3gD6G2G+sPI0
-	 9Nn2gQBWu0jjP6GTuO2XWveelOPUmUaPer/YNTzdl6IbM75hivo+kH4u8Q0eQc4KkN
-	 HtTLKBmIhLXuqmepKnj0ZdFVE3zXyITbbn4DdOgQnH9ZLCmw0FlfSW5p2//I9bEqF4
-	 Gz6P9fwNyolBg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Todd Freed <toddfreed@meta.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Boris Pismenny <borisp@nvidia.com>, Cosmin Ratiu
- <cratiu@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, Donald Hunter
- <donald.hunter@gmail.com>, Dragos Tatulea <dtatulea@nvidia.com>, Eric
- Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Jamal
- Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, Leon
- Romanovsky <leon@kernel.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>, Paolo Abeni
- <pabeni@redhat.com>, Pedro Tammela <pctammela@mojatatu.com>, Saeed
- Mahameed <saeedm@nvidia.com>, Simon Horman <horms@kernel.org>, Tariq
- Toukan <tariqt@nvidia.com>, Wei Wang <weiwan@google.com>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- bpf@vger.kernel.org, =?utf-8?Q?Asbj=C3=B8rn?= Sloth =?utf-8?Q?T=C3=B8nnes?=
- =?utf-8?Q?en?= <ast@fiberby.net>, Qingfang
- Deng <qingfang.deng@linux.dev>, Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgense?=
- =?utf-8?Q?n?= <toke@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
- Matthieu
- Baerts <matttbe@kernel.org>, David Ahern <dsahern@kernel.org>, Jonas
- =?utf-8?Q?K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>, Hangbin Liu
- <hangbin.liu@linux.dev>
-Subject: Re: [PATCH net-next v3 02/12] psp: take the psp nexthdr from the
- packet on encap
-In-Reply-To: <20261124221758.3230929-3-toddfreed@meta.com>
-References: <20261124221758.3230929-1-toddfreed@meta.com>
- <20261124221758.3230929-3-toddfreed@meta.com>
-Date: Thu, 26 Nov 2026 15:32:50 +0100
-Message-ID: <87h5h3irxp.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=qBcCtccu
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQEYaoX3001329;
+	Thu, 26 Nov 2026 14:37:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=TwYtFI
+	IgARqtGbMM7qPTE29IrecbQ9zr89kNyuGkh8s=; b=qBcCtccuhOdZwEnpLZnn7/
+	rLjOrKcvpDQtNOvT1K7DU3CXFWt1dIACTgb9yoluSCkgQH4p3Fvmu+6fe/BiUD10
+	iiBg3fH3YjNsQ8bfKvIpierfwUA4jirUI/055Cs/lXFCESRdwY0+yrJXLLmWO+Pi
+	+6QOTj4fpJKWsCJZORsqKJuDC7GxfKA99QNlV5HqGKX2jlVnjt5cTz+ST+53ccH2
+	o45TNTnGDVjEZqC/r0x2UGT1e6p+dWeC6Z/M5AVfQ63+VvB7ghL9/u9wOhDibIze
+	kcylGs3lpgTS1pnTMOB9SXySFRziKjaIAvQNsZEdE4j+Z+ptEpqcKq1qvFMV+t1A
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g3hqmn-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Thu, 26 Nov 2026 14:37:52 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AQEYRT11733411;
+	Thu, 26 Nov 2026 14:37:51 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j5uxx54b0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Nov 2026 14:37:51 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AQEbld649283426
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 26 Nov 2026 14:37:47 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 71BD02004B;
+	Thu, 26 Nov 2026 14:37:47 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2D05D20040;
+	Thu, 26 Nov 2026 14:37:47 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.68.31.243])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Thu, 26 Nov 2026 14:37:47 +0000 (GMT)
+Date: Thu, 26 Nov 2026 15:37:45 +0100
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
+To: Yvan Janssens <yvanj@cyber.gent>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank
+ <frankja@linux.ibm.com>,
+        David Hildenbrand <david@kernel.org>,
+        Eric Farman
+ <farman@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>,
+        Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander
+ Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson
+ <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] KVM: s390: selftests: Add a test for nested
+ guests in ESA mode
+Message-ID: <20261126153745.399d7f3d@p-imbrenda>
+In-Reply-To: <20261125165604.3074595-3-yvanj@cyber.gent>
+References: <20261125165604.3074595-1-yvanj@cyber.gent>
+	<20261125165604.3074595-3-yvanj@cyber.gent>
+Organization: IBM
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,240 +113,265 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=SoQFe/O0 c=1 sm=1 tr=0 ts=6b084441 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=iT8M5YjzDwDgK0uH:21 a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22
+ a=TfUWwnGe8vgNDgZCyUkA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI2MDA1NyBTYWx0ZWRfX463DcQ9FW3w8
+ 4CD1gjYGe5cbHTnInJFa0hzmbLZQcZMsk0jh+Wl/QGuyqNUpyVN8OsSI340ybPdeYeTr8anEF3C
+ V2DjfiUHZq7i/quCX1J7Z7A5LXp/1o8=
+X-Proofpoint-ORIG-GUID: 6B-dCLwvQ5RuX7wWuRuAQyEWvGPt4g2g
+X-Proofpoint-GUID: BPlFXjlmmVQRsmo6wtXFssUrmVrOXFJH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI2MDA1NyBTYWx0ZWRfX0ktblx3NA4pf
+ 4QnZX2B04tI/iM3wCIZc9DUAcLkCw9hOzrPYg6fdvd7/7TzsZIEl8Vn38ERflJHWZ5EHAo9fEo3
+ bCOnLtgB8FJkDljQlMs9CjQvSsDuWfZJuI+Gkckyc13Cu5d2pnj+pz/4zaKSJz1bTNc6WYk7m+N
+ 8ja4/q37Ypc9/fW/KaqdA4jQZ0i6wDor6FBkK8rqt15xj+oAFAkl3ycCYjKHu4qzyrszmUHgDgD
+ iiy38IQi0DVlEhlzuy91PTAvXttp5uAx8p9Zg0/PghyCk7Sq89zquapiA0I15CCH9GF61HZFCR6
+ h+/GE5bYl1GzppBD98bgk9c26fw6wfxUTe/fBB5Az4ysjA2Oc2YgdQ8zR4gTBSkj29VSLa44fEL
+ Jyuuu9zGDb2tD26b+qpqu+IbaGkjJGFS73cNM6aF6OYvD5aZjQGidepv/w+QprZ/U36EsuIN4q0
+ Kbjgd1HCnue7Zl/00bA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-26_03,2026-11-26_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1011 malwarescore=0 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611260057
 
-Todd Freed <toddfreed@meta.com> writes:
+On Wed, 25 Nov 2026 17:56:03 +0100
+Yvan Janssens <yvanj@cyber.gent> wrote:
 
-> PSP socket support has thus far been limited to TCP, and
-> psp_dev_encapsulate() hardcodes IPPROTO_TCP as the PSP next header.
->
-> Socket-less PSP associations will also support UDP traffic. Populate the
-> PSP next header from the IP header of the original packet instead.
->
-> With the next header taken from the fixed header, psp_dev_encapsulate()
-> now refuses some cases which are unsupported:
->
->  - IPv4 and IPv6 fragments. Non-initial fragments have no L4 header, so
->    this cannot work. Not a behavior change for PSP sockets.
->  - IPv6 extension headers. More generally, any packet whose transport
->    header isn't right after the IP header (IPv4 options are fine). Some
->    of these could be supported in the future. Not a behavior change for
->    PSP sockets.
->  - Already encapsulated for a tunnel (skb->encapsulation). Their inner
->    headers are already set up.
->  - A checksum to complete (CHECKSUM_PARTIAL) for a next header other than
->    TCP or UDP, which the device can't complete behind the PSP header.
->    Software GSO of a tunnel with an outer checksum, e.g. GRE with csum,
->    clears skb->encapsulation on the segments but leaves the outer checksum
->    to the device.
->
-> Both callers of psp_dev_encapsulate(), mlx5 and netdevsim, drop the
-> packet when it returns false.
->
-> mlx5e also fixes up the TCP checksum of GSO skbs for the device, which
-> is only valid for TCP. Have the stack segment other GSO skbs, e.g. UDP
-> from socket-less associations, in software. Likewise the device only
-> completes a TCP or UDP checksum behind the PSP header: have the stack
-> checksum the other CHECKSUM_PARTIAL skbs.
->
-> For the outer UDP source port, psp_write_headers() already branches to
-> use TCP ehash if the skb has a socket, with fallback to
-> udp_flow_src_port(). Previously, sk always meant TCP. Add an explicit
-> check on nexthdr, and on the socket being a TCP one (a raw or packet
-> socket can send TCP segments, and has no sk_hash), so that the fallback
-> branch is taken for other packets. udp_flow_src_port() hashes the flow
-> if the skb has no hash yet: compute it in psp_dev_encapsulate() before
-> the headers are moved and the IP protocol rewritten, so that it covers
-> the packet's own flow rather than the outer headers being written.
->
-> Signed-off-by: Todd Freed <toddfreed@meta.com>
+> Run a nested guest from a state description without the z/Architecture
+> flag, with KVM_CAP_S390_VSIE_ESAMODE enabled, and let it execute STORE
+> FACILITY LIST EXTENDED twice. vsie intercepts the first one of every SIE
+> entry to shadow the facility list guest 2 designates and then has the
+> instruction repeated.
+> 
+> The test checks that the second doubleword of the PSW field, which is not
+> part of an ESA/390 PSW, comes back unchanged, that the PSW points behind
+> the last instruction, and that the first instruction stored the
+> designated list. What the second instruction stored is printed for
+> diagnosis.
+> 
+> The test is skipped without the capability, without interpretive
+> execution for the guest (SIEF2) and without facility 7 in the guest's
+> model.
+
+which KVM ioctls are you testing here?
+
+are you sure that this is the right place for this test? my impression
+is that this would be done more cleanly as a kvm-unit-test
+
+> 
+> Signed-off-by: Yvan Janssens <yvanj@cyber.gent>
 > ---
->  .../net/ethernet/mellanox/mlx5/core/en_main.c | 33 +++++++++
->  net/psp/psp_main.c                            | 67 ++++++++++++++++---
->  2 files changed, 90 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/=
-net/ethernet/mellanox/mlx5/core/en_main.c
-> index 54f4f5a097c8..0fac06651e5b 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> @@ -5248,6 +5248,23 @@ static netdev_features_t mlx5e_tunnel_features_che=
-ck(struct mlx5e_priv *priv,
->  	return features & ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
->  }
->=20=20
-> +/* The L4 protocol right after the IP header (and its IPv4 options), whi=
-ch
-> + * the PSP Tx path requires, is one the device can complete the checksum=
- of
+>  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>  .../selftests/kvm/s390/vsie_esa_test.c        | 180 ++++++++++++++++++
+>  2 files changed, 181 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/s390/vsie_esa_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index 283c59d7649c..aef64ec2719c 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -227,6 +227,7 @@ TEST_GEN_PROGS_s390 += s390/shared_zeropage_test
+>  TEST_GEN_PROGS_s390 += s390/ucontrol_test
+>  TEST_GEN_PROGS_s390 += s390/user_operexec
+>  TEST_GEN_PROGS_s390 += s390/keyop
+> +TEST_GEN_PROGS_s390 += s390/vsie_esa_test
+>  TEST_GEN_PROGS_s390 += rseq_test
+>  TEST_GEN_PROGS_s390 += s390/irq_routing
+>  TEST_GEN_PROGS_s390 += mmu_stress_test
+> diff --git a/tools/testing/selftests/kvm/s390/vsie_esa_test.c b/tools/testing/selftests/kvm/s390/vsie_esa_test.c
+> new file mode 100644
+> index 000000000000..a52603e30f63
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/s390/vsie_esa_test.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Test nested guests that run in ESA mode (KVM_CAP_S390_VSIE_ESAMODE).
+> + *
+> + * Guest 2 runs a guest 3 from a state description without the
+> + * z/Architecture flag. Such a state description has the eight-byte ESA/390
+> + * PSW in the first doubleword of the PSW field. vsie rewinds the PSW of
+> + * guest 3 when it has to repeat an instruction; the test uses STORE FACILITY
+> + * LIST EXTENDED, which vsie repeats after it has shadowed the facility list
+> + * guest 2 designates.
 > + */
-> +static bool mlx5e_psp_l4_csum_ok(const struct sk_buff *skb)
+> +#include <stdio.h>
+> +#include <string.h>
+> +
+> +#include "kvm_util.h"
+> +#include "test_util.h"
+> +#include "kselftest.h"
+> +#include "sie.h"
+> +#include "facility.h"
+> +#include "ucall_common.h"
+> +
+> +#define G3_MEM_LEN	0x100000UL
+> +/* mso/msl have 1MB granularity */
+> +#define G3_MSO		0x10000000UL
+> +#define G3_START	(2 * 0x1000UL)
+> +/* where guest 3 stores its facility lists, in its first page */
+> +#define G3_STFLE_1	0xf00
+> +#define G3_STFLE_2	0xf80
+> +
+> +#define FAC_STFLE	7
+> +
+> +/* bit 12 of an ESA/390 PSW is one, bit 32 selects 31-bit addressing */
+> +#define ESA_PSW_MASK	0x0008000080000000ULL
+> +#define ESA_PSW_ADDR	0x000000007fffffffULL
+> +
+> +/* facility list for guest 3: only the first doubleword is looked at */
+> +#define G3_FAC_0	0x4000100000000001ULL
+> +
+> +static const u8 g3_code[] = {
+> +	0xa7, 0x08, 0x00, 0x00,			/* lhi   %r0,0 */
+> +	0xb2, 0xb0, 0x0f, 0x00,			/* stfle G3_STFLE_1 */
+> +	0xa7, 0x08, 0x00, 0x00,			/* lhi   %r0,0 */
+> +	0xb2, 0xb0, 0x0f, 0x80,			/* stfle G3_STFLE_2 */
+> +	0x83, 0x00, 0x00, 0x44,			/* diag  %r0,%r0,0x44 */
+> +};
+> +
+> +static u64 scb_real;
+> +
+> +static void guest_code(void)
 > +{
-> +	u8 proto;
-> +
-> +	if (skb->protocol =3D=3D htons(ETH_P_IP))
-> +		proto =3D ip_hdr(skb)->protocol;
-> +	else if (skb->protocol =3D=3D htons(ETH_P_IPV6))
-> +		proto =3D ipv6_hdr(skb)->nexthdr;
-> +	else
-> +		return false;
-> +
-> +	return proto =3D=3D IPPROTO_TCP || proto =3D=3D IPPROTO_UDP;
-> +}
-> +
->  netdev_features_t mlx5e_features_check(struct sk_buff *skb,
->  				       struct net_device *netdev,
->  				       netdev_features_t features)
-> @@ -5256,6 +5273,22 @@ netdev_features_t mlx5e_features_check(struct sk_b=
-uff *skb,
->=20=20
->  	features =3D vlan_features_check(skb, features);
->=20=20
-> +	/* The PSP tx path fixes up the TCP checksum of a GSO skb for the
-> +	 * device, which is only valid for TCP, and the device only completes
-> +	 * a TCP or UDP checksum behind the PSP header. Have the stack segment
-> +	 * and checksum other skbs.
-> +	 */
-> +	if ((skb_is_gso(skb) || skb->ip_summed =3D=3D CHECKSUM_PARTIAL) &&
-> +	    mlx5e_psp_is_offload(skb, netdev)) {
-> +		if (skb_is_gso(skb) &&
-> +		    !(skb_shinfo(skb)->gso_type &
-> +		      (SKB_GSO_TCPV4 | SKB_GSO_TCPV6)))
-> +			features &=3D ~NETIF_F_GSO_MASK;
-> +		if (skb->ip_summed =3D=3D CHECKSUM_PARTIAL &&
-> +		    !mlx5e_psp_l4_csum_ok(skb))
-> +			features &=3D ~NETIF_F_CSUM_MASK;
+> +	while (1) {
+> +		asm volatile("	sie	0(%[scb])\n"
+> +			     :
+> +			     : [scb] "a" (scb_real)
+> +			     : "memory", "cc");
+> +		GUEST_SYNC(0);
 > +	}
-
-Hmm, that's a large check in the hotpath -- maybe it's cheap? So the
-cost for small UDP packets with Tx checksumming enabled and no PSP don't
-blow up.
-
-> +
->  	/* Validate if the tunneled packet is being offloaded by HW */
->  	if (skb->encapsulation &&
->  	    (features & NETIF_F_CSUM_MASK || features & NETIF_F_GSO_MASK))
-> diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-> index 964749a865b1..dc6144469647 100644
-> --- a/net/psp/psp_main.c
-> +++ b/net/psp/psp_main.c
-> @@ -214,7 +214,8 @@ unsigned int psp_key_size(u32 version)
->  EXPORT_SYMBOL(psp_key_size);
->=20=20
->  static void psp_write_headers(struct net *net, struct sk_buff *skb, __be=
-32 spi,
-> -			      u8 ver, unsigned int udp_len, __be16 sport)
-> +			      u8 ver, u8 nexthdr, unsigned int udp_len,
-> +			      __be16 sport)
->  {
->  	struct udphdr *uh =3D udp_hdr(skb);
->  	struct psphdr *psph =3D (struct psphdr *)(uh + 1);
-> @@ -236,10 +237,11 @@ static void psp_write_headers(struct net *net, stru=
-ct sk_buff *skb, __be32 spi,
->  	 * This field is subject to reshuffling, thanks to
->  	 * sk_rethink_txhash() calls in various TCP functions.
->  	 *
-> -	 * Instead, use sk->sk_hash which is constant through
-> +	 * Instead, use sk->sk_hash for TCP which is constant through
->  	 * the whole flow duration.
->  	 */
-> -	if (likely(sk)) {
-> +	if (likely(sk && nexthdr =3D=3D IPPROTO_TCP &&
-> +		   (!sk_fullsock(sk) || sk_is_tcp(sk)))) {
->  		u32 hash =3D sk->sk_hash;
->  		int min, max;
->=20=20
-> @@ -261,7 +263,7 @@ static void psp_write_headers(struct net *net, struct=
- sk_buff *skb, __be32 spi,
->  	uh->check =3D 0;
->  	udp_set_len(uh, udp_len);
->=20=20
-> -	psph->nexthdr =3D IPPROTO_TCP;
-> +	psph->nexthdr =3D nexthdr;
->  	psph->hdrlen =3D PSP_HDRLEN_NOOPT;
->  	psph->crypt_offset =3D 0;
->  	psph->verfl =3D FIELD_PREP(PSPHDR_VERFL_VERSION, ver) |
-> @@ -270,8 +272,34 @@ static void psp_write_headers(struct net *net, struc=
-t sk_buff *skb, __be32 spi,
->  	memset(&psph->iv, 0, sizeof(psph->iv));
->  }
->=20=20
-> -/* Encapsulate a TCP packet with PSP by adding the UDP+PSP headers and f=
-illing
-> - * them in.
-> +/* UDP+PSP goes in at the transport header, the protocol of the IP header
-> + * becomes UDP, and the PSP next header takes the protocol it had. The
-> + * transport header must directly follow the IP header: IPv4 options are=
- fine,
-> + * IPv6 extension headers aren't.
-> + */
-> +static bool psp_dev_encap_ok(const struct sk_buff *skb)
-> +{
-> +	u32 network_len =3D skb_network_header_len(skb);
-> +
-> +	/* inner headers already set up */
-> +	if (skb->encapsulation)
-> +		return false;
-> +	/* fragments not supported for transport mode */
-> +	if (skb->protocol =3D=3D htons(ETH_P_IP))
-> +		return network_len =3D=3D ip_hdrlen(skb) &&
-> +		       !ip_is_fragment(ip_hdr(skb));
-> +	if (skb->protocol =3D=3D htons(ETH_P_IPV6))
-> +		return !ipv6_ext_hdr(ipv6_hdr(skb)->nexthdr) &&
-> +		       network_len =3D=3D sizeof(struct ipv6hdr);
-> +	return false;
 > +}
 > +
-> +/* Encapsulate a packet with PSP by adding the UDP+PSP headers and filli=
-ng
-> + * them in. The PSP next header is taken from the IP header: packets with
-> + * IPv6 extension headers, or whose transport header isn't right after t=
-he IP
-> + * header, are refused, as are IP fragments, packets already encapsulated
-> + * for a tunnel, and packets with a checksum to complete for a protocol =
-other
-> + * than TCP or UDP.
->   */
->  bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 sp=
-i,
->  			 u8 ver, __be16 sport)
-> @@ -279,11 +307,30 @@ bool psp_dev_encapsulate(struct net *net, struct sk=
-_buff *skb, __be32 spi,
->  	u32 network_len =3D skb_network_header_len(skb);
->  	u32 ethr_len =3D skb_mac_header_len(skb);
->  	u32 bufflen =3D ethr_len + network_len;
-> +	u8 nexthdr;
->=20=20
-> -	if (skb->protocol !=3D htons(ETH_P_IP) &&
-> -	    skb->protocol !=3D htons(ETH_P_IPV6))
-> +	if (!psp_dev_encap_ok(skb))
->  		return false;
->=20=20
-> +	if (skb->protocol =3D=3D htons(ETH_P_IP))
-> +		nexthdr =3D ip_hdr(skb)->protocol;
-> +	else
-> +		nexthdr =3D ipv6_hdr(skb)->nexthdr;
+> +static void get_machine_feat(struct kvm_s390_vm_cpu_feat *feat)
+> +{
+> +	struct kvm_vm *vm = vm_create_barebones();
 > +
-> +	/* Devices complete only a TCP or UDP checksum behind the PSP header.
-> +	 * Software GSO of a tunnel with an outer checksum, e.g. GRE, leaves
-> +	 * the segments here with encapsulation cleared and CHECKSUM_PARTIAL
-> +	 * at the tunnel header.
-> +	 */
-> +	if (skb->ip_summed =3D=3D CHECKSUM_PARTIAL &&
-> +	    nexthdr !=3D IPPROTO_TCP && nexthdr !=3D IPPROTO_UDP)
-> +		return false;
+> +	kvm_device_attr_get(vm->fd, KVM_S390_VM_CPU_MODEL,
+> +			    KVM_S390_VM_CPU_MACHINE_FEAT, feat);
+> +	kvm_vm_free(vm);
+> +}
 > +
-> +	/* udp_flow_src_port() may need to hash the flow: do it on the
-> +	 * original headers, before they are moved and rewritten
+> +static bool machine_has_sief2(void)
+> +{
+> +	struct kvm_s390_vm_cpu_feat feat = {};
+> +
+> +	get_machine_feat(&feat);
+> +	return feat.feat[0] & (1ULL << (63 - KVM_S390_VM_CPU_FEAT_SIEF2));
+> +}
+> +
+> +static bool machine_has_facility(int nr)
+> +{
+> +	struct kvm_s390_vm_cpu_processor proc = {};
+> +	struct kvm_vm *vm = vm_create_barebones();
+> +	bool ret;
+> +
+> +	kvm_device_attr_get(vm->fd, KVM_S390_VM_CPU_MODEL,
+> +			    KVM_S390_VM_CPU_PROCESSOR, &proc);
+> +	ret = test_bit_inv(nr, (unsigned long *)proc.fac_list);
+> +	kvm_vm_free(vm);
+> +	return ret;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct kvm_s390_vm_cpu_feat feat = {};
+> +	struct kvm_s390_sie_block *scb;
+> +	u64 *g3_page0, *fac_list;
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	gva_t gva, fac_gva;
+> +	u64 psw_end;
+> +	struct ucall uc;
+> +	void *code;
+> +	int i;
+> +
+> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_S390_VSIE_ESAMODE));
+> +	TEST_REQUIRE(machine_has_sief2());
+> +	TEST_REQUIRE(machine_has_facility(FAC_STFLE));
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(3);
+> +
+> +	/* SIEF2 must be enabled before the first vcpu is created */
+> +	get_machine_feat(&feat);
+> +	vm = vm_create(1);
+> +	kvm_device_attr_set(vm->fd, KVM_S390_VM_CPU_MODEL,
+> +			    KVM_S390_VM_CPU_PROCESSOR_FEAT, &feat);
+> +	vm_enable_cap(vm, KVM_CAP_S390_VSIE_ESAMODE, 0);
+> +	vcpu = vm_vcpu_add(vm, 0, guest_code);
+> +
+> +	gva = vm_alloc_page(vm);
+> +	scb = addr_gva2hva(vm, gva);
+> +	memset(scb, 0, getpagesize());
+> +	scb_real = addr_gva2gpa(vm, gva);
+> +	sync_global_to_guest(vm, scb_real);
+> +
+> +	fac_gva = vm_alloc_page(vm);
+> +	fac_list = addr_gva2hva(vm, fac_gva);
+> +	memset(fac_list, 0, getpagesize());
+> +	fac_list[0] = G3_FAC_0;
+> +
+> +	/* guest 3: two prefix pages and one page of code */
+> +	for (i = 0; i < 3; i++) {
+> +		gpa_t gpa = vm_phy_page_alloc(vm, MEM_REGION_TEST_DATA);
+> +
+> +		virt_pg_map(vm, G3_MSO + i * getpagesize(), gpa);
+> +		memset(addr_gpa2hva(vm, gpa), 0, getpagesize());
+> +		if (i == 0)
+> +			g3_page0 = addr_gpa2hva(vm, gpa);
+> +		if (i == 2)
+> +			code = addr_gpa2hva(vm, gpa);
+> +	}
+> +	memcpy(code, g3_code, sizeof(g3_code));
+> +
+> +	scb->cpuflags = CPUSTAT_RUNNING;
+> +	scb->ihcpu = 0xffff;
+> +	scb->mso = G3_MSO;
+> +	scb->msl = G3_MSO + ((G3_MEM_LEN - 1) & ~0xfffffUL);
+> +	scb->psw_mask = ESA_PSW_MASK | G3_START;
+> +	scb->psw_addr = 0;
+> +	scb->fac = addr_gva2gpa(vm, fac_gva);
+> +	TEST_ASSERT(!(scb->fac & 7) && addr_gva2gpa(vm, fac_gva) < (1UL << 31),
+> +		    "facility list not usable for a designation");
+> +
+> +	vcpu_run(vcpu);
+> +	TEST_ASSERT_EQ(get_ucall(vcpu, &uc), UCALL_SYNC);
+> +	/*
+> +	 * The capability does not tell whether the machine (or the hypervisor
+> +	 * this host is a guest of) runs a state description without the
+> +	 * z/Architecture flag. If not, it answers with validity 0x0001.
 > +	 */
-> +	skb_get_hash(skb);
+> +	if (scb->icptcode == ICPT_VALIDITY && (scb->ipb >> 16) == 0x0001)
+> +		ksft_exit_skip("the host cannot run nested guests in ESA mode (validity 0x0001)\n");
+> +	TEST_ASSERT(scb->icptcode == ICPT_INST && scb->ipa == 0x8300,
+> +		    "guest 3: icptcode 0x%02x ipa 0x%04x ipb 0x%08x psw 0x%016llx 0x%016llx",
+> +		    scb->icptcode, scb->ipa, scb->ipb, scb->psw_mask, scb->psw_addr);
+> +
+> +	psw_end = ESA_PSW_MASK | (G3_START + sizeof(g3_code));
+> +	ksft_test_result(scb->psw_addr == 0,
+> +			 "second PSW doubleword of the ESA mode guest untouched (0x%llx)\n",
+> +			 scb->psw_addr);
+> +	ksft_test_result((scb->psw_mask & ~0x0000300000000000ULL) == psw_end,
+> +			 "ESA/390 PSW after the last instruction (0x%llx)\n",
+> +			 scb->psw_mask);
+> +	ksft_print_msg("second STFLE stored 0x%lx\n",
+> +		       g3_page0[G3_STFLE_2 / sizeof(u64)]);
+> +	ksft_test_result(g3_page0[G3_STFLE_1 / sizeof(u64)] == G3_FAC_0,
+> +			 "first STFLE of the ESA mode guest executed (0x%lx)\n",
+> +			 g3_page0[G3_STFLE_1 / sizeof(u64)]);
+> +
+> +	kvm_vm_free(vm);
+> +	ksft_finished();
+> +}
 
-Wdyt about adding a helper that does source port selection here?
-Then pass that sport to the psp_write_headers (unused argument btw). The
-block in the header writer is then just uh->source =3D sport.
-
-Interesting series!
-
-
-Bj=C3=B6rn
