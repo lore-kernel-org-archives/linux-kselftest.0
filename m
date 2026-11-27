@@ -1,100 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795793257;
-	b=F2t77pBGIvTWppgWnjeDLHxGOEj7FDDG8frB8NYEqT7cW9QkS+mBYZMyvD7Qn2BEfGQw
-	 GjfWJ54nawhFYL40NSvPOkoiuDTTHBrFaBot5aAhVAFhrYVwbmaSIzFEgxVQz75BQcP5H
-	 NTE7SgJnS7ElvvW2+cSAGwUy34Ggax1egh4UGU/dBJ/l3WEwmoCzmlvalp+oUt9MgieEe
-	 bQ5ycmd6lHueXPVis2g9X5ZY0p5DS+Sv6G2G4iwRMao45rPuD8/nZ2Z11Ts80ylVSqFdA
-	 6CRcyO8fTNTT4n6w0qkZ0btJ2swB1ZjdbQOqcstocvjv7TN7Z3z0y1M9HJkCO/KNHPQ==
+	t=1795793596;
+	b=Bu/IigxpMK692wugE65mgWADQS3cpolzsQ9CL8Ac5e/Z8EOuP7zFkKeONiwuS7HdGE+0
+	 tqqKjuKG4aw9FQuPLNoIRmam40kmPUp7ZUUosdzDpkQ4jDUZHQmfUY695HRDTZCtYubyS
+	 63J9Cv1AkCKBO9JCX3+95nSJ+nL+wNjUZqNtrHMwmcpd+Q9uzBKDYtTnt35WFEpVOn3wH
+	 HpnaY4S8/8KSWGYUgTo1DpHH7x++RzmTbntT8m1v3EFMCEn/btS8RV0QfBgpF4HFp8hT5
+	 vddUa9BFlrmG6BRl/WKZLqt58FJsmC+IczYgu4Mbz5KhIR0JDc3hNFVQ8YIGwzpevMw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795793257;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=HRdPsM8k7LxHkJKc9/GKJtL7QWO/APvPQxk6NOXwn1I=;
-	b=GWQBCMF6tmgG2sjMYlIJ9uByTmIOCGNzRfSRoJ+dt80fANoVpIwXjUV7NXfL9pe7tJVb
-	 GeOavTrs9D+KijNlnw58/zjjje3oTZ9H2v9M1CFZN6+YqHF/iX8Y4am1M4qhuN9qjgKID
-	 zIgLyDso1I5yqBgcC2qA7V9zGLkowOrrfiyWpxFSYs2VVsygrriLuLLSe8mXgrPnSMh7q
-	 +FQVEQlmDBwM8Sn3F+SNC0TLQc7jTlqHShocArcXSM0nmzJO2tejzVoBivdyRJWLifbcP
-	 EGI0KYd9KW7Zt0c/kqA2MjmmkfCihMwnwXFr+rHorQUaTeX23ioeLeEsAKSY2/twVQg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795793596;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:Subject:Date:
+	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=0E5oFbfWv4al6ZhXYQB+Fc2jmPL18RQBBfOHqivCMnU=;
+	b=cU9BWilRgGTulPclKV2EB2sV9QTmPZvfHpX6LelKpvw3ZC4VvQtdcwQ9cC4iOm3372Md
+	 xtReWRd0q9pvarMduubm6HzNXhSfh7LBHBV1hIGjpffOeDWc9aBJJlfZJv42281UA+sTg
+	 oLaFyB4JSNfusY6U3FZrCCLwcxh8Hxoy0+AAOmMHilTmu7TBuVP0Q2tYJMwNw35KRE2MW
+	 UoaDLECgZFJ58wkkzBpJkABg5ejuOW2Zo3gYrya0ciJVXEMYsyK6JFG3gQV6qWL0vdY8U
+	 nHj7nHbWmwM6Edexh+VyBG0my+X96oES3yJIODNTnk9xcn0YZ+VtQS51kwaP19CwRdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=casper.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=bN51kz8A;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED5D606A31E;
-	Fri, 27 Nov 2026 15:27:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2ED5D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=bNYggG6W;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F946606A31F;
+	Fri, 27 Nov 2026 15:33:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F946606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=bN51kz8A
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=HRdPsM8k7LxHkJKc9/GKJtL7QWO/APvPQxk6NOXwn1I=; b=bN51kz8AqdcMI7Ca2+YkK0QH6y
-	qMq5tVCh++osclO5Qk4B6nUiVdaT/rdxlV3K4kQR65Fcfcfr/d2ITmIiP2+kmZMjQ+fONgRI8kuuk
-	Gic4OR68mqen0VPo0Gn8+AlXROKWVxUnh9Zvb2kHsZFOsAVXiwbGiYF8WvNzMoV4DicXEhnubu1NN
-	eyTTUMhKbcIGNkH3opTl6QLzhGfuGHe+hQQKr6zX443jX14k4BkhMyaI5gSZEvTMj98YUGu0NwQie
-	Tg34NGLdy/lKRIQXj9WEIJsKXx4f1AiFOG6vh+exIbMJV3L/cEvJHyo3EEoqoWUgBNAMjAJFVEJ7b
-	hpuOxrpg==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xWxrG-0000000Gy3X-46gt;
-	Fri, 27 Nov 2026 15:27:31 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xWxrG-00000000Pqm-3Fgj;
-	Fri, 27 Nov 2026 15:27:30 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Thara Gopinath <tgopinath@linux.microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Michael Kelley <mhklinux@outlook.com>,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>,
-	Nikolas Wipper <nik.wipper@gmx.de>,
-	Mushahid Hussain <hmushi@amazon.co.uk>,
-	Sriram Nambakam <snambakam@linux.microsoft.com>,
-	Zack Rusin <zack.rusin@broadcom.com>,
-	Doug Covelli <doug.covelli@broadcom.com>,
-	Jim Mattson <jmattson@google.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Paul Durrant <paul@xen.org>,
-	Xin Li <xin@zytor.com>,
-	Francesco Lavra <flavra@baylibre.com>,
-	=?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>,
-	Liran Alon <liran.alon@oracle.com>,
-	Arbel Moshe <arbel.moshe@oracle.com>,
-	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v3 12/15] KVM: SVM: Support CR0 and CR4 write filters
-Date: Fri, 27 Nov 2026 15:27:27 +0000
-Message-ID: <20261127152730.99319-13-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261127152730.99319-1-dwmw2@infradead.org>
-References: <20261127152730.99319-1-dwmw2@infradead.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=bNYggG6W
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9F16169E;
+	Fri, 27 Nov 2026 07:33:11 -0800 (PST)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 422B03F632;
+	Fri, 27 Nov 2026 07:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795793594; bh=CREZT/iY5Maoixa1IibuDtoXUQI0xrQeRjPWVOFSKwA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=bNYggG6W7pYvzbEvPWfcDMwAR0kUCLZHnsj/qbFyAnIGNAE1k/FTdOUVO+MbIjUiL
+	 Bt1iz4axqpaEidiwhz0tkxHw5/CCUg00sNrmBm+0qsIqKgqBJYBWbhCTjyGgHbe/HS
+	 FPT3VzxkYqeqpvRJs428DDnng4TvXLls3+uYj/yE=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH RFC v3 0/8] attestation: provider: add CCA Realm Guest
+ provider
+Date: Fri, 27 Nov 2026 15:32:55 +0000
+Message-Id: <20261127-arm_cca_mr-v3-0-df3230afce8f@arm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,148 +56,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKiiCWsC/22NywrCMBREf6XctZHkKrZxJQh+gFspJY9bm0UaS
+ SQoJf9uyNrlzGHObJAoOkpw7jaIlF1yYa3hsOvALGp9EnO2ZkCOJy5RMhX9ZIyafGRKyKNGkmh
+ ED3XwijS7T5M94H67wljLxaV3iN92kLGhf66MjDNh5aC1EkM/20uFexM8jKWUH8uK1lOnAAAA
+To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-acpi@vger.kernel.org, 
+ acpica-devel@lists.linux.dev
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
+ Suzuki Poulose <suzuki.poulose@arm.com>, 
+ Steven Price <steven.price@arm.com>, Sami Mujawar <sami.mujawar@arm.com>, 
+ thuth@redhat.com, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, 
+ Pawel Chmielewski <pawel.chmielewski@intel.com>, 
+ Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <shuah@kernel.org>, Len Brown <lenb@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Mark Brown <broonie@kernel.org>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Gavin Shan <gshan@redhat.com>, 
+ Yeoreum Yun <yeoreum.yun@arm.com>, Sudeep Holla <sudeep.holla@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4966; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=CREZT/iY5Maoixa1IibuDtoXUQI0xrQeRjPWVOFSKwA=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBrCaKyr1sL7I3GjufUXjAqUdNumg4Eu4t6MmqHp
+ tAOy6CS0BiJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCawmisgAKCRBt1cPRWsUx
+ M/DnDACUjQ9s+JwuutCXoESK7Y3sUXsaRo4m18QvFHFWdANC8ghLblUcU2RbSsyopDlIC4GHgS6
+ 3o8yvxhAQUlaN9p4PY1Tf1JdklJSW7hGM89MCOFo9sfffrbHdjc/cHxEv9+I+qqVJ7mUBeLkMkQ
+ 6TiH5pDeXFZDFg14WE5H2C3XlQJmzwdD8HA3GA1MYq7NY4OmYSD1xmdZU1k1bc8VNOL9dGidfsB
+ xQMXxlY1YIG4lxIVNL+tbU7ZBR+66zsMB1+bkuZ74j/+H4aWIxFbail6XTCD6yBdpQeleTUymbS
+ JR5D090Qdxj8biSqS9Tx/OgdaFrsgFLzf7FxCAeggOK9kDfUCF3r3YoCMwrlBplw/aX/GBpXWM6
+ sSZ7Z6nhzocO8wMYU9rSt0Aqz90ARhYLbgQCkkkQ33Zx7I9PQcO8UR1PtHmJScFk0SWSlWhgngX
+ 9kkMuWVDVyFPjKIqlwpGRVcZYHoLv7JaJpjGHSUrmGgG+Q04OeBWS5PjrzsKLRrSLbTZ8=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+This series adds support for Arm Confidential Compute Architecture (CCA)
+measurement registers in the Linux kernel, enabling guest Realms to
+access, extend, and expose measurement values for attestation and runtime
+integrity tracking.
 
-Keep INTERCEPT_CR0_WRITE set in vmcb01 while a CR0 filter is armed,
-and check the filter in cr_interception().  Without NextRIP the write
-goes to the emulator, which knows the instruction length.  L2 is not
-filtered.
+The Realm Management Monitor (RMM) defines a set of measurement registers
+consisting of a Realm Initial Measurement (RIM) and a number of Realm
+Extensible Measurements (REMs). This series introduces the necessary
+infrastructure to interact with these registers via the RSI interface
+and exposes them to userspace through CTLV attestation subsystem.
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Also, this seires includes the CCA attesation token generation interface
+and CCEL event-log exposure through CTLV attestation subsystem.
+
+At a high level, the series includes:
+ - Helper interfaces for reading and extending measurement
+   registers via RSI
+ - Definitions for Realm hash algorithms as defined by the
+   RMM specification
+ - Support CCEL table in arm64
+ - Integration with attestation subsystem by introducing CCA Realm Guest
+   provider
+
+After applying this series, measurement registers and relative interface
+will be exposed ctlv interfaces.
+
+This patch based on arm64/for-next/smccc-bus, attestation branch[0-2] and
+firme patch-series [3].
+
+To: linux-arm-kernel@lists.infradead.org
+To: linux-kernel@vger.kernel.org
+To: linux-security-module@vger.kernel.org
+To: linux-doc@vger.kernel.org
+To: linux-kselftest@vger.kernel.org
+To: linux-acpi@vger.kernel.org
+To: acpica-devel@lists.linux.dev
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: Steven Price <steven.price@arm.com>
+Cc: Sami Mujawar <sami.mujawar@arm.com>
+Cc: thuth@redhat.com
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: Pawel Chmielewski <pawel.chmielewski@intel.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mark Brown <broonie@kernel.org>
+
+Link: [0] https://github.com/jpirko/linux_mlxsw/tree/wip_attestation_all_2
+Link: [1] https://lore.kernel.org/all/20261113155515.2510194-1-jiri@resnulli.us/
+Link: [2] https://lore.kernel.org/all/20261113160838.2512652-1-jiri@resnulli.us/
+Link: [3] https://lore.kernel.org/all/20261127-firme_interface-v2-0-ab88b2d0b4e0@arm.com/
 ---
- arch/x86/kvm/svm/svm.c | 66 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 65 insertions(+), 1 deletion(-)
+Changes in v3:
+- rebase to attestation subsystem.
+- Link to v2: https://lore.kernel.org/r/20260929-arm_cca_mr-v2-0-1d98bba187fd@arm.com
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 4ffb41234dc2..c91467a59e20 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1135,6 +1135,22 @@ static void svm_recalc_intercepts(struct kvm_vcpu *vcpu)
- 	svm_recalc_msr_intercepts(vcpu);
- }
- 
-+static void svm_update_reg_write_filter(struct kvm_vcpu *vcpu)
-+{
-+	struct vcpu_svm *svm = to_svm(vcpu);
-+
-+	/*
-+	 * CR4 writes are always intercepted.  CR0 writes are not when the
-+	 * guest and host views agree (hcr0 == cr0): force the intercept in
-+	 * vmcb01 while a CR0 filter is armed.  Disarming leaves the
-+	 * intercept in place - a forced intercept only costs exits, which
-+	 * cr_interception() handles as usual - and the next svm_set_cr0(),
-+	 * which respects the filter, restores its own state.
-+	 */
-+	if (vcpu->arch.reg_write_filter_armed & BIT(KVM_X86_REG_FILTER_CR0))
-+		svm_set_intercept(svm, INTERCEPT_CR0_WRITE);
-+}
-+
- static void init_vmcb(struct kvm_vcpu *vcpu, bool init_event)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -1867,7 +1883,13 @@ void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
- 	if (hcr0 == cr0) {
- 		/* Selective CR0 write remains on.  */
- 		svm_clr_intercept(svm, INTERCEPT_CR0_READ);
--		svm_clr_intercept(svm, INTERCEPT_CR0_WRITE);
-+		/*
-+		 * The selective intercept misses writes that change only
-+		 * TS or MP, and CLTS: a CR0 write filter needs them all.
-+		 */
-+		if (!(vcpu->arch.reg_write_filter_armed &
-+		      BIT(KVM_X86_REG_FILTER_CR0)))
-+			svm_clr_intercept(svm, INTERCEPT_CR0_WRITE);
- 	} else {
- 		svm_set_intercept(svm, INTERCEPT_CR0_READ);
- 		svm_set_intercept(svm, INTERCEPT_CR0_WRITE);
-@@ -2647,6 +2669,21 @@ static bool check_selective_cr0_intercepted(struct kvm_vcpu *vcpu,
- 
- #define CR_VALID (1ULL << 63)
- 
-+/*
-+ * Send an intercepted write which a register write filter catches to
-+ * userspace instead of performing it.  The caller has checked that the
-+ * length of the instruction is known.
-+ */
-+static bool svm_reg_write_filtered(struct kvm_vcpu *vcpu, u32 reg,
-+				   unsigned long old, unsigned long val)
-+{
-+	if (!kvm_reg_write_filtered(vcpu, reg, old, val))
-+		return false;
-+
-+	kvm_reg_write_user_space(vcpu, reg, old, val, svm_exit_insn_len(vcpu));
-+	return true;
-+}
-+
- static int cr_interception(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -2660,6 +2697,16 @@ static int cr_interception(struct kvm_vcpu *vcpu)
- 	if (unlikely((svm->vmcb->control.exit_info_1 & CR_VALID) == 0))
- 		return emulate_on_interception(vcpu);
- 
-+	/*
-+	 * A filtered write reports the length of its instruction, which only
-+	 * NextRIP provides here.  Without it, let the emulator raise the exit,
-+	 * as it does without Decode Assists.
-+	 */
-+	if ((vcpu->arch.reg_write_filter_armed &
-+	     (BIT(KVM_X86_REG_FILTER_CR0) | BIT(KVM_X86_REG_FILTER_CR4))) &&
-+	    !svm_exit_insn_len(vcpu))
-+		return emulate_on_interception(vcpu);
-+
- 	reg = svm->vmcb->control.exit_info_1 & SVM_EXITINFO_REG_MASK;
- 	if (svm->vmcb->control.exit_code == SVM_EXIT_CR0_SEL_WRITE)
- 		cr = SVM_EXIT_WRITE_CR0 - SVM_EXIT_READ_CR0;
-@@ -2673,6 +2720,14 @@ static int cr_interception(struct kvm_vcpu *vcpu)
- 		trace_kvm_cr_write(cr, val);
- 		switch (cr) {
- 		case 0:
-+			/*
-+			 * The filter never triggers in guest mode and the
-+			 * selective-CR0 reflection only applies there, so
-+			 * the order of the two checks does not matter.
-+			 */
-+			if (svm_reg_write_filtered(vcpu, KVM_X86_REG_FILTER_CR0,
-+						   kvm_read_cr0(vcpu), val))
-+				return 0;
- 			if (!check_selective_cr0_intercepted(vcpu, val))
- 				err = kvm_set_cr0(vcpu, val);
- 			else
-@@ -2683,6 +2738,9 @@ static int cr_interception(struct kvm_vcpu *vcpu)
- 			err = kvm_set_cr3(vcpu, val);
- 			break;
- 		case 4:
-+			if (svm_reg_write_filtered(vcpu, KVM_X86_REG_FILTER_CR4,
-+						   kvm_read_cr4(vcpu), val))
-+				return 0;
- 			err = kvm_set_cr4(vcpu, val);
- 			break;
- 		case 8:
-@@ -5617,6 +5675,8 @@ struct kvm_x86_ops svm_x86_ops __initdata = {
- 
- 	.apic_init_signal_blocked = svm_apic_init_signal_blocked,
- 
-+	.update_reg_write_filter = svm_update_reg_write_filter,
-+
- 	.recalc_intercepts = svm_recalc_intercepts,
- 	.complete_emulated_msr = svm_complete_emulated_msr,
- 
-@@ -5722,6 +5782,10 @@ static __init void svm_set_cpu_caps(void)
- 	if (cpu_feature_enabled(X86_FEATURE_BUS_LOCK_THRESHOLD))
- 		kvm_caps.has_bus_lock_exit = true;
- 
-+	/* CR0/CR4 write interception can always be forced. */
-+	kvm_caps.supported_reg_write_filter |= BIT(KVM_X86_REG_FILTER_CR0) |
-+					       BIT(KVM_X86_REG_FILTER_CR4);
-+
- 	/* CPUID 0x80000008 */
- 	if (boot_cpu_has(X86_FEATURE_LS_CFG_SSBD) ||
- 	    boot_cpu_has(X86_FEATURE_AMD_SSBD))
+Changes in v2:
+- rebase to arm64 tree's for-next/smccc-bus
+- Link to v1: https://lore.kernel.org/all/20260413084957.327661-1-sami.mujawar@arm.com/
+
+---
+Sami Mujawar (2):
+      arm64: rsi: Add helpers for Arm CCA measurement register operations
+      arm64: rsi: Add realm hash algorithm defines
+
+Suzuki K Poulose (1):
+      arm64: acpi: Enable ACPI CCEL support
+
+Yeoreum Yun (5):
+      acpi: add CCtype value macros for CCEL table
+      Documentation/ctlv: introduce ctlv-attestation-cca-guest family
+      ctlv: add auto-generated files for ctlv-attestation-cca-guest
+      attestation: providers: introduce CCA Guest attestation provider
+      selftest: attestation: add cca_guest_attestation_test selftest
+
+ .../ctlv/abi/ctlv-attestation-cca-guest.yaml       |   19 +
+ Documentation/ctlv/abi/families.registry.yaml      |    1 +
+ Documentation/ctlv/families.yaml                   |    1 +
+ Documentation/ctlv/generated-files.yaml            |   11 +
+ .../ctlv/specs/ctlv-attestation-cca-guest.yaml     |   20 +
+ arch/arm64/kernel/acpi.c                           |   11 +
+ drivers/attestation/Kconfig                        |   10 +
+ drivers/attestation/Makefile                       |    5 +
+ .../generated/ctlv_attestation_cca_guest_gen.c     |   64 +
+ .../generated/ctlv_attestation_cca_guest_gen.h     |   40 +
+ drivers/attestation/providers/cca_guest.c          |  582 ++++++++
+ include/acpi/actbl2.h                              |    7 +
+ include/linux/arm-rsi-cmds.h                       |  118 +-
+ include/linux/arm-smccc-rsi.h                      |    8 +
+ include/uapi/ctlv/ctlv_attestation_cca_guest_gen.h |   34 +
+ include/uapi/ctlv/ctlv_families_gen.h              |    1 +
+ tools/testing/selftests/attestation/.gitignore     |    1 +
+ tools/testing/selftests/attestation/Makefile       |    9 +-
+ .../attestation/cca_guest_attestation_test.c       |  517 +++++++
+ .../ctlv_attestation_cca_guest_user_gen.c          | 1547 ++++++++++++++++++++
+ .../ctlv_attestation_cca_guest_user_gen.h          |   49 +
+ 21 files changed, 3051 insertions(+), 4 deletions(-)
+---
+base-commit: 55e9f5a2188b97fd2e3ef949b0e52910aa77d940
+change-id: 20260929-arm_cca_mr-a194b2e92c17
+
+Best regards,
 -- 
-2.50.1
+Sincerely,
+Yeoreum Yun
 
