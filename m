@@ -1,84 +1,84 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795772828;
-	b=RfmrtIuDRU+ocJJxWauKFjUfwuGZb5mi5NtfN8LONTUvBIu8TcgYjaLvo8qvolZaLKrj
-	 rhI8shuGDG+goAS3m6ejVpQe8oKnUa+sYuteA4PlCKS/k6KmDXpEqfsW/3IS98VbCOseu
-	 mWscnXlGAB0qQjz8Z3rNrxPvc/5U0Y0L/t5SgZQ0uzZ1zHMPNVe8IGXwbdnNf5DyTIVn2
-	 dTTyWMPUzdryptAr6lF7BODrASCofRJuRrU5UlWh8WaPA7zcLa6vyznuwRVAIqMmtVyUz
-	 3A5y/r40jcorGY/+D7IbyueP1iXnR7K6X1yDaYCgf1X4pWA3afemVcsFSgO9mWDqjLQ==
+	t=1795772830;
+	b=WxV8SXKb5yCH2g7flFGw7ONOaA0hRosKjLgMpZAksC6LiTyWrfZ5Olp9EZH51iKkFoft
+	 VdlY8cCqkYqGBx7NkSAHNY+xI1urUiactTcAB84Z15GiP0Kh7RoMMHANUxeqQPnvjMSfh
+	 GSPjEvCr+cwrB7t5sRvheYlB8t/VH094zZO9nCtDhT4HUQbz1uhxMqCOtcaaV07KDufp9
+	 7BMarTf/jN2C+dq9D5eTQod96Nmz+0OXBUuD+vAwsUrpxOWnAzlKiLjepLbsTORigFW8r
+	 dRFZt7c2UtuU7SoNBa5MNXQXxGXdSOs6gThDwtpV4KDxFkluOBuyeT06PVGmQBbY+YQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795772828;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795772830;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=DChxuWi1QfV4n8QP1UzjQQITjBXMyISv+4oZQzrmx/Y=;
-	b=Ua0xw+govBoS5L9TvHhGHNN3UY1CzknEne5HoPZqHvX2dBzt/bjs5eBhT7vbbXdv2ifi
-	 LHP+Z72ilO6DYoM9Trd+1SzoVyx+JGHPwEz+DLr2+36La3c9s+6Ut8JnpFnCdJXri/Cte
-	 84wjnb30rJ4uVMujCsooA+NvD/SEpt3abQ+gZjEM14RMmOOdZb0YoNWM3YIQp/GXQ9WTZ
-	 fF9SDIX8aRyDN6GyYf9m0CRAveWwi1M4UCwSK1N58DYc3jO0vmId0BCJnCZ0KA8WI3bj3
-	 Z4qIhlJD5ijjzaFl5bgf0+WJSN8c/B7tfc8agYQ1zNkNfJnjevAIQyucDQcDV4CuboQ==
+	bh=rLsQ/GlDzGOb8CaVAi+lRi51pZAWGSStX7fuTRtzazk=;
+	b=WyKWs80rfhCUsmG7PCIhSdRLAMI8zYaaqDMEoEPsVNPgE9xc6X5Ck1ma5ti3AXzGO9Jq
+	 nPW8K7uCYFfCg6F+KhVtQckiehXaNjxzQFTP+9sya0A/h78oCo27UUqA8qpQcSkdkt5bI
+	 zs32s4ooMRBnZCWEuqd7RuRcKkM2OYKaLJZiMO6+NyCZdipuJantuQe8AVUvbaaXXk/eU
+	 bdneE4nwP1OqK32dddR2aggL92kd+T365IKiX0+NFd3YGek1vqWMcRnoMLS/8XnAs8tHb
+	 s3CYd+wuOwiEqb0V+G09SSaFJsIxXFvaOPCtxMNgtQtlTthVo9wqiWqiF4KP5IczHJw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=blockcast.net;
 	spf=pass smtp.mailfrom=blockcast.net;
-	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=PZ5OkWsO;
+	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=yyW8otla;
 	arc=none smtp.remote-ip=74.125.82.45
 Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8FE606A332
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 09:47:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F8FE606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1723F606A692
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 09:47:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1723F606A692
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=PZ5OkWsO
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-15dd124bbe7so11670727c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 01:47:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=yyW8otla
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-170135e43c7so12275495c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 01:47:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1795772828; x=1796377628; darn=vger.kernel.org;
+        d=blockcast.net; s=google; t=1795772829; x=1796377629; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DChxuWi1QfV4n8QP1UzjQQITjBXMyISv+4oZQzrmx/Y=;
-        b=PZ5OkWsOvPVynZ/OsIDD0PmWjYzAOCoHvZEjUg1DHj20NbP1zlASUObN/m5cTCZgkX
-         e4vNlNRfgpp7nbPKW0IH7kHU5P7nXR60LiM0qtg72qjLkirT8eC31gphLAr3trxMR0jV
-         BxWn3DszDw+LDSqyKIyFOiqwK2HKCmIb8IJaE6woc5UDUic7MXpJ4vykoBscSKdEV3xQ
-         kTE8Dddnkw6CShPalyU/0nUypzC+B3h1uJJNtzjXA65kRTeVebuAAUhu0CtOyYF9apYa
-         k0iTq30PxH+8ytpxY3J0+0yfN1pheQWMi7bJNT/fzfm9d+YMDzXS51sZF5whTOMcy2U9
-         mLXw==
+        bh=rLsQ/GlDzGOb8CaVAi+lRi51pZAWGSStX7fuTRtzazk=;
+        b=yyW8otlanoSMDdVOdb0Pof/Al24Hb7CxppxajEVwGiiwVZmUDhbmTFNaZ64O0T0VNi
+         /cyZo2Cfe3Zk22wRzF4iNAXYJNh+yN65h7Te00QKw/AlYiZnhQ4KNsn90gjgsU0mPlPH
+         mpgpDwr0orE4qPkuSQdofFP9bljO9N9nOyViIE5F3G4PyWlC2K5CIMO2PuU/3YGYFeU7
+         tT6yWQfdytUT8CU+AAe/K2GgJs9FFlmOebSfV78oTDPvVXsijjkpxlIaYWvKeXLPxKiK
+         t6KLMDmJGclfX+rWbocH0ESVNdOzidKHrc/S4xH6nlzDyv38mK5/Kg5XD7sfM5rzEeBv
+         JWfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795772828; x=1796377628;
+        d=1e100.net; s=20260707; t=1795772829; x=1796377629;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DChxuWi1QfV4n8QP1UzjQQITjBXMyISv+4oZQzrmx/Y=;
-        b=E+Z7BFO8HXmVFwdk85sTsLVBWtWmmbvnSKNUymbtK1ehbgNVQs3SU+3oPHKmGD5G+K
-         agdg7Gk4618lx5JJ5gorvgVAtM2MZVHTjKb19KL6gdfvCd3J+L2Gce941bm+pA0QQEgN
-         pOYvX00ldpb2ph6jrGWCvIRK3ql2BMUOr9eOi7Prcb5EkixQImO3tuU2b1a+ubVSRtyz
-         bQ86Shvh4439shnHAXDwmVWjdq0YJU0HQkoJT5PcxBsTzPksKvYDMiWy984COQmWzTHh
-         1FM0mECKU2jjM3flr8Mqu0jsgIg6kq/Zk5ueLzzdtBdR2Z0KLkh9gEGc/e1P5pJWx/13
-         jdZg==
-X-Forwarded-Encrypted: i=1; AL+hErGN5O0cErFGMZwlEn4RTJ4NPUGww/UsnDFsDOBGzItLxzuoUWKsEyeAUpucUlLeIVtnmA8rO2LLJr+f4cnUh54=@vger.kernel.org
-X-Gm-Message-State: APuU4Z81ZizLEAEubZlBpJAjEEaRcnCi5M92QDOaNn6nZBd4cHGjK+/D
-	hVKj1sb6FLmrjaJp3Knyz7VbgLCv7TOih3xmswbUlbK/YpMHnsqmoHI4D9uptW1Si6U=
-X-Gm-Gg: AZFdTZeDfBEGT1fIjMUIH1ILXPcZBwmyd94jH7JBWo/1OCRvdi7S0fqNiZjAM2DY4O0
-	rvmNDBXSqtLkeeINi+MW4p5OzQ/vT7eEpum7SC+RwVfrzTliLtexvtYb5Ph6GXYheeLRUVeeRbM
-	jv3/RIjvK9KMrIDcfNHPLfcPgYf9nHFwu2F17G0eAj/6R7wZzQrOl9BVmS07s8+MbHiV2hVpTpR
-	ftC5o2cRD/1LftlFJwW/Yp1DUZopFDuq1k0hIlKa8qsJ/wL7bj8ULjV/zsVfwj02jQ/UuKPeInY
-	LC/+rQ/uo4DUcKk6UKE+wzSosX47kmQhRWeQS2Uplqb80luueSeLp4w4JV0dit4aimLbgCoJdpU
-	5Kinib6j3enkXZyIEpVDCSGwAZbFA1qG0ns8xRSBo56uEmNQ0UrTFi4Hfh4XECjzzIF7gtC/Nos
-	F/cR7NS6pylvQxSK2qLcFfDMMO12Ih3I/9msGWxfQnWfUzrVPOIz2mX8dy68Zn1Gj9ieh4vXf6I
-	Z6u6paF5LFbYjLODmCHT3dDLycsCR7jEI+bRxmkBRqMhnudlkVP0kJyfnRmZ3qoxqu5bTa5KBv2
-	MQZJazzmFy5LaSIMUlUUWRI9UfkfXntIqOARcmXctpGSF3RnixEi46FrkDLmWjUc0lSKcOdLyKU
-	9DZd/y9FADtn9UJZ54Kse4/n8VOI=
-X-Received: by 2002:a05:7022:e80e:b0:1b5:3b6e:e1ed with SMTP id a92af1059eb24-1b55690bcf3mr27887998c88.32.1795772827534;
-        Fri, 27 Nov 2026 01:47:07 -0800 (PST)
+        bh=rLsQ/GlDzGOb8CaVAi+lRi51pZAWGSStX7fuTRtzazk=;
+        b=yoc02tRzwLJHFstLZP5yF2zGz6ByfZ1Jd6V60RhvAVXHFeuXRYUEdyNPbzvF+GGQO7
+         Qrj7AxEB/yAnvcTVL7zcAGBzUUX2doLrDxgZ1hojI7MkLZ2K6uroTKbJPr6EpzmlzB4p
+         ZkdwYXtVWt+FKDAitRErvysewWUzgJhoZub8H+vvGm/qObgu8UsZQtahSN264pknjfyK
+         D1zaAgby3K/Pm109HnuLT2JmuysjEsv9giUxR0gjH+zn8mveh31wGc89ZNAxY3eRJ1rL
+         CwrinfFon+UHkG8M6Nmm8EBfCnleiV6vg8PNXbO6aNosgP4iapc9DaLCW3MQzaMr4R8v
+         TLxg==
+X-Forwarded-Encrypted: i=1; AL+hErHSlojVN1IpWb6fg8jAy/ivF0p0XGXhYOepUTTg4jXaHx+0wI0CcVDcpS1KUCOhF5Cd+YRegWAVlZJdLHYRIks=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/m8Sz1Hj+yhREpbO9Jz1CV8Hu9VvoLC+5Th7Wrg6ZuoyrFmjFD
+	5uEPYVZFvD0Va48oDCROcNnMVOEl6ifLhx9kLjYdQLtmnEavKAlKwnoeJIjxm7ADRLM=
+X-Gm-Gg: AZFdTZfqZ/7GlA8SK4JhBbsDxAG09/B0aGjTqzbXeHIrqUQhK5RmNrIYkMTztoQHo9R
+	DxIB9cgJ78hoix/6YIsqUToQmfZDHsT7MfQh1+neaPvt3Aw6r4sAj53B/VIcDS0FqdVZV5vOKZ2
+	HD+0jNPjqorcgs3RreZHK523MEC5ajC9t9q3r/I5jynMn7nzvKbEn7ZTNj+Mw14d0OEm+f5JqOa
+	0vFLC/SiCC4+HIw2AmGpiK8TyutoPKqNiZhr2lDyLACB/DSiMQ/vlu19vRI3j3P19ksY99we0pU
+	xXMZEezpvm3hFFn2vSfYCXwstsjSzTHULKcdmbT3B0QhVzchyOptX4zM5URTSCO5w8NIDbLzMCM
+	o88RvRTfbyCzux48B65UJHSTgfpfv/1fAPbdaqljXJks6bbzcg70c2hu0lNtDoz9olPy5PPhqX4
+	ol44YOUo5qXib65h6OycpBvoheQmei5q5fLQf5PLAJ1nPBsKTbsAUdD3M3O/yBWFHXExbUUyBqT
+	2y6Ye6DcUpl4RnZHQVLB2dkXFAv8FyU+h06z4u8DH7n1pIZCxtfgTu3sh7ECOjB4sPMvkA/vmMZ
+	Xk1P4KcIcX7D8adsTPNGdk3r7S0eWKQgQ/dzocsFxpRNysZRM+yzEo2+1Jml/hJjlqxpHDMtgXj
+	XhF16kL6Ls54JPsUx3CrVFUJ0s+Q=
+X-Received: by 2002:a05:7022:b044:10b0:19b:39f4:88c9 with SMTP id a92af1059eb24-1b5568a12e7mr25971086c88.10.1795772829134;
+        Fri, 27 Nov 2026 01:47:09 -0800 (PST)
 Received: from devbox.ts.blockcast.net ([2602:f74d:1::32])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5566c3052sm55115194c88.1.2026.11.27.01.47.06
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5566c3052sm55115194c88.1.2026.11.27.01.47.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2026 01:47:06 -0800 (PST)
+        Fri, 27 Nov 2026 01:47:08 -0800 (PST)
 From: Omar Ramadan <omar@blockcast.net>
 To: Taehee Yoo <ap420073@gmail.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -92,9 +92,9 @@ Cc: Simon Horman <horms@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v3 01/12] amt: create an AF_INET6 encapsulation socket for an IPv6 outer address
-Date: Fri, 27 Nov 2026 09:46:52 +0000
-Message-ID: <20261127094703.3025517-2-omar@blockcast.net>
+Subject: [PATCH net-next v3 02/12] amt: send the Relay Advertisement over IPv6
+Date: Fri, 27 Nov 2026 09:46:53 +0000
+Message-ID: <20261127094703.3025517-3-omar@blockcast.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261127094703.3025517-1-omar@blockcast.net>
 References: <20261127094703.3025517-1-omar@blockcast.net>
@@ -109,129 +109,231 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The amt device binds one AF_INET UDP socket on the relay port, so a
-relay and its gateways can only talk AMT over IPv4. RFC 7450 defines
-the protocol over either IP version: the Relay Advertisement carries
-an IPv4 or an IPv6 relay address, and s5.2 selects the form from the
-IP version of the outer header, so an IPv6-only access network needs
-an IPv6 outer transport to reach the relay at all.
+A gateway finds its relay with a Relay Discovery, and the relay answers
+with a Relay Advertisement carrying the address the gateway should use
+from then on. RFC 7450 s5.1.2 defines two forms of the Advertisement:
+the same fixed header and nonce followed by either a 4-byte IPv4 or a
+16-byte IPv6 relay address, and s5.2 selects the form from the IP
+version of the outer header rather than from a field in the message.
+An amt relay on an IPv6 outer transport therefore has to answer with
+the 24-byte IPv6 form.
 
-Add the outer IPv6 local address to struct amt_dev, and amt_v6(),
-which reports the device's outer family from it. amt_create_sock()
-binds an AF_INET6 socket for an IPv6 device. The socket sends and
-verifies the UDP checksum, which RFC 8200 s8.1 makes mandatory over
-IPv6, and it is V6ONLY, so that it does not also claim the IPv4
-wildcard port, which an IPv4 amt device in the same netns may hold.
+Add struct amt_header_advertisement_v6 for that form and
+amt_send_advertisement_v6(), which fills it on the stack and sends it
+with a new amt_send_ctrl_v6() helper. The helper routes with
+ip6_dst_lookup_flow() through amt_route6(), which the later IPv6 senders
+share, and sends with udp_tunnel6_xmit_skb(), which builds the UDP and
+IPv6 headers and fills in the UDP checksum that RFC 8200 s8.1 makes
+mandatory over IPv6. Like the IPv4 control messages, it marks the skb
+TC_PRIO_CONTROL, uses AMT_TOS as the traffic class and passes no netdev,
+so control traffic stays out of the amt device's tunnel stats. Passing
+no netdev also means that a drop after the hand-off to IPv6 output, in
+netfilter, in neighbour resolution or by the qdisc, is not counted in
+tx_errors, whereas the IPv4 senders count an ip_local_out() error; only
+a failed route lookup or allocation is counted.
 
-The socket is also bound to the underlying link, IFLA_AMT_LINK. The
-IPv4 paths pass that link as the output interface, and an IPv4 route
-lookup then only uses routes through it. An IPv6 lookup that has a
-source address, as every AMT send does, treats the output interface as
-a preference unless the socket is bound to a device, so without the
-binding the outer IPv6 traffic could leave through another link while
-the device's MTU and headroom are derived from this one. The binding
-also keeps packets that arrive on other links away from the socket. A
-link-local address is unique only on its link, and relay tunnels are
-keyed on the gateway's address, so two gateways on different links
-with the same link-local address would otherwise share a tunnel, and
-the replies would go out the wrong link.
+amt_discovery_handler() answers an IPv6 device's Discovery with the
+IPv6 form, sent back to the outer source of the Discovery. RFC 7450
+s5.1.2 makes the source of the Advertisement the destination of the
+Discovery, the Relay Discovery Address, so amt_send_ctrl_v6() and
+amt_route6() take the source address from their caller. The socket is
+bound to ::, so a Discovery sent to an anycast or secondary address
+reaches the relay, and a gateway accepts only an Advertisement whose
+source is the address it sent the Discovery to; answering from
+local_ipv6 would leave such a gateway stuck in discovery. The relay
+address carried in the message stays local_ipv6. The same socket also
+receives a Discovery sent to a multicast group the host has joined,
+such as ff02::1, and a multicast address may not be a source (RFC 4291
+s2.7), so a Discovery with a multicast destination is dropped rather
+than answered by every relay on the link with an invalid packet. The
+handler copies both outer addresses by value after its last
+pskb_may_pull(), and sending does not pull the received skb.
 
-The new socket also hands ICMPv6 errors to amt_err_lookup(). This relies
-on amt_parse_type() pulling the AMT header behind the transport header,
-as "amt: pull the AMT header behind the transport header in
-amt_parse_type()" in net makes it do, since on the error path skb->data
-points at the quoted IPv6 header.
+The IPv4 Advertisement has always been sent from local_ip, so an IPv4
+gateway that discovers the relay through another of its addresses drops
+the reply. That is left as it is: changing the source of an existing
+IPv4 relay's replies is a fix of its own for net, and nothing in this
+series depends on it.
 
-Nothing sets local_ipv6 yet. The netlink attribute that does is added
-at the end of this series, once every path can use it, so there is no
-functional change here.
+amt_v6() is still false for every device, so there is no functional
+change yet.
 
 Assisted-by: LLM
 Signed-off-by: Omar Ramadan <omar@blockcast.net>
 ---
- drivers/net/amt.c | 36 ++++++++++++++++++++++++++++++------
- include/net/amt.h |  2 ++
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ drivers/net/amt.c | 115 ++++++++++++++++++++++++++++++++++++++++++++++
+ include/net/amt.h |  21 +++++++++
+ 2 files changed, 136 insertions(+)
 
 diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index b145ed3ca..3f3205d2d 100644
+index 3f3205d2d..52ccaca08 100644
 --- a/drivers/net/amt.c
 +++ b/drivers/net/amt.c
-@@ -90,6 +90,14 @@ static struct in6_addr mld2_all_node = MLD2_ALL_NODE_INIT;
- static struct mld2_grec mldv2_zero_grec;
- #endif
- 
-+/* The outer transport family is fixed when the link is created: an IPv6
-+ * local address selects IPv6, otherwise the device runs over IPv4.
-+ */
-+static bool amt_v6(const struct amt_dev *amt)
-+{
-+	return IS_ENABLED(CONFIG_IPV6) && !ipv6_addr_any(&amt->local_ipv6);
-+}
-+
- static void __amt_source_gc_work(void)
- {
- 	struct amt_source_node *snode;
-@@ -3310,19 +3318,35 @@ drop:
- 	return 0;
+@@ -708,6 +708,80 @@ static void __amt_update_relay_status(struct amt_tunnel_list *tunnel,
+ 	tunnel->status = status;
  }
  
--static struct sock *amt_create_sock(struct net *net, __be16 port)
-+static struct sock *amt_create_sock(const struct amt_dev *amt)
- {
- 	struct udp_port_cfg udp_conf;
- 	struct socket *sock;
- 	int err;
- 
- 	memset(&udp_conf, 0, sizeof(udp_conf));
--	udp_conf.family = AF_INET;
--	udp_conf.local_ip.s_addr = htonl(INADDR_ANY);
-+	if (amt_v6(amt)) {
-+		/* Bound to :: by the memset, and to the underlying link: a
-+		 * bound socket makes every IPv6 route lookup strict about
-+		 * the output interface, as the IPv4 lookup is, and receives
-+		 * from that link only, where a link-local peer is unique.
-+		 * V6ONLY keeps the socket off the IPv4 wildcard, so an IPv4
-+		 * amt device can use the same port in the netns. The UDP
-+		 * checksum is mandatory over IPv6.
-+		 */
-+		udp_conf.family = AF_INET6;
-+		udp_conf.bind_ifindex = amt->stream_dev->ifindex;
-+		udp_conf.use_udp6_tx_checksums = true;
-+		udp_conf.use_udp6_rx_checksums = true;
-+		udp_conf.ipv6_v6only = true;
-+	} else {
-+		udp_conf.family = AF_INET;
-+		udp_conf.local_ip.s_addr = htonl(INADDR_ANY);
++static struct dst_entry *amt_route6(struct amt_dev *amt, struct sock *sk,
++				    const struct in6_addr *saddr,
++				    const struct in6_addr *daddr,
++				    __be16 sport, __be16 dport)
++{
++	struct flowi6 fl6;
++
++	memset(&fl6, 0, sizeof(fl6));
++	fl6.flowi6_oif		= amt->stream_dev->ifindex;
++	fl6.flowi6_proto	= IPPROTO_UDP;
++	fl6.daddr		= *daddr;
++	fl6.saddr		= *saddr;
++	fl6.fl6_dport		= dport;
++	fl6.fl6_sport		= sport;
++	/* The packet carries AMT_TOS, so route on it too: a policy rule
++	 * that matches the DSCP must see the same value.
++	 */
++	fl6.flowlabel		= ip6_make_flowinfo(AMT_TOS, 0);
++
++	return ip6_dst_lookup_flow(amt->net, sk, &fl6, NULL);
++}
++
++/* Send an AMT control message over the IPv6 outer transport from @saddr.
++ * udp_tunnel6_xmit_skb() adds the UDP and IPv6 headers, including the UDP
++ * checksum that IPv6 requires. Returns 0 once the message is handed to the
++ * IPv6 stack.
++ */
++static int amt_send_ctrl_v6(struct amt_dev *amt, const struct in6_addr *saddr,
++			    const struct in6_addr *daddr,
++			    __be16 sport, __be16 dport,
++			    const void *msg, unsigned int len)
++{
++	struct dst_entry *dst;
++	struct sk_buff *skb;
++	struct sock *sk;
++	int hlen, err;
++
++	rcu_read_lock();
++	sk = rcu_dereference(amt->sk);
++	if (!sk || !netif_running(amt->stream_dev) ||
++	    !netif_running(amt->dev)) {
++		err = -ENETDOWN;
++		goto out;
 +	}
++
++	dst = amt_route6(amt, sk, saddr, daddr, sport, dport);
++	if (IS_ERR(dst)) {
++		DEV_STATS_INC(amt->dev, tx_errors);
++		err = PTR_ERR(dst);
++		goto out;
++	}
++
++	hlen = LL_RESERVED_SPACE(amt->dev) + sizeof(struct ipv6hdr) +
++	       sizeof(struct udphdr);
++	skb = netdev_alloc_skb_ip_align(amt->dev, hlen + len +
++					amt->dev->needed_tailroom);
++	if (!skb) {
++		dst_release(dst);
++		DEV_STATS_INC(amt->dev, tx_errors);
++		err = -ENOMEM;
++		goto out;
++	}
++
++	skb_reserve(skb, hlen);
++	skb_put_data(skb, msg, len);
++	skb->priority = TC_PRIO_CONTROL;
++	udp_tunnel6_xmit_skb(dst, sk, skb, NULL, saddr, daddr, AMT_TOS,
++			     ip6_dst_hoplimit(dst), 0, sport, dport, false, 0);
++	err = 0;
++out:
++	rcu_read_unlock();
++	return err;
++}
++
+ static void amt_send_discovery(struct amt_dev *amt)
+ {
+ 	struct amt_header_discovery *amtd;
+@@ -3010,6 +3084,24 @@ out:
+ 	rcu_read_unlock();
+ }
  
--	udp_conf.local_udp_port = port;
-+	udp_conf.local_udp_port = amt->relay_port;
++/* The IPv6 form of amt_send_advertisement(), carrying the relay's IPv6
++ * address. It is sent from @saddr, the address the Discovery was sent to.
++ */
++static void amt_send_advertisement_v6(struct amt_dev *amt, __be32 nonce,
++				      const struct in6_addr *saddr,
++				      const struct in6_addr *daddr,
++				      __be16 dport)
++{
++	struct amt_header_advertisement_v6 amta = {
++		.type	= AMT_MSG_ADVERTISEMENT,
++		.nonce	= nonce,
++		.ip6	= amt->local_ipv6,
++	};
++
++	amt_send_ctrl_v6(amt, saddr, daddr, amt->relay_port, dport,
++			 &amta, sizeof(amta));
++}
++
+ static bool amt_discovery_handler(struct amt_dev *amt, struct sk_buff *skb)
+ {
+ 	struct amt_header_discovery *amtd;
+@@ -3026,6 +3118,29 @@ static bool amt_discovery_handler(struct amt_dev *amt, struct sk_buff *skb)
+ 	if (amtd->reserved || amtd->version)
+ 		return true;
  
--	err = udp_sock_create(net, &udp_conf, &sock);
-+	err = udp_sock_create(amt->net, &udp_conf, &sock);
- 	if (err < 0)
- 		return ERR_PTR(err);
++	/* The Advertisement takes the form of the outer IP version, and
++	 * RFC 7450 s5.1.2 sources it from the address the Discovery was
++	 * sent to, which may be an anycast Relay Discovery Address rather
++	 * than local_ipv6.
++	 */
++	if (amt_v6(amt)) {
++		struct in6_addr saddr = ipv6_hdr(skb)->saddr;
++		struct in6_addr daddr = ipv6_hdr(skb)->daddr;
++
++		/* The socket bound to :: also receives a Discovery sent to
++		 * a group, and a multicast address can never be a source
++		 * (RFC 4291 s2.7), so such a Discovery is not answered. Nor
++		 * is one from ::, which has nowhere to be sent.
++		 */
++		if (ipv6_addr_is_multicast(&daddr) ||
++		    ipv6_addr_any(&saddr))
++			return true;
++
++		amt_send_advertisement_v6(amt, amtd->nonce, &daddr, &saddr,
++					  udph->source);
++		return false;
++	}
++
+ 	amt_send_advertisement(amt, amtd->nonce, iph->saddr, udph->source);
  
-@@ -3334,7 +3358,7 @@ static int amt_socket_create(struct amt_dev *amt)
- 	struct udp_tunnel_sock_cfg tunnel_cfg;
- 	struct sock *sk;
- 
--	sk = amt_create_sock(amt->net, amt->relay_port);
-+	sk = amt_create_sock(amt);
- 	if (IS_ERR(sk))
- 		return PTR_ERR(sk);
- 
+ 	return false;
 diff --git a/include/net/amt.h b/include/net/amt.h
-index 9ba097127..ca35782f8 100644
+index ca35782f8..52d77bc6b 100644
 --- a/include/net/amt.h
 +++ b/include/net/amt.h
-@@ -361,6 +361,8 @@ struct amt_dev {
- 	__be16			gw_port;
- 	/* Outer local ip */
- 	__be32			local_ip;
-+	/* Outer local IPv6 address, :: unless the outer transport is IPv6 */
-+	struct in6_addr		local_ipv6;
- 	/* Outer remote ip */
- 	__be32			remote_ip;
- 	/* Outer discovery ip */
+@@ -133,6 +133,27 @@ struct amt_header_advertisement {
+ 	__be32	ip4;
+ } __packed;
+ 
++/* The IPv6 form of the Relay Advertisement (RFC 7450 s5.1.2): the same
++ * header and nonce, followed by a 16-byte relay address. s5.2 selects the
++ * form from the IP version of the outer header, not from a field in the
++ * message, so it is a type of its own.
++ */
++struct amt_header_advertisement_v6 {
++#if defined(__LITTLE_ENDIAN_BITFIELD)
++	u32	type:4,
++		version:4,
++		reserved:24;
++#elif defined(__BIG_ENDIAN_BITFIELD)
++	u32	version:4,
++		type:4,
++		reserved:24;
++#else
++#error  "Please fix <asm/byteorder.h>"
++#endif
++	__be32		nonce;
++	struct in6_addr	ip6;
++} __packed;
++
+ struct amt_header_request {
+ #if defined(__LITTLE_ENDIAN_BITFIELD)
+ 	u32	type:4,
