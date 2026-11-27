@@ -1,112 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795749789;
-	b=Sfk/B/4vetuis+D/MSPCilCuPZoiecuJoRA+2kvZ6Sow+NRPRcdWQpZH/yBP4Ttes4T0
-	 1M3FKz+ofxjQhKqqXzWNGK34kwm5YYLSyxGc4j8ZhxAr67I6VRE7Vivz7RgRF6BTo7Xgx
-	 iuA8j4fQtzznDdZE8g7dIaYsLQQmaK31ocXU9JyZPr0lRzXjYvcm9QUdhfq+wHo46HcPz
-	 Xz9JBUQLy5++WGzg5f8kKwRSwphrXfD5ZwqXVdP/PvQF7I+lgDHyCR8F/GZUoV0O5TaAt
-	 l3Spm3AbA3FK9zlDQdfkN8Vb1+MT7/xWakIpbUVNxaXwXMyv2jFYW/bT2jI4LkJrqZA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795749789;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=skeWlY9qqzvD2S0y6NSVBgm7gug5B6mxGigPdEgMeRg=;
-	b=KrHjVncmi4MjAIBnbHTTGZ7CdtCvC4z6p1kLAtotLxMsL2MeFXSpBNKME6l6QdLlkZAg
-	 CBLmDzXMS60TnuTEDMiu9Xmjkskc1Wp4LmXHk6wHYu6mbtlfVYi9XJf7PdKmUl4UInBFi
-	 twfeYm6Kpdmyqwo6LKIiMrOD3eZC1PF3VaU96ZEpHnzXv0YboRLGTec34CRwjuOd+gcMS
-	 Q2qqmVCxmbHf2KzfJ2h2jeOCI/y8TQ8gk3qapTT72BfxncKCU2bydmpJW5dhrcWwDt01c
-	 ThtK7V0vclLugR51JKhjfP3anGuWm+CFJ+6QwARPwGK03BP4yyXQLK/oRP0bDsrVG9A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WhCyEaNC;
-	arc=none smtp.remote-ip=74.125.82.47
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795752543;
+	b=JbefM6ik2YhdYW6LHeofLdow5/o7hQSAXAhpD2GQhUMLZiWS0s27T39yIdLFZsB1pkFj
+	 V2611eddONVWJTAQWE01TzkaqpgsJAr+v4Q/3up/DxC5J8KuBAHAw/u7xxqCokKjbwdpz
+	 wtrHcJZDCeEj3cOxfrAy4ICVrC3Kj+rAaG/sN0ST9pWAbPmnPbo7YNedg8gCVZ6mDOYJb
+	 TsUx1VnJdDFSazTXBc8u0I3xQu8xuGEe3p8yBC/VPWwl2FzkUCVClknbO7IReFdspygeV
+	 LMeuvCEpj7GFz/17wBV0HhiFwGoDGXIKD8xUhjQVcfCTEWEeCVBYa5UAM+yWyDPNt+w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795752543;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=li3JX+2Xd1AiqIgciAZ7DZSxkrw+I5jSEeNc/twiSZ4=;
+	b=OTOvMCTKpfcnwpwr7FGNu/FFqZGm9wtOaZ45TSgyhsYW9EldRFCpmXwWU+BiHc5sVbbb
+	 I3a0jmCfYzXgFmhCc6w4TZbNp1g3o89j24aUTTu6ANQFRdt8I48/vVWr9ho/0PFJWciBu
+	 j6EvQjHzFqSDMFPcovpZKeWQfsrKzqFRDOmfQp7SRszibZNPyoPsKd6GNIrINivtKmZr9
+	 +VLsnyeW8HaFwoJExrW+BiZxIMPzOIa3bhljnQhgkyZHZmzBoseuRpA/Fk+U2akDwalyy
+	 lsIaoExxqWW9szP74askdFe2+V5DX+tqyukEaEbgQpD1vcd606XKM3G7vmkHSbr4xpw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M+oAXcfJ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C164B606A32C;
+	Fri, 27 Nov 2026 04:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M+oAXcfJ
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795752543;
+	b=r9sfhgD1kvBWHINRmHu/cKNolX5FJFPHaKm+qEvW0worfM5HLRSzrWWYpplEjZBGAF/Y
+	 5sKG4luj9IE9jTa9b8P+mHfe3gj/5E65LrS3ODfize9AuPQftDvOMGbc7O04hgOmm9czb
+	 AsKnQEbYDjwo6X+QWCnUqTFeEOxiakN1ZosPlKukpOoFt77hbU2BXx+tvRs0ci8JdFSMm
+	 FEw2lMYCJvCLfOxDvPyYz3tQeXB9NdfT/Ivv4MDPHvm8gd0XuVqqUsQ5S5zwRrjoNoceE
+	 Rm/X6ZFWpg5dxuSDriL6FaRM/qGo5aL9EWcQjQj8VuqWkn2sJYen3JqzVfUXIvaHxRg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795752543;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=li3JX+2Xd1AiqIgciAZ7DZSxkrw+I5jSEeNc/twiSZ4=;
+	b=g6TYauPgZucmoBcu5VcKLqHABTF90DekMUy+9074Tl93NHo4Je2rLOJ9gdO9ZyGz+EtH
+	 iPVLHQQplw0kBMMW8BVlam5Qgmpta/QCpkK25GIgoogtQAIF6HEhuVl3qvhKypGkO/T2v
+	 PPMYyrQkhDW9XuQ08/2tp40hELxZsLsvypyvad0PO5c/JpY+9JE2g92BNdTx3/EvsgeNY
+	 xFNW35BT/RWUkHmFQPrsisTX92Uu411cST4aVQsmhEycDzzt1vQx4a/McJhoQmqSr7KSm
+	 Z75Y3AzmuWeOnq3IZwisqnE7BmFCqMPJY9jtXP9w/JEaonMi8R6wIh1sOqMfCJmM/5Q==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4518606A329
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 03:23:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4518606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WhCyEaNC
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1b3ada81853so8866750c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 19:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795749788; x=1796354588; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=skeWlY9qqzvD2S0y6NSVBgm7gug5B6mxGigPdEgMeRg=;
-        b=WhCyEaNCh/5h4fFok113/zslMkpXx1htd+MkLdA2Uz8QdeMa4BsIlCZDRLNxcl6PyG
-         VKbhgjrOMSbNbPa1yaNgIrP0ACv+Bt6ooLiBcY3tm4ZmLfMLw9oMT7yAcaqOeStaJCpQ
-         vB9kdk9TKhWebYS8D8GaXjl/ZKb7VWHeW3ygrRkC6+uYf7FxPjRF//q33qdZw8VHoDhV
-         7Nm76mKgGFHkJ7VPOLgEsrn88IVUuB1HZIKB9aP50TKxeLrF+5kSb1VSmG9Xyo7ICJ76
-         jNpDrSrWDoJwkIrSS3PhIyURrpqy+kCh0/d427QkO4Xh5Lzd66RUe5YYXvvvj+yar4j+
-         QBvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795749788; x=1796354588;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=skeWlY9qqzvD2S0y6NSVBgm7gug5B6mxGigPdEgMeRg=;
-        b=tbiy1SQysDncvsLiW2p0X8gaShb+X+rukmxRGm0RJ8pZ0/6AVw73isLj6xqjruHm4x
-         EI3d0EKvjephirURWBxC8D8xipgD4zdh19/NfbFwf3VFtlD/5TnVuHKTfiZ3cxA/+B+E
-         YbKD4EM7gfM+MmtR2gMnUhrftfLMFvwg+VhRReDVz7MGPlWD6XFtHtobuyMKDb55plJt
-         uKXEho3e6xrQsskFYJD6yPIiMQn1hCrV7Edd1E+SHusVKquJ78tK6Xv77pIBB6Kc9NkI
-         XGIyV3dljwQLQRjtTQ/PBRN3ef/3akvyU4ECxgH61UBB9Sgg5KkmzTcitAmbbb5lw0m/
-         +poQ==
-X-Forwarded-Encrypted: i=1; AL+hErHgpvXZqq3yRDfwOCoL+t7wALgsiYt82pWmIxzWaWADwo80PE965lBP368H9HcRZjtJGCw2DKejDZ/m/XDxdb0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9uiGRx7BLQb7DFVOYY+DON/3JGlc6fp1MLjrwySpaNmpI24ZzY
-	d1OD+SKZ1EkSRjO89nyMyzCKTy84H99g3cOXatZXhfl4Nyn48rAE+37n
-X-Gm-Gg: AZFdTZchNBD/dN6qnSW28p+TysQXXAJPyWOC8c8MsPWEQCjvagqMwt9tFca9Yihjeqj
-	jGx4gvslx9MqUyvJXIQjysMf+HrZTNFiVu9rU4SR6P69FP6nutnk15Zc4TWljIDvqAAOvq6cJnp
-	MHTV0U3dQ+xIwbFTAGIpdRco7CW44tpaeWzm6KVSO75dU7x9E8PzMOkJQ45j5MxXPY9K7PsJ+fo
-	pKi1mYcV+RWX3vwjcatAdGRnJww5ek7+6+OttiUMgGQMc6pxyjtBMR8jO2TXT0R3tAXKv9yCKbj
-	K1UdWdhEs4nrCCXlmp6E35cvU8zVGOnx/zxyPA5YeSdIv1hDLmq57T/oGzczj5Rot8889ZsHLWs
-	BfMfDTdSAc7fI08aYZFlL5f3gkx9rDzZd/WjcAfiqy4BFdMBZ1oIfWpB3/C/RZR1bgblyJnGjXf
-	G0u3/7PVnboxKkMGxsMuNl/PpKn2hrpoO87lCX2BsntuDCmjcrHOnf4WQjfIPoYd7yLtigMCNVT
-	DlFLvwxW6VHNRh7wgfREXlm15eF68jV4+U84O8aOJ8cN+CBBURR8dQQ/sxrRHo90UXZRn1lKy3+
-	17E0k5+XZRJKy36n9Pl5dnxSlUQhIGm6PAu5aRG1DolGUAI5oDCMUoOhhV/lWJ3yoSdBtoNz0W2
-	sIA/FXdeGVEzXDweEvQwCvVHJpkAzXgvkLHvN6wCKa/uh6LUOFJ33wCTUTQN9i1SCgbNaPCfgSg
-	==
-X-Received: by 2002:a05:693c:65ca:b0:386:b826:407 with SMTP id 5a478bee46e88-386b826061cmr13286774eec.20.1795749787617;
-        Thu, 26 Nov 2026 19:23:07 -0800 (PST)
-Received: from ramen-dev-security-2.asia-south1-c.c.ramen-dev-345017.internal (90.156.200.35.bc.googleusercontent.com. [35.200.156.90])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-38566cd40c5sm81845568eec.10.2026.11.26.19.23.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 19:23:07 -0800 (PST)
-From: Anil Kaushik <anilkaushikwireless@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	idosch@nvidia.com,
-	willemb@google.com,
-	nicolas.dichtel@6wind.com,
-	jacob.e.keller@intel.com,
-	jiri@resnulli.us,
-	fw@strlen.de,
-	martineau@kernel.org,
-	v3rdant.xiang@gmail.com,
-	aliceryhl@google.com,
-	linux-kernel@vger.kernel.org,
-	nhorman@tuxdriver.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	anilkaushikwireless@gmail.com
-Subject: [PATCH net v10 2/2] selftests: net: test joining genetlink groups no family owns
-Date: Fri, 27 Nov 2026 03:22:46 +0000
-Message-Id: <20261127032246.2886407-3-anilkaushikwireless@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20261127032246.2886407-1-anilkaushikwireless@gmail.com>
-References: <20261127032246.2886407-1-anilkaushikwireless@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 31CCA1F00923;
+	Fri, 27 Nov 2026 04:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795752543;
+	bh=li3JX+2Xd1AiqIgciAZ7DZSxkrw+I5jSEeNc/twiSZ4=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=M+oAXcfJyMhh4ui+uVN8NR+BdjjT58rZZY7NQ2xfin9m+84o46Od/4UsOV6t96hl/
+	 eMiYz8j3l3XzWMPp0XUsKAw7i3bF0RRi28/cgsRZMjW1BgNKF1CDCJnXDL+Ikv8+jB
+	 zsiiVC/cI+pyTOlH9KWj9mYOs3ba2M3ZudzUqEp7Q/I9F1uJ48d/acGxX2JcRl0jRC
+	 NTKc61WtG7BE3fHaV06+UrmB1IJRSuArcA/7311BmYelG5nT69Gh3y8LumagW7hvXO
+	 rqus8Z4YL/5XTgL6t4SIRgJnsj0v2MbFAZvzcXrkR41s+ciABXFmvdAezctLcvMIP+
+	 fY5UzPxTl+m+g==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id AA5484B55B;
+	Fri, 27 Nov 2026 04:08:51 +0000 (UTC)
+From: David Crawshaw via B4 Relay <devnull+david.exe.dev@kernel.org>
+Subject: [PATCH 0/2] fuse: fix data loss when writeback races a
+ write-through extending write
+Date: Fri, 27 Nov 2026 04:08:38 +0000
+Message-Id: <20261127-b4-fuse-wt-eof-v1-0-e055e2af652d@exe.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,189 +84,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEYCCWsC/yXMQQ6CMBBG4auQWTuJrdiKVzEuKP7VcQGkA2rSc
+ HcKLr/Fe5kUSaB0rTIlfERl6AvMoaLu1fZPsDyKyR6tM8Z6DjXHWcHfiTFE9sGb2jWX8ymASjQ
+ mRPntw9v9b53DG920XWhZVk8a8N1yAAAA
+X-Change-ID: 20261127-b4-fuse-wt-eof-7b71469853be
+To: Miklos Szeredi <miklos@szeredi.hu>, 
+ "Darrick J. Wong" <djwong@kernel.org>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Joanne Koong <joannelkoong@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev, 
+ David Crawshaw <david@exe.dev>, stable@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795752531; l=1976;
+ i=david@exe.dev; s=20261127; h=from:subject:message-id;
+ bh=/uZwlpKJlvGvr6lTGIgh3p40tIbnOtPhD5Kl6WqbtuQ=;
+ b=+7IrrOKCwsFl/f8JAosPywwOryhD5UclQsoKBCSUXZ4rKvgiQraL0C6ykQ4RX58RHmueH3z8e
+ CqpLN5xraBTDsm+mvL5eAd+qJQdgfKBO6yqS8Mttj0rhY8y52FW3FR8
+X-Developer-Key: i=david@exe.dev; a=ed25519;
+ pk=eQfKiR9S2peqiHuuNGCAaWlxwP+RerhKT2wVxakCrjQ=
+X-Endpoint-Received: by B4 Relay for david@exe.dev/20261127 with
+ auth_id=1661
+X-Original-From: David Crawshaw <david@exe.dev>
+Reply-To: david@exe.dev
 
-Check that a Generic Netlink group ID no family owns cannot be joined:
+Since v6.17 commit ef7e7cbb323f "fuse: use iomap for writeback",
+a write-through pwrite() that extends a file inside the folio
+holding EOF can return success and lose its data. This happens
+when that folio is dirty and writeback of it starts while the
+FUSE_WRITE is in flight.
 
-- setsockopt(NETLINK_ADD_MEMBERSHIP) on a free ID fails with ENOENT,
-  and still works on an owned group.
-- bind() with a mask of free IDs succeeds and joins nothing. With an
-  owned group in the mask, it joins only that group.
-- A socket bound to the free IDs is not a member of the NET_DM groups
-  after drop_monitor is loaded. The test unloads drop_monitor again
-  after it loaded it. Skipped when NET_DM is already registered or
-  drop_monitor is not available.
+The mechanism is that fuse_perform_write() unlocks the folio before
+sending the request and only updates i_size after the reply, and
+iomap_writeback_handle_eof() zeroes the folio beyond the old i_size.
 
-The free IDs are found with a family dump, which only lists the families
-of the current network namespace, so these checks are skipped outside
-the initial one. It is found with its fixed nsfs inode number, which
-also works in a container with its own PID namespace. Kernels before
-v6.17 do not have that number, so the checks are skipped there too.
+Patch 1 keeps a folio that straddles i_size locked over the request
+when the write extends the file within it, and updates i_size before
+the folios are unlocked, like iomap_write_iter() does.
 
-Suggested-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Anil Kaushik <anilkaushikwireless@gmail.com>
+Patch 2 adds a deterministic selftest case.
+
+Reproduced on v6.17 and v7.4-rc4+ (9437ee8b6cf9); not on v6.16.
+
+Data lost in the reproducer:
+
+                                   unpatched        patched
+  WRITE delayed 200us/0/2ms        1428/1500        0/6000
+  8 mounts in parallel             3229/4000        0/4000
+  EOF in a large folio (THP)        811/900         0/900
+  new selftest case                 50/50 fail      50/50 pass
+
+(All testing done on x86_64 KVM guests.)
+
+Disclosure: the bisection, and both patches were produced by an AI
+coding agent (exe.dev's Shelley, using the Opus 5.5 model).
+I reviewed the work and wrote the bulk of the prose.
+
+Signed-off-by: David Crawshaw <david@exe.dev>
 ---
- tools/testing/selftests/net/Makefile         |   1 +
- tools/testing/selftests/net/nl_genl_mcast.py | 138 +++++++++++++++++++
- 2 files changed, 139 insertions(+)
- create mode 100755 tools/testing/selftests/net/nl_genl_mcast.py
+David Crawshaw (2):
+      fuse: update i_size before unlocking the EOF folio in write-through writes
+      selftests/fuse: test a write extending the file beside writeback of the EOF page
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index baea3e7f0f8f..875ce0443814 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -74,6 +74,7 @@ TEST_PROGS := \
- 	netns-name.sh \
- 	netns-sysctl.sh \
- 	nk_qlease.py \
-+	nl_genl_mcast.py \
- 	nl_netdev.py \
- 	nl_nlctrl.py \
- 	nsh_gso.sh \
-diff --git a/tools/testing/selftests/net/nl_genl_mcast.py b/tools/testing/selftests/net/nl_genl_mcast.py
-new file mode 100755
-index 000000000000..32b4951f8816
---- /dev/null
-+++ b/tools/testing/selftests/net/nl_genl_mcast.py
-@@ -0,0 +1,138 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Tests for joining Generic Netlink multicast groups that no family owns.
-+"""
-+
-+import os
-+import socket
-+import struct
-+
-+from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_raises
-+from lib.py import KsftSkipEx, NlctrlFamily, NlError, cmd
-+
-+NETLINK_GENERIC = 16
-+SOL_NETLINK = 270
-+NETLINK_ADD_MEMBERSHIP = 1
-+NETLINK_LIST_MEMBERSHIPS = 9
-+# include/uapi/linux/nsfs.h
-+NET_NS_INIT_INO = 0xEFFFFFF9
-+
-+
-+def _groups(fam):
-+    """Return the multicast groups of a family as {name: id}."""
-+    return {g['name']: g['id']
-+            for grp in fam.get('mcast-groups', []) for g in grp.values()}
-+
-+
-+def _free_ids(ctrl):
-+    """Return the IDs in 1..32 that no family owns."""
-+    # Outside init_net, the dump skips the families that are not netnsok,
-+    # but their groups are still owned.
-+    if os.stat('/proc/self/ns/net').st_ino != NET_NS_INIT_INO:
-+        raise KsftSkipEx("not in the initial network namespace, "
-+                         "or the kernel is older than v6.17")
-+
-+    owned = set()
-+    for fam in ctrl.getfamily({}, dump=True):
-+        owned.update(_groups(fam).values())
-+    free = [gid for gid in range(1, 33) if gid not in owned]
-+    if not free:
-+        raise KsftSkipEx("no free group ID in 1..32")
-+    return free
-+
-+
-+def _sock():
-+    return socket.socket(socket.AF_NETLINK, socket.SOCK_RAW, NETLINK_GENERIC)
-+
-+
-+def _members(sk):
-+    # The returned length can be larger than what the kernel copied.
-+    buf = sk.getsockopt(SOL_NETLINK, NETLINK_LIST_MEMBERSHIPS, 64)[:64]
-+    # An array of u32 in host byte order
-+    words = struct.unpack(f'={len(buf) // 4}I', buf)
-+    return sum(w << (32 * i) for i, w in enumerate(words))
-+
-+
-+def _bit(gid):
-+    return 1 << (gid - 1)
-+
-+
-+def _notify_id(ctrl):
-+    return _groups(ctrl.getfamily({'family-name': 'nlctrl'}))['notify']
-+
-+
-+def join_free(ctrl) -> None:
-+    """setsockopt() on an ID no family owns fails with ENOENT."""
-+    with _sock() as sk:
-+        sk.bind((0, 0))
-+        for gid in _free_ids(ctrl):
-+            # ENOENT
-+            with ksft_raises(FileNotFoundError):
-+                sk.setsockopt(SOL_NETLINK, NETLINK_ADD_MEMBERSHIP, gid)
-+
-+        notify = _notify_id(ctrl)
-+        sk.setsockopt(SOL_NETLINK, NETLINK_ADD_MEMBERSHIP, notify)
-+        ksft_eq(_members(sk), _bit(notify))
-+
-+
-+def bind_mask(ctrl) -> None:
-+    """bind() skips the IDs no family owns and joins the others."""
-+    free = sum(_bit(gid) for gid in _free_ids(ctrl))
-+    notify = _notify_id(ctrl)
-+
-+    with _sock() as sk:
-+        sk.bind((0, free))
-+        ksft_eq(_members(sk), 0)
-+
-+    with _sock() as sk:
-+        sk.bind((0, free | _bit(notify)))
-+        ksft_eq(_members(sk), _bit(notify))
-+
-+
-+def _unload_drop_monitor():
-+    """Unload drop_monitor, so that the next run can load it again."""
-+    try:
-+        cmd("modprobe -q -r drop_monitor", fail=False)
-+    except OSError:
-+        # No modprobe in PATH
-+        pass
-+
-+
-+def bind_before_family(ctrl) -> None:
-+    """A free ID joined with bind() stays unjoined when a family takes it."""
-+    names = [fam['family-name'] for fam in ctrl.getfamily({}, dump=True)]
-+    if 'NET_DM' in names:
-+        raise KsftSkipEx("NET_DM is already registered")
-+
-+    free = _free_ids(ctrl)
-+    with _sock() as sk:
-+        sk.bind((0, sum(_bit(gid) for gid in free)))
-+
-+        # Looking up the family loads drop_monitor.
-+        try:
-+            ids = _groups(ctrl.getfamily({'family-name': 'NET_DM'}))
-+        except NlError as e:
-+            raise KsftSkipEx("drop_monitor is not available") from e
-+
-+        try:
-+            if not any(gid in free for gid in ids.values()):
-+                raise KsftSkipEx("NET_DM got no group ID that was free")
-+
-+            for name, gid in ids.items():
-+                ksft_eq(_members(sk) & _bit(gid), 0,
-+                        comment=f"member of NET_DM {name}")
-+        finally:
-+            _unload_drop_monitor()
-+
-+
-+def main() -> None:
-+    """ Ksft boiler plate main """
-+    ctrl = NlctrlFamily()
-+    ksft_run([join_free, bind_mask, bind_before_family], args=(ctrl, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.25.1
+ fs/fuse/file.c                                     | 21 ++++++-
+ .../filesystems/fuse/write_extend_eof_test.c       | 71 ++++++++++++++++++++++
+ 2 files changed, 91 insertions(+), 1 deletion(-)
+---
+base-commit: 9437ee8b6cf607e883b36e44bd755968daaebd48
+change-id: 20261127-b4-fuse-wt-eof-7b71469853be
+
+Best regards,
+--  
+David Crawshaw <david@exe.dev>
+
 
