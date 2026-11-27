@@ -1,47 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795775102;
-	b=rtgjV+bX86O5U+fJ57D3Aord9KVpx6QYumfMqoakqli83EpuFVV64OD+gA7FMgKTU6Hu
-	 z1ZnI+zDxhkGbX2tmJA+NS8vTlzMOcxJjCHy33dMwoykT3P89qYfsFQ3oU2jSmQf76SEY
-	 pxuFTKQ/T5Y5w5aqc6LWX0ZB5RFzxjrOK5GCKh1fq9yREvxq1s1GPmRwd6McoUqTig1xh
-	 LGutYgVkKWcRrKDcKJdyx+VUhL7FFfi1CnBKzdpzts0aOnOx84+im8pmkxrnpJDIF2a4X
-	 LTocO05qrCnnKsx1m/0aMzi6CZAy9EkRoXmNlzyAirSIcx5sYgjvRlimrP2RhY/Fk5g==
+	t=1795776991;
+	b=fY9zP65lmJ7XpBnOxpQhsnRa6grya1VcBluKhpK5RQcsi4wwsu4q1UbbrkGspL/iP80t
+	 KEdiXqXxkrCjZAtqo2lv6eCH5sNk1d/Pryw2X8XvUmLa0Er/dtVsEWaZzn5kssJnDpFAI
+	 iSj9vq/oigkCjypdDYZNsPWJuPDtsD3Urn1Fvb6PE8Bk04xs2XEV5rkPL6VmfYyawlKxY
+	 4BkO97E13yHEx14JMdLIi0Nif5rEJC5nXJrbIdUVY9+HzIR4pPV4ZB/SKwbHdBoPBmhxx
+	 Wkmd7NegY9bSIZivyc8wVw/hKtUGu/ulowQocZUCF9foXxkK1IxvIYYN+l0gKsvMjKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795775102;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=osc6Le5e4xpAnnXdYlkTJopbY6b6us6Q1tqpgew+zvQ=;
-	b=eJN8+VPyY7LkvvT2j6Nwj5yu5dbCFKUZ3CeZrjwhk7E1NuKPCJLhDgTJ3NOJCUpAS2MG
-	 2q2OrSoG4uqUXAsOpnWc3VhmNiKCnQc6UNhMepO3/UeHAuT17Lo1eqRvEPSJeMshVbg9A
-	 gmOLzno1qJtgbo/j6Lf3WJR0AGkYyJzYzEaMIhByE6w0Djn+uS8EhPYJKkhNZxFs5J2G3
-	 LhUUwK6sBMiNoJiHnI7k3O+dhyk8CE0LnmDcaVCk//HwrhafFXPp7I0Amj73+Neuc26c4
-	 nC7Myt+9FwUWgqbaKqcwPsbJ6/sXrdl05tyGI9SYUXBfWtHP5iyJMkqd0PiXYLgbBWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795776991;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=1P9jh/3dNVPHo3/JRb6QOjFyR52ByPWaY+Xbs/2Psnw=;
+	b=ISHERAJOCurazy4304mTepvGUIRJnbDvyyVY4t2JqXHZXn1SVyX8zQnFA5H2igkWubl0
+	 hQDSGLMxR8INmO53LWxqDkNqFXC3w7+HpXUfeCmxobiv22AHr/MBIDNQEl2MS+0MLHCmt
+	 vsx1v4EjN5RgGBeEK/fLTaBClkPbU7LWYCPZUGS47Eiv6/PoqONdELPh8AdioAHt4RRIG
+	 mEyqkEUPWjISY+OA5OkEU6sUxWhCx5jDd47rGvLW/8AsVZ3uCD4wZ/U9zeEk41I9LMTWl
+	 eQMQb6k+VzNRBmkdH06Up97+l7OIagwFs5eADqCLg9gHtRBgxLelDUyClPlE5DqKRhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a2X1rn05;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=dyb5RJbM;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65281606A31E;
-	Fri, 27 Nov 2026 10:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95553606A698
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 10:56:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95553606A698
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a2X1rn05
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860601F00893;
-	Fri, 27 Nov 2026 10:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795775102;
-	bh=osc6Le5e4xpAnnXdYlkTJopbY6b6us6Q1tqpgew+zvQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=a2X1rn05e+hkfFVi6MZe80aRyuiWXxUE//5I2oxdL0kR+rOgtmKrgCWw2YsNFUPxv
-	 kJKjWHASNNr0ohYavbxG6DtUwkRbtBEMnUzxMnf1vIKz1zWYkYlCYFRsu6A53uO3uj
-	 0mgXAjeCdh6s/OBxsn9Hd8ymOzJOby+VtoHp/m0dAXMsHMKacTBtgnhlsWt9RxzbUk
-	 g5Ycui0Y6FOrRUquVRhle1ZljGHKEyMvcb54TE+ZOyBsulcsQEMV2MCD6r9TKn8XIg
-	 rCUUp6r3qVs2CvmjL/UII7M/aQljguDe3i42rABJBGfOl7uWjakJxEJCHR0Q38H8ln
-	 /geuqMmP+gR4Q==
-Message-ID: <8707e3b0-c948-44ea-8afc-d33387925173@kernel.org>
-Date: Fri, 27 Nov 2026 11:24:55 +0100
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=dyb5RJbM
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4bba5e17cbeso25589255e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 02:56:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1795776990; x=1796381790; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1P9jh/3dNVPHo3/JRb6QOjFyR52ByPWaY+Xbs/2Psnw=;
+        b=dyb5RJbMSTNIthJgsi/N2ySzW1R3mcY+ZvZe6M9AuUMbmlx2TUCqkrG2xu3erNO2t+
+         Qoj9vIYm2Fdngl22sNhHrSlriisnh2LFEUQqXdYF6mSfhVxPdTknYvcBiynXMFaSR+wG
+         WnCOHJTLxU8GWrIjotHjCKr0AWZuFkiFCDMF98GVoeoJyg2WPjK6644T4whLKPa3QPV0
+         VFP1nA5/mud1GwPgrX7H1aMp2ftpoQlR1vr3Jj0gbxdP2IX1nO5tLsBKPIcxsGi98L8N
+         WBKsN0ILSfkYkl0WsTMR2/rxCZqw4WtQ988KHlu8QZXS6aLMpHItXNprbyyTSPNXrAp4
+         6tZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795776990; x=1796381790;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1P9jh/3dNVPHo3/JRb6QOjFyR52ByPWaY+Xbs/2Psnw=;
+        b=nKQ2Z39jrU15jP6IXbaQAZJlyHoc52lo15XzbjUdHoPSTFVxm6vb6vJR80Vu9Hxz8G
+         mE4MveF5aDSiMN+W2VeYX5pLQ3bozOCcmuCncdP/eQLffBPO9eJ+xYbFlBL9vQnaJCiF
+         vzI3yXZhxODC7Bh+R5AF3eCjkGS/RHBiTXmuYnE0gmmmtWxibitvC8wDaUdOqS2GW624
+         BqVk5hFHEzo1V7cbOrKoqCkx9JMw20Nx9O60k50MZuQ/nncCuO4jM26VNzX2HIqD5bLV
+         EaMWHT4a52qUo/KBjYUWDl1g4ZBNsspK1scz0yKBYCytPz1MF/IQFU/fxyBuMzy8pO+6
+         FR5Q==
+X-Forwarded-Encrypted: i=1; AL+hErGb50yQ4yN+fQBMsdnvn4pQLfRmQESc97IyACkEo8VGjiM4rR3C4tNsPwAwhjxQqbe8+d5kiPxzvZ0LUhr1gfU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Pv7jUj2tS3bJy7/HcrI/N5lBpdjt33CM4CVmtEHyztOba33sK
+	lYoU3kH8XcyUhh7aPm/4AM+D5YIxIGXEMNgz1Xt2gjs/E43rwtNAsNshV++E2IWODRw=
+X-Gm-Gg: AZFdTZeFUk1q1PCqUY4U89RGelpMagQCS0h5IU088a5yBcVoCNPMmCC9Sk5O+I9/UaG
+	KfmiWnqIqd826efmX5A5ye7QNSKT8X+xnRoxSrx+vcFNSfJvgJ3bFm2js+0UmIcfRSMd+6zLjDS
+	Fr6Cnj9lRuqM7oAQ46kYt745eTw4aLpGP8fyJGgsNuAqEYgjkZskqAHz5R9r3YScqUPq+6i94B/
+	Fun3/Dqt4fSyoGADh1bi9hhsm61QhlIikmY0koBgQHtD3YoNOXz2Fq9udF/1oPBgWU9gOwIdj9i
+	K7cRIyL6bs5622nNgk5Az6QEG3IyjDpdekyn003TyaMu3yGbPSb/qsrJWZwpobNdFOfqqWs5GZ9
+	4KvWOgJq1/hkuS0UYidrRz5nxsDZXhD/JWY1VsagvOjRvgehifwBoSGjmXFt7pYJPHerOlgyhBs
+	l+ucyJ1LEV1MpJoHKmUDEtN/igLVr5cAX/iaBAIemH24CNLPe5B7uIdPTDY577iKKPQmieI5L+C
+	j0+zWePKK/1IizdEq+xq6tb7IyYt5J+jHf1XlHZH1g/8egvuSGER7k2tzMvrV7hLxQ//TgUjYUV
+	meSFTn+eJ+Y2YkceBT/DnyR3yf6KpB83gg==
+X-Received: by 2002:a05:600c:6744:b0:4bb:afae:150d with SMTP id 5b1f17b1804b1-4bbafae24acmr75249945e9.33.1795776990010;
+        Fri, 27 Nov 2026 02:56:30 -0800 (PST)
+Received: from [192.168.1.3] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb906c089dsm408746585e9.1.2026.11.27.02.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 02:56:29 -0800 (PST)
+Message-ID: <9a471409-04c2-4f6e-aec9-0b23bb9b69f0@linaro.org>
+Date: Fri, 27 Nov 2026 10:56:27 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -51,88 +92,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 0/5] lisp: add a LISP (RFC 9300) tunnel device
-Content-Language: fr
-To: Vincent Jardin <vjardin@free.fr>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>,
- Nicolas Dichtel <nicolas.dichtel@6wind.com>, Simon Horman
- <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261126-for-upstream-lisp-v1-v1-0-7382a4bcfd9b@free.fr>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20261126-for-upstream-lisp-v1-v1-0-7382a4bcfd9b@free.fr>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+To: Leo Yan <leo.yan@arm.com>, Puranjay Mohan <puranjay12@gmail.com>
+Cc: vladimir.murzin@arm.com, Mark Rutland <mark.rutland@arm.com>,
+ Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
+ Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ Stephane Eranian <eranian@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
+ <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20260810164622.1829843-1-puranjay@kernel.org>
+ <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
+ <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
+ <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
+ <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
+ <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
+ <20261126180214.GB809232@e132581.arm.com>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20261126180214.GB809232@e132581.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Vincent,
 
-Thank you for working on that.
 
-On 26/11/2026 22:37, Vincent Jardin wrote:
+On 26/11/2026 18:02, Leo Yan wrote:
+> On Thu, Nov 26, 2026 at 12:39:52PM +0000, James Clark wrote:
+> 
+> [...]
+> 
+>>>>> Mark, Will, you guys seems to be designated as maintainers for
+>>>>> drivers/perf/arm_brbe.c, can you please take a look and give your
+>>>>> feedback as well? This is important and useful feature for newer arm64
+>>>>> CPUs, it would be great to get access to this functionality that we
+>>>>> had on x86-64 side for a long while now. Please help get this upstream
+>>>>> or, if it's not in the right shape, guide Puranjay towards a better
+>>>>> implementation. Thank you!
+> 
+> ...
+> 
+>> + Vladimir
+>>
+>> Hi Mark, Will, Vladimir,
+>>
+>> Any thoughts on this approach where NMIs need to be disabled? Alternatively
+>> we could do something like track where the PMU interrupts and BPF snapshots
+>> overlap and then discard the BRBE buffer and make sure they don't trample on
+>> each other etc, but it looks like it would be significantly more
+>> complicated.
+> 
+> Could we restrict bpf_get_branch_snapshot() on arm64 to a free-running
+> BRBE mode? On a given CPU, at least one active event would have to
+> request a branch stack, and every such event would have to be a
+> counting event.
+> 
+> This seems to fit in this series. The selftest opens a CPU-cycles event
+> with PERF_SAMPLE_BRANCH_STACK and sample_period = 0, then takes the
+> snapshot from an fexit program.
+> 
+> Counting events can still generate overflow interrupts for bookkeeping.
+> It requires to refactor the PMU driver to leave BRBCR_ELx.FZP clear so
+> an overflow doesn't freeze BRBE. The interrupt handler could service the
+> counters without touching BRBE and losing the branch records.
+> 
+> Thanks,
+> Leo
 
-(...)
+Yeah I think this is a pretty good idea. It looks like it would avoid 
+having to disable NMIs. You only need a local_irq_save() to avoid new 
+events from reconfiguring BRBE while taking a snapshot, and you don't 
+have to disable the PMU counters either.
 
-> The lisp link type of iproute2 comes as a separate series, for
-> iproute2-next. Tests are skipped without it. Tell me if you want
-> iproute2 series too for a simultaneous review.
-
-Do you mind sharing a branch on top of iproute2-next with these patches,
-please? (or the patches)
-
-With that, we can build an iproute2 version supporting lisp, and the CI
-can validate this series next time, instead of always marking this
-series as "Changes Requested" because some tests are marked as 'skip'.
-
-Cheers,
-Matt
+If any sampling BRBE event gets scheduled then the snapshots just start 
+skipping and returning empty.
