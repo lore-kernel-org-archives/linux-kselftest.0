@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795790181;
-	b=M0ksfAvz44vTrSDww+RJC8oqFVM2SR2Q6GOOd9DCPUqjOG/cB/GX33mS+tll6M7VnnSA
-	 lsgQzI4aYCHjArmzhzKfWCVjTIci7JjibMmYZtVLTn4M/0SWtHCYMeyNUlSYw0bA832I+
-	 IUdJ7Z5ABwA4W3ayGhpQOHMFrnILMweXVHyw7t1DyzIunf6by61jl7cb4/mzN2ky57PQC
-	 JrksJvxSNyP4WGQ0UoVRCRm197M3HJ85ifwy61qCgFdvaUwLvO781VUcFfMztaRbfl5Dx
-	 Cl/x6oZAu3ilS2tfb9h7rc3h4cAmQpfMus6YvlitY/yPmb2BM+Do5Ou6b2JpvwWeNew==
+	b=AFkRQXGCmOCSM3CiYAiKkya8Ii0Vrqi4eXsiC0TLZ7GaQjaewiDyDswBtFgqcRX1oYCl
+	 vpoSqxuzGdLriIoD7C080yjYeYcuwxjNujmotjURl7NesjU7L5pkkiRUU96HlPsVMFWzH
+	 rv/Qqr1uNlx0xl7ztDDqEaFieSuuTbD8TkSALzD4/nwRW0eNJbbRDRhWioE3xx58oA+1b
+	 ulF8DWCk/ic3VDCjJz48PPQG47e5wIrg1svIDPs2llV1AXdzmlSuRy2VFePRDpTHwX5zT
+	 U7GpyuGTPJMEJO8us480mHeqByFSN5lQ7wZRHA4DSu5Gjx9OaXRT3Ld7Id/sFPaUECw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795790181;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=QRt5QJSaH+mk/HutkEo3sQCsNqGBk17cH5jUYMgv3Rw=;
-	b=Xit4tZLn15UVKgE4iRFsBINfxJweuqY5ytajC7rWbB4GX9uj4cHDnfIlMqR8ErsGbdis
-	 KQljfBy1O8rr998EwNnu66PUkZ3M/jV61ckYskt2KDpFrWJr/rWzWiUbs+0teJzfAHrR/
-	 7ZQpYtdIoUN6bWlorO+fvYyH2WvYBEk5/viusV4c9Z2ejjR/rAWuSl9+6573ZWP4K/HW6
-	 OYTLfq0bfSzo8hH0ovnnUTWlTGa+fZ9R/UJRcNIXUfAU9kuXo4I5h3POYuC2FCky0dju5
-	 oU3gOILBqIWs2TuoxSt/p2N4TSewIKaZq7oB+sYsEIg5+ttGfHTpdVw5mjmovqeF+Yw==
+	bh=nV+8nJCVCkwKQM93407IXbRq7/HtWRuqNm/z94RNMUY=;
+	b=5fKh2srqS2GNbNDYxnBVEGCtJmBRUi67VzbrInk6U9cbkf3nIPHb2vhZ8Alj0xyg7G5u
+	 dpU2yoLYu8+VlxnrOXHwt5WPBlhIo/aujeI+k6qIc/TpskfmV6id1SgDpLji6H2h3iH1X
+	 48OX8AHax+SbZKG+wFuREo7hsuSMOstpfqUePV3PUw9P22LBxYRJyXtMP40gvRYZ3Qjsk
+	 k0nVSUtFjr/DIf8B4Ump5LGG3TKmZwqyaupwW9wDEqyirEK85NiXczTgk9aRO/I7oTYwv
+	 DS2K8jWReaDSshHfCykdw+BBS9LE3TnC8oN9ZxxYvUFmUqgMItiYH9GxDLTa7n5e0PA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ni5DLmy6;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=FqXkhIt6;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EC960746CE;
-	Fri, 27 Nov 2026 14:36:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2EC960746CE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A6860746E3;
+	Fri, 27 Nov 2026 14:36:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51A6860746E3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ni5DLmy6
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=FqXkhIt6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1795790177;
-	bh=QRt5QJSaH+mk/HutkEo3sQCsNqGBk17cH5jUYMgv3Rw=;
+	s=smtpout1; t=1795790178;
+	bh=nV+8nJCVCkwKQM93407IXbRq7/HtWRuqNm/z94RNMUY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ni5DLmy63/v7Wd42smd34ZG1WRBzr0FRgpWYjWGqnObbJP+HlW9VWmSAr4XxYqebv
-	 qklMeL8rX3dmKLRTGoMjOgQqO9CnvExAXjUJ5IschQUZhFjekmY8Ox51RNc02Z+P+5
-	 eU2mnfdZJHY8HToW7UXQwxNtG1Z8I9oUVsdWtTN4Xz5QGQ+ZNbVh9V+VCrwAqRRgsj
-	 JahX5tw04BDgR8M8A//1R/GjF/Gg1gz1x4uHGuj/Mkt4osUhWe8NdkKkpNS4QL1fjd
-	 f5v7/+oTKFrMdzn0B4ut/tTGffiQBq/Yrtp6+zPyGmY4ExrqHn3DfVy4SdSs8EXcIP
-	 GAtZrOjI7m/WA==
+	b=FqXkhIt6yixLUpcvbchLYvWqEO2Pe95W1dijr3gMnXhYEwKvOlKsB15ha4iUFPJcW
+	 qOEzLT0n0L6M9Ixd3afKqnXHID+7cPjlYGCI8lGWJgH8pEuFSYAgJm4hGnghnnWYsM
+	 ctgumFkvQhJmUvBWw8iJps1rXEPZ94qc0k4a5CDfAx8N1lKGrn62OjAWaWyLmQWu+q
+	 khgHtdRiHHMnw/s4X5vj3AOa+A3c0NLxELVWF7O24rS3g518ZKnri+Rv5q8BDaaoZv
+	 yHI3slHTDMe8EFuurR6ePY6MaDVjKEqvC9YpuswlApKuHJkhJXq1DgaRobw42FGTsp
+	 S8vz0VraH0TQQ==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jbbZT6HFGzXZR;
-	Fri, 27 Nov 2026 09:36:17 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jbbZV0PQbzXZS;
+	Fri, 27 Nov 2026 09:36:18 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -81,9 +81,9 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: [PATCH v12 25/43] sched/deadline: Count the 0-lag time from the next period
-Date: Fri, 27 Nov 2026 09:35:52 -0500
-Message-ID: <6d4923bb2cc2d45c2b06e81a9246a77bb9c60cab.1795771148.git.mathieu.desnoyers@efficios.com>
+Subject: [PATCH v12 26/43] sched/deadline: Keep a departing constrained task until its next period
+Date: Fri, 27 Nov 2026 09:35:53 -0500
+Message-ID: <54e41332aec6ddeb1d060c892cbac401c936df86.1795771148.git.mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <cover.1795771147.git.mathieu.desnoyers@efficios.com>
 References: <cover.1795771147.git.mathieu.desnoyers@efficios.com>
@@ -98,184 +98,153 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A deadline task that blocks keeps counting in running_bw until its
-0-lag time. Commit 209a0cbda7a0 ("sched/deadline: Improve the tracking
-of active utilization") added this for GRUB. A task that leaves the
-class or exits also keeps its bandwidth in total_bw until then.
-Commit 387e31300b57 ("sched/deadline: Fix the update of the
-total -deadline utilization") added that.
+A task that leaves SCHED_DEADLINE keeps its bandwidth until its 0-lag
+time, so that leaving and coming back gains nothing. Until the series
+this one builds on, it also kept its deadline. For an implicit
+deadline, losing it after the 0-lag time changes nothing: a wakeup in
+the class then starts a new period anyway. A constrained task in the
+class keeps its deadline until its next period. Past its deadline, its
+wakeup throttles it until then.
 
-The 0-lag time is when the task, served at its bandwidth since the
-start of its period, has received the runtime it used. That is:
+That series clears the deadline of a task when it releases its
+bandwidth:
+- "sched/deadline: Reset the deadline and the runtime with the
+  parameters" resets the deadline in __dl_clear_params().
+- "sched/deadline: Release the bandwidth of a task that leaves the class
+  asleep" adds this release for a task that leaves the class asleep
+  with no timer pending.
 
-  next period - runtime * dl_period / dl_runtime
-
-Here runtime is the runtime left. GRUB [1] has the same formula (rule 5
-of section 4.1), with the deadline in place of the next period. In
-GRUB, the deadline is always the end of the period (rules 1 and 3). For
-a constrained deadline, rule R6 of [2] puts the end of the period at
-deadline - dl_deadline + dl_period. This is what dl_next_period()
-returns.
-
-dl_time_to_zerolag() uses the deadline in place of the next period. The
-two are the same only for an implicit deadline. A constrained deadline
-comes dl_period - dl_deadline before the next period. So the 0-lag time
-comes that much too early.
+So a constrained task that leaves the class between its 0-lag time and
+its next period now loses its deadline. If it comes back before its
+next period, it gets a new period at once. Repeated, this gives the
+task more than its bandwidth. Other deadline tasks could then miss
+their deadlines.
 
 For example, take a task with a runtime of 10ms, a deadline of 20ms and
-a period of 500ms. It runs 2ms into its period, then sleeps with 8ms
-left. dl_time_to_zerolag() puts its 0-lag time at
-20 - 8 * 500 / 10 = -380ms, before the task even blocked. Counted from
-the next period, it is 500 - 400 = 100ms.
+a period of 500ms. Its period starts at 0ms.
+ 1. It runs 2ms, then sleeps with 8ms left. Its 0-lag time is
+    500 - 8 * 500 / 10 = 100ms.
+ 2. At 200ms, it is past its 0-lag time and before its next period.
+    Another thread calls sched_setattr() to make it SCHED_OTHER, then
+    SCHED_DEADLINE again. Leaving the class releases its bandwidth and
+    clears its deadline.
+ 3. At 205ms, it wakes up. Its wakeup starts a new period at once, not
+    at 500ms. Between 0ms and 500ms, it can run 12ms, not 10ms.
 
-On v7.4-rc2, this would affect a constrained task:
-- When it blocks, GRUB reclaiming would give its bandwidth to
-  SCHED_FLAG_RECLAIM tasks too early. Schedutil could lower the CPU
-  frequency too early. Deadline tasks could then miss their deadlines.
-- When it exits or leaves the class, admission control could admit
-  other tasks into a temporary overload.
-This was found by reading.
+Fix this by keeping the bandwidth and the deadline of a constrained
+task that leaves the class until its next period. task_non_contending()
+and inactive_task_timer() wait for the later of the 0-lag time and the
+next period. In the example, the task keeps its deadline at 200ms. Its
+wakeup throttles it until 500ms.
 
-Fix this by counting the 0-lag time from the next period, with
-dl_next_period(). Update the formula in
-Documentation/scheduler/sched-deadline.rst too.
+inactive_task_timer() restarts itself until the next period.
+switched_to_dl() cannot cancel it while its handler runs. So the timer
+can stay queued after the task comes back to the class. The next
+task_non_contending() would then take the 0-lag time as passed. It now
+cancels such a timer first.
 
-This needs "sched/deadline: Fix an overflow of the 0-lag time with long
-periods", which adds dl_time_to_zerolag().
+The proof of Lemma 5.1 in [1] uses the same rule for its H-CBSD-W
+server. A server that used up its budget while idle stays throttled
+until the end of its period, as a sporadic task would.
 
-A task that leaves the class and comes back after its 0-lag time
-starts a new period. "sched/deadline: Reset the deadline and the
-runtime with the parameters" does this. So a constrained task can come
-back after the early 0-lag time, before its next period. It then runs
-again before that next period. Three cases of deadline_bw_test check
-this: reenter_runnable_in_gap, reenter_asleep_in_gap and
-reenter_pi_blocked_in_gap. "selftests/sched: Test parameter changes in
-deadline_bw_test", later in this series, adds them. They fail without
-this patch and pass from it on.
+The cost: a constrained task that leaves the class keeps its bandwidth
+in total_bw up to one period longer. Until then, sched_setattr() can
+fail with EBUSY for a new deadline task.
 
-[1] L. Abeni, G. Lipari, A. Parri, Y. Sun, "Parallel and sequential
-    reclaiming in multicore real-time global scheduling", arXiv
-    1512.01984, 2016, https://arxiv.org/abs/1512.01984
-[2] D. Casini, L. Abeni, A. Biondi, T. Cucinotta, G. Buttazzo,
+A backport of the two patches above needs this one, and
+"sched/deadline: Count the 0-lag time from the next period" before it.
+
+"selftests/sched: Test parameter changes in deadline_bw_test", later in
+this series, adds the reenter_asleep_late_in_gap case. It runs the
+example above, with the round trip at 150ms. The case fails without
+this patch, and passes with it.
+
+[1] D. Casini, L. Abeni, A. Biondi, T. Cucinotta, G. Buttazzo,
     "Constant Bandwidth Servers with Constrained Deadlines", RTNS 2017,
     https://retis.santannapisa.it/~a.biondi/papers/CBS_CD_RTNS17.pdf
 
-Fixes: 209a0cbda7a0 ("sched/deadline: Improve the tracking of active utilization")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: stable@vger.kernel.org
 ---
- Documentation/scheduler/sched-deadline.rst | 12 ++++----
- kernel/sched/deadline.c                    | 32 ++++++++++++++--------
- 2 files changed, 27 insertions(+), 17 deletions(-)
+ kernel/sched/deadline.c | 49 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/scheduler/sched-deadline.rst b/Documentation/scheduler/sched-deadline.rst
-index 9019b66f6a5b..3529b667c07f 100644
---- a/Documentation/scheduler/sched-deadline.rst
-+++ b/Documentation/scheduler/sched-deadline.rst
-@@ -171,12 +171,14 @@ Deadline Task Scheduling
-       The 0-lag time for a task entering the ActiveNonContending state is
-       computed as::
- 
--                        (runtime * dl_period)
--             deadline - ---------------------
--                             dl_runtime
-+                           (runtime * dl_period)
-+             next period - ---------------------
-+                                dl_runtime
- 
--      where runtime is the remaining runtime, while dl_runtime and dl_period
--      are the reservation parameters.
-+      where runtime is the remaining runtime, next period is the start of
-+      the task's next period, and dl_runtime and dl_period are the
-+      reservation parameters. When dl_deadline equals dl_period, the next
-+      period starts at the deadline.
- 
-   (b) If the task wakes up before the inactive timer fires, the task re-enters
-       the ActiveContending state and the "inactive timer" is canceled.
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index d481bf5a68c7..7dc0b71e7cce 100644
+index 7dc0b71e7cce..adcd9c9f8a9d 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -607,6 +607,7 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
- 	dl_rq_change_utilization(task_rq(p), &p->dl, new_bw);
- }
+@@ -761,8 +761,35 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
  
-+static inline u64 dl_next_period(struct sched_dl_entity *dl_se);
- static void __dl_clear_params(struct sched_dl_entity *dl_se);
- static unsigned int dl_task_root_domain_cpu(struct task_struct *p);
+ 	WARN_ON(dl_se->dl_non_contending);
  
-@@ -614,14 +615,17 @@ static unsigned int dl_task_root_domain_cpu(struct task_struct *p);
-  * Return the time from now to the 0-lag time of @dl_se, or a negative
-  * value if the 0-lag time has passed.
-  *
-- * The 0-lag time is when a task running at its reserved bandwidth would
-- * use up the runtime it has left:
-+ * The 0-lag time is when the task, served at its reserved bandwidth
-+ * since the start of its period, has received the runtime it used. From
-+ * there to the next period, the bandwidth gives exactly the runtime left:
-  *
-- *   0-lag = deadline - runtime * dl_period / dl_runtime
-+ *   0-lag = next period - runtime * dl_period / dl_runtime
-  *
-  * Example: 30ms every 100ms, blocking 10ms into its period with 20ms
-- * left. 0-lag = 100 - 20 * 100 / 30 = 33ms. From there to the deadline,
-- * 30% of the CPU is exactly the 20ms left.
-+ * left. 0-lag = 100 - 20 * 100 / 30 = 33ms.
-+ *
-+ * Do not count from the deadline. A constrained deadline comes before
-+ * the next period, so the 0-lag time would come too early.
-  *
-  * The product can overflow 64 bits, so mul_u64_u64_div_u64() multiplies
-  * on 128 bits. Its quotient must still fit: on x86-64 it traps
-@@ -633,12 +637,16 @@ static unsigned int dl_task_root_domain_cpu(struct task_struct *p);
-  */
- static s64 dl_time_to_zerolag(struct sched_dl_entity *dl_se, struct rq *rq)
- {
--	/* Time to the deadline. Negative if the deadline has passed. */
--	s64 left = dl_se->deadline - rq_clock(rq);
-+	/* Time to the next period. Negative if it has started. */
-+	s64 left = dl_next_period(dl_se) - rq_clock(rq);
++	/*
++	 * inactive_task_timer() restarts itself for a constrained task that
++	 * has left the class. If the task came back while the handler ran,
++	 * switched_to_dl() could not cancel the timer, and it is still
++	 * queued. Cancel it here, so that the test below sees only a handler
++	 * that is running.
++	 */
++	if (!dl_server(dl_se) && hrtimer_try_to_cancel(timer) == 1)
++		put_task_struct(dl_task_of(dl_se));
 +
-+	/* A task with no period yet has received nothing: no 0-lag time. */
-+	if (!dl_se->deadline)
-+		return -1;
+ 	zerolag_time = dl_time_to_zerolag(dl_se, rq);
  
- 	if (dl_se->runtime < 0) {
- 		/*
--		 * Overrun: the 0-lag time is after the deadline, by the time
-+		 * Overrun: the 0-lag time is after the next period, by the time
- 		 * needed to pay the overrun back at the reserved bandwidth.
- 		 */
- 		u64 overrun = -dl_se->runtime;
-@@ -659,8 +667,8 @@ static s64 dl_time_to_zerolag(struct sched_dl_entity *dl_se, struct rq *rq)
- 	}
- 
++	/*
++	 * A constrained task that leaves the class keeps its bandwidth and its
++	 * deadline until its next period, if that comes after its 0-lag time.
++	 * Back in the class before then, it goes on with its current period,
++	 * as if it had stayed. A new period at once would give it more than
++	 * its runtime in this period. A dying task does not come back, so it
++	 * releases its bandwidth at its 0-lag time.
++	 */
++	if (!dl_task && !dl_server(dl_se) && !dl_is_implicit(dl_se) &&
++	    dl_se->deadline &&
++	    READ_ONCE(dl_task_of(dl_se)->__state) != TASK_DEAD) {
++		s64 next = dl_next_period(dl_se) - rq_clock(rq);
++
++		if (next > zerolag_time)
++			zerolag_time = next;
++	}
++
  	/*
--	 * Runtime left: the 0-lag time is before the deadline. It has
--	 * passed if the deadline has.
-+	 * Runtime left: the 0-lag time is before the next period. It has
-+	 * passed if the next period has started.
- 	 */
- 	if (left < 0)
- 		return -1;
-@@ -668,7 +676,7 @@ static s64 dl_time_to_zerolag(struct sched_dl_entity *dl_se, struct rq *rq)
- 	/*
- 	 * runtime * dl_period / dl_runtime > left: the 0-lag time has
- 	 * passed. The runtime left is more than the bandwidth gives until
--	 * the deadline, as a wakeup would find with dl_entity_overflow().
-+	 * the next period.
- 	 */
- 	if (dl_se->runtime > mul_u64_u64_div_u64(left, dl_se->dl_runtime,
- 						 dl_se->dl_period)) {
-@@ -1756,7 +1764,7 @@ static inline void dl_check_constrained_dl(struct sched_dl_entity *dl_se)
- {
- 	struct rq *rq = rq_of_dl_se(dl_se);
+ 	 * If the "0-lag time" already passed, decrease the active
+ 	 * utilization now, instead of starting a timer
+@@ -2602,6 +2629,25 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
+ 	if (dl_server(dl_se))
+ 		goto no_task;
  
--	if (dl_time_before(dl_se->deadline, rq_clock(rq)) &&
-+	if (dl_se->deadline && dl_time_before(dl_se->deadline, rq_clock(rq)) &&
- 	    dl_time_before(rq_clock(rq), dl_next_period(dl_se))) {
- 		if (unlikely(is_dl_boosted(dl_se) || !start_dl_timer(dl_se)))
- 			return;
++	/*
++	 * A constrained task which has left the class keeps its bandwidth
++	 * and its deadline until its next period, as in
++	 * task_non_contending(). This timer may have been armed for the
++	 * 0-lag time while the task was still in the class.
++	 */
++	if (!dl_task(p) && READ_ONCE(p->__state) != TASK_DEAD &&
++	    !dl_is_implicit(dl_se)) {
++		s64 left = dl_next_period(dl_se) - rq_clock(rq);
++
++		if (left > 0) {
++			ktime_t at = ktime_add_ns(hrtimer_cb_get_time(timer), left);
++
++			hrtimer_set_expires(timer, at);
++			task_rq_unlock(rq, p, &rf);
++			return HRTIMER_RESTART;
++		}
++	}
++
+ 	if (!dl_task(p) || READ_ONCE(p->__state) == TASK_DEAD) {
+ 		if (READ_ONCE(p->__state) == TASK_DEAD && dl_se->dl_non_contending) {
+ 			sub_running_bw(&p->dl, dl_rq_of_se(&p->dl));
+@@ -4576,7 +4622,8 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 	 * the "inactive timer" fires, it can continue to consume its current
+ 	 * runtime using its current deadline. If it stays outside of
+ 	 * SCHED_DEADLINE until the 0-lag time passes, inactive_task_timer()
+-	 * will reset the task parameters.
++	 * will reset the task parameters. For a constrained task, the reset
++	 * waits for its next period, if that is later.
+ 	 */
+ 	if (task_on_rq_queued(p) && p->dl.dl_runtime)
+ 		task_non_contending(&p->dl, false);
 -- 
 2.47.3
 
