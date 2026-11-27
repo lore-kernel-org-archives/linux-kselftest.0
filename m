@@ -1,79 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795745442;
-	b=LevTjIz+Yue10iSpiX1g/z/cv5iC3iKo1OcU8TJs4eHfIpm2FtvbwIpRyasNq9n8oqq3
-	 OJTEjFF4WY85hOsx5s0Cd3HkSunixdK0WFpiNxvqVWlQii3KH0QEQOHLDgYU3n5cjZ0Hj
-	 SUZcxld6IF2ZzlPP6XtbzTbQVjiY7oF2y3B/dnUkDhemPD4kRfpNJMVcBPPY09auOCtp3
-	 p3o7NvmOwhAGU5BsS1QrcOxidP/7wp0rVT9ZPohprXfgL4aDntqjKyo7DI7Eh8nspyW4j
-	 Pm3H2Z4yTKh92LAE5ArEAqI83UdDVYBBk3lQR00k3ImDjFgoijH1JAp6kC6otfbEoVQ==
+	t=1795746091;
+	b=fKhxDBgQ7u2e8WYDO2rjArUTxqfpPOFJbQuxDcElp8A6xfuI6JqqH5w+5pxzw4L0asTx
+	 FjLRU4rcT1rLeA6XlEa78xU2/Vd2r9kXArVgyTX/u2AVYQ7j23fEyfLp6IygreRQyGAuh
+	 FYfqp0pRVof3fDDRE8JDvyhJtyE/0v4IBhKZfpMpuLhCLhS6XbZqaXKkGM983rQ4ywC/k
+	 8XyAx1sof9uiy3OEHknL2vTILKcRs2/mldZ5OYCiEynXFPHSpBYLolIoC2JkAet3LeyAY
+	 48uSk1nZEYXTCu13O33IQJU9yDJ2I0jzBcjQhKCy6qZWG6OZVmNOt6a7Xk2+r34CgHQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795745442;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:X-CID-META:
-	 X-CID-BVR:X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=bO/W1h7ZD8/sZ8hK6m5Vq3d9fFeTUqLDBboZRe/aGTQ=;
-	b=wN/XH0JXBUaU4yGgAnfrc5EmymwxW6GBuHBKWDdp6u9t36bV7TI677O0MKD8tXuSIw3a
-	 2PSx/PdPX3EyLx5Mp3VQubHyLV0MJ7ekrUgrHLilLi8UrfJjIAhdY+UuMn3TFkucEno+y
-	 BOXxlrkyWvG9HFMMlqf+dSDpIBF3YMmW2HAflYOUhBDjXAmKW7UGNvRm3G9toaSho92DE
-	 NMl9MPFcaK4ba8lIVUzQribYptpjt0H5bCCzjXnHkvINTeZ2+95A3oQHHLMTIuLGajIxv
-	 AHe+AXfXYu/zIzngzMHYHkWhXXrx7AtbAJycbPlWsMW0RvJDclXfYN+InaPwxF2+X9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795746091;
+	h=DMARC-Filter:DKIM-Signature:Received:X-Spam-Checker-Version:
+	 X-Spam-Level:X-Spam-Status:DKIM-Signature:Received:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key;
+	bh=o2ET3ecSGMD0ZeNmKH7c+QB7Isg9jdNrey9dY+vrz6Q=;
+	b=Iz8pF7TLSEdctaF0xkvCC7ruN6EU+P4FvF6AZbc7ZLiF3f4WRlbC/9Mvp+pIEsoagNhr
+	 d1Lr/SH8VQ2XI+vw7Cgmu1M58n0urm2PXyqwihMs4WwEZWCX2lvYv3Z7gIwP6GWPwnSSE
+	 Z6RpantvOAshwR9MB0MFAGaa95ec6sza8sHRaOCzGHMlA71EZf060JuQ+0L0uhiYl55LY
+	 W1uq42PEr8bJAkM9B9fx+FZxyE16Eu1lGXTVRMf82Rm2ouW075u+GBm+2V2lbPzZrGD1s
+	 jOeWHRvP4wEDUnbxkVLfVptgDjTTMy/xMgeY5m/mhOd17CEUTFaeOALztVRalVjYKWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	dmarc=pass header.from=davidgow.net;
+	spf=pass smtp.mailfrom=davidgow.net;
+	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=HJzMCNv0;
+	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=IsV2yIgG;
+	arc=none smtp.remote-ip=203.29.242.92
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B16606A321;
-	Fri, 27 Nov 2026 02:10:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2B16606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b96e8d42ea0711f19a56ed5b684f684d-20261127
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:a3a60f6d-ce47-4618-83a3-085355a49b31,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:a3a60f6d-ce47-4618-83a3-085355a49b31,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:0a688e5116bb59d072e94ff420795ed2,BulkI
-	D:261127101034AZDMAGJK,BulkQuantity:0,SF:17|19|38|64|66|78|80|81|82|83|102
-	|127|136|153|841|850|865|898|915,TC:nil,Content:0|15|50|99,EDM:-3|-100,IP:
-	-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LE
-	S:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: b96e8d42ea0711f19a56ed5b684f684d-20261127
-X-User: maguicai@kylinos.cn
-Received: from localhost.localdomain [(36.106.123.207)] by mailgw.kylinos.cn
-	(envelope-from <maguicai@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 497214400; Fri, 27 Nov 2026 10:10:32 +0800
-From: Guicai Ma <maguicai@kylinos.cn>
-To: Cai Xinchen <caixinchen1@huawei.com>,
-	nicolas.bouchinet@oss.cyber.gouv.fr,
-	xiujianfeng@huawei.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	shuah@kernel.org,
-	kalevi@kolttonen.fi
-Cc: linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	lujialin4@huawei.com
-Subject: Re: [PATCH v3 8/8] selftests/lsm: add lockdown securityfs test
-Date: Thu, 26 Nov 2026 21:10:29 -0500
-Message-ID: <20261127021029.2562038-1-maguicai@kylinos.cn>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261126131315.1256553-9-caixinchen1@huawei.com>
-References: <20261126131315.1256553-1-caixinchen1@huawei.com> <20261126131315.1256553-9-caixinchen1@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D90606A321;
+	Fri, 27 Nov 2026 02:21:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5D90606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key, unprotected) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=HJzMCNv0;
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=IsV2yIgG
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1795746088;
+	bh=e7s2q4YjPzq+CftyBULIg4QzDfvyNMtvgTtksST7XZQ=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+	b=HJzMCNv0haYeigprWrbLG06ZYLOaDMbDgJp8B1wKYgT6YfkGx+eIuKxpthgBwQZCn
+	 N9FqNokHQe3Yux9PQ/dY8n+IQ+ZuUK782o7WloaLRLIoEUEqVp7hqcSfwZBJGOMbPO
+	 CdRMSEEh3SN34JbxjhufHYB+Ssg5J9HAPkUL32NlaAb6pxCd2E6iaHDtQxvEtze/pD
+	 1VzLmAgZfpVyVViDppLUk9FoStKgS+4TS04WgOYrOnkO1N1HRGdeiEdMhdp7sX0IRC
+	 K4hFYp3t+IdjFuUMGl/ym5TUrrnVgc98Zz8OrYl6ukO/MForXoQk3v6T0OueeD9aCc
+	 Sp0iZWG4523N3wyb5VIS5G+GYL6J9a05xDa6HqIO2oUN0KjSZK/Sssv/dsTSblexly
+	 WmPnFUiP8dSCnYp2DkUS8AlYyAOA+mERvIIRzQAp8OcRrhm6KxtqVkmwPrb5H8KXph
+	 Bp6gVediGUB1GM5Fjkhp2gFjYHc5mGOYdRnCUKpXyjEJ++WxLUq8ZBLPSKGRTImPBE
+	 esvbRx7v85OAsBAHRzHgfOMh3+Jyx9ZX9DTqdwwW2VHlSirn07NCcgZ8rMsbnyjjv5
+	 ULZ76uiUMUrYzDXc6gObt0UK2+iq33AmNzIoMs6whAHlw3RFG8sfkAcHqtgHAhFpnw
+	 0VTIMxCn/GyCCiCK01OlqW+g=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 39BDD1EADDC; Fri, 27 Nov 2026 10:21:28 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1795746085;
+	bh=e7s2q4YjPzq+CftyBULIg4QzDfvyNMtvgTtksST7XZQ=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+	b=IsV2yIgG2oSVAieNd/6Sr3wfxV3BwAqrbklK4zcS58X8hjwI55j/ODgb8G5863KG/
+	 SFqmGg+vYtmpo66fb/hJ0GTiYBIwrEBhAGXwXURIzsXeNrbBQGqz55euhlqTjexHk8
+	 TEtuKB86UoXzmR1xfPMb4Iuiuvth1gFbPBtMNbvxKJsp77xOBmVXzL0EzNbwEQD7Ee
+	 2Sh7RIFce44+ThwcyeJDlytVmbATBGUOxPhisbT3hEG6F1ttF8T1e/8QddtKOKidGg
+	 XRRaQ1ZzV0+24ypJAmm0d0aAWXAiXcykUau1+O2Yd4OCJiFVYhfJ4AVO3qsesYVOC2
+	 GGvFrF3uS+P3kJOXE41nx4Xh1WhwiYdLhK0eYSt2Vt9Fq8hxVdTPsuzdVv/3TplFPc
+	 paxMOwhGT9BweyB032oJ1Qk3bGEPl5VXrhhK069Csnbym6hN1TYOxXWdUUWxngdxjC
+	 Qs0MGhodzb5OW2LGvb0PnLFtQN1o7H9QbBnbKg0up0qTms+I0tX0Zwuex+Pexu4pFb
+	 ym/jatshmO0CzCp6WffseR4o+HXvbU081m1cCu3AsBsypUdrfWyBaZrMfOJAIhG3eM
+	 I6xb7WB0ovqC/BYbU505YkyyUUR09yi7aoqKn+vai3y0Ca2Vm4xVg1vGYagpQMAdoO
+	 XLD0Hz2wnyWkdZLyTamTmD4g=
+Received: from shelley.lan (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id D4CA61EADD4;
+	Fri, 27 Nov 2026 10:21:25 +0800 (AWST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,40 +82,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH RESEND v2] kunit: tool: Preserve suite ancestry in
+ JUnit test identities
+From: David Gow <david@davidgow.net>
+To: Daniil Matus <matus.daniil@gmail.com>
+Cc: David Gow <david@davidgow.net>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Rae Moar <raemoar63@gmail.com>, kunit-dev@googlegroups.com, 
+ Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+In-Reply-To: <20261126-kunit-junit-classname-resend-v2-1-9b64a461fd86@gmail.com>
+References: <CAJeAFep5wgtRpHwANoeqJkWE38y=9zQQ9e7moQw-3rE47b=wFw@mail.gmail.com>
+ <20261126-kunit-junit-classname-resend-v2-1-9b64a461fd86@gmail.com>
+Date: Fri, 27 Nov 2026 10:20:57 +0800
+Message-Id: <179574605708.1202103.7943504441342768927.b4-review@b4>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1419; i=david@davidgow.net;
+ h=from:subject:message-id; bh=e7s2q4YjPzq+CftyBULIg4QzDfvyNMtvgTtksST7XZQ=;
+ b=owEBiQJ2/ZANAwAIAcYipzoZDNtCAcsmYgBrCOkYvamYY+4xaGFDK8JZZzRQtsqNMwnJpV5hg
+ ic8b0U3CPmJAk8EAAEIADkWIQSmmTCaqhqZOsxDGC7GIqc6GQzbQgUCawjpGBsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQxiKnOhkM20JTow/+K9N+22GqVNggE3T5mptAZGQTpbU3vtZ
+ LoUeCL21CU3qxkec1dYYbD5SRY4qww44cpAcrpmYXkMKOaBNjpVHf+AFJgLX6OFmT/JAVyfIwu3
+ mWuqajlERxRTXXZCq5kcz+qHgHwMp/8sWGsUDMzB3IOI79WEumtGOE5BLrsTkoQ2fP+qyt857gi
+ BG33KA8FLYFa7aaGxNOCA6dxdNqawD8SA+LkKmib8+CiDx3G4NAmdPhra/sAce8Jj24EXYZF69C
+ 5q5iQ+VIxAY+qjqjbMyI79DK3aAQD5OfcWV8l8SWCZ/GYmIg139DQiVuRFfLsjDzOew93qx5K8C
+ CIE9VWOTgyNiwXLCYU69Kf2OJ1uKKV/ZjS9ZV4+FHpbWQd5XUt6xVDCk+sQbZmroCxLRl7noDQ+
+ xeveAqpxGpmAe//2DtJnM+YL5aYCUtY1aADe6Sy6cjNZ09j4qt4xlanCnNMXfd4CR/0+4+dxt8E
+ aZAqU7JRNkYx8dZIGEU5GBXQLkRapNbsVrvrrGxVntFmJYX0rXI6s3qATZLnIS6NJtZwLbBnh7O
+ Y/XnHz9NgBeiyE1WrCISmCcxtBlb4fHImp1q/fg0axs2Cw1ohPSDPhRUuo7nBi/Tz4J6v9pGKoO
+ X58blrjtRrXKsEVw8xLdzuHupsaIAlTTEVAJAU+3tXNzwS/qFlq0=
+X-Developer-Key: i=david@davidgow.net; a=openpgp;
+ fpr=3B0A53B1D9DF6AAC59C230322A821C5AD66AB03F
 
-On Thu, Nov 26, 2026 at 09:13:15PM +0800, Cai Xinchen wrote:
-> +run_lockdown_test: all
-> +	$(call RUN_TESTS, lockdown_test)
+> JUnit testcases currently carry only a name. A parameterized KUnit test
+> becomes a nested testsuite named after the test function. Reusing that
+> function in several outer suites therefore produces the same immediate
+> suite name and parameter name in each of them.
+> 
+> For example, cs_dsp_test_run_stop_callbacks is registered in four cs_dsp
+> callback suites with the same "all ops" parameter. GitLab identifies cases
+> by suite name, classname and testcase name. Without a classname, these
+> distinct cases have identical keys in the imported report.
+> 
+> Set classname to the dot-separated ancestor suite names, including the
+> parser's main root. Preserve the existing suite hierarchy, testcase names,
+> statuses and logs. Add a regression using the existing nested log fixture,
+> whose seven testcases otherwise have only five distinct identity tuples.
+> 
+> Validation: all 92 kunit_tool_test.py tests pass. The new regression fails
+> on the unmodified generator. Comparing all 24 log fixtures shows no XML
+> changes other than the added classname attributes.
+> 
+> Fixes: e9e05c72752f ("kunit: tool: Add (primitive) support for outputting JUnit XML")
+> Signed-off-by: Daniil Matus <matus.daniil@mail.ru>
 
-As Sashiko noted, out-of-tree builds fail here because the binary lives
-under $(OUTPUT).  Running with OUTPUT= set produces:
+Thanks very much: glad to see this working with something other than Jenkins, too.
 
-  # Warning: file lockdown_test is missing!
-  not ok 1 selftests: lsm: lockdown_test
+Reviewed-by: David Gow <david@davidgow.net>
 
-Using $(OUTPUT)/lockdown_test here works both in-tree and out-of-tree.
+-- David
 
-> +	if (geteuid() != 0)
-> +		SKIP(return, "requires root");
-> +	if (status_writable())
-> +		SKIP(return, "cannot open %s for writing: %s",
-> +		     LOCKDOWN_PATH, strerror(errno));
-
-Having both checks in FIXTURE_SETUP() makes non-root runs skip
-read_format as well, leaving the 0644 / open(O_WRONLY) EACCES behavior
-documented in 7/8 uncovered.  Moving the write/root gate out of
-read_format (or adding an unprivileged open() check) would cover that
-part of the ABI too.
-
-I also ran the lockdown_test binary under QEMU/KVM on arm64 (mainline
-9437ee8b6cf6 with this series applied, KASAN + lockdep,
-CONFIG_SECURITY_LOCKDOWN_LSM=y).  Under lsm=lockdown, uid 65534 skipped
-all 5 cases, while root runs passed none -> integrity (5/5),
-integrity -> confidentiality (5/5), and confidentiality (4 pass, 1 skip
-on upgrade).  Booting with lsm=yama skipped all 5 cases on ENOENT, with
-no KASAN or lockdep warnings.
-
-Thanks,
-Guicai Ma
+-- 
+David Gow <david@davidgow.net>
