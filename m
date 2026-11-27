@@ -1,62 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795818354;
-	b=KAP5N2Cb68dR2ergbretCpRqy+ozzJRR/wNr1KkIFsTCenp7S0vm7DkIXR2VIJ6HSXjd
-	 IU/k06zFe2pR44yqG4aZvr9vIOEPGSBqnOUQWMwEKwYtEhPIqP3m48rZaH3lp3GOn1BXr
-	 Kx8ZbDe0QRx012Pr325UT2on2XiI3aqdeq6phYAphDc6cGYY0UAZiaQr6ORAAlMr4d6/3
-	 rdxuY3QI+dMwcflNBt+lN6iyD86xDlZAdz/AiVAC0rLdWpwB8YMSnpLjshqIs2/FG2KzT
-	 m+JyJBd56boFvkK4SZuip0jSRiNJHIrbXLy6JwSJCpBp8zhcBl7RhurSV6Zj5HkeVgg==
+	t=1795818447;
+	b=yOppF6U48oG/C5+MffWtWJGeFXeRhM85e1o/eafrn1qdAidW3WKuA6DO6YgsNkTApbdP
+	 kSPaczWeHCnMMUCjJLnUd4lpdgBmpGl53XvGEpoG6KFy9ckdqcNVAK4d8GtQ+7Ir4S7sW
+	 gcRO/B9NUnASFFwZi8wRuL1K7G2T1GX+ILHwpOzvn47mH6s1zsjFOtG0OGWATuZzru28S
+	 BJt+ZddbK5FCUT9qxt13zISaDAGGRz6zyfWNny/Ti+58z1VYM/Z+VfkeftDzo6ue74hU5
+	 zxv3ZFsQBhBbLM5nY0m+mQxyH9jwy5uRyf/OXeT+6gvrPmJiCG9wUHBsHS1a/YPhdCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795818354;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=tPh1YE5zdqzDBoq23ydOXnyk0skwsBUIZkT0OnzQmAg=;
-	b=UTsaSi8eGx/nwJsAW0HE5kCYr2GzkyOG2rty1HQlBbHV/SL7ciIKbPCir6yBWiWp5O+2
-	 zh3GXVNBiDiohO/0CsXbLqrhc2Ifke9OlLIn640WUonEkUz8lY1qcR/R14En2acNebM3W
-	 X8noHJzasQ+HFjJRCQW5LzR8+BX4FvRl+UftbTKOGiUVn4kp0tEBBjxURKODAQypommv/
-	 r3oddbPxNzUQGaP/lRQcP324MlCijMKSu30H2Eh94rqUwsotkJHjx6xw3UWQj0cON8nLo
-	 Cx5tTF1055g8y1uXqETvUvPYRWGCP+PT4exzugXyimekEG92b9QDtxTL5ucf1nyGrZA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795818447;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=6lBdhfWXWDM1BJfgF8wRgQ9FWT8DwEuH6a0DOJBJBFA=;
+	b=AksC83FNtbxS6acTFqwY4wexMtRO0CM7J7vhvLe0wtQKePBscbMCRWb1dqVJT+anTioM
+	 WpFj+GhpkkhmJqj6DXsn+punSE0HX2FBtdhoD+xLsW39liHfPW3Nf7N7LMBHWCI1fCA+5
+	 teR0EFSQ/sUbBoiihnEEmdt2yU6P7/KJ3NtZv9d/pgwkbansiR0mu7DnbT/P+v6NCsnVy
+	 v/GfA5wBiUUMSIBTS57ZbCqNgaf681hGbDSeLt72Hn9DnlMnl0RW5mZs8GejyVc1sOYWK
+	 2IBoqHZgqggo0qkJi9WQdBCAvafBOfK/IniwyjywAYApZSa1kPu8k5/aDzpC/clyoLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YTveu0PR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gZ80EMhd;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CC3606A31E;
-	Fri, 27 Nov 2026 22:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF454606A31E;
+	Fri, 27 Nov 2026 22:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YTveu0PR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 483091F00919;
-	Fri, 27 Nov 2026 22:25:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gZ80EMhd
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223291F000C1;
+	Fri, 27 Nov 2026 22:27:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795818354;
-	bh=tPh1YE5zdqzDBoq23ydOXnyk0skwsBUIZkT0OnzQmAg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YTveu0PR97jt56tlHxKXpGMz2L58CqhTckl/RvJjoHehpGVifljK9662WPDE8utks
-	 byVIZecjDAD34nl/G4gGNFgVbaqfyoEz3zUAromr38CG9DcADraqbRtMMSMxZoUHLi
-	 rJST7ZGT2HQhUBj5rrq5kH5TPnphvsFPAqP6Ssxb1fLP0jLTK8ICAKCxwQvXG2wnMF
-	 8YdZf/x6mf5eat6BWQdpP/Up0bxVx/ErHP+WIWsdtfwM94tzTAveULmVIypsZzdnSE
-	 A+kq07HVoSbakq7JGjB+mAYwwQ4DqxoF3izbgFo8arfLt//jQVyokJPH7BLiF2a/TL
-	 rN6tmU4S23ilg==
-Subject:
- Re: [PATCH net-next 4/5] selftests: net: add a test of the LISP devices
-From: netdev-bot+sashiko@kernel.org
-To: vjardin@free.fr
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, donald.hunter@gmail.com,
- nicolas.dichtel@6wind.com, horms@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, rdunlap@infradead.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Fri, 27 Nov 2026 22:25:52 +0000
-Message-ID: <179581835281.3135.9886057049539183734@kernel.org>
-In-Reply-To: <20261126-for-upstream-lisp-v1-v1-4-7382a4bcfd9b@free.fr>
-References: <20261126-for-upstream-lisp-v1-v1-4-7382a4bcfd9b@free.fr>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795818447;
+	bh=6lBdhfWXWDM1BJfgF8wRgQ9FWT8DwEuH6a0DOJBJBFA=;
+	h=From:To:Cc:Subject:Date;
+	b=gZ80EMhdqxW1hW8lBfnxIryIkYqgywZ1EP4YBcNbDCWjeea6eG9LwyjKIu0SH0s1J
+	 n8idgbfIiH8aBJTLQNtScDkmSPiO4AYW684Iuq+4vLxrPmjGDCq90hx7nCoM3S3+Q8
+	 wb1FnpmoHd3NeoCzyuiKo3f/X7fahMop2kkl4bImRiq2k5AkrJcWZeNRsVJcfJK4xV
+	 Ra+aHOdTLxWP6ir6thvCigW42pOSEBRUbn589Rcpe6p4apFaS3yKlr+Mdb9SfBGZn8
+	 e4J4BV128rGxc+AQJzL716yobxLrDijbnlgBdl+lExwLdZEBJqgQIZAOrdsZCDyrBN
+	 jjXYzAuO9LH5w==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v3 0/7] mm/damon: various improvements/cleanups for code, tests and comments
+Date: Fri, 27 Nov 2026 14:27:11 -0800
+Message-ID: <20261127222719.105510-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,107 +60,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Refactor code, optimize code speed, add missing feature supports, and
+update comments on various areas of DAMON.
 
-Low priority / nit picks for your consideration:
+Optimize the efficiency of vaddr damos_migrate action under filter
+failures with patch 1.  Use damos->last_applied on damos_migrate action
+in vaddr and support sz_filter_passed for damos_migrate action in vaddr,
+respectively with patch 2 and 3.  Drop a redundant and racy quota goal
+target value validation in sysfs, in favor of that in the core layer,
+with patch 4.  Drop unused variables and imports from selftests with
+patch 5 and 6.  Update source file intro comments to call DAMON just
+DAMON, via patch 7.
 
-- [Low] The whole selftest needs an iproute2 that supports the new 'lisp'
-  link type, and nothing in the series says so.
-- [Low] In mtu_test() (tools/testing/selftests/net/lisp.sh:468-492), the
-  `for family in 4 6` loop flushes h1's route caches only after both…
+Issues for patches 1 and 3 were found by Sashiko.  Those are
+mild inefficiency and unsupported features, though.  Hence not Cc-ing
+stable.
 
---
+Changes from RFC v2
+- RFC v2: https://lore.kernel.org/20261101171630.81477-1-sj@kernel.org
+- Set last_applied regardless of damos-filtering.
+- Advance entire folio for invalid folio.
+- update subject for unused imports removal.
+- Add source file intro comments update patch.
+- Rebase to the latest mm-new.
+Changes from RFC
+- RFC: https://lore.kernel.org/20261031202614.96036-1-sj@kernel.org
+- Drop charge_target_from fixup consolidation.
+- Add a patch for using last_applied on vaddr migrate action.
+- Add missed damos_va_migrate_private->sz_filter_passed setup.
+- Fix wrong commit message for unused imports removal.
 
-selftests: net: add a test of the LISP devices
+SJ Park (7):
+  mm/damon/vaddr: advance migration attempt in folio level for filter
+    out
+  mm/damon/vaddr: use damos->last_applied for migrate action
+  mm/damon/vaddr: implement sz_filter_passed for migrate_{hot,cold}
+    action
+  mm/damon/sysfs-schemes: drop redundant and racy zero target_value
+    check
+  selftests/damon/damos_apply_interval: remove unused variables
+  selftests/damon: remove unused imports of sys and time modules
+  mm/damon: update file intro comments to call DAMON just DAMON
 
-This adds tools/testing/selftests/net/lisp.sh. In the test, two xTRs carry
-the traffic of two hosts through a core router. x1 keeps its EIDs and its
-RLOCs in separate VRFs, and x2 uses its main table. The net selftest
-config, the Makefile and MAINTAINERS are updated to match.
+ mm/damon/core.c                               |  2 +-
+ mm/damon/ops-common.c                         |  2 +-
+ mm/damon/ops-common.h                         |  2 +-
+ mm/damon/sysfs-schemes.c                      |  3 ---
+ mm/damon/tests/core-kunit.h                   |  2 +-
+ mm/damon/tests/paddr-kunit.h                  |  2 +-
+ mm/damon/tests/sysfs-kunit.h                  |  2 +-
+ mm/damon/tests/vaddr-kunit.h                  |  2 +-
+ mm/damon/vaddr.c                              | 27 ++++++++++++-------
+ .../selftests/damon/damos_apply_interval.py   |  2 --
+ .../damon/sysfs_no_op_commit_break.py         |  1 -
+ ...sysfs_update_schemes_tried_regions_hang.py |  1 -
+ 12 files changed, 24 insertions(+), 24 deletions(-)
 
-> diff --git a/tools/testing/selftests/net/lisp.sh b/tools/testing/selftests/net/lisp.sh
-> new file mode 100755
-> index 0000000000000..780053db366bc
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lisp.sh
-> @@ -0,0 +1,1120 @@
 
-[ ... ]
-
-> +mtu_test()
-> +{
-> +	local family
-> +
-> +	for family in 4 6; do
-> +		RET=0
-> +		use_rlocs "$family"
-> +
-> +		h1_ping -M do -s 1416 10.2.0.2
-> +		check_err $? "an IPv4 packet of 1444 bytes is lost"
-> +		h1_ping -M do -s 1417 10.2.0.2
-> +		check_fail $? "an IPv4 packet of 1445 bytes goes through"
-> +		h1_ping -s 1396 fd00:2::2
-> +		check_err $? "an IPv6 packet of 1444 bytes is lost"
-> +		h1_ping -s 1397 fd00:2::2
-> +		check_fail $? "an IPv6 packet of 1445 bytes goes through"
-> +		h1_ping -s 3000 10.2.0.2
-> +		check_err $? "IPv4 fragments are lost"
-> +
-> +		log_test "Device MTU with IPv$family RLOCs"
-> +	done
-> +
-> +	ip -n "$h1" route flush cache
-> +	ip -n "$h1" -6 route flush cache
-
-[Severity: Low]
-Does the IPv6 RLOC pass of this loop still exercise x1's lisp101?
-
-In the first pass, x1 refuses the 1445 byte pings because lisp101 has an
-MTU of 1444, which lisp_setup() sets:
-
-    dev->mtu = ETH_DATA_LEN - LISP_IPV6_HLEN;
-
-h1 then caches a PMTU of 1444 for 10.2.0.2 and for fd00:2::2. Those caches
-are flushed only after the loop ends. pmtu_family_test() and
-frag_family_test() flush on every pass.
-
-In the second pass:
-
-- h1_ping -M do -s 1417 10.2.0.2 fails on h1 itself with EMSGSIZE and
-  never reaches x1. The check_fail passes no matter what lisp101 does.
-
-- h1_ping -s 1397 fd00:2::2 is fragmented on h1 to the cached 1444, so x1
-  forwards it. The check_fail passes only because x2's lisp101 refuses the
-  1445 byte reply from h2.
-
-- h1_ping -s 3000 10.2.0.2 is fragmented on h1 to 1444 in both passes, so
-  x1 never handles an oversized packet in this test.
-
-Would flushing h1's caches at the end of each pass keep the second pass
-meaningful?
-
-[ ... ]
-
-> +require_command jq
-> +
-> +if ! ip link help lisp 2>&1 | grep -q "^Usage: ... lisp"; then
-> +	echo "SKIP: iproute2 does not know the lisp devices"
-> +	exit "$ksft_skip"
-> +fi
-
-[Severity: Low]
-This isn't a bug, but the whole test needs an iproute2 that supports the
-lisp link type. That covers "type lisp id N local A local A6", "external",
-"link-netns", and the info_data JSON keys id, local, local6 and external.
-
-Neither the commit message nor Documentation/networking/lisp.rst mentions
-this dependency or points to the iproute2 change. With a stock iproute2,
-the test always stops here with SKIP.
-
-Could the commit message say which iproute2 version or patch is needed?
-
+base-commit: f3e166bac17470d6c215e1b4c2af36f5ac5ee75c
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261126-for-upstream-lisp-v1-v1-0-7382a4bcfd9b%40free.fr
+2.47.3
