@@ -1,78 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.159
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795746091;
-	b=fKhxDBgQ7u2e8WYDO2rjArUTxqfpPOFJbQuxDcElp8A6xfuI6JqqH5w+5pxzw4L0asTx
-	 FjLRU4rcT1rLeA6XlEa78xU2/Vd2r9kXArVgyTX/u2AVYQ7j23fEyfLp6IygreRQyGAuh
-	 FYfqp0pRVof3fDDRE8JDvyhJtyE/0v4IBhKZfpMpuLhCLhS6XbZqaXKkGM983rQ4ywC/k
-	 8XyAx1sof9uiy3OEHknL2vTILKcRs2/mldZ5OYCiEynXFPHSpBYLolIoC2JkAet3LeyAY
-	 48uSk1nZEYXTCu13O33IQJU9yDJ2I0jzBcjQhKCy6qZWG6OZVmNOt6a7Xk2+r34CgHQ==
+	t=1795746658;
+	b=ZWC4iauZYhzTZF7lvhbFfuvorRG/9eTBqDx8tzPuqzrp2qEVoSGiKKRtI+1xJhwEs4ST
+	 qzgkDisZ7UqXR3fxCNBtZY8b0kd19D/HV33qdTGqZTarZHZpaECdutTh5kHiZue4Q71ht
+	 e9TEjOEXJq0cwBGNxnrgAiX/UnVF3mMkUWfBsqwVWTvqwpC+T86FFtxlSv3H6KPf8WQt0
+	 X3WW1yPwSrf+mdntuY3zAtX3d/A9bCBiTrnC0GVxf4tF8wzTIPTtTpPIcyx/M3b0gxbDG
+	 HMS0h3wEF8S0M0L/YtoiwpslhqVVfNn04Owh7R3xlh0Ud+NxoUxzS7OT/hKIxmMKnMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795746091;
-	h=DMARC-Filter:DKIM-Signature:Received:X-Spam-Checker-Version:
-	 X-Spam-Level:X-Spam-Status:DKIM-Signature:Received:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id:X-Mailer:X-Developer-Signature:
-	 X-Developer-Key;
-	bh=o2ET3ecSGMD0ZeNmKH7c+QB7Isg9jdNrey9dY+vrz6Q=;
-	b=Iz8pF7TLSEdctaF0xkvCC7ruN6EU+P4FvF6AZbc7ZLiF3f4WRlbC/9Mvp+pIEsoagNhr
-	 d1Lr/SH8VQ2XI+vw7Cgmu1M58n0urm2PXyqwihMs4WwEZWCX2lvYv3Z7gIwP6GWPwnSSE
-	 Z6RpantvOAshwR9MB0MFAGaa95ec6sza8sHRaOCzGHMlA71EZf060JuQ+0L0uhiYl55LY
-	 W1uq42PEr8bJAkM9B9fx+FZxyE16Eu1lGXTVRMf82Rm2ouW075u+GBm+2V2lbPzZrGD1s
-	 jOeWHRvP4wEDUnbxkVLfVptgDjTTMy/xMgeY5m/mhOd17CEUTFaeOALztVRalVjYKWA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795746658;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=yhPqhFmiPr+CMbPss5FuS1lnYkQ0ByFCw1K+Q5WzccA=;
+	b=4JCxtGRxlkERsXbogR4tGLdNehAk4c/seuvsYhz+H73td+bu2kc8qxCeynKGyoUh09Ih
+	 vgommGWkNwayNrTGWFZuXCFiEmSbP5NscRUQrKR0x9XZ3ZE/d2u3y4obYOEbqZ7t7f0D1
+	 HxJxKAs3juYVN6APJqIdKES9nycXn8RxJl0HXRra3y2VSN+Yvm+Et8Sq163g+i4nbpKnw
+	 oLKulSX3F0hkQCupoFc8/Hf2AxI099ee5VokTZ/6vdF9YeJbd/F6qx07mQGNPzfdaK1kk
+	 iTCLJ2sMb3WNtrnKUZgimFoHutWQPwNk1JbJ/JFNgOzxg6Arj2q54hXaDd3SAbifoBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=davidgow.net;
-	spf=pass smtp.mailfrom=davidgow.net;
-	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=HJzMCNv0;
-	dkim=pass header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=IsV2yIgG;
-	arc=none smtp.remote-ip=203.29.242.92
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FU2ehd3C;
+	arc=none smtp.remote-ip=95.215.58.159
+Received: from mta1.migadu.com (out-159.mta1.migadu.com [95.215.58.159])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D90606A321;
-	Fri, 27 Nov 2026 02:21:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5D90606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206CC606A321
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 02:30:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 206CC606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key, unprotected) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=HJzMCNv0;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.a=rsa-sha256 header.s=201606 header.b=IsV2yIgG
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1795746088;
-	bh=e7s2q4YjPzq+CftyBULIg4QzDfvyNMtvgTtksST7XZQ=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-	b=HJzMCNv0haYeigprWrbLG06ZYLOaDMbDgJp8B1wKYgT6YfkGx+eIuKxpthgBwQZCn
-	 N9FqNokHQe3Yux9PQ/dY8n+IQ+ZuUK782o7WloaLRLIoEUEqVp7hqcSfwZBJGOMbPO
-	 CdRMSEEh3SN34JbxjhufHYB+Ssg5J9HAPkUL32NlaAb6pxCd2E6iaHDtQxvEtze/pD
-	 1VzLmAgZfpVyVViDppLUk9FoStKgS+4TS04WgOYrOnkO1N1HRGdeiEdMhdp7sX0IRC
-	 K4hFYp3t+IdjFuUMGl/ym5TUrrnVgc98Zz8OrYl6ukO/MForXoQk3v6T0OueeD9aCc
-	 Sp0iZWG4523N3wyb5VIS5G+GYL6J9a05xDa6HqIO2oUN0KjSZK/Sssv/dsTSblexly
-	 WmPnFUiP8dSCnYp2DkUS8AlYyAOA+mERvIIRzQAp8OcRrhm6KxtqVkmwPrb5H8KXph
-	 Bp6gVediGUB1GM5Fjkhp2gFjYHc5mGOYdRnCUKpXyjEJ++WxLUq8ZBLPSKGRTImPBE
-	 esvbRx7v85OAsBAHRzHgfOMh3+Jyx9ZX9DTqdwwW2VHlSirn07NCcgZ8rMsbnyjjv5
-	 ULZ76uiUMUrYzDXc6gObt0UK2+iq33AmNzIoMs6whAHlw3RFG8sfkAcHqtgHAhFpnw
-	 0VTIMxCn/GyCCiCK01OlqW+g=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 39BDD1EADDC; Fri, 27 Nov 2026 10:21:28 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1795746085;
-	bh=e7s2q4YjPzq+CftyBULIg4QzDfvyNMtvgTtksST7XZQ=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-	b=IsV2yIgG2oSVAieNd/6Sr3wfxV3BwAqrbklK4zcS58X8hjwI55j/ODgb8G5863KG/
-	 SFqmGg+vYtmpo66fb/hJ0GTiYBIwrEBhAGXwXURIzsXeNrbBQGqz55euhlqTjexHk8
-	 TEtuKB86UoXzmR1xfPMb4Iuiuvth1gFbPBtMNbvxKJsp77xOBmVXzL0EzNbwEQD7Ee
-	 2Sh7RIFce44+ThwcyeJDlytVmbATBGUOxPhisbT3hEG6F1ttF8T1e/8QddtKOKidGg
-	 XRRaQ1ZzV0+24ypJAmm0d0aAWXAiXcykUau1+O2Yd4OCJiFVYhfJ4AVO3qsesYVOC2
-	 GGvFrF3uS+P3kJOXE41nx4Xh1WhwiYdLhK0eYSt2Vt9Fq8hxVdTPsuzdVv/3TplFPc
-	 paxMOwhGT9BweyB032oJ1Qk3bGEPl5VXrhhK069Csnbym6hN1TYOxXWdUUWxngdxjC
-	 Qs0MGhodzb5OW2LGvb0PnLFtQN1o7H9QbBnbKg0up0qTms+I0tX0Zwuex+Pexu4pFb
-	 ym/jatshmO0CzCp6WffseR4o+HXvbU081m1cCu3AsBsypUdrfWyBaZrMfOJAIhG3eM
-	 I6xb7WB0ovqC/BYbU505YkyyUUR09yi7aoqKn+vai3y0Ca2Vm4xVg1vGYagpQMAdoO
-	 XLD0Hz2wnyWkdZLyTamTmD4g=
-Received: from shelley.lan (unknown [IPv6:2001:8003:8802:7000::41b])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id D4CA61EADD4;
-	Fri, 27 Nov 2026 10:21:25 +0800 (AWST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FU2ehd3C
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=21MWGW1/WGQFy49l3Efg4AOdUE1giNJT27Feeuow9j8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795746656; v=1; x=1796351456;
+ b=FU2ehd3CCNfUkV3DE5f8126hiwQHqiyE3aFb80zlfsrXpOf+Duns0KehY4401tfzKXz8QGlA
+ IxH6Zb+Rns4W2Vn5u54dcqYZFXLnat7Fu42jS84LQRCMmzfuNPfdW1rh60Q0HGqlYmjf20g44jA
+ 0pM90oPGSj/Lu6fRyM705cKs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 51ad85fc44c1ffed;
+	Fri, 27 Nov 2026 02:30:50 +0000
+X-Mizu-Trace-ID: 51ad85fc44c1ffed
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 27 Nov 2026 10:30:36 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Alice Mikityanska <alice.kernel@fastmail.im>,
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 6/6] selftests: net: big_tcp_tunnels: Cover
+ IP tunnels
+Message-ID: <awjrTKpsp0dO1qe4@fedora>
+References: <20261126025015.10416-1-yanhaishuang@cmss.chinamobile.com>
+ <20261126025015.10416-7-yanhaishuang@cmss.chinamobile.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,68 +72,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH RESEND v2] kunit: tool: Preserve suite ancestry in
- JUnit test identities
-From: David Gow <david@davidgow.net>
-To: Daniil Matus <matus.daniil@gmail.com>
-Cc: David Gow <david@davidgow.net>, 
- Brendan Higgins <brendan.higgins@linux.dev>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Rae Moar <raemoar63@gmail.com>, kunit-dev@googlegroups.com, 
- Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-In-Reply-To: <20261126-kunit-junit-classname-resend-v2-1-9b64a461fd86@gmail.com>
-References: <CAJeAFep5wgtRpHwANoeqJkWE38y=9zQQ9e7moQw-3rE47b=wFw@mail.gmail.com>
- <20261126-kunit-junit-classname-resend-v2-1-9b64a461fd86@gmail.com>
-Date: Fri, 27 Nov 2026 10:20:57 +0800
-Message-Id: <179574605708.1202103.7943504441342768927.b4-review@b4>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1419; i=david@davidgow.net;
- h=from:subject:message-id; bh=e7s2q4YjPzq+CftyBULIg4QzDfvyNMtvgTtksST7XZQ=;
- b=owEBiQJ2/ZANAwAIAcYipzoZDNtCAcsmYgBrCOkYvamYY+4xaGFDK8JZZzRQtsqNMwnJpV5hg
- ic8b0U3CPmJAk8EAAEIADkWIQSmmTCaqhqZOsxDGC7GIqc6GQzbQgUCawjpGBsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQxiKnOhkM20JTow/+K9N+22GqVNggE3T5mptAZGQTpbU3vtZ
- LoUeCL21CU3qxkec1dYYbD5SRY4qww44cpAcrpmYXkMKOaBNjpVHf+AFJgLX6OFmT/JAVyfIwu3
- mWuqajlERxRTXXZCq5kcz+qHgHwMp/8sWGsUDMzB3IOI79WEumtGOE5BLrsTkoQ2fP+qyt857gi
- BG33KA8FLYFa7aaGxNOCA6dxdNqawD8SA+LkKmib8+CiDx3G4NAmdPhra/sAce8Jj24EXYZF69C
- 5q5iQ+VIxAY+qjqjbMyI79DK3aAQD5OfcWV8l8SWCZ/GYmIg139DQiVuRFfLsjDzOew93qx5K8C
- CIE9VWOTgyNiwXLCYU69Kf2OJ1uKKV/ZjS9ZV4+FHpbWQd5XUt6xVDCk+sQbZmroCxLRl7noDQ+
- xeveAqpxGpmAe//2DtJnM+YL5aYCUtY1aADe6Sy6cjNZ09j4qt4xlanCnNMXfd4CR/0+4+dxt8E
- aZAqU7JRNkYx8dZIGEU5GBXQLkRapNbsVrvrrGxVntFmJYX0rXI6s3qATZLnIS6NJtZwLbBnh7O
- Y/XnHz9NgBeiyE1WrCISmCcxtBlb4fHImp1q/fg0axs2Cw1ohPSDPhRUuo7nBi/Tz4J6v9pGKoO
- X58blrjtRrXKsEVw8xLdzuHupsaIAlTTEVAJAU+3tXNzwS/qFlq0=
-X-Developer-Key: i=david@davidgow.net; a=openpgp;
- fpr=3B0A53B1D9DF6AAC59C230322A821C5AD66AB03F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261126025015.10416-7-yanhaishuang@cmss.chinamobile.com>
 
-> JUnit testcases currently carry only a name. A parameterized KUnit test
-> becomes a nested testsuite named after the test function. Reusing that
-> function in several outer suites therefore produces the same immediate
-> suite name and parameter name in each of them.
+On Wed, Nov 25, 2026 at 06:50:15PM -0800, Haishuang Yan wrote:
+> Now that ipip, gre, gretap, sit, ip6tnl, ip6gre and ip6gretap allow BIG
+> TCP too, run the same checks over them as for vxlan, geneve and
+> bareudp, without encapsulation and with FOU and GUE. With FOU and GUE,
+> turn on the outer UDP checksum, which is off by default on an IPv4
+> underlay, so that it is checked too.
 > 
-> For example, cs_dsp_test_run_stop_callbacks is registered in four cs_dsp
-> callback suites with the same "all ops" parameter. GitLab identifies cases
-> by suite name, classname and testcase name. Without a classname, these
-> distinct cases have identical keys in the imported report.
+> sit only carries IPv6, and is only run with veth tx checksum offload
+> enabled: unlike the other tunnels it does not use gro_cells on receive,
+> so with software GSO on the sender the receiver does not see any BIG
+> TCP packet.
 > 
-> Set classname to the dot-separated ancestor suite names, including the
-> parser's main root. Preserve the existing suite hierarchy, testcase names,
-> statuses and logs. Add a regression using the existing nested log fixture,
-> whose seven testcases otherwise have only five distinct identity tuples.
+> fou is not loaded on demand when it is built as a module, so load fou
+> and fou6 first, and skip the FOU and GUE cases if that fails.
 > 
-> Validation: all 92 kunit_tool_test.py tests pass. The new regression fails
-> on the unmodified generator. Comparing all 24 log fixtures shows no XML
-> changes other than the added classname attributes.
+> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+> ---
+>  .../testing/selftests/net/big_tcp_tunnels.sh  | 139 +++++++++++++++++-
+>  1 file changed, 136 insertions(+), 3 deletions(-)
 > 
-> Fixes: e9e05c72752f ("kunit: tool: Add (primitive) support for outputting JUnit XML")
-> Signed-off-by: Daniil Matus <matus.daniil@mail.ru>
+> diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
+> index 9c1482b842b..1e8387fce99 100755
+> --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
+> +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
+> @@ -1,7 +1,9 @@
 
-Thanks very much: glad to see this working with something other than Jenkins, too.
+[...]
 
-Reviewed-by: David Gow <david@davidgow.net>
+>  
+> +# For IP tunnels: $1: tunnel family, $2: encapsulation
+>  cleanup_tunnel() {
+> +	local fou_args=()
+> +	local ns
+> +
+>  	ip -netns "$CLIENT_NS" link del tun0
+>  	ip -netns "$SERVER_NS" link del tun1
+> +	if [ "${2:-none}" = none ]; then
+> +		return 0
+> +	fi
 
--- David
+nit: maybe just [ -z $2 ] ? No need to change if no new version.
 
--- 
-David Gow <david@davidgow.net>
+> +	if [ "$1" = 6 ]; then
+> +		fou_args=(-6)
+> +	fi
+> +	for ns in "$CLIENT_NS" "$SERVER_NS"; do
+> +		ip -netns "$ns" fou del port "$FOU_PORT" "${fou_args[@]}"
+> +	done
+>  }
+>  
+>  cleanup() {
+> @@ -240,6 +336,30 @@ if ! ip link help 2>&1 | grep gso_ipv4_max_size &> /dev/null; then
+>  	exit "$ksft_skip"
+>  fi
+>  
+> +# $1: tunnel type, $2: tunnel family, $3: traffic family, $4: encapsulation
+> +run_ip_tunnel() {
+> +	local csum_offload
+> +
+> +	for csum_offload in on off; do
+> +		# sit does not use gro_cells on receive, so with software GSO
+> +		# on the sender there is nothing big to receive.
+> +		if [ "$1" = sit ] && [ "$csum_offload" = off ]; then
+> +			continue
+> +		fi
+> +		setup_tunnel "$1" "$2" "$csum_offload" "$3" "$4" || exit "$?"
+> +		do_test "$2" "$3" "$csum_offload" || exit "$?"
+> +		cleanup_tunnel "$2" "$4"
+> +	done
+> +}
+> +
+> +# fou is not loaded on demand when built as a module
+> +ENCAPS=(none)
+> +if modprobe -q fou && modprobe -q fou6; then
+> +	ENCAPS+=(fou gue)
+> +else
+> +	echo "SKIP: FOU and GUE tests, could not load fou and fou6"
+> +fi
+> +
+>  WORKDIR=$(mktemp -d)
+>  trap cleanup EXIT
+>  setup
+> @@ -254,3 +374,16 @@ for tunnel in vxlan geneve bareudp; do
+>  		done
+>  	done
+>  done
+> +for encap in "${ENCAPS[@]}"; do
+> +	run_ip_tunnel ipip 4 4 "$encap"
+> +	for traffic_family in 4 6; do
+> +		run_ip_tunnel gre 4 "$traffic_family" "$encap"
+> +		run_ip_tunnel gretap 4 "$traffic_family" "$encap"
+> +	done
+> +	run_ip_tunnel sit 4 6 "$encap"
+> +	for traffic_family in 4 6; do
+> +		run_ip_tunnel ip6tnl 6 "$traffic_family" "$encap"
+> +		run_ip_tunnel ip6gre 6 "$traffic_family" "$encap"
+> +		run_ip_tunnel ip6gretap 6 "$traffic_family" "$encap"
+> +	done
+> +done
+> -- 
+> 2.43.0
+> 
+> 
+
+Tested-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
