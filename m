@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795749357;
-	b=jTpZ3ha09NZ1aGx4/h6KgbwyftKy/Qw9Z3m9D5eAKDmtkq4JQQnv9jd0N3EFAbm5iypC
-	 SmUaZnXq0mu6JECCGyU4KjrmTSAstUq6UjsgPyEdfsaWCci4+K/pEBlVtBy8YAHY/E8aI
-	 rOSpHtW53v7TOcaEvG46Xbfahb3/z1fjqJnVHicObU+QGxIE0l3JScKgIu0F3idY8lvoC
-	 ejAIAGcgSNTYbqGvzX6Z+MdQDAqBwyryfK4K42bLOTmFkIZV0MVhr1lJkpvsTWVjFZ0Te
-	 zHrLzRpCugfjiZQG6OaNlKyOfAKdP6kZKI8vyF4b7DPGx0Smkztdemn3t4agJtie52w==
+	t=1795749358;
+	b=dlPP2FGiaL694cHVh6P0NWZ5/s+9B25JdXgrfqzUqmRBs4Msal9rQVP8CkqfIyGP7Epv
+	 yyJJsRo8FsK8v+0ijJLjAOaaCfI+7EGR/jQRjr/aqwNS3LCv3Nf8/9kRl+rHucPKBZKDI
+	 HGt0dz+TMjUDHXhSjB8iP1mfSLuPBwtSfnr6bTR+ytoru8UpHeY26KUFZXzFkPSIZMDtV
+	 O5xqWe+uU9cpYmumqZw4d6ZLMcmbP+6v4kKyAxQqwo0q5H5j8ivECKESf8iEXafHLwM4N
+	 mrPqjHFrS4tBCOgen2HWYgbtDIOSOAC+eh5/QVxTXq/NLPLTihYxJ5xKC+aDQ7vP6hg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795749357;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795749358;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=zacDcZZkB0SgR1IDOo839AuEOBLi4HSRGIYFOfbcasw=;
-	b=LzzX9RuAYGwow5AKqoBCsM06M/4zK9/s6LK/f86Ar8lUm+EVp3OHf2fV86F8zgGJJU/n
-	 a4YGtn1lno2CJrD5raSjJpPNwbyDUZCIaVuS4ykxf+HhEqamsOhvFyy1WrQYspN5RJLU3
-	 RlxaJ1IV2rV/GAHPZUNfO42+GLjk+LboipktiWdO6VHg4xGGOVplu8SZ89E7d9+wVZKTH
-	 xsIgYQYoPdkFQ2BaBnguJgEWLDudmT94xy6kTctURkxa6fWOQ4H2J6xn0DzVSuigFLycu
-	 pIVLDuOCE7UOYsIvcpqCQCawlU/0YsKMKohYLm3WSjjNN6jTdA/Kb7wRiB65wrtQ8eg==
+	bh=NexVNqunXuB86kwix8gWk/1ouKqyr5xdOMHE2DlkftI=;
+	b=ZrXV4J313aob1N4K5BHzC1sTvaQdKvSPO/UFiGXU9ZmbFSwe5txRaumqhMWZKXCWvyWf
+	 u2pulZil/RP/+zWpB5OulXjLZYO/42I/JzrB119Bt5uf12jwbFs1Fziq6kqbIwE1fHLt7
+	 bv602DifFgoYhgPvphWnOwNqAM8kXKOv7ngmnp1nVp1HO570S+QsIGm/wl8sYv0yoDFlK
+	 KIr45FZcxLWX1dhXKUzS/uiqqGORZHMYPbzi0U7aNCbkKY6lMlR6yE+JbD0ITrcUYn9w5
+	 L9oSD5/mtzWws2CbpelB/ICuuU9Fu6XEcK8sXg+MIQUL8Vr29c5qx9ctwiZGCHRk98Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G9LFas5B;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iiZB8FMA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E69F606A31E;
-	Fri, 27 Nov 2026 03:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13DE606A31C;
+	Fri, 27 Nov 2026 03:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G9LFas5B
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C76301F000C1;
-	Fri, 27 Nov 2026 03:15:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iiZB8FMA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8554C1F000C1;
+	Fri, 27 Nov 2026 03:15:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795749356;
-	bh=zacDcZZkB0SgR1IDOo839AuEOBLi4HSRGIYFOfbcasw=;
+	s=k20260515; t=1795749358;
+	bh=NexVNqunXuB86kwix8gWk/1ouKqyr5xdOMHE2DlkftI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=G9LFas5BPBTw99X+KtzXq0mMuRbxNxAz02QeK3RoHBkOiF2kpU7Dg0FnjIfnf2ZQX
-	 Kb2aBITCjy0rM3SD/A0jvOPgGGXr2RYRbxrTl6OTM07GuLStW5e1pQ4I53DuI/TGw7
-	 lyVJXIr1pE4imG+RMQUK1mi0inPMIxWoGOW0dHmyLOniIj07mUsUcqMkj48jkFj0mO
-	 gz+hAQeYlQBDnlHNCJ4SMAOqSympGqz0+Fxf1Vjk6mePjjDOFu2u3SSFF985nfUroL
-	 lcuAeRbDs0EAMI//uj/PZnijOaZBT5eVLam4hDwKFQffvIPGA4g6gRBjQ5ipHGhxmW
-	 VKoBQplAvELLw==
-Subject: Re: [PATCH net 1/3] Revert "bonding: do not set usable_slaves for
- broadcast mode"
+	b=iiZB8FMA2CQdQhDUAzXYjRX0rP1wEJj59/QpYimn4FkiMvOwgLy6uTUQoBi4A2VSA
+	 Zf+cPc+JzQFngyusHuY98jcWQ4G6011HTQ9p6C/qiNjV+nEs1I3N6YARDjv8EML/Vn
+	 O0McEyv4wY2vdo/4A/3++AAVJTHr53q0tmzzHVexEwrfMEeuS9Bd65w3tM7AmRkbWF
+	 cW0kuTH8Lh3QUDIwVCEa2NoZPGdLYBAh1goi9FFoDlVidnrk6vtLyKWzjACNO1c4s4
+	 CvBg2fTnsfjmUILqogEny97lQL8jKajxH7RAGQeRLvxZ8QkR8WVBrDxIAqV7l6+7pP
+	 gJdgBg10jLanQ==
+Subject: Re: [PATCH net 2/3] bonding: update slave array on link change for
+ broadcast mode
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -49,11 +49,11 @@ Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
  tonghao@bamaicloud.com, razor@blackwall.org, shuah@kernel.org,
  jiangjiehua1@huawei.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Fri, 27 Nov 2026 03:15:55 +0000
-Message-ID: <179574935536.3135.14725054266290783008@kernel.org>
-In-Reply-To: <20261126-bond_broadcast_updelay-v1-1-188e5538d6ca@kylinos.cn>
-References: <20261126-bond_broadcast_updelay-v1-1-188e5538d6ca@kylinos.cn>
-X-sashiko-severity: Low
+Date: Fri, 27 Nov 2026 03:15:57 +0000
+Message-ID: <179574935712.3135.18271637068349106750@kernel.org>
+In-Reply-To: <20261126-bond_broadcast_updelay-v1-2-188e5538d6ca@kylinos.cn>
+References: <20261126-bond_broadcast_updelay-v1-2-188e5538d6ca@kylinos.cn>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -66,115 +66,156 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
-- [Low] Commit trailer and tagging problems on the revert.
-- [Low] Comments no longer match how broadcast mode uses usable_slaves.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The commit message says the patch makes the broadcast
+  usable_slaves snapshot 'follow link transitions the same way balance-…
+- [Medium] Because broadcast now publishes usable_slaves (the revert,
+  which this patch relies on), switching a broadcast bond to balance-rr…
+- [Low] The series ordering is not bisect-safe, and the dependency
+  between the two patches is not recorded in tags.
 
 --
 
-Revert "bonding: do not set usable_slaves for broadcast mode"
+bonding: update slave array on link change for broadcast mode
 
-This reverts commit 45fc134bcfad. That commit stopped publishing
-bond->usable_slaves in broadcast mode, so updelay was no longer ignored
-when there were no active slaves. A follow-up patch in the series
-rebuilds the slave array on link changes for broadcast mode.
+This adds a BOND_MODE_BROADCAST case to bond_miimon_link_change(), so the
+usable_slaves snapshot is rebuilt on miimon link transitions. That keeps
+the ignore_updelay decision in bond_miimon_inspect() in line with the
+current slave link states. It depends on a revert of 45fc134bcfad so that
+bond_set_slave_arr() publishes the array for broadcast.
 
-> Revert "bonding: do not set usable_slaves for broadcast mode"
+> Add the broadcast case so the snapshot follows link transitions the
+> same way balance-xor does. This needs the revert of 45fc134bcfad as
+> a prerequisite: with 45fc134bcfad applied, bond_set_slave_arr()
+> discards the refreshed array for broadcast.
 >
-> This reverts commit 45fc134bcfadde456639c1b1e206e6918d69a553.
-
-[ ... ]
-
->     Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> Fixes: e0caeb24f538 ("net: bonding: update the slave array for broadcast mode")
 
 [Severity: Low]
-The From: address is Hangbin Liu <hangbin.liu@linux.dev>, but the
-Signed-off-by: address is Hangbin Liu <liuhangbin@kylinos.cn>. Checkpatch
-reports this as FROM_SIGN_OFF_MISMATCH. The other two patches in the series
-have the same mismatch.
+Is the series order bisect-safe? The revert of 45fc134bcfad is applied
+before this patch. On its own, it makes bond_set_slave_arr() publish
+usable_slaves for broadcast again, but nothing rebuilds the array on
+miimon link changes yet.
 
-Should this revert carry a Fixes: tag, or a stable dependency note?
+At that intermediate commit, a batch enslave with updelay leaves the new
+slaves in BOND_LINK_BACK. The snapshot taken at enslave time then has
+count == 0 and is never refreshed, so bond_miimon_inspect() ignores
+updelay permanently. That is the bug 45fc134bcfad fixed.
 
-Commit 45fc134bcfad went in through net with its own Fixes: e0caeb24f538,
-so it has probably reached stable. The follow-up "bonding: update slave
-array on link change for broadcast mode" has Fixes: e0caeb24f538 and says
-it needs this revert first. None of the tags tell stable tooling about
-that ordering.
+If this patch went first, it would be a no-op under 45fc134bcfad, and
+every commit in the series would be correct.
 
-If only the follow-up is backported, it has no effect. The
-bond_set_slave_arr() from 45fc134bcfad still drops usable_slaves for
-broadcast mode.
+Also, this patch carries Fixes: e0caeb24f538, but the revert it depends on
+has no Fixes: tag and no dependency annotation. 45fc134bcfad is likely
+already in stable trees.
 
-If only this revert is backported, the bug that 45fc134bcfad fixed comes
-back: in broadcast mode the stale, empty usable_slaves array makes the
-bond always ignore updelay.
+Would a tag-driven backport of only this patch leave the stale snapshot
+behaviour unchanged there?
 
 > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 042d7c75548fa..d6675e87d06b6 100644
+> index d6675e87d06b6..b1efbdf597ec4 100644
 > --- a/drivers/net/bonding/bond_main.c
 > +++ b/drivers/net/bonding/bond_main.c
-> @@ -5140,18 +5140,13 @@ static void bond_set_slave_arr(struct bonding *bond,
->  {
->  	struct bond_up_slave *usable, *all;
->
-> -	all = rtnl_dereference(bond->all_slaves);
-> -	rcu_assign_pointer(bond->all_slaves, all_slaves);
-> -	kfree_rcu(all, rcu);
-> -
-> -	if (BOND_MODE(bond) == BOND_MODE_BROADCAST) {
-> -		kfree_rcu(usable_slaves, rcu);
-> -		return;
-> -	}
-> -
->  	usable = rtnl_dereference(bond->usable_slaves);
->  	rcu_assign_pointer(bond->usable_slaves, usable_slaves);
->  	kfree_rcu(usable, rcu);
+> @@ -2780,6 +2780,7 @@ static void bond_miimon_link_change(struct bonding *bond,
+>  		bond_alb_handle_link_change(bond, slave, link);
+>  		break;
+>  	case BOND_MODE_XOR:
+> +	case BOND_MODE_BROADCAST:
+>  		bond_update_slave_arr(bond, NULL);
+>  		break;
+>  	}
 
-[Severity: Low]
-This isn't a bug, but after this revert bond->usable_slaves is published
-for BOND_MODE_BROADCAST too. Should the related comments in bond_main.c be
-updated to match?
+[Severity: Medium]
+The commit message says the snapshot follows link transitions "the same
+way balance-xor does". Does that hold outside the MII monitor?
 
-The comment above bond_update_slave_arr() still lists only the xmit-hash
-modes:
+balance-xor also rebuilds the array when the ARP load-balance monitor
+changes a slave's link state. Broadcast is still left out there:
 
-drivers/net/bonding/bond_main.c:
-/* Build the usable slaves array in control path for modes that use xmit-hash
- * to determine the slave interface -
- * (a) BOND_MODE_8023AD
- * (b) BOND_MODE_XOR
- * (c) (BOND_MODE_TLB || BOND_MODE_ALB) && tlb_dynamic_lb == 0
+drivers/net/bonding/bond_main.c:bond_loadbalance_arp_mon() {
+    ...
+		if (slave_state_changed) {
+			bond_slave_state_change(bond);
+			if (BOND_MODE(bond) == BOND_MODE_XOR)
+				bond_update_slave_arr(bond, NULL);
+		}
+    ...
+}
 
-The call site in bond_enslave() explains the broadcast case only in terms
-of all_slaves:
+Broadcast can use ARP monitoring, because bond_mode_uses_arp() only
+excludes BOND_MODE_8023AD, BOND_MODE_TLB and BOND_MODE_ALB.
+bond_slave_netdev_event() also skips broadcast, since
+bond_mode_can_use_xmit_hash() is false for it. So under ARP monitoring,
+the broadcast snapshot keeps the state from the last enslave or release.
 
-	/* broadcast mode uses the all_slaves to loop through slaves. */
+bond_option_miimon_set() can switch the bond from ARP monitoring to
+miimon at runtime. It zeroes arp_interval, cancels arp_work and queues
+mii_work, but it does not rebuild the slave array. params.updelay
+survives the switch.
+
+For example, slaves enslaved with carrier under ARP monitoring are marked
+BOND_LINK_UP and counted in usable_slaves. Later the ARP monitor marks
+them BOND_LINK_DOWN, but the snapshot is not refreshed. Once miimon is
+enabled, bond_miimon_inspect() sees usable_slaves->count != 0:
+
+	if (usable_slaves && usable_slaves->count == 0)
+		ignore_updelay = true;
+
+Recovering slaves then wait out updelay even though the bond has no usable
+link.
+
+The reverse case also happens. If slaves are enslaved without carrier,
+count == 0 and updelay is wrongly ignored. Either state lasts until the
+first miimon commit reaches bond_miimon_link_change().
+
+Should BOND_MODE_BROADCAST also be added to the condition in
+bond_loadbalance_arp_mon()?
+
+[Severity: Medium]
+Now that broadcast publishes usable_slaves, does a switch from broadcast
+to balance-rr leave a stale snapshot behind?
+
+Releasing the last broadcast slave goes through __bond_release_one():
+
 	if (bond_mode_can_use_xmit_hash(bond) ||
 	    BOND_MODE(bond) == BOND_MODE_BROADCAST)
-		bond_update_slave_arr(bond, NULL);
+		bond_update_slave_arr(bond, slave);
 
-However, bond_miimon_inspect() now relies on the broadcast-mode
-usable_slaves to decide ignore_updelay:
+This runs after bond_upper_dev_unlink(), so the slave list is already
+empty. The result is a non-NULL usable_slaves with count == 0, and after
+the revert that array is kept for broadcast.
 
-		usable_slaves = rcu_dereference(bond->usable_slaves);
+Neither bond_option_mode_set() nor bond_close() resets the arrays.
 
-		if (usable_slaves && usable_slaves->count == 0)
-			ignore_updelay = true;
+In balance-rr, nothing rebuilds the array afterwards:
 
-The rest of the series does not change either comment. Neither comment
-says that broadcast mode must keep usable_slaves current on link changes,
-which the follow-up patch makes a requirement.
+  - bond_enslave() and __bond_release_one() only rebuild for xmit-hash
+    modes or broadcast
+  - bond_open() and bond_slave_netdev_event() only rebuild when
+    bond_mode_can_use_xmit_hash() is true
+  - bond_miimon_link_change() has no BOND_MODE_ROUNDROBIN case
 
-> +
-> +	all = rtnl_dereference(bond->all_slaves);
-> +	rcu_assign_pointer(bond->all_slaves, all_slaves);
-> +	kfree_rcu(all, rcu);
->  }
+So in balance-rr, bond_miimon_inspect() would see count == 0 on every
+pass. It would set ignore_updelay = true and force slave->delay to 0 for
+every recovering slave.
+
+Documentation/networking/bonding.rst section 13.1 says updelay is ignored
+only when the bond has no active links.
+
+In the baseline tree with 45fc134bcfad, broadcast never published
+usable_slaves, so a switch from broadcast to balance-rr left it NULL. The
+same missing reset on mode change already existed for a switch from
+balance-xor to balance-rr.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261126-bond_broadcast_updelay-v1-0-188e5538d6ca%40kylinos.cn
