@@ -1,58 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795772889;
-	b=iTv7umj8g/PlMo4220DF16NRF5lOWwZgpSzOdLfIACVhOhM67vUHSt9bHffkOComvScd
-	 WTJ3FMP4ZfAnfjGkfadcKrLPhtxKxPt+sy18mQBhZnTlNn8tnzAMA5Tob/8OcubYOAMkD
-	 8CuHy20YRzlI8+WnqPk+wRfWUYiw0TfgtPiKNIZIwFRTHfL7DPsQhRJhAuyMgP7ix+Fzj
-	 YfDByeLrG8GmgCz27QpLFIFEC2VzvyV9zpyG+xozq8jb+FASiuONC+iIsg1TKrIGxugzm
-	 dRaGylzSZ3T+TUhr2PxTehFBd5b4MuQcFojvD5BnsKadWcx+NNGke7/WupmfyemzSsA==
+	t=1795772891;
+	b=3Nb/se1yYk0b+BXSorbYJ13ZIIQt85ttjj9efHgccKeshHoCL129E0onH2q3R/DB3Clr
+	 FRi1rjNwXJNidZCtZkoU7Ajv/AQMMUHZpj9s3GjBJWUD9MzARYgor+xSY4JZSffIR0A4p
+	 zkKqKpRoWdLMN32BG+YazfQ5z9Wog/zrC5Qy1joLY2jDkIfZOYp3MuRamWvzYANj9wem9
+	 AwfEHLmXuslvKQcZdh6qBYxwrzcjjm5t1VugrfhhuffjhMwYCbqldwiTSA9Y5MQwArgG/
+	 rUdVLmm7rpjVljeJnkt/m89zPiek2leXcnTnbp3xwL3FsWj8iEFPFaQC0RnVXpVNNLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795772889;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795772891;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=CtR9zbja128/tqNXZ1sd4nsIOtsn8t0YXyFSEJVxCY0=;
-	b=S31PwhRDimQMjfMuWru/uKkUIt87/0QkMnyGWlnAnPMLu16W8tCRA3003m6L8qiCBVtZ
-	 GKG7OyIU1tChQdbS2rvOu2cggMLcxy3sZNurjDkObI9v13hsLNuXBQoxowbdpmKATfTBF
-	 d9Hc0UWSj1y7MAEAIzOvyeK7zE8RWWqCe/MDeREvZESbzr3TliJcVlQSThpbgs/yKDJ8X
-	 3l24uE63SlXl8RslRZCpfwo9zUAUMxR8w/aoe5eY/2KhxADa1dPG3ygX8uxn+Q+QXs5Ui
-	 WJiz8x6msDpRE+VreAKH46fq15ffLl3smBD1On2cha8ePbQFGdcwUSgr3wWDIUn0Mfg==
+	bh=0g7WYB6uoahgDBa/G7HAgtzGq2iMqoL02xTsrofOnbE=;
+	b=EyZu/IV/bq5+jcPEhzC0lgQMcllw3FZLQ1niTrvZv5C1kKd3NfYijM7fr3y3p9FIOCXs
+	 UONwW8+pXY+KTIq2P85ANM5ARb0soJ0rjbcS1JHA8EIJWfAym8wzYEo6ZtmCHrWnWn1M4
+	 Oz2UPaw0Ig5WvC25S6YLiD0GTyJptombdBj+m+dZ0JKZNlSNUIQ/x1Mmpz79PmdoQ2KYp
+	 UUVM/DzTOP5Jkp+NTNwV2BTEwaItS4Lg72CtP/Jw46sFt7ZJhnMN7ssMvhOJX4HbjkDIp
+	 WihsjBOsYrIkPbYH5MgCnucqFZitEUMbU4NYtGUtwd3H5nsmqy14GzsECjzDbY95kgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZXJfFa1p;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K2ST3CQa;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59948606A334;
-	Fri, 27 Nov 2026 09:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EB1606A336;
+	Fri, 27 Nov 2026 09:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZXJfFa1p
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C0641F00929;
-	Fri, 27 Nov 2026 09:48:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K2ST3CQa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 296401F00898;
+	Fri, 27 Nov 2026 09:48:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795772888;
-	bh=CtR9zbja128/tqNXZ1sd4nsIOtsn8t0YXyFSEJVxCY0=;
+	s=k20260515; t=1795772890;
+	bh=0g7WYB6uoahgDBa/G7HAgtzGq2iMqoL02xTsrofOnbE=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ZXJfFa1prBGQN8yTSZak06j+vAF1uYCaoDm8x/hMec/a9ItrLOeiJ/aIlnJU51KKr
-	 qMxnfn2CZI3UupRkeSE1Ierf5OpCsxLBb7kLHg1y77/2ilOLCBUiXKtYgIMwrZmUqH
-	 J1trcNU6L6OVkOiQtjL3snnF9f0c5pgHtCbUp9tZNiiMVYlaRkekIM0GTPhT7ix8P3
-	 mzZ4o0YCURYpJ5NeAMy9E2BlhSxJMJsg3nX2Cx3vN6XN5snL5kU+iU8fQnQYf9AlNP
-	 bWXKpPjOHFjGW3ldyyVoRSAGEo3zo7CTT8XefDuCXbq1l84FY83sANSOnjzY1VufXh
-	 TLTU/EQhFYUXQ==
-Subject: Re: [PATCH net v2 1/2] wireguard: peer: free packets left on the
- per-peer queues on removal
+	b=K2ST3CQax1RGy7nJk8oNQk+zQ/mAb4WUwQlvbave292QHfi4nG0yFLFw2Lv00jzbM
+	 xMoKqRpkmYh63bMHdfV+DgiRPTc4TX9rkdrXwpDrw7OqSFJcUeAmL+OneNFwfM8kVe
+	 Sh8QBNdULnf4dp1mmdCrsOFx00sZfFskDO6a7piRVuYXBc3kcKqaUksB9q9fTgoZyB
+	 5B3/yeN1gU1r1iLGOpicK4Mv1hkwvfwOmdJQ9BGCHU9XQwHS/0MdToPSLyQM7t9pY6
+	 aXG7H5tTp5Lb6YKwSwcHsQftKP70kNY9CCzMpZF3rfeVs0aRCVenuRTgwfeYfn8ial
+	 XLmOleYyz++Ew==
+Subject: Re: [PATCH net v2 2/2] wireguard: selftests: remove a peer under load
 From: netdev-bot+sashiko@kernel.org
 To: apasichnik9@gmail.com
 Cc: Jason@zx2c4.com, wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
  andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
  kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Fri, 27 Nov 2026 09:48:07 +0000
-Message-ID: <179577288773.3135.10772290029017294104@kernel.org>
-In-Reply-To: <20261126094722.73025-2-apasichnik9@gmail.com>
-References: <20261126094722.73025-2-apasichnik9@gmail.com>
-X-sashiko-severity: High
+Date: Fri, 27 Nov 2026 09:48:09 +0000
+Message-ID: <179577288974.3135.10854019193613008297@kernel.org>
+In-Reply-To: <20261126094722.73025-3-apasichnik9@gmail.com>
+References: <20261126094722.73025-3-apasichnik9@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,10 +64,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -76,151 +75,148 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The new tx_queue purge in peer_remove_after_dead()
-  (drivers/net/wireguard/peer.c:148) can run while…
-- [Low] In peer_remove_after_dead() (drivers/net/wireguard/peer.c), the
-  patch adds a purge of the per-peer queues and a comment saying entries…
+- [Medium] Raising CONFIG_LOG_BUF_SHIFT from 18 to 20 leaves almost no
+  headroom for the log volume the new loop in…
+- [Low] The commit message gives the test's ability to detect the
+  regression only for 1 vCPU ('Without the previous patch it fails in…
+- [Low] The new loop in netns.sh (lines 213-222) relies on fixed waits at
+  two points and checks neither result.
 
 --
 
-wireguard: peer: free packets left on the per-peer queues on removal
+wireguard: selftests: remove a peer under load
 
-This patch adds peer_purge_queue(). peer_remove_after_dead() calls it
-after netif_napi_del() to free anything still left on peer->rx_queue and
-peer->tx_queue. The aim is to fix a peer/keypair leak: once a disable is
-pending, NAPI completes even when more than one budget of decrypted
-packets is still sitting on rx_queue.
+This adds a loop to netns.sh that removes and re-adds a peer ten times
+while a UDP iperf3 flood keeps its receive queue busy. The final
+created/destroyed object check should then catch peers or keypairs that
+queued packets keep alive. It also raises CONFIG_LOG_BUF_SHIFT from 18 to
+20 in the qemu kernel.config so the log can hold the extra output.
 
-> diff --git a/drivers/net/wireguard/peer.c b/drivers/net/wireguard/peer.c
-> index 1cb502a932e07..3e08898cec5ec 100644
-> --- a/drivers/net/wireguard/peer.c
-> +++ b/drivers/net/wireguard/peer.c
-> @@ -91,6 +91,25 @@ static void peer_make_dead(struct wg_peer *peer)
->  	/* The caller must now synchronize_net() for this to take effect. */
->  }
->  
-> +/* Each queue entry holds a keypair and a peer reference. Transmit entries
-> + * are lists of packets, receive entries single packets.
-> + */
-> +static void peer_purge_queue(struct wg_peer *peer, struct prev_queue *queue,
-> +			     bool lists)
-> +{
-> +	struct sk_buff *first;
-> +
-> +	while ((first = wg_prev_queue_peek(queue)) != NULL) {
-> +		wg_prev_queue_drop_peeked(queue);
-> +		wg_noise_keypair_put(PACKET_CB(first)->keypair, false);
-> +		wg_peer_put(peer);
-> +		if (lists)
-> +			kfree_skb_list(first);
-> +		else
-> +			dev_kfree_skb(first);
-> +	}
-> +}
-> +
+> The loop adds about 13 seconds to a run. Without the previous patch it
+> fails in every run with 1 vCPU.
+
+[Severity: Low]
+The detection rate is given only for 1 vCPU, but the qemu harness uses
+4 vCPUs by default:
+
+tools/testing/selftests/wireguard/qemu/Makefile:
+NR_CPUS ?= 4
+...
+		-smp $(NR_CPUS) \
+
+With 4 vCPUs, NAPI and the decrypt workers get more CPU time to drain
+rx_queue before napi_disable(). The loop may therefore catch the
+regression less often in a default run.
+
+Could the commit message give the detection rate with the default
+NR_CPUS? Or it could say that NR_CPUS=1 is needed to reproduce the
+regression reliably.
+
+> diff --git a/tools/testing/selftests/wireguard/netns.sh b/tools/testing/selftests/wireguard/netns.sh
+> index a8f550aecb35d..8303802c02f27 100755
+> --- a/tools/testing/selftests/wireguard/netns.sh
+> +++ b/tools/testing/selftests/wireguard/netns.sh
+> @@ -207,6 +207,20 @@ n0 iptables -F INPUT
 
 [ ... ]
 
-> @@ -122,6 +141,11 @@ static void peer_remove_after_dead(struct wg_peer *peer)
->  	 * here from process context.
->  	 */
->  	netif_napi_del(&peer->napi);
-> +	/* A NAPI being disabled completes after at most one more poll, which
-> +	 * may leave packets on rx_queue that still hold references.
-> +	 */
-> +	peer_purge_queue(peer, &peer->rx_queue, false);
-> +	peer_purge_queue(peer, &peer->tx_queue, true);
-
-[Severity: High]
-Can this purge of peer->tx_queue run while peer->transmit_packet_work is
-still pending or running on packet_crypt_wq?
-
-All peers on a device share wg->encrypt_queue, and the per-CPU
-wg_packet_encrypt_worker() drains it. Each flush_workqueue() call only
-waits for work that was queued before that flush started. Here is one
-possible interleaving:
-
-flush_workqueue() #1 (step a) is running
-  another peer's xmit queues encrypt worker W on packet_crypt_wq
-    (flush #1 does not wait for W)
-  W pops one of this peer's entries from the shared ring
-flush #1 returns
-
-flush_workqueue() #2 (step b.1) waits for W
-  W: wg_packet_encrypt_worker()->wg_queue_enqueue_per_peer_tx()
-       queue_work_on(..., peer->device->packet_crypt_wq,
-                     &peer->transmit_packet_work);
-    (queued after flush #2 started, so nothing waits for it)
-flush #2 returns
-
-napi_disable();
-netif_napi_del();    /* only a synchronize_net() */
-peer_purge_queue(peer, &peer->tx_queue, true);
-
-If wg_packet_tx_worker() runs at the same time, it and peer_purge_queue()
-both consume tx_queue. prev_queue is single-consumer, so
-wg_prev_queue_peek() and wg_prev_queue_dequeue() update queue->peeked and
-queue->tail without a lock.
-
-Could both sides get the same skb list? That would mean a double
-kfree_skb_list() plus a double wg_noise_keypair_put() and wg_peer_put().
-
-If transmit_packet_work is still pending instead, the purge drops the
-peer references held by the tx_queue entries. The final wg_peer_put() in
-peer_remove_after_dead() can then go through
-kref_release()->call_rcu(rcu_release) and free the peer while
-transmit_packet_work is still linked on the workqueue.
-
-Would wg_packet_tx_worker() then run container_of() on freed memory?
-
-Before this patch, a late tx worker was the only consumer, and the queued
-entries kept the peer alive.
-
-This also seems to contradict the commit message:
-
-  Free whatever is left on both per-peer queues once nothing can feed
-  them any more
-
-The follow-up patch in the series only touches the selftests and does
-not change this code.
-
-Would a flush_work() or cancel_work_sync() on &peer->transmit_packet_work
-before purging tx_queue close this window?
+> +for ((i = 0; i < 10; ++i)); do
+> +	n1 iperf3 -s -1 -B 192.168.241.1 &
+> +	pids=( $! ); waitiperf $netns1 $!
+> +	n2 iperf3 -Z -t 2 -b 0 -u -l 64 -P 4 -c 192.168.241.1 >/dev/null 2>&1 &
+> +	pids+=( $! ); sleep 1
+> +	n1 wg set wg0 peer "$pub2" remove
+> +	kill "${pids[@]}" 2>/dev/null || true; wait "${pids[@]}" || true
+> +	n1 wg set wg0 peer "$pub2" preshared-key <(echo "$psk") allowed-ips 192.168.241.2/32,fd00::2/128 endpoint 127.0.0.1:2
+> +	n1 ping -c 1 -W 1 192.168.241.2
+> +done
 
 [Severity: Low]
-This isn't a bug, but the earlier comment in peer_remove_after_dead() is
-left as it was, and it now contradicts the new one:
+Does anything confirm that the peer is actually under load when it is
+removed?
 
-	/* The transition between packet encryption/decryption queues isn't
-	 * guarded by is_dead, but each reference's life is strictly bounded by
-	 * two generations: once for parallel crypto and once for serial
-	 * ingestion, so we can simply flush twice, and be sure that we no
-	 * longer have references inside these queues.
-	 */
+The fixed sleep 1 is the only ordering between starting the flood and
+the removal. The client's output goes to /dev/null, and wait ... || true
+throws away its exit status.
 
-The a), b.1) and b.2.1) step comments also still describe the two
-flushes plus napi_disable() as a complete drain.
+The iperf3 UDP streams might not start within that second, which is
+possible on slow TCG targets. The iteration would then remove an idle
+peer and the final object check would still pass. The leak this loop
+targets would go unnoticed.
 
-__napi_poll() in net/core/dev.c does this:
+Checking wg show wg0 transfer, or rx_bytes on n1, before the removal
+would catch that.
 
-	if (unlikely(napi_disable_pending(n))) {
-		napi_complete(n);
-		return work;
-	}
+Separately, can the single ping abort the whole run? It needs a full new
+handshake plus a round trip within 1 second. It also runs under set -e
+with no retry.
 
-That makes the new comment the accurate one. Should the old comment be
-updated to match?
+If a handshake packet is lost or late, the next attempt only comes after
+REKEY_TIMEOUT (5 seconds). The ping then fails and netns.sh exits.
 
-Also, the new comment only covers rx_queue, but the next line purges
-tx_queue too. Could the comment say why the tx_queue purge is needed, or
-that it is only defensive?
+Right after the removal, up to 1024 queued packets may still be draining.
+About 1000 KERN_DEBUG lines are also going to the console, because
+init.c writes 9 to /proc/sys/kernel/printk.
 
-The follow-up selftest patch in the series doesn't update this comment
-either.
+Other places in netns.sh already use a single 1-second ping after a
+handshake without trouble. This is a timing concern rather than an
+observed failure.
 
->  
->  	/* Ensure any workstructs we own (like transmit_handshake_work or
->  	 * clear_peer_work) no longer are in use.
+> diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+> index 368fd9d600c83..c69a408a5a94c 100644
+> --- a/tools/testing/selftests/wireguard/qemu/kernel.config
+> +++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+> @@ -67,7 +67,7 @@ CONFIG_SYSCTL=y
+
+[ ... ]
+
+> -CONFIG_LOG_BUF_SHIFT=18
+> +CONFIG_LOG_BUF_SHIFT=20
+
+[Severity: Medium]
+Does 1 MiB leave enough headroom for what the new loop can log?
+
+netns.sh sets message_cost to 0, and WIREGUARD_DEBUG=y defines DEBUG.
+In wg_peer_remove(), peer_make_dead() takes the peer out of allowedips
+first. NAPI then keeps draining peer->rx_queue until napi_disable().
+
+Each packet handled in that window fails the source check and logs a
+line:
+
+drivers/net/wireguard/receive.c:wg_packet_consume_data_done() {
+    ...
+	net_dbg_skb_ratelimited("%s: Packet has unallowed src IP (%pISc) from peer %llu (%pISpfsc)\n",
+    ...
+}
+
+The only limit on the per-peer queue is in wg_prev_queue_enqueue():
+
+	if (!atomic_add_unless(&queue->count, 1, MAX_QUEUED_PACKETS))
+
+MAX_QUEUED_PACKETS is 1024, so one removal can log about 1024 of these
+lines. Each record takes about 96 bytes in the printk data ring: about
+86 bytes of text plus the 8-byte block id, rounded up.
+
+Ten removals can then use 10 * 1024 * 96 = 983,040 bytes. That is about
+94% of the 1,048,576-byte ring. Even with the commit message's estimate
+of about 1000 lines per removal, it is still about 91%.
+
+That leaves roughly 65-88 KiB for everything else netns.sh logs, from
+the run's start to its end. This covers the "created" lines from
+configure_peers at the start, the handshake and keepalive debug lines,
+and about 80 netlink-test peers. n2's original "Peer N created" record
+has to survive the whole run.
+
+If the ring wraps, the object check at the end of netns.sh would see a
+"destroyed" record without its "created" record. It would then report
+"merely destroyed", which is the failure this change is meant to
+prevent.
+
+The rest of the log has not been measured, so this rests on the
+arithmetic above.
+
+Would setting a non-zero message_cost while the loop runs avoid relying
+on such a thin margin? A larger shift such as 21 would also work.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261126094722.73025-1-apasichnik9%40gmail.com
