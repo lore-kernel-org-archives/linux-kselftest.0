@@ -1,97 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795740641;
-	b=iF7yRMnS3zmK3fr1MCFV3TWlYtm6LOMsDqBQ1vp8qACRFw4xHpsGsSOL9qa+t9CjpOhb
-	 h8c/8qI43c+uaaW8UamBT10gZBXgRiViNUHnmhU+aOUrJoVEaYkzMLnjHMYhDah0nqCTq
-	 hRlq/qJHhXgqV6Y454mX2bxnsac/iIDGlBX3/34fPmGAGv62f85E6XSN5VDRMZVAoBGY+
-	 liM6XZerrZhmtcHbxAgg8EI+5XDgOg2HG2LwG7NCSUIHzalnvcRUkfzUaD036LSoKHQVj
-	 ptofQf4BJ6HCtDqMxr/W6N3z+djnO/+lis2jopPj822jv4mpLnVGt4EX3hsV3QWnClA==
+	t=1795741970;
+	b=0g676j4bjYYcwTqKGJ+15oZgm4m75TWI/aYpdFW9+8m2lx+4X8hKThVFiieHW/++LM+J
+	 brNBW5fOyk3rieU+Qm6/iwV3+KujWgrqYuBSJGeL+a0P1oQbhPkpLpsg8pG4mpxS498Nn
+	 CkiULk54vXKhiC76TVGvSPaQ+Oga3WWFUPIPEP+tmDBqVMi32PZJhoP09n/jfm5Y34eyF
+	 N9CuAz6iE8ECRDqSVNDXAYlP4Rf0ia4kXTR4CE9o4uOpUvGD7cG/p31rT9SxbuZEwtmG3
+	 aAsdpXZ5RQc4xkkaFrNgaBo1jGjsq9v7lYXMPTlMKsFyfwlNM4VUH9wpVWPH+DWd2Ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795740641;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References;
-	bh=x0Mp5Txn9dhWnd7kNaeyrGhDTXOo7utFqS5hhFOq2io=;
-	b=RRUUqzOcRbMU9pwlGbB2Jc4qdGuF0qBV44hwVZE6bqWPnhgZlt8RfDdFz+T2x9nxphRL
-	 Ez1GWe38W7q2zGmNRhyM7umyI1bXv5ujVJwiVWtfepQk7JETHXtkjUadQdeowpgdC+C+l
-	 tte2KcI+edGGyoMwiKEp3Fd88B2z7g3tiNmHqfN0QGmaHHRlF/l8f/JASMJZyo8GSFag/
-	 om2YiOOep5AcICPPq06sa1o+avbIt3lsNZzeDF0r/VzAV0AuJuWPApS+pJjGmpXgvE0vr
-	 vRGEBAYaUfUfmABzSxtLSeHNjZq+Ld6sVqlDwaepnJRKGTq+EF1I//MM3fTNZ8M4sSA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795741970;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=WL6jcyaBgXtjlwf2xKoJMQ4E9Qb5FW6oej1sKLlt6UI=;
+	b=wsZbegxHIkYzvhfeuDUaPQraEnytKs1DYJkpwjNG0rIslMb3e9xG9BgXGq9LSIl3xjIc
+	 IN0dvcB84/4io/HWV4lQ8MAV2YYkq9Caam5mhPnX8ZoAbMhnqXiojuqvOCFPrcjwzNG6D
+	 OJcSsJ0NeYNpZkRKGEpJpFzCfw55zZI1ZIGkt/eMNOK7A+FM1sLpMINL8H7ysJT0oXxKb
+	 LfST45/abdfw7AqlGys0tIk818xi+DjASAclyWBhJz92M4jiUGRmr5cWCiDmHlGicXtuT
+	 8946sJGY/bwOma6XzKfBK43jAAnjPTJ6lZ1GS/FvbS+V5sA/iWhlOqEMWRZo6t3AtGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K1tEEi0C;
-	arc=none smtp.remote-ip=209.85.219.48
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45336606A31C
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 00:50:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45336606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K1tEEi0C
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-91f0274f88cso98924006d6.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Nov 2026 16:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795740640; x=1796345440; darn=vger.kernel.org;
-        h=references:in-reply-to:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=x0Mp5Txn9dhWnd7kNaeyrGhDTXOo7utFqS5hhFOq2io=;
-        b=K1tEEi0CKdL//6rYPHcqQGCm7O0J2ly60eWlW+M9HTfuVDK6FL91RNDcDxOxAxtiTp
-         oI7sUzz6QMfcVvFq4csJ6S083G2fdGSO+96r+9wFfux6cu46po3ovanEv6MSYhrNRPuh
-         IQRkruV5OXzzvS8TSq91jU/dMUZz4WKqyxCeQSHwpqqP2n004NI2x8HjUvKRpMdohSJp
-         LKJFj1bPEwjjKwdlmGJ5cwFR20a2FvFJ29hffy5GBV619FNLpZmc+rU9hunaxkLwu96q
-         tJfPopPK/Hbxyq1qO4pmcgcT6uFv67XSRGyn7viNKf9DaddfZHEz+68SomD6h69VsuMX
-         axBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795740640; x=1796345440;
-        h=references:in-reply-to:subject:cc:to:from:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=x0Mp5Txn9dhWnd7kNaeyrGhDTXOo7utFqS5hhFOq2io=;
-        b=n8YSZfPktdXq5lzAFIKz75br22/6QcXo2dLb/SXv+GlFq1dEH0qNxZuVWDh0VXawnF
-         xSttoJVIikY6LO0m3UewIkEh8wMAInAK0NWgAcZZvbVw/Sdu6/MZxOqWjFLjT6ncSJHk
-         FpIebyx3bL6OIazqLKPA+IhZmgnPLGlSkzjD/qGL/3BMaPp2knbfJpTfR1gw1xc3L6+M
-         AjhgbTmCc92vogmUC4r+SrgbcFVjsMp4FOSKJViPmSuaOIDfB5an3/7/OugM7EIwYnin
-         u+aZgdU20vWCVlvPElPUdyl1+8NkvDdTGME0Fk5sJsn3qHy2rtyakzVF8izdh1eDMzBg
-         tc9g==
-X-Forwarded-Encrypted: i=1; AL+hErExsGYudVLWp8ta0r9Elb8X2gZlQZi6IKZjNHhzgXs2PvobFzqqyXR8jb92CLRPkZjzz9j7OpB4+TA0DcS38Is=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/z5moDJvFsCYyUrB7b8lUK40Q63ZVHr8hBKdvhvKXYbP3LEroy
-	lnSUd5mSyumDoKHx+LC8zPi5QAHuqtLx0wM4G9Vt0KDRpkvEwMtta0N2
-X-Gm-Gg: AZFdTZcbYssZxSZX79XhSp+8ymM6woakeWQjQLzJd7nX2niUbYBePlKwVDq2t/yrtdP
-	NhfpGwFZEEVy8DlWy8D2Sxa8B6GCKPBfHU2WgKl22W/UaBXSFALJQj3Cas32PqDWUgE2j58d3kG
-	ecuFTpK5ViBMSlax9WIVSYpE+XdIwaLj+oNSgaMYk4YgUb4JSZ8b0vbHbWa88628p/lnzS/p1KN
-	1Jqlk9T43hmlY2Fz71cpC3Hb5ga/eejFj+jPKDh6rd0d+HudyObwJ63kiElEQ7XZXFvMmGqCysf
-	VVRnA/3TWASRF+vXxlgrluhUigfhP51TqI9VkQ2rOyegoyDKZRiIqW7zQKbjQEZMJD3pPh3PCsD
-	MCKBIkUnXr5MAAbqP3fb29E20TkoKZEWQDJrBCliIa4lBTSXQ1oiCh6yA/2v4o0aZJ2fL/zW7s/
-	5MqRFaBCWCeYzRVVPCOa2MvOB4b/2r6WsxCZwu65QY1qWzge5VqsdovnkNnoDdHoDBrcZIRxfBi
-	O2zU7mGpdOTg46A/nTJYb4FsLBEjgSHUBTMuvgGKq12fOkBY+RqPk4fA1fi2Frl3RStra+J3zvR
-	gDIPSblC+sjyQHuVV1TiWOFqLEuH+2nintUJnHOqQ5uHCkSmWUg1yFhiKWGhXT3uUlo9xTbiPEG
-	NcStAD5yH9IxgutZHhmJ0x5HCnw==
-X-Received: by 2002:a05:620a:2907:b0:949:72c3:dee6 with SMTP id af79cd13be357-949ba99cbf7mr4043850085a.19.1795740640134;
-        Thu, 26 Nov 2026 16:50:40 -0800 (PST)
-Received: from localhost ([138.197.109.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb34ac11sm1703987985a.14.2026.11.26.16.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 16:50:39 -0800 (PST)
-Date: Fri, 27 Nov 2026 03:50:37 +0300
-Message-ID: <a424da14ad9f0fcda6988f558432d10e.ndokutovich@gmail.com>
-From: Nikolai Dokutovich <ndokutovich@gmail.com>
-To: linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
- dm-devel@lists.linux.dev
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jens Axboe <axboe@kernel.dk>,
- Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
- Mikulas Patocka <mpatocka@redhat.com>,
- Benjamin Marzinski <bmarzins@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH] fs: tolerate an unfrozen superblock in the
- block-layer thaw
-In-Reply-To: <20261127003902.48-1-ndokutovich@gmail.com>
-References: <20261127003902.48-1-ndokutovich@gmail.com>
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF77606A327;
+	Fri, 27 Nov 2026 01:12:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BF77606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8BxLNAI2Qhr2WcjAA--.7030S3;
+	Fri, 27 Nov 2026 09:12:40 +0800 (CST)
+Received: from [127.0.0.1] (unknown [127.0.0.1])
+	by front1 (Coremail) with SMTP id qMiowJCxf88F2Qhr3ac3AA--.46655S2;
+	Fri, 27 Nov 2026 09:12:37 +0800 (CST)
+Subject: Re: [PATCH v2 0/2] KVM: LoongArch: selftests: MAINTAINERS coverage
+ and a VM leak
+To: Gokul K <gokul02k@gmail.com>, Tianrui Zhao <zhaotianrui@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-kselftest@vger.kernel.org
+Cc: Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org
+References: <20261126050352.1957454-1-gokul02k@gmail.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <b5d4b059-6561-a68c-e00d-247566a081f8@loongson.cn>
+Date: Fri, 27 Nov 2026 09:13:48 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,11 +55,68 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+In-Reply-To: <20261126050352.1957454-1-gokul02k@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxf88F2Qhr3ac3AA--.46655S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7uF13KF4kurW5Cw48Gr1fZrc_yoW8Ar1kpa
+	yfu3ZFyr1vgFs7Ga1qk34jg3ZxXFnrJF1xZ3Z0k34Uurs8Zry8Xrn29r4DXa4DZ39YgFWS
+	ga1Ska4Fga1DXacCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
 
-Please disregard this patch.  The same issue is already fixed by the
-"super: fixes for freezing, reconfiguration and error reporting" series
-([PATCH 09/15] fs: don't keep a device frozen when its freeze is already
-gone), which I missed when preparing this.  Sorry for the noise.
+On 2026/11/26 下午1:03, Gokul K wrote:
+> Two small fixes to the LoongArch KVM selftests. Patch 2 frees the VM on
+> the PMU test's skip path. Patch 1 came out of routing it:
+> get_maintainer.pl did not name the LoongArch KVM maintainers for
+> tools/testing/selftests/kvm/loongarch/, because the MAINTAINERS entry
+> does not cover that directory, so this series would otherwise have
+> gone to Paolo, Sean and Shuah only.
+> 
+> Based on loongarch-kvm in linux-loongson.git.
+> 
+> Patch 2's hunk sits next to the one in "KVM: selftests: Convert comma
+> to semicolon" [1], which is not applied yet. They do not overlap and
+> apply in either order.
+> 
+> Compile-tested only. Patch 2 builds: tools/testing/selftests/kvm/loongarch/
+> pmu_test links for loongarch64 with a GCC 15.2.1 cross compiler, using
+> glibc from Debian's loong64 port as the sysroot. The binary was not run.
+> Patch 2 changes the PMU-not-enabled skip path, which only runs on a
+> LoongArch host whose VM config leaves the PMU off.
+> 
+> Changes in v2:
+> - 1/2: also drop the lib/loongarch/ line, which */loongarch/ already
+>    covers, so the entry matches the other arches (Zenghui Yu)
+> - 2/2: unchanged
+> 
+> v1: https://lore.kernel.org/all/20261123100701.1679376-1-gokul02k@gmail.com/
+> 
+> [1] https://lore.kernel.org/all/20260428053204.1018608-1-nichen@iscas.ac.cn/
+> 
+> Gokul K (2):
+>    MAINTAINERS: Add the LoongArch KVM selftests directory
+>    KVM: LoongArch: selftests: Free the VM when the PMU test skips
+> 
+>   MAINTAINERS                                      | 2 +-
+>   tools/testing/selftests/kvm/loongarch/pmu_test.c | 3 ++-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+For this series.
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
 
-Thanks,
-Nikolai Dokutovich
