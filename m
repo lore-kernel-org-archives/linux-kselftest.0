@@ -1,79 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795752549;
-	b=q7ITvdcO+BmCLWcG4/wpV/nGCd5H0sQKa+H3SGEeKqfMf+uA93tZrJg6qhLK1/pg+eao
-	 fp2lfXZAIqTr7SdsWjkF/h5nFA+VaaSK07K0darsC0OcGlxBJ4S13zcbCgdeToJwD4Kev
-	 HQCzii5lMOxHcS1UsdRt1laME/9rashOmT7YyLFoyFamvmi65qDyiVPgArvmxVVIXqytE
-	 1jLp84RFSBGuRu0l3SsJqgXI9uu+iHTkQfS4CPyaedRLhKDrZJUn4HJmgkXgHpUbk59bw
-	 Ya/Fd1IRF5O5qFAzbfrJwYEvKLM9re5yNAmaQ0f8JNE4PY6z+RtD+yVWkr1i5OvBe3Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795752549;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=HjpF0P5UyQ9nLom4QODoSUXMxsk2mmPrm0eKHuDGnBg=;
-	b=QigB+ZwvXtBJbK63wzFOhAsygYg7Euhz5Gbdbt0/yKxcxNgKjfEDABQgppz8O4YhdMRg
-	 Fz9WelDRysYuKe1AjrQB9i03DMo9vWFjPtgdHuI1Ya5mtiToYLt38Rmdf941xYTc7YBKJ
-	 HtI6gD6QKodINyS5Cr1Dt+DhElIQ0p7aFk0YR14UYoojtZKMxVyrzL0/+498qQS1Pp9e7
-	 13iUGt5fHOYSFRcgT0Nil5CD5rJPEnXy/qq9uQ4Y7tEAqshk4ldiKYTJ1MRTLhNjAgNTw
-	 SyaTMhKY0RzoW3U2FUoIHAPiCPqqqR67i3ZZKlp25dv5sbYGCEA3rnFK60CAOpqMv0Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jZViEjrH;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442B3606A323;
-	Fri, 27 Nov 2026 04:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jZViEjrH
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795752548;
-	b=F8gkl5dz2zeGG5mwBRtAPBVa85fTWVoyJRHI6/kjMN2mRFJGSOr1eln+qVxZt94pT2cr
-	 6XtgMgTy5ofpH152BbruRV+M8S4Ek3Hk9xoe6sO55xtG/859P8u7h1JQCpyeI32rKjhum
-	 v33kRSGCxNHsI+xaeWm5zfZqyCyuqOSf6ZxtTOfMc7qqI9hLNQfIBF9Oo5aq1AdY9ji2F
-	 bex3OtMDKFH8NgW4OyYsrWLr9DtDnI4ORXKHjh1YHdh4pVrma0ZGWryohNtLqiCvqqDTO
-	 CSva5i5UUd07eqOgKx7DbDwE4ap7MiDbINwY36RFfbrA4+LWjVIWW/g0cwMgdDuzMEA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795752548;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=HjpF0P5UyQ9nLom4QODoSUXMxsk2mmPrm0eKHuDGnBg=;
-	b=GMwVXg7wlL4Eks+yB+NQdw+OnNiSVw/T2CgJp3hzGK+F8dOAhgmxINHZEtjxZOAdR04m
-	 kSx+TOkCWTZjeA5mkvmdKTbJavxKy/p61zfNd+8j45htAeGqMFkGJ8D88E2sCYB6/Mid1
-	 uUUNqncOjkVfkbcRx2pPu1pHOY936TG7kU0xLa9ZL0+l5iYCXMXz3CEJ7JAY+Facv6wf0
-	 EHwFct42tpeEt0F6aN/eMXpwSXV0yRT9bQNh1hpmkHXf5nJtJF/6EaJalhjeRkCk69YMo
-	 II1q7aFNlqVIg701BfSb+cksKDOW3vxUewi1kgZqdt/AB0FLS3/YnWJco8K9Djhdagg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.75
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795759274;
+	b=kBvDkMlHlU2/cdfZR2b+LJoruRBx6/mKaU71Pv9stPbAgTWAsp87VeMZG4YN7w/ntr2p
+	 B8gD1n1laFSNCbq/aqDepmtPltdzYIAr0/YykhuPKcPCgh6Sg4jirXbuok4P+4hnpHVrY
+	 BgcP5c40JuMwjzaAXCpD4bIb04ULJliuWQa57gcgMcWU3axc/IyD/cN2ungFMT6GdC7W0
+	 abftaXa3mz9RwgGqvkuw3/ZlBjL0p+pPth1aCh16tFnfSx7TcU/fLWYCKd+JenwMKiOPQ
+	 9gYKs9wMQNVi4ZrhM6/kGvopb99vHF45+RpWimbeJzbczXxC5191lSXcaKNsS0A81BA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795759274;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=nrXUyBnnLMn4mqMV0QE9b5zcQInsdQBriad2AyK2+Eo=;
+	b=eNkrx6IU9uqPs+oyTzTOxty1bgMgdusTiMwMcYoGwEUsY9U1RAW9XFZEdQkTqMUJFq5v
+	 iELtquA/nihqzKHECQGtn8E469BR/fPQccqDPXCKDaP+NonL9saU3UtXEmLOJRGWjlSFA
+	 GtRkVP3k54EesvfXv+ISFiSEQrCuV9NZuSQ0qiGJBET3JWBfixjG7hV4UMVv5NGhzlcZa
+	 JjO4ODdCQlZn/NHpEbT9NZ2XFmaY5VsAPi/QpCHP6KiqkJDDX0ZX2SQVkMOqYs+UK8S0t
+	 L3ulXKu161MJe6tPpNdzHcNY6QIhRhuW1c8rf2wOZenR4JindTqK007vPlQDfMNBLlA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Y5sBkEAp;
+	arc=none smtp.remote-ip=95.215.58.75
+Received: from mta1.migadu.com (out-75.mta1.migadu.com [95.215.58.75])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4A2AB1F00924;
-	Fri, 27 Nov 2026 04:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795752548;
-	bh=HjpF0P5UyQ9nLom4QODoSUXMxsk2mmPrm0eKHuDGnBg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=jZViEjrHv7dvOmMePsATDqUzpBYEctt0Ldy+QMYHQPLrNh83CcrUuaKNva7rTo50Z
-	 ENdNGgZUwuetP2UKbzMBfyJGieqgzrjbGr/eHme5t/DydC4YaONuKfELSI+HbaGCNQ
-	 yrQjOHtYew5wmW1jQyTmv6xHFg+Lxl1fEuD8EoC42AxS8x1uYlfg0SMdSQQn79EXky
-	 RU+Rc1G/2uJhJ2BqKYPFc+8oi88yHm8E1mIDFwBt2WNfzK1CTnG79B50FZQgtaiQsx
-	 wupuDgJw7nvmEmcpvf1SwEQrToINvLy15Eh1q0uP6epiEEpwrKteIBUpvqiYDXFEuV
-	 KYO/V5A546rjg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id D081C4B558;
-	Fri, 27 Nov 2026 04:08:51 +0000 (UTC)
-From: David Crawshaw via B4 Relay <devnull+david.exe.dev@kernel.org>
-Date: Fri, 27 Nov 2026 04:08:39 +0000
-Subject: [PATCH 1/2] fuse: update i_size before unlocking the EOF folio in
- write-through writes
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D62606A31C
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 06:01:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98D62606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Y5sBkEAp
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7VngrNZEXiKoDUMjMc/nzPenWV2Zy0/emms0Y+lumzs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795759270; v=1; x=1796364070;
+ b=Y5sBkEApFsaG7tDNVA61iRZ4F35l421r6lYOjienw2wc71fpUfYJS4oFsuZOprbajPMWb2Kd
+ 9usp5H8ixhueAERbI0YLoOwHmmbj1ZDIMlXKoxFC3spponR6w+jpLJl2ott7gOdh7Vz3+vTY7NP
+ PXHHL3qGfL5jdPEUKM7zdtKo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 9ad39df9598d294b;
+	Fri, 27 Nov 2026 06:01:10 +0000
+X-Mizu-Trace-ID: 9ad39df9598d294b
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 27 Nov 2026 14:00:58 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: netdev-bot+sashiko@kernel.org
+Cc: jv@jvosburgh.net, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	tonghao@bamaicloud.com, razor@blackwall.org, shuah@kernel.org,
+	jiangjiehua1@huawei.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 2/3] bonding: update slave array on link change for
+ broadcast mode
+Message-ID: <awkcmoDW5AHqJujs@fedora>
+References: <20261126-bond_broadcast_updelay-v1-2-188e5538d6ca@kylinos.cn>
+ <179574935712.3135.18271637068349106750@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,128 +69,174 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261127-b4-fuse-wt-eof-v1-1-e055e2af652d@exe.dev>
-References: <20261127-b4-fuse-wt-eof-v1-0-e055e2af652d@exe.dev>
-In-Reply-To: <20261127-b4-fuse-wt-eof-v1-0-e055e2af652d@exe.dev>
-To: Miklos Szeredi <miklos@szeredi.hu>, 
- "Darrick J. Wong" <djwong@kernel.org>, 
- Christian Brauner <brauner@kernel.org>, 
- Joanne Koong <joannelkoong@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: fuse-devel@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev, 
- David Crawshaw <david@exe.dev>, stable@vger.kernel.org
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795752531; l=3912;
- i=david@exe.dev; s=20261127; h=from:subject:message-id;
- bh=aneCOpdxoK+BoX+KlAWJghFJrKt6ILqgZAIYQqmiW0I=;
- b=pZh3gDBUojjRGzwL5hg+aYbb26zpqEM71Wd+/shQt6BrHzKj9HuOjKvTby6mb6BA9RCczfdJ0
- lSNoakYmogFAEnBL4QI0J56eiQi7rzmRlhRFMuxLCktZNcYpBh3J7L4
-X-Developer-Key: i=david@exe.dev; a=ed25519;
- pk=eQfKiR9S2peqiHuuNGCAaWlxwP+RerhKT2wVxakCrjQ=
-X-Endpoint-Received: by B4 Relay for david@exe.dev/20261127 with
- auth_id=1661
-X-Original-From: David Crawshaw <david@exe.dev>
-Reply-To: david@exe.dev
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179574935712.3135.18271637068349106750@kernel.org>
 
-From: David Crawshaw <david@exe.dev>
+On Fri, Nov 27, 2026 at 03:15:57AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 2 · Low: 1
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] The commit message says the patch makes the broadcast
+>   usable_slaves snapshot 'follow link transitions the same way balance-…
+> - [Medium] Because broadcast now publishes usable_slaves (the revert,
+>   which this patch relies on), switching a broadcast bond to balance-rr…
+> - [Low] The series ordering is not bisect-safe, and the dependency
+>   between the two patches is not recorded in tags.
+> 
+> --
+> 
+> bonding: update slave array on link change for broadcast mode
+> 
+> This adds a BOND_MODE_BROADCAST case to bond_miimon_link_change(), so the
+> usable_slaves snapshot is rebuilt on miimon link transitions. That keeps
+> the ignore_updelay decision in bond_miimon_inspect() in line with the
+> current slave link states. It depends on a revert of 45fc134bcfad so that
+> bond_set_slave_arr() publishes the array for broadcast.
+> 
+> > Add the broadcast case so the snapshot follows link transitions the
+> > same way balance-xor does. This needs the revert of 45fc134bcfad as
+> > a prerequisite: with 45fc134bcfad applied, bond_set_slave_arr()
+> > discards the refreshed array for broadcast.
+> >
+> > Fixes: e0caeb24f538 ("net: bonding: update the slave array for broadcast mode")
+> 
+> [Severity: Low]
+> Is the series order bisect-safe? The revert of 45fc134bcfad is applied
+> before this patch. On its own, it makes bond_set_slave_arr() publish
+> usable_slaves for broadcast again, but nothing rebuilds the array on
+> miimon link changes yet.
+> 
+> At that intermediate commit, a batch enslave with updelay leaves the new
+> slaves in BOND_LINK_BACK. The snapshot taken at enslave time then has
+> count == 0 and is never refreshed, so bond_miimon_inspect() ignores
+> updelay permanently. That is the bug 45fc134bcfad fixed.
+> 
+> If this patch went first, it would be a no-op under 45fc134bcfad, and
+> every commit in the series would be correct.
+> 
+> Also, this patch carries Fixes: e0caeb24f538, but the revert it depends on
+> has no Fixes: tag and no dependency annotation. 45fc134bcfad is likely
+> already in stable trees.
+> 
+> Would a tag-driven backport of only this patch leave the stale snapshot
+> behaviour unchanged there?
 
-Since FUSE writeback was converted to iomap, a write-through write
-that extends the file within the folio holding the current EOF can
-lose its data if writeback of that folio starts while the FUSE_WRITE
-request is in flight.
+This commit description already said it depends on the revert.
 
-fuse_perform_write() copies the data into the page cache folio, unlocks
-it in fuse_fill_write_pages(), sends FUSE_WRITE, and only updates
-i_size after the reply has arrived.  If the folio is dirty, writeback
-can lock it in between, and iomap_writeback_handle_eof() zeroes the
-folio from the old i_size to its end.
+> 
+> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > index d6675e87d06b6..b1efbdf597ec4 100644
+> > --- a/drivers/net/bonding/bond_main.c
+> > +++ b/drivers/net/bonding/bond_main.c
+> > @@ -2780,6 +2780,7 @@ static void bond_miimon_link_change(struct bonding *bond,
+> >  		bond_alb_handle_link_change(bond, slave, link);
+> >  		break;
+> >  	case BOND_MODE_XOR:
+> > +	case BOND_MODE_BROADCAST:
+> >  		bond_update_slave_arr(bond, NULL);
+> >  		break;
+> >  	}
+> 
+> [Severity: Medium]
+> The commit message says the snapshot follows link transitions "the same
+> way balance-xor does". Does that hold outside the MII monitor?
+> 
+> balance-xor also rebuilds the array when the ARP load-balance monitor
+> changes a slave's link state. Broadcast is still left out there:
+> 
+> drivers/net/bonding/bond_main.c:bond_loadbalance_arp_mon() {
+>     ...
+> 		if (slave_state_changed) {
+> 			bond_slave_state_change(bond);
+> 			if (BOND_MODE(bond) == BOND_MODE_XOR)
+> 				bond_update_slave_arr(bond, NULL);
+> 		}
+>     ...
+> }
+> 
+> Broadcast can use ARP monitoring, because bond_mode_uses_arp() only
+> excludes BOND_MODE_8023AD, BOND_MODE_TLB and BOND_MODE_ALB.
+> bond_slave_netdev_event() also skips broadcast, since
+> bond_mode_can_use_xmit_hash() is false for it. So under ARP monitoring,
+> the broadcast snapshot keeps the state from the last enslave or release.
+> 
+> bond_option_miimon_set() can switch the bond from ARP monitoring to
+> miimon at runtime. It zeroes arp_interval, cancels arp_work and queues
+> mii_work, but it does not rebuild the slave array. params.updelay
+> survives the switch.
+> 
+> For example, slaves enslaved with carrier under ARP monitoring are marked
+> BOND_LINK_UP and counted in usable_slaves. Later the ARP monitor marks
+> them BOND_LINK_DOWN, but the snapshot is not refreshed. Once miimon is
+> enabled, bond_miimon_inspect() sees usable_slaves->count != 0:
+> 
+> 	if (usable_slaves && usable_slaves->count == 0)
+> 		ignore_updelay = true;
+> 
+> Recovering slaves then wait out updelay even though the bond has no usable
+> link.
+> 
+> The reverse case also happens. If slaves are enslaved without carrier,
+> count == 0 and updelay is wrongly ignored. Either state lasts until the
+> first miimon commit reaches bond_miimon_link_change().
+> 
+> Should BOND_MODE_BROADCAST also be added to the condition in
+> bond_loadbalance_arp_mon()?
 
-Depending on timing:
+Ack, I will also handle the arp monitor.
 
- - the page cache is left with zeroes where the write's data should be,
- - the FUSE_WRITE request itself carries zeroes, as its pages are the
-   page cache folios and are only copied when the server reads the
-   request, so the server stores zeroes,
- - a later writeback of the zeroed folio overwrites the server data.
+> 
+> [Severity: Medium]
+> Now that broadcast publishes usable_slaves, does a switch from broadcast
+> to balance-rr leave a stale snapshot behind?
+> 
+> Releasing the last broadcast slave goes through __bond_release_one():
+> 
+> 	if (bond_mode_can_use_xmit_hash(bond) ||
+> 	    BOND_MODE(bond) == BOND_MODE_BROADCAST)
+> 		bond_update_slave_arr(bond, slave);
+> 
+> This runs after bond_upper_dev_unlink(), so the slave list is already
+> empty. The result is a non-NULL usable_slaves with count == 0, and after
+> the revert that array is kept for broadcast.
+> 
+> Neither bond_option_mode_set() nor bond_close() resets the arrays.
+> 
+> In balance-rr, nothing rebuilds the array afterwards:
+> 
+>   - bond_enslave() and __bond_release_one() only rebuild for xmit-hash
+>     modes or broadcast
+>   - bond_open() and bond_slave_netdev_event() only rebuild when
+>     bond_mode_can_use_xmit_hash() is true
+>   - bond_miimon_link_change() has no BOND_MODE_ROUNDROBIN case
+> 
+> So in balance-rr, bond_miimon_inspect() would see count == 0 on every
+> pass. It would set ignore_updelay = true and force slave->delay to 0 for
+> every recovering slave.
+> 
+> Documentation/networking/bonding.rst section 13.1 says updelay is ignored
+> only when the bond has no active links.
+> 
+> In the baseline tree with 45fc134bcfad, broadcast never published
+> usable_slaves, so a switch from broadcast to balance-rr left it NULL. The
+> same missing reset on mode change already existed for a switch from
+> balance-xor to balance-rr.
 
-In each case the write returns success.  Before iomap, FUSE writeback
-never modified the folio and cropped the request to i_size at send time,
-so this window was harmless.  iomap, on the other hand, expects i_size
-to cover the data in a folio before the folio is unlocked, as
-iomap_write_iter() does for the writeback cache path.
+This seems not broadcast only issue. The other xmit hash mode also have this
+problem. Maybe we should set usable_array to NULL if it's length is 0? Need
+to further checking.
 
-Fix it the same way for write-through writes: keep a folio that
-straddles i_size locked over the request when the write extends the
-file within it and update i_size from fuse_send_write_pages() before
-the folios are unlocked.
-
-Reproducer: a thread repeatedly stores into the EOF page through a
-shared mapping and calls sync_file_range(SYNC_FILE_RANGE_WRITE) on it,
-while another thread pwrite()s a few bytes past EOF within that page;
-with a server that delays FUSE_WRITE by 200us the data was lost in
-493/500 runs (the selftest added in the next patch fails reliably), and in
-0/3000 runs with this patch.
-
-This patch written with an AI coding assistant (Shelley using Opus 5.5).
-I reviewed and tested it.
-
-Fixes: ef7e7cbb323f ("fuse: use iomap for writeback")
-Cc: stable@vger.kernel.org # v6.17+
-Signed-off-by: David Crawshaw <david@exe.dev>
+Thanks
+Hangbin
 ---
- fs/fuse/file.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index 993a1d2b315..ee3bdc3cb04 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -1287,6 +1287,15 @@ static ssize_t fuse_send_write_pages(struct fuse_io_args *ia,
- 	if (!err && ia->write.out.size > count)
- 		err = -EIO;
- 
-+	/*
-+	 * Extend i_size before unlocking the last folio, so that writeback
-+	 * cannot see the newly written data beyond i_size and zero it.  See
-+	 * fuse_fill_write_pages().
-+	 */
-+	if (!err)
-+		fuse_write_update_attr(inode, pos + ia->write.out.size,
-+				       ia->write.out.size);
-+
- 	for (i = 0; i < ap->num_folios; i++) {
- 		struct folio *folio = ap->folios[i];
- 
-@@ -1305,6 +1314,7 @@ static ssize_t fuse_fill_write_pages(struct fuse_io_args *ia,
- {
- 	struct fuse_args_pages *ap = &ia->ap;
- 	struct fuse_conn *fc = get_fuse_conn(mapping->host);
-+	loff_t isize = i_size_read(mapping->host);
- 	size_t count = 0;
- 	unsigned int num;
- 	int err = 0;
-@@ -1366,7 +1376,16 @@ static ssize_t fuse_fill_write_pages(struct fuse_io_args *ia,
- 		if (tmp == folio_size(folio))
- 			iomap_folio_mark_uptodate(folio);
- 
--		if (folio_test_uptodate(folio)) {
-+		/*
-+		 * Keep the folio locked until the reply if it is not uptodate,
-+		 * or if it straddles i_size and this write extends the file
-+		 * within it: writeback zeroes a folio beyond i_size
-+		 * (iomap_writeback_handle_eof()), which would wipe the data
-+		 * just copied, both in the page cache and in the request,
-+		 * while i_size has not yet been updated.
-+		 */
-+		if (folio_test_uptodate(folio) &&
-+		    !(folio_pos(folio) < isize && pos > isize)) {
- 			folio_unlock(folio);
- 		} else {
- 			ia->write.folio_locked = true;
-
--- 
-2.43.0
-
-
+pw-bot: cr
