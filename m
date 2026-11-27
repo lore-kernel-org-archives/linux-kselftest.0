@@ -1,44 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795789303;
-	b=LBlOP0Dpp2F4m6nq/sR0wbgfO9L7M9sg00Rv91/KNNd4pR8Tk7sgqeAbml7dd7950BKB
-	 0cZvZS4MlgRPmn7tBdFoHXhQ9Pm6DTKk12RG4tHtprFRNkh5+4VqlxaH6NBW1zvRJLdjz
-	 Ls45S/4XnJ4nOxfEniy9yVjy/krBjVBNsd4oD737QONGHLjX/TsybEx9UU3qriHMVnuLi
-	 BBxhLJf6MI586ZOEhyCfX59Hio25OJcs8HS1c5uOrQhiafjy6/h4VSen6IP1u1FmxUfMz
-	 TeEVJJgVWExute4nfXhA7qatC/Zq13W5dnkeVBTRpYi6Qm1fyYP2K6Lk+eIeBNZcEdA==
+	t=1795789310;
+	b=Cb4MKpXu8NGAdPAdJfTnNVoAj1I3iumRCo/PehQ5391uK6T+ysh8kpSMjlVii/kAulmo
+	 gG+dasRZ01GAd534mCrNryLu5kHv6OoMaOOQDPl0CrdySs5MOP7losaz1rdhLt7M2d7Y1
+	 XrvQuY79cN+q+60kZuyB1C0UdBSrRXMH6og66ErgeSTnPsV2lzndBRm8QGagW7tDrA1Sa
+	 4dIjAHRpBMRsUfbVtgXmcG/c5ULGPeNN+6EwQ9VS9S46JjXPBtAHEovXokmAuPkPlrz5F
+	 SDagnKmrzHPDyA0hUY89K2cpqw/d9YeF62zYyT9MGXMFVXWU4ODr1NA2EG4Zq7Pn54Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795789303;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795789310;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=HE7gEqGCw4EyFiuV8uGktoGe7HLL7Xdr4RQo2bxKmaU=;
-	b=kdq0CIzc9MQzrjJrNvM4CUVLsrV8zFIPtNW5LqRyQ8EaLmnhn6Bj/2Ua5NK/5gssV2nJ
-	 QHiNn9sfG9ArkMXSpx5X6OCEIVuLHuZ8Tq6+RM1K/y5sJSYXrjjsIwXc9P/GTJ/bs9myT
-	 sHw4o8L27Ti6jnylNwpHIWySvrIWCwh1JKiRBmL5FEK9NAHL+1g99CKupgm5cEqh+jAgU
-	 Ia8gD9HJ0BUFfWbTY/Kj89Yv0tdd+UYKweOLxfLOTvmJS7DTy8kzxCsz1Z9dfNAbazeaJ
-	 ExnSZkUnb6WjGuBwHQ8jja63ouTKq9c+onbUXJDIGdDAsXgEkn8KotktsahwkcLZvtw==
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=7+c1Qm3VYeU1+HWEx+l1hojCUO1r8kUOKWi5tpZjEFQ=;
+	b=jYSEf8CDvX1WZ55KeDaCxS7QqLRm2iB1EXIVx5/Zn5TqZjZCPbDH3/lxKj/FSJpPFNdR
+	 fqE4+Vq4S+aTIvnTAZIPAkzCoO2+SEX5XWd1JieFM5pcds62m52drTplHUbkya4kV+d6H
+	 CrXmhYw9nTfJrtpqluvdbpTSQxEhu3Z7jsx3KJRsxbxR/gyp3ZmtdIK063ws/TF59cqS+
+	 vCDdA/Rs5u7ob1yb5z4gm58HDUmJ4ySCs0NqZaJlbL7QnnZH+OU+zK7V9aerW8jiYBJA6
+	 Jy1AZUoQtpFz8lAuy8txynnY2m9joLM2cDHo0+zREBSH8kuHnkTUF7ir/YNVFM16Vew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DSZfoBMC;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jDF1YvTc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92AB606A32E;
-	Fri, 27 Nov 2026 14:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C9A606A321;
+	Fri, 27 Nov 2026 14:21:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DSZfoBMC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0AC91F000C1;
-	Fri, 27 Nov 2026 14:21:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jDF1YvTc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29781F00898;
+	Fri, 27 Nov 2026 14:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795789302;
-	bh=HE7gEqGCw4EyFiuV8uGktoGe7HLL7Xdr4RQo2bxKmaU=;
-	h=From:To:Cc:Subject:Date;
-	b=DSZfoBMCSmtY1GfTC/aIsp071xWx6Mp0hDMLkQraEQDi8XJb1Dd9rqkypOU8L1psY
-	 eB/vAXVvxYh1jKxDT/9Viqq1QtP9B3iC1uSoeVW8JbqQrgdN88s6KprKBUH4Ghe6gx
-	 wqw9+rMaO8T2/38DOzym6kcukJMMMiz0vkyocUzAKxI4iCXlQgl/2oVSstArCKrqJu
-	 qayNzLkTUVxoSA7IdZXIinv836XVHWNwDFBu7pMC+749RSbQ3+KqIlMVcHAExQWYxa
-	 3YWSAnVYjz8+U+KvJz1JwGKBzqyEsNoWS3dUTHyHkepJH25gf9HhnzboSb0zrqsUAd
-	 IeL4x1WxCS2kQ==
+	s=k20260515; t=1795789310;
+	bh=7+c1Qm3VYeU1+HWEx+l1hojCUO1r8kUOKWi5tpZjEFQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=jDF1YvTcOZIItHkIbN2v0sQMzIKYAr7B1NuEmMRXZfwW5guiOGIRAnfZ84fnza+ou
+	 KuIfaYDVPPah8qEPjKTJbF/JnsSI8vYu0suJ4MYpXaG5ZY1/+01Ac7LwPgyZDN/q7P
+	 O5Yfj+ZKRvXcITPli95LyIJR4t4Omb4R3oa47Sm702fWwVkP1EWCfqfGUoUQC9ItRm
+	 G7Rx2QVLGWzlyukn/WqOwcePlcCASoDSzaUqhAwNg6TSw/1ypspRp2Gq/Q7gGF36oP
+	 Nq9px5OqKlKW/JhbWZe/5mbSlGqCImLYXhl2xLCO6hENDPWFhbCtZ8DkbPgzEzdMA6
+	 6e+3QF4z0GUCg==
 From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -76,10 +77,12 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Colin Ian King <colin.i.king@gmail.com>,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 0/3] xsk: Keep the shared info of zero-copy buffers in kernel memory
-Date: Fri, 27 Nov 2026 15:21:26 +0100
-Message-ID: <20261127142131.3527737-1-bjorn@kernel.org>
+Subject: [PATCH net 1/3] libeth: xsk: Count each XDP_TX buffer on its own
+Date: Fri, 27 Nov 2026 15:21:27 +0100
+Message-ID: <20261127142131.3527737-2-bjorn@kernel.org>
 X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261127142131.3527737-1-bjorn@kernel.org>
+References: <20261127142131.3527737-1-bjorn@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,55 +95,93 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-A packet that AF_XDP receives in zero-copy mode over several buffers
-keeps its shared info, the fragment list and its count, in the UMEM,
-which userspace can write while the kernel uses it. A rewritten list
-or count makes the kernel read and write out of bounds.
+libeth reads the shared info of an XSk XDP_TX frame when it flushes
+the bulk, not when it queues the frame. The fragment count it finds
+there decides how many completions idpf reports to the XSk pool.
 
-Patch 2 moves the shared info into the buffer pool and lets the device
-write up to the end of each chunk. Patch 1 makes libeth count XSk
-XDP_TX buffers one by one, as it read the shared info at a later bulk
-flush. Patch 3 updates the xsk selftests.
+The shared info of a zero-copy buffer lives in the UMEM, which
+userspace may write at any time, so a rewritten count makes idpf
+report the wrong number of completions. Once the next patch moves the
+shared info into the buffer pool, the next multi-buffer frame of the
+same poll can overwrite it before the flush.
 
-Sashiko found this in its review of the AF_XDP device buffer layout
-series [1].
+Count each buffer on its own SQE. Head and fragments each take one off
+the in-flight count, and the head counts the packet. Stats do not
+change.
 
-I tested this on mlx5 hardware, and on igb and veth in QEMU. None of
-them receives multi-buffer packets in zero copy, so i40e, ice and
-idpf, which do, are only build-tested. Intel folks, could you run your
-multi-buffer zero-copy tests on them?
+Found by code inspection.
 
-Also for Intel, found while auditing the drivers and not touched here:
-ice no longer sizes its zero-copy RX buffers from the XSK pool. Commit
-3a4f419f7509 ("ice: drop page splitting and recycling") programmed a
-fixed 3072 bytes, and 93f53db9f9dc ("ice: switch to Page Pool")
-changed ice_setup_rx_ctx() to use ring->rx_buf_len, which only the
-page pool path sets. An XSK ring gets the length of its last page pool
-setup, 3456 bytes on 4K pages, or 0 if it never had one. With 2K
-chunks the device can write past the chunk into the next one. I found
-this by reading the code and did not test it.
+Fixes: b3ad8450b4dc ("libeth: xsk: add XSk XDP_TX sending helpers")
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
+---
+ include/net/libeth/tx.h  | 3 ++-
+ include/net/libeth/xdp.h | 9 ++++++++-
+ include/net/libeth/xsk.h | 6 ++++--
+ 3 files changed, 14 insertions(+), 4 deletions(-)
 
-[1] https://lore.kernel.org/netdev/179561567996.3135.9952128421877275714@kernel.org/
-
-Björn Töpel (3):
-  libeth: xsk: Count each XDP_TX buffer on its own
-  xsk: Keep the shared info of zero-copy buffers in kernel memory
-  selftests/bpf: Drop the zero-copy tailroom from the xsk tests
-
- include/net/libeth/tx.h                       |  3 +-
- include/net/libeth/xdp.h                      |  9 +++++-
- include/net/libeth/xsk.h                      |  6 ++--
- include/net/xdp.h                             | 32 +++++++++++++++----
- include/net/xdp_sock_drv.h                    | 29 ++++++-----------
- include/net/xsk_buff_pool.h                   |  2 ++
- net/xdp/xdp_umem.c                            |  3 +-
- net/xdp/xsk_buff_pool.c                       | 17 +++++-----
- .../selftests/bpf/prog_tests/test_xsk.c       | 10 +++---
- .../selftests/bpf/prog_tests/test_xsk.h       |  2 --
- tools/testing/selftests/bpf/prog_tests/xsk.c  | 13 +-------
- tools/testing/selftests/bpf/xskxceiver.c      | 15 +--------
- 12 files changed, 67 insertions(+), 74 deletions(-)
-
+diff --git a/include/net/libeth/tx.h b/include/net/libeth/tx.h
+index c3db5c6f1641..25cad5566436 100644
+--- a/include/net/libeth/tx.h
++++ b/include/net/libeth/tx.h
+@@ -22,7 +22,8 @@
+  * @LIBETH_SQE_XDP_XMIT: &xdp_frame, unmap and xdp_return_frame_bulk(), stats
+  * @LIBETH_SQE_XDP_XMIT_FRAG: &xdp_frame frag, only unmap DMA
+  * @LIBETH_SQE_XSK_TX: &libeth_xdp_buff on XSk queue, xsk_buff_free(), stats
+- * @LIBETH_SQE_XSK_TX_FRAG: &libeth_xdp_buff frag on XSk queue, xsk_buff_free()
++ * @LIBETH_SQE_XSK_TX_FRAG: &libeth_xdp_buff frag on XSk queue, xsk_buff_free(),
++ *			    stats
+  */
+ enum libeth_sqe_type {
+ 	LIBETH_SQE_EMPTY		= 0U,
+diff --git a/include/net/libeth/xdp.h b/include/net/libeth/xdp.h
+index 898723ab62e8..66a3c4ec9967 100644
+--- a/include/net/libeth/xdp.h
++++ b/include/net/libeth/xdp.h
+@@ -1794,12 +1794,19 @@ __libeth_xdp_complete_tx(struct libeth_sqe *sqe, struct libeth_cq_pp *cp,
+ 	switch (type) {
+ 	case LIBETH_SQE_XDP_TX:
+ 	case LIBETH_SQE_XDP_XMIT:
+-	case LIBETH_SQE_XSK_TX:
+ 		cp->xdp_tx -= sqe->nr_frags;
+ 
+ 		cp->xss->packets++;
+ 		cp->xss->bytes += sqe->bytes;
+ 		break;
++	case LIBETH_SQE_XSK_TX:
++		cp->xss->packets++;
++		fallthrough;
++	case LIBETH_SQE_XSK_TX_FRAG:
++		/* One buffer per SQE, see libeth_xsk_tx_fill_buf() */
++		cp->xdp_tx--;
++		cp->xss->bytes += sqe->bytes;
++		break;
+ 	default:
+ 		break;
+ 	}
+diff --git a/include/net/libeth/xsk.h b/include/net/libeth/xsk.h
+index 249b1c740788..2cd4252a3445 100644
+--- a/include/net/libeth/xsk.h
++++ b/include/net/libeth/xsk.h
+@@ -129,6 +129,10 @@ libeth_xsk_tx_fill_buf(struct libeth_xdp_tx_frame frm, u32 i,
+ 
+ 	sqe = &sq->sqes[i];
+ 	sqe->xsk = xdp;
++	/* Count each buffer on its own SQE. The shared info of the frame
++	 * may change before the bulk is flushed.
++	 */
++	sqe->bytes = desc.len;
+ 
+ 	if (!(desc.flags & LIBETH_XDP_TX_FIRST)) {
+ 		sqe->type = LIBETH_SQE_XSK_TX_FRAG;
+@@ -136,8 +140,6 @@ libeth_xsk_tx_fill_buf(struct libeth_xdp_tx_frame frm, u32 i,
+ 	}
+ 
+ 	sqe->type = LIBETH_SQE_XSK_TX;
+-	libeth_xdp_tx_fill_stats(sqe, &desc,
+-				 xdp_get_shared_info_from_buff(&xdp->base));
+ 
+ 	return desc;
+ }
 
 base-commit: 28a371228d4eb4857cc31eeb1a0d7d01e9c3ea2f
 -- 
