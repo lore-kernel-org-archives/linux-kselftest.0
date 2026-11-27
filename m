@@ -1,55 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795798591;
-	b=mxkpWgox/y35JjKCFGd3IXm0KKKD8e/U1Xxh/tX9ecWvB83FW3VYOF/P2Ntq49MkUogj
-	 vKsit6oU62QNQx740DpTQk942nJ11nsMI/9KoC9Z/hqKJyMPkseRrB6dBx2FwTrOeESse
-	 08Of0lgViTW0KAqo+VLJ8+zNGYoyDJ1/o2X9L5wfRLlgmFz7H6TSCZhuSWa3d7w3rL7Bk
-	 WimRZ4JnAKtlS6SNJJdDwozm5aGb+CHssnZNWUeB864OmFogzRZgtp5/pLF2GiSOnqD1v
-	 nNNmM5WvJsLHzJUvwIAi7jllBSf3Bv8hDSUIV3AKSdz8/Xdiurt9Gtb3jFr6cctFvfA==
+	t=1795799245;
+	b=qy2JBnF8vmcQ5HtLOh7Qv7/Vj5BBjMj46ANuQvGRzspX3/AJvrESE2pDJ7xK8wfOwTwA
+	 K1l41E0VAYNb4+Bc6vScNrMQETZY/iBmo22pCkdQsDW/G+qImoFs9F81sEnJGWFz6zRw5
+	 fwHbmSVW2mkBrfhqg9wk0EVxwRBssMvjMsJ0YJ9TYSkprIxcMHUJnzDDCuNj2weQjwlOn
+	 AhtRWD2/PVd5t8k51yuKdhx5OgrU7cJ+2OBRpgroyU5edzEjN0m02Q+DcbB4mF83biAS/
+	 QFIy7+iQie4UBgzzzuSttO1FRr4innsveeGKYXqmwpQ73RLKe+kuSAjAraGPdPs8goQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795798591;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=V9s5cE0YFouh5jmUZ3qtfKF7Wf5pwrkzWs9hUWaorfQ=;
-	b=cRkuj1wpcdGzBfTz4OR7HTWGBoFSvierZuBwNzzCmThmd5ommN7wVWYA6EiGAOo3z4bw
-	 7Mj8PoWNcQodVGM9+2a7Pp7EOo2X15/X3iF4Ul77QpKW+9KkObWXyTE0+Rt0YLBQEqouD
-	 ZhquUm9omx3du3I2IbAn86x5Gja6QakilZ+McmzXb0ne7kmaBqg6jVH5zRWKndT8rnn5E
-	 /wPbEF8ZFf0d0md6cgQdKs5Csv6Dyf5IDAVVLlLUbYyWaDln+FzryRy7D4bAm98Be12/f
-	 kbxoSnG8A2TQK+jyXosGeUJZDlroL9bqhnEBwB+6smUiljyAEbDwWq2wf3WjwXExkiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795799245;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=iIDdrX9Im0YtrcnZJ8KtkgD4n/tK93wVoTEyhvvYAHU=;
+	b=Yx4RoDlrpuDNoIX5coaxAUtusunlQyfppGtdniuBK7ppFAramCKmtT6nXxK59eO3tYyC
+	 zdPTUa82vK6DHWU0o6HZWuwxLM8kTKhX10aK2l78ADBtJufYN1TO/6GFJwiJ8W8vZwP3E
+	 Uo+R696C34cUgSFojWVw+Ax41By0ePsKlIVhe4yK3ohtRSpfYdN7iu/YK4CPCcBjUYgqT
+	 Agzgjn4U424soZ0wR9eYSinWhDE1IE7EQNZBzUzdr7/qLLM5VYXkD+hovDgdv7EZdEDil
+	 t/ekUSYfldYciERL8PY8kYjYrQwnEwTjdNFDunksofvcflyek/mwdPuYLBONhWErH4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RqajruAc;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=ziepe.ca;
+	spf=pass smtp.mailfrom=ziepe.ca;
+	dkim=pass header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=hLpAPOWR;
+	arc=none smtp.remote-ip=209.85.160.182
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89DA606A327
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 16:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C7B606A31E
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 17:07:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0C7B606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RqajruAc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32781F0092A
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 16:56:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795798591;
-	bh=V9s5cE0YFouh5jmUZ3qtfKF7Wf5pwrkzWs9hUWaorfQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=RqajruAcR6zloTFF9yw5YIV2Y3qMAhDUo15smivVrvxMIjmpi1Dg32UTAhlRlcFsr
-	 UKLfOvt0GbAIWYvaOynCACibHxabakYD35LazrIFriffOBsOoiOG7MNv6FJMwvbx43
-	 Sv45hfvkBDGCcWPdABDvCeENnCbyF23zAJFZzg6cyqE/yPq9YQFenTIWhDwZb0sW2z
-	 q8VDTAbP7zUDQZKmb7JFOQ1/67cnV/iARtxXwaMAETkmuJKF30hrwnN4xP5AVBKMqr
-	 rWwmDgDEG/hOsMzX535nwZ6cJbdg3KD7kCFnUH3WXnOaoMfFmnk9UXyqg1P05UhEPL
-	 eZB6WJXZuqnBg==
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-9495f083657so886147885a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 08:56:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErHP2t+3DlUhDueG2k8Q0uHaJ4XdTucpasvXCBEGwEPc09xqRD8SZcHXhnmuZ/wlhZbk5eiDPZg9jo2Ntr6g12k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/lT6D6Bjd2kO2JTW1wHXZwP2jHgAV9MpyRMfXhlvgtIDQ14TxB
-	FMDlKdi0iJ+UyNXyGAJEhh2K0pDE2W1hGvIMMANQWnQgqFvRFDDvzDkQgRO0Vv2r2Dd1W03XqLO
-	VoxFG1RZUeLv8Y3TS1cuMOnsMhYTwgGI=
-X-Received: by 2002:a05:620a:649a:b0:949:752d:31e6 with SMTP id
- af79cd13be357-949bac8557bmr4188486185a.79.1795798590170; Fri, 27 Nov 2026
- 08:56:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.a=rsa-sha256 header.s=google header.b=hLpAPOWR
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-53639b8903bso99128621cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 09:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1795799244; x=1796404044; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=iIDdrX9Im0YtrcnZJ8KtkgD4n/tK93wVoTEyhvvYAHU=;
+        b=hLpAPOWRY7vTqoqj/VpAI3MIy/Dx8pPyh+PJKOuSfIcD254Kk/4gkRx3B2QyxSqbwp
+         fSdzCyryN+vNUIa0tkYGg6M1xAaezMYdTW9co5HGl80FeMoyGjN2wXNcf32K9XKYm2HB
+         gTEnzSjwz6Q0JhUNUoiqfDaPs617ZtzxVvpdee3ATRz9OIjqPuAzY5bUEQaX0Rg61YWN
+         2NH/p2cucwDNSxXN1mXjxEj+OoVaSDtXHWj22NeH/QgwylG2TIuj5Y0KTcMDZxrLqjba
+         K47jaNvOunsnzH0hBIkqJedgONyAnXTMLvQ9H/TGcfrRjPXzSdjuVpbwgVsmDB8Td5lo
+         Ep8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795799244; x=1796404044;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iIDdrX9Im0YtrcnZJ8KtkgD4n/tK93wVoTEyhvvYAHU=;
+        b=NNVERbDvBBBrFRGPOjEmVUtxCU1x2UMpTVcl/Eo4SI9QJ3zgKr8VmSwEAe1IgfwbvG
+         BdPvBcZm0o4o54+pnT5OtNnHiH7sW7+i9kDfRstwzU+NjXrGfGOQM1k/rAO+ORyrTa3S
+         0zFbv5naoW13sSWwwz0jFEMKR4oFeN22GBqfZmYnibZrOLUBnKxD+BU6aB5LV3o+ssxp
+         n2ulKRKOyclPGazw/UJixap9Eoy+PT/Rujl176NJ+o4EludRjl8uHHTjCbCtwmwrVRgB
+         bVTxvSbLi8u/pzV6kp1ECeZvrEYXJySI5L0qnSRRAKFIzAy7HPmG7WzaMnHDhArN9kD/
+         q3Aw==
+X-Forwarded-Encrypted: i=1; AL+hErHolGKwI7ntXrN2Gs6mLnM0ngdromzKJ1GD+bMX2gijwHUTb60P3+36W7U8TRVWkMqJT9N6EK+R9avE+d17qBs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8qGIDOMn6ykWgwcSmzJi+mRUKNqTi3Hr8EMO8TBuZj7YIdatfO
+	GcrXvUrAH98Zv4t58PI2k+YOACNGjPIiUcz22TVpQ2/3W5bJhcZbdae2VRz8ldp41Jc=
+X-Gm-Gg: AZFdTZchvgQcIqzmRoz5YRmE9W0va4s9eDInu+7ThSWE8GvWl1RnFFPdhXMeaQxhRHZ
+	oSFfknz8ElaF+LiBK+E2ujZIBRIP6+cAzlXQGSiRTPERyh+J3xcyuweyG+45NhPN0aX3tZ6Stez
+	aa4qHVL74BK3mFZLCSwpWrXnqpEvidw9TboB/JMCWZUddYJuwaed2o/ZjZqYWfF786Sw/oDfzx8
+	iyDfneSckgxCrlI8Rah/8nsAzRlI/vCMhAW1mMP238C2hR9waYjtOti1EII6xVt2UfyjPH0Zc5l
+	TJc5/GFvYU3QUfD71Mnp+erp1gIpjlx07gXxw1EXoS1cBkArdTQFTeec/vg/lXFwFZrrwEXKN0W
+	hd8xMlyN/MAGgylBOrw/BcW4iOjNt5EF2hvxLp017ePz7OaeWv8/vOsvh6IfNTV0N4GXgQoGVgq
+	R/H5jePouXWfz/OzpsuCtdTS7ZUor+e5agaAtzr1cso5qtvRu7x+BYtnt26V0VLURBppiAb+/rS
+	miWnnjNHVg5VeggLW5XkILL5be/B2CYSE+lIOmc4L57mswHiQdBg8aFcKl9JgmBPQxgq51El1k/
+	rqxMlA==
+X-Received: by 2002:a05:622a:400d:b0:536:7f96:915c with SMTP id d75a77b69052e-55d6fbfc5f7mr441942441cf.5.1795799243423;
+        Fri, 27 Nov 2026 09:07:23 -0800 (PST)
+Received: from ziepe.ca ([142.177.118.84])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55d7882e32dsm214830511cf.13.2026.11.27.09.07.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2026 09:07:22 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1xWzPu-000000079Rg-05Sr;
+	Fri, 27 Nov 2026 13:07:22 -0400
+Date: Fri, 27 Nov 2026 13:07:22 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-acpi@vger.kernel.org,
+	acpica-devel@lists.linux.dev,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Suzuki Poulose <suzuki.poulose@arm.com>,
+	Steven Price <steven.price@arm.com>,
+	Sami Mujawar <sami.mujawar@arm.com>, thuth@redhat.com,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+	Pawel Chmielewski <pawel.chmielewski@intel.com>,
+	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>, Len Brown <lenb@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH RFC v3 7/8] attestation: providers: introduce CCA Guest
+ attestation provider
+Message-ID: <20261127170722.GT246011@ziepe.ca>
+References: <20261127-arm_cca_mr-v3-0-df3230afce8f@arm.com>
+ <20261127-arm_cca_mr-v3-7-df3230afce8f@arm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,63 +117,212 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261127142131.3527737-1-bjorn@kernel.org> <20261127142131.3527737-4-bjorn@kernel.org>
- <awmmhuuailYkTtLu@boxer>
-In-Reply-To: <awmmhuuailYkTtLu@boxer>
-From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date: Fri, 27 Nov 2026 17:56:18 +0100
-X-Gmail-Original-Message-ID: <CAJ+HfNhwOrsGZoUz4wYokaGOOzEeCTAdkVUtvY5REV27gkbDww@mail.gmail.com>
-X-Gm-Features: Aa3M54rS-Z7TnayrDFO8SKtWi5cnEqowLhI7xQRnBgqe0ZPhgLbFwKqxRVt_Mys
-Message-ID: <CAJ+HfNhwOrsGZoUz4wYokaGOOzEeCTAdkVUtvY5REV27gkbDww@mail.gmail.com>
-Subject: Re: [PATCH net 3/3] selftests/bpf: Drop the zero-copy tailroom from
- the xsk tests
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, Simon Horman <horms@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Larysa Zaremba <larysa.zaremba@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, Colin Ian King <colin.i.king@gmail.com>, 
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261127-arm_cca_mr-v3-7-df3230afce8f@arm.com>
 
-On Fri, 27 Nov 2026 at 16:49, Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Fri, Nov 27, 2026 at 03:21:29PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
-> > The xsk tests take the size of the shared info off the UMEM headroom
-> > of RX_DROPPED and off the growth of XDP_ADJUST_TAIL_GROW_MULTI_BUFF,
-> > as zero-copy multi-buffer pools kept it at the end of each chunk.
-> >
-> > The previous patch moves the shared info into the buffer pool, so the
-> > UMEM headroom limit and the frame size no longer leave room for it.
-> > Drop it from both tests.
-> >
-> > Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
-> > ---
-> >  tools/testing/selftests/bpf/prog_tests/test_xsk.c | 10 ++++------
-> >  tools/testing/selftests/bpf/prog_tests/test_xsk.h |  2 --
-> >  tools/testing/selftests/bpf/prog_tests/xsk.c      | 13 +------------
-> >  tools/testing/selftests/bpf/xskxceiver.c          | 15 +--------------
->
-> This is based on old xskxceiver location, would it be better to have this
-> one send to -next out of this set? I assume the move might not have been
-> back-propagated yet...so seems we would have to double the effort?
+On Fri, Nov 27, 2026 at 03:33:02PM +0000, Yeoreum Yun wrote:
+> Introduce CCA Realm Guest attestation provider for retrieving:
+> 
+>   - RIM, REM0-REM3 measurement registers.
+>   - CCA attestation token
+>   - CCEL event log
+> 
+> used for CCA Realm Guest attestation.
 
-Ya, good call. I'll pop this out of the series, and respin a v2 w/o this.
+This is great to see positive proof that the API fits CCA!
 
-Please have a look at the Intel side of things if 1 and 2 is a good
-fit. I'll spin a v2 when Sashiko has spoken!
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+>  drivers/attestation/Kconfig               |  10 +
+>  drivers/attestation/Makefile              |   5 +
+>  drivers/attestation/providers/cca_guest.c | 582 ++++++++++++++++++++++++++++++
+>  3 files changed, 597 insertions(+)
 
+But we need to do alot more work on this to make the drivers slimmer.
 
-Bj=C3=B6rn
+First, we need to pull drivers/virt/coco/arm-cca-guest/main.c which is
+the evidence part of this driver into drivers/attestation and build
+the MR stuff on top of that.
+
+Second, things like CCEL need to be handled by core code. The driver
+should only indicate it "claims" the CCEL if the core code happens to
+find one. TDX and ARM shouldn't have any direct CCEL stuff beyond
+that.
+
+Similarly the TCG log should work the same way.
+
+I'm also wondering if too much code is leaking into to drivers to
+implement the uAPI. We should take a look at this vs the TDX one and
+make sure we have the right level of helpers and abstraction.
+
+I also can't help but notice there isn't a single comment in any of
+this, it should be a bit more descriptive why some of these things are
+in here.
+
+> +static enum hash_algo cca_guest_attestation_algorithms[] = {
+> +	HASH_ALGO_SHA512,
+> +};
+
+static const
+
+> +
+> +static const struct attestation_mr_props cca_guest_attestation_mrs[] = {
+> +	{
+> +		.id = 0,
+> +		.name = "rim",
+> +		.algorithms = cca_guest_attestation_algorithms,
+> +		.algorithms_count = ARRAY_SIZE(cca_guest_attestation_algorithms),
+> +	},
+> +	{
+> +		.id = 1,
+> +		.name = "rem0",
+> +		.algorithms = cca_guest_attestation_algorithms,
+> +		.algorithms_count = ARRAY_SIZE(cca_guest_attestation_algorithms),
+> +		.has_register_index = true,
+> +		.register_index = 0,
+> +		.extendable = true,
+> +	},
+> +	{
+> +		.id = 2,
+> +		.name = "rem1",
+> +		.algorithms = cca_guest_attestation_algorithms,
+> +		.algorithms_count = ARRAY_SIZE(cca_guest_attestation_algorithms),
+> +		.has_register_index = true,
+> +		.register_index = 1,
+> +		.extendable = true,
+> +	},
+> +	{
+> +		.id = 3,
+> +		.name = "rem2",
+> +		.algorithms = cca_guest_attestation_algorithms,
+> +		.algorithms_count = ARRAY_SIZE(cca_guest_attestation_algorithms),
+> +		.has_register_index = true,
+> +		.register_index = 2,
+> +		.extendable = true,
+> +	},
+> +	{
+> +		.id = 4,
+> +		.name = "rem3",
+> +		.algorithms = cca_guest_attestation_algorithms,
+> +		.algorithms_count = ARRAY_SIZE(cca_guest_attestation_algorithms),
+> +		.has_register_index = true,
+> +		.register_index = 3,
+> +		.extendable = true,
+> +	},
+> +};
+
+Jiri this probably isn't going to scale when we get to 32 PCRs on a
+TPM.
+
+> +
+> +static const struct attestation_evidence_format cca_attestation_token_formats[] = {
+> +	{ .vendor = true, .value = CTLV_ATTESTATION_CCA_GUEST_EVIDENCE_VENDOR_FORMAT_CCA_ATTESTATION_TOKEN },
+> +};
+
+should be the generic EAT token type
+
+> +
+> +static const struct attestation_evidence_format cca_guest_attestation_log_formats[] = {
+> +	{ .value = CTLV_ATTESTATION_EVIDENCE_FORMAT_CCEL },
+> +};
+> +
+> +static const struct attestation_evidence_challenge_length
+> +cca_guest_attestation_challenge_lengths[] = {
+> +	{ .min = RSI_ATTEST_CHALLENGE_MIN_SIZE, .max = RSI_ATTEST_CHALLENGE_MAX_SIZE },
+> +};
+> +
+> +static struct attestation_evidence_supported_object
+> +cca_guest_attestation_evidence_objects[] = {
+> +	{
+> +		.evidence_class = ATTESTATION_EVIDENCE_SIGNED,
+> +		.formats = cca_attestation_token_formats,
+> +		.formats_count = ARRAY_SIZE(cca_attestation_token_formats),
+> +		.challenge_lengths = cca_guest_attestation_challenge_lengths,
+> +		.challenge_lengths_count =
+> +			ARRAY_SIZE(cca_guest_attestation_challenge_lengths),
+> +		.max_length = 0,
+> +		.binds_mrs = true,
+> +	},
+> +#ifdef CONFIG_ACPI
+> +	{
+> +		.evidence_class = ATTESTATION_EVIDENCE_EVENT_LOG,
+> +		.formats = cca_guest_attestation_log_formats,
+> +		.formats_count = ARRAY_SIZE(cca_guest_attestation_log_formats),
+> +		.max_length = 0,
+> +	},
+> +#endif
+
+Jiri, same scaling issue, CCEL should be handled by core code so it
+needs to be inserted dynamically into the evidence list.
+
+> +static long cca_guest_get_max_token_size(void)
+> +{
+> +	u8 dummy[RSI_ATTEST_CHALLENGE_MAX_SIZE] = { 0x00, };
+> +
+> +	return rsi_attestation_token_init(dummy, RSI_ATTEST_CHALLENGE_MAX_SIZE);
+> +}
+> +
+> +static int cca_guest_get_attest_tokens(const struct cca_guest_attestation *cca_guest_att,
+> +				       const void *challenge, size_t challenge_size,
+> +				       u8 *token, size_t *token_size)
+> +{
+> +	int ret;
+> +	long max_token_size;
+> +	void *buf;
+> +	unsigned long granule, offset, len, rsi_ret;
+> +
+> +	guard(migrate)();
+> +
+> +	max_token_size = rsi_attestation_token_init(challenge, challenge_size);
+> +	if (max_token_size <= 0)
+> +		return -EINVAL;
+> +
+> +	if (max_token_size != cca_guest_att->max_token_size)
+> +		return -ESTALE;
+
+What is this and the related work? That isn't making sense to
+me. If the token size is not absolutely fixed when the driver starts
+then it should be fully dynamic and this just streams the variable
+sized token.
+
+Ideally directly into user memory so we don't need to allocate a kvmalloc.
+
+> +static int
+> +cca_guest_attestation_evidence_get(struct attestation_dev *att,
+> +				   const struct attestation_evidence_request *request,
+> +				   struct attestation_evidence_result *result)
+> +{
+> +	struct cca_guest_attestation *cca_guest_att = to_cca_guest_attestation(att);
+> +	size_t i, length;
+> +	void *buffer;
+> +	int ret = 0, ccel_obj_idx;
+> +
+> +	ccel_obj_idx = cca_guest_att->ccel_obj_idx;
+> +
+> +	for (i = 0; !ret && i < request->objects_count; i++) {
+> +		const struct attestation_evidence_object_request *object =
+> +			&request->objects[i];
+> +		struct attestation_evidence_object_result *produced =
+> +			&result->objects[i];
+
+I feel like the core code should be doing more of this for the
+drivers... Drivers should have an op to return a single evidence, for
+an ID that they control. ie the core code should be returning the CCEL
+for its id, and when we get to SPDM other common code will handle ids
+too.
+
+Maybe the evidence itself needs an ops?
+
+> +static const struct arm_smccc_device_id cca_guest_attest_id_table[] = {
+> +	{ .func_id = SMC_RSI_ABI_VERSION, },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(arm_smccc, cca_guest_attest_id_table);
+
+This isn't OK.. We only get one struct device per RSI and it gets to
+bind to only one driver. Given there are other drivers that will need
+to use the RSI, like the TSM and others, this needs some other
+solution?
+
+Jason
