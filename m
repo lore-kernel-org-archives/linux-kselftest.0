@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795793260;
-	b=MS/8whN+v/9kij1DJCnimuKZxVdGwHYxUi1ViB+AoUUQotbozAdq8cARMKin0/8VZYxc
-	 liRj8Xb7ete0E24lSqq/ESxpdv06W+6nTKanAIxurFeh/qVZ8n2X3niZ/VJrBSTzed1uC
-	 a3kttNXDFLPVV4mU5q8ljk10hLfg4tkeKMwaieXJOXSY9HJxVbbf10idku66OCqeHIdoJ
-	 btS56c4TsePpKFC0GlcvOr1AQYn8WM2AnM1qPJ8y2+Qu3eS0xFSygzbgz6AOrEdU6oMVi
-	 Yu2mjMDqmqLN9mYoX935q0fxp4uuEW1rtE3A23dDEE0Jis55FQyXua4SsLp6rjUlJlw==
+	t=1795793257;
+	b=F2t77pBGIvTWppgWnjeDLHxGOEj7FDDG8frB8NYEqT7cW9QkS+mBYZMyvD7Qn2BEfGQw
+	 GjfWJ54nawhFYL40NSvPOkoiuDTTHBrFaBot5aAhVAFhrYVwbmaSIzFEgxVQz75BQcP5H
+	 NTE7SgJnS7ElvvW2+cSAGwUy34Ggax1egh4UGU/dBJ/l3WEwmoCzmlvalp+oUt9MgieEe
+	 bQ5ycmd6lHueXPVis2g9X5ZY0p5DS+Sv6G2G4iwRMao45rPuD8/nZ2Z11Ts80ylVSqFdA
+	 6CRcyO8fTNTT4n6w0qkZ0btJ2swB1ZjdbQOqcstocvjv7TN7Z3z0y1M9HJkCO/KNHPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795793260;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795793257;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=Blb7Mg/UOWA71rnTCoPfVbDymfiRcX3jB92crLcpHmM=;
-	b=KZchYnWb5Yxu3SeBrbetUfKQ1HPnKzJTHMk00ejieAO5T2Pjf9zYtuV2aLT2FIQKdaO6
-	 9uFMBnE7Fl9wYrSMEbZI18HSaTILSPVVwQ9dJOLoWPzcxOrBliuSFShZaoe69Cf627So7
-	 Y1DsSD8b9y6S985ZvrOc8T6Z9j8w0NzVhDomr4dI9TSaR5wkb13dshiTKXNSIizkBVE3g
-	 F7GqlO5shEC3oLZywr4pvTthdS6jtfymBe/iyCpOreCJoPTkDTuMxqL/bJCdX9RwIxLJy
-	 TWXXyUTHenqQOWoSN4xCX9fGUI6cN3JqxX5l5Bm3JDzI920ePXhbPUidtPNjtVSM3HQ==
+	bh=HRdPsM8k7LxHkJKc9/GKJtL7QWO/APvPQxk6NOXwn1I=;
+	b=GWQBCMF6tmgG2sjMYlIJ9uByTmIOCGNzRfSRoJ+dt80fANoVpIwXjUV7NXfL9pe7tJVb
+	 GeOavTrs9D+KijNlnw58/zjjje3oTZ9H2v9M1CFZN6+YqHF/iX8Y4am1M4qhuN9qjgKID
+	 zIgLyDso1I5yqBgcC2qA7V9zGLkowOrrfiyWpxFSYs2VVsygrriLuLLSe8mXgrPnSMh7q
+	 +FQVEQlmDBwM8Sn3F+SNC0TLQc7jTlqHShocArcXSM0nmzJO2tejzVoBivdyRJWLifbcP
+	 EGI0KYd9KW7Zt0c/kqA2MjmmkfCihMwnwXFr+rHorQUaTeX23ioeLeEsAKSY2/twVQg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=BE8Zt7ij;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	spf=none smtp.mailfrom=casper.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=bN51kz8A;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEC460A261F;
-	Fri, 27 Nov 2026 15:27:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDEC460A261F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED5D606A31E;
+	Fri, 27 Nov 2026 15:27:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2ED5D606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=BE8Zt7ij
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=bN51kz8A
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Blb7Mg/UOWA71rnTCoPfVbDymfiRcX3jB92crLcpHmM=; b=BE8Zt7ijIQFxXAcVLD3kw9fV5L
-	FC+rM3e69g9WhhZzgQJnlvSYGeAxFusbMqdVLG6CCVAJq5Pa3HuOZIDXFUB8peSewuR/JVUAQLslH
-	pTTpi9gIo8yYJEWa/hIzH7wmvkepmQsOG1M2Qz61Eyhg/MlPa2L9HWyXfwcjco8Wsx66j34sQrEFH
-	vCN/+Jmha3jYtwKybOd2vwrv5JiG5pWk1YfGi6yUJNdcSupc54hF4rCueK09FkWb4NZ+y5ZHWkrHe
-	m2teBxZpLUMAZRp8AwlNZvKEMtMb5UbZ07ZyfM4jHp/kapAFy8oBP9OqVYI5oSfD5SJCwu4EFv/rU
-	O6qWzTiw==;
+	bh=HRdPsM8k7LxHkJKc9/GKJtL7QWO/APvPQxk6NOXwn1I=; b=bN51kz8AqdcMI7Ca2+YkK0QH6y
+	qMq5tVCh++osclO5Qk4B6nUiVdaT/rdxlV3K4kQR65Fcfcfr/d2ITmIiP2+kmZMjQ+fONgRI8kuuk
+	Gic4OR68mqen0VPo0Gn8+AlXROKWVxUnh9Zvb2kHsZFOsAVXiwbGiYF8WvNzMoV4DicXEhnubu1NN
+	eyTTUMhKbcIGNkH3opTl6QLzhGfuGHe+hQQKr6zX443jX14k4BkhMyaI5gSZEvTMj98YUGu0NwQie
+	Tg34NGLdy/lKRIQXj9WEIJsKXx4f1AiFOG6vh+exIbMJV3L/cEvJHyo3EEoqoWUgBNAMjAJFVEJ7b
+	hpuOxrpg==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xWxrJ-00000007tkn-2Ea9;
-	Fri, 27 Nov 2026 15:27:33 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xWxrG-0000000Gy3X-46gt;
+	Fri, 27 Nov 2026 15:27:31 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xWxrG-00000000PqS-2Oj9;
+	id 1xWxrG-00000000Pqm-3Fgj;
 	Fri, 27 Nov 2026 15:27:30 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
@@ -89,9 +89,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Liran Alon <liran.alon@oracle.com>,
 	Arbel Moshe <arbel.moshe@oracle.com>,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v3 07/15] KVM: x86: hyper-v: Advertise XMM fast hypercall output
-Date: Fri, 27 Nov 2026 15:27:22 +0000
-Message-ID: <20261127152730.99319-8-dwmw2@infradead.org>
+Subject: [PATCH v3 12/15] KVM: SVM: Support CR0 and CR4 write filters
+Date: Fri, 27 Nov 2026 15:27:27 +0000
+Message-ID: <20261127152730.99319-13-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261127152730.99319-1-dwmw2@infradead.org>
 References: <20261127152730.99319-1-dwmw2@infradead.org>
@@ -106,36 +106,146 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-A fast hypercall may return its output in XMM registers when the
-hypervisor reports HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE, and Windows
-only uses those forms when the bit is set.  KVM does not report it,
-although a VMM handling a forwarded fast hypercall can write the output
-through the vCPU FPU state.
-
-Report the bit.  None of the hypercalls KVM implements itself returns
-output, so it only matters for those which the VMM handles.
+Keep INTERCEPT_CR0_WRITE set in vmcb01 while a CR0 filter is armed,
+and check the filter in cr_interception().  Without NextRIP the write
+goes to the emulator, which knows the instruction length.  L2 is not
+filtered.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- arch/x86/kvm/hyperv.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/svm/svm.c | 66 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 65 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 67c9d20547d8..bf0e37d026c0 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -2882,6 +2882,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 			ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 4ffb41234dc2..c91467a59e20 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1135,6 +1135,22 @@ static void svm_recalc_intercepts(struct kvm_vcpu *vcpu)
+ 	svm_recalc_msr_intercepts(vcpu);
+ }
  
- 			ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
-+			ent->edx |= HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE;
- 			ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
- 			ent->edx |= HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
++static void svm_update_reg_write_filter(struct kvm_vcpu *vcpu)
++{
++	struct vcpu_svm *svm = to_svm(vcpu);
++
++	/*
++	 * CR4 writes are always intercepted.  CR0 writes are not when the
++	 * guest and host views agree (hcr0 == cr0): force the intercept in
++	 * vmcb01 while a CR0 filter is armed.  Disarming leaves the
++	 * intercept in place - a forced intercept only costs exits, which
++	 * cr_interception() handles as usual - and the next svm_set_cr0(),
++	 * which respects the filter, restores its own state.
++	 */
++	if (vcpu->arch.reg_write_filter_armed & BIT(KVM_X86_REG_FILTER_CR0))
++		svm_set_intercept(svm, INTERCEPT_CR0_WRITE);
++}
++
+ static void init_vmcb(struct kvm_vcpu *vcpu, bool init_event)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -1867,7 +1883,13 @@ void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+ 	if (hcr0 == cr0) {
+ 		/* Selective CR0 write remains on.  */
+ 		svm_clr_intercept(svm, INTERCEPT_CR0_READ);
+-		svm_clr_intercept(svm, INTERCEPT_CR0_WRITE);
++		/*
++		 * The selective intercept misses writes that change only
++		 * TS or MP, and CLTS: a CR0 write filter needs them all.
++		 */
++		if (!(vcpu->arch.reg_write_filter_armed &
++		      BIT(KVM_X86_REG_FILTER_CR0)))
++			svm_clr_intercept(svm, INTERCEPT_CR0_WRITE);
+ 	} else {
+ 		svm_set_intercept(svm, INTERCEPT_CR0_READ);
+ 		svm_set_intercept(svm, INTERCEPT_CR0_WRITE);
+@@ -2647,6 +2669,21 @@ static bool check_selective_cr0_intercepted(struct kvm_vcpu *vcpu,
  
+ #define CR_VALID (1ULL << 63)
+ 
++/*
++ * Send an intercepted write which a register write filter catches to
++ * userspace instead of performing it.  The caller has checked that the
++ * length of the instruction is known.
++ */
++static bool svm_reg_write_filtered(struct kvm_vcpu *vcpu, u32 reg,
++				   unsigned long old, unsigned long val)
++{
++	if (!kvm_reg_write_filtered(vcpu, reg, old, val))
++		return false;
++
++	kvm_reg_write_user_space(vcpu, reg, old, val, svm_exit_insn_len(vcpu));
++	return true;
++}
++
+ static int cr_interception(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -2660,6 +2697,16 @@ static int cr_interception(struct kvm_vcpu *vcpu)
+ 	if (unlikely((svm->vmcb->control.exit_info_1 & CR_VALID) == 0))
+ 		return emulate_on_interception(vcpu);
+ 
++	/*
++	 * A filtered write reports the length of its instruction, which only
++	 * NextRIP provides here.  Without it, let the emulator raise the exit,
++	 * as it does without Decode Assists.
++	 */
++	if ((vcpu->arch.reg_write_filter_armed &
++	     (BIT(KVM_X86_REG_FILTER_CR0) | BIT(KVM_X86_REG_FILTER_CR4))) &&
++	    !svm_exit_insn_len(vcpu))
++		return emulate_on_interception(vcpu);
++
+ 	reg = svm->vmcb->control.exit_info_1 & SVM_EXITINFO_REG_MASK;
+ 	if (svm->vmcb->control.exit_code == SVM_EXIT_CR0_SEL_WRITE)
+ 		cr = SVM_EXIT_WRITE_CR0 - SVM_EXIT_READ_CR0;
+@@ -2673,6 +2720,14 @@ static int cr_interception(struct kvm_vcpu *vcpu)
+ 		trace_kvm_cr_write(cr, val);
+ 		switch (cr) {
+ 		case 0:
++			/*
++			 * The filter never triggers in guest mode and the
++			 * selective-CR0 reflection only applies there, so
++			 * the order of the two checks does not matter.
++			 */
++			if (svm_reg_write_filtered(vcpu, KVM_X86_REG_FILTER_CR0,
++						   kvm_read_cr0(vcpu), val))
++				return 0;
+ 			if (!check_selective_cr0_intercepted(vcpu, val))
+ 				err = kvm_set_cr0(vcpu, val);
+ 			else
+@@ -2683,6 +2738,9 @@ static int cr_interception(struct kvm_vcpu *vcpu)
+ 			err = kvm_set_cr3(vcpu, val);
+ 			break;
+ 		case 4:
++			if (svm_reg_write_filtered(vcpu, KVM_X86_REG_FILTER_CR4,
++						   kvm_read_cr4(vcpu), val))
++				return 0;
+ 			err = kvm_set_cr4(vcpu, val);
+ 			break;
+ 		case 8:
+@@ -5617,6 +5675,8 @@ struct kvm_x86_ops svm_x86_ops __initdata = {
+ 
+ 	.apic_init_signal_blocked = svm_apic_init_signal_blocked,
+ 
++	.update_reg_write_filter = svm_update_reg_write_filter,
++
+ 	.recalc_intercepts = svm_recalc_intercepts,
+ 	.complete_emulated_msr = svm_complete_emulated_msr,
+ 
+@@ -5722,6 +5782,10 @@ static __init void svm_set_cpu_caps(void)
+ 	if (cpu_feature_enabled(X86_FEATURE_BUS_LOCK_THRESHOLD))
+ 		kvm_caps.has_bus_lock_exit = true;
+ 
++	/* CR0/CR4 write interception can always be forced. */
++	kvm_caps.supported_reg_write_filter |= BIT(KVM_X86_REG_FILTER_CR0) |
++					       BIT(KVM_X86_REG_FILTER_CR4);
++
+ 	/* CPUID 0x80000008 */
+ 	if (boot_cpu_has(X86_FEATURE_LS_CFG_SSBD) ||
+ 	    boot_cpu_has(X86_FEATURE_AMD_SSBD))
 -- 
 2.50.1
 
