@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795818356;
-	b=1HW076wCJpRelGa5CLJyZyrCWe3QFUcuPeXyMUPgZLmn5lutnmaddulc8eY6y9Y+L7Gk
-	 zRQa2iYvAEC2In/HlhyX1RGAIb9PP4LzIBMzijysBnd2fDSmt0JhuDb5tSp7sbSLSdFBj
-	 ILEk2RcJX1t1anIIggxvJ9SFaOuQ0qTS3EluCfXGFpHBJWShNXswUyOyJTU0Ao5JU7Ip1
-	 MqbF9+W/fBZWJW0Ejf5ByG/6UGVYhhBWfhNgWjjxWumJ2YORVoI+ndm1rJnqdn92U5y2K
-	 4YEAfxOOovJ0oIvyTT47ldY83mcickRuxWuLzaFyTFV1QSidPEnbvQNGnvN+fXFQ9Ug==
+	t=1795818354;
+	b=KAP5N2Cb68dR2ergbretCpRqy+ozzJRR/wNr1KkIFsTCenp7S0vm7DkIXR2VIJ6HSXjd
+	 IU/k06zFe2pR44yqG4aZvr9vIOEPGSBqnOUQWMwEKwYtEhPIqP3m48rZaH3lp3GOn1BXr
+	 Kx8ZbDe0QRx012Pr325UT2on2XiI3aqdeq6phYAphDc6cGYY0UAZiaQr6ORAAlMr4d6/3
+	 rdxuY3QI+dMwcflNBt+lN6iyD86xDlZAdz/AiVAC0rLdWpwB8YMSnpLjshqIs2/FG2KzT
+	 m+JyJBd56boFvkK4SZuip0jSRiNJHIrbXLy6JwSJCpBp8zhcBl7RhurSV6Zj5HkeVgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795818356;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795818354;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=xJRmzNvq1O79iasY33Ckwg4qBT9YXe3i0Q0gMj2U+Y0=;
-	b=D8Phji+z2JF70V+DYtdkT/73q/aI722F1YsgZaqRdbfF04xFRilYcJnYr6JrFoQ5p8fv
-	 aEtvmePqJmZa3al9IWFltlJvZanJW6Ohwww6gprze9/MaM84OJFEFgtvfSVH+kczTN4wt
-	 d3qJY3LiV7XBt2e7aU48Z5l27uvLDLVIay8/t1SB0+1G7SlesaPQkNkjt+T6xHSDc2XLN
-	 xpqX1KZkEi1sRD0mdkHb+osBiF/5CYp8y+FDNVcf2Zx/mIipF78S7OUycQnjqBhMEE0n4
-	 uYGe5DXkVE0shv5FJW4vY8ONiYVj6kf0oocTgS4onUuEq+IYd0W07YHQ9OIc15FAopQ==
+	bh=tPh1YE5zdqzDBoq23ydOXnyk0skwsBUIZkT0OnzQmAg=;
+	b=UTsaSi8eGx/nwJsAW0HE5kCYr2GzkyOG2rty1HQlBbHV/SL7ciIKbPCir6yBWiWp5O+2
+	 zh3GXVNBiDiohO/0CsXbLqrhc2Ifke9OlLIn640WUonEkUz8lY1qcR/R14En2acNebM3W
+	 X8noHJzasQ+HFjJRCQW5LzR8+BX4FvRl+UftbTKOGiUVn4kp0tEBBjxURKODAQypommv/
+	 r3oddbPxNzUQGaP/lRQcP324MlCijMKSu30H2Eh94rqUwsotkJHjx6xw3UWQj0cON8nLo
+	 Cx5tTF1055g8y1uXqETvUvPYRWGCP+PT4exzugXyimekEG92b9QDtxTL5ucf1nyGrZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bJaBinNW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YTveu0PR;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489DE606A326;
-	Fri, 27 Nov 2026 22:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bJaBinNW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB201F000C1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CC3606A31E;
 	Fri, 27 Nov 2026 22:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YTveu0PR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 483091F00919;
+	Fri, 27 Nov 2026 22:25:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795818355;
-	bh=xJRmzNvq1O79iasY33Ckwg4qBT9YXe3i0Q0gMj2U+Y0=;
+	s=k20260515; t=1795818354;
+	bh=tPh1YE5zdqzDBoq23ydOXnyk0skwsBUIZkT0OnzQmAg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=bJaBinNWkcj4mgWSBRNvCS2tKhK+mjiTKF8/RwIFfrUEoEZ9TPBx794qSrTZMYkc5
-	 jK+9FYweOL3n/0mcVn9iwd/VqGiEH5vLpb5xlwr7QCPvrdMWjEKM+V4Ht0mLbCtcst
-	 DjX1qDFxxUfOD5E0fGzf3HgV9E0jzovsvX15uOuFFu4OXHstxZO/rQXVZ8UusbFtlm
-	 Mhw3rgTyISz1wVbpUnNo/pykEudYHEuU4HLurDv0K7pwv6hC+alot+VLM74PaFyi6n
-	 LACjWqGLOiKH9gad8ggzRgfCM98iuCLF0nMhBc45Nnxg42so4zBOc+FCistgIH8wOM
-	 0tbvreiVYG9zg==
-Subject: Re: [PATCH net-next 5/5] selftests: net: add a scale test for LISP
+	b=YTveu0PR97jt56tlHxKXpGMz2L58CqhTckl/RvJjoHehpGVifljK9662WPDE8utks
+	 byVIZecjDAD34nl/G4gGNFgVbaqfyoEz3zUAromr38CG9DcADraqbRtMMSMxZoUHLi
+	 rJST7ZGT2HQhUBj5rrq5kH5TPnphvsFPAqP6Ssxb1fLP0jLTK8ICAKCxwQvXG2wnMF
+	 8YdZf/x6mf5eat6BWQdpP/Up0bxVx/ErHP+WIWsdtfwM94tzTAveULmVIypsZzdnSE
+	 A+kq07HVoSbakq7JGjB+mAYwwQ4DqxoF3izbgFo8arfLt//jQVyokJPH7BLiF2a/TL
+	 rN6tmU4S23ilg==
+Subject:
+ Re: [PATCH net-next 4/5] selftests: net: add a test of the LISP devices
 From: netdev-bot+sashiko@kernel.org
 To: vjardin@free.fr
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
@@ -49,11 +50,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
  skhan@linuxfoundation.org, rdunlap@infradead.org, shuah@kernel.org,
  linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Fri, 27 Nov 2026 22:25:54 +0000
-Message-ID: <179581835452.3135.4676723835518066022@kernel.org>
-In-Reply-To: <20261126-for-upstream-lisp-v1-v1-5-7382a4bcfd9b@free.fr>
-References: <20261126-for-upstream-lisp-v1-v1-5-7382a4bcfd9b@free.fr>
-X-sashiko-severity: Medium
+Date: Fri, 27 Nov 2026 22:25:52 +0000
+Message-ID: <179581835281.3135.9886057049539183734@kernel.org>
+In-Reply-To: <20261126-for-upstream-lisp-v1-v1-4-7382a4bcfd9b@free.fr>
+References: <20261126-for-upstream-lisp-v1-v1-4-7382a4bcfd9b@free.fr>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -66,131 +67,106 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The background loops in churn_test()
-  (tools/testing/selftests/net/lisp_scale.sh) can be left running when…
-- [Low] The sub-tests in tools/testing/selftests/net/lisp_scale.sh depend
-  on each other through hard-coded state.
+- [Low] The whole selftest needs an iproute2 that supports the new 'lisp'
+  link type, and nothing in the series says so.
+- [Low] In mtu_test() (tools/testing/selftests/net/lisp.sh:468-492), the
+  `for family in 4 6` loop flushes h1's route caches only after both…
 
 --
 
-selftests: net: add a scale test for LISP
+selftests: net: add a test of the LISP devices
 
-This adds lisp_scale.sh, a selftest that installs the mappings of many
-remote sites on one LISP device of an xTR. Each site gets one nexthop and
-four EID routes, and a second namespace stands in for all the sites. The
-sub-tests cover counters, RLOC moves and replacements, withdrawals, churn
-under traffic, and taking the device down and deleting it.
+This adds tools/testing/selftests/net/lisp.sh. In the test, two xTRs carry
+the traffic of two hosts through a core router. x1 keeps its EIDs and its
+RLOCs in separate VRFs, and x2 uses its main table. The net selftest
+config, the Makefile and MAINTAINERS are updated to match.
 
-> diff --git a/tools/testing/selftests/net/lisp_scale.sh b/tools/testing/selftests/net/lisp_scale.sh
+> diff --git a/tools/testing/selftests/net/lisp.sh b/tools/testing/selftests/net/lisp.sh
 > new file mode 100755
-> index 0000000000000..badba6491a42c
+> index 0000000000000..780053db366bc
 > --- /dev/null
-> +++ b/tools/testing/selftests/net/lisp_scale.sh
-> @@ -0,0 +1,532 @@
+> +++ b/tools/testing/selftests/net/lisp.sh
+> @@ -0,0 +1,1120 @@
 
 [ ... ]
 
-> +churn_test()
+> +mtu_test()
 > +{
-> +	local loops=()
-> +	local pids=()
-> +	local rounds=0
-> +	local site
-> +	local out
-> +	local pid
+> +	local family
 > +
-> +	RET=0
+> +	for family in 4 6; do
+> +		RET=0
+> +		use_rlocs "$family"
 > +
-> +	out=$(mktemp -d)
-
-[ ... ]
-
-> +	for site in 5000 5001; do
-> +		while :; do
-> +			ip netns exec "$x1" ping -q -f -w 1 -I site \
-> +				"$(site_eid4 "$site")"
-> +			ip netns exec "$x1" ping -q -f -w 1 -I site \
-> +				"$(site_eid6 "$site")"
-> +		done > /dev/null 2>&1 &
-> +		loops+=($!)
+> +		h1_ping -M do -s 1416 10.2.0.2
+> +		check_err $? "an IPv4 packet of 1444 bytes is lost"
+> +		h1_ping -M do -s 1417 10.2.0.2
+> +		check_fail $? "an IPv4 packet of 1445 bytes goes through"
+> +		h1_ping -s 1396 fd00:2::2
+> +		check_err $? "an IPv6 packet of 1444 bytes is lost"
+> +		h1_ping -s 1397 fd00:2::2
+> +		check_fail $? "an IPv6 packet of 1445 bytes goes through"
+> +		h1_ping -s 3000 10.2.0.2
+> +		check_err $? "IPv4 fragments are lost"
+> +
+> +		log_test "Device MTU with IPv$family RLOCs"
 > +	done
-
-[Severity: Medium]
-If the script exits before churn_test() reaches its kill_process loop,
-what stops these while : loops?
-
-The loop subshells run in the init netns, and their PIDs are kept only in
-the local loops array. The EXIT trap only runs this:
-
-cleanup()
-{
-	cleanup_all_ns
-}
-
-cleanup_ns() in lib.sh kills only the processes listed by "ip netns pids"
-for the namespace and then deletes it, so it never touches these subshells.
-
-Suppose the script gets Ctrl-C while the churn loop is running. In a
-non-interactive shell, background commands ignore SIGINT. A SIGTERM sent
-only to the script PID has the same effect. In both cases x1 is deleted
-and every "ip netns exec $x1" then fails at once.
-
-Would the two loops then keep forking failing ip processes until someone
-kills them by hand?
-
-The kselftest runner timeout signals the whole process group, so this
-mostly affects manual interruption and harnesses that signal only the
-script PID.
-
-The mktemp -d directory in $out would also be left behind, because
-rm -rf "$out" only runs on the normal path.
-
-Could the loop kill and the rm -rf be registered with the lib.sh defer
-helpers? tests_run() already wraps each test in in_defer_scope.
-Alternatively, the PIDs and $out could live in globals that cleanup()
-handles, or the loops could stop at a deadline instead of using while :.
-
-[ ... ]
-
-> +	rm -rf "$out"
 > +
-> +	(( $(count_nexthops) == LISP_SITES - 1100 ))
-> +	check_err $? "unexpected count of nexthops"
+> +	ip -n "$h1" route flush cache
+> +	ip -n "$h1" -6 route flush cache
 
 [Severity: Low]
-Does churn_test() need to depend on what withdraw_test() did here?
+Does the IPv6 RLOC pass of this loop still exercise x1's lisp101?
 
-The 1100 comes from withdraw_test() deleting the nexthops of sites
-3000..3999 and then 4000..4099:
+In the first pass, x1 refuses the 1445 byte pings because lisp101 has an
+MTU of 1444, which lisp_setup() sets:
 
-	sites_batch "" 4000 4100 'printf "nexthop del id %d\n", nh'
+    dev->mtu = ETH_DATA_LEN - LISP_IPV6_HLEN;
 
-churn_test() deletes and re-adds sites 5000..5199, so it does not change
-the total. This check just repeats the one at the end of withdraw_test().
-move_test() also asserts count_nexthops == LISP_SITES, and most sub-tests
-rely on the sites created by install_test().
+h1 then caches a PMTU of 1444 for 10.2.0.2 and for fd00:2::2. Those caches
+are flushed only after the loop ends. pmtu_family_test() and
+frag_family_test() flush on every pass.
 
-tests_run() in lib.sh iterates ${TESTS:-$ALL_TESTS}, so a subset can be
-run. With TESTS=churn_test, this check would fail, and sites 5500/5501
-would not exist, even if the churn handling itself works.
+In the second pass:
 
-withdraw_test() sends its deletions through ip -batch without -force. If
-it fails partway, the same problem would be reported again here as an
-unexpected count of nexthops.
+- h1_ping -M do -s 1417 10.2.0.2 fails on h1 itself with EMSGSIZE and
+  never reaches x1. The check_fail passes no matter what lisp101 does.
 
-Could this cross-test count be dropped, or compared against a count taken
-at the start of churn_test()?
+- h1_ping -s 1397 fd00:2::2 is fragmented on h1 to the cached 1444, so x1
+  forwards it. The check_fail passes only because x2's lisp101 refuses the
+  1445 byte reply from h2.
+
+- h1_ping -s 3000 10.2.0.2 is fragmented on h1 to 1444 in both passes, so
+  x1 never handles an oversized packet in this test.
+
+Would flushing h1's caches at the end of each pass keep the second pass
+meaningful?
+
+[ ... ]
+
+> +require_command jq
+> +
+> +if ! ip link help lisp 2>&1 | grep -q "^Usage: ... lisp"; then
+> +	echo "SKIP: iproute2 does not know the lisp devices"
+> +	exit "$ksft_skip"
+> +fi
+
+[Severity: Low]
+This isn't a bug, but the whole test needs an iproute2 that supports the
+lisp link type. That covers "type lisp id N local A local A6", "external",
+"link-netns", and the info_data JSON keys id, local, local6 and external.
+
+Neither the commit message nor Documentation/networking/lisp.rst mentions
+this dependency or points to the iproute2 change. With a stock iproute2,
+the test always stops here with SKIP.
+
+Could the commit message say which iproute2 version or patch is needed?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261126-for-upstream-lisp-v1-v1-0-7382a4bcfd9b%40free.fr
