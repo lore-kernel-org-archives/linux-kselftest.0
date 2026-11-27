@@ -1,58 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795804975;
-	b=MV9YHsHmcZ5IGeUlHxNCwILx3EXd2ioSOv2VgzrVcETo6ZTxcbfJB4qVVpFbdRbiI5Zx
-	 BFbA9Q9S6/hoHDBb9kAklF+08j4gnKZEI/l3jTSeEbJVNm3A6ZVOBm3GDjO/tbY2S+TlW
-	 xumLf+sh4uiZGezZzpalJwH9ITO71QwOupd+tuAdcrK2ebwc+nlHWf29EMXS1ljOyy9Ee
-	 7tRnLjpRoZa9shJZhU28RNa9/SiKv7HdbVKG4ceDs1tAx4LzCryw7+5jvWfX0x5gapVOI
-	 7H1xNIf3Hda16LWk87tm7Kj/B35yfMD+XWJlFHP+YcW126qVuqmColffWjux+2HJsYg==
+	t=1795805905;
+	b=zsNsGRUiZT7WXDGuxDV3JAEA1uml4zAfaaVJXnHemCraysgFPvzWr3qn2Pnd7aK61g07
+	 x31J7Nu4ZfNzrjJP7AO7i+ngzWqFX8p8FX7ra8nScwBC3xWgupHFl4+rj5vjieeLxus4e
+	 cJeaLTmrRTC5l3EpVgncIMLUO4mpha/fojYKgyukwmZ29aJ+HpkLeNmu4wxZZx1s13h48
+	 Fs2n1qNgNfn4uPf2GS+JxNB8N6gR2xUnUkUxFcZfPbBX59oFezZZdZ2tFbLtTzCNA9kpG
+	 ImE9w/YMblcc1E/4sQN8mVjxaTpQMW5vLYeYC1jzdMzu1oyu2RH7yDGDYXmKx3n62og==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795804975;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=7omIvyqBdJHk9teCPUFXfWrEzQ9+VYkHiJCDQQJQ93E=;
-	b=kqoWQrJXKOe9dgYN9NIVoNDQsf0jhIwZe9CyW68mUGU2411j93oudRZXIBqWRJjFoci9
-	 gB9FTD3lv1C+FsnRjUdgdNpTsCfuAAKWOGKOq+snvC4ek2xBIHJmUK3USKt/V2ZZzGbrs
-	 lP/Uv55gPbYz0qStAXOTGo53WaIYUlUkohniW61c1t0/xBiUB917sIm5VSU2D+WU2DYq4
-	 Tmnz7vvhQhUEKQYA/LR589f9OmlU05m++H1TVOE1Lqto2UJUu9LsAkO7y4cnvBk+JW2EF
-	 dMEKi8L0pnPk0Xyea+JL5HCQj4b3Ojf49ywV/NMSpmiXu/OG9EIhRBx6a1mgS99C35Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795805905;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Aa+Ay1/zkX9mW1dHapCcJ29KkN3LrR+HogZO/SC57M4=;
+	b=OGXZSxPKNzdoyno7wd8vy5+GZUnv92FzpWbu2YGyTaijngqgJBZSUbmIBSFDfWjoewGR
+	 aE1Ft+a7R2AAI0XeCJATqnmvttCAiGCyVc1G3hSpbUlV/k5kQSAKjkd0mRJZ+YvM4UnF3
+	 w7dQ6sb6v/ENwNys5kX02jxjCkpnFd5qCujOf57EUfBhjx7tNp5JAFUZcSLvsYMFPrmvJ
+	 BnEgpgGGlmP2yXS7kx52bX7JQt5KvUSDzhxiy8M5hQgf04OQn01i5QE2RvNt+Vl4EhrVV
+	 sQx7FMtL5wPXCZ3KGzVLrRhgx+FvzoliUTRmWQ4I2pPDlh+zXuEgM+zFBsRHII9WMew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OKltYJ9c;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ImjIGOm9;
+	arc=none smtp.remote-ip=158.69.130.18
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474F5606A31C;
-	Fri, 27 Nov 2026 18:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC448606A31C;
+	Fri, 27 Nov 2026 18:58:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC448606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OKltYJ9c
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A351F0280B;
-	Fri, 27 Nov 2026 18:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795804974;
-	bh=7omIvyqBdJHk9teCPUFXfWrEzQ9+VYkHiJCDQQJQ93E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OKltYJ9cUaVOyvxtAzqwRPybYHoVF1i9ar2+j8nlWyjpRvwBk0HEgDkmUg26j3SBx
-	 Sujd3iSaszavzxUAX+VWzocOlHxJzmOnc+Tvk7Ds4JuNJRUbBRX6V3VqSQtPcJ82tK
-	 6osWERdqqRSsHGZZCZqoIAnY5sYAKXmCcYbWhKMJXyGxwFcWzp6dZ77aZI8eiNydl9
-	 tWbZOdpm1citPBz/CtozN6hPb1fbDjAX26zd+E0XIRZ5SkY6eGB+lHmQ9ioaTSJ6wU
-	 j6jSK5HaUehLoYJ90C/UzazsKTsTUD9ICsYT0yd8KpW4e9QgMWoQXKfH6GZbNiIQ8T
-	 UxYliNOKzliNQ==
-Date: Fri, 27 Nov 2026 18:42:49 +0000
-From: Will Deacon <will@kernel.org>
-To: Abdalla Eldoumani <aamsdoumani@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Abdalla Eldoumani <abdalla.eldoumani@ucalgary.ca>
-Subject: Re: [PATCH 2/2] kselftest/arm64: Check that PR_SVE_VL_INHERIT
- survives a second exec
-Message-ID: <awnPKRtczyTiEcN0@willie-the-truck>
-References: <20261017182455.1884-1-aamsdoumani@gmail.com>
- <20261017182455.1884-3-aamsdoumani@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ImjIGOm9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1795805904;
+	bh=Aa+Ay1/zkX9mW1dHapCcJ29KkN3LrR+HogZO/SC57M4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ImjIGOm9KBmBZq1yg97FtzfwnbsEC39679+1JVcBe6Ue12OL169nn8f3I/uvs2PAU
+	 C9N7qLzKlqyTIRKhDiIkhC+l38b26VOQeryebzOMRZnUY+U4/YXmta9LEUajsbv/aY
+	 Qjr+rv35GACypyc9mz3Dkhnj9er9tYSRzXi5nwzOKhA8MgpbAGsLL9QGnQHDsN7Sxe
+	 loQ3rwokmaYe8FPP/u1ymQk5tNsJcClWfRE8XLA0id0ErQp+OqaWfJ7B1XOAIisyJM
+	 uEZhFmAkEdqtd+9Ty03GMomM6dXWwhY327uyikdxdyFtq9iUlqJge81PormiuSmtYM
+	 1m5CQxv83xB1Q==
+Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jbjNw0t5nzXWw;
+	Fri, 27 Nov 2026 13:58:24 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Chris Gellermann <christian.gellermann@codasip.com>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 04/16] selftests/membarrier: Issue the sync core command in its test
+Date: Fri, 27 Nov 2026 13:58:09 -0500
+Message-ID: <20261127185822.158216-5-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261127185822.158216-1-mathieu.desnoyers@efficios.com>
+References: <20261127185822.158216-1-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,51 +75,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261017182455.1884-3-aamsdoumani@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 17, 2026 at 12:24:54PM -0600, Abdalla Eldoumani wrote:
-> From: Abdalla Eldoumani <abdalla.eldoumani@ucalgary.ca>
-> 
-> The prctl_set_for_child test sets a vector length with
-> PR_SVE_VL_INHERIT and checks that a forked and exec()ed child sees it.
-> That only covers the first exec(). The kernel keeps the inherit flag
-> and the on-exec VL across exec() so that later descendants keep the VL
-> too, and nothing checks that part, which the fp TODO list notes as
-> testing PR_SVE_VL_INHERIT after a double fork.
-> 
-> Extend the test to also read the VL in a grandchild. The child
-> re-executes vec-syscfg in a mode that forks and execs the rdvl helper,
-> so the VL is read after two fork() and exec() generations. Both SVE and
-> SME are covered since the test runs for each vector type.
-> 
-> With a kernel modified to clear the inherit flag on exec() the existing
-> check still passes and the new check fails for both vector types, with
-> the grandchild getting the default VL. Drop the item from the TODO list.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Abdalla Eldoumani <abdalla.eldoumani@ucalgary.ca>
-> ---
->  tools/testing/selftests/arm64/fp/TODO         |  1 -
->  tools/testing/selftests/arm64/fp/vec-syscfg.c | 62 ++++++++++++++++++-
->  2 files changed, 59 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/fp/TODO b/tools/testing/selftests/arm64/fp/TODO
-> index 44004e5..90ee128 100644
-> --- a/tools/testing/selftests/arm64/fp/TODO
-> +++ b/tools/testing/selftests/arm64/fp/TODO
-> @@ -4,4 +4,3 @@
->   - Ensure ptraced processes actually see the register state visible through
->     the ptrace interface.
->   - Big endian.
-> -- Test PR_SVE_VL_INHERIT after a double fork.
+test_membarrier_private_expedited_sync_core_success() is meant to
+check that MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE succeeds after
+its registration. It issues MEMBARRIER_CMD_PRIVATE_EXPEDITED instead.
+No test issues the sync core command with success.
 
-Since this TODO list was authored by Mark (Brown), it would be good for
-him to assess whether or not your patch implements what he had in mind.
+Issue the sync core command.
 
-I can't see where the initial parent touches the prctl() and the way
-you've added the fork() before we even print the selftest header looks
-a bit weird to me.
+While at it, pass the third system call argument. It was left
+uninitialized.
 
-Will
+Fixes: 460e8c3340a2 ("membarrier/selftest: Test private expedited sync core command")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ tools/testing/selftests/membarrier/membarrier_test_impl.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/membarrier/membarrier_test_impl.h b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+index b4dcbb32538d..4b9d1771916e 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test_impl.h
++++ b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+@@ -13,7 +13,7 @@ static int registrations;
+ 
+ static int sys_membarrier(int cmd, int flags)
+ {
+-	return syscall(__NR_membarrier, cmd, flags);
++	return syscall(__NR_membarrier, cmd, flags, 0);
+ }
+ 
+ static int membarrier_get_registrations(void)
+@@ -221,7 +221,7 @@ static int test_membarrier_register_private_expedited_sync_core_success(void)
+ 
+ static int test_membarrier_private_expedited_sync_core_success(void)
+ {
+-	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
++	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE, flags = 0;
+ 	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE";
+ 
+ 	if (sys_membarrier(cmd, flags) != 0) {
+-- 
+2.47.3
+
