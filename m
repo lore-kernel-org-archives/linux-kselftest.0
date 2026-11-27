@@ -1,52 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795793622;
-	b=AXwae1jgYcS3zAw0zwuahBxKxUVwkXqz0Hit6nloTOHPbVpB8QflzXpY+I5nf3dgTyw1
-	 ijqqKnW0vXoaizX9/ia5n8uTpkHK6UiGAnE4XmlaRNVridHhIibOuwv5ZCkJrS0QHlL2j
-	 VY8j6uafPmxApPpBttjzImMIE1ItN2g4X4Q6ofj/+8iK+QFmci6b8dFfmNT1jVXnXY6sT
-	 2lRIrDkHwmsuFFKNFgsj+4RX4m6i4HSMOU1jtE6D9ul89avcSn2HsrwtChlZXJYvavYFb
-	 Na9gwUEvfcCzD3tKnFlIjnHlRnCSOzRBx0fVeSOmo/Cg2f3Ewj/ZJhtJZTxsrFm/i7w==
+	t=1795793892;
+	b=QZcWQTKPivfAszAEKOvzXuwiJBYG3GV3A879GAQ/p8ZuREzNoa6RpzP5yUA5xY9PqiM5
+	 CDmfTASR3XSGFxrMKoQOtDK/CQMJ0+h4Z+hXW1Sj86cz0xrtQX5xHKTF+w1ySvHLuprLY
+	 xvaJU5fqhITYFP9vwAhphMSaG37bD9Qb9bHJX0R2VccLpDJrNuSw3i1+XvFQjcAVL0qvZ
+	 zcXzRNfkYGBUOlM04S9CJ9vY/IIeGHoOpIkdnLdfxsWT0Fkl8FpSGv9Q2qItgyO99PTPJ
+	 pmHAXVd7rpyw7XAMDtk/crPDwRWeny17BTc0fdPxxQz+MIxI9isH+is+p8Z5A74jFJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795793622;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:Date:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	 References:In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:
-	 X-Developer-Key;
-	bh=vhR6IsG+Rk+VWXlr+ir06fuP3Aj8UKRDlJ6r0XXQ2X8=;
-	b=YDZ+oD0QBPR2BQaeI+/LLkdPBn3E5kjI6uxT0n/AFVXKwsZg+9EyZTjA6HJQ6T6yip+U
-	 0d2Ga79zZzAg29OozZXFVYR+3TZ3M8RI3MtKeulKwILAh2a9c3pDv9zjD+gsESE+y1xdx
-	 9r6yDjGGOgPREd1QKBZcEBLJ9jyQu+5lSsHsV5bYDXMMjjiM/6UplNg1tfeo+nySLOBsC
-	 npYN+qGzdw0NFo522HKILzr//Io8y1ey61rJcHCF4s9OjNGUOHByy07CMcjmZ74hYs9f7
-	 Crui7hO0qiRvOklZy6WTz/8Xesz4EAttYg01oaN7Z/7y2E3DJac96anipMEDhQNeoDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795793892;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:From:Subject:To:Cc:References:Content-Language:
+	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-TM-AS-GCONF:X-Proofpoint-Reinject:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=wSDkFlm4jY6UNA0o3Zt5f5H/V94IK7NSFsorwTBkxTg=;
+	b=iW7rg8hfDtm8YbsbLn1VWmIKzBe8MMlXNpbxdaZ7KsTVhaJy+BLyeRPHDtCu7UgrBn3m
+	 8+Lc6uDqukgKiEd9B6H5Uvbj0z6G8ui1rE0gRpuEcDeLUyIptiHN+o/Lx+MbhYh/jt/5P
+	 gulf0j23LQJCy7cfNfXyC4O2qK0gT1d7ga2Hec/bU7cFdb8120zMfw5EyC6qLCHM0U/wa
+	 AHbhCDH3z9P7iXZaUzg9zp34m9mXAr8dYETpG1z3O/i2MqpuEOv6CTnWVBsOZ4towY0th
+	 7kvFrH3Iz7SO1MCcdJX7uXf+kGUmMAudjIqFnJxC9VwoVvxPuMJg1kqYA963/SIa8jw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=UwsntyAk;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D88606A684;
-	Fri, 27 Nov 2026 15:33:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7D88606A684
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b="nn/hj00N";
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DEC606A31C;
+	Fri, 27 Nov 2026 15:38:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89DEC606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=UwsntyAk
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8980D1EA6;
-	Fri, 27 Nov 2026 07:33:38 -0800 (PST)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 337853F632;
-	Fri, 27 Nov 2026 07:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795793621; bh=qMOM7DQ0sgq5yTKvksMRjqHLxSAWZJcGOYDwTILlBFw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=UwsntyAk3EvvMQ7NNAnNwZBDAiwOohDVWpmJ/5HOTKX/HROalC3otlIErFpkfMem6
-	 nLvmRYy8pRlCZkbQkbs+UxtQXDf7zW2UER+wrg99IuwcDBejTPOZxTNsZqh2REv+/1
-	 11eWoPvdGGf5IvZkibe/Lep1KaiDkcqu6BBUBXRY=
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-Date: Fri, 27 Nov 2026 15:33:03 +0000
-Subject: [PATCH RFC v3 8/8] selftest: attestation: add
- cca_guest_attestation_test selftest
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=nn/hj00N
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARE4sZS3266007;
+	Fri, 27 Nov 2026 15:37:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=wSDkFl
+	m4jY6UNA0o3Zt5f5H/V94IK7NSFsorwTBkxTg=; b=nn/hj00NgZJYb5SXVZhx2Z
+	kNkF85lXdR5x+V+fqdDyxJ5qYh+Gqipxe0MXks2I/k/un6fKwJ3RJaiTxctQaP3z
+	nCMk1w00QNknlcaL+IOfEC7OeTi8YZ0MRCNvCUsHFIsIoo2c9niAfPaklcJTFebi
+	qkJGjLSH4y4xq/eFyQ1U5fWtVLz7iulTZYM+peO9uvVRKsefY4CRYRSxQc+DaKCn
+	lGJi0Jwl+FH3u48VV2G3+qhvTDQk1AnZhUUL+VXF5QXvZEDDGj4oIQwJIvS7hrbY
+	5qJpcAuXFjFaWRPge4t52PMZGfS4F+OreQ8l8CHyb2ZpBdA7WTO85cQAzXNB62ag
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g1nns7-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 27 Nov 2026 15:37:14 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARE4Hec2819251;
+	Fri, 27 Nov 2026 15:37:13 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4j5kfaarn6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Nov 2026 15:37:13 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6ARFb8ha49676778
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 27 Nov 2026 15:37:11 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 915132004F;
+	Fri, 27 Nov 2026 15:37:08 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0CC8F2004E;
+	Fri, 27 Nov 2026 15:37:05 +0000 (GMT)
+Received: from [9.111.162.114] (unknown [9.111.162.114])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 27 Nov 2026 15:37:04 +0000 (GMT)
+Message-ID: <a98fab70-48fa-4640-88d2-a7a08f523128@linux.ibm.com>
+Date: Fri, 27 Nov 2026 16:37:04 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,621 +86,219 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261127-arm_cca_mr-v3-8-df3230afce8f@arm.com>
-References: <20261127-arm_cca_mr-v3-0-df3230afce8f@arm.com>
-In-Reply-To: <20261127-arm_cca_mr-v3-0-df3230afce8f@arm.com>
-To: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-acpi@vger.kernel.org, 
- acpica-devel@lists.linux.dev
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
- Suzuki Poulose <suzuki.poulose@arm.com>, 
- Steven Price <steven.price@arm.com>, Sami Mujawar <sami.mujawar@arm.com>, 
- thuth@redhat.com, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, 
- Pawel Chmielewski <pawel.chmielewski@intel.com>, 
- Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>, Len Brown <lenb@kernel.org>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Mark Brown <broonie@kernel.org>, 
- Yeoreum Yun <yeoreum.yun@arm.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17380; i=yeoreum.yun@arm.com;
- h=from:subject:message-id; bh=qMOM7DQ0sgq5yTKvksMRjqHLxSAWZJcGOYDwTILlBFw=;
- b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBrCaK2VJe6b3BqSaIwfhduUKb/9stMF6YV1SktY
- jKzdLAm+WWJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCawmitgAKCRBt1cPRWsUx
- M11gDADLkIqjnqHEbebnT6bfBEdC0jLB3YptcAD/djs4CMNe0dNZL8JXHWCgxMLNuR8BicovyWk
- vZAoPV05TFsajtlkia9me8/H1YExGNUJmNe/b7FBJPUFA+k4YOk3ww35RXskZTgH+4dt3Kxvmqj
- rp5CtDdDGhSVn3BRK8rbHZ+3sjlixIc5YBrl63QMibQBY+oUzFc9fBfPWEznnFux+tRaabE/uEl
- p1MKdfFOhK1Ka5VHNBbToqo+rM9AMH8P2Gtoxmc5PBegoIgJNWMBiLvQKFSYhfS8Wl102q+OnWZ
- fplQIocAraCvAgvbK2F8/fZus1wIn3Td5RkBd8UednDrI7Pi8+MPAAb9bcTi7L5op2jvdN4XIst
- fsJDWjmw5Agbr5xQ7ElGE9ZzyICKMwLh7zBTqAUnnVceQcZIp9ezcrKVcy/d2Q/iNbQwfQr0tQH
- 2f9PP/jucGhqSxHsFQ9df/JuHMlduz/ll/fddbsNRllEHaddBCmVnQA4Av1aipT+hvLW0=
-X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
- fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
+User-Agent: Mozilla Thunderbird
+From: Jens Remus <jremus@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 01/30] unwind: Add Minimal DWARF CFI bytecode
+ interpreter
+To: Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
+        mingo@redhat.com, tglx@kernel.org, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, pjw@kernel.org,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+        linux-riscv@lists.infradead.org, acme@kernel.org, namhyung@kernel.org,
+        linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+        nathan@kernel.org, llvm@lists.linux.dev, nsc@kernel.org,
+        linux-kbuild@vger.kernel.org, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org, ardb@kernel.org,
+        linux-efi@vger.kernel.org, maz@kernel.org, oupton@kernel.org,
+        kvmarm@lists.linux.dev, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, indu.bhagat@oracle.com,
+        wnliu@google.com, dylanbhatch@google.com
+References: <20261125061523.1540234-1-irogers@google.com>
+ <20261125061523.1540234-2-irogers@google.com>
+Content-Language: en-US
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20261125061523.1540234-2-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: brvXg_RJUZTQu5mAUmnatHUtcWzdDrrf
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI3MDA2MiBTYWx0ZWRfX+qzyyuyu1B+R
+ /ruRXWo/zu5u+2/Z0LaCtY3N+BUb8znffYTTtu+NHKiNIaooKN3ELdx20GOt2uvxx7P5wXL+1+A
+ cpcYOaHmrjyz1MF/V7sVGbOPBX+fEdk=
+X-Proofpoint-GUID: wK7aymzh3GdSqbeQ85e9O3Dhs5dNAbYJ
+X-Authority-Analysis: v=2.4 cv=c8M+0h9l c=1 sm=1 tr=0 ts=6b09a3ab cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=1XWaLZrsAAAA:8 a=M8zXbRpaHz8_b2Mss2oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=O8hF6Hzn-FEA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI3MDA2MiBTYWx0ZWRfX4HPNbmoz03PS
+ bjSpWwHbVDc6A2l18C+xFCEmA5d1gCfAti1AE4Q1SzAW+XWH1dJfaPQdyS4stAn2G+cg/1aAUvf
+ uRdgrMyWaeQO3VhqDkxGUuZ2cKaGcV1OBrcozmGInTBrfeDXb6RQrK4KxWwkAtf42OotKBIWdHe
+ BceGetoE/nBLl99++V5H3LEeU1J4HIw9TYbDgVEuk9GuJR2pdZKKa9D/CsYi8ZDqJARO/x5ufyD
+ 2Jpgbhn/gZMqp0o8TMTsgQaOMNwvalX4PYiAfWhyhXyVAi/esM70kJBhZWD9wMlkR/aiDWPBf4i
+ xwqUtmTmLdRda/+RZJvu1W41t85aw+igiTDUK8MpVNp9G1dcUK9mU62x9+jkJKQaVc9srXlgnZB
+ Ih3tcpQ1UlqbOBvPf5aIAVXxJ3jGYc131ZTQb9l7oa6JZzH2VjFqr7PCIm5nNDsFOCNVU4nM1HJ
+ FsYR8R2QvfZiN/PT/7g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-27_02,2026-11-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1011 malwarescore=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611270062
 
-Add CCA Realm Guest attestation selftest to test evidence-get, mr_read
-and mr_extend interfaces.
+Hello Ian,
 
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
----
- tools/testing/selftests/attestation/.gitignore     |   1 +
- tools/testing/selftests/attestation/Makefile       |   9 +-
- .../attestation/cca_guest_attestation_test.c       | 517 +++++++++++++++++++++
- 3 files changed, 524 insertions(+), 3 deletions(-)
+great work, I like it!  I am working on adding s390 support on top of
+your series.  Some early feedback.
 
-diff --git a/tools/testing/selftests/attestation/.gitignore b/tools/testing/selftests/attestation/.gitignore
-index e10d0c9e4723c..9ae9baec654d1 100644
---- a/tools/testing/selftests/attestation/.gitignore
-+++ b/tools/testing/selftests/attestation/.gitignore
-@@ -3,3 +3,4 @@ attestation_test
- ima_attestation_test
- tdx_attestation_test
- firme_attestation_test
-+cca_guest_attestation_test
-diff --git a/tools/testing/selftests/attestation/Makefile b/tools/testing/selftests/attestation/Makefile
-index d4875652b4a14..f5a1ae68c0c4a 100644
---- a/tools/testing/selftests/attestation/Makefile
-+++ b/tools/testing/selftests/attestation/Makefile
-@@ -4,13 +4,14 @@ CFLAGS += -I../../../ctlv/libctlv
- LDLIBS += -lpthread
- 
- TEST_GEN_PROGS := attestation_test ima_attestation_test tdx_attestation_test \
--		  firme_attestation_test
-+		  firme_attestation_test cca_guest_attestation_test
- 
- LIBCTLV_DIR := ../../../ctlv/libctlv
- BINDINGS := ctlv_attestation_user_gen.c \
- 	    ctlv_attestation_sim_user_gen.c \
- 	    ctlv_attestation_tdx_user_gen.c \
--	    ctlv_attestation_firme_user_gen.c
-+	    ctlv_attestation_firme_user_gen.c \
-+	    ctlv_attestation_cca_guest_user_gen.c
- 
- EXTRA_CLEAN = $(OUTPUT)/libctlv
- 
-@@ -30,6 +31,9 @@ $(OUTPUT)/tdx_attestation_test: tdx_attestation_test.c $(BINDINGS) $(LIBCTLV)
- $(OUTPUT)/firme_attestation_test: firme_attestation_test.c $(BINDINGS) $(LIBCTLV)
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $^ $(LDLIBS) -o $@
- 
-+$(OUTPUT)/cca_guest_attestation_test: cca_guest_attestation_test.c $(BINDINGS) $(LIBCTLV)
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $^ $(LDLIBS) -o $@
-+
- $(LIBCTLV): FORCE
- 	$(Q)mkdir -p $(OUTPUT)/libctlv
- 	$(Q)$(MAKE) -C $(LIBCTLV_DIR) CC="$(CC)" OUTPUT=$(OUTPUT)/libctlv/ \
-@@ -38,4 +42,3 @@ $(LIBCTLV): FORCE
- FORCE:
- 
- .PHONY: FORCE
--
-diff --git a/tools/testing/selftests/attestation/cca_guest_attestation_test.c b/tools/testing/selftests/attestation/cca_guest_attestation_test.c
-new file mode 100644
-index 0000000000000..c6dc0452f79d6
---- /dev/null
-+++ b/tools/testing/selftests/attestation/cca_guest_attestation_test.c
-@@ -0,0 +1,517 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+#include <linux/bits.h>
-+#include <linux/hash_info.h>
-+
-+#include "../kselftest_harness.h"
-+#include "ctlv_attestation_cca_guest_user_gen.h"
-+
-+#define EVENT_WAIT_MS 5000
-+#define TDX_REPORTDATA_LEN 64
-+#define TDX_REPORT_LEN 1024
-+#define TDX_REPORTDATA_OFFSET 128
-+#define TDX_QUOTE_MAX_LEN ((128 * 1024) - 24)
-+
-+static const char *error_text(const struct ctlv_error *error)
-+{
-+	static char text[512];
-+
-+	return ctlv_error_str(error, text, sizeof(text));
-+}
-+
-+static void dump_hex(const void *data, __u64 size)
-+{
-+	__u64 i;
-+
-+	if (!TH_LOG_ENABLED)
-+		return;
-+
-+	for (i = 0; i < size; i++) {
-+		if (!(i % 16)) {
-+			if (i)
-+				fprintf(TH_LOG_STREAM, "\n");
-+			fprintf(TH_LOG_STREAM, "\t");
-+		}
-+		fprintf(TH_LOG_STREAM, "%02x ", ((uint8_t *)(data))[i]);
-+	}
-+	fprintf(TH_LOG_STREAM, "\n");
-+}
-+
-+static int mr_hash_info_get(struct ctlv_dev *dev, __u64 *hash_alg, size_t *digest_size)
-+{
-+	const struct ctlv_hdr *item, *algorithm;
-+	struct ctlv_error error;
-+	struct ctlv_reply *reply;
-+	__u64 id, hash = HASH_ALGO__LAST;
-+	int ret;
-+	bool got;
-+
-+	ret = ctlv_attestation_mr_get(dev, NULL, &reply, &error);
-+	if (ret)
-+		return ret;
-+
-+	ret = -EIO;
-+	ctlv_attestation_mr_get_items_for_each(item, ctlv_reply_root(reply)) {
-+		got = ctlv_attestation_mr_get_items_id_get(item, &id);
-+		if (!got)
-+			goto err_out;
-+		algorithm = NULL;
-+		ctlv_attestation_mr_desc_supported_hash_algorithms_for_each(algorithm, item) {
-+			break;
-+		}
-+		if (!algorithm)
-+			goto err_out;
-+
-+		got = ctlv_attestation_mr_desc_supported_hash_algorithms_get(algorithm,
-+								 	     &hash, NULL);
-+		if (!got)
-+			goto err_out;
-+
-+		break;
-+	}
-+
-+	if (hash != HASH_ALGO_SHA256 && hash != HASH_ALGO_SHA384 &&
-+	    hash != HASH_ALGO_SHA512) {
-+		ret = -EINVAL;
-+		goto err_out;
-+	}
-+
-+	*hash_alg = hash;
-+
-+	if (hash == HASH_ALGO_SHA256)
-+		*digest_size = 32;
-+	else if (hash == HASH_ALGO_SHA384)
-+		*digest_size = 48;
-+	else
-+		*digest_size = 64;
-+
-+	ret = 0;
-+
-+err_out:
-+	ctlv_reply_free(reply);
-+	return ret;
-+}
-+
-+static int cca_guest_token_get(struct ctlv_dev *dev, __u64 id,
-+			       const unsigned char *challenge, size_t challenge_length,
-+			       void *output, size_t output_length,
-+			       struct ctlv_reply **reply, struct ctlv_error *error)
-+{
-+	struct ctlv_msg *request;
-+	int ret;
-+
-+	ret = ctlv_attestation_evidence_get_request_new(&request);
-+	if (ret)
-+		return ret;
-+	ctlv_attestation_evidence_get_challenge_put(request, challenge,
-+						    challenge_length);
-+
-+	ctlv_attestation_evidence_get_objects_start(request);
-+	ctlv_attestation_evidence_get_objects_id_put(request, id);
-+	ctlv_attestation_evidence_get_objects_data_put_va(request, output, output_length);
-+	ctlv_record_end(request);
-+
-+	ret = ctlv_msg_err(request);
-+	if (!ret)
-+		ret = ctlv_attestation_evidence_get(dev, request, reply, error);
-+	ctlv_msg_free(request);
-+	return ret;
-+}
-+
-+static int cca_guest_eventlog_get(struct ctlv_dev *dev, __u64 id,
-+				  void *output, size_t output_length,
-+				  struct ctlv_reply **reply, struct ctlv_error *error)
-+{
-+	struct ctlv_msg *request;
-+	int ret;
-+
-+	if (!id)
-+		return -EOPNOTSUPP;
-+
-+	ret = ctlv_attestation_evidence_get_request_new(&request);
-+	if (ret)
-+		return ret;
-+
-+	ctlv_attestation_evidence_get_objects_start(request);
-+	ctlv_attestation_evidence_get_objects_id_put(request, id);
-+	ctlv_attestation_evidence_get_objects_data_put_va(request, output, output_length);
-+	ctlv_record_end(request);
-+	
-+	ret = ctlv_msg_err(request);
-+	if (!ret)
-+		ret = ctlv_attestation_evidence_get(dev, request, reply, error);
-+	ctlv_msg_free(request);
-+	return ret;
-+}
-+
-+static int cca_guest_mr_read(struct ctlv_dev *dev, unsigned int id,
-+			     struct ctlv_reply **reply, struct ctlv_error *error)
-+{
-+	struct ctlv_msg *request;
-+	int ret;
-+
-+	ret = ctlv_attestation_mr_read_request_new(&request);
-+	if (ret)
-+		return ret;
-+	ctlv_attestation_mr_read_id_put(request, id);
-+	ret = ctlv_msg_err(request);
-+	if (!ret)
-+		ret = ctlv_attestation_mr_read(dev, request, reply, error);
-+	ctlv_msg_free(request);
-+	return ret;
-+}
-+
-+static int cca_guest_mr_extend(struct ctlv_dev *dev, unsigned int id,
-+			       const unsigned char digest[64],
-+			       struct ctlv_reply **reply, struct ctlv_error *error)
-+{
-+	struct ctlv_msg *request;
-+	__u64 hash_alg;
-+	size_t digest_size;
-+	int ret;
-+
-+	ret = mr_hash_info_get(dev, &hash_alg, &digest_size);
-+	if (ret)
-+		return ret;
-+
-+	ret = ctlv_attestation_mr_extend_request_new(&request);
-+	if (ret)
-+		return ret;
-+
-+	ctlv_attestation_mr_extend_id_put(request, id);
-+	ctlv_attestation_mr_values_start(request);
-+	ctlv_attestation_mr_value_hash_algo_put(request, hash_alg);
-+	ctlv_attestation_mr_value_data_put(request, digest, digest_size);
-+	ctlv_record_end(request);
-+
-+	ret = ctlv_msg_err(request);
-+	if (!ret)
-+		ret = ctlv_attestation_mr_extend(dev, request, reply, error);
-+	ctlv_msg_free(request);
-+	return ret;
-+}
-+
-+FIXTURE(cca_guest_attestation)
-+{
-+	struct ctlv_dev *dev;
-+	struct ctlv_error error;
-+	__u64 max_challenge_size;
-+	__u64 max_token_size;
-+	__u64 max_eventlog_size;
-+	__u64 token_id;
-+	__u64 ccel_id;
-+};
-+
-+FIXTURE_SETUP(cca_guest_attestation)
-+{
-+	const struct ctlv_hdr *caps, *evidence, *obj, *format, *challenge;
-+	struct ctlv_reply *reply;
-+	__u64 value, class;
-+	__u32 obj_count = 0;
-+	int ret;
-+	bool got, known;
-+
-+	ret = ctlv_open("ctlv-attestation-cca-guest", 0, O_RDWR, &self->dev);
-+	if (ret)
-+		SKIP(return, "no CCA Realm guest attestation device: %s", strerror(-ret));
-+
-+	ASSERT_EQ(0, ctlv_attestation_device_get(self->dev, NULL, &reply,
-+						 &self->error))
-+	{
-+		TH_LOG("%s", error_text(&self->error));
-+	}
-+
-+	caps = ctlv_attestation_device_get_caps_get(ctlv_reply_root(reply));
-+	ASSERT_NE(NULL, caps);
-+
-+	evidence = ctlv_attestation_device_get_caps_evidence_get(caps);
-+	ASSERT_NE(NULL, evidence);
-+
-+	ctlv_attestation_device_get_evidence_objects_for_each(obj, evidence) {
-+		obj_count++;
-+	}
-+
-+	obj = ctlv_hdr_find(evidence, CTLV_ATTESTATION_T_DEVICE_GET_EVIDENCE_OBJECTS);
-+	ASSERT_NE(NULL, obj);
-+
-+	got = ctlv_attestation_device_get_objects_class_get(obj, &class, &known);
-+	ASSERT_TRUE(got);
-+	ASSERT_EQ(class, CTLV_ATTESTATION_EVIDENCE_CLASS_SIGNED);
-+
-+	got = ctlv_attestation_device_get_objects_id_get(obj, &value);
-+	ASSERT_TRUE(got);
-+	self->token_id = value;
-+	ASSERT_EQ(0, self->token_id);
-+
-+	got = ctlv_attestation_device_get_objects_max_length_get(obj, &value);
-+	ASSERT_TRUE(got);
-+	self->max_token_size = value;
-+	ASSERT_NE(0, self->max_token_size);
-+
-+	challenge = ctlv_hdr_find(obj, CTLV_ATTESTATION_T_DEVICE_GET_OBJECTS_CHALLENGE_LENGTHS);
-+	ASSERT_NE(NULL, challenge);
-+
-+	got = ctlv_attestation_device_get_challenge_lengths_max_length_get(challenge, &value);
-+	ASSERT_TRUE(got);
-+	self->max_challenge_size = value;
-+	ASSERT_NE(0, self->max_challenge_size);
-+
-+	if (obj_count < 2) {
-+		self->ccel_id = 0;
-+		goto out;
-+	}
-+
-+	obj = ctlv_hdr_find_next(evidence, obj, CTLV_ATTESTATION_T_DEVICE_GET_EVIDENCE_OBJECTS);
-+	ASSERT_NE(NULL, obj);
-+
-+	format = ctlv_hdr_find(obj, CTLV_ATTESTATION_T_DEVICE_GET_OBJECTS_FORMATS);
-+	ASSERT_NE(NULL, format);
-+
-+	got = ctlv_attestation_device_get_objects_formats_get(format, &value, &known);
-+	ASSERT_TRUE(got);
-+	ASSERT_EQ(value, CTLV_ATTESTATION_EVIDENCE_FORMAT_CCEL);
-+
-+	got = ctlv_attestation_device_get_objects_id_get(obj, &value);
-+	ASSERT_TRUE(got);
-+	self->ccel_id = value;
-+
-+	got = ctlv_attestation_device_get_objects_max_length_get(obj, &value);
-+	ASSERT_TRUE(got);
-+	self->max_eventlog_size = value;
-+	ASSERT_NE(0, self->max_eventlog_size);
-+
-+out:
-+	ctlv_reply_free(reply);
-+}
-+
-+FIXTURE_TEARDOWN(cca_guest_attestation)
-+{
-+	if (self->dev)
-+		ctlv_close(self->dev);
-+}
-+
-+TEST_F(cca_guest_attestation, discovery_and_construction_fields)
-+{
-+	const struct ctlv_hdr *caps, *evidence, *mr, *info;
-+	struct ctlv_reply *reply;
-+	__u64 flags, unknown, value;
-+	bool got;
-+
-+	EXPECT_TRUE(ctlv_dev_inherits(self->dev, "ctlv-attestation"));
-+	ASSERT_EQ(0, ctlv_attestation_device_get(self->dev, NULL, &reply,
-+						 &self->error))
-+	{
-+		TH_LOG("%s", error_text(&self->error));
-+	}
-+	caps = ctlv_attestation_device_get_caps_get(ctlv_reply_root(reply));
-+	ASSERT_NE(NULL, caps);
-+	evidence = ctlv_attestation_device_get_caps_evidence_get(caps);
-+	mr = ctlv_attestation_device_get_caps_mr_get(caps);
-+	ASSERT_NE(NULL, evidence);
-+	ASSERT_NE(NULL, mr);
-+	got = ctlv_attestation_device_get_evidence_flags_get(evidence, &flags,
-+							     &unknown);
-+	ASSERT_TRUE(got);
-+	EXPECT_EQ(0, flags);
-+	EXPECT_EQ(0, unknown);
-+
-+	got = ctlv_attestation_device_get_mr_flags_get(mr, &flags, &unknown);
-+	ASSERT_TRUE(got);
-+	EXPECT_EQ(flags, CTLV_ATTESTATION_MR_DEVICE_CAPS_EXTEND);
-+	EXPECT_EQ(0, unknown);
-+
-+	info = ctlv_attestation_device_get_info_get(ctlv_reply_root(reply));
-+	ASSERT_NE(NULL, info);
-+
-+	got = ctlv_attestation_cca_guest_device_info_version_get(info, &value);
-+	ASSERT_TRUE(got);
-+	TH_LOG("CCA Realm Guest attestation version: %lld.%lld\n",
-+		(value & __GENMASK_ULL(31, 16)) >> 16,
-+		value & __GENMASK_ULL(15, 0));
-+
-+	ctlv_reply_free(reply);
-+}
-+
-+TEST_F(cca_guest_attestation, cca_attestation_token_get)
-+{
-+	void *challenge, *token;
-+	struct ctlv_reply *reply;
-+	const struct ctlv_hdr *root, *result;
-+	unsigned int index;
-+	__u64 token_size;
-+	bool got;
-+	int ret;
-+
-+	ASSERT_EQ(0, posix_memalign(&challenge, 8, self->max_challenge_size));
-+	ASSERT_EQ(0, posix_memalign(&token, 8, self->max_token_size));
-+
-+	for (index = 0; index < self->max_challenge_size; index++)
-+		((uint8_t *)challenge)[index] = index;
-+
-+	ret = cca_guest_token_get(self->dev, self->token_id,
-+				  challenge, self->max_challenge_size,
-+				  token, self->max_token_size,
-+				  &reply, &self->error);
-+	if (ret == -EIO || ret == -ETIMEDOUT || ret == -EOPNOTSUPP) {
-+		free(token);
-+		free(challenge);
-+		SKIP(return, "CCA atesation token is unavailable: %s", strerror(-ret));
-+	}
-+
-+	ASSERT_EQ(0, ret)
-+	{
-+		TH_LOG("%s", error_text(&self->error));
-+	}
-+
-+	root = ctlv_reply_root(reply);
-+	got = ctlv_attestation_evidence_get_evidence_generation_present(root);
-+	EXPECT_FALSE(got);
-+
-+	got = ctlv_attestation_mr_generation_present(root);
-+	EXPECT_TRUE(got);
-+
-+	result = ctlv_hdr_find(root, CTLV_ATTESTATION_T_EVIDENCE_GET_RESULTS);
-+	ASSERT_NE(NULL, result);
-+
-+	got = ctlv_attestation_evidence_get_results_length_get(result, &token_size);
-+	ASSERT_TRUE(got);
-+	ASSERT_GT(token_size, 0);
-+	ASSERT_LE(token_size, self->max_token_size);
-+	TH_LOG("CCA attestation token size: 0x%llx\n", token_size);
-+
-+	fprintf(TH_LOG_STREAM, "CCA attestation token:\n");
-+	dump_hex(token, token_size);
-+
-+	ctlv_reply_free(reply);
-+	free(token);
-+	free(challenge);
-+}
-+
-+TEST_F(cca_guest_attestation, cca_eventlog_get)
-+{
-+	void *eventlog;
-+	struct ctlv_reply *reply;
-+	const struct ctlv_hdr *root, *result;
-+	__u64 log_size;
-+	bool got;
-+	int ret;
-+
-+	ASSERT_EQ(0, posix_memalign(&eventlog, 8, self->max_eventlog_size));
-+
-+	ret = cca_guest_eventlog_get(self->dev, self->ccel_id,
-+				     eventlog, self->max_eventlog_size,
-+				     &reply, &self->error);
-+	if (ret == -EIO || ret == -ETIMEDOUT || ret == -EOPNOTSUPP) {
-+		free(eventlog);
-+		SKIP(return, "CCA eventlog is unavailable: %s", strerror(-ret));
-+	}
-+
-+	ASSERT_EQ(0, ret)
-+	{
-+		TH_LOG("%s", error_text(&self->error));
-+	}
-+
-+	root = ctlv_reply_root(reply);
-+	got = ctlv_attestation_evidence_get_evidence_generation_present(root);
-+	EXPECT_FALSE(got);
-+
-+	result = ctlv_hdr_find(root, CTLV_ATTESTATION_T_EVIDENCE_GET_RESULTS);
-+	ASSERT_NE(NULL, result);
-+
-+	got = ctlv_attestation_evidence_get_results_length_get(result, &log_size);
-+	ASSERT_TRUE(got);
-+	ASSERT_GT(log_size, 0);
-+	ASSERT_LE(log_size, self->max_eventlog_size);
-+	TH_LOG("CCA attestation eventlog size: 0x%llx\n", log_size);
-+
-+	fprintf(TH_LOG_STREAM, "CCA attestation eventlog:\n");
-+	dump_hex(eventlog, log_size);
-+
-+	ctlv_reply_free(reply);
-+	free(eventlog);
-+}
-+
-+TEST_F(cca_guest_attestation, read_measurement_registers)
-+{
-+	const struct ctlv_hdr *item, *algorithm, *value;
-+	struct ctlv_reply *reply;
-+	const void *digest;
-+	__u64 id, hash = HASH_ALGO__LAST;
-+	__u32 length;
-+	unsigned int count = 0;
-+	bool got;
-+
-+	ASSERT_EQ(0, ctlv_attestation_mr_get(self->dev, NULL, &reply,
-+					     &self->error));
-+	ctlv_attestation_mr_get_items_for_each(item, ctlv_reply_root(reply)) {
-+		ASSERT_TRUE(ctlv_attestation_mr_get_items_id_get(item, &id));
-+		EXPECT_EQ(count, id);
-+		algorithm = NULL;
-+		ctlv_attestation_mr_desc_supported_hash_algorithms_for_each(algorithm, item) {
-+			break;
-+		}
-+		ASSERT_NE(NULL, algorithm);
-+		got = ctlv_attestation_mr_desc_supported_hash_algorithms_get(algorithm,
-+									     &hash, NULL);
-+		ASSERT_TRUE(got);
-+		count++;
-+	}
-+	ASSERT_EQ(5, count);
-+	ASSERT_TRUE(hash == HASH_ALGO_SHA256 || hash == HASH_ALGO_SHA384 ||
-+		    hash == HASH_ALGO_SHA512);
-+	ctlv_reply_free(reply);
-+
-+	for (id = 0; id < 5; id++) {
-+		ASSERT_EQ(0, cca_guest_mr_read(self->dev, id, &reply, &self->error));
-+		value = NULL;
-+		ctlv_attestation_mr_values_for_each(value, ctlv_reply_root(reply)) {
-+			break;
-+		}
-+		ASSERT_NE(NULL, value);
-+		got = ctlv_attestation_mr_value_data_get(value, &digest, &length);
-+		ASSERT_TRUE(got);
-+		if (hash == HASH_ALGO_SHA256) {
-+			EXPECT_EQ(32, length);
-+		} else if (hash == HASH_ALGO_SHA384) {
-+			EXPECT_EQ(48, length);
-+		} else {
-+			EXPECT_EQ(64, length);
-+		}
-+
-+		fprintf(TH_LOG_STREAM, "mr_id(%llu):\n", id);
-+		dump_hex(digest, length);
-+
-+		ctlv_reply_free(reply);
-+	}
-+}
-+
-+TEST_F(cca_guest_attestation, extend_measurment_registers)
-+{
-+	const __u64 subscriptions[] = {
-+		CTLV_ATTESTATION_OP_MR_LOG_ENTRY_APPENDED,
-+	};
-+	unsigned char digest[64] = { 0xa5 };
-+	struct ctlv_event *event;
-+	struct ctlv_reply *reply;
-+	unsigned long id;
-+
-+	ASSERT_EQ(0, ctlv_subscribe(self->dev, subscriptions,
-+				    ARRAY_SIZE(subscriptions), &self->error));
-+
-+	for (id = 1; id < 5; id++) {
-+		ASSERT_EQ(0, cca_guest_mr_extend(self->dev, id, digest,
-+						 &reply, &self->error));
-+		ctlv_reply_free(reply);
-+		ASSERT_EQ(0, ctlv_event_wait(self->dev, EVENT_WAIT_MS));
-+		ASSERT_EQ(0, ctlv_event_read(self->dev, &event));
-+		EXPECT_TRUE(ctlv_attestation_mr_log_entry_appended_is(event));
-+		ctlv_event_free(event);
-+	}
-+}
-+
-+TEST_HARNESS_MAIN
+On 11/25/2026 7:14 AM, Ian Rogers wrote:
+> Add a strictly bounded DWARF Call Frame Information (.eh_frame /
+> .eh_frame_hdr) interpreter (CONFIG_UNWIND_DWARF_CFI) matching SFrame's
+> stack-unwinding state model and security properties, without requiring
+> new toolchain sections or duplicating user-space unwind metadata.
+> 
+> Instead of implementing a general DWARF expression virtual machine or
+> tracking arbitrary architectural register arrays, struct dwarf_cfi_row
+> tracks only:
+>  - CFA = (SP | FP | prologue scratch reg) + cfa_off, or fixed-pattern
+>    indirect CFA *(FP + off) (DRAP stack realignment) / *(SP + off)
+>    (signal trampolines)
+>  - Stack pointer save rule (SAME or *(CFA + off)) for signal frames that
+>    save SP in sigcontext (such as 32-bit x86 vdso32 __kernel_rt_sigreturn)
+>  - Frame pointer save rule (SAME, *(CFA + off), *(FP + off), *(SP + off))
+>  - Return address save rule (SAME in link register, *(CFA + off),
+>    *(SP + off), or UNDEFINED for bottom-of-stack termination), plus
+>    AArch64 PAC-RET signing state (DW_CFA_AARCH64_negate_ra_state)
+> 
+> Callee-saved general-purpose register spill/restore opcodes are decoded
+> and ignored in O(1) space. General DW_OP_* expressions, DW_CFA_set_loc
+> backward PC jumps, and DW_CFA_register rules on {SP, FP, RA} are
+> rejected with -EINVAL; DW_EH_PE_indirect encodings are rejected whenever
+> an encoded address is evaluated (while unused 'P'/'L' CIE augmentation
+> fields are skipped by encoded width without dereferencing). CIEs
+> (<= 128 B), FDEs (<= 4096 B), LEB128 operands (<= 5 B), and
+> DW_CFA_remember_state nesting (<= 4 entries) execute in a single forward
+> pass with zero dynamic memory allocations, zero locks, KMSAN output
+> unpoisoning, noinstr kernel-memory entry points, and Spectre v1 / v1.1
+> nospec hardening (array_index_nospec() and barrier_nospec()).
+> 
+> Also provide shared RCU-safe loadable-module .eh_frame indexing helpers
+> using kvmalloc()/kvfree_rcu_mightsleep() (dwarf_cfi_mod_alloc(),
+> dwarf_cfi_mod_free_rcu(), dwarf_cfi_mod_eval()).
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
+> diff --git a/include/linux/unwind_dwarf_cfi.h b/include/linux/unwind_dwarf_cfi.h
+
+> +/**
+> + * enum dwarf_cfi_rule - Recovery rule for caller's SP, FP, or return address
+> + * @DWARF_CFI_RULE_SAME: Register retains its value from the current frame
+> + *                       (or defaults to CFA for SP).
+> + * @DWARF_CFI_RULE_OFFSET: Saved on the stack at *(CFA + off).
+> + * @DWARF_CFI_RULE_FP_OFFSET: Saved relative to FP at *(FP + off) (DRAP frame).
+> + * @DWARF_CFI_RULE_SP_OFFSET: Saved relative to SP at *(SP + off) (sigframe).
+
+For s390 support I plan to add the following:
+
+For the implicit DW_CFA_val_offset(SP, -160) rule, as the CFA is defined
+as SP at call site + 160:
+
+ * @DWARF_CFI_RULE_VAL_OFFSET: Value is CFA + off; only used for SP.
+
+For DW_CFA_register (mostly used in lead functions to save FP and RA as
+well as SP):
+
+ * @DWARF_CFI_RULE_REG[ISTER]: Saved in another register.
+
+> + * @DWARF_CFI_RULE_UNDEFINED: Explicitly undefined (DW_CFA_undefined); marks
+> + *                            the bottom of a stack (e.g. _start or clone).
+> + */
+> +enum dwarf_cfi_rule {
+> +	DWARF_CFI_RULE_SAME = 0,
+> +	DWARF_CFI_RULE_OFFSET,
+> +	DWARF_CFI_RULE_FP_OFFSET,
+> +	DWARF_CFI_RULE_SP_OFFSET,
+> +	DWARF_CFI_RULE_UNDEFINED,
+> +};
+> +
+> +/**
+> + * struct dwarf_cfi_arch - Architecture DWARF register numbers and word size
+
+For s390 support I plan to add:
+
+ * @sp_off: Initial SP offset from the CFA unless a CIE instruction says
+ *          otherwise, caller SP = CFA + @sp_off.
+ *          0 on most ABIs; -160 on s390, where CFA = caller SP + 160.
+
+That would be used in dwarf_cfi_parse_cie() to initialize the SP rule
+and offset.
+
+> + * @ws: Target address/word size in bytes (4 or 8).
+> + * @sp_reg: DWARF register number for the stack pointer.
+> + * @fp_reg: DWARF register number for the frame pointer.
+> + * @ra_reg: Default DWARF return-address column number.
+> + */
+> +struct dwarf_cfi_arch {
+> +	u8 ws;
+> +	u8 sp_reg;
+> +	u8 fp_reg;
+> +	u8 ra_reg;
+> +};
+> +
+> +/**
+> + * struct dwarf_cfi_row - Evaluated Minimal DWARF unwind state at a target PC
+> + * @cfa_off: Byte offset added to the CFA base register before or as the CFA.
+
+As a non-native speaker I have a hard time to understand that comment.
+Wouldn't the following suffice?
+
+ * @cfa_off: Byte offset added to the CFA base register.
+
+> + * @sp_off: Byte offset used to load the saved SP when @sp_rule is an offset.
+> + * @fp_off: Byte offset used to load the saved FP when @fp_rule is an offset.
+> + * @ra_off: Byte offset used to load the saved RA when @ra_rule is an offset.
+> + * @cfa_base: CFA computation mode (&enum dwarf_cfi_base).
+
+What about renaming to cfa_rule?  That would nicely align with the
+{sp|fp|ra}_rule and *_reg.
+
+> + * @cfa_reg: DWARF register number when @cfa_base is %DWARF_CFI_BASE_REG.
+
+For s390 support I plan to add the following to support DW_CFA_register:
+
+ * @sp_reg: DWARF register number containing the saved SP when @sp_rule is a register.
+ * @fp_reg: DWARF register number containing the saved FP when @fp_rule is a register.
+ * @ra_reg: DWARF register number containing the saved RA when @ra_rule is a register.
+
+> + * @sp_rule: Recovery rule for the stack pointer (&enum dwarf_cfi_rule;
+> + *           %DWARF_CFI_RULE_SAME indicates caller SP equals CFA).
+> + * @fp_rule: Recovery rule for the frame pointer (&enum dwarf_cfi_rule).
+> + * @ra_rule: Recovery rule for the return address (&enum dwarf_cfi_rule).
+> + * @signal: True if the CIE carries the 'S' signal/interrupt frame augmentation,
+> + *          indicating that the saved PC points directly to the interrupted
+> + *          instruction rather than after a call instruction.
+> + * @ra_signed: True on AArch64 when DW_CFA_AARCH64_negate_ra_state indicates
+> + *             that the saved return address carries a PAC signature.
+> + */
+> +struct dwarf_cfi_row {
+> +	s32 cfa_off;
+> +	s32 sp_off;
+> +	s32 fp_off;
+> +	s32 ra_off;
+> +	u8 cfa_base;
+> +	u8 cfa_reg;
+> +	u8 sp_rule;
+> +	u8 fp_rule;
+> +	u8 ra_rule;
+> +	bool signal;
+> +	bool ra_signed;
+> +};
+Regards,
+Jens
 -- 
-2.43.0
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
