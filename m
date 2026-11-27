@@ -1,56 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.61
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795798121;
-	b=sFLkjI/eJPNpL2JWFd37zFmgKJ5xeGGzm1Lew8vUZGww2gBJNUDABDtVQD3ByMwX0DTs
-	 J+noVj4WVQ7qvHfjswgYA1e/BhiLrLGAgRfQJ4OZgtxk5qS+5tExHQB3q/pIMfUgiTcUx
-	 nHjeKlYW0JD28LMjeRc2ftXWGHGg8YGFAW0MIF61QDtcqNEImQkVXtGrXlDfUxBxfgHvf
-	 gx6u9Gde9Myw2kJcXQ1sOZuJPiKBb/cTPt25Il7s9R3u5nBjMXGu5wCqsTDhjDyFQJ5Kz
-	 YKbcZ/idyTu1euxd4HKYQMfxKPACUS2wxkDwhSVLz88cdKGM2dDfk6VrQOwWb4+08kA==
+	t=1795798125;
+	b=115DzVPNlvNOzVsN9AULsrm1WitbVTVEz4FisQ4cOUNC3AzKtkuh+L2ABwRYlTf60jM4
+	 J9SqW3fPpjvGyeJsGOnMeHYhTaW8fcXy8WohjoniVAAuExFe3IzN4l9d40BW/jyjqDnNa
+	 J5qzw7k7lO2Luvnps3c54MVan/x6qwZF7E5YwyE+uHkBmLM0caLebxtqZzY7+QUpDpP8K
+	 TIyUhtdpQWxABjhOYDyudB1hGmWCZJEGKX4rvoFdM0yVaj7xBNXlzdgGejBujYPP6pSd5
+	 pk3HHiOORp8PoumHpcbcXgmlmEaGS5nod8IdFRFCY7rytlsn0vS4Psu+q5KmTI+dpWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795798121;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795798125;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=d25kI2cFp4xOJkScEkzgccIm4TbZYpw7NLHWsddR/kE=;
-	b=cX/ohKWxTfadvGP6GllsYqVedY0ogPBzI5z29qFZ2BISibRG6JXTWT7cgBsqh11o8w2W
-	 alJhUMm3zfkYKkVkDGxNXq9sjvKOSl9rjfKDcjgiXATw9h3cNOfsunifobVKaUS7Dk+1L
-	 SYl9HeCXbgHYNoNxdirybPZ8nm8S6nJiOn45quZ1oTMwPt2RPuqc74p1kgJEsepiSFPQi
-	 5EsJaUSxNOZPVYo2Hz51tUOYHw65sbN76aF6+pLmgnweZIcm/20onqwb+1AEGUPrFjXK4
-	 4GtslK4MDlc4qr1xNGk35t60aeaw2fbWn2Cr/sCJQA42oRH3/KPuY9qqWZEG4G5patg==
+	bh=R6M2QDm0shUYu+Aa9n3dgQxA+aZ0+wpdOiS/ZjGCe24=;
+	b=ko2DjwBEFbOMGLkZKb98/m8ogB8QuUKy5SnEvwJD9uyYZl8CYO7ooathk0FzKZFBT2L9
+	 nsGGk0Xj3N5fJLii41ijPUAWQoJTfm/v0R2NNCW+V58mQw7nUKP3pSRWCP08XJ5FFC6v+
+	 +rfh/2cqU58bFb2w4wJzSnX/cgOKTlRKvikXiT/w1lTO0HTcPkrlL+NGn6Mc6et8yMNI+
+	 f4aCQ9T+hLP3yal3k+PWTU6uWluXl7Vdk0qIN3BInLIJaMstjrkLU4kM8Qj4WzZrSgvnb
+	 PawqzM86W7YEyBzg7roUgrj2jSmtR0Lj8Vq03BZklAOU/3WKiQFeUpg6diQZ9ZBpg3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=mandelbit.com;
 	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=z+TEEMJe;
-	arc=none smtp.remote-ip=195.10.208.62
-Received: from mout-b-202.mailbox.org (mout-b-202.mailbox.org [195.10.208.62])
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=aCaGERtZ;
+	arc=none smtp.remote-ip=195.10.208.61
+Received: from mout-b-201.mailbox.org (mout-b-201.mailbox.org [195.10.208.61])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24A2606A31E;
-	Fri, 27 Nov 2026 16:48:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D24A2606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A151606A327;
+	Fri, 27 Nov 2026 16:48:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A151606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=z+TEEMJe
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=aCaGERtZ
 Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-b-202.mailbox.org (Postfix) with ESMTPS id 4jbfW919kdzKnG2;
-	Fri, 27 Nov 2026 17:48:37 +0100 (CET)
+	by mout-b-201.mailbox.org (Postfix) with ESMTPS id 4jbfW74R7jzLlRn;
+	Fri, 27 Nov 2026 17:48:35 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1795798117;
+	s=MBO0001; t=1795798115;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d25kI2cFp4xOJkScEkzgccIm4TbZYpw7NLHWsddR/kE=;
-	b=z+TEEMJe370krGxLXqeIfGFgbxevwFAmJQgFHg9Zix7qyCkOjDUP95T3H8dqOO9tI1EbZq
-	GlFtk9Sp6n6QVTgfnGkqFCMD7EP72EgqaZ6lTyKRc2KuqonmsuJWvKPH//e8bNFgflK/m3
-	XIh2Tdb1i0mFMK8q8zh7Mt3bK6U4F4MBWolu5cRWLD7OLaUj81gQfakEVSNUuqD2cAdAhU
-	9hbroWgj0jb1/pOxC3gWkjy6UnMof6DwgFipw2kT4WEGwDCMI583x6c/3m7HDINvPRgm0/
-	apPQmulx51CztwBLl6TGKPV8qgNnERE+RStjg3ZIQXFDa5O7qppERiup+lJhYw==
+	bh=R6M2QDm0shUYu+Aa9n3dgQxA+aZ0+wpdOiS/ZjGCe24=;
+	b=aCaGERtZHWwKOexRxXSeQA411NhVhQtDKBC8W6VZiMLAxUIuThKK0gOz+87Km/XeWNFIUU
+	pGhKE5AFQt3ejoKRPSn3nd/u6ouUZZbZrrExXFzPGLvd/e3QtTgI3fc7iSVSFX8JwBvIW/
+	5wBMH9eMeDATldY6sSAOq0NT22GT7B0Zx1BPpDU030aUwzucN0UkGPGG5csG5u5YR4Qgy3
+	eOPjpZ5YFcPon7O0Lan9POhyXefk+31XAPaZACFojrmOub9SPW6UWF8IWJzstyXXkE0N5V
+	z1Q4qouWKNZ8BHYf4exSRRzvUiCiaVjA3o1sYvJDXBBGWuQsSwF0+RN4MAn3OA==
 Authentication-Results: outgoing_mbo_mout;
 	dkim=none;
 	spf=pass (outgoing_mbo_mout: domain of ralf@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=ralf@mandelbit.com
@@ -69,9 +69,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	ipsec@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH ipsec v2 2/2] selftests: net: add a test for xfrm policy removal
-Date: Fri, 27 Nov 2026 17:48:21 +0100
-Message-ID: <467acfb25f93252b01f9f096037ae248b8826a56.1795797791.git.ralf@mandelbit.com>
+Subject: [PATCH ipsec v2 1/2] xfrm: advance the route generation when policies are removed
+Date: Fri, 27 Nov 2026 17:48:20 +0100
+Message-ID: <3c91d1fc49e074fea1e87a7fdb8d4157fc42b342.1795797791.git.ralf@mandelbit.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1795797791.git.ralf@mandelbit.com>
 References: <cover.1795797791.git.ralf@mandelbit.com>
@@ -85,262 +85,123 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jbfW919kdzKnG2
+X-Rspamd-Queue-Id: 4jbfW74R7jzLlRn
 
-Check that a connected UDP socket that cached its route through an allow
-policy stops sending in plaintext once that policy is deleted, deleted
-by index, expires or is flushed.
+Only xfrm_policy_insert and xfrm_set_default advance the IPv4 and IPv6
+route generations. Deleting, flushing or expiring a policy does not, so
+a route that a socket cached while an allow policy without templates
+matched its flow keeps validating after that policy is removed, and the
+socket keeps sending in plaintext although a policy requiring IPsec now
+matches. xfrm_policy_insert also advances the generation before
+unlinking the policy that the new one replaces, which can still be
+matched until then, since the new policy can be linked behind it.
 
+Advance the generation once a policy is unlinked by a delete or by its
+expiry, once after all policies are unlinked by a flush, and after the
+replaced policy is unlinked by an insert. Socket policies only apply to
+their own socket and are left out.
+
+Fixes: ee8372dd1989 ("xfrm: invalidate dst on policy insertion/deletion")
 Signed-off-by: Ralf Lici <ralf@mandelbit.com>
 ---
- tools/testing/selftests/net/Makefile          |   1 +
- tools/testing/selftests/net/config            |   1 +
- .../selftests/net/xfrm_policy_removal.sh      | 212 ++++++++++++++++++
- 3 files changed, 214 insertions(+)
- create mode 100755 tools/testing/selftests/net/xfrm_policy_removal.sh
+ net/xfrm/xfrm_policy.c | 34 ++++++++++++++++++++++++----------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 9180b9bec515..bdc31252a6fc 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -136,6 +136,7 @@ TEST_PROGS := \
- 	vrf_route_leaking.sh \
- 	vrf_strict_mode_test.sh \
- 	xfrm_policy.sh \
-+	xfrm_policy_removal.sh \
- 	xfrm_state.sh \
- # end of TEST_PROGS
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index d2e938d4db9a..47379da24e99 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -1569,6 +1569,14 @@ static struct xfrm_policy *xfrm_policy_insert_list(struct hlist_head *chain,
+ 	return delpol;
+ }
  
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index d4416f8bdcfd..d5d289089059 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -18,6 +18,7 @@ CONFIG_DUMMY=y
- CONFIG_GENEVE=m
- CONFIG_GTP=m
- CONFIG_IFB=y
-+CONFIG_INET6_ESP=y
- CONFIG_INET_DIAG=y
- CONFIG_INET_ESP=y
- CONFIG_INET_ESP_OFFLOAD=y
-diff --git a/tools/testing/selftests/net/xfrm_policy_removal.sh b/tools/testing/selftests/net/xfrm_policy_removal.sh
-new file mode 100755
-index 000000000000..a5cd38091483
---- /dev/null
-+++ b/tools/testing/selftests/net/xfrm_policy_removal.sh
-@@ -0,0 +1,212 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test that removing an xfrm policy invalidates the routes that sockets
-+# cached while it was in place.
-+#
-+# An allow policy without templates exempts UDP to one port from an ESP
-+# policy with a lower priority. A connected UDP socket sends a datagram
-+# through the allow policy, caching a plain route, then the allow policy is
-+# deleted, deleted by index, expires or is flushed, and the socket sends
-+# again. The datagrams sent after the removal must be encrypted, as counted
-+# by the SA. For the flush, the output default is block instead of the ESP
-+# policy, so these sends must fail.
-+
-+source lib.sh
-+
-+NS=""
-+SRC=""
-+DST=""
-+PORT=5002
-+COUNT=10
-+KEY=0x0102030405060708090a0b0c0d0e0f1011121314
-+
-+cleanup() {
-+	stop_sender
-+	cleanup_all_ns
-+}
-+
-+trap cleanup EXIT
-+
-+# setup creates the namespace, a dummy device with the IPv$1 sender
-+# address and the state and policies for removal $2.
-+setup() {
-+	local family=$1
-+	local mode=$2
-+	local plen=24
-+	local limit=()
-+
-+	SRC=10.0.0.1
-+	DST=10.0.0.2
-+	if [ "$family" = 6 ]; then
-+		SRC=2001:db8::1
-+		DST=2001:db8::2
-+		plen=64
-+	fi
-+
-+	setup_ns NS || return "$ksft_skip"
-+	# The datagrams only need to leave the sender: a dummy device drops
-+	# them and needs no neighbour resolution for the peer.
-+	ip -n "$NS" link add dummy0 type dummy || return "$ksft_skip"
-+	# No link-local address: adding its routes would advance the route
-+	# generation and hide a missing invalidation.
-+	ip -n "$NS" link set dummy0 addrgenmode none
-+	ip -n "$NS" link set dummy0 up
-+	ip -n "$NS" addr add "$SRC/$plen" dev dummy0 nodad
-+
-+	# The SA that the ESP policy requires. Its packet counter tells
-+	# which datagrams were encrypted.
-+	ip -n "$NS" xfrm state add src "$SRC" dst "$DST" proto esp spi 0x1000 \
-+		reqid 1 mode transport aead 'rfc4106(gcm(aes))' "$KEY" 128 ||
-+		return "$ksft_skip"
-+	if [ "$mode" = flush ]; then
-+		# A flush also removes the ESP policy, so rely on the output
-+		# default instead.
-+		ip -n "$NS" xfrm policy setdefault in accept fwd accept \
-+			out block || return "$ksft_skip"
++static void xfrm_policy_bump_rt_genid(struct net *net, unsigned short family)
++{
++	if (family == AF_INET)
++		rt_genid_bump_ipv4(net);
 +	else
-+		ip -n "$NS" xfrm policy add src "$SRC" dst "$DST" dir out \
-+			priority 100 tmpl src "$SRC" dst "$DST" proto esp \
-+			reqid 1 mode transport
-+	fi
-+	# The allow policy, which takes precedence for the test port.
-+	if [ "$mode" = expire ]; then
-+		limit=(limit time-hard 1)
-+	fi
-+	ip -n "$NS" xfrm policy add src "$SRC" dst "$DST" proto udp \
-+		dport "$PORT" dir out priority 10 action allow "${limit[@]}"
++		rt_genid_bump_ipv6(net);
 +}
 +
-+# sender runs in the namespace and keeps one UDP socket connected to
-+# $1 port $2, so that the route it caches survives across the removal.
-+# For each count it reads, it sends that many datagrams and prints how
-+# many sends failed.
-+# shellcheck disable=SC2329 # run in the namespace through declare -f
-+sender() {
-+	local fails
-+	local n
-+	local i
+ int xfrm_policy_insert(int dir, struct xfrm_policy *policy, int excl)
+ {
+ 	struct net *net = xp_net(policy);
+@@ -1589,16 +1597,13 @@ int xfrm_policy_insert(int dir, struct xfrm_policy *policy, int excl)
+ 
+ 	__xfrm_policy_link(policy, dir);
+ 
+-	/* After previous checking, family can either be AF_INET or AF_INET6 */
+-	if (policy->family == AF_INET)
+-		rt_genid_bump_ipv4(net);
+-	else
+-		rt_genid_bump_ipv6(net);
+-
+ 	if (delpol) {
+ 		xfrm_policy_requeue(delpol, policy);
+ 		__xfrm_policy_unlink(delpol, dir);
+ 	}
 +
-+	exec 3>"/dev/udp/$1/$2" || exit 1
-+	while read -r n; do
-+		fails=0
-+		for ((i = 0; i < n; i++)); do
-+			echo >&3 2>/dev/null || fails=$((fails + 1))
-+		done
-+		echo "$fails"
-+	done
-+}
-+
-+start_sender() {
-+	coproc SENDER {
-+		ip netns exec "$NS" bash -c \
-+			"$(declare -f sender); sender $DST $PORT"
++	/* Advance the route generation only once the replaced policy is gone */
++	xfrm_policy_bump_rt_genid(net, policy->family);
+ 	policy->index = delpol ? delpol->index : xfrm_gen_index(net, dir, policy->index);
+ 	hlist_add_head(&policy->byidx, net->xfrm.policy_byidx+idx_hash(net, policy->index));
+ 	policy->curlft.add_time = ktime_get_real_seconds();
+@@ -1695,6 +1700,7 @@ xfrm_policy_bysel_ctx(struct net *net, const struct xfrm_mark *mark, u32 if_id,
+ 				return pol;
+ 			}
+ 			__xfrm_policy_unlink(pol, dir);
++			xfrm_policy_bump_rt_genid(net, pol->family);
+ 		}
+ 		ret = pol;
+ 	}
+@@ -1735,6 +1741,7 @@ xfrm_policy_byid(struct net *net, const struct xfrm_mark *mark, u32 if_id,
+ 					return pol;
+ 				}
+ 				__xfrm_policy_unlink(pol, dir);
++				xfrm_policy_bump_rt_genid(net, pol->family);
+ 			}
+ 			ret = pol;
+ 			break;
+@@ -1835,10 +1842,12 @@ int xfrm_policy_flush(struct net *net, u8 type, bool task_valid)
+ 		spin_lock_bh(&net->xfrm.xfrm_policy_lock);
+ 		goto again;
+ 	}
+-	if (cnt)
++	if (cnt) {
++		rt_genid_bump_all(net);
+ 		__xfrm_policy_inexact_flush(net);
+-	else
++	} else {
+ 		err = -ESRCH;
 +	}
-+}
-+
-+stop_sender() {
-+	if [ -n "$SENDER_PID" ]; then
-+		kill "$SENDER_PID" 2>/dev/null
-+		wait "$SENDER_PID" 2>/dev/null
-+	fi
-+}
-+
-+send_datagrams() {
-+	local fails
-+
-+	# Ask the sender for $1 datagrams
-+	echo "$1" >&"${SENDER[1]}" || return 1
-+	# and print how many of its sends failed.
-+	read -r -t 5 fails <&"${SENDER[0]}" || return 1
-+	echo "$fails"
-+}
-+
-+# sa_packets prints the number of packets that the SA has encrypted.
-+sa_packets() {
-+	ip -n "$NS" -s xfrm state |
-+		sed -nE 's/^\s*[0-9]+\(bytes\), ([0-9]+)\(packets\)$/\1/p'
-+}
-+
-+# allow_policy_gone succeeds once the allow policy is no longer installed.
-+allow_policy_gone() {
-+	! ip -n "$NS" xfrm policy list dir out | grep -q "dport $PORT"
-+}
-+
-+remove_allow_policy() {
-+	local mode=$1
-+	local index
-+
-+	case $mode in
-+	delete)
-+		ip -n "$NS" xfrm policy delete src "$SRC" dst "$DST" \
-+			proto udp dport "$PORT" dir out
-+		;;
-+	index)
-+		index=$(ip -n "$NS" -s xfrm policy list dir out |
-+			grep -A1 "dport $PORT" |
-+			sed -nE 's/.* index ([0-9]+) .*/\1/p')
-+		ip -n "$NS" xfrm policy delete dir out index "$index"
-+		;;
-+	expire)
-+		slowwait 5 allow_policy_gone
-+		;;
-+	flush)
-+		ip -n "$NS" xfrm policy flush
-+		;;
-+	esac
-+	allow_policy_gone
-+}
-+
-+run_test() {
-+	local family=$1
-+	local mode=$2
-+	local name="IPv$family: send after $3"
-+	local plain
-+	local fails
-+	local sent
-+	local esp
-+
-+	RET=0
-+
-+	if ! setup "$family" "$mode"; then
-+		log_test_skip "$name"
-+		cleanup_all_ns
-+		return
-+	fi
-+
-+	start_sender
-+	if ! fails=$(send_datagrams 1) || [ "$fails" != 0 ]; then
-+		log_test_skip "$name" "connected UDP socket not usable"
-+		cleanup
-+		return
-+	fi
-+	esp=$(sa_packets)
-+	check_err "$esp" "the allow policy did not apply"
-+
-+	remove_allow_policy "$mode"
-+	check_err $? "the allow policy was not removed"
-+
-+	fails=$(send_datagrams "$COUNT")
-+	check_err $? "the sender did not answer"
-+	if [ "$mode" = flush ]; then
-+		sent=$((COUNT - fails))
-+		check_err "$sent" "$sent of $COUNT datagrams not blocked"
-+	else
-+		plain=$((COUNT - fails - $(sa_packets) + esp))
-+		check_err "$fails" "$fails of $COUNT sends failed"
-+		check_err "$plain" \
-+			"$plain of $COUNT datagrams sent in plaintext"
-+	fi
-+
-+	log_test "$name"
-+	cleanup
-+}
-+
-+for family in 4 6; do
-+	run_test "$family" delete "policy deletion"
-+	run_test "$family" index "policy deletion by index"
-+	run_test "$family" expire "policy expiry"
-+	run_test "$family" flush "policy flush"
-+done
-+
-+exit "$EXIT_STATUS"
+ out:
+ 	spin_unlock_bh(&net->xfrm.xfrm_policy_lock);
+ 	return err;
+@@ -1875,10 +1884,12 @@ int xfrm_dev_policy_flush(struct net *net, struct net_device *dev,
+ 		spin_lock_bh(&net->xfrm.xfrm_policy_lock);
+ 		goto again;
+ 	}
+-	if (cnt)
++	if (cnt) {
++		rt_genid_bump_all(net);
+ 		__xfrm_policy_inexact_flush(net);
+-	else
++	} else {
+ 		err = -ESRCH;
++	}
+ out:
+ 	spin_unlock_bh(&net->xfrm.xfrm_policy_lock);
+ 	return err;
+@@ -2365,6 +2376,9 @@ int xfrm_policy_delete(struct xfrm_policy *pol, int dir)
+ 
+ 	spin_lock_bh(&net->xfrm.xfrm_policy_lock);
+ 	pol = __xfrm_policy_unlink(pol, dir);
++	/* Socket policies only apply to their own socket. */
++	if (pol && dir < XFRM_POLICY_MAX)
++		xfrm_policy_bump_rt_genid(net, pol->family);
+ 	spin_unlock_bh(&net->xfrm.xfrm_policy_lock);
+ 	if (pol) {
+ 		xfrm_policy_kill(pol);
 -- 
 2.56.0
 
