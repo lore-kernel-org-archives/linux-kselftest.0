@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795859317;
-	b=f0Vq/f8cKa+tpxMDGzT5YXSU2GK0xvYV6iTL9Xp1iuxOQPW5F5CLUJHllWqV6qig6byx
-	 lxbW0JiNO49D6LCb8bJkw6IE0e1Kq7z2K3wlbaNluZqDut7eaG7f6IVe3/4SVRPLGLm8c
-	 076u+tV9iliUa/Qhgz3YTW2VO6k1FVzPknOjKHKnEx0SpArN2Rz5vli7gvhbykVHrFcZv
-	 vwvkMyhFmWzYJ9xXMwZ9akt8uDEwqsi+DmSCSvjGdfReBwtqgK3VZurzhzhsh6QKXELEK
-	 xtGTHS6dOID2FuEamkAPLhj3J/iaiVkz68lUWKV5BfvmOIN/tGMa+8o46LU7iLWZWEg==
+	t=1795859325;
+	b=hPsRLj5o9p2lAXj09c1Hu/E7pNWM4qTc8pqe4G4cuPYvCjXkRhbCehwB81qZnC4n6CDH
+	 pW8IeRdmcXRfSprA6CU8RHy8TK7GpG4twgUwpOFFjJbU5CVlummzFHADVkVSatCkoGdKw
+	 8zIydrYksfDv5t19IjverroHCueWtbB4I/CLsPnO5Za3USrCDwbU6neWX81wpJi46nWe6
+	 zn4diAImv8Fgdja6nOmGNS5BSB+Qs17PwJzfQzCNZ9FhgO+f/Zw4rS3HEjpGrfEx2T76o
+	 oAGiG/+7WJ88In3d6n1ZC8OKfrLLmlgmXDJNC51IgfoRS11ywoO2Wva8ITy9v9lYnSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795859317;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795859325;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=RZs+hLB39RJoNYD8vJAf6edaYJxDfKubtPKj/+Sx+cY=;
-	b=XvT3kekulUAQL1K2EycXBBpyah70U5uKvVAAL9cS5pelUrM+WfmiUt6xfybEX10LEkVN
-	 oDZ7uu7m7dmWiAYVIAu+53ez/XCIaM/7fTTEhX6ySH+Od1kSe7qmqBqN39iDUMbRB9N5e
-	 zOJxQIe9HyoWz+yvpK5WmsC7e3hfKGq+sf4mROVyOZXVVUWKpBaa5ieO/2cgD44BKRKXS
-	 9d0ilAGmgisU5TcfG48h5P0O9+uyWGL+UIb1mSmSaUjrjspbKHZoWRmSG0ihc13bfabDo
-	 YNNCTJ4oiIknCx8vmUWdGsf9ijcDwQ1KjqexWXlhT3NuGH39gUQDdWljcLYMYJ8txJg==
+	bh=AXbs4Y08RfwAdusG9LPgruxTER1AdJ9w1oDDyOdB+wY=;
+	b=NIvMAAGIZ/f3ZpDpGbO5J3C1Yz74e1wymsOLnZeXUZ3/CGivdyfMw4ysTsaTaJBSe4UF
+	 LeC4X5YYf+rMoejU17yaj1mMal0tDxv0DNvndUSCCc3ORyIOjUfJALKOCHNaFEGpBB4XQ
+	 9lQbOL+YQDQ9ZmFOvRtsOioENHYG9uS7c4aH6WO2hstONupHPKMOwq4oGX6be7CiLv4P6
+	 pRpJ3Unt5jUV4MZjtwyeoi1oKiJiSDhoA5F+M4nQHCcM3SB8UV1q5Wk8caGhAxKSyz3dc
+	 5fSOVjyXpeuWRl+oUwGR3QW3PU5cQLO+02nrnNC4T5JpX7qm2FDa3C47K7Evjurxk8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K011nthr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EjK+TqbK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3888606A31C;
-	Sat, 28 Nov 2026 09:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30414606A68F;
+	Sat, 28 Nov 2026 09:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K011nthr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60711F000C1;
-	Sat, 28 Nov 2026 09:48:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EjK+TqbK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 473B91F00931;
+	Sat, 28 Nov 2026 09:48:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795859317;
-	bh=RZs+hLB39RJoNYD8vJAf6edaYJxDfKubtPKj/+Sx+cY=;
+	s=k20260515; t=1795859325;
+	bh=AXbs4Y08RfwAdusG9LPgruxTER1AdJ9w1oDDyOdB+wY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=K011nthr42Ejz0hTEP8cH2ToftWhnQiYQV9ud+pgvfrrueOqb18dPkleGKHOQPv4Z
-	 eobS/zgM3teU9+Sk5m9+GpXcpVgjJCyV1xloKtIku2bNa8C9LBqGU7EiMBnfhxCSKm
-	 vQUUczv1VukkXP74dYKM9BpyAqW7N6eWpX6vIKHv36QCSXx8imHb4DdDkFH7JxuIss
-	 TLYNnj1gCZyNTUoet+GHnDXEIZlCOqFfuXsvk9XIpaChAUiJfc7lBoES+ObJHWwyur
-	 U2HV0fc6ylTPAO1EUFgWrKnixK868OPws2nbFvsy2ymWrVJk1QSucVxRbB7LBCxWVX
-	 80jz41Istrv9w==
-Subject: Re: [PATCH net-next v3 03/12] amt: key relay tunnels on a union
- amt_addr endpoint
+	b=EjK+TqbKBdErilQiW5SmS7G9BzOd3iZmeaxs453dYf/bMoFwykR/gjilX0eBPNP0v
+	 /nDeuzYXulGwZE/NQQASHoCLDFKjcgDdI1pDtkKDGj911SLL+89A/JFio2I2ZMfPh5
+	 7r1Y51nFV0ABdA8afZTL4tAMCdf1KnKSTbMcufFsspwNuyu3VbYtXEPtwCkEJcvg/L
+	 IQELL9KLxxSgHUTrxmgHysrOWrK/OFZ43f2EkF1bKoC/4idI00VpvwQlpKDLoxO8o0
+	 q8CD1YVCbc63beeqXsY7lUXSHsYPLNNSQ0sBiGI0ptgzcUGYBQ59x9mWXMSUS9la1t
+	 2xeiqO/o5ZIzg==
+Subject: Re: [PATCH net-next v3 12/12] selftests: net: add amt_gw_v6.sh for
+ the IPv6 netlink attributes
 From: netdev-bot+sashiko@kernel.org
 To: omar@blockcast.net
 Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, willemb@google.com
-Date: Sat, 28 Nov 2026 09:48:36 +0000
-Message-ID: <179585931643.3135.2851219283955870732@kernel.org>
-In-Reply-To: <20261127094703.3025517-4-omar@blockcast.net>
-References: <20261127094703.3025517-4-omar@blockcast.net>
-X-sashiko-severity: Low
+Date: Sat, 28 Nov 2026 09:48:43 +0000
+Message-ID: <179585932383.3135.977907655234165301@kernel.org>
+In-Reply-To: <20261127094703.3025517-13-omar@blockcast.net>
+References: <20261127094703.3025517-13-omar@blockcast.net>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,148 +65,129 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-- [Low] The commit message misdescribes the pre-patch behaviour on an
-  IPv6 outer transport.
-- [Low] The commit message says both `amt_update_handler()` and
-  `amt_request_handler()` pass the outer-source snapshot "to…
-- [Low] The patch changes what the per-source tunnel cap counts.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] In tools/testing/selftests/net/amt_gw_v6.sh,
+  probe_v6_gateway() exits the whole script with $ksft_skip whenever the…
+- [Low] The new selftest tools/testing/selftests/net/amt_gw_v6.sh gives a
+  reason for adding the IPv6 address with `nodad` (line 158: "# nodad: a…
 
 --
 
-amt: key relay tunnels on a union amt_addr endpoint
+selftests: net: add amt_gw_v6.sh for the IPv6 netlink attributes
 
-This commit stores the relay tunnel endpoint as a union amt_addr instead
-of a __be32. It also adds the amt_outer_saddr(), amt_relay_mac() and
-amt_same_source() helpers. The per-source tunnel cap now counts IPv6
-sources per /64, and amt_v6() is still false for every device, so no
-functional change is intended.
+This adds a netlink-only selftest for the AMT IPv6 attributes
+IFLA_AMT_LOCAL_IP6 and IFLA_AMT_DISCOVERY_IP6. It checks that gateway and
+relay addresses read back through amt_fill_info(), and that invalid
+combinations are rejected with the expected extack message. A probe skips
+the test when iproute2 or the kernel lacks IPv6 AMT support.
 
-> A relay keeps one struct amt_tunnel_list per gateway endpoint and finds
-> it by the gateway's IPv4 address, stored as __be32 ip4 and taken from
-> ip_hdr(skb)->saddr, together with its UDP source port. On an IPv6 outer
-> transport that reads the traffic class and flow label of the IPv6
-> header as an address, and the field cannot hold the gateway's address
-> anyway.
-
-[Severity: Low]
-Is this description of the old read accurate?
-
-In struct iphdr, saddr starts at byte 12. In struct ipv6hdr, version,
-traffic class and flow label take bytes 0-3, payload_len bytes 4-5,
-nexthdr byte 6 and hop_limit byte 7. The source address then runs from
-byte 8 to byte 23.
-
-So ip_hdr(skb)->saddr on an IPv6 header reads bytes 12-15, which are
-s6_addr[4..7] of the IPv6 source address. It never reads the traffic
-class or the flow label.
-
-The conclusion is still correct, since a __be32 cannot hold an IPv6
-gateway address. Could the reason given in the message be corrected?
-
-> amt_outer_saddr() copies the outer source address of a received message
-> by value into a zeroed union amt_addr. amt_update_handler() takes that
-> snapshot before pskb_may_pull() and iptunnel_pull_header() can
-> reallocate the header; amt_request_handler() takes it after its only
-> pskb_may_pull() and pulls nothing more. Both pass it to
-> amt_tunnel_lookup(), amt_tunnel_get_or_create() and amt_update_tunnel().
-
-[Severity: Low]
-Does amt_request_handler() actually call any of these helpers?
-
-Only the Update path does:
-
-amt_update_handler()->amt_update_tunnel()->amt_tunnel_get_or_create()
-    ->amt_tunnel_lookup()
-
-amt_request_handler() walks the tunnel list itself instead:
-
-    list_for_each_entry_rcu(tunnel, &amt->tunnel_list, list) {
-        if (!amt_same_source(amt, &tunnel->addr, &saddr) ||
-            READ_ONCE(tunnel->dead))
-            continue;
-        per_src++;
-        if (amt_addr_equal(&tunnel->addr, &saddr) &&
-            tunnel->source_port == udph->source)
-            have = true;
-    }
-
-It then uses saddr for amt_relay_mac() and saddr.ip4 for
-amt_send_igmp_gq() and amt_send_mld_gq().
-
-That loop is a separate copy of the matching in
-amt_tunnel_get_or_create(), and the two have to be kept in sync by hand.
-Could the message say that only amt_update_handler() passes the snapshot
-to these three helpers?
-
-> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-> index 52ccaca08b5ec..83e666a023c12 100644
-> --- a/drivers/net/amt.c
-> +++ b/drivers/net/amt.c
+> diff --git a/tools/testing/selftests/net/amt_gw_v6.sh b/tools/testing/selftests/net/amt_gw_v6.sh
+> new file mode 100755
+> index 0000000000000..38858cbc9d3b8
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/amt_gw_v6.sh
+> @@ -0,0 +1,210 @@
 
 [ ... ]
 
-> @@ -2728,20 +2777,22 @@ static bool amt_membership_query_handler(struct amt_dev *amt,
+> +probe_v6_gateway()
+> +{
 
 [ ... ]
 
-> -/* Most tunnels one source address may hold: an eighth of the table, at
-> - * least one and at most AMT_MAX_TUNNELS_PER_SRC.
-> +/* Most tunnels one source (an IPv4 address or an IPv6 /64) may hold: an
-> + * eighth of the table, at least one and at most AMT_MAX_TUNNELS_PER_SRC.
->   */
->  static u32 amt_max_tunnels_per_src(const struct amt_dev *amt)
->  {
-> @@ -2759,7 +2810,7 @@ static u32 amt_max_tunnels_per_src(const struct amt_dev *amt)
->   * verified source address may hold.
->   */
->  static struct amt_tunnel_list *amt_tunnel_get_or_create(struct amt_dev *amt,
-> -							__be32 saddr,
-> +							union amt_addr *saddr,
->  							__be16 sport)
->  {
->  	struct amt_tunnel_list *tunnel;
-> @@ -2779,9 +2830,11 @@ static struct amt_tunnel_list *amt_tunnel_get_or_create(struct amt_dev *amt,
->  	 * against its address.
->  	 */
->  	list_for_each_entry(tunnel, &amt->tunnel_list, list) {
-> -		if (tunnel->ip4 != saddr || READ_ONCE(tunnel->dead))
-> +		if (!amt_same_source(amt, &tunnel->addr, saddr) ||
-> +		    READ_ONCE(tunnel->dead))
->  			continue;
+> +	if ! add_amt amtprobe mode gateway local "$V6_LOCAL" \
+> +	     discovery "$V6_DISC"; then
+> +		case "$ADD_ERR" in
+> +		*"binary attribute size out of range"*)
+
+[ ... ]
+
+> +	fi
+> +	got=$(amt_field amtprobe discovery)
+> +	ip -n "$GW" link del amtprobe
+> +	if [[ "$got" != *:* ]]; then
+> +		# The attributes are exactly four bytes, so this is an iproute2
+> +		# that truncated the literal to an IPv4 address, or prints the
+> +		# IPv6 one under another key. Four truncated bytes cannot be
+> +		# told from a real IPv4 address, and the kernel did what it
+> +		# should.
+> +		echo "SKIP: iproute2 lacks IPv6 AMT support (read back '$got')"
+> +		exit "$ksft_skip"
+> +	fi
+> +}
+
+[Severity: Medium]
+Could this check report a regression in amt_fill_info() as a skip?
+
+With this series, amt_policy uses NLA_POLICY_EXACT_LEN(sizeof(__be32)) for
+IFLA_AMT_LOCAL_IP and IFLA_AMT_DISCOVERY_IP. The "binary attribute size out
+of range" branch above already catches a 16-byte value in an IPv4
+attribute. So if add_amt succeeds here, the kernel has received
+IFLA_AMT_DISCOVERY_IP6 and built an IPv6 gateway.
+
+Suppose amt_fill_addr6() stopped emitting this attribute, or emitted the
+IPv4 IFLA_AMT_DISCOVERY_IP in its place:
+
+drivers/net/amt.c:amt_fill_addr6() {
+    ...
+	if (amt->mode == AMT_MODE_GATEWAY &&
+	    nla_put_in6_addr(skb, IFLA_AMT_DISCOVERY_IP6, &amt->discovery_ipv6))
+		return -EMSGSIZE;
+    ...
+}
+
+Then got would be '' or '0.0.0.0', and the whole script would exit with
+$ksft_skip before test_v6_gateway_roundtrip() runs. That function's check:
+
+	[ "$(amt_field amtg6 discovery)" = "$V6_DISC" ]
+	check_err $? "discovery did not read back as $V6_DISC"
+
+can therefore never fail because the readback is missing or IPv4. The
+commit message says the test checks that the IPv6 discovery address reads
+back through amt_fill_info(), and this check does not fully cover that.
+
+The skip is meant for an older kernel that truncates the address, where
+2001:db8:a::2 reads back as 32.1.13.184. Could it match that value instead
+of any readback without a colon?
+
+[ ... ]
+
+> +trap cleanup_all_ns EXIT
+> +setup_ns GW || exit "$ksft_skip"
+> +ip -n "$GW" link add gw_dev type dummy
+> +ip -n "$GW" link set gw_dev up
+> +ip -n "$GW" addr add "$V4_LOCAL/24" dev gw_dev
+> +# nodad: a tentative source address would race link creation.
+> +ip -n "$GW" addr add "$V6_LOCAL/64" dev gw_dev nodad
 
 [Severity: Low]
-This isn't a bug, but the comment on amt_max_tunnels_per_src() now says
-the cap counts an IPv4 address or an IPv6 /64. Three other comments
-about the same cap still describe it as per-address.
+Is the reason in this comment accurate?
 
-The kernel-doc above amt_tunnel_get_or_create():
+amt_newlink() checks only the syntax of IFLA_AMT_LOCAL_IP6. It rejects
+loopback, any, multicast and v4-mapped values. It never checks whether the
+address is assigned to an interface or still tentative.
 
- * table, amt_max_tunnels_per_src(), additionally limits the tunnels one
- * verified source address may hold.
+The encapsulation socket is created only by
+amt_dev_open()->amt_socket_create()->amt_create_sock(), and for IPv6 it
+binds to :: in any case. This script never brings an amt device up. So
+there seems to be no race between DAD and link creation for nodad to avoid.
 
-The comment above this loop:
+Separately, the "Not covered" list in the header comment at the top of the
+file names only the two duplicate-argument cases: discovery v4 together
+with discovery v6, and local v4 together with local v6. The commit message
+lists a third case, a 16-byte IFLA_AMT_LOCAL_IP or IFLA_AMT_DISCOVERY_IP.
 
-	 * a tunnel being freed neither stands in for its endpoint nor counts
-	 * against its address.
-
-And in include/net/amt.h:
-
-/* Upper bound of amt_max_tunnels_per_src(), the per-address tunnel cap */
-#define AMT_MAX_TUNNELS_PER_SRC 16
-
-amt_same_source() compares only the first AMT_SRC_PREFIX6_LEN bytes for
-IPv6, so two gateways at different addresses in the same /64 share one
-cap. None of these comments is updated later in the series either. At
-the series tip, the AMT_MAX_TUNNELS_PER_SRC comment and the
-amt_tunnel_get_or_create() kernel-doc still say per-address.
-
-Could these be updated to match the new definition of a source?
+Should the header comment list that case as well?
 
 [ ... ]
 
