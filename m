@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795826517;
-	b=2QSDlDz/SSv+NsZ6qAcbd6dnKImQmOnJpPCBT232JbWvVBCs41P2jlAUH2bDXYkuOYq4
-	 TIMpe44a50c+oThulxobGm3kXB+V1WO9fVruIIvhqmnkft5awUQkUALc86trl3kpoyP3d
-	 7ZbKsfs3PlLhQ+/N+6YChQMeL3cty0nkVmPCS53X+9xn7xZslSzkM+cRLI4HubP/e+0W4
-	 xqi8vVdBIwvEDeJz9qwjPzvjj+g74CdxBYyY2gqoA7nx1KKC4ysataPOeVoPSJxhHKYj2
-	 70S3QUaEFgBprsjQFIewCS/Wb5F63hX0L6aYrRjV/1+jgmFpbPzImV//Hoiiu7qxcUQ==
+	t=1795826523;
+	b=K1O4Bw6OAwKm9Mh97Rg2aXkIrud9om06it4u1FVu0EtpKpFMD4W0KRTXiorrUM5gP1zn
+	 PpDN6L6o1Ei133/jT9IQ81FxVoMn9iVwwvsdQIW5FV9tzhgJ7JMSJrp4tOtE7JSjisMX6
+	 r1lSTewG8maFTahnxnzoUmZNIgdloGymhE8mE5wfVtBd9jonvbR5C2U44QmrJe01ZN2dT
+	 iFm4HC0uKrSkITFYVIqLgu3c3AMDwp/sWcbZZm51WNfSEvy41wgf96mQMUx5znNGMdD7a
+	 F3jLcoWt0KMw0+E0lOoPXHzl0tBKXfh6pJiZr/UO4/tThdTSBUDJvupN0jHcmvK+kDQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795826517;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795826523;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=4sTZ3hSZWa9XKP9DNehQj39fUML0ZzMuSinX6q99rb8=;
-	b=1oVNIE/qaEs4f51mH8iJe/LXy95EOG5wZazTMZ0I0XYci2IsoL//AJ9O1XXRyHKkYrAj
-	 4HgeBlTA0DNFp8qqoANeXPFVdP1t25dehydxD2chSgWzlz3MMN5xom7/h6C661wpqoFAQ
-	 vRkVyvewfOAMXKPgPm1pw4043Im+HVatx9Ly0UOb1LE+l1HKiCR9LiiOMUE7/naY6jNMX
-	 p/eIV6Na9C2fUZVwSlOiSmYFhkPpJbkzBj3qN2vAMGMz5pK3IQVWLUuGp46IVZCY89SQ1
-	 9TU28Ok+kUfcZn13gEtyWZf8SqQZpGxzzyKhocaizWY57PKK04WeaLxiBxnjXKc0XNw==
+	bh=Y0X2+JtaSu8RoVd5++OIga8k8voJZCwQm1LERPaXDRY=;
+	b=RpSNzhJbS36ZXx3IsxZtH83vykRAYDePUvDE7BaA78APwRltJexVqekkocmh3cHqK/2I
+	 +HLMYRv4YuLXqBFnBaEgtOotkORvSq9JqhCksjNsrVnZDw8ue4IYMF5A2FQL78HPqY5vB
+	 ULeok2BcnOycDHtpn23IyFj4Z3UIrOSFVTJiIyzJHgqG0hLqNXmRhd5KV1CYO8tNxXo9o
+	 R2N5P7xRRyA1yW6HAHvIRRvFFJ+960VbzzmJo+5f/uv/+eYZIwrqre2whDn++T2RZkzrw
+	 8gsa5vn3EmxAbckKt7lFMdEPT4VZi0INm5ctkcIkxPfUQjrnrcWYV3hc6tZDm02yc/Q==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=baJbIitF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PQ0jtBzs;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583C6606A68D;
-	Sat, 28 Nov 2026 00:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16303606A6A5;
+	Sat, 28 Nov 2026 00:42:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=baJbIitF
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PQ0jtBzs
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795826517;
-	b=0s9sD4kG7f6iprAsO8PAOx5S4E3NK6VN3PQ9bqQNgXm0xszVM09yU+b4G3UdIZ2I1z6J
-	 0UUeQs/9BN/CV54dXS2oFL/Z7AS2Q14jlVOORTiCUpNnhie3PT25Hd/grmpGMDJiABC4l
-	 yH4MtkxgfrXTheW1O+tyfYo+ZWtJVtaRY8PwtmMZ3tlblFtEvHMiVCf8fpPA+ZR2+tQvy
-	 XFzfd6sATzy2EM78c243FSSZCVJtiwIVSOZgu06fBbqec1DfjluB0Y/7jqDtgWCLBAKcV
-	 qK6ITn03GCH/2hRy63qDJPXvWniJVJks7IqMZNv2XvAfa04PFenyWhGNm3GmmycZ9aQ==
+	t=1795826522;
+	b=XeVH9PDdghuCt7ujwJ7jQzM599/20ImVIk8EOWLS+VtsFSjkJWURA8KzAgXls0MdHmj1
+	 UXPfuh4C5Q8VpCcpux8U9ZXBUQ5RSkR96hQKe+nKxMc9ZkNHoSpD+S5QZ53ZxfhR/XUZj
+	 +DJbqtc3LhKoq75T7EA2eCSAfy5mzmKCaH0wLfl/BbsO0qvPUe4ZgWNy96YpJH8swgO1T
+	 iTvSnbKDzLG46Iz/tBXHADnRG5VI/zulmGDdhhtLKmyTy36mSwkUoQunP4gZcOVnZDW+a
+	 /Jmy6Uc/tq3HQRTydviuY11VBGc+X3EM+lE6ZNxxUH2VpbJQUmTTb2H8yik0MEoL6FA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795826517;
+	c=relaxed/relaxed; t=1795826522;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=4sTZ3hSZWa9XKP9DNehQj39fUML0ZzMuSinX6q99rb8=;
-	b=j1U6RV/bTvMxRyX2AVTrzPCf9OZJJJ7C8QzzasoNQCHH1AgTaKtUzRhiVjvWsb3UMgJN
-	 sFDmn3qN85NZDSbQ+2Aab7tmDotVoWuKEkYHPRaCtBIKOvdlqqJF4Z0AJFNAMzeNcOnmC
-	 OvEKufFdRxIxQZ7SL94QO+rrbe6KU29YpoQUv1X2YHssuVPAZvScQ+e1/mlPgrtUMEaFc
-	 oJ/D1bYwXbDjG/IGg1B9+QdcZsrwIB5i+TozjGKgzF7Nu1SxiaClt4SW9c/yQtPIO+RnP
-	 YIvqmdwNL7yfE4NhKmups5WRZ0LLVDT8IP7XHusmdJImmsrM/qGWf55/o+2YxXIwkTg==
+	bh=Y0X2+JtaSu8RoVd5++OIga8k8voJZCwQm1LERPaXDRY=;
+	b=UCtMkGwErU3O8QfseFcWDODqkd/uwVackP0nsdjvd1W5Etjf4CzHqV8Ah2lngiCLHkyj
+	 IH0AotpSX9mm8CHTFN3ass/r93wROYExBFPzpF/Z/Atgjo2JtdnjXDVoJH+TCi+Xn+fKe
+	 +2NFFN/xDim6UAIjVYriCCn2J4gtWqVtyQY4tt8va0am38Npwgc8NI44tdwEf0Cbuqv0j
+	 OluaTZBL426y+8TXKF8wNxHacVITTJNQStiZIrfe5WKAvkggwymoCSr56vISAW9iyK9oq
+	 9WA+5SdS2FYIA43m2w0Jb81EaTWW+TOuzcscvqz8puf92qgmXQVJ5j3YgKpdc9zOKVQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E74DC1F0089F;
-	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 545D41F00897;
+	Sat, 28 Nov 2026 00:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795826517;
-	bh=4sTZ3hSZWa9XKP9DNehQj39fUML0ZzMuSinX6q99rb8=;
+	s=k20260515; t=1795826522;
+	bh=Y0X2+JtaSu8RoVd5++OIga8k8voJZCwQm1LERPaXDRY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=baJbIitFfUgW4bEP9ug9F6PJ+zQR1vVnNl8tiYFGbD7RXRooZ6tTFpJn4Hvv7peGH
-	 Goj2powdTlBIGNI4LldB5496fIQmgTDIawkaLJF3jE+chdqvBxKHbVw/Nqzj482sJJ
-	 AIeFKLiteYnbx5BbDZH880cnnoOxy/Xo2I8ezjjtqfqm8FipOynHkbdBt8jVn6M3/X
-	 JUgkDMmswxKY7A34hrQPR6wZKPQ+dQQdH6t+4kw7Ceo3HwV0uwKQm+pWxf1DZNrPFW
-	 51J00ULRAHkQMCIpX3amNkcfM/Qao922S+hUpnbl3GnF2a2HP8TVdZqBrOVJSNMMTZ
-	 bbEMWrPWt1Muw==
+	b=PQ0jtBzswQ+LM2o9YoAjdMMSZvQaXqlWCUQP2Rpv8x59oOy8x87KOmXpU2yICyPMi
+	 Jl4ldwc5zNZjPWN45Yy5815fj3cTSfE/lAsCHaOLHUrVacPKOFwKodUfCtKdUfSZst
+	 QhIx42y/MpCKPQtqfU5R55CthyBMuw7JC9rK7uf6w449GEGk3tLFEIcz9UMxZV4cVY
+	 RgRyWRXbBsQb4FOfZp/uqcEcv+4bSAuCeuQ1rVaOt6akzSPrj/pJIMDyXEu1F7mBez
+	 mkYJ4hwKemk4NcLEfzu+u+NqNeC16CuotZ8t63nalDAw1w2gcshZiM8bzqnZjPNZYE
+	 6zZbuoIjzdPRg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 6E6EE4DEC7;
+	by lkml.kernel.org (Postfix) with ESMTP id D28434DED5;
 	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
 From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Sat, 28 Nov 2026 01:41:33 +0100
-Subject: [PATCH net-next v2 1/5] lisp: add LISP (Locator/ID Separation
- Protocol)
+Date: Sat, 28 Nov 2026 01:41:36 +0100
+Subject: [PATCH net-next v2 4/5] selftests: net: add a test of the LISP
+ devices
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261128-for-upstream-lisp-v1-v2-1-68e8649c3ed2@free.fr>
+Message-Id: <20261128-for-upstream-lisp-v1-v2-4-68e8649c3ed2@free.fr>
 References: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
 In-Reply-To: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -100,11 +100,11 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  =?utf-8?q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>, 
  Danielle Ratson <danieller@nvidia.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=32105;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=39986;
  i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=OK0njdsN4eZZm+tcA8UmL0sGkoZ/yEtEbSak10oDdME=;
- b=V/f0i5LWo0L7U1HnPT5vftqU+4PJq24j38RKDaAc31d/3gfNc7FFJKJYq+7MfmcE9iuGR1tjF
- 4EQ/BNvDy8+D3DbQk1oG9s+1pxqndfFZbySDsMAdHkakNWBaEZg9Vk+
+ bh=ArU5l36NgxSgK6DoEhmCvkbgOCHh0hlMGy+ipSOF1iY=;
+ b=UfhaAf9JtkEwdjXLQ1jILAnVKitxIx1YvIqXmWFkwlMV7yDkkRvN2Wl3gCnv46t5Ml3RVfdvP
+ 53E/Th+nrkgAe2VRErHtHeULAxxLiTuM1VfaDTy5CgVZ93SCpQG364n
 X-Developer-Key: i=vjardin@free.fr; a=ed25519;
  pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
 X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
@@ -115,1172 +115,1218 @@ Content-Transfer-Encoding: 7bit
 
 From: Vincent Jardin <vjardin@free.fr>
 
-LISP (RFC 9300) carries the packets sent to an endpoint identifier
-(EID) over UDP, to a routing locator (RLOC) of the site of that EID.
-An EID prefix and its RLOCs are a mapping, which the LISP control
-plane (RFC 9301) provides.
-
-The data plane of a LISP router (xTR) is a tunnel device. It sends
-IPv4 and IPv6 packets with a LISP header over UDP (port 4341).
-
-A mapping is a route. The kernel takes the RLOC of a packet from its
-tunnel metadata, which the lightweight tunnel encapsulation of the
-route or of its nexthop provides:
-  "encap ip" for an IPv4 RLOC
-  "encap ip6" for an IPv6 one
-whatever the family of the EID prefix.
-
-Example:
-  ip link add lisp101 type lisp id 101 local 192.0.2.1
-  ip link set lisp101 master site up
-  ip -6 nexthop add id 1 encap ip dst 198.51.100.1 dev lisp101
-  ip route add 10.2.0.0/24 vrf site nhid 1
-  ip -6 route add 2001:db8:2::/48 vrf site nhid 1
-
-The kernel has no map-cache and it does not resolve anything: it holds
-no state that the packets of a host create. The routes and the nexthops
-come from a control plane, in user space, as those of any other routing
-protocol. A packet without RLOC ends up dropped.
-
-A remote site is a nexthop, shared by its EID prefixes.
+Scenario: 2 xTRs carry the packets of 2 hosts through a core router.
+The EIDs of the first one are in a VRF and its RLOCs in another one,
+the second one uses its main table.
 
 Signed-off-by: Vincent Jardin <vjardin@free.fr>
 ---
- MAINTAINERS                  |    6 +
- drivers/net/Kconfig          |   19 +
- drivers/net/Makefile         |    1 +
- drivers/net/lisp.c           | 1040 ++++++++++++++++++++++++++++++++++++++++++
- include/uapi/linux/if_link.h |   12 +
- 5 files changed, 1078 insertions(+)
+ MAINTAINERS                          |    1 +
+ tools/testing/selftests/net/Makefile |    1 +
+ tools/testing/selftests/net/config   |    4 +
+ tools/testing/selftests/net/lisp.sh  | 1139 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 1145 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 97308edec53dd..6b62bc1f45bae 100644
+index addedadf43446..0d3a537d87023 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -15506,6 +15506,12 @@ F:	Documentation/misc-devices/lis3lv02d.rst
- F:	drivers/misc/lis3lv02d/
- F:	drivers/platform/x86/hp/hp_accel.c
+@@ -15512,6 +15512,7 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/networking/lisp.rst
+ F:	drivers/net/lisp.c
++F:	tools/testing/selftests/net/lisp*.sh
  
-+LISP DATA PLANE DRIVER
-+M:	Vincent Jardin <vjardin@free.fr>
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/lisp.c
-+
  LIST KUNIT TEST
  M:	David Gow <david@davidgow.net>
- L:	linux-kselftest@vger.kernel.org
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index ff79c466712df..aa78fd48e77a9 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -269,6 +269,25 @@ config BAREUDP
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called bareudp.
- 
-+config LISP
-+	tristate "Locator/ID Separation Protocol (LISP) data plane"
-+	depends on INET
-+	select NET_UDP_TUNNEL
-+	select GRO_CELLS
-+	select LWTUNNEL
-+	help
-+	  This adds the data plane of the Locator/ID Separation Protocol
-+	  (LISP, RFC 9300): a tunnel device that carries the IPv4 and IPv6
-+	  packets of an instance ID over UDP, to the routing locator (RLOC)
-+	  that the route or the nexthop of their destination gives as a
-+	  lightweight tunnel encapsulation.
-+
-+	  The mappings of the destinations to the RLOCs come from user space,
-+	  from a LISP control plane or from the configuration.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called lisp.
-+
- config GTP
- 	tristate "GPRS Tunneling Protocol datapath (GTP-U)"
- 	depends on INET
-diff --git a/drivers/net/Makefile b/drivers/net/Makefile
-index 88e4c485d6b2f..e7a521ac8b97d 100644
---- a/drivers/net/Makefile
-+++ b/drivers/net/Makefile
-@@ -36,6 +36,7 @@ obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
- obj-$(CONFIG_VXLAN) += vxlan/
- obj-$(CONFIG_GENEVE) += geneve.o
- obj-$(CONFIG_BAREUDP) += bareudp.o
-+obj-$(CONFIG_LISP) += lisp.o
- obj-$(CONFIG_GTP) += gtp.o
- obj-$(CONFIG_NLMON) += nlmon.o
- obj-$(CONFIG_PFCP) += pfcp.o
-diff --git a/drivers/net/lisp.c b/drivers/net/lisp.c
-new file mode 100644
-index 0000000000000..5fdd8113b4a5a
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index fb0a64662053f..7263049ab7c44 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -63,6 +63,7 @@ TEST_PROGS := \
+ 	l2_tos_ttl_inherit.sh \
+ 	l2tp.sh \
+ 	link_netns.py \
++	lisp.sh \
+ 	lwt_dst_cache_ref_loop.sh \
+ 	macvlan_mcast_shared_mac.sh \
+ 	msg_zerocopy.sh \
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index dab62cdfa27ba..767c0fdb79353 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -31,8 +31,10 @@ CONFIG_IP6_NF_MATCH_SRH=m
+ CONFIG_IP6_NF_NAT=m
+ CONFIG_IP6_NF_RAW=m
+ CONFIG_IP6_NF_TARGET_REJECT=m
++CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MROUTE=y
+ CONFIG_IP_MULTICAST=y
++CONFIG_IP_MULTIPLE_TABLES=y
+ CONFIG_IP_NF_FILTER=m
+ CONFIG_IP_NF_IPTABLES=m
+ CONFIG_IP_NF_IPTABLES_LEGACY=m
+@@ -42,6 +44,7 @@ CONFIG_IP_NF_NAT=m
+ CONFIG_IP_NF_RAW=m
+ CONFIG_IP_NF_TARGET_REJECT=m
+ CONFIG_IP_NF_TARGET_TTL=m
++CONFIG_IP_ROUTE_MULTIPATH=y
+ CONFIG_IP_SCTP=m
+ CONFIG_IPV6=y
+ CONFIG_IPV6_FOU=m
+@@ -64,6 +67,7 @@ CONFIG_L2TP=m
+ CONFIG_L2TP_ETH=m
+ CONFIG_L2TP_IP=m
+ CONFIG_L2TP_V3=y
++CONFIG_LISP=m
+ CONFIG_MACSEC=m
+ CONFIG_MACVLAN=y
+ CONFIG_MACVTAP=y
+diff --git a/tools/testing/selftests/net/lisp.sh b/tools/testing/selftests/net/lisp.sh
+new file mode 100755
+index 0000000000000..3b2e6590e41b0
 --- /dev/null
-+++ b/drivers/net/lisp.c
-@@ -0,0 +1,1040 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* LISP: data plane of the Locator/ID Separation Protocol, RFC 9300.
-+ *
-+ * Copyright (c) 2026 Vincent Jardin <vjardin@free.fr>, Free Mobile
-+ */
++++ b/tools/testing/selftests/net/lisp.sh
+@@ -0,0 +1,1139 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (c) 2026 Vincent Jardin <vjardin@free.fr>, Free Mobile
++#
++# Test the LISP data plane of drivers/net/lisp.c between two xTRs.
++#
++# The EIDs of x1 are in the VRF "site" and its RLOCs in the VRF "wan". x2 keeps
++# everything in its main table. The instance 101 has one LISP device on each
++# xTR. The instance 102 has a device on x1, in the VRF "site2", and uses a
++# device that collects metadata on x2.
++#
++# h1         x1                        core               x2           h2
++# 10.1.0.2   10.1.0.1 (site)                              10.2.0.1     10.2.0.2
++# fd00:1::2  fd00:1::1                                    fd00:2::1    fd00:2::2
++#       veth      lisp101 (site)                   lisp101      veth
++#                 lisp102 (site2)                  lispmd
++#                 192.0.2.1 (wan)     192.0.2.2
++#                 2001:db8:1::1  veth 2001:db8:1::2
++#                                     198.51.100.2        198.51.100.1
++#                                     2001:db8:2::2  veth 2001:db8:2::1
 +
-+#include <linux/hash.h>
-+#include <linux/icmp.h>
-+#include <linux/icmpv6.h>
-+#include <linux/if_arp.h>
-+#include <linux/ipv6.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/netdevice.h>
-+#include <linux/rculist.h>
-+#include <net/dsfield.h>
-+#include <net/dst_metadata.h>
-+#include <net/gro_cells.h>
-+#include <net/gso.h>
-+#include <net/icmp.h>
-+#include <net/inet_ecn.h>
-+#include <net/ip6_route.h>
-+#include <net/ip_tunnels.h>
-+#include <net/ipv6.h>
-+#include <net/l3mdev.h>
-+#include <net/netns/generic.h>
-+#include <net/rtnetlink.h>
-+#include <net/udp_tunnel.h>
++# shellcheck disable=SC2154 # variables assigned by setup_ns
++source lib.sh
 +
-+/* RFC 9300, section 5.1 */
-+#define LISP_UDP_PORT		4341
++# shellcheck disable=SC2155 # prefer RO variable over return value from cmd
++readonly CLI="$(dirname "$(readlink -f "$0")")/../../../net/ynl/pyynl/cli.py"
 +
-+/* RFC 9300, section 5.3 */
-+struct lisphdr {
-+	u8	flags;
-+	u8	nonce[3];
-+	__be32	iid_lsb;
-+};
++ALL_TESTS="
++	netlink_test
++	ping_test
++	fields_test
++	mtu_test
++	pmtu_test
++	multipath_test
++	instance_test
++	receive_test
++	rpfilter_test
++	updown_test
++	tcp_test
++	cross_vrf_test
++	cross_netns_test
++	netns_test
++"
 +
-+#define LISP_F_I		0x08	/* an instance ID is present */
-+#define LISP_F_KK		0x03	/* the payload is encrypted, RFC 8061 */
-+#define LISP_IID_SHIFT		8
-+#define LISP_IID_MAX		0xffffff
++LISP_PORT=4341
++IID=101
 +
-+#define LISP_BASE_HLEN		(sizeof(struct udphdr) + sizeof(struct lisphdr))
-+#define LISP_IPV4_HLEN		(sizeof(struct iphdr) + LISP_BASE_HLEN)
-+#define LISP_IPV6_HLEN		(sizeof(struct ipv6hdr) + LISP_BASE_HLEN)
++X1_RLOC4=192.0.2.1
++X1_RLOC6=2001:db8:1::1
++X2_RLOC4=198.51.100.1
++X2_RLOC6=2001:db8:2::1
 +
-+#define LISP_IID_HASH_BITS	10
-+#define LISP_IID_HASH_SIZE	BIT(LISP_IID_HASH_BITS)
++# ID of the nexthop that reaches the other xTR at its RLOC of a family
++NH4=14
++NH6=16
++# IDs of the nexthops that a test makes for itself
++NH_FIELDS=24
++NH_GROUP=30
++NH_INSTANCE=40
++NH_OTHER=99
 +
-+static unsigned int lisp_net_id;
++# An RLOC that is not the one of an xTR
++OTHER_RLOC4=203.0.113.9
 +
-+struct lisp_net {
-+	struct list_head	dev_list;
-+	struct list_head	sock_list;
-+	/* protects the two lists, and the devices of the sockets */
-+	struct mutex		lock;
-+};
++TCP_PORT=5000
++TCP_TIMEOUT=60
++TCP_FILE=
 +
-+struct lisp_dev;
++################################################################################
++# Helpers
 +
-+/* The UDP sockets of an l3mdev, shared by the devices that use it. */
-+struct lisp_sock {
-+	struct sock		*sk4;
-+	struct sock		*sk6;
-+	struct lisp_dev __rcu	*md_dev;
-+	struct list_head	list;
-+	struct rcu_head		rcu;
-+	int			refcnt;
-+	struct hlist_head	iid_list[LISP_IID_HASH_SIZE];
-+};
-+
-+struct lisp_dev {
-+	struct hlist_node	hlist;
-+	struct list_head	next;
-+	struct net		*net;	/* netns of the RLOCs */
-+	struct net_device	*dev;
-+	struct lisp_sock __rcu	*sock;
-+	struct gro_cells	gro_cells;
-+	struct in6_addr		local6;
-+	__be32			local;
-+	u32			iid;
-+	int			link;
-+	bool			collect_md;
-+	unsigned long		rcu_state;	/* when hlist left its chain */
-+};
-+
-+static struct hlist_head *lisp_iid_head(struct lisp_sock *ls, u32 iid)
++h1_ping()
 +{
-+	return &ls->iid_list[hash_32(iid, LISP_IID_HASH_BITS)];
++	ip netns exec "$h1" ping -q -c 1 -W 2 "$@" > /dev/null 2>&1
 +}
 +
-+static struct lisp_dev *lisp_lookup(struct lisp_sock *ls, u32 iid)
++h2_ping()
 +{
-+	struct lisp_dev *lisp;
-+
-+	/* A device that is going down may still be walked here. */
-+	hlist_for_each_entry_rcu(lisp, lisp_iid_head(ls, iid), hlist)
-+		if (lisp->iid == iid && rcu_access_pointer(lisp->sock) == ls)
-+			return lisp;
-+
-+	return rcu_dereference(ls->md_dev);
++	ip netns exec "$h2" ping -q -c 1 -W 1 "$@" > /dev/null 2>&1
 +}
 +
-+/* RFC 9300, section 5.3: the inner header gets the congestion indication and
-+ * the DSCP of the outer header, and its TTL when that one is lower.
-+ */
-+static int lisp_decap_fields(struct sk_buff *skb, u8 tos, u8 ttl)
++tc_packets()
 +{
-+	u8 dscp = tos & ~INET_ECN_MASK;
-+	struct ipv6hdr *ip6h;
-+	struct iphdr *iph;
++	local ns=$1; shift
++	local dev=$1; shift
++	local pref=$1; shift
 +
-+	if (skb->protocol == htons(ETH_P_IP)) {
-+		if (skb_ensure_writable(skb, sizeof(*iph)))
-+			return -ENOMEM;
-+
-+		iph = ip_hdr(skb);
-+		if (INET_ECN_decapsulate(skb, tos, iph->tos) > 1)
-+			return -EINVAL;
-+
-+		ipv4_change_dsfield(iph, INET_ECN_MASK, dscp);
-+		if (ttl < iph->ttl) {
-+			csum_replace2(&iph->check, htons(iph->ttl << 8),
-+				      htons(ttl << 8));
-+			iph->ttl = ttl;
-+		}
-+		return 0;
-+	}
-+
-+	if (skb_ensure_writable(skb, sizeof(*ip6h)))
-+		return -ENOMEM;
-+
-+	ip6h = ipv6_hdr(skb);
-+	if (INET_ECN_decapsulate(skb, tos, ipv6_get_dsfield(ip6h)) > 1)
-+		return -EINVAL;
-+
-+	if (ttl >= ip6h->hop_limit &&
-+	    dscp == (ipv6_get_dsfield(ip6h) & ~INET_ECN_MASK))
-+		return 0;
-+
-+	skb_postpull_rcsum(skb, ip6h, sizeof(*ip6h));
-+	ipv6_change_dsfield(ip6h, INET_ECN_MASK, dscp);
-+	if (ttl < ip6h->hop_limit)
-+		ip6h->hop_limit = ttl;
-+	skb_postpush_rcsum(skb, ip6h, sizeof(*ip6h));
-+
-+	return 0;
++	tc -n "$ns" -j -s filter show dev "$dev" ingress pref "$pref" |
++		jq '[.[] | select(.options.actions) |
++		     .options.actions[0].stats.packets] | add'
 +}
 +
-+static int lisp_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
++# On the core, coming from x1.
++core_packets()
 +{
-+	unsigned short family = AF_INET6;
-+	struct metadata_dst *tun_dst;
-+	const struct lisphdr *lh;
-+	struct lisp_sock *ls;
-+	struct lisp_dev *lisp;
-+	unsigned int len;
-+	__be16 proto;
-+	u32 iid = 0;
-+	u8 tos, ttl;
-+	int err;
-+
-+	ls = rcu_dereference_sk_user_data(sk);
-+	if (!ls)
-+		goto drop;
-+
-+	if (!pskb_may_pull(skb, LISP_BASE_HLEN + 1))
-+		goto drop;
-+
-+	lh = (const struct lisphdr *)(udp_hdr(skb) + 1);
-+	if (lh->flags & LISP_F_KK)
-+		goto drop;
-+
-+	if (lh->flags & LISP_F_I)
-+		iid = be32_to_cpu(lh->iid_lsb) >> LISP_IID_SHIFT;
-+
-+	lisp = lisp_lookup(ls, iid);
-+	if (!lisp)
-+		goto drop;
-+
-+	switch (*(const u8 *)(lh + 1) >> 4) {
-+	case 4:
-+		proto = htons(ETH_P_IP);
-+		break;
-+	case 6:
-+		if (!ipv6_mod_enabled())
-+			goto rx_dropped;
-+		proto = htons(ETH_P_IPV6);
-+		break;
-+	default:
-+		goto rx_frame_error;
-+	}
-+
-+	if (skb->protocol == htons(ETH_P_IP)) {
-+		family = AF_INET;
-+		tos = ip_hdr(skb)->tos;
-+		ttl = ip_hdr(skb)->ttl;
-+	} else {
-+		tos = ipv6_get_dsfield(ipv6_hdr(skb));
-+		ttl = ipv6_hdr(skb)->hop_limit;
-+	}
-+
-+	if (iptunnel_pull_header(skb, LISP_BASE_HLEN, proto,
-+				 !net_eq(lisp->net, dev_net(lisp->dev))))
-+		goto rx_dropped;
-+
-+	if (lisp->collect_md) {
-+		IP_TUNNEL_DECLARE_FLAGS(flags) = { };
-+
-+		__set_bit(IP_TUNNEL_KEY_BIT, flags);
-+		tun_dst = udp_tun_rx_dst(skb, family, flags,
-+					 key32_to_tunnel_id(cpu_to_be32(iid)),
-+					 0);
-+		if (!tun_dst)
-+			goto rx_dropped;
-+
-+		skb_dst_set(skb, &tun_dst->dst);
-+	}
-+
-+	skb->dev = lisp->dev;
-+	skb_reset_mac_header(skb);
-+	skb_reset_network_header(skb);
-+
-+	if (!pskb_inet_may_pull(skb)) {
-+		DEV_STATS_INC(lisp->dev, rx_length_errors);
-+		DEV_STATS_INC(lisp->dev, rx_errors);
-+		goto drop;
-+	}
-+
-+	err = lisp_decap_fields(skb, tos, ttl);
-+	if (err == -ENOMEM)
-+		goto rx_dropped;
-+	if (err)
-+		goto rx_frame_error;
-+
-+	len = skb->len;
-+	if (gro_cells_receive(&lisp->gro_cells, skb) == NET_RX_SUCCESS)
-+		dev_dstats_rx_add(lisp->dev, len);
-+
-+	return 0;
-+
-+rx_frame_error:
-+	DEV_STATS_INC(lisp->dev, rx_frame_errors);
-+	DEV_STATS_INC(lisp->dev, rx_errors);
-+	goto drop;
-+rx_dropped:
-+	dev_dstats_rx_dropped(lisp->dev);
-+drop:
-+	kfree_skb(skb);
-+	return 0;
++	tc_packets "$core" c1 "$1"
 +}
 +
-+static int lisp_udp_encap_err_lookup(struct sock *sk, struct sk_buff *skb)
++h2_packets()
 +{
-+	return 0;
++	tc_packets "$h2" eth0 "$1"
 +}
 +
-+static struct sock *lisp_udp_sock(struct net *net, int ifindex,
-+				  unsigned short family, struct lisp_sock *ls)
++link_stat()
 +{
-+	struct udp_tunnel_sock_cfg tunnel_cfg = { };
-+	struct udp_port_cfg udp_conf = { };
-+	struct socket *sock;
-+	int err;
++	local ns=$1; shift
++	local dev=$1; shift
++	local stat=$1; shift
 +
-+	udp_conf.family = family;
-+	udp_conf.ipv6_v6only = family == AF_INET6;
-+	udp_conf.local_udp_port = htons(LISP_UDP_PORT);
-+	udp_conf.bind_ifindex = ifindex;
-+
-+	err = udp_sock_create(net, &udp_conf, &sock);
-+	if (err < 0)
-+		return ERR_PTR(err);
-+
-+	udp_allow_gso(sock->sk);
-+
-+	tunnel_cfg.sk_user_data = ls;
-+	tunnel_cfg.encap_type = 1;
-+	tunnel_cfg.encap_rcv = lisp_udp_encap_recv;
-+	tunnel_cfg.encap_err_lookup = lisp_udp_encap_err_lookup;
-+	setup_udp_tunnel_sock(net, sock->sk, &tunnel_cfg);
-+
-+	return sock->sk;
++	ip -n "$ns" -j -s -s link show dev "$dev" | jq ".[0].stats64$stat"
 +}
 +
-+static void lisp_sock_release(struct lisp_sock *ls)
++# What the kernel answers to the creation of a device with these attributes,
++# which ip refuses to send.
++ynl_add()
 +{
-+	udp_tunnel_sock_release(ls->sk4);
-+	if (ls->sk6)
-+		udp_tunnel_sock_release(ls->sk6);
-+	kfree_rcu(ls, rcu);
++	local data=$1; shift
++
++	ip netns exec "$x2" "$CLI" --family rt-link --create --excl \
++		--do newlink --json "{\"ifname\": \"t0\", \"linkinfo\":
++			{\"kind\": \"lisp\", \"data\": $data}}" 2>&1
 +}
 +
-+/* A socket per family, as vxlan and geneve have: an IPv6 socket only takes
-+ * the IPv4 packets too when net.ipv6.bindv6only allows it.
-+ */
-+static struct lisp_sock *lisp_sock_create(struct net *net, int ifindex)
++# The EID prefixes of the instance 101 use the RLOCs of a family.
++use_rlocs()
 +{
-+	struct lisp_sock *ls;
-+	struct sock *sk;
++	local family=$1; shift
++	local nh=NH$family
 +
-+	ls = kzalloc_obj(*ls);
-+	if (!ls)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ls->refcnt = 1;
-+
-+	sk = lisp_udp_sock(net, ifindex, AF_INET, ls);
-+	if (IS_ERR(sk)) {
-+		kfree(ls);
-+		return ERR_CAST(sk);
-+	}
-+	ls->sk4 = sk;
-+
-+	if (!ipv6_mod_enabled())
-+		return ls;
-+
-+	sk = lisp_udp_sock(net, ifindex, AF_INET6, ls);
-+	if (IS_ERR(sk)) {
-+		lisp_sock_release(ls);
-+		return ERR_CAST(sk);
-+	}
-+	ls->sk6 = sk;
-+
-+	return ls;
++	ip -n "$x1" route replace 10.2.0.0/24 vrf site nhid "${!nh}"
++	ip -n "$x1" -6 route replace fd00:2::/64 vrf site nhid "${!nh}"
++	ip -n "$x2" route replace 10.1.0.0/24 nhid "${!nh}"
++	ip -n "$x2" -6 route replace fd00:1::/64 nhid "${!nh}"
 +}
 +
-+static bool lisp_sock_busy(struct lisp_sock *ls, const struct lisp_dev *lisp)
++core_send()
 +{
-+	const struct lisp_dev *tmp;
++	local bytes=$1; shift
 +
-+	if (lisp->collect_md)
-+		return rcu_access_pointer(ls->md_dev);
-+
-+	hlist_for_each_entry(tmp, lisp_iid_head(ls, lisp->iid), hlist)
-+		if (tmp->iid == lisp->iid)
-+			return true;
-+
-+	return false;
++	ip netns exec "$core" bash -c \
++		"printf '$bytes' > /dev/udp/$X1_RLOC4/$LISP_PORT"
 +}
 +
-+/* The l3mdev of the RLOCs: the link, or the one that the link is in. */
-+static int lisp_l3mdev(const struct lisp_dev *lisp)
-+{
-+	if (!lisp->link)
-+		return 0;
++################################################################################
++# Setup
 +
-+	return l3mdev_master_upper_ifindex_by_index(lisp->net, lisp->link);
++host_setup()
++{
++	local ns=$1; shift
++	local id=$1; shift
++
++	ip -n "$ns" link set eth0 up
++	ip -n "$ns" addr add "10.$id.0.2/24" dev eth0
++	ip -n "$ns" addr add "fd00:$id::2/64" dev eth0 nodad
++	ip -n "$ns" route add default via "10.$id.0.1"
++	ip -n "$ns" -6 route add default via "fd00:$id::1"
++	tc -n "$ns" qdisc add dev eth0 clsact
 +}
 +
-+static int lisp_open(struct net_device *dev)
++setup()
 +{
-+	struct lisp_dev *lisp = netdev_priv(dev);
-+	struct lisp_sock *ls, *found = NULL;
-+	struct lisp_net *ln;
-+	int ifindex;
-+	int err = 0;
++	local ns
 +
-+	ifindex = lisp_l3mdev(lisp);
++	setup_ns h1 x1 core x2 h2 || return
 +
-+	if (!lisp->collect_md && !poll_state_synchronize_rcu(lisp->rcu_state))
-+		synchronize_net();
++	for ns in "$h1" "$x1" "$core" "$x2" "$h2"; do
++		ip netns exec "$ns" sysctl -wq net.ipv6.conf.all.accept_dad=0
++		ip netns exec "$ns" sysctl -wq \
++			net.ipv6.conf.default.accept_dad=0
++	done
++	ip netns exec "$x2" sysctl -wq net.ipv6.bindv6only=1
 +
-+	ln = net_generic(lisp->net, lisp_net_id);
-+	mutex_lock(&ln->lock);
++	ip link add eth0 netns "$h1" type veth peer name eth0 netns "$x1"
++	ip link add eth1 netns "$x1" type veth peer name c1 netns "$core"
++	ip link add eth1 netns "$x2" type veth peer name c2 netns "$core"
++	ip link add eth0 netns "$h2" type veth peer name eth0 netns "$x2"
 +
-+	list_for_each_entry(ls, &ln->sock_list, list) {
-+		if (ls->sk4->sk_bound_dev_if == ifindex) {
-+			found = ls;
-+			break;
-+		}
-+	}
++	for ns in "$x1" "$core" "$x2"; do
++		ip netns exec "$ns" sysctl -wq net.ipv4.ip_forward=1
++		ip netns exec "$ns" sysctl -wq net.ipv6.conf.all.forwarding=1
++	done
 +
-+	if (found) {
-+		if (lisp_sock_busy(found, lisp)) {
-+			err = -EBUSY;
-+			goto unlock;
-+		}
-+		found->refcnt++;
-+	} else {
-+		found = lisp_sock_create(lisp->net, ifindex);
-+		if (IS_ERR(found)) {
-+			err = PTR_ERR(found);
-+			goto unlock;
-+		}
-+		list_add(&found->list, &ln->sock_list);
-+	}
++	host_setup "$h1" 1
++	host_setup "$h2" 2
 +
-+	rcu_assign_pointer(lisp->sock, found);
-+	if (lisp->collect_md)
-+		rcu_assign_pointer(found->md_dev, lisp);
++	ip -n "$core" link set c1 up
++	ip -n "$core" link set c2 up
++	ip -n "$core" addr add 192.0.2.2/30 dev c1
++	ip -n "$core" addr add 2001:db8:1::2/64 dev c1 nodad
++	ip -n "$core" addr add 198.51.100.2/30 dev c2
++	ip -n "$core" addr add 2001:db8:2::2/64 dev c2 nodad
++	tc -n "$core" qdisc add dev c1 clsact
++	tc -n "$core" qdisc add dev c2 clsact
++
++	# The packets of the instance 101, by family of RLOC: the I flag and
++	# the instance ID after the UDP header, and DF in the IPv4 header.
++	tc -n "$core" filter add dev c1 ingress protocol ip pref 4 u32 \
++		match ip protocol 17 0xff match ip dport $LISP_PORT 0xffff \
++		match u16 0x4000 0xffff at 6 match u8 0x08 0xff at 28 \
++		match u32 $((IID << 8)) 0xffffffff at 32 action continue
++	tc -n "$core" filter add dev c1 ingress protocol ipv6 pref 6 u32 \
++		match ip6 protocol 17 0xff match ip6 dport $LISP_PORT 0xffff \
++		match u8 0x08 0xff at 48 \
++		match u32 $((IID << 8)) 0xffffffff at 52 action continue
++
++	ip -n "$x1" link add site type vrf table 10
++	ip -n "$x1" link add wan type vrf table 20
++	ip -n "$x1" link add site2 type vrf table 30
++	ip -n "$x1" link set site up
++	ip -n "$x1" link set wan up
++	ip -n "$x1" link set site2 up
++	ip -n "$x1" link set eth0 master site up
++	ip -n "$x1" link set eth1 master wan up
++	ip -n "$x1" addr add 10.1.0.1/24 dev eth0
++	ip -n "$x1" addr add fd00:1::1/64 dev eth0 nodad
++	ip -n "$x1" addr add $X1_RLOC4/30 dev eth1
++	ip -n "$x1" addr add $X1_RLOC6/64 dev eth1 nodad
++	ip -n "$x1" route add default vrf wan via 192.0.2.2
++	ip -n "$x1" -6 route add default vrf wan via 2001:db8:1::2
++
++	ip -n "$x1" link add link wan name lisp101 type lisp id $IID \
++		local $X1_RLOC4 local $X1_RLOC6 || return
++	ip -n "$x1" link set lisp101 master site up
++	ip -n "$x1" -6 nexthop add id $NH4 encap ip dst $X2_RLOC4 dev lisp101
++	ip -n "$x1" -6 nexthop add id $NH6 encap ip6 dst $X2_RLOC6 dev lisp101
++
++	ip -n "$x2" link set eth0 up
++	ip -n "$x2" link set eth1 up
++	ip -n "$x2" addr add 10.2.0.1/24 dev eth0
++	ip -n "$x2" addr add fd00:2::1/64 dev eth0 nodad
++	ip -n "$x2" addr add $X2_RLOC4/30 dev eth1
++	ip -n "$x2" addr add $X2_RLOC6/64 dev eth1 nodad
++	ip -n "$x2" route add default via 198.51.100.2
++	ip -n "$x2" -6 route add default via 2001:db8:2::2
++
++	ip -n "$x2" link add lisp101 type lisp id $IID
++	ip -n "$x2" link set lisp101 up
++	ip -n "$x2" -6 nexthop add id $NH4 encap ip dst $X1_RLOC4 dev lisp101
++	ip -n "$x2" -6 nexthop add id $NH6 encap ip6 dst $X1_RLOC6 dev lisp101
++
++	use_rlocs 4
++}
++
++cleanup()
++{
++	[[ -n $TCP_FILE ]] && rm -f "$TCP_FILE" "$TCP_FILE.out"
++	cleanup_all_ns
++}
++
++################################################################################
++# Tests
++
++netlink_test()
++{
++	local out
++
++	RET=0
++
++	out=$(ip -n "$x2" link add t0 type lisp id "$IID" 2>&1)
++	check_fail $? "an instance ID is used twice"
++	[[ $out == *"already has this instance ID"* ]]
++	check_err $? "unexpected error for a used instance ID: $out"
++
++	ip -n "$x2" link add t1 type lisp external
++	check_err $? "no device that collects metadata"
++	out=$(ip -n "$x2" link add t0 type lisp external 2>&1)
++	check_fail $? "two devices collect metadata"
++	[[ $out == *"already collects the metadata"* ]]
++	check_err $? "unexpected error for a second device with metadata: $out"
++	out=$(ip -n "$x2" -d -j link show dev t1 |
++	      jq -c '.[0].linkinfo.info_data')
++	[[ $out == '{"external":true}' ]]
++	check_err $? "unexpected attributes with metadata: $out"
++	ip -n "$x2" link del t1
++
++	out=$(ip -n "$x2" link add t0 type lisp id 7 local 224.0.0.1 2>&1)
++	check_fail $? "a multicast local RLOC is accepted"
++	[[ $out == *"not a unicast address"* ]]
++	check_err $? "unexpected error for a multicast RLOC: $out"
++
++	out=$(ip -n "$x2" link add t0 type lisp id 7 local fe80::1 2>&1)
++	check_fail $? "a link-local local RLOC is accepted"
++	[[ $out == *"not a global unicast address"* ]]
++	check_err $? "unexpected error for a link-local RLOC: $out"
++
++	out=$(ip -n "$x2" link set lisp101 type lisp id 7 2>&1)
++	check_fail $? "the instance ID of a device can be changed"
++	[[ $out == *"Operation not supported"* ]]
++	check_err $? "unexpected error for a change: $out"
++	ip -n "$x1" link set lisp101 type lisp local 192.0.2.99 2> /dev/null
++	check_fail $? "a local RLOC of a device can be changed"
++
++	ip -n "$x2" link add t0 type lisp id 16777215 local 192.0.2.9 \
++		local 2001:db8::9
++	check_err $? "the highest instance ID is refused"
++	out=$(ip -n "$x2" -d -j link show dev t0 | jq -c \
++		'.[0] | [.mtu, .linkinfo.info_data.id,
++			 .linkinfo.info_data.local,
++			 .linkinfo.info_data.local6]')
++	[[ $out == '[1444,16777215,"192.0.2.9","2001:db8::9"]' ]]
++	check_err $? "unexpected attributes: $out"
++	ip -n "$x2" link del t0
++
++	[[ $(ip -n "$x1" -j link show dev lisp101 | jq -r '.[0].link') == wan ]]
++	check_err $? "the link of the RLOCs is not reported"
++
++	# The same instance ID can be used with RLOCs of another l3mdev, but
++	# not twice with the same one.
++	ip -n "$x1" link add link site2 name t0 type lisp id "$IID"
++	check_err $? "an instance ID cannot be used with two l3mdevs"
++	ip -n "$x1" link set t0 up
++	check_err $? "an instance ID cannot be up with two l3mdevs"
++	ip -n "$x1" link del t0
++
++	out=$(ip -n "$x1" link add link eth1 name t0 type lisp id "$IID" 2>&1)
++	check_fail $? "an instance ID is used twice with the links of an l3mdev"
++	[[ $out == *"already has this instance ID"* ]]
++	check_err $? "unexpected error for a used l3mdev: $out"
++
++	# A link that joins the l3mdev later: the device cannot be up.
++	ip -n "$x1" link add port9 type dummy
++	ip -n "$x1" link add link port9 name t0 type lisp id "$IID"
++	check_err $? \
++		"an instance ID cannot be used with a link of the main table"
++	ip -n "$x1" link set port9 master wan
++	out=$(ip -n "$x1" link set t0 up 2>&1)
++	check_fail $? "an instance ID is up twice with the same l3mdev"
++	[[ $out == *"Device or resource busy"* ]]
++	check_err $? "unexpected error for a used l3mdev: $out"
++
++	# A device goes with its link.
++	ip -n "$x1" link del port9
++	busywait "$BUSYWAIT_TIMEOUT" bash -c \
++		"! ip -n $x1 link show dev t0 > /dev/null 2>&1"
++	check_err $? "a device outlives its link"
++
++	log_test "Device attributes"
++
++	if ! "$CLI" --family rt-link --list-ops > /dev/null 2>&1; then
++		log_test_skip "Device attributes that ip does not send" \
++			"YNL CLI not usable"
++		return
++	fi
++
++	RET=0
++
++	out=$(ynl_add '{"id": 16777216}')
++	[[ $out == *"Numerical result out of range"* ]]
++	check_err $? "unexpected answer to an instance ID of 25 bits: $out"
++	out=$(ynl_add '{"local": "192.0.2.9"}')
++	[[ $out == *"Invalid argument"* ]]
++	check_err $? "unexpected answer without instance ID: $out"
++	out=$(ynl_add '{"id": 7, "collect-metadata": true}')
++	[[ $out == *"Invalid argument"* ]]
++	check_err $? "unexpected answer with an instance ID and metadata: $out"
++	out=$(ynl_add '{"id": 7, "local": "192.0.2.9"}')
++	check_err $? "unexpected answer to valid attributes: $out"
++	ip -n "$x2" link del t0
++
++	log_test "Device attributes that ip does not send"
++}
++
++rloc_family_test()
++{
++	local family=$1; shift
++	local other=$1; shift
++	local before_other
++	local before
++
++	RET=0
++
++	use_rlocs "$family"
++	before=$(core_packets "$family")
++	before_other=$(core_packets "$other")
++
++	h1_ping 10.2.0.2
++	check_err $? "no answer from the IPv4 EID"
++	h1_ping fd00:2::2
++	check_err $? "no answer from the IPv6 EID"
++
++	(( $(core_packets "$family") - before == 2 ))
++	check_err $? "unexpected LISP header with IPv$family RLOCs"
++	(( $(core_packets "$other") == before_other ))
++	check_err $? "packets sent to IPv$other RLOCs"
++
++	log_test "IPv4 and IPv6 EIDs with IPv$family RLOCs"
++}
++
++ping_test()
++{
++	rloc_family_test 4 6
++	rloc_family_test 6 4
++	use_rlocs 4
++}
++
++# The TTL and the DSCP of a packet go to the outer header, then come back with
++# what the core did to them. The host sends 20, x1 forwards 19, which the core
++# gets in the outer header and forwards as 18. x2 forwards 17.
++fields_test()
++{
++	RET=0
++
++	tc -n "$core" filter add dev c1 ingress protocol ip pref 10 u32 \
++		match ip dport "$LISP_PORT" 0xffff match ip tos 0x28 0xff \
++		match u8 19 0xff at 8 action pass
++	tc -n "$h2" filter add dev eth0 ingress protocol ip pref 10 u32 \
++		match ip protocol 1 0xff match ip tos 0x28 0xff \
++		match u8 17 0xff at 8 action pass
++	tc -n "$h2" filter add dev eth0 ingress protocol ipv6 pref 11 u32 \
++		match ip6 protocol 58 0xff match ip6 priority 0x28 0xff \
++		match u8 17 0xff at 7 action pass
++
++	h1_ping -t 20 -Q 0x28 10.2.0.2
++	check_err $? "no answer from the IPv4 EID"
++	h1_ping -t 20 -Q 0x28 fd00:2::2
++	check_err $? "no answer from the IPv6 EID"
++
++	(( $(core_packets 10) == 2 ))
++	check_err $? "the outer header did not inherit the TTL and the DSCP"
++	(( $(h2_packets 10) == 1 ))
++	check_err $? "the IPv4 packet did not get the outer TTL and DSCP"
++	(( $(h2_packets 11) == 1 ))
++	check_err $? "the IPv6 packet did not get the outer TTL and DSCP"
++
++	tc -n "$core" filter del dev c1 ingress pref 10
++	tc -n "$h2" filter del dev eth0 ingress pref 10
++	tc -n "$h2" filter del dev eth0 ingress pref 11
++	log_test "TTL and DSCP inherited"
++
++	RET=0
++
++	ip -n "$x1" -6 nexthop add id "$NH_FIELDS" encap ip dst "$X2_RLOC4" \
++		ttl 5 tos 0x40 dev lisp101
++	ip -n "$x1" route replace 10.2.0.0/24 vrf site nhid "$NH_FIELDS"
++	ip -n "$x1" -6 route replace fd00:2::/64 vrf site nhid "$NH_FIELDS"
++
++	tc -n "$core" filter add dev c1 ingress protocol ip pref 10 u32 \
++		match ip dport "$LISP_PORT" 0xffff match ip tos 0x42 0xff \
++		match u8 5 0xff at 8 action pass
++	tc -n "$core" filter add dev c2 egress protocol ip pref 10 u32 \
++		match ip dport "$LISP_PORT" 0xffff match ip tos 0x02 0x03 \
++		action pedit ex munge ip tos set 0x03 retain 0x03 \
++		pipe action csum ip4h
++	tc -n "$h2" filter add dev eth0 ingress protocol ip pref 10 u32 \
++		match ip protocol 1 0xff match ip tos 0x43 0xff \
++		match u8 3 0xff at 8 action pass
++	tc -n "$h2" filter add dev eth0 ingress protocol ipv6 pref 11 u32 \
++		match ip6 protocol 58 0xff match ip6 priority 0x43 0xff \
++		match u8 3 0xff at 7 action pass
++
++	h1_ping -Q 0x2a 10.2.0.2
++	check_err $? "no answer from the IPv4 EID"
++	h1_ping -Q 0x2a fd00:2::2
++	check_err $? "no answer from the IPv6 EID"
++
++	(( $(core_packets 10) == 2 ))
++	check_err $? \
++		"the outer header did not get the TTL and DSCP of the nexthop"
++	(( $(h2_packets 10) == 1 ))
++	check_err $? "the IPv4 packet did not get the outer TTL, DSCP and ECN"
++	(( $(h2_packets 11) == 1 ))
++	check_err $? "the IPv6 packet did not get the outer TTL, DSCP and ECN"
++
++	tc -n "$core" filter del dev c1 ingress pref 10
++	tc -n "$core" filter del dev c2 egress pref 10
++	tc -n "$h2" filter del dev eth0 ingress pref 10
++	tc -n "$h2" filter del dev eth0 ingress pref 11
++	use_rlocs 4
++	ip -n "$x1" nexthop del id "$NH_FIELDS"
++	log_test "TTL and DSCP of the nexthop, congestion marked by the core"
++}
++
++mtu_test()
++{
++	local family
++
++	for family in 4 6; do
++		RET=0
++		use_rlocs "$family"
++
++		h1_ping -M "do" -s 1416 10.2.0.2
++		check_err $? "an IPv4 packet of 1444 bytes is lost"
++		h1_ping -M "do" -s 1417 10.2.0.2
++		check_fail $? "an IPv4 packet of 1445 bytes goes through"
++		h1_ping -s 1396 fd00:2::2
++		check_err $? "an IPv6 packet of 1444 bytes is lost"
++		h1_ping -s 1397 fd00:2::2
++		check_fail $? "an IPv6 packet of 1445 bytes goes through"
++		h1_ping -s 3000 10.2.0.2
++		check_err $? "IPv4 fragments are lost"
++
++		log_test "Device MTU with IPv$family RLOCs"
++
++		# The next pass must not start from the path MTU of this one.
++		ip -n "$h1" route flush cache
++		ip -n "$h1" -6 route flush cache
++	done
++
++	use_rlocs 4
++}
++
++pmtu_family_test()
++{
++	local family=$1; shift
++	local hlen=$1; shift
++	local mtu=$((1400 - hlen))
++
++	RET=0
++	use_rlocs "$family"
++
++	h1_ping -M "do" -s 1372 10.2.0.2
++	check_fail $? "a packet goes through a path that is too small"
++	h1_ping -M "do" -s 1372 10.2.0.2
++	check_fail $? "a packet goes through a path that is known as too small"
++	ip -n "$h1" route get 10.2.0.2 | grep -qw "mtu $mtu"
++	check_err $? "no IPv4 path MTU of $mtu on the host"
++	h1_ping -M "do" -s $((mtu - 28)) 10.2.0.2
++	check_err $? "an IPv4 packet of the path MTU is lost"
++
++	h1_ping -s 1352 fd00:2::2
++	check_fail $? "an IPv6 packet goes through a path that is too small"
++	ip -n "$h1" -6 route get fd00:2::2 | grep -qw "mtu $mtu"
++	check_err $? "no IPv6 path MTU of $mtu on the host"
++	h1_ping -s $((mtu - 48)) fd00:2::2
++	check_err $? "an IPv6 packet of the path MTU is lost"
++
++	log_test "Path MTU with IPv$family RLOCs"
++
++	ip -n "$h1" route flush cache
++	ip -n "$h1" -6 route flush cache
++	ip -n "$x1" route flush cache
++	ip -n "$x1" -6 route flush cache
++}
++
++frag_family_test()
++{
++	local family=$1; shift
++
++	RET=0
++	use_rlocs "$family"
++
++	# x1 learns the path MTU to the RLOC with a first packet.
++	h1_ping -s 1232 fd00:2::2
++	h1_ping -s 1232 fd00:2::2
++	check_err $? "an IPv6 packet of 1280 bytes is lost"
++	h1_ping -s 1233 fd00:2::2
++	check_fail $? "an IPv6 packet of 1281 bytes goes through"
++	ip -n "$h1" -6 route get fd00:2::2 | grep -qw "mtu 1280"
++	check_err $? "no IPv6 path MTU of 1280 on the host"
++
++	log_test "Path that leaves less than 1280 bytes, IPv$family RLOCs"
++
++	ip -n "$h1" -6 route flush cache
++	ip -n "$x1" route flush cache
++	ip -n "$x1" -6 route flush cache
++}
++
++pmtu_test()
++{
++	ip -n "$core" link set c2 mtu 1400
++	ip -n "$x2" link set eth1 mtu 1400
++
++	pmtu_family_test 4 36
++	pmtu_family_test 6 56
++
++	ip -n "$core" link set c2 mtu 1300
++	ip -n "$x2" link set eth1 mtu 1300
++
++	frag_family_test 4
++	frag_family_test 6
++
++	ip -n "$core" link set c2 mtu 1500
++	ip -n "$x2" link set eth1 mtu 1500
++	use_rlocs 4
++}
++
++multipath_test()
++{
++	local before4
++	local before6
++	local i
++
++	RET=0
++
++	for i in $(seq 16 47); do
++		ip -n "$h2" addr add "10.2.0.$i/24" dev eth0
++	done
++	ip -n "$x1" nexthop add id "$NH_GROUP" group "$NH4"/"$NH6"
++	ip -n "$x1" route replace 10.2.0.0/24 vrf site nhid "$NH_GROUP"
++
++	before4=$(core_packets 4)
++	before6=$(core_packets 6)
++	for i in $(seq 16 47); do
++		h1_ping "10.2.0.$i"
++		check_err $? "no answer from 10.2.0.$i"
++	done
++
++	(( $(core_packets 4) > before4 ))
++	check_err $? "nothing was sent to the IPv4 RLOC of the group"
++	(( $(core_packets 6) > before6 ))
++	check_err $? "nothing was sent to the IPv6 RLOC of the group"
++	(( $(core_packets 4) + $(core_packets 6) - before4 - before6 == 32 ))
++	check_err $? "packets were not sent once"
++
++	# The group counts what it sends to each RLOC.
++	(( $(ip -n "$x1" -j -s nexthop show id "$NH_GROUP" |
++	     jq --argjson id "$NH4" \
++	     '.[0].group_stats[] | select(.id == $id) | .packets') ==
++	   $(core_packets 4) - before4 ))
++	check_err $? "unexpected count of the packets sent to the IPv4 RLOC"
++	(( $(ip -n "$x1" -j -s nexthop show id "$NH_GROUP" |
++	     jq --argjson id "$NH6" \
++	     '.[0].group_stats[] | select(.id == $id) | .packets') ==
++	   $(core_packets 6) - before6 ))
++	check_err $? "unexpected count of the packets sent to the IPv6 RLOC"
++
++	use_rlocs 4
++	ip -n "$x1" nexthop del id "$NH_GROUP"
++	for i in $(seq 16 47); do
++		ip -n "$h2" addr del "10.2.0.$i/24" dev eth0
++	done
++	log_test "Group of nexthops"
++}
++
++# Another instance uses the same sockets: a device in another VRF of x1, and
++# the device that collects metadata on x2, where the routes give the instance
++# ID.
++instance_test()
++{
++	local rx_before
++	local tx_errors
++	local family
++	local addr
++
++	RET=0
++
++	ip -n "$x1" link add link wan name lisp102 type lisp id 102
++	ip -n "$x1" link set lisp102 master site2 up
++	ip -n "$x1" addr add 10.9.1.1/32 dev lisp102
++	ip -n "$x1" addr add fd00:91::1/128 dev lisp102 nodad
++
++	ip -n "$x2" link add lispmd type lisp external
++	ip -n "$x2" link set lispmd up
++	ip -n "$x2" link add dummy0 type dummy
++	ip -n "$x2" link set dummy0 up
++	ip -n "$x2" addr add 10.9.2.1/24 dev dummy0
++	ip -n "$x2" addr add fd00:92::1/64 dev dummy0 nodad
++	tc -n "$x2" qdisc add dev lispmd clsact
++
++	for family in 4 6; do
++		if [[ $family == 4 ]]; then
++			ip -n "$x1" -6 nexthop add id "$NH_INSTANCE" encap ip \
++				dst "$X2_RLOC4" dev lisp102
++			ip -n "$x2" -6 nexthop add id "$NH_INSTANCE" encap ip \
++				id 102 dst "$X1_RLOC4" dev lispmd
++			tc -n "$x2" filter add dev lispmd ingress pref 1 \
++				flower enc_key_id 102 enc_src_ip "$X1_RLOC4" \
++				action pass
++		else
++			ip -n "$x1" -6 nexthop replace id "$NH_INSTANCE" \
++				encap ip6 dst "$X2_RLOC6" dev lisp102
++			ip -n "$x2" -6 nexthop replace id "$NH_INSTANCE" \
++				encap ip6 id 102 dst "$X1_RLOC6" dev lispmd
++			tc -n "$x2" filter add dev lispmd ingress pref 1 \
++				flower enc_key_id 102 enc_src_ip "$X1_RLOC6" \
++				action pass
++		fi
++		ip -n "$x1" route replace 10.9.2.0/24 vrf site2 \
++			nhid "$NH_INSTANCE"
++		ip -n "$x1" -6 route replace fd00:92::/64 vrf site2 \
++			nhid "$NH_INSTANCE"
++		ip -n "$x2" route replace 10.9.1.0/24 nhid "$NH_INSTANCE"
++		ip -n "$x2" -6 route replace fd00:91::/64 nhid "$NH_INSTANCE"
++
++		rx_before=$(link_stat "$x1" lisp101 .rx.packets)
++		for addr in 10.9.2.1 fd00:92::1; do
++			ip netns exec "$x1" ping -q -c 1 -W 2 -I site2 "$addr" \
++				> /dev/null 2>&1
++			check_err $? \
++				"no answer from $addr with IPv$family RLOCs"
++		done
++
++		(( $(tc_packets "$x2" lispmd 1) == 2 ))
++		check_err $? "no metadata with IPv$family RLOCs"
++		(( $(link_stat "$x1" lisp101 .rx.packets) == rx_before ))
++		check_err $? "packets received by another instance"
++
++		tc -n "$x2" filter del dev lispmd ingress pref 1
++	done
++
++	h1_ping 10.2.0.2
++	check_err $? "the first instance is lost"
++
++	# An instance ID that does not fit the header: the device refuses it.
++	ip -n "$x2" -6 route del fd00:91::/64
++	ip -n "$x2" -6 nexthop replace id "$NH_INSTANCE" encap ip id 16777216 \
++		dst "$X1_RLOC4" dev lispmd
++	tx_errors=$(link_stat "$x2" lispmd .tx.errors)
++	ip netns exec "$x2" ping -q -c 1 -W 1 10.9.1.1 > /dev/null 2>&1
++	check_fail $? "an instance ID of 25 bits is sent"
++	(( $(link_stat "$x2" lispmd .tx.errors) == tx_errors + 1 ))
++	check_err $? "an instance ID of 25 bits is not refused by the device"
++
++	ip -n "$x2" route del 10.9.1.0/24
++	ip -n "$x2" nexthop del id "$NH_INSTANCE"
++	ip -n "$x2" link del dummy0
++	ip -n "$x2" link del lispmd
++	ip -n "$x1" link del lisp102
++	log_test "Instances with a device each and with metadata"
++}
++
++receive_test()
++{
++	local frame_errors
++	local length_errors
++	local rx
++
++	RET=0
++
++	rx=$(link_stat "$x1" lisp101 .rx.packets)
++	frame_errors=$(link_stat "$x1" lisp101 .rx.frame_errors)
++	length_errors=$(link_stat "$x1" lisp101 .rx.length_errors)
++
++	# Neither IPv4 nor IPv6 after the header.
++	core_send '\x08\x00\x00\x00\x00\x00\x65\x00\x00\x00\x00\x00'
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
++		"== $((frame_errors + 1))" \
++		link_stat "$x1" lisp101 .rx.frame_errors > /dev/null
++	check_err $? "a payload of an unknown version is not counted"
++
++	# An IPv4 header that is cut.
++	core_send '\x08\x00\x00\x00\x00\x00\x65\x00\x45\x00\x00\x00'
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
++		"== $((length_errors + 1))" \
++		link_stat "$x1" lisp101 .rx.length_errors > /dev/null
++	check_err $? "a short payload is not counted"
++
++	# An encrypted payload, an unknown instance, and no instance.
++	core_send '\x09\x00\x00\x00\x00\x00\x65\x00\x00\x00\x00\x00'
++	core_send '\x08\x00\x00\x00\x00\x00\x66\x00\x00\x00\x00\x00'
++	core_send '\x00\x00\x00\x00\x00\x00\x65\x00\x00\x00\x00\x00'
++	core_send '\x08\x00\x00\x00\x00\x00\x65\x00\x00\x00\x00\x00'
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
++		"== $((frame_errors + 2))" \
++		link_stat "$x1" lisp101 .rx.frame_errors > /dev/null
++	check_err $? "packets of other instances are counted"
++
++	# Without the I flag, the instance is 0.
++	ip -n "$x1" link add link wan name lisp0 type lisp id 0
++	ip -n "$x1" link set lisp0 up
++	core_send '\x00\x00\x00\x00\xff\xff\xff\xff\x00\x00\x00\x00'
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== 1" \
++		link_stat "$x1" lisp0 .rx.frame_errors > /dev/null
++	check_err $? "a packet without instance ID is not for the instance 0"
++	ip -n "$x1" link del lisp0
++
++	(( $(link_stat "$x1" lisp101 .rx.packets) == rx ))
++	check_err $? "packets were received"
++
++	# A route without RLOC.
++	ip -n "$x1" route add 10.3.0.0/24 vrf site dev lisp101
++	rx=$(link_stat "$x1" lisp101 .tx.errors)
++	h1_ping -W 1 10.3.0.1
++	(( $(link_stat "$x1" lisp101 .tx.errors) == rx + 1 ))
++	check_err $? "a packet without RLOC is not counted"
++	ip -n "$x1" route del 10.3.0.0/24 vrf site
++
++	log_test "Packets that are dropped"
++}
++
++# the reverse path filter of IPv4 dropped on x1
++x1_filtered()
++{
++	ip netns exec "$x1" nstat -asz TcpExtIPReversePathFilter |
++		awk '$1 == "TcpExtIPReversePathFilter" { print $2 }'
++}
++
++h1_echos()
++{
++	ip netns exec "$h1" nstat -asz IcmpInEchos |
++		awk '$1 == "IcmpInEchos" { print $2 }'
++}
++
++rpfilter_test()
++{
++	local filtered
++	local echos
++	local all
++
++	RET=0
++
++	use_rlocs 4
++	all=$(ip netns exec "$x1" sysctl -n net.ipv4.conf.all.rp_filter)
++	ip netns exec "$x1" sysctl -qw net.ipv4.conf.all.rp_filter=0
++	ip netns exec "$x1" sysctl -qw net.ipv4.conf.lisp101.rp_filter=1
++
++	h2_ping 10.1.0.2
++	check_err $? "a source is dropped, whose route sends to the device"
++
++	# The route of the source has another RLOC than the one of x2.
++	ip -n "$x1" -6 nexthop add id "$NH_OTHER" encap ip dst "$OTHER_RLOC4" \
++		dev lisp101
++	ip -n "$x1" route replace 10.2.0.0/24 vrf site nhid "$NH_OTHER"
++	echos=$(h1_echos)
++	h2_ping 10.1.0.2
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== $((echos + 1))" \
++		h1_echos > /dev/null
++	check_err $? "a source is dropped for the RLOC that it comes from"
++
++	ip -n "$x1" link add nomap type dummy
++	ip -n "$x1" link set nomap master site up
++	ip -n "$x1" route replace 10.2.0.0/24 vrf site dev nomap
++	filtered=$(x1_filtered)
++	h2_ping 10.1.0.2
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== $((filtered + 1))" \
++		x1_filtered > /dev/null
++	check_err $? "a source without mapping is not dropped by the filter"
++
++	ip netns exec "$x1" sysctl -qw net.ipv4.conf.lisp101.rp_filter=0
++	echos=$(h1_echos)
++	h2_ping 10.1.0.2
++	busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== $((echos + 1))" \
++		h1_echos > /dev/null
++	check_err $? "a source without mapping is dropped without the filter"
++
++	ip netns exec "$x1" sysctl -qw net.ipv4.conf.all.rp_filter="$all"
++	ip -n "$x1" link del nomap
++	ip -n "$x1" nexthop del id "$NH_OTHER"
++	use_rlocs 4
++	h2_ping 10.1.0.2
++	check_err $? "no connectivity after the test"
++
++	log_test "Reverse path filter on a device"
++}
++
++updown_test()
++{
++	RET=0
++
++	ip -n "$x1" link add link wan name lisp102 type lisp id 102
++	ip -n "$x1" link set lisp102 up
++	ip -n "$x1" link set lisp101 down
++	h1_ping -W 1 10.2.0.2
++	check_fail $? "an answer through a device that is down"
++
++	ip -n "$x1" nexthop show id "$NH4" > /dev/null 2>&1
++	check_fail $? "a nexthop outlives its device"
++	ip -n "$x1" link set lisp101 up
++	ip -n "$x1" -6 nexthop add id "$NH4" encap ip dst "$X2_RLOC4" \
++		dev lisp101
++	ip -n "$x1" -6 nexthop add id "$NH6" encap ip6 dst "$X2_RLOC6" \
++		dev lisp101
++	use_rlocs 4
++	ip -n "$x1" link del lisp102
++	h1_ping 10.2.0.2
++	check_err $? "no answer once the device is up again"
++
++	ip -n "$x1" link set lisp101 down
++	ip -n "$x1" link set lisp101 up
++	ip -n "$x1" -6 nexthop add id "$NH4" encap ip dst "$X2_RLOC4" \
++		dev lisp101
++	ip -n "$x1" -6 nexthop add id "$NH6" encap ip6 dst "$X2_RLOC6" \
++		dev lisp101
++	use_rlocs 4
++	h1_ping fd00:2::2
++	check_err $? "no answer with a new socket"
++
++	log_test "Devices going down and up"
++}
++
++tcp_family_test()
++{
++	local family=$1; shift
++	local addr=$1; shift
++	local pid
++
++	ip netns exec "$h2" timeout "$TCP_TIMEOUT" socat -u \
++		"TCP$family-LISTEN:$TCP_PORT,reuseaddr" \
++		"OPEN:$TCP_FILE.out,creat,trunc" &
++	pid=$!
++	wait_local_port_listen "$h2" "$TCP_PORT" tcp
++	if ip netns exec "$h1" timeout "$TCP_TIMEOUT" \
++			socat -u "OPEN:$TCP_FILE" \
++			"TCP$family:$addr:$TCP_PORT"; then
++		wait "$pid"
++		check_err $? "the listener of $addr did not end"
 +	else
-+		hlist_add_head_rcu(&lisp->hlist,
-+				   lisp_iid_head(found, lisp->iid));
++		check_err 1 "no TCP connection to $addr"
++		kill_process "$pid"
++	fi
 +
-+unlock:
-+	mutex_unlock(&ln->lock);
-+	return err;
++	cmp -s "$TCP_FILE" "$TCP_FILE.out"
++	check_err $? "the data sent to $addr is not what was received"
 +}
 +
-+static int lisp_stop(struct net_device *dev)
++tcp_test()
 +{
-+	struct lisp_dev *lisp = netdev_priv(dev);
-+	struct lisp_sock *ls;
-+	struct lisp_net *ln;
++	local family
 +
-+	ln = net_generic(lisp->net, lisp_net_id);
-+	mutex_lock(&ln->lock);
++	if ! command -v socat > /dev/null; then
++		log_test_skip "TCP" "socat not installed"
++		return
++	fi
 +
-+	ls = rcu_dereference_protected(lisp->sock, lockdep_is_held(&ln->lock));
-+	RCU_INIT_POINTER(lisp->sock, NULL);
-+	if (lisp->collect_md) {
-+		RCU_INIT_POINTER(ls->md_dev, NULL);
-+	} else {
-+		hlist_del_init_rcu(&lisp->hlist);
-+		lisp->rcu_state = start_poll_synchronize_rcu();
-+	}
++	TCP_FILE=$(mktemp)
++	head -c 16M /dev/urandom > "$TCP_FILE"
 +
-+	if (--ls->refcnt) {
-+		mutex_unlock(&ln->lock);
-+		return 0;
-+	}
-+
-+	list_del(&ls->list);
-+	mutex_unlock(&ln->lock);
-+
-+	lisp_sock_release(ls);
-+
-+	return 0;
++	for family in 4 6; do
++		RET=0
++		use_rlocs "$family"
++		tcp_family_test 4 10.2.0.2
++		tcp_family_test 6 "[fd00:2::2]"
++		log_test "TCP with IPv$family RLOCs"
++	done
++	use_rlocs 4
 +}
 +
-+/* RFC 9300, section 7.2: the sender of a packet that does not fit the path to
-+ * the RLOC is told what fits, whatever its DF bit. It cannot be told less
-+ * than the minimum MTU of its protocol: what is not larger is then sent in
-+ * an outer packet that may be fragmented.
-+ */
-+static int lisp_check_pmtu(struct sk_buff *skb, const struct dst_entry *dst,
-+			   unsigned int hlen, bool *frag)
++# Two xTRs whose EIDs and RLOCs are in two routing domains with the same
++# addresses: the EID of an xTR is the RLOC of the other one. A packet and its
++# outer header have then the same addresses, the other way around, and they
++# only reach their destinations when each one is routed in its own domain.
++CROSS_A4=192.0.2.9
++CROSS_A6=2001:db8:3::1
++CROSS_B4=192.0.2.10
++CROSS_B6=2001:db8:3::2
++
++cross_nexthops()
 +{
-+	int min_mtu = skb->protocol == htons(ETH_P_IPV6) ? IPV6_MIN_MTU :
-+							   IPV4_MIN_MTU;
-+	int room = dst_mtu(dst) - hlen;
-+	u32 mtu = max(room, min_mtu);
++	local ns=$1; shift
++	local rloc4=$1; shift
++	local rloc6=$1; shift
 +
-+	*frag = room < min_mtu;
-+
-+	if (skb_is_gso(skb) ? skb_gso_validate_network_len(skb, mtu) :
-+			      skb->len <= mtu)
-+		return 0;
-+
-+	skb_dst_update_pmtu_no_confirm(skb, mtu);
-+
-+	if (skb->protocol == htons(ETH_P_IP))
-+		icmp_ndo_send(skb, ICMP_DEST_UNREACH, ICMP_FRAG_NEEDED,
-+			      htonl(mtu));
-+	else
-+		icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
-+
-+	return -EMSGSIZE;
++	ip -n "$ns" -6 nexthop add id "$NH4" encap ip dst "$rloc4" dev lisp0
++	ip -n "$ns" -6 nexthop add id "$NH6" encap ip6 dst "$rloc6" dev lisp0
 +}
 +
-+/* RFC 9300, section 5.3: the outer header gets the DSCP and the TTL of the
-+ * inner header, unless the tunnel metadata sets them.
-+ */
-+static u8 lisp_encap_dsfield(const struct sk_buff *skb,
-+			     const struct ip_tunnel_key *key)
++cross_routes()
 +{
-+	return key->tos ? : ip_tunnel_get_dsfield(ip_hdr(skb), skb);
++	local ns=$1; shift
++	local nh=$1; shift
++	local eid4=$1; shift
++	local eid6=$1; shift
++
++	ip -n "$ns" route replace "$eid4/32" "$@" nhid "$nh"
++	ip -n "$ns" -6 route replace "$eid6/128" "$@" nhid "$nh"
 +}
 +
-+static void lisp_encap_fields(const struct sk_buff *skb,
-+			      const struct ip_tunnel_key *key, u8 dsfield,
-+			      u8 *tos, u8 *ttl)
++cross_ping()
 +{
-+	const struct iphdr *iph = ip_hdr(skb);
++	local ns=$1; shift
++	local eid4=$1; shift
++	local eid6=$1; shift
++	local before
 +
-+	*tos = ip_tunnel_ecn_encap(dsfield, iph, skb);
-+	*ttl = key->ttl ? : ip_tunnel_get_ttl(iph, skb);
++	before=$(link_stat "$ns" lisp0 .rx.packets)
++	ip netns exec "$ns" ping -q -c 1 -W 2 "$@" "$eid4" > /dev/null 2>&1
++	check_err $? "no answer from the EID $eid4"
++	ip netns exec "$ns" ping -q -c 1 -W 2 "$@" "$eid6" > /dev/null 2>&1
++	check_err $? "no answer from the EID $eid6"
++	(( $(link_stat "$ns" lisp0 .rx.packets) == before + 2 ))
++	check_err $? "the answers did not come through the LISP device"
 +}
 +
-+/* The route to the RLOC is the one of the DSCP of the outer header. The one
-+ * that the encapsulation caches was looked up with its own DSCP.
-+ */
-+static struct dst_cache *lisp_dst_cache(const struct sk_buff *skb,
-+					const struct ip_tunnel_info *info,
-+					u8 dsfield)
++# The first xTR has its EIDs in a VRF and its RLOCs in the main table, the
++# second one has its RLOCs in a VRF and its EIDs in the main table.
++#
++#   y1                                           y2
++#   VRF "eid", lisp0: B4, B6 ................... lisp0: A4, A6
++#   eth0: A4, A6 ------------------------------- VRF "rloc", eth0: B4, B6
++cross_vrf_test()
 +{
-+	if (((dsfield ^ info->key.tos) & ~INET_ECN_MASK) ||
-+	    !ip_tunnel_dst_cache_usable(skb, info))
-+		return NULL;
++	local family
++	local before
++	local ns
++	local nh
++	local msg="EIDs and RLOCs in a VRF and the main table"
 +
-+	return (struct dst_cache *)&info->dst_cache;
++	setup_ns y1 y2
++	ip link add eth0 netns "$y1" type veth peer name eth0 netns "$y2"
++
++	for ns in "$y1" "$y2"; do
++		ip -n "$ns" rule add pref 32765 table local
++		ip -n "$ns" rule del pref 0
++		ip -n "$ns" -6 rule add pref 32765 table local
++		ip -n "$ns" -6 rule del pref 0
++	done
++
++	ip -n "$y1" link set eth0 up
++	ip -n "$y1" addr add "$CROSS_A4"/30 dev eth0
++	ip -n "$y1" addr add "$CROSS_A6"/64 dev eth0 nodad
++	ip -n "$y1" link add eid type vrf table 10
++	ip -n "$y1" link set eid up
++	ip -n "$y1" link add lisp0 type lisp id 7
++	ip -n "$y1" link set lisp0 master eid up
++	ip -n "$y1" addr add "$CROSS_B4"/32 dev lisp0
++	ip -n "$y1" addr add "$CROSS_B6"/128 dev lisp0 nodad
++	cross_nexthops "$y1" "$CROSS_B4" "$CROSS_B6"
++
++	ip -n "$y2" link add rloc type vrf table 10
++	ip -n "$y2" link set rloc up
++	ip -n "$y2" link set eth0 master rloc up
++	ip -n "$y2" addr add "$CROSS_B4"/30 dev eth0
++	ip -n "$y2" addr add "$CROSS_B6"/64 dev eth0 nodad
++	ip -n "$y2" link add link rloc name lisp0 type lisp id 7
++	ip -n "$y2" link set lisp0 up
++	ip -n "$y2" addr add "$CROSS_A4"/32 dev lisp0
++	ip -n "$y2" addr add "$CROSS_A6"/128 dev lisp0 nodad
++	cross_nexthops "$y2" "$CROSS_A4" "$CROSS_A6"
++
++	for family in 4 6; do
++		RET=0
++		nh=NH$family
++		cross_routes "$y1" "${!nh}" "$CROSS_A4" "$CROSS_A6" vrf eid
++		cross_routes "$y2" "${!nh}" "$CROSS_B4" "$CROSS_B6"
++
++		cross_ping "$y1" "$CROSS_A4" "$CROSS_A6" -I eid
++		cross_ping "$y2" "$CROSS_B4" "$CROSS_B6"
++
++		# In the main table of y1, the same addresses are the RLOCs
++		# of y2, which answer without LISP.
++		before=$(link_stat "$y1" lisp0 .tx.packets)
++		ip netns exec "$y1" ping -q -c 1 -W 2 "$CROSS_B4" \
++			> /dev/null 2>&1
++		check_err $? "no answer from the RLOC $CROSS_B4"
++		ip netns exec "$y1" ping -q -c 1 -W 2 "$CROSS_B6" \
++			> /dev/null 2>&1
++		check_err $? "no answer from the RLOC $CROSS_B6"
++		(( $(link_stat "$y1" lisp0 .tx.packets) == before ))
++		check_err $? "packets for an RLOC were sent to the LISP device"
++
++		log_test "$msg, IPv$family RLOCs"
++	done
++
++	cleanup_ns "$y1" "$y2"
 +}
 +
-+static int lisp_build_skb(struct sk_buff *skb, const struct dst_entry *dst,
-+			  unsigned int hlen, u32 iid, bool udp_sum)
++# Both xTRs have their EIDs in a netns and their RLOCs in another one. The
++# netns of the EIDs has no other device than the LISP one.
++#
++#   ain                                          bin
++#   lisp0: B4, B6 .............................. lisp0: A4, A6
++#   aout                                         bout
++#   eth0: A4, A6 ------------------------------- eth0: B4, B6
++cross_netns_test()
 +{
-+	struct lisphdr *lh;
-+	int err;
++	local family
++	local nh
 +
-+	err = skb_cow_head(skb, LL_RESERVED_SPACE(dst_dev(dst)) +
-+			   dst->header_len + hlen);
-+	if (unlikely(err))
-+		return err;
++	setup_ns ain aout bin bout
++	ip link add eth0 netns "$aout" type veth peer name eth0 netns "$bout"
 +
-+	err = udp_tunnel_handle_offloads(skb, udp_sum);
-+	if (err)
-+		return err;
++	ip -n "$aout" link set eth0 up
++	ip -n "$aout" addr add "$CROSS_A4"/30 dev eth0
++	ip -n "$aout" addr add "$CROSS_A6"/64 dev eth0 nodad
++	ip -n "$ain" link add lisp0 link-netns "$aout" type lisp id 8
++	ip -n "$ain" link set lisp0 up
++	ip -n "$ain" addr add "$CROSS_B4"/32 dev lisp0
++	ip -n "$ain" addr add "$CROSS_B6"/128 dev lisp0 nodad
++	cross_nexthops "$ain" "$CROSS_B4" "$CROSS_B6"
 +
-+	lh = __skb_push(skb, sizeof(*lh));
-+	memset(lh, 0, sizeof(*lh));
-+	if (iid) {
-+		lh->flags = LISP_F_I;
-+		lh->iid_lsb = cpu_to_be32(iid << LISP_IID_SHIFT);
-+	}
-+	skb_set_inner_protocol(skb, skb->protocol);
++	ip -n "$bout" link set eth0 up
++	ip -n "$bout" addr add "$CROSS_B4"/30 dev eth0
++	ip -n "$bout" addr add "$CROSS_B6"/64 dev eth0 nodad
++	ip -n "$bin" link add lisp0 link-netns "$bout" type lisp id 8
++	ip -n "$bin" link set lisp0 up
++	ip -n "$bin" addr add "$CROSS_A4"/32 dev lisp0
++	ip -n "$bin" addr add "$CROSS_A6"/128 dev lisp0 nodad
++	cross_nexthops "$bin" "$CROSS_A4" "$CROSS_A6"
 +
-+	return 0;
++	for family in 4 6; do
++		RET=0
++		nh=NH$family
++		cross_routes "$ain" "${!nh}" "$CROSS_A4" "$CROSS_A6"
++		cross_routes "$bin" "${!nh}" "$CROSS_B4" "$CROSS_B6"
++
++		cross_ping "$ain" "$CROSS_A4" "$CROSS_A6"
++		cross_ping "$bin" "$CROSS_B4" "$CROSS_B6"
++
++		log_test "EIDs and RLOCs in two netns, IPv$family RLOCs"
++	done
++
++	cleanup_ns "$ain" "$aout" "$bin" "$bout"
 +}
 +
-+static int lisp_xmit_skb(struct sk_buff *skb, struct net_device *dev,
-+			 struct sock *sk, const struct ip_tunnel_info *info,
-+			 u32 iid)
++netns_test()
 +{
-+	bool udp_sum = test_bit(IP_TUNNEL_CSUM_BIT, info->key.tun_flags);
-+	const struct lisp_dev *lisp = netdev_priv(dev);
-+	bool xnet = !net_eq(lisp->net, dev_net(dev));
-+	const struct ip_tunnel_key *key = &info->key;
-+	u8 dsfield = lisp_encap_dsfield(skb, key);
-+	struct ip_tunnel_key local_key;
-+	struct rtable *rt;
-+	__be16 sport;
-+	__be32 saddr;
-+	u8 tos, ttl;
-+	bool frag;
-+	int err;
++	local port
 +
-+	if (!key->u.ipv4.src && lisp->local) {
-+		local_key = *key;
-+		local_key.u.ipv4.src = lisp->local;
-+		key = &local_key;
-+	}
++	RET=0
++	port=$(printf ':%04X' "$LISP_PORT")
 +
-+	sport = udp_flow_src_port(lisp->net, skb, 0, 0, false);
-+	rt = udp_tunnel_dst_lookup(skb, dev, lisp->net, lisp->link, &saddr,
-+				   key, sport, htons(LISP_UDP_PORT), dsfield,
-+				   lisp_dst_cache(skb, info, dsfield));
-+	if (IS_ERR(rt))
-+		return PTR_ERR(rt);
++	setup_ns eid rloc
++	ip -n "$eid" link add lisp0 link-netns "$rloc" type lisp id 5
++	check_err $? "no device with a link netns"
++	ip -n "$eid" link set lisp0 up
++	ip -n "$eid" -d link show dev lisp0 | grep -q link-netns
++	check_err $? "the link netns is not reported"
++	ip netns exec "$rloc" grep -q "$port " /proc/net/udp /proc/net/udp6
++	check_err $? "no socket in the link netns"
++	ip netns exec "$eid" grep -q "$port " /proc/net/udp /proc/net/udp6
++	check_fail $? "a socket in the netns of the device"
 +
-+	err = lisp_check_pmtu(skb, &rt->dst, LISP_IPV4_HLEN, &frag);
-+	if (err)
-+		goto free_dst;
++	cleanup_ns "$rloc"
++	busywait "$BUSYWAIT_TIMEOUT" bash -c \
++		"! ip -n $eid link show dev lisp0 > /dev/null 2>&1"
++	check_err $? "the device outlives the netns of its RLOCs"
++	cleanup_ns "$eid"
 +
-+	lisp_encap_fields(skb, key, dsfield, &tos, &ttl);
-+	skb_scrub_packet(skb, xnet);
-+
-+	err = lisp_build_skb(skb, &rt->dst, LISP_IPV4_HLEN, iid, udp_sum);
-+	if (err)
-+		goto free_dst;
-+
-+	udp_tunnel_xmit_skb(rt, sk, skb, saddr, key->u.ipv4.dst, tos, ttl,
-+			    frag ? 0 : htons(IP_DF), sport,
-+			    htons(LISP_UDP_PORT), xnet, !udp_sum, 0);
-+	return 0;
-+
-+free_dst:
-+	dst_release(&rt->dst);
-+	return err;
++	log_test "RLOCs in another netns"
 +}
 +
-+static int lisp6_xmit_skb(struct sk_buff *skb, struct net_device *dev,
-+			  struct sock *sk, const struct ip_tunnel_info *info,
-+			  u32 iid)
-+{
-+	bool udp_sum = test_bit(IP_TUNNEL_CSUM_BIT, info->key.tun_flags);
-+	const struct lisp_dev *lisp = netdev_priv(dev);
-+	bool xnet = !net_eq(lisp->net, dev_net(dev));
-+	const struct ip_tunnel_key *key = &info->key;
-+	u8 dsfield = lisp_encap_dsfield(skb, key);
-+	struct ip_tunnel_key local_key;
-+	struct dst_entry *dst;
-+	struct in6_addr saddr;
-+	__be16 sport;
-+	u8 tos, ttl;
-+	bool frag;
-+	int err;
++################################################################################
++# Main
 +
-+	if (ipv6_addr_any(&key->u.ipv6.src) && !ipv6_addr_any(&lisp->local6)) {
-+		local_key = *key;
-+		local_key.u.ipv6.src = lisp->local6;
-+		key = &local_key;
-+	}
++require_command jq
 +
-+	sport = udp_flow_src_port(lisp->net, skb, 0, 0, false);
-+	dst = udp_tunnel6_dst_lookup(skb, dev, lisp->net, sk, lisp->link,
-+				     &saddr, key, sport, htons(LISP_UDP_PORT),
-+				     dsfield,
-+				     lisp_dst_cache(skb, info, dsfield));
-+	if (IS_ERR(dst))
-+		return PTR_ERR(dst);
++if ! ip link help lisp 2>&1 | grep -q "^Usage: ... lisp"; then
++	echo "SKIP: iproute2 does not know the lisp devices"
++	exit "$ksft_skip"
++fi
 +
-+	err = lisp_check_pmtu(skb, dst, LISP_IPV6_HLEN, &frag);
-+	if (err)
-+		goto free_dst;
++trap cleanup EXIT
 +
-+	lisp_encap_fields(skb, key, dsfield, &tos, &ttl);
-+	skb_scrub_packet(skb, xnet);
++setup_ns probe
++out=$(ip -n "$probe" link add lisp0 type lisp id 1 2>&1)
++if [[ $out == *"Unknown device type"* ]]; then
++	echo "SKIP: the kernel does not have the lisp devices (CONFIG_LISP)"
++	exit "$ksft_skip"
++fi
++cleanup_ns "$probe"
 +
-+	err = lisp_build_skb(skb, dst, LISP_IPV6_HLEN, iid, udp_sum);
-+	if (err)
-+		goto free_dst;
++if ! setup; then
++	echo "FAIL: the setup of the test failed"
++	exit "$ksft_fail"
++fi
 +
-+	skb->ignore_df = frag;
-+	udp_tunnel6_xmit_skb(dst, sk, skb, dev, &saddr, &key->u.ipv6.dst, tos,
-+			     ttl, key->label, sport, htons(LISP_UDP_PORT),
-+			     !udp_sum, 0);
-+	return 0;
++tests_run
 +
-+free_dst:
-+	dst_release(dst);
-+	return err;
-+}
-+
-+static netdev_tx_t lisp_xmit(struct sk_buff *skb, struct net_device *dev)
-+{
-+	const struct ip_tunnel_info *info = skb_tunnel_info(skb);
-+	const struct lisp_dev *lisp = netdev_priv(dev);
-+	const struct lisp_sock *ls;
-+	u32 iid = lisp->iid;
-+	int err = -EINVAL;
-+
-+	if (skb->protocol != htons(ETH_P_IP) &&
-+	    (skb->protocol != htons(ETH_P_IPV6) || !ipv6_mod_enabled()))
-+		goto tx_error;
-+
-+	if (!pskb_inet_may_pull(skb))
-+		goto tx_error;
-+
-+	if (unlikely(!info || !(info->mode & IP_TUNNEL_INFO_TX)))
-+		goto tx_error;
-+
-+	if (lisp->collect_md) {
-+		u64 tun_id = be64_to_cpu(info->key.tun_id);
-+
-+		if (tun_id > LISP_IID_MAX)
-+			goto tx_error;
-+		iid = tun_id;
-+	}
-+
-+	rcu_read_lock();
-+	ls = rcu_dereference(lisp->sock);
-+	if (!ls)
-+		err = -ESHUTDOWN;
-+	else if (ip_tunnel_info_af(info) == AF_INET)
-+		err = lisp_xmit_skb(skb, dev, ls->sk4, info, iid);
-+	else if (IS_ENABLED(CONFIG_IPV6) && ls->sk6)
-+		err = lisp6_xmit_skb(skb, dev, ls->sk6, info, iid);
-+	else
-+		err = -EAFNOSUPPORT;
-+	rcu_read_unlock();
-+
-+	if (likely(!err))
-+		return NETDEV_TX_OK;
-+
-+tx_error:
-+	dev_kfree_skb(skb);
-+
-+	if (err == -ELOOP)
-+		DEV_STATS_INC(dev, collisions);
-+	else if (err == -ENETUNREACH)
-+		DEV_STATS_INC(dev, tx_carrier_errors);
-+
-+	DEV_STATS_INC(dev, tx_errors);
-+	return NETDEV_TX_OK;
-+}
-+
-+static int lisp_init(struct net_device *dev)
-+{
-+	struct lisp_dev *lisp = netdev_priv(dev);
-+	int err;
-+
-+	err = gro_cells_init(&lisp->gro_cells, dev);
-+	if (err)
-+		return err;
-+
-+	netdev_lockdep_set_classes(dev);
-+	return 0;
-+}
-+
-+static void lisp_uninit(struct net_device *dev)
-+{
-+	struct lisp_dev *lisp = netdev_priv(dev);
-+
-+	gro_cells_destroy(&lisp->gro_cells);
-+}
-+
-+static int lisp_get_iflink(const struct net_device *dev)
-+{
-+	const struct lisp_dev *lisp = netdev_priv(dev);
-+
-+	return lisp->link ? : READ_ONCE(dev->ifindex);
-+}
-+
-+static const struct net_device_ops lisp_netdev_ops = {
-+	.ndo_init		= lisp_init,
-+	.ndo_uninit		= lisp_uninit,
-+	.ndo_open		= lisp_open,
-+	.ndo_stop		= lisp_stop,
-+	.ndo_start_xmit		= lisp_xmit,
-+	.ndo_get_iflink		= lisp_get_iflink,
-+};
-+
-+static const struct device_type lisp_type = {
-+	.name = "lisp",
-+};
-+
-+static void lisp_setup(struct net_device *dev)
-+{
-+	dev->netdev_ops = &lisp_netdev_ops;
-+	dev->needs_free_netdev = true;
-+	SET_NETDEV_DEVTYPE(dev, &lisp_type);
-+
-+	dev->features |= NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F_FRAGLIST;
-+	dev->features |= NETIF_F_RXCSUM;
-+	dev->features |= NETIF_F_GSO_SOFTWARE;
-+	dev->hw_features |= NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F_FRAGLIST;
-+	dev->hw_features |= NETIF_F_RXCSUM;
-+	dev->hw_features |= NETIF_F_GSO_SOFTWARE;
-+
-+	dev->type = ARPHRD_NONE;
-+	dev->hard_header_len = 0;
-+	dev->addr_len = 0;
-+	dev->needed_headroom = LL_MAX_HEADER + LISP_IPV6_HLEN;
-+	dev->mtu = ETH_DATA_LEN - LISP_IPV6_HLEN;
-+	dev->min_mtu = IPV4_MIN_MTU;
-+	dev->max_mtu = IP_MAX_MTU - LISP_IPV4_HLEN;
-+	dev->flags = IFF_POINTOPOINT | IFF_NOARP;
-+	dev->priv_flags |= IFF_NO_QUEUE;
-+	dev->lltx = true;
-+	dev->pcpu_stat_type = NETDEV_PCPU_STAT_DSTATS;
-+
-+	netif_keep_dst(dev);
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
-+}
-+
-+static const struct netlink_range_validation lisp_iid_range = {
-+	.max = LISP_IID_MAX,
-+};
-+
-+static const struct nla_policy lisp_policy[IFLA_LISP_MAX + 1] = {
-+	[IFLA_LISP_UNSPEC]		= { .strict_start_type = IFLA_LISP_ID },
-+	[IFLA_LISP_ID]			=
-+		NLA_POLICY_FULL_RANGE(NLA_U32, &lisp_iid_range),
-+	[IFLA_LISP_COLLECT_METADATA]	= { .type = NLA_FLAG },
-+	[IFLA_LISP_LOCAL]		= { .type = NLA_BE32 },
-+	[IFLA_LISP_LOCAL6]		=
-+		NLA_POLICY_EXACT_LEN(sizeof(struct in6_addr)),
-+};
-+
-+static int lisp_validate(struct nlattr *tb[], struct nlattr *data[],
-+			 struct netlink_ext_ack *extack)
-+{
-+	if (!data)
-+		return 0;
-+
-+	if (data[IFLA_LISP_LOCAL]) {
-+		__be32 addr = nla_get_in_addr(data[IFLA_LISP_LOCAL]);
-+
-+		if (ipv4_is_zeronet(addr) || ipv4_is_multicast(addr) ||
-+		    ipv4_is_lbcast(addr)) {
-+			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_LISP_LOCAL],
-+					    "The local RLOC is not a unicast address");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	if (data[IFLA_LISP_LOCAL6]) {
-+		struct in6_addr addr = nla_get_in6_addr(data[IFLA_LISP_LOCAL6]);
-+
-+		if (ipv6_addr_type(&addr) != IPV6_ADDR_UNICAST) {
-+			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_LISP_LOCAL6],
-+					    "The local RLOC is not a global unicast address");
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int lisp_newlink(struct net_device *dev,
-+			struct rtnl_newlink_params *params,
-+			struct netlink_ext_ack *extack)
-+{
-+	struct net *link_net = rtnl_newlink_link_net(params);
-+	struct lisp_net *ln = net_generic(link_net, lisp_net_id);
-+	struct lisp_dev *lisp = netdev_priv(dev);
-+	struct nlattr **data = params->data;
-+	struct nlattr **tb = params->tb;
-+	const struct lisp_dev *tmp;
-+	int ifindex;
-+	int err;
-+
-+	if (!data ||
-+	    !data[IFLA_LISP_ID] == !data[IFLA_LISP_COLLECT_METADATA]) {
-+		NL_SET_ERR_MSG(extack,
-+			       "Either an instance ID or the collection of metadata is required");
-+		return -EINVAL;
-+	}
-+
-+	lisp->net = link_net;
-+	lisp->dev = dev;
-+	INIT_LIST_HEAD(&lisp->next);
-+	lisp->rcu_state = get_completed_synchronize_rcu();
-+
-+	lisp->collect_md = nla_get_flag(data[IFLA_LISP_COLLECT_METADATA]);
-+	lisp->iid = nla_get_u32_default(data[IFLA_LISP_ID], 0);
-+	lisp->local = nla_get_in_addr_default(data[IFLA_LISP_LOCAL], 0);
-+	if (data[IFLA_LISP_LOCAL6])
-+		lisp->local6 = nla_get_in6_addr(data[IFLA_LISP_LOCAL6]);
-+
-+	if (tb[IFLA_LINK]) {
-+		lisp->link = nla_get_u32(tb[IFLA_LINK]);
-+		if (!__dev_get_by_index(link_net, lisp->link)) {
-+			NL_SET_BAD_ATTR(extack, tb[IFLA_LINK]);
-+			return -ENODEV;
-+		}
-+	}
-+
-+	ifindex = lisp_l3mdev(lisp);
-+	mutex_lock(&ln->lock);
-+	list_for_each_entry(tmp, &ln->dev_list, next) {
-+		if (lisp_l3mdev(tmp) != ifindex ||
-+		    tmp->collect_md != lisp->collect_md)
-+			continue;
-+
-+		if (lisp->collect_md) {
-+			mutex_unlock(&ln->lock);
-+			NL_SET_ERR_MSG(extack,
-+				       "A LISP device already collects the metadata of these RLOCs");
-+			return -EEXIST;
-+		}
-+		if (tmp->iid == lisp->iid) {
-+			mutex_unlock(&ln->lock);
-+			NL_SET_ERR_MSG(extack,
-+				       "A LISP device already has this instance ID for these RLOCs");
-+			return -EEXIST;
-+		}
-+	}
-+	mutex_unlock(&ln->lock);
-+
-+	err = register_netdevice(dev);
-+	if (err)
-+		return err;
-+
-+	mutex_lock(&ln->lock);
-+	list_add(&lisp->next, &ln->dev_list);
-+	mutex_unlock(&ln->lock);
-+
-+	return 0;
-+}
-+
-+static void lisp_dellink(struct net_device *dev, struct list_head *head)
-+{
-+	struct lisp_dev *lisp = netdev_priv(dev);
-+	struct lisp_net *ln = net_generic(lisp->net, lisp_net_id);
-+
-+	mutex_lock(&ln->lock);
-+	if (!list_empty(&lisp->next)) {
-+		list_del_init(&lisp->next);
-+		unregister_netdevice_queue_net(dev_net(dev), dev, head);
-+	}
-+	mutex_unlock(&ln->lock);
-+}
-+
-+static size_t lisp_get_size(const struct net_device *dev)
-+{
-+	return nla_total_size(sizeof(u32)) +		/* IFLA_LISP_ID */
-+	       nla_total_size(0) +	/* IFLA_LISP_COLLECT_METADATA */
-+	       nla_total_size(sizeof(struct in_addr)) +	/* IFLA_LISP_LOCAL */
-+	       nla_total_size(sizeof(struct in6_addr));	/* IFLA_LISP_LOCAL6 */
-+}
-+
-+static int lisp_fill_info(struct sk_buff *skb, const struct net_device *dev)
-+{
-+	const struct lisp_dev *lisp = netdev_priv(dev);
-+
-+	if (lisp->collect_md) {
-+		if (nla_put_flag(skb, IFLA_LISP_COLLECT_METADATA))
-+			return -EMSGSIZE;
-+	} else if (nla_put_u32(skb, IFLA_LISP_ID, lisp->iid)) {
-+		return -EMSGSIZE;
-+	}
-+
-+	if (lisp->local &&
-+	    nla_put_in_addr(skb, IFLA_LISP_LOCAL, lisp->local))
-+		return -EMSGSIZE;
-+
-+	if (!ipv6_addr_any(&lisp->local6) &&
-+	    nla_put_in6_addr(skb, IFLA_LISP_LOCAL6, &lisp->local6))
-+		return -EMSGSIZE;
-+
-+	return 0;
-+}
-+
-+static struct net *lisp_get_link_net(const struct net_device *dev)
-+{
-+	const struct lisp_dev *lisp = netdev_priv(dev);
-+
-+	return lisp->net;
-+}
-+
-+static struct rtnl_link_ops lisp_link_ops __read_mostly = {
-+	.kind		= "lisp",
-+	.maxtype	= IFLA_LISP_MAX,
-+	.policy		= lisp_policy,
-+	.priv_size	= sizeof(struct lisp_dev),
-+	.setup		= lisp_setup,
-+	.validate	= lisp_validate,
-+	.newlink	= lisp_newlink,
-+	.dellink	= lisp_dellink,
-+	.get_size	= lisp_get_size,
-+	.fill_info	= lisp_fill_info,
-+	.get_link_net	= lisp_get_link_net,
-+};
-+
-+static __net_init int lisp_init_net(struct net *net)
-+{
-+	struct lisp_net *ln = net_generic(net, lisp_net_id);
-+
-+	INIT_LIST_HEAD(&ln->dev_list);
-+	INIT_LIST_HEAD(&ln->sock_list);
-+	mutex_init(&ln->lock);
-+
-+	return 0;
-+}
-+
-+static void __net_exit lisp_exit_rtnl_net(struct net *net,
-+					  struct list_head *dev_kill_list)
-+{
-+	struct lisp_net *ln = net_generic(net, lisp_net_id);
-+	struct lisp_dev *lisp, *next;
-+
-+	mutex_lock(&ln->lock);
-+	list_for_each_entry_safe(lisp, next, &ln->dev_list, next) {
-+		list_del_init(&lisp->next);
-+		unregister_netdevice_queue_net(net, lisp->dev, dev_kill_list);
-+	}
-+	mutex_unlock(&ln->lock);
-+}
-+
-+static void __net_exit lisp_exit_net(struct net *net)
-+{
-+	struct lisp_net *ln = net_generic(net, lisp_net_id);
-+
-+	WARN_ON_ONCE(!list_empty(&ln->dev_list));
-+	WARN_ON_ONCE(!list_empty(&ln->sock_list));
-+}
-+
-+static int lisp_netdevice_event(struct notifier_block *nb, unsigned long event,
-+				void *ptr)
-+{
-+	struct net_device *link = netdev_notifier_info_to_dev(ptr);
-+	struct net *net = dev_net(link);
-+	struct lisp_dev *lisp, *next;
-+	struct lisp_net *ln;
-+	LIST_HEAD(kill);
-+
-+	if (event != NETDEV_UNREGISTER)
-+		return NOTIFY_DONE;
-+
-+	ln = net_generic(net, lisp_net_id);
-+	mutex_lock(&ln->lock);
-+	list_for_each_entry_safe(lisp, next, &ln->dev_list, next) {
-+		if (lisp->link != link->ifindex)
-+			continue;
-+
-+		list_del_init(&lisp->next);
-+		unregister_netdevice_queue_net(net, lisp->dev, &kill);
-+	}
-+	mutex_unlock(&ln->lock);
-+
-+	unregister_netdevice_many(&kill);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block lisp_notifier_block __read_mostly = {
-+	.notifier_call = lisp_netdevice_event,
-+};
-+
-+static struct pernet_operations lisp_net_ops = {
-+	.init		= lisp_init_net,
-+	.exit_rtnl	= lisp_exit_rtnl_net,
-+	.exit		= lisp_exit_net,
-+	.id		= &lisp_net_id,
-+	.size		= sizeof(struct lisp_net),
-+};
-+
-+static int __init lisp_init_module(void)
-+{
-+	int err;
-+
-+	err = register_pernet_subsys(&lisp_net_ops);
-+	if (err)
-+		return err;
-+
-+	err = register_netdevice_notifier(&lisp_notifier_block);
-+	if (err)
-+		goto unregister_pernet;
-+
-+	err = rtnl_link_register(&lisp_link_ops);
-+	if (err)
-+		goto unregister_notifier;
-+
-+	return 0;
-+
-+unregister_notifier:
-+	unregister_netdevice_notifier(&lisp_notifier_block);
-+unregister_pernet:
-+	unregister_pernet_subsys(&lisp_net_ops);
-+	return err;
-+}
-+late_initcall(lisp_init_module);
-+
-+static void __exit lisp_cleanup_module(void)
-+{
-+	rtnl_link_unregister(&lisp_link_ops);
-+	unregister_netdevice_notifier(&lisp_notifier_block);
-+	unregister_pernet_subsys(&lisp_net_ops);
-+}
-+module_exit(lisp_cleanup_module);
-+
-+MODULE_ALIAS_RTNL_LINK("lisp");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Vincent Jardin <vjardin@free.fr>");
-+MODULE_DESCRIPTION("Data plane of the Locator/ID Separation Protocol (LISP)");
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index 245b362045253..f64399ea9d54f 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -1538,6 +1538,18 @@ enum {
- 
- #define IFLA_BAREUDP_MAX (__IFLA_BAREUDP_MAX - 1)
- 
-+/* LISP section */
-+enum {
-+	IFLA_LISP_UNSPEC,
-+	IFLA_LISP_ID,
-+	IFLA_LISP_COLLECT_METADATA,
-+	IFLA_LISP_LOCAL,
-+	IFLA_LISP_LOCAL6,
-+	__IFLA_LISP_MAX
-+};
-+
-+#define IFLA_LISP_MAX (__IFLA_LISP_MAX - 1)
-+
- /* PPP section */
- enum {
- 	IFLA_PPP_UNSPEC,
++exit "$EXIT_STATUS"
 
 -- 
 2.43.0
