@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795892441;
-	b=LHM60lsxLePZAdpVvFmGNAj4XR3Q18hfOebvCsNN4clBmpJfuc1bjB0Ys4X1teShQRWI
-	 lwh00XkmrzNUhl8cCMGHUuLSRLqtAxz/kjgnqOvjjLpxFz6EWwYsXJqn2Cx5YQaleULjp
-	 S6tnad8AdNL3QEJwCDpaRz9aURh3OiYii5OOg2rbfcfP0Cld4BjIi+3DTt7ixCk9gA3LI
-	 gXYGLLfbVDFFTkHxCWRn7Zy1kmwK0rtVm5co4hOqOsRE+jcnuSo9XxoD+1CGxLsk9jRkP
-	 mviTIy4cXAsbFy2kcw3m17BcdIPUTU4ZRU0RvbeN0bzSFsrSMHnwEY7qESAe0k/40Ig==
+	t=1795892442;
+	b=5SxPKw0+TSjlt6OUqUcOdlixV1dyXb+DH6jwq90k7OTY8f13SFLKgB+R0kG/EpXAeeOy
+	 HhtLVkEptymfJ91TaVvvGPFKlY5pnI6AgacGSQhaPpLx70oi2NjWQbP+2uk0//6yPpfOA
+	 HCPIQb763+B6o8T8djqTSLRduvUKbbFQrjk42lIB1PN6FGwWoQq4qZHFvBnpw+1hJCH4y
+	 G2HeeKGeg1FSlALYyAvZKyRwX0zmhXkw8rKtu/HSUacG9B4b7w0BTNkobr0pNgEgIun0N
+	 R4I/Cw8xL4QdrDDSbgrTmmb4RONFcLLtQj/QBGKd/MLQwf6WDBU32iZxTnVUWUymL3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795892441;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795892442;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=q3Ayp3mf5LZNEnREMb+uXcykhhHuaIN8Xp18yqPUd3A=;
-	b=4OZ5/NhS6yQT0ISD37Jz5xo+UZv1zuDjz6pLMIPaS7qtqiw3dY8E4xINRLajyygAmNK8
-	 rxdCvCw9C3SGPLc4F2LYDikQlY22qLD23U0vcuqzHAzUtFQ9gKPL+T5CcL/pqs3q1TO8x
-	 temiChU29KPKgvp1V4Yj0DoyZuw3hFdxxoiahzXDUqAqf1A1YqUnhbg1JqzY8KNFjPPQD
-	 ysMa/ztF0iNWXQxNMUB/hWMtTQpUdDHGbGPV3tYI3D4i8peexaf2A0qHhQPiYxppKpq24
-	 AAnvDBt5Ay4tZiQRFsYYK47yQuLR38A8Fo3TDabmK0S3TamMkeAQdmEAkjWZbgn7UPg==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=qUZ1Sh0+x+PxUSd04DpLnU3Boe55h78UdXb2EcapTys=;
+	b=4DAdlUrg9Y/bR+zjDg3qeXIlB7YHWJkWc5cnmcxtXDMr0nPgxCxSS5/Jud1LCpLEH+D0
+	 mjOy3unUqZdDVIwSJYS+9VN8ejGv+EeotBLOBVmtfWZVlF7iQFSMMb0zzi9AILEtkyMoZ
+	 ypli5EL5teCOf/JsQIOxFny0lk9h4MucIIzpWAEenEYo3qqzFCYu7bXAkk2Iw/n5oVG0V
+	 rQFu9jmYn6Cz0hYO5AIxHU9/Of39x+L//sjx5+zpIN8k1zq7m+exH3El6HUIGVet+fsI1
+	 JrRY/KNZBp8kVo2UsibdDnhhNNHiUzfUeRIU21sMFzyGWnBSbY/tS6ryXxOW+4vKUnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GdnGfLMj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=giILd4la;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319C2606A32F;
-	Sat, 28 Nov 2026 19:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687E0606A31C;
+	Sat, 28 Nov 2026 19:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GdnGfLMj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A48EE1F000C1;
-	Sat, 28 Nov 2026 19:00:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=giILd4la
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F7AD1F00893;
+	Sat, 28 Nov 2026 19:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795892440;
-	bh=q3Ayp3mf5LZNEnREMb+uXcykhhHuaIN8Xp18yqPUd3A=;
-	h=From:To:Cc:Subject:Date;
-	b=GdnGfLMjul9fQRT6906rDXCgC2/D0Y5dW/e2PWhjxZ8N8fAF7RPdXyO2vx3WMwtAt
-	 5BJQWHu4eQTYZ+2rPP653yS19LweSjGhtbe/xwNh64gf22/fqJrHu1UvkJY05U2UYN
-	 V30gWCTN6RNjHzagJwFD+NposNA/DlipgFY385d0GL9zwyrQIQCmdZDl2JqyLVCAZJ
-	 FZAlKEmtXpnCrn+DoDwLn4dfUk+Fp+gyBdcrxDy9YwT4W2A7rmUw6/tCX2PjzPeaMK
-	 1D/JX047UmTX121RrdncGnhxApjgrVvRoaZygIhCcLwyuLJS+AznhnEM1wxulPMj/N
-	 MJRlI8Q6dTZpA==
+	s=k20260515; t=1795892442;
+	bh=qUZ1Sh0+x+PxUSd04DpLnU3Boe55h78UdXb2EcapTys=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=giILd4laJn1arNGe2gjeEkdUzhMop+yNprr6o/vG2XYa01P+WsX/oh/2Tr712+Npz
+	 kLiqMppcExF3Bykis+Ao1p6cwe9x/bDqgRh9fPY8YLWS4skkNkluOJDT8lDutveBil
+	 PPVFzEAwiEmE5x4Vn2kM8XB5m1x8QW2KVlOGzsddijAS7E9wh9uxgiexttaL0rMEvp
+	 wAKfYN9JEmYPGNFAi98PdnpFkpyt6z6GPqnBb4U5aJw2uTkEaVQRbcADAmB2dfU4Tr
+	 fo8ulXS99TheW0QgmuR8xWat1FFEFd7AuGHxAyMAjoMLxeratvPDZM9KmwtigF/0e3
+	 4vhhI4zHIgbhw==
 From: SJ Park <sj@kernel.org>
 To: 
 Cc: SJ Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
 	damon@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH v4 0/7] mm/damon: various improvements/cleanups for code, tests and comments
-Date: Sat, 28 Nov 2026 11:00:25 -0800
-Message-ID: <20261128190033.164440-1-sj@kernel.org>
+Subject: [RFC PATCH v4 5/7] selftests/damon/damos_apply_interval: remove unused variables
+Date: Sat, 28 Nov 2026 11:00:30 -0800
+Message-ID: <20261128190033.164440-6-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261128190033.164440-1-sj@kernel.org>
+References: <20261128190033.164440-1-sj@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,67 +63,28 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refactor code, optimize code speed, add missing feature supports, and
-update comments on various areas of DAMON.
+wss_collected and nr_quota_exceeds in damos_apply_interval.py are
+assigned to but never used.  Remove.
 
-Optimize the efficiency of vaddr damos_migrate action under filter
-failures with patch 1.  Use damos->last_applied on damos_migrate action
-in vaddr and support sz_filter_passed for damos_migrate action in vaddr,
-respectively with patch 2 and 3.  Drop a redundant and racy quota goal
-target value validation in sysfs, in favor of that in the core layer,
-with patch 4.  Drop unused variables and imports from selftests with
-patch 5 and 6.  Update source file intro comments to call DAMON just
-DAMON, via patch 7.
+The issue is found using flake8.
 
-Issues for patches 1 and 3 were found by Sashiko.  Those are
-mild inefficiency and unsupported features, though.  Hence not Cc-ing
-stable.
+Signed-off-by: SJ Park <sj@kernel.org>
+---
+ tools/testing/selftests/damon/damos_apply_interval.py | 2 --
+ 1 file changed, 2 deletions(-)
 
-Changes from RFC v3
-- RFC v3: https://lore.kernel.org/20261127222719.105510-1-sj@kernel.org
-- Avoid NULL dereference when vm_normal_folio() returns NULL, in patch 2.
-- Rebase to the latest mm-new.
-Changes from RFC v2
-- RFC v2: https://lore.kernel.org/20261101171630.81477-1-sj@kernel.org
-- Set last_applied regardless of damos-filtering.
-- Advance entire folio for invalid folio.
-- update subject for unused imports removal.
-- Add source file intro comments update patch.
-- Rebase to the latest mm-new.
-Changes from RFC
-- RFC: https://lore.kernel.org/20261031202614.96036-1-sj@kernel.org
-- Drop charge_target_from fixup consolidation.
-- Add a patch for using last_applied on vaddr migrate action.
-- Add missed damos_va_migrate_private->sz_filter_passed setup.
-- Fix wrong commit message for unused imports removal.
-
-SJ Park (7):
-  mm/damon/vaddr: advance migration attempt in folio level for filter
-    out
-  mm/damon/vaddr: use damos->last_applied for migrate action
-  mm/damon/vaddr: implement sz_filter_passed for migrate_{hot,cold}
-    action
-  mm/damon/sysfs-schemes: drop redundant and racy zero target_value
-    check
-  selftests/damon/damos_apply_interval: remove unused variables
-  selftests/damon: remove unused imports of sys and time modules
-  mm/damon: update file intro comments to call DAMON just DAMON
-
- mm/damon/core.c                               |  2 +-
- mm/damon/ops-common.c                         |  2 +-
- mm/damon/ops-common.h                         |  2 +-
- mm/damon/sysfs-schemes.c                      |  3 ---
- mm/damon/tests/core-kunit.h                   |  2 +-
- mm/damon/tests/paddr-kunit.h                  |  2 +-
- mm/damon/tests/sysfs-kunit.h                  |  2 +-
- mm/damon/tests/vaddr-kunit.h                  |  2 +-
- mm/damon/vaddr.c                              | 27 ++++++++++++-------
- .../selftests/damon/damos_apply_interval.py   |  2 --
- .../damon/sysfs_no_op_commit_break.py         |  1 -
- ...sysfs_update_schemes_tried_regions_hang.py |  1 -
- 12 files changed, 25 insertions(+), 23 deletions(-)
-
-
-base-commit: 23cd682622886800b912219e307cf46a99f69c10
+diff --git a/tools/testing/selftests/damon/damos_apply_interval.py b/tools/testing/selftests/damon/damos_apply_interval.py
+index 0bf7768b2006..0ad110be0fb9 100755
+--- a/tools/testing/selftests/damon/damos_apply_interval.py
++++ b/tools/testing/selftests/damon/damos_apply_interval.py
+@@ -42,8 +42,6 @@ def main():
+         print('kdamond start failed: %s' % err)
+         exit(1)
+ 
+-    wss_collected = []
+-    nr_quota_exceeds = 0
+     while proc.poll() == None:
+         time.sleep(0.1)
+         err = kdamonds.kdamonds[0].update_schemes_stats()
 -- 
 2.47.3
