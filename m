@@ -1,102 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795890474;
-	b=G5N86UyvE32qpJvS5gUbxW3TKxeSv+MsZaTLtB1+7/XgzEa5fMvNhgKFkrfde+W/XeR/
-	 1U6AihfE2GjlF5Jt08xNU1BooYsadbOMfR8Q3WFNZUDdi6QYAWUvfbPZT9awGnYPaqxZ3
-	 DqmJWEHK1TM4NOCAd1mFZCKbGo0GWYX+dK9ngRssPFb93wbzGQkiw2UxzynX4VZdXB+Mt
-	 9YWQ9u/VuXihZTc2RoYNwDCr5NhTRypFrjKtmeKEVwMu33Gg1IwLqQ02xgpitkSKkJgpQ
-	 s36nYcBT89dMUGQr24E5fGKu3FhCVZCE6P6E9aOMYZmfe/RxBbSA1m4/Ers+3DFtV5A==
+	t=1795892441;
+	b=LHM60lsxLePZAdpVvFmGNAj4XR3Q18hfOebvCsNN4clBmpJfuc1bjB0Ys4X1teShQRWI
+	 lwh00XkmrzNUhl8cCMGHUuLSRLqtAxz/kjgnqOvjjLpxFz6EWwYsXJqn2Cx5YQaleULjp
+	 S6tnad8AdNL3QEJwCDpaRz9aURh3OiYii5OOg2rbfcfP0Cld4BjIi+3DTt7ixCk9gA3LI
+	 gXYGLLfbVDFFTkHxCWRn7Zy1kmwK0rtVm5co4hOqOsRE+jcnuSo9XxoD+1CGxLsk9jRkP
+	 mviTIy4cXAsbFy2kcw3m17BcdIPUTU4ZRU0RvbeN0bzSFsrSMHnwEY7qESAe0k/40Ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795890474;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type:Content-Disposition:User-Agent;
-	bh=PW6VqNGtt0Xn7Z9rDv8x1cEDI/qhpG4GN81tYMe/l/E=;
-	b=t1SOx9X3UJhX4b0+6Ntni/WHYhlCxHwNgai0MdXSjBnG+UT/KXY/u/zebCahKKm54l6+
-	 EkySmGd2yNbxG/ZGfg3ajGVPh8/+7yFu7jCKjrOVJuFZleZINGRAPRHacqB6ySy2g7SQl
-	 h3IyoMApCSf7NQYioSO1fq2ctXLUGgccUx8Bed8D5DOsBi8DqNMdXCJMVPU++gzCGsig7
-	 2yP+X4TI6SpqQKvqoZERj3cVD6FRdQG/ZV2shESbfxhqDTLTp+qX9opTaylVh+slp+/Dd
-	 wYIamO3Ni2riCt4uI8aPyxrp6FbaTKJnfYeEUX0ELStaI3cgR1D1fkc3PfQoMI5uyKg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795892441;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=q3Ayp3mf5LZNEnREMb+uXcykhhHuaIN8Xp18yqPUd3A=;
+	b=4OZ5/NhS6yQT0ISD37Jz5xo+UZv1zuDjz6pLMIPaS7qtqiw3dY8E4xINRLajyygAmNK8
+	 rxdCvCw9C3SGPLc4F2LYDikQlY22qLD23U0vcuqzHAzUtFQ9gKPL+T5CcL/pqs3q1TO8x
+	 temiChU29KPKgvp1V4Yj0DoyZuw3hFdxxoiahzXDUqAqf1A1YqUnhbg1JqzY8KNFjPPQD
+	 ysMa/ztF0iNWXQxNMUB/hWMtTQpUdDHGbGPV3tYI3D4i8peexaf2A0qHhQPiYxppKpq24
+	 AAnvDBt5Ay4tZiQRFsYYK47yQuLR38A8Fo3TDabmK0S3TamMkeAQdmEAkjWZbgn7UPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=i5ph78qm;
-	arc=none smtp.remote-ip=209.85.128.169
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GdnGfLMj;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB8A606A6BC
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 18:27:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EB8A606A6BC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319C2606A32F;
+	Sat, 28 Nov 2026 19:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=i5ph78qm
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-8b595601695so14466387b3.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 10:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1795890473; x=1796495273; darn=vger.kernel.org;
-        h=user-agent:content-disposition:content-type:mime-version:message-id
-         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PW6VqNGtt0Xn7Z9rDv8x1cEDI/qhpG4GN81tYMe/l/E=;
-        b=i5ph78qmR6TS4lDtiPa/uEWjxLt7/sYnXoM8P4ugjRid3t+og6xxwR5T7r9B3WJBlu
-         qVIjeYvpPsRCpyvSImvNGhvs0oy15P3XvItx2HsaBqdNkBDzPQlBLEAoScg4dFJpEcCD
-         HELWeMDHrOmbKAhaSHblth7pbaJlLfrozG0oY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795890473; x=1796495273;
-        h=user-agent:content-disposition:content-type:mime-version:message-id
-         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PW6VqNGtt0Xn7Z9rDv8x1cEDI/qhpG4GN81tYMe/l/E=;
-        b=ZNgnuHpiGKrP/yuS1FkgU8CQK3aGl94f0dOowth7b9TAqaM/Xbb3Ca6W1LOq3/ILGa
-         1Hi21fkX+LJFOwLzp83/Qa8cqJ6pD84XocVlJPC12ra4mntxERQIuORl0d0OjhgUzdLE
-         gigmO2QqMoGtdRtHvnvouFCED8hxrR8YKFokY93QloCnFrCRkY243aBICKldRfx+BXN8
-         b0PI7zmj/PcA7YQKY/t98kcF9v6LJYN+565KYknvSTRW+xdCAI60W8rGxYafstkSHFH8
-         T0ODdfjIoUbscsg9xFQsbayiQMwOkbkC/9LHgEz0DFJnMO+8/HGlhuvuTwajRZkpbsbd
-         wyjg==
-X-Forwarded-Encrypted: i=1; AL+hErFJDvC6cOj1/7KMGmJRBPCRlRRNcvhCbyjjTtefiviGbNvTteQs1spZdpbNv9MVYCKQRMdqCkULuQA8RP6Oadw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9oS1t/XpJ4ZJZZ57YwjWzEcaCwm1Gqt0xngRlfXg6x+mLlD3Hk
-	8MT3y9qXRRWn8af90CKbVTRNGMqRto2Hh+aClxaRTgMn3sX+P5AwC4TEpyQT5GP0KK0=
-X-Gm-Gg: AZFdTZdkUiGwE963Htrb6nRHVx6VFYo0w9IIJpvF7hAiUUJnrvFeM9HxZoQe7nGuQqU
-	78nWOQSjK1Yk42wpnWwqnXyKeIM6IgSNEQ/Q51M/2FEGC5BlhC+zmKj2fQfKE1IaWZZ+94WWt4P
-	gV1PX/BxF6TQWefvrvDK+aJl0IzbtueOb39KZFb8SZ1Za4Z0DVkygzRKQeKZZ8HaQEseugTyhUY
-	3LluWZvLI7XwOKydhzNxyKe3jhVkIXQpH/x40CEJOA31lmb5+bcsvoGvx+fzYbnCzXA6kksIn8Q
-	ko6GLTRhOKi1BUOsT8jhJSS7IgmMMzpXx+yGksoXCSq2VbrzYuXcRDanQ/E91GRv693WItQhZ5s
-	Bj8EaaJ0M0kWhrMy1I8yvKCP5/xwlXOY+6ezMYUQer6QKvNb5hApYSDHH+eMWA0qFFCBj2PkycB
-	mfVH3K5XQQPTFlD+j0jcn3+QYkERWur00B6mJrtfphzR9HplplnWC6fRTAZeCqNLZxhJjbo+B8J
-	88Y1zSWF6+mg47+xBxAx60dN9tPvh6K0CTzIbQ6PggGowLZSdLqT5jCrE2cFEdmwogws62yWX1e
-	IgN9DqDJb3mUDPIgFY44ChFr7trIIFxXAfwkPfx5Rc3Q6jw4255fgYis4sNNmqSMc2ZhmAX0D2+
-	/UiVLDn/j0rzwZvUhALWsjsfcoCqvmHEPZbmn0l6TZ7MbtaxCT6rEtEZNN3V5lOyyntQpAOpoEF
-	hSGp9cuG4s4Hctl9H4UEh/N4ttTwAB1TcWVV8sdjKf4kwhP5g9GOLq2PkyPpY5FO/g7FOjtmwaI
-	1NlT5JgCymQSRgaRsg1/7o=
-X-Received: by 2002:a05:690c:6213:b0:8b4:dd2b:10dd with SMTP id 00721157ae682-8b52050f0demr78249287b3.64.1795890473377;
-        Sat, 28 Nov 2026 10:27:53 -0800 (PST)
-Received: from [172.20.0.3] (c-73-207-185-9.hsd1.ga.comcast.net. [73.207.185.9])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b5202f90casm107671227b3.28.2026.11.28.10.27.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2026 10:27:52 -0800 (PST)
-Date: Sat, 28 Nov 2026 10:27:51 -0800
-From: Chris Down <chris@chrisdown.name>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>,
-	Baoquan He <baoquan.he@linux.dev>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, kexec@lists.infradead.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 2/9] kho: Make bootmem reservations visible to fleet
-	monitoring
-In-Reply-To: <2vxz4id3wgu7.fsf@kernel.org>
-References: <cover.1794383544.git.chris@chrisdown.name>
-	<c41c639fc5f453d60a265ba42a233f2ea5b48319.1794383544.git.chris@chrisdown.name>
-	<179443886218.2329176.10742245280418377061.b4-review@b4>
-	<20261113003059.056dd036a6546756@chrisdown.name>
-	<2vxz4id3wgu7.fsf@kernel.org>
-Message-ID: <awsdJ3sKM6Kq28Yi@chrisdown.name>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GdnGfLMj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A48EE1F000C1;
+	Sat, 28 Nov 2026 19:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795892440;
+	bh=q3Ayp3mf5LZNEnREMb+uXcykhhHuaIN8Xp18yqPUd3A=;
+	h=From:To:Cc:Subject:Date;
+	b=GdnGfLMjul9fQRT6906rDXCgC2/D0Y5dW/e2PWhjxZ8N8fAF7RPdXyO2vx3WMwtAt
+	 5BJQWHu4eQTYZ+2rPP653yS19LweSjGhtbe/xwNh64gf22/fqJrHu1UvkJY05U2UYN
+	 V30gWCTN6RNjHzagJwFD+NposNA/DlipgFY385d0GL9zwyrQIQCmdZDl2JqyLVCAZJ
+	 FZAlKEmtXpnCrn+DoDwLn4dfUk+Fp+gyBdcrxDy9YwT4W2A7rmUw6/tCX2PjzPeaMK
+	 1D/JX047UmTX121RrdncGnhxApjgrVvRoaZygIhCcLwyuLJS+AznhnEM1wxulPMj/N
+	 MJRlI8Q6dTZpA==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v4 0/7] mm/damon: various improvements/cleanups for code, tests and comments
+Date: Sat, 28 Nov 2026 11:00:25 -0800
+Message-ID: <20261128190033.164440-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,27 +60,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
+Content-Transfer-Encoding: 8bit
 
-Hi Pratyush,
+Refactor code, optimize code speed, add missing feature supports, and
+update comments on various areas of DAMON.
 
-Pratyush Yadav writes:
->I have a internal bug assigned to me to fix this. It would be great if
->you could fix it for me. I'd owe you a beer ;-)
+Optimize the efficiency of vaddr damos_migrate action under filter
+failures with patch 1.  Use damos->last_applied on damos_migrate action
+in vaddr and support sz_filter_passed for damos_migrate action in vaddr,
+respectively with patch 2 and 3.  Drop a redundant and racy quota goal
+target value validation in sysfs, in favor of that in the core layer,
+with patch 4.  Drop unused variables and imports from selftests with
+patch 5 and 6.  Update source file intro comments to call DAMON just
+DAMON, via patch 7.
 
-Deal :-) I'll send it separately from this series.
+Issues for patches 1 and 3 were found by Sashiko.  Those are
+mild inefficiency and unsupported features, though.  Hence not Cc-ing
+stable.
 
->Is it really that hard for your collector to sum up the areas. I don't
->mind this change since it is in debugfs and very simple, but I'm curious
->if you really need it.
+Changes from RFC v3
+- RFC v3: https://lore.kernel.org/20261127222719.105510-1-sj@kernel.org
+- Avoid NULL dereference when vm_normal_folio() returns NULL, in patch 2.
+- Rebase to the latest mm-new.
+Changes from RFC v2
+- RFC v2: https://lore.kernel.org/20261101171630.81477-1-sj@kernel.org
+- Set last_applied regardless of damos-filtering.
+- Advance entire folio for invalid folio.
+- update subject for unused imports removal.
+- Add source file intro comments update patch.
+- Rebase to the latest mm-new.
+Changes from RFC
+- RFC: https://lore.kernel.org/20261031202614.96036-1-sj@kernel.org
+- Drop charge_target_from fixup consolidation.
+- Add a patch for using last_applied on vaddr migrate action.
+- Add missed damos_va_migrate_private->sz_filter_passed setup.
+- Fix wrong commit message for unused imports removal.
 
-No, summing them is easy. The point in v1 was that the collector wouldn't
-need debugfs at all, and once the total is in debugfs next to bootmem_len,
-all it saves is a loop. I'll drop this patch and its selftest from v2, and
-we can come back to it once bootmem has settled down enough for sysfs.
+SJ Park (7):
+  mm/damon/vaddr: advance migration attempt in folio level for filter
+    out
+  mm/damon/vaddr: use damos->last_applied for migrate action
+  mm/damon/vaddr: implement sz_filter_passed for migrate_{hot,cold}
+    action
+  mm/damon/sysfs-schemes: drop redundant and racy zero target_value
+    check
+  selftests/damon/damos_apply_interval: remove unused variables
+  selftests/damon: remove unused imports of sys and time modules
+  mm/damon: update file intro comments to call DAMON just DAMON
 
-Thanks!
+ mm/damon/core.c                               |  2 +-
+ mm/damon/ops-common.c                         |  2 +-
+ mm/damon/ops-common.h                         |  2 +-
+ mm/damon/sysfs-schemes.c                      |  3 ---
+ mm/damon/tests/core-kunit.h                   |  2 +-
+ mm/damon/tests/paddr-kunit.h                  |  2 +-
+ mm/damon/tests/sysfs-kunit.h                  |  2 +-
+ mm/damon/tests/vaddr-kunit.h                  |  2 +-
+ mm/damon/vaddr.c                              | 27 ++++++++++++-------
+ .../selftests/damon/damos_apply_interval.py   |  2 --
+ .../damon/sysfs_no_op_commit_break.py         |  1 -
+ ...sysfs_update_schemes_tried_regions_hang.py |  1 -
+ 12 files changed, 25 insertions(+), 23 deletions(-)
 
-Chris
+
+base-commit: 23cd682622886800b912219e307cf46a99f69c10
+-- 
+2.47.3
