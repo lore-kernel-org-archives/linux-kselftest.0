@@ -1,73 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795865173;
-	b=ZBdvYUDt69J5wZyyWxSxmS7ccnPlRcPAN3ITLKkYwKo5xKPGockSXxXCaWgWTDWAcWOH
-	 aC773z8ORXofDhaIiyh/GNMDGL+LSnMj08gifuEzUxjDQVEiOMOEJuGgU0RtUhbTgybP6
-	 KRN3AyrnQJ0a1bAWn5RcwLn3jPAMWEloUjgtejSmKZVF8QvJIuP3p4d3Kg/mMOHu/5Zl8
-	 JcHBk06+92nPj/AiaU8YLy1n/aXe/DkLEJt0xNJuEhtp9T4QKt5v5q8J4cMcdJI3c2WGz
-	 F53auuPq4oBQGfVBLxlB7FWd1KeOznY5D9XymblxEtooo/csEboPXvtnOVNUKkiWPuQ==
+	t=1795866555;
+	b=Tvu3gzajx3PUknB2RWbR+EWgDuSYvP9Oc/4SouQlKLczmrKor9ueJ8YHRaFMWxIEvgFk
+	 5TOp1xSmumy2cV8ztN//0WLzocrbnv+iByyv5r2qW95H71uEwJLnZJqOrX4cbmfV7MkX0
+	 KqJFDmWz7Pcc9dwztbqUr6tzIAFC79SskFoMPne3mse6CK1eXsMgcVB1gBrTHEdmGU/hM
+	 XSqCaWcgknYcSGcYRCyDbyUwzbuTF75m9gcyC0fYKbyZvmlBkkv5cQCHM6b/oo1pIU4gS
+	 fDz2nV3QqKPyxdtoK1eMSRMOf3YNdk6sdYICT3bjw64kg97gIZLk7j++0mYYSrJiGpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795865173;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=KleLQMep/ikw4l22dunyzk0OW7JrxNRSqCmyhew0bn8=;
-	b=Tq65g5NzXXcSoOT1wHlNFZ9SvlnUQqdKw4kH0oKr13x3kW2B2lvFaJz6+AkXrrE1JsAo
-	 p66VjCZdQGJlpdG2rwJZ5Iu7THtK3k45YXmVd2rfVFwRU83HpYNB5CWf1BgpZ5lM0Sx++
-	 DxL7vTk40LXRbqMVDc9GDW8A71Wdib+WZ8wfrouQ2RPpDTs6oJKIeC6hPHBSxBXnQ3zam
-	 6WTsZwtBtG+My7/qidow9BQn5opAnAknsjJCmjfaWauZrAjqB8IqidAPu+slnxYUwtgUp
-	 m9g3ZouSDIBJDNgbGCt1mvLcoAKdLkspQCAklhXI11LRqciMiSNANfbR69sPP+tx3VA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795866555;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=Sz7duWS2xaM7GzKqf18DzuNc7DZR5td8vc9u4f7nkuA=;
+	b=YKzF+A/AHxYseRYOD1ixcg44rElupadE0bHk5DNj30Uw1dbbkSVL2FPjAIpeT5CMSmTF
+	 1J6ZA1UOp1jznw/8U0A1aIcrSFJ9NlYgUUDx3pldGBKyg4/OCSoX97+RvQN7Z7zAXe+eh
+	 hlxlvAI4bLRBKV/tzGhek/P5qE7DuUCj8bOmmp5NzVXyiCXMLg2cni72er7k5ABmfW55e
+	 zuAQultzvv9xdd/O3ovimhJ4iUgNW5N3Jq9hXJ7rOrvNhYEvzIVf+EhZEsyDbY0/Vzq+f
+	 iVe4+YhVZ8NkjRyHUDlc+LW3up+RpUj188C9fZhORmg+pOG1PJ+weLuSfY2Luy8ASbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="dX/0MpPr";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aFh2mwtp;
+	arc=none smtp.remote-ip=209.85.167.48
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 7F7A9606A336;
-	Sat, 28 Nov 2026 11:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D01606A323
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 11:49:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0D01606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dX/0MpPr
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A14C91F00919;
-	Sat, 28 Nov 2026 11:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795865173;
-	bh=KleLQMep/ikw4l22dunyzk0OW7JrxNRSqCmyhew0bn8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dX/0MpPrnSdz78o1T/PxNhqtu2r3DoNwoRBz44tLf+5obQ2HIKuWyBogTE8yATYqf
-	 PvZtAEUPlcWWrh2QsYKHgbBNx6hLM+Hh5XJj0jv4NrO9VatW2715WZ/uJn/UtDk9nL
-	 cvKzyN4a+Zurt0NbdZAmGX76PtVIJ8SpBplJixw5SgRT3Wb2qrH1bB4aam3uvF1Ci6
-	 lV4+C1VUq/6GLaxJqQNibuoOTI+GbCeEz1fkXsauRv6zUnfa0tQODeQbqJ47LyziJf
-	 PACLGJbeUdbkeO02ICL/RvuHPM1bJuGKz59wWd1d7YEBiCg5aHftwtHeolG7KBnl1O
-	 +66cHW3diWvDQ==
-Date: Sat, 28 Nov 2026 13:26:09 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Askar Safin <safinaskar@gmail.com>
-Cc: aleksa@amutable.com, alex@amutable.com, alexei.starovoitov@gmail.com,
-	arnd@arndb.de, bpf@vger.kernel.org, brauner@kernel.org,
-	containers@lists.linux.dev, corbet@lwn.net, dhowells@redhat.com,
-	ebiggers@kernel.org, giuseppe@scrivano.org, hughd@google.com,
-	jack@suse.cz, jlayton@kernel.org, josef@toxicpanda.com,
-	kees@kernel.org, kpsingh@kernel.org, lennart@poettering.net,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	luto@amacapital.net, neal@gompa.dev, oleg@redhat.com,
-	paul@paul-moore.com, ptikhomirov@virtuozzo.com, sergeh@kernel.org,
-	skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
-	zygmunt.krynicki@canonical.com
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awq6UXILgmgWY3Fn@kernel.org>
-References: <awOQDOel_72Xwjm7@kernel.org>
- <20261127214103.542291-1-safinaskar@gmail.com>
- <awn-ioAuksHNV-Rc@kernel.org>
- <awn_Y7oI4ckfsjSv@kernel.org>
- <awoHex4LVst2JwkO@kernel.org>
- <awoO9R7YF_5_6dHA@kernel.org>
- <CAPnZJGBnFyrmr88OsYkMwtLiR93z4g0NAuoMurcnhcYFXz51jg@mail.gmail.com>
- <awqkft-e6Tbj7dbJ@kernel.org>
- <awqut63HdrL97iu3@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aFh2mwtp
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5be3cff0f6cso5908015e87.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 03:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795866553; x=1796471353; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Sz7duWS2xaM7GzKqf18DzuNc7DZR5td8vc9u4f7nkuA=;
+        b=aFh2mwtpLHrjgKdOdhYb592xOXx5WWMDM54foyMSTkNLn+Okk0D/uX2SIuHhOlIhjo
+         vRqDBJwDEmPYNGU614TkVy8RCXyEqpjirmxrH6y2xvfq89U+WbiSw3Sdkg0KNiwYZtCB
+         J21SVhCiodpqVxKvHtuXuxrAskcyz6ON87/IqK/C8SNFH3eFKzHWs4n53XgESRLLPxlO
+         K0zRJ4d2p/qngCfifN2/5Nf4v65YnLbuB006MZH4eOB//5+MTCHwwBuhdOOZg8SMBM/j
+         SEtXaIsGa8FEVKJ3v8kpQfjqYn7qxvcBs+6nIuUODqd3HQeZWAx88I9bB6ivtL31Uysd
+         lqsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795866553; x=1796471353;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Sz7duWS2xaM7GzKqf18DzuNc7DZR5td8vc9u4f7nkuA=;
+        b=lyy97yp/Vk/TFZSC6elAbZqaWpnWxddu0Jf4lm7dVE0ahYgryoqGnwgeKcREZtDq+1
+         AQlC3XydmRbgobwkJ5Lj52DwlqpUswS66WEYdM30bwvwdSf3/juyhvoetBDtfj8Umth/
+         bX9wzcgeZ50+D2mkXNHlUz4aaHhwpTzI6nfg+3YyhMDOC/LtbXnsx3lHYsWQzhFSZ8MG
+         fRmyIF4+Z1n3gWgcGWTM8FMWv64XXMi7OtSvmrpIP1B72dszPMmFHVmReHnDdxtvFvNZ
+         Jzca1HaXwEXrOcNhhlXw5a5/Snhis1WHStSuS/oq02FqoU0L7x9RGa/PD1NHOJq3Ihrz
+         29Gw==
+X-Forwarded-Encrypted: i=1; AL+hErFS4rlvppVDNQdk8ghiA0jtNWTnyfqFsRwsAjbqsnKHCXMiLy3TpbCRi2lFZxc1A26lGcVVFFot7obho54OBP8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Fis9bnyv4Jel3xjdPxmL6L6+shXunwiK/LbGwkRjyYQyqTkYn
+	KtbjZEvzZK6HyEplPiH8UbzlTtllze6AoSXxDKb/H9QOCZt0vhzcAd4f
+X-Gm-Gg: AZFdTZcP2Pw1sfqdL5fWsaPdaTJyVEooLX2wsP159JIDtD8BrnUmP8dCCqSlKLnTvr6
+	fUCcqeBstRpCj4+regVYdsqWrqSAuxS9SAVkeQhw/DU34giCarDvMq/U21QqdJCiMKY5GgoSy2z
+	Ul3QAX/5I5BB3NxdlX4ByPBQRcXGeOE1HaXVjArASf4185ESe3xlMwZespRQ9sRKnCoGrMTVBAX
+	24Q91ORUHkugatQY9hUS0LuIBe037m1iyCFTBXWA3J84arwqMxmo0ecU8TpAK9Tw4IaVRf630lg
+	TbapsAWsTGDhHfHTW4g7TIuzSiC6A45WWrkiUsFY89IFeHyviSpIgw7kuaT59IlGg2a8b0VKfHB
+	H/wm4hvH1mtkobLqRPMqSMmc9/1j8sC08L6bO4Pa+97IPjD8tS8Ea4rMEaaHa0iQFFepQEhKRL2
+	Gi71rIe/uT0+ikMO6nGURXW3AI+fWpGak4oyVvpytrzbocjQqzmAeSLe2C1RPbcBk6Jdyj5mE5w
+	tbLAwg/AfIQHnhTUTQMHra/+yeHBhN4+0CmGi8BoaIvbOqo9qO48QQqY7L/TnMK8oUHhrnFgMGs
+	Pc1t6GtlHxdN48u9eztWJ0kFl3z1wRmfK1mOhilVMHIT
+X-Received: by 2002:a05:6512:12cd:b0:5c1:522e:3d44 with SMTP id 2adb3069b0e04-5c1bc7c22fbmr9479195e87.23.1795866552941;
+        Sat, 28 Nov 2026 03:49:12 -0800 (PST)
+Received: from thinkpad ([92.36.65.198])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3ae8050ff30sm67319321fa.18.2026.11.28.03.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Nov 2026 03:49:11 -0800 (PST)
+From: Andrey Zakharov <dedemorow@gmail.com>
+To: david@davidgow.net
+Cc: tglx@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	raemoar63@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	Andrey Zakharov <dedemorow@gmail.com>
+Subject: Re: [PATCH] x86/e820: Add KUnit tests for table sanitizing and range update
+Date: Sat, 28 Nov 2026 14:48:50 +0300
+Message-ID: <20261128114850.1683690-1-dedemorow@gmail.com>
+X-Mailer: git-send-email 2.56.1
+In-Reply-To: <179576714578.1671685.15482503905360730523.b4-review@b4>
+References: <179576714578.1671685.15482503905360730523.b4-review@b4>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,58 +106,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <awqut63HdrL97iu3@kernel.org>
 
-On Sat, Nov 28, 2026 at 12:36:43PM +0200, Jarkko Sakkinen wrote:
-> On Sat, Nov 28, 2026 at 11:53:06AM +0200, Jarkko Sakkinen wrote:
-> > On Sat, Nov 28, 2026 at 04:50:42AM +0300, Askar Safin wrote:
-> > > On Sat, Nov 28, 2026 at 2:15 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > thinking more sequencing than data structures. I.e. I have a game where
-> > > > I need to end up to process creation without embryonic state, and add
-> > > > just enough weight to kernel to support that outcome, and that leads
-> > > > to ~2K'ish LOC of extra kernel complexity.
-> > > 
-> > > So you don't have embryonic state? I don't like this.
-> > > 
-> > > Let's assume the following situation. Userland's PID 1 is already running.
-> > > Our container manager attempts to spawn yet another process into userland.
-> > > As well as I understand, it should do clone3 with CLONE_INTO_USERLAND,
-> > > and then execve.
-> > > This creates time hole when there is process, which already runs inside
-> > > userland (i. e. its PID namespace and other namespaces), but runs
-> > > container manager's binary and have container manager's mm.
-> > > This invites for bugs. Other processes, which already run inside userland,
-> > > may somehow take advantage of this.
-> > > For example, see section "CVE-2019-5736 Is a Very Very Very Bad
-> > > Privilege Escalation to Host Root"
-> > > of https://brauner.io/2019/02/12/privileged-containers.html .
-> > > So, here I like embryos.
-> > 
-> > We all have things that I like but let's talk about facts instead.
-> > 
-> > CVE-2019-5736 was also not a sibling process racing the pre-execve
-> > window: it happened inside execve() itself via binfmt_script resolving
-> > container-controlled #!/proc/self/exe.
-> > 
-> > CLONE_INTO_USERLAND rejects CLONE_VM, CLONE_FILES, CLONE_FS, and
-> > CLONE_SIGHAND, keeps exec_state->user_ns in the caller's outer user
-> > namespace, and resets exec_state->dumpable to suid_dumpable (0) when
-> > installing userland->user_ns. Until execve(), ptrace_may_access() checks
-> > CAP_SYS_PTRACE against the outer user_ns, so processes inside the
-> > userland cannot ptrace the child or access /proc/<pid>/{exe,mem,fd}.
-> 
-> The build phase on struct userland (USERLAND_INIT, before any task
-> exists) lets clone3(CLONE_INTO_USERLAND) stay an atomic copy_process()
-> step and execve() stay as it is.
-> 
-> It fully lives in the *pre-existing syscall paths*".
+Hi David,
 
-Noteworthy addition: this is also optimal for pre-existing LSM
-infrastructure, as less you diverge better the pre-existing policies
-can protect (and less there's need for change in e.g., SELinux
-policies).
+Thank you for the review and for running the tests.
 
-Br, Jarkko
+> I do think there'd be some benefit going forward to extending this to
+> cover other parts of the e820 handling code [...]
+
+If you have not started polishing your sketch yet, I would be happy to
+try turning it into a proper follow-up patch on top of this one. I would
+mention you with a Suggested-by tag, or however you prefer, since the
+idea and the stub approach are yours. Would that be OK with you?
+
+Thanks again,
+Andrey
