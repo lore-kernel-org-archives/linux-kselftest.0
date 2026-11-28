@@ -1,78 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795826516;
-	b=INmzPIt5UOPrDr2xiJGVbM8dBZJ1lBR6PaNbP/ODBWm+9W7pTj3C0IEck5gHAmOm1K+A
-	 ydwrlt+lsmXD0UGXqMyCbmA3q4Cc+C39kjg0tIOqU9iva03/JiSG32vMYft274l3DX7Ju
-	 QsaQzbqEcV6C585RPdpEEr7psOCXULzAwwLDSOfHKIKLc2W/7jLbC9ZvNX1/UaVAQHVD9
-	 Hwq/SxxFNgb7kS53UJuKqskb2hdyH2LI6hmkKlR4ALKL7yppYGJq6iqhiCDTrnr0gG0s4
-	 Tka1mWftmPNX1gh/ajDnqj1mHc0qkK+qK2efXZrDpA9CSvXwa++xyb4gTiyq0J2AH8w==
+	t=1795826517;
+	b=2QSDlDz/SSv+NsZ6qAcbd6dnKImQmOnJpPCBT232JbWvVBCs41P2jlAUH2bDXYkuOYq4
+	 TIMpe44a50c+oThulxobGm3kXB+V1WO9fVruIIvhqmnkft5awUQkUALc86trl3kpoyP3d
+	 7ZbKsfs3PlLhQ+/N+6YChQMeL3cty0nkVmPCS53X+9xn7xZslSzkM+cRLI4HubP/e+0W4
+	 xqi8vVdBIwvEDeJz9qwjPzvjj+g74CdxBYyY2gqoA7nx1KKC4ysataPOeVoPSJxhHKYj2
+	 70S3QUaEFgBprsjQFIewCS/Wb5F63hX0L6aYrRjV/1+jgmFpbPzImV//Hoiiu7qxcUQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795826516;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795826517;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=S9CnuD4WQSQFLyYjLuWuOQZ+RY+7TYuzX1XA+3+jbm4=;
-	b=IwN+dKNe+1qHA+4ZL8ierWhr0lkhUqfdEvNQTNmGq3xpaoI4dfL6xMyQjAS14cuUb3X0
-	 /k+jwi3PWVGwgnMIPmAKlUhw1lHpcL7dD7UdLcR+By1N+LEd0UP7FX8WMk3Ygk72vXGV2
-	 UmiVAm6Jo2Q45jaaA6Rzqw5XY/cN8MM3Wo5gBe29e6xyM72Q13vlZ4G1mopzQpnZ7L+ib
-	 NnPRs2a5bTGprFdfLjb2aIu8J5mGJgUXS5y9Fz+S13/nPCa6OVbl1VSGi8ZoD4+eTvl0l
-	 JWQxE6TrEzKdR53CULlYKRC3Bv/eONDTOU/ieSFLM/qzfAml/8P8Sw51bGkAfDW1Wuw==
+	bh=4sTZ3hSZWa9XKP9DNehQj39fUML0ZzMuSinX6q99rb8=;
+	b=1oVNIE/qaEs4f51mH8iJe/LXy95EOG5wZazTMZ0I0XYci2IsoL//AJ9O1XXRyHKkYrAj
+	 4HgeBlTA0DNFp8qqoANeXPFVdP1t25dehydxD2chSgWzlz3MMN5xom7/h6C661wpqoFAQ
+	 vRkVyvewfOAMXKPgPm1pw4043Im+HVatx9Ly0UOb1LE+l1HKiCR9LiiOMUE7/naY6jNMX
+	 p/eIV6Na9C2fUZVwSlOiSmYFhkPpJbkzBj3qN2vAMGMz5pK3IQVWLUuGp46IVZCY89SQ1
+	 9TU28Ok+kUfcZn13gEtyWZf8SqQZpGxzzyKhocaizWY57PKK04WeaLxiBxnjXKc0XNw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kc3WH1Dg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=baJbIitF;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71F1606A338;
-	Sat, 28 Nov 2026 00:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583C6606A68D;
+	Sat, 28 Nov 2026 00:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kc3WH1Dg
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=baJbIitF
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795826516;
-	b=fXSX0NxsDQ9Bi2BbL5j5ptc6y5IamXd4r33NWhIJ1XTmzb5OdTz2v8616ukeMVJVIGbl
-	 N8uh2NEhFHdBQL7R6x9YKSJkVktJdso+E+c8SCo5YaEiURNSJ0nQg5I9piwQ4RQhQeYjQ
-	 SkziQayMOSVUAVl+9IIq18OQ4np3saGi5cq61uvj7tNPD3GUe3O2a7fUFqZQKzy29N4NG
-	 WRhFUxsFOKKsR/2KHu38Gx5sGE+4MEj/8tkUTCFSW3Qx+zLpMt4fh4bQEuqkLsOIcdlKI
-	 wSO0MK3dGgbJRADjLGAgBpA/bT4B90QGQv9OiavRyR6FXEQu2JOdYTiBGrw/lDCaJYw==
+	t=1795826517;
+	b=0s9sD4kG7f6iprAsO8PAOx5S4E3NK6VN3PQ9bqQNgXm0xszVM09yU+b4G3UdIZ2I1z6J
+	 0UUeQs/9BN/CV54dXS2oFL/Z7AS2Q14jlVOORTiCUpNnhie3PT25Hd/grmpGMDJiABC4l
+	 yH4MtkxgfrXTheW1O+tyfYo+ZWtJVtaRY8PwtmMZ3tlblFtEvHMiVCf8fpPA+ZR2+tQvy
+	 XFzfd6sATzy2EM78c243FSSZCVJtiwIVSOZgu06fBbqec1DfjluB0Y/7jqDtgWCLBAKcV
+	 qK6ITn03GCH/2hRy63qDJPXvWniJVJks7IqMZNv2XvAfa04PFenyWhGNm3GmmycZ9aQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795826516;
+	c=relaxed/relaxed; t=1795826517;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=S9CnuD4WQSQFLyYjLuWuOQZ+RY+7TYuzX1XA+3+jbm4=;
-	b=ZtjofUCVx4FXH1sxLwf3AqFkkNbxOmbeOORPDJCSt+9rNfKxZZ/XYuVdWEFgxsS0/WIs
-	 fFEDWAWrHOcljF/xB+42q9TXdQy0KuoDhB5KOgkx7ltcRd1kvMjF3+3F5WlV2EDUK2bG0
-	 gjpjgpugLaPAHx7FCZWIgvBXYTwbknVfF8gzMQ2cqBZQBALRqcGMTXuVIOKTkEHjxa6lV
-	 gYFECNgbdJvYK3RIX5IhjI6SmQRWmx8Nb9NRu2hdxpAzC0qeyEpSB/lmyXo5NNYiEXfSE
-	 fzyQb0/MdQaiUVdMH+uOLEaVhDL+fCAdpKjJw0y9YuYeuT3K7QtDuk6ZDSpW2LREh9w==
+	bh=4sTZ3hSZWa9XKP9DNehQj39fUML0ZzMuSinX6q99rb8=;
+	b=j1U6RV/bTvMxRyX2AVTrzPCf9OZJJJ7C8QzzasoNQCHH1AgTaKtUzRhiVjvWsb3UMgJN
+	 sFDmn3qN85NZDSbQ+2Aab7tmDotVoWuKEkYHPRaCtBIKOvdlqqJF4Z0AJFNAMzeNcOnmC
+	 OvEKufFdRxIxQZ7SL94QO+rrbe6KU29YpoQUv1X2YHssuVPAZvScQ+e1/mlPgrtUMEaFc
+	 oJ/D1bYwXbDjG/IGg1B9+QdcZsrwIB5i+TozjGKgzF7Nu1SxiaClt4SW9c/yQtPIO+RnP
+	 YIvqmdwNL7yfE4NhKmups5WRZ0LLVDT8IP7XHusmdJImmsrM/qGWf55/o+2YxXIwkTg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 301321F000C1;
-	Sat, 28 Nov 2026 00:41:45 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id E74DC1F0089F;
+	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795826516;
-	bh=S9CnuD4WQSQFLyYjLuWuOQZ+RY+7TYuzX1XA+3+jbm4=;
+	s=k20260515; t=1795826517;
+	bh=4sTZ3hSZWa9XKP9DNehQj39fUML0ZzMuSinX6q99rb8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=kc3WH1DgEd/gB0NxHdfyG+zmxjtT7orcODLuR14hsD70n+95Y/oZSsYa9pojTimnz
-	 Ut1yvOlFpDeSgOWc0cA37n6asdmGBJSg4xONiw31StJQpFBpp8WG1UHQBWTMfLbpJq
-	 lNkIj1OhmokUUv1NUF6yQUfYyFMkWh/b9siFMlPw46M3chxGjbkFHio33MaAUDIlbn
-	 NfI4wjhF/sF459Httknzt0/mMpKIKBQupQcApidocVhwxIQbUllsS70JBZq0yr6UXH
-	 bZBGPeQu4JRT3ZsAGugncP6/amG5kBRBkelm2vR9OGaZIWH562A2XjEORiu8BVwQD8
-	 ZDK0AImSd9fzw==
+	b=baJbIitFfUgW4bEP9ug9F6PJ+zQR1vVnNl8tiYFGbD7RXRooZ6tTFpJn4Hvv7peGH
+	 Goj2powdTlBIGNI4LldB5496fIQmgTDIawkaLJF3jE+chdqvBxKHbVw/Nqzj482sJJ
+	 AIeFKLiteYnbx5BbDZH880cnnoOxy/Xo2I8ezjjtqfqm8FipOynHkbdBt8jVn6M3/X
+	 JUgkDMmswxKY7A34hrQPR6wZKPQ+dQQdH6t+4kw7Ceo3HwV0uwKQm+pWxf1DZNrPFW
+	 51J00ULRAHkQMCIpX3amNkcfM/Qao922S+hUpnbl3GnF2a2HP8TVdZqBrOVJSNMMTZ
+	 bbEMWrPWt1Muw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id B11AB4DED1;
+	by lkml.kernel.org (Postfix) with ESMTP id 6E6EE4DEC7;
 	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
 From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Sat, 28 Nov 2026 01:41:35 +0100
-Subject: [PATCH net-next v2 3/5] docs: net: document the LISP devices
+Date: Sat, 28 Nov 2026 01:41:33 +0100
+Subject: [PATCH net-next v2 1/5] lisp: add LISP (Locator/ID Separation
+ Protocol)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261128-for-upstream-lisp-v1-v2-3-68e8649c3ed2@free.fr>
+Message-Id: <20261128-for-upstream-lisp-v1-v2-1-68e8649c3ed2@free.fr>
 References: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
 In-Reply-To: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -99,11 +100,11 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  =?utf-8?q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>, 
  Danielle Ratson <danieller@nvidia.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=9280;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=32105;
  i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=8e5RbI6cVe0qnP19u1JfP5nfVOjyBFC4ratoywdAAc4=;
- b=Ldijmsnm2+sdHaV5pRkcLDlT1z+vm3ygA0TO4GDEH85Ncl/ykLOwNJd27+BlJ8ykIEXd6g7sa
- dTgwmmiHoqdAvHvlaV6F1X9pEvS4RzIVptC3YjKbXMocAaYa1s28A22
+ bh=OK0njdsN4eZZm+tcA8UmL0sGkoZ/yEtEbSak10oDdME=;
+ b=V/f0i5LWo0L7U1HnPT5vftqU+4PJq24j38RKDaAc31d/3gfNc7FFJKJYq+7MfmcE9iuGR1tjF
+ 4EQ/BNvDy8+D3DbQk1oG9s+1pxqndfFZbySDsMAdHkakNWBaEZg9Vk+
 X-Developer-Key: i=vjardin@free.fr; a=ed25519;
  pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
 X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
@@ -114,221 +115,1172 @@ Content-Transfer-Encoding: 7bit
 
 From: Vincent Jardin <vjardin@free.fr>
 
-Describe the LISP devices, how the routes and the nexthops
-give the RLOCs and what checks the sources of the packets that a
-device decapsulates.
+LISP (RFC 9300) carries the packets sent to an endpoint identifier
+(EID) over UDP, to a routing locator (RLOC) of the site of that EID.
+An EID prefix and its RLOCs are a mapping, which the LISP control
+plane (RFC 9301) provides.
+
+The data plane of a LISP router (xTR) is a tunnel device. It sends
+IPv4 and IPv6 packets with a LISP header over UDP (port 4341).
+
+A mapping is a route. The kernel takes the RLOC of a packet from its
+tunnel metadata, which the lightweight tunnel encapsulation of the
+route or of its nexthop provides:
+  "encap ip" for an IPv4 RLOC
+  "encap ip6" for an IPv6 one
+whatever the family of the EID prefix.
+
+Example:
+  ip link add lisp101 type lisp id 101 local 192.0.2.1
+  ip link set lisp101 master site up
+  ip -6 nexthop add id 1 encap ip dst 198.51.100.1 dev lisp101
+  ip route add 10.2.0.0/24 vrf site nhid 1
+  ip -6 route add 2001:db8:2::/48 vrf site nhid 1
+
+The kernel has no map-cache and it does not resolve anything: it holds
+no state that the packets of a host create. The routes and the nexthops
+come from a control plane, in user space, as those of any other routing
+protocol. A packet without RLOC ends up dropped.
+
+A remote site is a nexthop, shared by its EID prefixes.
 
 Signed-off-by: Vincent Jardin <vjardin@free.fr>
 ---
- Documentation/networking/index.rst |   1 +
- Documentation/networking/lisp.rst  | 159 +++++++++++++++++++++++++++++++++++++
- MAINTAINERS                        |   1 +
- drivers/net/Kconfig                |   3 +-
- 4 files changed, 163 insertions(+), 1 deletion(-)
+ MAINTAINERS                  |    6 +
+ drivers/net/Kconfig          |   19 +
+ drivers/net/Makefile         |    1 +
+ drivers/net/lisp.c           | 1040 ++++++++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/if_link.h |   12 +
+ 5 files changed, 1078 insertions(+)
 
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 44a422ad3b055..f2bc062f80d80 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -69,6 +69,7 @@ Contents:
-    kcm
-    l2tp
-    lapb-module
-+   lisp
-    mac80211-injection
-    mctp
-    mpls-sysctl
-diff --git a/Documentation/networking/lisp.rst b/Documentation/networking/lisp.rst
-new file mode 100644
-index 0000000000000..aae350cf04f77
---- /dev/null
-+++ b/Documentation/networking/lisp.rst
-@@ -0,0 +1,159 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright (c) 2026 Vincent Jardin <vjardin@free.fr>, Free Mobile
-+
-+=============================================
-+Locator/ID Separation Protocol (LISP) devices
-+=============================================
-+
-+LISP separates the addresses of the hosts, the endpoint identifiers (EIDs),
-+from the addresses of the routers that the hosts are reachable through, the
-+routing locators (RLOCs). A LISP router, an xTR, carries the packets that are
-+sent to a remote EID over UDP to an RLOC of the site of that EID (:rfc:`9300`).
-+
-+A LISP device is the data plane of an xTR. It encapsulates IPv4 and IPv6
-+packets in a LISP header, UDP port 4341, and an IPv4 or IPv6 header, and it
-+decapsulates what it receives. The family of the RLOCs is independent from the
-+family of the EIDs.
-+
-+The kernel has no LISP control plane and no map-cache: the association of an
-+EID prefix with its RLOCs, a mapping, is a route. Its nexthop gives the RLOC as
-+a lightweight tunnel encapsulation, ``encap ip`` for an IPv4 RLOC and ``encap
-+ip6`` for an IPv6 one, and has the LISP device as output device. The routes are
-+configured, or installed by a LISP control plane in user space (:rfc:`9301`)
-+as any routing daemon does. A packet whose destination has no route with an
-+RLOC is not resolved by the kernel.
-+
-+Devices
-+=======
-+
-+There are two kinds of LISP devices.
-+
-+A device (1) with an instance ID sends and receives the packets of that instance::
-+
-+  ip link add site type vrf table 10
-+  ip link set site up
-+  ip link add lisp101 type lisp id 101
-+  ip link set lisp101 master site up
-+
-+It is meant to be in the VRF of the EIDs of the instance: what it receives is
-+routed in that VRF, and the routes of that VRF send to it. A site has one
-+device per instance, whatever the number of remote sites.
-+
-+A device (2) that collects metadata serves all the instance IDs that have no device
-+of their own::
-+
-+  ip link add lisp0 type lisp external
-+  ip link set lisp0 up
-+
-+The instance ID then comes with the RLOC, as the ``id`` of the encapsulation
-+of the nexthop. The packets that the device receives have it in their tunnel
-+metadata, where a routing rule (``ip rule add tun_id``), a traffic control
-+filter or a BPF program finds it.
-+
-+A device with an instance ID takes the packets of its instance only while it
-+is up: while it is down, they go to the device that collects metadata, if
-+there is one.
-+
-+Both kinds take the RLOC from the tunnel metadata of the packet. A packet
-+without metadata, sent by a route that has no encapsulation, is dropped and
-+counted as a transmit error.
-+
-+``id IID``
-+  The instance ID, from 0 to 16777215. The header of the packets of the
-+  instance 0 has no instance ID, and a packet without instance ID is received
-+  by the instance 0.
-+
-+``external``
-+  The device collects metadata.
-+
-+``local ADDR``
-+  The source address of the packets that are sent to an RLOC of the same
-+  family, a local RLOC. It can be given once per family. A source address in
-+  the encapsulation of the nexthop is used instead. Without either, the route
-+  to the RLOC gives the source address.
-+
-+``link DEVICE``
-+  A generic option of ``ip link add``, before ``type lisp``. The packets are
-+  sent to the RLOCs through ``DEVICE``: by the routes of a VRF when it is a
-+  VRF device, by its own routes otherwise. The LISP device receives what
-+  comes from the VRF that ``DEVICE`` is, or is in. Without link, or with a
-+  link that is in no VRF, the RLOCs are in the main table. The LISP device is
-+  removed with ``DEVICE``::
-+
-+    ip link add link wan name lisp101 type lisp id 101 local 192.0.2.1
-+
-+The devices that have the same VRF of RLOCs share their UDP sockets, one per
-+address family. The sockets are in the network namespace of ``DEVICE``: the
-+one that the LISP device is created from, unless ``link-netns`` names another
-+one, which the LISP device is then removed with. An instance ID is used once
-+per VRF of RLOCs, and one device collects its metadata. The sockets of a VRF
-+and those of the main table cannot coexist: the RLOCs of a network namespace
-+are either in VRFs or in the main table.
-+
-+Mappings
-+========
-+
-+The RLOC of an EID prefix is a nexthop, shared by the prefixes of the same
-+site, or a group of nexthops for the RLOCs that share the traffic::
-+
-+  ip -6 nexthop add id 1 encap ip dst 192.0.2.1 dev lisp101
-+  ip -6 nexthop add id 2 encap ip6 dst 2001:db8::1 dev lisp101
-+  ip nexthop add id 3 group 1,3/2,1
-+
-+  ip route add 10.1.0.0/16 vrf site nhid 1
-+  ip -6 route add 2001:db8:1::/48 vrf site nhid 3
-+
-+An IPv6 nexthop is used by IPv4 and IPv6 routes. With the device that
-+collects metadata, the nexthop gives the instance ID too::
-+
-+  ip -6 nexthop add id 4 encap ip id 102 dst 192.0.2.1 dev lisp0
-+
-+A route can carry the encapsulation itself, without nexthop object. This does
-+not scale with the number of RLOCs: the routes that only differ by their
-+encapsulation are compared with each other when one is added.
-+
-+A group counts the packets that it forwards to each of its nexthops
-+(``ip -s nexthop``).
-+
-+A nexthop is removed with its routes when the device goes down.
-+
-+Checking the IP sources
-+=======================
-+
-+The device decapsulates what comes for its instance ID, from any RLOC: it
-+does not check the source of a packet. What the kernel has for any device
-+applies to it.
-+
-+The reverse path filter of IPv4 checks the source EID. With ``rp_filter`` set
-+to 1 for the LISP device, a packet is dropped unless the route to its source
-+sends to that device, that is, unless its source has a mapping in that
-+instance. The packets that it drops are counted as ``IPReversePathFilter``.
-+The kernel uses the larger of the value of the device and of ``all``: with
-+``all`` at 2, as some distributions set it, the check is the loose one, which
-+accepts a source that has any route::
-+
-+  sysctl -w net.ipv4.conf.all.rp_filter=0
-+  sysctl -w net.ipv4.conf.lisp101.rp_filter=1
-+
-+IPv6 has no ``rp_filter``: the ``rpfilter`` match of ip6tables, or the ``fib``
-+expression of nftables, makes the same check::
-+
-+  ip6tables -t raw -A PREROUTING -i lisp101 -m rpfilter --invert -j DROP
-+
-+These checks do not look at the RLOC that a packet comes from. With mappings
-+that user space installs when packets need them, they drop what a site sends
-+until the mapping of that site is there.
-+
-+The packets that a device that collects metadata receives have the RLOC that
-+they come from and their instance ID in their tunnel metadata, which a traffic
-+control filter matches with the source EID. These filters accept an EID
-+prefix from the RLOC of its site and drop what else the device receives,
-+which the last one counts::
-+
-+  tc qdisc add dev lisp0 clsact
-+  tc filter add dev lisp0 ingress protocol ip pref 10 flower \
-+      enc_key_id 102 enc_src_ip 192.0.2.1 src_ip 10.1.0.0/16 action pass
-+  tc filter add dev lisp0 ingress pref 100 matchall action drop
-+
-+A device with an instance ID gives its packets no tunnel metadata: nothing
-+checks the RLOC that they come from.
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 6b62bc1f45bae..addedadf43446 100644
+index 97308edec53dd..6b62bc1f45bae 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -15510,6 +15510,7 @@ LISP DATA PLANE DRIVER
- M:	Vincent Jardin <vjardin@free.fr>
- L:	netdev@vger.kernel.org
- S:	Maintained
-+F:	Documentation/networking/lisp.rst
- F:	drivers/net/lisp.c
+@@ -15506,6 +15506,12 @@ F:	Documentation/misc-devices/lis3lv02d.rst
+ F:	drivers/misc/lis3lv02d/
+ F:	drivers/platform/x86/hp/hp_accel.c
  
++LISP DATA PLANE DRIVER
++M:	Vincent Jardin <vjardin@free.fr>
++L:	netdev@vger.kernel.org
++S:	Maintained
++F:	drivers/net/lisp.c
++
  LIST KUNIT TEST
+ M:	David Gow <david@davidgow.net>
+ L:	linux-kselftest@vger.kernel.org
 diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index aa78fd48e77a9..6201f5046422b 100644
+index ff79c466712df..aa78fd48e77a9 100644
 --- a/drivers/net/Kconfig
 +++ b/drivers/net/Kconfig
-@@ -280,7 +280,8 @@ config LISP
- 	  (LISP, RFC 9300): a tunnel device that carries the IPv4 and IPv6
- 	  packets of an instance ID over UDP, to the routing locator (RLOC)
- 	  that the route or the nexthop of their destination gives as a
--	  lightweight tunnel encapsulation.
-+	  lightweight tunnel encapsulation. See
-+	  Documentation/networking/lisp.rst.
+@@ -269,6 +269,25 @@ config BAREUDP
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called bareudp.
  
- 	  The mappings of the destinations to the RLOCs come from user space,
- 	  from a LISP control plane or from the configuration.
++config LISP
++	tristate "Locator/ID Separation Protocol (LISP) data plane"
++	depends on INET
++	select NET_UDP_TUNNEL
++	select GRO_CELLS
++	select LWTUNNEL
++	help
++	  This adds the data plane of the Locator/ID Separation Protocol
++	  (LISP, RFC 9300): a tunnel device that carries the IPv4 and IPv6
++	  packets of an instance ID over UDP, to the routing locator (RLOC)
++	  that the route or the nexthop of their destination gives as a
++	  lightweight tunnel encapsulation.
++
++	  The mappings of the destinations to the RLOCs come from user space,
++	  from a LISP control plane or from the configuration.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called lisp.
++
+ config GTP
+ 	tristate "GPRS Tunneling Protocol datapath (GTP-U)"
+ 	depends on INET
+diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+index 88e4c485d6b2f..e7a521ac8b97d 100644
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -36,6 +36,7 @@ obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
+ obj-$(CONFIG_VXLAN) += vxlan/
+ obj-$(CONFIG_GENEVE) += geneve.o
+ obj-$(CONFIG_BAREUDP) += bareudp.o
++obj-$(CONFIG_LISP) += lisp.o
+ obj-$(CONFIG_GTP) += gtp.o
+ obj-$(CONFIG_NLMON) += nlmon.o
+ obj-$(CONFIG_PFCP) += pfcp.o
+diff --git a/drivers/net/lisp.c b/drivers/net/lisp.c
+new file mode 100644
+index 0000000000000..5fdd8113b4a5a
+--- /dev/null
++++ b/drivers/net/lisp.c
+@@ -0,0 +1,1040 @@
++// SPDX-License-Identifier: GPL-2.0
++/* LISP: data plane of the Locator/ID Separation Protocol, RFC 9300.
++ *
++ * Copyright (c) 2026 Vincent Jardin <vjardin@free.fr>, Free Mobile
++ */
++
++#include <linux/hash.h>
++#include <linux/icmp.h>
++#include <linux/icmpv6.h>
++#include <linux/if_arp.h>
++#include <linux/ipv6.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/netdevice.h>
++#include <linux/rculist.h>
++#include <net/dsfield.h>
++#include <net/dst_metadata.h>
++#include <net/gro_cells.h>
++#include <net/gso.h>
++#include <net/icmp.h>
++#include <net/inet_ecn.h>
++#include <net/ip6_route.h>
++#include <net/ip_tunnels.h>
++#include <net/ipv6.h>
++#include <net/l3mdev.h>
++#include <net/netns/generic.h>
++#include <net/rtnetlink.h>
++#include <net/udp_tunnel.h>
++
++/* RFC 9300, section 5.1 */
++#define LISP_UDP_PORT		4341
++
++/* RFC 9300, section 5.3 */
++struct lisphdr {
++	u8	flags;
++	u8	nonce[3];
++	__be32	iid_lsb;
++};
++
++#define LISP_F_I		0x08	/* an instance ID is present */
++#define LISP_F_KK		0x03	/* the payload is encrypted, RFC 8061 */
++#define LISP_IID_SHIFT		8
++#define LISP_IID_MAX		0xffffff
++
++#define LISP_BASE_HLEN		(sizeof(struct udphdr) + sizeof(struct lisphdr))
++#define LISP_IPV4_HLEN		(sizeof(struct iphdr) + LISP_BASE_HLEN)
++#define LISP_IPV6_HLEN		(sizeof(struct ipv6hdr) + LISP_BASE_HLEN)
++
++#define LISP_IID_HASH_BITS	10
++#define LISP_IID_HASH_SIZE	BIT(LISP_IID_HASH_BITS)
++
++static unsigned int lisp_net_id;
++
++struct lisp_net {
++	struct list_head	dev_list;
++	struct list_head	sock_list;
++	/* protects the two lists, and the devices of the sockets */
++	struct mutex		lock;
++};
++
++struct lisp_dev;
++
++/* The UDP sockets of an l3mdev, shared by the devices that use it. */
++struct lisp_sock {
++	struct sock		*sk4;
++	struct sock		*sk6;
++	struct lisp_dev __rcu	*md_dev;
++	struct list_head	list;
++	struct rcu_head		rcu;
++	int			refcnt;
++	struct hlist_head	iid_list[LISP_IID_HASH_SIZE];
++};
++
++struct lisp_dev {
++	struct hlist_node	hlist;
++	struct list_head	next;
++	struct net		*net;	/* netns of the RLOCs */
++	struct net_device	*dev;
++	struct lisp_sock __rcu	*sock;
++	struct gro_cells	gro_cells;
++	struct in6_addr		local6;
++	__be32			local;
++	u32			iid;
++	int			link;
++	bool			collect_md;
++	unsigned long		rcu_state;	/* when hlist left its chain */
++};
++
++static struct hlist_head *lisp_iid_head(struct lisp_sock *ls, u32 iid)
++{
++	return &ls->iid_list[hash_32(iid, LISP_IID_HASH_BITS)];
++}
++
++static struct lisp_dev *lisp_lookup(struct lisp_sock *ls, u32 iid)
++{
++	struct lisp_dev *lisp;
++
++	/* A device that is going down may still be walked here. */
++	hlist_for_each_entry_rcu(lisp, lisp_iid_head(ls, iid), hlist)
++		if (lisp->iid == iid && rcu_access_pointer(lisp->sock) == ls)
++			return lisp;
++
++	return rcu_dereference(ls->md_dev);
++}
++
++/* RFC 9300, section 5.3: the inner header gets the congestion indication and
++ * the DSCP of the outer header, and its TTL when that one is lower.
++ */
++static int lisp_decap_fields(struct sk_buff *skb, u8 tos, u8 ttl)
++{
++	u8 dscp = tos & ~INET_ECN_MASK;
++	struct ipv6hdr *ip6h;
++	struct iphdr *iph;
++
++	if (skb->protocol == htons(ETH_P_IP)) {
++		if (skb_ensure_writable(skb, sizeof(*iph)))
++			return -ENOMEM;
++
++		iph = ip_hdr(skb);
++		if (INET_ECN_decapsulate(skb, tos, iph->tos) > 1)
++			return -EINVAL;
++
++		ipv4_change_dsfield(iph, INET_ECN_MASK, dscp);
++		if (ttl < iph->ttl) {
++			csum_replace2(&iph->check, htons(iph->ttl << 8),
++				      htons(ttl << 8));
++			iph->ttl = ttl;
++		}
++		return 0;
++	}
++
++	if (skb_ensure_writable(skb, sizeof(*ip6h)))
++		return -ENOMEM;
++
++	ip6h = ipv6_hdr(skb);
++	if (INET_ECN_decapsulate(skb, tos, ipv6_get_dsfield(ip6h)) > 1)
++		return -EINVAL;
++
++	if (ttl >= ip6h->hop_limit &&
++	    dscp == (ipv6_get_dsfield(ip6h) & ~INET_ECN_MASK))
++		return 0;
++
++	skb_postpull_rcsum(skb, ip6h, sizeof(*ip6h));
++	ipv6_change_dsfield(ip6h, INET_ECN_MASK, dscp);
++	if (ttl < ip6h->hop_limit)
++		ip6h->hop_limit = ttl;
++	skb_postpush_rcsum(skb, ip6h, sizeof(*ip6h));
++
++	return 0;
++}
++
++static int lisp_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
++{
++	unsigned short family = AF_INET6;
++	struct metadata_dst *tun_dst;
++	const struct lisphdr *lh;
++	struct lisp_sock *ls;
++	struct lisp_dev *lisp;
++	unsigned int len;
++	__be16 proto;
++	u32 iid = 0;
++	u8 tos, ttl;
++	int err;
++
++	ls = rcu_dereference_sk_user_data(sk);
++	if (!ls)
++		goto drop;
++
++	if (!pskb_may_pull(skb, LISP_BASE_HLEN + 1))
++		goto drop;
++
++	lh = (const struct lisphdr *)(udp_hdr(skb) + 1);
++	if (lh->flags & LISP_F_KK)
++		goto drop;
++
++	if (lh->flags & LISP_F_I)
++		iid = be32_to_cpu(lh->iid_lsb) >> LISP_IID_SHIFT;
++
++	lisp = lisp_lookup(ls, iid);
++	if (!lisp)
++		goto drop;
++
++	switch (*(const u8 *)(lh + 1) >> 4) {
++	case 4:
++		proto = htons(ETH_P_IP);
++		break;
++	case 6:
++		if (!ipv6_mod_enabled())
++			goto rx_dropped;
++		proto = htons(ETH_P_IPV6);
++		break;
++	default:
++		goto rx_frame_error;
++	}
++
++	if (skb->protocol == htons(ETH_P_IP)) {
++		family = AF_INET;
++		tos = ip_hdr(skb)->tos;
++		ttl = ip_hdr(skb)->ttl;
++	} else {
++		tos = ipv6_get_dsfield(ipv6_hdr(skb));
++		ttl = ipv6_hdr(skb)->hop_limit;
++	}
++
++	if (iptunnel_pull_header(skb, LISP_BASE_HLEN, proto,
++				 !net_eq(lisp->net, dev_net(lisp->dev))))
++		goto rx_dropped;
++
++	if (lisp->collect_md) {
++		IP_TUNNEL_DECLARE_FLAGS(flags) = { };
++
++		__set_bit(IP_TUNNEL_KEY_BIT, flags);
++		tun_dst = udp_tun_rx_dst(skb, family, flags,
++					 key32_to_tunnel_id(cpu_to_be32(iid)),
++					 0);
++		if (!tun_dst)
++			goto rx_dropped;
++
++		skb_dst_set(skb, &tun_dst->dst);
++	}
++
++	skb->dev = lisp->dev;
++	skb_reset_mac_header(skb);
++	skb_reset_network_header(skb);
++
++	if (!pskb_inet_may_pull(skb)) {
++		DEV_STATS_INC(lisp->dev, rx_length_errors);
++		DEV_STATS_INC(lisp->dev, rx_errors);
++		goto drop;
++	}
++
++	err = lisp_decap_fields(skb, tos, ttl);
++	if (err == -ENOMEM)
++		goto rx_dropped;
++	if (err)
++		goto rx_frame_error;
++
++	len = skb->len;
++	if (gro_cells_receive(&lisp->gro_cells, skb) == NET_RX_SUCCESS)
++		dev_dstats_rx_add(lisp->dev, len);
++
++	return 0;
++
++rx_frame_error:
++	DEV_STATS_INC(lisp->dev, rx_frame_errors);
++	DEV_STATS_INC(lisp->dev, rx_errors);
++	goto drop;
++rx_dropped:
++	dev_dstats_rx_dropped(lisp->dev);
++drop:
++	kfree_skb(skb);
++	return 0;
++}
++
++static int lisp_udp_encap_err_lookup(struct sock *sk, struct sk_buff *skb)
++{
++	return 0;
++}
++
++static struct sock *lisp_udp_sock(struct net *net, int ifindex,
++				  unsigned short family, struct lisp_sock *ls)
++{
++	struct udp_tunnel_sock_cfg tunnel_cfg = { };
++	struct udp_port_cfg udp_conf = { };
++	struct socket *sock;
++	int err;
++
++	udp_conf.family = family;
++	udp_conf.ipv6_v6only = family == AF_INET6;
++	udp_conf.local_udp_port = htons(LISP_UDP_PORT);
++	udp_conf.bind_ifindex = ifindex;
++
++	err = udp_sock_create(net, &udp_conf, &sock);
++	if (err < 0)
++		return ERR_PTR(err);
++
++	udp_allow_gso(sock->sk);
++
++	tunnel_cfg.sk_user_data = ls;
++	tunnel_cfg.encap_type = 1;
++	tunnel_cfg.encap_rcv = lisp_udp_encap_recv;
++	tunnel_cfg.encap_err_lookup = lisp_udp_encap_err_lookup;
++	setup_udp_tunnel_sock(net, sock->sk, &tunnel_cfg);
++
++	return sock->sk;
++}
++
++static void lisp_sock_release(struct lisp_sock *ls)
++{
++	udp_tunnel_sock_release(ls->sk4);
++	if (ls->sk6)
++		udp_tunnel_sock_release(ls->sk6);
++	kfree_rcu(ls, rcu);
++}
++
++/* A socket per family, as vxlan and geneve have: an IPv6 socket only takes
++ * the IPv4 packets too when net.ipv6.bindv6only allows it.
++ */
++static struct lisp_sock *lisp_sock_create(struct net *net, int ifindex)
++{
++	struct lisp_sock *ls;
++	struct sock *sk;
++
++	ls = kzalloc_obj(*ls);
++	if (!ls)
++		return ERR_PTR(-ENOMEM);
++
++	ls->refcnt = 1;
++
++	sk = lisp_udp_sock(net, ifindex, AF_INET, ls);
++	if (IS_ERR(sk)) {
++		kfree(ls);
++		return ERR_CAST(sk);
++	}
++	ls->sk4 = sk;
++
++	if (!ipv6_mod_enabled())
++		return ls;
++
++	sk = lisp_udp_sock(net, ifindex, AF_INET6, ls);
++	if (IS_ERR(sk)) {
++		lisp_sock_release(ls);
++		return ERR_CAST(sk);
++	}
++	ls->sk6 = sk;
++
++	return ls;
++}
++
++static bool lisp_sock_busy(struct lisp_sock *ls, const struct lisp_dev *lisp)
++{
++	const struct lisp_dev *tmp;
++
++	if (lisp->collect_md)
++		return rcu_access_pointer(ls->md_dev);
++
++	hlist_for_each_entry(tmp, lisp_iid_head(ls, lisp->iid), hlist)
++		if (tmp->iid == lisp->iid)
++			return true;
++
++	return false;
++}
++
++/* The l3mdev of the RLOCs: the link, or the one that the link is in. */
++static int lisp_l3mdev(const struct lisp_dev *lisp)
++{
++	if (!lisp->link)
++		return 0;
++
++	return l3mdev_master_upper_ifindex_by_index(lisp->net, lisp->link);
++}
++
++static int lisp_open(struct net_device *dev)
++{
++	struct lisp_dev *lisp = netdev_priv(dev);
++	struct lisp_sock *ls, *found = NULL;
++	struct lisp_net *ln;
++	int ifindex;
++	int err = 0;
++
++	ifindex = lisp_l3mdev(lisp);
++
++	if (!lisp->collect_md && !poll_state_synchronize_rcu(lisp->rcu_state))
++		synchronize_net();
++
++	ln = net_generic(lisp->net, lisp_net_id);
++	mutex_lock(&ln->lock);
++
++	list_for_each_entry(ls, &ln->sock_list, list) {
++		if (ls->sk4->sk_bound_dev_if == ifindex) {
++			found = ls;
++			break;
++		}
++	}
++
++	if (found) {
++		if (lisp_sock_busy(found, lisp)) {
++			err = -EBUSY;
++			goto unlock;
++		}
++		found->refcnt++;
++	} else {
++		found = lisp_sock_create(lisp->net, ifindex);
++		if (IS_ERR(found)) {
++			err = PTR_ERR(found);
++			goto unlock;
++		}
++		list_add(&found->list, &ln->sock_list);
++	}
++
++	rcu_assign_pointer(lisp->sock, found);
++	if (lisp->collect_md)
++		rcu_assign_pointer(found->md_dev, lisp);
++	else
++		hlist_add_head_rcu(&lisp->hlist,
++				   lisp_iid_head(found, lisp->iid));
++
++unlock:
++	mutex_unlock(&ln->lock);
++	return err;
++}
++
++static int lisp_stop(struct net_device *dev)
++{
++	struct lisp_dev *lisp = netdev_priv(dev);
++	struct lisp_sock *ls;
++	struct lisp_net *ln;
++
++	ln = net_generic(lisp->net, lisp_net_id);
++	mutex_lock(&ln->lock);
++
++	ls = rcu_dereference_protected(lisp->sock, lockdep_is_held(&ln->lock));
++	RCU_INIT_POINTER(lisp->sock, NULL);
++	if (lisp->collect_md) {
++		RCU_INIT_POINTER(ls->md_dev, NULL);
++	} else {
++		hlist_del_init_rcu(&lisp->hlist);
++		lisp->rcu_state = start_poll_synchronize_rcu();
++	}
++
++	if (--ls->refcnt) {
++		mutex_unlock(&ln->lock);
++		return 0;
++	}
++
++	list_del(&ls->list);
++	mutex_unlock(&ln->lock);
++
++	lisp_sock_release(ls);
++
++	return 0;
++}
++
++/* RFC 9300, section 7.2: the sender of a packet that does not fit the path to
++ * the RLOC is told what fits, whatever its DF bit. It cannot be told less
++ * than the minimum MTU of its protocol: what is not larger is then sent in
++ * an outer packet that may be fragmented.
++ */
++static int lisp_check_pmtu(struct sk_buff *skb, const struct dst_entry *dst,
++			   unsigned int hlen, bool *frag)
++{
++	int min_mtu = skb->protocol == htons(ETH_P_IPV6) ? IPV6_MIN_MTU :
++							   IPV4_MIN_MTU;
++	int room = dst_mtu(dst) - hlen;
++	u32 mtu = max(room, min_mtu);
++
++	*frag = room < min_mtu;
++
++	if (skb_is_gso(skb) ? skb_gso_validate_network_len(skb, mtu) :
++			      skb->len <= mtu)
++		return 0;
++
++	skb_dst_update_pmtu_no_confirm(skb, mtu);
++
++	if (skb->protocol == htons(ETH_P_IP))
++		icmp_ndo_send(skb, ICMP_DEST_UNREACH, ICMP_FRAG_NEEDED,
++			      htonl(mtu));
++	else
++		icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
++
++	return -EMSGSIZE;
++}
++
++/* RFC 9300, section 5.3: the outer header gets the DSCP and the TTL of the
++ * inner header, unless the tunnel metadata sets them.
++ */
++static u8 lisp_encap_dsfield(const struct sk_buff *skb,
++			     const struct ip_tunnel_key *key)
++{
++	return key->tos ? : ip_tunnel_get_dsfield(ip_hdr(skb), skb);
++}
++
++static void lisp_encap_fields(const struct sk_buff *skb,
++			      const struct ip_tunnel_key *key, u8 dsfield,
++			      u8 *tos, u8 *ttl)
++{
++	const struct iphdr *iph = ip_hdr(skb);
++
++	*tos = ip_tunnel_ecn_encap(dsfield, iph, skb);
++	*ttl = key->ttl ? : ip_tunnel_get_ttl(iph, skb);
++}
++
++/* The route to the RLOC is the one of the DSCP of the outer header. The one
++ * that the encapsulation caches was looked up with its own DSCP.
++ */
++static struct dst_cache *lisp_dst_cache(const struct sk_buff *skb,
++					const struct ip_tunnel_info *info,
++					u8 dsfield)
++{
++	if (((dsfield ^ info->key.tos) & ~INET_ECN_MASK) ||
++	    !ip_tunnel_dst_cache_usable(skb, info))
++		return NULL;
++
++	return (struct dst_cache *)&info->dst_cache;
++}
++
++static int lisp_build_skb(struct sk_buff *skb, const struct dst_entry *dst,
++			  unsigned int hlen, u32 iid, bool udp_sum)
++{
++	struct lisphdr *lh;
++	int err;
++
++	err = skb_cow_head(skb, LL_RESERVED_SPACE(dst_dev(dst)) +
++			   dst->header_len + hlen);
++	if (unlikely(err))
++		return err;
++
++	err = udp_tunnel_handle_offloads(skb, udp_sum);
++	if (err)
++		return err;
++
++	lh = __skb_push(skb, sizeof(*lh));
++	memset(lh, 0, sizeof(*lh));
++	if (iid) {
++		lh->flags = LISP_F_I;
++		lh->iid_lsb = cpu_to_be32(iid << LISP_IID_SHIFT);
++	}
++	skb_set_inner_protocol(skb, skb->protocol);
++
++	return 0;
++}
++
++static int lisp_xmit_skb(struct sk_buff *skb, struct net_device *dev,
++			 struct sock *sk, const struct ip_tunnel_info *info,
++			 u32 iid)
++{
++	bool udp_sum = test_bit(IP_TUNNEL_CSUM_BIT, info->key.tun_flags);
++	const struct lisp_dev *lisp = netdev_priv(dev);
++	bool xnet = !net_eq(lisp->net, dev_net(dev));
++	const struct ip_tunnel_key *key = &info->key;
++	u8 dsfield = lisp_encap_dsfield(skb, key);
++	struct ip_tunnel_key local_key;
++	struct rtable *rt;
++	__be16 sport;
++	__be32 saddr;
++	u8 tos, ttl;
++	bool frag;
++	int err;
++
++	if (!key->u.ipv4.src && lisp->local) {
++		local_key = *key;
++		local_key.u.ipv4.src = lisp->local;
++		key = &local_key;
++	}
++
++	sport = udp_flow_src_port(lisp->net, skb, 0, 0, false);
++	rt = udp_tunnel_dst_lookup(skb, dev, lisp->net, lisp->link, &saddr,
++				   key, sport, htons(LISP_UDP_PORT), dsfield,
++				   lisp_dst_cache(skb, info, dsfield));
++	if (IS_ERR(rt))
++		return PTR_ERR(rt);
++
++	err = lisp_check_pmtu(skb, &rt->dst, LISP_IPV4_HLEN, &frag);
++	if (err)
++		goto free_dst;
++
++	lisp_encap_fields(skb, key, dsfield, &tos, &ttl);
++	skb_scrub_packet(skb, xnet);
++
++	err = lisp_build_skb(skb, &rt->dst, LISP_IPV4_HLEN, iid, udp_sum);
++	if (err)
++		goto free_dst;
++
++	udp_tunnel_xmit_skb(rt, sk, skb, saddr, key->u.ipv4.dst, tos, ttl,
++			    frag ? 0 : htons(IP_DF), sport,
++			    htons(LISP_UDP_PORT), xnet, !udp_sum, 0);
++	return 0;
++
++free_dst:
++	dst_release(&rt->dst);
++	return err;
++}
++
++static int lisp6_xmit_skb(struct sk_buff *skb, struct net_device *dev,
++			  struct sock *sk, const struct ip_tunnel_info *info,
++			  u32 iid)
++{
++	bool udp_sum = test_bit(IP_TUNNEL_CSUM_BIT, info->key.tun_flags);
++	const struct lisp_dev *lisp = netdev_priv(dev);
++	bool xnet = !net_eq(lisp->net, dev_net(dev));
++	const struct ip_tunnel_key *key = &info->key;
++	u8 dsfield = lisp_encap_dsfield(skb, key);
++	struct ip_tunnel_key local_key;
++	struct dst_entry *dst;
++	struct in6_addr saddr;
++	__be16 sport;
++	u8 tos, ttl;
++	bool frag;
++	int err;
++
++	if (ipv6_addr_any(&key->u.ipv6.src) && !ipv6_addr_any(&lisp->local6)) {
++		local_key = *key;
++		local_key.u.ipv6.src = lisp->local6;
++		key = &local_key;
++	}
++
++	sport = udp_flow_src_port(lisp->net, skb, 0, 0, false);
++	dst = udp_tunnel6_dst_lookup(skb, dev, lisp->net, sk, lisp->link,
++				     &saddr, key, sport, htons(LISP_UDP_PORT),
++				     dsfield,
++				     lisp_dst_cache(skb, info, dsfield));
++	if (IS_ERR(dst))
++		return PTR_ERR(dst);
++
++	err = lisp_check_pmtu(skb, dst, LISP_IPV6_HLEN, &frag);
++	if (err)
++		goto free_dst;
++
++	lisp_encap_fields(skb, key, dsfield, &tos, &ttl);
++	skb_scrub_packet(skb, xnet);
++
++	err = lisp_build_skb(skb, dst, LISP_IPV6_HLEN, iid, udp_sum);
++	if (err)
++		goto free_dst;
++
++	skb->ignore_df = frag;
++	udp_tunnel6_xmit_skb(dst, sk, skb, dev, &saddr, &key->u.ipv6.dst, tos,
++			     ttl, key->label, sport, htons(LISP_UDP_PORT),
++			     !udp_sum, 0);
++	return 0;
++
++free_dst:
++	dst_release(dst);
++	return err;
++}
++
++static netdev_tx_t lisp_xmit(struct sk_buff *skb, struct net_device *dev)
++{
++	const struct ip_tunnel_info *info = skb_tunnel_info(skb);
++	const struct lisp_dev *lisp = netdev_priv(dev);
++	const struct lisp_sock *ls;
++	u32 iid = lisp->iid;
++	int err = -EINVAL;
++
++	if (skb->protocol != htons(ETH_P_IP) &&
++	    (skb->protocol != htons(ETH_P_IPV6) || !ipv6_mod_enabled()))
++		goto tx_error;
++
++	if (!pskb_inet_may_pull(skb))
++		goto tx_error;
++
++	if (unlikely(!info || !(info->mode & IP_TUNNEL_INFO_TX)))
++		goto tx_error;
++
++	if (lisp->collect_md) {
++		u64 tun_id = be64_to_cpu(info->key.tun_id);
++
++		if (tun_id > LISP_IID_MAX)
++			goto tx_error;
++		iid = tun_id;
++	}
++
++	rcu_read_lock();
++	ls = rcu_dereference(lisp->sock);
++	if (!ls)
++		err = -ESHUTDOWN;
++	else if (ip_tunnel_info_af(info) == AF_INET)
++		err = lisp_xmit_skb(skb, dev, ls->sk4, info, iid);
++	else if (IS_ENABLED(CONFIG_IPV6) && ls->sk6)
++		err = lisp6_xmit_skb(skb, dev, ls->sk6, info, iid);
++	else
++		err = -EAFNOSUPPORT;
++	rcu_read_unlock();
++
++	if (likely(!err))
++		return NETDEV_TX_OK;
++
++tx_error:
++	dev_kfree_skb(skb);
++
++	if (err == -ELOOP)
++		DEV_STATS_INC(dev, collisions);
++	else if (err == -ENETUNREACH)
++		DEV_STATS_INC(dev, tx_carrier_errors);
++
++	DEV_STATS_INC(dev, tx_errors);
++	return NETDEV_TX_OK;
++}
++
++static int lisp_init(struct net_device *dev)
++{
++	struct lisp_dev *lisp = netdev_priv(dev);
++	int err;
++
++	err = gro_cells_init(&lisp->gro_cells, dev);
++	if (err)
++		return err;
++
++	netdev_lockdep_set_classes(dev);
++	return 0;
++}
++
++static void lisp_uninit(struct net_device *dev)
++{
++	struct lisp_dev *lisp = netdev_priv(dev);
++
++	gro_cells_destroy(&lisp->gro_cells);
++}
++
++static int lisp_get_iflink(const struct net_device *dev)
++{
++	const struct lisp_dev *lisp = netdev_priv(dev);
++
++	return lisp->link ? : READ_ONCE(dev->ifindex);
++}
++
++static const struct net_device_ops lisp_netdev_ops = {
++	.ndo_init		= lisp_init,
++	.ndo_uninit		= lisp_uninit,
++	.ndo_open		= lisp_open,
++	.ndo_stop		= lisp_stop,
++	.ndo_start_xmit		= lisp_xmit,
++	.ndo_get_iflink		= lisp_get_iflink,
++};
++
++static const struct device_type lisp_type = {
++	.name = "lisp",
++};
++
++static void lisp_setup(struct net_device *dev)
++{
++	dev->netdev_ops = &lisp_netdev_ops;
++	dev->needs_free_netdev = true;
++	SET_NETDEV_DEVTYPE(dev, &lisp_type);
++
++	dev->features |= NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F_FRAGLIST;
++	dev->features |= NETIF_F_RXCSUM;
++	dev->features |= NETIF_F_GSO_SOFTWARE;
++	dev->hw_features |= NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F_FRAGLIST;
++	dev->hw_features |= NETIF_F_RXCSUM;
++	dev->hw_features |= NETIF_F_GSO_SOFTWARE;
++
++	dev->type = ARPHRD_NONE;
++	dev->hard_header_len = 0;
++	dev->addr_len = 0;
++	dev->needed_headroom = LL_MAX_HEADER + LISP_IPV6_HLEN;
++	dev->mtu = ETH_DATA_LEN - LISP_IPV6_HLEN;
++	dev->min_mtu = IPV4_MIN_MTU;
++	dev->max_mtu = IP_MAX_MTU - LISP_IPV4_HLEN;
++	dev->flags = IFF_POINTOPOINT | IFF_NOARP;
++	dev->priv_flags |= IFF_NO_QUEUE;
++	dev->lltx = true;
++	dev->pcpu_stat_type = NETDEV_PCPU_STAT_DSTATS;
++
++	netif_keep_dst(dev);
++	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
++}
++
++static const struct netlink_range_validation lisp_iid_range = {
++	.max = LISP_IID_MAX,
++};
++
++static const struct nla_policy lisp_policy[IFLA_LISP_MAX + 1] = {
++	[IFLA_LISP_UNSPEC]		= { .strict_start_type = IFLA_LISP_ID },
++	[IFLA_LISP_ID]			=
++		NLA_POLICY_FULL_RANGE(NLA_U32, &lisp_iid_range),
++	[IFLA_LISP_COLLECT_METADATA]	= { .type = NLA_FLAG },
++	[IFLA_LISP_LOCAL]		= { .type = NLA_BE32 },
++	[IFLA_LISP_LOCAL6]		=
++		NLA_POLICY_EXACT_LEN(sizeof(struct in6_addr)),
++};
++
++static int lisp_validate(struct nlattr *tb[], struct nlattr *data[],
++			 struct netlink_ext_ack *extack)
++{
++	if (!data)
++		return 0;
++
++	if (data[IFLA_LISP_LOCAL]) {
++		__be32 addr = nla_get_in_addr(data[IFLA_LISP_LOCAL]);
++
++		if (ipv4_is_zeronet(addr) || ipv4_is_multicast(addr) ||
++		    ipv4_is_lbcast(addr)) {
++			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_LISP_LOCAL],
++					    "The local RLOC is not a unicast address");
++			return -EINVAL;
++		}
++	}
++
++	if (data[IFLA_LISP_LOCAL6]) {
++		struct in6_addr addr = nla_get_in6_addr(data[IFLA_LISP_LOCAL6]);
++
++		if (ipv6_addr_type(&addr) != IPV6_ADDR_UNICAST) {
++			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_LISP_LOCAL6],
++					    "The local RLOC is not a global unicast address");
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++static int lisp_newlink(struct net_device *dev,
++			struct rtnl_newlink_params *params,
++			struct netlink_ext_ack *extack)
++{
++	struct net *link_net = rtnl_newlink_link_net(params);
++	struct lisp_net *ln = net_generic(link_net, lisp_net_id);
++	struct lisp_dev *lisp = netdev_priv(dev);
++	struct nlattr **data = params->data;
++	struct nlattr **tb = params->tb;
++	const struct lisp_dev *tmp;
++	int ifindex;
++	int err;
++
++	if (!data ||
++	    !data[IFLA_LISP_ID] == !data[IFLA_LISP_COLLECT_METADATA]) {
++		NL_SET_ERR_MSG(extack,
++			       "Either an instance ID or the collection of metadata is required");
++		return -EINVAL;
++	}
++
++	lisp->net = link_net;
++	lisp->dev = dev;
++	INIT_LIST_HEAD(&lisp->next);
++	lisp->rcu_state = get_completed_synchronize_rcu();
++
++	lisp->collect_md = nla_get_flag(data[IFLA_LISP_COLLECT_METADATA]);
++	lisp->iid = nla_get_u32_default(data[IFLA_LISP_ID], 0);
++	lisp->local = nla_get_in_addr_default(data[IFLA_LISP_LOCAL], 0);
++	if (data[IFLA_LISP_LOCAL6])
++		lisp->local6 = nla_get_in6_addr(data[IFLA_LISP_LOCAL6]);
++
++	if (tb[IFLA_LINK]) {
++		lisp->link = nla_get_u32(tb[IFLA_LINK]);
++		if (!__dev_get_by_index(link_net, lisp->link)) {
++			NL_SET_BAD_ATTR(extack, tb[IFLA_LINK]);
++			return -ENODEV;
++		}
++	}
++
++	ifindex = lisp_l3mdev(lisp);
++	mutex_lock(&ln->lock);
++	list_for_each_entry(tmp, &ln->dev_list, next) {
++		if (lisp_l3mdev(tmp) != ifindex ||
++		    tmp->collect_md != lisp->collect_md)
++			continue;
++
++		if (lisp->collect_md) {
++			mutex_unlock(&ln->lock);
++			NL_SET_ERR_MSG(extack,
++				       "A LISP device already collects the metadata of these RLOCs");
++			return -EEXIST;
++		}
++		if (tmp->iid == lisp->iid) {
++			mutex_unlock(&ln->lock);
++			NL_SET_ERR_MSG(extack,
++				       "A LISP device already has this instance ID for these RLOCs");
++			return -EEXIST;
++		}
++	}
++	mutex_unlock(&ln->lock);
++
++	err = register_netdevice(dev);
++	if (err)
++		return err;
++
++	mutex_lock(&ln->lock);
++	list_add(&lisp->next, &ln->dev_list);
++	mutex_unlock(&ln->lock);
++
++	return 0;
++}
++
++static void lisp_dellink(struct net_device *dev, struct list_head *head)
++{
++	struct lisp_dev *lisp = netdev_priv(dev);
++	struct lisp_net *ln = net_generic(lisp->net, lisp_net_id);
++
++	mutex_lock(&ln->lock);
++	if (!list_empty(&lisp->next)) {
++		list_del_init(&lisp->next);
++		unregister_netdevice_queue_net(dev_net(dev), dev, head);
++	}
++	mutex_unlock(&ln->lock);
++}
++
++static size_t lisp_get_size(const struct net_device *dev)
++{
++	return nla_total_size(sizeof(u32)) +		/* IFLA_LISP_ID */
++	       nla_total_size(0) +	/* IFLA_LISP_COLLECT_METADATA */
++	       nla_total_size(sizeof(struct in_addr)) +	/* IFLA_LISP_LOCAL */
++	       nla_total_size(sizeof(struct in6_addr));	/* IFLA_LISP_LOCAL6 */
++}
++
++static int lisp_fill_info(struct sk_buff *skb, const struct net_device *dev)
++{
++	const struct lisp_dev *lisp = netdev_priv(dev);
++
++	if (lisp->collect_md) {
++		if (nla_put_flag(skb, IFLA_LISP_COLLECT_METADATA))
++			return -EMSGSIZE;
++	} else if (nla_put_u32(skb, IFLA_LISP_ID, lisp->iid)) {
++		return -EMSGSIZE;
++	}
++
++	if (lisp->local &&
++	    nla_put_in_addr(skb, IFLA_LISP_LOCAL, lisp->local))
++		return -EMSGSIZE;
++
++	if (!ipv6_addr_any(&lisp->local6) &&
++	    nla_put_in6_addr(skb, IFLA_LISP_LOCAL6, &lisp->local6))
++		return -EMSGSIZE;
++
++	return 0;
++}
++
++static struct net *lisp_get_link_net(const struct net_device *dev)
++{
++	const struct lisp_dev *lisp = netdev_priv(dev);
++
++	return lisp->net;
++}
++
++static struct rtnl_link_ops lisp_link_ops __read_mostly = {
++	.kind		= "lisp",
++	.maxtype	= IFLA_LISP_MAX,
++	.policy		= lisp_policy,
++	.priv_size	= sizeof(struct lisp_dev),
++	.setup		= lisp_setup,
++	.validate	= lisp_validate,
++	.newlink	= lisp_newlink,
++	.dellink	= lisp_dellink,
++	.get_size	= lisp_get_size,
++	.fill_info	= lisp_fill_info,
++	.get_link_net	= lisp_get_link_net,
++};
++
++static __net_init int lisp_init_net(struct net *net)
++{
++	struct lisp_net *ln = net_generic(net, lisp_net_id);
++
++	INIT_LIST_HEAD(&ln->dev_list);
++	INIT_LIST_HEAD(&ln->sock_list);
++	mutex_init(&ln->lock);
++
++	return 0;
++}
++
++static void __net_exit lisp_exit_rtnl_net(struct net *net,
++					  struct list_head *dev_kill_list)
++{
++	struct lisp_net *ln = net_generic(net, lisp_net_id);
++	struct lisp_dev *lisp, *next;
++
++	mutex_lock(&ln->lock);
++	list_for_each_entry_safe(lisp, next, &ln->dev_list, next) {
++		list_del_init(&lisp->next);
++		unregister_netdevice_queue_net(net, lisp->dev, dev_kill_list);
++	}
++	mutex_unlock(&ln->lock);
++}
++
++static void __net_exit lisp_exit_net(struct net *net)
++{
++	struct lisp_net *ln = net_generic(net, lisp_net_id);
++
++	WARN_ON_ONCE(!list_empty(&ln->dev_list));
++	WARN_ON_ONCE(!list_empty(&ln->sock_list));
++}
++
++static int lisp_netdevice_event(struct notifier_block *nb, unsigned long event,
++				void *ptr)
++{
++	struct net_device *link = netdev_notifier_info_to_dev(ptr);
++	struct net *net = dev_net(link);
++	struct lisp_dev *lisp, *next;
++	struct lisp_net *ln;
++	LIST_HEAD(kill);
++
++	if (event != NETDEV_UNREGISTER)
++		return NOTIFY_DONE;
++
++	ln = net_generic(net, lisp_net_id);
++	mutex_lock(&ln->lock);
++	list_for_each_entry_safe(lisp, next, &ln->dev_list, next) {
++		if (lisp->link != link->ifindex)
++			continue;
++
++		list_del_init(&lisp->next);
++		unregister_netdevice_queue_net(net, lisp->dev, &kill);
++	}
++	mutex_unlock(&ln->lock);
++
++	unregister_netdevice_many(&kill);
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block lisp_notifier_block __read_mostly = {
++	.notifier_call = lisp_netdevice_event,
++};
++
++static struct pernet_operations lisp_net_ops = {
++	.init		= lisp_init_net,
++	.exit_rtnl	= lisp_exit_rtnl_net,
++	.exit		= lisp_exit_net,
++	.id		= &lisp_net_id,
++	.size		= sizeof(struct lisp_net),
++};
++
++static int __init lisp_init_module(void)
++{
++	int err;
++
++	err = register_pernet_subsys(&lisp_net_ops);
++	if (err)
++		return err;
++
++	err = register_netdevice_notifier(&lisp_notifier_block);
++	if (err)
++		goto unregister_pernet;
++
++	err = rtnl_link_register(&lisp_link_ops);
++	if (err)
++		goto unregister_notifier;
++
++	return 0;
++
++unregister_notifier:
++	unregister_netdevice_notifier(&lisp_notifier_block);
++unregister_pernet:
++	unregister_pernet_subsys(&lisp_net_ops);
++	return err;
++}
++late_initcall(lisp_init_module);
++
++static void __exit lisp_cleanup_module(void)
++{
++	rtnl_link_unregister(&lisp_link_ops);
++	unregister_netdevice_notifier(&lisp_notifier_block);
++	unregister_pernet_subsys(&lisp_net_ops);
++}
++module_exit(lisp_cleanup_module);
++
++MODULE_ALIAS_RTNL_LINK("lisp");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Vincent Jardin <vjardin@free.fr>");
++MODULE_DESCRIPTION("Data plane of the Locator/ID Separation Protocol (LISP)");
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index 245b362045253..f64399ea9d54f 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -1538,6 +1538,18 @@ enum {
+ 
+ #define IFLA_BAREUDP_MAX (__IFLA_BAREUDP_MAX - 1)
+ 
++/* LISP section */
++enum {
++	IFLA_LISP_UNSPEC,
++	IFLA_LISP_ID,
++	IFLA_LISP_COLLECT_METADATA,
++	IFLA_LISP_LOCAL,
++	IFLA_LISP_LOCAL6,
++	__IFLA_LISP_MAX
++};
++
++#define IFLA_LISP_MAX (__IFLA_LISP_MAX - 1)
++
+ /* PPP section */
+ enum {
+ 	IFLA_PPP_UNSPEC,
 
 -- 
 2.43.0
