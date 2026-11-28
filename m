@@ -1,65 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795828136;
-	b=FNkfPSoHVCw3SiUPPSEmvmw+Wh5U8xLcNwhuOrvIo2uJFSlQwS6tO2lE3ScIZJEKHLfk
-	 EkPLcVyyvqJ7abf9pEv0sKTVTAC6mJcsVq2DYl+nONgESZhk26d4Z+d4ZzHGyS3/Ws4vb
-	 VOVCkQdhf0jHOWB2pmpN/48IRB44RxC8VxSvwqRyWIzs2lMPsPwLY6l/Sj7EKzvR7XI+t
-	 fQWkbpMBqj7LkgvA/yFW6N4aBe0S6BnMDZrXOgIAEomIzrjXtCLWrI8OQqq3rZ4dC3ral
-	 j9tdryGAUXgifOoLnoxLDQOQ/vHYi6xjpL4pApIiFE48F1D4c11Sn4xxwGt8r/Ntogw==
+	t=1795828523;
+	b=Zrr7KD9XqE5exaD6mtJxOoKdM/QiwovhKNf+MBuX5uyWyR+xnZyviTplCPFGueb0RPiv
+	 Ea3UQqORLAXwhIi7pH0tNidcgAKCFYmgKmvhSEkAm7stxtbzUeVVaeBmOp7rgI9dgMExF
+	 Ovrh1FfQhipsOMvG6xxDdBQVDqa1WD2dPe9a5C1ngYDesxb+PmpKfvRk/AvkiWH9q2aTI
+	 q2ARxXth4KNr5wXLQSRQEgmsTKxfvnlvvvb4QK1/UpEH3QERBI7MvFSqJLBiCkSx0iaN3
+	 T5esmfQPXOEjj7RAzAlM45n9awRqarbpwiMQMf3PZgxxbCIRdjkYLQNmZzb58tnlqQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795828136;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=BiX6ZyljcdQPQcS9kGO9WzZ1LmpsTkhRSgDRiHn9c1o=;
-	b=B8F6SatI2g49+Upcak7smdW9E5GuosVTBUYE/rCLQS8TbTtMjOmKc2EOhvpeSLGfGp9z
-	 w/pi4V2bkR0Wq1M6MXtKSKwi3vA+xtCuJCtNyhbK5bkrtnzhOVZxzpy1c8DJJIoBZpf+/
-	 KbpyMoCis7wd5S9R743/Nj7UKyEY5XhkO1bp/jHohwGvZf0bmGmbuaA1NDw7zsTxdTAuS
-	 lvYzrRzUwB3wMzcgI3mu5arnE3IeoE8firc0RY07wCmsAT1gvPKkFwriEG90VF1mvxeBA
-	 rXRVqraVfV+XtcBdAXzc4BKWmE1gGMLDwJe5TS3LnjeSKyzwc6oiRRa0YQd+T2QjHEQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795828523;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=9854QH4TMdL6guUMAEcKJ+FttltmbvocYCBGe/+Uhqo=;
+	b=thVfF/hVnlYfkougIHclHtwtxqf9X3gJKBjYqQQUgTnLY88iysy9Cluq8tqGcWEob9iX
+	 op8GHX5c6U7oHqdt6pQoRFiWzyzr6sdm9ihArTCYNFq6R7dfubBts88wQqhlWuJbwPhhi
+	 CWO0IDgMP4SLopiaKmvbPF1FO8STsSCrTRl/cUQkpjh6mx0OOumyfhS+GFkTZWBHM1dzB
+	 vVPVhz7ltIRVlxX26NXvueVBOhxCejJdMhhq2SKwCfnuKYHgMOPhJ6htuyMo3N1ubbLPe
+	 w467sSyFLeAkdIqKa6ADjT4bJPhW4Slt6DzL5XP2S3ndB/VIrWn2rzaZ3KZQsbGzIug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m7iLJfrH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id A6D99606A31F;
-	Sat, 28 Nov 2026 01:08:56 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=jSo9ZDls;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2C8606A31C;
+	Sat, 28 Nov 2026 01:15:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD2C8606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m7iLJfrH
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 91B211F00893;
-	Sat, 28 Nov 2026 01:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795828136;
-	bh=BiX6ZyljcdQPQcS9kGO9WzZ1LmpsTkhRSgDRiHn9c1o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=m7iLJfrHpA8eePZ6FYzysI93EHHYYCIo2ytcOQKp7ORyyDMSYxAtkEvF/yx09Cg4R
-	 iJpoHjXY0fVAvXCIvIs1NJ/9w+qIsCt6RlwL4ajRU1yO+cHTh7Kqs9xPXT70wa2ztz
-	 w9aAxfd4oLS/lkq6tKivYGYmqxvSr9+PmXk6sL5aSxkY+3hL8PAK3/XCPEqMlKxIz+
-	 HQtEFMtzRMrzi4vfR0aKtXsT0Hn90k3NcrBuaz2Pdcy1JZLE49YB2Eq7UcGR+3pIPL
-	 0oJTU3Xa3CDhp1P5hE3sz1DkIOuyxJP2Em7qSR+Y9YvoBlBS1Ske2Iz2DgAlZ38EGJ
-	 V6CXPjiHUEcjA==
-Date: Sat, 28 Nov 2026 03:08:52 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Askar Safin <safinaskar@gmail.com>
-Cc: aleksa@amutable.com, alex@amutable.com, arnd@arndb.de,
-	bpf@vger.kernel.org, brauner@kernel.org, containers@lists.linux.dev,
-	corbet@lwn.net, dhowells@redhat.com, ebiggers@kernel.org,
-	giuseppe@scrivano.org, hughd@google.com, jack@suse.cz,
-	jlayton@kernel.org, josef@toxicpanda.com, kees@kernel.org,
-	kpsingh@kernel.org, lennart@poettering.net,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	luto@amacapital.net, neal@gompa.dev, oleg@redhat.com,
-	paul@paul-moore.com, ptikhomirov@virtuozzo.com, sergeh@kernel.org,
-	skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
-	zygmunt.krynicki@canonical.com
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awoppInSWN0XVPz-@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <20261128005541.873229-1-safinaskar@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=jSo9ZDls
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A80C01575;
+	Fri, 27 Nov 2026 17:15:17 -0800 (PST)
+Received: from entos-yitian-01.Arm.com (unknown [10.168.196.233])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 33FFB3F632;
+	Fri, 27 Nov 2026 17:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795828520; bh=XgGdTO+fLL8ATBkcKpsheH2Fam2xVx2g5zcyj4vdLus=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jSo9ZDlsqBhaK4ZXAB1mgci1w3tc2p6rIkZPYzomz4otiDF3EpPzXSIPrFlg/XRZ/
+	 9e7/oi308QYswege6FG7vs4CSCtWlSxB8m76DjXTXQRh+5hZtd6vLmtxHZF2CitfZp
+	 cOlBrPqKWvSetCL9G6RHP751kgvIjx2K1s95584Y=
+From: Jia He <justin.he@arm.com>
+To: maz@kernel.org,
+	oupton@kernel.org
+Cc: fuad.tabba@linux.dev,
+	joey.gouly@arm.com,
+	seiden@linux.ibm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	mark.rutland@arm.com,
+	pbonzini@redhat.com,
+	seanjc@google.com,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jia He <justin.he@arm.com>
+Subject: [PATCH v3 0/4] KVM: arm64: nv: VNCR page mapping fixes
+Date: Sat, 28 Nov 2026 01:14:43 +0000
+Message-Id: <20261128011447.3588988-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,24 +74,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261128005541.873229-1-safinaskar@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 28, 2026 at 03:55:41AM +0300, Askar Safin wrote:
-> Jarkko Sakkinen <jarkko@kernel.org>:
-> > Work on this feature started in 2025 after reviewing David Howells'
-> > container object patch set [1], whose underlying mechanics made sense to
-> 
-> > [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
-> > [2] https://lwn.net/Articles/1102593/
-> 
-> You put wrong link in "[1]". This is not Howells' container patchset. This
-> is Howells' fsopen/fsmount patchset.
-> 
-> Link "[2]" seems to be wrong, too. It is not something "earlier", this is
-> very recent LWN article.
+On a VNCR abort, KVM walks the guest hypervisor's EL2 stage-1 tables,
+maps the page that VNCR_EL2 points to at a fixmap, and points the
+hardware VNCR_EL2 at that fixmap. This series fixes three cases where
+this goes wrong.
 
-Thanks for pointing that out: https://lwn.net/Articles/780364/
+Patch 1 fixes the address that KVM programs into VNCR_EL2 on a host
+with 16K or 64K pages. The fixmap maps the host page that contains the
+VNCR page, and KVM takes the offset of the VNCR page in it from the VA.
+If the guest hypervisor uses a smaller stage-1 granule, the VA and the
+PA can have different offsets, and the nested context accesses another
+page of the guest. Patch 1 takes the offset from the PA.
 
-Br, Jarkko
+Patch 2 fixes a walk that cannot set the AF. If TCR_EL2.HA is set and
+the descriptor that maps VNCR_EL2 is in a read-only memslot, the walk
+returns -EPERM. kvm_handle_vncr_abort() has no case for -EPERM, so the
+vCPU takes the same abort forever. Patch 2 injects the SEA that the
+walk recorded.
+
+Patch 3 adds a selftest for both. It maps the VNCR page at a VA whose
+offset in a 16K or 64K page differs from that of its PA, and puts the
+table that maps it in a read-only memslot.
+
+Patch 4 allows the VNCR page in a cacheable VM_PFNMAP or VM_MIXEDMAP
+VMA. The stage-2 fault path already maps such memory as cacheable, but
+kvm_translate_vncr() rejects it and injects an SEA.
+
+Patches 1 and 2 fix bugs that predate this series, and each can be
+applied on its own.
+
+Based on v7.4-rc3.
+
+Patch numbers below are those of v3.
+
+Changes since v2:
+- New patch 1 (Sashiko).
+- Patch 3: size the read-only memslot to whole host pages, and map the
+  VNCR page at a VA whose bits [15:12] differ from those of its PA
+  (Sashiko).
+
+Changes since v1:
+- New patches 2 and 3 (Sashiko).
+- Patch 4: get the HVA with gfn_to_hva_memslot_prot() so that a VNCR
+  page in a read-only memslot is not rejected (Sashiko).
+- Patch 4: limit the stage-2 comparison in the commit message to
+  VM_PFNMAP and VM_MIXEDMAP VMAs.
+
+v2: https://lore.kernel.org/r/20261125024426.3464050-1-justin.he@arm.com
+v1: https://lore.kernel.org/r/20261124025336.4107575-1-justin.he@arm.com
+
+Jia He (4):
+  KVM: arm64: nv: Locate the VNCR page in the host page from its PA
+  KVM: arm64: nv: Inject an SEA when the VNCR walk cannot set the AF
+  KVM: arm64: selftests: Add a test for VNCR_EL2 translation faults
+  KVM: arm64: nv: Allow the L1 VNCR page in cacheable PFNMAP memory
+
+ arch/arm64/include/asm/kvm_mmu.h              |   2 +
+ arch/arm64/include/asm/kvm_nested.h           |   1 +
+ arch/arm64/kvm/hyp/vhe/switch.c               |   9 +-
+ arch/arm64/kvm/mmu.c                          |   2 +-
+ arch/arm64/kvm/nested.c                       |  47 +++-
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/arm64/nv_vncr_abort.c       | 221 ++++++++++++++++++
+ 7 files changed, 273 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/arm64/nv_vncr_abort.c
+
+-- 
+2.34.1
+
