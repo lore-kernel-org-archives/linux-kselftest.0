@@ -1,78 +1,125 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795826520;
-	b=miQss1MD0wgd9ak9NRLLdRwYck9tEKYVZJVliqssRN+flnME9/LbAP5bf9dy0fK06wEF
-	 Fvu8m4EwvA0tpttHS8kx3CBNYgLhdlCz3zQT6iEySNqU2pLN0o5vC7i0B/thCTlXqf/LX
-	 /ZIpH/7Eha8pP9IO/J08EuOQnFtFyMeKsHWv80SWX5/+/73FcfZ2S+/jvDmZfIGsD4Y3X
-	 2RQx0fpmBBCLESoydXZXdnBJOrKL/Ox9zQTZ7zShJAdK6vObM/1rqQE6+TCJr8WLI/Vel
-	 AUQEuvx9bC0M5LLa+n2ha/tRKghYuMJsS6PyoPgDZl1FTnIer4nhqo2bf7or5mgh4cg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795826520;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=r1p/VCud5eydrTTli2VLx7I53x15vygy0WJGVat3tGY=;
-	b=N1Bg+B2rZLohifIjKdggSqV9UI1UukcSa2IpOpBR6vr1eCyDZczwAe+JoMfSdlRQSzaQ
-	 TWp5iFBLG6NGPh+x2UzEHeFK5+dQp5KgwZ0cMxN/5F1W1cGVzakmAXbqwYI9dESeeN231
-	 FrPMwv3DHAnHHNWNT/ojomJr8R5e9AlbTSBysxC4kuaUa1RjiD1P3Erk2xnRzo3TDPTgu
-	 LeD2lMUB8rbEEyxf4gkBnlUSM0GVGtBQOJc7U4wDKH+5gMBetTrx81Fs1/vEpunHN3OWv
-	 3la4rnv9bGCMAhCmHJIswbIm1VENovNSaiqfDxruEAY8+zIWfKKQc/PvjUok+V34c3A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ecdZCP7w;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C47606A686;
-	Sat, 28 Nov 2026 00:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ecdZCP7w
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795826520;
-	b=yaQRUQIjmEvwh2RqPGTut+6aBQJyJnTWQ+4yVsZHdh+Mrhlixvw7o1jfxYShxDv31IES
-	 vRxYSnX1Jcc70XagQ07Fp9cpg2kmv58xXTeFLpD1l/jtlq5WwG2wX+mabdRLmgOenEC/n
-	 vfC26jGod8TRiJaqtDdbf5Fwyg1JPScfhPgT048BmC4fDrw2NLhK+AIs/j7euPegTw7DA
-	 bR7Uw8tHJHzfCgzq9Ni/IiqiJEs7UPgFNy2j4p4PWnydVjMzVdqGplAWDFX87LkAiT2iQ
-	 3UrJ8zuyaM2DoFm6U/Ivq0+Coik0df9b6lo39r3yZc4xaHgGYfL3qN8/Lxbf//Oh5xw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795826520;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=r1p/VCud5eydrTTli2VLx7I53x15vygy0WJGVat3tGY=;
-	b=qzeBgBxEGfX/cQN63cOEE8xquJLqzFlAuf7A9wQ5CSU0W2DTD7ShyzepskuEDoELKSLv
-	 hyZPX3JGLpvo5VsYoC8tj6u9DY1CFF3AlbQNXQYWnsncP9MteOjCzbMnjWY+EmeaFlXM5
-	 St1DkkPa78r0uzi9DigGgh6/v6UaFfauKL4+EStrOXGTQKBA5lBnxKlQcNzh777TVkmkv
-	 2gkyQCdXeDfvKOn9Pus8hioM8eNHiOJIhBDtncODF0Te9Wn/kg77Y/oWTEZeEuyq9N3d6
-	 Z6eP6s4uOgGexwoausx+l61yrIBYtRF8Ko4/oCuR2YfzoPA6I4MMH1jEYI7jsR/sJkA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795827354;
+	b=2WYDlVAqfaR5b0ctrNjWV2YWdnUTkrQSa/IVdIVb8rKsd2JYZBxeA+hwUOjkcTqVP5is
+	 Uiaj0EWJ5Q8Uq8CDulAgmHVzoZn9aAY7UvqAzvuad+iBFFwEijJfB8pdQHKGDYlw6TFap
+	 v+/8Ocbsr0t+4PjHG48VWcu9qMOcOq59KbXQjxf5GqwSvgYt7/d1/yedVmZ4jqOLGRszy
+	 ECv+L/8PuICrjdmoVviPQr+hTJQeVlciG7spX7kXzw2kCJI/pXv1zqMjYZxcPfZ4ffmqe
+	 mS0CIlR8rhKqbyO2yE1cNgK3Xreifv17Pqgr1zJ5X2KXeShGIiVuzT7iaXgyNw1Gh0A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795827354;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
+	b=Klx2GyqEQZdSbS4PY+yFZ6b2yEQPE8s4jInsvWJxSNzRXSuyoz2sNAX9AQyx/qFbsp33
+	 J3Yhx/oAZ7ja5hxZwlZX2YeLrTlTNmjkcXU7/kxtMO4kPktv6mMT/XVfgkjtuAwcutQ6Y
+	 D1aPAbeMofHQi6FD/gBmVS7Qw1fi0pJc4nVj2oSjTifr9OHH3UzB+Fss8Bl7Z88rLGwUg
+	 kpLQIkBLmGiHxLeRNMF7bs28AhWVpT/ySeoD6mE08m/haqBC4zjDULJf5f/dilmxOKFXc
+	 fq9rGA7CmVrXuvmfZcoF6O4NgXE05RgPjFX7Hpw8R96mIEVMYhxZOuogMS+DrLcDyCA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=egc5oRyU;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 511D51F00898;
-	Sat, 28 Nov 2026 00:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795826520;
-	bh=r1p/VCud5eydrTTli2VLx7I53x15vygy0WJGVat3tGY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=ecdZCP7w9bRmitPXH9pYpO+Nrdt+7UOTLU36z59JZRQvpe3/KJQb/UCrvbY3+Y0nt
-	 XRklEFE2/UYzfyNiUDfp5ePerDh/XSWw2RqAtLbxJoiBKo0WTjmCbeMemIQjbCj5/X
-	 Ar6piQFkj8nBAFtOtAushvDvOPeZr/EmEiKViYKTTWc0M6RwkDxF+Xj/0V+pLK5sGx
-	 NMAxt63oGKNKnpgMwFFqP9vSWedHPMcWlXpWfhNJv45VmHUhrFGoTpZTv418VjYufm
-	 T1Plyu4Q7BVqe4d0u/ETlSG9jVG0AvWyf2uTKD02EvSvx7rfWAmU9O7k9LGWjvTfuu
-	 P5D3jBS0JNutg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 013734DED9;
-	Sat, 28 Nov 2026 00:41:45 +0000 (UTC)
-From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Date: Sat, 28 Nov 2026 01:41:37 +0100
-Subject: [PATCH net-next v2 5/5] selftests: net: add a scale test for LISP
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFAF606A326
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 00:55:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADFAF606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=egc5oRyU
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4bb9d8e8e90so58026655e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 16:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795827352; x=1796432152; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
+        b=egc5oRyUW6VFDIcdxYwZDeGVcRPdqVVcw0/9bUs8kD5ZsjJsFc0wc7Ij4lq+IUwayF
+         w2XgNkLL/plAb0xjtXjWDmbgHsj8BbN8y5QH4zabvGdDwwb8xzCpvOiS/FFDQ1pAmNwA
+         4uiU6YjDORB86waZuFacytNoIhdLmWlhX93TlunzFDHBxP1tk3JWqemA4JUyNxNFOtfh
+         CKwdIz1EOzEmUqFvrYxqw/6yXUkip8rv4zUWrx4HDc3q++gCUskaW4sXZoxU4kXNS894
+         nnM8O1l8kivUFX2WTqpxfjbMSvlGbzGIvqyGbP1cvEGn8taKbCLd436XionhZ+TbNkl7
+         Tb/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795827352; x=1796432152;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
+        b=F6lR2PhcVMek0NRpb4w0c/bg2jb5QHnBRY4mqQDVd2Lec1fvwgsPSoK4GLc0/Nog5H
+         kdN7oiUlPVF1jOc/pc0mAXHh9nwQ+HIQb2dWFWkfdxFF4MsX1tzm+p4SGCIN+q3BEcK1
+         kfgjRM0CCiDwW3ruhPH89J981tluOG6jm3dY08EbhwOHe7M0byZqla1c+aAi3Ae1WDQP
+         QgzwamCVjhmmQZb15u6cwPFecw5bC1qnaSZdI1sdvVPF72j9KFnogjja3ss7yteIBK0O
+         W0XqZBkXq87F5d8PBoHtg7I2wI5C2U5zbBaAjWQFoUnlBfOrPm00SvieeCjc+cUqyxHO
+         1qXQ==
+X-Forwarded-Encrypted: i=1; AL+hErEzOs2s4HnOQRpO1gXysMkR6o5wq4WFuEaAWw0D4BPNIXtVuV5gMCiWceuLwS2gwtRir7BbmZmERws0HVGzDtY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+iMw++1cFunMf+Vr1Nog2as1ZjIXgYtqLKVUm44zo625cTxD/i
+	zZCz0vFAOkjl08XBye7UYNrWSEZcOuJG1mB6Ly+iR1upUIkrE0zMN5RF
+X-Gm-Gg: AZFdTZfatiAQL+TJMSD78y5Xp+K0bSNuMMqZb7lNRPKFPI/S2ndsR46QnMCKhSiztlc
+	FGQ7y8ljGPB6+fkaXG+a80YgBHegEiHvjwOA4GLzpbqO0VMGwHEKPirgSHEDo8NQseEFCCJmYU5
+	KBnUiWi+fM5ChlhVfkyyXYuqSVlo3FJnw6AXiZydsFqtR2kYgjZP8wNEd7sjTkeqzdc4mvlMix9
+	x0hzaysP/P4iK/4cadKF05d5OiUdWgWfo+KyJzT5js4i0etpXe8xKW6h7xwd+ks73yjSfgFKvIv
+	tmh9bLWjbeGCNzWu+Ka3Q0jmKvW+Gb4n1HP0WZokdn2HS12kTI4yrX0rdUMqTXyEHxeg+7QWfGa
+	jPaf1qVWdmFBDo8k2cQzVP1GK7zC6nm4O29x9ydBBFal9xm+/Y+1g7qCoI1CYlVlB3gHXEC+E28
+	8QadFuThPcNjDUp+7GZNmgrFFa0/qyxk9gXjiCTvofqy+TRZVLJtdvJibj2+T7C2TwWVQsYbsTd
+	zPnwmA8E6U4xa/38oQ1gwcmlVvKghL5Hn61ewWyM0TBwnRqTgQ3Jm02alQTc9EjoD2BhujNb62/
+	cgdNQWwtjojlc1DUzpPAXSWAuQ==
+X-Received: by 2002:a05:600c:4e0b:b0:49f:e772:6ddf with SMTP id 5b1f17b1804b1-4bb8881ae90mr541218935e9.32.1795827351797;
+        Fri, 27 Nov 2026 16:55:51 -0800 (PST)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb8538b09bsm1328407645e9.4.2026.11.27.16.55.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 16:55:51 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: jarkko@kernel.org
+Cc: aleksa@amutable.com,
+	alex@amutable.com,
+	arnd@arndb.de,
+	bpf@vger.kernel.org,
+	brauner@kernel.org,
+	containers@lists.linux.dev,
+	corbet@lwn.net,
+	dhowells@redhat.com,
+	ebiggers@kernel.org,
+	giuseppe@scrivano.org,
+	hughd@google.com,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	josef@toxicpanda.com,
+	kees@kernel.org,
+	kpsingh@kernel.org,
+	lennart@poettering.net,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	luto@amacapital.net,
+	neal@gompa.dev,
+	oleg@redhat.com,
+	paul@paul-moore.com,
+	ptikhomirov@virtuozzo.com,
+	sergeh@kernel.org,
+	skhan@linuxfoundation.org,
+	viro@zeniv.linux.org.uk,
+	zygmunt.krynicki@canonical.com
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Date: Sat, 28 Nov 2026 03:55:41 +0300
+Message-ID: <20261128005541.873229-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261122193539.3334213-1-jarkko@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,613 +129,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261128-for-upstream-lisp-v1-v2-5-68e8649c3ed2@free.fr>
-References: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
-In-Reply-To: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Vincent Jardin <vjardin@free.fr>, Donald Hunter <donald.hunter@gmail.com>, 
- Nicolas Dichtel <nicolas.dichtel@6wind.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>, 
- Danielle Ratson <danieller@nvidia.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=16416;
- i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=HZ8gnxltu47Pa8IU531J9gJMJPPmgKQdRgGu5Bn3lW8=;
- b=uNhXhcKxQUdfx2E2HbzWTpYPsYCSXXsJ1RCMz50R3uH/BhUI0cQjpHtYiXEMJPWW9FzqANzdw
- nGWzH3I/3o1B3JQ+/UYmUye7U3gthP6sUbXt6tG5sNEGk8FI5G/zhkg
-X-Developer-Key: i=vjardin@free.fr; a=ed25519;
- pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
-X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
- auth_id=871
-X-Original-From: Vincent Jardin <vjardin@free.fr>
-Reply-To: vjardin@free.fr
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-From: Vincent Jardin <vjardin@free.fr>
+Jarkko Sakkinen <jarkko@kernel.org>:
+> Work on this feature started in 2025 after reviewing David Howells'
+> container object patch set [1], whose underlying mechanics made sense to
 
-Scenario: an xTR with the mappings of many remote sites on one LISP
-device.
-1 nexthop per site, half of them with an IPv4 RLOC and half with an
-IPv6 one, and 4 routes per site, 2 IPv4 and 2 IPv6 EID prefixes.
+> [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
+> [2] https://lwn.net/Articles/1102593/
 
-Another xTR stands for all the sites.
+You put wrong link in "[1]". This is not Howells' container patchset. This
+is Howells' fsopen/fsmount patchset.
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
----
- tools/testing/selftests/net/Makefile      |   1 +
- tools/testing/selftests/net/lisp_scale.sh | 542 ++++++++++++++++++++++++++++++
- 2 files changed, 543 insertions(+)
+Link "[2]" seems to be wrong, too. It is not something "earlier", this is
+very recent LWN article.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 7263049ab7c44..27a1e9e6b4ed3 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -64,6 +64,7 @@ TEST_PROGS := \
- 	l2tp.sh \
- 	link_netns.py \
- 	lisp.sh \
-+	lisp_scale.sh \
- 	lwt_dst_cache_ref_loop.sh \
- 	macvlan_mcast_shared_mac.sh \
- 	msg_zerocopy.sh \
-diff --git a/tools/testing/selftests/net/lisp_scale.sh b/tools/testing/selftests/net/lisp_scale.sh
-new file mode 100755
-index 0000000000000..fd261a555d3bf
---- /dev/null
-+++ b/tools/testing/selftests/net/lisp_scale.sh
-@@ -0,0 +1,542 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (c) 2026 Vincent Jardin <vjardin@free.fr>, Free Mobile
-+#
-+# Scale of the LISP data plane of drivers/net/lisp.c: the mappings of many
-+# remote sites on one device of an xTR. A site is an RLOC, which is a nexthop,
-+# and EID prefixes, which are routes to it. The sites with an even number have
-+# an IPv4 RLOC, the others an IPv6 one. Each site has two IPv4 and two IPv6 EID
-+# prefixes.
-+#
-+# x2 stands for all the remote sites: their RLOCs and their EIDs are local to
-+# it, and it answers to the EIDs of x1.
-+#
-+#   x1 (VRF "site")                                    x2
-+#   172.16.0.1, fd01::1    lisp101 ...... lisp101      10.0.0.0/8, fd00::/16
-+#   192.0.2.1, 2001:db8:1::1  veth        veth         198.18.0.0/15,
-+#                                                      2001:db8:ffff::/48
-+#
-+# LISP_SITES is the number of sites: 40000 by default, 8000 on a slow machine,
-+# which is also the least: the tests change sites of their own, below 8000.
-+
-+# shellcheck disable=SC2154 # variables assigned by setup_ns
-+source lib.sh
-+
-+if [[ $KSFT_MACHINE_SLOW == yes ]]; then
-+	: "${LISP_SITES:=8000}"
-+else
-+	: "${LISP_SITES:=40000}"
-+fi
-+
-+ALL_TESTS="
-+	install_test
-+	stats_test
-+	move_test
-+	replace_test
-+	withdraw_test
-+	churn_test
-+	down_test
-+"
-+
-+X1_RLOC4=192.0.2.1
-+X1_RLOC6=2001:db8:1::1
-+
-+# The nexthop of a site has its number plus 1 as ID. Those of the sites that
-+# move are above the others, and the groups above them.
-+NH_MOVED=1000000
-+NH_GROUP=2000000
-+
-+################################################################################
-+# Helpers
-+
-+site_addr()
-+{
-+	local site=$1; shift
-+	local format=$1; shift
-+
-+	awk -v i="$site" "BEGIN { printf \"$format\", $* }"
-+}
-+
-+site_rloc()
-+{
-+	local site=$1; shift
-+
-+	if (( site % 2 )); then
-+		site_addr "$site" "2001:db8:ffff:%x::1" i
-+	else
-+		site_addr "$site" "198.18.%d.%d" "int(i / 256), i % 256"
-+	fi
-+}
-+
-+# The IPv4 RLOC that a site gets when a test moves it.
-+site_moved_rloc()
-+{
-+	site_addr "$1" "198.19.%d.%d" "int(i / 256), i % 256"
-+}
-+
-+site_eid4()
-+{
-+	site_addr "$1" "10.%d.%d.129" "int(i / 256), i % 256"
-+}
-+
-+site_eid6()
-+{
-+	site_addr "$1" "fd00:%x:1::1" i
-+}
-+
-+sites_batch()
-+{
-+	local family=$1; shift
-+	local first=$1; shift
-+	local last=$1; shift
-+	local program=$1; shift
-+
-+	awk -v first="$first" -v last="$last" -v moved="$NH_MOVED" \
-+	    -v group="$NH_GROUP" "
-+	BEGIN {
-+		for (i = first; i < last; i++) {
-+			nh = i + 1
-+			hi = int(i / 256)
-+			lo = i % 256
-+			if (i % 2) {
-+				encap = \"ip6\"
-+				rloc = sprintf(\"2001:db8:ffff:%x::1\", i)
-+			} else {
-+				encap = \"ip\"
-+				rloc = sprintf(\"198.18.%d.%d\", hi, lo)
-+			}
-+			$program
-+		}
-+	}" | ip -n "$x1" ${family:+-$family} -batch -
-+}
-+
-+SITE_ROUTES='
-+	printf "route %s 10.%d.%d.0/25 vrf site nhid %d\n", cmd, hi, lo, to
-+	printf "route %s 10.%d.%d.128/25 vrf site nhid %d\n", cmd, hi, lo, to
-+	printf "route %s fd00:%x:0::/64 vrf site nhid %d\n", cmd, i, to
-+	printf "route %s fd00:%x:1::/64 vrf site nhid %d\n", cmd, i, to
-+'
-+
-+sites_add()
-+{
-+	local first=$1; shift
-+	local last=$1; shift
-+
-+	sites_batch 6 "$first" "$last" '
-+		printf "nexthop add id %d encap %s dst %s dev lisp101\n", \
-+			nh, encap, rloc
-+	' && sites_batch "" "$first" "$last" \
-+		"cmd = \"add\"; to = nh; $SITE_ROUTES"
-+}
-+
-+count_nexthops()
-+{
-+	ip -n "$x1" nexthop show dev lisp101 | wc -l
-+}
-+
-+count_routes()
-+{
-+	local family=$1; shift
-+
-+	ip -n "$x1" "-$family" route show vrf site | grep -c " nhid "
-+}
-+
-+site_ping()
-+{
-+	local site=$1; shift
-+
-+	ip netns exec "$x1" ping -q -c 1 -W 2 -I site "$(site_eid4 "$site")" \
-+		> /dev/null 2>&1 &&
-+	ip netns exec "$x1" ping -q -c 1 -W 2 -I site "$(site_eid6 "$site")" \
-+		> /dev/null 2>&1
-+}
-+
-+rloc_filter()
-+{
-+	local rloc=$1; shift
-+	local protocol=ip
-+
-+	[[ $rloc == *:* ]] && protocol=ipv6
-+	tc -n "$x2" filter add dev eth0 ingress protocol "$protocol" pref 1 \
-+		flower dst_ip "$rloc" action pass
-+}
-+
-+rloc_packets()
-+{
-+	tc -n "$x2" -j -s filter show dev eth0 ingress pref 1 |
-+		jq '[.[] | select(.options.actions) |
-+		     .options.actions[0].stats.packets] | add'
-+	tc -n "$x2" filter del dev eth0 ingress pref 1
-+}
-+
-+site_check()
-+{
-+	local site=$1; shift
-+	local rloc=$1; shift
-+
-+	rloc_filter "$rloc"
-+	site_ping "$site"
-+	check_err $? "no answer from the site $site"
-+	(( $(rloc_packets) == 2 ))
-+	check_err $? "the site $site is not reached through $rloc"
-+}
-+
-+elapsed()
-+{
-+	local start=$1; shift
-+
-+	echo "$(( $(timestamp_ms) - start )) ms"
-+}
-+
-+################################################################################
-+# Setup
-+
-+setup()
-+{
-+	local ns
-+
-+	setup_ns x1 x2 || return
-+
-+	ip link add eth0 netns "$x1" type veth peer name eth0 netns "$x2"
-+	for ns in "$x1" "$x2"; do
-+		ip netns exec "$ns" sysctl -wq net.ipv4.ip_forward=1
-+		ip netns exec "$ns" sysctl -wq net.ipv6.conf.all.forwarding=1
-+		ip -n "$ns" link set eth0 up
-+	done
-+
-+	ip -n "$x1" addr add $X1_RLOC4/30 dev eth0
-+	ip -n "$x1" addr add $X1_RLOC6/64 dev eth0 nodad
-+	ip -n "$x1" route add 198.18.0.0/15 via 192.0.2.2
-+	ip -n "$x1" -6 route add 2001:db8:ffff::/48 via 2001:db8:1::2
-+	ip -n "$x1" link add site type vrf table 10
-+	ip -n "$x1" link set site up
-+	ip -n "$x1" link add lisp101 type lisp id 101 \
-+		local $X1_RLOC4 local $X1_RLOC6 || return
-+	ip -n "$x1" link set lisp101 master site up
-+	ip -n "$x1" addr add 172.16.0.1/32 dev lisp101
-+	ip -n "$x1" addr add fd01::1/128 dev lisp101 nodad
-+
-+	ip -n "$x2" addr add 192.0.2.2/30 dev eth0
-+	ip -n "$x2" addr add 2001:db8:1::2/64 dev eth0 nodad
-+	ip -n "$x2" route add local 198.18.0.0/15 dev lo
-+	ip -n "$x2" -6 route add local 2001:db8:ffff::/48 dev lo
-+	ip -n "$x2" route add local 10.0.0.0/8 dev lo
-+	ip -n "$x2" -6 route add local fd00::/16 dev lo
-+	ip -n "$x2" link add lisp101 type lisp id 101
-+	ip -n "$x2" link set lisp101 up
-+	ip -n "$x2" route add 172.16.0.1/32 encap ip dst $X1_RLOC4 dev lisp101
-+	ip -n "$x2" -6 route add fd01::1/128 encap ip6 dst $X1_RLOC6 \
-+		dev lisp101
-+	tc -n "$x2" qdisc add dev eth0 clsact
-+}
-+
-+cleanup()
-+{
-+	defer_scopes_cleanup
-+	cleanup_all_ns
-+}
-+
-+################################################################################
-+# Tests
-+
-+install_test()
-+{
-+	local routes=$((4 * LISP_SITES))
-+	local start
-+	local site
-+
-+	RET=0
-+
-+	start=$(timestamp_ms)
-+	sites_add 0 "$LISP_SITES"
-+	check_err $? "the sites are not installed"
-+	log_info "$LISP_SITES sites installed in $(elapsed "$start")"
-+
-+	(( $(count_nexthops) == LISP_SITES ))
-+	check_err $? "unexpected count of nexthops"
-+	(( $(count_routes 4) == 2 * LISP_SITES ))
-+	check_err $? "unexpected count of IPv4 routes"
-+	(( $(count_routes 6) == 2 * LISP_SITES ))
-+	check_err $? "unexpected count of IPv6 routes"
-+
-+	for site in 0 1 $((LISP_SITES / 2)) $((LISP_SITES / 2 + 1)) \
-+		    $((LISP_SITES - 2)) $((LISP_SITES - 1)); do
-+		site_check "$site" "$(site_rloc "$site")"
-+	done
-+
-+	log_test "$LISP_SITES sites: $LISP_SITES nexthops, $routes routes"
-+}
-+
-+stats_test()
-+{
-+	local rx_before
-+	local tx_before
-+	local packets
-+	local i
-+
-+	RET=0
-+
-+	ip -n "$x1" nexthop add id "$NH_GROUP" group 6001/6002
-+	sites_batch "" 6000 6064 "cmd = \"replace\"; to = group; $SITE_ROUTES"
-+
-+	tx_before=$(ip -n "$x1" -j -s link show dev lisp101 |
-+		    jq '.[0].stats64.tx.packets')
-+	rx_before=$(ip -n "$x1" -j -s link show dev lisp101 |
-+		    jq '.[0].stats64.rx.packets')
-+	for i in $(seq 6000 6063); do
-+		site_ping "$i"
-+		check_err $? "no answer from the site $i"
-+	done
-+
-+	(( $(ip -n "$x1" -j -s link show dev lisp101 |
-+	     jq '.[0].stats64.tx.packets') == tx_before + 128 ))
-+	check_err $? "unexpected count of sent packets"
-+	(( $(ip -n "$x1" -j -s link show dev lisp101 |
-+	     jq '.[0].stats64.rx.packets') == rx_before + 128 ))
-+	check_err $? "unexpected count of received packets"
-+
-+	packets=$(ip -n "$x1" -j -s nexthop show id "$NH_GROUP" |
-+		  jq -c '[.[0].group_stats[].packets]')
-+	(( $(jq 'add' <<< "$packets") >= 128 ))
-+	check_err $? "unexpected count of the packets of the group: $packets"
-+	[[ $(jq 'min' <<< "$packets") != 0 ]]
-+	check_err $? "an RLOC of the group is not used: $packets"
-+
-+	sites_batch "" 6000 6064 "cmd = \"replace\"; to = nh; $SITE_ROUTES"
-+	ip -n "$x1" nexthop del id "$NH_GROUP"
-+	log_test "Counters of the device and of a group"
-+}
-+
-+move_test()
-+{
-+	local start
-+
-+	RET=0
-+
-+	start=$(timestamp_ms)
-+	sites_batch 6 1000 2000 '
-+		printf "nexthop add id %d encap ip dst 198.19.%d.%d" \
-+			" dev lisp101\n", moved + i, hi, lo
-+	' && sites_batch "" 1000 2000 \
-+		"cmd = \"replace\"; to = moved + i; $SITE_ROUTES" &&
-+	sites_batch "" 1000 2000 'printf "nexthop del id %d\n", nh'
-+	check_err $? "the sites are not moved"
-+	log_info "1000 sites moved to new nexthops in $(elapsed "$start")"
-+
-+	(( $(count_nexthops) == LISP_SITES ))
-+	check_err $? "unexpected count of nexthops"
-+	site_check 1000 "$(site_moved_rloc 1000)"
-+	site_check 1999 "$(site_moved_rloc 1999)"
-+	site_check 2000 "$(site_rloc 2000)"
-+
-+	log_test "RLOC changed with new nexthops"
-+}
-+
-+replace_test()
-+{
-+	local start
-+
-+	RET=0
-+
-+	start=$(timestamp_ms)
-+	sites_batch 6 2000 2100 '
-+		printf "nexthop replace id %d encap ip dst 198.19.%d.%d" \
-+			" dev lisp101\n", nh, hi, lo
-+	'
-+	check_err $? "the nexthops are not replaced"
-+	log_info "100 nexthops replaced in $(elapsed "$start")"
-+
-+	site_check 2000 "$(site_moved_rloc 2000)"
-+	site_check 2099 "$(site_moved_rloc 2099)"
-+	site_check 2100 "$(site_rloc 2100)"
-+
-+	log_test "RLOC changed in place"
-+}
-+
-+withdraw_test()
-+{
-+	local start
-+
-+	RET=0
-+
-+	start=$(timestamp_ms)
-+	sites_batch "" 3000 4000 '
-+		printf "route del 10.%d.%d.0/25 vrf site\n", hi, lo
-+		printf "route del 10.%d.%d.128/25 vrf site\n", hi, lo
-+		printf "route del fd00:%x:0::/64 vrf site\n", i
-+		printf "route del fd00:%x:1::/64 vrf site\n", i
-+	' && sites_batch "" 3000 4000 'printf "nexthop del id %d\n", nh'
-+	check_err $? "the sites are not withdrawn"
-+	log_info "1000 sites withdrawn in $(elapsed "$start")"
-+
-+	start=$(timestamp_ms)
-+	sites_batch "" 4000 4100 'printf "nexthop del id %d\n", nh'
-+	check_err $? "the nexthops are not removed"
-+	log_info "100 nexthops removed with their routes in $(elapsed "$start")"
-+
-+	(( $(count_nexthops) == LISP_SITES - 1100 ))
-+	check_err $? "unexpected count of nexthops"
-+	(( $(count_routes 4) == 2 * (LISP_SITES - 1100) ))
-+	check_err $? "unexpected count of IPv4 routes"
-+	(( $(count_routes 6) == 2 * (LISP_SITES - 1100) ))
-+	check_err $? "unexpected count of IPv6 routes"
-+
-+	site_ping 3500
-+	check_fail $? "an answer from a site that left"
-+	site_ping 4050
-+	check_fail $? "an answer from a site whose nexthop was removed"
-+	site_check 4100 "$(site_rloc 4100)"
-+
-+	log_test "Sites withdrawn"
-+}
-+
-+churn_test()
-+{
-+	local nexthops
-+	local loops=()
-+	local pids=()
-+	local rounds=0
-+	local site
-+	local out
-+	local pid
-+
-+	RET=0
-+
-+	nexthops=$(count_nexthops)
-+	out=$(mktemp -d)
-+	defer rm -rf "$out"
-+	for site in 5500 5501; do
-+		ip netns exec "$x1" ping -q -f -w 10 -I site \
-+			"$(site_eid4 "$site")" > "$out/$site.4" 2>&1 &
-+		pids+=($!)
-+		ip netns exec "$x1" ping -q -f -w 10 -I site \
-+			"$(site_eid6 "$site")" > "$out/$site.6" 2>&1 &
-+		pids+=($!)
-+	done
-+
-+	# The loops end with the first ping, if nothing kills them first.
-+	for site in 5000 5001; do
-+		while kill -0 "${pids[0]}" 2> /dev/null; do
-+			ip netns exec "$x1" ping -q -f -w 1 -I site \
-+				"$(site_eid4 "$site")"
-+			ip netns exec "$x1" ping -q -f -w 1 -I site \
-+				"$(site_eid6 "$site")"
-+		done > /dev/null 2>&1 &
-+		loops+=($!)
-+		defer kill_process "$!"
-+	done
-+
-+	while kill -0 "${pids[0]}" 2> /dev/null; do
-+		sites_batch "" 5000 5200 'printf "nexthop del id %d\n", nh'
-+		sites_add 5000 5200
-+		check_err $? "the sites are not installed again"
-+		sites_batch 6 5000 5016 '
-+			printf "nexthop replace id %d encap ip" \
-+				" dst 198.19.%d.%d dev lisp101\n", nh, hi, lo
-+		'
-+		sites_batch 6 5000 5016 '
-+			printf "nexthop replace id %d encap %s dst %s" \
-+				" dev lisp101\n", nh, encap, rloc
-+		'
-+		rounds=$((rounds + 1))
-+	done
-+	log_info "$rounds rounds of changes under traffic"
-+
-+	for pid in "${loops[@]}"; do
-+		kill_process "$pid"
-+	done
-+	for pid in "${pids[@]}"; do
-+		wait "$pid"
-+		check_err $? "no answer from a site that did not change"
-+	done
-+	# The ping that a loop was running goes on for a second without it.
-+	ip netns pids "$x1" | xargs -r kill 2> /dev/null
-+
-+	# The changes of the other sites cost them less than half their packets.
-+	for site in 5500 5501; do
-+		awk '/packets transmitted/ { n++; if ($4 * 2 < $1) lost = 1 }
-+		     END { exit lost || n != 2 }' "$out/$site.4" "$out/$site.6"
-+		check_err $? \
-+			"most packets of a site that did not change are lost"
-+	done
-+
-+	(( $(count_nexthops) == nexthops ))
-+	check_err $? "unexpected count of nexthops"
-+	site_check 5002 "$(site_rloc 5002)"
-+	site_check 5199 "$(site_rloc 5199)"
-+	site_check 5500 "$(site_rloc 5500)"
-+
-+	log_test "Mappings changed under traffic"
-+}
-+
-+down_test()
-+{
-+	local start
-+	local duration
-+	local pid
-+
-+	RET=0
-+
-+	ip netns exec "$x1" ping -q -f -w 4 -I site "$(site_eid4 7500)" \
-+		> /dev/null 2>&1 &
-+	pid=$!
-+
-+	start=$(timestamp_ms)
-+	ip -n "$x1" link set lisp101 down
-+	duration=$(elapsed "$start")
-+	log_info "device down with its nexthops and routes in $duration"
-+	(( $(count_nexthops) == 0 ))
-+	check_err $? "nexthops outlive the device"
-+	(( $(count_routes 4) == 0 && $(count_routes 6) == 0 ))
-+	check_err $? "routes outlive the device"
-+
-+	ip -n "$x1" link set lisp101 up
-+	ip -n "$x1" addr add fd01::1/128 dev lisp101 nodad
-+	sites_add 7000 7100
-+	check_err $? "no site can be installed again"
-+	site_check 7000 "$(site_rloc 7000)"
-+	site_check 7099 "$(site_rloc 7099)"
-+
-+	start=$(timestamp_ms)
-+	ip -n "$x1" link del lisp101
-+	log_info "device deleted in $(elapsed "$start")"
-+	(( $(ip -n "$x1" nexthop | wc -l) == 0 ))
-+	check_err $? "nexthops outlive the device"
-+	wait "$pid"
-+
-+	log_test "Device down and deleted"
-+}
-+
-+################################################################################
-+# Main
-+
-+require_command jq
-+
-+if ! ip link help lisp 2>&1 | grep -q "^Usage: ... lisp"; then
-+	echo "SKIP: iproute2 does not know the lisp devices"
-+	exit "$ksft_skip"
-+fi
-+
-+if (( LISP_SITES < 8000 || LISP_SITES > 65536 )); then
-+	echo "SKIP: LISP_SITES must be between 8000 and 65536"
-+	exit "$ksft_skip"
-+fi
-+
-+trap cleanup EXIT
-+
-+setup_ns probe
-+out=$(ip -n "$probe" link add lisp0 type lisp id 1 2>&1)
-+if [[ $out == *"Unknown device type"* ]]; then
-+	echo "SKIP: the kernel does not have the lisp devices (CONFIG_LISP)"
-+	exit "$ksft_skip"
-+fi
-+cleanup_ns "$probe"
-+
-+if ! setup; then
-+	echo "FAIL: the setup of the test failed"
-+	exit "$ksft_fail"
-+fi
-+
-+tests_run
-+
-+exit "$EXIT_STATUS"
+> While the patch set is manually written, the original motivation came
+> from isolating LLM agents
+
+LLM agents are too strong for Linux containers. They should be isolated
+using VMs or using some Linux reimplementation, such as gVisor.
+
+Bacik said that he tested his patchset in Anthropic. But I think it
+was tested not for agents themselves, but for something else.
+
+Anyway, I suggest to drop this phrase from your cover letter and think
+about some other use case.
 
 -- 
-2.43.0
-
-
+Askar Safin
