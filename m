@@ -1,103 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795830019;
-	b=HLKeBETYoQ2efaRkqSjfcQIDAPfpQwKDtScCPOHG3HVnwRDXkObFBlMz1ofZmZzJkgsS
-	 Y0HoR3Of4JoSzZEfPWMqTDv0IKiL0CWk1EIZ+xB8VwS1a97tIhGwiZECOYR7AnoF+3log
-	 SoozRvw3Vn/GErRPH/blPT8qN9Jmuyi1DvhBXDQbmNRVr0hezYff5fcHUoRoluCDX8M/u
-	 XOCiVlmFMGTv+09ovCNd3r6+ns+GVaLjsim8eiRT6UsdgkigCUhVxHiksfTayrwFIuBx/
-	 m0tzYwARHGSZedvPV5DeLyfbBDovYmWQtmFyt9hcap3TaXhNyrrbYKdsxWv/++8QQ5g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795830019;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.45
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795830680;
+	b=0/XIWcUFXY+TjVfK31ZSzskg+e7ASzRIukhrEzr+nn36dlCdEcrok0Ztq+pKvJ7hhZYx
+	 ThA8+DDYH5eBWskdo2h/Xm7513CcbAxAAOlKVc8JhycxXqeV4m36BjNfjSCnXXmJCzhO2
+	 OxZTZEZMGS4HdIyDBKh46UUi3w7jr3vzUoWKJBrPtntC9C+MVO0UIYEztw7iCAv4BRxax
+	 J0FVfnxAv+kThKkt0MUtXhrVAZWuFWLHFJnfY4AW8tw1VO5pp6ztBRKRJCgAIoFUPYKYF
+	 NC+5JdXoDjG65xaCN+EMB19HMr24ReF0zjYV/uaxLaB0HAqDt39KSXSmJOIWpuoQJOw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795830680;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
-	b=QQBSpKKQI58+faVf5vyasJQ/4Rdcpk5Dc2Hm0Hnc95vBuLh67+/fDykn3Eoq9irTZEx5
-	 e1sW7fN8gQSfELdSPFabQLvHpnObQFirA+NvO4Mq5WDk9OXqCPXBr8uOPgGQ0k+TvZwDX
-	 SvuvwnqQ3JdKu35kveIjV/J/4HcF01V+UdhdM+v4YtpFu/GlwH4CRtBob07v0sa3PLR5z
-	 XEdnfRJirwDMY8ZppK+AO0c23mXDIJ3cwwWv4M86p+FFPVH9Q4TSUxNyVuq4lkQtVcaCn
-	 3kt4wlAQgv4KDpl85wLpscGTwgjF1pIdh5x518WDt8bsEsfWfLQc7GMiXA77ymhSYKQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=M+kv6M/MroHXNub3A7PdHe23Ap2KXe5JLqM78W2xjvU=;
+	b=eEhNRgxtFJYhBPKopSheOySVbAY8fulBBgVUciMB24EqgsNFGeN+xrbbHYnobLlJCMSK
+	 Y4nAOnlLbmutgf5c2k80l3KK2jMUaBsTyzZb2oPqaTg/EZYFfz1iB3x3oCK/JMOFRCe39
+	 9lBycDT+2+Pghkd+nJF5oBSO25cwIrZxAIyteLpEll23wmWTKLImY1QD3tbwq7me49mRg
+	 a03c/T26dF8n8UufNc9Jgj4N2mQih+8HbvhhUdx2faxuUYmKHHtu+Lm3n3DJ2a731JPra
+	 8Q03Q85Z6sJbsda9rtZjJGMCuWbS2BoEHZ4+Whqg246Jvrcc4oqFax8AJnPOAG0RGLA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q+j29iSJ;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XLosXPN4;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.45
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5C0606A31F
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 01:40:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D5C0606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFFE606A324
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 01:51:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EFFE606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q+j29iSJ
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b49a6e8212so3703342a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 17:40:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XLosXPN4
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c4d2b741ed9so1388182766b.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 17:51:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795830679; cv=none;
+        d=google.com; s=arc-20260327;
+        b=SkVasYAAQ+N6EWLTW7zTPKN6GDNufPPULpv1f+hnPL+W0GhMwyINiGAzZ47FKI+c8Q
+         GrSFx7Uqqu0JbFK0S2TS0ERcsQQU9oBRTkBwZPhF0w8dVB5kI+POTGW3t9UpqHgbtl6L
+         E40htdxsfnS/4jOFeeRi/7psjThn4KVmlUM7Ke/Lk6/0OW0el5CKHXTGunr45aigP8mj
+         kW0nJTeoWOLgRIkyyYSET0SLszs72IYGMtejWWjJUjCUawSzHl96zF8BrbThFQm+0NGE
+         GP7+WA+FrFslOpPzuawRntQjjinrVp4sEF1/fkZjQNM3m8fxQGDv4hTPwBWSfbTV9+7F
+         y6cA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=M+kv6M/MroHXNub3A7PdHe23Ap2KXe5JLqM78W2xjvU=;
+        fh=CmLcxp2Nw+m0PR7Qf/dK+ubLwNgBz8vkUKlpLLJdCvc=;
+        b=Hgeep9+sJKXMuSzgvUkoYx4FMLdQi/tJQ0GFu2810aio5enw6fj08SyyHnOO5WWBhy
+         K75m1EK4izunpL80FurvdBZGUeXe2LBVIrdfhBIcuYGavBubogDPn4HogJoF9DPTAGIn
+         U5VULH63HroX2K0kpUIFhBnpdCYPH3i5bu9xiw2dGp7D3sLvv5dzR9D8HSzHED5ZACOA
+         rUj/2VjEhITSXNRHNuIkGtrPXCDmtjFqqYYR17VK6KFDrYiHvCiYblMWo0q+0naXqWVn
+         HE9J8Tt70KybilBR9Rx4pIG2MGsldv99i/Xb0xOSrYH2V52BNv7UVK2BnGb06KOkNaIc
+         chFQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795830019; x=1796434819; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1795830679; x=1796435479; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
-        b=q+j29iSJxxoGRSE7F1BSeZcwvPI2mVgZdsm7x/iBZmNEPXFEggoUPsany6GgqPf49N
-         /WCfN6WWWcsv78zTqQFJw+6S4CNLeaGaCBRB9fJpCLiXasH2KydEsCWgbxRG0xLDDxp6
-         R0abfDF6sPKD1k3vrcfRenL3is4HryeHnzsb+0WNeuw5ybnn5mJOkxw/Z+xZpNvmkOXx
-         a2MWyrzJxnQqJjEbJ83Z7fgtgGTnx7iclNLHAevNJwBwt+jzKKWRSQZ2RChsV9JzzBXV
-         APdCwTcI4b06cCuyG5Yz3gEXqd64yFqH8/jRVSK3u1ny8aOBh6wF07CNuf8cZMVpFbwb
-         UGhQ==
+        bh=M+kv6M/MroHXNub3A7PdHe23Ap2KXe5JLqM78W2xjvU=;
+        b=XLosXPN4XY1X7SNdxkqBL+OmW6RyoS3KUKiJGN6VkhP3L0yhHIWAe9gfCGB7c23JLd
+         lHNLLgTgGaPV+ANwny7auVJWhylTPy7tn8Qbd1QmlxO7gDNExEWgSGEhy30NAozJQ+8+
+         +xKv07hbVc2PMmC0nQwONM+Snu/fB4CVx2Zu1RVG2ABrNV3bydSS40OT+TsJEZK+JELi
+         MFuPTs18dGi6k3X7RKL9C6rS6PY4lyASR9cQGoX1ApSJvF/sCt8fWc54v5qN8Mgd+424
+         mRGAbRe9QyqlYYy8UZHrD36MAiba/qdVjAz2hG+uSVag6rBQPtZrBpUV+D6X33j1iq7k
+         51pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795830019; x=1796434819;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1795830679; x=1796435479;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
-        b=OnUDxQpLmzO5+QU7lrxSsj7zB6eT7N+h0Zg3U3TQRCjTF8C2BlisFTYRu+uixNXZ05
-         FlE3bKen9K4Q0l4nDaLpZALIV+3hccK3ouaIstXZPjbkvqyGb2wUewSwcjm+k9qxEQn8
-         WKZeQMTqe+dgelUjBb8cj47w5rkhxAwHvs6jZ971s5DlnsqGABnOrsHz49vtYb+Cx/RY
-         ojpBLRfxaRejPsE2OvhRuKa+AbDMpY17bxLkwAh2lLqNRWkY9gbLs6c4FU3Cg9+iFFZe
-         ob778mIbDPaVXluEC2GHdNh4GW9TfTYcFNXi2kh2baEOVuzb0+zUsnahmO306Pmm7Ohv
-         HhCg==
-X-Forwarded-Encrypted: i=1; AL+hErENMnx4OYgDlawEOr9AFxmZjC1ash0Lc8lmXW4H+JPLutbrOtSYVhAE65QXm47wd2t2DCUsMU9jTJmfiYZynWg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8VCKCgA+S32r/h65Uu95C3YNmmQtexuBQDHISWcNW3zRMb0iPe
-	wbqVakI5j44En2w0m/em61UdWkoh6PEd7bDqnRD2rx7Dwu224NCdnleWFIZtIg==
-X-Gm-Gg: AZFdTZfo3/H1fkJw2b960fyan6am8bTPlAXvJdc7Nb8pANN7+aylP/pLdZpVXrOR52v
-	xYExe/0bEhrgQ9M/dhoz6jJ5vnjo8Z9tqDFreDSKAqIfNmka5b3c1dJn8Q6cV1113rdvlDTS7Wp
-	EyhLlAJ4qEllrEG3Seim33gB1iscF61wtZaS/okCmj2+riNZC9Iqpz48Ickj5o4kHIa5WwtGhoD
-	XuczJQN8Ui9F4oxh7q7R5GKfA4gLW3e4XLoIPMiHkCt8aoGrw1LzA1ugebSw5cGKB3qbiKtHPMD
-	pyx13RPrpPjorPAf2DlOK5XNGLY3wNem2plZii8T+9WdMXNu9EPZAjHWMY7LFL57mYa+dA9p5AV
-	iqhwckadG6obg0irwtD8+fKH/VqniXud8gX7MldZQ/w5ISax5n4eGWFkRY4rfJ+a8FH9z9/C7Eb
-	y84MgpoEV0Mn+twNd4yloDmRTf1Zce9pAKuSUyq8qf5RRajtCvUtD4+nkat5dFRd1D5uD93UbmT
-	oBHl1+eI7WW/4ygXSx6t2l2qnUXtk4aaZG64rsibbcGodNOv3aVyo+N3C/ioaoru8NjzvFZoqK4
-	1R87PCcXDEELdS2r4Ej39oZtTQrjXIAgVYbdvmRgU0Z8C7ngq08+/maT6ObQS0kaOQPLi17gJRR
-	kYizVRH1DONJIrB2cI0Ckzi7dqAWXG9d5QQ==
-X-Received: by 2002:a17:90b:3ecd:b0:3a4:adea:50ad with SMTP id 98e67ed59e1d1-3b41c9e46c6mr27425363a91.27.1795830018596;
-        Fri, 27 Nov 2026 17:40:18 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0b2c4sm40440119a91.4.2026.11.27.17.40.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 17:40:18 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 28 Nov 2026 01:40:17 +0000
-Message-Id: <DN6GM0YTCXII.2LIEDQV0KFDM1@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: Drop conflicting DWARF choice from
- config.x86_64
-In-Reply-To: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
-References: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
-Content-Transfer-Encoding: 8bit
+        bh=M+kv6M/MroHXNub3A7PdHe23Ap2KXe5JLqM78W2xjvU=;
+        b=hT5cnbnr0HlNvOIPnXv9Fd+eBzqbjAD0HPdffHj3RwdwCg3JGIF2XOeiXot4TlYNt0
+         p06NTULeb1LSa7bxMDqGrxYsaNTQn8abnWl4G7r29kAjTZZwWcoBncbYfbFNA0zbCi9f
+         xr4cWCfvEEcgFsCJisqNYxpjukpETHUbV4Bt01EykMJWJP2/65w+QygEAmG+Sidx5Ucc
+         8VEB5UB9hL5eVgRXwJ7etLl5XugQu8zNqpEpK7/mdFRtGIECHlVHFbvSJUsLtnFzMqy7
+         LAR8dhpRS3OAYWHSz0zjn4t4mYm4kefh3A5AeROUqQhqj9dg99xTV8PODSaL+klkV1HC
+         j8QA==
+X-Forwarded-Encrypted: i=1; AL+hErGOd9QTy1tcwG1/yubbMLZQSM0Yuz3RhQ/Ibp4RpuSuC7iMMmYcwScv+U7tOyV0wF+Vj6j1h9bChYYUr6BgSIo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9RGcgBlgaIAyMS9o/8k07MsFyb5NgAhOm358a1N47DN9d3OS+n
+	GKdzlMphbk/XZ9Z+R0y7cCuhlch0dSMZwBpGkOlfMQm9UxZIEtG8CEvFgzpqP0qYn2cOmBKv0qa
+	zB0OCUZ9B0qkE8xiZqpOffF+ws/9d4XM=
+X-Gm-Gg: AZFdTZc2RbCzIQMEoXI/JVdaw9UGgu8JZP8ed6T0kgTt65U7hDBNh6wcpwZcRRVMh+a
+	XPJyOiBPe6ioog6rfnLkB4yo5TrXW9Xx6nzBf4iTlU3vz/Yab/tGQ+KshlcgozwgbyTmWWPmqrw
+	wDcbxUyE5xot8gqhYnuxehF9f+yS3colB6ua3NqlznzbktY1+ERtp1l/VJj+3S81dFmXLHwIgvA
+	9ShR5y4jWbmE4SkHESIznaQ7ouWicRgOMAunORc7YcvU8CDHX8nVJQ+XiIzx3TrT9lFFGTi4tCn
+	UCz+6oOcQjkUES9if6U5zlxUthPsuMLpp42D6LO7//PVGkyx9Y8V7XaqV/0ofqjOPk5B/Q9LWv0
+	nsYoHVGFp1MmVX7Ip579Fh3/OEYpDSlO/GkLp
+X-Received: by 2002:a17:906:fa82:b0:c50:4b6e:329 with SMTP id
+ a640c23a62f3a-c513a5eaea2mr1724212966b.15.1795830678877; Fri, 27 Nov 2026
+ 17:51:18 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,22 +104,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <awOQDOel_72Xwjm7@kernel.org> <20261127214103.542291-1-safinaskar@gmail.com>
+ <awn-ioAuksHNV-Rc@kernel.org> <awn_Y7oI4ckfsjSv@kernel.org>
+ <awoHex4LVst2JwkO@kernel.org> <awoO9R7YF_5_6dHA@kernel.org>
+In-Reply-To: <awoO9R7YF_5_6dHA@kernel.org>
+From: Askar Safin <safinaskar@gmail.com>
+Date: Sat, 28 Nov 2026 04:50:42 +0300
+X-Gm-Features: Aa3M54pCi2p8qLdocdLXd3OCMkn8g_j_UUSVEEax8LAEOxwj1oFmxFAoHI8_4lc
+Message-ID: <CAPnZJGBnFyrmr88OsYkMwtLiR93z4g0NAuoMurcnhcYFXz51jg@mail.gmail.com>
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: aleksa@amutable.com, alex@amutable.com, alexei.starovoitov@gmail.com, 
+	arnd@arndb.de, bpf@vger.kernel.org, brauner@kernel.org, 
+	containers@lists.linux.dev, corbet@lwn.net, dhowells@redhat.com, 
+	ebiggers@kernel.org, giuseppe@scrivano.org, hughd@google.com, jack@suse.cz, 
+	jlayton@kernel.org, josef@toxicpanda.com, kees@kernel.org, kpsingh@kernel.org, 
+	lennart@poettering.net, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+	luto@amacapital.net, neal@gompa.dev, oleg@redhat.com, paul@paul-moore.com, 
+	ptikhomirov@virtuozzo.com, sergeh@kernel.org, skhan@linuxfoundation.org, 
+	viro@zeniv.linux.org.uk, zygmunt.krynicki@canonical.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 27, 2026 at 10:03 AM Ricardo B. Marlière (SUSE) <ricardo@marliere.net> wrote:
->  CONFIG_DEBUG_ATOMIC_SLEEP=y
-> -CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+On Sat, Nov 28, 2026 at 2:15=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.org>=
+ wrote:
+> thinking more sequencing than data structures. I.e. I have a game where
+> I need to end up to process creation without embryonic state, and add
+> just enough weight to kernel to support that outcome, and that leads
+> to ~2K'ish LOC of extra kernel complexity.
 
-gcc 11+ and clang 14+ default to DWARF5.
-This moves x86-64 from DWARF5 to DWARF4:
+So you don't have embryonic state? I don't like this.
 
-  arch                              today              with the patch
-  --------------------------------  -----------------  --------------
-  x86_64                            toolchain default  DWARF4
-  aarch64, s390x, riscv64, ppc64el  DWARF4             DWARF4
+Let's assume the following situation. Userland's PID 1 is already running.
+Our container manager attempts to spawn yet another process into userland.
+As well as I understand, it should do clone3 with CLONE_INTO_USERLAND,
+and then execve.
+This creates time hole when there is process, which already runs inside
+userland (i. e. its PID namespace and other namespaces), but runs
+container manager's binary and have container manager's mm.
+This invites for bugs. Other processes, which already run inside userland,
+may somehow take advantage of this.
+For example, see section "CVE-2019-5736 Is a Very Very Very Bad
+Privilege Escalation to Host Root"
+of https://brauner.io/2019/02/12/privileged-containers.html .
+So, here I like embryos.
 
-
-If you care about cleaning up configs then drop
-CONFIG_DEBUG_INFO_DWARF4=y
-instead.
-
-pw-bot: cr
+--=20
+Askar Safin
