@@ -1,60 +1,141 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795873375;
-	b=pD+lT437knoUwKyT/5WhSWrqfLQl+iDObEYIGTGR6D0iT9y6ynriz0EkHrnHe1ZwmuYz
-	 BZuW4ml/MQiisGcEQcfGAUs3WZHxNGz0AULQYgO79cHPuQ5kU7kjr3tXGTSqkC6oEIO08
-	 HYUGkIiaA4E7KaO+so5Qud32sUWFIuF40COJ58Ki9iDxRHufZ+cazJ+DN32cZ1D6g13u1
-	 t3uuqgrx/nS0Ffy3vJ0vCAlb/soADCqnoy3SzuaVSbZsNiTfX9YsjBmibe32KZv9GNWom
-	 lOixC3orSWZds3CAkyAbdlMFaI7t6IdZijSmvTa+QBP5xPqlRFYGHgnfQVi87pCrHDg==
+	t=1795874854;
+	b=E2K96+ssh7Pofcn3RKQ2gpthaIRcndT9vbOyTJUKQuRUEH3mfhBwBPXVW79sUv90Fya6
+	 x3tlWO12G5x+GbumnOVGLVxOufmtt4rlC69ThQQRFuIb20Gxlu+7j6RWmPLec/iH5Nr2y
+	 8kKVEw+mO/vFJfm4Yi5M7dk6Ta3LRkAIV4e4CtFc/F6wwU5styNNhSjyuDqA5Unsr5gBE
+	 cBeT6HrNvBX0xHVUUrTnE/jzLNXt37PypM9KwekyTPAdiq7pCYKtXRkZWPr5IcRGhVD5w
+	 xIYNXzzSLUu6Vwv/aOKf8M1Uh7BUsQ44XKGzlJtJlwAEwGDSbKST2wO2Ijx62SrvEPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795873375;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
-	 Content-Type;
-	bh=ogMgdvQpGGoQmIF6CpJpsTzdhhvKznudi12MCR8DEy8=;
-	b=UOxtRIko/d+PYC4kHhozNbFRumAotvCz/Jm4NkQGza5b+Q45mYey2LnqwCClmrXfesLa
-	 nBZc38ns6r50bbIIjx2TJz3vrmoFugrzH8XMvH7Zztw922ovV3KDvlu6NKLPNCHbkGfTT
-	 uzW7GdmuodMTZtrvIdV7a6nU2loR7f5Ww3x2Gz5w1MOtN0XnPduEu/0l+Y11HVVKsvtHA
-	 LjpR/q75ro1EPX+hrFj6lBspPUd79Abmt3h3nffkYFpTdXckkVeYpn/RcXgNC0VHTgKOS
-	 JhezVbSD3TWpOEkp/NQAonzjx/oQUrICsK4hQyinHPB3jUEksqX25TbGOCRaIpYk+yA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795874854;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=ayl4vL63SRDfFqUS4rNnHQY3+noL1p8yBbowjznB6G4=;
+	b=KQPY/dbYm72Ou0ZaOBtN0hmhLhHFUf7Q/sIn9R0SayW3sm1A6n6UQf5qc7oPz/oX8h2z
+	 9rGvabh+g0xBK49fb7unfBCCSTSKdEtXBNJ9kozN9isRD8GREPZSpDSL8O8rdUmEe3oP6
+	 l0nc4tGeLpQ4LMPImLuspKOiVMq1TdVdIhnvTj1ybktBQwJ864kxBz1fcRf5JiC6/SapI
+	 P71ZhcKy42gLLytW+hITwo00MLV73JKvFdjJzA1cCR8U82Y2Vw4idFroqCSYW1gDsMUEK
+	 4RK8SeUcvAVysl4sRzpTybBVjCyNVbwJb44z5ieUTvI3JuJk+y6+mVrBj9Q46ZuthmQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mzfr.me;
-	spf=pass smtp.mailfrom=mzfr.me;
-	dkim=pass header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=LUdS3qqJ;
-	arc=none smtp.remote-ip=185.70.43.20
-Received: from mail-4320.protonmail.ch (mail-4320.protonmail.ch [185.70.43.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=bairaktaris.de;
+	spf=pass smtp.mailfrom=bairaktaris.de;
+	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=MF37sjiA;
+	arc=none smtp.remote-ip=209.85.218.51
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F161E606A321;
-	Sat, 28 Nov 2026 13:42:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F161E606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mzfr.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mzfr.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D70606A321
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 14:07:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59D70606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=LUdS3qqJ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mzfr.me;
-	s=protonmail2; t=1795873372; x=1796132572;
-	bh=ogMgdvQpGGoQmIF6CpJpsTzdhhvKznudi12MCR8DEy8=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=LUdS3qqJlFipr12kmswDnkSKIYZ7A3cK2SUWnofdd36XskWCc5V6/u5ymTS8XF6uh
-	 WgNEHecJsk9n0KTLseA0t7Ul82TDmluqIRs+XnflrqZUhDzE+c3VD1NiZI1nCg462i
-	 2wp2LqYjxXwK9KCOJwK7s23NxvgnKXSK9rVm8cCv1925NwD586VLJYfE6+XlCEJJBf
-	 /A2gtEy4Ducqy44eoFP0/v8RduAMNKTvFz0VioPboK30o0cSvy5EwpjYcPrbc6g/mX
-	 ndSb0WI82pCpjEU6LvutKnnHLkbP7Yr9LieV1ZAnCeqxvKHLrGoaE0ZCBGBnOniTlF
-	 GHBXCTxGANY/A==
-Date: Sat, 28 Nov 2026 13:42:48 +0000
-To: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
-From: Mehtab Zafar <hello@mzfr.me>
-Cc: Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/splice: cover zero-count sendfile to a full pipe
-Message-ID: <20261128134221.64884-3-hello@mzfr.me>
-In-Reply-To: <20261128134221.64884-1-hello@mzfr.me>
-References: <20261128134221.64884-1-hello@mzfr.me>
-Feedback-ID: 37505322:user:proton
-X-Pm-Message-ID: 451ce0ddd8f4fc2bd8b6b3926ba0e6b606190288
+	dkim=pass (2048-bit key, unprotected) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=MF37sjiA
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c50d3ac6b51so1704332766b.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 06:07:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bairaktaris.de; s=google; t=1795874853; x=1796479653; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ayl4vL63SRDfFqUS4rNnHQY3+noL1p8yBbowjznB6G4=;
+        b=MF37sjiANiNc5l7el+TpsnAemm4aT5Yz8YXEq1+QSIfVHJqteVaW3QJThjfhppCsbz
+         DEB+8LLIBBCM/ETMhUqqgfRJzLicVxoAveGI34GdxvtzXmS9+vzeDqZWilbWkkzTyGc1
+         vRSKepvWKqaODJQGOmEN3y+ktKQ0u0ztya9l10Io1fcnunN7jj0cSGabKwxvtvwouOuS
+         BxmeB3Kl+tsYdUGdKspB+4mXyogKmVq+r2fhQ/ZDG1PAQgCjJfEcp887O8t+rZ4RB1cB
+         PDAuS3HIgfkg42ynlSxyTI+aGRgRoYKqfpLhW5ejYnehG7ZP3zKfeJA+jkMktIvlmCJ6
+         7USA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795874853; x=1796479653;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ayl4vL63SRDfFqUS4rNnHQY3+noL1p8yBbowjznB6G4=;
+        b=QEylNp3Vwc2EUN4zx+Ax+acsMeG55RfAFlVJP1PaFxOxse9ATxuiQFFTgcQ9A/msma
+         iFBiEqDqH9+FlqFeSynLxX3iNPP6Br/ZZrUzxRoKbMXWlCQU5jHm07p9B2lDHubZTTTa
+         JqL/toTh26vc2h3qJpn+Tb4ghaVQPmaAgzhAZkS0wpg/Xv7+6CSpVs6DayCTzGbkS0XQ
+         cioVFvGPFUxVpPMwaY0EdNOPQVoqJZLYVaHFtK4/hM4Oc73Hnxo1s9dOfKYJRlf2sJZV
+         9RF4XDbk7se7FwNkow58hG3x7WtX4Gynu4wETP07oQcFWKExR1GzLrXErF4gzXiM81cQ
+         RLXA==
+X-Forwarded-Encrypted: i=1; AL+hErE+hf64tnE3JwfLNvvHmS64ZO8LZdVNYu11ElkYDzqH6cTkEzXfnbZoL4Ipqt+gqy9vGWmU8BoLEpa+1CSqi9Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9WEYT06pYaPhyACRvFKh2AR1zL8WGv44jZHhHk2gz8Kf8/gfU0
+	5zQnqAGtIv761WDyYQbzwpRdYQbOm8zt7eVmK6WemL17ycW1UMVk/fKL95ZbBdQlPg==
+X-Gm-Gg: AZFdTZeLNsoqVLIygFWwrqJfq3qGu+VXnnjtYk6L4/j+liBuo/ozouMSby6joExOES8
+	4KTD9iQ0KtzBq3rQvE/0lqR2jSOCerd52IN60q1625daa8zEbn4D5Du5Vt1sHL1720k8OdHJ8Vd
+	tuBJ/HcqAqMHHKbS7B6jRGVr1p1fF4QjYb/YzrTiOnqZWrHpy0zbAwBsCMn/6xXRICtRct/tUxd
+	VZmHaSLrCyWk6Fr6+uGCE4zn/sC0B1mYDkofdBcxTD0hIruPIaiXOPRqIZchdM8NddQjHguZOou
+	KVfqq/Wsa72bqmM0sOrvDffBtEavTfhU8KXQtERLV67ByxpBRCQxfIx6uSB+W00HqnAGFGiN0NT
+	ysRlDkKGJMCQVxw1RQds0EbX9o7r6zWbBuB5n9x9VcDiyGIECOBDk8sxQ4cCO9Z6pDBYuULLrLH
+	/zfO4eDJWxeAlN7DFCC5QK8HMr591pclNTJfYXvk1ZjuWkXSljOz9LxqWmbOUz0QcmazDt02aiC
+	w97b8/8papFCjIinWf2owb9Q/bZ/ETXim0cZzlPhe2eRsAB4iKjzOsSRkWbojdoJnDzgbSRL85a
+	ywGp7QDt/gsKMuVqnpGezjHT7OVJKVpHG8s9mE3iLj06liupWxf9NmtvHZ/wRPU2rpWn1k9sdFT
+	9I7HqWhJ2CHczj1jB4p68S31yk0oMIQagJUUjQqAxR/H3PngTbuEPxPNb7w7QgBn2XqY9DwQNmN
+	cCXzO7xeLn4q0kc8nSDheYqjxFFZSRl1GV59gQOxmmqm3HyZ1P2vTzyAgxXA9QF+u7Kf9XTyK32
+	cMgVcRdeoaD01wdwa9MN7c1qaqH9MPxAdR6dud1DALgDPZGpSkHGc6FOzAsF+NaaR2LIaLdrbz8
+	CK5Rqgcn5phNykNhtx4hXj8sd2sCZBw/7LRPNGE2Y2d5UmV1+HcyHvkLS3Qrn3QAED+m5ccikQ=
+	=
+X-Received: by 2002:a17:907:6d22:b0:c45:219c:7fec with SMTP id a640c23a62f3a-c51319bc924mr2479907966b.27.1795874852496;
+        Sat, 28 Nov 2026 06:07:32 -0800 (PST)
+Received: from Desktop.tail070c67.ts.net (p200300f247083200a8c3fd0ab7d20fde.dip0.t-ipconnect.de. [2003:f2:4708:3200:a8c3:fd0a:b7d2:fde])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ad010a6sm990714266b.7.2026.11.28.06.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Nov 2026 06:07:31 -0800 (PST)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	dsahern@kernel.org,
+	idosch@nvidia.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	steffen.klassert@secunet.com,
+	herbert@gondor.apana.org.au,
+	richardbgobert@gmail.com,
+	ecree.xilinx@gmail.com,
+	andy.moreton@amd.com,
+	alex.austin@amd.com,
+	linux-net-drivers@amd.com,
+	saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	leon@kernel.org,
+	linux-rdma@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	izaiahsun@gmail.com,
+	zirajs7@gmail.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	ipsec@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 0/2] net: keep the TCP fixed-ID flags on the header they describe
+Date: Sat, 28 Nov 2026 15:07:32 +0100
+Message-ID: <cover.1795869698.git.julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,197 +145,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha256; boundary="------f76c3cbc752918eb2ddd3c2e8da20766fdcf629ed2a59e6cec25637707d44c07"; charset=utf-8
-
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------f76c3cbc752918eb2ddd3c2e8da20766fdcf629ed2a59e6cec25637707d44c07
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-From: Mehtab Zafar <hello@mzfr.me>
-To: Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org
-Cc: Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/splice: cover zero-count sendfile to a full pipe
-Date: Sat, 28 Nov 2026 21:42:21 +0800
-Message-ID: <20261128134221.64884-3-hello@mzfr.me>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261128134221.64884-1-hello@mzfr.me>
-References: <20261128134221.64884-1-hello@mzfr.me>
-MIME-Version: 1.0
 
-Add blocking and nonblocking cases for sendfile() with count zero and
-a full output pipe. Both calls must return zero without waiting for pipe
-space.
+GRO sets SKB_GSO_TCP_FIXEDID for a TCP packet whose IPv4 IDs do not
+change. Since commit 3271f19bf7b9 ("net: gso: restore ids of outer ip
+headers correctly") the flag describes the outermost header and
+SKB_GSO_TCP_FIXEDID_INNER the inner one, so every path that adds or
+removes a header would have to move the flags. None does, and a TCP
+stream that GRO merged and that crosses a tunnel boundary is segmented
+with the fixed-ID state of the wrong header.
 
-This regression test was developed with AI assistance.
+Patch 1 lets SKB_GSO_TCP_FIXEDID describe the innermost header again and
+replaces the inner flag with SKB_GSO_TCP_FIXEDID_OUTER, as Alexei
+suggested in review of v1. A header added in front of a packet that is
+already encapsulated clears the outer flag, and ESP transport and BEET
+mode with crypto offload, which keep the IPv4 header, copy the inner flag
+to the outer one. GRO of an IPv6 stream in an IPv4 tunnel sets the outer
+flag as it does for an IPv4 stream, and xfrm_output() no longer segments
+a decapsulated packet for a tunnel mode SA as an encapsulated one. Two
+flags cannot describe the middle header of a packet with three IPv4
+headers: software segmentation uses SKB_GSO_TCP_FIXEDID for it, as it
+used SKB_GSO_TCP_FIXEDID_INNER before. Patch 2 adds a selftest.
 
-Signed-off-by: Mehtab Zafar <hello@mzfr.me>
----
-The selftest passed 0/2 cases on baseline and 2/2 on the patched kernel
-in each of three fresh x86_64 KVM boots per kernel. The static test binary
-was built with warnings treated as errors; git diff --check was clean.
-With the generic FILE_PATH_CHANGES message ignored, final strict
-checkpatch reported no errors, warnings, or checks. Its final run also
-logged an spdxcheck.py traceback because Python ply was missing; the
-source and SPDX line were unchanged from the earlier successful SPDX
-validation.
+Trigger: a host with GRO on its ingress device forwards a TCP stream
+into or out of an IPIP, GRE, VXLAN or crypto-offloaded ESP tunnel; any
+sender on the network can produce the stream. Impact: IPv4 IDs that
+repeat across the segments of a tunnel's outer header, or that change
+on a header whose IDs the sender kept fixed; no crash or memory
+corruption. CVSS 3.1 3.7 (AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N). Until
+the fix: "ethtool -K <dev> gro off" on the ingress device.
 
- tools/testing/selftests/splice/.gitignore     |  1 +
- tools/testing/selftests/splice/Makefile       |  1 +
- .../testing/selftests/splice/sendfile_zero.c  | 93 +++++++++++++++++++
- 3 files changed, 95 insertions(+)
- cre
-ate mode 100644 tools/testing/selftests/splice/sendfile_zero.c
+The hosted Sashiko AI review of v2 2/3 of my "ipmr: forward GSO multicast
+packets" series reported the issue [1], its review of v3 the IPv6 and
+the xfrm_output() cases, and the selftest in patch 2 reproduces each.
 
-diff --git a/tools/testing/selftests/splice/.gitignore b/tools/testing/selftests/splice/.gitignore
-index be8266f5d04c..0b7414d3bbf1 100644
---- a/tools/testing/selftests/splice/.gitignore
-+++ b/tools/testing/selftests/splice/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- default_file_splice_read
-+sendfile_zero
- splice_read
-diff --git a/tools/testing/selftests/splice/Makefile b/tools/testing/selftests/splice/Makefile
-index 541cd826d5a5..b77c12767846 100644
---- a/tools/testing/selftests/splice/Makefile
-+++ b/tools/testing/selftests/splice/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- TEST_PROGS := default_file_splice_read.sh short_splice_read.sh
-+TEST_GEN_PROGS := sendfile_zero
- TEST_GEN_PROGS_EXTENDED := default_file_splice_read splice_read
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/splice/sendfile_zero.c b/tools/testing/selftests/splice/sendfile_zero
-.c
-new file mode 100644
-index 000000000000..b597420be687
---- /dev/null
-+++ b/tools/testing/selftests/splice/sendfile_zero.c
-@@ -0,0 +1,93 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/sendfile.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+FIXTURE(sendfile_zero) {
-+	int input_fd;
-+	int pipefd[2];
-+};
-+
-+FIXTURE_SETUP(sendfile_zero)
-+{
-+	char path[] = "/tmp/sendfile_zero.XXXXXX";
-+	char buf[4096] = {};
-+	ssize_t ret;
-+
-+	self->input_fd = -1;
-+	self->pipefd[0] = -1;
-+	self->pipefd[1] = -1;
-+
-+	self->input_fd = mkstemp(path);
-+	ASSERT_GE(self->input_fd, 0);
-+	ASSERT_EQ(0, unlink(path));
-+	ASSERT_EQ(1, write(self->input_fd, "x", 1));
-+	ASSERT_EQ(0, lseek(self->input_fd, 0, SEEK_SET));
-+
-+	ASSERT_EQ(0, pipe2(self->pipefd, O_NONBLOCK));
-+	while ((ret = write(self->pipefd[1], buf, sizeof(buf))) > 0)
-+		;
+Tested in QEMU (KVM) with the selftest, 22 cases, 400 segments each:
+- net (d5b89d55a322), the new cases, 1 run: 6in4 with fixed outer IDs
+  fails (40 distinct outer IDs for 400 segments, want 1), and so do
+  both ESP tunnel mode cases (390 of 400 segments carry an inner ID the
+  sender did not use).
+- v3 of this series, the new cases, 1 run: 6in4 with fixed outer IDs
+  and ESP tunnel mode after VXLAN decapsulation fail, as above.
+- this series on net-next (f89726ffabef), 3 of 3 runs: 22 of 22 pass,
+  and with 2 busy loops on the 4 vCPUs, 3 of 3 runs: 22 of 22 pass.
+- the v3 receiver on the v3 kernel with 2 busy loops on the 4 vCPUs,
+  the 12 encap cases, 5 runs: 60 of 60 cases lose 18 to 62 segments,
+  each exactly the frames the socket dropped, as on NIPA; the v4
+  receiver: 0 of 60.
 
-+	ASSERT_EQ(-1, ret);
-+	ASSERT_EQ(EAGAIN, errno);
-+}
-+
-+FIXTURE_TEARDOWN(sendfile_zero)
-+{
-+	if (self->pipefd[0] >= 0)
-+		close(self->pipefd[0]);
-+	if (self->pipefd[1] >= 0)
-+		close(self->pipefd[1]);
-+	if (self->input_fd >= 0)
-+		close(self->input_fd);
-+}
-+
-+TEST_F(sendfile_zero, nonblocking_full_pipe)
-+{
-+	off_t offset = 0;
-+	ssize_t ret;
-+
-+	ret = sendfile(self->pipefd[1], self->input_fd, &offset, 0);
-+	ASSERT_EQ(0, ret) TH_LOG("sendfile: %s", strerror(errno));
-+	ASSERT_EQ(0, offset);
-+}
-+
-+static void alarm_handler(int signal)
-+{
-+	(void)signal;
-+}
-+
-+TEST_F(sendfile_zero, blocking_full_pipe)
-+{
-+	struct sigaction action = {
-+		.sa_handler = alarm_handler,
-+	};
-+	struct sigaction old_action;
-+	off_t offset = 0;
-+	ssize_t ret;
-+	int error;
-+	int flags;
-+
-+	flags = fcntl(self->pipefd[1], F_GETFL);
-+	ASSERT_GE(flags, 0);
-+	ASSERT_EQ(0, fcntl(self->pipefd[1], F_SETFL,
-+			   flags & ~O_NONBLOCK));
-+	ASSERT_EQ(0, sigaction(SIGALRM, &action, &
-old_action));
-+
-+	alarm(1);
-+	ret = sendfile(self->pipefd[1], self->input_fd, &offset, 0);
-+	error = errno;
-+	alarm(0);
-+	ASSERT_EQ(0, sigaction(SIGALRM, &old_action, NULL));
-+
-+	ASSERT_EQ(0, ret) TH_LOG("sendfile: %s", strerror(error));
-+	ASSERT_EQ(0, offset);
-+}
-+
-+TEST_HARNESS_MAIN
+Changes in v4:
+- Target net-next, as Paolo asked; rebased onto net-next f89726ffabef,
+  and the Fixes: tag dropped.
+- Patch 1: set SKB_GSO_TCP_FIXEDID_OUTER in tcp6_gro_complete() for an
+  IPv4 outer header with fixed IDs in front of an IPv6 TCP stream;
+  segmentation numbered those IDs from the first one (Sashiko).
+- Patch 1: in xfrm_output(), segment a GSO packet for a tunnel mode SA
+  before ESP only if it is still encapsulated; a decapsulated packet kept
+  skb->inner_protocol, and its only IPv4 header got the outer flag
+  (Sashiko).
+- Patch 2: read the captured frames from a PACKET_RX_RING with room for
+  every frame of a case and fail a case on a socket drop; on NIPA the
+  socket buffer overflowed while the receiver was not scheduled (Paolo).
+- Patch 2: add 6in4 cases with fixed and incrementing outer IDs and an
+  ESP tunnel mode case after VXLAN decapsulation.
+- v3: https://lore.kernel.org/netdev/cover.1795284858.git.julius@bairaktaris.de/
+- v2: https://lore.kernel.org/netdev/cover.1794139176.git.julius@bairaktaris.de/
+- v1: https://lore.kernel.org/netdev/cover.1792857378.git.julius@bairaktaris.de/
+
+[1] https://lore.kernel.org/netdev/179182559332.434549.18294510093742639467@kernel.org/
+
+I used Claude (Anthropic) to help write these patches.
+
+Julius Bairaktaris (2):
+  net: keep the TCP fixed-ID flags on the header they describe
+  selftests: net: check TCP IP IDs across tunnels after GRO and GSO
+
+ .../networking/segmentation-offloads.rst      |   8 +-
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |   8 +-
+ drivers/net/ethernet/sfc/ef100_tx.c           |  12 +-
+ include/linux/netdevice.h                     |   2 +-
+ include/linux/skbuff.h                        |  12 +-
+ include/net/ip_tunnels.h                      |   1 +
+ include/uapi/linux/bpf.h                      |  16 +-
+ net/core/filter.c                             |   1 +
+ net/core/lwt_bpf.c                            |   2 +
+ net/ipv4/af_inet.c                            |   9 +-
+ net/ipv4/ip_tunnel_core.c                     |   2 +
+ net/ipv4/tcp_offload.c                        |   7 +-
+ net/ipv6/tcpv6_offload.c                      |   5 +-
+ net/xfrm/xfrm_output.c                        |  18 +-
+ tools/include/uapi/linux/bpf.h                |  16 +-
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/Makefile          |   2 +
+ tools/testing/selftests/net/tcp_fixedid.c     | 538 ++++++++++++++++++
+ tools/testing/selftests/net/tcp_fixedid.sh    | 472 +++++++++++++++
+ 19 files changed, 1091 insertions(+), 41 deletions(-)
+ create mode 100644 tools/testing/selftests/net/tcp_fixedid.c
+ create mode 100755 tools/testing/selftests/net/tcp_fixedid.sh
+
+
+base-commit: f89726ffabef1b08c52e6163b7ab94b0d5f15503
 -- 
-2.34.1
-
-
---------f76c3cbc752918eb2ddd3c2e8da20766fdcf629ed2a59e6cec25637707d44c07
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsCpBAEBCABdBYJrCtpYCRBCkCzGpVLSJDUUAAAAAAAcABBzYWx0QG5vdGF0
-aW9ucy5vcGVucGdwanMub3JnMPcH3sFolW/lVvgwPO2jiRYhBJC8NTVod5IV
-Rdc7/kKQLMalUtIkAACb7Af+Mqu5aPcpErgXgpPrmplUbYv+wVrTzeoKnapx
-f45DpNrLhBAETtQRDhwhad/u/jL9A95hw4zNjnShnLh02nNJpfphBbTY8Vqs
-TC9pyHb96cJyKg60xJytEx/f+zEFp0ztJswUuwdI6x8UfWmCkOAaiBhUeYZA
-YeYHcIl28eUbmgsLumFS3va46ZpzBjrfs3sec+e44Pl6Ow7TBh3YdB/0JlSK
-zI52B2OkPyLVVraCb8tj4OiJk5pAvA5ACcIwdFcpqb9W4VzOaIf+LsWMDvvf
-h6ontkwmMRt/NaGaQA6Od8buQRfmsGp43LsJDW2w3xJhV5ZTzyJN5ZEgOruI
-GO0w2g==
-=YIv+
------END PGP SIGNATURE-----
-
-
---------f76c3cbc752918eb2ddd3c2e8da20766fdcf629ed2a59e6cec25637707d44c07--
+2.53.0
 
