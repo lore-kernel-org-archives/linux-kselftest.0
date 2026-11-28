@@ -1,77 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795835668;
-	b=iiaB1KBGIHk9u+Y4rk8bBmT/Q/5CYzc1GJPX4JCUdt9TmRYZfFI+qWesrF+wdRRV7gi2
-	 rrAuc2IDyd5pwWZ+9fBMnu+8EGc/NJ1wlvEHBWeOjf4nQzHfXk2GiIgT+kqogWKALMeYr
-	 jwtREIS3HV8ItUmPA2TmNwp0sn99vePVzjg4f7LeO5tNo0UmMnAP+fA3fULZbeym1LZ2E
-	 my7y4Vpo2Xlimcpglxm0YnmnhvyQFIY/4CKzCI3vzaeRPJJFdS5IFaqRudyh6zptJM2Og
-	 oJZnV5HROF9NPO2KxZ5o+fMOxq3WrslzTO7v2y/S5oTaW+BW6FLflgofqGjpZ7eNl6A==
+	t=1795848643;
+	b=ZHOElebqsWauJX0c29lFkFfnji8ax8ID+Wf/cwBEH8SzjL2E7qIcdHzdcDJeUip0esAO
+	 teFU0vlM05mjcUUce37uC6HJwzv6eQnUwX3TZgKdU2ASBSoqfI6h3vlrfpOWjKBCJsnYT
+	 0ySUOF4C21eDdyOvRimZCb/5Q1ZFYQnZPPLaa11fg1UHljZ3ond/W+ZEn/+1Aj5Cdgize
+	 5R7hSLvleJTIdjUSeWZhb3xhNRjWJnxg6x4iljDkwGoGZOC98N7zDwJPxOk/PbEwF72WX
+	 Eg78sCsuN2VDZEpRR4WWOTkwhE5bL3+QO4RIZGTdFRuvm51HPypp72fp19lT+bPZNrw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795835668;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Subject:To:CC:
-	 References:From:Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-	 Content-Type:Content-Language:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy;
-	bh=KTKPmpu7cQqp9OdU/3u1dQB38lywShDeIEXeWARcue8=;
-	b=MPqxMfI0fBBE2RQAry8HdueMttpMAB8tG0U6rZ6TcNAKZglxAyAJZwt3GuJwd39g1JWB
-	 G78lmN3+cKdE/kTTmhqjYOLd+G6aonuOY4u6xyPZbn+VcisJrJ10Y3JzKS4cCbLPise+d
-	 t4vcn262Cr0sojy2vFq4khsPlRm2vOSVIXUkdAqlnn+P8wSTMyD/c8f6diQTCBUzgU34T
-	 5IVqWr5SiGdTZxOPOxwiHyGk3Vl8M8Oxpnm8gXBdGFWn5jHGoGu454lxUFy9HZkpZ1gqc
-	 bneGn/J9WoCXZWjcFurx/h72nawLgb5anzivLBDBKVl8dVgfzrQbM8LFyj5sDUE15eg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795848643;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=kOlVHY/wyAKwfQn6ewbvx7N2qcH8FDvBchLks/jIQ24=;
+	b=JagsF6YywKrpyFJeBAv/Cd5LFuMq3n4E/N3mUHDMd2nv1tjtJHwffMJp9QYRdo8tmvaB
+	 BxJJjx3X9J2tnJIhxrzakDSZ9VBjPfRMgE0etIJ1xMZ4wvdeKkOKKrXrT2IM78mmYXGSl
+	 lIGUR78OQzYRem3RHiNVKIvO6r5ABTylPhGaWH7VXzyhWEmDz6LYUl04VcDA4RByhrXsJ
+	 TgohTWzSdya3rdDNHcAWNYI2L1mHTivOyHooaz02hctLhJoIcgmZ9sBVsT3lI3rGrFxZR
+	 a+A5cP2w04+Vag/2OrMNtKPU1dB4yl0qmeIBW+PdkR2YTqoZTRe0r9KiKYbs+3gYTaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=na6IyvOs;
-	arc=none smtp.remote-ip=113.46.200.220
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=2OFUQRoK;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBF5606A31F;
-	Sat, 28 Nov 2026 03:14:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCBF5606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010E8606A32F
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 06:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=na6IyvOs
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=KTKPmpu7cQqp9OdU/3u1dQB38lywShDeIEXeWARcue8=;
-	b=na6IyvOsUpAhRUvw5wJnlVmOZKwpv4u7S6ZFdiwUVU7aJuyZBUXKW+lpp5xZRI3qEPLqWRbgG
-	kz0oEqWY6ghGjwbDxUbm/zLdpiPSbDMcSuFJ1tiNx4TAbHIzwwT82F2xecmJZ4POLREdUtv0zpK
-	0mx4Pxf0e4m+Ze/0a3pN7XU=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4jbwNB54phz12LCv;
-	Sat, 28 Nov 2026 11:13:30 +0800 (CST)
-Received: from whupemk100004.china.huawei.com (unknown [7.152.185.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 46203202E6;
-	Sat, 28 Nov 2026 11:14:17 +0800 (CST)
-Received: from [10.173.98.163] (10.173.98.163) by
- whupemk100004.china.huawei.com (7.152.185.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Sat, 28 Nov 2026 11:14:14 +0800
-Subject: Re: [PATCH v4 1/3] mm: memfd/hugetlb: memfd-based userspace HugeTLB
- MFR policy
-To: Jiaqi Yan <jiaqiyan@google.com>
-CC: <nao.horiguchi@gmail.com>, <william.roche@oracle.com>, <ljs@kernel.org>,
-	<vbabka@kernel.org>, <tony.luck@intel.com>, <wangkefeng.wang@huawei.com>,
-	<willy@infradead.org>, <akpm@linux-foundation.org>, <osalvador@suse.de>,
-	<rientjes@google.com>, <duenwen@google.com>, <jthoughton@google.com>,
-	<jgg@nvidia.com>, <ankita@nvidia.com>, <peterx@redhat.com>,
-	<sidhartha.kumar@oracle.com>, <ziy@nvidia.com>, <skhan@linuxfoundation.org>,
-	<corbet@lwn.net>, <david@kernel.org>, <dave.hansen@linux.intel.com>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>, Muchun Song
-	<muchun.song@linux.dev>
-References: <20261115160105.2507650-1-jiaqiyan@google.com>
- <20261115160105.2507650-2-jiaqiyan@google.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <3dbb102a-9860-f5db-28ae-801bdb3ae8c5@huawei.com>
-Date: Sat, 28 Nov 2026 11:14:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=2OFUQRoK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15EBB1F000C1;
+	Sat, 28 Nov 2026 06:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1795848642;
+	bh=kOlVHY/wyAKwfQn6ewbvx7N2qcH8FDvBchLks/jIQ24=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=2OFUQRoKI6wxHO5tDUu5d6QoZnR9uVTzbm81K+82RSRNJnkiTI0ok8i7sh3WvPGsb
+	 pNc/QOesP1xluqeoPN1BLIpfaYLOw4bJkAJeq1PpNia+j57AZ+iSK46F5BvZhpa2Z9
+	 6fLxplM035rDtgQuscWsEplqf8kat7r42dm92X84=
+Date: Fri, 27 Nov 2026 22:50:41 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Kurt Lin <lylin1023@gmail.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, David Hildenbrand <david@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko
+ <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, Muhammad Usama Anjum <usama.anjum@arm.com>
+Subject: Re: [PATCH] selftests/mm: skip hard dirty page-cache test on FUSE
+Message-Id: <20261127225041.504dba5029c3519b9ca8b6f2@linux-foundation.org>
+In-Reply-To: <20261123-memory-failure-fuse-skip-v1-1-19dcbda6e2e8@gmail.com>
+References: <20261123-memory-failure-fuse-skip-v1-1-19dcbda6e2e8@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,66 +59,86 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-In-Reply-To: <20261115160105.2507650-2-jiaqiyan@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100004.china.huawei.com (7.152.185.74)
 
-On 2026/11/16 0:01, Jiaqi Yan wrote:
+On Mon, 23 Nov 2026 01:58:43 +0800 Kurt Lin <lylin1023@gmail.com> wrote:
 
-Thanks for your patch. Some comments below.
+> Like NFS, FUSE reports on close() the -EIO that MADV_HWPOISON records
+> in the mapping of a dirty page-cache page, as fuse_flush() calls
+> filemap_check_errors(). Run from a virtiofs directory, e.g. in a
+> virtme-ng guest, the hard dirty_pagecache variant fails on its final
+> close():
+> 
+>   memory-failure.c:389:dirty_pagecache:Expected close(fd) (-1) == 0 (0)
+> 
+> Skip it on FUSE, as commit e14e52a7ce02 ("selftests/mm: skip hard dirty
+> page-cache test on NFS") does for NFS.
+> 
 
-> +static inline bool mapping_mf_keep_ue_mapped(const struct address_space *mapping)
-> +{
-> +	return test_bit(AS_MF_KEEP_UE_MAPPED, &mapping->flags);
-> +}
-> +
-> +static inline void mapping_set_mf_keep_ue_mapped(struct address_space *mapping)
-> +{
-> +	set_bit(AS_MF_KEEP_UE_MAPPED, &mapping->flags);
-> +}
-> +
+That test is broken :(
 
-Is mapping_clear_mf_keep_ue_mapped not supported?
+> --- a/tools/testing/selftests/mm/memory-failure.c
+> +++ b/tools/testing/selftests/mm/memory-failure.c
+> @@ -355,11 +355,12 @@ TEST_F(memory_failure, dirty_pagecache)
+>  	fs_type = get_fs_type(fd);
+>  	/*
+>  	 * MADV_HARD poisoning of dirty page-cache data records an expected
+> -	 * -EIO in the file mapping. NFS reports this error on close(), so
+> -	 * skip this variant.
+> +	 * -EIO in the file mapping. NFS and FUSE report this error on
+> +	 * close(), so skip this variant.
+>  	 */
+>  	if (!fs_type || fs_type == TMPFS_MAGIC ||
+> -	    (fs_type == NFS_SUPER_MAGIC && variant->type == MADV_HARD)) {
+> +	    ((fs_type == NFS_SUPER_MAGIC || fs_type == FUSE_SUPER_MAGIC) &&
+> +	     variant->type == MADV_HARD)) {
+>  		close(fd);
+>  		SKIP(return, "unsupported filesystem :%x\n", fs_type);
+>  	}
 
-> @@ -1229,6 +1259,15 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->  		/* The page is kept in page cache. */
->  		extra_pins = true;
->  		folio_unlock(folio);
-> +
-> +		if (hugetlb_should_keep_hwpoison_mapped(folio, mapping)) {
-> +			/*
-> +			 * Page cache keeps the folio until
-> +			 * filemap_offline_hwpoison_folio() dissolves it.
-> +			 */
-> +			folio_put(folio);
+I invented that store-errors-in-the-mapping thing about a million years
+ago.  It was never intended that close() report errors - that's silly
+because the file might still have gigs of unwritten dirty pagecache.
 
-There is a has_extra_refcount check below that may change the return value.
-Is it problematic to return directly here?
+If a filesystem is checking mapping->AS_foo at close() then that's
+quite misguided - it presumably works for O_[D]SYNC-opened files which
+were dirtied only by write(), but still no good if the pagecache was
+dirtied via MAP_SHARED.
 
-> @@ -2070,7 +2122,15 @@ static int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
->  		count_increased = true;
->  	} else if (folio_test_hugetlb_freed(folio)) {
->  		ret = MF_HUGETLB_FREED;
-> -	} else if (folio_test_hugetlb_migratable(folio)) {
-> +	} else if (folio_test_hugetlb_migratable(folio) ||
-> +		   (folio_test_hwpoison(folio) &&
-> +		    hugetlb_should_keep_hwpoison_mapped(folio, mapping))) {
-> +		/*
-> +		 * A kept-mapped HWPoison hugepage is
-> +		 * no longer migratable (cleared by
-> +		 * the 1st error), but it is still in use
+The way for userspace to check for errors is to run msync() if needed
+then fsync() and check its return value and that's what we should
+(self)test for.  And after fsync() has read and cleared the mapping's
+AS_foo, a close() should return 0, so we can selftest for that also.
 
-hugetlb_migratable could also be cleared by folio_isolate_hugetlb. So when a kept-mapped
-HWPoison hugepage is no longer migratable, it still might be the 1st error.
+And boy you sent me down a Sunday (then Monday) rathole with this one.
 
-> +		 * and should/can go through same handling.
+I ended up with one nice clean patch for memory-failure.c which makes
+it work for all well-behaved filesystems.  Then eight patches which
+pile in hacks and workarounds for all the weird/broken fs behavior I
+hit.  The end result is that this poor little selftest gets "pass" or
+"skip" for all Linux flesystems.
 
-The folio has already been handled in the first pass when 1st error happened. Why does it
-need to go through the whole process again?
+I have fixes for a few filesystems here so if maintainers merge them we
+can remove some of memory-failure's hacks and workarounds.
 
-Thanks.
-.
+I'll hose all these patches out in a sec.  Probably it'll be best to
+fold them all into a single patch.
+
+
+
+There's some really bad behavior in there!  Responsible and careful
+userspace which cares about its data should do:
+
+	write(fd);
+	err = fsync(fd);
+	if (err)
+		/* eeek, we lost data */
+
+But in some cases, the kernel is lying to userspace.  If data was lost
+due to dirty pagecache memory-failures or even to plain old device
+-EIO, the kernel will report "all safely written back" when in fact
+userspace just lost its data.  This is a fundamental data integrity
+flaw.
+
