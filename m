@@ -1,103 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795826288;
-	b=hyOg/s82DzdDD+Qo+lTnEXiGp3bq2QNjw9GeNgHFHfgZNYBo/9yKScr5LIIFDCOLkM+u
-	 dVnIcIT36ExG5IaWXQroH1XJRcG8AmD+dhmTkiKwjCMICkg6eBE2yA2VsVXXDGmxxyAFr
-	 RdqwI5WbtrDIac4/vhMDBCWxjvihs54eVcbCQl1RTb54paVKkn86fAys2PfKuYlYtUIDN
-	 3PVGR2wSEqMzjaiFWPWT9Y8tlKSu7/E2D8JLt8Zwf1floNrZjHOkkymKLha2oSntpaZIB
-	 Bc+b/ZiVfjY6HhxUKfTS3olKyn1ehcGrN6FXtUQ6g8d+OycwBIOu0gUdJ7FW2F7cTmA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795826288;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=YOL0rHwI3wzAxiSlMAGGk9NJU9DJm9wEtDs3FMJdkxM=;
-	b=ZcbbDUHLJO051C0LmjnAOPBJGP/3ToJAKjWjVZe822XThsVnBoNwpgyfshkItXG/ZPmx
-	 vrbhvU1u0TzjUnZxH5AhmKiYAfU+MYycgwcM7lKK0NetOkJnZiyED3MiS1lzutrakheYe
-	 CmDYLsp2a7NlMAVU6VJKo8pceHh/Rhp5rSqXtwXzBHe0xHVfA8QUdRa/eohR4nl99CsP/
-	 puqJM/G1PxkzlYkdepgQbwHdBB0kSCsQWfbjIMUkoxLd3YSpTXyzGCOm4ab7bEKv4KBOq
-	 SdMKBCflv8OE4P2uKRDxEJyPY+7GxCzVrkOzWvnMdMI6ppfdrLKCHAF+A9DVoXp2PDQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZKquqcb5;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795826511;
+	b=QzwfhnozHsBcquHa06DmD2n92h9Yyyg4jnLi9qKFIaEyGQX1bhJk0hN2GnCn+0EsknR9
+	 TwwolsfrweEAZzvPvbbiU5SJ4YOerzbeUcnFZ6/RGXiiGAyj9G2UWQqwGdLuukWGCWsVO
+	 QnpTvtdEtODW38jhkyOazaG6/VJqk+yWjFj+2cwIEv0P0PiZtiQ+zApk1DrQ/ocEQDEG8
+	 K9+TaewgbYZRKrYZvY95cHIiJEXJoAkuZjHokXE7FlDrsfqxGhRfREW8kVoeGA1icAQG6
+	 yATpfLHrcboz+lWAbtDEajuG7+If9txKHGAypqCOZx5DoXqjzfq3RVfPgvs5a5u+0ZQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795826511;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=sxK9aNeAgpmnRNl1nqPKEZb/ERh5H2YTIzE4eyPp30o=;
+	b=pwPOsTg24gXdy07qc6ER1wjz28yHv/lY82A7JFPsy5JH0+3gtkFJxXn5uTNjNc0vkRL6
+	 j0jxml75/RyjneWXPbWI+jqxdTV2OE5JYExNW33vFSR4Ee9EWiwSpCWDW3Wpk8NQmDqwK
+	 WTlDoxx/DOlrIFw8Rz2ubHoy+Yp5ZaTojPfAaBvneyaNH5CZJyIJQ1+4am/E2HnBoHhtH
+	 6AUPa2BFjTP93m8v44KCHVxGPEsYh9PBy/IvrPm9f43lZ2ZTh6dkjCFHl5gqgrQo3PJAR
+	 Yxd9dl98P6q5vEbjMfTl8oaAd/He0G2PruIo2JIk69khQ6QvIMxlsIw6RGNTBbO1u9w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QHQ+i9QJ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC7606A31E;
+	Sat, 28 Nov 2026 00:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QHQ+i9QJ
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795826510;
+	b=SLLIFit7bMQ6hlsrFY9lMBeULFrRwxHShm1GmZ44aCrgA3YAf3N8+empJYv/6hP4evHa
+	 je5YDS/F8q2dzVZ+JhyZX6enT5Uz1IWMEgV9V1Ea8S+Y0U5dbFC4sn4PsHAUU1uQrLCAU
+	 0lvzwbat6GrVdQXwJkOLPA4g7eiRWgiq2Z8vjgjZgi/PsOwuiW2uTikadIkIVSq7ODWht
+	 eSVitdjLNrsD79qIsd7BXQj0248KBiln5GyiQd5CjbKXtj43rWCll/YoBYPznAuqW4bXL
+	 ZvSg7z5gsQAv1jqnrig/zb0lnm6TxXZV1FoSRWixJWZXYdPZMdGFM0M/tiE3UF69ImQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795826510;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=sxK9aNeAgpmnRNl1nqPKEZb/ERh5H2YTIzE4eyPp30o=;
+	b=RqdvrZmb60PIKm+FFmxx9PaAwpzcyDMNL/6fXJltwiewslkpQE1kk29r1SEaggLPk2dK
+	 YNodziu7KGhXhmUWxk+P6MME5I/inEU+H5QT+vVgu3NfLYCkRwmRAMbw+iRA3voaV0BTp
+	 ZORDbYbRNHRfu8LQnMkoeW2jeH9zsSu57yCtgoxz30qBhRX2n6BKa9FpoBYaLAWv429n4
+	 MIP1i5ZKBBLYIq+bsKCTpKB99V4dxLUebOoG8pVThFgEiTEywCzBzeL9375PGTi1Q1NwW
+	 TkEc67mwPRl4HXXKCx6iIjtDCx4NqfiRmTd/EMl3lswR+Tx8g0X5c2+Ea396UnShANQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36523606A31C
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 00:38:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36523606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZKquqcb5
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3b44bdcea8aso4985095a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 16:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795826287; x=1796431087; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=YOL0rHwI3wzAxiSlMAGGk9NJU9DJm9wEtDs3FMJdkxM=;
-        b=ZKquqcb553C1STK9QTgdXfRyAWUuYTT0NYDXAbFNELVbvDZVCnsYPo1TIdFhNon5XC
-         kg+l1yQya+4Eu5DNiTvrPG7CssM5yQFpVMgmNj5wsreMe0dXvFPd3fe11juBaBgNB3BM
-         dMyd2o7qTGDHVEem/5/uht7ZikH591ADQjGtfG9unKEU0KzXTHrcutyDa6X8I0oiJckz
-         DlXPu/49ZuqhLHOPnUDJG0VHqml3u3ymKLeUBnSB2+YPsEVQY8usntbthQCTds7BmZAi
-         b2E/Q7QRhBklENM9luDICJmLTN2PM0+S3OaVARAWjToxNsNm8tSKk/iUS8DFcqzubrby
-         SRmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795826287; x=1796431087;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YOL0rHwI3wzAxiSlMAGGk9NJU9DJm9wEtDs3FMJdkxM=;
-        b=aoZy8XunDf2lPF2vRepo0V29jz4xzrnTm83pYHQKMxuu2I+ovicoF0PsUMFkvvdqsk
-         8+nf1kijgIZB+xusHCjs22PYvOY+8aVQZ+dbxu9HuVNztPH1zObsshfrClS9YvLeOALq
-         NgxDkFep7BEaxtNDRUCXUuvs866givG/3jGrNnFYYvN8S4JpILHPFIYaiW4qH5cSfdJV
-         92vtaQPylTn6GK0LMNmBYr16zk7r7nnR5/JqlpBmF5Lypu038NI6do3oxB5xMx6i28d2
-         rNfVOOsXO915rIDgfm/pMyBMLQA+nlqzv1RRwebKREzANZ2iRZrkvjwIWDDhQz3UsXtY
-         3IBQ==
-X-Forwarded-Encrypted: i=1; AL+hErG6kcyF281zPQtvBeZMjfhAB+OYmJ60ujN+23W1JBiHea0uFUdzb94EY7TxqQParVHsGZNvMRqxSKmtHfKldIs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z97+RQ+xPLDSjw6nljmtlHZeHK1koEt9eJSTK2jdfLA1u2dpWYj
-	pwXeP5ukR/gINJCg659c/8Ln8y1cYaWn6OYv1/HkQkc6Jgqo86NEXooY
-X-Gm-Gg: AZFdTZfydu2X/XHy/AsgaTjYWxWgYlYbkIIDZ9P0gaaCYTmFWn8GSFESHJZ32eJgO4Y
-	IVjgB4GecYWNnwaPho2zSiju3HILMcQBBeAtnzAdUSjq70D3p9ikkY7v4xOQ58XdcNLXXepK8RR
-	PA+nHGKrEU24DUzXlIWm7n+gl1Tiv2wuMZJ+BCFa7mRt6DboTNR2coPFP6O3ZgknqFUtg7W95Zo
-	f04USY0rzljoAZ4wBlGMoNIS7xb9Fs7GoKEMMay6PNVT8v/jG1XJp60qYZMvWQM28b0kQzX4+F5
-	wZsgpWKvYVyCKYo8suJ8PkcOGFDeaSVKzKM19X2UMWkXbRd7tVszjG5mTIBi8ygB3aanPFP6PDd
-	r8prmqCnAeetEN9aP+T/BSCxEFxoynfxxiDSNPD3zih8g1ihrGWSniFaGMYOWQQ90+1aKmjJ9OX
-	cP4XMxhzvEb2EmkPHImAUrjX8LJS19vhMXcCMitBgaCp7+xDIZBvNlffl4JmQArYGlWuFxoFrHJ
-	bNbXFRsF/4+B8N1c09IkBXF+AEgmM4ogPv+pXnS/UbZT2btEmZwZNkgRUNiIJIOVa78spe5al92
-	24iJD5VsP23rMeYFGWdbMKSQF5GOMAGSVwW1MXFhduttW5P5SHzS44bPL8cMYr8OGbq8pOVEvGj
-	tp6gZmQdokC+p9vK2K5cOQBc/fXNRljTTpA==
-X-Received: by 2002:a17:90b:2f8c:b0:3ac:9ed8:f301 with SMTP id 98e67ed59e1d1-3b41c93fac6mr17486167a91.30.1795826287365;
-        Fri, 27 Nov 2026 16:38:07 -0800 (PST)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40f4312dfsm42125157a91.3.2026.11.27.16.38.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 16:38:06 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 28 Nov 2026 00:38:06 +0000
-Message-Id: <DN6FAEWV4D25.2PLLOZNKR0L1X@gmail.com>
-Cc: "Jiri Pirko" <jiri@resnulli.us>, "David S . Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Willem de
- Bruijn" <willemb@google.com>, "Simon Horman" <horms@kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, "Victor
- Nogueira" <victor@mojatatu.com>, <stable@vger.kernel.org>,
- <syzbot+0054fed3dc9085390f51@syzkaller.appspotmail.com>, "shaos"
- <shawnq1@163.com>
-Subject: Re: [PATCH net v5 0/2] net/sched: act_gate: bound the cycle time
- and start time arithmetic
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jamal Hadi Salim" <jhs@mojatatu.com>, <netdev@vger.kernel.org>
-In-Reply-To: <ACT-WEXM.v5.r0.20261127063407@mojatatu.com>
-References: <ACT-WEXM.v5.r0.20261127063407@mojatatu.com>
-Content-Transfer-Encoding: 8bit
+	by smtp.kernel.org (Postfix) with ESMTPS id E75301F008A0;
+	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795826510;
+	bh=sxK9aNeAgpmnRNl1nqPKEZb/ERh5H2YTIzE4eyPp30o=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=QHQ+i9QJVN5GhJ0TVCPzxUcYHWrltxckQFtUUBWKUmKChu2Rhwykfr7Ic1cd9HTrl
+	 ZJDV9RdLr4PaSPr69S3Ps37V767WQMiL4Qx/jB4xnYB6h0GsY0HX36sQqHdlVHBOAx
+	 geVqas1zgjhKLI/aJTK4eb+9lZcQCv4ZPozp7HCZ1HIAX5Va2OMPCsZbD/5pCqp58g
+	 rsIAABrNEK/19ScWlvXUHn61BwflbRm/ZlOY+lbaVVqC5TmVhUV0B2wG56CSGrHhjA
+	 3UhAR6OOHUkIK/qwSbAHBaraH+0vtPTt9t67Q80WD9pmEafXDJ3f/PPitMRF2h9Ssl
+	 HJN/LceaQ1Ksw==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 48A3A4DEC9;
+	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
+From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
+Subject: [PATCH net-next v2 0/5] lisp: add a LISP (RFC 9300) tunnel device
+Date: Sat, 28 Nov 2026 01:41:32 +0100
+Message-Id: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,12 +83,138 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADwjCmsC/32NwQqDMBBEf0X23C0mlag9+R/FQzSbutBG2aRiE
+ f+9wQ8ozGWYmTc7RBKmCPdiB6GVI88hG30pYJxseBKyyx50qY1S2qCfBT9LTEL2jS+OC64Kh6q
+ 2o2kbl1uQp4uQ5+3EPiBQwkBbgj4nE8c0y/f8W9WZ/0dnlVjfGm2rYfSuHTovRFcv0B/H8QPCz
+ TqwwAAAAA==
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Vincent Jardin <vjardin@free.fr>, Donald Hunter <donald.hunter@gmail.com>, 
+ Nicolas Dichtel <nicolas.dichtel@6wind.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>, 
+ Danielle Ratson <danieller@nvidia.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=4327;
+ i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
+ bh=3QIbv24rPwGBZWn9xkNpTTUXhCedhThkPImwKnrDxv8=;
+ b=+M8pAoNkv4l30kgyWMv8hMT7VICYTTzvk8BqRtpPTRxtXemyU8UlqJ+AJYXn7ADWiQ+N1X6vr
+ MfzW61hEDXmCMRQXr1wwNaWmCOqLwLTWYWRB7pZas7DFDfkYM/PnLU5
+X-Developer-Key: i=vjardin@free.fr; a=ed25519;
+ pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
+X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
+ auth_id=871
+X-Original-From: Vincent Jardin <vjardin@free.fr>
+Reply-To: vjardin@free.fr
 
-On Fri, Nov 27, 2026 at 03:43 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
-> Patch 1 bounds both attributes at KTIME_MAX and computes the next
-> boundary with ktime_add_safe(), so an unrepresentable expiry saturates in
-> the far future.  Patch 2 covers the accepted upper bound and both refusals
-> in tc-testing.
+LISP (Locator/ID Separation Protocol, RFC 9300) carries the packets sent
+to an endpoint identifier (EID) over UDP, to a routing locator (RLOC) of
+the site of that EID. An EID prefix and its RLOCs are a mapping, which
+the LISP control plane (RFC 9301) provides.
 
-For the series:
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+This series adds the data plane of a LISP router (xTR): a tunnel device,
+link kind "lisp", for IPv4 and IPv6 EIDs over IPv4 and IPv6 RLOCs.
+
+A mapping is a route. The device takes the RLOC of a packet from its
+tunnel metadata, which the lwtunnel encapsulation of the route
+or of its nexthop provides. A remote site is a nexthop, shared by its
+EID prefixes:
+
+  ip link add link wan name lisp101 type lisp id 101 local 192.0.2.1
+  ip link set lisp101 master site up
+  ip -6 nexthop add id 1 encap ip dst 198.51.100.1 dev lisp101
+  ip route add 10.2.0.0/24 vrf site nhid 1
+  ip -6 route add 2001:db8:2::/48 vrf site nhid 1
+
+Design:
+
+- The kernel has no map-cache and it does not resolve anything: no
+  upcall, no state that the packets of a host create. Its tables are the
+  routes and the nexthops, which a control plane in user space writes,
+  as it does for any other routing protocol. A packet without RLOC ends
+  up dropped.
+
+- A remote site is a nexthop object, not a device: it has been designed
+  to scale.
+
+- The common UDP tunnel code is used: its sockets, GRO cells, GSO, the
+  dst cache of the encapsulation, and a zero UDP checksum unless the
+  encapsulation asks for one.
+
+Note: a LISP driver was posted to netdev back to 2014 and was not
+merged. It had a device per remote RLOC and IPv4 RLOCs only, and a
+map-cache that traffic fills was not accepted.
+lwtunnels is an alternative.
+
+This design shall allow routing daemons like FRRouting to support LISP.
+
+Patches:
+- patch 1 adds the driver, drivers/net/lisp.c, and its link attributes
+- patch 2 describes them in the rt-link netlink spec
+- patch 3 adds Documentation/networking/lisp.rst
+- patch 4 adds a selftest, lisp.sh
+- patch 5 adds a scale selftest, lisp_scale.sh
+
+The series only adds: no existing code path is changed.
+
+The lisp support of iproute2 is a separate series, for
+iproute2-next. The tests are skipped without it:
+
+  https://lore.kernel.org/all/20261127-iproute2-lisp-v1-0-df8ea175bc06@free.fr/
+
+---
+Changes in v2, based on CI's checks:
+- 1/5: fix to 80 columns
+- 4/5, 5/5: fix shellcheck report
+- 4/5, 5/5: wrap the lines to 80 columns
+- Cc recent contributors of rt-link.yaml
+
+Changes in v2, based on Sashiko's review:
+- 1/5: link an instance device again only after an RCU grace period
+  since it left its chain (lisp_stop(), lisp_open())
+- 1/5: fix build without CONFIG_IPV6
+- 3/5: device with an instance ID that is down leaves its packets to
+  the device that collects metadata
+- 3/5: rp_filter is the larger of the value of "all" and of the device,
+  ip6tables rpfilter or the nftables fib expression for IPv6
+- 4/5: flush the path MTU of the host on each pass of mtu_test()
+- 5/5: churn_test() improvements
+- Link to v1: https://lore.kernel.org/r/20261126-for-upstream-lisp-v1-v1-0-7382a4bcfd9b@free.fr
+
+---
+Vincent Jardin (5):
+      lisp: add LISP (Locator/ID Separation Protocol)
+      netlink: specs: rt-link: add the lisp link type
+      docs: net: document the LISP devices
+      selftests: net: add a test of the LISP devices
+      selftests: net: add a scale test for LISP
+
+ Documentation/netlink/specs/rt-link.yaml  |   35 +
+ Documentation/networking/index.rst        |    1 +
+ Documentation/networking/lisp.rst         |  159 ++++
+ MAINTAINERS                               |    8 +
+ drivers/net/Kconfig                       |   20 +
+ drivers/net/Makefile                      |    1 +
+ drivers/net/lisp.c                        | 1040 ++++++++++++++++++++++++++
+ include/uapi/linux/if_link.h              |   12 +
+ tools/testing/selftests/net/Makefile      |    2 +
+ tools/testing/selftests/net/config        |    4 +
+ tools/testing/selftests/net/lisp.sh       | 1139 +++++++++++++++++++++++++++++
+ tools/testing/selftests/net/lisp_scale.sh |  542 ++++++++++++++
+ 12 files changed, 2963 insertions(+)
+---
+base-commit: eb6d6c80d35449c27471b1874f13066c09a8964d
+change-id: 20261126-for-upstream-lisp-v1-b47ac698d026
+
+Best regards,
+-- 
+Vincent Jardin <vjardin@free.fr>
+
+
