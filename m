@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795859322;
-	b=T6R5LGWulepMNiQzgwCMNzPLR86ZdwenmMv6ky+sKa7fgjsW+8hZ/mORZoyEURpK6R/N
-	 70lFhX+5fCfnj60uVdILLcV1bCib70ldnw5GS6SQ3tVz2EUVcxw3R2DJOlpReu5mk8heq
-	 zFADIPAgXVHbfSF0oltMuGpTwnWVU+JyJIHiuGdKhDoMzVU9Bzm63wtpRHivG3YWBxvbp
-	 D8mcSZL/I/MNesYs6ib/rjMGeM1yDUAZ42F2/cDkbjnHDZZyTS0+BdMuSM4t37k4trANJ
-	 xU2uhmb2z9mmmTJiww9ncPvKwVmQhcd6dSNwmUVYmmMcs22hHGNRZ38hEYVUxzXZkEw==
+	t=1795859317;
+	b=f0Vq/f8cKa+tpxMDGzT5YXSU2GK0xvYV6iTL9Xp1iuxOQPW5F5CLUJHllWqV6qig6byx
+	 lxbW0JiNO49D6LCb8bJkw6IE0e1Kq7z2K3wlbaNluZqDut7eaG7f6IVe3/4SVRPLGLm8c
+	 076u+tV9iliUa/Qhgz3YTW2VO6k1FVzPknOjKHKnEx0SpArN2Rz5vli7gvhbykVHrFcZv
+	 vwvkMyhFmWzYJ9xXMwZ9akt8uDEwqsi+DmSCSvjGdfReBwtqgK3VZurzhzhsh6QKXELEK
+	 xtGTHS6dOID2FuEamkAPLhj3J/iaiVkz68lUWKV5BfvmOIN/tGMa+8o46LU7iLWZWEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795859322;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795859317;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=6ifWf4j1d3G8lIodYGxBjWABGXQx7X8VTWGws64IYAE=;
-	b=yKUWhfpDwuavwzig5j+2tMf/IPsjboCBKZBiqy9/8QPpDrJ/Yzg+pSqjasU/dZWCOwCX
-	 T5Ll2XRSXc8jhSSU/4w3vuwBNo8sPrO5MqseAEdZIv54bKEm1JHbweN8ANfwhynh68LIH
-	 riiCl2A1Covmkod01uOsLmTtUHBZJTnJ8vHPHOaIrCPT1mcYjIkxM3dZ+RzuOiVTf01L5
-	 x2CxGjZpmyKmvL3JUnMzhkk84+sjhgrYv7JHdGNULLZo7PWwjMP9jjWAKKVi/DJgDUeEp
-	 IDOq0kF7JQBghCC3tVvG2d+bEzYBKrOH9YI4y2HOumJkHbBKJOhtLedNFNhieoqMbHg==
+	bh=RZs+hLB39RJoNYD8vJAf6edaYJxDfKubtPKj/+Sx+cY=;
+	b=XvT3kekulUAQL1K2EycXBBpyah70U5uKvVAAL9cS5pelUrM+WfmiUt6xfybEX10LEkVN
+	 oDZ7uu7m7dmWiAYVIAu+53ez/XCIaM/7fTTEhX6ySH+Od1kSe7qmqBqN39iDUMbRB9N5e
+	 zOJxQIe9HyoWz+yvpK5WmsC7e3hfKGq+sf4mROVyOZXVVUWKpBaa5ieO/2cgD44BKRKXS
+	 9d0ilAGmgisU5TcfG48h5P0O9+uyWGL+UIb1mSmSaUjrjspbKHZoWRmSG0ihc13bfabDo
+	 YNNCTJ4oiIknCx8vmUWdGsf9ijcDwQ1KjqexWXlhT3NuGH39gUQDdWljcLYMYJ8txJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zxh8EQ5O;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K011nthr;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C280606A6AB;
-	Sat, 28 Nov 2026 09:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3888606A31C;
+	Sat, 28 Nov 2026 09:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zxh8EQ5O
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6801F00939;
-	Sat, 28 Nov 2026 09:48:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K011nthr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60711F000C1;
+	Sat, 28 Nov 2026 09:48:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795859321;
-	bh=6ifWf4j1d3G8lIodYGxBjWABGXQx7X8VTWGws64IYAE=;
+	s=k20260515; t=1795859317;
+	bh=RZs+hLB39RJoNYD8vJAf6edaYJxDfKubtPKj/+Sx+cY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Zxh8EQ5OotkVkJR4KOzWl6P8qqSAz8YGdwAt1FbMjYE+ifp1NsF5ZJ+drPh8YgZl/
-	 QRBJfU3l5MFhHxaU2xI1uederw78aivdTG6+rCZV959mTTwCWJnvzXpEvdKJLNOS3Q
-	 X/vRruLquKBh7RpUoY+tmOfpuzqHyrYzRCLHTcMJHJB5jbX2Qjv5VuJL+nmU6l0jA1
-	 V7p/fb4zcLwivAJu4VSGiRemrTNHW1icZeLbptxoqEQXBqmVumOL4tz+BN9oJPioQv
-	 YnJP2J7JDdHyE8m8CTjJ3KLHqqdgrkAXsK44lcPLbaIki8a4EZ4Pd+3GHx0a9jpHuc
-	 8FTIm5MDDDqVw==
-Subject: Re: [PATCH net-next v3 08/12] amt: receive the AMT gateway control
- plane over IPv6
+	b=K011nthr42Ejz0hTEP8cH2ToftWhnQiYQV9ud+pgvfrrueOqb18dPkleGKHOQPv4Z
+	 eobS/zgM3teU9+Sk5m9+GpXcpVgjJCyV1xloKtIku2bNa8C9LBqGU7EiMBnfhxCSKm
+	 vQUUczv1VukkXP74dYKM9BpyAqW7N6eWpX6vIKHv36QCSXx8imHb4DdDkFH7JxuIss
+	 TLYNnj1gCZyNTUoet+GHnDXEIZlCOqFfuXsvk9XIpaChAUiJfc7lBoES+ObJHWwyur
+	 U2HV0fc6ylTPAO1EUFgWrKnixK868OPws2nbFvsy2ymWrVJk1QSucVxRbB7LBCxWVX
+	 80jz41Istrv9w==
+Subject: Re: [PATCH net-next v3 03/12] amt: key relay tunnels on a union
+ amt_addr endpoint
 From: netdev-bot+sashiko@kernel.org
 To: omar@blockcast.net
 Cc: ap420073@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
  horms@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, willemb@google.com
-Date: Sat, 28 Nov 2026 09:48:40 +0000
-Message-ID: <179585932045.3135.13937242522656754802@kernel.org>
-In-Reply-To: <20261127094703.3025517-9-omar@blockcast.net>
-References: <20261127094703.3025517-9-omar@blockcast.net>
+Date: Sat, 28 Nov 2026 09:48:36 +0000
+Message-ID: <179585931643.3135.2851219283955870732@kernel.org>
+In-Reply-To: <20261127094703.3025517-4-omar@blockcast.net>
+References: <20261127094703.3025517-4-omar@blockcast.net>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,146 +71,144 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The new comment in amt_rcv() (drivers/net/amt.c), "IPv4 input
-  drops a 0.0.0.0 source as a martian, but IPv6 input delivers ::", is…
-- [Low] On an IPv6 gateway, amt_dev_xmit() reads
-  READ_ONCE(amt->ready4/ready6) without a lock and then calls…
+- [Low] The commit message misdescribes the pre-patch behaviour on an
+  IPv6 outer transport.
+- [Low] The commit message says both `amt_update_handler()` and
+  `amt_request_handler()` pass the outer-source snapshot "to…
+- [Low] The patch changes what the per-source tunnel cap counts.
 
 --
 
-amt: receive the AMT gateway control plane over IPv6
+amt: key relay tunnels on a union amt_addr endpoint
 
-This patch lets an IPv6 AMT gateway accept Advertisement, Membership Query
-and Multicast Data over an IPv6 outer header. It takes a snapshot of the
-outer source with amt_outer_saddr() and matches it through amt_from_relay().
-The learned IPv6 relay address is published under a new seqlock, and the
-IPv6 gateway socket now accepts a zero UDP checksum, but only for Multicast
-Data.
+This commit stores the relay tunnel endpoint as a union amt_addr instead
+of a __be32. It also adds the amt_outer_saddr(), amt_relay_mac() and
+amt_same_source() helpers. The per-source tunnel cap now counts IPv6
+sources per /64, and amt_v6() is still false for every device, so no
+functional change is intended.
+
+> A relay keeps one struct amt_tunnel_list per gateway endpoint and finds
+> it by the gateway's IPv4 address, stored as __be32 ip4 and taken from
+> ip_hdr(skb)->saddr, together with its UDP source port. On an IPv6 outer
+> transport that reads the traffic class and flow label of the IPv6
+> header as an address, and the field cannot hold the gateway's address
+> anyway.
+
+[Severity: Low]
+Is this description of the old read accurate?
+
+In struct iphdr, saddr starts at byte 12. In struct ipv6hdr, version,
+traffic class and flow label take bytes 0-3, payload_len bytes 4-5,
+nexthdr byte 6 and hop_limit byte 7. The source address then runs from
+byte 8 to byte 23.
+
+So ip_hdr(skb)->saddr on an IPv6 header reads bytes 12-15, which are
+s6_addr[4..7] of the IPv6 source address. It never reads the traffic
+class or the flow label.
+
+The conclusion is still correct, since a __be32 cannot hold an IPv6
+gateway address. Could the reason given in the message be corrected?
+
+> amt_outer_saddr() copies the outer source address of a received message
+> by value into a zeroed union amt_addr. amt_update_handler() takes that
+> snapshot before pskb_may_pull() and iptunnel_pull_header() can
+> reallocate the header; amt_request_handler() takes it after its only
+> pskb_may_pull() and pulls nothing more. Both pass it to
+> amt_tunnel_lookup(), amt_tunnel_get_or_create() and amt_update_tunnel().
+
+[Severity: Low]
+Does amt_request_handler() actually call any of these helpers?
+
+Only the Update path does:
+
+amt_update_handler()->amt_update_tunnel()->amt_tunnel_get_or_create()
+    ->amt_tunnel_lookup()
+
+amt_request_handler() walks the tunnel list itself instead:
+
+    list_for_each_entry_rcu(tunnel, &amt->tunnel_list, list) {
+        if (!amt_same_source(amt, &tunnel->addr, &saddr) ||
+            READ_ONCE(tunnel->dead))
+            continue;
+        per_src++;
+        if (amt_addr_equal(&tunnel->addr, &saddr) &&
+            tunnel->source_port == udph->source)
+            have = true;
+    }
+
+It then uses saddr for amt_relay_mac() and saddr.ip4 for
+amt_send_igmp_gq() and amt_send_mld_gq().
+
+That loop is a separate copy of the matching in
+amt_tunnel_get_or_create(), and the two have to be kept in sync by hand.
+Could the message say that only amt_update_handler() passes the snapshot
+to these three helpers?
 
 > diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-> index 42de266f3ae3e..e9d5fb4c3634e 100644
+> index 52ccaca08b5ec..83e666a023c12 100644
 > --- a/drivers/net/amt.c
 > +++ b/drivers/net/amt.c
 
 [ ... ]
 
-> @@ -1271,7 +1328,7 @@ static void amt_event_send_request(struct amt_dev *amt)
->  		amt->qi = AMT_INIT_REQ_TIMEOUT;
->  		WRITE_ONCE(amt->ready4, false);
->  		WRITE_ONCE(amt->ready6, false);
-> -		WRITE_ONCE(amt->remote_ip, 0);
-> +		amt_clear_remote(amt);
->  		amt_update_gw_status(amt, AMT_STATUS_INIT, false);
->  		amt->req_cnt = 0;
->  		amt->nonce = 0;
-> @@ -1424,7 +1481,7 @@ static bool amt_send_membership_update(struct amt_dev *amt,
->  	else
->  		skb_set_inner_protocol(skb, htons(ETH_P_IPV6));
->  	if (amt_v6(amt))
-> -		remote.ip6 = amt->remote_ipv6;
-> +		amt_get_remote_ipv6(amt, &remote.ip6);
->  	else
->  		remote.ip4 = remote_ip;
->  	if (amt_udp_xmit(amt, sk, skb, &remote, amt->gw_port,
-
-[Severity: Low]
-Can this send a Membership Update to the unspecified address?
-
-amt_dev_xmit() checks readiness without a lock, then calls
-amt_send_membership_update():
-
-    if ((!v6 && !READ_ONCE(amt->ready4)) ||
-        (v6 && !READ_ONCE(amt->ready6))) {
-        ...
-        goto free;
-    }
-    if (amt_send_membership_update(amt, skb,  v6))
-
-amt_wq is WQ_UNBOUND, not ordered, so the event worker can run at the same
-time. If amt_event_send_request() takes the req_cnt > AMT_MAX_REQ_COUNT
-branch, it clears ready6 and then publishes in6addr_any through
-amt_clear_remote():
-
-CPU1 (TX)                          CPU2 (amt_wq)
-amt_dev_xmit()
-  READ_ONCE(amt->ready6) == true
-                                   amt_event_send_request()
-                                     WRITE_ONCE(amt->ready6, false);
-                                     amt_clear_remote(amt);
-amt_send_membership_update()
-  amt_get_remote_ipv6() -> ::
-  amt_udp_xmit() -> amt_route6()
-
-The seqlock prevents a torn read, but it does not order the ready6 flag
-against the address. The snapshot then goes to amt_udp_xmit() with no
-ipv6_addr_any() check. The Update, which carries the nonce and response
-MAC, is either dropped on a failed route lookup or sent to the next hop
-with destination ::.
-
-The window is narrow. ready6 is normally already false by the time req_cnt
-exceeds AMT_MAX_REQ_COUNT. Hitting this needs a Query handled just as the
-request timer expires, or a TX path stalled between the ready check and
-the snapshot.
-
-The IPv4 path already has the same race with remote_ip == 0. The IPv6
-version only becomes reachable with this patch.
-
-Would it make sense for amt_send_membership_update() to return true when
-the snapshot is ipv6_addr_any() (or remote_ip is 0)? That would match the
-receive side, where amt_from_relay() treats :: as matching nothing.
+> @@ -2728,20 +2777,22 @@ static bool amt_membership_query_handler(struct amt_dev *amt,
 
 [ ... ]
 
-> @@ -3456,10 +3536,17 @@ static int amt_rcv(struct sock *sk, struct sk_buff *skb)
->  		kfree_skb(skb);
->  		goto out;
->  	}
-> -	remote_ip = READ_ONCE(amt->remote_ip);
->  
->  	skb->dev = amt->dev;
-> -	saddr = ip_hdr(skb)->saddr;
-> +	/* Snapshot the outer source before amt_parse_type() pulls. */
-> +	amt_outer_saddr(amt, skb, &saddr);
-> +	/* IPv4 input drops a 0.0.0.0 source as a martian, but IPv6 input
-> +	 * delivers ::, which no relay or gateway can be.
-> +	 */
-> +	if (amt_v6(amt) && ipv6_addr_any(&saddr.ip6)) {
-> +		err = true;
-> +		goto drop;
-> +	}
+> -/* Most tunnels one source address may hold: an eighth of the table, at
+> - * least one and at most AMT_MAX_TUNNELS_PER_SRC.
+> +/* Most tunnels one source (an IPv4 address or an IPv6 /64) may hold: an
+> + * eighth of the table, at least one and at most AMT_MAX_TUNNELS_PER_SRC.
+>   */
+>  static u32 amt_max_tunnels_per_src(const struct amt_dev *amt)
+>  {
+> @@ -2759,7 +2810,7 @@ static u32 amt_max_tunnels_per_src(const struct amt_dev *amt)
+>   * verified source address may hold.
+>   */
+>  static struct amt_tunnel_list *amt_tunnel_get_or_create(struct amt_dev *amt,
+> -							__be32 saddr,
+> +							union amt_addr *saddr,
+>  							__be16 sport)
+>  {
+>  	struct amt_tunnel_list *tunnel;
+> @@ -2779,9 +2830,11 @@ static struct amt_tunnel_list *amt_tunnel_get_or_create(struct amt_dev *amt,
+>  	 * against its address.
+>  	 */
+>  	list_for_each_entry(tunnel, &amt->tunnel_list, list) {
+> -		if (tunnel->ip4 != saddr || READ_ONCE(tunnel->dead))
+> +		if (!amt_same_source(amt, &tunnel->addr, saddr) ||
+> +		    READ_ONCE(tunnel->dead))
+>  			continue;
 
 [Severity: Low]
-Is this comment accurate for all IPv4 input? In net/ipv4/route.c,
-ip_route_input_slow() sends a zero source addressed to limited broadcast
-to brd_input before it reaches the zeronet martian check:
+This isn't a bug, but the comment on amt_max_tunnels_per_src() now says
+the cap counts an IPv4 address or an IPv6 /64. Three other comments
+about the same cap still describe it as per-address.
 
-    if (ipv4_is_lbcast(daddr) || (saddr == 0 && daddr == 0))
-        goto brd_input;
+The kernel-doc above amt_tunnel_get_or_create():
 
-    /* Accept zero addresses only to limited broadcast;
-     * I even do not know to fix it or not. Waiting for complains :-)
-     */
-    if (ipv4_is_zeronet(saddr)) {
-        reason = SKB_DROP_REASON_IP_INVALID_SOURCE;
-        goto martian_source;
-    }
+ * table, amt_max_tunnels_per_src(), additionally limits the tunnels one
+ * verified source address may hold.
 
-So a UDP datagram from 0.0.0.0 to 255.255.255.255 on the AMT port can
-reach the INADDR_ANY-bound IPv4 AMT socket.
+The comment above this loop:
 
-On an IPv4 gateway, the relay4 check in amt_from_relay() covers this. The
-IPv4 relay paths, amt_discovery_handler() and amt_request_handler(), have
-no source check of their own. This patch doesn't change their behaviour,
-but the comment suggests they need no check. The comment is still the
-same at the end of the series.
+	 * a tunnel being freed neither stands in for its endpoint nor counts
+	 * against its address.
 
-The commit message makes the same claim:
+And in include/net/amt.h:
 
-  "IPv6 input does not drop a packet from the unspecified address, as
-  IPv4 input drops a 0.0.0.0 source as a martian."
+/* Upper bound of amt_max_tunnels_per_src(), the per-address tunnel cap */
+#define AMT_MAX_TUNNELS_PER_SRC 16
 
-Could the comment and the commit message be reworded so they don't imply
-that IPv4 input never delivers a 0.0.0.0 source?
+amt_same_source() compares only the first AMT_SRC_PREFIX6_LEN bytes for
+IPv6, so two gateways at different addresses in the same /64 share one
+cap. None of these comments is updated later in the series either. At
+the series tip, the AMT_MAX_TUNNELS_PER_SRC comment and the
+amt_tunnel_get_or_create() kernel-doc still say per-address.
+
+Could these be updated to match the new definition of a source?
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261127094703.3025517-1-omar%40blockcast.net
