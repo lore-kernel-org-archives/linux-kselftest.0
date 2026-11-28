@@ -1,60 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795861518;
-	b=1/DRK7y5m98ywB3/YsPQalIE7t+JxTmmaBC1lq5PCtT6+c2swK2slLBE78mPqyWbrrDh
-	 Hfu7okaAFiCFUGS+fOEuNkQMSjhSqfpZ8JMyF+nmi0pmEn3Pn8msGQ1CZToesRTLFs7PW
-	 WEYWuhXIoqyQxvgCMqJR5UL6JXHtIWdEWWFRXNusNwukJZfKlMdfyXlCqdeU3vbabmfiZ
-	 zTJwnDbPN6dwrVxkNCNFoeNhCFN8xKDKfgBDLdlDH1EKAFN1OdiaXkhZ5a7hUmPyRUJzA
-	 Jvha2tNK2d9xSzCOsqgp/S3AhJ2PWi7f+fexAZbeWvpkqp3ykBWZbAAnYjN5ZCpeknw==
+	t=1795861689;
+	b=rlzk8qmJXuk3l/1XaMlfSlLlP5aRpeXc9YAz9rtxx+AvXebPshHUM+BN8Twt6cAm5XYr
+	 7/eyiQDWNby4PvyWGiDdHx6Jap43jBfz+YjMGcJVyk88t+pl/OaptAb2avW8ZC59vz8IT
+	 67/vuC2FLZ6CeD8tAxeG8Mha6caaHv4j8PzwmbeV53YJQHBhGM4v1vtAaxjl7+x7uyPOq
+	 KOs2zOMP2JoJQYH3nEe0tJSLoI8rPAAQlgmb3mMV9Za1hPTjpv3jf7Y6OTYWYwyVDWjUC
+	 JGP7RdJo/lwnbEBML4TM9mYigDvjWnJ2RW/zWnTtIm+HEuoG5Yw7zblaM18+k7F0fVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795861518;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=HG/kFYl5oDMkfPL6aHfHn98/45lFfto87m3QqcW7mkE=;
-	b=UUyUcyjRKzVRbZ/XHxI4APwaAydFZa3YrCcQpMFsTH/MT0AWcmZpJ5dz5V5EXCwPU6JG
-	 RhrC8PNhMcRrOejCa82Q0tLDLlxNGO4brJHBvpVivhbJFBCdhQKFJptV1mqzkc+euYPNd
-	 E1NyGj2FRO1y/MFN3jg9iYxGZza4vPircQ+Now5+Q/zhagubCHMFlUqdRA/UEeUBuJ9+y
-	 mehfEcA1jdOLqxpYVdZVC2Pd5xHpQ56Iq3cE2weG/rAE1DsTLt+vDwSFWXA4j9+k6uDTW
-	 RAT4e6AFlVuGpQ2bsmyp4wI1ZE5p25u2GjQX7wq52eAvBsIm51izxJ6u9M4PSf2NMjw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795861689;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type;
+	bh=9Lskh+N7JQvWM1QZ5Sr9CMmPwP72CT3UqVM90SLhC8k=;
+	b=yBc1V12efsWKAB9mvWQbnyIjrG3T9b5VeHiP0z1d3ImUiBFAjab7m/hbNDbxJRKV+tLD
+	 Pa6nG0ziVpq3seSPPV3SxLY4gPnZzKnW1l2IOkc6K11ViVYOgQDF8yIf1TObOIQw41n27
+	 cVbtajQEfYV7MabsVq/UTO3spFVx2wKtv3vvpp6JNbA1vefBelvMA4m3uLiaosGf1uNe/
+	 MsBW1X8Kq786zU9K+9ysPeIVJo2sy/SOvcWPIzgpsGc00boEj1wKZk8VTrExiKfo6IK4Y
+	 2Cj6zEHqMxrSEbwS3IImBOtiYF5gsBn/A295GsicBu9e8ktidyf9ejyj0itNDOg0r6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="B8yx/Y+G";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cL2X3L7l;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAEB606A31C;
-	Sat, 28 Nov 2026 10:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AB1606A31C;
+	Sat, 28 Nov 2026 10:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B8yx/Y+G
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2F51F00897;
-	Sat, 28 Nov 2026 10:25:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cL2X3L7l
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79F21F00897;
+	Sat, 28 Nov 2026 10:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795861518;
-	bh=HG/kFYl5oDMkfPL6aHfHn98/45lFfto87m3QqcW7mkE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=B8yx/Y+Gi/rauFSFQuimTHfVzTrLgLz27hZvBYirftc95e+3u2rJLVexBJHc0h7VF
-	 1gdKCJ7MbQVwUoEVvdDsX3kYJB00q+oEZFRxWqqIs6g0qRls+iYK0N74j/+2FAI5YG
-	 qv9jq6GPbtOiA4fvy34WHoDqq4yzH83ePE0td8nd9WLrNKTnrGMZc/limShX2usjQ3
-	 BrfTyVSxlsurj8x2OJF5MOmCO0iOwvMAZV2fvXL0d1AZY+JptAPFXi4mDLGX8uXpwk
-	 /SWw78yw6wwpy95zv49gkkEoUfiYjfdteVUnE6VMkGKrTV9GWRzBAXt6KKTlzwyBoc
-	 otVtf9cicOOBQ==
-Subject: Re: [PATCH net v3 1/2] wireguard: peer: free packets left on the
- receive queue on removal
-From: netdev-bot+sashiko@kernel.org
-To: apasichnik9@gmail.com
-Cc: Jason@zx2c4.com, wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Sat, 28 Nov 2026 10:25:16 +0000
-Message-ID: <179586151692.3135.13303430947283381708@kernel.org>
-In-Reply-To: <20261127102243.49405-2-apasichnik9@gmail.com>
-References: <20261127102243.49405-2-apasichnik9@gmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795861688;
+	bh=9Lskh+N7JQvWM1QZ5Sr9CMmPwP72CT3UqVM90SLhC8k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=cL2X3L7lNbnr6CCN3wycQ7lBD4D0QUrGFLYnKkWeFpFCi2ohet7l2y6F+B+7o47cC
+	 ZhG5JHdwZejbSpHHqqKzoBza+HyuJmbhTRvApnRcbcka5rLnEzHtk86rRaf7PwrnKu
+	 xw6T2wXwMxpw6CfNf2cdijFqJR6Mw2zjiHnLiJzkQB+mE1dWmiBuKMaR4im/KvjPgC
+	 yONscOLVeaJjIZGw5a2mSY5OV5qCOmN8aS77IEWxJy5rKnKeGxNkyKX5V60kp9Xe2k
+	 WNLoN/HQqLHE7JhBdT26jm6MLZfs0iK4P2FcVigb6mTnrEI8VhHJlSsEKd7xlegWvW
+	 JYeTqwNC6okbw==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, peterz@infradead.org
+Cc: linux-kernel@vger.kernel.org, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, mingo@redhat.com, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, paulmck@kernel.org, boqun@kernel.org,
+ shuah@kernel.org, kees@kernel.org, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, jack@suse.cz, oleg@redhat.com, bestswngs@gmail.com,
+ xmei5@asu.edu, xujiakai24@mails.ucas.ac.cn, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, Dominik
+ Maier <dmnk@google.com>
+Subject: Re: [PATCH 00/17] sched/mmcid: fixes for execve, mode switches and
+ affinity
+In-Reply-To: <cover.1794932121.git.mathieu.desnoyers@efficios.com>
+References: <cover.1794932121.git.mathieu.desnoyers@efficios.com>
+Date: Sat, 28 Nov 2026 11:28:05 +0100
+Message-ID: <87bj79s11m.ffs@fw13>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,164 +66,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+On Tue, Nov 17 2026 at 11:17, Mathieu Desnoyers wrote:
+> This series fixes six problems of the rseq concurrency IDs (mm_cid),
+> and adds selftests for them. I looked for cases the existing tests do
+> not reach:
+> - a thread count that goes up and down;
+> - exit, fork and a failed execve();
+> - affinity changes made by another process.
+>
+> The fixes come first, and all six are marked for stable:
+>
+>   1  Give a CID to a task that joins its mm while running. A failed
+>      execve() then no longer returns to user space with an mm_cid of
+>      0x80000000.
+>   2  Give no CID to io_uring and vhost workers, so that they do not
+>      take IDs from the threads of the process.
+>   3  Reset the stale per CPU state of an mm when its first user joins.
+>      A machine with two or three CPUs no longer locks up after a failed
+>      execve().
+>   4  Keep a running joiner inactive until the fixups are done, so that
+>      it cannot loop in mm_get_cid() while it holds mm_cid.mutex.
+>   5  Add the allowed CPUs of the first user to the mm when it joins.
+>      An affinity change by another task during execve() is then not
+>      lost. 
+>   6  Fix the use after free of the old mm in set_cpus_allowed_common().
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 2
+#1, #3 and #4 are all caused by the fact that the exec()'ing task
+disables MM CID right at the beginning of exec(). But that can be
+completely avoided because the only requirement to deactivate it is when
+the task is about to switch to the new MM, i.e. after all other threads
+are torn down.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+So instead of adding duct tape and haywire in the MM CID core code we
+really should fix the underlying problem. See untested patch below.
 
-- [High] The patch skips purging tx_queue.
-- [Low] The new comment in peer_remove_after_dead() says a
-  transmit_packet_work queued during the second flush of packet_crypt_wq…
-- [Low] The commit message describes the bug only as a refcount/memory
-  leak ('leaks a peer and its keypair').
+#6 is incomplete vs. exec() switching MMs because the new MM is visible
+before MMCID has been initialized on it. I look into that seperately.
 
---
+Thanks,
 
-wireguard: peer: free packets left on the receive queue on removal
+        tglx
+---
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1171,6 +1171,21 @@ int begin_new_exec(struct linux_binprm *
+ 	 */
+ 	posixtimer_exec();
+ 
++	/*
++	 * Remove the task from the MM CID management which is associated to the
++	 * original MM. This is done here to avoid leaving and rejoining the MM
++	 * CID management _before_ all threads of the the process have been
++	 * terrminated.
++	 *
++	 * On success the task invokes sched_mm_cid_after_execve() in
++	 * bprm_execve().
++	 *
++	 * In case that the below fails, the task will not return to user space
++	 * because bprm->point_of_no_return is set so there is no point to bring
++	 * the task back into MM CID management.
++	 */
++	sched_mm_cid_before_execve(current);
++
+ 	/* see the comment in check_unsafe_exec() */
+ 	current->fs->in_exec = 0;
+ 
+@@ -1853,7 +1868,6 @@ static int bprm_execve(struct linux_binp
+ 	 */
+ 	check_unsafe_exec(bprm);
+ 	current->in_execve = 1;
+-	sched_mm_cid_before_execve(current);
+ 
+ 	sched_exec();
+ 
+@@ -1866,7 +1880,14 @@ static int bprm_execve(struct linux_binp
+ 	if (retval < 0)
+ 		goto out;
+ 
++	/*
++	 * Reactivating MM CID is only required for the success case. The
++	 * exec()'ing task deactivates MM CID after bprm->point_of_no_return has
++	 * been set true, so any failure after that point will prevent the task
++	 * from going back to user space.
++	 */
+ 	sched_mm_cid_after_execve(current);
++
+ 	rseq_execve(current);
+ 	/* execve succeeded */
+ 	current->in_execve = 0;
+@@ -1885,7 +1906,6 @@ static int bprm_execve(struct linux_binp
+ 	if (bprm->point_of_no_return && !fatal_signal_pending(current))
+ 		force_fatal_sig(SIGSEGV);
+ 
+-	sched_mm_cid_after_execve(current);
+ 	rseq_force_update();
+ 	current->in_execve = 0;
+ 
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11166,7 +11166,7 @@ void sched_mm_cid_exit(struct task_struc
+ 	cancel_work_sync(&mm->mm_cid.work);
+ }
+ 
+-/* Deactivate MM CID allocation across execve() */
++/* Deactivate MM CID allocation across execve() switching MM */
+ void sched_mm_cid_before_execve(struct task_struct *t)
+ {
+ 	sched_mm_cid_exit(t);
 
-This commit adds peer_purge_rx_queue() and calls it from
-peer_remove_after_dead() after netif_napi_del(). It frees packets left on
-rx_queue when a NAPI that is being disabled completes without draining
-the queue, and drops each entry's keypair and peer references. tx_queue
-is intentionally left alone.
-
-> rx_queue keeps the rest there. Each entry holds a keypair and a peer
-> reference, so the peer is never released; the WARN_ON in rcu_release()
-> that checks for leftovers is never reached either.
-
-[Severity: Low]
-
-This isn't a bug in the code, but could the message also mention the
-other effects of the leak? A stranded rx_queue entry pins the peer, so
-kref_release() never runs.
-
-As a result, rcu_release() never calls memzero_explicit(peer,
-sizeof(*peer)). That call clears the remaining handshake key material,
-such as the preshared key and the precomputed static-static DH value.
-
-The pinned keypairs also never reach kfree_sensitive() in
-keypair_free_rcu(), so the session keys stay in slab memory as well.
-
-peer->handshake.entry is only removed from index_hashtable in
-kref_release(), and peer_remove_after_dead() doesn't call
-wg_noise_handshake_clear(). The removed peer therefore stays reachable
-through wg_index_hashtable_lookup(). That contradicts this comment in
-peer_remove_after_dead():
-
-    and in wg_cookie_message_consume, the lookup eventually gets a peer
-    with a refcount of zero, so no new reference is taken.
-
-As written, the message describes only a memory leak. The Fixes: tag
-should be enough for stable selection.
-
-> diff --git a/drivers/net/wireguard/peer.c b/drivers/net/wireguard/peer.c
-> index 1cb502a932e07..6bafe572469ca 100644
-> --- a/drivers/net/wireguard/peer.c
-> +++ b/drivers/net/wireguard/peer.c
-
-[ ... ]
-
-> @@ -122,6 +136,13 @@ static void peer_remove_after_dead(struct wg_peer *peer)
->  	 * here from process context.
->  	 */
->  	netif_napi_del(&peer->napi);
-> +	/* A NAPI that is being disabled completes after the poll in progress,
-> +	 * even if that poll used its whole budget, so rx_queue may still hold
-> +	 * packets, and nothing reads it any more. tx_queue is left alone: a
-> +	 * transmit_packet_work queued during the second flush may still be
-> +	 * draining it, and its entries keep the peer alive until it has.
-> +	 */
-
-[Severity: High]
-
-Do tx_queue entries really keep the peer alive until draining is done?
-The commit message makes the same claim:
-
-  tx_queue needs no such step: transmit_packet_work drains it without a
-  budget, and its entries keep the peer alive until then.
-
-If transmit_packet_work is still running after peer_remove_after_dead()
-drops the base reference, the put for the last entry in
-wg_packet_tx_worker() can be the final one:
-
-drivers/net/wireguard/send.c:wg_packet_tx_worker() {
-	while ((first = wg_prev_queue_peek(&peer->tx_queue)) != NULL &&
-	       ...
-		wg_noise_keypair_put(keypair, false);
-		wg_peer_put(peer);
-		if (need_resched())
-			cond_resched();
-	}
-}
-
-That final put goes through kref_release()->call_rcu(&peer->rcu,
-rcu_release). The worker runs in process context outside any RCU
-read-side section, so a grace period can complete during cond_resched(),
-or while the worker is preempted under PREEMPT_RCU.
-
-rcu_release() then runs memzero_explicit() and kmem_cache_free() on the
-peer. After that, the worker evaluates wg_prev_queue_peek(&peer->tx_queue)
-again on freed memory.
-
-Couldn't this lead to a NULL dereference on the zeroed object, or to
-writes into a reused slab object via wg_prev_queue_dequeue()?
-
-The new comment itself says the work can outlive the flushes. The
-packet_crypt_wq encrypt workers share one ring across peers. An encrypt
-worker queued after the first flush_workqueue() began, for example by
-another peer's traffic, can take this peer's packet. It can then reach
-this point after the second flush has advanced the flush colour:
-
-drivers/net/wireguard/queueing.h:wg_queue_enqueue_per_peer_tx() {
-	...
-	queue_work_on(wg_cpumask_choose_online(&peer->serial_work_cpu, peer->internal_id),
-		      peer->device->packet_crypt_wq, &peer->transmit_packet_work);
-}
-
-The second flush does not wait for that work.
-
-rcu_release() also peeks tx_queue in its WARN_ON() while the worker may
-still be in its loop. That makes it a second consumer of a
-single-consumer queue.
-
-wg_packet_tx_worker() predates this patch, but the new comment relies on
-this lifetime guarantee to skip tx_queue. Does something need to wait for
-transmit_packet_work before the final wg_peer_put() in
-peer_remove_after_dead()?
-
-> +	peer_purge_rx_queue(peer);
->  
->  	/* Ensure any workstructs we own (like transmit_handshake_work or
->  	 * clear_peer_work) no longer are in use.
-
-[Severity: Low]
-
-This isn't a bug, but the new comment contradicts two comments that this
-patch leaves unchanged in peer_remove_after_dead(). The marker before the
-second flush says it covers the send side:
-
-	/* b.1) For send (but not receive, since that's napi). */
-	flush_workqueue(peer->device->packet_crypt_wq);
-
-The block before the final wg_peer_put() lists which contexts may still
-use the peer after the flushes:
-
-	/* After the above flushes, a peer might still be active in a few
-	 * different contexts: 1) from xmit(), before hitting is_dead and
-	 * returning, 2) from wg_packet_consume_data(), before hitting is_dead
-	 * and returning, 3) from wg_receive_handshake_packet() after a point
-	 ...
-
-That list does not include a wg_packet_tx_worker() that is still
-running, even though the new comment says one can be. Should these two
-comments be updated to match?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261127102243.49405-1-apasichnik9%40gmail.com
