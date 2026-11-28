@@ -1,101 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.223
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795848765;
-	b=5UArrrDvnbYB3R6GhHce3EjZ3njniJ5WM7wEAapvPMG+b4q8VukodlMDVTncoH1jQIBG
-	 HKe9FMIhy2m3bbCfI0KBx/omH0JFPteMR26GATJucWY8jipnQB5+Lj/ktyZ6v3SsjWR1k
-	 nYufLMGzWIScKDBsnwuqZKpiUcIrgfLn3d+br7Pct9p9MizkRDQUzMRaOC7uRErfo0pVW
-	 ymOvxkvyml4QlFlfUhQ7m/fFVC42Ilw6yDrHP+EYGsDQjxUXhFX9VENijoG8ZJpsBOD4K
-	 isUCoBSuYB2YS2pUWroNcBZCntS/5bfRw9kyX5a+LuuNZzM36kW2AnT3rF98gXydFrQ==
+	t=1795850845;
+	b=B9Pj+4Lmk15MrHJK1ZMA8aeym18uRGd17JTvNMGfRAlgQtE99/JvRtsK5dV6J5JFGcPr
+	 xvpgoZ9Qz8u6lBKxqTYbOgayC6mJYtRTVUKEN6PXA9AXVtZAL0LTlV0AyDcXH1jG20QCp
+	 /V7YKEfXFodO96P6PrMBORbh0aP8o4u58QNFucWGerQuczFqNiEyZlxi6KfFj2KLHrPf/
+	 JtuEDgseq5Yw0Z68TxHcHYIdJ7n9M4eKrrGtq6/WTHsS++KOk3/b1mHNzqFMHk+JcL99v
+	 Uiq9RabSSgLrLxIwovI23KMsKDiSn9aMoOgpV5D8UdHYZ/ezBHszzIa4p/Fzsv96TIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795848765;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=LTcZKKzHAeS7Mwx/kr7PKAioen5WcsycTXqL7tdd7kk=;
-	b=EPu7rbpi6ytCImoWfTVAdHW0rppVW90z8oWRTKN/3ULe5REVUyDz73XE3QTdE/v/tY0p
-	 7WG1MvhJYqkL1JZJeb3p+OIdXofjiVyFEt7z0r/yWBzIriR8nABfZeRRm3um85OZZd/sp
-	 xA83phzPtns37FHDRuY0WmbcONx+yAvXi/Vb0pwROK2/QGJdYq1s632cGVPudarpGyqbT
-	 2GievIkgWb+zOC8kjGQTP9xeQ4w5ybm8VSA2tiBwnmYJY+zWj6SYfnYYEh2P+vtWfjMWg
-	 t5UIteNtZk9adpMexxNJ7wEcSVPg+k9OjdztStuu6+Lizw9gN0O/iVTifT5TmAgDr7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795850845;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=uXPgXvBJT57DR1S+V3IBkpL9Dt6mi6Z/uuu7CuFzrb8=;
+	b=iO7d3wJjkiXZxam8HiFRZRnUTsiVd9vx7UQTRW3uqw7HnyB+u11yy33sl8y5zsLUEMqn
+	 e8LZ5AgaQFlkbJ3ntLTE/U+KbD2lVCffD18zuaQNUw48CMjE5a+GJXjB6wQLXX7sAbA7C
+	 A3+6WYydcY6hFyFd+JxMe+X4AE8EHc2Hy3/mLV+5EmCOTr9qSD5mDll+Ms2t/5o6vofBN
+	 VM8mUZWGUr3ImpIjHV42s7AW/FgyCwtLhktOYjHyPokkpErp38EeL1T0sKrIJSCIZfCXT
+	 xmyVSy/DzRnatb0RTplKuPzdjEVkPgLReKX5xScfSETShAzf++ZjpqPPVMtKbKcvOBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Wgw5NiQZ;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=SQJC7cRS;
+	arc=none smtp.remote-ip=113.46.200.223
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469CA606A334
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 06:52:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 469CA606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131F4606A31C;
+	Sat, 28 Nov 2026 07:27:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 131F4606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Wgw5NiQZ
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b0e0e65adbso3976709a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 22:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795848765; x=1796453565; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LTcZKKzHAeS7Mwx/kr7PKAioen5WcsycTXqL7tdd7kk=;
-        b=Wgw5NiQZUceuxOQxc2tauQLWvq3tcPn2/7gmKBB95k4EKFQTfCBOp/nCTx0SEi8fRu
-         3Mkjrtzh24NiMd4aY4SLUqQPntrXmnV4ZaY+X+i5MG2oBaThN1sBnKhDdZY2Ef8N90Pc
-         lc8gsJ7BWjFz9YL5DZMcNXAG2H69eJW5gCcSSsRV3sx6B2WLe0+widcEZMjcI45zD12H
-         ox8htxy2pnkKedOX38tft8B0I8YiR3svHqOA+qS4mbbf3tEdCSC1B0sfLzlJSxH5uyWa
-         DpsI3tRY02tBmmwDeXpiiJLURqAxV8vx/M3KHSEHXJ0ORNbOeDnQmK4z8V47e1vU/18Y
-         sewA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795848765; x=1796453565;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LTcZKKzHAeS7Mwx/kr7PKAioen5WcsycTXqL7tdd7kk=;
-        b=iCt2ISA1ozQGScUWAuTiWPK/RZiYFO62CBLez0X9J3i4QTRK6c3AZLF8aXjnoJsKhD
-         JqNza8fza0nEr183zAZ4Ep/hS7bZ9fmNiISa0+Z8o4iS6sgNGMqD1GRuWjduleZdN5/H
-         +mcQeEk9aXnvQAsCCAShZC4ySTvcBt9WLcpNDvWBtL2JmtEE1cmIiwkpNbnZ0ZX6FMxJ
-         n/E/06ebsLiY2UhBWrTf7GUD8Jt3OWMvyClWe+U5D9A5WawAPjgqvo73f7SVsK6ivW7c
-         OMt3g9a9vYvJAx6I5FVz5iOrZOE/4f/0yvOEcHq2AiqiT82DUIlFp/vQKz9s0oj3erT0
-         jdXg==
-X-Forwarded-Encrypted: i=1; AL+hErGLqzwr8QfQKiCFRZQ8BEqD5owbgjrk7VcFzuker/2JbtjUt4W1k2+lPSrFTmqqhXz/mdFnqV7FeUiBVcP2WbI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+UcYFg1LsWlIW97/ajOozDe5zFlWIS3qNew4t32IKHEBWl/Mij
-	cQn+JSO9E+pYvDPNgdYiYjCanP4I8QCEiApjnQ7M4HSth65gJrjQ3etJ
-X-Gm-Gg: AZFdTZcwpMgpxkRzLZs0k04J+8JCkX+JqLqR1MHl2aPbVHKtV70HGfMwcELFiedbfeD
-	X67Xc5GCbTHwffwxUgjrgE04MiYz8krQ2X3wHT6ToetV+rNSt8Dlmudgr43fYjOPsvD6yMd1YKz
-	6UfZ4I/+HjxJqwpJk1zKItqQSDk4ayuWNxTV9zpTVOxzaHUo8PpMxBB+FHdLCz/uE1I8cOzRgEh
-	PUoHt9r7FW0iJW85XWuJlNFxkKWUePa5kDMF7B+VjrX4bmxbU357piEvZHE/WhtbeEDi+Wduf1c
-	JIY9ajpWopgFeBW6PTWpKUeDkkoCZLveITFpfONFUpQVHBbmxuw58eE9YYBlGeCSg1SlJ4uvmnN
-	PkkCELOUCAn67gPIW+B8LHAKZzWJsQcG9CZo+C7113NNmjcgtxuclg82BCmyGDB4BB1GAP9mWUn
-	mg/3I8pe3XPKsllaVX61uU+q9DawadbAXIkTGHJl6cWNAL2KIE8bx19mGi+4Qc9nH4D7/Yp1RFH
-	Xpo9PaptKpfIasdgH+0hvgvqKbdve53AuB0GSRjAUN79FUgL0HedMDfxRg/esMiLC0jjK133e8Y
-	0cKxtAqXh+R/ha92FFlV2TQnqwHrk1Teg3/HqmOsmqt1UkBiCtUL9eJCPtxWsfjHCcX7BMAekMh
-	DzxqQMO3+fqexGGSTyD1QtyyY1dmDt0RPGm8IEKq40XJp+agcxk0xzAw6AUKGDw==
-X-Received: by 2002:a17:90b:268f:b0:3b3:a421:7e00 with SMTP id 98e67ed59e1d1-3b41c8d4831mr25103895a91.16.1795848764542;
-        Fri, 27 Nov 2026 22:52:44 -0800 (PST)
-Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40a878d50sm44372965a91.11.2026.11.27.22.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2026 22:52:44 -0800 (PST)
-From: HyeongJun An <sammiee5311@gmail.com>
-To: broonie@kernel.org,
-	tiwai@suse.com
-Cc: perex@perex.cz,
-	shuah@kernel.org,
-	ivan.orlov0322@gmail.com,
-	ben.copeland@linaro.org,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	HyeongJun An <sammiee5311@gmail.com>
-Subject: [PATCH v2 2/2] selftests: ALSA: pcmtest: Load the module when it is missing
-Date: Sat, 28 Nov 2026 15:52:27 +0900
-Message-ID: <20261128065228.3628550-3-sammiee5311@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=SQJC7cRS
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=uXPgXvBJT57DR1S+V3IBkpL9Dt6mi6Z/uuu7CuFzrb8=;
+	b=SQJC7cRSWEjLbpHqVRB+BqMMel7rrly3hil4T6/9JLroEsRPJ7J9axzhBt/AYqMCverJa6To+
+	QQ51V35MLf4A36Vab01XTQM1VnVkLvh4PzsAyivPZ0/YlnEt0SJ2jsw8YAngiu3b+uGKW7Ew8JY
+	jZJzF/KYZUPKeMGBczEfZCo=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4jc20Y6V9FzmV6J;
+	Sat, 28 Nov 2026 15:26:53 +0800 (CST)
+Received: from kwepemo200009.china.huawei.com (unknown [7.202.195.26])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7C12D40586;
+	Sat, 28 Nov 2026 15:27:19 +0800 (CST)
+Received: from localhost.localdomain (10.50.159.234) by
+ kwepemo200009.china.huawei.com (7.202.195.26) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Sat, 28 Nov 2026 15:27:18 +0800
+From: Long Wei <longwei27@huawei.com>
+To: <rppt@kernel.org>, <pasha.tatashin@soleen.com>, <pratyush@kernel.org>
+CC: <shuah@kernel.org>, <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+	<kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <hewenliang4@huawei.com>, Long Wei
+	<longwei27@huawei.com>
+Subject: [PATCH 0/2] mm: memfd_luo: pick up seals added after preserve at freeze
+Date: Sat, 28 Nov 2026 15:24:42 +0800
+Message-ID: <20261128072444.1114964-1-longwei27@huawei.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261126035526.1779288-1-sammiee5311@gmail.com>
-References: <20261126035526.1779288-1-sammiee5311@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,70 +71,50 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemo200009.china.huawei.com (7.202.195.26)
 
-test-pcmtest-driver skips when the pcmtest debugfs files are missing.
-The driver has no device to bind to, so nothing loads the module, and the
-test skips even on a kernel that builds it.
+A seal added to a memfd after the memfd was preserved with a liveupdate
+session is accepted without any error, but the seal is silently gone once
+the kexec handover is over: the retrieved memfd no longer has it.
 
-Run modprobe once before skipping, as the net pktgen test does. Each test
-runs in a child process, so record whether the module was loaded before
-the tests start, and unload it at exit if the tests loaded it.
+memfd_luo_preserve() snapshots the file seals, but userspace may keep
+operating on the memfd until the handover, so the preserve-time snapshot
+is naturally incomplete.  memfd_luo_freeze() never re-read the seals and
+memfd_luo_retrieve() replays the stale snapshot, so seals added in the
+window between preserve() and kexec were dropped without any notice.
 
-Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
----
-A built-in pcmtest creates its debugfs files at boot, so read_patterns()
-succeeds and modprobe is not run. If debugfs is not mounted, modprobe of
-a built-in module returns 0, the second read fails, and the test skips as
-before.
+Patch 1 re-reads the seals at freeze time, mirroring the file position
+handling: freeze is the last snapshot point before kexec and the only
+place where the final value can still be sampled and, when it diverged
+from the preserve-time snapshot, validated while the live update can
+still be aborted.
 
- .../selftests/alsa/test-pcmtest-driver.c      | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Patch 2 adds a kexec round-trip selftest that adds F_SEAL_GROW after
+preserve and asserts that the seal survives the handover.
 
-diff --git a/tools/testing/selftests/alsa/test-pcmtest-driver.c b/tools/testing/selftests/alsa/test-pcmtest-driver.c
-index b796a5613c6f..3bd6f75ac6f6 100644
---- a/tools/testing/selftests/alsa/test-pcmtest-driver.c
-+++ b/tools/testing/selftests/alsa/test-pcmtest-driver.c
-@@ -6,6 +6,7 @@
-  * Copyright 2023 Ivan Orlov <ivan.orlov0322@gmail.com>
-  */
- #include <errno.h>
-+#include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
- #include <alsa/asoundlib.h>
-@@ -149,6 +150,22 @@ static int setup_handle(snd_pcm_t **handle, snd_pcm_sw_params_t *swparams,
- 	return 0;
- }
- 
-+static bool module_was_loaded;
-+
-+/* remember whether snd-pcmtest was loaded before the tests ran */
-+static void __attribute__((constructor)) check_module(void)
-+{
-+	module_was_loaded = !access("/sys/module/snd_pcmtest", F_OK);
-+}
-+
-+/* each test runs in a child, so unload in the parent once all are done */
-+static void __attribute__((destructor)) unload_module(void)
-+{
-+	if (!module_was_loaded && !access("/sys/module/snd_pcmtest", F_OK) &&
-+	    system("modprobe -r -q snd-pcmtest"))
-+		ksft_print_msg("Failed to unload snd-pcmtest\n");
-+}
-+
- FIXTURE(pcmtest) {
- 	int card;
- 	snd_pcm_sw_params_t *swparams;
-@@ -171,6 +188,9 @@ FIXTURE_SETUP(pcmtest) {
- 		SKIP(return, "This test needs root to run!");
- 
- 	err = read_patterns();
-+	/* nothing loads the module on its own, so ask for it */
-+	if (err && !system("modprobe -q snd-pcmtest"))
-+		err = read_patterns();
- 	if (err)
- 		SKIP(return, "Can't read patterns. Probably, module isn't loaded");
- 
+Tested on arm64 and x86_64 with two consecutive kexec handovers each:
+with the fix the seal survives and dmesg stays free of new warnings.
+
+This series applies on the current next branch of liveupdate.git,
+where the file is still named memfd_luo.c. I am aware of the
+pending "mm: Rename memfd_luo to shmem_luo" series. If that series
+lands first, a trivial s/memfd_luo/shmem_luo/ rebase will be needed,
+which I am happy to provide.
+
+
+Long Wei (2):
+  mm: memfd_luo: pick up seals added after preserve at freeze
+  selftests/liveupdate: add seal-after-preserve kexec test
+
+ mm/memfd_luo.c                                |  27 ++-
+ tools/testing/selftests/liveupdate/Makefile   |   1 +
+ .../liveupdate/luo_seal_after_preserve.c      | 170 ++++++++++++++++++
+ .../selftests/liveupdate/run-vmtests.sh       |   1 +
+ 4 files changed, 197 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/liveupdate/luo_seal_after_preserve.c
+
 -- 
 2.43.0
 
