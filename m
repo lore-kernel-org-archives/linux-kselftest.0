@@ -1,56 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.27
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795873363;
-	b=jV5TsgsP43KiT58q1J2yIq80pP03/XBH1U01vfnkmUSJOgeIOt8+aLWLY88JqYFmwHMk
-	 B35FVztyOm+wTh1AnEV6U8dnRgYsEhzXKU46+0jZOLJm2T7RfLDh2oLZwes87sUkGmk+K
-	 zi8zXr2hrY1HIStWsACDW2sAbReSLVes4w7KbzCB8gu7dTSft/eCFV9YP6scP4jVq4LNR
-	 QwYB0urJHQ8t63eBrMAilBi8XmAdfvaPlV/QZW/h+FvSiAavf9+aCtxJxiQBuiLx7on0H
-	 //hkSsHsb88VUVaggpixIzYFrXgcmzsb9huBQ2Ao7Pt9gAoKuQM2wSbgfFl8SWkFrsA==
+	t=1795873367;
+	b=BZT4u3bct0tnX+twfFJZyjhCD8H/FumRnQ1pvak31q8JQMog92y2hvVYtgIWNIykwJWU
+	 KUk6aVAGNsf4abOTShky+ehxksWu6UE1Q0kXXyjHC5YPDlu1g4+qtXiVKtn07HQ1Gb2zY
+	 J/JQc35RfYUwUY26U1sH89hlgXv8ddU29EGakvtpK84VvNKWaRyH4dCg+WpVFDVnvgmKO
+	 mJgvE54VMidakLPnrqrnlHcZLQq1ghZmSYWvKkRMG3Wr0Mdcnx8MjMGJ/vfCas6jsJdcO
+	 0+GLbzazCZ+RWDRebC4I6y6z+HXqtk5D/PvIds6QBp8dN0eWbvjsi3wn5UwZPZsm99g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795873363;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795873367;
 	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type;
-	bh=/YrVE3nfHgtbOpjM9TAOhUwtbJ7UumHTjiT82LE/yJs=;
-	b=OCX/kgMfZISBqpK0Ra4sel8fi7B+D/4ujQqr7vBL3MNCNni9Yz33HgBC1PMl11j4SXyW
-	 2Cw3j0UNwbg3kp6kK13lnG4X1Y7AcH1LtDhmDbp/Nr02mFLIOyg0K92Y9Fm6KQ7NUac1u
-	 9UQmE5dRlWAqtitkeDWEB5Ms6LtbcuWsKPY4/V6vNC+GOgLIGkYIyFe6Ma647RmxDphkl
-	 ca1H3mW166Wru3Ku1DRPCs7vJOKEr5Ls78UBSJhPLNxiukS6aLcoa/Yd2xZ1GdHJ34h17
-	 WdS0arUNpa33lYopo+6ziHS7WVWLErlpdE2oowd39kkclYSb8tmrNnQ7W/fWt3A1bkA==
+	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
+	 Content-Type;
+	bh=nQoAOzprCWfZA4oj6UvxUYwDg5wgrLYjKsw078gb2f0=;
+	b=DSuZ8lF3S8N+7ti6f96q2qErOeyXD/oIgzbBPmXJSDLmS01v1DhuCETS5Y2OKQNnHT7F
+	 XwVmiGCttUfWU2qgFSbgnAdnS/ToflFUGqmFsJLQDYkfJfGmTDJiyR9ownRMw8/2GOJ0r
+	 p7f/b9yjRGWS2UK6+YIF3FIGUHduBy6QxaoIG/39qI/b1pIpsBtbqGD16UoYeoG2fKzoC
+	 FNtFwMBuS7MxgFwIsVcATbndOAxinHQvY3TW4JTvb2PXRUpAc4+3ijx2tFJJApzhAbVXd
+	 749r8oP3RnKsbfsIeQnc9mUiKivSBIcf67qzHntWZz2oOX+VfDzGx3FqGVaBGrDX2Cg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=mzfr.me;
 	spf=pass smtp.mailfrom=mzfr.me;
-	dkim=pass header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=H9LurABt;
-	arc=none smtp.remote-ip=79.135.106.27
-Received: from mail-10627.protonmail.ch (mail-10627.protonmail.ch [79.135.106.27])
+	dkim=pass header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=wgYKblGC;
+	arc=none smtp.remote-ip=185.70.43.18
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6717606A31C
-	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 13:42:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6717606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0202606A323;
+	Sat, 28 Nov 2026 13:42:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0202606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mzfr.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mzfr.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=H9LurABt
+	dkim=pass (2048-bit key, unprotected) header.d=mzfr.me header.i=@mzfr.me header.a=rsa-sha256 header.s=protonmail2 header.b=wgYKblGC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mzfr.me;
-	s=protonmail2; t=1795873360; x=1796132560;
-	bh=/YrVE3nfHgtbOpjM9TAOhUwtbJ7UumHTjiT82LE/yJs=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=H9LurABtvYdWc1fQJK28QW12br7JTpYXClDnFTO0NIwsyOLBPsHPFgiJ4pulB0Zuc
-	 lEtI0cqUGi6H/aLonHrDhVwunsFwMSH9wu1DGWP/b159pOlzb8v7GxJGtXYGZmCdzP
-	 WwOQJNn/0jPJa5Twg9BrQ9vVTf5ngFu7o9bdImUccRdm8x9Arvi948oaO25+6HF+9w
-	 hZw2s7Nzz9g0Ms5/uZnRF4cFzW4x3987XqvgHI7HKbHjU+/qysRyjUPQZ1Yf73CuZz
-	 /nrQM6hPx7dnUp6sjzURrbhiVsukUhNH/AoCPSNHMaCrtZ6rq38WT2BNKMFRrSclwD
-	 sG32BDNpORE1A==
-Date: Sat, 28 Nov 2026 13:42:32 +0000
+	s=protonmail2; t=1795873365; x=1796132565;
+	bh=nQoAOzprCWfZA4oj6UvxUYwDg5wgrLYjKsw078gb2f0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=wgYKblGCtIafcEqc+dxNBL52USCYvfeA1Wmrvpna+6wtwkL15w6jkS5/bPdbmhxRY
+	 16W2gSiJ/vbcGqe3wVS35Hf5YNPaJWz0RqFmCG9FkDTsEUckFFvE4pyyrrsb064xjv
+	 UIy2q8amWXRxpyoHh6Eht8NUvNdBIac8dgeAPjPEveojcgffpaURVT3JwSaE3c+zeR
+	 mxBnNGi9MIRgOwYRWzLeVro45yoLsnQtE7BDAkn7uIMfPyb7JewjNKDKs6oKUy4ZV6
+	 W1+cvspxEtMx1tyWQzTbvgXDbrVyHUUvd4qfBXV94iUQCyj04McluyvlO9m14GqW6T
+	 T18qbg1DqUzrQ==
+Date: Sat, 28 Nov 2026 13:42:40 +0000
 To: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
 From: Mehtab Zafar <hello@mzfr.me>
 Cc: Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] splice: handle zero-count sendfile to full pipes
-Message-ID: <20261128134221.64884-1-hello@mzfr.me>
+Subject: [PATCH 1/2] splice: return immediately for zero-length file-to-pipe splices
+Message-ID: <20261128134221.64884-2-hello@mzfr.me>
+In-Reply-To: <20261128134221.64884-1-hello@mzfr.me>
+References: <20261128134221.64884-1-hello@mzfr.me>
 Feedback-ID: 37505322:user:proton
-X-Pm-Message-ID: 6638043d303497b47feaf6c3d4eff58d37042df9
+X-Pm-Message-ID: b31e0b54b2e7a00b792d7449a2cc6be49a14b777
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,10 +64,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha256; boundary="------37ff276189f2a11e75876853f9d2b251d4bfe4a94ae0bb1f337359ef042a05d4"; charset=utf-8
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha256; boundary="------520483031699f09f7999ba80600ea9817aa6409337e1b91ad82e43eae5f09e88"; charset=utf-8
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------37ff276189f2a11e75876853f9d2b251d4bfe4a94ae0bb1f337359ef042a05d4
+--------520483031699f09f7999ba80600ea9817aa6409337e1b91ad82e43eae5f09e88
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 From: Mehtab Zafar <hello@mzfr.me>
@@ -74,72 +78,77 @@ Cc: Jan Kara <jack@suse.cz>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] splice: handle zero-count sendfile to full pipes
-Date: Sat, 28 Nov 2026 21:42:19 +0800
-Message-ID: <20261128134221.64884-1-hello@mzfr.me>
+Subject: [PATCH 1/2] splice: return immediately for zero-length file-to-pipe splices
+Date: Sat, 28 Nov 2026 21:42:20 +0800
+Message-ID: <20261128134221.64884-2-hello@mzfr.me>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261128134221.64884-1-hello@mzfr.me>
+References: <20261128134221.64884-1-hello@mzfr.me>
 MIME-Version: 1.0
 
-sendfile() sends to a pipe through splice_file_to_pipe() directly. For a
-zero-count operation, that helper currently waits for pipe space before the
-lower-level read sees the zero length. On a full pipe this makes blocking
-sendfile() wait and nonblocking sendfile() return -EAGAIN, while splice()
-returns zero immediately.
+sendfile() to a pipe calls splice_file_to_pipe() directly. Unlike
+splice(), this path reaches wait_for_space() before the lower-level read
+handles a zero length. A zero-count sendfile() therefore blocks on a
+full blocking pipe and returns -EAGAIN on a full nonblocking pipe.
 
-Patch 1 returns before waiting when the helper receives a zero length.
-Patch 2 adds kselftest coverage for full blocking and nonblocking pipes.
+There is no data to enqueue for a zero-length transfer. Return 0 before
+locking or waiting for pipe space, matching splice() behavior.
 
 This bug was found with AI assistance, which also helped
 prepare the fix, tests, and description.
 
-Validation on x86_64, based on vfs/vfs.all at 3857587d9d6f:
-- baseline, three fresh no-disk/no-NIC KVM boots: nonblocking returned
-  -EAGAIN, blocking waited until interrupted, and the selftest passed 0/2
-- patched, three fresh no-disk/no-NIC KVM boots: both calls returned zero
-  immediately and the selftest passed 2/2
-- positive-count full-pipe behavior remained -EAGAIN, invalid output fd
-  remained -EBADF, an
-d the input offset and pipe contents did not advance
-- W=1 fs/splice.o and full bzImage builds passed
-- strict checkpatch was clean for the fix; for the selftest it reported
-  no errors, warnings, or checks with FILE_PATH_CHANGES ignored. The final
-  selftest run also logged an spdxcheck.py traceback due to missing Python
-  ply; unchanged source and SPDX text had passed earlier SPDX validation
+Fixes: b964bf53e540 ("teach sendfile(2) to handle send-to-pipe directly")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mehtab Zafar <hello@mzfr.me>
+---
+Tested on x86_64 against vfs/vfs.all at 3857587d9d6f in three fresh KVM
+boots per kernel. Baseline: zero count returned -EAGAIN on a full
+nonblocking pipe and waited until interrupted on a full blocking pipe.
+Patched: both returned 0 immediately. Positive-count and invalid-fd
+controls were unchanged. W=1 fs/splice.o and
+ full bzImage builds passed;
+strict checkpatch and git diff --check were clean.
 
-Mehtab Zafar (2):
-  splice: return immediately for zero-length file-to-pipe splices
-  selftests/splice: cover zero-count sendfile to a full pipe
+ fs/splice.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- fs/splice.c                                   |  3 +
- tools/testing/selftests/splice/.gitignore     |  1 +
- tools/testing/selftests/splice/Makefile       |  1 +
- .../testing/selftests/splice/sendfile_zero.c  | 93 +++++++++++++++++++
- 4 files changed, 98 insertions(+)
- create mode 100644 tools/testing/selftests/splice/sendfile_zero.c
-
+diff --git a/fs/splice.c b/fs/splice.c
+index 5397ded643a7..afad10adf138 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -1239,6 +1239,9 @@ ssize_t splice_file_to_pipe(struct file *in,
+ {
+ 	ssize_t ret;
+ 
++	if (!len)
++		return 0;
++
+ 	pipe_lock(opipe);
+ 	ret = wait_for_space(opipe, flags);
+ 	if (!ret)
 -- 
 2.34.1
 
 
---------37ff276189f2a11e75876853f9d2b251d4bfe4a94ae0bb1f337359ef042a05d4
+--------520483031699f09f7999ba80600ea9817aa6409337e1b91ad82e43eae5f09e88
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsCpBAEBCABdBYJrCtpHCRBCkCzGpVLSJDUUAAAAAAAcABBzYWx0QG5vdGF0
-aW9ucy5vcGVucGdwanMub3JnHtb5RJRsKbqCLlhaDuVo+xYhBJC8NTVod5IV
-Rdc7/kKQLMalUtIkAAB61wf/d7CUc+fBkFY0amvSZbH85OHMc5m9CF16w9wD
-2SiZgeDoPocKRCoEmKqVvCinFCSRuoIKRYFjor0vC7BEMXIzNLiFaKMoC9QD
-Fd4+XLAcXOP+oVbjbizYGwrIMhV+NgFsKrfs7/8OaiGhlm40fPmi7Hi8+ONm
-GIw8OYqfYArqx8x9C+XbzhQiSMcmJIN7AS4PVOtEynsCBsz59wAN4aglmSDo
-iR1rQpP3BoGGK2BN0a8iJy2wWmjQdPupfuqEybeD6UeNuqWHgHVo3Likx6yt
-3ldPl7dwL0v2EqjMVy2u+EcvXnf1GGpdpHuc9ryQ3mNlkc8dfKg9k48bJ5nZ
-cIb6qQ==
-=IZ04
+wsCpBAEBCABdBYJrCtpQCRBCkCzGpVLSJDUUAAAAAAAcABBzYWx0QG5vdGF0
+aW9ucy5vcGVucGdwanMub3JngyYqCLjelYxq07mrcH9vaRYhBJC8NTVod5IV
+Rdc7/kKQLMalUtIkAACjrggApFhCjhmLIvF8ryb96f1d/CDnxxoPbwDVAaDW
+YC2I2ZbbnAAgM5cWLsGlZk1pEFYBzA0H13wgSc+8DaOzI5DOKAFCsz/oUgFq
+wf3XUkgsUyB1wT8gmg0+eQSzyrYG74yXCatsjti8Y9Kom2/bS2VGVkxIUzc6
+DdTHDJil/160jeSLDIY39dz1/4aD1TRO59y+OHdqN1L08b/mgJNFTFZhNxuU
+46gORPS6VsI793NTAWk6sodgLTuL00E0f16yn1pJk4QRQ1Hf7aT7aGPywPx6
+M36zU5dngQLLaJVSLR3ZsMi1uisF72GP388L5eGIutQ+34UwBPv0j8+JYsiK
+WJozww==
+=urW/
 -----END PGP SIGNATURE-----
 
 
---------37ff276189f2a11e75876853f9d2b251d4bfe4a94ae0bb1f337359ef042a05d4--
+--------520483031699f09f7999ba80600ea9817aa6409337e1b91ad82e43eae5f09e88--
 
