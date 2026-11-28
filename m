@@ -1,73 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795828550;
-	b=zvRwcL63hVIDdylbg1QRuPxRyt9+aSi5FG3NHpDKMIhn/ku8hG8othfdOB032mGjW3zd
-	 mx1W7cVSwTheSdsi5sDbkkTR3UtQqx8bbnF3jsNqW+YO5JNd4F+eO62B9NgvBqWiqJcjy
-	 7EJwxexwnLH54eJLbwdVJBkYDIUGT8fHwuhDD7CEnMyMi0OFK62GsInyCjA6b7GYoFYGU
-	 J01Iu0uvmkNVD/HPxcoFOJaom5Z4R/Sb+xqoOCpWWNZujB0IUb9j43x6WfmxaJpi93jjk
-	 6u3RkGRFiUI4xg/85mUkhhYB9TrMEWN/Aqy47ll4urb/AsDkUZKx66K/yK6HV+T95YA==
+	t=1795830019;
+	b=HLKeBETYoQ2efaRkqSjfcQIDAPfpQwKDtScCPOHG3HVnwRDXkObFBlMz1ofZmZzJkgsS
+	 Y0HoR3Of4JoSzZEfPWMqTDv0IKiL0CWk1EIZ+xB8VwS1a97tIhGwiZECOYR7AnoF+3log
+	 SoozRvw3Vn/GErRPH/blPT8qN9Jmuyi1DvhBXDQbmNRVr0hezYff5fcHUoRoluCDX8M/u
+	 XOCiVlmFMGTv+09ovCNd3r6+ns+GVaLjsim8eiRT6UsdgkigCUhVxHiksfTayrwFIuBx/
+	 m0tzYwARHGSZedvPV5DeLyfbBDovYmWQtmFyt9hcap3TaXhNyrrbYKdsxWv/++8QQ5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795828550;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=vXy2aP8GDRjSyqVtGydk9aFrLy23+49FL9J75Av5HRo=;
-	b=jcN2N6J9v78qa5LXsCuVTGPtrvjPveTWEvdDXs+ZqTXjSVU1U6rcwFIo7upFMrr8w2WZ
-	 t+Y6XKwJCti+HK8UgmYORLrYhmtdSr0wDdXUX6WLZaJTcrSww2Cg1qO/9JtMf+4NFdxbP
-	 Jl32+e9M/FTQPEwk4q+Zr0FVu40XU8nl6E0kCsXkGhgqBe6V8T80tgtczgoJxWpeIspJo
-	 Yz70lL3m1wvUpcOw30pqq6ypaRflwFLTzpVMhq8i9krqLXAVNZL4FaSaFoAL7OMlAEASm
-	 OJHTEl9r1VncmXSZJ5m5PHEupuUdLmgWGGLZbhtJ9kK0ZJCN+sh4a0StWIfsQq8K2oQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795830019;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
+	b=QQBSpKKQI58+faVf5vyasJQ/4Rdcpk5Dc2Hm0Hnc95vBuLh67+/fDykn3Eoq9irTZEx5
+	 e1sW7fN8gQSfELdSPFabQLvHpnObQFirA+NvO4Mq5WDk9OXqCPXBr8uOPgGQ0k+TvZwDX
+	 SvuvwnqQ3JdKu35kveIjV/J/4HcF01V+UdhdM+v4YtpFu/GlwH4CRtBob07v0sa3PLR5z
+	 XEdnfRJirwDMY8ZppK+AO0c23mXDIJ3cwwWv4M86p+FFPVH9Q4TSUxNyVuq4lkQtVcaCn
+	 3kt4wlAQgv4KDpl85wLpscGTwgjF1pIdh5x518WDt8bsEsfWfLQc7GMiXA77ymhSYKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=T5yafpEl;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79280606A31E;
-	Sat, 28 Nov 2026 01:15:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79280606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q+j29iSJ;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5C0606A31F
+	for <linux-kselftest@vger.kernel.org>; Sat, 28 Nov 2026 01:40:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D5C0606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=T5yafpEl
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31D961575;
-	Fri, 27 Nov 2026 17:15:46 -0800 (PST)
-Received: from entos-yitian-01.Arm.com (unknown [10.168.196.233])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B7AEE3F632;
-	Fri, 27 Nov 2026 17:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795828549; bh=VVsnnu70vsRCRNLJdw3gnIMtF5TQk0N9+QCXllDagCo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T5yafpElX9xBSr6VhjpHakO4qQv0+Pz/O7QsWGdG3siaVix93H8tL/qgAxNbqh8SA
-	 bBzh2Ak16eeMxCB6fuQzu8d2OVFJFBir27VHHj7b4fBC8/dpUMRtXhPE8ozUKwncKo
-	 RtocVMZTCLYW4KGTA97B9ZVTjqxfFxjPeZ4C621c=
-From: Jia He <justin.he@arm.com>
-To: maz@kernel.org,
-	oupton@kernel.org
-Cc: fuad.tabba@linux.dev,
-	joey.gouly@arm.com,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	pbonzini@redhat.com,
-	seanjc@google.com,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jia He <justin.he@arm.com>
-Subject: [PATCH v3 4/4] KVM: arm64: nv: Allow the L1 VNCR page in cacheable PFNMAP memory
-Date: Sat, 28 Nov 2026 01:14:47 +0000
-Message-Id: <20261128011447.3588988-5-justin.he@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261128011447.3588988-1-justin.he@arm.com>
-References: <20261128011447.3588988-1-justin.he@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q+j29iSJ
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b49a6e8212so3703342a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Nov 2026 17:40:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795830019; x=1796434819; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
+        b=q+j29iSJxxoGRSE7F1BSeZcwvPI2mVgZdsm7x/iBZmNEPXFEggoUPsany6GgqPf49N
+         /WCfN6WWWcsv78zTqQFJw+6S4CNLeaGaCBRB9fJpCLiXasH2KydEsCWgbxRG0xLDDxp6
+         R0abfDF6sPKD1k3vrcfRenL3is4HryeHnzsb+0WNeuw5ybnn5mJOkxw/Z+xZpNvmkOXx
+         a2MWyrzJxnQqJjEbJ83Z7fgtgGTnx7iclNLHAevNJwBwt+jzKKWRSQZ2RChsV9JzzBXV
+         APdCwTcI4b06cCuyG5Yz3gEXqd64yFqH8/jRVSK3u1ny8aOBh6wF07CNuf8cZMVpFbwb
+         UGhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795830019; x=1796434819;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
+        b=OnUDxQpLmzO5+QU7lrxSsj7zB6eT7N+h0Zg3U3TQRCjTF8C2BlisFTYRu+uixNXZ05
+         FlE3bKen9K4Q0l4nDaLpZALIV+3hccK3ouaIstXZPjbkvqyGb2wUewSwcjm+k9qxEQn8
+         WKZeQMTqe+dgelUjBb8cj47w5rkhxAwHvs6jZ971s5DlnsqGABnOrsHz49vtYb+Cx/RY
+         ojpBLRfxaRejPsE2OvhRuKa+AbDMpY17bxLkwAh2lLqNRWkY9gbLs6c4FU3Cg9+iFFZe
+         ob778mIbDPaVXluEC2GHdNh4GW9TfTYcFNXi2kh2baEOVuzb0+zUsnahmO306Pmm7Ohv
+         HhCg==
+X-Forwarded-Encrypted: i=1; AL+hErENMnx4OYgDlawEOr9AFxmZjC1ash0Lc8lmXW4H+JPLutbrOtSYVhAE65QXm47wd2t2DCUsMU9jTJmfiYZynWg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8VCKCgA+S32r/h65Uu95C3YNmmQtexuBQDHISWcNW3zRMb0iPe
+	wbqVakI5j44En2w0m/em61UdWkoh6PEd7bDqnRD2rx7Dwu224NCdnleWFIZtIg==
+X-Gm-Gg: AZFdTZfo3/H1fkJw2b960fyan6am8bTPlAXvJdc7Nb8pANN7+aylP/pLdZpVXrOR52v
+	xYExe/0bEhrgQ9M/dhoz6jJ5vnjo8Z9tqDFreDSKAqIfNmka5b3c1dJn8Q6cV1113rdvlDTS7Wp
+	EyhLlAJ4qEllrEG3Seim33gB1iscF61wtZaS/okCmj2+riNZC9Iqpz48Ickj5o4kHIa5WwtGhoD
+	XuczJQN8Ui9F4oxh7q7R5GKfA4gLW3e4XLoIPMiHkCt8aoGrw1LzA1ugebSw5cGKB3qbiKtHPMD
+	pyx13RPrpPjorPAf2DlOK5XNGLY3wNem2plZii8T+9WdMXNu9EPZAjHWMY7LFL57mYa+dA9p5AV
+	iqhwckadG6obg0irwtD8+fKH/VqniXud8gX7MldZQ/w5ISax5n4eGWFkRY4rfJ+a8FH9z9/C7Eb
+	y84MgpoEV0Mn+twNd4yloDmRTf1Zce9pAKuSUyq8qf5RRajtCvUtD4+nkat5dFRd1D5uD93UbmT
+	oBHl1+eI7WW/4ygXSx6t2l2qnUXtk4aaZG64rsibbcGodNOv3aVyo+N3C/ioaoru8NjzvFZoqK4
+	1R87PCcXDEELdS2r4Ej39oZtTQrjXIAgVYbdvmRgU0Z8C7ngq08+/maT6ObQS0kaOQPLi17gJRR
+	kYizVRH1DONJIrB2cI0Ckzi7dqAWXG9d5QQ==
+X-Received: by 2002:a17:90b:3ecd:b0:3a4:adea:50ad with SMTP id 98e67ed59e1d1-3b41c9e46c6mr27425363a91.27.1795830018596;
+        Fri, 27 Nov 2026 17:40:18 -0800 (PST)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0b2c4sm40440119a91.4.2026.11.27.17.40.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 17:40:18 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 28 Nov 2026 01:40:17 +0000
+Message-Id: <DN6GM0YTCXII.2LIEDQV0KFDM1@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] selftests/bpf: Drop conflicting DWARF choice from
+ config.x86_64
+In-Reply-To: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
+References: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,136 +107,22 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-kvm_translate_vncr() refuses any PFN that isn't memory and injects an
-SEA into the guest hypervisor. That is stricter than what the stage-2
-fault path allows (kvm_s2_fault_pin_pfn()): a VM_PFNMAP or VM_MIXEDMAP
-VMA whose host stage-1 attributes are cacheable is mapped cacheable at
-stage-2 when FWB and DIC are present, and the guest can use such memory
-as RAM (e.g. device memory that it onlines as a NUMA node). If the guest
-then picks a page of that memory as the VNCR page of one of its own
-guests, it takes an SEA as soon as it enters that guest.
+On Fri, Nov 27, 2026 at 10:03 AM Ricardo B. Marlière (SUSE) <ricardo@marliere.net> wrote:
+>  CONFIG_DEBUG_ATOMIC_SLEEP=y
+> -CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 
-For VM_PFNMAP and VM_MIXEDMAP VMAs, relax the check to match the stage-2
-fault path, and remove the FIXME added by commit 4bd7dbe0b224 ("KVM:
-arm64: nv: Inject SEA if guest VNCR isn't normal memory"). Look up the
-VMA, and allow the PFN if the VMA is a cacheable VM_PFNMAP or
-VM_MIXEDMAP one and the system supports cacheable PFNMAP at stage-2. No
-linear mapping is required, because VNCR accesses use the EL2 fixmap and
-require no cache maintenance.
+gcc 11+ and clang 14+ default to DWARF5.
+This moves x86-64 from DWARF5 to DWARF4:
 
-Get the HVA with gfn_to_hva_memslot_prot(), as kvm_handle_guest_abort()
-does. gfn_to_hva_memslot() returns KVM_HVA_ERR_RO_BAD for a read-only
-memslot, and the VMA lookup would then fail. A VNCR page in a read-only
-memslot is valid and is mapped read-only since commit 2684e02bac41
-("KVM: arm64: nv: Respect read-only PFN when mapping L1 VNCR").
+  arch                              today              with the patch
+  --------------------------------  -----------------  --------------
+  x86_64                            toolchain default  DWARF4
+  aarch64, s390x, riscv64, ppc64el  DWARF4             DWARF4
 
-mmu_invalidate_seq is sampled before the PFN is faulted in, so a VMA
-change after the lookup is caught by the mmu_invalidate_retry() check
-that follows, as for the PFN itself.
 
-Tested on a host with FEAT_FGT, FWB and DIC, with an L1 whose whole RAM
-is a cacheable PFNMAP (host RAM withheld with mem= and handed to the VMM
-by a test driver with remap_pfn_range()) starting an L2 guest
-hypervisor. Without the patch, L2 repeatedly takes an SEA at the same PC
-and fails to boot. With the patch, L2 boots successfully.
+If you care about cleaning up configs then drop
+CONFIG_DEBUG_INFO_DWARF4=y
+instead.
 
-The read-only case was tested on a Neoverse-N2 host. The guest
-hypervisor's VNCR page is in a cacheable PFNMAP registered as a
-read-only memslot, and a nested context reads VTTBR_EL2. When the HVA
-is looked up with gfn_to_hva_memslot(), the guest hypervisor takes an
-SEA. With this patch, the read returns the contents of the VNCR page.
-
-Signed-off-by: Jia He <justin.he@arm.com>
----
- arch/arm64/include/asm/kvm_mmu.h |  2 ++
- arch/arm64/kvm/mmu.c             |  2 +-
- arch/arm64/kvm/nested.c          | 38 +++++++++++++++++++++++++++-----
- 3 files changed, 35 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
-index 32392abf2e21..e59c6603b137 100644
---- a/arch/arm64/include/asm/kvm_mmu.h
-+++ b/arch/arm64/include/asm/kvm_mmu.h
-@@ -385,6 +385,8 @@ static inline void kvm_fault_unlock(struct kvm *kvm)
- 		read_unlock(&kvm->mmu_lock);
- }
- 
-+bool kvm_vma_is_cacheable(struct vm_area_struct *vma);
-+
- /*
-  * ARM64 KVM relies on a simple conversion from physaddr to a kernel
-  * virtual address (KVA) when it does cache maintenance as the CMO
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 1db10d8d6db7..cbd563ba4dd9 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -1639,7 +1639,7 @@ static bool kvm_vma_mte_allowed(struct vm_area_struct *vma)
- 	return vma->vm_flags & VM_MTE_ALLOWED;
- }
- 
--static bool kvm_vma_is_cacheable(struct vm_area_struct *vma)
-+bool kvm_vma_is_cacheable(struct vm_area_struct *vma)
- {
- 	switch (FIELD_GET(PTE_ATTRINDX_MASK, pgprot_val(vma->vm_page_prot))) {
- 	case MT_NORMAL_NC:
-diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
-index 523d71d4df13..d3b77ed53ef6 100644
---- a/arch/arm64/kvm/nested.c
-+++ b/arch/arm64/kvm/nested.c
-@@ -1553,6 +1553,37 @@ static u64 read_vncr_el2(struct kvm_vcpu *vcpu)
- 	return (u64)sign_extend64(__vcpu_sys_reg(vcpu, VNCR_EL2), 48);
- }
- 
-+/*
-+ * Allow a non-memory PFN only if it comes from a cacheable VM_PFNMAP or
-+ * VM_MIXEDMAP VMA and the system supports cacheable PFNMAP at stage-2. The
-+ * VMA is looked up after the PFN has been faulted in: the caller must check
-+ * mmu_invalidate_retry() against a sequence count sampled before the
-+ * fault-in.
-+ */
-+static bool vncr_pfn_is_cacheable(struct kvm_memory_slot *memslot, gfn_t gfn,
-+				  kvm_pfn_t pfn)
-+{
-+	struct vm_area_struct *vma;
-+	unsigned long hva;
-+	bool ret = false;
-+
-+	if (pfn_is_map_memory(pfn))
-+		return true;
-+
-+	if (!kvm_supports_cacheable_pfnmap())
-+		return false;
-+
-+	hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
-+
-+	mmap_read_lock(current->mm);
-+	vma = vma_lookup(current->mm, hva);
-+	if (vma && (vma->vm_flags & (VM_PFNMAP | VM_MIXEDMAP)))
-+		ret = kvm_vma_is_cacheable(vma);
-+	mmap_read_unlock(current->mm);
-+
-+	return ret;
-+}
-+
- static int kvm_translate_vncr(struct kvm_vcpu *vcpu, bool *is_gmem)
- {
- 	struct kvm_memory_slot *memslot;
-@@ -1625,12 +1656,7 @@ static int kvm_translate_vncr(struct kvm_vcpu *vcpu, bool *is_gmem)
- 		writable = !(memslot->flags & KVM_MEM_READONLY);
- 	}
- 
--	/*
--	 * FIXME: This check is too restrictive as KVM allows cacheable memory
--	 * attributes for PFNMAP VMAs that have cacheable attributes in host
--	 * stage-1.
--	 */
--	if (!pfn_is_map_memory(pfn)) {
-+	if (!vncr_pfn_is_cacheable(memslot, gfn, pfn)) {
- 		kvm_release_faultin_page(vcpu->kvm, page, true, false);
- 		fail_s1_walk(&vt->wr, ESR_ELx_FSC_EXTABT, false);
- 		return -EINVAL;
--- 
-2.34.1
-
+pw-bot: cr
