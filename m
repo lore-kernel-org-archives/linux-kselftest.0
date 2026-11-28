@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795826511;
-	b=QzwfhnozHsBcquHa06DmD2n92h9Yyyg4jnLi9qKFIaEyGQX1bhJk0hN2GnCn+0EsknR9
-	 TwwolsfrweEAZzvPvbbiU5SJ4YOerzbeUcnFZ6/RGXiiGAyj9G2UWQqwGdLuukWGCWsVO
-	 QnpTvtdEtODW38jhkyOazaG6/VJqk+yWjFj+2cwIEv0P0PiZtiQ+zApk1DrQ/ocEQDEG8
-	 K9+TaewgbYZRKrYZvY95cHIiJEXJoAkuZjHokXE7FlDrsfqxGhRfREW8kVoeGA1icAQG6
-	 yATpfLHrcboz+lWAbtDEajuG7+If9txKHGAypqCOZx5DoXqjzfq3RVfPgvs5a5u+0ZQ==
+	t=1795826516;
+	b=mvXBFuMYU7rJjyNKHUvS7Va3S0OaRnOEzx6Ykk5Ejtf+LtcxTbt37jnJjG0fIAilZyNz
+	 2keMyv/KMj/oMsALb2xAUx0NdYICy8AXxlC+HtO56xnSXb7Q6vYRM2bLKMIh7DSZ+Zy0V
+	 MBqrq2jYpXuDi05sPGlmxT0IR/BN5w9VPsXXqT5booUJQoEt8WjRhfJAz4eqysY+bFnyB
+	 d5nOp7Y8V7HcTPlQhkCBoElj3+iRnpiyqQw+3TU2WDEofOv25YLkoRRGsJ03SDj9rA0Un
+	 GHDDhQ657Y7V3t8iW723Tir2CHiSf/iBSa3CQNEnyaxW/J6u9dYnKV3lkNnTIyJn/YA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795826511;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=sxK9aNeAgpmnRNl1nqPKEZb/ERh5H2YTIzE4eyPp30o=;
-	b=pwPOsTg24gXdy07qc6ER1wjz28yHv/lY82A7JFPsy5JH0+3gtkFJxXn5uTNjNc0vkRL6
-	 j0jxml75/RyjneWXPbWI+jqxdTV2OE5JYExNW33vFSR4Ee9EWiwSpCWDW3Wpk8NQmDqwK
-	 WTlDoxx/DOlrIFw8Rz2ubHoy+Yp5ZaTojPfAaBvneyaNH5CZJyIJQ1+4am/E2HnBoHhtH
-	 6AUPa2BFjTP93m8v44KCHVxGPEsYh9PBy/IvrPm9f43lZ2ZTh6dkjCFHl5gqgrQo3PJAR
-	 Yxd9dl98P6q5vEbjMfTl8oaAd/He0G2PruIo2JIk69khQ6QvIMxlsIw6RGNTBbO1u9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795826516;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=k9P5r4zRavs9vWI7FzZxFkeTlmp2ngkFeToAzBYyCXg=;
+	b=bG0DxGyQNoi+VfUP6+DmbVEPGol88f82l5asbwVeqJgu+kMn+RF2EESn/pxrome1Yhj/
+	 K0zdRaVsnrQwOOvxRUE0qXlV7xVhLZazeG+UY3keh5c1yfDnF36/ecnndF3wEiSXtMvqI
+	 ism1TSbi2BZkWLeJyeA0IPKoWFB6qJcq1+95Aze+HwURneFraJ8fkMRHYaATipsLkYvDr
+	 fzZWZt6wQJH/A8JSsrJBBLNM8bJNSJbQSPcfJuCD0j6JSNlb6edkEqUgLCbrTOPneteYp
+	 SZiwZPVkw7mmDN7diCt1zTYb7AfLVpinzhadT+iYaJT3p0/Dx37PNWww5gxcfD56clw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QHQ+i9QJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WxHO8Sr+;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC7606A31E;
-	Sat, 28 Nov 2026 00:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1190E606A321;
+	Sat, 28 Nov 2026 00:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QHQ+i9QJ
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WxHO8Sr+
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795826510;
-	b=SLLIFit7bMQ6hlsrFY9lMBeULFrRwxHShm1GmZ44aCrgA3YAf3N8+empJYv/6hP4evHa
-	 je5YDS/F8q2dzVZ+JhyZX6enT5Uz1IWMEgV9V1Ea8S+Y0U5dbFC4sn4PsHAUU1uQrLCAU
-	 0lvzwbat6GrVdQXwJkOLPA4g7eiRWgiq2Z8vjgjZgi/PsOwuiW2uTikadIkIVSq7ODWht
-	 eSVitdjLNrsD79qIsd7BXQj0248KBiln5GyiQd5CjbKXtj43rWCll/YoBYPznAuqW4bXL
-	 ZvSg7z5gsQAv1jqnrig/zb0lnm6TxXZV1FoSRWixJWZXYdPZMdGFM0M/tiE3UF69ImQ==
+	t=1795826515;
+	b=WK2v9GOxv4zD/jy1yF5IKgUdQW16d+tMftH/ERmNuDZM7yR+eYS5ienNwvubYd3RW7Xh
+	 46y+OCCONa4iEYovagxZslIhOc6W2zLgggwvXPdqiayCXWtRqBp1x6PISoZq9hbnuoeFt
+	 Nt8/1IIY9S4VzizpZSQFSFz5/h15/JITx52dVfwqz3bxOw3RT7FpxbyH6zw7hIix6+mDm
+	 IkjxbYWVvLwsW48nl/+4nMvXHi/jkftTUWJrwDO54+nbWEx7hOhGBZyYABo0Yy6VqhWZT
+	 aXG2XHIbB40quAoUIsjQSxk5EZzQhCDFmgPkxWcJJ02nTYtDfwegPHM6amHi/8K+pxg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795826510;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer:
+	c=relaxed/relaxed; t=1795826515;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=sxK9aNeAgpmnRNl1nqPKEZb/ERh5H2YTIzE4eyPp30o=;
-	b=RqdvrZmb60PIKm+FFmxx9PaAwpzcyDMNL/6fXJltwiewslkpQE1kk29r1SEaggLPk2dK
-	 YNodziu7KGhXhmUWxk+P6MME5I/inEU+H5QT+vVgu3NfLYCkRwmRAMbw+iRA3voaV0BTp
-	 ZORDbYbRNHRfu8LQnMkoeW2jeH9zsSu57yCtgoxz30qBhRX2n6BKa9FpoBYaLAWv429n4
-	 MIP1i5ZKBBLYIq+bsKCTpKB99V4dxLUebOoG8pVThFgEiTEywCzBzeL9375PGTi1Q1NwW
-	 TkEc67mwPRl4HXXKCx6iIjtDCx4NqfiRmTd/EMl3lswR+Tx8g0X5c2+Ea396UnShANQ==
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=k9P5r4zRavs9vWI7FzZxFkeTlmp2ngkFeToAzBYyCXg=;
+	b=eBUUmctMmk1QbXpEM7Mg1NV+JbKylXkQkpbiuAGQZbaSqVkAYGFbSbl8f+sAkpe6kEyr
+	 QJs+5GcP1Qu45LtLWHNHn9dYwsdKcDxDkcRBIA/pc9pjCQFXx5a/ACHvhNyer7SKpJ+T9
+	 GbXOzCf8ZrXBRkpb2YLIzgLD46vf+hz8HnrFKnZHNCabY2ea+CDvFXMT1IHwZW8blKb86
+	 t52wYZHiMTAtNhnctTeii0/ldv/lHdCnrT5EWeVs0PFTK5cA4YflMPCDV2gWJX4oi3CYy
+	 wrlpiyDPeDLA1oviBvPX7P9i+7/ni0btbiNkUaop7NWE6flKiH3gPCSJryTJMWKByPw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E75301F008A0;
-	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0ECE11F0092B;
+	Sat, 28 Nov 2026 00:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795826510;
-	bh=sxK9aNeAgpmnRNl1nqPKEZb/ERh5H2YTIzE4eyPp30o=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=QHQ+i9QJVN5GhJ0TVCPzxUcYHWrltxckQFtUUBWKUmKChu2Rhwykfr7Ic1cd9HTrl
-	 ZJDV9RdLr4PaSPr69S3Ps37V767WQMiL4Qx/jB4xnYB6h0GsY0HX36sQqHdlVHBOAx
-	 geVqas1zgjhKLI/aJTK4eb+9lZcQCv4ZPozp7HCZ1HIAX5Va2OMPCsZbD/5pCqp58g
-	 rsIAABrNEK/19ScWlvXUHn61BwflbRm/ZlOY+lbaVVqC5TmVhUV0B2wG56CSGrHhjA
-	 3UhAR6OOHUkIK/qwSbAHBaraH+0vtPTt9t67Q80WD9pmEafXDJ3f/PPitMRF2h9Ssl
-	 HJN/LceaQ1Ksw==
+	s=k20260515; t=1795826515;
+	bh=k9P5r4zRavs9vWI7FzZxFkeTlmp2ngkFeToAzBYyCXg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=WxHO8Sr+EGbIzXd2KGDYqMxfDQT4uu+BcUEb5OTJTX0wGCpPn47+aGyw4Gge3uiPz
+	 ILTkrJCjPIBzFW2Vhc0VaiJhZJzTFLXZISGBZ5qr/nBmPcO8Cj3945ZGiIISmESj3g
+	 0e+uiWbtR0RQbgKlCN1nZkzERt+s3aNbBrPxqvyzfJi3Qb/YyYX/jn0T2YfzQKGXkK
+	 o1POtgxEoJMuSVdQtkYfQ2iygHRu/HTQaaSCFUopS/wR7fQeop8+bWJOP8qQRT4Klg
+	 q6+Etr/Hl3m2mmZ4EganI0h+v6xZsksKo7ZghdGaVCvgJL3ondsFuC7nxQSNTNv8Xs
+	 p64fyr890/j9A==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 48A3A4DEC9;
+	by lkml.kernel.org (Postfix) with ESMTP id 8F9E34DECD;
 	Sat, 28 Nov 2026 00:41:44 +0000 (UTC)
 From: Vincent Jardin via B4 Relay <devnull+vjardin.free.fr@kernel.org>
-Subject: [PATCH net-next v2 0/5] lisp: add a LISP (RFC 9300) tunnel device
-Date: Sat, 28 Nov 2026 01:41:32 +0100
-Message-Id: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
+Date: Sat, 28 Nov 2026 01:41:34 +0100
+Subject: [PATCH net-next v2 2/5] netlink: specs: rt-link: add the lisp link
+ type
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,11 +84,9 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADwjCmsC/32NwQqDMBBEf0X23C0mlag9+R/FQzSbutBG2aRiE
- f+9wQ8ozGWYmTc7RBKmCPdiB6GVI88hG30pYJxseBKyyx50qY1S2qCfBT9LTEL2jS+OC64Kh6q
- 2o2kbl1uQp4uQ5+3EPiBQwkBbgj4nE8c0y/f8W9WZ/0dnlVjfGm2rYfSuHTovRFcv0B/H8QPCz
- TqwwAAAAA==
+Message-Id: <20261128-for-upstream-lisp-v1-v2-2-68e8649c3ed2@free.fr>
+References: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
+In-Reply-To: <20261128-for-upstream-lisp-v1-v2-0-68e8649c3ed2@free.fr>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -102,119 +100,83 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  =?utf-8?q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>, 
  Danielle Ratson <danieller@nvidia.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=4327;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795826502; l=1837;
  i=vjardin@free.fr; s=20260525; h=from:subject:message-id;
- bh=3QIbv24rPwGBZWn9xkNpTTUXhCedhThkPImwKnrDxv8=;
- b=+M8pAoNkv4l30kgyWMv8hMT7VICYTTzvk8BqRtpPTRxtXemyU8UlqJ+AJYXn7ADWiQ+N1X6vr
- MfzW61hEDXmCMRQXr1wwNaWmCOqLwLTWYWRB7pZas7DFDfkYM/PnLU5
+ bh=/PetGQdaL3uGENm+cDP7KlWMMRtUNnnGqpSboQO7TLs=;
+ b=FVkrzQEf9ZBeuUfbrMMS5YS3BhY5JO7XpAzuShXu3dALsVvpupce6vMPIlcY1RoHXjFuHW6bF
+ jQtuMRO+9W+DH+4OIIYH8XSC1Y9Mdlt6YEEbXIftrJiPM+lZ3sw9rJF
 X-Developer-Key: i=vjardin@free.fr; a=ed25519;
  pk=hppgLeFpGpKOi7LNwGEZ4jOYofJCoGd4Jf1ltAabiLw=
 X-Endpoint-Received: by B4 Relay for vjardin@free.fr/20260525 with
  auth_id=871
 X-Original-From: Vincent Jardin <vjardin@free.fr>
 Reply-To: vjardin@free.fr
+Content-Transfer-Encoding: 7bit
 
-LISP (Locator/ID Separation Protocol, RFC 9300) carries the packets sent
-to an endpoint identifier (EID) over UDP, to a routing locator (RLOC) of
-the site of that EID. An EID prefix and its RLOCs are a mapping, which
-the LISP control plane (RFC 9301) provides.
+From: Vincent Jardin <vjardin@free.fr>
 
-This series adds the data plane of a LISP router (xTR): a tunnel device,
-link kind "lisp", for IPv4 and IPv6 EIDs over IPv4 and IPv6 RLOCs.
+Describe the attributes of the LISP devices.
 
-A mapping is a route. The device takes the RLOC of a packet from its
-tunnel metadata, which the lwtunnel encapsulation of the route
-or of its nexthop provides. A remote site is a nexthop, shared by its
-EID prefixes:
-
-  ip link add link wan name lisp101 type lisp id 101 local 192.0.2.1
-  ip link set lisp101 master site up
-  ip -6 nexthop add id 1 encap ip dst 198.51.100.1 dev lisp101
-  ip route add 10.2.0.0/24 vrf site nhid 1
-  ip -6 route add 2001:db8:2::/48 vrf site nhid 1
-
-Design:
-
-- The kernel has no map-cache and it does not resolve anything: no
-  upcall, no state that the packets of a host create. Its tables are the
-  routes and the nexthops, which a control plane in user space writes,
-  as it does for any other routing protocol. A packet without RLOC ends
-  up dropped.
-
-- A remote site is a nexthop object, not a device: it has been designed
-  to scale.
-
-- The common UDP tunnel code is used: its sockets, GRO cells, GSO, the
-  dst cache of the encapsulation, and a zero UDP checksum unless the
-  encapsulation asks for one.
-
-Note: a LISP driver was posted to netdev back to 2014 and was not
-merged. It had a device per remote RLOC and IPv4 RLOCs only, and a
-map-cache that traffic fills was not accepted.
-lwtunnels is an alternative.
-
-This design shall allow routing daemons like FRRouting to support LISP.
-
-Patches:
-- patch 1 adds the driver, drivers/net/lisp.c, and its link attributes
-- patch 2 describes them in the rt-link netlink spec
-- patch 3 adds Documentation/networking/lisp.rst
-- patch 4 adds a selftest, lisp.sh
-- patch 5 adds a scale selftest, lisp_scale.sh
-
-The series only adds: no existing code path is changed.
-
-The lisp support of iproute2 is a separate series, for
-iproute2-next. The tests are skipped without it:
-
-  https://lore.kernel.org/all/20261127-iproute2-lisp-v1-0-df8ea175bc06@free.fr/
-
+Signed-off-by: Vincent Jardin <vjardin@free.fr>
 ---
-Changes in v2, based on CI's checks:
-- 1/5: fix to 80 columns
-- 4/5, 5/5: fix shellcheck report
-- 4/5, 5/5: wrap the lines to 80 columns
-- Cc recent contributors of rt-link.yaml
+ Documentation/netlink/specs/rt-link.yaml | 35 ++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-Changes in v2, based on Sashiko's review:
-- 1/5: link an instance device again only after an RCU grace period
-  since it left its chain (lisp_stop(), lisp_open())
-- 1/5: fix build without CONFIG_IPV6
-- 3/5: device with an instance ID that is down leaves its packets to
-  the device that collects metadata
-- 3/5: rp_filter is the larger of the value of "all" and of the device,
-  ip6tables rpfilter or the nftables fib expression for IPv6
-- 4/5: flush the path MTU of the host on each pass of mtu_test()
-- 5/5: churn_test() improvements
-- Link to v1: https://lore.kernel.org/r/20261126-for-upstream-lisp-v1-v1-0-7382a4bcfd9b@free.fr
+diff --git a/Documentation/netlink/specs/rt-link.yaml b/Documentation/netlink/specs/rt-link.yaml
+index 81b58633911d6..30a8e36c212f4 100644
+--- a/Documentation/netlink/specs/rt-link.yaml
++++ b/Documentation/netlink/specs/rt-link.yaml
+@@ -2368,6 +2368,38 @@ attribute-sets:
+         name: mode
+         type: u8
+         enum: ovpn-mode
++  -
++    name: linkinfo-lisp-attrs
++    name-prefix: ifla-lisp-
++    attributes:
++      -
++        name: id
++        type: u32
++        doc: |
++          Instance ID of the packets that the device sends and receives,
++          24 bits.
++      -
++        name: collect-metadata
++        type: flag
++        doc: |
++          The device serves the instance IDs that have no device: it takes
++          the instance ID of a packet from its tunnel metadata, and
++          provides it when it receives.
++      -
++        name: local
++        type: u32
++        byte-order: big-endian
++        display-hint: ipv4
++        doc: |
++          Source address of the packets sent to an IPv4 RLOC, when the
++          tunnel metadata do not give it.
++      -
++        name: local6
++        type: binary
++        display-hint: ipv6
++        doc: |
++          Source address of the packets sent to an IPv6 RLOC, when the
++          tunnel metadata do not give it.
+ 
+ sub-messages:
+   -
+@@ -2427,6 +2459,9 @@ sub-messages:
+       -
+         value: ovpn
+         attribute-set: linkinfo-ovpn-attrs
++      -
++        value: lisp
++        attribute-set: linkinfo-lisp-attrs
+   -
+     name: linkinfo-member-data-msg
+     formats:
 
----
-Vincent Jardin (5):
-      lisp: add LISP (Locator/ID Separation Protocol)
-      netlink: specs: rt-link: add the lisp link type
-      docs: net: document the LISP devices
-      selftests: net: add a test of the LISP devices
-      selftests: net: add a scale test for LISP
-
- Documentation/netlink/specs/rt-link.yaml  |   35 +
- Documentation/networking/index.rst        |    1 +
- Documentation/networking/lisp.rst         |  159 ++++
- MAINTAINERS                               |    8 +
- drivers/net/Kconfig                       |   20 +
- drivers/net/Makefile                      |    1 +
- drivers/net/lisp.c                        | 1040 ++++++++++++++++++++++++++
- include/uapi/linux/if_link.h              |   12 +
- tools/testing/selftests/net/Makefile      |    2 +
- tools/testing/selftests/net/config        |    4 +
- tools/testing/selftests/net/lisp.sh       | 1139 +++++++++++++++++++++++++++++
- tools/testing/selftests/net/lisp_scale.sh |  542 ++++++++++++++
- 12 files changed, 2963 insertions(+)
----
-base-commit: eb6d6c80d35449c27471b1874f13066c09a8964d
-change-id: 20261126-for-upstream-lisp-v1-b47ac698d026
-
-Best regards,
 -- 
-Vincent Jardin <vjardin@free.fr>
+2.43.0
 
 
